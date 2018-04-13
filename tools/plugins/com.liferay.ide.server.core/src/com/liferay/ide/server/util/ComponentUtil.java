@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,13 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.server.util;
 
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -46,259 +49,230 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.validation.internal.ValType;
 import org.eclipse.wst.validation.internal.ValidationRunner;
 
-
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class ComponentUtil
-{
-    public static boolean containsMember( IModuleResourceDelta delta, String[] paths )
-    {
-        if( delta == null )
-        {
-            return false;
-        }
+@SuppressWarnings("restriction")
+public class ComponentUtil {
 
-        // iterate over the path and find matching child delta
-        IModuleResourceDelta[] currentChildren = delta.getAffectedChildren();
+	public static boolean containsMember(IModuleResourceDelta delta, String[] paths) {
+		if (delta == null) {
+			return false;
+		}
 
-        if( currentChildren == null )
-        {
-            IFile file = (IFile) delta.getModuleResource().getAdapter( IFile.class );
+		// iterate over the path and find matching child delta
 
-            if( file != null )
-            {
-                String filePath = file.getFullPath().toString();
+		IModuleResourceDelta[] currentChildren = delta.getAffectedChildren();
 
-                for( String path : paths )
-                {
-                    if( filePath.contains( path ) )
-                    {
-                        return true;
-                    }
-                }
-            }
+		if (currentChildren == null) {
+			IModuleResource deltaModuleResource = delta.getModuleResource();
 
-            return false;
-        }
+			IFile file = (IFile)deltaModuleResource.getAdapter(IFile.class);
 
-        for( int j = 0, jmax = currentChildren.length; j < jmax; j++ )
-        {
-            IPath moduleRelativePath = currentChildren[j].getModuleRelativePath();
-            String moduleRelativePathValue = moduleRelativePath.toString();
-            String moduleRelativeLastSegment = moduleRelativePath.lastSegment();
+			if (file != null) {
+				IPath fileFullPath = file.getFullPath();
 
-            for( String path : paths )
-            {
-                if( moduleRelativePathValue.equals( path ) || moduleRelativeLastSegment.equals( path ) )
-                {
-                    return true;
-                }
-            }
+				String filePath = fileFullPath.toString();
 
-            boolean childContains = containsMember( currentChildren[j], paths );
+				for (String path : paths) {
+					if (filePath.contains(path)) {
+						return true;
+					}
+				}
+			}
 
-            if( childContains )
-            {
-                return true;
-            }
-        }
+			return false;
+		}
 
-        return false;
-    }
+		for (int j = 0, jmax = currentChildren.length; j < jmax; j++) {
+			IPath moduleRelativePath = currentChildren[j].getModuleRelativePath();
 
-    public static IFile findServiceJarForContext( String context )
-    {
-        IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+			String moduleRelativePathValue = moduleRelativePath.toString();
+			String moduleRelativeLastSegment = moduleRelativePath.lastSegment();
 
-        for( IProject project : projects )
-        {
-            if( project.getName().equals( context ) )
-            {
-                final IWebProject lrproject = LiferayCore.create( IWebProject.class, project );
+			for (String path : paths) {
+				if (moduleRelativePathValue.equals(path) || moduleRelativeLastSegment.equals(path)) {
+					return true;
+				}
+			}
 
-                if( lrproject != null )
-                {
-                    final IResource resource =
-                        lrproject.findDocrootResource( new Path( "WEB-INF/lib/" + project.getName() +
-                            "-service.jar" ) );
+			boolean childContains = containsMember(currentChildren[j], paths);
 
-                    if( resource != null && resource.exists() )
-                    {
-                        return (IFile) resource;
-                    }
-                }
-            }
-        }
+			if (childContains) {
+				return true;
+			}
+		}
 
-        return null;
-    }
+		return false;
+	}
 
-    public static IFolder[] getSourceContainers( IProject project )
-    {
-        List<IFolder> sourceFolders = new ArrayList<IFolder>();
+	public static IFile findServiceJarForContext(String context) {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-        IPackageFragmentRoot[] sources = getSources( project );
+		IWorkspaceRoot root = workspace.getRoot();
 
-        for( IPackageFragmentRoot source : sources )
-        {
-            if( source.getResource() instanceof IFolder )
-            {
-                sourceFolders.add( ( (IFolder) source.getResource() ) );
-            }
-        }
+		IProject[] projects = root.getProjects();
 
-        return sourceFolders.toArray( new IFolder[sourceFolders.size()] );
-    }
+		for (IProject project : projects) {
+			String projectName = project.getName();
 
-    private static IPackageFragmentRoot[] getSources( IProject project )
-    {
-        IJavaProject jProject = JavaCore.create( project );
+			if (projectName.equals(context)) {
+				IWebProject lrproject = LiferayCore.create(IWebProject.class, project);
 
-        if( jProject == null )
-        {
-            return new IPackageFragmentRoot[0];
-        }
+				if (lrproject != null) {
+					IResource resource = lrproject.findDocrootResource(
+						new Path("WEB-INF/lib/" + project.getName() + "-service.jar"));
 
-        List<IPackageFragmentRoot> list = new ArrayList<IPackageFragmentRoot>();
-        IVirtualComponent vc = ComponentCore.createComponent( project );
-        IPackageFragmentRoot[] roots;
+					if (FileUtil.exists(resource)) {
+						return (IFile)resource;
+					}
+				}
+			}
+		}
 
-        try
-        {
-            roots = jProject.getPackageFragmentRoots();
+		return null;
+	}
 
-            for( int i = 0; i < roots.length; i++ )
-            {
-                if( roots[i].getKind() != IPackageFragmentRoot.K_SOURCE )
-                {
-                    continue;
-                }
+	public static IFolder[] getSourceContainers(IProject project) {
+		List<IFolder> sourceFolders = new ArrayList<>();
 
-                IResource resource = roots[i].getResource();
+		IPackageFragmentRoot[] sources = _getSources(project);
 
-                if( null != resource )
-                {
-                    IVirtualResource[] vResources = ComponentCore.createResources( resource );
-                    boolean found = false;
+		for (IPackageFragmentRoot source : sources) {
+			if (source.getResource() instanceof IFolder) {
+				sourceFolders.add((IFolder)source.getResource());
+			}
+		}
 
-                    for( int j = 0; ! found && j < vResources.length; j++ )
-                    {
-                        if( vResources[j].getComponent().equals( vc ) )
-                        {
-                            if( ! list.contains( roots[i] ) )
-                            {
-                                list.add( roots[i] );
-                            }
+		return sourceFolders.toArray(new IFolder[sourceFolders.size()]);
+	}
 
-                            found = true;
-                        }
-                    }
-                }
-            }
+	public static boolean hasLiferayFacet(IProject project) {
+		boolean retval = false;
 
-            if( list.size() == 0 )
-            {
-                for( IPackageFragmentRoot root : roots )
-                {
-                    if( root.getKind() == IPackageFragmentRoot.K_SOURCE )
-                    {
-                        if( ! list.contains( root ) )
-                        {
-                            list.add( root );
-                        }
-                    }
-                }
-            }
-        }
-        catch( JavaModelException e )
-        {
-            LiferayServerCore.logError( e );
-        }
+		if (project == null) {
+			return retval;
+		}
 
-        return list.toArray( new IPackageFragmentRoot[list.size()] );
-    }
+		try {
+			IFacetedProject facetedProject = ProjectFacetsManager.create(project);
 
-    public static boolean hasLiferayFacet( IProject project )
-    {
-        boolean retval = false;
+			if (facetedProject != null) {
+				for (IProjectFacetVersion facet : facetedProject.getProjectFacets()) {
+					IProjectFacet projectFacet = facet.getProjectFacet();
 
-        if( project == null )
-        {
-            return retval;
-        }
+					String projectFacetId = projectFacet.getId();
 
-        try
-        {
-            IFacetedProject facetedProject = ProjectFacetsManager.create( project );
+					if (projectFacetId.startsWith("liferay"))
+					{
+						retval = true;
 
-            if( facetedProject != null )
-            {
-                for( IProjectFacetVersion facet : facetedProject.getProjectFacets() )
-                {
-                    IProjectFacet projectFacet = facet.getProjectFacet();
+						break;
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+		}
 
-                    if( projectFacet.getId().startsWith( "liferay" ) ) //$NON-NLS-1$
-                    {
-                        retval = true;
-                        break;
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-        }
+		return retval;
+	}
 
-        return retval;
-    }
+	public static void validateFile(IFile file, IProgressMonitor monitor) {
+		try {
+			ValidationRunner.validate(file, ValType.Manual, monitor, false);
+		}
+		catch (CoreException ce) {
+			LiferayServerCore.logError("Error while validating file: " + file.getFullPath(), ce);
+		}
+	}
 
-    public static void validateFile( IFile file, IProgressMonitor monitor )
-    {
-        try
-        {
-            ValidationRunner.validate( file, ValType.Manual, monitor, false );
-        }
-        catch( CoreException e )
-        {
-            LiferayServerCore.logError( "Error while validating file: " + file.getFullPath(), e ); //$NON-NLS-1$
-        }
-    }
+	public static void validateFolder(IFolder folder, IProgressMonitor monitor) {
+		try {
+			Map<IProject, Set<IResource>> projects = new HashMap<>();
+			Set<IResource> resources = new HashSet<>();
 
-    public static void validateFolder( IFolder folder, IProgressMonitor monitor )
-    {
-        try
-        {
-            Map<IProject, Set<IResource>> projects = new HashMap<IProject, Set<IResource>>();
-            final Set<IResource> resources = new HashSet<IResource>();
+			folder.accept(
+				new IResourceVisitor() {
 
-            folder.accept
-            (
-                new IResourceVisitor()
-                {
-                    public boolean visit( IResource resource ) throws CoreException
-                    {
-                        if( resource instanceof IFile || resource instanceof IFile )
-                        {
-                            resources.add( resource );
-                        }
+					public boolean visit(IResource resource) throws CoreException {
+						if (resource instanceof IFile || resource instanceof IFile) {
+							resources.add(resource);
+						}
 
-                        return true;
-                    }
-                }
-            );
+						return true;
+					}
 
-            projects.put( folder.getProject(), resources );
-            ValidationRunner.validate( projects, ValType.Manual, monitor, false );
-        }
-        catch( CoreException e )
-        {
-            LiferayServerCore.logError( "Error while validating folder: " + folder.getFullPath(), e );
-        }
-    }
+				});
+
+			projects.put(folder.getProject(), resources);
+
+			ValidationRunner.validate(projects, ValType.Manual, monitor, false);
+		}
+		catch (CoreException ce) {
+			LiferayServerCore.logError("Error while validating folder: " + folder.getFullPath(), ce);
+		}
+	}
+
+	private static IPackageFragmentRoot[] _getSources(IProject project) {
+		IJavaProject jProject = JavaCore.create(project);
+
+		if (jProject == null) {
+			return new IPackageFragmentRoot[0];
+		}
+
+		List<IPackageFragmentRoot> list = new ArrayList<>();
+		IVirtualComponent vc = ComponentCore.createComponent(project);
+		IPackageFragmentRoot[] roots;
+
+		try {
+			roots = jProject.getPackageFragmentRoots();
+
+			for (int i = 0; i < roots.length; i++) {
+				if (roots[i].getKind() != IPackageFragmentRoot.K_SOURCE) {
+					continue;
+				}
+
+				IResource resource = roots[i].getResource();
+
+				if (null != resource) {
+					IVirtualResource[] vResources = ComponentCore.createResources(resource);
+					boolean found = false;
+
+					for (int j = 0; !found && j < vResources.length; j++) {
+						IVirtualComponent vResourceComponent = vResources[j].getComponent();
+
+						if (vResourceComponent.equals(vc)) {
+							if (!list.contains(roots[i])) {
+								list.add(roots[i]);
+							}
+
+							found = true;
+						}
+					}
+				}
+			}
+
+			if (list.isEmpty()) {
+				for (IPackageFragmentRoot root : roots) {
+					if (root.getKind() == IPackageFragmentRoot.K_SOURCE) {
+						if (!list.contains(root)) {
+							list.add(root);
+						}
+					}
+				}
+			}
+		}
+		catch (JavaModelException jme) {
+			LiferayServerCore.logError(jme);
+		}
+
+		return list.toArray(new IPackageFragmentRoot[list.size()]);
+	}
+
 }

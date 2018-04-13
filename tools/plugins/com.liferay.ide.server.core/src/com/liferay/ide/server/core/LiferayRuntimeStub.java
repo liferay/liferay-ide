@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core;
 
@@ -23,41 +20,34 @@ import org.eclipse.core.runtime.Status;
 /**
  * @author Gregory Amerson
  */
-public class LiferayRuntimeStub implements ILiferayRuntimeStub
-{
+public class LiferayRuntimeStub implements ILiferayRuntimeStub {
 
-    protected String runtimeStubTypeId;
-    protected boolean isDefault;
-    protected String name;
+	public String getName() {
+		return name;
+	}
 
-    public String getRuntimeStubTypeId()
-    {
-        return this.runtimeStubTypeId;
-    }
+	public String getRuntimeStubTypeId() {
+		return runtimeStubTypeId;
+	}
 
-    public String getName()
-    {
-        return this.name;
-    }
+	public void setDefault(boolean isDefault) {
+		this.isDefault = isDefault;
+	}
 
-    public IStatus validate()
-    {
-        return Status.OK_STATUS;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setRuntimeTypeId( String runtimeTypeId )
-    {
-        this.runtimeStubTypeId = runtimeTypeId;
-    }
+	public void setRuntimeTypeId(String runtimeTypeId) {
+		runtimeStubTypeId = runtimeTypeId;
+	}
 
-    public void setName( String name )
-    {
-        this.name = name;
-    }
+	public IStatus validate() {
+		return Status.OK_STATUS;
+	}
 
-    public void setDefault( boolean isDefault )
-    {
-        this.isDefault = isDefault;
-    }
+	protected boolean isDefault;
+	protected String name;
+	protected String runtimeStubTypeId;
 
 }

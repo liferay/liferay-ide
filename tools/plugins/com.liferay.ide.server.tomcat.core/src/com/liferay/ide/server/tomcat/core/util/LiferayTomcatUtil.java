@@ -658,7 +658,7 @@ public class LiferayTomcatUtil {
 			if (!ILiferayTomcatConstants.DEFAULT_AUTO_DEPLOYDIR.equals(autoDeployDir)) {
 				IPath autoDeployDirPath = new Path(autoDeployDir);
 
-				if (autoDeployDirPath.isAbsolute() && FileUtil.exists(autoDeployDirPath.toFile())) {
+				if (autoDeployDirPath.isAbsolute() && FileUtil.exists(autoDeployDirPath)) {
 					props.put("auto.deploy.deploy.dir", portalServer.getAutoDeployDirectory());
 				}
 				else {

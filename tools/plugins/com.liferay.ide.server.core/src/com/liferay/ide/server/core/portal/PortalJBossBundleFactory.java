@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,11 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.util.JavaUtil;
 
 import java.util.Map;
@@ -25,40 +25,40 @@ import org.eclipse.core.runtime.Path;
 /**
  * @author Simon Jiang
  */
-public class PortalJBossBundleFactory extends AbstractPortalBundleFactory
-{
+public class PortalJBossBundleFactory extends AbstractPortalBundleFactory {
 
-    private static final String JBAS7_RELEASE_VERSION = "JBossAS-Release-Version";
+	@Override
+	public PortalBundle create(IPath location) {
+		return new PortalJBossBundle(location);
+	}
 
-    @Override
-    public PortalBundle create( Map<String, String> appServerProperties )
-    {
-        return new PortalJBossBundle( appServerProperties );
-    }
+	@Override
+	public PortalBundle create(Map<String, String> appServerProperties) {
+		return new PortalJBossBundle(appServerProperties);
+	}
 
-    @Override
-    public PortalBundle create( IPath location )
-    {
-        return new PortalJBossBundle( location );
-    }
+	@Override
+	protected boolean detectBundleDir(IPath path) {
+		if (FileUtil.notExists(path)) {
+			return false;
+		}
 
-    @Override
-    protected boolean detectBundleDir( IPath path )
-    {
-        if( !path.toFile().exists() )
-        {
-            return false;
-        }
+		IPath bundlesPath = path.append("bundles");
+		IPath modulesPath = path.append("modules");
+		IPath standalonePath = path.append("standalone");
+		IPath binPath = path.append("bin");
 
-        if( path.append( "bundles" ).toFile().exists() && path.append( "modules" ).toFile().exists() &&
-            path.append( "standalone" ).toFile().exists() && path.append( "bin" ).toFile().exists() )
-        {
-            final String mainFolder = new Path( "modules/org/jboss/as/server/main" ).toOSString();
+		if (FileUtil.exists(bundlesPath) && FileUtil.exists(modulesPath) && FileUtil.exists(standalonePath) &&
+			FileUtil.exists(binPath)) {
 
-            return JavaUtil.scanFolderJarsForManifestProp( path.toFile(), mainFolder, JBAS7_RELEASE_VERSION, "7." );
-        }
+			String mainFolder = new Path("modules/org/jboss/as/server/main").toOSString();
 
-        return false;
-    }
+			return JavaUtil.scanFolderJarsForManifestProp(path.toFile(), mainFolder, _JBAS7_RELEASE_VERSION, "7.");
+		}
+
+		return false;
+	}
+
+	private static final String _JBAS7_RELEASE_VERSION = "JBossAS-Release-Version";
 
 }

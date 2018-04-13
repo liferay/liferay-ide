@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.server.core;
 
 import org.eclipse.core.runtime.CoreException;
@@ -20,21 +20,21 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.sourcelookup.ISourceLookupParticipant;
 
-
 /**
  * @author Gregory Amerson
  */
-public interface PortalLaunchParticipant
-{
+public interface PortalLaunchParticipant {
 
-    ISourceLookupParticipant[] getPortalSourceLookupParticipants();
+	public ISourceLookupParticipant[] getPortalSourceLookupParticipants();
 
-    void portalPostLaunch( ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor )
-        throws CoreException;
+	public void portalPostLaunch(
+			ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
+		throws CoreException;
 
-    void portalPreLaunch( ILaunchConfiguration configuration, String mode , ILaunch launch, IProgressMonitor monitor )
-        throws CoreException;
+	public void portalPreLaunch(
+			ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
+		throws CoreException;
 
-    String provideVMArgs( ILaunchConfiguration configuration );
+	public String provideVMArgs(ILaunchConfiguration configuration);
 
 }

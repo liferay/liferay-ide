@@ -64,7 +64,7 @@ public class OpenDeployedFolderAction extends AbstractServerRunningAction {
 			IPath deployedPath = _getDeployFolderPath();
 
 			try {
-				if (FileUtil.notExists(deployedPath.toFile()) ||
+				if (FileUtil.notExists(deployedPath) ||
 					CoreUtil.isNullOrEmpty(ServerUIUtil.getSystemExplorerCommand(deployedPath.toFile()))) {
 
 					action.setEnabled(false);

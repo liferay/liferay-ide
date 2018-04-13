@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,17 +10,18 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.util.JavaUtil;
 import com.liferay.ide.server.util.LayeredModulePathFactory;
 
 import java.io.File;
 import java.io.FileFilter;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -31,129 +32,124 @@ import org.eclipse.core.runtime.Path;
  * @author Simon Jiang
  * @author Charles Wu
  */
-public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory
-{
-    private static final String WF_100_RELEASE_MANIFEST_KEY = "JBoss-Product-Release-Version";
+public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory {
 
-    @Override
-    public PortalBundle create( Map<String, String> appServerProperties )
-    {
-        return new PortalWildFlyBundle( appServerProperties );
-    }
+	@Override
+	public PortalBundle create(IPath location) {
+		return new PortalWildFlyBundle(location);
+	}
 
-    @Override
-    public PortalBundle create( IPath location )
-    {
-        return new PortalWildFlyBundle( location );
-    }
+	@Override
+	public PortalBundle create(Map<String, String> appServerProperties) {
+		return new PortalWildFlyBundle(appServerProperties);
+	}
 
-    @Override
-    protected boolean detectBundleDir( IPath path )
-    {
-        if( !path.toFile().exists() )
-        {
-            return false;
-        }
+	@Override
+	protected boolean detectBundleDir(IPath path) {
+		if (FileUtil.notExists(path)) {
+			return false;
+		}
 
-        if( path.append( "modules" ).toFile().exists() && path.append( "standalone" ).toFile().exists() &&
-            path.append( "bin" ).toFile().exists() )
-        {
-            String vers =
-                getManifestPropFromJBossModulesFolder(
-                    new File[] { new File( path.toPortableString(), "modules" ) }, "org.jboss.as.product",
-                    "wildfly-full/dir/META-INF", WF_100_RELEASE_MANIFEST_KEY );
+		IPath modulesPath = path.append("modules");
+		IPath standalonePath = path.append("standalone");
+		IPath binPath = path.append("bin");
 
-            if( vers != null && vers.startsWith( "10." ) )
-            {
-                return true;
-            }
-            else
-            {
-                return super.detectBundleDir( path );
-            }
-        }
+		if (FileUtil.exists(modulesPath) && FileUtil.exists(standalonePath) && FileUtil.exists(binPath)) {
+			String vers = getManifestPropFromJBossModulesFolder(
+				new File[] {new File(path.toPortableString(), "modules")}, "org.jboss.as.product",
+				"wildfly-full/dir/META-INF", _WF_100_RELEASE_MANIFEST_KEY);
 
-        return false;
-    }
+			if ((vers != null) && vers.startsWith("10.")) {
+				return true;
+			}
+			else {
+				return super.detectBundleDir(path);
+			}
+		}
 
-    protected String getManifestPropFromJBossModulesFolder(
-        File[] moduleRoots, String moduleId, String slot, String property )
-    {
-        File[] layeredRoots = LayeredModulePathFactory.resolveLayeredModulePath( moduleRoots );
+		return false;
+	}
 
-        for( int i = 0; i < layeredRoots.length; i++ )
-        {
-            IPath[] manifests = getFilesForModule( layeredRoots[i], moduleId, slot, manifestFilter() );
+	protected String getManifestPropFromJBossModulesFolder(
+		File[] moduleRoots, String moduleId, String slot, String property) {
 
-            if( ListUtil.isNotEmpty(manifests) )
-            {
-                String value = JavaUtil.getManifestProperty( manifests[0].toFile(), property );
+		File[] layeredRoots = LayeredModulePathFactory.resolveLayeredModulePath(moduleRoots);
 
-                if( value != null )
-                    return value;
-                return null;
-            }
-        }
-        return null;
-    }
+		for (int i = 0; i < layeredRoots.length; i++) {
+			IPath[] manifests = _getFilesForModule(layeredRoots[i], moduleId, slot, _manifestFilter());
 
-    private static FileFilter manifestFilter()
-    {
-        return new FileFilter()
-        {
+			if (ListUtil.isNotEmpty(manifests)) {
+				String value = JavaUtil.getManifestProperty(manifests[0].toFile(), property);
 
-            @Override
-            public boolean accept( File pathname )
-            {
-                if( pathname.isFile() && pathname.getName().toLowerCase().equals( "manifest.mf" ) )
-                {
-                    return true;
-                }
-                return false;
-            }
-        };
-    }
+				if (value != null) {
+					return value;
+				}
 
-    private static IPath[] getFilesForModule( File modulesFolder, String moduleName, String slot, FileFilter filter )
-    {
-        String slashed = moduleName.replaceAll( "\\.", "/" );
-        slot = ( slot == null ? "main" : slot );
+				return null;
+			}
+		}
 
-        return getFiles( modulesFolder, new Path( slashed ).append( slot ), filter );
+		return null;
+	}
 
-    }
+	private static IPath[] _getFiles(File modulesFolder, IPath moduleRelativePath, FileFilter filter) {
+		File[] layeredPaths = LayeredModulePathFactory.resolveLayeredModulePath(modulesFolder);
 
-    private static IPath[] getFiles( File modulesFolder, IPath moduleRelativePath, FileFilter filter )
-    {
-        File[] layeredPaths = LayeredModulePathFactory.resolveLayeredModulePath( modulesFolder );
+		for (int i = 0; i < layeredPaths.length; i++) {
+			IPath lay = new Path(layeredPaths[i].getAbsolutePath());
 
-        for( int i = 0; i < layeredPaths.length; i++ )
-        {
-            IPath lay = new Path( layeredPaths[i].getAbsolutePath() );
-            File layeredPath = new File( lay.append( moduleRelativePath ).toOSString() );
+			IPath relativeLayPath = lay.append(moduleRelativePath);
 
-            if( layeredPath.exists() )
-            {
-                return getFilesFrom( layeredPath, filter );
-            }
-        }
-        return new IPath[0];
-    }
+			File layeredPath = new File(relativeLayPath.toOSString());
 
-    private static IPath[] getFilesFrom( File layeredPath, FileFilter filter )
-    {
-        ArrayList<IPath> list = new ArrayList<IPath>();
-        File[] children = layeredPath.listFiles();
+			if (FileUtil.exists(layeredPath)) {
+				return _getFilesFrom(layeredPath, filter);
+			}
+		}
 
-        for( int i = 0; i < children.length; i++ )
-        {
-            if( filter.accept( children[i] ) )
-            {
-                list.add( new Path( children[i].getAbsolutePath() ) );
-            }
-        }
+		return new IPath[0];
+	}
 
-        return list.toArray( new IPath[list.size()] );
-    }
+	private static IPath[] _getFilesForModule(File modulesFolder, String moduleName, String slot, FileFilter filter) {
+		String slashed = moduleName.replaceAll("\\.", "/");
+
+		slot = slot == null ? "main" : slot;
+
+		return _getFiles(modulesFolder, new Path(slashed).append(slot), filter);
+	}
+
+	private static IPath[] _getFilesFrom(File layeredPath, FileFilter filter) {
+		ArrayList<IPath> list = new ArrayList<>();
+		File[] children = layeredPath.listFiles();
+
+		for (int i = 0; i < children.length; i++) {
+			if (filter.accept(children[i])) {
+				list.add(new Path(children[i].getAbsolutePath()));
+			}
+		}
+
+		return list.toArray(new IPath[list.size()]);
+	}
+
+	private static FileFilter _manifestFilter() {
+		return new FileFilter() {
+
+			@Override
+			public boolean accept(File pathname) {
+				String pathName = pathname.getName();
+
+				String pathNameLowerCase = pathName.toLowerCase();
+
+				if (pathname.isFile() && pathNameLowerCase.equals("manifest.mf")) {
+					return true;
+				}
+
+				return false;
+			}
+
+		};
+	}
+
+	private static final String _WF_100_RELEASE_MANIFEST_KEY = "JBoss-Product-Release-Version";
 
 }

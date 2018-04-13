@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core.portal;
 
@@ -21,25 +20,23 @@ import org.osgi.framework.dto.BundleDTO;
  * @author Gregory Amerson
  * @author Andy Wu
  */
-public class BundleDTOWithStatus extends BundleDTO
-{
+public class BundleDTOWithStatus extends BundleDTO {
 
-    public String _status;
+	public BundleDTOWithStatus(BundleDTO original, String status) {
+		id = original.id;
+		lastModified = original.lastModified;
+		state = original.state;
+		symbolicName = original.symbolicName;
+		version = original.version;
+		this.status = status;
+	}
 
-    public BundleDTOWithStatus( long id, String status, String symbolicName )
-    {
-        this.id = id;
-        _status = status;
-        this.symbolicName = symbolicName;
-    }
+	public BundleDTOWithStatus(long id, String status, String symbolicName) {
+		this.id = id;
+		this.status = status;
+		this.symbolicName = symbolicName;
+	}
 
-    public BundleDTOWithStatus( BundleDTO original, String status )
-    {
-        id = original.id;
-        lastModified = original.lastModified;
-        state = original.state;
-        symbolicName = original.symbolicName;
-        version = original.version;
-        _status = status;
-    }
+	public String status;
+
 }

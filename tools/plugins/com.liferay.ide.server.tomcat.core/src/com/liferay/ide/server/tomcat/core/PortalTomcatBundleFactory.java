@@ -40,7 +40,7 @@ public class PortalTomcatBundleFactory extends AbstractPortalBundleFactory {
 
 	@Override
 	protected boolean detectBundleDir(IPath path) {
-		if (FileUtil.notExists(path.toFile())) {
+		if (FileUtil.notExists(path)) {
 			return false;
 		}
 
@@ -49,8 +49,8 @@ public class PortalTomcatBundleFactory extends AbstractPortalBundleFactory {
 		IPath libPath = path.append("lib");
 		IPath webappPath = path.append("webapps");
 
-		if (FileUtil.exists(binPath.toFile()) && FileUtil.exists(confPath.toFile()) &&
-			FileUtil.exists(libPath.toFile()) && FileUtil.exists(webappPath.toFile())) {
+		if (FileUtil.exists(binPath) && FileUtil.exists(confPath) && FileUtil.exists(libPath) &&
+			FileUtil.exists(webappPath)) {
 
 			return true;
 		}

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,28 +10,23 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core;
 
 /**
  * @author Gregory Amerson
  */
-public abstract class AbstractRuntimeDelegateValidator implements IRuntimeDelegateValidator
-{
-    protected String runtimeTypeId;
+public abstract class AbstractRuntimeDelegateValidator implements IRuntimeDelegateValidator {
 
-    public String getRuntimeTypeId()
-    {
-        return runtimeTypeId;
-    }
+	public String getRuntimeTypeId() {
+		return runtimeTypeId;
+	}
 
-    public void setRuntimeTypeId( String runtimeTypeId )
-    {
-        this.runtimeTypeId = runtimeTypeId;
-    }
+	public void setRuntimeTypeId(String runtimeTypeId) {
+		this.runtimeTypeId = runtimeTypeId;
+	}
+
+	protected String runtimeTypeId;
 
 }

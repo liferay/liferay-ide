@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,13 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.server.remote;
 
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
 
@@ -23,17 +24,21 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import java.nio.file.Files;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -42,206 +47,197 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 
 /**
  * @author Simon Jiang
  */
-public abstract class AbstractRemoteServerPublisher implements IRemoteServerPublisher
-{
-    private IProject project;
+public abstract class AbstractRemoteServerPublisher implements IRemoteServerPublisher {
 
-    public AbstractRemoteServerPublisher( IProject project )
-    {
-        this.project = project;
-    }
+	public AbstractRemoteServerPublisher(IProject project) {
+		_project = project;
+	}
 
-    protected void addRemoveProps(
-        IPath deltaPath, IResource deltaResource, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries,
-        String deletePrefix ) throws IOException
-    {
-        String archive = removeArchive( deltaPath.toPortableString() );
+	public IPath publishModuleDelta(
+			String archiveName, IModuleResourceDelta[] deltas, String deletePrefix, boolean adjustGMTOffset)
+		throws CoreException {
 
-        ZipEntry zipEntry = null;
+		IPath path = LiferayServerCore.getTempLocation("partial-war", archiveName);
 
-        // check to see if we already have an entry for this archive
-        for( ZipEntry entry : deleteEntries.keySet() )
-        {
-            if( entry.getName().startsWith( archive ) )
-            {
-                zipEntry = entry;
-            }
-        }
+		File warfile = path.toFile();
 
-        if( zipEntry == null )
-        {
-            zipEntry = new ZipEntry( archive + "META-INF/" + deletePrefix + "-partialapp-delete.props" ); //$NON-NLS-1$ //$NON-NLS-2$
-        }
+		File warParent = warfile.getParentFile();
 
-        String existingFiles = deleteEntries.get( zipEntry );
+		warParent.mkdirs();
 
-        // String file = encodeRemovedPath(deltaPath.toPortableString().substring(archive.length()));
-        String file = deltaPath.toPortableString().substring( archive.length() );
+		try (OutputStream outputStream = Files.newOutputStream(warfile.toPath());
+			ZipOutputStream zip = new ZipOutputStream(outputStream)) {
 
-        if( deltaResource.getType() == IResource.FOLDER )
-        {
-            file += "/.*"; //$NON-NLS-1$
-        }
+			Map<ZipEntry, String> deleteEntries = new HashMap<>();
 
-        deleteEntries.put( zipEntry, ( existingFiles != null ? existingFiles : StringPool.EMPTY ) + ( file + "\n" ) ); //$NON-NLS-1$
-    }
+			processResourceDeltas(deltas, zip, deleteEntries, deletePrefix, StringPool.EMPTY, adjustGMTOffset);
 
-    protected void addToZip( IPath path, IResource resource, ZipOutputStream zip, boolean adjustGMTOffset )
-                    throws IOException, CoreException
-    {
-        switch( resource.getType() )
-        {
-            case IResource.FILE:
-                ZipEntry zipEntry = new ZipEntry( path.toString() );
+			for (Entry<ZipEntry, String> entry : deleteEntries.entrySet()) {
+				zip.putNextEntry((ZipEntry)entry);
 
-                zip.putNextEntry( zipEntry );
+				String deleteEntry = entry.getValue();
 
-                InputStream contents = ( (IFile) resource ).getContents();
+				zip.write(deleteEntry.getBytes());
+			}
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
-                if( adjustGMTOffset )
-                {
-                    TimeZone currentTimeZone = TimeZone.getDefault();
-                    Calendar currentDt = new GregorianCalendar( currentTimeZone, Locale.getDefault() );
+		return new Path(warfile.getAbsolutePath());
+	}
 
-                    // Get the Offset from GMT taking current TZ into account
-                    int gmtOffset =
-                        currentTimeZone.getOffset(
-                            currentDt.get( Calendar.ERA ), currentDt.get( Calendar.YEAR ),
-                            currentDt.get( Calendar.MONTH ), currentDt.get( Calendar.DAY_OF_MONTH ),
-                            currentDt.get( Calendar.DAY_OF_WEEK ), currentDt.get( Calendar.MILLISECOND ) );
+	protected void addRemoveProps(
+			IPath deltaPath, IResource deltaResource, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries,
+			String deletePrefix)
+		throws IOException {
 
-                    zipEntry.setTime( System.currentTimeMillis() + ( gmtOffset * -1 ) );
-                }
+		String archive = _removeArchive(deltaPath.toPortableString());
 
-                try
-                {
-                    IOUtils.copy( contents, zip );
-                }
-                finally
-                {
-                    contents.close();
-                }
+		ZipEntry zipEntry = null;
 
-                break;
+		// check to see if we already have an entry for this archive
 
-            case IResource.FOLDER:
-            case IResource.PROJECT:
-                IContainer container = (IContainer) resource;
+		for (ZipEntry entry : deleteEntries.keySet()) {
+			String entryName = entry.getName();
 
-                IResource[] members = container.members();
+			if (entryName.startsWith(archive)) {
+				zipEntry = entry;
+			}
+		}
 
-                for( IResource res : members )
-                {
-                    addToZip( path.append( res.getName() ), res, zip, adjustGMTOffset );
-                }
-        }
-    }
+		if (zipEntry == null) {
+			zipEntry = new ZipEntry(archive + "META-INF/" + deletePrefix + "-partialapp-delete.props");
+		}
 
-    protected IProject getProject()
-    {
-        return this.project;
-    }
+		String existingFiles = deleteEntries.get(zipEntry);
 
-    protected void processResourceDeltas(
-        IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries, String deletePrefix,
-        String deltaPrefix, boolean adjustGMTOffset ) throws IOException, CoreException
-    {
-        for( IModuleResourceDelta delta : deltas )
-        {
-            final int deltaKind = delta.getKind();
+		String path = deltaPath.toPortableString();
 
-            final IResource deltaResource = (IResource) delta.getModuleResource().getAdapter( IResource.class );
+		String file = path.substring(archive.length());
 
-            final IProject deltaProject = deltaResource.getProject();
+		if (deltaResource.getType() == IResource.FOLDER) {
+			file += "/.*";
+		}
 
-            // IDE-110 IDE-648
-            final IWebProject lrproject = LiferayCore.create( IWebProject.class, deltaProject );
+		deleteEntries.put(zipEntry, (existingFiles != null ? existingFiles : StringPool.EMPTY) + (file + "\n"));
+	}
 
-            if( lrproject != null )
-            {
-                final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
+	protected void addToZip(IPath path, IResource resource, ZipOutputStream zip, boolean adjustGMTOffset)
+		throws CoreException, IOException {
 
-                IPath deltaPath = null;
+		switch (resource.getType()) {
+			case IResource.FILE:
+				ZipEntry zipEntry = new ZipEntry(path.toString());
 
-                if( webappRoot != null && webappRoot.exists() )
-                {
-                    final IPath deltaFullPath = deltaResource.getFullPath();
-                    final IPath containerFullPath = webappRoot.getFullPath();
-                    deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
+				zip.putNextEntry(zipEntry);
 
-                    if( deltaPath != null && deltaPath.segmentCount() > 0 )
-                    {
-                        break;
-                    }
-                }
+				InputStream contents = ((IFile)resource).getContents();
 
-                if( deltaKind == IModuleResourceDelta.ADDED || deltaKind == IModuleResourceDelta.CHANGED )
-                {
-                    addToZip( deltaPath, deltaResource, zip, adjustGMTOffset );
-                }
-                else if( deltaKind == IModuleResourceDelta.REMOVED )
-                {
-                    addRemoveProps( deltaPath, deltaResource, zip, deleteEntries, deletePrefix );
-                }
-                else if( deltaKind == IModuleResourceDelta.NO_CHANGE )
-                {
-                    IModuleResourceDelta[] children = delta.getAffectedChildren();
-                    processResourceDeltas(
-                        children, zip, deleteEntries, deletePrefix, deltaPrefix, adjustGMTOffset );
-                }
-            }
-        }
-    }
+				if (adjustGMTOffset) {
+					TimeZone currentTimeZone = TimeZone.getDefault();
 
-    public IPath publishModuleDelta(
-        String archiveName, IModuleResourceDelta[] deltas, String deletePrefix, boolean adjustGMTOffset )
-        throws CoreException
-    {
-        IPath path = LiferayServerCore.getTempLocation( "partial-war", archiveName ); //$NON-NLS-1$
- 
-        File warfile = path.toFile();
+					Calendar currentDt = new GregorianCalendar(currentTimeZone, Locale.getDefault());
 
-        warfile.getParentFile().mkdirs();
+					// Get the Offset from GMT taking current TZ into account
 
-        try(OutputStream outputStream = Files.newOutputStream( warfile.toPath() );
-                        ZipOutputStream zip = new ZipOutputStream( outputStream ))
-        {
-            Map<ZipEntry, String> deleteEntries = new HashMap<ZipEntry, String>();
+					int gmtOffset = currentTimeZone.getOffset(
+						currentDt.get(Calendar.ERA), currentDt.get(Calendar.YEAR), currentDt.get(Calendar.MONTH),
+						currentDt.get(Calendar.DAY_OF_MONTH), currentDt.get(Calendar.DAY_OF_WEEK),
+						currentDt.get(Calendar.MILLISECOND));
 
-            processResourceDeltas( deltas, zip, deleteEntries, deletePrefix, StringPool.EMPTY, adjustGMTOffset );
+					zipEntry.setTime(System.currentTimeMillis() + (gmtOffset * -1));
+				}
 
-            for( ZipEntry entry : deleteEntries.keySet() )
-            {
-                zip.putNextEntry( entry );
-                zip.write( deleteEntries.get( entry ).getBytes() );
-            }
+				try {
+					IOUtils.copy(contents, zip);
+				}
+				finally {
+					contents.close();
+				}
 
-            // if ((removedResources != null) && (removedResources.size() > 0)) {
-            // writeRemovedResources(removedResources, zip);
-            // }
-        }
-        catch( Exception ex )
-        {
-            ex.printStackTrace();
-        }
+				break;
 
-        return new Path( warfile.getAbsolutePath() );
-    }
+			case IResource.FOLDER:
+			case IResource.PROJECT:
+				IContainer container = (IContainer)resource;
 
-    private String removeArchive( String archive )
-    {
-        int index = Math.max( archive.lastIndexOf( ".war" ), archive.lastIndexOf( ".jar" ) ); //$NON-NLS-1$ //$NON-NLS-2$
+				IResource[] members = container.members();
 
-        if( index >= 0 )
-        {
-            return archive.substring( 0, index + 5 );
-        }
+				for (IResource res : members) {
+					addToZip(path.append(res.getName()), res, zip, adjustGMTOffset);
+				}
+		}
+	}
 
-        return StringPool.EMPTY;
-    }
+	protected IProject getProject() {
+		return _project;
+	}
+
+	protected void processResourceDeltas(
+			IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries,
+			String deletePrefix, String deltaPrefix, boolean adjustGMTOffset)
+		throws CoreException, IOException {
+
+		for (IModuleResourceDelta delta : deltas) {
+			int deltaKind = delta.getKind();
+			IModuleResource deltaModuleResource = delta.getModuleResource();
+
+			IResource deltaResource = (IResource)deltaModuleResource.getAdapter(IResource.class);
+
+			IProject deltaProject = deltaResource.getProject();
+
+			// IDE-110 IDE-648
+
+			IWebProject lrproject = LiferayCore.create(IWebProject.class, deltaProject);
+
+			if (lrproject != null) {
+				IFolder webappRoot = lrproject.getDefaultDocrootFolder();
+
+				IPath deltaPath = null;
+
+				if (FileUtil.exists(webappRoot)) {
+					IPath deltaFullPath = deltaResource.getFullPath();
+					IPath containerFullPath = webappRoot.getFullPath();
+
+					deltaPath = new Path(deltaPrefix + deltaFullPath.makeRelativeTo(containerFullPath));
+
+					if ((deltaPath != null) && (deltaPath.segmentCount() > 0)) {
+						break;
+					}
+				}
+
+				if ((deltaKind == IModuleResourceDelta.ADDED) || (deltaKind == IModuleResourceDelta.CHANGED)) {
+					addToZip(deltaPath, deltaResource, zip, adjustGMTOffset);
+				}
+				else if (deltaKind == IModuleResourceDelta.REMOVED) {
+					addRemoveProps(deltaPath, deltaResource, zip, deleteEntries, deletePrefix);
+				}
+				else if (deltaKind == IModuleResourceDelta.NO_CHANGE) {
+					IModuleResourceDelta[] children = delta.getAffectedChildren();
+
+					processResourceDeltas(children, zip, deleteEntries, deletePrefix, deltaPrefix, adjustGMTOffset);
+				}
+			}
+		}
+	}
+
+	private String _removeArchive(String archive) {
+		int index = Math.max(archive.lastIndexOf(".war"), archive.lastIndexOf(".jar"));
+
+		if (index >= 0) {
+			return archive.substring(0, index + 5);
+		}
+
+		return StringPool.EMPTY;
+	}
+
+	private IProject _project;
+
 }

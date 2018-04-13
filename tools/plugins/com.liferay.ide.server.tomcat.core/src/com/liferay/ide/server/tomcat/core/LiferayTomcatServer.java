@@ -292,7 +292,7 @@ public class LiferayTomcatServer
 			configuration = new LiferayTomcat70Configuration(folder);
 		}
 
-		if (FileUtil.exists(path.toFile())) {
+		if (FileUtil.exists(path)) {
 			try {
 				configuration.importFromPath(path, isTestEnvironment(), monitor);
 			}

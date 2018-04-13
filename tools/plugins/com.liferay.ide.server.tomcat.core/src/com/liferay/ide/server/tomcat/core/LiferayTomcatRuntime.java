@@ -379,7 +379,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 	private IPath _findBundledJREPath(IPath location) {
 		String os = Platform.getOS();
 
-		if (os.equals(Platform.OS_WIN32) && (location != null) && FileUtil.exists(location.toFile())) {
+		if (os.equals(Platform.OS_WIN32) && (location != null) && FileUtil.exists(location)) {
 			File tomcat = location.toFile();
 
 			String[] jre = tomcat.list(

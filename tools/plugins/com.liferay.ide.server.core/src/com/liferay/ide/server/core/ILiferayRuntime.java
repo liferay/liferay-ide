@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core;
 
@@ -24,37 +23,36 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Greg Amerson
  */
-public interface ILiferayRuntime extends IJavaRuntime
-{
+public interface ILiferayRuntime extends IJavaRuntime {
 
-    IPath getAppServerDeployDir();
+	public IPath getAppServerDeployDir();
 
-    IPath getAppServerDir();
+	public IPath getAppServerDir();
 
-    IPath getAppServerLibGlobalDir();
+	public IPath getAppServerLibGlobalDir();
 
-    IPath getAppServerPortalDir();
+	public IPath getAppServerPortalDir();
 
-    String getAppServerType();
+	public String getAppServerType();
 
-    String[] getHookSupportedProperties();
+	public String[] getHookSupportedProperties();
 
-    String getJavadocURL();
+	public String getJavadocURL();
 
-    IPath getLiferayHome();
+	public IPath getLiferayHome();
 
-    String getPortalVersion();
+	public String getPortalVersion();
 
-    Properties getPortletCategories();
+	public Properties getPortletCategories();
 
-    Properties getPortletEntryCategories();
+	public Properties getPortletEntryCategories();
 
-    IRuntime getRuntime();
+	public IRuntime getRuntime();
 
-    IPath getRuntimeLocation();
+	public IPath getRuntimeLocation();
 
-    IPath getSourceLocation();
+	public IPath getSourceLocation();
 
-    IPath[] getUserLibs();
+	public IPath[] getUserLibs();
 
 }

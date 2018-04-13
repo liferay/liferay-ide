@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,50 +10,40 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core;
 
 /**
- * @author gregory.amerson@liferay.com
+ * @author Gregory Amerson
  */
-public abstract class AbstractPluginPublisher implements IPluginPublisher
-{
+public abstract class AbstractPluginPublisher implements IPluginPublisher {
 
-    protected String facetId;
+	public AbstractPluginPublisher() {
+		this(null);
+	}
 
-    protected String runtimeTypeId;
+	public AbstractPluginPublisher(String facetId) {
+		this.facetId = facetId;
+	}
 
-    public AbstractPluginPublisher()
-    {
-        this( null );
-    }
+	public String getFacetId() {
+		return facetId;
+	}
 
-    public AbstractPluginPublisher( String facetId )
-    {
-        super();
-        this.facetId = facetId;
-    }
+	public String getRuntimeTypeId() {
+		return runtimeTypeId;
+	}
 
-    public String getFacetId()
-    {
-        return facetId;
-    }
+	public void setFacetId(String facetId) {
+		this.facetId = facetId;
+	}
 
-    public String getRuntimeTypeId()
-    {
-        return runtimeTypeId;
-    }
+	public void setRuntimeTypeId(String runtimeTypeId) {
+		this.runtimeTypeId = runtimeTypeId;
+	}
 
-    public void setFacetId( String facetId )
-    {
-        this.facetId = facetId;
-    }
-
-    public void setRuntimeTypeId( String runtimeTypeId )
-    {
-        this.runtimeTypeId = runtimeTypeId;
-    }
+	protected String facetId;
+	protected String runtimeTypeId;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core.portal;
 
@@ -24,18 +23,18 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public interface PortalServerConstants
-{
-    IEclipsePreferences _defaultPrefs = DefaultScope.INSTANCE.getNode( LiferayServerCore.PLUGIN_ID );
+public interface PortalServerConstants {
 
-    boolean DEFAULT_DEVELOPER_MODE = false;
+	public boolean DEFAULT_DEVELOPER_MODE = false;
 
-    boolean DEFAULT_LAUNCH_SETTING = true;
+	public String DEFAULT_HTTP_PORT = "8080";
 
-    String DEFAULT_MEMORY_ARGS = _defaultPrefs.get( "default.memory.args", "-Xmx1024m" );
+	public boolean DEFAULT_LAUNCH_SETTING = true;
 
-    String DEFAULT_USERNAME = "test@liferay.com";
+	public IEclipsePreferences defaultPrefs = DefaultScope.INSTANCE.getNode(LiferayServerCore.PLUGIN_ID);
 
-    String DEFAULT_HTTP_PORT = "8080";
+	public String DEFAULT_MEMORY_ARGS = defaultPrefs.get("default.memory.args", "-Xmx1024m");
+
+	public String DEFAULT_USERNAME = "test@liferay.com";
 
 }

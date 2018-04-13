@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core.portal;
 
@@ -21,12 +20,15 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 
+import java.lang.reflect.Constructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.internal.Server;
@@ -39,172 +41,164 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class PortalPublishTask extends PublishTaskDelegate
-{
+@SuppressWarnings("restriction")
+public class PortalPublishTask extends PublishTaskDelegate {
 
-    public PortalPublishTask()
-    {
-        super();
-    }
+	public PortalPublishTask() {
+	}
 
-    private void addOperation(
-        Class<? extends BundlePublishOperation> opClass, List<BundlePublishOperation> tasks, IServer server,
-        IModule[] module )
-    {
-        for( BundlePublishOperation task : tasks )
-        {
-            if( task.getClass().equals( opClass ) )
-            {
-                task.addModule( module );
-                return;
-            }
-        }
+	@SuppressWarnings("rawtypes")
+	public PublishOperation[] getTasks(IServer server, int kind, List modules, List kindList) {
+		List<BundlePublishOperation> tasks = new ArrayList<>();
 
-        try
-        {
-            BundlePublishOperation op =
-                opClass.getConstructor( IServer.class, IModule[].class ).newInstance( server, module );
-            tasks.add( op );
-        }
-        catch( Exception e )
-        {
-            LiferayServerCore.logError( "Unable to add bundle operation", e );
-        }
-    }
+		PortalServerBehavior serverBehavior = (PortalServerBehavior)server.loadAdapter(
+			PortalServerBehavior.class, null);
 
-    @SuppressWarnings( "rawtypes" )
-    public PublishOperation[] getTasks( IServer server, int kind, List modules, List kindList )
-    {
-        List<BundlePublishOperation> tasks = new ArrayList<BundlePublishOperation>();
+		if (ListUtil.isNotEmpty(modules)) {
+			int size = modules.size();
 
-        PortalServerBehavior serverBehavior =
-            (PortalServerBehavior) server.loadAdapter( PortalServerBehavior.class, null );
+			for (int i = 0; i < size; i++) {
+				IModule[] module = (IModule[])modules.get(i);
+				Integer deltaKind = (Integer)kindList.get(i);
+				boolean needClean = false;
+				IModuleResourceDelta[] deltas = ((Server)server).getPublishedResourceDelta(module);
 
-        if( ListUtil.isNotEmpty(modules) )
-        {
-            final int size = modules.size();
+				for (IModuleResourceDelta delta : deltas) {
+					IModuleResource resource = delta.getModuleResource();
 
-            for( int i = 0; i < size; i++ )
-            {
-                IModule[] module = (IModule[]) modules.get( i );
-                Integer deltaKind = (Integer) kindList.get( i );
-                boolean needClean = false;
-                IModuleResourceDelta[] deltas = ( (Server) server ).getPublishedResourceDelta( module );
+					IFile resourceFile = (IFile)resource.getAdapter(IFile.class);
 
-                for( IModuleResourceDelta delta : deltas )
-                {
-                    final IModuleResource resource = delta.getModuleResource();
-                    final IFile resourceFile = (IFile) resource.getAdapter( IFile.class );
+					if (resourceFile != null) {
+						String resourceFileName = resourceFile.getName();
 
-                    if( resourceFile != null && resourceFile.getName().equals( "bnd.bnd" ) )
-                    {
-                        needClean = true;
-                        break;
-                    }
-                }
+						if (resourceFileName.equals("bnd.bnd")) {
+							needClean = true;
 
-                switch( kind )
-                {
-                    case IServer.PUBLISH_FULL:
-                    case IServer.PUBLISH_INCREMENTAL:
-                    case IServer.PUBLISH_AUTO:
-                        final IProject project = module[0].getProject();
+							break;
+						}
+					}
+				}
 
-                        switch( deltaKind )
-                        {
-                            case ServerBehaviourDelegate.ADDED:
-                                addOperation( BundlePublishFullAddCleanBuild.class, tasks, server, module );
-                                break;
+				switch (kind) {
+					case IServer.PUBLISH_FULL:
+					case IServer.PUBLISH_INCREMENTAL:
+					case IServer.PUBLISH_AUTO:
+						IProject project = module[0].getProject();
 
-                            case ServerBehaviourDelegate.CHANGED:
-                                if (needClean)
-                                {
-                                    addOperation( BundlePublishFullAddCleanBuild.class, tasks, server, module );
-                                }
-                                else
-                                {
-                                    addOperation( BundlePublishFullAdd.class, tasks, server, module );
-                                }
+						switch (deltaKind) {
+						case ServerBehaviourDelegate.ADDED:
+							_addOperation(BundlePublishFullAddCleanBuild.class, tasks, server, module);
 
-                                break;
+							break;
 
-                            case ServerBehaviourDelegate.REMOVED:
-                                addOperation( BundlePublishFullRemove.class, tasks, server, module );
-                                break;
+						case ServerBehaviourDelegate.CHANGED:
+							if (needClean) {
+								_addOperation(BundlePublishFullAddCleanBuild.class, tasks, server, module);
+							}
+							else {
+								_addOperation(BundlePublishFullAdd.class, tasks, server, module);
+							}
 
-                            case ServerBehaviourDelegate.NO_CHANGE:
-                                final IBundleProject bundleProject =
-                                    LiferayCore.create( IBundleProject.class, project );
+							break;
 
-                                if( bundleProject != null )
-                                {
-                                    try
-                                    {
-                                        if( isUserRedeploy( serverBehavior, module[0] ) ||
-                                           !isDeployed(server,serverBehavior,bundleProject.getSymbolicName()) )
-                                        {
-                                            addOperation(
-                                                BundlePublishFullAddCleanBuild.class, tasks, server, module );
-                                        }
-                                    }
-                                    catch( CoreException e )
-                                    {
-                                        LiferayServerCore.logError(
-                                            "Unable to get bsn for project " + project.getName(), e );
-                                    }
-                                }
+						case ServerBehaviourDelegate.REMOVED:
+							_addOperation(BundlePublishFullRemove.class, tasks, server, module);
 
-                                break;
+							break;
 
-                            default:
-                                break;
-                            }
-                        break;
+						case ServerBehaviourDelegate.NO_CHANGE:
+							IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 
-                    default:
-                        break;
-                }
-            }
-        }
+							if (bundleProject != null) {
+								try {
+									if (_isUserRedeploy(serverBehavior, module[0]) ||
+										!_isDeployed(server, bundleProject.getSymbolicName())) {
 
-        return tasks.toArray( new PublishOperation[0] );
-    }
+										_addOperation(BundlePublishFullAddCleanBuild.class, tasks, server, module);
+									}
+								}
+								catch (CoreException ce) {
+									LiferayServerCore.logError(
+										"Unable to get bsn for project " + project.getName(), ce);
+								}
+							}
 
-    @SuppressWarnings( "rawtypes" )
-    @Override
-    public PublishOperation[] getTasks( IServer server, List modules )
-    {
-        return super.getTasks( server, modules );
-    }
+							break;
 
-    private boolean isDeployed(IServer server , PortalServerBehavior serverBehavior , String bsn )
-    {
-        boolean isDeployed = false;
+						default:
 
-        if( server.getServerState() == IServer.STATE_STARTED )
-        {
-            try
-            {
-                isDeployed = new GogoBundleDeployer().getBundleId( bsn ) > 0;
-            }
-            catch( Exception e )
-            {
-            }
-        }
+							break;
+						}
 
-        return isDeployed;
-    }
+						break;
 
-    private boolean isUserRedeploy( PortalServerBehavior serverBehavior, IModule module )
-    {
-        if( serverBehavior.getInfo() != null )
-        {
-            Object moduleInfo = serverBehavior.getInfo().getAdapter( IModule.class );
+					default:
 
-            return module.equals( moduleInfo );
-        }
+						break;
+				}
+			}
+		}
 
-        return false;
-    }
+		return tasks.toArray(new PublishOperation[0]);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public PublishOperation[] getTasks(IServer server, List modules) {
+		return super.getTasks(server, modules);
+	}
+
+	private void _addOperation(
+		Class<? extends BundlePublishOperation> opClass, List<BundlePublishOperation> tasks, IServer server,
+		IModule[] module) {
+
+		for (BundlePublishOperation task : tasks) {
+			Class<? extends BundlePublishOperation> c = task.getClass();
+
+			if (c.equals(opClass)) {
+				task.addModule(module);
+
+				return;
+			}
+		}
+
+		try {
+			Constructor<? extends BundlePublishOperation> constructor = opClass.getConstructor(
+				IServer.class, IModule[].class);
+
+			BundlePublishOperation op = constructor.newInstance(server, module);
+
+			tasks.add(op);
+		}
+		catch (Exception e) {
+			LiferayServerCore.logError("Unable to add bundle operation", e);
+		}
+	}
+
+	private boolean _isDeployed(IServer server, String bsn) {
+		boolean deployed = false;
+
+		if (server.getServerState() == IServer.STATE_STARTED) {
+			try {
+				deployed = new GogoBundleDeployer().getBundleId(bsn) > 0;
+			}
+			catch (Exception e) {
+			}
+		}
+
+		return deployed;
+	}
+
+	private boolean _isUserRedeploy(PortalServerBehavior serverBehavior, IModule module) {
+		if (serverBehavior.getInfo() != null) {
+			IAdaptable serverBehaviorInfo = serverBehavior.getInfo();
+
+			Object moduleInfo = serverBehaviorInfo.getAdapter(IModule.class);
+
+			return module.equals(moduleInfo);
+		}
+
+		return false;
+	}
+
 }

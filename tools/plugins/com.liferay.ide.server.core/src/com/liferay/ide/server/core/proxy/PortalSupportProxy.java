@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,116 +10,112 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.server.core.proxy;
 
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+
 import java.net.URL;
 import java.net.URLClassLoader;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
 
-
 /**
  * @author Gregory Amerson
  */
-public abstract class PortalSupportProxy implements InvocationHandler
-{
-    protected ClassLoader previousClassLoader;
-    protected URLClassLoader proxyClassLoader;
-    protected Object serviceObject;
+public abstract class PortalSupportProxy implements InvocationHandler {
 
-    protected void configureClassloader() throws CoreException {
-        if (proxyClassLoader == null) {
-            proxyClassLoader = createClassLoader();
-        }
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		Object retval = null;
+		Throwable error = null;
 
-        ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
+		configureClassloader();
 
-        if (currentClassLoader.equals(proxyClassLoader)) {
-            return;
-        }
-        else {
-            previousClassLoader = currentClassLoader;
-            Thread.currentThread().setContextClassLoader(proxyClassLoader);
-        }
+		try {
+			Object serviceObject = getServiceObject();
 
-    }
+			Class<? extends Object> serviceClass = serviceObject.getClass();
 
-    protected URLClassLoader createClassLoader() throws CoreException
-    {
-        List<URL> urls = new ArrayList<URL>();
+			Method serviceMethod = serviceClass.getMethod(method.getName(), method.getParameterTypes());
 
-        urls.add( LiferayServerCore.getPortalSupportLibURL() );
+			retval = serviceMethod.invoke(serviceObject, args);
+		}
+		catch (Throwable t) {
+			LiferayServerCore.logError("Error in proxy method " + method.getName(), t);
+			error = t;
+		}
+		finally {
+			unconfigureClassloader();
+		}
 
-        for( URL url : getProxyClasspath() )
-        {
-            urls.add( url );
-        }
+		if (error != null) {
+			throw new RuntimeException("Error in workflow validation proxy.", error.getCause());
+		}
 
-        return new URLClassLoader( urls.toArray( new URL[0] ), Platform.class.getClassLoader() );
-    }
+		return retval;
+	}
 
-    protected abstract URL[] getProxyClasspath() throws CoreException;
+	protected void configureClassloader() throws CoreException {
+		if (proxyClassLoader == null) {
+			proxyClassLoader = createClassLoader();
+		}
 
-    protected Object getServiceObject() throws Exception {
+		Thread currentThread = Thread.currentThread();
 
-        if (serviceObject == null) {
-            //serviceObject = ScriptingCore.getGroovyScriptingSupport().newInstanceFromFile( getGroovyFile() );
-        }
+		ClassLoader currentClassLoader = currentThread.getContextClassLoader();
 
-        return serviceObject;
-    }
+		if (currentClassLoader.equals(proxyClassLoader)) {
+			return;
+		}
+		else {
+			previousClassLoader = currentClassLoader;
 
-    public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
-    {
-        Object retval = null;
-        Throwable error = null;
+			currentThread.setContextClassLoader(proxyClassLoader);
+		}
+	}
 
-        configureClassloader();
+	protected URLClassLoader createClassLoader() throws CoreException {
+		List<URL> urls = new ArrayList<>();
 
-        try
-        {
-            Object serviceObject = getServiceObject();
+		urls.add(LiferayServerCore.getPortalSupportLibURL());
 
-            Method serviceMethod = serviceObject.getClass().getMethod( method.getName(), method.getParameterTypes() );
+		for (URL url : getProxyClasspath()) {
+			urls.add(url);
+		}
 
-            retval = serviceMethod.invoke( serviceObject, args );
-        }
-        catch( Throwable t )
-        {
-            LiferayServerCore.logError( "Error in proxy method " + method.getName(), t); //$NON-NLS-1$
-            error = t;
-        }
-        finally
-        {
-            unconfigureClassloader();
-        }
+		return new URLClassLoader(urls.toArray(new URL[0]), Platform.class.getClassLoader());
+	}
 
-        if( error != null )
-        {
-            throw new RuntimeException( "Error in workflow validation proxy.", error.getCause() ); //$NON-NLS-1$
-        }
+	protected abstract URL[] getProxyClasspath() throws CoreException;
 
-        return retval;
-    }
+	protected Object getServiceObject() throws Exception {
+		if (serviceObject == null) {
+		}
 
-    protected void unconfigureClassloader()
-    {
-        if( previousClassLoader != null )
-        {
-            Thread.currentThread().setContextClassLoader( previousClassLoader );
-        }
-        else
-        {
-            Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
-        }
-    }
+		return serviceObject;
+	}
+
+	protected void unconfigureClassloader() {
+		Thread currentThread = Thread.currentThread();
+
+		if (previousClassLoader != null) {
+			currentThread.setContextClassLoader(previousClassLoader);
+		}
+		else {
+			currentThread.setContextClassLoader(getClass().getClassLoader());
+		}
+	}
+
+	protected ClassLoader previousClassLoader;
+	protected URLClassLoader proxyClassLoader;
+	protected Object serviceObject;
+
 }

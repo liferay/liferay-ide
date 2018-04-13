@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.remote;
 
@@ -32,144 +31,124 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class RemoteMonitorProcess extends Process implements IProcess
-{
+@SuppressWarnings("restriction")
+public class RemoteMonitorProcess extends Process implements IProcess {
 
-    protected IServerManagerConnection remoteConnection;
-    protected String label;
-    protected ILaunch launch;
-    protected IServer server;
-    protected IStreamsProxy streamsProxy;
-    protected IRemoteServer remoteServer;
+	public RemoteMonitorProcess(IServer server, IServerManagerConnection connection, ILaunch launch) {
+		this.server = server;
+		remoteServer = (IRemoteServer)server.loadAdapter(IRemoteServer.class, null);
+		remoteConnection = connection;
+		this.launch = launch;
+	}
 
-    public RemoteMonitorProcess( IServer server, IServerManagerConnection connection, ILaunch launch )
-    {
-        this.server = server;
-        this.remoteServer = (IRemoteServer) server.loadAdapter( IRemoteServer.class, null );
-        this.remoteConnection = connection;
-        this.launch = launch;
-    }
+	public boolean canTerminate() {
+		return !isTerminated();
+	}
 
-    public boolean canTerminate()
-    {
-        return !isTerminated();
-    }
+	@Override
+	public void destroy() {
+		System.out.println("destroy");
+	}
 
-    @Override
-    public void destroy()
-    {
-        System.out.println( "destroy" ); //$NON-NLS-1$
-    }
+	@Override
+	public int exitValue() {
+		return 0;
+	}
 
-    @Override
-    public int exitValue()
-    {
+	@SuppressWarnings("rawtypes")
+	public Object getAdapter(Class adapter) {
+		return null;
+	}
 
-        return 0;
-    }
+	public String getAttribute(String key) {
+		return null;
+	}
 
-    @SuppressWarnings( "rawtypes" )
-    public Object getAdapter( Class adapter )
-    {
-        return null;
-    }
+	@Override
+	public InputStream getErrorStream() {
+		return new RemoteLogStream(server, remoteServer, remoteConnection, "error");
+	}
 
-    public String getAttribute( String key )
-    {
-        // return (/* IProcess.ATTR_PROCESS_TYPE.equals(key) || */IProcess.ATTR_PROCESS_LABEL.equals(key))
-        // ? "Remote Liferay Server Monitor" : null;
-        return null;
-    }
+	public int getExitValue() throws DebugException {
+		return 0;
+	}
 
-    @Override
-    public InputStream getErrorStream()
-    {
-        return new RemoteLogStream( server, remoteServer, remoteConnection, "error" ); //$NON-NLS-1$
-    }
+	@Override
+	public InputStream getInputStream() {
+		return new RemoteLogStream(server, remoteServer, remoteConnection, "output");
+	}
 
-    public int getExitValue() throws DebugException
-    {
+	public String getLabel() {
+		if (label == null) {
+			String host = null;
+			String port = null;
 
-        return 0;
-    }
+			if (server != null) {
+				host = server.getHost();
+			}
 
-    @Override
-    public InputStream getInputStream()
-    {
-        return new RemoteLogStream( server, remoteServer, remoteConnection, "output" ); //$NON-NLS-1$
-    }
+			IRemoteServer wasServer = RemoteUtil.getRemoteServer(server);
 
-    public String getLabel()
-    {
-        if( this.label == null )
-        {
-            String host = null;
-            String port = null;
+			if (wasServer != null) {
+				port = wasServer.getHTTPPort();
+			}
 
-            if( server != null )
-            {
-                host = server.getHost();
-            }
+			label = (host != null ? host : StringPool.EMPTY) + ":" + (port != null ? port : StringPool.EMPTY);
+		}
 
-            IRemoteServer wasServer = RemoteUtil.getRemoteServer( server );
+		return label;
+	}
 
-            if( wasServer != null )
-            {
-                port = wasServer.getHTTPPort();
-            }
+	public ILaunch getLaunch() {
+		return launch;
+	}
 
-            this.label = ( host != null ? host : StringPool.EMPTY ) + ":" + ( port != null ? port : StringPool.EMPTY ); //$NON-NLS-1$
-        }
+	@Override
+	public OutputStream getOutputStream() {
+		return null;
+	}
 
-        return this.label;
-    }
+	public IStreamsProxy getStreamsProxy() {
+		if (streamsProxy == null) {
+			streamsProxy = new StreamsProxy(this, "UTF-8");
+		}
 
-    public ILaunch getLaunch()
-    {
-        return launch;
-    }
+		return streamsProxy;
+	}
 
-    @Override
-    public OutputStream getOutputStream()
-    {
-        return null;
-    }
+	public boolean isTerminated() {
+		if (remoteConnection == null) {
+			return true;
+		}
 
-    public IStreamsProxy getStreamsProxy()
-    {
-        if( streamsProxy == null )
-        {
-            streamsProxy = new StreamsProxy( this, "UTF-8" ); //$NON-NLS-1$
-        }
+		return false;
+	}
 
-        return streamsProxy;
-    }
+	public void setAttribute(String key, String value) {
+	}
 
-    public boolean isTerminated()
-    {
-        return remoteConnection == null; // || (!adminConnection.isAlive().isOK());
-    }
+	public void terminate() throws DebugException {
+		remoteConnection = null;
 
-    public void setAttribute( String key, String value )
-    {
-    }
+		// this.launch.removeProcess(this);
 
-    public void terminate() throws DebugException
-    {
-        remoteConnection = null;
-        // this.launch.removeProcess(this);
+		DebugEvent[] events = {new DebugEvent(this, DebugEvent.TERMINATE)};
 
-        DebugEvent[] events = { new DebugEvent( this, DebugEvent.TERMINATE ) };
+		DebugPlugin debugPlugin = DebugPlugin.getDefault();
 
-        DebugPlugin.getDefault().fireDebugEventSet( events );
-    }
+		debugPlugin.fireDebugEventSet(events);
+	}
 
-    @Override
-    public int waitFor() throws InterruptedException
-    {
+	@Override
+	public int waitFor() throws InterruptedException {
+		return 0;
+	}
 
-        return 0;
-    }
+	protected String label;
+	protected ILaunch launch;
+	protected IServerManagerConnection remoteConnection;
+	protected IRemoteServer remoteServer;
+	protected IServer server;
+	protected IStreamsProxy streamsProxy;
 
 }

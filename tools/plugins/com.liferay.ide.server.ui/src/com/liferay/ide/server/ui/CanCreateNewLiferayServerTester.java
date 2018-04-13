@@ -33,7 +33,7 @@ public class CanCreateNewLiferayServerTester extends PropertyTester {
 
 			IPath location = folder.getRawLocation();
 
-			if (FileUtil.exists(location.toFile())) {
+			if (FileUtil.exists(location)) {
 				return LiferayServerCore.isPortalBundlePath(location);
 			}
 		}

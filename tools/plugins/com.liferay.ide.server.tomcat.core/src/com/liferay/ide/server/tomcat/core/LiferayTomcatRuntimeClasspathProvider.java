@@ -77,7 +77,7 @@ public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspat
 
 		IPath libPath = installPath.append("lib");
 
-		if (runtimeTypeId.endsWith("60") || runtimeTypeId.endsWith("70") || FileUtil.exists(libPath.toFile())) {
+		if (runtimeTypeId.endsWith("60") || runtimeTypeId.endsWith("70") || FileUtil.exists(libPath)) {
 			IPath path = installPath.append("lib");
 
 			addLibraryEntries(list, path.toFile(), true);

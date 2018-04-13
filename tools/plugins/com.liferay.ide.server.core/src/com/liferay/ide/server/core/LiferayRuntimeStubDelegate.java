@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core;
 
@@ -27,6 +24,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
@@ -35,155 +33,135 @@ import org.eclipse.wst.server.core.model.RuntimeDelegate;
 /**
  * @author Gregory Amerson
  */
-public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILiferayRuntime
-{
+public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILiferayRuntime {
 
-    protected static final String PROP_STUB_TYPE_ID = "stub-type-id"; //$NON-NLS-1$
+	public LiferayRuntimeStubDelegate() {
+	}
 
-    protected IRuntimeWorkingCopy tempRuntime = null;
+	public IPath getAppServerDeployDir() {
+		return getLiferayRuntime().getAppServerDeployDir();
+	}
 
-    public LiferayRuntimeStubDelegate()
-    {
-        super();
-    }
+	public IPath getAppServerDir() {
+		return getLiferayRuntime().getAppServerDir();
+	}
 
-    public IPath getAppServerDeployDir()
-    {
-        return getLiferayRuntime().getAppServerDeployDir();
-    }
+	public IPath getAppServerLibGlobalDir() {
+		return getLiferayRuntime().getAppServerLibGlobalDir();
+	}
 
-    public IPath getAppServerDir()
-    {
-        return getLiferayRuntime().getAppServerDir();
-    }
+	public IPath getAppServerPortalDir() {
+		return getLiferayRuntime().getAppServerPortalDir();
+	}
 
-    public IPath getAppServerLibGlobalDir()
-    {
-        return getLiferayRuntime().getAppServerLibGlobalDir();
-    }
+	public String getAppServerType() {
+		return getLiferayRuntime().getAppServerType();
+	}
 
-    public IPath getAppServerPortalDir()
-    {
-        return getLiferayRuntime().getAppServerPortalDir();
-    }
+	public String[] getHookSupportedProperties() {
+		return getLiferayRuntime().getHookSupportedProperties();
+	}
 
-    public String getAppServerType()
-    {
-        return getLiferayRuntime().getAppServerType();
-    }
+	public String getJavadocURL() {
+		return getLiferayRuntime().getJavadocURL();
+	}
 
-    public String[] getHookSupportedProperties()
-    {
-        return getLiferayRuntime().getHookSupportedProperties();
-    }
+	public IPath getLiferayHome() {
+		return getLiferayRuntime().getLiferayHome();
+	}
 
-    public String getJavadocURL()
-    {
-        return getLiferayRuntime().getJavadocURL();
-    }
+	public ILiferayRuntime getLiferayRuntime() {
+		return (ILiferayRuntime)getTempRuntime().loadAdapter(ILiferayRuntime.class, new NullProgressMonitor());
+	}
 
-    public IPath getLiferayHome()
-    {
-        return getLiferayRuntime().getLiferayHome();
-    }
+	public String getName() {
+		return getRuntime().getName();
+	}
 
-    public ILiferayRuntime getLiferayRuntime()
-    {
-        return (ILiferayRuntime) getTempRuntime().loadAdapter( ILiferayRuntime.class, new NullProgressMonitor() );
-    }
+	public String getPortalVersion() {
+		return getLiferayRuntime().getPortalVersion();
+	}
 
-    public String getName()
-    {
-        return getRuntime().getName();
-    }
+	public Properties getPortletCategories() {
+		return getLiferayRuntime().getPortletCategories();
+	}
 
-    public String getPortalVersion()
-    {
-        return getLiferayRuntime().getPortalVersion();
-    }
+	public Properties getPortletEntryCategories() {
+		return getLiferayRuntime().getPortletEntryCategories();
+	}
 
-    public Properties getPortletCategories()
-    {
-        return getLiferayRuntime().getPortletCategories();
-    }
+	public IPath getRuntimeLocation() {
+		return getRuntime().getLocation();
+	}
 
-    public Properties getPortletEntryCategories()
-    {
-        return getLiferayRuntime().getPortletEntryCategories();
-    }
+	public String getRuntimeStubTypeId() {
+		return getAttribute(PROP_STUB_TYPE_ID, StringPool.EMPTY);
+	}
 
-    public IPath getRuntimeLocation()
-    {
-        return getRuntime().getLocation();
-    }
+	public IPath getSourceLocation() {
+		return getLiferayRuntime().getSourceLocation();
+	}
 
-    public String getRuntimeStubTypeId()
-    {
-        return getAttribute( PROP_STUB_TYPE_ID, StringPool.EMPTY );
-    }
+	public IPath[] getUserLibs() {
+		return getLiferayRuntime().getUserLibs();
+	}
 
-    public IPath getSourceLocation()
-    {
-        return getLiferayRuntime().getSourceLocation();
-    }
+	public IVMInstall getVMInstall() {
+		return JavaRuntime.getDefaultVMInstall();
+	}
 
-    protected IRuntimeWorkingCopy getTempRuntime()
-    {
-        if( tempRuntime == null && getRuntime().getLocation() != null )
-        {
-            IRuntimeType runtimeType = ServerCore.findRuntimeType( getRuntimeStubTypeId() );
+	public boolean isUsingDefaultJRE() {
+		return true;
+	}
 
-            try
-            {
-                tempRuntime = runtimeType.createRuntime( getRuntimeStubTypeId() + "-stub", new NullProgressMonitor() ); //$NON-NLS-1$
-                tempRuntime.setLocation( getRuntime().getLocation() );
-            }
-            catch( CoreException e )
-            {
-                LiferayServerCore.logError( "Error creating runtime", e ); //$NON-NLS-1$
-            }
-        }
+	public void setRuntimeStubTypeId(String typeId) {
+		setAttribute(PROP_STUB_TYPE_ID, typeId);
+		tempRuntime = null;
+	}
 
-        if( tempRuntime.getLocation() == null || !( tempRuntime.getLocation().equals( getRuntime().getLocation() ) ) )
-        {
-            tempRuntime.setLocation( getRuntime().getLocation() );
-        }
+	@Override
+	public IStatus validate() {
+		IStatus status = super.validate();
 
-        return tempRuntime;
-    }
+		if (!status.isOK()) {
+			return status;
+		}
 
-    public IPath[] getUserLibs()
-    {
-        return getLiferayRuntime().getUserLibs();
-    }
+		IRuntimeWorkingCopy tempRuntimeWorkingCopy = getTempRuntime();
 
-    public IVMInstall getVMInstall()
-    {
-        return JavaRuntime.getDefaultVMInstall();
-    }
+		RuntimeDelegate runtimeDelegate = (RuntimeDelegate)tempRuntimeWorkingCopy.loadAdapter(
+			RuntimeDelegate.class, new NullProgressMonitor());
 
-    public boolean isUsingDefaultJRE()
-    {
-        return true;
-    }
+		return runtimeDelegate.validate();
+	}
 
-    public void setRuntimeStubTypeId( String typeId )
-    {
-        setAttribute( PROP_STUB_TYPE_ID, typeId );
-        tempRuntime = null;
-    }
+	protected IRuntimeWorkingCopy getTempRuntime() {
+		IRuntime runtime = getRuntime();
 
-    @Override
-    public IStatus validate()
-    {
-        IStatus status = super.validate();
+		if ((tempRuntime == null) && (runtime.getLocation() != null)) {
+			IRuntimeType runtimeType = ServerCore.findRuntimeType(getRuntimeStubTypeId());
 
-        if( !status.isOK() )
-        {
-            return status;
-        }
+			try {
+				tempRuntime = runtimeType.createRuntime(getRuntimeStubTypeId() + "-stub", new NullProgressMonitor());
 
-        return ( (RuntimeDelegate) getTempRuntime().loadAdapter( RuntimeDelegate.class, new NullProgressMonitor() ) ).validate();
-    }
+				tempRuntime.setLocation(runtime.getLocation());
+			}
+			catch (CoreException ce) {
+				LiferayServerCore.logError("Error creating runtime", ce);
+			}
+		}
+
+		IPath tempRuntimeLocation = tempRuntime.getLocation();
+
+		if ((tempRuntime.getLocation() == null) || !tempRuntimeLocation.equals(runtime.getLocation())) {
+			tempRuntime.setLocation(runtime.getLocation());
+		}
+
+		return tempRuntime;
+	}
+
+	protected static final String PROP_STUB_TYPE_ID = "stub-type-id";
+
+	protected IRuntimeWorkingCopy tempRuntime = null;
 
 }

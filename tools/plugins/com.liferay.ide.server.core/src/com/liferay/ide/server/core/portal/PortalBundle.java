@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core.portal;
 
@@ -24,49 +23,48 @@ import org.eclipse.core.runtime.IPath;
  * @author Simon Jiang
  * @author Charles Wu
  */
-public interface PortalBundle extends ILiferayPortal
-{
+public interface PortalBundle extends ILiferayPortal {
 
-    IPath getAutoDeployPath();
+	public IPath getAppServerDeployDir();
 
-    IPath getAppServerDeployDir();
+	public IPath getAppServerDir();
 
-    IPath getAppServerLibGlobalDir();
+	public IPath getAppServerLibGlobalDir();
 
-    IPath getLiferayHome();
+	public IPath getAutoDeployPath();
 
-    IPath getAppServerDir();
+	public IPath[] getBundleDependencyJars();
 
-    int getJmxRemotePort();
+	public String getDisplayName();
 
-    String getMainClass();
+	public String getHttpPort();
 
-    IPath getModulesPath();
+	public int getJmxRemotePort();
 
-    IPath getOSGiBundlesDir();
+	public IPath getLiferayHome();
 
-    IPath[] getRuntimeClasspath();
+	public String getMainClass();
 
-    String[] getRuntimeStartVMArgs();
+	public IPath getModulesPath();
 
-    String[] getRuntimeStopVMArgs();
+	public IPath getOSGiBundlesDir();
 
-    String[] getRuntimeStartProgArgs();
+	public IPath[] getRuntimeClasspath();
 
-    String[] getRuntimeStopProgArgs();
+	public String[] getRuntimeStartProgArgs();
 
-    String getType();
+	public String[] getRuntimeStartVMArgs();
 
-    String getDisplayName();
+	public String[] getRuntimeStopProgArgs();
 
-    IPath[] getBundleDependencyJars();
+	public String[] getRuntimeStopVMArgs();
 
-    IPath[] getUserLibs();
+	public String getServerReleaseInfo();
 
-    String getHttpPort();
+	public String getType();
 
-    String getServerReleaseInfo();
+	public IPath[] getUserLibs();
 
-    void setHttpPort( String port );
+	public void setHttpPort(String port);
 
 }

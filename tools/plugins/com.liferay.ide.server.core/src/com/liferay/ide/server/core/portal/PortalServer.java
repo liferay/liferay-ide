@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core.portal;
 
@@ -22,35 +21,34 @@ import com.liferay.ide.server.core.ILiferayServer;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public interface PortalServer extends ILiferayServer
-{
+public interface PortalServer extends ILiferayServer {
 
-    String ID = "com.liferay.ide.server.portal";
+	public int getAutoPublishTime();
 
-    String START = "start";
+	public boolean getDeveloperMode();
 
-    String STOP = "stop";
+	public String getExternalProperties();
 
-    String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties";
+	public boolean getLaunchSettings();
 
-    String PROPERTY_MEMORY_ARGS = "memoryArgs";
+	public String[] getMemoryArgs();
 
-    String PROPERTY_SERVER_MODE = "serverMode";
+	public String DEFAULT_HTTP_PORT = defaultPrefs.get("default.http.port", StringPool.EMPTY);
 
-    String PROPERTY_LAUNCH_SETTINGS = "launchSettings";
+	public String ID = "com.liferay.ide.server.portal";
 
-    String PROPERTY_DEVELOPER_MODE = "developerMode";
+	public String PROPERTY_DEVELOPER_MODE = "developerMode";
 
-    String DEFAULT_HTTP_PORT = defaultPrefs.get( "default.http.port", StringPool.EMPTY );
+	public String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties";
 
-    int getAutoPublishTime();
+	public String PROPERTY_LAUNCH_SETTINGS = "launchSettings";
 
-    boolean getDeveloperMode();
+	public String PROPERTY_MEMORY_ARGS = "memoryArgs";
 
-    String getExternalProperties();
+	public String PROPERTY_SERVER_MODE = "serverMode";
 
-    boolean getLaunchSettings();
+	public String START = "start";
 
-    String[] getMemoryArgs();
+	public String STOP = "stop";
 
 }

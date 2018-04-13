@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
@@ -25,67 +25,62 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.PublishOperation;
 
 /**
  * @author Gregory Amerson
  */
-public class BundlePublishOperation extends PublishOperation
-{
+public class BundlePublishOperation extends PublishOperation {
 
-    protected final List<IModule> modules;
-    protected final PortalRuntime portalRuntime;
-    protected final PortalServerBehavior portalServerBehavior;
-    protected final IServer server;
+	public BundlePublishOperation(IServer s, IModule[] modules) {
+		server = s;
 
-    public BundlePublishOperation( IServer s, IModule[] modules )
-    {
-        this.server = s;
-        this.modules = new ArrayList<IModule>( Arrays.asList( modules ) );
-        this.portalRuntime = (PortalRuntime) this.server.getRuntime().loadAdapter( PortalRuntime.class, null );
+		this.modules = new ArrayList<>(Arrays.asList(modules));
 
-        if( this.portalRuntime == null )
-        {
-            throw new IllegalArgumentException( "Could not get portal runtime from server " + s.getName() );
-        }
+		IRuntime serverRuntime = server.getRuntime();
 
-        this.portalServerBehavior = (PortalServerBehavior) this.server.loadAdapter( PortalServerBehavior.class, null );
+		portalRuntime = (PortalRuntime)serverRuntime.loadAdapter(PortalRuntime.class, null);
 
-        if( this.portalServerBehavior == null )
-        {
-            throw new IllegalArgumentException( "Could not get portal server behavior from server " + s.getName() );
-        }
-    }
+		if (portalRuntime == null) {
+			throw new IllegalArgumentException("Could not get portal runtime from server " + s.getName());
+		}
 
-    public void addModule( IModule[] module )
-    {
-        for( IModule m : module )
-        {
-            this.modules.add( m );
-        }
-    }
+		portalServerBehavior = (PortalServerBehavior)server.loadAdapter(PortalServerBehavior.class, null);
 
-    @Override
-    public void execute( IProgressMonitor monitor, IAdaptable info ) throws CoreException
-    {
-    }
+		if (portalServerBehavior == null) {
+			throw new IllegalArgumentException("Could not get portal server behavior from server " + s.getName());
+		}
+	}
 
-    @Override
-	public int getKind()
-    {
-        return REQUIRED;
-    }
+	public void addModule(IModule[] modules) {
+		for (IModule m : modules) {
+			this.modules.add(m);
+		}
+	}
 
-    @Override
-    public int getOrder()
-    {
-        return 0;
-    }
+	@Override
+	public void execute(IProgressMonitor monitor, IAdaptable info) throws CoreException {
+	}
 
-    protected GogoBundleDeployer createBundleDeployer() throws Exception
-    {
-        return ServerUtil.createBundleDeployer( portalRuntime, server );
-    }
+	@Override
+	public int getKind() {
+		return REQUIRED;
+	}
+
+	@Override
+	public int getOrder() {
+		return 0;
+	}
+
+	protected GogoBundleDeployer createBundleDeployer() throws Exception {
+		return ServerUtil.createBundleDeployer(portalRuntime, server);
+	}
+
+	protected List<IModule> modules;
+	protected PortalRuntime portalRuntime;
+	protected PortalServerBehavior portalServerBehavior;
+	protected IServer server;
 
 }

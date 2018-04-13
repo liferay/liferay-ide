@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.util;
 
@@ -19,105 +18,102 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.IOException;
+
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * @author Greg Amerson
  */
-public class WebServicesHelper
-{
-    protected URL webServicesListURL;
-    protected Map<String, String> wsdlNameURLMap = null;
+public class WebServicesHelper {
 
-    public WebServicesHelper( URL webServicesListURL )
-    {
-        this.webServicesListURL = webServicesListURL;
-    }
+	public WebServicesHelper(URL webServicesListURL) {
+		this.webServicesListURL = webServicesListURL;
+	}
 
-    public String[] getWebServiceNames()
-    {
-        if( wsdlNameURLMap == null )
-        {
-            initMap();
-        }
+	public String[] getWebServiceNames() {
+		if (wsdlNameURLMap == null) {
+			initMap();
+		}
 
-        return wsdlNameURLMap.keySet().toArray( new String[0] );
-    }
+		Set<String> keySet = wsdlNameURLMap.keySet();
 
-    protected void initMap()
-    {
-        try
-        {
-            wsdlNameURLMap = new HashMap<String, String>();
-            String webServicesString = CoreUtil.readStreamToString( webServicesListURL.openStream() );
-            List<String> wsdlUrls = pullLinks( webServicesString );
+		return keySet.toArray(new String[0]);
+	}
 
-            for( String url : wsdlUrls )
-            {
-                String name = pullServiceName( url );
+	public String getWebServiceWSDLURLByName(String serviceName) {
+		if (wsdlNameURLMap == null) {
+			initMap();
+		}
 
-                if( !CoreUtil.isNullOrEmpty( name ) )
-                {
-                    wsdlNameURLMap.put( name, url );
-                }
-            }
-        }
-        catch( IOException e1 )
-        {
-            LiferayServerCore.logError( "Unable to initial web services list." ); //$NON-NLS-1$
-        }
-    }
+		return wsdlNameURLMap.get(serviceName);
+	}
 
-    private List<String> pullLinks( String text )
-    {
-        List<String> links = new ArrayList<String>();
+	protected void initMap() {
+		try {
+			wsdlNameURLMap = new HashMap<>();
+			String webServicesString = CoreUtil.readStreamToString(webServicesListURL.openStream());
 
-        String regex = "\\(?\\b(http://|www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]"; //$NON-NLS-1$
-        Pattern p = Pattern.compile( regex );
-        Matcher m = p.matcher( text );
+			List<String> wsdlUrls = _pullLinks(webServicesString);
 
-        while( m.find() )
-        {
-            String urlStr = m.group();
+			for (String url : wsdlUrls) {
+				String name = _pullServiceName(url);
 
-            if( urlStr.startsWith( "(" ) && urlStr.endsWith( ")" ) ) //$NON-NLS-1$ //$NON-NLS-2$
-            {
-                urlStr = urlStr.substring( 1, urlStr.length() - 1 );
-            }
-            links.add( urlStr );
-        }
+				if (!CoreUtil.isNullOrEmpty(name)) {
+					wsdlNameURLMap.put(name, url);
+				}
+			}
+		}
+		catch (IOException ioe) {
+			LiferayServerCore.logError("Unable to initial web services list.");
+		}
+	}
 
-        return links;
-    }
+	protected URL webServicesListURL;
+	protected Map<String, String> wsdlNameURLMap = null;
 
-    private String pullServiceName( String wsdlUrl )
-    {
-        String regex = "axis/(\\w+)\\?wsdl$"; //$NON-NLS-1$
-        Pattern p = Pattern.compile( regex );
-        Matcher m = p.matcher( wsdlUrl );
+	private List<String> _pullLinks(String text) {
+		List<String> links = new ArrayList<>();
 
-        if( m.find() )
-        {
-            return m.group( 1 );
-        }
+		String regex = "\\(?\\b(http://|www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
 
-        return null;
-    }
+		Pattern p = Pattern.compile(regex);
 
-    public String getWebServiceWSDLURLByName( String serviceName )
-    {
-        if( wsdlNameURLMap == null )
-        {
-            initMap();
-        }
+		Matcher m = p.matcher(text);
 
-        return wsdlNameURLMap.get( serviceName );
-    }
+		while (m.find()) {
+			String urlStr = m.group();
+
+			if (urlStr.startsWith("(") && urlStr.endsWith(")"))
+			{
+				urlStr = urlStr.substring(1, urlStr.length() - 1);
+			}
+
+			links.add(urlStr);
+		}
+
+		return links;
+	}
+
+	private String _pullServiceName(String wsdlUrl) {
+		String regex = "axis/(\\w+)\\?wsdl$";
+
+		Pattern p = Pattern.compile(regex);
+
+		Matcher m = p.matcher(wsdlUrl);
+
+		if (m.find()) {
+			return m.group(1);
+		}
+
+		return null;
+	}
 
 }

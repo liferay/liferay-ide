@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.remote;
 
@@ -23,14 +22,12 @@ import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 /**
  * @author Simon Jiang
  */
-public interface IRemoteServerPublisher
-{
+public interface IRemoteServerPublisher {
 
-    public IPath publishModuleDelta( String archiveName,
-                                     IModuleResourceDelta[] deltas,
-                                     String deletePrefix,
-                                     boolean adjustGMTOffset ) throws CoreException;
+	public IPath publishModuleDelta(
+			String archiveName, IModuleResourceDelta[] deltas, String deletePrefix, boolean adjustGMTOffset)
+		throws CoreException;
 
-    public IPath publishModuleFull( IProgressMonitor monitor ) throws CoreException;
+	public IPath publishModuleFull(IProgressMonitor monitor) throws CoreException;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core;
 
@@ -23,13 +20,12 @@ import org.eclipse.wst.server.core.model.RuntimeDelegate;
 /**
  * @author Gregory Amerson
  */
-public interface IRuntimeDelegateValidator
-{
+public interface IRuntimeDelegateValidator {
 
-    String ID = "com.liferay.ide.server.core.runtimeDelegateValidators"; //$NON-NLS-1$
+	public String getRuntimeTypeId();
 
-    IStatus validateRuntimeDelegate( RuntimeDelegate runtimeDelegate );
+	public IStatus validateRuntimeDelegate(RuntimeDelegate runtimeDelegate);
 
-    String getRuntimeTypeId();
+	public String ID = "com.liferay.ide.server.core.runtimeDelegateValidators";
 
 }

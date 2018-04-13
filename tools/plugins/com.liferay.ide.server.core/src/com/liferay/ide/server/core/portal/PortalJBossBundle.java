@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,18 +10,19 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -43,303 +45,293 @@ import org.w3c.dom.NodeList;
 /**
  * @author Simon Jiang
  */
-public class PortalJBossBundle extends AbstractPortalBundle
-{
+public class PortalJBossBundle extends AbstractPortalBundle {
+
 	public static final int DEFAULT_JMX_PORT = 2099;
 
-    public PortalJBossBundle( IPath path )
-    {
-       super(path);
-    }
+	public PortalJBossBundle(IPath path) {
+		super(path);
+	}
 
-    public PortalJBossBundle( Map<String, String> appServerProperties )
-    {
-       super(appServerProperties);
-    }
+	public PortalJBossBundle(Map<String, String> appServerProperties) {
+		super(appServerProperties);
+	}
 
-    @Override
-    public IPath getAppServerDeployDir()
-    {
-        return this.bundlePath.append( "/standalone/deployments/" );
-    }
+	@Override
+	public IPath getAppServerDeployDir() {
+		return bundlePath.append("/standalone/deployments/");
+	}
 
-    @Override
-    public IPath getAppServerLibGlobalDir()
-    {
-        return getAppServerDir().append( "/modules/com/liferay/portal/main" );
-    }
+	@Override
+	public IPath getAppServerLibGlobalDir() {
+		return getAppServerDir().append("/modules/com/liferay/portal/main");
+	}
 
-    @Override
-    protected IPath getAppServerLibDir()
-    {
-        return getAppServerDir().append( "modules" ); //$NON-NLS-1$
-    }
+	@Override
+	public IPath getAppServerPortalDir() {
+		IPath retval = null;
 
-    @Override
-    protected int getDefaultJMXRemotePort()
-    {
-        return DEFAULT_JMX_PORT;
-    }
+		if (bundlePath != null) {
+			retval = bundlePath.append("/standalone/deployments/ROOT.war");
+		}
 
-    @Override
-    public String getHttpPort()
-    {
-        String retVal = "8080";
+		return retval;
+	}
 
-        File standaloneXmlFile = new File( getAppServerDir().toPortableString(), "standalone/configuration/standalone.xml" );
+	@Override
+	public String getDisplayName() {
+		return "JBoss AS";
+	}
 
-        String portValue = getHttpPortValue( standaloneXmlFile, "socket-binding", "name", "http", "port" );
+	@Override
+	public String getHttpPort() {
+		String retVal = "8080";
 
-        if( !CoreUtil.empty( portValue ) )
-        {
-            if( portValue.lastIndexOf( ":" ) == -1 )
-            {
-                retVal = portValue;
-            }
-            else
-            {
-                retVal = portValue.substring( portValue.lastIndexOf( ":" ) + 1, portValue.length() - 1 );
-            }
-        }
+		File standaloneXmlFile = new File(
+			getAppServerDir().toPortableString(), "standalone/configuration/standalone.xml");
 
-        return retVal;
-    }
+		String portValue = getHttpPortValue(standaloneXmlFile, "socket-binding", "name", "http", "port");
 
-    @Override
-    public void setHttpPort( String port )
-    {
-        File standaloneXmlFile = new File( getAppServerDir().toPortableString(), "standalone/configuration/standalone.xml" );
+		if (!CoreUtil.empty(portValue)) {
+			if (portValue.lastIndexOf(":") == -1) {
+				retVal = portValue;
+			}
+			else {
+				retVal = portValue.substring(portValue.lastIndexOf(":") + 1, portValue.length() - 1);
+			}
+		}
 
-        setHttpPortValue( standaloneXmlFile, "socket-binding", "name", "http", "port", port );
-    }
+		return retVal;
+	}
 
-    @Override
-    public String getMainClass()
-    {
-        return "org.jboss.modules.Main";
-    }
+	@Override
+	public String getMainClass() {
+		return "org.jboss.modules.Main";
+	}
 
-    @Override
-    public IPath getAppServerPortalDir()
-    {
-        IPath retval = null;
+	@Override
+	public IPath[] getRuntimeClasspath() {
+		List<IPath> paths = new ArrayList<>();
 
-        if( this.bundlePath != null )
-        {
-            retval = this.bundlePath.append( "/standalone/deployments/ROOT.war" );
-        }
+		if (FileUtil.exists(bundlePath)) {
+			paths.add(bundlePath.append("jboss-modules.jar"));
 
-        return retval;
-    }
+			IPath loggManagerPath = bundlePath.append("modules/system/layers/base/org/jboss/logmanager/main");
 
-    @Override
-    public IPath[] getRuntimeClasspath()
-    {
-        final List<IPath> paths = new ArrayList<IPath>();
+			File loggManagerFile = loggManagerPath.toFile();
 
-        if( this.bundlePath.toFile().exists() )
-        {
-            paths.add( bundlePath.append( "jboss-modules.jar" ) );
-            IPath loggManagerPath = bundlePath.append( "modules/system/layers/base/org/jboss/logmanager/main" );
+			if (FileUtil.exists(loggManagerFile)) {
+				File[] libFiles = loggManagerFile.listFiles(
+					new FileFilter() {
 
-            if ( loggManagerPath.toFile().exists() )
-            {
-                File[] libFiles = loggManagerPath.toFile().listFiles( new FileFilter()
-                {
-                    @Override
-                    public boolean accept( File libFile )
-                    {
-                        if ( libFile.isFile() && libFile.getName().endsWith( ".jar" ))
-                        {
-                            return true;
-                        }
-                        return false;
-                    }
-                });
+						@Override
+						public boolean accept(File libFile) {
+							String libFileName = libFile.getName();
 
-                if ( libFiles != null )
-                {
-                    for( File libFile : libFiles )
-                    {
-                        paths.add( loggManagerPath.append( libFile.getName() ) );
-                    }
-                }
-            }
-        }
+							if (libFile.isFile() && libFileName.endsWith(".jar")) {
+								return true;
+							}
 
-        return paths.toArray( new IPath[0] );
-    }
+							return false;
+						}
 
-    @Override
-    public String[] getRuntimeStartProgArgs()
-    {
-        final List<String> args = new ArrayList<String>();
+					});
 
-        args.add( "-mp \"" + this.bundlePath.toPortableString() +  "/modules" + "\"");
-        args.add( "-jaxpmodule" );
-        args.add( "javax.xml.jaxp-provider" );
-        args.add( "org.jboss.as.standalone" );
-        args.add( "-b" );
-        args.add( "localhost" );
-        args.add( "--server-config=standalone.xml" );
-        args.add( "-Djboss.server.base.dir=" + "\"" + this.bundlePath.toPortableString() + "/standalone/"+ "\"" );
+				if (libFiles != null) {
+					for (File libFile : libFiles) {
+						paths.add(loggManagerPath.append(libFile.getName()));
+					}
+				}
+			}
+		}
 
-        return args.toArray( new String[0] );
+		return paths.toArray(new IPath[0]);
+	}
 
-    }
+	@Override
+	public String[] getRuntimeStartProgArgs() {
+		List<String> args = new ArrayList<>();
 
-    @Override
-    public String[] getRuntimeStopProgArgs()
-    {
-        final List<String> args = new ArrayList<String>();
+		args.add("-mp \"" + bundlePath.toPortableString() + "/modules\"");
+		args.add("-jaxpmodule");
+		args.add("javax.xml.jaxp-provider");
+		args.add("org.jboss.as.standalone");
+		args.add("-b");
+		args.add("localhost");
+		args.add("--server-config=standalone.xml");
+		args.add("-Djboss.server.base.dir=\"" + bundlePath.toPortableString() + "/standalone/\"");
 
-        args.add( "-mp \"" + this.bundlePath.toPortableString() +  "/modules" + "\"" );
-        args.add( "org.jboss.as.cli" );
-        args.add( "--controller=localhost" );
-        args.add( "--connect" );
-        args.add( "--command=:shutdown" );
+		return args.toArray(new String[0]);
+	}
 
-        return args.toArray( new String[0] );
-    }
+	@Override
+	public String[] getRuntimeStartVMArgs() {
+		List<String> args = new ArrayList<>();
 
-    @Override
-    public String[] getRuntimeStartVMArgs()
-    {
-        final List<String> args = new ArrayList<String>();
+		args.add("-Dcom.sun.management.jmxremote");
+		args.add("-Dcom.sun.management.jmxremote.authenticate=false");
+		args.add("-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort());
+		args.add("-Dcom.sun.management.jmxremote.ssl=false");
+		args.add("-Dorg.jboss.resolver.warning=true");
+		args.add("-Djava.net.preferIPv4Stack=true");
+		args.add("-Dsun.rmi.dgc.client.gcInterval=3600000");
+		args.add("-Dsun.rmi.dgc.server.gcInterval=3600000");
+		args.add("-Djboss.modules.system.pkgs=org.jboss.byteman");
+		args.add("-Djava.awt.headless=true");
+		args.add("-Dfile.encoding=UTF8");
+		args.add("-server");
+		args.add("-Djava.util.logging.manager=org.jboss.logmanager.LogManager");
+		args.add(
+			"-Xbootclasspath/p:\"" + bundlePath + "/modules/org/jboss/logmanager/main/jboss-logmanager-1.2.2.GA.jar\"");
+		args.add(
+			"-Xbootclasspath/p:\"" + bundlePath +
+				"/modules/org/jboss/logmanager/log4j/main/jboss-logmanager-log4j-1.0.0.GA.jar\"");
+		args.add("-Xbootclasspath/p:\"" + bundlePath + "/modules/org/apache/log4j/main/log4j-1.2.16.jar\"");
+		args.add("-Djboss.modules.system.pkgs=org.jboss.logmanager");
+		args.add("-Dorg.jboss.boot.log.file=\"" + bundlePath.append("/standalone/log/boot.log") + "\"");
+		args.add("-Dlogging.configuration=file:\"" + bundlePath + "/standalone/configuration/logging.properties\"");
+		args.add("-Djboss.home.dir=\"" + bundlePath + "\"");
+		args.add("-Djboss.bind.address.management=localhost");
+		args.add("-Duser.timezone=GMT");
 
-        args.add( "-Dcom.sun.management.jmxremote" );
-        args.add( "-Dcom.sun.management.jmxremote.authenticate=false" );
-        args.add( "-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort() );
-        args.add( "-Dcom.sun.management.jmxremote.ssl=false" );
-        args.add( "-Dorg.jboss.resolver.warning=true" );
-        args.add( "-Djava.net.preferIPv4Stack=true" );
-        args.add( "-Dsun.rmi.dgc.client.gcInterval=3600000" );
-        args.add( "-Dsun.rmi.dgc.server.gcInterval=3600000" );
-        args.add( "-Djboss.modules.system.pkgs=org.jboss.byteman" );
-        args.add( "-Djava.awt.headless=true" );
-        args.add( "-Dfile.encoding=UTF8" );
-        args.add( "-server" );
-        args.add( "-Djava.util.logging.manager=org.jboss.logmanager.LogManager" );
-        args.add( "-Xbootclasspath/p:" +  "\""  +  this.bundlePath +  "/modules/org/jboss/logmanager/main/jboss-logmanager-1.2.2.GA.jar"  +  "\"" );
-        args.add( "-Xbootclasspath/p:" +  "\""  +  this.bundlePath +  "/modules/org/jboss/logmanager/log4j/main/jboss-logmanager-log4j-1.0.0.GA.jar"  +  "\"" );
-        args.add( "-Xbootclasspath/p:" +  "\""  +  this.bundlePath +  "/modules/org/apache/log4j/main/log4j-1.2.16.jar"  +  "\"" );
-        args.add( "-Djboss.modules.system.pkgs=org.jboss.logmanager");
-        args.add( "-Dorg.jboss.boot.log.file=" +  "\""  + this.bundlePath.append("/standalone/log/boot.log") + "\"" );
-        args.add( "-Dlogging.configuration=file:" + "\"" + this.bundlePath + "/standalone/configuration/logging.properties" + "\"" );
-        args.add( "-Djboss.home.dir=" + "\"" + this.bundlePath + "\"" );
-        args.add( "-Djboss.bind.address.management=localhost" );
-        args.add( "-Duser.timezone=GMT" );
+		return args.toArray(new String[0]);
+	}
 
-        return args.toArray( new String[0] );
-    }
+	@Override
+	public String[] getRuntimeStopProgArgs() {
+		List<String> args = new ArrayList<>();
 
-    @Override
-    public String[] getRuntimeStopVMArgs()
-    {
-        final List<String> args = new ArrayList<String>();
-        args.add( "-Djboss.home.dir=" + "\"" + this.bundlePath + "\"");
+		args.add("-mp \"" + bundlePath.toPortableString() + "/modules\"");
+		args.add("org.jboss.as.cli");
+		args.add("--controller=localhost");
+		args.add("--connect");
+		args.add("--command=:shutdown");
 
-        return args.toArray( new String[0] );
-    }
+		return args.toArray(new String[0]);
+	}
 
-    @Override
-    public String getType()
-    {
-        return "jboss";
-    }
+	@Override
+	public String[] getRuntimeStopVMArgs() {
+		List<String> args = new ArrayList<>();
 
-    @Override
-    public String getDisplayName()
-    {
-        return "JBoss AS";
-    }
+		args.add("-Djboss.home.dir=\"" + bundlePath + "\"");
 
-    @Override
-    public IPath[] getUserLibs()
-    {
-        List<IPath> libs = new ArrayList<IPath>();
+		return args.toArray(new String[0]);
+	}
 
-        try
-        {
-            List<File>  portallibFiles = FileListing.getFileListing( new File( getAppServerPortalDir().append( "WEB-INF/lib" ).toPortableString() ) );
+	@Override
+	public String getType() {
+		return "jboss";
+	}
 
-            for( File lib : portallibFiles )
-            {
-                if( lib.exists() && lib.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
-                {
-                    libs.add( new Path( lib.getPath() ) );
-                }
-            }
+	@Override
+	public IPath[] getUserLibs() {
+		List<IPath> libs = new ArrayList<>();
 
-            List<File>  libFiles = FileListing.getFileListing( new File( getAppServerLibDir().toPortableString() ) );
+		try {
+			IPath serverPortalDir = getAppServerPortalDir();
 
-            for( File lib : libFiles )
-            {
-                if( lib.exists() && lib.getName().endsWith( ".jar" ) )
-                {
-                    libs.add( new Path( lib.getPath() ) );
-                }
-            }
-        }
-        catch( FileNotFoundException e )
-        {
-        }
+			IPath portalLibPath = serverPortalDir.append("WEB-INF/lib");
 
-        return libs.toArray( new IPath[libs.size()] );
-    }
+			List<File> portallibFiles = FileListing.getFileListing(new File(portalLibPath.toPortableString()));
 
-    private void setHttpPortValue(
-        File xmlFile, String tagName, String attriName, String attriValue, String targetName, String value )
-    {
-        DocumentBuilder db = null;
+			for (File lib : portallibFiles) {
+				if (FileUtil.exists(lib)) {
+					String libName = lib.getName();
 
-        DocumentBuilderFactory dbf = null;
+					if (libName.endsWith(".jar")) {
+						libs.add(new Path(lib.getPath()));
+					}
+				}
+			}
 
-        try
-        {
-            dbf = DocumentBuilderFactory.newInstance();
+			IPath appServerLibDir = getAppServerLibDir();
 
-            db = dbf.newDocumentBuilder();
+			List<File> libFiles = FileListing.getFileListing(new File(appServerLibDir.toPortableString()));
 
-            Document document = db.parse( xmlFile );
+			for (File lib : libFiles) {
+				if (FileUtil.exists(lib)) {
+					String libName = lib.getName();
 
-            NodeList connectorNodes = document.getElementsByTagName( tagName );
+					if (libName.endsWith(".jar")) {
+						libs.add(new Path(lib.getPath()));
+					}
+				}
+			}
+		}
+		catch (FileNotFoundException fnfe) {
+		}
 
-            for( int i = 0; i < connectorNodes.getLength(); i++ )
-            {
-                Node node = connectorNodes.item( i );
+		return libs.toArray(new IPath[libs.size()]);
+	}
 
-                NamedNodeMap attributes = node.getAttributes();
+	@Override
+	public void setHttpPort(String port) {
+		File standaloneXmlFile = new File(
+			getAppServerDir().toPortableString(), "standalone/configuration/standalone.xml");
 
-                Node protocolNode = attributes.getNamedItem( attriName );
+		_setHttpPortValue(standaloneXmlFile, "socket-binding", "name", "http", "port", port);
+	}
 
-                if( protocolNode != null )
-                {
-                    if( protocolNode.getNodeValue().equals( attriValue ) )
-                    {
-                        Node portNode = attributes.getNamedItem( targetName );
+	@Override
+	protected IPath getAppServerLibDir() {
+		return getAppServerDir().append("modules");
+	}
 
-                        portNode.setNodeValue( value );
+	@Override
+	protected int getDefaultJMXRemotePort() {
+		return DEFAULT_JMX_PORT;
+	}
 
-                        break;
-                    }
-                }
-            }
+	private void _setHttpPortValue(
+		File xmlFile, String tagName, String attriName, String attriValue, String targetName, String value) {
 
-            TransformerFactory factory = TransformerFactory.newInstance();
+		DocumentBuilder db = null;
 
-            Transformer transformer = factory.newTransformer();
+		DocumentBuilderFactory dbf = null;
 
-            DOMSource domSource = new DOMSource( document );
+		try {
+			dbf = DocumentBuilderFactory.newInstance();
 
-            StreamResult result = new StreamResult( xmlFile );
+			db = dbf.newDocumentBuilder();
 
-            transformer.transform( domSource, result );
-        }
-        catch( Exception e )
-        {
-            LiferayServerCore.logError( e );
-        }
-    }
+			Document document = db.parse(xmlFile);
+
+			NodeList connectorNodes = document.getElementsByTagName(tagName);
+
+			for (int i = 0; i < connectorNodes.getLength(); i++) {
+				Node node = connectorNodes.item(i);
+
+				NamedNodeMap attributes = node.getAttributes();
+
+				Node protocolNode = attributes.getNamedItem(attriName);
+
+				if (protocolNode != null) {
+					String nodeValue = protocolNode.getNodeValue();
+
+					if (nodeValue.equals(attriValue)) {
+						Node portNode = attributes.getNamedItem(targetName);
+
+						portNode.setNodeValue(value);
+
+						break;
+					}
+				}
+			}
+
+			TransformerFactory factory = TransformerFactory.newInstance();
+
+			Transformer transformer = factory.newTransformer();
+
+			DOMSource domSource = new DOMSource(document);
+
+			StreamResult result = new StreamResult(xmlFile);
+
+			transformer.transform(domSource, result);
+		}
+		catch (Exception e) {
+			LiferayServerCore.logError(e);
+		}
+	}
 
 }

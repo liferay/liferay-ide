@@ -112,12 +112,12 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 		IPath binPath = bundlePath.append("bin");
 
-		if (FileUtil.exists(binPath.toFile())) {
+		if (FileUtil.exists(binPath)) {
 			paths.add(binPath.append("bootstrap.jar"));
 
 			IPath juli = binPath.append("tomcat-juli.jar");
 
-			if (FileUtil.exists(juli.toFile())) {
+			if (FileUtil.exists(juli)) {
 				paths.add(juli);
 			}
 		}
