@@ -44,8 +44,8 @@
         <portal-version>7.0.10.7</portal-version>
         <portal-zip-name>liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</portal-zip-name>
         <portal-ce-download-base>http://mirrors/releases.liferay.com/portal</portal-ce-download-base>
-        <portal-ce-version>7.1.0-m1</portal-ce-version>
-        <portal-ce-zip-name>liferay-ce-portal-tomcat-7.1-m1-20180223151209360.zip</portal-ce-zip-name>
+        <portal-ce-version>7.1.0-a1</portal-ce-version>
+        <portal-ce-zip-name>liferay-ce-portal-tomcat-7.1-a1-20180410105031513.zip</portal-ce-zip-name>
         <plugin-sdk-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
         <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</plugin-sdk-zip-name>
         <plugin-sdk-version>1.0.16</plugin-sdk-version>
