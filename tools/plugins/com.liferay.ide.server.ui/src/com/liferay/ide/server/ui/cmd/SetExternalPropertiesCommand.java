@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2010 SAS Institute, Inc. and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     Larry Isaacs - Initial API and implementation
- *     Greg Amerson <gregory.amerson@liferay.com>
- *******************************************************************************/
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.server.ui.cmd;
 
@@ -20,52 +22,44 @@ import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.ui.internal.command.ServerCommand;
 
 /**
- * Command to change the external properties
+ * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class SetExternalPropertiesCommand extends ServerCommand
-{
+@SuppressWarnings("restriction")
+public class SetExternalPropertiesCommand extends ServerCommand {
 
-    protected String externalProperties;
-    protected String oldExternalProperties;
+	public SetExternalPropertiesCommand(IServerWorkingCopy server, String externalProperties) {
+		super(server, Msgs.setExternalProperties);
 
-    /**
-     * Constructs command to set the deploy directory.
-     * 
-     * @param server
-     * @param deployDir
-     *            deployment directory to set
-     */
-    public SetExternalPropertiesCommand( IServerWorkingCopy server, String externalProperties )
-    {
-        super( server, Msgs.setExternalProperties );
-        this.externalProperties = externalProperties;
-    }
+		this.externalProperties = externalProperties;
+	}
 
-    /**
-     * Execute setting the external properties
-     */
-    public void execute()
-    {
-        oldExternalProperties =  ( (PortalServer) server.loadAdapter( PortalServer.class, null ) ).getExternalProperties();
-        ( (PortalServerDelegate) server.loadAdapter( PortalServer.class, null ) ).setExternalProperties( externalProperties );
-    }
+	public void execute() {
+		PortalServer portalServer = (PortalServer)server.loadAdapter(PortalServer.class, null);
 
-    /**
-     * Restore prior external properties
-     */
-    public void undo()
-    {
-        ( (PortalServerDelegate) server.loadAdapter( PortalServer.class, null ) ).setExternalProperties( oldExternalProperties );
-    }
+		oldExternalProperties = portalServer.getExternalProperties();
 
-    private static class Msgs extends NLS
-    {
-        public static String setExternalProperties;
+		PortalServerDelegate portalServerDelegate = (PortalServerDelegate)server.loadAdapter(PortalServer.class, null);
 
-        static
-        {
-            initializeMessages( SetExternalPropertiesCommand.class.getName(), Msgs.class );
-        }
-    }
+		portalServerDelegate.setExternalProperties(externalProperties);
+	}
+
+	public void undo() {
+		PortalServerDelegate portalServerDelegate = (PortalServerDelegate)server.loadAdapter(PortalServer.class, null);
+
+		portalServerDelegate.setExternalProperties(oldExternalProperties);
+	}
+
+	protected String externalProperties;
+	protected String oldExternalProperties;
+
+	private static class Msgs extends NLS {
+
+		public static String setExternalProperties;
+
+		static {
+			initializeMessages(SetExternalPropertiesCommand.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,46 +10,43 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.server.ui.navigator;
 
 import java.io.File;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
-
+import org.eclipse.core.filesystem.IFileSystem;
 
 /**
  * @author Gregory Amerson
  */
-public class PropertiesFile
-{
-    private final File file;
+public class PropertiesFile {
 
-    public PropertiesFile( File f )
-    {
-        this.file = f;
+	public PropertiesFile(File f) {
+		_file = f;
 
-        if( f == null )
-        {
-            throw new IllegalArgumentException( "file can not be null" );
-        }
-    }
+		if (f == null) {
+			throw new IllegalArgumentException("file can not be null");
+		}
+	}
 
-    public IFileStore getFileStore()
-    {
-        return EFS.getLocalFileSystem().fromLocalFile( this.file );
-    }
+	public IFileStore getFileStore() {
+		IFileSystem esfLocalFilesSystem = EFS.getLocalFileSystem();
 
-    public String getName()
-    {
-        return this.file.getName();
-    }
+		return esfLocalFilesSystem.fromLocalFile(_file);
+	}
 
-    public String getPath()
-    {
-        return this.file.getPath();
-    }
+	public String getName() {
+		return _file.getName();
+	}
+
+	public String getPath() {
+		return _file.getPath();
+	}
+
+	private File _file;
 
 }

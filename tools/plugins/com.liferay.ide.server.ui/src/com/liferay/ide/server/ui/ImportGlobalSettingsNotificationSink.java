@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.server.ui;
 
 import java.util.ArrayList;
@@ -24,98 +24,91 @@ import org.eclipse.mylyn.internal.commons.notifications.ui.popup.PopupNotificati
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 
-
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class ImportGlobalSettingsNotificationSink extends PopupNotificationSink
-{
-    private NotificationPopup popup;
+@SuppressWarnings("restriction")
+public class ImportGlobalSettingsNotificationSink extends PopupNotificationSink {
 
-    public ImportGlobalSettingsNotificationSink()
-    {
-        super();
-    }
+	public ImportGlobalSettingsNotificationSink() {
+	}
 
-    @Override
-    public void showPopup()
-    {
-        if( popup != null )
-        {
-            popup.close();
-        }
+	@Override
+	public void showPopup() {
+		if (_popup != null) {
+			_popup.close();
+		}
 
-        Shell shell = new Shell( PlatformUI.getWorkbench().getDisplay() );
+		IWorkbench workbench = PlatformUI.getWorkbench();
 
-        popup = new NotificationPopup( shell )
-        {
-            @Override
-            protected void createContentArea( Composite parent )
-            {
-                super.createContentArea( parent );
+		Shell shell = new Shell(workbench.getDisplay());
 
-                hookHyperlink( parent );
-            }
+		_popup = new NotificationPopup(shell) {
 
-            @Override
-            protected String getPopupShellTitle()
-            {
-                return "Liferay IDE Notification";
-            }
+			@Override
+			protected void createContentArea(Composite parent) {
+				super.createContentArea(parent);
 
-            private void hookHyperlink( Composite parent )
-            {
-                Hyperlink hyperlink = null;
+				_hookHyperlink(parent);
+			}
 
-                for( Control child : parent.getChildren() )
-                {
-                    if( child instanceof Hyperlink )
-                    {
-                        hyperlink = (Hyperlink) child;
+			@Override
+			protected String getPopupShellTitle() {
+				return "Liferay IDE Notification";
+			}
 
-                        hyperlink.addHyperlinkListener( new IHyperlinkListener()
-                        {
-                            public void linkExited( HyperlinkEvent e )
-                            {
-                            }
+			private void _hookHyperlink(Composite parent) {
+				Hyperlink hyperlink = null;
 
-                            public void linkEntered( HyperlinkEvent e )
-                            {
-                            }
+				for (Control child : parent.getChildren()) {
+					if (child instanceof Hyperlink) {
+						hyperlink = (Hyperlink)child;
 
-                            public void linkActivated( HyperlinkEvent e )
-                            {
-                                if( popup != null )
-                                {
-                                    popup.closeFade();
-                                }
-                            }
-                        });
+						hyperlink.addHyperlinkListener(
+							new IHyperlinkListener() {
 
-                        return;
-                    }
-                    else if( child instanceof Composite )
-                    {
-                        hookHyperlink( (Composite) child );
-                    }
-                }
-            }
-        };
+								public void linkActivated(HyperlinkEvent e) {
+									if (_popup != null) {
+										_popup.closeFade();
+									}
+								}
 
-        popup.setFadingEnabled( isAnimationsEnabled() );
-        List<AbstractNotification> toDisplay = new ArrayList<AbstractNotification>( getNotifications() );
-        Collections.sort( toDisplay );
-        popup.setContents( toDisplay );
-        getNotifications().clear();
-        popup.setBlockOnOpen( false );
-        popup.setDelayClose( 60 * 1000 );
-        popup.open();
-    }
+								public void linkEntered(HyperlinkEvent e) {
+								}
+
+								public void linkExited(HyperlinkEvent e) {
+								}
+
+							});
+
+						return;
+					}
+					else if (child instanceof Composite) {
+						_hookHyperlink((Composite)child);
+					}
+				}
+			}
+
+		};
+
+		_popup.setFadingEnabled(isAnimationsEnabled());
+
+		List<AbstractNotification> toDisplay = new ArrayList<>(getNotifications());
+
+		Collections.sort(toDisplay);
+		_popup.setContents(toDisplay);
+		getNotifications().clear();
+		_popup.setBlockOnOpen(false);
+		_popup.setDelayClose(60 * 1000);
+		_popup.open();
+	}
+
+	private NotificationPopup _popup;
 
 }

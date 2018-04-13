@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.server.ui.navigator;
@@ -34,132 +37,127 @@ import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 /**
  * @author Gregory Amerson
  */
-public class PropertiesActionProvider extends CommonActionProvider
-{
-    public static final String NEW_MENU_ID = "org.eclipse.wst.server.ui.internal.cnf.newMenuId";
-    public static final String TOP_SECTION_END_SEPARATOR = "org.eclipse.wst.server.ui.internal.cnf.topSectionEnd";
-    public static final String TOP_SECTION_START_SEPARATOR = "org.eclipse.wst.server.ui.internal.cnf.topSectionStart";
+public class PropertiesActionProvider extends CommonActionProvider {
 
-    private ICommonActionExtensionSite actionSite;
-    private EditPropertiesFileAction editAction;
-    private OpenLiferayHomeFolderAction openFolderAction;
+	public static final String NEW_MENU_ID = "org.eclipse.wst.server.ui.internal.cnf.newMenuId";
 
-    public PropertiesActionProvider()
-    {
-        super();
-    }
+	public static final String TOP_SECTION_END_SEPARATOR = "org.eclipse.wst.server.ui.internal.cnf.topSectionEnd";
 
-    private void addListeners( CommonViewer tableViewer )
-    {
-        tableViewer.addOpenListener( new IOpenListener()
-        {
-            public void open( OpenEvent event )
-            {
-                try
-                {
-                    final IStructuredSelection sel = (IStructuredSelection) event.getSelection();
-                    final Object data = sel.getFirstElement();
+	public static final String TOP_SECTION_START_SEPARATOR = "org.eclipse.wst.server.ui.internal.cnf.topSectionStart";
 
-                    if( !( data instanceof PropertiesFile ) )
-                    {
-                        return;
-                    }
+	public PropertiesActionProvider() {
+	}
 
-                    PropertiesActionProvider.this.editAction.run();
-                }
-                catch( Exception e )
-                {
-                    LiferayServerUI.logError( "Error opening kaleo workflow.", e );
-                }
-            }
-        } );
-    }
+	public void fillContextMenu(IMenuManager menu) {
 
-    protected void addTopSection( IMenuManager menu, PropertiesFile file )
-    {
-        // open action
-        if( file != null )
-        {
-            menu.add( editAction );
-            menu.add( openFolderAction );
-        }
-    }
+		// This is a temp workaround to clean up the default group that are provided by CNF
 
-    public void fillContextMenu( IMenuManager menu )
-    {
-        // This is a temp workaround to clean up the default group that are provided by CNF
-        menu.removeAll();
+		menu.removeAll();
 
-        ICommonViewerSite site = actionSite.getViewSite();
-        IStructuredSelection selection = null;
+		ICommonViewerSite site = _actionSite.getViewSite();
+		IStructuredSelection selection = null;
 
-        if( site instanceof ICommonViewerWorkbenchSite )
-        {
-            ICommonViewerWorkbenchSite wsSite = (ICommonViewerWorkbenchSite) site;
-            selection = (IStructuredSelection) wsSite.getSelectionProvider().getSelection();
-        }
+		if (site instanceof ICommonViewerWorkbenchSite) {
+			ICommonViewerWorkbenchSite wsSite = (ICommonViewerWorkbenchSite)site;
 
-        PropertiesFile file = null;
+			ISelectionProvider selectionProvider = wsSite.getSelectionProvider();
 
-        if( selection != null && !selection.isEmpty() )
-        {
-            Iterator<?> iterator = selection.iterator();
-            Object obj = iterator.next();
+			selection = (IStructuredSelection)selectionProvider.getSelection();
+		}
 
-            if( obj instanceof PropertiesFile )
-            {
-                file = (PropertiesFile) obj;
-            }
+		PropertiesFile file = null;
 
-            if( iterator.hasNext() )
-            {
-                file = null;
-            }
-        }
+		if ((selection != null) && !selection.isEmpty()) {
+			Iterator<?> iterator = selection.iterator();
 
-        menu.add( invisibleSeparator( TOP_SECTION_START_SEPARATOR ) );
-        addTopSection( menu, file );
-        menu.add( invisibleSeparator( TOP_SECTION_END_SEPARATOR ) );
-        menu.add( new Separator() );
+			Object obj = iterator.next();
 
-        menu.add( new Separator( IWorkbenchActionConstants.MB_ADDITIONS ) );
-        menu.add( new Separator( IWorkbenchActionConstants.MB_ADDITIONS + "-end" ) );
-    }
+			if (obj instanceof PropertiesFile) {
+				file = (PropertiesFile)obj;
+			}
 
-    public void init( ICommonActionExtensionSite site )
-    {
-        super.init( site );
-        this.actionSite = site;
-        ICommonViewerSite viewerSite = site.getViewSite();
+			if (iterator.hasNext()) {
+				file = null;
+			}
+		}
 
-        if( viewerSite instanceof ICommonViewerWorkbenchSite )
-        {
-            StructuredViewer v = site.getStructuredViewer();
+		menu.add(_invisibleSeparator(TOP_SECTION_START_SEPARATOR));
 
-            if( v instanceof CommonViewer )
-            {
-                CommonViewer cv = (CommonViewer) v;
-                ICommonViewerWorkbenchSite wsSite = (ICommonViewerWorkbenchSite) viewerSite;
-                addListeners( cv );
-                makeActions( cv, wsSite.getSelectionProvider() );
-            }
-        }
-    }
+		addTopSection(menu, file);
 
-    private Separator invisibleSeparator( String s )
-    {
-        Separator sep = new Separator( s );
-        sep.setVisible( false );
-        return sep;
-    }
+		menu.add(_invisibleSeparator(TOP_SECTION_END_SEPARATOR));
+		menu.add(new Separator());
+		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS + "-end"));
+	}
 
-    private void makeActions( CommonViewer tableViewer, ISelectionProvider provider )
-    {
-        // Shell shell = tableViewer.getTree().getShell();
+	public void init(ICommonActionExtensionSite site) {
+		super.init(site);
 
-        // create the open action
-        editAction = new EditPropertiesFileAction( provider );
-        openFolderAction = new OpenLiferayHomeFolderAction( provider );
-    }
+		_actionSite = site;
+
+		ICommonViewerSite viewerSite = site.getViewSite();
+
+		if (viewerSite instanceof ICommonViewerWorkbenchSite) {
+			StructuredViewer v = site.getStructuredViewer();
+
+			if (v instanceof CommonViewer) {
+				CommonViewer cv = (CommonViewer)v;
+				ICommonViewerWorkbenchSite wsSite = (ICommonViewerWorkbenchSite)viewerSite;
+
+				_addListeners(cv);
+
+				_makeActions(wsSite.getSelectionProvider());
+			}
+		}
+	}
+
+	protected void addTopSection(IMenuManager menu, PropertiesFile file) {
+		if (file != null) {
+			menu.add(_editAction);
+			menu.add(_openFolderAction);
+		}
+	}
+
+	private void _addListeners(CommonViewer tableViewer) {
+		tableViewer.addOpenListener(
+			new IOpenListener() {
+
+				public void open(OpenEvent event) {
+					try {
+						IStructuredSelection sel = (IStructuredSelection)event.getSelection();
+
+						Object data = sel.getFirstElement();
+
+						if (!(data instanceof PropertiesFile)) {
+							return;
+						}
+
+						PropertiesActionProvider.this._editAction.run();
+					}
+					catch (Exception e) {
+						LiferayServerUI.logError("Error opening kaleo workflow.", e);
+					}
+				}
+
+			});
+	}
+
+	private Separator _invisibleSeparator(String s) {
+		Separator sep = new Separator(s);
+
+		sep.setVisible(false);
+
+		return sep;
+	}
+
+	private void _makeActions(ISelectionProvider provider) {
+		_editAction = new EditPropertiesFileAction(provider);
+		_openFolderAction = new OpenLiferayHomeFolderAction(provider);
+	}
+
+	private ICommonActionExtensionSite _actionSite;
+	private EditPropertiesFileAction _editAction;
+	private OpenLiferayHomeFolderAction _openFolderAction;
 
 }

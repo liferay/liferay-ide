@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui;
 
@@ -21,8 +20,11 @@ import com.liferay.ide.server.core.LiferayServerCore;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IDecoratorManager;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.ui.internal.ImageResource;
@@ -32,81 +34,81 @@ import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings( { "restriction" } )
-public class LiferayServerModuleLabelDecorator extends ModuleLabelDecorator
-{
-    public LiferayServerModuleLabelDecorator()
-    {
-        super();
-    }
+@SuppressWarnings("restriction")
+public class LiferayServerModuleLabelDecorator extends ModuleLabelDecorator {
 
-    @Override
-    public Image decorateImage( Image image, Object element )
-    {
-        try
-        {
-            IModule module = null;
-            Image bundleImage = image;
+	public LiferayServerModuleLabelDecorator() {
+	}
 
-            if( element instanceof IModule )
-            {
-                module = (IModule) element;
-            }
-            else if( element instanceof ModuleServer )
-            {
-                IModule[] modules = ( (ModuleServer) element ).module;
-                module = modules[modules.length - 1];
+	@Override
+	public Image decorateImage(Image image, Object element) {
+		try {
+			IModule module = null;
+			Image bundleImage = image;
 
-                ModuleServer portalServer = (ModuleServer) element;
+			if (element instanceof IModule) {
+				module = (IModule)element;
+			}
+			else if (element instanceof ModuleServer) {
+				IModule[] modules = ((ModuleServer)element).module;
 
-                IServer server = portalServer.getServer();
-                IServerType serverType = server.getServerType();
+				module = modules[modules.length - 1];
 
-                if( serverType.getRuntimeType().getId().equals( "com.liferay.ide.server.portal.runtime" ) )
-                {
-                    bundleImage = getBundleModuleImage();
-                }
-            }
+				ModuleServer portalServer = (ModuleServer)element;
 
-            if( module == null )
-            {
-                return null;
-            }
+				IServer server = portalServer.getServer();
 
-            IProject project = module.getProject();
+				IServerType serverType = server.getServerType();
 
-            if( project == null )
-            {
-                return null;
-            }
+				IRuntimeType runtimeType = serverType.getRuntimeType();
 
-            IMarker[] markers = project.findMarkers( LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0 );
+				String runtimeId = runtimeType.getId();
 
-            if( ListUtil.isNotEmpty(markers) )
-            {
-                bundleImage = BundlesImages.IMG_BUNDLE_ERROR;
-            }
+				if (runtimeId.equals("com.liferay.ide.server.portal.runtime")) {
+					bundleImage = _getBundleModuleImage();
+				}
+			}
 
-            return PlatformUI.getWorkbench().getDecoratorManager().decorateImage( bundleImage, project );
-        }
-        catch( Exception e )
-        {
-            return null;
-        }
-    }
+			if (module == null) {
+				return null;
+			}
 
-    private Image getBundleModuleImage()
-    {
-        String typeId = "liferay.bundle";
-        Image image = ImageResource.getImage( typeId );
-        int ind = typeId.indexOf( "." );
+			IProject project = module.getProject();
 
-        while( image == null && ind >= 0 )
-        {
-            typeId = typeId.substring( 0, ind );
-            image = ImageResource.getImage( typeId );
-        }
+			if (project == null) {
+				return null;
+			}
 
-        return image;
-    }
+			IMarker[] markers = project.findMarkers(LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0);
+
+			if (ListUtil.isNotEmpty(markers)) {
+				bundleImage = BundlesImages.IMG_BUNDLE_ERROR;
+			}
+
+			IWorkbench workbench = PlatformUI.getWorkbench();
+
+			IDecoratorManager decoratorManager = workbench.getDecoratorManager();
+
+			return decoratorManager.decorateImage(bundleImage, project);
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+
+	private Image _getBundleModuleImage() {
+		String typeId = "liferay.bundle";
+
+		Image image = ImageResource.getImage(typeId);
+		int ind = typeId.indexOf(".");
+
+		while ((image == null) && (ind >= 0)) {
+			typeId = typeId.substring(0, ind);
+
+			image = ImageResource.getImage(typeId);
+		}
+
+		return image;
+	}
+
 }

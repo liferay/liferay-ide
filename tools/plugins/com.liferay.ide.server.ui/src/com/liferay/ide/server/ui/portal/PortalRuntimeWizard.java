@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui.portal;
 
@@ -20,6 +19,7 @@ import com.liferay.ide.server.core.LiferayServerCore;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.TaskModel;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
@@ -29,69 +29,60 @@ import org.eclipse.wst.server.ui.wizard.WizardFragment;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class PortalRuntimeWizard extends WizardFragment
-{
+public class PortalRuntimeWizard extends WizardFragment {
 
-    private PortalRuntimeComposite composite;
+	public PortalRuntimeWizard() {
+	}
 
-    public PortalRuntimeWizard()
-    {
-        super();
-    }
+	@Override
+	public Composite createComposite(Composite parent, IWizardHandle handle) {
+		_composite = new PortalRuntimeComposite(parent, handle);
 
-    @Override
-    public Composite createComposite( Composite parent, IWizardHandle handle )
-    {
-        composite = new PortalRuntimeComposite( parent, handle );
-        return composite;
-    }
+		return _composite;
+	}
 
-    @Override
-    public boolean hasComposite()
-    {
-        return true;
-    }
+	@Override
+	public void enter() {
+		if (_composite != null) {
+			IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy)getTaskModel().getObject(TaskModel.TASK_RUNTIME);
 
-    @Override
-    public void enter()
-    {
-        if( this.composite != null )
-        {
-            final IRuntimeWorkingCopy runtime =
-                (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
+			_composite.setRuntime(runtime);
+		}
+	}
 
-            this.composite.setRuntime( runtime );
-        }
-    }
+	public void exit() {
+		IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy)getTaskModel().getObject(TaskModel.TASK_RUNTIME);
 
-    public void exit()
-    {
-        IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
-        IPath path = runtime.getLocation();
+		IPath path = runtime.getLocation();
+		IStatus status = runtime.validate(null);
 
-        if( runtime.validate( null ).getSeverity() != IStatus.ERROR )
-        {
-            LiferayServerCore.setPreference(
-                "location." + runtime.getRuntimeType().getId(), path.toPortableString() );
-        }
-    }
+		if (status.getSeverity() != IStatus.ERROR) {
+			IRuntimeType runtimeType = runtime.getRuntimeType();
 
-    @Override
-    public boolean isComplete()
-    {
-        boolean retval = false;
+			LiferayServerCore.setPreference("location." + runtimeType.getId(), path.toPortableString());
+		}
+	}
 
-        final IRuntimeWorkingCopy runtime =
-            (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
+	@Override
+	public boolean hasComposite() {
+		return true;
+	}
 
-        if( runtime != null )
-        {
-            final IStatus status = runtime.validate( null );
+	@Override
+	public boolean isComplete() {
+		boolean retval = false;
 
-            retval = status == null || status.getSeverity() != IStatus.ERROR;
-        }
+		IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy)getTaskModel().getObject(TaskModel.TASK_RUNTIME);
 
-        return retval;
-    }
+		if (runtime != null) {
+			IStatus status = runtime.validate(null);
+
+			retval = status == null || status.getSeverity() != IStatus.ERROR;
+		}
+
+		return retval;
+	}
+
+	private PortalRuntimeComposite _composite;
 
 }

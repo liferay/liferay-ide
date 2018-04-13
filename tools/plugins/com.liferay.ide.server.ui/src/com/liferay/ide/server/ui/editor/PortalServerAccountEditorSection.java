@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2007, 2010 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *    IBM Corporation - Initial API and implementation
- *    Greg Amerson <gregory.amerson@liferay.com>
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.server.ui.editor;
 
@@ -33,130 +35,133 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 /**
  * @author Terry Jia
  */
-public class PortalServerAccountEditorSection extends AbstractPortalServerEditorSection
-{
+public class PortalServerAccountEditorSection extends AbstractPortalServerEditorSection {
 
-    protected Text password;
-    protected Text username;
+	public PortalServerAccountEditorSection() {
+	}
 
-    public PortalServerAccountEditorSection()
-    {
-        super();
-    }
+	@Override
+	protected void addPropertyListeners(PropertyChangeEvent event) {
+		if (PortalServer.ATTR_USERNAME.equals(event.getPropertyName())) {
+			String s = (String)event.getNewValue();
 
-    @Override
-    protected void addPropertyListeners( PropertyChangeEvent event )
-    {
-        if( PortalServer.ATTR_USERNAME.equals( event.getPropertyName() ) )
-        {
-            String s = (String) event.getNewValue();
-            PortalServerAccountEditorSection.this.username.setText( s );
+			PortalServerAccountEditorSection.this.username.setText(s);
 
-            validate();
-        }
-        else if( PortalServer.ATTR_PASSWORD.equals( event.getPropertyName() ) )
-        {
-            String s = (String) event.getNewValue();
-            PortalServerAccountEditorSection.this.password.setText( s );
+			validate();
+		}
+		else if (PortalServer.ATTR_PASSWORD.equals(event.getPropertyName())) {
+			String s = (String)event.getNewValue();
 
-            validate();
-        }
-    }
+			PortalServerAccountEditorSection.this.password.setText(s);
 
-    @Override
-    protected void createEditorSection( FormToolkit toolkit, Composite composite )
-    {
-        Label label = createLabel( toolkit, composite, Msgs.username );
+			validate();
+		}
+	}
 
-        GridData data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
+	@Override
+	protected void createEditorSection(FormToolkit toolkit, Composite composite) {
+		Label label = createLabel(toolkit, composite, Msgs.username);
 
-        label.setLayoutData( data );
+		GridData data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 
-        username = toolkit.createText( composite, null );
-        username.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
- 
-        username.addModifyListener( new ModifyListener()
-        {
+		label.setLayoutData(data);
 
-            public void modifyText( ModifyEvent e )
-            {
-                if( updating )
-                {
-                    return;
-                }
+		username = toolkit.createText(composite, null);
 
-                updating = true;
-                execute( new SetPortalServerUsernameCommand( server, username.getText().trim() ) );
-                updating = false;
-            }
-        } );
+		username.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-        label = createLabel( toolkit, composite, StringPool.EMPTY );
-        data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        label.setLayoutData( data );
+		username.addModifyListener(
+			new ModifyListener() {
 
-        label = createLabel( toolkit, composite, Msgs.password );
-        label.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
+				public void modifyText(ModifyEvent e) {
+					if (updating) {
+						return;
+					}
 
-        password = toolkit.createText( composite, null, SWT.PASSWORD );
-        password.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
-        password.addModifyListener( new ModifyListener()
-        {
+					updating = true;
 
-            public void modifyText( ModifyEvent e )
-            {
-                if( updating )
-                {
-                    return;
-                }
+					String userName = username.getText();
 
-                updating = true;
-                execute( new SetPortalServerPasswordCommand( server, password.getText().trim() ) );
-                updating = false;
-            }
-        } );
-    }
+					execute(new SetPortalServerUsernameCommand(server, userName.trim()));
 
-    @Override
-    protected String getSectionLabel()
-    {
-        return Msgs.liferayAccount;
-    }
+					updating = false;
+				}
 
-    @Override
-    protected void initProperties()
-    {
-        username.setText( portalServer.getUsername() );
-        password.setText( portalServer.getPassword() );
-    }
+			});
 
-    @Override
-    protected void setDefault()
-    {
-        execute( new SetPortalServerUsernameCommand( server, PortalServerConstants.DEFAULT_USERNAME ) );
-        username.setText( PortalServerConstants.DEFAULT_USERNAME );
+		label = createLabel(toolkit, composite, StringPool.EMPTY);
 
-        execute( new SetPortalServerPasswordCommand( server, StringPool.EMPTY ) );
-        password.setText( StringPool.EMPTY );
-    }
+		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 
-    @Override
-    protected boolean needCreate()
-    {
-        return true;
-    }
+		label.setLayoutData(data);
 
-    private static class Msgs extends NLS
-    {
+		label = createLabel(toolkit, composite, Msgs.password);
 
-        public static String liferayAccount;
-        public static String password;
-        public static String username;
+		label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
 
-        static
-        {
-            initializeMessages( PortalServerAccountEditorSection.class.getName(), Msgs.class );
-        }
-    }
+		password = toolkit.createText(composite, null, SWT.PASSWORD);
+
+		password.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		password.addModifyListener(
+			new ModifyListener() {
+
+				public void modifyText(ModifyEvent e) {
+					if (updating) {
+						return;
+					}
+
+					updating = true;
+
+					String p = password.getText();
+
+					execute(new SetPortalServerPasswordCommand(server, p.trim()));
+
+					updating = false;
+				}
+
+			});
+	}
+
+	@Override
+	protected String getSectionLabel() {
+		return Msgs.liferayAccount;
+	}
+
+	@Override
+	protected void initProperties() {
+		username.setText(portalServer.getUsername());
+		password.setText(portalServer.getPassword());
+	}
+
+	@Override
+	protected boolean needCreate() {
+		return true;
+	}
+
+	@Override
+	protected void setDefault() {
+		execute(new SetPortalServerUsernameCommand(server, PortalServerConstants.DEFAULT_USERNAME));
+
+		username.setText(PortalServerConstants.DEFAULT_USERNAME);
+
+		execute(new SetPortalServerPasswordCommand(server, StringPool.EMPTY));
+
+		password.setText(StringPool.EMPTY);
+	}
+
+	protected Text password;
+	protected Text username;
+
+	private static class Msgs extends NLS {
+
+		public static String liferayAccount;
+		public static String password;
+		public static String username;
+
+		static {
+			initializeMessages(PortalServerAccountEditorSection.class.getName(), Msgs.class);
+		}
+
+	}
 
 }

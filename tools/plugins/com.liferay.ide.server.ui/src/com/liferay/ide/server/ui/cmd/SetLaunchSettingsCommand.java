@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2010 SAS Institute, Inc. and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *     Larry Isaacs - Initial API and implementation
- *     Greg Amerson <gregory.amerson@liferay.com>
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.server.ui.cmd;
 
@@ -20,45 +22,35 @@ import org.eclipse.wst.server.ui.internal.Messages;
 import org.eclipse.wst.server.ui.internal.command.ServerCommand;
 
 /**
- * Command to change the server model
- *
  * @author Simon Jiang
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
-public class SetLaunchSettingsCommand extends ServerCommand
-{
+@SuppressWarnings("restriction")
+public class SetLaunchSettingsCommand extends ServerCommand {
 
-    protected boolean launchSettings;
-    protected boolean oldLaunchSettings;
+	public SetLaunchSettingsCommand(IServerWorkingCopy server, boolean launchSettings) {
+		super(server, Messages.editorResourceModifiedTitle);
 
-    /**
-     * Constructs command to set launch setting
-     *
-     * @param server
-     * @param value
-     *            of launchSettings
-     */
-    public SetLaunchSettingsCommand( IServerWorkingCopy server, boolean launchSettings )
-    {
-        super( server, Messages.editorResourceModifiedTitle );
-        this.launchSettings = launchSettings;
-    }
+		this.launchSettings = launchSettings;
+	}
 
-    /**
-     * Execute setting launch setting propety
-     */
-    public void execute()
-    {
-        oldLaunchSettings = ( (PortalServer) server.loadAdapter( PortalServer.class, null ) ).getLaunchSettings();
-        ( (PortalServerDelegate) server.loadAdapter( PortalServer.class, null ) ).setLaunchSettings( launchSettings );
-    }
+	public void execute() {
+		PortalServer portalServer = (PortalServer)server.loadAdapter(PortalServer.class, null);
 
-    /**
-     * Restore prior portalServerSettings prooperty
-     */
-    public void undo()
-    {
-        ( (PortalServerDelegate) server.loadAdapter( PortalServer.class, null ) ).setLaunchSettings( oldLaunchSettings );
-    }
+		oldLaunchSettings = portalServer.getLaunchSettings();
+
+		PortalServerDelegate portalServerDelegate = (PortalServerDelegate)server.loadAdapter(PortalServer.class, null);
+
+		portalServerDelegate.setLaunchSettings(launchSettings);
+	}
+
+	public void undo() {
+		PortalServerDelegate portalServerDelegate = (PortalServerDelegate)server.loadAdapter(PortalServer.class, null);
+
+		portalServerDelegate.setLaunchSettings(oldLaunchSettings);
+	}
+
+	protected boolean launchSettings;
+	protected boolean oldLaunchSettings;
+
 }

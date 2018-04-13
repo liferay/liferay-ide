@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui.cmd;
 
@@ -22,36 +21,35 @@ import org.eclipse.osgi.util.NLS;
 /**
  * @author Greg Amerson
  */
-public class SetLiferayPortalContextPathCommand extends RemoteServerCommand
-{
+public class SetLiferayPortalContextPathCommand extends RemoteServerCommand {
 
-    protected String oldLiferayPortalContextPath;
-    protected String liferayPortalContextPath;
+	public SetLiferayPortalContextPathCommand(IRemoteServerWorkingCopy server, String liferayPortalContextPath) {
+		super(server, Msgs.setLiferayPortalContextPath);
 
-    public SetLiferayPortalContextPathCommand( IRemoteServerWorkingCopy server, String liferayPortalContextPath )
-    {
-        super( server, Msgs.setLiferayPortalContextPath );
-        this.liferayPortalContextPath = liferayPortalContextPath;
-    }
+		this.liferayPortalContextPath = liferayPortalContextPath;
+	}
 
-    public void execute()
-    {
-        oldLiferayPortalContextPath = server.getLiferayPortalContextPath();
-        server.setLiferayPortalContextPath( liferayPortalContextPath );
-    }
+	public void execute() {
+		oldLiferayPortalContextPath = server.getLiferayPortalContextPath();
 
-    public void undo()
-    {
-        server.setLiferayPortalContextPath( oldLiferayPortalContextPath );
-    }
+		server.setLiferayPortalContextPath(liferayPortalContextPath);
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String setLiferayPortalContextPath;
+	public void undo() {
+		server.setLiferayPortalContextPath(oldLiferayPortalContextPath);
+	}
 
-        static
-        {
-            initializeMessages( SetLiferayPortalContextPathCommand.class.getName(), Msgs.class );
-        }
-    }
+	protected String liferayPortalContextPath;
+	protected String oldLiferayPortalContextPath;
+
+	private static class Msgs extends NLS {
+
+		public static String setLiferayPortalContextPath;
+
+		static {
+			initializeMessages(SetLiferayPortalContextPathCommand.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

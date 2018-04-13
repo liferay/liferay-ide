@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2007, 2010 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *    IBM Corporation - Initial API and implementation
- *    Greg Amerson <gregory.amerson@liferay.com>
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.server.ui.editor;
 
@@ -29,7 +31,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
@@ -38,7 +42,9 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.help.IWorkbenchHelpSystem;
+import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IPublishListener;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.util.PublishAdapter;
 import org.eclipse.wst.server.ui.editor.ServerEditorSection;
@@ -47,207 +53,216 @@ import org.eclipse.wst.server.ui.internal.ContextIds;
 /**
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
-public abstract class AbstractPortalServerEditorSection extends ServerEditorSection
-{
+@SuppressWarnings("restriction")
+public abstract class AbstractPortalServerEditorSection extends ServerEditorSection {
 
-    protected boolean allowRestrictedEditing;
-    protected PropertyChangeListener listener;
-    protected PortalBundle portalBundle;
-    protected PortalRuntime portalRuntime;
-    protected PortalServer portalServer;
-    protected IPublishListener publishListener;
-    protected Section section;
-    protected Hyperlink setDefault;
+	public void createSection(Composite parent) {
+		if (!needCreate()) {
+			return;
+		}
 
-    protected boolean updating;
+		super.createSection(parent);
 
-    protected void addChangeListeners()
-    {
-        listener = new PropertyChangeListener()
-        {
+		FormToolkit toolkit = getFormToolkit(parent.getDisplay());
 
-            public void propertyChange( PropertyChangeEvent event )
-            {
-                if( updating )
-                {
-                    return;
-                }
+		section = toolkit.createSection(
+			parent,
+			ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED |
+			ExpandableComposite.TITLE_BAR | Section.DESCRIPTION | ExpandableComposite.FOCUS_TITLE);
 
-                updating = true;
+		section.setText(getSectionLabel());
+		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL));
 
-                addPropertyListeners( event );
+		Composite composite = toolkit.createComposite(section);
+		GridLayout layout = new GridLayout();
 
-                updating = false;
-            }
-        };
+		layout.numColumns = 3;
+		layout.marginHeight = 5;
+		layout.marginWidth = 10;
+		layout.verticalSpacing = 5;
+		layout.horizontalSpacing = 15;
 
-        server.addPropertyChangeListener( listener );
+		composite.setLayout(layout);
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL));
 
-        publishListener = new PublishAdapter()
-        {
+		IWorkbench workbench = PlatformUI.getWorkbench();
 
-            public void publishFinished( IServer server2, IStatus status )
-            {
-                boolean flag = false;
-                if( status.isOK() && server2.getModules().length == 0 )
-                    flag = true;
-                if( flag != allowRestrictedEditing )
-                {
-                    allowRestrictedEditing = flag;
-                }
-            }
-        };
+		IWorkbenchHelpSystem whs = workbench.getHelpSystem();
 
-        server.getOriginal().addPublishListener( publishListener );
-    }
+		whs.setHelp(composite, ContextIds.EDITOR_SERVER);
+		whs.setHelp(section, ContextIds.EDITOR_SERVER);
 
-    protected abstract void addPropertyListeners( PropertyChangeEvent event );
+		toolkit.paintBordersFor(composite);
 
-    protected abstract void createEditorSection( FormToolkit toolkit, Composite composite );
+		section.setClient(composite);
 
-    protected Label createLabel( FormToolkit toolkit, Composite parent, String text )
-    {
-        Label label = toolkit.createLabel( parent, text );
-        label.setForeground( toolkit.getColors().getColor( IFormColors.TITLE ) );
+		createEditorSection(toolkit, composite);
 
-        return label;
-    }
+		Label label = createLabel(toolkit, composite, StringPool.EMPTY);
+		GridData data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 
-    public void createSection( Composite parent )
-    {
-        if( !needCreate() )
-        {
-            return;
-        }
+		label.setLayoutData(data);
 
-        super.createSection( parent );
-        FormToolkit toolkit = getFormToolkit( parent.getDisplay() );
+		setDefault = toolkit.createHyperlink(composite, Msgs.restoreDefaultsLink, SWT.WRAP);
 
-        section = toolkit.createSection(
-            parent, ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR |
-                Section.DESCRIPTION | ExpandableComposite.FOCUS_TITLE );
-        section.setText( getSectionLabel() );
-        section.setLayoutData( new GridData( GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL ) );
+		setDefault.addHyperlinkListener(
+			new HyperlinkAdapter() {
 
-        Composite composite = toolkit.createComposite( section );
-        GridLayout layout = new GridLayout();
-        layout.numColumns = 3;
-        layout.marginHeight = 5;
-        layout.marginWidth = 10;
-        layout.verticalSpacing = 5;
-        layout.horizontalSpacing = 15;
-        composite.setLayout( layout );
-        composite.setLayoutData( new GridData( GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL ) );
-        IWorkbenchHelpSystem whs = PlatformUI.getWorkbench().getHelpSystem();
-        whs.setHelp( composite, ContextIds.EDITOR_SERVER );
-        whs.setHelp( section, ContextIds.EDITOR_SERVER );
-        toolkit.paintBordersFor( composite );
-        section.setClient( composite );
+				public void linkActivated(HyperlinkEvent e) {
+					updating = true;
 
-        createEditorSection( toolkit, composite );;
+					setDefault();
 
-        Label label = createLabel( toolkit, composite, StringPool.EMPTY );
-        GridData data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        label.setLayoutData( data );
+					updating = false;
 
-        setDefault = toolkit.createHyperlink( composite, Msgs.restoreDefaultsLink, SWT.WRAP );
-        setDefault.addHyperlinkListener( new HyperlinkAdapter()
-        {
+					validate();
+				}
 
-            public void linkActivated( HyperlinkEvent e )
-            {
-                updating = true;
+			});
 
-                setDefault();
+		data = new GridData(SWT.FILL, SWT.CENTER, true, false);
 
-                updating = false;
-                validate();
-            }
-        } );
+		data.horizontalSpan = 3;
 
-        data = new GridData( SWT.FILL, SWT.CENTER, true, false );
-        data.horizontalSpan = 3;
-        setDefault.setLayoutData( data );
+		setDefault.setLayoutData(data);
 
-        initialize();
-    }
+		initialize();
+	}
 
-    public void dispose()
-    {
-        if( server != null )
-        {
-            server.removePropertyChangeListener( listener );
+	public void dispose() {
+		if (server != null) {
+			server.removePropertyChangeListener(listener);
 
-            if( server.getOriginal() != null )
-            {
-                server.getOriginal().removePublishListener( publishListener );
-            }
-        }
-    }
+			IServer originalServer = server.getOriginal();
 
-    protected abstract String getSectionLabel();
+			if (originalServer != null) {
+				originalServer.removePublishListener(publishListener);
+			}
+		}
+	}
 
-    public void init( IEditorSite site, IEditorInput input )
-    {
-        super.init( site, input );
+	public void init(IEditorSite site, IEditorInput input) {
+		super.init(site, input);
 
-        if( !needCreate() )
-        {
-            return;
-        }
+		if (!needCreate()) {
+			return;
+		}
 
-        if( server != null )
-        {
-            portalServer = (PortalServer) server.loadAdapter( PortalServer.class, null );
+		if (server != null) {
+			portalServer = (PortalServer)server.loadAdapter(PortalServer.class, null);
 
-            portalRuntime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
+			IRuntime runtime = server.getRuntime();
 
-            portalBundle = portalRuntime.getPortalBundle();
+			portalRuntime = (PortalRuntime)runtime.loadAdapter(PortalRuntime.class, null);
 
-            addChangeListeners();
-        }
-    }
+			portalBundle = portalRuntime.getPortalBundle();
 
-    protected void initialize()
-    {
-        if( portalServer == null || portalBundle == null)
-        {
-            return;
-        }
+			addChangeListeners();
+		}
+	}
 
-        updating = true;
+	protected void addChangeListeners() {
+		listener = new PropertyChangeListener() {
 
-        initProperties();
+			public void propertyChange(PropertyChangeEvent event) {
+				if (updating) {
+					return;
+				}
 
-        updating = false;
+				updating = true;
 
-        validate();
-    }
+				addPropertyListeners(event);
 
-    protected abstract void initProperties();
+				updating = false;
+			}
 
-    protected abstract void setDefault();
+		};
 
-    protected abstract boolean needCreate();
+		server.addPropertyChangeListener(listener);
 
-    protected void validate()
-    {
-        if( portalServer != null )
-        {
-            setErrorMessage( null );
-        }
-    }
+		publishListener = new PublishAdapter() {
 
-    private static class Msgs extends NLS
-    {
+			public void publishFinished(IServer server2, IStatus status) {
+				boolean flag = false;
 
-        public static String restoreDefaultsLink;
+				IModule[] modules = server2.getModules();
 
-        static
-        {
-            initializeMessages( AbstractPortalServerEditorSection.class.getName(), Msgs.class );
-        }
-    }
+				if (status.isOK() && (modules.length == 0)) {
+					flag = true;
+				}
+
+				if (flag != allowRestrictedEditing) {
+					allowRestrictedEditing = flag;
+				}
+			}
+
+		};
+
+		IServer originalServer = server.getOriginal();
+
+		originalServer.addPublishListener(publishListener);
+	}
+
+	protected abstract void addPropertyListeners(PropertyChangeEvent event);
+
+	protected abstract void createEditorSection(FormToolkit toolkit, Composite composite);
+
+	protected Label createLabel(FormToolkit toolkit, Composite parent, String text) {
+		Label label = toolkit.createLabel(parent, text);
+
+		FormColors colors = toolkit.getColors();
+
+		label.setForeground(colors.getColor(IFormColors.TITLE));
+
+		return label;
+	}
+
+	protected abstract String getSectionLabel();
+
+	protected void initialize() {
+		if ((portalServer == null) || (portalBundle == null)) {
+			return;
+		}
+
+		updating = true;
+
+		initProperties();
+
+		updating = false;
+
+		validate();
+	}
+
+	protected abstract void initProperties();
+
+	protected abstract boolean needCreate();
+
+	protected abstract void setDefault();
+
+	protected void validate() {
+		if (portalServer != null) {
+			setErrorMessage(null);
+		}
+	}
+
+	protected boolean allowRestrictedEditing;
+	protected PropertyChangeListener listener;
+	protected PortalBundle portalBundle;
+	protected PortalRuntime portalRuntime;
+	protected PortalServer portalServer;
+	protected IPublishListener publishListener;
+	protected Section section;
+	protected Hyperlink setDefault;
+	protected boolean updating;
+
+	private static class Msgs extends NLS {
+
+		public static String restoreDefaultsLink;
+
+		static {
+			initializeMessages(AbstractPortalServerEditorSection.class.getName(), Msgs.class);
+		}
+
+	}
 
 }

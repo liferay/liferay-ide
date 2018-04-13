@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui.navigator;
 
@@ -20,44 +19,42 @@ import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Gregory Amerson
  */
-public class PropertiesLabelProvider extends LabelProvider implements ILightweightLabelDecorator
-{
+public class PropertiesLabelProvider extends LabelProvider implements ILightweightLabelDecorator {
 
-    public PropertiesLabelProvider()
-    {
-        super();
-    }
+	public PropertiesLabelProvider() {
+	}
 
-    public void decorate( Object element, IDecoration decoration )
-    {
-    }
+	public void decorate(Object element, IDecoration decoration) {
+	}
 
-    @Override
-    public Image getImage( Object element )
-    {
-        if( element instanceof PropertiesFile )
-        {
-            return PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJ_FILE );
-        }
+	@Override
+	public Image getImage(Object element) {
+		if (element instanceof PropertiesFile) {
+			IWorkbench workbench = PlatformUI.getWorkbench();
 
-        return null;
-    }
+			ISharedImages sharedImage = workbench.getSharedImages();
 
-    @Override
-    public String getText( Object element )
-    {
-        if( element instanceof PropertiesFile )
-        {
-            final PropertiesFile file = (PropertiesFile) element;
+			return sharedImage.getImage(ISharedImages.IMG_OBJ_FILE);
+		}
 
-            return file.getName();
-        }
+		return null;
+	}
 
-        return null;
-    }
+	@Override
+	public String getText(Object element) {
+		if (element instanceof PropertiesFile) {
+			PropertiesFile file = (PropertiesFile)element;
+
+			return file.getName();
+		}
+
+		return null;
+	}
+
 }

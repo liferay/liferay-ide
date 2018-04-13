@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2007, 2010 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *    IBM Corporation - Initial API and implementation
- *    Greg Amerson <gregory.amerson@liferay.com>
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.server.ui.editor;
 
@@ -29,92 +31,95 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.wst.server.core.IRuntime;
 
 /**
  * @author Terry Jia
  */
-public class PortalServerPortsEditorSection extends AbstractPortalServerEditorSection
-{
+public class PortalServerPortsEditorSection extends AbstractPortalServerEditorSection {
 
-    protected Text httpPort;
+	public PortalServerPortsEditorSection() {
+	}
 
-    public PortalServerPortsEditorSection()
-    {
-        super();
-    }
+	protected void addPropertyListeners(PropertyChangeEvent event) {
+		if (PortalServer.ATTR_HTTP_PORT.equals(event.getPropertyName())) {
+			String s = (String)event.getNewValue();
 
-    protected void addPropertyListeners( PropertyChangeEvent event )
-    {
-        if( PortalServer.ATTR_HTTP_PORT.equals( event.getPropertyName() ) )
-        {
-            String s = (String) event.getNewValue();
-            PortalServerPortsEditorSection.this.httpPort.setText( s );
-            validate();
-        }
-    }
+			PortalServerPortsEditorSection.this.httpPort.setText(s);
 
-    protected void createEditorSection( FormToolkit toolkit, Composite composite )
-    {
-        Label label = createLabel( toolkit, composite, Msgs.httpPort );
-        GridData data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        label.setLayoutData( data );
+			validate();
+		}
+	}
 
-        httpPort = toolkit.createText( composite, null );
-        httpPort.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
-        httpPort.addModifyListener( new ModifyListener()
-        {
+	protected void createEditorSection(FormToolkit toolkit, Composite composite) {
+		Label label = createLabel(toolkit, composite, Msgs.httpPort);
 
-            public void modifyText( ModifyEvent e )
-            {
-                if( updating )
-                {
-                    return;
-                }
+		GridData data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 
-                updating = true;
+		label.setLayoutData(data);
 
-                execute( new SetPortalServerHttpPortCommand( server, httpPort.getText().trim() ) );
+		httpPort = toolkit.createText(composite, null);
 
-                updating = false;
-            }
-        } );
-    }
+		httpPort.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		httpPort.addModifyListener(
+			new ModifyListener() {
 
-    protected String getSectionLabel()
-    {
-        return Msgs.ports;
-    }
+				public void modifyText(ModifyEvent e) {
+					if (updating) {
+						return;
+					}
 
-    protected void initProperties()
-    {
-        httpPort.setText( portalBundle.getHttpPort() );
-    }
+					updating = true;
 
-    protected void setDefault()
-    {
-        execute( new SetPortalServerHttpPortCommand( server, PortalServerConstants.DEFAULT_HTTP_PORT ) );
-        httpPort.setText( PortalServerConstants.DEFAULT_HTTP_PORT );
-    }
+					String hp = httpPort.getText();
 
-    private static class Msgs extends NLS
-    {
+					execute(new SetPortalServerHttpPortCommand(server, hp.trim()));
 
-        public static String httpPort;
-        public static String ports;
+					updating = false;
+				}
 
-        static
-        {
-            initializeMessages( PortalServerPortsEditorSection.class.getName(), Msgs.class );
-        }
-    }
+			});
+	}
 
-    @Override
-    protected boolean needCreate()
-    {
-        PortalRuntime runtime =
-            (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, new NullProgressMonitor() );
+	protected String getSectionLabel() {
+		return Msgs.ports;
+	}
 
-        return runtime != null;
-    }
+	protected void initProperties() {
+		httpPort.setText(portalBundle.getHttpPort());
+	}
+
+	@Override
+	protected boolean needCreate() {
+		IRuntime serverRuntime = server.getRuntime();
+
+		PortalRuntime runtime = (PortalRuntime)serverRuntime.loadAdapter(
+			PortalRuntime.class, new NullProgressMonitor());
+
+		if (runtime != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	protected void setDefault() {
+		execute(new SetPortalServerHttpPortCommand(server, PortalServerConstants.DEFAULT_HTTP_PORT));
+
+		httpPort.setText(PortalServerConstants.DEFAULT_HTTP_PORT);
+	}
+
+	protected Text httpPort;
+
+	private static class Msgs extends NLS {
+
+		public static String httpPort;
+		public static String ports;
+
+		static {
+			initializeMessages(PortalServerPortsEditorSection.class.getName(), Msgs.class);
+		}
+
+	}
 
 }

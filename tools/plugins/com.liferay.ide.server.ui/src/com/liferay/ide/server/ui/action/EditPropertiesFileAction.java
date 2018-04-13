@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.server.ui.action;
@@ -20,123 +23,111 @@ import java.util.Iterator;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.SelectionProviderAction;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
 /**
- * "Edit" menu action.
- *
  * @author Gregory Amerson
  */
-public class EditPropertiesFileAction extends SelectionProviderAction
-{
-    protected Shell shell;
+public class EditPropertiesFileAction extends SelectionProviderAction {
 
-    public EditPropertiesFileAction( ISelectionProvider sp )
-    {
-        super( sp, "Edit Properties File" );
-    }
+	public EditPropertiesFileAction(ISelectionProvider sp) {
+		super(sp, "Edit Properties File");
+	}
 
-    public EditPropertiesFileAction( ISelectionProvider selectionProvider, String text )
-    {
-        this( null, selectionProvider, text );
-    }
+	public EditPropertiesFileAction(ISelectionProvider selectionProvider, String text) {
+		this(null, selectionProvider, text);
+	}
 
-    public EditPropertiesFileAction( Shell shell, ISelectionProvider selectionProvider, String text )
-    {
-        super( selectionProvider, text );
-        this.shell = shell;
-        setEnabled( false );
-    }
+	public EditPropertiesFileAction(Shell shell, ISelectionProvider selectionProvider, String text) {
+		super(selectionProvider, text);
 
-    public boolean accept( Object node )
-    {
-        return node instanceof PropertiesFile;
-    }
+		this.shell = shell;
 
-    public Shell getShell()
-    {
-        return this.shell;
-    }
+		setEnabled(false);
+	}
 
-    public void perform( Object entry )
-    {
-        if( entry instanceof PropertiesFile )
-        {
-            final PropertiesFile workflowEntry = (PropertiesFile) entry;
-            final FileStoreEditorInput editorInput = new FileStoreEditorInput( workflowEntry.getFileStore() );
-            final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+	public boolean accept(Object node) {
+		return node instanceof PropertiesFile;
+	}
 
-            try
-            {
-                page.openEditor( editorInput, LiferayPropertiesEditor.ID );
-            }
-            catch( PartInitException e )
-            {
-                LiferayServerUI.logError( "Error opening properties editor.", e );
-            }
-        }
-    }
+	public Shell getShell() {
+		return shell;
+	}
 
-    @SuppressWarnings( "rawtypes" )
-    public void run()
-    {
-        Iterator iterator = getStructuredSelection().iterator();
+	public void perform(Object entry) {
+		if (entry instanceof PropertiesFile) {
+			PropertiesFile workflowEntry = (PropertiesFile)entry;
 
-        if( !iterator.hasNext() )
-            return;
+			FileStoreEditorInput editorInput = new FileStoreEditorInput(workflowEntry.getFileStore());
 
-        Object obj = iterator.next();
+			IWorkbench workbench = PlatformUI.getWorkbench();
 
-        if( accept( obj ) )
-        {
-            perform( obj );
-        }
+			IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 
-        selectionChanged( getStructuredSelection() );
-    }
+			IWorkbenchPage page = activeWorkbenchWindow.getActivePage();
 
-    /**
-     * Update the enabled state.
-     *
-     * @param sel
-     *            a selection
-     */
-    @SuppressWarnings( "rawtypes" )
-    public void selectionChanged( IStructuredSelection sel )
-    {
-        if( sel.isEmpty() )
-        {
-            setEnabled( false );
-            return;
-        }
+			try {
+				page.openEditor(editorInput, LiferayPropertiesEditor.ID);
+			}
+			catch (PartInitException pie) {
+				LiferayServerUI.logError("Error opening properties editor.", pie);
+			}
+		}
+	}
 
-        boolean enabled = false;
-        Iterator iterator = sel.iterator();
+	@SuppressWarnings("rawtypes")
+	public void run() {
+		Iterator iterator = getStructuredSelection().iterator();
 
-        while( iterator.hasNext() )
-        {
-            Object obj = iterator.next();
-            if( obj instanceof PropertiesFile )
-            {
-                final PropertiesFile node = (PropertiesFile) obj;
+		if (!iterator.hasNext()) {
+			return;
+		}
 
-                if( accept( node ) )
-                {
-                    enabled = true;
-                }
-            }
-            else
-            {
-                setEnabled( false );
-                return;
-            }
-        }
+		Object obj = iterator.next();
 
-        setEnabled( enabled );
-    }
+		if (accept(obj)) {
+			perform(obj);
+		}
+
+		selectionChanged(getStructuredSelection());
+	}
+
+	@SuppressWarnings("rawtypes")
+	public void selectionChanged(IStructuredSelection sel) {
+		if (sel.isEmpty()) {
+			setEnabled(false);
+			return;
+		}
+
+		boolean enabled = false;
+
+		Iterator iterator = sel.iterator();
+
+		while (iterator.hasNext()) {
+			Object obj = iterator.next();
+
+			if (obj instanceof PropertiesFile) {
+				PropertiesFile node = (PropertiesFile)obj;
+
+				if (accept(node)) {
+					enabled = true;
+				}
+			}
+			else {
+				setEnabled(false);
+				return;
+			}
+		}
+
+		setEnabled(enabled);
+	}
+
+	protected Shell shell;
 
 }

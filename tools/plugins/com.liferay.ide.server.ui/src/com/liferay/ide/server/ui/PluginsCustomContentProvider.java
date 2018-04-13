@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui;
 
@@ -27,7 +24,10 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.ui.navigator.INavigatorContentDescriptor;
 import org.eclipse.ui.navigator.INavigatorContentExtension;
+import org.eclipse.ui.navigator.INavigatorContentService;
 import org.eclipse.ui.navigator.PipelinedViewerUpdate;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
@@ -36,171 +36,157 @@ import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class PluginsCustomContentProvider extends AbstractNavigatorContentProvider
-{
+@SuppressWarnings("restriction")
+public class PluginsCustomContentProvider extends AbstractNavigatorContentProvider {
 
-    protected final static Object[] EMPTY = new Object[] {};
+	public void dispose() {
+	}
 
-    private PluginsContent pluginsContentNode = null;
+	public Object[] getChildren(Object parentElement) {
+		if (parentElement instanceof PluginsContent) {
+			return ((PluginsContent)parentElement).getChildren();
+		}
 
-    public void dispose()
-    {
-    }
+		if (!(parentElement instanceof IServer)) {
+			return EMPTY;
+		}
 
-    public Object[] getChildren( Object parentElement )
-    {
-        if( parentElement instanceof PluginsContent )
-        {
-            return ( (PluginsContent) parentElement ).getChildren();
-        }
+		IServer server = (IServer)parentElement;
 
-        if( !( parentElement instanceof IServer ) )
-        {
-            return EMPTY;
-        }
+		if (!ServerUtil.isLiferayRuntime(server)) {
+			return EMPTY;
+		}
 
-        IServer server = (IServer) parentElement;
+		List<IModule> liferayPlugins = new ArrayList<>();
 
-        if( !ServerUtil.isLiferayRuntime( server ) )
-        {
-            return EMPTY;
-        }
+		for (IModule module : server.getModules()) {
+			if (ProjectUtil.isLiferayFacetedProject(module.getProject())) {
+				liferayPlugins.add(module);
+			}
+		}
 
-        List<IModule> liferayPlugins = new ArrayList<IModule>();
+		return EMPTY;
+	}
 
-        for( IModule module : server.getModules() )
-        {
-            if( ProjectUtil.isLiferayFacetedProject( module.getProject() ) )
-            {
-                liferayPlugins.add( module );
-            }
-        }
+	public Object getParent(Object element) {
+		if (element instanceof IWorkspaceRoot) {
+			return null;
+		}
 
-        return EMPTY;
-        // return new Object[] {new PluginsContent(liferayPlugins,
-        // parentElement)};
-    }
+		return null;
+	}
 
-    public Object getParent( Object element )
-    {
-        if( element instanceof IWorkspaceRoot )
-        {
-            return null;
-        }
+	public void getPipelinedChildren(Object aParent, Set theCurrentChildren) {
+		List<ModuleServer> redirectedModules = new ArrayList<>();
 
-        return null;
-    }
+		// if a portlet module is going to be displayed, don't show it
 
-    public void getPipelinedChildren( Object aParent, Set theCurrentChildren )
-    {
-        List<ModuleServer> redirectedModules = new ArrayList<ModuleServer>();
+		for (Object pipelinedChild : theCurrentChildren) {
+			if (pipelinedChild instanceof ModuleServer) {
+				ModuleServer module = (ModuleServer)pipelinedChild;
 
-        // if a portlet module is going to be displayed, don't show it
-        for( Object pipelinedChild : theCurrentChildren )
-        {
-            if( pipelinedChild instanceof ModuleServer )
-            {
-                ModuleServer module = (ModuleServer) pipelinedChild;
+				IModule m = module.getModule()[0];
 
-                if( ProjectUtil.isLiferayFacetedProject( module.getModule()[0].getProject() ) )
-                {
-                    redirectedModules.add( module );
-                }
-            }
-        }
+				IProject project = m.getProject();
 
-        for( ModuleServer redirectedModule : redirectedModules )
-        {
-            theCurrentChildren.remove( redirectedModule );
-        }
+				if (ProjectUtil.isLiferayFacetedProject(project)) {
+					redirectedModules.add(module);
+				}
+			}
+		}
 
-        // add portlet contents if there are any liferay plugins
-        if( redirectedModules.size() > 0 )
-        {
-            this.pluginsContentNode = new PluginsContent( redirectedModules, aParent );
+		for (ModuleServer redirectedModule : redirectedModules) {
+			theCurrentChildren.remove(redirectedModule);
+		}
 
-            theCurrentChildren.add( this.pluginsContentNode );
-        }
-    }
+		// add portlet contents if there are any liferay plugins
 
-    public Object getPipelinedParent( Object anObject, Object aSuggestedParent )
-    {
-        if( anObject instanceof ModuleServer )
-        {
-            IProject project = ( (ModuleServer) anObject ).getModule()[0].getProject();
+		if (!redirectedModules.isEmpty()) {
+			_pluginsContentNode = new PluginsContent(redirectedModules, aParent);
 
-            if( ProjectUtil.isLiferayFacetedProject( project ) && this.pluginsContentNode != null )
-            {
-                return this.pluginsContentNode;
-            }
-        }
-        else if( anObject instanceof PluginsContent && anObject.equals( this.pluginsContentNode ) )
-        {
-            return this.pluginsContentNode.getParent();
-        }
+			theCurrentChildren.add(_pluginsContentNode);
+		}
+	}
 
-        return null;
-    }
+	public Object getPipelinedParent(Object anObject, Object aSuggestedParent) {
+		if (anObject instanceof ModuleServer) {
+			IModule m = ((ModuleServer)anObject).getModule()[0];
 
-    public boolean hasChildren( Object element, boolean currentHasChildren)
-    {
-        if( element instanceof ModuleServer )
-        {
-            INavigatorContentExtension serverContent =
-                getConfig().getService().getContentExtensionById(
-                    getConfig().getExtension().getDescriptor().getSuppressedExtensionId() );
+			IProject project = m.getProject();
 
-            return serverContent.getContentProvider().hasChildren( element );
-        }
-        else if( element instanceof PluginsContent )
-        {
-            return ( (PluginsContent) element ).getSize() > 0;
-        }
+			if (ProjectUtil.isLiferayFacetedProject(project) && (_pluginsContentNode != null)) {
+				return _pluginsContentNode;
+			}
+		}
+		else if (anObject instanceof PluginsContent && anObject.equals(_pluginsContentNode)) {
+			return _pluginsContentNode.getParent();
+		}
 
-        return false;
-    }
+		return null;
+	}
 
-    @Override
-    public boolean hasPipelinedChildren( Object element, boolean currentHasChildren )
-    {
-        return hasChildren( element, currentHasChildren );
-    }
+	public boolean hasChildren(Object element, boolean currentHasChildren) {
+		if (element instanceof ModuleServer) {
+			INavigatorContentService service = getConfig().getService();
+			INavigatorContentExtension extension = getConfig().getExtension();
 
-    public boolean interceptRefresh( PipelinedViewerUpdate aRefreshSynchronization )
-    {
-        boolean needToExpandPluginsNode = false;
+			INavigatorContentDescriptor descriptor = extension.getDescriptor();
 
-        Object obj = aRefreshSynchronization.getRefreshTargets().toArray()[0];
+			INavigatorContentExtension serverContent = service.getContentExtensionById(
+				descriptor.getSuppressedExtensionId());
 
-        if( obj instanceof ModuleServer )
-        {
-            ModuleServer module = (ModuleServer) obj;
+			ITreeContentProvider contentProvider = serverContent.getContentProvider();
 
-            IModule[] modules = module.getServer().getModules();
+			return contentProvider.hasChildren(element);
+		}
+		else if (element instanceof PluginsContent) {
+			if (((PluginsContent)element).getSize() > 0) {
+				return true;
+			}
 
-            for( IModule m : modules )
-            {
-                if( module.getModule()[0].equals( m ) )
-                {
-                    needToExpandPluginsNode = true;
-                }
-            }
-        }
+			return false;
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    public boolean interceptUpdate( PipelinedViewerUpdate anUpdateSynchronization )
-    {
-        // Set refreshTargets = anUpdateSynchronization.getRefreshTargets();
-        // for (Object refreshTarget : refreshTargets) {
-        // if (refreshTarget instanceof IServer) {
-        // IServer server = (IServer)refreshTarget;
-        // }
-        // }
+	@Override
+	public boolean hasPipelinedChildren(Object element, boolean currentHasChildren) {
+		return hasChildren(element, currentHasChildren);
+	}
 
-        return false;
-    }
+	public boolean interceptRefresh(PipelinedViewerUpdate aRefreshSynchronization) {
+		boolean needToExpandPluginsNode = false;
+
+		Set<?> targets = aRefreshSynchronization.getRefreshTargets();
+
+		Object obj = targets.toArray()[0];
+
+		if (obj instanceof ModuleServer) {
+			ModuleServer module = (ModuleServer)obj;
+
+			IServer server = module.getServer();
+
+			IModule[] modules = server.getModules();
+
+			for (IModule m : modules) {
+				IModule m1 = module.getModule()[0];
+
+				if (m1.equals(m)) {
+					needToExpandPluginsNode = true;
+				}
+			}
+		}
+
+		return needToExpandPluginsNode;
+	}
+
+	public boolean interceptUpdate(PipelinedViewerUpdate anUpdateSynchronization) {
+		return false;
+	}
+
+	protected static final Object[] EMPTY = {};
+
+	private PluginsContent _pluginsContentNode = null;
 
 }

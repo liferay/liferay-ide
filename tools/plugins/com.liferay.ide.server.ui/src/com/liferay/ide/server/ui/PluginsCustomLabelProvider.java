@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,103 +10,108 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui;
 
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.IModuleType;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class PluginsCustomLabelProvider extends LabelProvider
-{
+@SuppressWarnings("restriction")
+public class PluginsCustomLabelProvider extends LabelProvider {
 
-    public PluginsCustomLabelProvider()
-    {
-        super();
-    }
+	public PluginsCustomLabelProvider() {
+	}
 
-    @Override
-    public Image getImage( Object element )
-    {
-        if( element instanceof PluginsContent )
-        {
-            return LiferayServerUI.imageDescriptorFromPlugin(
-                LiferayServerUI.PLUGIN_ID, "/icons/e16/plugin.png" ).createImage(); //$NON-NLS-1$
-        }
-        else if( element instanceof ModuleServer )
-        {
-            try
-            {
-                final ModuleServer server = (ModuleServer) element;
+	@Override
+	public Image getImage(Object element) {
+		if (element instanceof PluginsContent) {
+			ImageDescriptor imageDescriptor = LiferayServerUI.imageDescriptorFromPlugin(
+				LiferayServerUI.PLUGIN_ID, "/icons/e16/plugin.png");
 
-                // IDE-880 check to make sure this element isn't a nested jar
-                final IModule module = server.getModule()[ server.module.length - 1 ];
+			return imageDescriptor.createImage();
+		}
+		else if (element instanceof ModuleServer) {
+			try {
+				ModuleServer server = (ModuleServer)element;
 
-                if( "jst.web".equals( module.getModuleType().getId() ) ) //$NON-NLS-1$
-                {
-                    final IProject project = module.getProject();
-                    final IFacetedProject facetedProject = ProjectUtil.getFacetedProject( project );
+				// IDE-880 check to make sure this element isn't a nested jar
 
-                    String imageKey = null;
+				IModule module = server.getModule()[server.module.length - 1];
 
-                    if( facetedProject != null )
-                    {
-                        IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet( facetedProject );
+				IModuleType moduleType = module.getModuleType();
 
-                        if( liferayFacet != null )
-                        {
-                            final String id = liferayFacet.getId();
-                            imageKey = id.substring( id.indexOf( '.' ) + 1, id.length() );
-                        }
-                    }
-                    else
-                    {
-                        imageKey = ProjectUtil.getLiferayPluginType( project.getLocation().toOSString() );
-                    }
+				if ("jst.web".equals(moduleType.getId())) {
+					IProject project = module.getProject();
 
-                    return LiferayServerUI.getDefault().getImageRegistry().get( imageKey );
-                }
-            }
-            catch( Exception ex )
-            {
-                // best effort no need to log error
-            }
-        }
+					IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
 
-        return null;
-    }
+					String imageKey = null;
 
-    @Override
-    public String getText( Object element )
-    {
-        if( element instanceof PluginsContent )
-        {
-            return Msgs.liferayPlugins;
-        }
+					if (facetedProject != null) {
+						IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
 
-        return null;
-    }
+						if (liferayFacet != null) {
+							String id = liferayFacet.getId();
 
-    private static class Msgs extends NLS
-    {
-        public static String liferayPlugins;
+							imageKey = id.substring(id.indexOf('.') + 1, id.length());
+						}
+					}
+					else {
+						IPath projectLocation = project.getLocation();
 
-        static
-        {
-            initializeMessages( PluginsCustomLabelProvider.class.getName(), Msgs.class );
-        }
-    }
+						imageKey = ProjectUtil.getLiferayPluginType(projectLocation.toOSString());
+					}
+
+					LiferayServerUI serverUIPlugin = LiferayServerUI.getDefault();
+
+					ImageRegistry imageRegistry = serverUIPlugin.getImageRegistry();
+
+					return imageRegistry.get(imageKey);
+				}
+			}
+			catch (Exception ex) {
+
+				// best effort no need to log error
+
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public String getText(Object element) {
+		if (element instanceof PluginsContent) {
+			return Msgs.liferayPlugins;
+		}
+
+		return null;
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String liferayPlugins;
+
+		static {
+			initializeMessages(PluginsCustomLabelProvider.class.getName(), Msgs.class);
+		}
+
+	}
+
 }
