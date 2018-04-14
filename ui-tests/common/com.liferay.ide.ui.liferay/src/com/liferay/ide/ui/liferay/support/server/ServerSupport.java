@@ -65,22 +65,41 @@ public class ServerSupport extends SupportBase {
 		serverDir.mkdirs();
 
 		try {
-			ZipUtil.unzip(zipFile, _bundle.getBundleDir(), serverDir, new NullProgressMonitor());
+			// TODO Need to do more research why for 7.1 a1 zip file couldn't find the root folder /liferay-ce-portal-7.1-a1 
+			// ZipUtil.unzip(zipFile, _bundle.getBundleDir(), serverDir, new NullProgressMonitor());
+
+			ZipUtil.unzip(zipFile, serverDir, new NullProgressMonitor());
 		}
 		catch (IOException ioe) {
 		}
 
-		_preparePortalExtFile(serverDir);
+		File finalDir = new File(serverDir, _bundle.getBundleDir());
 
-		_preparePortalSetupWizardFile(serverDir);
+		_preparePortalExtFile(finalDir);
+
+		_preparePortalSetupWizardFile(finalDir);
 	}
 
 	public String getFullServerDir() {
-		return new File(envAction.getTempDir(), getServerDirName()).getAbsolutePath();
+		File dir = new File(envAction.getTempDir(), getServerDirName());
+
+		File serverDir = new File(dir, _bundle.getBundleDir());
+
+		// TODO Need to do more research why for 7.1 a1 zip file couldn't find the root folder /liferay-ce-portal-7.1-a1
+		// return new File(envAction.getTempDir(), getServerDirName()).getAbsolutePath();
+
+		return serverDir.getAbsolutePath();
 	}
 
 	public String getServerDirName() {
 		return _bundle.getBundleDir() + timestamp;
+	}
+
+	/**
+	 * @return tomcat-9.0.6 etc...
+	 */
+	public String getServerDir() {
+		return _bundle.getServerDir();
 	}
 
 	public String getServerName() {
