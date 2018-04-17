@@ -19,17 +19,17 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class PureTomcat70DxpSupport extends ServerSupport {
+public class PureTomcatDxpSupport extends ServerSupport {
 
 	public static boolean isNot(ServerSupport server) {
-		if ((server == null) || !(server instanceof PureTomcat70DxpSupport)) {
+		if ((server == null) || !(server instanceof PureTomcatDxpSupport)) {
 			return true;
 		}
 
 		return false;
 	}
 
-	public PureTomcat70DxpSupport(SWTWorkbenchBot bot) {
+	public PureTomcatDxpSupport(SWTWorkbenchBot bot) {
 		super(bot, "tomcat", "7.0-sp7");
 	}
 

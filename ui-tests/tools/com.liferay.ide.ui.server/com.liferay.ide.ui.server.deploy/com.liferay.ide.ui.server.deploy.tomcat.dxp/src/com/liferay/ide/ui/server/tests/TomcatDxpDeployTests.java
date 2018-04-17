@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.server.tests;
 
-import com.liferay.ide.ui.liferay.support.server.PureTomcat70DxpSupport;
+import com.liferay.ide.ui.liferay.support.server.PureTomcatDxpSupport;
 import com.liferay.ide.ui.liferay.support.server.ServerSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 import com.liferay.ide.ui.server.deploy.base.Tomcat7xDeployBase;
@@ -31,8 +31,8 @@ public class TomcatDxpDeployTests extends Tomcat7xDeployBase {
 	public static RuleChain chain = RuleUtil.getTomcat7xRunningSdkRuleChain(bot, getServer());
 
 	public static ServerSupport getServer() {
-		if ((server == null) || !(server instanceof PureTomcat70DxpSupport)) {
-			server = new PureTomcat70DxpSupport(bot);
+		if ((server == null) || !(server instanceof PureTomcatDxpSupport)) {
+			server = new PureTomcatDxpSupport(bot);
 		}
 
 		return server;
