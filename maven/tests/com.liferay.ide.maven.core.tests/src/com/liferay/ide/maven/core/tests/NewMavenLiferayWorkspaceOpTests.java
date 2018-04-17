@@ -16,6 +16,8 @@
 package com.liferay.ide.maven.core.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -23,11 +25,14 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
 import java.io.File;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.ServerCore;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -148,4 +153,37 @@ public class NewMavenLiferayWorkspaceOpTests
 
         assertTrue( content.contains("com.liferay.portal.tools.bundle.support") );
     }
+
+	@Test
+	public void testNewLiferayWorkspaceOpWithInvalidBundleUrl() throws Exception
+	{
+
+		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
+
+		op.setWorkspaceName("NewGradleWorkspaceWithInvalidBundleUrl");
+		op.setProjectProvider("maven-liferay-workspace");
+		op.setUseDefaultLocation(false);
+		op.setProvisionLiferayBundle(true);
+		op.setBundleUrl("https://issues.liferay.com/browse/IDE-3605");
+
+		String serverName = "NewServerNameWithInvalidBundleUrl";
+
+		op.setServerName(serverName);
+
+		op.execute(new ProgressMonitor());
+
+		IProject workspaceProject = CoreUtil.getProject("NewGradleWorkspaceWithInvalidBundleUrl");
+
+		assertNotNull(workspaceProject);
+
+		assertTrue(workspaceProject.exists());
+
+		Stream<IServer> serverStream = Stream.of(ServerCore.getServers());
+
+		boolean serverCreated = serverStream.filter(
+			server -> server.getName().equals(serverName)
+		).findAny().isPresent();
+
+		assertFalse(serverCreated);
+	}
 }

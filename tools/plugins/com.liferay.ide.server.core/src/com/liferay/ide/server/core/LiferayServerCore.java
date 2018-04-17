@@ -17,6 +17,7 @@ package com.liferay.ide.server.core;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKListener;
@@ -231,6 +232,10 @@ public class LiferayServerCore extends Plugin
 
     public static boolean isPortalBundlePath( final IPath bundlePath )
     {
+        if (FileUtil.notExists(bundlePath)) {
+            return false;
+        }
+
         final PortalBundleFactory[] factories = getPortalBundleFactories();
 
         if( factories != null )

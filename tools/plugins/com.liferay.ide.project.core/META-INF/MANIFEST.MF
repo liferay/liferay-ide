@@ -55,4 +55,5 @@ Export-Package: com.liferay.ide.project.core,
  com.liferay.ide.project.core.workspace
 Bundle-ClassPath: lib/jackson-core-asl-1.9.13.jar,
  lib/jackson-mapper-asl-1.9.13.jar,
+ lib/commons-validator-1.6.jar,
  .

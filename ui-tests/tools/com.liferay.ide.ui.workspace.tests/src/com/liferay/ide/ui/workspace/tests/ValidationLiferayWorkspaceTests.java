@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
@@ -23,6 +24,7 @@ import java.io.File;
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -108,6 +110,37 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 	}
 
 	@Test
+	public void createLiferayWorkspaceWithInvalidBundleUrl() {
+		String invalidMessage = "The bundle URL may not be a vaild URL.";
+
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
+
+		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
+
+		String bundleHttpsErrorUrl = "https://";
+
+		wizardAction.newLiferayWorkspace.setBundleUrl(bundleHttpsErrorUrl);
+
+		Assert.assertEquals(invalidMessage, wizardAction.getValidationMsg(4));
+
+		String bundleHttpErrorUrl = "http://";
+
+		wizardAction.newLiferayWorkspace.setBundleUrl(bundleHttpErrorUrl);
+
+		Assert.assertEquals(invalidMessage, wizardAction.getValidationMsg(4));
+
+		String bundleFtpErrorUrl = "ftp://";
+
+		wizardAction.newLiferayWorkspace.setBundleUrl(bundleFtpErrorUrl);
+
+		Assert.assertEquals(invalidMessage, wizardAction.getValidationMsg(4));
+
+		wizardAction.cancel();
+	}
+
+	@Test
 	public void checkLocation() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -156,5 +189,8 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 	@Test
 	public void checkServerName() {
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }
