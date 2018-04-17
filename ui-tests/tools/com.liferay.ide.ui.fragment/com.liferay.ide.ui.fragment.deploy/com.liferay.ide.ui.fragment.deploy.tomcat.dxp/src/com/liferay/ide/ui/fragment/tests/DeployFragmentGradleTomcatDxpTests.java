@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.fragment.deploy.base.FragmentTomcat7xGradleDeployBase;
-import com.liferay.ide.ui.liferay.support.server.PureTomcat70DxpSupport;
+import com.liferay.ide.ui.liferay.support.server.PureTomcatDxpSupport;
 import com.liferay.ide.ui.liferay.support.server.ServerSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
@@ -26,14 +26,14 @@ import org.junit.rules.RuleChain;
 /**
  * @author Ying Xu
  */
-public class DeployFragmentGradleTomcat70DxpTests extends FragmentTomcat7xGradleDeployBase {
+public class DeployFragmentGradleTomcatDxpTests extends FragmentTomcat7xGradleDeployBase {
 
 	@ClassRule
 	public static RuleChain chain = RuleUtil.getTomcat7xRunningRuleChain(bot, getServer());
 
 	public static ServerSupport getServer() {
-		if ((server == null) || !(server instanceof PureTomcat70DxpSupport)) {
-			server = new PureTomcat70DxpSupport(bot);
+		if ((server == null) || !(server instanceof PureTomcatDxpSupport)) {
+			server = new PureTomcatDxpSupport(bot);
 		}
 
 		return server;
