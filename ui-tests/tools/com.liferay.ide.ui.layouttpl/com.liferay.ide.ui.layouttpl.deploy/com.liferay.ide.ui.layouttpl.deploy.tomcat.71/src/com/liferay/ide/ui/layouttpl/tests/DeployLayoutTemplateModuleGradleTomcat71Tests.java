@@ -41,6 +41,7 @@ public class DeployLayoutTemplateModuleGradleTomcat71Tests extends DeployLayoutT
 
 	@Test
 	public void deployLayoutTemplate() {
+		super.deployLayoutTemplate();
 	}
 
 }

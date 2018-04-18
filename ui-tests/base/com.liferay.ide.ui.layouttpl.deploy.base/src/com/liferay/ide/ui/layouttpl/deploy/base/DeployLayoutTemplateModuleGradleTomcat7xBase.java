@@ -25,7 +25,27 @@ import org.junit.Rule;
 public class DeployLayoutTemplateModuleGradleTomcat7xBase extends ServerTestBase {
 
 	public void deployLayoutTemplate() {
-		
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(project.getName(), LAYOUT_TEMPLATE);
+
+		wizardAction.finish();
+
+		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
+
+		dialogAction.addAndRemove.addModule(project.getName());
+
+		dialogAction.confirm(FINISH);
+
+		viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName());
+
+		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName() + "_", 20 * 1000);
+
+		viewAction.servers.removeModule(server.getStartedLabel(), project.getStartedLabel());
+
+		dialogAction.confirm();
+
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Rule
