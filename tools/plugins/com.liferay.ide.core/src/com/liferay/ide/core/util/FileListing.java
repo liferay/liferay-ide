@@ -35,27 +35,6 @@ import org.eclipse.core.runtime.Path;
  */
 public class FileListing {
 
-	public static IPath findFilePattern(File location, String pattern) {
-		try {
-			List<File> fileList = getFileListing(location, false);
-
-			for (File file : fileList) {
-				if (file.getPath().contains(pattern)) {
-
-					// found jvm
-
-					File jreRoot = file.getParentFile().getParentFile();
-
-					return new Path(jreRoot.getAbsolutePath());
-				}
-			}
-		}
-		catch (FileNotFoundException fnfe) {
-		}
-
-		return null;
-	}
-
 	public static List<File> getFileListing(File aStartingDir) throws FileNotFoundException {
 		List<File> result = new ArrayList<>();
 
