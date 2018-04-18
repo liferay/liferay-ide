@@ -16,9 +16,7 @@ package com.liferay.ide.core.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +24,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
-
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
@@ -35,27 +32,19 @@ import org.eclipse.core.runtime.Path;
  */
 public class FileListing {
 
-	public static List<File> getFileListing(File aStartingDir) throws FileNotFoundException {
+	public static List<File> getFileListing(File dir) throws FileNotFoundException {
 		List<File> result = new ArrayList<>();
 
-		File[] filesAndDirs = aStartingDir.listFiles();
+		File[] files = dir.listFiles();
 
-		if ( ListUtil.isEmpty(filesAndDirs)) {
+		if ( ListUtil.isEmpty(files)) {
 			return Collections.emptyList();
 		}
 
-		List<File> filesDirs = Arrays.asList(filesAndDirs);
-
-		for (File file : filesDirs) {
-
-			// always add, even if directory
-
+		for (File file : files) {
 			result.add(file);
 
 			if (!file.isFile()) {
-
-				// must be a directory recursive call!
-
 				List<File> deeperList = getFileListing(file);
 
 				result.addAll(deeperList);
@@ -84,20 +73,18 @@ public class FileListing {
 		return result;
 	}
 
-	public static List<IPath> getFileListing(File aStartingDir, String fileType) {
-		Collection<File> listFilesCollection = FileUtils.listFiles(aStartingDir, new String[] {fileType}, true);
+	public static List<IPath> getFileListing(File dir, String fileType) {
+		Collection<File> files = FileUtils.listFiles(dir, new String[] {fileType}, true);
 
-		Stream<File> libStream = listFilesCollection.stream();
+		Stream<File> stream = files.stream();
 
-		List<IPath> retVal = libStream.filter(
+		return stream.filter(
 			file -> file.exists()
 		).map(
 			file -> new Path(file.getPath())
 		).collect(
 			Collectors.toList()
 		);
-
-		return retVal;
 	}
 
 	/**
