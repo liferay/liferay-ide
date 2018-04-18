@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.server.ui.navigator;
 
 import com.liferay.ide.ui.util.UIUtil;
@@ -22,39 +22,32 @@ import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.INavigatorContentService;
 import org.eclipse.wst.server.core.IServer;
 
-
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class NavigatorUIUtil
-{
+@SuppressWarnings("restriction")
+public class NavigatorUIUtil {
 
-    public static void refreshUI( final INavigatorContentService service, final IServer server )
-    {
-        UIUtil.async
-        (
-            new Runnable()
-            {
-                public void run()
-                {
-                    try
-                    {
-                        final CommonViewer viewer = (CommonViewer) ( (NavigatorContentService) service ).getViewer();
-                        viewer.refresh( true );
-                        viewer.setExpandedState( server, true );
-                    }
-                    catch (Exception e)
-                    {
-                    }
-                }
-            }
-        );
-    }
+	public static CommonViewer getViewer(ICommonContentExtensionSite config) {
+		return (CommonViewer)((NavigatorContentService)config.getService()).getViewer();
+	}
 
-    public static CommonViewer getViewer( ICommonContentExtensionSite config )
-    {
-        return (CommonViewer) ( (NavigatorContentService) config.getService() ).getViewer();
-    }
+	public static void refreshUI(INavigatorContentService service, IServer server) {
+		UIUtil.async(
+			new Runnable() {
+
+				public void run() {
+					try {
+						CommonViewer viewer = (CommonViewer)((NavigatorContentService)service).getViewer();
+
+						viewer.refresh(true);
+						viewer.setExpandedState(server, true);
+					}
+					catch (Exception e) {
+					}
+				}
+
+			});
+	}
 
 }

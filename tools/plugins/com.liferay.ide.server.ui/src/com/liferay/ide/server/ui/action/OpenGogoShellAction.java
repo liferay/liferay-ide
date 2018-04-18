@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui.action;
 
@@ -30,49 +29,45 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Gregory Amerson
  */
-public class OpenGogoShellAction extends AbstractServerRunningAction
-{
+public class OpenGogoShellAction extends AbstractServerRunningAction {
 
-    public OpenGogoShellAction()
-    {
-        super();
-    }
+	public OpenGogoShellAction() {
+	}
 
-    protected ILiferayServer getLiferayServer()
-    {
-        return (ILiferayServer) selectedServer.loadAdapter( ILiferayServer.class, null );
-    }
+	public void run(IAction action) {
+		if (selectedServer != null) {
+			String host = selectedServer.getHost();
 
-    @Override
-    protected int getRequiredServerState()
-    {
-        return IServer.STATE_STARTED;
-    }
+			LauncherDelegateManager launchDelegateManager = LauncherDelegateManager.getInstance();
 
-    public void run( IAction action )
-    {
-        if( selectedServer != null )
-        {
-            final String host = selectedServer.getHost();
+			ILauncherDelegate delegate = launchDelegateManager.getLauncherDelegate(
+				"org.eclipse.tm.terminal.connector.telnet.launcher.telnet", false);
 
-            final ILauncherDelegate delegate =
-                LauncherDelegateManager.getInstance().getLauncherDelegate(
-                    "org.eclipse.tm.terminal.connector.telnet.launcher.telnet", false );
+			Map<String, Object> properties = new HashMap<>();
 
-            final Map<String, Object> properties = new HashMap<>();
+			properties.put(
+				ITerminalsConnectorConstants.PROP_TERMINAL_CONNECTOR_ID,
+				"org.eclipse.tm.terminal.connector.telnet.TelnetConnector");
+			properties.put(
+				ITerminalsConnectorConstants.PROP_DELEGATE_ID,
+				"org.eclipse.tm.terminal.connector.telnet.launcher.telnet");
+			properties.put(ITerminalsConnectorConstants.PROP_IP_HOST, host);
+			properties.put(ITerminalsConnectorConstants.PROP_IP_PORT, 11311);
+			properties.put(ITerminalsConnectorConstants.PROP_TIMEOUT, 5);
+			properties.put(ITerminalsConnectorConstants.PROP_ENCODING, null);
+			properties.put(ITerminalsConnectorConstants.PROP_TITLE, "Liferay Gogo Shell");
 
-            properties.put( ITerminalsConnectorConstants.PROP_TERMINAL_CONNECTOR_ID,
-                "org.eclipse.tm.terminal.connector.telnet.TelnetConnector");
-            properties.put( ITerminalsConnectorConstants.PROP_DELEGATE_ID,
-                "org.eclipse.tm.terminal.connector.telnet.launcher.telnet" );
-            properties.put( ITerminalsConnectorConstants.PROP_IP_HOST, host );
-            properties.put( ITerminalsConnectorConstants.PROP_IP_PORT, 11311 );
-            properties.put( ITerminalsConnectorConstants.PROP_TIMEOUT, 5 );
-            properties.put( ITerminalsConnectorConstants.PROP_ENCODING, null ); // null specifies default
-            properties.put( ITerminalsConnectorConstants.PROP_TITLE, "Liferay Gogo Shell" );
+			delegate.execute(properties, (Done)null);
+		}
+	}
 
-            delegate.execute( properties, (Done) null );
-        }
-    }
+	protected ILiferayServer getLiferayServer() {
+		return (ILiferayServer)selectedServer.loadAdapter(ILiferayServer.class, null);
+	}
+
+	@Override
+	protected int getRequiredServerState() {
+		return IServer.STATE_STARTED;
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,11 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import org.eclipse.core.expressions.PropertyTester;
@@ -24,25 +24,21 @@ import org.eclipse.core.runtime.IPath;
 /**
  * @author Gregory Amerson
  */
-public class CanCreateNewLiferayServerTester extends PropertyTester
-{
+public class CanCreateNewLiferayServerTester extends PropertyTester {
 
-    @Override
-    public boolean test( final Object receiver, final String property, final Object[] args, final Object expectedValue )
-    {
-        if( receiver instanceof IFolder )
-        {
-            final IFolder folder = (IFolder) receiver;
+	@Override
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+		if (receiver instanceof IFolder) {
+			IFolder folder = (IFolder)receiver;
 
-            final IPath location = folder.getRawLocation();
+			IPath location = folder.getRawLocation();
 
-            if( location != null && location.toFile().exists() )
-            {
-                return LiferayServerCore.isPortalBundlePath( location );
-            }
-        }
+			if (FileUtil.exists(location.toFile())) {
+				return LiferayServerCore.isPortalBundlePath(location);
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 }

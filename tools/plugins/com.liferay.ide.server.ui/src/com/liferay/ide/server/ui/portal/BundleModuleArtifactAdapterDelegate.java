@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.server.ui.portal;
 
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -26,65 +26,53 @@ import org.eclipse.wst.server.core.ServerUtil;
 import org.eclipse.wst.server.core.model.ModuleArtifactAdapterDelegate;
 import org.eclipse.wst.server.core.util.WebResource;
 
-
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-@SuppressWarnings( { "rawtypes", "unchecked" } )
-public class BundleModuleArtifactAdapterDelegate extends ModuleArtifactAdapterDelegate implements IAdapterFactory
-{
+@SuppressWarnings({"rawtypes", "unchecked"})
+public class BundleModuleArtifactAdapterDelegate extends ModuleArtifactAdapterDelegate implements IAdapterFactory {
 
-    @Override
-    public Object getAdapter( Object adaptableObject, Class adapterType )
-    {
-        return null;
-    }
+	@Override
+	public Object getAdapter(Object adaptableObject, Class adapterType) {
+		return null;
+	}
 
-    @Override
-    public Class[] getAdapterList()
-    {
-        return new Class[] { ILaunchable.class };
-    }
+	@Override
+	public Class[] getAdapterList() {
+		return new Class<?>[] {ILaunchable.class};
+	}
 
-    private IModule getModule( IProject project )
-    {
-        final IModule[] modules = ServerUtil.getModules( "liferay.bundle" );
+	@Override
+	public IModuleArtifact getModuleArtifact(Object obj) {
+		IProject project = null;
 
-        for( IModule module : modules )
-        {
-            if( project == null || project.equals( module.getProject() ) )
-            {
-                return module;
-            }
-        }
+		if (obj instanceof IProject) {
+			project = (IProject)obj;
+		}
+		else if (obj instanceof IAdaptable) {
+			project = (IProject)((IAdaptable)obj).getAdapter(IProject.class);
+		}
 
-        return null;
-    }
+		if (project != null) {
+			if (ProjectUtil.is7xServerDeployableProject(project)) {
+				return new WebResource(_getModule(project), project.getProjectRelativePath());
+			}
+		}
 
-    @Override
-    public IModuleArtifact getModuleArtifact( Object obj )
-    {
-        IProject project = null;
+		return null;
+	}
 
-       if( obj instanceof IProject )
-       {
-           project = (IProject) obj;
-       }
-       else if( obj instanceof IAdaptable )
-       {
-           project = (IProject) ( (IAdaptable) obj ).getAdapter( IProject.class );
-       }
+	private IModule _getModule(IProject project) {
+		IModule[] modules = ServerUtil.getModules("liferay.bundle");
 
-       if( project != null )
-       {
-            if( ProjectUtil.is7xServerDeployableProject( project ) )
-            {
-                return new WebResource( getModule( project ), project.getProjectRelativePath() );
-            }
-        }
+		for (IModule module : modules) {
+			if ((project == null) || project.equals(module.getProject())) {
+				return module;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
 }

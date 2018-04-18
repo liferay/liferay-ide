@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui.handlers;
 
@@ -28,71 +27,65 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 
 /**
  * @author Eric Min
  */
-@SuppressWarnings( "restriction" )
-public class OpenDeployedFolderHandler extends AbstractHandler
-{
-    public Object execute( ExecutionEvent event ) throws ExecutionException
-    {
-        final ISelection selection = HandlerUtil.getCurrentSelection( event );
+@SuppressWarnings("restriction")
+public class OpenDeployedFolderHandler extends AbstractHandler {
 
-        if( selection instanceof IStructuredSelection )
-        {
-            final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		ISelection selection = HandlerUtil.getCurrentSelection(event);
 
-            final Object selected = structuredSelection.getFirstElement();
+		if (selection instanceof IStructuredSelection) {
+			IStructuredSelection structuredSelection = (IStructuredSelection)selection;
 
-            if( selected != null )
-            {
-                final IPath folder = getDeployFolderPath( selected );
+			Object selected = structuredSelection.getFirstElement();
 
-                if (folder != null)
-                {
-                    try
-                    {
-                        String launchCmd = ServerUIUtil.getSystemExplorerCommand( folder.toFile() );
+			if (selected != null) {
+				IPath folder = _getDeployFolderPath(selected);
 
-                        ServerUIUtil.openInSystemExplorer( launchCmd, folder.toFile() );
-                    }
-                    catch( IOException e )
-                    {
-                        LiferayServerUI.logError( "Unable to execute command", e );
-                    }
-                }
-            }
-        }
+				if (folder != null) {
+					try {
+						String launchCmd = ServerUIUtil.getSystemExplorerCommand(folder.toFile());
 
-        return null;
-    }
+						ServerUIUtil.openInSystemExplorer(launchCmd, folder.toFile());
+					}
+					catch (IOException ioe) {
+						LiferayServerUI.logError("Unable to execute command", ioe);
+					}
+				}
+			}
+		}
 
-    private IPath getDeployFolderPath( Object selected )
-    {
-        IPath retval = null;
+		return null;
+	}
 
-        ModuleServer moduleServer = null;
+	private IPath _getDeployFolderPath(Object selected) {
+		IPath retval = null;
 
-        if( selected != null )
-        {
-            if( selected instanceof ModuleServer )
-            {
-                moduleServer = (ModuleServer) selected;
-                moduleServer.getModule()[0].getProject();
+		ModuleServer moduleServer = null;
 
-                final ILiferayServerBehavior liferayServerBehavior =
-                    (ILiferayServerBehavior) moduleServer.getServer().loadAdapter(
-                        ILiferayServerBehavior.class, null );
+		if (selected != null) {
+			if (selected instanceof ModuleServer) {
+				moduleServer = (ModuleServer)selected;
 
-                if( liferayServerBehavior != null )
-                {
-                    retval = liferayServerBehavior.getDeployedPath( moduleServer.getModule() );
-                }
-            }
-        }
+				moduleServer.getModule()[0].getProject();
 
-        return retval;
-    }
+				IServer server = moduleServer.getServer();
+
+				ILiferayServerBehavior liferayServerBehavior = (ILiferayServerBehavior)server.loadAdapter(
+					ILiferayServerBehavior.class, null);
+
+				if (liferayServerBehavior != null) {
+					retval = liferayServerBehavior.getDeployedPath(moduleServer.getModule());
+				}
+			}
+		}
+
+		return retval;
+	}
+
 }

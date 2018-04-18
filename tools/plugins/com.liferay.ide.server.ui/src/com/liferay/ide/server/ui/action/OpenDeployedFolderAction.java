@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.ui.util.ServerUIUtil;
@@ -25,87 +25,82 @@ import java.io.IOException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 
 /**
  * @author Gregory Amerson
  */
-public class OpenDeployedFolderAction extends AbstractServerRunningAction
-{
-    public OpenDeployedFolderAction()
-    {
-        super();
-    }
+public class OpenDeployedFolderAction extends AbstractServerRunningAction {
 
-    private IPath getDeployFolderPath()
-    {
-        IPath retval = null;
+	public OpenDeployedFolderAction() {
+	}
 
-        if( selectedModule != null )
-        {
-            selectedModule.getModule()[0].getProject();
+	public void run(IAction action) {
+		if (selectedModule == null) {
 
-            final ILiferayServerBehavior liferayServerBehavior =
-                (ILiferayServerBehavior) selectedModule.getServer().loadAdapter( ILiferayServerBehavior.class, null );
+			// can't do anything if server has not been selected
 
-            if( liferayServerBehavior != null )
-            {
-                retval = liferayServerBehavior.getDeployedPath( selectedModule.getModule() );
-            }
-        }
+			return;
+		}
 
-        return retval;
-    }
+		IPath folder = _getDeployFolderPath();
 
-    @Override
-    protected int getRequiredServerState()
-    {
-        return IServer.STATE_STARTED | IServer.STATE_STOPPED | IServer.STATE_STARTING | IServer.STATE_STOPPING |
-            IServer.STATE_UNKNOWN;
-    }
+		try {
+			String launchCmd = ServerUIUtil.getSystemExplorerCommand(folder.toFile());
 
-    public void run( IAction action )
-    {
-        if( selectedModule == null )
-        {
-            return; // can't do anything if server has not been selected
-        }
+			ServerUIUtil.openInSystemExplorer(launchCmd, folder.toFile());
+		}
+		catch (IOException ioe) {
+			LiferayServerUI.logError("Unable to execute command", ioe);
+		}
+	}
 
-        final IPath folder = getDeployFolderPath();
+	@Override
+	public void selectionChanged(IAction action, ISelection selection) {
+		super.selectionChanged(action, selection);
 
-        try
-        {
-            String launchCmd = ServerUIUtil.getSystemExplorerCommand( folder.toFile() );
+		if (action.isEnabled()) {
+			IPath deployedPath = _getDeployFolderPath();
 
-            ServerUIUtil.openInSystemExplorer( launchCmd, folder.toFile() );
-        }
-        catch( IOException e )
-        {
-            LiferayServerUI.logError( "Unable to execute command", e );
-        }
-    }
+			try {
+				if (FileUtil.notExists(deployedPath.toFile()) ||
+					CoreUtil.isNullOrEmpty(ServerUIUtil.getSystemExplorerCommand(deployedPath.toFile()))) {
 
-    @Override
-    public void selectionChanged( IAction action, ISelection selection )
-    {
-        super.selectionChanged( action, selection );
+					action.setEnabled(false);
+				}
+			}
+			catch (Exception e) {
+				action.setEnabled(false);
+			}
+		}
+	}
 
-        if( action.isEnabled() )
-        {
-            final IPath deployedPath = getDeployFolderPath();
+	@Override
+	protected int getRequiredServerState() {
+		return IServer.STATE_STARTED | IServer.STATE_STOPPED | IServer.STATE_STARTING | IServer.STATE_STOPPING |
+			IServer.STATE_UNKNOWN;
+	}
 
-            try
-            {
-                if( deployedPath == null || ( !deployedPath.toFile().exists() ) ||
-                    CoreUtil.isNullOrEmpty( ServerUIUtil.getSystemExplorerCommand( deployedPath.toFile() ) ) )
-                {
-                    action.setEnabled( false );
-                }
-            }
-            catch( IOException e )
-            {
-                action.setEnabled( false );
-            }
-        }
-    }
+	private IPath _getDeployFolderPath() {
+		IPath retval = null;
+
+		if (selectedModule != null) {
+			IModule module = selectedModule.getModule()[0];
+
+			module.getProject();
+
+			IServer server = selectedModule.getServer();
+
+			ILiferayServerBehavior liferayServerBehavior = (ILiferayServerBehavior)server.loadAdapter(
+				ILiferayServerBehavior.class, null);
+
+			if (liferayServerBehavior != null) {
+				retval = liferayServerBehavior.getDeployedPath(selectedModule.getModule());
+			}
+		}
+
+		return retval;
+	}
+
 }

@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.server.ui.action;
@@ -17,6 +20,7 @@ import com.liferay.ide.server.ui.navigator.PropertiesFile;
 import com.liferay.ide.server.ui.util.ServerUIUtil;
 
 import java.io.IOException;
+
 import java.util.Iterator;
 
 import org.eclipse.core.runtime.Path;
@@ -28,129 +32,104 @@ import org.eclipse.ui.actions.SelectionProviderAction;
 /**
  * @author Terry Jia
  */
-public class OpenLiferayHomeFolderAction extends SelectionProviderAction
-{
+public class OpenLiferayHomeFolderAction extends SelectionProviderAction {
 
-    private Shell shell;
+	public OpenLiferayHomeFolderAction(ISelectionProvider sp) {
+		super(sp, "Open Liferay Home Folder");
+	}
 
-    public OpenLiferayHomeFolderAction( ISelectionProvider sp )
-    {
-        super( sp, "Open Liferay Home Folder" );
-    }
+	public OpenLiferayHomeFolderAction(ISelectionProvider selectionProvider, String text) {
+		this(null, selectionProvider, text);
+	}
 
-    public OpenLiferayHomeFolderAction( ISelectionProvider selectionProvider, String text )
-    {
-        this( null, selectionProvider, text );
-    }
+	public OpenLiferayHomeFolderAction(Shell shell, ISelectionProvider selectionProvider, String text) {
+		super(selectionProvider, text);
 
-    public OpenLiferayHomeFolderAction( Shell shell, ISelectionProvider selectionProvider, String text )
-    {
-        super( selectionProvider, text );
+		_shell = shell;
 
-        this.shell = shell;
+		setEnabled(false);
+	}
 
-        setEnabled( false );
-    }
+	public boolean accept(Object node) {
+		return node instanceof PropertiesFile;
+	}
 
-    public boolean accept( Object node )
-    {
-        return node instanceof PropertiesFile;
-    }
+	public Shell getShell() {
+		return _shell;
+	}
 
-    public Shell getShell()
-    {
-        return this.shell;
-    }
+	public void perform(Object entry) {
+		if (entry instanceof PropertiesFile) {
+			PropertiesFile workflowEntry = (PropertiesFile)entry;
 
-    public void perform( Object entry )
-    {
-        if( entry instanceof PropertiesFile )
-        {
-            final PropertiesFile workflowEntry = (PropertiesFile) entry;
+			String path = workflowEntry.getPath();
 
-            final String path = workflowEntry.getPath();
+			try {
+				ServerUIUtil.openFileInSystemExplorer(new Path(path));
+			}
+			catch (IOException ioe) {
+				LiferayServerUI.logError("Error opening portal home folder.", ioe);
+			}
+		}
+	}
 
-            try
-            {
-                ServerUIUtil.openFileInSystemExplorer( new Path( path ) );
-            }
-            catch( IOException e )
-            {
-                LiferayServerUI.logError( "Error opening portal home folder.", e );
-            }
-        }
-    }
+	@SuppressWarnings("rawtypes")
+	public void run() {
+		Iterator iterator = getStructuredSelection().iterator();
 
-    @SuppressWarnings( "rawtypes" )
-    public void run()
-    {
-        Iterator iterator = getStructuredSelection().iterator();
+		if (!iterator.hasNext()) {
+			return;
+		}
 
-        if( !iterator.hasNext() )
-        {
-            return;
-        }
+		Object obj = iterator.next();
 
-        Object obj = iterator.next();
+		if (accept(obj)) {
+			perform(obj);
+		}
 
-        if( accept( obj ) )
-        {
-            perform( obj );
-        }
+		selectionChanged(getStructuredSelection());
+	}
 
-        selectionChanged( getStructuredSelection() );
-    }
+	@SuppressWarnings("rawtypes")
+	public void selectionChanged(IStructuredSelection sel) {
+		if (sel.isEmpty()) {
+			setEnabled(false);
 
-    /**
-     * Update the enabled state.
-     *
-     * @param sel
-     *            a selection
-     */
-    @SuppressWarnings( "rawtypes" )
-    public void selectionChanged( IStructuredSelection sel )
-    {
-        if( sel.isEmpty() )
-        {
-            setEnabled( false );
+			return;
+		}
 
-            return;
-        }
+		boolean enabled = false;
 
-        boolean enabled = false;
-        Iterator iterator = sel.iterator();
+		Iterator iterator = sel.iterator();
 
-        while( iterator.hasNext() )
-        {
-            Object obj = iterator.next();
+		while (iterator.hasNext()) {
+			Object obj = iterator.next();
 
-            if( obj instanceof PropertiesFile )
-            {
-                final PropertiesFile node = (PropertiesFile) obj;
+			if (obj instanceof PropertiesFile) {
+				PropertiesFile node = (PropertiesFile)obj;
 
-                final String path = node.getPath();
+				String path = node.getPath();
 
-                try
-                {
-                    if( !CoreUtil.isNullOrEmpty( ServerUIUtil.getSystemExplorerCommand( new Path( path ).toFile() ) ) &&
-                        accept( node ) )
-                    {
-                        enabled = true;
-                    }
-                }
-                catch( IOException e )
-                {
-                }
-            }
-            else
-            {
-                setEnabled( false );
+				try {
+					if (!CoreUtil.isNullOrEmpty(ServerUIUtil.getSystemExplorerCommand(new Path(path).toFile())) &&
+						accept(node)) {
 
-                return;
-            }
-        }
+						enabled = true;
+					}
+				}
+				catch (IOException ioe) {
+				}
+			}
+			else {
+				setEnabled(false);
 
-        setEnabled( enabled );
-    }
+				return;
+			}
+		}
+
+		setEnabled(enabled);
+	}
+
+	private Shell _shell;
 
 }

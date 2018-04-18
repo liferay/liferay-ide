@@ -1,12 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.server.ui.cmd;
@@ -16,39 +19,41 @@ import com.liferay.ide.server.remote.IRemoteServer;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.ui.internal.command.ServerCommand;
 
-@SuppressWarnings( "restriction" )
-public class SetAdjustDeploymentTimestampCommand extends ServerCommand
-{
+/**
+ * @author Greg Amerson
+ */
+@SuppressWarnings("restriction")
+public class SetAdjustDeploymentTimestampCommand extends ServerCommand {
 
-    protected boolean adjustDemploymentTimestamp;
-    protected boolean oldAdjustDemploymentTimestamp;
-    protected IRemoteServer remoteServer;
+	public SetAdjustDeploymentTimestampCommand(IRemoteServer server, boolean adjustTimestamp) {
+		super(null, Msgs.setDeployCustomPortletXML);
 
-    public SetAdjustDeploymentTimestampCommand( IRemoteServer server, boolean adjustTimestamp )
-    {
-        super( null, Msgs.setDeployCustomPortletXML );
-        this.remoteServer = server;
-        this.adjustDemploymentTimestamp = adjustTimestamp;
-    }
+		remoteServer = server;
+		adjustDemploymentTimestamp = adjustTimestamp;
+	}
 
-    public void execute()
-    {
-        oldAdjustDemploymentTimestamp = remoteServer.getAdjustDeploymentTimestamp();
-        remoteServer.setAdjustDeploymentTimestamp( adjustDemploymentTimestamp );
-    }
+	public void execute() {
+		oldAdjustDemploymentTimestamp = remoteServer.getAdjustDeploymentTimestamp();
 
-    public void undo()
-    {
-        remoteServer.setAdjustDeploymentTimestamp( oldAdjustDemploymentTimestamp );
-    }
+		remoteServer.setAdjustDeploymentTimestamp(adjustDemploymentTimestamp);
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String setDeployCustomPortletXML;
+	public void undo() {
+		remoteServer.setAdjustDeploymentTimestamp(oldAdjustDemploymentTimestamp);
+	}
 
-        static
-        {
-            initializeMessages( SetAdjustDeploymentTimestampCommand.class.getName(), Msgs.class );
-        }
-    }
+	protected boolean adjustDemploymentTimestamp;
+	protected boolean oldAdjustDemploymentTimestamp;
+	protected IRemoteServer remoteServer;
+
+	private static class Msgs extends NLS {
+
+		public static String setDeployCustomPortletXML;
+
+		static {
+			initializeMessages(SetAdjustDeploymentTimestampCommand.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

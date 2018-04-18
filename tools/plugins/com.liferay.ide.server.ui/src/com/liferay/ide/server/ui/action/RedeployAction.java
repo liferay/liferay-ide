@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui.action;
+
+import com.liferay.ide.server.core.ILiferayServerBehavior;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,99 +32,87 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 
-import com.liferay.ide.server.core.ILiferayServerBehavior;
-import com.liferay.ide.server.core.LiferayServerCore;
-
 /**
  * @author Greg Amerson
  * @author Simon Jiang
  */
-@SuppressWarnings( { "restriction", "rawtypes" } )
-public class RedeployAction extends AbstractServerRunningAction
-{
-    private ModuleServer[] selectedModules;
+@SuppressWarnings({"restriction", "rawtypes"})
+public class RedeployAction extends AbstractServerRunningAction {
 
-    public RedeployAction()
-    {
-        super();
-    }
+	public RedeployAction() {
+	}
 
-    @Override
-    protected int getRequiredServerState()
-    {
-        return IServer.STATE_STARTED | IServer.STATE_STOPPED;
-    }
+	public void run(IAction action) {
+		if (_selectedModules == null) {
+			return;
+		}
 
-    public void run( IAction action )
-    {
-        if( selectedModules == null )
-        {
-            return; // can't do anything if server has not been selected
-        }
+		if (_selectedModules != null) {
+			for (ModuleServer moduleServer : _selectedModules) {
+				IServer server = moduleServer.getServer();
 
-        if( selectedModules != null )
-        {
-            for( ModuleServer moduleServer : selectedModules )
-            {
-                final ILiferayServerBehavior liferayServerBehavior =
-                    (ILiferayServerBehavior) moduleServer.getServer().loadAdapter(
-                        ILiferayServerBehavior.class, null );
+				ILiferayServerBehavior liferayServerBehavior = (ILiferayServerBehavior)server.loadAdapter(
+					ILiferayServerBehavior.class, null);
 
-                if( liferayServerBehavior != null )
-                {
-                    Job redeployJob = new Job( "Redeploying " + moduleServer.getModuleDisplayName() )
-                    {
-                        @Override
-                        protected IStatus run( IProgressMonitor monitor )
-                        {
-                            try
-                            {
-                                liferayServerBehavior.redeployModule( moduleServer.getModule() );
-                            }
-                            catch( CoreException e )
-                            {
-                                LiferayServerCore.logError(
-                                    "Error redeploying " + moduleServer.getModuleDisplayName(), e );
-                            }
+				if (liferayServerBehavior != null) {
+					Job redeployJob = new Job("Redeploying " + moduleServer.getModuleDisplayName()) {
 
-                            return Status.OK_STATUS;
-                        }
-                    };
+						@Override
+						protected IStatus run(IProgressMonitor monitor) {
+							try {
+								liferayServerBehavior.redeployModule(moduleServer.getModule());
+							}
+							catch (CoreException ce) {
+								LiferayServerCore.logError(
+									"Error redeploying " + moduleServer.getModuleDisplayName(), ce);
+							}
 
-                    redeployJob.setUser( true );
-                    redeployJob.schedule();
-                }
-            }
-        }
-    }
+							return Status.OK_STATUS;
+						}
 
-    @Override
-    public void selectionChanged( IAction action, ISelection selection )
-    {
-        boolean validServerState = true;
+					};
 
-        if( !selection.isEmpty() )
-        {
-            final List<ModuleServer> newModules = new ArrayList<>();
+					redeployJob.setUser(true);
+					redeployJob.schedule();
+				}
+			}
+		}
+	}
 
-            if( selection instanceof IStructuredSelection )
-            {
-                final IStructuredSelection obj = (IStructuredSelection) selection;
-                final Iterator selectionIterator = obj.iterator();
+	@Override
+	public void selectionChanged(IAction action, ISelection selection) {
+		boolean validServerState = true;
 
-                while( selectionIterator.hasNext() )
-                {
-                    ModuleServer moduleServer = (ModuleServer) selectionIterator.next();
-                    newModules.add( moduleServer );
-                    validServerState =
-                        validServerState &&
-                            ( ( moduleServer.getServer().getServerState() & getRequiredServerState() ) > 0 );
-                }
+		if (!selection.isEmpty()) {
+			List<ModuleServer> newModules = new ArrayList<>();
 
-                this.selectedModules = newModules.toArray( new ModuleServer[0] );
+			if (selection instanceof IStructuredSelection) {
+				IStructuredSelection obj = (IStructuredSelection)selection;
 
-                action.setEnabled( validServerState );
-            }
-        }
-    }
+				Iterator selectionIterator = obj.iterator();
+
+				while (selectionIterator.hasNext()) {
+					ModuleServer moduleServer = (ModuleServer)selectionIterator.next();
+
+					newModules.add(moduleServer);
+
+					IServer server = moduleServer.getServer();
+
+					validServerState = validServerState && ((server.getServerState() & getRequiredServerState()) > 0);
+				}
+
+				_selectedModules = newModules.toArray(new ModuleServer[0]);
+
+				action.setEnabled(validServerState);
+			}
+		}
+	}
+
+	@Override
+	protected int getRequiredServerState() {
+		return IServer.STATE_STARTED | IServer.STATE_STOPPED;
+	}
+
+	private ModuleServer[] _selectedModules;
+
 }

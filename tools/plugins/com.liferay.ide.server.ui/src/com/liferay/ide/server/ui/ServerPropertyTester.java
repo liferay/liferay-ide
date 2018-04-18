@@ -1,12 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.server.ui;
@@ -18,27 +21,24 @@ import org.eclipse.wst.server.core.IServerType;
 /**
  * @author Cindy Li
  */
-public class ServerPropertyTester extends PropertyTester
-{
-    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
-    {
-        if( receiver instanceof IServerAttributes )
-        {
-            IServerAttributes server = (IServerAttributes) receiver;
-            IServerType serverType = server.getServerType();
+public class ServerPropertyTester extends PropertyTester {
 
-            if( serverType != null )
-            {
-                String id = serverType.getId();
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+		if (receiver instanceof IServerAttributes) {
+			IServerAttributes server = (IServerAttributes)receiver;
 
-                if( "com.liferay.ide.eclipse.server.remote".equals( id ) ) //$NON-NLS-1$
-                {
-                    return true;
-                }
-            }
-        }
+			IServerType serverType = server.getServerType();
 
-        return false;
-    }
+			if (serverType != null) {
+				String id = serverType.getId();
+
+				if ("com.liferay.ide.eclipse.server.remote".equals(id)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui.cmd;
 
@@ -22,36 +21,35 @@ import org.eclipse.osgi.util.NLS;
 /**
  * @author Greg Amerson
  */
-public class SetServerManagerContextPathCommand extends RemoteServerCommand
-{
+public class SetServerManagerContextPathCommand extends RemoteServerCommand {
 
-    protected String oldServerManagerContextPath;
-    protected String serverManagerContextPath;
+	public SetServerManagerContextPathCommand(IRemoteServerWorkingCopy server, String serverManagerContextPath) {
+		super(server, Msgs.setServerManagerContextPath);
 
-    public SetServerManagerContextPathCommand( IRemoteServerWorkingCopy server, String serverManagerContextPath )
-    {
-        super( server, Msgs.setServerManagerContextPath );
-        this.serverManagerContextPath = serverManagerContextPath;
-    }
+		this.serverManagerContextPath = serverManagerContextPath;
+	}
 
-    public void execute()
-    {
-        oldServerManagerContextPath = server.getServerManagerContextPath();
-        server.setServerManagerContextPath( serverManagerContextPath );
-    }
+	public void execute() {
+		oldServerManagerContextPath = server.getServerManagerContextPath();
 
-    public void undo()
-    {
-        server.setServerManagerContextPath( oldServerManagerContextPath );
-    }
+		server.setServerManagerContextPath(serverManagerContextPath);
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String setServerManagerContextPath;
+	public void undo() {
+		server.setServerManagerContextPath(oldServerManagerContextPath);
+	}
 
-        static
-        {
-            initializeMessages( SetServerManagerContextPathCommand.class.getName(), Msgs.class );
-        }
-    }
+	protected String oldServerManagerContextPath;
+	protected String serverManagerContextPath;
+
+	private static class Msgs extends NLS {
+
+		public static String setServerManagerContextPath;
+
+		static {
+			initializeMessages(SetServerManagerContextPathCommand.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
-/**
- * 
  */
 
 package com.liferay.ide.server.ui;
@@ -25,38 +21,37 @@ import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class PluginsContent
-{
+@SuppressWarnings("restriction")
+public class PluginsContent {
 
-    private Object parent;
+	public PluginsContent(List<ModuleServer> input, Object parent) {
+		this.input = input;
+		_parent = parent;
+	}
 
-    protected List<ModuleServer> input;
+	public Object[] getChildren() {
+		return input.toArray();
+	}
 
-    public PluginsContent( List<ModuleServer> input, Object parent )
-    {
-        this.input = input;
+	public List<ModuleServer> getInput() {
+		return input;
+	}
 
-        this.parent = parent;
-    }
+	public Object getParent() {
+		return _parent;
+	}
 
-    public Object[] getChildren()
-    {
-        return input.toArray();
-    }
+	public int getSize() {
+		if (input != null) {
+			return input.size();
+		}
+		else {
+			return 0;
+		}
+	}
 
-    public List<ModuleServer> getInput()
-    {
-        return input;
-    }
+	protected List<ModuleServer> input;
 
-    public Object getParent()
-    {
-        return parent;
-    }
+	private Object _parent;
 
-    public int getSize()
-    {
-        return input != null ? input.size() : 0;
-    }
 }

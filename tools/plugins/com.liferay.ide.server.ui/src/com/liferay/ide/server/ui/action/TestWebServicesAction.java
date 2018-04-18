@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui.action;
 
@@ -23,6 +22,7 @@ import com.liferay.ide.ui.dialog.StringsFilteredDialog;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -30,6 +30,7 @@ import java.util.Vector;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.window.Window;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.ws.internal.explorer.LaunchOption;
 import org.eclipse.wst.ws.internal.explorer.LaunchOptions;
@@ -41,128 +42,136 @@ import org.eclipse.wst.ws.internal.parser.wsil.WebServicesParser;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( { "restriction", "rawtypes", "unchecked" } )
-public class TestWebServicesAction extends AbstractServerRunningAction
-{
+@SuppressWarnings({"restriction", "rawtypes", "unchecked"})
+public class TestWebServicesAction extends AbstractServerRunningAction {
 
-    public TestWebServicesAction()
-    {
-        super();
-    }
+	public TestWebServicesAction() {
+	}
 
-    public void run( IAction action )
-    {
-        if( selectedServer == null && selectedModule == null )
-        {
-            return; // can't do anything if server has not been selected
-        }
+	public void run(IAction action) {
+		if ((selectedServer == null) && (selectedModule == null)) {
+			return;
+		}
 
-        URL webServicesListURL = null;
-        String[] names = null;
-        WebServicesHelper helper = null;
+		URL webServicesListURL = null;
+		String[] names = null;
+		WebServicesHelper helper = null;
 
-        if( selectedServer != null )
-        {
-            ILiferayServer portalServer = (ILiferayServer) selectedServer.loadAdapter( ILiferayServer.class, null );
+		if (selectedServer != null) {
+			ILiferayServer portalServer = (ILiferayServer)selectedServer.loadAdapter(ILiferayServer.class, null);
 
-            webServicesListURL = portalServer.getWebServicesListURL();
+			webServicesListURL = portalServer.getWebServicesListURL();
 
-            helper = new WebServicesHelper( webServicesListURL );
-            names = helper.getWebServiceNames();
-        }
-        else if( selectedModule != null )
-        {
-            selectedModule.getModule()[0].getProject();
-            ILiferayServer portalServer =
-                (ILiferayServer) selectedModule.getServer().loadAdapter( ILiferayServer.class, null );
-            try
-            {
-                webServicesListURL =
-                    new URL( portalServer.getPortalHomeUrl(), selectedModule.getModule()[0].getName() + "/axis" ); //$NON-NLS-1$
-            }
-            catch( MalformedURLException e )
-            {
-                LiferayServerUI.logError( e );
-                return;
-            }
+			helper = new WebServicesHelper(webServicesListURL);
 
-            helper = new WebServicesHelper( webServicesListURL );
-            names = helper.getWebServiceNames();
+			names = helper.getWebServiceNames();
+		}
+		else if (selectedModule != null) {
+			IModule module = selectedModule.getModule()[0];
 
-            if( ListUtil.isEmpty(names) )
-            {
-                try
-                {
-                    webServicesListURL =
-                        new URL( portalServer.getPortalHomeUrl(), selectedModule.getModule()[0].getName() + "/api/axis" ); //$NON-NLS-1$
-                }
-                catch( MalformedURLException e )
-                {
-                    LiferayServerUI.logError( e );
-                    return;
-                }
+			module.getProject();
 
-                helper = new WebServicesHelper( webServicesListURL );
-                names = helper.getWebServiceNames();
-            }
-        }
+			IServer server = selectedModule.getServer();
 
-        StringsFilteredDialog dialog = new StringsFilteredDialog( getActiveShell() );
-        dialog.setTitle( Msgs.webServiceSelection );
-        dialog.setMessage( Msgs.selectWebService );
-        dialog.setInput( names );
-        int retval = dialog.open();
+			ILiferayServer portalServer = (ILiferayServer)server.loadAdapter(ILiferayServer.class, null);
 
-        if( retval == Window.OK )
-        {
-            String serviceName = dialog.getFirstResult().toString();
+			try {
+				webServicesListURL = new URL(portalServer.getPortalHomeUrl(), module.getName() + "/axis");
+			}
+			catch (MalformedURLException murle) {
+				LiferayServerUI.logError(murle);
 
-            String url = helper.getWebServiceWSDLURLByName( serviceName );
+				return;
+			}
 
-            String stateLocation = ExplorerPlugin.getInstance().getPluginStateLocation();
-            String defaultFavoritesLocation = ExplorerPlugin.getInstance().getDefaultFavoritesLocation();
-            WSExplorerLauncherCommand command = new WSExplorerLauncherCommand();
-            command.setForceLaunchOutsideIDE( false );
-            Vector launchOptions = new Vector();
-            addLaunchOptions( launchOptions, url, stateLocation, defaultFavoritesLocation );
-            command.setLaunchOptions( (LaunchOption[]) launchOptions.toArray( new LaunchOption[0] ) );
-            command.execute();
-        }
-    }
+			helper = new WebServicesHelper(webServicesListURL);
 
-    protected void addLaunchOptions(
-        Vector launchOptions, String wsdlURL, String stateLocation, String defaultFavoritesLocation )
-    {
-        GetMonitorCommand getMonitorCmd = new GetMonitorCommand();
-        getMonitorCmd.setMonitorService( true );
-        getMonitorCmd.setCreate( false );
-        getMonitorCmd.setWebServicesParser( new WebServicesParser() );
-        getMonitorCmd.setWsdlURI( wsdlURL );
-        getMonitorCmd.execute( null, null );
-        List endpoints = getMonitorCmd.getEndpoints();
-        for( Iterator endpointsIt = endpoints.iterator(); endpointsIt.hasNext(); )
-        {
-            launchOptions.add( new LaunchOption( LaunchOptions.WEB_SERVICE_ENDPOINT, (String) endpointsIt.next() ) );
-        }
-        launchOptions.add( new LaunchOption( LaunchOptions.WSDL_URL, wsdlURL ) );
-        launchOptions.add( new LaunchOption( LaunchOptions.STATE_LOCATION, stateLocation ) );
-        launchOptions.add( new LaunchOption( LaunchOptions.DEFAULT_FAVORITES_LOCATION, defaultFavoritesLocation ) );
-    }
+			names = helper.getWebServiceNames();
 
-    @Override
-    protected int getRequiredServerState()
-    {
-        return IServer.STATE_STARTED;
-    }
+			if (ListUtil.isEmpty(names)) {
+				try {
+					webServicesListURL = new URL(portalServer.getPortalHomeUrl(), module.getName() + "/api/axis");
+				}
+				catch (MalformedURLException murle) {
+					LiferayServerUI.logError(murle);
 
-    private static class Msgs extends NLS
-    {
-        public static String selectWebService;
-        public static String webServiceSelection;
+					return;
+				}
 
-        static
-        {
-            initializeMessages( TestWebServicesAction.class.getName(), Msgs.class );
-        }
-    }
+				helper = new WebServicesHelper(webServicesListURL);
+
+				names = helper.getWebServiceNames();
+			}
+		}
+
+		StringsFilteredDialog dialog = new StringsFilteredDialog(getActiveShell());
+
+		dialog.setTitle(Msgs.webServiceSelection);
+		dialog.setMessage(Msgs.selectWebService);
+		dialog.setInput(names);
+
+		int retval = dialog.open();
+
+		if (retval == Window.OK) {
+			Object serviceName = dialog.getFirstResult();
+
+			String url = helper.getWebServiceWSDLURLByName(serviceName.toString());
+
+			ExplorerPlugin explorerPlugin = ExplorerPlugin.getInstance();
+
+			String stateLocation = explorerPlugin.getPluginStateLocation();
+			String defaultFavoritesLocation = explorerPlugin.getDefaultFavoritesLocation();
+
+			WSExplorerLauncherCommand command = new WSExplorerLauncherCommand();
+
+			command.setForceLaunchOutsideIDE(false);
+
+			Vector launchOptions = new Vector();
+
+			addLaunchOptions(launchOptions, url, stateLocation, defaultFavoritesLocation);
+
+			command.setLaunchOptions((LaunchOption[])launchOptions.toArray(new LaunchOption[0]));
+
+			command.execute();
+		}
+	}
+
+	protected void addLaunchOptions(
+		Vector launchOptions, String wsdlURL, String stateLocation, String defaultFavoritesLocation) {
+
+		GetMonitorCommand getMonitorCmd = new GetMonitorCommand();
+
+		getMonitorCmd.setMonitorService(true);
+		getMonitorCmd.setCreate(false);
+		getMonitorCmd.setWebServicesParser(new WebServicesParser());
+		getMonitorCmd.setWsdlURI(wsdlURL);
+		getMonitorCmd.execute(null, null);
+
+		List endpoints = getMonitorCmd.getEndpoints();
+
+		for (Iterator endpointsIt = endpoints.iterator(); endpointsIt.hasNext();) {
+			launchOptions.add(new LaunchOption(LaunchOptions.WEB_SERVICE_ENDPOINT, (String)endpointsIt.next()));
+		}
+
+		launchOptions.add(new LaunchOption(LaunchOptions.WSDL_URL, wsdlURL));
+		launchOptions.add(new LaunchOption(LaunchOptions.STATE_LOCATION, stateLocation));
+		launchOptions.add(new LaunchOption(LaunchOptions.DEFAULT_FAVORITES_LOCATION, defaultFavoritesLocation));
+	}
+
+	@Override
+	protected int getRequiredServerState() {
+		return IServer.STATE_STARTED;
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String selectWebService;
+		public static String webServiceSelection;
+
+		static {
+			initializeMessages(TestWebServicesAction.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

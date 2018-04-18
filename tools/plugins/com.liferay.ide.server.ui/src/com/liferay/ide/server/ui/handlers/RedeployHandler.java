@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui.handlers;
 
@@ -27,55 +26,51 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 
 /**
  * @author Eric Min
  */
-@SuppressWarnings( { "restriction", "rawtypes" } )
-public class RedeployHandler extends AbstractHandler
-{
+@SuppressWarnings({"restriction", "rawtypes"})
+public class RedeployHandler extends AbstractHandler {
 
-    public Object execute( ExecutionEvent event ) throws ExecutionException
-    {
-        final List<ModuleServer> modules = new ArrayList<ModuleServer>();
-        final ISelection selection = HandlerUtil.getCurrentSelection( event );
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		List<ModuleServer> modules = new ArrayList<>();
 
-        if( !selection.isEmpty() )
-        {
-            if( selection instanceof IStructuredSelection )
-            {
-                List selectedObj = ( (IStructuredSelection) selection ).toList();
+		ISelection selection = HandlerUtil.getCurrentSelection(event);
 
-                for( Object object : selectedObj )
-                {
-                    if( object instanceof ModuleServer )
-                    {
-                        ModuleServer moduleServer = (ModuleServer) object;
-                        modules.add( moduleServer );
-                    }
-                }
-            }
-        }
+		if (!selection.isEmpty()) {
+			if (selection instanceof IStructuredSelection) {
+				List selectedObj = ((IStructuredSelection)selection).toList();
 
-        for( ModuleServer moduleServer : modules )
-        {
-            final ILiferayServerBehavior liferayServerBehavior =
-                (ILiferayServerBehavior) moduleServer.getServer().loadAdapter( ILiferayServerBehavior.class, null );
+				for (Object object : selectedObj) {
+					if (object instanceof ModuleServer) {
+						ModuleServer moduleServer = (ModuleServer)object;
 
-            if( liferayServerBehavior != null )
-            {
-                try
-                {
-                    liferayServerBehavior.redeployModule( moduleServer.getModule() );
-                }
-                catch( CoreException e )
-                {
-                    throw new ExecutionException( e.getMessage(), e.getCause() );
-                }
-            }
-        }
+						modules.add(moduleServer);
+					}
+				}
+			}
+		}
 
-        return null;
-    }
+		for (ModuleServer moduleServer : modules) {
+			IServer server = moduleServer.getServer();
+
+			ILiferayServerBehavior liferayServerBehavior = (ILiferayServerBehavior)server.loadAdapter(
+				ILiferayServerBehavior.class, null);
+
+			if (liferayServerBehavior != null) {
+				try {
+					liferayServerBehavior.redeployModule(moduleServer.getModule());
+				}
+				catch (CoreException ce) {
+					throw new ExecutionException(ce.getMessage(), ce.getCause());
+				}
+			}
+		}
+
+		return null;
+	}
+
 }

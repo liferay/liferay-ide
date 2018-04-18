@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui.action;
 
@@ -20,7 +19,10 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.IServerModule;
@@ -28,66 +30,61 @@ import org.eclipse.wst.server.ui.IServerModule;
 /**
  * @author Greg Amerson
  */
-public abstract class AbstractServerRunningAction implements IObjectActionDelegate
-{
+public abstract class AbstractServerRunningAction implements IObjectActionDelegate {
 
-    protected IWorkbenchPart activePart;
-    protected IServerModule selectedModule;
-    protected IServer selectedServer;
+	public AbstractServerRunningAction() {
+	}
 
-    public AbstractServerRunningAction()
-    {
-        super();
-    }
+	public void selectionChanged(IAction action, ISelection selection) {
+		selectedServer = null;
 
-    protected IWorkbenchPart getActivePart()
-    {
-        return this.activePart;
-    }
+		if (!selection.isEmpty()) {
+			if (selection instanceof IStructuredSelection) {
+				Object obj = ((IStructuredSelection)selection).getFirstElement();
 
-    protected Shell getActiveShell()
-    {
-        if( getActivePart() != null )
-        {
-            return getActivePart().getSite().getShell();
-        }
-        else
-        {
-            return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-        }
-    }
+				if (obj instanceof IServer) {
+					selectedServer = (IServer)obj;
 
-    protected abstract int getRequiredServerState();
+					action.setEnabled((selectedServer.getServerState() & getRequiredServerState()) > 0);
+				}
+				else if (obj instanceof IServerModule) {
+					selectedModule = (IServerModule)obj;
 
-    public void selectionChanged( IAction action, ISelection selection )
-    {
-        selectedServer = null;
+					IServer server = selectedModule.getServer();
 
-        if( !selection.isEmpty() )
-        {
-            if( selection instanceof IStructuredSelection )
-            {
-                Object obj = ( (IStructuredSelection) selection ).getFirstElement();
+					action.setEnabled((server.getServerState() & getRequiredServerState()) > 0);
+				}
+			}
+		}
+	}
 
-                if( obj instanceof IServer )
-                {
-                    selectedServer = (IServer) obj;
+	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+		activePart = targetPart;
+	}
 
-                    action.setEnabled( ( selectedServer.getServerState() & getRequiredServerState() ) > 0 );
-                }
-                else if( obj instanceof IServerModule )
-                {
-                    selectedModule = (IServerModule) obj;
+	protected IWorkbenchPart getActivePart() {
+		return activePart;
+	}
 
-                    action.setEnabled( ( selectedModule.getServer().getServerState() & getRequiredServerState() ) > 0 );
-                }
-            }
-        }
-    }
+	protected Shell getActiveShell() {
+		if (getActivePart() != null) {
+			IWorkbenchPartSite site = getActivePart().getSite();
 
-    public void setActivePart( IAction action, IWorkbenchPart targetPart )
-    {
-        this.activePart = targetPart;
-    }
+			return site.getShell();
+		}
+		else {
+			IWorkbench workbench = PlatformUI.getWorkbench();
+
+			IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+
+			return activeWorkbenchWindow.getShell();
+		}
+	}
+
+	protected abstract int getRequiredServerState();
+
+	protected IWorkbenchPart activePart;
+	protected IServerModule selectedModule;
+	protected IServer selectedServer;
 
 }

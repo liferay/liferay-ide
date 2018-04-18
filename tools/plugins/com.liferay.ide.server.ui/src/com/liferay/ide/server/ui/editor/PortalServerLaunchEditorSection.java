@@ -1,18 +1,21 @@
-/*******************************************************************************
- * Copyright (c) 2007, 2010 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *    IBM Corporation - Initial API and implementation
- *    Greg Amerson <gregory.amerson@liferay.com>
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.server.ui.editor;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.core.portal.PortalServer;
@@ -25,6 +28,7 @@ import com.liferay.ide.server.ui.cmd.SetMemoryArgsCommand;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.beans.PropertyChangeEvent;
+
 import java.io.File;
 
 import org.eclipse.core.runtime.IStatus;
@@ -47,311 +51,337 @@ import org.eclipse.wst.server.core.internal.Server;
 /**
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
-public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorSection
-{
+@SuppressWarnings("restriction")
+public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorSection {
 
-    protected Button customLaunchSettings;
-    protected Button defaultLaunchSettings;
-    protected Button developerMode;
-    protected Text externalProperties;
-    protected Button externalPropertiesBrowse;
+	public PortalServerLaunchEditorSection() {
+	}
 
-    protected Text memoryArgs;
+	public IStatus[] getSaveStatus() {
+		String externalPropetiesValue = portalServer.getExternalProperties();
 
-    public PortalServerLaunchEditorSection()
-    {
-        super();
-    }
+		if (!CoreUtil.isNullOrEmpty(externalPropetiesValue)) {
+			File externalPropertiesFile = new File(externalPropetiesValue);
 
-    @Override
-    protected void addPropertyListeners( PropertyChangeEvent event )
-    {
-        if( PortalServer.PROPERTY_MEMORY_ARGS.equals( event.getPropertyName() ) )
-        {
-            memoryArgs.setText( (String) event.getNewValue() );
-        }
-        else if( PortalServer.PROPERTY_EXTERNAL_PROPERTIES.equals( event.getPropertyName() ) )
-        {
-            externalProperties.setText( (String) event.getNewValue() );
-        }
-        else if( PortalServer.PROPERTY_DEVELOPER_MODE.equals( event.getPropertyName() ) )
-        {
-            developerMode.setSelection( (Boolean) event.getNewValue() );
-        }
-        else if( PortalServer.PROPERTY_LAUNCH_SETTINGS.equals( event.getPropertyName() ) )
-        {
-            boolean s = (Boolean) event.getNewValue();
+			if (FileUtil.exists(externalPropertiesFile) || !ServerUtil.isValidPropertiesFile(externalPropertiesFile)) {
+				return new IStatus[] {
+					new Status(IStatus.ERROR, LiferayServerUI.PLUGIN_ID, Msgs.invalidExternalPropertiesFile)
+				};
+			}
+		}
 
-            defaultLaunchSettings.setSelection( s );
-            customLaunchSettings.setSelection( !s );
-        }
-    }
+		return super.getSaveStatus();
+	}
 
-    private void applyDefaultPortalServerSetting( final boolean useDefaultPortalSeverSetting )
-    {
-        if( useDefaultPortalSeverSetting )
-        {
-            developerMode.setEnabled( false );
-            externalProperties.setEnabled( false );
-            externalPropertiesBrowse.setEnabled( false );
-            memoryArgs.setEnabled( false );
-        }
-        else
-        {
-            developerMode.setEnabled( true );
-            externalProperties.setEnabled( true );
-            externalPropertiesBrowse.setEnabled( true );
-            memoryArgs.setEnabled( true );;
-        }
-    }
+	@Override
+	protected void addPropertyListeners(PropertyChangeEvent event) {
+		if (PortalServer.PROPERTY_MEMORY_ARGS.equals(event.getPropertyName())) {
+			memoryArgs.setText((String)event.getNewValue());
+		}
+		else if (PortalServer.PROPERTY_EXTERNAL_PROPERTIES.equals(event.getPropertyName())) {
+			externalProperties.setText((String)event.getNewValue());
+		}
+		else if (PortalServer.PROPERTY_DEVELOPER_MODE.equals(event.getPropertyName())) {
+			developerMode.setSelection((Boolean)event.getNewValue());
+		}
+		else if (PortalServer.PROPERTY_LAUNCH_SETTINGS.equals(event.getPropertyName())) {
+			boolean s = (Boolean)event.getNewValue();
 
-    @Override
-    protected void createEditorSection( FormToolkit toolkit, Composite composite )
-    {
-        GridData data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
+			defaultLaunchSettings.setSelection(s);
+			customLaunchSettings.setSelection(!s);
+		}
+	}
 
-        defaultLaunchSettings = new Button( composite, SWT.RADIO );
-        defaultLaunchSettings.setText( Msgs.defaultLaunchSettings );
-        data = new GridData( SWT.BEGINNING, SWT.CENTER, true, false, 3, 1 );
-        defaultLaunchSettings.setLayoutData( data );
+	@Override
+	protected void createEditorSection(FormToolkit toolkit, Composite composite) {
+		GridData data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 
-        defaultLaunchSettings.addSelectionListener( new SelectionAdapter()
-        {
+		defaultLaunchSettings = new Button(composite, SWT.RADIO);
 
-            public void widgetSelected( SelectionEvent e )
-            {
-                updating = true;
-                execute( new SetLaunchSettingsCommand( server, defaultLaunchSettings.getSelection() ) );
-                updating = false;
+		defaultLaunchSettings.setText(Msgs.defaultLaunchSettings);
 
-                applyDefaultPortalServerSetting( defaultLaunchSettings.getSelection() );
-                customLaunchSettings.setSelection( !defaultLaunchSettings.getSelection() );
-                validate();
-            }
-        } );
+		data = new GridData(SWT.BEGINNING, SWT.CENTER, true, false, 3, 1);
 
-        customLaunchSettings = new Button( composite, SWT.RADIO );
-        customLaunchSettings.setText( Msgs.customLaunchSettings );
-        data = new GridData( SWT.BEGINNING, SWT.CENTER, true, false, 3, 1 );
-        customLaunchSettings.setLayoutData( data );
+		defaultLaunchSettings.setLayoutData(data);
 
-        customLaunchSettings.addSelectionListener( new SelectionAdapter()
-        {
+		defaultLaunchSettings.addSelectionListener(
+			new SelectionAdapter() {
 
-            public void widgetSelected( SelectionEvent e )
-            {
-                updating = true;
-                execute( new SetLaunchSettingsCommand( server, !customLaunchSettings.getSelection() ) );
-                updating = false;
+				public void widgetSelected(SelectionEvent e) {
+					updating = true;
 
-                applyDefaultPortalServerSetting( !customLaunchSettings.getSelection() );
-                defaultLaunchSettings.setSelection( !customLaunchSettings.getSelection() );
-                validate();
-            }
-        } );
+					execute(new SetLaunchSettingsCommand(server, defaultLaunchSettings.getSelection()));
 
-        Label label = createLabel( toolkit, composite, Msgs.memoryArgsLabel );
-        data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        label.setLayoutData( data );
+					updating = false;
 
-        memoryArgs = toolkit.createText( composite, null );
-        data = new GridData( SWT.FILL, SWT.CENTER, true, false );
-        data.widthHint = 300;
-        memoryArgs.setLayoutData( data );
-        memoryArgs.addModifyListener( new ModifyListener()
-        {
+					_applyDefaultPortalServerSetting(defaultLaunchSettings.getSelection());
 
-            public void modifyText( ModifyEvent e )
-            {
-                if( updating )
-                {
-                    return;
-                }
-                updating = true;
-                execute( new SetMemoryArgsCommand( server, memoryArgs.getText().trim() ) );
-                updating = false;
-                validate();
-            }
+					customLaunchSettings.setSelection(!defaultLaunchSettings.getSelection());
 
-        } );
+					validate();
+				}
 
-        label = createLabel( toolkit, composite, StringPool.EMPTY );
-        data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        label.setLayoutData( data );
+			});
 
-        label = createLabel( toolkit, composite, Msgs.externalPropertiesLabel );
-        data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        label.setLayoutData( data );
+		customLaunchSettings = new Button(composite, SWT.RADIO);
 
-        externalProperties = toolkit.createText( composite, null );
-        data = new GridData( SWT.FILL, SWT.CENTER, false, false );
-        data.widthHint = 150;
-        externalProperties.setLayoutData( data );
-        externalProperties.addModifyListener( new ModifyListener()
-        {
+		customLaunchSettings.setText(Msgs.customLaunchSettings);
 
-            public void modifyText( ModifyEvent e )
-            {
-                if( updating )
-                {
-                    return;
-                }
+		data = new GridData(SWT.BEGINNING, SWT.CENTER, true, false, 3, 1);
 
-                updating = true;
-                execute( new SetExternalPropertiesCommand( server, externalProperties.getText().trim() ) );
-                updating = false;
-                validate();
-            }
-        } );
+		customLaunchSettings.setLayoutData(data);
+		customLaunchSettings.addSelectionListener(
+			new SelectionAdapter() {
 
-        externalPropertiesBrowse = toolkit.createButton( composite, Msgs.editorBrowse, SWT.PUSH );
-        externalPropertiesBrowse.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false, false ) );
-        externalPropertiesBrowse.addSelectionListener( new SelectionAdapter()
-        {
+				public void widgetSelected(SelectionEvent e) {
+					updating = true;
 
-            public void widgetSelected( SelectionEvent se )
-            {
-                FileDialog dialog = new FileDialog( externalPropertiesBrowse.getShell() );
-                dialog.setFilterPath( externalPropertiesBrowse.getText() );
-                String selectedFile = dialog.open();
+					execute(new SetLaunchSettingsCommand(server, !customLaunchSettings.getSelection()));
 
-                if( selectedFile != null && !selectedFile.equals( externalPropertiesBrowse.getText() ) )
-                {
-                    updating = true;
-                    execute( new SetExternalPropertiesCommand( server, selectedFile ) );
-                    externalProperties.setText( selectedFile );
-                    updating = false;
-                    validate();
-                }
-            }
-        } );
+					updating = false;
 
-        label = createLabel( toolkit, composite, StringPool.EMPTY );
-        data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        label.setLayoutData( data );
+					_applyDefaultPortalServerSetting(!customLaunchSettings.getSelection());
 
-        developerMode = new Button( composite, SWT.CHECK );
-        developerMode.setText( Msgs.useDeveloperMode );
-        data = new GridData( SWT.FILL, SWT.CENTER, true, false );
-        developerMode.setLayoutData( data );
+					defaultLaunchSettings.setSelection(!customLaunchSettings.getSelection());
 
-        developerMode.addSelectionListener( new SelectionAdapter()
-        {
+					validate();
+				}
 
-            public void widgetSelected( SelectionEvent e )
-            {
-                if( updating )
-                {
-                    return;
-                }
+			});
 
-                updating = true;
-                execute( new SetDeveloperModeCommand( server, developerMode.getSelection() ) );
-                updating = false;
-                validate();
-            }
-        } );
-    }
+		Label label = createLabel(toolkit, composite, Msgs.memoryArgsLabel);
 
-    public IStatus[] getSaveStatus()
-    {
-        String externalPropetiesValue = portalServer.getExternalProperties();
+		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 
-        if( !CoreUtil.isNullOrEmpty( externalPropetiesValue ) )
-        {
-            File externalPropertiesFile = new File( externalPropetiesValue );
+		label.setLayoutData(data);
 
-            if( ( !externalPropertiesFile.exists() ) ||
-                ( !ServerUtil.isValidPropertiesFile( externalPropertiesFile ) ) )
-            {
-                return new IStatus[] {
-                    new Status( IStatus.ERROR, LiferayServerUI.PLUGIN_ID, Msgs.invalidExternalPropertiesFile ) };
-            }
-        }
+		memoryArgs = toolkit.createText(composite, null);
 
-        return super.getSaveStatus();
-    }
+		data = new GridData(SWT.FILL, SWT.CENTER, true, false);
 
-    @Override
-    protected String getSectionLabel()
-    {
-        return Msgs.liferayLaunch;
-    }
+		data.widthHint = 300;
 
-    @Override
-    protected void initProperties()
-    {
-        applyDefaultPortalServerSetting( portalServer.getLaunchSettings() );
-        customLaunchSettings.setSelection( !portalServer.getLaunchSettings() );
-        defaultLaunchSettings.setSelection( portalServer.getLaunchSettings() );
-        developerMode.setSelection( portalServer.getDeveloperMode() );
-        externalProperties.setText( portalServer.getExternalProperties() );
-        memoryArgs.setText( StringUtil.merge( portalServer.getMemoryArgs(), " " ) );
-        server.setAttribute( Server.PROP_AUTO_PUBLISH_TIME, portalServer.getAutoPublishTime() );
-    }
+		memoryArgs.setLayoutData(data);
+		memoryArgs.addModifyListener(
+			new ModifyListener() {
 
-    @Override
-    protected void setDefault()
-    {
-        execute( new SetMemoryArgsCommand( server, PortalServerConstants.DEFAULT_MEMORY_ARGS ) );
-        memoryArgs.setText( PortalServerConstants.DEFAULT_MEMORY_ARGS );
-        execute( new SetExternalPropertiesCommand( server, StringPool.EMPTY ) );
-        externalProperties.setText( StringPool.EMPTY );
-        execute( new SetDeveloperModeCommand( server, PortalServerConstants.DEFAULT_DEVELOPER_MODE ) );
-        developerMode.setSelection( PortalServerConstants.DEFAULT_DEVELOPER_MODE );
+				public void modifyText(ModifyEvent e) {
+					if (updating) {
+						return;
+					}
 
-        execute( new SetLaunchSettingsCommand( server, PortalServerConstants.DEFAULT_LAUNCH_SETTING ) );
-        defaultLaunchSettings.setSelection( PortalServerConstants.DEFAULT_LAUNCH_SETTING );
-        customLaunchSettings.setSelection( !PortalServerConstants.DEFAULT_LAUNCH_SETTING );
-        applyDefaultPortalServerSetting( PortalServerConstants.DEFAULT_LAUNCH_SETTING );
-    }
+					updating = true;
 
-    protected void validate()
-    {
-        if( portalServer != null )
-        {
-            String externalPropetiesValue = portalServer.getExternalProperties();
+					String m = memoryArgs.getText();
 
-            if( !CoreUtil.isNullOrEmpty( externalPropetiesValue ) )
-            {
-                File externalPropertiesFile = new File( externalPropetiesValue );
+					execute(new SetMemoryArgsCommand(server, m.trim()));
 
-                if( ( !externalPropertiesFile.exists() ) ||
-                    ( !ServerUtil.isValidPropertiesFile( externalPropertiesFile ) ) )
-                {
-                    setErrorMessage( Msgs.invalidExternalPropertiesFile );
+					updating = false;
 
-                    return;
-                }
-            }
+					validate();
+				}
 
-            setErrorMessage( null );
-        }
-    }
+			});
 
-    @Override
-    protected boolean needCreate()
-    {
-        return true;
-    }
+		label = createLabel(toolkit, composite, StringPool.EMPTY);
 
-    private static class Msgs extends NLS
-    {
+		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 
-        public static String customLaunchSettings;
-        public static String defaultLaunchSettings;
-        public static String editorBrowse;
-        public static String externalPropertiesLabel;
-        public static String invalidExternalPropertiesFile;
-        public static String liferayLaunch;
-        public static String memoryArgsLabel;
-        public static String useDeveloperMode;
+		label.setLayoutData(data);
 
-        static
-        {
-            initializeMessages( PortalServerLaunchEditorSection.class.getName(), Msgs.class );
-        }
-    }
+		label = createLabel(toolkit, composite, Msgs.externalPropertiesLabel);
+
+		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
+
+		label.setLayoutData(data);
+
+		externalProperties = toolkit.createText(composite, null);
+
+		data = new GridData(SWT.FILL, SWT.CENTER, false, false);
+
+		data.widthHint = 150;
+
+		externalProperties.setLayoutData(data);
+		externalProperties.addModifyListener(
+			new ModifyListener() {
+
+				public void modifyText(ModifyEvent e) {
+					if (updating) {
+						return;
+					}
+
+					updating = true;
+
+					String externalPropertiesTxt = externalProperties.getText();
+
+					execute(new SetExternalPropertiesCommand(server, externalPropertiesTxt.trim()));
+
+					updating = false;
+
+					validate();
+				}
+
+			});
+
+		externalPropertiesBrowse = toolkit.createButton(composite, Msgs.editorBrowse, SWT.PUSH);
+
+		externalPropertiesBrowse.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		externalPropertiesBrowse.addSelectionListener(
+			new SelectionAdapter() {
+
+				public void widgetSelected(SelectionEvent se) {
+					FileDialog dialog = new FileDialog(externalPropertiesBrowse.getShell());
+
+					dialog.setFilterPath(externalPropertiesBrowse.getText());
+					String selectedFile = dialog.open();
+
+					if ((selectedFile != null) && !selectedFile.equals(externalPropertiesBrowse.getText())) {
+						updating = true;
+						execute(new SetExternalPropertiesCommand(server, selectedFile));
+						externalProperties.setText(selectedFile);
+						updating = false;
+						validate();
+					}
+				}
+
+			});
+
+		label = createLabel(toolkit, composite, StringPool.EMPTY);
+
+		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
+
+		label.setLayoutData(data);
+
+		developerMode = new Button(composite, SWT.CHECK);
+
+		developerMode.setText(Msgs.useDeveloperMode);
+
+		data = new GridData(SWT.FILL, SWT.CENTER, true, false);
+
+		developerMode.setLayoutData(data);
+
+		developerMode.addSelectionListener(
+			new SelectionAdapter() {
+
+				public void widgetSelected(SelectionEvent e) {
+					if (updating) {
+						return;
+					}
+
+					updating = true;
+
+					execute(new SetDeveloperModeCommand(server, developerMode.getSelection()));
+
+					updating = false;
+
+					validate();
+				}
+
+			});
+	}
+
+	@Override
+	protected String getSectionLabel() {
+		return Msgs.liferayLaunch;
+	}
+
+	@Override
+	protected void initProperties() {
+		_applyDefaultPortalServerSetting(portalServer.getLaunchSettings());
+
+		customLaunchSettings.setSelection(!portalServer.getLaunchSettings());
+		defaultLaunchSettings.setSelection(portalServer.getLaunchSettings());
+		developerMode.setSelection(portalServer.getDeveloperMode());
+		externalProperties.setText(portalServer.getExternalProperties());
+		memoryArgs.setText(StringUtil.merge(portalServer.getMemoryArgs(), " "));
+		server.setAttribute(Server.PROP_AUTO_PUBLISH_TIME, portalServer.getAutoPublishTime());
+	}
+
+	@Override
+	protected boolean needCreate() {
+		return true;
+	}
+
+	@Override
+	protected void setDefault() {
+		execute(new SetMemoryArgsCommand(server, PortalServerConstants.DEFAULT_MEMORY_ARGS));
+
+		memoryArgs.setText(PortalServerConstants.DEFAULT_MEMORY_ARGS);
+
+		execute(new SetExternalPropertiesCommand(server, StringPool.EMPTY));
+
+		externalProperties.setText(StringPool.EMPTY);
+
+		execute(new SetDeveloperModeCommand(server, PortalServerConstants.DEFAULT_DEVELOPER_MODE));
+
+		developerMode.setSelection(PortalServerConstants.DEFAULT_DEVELOPER_MODE);
+
+		execute(new SetLaunchSettingsCommand(server, PortalServerConstants.DEFAULT_LAUNCH_SETTING));
+
+		defaultLaunchSettings.setSelection(PortalServerConstants.DEFAULT_LAUNCH_SETTING);
+
+		customLaunchSettings.setSelection(!PortalServerConstants.DEFAULT_LAUNCH_SETTING);
+
+		_applyDefaultPortalServerSetting(PortalServerConstants.DEFAULT_LAUNCH_SETTING);
+	}
+
+	protected void validate() {
+		if (portalServer != null) {
+			String externalPropetiesValue = portalServer.getExternalProperties();
+
+			if (!CoreUtil.isNullOrEmpty(externalPropetiesValue)) {
+				File externalPropertiesFile = new File(externalPropetiesValue);
+
+				if (FileUtil.notExists(externalPropertiesFile) ||
+					!ServerUtil.isValidPropertiesFile(externalPropertiesFile)) {
+
+					setErrorMessage(Msgs.invalidExternalPropertiesFile);
+
+					return;
+				}
+			}
+
+			setErrorMessage(null);
+		}
+	}
+
+	protected Button customLaunchSettings;
+	protected Button defaultLaunchSettings;
+	protected Button developerMode;
+	protected Text externalProperties;
+	protected Button externalPropertiesBrowse;
+	protected Text memoryArgs;
+
+	private void _applyDefaultPortalServerSetting(boolean useDefaultPortalSeverSetting) {
+		if (useDefaultPortalSeverSetting) {
+			developerMode.setEnabled(false);
+			externalProperties.setEnabled(false);
+			externalPropertiesBrowse.setEnabled(false);
+			memoryArgs.setEnabled(false);
+		}
+		else {
+			developerMode.setEnabled(true);
+			externalProperties.setEnabled(true);
+			externalPropertiesBrowse.setEnabled(true);
+			memoryArgs.setEnabled(true);
+		}
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String customLaunchSettings;
+		public static String defaultLaunchSettings;
+		public static String editorBrowse;
+		public static String externalPropertiesLabel;
+		public static String invalidExternalPropertiesFile;
+		public static String liferayLaunch;
+		public static String memoryArgsLabel;
+		public static String useDeveloperMode;
+
+		static {
+			initializeMessages(PortalServerLaunchEditorSection.class.getName(), Msgs.class);
+		}
+
+	}
 
 }

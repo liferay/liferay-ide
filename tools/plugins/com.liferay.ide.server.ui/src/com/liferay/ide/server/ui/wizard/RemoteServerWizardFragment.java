@@ -1,12 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.server.ui.wizard;
@@ -37,153 +40,153 @@ import org.eclipse.wst.server.core.TaskModel;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Greg Amerson
  * @author Simon Jiang
  */
-public class RemoteServerWizardFragment extends WizardFragment
-{
-    protected RemoteServerComposite composite;
-    protected IStatus lastServerStatus = null;
-    protected IWizardHandle wizard;
+public class RemoteServerWizardFragment extends WizardFragment {
 
-    public RemoteServerWizardFragment()
-    {
-        super();
-    }
+	public RemoteServerWizardFragment() {
+	}
 
-    @Override
-    public Composite createComposite( Composite parent, IWizardHandle wizard )
-    {
-        this.wizard = wizard;
+	@Override
+	public Composite createComposite(Composite parent, IWizardHandle wizard) {
+		this.wizard = wizard;
 
-        composite = new RemoteServerComposite( parent, this, wizard );
+		composite = new RemoteServerComposite(parent, this, wizard);
 
-        wizard.setTitle( Msgs.remoteLiferayServer );
-        wizard.setDescription( Msgs.configureRemoteLiferayServerInstance );
-        wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayServerUI.getDefault().getBundle().getEntry(
-            "/icons/wizban/server_wiz.png" ) ) ); //$NON-NLS-1$
+		wizard.setTitle(Msgs.remoteLiferayServer);
+		wizard.setDescription(Msgs.configureRemoteLiferayServerInstance);
 
-        return composite;
-    }
+		LiferayServerUI liferayServerUi = LiferayServerUI.getDefault();
 
-    @Override
-    public void enter()
-    {
-        if( composite != null && !composite.isDisposed() )
-        {
-            IServerWorkingCopy serverWC = getServerWorkingCopy();
+		Bundle bundle = liferayServerUi.getBundle();
 
-            // need to set defaults now that we have a connection
+		wizard.setImageDescriptor(ImageDescriptor.createFromURL(bundle.getEntry("/icons/wizban/server_wiz.png")));
 
-            composite.setServer( serverWC );
-        }
-    }
+		return composite;
+	}
 
-    @Override
-    public boolean hasComposite()
-    {
-        return true;
-    }
+	@Override
+	public void enter() {
+		if ((composite != null) && !composite.isDisposed()) {
+			IServerWorkingCopy serverWC = getServerWorkingCopy();
 
-    @Override
-    public boolean isComplete()
-    {
-        return lastServerStatus != null && lastServerStatus.getSeverity() != IStatus.ERROR;
-    }
+			// need to set defaults now that we have a connection
 
-    @Override
-    public void performFinish( IProgressMonitor monitor ) throws CoreException
-    {
-        try
-        {
-            this.wizard.run( false, false, new IRunnableWithProgress()
-            {
-                public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
-                {
+			composite.setServer(serverWC);
+		}
+	}
 
-                    if( lastServerStatus == null || ( !lastServerStatus.isOK() ) )
-                    {
-                        lastServerStatus = getRemoteServerWC().validate( monitor );
+	@Override
+	public boolean hasComposite() {
+		return true;
+	}
 
-                        if( !lastServerStatus.isOK() )
-                        {
-                            throw new InterruptedException( lastServerStatus.getMessage() );
-                        }
-                    }
-                }
-            } );
-        }
-        catch( Exception e )
-        {
-        }
+	@Override
+	public boolean isComplete() {
+		if ((lastServerStatus != null) && (lastServerStatus.getSeverity() != IStatus.ERROR)) {
+			return true;
+		}
 
-        ServerCore.addServerLifecycleListener( new IServerLifecycleListener()
-        {
-            String id = getServerWorkingCopy().getId();
+		return false;
+	}
 
-            public void serverAdded( final IServer server )
-            {
-                if( server.getId().equals( id ) )
-                {
-                    UIUtil.async( new Runnable()
-                    {
+	@Override
+	public void performFinish(IProgressMonitor monitor) throws CoreException {
+		try {
+			wizard.run(
+				false, false,
+				new IRunnableWithProgress() {
 
-                        public void run()
-                        {
-                            IViewPart serversView = UIUtil.showView( "org.eclipse.wst.server.ui.ServersView" ); //$NON-NLS-1$
-                            CommonViewer viewer = (CommonViewer) serversView.getAdapter( CommonViewer.class );
-                            viewer.setSelection( new StructuredSelection( server ) );
-                        }
-                    } );
+					public void run(IProgressMonitor monitor) throws InterruptedException, InvocationTargetException {
+						if ((lastServerStatus == null) || !lastServerStatus.isOK()) {
+							lastServerStatus = getRemoteServerWC().validate(monitor);
 
-                    ServerCore.removeServerLifecycleListener( this );
+							if (!lastServerStatus.isOK()) {
+								throw new InterruptedException(lastServerStatus.getMessage());
+							}
+						}
+					}
 
-                    server.addServerListener( new IServerListener()
-                    {
-                        public void serverChanged( ServerEvent event )
-                        {
-                            if( event.getServer().getServerState() == IServer.STATE_STARTED )
-                            {
-                                server.publish( IServer.PUBLISH_INCREMENTAL, null, null, null );
+				});
+		}
+		catch (Exception e) {
+		}
 
-                                server.removeServerListener( this );
-                            }
-                        }
-                    });
-                }
-            }
+		ServerCore.addServerLifecycleListener(
+			new IServerLifecycleListener() {
 
-            public void serverChanged( IServer server )
-            {
-            }
+				public void serverAdded(IServer server) {
+					String serverId = server.getId();
 
-            public void serverRemoved( IServer server )
-            {
-            }
+					if (serverId.equals(id)) {
+						UIUtil.async(
+							new Runnable() {
 
-        } );
+								public void run() {
+									IViewPart serversView = UIUtil.showView("org.eclipse.wst.server.ui.ServersView");
 
-    }
+									CommonViewer viewer = (CommonViewer)serversView.getAdapter(CommonViewer.class);
 
-    protected IServerWorkingCopy getServerWorkingCopy()
-    {
-        return (IServerWorkingCopy) getTaskModel().getObject( TaskModel.TASK_SERVER );
-    }
+									viewer.setSelection(new StructuredSelection(server));
+								}
 
-    IRemoteServerWorkingCopy getRemoteServerWC()
-    {
-        return (IRemoteServerWorkingCopy) getServerWorkingCopy().loadAdapter( IRemoteServerWorkingCopy.class, null );
-    }
+							});
 
-    private static class Msgs extends NLS
-    {
-        public static String configureRemoteLiferayServerInstance;
-        public static String remoteLiferayServer;
+						ServerCore.removeServerLifecycleListener(this);
 
-        static
-        {
-            initializeMessages( RemoteServerWizardFragment.class.getName(), Msgs.class );
-        }
-    }
+						server.addServerListener(
+							new IServerListener() {
+
+								public void serverChanged(ServerEvent event) {
+									IServer s = event.getServer();
+
+									if (s.getServerState() == IServer.STATE_STARTED) {
+										server.publish(IServer.PUBLISH_INCREMENTAL, null, null, null);
+
+										server.removeServerListener(this);
+									}
+								}
+
+							});
+					}
+				}
+
+				public void serverChanged(IServer server) {
+				}
+
+				public void serverRemoved(IServer server) {
+				}
+
+				public String id = getServerWorkingCopy().getId();
+
+			});
+	}
+
+	protected IRemoteServerWorkingCopy getRemoteServerWC() {
+		return (IRemoteServerWorkingCopy)getServerWorkingCopy().loadAdapter(IRemoteServerWorkingCopy.class, null);
+	}
+
+	protected IServerWorkingCopy getServerWorkingCopy() {
+		return (IServerWorkingCopy)getTaskModel().getObject(TaskModel.TASK_SERVER);
+	}
+
+	protected RemoteServerComposite composite;
+	protected IStatus lastServerStatus = null;
+	protected IWizardHandle wizard;
+
+	private static class Msgs extends NLS {
+
+		public static String configureRemoteLiferayServerInstance;
+		public static String remoteLiferayServer;
+
+		static {
+			initializeMessages(RemoteServerWizardFragment.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

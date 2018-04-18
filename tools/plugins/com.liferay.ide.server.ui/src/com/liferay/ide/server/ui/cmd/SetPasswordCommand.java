@@ -1,60 +1,56 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.server.ui.cmd;
 
-import org.eclipse.osgi.util.NLS;
-
 import com.liferay.ide.server.core.ILiferayServerWorkingCopy;
 import com.liferay.ide.server.core.LiferayServerCommand;
+
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
  */
-public class SetPasswordCommand extends LiferayServerCommand
-{
+public class SetPasswordCommand extends LiferayServerCommand {
 
-    protected String oldPassword;
-    protected String password;
+	public SetPasswordCommand(ILiferayServerWorkingCopy server, String password) {
+		super(server, Msgs.setPassword);
 
-    public SetPasswordCommand( ILiferayServerWorkingCopy server, String password )
-    {
-        super( server, Msgs.setPassword );
-        this.password = password;
-    }
+		this.password = password;
+	}
 
-    /**
-     * Execute setting the memory args
-     */
-    public void execute()
-    {
-        oldPassword = server.getPassword();
-        server.setPassword( password );
-    }
+	public void execute() {
+		oldPassword = server.getPassword();
 
-    /**
-     * Restore prior memoryargs
-     */
-    public void undo()
-    {
-        server.setPassword( oldPassword );
-    }
+		server.setPassword(password);
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String setPassword;
+	public void undo() {
+		server.setPassword(oldPassword);
+	}
 
-        static
-        {
-            initializeMessages( SetPasswordCommand.class.getName(), Msgs.class );
-        }
-    }
+	protected String oldPassword;
+	protected String password;
+
+	private static class Msgs extends NLS {
+
+		public static String setPassword;
+
+		static {
+			initializeMessages(SetPasswordCommand.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

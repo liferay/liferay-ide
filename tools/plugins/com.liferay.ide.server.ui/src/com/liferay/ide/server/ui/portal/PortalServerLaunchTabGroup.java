@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.server.ui.portal;
 
 import com.liferay.ide.server.core.portal.PortalServer;
@@ -26,36 +26,26 @@ import org.eclipse.jdt.debug.ui.launchConfigurations.JavaArgumentsTab;
 import org.eclipse.jdt.debug.ui.launchConfigurations.JavaClasspathTab;
 import org.eclipse.wst.server.ui.ServerLaunchConfigurationTab;
 
-
 /**
  * @author Gregory Amerson
  */
-public class PortalServerLaunchTabGroup extends AbstractLaunchConfigurationTabGroup
-{
+public class PortalServerLaunchTabGroup extends AbstractLaunchConfigurationTabGroup {
 
-    public PortalServerLaunchTabGroup()
-    {
-        super();
-    }
+	public PortalServerLaunchTabGroup() {
+	}
 
-    public void createTabs( ILaunchConfigurationDialog dialog, String mode )
-    {
-        final ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[]
-        {
-            new ServerLaunchConfigurationTab( new String[] { PortalServer.ID } ),
-            new JavaArgumentsTab(),
-            new JavaClasspathTab(),
-            new SourceLookupTab(),
-            new EnvironmentTab(),
-            new CommonTab(),
-        };
+	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
+		ILaunchConfigurationTab[] tabs = {
+			new ServerLaunchConfigurationTab(
+				new String[] {PortalServer.ID}), new JavaArgumentsTab(), new JavaClasspathTab(),
+			new SourceLookupTab(), new EnvironmentTab(), new CommonTab()
+		};
 
-        for( ILaunchConfigurationTab tab : tabs )
-        {
-            tab.setLaunchConfigurationDialog( dialog );
-        }
+		for (ILaunchConfigurationTab tab : tabs) {
+			tab.setLaunchConfigurationDialog(dialog);
+		}
 
-        setTabs( tabs );
-    }
+		setTabs(tabs);
+	}
 
 }

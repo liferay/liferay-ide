@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui.action;
 
@@ -20,6 +19,7 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
@@ -29,7 +29,10 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IObjectActionDelegate;
+import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
@@ -38,63 +41,62 @@ import org.eclipse.wst.server.core.ServerCore;
 /**
  * @author Gregory Amerson
  */
-public class CreateNewLiferayServerAction implements IObjectActionDelegate
-{
+public class CreateNewLiferayServerAction implements IObjectActionDelegate {
 
-    @Override
-    public void run( IAction action )
-    {
-        final ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+	@Override
+	public void run(IAction action) {
+		IWorkbench workbench = PlatformUI.getWorkbench();
 
-        if( selection instanceof IStructuredSelection )
-        {
-            final IStructuredSelection sSelection = (IStructuredSelection) selection;
+		IWorkbenchWindow getActiveWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 
-            final Object element = sSelection.getFirstElement();
+		ISelectionService selectionService = getActiveWorkbenchWindow.getSelectionService();
 
-            if( element instanceof IFolder )
-            {
-                final IFolder folder = (IFolder) element;
+		ISelection selection = selectionService.getSelection();
 
-                final String[] serverName = new String[] { folder.getName() };
+		if (selection instanceof IStructuredSelection) {
+			IStructuredSelection sSelection = (IStructuredSelection)selection;
 
-                final IPath location = folder.getRawLocation();
+			Object element = sSelection.getFirstElement();
 
-                final List<IRuntime> runtimes = Arrays.asList( ServerCore.getRuntimes() );
+			if (element instanceof IFolder) {
+				IFolder folder = (IFolder)element;
 
-                while (runtimes.stream().anyMatch( r -> r.getName().equals( serverName[0] ) ) )
-                {
-                    serverName[0] = serverName[0] + "Extra";
-                }
+				String[] serverName = {folder.getName()};
 
-                final List<IServer> servers = Arrays.asList( ServerCore.getServers() );
+				IPath location = folder.getRawLocation();
 
-                while (servers.stream().anyMatch( s -> s.getName().equals( serverName[0] ) ) )
-                {
-                    serverName[0] = serverName[0] + "Extra";
-                }
+				List<IRuntime> runtimes = Arrays.asList(ServerCore.getRuntimes());
 
-                try
-                {
-                    ServerUtil.addPortalRuntimeAndServer( serverName[0], location, new NullProgressMonitor() );
-                }
-                catch( CoreException e )
-                {
-                    LiferayServerUI.logError( "Unable to add server at specified location", e );
-                }
-            }
-        }
+				Stream<IRuntime> runtimeStream = runtimes.stream();
 
-    }
+				while (runtimeStream.anyMatch(r -> r.getName().equals(serverName[0]))) {
+					serverName[0] = serverName[0] + "Extra";
+				}
 
-    @Override
-    public void selectionChanged( IAction action, ISelection selection )
-    {
-    }
+				List<IServer> servers = Arrays.asList(ServerCore.getServers());
 
-    @Override
-    public void setActivePart( IAction action, IWorkbenchPart targetPart )
-    {
-    }
+				Stream<IServer> serverStream = servers.stream();
+
+				while (serverStream.anyMatch(s -> s.getName().equals(serverName[0]))) {
+					serverName[0] = serverName[0] + "Extra";
+				}
+
+				try {
+					ServerUtil.addPortalRuntimeAndServer(serverName[0], location, new NullProgressMonitor());
+				}
+				catch (CoreException ce) {
+					LiferayServerUI.logError("Unable to add server at specified location", ce);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void selectionChanged(IAction action, ISelection selection) {
+	}
+
+	@Override
+	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+	}
 
 }

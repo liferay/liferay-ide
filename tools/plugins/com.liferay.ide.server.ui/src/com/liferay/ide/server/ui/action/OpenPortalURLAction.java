@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.ui.action;
 
@@ -20,6 +19,7 @@ import com.liferay.ide.ui.LiferayUIPlugin;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.wst.server.core.IServer;
@@ -27,33 +27,29 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Greg Amerson
  */
-public abstract class OpenPortalURLAction extends AbstractServerRunningAction
-{
+public abstract class OpenPortalURLAction extends AbstractServerRunningAction {
 
-    public void run( IAction action )
-    {
-        if( selectedServer != null )
-        {
-            final ICommandService actionService =
-                (ICommandService) PlatformUI.getWorkbench().getService( ICommandService.class );
+	public void run(IAction action) {
+		if (selectedServer != null) {
+			IWorkbench workbench = PlatformUI.getWorkbench();
 
-            final Command actionCmd = actionService.getCommand( getCommandId() );
+			ICommandService actionService = (ICommandService)workbench.getService(ICommandService.class);
 
-            try
-            {
-                actionCmd.executeWithChecks( new ExecutionEvent() );
-            }
-            catch( Exception e )
-            {
-                LiferayUIPlugin.logError( "Error running command " + getCommandId(), e );
-            }
-        }
-    }
+			Command actionCmd = actionService.getCommand(getCommandId());
 
-    protected abstract String getCommandId();
+			try {
+				actionCmd.executeWithChecks(new ExecutionEvent());
+			}
+			catch (Exception e) {
+				LiferayUIPlugin.logError("Error running command " + getCommandId(), e);
+			}
+		}
+	}
 
-    protected int getRequiredServerState()
-    {
-        return IServer.STATE_STARTED;
-    }
+	protected abstract String getCommandId();
+
+	protected int getRequiredServerState() {
+		return IServer.STATE_STARTED;
+	}
+
 }
