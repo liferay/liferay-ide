@@ -15,7 +15,7 @@
 package com.liferay.ide.server.core.gogo;
 
 import com.liferay.ide.core.IBundleProject;
-import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.portal.BundleDTOWithStatus;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.resources.IProject;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.dto.BundleDTO;
 
@@ -331,18 +331,11 @@ public class GogoBundleDeployer {
         return retval;
     }
 
-    public String uninstall( IBundleProject bundleProject, IPath outputJar ) throws Exception
+    public String uninstall( IBundleProject bundleProject ) throws Exception
     {
-        if (FileUtil.notExists(outputJar))
-        {
-            return null;
-        }
-
         String retVal = null;
 
-        String fragmentHostName = ServerUtil.getFragemtHostName( outputJar.toFile() );
-
-        boolean isFragment = ( fragmentHostName != null );
+        boolean isFragment = bundleProject.isFragmentBundle();
 
         final String symbolicName = bundleProject.getSymbolicName();
 
@@ -356,7 +349,14 @@ public class GogoBundleDeployer {
 
                 if( isFragment )
                 {
-                    	refresh( fragmentHostName );
+                    IProject _bundleProject = bundleProject.getProject();
+
+                    String fragmentName = ServerUtil.getBundleFragmentHostNameFromBND(_bundleProject);
+
+                    if ( !CoreUtil.isNullOrEmpty(fragmentName))
+                    {
+                        refresh( fragmentName );
+                    }
                 }
             }
         }

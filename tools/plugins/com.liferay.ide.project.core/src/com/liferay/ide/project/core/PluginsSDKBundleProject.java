@@ -30,18 +30,13 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -135,21 +130,9 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 
 		IPath distPath = sdk.getLocation().append("dist");
 
-		// TODO need to find a better way to determine the actual output file.
+		File[] distFiles = _getSDKOutputFiles(distPath);
 
-		File[] distFiles = distPath.toFile().listFiles(
-			new FilenameFilter() {
-
-				@Override
-				public boolean accept(File dir, String name) {
-					IPath location = getProject().getLocation();
-
-					return name.contains(location.lastSegment());
-				}
-
-			});
-
-		if (warStatus.isOK()) {
+		if (warStatus.isOK() && ListUtil.isNotEmpty(distFiles)) {
 			try {
 				retval = new Path(distFiles[0].getCanonicalPath());
 			}
@@ -175,45 +158,18 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 
 		IPath distPath = sdk.getLocation().append("dist");
 
-		File[] distFiles = distPath.toFile().listFiles(
-			new FilenameFilter() {
+		File[] distFiles = _getSDKOutputFiles(distPath);
 
-				@Override
-				public boolean accept(File dir, String name) {
-					IPath location = getProject().getLocation();
-
-					return name.contains(location.lastSegment());
-				}
-
-			});
-
-		try {
-			retval = new Path(distFiles[0].getCanonicalPath());
-		}
-		catch (IOException ioe) {
-			ProjectCore.createErrorStatus(ioe);
+		if (ListUtil.isNotEmpty(distFiles)) {
+			try {
+				retval = new Path(distFiles[0].getCanonicalPath());
+			}
+			catch (IOException ioe) {
+				ProjectCore.createErrorStatus(ioe);
+			}
 		}
 
 		return retval;
-	}
-
-	public Collection<IFile> getOutputs(boolean build, IProgressMonitor monitor) throws CoreException {
-		Collection<IFile> outputs = new HashSet<>();
-
-		if (!build) {
-			return outputs;
-		}
-
-		getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
-
-		SDK sdk = SDKUtil.getSDK(getProject());
-
-		IStatus warStatus = sdk.war(getProject(), null, true, monitor);
-
-		if (warStatus.isOK()) {
-		}
-
-		return outputs;
 	}
 
 	public String getProperty(String key, String defaultValue) {
@@ -283,6 +239,39 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 	@Override
 	public boolean isFragmentBundle() {
 		return false;
+	}
+
+	private File[] _getSDKOutputFiles(IPath distPath) {
+
+		File[] distFiles = null;
+
+		if ( FileUtil.notExists(distPath)) {
+			return null;
+		}
+
+		try {
+			distFiles = distPath.toFile().listFiles(
+				new FilenameFilter() {
+
+					@Override
+					public boolean accept(File dir, String name) {
+
+						if ( FileUtil.isNotDir(dir)) {
+							return false;
+						}
+
+						IPath location = getProject().getLocation();
+
+						return name.contains(location.lastSegment());
+					}
+
+				}
+			);
+		}
+		catch(Exception e) {
+		}
+
+		return distFiles;
 	}
 
 	private static final String[] _IGNORE_PATHS = {"docroot/WEB-INF/classes"};

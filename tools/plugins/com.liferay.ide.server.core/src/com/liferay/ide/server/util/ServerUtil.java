@@ -22,6 +22,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -57,6 +58,7 @@ import java.util.jar.JarInputStream;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -86,6 +88,7 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -308,6 +311,32 @@ public class ServerUtil
 
         return retval;
     }
+
+    public static String getBundleFragmentHostNameFromBND(IProject project)
+    {
+        String retVal = null;
+
+        IFile bndFile = project.getFile("bnd.bnd");
+
+        if (FileUtil.exists(bndFile))
+        {
+            Properties prop = PropertiesUtil.loadProperties(bndFile.getLocation().toFile());
+
+            String fragmentHost = prop.getProperty(Constants.FRAGMENT_HOST);
+
+            if (fragmentHost != null)
+            {
+                String[] fragmentNames = fragmentHost.split(";");
+
+                if (ListUtil.isNotEmpty(fragmentNames))
+                {
+                    retVal = fragmentNames[0];
+                }
+            }
+        }
+
+		return retVal;
+	}
 
     public static Properties getEntryCategories( IPath portalDir, String portalVersion )
     {
