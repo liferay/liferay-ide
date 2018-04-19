@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
@@ -31,6 +32,7 @@ import org.eclipse.jdt.launching.ExecutionArguments;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.VMRunnerConfiguration;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerListener;
 import org.eclipse.wst.server.core.ServerEvent;
@@ -39,6 +41,7 @@ import org.eclipse.wst.server.core.ServerUtil;
 
 /**
  * @author Gregory Amerson
+ * @author Charles Wu
  */
 public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigurationDelegate
 {
@@ -53,10 +56,24 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 
         if( server != null )
         {
-//            if( server.shouldPublish() && ServerCore.isAutoPublishing() )
-//            {
-//                server.publish( IServer.PUBLISH_INCREMENTAL, monitor );
-//            }
+            IRuntime runtime = server.getRuntime();
+
+            if ( runtime == null ) {
+                throw new CoreException( LiferayServerCore.createErrorStatus("Server runtime is invalid.") );
+            }
+
+            PortalRuntime portalRuntime = (PortalRuntime) runtime.loadAdapter( PortalRuntime.class, monitor );
+
+            if ( portalRuntime == null ) {
+                throw new CoreException( LiferayServerCore.createErrorStatus("Server portal runtime is invalid.") );
+            }
+
+            IStatus status = portalRuntime.validate();
+
+            if( !status.isOK() )
+            {
+                throw new CoreException( status );
+            }
 
             launchServer( server, config, mode, launch, monitor );
         }
