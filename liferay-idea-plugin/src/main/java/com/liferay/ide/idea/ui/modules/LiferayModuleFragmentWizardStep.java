@@ -98,9 +98,9 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 		List<String> bundles = ServerUtil.getModuleFileListFrom70Server(liferayHomeDir);
 
-		Stream<String> steam = bundles.stream();
+		Stream<String> stream = bundles.stream();
 
-		steam.forEach(b -> _fragmentHost.addItem(b));
+		stream.forEach(b -> _fragmentHost.addItem(b));
 
 		_fragmentHost.addActionListener(
 			new ActionListener() {

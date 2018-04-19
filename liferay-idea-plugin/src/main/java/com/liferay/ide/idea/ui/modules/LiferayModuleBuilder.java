@@ -14,6 +14,7 @@
 
 package com.liferay.ide.idea.ui.modules;
 
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.ide.util.projectWizard.ModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
@@ -122,6 +123,18 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 			sb.append("maven ");
 		}
 
+		PropertiesComponent component = PropertiesComponent.getInstance(project);
+		String selectedLiferayVersionProperty = "selected.liferay.version";
+
+		String liferayVersion = component.getValue(selectedLiferayVersionProperty);
+
+		if (liferayVersion == null) {
+			liferayVersion = "7.0";
+		}
+
+		sb.append("-v ");
+		sb.append(liferayVersion);
+		sb.append(" ");
 		sb.append("-t ");
 		sb.append(_type);
 		sb.append(" ");

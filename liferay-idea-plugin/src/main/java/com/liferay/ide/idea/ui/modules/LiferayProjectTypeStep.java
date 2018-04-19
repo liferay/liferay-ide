@@ -461,13 +461,17 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 		int width = 0;
 
 		for (JLabel label : labels) {
-			int width1 = label.getPreferredSize().width;
+			Dimension labelPreferredSize = label.getPreferredSize();
+
+			int width1 = labelPreferredSize.width;
 
 			width = Math.max(width, width1);
 		}
 
 		for (JLabel label : labels) {
-			label.setPreferredSize(new Dimension(width, label.getPreferredSize().height));
+			Dimension labelPreferredSize = label.getPreferredSize();
+
+			label.setPreferredSize(new Dimension(width, labelPreferredSize.height));
 		}
 
 		_headerPanel.revalidate();
