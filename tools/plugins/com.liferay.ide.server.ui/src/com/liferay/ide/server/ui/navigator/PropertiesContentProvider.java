@@ -22,7 +22,6 @@ import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
 
 import java.io.File;
-import java.io.FilenameFilter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -115,20 +114,12 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider 
 		if (liferayHome != null) {
 			File liferayHomeDir = liferayHome.toFile();
 
-			File[] files = liferayHomeDir.listFiles(
-				new FilenameFilter() {
+			File[] files =
+				liferayHomeDir.listFiles((dir, name) -> dir.equals(liferayHomeDir) && name.endsWith("-ext.properties"));
 
-					public boolean accept(File dir, String name) {
-						if (dir.equals(liferayHomeDir) && name.endsWith("-ext.properties")) {
-							return true;
-						}
-
-						return false;
-					}
-
-				});
-
-			retVal = files;
+			if (files != null) {
+				retVal = files;
+			}
 		}
 
 		return retVal;
