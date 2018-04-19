@@ -46,7 +46,7 @@
         <gradle-site>http://download.eclipse.org/buildship/updates/e46/snapshots/2.x/2.2.1.v20180123-2310-s/</gradle-site>
         <tycho-m2e-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.9.0/N/0.9.0.201412222151/</tycho-m2e-site>
         <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/2.6.0/</swtbot-site>
-        <sapphire-site>http://download.eclipse.org/sapphire/9.1/repository/</sapphire-site>
+        <sapphire-site>http://download.eclipse.org/sapphire/9.1.1/repository/</sapphire-site>
         <maven-deps-plugin-site>http://ianbrandt.github.io/m2e-maven-dependency-plugin/0.0.4/</maven-deps-plugin-site>
         <gmaven.runtime>1.8</gmaven.runtime>
         <blade-latest-download-url>https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/503/artifact/build/libs/blade.jar</blade-latest-download-url>

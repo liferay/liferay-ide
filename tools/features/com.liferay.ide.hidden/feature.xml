@@ -158,7 +158,14 @@
          id="org.objectweb.asm"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="5.2.0.v20170126-0011"
+         unpack="false"/>
+
+   <plugin
+         id="org.objectweb.asm"
+         download-size="0"
+         install-size="0"
+         version="6.0.0.v20180116-1719"
          unpack="false"/>
 
    <plugin
