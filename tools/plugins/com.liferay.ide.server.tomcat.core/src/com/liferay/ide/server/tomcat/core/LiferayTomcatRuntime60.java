@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2003, 2010 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *     IBM Corporation - Initial API and implementation
- *     Greg Amerson <gregory.amerson@liferay.com>
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.server.tomcat.core;
 
@@ -19,12 +21,10 @@ import org.osgi.framework.Version;
 /**
  * @author Gregory Amerson
  */
-public class LiferayTomcatRuntime60 extends LiferayTomcatRuntime
-{
+public class LiferayTomcatRuntime60 extends LiferayTomcatRuntime {
 
-    protected Version getLeastSupportedVersion()
-    {
-        return ILiferayConstants.LEAST_SUPPORTED_VERSION;
-    }
+	protected Version getLeastSupportedVersion() {
+		return ILiferayConstants.LEAST_SUPPORTED_VERSION;
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.tomcat.core;
 
@@ -23,20 +22,19 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntimeComponent;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( { "restriction", "rawtypes" } )
-public class RuntimeClasspathFactory implements IAdapterFactory
-{
-    private static final Class[] ADAPTER_TYPES = { IClasspathProvider.class };
+@SuppressWarnings({"restriction", "rawtypes", "unchecked"})
+public class RuntimeClasspathFactory implements IAdapterFactory {
 
-    public Object getAdapter( Object adaptable, Class adapterType )
-    {
-        IRuntimeComponent rc = (IRuntimeComponent) adaptable;
+	public Object getAdapter(Object adaptable, Class adapterType) {
+		IRuntimeComponent rc = (IRuntimeComponent)adaptable;
 
-        return new RuntimeClasspathProvider( rc );
-    }
+		return new RuntimeClasspathProvider(rc);
+	}
 
-    public Class[] getAdapterList()
-    {
-        return ADAPTER_TYPES;
-    }
+	public Class[] getAdapterList() {
+		return _ADAPTER_TYPES;
+	}
+
+	private static final Class<?>[] _ADAPTER_TYPES = {IClasspathProvider.class};
+
 }

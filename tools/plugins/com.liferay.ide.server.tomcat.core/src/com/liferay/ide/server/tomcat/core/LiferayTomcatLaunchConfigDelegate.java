@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.tomcat.core;
 
@@ -30,43 +29,37 @@ import org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDele
  * @author Cindy Li
  * @author Tao Tao
  */
-@SuppressWarnings( "restriction" )
-public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfigurationDelegate
-{
-    @Override
-    public String getVMArguments( ILaunchConfiguration configuration ) throws CoreException
-    {
-        String retval = super.getVMArguments( configuration );
+@SuppressWarnings("restriction")
+public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfigurationDelegate {
 
-        for( PortalLaunchParticipant participant : LiferayServerCore.getPortalLaunchParticipants() )
-        {
-            String vmArgs = participant.provideVMArgs( configuration );
+	@Override
+	public String getVMArguments(ILaunchConfiguration configuration) throws CoreException {
+		String retval = super.getVMArguments(configuration);
 
-            if( ! CoreUtil.isNullOrEmpty( vmArgs ) )
-            {
-                retval += vmArgs;
-            }
-        }
+		for (PortalLaunchParticipant participant : LiferayServerCore.getPortalLaunchParticipants()) {
+			String vmArgs = participant.provideVMArgs(configuration);
 
-        return retval;
-    }
+			if (!CoreUtil.isNullOrEmpty(vmArgs)) {
+				retval += vmArgs;
+			}
+		}
 
-    @Override
-    public void launch(
-        final ILaunchConfiguration configuration, String mode, final ILaunch launch, IProgressMonitor monitor )
-        throws CoreException
-    {
-        for( PortalLaunchParticipant participant : LiferayServerCore.getPortalLaunchParticipants() )
-        {
-            participant.portalPreLaunch( configuration, mode, launch, monitor );
-        }
+		return retval;
+	}
 
-        super.launch( configuration, mode, launch, monitor );
+	@Override
+	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
+		throws CoreException {
 
-        for( PortalLaunchParticipant participant : LiferayServerCore.getPortalLaunchParticipants() )
-        {
-            participant.portalPostLaunch( configuration, mode, launch, monitor );
-        }
-    }
+		for (PortalLaunchParticipant participant : LiferayServerCore.getPortalLaunchParticipants()) {
+			participant.portalPreLaunch(configuration, mode, launch, monitor);
+		}
+
+		super.launch(configuration, mode, launch, monitor);
+
+		for (PortalLaunchParticipant participant : LiferayServerCore.getPortalLaunchParticipants()) {
+			participant.portalPostLaunch(configuration, mode, launch, monitor);
+		}
+	}
 
 }

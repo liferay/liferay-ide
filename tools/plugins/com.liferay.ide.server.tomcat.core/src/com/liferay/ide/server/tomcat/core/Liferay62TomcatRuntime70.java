@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.tomcat.core;
 
@@ -22,13 +21,12 @@ import org.osgi.framework.Version;
 /**
  * @author Cindy Li
  */
-public class Liferay62TomcatRuntime70 extends LiferayTomcatRuntime
-{
-    public static final Version leastSupportedVersion = ILiferayConstants.V620;
+public class Liferay62TomcatRuntime70 extends LiferayTomcatRuntime {
 
-    protected Version getLeastSupportedVersion()
-    {
-        return leastSupportedVersion;
-    }
+	public static final Version leastSupportedVersion = ILiferayConstants.V620;
+
+	protected Version getLeastSupportedVersion() {
+		return leastSupportedVersion;
+	}
 
 }

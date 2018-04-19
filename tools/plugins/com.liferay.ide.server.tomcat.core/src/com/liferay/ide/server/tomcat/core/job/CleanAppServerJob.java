@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.tomcat.core.job;
 
 import com.liferay.ide.sdk.core.SDKJob;
+import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
@@ -23,114 +23,112 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class CleanAppServerJob extends SDKJob
-{
+@SuppressWarnings("restriction")
+public class CleanAppServerJob extends SDKJob {
 
-    private final String bundleZipLocation;
+	public CleanAppServerJob(IProject project, String bundleZipLocation) {
+		super("Clean App Server");
 
-    public CleanAppServerJob( IProject project, String bundleZipLocation )
-    {
-        super( "Clean App Server" ); //$NON-NLS-1$
+		setUser(true);
 
-        setUser( true );
+		setProject(project);
 
-        setProject( project );
+		_bundleZipLocation = bundleZipLocation;
+	}
 
-        this.bundleZipLocation = bundleZipLocation;
-    }
+	protected void assertStatus(IStatus status) throws CoreException {
+		if (status == null) {
+			throw new CoreException(LiferayTomcatPlugin.createErrorStatus("null status"));
+		}
 
-    protected void assertStatus( IStatus status ) throws CoreException
-    {
+		if (!status.isOK()) {
+			throw new CoreException(status);
+		}
+	}
 
-        if( status == null )
-        {
-            throw new CoreException( LiferayTomcatPlugin.createErrorStatus( "null status" ) ); //$NON-NLS-1$
-        }
+	@Override
+	protected IStatus run(IProgressMonitor monitor) {
+		IStatus retval = Status.OK_STATUS;
 
-        if( !status.isOK() )
-        {
-            throw new CoreException( status );
-        }
-    }
+		if (monitor != null) {
+			monitor.beginTask(Msgs.runningCleanAppServerTask, IProgressMonitor.UNKNOWN);
+		}
 
-    @Override
-    protected IStatus run( IProgressMonitor monitor )
-    {
-        IStatus retval = Status.OK_STATUS;
+		try {
+			PortalBundle portalBundle = ServerUtil.getPortalBundle(project);
 
-        if( monitor != null )
-        {
-            monitor.beginTask( Msgs.runningCleanAppServerTask, IProgressMonitor.UNKNOWN );
-        }
+			IPath appServerPath = portalBundle.getAppServerDir();
 
-        try
-        {
-            final String appServerDir = ServerUtil.getPortalBundle( project ).getAppServerDir().toOSString();
+			String appServerDir = appServerPath.toOSString();
 
-            IServer[] servers = ServerCore.getServers();
+			IServer[] servers = ServerCore.getServers();
 
-            for( IServer server : servers )
-            {
-                String mode = server.getServerState() == IServer.STATE_STARTED ? server.getMode() : null;
+			for (IServer server : servers) {
+				String mode = server.getServerState() == IServer.STATE_STARTED ? server.getMode() : null;
 
-                if( mode != null )
-                {
-                    if( server.getRuntime().getLocation().toOSString().equals( appServerDir ) )
-                        LiferayTomcatUtil.syncStopServer( server );
-                }
-            }
+				if (mode != null) {
+					IRuntime serverRuntime = server.getRuntime();
 
-            IStatus status = getSDK().cleanAppServer( project, bundleZipLocation, appServerDir, monitor );
+					IPath serverLocation = serverRuntime.getLocation();
 
-            assertStatus( status );
+					if (appServerDir.equals(serverLocation.toOSString())) {
+						LiferayTomcatUtil.syncStopServer(server);
+					}
+				}
+			}
 
-            for( IServer server : servers )
-            {
-                // need to mark all other server modules at needing republishing since ext will wipe out webapps folder
-                IModule[] modules = server.getModules();
+			IStatus status = getSDK().cleanAppServer(project, _bundleZipLocation, appServerDir, monitor);
 
-                for( IModule mod : modules )
-                {
-                    IModule[] m = new IModule[] { mod };
+			assertStatus(status);
 
-                    ( (LiferayTomcatServerBehavior) server.loadAdapter( LiferayTomcatServerBehavior.class, monitor ) ).setModulePublishState2(
-                        m, IServer.PUBLISH_STATE_FULL );
-                }
-            }
+			for (IServer server : servers) {
 
-        }
-        catch( Exception ex )
-        {
-            retval = LiferayTomcatPlugin.createErrorStatus( ex );
-        }
+				// need to mark all other server modules at needing republishing since ext will wipe out webapps folder
 
-        if( monitor != null )
-        {
-            monitor.done();
-        }
+				IModule[] modules = server.getModules();
 
-        return retval;
-    }
+				for (IModule mod : modules) {
+					IModule[] m = {mod};
 
-    private static class Msgs extends NLS
-    {
-        public static String runningCleanAppServerTask;
+					((LiferayTomcatServerBehavior)server.loadAdapter(LiferayTomcatServerBehavior.class, monitor)).
+						setModulePublishState2(m, IServer.PUBLISH_STATE_FULL);
+				}
+			}
+		}
+		catch (Exception ex) {
+			retval = LiferayTomcatPlugin.createErrorStatus(ex);
+		}
 
-        static
-        {
-            initializeMessages( CleanAppServerJob.class.getName(), Msgs.class );
-        }
-    }
+		if (monitor != null) {
+			monitor.done();
+		}
+
+		return retval;
+	}
+
+	private String _bundleZipLocation;
+
+	private static class Msgs extends NLS {
+
+		public static String runningCleanAppServerTask;
+
+		static {
+			initializeMessages(CleanAppServerJob.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

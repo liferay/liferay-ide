@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.tomcat.core;
 
@@ -24,39 +23,35 @@ import org.eclipse.jst.server.tomcat.core.internal.ITomcatServer;
  * @author Terry Jia
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public interface ILiferayTomcatServer extends ILiferayServerWorkingCopy, ITomcatServer
-{
+@SuppressWarnings("restriction")
+public interface ILiferayTomcatServer extends ILiferayServerWorkingCopy, ITomcatServer {
 
-    /**
-     * Property which specifies the directory where liferay scans for autodeployment
-     */
-    String PROPERTY_AUTO_DEPLOY_DIR = "autoDeployDir"; //$NON-NLS-1$
+	public static final String PROPERTY_AUTO_DEPLOY_DIR = "autoDeployDir";
 
-    String PROPERTY_AUTO_DEPLOY_INTERVAL = "autoDeployInterval"; //$NON-NLS-1$
+	public static final String PROPERTY_AUTO_DEPLOY_INTERVAL = "autoDeployInterval";
 
-    String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties"; //$NON-NLS-1$
+	public static final String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties";
 
-    String PROPERTY_MEMORY_ARGS = "memoryArgs"; //$NON-NLS-1$
+	public static final String PROPERTY_MEMORY_ARGS = "memoryArgs";
 
-    String PROPERTY_SERVER_MODE = "serverMode"; //$NON-NLS-1$
+	public static final String PROPERTY_SERVER_MODE = "serverMode";
 
-    String PROPERTY_USE_DEFAULT_PORTAL_SERVER_SETTINGS = "useDefaultPortalServerSettings";
+	public static final String PROPERTY_USE_DEFAULT_PORTAL_SERVER_SETTINGS = "useDefaultPortalServerSettings";
 
-    String PROPERTY_USER_TIMEZONE = "userTimezone"; //$NON-NLS-1$
+	public static final String PROPERTY_USER_TIMEZONE = "userTimezone";
 
-    String getAutoDeployDirectory();
+	public String getAutoDeployDirectory();
 
-    String getAutoDeployInterval();
+	public String getAutoDeployInterval();
 
-    String getExternalProperties();
+	public String getExternalProperties();
 
-    String getMemoryArgs();
+	public String getMemoryArgs();
 
-    int getServerMode();
+	public int getServerMode();
 
-    boolean getUseDefaultPortalServerSettings();
+	public boolean getUseDefaultPortalServerSettings();
 
-    String getUserTimezone();
+	public String getUserTimezone();
 
 }
