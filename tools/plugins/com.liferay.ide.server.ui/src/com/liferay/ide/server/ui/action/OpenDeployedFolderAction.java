@@ -36,7 +36,7 @@ public class OpenDeployedFolderAction extends AbstractServerRunningAction {
 	public OpenDeployedFolderAction() {
 	}
 
-	public void run(IAction action) {
+	public void runAction(IAction action) {
 		if (selectedModule == null) {
 
 			// can't do anything if server has not been selected

@@ -42,7 +42,7 @@ public class RedeployAction extends AbstractServerRunningAction {
 	public RedeployAction() {
 	}
 
-	public void run(IAction action) {
+	public void runAction(IAction action) {
 		if (_selectedModules == null) {
 			return;
 		}

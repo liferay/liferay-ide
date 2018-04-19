@@ -29,7 +29,7 @@ import org.eclipse.wst.server.core.IServer;
  */
 public abstract class OpenPortalURLAction extends AbstractServerRunningAction {
 
-	public void run(IAction action) {
+	public void runAction(IAction action) {
 		if (selectedServer != null) {
 			IWorkbench workbench = PlatformUI.getWorkbench();
 
