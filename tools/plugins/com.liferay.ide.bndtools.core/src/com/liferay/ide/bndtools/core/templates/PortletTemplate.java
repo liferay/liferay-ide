@@ -74,7 +74,9 @@ public class PortletTemplate extends AbstractProjectTemplate {
 		String src = projectPaths.getSrc();
 		String safePackageName = safePackageName(projectName);
 
-		String pkgPath = safePackageName.toLowerCase().replaceAll("\\.", "/");
+		String lowerCase = safePackageName.toLowerCase();
+
+		String pkgPath = lowerCase.replaceAll("\\.", "/");
 
 		String noEmptyClassName = safeJavaClassName(projectName).replaceAll("^Rule", "");
 
