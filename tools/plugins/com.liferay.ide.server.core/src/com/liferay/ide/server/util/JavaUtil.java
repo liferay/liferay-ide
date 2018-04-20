@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.util;
 
@@ -20,7 +19,9 @@ import com.liferay.ide.core.util.CoreUtil;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+
 import java.nio.file.Files;
+
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
@@ -33,100 +34,92 @@ import org.eclipse.jdt.launching.IVMInstallType;
  * @author Simon Jiang
  * @author Charles Wu
  */
-public class JavaUtil
-{
-    public static final String EXT_JAR = ".jar";
+public class JavaUtil {
 
-    public static String createUniqueId( IVMInstallType vmType )
-    {
-        String id = null;
+	public static final String EXT_JAR = ".jar";
 
-        do
-        {
-            id = String.valueOf( System.currentTimeMillis() );
-        }
-        while( vmType.findVMInstall( id ) != null );
+	public static String createUniqueId(IVMInstallType vmType) {
+		String id = null;
 
-        return id;
-    }
+		do {
+			id = String.valueOf(System.currentTimeMillis());
+		}
+		while (vmType.findVMInstall(id) != null);
 
-    public static String getJarProperty( final File systemJarFile, final String propertyName )
-    {
-        if( systemJarFile.canRead() )
-        {
-            try( ZipFile jar = new ZipFile( systemJarFile ) )
-            {
-                ZipEntry manifest = jar.getEntry( "META-INF/MANIFEST.MF" );//$NON-NLS-1$
+		return id;
+	}
 
-                Manifest mf = new Manifest( jar.getInputStream( manifest ) );
+	public static String getJarProperty(final File systemJarFile, final String propertyName) {
+		if (systemJarFile.canRead()) {
+			try (ZipFile jar = new ZipFile(systemJarFile)) {
+				ZipEntry manifest = jar.getEntry("META-INF/MANIFEST.MF");
 
-                Attributes a = mf.getMainAttributes();
+				Manifest mf = new Manifest(jar.getInputStream(manifest));
 
-                return a.getValue( propertyName );
-            }
-            catch( IOException e )
-            {
-                return null;
-            }
-        }
+				Attributes a = mf.getMainAttributes();
 
-        return null;
-    }
+				return a.getValue(propertyName);
+			}
+			catch (IOException ioe) {
+				return null;
+			}
+		}
 
-    public static String getManifestProperty( File manifestFile, String propertyName )
-    {
-        try
-        {
-            String contents = CoreUtil.readStreamToString( Files.newInputStream( manifestFile.toPath() ) );
+		return null;
+	}
 
-            if( contents != null )
-            {
-                Manifest mf = new Manifest( new ByteArrayInputStream( contents.getBytes() ) );
-                Attributes a = mf.getMainAttributes();
-                String val = a.getValue( propertyName );
+	public static String getManifestProperty(File manifestFile, String propertyName) {
+		try {
+			String contents = CoreUtil.readStreamToString(Files.newInputStream(manifestFile.toPath()));
 
-                return val;
-            }
-        }
-        catch( IOException ioe )
-        {
-        }
+			if (contents != null) {
+				Manifest mf = new Manifest(new ByteArrayInputStream(contents.getBytes()));
 
-        return null;
-    }
+				Attributes a = mf.getMainAttributes();
 
-    public static String getManifestPropFromFolderJars(
-        final File location, final String mainFolder, final String property )
-    {
-        File f = new File( location, mainFolder );
+				String val = a.getValue(propertyName);
 
-        if( f.exists() )
-        {
-            File[] children = f.listFiles();
+				return val;
+			}
+		}
+		catch (IOException ioe) {
+		}
 
-            for( int i = 0; i < children.length; i++ )
-            {
-                if( children[i].getName().endsWith( EXT_JAR ) )
-                {
-                    return getJarProperty( children[i], property );
-                }
-            }
-        }
+		return null;
+	}
 
-        return null;
-    }
+	public static String getManifestPropFromFolderJars(File location, String mainFolder, String property) {
+		File f = new File(location, mainFolder);
 
-    public static boolean scanFolderJarsForManifestProp(
-        final File location, final String mainFolder, final String property, final String propPrefix )
-    {
-        String value = getManifestPropFromFolderJars( location, mainFolder, property );
+		if (f.exists()) {
+			File[] children = f.listFiles();
 
-        if( value != null && value.trim().startsWith( propPrefix ) )
-        {
-            return true;
-        }
+			for (int i = 0; i < children.length; i++) {
+				String childrenName = children[i].getName();
 
-        return false;
-    }
+				if (childrenName.endsWith(EXT_JAR)) {
+					return getJarProperty(children[i], property);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public static boolean scanFolderJarsForManifestProp(
+		File location, String mainFolder, String property, String propPrefix) {
+
+		String value = getManifestPropFromFolderJars(location, mainFolder, property);
+
+		if (value != null) {
+			String trimedValue = value.trim();
+
+			if (trimedValue.startsWith(propPrefix)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 }

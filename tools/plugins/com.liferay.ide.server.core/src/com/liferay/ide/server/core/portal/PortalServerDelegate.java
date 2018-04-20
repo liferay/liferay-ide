@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core.portal;
 
@@ -22,6 +21,7 @@ import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IModuleType;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerUtil;
 import org.eclipse.wst.server.core.internal.Server;
 import org.eclipse.wst.server.core.model.ServerDelegate;
@@ -41,224 +42,188 @@ import org.eclipse.wst.server.core.model.ServerDelegate;
  * @author Terry Jia
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class PortalServerDelegate extends ServerDelegate implements PortalServerWorkingCopy
-{
+@SuppressWarnings("restriction")
+public class PortalServerDelegate extends ServerDelegate implements PortalServerWorkingCopy {
 
-    private final static List<String> SUPPORT_TYPES_LIST = Arrays.asList( "liferay.bundle", "jst.web", "jst.utility" );
+	public PortalServerDelegate() {
+	}
 
-    public PortalServerDelegate()
-    {
-        super();
-    }
+	@Override
+	public IStatus canModifyModules(IModule[] add, IModule[] remove) {
+		IStatus retval = Status.OK_STATUS;
 
-    @Override
-    public IStatus canModifyModules( IModule[] add, IModule[] remove )
-    {
-        IStatus retval = Status.OK_STATUS;
+		if (ListUtil.isNotEmpty(add)) {
+			for (IModule module : add) {
+				IModuleType moduleType = module.getModuleType();
 
-        if( ListUtil.isNotEmpty(add) )
-        {
-            for( IModule module : add )
-            {
-                if( !SUPPORT_TYPES_LIST.contains( module.getModuleType().getId() ) )
-                {
-                    retval =
-                        LiferayServerCore.error( "Unable to add module with type " + module.getModuleType().getName() );
-                    break;
-                }
-            }
-        }
+				if (!_supportTypeList.contains(moduleType.getId())) {
+					retval = LiferayServerCore.error("Unable to add module with type " + moduleType.getName());
 
-        return retval;
-    }
+					break;
+				}
+			}
+		}
 
-    public int getAutoPublishTime()
-    {
-        return getAttribute( Server.PROP_AUTO_PUBLISH_TIME, 0 );
-    }
+		return retval;
+	}
 
-    @Override
-    public String getHttpPort()
-    {
-        return getAttribute( ATTR_HTTP_PORT, DEFAULT_HTTP_PORT );
-    }
+	public int getAutoPublishTime() {
+		return getAttribute(Server.PROP_AUTO_PUBLISH_TIME, 0);
+	}
 
-    @Override
-    public IModule[] getChildModules( IModule[] module )
-    {
-        IModule[] retval = null;
+	@Override
+	public IModule[] getChildModules(IModule[] module) {
+		IModule[] retval = null;
 
-        if( module != null )
-        {
-            final IModuleType moduleType = module[0].getModuleType();
+		if (module != null) {
+			IModuleType moduleType = module[0].getModuleType();
 
-            if( module.length == 1 && moduleType != null && SUPPORT_TYPES_LIST.contains( moduleType.getId() ) )
-            {
-                retval = new IModule[0];
-            }
-        }
+			if ((module.length == 1) && (moduleType != null) && _supportTypeList.contains(moduleType.getId())) {
+				retval = new IModule[0];
+			}
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
-    @Override
-    public boolean getDeveloperMode()
-    {
-        return getAttribute( PROPERTY_DEVELOPER_MODE, PortalServerConstants.DEFAULT_DEVELOPER_MODE );
-    }
+	@Override
+	public boolean getDeveloperMode() {
+		return getAttribute(PROPERTY_DEVELOPER_MODE, PortalServerConstants.DEFAULT_DEVELOPER_MODE);
+	}
 
-    public String getExternalProperties()
-    {
-        return getAttribute( PROPERTY_EXTERNAL_PROPERTIES, StringPool.EMPTY );
-    }
+	public String getExternalProperties() {
+		return getAttribute(PROPERTY_EXTERNAL_PROPERTIES, StringPool.EMPTY);
+	}
 
-    @Override
-    public boolean getLaunchSettings()
-    {
-        return getAttribute( PROPERTY_LAUNCH_SETTINGS, PortalServerConstants.DEFAULT_LAUNCH_SETTING );
-    }
+	public String getHost() {
+		return getServer().getHost();
+	}
 
-    public String getHost()
-    {
-        return getServer().getHost();
-    }
+	@Override
+	public String getHttpPort() {
+		return getAttribute(ATTR_HTTP_PORT, DEFAULT_HTTP_PORT);
+	}
 
-    public String getId()
-    {
-        return getServer().getId();
-    }
+	public String getId() {
+		return getServer().getId();
+	}
 
-    @Override
-    public void setLaunchSettings( boolean launchSettings )
-    {
-        setAttribute( PROPERTY_LAUNCH_SETTINGS, launchSettings );
-    }
+	@Override
+	public boolean getLaunchSettings() {
+		return getAttribute(PROPERTY_LAUNCH_SETTINGS, PortalServerConstants.DEFAULT_LAUNCH_SETTING);
+	}
 
-    public String[] getMemoryArgs()
-    {
-        String[] retval = new String[0];
+	public String[] getMemoryArgs() {
+		String[] retval = new String[0];
 
-        final String args = getAttribute( PROPERTY_MEMORY_ARGS, PortalServerConstants.DEFAULT_MEMORY_ARGS );
+		String args = getAttribute(PROPERTY_MEMORY_ARGS, PortalServerConstants.DEFAULT_MEMORY_ARGS);
 
-        if( !CoreUtil.isNullOrEmpty( args ) )
-        {
-            retval = args.split( " " );
-        }
+		if (!CoreUtil.isNullOrEmpty(args)) {
+			retval = args.split(" ");
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
-    public String getPassword()
-    {
-        return getAttribute( ATTR_PASSWORD, DEFAULT_PASSWORD );
-    }
+	public String getPassword() {
+		return getAttribute(ATTR_PASSWORD, DEFAULT_PASSWORD);
+	}
 
-    @Override
-    public URL getPluginContextURL( String context )
-    {
-        try
-        {
-            return new URL( getPortalHomeUrl(), StringPool.FORWARD_SLASH + context );
-        }
-        catch( Exception e )
-        {
-            return null;
-        }
-    }
+	@Override
+	public URL getPluginContextURL(String context) {
+		try {
+			return new URL(getPortalHomeUrl(), StringPool.FORWARD_SLASH + context);
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
 
-    @Override
-    public URL getPortalHomeUrl()
-    {
-        try
-        {
-            return new URL( "http://localhost:" + getHttpPort() );
-        }
-        catch( Exception e )
-        {
-            return null;
-        }
-    }
+	@Override
+	public URL getPortalHomeUrl() {
+		try {
+			return new URL("http://localhost:" + getHttpPort());
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
 
-    @Override
-    public IModule[] getRootModules( IModule module ) throws CoreException
-    {
-        final IStatus status = canModifyModules( new IModule[] { module }, null );
+	@Override
+	public IModule[] getRootModules(IModule module) throws CoreException {
+		IStatus status = canModifyModules(new IModule[] {module}, null);
 
-        if( status == null || !status.isOK() )
-        {
-            throw new CoreException( status );
-        }
+		if ((status == null) || !status.isOK()) {
+			throw new CoreException(status);
+		}
 
-        return new IModule[] { module };
-    }
+		return new IModule[] {module};
+	}
 
-    public String getUsername()
-    {
-        return getAttribute( ATTR_USERNAME, DEFAULT_USERNAME );
-    }
+	public String getUsername() {
+		return getAttribute(ATTR_USERNAME, DEFAULT_USERNAME);
+	}
 
-    @Override
-    public URL getWebServicesListURL()
-    {
-        try
-        {
-            return new URL( getPortalHomeUrl(), "/tunnel-web/axis" ); //$NON-NLS-1$
-        }
-        catch( MalformedURLException e )
-        {
-            LiferayServerCore.logError( "Unable to get web services list URL", e ); //$NON-NLS-1$
-        }
+	@Override
+	public URL getWebServicesListURL() {
+		try {
+			return new URL(getPortalHomeUrl(), "/tunnel-web/axis");
+		}
+		catch (MalformedURLException murle) {
+			LiferayServerCore.logError("Unable to get web services list URL", murle);
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    public void modifyModules( IModule[] add, IModule[] remove, IProgressMonitor monitor ) throws CoreException
-    {
-    }
+	@Override
+	public void modifyModules(IModule[] add, IModule[] remove, IProgressMonitor monitor) throws CoreException {
+	}
 
-    @Override
-    public void setDefaults( IProgressMonitor monitor )
-    {
-        setAttribute( Server.PROP_AUTO_PUBLISH_TIME, getAutoPublishTime() );
-        ServerUtil.setServerDefaultName(getServerWorkingCopy());
-    }
+	@Override
+	public void setDefaults(IProgressMonitor monitor) {
+		setAttribute(Server.PROP_AUTO_PUBLISH_TIME, getAutoPublishTime());
+		ServerUtil.setServerDefaultName(getServerWorkingCopy());
+	}
 
-    @Override
-    public void setDeveloperMode( boolean developerMode )
-    {
-        setAttribute( PROPERTY_DEVELOPER_MODE, developerMode );
-    }
+	@Override
+	public void setDeveloperMode(boolean developerMode) {
+		setAttribute(PROPERTY_DEVELOPER_MODE, developerMode);
+	}
 
-    public void setExternalProperties( String externalProperties )
-    {
-        setAttribute( PROPERTY_EXTERNAL_PROPERTIES, externalProperties );
-    }
+	public void setExternalProperties(String externalProperties) {
+		setAttribute(PROPERTY_EXTERNAL_PROPERTIES, externalProperties);
+	}
 
-    public void setMemoryArgs( String memoryArgs )
-    {
-        setAttribute( PROPERTY_MEMORY_ARGS, memoryArgs );
-    }
+	public void setHttpPort(String httpPort) {
+		setAttribute(ATTR_HTTP_PORT, httpPort);
 
-    public void setPassword( String password )
-    {
-        setAttribute( ATTR_PASSWORD, password );
-    }
+		IRuntime rt = getServer().getRuntime();
 
-    public void setUsername( String username )
-    {
-        setAttribute( ATTR_USERNAME, username );
-    }
+		PortalRuntime runtime = (PortalRuntime)rt.loadAdapter(PortalRuntime.class, new NullProgressMonitor());
 
-    public void setHttpPort( String httpPort )
-    {
-        setAttribute( ATTR_HTTP_PORT, httpPort );
+		PortalBundle portalRuntime = runtime.getPortalBundle();
 
-        PortalRuntime runtime =
-            (PortalRuntime) getServer().getRuntime().loadAdapter( PortalRuntime.class, new NullProgressMonitor() );
+		portalRuntime.setHttpPort(httpPort);
+	}
 
-        runtime.getPortalBundle().setHttpPort( httpPort );
-    }
+	@Override
+	public void setLaunchSettings(boolean launchSettings) {
+		setAttribute(PROPERTY_LAUNCH_SETTINGS, launchSettings);
+	}
+
+	public void setMemoryArgs(String memoryArgs) {
+		setAttribute(PROPERTY_MEMORY_ARGS, memoryArgs);
+	}
+
+	public void setPassword(String password) {
+		setAttribute(ATTR_PASSWORD, password);
+	}
+
+	public void setUsername(String username) {
+		setAttribute(ATTR_USERNAME, username);
+	}
+
+	private static final List<String> _supportTypeList = Arrays.asList("liferay.bundle", "jst.web", "jst.utility");
 
 }

@@ -1,17 +1,24 @@
-/**********************************************************************
- * Copyright (c) 2007, 2011 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *    Igor Fedorenko & Fabrizio Giustina - Initial API and implementation
- **********************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.server.remote;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
+
+import java.io.File;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,11 +26,14 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -47,554 +57,717 @@ import org.eclipse.wst.common.componentcore.internal.impl.PlatformURLModuleConne
 import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.IModuleType;
 
 /**
- * Temporary solution for https://bugs.eclipse.org/bugs/show_bug.cgi?id=103888
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class ModuleTraverser {
 
 	/**
-	 * Facet type for EAR modules
+	 * Name of the custom Java classpath entry attribute that is used to flag
+	 * entries which should be exposed as module dependencies via the virtual
+	 * component API.
 	 */
-    public static final String EAR_MODULE = IModuleConstants.JST_EAR_MODULE;
-
-    /**
-     * Facet type for Web modules
-     */
-    public static final String WEB_MODULE = IModuleConstants.JST_WEB_MODULE;
-
-    /**
-     * Facet type for utility modules
-     */
-    public static final String UTILITY_MODULE = IModuleConstants.JST_UTILITY_MODULE;
-
-    /**
-     * Name of the custom Java classpath entry attribute that is used to flag entries
-     * which should be exposed as module dependencies via the virtual component API.
-     */
-	public static final String CLASSPATH_COMPONENT_DEPENDENCY = "org.eclipse.jst.component.dependency"; //$NON-NLS-1$
+	public static final String CLASSPATH_COMPONENT_DEPENDENCY = "org.eclipse.jst.component.dependency";
 
 	/**
 	 * Name of the custom Java classpath entry attribute that is used to flag
 	 * the resolved entries of classpath containers that should not be exposed
 	 * via the virtual component API.
 	 */
-	public static final String CLASSPATH_COMPONENT_NON_DEPENDENCY = "org.eclipse.jst.component.nondependency"; //$NON-NLS-1$
+	public static final String CLASSPATH_COMPONENT_NON_DEPENDENCY = "org.eclipse.jst.component.nondependency";
 
 	/**
-	 * Argument values that are used to select component dependency attribute type.
+	 * Facet type for EAR modules
 	 */
-	private static final int DEPENDECYATTRIBUTETYPE_DEPENDENCY_OR_NONDEPENDENCY = 0;
-	private static final int DEPENDECYATTRIBUTETYPE_CLASSPATH_COMPONENT_DEPENDENCY = 1;
-	private static final int DEPENDECYATTRIBUTETYPE_CLASSPATH_COMPONENT_NONDEPENDENCY = 2;
+	public static final String EAR_MODULE = IModuleConstants.JST_EAR_MODULE;
 
 	/**
-     * Scans the module using the specified visitor.
-     *
-     * @param module module to traverse
-     * @param visitor visitor to handle resources
-     * @param monitor a progress monitor
-     * @throws CoreException
-     */
-    public static void traverse(IModule module, IModuleVisitor visitor,
-            IProgressMonitor monitor) throws CoreException {
-        if (module == null || module.getModuleType() == null)
-            return;
+	 * Facet type for utility modules
+	 */
+	public static final String UTILITY_MODULE = IModuleConstants.JST_UTILITY_MODULE;
 
-        String typeId = module.getModuleType().getId();
-        IVirtualComponent component = ComponentCore.createComponent(module.getProject());
+	/**
+	 * Facet type for Web modules
+	 */
+	public static final String WEB_MODULE = IModuleConstants.JST_WEB_MODULE;
 
-        if (component == null) {
-            // can happen if project has been closed
-//            Trace.trace(Trace.WARNING, "Unable to create component for module " //$NON-NLS-1$
-//                    + module.getName());
-            return;
-        }
+	/**
+	 * Scans the module using the specified visitor.
+	 *
+	 * @param module
+	 *            module to traverse
+	 * @param visitor
+	 *            visitor to handle resources
+	 * @param monitor
+	 *            a progress monitor
+	 * @throws CoreException
+	 */
+	public static void traverse(IModule module, IModuleVisitor visitor, IProgressMonitor monitor) throws CoreException {
+		IModuleType moduleType = module.getModuleType();
 
-        if (EAR_MODULE.equals(typeId)) {
-            traverseEarComponent(component, visitor, monitor);
-        } else if (WEB_MODULE.equals(typeId)) {
-            traverseWebComponent(component, visitor, monitor);
-        }
-    }
+		if ((module == null) || (moduleType == null)) {
+			return;
+		}
 
-    private static void traverseEarComponent(IVirtualComponent component,
-            IModuleVisitor visitor, IProgressMonitor monitor)
-            throws CoreException {
-    	// Currently the JST Server portion of WTP may not depend on the JST Enterprise portion of WTP
-/*        EARArtifactEdit earEdit = EARArtifactEdit
-                .getEARArtifactEditForRead(component);
-        if (earEdit != null) {
-            IVirtualReference[] j2eeComponents = earEdit.getJ2EEModuleReferences();
-            for (int i = 0; i < j2eeComponents.length; i++) {
-                traverseWebComponent(
-                        j2eeComponents[i].getReferencedComponent(), visitor,
-                        monitor);
-            }
-            IVirtualReference[] jarComponents = earEdit.getUtilityModuleReferences();
-            for (int i = 0; i < jarComponents.length; i++) {
-                IVirtualReference jarReference = jarComponents[i];
-                IVirtualComponent jarComponent = jarReference
-                        .getReferencedComponent();
-                IProject dependentProject = jarComponent.getProject();
-                if (!dependentProject.hasNature(JavaCore.NATURE_ID))
-                    continue;
-                IJavaProject project = JavaCore.create(dependentProject);
-                IClasspathEntry cpe = getClasspathEntry(project, jarComponent
-                        .getRootFolder().getProjectRelativePath());
-                visitor.visitEarResource(null, getOSPath(dependentProject,
-                        project, cpe.getOutputLocation()));
-            }
-        }*/
-        visitor.endVisitEarComponent(component);
-    }
+		String typeId = moduleType.getId();
+		IVirtualComponent component = ComponentCore.createComponent(module.getProject());
 
-    private static void traverseWebComponent(IVirtualComponent component,
-            IModuleVisitor visitor, IProgressMonitor monitor)
-            throws CoreException {
+		if (component == null) {
+			return;
+		}
 
-        visitor.visitWebComponent(component);
+		if (EAR_MODULE.equals(typeId)) {
+			_traverseEarComponent(component, visitor);
+		}
+		else if (WEB_MODULE.equals(typeId)) {
+			_traverseWebComponent(component, visitor);
+		}
+	}
 
-        IProject proj = component.getProject();
-        StructureEdit warStruct = StructureEdit.getStructureEditForRead(proj);
-        try {
-            WorkbenchComponent comp = warStruct.getComponent();
-            if (comp == null) {
-//                Trace.trace(Trace.SEVERE,
-//                        "Error getting WorkbenchComponent from war project. IProject=\"" //$NON-NLS-1$
-//                                + proj + "\" StructureEdit=\"" + warStruct //$NON-NLS-1$
-//                                + "\" WorkbenchComponent=\"" + comp + "\""); //$NON-NLS-1$ //$NON-NLS-2$
-                return;
-            }
-            traverseWebComponentLocalEntries(comp, visitor, monitor);
+	/**
+	 * Derived from
+	 * ClasspathDependencyUtil.checkForComponentDependencyAttribute()
+	 */
+	private static IClasspathAttribute _checkForComponentDependencyAttribute(IClasspathEntry entry, int attributeType) {
+		if (entry == null) {
+			return null;
+		}
 
-            // traverse referenced components
-            List children = comp.getReferencedComponents();
-            for (Iterator itor = children.iterator(); itor.hasNext();) {
-                ReferencedComponent childRef = (ReferencedComponent) itor.next();
-                IPath rtFolder = childRef.getRuntimePath();
-                URI refHandle = childRef.getHandle();
+		IClasspathAttribute[] attributes = entry.getExtraAttributes();
 
-                if (PlatformURLModuleConnection.CLASSPATH.equals(
-                		refHandle.segment(ModuleURIUtil.ModuleURI.SUB_PROTOCOL_INDX))) {
-                    IPath refPath = getResolvedPathForArchiveComponent(refHandle);
-                    // If an archive component, add to list
-                    if (refPath != null) {
-                    	if (!refPath.isAbsolute()) {
-                    		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(refPath);
-                    		IPath refPath2 = file.getLocation();
-                    		if (refPath2 != null) {
-                    			visitor.visitArchiveComponent(rtFolder, refPath2);
-                    		}
-                    		else {
-//                    			Trace.trace(Trace.WARNING, NLS.bind(
-//                    					"Could not get the location of a referenced component.  It may not exist.  Project={0}, Parent Component={1}, Referenced Component Path={2}", //$NON-NLS-1$
-//                    					new Object[] { proj.getName(), comp.getName(), refPath}));
-                    		}
-                    	}
-                    	else {
-                    		visitor.visitArchiveComponent(rtFolder, refPath);
-                    	}
-                    }
-                    else {
-                    	// TODO Determine if any use case would arrive here.
-                    }
-                } else {
-                    try {
-                        WorkbenchComponent childCom = warStruct.findComponentByURI(refHandle);
-                        if (childCom == null) {
-                            continue;
-                        }
+		for (IClasspathAttribute attribute : attributes) {
+			String name = attribute.getName();
 
-                        traverseDependentEntries(visitor, rtFolder, childCom,
-                                monitor);
-                    } catch (UnresolveableURIException e) {
-                        LiferayServerCore.logError(e);
-                    }
-                }
-            }
-        } finally {
-            warStruct.dispose();
-        }
+			if (name.equals(CLASSPATH_COMPONENT_DEPENDENCY)) {
+				if ((attributeType == _DEPENDECYATTRIBUTETYPE_DEPENDENCY_OR_NONDEPENDENCY) ||
+					(attributeType == _DEPENDECYATTRIBUTETYPE_CLASSPATH_COMPONENT_DEPENDENCY)) {
 
-        visitor.endVisitWebComponent(component);
-    }
-
-    private static void traverseWebComponentLocalEntries(
-            WorkbenchComponent comp, IModuleVisitor visitor,
-            IProgressMonitor monitor) throws CoreException {
-        IProject warProject = StructureEdit.getContainingProject(comp);
-        if (warProject == null || !warProject.hasNature(JavaCore.NATURE_ID)) {
-            return;
-        }
-        IJavaProject project = JavaCore.create(warProject);
-
-        List res = comp.getResources();
-        for (Iterator itorRes = res.iterator(); itorRes.hasNext();) {
-            ComponentResource childComp = (ComponentResource) itorRes.next();
-            IClasspathEntry cpe = getClasspathEntry(project, childComp.getSourcePath());
-            if (cpe == null)
-                continue;
-            visitor.visitWebResource(childComp.getRuntimePath(), getOSPath(
-                    warProject, project, cpe.getOutputLocation()));
-        }
-
-        // Include tagged classpath entries
-        Map classpathDeps = getComponentClasspathDependencies(project, true);
-        for (Iterator iterator = classpathDeps.keySet().iterator(); iterator.hasNext();) {
-			IClasspathEntry entry = (IClasspathEntry)iterator.next();
-			IClasspathAttribute attrib = (IClasspathAttribute)classpathDeps.get(entry);
-			boolean isClassFolder = isClassFolderEntry(entry);
-			String rtFolder = attrib.getValue();
-			if (rtFolder == null) {
-				if (isClassFolder) {
-					rtFolder = "/WEB-INF/classes"; //$NON-NLS-1$
-				} else {
-					rtFolder = "/WEB-INF/lib"; //$NON-NLS-1$
+					return attribute;
 				}
 			}
-			IPath entryPath = entry.getPath();
-			IResource entryRes = ResourcesPlugin.getWorkspace().getRoot().findMember(entryPath);
-			if (entryRes != null) {
-				entryPath = entryRes.getLocation();
-			}
-			// TODO Determine if different handling is needed for some use cases
-			if (isClassFolder) {
-				 visitor.visitWebResource(new Path(rtFolder),
-		                    getOSPath(warProject, project, entry.getPath()));
-			} else {
-				visitor.visitArchiveComponent(new Path(rtFolder), entryPath);
-			}
-		}
-    }
+			else if (name.equals(CLASSPATH_COMPONENT_NON_DEPENDENCY)) {
+				if ((attributeType == _DEPENDECYATTRIBUTETYPE_DEPENDENCY_OR_NONDEPENDENCY) ||
+					(attributeType == _DEPENDECYATTRIBUTETYPE_CLASSPATH_COMPONENT_NONDEPENDENCY)) {
 
-    private static void traverseDependentEntries(IModuleVisitor visitor,
-            IPath runtimeFolder, WorkbenchComponent component,
-            IProgressMonitor monitor) throws CoreException {
-        IProject dependentProject = StructureEdit.getContainingProject(component);
-        if (!dependentProject.hasNature(JavaCore.NATURE_ID))
-            return;
-        IJavaProject project = JavaCore.create(dependentProject);
-		visitor.visitDependentJavaProject(project);
-
-        String name = component.getName(); // assume it is the same as URI
-
-        // go thru all entries
-        List res = component.getResources();
-        for (Iterator itorRes = res.iterator(); itorRes.hasNext();) {
-            ComponentResource childComp = (ComponentResource) itorRes.next();
-            IPath rtPath = childComp.getRuntimePath();
-            IPath srcPath = childComp.getSourcePath();
-            IClasspathEntry cpe = getClasspathEntry(project, srcPath);
-            if (cpe != null) {
-                visitor.visitDependentComponent(runtimeFolder.append(rtPath)
-                        .append(name + ".jar"), getOSPath(dependentProject, //$NON-NLS-1$
-                        project, cpe.getOutputLocation()));
-            }
-            // Handle META-INF/resources
-    		String path = rtPath.toString();
-    		IFolder resFolder = null;
-    		String targetPath = StringPool.EMPTY;
-    		if ("/".equals(path)) { //$NON-NLS-1$
-    			resFolder = dependentProject.getFolder(srcPath.append("META-INF/resources")); //$NON-NLS-1$
-    		}
-    		else if ("/META-INF".equals(path)) { //$NON-NLS-1$
-    			resFolder = dependentProject.getFolder(srcPath.append("resources")); //$NON-NLS-1$
-    		}
-    		else if ("/META-INF/resources".equals(path)) { //$NON-NLS-1$
-    			resFolder = dependentProject.getFolder(srcPath);
-    		}
-    		else if (path.startsWith("/META-INF/resources/")) { //$NON-NLS-1$
-    			resFolder = dependentProject.getFolder(srcPath);
-    			targetPath = path.substring("/META-INF/resources".length()); //$NON-NLS-1$
-    		}
-    		if (resFolder != null && resFolder.exists()) {
-    			visitor.visitDependentContentResource(new Path(targetPath), resFolder.getLocation());
-    		}
-        }
-
-        // Include tagged classpath entries
-        Map classpathDeps = getComponentClasspathDependencies(project, false);
-        for (Iterator iterator = classpathDeps.keySet().iterator(); iterator.hasNext();) {
-			IClasspathEntry entry = (IClasspathEntry)iterator.next();
-			boolean isClassFolder = isClassFolderEntry(entry);
-			String rtFolder = null;
-			if (isClassFolder) {
-				rtFolder = "/"; //$NON-NLS-1$
-			} else {
-				rtFolder = "/WEB-INF/lib"; //$NON-NLS-1$
-			}
-			IPath entryPath = entry.getPath();
-			IResource entryRes = ResourcesPlugin.getWorkspace().getRoot().findMember(entryPath);
-			if (entryRes != null) {
-				entryPath = entryRes.getLocation();
-			}
-			// TODO Determine if different handling is needed for some use cases
-			if (isClassFolder) {
-				 visitor.visitDependentComponent(runtimeFolder.append(rtFolder)
-		                    .append(name + ".jar"), getOSPath(dependentProject, //$NON-NLS-1$
-		                    project, entry.getPath()));
-			} else {
-				visitor.visitArchiveComponent(new Path(rtFolder), entryPath);
-			}
-		}
-    }
-
-    private static IClasspathEntry getClasspathEntry(IJavaProject project,
-            IPath sourcePath) throws JavaModelException {
-        sourcePath = project.getPath().append(sourcePath);
-        IClasspathEntry[] cp = project.getRawClasspath();
-        for (int i = 0; i < cp.length; i++) {
-            if (sourcePath.equals(cp[i].getPath()))
-                return JavaCore.getResolvedClasspathEntry(cp[i]);
-        }
-        return null;
-    }
-
-    private static IPath getOSPath(IProject project, IJavaProject javaProject,
-            IPath outputPath) throws JavaModelException {
-        if (outputPath == null)
-            outputPath = javaProject.getOutputLocation();
-        // If we have the root of a project, return project location
-        if (outputPath.segmentCount() == 1) {
-        	return ResourcesPlugin.getWorkspace().getRoot().getProject(outputPath.lastSegment())
-        			.getLocation();
-        }
-        // Otherwise return project folder location
-        return ResourcesPlugin.getWorkspace().getRoot().getFolder(outputPath)
-                .getLocation();
-    }
-
-    /*
-     * Derived from J2EEProjectUtilities.getResolvedPathForArchiveComponent()
-     */
-	private static IPath getResolvedPathForArchiveComponent(URI uri) {
-
-		String resourceType = uri.segment(1);
-		URI contenturi = ModuleURIUtil.trimToRelativePath(uri, 2);
-		String contentName = contenturi.toString();
-
-		if (resourceType.equals("lib")) { //$NON-NLS-1$
-			// module:/classpath/lib/D:/foo/foo.jar
-			return Path.fromOSString(contentName);
-
-		} else if (resourceType.equals("var")) { //$NON-NLS-1$
-
-			// module:/classpath/var/<CLASSPATHVAR>/foo.jar
-			String classpathVar = contenturi.segment(0);
-			URI remainingPathuri = ModuleURIUtil.trimToRelativePath(contenturi, 1);
-			String remainingPath = remainingPathuri.toString();
-
-			String[] classpathvars = JavaCore.getClasspathVariableNames();
-			boolean found = false;
-			for (int i = 0; i < classpathvars.length; i++) {
-				if (classpathVar.equals(classpathvars[i])) {
-					found = true;
-					break;
+					return attribute;
 				}
 			}
-			if (found) {
-				IPath path = JavaCore.getClasspathVariable(classpathVar);
-				if (path != null) {
-					URI finaluri = URI.createURI(path.toOSString() + IPath.SEPARATOR + remainingPath);
-					return Path.fromOSString(finaluri.toString());
-				}
-			}
-//			Trace.trace(Trace.WARNING,
-//					NLS.bind("Tomcat publishing could not resolve dependency URI \"{0}\".  A value for classpath variable {1} was not found.", uri, classpathVar)); //$NON-NLS-1$
 		}
+
 		return null;
 	}
 
-	/*
+	/**
+	 * Derived from ClasspathDependencyUtil.isClassFolderEntry()
+	 */
+	private static boolean _classFolderEntry(IClasspathEntry entry) {
+		if ((entry == null) || (entry.getEntryKind() != IClasspathEntry.CPE_LIBRARY)) {
+			return false;
+		}
+
+		// does the path refer to a file or a folder?
+
+		IPath entryPath = entry.getPath();
+
+		IPath entryLocation = entryPath;
+
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		IWorkspaceRoot workspaceRoot = workspace.getRoot();
+
+		IResource resource = workspaceRoot.findMember(entryPath);
+
+		if (resource != null) {
+			entryLocation = resource.getLocation();
+		}
+
+		boolean file = true;
+		File entryFile = entryLocation.toFile();
+
+		if (entryFile.isDirectory()) {
+			file = false;
+		}
+
+		return !file;
+	}
+
+	private static IClasspathEntry _getClasspathEntry(IJavaProject project, IPath sourcePath)
+		throws JavaModelException {
+
+		IPath projectPath = project.getPath();
+
+		sourcePath = projectPath.append(sourcePath);
+
+		IClasspathEntry[] cp = project.getRawClasspath();
+
+		for (int i = 0; i < cp.length; i++) {
+			if (sourcePath.equals(cp[i].getPath())) {
+				return JavaCore.getResolvedClasspathEntry(cp[i]);
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * Derived from ClasspathDependencyUtil.getComponentClasspathDependencies()
 	 */
-	private static Map getComponentClasspathDependencies(final IJavaProject javaProject, final boolean isWebApp) throws CoreException {
+	private static Map _getComponentClasspathDependencies(IJavaProject javaProject, boolean webApp)
+		throws CoreException {
 
 		// get the raw entries
-		final Map referencedRawEntries = getRawComponentClasspathDependencies(javaProject);
-		final Map<IClasspathEntry, IClasspathAttribute> validRawEntries = new HashMap<IClasspathEntry, IClasspathAttribute>();
+
+		Map referencedRawEntries = _getRawComponentClasspathDependencies(javaProject);
+		Map<IClasspathEntry, IClasspathAttribute> validRawEntries = new HashMap<>();
 
 		// filter out non-valid referenced raw entries
-		final Iterator i = referencedRawEntries.keySet().iterator();
+
+		Set keySet = referencedRawEntries.keySet();
+
+		Iterator i = keySet.iterator();
+
 		while (i.hasNext()) {
-			final IClasspathEntry entry = (IClasspathEntry) i.next();
-			final IClasspathAttribute attrib = (IClasspathAttribute) referencedRawEntries.get(entry);
-			if (isValid(entry, attrib, isWebApp, javaProject.getProject())) {
+			IClasspathEntry entry = (IClasspathEntry)i.next();
+
+			IClasspathAttribute attrib = (IClasspathAttribute)referencedRawEntries.get(entry);
+
+			if (_valid(entry, attrib, webApp)) {
 				validRawEntries.put(entry, attrib);
 			}
 		}
 
 		// if we have no valid raw entries, return empty map
+
 		if (validRawEntries.isEmpty()) {
-        	return Collections.EMPTY_MAP;
+			return Collections.emptyMap();
 		}
 
-		// XXX Would like to replace the code below with use of a public JDT API that returns
-		// the raw IClasspathEntry for a given resolved IClasspathEntry (see see https://bugs.eclipse.org/bugs/show_bug.cgi?id=183995)
-		// The code must currently leverage IPackageFragmentRoot to determine this
-		// mapping and, because IPackageFragmentRoots do not maintain IClasspathEntry data, a prior
-		// call is needed to getResolvedClasspath() and the resolved IClasspathEntries have to be stored in a Map from IPath-to-IClasspathEntry to
-		// support retrieval using the resolved IPackageFragmentRoot
-
-		// retrieve the resolved classpath
-		final IClasspathEntry[] entries = javaProject.getResolvedClasspath(true);
-		final Map<IPath, IClasspathEntry> pathToResolvedEntry = new HashMap<IPath, IClasspathEntry>();
+		IClasspathEntry[] entries = javaProject.getResolvedClasspath(true);
+		Map<IPath, IClasspathEntry> pathToResolvedEntry = new HashMap<>();
 
 		// store in a map from path to entry
+
 		for (int j = 0; j < entries.length; j++) {
 			pathToResolvedEntry.put(entries[j].getPath(), entries[j]);
 		}
 
-		final Map<IClasspathEntry, IClasspathAttribute> referencedEntries = new LinkedHashMap<IClasspathEntry, IClasspathAttribute>();
+		Map<IClasspathEntry, IClasspathAttribute> referencedEntries = new LinkedHashMap<>();
 
 		// grab all IPackageFragmentRoots
-		final IPackageFragmentRoot[] roots = javaProject.getPackageFragmentRoots();
-		for (int j = 0; j < roots.length; j++) {
-			final IPackageFragmentRoot root = roots[j];
-			final IClasspathEntry rawEntry = root.getRawClasspathEntry();
+
+		IPackageFragmentRoot[] roots = javaProject.getPackageFragmentRoots();
+
+		for (IPackageFragmentRoot root : roots) {
+			IClasspathEntry rawEntry = root.getRawClasspathEntry();
 
 			// is the raw entry valid?
+
 			IClasspathAttribute attrib = validRawEntries.get(rawEntry);
+
 			if (attrib == null) {
 				continue;
 			}
 
-			final IPath pkgFragPath = root.getPath();
-			final IClasspathEntry resolvedEntry = pathToResolvedEntry.get(pkgFragPath);
-			final IClasspathAttribute resolvedAttrib = checkForComponentDependencyAttribute(resolvedEntry,
-					DEPENDECYATTRIBUTETYPE_DEPENDENCY_OR_NONDEPENDENCY);
-			// attribute for the resolved entry must either be unspecified or it must be the
-			// dependency attribute for it to be included
-			if (resolvedAttrib == null || resolvedAttrib.getName().equals(CLASSPATH_COMPONENT_DEPENDENCY)) {
+			IPath pkgFragPath = root.getPath();
+
+			IClasspathEntry resolvedEntry = pathToResolvedEntry.get(pkgFragPath);
+
+			IClasspathAttribute resolvedAttrib = _checkForComponentDependencyAttribute(
+				resolvedEntry, _DEPENDECYATTRIBUTETYPE_DEPENDENCY_OR_NONDEPENDENCY);
+
+			/*
+			 * attribute for the resolved entry must either be unspecified or it must be the
+			 * dependency attribute for it to be included
+			 */
+			String resolvedAttribName = resolvedAttrib.getName();
+
+			if ((resolvedAttrib == null) || resolvedAttrib.equals(CLASSPATH_COMPONENT_DEPENDENCY)) {
+
 				// filter out resolved entry if it doesn't pass the validation rules
-				if (isValid(resolvedEntry, resolvedAttrib != null ? resolvedAttrib : attrib, isWebApp, javaProject.getProject())) {
+
+				if (_valid(resolvedEntry, (resolvedAttrib != null) ? resolvedAttrib : attrib, webApp)) {
 					if (resolvedAttrib != null) {
+
 						// if there is an attribute on the sub-entry, use that
+
 						attrib = resolvedAttrib;
 					}
+
 					referencedEntries.put(resolvedEntry, attrib);
 				}
 			}
 		}
 
-        return referencedEntries;
+		return referencedEntries;
 	}
 
-	/*
-	 * Derived from ClasspathDependencyUtil.getRawComponentClasspathDependencies()
-	 */
-	private static Map getRawComponentClasspathDependencies(final IJavaProject javaProject) throws CoreException {
-		if (javaProject == null) {
-			return Collections.EMPTY_MAP;
+	private static IPath _getOSPath(IJavaProject javaProject, IPath outputPath) throws JavaModelException {
+		if (outputPath == null) {
+			outputPath = javaProject.getOutputLocation();
 		}
-		final Map<IClasspathEntry, IClasspathAttribute> referencedRawEntries = new HashMap<IClasspathEntry, IClasspathAttribute>();
-		final IClasspathEntry[] entries = javaProject.getRawClasspath();
-        for (int i = 0; i < entries.length; i++) {
-            final IClasspathEntry entry = entries[i];
-            final IClasspathAttribute attrib = checkForComponentDependencyAttribute(entry,
-            		DEPENDECYATTRIBUTETYPE_CLASSPATH_COMPONENT_DEPENDENCY);
-            if (attrib != null) {
-            	referencedRawEntries.put(entry, attrib);
-            }
-        }
-        return referencedRawEntries;
+
+		// If we have the root of a project, return project location
+
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		IWorkspaceRoot workspaceRoot = workspace.getRoot();
+
+		if (outputPath.segmentCount() == 1) {
+			IProject workspaceProject = workspaceRoot.getProject(outputPath.lastSegment());
+
+			return workspaceProject.getLocation();
+		}
+
+		// Otherwise return project folder location
+
+		IFolder outputFolder = workspaceRoot.getFolder(outputPath);
+
+		return outputFolder.getLocation();
 	}
 
-	/*
-	 * Derived from ClasspathDependencyUtil.checkForComponentDependencyAttribute()
+	/**
+	 * Derived from
+	 * ClasspathDependencyUtil.getRawComponentClasspathDependencies()
 	 */
-	private static IClasspathAttribute checkForComponentDependencyAttribute(final IClasspathEntry entry, final int attributeType) {
-		if (entry == null) {
+	private static Map _getRawComponentClasspathDependencies(IJavaProject javaProject) throws CoreException {
+		if (javaProject == null) {
+			return Collections.emptyMap();
+		}
+
+		Map<IClasspathEntry, IClasspathAttribute> referencedRawEntries = new HashMap<>();
+		IClasspathEntry[] entries = javaProject.getRawClasspath();
+
+		for (IClasspathEntry entry : entries) {
+			IClasspathAttribute attrib = _checkForComponentDependencyAttribute(
+				entry, _DEPENDECYATTRIBUTETYPE_CLASSPATH_COMPONENT_DEPENDENCY);
+
+			if (attrib != null) {
+				referencedRawEntries.put(entry, attrib);
+			}
+		}
+
+		return referencedRawEntries;
+	}
+
+	/**
+	 * Derived from J2EEProjectUtilities.getResolvedPathForArchiveComponent()
+	 */
+	private static IPath _getResolvedPathForArchiveComponent(URI uri) {
+		String resourceType = uri.segment(1);
+		URI contenturi = ModuleURIUtil.trimToRelativePath(uri, 2);
+
+		String contentName = contenturi.toString();
+
+		if (resourceType.equals("lib")) {
+
+			// module:/classpath/lib/D:/foo/foo.jar
+
+			return Path.fromOSString(contentName);
+		}
+		else if (resourceType.equals("var")) {
+
+			// module:/classpath/var/<CLASSPATHVAR>/foo.jar
+
+			String classpathVar = contenturi.segment(0);
+			URI remainingPathuri = ModuleURIUtil.trimToRelativePath(contenturi, 1);
+
+			String remainingPath = remainingPathuri.toString();
+
+			String[] classpathvars = JavaCore.getClasspathVariableNames();
+			boolean found = false;
+
+			for (int i = 0; i < classpathvars.length; i++) {
+				if (classpathVar.equals(classpathvars[i])) {
+					found = true;
+
+					break;
+				}
+			}
+
+			if (found) {
+				IPath path = JavaCore.getClasspathVariable(classpathVar);
+
+				if (path != null) {
+					URI finaluri = URI.createURI(path.toOSString() + IPath.SEPARATOR + remainingPath);
+
+					return Path.fromOSString(finaluri.toString());
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Derived from ClasspathDependencyUtil.getRuntimePath()
+	 */
+	private static String _getRuntimePath(IClasspathAttribute attrib, boolean webApp, boolean classFolder) {
+		String attribName = attrib.getName();
+
+		if ((attrib != null) && !attribName.equals(CLASSPATH_COMPONENT_DEPENDENCY)) {
 			return null;
 		}
-	    final IClasspathAttribute[] attributes = entry.getExtraAttributes();
-	    for (int i = 0; i < attributes.length; i++) {
-	    	final IClasspathAttribute attribute = attributes[i];
-	    	final String name = attribute.getName();
-	    	if (name.equals(CLASSPATH_COMPONENT_DEPENDENCY)) {
-	    		if (attributeType == DEPENDECYATTRIBUTETYPE_DEPENDENCY_OR_NONDEPENDENCY
-	    				|| attributeType == DEPENDECYATTRIBUTETYPE_CLASSPATH_COMPONENT_DEPENDENCY) {
-	    			return attribute;
-	    		}
-	    	} else if (name.equals(CLASSPATH_COMPONENT_NON_DEPENDENCY)) {
-	    		if (attributeType == DEPENDECYATTRIBUTETYPE_DEPENDENCY_OR_NONDEPENDENCY
-	    				|| attributeType == DEPENDECYATTRIBUTETYPE_CLASSPATH_COMPONENT_NONDEPENDENCY) {
-	    			return attribute;
-	    		}
-	    	}
-	    }
-	    return null;
+
+		String attribValue = attrib.getValue();
+
+		if ((attrib == null) || (attribValue == null) || (attribValue.length() == 0)) {
+			if (webApp) {
+				if (classFolder) {
+					return "/WEB_INF/classes";
+				}
+
+				return "WEB-INF/lib";
+			}
+
+			if (classFolder) {
+				return "/";
+			}
+
+			return "../";
+		}
+
+		return attrib.getValue();
 	}
 
-	/*
+	private static void _traverseDependentEntries(
+			IModuleVisitor visitor, IPath runtimeFolder, WorkbenchComponent component)
+		throws CoreException {
+
+		IProject dependentProject = StructureEdit.getContainingProject(component);
+
+		if (!dependentProject.hasNature(JavaCore.NATURE_ID)) {
+			return;
+		}
+
+		IJavaProject project = JavaCore.create(dependentProject);
+
+		visitor.visitDependentJavaProject(project);
+
+		// assume it is the same as URI
+
+		String name = component.getName();
+
+		// go thru all entries
+
+		List res = component.getResources();
+
+		for (Iterator itorRes = res.iterator(); itorRes.hasNext();) {
+			ComponentResource childComp = (ComponentResource)itorRes.next();
+
+			IPath rtPath = childComp.getRuntimePath();
+			IPath srcPath = childComp.getSourcePath();
+
+			IClasspathEntry cpe = _getClasspathEntry(project, srcPath);
+
+			if (cpe != null) {
+				IPath rtFolder = runtimeFolder.append(rtPath);
+
+				visitor.visitDependentComponent(
+					rtFolder.append(name + ".jar"), _getOSPath(project, cpe.getOutputLocation()));
+			}
+
+			// Handle META-INF/resources
+
+			String path = rtPath.toString();
+			IFolder resFolder = null;
+			String targetPath = StringPool.EMPTY;
+
+			if ("/".equals(path)) {
+				resFolder = dependentProject.getFolder(srcPath.append("META-INF/resources"));
+			}
+			else if ("/META-INF".equals(path)) {
+				resFolder = dependentProject.getFolder(srcPath.append("resources"));
+			}
+			else if ("/META-INF/resources".equals(path)) {
+				resFolder = dependentProject.getFolder(srcPath);
+			}
+			else if (path.startsWith("/META-INF/resources/")) {
+				resFolder = dependentProject.getFolder(srcPath);
+				targetPath = path.substring("/META-INF/resources".length());
+			}
+
+			if (FileUtil.exists(resFolder)) {
+				visitor.visitDependentContentResource(new Path(targetPath), resFolder.getLocation());
+			}
+		}
+
+		// Include tagged classpath entries
+
+		Map classpathDeps = _getComponentClasspathDependencies(project, false);
+
+		Set classpathDepsKeySet = classpathDeps.keySet();
+
+		for (Iterator iterator = classpathDepsKeySet.iterator(); iterator.hasNext();) {
+			IClasspathEntry entry = (IClasspathEntry)iterator.next();
+
+			boolean classFolder = _classFolderEntry(entry);
+
+			String rtFolder = null;
+
+			if (classFolder) {
+				rtFolder = "/";
+			}
+			else {
+				rtFolder = "/WEB-INF/lib";
+			}
+
+			IPath entryPath = entry.getPath();
+
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+			IWorkspaceRoot workspaceRoot = workspace.getRoot();
+
+			IResource entryRes = workspaceRoot.findMember(entryPath);
+
+			if (entryRes != null) {
+				entryPath = entryRes.getLocation();
+			}
+
+			// TODO Determine if different handling is needed for some use cases
+
+			if (classFolder) {
+				IPath rtPath = runtimeFolder.append(rtFolder);
+
+				visitor.visitDependentComponent(rtPath.append(name + ".jar"), _getOSPath(project, entry.getPath()));
+			}
+			else {
+				visitor.visitArchiveComponent(new Path(rtFolder), entryPath);
+			}
+		}
+	}
+
+	private static void _traverseEarComponent(IVirtualComponent component, IModuleVisitor visitor)
+		throws CoreException {
+
+		// Currently the JST Server portion of WTP may not depend on the JST Enterprise portion of WTP
+
+		/*
+		 * EARArtifactEdit earEdit = EARArtifactEdit
+		 * .getEARArtifactEditForRead(component); if (earEdit != null) {
+		 * IVirtualReference[] j2eeComponents =
+		 * earEdit.getJ2EEModuleReferences(); for (int i = 0; i <
+		 * j2eeComponents.length; i++) { traverseWebComponent(
+		 * j2eeComponents[i].getReferencedComponent(), visitor, monitor); }
+		 * IVirtualReference[] jarComponents =
+		 * earEdit.getUtilityModuleReferences(); for (int i = 0; i <
+		 * jarComponents.length; i++) { IVirtualReference jarReference =
+		 * jarComponents[i]; IVirtualComponent jarComponent = jarReference
+		 * .getReferencedComponent(); IProject dependentProject =
+		 * jarComponent.getProject(); if
+		 * (!dependentProject.hasNature(JavaCore.NATURE_ID)) continue;
+		 * IJavaProject project = JavaCore.create(dependentProject);
+		 * IClasspathEntry cpe = getClasspathEntry(project, jarComponent
+		 * .getRootFolder().getProjectRelativePath());
+		 * visitor.visitEarResource(null, getOSPath(dependentProject, project,
+		 * cpe.getOutputLocation())); } }
+		 */
+		visitor.endVisitEarComponent(component);
+	}
+
+	private static void _traverseWebComponent(IVirtualComponent component, IModuleVisitor visitor)
+		throws CoreException {
+
+		visitor.visitWebComponent(component);
+
+		IProject proj = component.getProject();
+
+		StructureEdit warStruct = StructureEdit.getStructureEditForRead(proj);
+
+		try {
+			WorkbenchComponent comp = warStruct.getComponent();
+
+			if (comp == null) {
+				return;
+			}
+
+			_traverseWebComponentLocalEntries(comp, visitor);
+
+			// traverse referenced components
+
+			List children = comp.getReferencedComponents();
+
+			for (Iterator itor = children.iterator(); itor.hasNext();) {
+				ReferencedComponent childRef = (ReferencedComponent)itor.next();
+
+				IPath rtFolder = childRef.getRuntimePath();
+				URI refHandle = childRef.getHandle();
+
+				if (PlatformURLModuleConnection.CLASSPATH.equals(
+						refHandle.segment(ModuleURIUtil.ModuleURI.SUB_PROTOCOL_INDX))) {
+
+					IPath refPath = _getResolvedPathForArchiveComponent(refHandle);
+
+					// If an archive component, add to list
+
+					if (refPath != null) {
+						if (!refPath.isAbsolute()) {
+							IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+							IWorkspaceRoot workspaceRoot = workspace.getRoot();
+
+							IFile file = workspaceRoot.getFile(refPath);
+
+							IPath refPath2 = file.getLocation();
+
+							if (refPath2 != null) {
+								visitor.visitArchiveComponent(rtFolder, refPath2);
+							}
+							else {
+							}
+						}
+						else {
+							visitor.visitArchiveComponent(rtFolder, refPath);
+						}
+					}
+					else {
+
+						// TODO Determine if any use case would arrive here.
+
+					}
+				}
+				else {
+					try {
+						WorkbenchComponent childCom = warStruct.findComponentByURI(refHandle);
+
+						if (childCom == null) {
+							continue;
+						}
+
+						_traverseDependentEntries(visitor, rtFolder, childCom);
+					}
+					catch (UnresolveableURIException uurie) {
+						LiferayServerCore.logError(uurie);
+					}
+				}
+			}
+		}
+		finally {
+			warStruct.dispose();
+		}
+
+		visitor.endVisitWebComponent(component);
+	}
+
+	private static void _traverseWebComponentLocalEntries(WorkbenchComponent comp, IModuleVisitor visitor)
+		throws CoreException {
+
+		IProject warProject = StructureEdit.getContainingProject(comp);
+
+		if ((warProject == null) || !warProject.hasNature(JavaCore.NATURE_ID)) {
+			return;
+		}
+
+		IJavaProject project = JavaCore.create(warProject);
+
+		List res = comp.getResources();
+
+		for (Iterator itorRes = res.iterator(); itorRes.hasNext();) {
+			ComponentResource childComp = (ComponentResource)itorRes.next();
+
+			IClasspathEntry cpe = _getClasspathEntry(project, childComp.getSourcePath());
+
+			if (cpe == null) {
+				continue;
+			}
+
+			visitor.visitWebResource(childComp.getRuntimePath(), _getOSPath(project, cpe.getOutputLocation()));
+		}
+
+		// Include tagged classpath entries
+
+		Map classpathDeps = _getComponentClasspathDependencies(project, true);
+
+		Set classpathDepsKeySet = classpathDeps.keySet();
+
+		for (Iterator iterator = classpathDepsKeySet.iterator(); iterator.hasNext();) {
+			IClasspathEntry entry = (IClasspathEntry)iterator.next();
+
+			IClasspathAttribute attrib = (IClasspathAttribute)classpathDeps.get(entry);
+
+			boolean classFolder = _classFolderEntry(entry);
+
+			String rtFolder = attrib.getValue();
+
+			if (rtFolder == null) {
+				if (classFolder) {
+					rtFolder = "/WEB-INF/classes";
+				}
+				else {
+					rtFolder = "/WEB-INF/lib";
+				}
+			}
+
+			IPath entryPath = entry.getPath();
+
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+			IWorkspaceRoot workspaceRoot = workspace.getRoot();
+
+			IResource entryRes = workspaceRoot.findMember(entryPath);
+
+			if (entryRes != null) {
+				entryPath = entryRes.getLocation();
+			}
+
+			// TODO Determine if different handling is needed for some use cases
+
+			if (classFolder) {
+				visitor.visitWebResource(new Path(rtFolder), _getOSPath(project, entry.getPath()));
+			}
+			else {
+				visitor.visitArchiveComponent(new Path(rtFolder), entryPath);
+			}
+		}
+	}
+
+	/**
 	 * Derived from ClasspathDependencyValidator.validateVirtualComponentEntry()
 	 */
-	private static boolean isValid(final IClasspathEntry entry, final IClasspathAttribute attrib, boolean isWebApp, final IProject project) {
+	private static boolean _valid(IClasspathEntry entry, IClasspathAttribute attrib, boolean webApp) {
 		int kind = entry.getEntryKind();
-		boolean isClassFolder = isClassFolderEntry(entry);
+		boolean classFolder = _classFolderEntry(entry);
 
-		if (kind == IClasspathEntry.CPE_PROJECT || kind == IClasspathEntry.CPE_SOURCE) {
+		if ((kind == IClasspathEntry.CPE_PROJECT) || (kind == IClasspathEntry.CPE_SOURCE)) {
 			return false;
 		}
 
-		String runtimePath = getRuntimePath(attrib, isWebApp, isClassFolder);
-		if (!isWebApp) {
-			if (!runtimePath.equals("../") && !runtimePath.equals("/")) {  //$NON-NLS-1$//$NON-NLS-2$
+		String runtimePath = _getRuntimePath(attrib, webApp, classFolder);
+
+		if (!webApp) {
+			if (!runtimePath.equals("../") && !runtimePath.equals("/")) {
 				return false;
 			}
-			if (isClassFolder && !runtimePath.equals("/")) { //$NON-NLS-1$
+
+			if (classFolder && !runtimePath.equals("/")) {
 				return false;
 			}
 		}
 		else {
-			if (runtimePath != null && !runtimePath.equals("/WEB-INF/lib") //$NON-NLS-1$
-					&& !runtimePath.equals("/WEB-INF/classes") //$NON-NLS-1$
-					&& !runtimePath.equals("../")) { //$NON-NLS-1$
+			if ((runtimePath != null) && !runtimePath.equals("/WEB-INF/lib") &&
+				!runtimePath.equals("/WEB-INF/classes") && !runtimePath.equals("../")) {
+
 				return false;
 			}
-			if (isClassFolder && !runtimePath.equals("/WEB-INF/classes")) { //$NON-NLS-1$
+
+			if (classFolder && !runtimePath.equals("/WEB-INF/classes")) {
 				return false;
 			}
 		}
+
 		return true;
 	}
 
-	/*
-	 * Derived from ClasspathDependencyUtil.isClassFolderEntry()
-	 */
-	private static boolean isClassFolderEntry(final IClasspathEntry entry) {
-		if (entry == null || entry.getEntryKind() != IClasspathEntry.CPE_LIBRARY) {
-			return false;
-		}
-		// does the path refer to a file or a folder?
-		final IPath entryPath = entry.getPath();
-		IPath entryLocation = entryPath;
-		final IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(entryPath);
-		if (resource != null) {
-			entryLocation = resource.getLocation();
-		}
-		boolean isFile = true; // by default, assume a jar file
-		if (entryLocation.toFile().isDirectory()) {
-			isFile = false;
-		}
-		return !isFile;
-	}
+	private static final int _DEPENDECYATTRIBUTETYPE_CLASSPATH_COMPONENT_DEPENDENCY = 1;
 
-	/*
-	 * Derived from ClasspathDependencyUtil.getRuntimePath()
+	private static final int _DEPENDECYATTRIBUTETYPE_CLASSPATH_COMPONENT_NONDEPENDENCY = 2;
+
+	/**
+	 * Argument values that are used to select component dependency attribute
+	 * type.
 	 */
-	private static String getRuntimePath(final IClasspathAttribute attrib, final boolean isWebApp, final boolean isClassFolder) {
-    	if (attrib != null && !attrib.getName().equals(CLASSPATH_COMPONENT_DEPENDENCY)) {
-    		return null;
-    	}
-    	if (attrib == null || attrib.getValue()== null || attrib.getValue().length() == 0) {
-    		if (isWebApp) {
-    			return isClassFolder ? "/WEB_INF/classes" : "WEB-INF/lib"; //$NON-NLS-1$ //$NON-NLS-2$
-    		}
-			return isClassFolder ? "/" : "../"; //$NON-NLS-1$ //$NON-NLS-2$
-    	}
-    	return attrib.getValue();
-	}
+	private static final int _DEPENDECYATTRIBUTETYPE_DEPENDENCY_OR_NONDEPENDENCY = 0;
+
 }

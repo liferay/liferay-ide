@@ -88,7 +88,7 @@ public class CreatePortalSettingsFileAction extends AbstractServerRunningAction 
 		if (action.isEnabled()) {
 			IPath settingsFile = _getSettingsFilePath();
 
-			if (FileUtil.exists(settingsFile.toFile())) {
+			if (FileUtil.exists(settingsFile)) {
 				action.setEnabled(false);
 			}
 		}
@@ -109,7 +109,7 @@ public class CreatePortalSettingsFileAction extends AbstractServerRunningAction 
 			if (liferayRuntime != null) {
 				IPath home = liferayRuntime.getLiferayHome();
 
-				if (FileUtil.exists(home.toFile())) {
+				if (FileUtil.exists(home)) {
 					retval = home.append(_PORTAL_EXT_PROPERTIES);
 				}
 			}

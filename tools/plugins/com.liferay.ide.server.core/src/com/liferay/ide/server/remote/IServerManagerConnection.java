@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
-
+ */
 
 package com.liferay.ide.server.remote;
 
@@ -29,35 +25,34 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * @author Gregory Amerson
  * @author Cindy Li
  */
-public interface IServerManagerConnection extends IRemoteConnection
-{
+public interface IServerManagerConnection extends IRemoteConnection {
 
-    int getDebugPort() throws APIException;
+	public int getDebugPort() throws APIException;
 
-    String getFMDebugPassword() throws APIException;
+	public String getFMDebugPassword() throws APIException;
 
-    int getFMDebugPort() throws APIException;
+	public int getFMDebugPort() throws APIException;
 
-    List<String> getLiferayPlugins();
+	public List<String> getLiferayPlugins();
 
-    String getManagerURI();
+	public String getManagerURI();
 
-    String getRemoteServerConfig( String configAPI ) throws APIException;
+	public String getRemoteServerConfig(String configAPI) throws APIException;
 
-    String getServerState() throws APIException;
+	public String getServerState() throws APIException;
 
-    Object installApplication( String absolutePath, String appName, IProgressMonitor monitor ) throws APIException;
+	public Object installApplication(String absolutePath, String appName, IProgressMonitor monitor) throws APIException;
 
-    boolean isAlive() throws APIException;
+	public boolean isAlive() throws APIException;
 
-    boolean isAppInstalled( String appName ) throws APIException;
+	public boolean isAppInstalled(String appName) throws APIException;
 
-    boolean isLiferayPluginStarted( String name ) throws APIException;
+	public boolean isLiferayPluginStarted(String name) throws APIException;
 
-    void setManagerContextPath( String path );
+	public void setManagerContextPath(String path);
 
-    Object uninstallApplication( String appName, IProgressMonitor monitor ) throws APIException;
+	public Object uninstallApplication(String appName, IProgressMonitor monitor) throws APIException;
 
-    Object updateApplication( String appName, String absolutePath, IProgressMonitor monitor ) throws APIException;
+	public Object updateApplication(String appName, String absolutePath, IProgressMonitor monitor) throws APIException;
 
 }

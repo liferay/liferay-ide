@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core.portal;
 
@@ -21,17 +20,14 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Terry Jia
  */
-public class BundlePublishFullAddCleanBuild extends BundlePublishFullAdd
-{
+public class BundlePublishFullAddCleanBuild extends BundlePublishFullAdd {
 
-    public BundlePublishFullAddCleanBuild( IServer s, IModule[] modules)
-    {
-        super( s, modules );
-    }
+	public BundlePublishFullAddCleanBuild(IServer s, IModule[] modules) {
+		super(s, modules);
+	}
 
-    protected boolean cleanBuildNeeded()
-    {
-        return true;
-    }
+	protected boolean cleanBuildNeeded() {
+		return true;
+	}
 
 }

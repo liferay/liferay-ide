@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core;
 
@@ -26,34 +25,34 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
  * @author Greg Amerson
  * @author Terry Jia
  */
-public interface ILiferayServer
-{
+public interface ILiferayServer {
 
-    IEclipsePreferences defaultPrefs = DefaultScope.INSTANCE.getNode( LiferayServerCore.PLUGIN_ID );
+	public String getHost();
 
-    String ATTR_PASSWORD = "password";
+	public String getHttpPort();
 
-    String ATTR_USERNAME = "username";
+	public String getId();
 
-    String ATTR_HTTP_PORT = "http-port";
+	public String getPassword();
 
-    String DEFAULT_PASSWORD = defaultPrefs.get( "default.password", StringPool.EMPTY );
+	public URL getPluginContextURL(String context);
 
-    String DEFAULT_USERNAME = defaultPrefs.get( "default.username", StringPool.EMPTY );
+	public URL getPortalHomeUrl();
 
-    URL getWebServicesListURL();
+	public String getUsername();
 
-    String getPassword();
+	public URL getWebServicesListURL();
 
-    URL getPluginContextURL( String context );
+	public String ATTR_HTTP_PORT = "http-port";
 
-    URL getPortalHomeUrl();
+	public String ATTR_PASSWORD = "password";
 
-    String getUsername();
+	public String ATTR_USERNAME = "username";
 
-    String getHttpPort();
+	public IEclipsePreferences defaultPrefs = DefaultScope.INSTANCE.getNode(LiferayServerCore.PLUGIN_ID);
 
-    String getId();
+	public String DEFAULT_PASSWORD = defaultPrefs.get("default.password", StringPool.EMPTY);
 
-    String getHost();
+	public String DEFAULT_USERNAME = defaultPrefs.get("default.username", StringPool.EMPTY);
+
 }

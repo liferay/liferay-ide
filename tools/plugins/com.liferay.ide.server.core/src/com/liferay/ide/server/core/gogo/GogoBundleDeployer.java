@@ -21,9 +21,12 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
+
+import java.net.URI;
 import java.net.URL;
 
 import org.eclipse.core.resources.IProject;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.dto.BundleDTO;
 
@@ -31,91 +34,6 @@ import org.osgi.framework.dto.BundleDTO;
  * @author Terry Jia
  */
 public class GogoBundleDeployer {
-
-	private static int _getState(String state) {
-		if ("Active".equals(state)) {
-			return Bundle.ACTIVE;
-		}
-		else if ("Starting".equals(state)) {
-			return Bundle.STARTING;
-		}
-		else if ("Resolved".equals(state)) {
-			return Bundle.RESOLVED;
-		}
-		else if ("Stopping".equals(state)) {
-			return Bundle.STOPPING;
-		}
-		else if ("Installed".equals(state)) {
-			return Bundle.INSTALLED;
-		}
-		else if ("Uninstalled".equals(state)) {
-			return Bundle.UNINSTALLED;
-		}
-
-		return -1;
-	}
-
-	/**
-	 * Return the string array with trim
-	 */
-	private static String[] _split(String string, String regex) {
-		String[] lines = string.split(regex);
-
-		String[] newLines = new String[lines.length];
-
-		for (int i = 0; i < lines.length; i++) {
-			newLines[i] = lines[i].trim();
-		}
-
-		return newLines;
-	}
-
-	/**
-	 * The content should be the result from GogoShell by "lb -s"
-	 * The format should be:
-	 * START LEVEL 20\r\n
-	 *    ID|State      |Level|Symbolic name\r\n
-	 *     0|Active     |    0|org.eclipse.osgi (3.10.200.v20150831-0856)\r\n
-	 *     1|Active     |    6|com.liferay.portal.startup.monitor (1.0.2)\r\n
-	 *     ......
-	 *   146|Active     |   10|com.liferay.asset.tags.service (2.0.2)
-	 * We will get id, state, symbolicName, version for bundles by parsing:
-	 * 146|Active     |   10|com.liferay.asset.tags.service (2.0.2)
-	 */
-	private static BundleDTO[] _parseBundleInfos(String content) {
-		String[] lines = _split(content, "\r\n");
-
-		if (lines.length < 3) {
-			return new BundleDTO[0];
-		}
-
-		String[] newLines = new String[lines.length - 2];
-
-		System.arraycopy(lines, 2, newLines, 0, newLines.length);
-
-		BundleDTO[] bundles = new BundleDTO[newLines.length];
-
-		for( int i = 0;i < bundles.length; i++) {
-			BundleDTO bundle = new BundleDTO();
-
-			String line = newLines[i];
-
-			String[] infos = _split(line, "\\|");
-
-			bundle.id = Long.parseLong(infos[0]);
-			bundle.state = _getState(infos[1]);
-			bundle.symbolicName = infos[3].substring(0, infos[3].indexOf("(")).trim();
-			bundle.version = infos[3].substring(infos[3].indexOf("(") + 1, infos[3].indexOf(")")).trim();
-
-			bundles[i] = bundle;
-		}
-
-		return bundles;
-	}
-
-	private String _host;
-
-	private int _port;
 
 	public GogoBundleDeployer() {
 		_host = "localhost";
@@ -125,6 +43,77 @@ public class GogoBundleDeployer {
 	public GogoBundleDeployer(String host, int port) {
 		_host = host;
 		_port = port;
+	}
+
+	public BundleDTO deploy(String bsn, File bundleFile, String bundleUrl) throws Exception {
+		BundleDTO retval = null;
+
+		boolean fragment = false;
+		String fragmentHostName = null;
+
+		if (!bundleUrl.contains("webbundle:")) {
+			fragmentHostName = ServerUtil.getFragemtHostName(bundleFile);
+
+			fragment = fragmentHostName != null;
+		}
+
+		long bundleId = getBundleId(bsn);
+
+		if (bundleId > 0) {
+			if (!fragment) {
+				stop(bundleId);
+			}
+
+			if (bundleUrl.contains("webbundle:")) {
+				update(bundleId, bundleUrl);
+			}
+			else {
+				update(bundleId, bundleFile);
+
+				if (fragment) {
+					refresh(bundleId);
+				}
+			}
+
+			if (!fragment) {
+				String startStatus = start(bundleId);
+
+				if (startStatus != null) {
+					retval = new BundleDTO();
+
+					retval.id = bundleId;
+
+					retval = new BundleDTOWithStatus(retval, startStatus);
+				}
+			}
+
+			if (retval == null) {
+				retval = new BundleDTO();
+
+				retval.id = bundleId;
+			}
+		}
+		else {
+			if (bundleUrl.contains("webbundle:")) {
+				retval = install(bundleUrl);
+			}
+			else {
+				retval = install(bundleFile);
+			}
+
+			if (!fragment) {
+				String startStatus = start(retval.id);
+
+				if (startStatus != null) {
+					retval = new BundleDTOWithStatus(retval, startStatus);
+				}
+			}
+			else {
+				refresh(fragmentHostName);
+			}
+		}
+
+		return retval;
 	}
 
 	public long getBundleId(String bsn) throws IOException {
@@ -146,7 +135,9 @@ public class GogoBundleDeployer {
 	}
 
 	public BundleDTO install(File bundle) throws IOException {
-		URL url = bundle.toURI().toURL();
+		URI uri = bundle.toURI();
+
+		URL url = uri.toURL();
 
 		return install(url.toExternalForm());
 	}
@@ -202,7 +193,9 @@ public class GogoBundleDeployer {
 
 		if (successResult) {
 			if (result.startsWith(cmd)) {
-				retval = result.substring(result.indexOf(cmd) + cmd.length()).trim();
+				result = result.substring(result.indexOf(cmd) + cmd.length());
+
+				retval = result.trim();
 
 				if ("".equals(retval)) {
 					retval = null;
@@ -226,6 +219,34 @@ public class GogoBundleDeployer {
 		return run("stop " + id);
 	}
 
+	public String uninstall(IBundleProject bundleProject) throws Exception {
+		String retVal = null;
+
+		boolean fragment = bundleProject.isFragmentBundle();
+
+		String symbolicName = bundleProject.getSymbolicName();
+
+		if (symbolicName != null) {
+			long bundleId = getBundleId(symbolicName);
+
+			if (bundleId > 0) {
+				retVal = uninstall(bundleId);
+
+				if (fragment) {
+					IProject bProject = bundleProject.getProject();
+
+					String fragmentName = ServerUtil.getBundleFragmentHostNameFromBND(bProject);
+
+					if (!CoreUtil.isNullOrEmpty(fragmentName)) {
+						refresh(fragmentName);
+					}
+				}
+			}
+		}
+
+		return retVal;
+	}
+
 	public String uninstall(long id) throws IOException {
 		return run("uninstall " + id);
 	}
@@ -235,7 +256,9 @@ public class GogoBundleDeployer {
 	}
 
 	public String update(long id, File bundle) throws IOException {
-		URL url = bundle.toURI().toURL();
+		URI uri = bundle.toURI();
+
+		URL url = uri.toURL();
 
 		return update(id, url.toExternalForm());
 	}
@@ -244,123 +267,89 @@ public class GogoBundleDeployer {
 		return run("update " + id + " " + url, true);
 	}
 
-	public BundleDTO deploy( final String bsn, final File bundleFile, final String bundleUrl ) throws Exception
-    {
-        BundleDTO retval = null;
+	private static int _getState(String state) {
+		if ("Active".equals(state)) {
+			return Bundle.ACTIVE;
+		}
+		else if ("Starting".equals(state)) {
+			return Bundle.STARTING;
+		}
+		else if ("Resolved".equals(state)) {
+			return Bundle.RESOLVED;
+		}
+		else if ("Stopping".equals(state)) {
+			return Bundle.STOPPING;
+		}
+		else if ("Installed".equals(state)) {
+			return Bundle.INSTALLED;
+		}
+		else if ("Uninstalled".equals(state)) {
+			return Bundle.UNINSTALLED;
+		}
 
-        boolean isFragment = false;
-        String fragmentHostName = null;
+		return -1;
+	}
 
-        if( !bundleUrl.contains( "webbundle:" ) )
-        {
-            fragmentHostName = ServerUtil.getFragemtHostName( bundleFile );
+	/**
+	 * The content should be the result from GogoShell by "lb -s" The format
+	 * should be: START LEVEL 20\r\n ID|State |Level|Symbolic name\r\n 0|Active
+	 * | 0|org.eclipse.osgi (3.10.200.v20150831-0856)\r\n 1|Active |
+	 * 6|com.liferay.portal.startup.monitor (1.0.2)\r\n ...... 146|Active |
+	 * 10|com.liferay.asset.tags.service (2.0.2) We will get id, state,
+	 * symbolicName, version for bundles by parsing: 146|Active |
+	 * 10|com.liferay.asset.tags.service (2.0.2)
+	 */
+	private static BundleDTO[] _parseBundleInfos(String content) {
+		String[] lines = _split(content, "\r\n");
 
-            isFragment = ( fragmentHostName != null );
-        }
+		if (lines.length < 3) {
+			return new BundleDTO[0];
+		}
 
-        long bundleId = getBundleId( bsn );
+		String[] newLines = new String[lines.length - 2];
 
-        if( bundleId > 0 )
-        {
-            if( !isFragment )
-            {
-                stop( bundleId );
-            }
+		System.arraycopy(lines, 2, newLines, 0, newLines.length);
 
-            if( bundleUrl.contains( "webbundle:" ) )
-            {
-                update( bundleId, bundleUrl );
-            }
-            else
-            {
-                update( bundleId, bundleFile );
+		BundleDTO[] bundles = new BundleDTO[newLines.length];
 
-                if( isFragment )
-                {
-                    refresh( bundleId );
-                }
-            }
+		for (int i = 0; i < bundles.length; i++) {
+			BundleDTO bundle = new BundleDTO();
 
-            if( !isFragment )
-            {
-                String startStatus = start( bundleId );
+			String line = newLines[i];
 
-                if( startStatus != null )
-                {
-                    retval = new BundleDTO();
+			String[] infos = _split(line, "\\|");
 
-                    retval.id = bundleId;
+			String symbolicName = infos[3].substring(0, infos[3].indexOf("("));
+			String version = infos[3].substring(infos[3].indexOf("(") + 1, infos[3].indexOf(")"));
 
-                    retval = new BundleDTOWithStatus( retval, startStatus );
-                }
-            }
+			bundle.id = Long.parseLong(infos[0]);
+			bundle.state = _getState(infos[1]);
 
-            if( retval == null )
-            {
-                retval = new BundleDTO();
+			bundle.symbolicName = symbolicName.trim();
+			bundle.version = version.trim();
 
-                retval.id = bundleId;
-            }
-        }
-        else
-        {
-            if( bundleUrl.contains( "webbundle:" ) )
-            {
-                retval = install( bundleUrl );
-            }
-            else
-            {
-                retval = install( bundleFile );
-            }
+			bundles[i] = bundle;
+		}
 
-            if( !isFragment )
-            {
-                String startStatus = start( retval.id );
+		return bundles;
+	}
 
-                if( startStatus != null )
-                {
-                    retval = new BundleDTOWithStatus( retval, startStatus );
-                }
-            }
-            else
-            {
-                refresh( fragmentHostName );
-            }
-        }
+	/**
+	 * Return the string array with trim
+	 */
+	private static String[] _split(String string, String regex) {
+		String[] lines = string.split(regex);
 
-        return retval;
-    }
+		String[] newLines = new String[lines.length];
 
-    public String uninstall( IBundleProject bundleProject ) throws Exception
-    {
-        String retVal = null;
+		for (int i = 0; i < lines.length; i++) {
+			newLines[i] = lines[i].trim();
+		}
 
-        boolean isFragment = bundleProject.isFragmentBundle();
+		return newLines;
+	}
 
-        final String symbolicName = bundleProject.getSymbolicName();
+	private String _host;
+	private int _port;
 
-        if( symbolicName != null )
-        {
-            long bundleId = getBundleId( symbolicName );
-
-            if( bundleId > 0 )
-            {
-                retVal = uninstall( bundleId );
-
-                if( isFragment )
-                {
-                    IProject _bundleProject = bundleProject.getProject();
-
-                    String fragmentName = ServerUtil.getBundleFragmentHostNameFromBND(_bundleProject);
-
-                    if ( !CoreUtil.isNullOrEmpty(fragmentName))
-                    {
-                        refresh( fragmentName );
-                    }
-                }
-            }
-        }
-
-        return retVal;
-    }
 }

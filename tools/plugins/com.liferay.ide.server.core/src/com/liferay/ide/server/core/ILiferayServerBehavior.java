@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core;
 
@@ -22,11 +21,10 @@ import org.eclipse.wst.server.core.IModule;
 /**
  * @author Gregory Amerson
  */
-public interface ILiferayServerBehavior
-{
+public interface ILiferayServerBehavior {
 
-    IPath getDeployedPath( IModule[] module );
+	public IPath getDeployedPath(IModule[] module);
 
-    void redeployModule( IModule[] module ) throws CoreException;
+	public void redeployModule(IModule[] module) throws CoreException;
 
 }

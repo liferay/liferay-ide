@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,41 +10,44 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core;
 
 import org.eclipse.core.expressions.PropertyTester;
+import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IServer;
 
 /**
  * @author Greg Amerson
  */
-public class LiferayServerPropertyTester extends PropertyTester
-{
+public class LiferayServerPropertyTester extends PropertyTester {
 
-    public LiferayServerPropertyTester()
-    {
-    }
+	public LiferayServerPropertyTester() {
+	}
 
-    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
-    {
-        if( receiver instanceof IServer )
-        {
-            IServer server = (IServer) receiver;
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+		if (receiver instanceof IServer) {
+			IServer server = (IServer)receiver;
 
-            try
-            {
-                return server.getRuntime().getRuntimeType().getId().startsWith( "com.liferay." ); //$NON-NLS-1$
-            }
-            catch( Throwable t )
-            {
-                // ignore
-            }
-        }
+			try {
+				IRuntime runtime = server.getRuntime();
 
-        return false;
-    }
+				IRuntimeType runtimeType = runtime.getRuntimeType();
+
+				String runtimeTypeId = runtimeType.getId();
+
+				return runtimeTypeId.startsWith("com.liferay.");
+			}
+			catch (Throwable t) {
+
+				// ignore
+
+			}
+		}
+
+		return false;
+	}
 
 }

@@ -1,5 +1,5 @@
-/*******************************************************************************
- * Copyright (c) 2000-present Liferay, Inc. All riproghts reserved.
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.core.portal;
 
@@ -34,97 +33,80 @@ import org.eclipse.wst.server.core.IServer;
  * @author Andy Wu
  * @author Terry Jia
  */
-public class BundlePublishFullRemove extends BundlePublishOperation
-{
+public class BundlePublishFullRemove extends BundlePublishOperation {
 
-    public BundlePublishFullRemove( IServer server, IModule[] modules )
-    {
-        super( server, modules );
-    }
+	public BundlePublishFullRemove(IServer server, IModule[] modules) {
+		super(server, modules);
+	}
 
-    @Override
-    public void execute( IProgressMonitor monitor, IAdaptable info ) throws CoreException
-    {
-        for( IModule module : modules )
-        {
-            IProject project = module.getProject();
+	@Override
+	public void execute(IProgressMonitor monitor, IAdaptable info) throws CoreException {
+		for (IModule module : modules) {
+			IProject project = module.getProject();
 
-            if( project == null )
-            {
-                continue;
-            }
+			if (project == null) {
+				continue;
+			}
 
-            IStatus status = Status.OK_STATUS;
+			IStatus status = Status.OK_STATUS;
 
-            final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+			IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 
-            if( bundleProject != null )
-            {
-                final String symbolicName = bundleProject.getSymbolicName();
+			if (bundleProject != null) {
+				String symbolicName = bundleProject.getSymbolicName();
 
-                if( this.server.getServerState() == IServer.STATE_STARTED )
-                {
-                    monitor.subTask( "Remotely undeploying " + module.getName() + " from Liferay module framework..." );
+				if (server.getServerState() == IServer.STATE_STARTED) {
+					monitor.subTask("Remotely undeploying " + module.getName() + " from Liferay module framework...");
 
-                    status = remoteUninstall( bundleProject, symbolicName , monitor);
-                }
+					status = _remoteUninstall(bundleProject, symbolicName);
+				}
 
-                if( status != null && status.isOK() )
-                {
-                    this.portalServerBehavior.setModulePublishState2(
-                        new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
+				if ((status != null) && status.isOK()) {
+					this.portalServerBehavior.setModulePublishState2(
+						new IModule[] {module}, IServer.PUBLISH_STATE_NONE);
 
-                    project.deleteMarkers( LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0 );
-                }
-            }
-            else
-            {
-                status =
-                    LiferayServerCore.error( "Could not get module publisher for project " +
-                        module.getProject().getName() );
-            }
+					project.deleteMarkers(LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0);
+				}
+			}
+			else {
+				status = LiferayServerCore.error("Could not get module publisher for project " + project.getName());
+			}
 
-            if( !status.isOK() )
-            {
-                throw new CoreException( status );
-            }
-        }
-    }
+			if (!status.isOK()) {
+				throw new CoreException(status);
+			}
+		}
+	}
 
-    private IStatus remoteUninstall( IBundleProject bundleProject, String symbolicName, IProgressMonitor monitor ) throws CoreException
-    {
-        //TODO we should get bsn first and try use the bsn to uninstall
-        IStatus retval = null;
+	private IStatus _remoteUninstall(IBundleProject bundleProject, String symbolicName) throws CoreException {
 
-        GogoBundleDeployer bundleDeployer = null;
+		// TODO we should get bsn first and try use the bsn to uninstall
 
-        try
-        {
-            bundleDeployer = createBundleDeployer();
+		IStatus retval = null;
 
-            String error = bundleDeployer.uninstall( bundleProject );
+		GogoBundleDeployer bundleDeployer = null;
 
-            if( error == null )
-            {
-                retval = Status.OK_STATUS;
-            }
-            else
-            {
-                retval = LiferayServerCore.error( "Unable to uninstall bundle " + error );
-            }
+		try {
+			bundleDeployer = createBundleDeployer();
 
-        }
-        catch( Exception e )
-        {
-            retval = LiferayServerCore.error( "Unable to uninstall bundle " + symbolicName, e );
-        }
+			String error = bundleDeployer.uninstall(bundleProject);
 
-        if( retval == null )
-        {
-            retval = Status.OK_STATUS;
-        }
+			if (error == null) {
+				retval = Status.OK_STATUS;
+			}
+			else {
+				retval = LiferayServerCore.error("Unable to uninstall bundle " + error);
+			}
+		}
+		catch (Exception e) {
+			retval = LiferayServerCore.error("Unable to uninstall bundle " + symbolicName, e);
+		}
 
-        return retval;
-    }
+		if (retval == null) {
+			retval = Status.OK_STATUS;
+		}
+
+		return retval;
+	}
 
 }

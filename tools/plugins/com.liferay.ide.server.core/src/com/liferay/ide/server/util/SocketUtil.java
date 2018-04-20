@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.util;
 
@@ -20,6 +19,7 @@ import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -36,143 +36,127 @@ import org.eclipse.osgi.util.NLS;
  * @author Greg Amerson
  * @author Terry Jia
  */
-public class SocketUtil
-{
+public class SocketUtil {
 
-    public static IStatus canConnect( String host, String port )
-    {
-        return canConnect( new Socket(), host, port );
-    }
+	public static IStatus canConnect(Socket socket, String host, String port) {
+		IStatus status = null;
 
-    public static IStatus canConnect( Socket socket, String host, String port )
-    {
-        IStatus status = null;
+		InputStream in = null;
 
-        InputStream in = null;
+		try {
+			InetSocketAddress address = new InetSocketAddress(host, Integer.valueOf(port));
+			InetSocketAddress local = new InetSocketAddress(0);
 
-        try
-        {
-            InetSocketAddress address = new InetSocketAddress( host, Integer.valueOf( port ) );
-            InetSocketAddress local = new InetSocketAddress( 0 );
-            socket.bind( local );
-            socket.connect( address );
-            in = socket.getInputStream();
-            status = Status.OK_STATUS;
-        }
-        catch( Exception e )
-        {
-            status = LiferayServerCore.error( Msgs.notConnect );
-            // e.printStackTrace();
-        }
-        finally
-        {
-            if( socket != null )
-            {
-                try
-                {
-                    socket.close();
-                }
-                catch( IOException e )
-                {
-                    // best effort
-                }
-            }
+			socket.bind(local);
 
-            if( in != null )
-            {
-                try
-                {
-                    in.close();
-                }
-                catch( Exception e )
-                {
-                    // best effort
-                }
-            }
-        }
+			socket.connect(address);
 
-        return status;
-    }
+			in = socket.getInputStream();
+			status = Status.OK_STATUS;
+		}
+		catch (Exception e) {
+			status = LiferayServerCore.error(Msgs.notConnect);
 
-    public static IStatus canConnectProxy( String host, String port )
-    {
-        return canConnectProxy( new Socket(), host, port );
-    }
+			// e.printStackTrace();
 
-    public static IStatus canConnectProxy( Socket socket, String host, String port )
-    {
-        IProxyService proxyService = LiferayCore.getProxyService();
+		}
+		finally {
+			if (socket != null) {
+				try {
+					socket.close();
+				}
+				catch (IOException ioe) {
 
-        try
-        {
-            URI uri = new URI( "http://" + host + ":" + port ); //$NON-NLS-1$ //$NON-NLS-2$
-            IProxyData[] proxyDataForHost = proxyService.select( uri );
+					// best effort
 
-            for( IProxyData data : proxyDataForHost )
-            {
-                if( data.getHost() != null )
-                {
-                    return SocketUtil.canConnect( socket, data.getHost(), String.valueOf( data.getPort() ) );
-                }
-            }
+				}
+			}
 
-            uri = new URI( "SOCKS://" + host + ":" + port ); //$NON-NLS-1$ //$NON-NLS-2$
+			if (in != null) {
+				try {
+					in.close();
+				}
+				catch (Exception e) {
 
-            for( IProxyData data : proxyDataForHost )
-            {
-                if( data.getHost() != null )
-                {
-                    return SocketUtil.canConnect( socket, data.getHost(), String.valueOf( data.getPort() ) );
-                }
-            }
-        }
-        catch( URISyntaxException e )
-        {
-            LiferayServerCore.logError( "Could not read proxy data", e ); //$NON-NLS-1$
-        }
+					// best effort
 
-        return null;
-    }
+				}
+			}
+		}
 
-    public static boolean isPortAvailable( final String port )
-    {
-        ServerSocket serverSocket = null;
+		return status;
+	}
 
-        try
-        {
-            serverSocket = new ServerSocket();
+	public static IStatus canConnect(String host, String port) {
+		return canConnect(new Socket(), host, port);
+	}
 
-            serverSocket.bind( new InetSocketAddress( Integer.parseInt( port ) ) );
+	public static IStatus canConnectProxy(Socket socket, String host, String port) {
+		IProxyService proxyService = LiferayCore.getProxyService();
 
-            return true;
-        }
-        catch( IOException e )
-        {
-        }
-        finally
-        {
-            if( serverSocket != null )
-            {
-                try
-                {
-                    serverSocket.close();
-                }
-                catch( IOException e )
-                {
-                }
-            }
-        }
+		try {
+			URI uri = new URI("http://" + host + ":" + port);
 
-        return false;
-    }
+			IProxyData[] proxyDataForHost = proxyService.select(uri);
 
-    private static class Msgs extends NLS
-    {
-        public static String notConnect;
+			for (IProxyData data : proxyDataForHost) {
+				if (data.getHost() != null) {
+					return canConnect(socket, data.getHost(), String.valueOf(data.getPort()));
+				}
+			}
 
-        static
-        {
-            initializeMessages( SocketUtil.class.getName(), Msgs.class );
-        }
-    }
+			uri = new URI("SOCKS://" + host + ":" + port);
+
+			for (IProxyData data : proxyDataForHost) {
+				if (data.getHost() != null) {
+					return canConnect(socket, data.getHost(), String.valueOf(data.getPort()));
+				}
+			}
+		}
+		catch (URISyntaxException urise) {
+			LiferayServerCore.logError("Could not read proxy data", urise);
+		}
+
+		return null;
+	}
+
+	public static IStatus canConnectProxy(String host, String port) {
+		return canConnectProxy(new Socket(), host, port);
+	}
+
+	public static boolean isPortAvailable(String port) {
+		ServerSocket serverSocket = null;
+
+		try {
+			serverSocket = new ServerSocket();
+
+			serverSocket.bind(new InetSocketAddress(Integer.parseInt(port)));
+
+			return true;
+		}
+		catch (IOException ioe) {
+		}
+		finally {
+			if (serverSocket != null) {
+				try {
+					serverSocket.close();
+				}
+				catch (IOException ioe) {
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String notConnect;
+
+		static {
+			initializeMessages(SocketUtil.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

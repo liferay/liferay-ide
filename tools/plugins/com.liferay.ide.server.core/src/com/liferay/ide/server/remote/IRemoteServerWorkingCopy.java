@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.remote;
 
@@ -23,15 +22,14 @@ import org.eclipse.core.runtime.IStatus;
 /**
  * @author Greg Amerson
  */
-public interface IRemoteServerWorkingCopy extends ILiferayServerWorkingCopy, IRemoteServer
-{
+public interface IRemoteServerWorkingCopy extends ILiferayServerWorkingCopy, IRemoteServer {
 
-    void setHTTPPort( String httpPort );
+	public void setHTTPPort(String httpPort);
 
-    void setLiferayPortalContextPath( String path );
+	public void setLiferayPortalContextPath(String path);
 
-    void setServerManagerContextPath( String path );
+	public void setServerManagerContextPath(String path);
 
-    IStatus validate( IProgressMonitor monitor );
+	public IStatus validate(IProgressMonitor monitor);
 
 }
