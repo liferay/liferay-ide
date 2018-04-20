@@ -40,9 +40,9 @@ public abstract class AbstractProjectTemplate {
 	}
 
 	protected String safeJavaClassName(String projectName) {
-		return WordUtils.capitalizeFully(projectName, new char[] {
-			'_', '-', '.', ' '
-		}).replaceAll("[_|\\-|\\.|\\s+]", "");
+		String javaClassName = WordUtils.capitalizeFully(projectName, new char[] {'_', '-', '.', ' '});
+
+		return javaClassName.replaceAll("[_|\\-|\\.|\\s+]", "");
 	}
 
 	protected String safePackageName(String projectName) {

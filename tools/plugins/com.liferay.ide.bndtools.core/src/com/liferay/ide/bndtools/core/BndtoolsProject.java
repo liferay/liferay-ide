@@ -24,6 +24,7 @@ import com.liferay.ide.core.util.ListUtil;
 import java.io.File;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -39,12 +40,13 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 
 	public BndtoolsProject(IProject project, Project bndProject) {
 		super(project);
+
 		_bndProject = bndProject;
 	}
 
 	@Override
 	public boolean filterResource(IPath resourcePath) {
-		if (filterResource(resourcePath, _ignorePaths)) {
+		if (filterResource(resourcePath, _IGNORE_PATHS)) {
 			return true;
 		}
 
@@ -117,7 +119,9 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 			Collection<String> names = _bndProject.getBsns();
 
 			if ((names != null) && !names.isEmpty()) {
-				retval = names.iterator().next();
+				Iterator<String> iterator = names.iterator();
+
+				retval = iterator.next();
 			}
 		}
 		catch (Exception e) {
@@ -145,7 +149,7 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 		return false;
 	}
 
-	private static final String[] _ignorePaths = {"generated"};
+	private static final String[] _IGNORE_PATHS = {"generated"};
 
 	private final Project _bndProject;
 

@@ -26,6 +26,7 @@ import java.lang.reflect.Field;
 
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.content.IContentDescription;
@@ -62,7 +63,9 @@ public class AlloyContentDescriberForJSP implements ITextContentDescriber {
 			IFileStore fileStore = (IFileStore)fileStoreField.get(inputStream);
 
 			if (fileStore != null) {
-				IFile[] files = CoreUtil.getWorkspaceRoot().findFilesForLocationURI(fileStore.toURI());
+				IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
+
+				IFile[] files = root.findFilesForLocationURI(fileStore.toURI());
 
 				for (IFile file : files) {
 					if (ProjectUtil.isPortletProject(file.getProject()) || LiferayNature.hasNature(file.getProject())) {
@@ -100,7 +103,9 @@ public class AlloyContentDescriberForJSP implements ITextContentDescriber {
 
 			Class<?> documentClass = fDocument.getClass();
 
-			Class<?> superDocument = documentClass.getSuperclass().getSuperclass();
+			Class<?> documentSuperClass = documentClass.getSuperclass();
+
+			Class<?> superDocument = documentSuperClass.getSuperclass();
 
 			Field fDocumentListenersField = superDocument.getDeclaredField("fDocumentListeners");
 

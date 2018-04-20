@@ -71,6 +71,7 @@ public class BndtoolsCore extends Plugin {
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 	}
 

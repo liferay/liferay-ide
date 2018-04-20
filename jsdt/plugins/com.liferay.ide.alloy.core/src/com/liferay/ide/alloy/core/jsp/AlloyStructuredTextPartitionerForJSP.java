@@ -18,6 +18,7 @@ import org.eclipse.jst.jsp.core.internal.text.StructuredTextPartitionerForJSP;
 import org.eclipse.wst.html.core.text.IHTMLPartitions;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
 
 /**
  * @author Gregory Amerson
@@ -72,18 +73,24 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
 			"XML_TAG_ATTRIBUTE_VALUE".equals(childRegion.getType()) &&
 			(lowerCaseText.startsWith("<aui:") || lowerCaseText.startsWith("<liferay-ui:"))) {
 
-			ITextRegion[] regions = region.getRegions().toArray();
+			ITextRegionList regionList = region.getRegions();
+
+			ITextRegion[] regions = regionList.toArray();
 
 			for (int i = 0; i < regions.length; i++) {
 				if (regions[i].equals(childRegion)) {
-					if ((i >= 2) && regions[i - 2].getType().equals("XML_TAG_ATTRIBUTE_NAME")) {
-						ITextRegion attrNameRegion = regions[i - 2];
+					if (i >= 2) {
+						String type = regions[i - 2].getType();
 
-						String attrName = region.getFullText(attrNameRegion);
+						if (type.equals("XML_TAG_ATTRIBUTE_NAME")) {
+							ITextRegion attrNameRegion = regions[i - 2];
 
-						for (String attr : _resourceBundleAttrs) {
-							if (attrName.equals(attr)) {
-								return true;
+							String attrName = region.getFullText(attrNameRegion);
+
+							for (String attr : _resourceBundleAttrs) {
+								if (attrName.equals(attr)) {
+									return true;
+								}
 							}
 						}
 					}
@@ -106,18 +113,24 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
 			 *  we have found an attribute value in a AUI tag
 			 *  but now we need to check if the attribteName is a javascript type attribute
 			 */
-			ITextRegion[] regions = region.getRegions().toArray();
+			ITextRegionList regionList = region.getRegions();
+
+			ITextRegion[] regions = regionList.toArray();
 
 			for (int i = 0; i < regions.length; i++) {
 				if (regions[i].equals(childRegion)) {
-					if ((i >= 2) && regions[i - 2].getType().equals("XML_TAG_ATTRIBUTE_NAME")) {
-						ITextRegion attrNameRegion = regions[i - 2];
+					if (i >= 2) {
+						String type = regions[i - 2].getType();
 
-						String attrName = region.getFullText(attrNameRegion);
+						if (type.equals("XML_TAG_ATTRIBUTE_NAME")) {
+							ITextRegion attrNameRegion = regions[i - 2];
 
-						for (String attrEvent : AlloyJsTranslator.ALLOYATTREVENTS) {
-							if (attrName.equals(attrEvent)) {
-								return true;
+							String attrName = region.getFullText(attrNameRegion);
+
+							for (String attrEvent : AlloyJsTranslator.ALLOYATTREVENTS) {
+								if (attrName.equals(attrEvent)) {
+									return true;
+								}
 							}
 						}
 					}
@@ -129,7 +142,9 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
 	}
 
 	private boolean _isAUIScriptBetween(IStructuredDocumentRegion previousNode) {
-		return previousNode.toString().contains("aui:script");
+		String node = previousNode.toString();
+
+		return node.contains("aui:script");
 	}
 
 	private boolean _isAUIScriptRegion(IStructuredDocumentRegion sdRegion) {
@@ -140,7 +155,7 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
 		 */
 		IStructuredDocumentRegion previousRegion = sdRegion.getPrevious();
 
-		if ( previousRegion == null ) {
+		if (previousRegion == null) {
 			return false;
 		}
 
