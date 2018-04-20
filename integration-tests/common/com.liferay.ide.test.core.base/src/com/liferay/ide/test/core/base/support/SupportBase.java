@@ -14,9 +14,9 @@
 
 package com.liferay.ide.test.core.base.support;
 
-import org.junit.rules.ExternalResource;
-
 import com.liferay.ide.test.core.base.action.EnvAction;
+
+import org.junit.rules.ExternalResource;
 
 /**
  * @author Terry Jia

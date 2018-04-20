@@ -14,11 +14,11 @@
 
 package com.liferay.ide.gradle.core.tests;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
 import com.liferay.ide.gradle.core.tests.base.NewModuleGradleBase;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
+
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * @author Joye Luo
@@ -145,16 +145,17 @@ public class NewModuleNpm71GradleTests extends NewModuleGradleBase {
 		deleteProject(project.getName());
 	}
 
-	protected void verifyProjectFiles(String projectName) {
-		super.verifyProjectFiles(projectName);
-
-		assertProjectFileContains(projectName, "src/main/resources/META-INF/resources/view.jsp",
-				"<aui:script require=\"<%= bootstrapRequire %>\">");
-	}
-
 	@Override
 	protected String shape() {
 		return "jar";
+	}
+
+	protected void verifyProjectFiles(String projectName) {
+		super.verifyProjectFiles(projectName);
+
+		assertProjectFileContains(
+			projectName, "src/main/resources/META-INF/resources/view.jsp",
+			"<aui:script require=\"<%= bootstrapRequire %>\">");
 	}
 
 }

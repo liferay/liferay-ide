@@ -68,8 +68,8 @@ public class GradleUtilTests extends ProjectBase {
 		try {
 			GradleUtil.importGradleProject(ips.getProjectFile(), npm);
 		}
-		catch (CoreException e) {
-			failTest(e);
+		catch (CoreException ce) {
+			failTest(ce);
 		}
 
 		waitForBuildAndValidation();
@@ -85,17 +85,23 @@ public class GradleUtilTests extends ProjectBase {
 
 	@Test
 	public void isBuildFile() {
+
 		// TODO test for GradleUtil.isBuildFile()
+
 	}
 
 	@Test
 	public void refreshGradleProject() {
+
 		// TODO test for GradleUtil.refreshGradleProject()
+
 	}
 
 	@Test
 	public void runGradleTask() {
+
 		// TODO test for GradleUtil.runGradleTask()
+
 	}
 
 	@Override

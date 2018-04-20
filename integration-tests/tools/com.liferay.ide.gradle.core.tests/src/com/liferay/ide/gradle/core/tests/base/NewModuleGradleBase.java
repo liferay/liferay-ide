@@ -35,14 +35,14 @@ public abstract class NewModuleGradleBase extends NewModuleOpBase<NewLiferayModu
 		manager.join(GradleCore.JobFamilyId, new NullProgressMonitor());
 	}
 
-	protected void verifyProjectFiles(String projectName) {
-		assertProjectFileExists(projectName, "build.gradle");
-		assertProjectFileNotExists(projectName, "pom.xml");
-	}
-
 	@Override
 	protected String provider() {
 		return "gradle-module";
+	}
+
+	protected void verifyProjectFiles(String projectName) {
+		assertProjectFileExists(projectName, "build.gradle");
+		assertProjectFileNotExists(projectName, "pom.xml");
 	}
 
 }

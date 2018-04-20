@@ -14,12 +14,12 @@
 
 package com.liferay.ide.test.core.base.support;
 
+import com.liferay.ide.test.core.base.util.FileUtil;
+
 import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.core.resources.IProject;
-
-import com.liferay.ide.test.core.base.util.FileUtil;
 
 /**
  * @author Terry Jia

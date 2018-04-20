@@ -14,6 +14,12 @@
 
 package com.liferay.ide.test.core.base;
 
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.test.core.base.util.FileUtil;
+
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -28,13 +34,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.junit.Assert;
 
-import com.liferay.ide.core.IBundleProject;
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.LiferayNature;
-import com.liferay.ide.core.util.FileUtil;
+import org.junit.Assert;
 
 /**
  * @author Gregory Amerson
@@ -62,6 +63,14 @@ public class BaseTests {
 		return workspace().getRoot();
 	}
 
+	protected void assertBundleProject(String projectName) {
+		IProject project = project(projectName);
+
+		assertProjectExists(project);
+
+		Assert.assertNotNull(LiferayCore.create(IBundleProject.class, project));
+	}
+
 	protected void assertFileExists(File file) {
 		Assert.assertTrue(FileUtil.exists(file));
 	}
@@ -70,18 +79,10 @@ public class BaseTests {
 		try {
 			file.refreshLocal(0, npm);
 		}
-		catch (CoreException e) {
+		catch (CoreException ce) {
 		}
 
 		Assert.assertTrue(FileUtil.exists(file));
-	}
-
-	protected void assertFileSuffix(IPath path, String expectedSuffix) {
-		Assert.assertTrue(path.toFile().getName().endsWith(expectedSuffix));
-	}
-
-	protected void assertFileSuffix(IFile file, String expectedSuffix) {
-		Assert.assertTrue(file.getName().endsWith(expectedSuffix));
 	}
 
 	protected void assertFileExists(IPath path) {
@@ -90,6 +91,18 @@ public class BaseTests {
 
 	protected void assertFileNotExists(IFile file) {
 		Assert.assertTrue(FileUtil.notExists(file));
+	}
+
+	protected void assertFileSuffix(IFile file, String expectedSuffix) {
+		Assert.assertTrue(file.getName().endsWith(expectedSuffix));
+	}
+
+	protected void assertFileSuffix(IPath path, String expectedSuffix) {
+		File file = path.toFile();
+
+		String fileName = file.getName();
+
+		Assert.assertTrue(fileName.endsWith(expectedSuffix));
 	}
 
 	protected void assertLiferayProject(IProject project) {
@@ -118,14 +131,6 @@ public class BaseTests {
 		Assert.assertTrue(FileUtil.exists(project));
 	}
 
-	protected void assertBundleProject(String projectName) {
-		IProject project = project(projectName);
-
-		assertProjectExists(project);
-
-		Assert.assertNotNull(LiferayCore.create(IBundleProject.class, project));
-	}
-
 	protected void assertProjectExists(String projectName) {
 		Assert.assertTrue(FileUtil.exists(project(projectName)));
 	}
@@ -139,17 +144,9 @@ public class BaseTests {
 
 		assertFileExists(file);
 
-		String content = FileUtil.readContents(file);
+		String content = FileUtil.readContents(file.getLocation().toFile());
 
 		Assert.assertTrue(content.contains(expectedContent));
-	}
-
-	protected void assertProjectFileNotExists(String projectName, String filePath) {
-		IProject project = project(projectName);
-
-		assertProjectExists(project);
-
-		assertFileNotExists(project.getFile(filePath));
 	}
 
 	protected void assertProjectFileExists(String projectName, String filePath) {
@@ -158,6 +155,14 @@ public class BaseTests {
 		assertProjectExists(project);
 
 		assertFileExists(project.getFile(filePath));
+	}
+
+	protected void assertProjectFileNotExists(String projectName, String filePath) {
+		IProject project = project(projectName);
+
+		assertProjectExists(project);
+
+		assertFileNotExists(project.getFile(filePath));
 	}
 
 	protected void assertSourceFolders(String projectName, String expectedSourceFolderName) {
@@ -182,10 +187,9 @@ public class BaseTests {
 
 			project.delete(true, true, npm);
 		}
-		catch (CoreException e) {
-			failTest(e);
+		catch (CoreException ce) {
+			failTest(ce);
 		}
-
 	}
 
 	protected IProgressMonitor npm = new NullProgressMonitor();

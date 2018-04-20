@@ -18,7 +18,6 @@ import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.test.core.base.support.ProjectSupport;
 import com.liferay.ide.test.project.core.base.NewModuleOpBase;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.m2e.tests.common.JobHelpers;
 
 import org.junit.Rule;
@@ -47,6 +46,16 @@ public class NewModuleMavenTests extends NewModuleOpBase<NewLiferayModuleProject
 	@Rule
 	public ProjectSupport project = new ProjectSupport();
 
+	@Override
+	protected String provider() {
+		return "maven-module";
+	}
+
+	@Override
+	protected String shape() {
+		return "jar";
+	}
+
 	protected void verifyProjectFiles(String projectName) {
 		super.verifyProjectFiles(projectName);
 
@@ -56,16 +65,6 @@ public class NewModuleMavenTests extends NewModuleOpBase<NewLiferayModuleProject
 
 	protected void waitForBuildAndValidation() {
 		JobHelpers.waitForJobsToComplete();
-	}
-
-	@Override
-	protected String provider() {
-		return "maven-module";
-	}
-
-	@Override
-	protected String shape() {
-		return "jar";
 	}
 
 }

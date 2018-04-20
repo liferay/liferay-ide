@@ -40,6 +40,10 @@ import org.junit.Assert;
  */
 public class EnvAction {
 
+	public EnvAction() {
+		_bundleInfos = _parseBundleInfos();
+	}
+
 	public File getBundleFile(String fileName) {
 		IPath path = getBundlesPath().append(fileName);
 
@@ -195,10 +199,6 @@ public class EnvAction {
 
 	public final String test_in_the_internal_net =
 		"Only do this test in the internal net, add -Dinternal=\"false\" if you are out of the China office.";
-
-	public EnvAction() {
-		_bundleInfos = _parseBundleInfos();
-	}
 
 	private BundleInfo[] _parseBundleInfos() {
 		IPath bundlesCsvPath = getBundlesPath().append("bundles.csv");

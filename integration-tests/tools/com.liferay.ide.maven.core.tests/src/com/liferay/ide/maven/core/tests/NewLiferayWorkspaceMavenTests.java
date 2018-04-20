@@ -44,14 +44,14 @@ public class NewLiferayWorkspaceMavenTests extends NewProjectOpBase<NewLiferayWo
 	@Rule
 	public LiferayWorkspaceSupport workspace = new LiferayWorkspaceSupport();
 
-	protected void verifyProjectFiles(IProject project) {
-		assertFileNotExists(project.getFile("build.gradle"));
-		assertFileExists(project.getFile("pom.xml"));
-	}
-
 	@Override
 	protected String provider() {
 		return "maven-liferay-workspace";
+	}
+
+	protected void verifyProjectFiles(IProject project) {
+		assertFileNotExists(project.getFile("build.gradle"));
+		assertFileExists(project.getFile("pom.xml"));
 	}
 
 }

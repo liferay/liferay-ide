@@ -14,6 +14,8 @@
 
 package com.liferay.ide.test.project.core.base;
 
+import com.liferay.ide.test.core.base.support.ProjectSupport;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -23,8 +25,6 @@ import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 
 import org.junit.Assert;
 import org.junit.Rule;
-
-import com.liferay.ide.test.core.base.support.ProjectSupport;
 
 /**
  * @author Terry Jia
@@ -57,8 +57,8 @@ public abstract class NewProjectOpBase<T extends ExecutableElement> extends Proj
 		try {
 			project.refreshLocal(IResource.DEPTH_INFINITE, npm);
 		}
-		catch (CoreException e) {
-			failTest(e);
+		catch (CoreException ce) {
+			failTest(ce);
 		}
 
 		return project;

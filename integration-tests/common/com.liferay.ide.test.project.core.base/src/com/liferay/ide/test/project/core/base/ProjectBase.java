@@ -14,6 +14,8 @@
 
 package com.liferay.ide.test.project.core.base;
 
+import com.liferay.ide.test.core.base.BaseTests;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -26,8 +28,6 @@ import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.validation.internal.operations.ValidatorManager;
 
-import com.liferay.ide.test.core.base.BaseTests;
-
 /**
  * @author Terry Jia
  */
@@ -35,10 +35,6 @@ import com.liferay.ide.test.core.base.BaseTests;
 public class ProjectBase extends BaseTests {
 
 	protected void needJobsToBuild(IJobManager manager) throws InterruptedException, OperationCanceledException {
-	}
-
-	protected void verifyProject(String projectName) {
-		verifyProject(project(projectName));
 	}
 
 	protected void verifyProject(IProject project) {
@@ -49,8 +45,8 @@ public class ProjectBase extends BaseTests {
 		try {
 			project.build(IncrementalProjectBuilder.CLEAN_BUILD, npm);
 		}
-		catch (CoreException e) {
-			failTest(e);
+		catch (CoreException ce) {
+			failTest(ce);
 		}
 
 		waitForBuildAndValidation();
@@ -58,11 +54,15 @@ public class ProjectBase extends BaseTests {
 		try {
 			project.build(IncrementalProjectBuilder.FULL_BUILD, npm);
 		}
-		catch (CoreException e) {
-			failTest(e);
+		catch (CoreException ce) {
+			failTest(ce);
 		}
 
 		waitForBuildAndValidation();
+	}
+
+	protected void verifyProject(String projectName) {
+		verifyProject(project(projectName));
 	}
 
 	protected void verifyProjectFiles(String projectName) {
@@ -103,6 +103,6 @@ public class ProjectBase extends BaseTests {
 				manager.endRule(root);
 			}
 		}
-	};
+	}
 
 }

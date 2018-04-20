@@ -29,6 +29,8 @@ import org.junit.Assert;
  */
 public abstract class NewModuleOpBase<T extends ExecutableElement> extends NewProjectOpBase<T> {
 
+	protected abstract String shape();
+
 	protected void verifyProject(IProject project) {
 		super.verifyProject(project);
 
@@ -45,11 +47,9 @@ public abstract class NewModuleOpBase<T extends ExecutableElement> extends NewPr
 
 			assertFileSuffix(outputBundle, shape());
 		}
-		catch (CoreException e) {
-			failTest(e);
+		catch (CoreException ce) {
+			failTest(ce);
 		}
 	}
-
-	protected abstract String shape();
 
 }

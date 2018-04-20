@@ -14,10 +14,10 @@
 
 package com.liferay.ide.gradle.core.tests;
 
-import org.junit.Test;
-
 import com.liferay.ide.gradle.core.tests.base.NewModuleGradleBase;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
+
+import org.junit.Test;
 
 /**
  * @author Joye Luo
@@ -240,19 +240,6 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectName(project.getName());
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("template-context-contributor");
-
-		createAndBuild(op, project.getName());
-
-		deleteProject(project.getName());
-	}
-
-	@Test
-	public void createTheme() {
-		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-		op.setProjectName(project.getName());
-		op.setProjectProvider(provider());
-		op.setProjectTemplateName("theme");
 
 		createAndBuild(op, project.getName());
 

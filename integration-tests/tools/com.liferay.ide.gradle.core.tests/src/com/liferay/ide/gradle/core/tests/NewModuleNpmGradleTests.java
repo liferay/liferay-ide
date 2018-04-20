@@ -14,11 +14,11 @@
 
 package com.liferay.ide.gradle.core.tests;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
 import com.liferay.ide.gradle.core.tests.base.NewModuleGradleBase;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
+
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * @author Joye Luo
