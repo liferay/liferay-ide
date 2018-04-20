@@ -27,6 +27,7 @@ import org.junit.rules.RuleChain;
 /**
  * @author Joye Luo
  * @author Terry Jia
+ * @author Ying Xu
  */
 public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 

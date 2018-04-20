@@ -16,38 +16,29 @@ package com.liferay.ide.ui.service.builder.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
-import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceGradleSupport;
-import com.liferay.ide.ui.liferay.util.RuleUtil;
+import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceMavenSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.RuleChain;
 
 /**
  * @author Joye Luo
+ * @author Ying Xu
  */
-public class NewServiceBuilderModuleLiferayWorkspaceGradleTest extends SwtbotBase {
-
-	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
+public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends SwtbotBase {
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getTomcat7xRuleChain(bot, tomcat);
-
-	@ClassRule
-	public static LiferayWorkspaceGradleSupport liferayWorkspace = new LiferayWorkspaceGradleSupport(bot);
+	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
 
 	@Test
 	public void createServiceBuilder() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_BUILDER);
+		wizardAction.newModule.prepareMaven(project.getName(), SERVICE_BUILDER);
 
 		wizardAction.finish();
-
-		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 

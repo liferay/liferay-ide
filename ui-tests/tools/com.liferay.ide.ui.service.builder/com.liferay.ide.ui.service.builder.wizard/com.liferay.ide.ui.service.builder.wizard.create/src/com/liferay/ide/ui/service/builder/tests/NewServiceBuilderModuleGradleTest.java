@@ -23,14 +23,15 @@ import org.junit.Test;
 
 /**
  * @author Joye Luo
+ * @author Ying Xu
  */
-public class NewServiceBuilderModuleMavenTest extends SwtbotBase {
+public class NewServiceBuilderModuleGradleTest extends SwtbotBase {
 
 	@Test
 	public void createServiceBuilder() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), SERVICE_BUILDER);
+		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_BUILDER);
 
 		wizardAction.finish();
 
