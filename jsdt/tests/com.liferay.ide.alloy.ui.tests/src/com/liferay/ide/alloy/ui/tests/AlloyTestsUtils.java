@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.alloy.ui.tests;
 
@@ -32,26 +31,24 @@ import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
  * @author Kuo Zhang
  * @author Terry Jia
  */
+@SuppressWarnings("restriction")
+public class AlloyTestsUtils {
 
-@SuppressWarnings( "restriction" )
-public class AlloyTestsUtils
-{
+	public static ICompletionProposal[] getWebSevicesProposals(IFile file, String elementName) throws Exception {
+		StructuredTextViewer viewer = getEditor(file).getTextViewer();
+		SourceViewerConfiguration srcViewConf = getSourceViewerConfiguraionFromOpenedEditor(file);
 
-    public static ICompletionProposal[] getWebSevicesProposals( IFile file , String elementName ) throws Exception
-    {
-        final StructuredTextViewer viewer = getEditor( file ).getTextViewer();
-        final SourceViewerConfiguration srcViewConf = getSourceViewerConfiguraionFromOpenedEditor( file );
+		ContentAssistant contentAssistant = (ContentAssistant)srcViewConf.getContentAssistant(viewer);
 
-        final ContentAssistant contentAssistant = (ContentAssistant) srcViewConf.getContentAssistant( viewer );
+		String partitionTypeID = viewer.getDocument().getPartition(getElementContentEndOffset(file, elementName))
+			.getType();
 
-        final String partitionTypeID =
-            viewer.getDocument().getPartition( getElementContentEndOffset( file, elementName ) ).getType();
+		IContentAssistProcessor processor = contentAssistant.getContentAssistProcessor(partitionTypeID);
 
-        final IContentAssistProcessor processor = contentAssistant.getContentAssistProcessor( partitionTypeID );
+		ICompletionProposal[] proposals = processor.computeCompletionProposals(viewer,
+			getElementContentEndOffset(file, elementName));
 
-        final ICompletionProposal[] proposals =
-            processor.computeCompletionProposals( viewer, getElementContentEndOffset( file, elementName ) );
+		return proposals;
+	}
 
-        return proposals;
-    }
 }
