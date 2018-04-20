@@ -76,10 +76,11 @@ public class PortalResourcesProvider implements IWebResourcesFileSystemProvider 
 								Collection<File> cached = new HashSet<>();
 
 								for (File file : files) {
-									if (file.getName().endsWith("scss")) {
+									String fileName = file.getName();
+
+									if (fileName.endsWith("scss")) {
 										File cachedFile = new File(
-											file.getParent(),
-											".sass-cache/" + file.getName().replaceAll("scss$", "css"));
+											file.getParent(), ".sass-cache/" + fileName.replaceAll("scss$", "css"));
 
 										if (FileUtil.exists(cachedFile)) {
 											cached.add(file);

@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.content.IContentTypeManager;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.wst.sse.core.internal.document.IDocumentLoader;
 import org.eclipse.wst.sse.core.internal.filebuffers.BasicStructuredDocumentFactory;
 import org.eclipse.wst.sse.core.internal.ltk.modelhandler.IModelHandler;
 import org.eclipse.wst.sse.core.internal.modelhandler.ModelHandlerRegistry;
@@ -33,16 +34,22 @@ public class AlloyJSPDocumentFactory extends BasicStructuredDocumentFactory {
 	public IDocument createDocument() {
 		IModelHandler handler = null;
 
-		IContentType contentType =
-			Platform.getContentTypeManager().getContentType("com.liferay.ide.alloy.core.alloyjspsource");
+		IContentTypeManager manager = Platform.getContentTypeManager();
+
+		IContentType contentType = manager.getContentType("com.liferay.ide.alloy.core.alloyjspsource");
 
 		while ((handler == null) && !IContentTypeManager.CT_TEXT.equals(contentType.getId())) {
-			handler = ModelHandlerRegistry.getInstance().getHandlerForContentTypeId(contentType.getId());
+			ModelHandlerRegistry registry = ModelHandlerRegistry.getInstance();
+
+			handler = registry.getHandlerForContentTypeId(contentType.getId());
+
 			contentType = contentType.getBaseType();
 		}
 
 		if (handler != null) {
-			return handler.getDocumentLoader().createNewStructuredDocument();
+			IDocumentLoader loader = handler.getDocumentLoader();
+
+			return loader.createNewStructuredDocument();
 		}
 		else {
 			return new JobSafeStructuredDocument();
