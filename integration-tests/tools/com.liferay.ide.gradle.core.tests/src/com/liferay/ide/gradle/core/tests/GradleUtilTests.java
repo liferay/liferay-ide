@@ -28,22 +28,23 @@ import org.eclipse.core.runtime.jobs.IJobManager;
 import org.junit.Test;
 
 /**
+ * @author Gregory Amerson
  * @author Terry Jia
  */
 @SuppressWarnings("restriction")
-public class ImportLiferayWorkspaceGradleTests extends ProjectBase {
+public class GradleUtilTests extends ProjectBase {
 
 	@Test
 	public void importLiferayWorkspace() throws CoreException {
-		ImportProjectSupport ps = new ImportProjectSupport("test-liferay-workspace");
+		ImportProjectSupport ips = new ImportProjectSupport("test-liferay-workspace");
 
-		ps.before();
+		ips.before();
 
-		GradleUtil.importGradleProject(ps.getProjectFile(), npm);
+		GradleUtil.importGradleProject(ips.getProjectFile(), npm);
 
 		waitForBuildAndValidation();
 
-		assertNotLiferayProject(ps.getName());
+		assertNotLiferayProject(ips.getName());
 
 		assertLiferayProject("jstl.test");
 		assertLiferayProject("roster-api");
@@ -55,26 +56,46 @@ public class ImportLiferayWorkspaceGradleTests extends ProjectBase {
 
 		assertSourceFolders("sample-theme", "src");
 
-		deleteProject(ps.getName());
+		deleteProject(ips.getName());
 	}
 
 	@Test
-	public void importLiferayWorkspaceEE() throws CoreException {
-		ImportProjectSupport ps = new ImportProjectSupport("test-liferay-workspace-ee");
+	public void importLiferayWorkspaceEE() {
+		ImportProjectSupport ips = new ImportProjectSupport("test-liferay-workspace-ee");
 
-		ps.before();
+		ips.before();
 
-		GradleUtil.importGradleProject(ps.getProjectFile(), npm);
+		try {
+			GradleUtil.importGradleProject(ips.getProjectFile(), npm);
+		}
+		catch (CoreException e) {
+			failTest(e);
+		}
 
 		waitForBuildAndValidation();
 
-		assertNotLiferayProject(ps.getName());
+		assertNotLiferayProject(ips.getName());
 
 		assertNotLiferayProject("aws");
 		assertNotLiferayProject("docker");
 		assertNotLiferayProject("jenkins");
 
-		deleteProject(ps.getName());
+		deleteProject(ips.getName());
+	}
+
+	@Test
+	public void isBuildFile() {
+		// TODO test for GradleUtil.isBuildFile()
+	}
+
+	@Test
+	public void refreshGradleProject() {
+		// TODO test for GradleUtil.refreshGradleProject()
+	}
+
+	@Test
+	public void runGradleTask() {
+		// TODO test for GradleUtil.runGradleTask()
 	}
 
 	@Override

@@ -47,13 +47,25 @@ public class NewModuleMavenTests extends NewModuleOpBase<NewLiferayModuleProject
 	@Rule
 	public ProjectSupport project = new ProjectSupport();
 
-	protected void verifyProjectFiles(IProject project) {
-		assertFileNotExists(project.getFile("build.gradle"));
-		assertFileExists(project.getFile("pom.xml"));
+	protected void verifyProjectFiles(String projectName) {
+		super.verifyProjectFiles(projectName);
+
+		assertProjectFileNotExists(projectName, "build.gradle");
+		assertProjectFileExists(projectName, "pom.xml");
 	}
 
 	protected void waitForBuildAndValidation() {
 		JobHelpers.waitForJobsToComplete();
+	}
+
+	@Override
+	protected String provider() {
+		return "maven-module";
+	}
+
+	@Override
+	protected String shape() {
+		return "jar";
 	}
 
 }

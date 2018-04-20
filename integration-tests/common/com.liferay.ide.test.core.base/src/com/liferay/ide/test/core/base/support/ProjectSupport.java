@@ -14,9 +14,6 @@
 
 package com.liferay.ide.test.core.base.support;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 /**
  * @author Terry Jia
  */
@@ -38,6 +35,5 @@ public class ProjectSupport extends SupportBase {
 	}
 
 	protected String name = "test";
-	protected IProgressMonitor npm = new NullProgressMonitor();
 
 }

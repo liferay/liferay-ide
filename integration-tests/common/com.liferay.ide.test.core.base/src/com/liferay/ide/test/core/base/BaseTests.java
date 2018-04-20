@@ -14,11 +14,6 @@
 
 package com.liferay.ide.test.core.base;
 
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.LiferayNature;
-import com.liferay.ide.core.util.FileUtil;
-
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -33,8 +28,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.junit.Assert;
+
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.core.util.FileUtil;
 
 /**
  * @author Gregory Amerson
@@ -67,7 +67,21 @@ public class BaseTests {
 	}
 
 	protected void assertFileExists(IFile file) {
+		try {
+			file.refreshLocal(0, npm);
+		}
+		catch (CoreException e) {
+		}
+
 		Assert.assertTrue(FileUtil.exists(file));
+	}
+
+	protected void assertFileSuffix(IPath path, String expectedSuffix) {
+		Assert.assertTrue(path.toFile().getName().endsWith(expectedSuffix));
+	}
+
+	protected void assertFileSuffix(IFile file, String expectedSuffix) {
+		Assert.assertTrue(file.getName().endsWith(expectedSuffix));
 	}
 
 	protected void assertFileExists(IPath path) {
@@ -104,6 +118,48 @@ public class BaseTests {
 		Assert.assertTrue(FileUtil.exists(project));
 	}
 
+	protected void assertBundleProject(String projectName) {
+		IProject project = project(projectName);
+
+		assertProjectExists(project);
+
+		Assert.assertNotNull(LiferayCore.create(IBundleProject.class, project));
+	}
+
+	protected void assertProjectExists(String projectName) {
+		Assert.assertTrue(FileUtil.exists(project(projectName)));
+	}
+
+	protected void assertProjectFileContains(String projectName, String filePath, String expectedContent) {
+		IProject project = project(projectName);
+
+		assertProjectExists(project);
+
+		IFile file = project.getFile(filePath);
+
+		assertFileExists(file);
+
+		String content = FileUtil.readContents(file);
+
+		Assert.assertTrue(content.contains(expectedContent));
+	}
+
+	protected void assertProjectFileNotExists(String projectName, String filePath) {
+		IProject project = project(projectName);
+
+		assertProjectExists(project);
+
+		assertFileNotExists(project.getFile(filePath));
+	}
+
+	protected void assertProjectFileExists(String projectName, String filePath) {
+		IProject project = project(projectName);
+
+		assertProjectExists(project);
+
+		assertFileExists(project.getFile(filePath));
+	}
+
 	protected void assertSourceFolders(String projectName, String expectedSourceFolderName) {
 		IProject project = project(projectName);
 
@@ -116,14 +172,20 @@ public class BaseTests {
 		Assert.assertEquals(expectedSourceFolderName, srcFolders[0].getName());
 	}
 
-	protected final void deleteProject(String projectName) throws CoreException {
+	protected final void deleteProject(String projectName) {
 		IProject project = project(projectName);
 
 		assertProjectExists(project);
 
-		project.close(npm);
+		try {
+			project.close(npm);
 
-		project.delete(true, true, npm);
+			project.delete(true, true, npm);
+		}
+		catch (CoreException e) {
+			failTest(e);
+		}
+
 	}
 
 	protected IProgressMonitor npm = new NullProgressMonitor();
