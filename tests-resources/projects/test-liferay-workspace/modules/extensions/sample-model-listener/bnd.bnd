@@ -1,0 +1,10 @@
+Bundle-SymbolicName: sample.model.listener
+
+Bundle-Version: ${version}.${tstamp}
+
+Import-Package:\
+	com.liferay.portal;version='[7,8)',\
+	com.liferay.portal.model;version='[7,8)',\
+	*
+
+Private-Package: sample.model.listener

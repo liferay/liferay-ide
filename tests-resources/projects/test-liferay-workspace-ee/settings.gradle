@@ -1,0 +1,17 @@
+buildscript {
+    dependencies {
+        classpath group: "com.liferay", name: "com.liferay.gradle.plugins.workspace", version: "1.2.2"
+    }
+
+    repositories {
+        maven {
+            url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+        }
+    }
+}
+
+apply plugin: "com.liferay.workspace"
+
+// Liferay Workspace EE START
+apply from: 'gradle/liferay-workspace-ee/settings-ee.gradle'
+// Liferay Workspace EE END

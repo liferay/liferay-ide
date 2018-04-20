@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.liferay.roster.model.Club">
+		<field name="uuid" type="String" />
+		<field name="clubId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="name" type="String" />
+	</model>
+	<model name="com.liferay.roster.model.Roster">
+		<field name="uuid" type="String" />
+		<field name="rosterId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="clubId" type="long" />
+		<field name="name" type="String" />
+	</model>
+	<model name="com.liferay.roster.model.RosterMember">
+		<field name="uuid" type="String" />
+		<field name="rosterMemberId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="rosterId" type="long" />
+		<field name="contactId" type="long" />
+	</model>
+</model-hints>
