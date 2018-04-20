@@ -38,7 +38,9 @@ public class PortletJSPSourceViewerConfiguration extends JSDTStructuredTextViewe
 	public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType, int stateMask) {
 		ITextHover textHover = null;
 
-		TextHoverManager textHoverManager = SSEUIPlugin.getDefault().getTextHoverManager();
+		SSEUIPlugin plugin = SSEUIPlugin.getDefault();
+
+		TextHoverManager textHoverManager = plugin.getTextHoverManager();
 
 		TextHoverManager.TextHoverDescriptor[] hoverDescs = textHoverManager.getTextHovers();
 
