@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.project.core.modules;
+package com.liferay.ide.project.core.service;
 
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -37,7 +37,7 @@ public class TargetLiferayVersionDefaultValueService extends DefaultValueService
 		IPreferencesService prefService = Platform.getPreferencesService();
 
 		String defaultLiferayVersion = prefService.getString(
-			ProjectCore.PLUGIN_ID, ProjectCore.PRE_DEFAULT_MODULE_PROJECT_LIFERAY_VERSION_OPTION, null, prefContexts);
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, null, prefContexts);
 
 		if (defaultLiferayVersion != null) {
 			retval = defaultLiferayVersion;

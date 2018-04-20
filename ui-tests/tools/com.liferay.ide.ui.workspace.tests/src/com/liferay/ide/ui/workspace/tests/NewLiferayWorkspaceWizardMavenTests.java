@@ -87,6 +87,29 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Test
+	public void createLiferayWorkspace71() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
+
+		wizardAction.newLiferayWorkspace.prepareMaven(project.getName(), "7.1");
+
+		wizardAction.newLiferayWorkspace.deselectDownloadLiferayBundle();
+
+		wizardAction.finish();
+
+		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
+		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
+		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
+
+		viewAction.project.closeAndDelete(moduleNames);
+		viewAction.project.closeAndDelete(themeNames);
+		viewAction.project.closeAndDelete(warNames);
+
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
 	@Ignore
 	@Test
 	public void createLiferayWorkspaceInitBundle() {

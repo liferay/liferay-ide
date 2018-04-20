@@ -63,14 +63,17 @@ public class LiferayGradleWorkspaceProjectProvider
 
 		IPath wsLocation = location.append(wsName);
 
+		String liferayVersion = op.getLiferayVersion().content();
+
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("--base ");
 		sb.append("\"");
 		sb.append(wsLocation.toFile().getAbsolutePath());
 		sb.append("\" ");
-		sb.append("");
-		sb.append("init");
+		sb.append("init ");
+		sb.append("-v ");
+		sb.append(liferayVersion);
 
 		try {
 			BladeCLI.execute(sb.toString());
@@ -178,7 +181,7 @@ public class LiferayGradleWorkspaceProjectProvider
 	public String getInitBundleUrl(String workspaceLocation) {
 		return LiferayWorkspaceUtil.getGradleProperty(
 			workspaceLocation, LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL,
-			BaseLiferayWorkspaceOp.DEFAULT_BUNDLE_URL
+			BaseLiferayWorkspaceOp.LIFERAY_70_BUNDLE_URL
 		);
 	}
 

@@ -435,6 +435,8 @@ public interface UI {
 
 	public final String LIFERAY_VAADIN_PORTLET = "Liferay Vaadin Portlet";
 
+	public final String LIFERAY_VERSION = "Liferay version:";
+
 	public final String LIFERAY_WORKSPACE = "Liferay Workspace";
 
 	public final String LIFERAY_WORKSPACE_PROJECT = "Liferay Workspace Project";

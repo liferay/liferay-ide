@@ -445,12 +445,9 @@ public class FileUtil {
 
 		StringBuffer contents = new StringBuffer();
 
-		BufferedReader bufferedReader = null;
+		try (FileReader fileReader = new FileReader(file);
+			BufferedReader bufferedReader = new BufferedReader(fileReader)) {
 
-		try {
-			FileReader fileReader = new FileReader(file);
-
-			bufferedReader = new BufferedReader(fileReader);
 
 			String line;
 
@@ -464,18 +461,6 @@ public class FileUtil {
 		}
 		catch (Exception e) {
 			LiferayCore.logError("Could not read file: " + file.getPath());
-		}
-		finally {
-			if (bufferedReader != null) {
-				try {
-					bufferedReader.close();
-				}
-				catch (IOException ioe) {
-
-					// best effort no need to log
-
-				}
-			}
 		}
 
 		return contents.toString();

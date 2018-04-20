@@ -688,8 +688,16 @@ public class WizardAction extends UIAction {
 
 	public class NewLiferayWorkspaceWizardAction extends NewProjectWizardAction {
 
+		public void deselectDownloadLiferayBundle() {
+			downloadLiferayBundle().deselect();
+		}
+
 		public CheckBox downloadLiferayBundle() {
 			return _newLiferayWorkspaceWizard.getDownloadLiferayBundle();
+		}
+
+		public Text getBundleUrl() {
+			return _newLiferayWorkspaceWizard.getBundleUrl();
 		}
 
 		public void prepareGradle(String projectName) {
@@ -703,8 +711,16 @@ public class WizardAction extends UIAction {
 			_prepare(projectName, GRADLE, downloadLiferayBundle, serverName, useDefaultBundleUrl, bundleUrl);
 		}
 
+		public void prepareGradle(String projectName, String version) {
+			_prepare(projectName, GRADLE, version);
+		}
+
 		public void prepareMaven(String projectName) {
 			_prepare(projectName, MAVEN);
+		}
+
+		public void prepareMaven(String projectName, String version) {
+			_prepare(projectName, MAVEN, version);
 		}
 
 		public void selectDownloadLiferayBundle() {
@@ -742,6 +758,14 @@ public class WizardAction extends UIAction {
 			else {
 				downloadLiferayBundle().deselect();
 			}
+		}
+
+		private void _prepare(String projectName, String buildType, String version) {
+			_newLiferayWorkspaceWizard.getProjectName().setText(projectName);
+			ide.sleep(800);
+			_newLiferayWorkspaceWizard.getBuildTypes().setSelection(buildType);
+			_newLiferayWorkspaceWizard.getLiferayVersion().setSelection(version);
+			ide.sleep(800);
 		}
 
 		private final NewLiferayWorkspaceWizard _newLiferayWorkspaceWizard = new NewLiferayWorkspaceWizard(bot);

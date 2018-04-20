@@ -162,6 +162,21 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Test
+	public void createLiferayWorkspace71() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.1");
+
+		wizardAction.newLiferayWorkspace.deselectDownloadLiferayBundle();
+
+		wizardAction.finish();
+
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
 	@Ignore("Ignore forever and test the download bundle in createLiferayWorkspaceWithDownloadBundleChangeBundleUrl")
 	@Test
 	public void createLiferayWorkspaceWithDownloadBundle() {

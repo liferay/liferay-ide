@@ -15,6 +15,8 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
+import com.liferay.ide.project.core.service.TargetLiferayVersionDefaultValueService;
+import com.liferay.ide.project.core.service.TargetLiferayVersionPossibleValuesService;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;

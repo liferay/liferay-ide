@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.project.core.workspace.BaseLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
 import java.io.File;
@@ -31,8 +32,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerCore;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -94,7 +97,7 @@ public class NewMavenLiferayWorkspaceOpTests
     {
         NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-        String projectName = "test-liferay-workspace";
+        String projectName = "test-liferay-workspace-init";
 
         IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
 
@@ -153,6 +156,37 @@ public class NewMavenLiferayWorkspaceOpTests
 
         assertTrue( content.contains("com.liferay.portal.tools.bundle.support") );
     }
+
+	@Test
+	public void testNewMavenLiferayWorkspaceOpWithBundle71() throws Exception {
+		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
+
+		String projectName = "test-liferay-workspace-71";
+
+		IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+
+		op.setWorkspaceName(projectName);
+		op.setLiferayVersion("7.1");
+		op.setProjectProvider("maven-liferay-workspace");
+		op.setLocation(workspaceLocation.toPortableString());
+
+		Status status = op.execute(new ProgressMonitor());
+
+		Assert.assertNotNull(status);
+		Assert.assertEquals("OK", status.message());
+
+		String wsLocation = workspaceLocation.append(projectName).toPortableString();
+
+		File wsFile = new File(wsLocation);
+
+		File pomFile = new File(wsFile, "pom.xml");
+
+		Assert.assertTrue( pomFile.exists() );
+
+		String xml = FileUtil.readContents(pomFile);
+
+		Assert.assertTrue(xml.contains(BaseLiferayWorkspaceOp.LIFERAY_71_BUNDLE_URL));
+	}
 
 	@Test
 	public void testNewLiferayWorkspaceOpWithInvalidBundleUrl() throws Exception
