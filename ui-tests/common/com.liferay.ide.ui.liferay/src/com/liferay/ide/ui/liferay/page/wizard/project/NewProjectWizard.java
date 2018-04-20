@@ -43,6 +43,10 @@ public class NewProjectWizard extends Wizard {
 		return new ComboBox(getShell().bot(), BUILD_TYPE);
 	}
 
+	public ComboBox getLiferayVersion() {
+		return new ComboBox(getShell().bot(), LIFERAY_VERSION);
+	}
+
 	public Text getLocation() {
 		return new Text(getShell().bot(), LOCATION_WITH_COLON);
 	}

@@ -93,22 +93,23 @@ public class NewLiferayWorkspaceOpMethods {
 		}
 
 		if (retval.ok()) {
-			_updateBuildPrefs(op);
+			_updateBuildAndVersionPrefs(op);
 		}
 
 		return retval;
 	}
 
-	private static void _updateBuildPrefs(NewLiferayWorkspaceOp op) {
+	private static void _updateBuildAndVersionPrefs(NewLiferayWorkspaceOp op) {
 		try {
 			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
 
+			prefs.put(ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, op.getLiferayVersion().text());
 			prefs.put(ProjectCore.PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text());
 
 			prefs.flush();
 		}
 		catch (Exception e) {
-			String msg = "Error updating default workspace build type.";
+			String msg = "Error updating default workspace build type or version.";
 
 			ProjectCore.logError(msg, e);
 		}

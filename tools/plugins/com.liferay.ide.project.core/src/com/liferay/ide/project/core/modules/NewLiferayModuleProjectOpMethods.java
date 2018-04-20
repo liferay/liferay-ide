@@ -368,7 +368,7 @@ public class NewLiferayModuleProjectOpMethods {
 		try {
 			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
 
-			prefs.put(ProjectCore.PRE_DEFAULT_MODULE_PROJECT_LIFERAY_VERSION_OPTION, op.getLiferayVersion().text());
+			prefs.put(ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, op.getLiferayVersion().text());
 			prefs.put(ProjectCore.PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text());
 
 			prefs.flush();
