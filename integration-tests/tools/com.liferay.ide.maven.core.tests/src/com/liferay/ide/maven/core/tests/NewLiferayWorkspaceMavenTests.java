@@ -34,7 +34,7 @@ public class NewLiferayWorkspaceMavenTests extends NewProjectOpBase<NewLiferayWo
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
 		op.setWorkspaceName(workspace.getName());
-		op.setProjectProvider("maven-liferay-workspace");
+		op.setProjectProvider(provider());
 
 		createAndBuild(op, workspace.getName());
 
@@ -43,6 +43,11 @@ public class NewLiferayWorkspaceMavenTests extends NewProjectOpBase<NewLiferayWo
 
 	@Rule
 	public LiferayWorkspaceSupport workspace = new LiferayWorkspaceSupport();
+
+	@Override
+	protected String provider() {
+		return "maven-liferay-workspace";
+	}
 
 	protected void verifyProjectFiles(IProject project) {
 		assertFileNotExists(project.getFile("build.gradle"));

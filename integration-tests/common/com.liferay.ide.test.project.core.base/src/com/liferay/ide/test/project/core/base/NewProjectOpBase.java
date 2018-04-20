@@ -14,20 +14,27 @@
 
 package com.liferay.ide.test.project.core.base;
 
+import com.liferay.ide.test.core.base.support.ProjectSupport;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.sapphire.ExecutableElement;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 
 import org.junit.Assert;
+import org.junit.Rule;
 
 /**
  * @author Terry Jia
  */
 public abstract class NewProjectOpBase<T extends ExecutableElement> extends ProjectBase {
 
-	protected IProject create(T op, String projectName) throws Exception {
+	@Rule
+	public ProjectSupport project = new ProjectSupport();
+
+	protected IProject create(T op, String projectName) {
 		Status status = op.execute(ProgressMonitorBridge.create(npm));
 
 		Assert.assertNotNull(status);
@@ -38,7 +45,7 @@ public abstract class NewProjectOpBase<T extends ExecutableElement> extends Proj
 		return project(projectName);
 	}
 
-	protected IProject createAndBuild(T op, String projectName) throws Exception {
+	protected IProject createAndBuild(T op, String projectName) {
 		Status status = op.validation();
 
 		Assert.assertTrue(status.message(), status.ok());
@@ -47,9 +54,16 @@ public abstract class NewProjectOpBase<T extends ExecutableElement> extends Proj
 
 		verifyProject(project);
 
-		project.refreshLocal(IResource.DEPTH_INFINITE, npm);
+		try {
+			project.refreshLocal(IResource.DEPTH_INFINITE, npm);
+		}
+		catch (CoreException ce) {
+			failTest(ce);
+		}
 
 		return project;
 	}
+
+	protected abstract String provider();
 
 }

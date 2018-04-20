@@ -14,18 +14,19 @@
 
 package com.liferay.ide.test.project.core.base;
 
+import com.liferay.ide.test.core.base.BaseTests;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.validation.internal.operations.ValidatorManager;
-
-import com.liferay.ide.test.core.base.BaseTests;
 
 /**
  * @author Terry Jia
@@ -36,21 +37,35 @@ public class ProjectBase extends BaseTests {
 	protected void needJobsToBuild(IJobManager manager) throws InterruptedException, OperationCanceledException {
 	}
 
-	protected void verifyProject(IProject project) throws Exception {
+	protected void verifyProject(IProject project) {
 		assertProjectExists(project);
 
-		verifyProjectFiles(project);
+		verifyProjectFiles(project.getName());
 
-		project.build(IncrementalProjectBuilder.CLEAN_BUILD, npm);
+		try {
+			project.build(IncrementalProjectBuilder.CLEAN_BUILD, npm);
+		}
+		catch (CoreException ce) {
+			failTest(ce);
+		}
 
 		waitForBuildAndValidation();
 
-		project.build(IncrementalProjectBuilder.FULL_BUILD, npm);
+		try {
+			project.build(IncrementalProjectBuilder.FULL_BUILD, npm);
+		}
+		catch (CoreException ce) {
+			failTest(ce);
+		}
 
 		waitForBuildAndValidation();
 	}
 
-	protected void verifyProjectFiles(IProject project) {
+	protected void verifyProject(String projectName) {
+		verifyProject(project(projectName));
+	}
+
+	protected void verifyProjectFiles(String projectName) {
 	}
 
 	protected void waitForBuildAndValidation() {
@@ -88,6 +103,6 @@ public class ProjectBase extends BaseTests {
 				manager.endRule(root);
 			}
 		}
-	};
+	}
 
 }

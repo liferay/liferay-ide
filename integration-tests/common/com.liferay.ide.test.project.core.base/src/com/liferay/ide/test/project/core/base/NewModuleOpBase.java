@@ -18,6 +18,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.ExecutableElement;
 
@@ -28,16 +29,27 @@ import org.junit.Assert;
  */
 public abstract class NewModuleOpBase<T extends ExecutableElement> extends NewProjectOpBase<T> {
 
-	protected void verifyProject(IProject project) throws Exception {
+	protected abstract String shape();
+
+	protected void verifyProject(IProject project) {
 		super.verifyProject(project);
 
 		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 
 		Assert.assertNotNull(bundleProject);
 
-		IPath outputBundle = bundleProject.getOutputBundle(true, npm);
+		IPath outputBundle;
 
-		assertFileExists(outputBundle);
+		try {
+			outputBundle = bundleProject.getOutputBundle(true, npm);
+
+			assertFileExists(outputBundle);
+
+			assertFileSuffix(outputBundle, shape());
+		}
+		catch (CoreException ce) {
+			failTest(ce);
+		}
 	}
 
 }
