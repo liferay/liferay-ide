@@ -60,6 +60,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -628,6 +629,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         createAndBuild(op);
     }
 
+    @Ignore("Re-enable NPM tests")
     @Test
     public void testProjectTemplateNpmBillboardjsPortlet() throws Exception
     {
@@ -640,6 +642,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         createAndBuild(op);
     }
 
+    @Ignore("Re-enable NPM Tests")
     @Test
     public void testProjectTemplateNpmIsomorphicPortlet () throws Exception
     {
@@ -652,6 +655,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         createAndBuild(op);
     }
 
+    @Ignore("Re-enable NPM Tests")
     @Test
     public void testProjectTemplateNpmJqueryPortlet() throws Exception
     {
@@ -664,6 +668,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         createAndBuild(op);
     }
 
+    @Ignore("Re-enable NPM Tests")
     @Test
     public void testProjectTemplateNpmMetaljsPortlet() throws Exception
     {
@@ -676,6 +681,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         createAndBuild(op);
     }
 
+    @Ignore("Re-enable NPM Tests")
     @Test
     public void testProjectTemplateNpmPortlet() throws Exception
     {
@@ -688,6 +694,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         createAndBuild(op);
     }
 
+    @Ignore("Re-enable NPM Tests")
     @Test
     public void testProjectTemplateNpmReactPortlet() throws Exception
     {
@@ -700,6 +707,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         createAndBuild(op);
     }
 
+    @Ignore("Re-enable NPM Tests")
     @Test
     public void testProjectTemplateNpmVuejsPortlet() throws Exception
     {
@@ -726,6 +734,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         verifyNpmPortletV71( op );
     }
 
+    @Ignore("Re-enable NPM Tests")
     @Test
     public void testProjectTemplateNpmBillboardjsPortlet71() throws Exception
     {
@@ -740,6 +749,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         verifyNpmPortletV71( op );
     }
 
+    @Ignore("Re-enable NPM Tests")
     @Test
     public void testProjectTemplateNpmIsomorphicPortlet71() throws Exception
     {
@@ -754,6 +764,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         verifyNpmPortletV71( op );
     }
 
+    @Ignore("Re-enable NPM Tests")
     @Test
     public void testProjectTemplateNpmJqueryPortlet71() throws Exception
     {
@@ -768,6 +779,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         verifyNpmPortletV71( op );
     }
 
+    @Ignore("Re-enable NPM Tests")
     @Test
     public void testProjectTemplateNpmMetaljsPortlet71() throws Exception
     {
@@ -782,6 +794,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         verifyNpmPortletV71( op );
     }
 
+    @Ignore("Re-enable NPM Tests")
     @Test
     public void testProjectTemplateNpmPortlet71() throws Exception
     {
@@ -796,6 +809,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         verifyNpmPortletV71( op );
     }
 
+    @Ignore("Re-enable NPM Tests")
     @Test
     public void testProjectTemplateNpmReactPortlet71() throws Exception
     {
@@ -810,6 +824,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         verifyNpmPortletV71( op );
     }
 
+    @Ignore("Re-enable NPM Tests")
     @Test
     public void testProjectTemplateNpmVuejsPortlet71() throws Exception
     {
