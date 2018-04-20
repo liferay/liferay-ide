@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.liferay.ide.alloy"
-      label="Liferay IDE AlloyUI"
-      version="3.2.0.qualifier"
-      provider-name="Liferay, Inc."
-      plugin="com.liferay.ide.alloy.ui">
+	id="com.liferay.ide.alloy"
+	label="Liferay IDE AlloyUI"
+	version="3.2.0.qualifier"
+	provider-name="Liferay, Inc."
+	  plugin="com.liferay.ide.alloy.ui">
 
-   <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
-      Liferay IDE AlloyUI includes javascript development tooling for AlloyUI framework including Tern integration, and css webresources feature.
-   </description>
+	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
+	  Liferay IDE AlloyUI includes javascript development tooling for AlloyUI framework including Tern integration, and css webresources feature.
+	</description>
 
-   <copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
-      /**
+	<copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
+	  /**
 * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
 *
 * This library is free software; you can redistribute it and/or
@@ -25,32 +25,32 @@
 * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
 * the GNU Lesser General Public License for more details.
 */
-   </copyright>
+	</copyright>
 
-   <license url="http://www.gnu.org/licenses/lgpl-2.1.html">
-      Liferay IDE is free software distributed under the terms of the Lesser GNU Public License. See URL for full license text.  http://www.gnu.org/licenses/lgpl-2.1.html
-   </license>
+	<license url="http://www.gnu.org/licenses/lgpl-2.1.html">
+	  Liferay IDE is free software distributed under the terms of the Lesser GNU Public License. See URL for full license text.  http://www.gnu.org/licenses/lgpl-2.1.html
+	</license>
 
-   <requires>
-      <import feature="com.liferay.ide.eclipse.tools" version="3.0.0" match="greaterOrEqual"/>
-      <import feature="tern-feature" version="0.9.0" match="greaterOrEqual"/>
-      <import feature="tern-jsdt-feature" version="0.9.0" match="greaterOrEqual"/>
-      <import feature="tern-server-nodejs-feature" version="0.9.0" match="greaterOrEqual"/>
-      <import feature="tern.eclipse.ide.server.nodejs.embed" version="0.9.0" match="greaterOrEqual"/>
-   </requires>
+	<requires>
+		<import feature="com.liferay.ide.eclipse.tools" version="3.0.0" match="greaterOrEqual" />
+		<import feature="tern-feature" version="0.9.0" match="greaterOrEqual" />
+		<import feature="tern-jsdt-feature" version="0.9.0" match="greaterOrEqual" />
+		<import feature="tern-server-nodejs-feature" version="0.9.0" match="greaterOrEqual" />
+		<import feature="tern.eclipse.ide.server.nodejs.embed" version="0.9.0" match="greaterOrEqual" />
+	</requires>
 
-   <plugin
-         id="com.liferay.ide.alloy.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.alloy.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.alloy.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.alloy.ui"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
 </feature>
