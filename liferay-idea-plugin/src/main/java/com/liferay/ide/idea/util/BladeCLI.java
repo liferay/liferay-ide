@@ -58,9 +58,9 @@ public class BladeCLI {
 		URL url = bladeClassLoader.getResource("/libs/blade.jar");
 
 		try (InputStream in = bladeClassLoader.getResourceAsStream("/libs/blade.jar")) {
-			JarURLConnection jarUrlConnection = (JarURLConnection)url.openConnection();
+			JarURLConnection jarURLConnection = (JarURLConnection)url.openConnection();
 
-			JarEntry jarEntry = jarUrlConnection.getJarEntry();
+			JarEntry jarEntry = jarURLConnection.getJarEntry();
 
 			Long bladeJarTimestamp = jarEntry.getTime();
 

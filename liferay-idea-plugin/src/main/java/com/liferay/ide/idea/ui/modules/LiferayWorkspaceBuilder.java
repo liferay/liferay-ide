@@ -14,17 +14,26 @@
 
 package com.liferay.ide.idea.ui.modules;
 
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.ide.util.projectWizard.ModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.SdkSettingsStep;
 import com.intellij.ide.util.projectWizard.SettingsStep;
+import com.intellij.ide.util.projectWizard.WizardContext;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.StdModuleTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.SdkTypeId;
+import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.Condition;
 
 import com.liferay.ide.idea.util.BladeCLI;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JComboBox;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,6 +48,12 @@ public abstract class LiferayWorkspaceBuilder extends ModuleBuilder {
 		_liferayProjectType = liferayProjectType;
 	}
 
+	@Nullable
+	@Override
+	public ModuleWizardStep getCustomOptionsStep(WizardContext context, Disposable parentDisposable) {
+		return super.getCustomOptionsStep(context, parentDisposable);
+	}
+
 	@Override
 	public ModuleType getModuleType() {
 		return StdModuleTypes.JAVA;
@@ -47,6 +62,25 @@ public abstract class LiferayWorkspaceBuilder extends ModuleBuilder {
 	@Nullable
 	@Override
 	public ModuleWizardStep modifySettingsStep(@NotNull SettingsStep settingsStep) {
+		JComboBox liferayVersionComboBox = new ComboBox();
+
+		liferayVersionComboBox.addItem("7.0");
+		liferayVersionComboBox.addItem("7.1");
+
+		liferayVersionComboBox.addActionListener(
+			new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Object selectedVersion = liferayVersionComboBox.getSelectedItem();
+
+					_liferayVersion = selectedVersion.toString();
+				}
+
+			});
+
+		settingsStep.addSettingsField("Liferay version:", liferayVersionComboBox);
+
 		return new SdkSettingsStep(
 			settingsStep, this,
 			new Condition<SdkTypeId>() {
@@ -67,6 +101,9 @@ public abstract class LiferayWorkspaceBuilder extends ModuleBuilder {
 		sb.append(project.getBasePath());
 		sb.append("\" ");
 		sb.append("init ");
+		sb.append("-v ");
+		sb.append(_liferayVersion);
+		sb.append(" ");
 		sb.append("-f ");
 
 		if (_liferayProjectType.equals(LiferayProjectType.LIFERAY_MAVEN_WORKSPACE)) {
@@ -74,9 +111,15 @@ public abstract class LiferayWorkspaceBuilder extends ModuleBuilder {
 			sb.append("maven");
 		}
 
+		PropertiesComponent component = PropertiesComponent.getInstance(project);
+		String selectedLiferayVersionProperty = "selected.liferay.version";
+
+		component.setValue(selectedLiferayVersionProperty, _liferayVersion);
+
 		BladeCLI.execute(sb.toString());
 	}
 
 	private String _liferayProjectType;
+	private String _liferayVersion = "7.0";
 
 }

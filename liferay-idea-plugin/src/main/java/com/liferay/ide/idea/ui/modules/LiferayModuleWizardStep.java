@@ -101,9 +101,9 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 
 						List<String> services = serviceContainer.getServiceList();
 
-						Stream<String> steam = services.stream();
+						Stream<String> stream = services.stream();
 
-						steam.forEach(b -> _servcieName.addItem(b));
+						stream.forEach(b -> _servcieName.addItem(b));
 					}
 					catch (Exception e) {
 						_servcieName.addItem("Unable to get services");
@@ -122,9 +122,9 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 
 						List<String> services = serviceContainer.getServiceList();
 
-						Stream<String> steam = services.stream();
+						Stream<String> stream = services.stream();
 
-						steam.forEach(b -> _servcieName.addItem(b));
+						stream.forEach(b -> _servcieName.addItem(b));
 					}
 					catch (Exception e) {
 						_servcieName.addItem("Unable to get services");

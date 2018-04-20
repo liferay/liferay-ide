@@ -179,7 +179,9 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 
 	@Override
 	public void onStepLeaving() {
-		SelectTemplateSettings.getInstance().EXPERT_MODE = _expertDecorator.isExpanded();
+		SelectTemplateSettings selectTemplateSettings = SelectTemplateSettings.getInstance();
+
+		selectTemplateSettings.EXPERT_MODE = _expertDecorator.isExpanded();
 	}
 
 	@Override
@@ -202,7 +204,9 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 
 	@Override
 	public void updateStep() {
-		_expertDecorator.setOn(SelectTemplateSettings.getInstance().EXPERT_MODE);
+		SelectTemplateSettings selectTemplateSettings = SelectTemplateSettings.getInstance();
+
+		_expertDecorator.setOn(selectTemplateSettings.EXPERT_MODE);
 
 		_setupPanels();
 	}

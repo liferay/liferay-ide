@@ -95,12 +95,18 @@ public class LiferayNamePathComponent extends JPanel {
 		_name = new JTextField();
 
 		_name.setDocument(new NameFieldDocument());
-		_name.setPreferredSize(new Dimension(200, _name.getPreferredSize().height));
+
+		Dimension namePreferredSize = _name.getPreferredSize();
+
+		_name.setPreferredSize(new Dimension(200, namePreferredSize.height));
 
 		_path = new JTextField();
 
 		_path.setDocument(new PathFieldDocument());
-		_path.setPreferredSize(new Dimension(200, _path.getPreferredSize().height));
+
+		Dimension pathPreferredSize = _path.getPreferredSize();
+
+		_path.setPreferredSize(new Dimension(200, pathPreferredSize.height));
 
 		_nameLabel = new JLabel(nameLabelText);
 

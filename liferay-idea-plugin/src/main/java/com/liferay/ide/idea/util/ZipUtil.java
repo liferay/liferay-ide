@@ -52,10 +52,6 @@ public class ZipUtil {
 		try {
 			Enumeration<? extends ZipEntry> entries = zip.entries();
 
-			int totalWork = zip.size();
-
-			int c = 0;
-
 			boolean foundStartEntry = false;
 
 			if (entryToStart == null) {
