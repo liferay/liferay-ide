@@ -35,6 +35,7 @@ import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -167,6 +168,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_verifyNpmPortletV71(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmBillboardjsPortlet() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -178,6 +180,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_createAndBuild(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmBillboardjsPortlet71() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -191,6 +194,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_verifyNpmPortletV71(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmIsomorphicPortlet() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -202,6 +206,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_createAndBuild(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmIsomorphicPortlet71() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -215,6 +220,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_verifyNpmPortletV71(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmJqueryPortlet() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -226,6 +232,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_createAndBuild(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmJqueryPortlet71() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -239,6 +246,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_verifyNpmPortletV71(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmMetaljsPortlet() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -250,6 +258,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_createAndBuild(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmMetaljsPortlet71() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -263,6 +272,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_verifyNpmPortletV71(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmPortlet() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -274,6 +284,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_createAndBuild(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmPortlet71() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -287,6 +298,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_verifyNpmPortletV71(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmReactPortlet() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -298,6 +310,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_createAndBuild(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmReactPortlet71() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -311,6 +324,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_verifyNpmPortletV71(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmVuejsPortlet() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -322,6 +336,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		_createAndBuild(op);
 	}
 
+	@Ignore("We will add it back in the future days.")
 	@Test
 	public void testProjectTemplateNpmVuejsPortlet71() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
