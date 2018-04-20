@@ -844,6 +844,12 @@ public class WizardAction extends UIAction {
 			_prepare(projectName, GRADLE, template);
 		}
 
+		public void prepareGradle(String projectName, String template, String location) {
+			_prepare(projectName, GRADLE, template);
+			_newModuleWizard.getUseDefaultLocation().deselect();
+			_newModuleWizard.getLocation().setText(location);
+		}
+
 		public void prepareMaven(String projectName) {
 			_prepare(projectName, MAVEN, MVC_PORTLET);
 		}
