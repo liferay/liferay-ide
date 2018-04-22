@@ -40,7 +40,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implements INewLayoutTplDataModelProperties {

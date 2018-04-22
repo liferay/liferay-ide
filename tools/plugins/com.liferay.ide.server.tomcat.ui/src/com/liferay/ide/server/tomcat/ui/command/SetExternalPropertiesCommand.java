@@ -20,7 +20,7 @@ import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class SetExternalPropertiesCommand extends ServerCommand {

@@ -17,7 +17,7 @@ package com.liferay.ide.service.ui.actions;
 import com.liferay.ide.ui.action.AbstractCommandAction;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class BuildServicesAction extends AbstractCommandAction {
 

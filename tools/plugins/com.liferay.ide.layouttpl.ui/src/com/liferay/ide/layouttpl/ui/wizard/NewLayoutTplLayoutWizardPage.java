@@ -37,7 +37,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPage;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class NewLayoutTplLayoutWizardPage extends DataModelWizardPage implements INewLayoutTplDataModelProperties {

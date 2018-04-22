@@ -37,7 +37,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.wst.server.core.IServer;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Tao Tao
  * @author Simon Jiang
  */

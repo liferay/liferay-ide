@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class PropertyOverridesTableWizardSection extends StringArrayTableWizardSection {
 

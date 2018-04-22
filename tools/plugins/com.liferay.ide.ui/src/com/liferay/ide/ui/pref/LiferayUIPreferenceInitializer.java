@@ -17,7 +17,7 @@ package com.liferay.ide.ui.pref;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LiferayUIPreferenceInitializer extends AbstractPreferenceInitializer {
 

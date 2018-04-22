@@ -28,7 +28,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Kamesh Sampath
  */
 public class HookPluginFacetInstall extends PluginFacetInstall {

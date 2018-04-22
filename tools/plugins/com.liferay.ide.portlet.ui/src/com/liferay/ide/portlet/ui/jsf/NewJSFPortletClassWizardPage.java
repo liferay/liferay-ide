@@ -40,7 +40,7 @@ import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOper
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Cindy Li
  */
 @SuppressWarnings("restriction")

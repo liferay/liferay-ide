@@ -21,7 +21,7 @@ import org.eclipse.core.variables.IDynamicVariable;
 import org.eclipse.core.variables.IDynamicVariableResolver;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class SDKProjectVariableResolver implements IDynamicVariableResolver {
 

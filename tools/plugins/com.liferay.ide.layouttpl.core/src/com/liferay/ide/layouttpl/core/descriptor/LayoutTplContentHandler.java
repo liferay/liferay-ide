@@ -17,7 +17,7 @@ package com.liferay.ide.layouttpl.core.descriptor;
 import com.liferay.ide.core.AbstractDefaultHandler;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LayoutTplContentHandler extends AbstractDefaultHandler {
 

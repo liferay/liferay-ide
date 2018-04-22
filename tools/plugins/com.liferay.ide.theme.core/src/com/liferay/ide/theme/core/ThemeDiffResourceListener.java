@@ -51,7 +51,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Cindy Li
  */
 public class ThemeDiffResourceListener implements IResourceChangeListener {

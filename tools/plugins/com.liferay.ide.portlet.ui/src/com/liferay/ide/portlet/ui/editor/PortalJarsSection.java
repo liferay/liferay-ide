@@ -66,7 +66,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class PortalJarsSection extends TableSection implements IModelChangedListener, IPropertyChangeListener {
 

@@ -19,7 +19,7 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.Property;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public abstract class AbstractPropertySetterTask extends Task {
 

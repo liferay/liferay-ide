@@ -17,7 +17,7 @@ package com.liferay.ide.server.core;
 import org.eclipse.core.runtime.IStatus;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public interface ILiferayRuntimeStub {
 

@@ -20,7 +20,7 @@ import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
 import org.eclipse.jdt.internal.formatter.DefaultCodeFormatterOptions;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings({"restriction", "rawtypes", "unchecked", "deprecation"})
 public class LiferayDefaultCodeFormatterSettings extends DefaultCodeFormatterConstants {

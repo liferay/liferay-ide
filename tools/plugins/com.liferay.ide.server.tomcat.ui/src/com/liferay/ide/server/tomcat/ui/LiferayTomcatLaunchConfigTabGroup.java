@@ -25,7 +25,7 @@ import org.eclipse.jst.server.tomcat.ui.internal.TomcatLaunchConfigurationTabGro
 import org.eclipse.wst.server.ui.ServerLaunchConfigurationTab;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class LiferayTomcatLaunchConfigTabGroup extends TomcatLaunchConfigurationTabGroup {

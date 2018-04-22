@@ -20,7 +20,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class PortalServiceSearchScope implements IJavaSearchScope {
 

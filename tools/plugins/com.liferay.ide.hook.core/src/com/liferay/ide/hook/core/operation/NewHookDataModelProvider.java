@@ -54,7 +54,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 import org.osgi.framework.Version;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Terry Jia
  * @author Simon Jiang
  * @author Charles Wu

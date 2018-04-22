@@ -17,7 +17,7 @@ package com.liferay.ide.server.tomcat.core;
 import org.eclipse.jst.server.tomcat.core.internal.ITomcatServerWorkingCopy;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public interface ILiferayTomcatServerWC extends ITomcatServerWorkingCopy {

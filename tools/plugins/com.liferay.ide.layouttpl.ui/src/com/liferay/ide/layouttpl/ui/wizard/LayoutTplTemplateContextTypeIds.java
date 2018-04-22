@@ -15,7 +15,7 @@
 package com.liferay.ide.layouttpl.ui.wizard;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LayoutTplTemplateContextTypeIds {
 

@@ -20,7 +20,7 @@ import com.liferay.ide.server.core.LiferayServerCommand;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class SetUsernameCommand extends LiferayServerCommand {
 

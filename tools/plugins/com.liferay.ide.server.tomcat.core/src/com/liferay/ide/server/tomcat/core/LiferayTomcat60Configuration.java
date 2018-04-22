@@ -27,7 +27,7 @@ import org.eclipse.jst.server.tomcat.core.internal.Tomcat60Configuration;
 import org.eclipse.wst.server.core.IModule;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class LiferayTomcat60Configuration extends Tomcat60Configuration implements ILiferayTomcatConfiguration {

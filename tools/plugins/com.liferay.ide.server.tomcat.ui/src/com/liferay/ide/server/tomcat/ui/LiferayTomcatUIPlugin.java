@@ -22,7 +22,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LiferayTomcatUIPlugin extends AbstractUIPlugin {
 

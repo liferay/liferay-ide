@@ -18,7 +18,7 @@ import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFile;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class BuildFilePropertyTester extends PropertyTester {
 

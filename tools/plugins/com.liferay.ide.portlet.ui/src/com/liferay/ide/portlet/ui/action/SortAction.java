@@ -26,7 +26,7 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.osgi.framework.Bundle;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class SortAction extends Action {
 

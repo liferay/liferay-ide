@@ -37,7 +37,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 

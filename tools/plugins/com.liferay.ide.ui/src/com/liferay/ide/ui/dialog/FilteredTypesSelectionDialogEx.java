@@ -22,7 +22,7 @@ import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.swt.widgets.Shell;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class FilteredTypesSelectionDialogEx extends FilteredTypesSelectionDialog {

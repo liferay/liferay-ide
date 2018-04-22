@@ -15,7 +15,7 @@
 package com.liferay.ide.service.ui.template;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class ServiceBuilderTemplateContextTypeIds {
 

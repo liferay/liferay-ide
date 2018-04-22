@@ -59,7 +59,7 @@ import org.eclipse.wst.server.core.util.ModuleFile;
 import org.eclipse.wst.server.core.util.PublishHelper;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class LiferayPublishOperation extends PublishOperation {

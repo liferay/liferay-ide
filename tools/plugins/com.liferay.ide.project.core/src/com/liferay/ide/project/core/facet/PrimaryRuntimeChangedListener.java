@@ -18,7 +18,7 @@ import org.eclipse.wst.common.project.facet.core.events.IFacetedProjectEvent;
 import org.eclipse.wst.common.project.facet.core.events.IFacetedProjectListener;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class PrimaryRuntimeChangedListener implements IFacetedProjectListener {
 

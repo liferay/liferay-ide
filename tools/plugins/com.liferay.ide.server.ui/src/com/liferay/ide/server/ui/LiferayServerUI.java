@@ -30,7 +30,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LiferayServerUI extends AbstractUIPlugin {
 

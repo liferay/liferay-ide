@@ -29,7 +29,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class PluginPackageFormPage extends IDEFormPage {
 

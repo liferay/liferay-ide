@@ -20,7 +20,7 @@ import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IServer;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LiferayServerPropertyTester extends PropertyTester {
 

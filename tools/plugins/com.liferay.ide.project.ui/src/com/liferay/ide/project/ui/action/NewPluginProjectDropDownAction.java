@@ -37,7 +37,7 @@ import org.eclipse.ui.IWorkbenchWindowPulldownDelegate2;
 import org.eclipse.ui.PlatformUI;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Kuo Zhang
  * @author Simon Jiang
  */

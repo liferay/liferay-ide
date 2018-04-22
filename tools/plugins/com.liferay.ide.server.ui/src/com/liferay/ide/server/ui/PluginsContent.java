@@ -19,7 +19,7 @@ import java.util.List;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class PluginsContent {

@@ -19,7 +19,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class PortalPropertiesConfiguration extends PropertiesConfiguration {
 

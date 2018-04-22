@@ -20,7 +20,7 @@ import com.liferay.ide.ui.form.IDEFormEditor;
 import org.eclipse.ui.IFileEditorInput;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class PluginPackageInputContextManager extends InputContextManager {
 

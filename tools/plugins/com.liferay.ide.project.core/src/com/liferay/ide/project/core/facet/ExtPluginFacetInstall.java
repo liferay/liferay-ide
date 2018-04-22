@@ -48,7 +48,7 @@ import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
 import org.w3c.dom.Element;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Kamesh Sampath
  */
 @SuppressWarnings("restriction")

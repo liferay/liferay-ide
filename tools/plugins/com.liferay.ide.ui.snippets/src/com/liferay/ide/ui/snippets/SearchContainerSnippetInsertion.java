@@ -24,7 +24,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.wst.common.snippets.internal.util.StringUtils;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class SearchContainerSnippetInsertion extends ModelSnippetInsertion {

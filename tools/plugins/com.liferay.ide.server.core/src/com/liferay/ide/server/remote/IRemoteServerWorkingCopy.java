@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public interface IRemoteServerWorkingCopy extends ILiferayServerWorkingCopy, IRemoteServer {
 

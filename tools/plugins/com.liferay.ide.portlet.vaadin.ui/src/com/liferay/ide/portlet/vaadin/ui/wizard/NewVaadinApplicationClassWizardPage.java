@@ -46,7 +46,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.osgi.framework.Bundle;
 
 /**
- * @author Henri Sara - borrows from superclass by Greg Amerson
+ * @author Henri Sara - borrows from superclass by Gregory Amerson
  * @author Cindy Li
  */
 @SuppressWarnings("restriction")

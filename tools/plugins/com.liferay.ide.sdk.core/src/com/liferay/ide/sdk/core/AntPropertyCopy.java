@@ -17,7 +17,7 @@ package com.liferay.ide.sdk.core;
 import org.apache.tools.ant.BuildException;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class AntPropertyCopy extends AbstractPropertySetterTask {
 

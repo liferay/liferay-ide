@@ -17,7 +17,7 @@ package com.liferay.ide.project.core;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public interface ISDKProjectsImportDataModelProperties extends IFacetProjectCreationDataModelProperties {
 

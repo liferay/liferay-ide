@@ -17,7 +17,7 @@ package com.liferay.ide.service.core.operation;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public interface INewServiceBuilderDataModelProperties extends IArtifactEditOperationDataModelProperties {

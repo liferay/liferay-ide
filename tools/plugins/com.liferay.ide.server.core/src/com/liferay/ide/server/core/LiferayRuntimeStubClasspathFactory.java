@@ -20,7 +20,7 @@ import org.eclipse.jst.server.core.internal.RuntimeClasspathProvider;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntimeComponent;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings({"restriction", "rawtypes", "unchecked"})
 public class LiferayRuntimeStubClasspathFactory implements IAdapterFactory {

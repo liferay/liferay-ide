@@ -63,7 +63,7 @@ import org.osgi.framework.Bundle;
 import com.liferay.ide.ui.LiferayUIPlugin;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Cindy Li
  * @author Simon Jiang
  */

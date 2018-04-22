@@ -17,7 +17,7 @@ package com.liferay.ide.layouttpl.core.facet;
 import com.liferay.ide.project.core.facet.PluginFacetUninstall;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LayoutTplPluginFacetUninstall extends PluginFacetUninstall {
 }

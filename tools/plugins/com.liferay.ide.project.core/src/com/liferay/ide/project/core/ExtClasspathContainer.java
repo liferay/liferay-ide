@@ -19,7 +19,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class ExtClasspathContainer extends PluginClasspathContainer {
 

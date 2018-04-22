@@ -46,7 +46,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class PluginPackageGeneralSection extends IDESection implements IContextPart, IModelChangedListener {
 

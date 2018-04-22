@@ -25,7 +25,7 @@ import org.eclipse.jdt.debug.ui.launchConfigurations.JavaClasspathTab;
 import org.eclipse.wst.server.ui.ServerLaunchConfigurationTab;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class RemoteLaunchConfigTabGroup extends AbstractLaunchConfigurationTabGroup {
 

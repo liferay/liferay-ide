@@ -38,7 +38,7 @@ import org.eclipse.wst.common.project.facet.ui.IWizardContext;
 import org.osgi.framework.Bundle;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class PortletPluginFacetInstallPage

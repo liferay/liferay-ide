@@ -37,7 +37,7 @@ import org.eclipse.ui.navigator.PipelinedViewerUpdate;
 import org.eclipse.wst.server.core.IServer;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class WorkflowDefinitionsCustomContentProvider extends PluginsCustomContentProvider {

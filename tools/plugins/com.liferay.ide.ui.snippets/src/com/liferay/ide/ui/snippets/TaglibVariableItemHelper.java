@@ -27,7 +27,7 @@ import org.eclipse.wst.common.snippets.internal.VariableInsertionDialog;
 /**
  * Class copied from VariableItemHelper.java v1.4
  *
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class TaglibVariableItemHelper {

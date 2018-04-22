@@ -92,7 +92,7 @@ import org.osgi.service.prefs.BackingStoreException;
 /**
  * The activator class controls the plugin life cycle
  *
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings({"restriction", "deprecation"})
 public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {

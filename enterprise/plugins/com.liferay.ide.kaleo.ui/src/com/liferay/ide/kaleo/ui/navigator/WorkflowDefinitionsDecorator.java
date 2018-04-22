@@ -28,7 +28,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class WorkflowDefinitionsDecorator
 	extends LabelProvider

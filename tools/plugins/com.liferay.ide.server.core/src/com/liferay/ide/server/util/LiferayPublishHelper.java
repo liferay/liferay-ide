@@ -30,7 +30,7 @@ import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LiferayPublishHelper {
 

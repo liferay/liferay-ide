@@ -40,7 +40,7 @@ import org.eclipse.wst.server.core.internal.ServerPlugin;
 import org.eclipse.wst.server.core.model.ServerDelegate;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Tao Tao
  */
 @SuppressWarnings("restriction")

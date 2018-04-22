@@ -28,7 +28,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class ThemePluginFacetUninstall extends PluginFacetUninstall {
 

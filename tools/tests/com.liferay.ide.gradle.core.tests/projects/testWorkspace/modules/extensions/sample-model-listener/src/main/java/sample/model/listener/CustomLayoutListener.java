@@ -8,7 +8,7 @@ import com.liferay.portal.kernel.model.ModelListener;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @Component(immediate = true, service = ModelListener.class)
 public class CustomLayoutListener extends BaseModelListener<Layout> {

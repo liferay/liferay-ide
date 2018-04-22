@@ -39,7 +39,7 @@ import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Terry Jia
  */
 @SuppressWarnings("restriction")

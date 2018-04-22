@@ -28,7 +28,7 @@ import org.eclipse.wst.server.ui.wizard.WizardFragment;
 import org.osgi.framework.Bundle;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class LiferayTomcatRuntimeFragment extends TomcatRuntimeWizardFragment {

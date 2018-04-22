@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.facet;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class ExtPluginFacetUninstall extends PluginFacetUninstall {
 }

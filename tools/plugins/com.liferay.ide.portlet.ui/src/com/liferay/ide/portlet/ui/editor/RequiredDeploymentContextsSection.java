@@ -69,7 +69,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.ide.IDE.SharedImages;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class RequiredDeploymentContextsSection
 	extends TableSection implements IModelChangedListener, IPropertyChangeListener {

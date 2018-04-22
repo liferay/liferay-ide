@@ -35,7 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class WorkflowDefinitionsFolder {
 

@@ -18,7 +18,7 @@ import org.eclipse.jface.text.templates.GlobalTemplateVariables;
 import org.eclipse.jface.text.templates.TemplateContextType;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class ServiceBuilderTemplateContextType extends TemplateContextType {
 

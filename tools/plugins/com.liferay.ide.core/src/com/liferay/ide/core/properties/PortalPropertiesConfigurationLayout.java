@@ -36,7 +36,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("rawtypes")
 public class PortalPropertiesConfigurationLayout extends PropertiesConfigurationLayout {

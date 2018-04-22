@@ -36,7 +36,7 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerUtil;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class RemoteSourcePathComputerDelegate implements ISourcePathComputerDelegate {
 

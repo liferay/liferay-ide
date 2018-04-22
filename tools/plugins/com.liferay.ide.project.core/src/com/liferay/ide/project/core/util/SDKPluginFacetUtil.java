@@ -51,7 +51,7 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.osgi.framework.Version;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Terry Jia
  * @author Simon Jiang
  */

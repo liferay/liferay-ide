@@ -55,7 +55,7 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Andy Wu
  */
 @SuppressWarnings({"restriction", "unchecked"})

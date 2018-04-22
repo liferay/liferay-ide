@@ -15,7 +15,7 @@
 package com.liferay.ide.server.ui.action;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class OpenPortalHomeAction extends OpenPortalURLAction {
 

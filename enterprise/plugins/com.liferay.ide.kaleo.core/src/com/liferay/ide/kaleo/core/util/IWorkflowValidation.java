@@ -17,7 +17,7 @@ package com.liferay.ide.kaleo.core.util;
 import java.io.InputStream;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public interface IWorkflowValidation {
 

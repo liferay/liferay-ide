@@ -64,7 +64,7 @@ import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Tao Tao
  * @author Simon Jiang
  */

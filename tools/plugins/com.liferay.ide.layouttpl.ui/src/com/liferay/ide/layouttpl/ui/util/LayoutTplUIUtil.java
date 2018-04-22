@@ -26,7 +26,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.requests.CreateRequest;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Cindy Li
  */
 public class LayoutTplUIUtil {

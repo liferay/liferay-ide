@@ -50,7 +50,7 @@ import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LiferayRuntimeStubComposite extends Composite {
 

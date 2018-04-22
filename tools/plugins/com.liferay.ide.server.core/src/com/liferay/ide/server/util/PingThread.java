@@ -25,7 +25,7 @@ import java.net.URLConnection;
 import org.eclipse.wst.server.core.IServer;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class PingThread {
 

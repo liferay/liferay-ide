@@ -15,7 +15,7 @@
 package com.liferay.ide.project.ui.pref;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class ComboData {
 

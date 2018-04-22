@@ -41,7 +41,7 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Kamesh Sampath
  * @author Simon Jiang
  */

@@ -27,7 +27,7 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class ConvertProjectAction implements IObjectActionDelegate {
 

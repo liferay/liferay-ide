@@ -18,7 +18,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class DebugComposite extends Composite {
 

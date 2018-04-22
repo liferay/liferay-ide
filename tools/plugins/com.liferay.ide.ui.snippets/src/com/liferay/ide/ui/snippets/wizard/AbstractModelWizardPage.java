@@ -60,7 +60,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings({"restriction", "rawtypes"})
 public class AbstractModelWizardPage extends NewTypeWizardPage {

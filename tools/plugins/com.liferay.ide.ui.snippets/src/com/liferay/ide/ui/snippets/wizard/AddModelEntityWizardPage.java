@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorPart;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class AddModelEntityWizardPage extends AbstractModelWizardPage {
 

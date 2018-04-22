@@ -32,7 +32,7 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.internal.operation.ArtifactEditOperationDataModelProvider;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings({"restriction", "unchecked", "rawtypes"})
 public class NewLayoutTplDataModelProvider

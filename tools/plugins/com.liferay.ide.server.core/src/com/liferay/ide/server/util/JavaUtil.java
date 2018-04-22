@@ -30,7 +30,7 @@ import java.util.zip.ZipFile;
 import org.eclipse.jdt.launching.IVMInstallType;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Simon Jiang
  * @author Charles Wu
  */

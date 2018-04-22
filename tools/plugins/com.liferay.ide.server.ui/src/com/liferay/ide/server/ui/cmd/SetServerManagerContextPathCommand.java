@@ -19,7 +19,7 @@ import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class SetServerManagerContextPathCommand extends RemoteServerCommand {
 

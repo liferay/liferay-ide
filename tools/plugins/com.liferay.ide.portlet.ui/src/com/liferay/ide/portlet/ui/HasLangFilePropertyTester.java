@@ -26,7 +26,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.JavaCore;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class HasLangFilePropertyTester extends PropertyTester {
 

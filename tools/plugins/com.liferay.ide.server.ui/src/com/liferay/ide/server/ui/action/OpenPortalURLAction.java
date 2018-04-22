@@ -25,7 +25,7 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.wst.server.core.IServer;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public abstract class OpenPortalURLAction extends AbstractServerRunningAction {
 
