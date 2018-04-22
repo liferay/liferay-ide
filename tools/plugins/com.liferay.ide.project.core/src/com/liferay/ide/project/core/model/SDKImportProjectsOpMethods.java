@@ -30,7 +30,6 @@ import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
-import org.eclipse.sapphire.platform.StatusBridge;
 
 /**
  * @author Simon Jiang
@@ -69,7 +68,7 @@ public class SDKImportProjectsOpMethods {
 						}
 					}
 					catch (Exception e) {
-						statusBuilder.add(StatusBridge.create(Status.createErrorStatus(e.getMessage())));
+						statusBuilder.add(ProjectCore.createErrorStatus(e));
 					}
 				}
 
