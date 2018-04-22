@@ -267,6 +267,10 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 	}
 
 	protected void processPropertiesFile(IFile pluginPackagePropertiesFile) throws CoreException {
+		if (FileUtil.notExists(pluginPackagePropertiesFile)) {
+			return;
+		}
+
 		IProject project = pluginPackagePropertiesFile.getProject();
 
 		IJavaProject javaProject = JavaCore.create(project);
