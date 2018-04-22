@@ -250,15 +250,6 @@ public class LiferayCore extends Plugin {
 		super.start(context);
 
 		_plugin = this;
-
-		if (_liferayLanguagePropertiesListener != null) {
-			return;
-		}
-
-		_liferayLanguagePropertiesListener = new LiferayLanguagePropertiesListener();
-
-		CoreUtil.getWorkspace().addResourceChangeListener(
-			_liferayLanguagePropertiesListener, IResourceChangeEvent.POST_CHANGE);
 	}
 
 	@Override
@@ -266,19 +257,10 @@ public class LiferayCore extends Plugin {
 		_plugin = null;
 
 		super.stop(context);
-
-		if (_liferayLanguagePropertiesListener == null) {
-			return;
-		}
-
-		CoreUtil.getWorkspace().removeResourceChangeListener(_liferayLanguagePropertiesListener);
-
-		_liferayLanguagePropertiesListener = null;
 	}
 
 	private static final LiferayProjectAdapterReader _adapterReader = new LiferayProjectAdapterReader();
 	private static LiferayProjectImporterReader _importerReader;
-	private static LiferayLanguagePropertiesListener _liferayLanguagePropertiesListener;
 	private static LiferayCore _plugin;
 	private static LiferayProjectProviderReader _providerReader;
 
