@@ -19,7 +19,7 @@ import com.liferay.ide.server.core.ILiferayServerWorkingCopy;
 import org.eclipse.jst.server.tomcat.core.internal.ITomcatServer;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Terry Jia
  * @author Simon Jiang
  */

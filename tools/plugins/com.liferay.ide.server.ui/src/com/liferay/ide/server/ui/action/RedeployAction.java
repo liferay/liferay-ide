@@ -33,7 +33,7 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Simon Jiang
  */
 @SuppressWarnings({"restriction", "rawtypes"})

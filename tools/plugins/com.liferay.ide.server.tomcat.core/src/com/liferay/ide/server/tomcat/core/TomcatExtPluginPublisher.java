@@ -34,7 +34,7 @@ import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Simon Jiang
  */
 public class TomcatExtPluginPublisher extends AbstractPluginPublisher {

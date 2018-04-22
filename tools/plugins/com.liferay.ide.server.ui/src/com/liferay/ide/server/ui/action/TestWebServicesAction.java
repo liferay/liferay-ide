@@ -40,7 +40,7 @@ import org.eclipse.wst.ws.internal.monitor.GetMonitorCommand;
 import org.eclipse.wst.ws.internal.parser.wsil.WebServicesParser;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings({"restriction", "rawtypes", "unchecked"})
 public class TestWebServicesAction extends AbstractServerRunningAction {

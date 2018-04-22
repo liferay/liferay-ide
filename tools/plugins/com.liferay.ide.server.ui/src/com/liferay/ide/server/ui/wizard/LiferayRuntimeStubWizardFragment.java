@@ -29,7 +29,7 @@ import org.eclipse.wst.server.ui.wizard.WizardFragment;
 import org.osgi.framework.Bundle;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LiferayRuntimeStubWizardFragment extends WizardFragment {
 

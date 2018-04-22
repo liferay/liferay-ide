@@ -33,7 +33,7 @@ import org.eclipse.jst.j2ee.classpathdep.IClasspathDependencyConstants;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectBase;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class SDKClasspathContainerInstallOperation extends LibraryProviderOperation {
 

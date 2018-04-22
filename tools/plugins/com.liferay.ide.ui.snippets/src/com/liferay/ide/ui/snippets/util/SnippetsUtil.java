@@ -32,7 +32,7 @@ import org.eclipse.wst.common.snippets.internal.model.SnippetManager;
 import org.eclipse.wst.common.snippets.internal.palette.ModelFactoryForUser;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class SnippetsUtil {

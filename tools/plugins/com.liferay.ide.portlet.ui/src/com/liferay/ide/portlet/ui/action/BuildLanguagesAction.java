@@ -17,7 +17,7 @@ package com.liferay.ide.portlet.ui.action;
 import com.liferay.ide.ui.action.AbstractCommandAction;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class BuildLanguagesAction extends AbstractCommandAction {
 

@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public abstract class SDKJob extends Job {
 

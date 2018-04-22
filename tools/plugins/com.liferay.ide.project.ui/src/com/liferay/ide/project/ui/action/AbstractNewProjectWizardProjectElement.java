@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.spi.RegistryContributor;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public abstract class AbstractNewProjectWizardProjectElement extends AbstractConfigurationElement {
 

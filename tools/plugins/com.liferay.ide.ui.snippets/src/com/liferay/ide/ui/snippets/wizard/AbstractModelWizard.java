@@ -19,7 +19,7 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IEditorPart;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public abstract class AbstractModelWizard extends Wizard {
 

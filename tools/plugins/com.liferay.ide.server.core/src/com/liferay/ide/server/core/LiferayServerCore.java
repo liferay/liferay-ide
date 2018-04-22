@@ -75,7 +75,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Simon Jiang
  */
 @SuppressWarnings("restriction")

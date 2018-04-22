@@ -33,7 +33,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LiferayProjectImportOperation
 	extends AbstractDataModelOperation implements ILiferayProjectImportDataModelProperties {

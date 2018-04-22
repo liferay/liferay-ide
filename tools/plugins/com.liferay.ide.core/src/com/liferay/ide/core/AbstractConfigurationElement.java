@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public abstract class AbstractConfigurationElement implements IConfigurationElement {
 

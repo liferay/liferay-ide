@@ -17,7 +17,7 @@ package com.liferay.ide.service.core;
 import com.liferay.ide.core.AbstractDefaultHandler;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class ServiceBuilderContentHandler extends AbstractDefaultHandler {
 

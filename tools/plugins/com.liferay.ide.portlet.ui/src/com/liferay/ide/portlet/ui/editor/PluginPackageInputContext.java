@@ -31,7 +31,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings({"rawtypes", "restriction"})
 public class PluginPackageInputContext extends InputContext {

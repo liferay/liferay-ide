@@ -34,7 +34,7 @@ import org.eclipse.debug.internal.core.XMLMemento;
 import org.osgi.framework.Version;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public final class SDKManager {

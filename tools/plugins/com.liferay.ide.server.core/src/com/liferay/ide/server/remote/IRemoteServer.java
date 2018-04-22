@@ -20,7 +20,7 @@ import com.liferay.ide.server.core.ILiferayServer;
 import org.eclipse.wst.server.core.model.IURLProvider;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public interface IRemoteServer extends ILiferayServer, IURLProvider {
 

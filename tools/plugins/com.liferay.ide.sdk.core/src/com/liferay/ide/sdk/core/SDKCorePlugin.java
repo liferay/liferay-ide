@@ -39,7 +39,7 @@ import org.eclipse.wst.server.core.internal.XMLMemento;
 import org.osgi.framework.BundleContext;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class SDKCorePlugin extends Plugin {

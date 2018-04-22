@@ -20,7 +20,7 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.ui.internal.command.ServerCommand;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class SetAdjustDeploymentTimestampCommand extends ServerCommand {

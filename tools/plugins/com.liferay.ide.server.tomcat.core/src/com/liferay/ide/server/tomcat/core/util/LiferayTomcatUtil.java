@@ -75,7 +75,7 @@ import org.eclipse.wst.server.core.ServerEvent;
 import org.osgi.framework.Version;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Simon Jiang
  * @author Terry Jia
  */

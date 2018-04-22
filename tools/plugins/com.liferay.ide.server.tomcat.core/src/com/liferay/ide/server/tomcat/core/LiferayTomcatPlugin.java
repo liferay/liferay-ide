@@ -31,7 +31,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plugin life cycle
  *
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LiferayTomcatPlugin extends Plugin {
 

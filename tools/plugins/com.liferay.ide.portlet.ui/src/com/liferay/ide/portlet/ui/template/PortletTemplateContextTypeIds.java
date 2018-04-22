@@ -15,7 +15,7 @@
 package com.liferay.ide.portlet.ui.template;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class PortletTemplateContextTypeIds {
 

@@ -28,7 +28,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class ProjectRecord {
 

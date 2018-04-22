@@ -38,7 +38,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.wst.sse.ui.internal.preferences.ui.ScrolledPageContent;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class WorkflowValidationSettingsPage extends AbstractValidationSettingsPage {

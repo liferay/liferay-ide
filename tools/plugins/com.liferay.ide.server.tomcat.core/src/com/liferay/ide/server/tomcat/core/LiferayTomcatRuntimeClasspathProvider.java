@@ -32,7 +32,7 @@ import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeType;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspathProvider {

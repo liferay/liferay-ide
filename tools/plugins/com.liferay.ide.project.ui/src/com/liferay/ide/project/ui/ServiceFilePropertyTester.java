@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.IContentType;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class ServiceFilePropertyTester extends PropertyTester {
 

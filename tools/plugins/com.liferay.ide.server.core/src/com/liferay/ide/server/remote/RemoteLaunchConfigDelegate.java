@@ -38,7 +38,7 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerCore;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Cindy Li
  */
 public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationDelegate {

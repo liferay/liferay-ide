@@ -62,7 +62,7 @@ import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class RemoteServerComposite extends Composite implements ModifyListener, PropertyChangeListener {
 

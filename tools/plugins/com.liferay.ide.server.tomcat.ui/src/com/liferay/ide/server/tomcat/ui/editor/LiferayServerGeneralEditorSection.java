@@ -17,7 +17,7 @@ package com.liferay.ide.server.tomcat.ui.editor;
 import org.eclipse.jst.server.tomcat.ui.internal.editor.ServerGeneralEditorSection;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class LiferayServerGeneralEditorSection extends ServerGeneralEditorSection {

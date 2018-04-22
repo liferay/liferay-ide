@@ -39,7 +39,7 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelSynchHel
 import org.eclipse.wst.common.frameworks.internal.ui.NewProjectGroup;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class NewPluginProjectGroup extends NewProjectGroup implements IPluginProjectDataModelProperties {

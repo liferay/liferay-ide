@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public interface ILiferayTomcatConfiguration {
 

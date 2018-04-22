@@ -58,7 +58,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * The activator class controls the plugin life cycle
  *
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Simon Jiang
  * @author Kuo Zhang
  */

@@ -23,7 +23,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class ServiceBuilderEditorActionBarContributor extends MultiPageEditorActionBarContributor {
 

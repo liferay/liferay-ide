@@ -19,7 +19,7 @@ import org.eclipse.wst.common.project.facet.ui.IRuntimeComponentLabelProvider;
 import org.eclipse.wst.server.ui.FacetRuntimeComponentLabelProvider;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LiferayTomcatRuntimeComponentLabelProvider extends FacetRuntimeComponentLabelProvider {
 

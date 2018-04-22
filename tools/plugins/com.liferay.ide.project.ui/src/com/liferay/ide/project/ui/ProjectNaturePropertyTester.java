@@ -19,7 +19,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class ProjectNaturePropertyTester extends PropertyTester {
 

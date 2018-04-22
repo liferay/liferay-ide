@@ -25,7 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.ui.IEditorPart;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class AddModelEntitySnippetInsertion extends ModelSnippetInsertion {
 

@@ -15,7 +15,7 @@
 package com.liferay.ide.portlet.ui.jsf;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class JSFPortletTemplateContextTypeIds {
 

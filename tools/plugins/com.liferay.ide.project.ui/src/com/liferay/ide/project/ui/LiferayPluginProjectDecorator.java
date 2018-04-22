@@ -31,7 +31,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.wst.common.project.facet.core.FacetedProjectFramework;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Terry Jia
  */
 public class LiferayPluginProjectDecorator extends LabelProvider implements ILightweightLabelDecorator {

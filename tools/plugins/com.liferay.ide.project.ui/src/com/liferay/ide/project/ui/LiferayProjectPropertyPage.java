@@ -74,7 +74,7 @@ import org.osgi.framework.Version;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Simon Jiang
  */
 public class LiferayProjectPropertyPage

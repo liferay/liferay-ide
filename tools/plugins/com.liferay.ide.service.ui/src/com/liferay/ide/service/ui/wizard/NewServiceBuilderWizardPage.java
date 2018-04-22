@@ -55,7 +55,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.osgi.framework.Bundle;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class NewServiceBuilderWizardPage

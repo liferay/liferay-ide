@@ -20,7 +20,7 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.eclipse.wst.common.project.facet.ui.IDecorationsProvider;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("rawtypes")
 public class LiferayTomcatRuntimeDecorationsProvider implements IAdapterFactory {

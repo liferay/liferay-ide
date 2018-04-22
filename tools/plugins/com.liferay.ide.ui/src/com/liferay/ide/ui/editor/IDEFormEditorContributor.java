@@ -43,7 +43,7 @@ import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.IUpdate;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class IDEFormEditorContributor extends MultiPageEditorActionBarContributor {
 

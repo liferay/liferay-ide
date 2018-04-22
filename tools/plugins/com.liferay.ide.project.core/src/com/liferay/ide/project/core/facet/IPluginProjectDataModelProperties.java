@@ -18,7 +18,7 @@ import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetProjectCreationDataModelProp
 import org.eclipse.wst.common.frameworks.internal.operations.IProjectCreationPropertiesNew;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Cindy Li
  * @author Terry Jia
  */

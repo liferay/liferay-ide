@@ -28,7 +28,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class PortalTldViewerFilter extends ViewerFilter {
 

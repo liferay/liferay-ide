@@ -60,7 +60,7 @@ import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.Version;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Terry Jia
  * @author Simon Jiang
  */

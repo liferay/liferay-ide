@@ -45,7 +45,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 import org.osgi.framework.Bundle;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Simon Jiang
  */
 @SuppressWarnings("restriction")

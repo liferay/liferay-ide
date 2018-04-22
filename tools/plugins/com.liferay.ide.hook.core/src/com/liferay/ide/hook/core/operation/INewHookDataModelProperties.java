@@ -17,7 +17,7 @@ package com.liferay.ide.hook.core.operation;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Terry Jia
  */
 @SuppressWarnings("restriction")

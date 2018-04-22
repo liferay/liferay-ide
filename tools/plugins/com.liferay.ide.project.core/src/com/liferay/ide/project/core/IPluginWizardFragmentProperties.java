@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public interface IPluginWizardFragmentProperties {
 

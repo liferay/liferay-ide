@@ -28,7 +28,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class FileListing {
 

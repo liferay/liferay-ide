@@ -40,7 +40,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.osgi.framework.Bundle;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Kamesh Sampath [IDE-450]
  */
 @SuppressWarnings("restriction")

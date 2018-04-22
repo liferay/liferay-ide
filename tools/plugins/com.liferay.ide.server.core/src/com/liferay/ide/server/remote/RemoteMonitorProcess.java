@@ -29,7 +29,7 @@ import org.eclipse.debug.internal.core.StreamsProxy;
 import org.eclipse.wst.server.core.IServer;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class RemoteMonitorProcess extends Process implements IProcess {

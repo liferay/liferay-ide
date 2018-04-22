@@ -21,7 +21,7 @@ import org.eclipse.wst.common.project.facet.core.IDelegate;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class PluginFacetUninstall implements IDelegate {
 

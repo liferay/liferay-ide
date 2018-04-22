@@ -75,7 +75,7 @@ import org.eclipse.wst.server.core.util.PublishAdapter;
 import org.eclipse.wst.server.ui.editor.ServerEditorSection;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class LiferayServerSettingsEditorSection extends ServerEditorSection {

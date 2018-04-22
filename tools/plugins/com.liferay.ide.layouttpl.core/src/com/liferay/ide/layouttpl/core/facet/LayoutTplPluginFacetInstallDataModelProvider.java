@@ -18,7 +18,7 @@ import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.PluginFacetInstallDataModelProvider;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class LayoutTplPluginFacetInstallDataModelProvider extends PluginFacetInstallDataModelProvider {
 

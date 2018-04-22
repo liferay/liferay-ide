@@ -21,7 +21,7 @@ import org.eclipse.jst.server.core.IJavaRuntime;
 import org.eclipse.wst.server.core.IRuntime;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public interface ILiferayRuntime extends IJavaRuntime {
 

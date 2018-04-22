@@ -69,7 +69,7 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Cindy Li
  * @author Simon Jiang
  * @author Terry Jia

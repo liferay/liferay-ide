@@ -19,7 +19,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public interface IPluginWizardFragment {
 

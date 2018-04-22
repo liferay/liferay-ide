@@ -30,7 +30,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class WebServicesHelper {
 

@@ -30,7 +30,7 @@ import org.eclipse.wst.server.core.IModuleType;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class PluginsCustomLabelProvider extends LabelProvider {

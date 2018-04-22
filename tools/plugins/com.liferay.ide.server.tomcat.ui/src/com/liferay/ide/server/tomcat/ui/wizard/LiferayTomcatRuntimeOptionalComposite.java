@@ -58,7 +58,7 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposite implements ModifyListener {

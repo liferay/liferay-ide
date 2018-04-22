@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public abstract class RemoteServerCommand extends AbstractOperation {
 

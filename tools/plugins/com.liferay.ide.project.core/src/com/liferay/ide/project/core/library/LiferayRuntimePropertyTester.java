@@ -21,7 +21,7 @@ import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.internal.facets.FacetUtil;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class LiferayRuntimePropertyTester extends PropertyTester {

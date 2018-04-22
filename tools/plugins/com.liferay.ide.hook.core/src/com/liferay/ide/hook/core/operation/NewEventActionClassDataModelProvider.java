@@ -21,7 +21,7 @@ import org.eclipse.jst.j2ee.internal.common.operations.NewJavaClassDataModelProv
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Simon Jiang
  */
 @SuppressWarnings("restriction")

@@ -70,7 +70,7 @@ import org.eclipse.wst.server.ui.ServerUIUtil;
 import org.eclipse.wst.web.ui.internal.wizards.DataModelFacetCreationWizardPage;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class SDKProjectConvertWizardPage

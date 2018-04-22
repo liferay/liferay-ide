@@ -21,7 +21,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class SDKFolderProjectPropertyTester extends PropertyTester {
 

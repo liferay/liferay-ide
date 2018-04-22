@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class StringBufferOutputStream extends OutputStream {
 

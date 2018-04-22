@@ -20,7 +20,7 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.progress.IProgressConstants;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  * @author Lovett Li
  */
 @SuppressWarnings("deprecation")

@@ -31,7 +31,7 @@ import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public abstract class AbstractDefaultHandler extends DefaultHandler {
 

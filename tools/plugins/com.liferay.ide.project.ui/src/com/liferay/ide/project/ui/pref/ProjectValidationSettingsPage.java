@@ -38,7 +38,7 @@ import org.eclipse.wst.sse.ui.internal.preferences.ui.ScrolledPageContent;
 import org.osgi.framework.Bundle;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class ProjectValidationSettingsPage extends AbstractValidationSettingsPage {

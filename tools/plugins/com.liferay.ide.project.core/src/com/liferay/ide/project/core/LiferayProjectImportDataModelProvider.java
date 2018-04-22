@@ -42,7 +42,7 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
 import org.osgi.framework.Version;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings({"unchecked", "restriction", "rawtypes"})
 public class LiferayProjectImportDataModelProvider

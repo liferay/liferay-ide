@@ -20,7 +20,7 @@ import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
 public class SetAutoDeployDirectoryCommand extends ServerCommand {
