@@ -57,7 +57,7 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 		throws CoreException {
 
 		if (ListUtil.isEmpty(locations)) {
-			return null;
+			return new IJavaCompletionProposal[0];
 		}
 
 		List<IJavaCompletionProposal> resultingCollections = new ArrayList<>();
@@ -112,7 +112,7 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 
 					ILiferayProject liferayProject = LiferayCore.create(project);
 
-					final IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);
+					IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);
 
 					if (builder != null) {
 						Version retriveVersion = new Version(bundleVersion);
@@ -148,19 +148,17 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 	private List<IJavaCompletionProposal> _process(IInvocationContext context, IProblemLocation problem) {
 		int id = problem.getProblemId();
 
-		if (id == 0) {
-			return null;
-		}
-
 		List<IJavaCompletionProposal> proposals = new ArrayList<>();
 
-		switch (id) {
-			case IProblem.ImportNotFound:
-				proposals = _processImportNotFoundProposals(context, problem);
-				break;
-			case IProblem.UndefinedType:
-				proposals = _processUndefinedTypeProposals(context, problem);
-				break;
+		if (id != 0) {
+			switch (id) {
+				case IProblem.ImportNotFound:
+					proposals = _processImportNotFoundProposals(context, problem);
+					break;
+				case IProblem.UndefinedType:
+					proposals = _processUndefinedTypeProposals(context, problem);
+					break;
+			}
 		}
 
 		return proposals;
@@ -169,26 +167,26 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 	private List<IJavaCompletionProposal> _processImportNotFoundProposals(
 		IInvocationContext context, IProblemLocation problem) {
 
+		List<IJavaCompletionProposal> proposals = new ArrayList<>();
+
 		ASTNode selectedNode = problem.getCoveringNode(context.getASTRoot());
 
 		if (selectedNode == null) {
-			return null;
+			return proposals;
 		}
 
 		ImportDeclaration importDeclaration = (ImportDeclaration)ASTNodes.getParent(
 			selectedNode, ASTNode.IMPORT_DECLARATION);
 
 		if (importDeclaration == null) {
-			return null;
+			return proposals;
 		}
 
 		String importName = importDeclaration.getName().toString();
-		List<String> serviceWrapperList;
 		List<String> servicesList;
-		List<IJavaCompletionProposal> proposals = new ArrayList<>();
 
 		try {
-			serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
+			List<String> serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
 
 			servicesList = TargetPlatformUtil.getServicesList().getServiceList();
 
@@ -229,14 +227,11 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 			fullyQualifiedName = node.getFullyQualifiedName();
 		}
 
-		List<String> serviceWrapperList;
-		List<String> servicesList;
 		boolean depWrapperCanFixed = false;
 		List<IJavaCompletionProposal> proposals = new ArrayList<>();
 
 		try {
-			serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
-			servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+			List<String> serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
 
 			for (String wrapper : serviceWrapperList) {
 				if (wrapper.endsWith(fullyQualifiedName)) {
@@ -247,6 +242,8 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 			}
 
 			if (!depWrapperCanFixed) {
+				List<String> servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+
 				for (String service : servicesList) {
 					if (service.endsWith(fullyQualifiedName)) {
 						ServiceContainer bundle = TargetPlatformUtil.getServiceBundle(service);
