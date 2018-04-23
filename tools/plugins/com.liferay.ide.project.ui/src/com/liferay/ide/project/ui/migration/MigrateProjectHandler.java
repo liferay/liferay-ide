@@ -596,7 +596,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 		return true;
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "rawtypes" })
 	private boolean _shouldSearch(File file) {
 		String path = file.getAbsolutePath().replaceAll("\\\\", "/");
 
@@ -609,20 +609,24 @@ public class MigrateProjectHandler extends AbstractHandler {
 		if (path.endsWith("java")) {
 			CompilationUnit ast = CUCache.getCU(file, FileUtil.readContents(file).toCharArray());
 
-			Name superClass = ((TypeDeclaration)ast.types().get(0)).getSuperclass();
+			List types = ast.types();
 
-			if (superClass != null) {
-				return !_checkClassIgnore(ast, superClass.toString());
-			}
+			if (ListUtil.isNotEmpty(types)) {
+				Name superClass = ((TypeDeclaration)types.get(0)).getSuperclass();
 
-			List<ASTNode> interfaces = ((TypeDeclaration)ast.types().get(0)).superInterfaces();
+				if (superClass != null) {
+					return !_checkClassIgnore(ast, superClass.toString());
+				}
 
-			if (interfaces != null) {
-				for (ASTNode n : interfaces) {
-					String name = n.toString();
+				List<ASTNode> interfaces = ((TypeDeclaration)ast.types().get(0)).superInterfaces();
 
-					if (_checkClassIgnore(ast, name)) {
-						return false;
+				if (interfaces != null) {
+					for (ASTNode n : interfaces) {
+						String name = n.toString();
+
+						if (_checkClassIgnore(ast, name)) {
+							return false;
+						}
 					}
 				}
 			}
