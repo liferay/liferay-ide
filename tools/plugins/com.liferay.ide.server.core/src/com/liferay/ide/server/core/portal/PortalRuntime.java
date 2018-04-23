@@ -252,7 +252,6 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 	@Override
 	public IStatus validate() {
 		IStatus status = super.validate();
-		String portalBundleVersion = _portalBundle.getVersion();
 
 		if (!status.isOK()) {
 			return status;
@@ -261,6 +260,8 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 		if (_portalBundle == null) {
 			return new Status(IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorPortalNotExisted, null);
 		}
+
+		String portalBundleVersion = _portalBundle.getVersion();
 
 		if (!portalBundleVersion.startsWith("7")) {
 			return new Status(IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorPortalVersion70, null);
