@@ -16,12 +16,9 @@ package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.server.util.ServerUtil;
 
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
@@ -67,24 +64,6 @@ public class ImportLiferayWorkspaceOpMethods {
 
 			if (!retval.ok() || (retval.exception() != null)) {
 				return retval;
-			}
-
-			if (initBundle || hasBundlesDir) {
-				String serverRuntimeName = op.getServerName().content();
-				IPath bundlesLocation = null;
-
-				String buildType = op.getBuildType().content();
-
-				if (buildType.equals("gradle-liferay-workspace")) {
-					bundlesLocation = LiferayWorkspaceUtil.getHomeLocation(location);
-				}
-				else {
-					bundlesLocation = new Path(location).append("bundles");
-				}
-
-				if ((bundlesLocation != null) && bundlesLocation.toFile().exists()) {
-					ServerUtil.addPortalRuntimeAndServer(serverRuntimeName, bundlesLocation, monitor);
-				}
 			}
 		}
 		catch (Exception e) {

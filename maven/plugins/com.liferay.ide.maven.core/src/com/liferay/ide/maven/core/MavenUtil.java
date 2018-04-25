@@ -72,6 +72,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectImportResult;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
+import org.eclipse.m2e.core.project.IProjectCreationListener;
 import org.eclipse.m2e.core.project.LocalProjectScanner;
 import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
@@ -489,7 +490,13 @@ public class MavenUtil {
 		return false;
 	}
 
-	public static List<IMavenProjectImportResult> importProject(String location, IProgressMonitor monitor)
+	public static List<IMavenProjectImportResult> importProject(String location, IProgressMonitor monitor)throws CoreException, InterruptedException
+	{
+		return importProject(location, null, monitor);
+	}
+
+	public static List<IMavenProjectImportResult> importProject(
+			String location, IProjectCreationListener createListener, IProgressMonitor monitor)
 		throws CoreException, InterruptedException {
 
 		MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
@@ -515,7 +522,8 @@ public class MavenUtil {
 
 		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
-		return projectConfigurationManager.importProjects(mavenProjects, importConfiguration, monitor);
+		return projectConfigurationManager.importProjects(
+			mavenProjects, importConfiguration, createListener, monitor);
 	}
 
 	public static boolean isMavenProject(IProject project) throws CoreException {
