@@ -17,7 +17,6 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.workspace.BaseLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
@@ -29,15 +28,15 @@ import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.m2e.core.project.IProjectCreationListener;
 import org.eclipse.sapphire.platform.PathBridge;
 
 /**
@@ -83,34 +82,6 @@ public class LiferayMavenWorkspaceProjectProvider
 	}
 
 	@Override
-	public IStatus importProject(String location, IProgressMonitor monitor, boolean initBundle, String bundleUrl) {
-		IStatus retval = Status.OK_STATUS;
-
-		IPath path = new Path(location);
-
-		String projectName = path.lastSegment();
-
-		try {
-			MavenUtil.importProject(location, monitor);
-
-			if (initBundle) {
-				IProject workspaceProject = ProjectUtil.getProject(projectName);
-
-				MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder(workspaceProject);
-
-				mavenProjectBuilder.initBundle(workspaceProject, bundleUrl, monitor);
-
-				workspaceProject.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-			}
-		}
-		catch (Exception e) {
-			retval = ProjectCore.createErrorStatus(e);
-		}
-
-		return retval;
-	}
-
-	@Override
 	public String getInitBundleUrl(String workspaceLocation) {
 		File pomFile = new File(workspaceLocation, "pom.xml");
 
@@ -125,7 +96,7 @@ public class LiferayMavenWorkspaceProjectProvider
 				Plugin plugin = build.getPluginsAsMap().get("com.liferay:com.liferay.portal.tools.bundle.support");
 
 				if (plugin != null) {
-					Xpp3Dom config = (Xpp3Dom) plugin.getConfiguration();
+					Xpp3Dom config = (Xpp3Dom)plugin.getConfiguration();
 
 					if (config != null) {
 						Xpp3Dom url = config.getChild("url");
@@ -146,6 +117,27 @@ public class LiferayMavenWorkspaceProjectProvider
 		}
 
 		return BaseLiferayWorkspaceOp.LIFERAY_70_BUNDLE_URL;
+	}
+
+	@Override
+	public IStatus importProject(String location, IProgressMonitor monitor, boolean initBundle, String bundleUrl) {
+		IStatus retval = Status.OK_STATUS;
+
+		try {
+			if (initBundle) {
+				IProjectCreationListener workspaceCreateListener = new LiferayMavenWorkspaceCreateListener(
+					location, bundleUrl);
+
+				MavenUtil.importProject(location, workspaceCreateListener, monitor);
+			}else {
+				MavenUtil.importProject(location, monitor);
+			}
+		}
+		catch (Exception e) {
+			retval = ProjectCore.createErrorStatus(e);
+		}
+
+		return retval;
 	}
 
 	@Override
