@@ -1,6 +1,7 @@
 <idea-plugin>
 	<id>com.liferay.ide.idea.plugin</id>
 	<name>Liferay Idea Plugin</name>
+	<idea-version since-build="172.0"/>
 	<vendor url="https://www.liferay.com">Liferay Inc.</vendor>
 	<description>Liferay Plugin for IntelliJ IDEA</description>
 	<version>0.1.1</version>
