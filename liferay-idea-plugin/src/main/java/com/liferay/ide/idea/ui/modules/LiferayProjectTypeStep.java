@@ -543,7 +543,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 
 	private List<TemplatesGroup> _fillTemplatesMap() {
 		_templatesMap.put(new TemplatesGroup(new LiferayModuleBuilder()), new ArrayList<>());
-		_templatesMap.put(new TemplatesGroup(new LiferayModuleFragmentBuilder()), new ArrayList<>());
+		//_templatesMap.put(new TemplatesGroup(new LiferayModuleFragmentBuilder()), new ArrayList<>());
 
 		List<TemplatesGroup> groups = new ArrayList<>(_templatesMap.keySet());
 
