@@ -23,6 +23,6 @@ import org.eclipse.core.runtime.IPath;
  */
 public interface IWorkspaceProject extends ILiferayProject {
 
-	List<IPath> getTargetPlatformArtifacts();
+	public List<IPath> getTargetPlatformArtifacts();
 
 }

@@ -16,6 +16,7 @@ package com.liferay.ide.core.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
@@ -37,7 +39,7 @@ public class FileListing {
 
 		File[] files = dir.listFiles();
 
-		if ( ListUtil.isEmpty(files)) {
+		if (ListUtil.isEmpty(files)) {
 			return Collections.emptyList();
 		}
 

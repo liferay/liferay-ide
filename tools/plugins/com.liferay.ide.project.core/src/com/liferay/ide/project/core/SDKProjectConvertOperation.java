@@ -103,7 +103,7 @@ public class SDKProjectConvertOperation
 
 		monitor.beginTask(Msgs.importingProject, 100);
 
-		project.open(IResource.FORCE, CoreUtil.newSubMonitor(monitor, 70));
+		project.open(IResource.FORCE, CoreUtil.newSubmonitor(monitor, 70));
 
 		IFacetedProject fProject = ProjectFacetsManager.create(project, true, monitor);
 

@@ -24,11 +24,11 @@ import org.eclipse.core.runtime.IPath;
  */
 public interface IWebProject extends ILiferayProject {
 
-	public IFile getDescriptorFile(String name);
-
 	public IResource findDocrootResource(IPath path);
 
 	public IFolder getDefaultDocrootFolder();
+
+	public IFile getDescriptorFile(String name);
 
 	public IPath getLibraryPath(String filename);
 

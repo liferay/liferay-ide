@@ -740,7 +740,9 @@ public class PropertiesUtil {
 									}
 								}
 
-								if (ListUtil.isNotEmpty(_supportedLocaleValues) && ListUtil.isNotEmpty(resourceBundlesPatterns)) {
+								if (ListUtil.isNotEmpty(_supportedLocaleValues) &&
+									ListUtil.isNotEmpty(resourceBundlesPatterns)) {
+
 									String resourceBundleValueBase = resourceBundlesPatterns[0];
 
 									for (String supportedLocaleValue : _supportedLocaleValues) {

@@ -60,22 +60,22 @@ public class WorkflowSupportManager {
 			return project;
 		}
 
-		project.create(CoreUtil.newSubMonitor(monitor, 1));
-		project.open(CoreUtil.newSubMonitor(monitor, 1));
+		project.create(CoreUtil.newSubmonitor(monitor, 1));
+		project.open(CoreUtil.newSubmonitor(monitor, 1));
 
 		CoreUtil.makeFolders(project.getFolder("src"));
 
 		String[] natureID = {JavaCore.NATURE_ID};
 
-		CoreUtil.addNaturesToProject(project, natureID, CoreUtil.newSubMonitor(monitor, 1));
+		CoreUtil.addNaturesToProject(project, natureID, CoreUtil.newSubmonitor(monitor, 1));
 
 		IJavaProject jProject = JavaCore.create(project);
 
 		IPath fullPath = project.getFullPath();
 
-		jProject.setOutputLocation(fullPath.append("bin"), CoreUtil.newSubMonitor(monitor, 1));
+		jProject.setOutputLocation(fullPath.append("bin"), CoreUtil.newSubmonitor(monitor, 1));
 
-		_computeClasspath(jProject, CoreUtil.newSubMonitor(monitor, 1));
+		_computeClasspath(jProject, CoreUtil.newSubmonitor(monitor, 1));
 
 		return project;
 	}

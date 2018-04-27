@@ -323,9 +323,9 @@ public class ProjectUtil {
 			record.description.setName(projectName);
 		}
 
-		project.create(record.description, CoreUtil.newSubMonitor(monitor, 30));
+		project.create(record.description, CoreUtil.newSubmonitor(monitor, 30));
 
-		project.open(IResource.FORCE, CoreUtil.newSubMonitor(monitor, 70));
+		project.open(IResource.FORCE, CoreUtil.newSubmonitor(monitor, 70));
 
 		// need to check to see if we an ext project with source folders with incorrect
 		// parent attributes
@@ -459,9 +459,9 @@ public class ProjectUtil {
 
 		monitor.beginTask(Msgs.importingProject, 100);
 
-		project.create(record.description, CoreUtil.newSubMonitor(monitor, 30));
+		project.create(record.description, CoreUtil.newSubmonitor(monitor, 30));
 
-		project.open(IResource.FORCE, CoreUtil.newSubMonitor(monitor, 70));
+		project.open(IResource.FORCE, CoreUtil.newSubmonitor(monitor, 70));
 
 		// need to check to see if we an ext project with source folders with incorrect parent attributes
 

@@ -60,9 +60,7 @@ public abstract class AbstractModel
 		IModelChangedListener[] list = (IModelChangedListener[])_fListeners.toArray(
 			new IModelChangedListener[_fListeners.size()]);
 
-		for (int i = 0; i < list.length; i++) {
-			IModelChangedListener listener = list[i];
-
+		for (IModelChangedListener listener : list) {
 			listener.modelChanged(event);
 		}
 	}

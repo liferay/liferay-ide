@@ -37,7 +37,7 @@ public class UpgradeServiceBuilderHandler extends AbstractUpgradeProjectHandler 
 		try {
 			int worked = 0;
 
-			IProgressMonitor submon = CoreUtil.newSubMonitor(monitor, 25);
+			IProgressMonitor submon = CoreUtil.newSubmonitor(monitor, 25);
 
 			submon.subTask("Executing build-service for " + project.getName());
 
