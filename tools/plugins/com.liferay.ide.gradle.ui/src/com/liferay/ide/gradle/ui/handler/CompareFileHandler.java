@@ -48,6 +48,7 @@ public class CompareFileHandler extends AbstractCompareFileHandler {
 			while ((fragment = reader.readLine()) != null) {
 				if (fragment.startsWith("Fragment-Host:")) {
 					fragment = fragment.substring(fragment.indexOf(":") + 1, fragment.indexOf(";")).trim();
+
 					break;
 				}
 			}

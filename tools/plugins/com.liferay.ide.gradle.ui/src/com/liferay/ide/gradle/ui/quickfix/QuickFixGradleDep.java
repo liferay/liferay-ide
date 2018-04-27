@@ -78,9 +78,7 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 		List<IJavaCompletionProposal> resultingCollections = new ArrayList<>();
 
 		if (FileUtil.exists(_gradleFile)) {
-			for (int i = 0; i < locations.length; i++) {
-				IProblemLocation curr = locations[i];
-
+			for (IProblemLocation curr : locations) {
 				_process(context, curr, resultingCollections);
 			}
 		}
@@ -225,9 +223,11 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 		switch (id) {
 			case IProblem.ImportNotFound:
 				_importNotFoundProposal(context, problem, proposals);
+
 				break;
 			case IProblem.UndefinedType:
 				_undefinedType(context, problem, proposals);
+
 				break;
 		}
 	}
