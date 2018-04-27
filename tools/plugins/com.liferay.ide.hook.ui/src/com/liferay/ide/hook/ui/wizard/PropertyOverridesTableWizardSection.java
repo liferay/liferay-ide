@@ -113,7 +113,7 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
 							public void widgetSelected(SelectionEvent e) {
 								handleArrayDialogButtonSelected(index, lbl, text);
 							}
-	
+
 						});
 				}
 			}

@@ -183,6 +183,7 @@ public class HookXmlEditor extends SapphireEditorForXml {
 	protected void pageChange(int pageIndex) {
 		_ignoreCustomModelChanges = true;
 		super.pageChange(pageIndex);
+
 		_ignoreCustomModelChanges = false;
 	}
 

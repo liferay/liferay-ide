@@ -173,9 +173,7 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 		return new ISelectionStatusValidator() {
 
 			public IStatus validate(Object[] selection) {
-				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) &&
-					!(selection[0] instanceof IProject)) {
-
+				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) && !(selection[0] instanceof IProject)) {
 					return Status.OK_STATUS;
 				}
 

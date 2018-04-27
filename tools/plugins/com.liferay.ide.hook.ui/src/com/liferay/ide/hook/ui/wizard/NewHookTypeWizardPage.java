@@ -139,9 +139,7 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 
 		List<String> items = new ArrayList<>();
 
-		for (int i = 0; i < workspaceProjects.length; i++) {
-			IProject project = workspaceProjects[i];
-
+		for (IProject project : workspaceProjects) {
 			if (isProjectValid(project)) {
 				items.add(project.getName());
 			}
