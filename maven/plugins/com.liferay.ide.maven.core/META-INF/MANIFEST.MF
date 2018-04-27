@@ -28,7 +28,8 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.server.core,
  biz.aQute.bndlib;bundle-version="[4,5)",
  com.liferay.ide.project.core,
- org.json
+ org.json,
+ org.eclipse.ltk.core.refactoring
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,

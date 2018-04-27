@@ -122,5 +122,18 @@
 		>
 		</liferayProjectImporter>
 	</extension>
+	<extension point="org.eclipse.ltk.core.refactoring.deleteParticipants">
+		<deleteParticipant
+			class="com.liferay.ide.maven.core.LiferayMavenModuleProjectDeleteParticipant"
+			id="com.liferay.ide.maven.core.LiferayMavenModuleProjectDeleteParticipant"
+			name="liferayMavenModuleProjectDeleteParticipant">
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IProject">
+					<test property="com.liferay.ide.maven.ui.isMavenProject">
+					</test>
+				</adapt>
+			</enablement>
+		</deleteParticipant>
+	</extension>
 
 </plugin>
