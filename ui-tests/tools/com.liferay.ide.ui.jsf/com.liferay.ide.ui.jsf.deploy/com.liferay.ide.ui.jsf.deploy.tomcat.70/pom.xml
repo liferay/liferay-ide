@@ -20,19 +20,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.ui.tests</groupId>
-		<artifactId>tools-tests</artifactId>
+		<groupId>com.liferay.ide.ui.tests.jsf.deploy</groupId>
+		<artifactId>jsf-deploy-tests</artifactId>
 		<version>3.2.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.ui.tests.jsf</groupId>
-	<artifactId>jsf-tests</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>com.liferay.ide.ui.jsf.deploy.tomcat.70.tests</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
 
-	<name>Liferay IDE UI Jsf</name>
-
-	<modules>
-		<module>com.liferay.ide.ui.jsf.wizard</module>
-		<module>com.liferay.ide.ui.jsf.deploy</module>
-	</modules>
+	<name>Liferay IDE UI Jsf Deploy Tomcat 70 Tests</name>
 </project>
