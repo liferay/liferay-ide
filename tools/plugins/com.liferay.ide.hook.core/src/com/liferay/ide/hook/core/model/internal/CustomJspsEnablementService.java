@@ -72,7 +72,7 @@ public class CustomJspsEnablementService extends EnablementService {
 
 			protected void handleTypedEvent(PropertyEvent event) {
 				refresh();
-			};
+			}
 
 		};
 

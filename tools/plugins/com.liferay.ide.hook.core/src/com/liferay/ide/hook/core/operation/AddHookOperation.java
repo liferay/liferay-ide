@@ -67,9 +67,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
  * @author Andy Wu
  * @author Charles Wu
  */
-@SuppressWarnings( {
-	"restriction", "unchecked"
-})
+@SuppressWarnings({"restriction", "unchecked"})
 public class AddHookOperation extends AbstractDataModelOperation implements INewHookDataModelProperties {
 
 	public AddHookOperation(IDataModel model) {

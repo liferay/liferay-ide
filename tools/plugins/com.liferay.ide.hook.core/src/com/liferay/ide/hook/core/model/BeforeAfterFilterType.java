@@ -22,13 +22,12 @@ import org.eclipse.sapphire.modeling.annotations.Label;
  */
 public enum BeforeAfterFilterType {
 
-	@Label(standard = "Before Filter")
-		@EnumSerialization(caseSensitive = true, primary = "before-filter")
-	BEFORE_FILTER("before-filter"),
-
 	@Label(standard = "After Filter")
 		@EnumSerialization(caseSensitive = true, primary = "after-filter")
-	AFTER_FILTER("after-filter");
+	AFTER_FILTER("after-filter"),
+	@Label(standard = "Before Filter")
+		@EnumSerialization(caseSensitive = true, primary = "before-filter")
+	BEFORE_FILTER("before-filter");
 
 	public String getText() {
 		return _text;

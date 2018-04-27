@@ -30,7 +30,9 @@ public class NewEventActionClassDataModelProvider
 
 	public NewEventActionClassDataModelProvider(IDataModel model, String qualifiedClassname, String text) {
 		hookModel = model;
+
 		this.qualifiedClassname = qualifiedClassname;
+
 		qualifiedSuperclassname = text;
 	}
 
