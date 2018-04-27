@@ -33,5 +33,6 @@
 
 	<modules>
 		<module>com.liferay.ide.ui.jsf.deploy.tomcat.70</module>
+		<module>com.liferay.ide.ui.jsf.deploy.tomcat.71</module>
 	</modules>
 </project>
