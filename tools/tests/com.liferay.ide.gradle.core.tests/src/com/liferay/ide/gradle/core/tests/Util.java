@@ -99,7 +99,7 @@ public class Util {
 			manager.join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
 			manager.join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
 			manager.join(CorePlugin.GRADLE_JOB_FAMILY, new NullProgressMonitor());
-			manager.join(GradleCore.JobFamilyId, new NullProgressMonitor());
+			manager.join(GradleCore.JOB_FAMILY_ID, new NullProgressMonitor());
 
 			Thread.sleep(200);
 

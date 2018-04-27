@@ -15,13 +15,13 @@
  */
 
 initscript {
-    File deps = file('%deps%')
+	File deps = file('%deps%')
 
-    dependencies {
-        classpath files { deps.listFiles() }
-    }
+	dependencies {
+		classpath files { deps.listFiles() }
+	}
 }
 
 allprojects {
-    apply plugin: com.liferay.blade.gradle.plugin.CustomModelPlugin
+	apply plugin: com.liferay.blade.gradle.plugin.CustomModelPlugin
 }
