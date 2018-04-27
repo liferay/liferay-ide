@@ -12,4 +12,5 @@
 	<bundle id="com.liferay.ide.ui.layouttpl.deploy.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.ui.theme.deploy.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.ui.jsf.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.ui.service.builder.deploy.base" version="0.0.0" />
 </site>

@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE UI Service Builder Deploy Tomcat 71 Tests
+Bundle-SymbolicName: com.liferay.ide.ui.service.builder.deploy.tomcat.71.tests
+Bundle-Version: 3.2.0.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: com.liferay.ide.ui.swtbot,
+ com.liferay.ide.ui.liferay,
+ org.eclipse.swtbot.go,
+ org.junit,
+ com.liferay.ide.ui.service.builder.deploy.base
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
