@@ -40,6 +40,7 @@ public class MavenProjectPreferencePage extends FieldEditorPreferencePage implem
 
 	public MavenProjectPreferencePage() {
 		super(GRID);
+
 		_prefStore = new ScopedPreferenceStore(InstanceScope.INSTANCE, LiferayMavenCore.PLUGIN_ID);
 	}
 

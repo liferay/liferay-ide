@@ -454,6 +454,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 				if (projectFacet.getId().contains("liferay.")) {
 					retval = fv;
+
 					break;
 				}
 			}
@@ -619,7 +620,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 	private IFolder _warSourceDirectory(IProject project, MavenProject mavenProject) {
 		IFolder retval = null;
 
-		Xpp3Dom warPluginConfiguration = (Xpp3Dom)mavenProject.getPlugin(_mavenWarPluginKey).getConfiguration();
+		Xpp3Dom warPluginConfiguration = (Xpp3Dom)mavenProject.getPlugin(_MAVEN_WAR_PLUGIN_KEY).getConfiguration();
 
 		if (warPluginConfiguration != null) {
 			Xpp3Dom[] warSourceDirs = warPluginConfiguration.getChildren("warSourceDirectory");
@@ -638,16 +639,18 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 			 * http://maven.apache.org/plugins/maven-war-plugin/war-mojo.html for more
 			 * information
 			 */
-			retval = project.getFolder(_warSourceFolder);
+			retval = project.getFolder(_WAR_SOURCE_FOLDER);
 		}
 
 		return retval;
 	}
 
-	private static final String _mavenWarPluginKey = "org.apache.maven.plugins:maven-war-plugin";
+	private static final String _MAVEN_WAR_PLUGIN_KEY = "org.apache.maven.plugins:maven-war-plugin";
+
+	private static final String _WAR_SOURCE_FOLDER = "/src/main/webapp";
+
 	private static final IPath _rootPath = new Path("/");
 	private static final Pattern _versionPattern = Pattern.compile("^(.*)-([0-9]\\.[0-9]\\.[0-9])(?:-SNAPSHOT)?$");
-	private static final String _warSourceFolder = "/src/main/webapp";
 
 	private IMavenMarkerManager _mavenMarkerManager;
 

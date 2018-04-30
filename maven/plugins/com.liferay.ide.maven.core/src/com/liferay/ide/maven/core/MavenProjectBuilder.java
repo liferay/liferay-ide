@@ -426,6 +426,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
 					if (existedKey.equals(newKey)) {
 						existed = true;
+
 						break;
 					}
 				}

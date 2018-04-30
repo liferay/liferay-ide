@@ -259,6 +259,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 						// return dummy maven project that can't lookup docroot resources
 
 						return new LiferayMavenProject(project) {
+
 							@Override
 							public IFolder[] getSourceFolders() {
 								return null;
@@ -384,7 +385,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 					String publicId = docType.getPublicId();
 
-					String newPublicId = _getNewDoctTypeSetting(publicId, tmpPublicId, _publicid_pattern);
+					String newPublicId = _getNewDoctTypeSetting(publicId, tmpPublicId, _publicidPattern);
 
 					if (newPublicId != null) {
 						docType.setPublicId(newPublicId);
@@ -392,7 +393,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 					String systemId = docType.getSystemId();
 
-					String newSystemId = _getNewDoctTypeSetting(systemId, tmpSystemId, _systemid_pattern);
+					String newSystemId = _getNewDoctTypeSetting(systemId, tmpSystemId, _systemidPattern);
 
 					if (newSystemId != null) {
 						docType.setSystemId(newSystemId);
@@ -420,7 +421,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 	private IFile[] _getLiferayMetaFiles(IProject project) {
 		List<IFile> files = new ArrayList<>();
 
-		for (String name : _fileNames) {
+		for (String name : _FILE_NAMES) {
 			files.addAll(new SearchFilesVisitor().searchFiles(project, name));
 		}
 
@@ -441,14 +442,15 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 		return newDoctTypeSetting;
 	}
 
-	private static final String[] _fileNames = {
+	private static final String[] _FILE_NAMES = {
 		"liferay-portlet.xml", "liferay-display.xml", "service.xml", "liferay-hook.xml", "liferay-layout-templates.xml",
 		"liferay-look-and-feel.xml", "liferay-portlet-ext.xml"
 	};
-	private static final Pattern _publicid_pattern = Pattern.compile(
+
+	private static final Pattern _publicidPattern = Pattern.compile(
 		"-\\//(?:[a-z][a-z]+)\\//(?:[a-z][a-z]+)[\\s+(?:[a-z][a-z0-9_]*)]*\\s+(\\d\\.\\d\\.\\d)\\//(?:[a-z][a-z]+)",
 		Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-	private static final Pattern _systemid_pattern = Pattern.compile(
+	private static final Pattern _systemidPattern = Pattern.compile(
 		"^http://www.liferay.com/dtd/[-A-Za-z0-9+&@#/%?=~_()]*(\\d_\\d_\\d).dtd",
 		Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 

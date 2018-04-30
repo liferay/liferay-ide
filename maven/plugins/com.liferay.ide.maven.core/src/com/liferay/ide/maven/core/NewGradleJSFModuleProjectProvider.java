@@ -66,7 +66,7 @@ public class NewGradleJSFModuleProjectProvider extends NewMavenJSFModuleProjectP
 							List<String> modifyContents = new ArrayList<>();
 
 							for (String line : buildGradleContents) {
-								if (_PATTERN_LIFERAY_WAR_PLUGIN.matcher(line).matches()) {
+								if (_liferayWarPluginPattern.matcher(line).matches()) {
 									continue;
 								}
 
@@ -103,7 +103,7 @@ public class NewGradleJSFModuleProjectProvider extends NewMavenJSFModuleProjectP
 		return retval;
 	}
 
-	private static final Pattern _PATTERN_LIFERAY_WAR_PLUGIN = Pattern.compile(
+	private static final Pattern _liferayWarPluginPattern = Pattern.compile(
 		".*apply.*plugin.*:.*[\'\"]((com\\.liferay)|(war))[\'\"].*", Pattern.MULTILINE | Pattern.DOTALL);
 
 }
