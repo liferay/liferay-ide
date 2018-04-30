@@ -69,6 +69,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("ignore create project have too long time lead to timeout")
 	@Test
 	public void createNpmBillboardjsPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -82,6 +83,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("ignore create project have too long time lead to timeout")
 	@Test
 	public void createNpmIsomorphicPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -95,6 +97,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("ignore create project have too long time lead to timeout")
 	@Test
 	public void createNpmJqueryPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -108,6 +111,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("ignore create project have too long time lead to timeout")
 	@Test
 	public void createNpmMetaljsPortletGradle() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -121,6 +125,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("ignore create project have too long time lead to timeout")
 	@Test
 	public void createNpmPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -134,6 +139,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("ignore create project have too long time lead to timeout")
 	@Test
 	public void createNpmReactPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -147,6 +153,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("ignore create project have too long time lead to timeout")
 	@Test
 	public void createNpmVuejsPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
