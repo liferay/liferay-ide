@@ -42,7 +42,7 @@ public class Tree extends AbstractWidget {
 	public void contextMenu(String menu, String... items) {
 		SWTBotTreeItem item = null;
 
-		int timeout = 10 * 1000;
+		int timeout = 60 * 1000;
 
 		long current = System.currentTimeMillis();
 
