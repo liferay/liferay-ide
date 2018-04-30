@@ -32,9 +32,9 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import com.liferay.ide.idea.core.LiferayProjectTypeService;
-import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.util.BladeCLI;
 import com.liferay.ide.idea.util.CoreUtil;
+import com.liferay.ide.idea.util.LiferayIcons;
 
 import java.io.File;
 
@@ -71,7 +71,7 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 
 	@Override
 	public Icon getNodeIcon() {
-		return LiferayIdeaUI.LIFERAY_ICON;
+		return LiferayIcons.LIFERAY_ICON;
 	}
 
 	@Override
@@ -203,7 +203,6 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 				ProgressExecutionMode.IN_BACKGROUND_ASYNC);
 		}
 	}
-
 
 	private static final String _LIFERAY_MODULES = "Liferay Modules";
 

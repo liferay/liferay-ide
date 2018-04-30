@@ -29,7 +29,7 @@ import com.intellij.openapi.roots.ui.configuration.ModulesConfigurator;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 
-import com.liferay.ide.idea.ui.LiferayIdeaUI;
+import com.liferay.ide.idea.util.LiferayIcons;
 import com.liferay.ide.idea.util.LiferayWorkspaceUtil;
 
 import java.util.List;
@@ -43,7 +43,7 @@ import org.jetbrains.annotations.Nullable;
 public class NewLiferayModuleAction extends AnAction implements DumbAware {
 
 	public NewLiferayModuleAction() {
-		super(LiferayIdeaUI.LIFERAY_ICON);
+		super(LiferayIcons.LIFERAY_ICON);
 	}
 
 	@Override

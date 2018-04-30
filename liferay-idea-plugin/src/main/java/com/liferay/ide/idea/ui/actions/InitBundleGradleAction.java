@@ -19,7 +19,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
-import com.liferay.ide.idea.ui.LiferayIdeaUI;
+import com.liferay.ide.idea.util.LiferayIcons;
 
 /**
  * @author Andy Wu
@@ -27,7 +27,7 @@ import com.liferay.ide.idea.ui.LiferayIdeaUI;
 public class InitBundleGradleAction extends AbstractLiferayGradleTaskAction {
 
 	public InitBundleGradleAction() {
-		super("InitBundle", "Run initBundle task", LiferayIdeaUI.LIFERAY_ICON, "initBundle");
+		super("InitBundle", "Run initBundle task", LiferayIcons.LIFERAY_ICON, "initBundle");
 	}
 
 	@Override

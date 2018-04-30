@@ -12,23 +12,21 @@
  * details.
  */
 
-package com.liferay.ide.idea.ui;
+package com.liferay.ide.idea.bndtools;
 
-import java.io.File;
+import com.intellij.openapi.fileTypes.FileTypeConsumer;
+import com.intellij.openapi.fileTypes.FileTypeFactory;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
- * @author Gregory Amerson
+ * @author Dominik Marks
  */
-public class LiferayIdeaUI {
+public class BndFileFactory extends FileTypeFactory {
 
-	public static final File USER_BUNDLES_DIR = new File(
-		new File(System.getProperty("user.home"), ".liferay-ide"), "bundles");
-
-	public static final File USER_TEMP_DIR = new File(System.getProperty("user.home"), ".liferay-ide");
-
-	static {
-		USER_TEMP_DIR.mkdirs();
-		USER_BUNDLES_DIR.mkdirs();
+	@Override
+	public void createFileTypes(@NotNull FileTypeConsumer consumer) {
+		consumer.consume(BndFileType.INSTANCE, "bnd");
 	}
 
 }

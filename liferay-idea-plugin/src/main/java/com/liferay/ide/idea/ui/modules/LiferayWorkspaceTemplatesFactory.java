@@ -18,7 +18,7 @@ import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.platform.ProjectTemplate;
 import com.intellij.platform.ProjectTemplatesFactory;
 
-import com.liferay.ide.idea.ui.LiferayIdeaUI;
+import com.liferay.ide.idea.util.LiferayIcons;
 
 import javax.swing.Icon;
 
@@ -43,7 +43,7 @@ public class LiferayWorkspaceTemplatesFactory extends ProjectTemplatesFactory {
 
 	@Override
 	public Icon getGroupIcon(String group) {
-		return LiferayIdeaUI.LIFERAY_ICON;
+		return LiferayIcons.LIFERAY_ICON;
 	}
 
 	@NotNull
