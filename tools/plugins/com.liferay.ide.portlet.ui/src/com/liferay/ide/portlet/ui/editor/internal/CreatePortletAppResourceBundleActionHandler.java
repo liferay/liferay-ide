@@ -56,6 +56,7 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
 	@Override
 	public void init(SapphireAction action, ActionHandlerDef def) {
 		super.init(action, def);
+
 		Element element = getModelElement();
 		Property property = property();
 		listener = new FilteredListener<PropertyEvent>() {

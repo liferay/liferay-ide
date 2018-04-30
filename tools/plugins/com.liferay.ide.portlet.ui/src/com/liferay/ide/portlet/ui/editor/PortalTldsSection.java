@@ -74,6 +74,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 
 	public PortalTldsSection(IDEFormPage page, Composite parent, String[] labels) {
 		super(page, parent, Section.DESCRIPTION, labels);
+
 		Section section = getSection();
 
 		section.setText(Msgs.portalDependencyTlds);
@@ -124,7 +125,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.pde.internal.ui.editor.PDESection#doGlobalAction(java.lang.String)
+	 * @see org.eclipse.pde.internal.ui.editor.PDESection#doGlobalAction(String)
 	 */
 	public boolean doGlobalAction(String actionId) {
 		if (!isEditable()) {
@@ -233,6 +234,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	public boolean setFormInput(Object object) {
 		//		if (object instanceof IPluginImport) {
 		//			ImportObject iobj = new ImportObject((IPluginImport) object);
+
 		//			fImportViewer.setSelection(new StructuredSelection(iobj), true);
 		//			return true;
 		//		}
@@ -279,21 +281,25 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		switch (index) {
 			case _ADD_INDEX:
 				_handleAdd();
+
 				break;
 			case _REMOVE_INDEX:
 				_handleRemove();
+
 				break;
 			case _UP_INDEX:
 				_handleUp();
+
 				break;
 			case _DOWN_INDEX:
 				_handleDown();
+
 				break;
 		}
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#canPaste(java.lang.Object, java.lang.Object[])
+	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#canPaste(Object, Object[])
 	 */
 	protected boolean canPaste(Object targetObject, Object[] sourceObjects) {
 		return false;
@@ -323,7 +329,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#doPaste(java.lang.Object, java.lang.Object[])
+	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#doPaste(Object, Object[])
 	 */
 	protected void doPaste(Object targetObject, Object[] sourceObjects) {
 

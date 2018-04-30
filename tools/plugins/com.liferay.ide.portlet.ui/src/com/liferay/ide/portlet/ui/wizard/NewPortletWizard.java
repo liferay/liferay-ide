@@ -80,6 +80,7 @@ public class NewPortletWizard
 
 	public NewPortletWizard(IDataModel model) {
 		super(model);
+
 		setDefaultPageImageDescriptor(getImage());
 		setupWizard();
 	}
@@ -108,6 +109,7 @@ public class NewPortletWizard
 		}
 
 		super.init(workbench, selection);
+
 		ValidProjectChecker checker = new ValidProjectChecker(ID);
 
 		checker.checkValidProjectTypes();

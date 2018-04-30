@@ -318,6 +318,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 			public void widgetSelected(SelectionEvent e) {
 				super.widgetSelected(e);
+
 				IProject project = CoreUtil.getProject(projectNameCombo.getText());
 
 				validateProjectRequirements(project);

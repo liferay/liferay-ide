@@ -51,9 +51,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 	public List<SapphireActionHandler> create() {
 		List<SapphireActionHandler> listOfHandlers = new ArrayList<>();
 
-		for (int i = 0; i < _modelProperties.length; i++) {
-			String property = _modelProperties[i];
-
+		for (String property : _modelProperties) {
 			if ((property != null) && "Portlets".equalsIgnoreCase(property) && _isPartInLiferayProject()) {
 				SapphireActionHandler handler = new CreateLiferayPortletActionHandler();
 
@@ -124,6 +122,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 		@Override
 		public void init(SapphireAction action, ActionHandlerDef def) {
 			super.init(action, def);
+
 			Element rootModel = action.getPart().getModelElement();
 
 			PropertyDef property = rootModel.type().property(_strProperty);

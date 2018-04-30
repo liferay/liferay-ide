@@ -81,6 +81,7 @@ public class PortalDeployExcludesSection
 
 	public PortalDeployExcludesSection(IDEFormPage page, Composite parent, String[] labels) {
 		super(page, parent, Section.DESCRIPTION, labels);
+
 		getSection().setText(Msgs.portalDeployExcludeJars);
 		getSection().setDescription(Msgs.excludeJars);
 
@@ -131,7 +132,7 @@ public class PortalDeployExcludesSection
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.pde.internal.ui.editor.PDESection#doGlobalAction(java.lang.String)
+	 * @see org.eclipse.pde.internal.ui.editor.PDESection#doGlobalAction(String)
 	 */
 	public boolean doGlobalAction(String actionId) {
 		if (!isEditable()) {
@@ -202,8 +203,7 @@ public class PortalDeployExcludesSection
 				if (changedObjects[0] instanceof IPluginImport) {
 					int index = 0;
 
-					for (int i = 0; i < changedObjects.length; i++) {
-						Object changeObject = changedObjects[i];
+					for (Object changeObject : changedObjects) {
 						IPluginImport iimport = (IPluginImport)changeObject;
 
 						if (event.getChangeType() == IModelChangedEvent.INSERT) {
@@ -266,6 +266,7 @@ public class PortalDeployExcludesSection
 							// Get the last import added to the viewer
 
 							IPluginImport lastImport = (IPluginImport)changedObjects[changedObjects.length - 1];
+
 							//Find the corresponding bundle object for the plugin import
 							ImportObject lastImportObject = findImportObject(lastImport);
 
@@ -314,6 +315,7 @@ public class PortalDeployExcludesSection
 	public boolean setFormInput(Object object) {
 		//		if (object instanceof IPluginImport) {
 		//			ImportObject iobj = new ImportObject((IPluginImport) object);
+
 		//			fImportViewer.setSelection(new StructuredSelection(iobj), true);
 		//			return true;
 		//		}
@@ -373,21 +375,25 @@ public class PortalDeployExcludesSection
 		switch (index) {
 			case _ADD_INDEX :
 				_handleAdd();
+
 				break;
 			case _REMOVE_INDEX :
 				_handleRemove();
+
 				break;
 			case _UP_INDEX :
 				_handleUp();
+
 				break;
 			case _DOWN_INDEX :
 				_handleDown();
+
 				break;
 		}
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#canPaste(java.lang.Object, java.lang.Object[])
+	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#canPaste(Object, Object[])
 	 */
 	protected boolean canPaste(Object targetObject, Object[] sourceObjects) {
 		return false;
@@ -452,7 +458,7 @@ public class PortalDeployExcludesSection
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#doPaste(java.lang.Object, java.lang.Object[])
+	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#doPaste(Object, Object[])
 	 */
 	protected void doPaste(Object targetObject, Object[] sourceObjects) {
 
