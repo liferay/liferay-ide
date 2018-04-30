@@ -61,7 +61,7 @@ public class BundleUrlDefaultValueService extends DefaultValueService {
 
 		@SuppressWarnings("unchecked")
 		NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> provider =
-			(NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp>) LiferayCore.getProvider(buildType);
+			(NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp>)LiferayCore.getProvider(buildType);
 
 		return provider.getInitBundleUrl(workspaceLocation);
 	}

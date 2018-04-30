@@ -55,6 +55,7 @@ public class ResourceFilterUtil {
 
 				if (projectName.equals(filteredSubFolderName)) {
 					shouldAdd = false;
+
 					break;
 				}
 			}

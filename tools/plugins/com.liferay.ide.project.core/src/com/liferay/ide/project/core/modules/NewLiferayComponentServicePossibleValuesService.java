@@ -59,9 +59,8 @@ public class NewLiferayComponentServicePossibleValuesService extends PossibleVal
 		String template = componentTemplate.getShortName();
 
 		if (template.equals("ServiceHook")) {
-
 			try {
-				ServiceContainer allServicesWrapper = TargetPlatformUtil.getServiceWrapperList();;
+				ServiceContainer allServicesWrapper = TargetPlatformUtil.getServiceWrapperList();
 
 				values.addAll(allServicesWrapper.getServiceList());
 			}
@@ -70,7 +69,6 @@ public class NewLiferayComponentServicePossibleValuesService extends PossibleVal
 			}
 		}
 		else if (template.equals("service")) {
-
 			try {
 				ServiceContainer allServices = TargetPlatformUtil.getServicesList();
 

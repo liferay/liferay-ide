@@ -57,7 +57,6 @@ public class ServicePossibleValuesService extends PossibleValuesService {
 		String template = op.getProjectTemplateName().content(true);
 
 		if (template.equals("service-wrapper")) {
-
 			try {
 				ServiceContainer allServicesWrapper = TargetPlatformUtil.getServiceWrapperList();
 
@@ -68,7 +67,6 @@ public class ServicePossibleValuesService extends PossibleValuesService {
 			}
 		}
 		else if (template.equals("service")) {
-
 			try {
 				ServiceContainer allServices = TargetPlatformUtil.getServicesList();
 

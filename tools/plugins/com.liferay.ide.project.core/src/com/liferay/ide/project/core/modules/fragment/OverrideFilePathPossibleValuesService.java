@@ -161,7 +161,9 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 						it.remove();
 					}
 
-					if (FileUtil.exists(javaFolder.getFile("portlet-ext.properties")) && v.equals("portlet.properties")) {
+					if (FileUtil.exists(javaFolder.getFile("portlet-ext.properties")) &&
+						v.equals("portlet.properties")) {
+
 						it.remove();
 					}
 

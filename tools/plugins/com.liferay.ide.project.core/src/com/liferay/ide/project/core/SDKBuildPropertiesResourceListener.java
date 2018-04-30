@@ -194,6 +194,7 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
 				for (IStatus status : statuses) {
 					if (status.getMessage().equals(message)) {
 						canDelete = false;
+
 						break;
 					}
 				}
@@ -212,6 +213,7 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
 
 						if (status.getMessage().equals(message)) {
 							canAdd = false;
+
 							break;
 						}
 					}

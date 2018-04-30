@@ -249,9 +249,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 		// compare jarPath to an existing entry
 
-		if ((jarPath != null) && !CoreUtil.isNullOrEmpty(jarPath.toString()) &&
-				ListUtil.isNotEmpty(suggestedEntries)) {
-
+		if ((jarPath != null) && !CoreUtil.isNullOrEmpty(jarPath.toString()) && ListUtil.isNotEmpty(suggestedEntries)) {
 			int matchLength = jarPath.segmentCount();
 
 			for (IClasspathEntry suggestedEntry : suggestedEntries) {

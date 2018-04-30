@@ -29,6 +29,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.eclipse.wst.server.core.IServer;
 
 /**
@@ -85,6 +86,7 @@ public class ServiceCommand {
 		String bundleVersion;
 
 		// String result  = supervisor.packages("packages " + serviceName.substring(0, serviceName.lastIndexOf(".")));
+
 		String result = "";
 
 		if (result.startsWith("No exported packages")) {
@@ -210,7 +212,7 @@ public class ServiceCommand {
 		while (newListIterator.hasNext()) {
 			String serviceName = newListIterator.next();
 
-			for (String packageName : _portalImplExpPackage) {
+			for (String packageName : _PORTAL_IMPL_EXP_PACKAGE) {
 				if (serviceName.startsWith(packageName)) {
 					newListIterator.remove();
 
@@ -252,7 +254,7 @@ public class ServiceCommand {
 		return null;
 	}
 
-	private static final String[] _portalImplExpPackage = {
+	private static final String[] _PORTAL_IMPL_EXP_PACKAGE = {
 		"com.liferay.portal.bean", "com.liferay.portal.cache.thread.local", "com.liferay.portal.cluster",
 		"com.liferay.portal.convert.database", "com.liferay.portal.convert.util", "com.liferay.portal.dao.jdbc.aop",
 		"com.liferay.portal.dao.orm.hibernate", "com.liferay.portal.deploy.hot", "com.liferay.portal.events",

@@ -78,6 +78,46 @@ public class LiferayWorkspaceUtil {
 		"A Liferay Workspace project already exists in this Eclipse instance.";
 	public static String multiWorkspaceErrorMsg = "More than one Liferay workspace build in current Eclipse workspace.";
 
+	public static void addPortalRuntime() {
+		IProject project = getWorkspaceProject();
+
+		try {
+			if (project == null) {
+				throw new CoreException(ProjectCore.createErrorStatus("Cann't get a valid Liferay Workspace project."));
+			}
+
+			IPath bundlesLocation = getHomeLocation(project);
+
+			if (FileUtil.exists(bundlesLocation)) {
+				PortalBundle bundle = LiferayServerCore.newPortalBundle(bundlesLocation);
+
+				if (bundle == null) {
+					ProjectCore.logError("Can not create bundle from location :" + bundlesLocation);
+
+					return;
+				}
+
+				String serverName = bundle.getServerReleaseInfo();
+
+				ServerUtil.addPortalRuntimeAndServer(serverName, bundlesLocation, new NullProgressMonitor());
+
+				IProject pluginsSDK = CoreUtil.getProject(getPluginsSDKDir(project.getLocation().toPortableString()));
+
+				if (FileUtil.exists(pluginsSDK)) {
+					SDK sdk = SDKUtil.createSDKFromLocation(pluginsSDK.getLocation());
+
+					sdk.addOrUpdateServerProperties(
+						ServerUtil.getLiferayRuntime(ServerUtil.getServer(serverName)).getLiferayHome());
+
+					pluginsSDK.refreshLocal(IResource.DEPTH_INFINITE, null);
+				}
+			}
+		}
+		catch (Exception e) {
+			ProjectCore.logError("Add Liferay server failed", e);
+		}
+	}
+
 	public static void clearWorkspace(String location) {
 		File projectFile = new File(location, ".project");
 
@@ -355,46 +395,6 @@ public class LiferayWorkspaceUtil {
 		return false;
 	}
 
-	public static void addPortalRuntime() {
-		IProject project = getWorkspaceProject();
-
-		try {
-			if (project == null) {
-				throw new CoreException(ProjectCore.createErrorStatus("Cann't get a valid Liferay Workspace project."));
-			}
-
-			IPath bundlesLocation = getHomeLocation(project);
-
-			if (FileUtil.exists(bundlesLocation)) {
-				PortalBundle bundle = LiferayServerCore.newPortalBundle(bundlesLocation);
-
-				if (bundle == null) {
-					ProjectCore.logError("Can not create bundle from location :" + bundlesLocation);
-					return;
-				}
-
-				String serverName = bundle.getServerReleaseInfo();
-
-				ServerUtil.addPortalRuntimeAndServer(serverName, bundlesLocation, new NullProgressMonitor());
-
-				IProject pluginsSDK = CoreUtil.getProject(
-					LiferayWorkspaceUtil.getPluginsSDKDir(project.getLocation().toPortableString()));
-
-				if (FileUtil.exists(pluginsSDK)) {
-					SDK sdk = SDKUtil.createSDKFromLocation(pluginsSDK.getLocation());
-
-					sdk.addOrUpdateServerProperties(
-						ServerUtil.getLiferayRuntime(ServerUtil.getServer(serverName)).getLiferayHome());
-
-					pluginsSDK.refreshLocal(IResource.DEPTH_INFINITE, null);
-				}
-			}
-		}
-		catch (Exception e) {
-			ProjectCore.logError("Add Liferay server failed", e);
-		}
-	}
-
 	public static boolean isValidGradleWorkspaceLocation(String location) {
 		File workspaceDir = new File(location);
 
@@ -410,7 +410,7 @@ public class LiferayWorkspaceUtil {
 
 		String settingsContent = FileUtil.readContents(settingsGradle, true);
 
-		if ((settingsContent != null) && _PATTERN_WORKSPACE_PLUGIN.matcher(settingsContent).matches()) {
+		if ((settingsContent != null) && _workspacePluginPattern.matcher(settingsContent).matches()) {
 			return true;
 		}
 
@@ -479,9 +479,9 @@ public class LiferayWorkspaceUtil {
 
 	private static final String _GRADLE_PROPERTIES_FILE_NAME = "gradle.properties";
 
-	private static final Pattern _PATTERN_WORKSPACE_PLUGIN = Pattern.compile(
-		".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.workspace[\'\"].*", Pattern.MULTILINE | Pattern.DOTALL);
-
 	private static final String _SETTINGS_GRADLE_FILE_NAME = "settings.gradle";
+
+	private static final Pattern _workspacePluginPattern = Pattern.compile(
+		".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.workspace[\'\"].*", Pattern.MULTILINE | Pattern.DOTALL);
 
 }

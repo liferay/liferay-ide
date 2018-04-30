@@ -38,6 +38,7 @@ public class ClasspathUtil {
 
 			if ((entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) && segment.equals(SDKClasspathContainer.ID)) {
 				retVal = true;
+
 				break;
 			}
 		}
@@ -69,6 +70,7 @@ public class ClasspathUtil {
 
 				if (segment.equals(SDKClasspathContainer.ID)) {
 					containerPath = entry.getPath();
+
 					break;
 				}
 			}

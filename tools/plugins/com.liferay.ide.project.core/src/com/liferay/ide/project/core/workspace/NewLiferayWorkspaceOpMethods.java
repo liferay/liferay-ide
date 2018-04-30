@@ -14,7 +14,6 @@
 
 package com.liferay.ide.project.core.workspace;
 
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
@@ -80,7 +79,8 @@ public class NewLiferayWorkspaceOpMethods {
 					ServerUtil.addPortalRuntimeAndServer(serverRuntimeName, bundlesLocation, monitor);
 				}
 				else {
-					ProjectCore.logWarning("Location " + bundlesLocation + " is not Liferay Portal Bundle, bundle init failed.");
+					ProjectCore.logWarning(
+						"Location " + bundlesLocation + " is not Liferay Portal Bundle, bundle init failed.");
 				}
 			}
 		}

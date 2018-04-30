@@ -154,7 +154,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall {
 		}
 
 		try {
-			IDOMModel domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit(tilesDefExtFile);
+			IDOMModel domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForEdit(tilesDefExtFile);
 
 			domModel.aboutToChangeModel();
 

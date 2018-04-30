@@ -26,4 +26,5 @@ public enum ProfileLocation {
 
 	@Label(standard = "User settings at ${user.home}/.m2/settings.xml")
 	userSettings,
+
 }

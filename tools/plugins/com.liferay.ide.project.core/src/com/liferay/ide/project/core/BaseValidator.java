@@ -152,6 +152,7 @@ public abstract class BaseValidator extends AbstractValidator {
 
 							if (supertypeHierarchy.contains(checkType)) {
 								typeFound = true;
+
 								break;
 							}
 						}

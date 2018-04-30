@@ -166,6 +166,7 @@ public class PluginFacetProjectCreationDataModelProvider
 
 			if (runtime instanceof BridgedRuntime && ServerUtil.isLiferayRuntime((BridgedRuntime)runtime)) {
 				getDataModel().setProperty(FACET_RUNTIME, runtime);
+
 				break;
 			}
 		}
@@ -280,7 +281,7 @@ public class PluginFacetProjectCreationDataModelProvider
 		Set<IProjectFacetVersion> facets = facetedProject.getProjectFacets();
 
 		for (IProjectFacetVersion fv : facets) {
-			if (!(fv.getProjectFacet().equals(facet))) {
+			if (!fv.getProjectFacet().equals(facet)) {
 				newFacetSet.add(fv);
 			}
 		}
