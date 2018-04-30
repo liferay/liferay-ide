@@ -559,11 +559,9 @@ public class PortalServerBehavior
 
 					PortalPropertiesConfiguration config = new PortalPropertiesConfiguration();
 
-					InputStream in = Files.newInputStream(portalext.toPath());
-
-					config.load(in);
-
-					in.close();
+					try (InputStream in = Files.newInputStream(portalext.toPath())) {
+						config.load(in);
+					}
 
 					String[] p = config.getStringArray("include-and-override");
 

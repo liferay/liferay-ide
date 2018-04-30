@@ -19,6 +19,7 @@ import com.liferay.ide.portlet.core.model.PortletApp;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public class PortletsNode {
 			IFile portletXmlFile = ProjectUtil.getPortletXmlFile(this._parent.getProject());
 
 			if ((portletXmlFile != null) && portletXmlFile.exists()) {
-				try {
+				try (InputStream inputStream = portletXmlFile.getContents()){
 					IStructuredModel portletXmlModel =
 						StructuredModelManager.getModelManager().getModelForRead(portletXmlFile);
 
@@ -125,7 +126,7 @@ public class PortletsNode {
 					portletXmlModel.addModelStateListener(listener);
 
 					_modelElement = PortletApp.TYPE.instantiate(
-						new RootXmlResource(new XmlResourceStore(portletXmlFile.getContents())));
+						new RootXmlResource(new XmlResourceStore(inputStream)));
 				}
 				catch (Exception e) {
 					PortletUIPlugin.logError(e);

@@ -617,7 +617,9 @@ public class PropertiesUtil {
 
 			file.setCharset(null, monitor);
 
-			file.setContents(new ByteArrayInputStream(contents.getBytes("UTF-8")), IResource.FORCE, monitor);
+			try( InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"))){
+				file.setContents(inputStream, IResource.FORCE, monitor);	
+			}
 		}
 		catch (Exception e) {
 			LiferayCore.logError(e);
@@ -676,18 +678,16 @@ public class PropertiesUtil {
 
 				};
 
-				InputStream contents = liferayHookXml.getContents();
+				try(InputStream contents = liferayHookXml.getContents()){
+					SAXParser saxParser = _saxParserFactory.newSAXParser();
 
-				SAXParser saxParser = _saxParserFactory.newSAXParser();
+					XMLReader xmlReader = saxParser.getXMLReader();
 
-				XMLReader xmlReader = saxParser.getXMLReader();
+					xmlReader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+					xmlReader.setFeature("http://xml.org/sax/features/validation", false);
 
-				xmlReader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-				xmlReader.setFeature("http://xml.org/sax/features/validation", false);
-
-				saxParser.parse(contents, handler);
-
-				contents.close();
+					saxParser.parse(contents, handler);
+				}
 			}
 			catch (Exception e) {
 				LiferayCore.logError("Error resolving " + ILiferayConstants.LIFERAY_HOOK_XML_FILE, e);
@@ -788,18 +788,16 @@ public class PropertiesUtil {
 
 				};
 
-				InputStream contents = portletXml.getContents();
+				try(InputStream contents = portletXml.getContents()){
+					SAXParser saxParser = _saxParserFactory.newSAXParser();
 
-				SAXParser saxParser = _saxParserFactory.newSAXParser();
+					XMLReader xmlReader = saxParser.getXMLReader();
 
-				XMLReader xmlReader = saxParser.getXMLReader();
+					xmlReader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+					xmlReader.setFeature("http://xml.org/sax/features/validation", false);
 
-				xmlReader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-				xmlReader.setFeature("http://xml.org/sax/features/validation", false);
-
-				saxParser.parse(contents, handler);
-
-				contents.close();
+					saxParser.parse(contents, handler);
+				}
 			}
 			catch (SAXException saxe) {
 			}

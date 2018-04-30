@@ -76,7 +76,8 @@ public class FileHelper {
 
 		try (OutputStream stream = Files.newOutputStream(file.toPath());
 			BufferedOutputStream out = new BufferedOutputStream(stream);
-			BufferedInputStream bin = new BufferedInputStream(new ByteArrayInputStream(contents.getBytes()))) {
+			ByteArrayInputStream byteInputStream = new ByteArrayInputStream(contents.getBytes());
+			BufferedInputStream bin = new BufferedInputStream(byteInputStream)) {
 
 			byte[] buffer = new byte[1024];
 

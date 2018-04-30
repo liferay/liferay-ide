@@ -119,14 +119,11 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 
 			if (propertiesFileRes instanceof IFile && propertiesFileRes.exists()) {
 				Properties props = new Properties();
+				IFile propsFile = (IFile)propertiesFileRes;
 
-				try {
-					IFile propsFile = (IFile)propertiesFileRes;
-
-					InputStream contents = propsFile.getContents();
+				try(InputStream contents = propsFile.getContents()) {
 
 					props.load(contents);
-					contents.close();
 
 					String nameValue = props.getProperty("name");
 

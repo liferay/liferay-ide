@@ -173,7 +173,9 @@ public class JSFPortletFramework
 				if (contents.contains("init-param")) {
 					contents = contents.replaceAll("/views/view.xhtml", "/WEB-INF/views/view.xhtml");
 
-					portletXml.setContents(new ByteArrayInputStream(contents.getBytes("UTF-8")), IResource.FORCE, null);
+					try(InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"))){
+						portletXml.setContents(inputStream, IResource.FORCE, null);
+					}
 				}
 			}
 		}

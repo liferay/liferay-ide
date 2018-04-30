@@ -22,6 +22,7 @@ import com.liferay.ide.portlet.ui.wizard.AddPortletOperation;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -67,9 +68,9 @@ public class AddJSFPortletOperation extends AddPortletOperation implements INewJ
 			getDataModel().getStringProperty(PORTLET_NAME) + "-hello-world=Hello " +
 				getDataModel().getStringProperty(DISPLAY_NAME);
 
-		try {
+		try (InputStream inputStream = i18nPropertiesFile.getContents()){
 			if (i18nPropertiesFile.exists()) {
-				String propsContents = FileUtil.readContents(i18nPropertiesFile.getContents());
+				String propsContents = FileUtil.readContents(inputStream);
 
 				String newContents = propsContents + "\n" + outputToAppend;
 
@@ -77,7 +78,9 @@ public class AddJSFPortletOperation extends AddPortletOperation implements INewJ
 					new ByteArrayInputStream(newContents.getBytes("UTF-8")), IResource.FORCE, null);
 			}
 			else {
-				i18nPropertiesFile.create(new ByteArrayInputStream(outputToAppend.getBytes("UTF-8")), true, null);
+				try(InputStream input = new ByteArrayInputStream(outputToAppend.getBytes("UTF-8"))){
+					i18nPropertiesFile.create(input, true, null);
+				}
 			}
 		}
 		catch (Exception e) {

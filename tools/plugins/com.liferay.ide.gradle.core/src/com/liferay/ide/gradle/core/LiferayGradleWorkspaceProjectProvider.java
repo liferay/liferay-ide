@@ -31,6 +31,7 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
@@ -106,16 +107,20 @@ public class LiferayGradleWorkspaceProjectProvider
 				if (bundleUrl != null) {
 					final IFile gradlePropertiesFile = project.getFile("gradle.properties");
 
-					String content = FileUtil.readContents(gradlePropertiesFile.getContents());
+					try(InputStream gradleStream = gradlePropertiesFile.getContents()){
 
-					String bundleUrlProp = LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
+						String content = FileUtil.readContents(gradleStream);
 
-					String separator = System.getProperty("line.separator", "\n");
+						String bundleUrlProp = LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
 
-					String newContent = content + separator + bundleUrlProp;
+						String separator = System.getProperty("line.separator", "\n");
 
-					gradlePropertiesFile.setContents(
-						new ByteArrayInputStream(newContent.getBytes()), IResource.FORCE, monitor);
+						String newContent = content + separator + bundleUrlProp;
+
+						try(InputStream inputStream = new ByteArrayInputStream(newContent.getBytes())){
+							gradlePropertiesFile.setContents(inputStream, IResource.FORCE, monitor);
+						}
+					}
 				}
 
 				GradleUtil.runGradleTask(project, "initBundle", monitor);

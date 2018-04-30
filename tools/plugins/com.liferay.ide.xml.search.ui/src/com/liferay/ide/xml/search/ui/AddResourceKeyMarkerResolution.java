@@ -17,7 +17,6 @@ package com.liferay.ide.xml.search.ui;
 import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import java.net.URL;
@@ -66,11 +65,7 @@ public class AddResourceKeyMarkerResolution extends AbstractResourceBundleMarker
 			return;
 		}
 
-		InputStream is = null;
-
-		try {
-			is = _resourceBundle.getContents();
-
+		try{
 			String languageKey = getResourceKey(marker);
 
 			if (CoreUtil.isNullOrEmpty(languageKey)) {
@@ -79,7 +74,9 @@ public class AddResourceKeyMarkerResolution extends AbstractResourceBundleMarker
 
 			Properties properties = new Properties();
 
-			properties.load(is);
+			try(InputStream is = _resourceBundle.getContents()){
+				properties.load(is);
+			}
 
 			if (properties.get(languageKey) != null) {
 				return;
@@ -109,21 +106,14 @@ public class AddResourceKeyMarkerResolution extends AbstractResourceBundleMarker
 
 			int resourcePropertyLineOffset = resourcePropertyLine.getBytes().length;
 
-			_resourceBundle.setContents(new ByteArrayInputStream(bytes), IResource.FORCE, new NullProgressMonitor());
+			try(ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes)){
+				_resourceBundle.setContents(inputStream, IResource.FORCE, new NullProgressMonitor());	
+			}
 
 			openEditor(_resourceBundle, contentOffset - resourcePropertyLineOffset, contentOffset - 1);
 		}
 		catch (Exception e) {
 			LiferayXMLSearchUI.logError(e);
-		}
-		finally {
-			if (is != null) {
-				try {
-					is.close();
-				}
-				catch (IOException ioe) {
-				}
-			}
 		}
 	}
 

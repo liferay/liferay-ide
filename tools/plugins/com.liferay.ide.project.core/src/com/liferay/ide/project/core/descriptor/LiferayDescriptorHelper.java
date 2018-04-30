@@ -23,6 +23,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import java.text.MessageFormat;
 
@@ -140,8 +141,8 @@ public abstract class LiferayDescriptorHelper {
 		public void createDefaultDescriptor(String templateString, String version) {
 			String content = MessageFormat.format(templateString, version, version.replace('.', '_'));
 
-			try {
-				file.create(new ByteArrayInputStream(content.getBytes("UTF-8")), IResource.FORCE, null);
+			try(InputStream input = new ByteArrayInputStream(content.getBytes("UTF-8"))) {
+				file.create(input, IResource.FORCE, null);
 			}
 			catch (Exception e) {
 				LiferayCore.logError(e);

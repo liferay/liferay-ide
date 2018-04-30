@@ -739,9 +739,9 @@ public class LiferayServerCore extends Plugin {
 					}
 				}
 
-				OutputStream fos = Files.newOutputStream(runtimesGlobalFile.toPath());
-
-				runtimeMementos.save(fos);
+				try (OutputStream fos = Files.newOutputStream(runtimesGlobalFile.toPath())) {
+					runtimeMementos.save(fos);
+				}
 			}
 			catch (Exception e) {
 				logError("Unable to save global runtime settings", e);
@@ -819,9 +819,9 @@ public class LiferayServerCore extends Plugin {
 					}
 
 					if (!mementos.isEmpty()) {
-						OutputStream fos = Files.newOutputStream(globalServersFile.toPath());
-
-						serverMementos.save(fos);
+						try (OutputStream fos = Files.newOutputStream(globalServersFile.toPath())) {
+							serverMementos.save(fos);
+						}
 					}
 				}
 				catch (Exception e) {

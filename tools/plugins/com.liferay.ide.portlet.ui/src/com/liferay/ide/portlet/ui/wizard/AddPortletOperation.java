@@ -22,6 +22,7 @@ import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.portlet.core.operation.NewEntryClassOperation;
 import com.liferay.ide.portlet.core.operation.NewPortletClassOperation;
+import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.descriptor.AddNewPortletOperation;
@@ -29,6 +30,8 @@ import com.liferay.ide.project.core.descriptor.RemoveAllPortletsOperation;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.List;
 
@@ -164,7 +167,12 @@ public class AddPortletOperation
 
 				CoreUtil.prepareFolder(parent);
 
-				projectFile.create(new ByteArrayInputStream(new byte[0]), IResource.FORCE, null);
+				try(InputStream input = new ByteArrayInputStream(new byte[0])){
+					projectFile.create(input, IResource.FORCE, null);
+				}
+				catch (IOException e) {
+					throw new CoreException(PortletUIPlugin.createErrorStatus(e));
+				}
 			}
 		}
 	}
@@ -267,18 +275,16 @@ public class AddPortletOperation
 		}
 
 		if (viewJspFile != null) {
-			try {
+			try (InputStream input = new ByteArrayInputStream(templateString.getBytes("UTF-8"))){
 				if (viewJspFile.exists()) {
-					viewJspFile.setContents(
-						new ByteArrayInputStream(templateString.getBytes("UTF-8")), IResource.FORCE, null);
+					viewJspFile.setContents(input, IResource.FORCE, null);
 				}
 				else {
 
 					// make sure that full path to jspfile is available
 
 					CoreUtil.prepareFolder((IFolder)viewJspFile.getParent());
-					viewJspFile.create(
-						new ByteArrayInputStream(templateString.getBytes("UTF-8")), IResource.FORCE, null);
+					viewJspFile.create(input, IResource.FORCE, null);
 				}
 			}
 			catch (Exception ex) {

@@ -55,13 +55,13 @@ public class DefaultScriptEditorHelper extends AbstractKaleoEditorHelper {
 			 */
 			IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
 
-			InputStream inputStream = editorInput.getStorage().getContents();
+			try(InputStream inputStream = editorInput.getStorage().getContents()){
+				IContentDescription contentDescription = contentTypeManager.getDescriptionFor(
+						inputStream, fileName, IContentDescription.ALL);
 
-			IContentDescription contentDescription = contentTypeManager.getDescriptionFor(
-				inputStream, fileName, IContentDescription.ALL);
-
-			if (contentDescription != null) {
-				contentType = contentDescription.getContentType();
+				if (contentDescription != null) {
+					contentType = contentDescription.getContentType();
+				}
 			}
 
 			if (contentType == null) {

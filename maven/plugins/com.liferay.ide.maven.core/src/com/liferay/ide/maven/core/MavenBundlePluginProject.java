@@ -24,6 +24,7 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -238,8 +239,8 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 		IFile bndFile = getProject().getFile("bnd.bnd");
 
 		if (FileUtil.exists(bndFile)) {
-			try {
-				String content = FileUtil.readContents(bndFile.getContents());
+			try(InputStream inputStream = bndFile.getContents()) {
+				String content = FileUtil.readContents(inputStream);
 
 				if (content.contains("Fragment-Host")) {
 					return true;

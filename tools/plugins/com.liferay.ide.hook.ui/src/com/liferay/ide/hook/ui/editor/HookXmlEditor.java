@@ -260,8 +260,10 @@ public class HookXmlEditor extends SapphireEditorForXml {
 									CoreUtil.makeFolders((IFolder)customJspFile.getParent());
 
 									if (portalJsp.toFile().exists()) {
-										customJspFile.create(
-											Files.newInputStream(portalJsp.toFile().toPath()), true, null);
+										try(InputStream jspInputStream = 
+												Files.newInputStream(portalJsp.toFile().toPath())){
+											customJspFile.create(jspInputStream, true, null);											
+										}
 									}
 									else {
 										CoreUtil.createEmptyFile(customJspFile);

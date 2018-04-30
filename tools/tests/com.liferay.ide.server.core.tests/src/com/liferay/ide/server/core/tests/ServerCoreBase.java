@@ -29,6 +29,7 @@ import com.liferay.ide.server.util.LiferayPublishHelper;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 
 import org.eclipse.core.resources.IProject;
@@ -129,13 +130,13 @@ public abstract class ServerCoreBase extends BaseTests
         assertEquals(
             "Expected the server.xml file to exist:" + serverXml.getAbsolutePath(), true, serverXml.exists() );
 
-        try
+        try(OutputStream outputStream = Files.newOutputStream( serverXml.toPath() ))
         {
             String contents = CoreUtil.readStreamToString( Files.newInputStream( serverXml.toPath() ), true );
 
             contents = contents.replaceAll( currentPort, targetPort );
 
-            CoreUtil.writeStreamFromString( contents, Files.newOutputStream( serverXml.toPath() ) );
+            CoreUtil.writeStreamFromString( contents, outputStream );
         }
         catch( IOException e )
         {

@@ -83,41 +83,43 @@ public class BladeCLI {
 		DefaultLogger logger = new DefaultLogger();
 
 		project.addBuildListener(logger);
-
-		StringBufferOutputStream out = new StringBufferOutputStream();
-
-		logger.setOutputPrintStream(new PrintStream(out));
-
-		logger.setMessageOutputLevel(Project.MSG_INFO);
-
-		int returnCode = javaTask.executeJava();
-
 		List<String> lines = new ArrayList<>();
-		Scanner scanner = new Scanner(out.toString());
+		int returnCode = 0;
 
-		while (scanner.hasNextLine()) {
-			lines.add(scanner.nextLine().replaceAll(".*\\[null\\] ", ""));
-		}
+		try(StringBufferOutputStream out = new StringBufferOutputStream();
+				PrintStream printStream = new PrintStream(out)){
+			logger.setOutputPrintStream(printStream);
 
-		scanner.close();
+			logger.setMessageOutputLevel(Project.MSG_INFO);
 
-		boolean hasErrors = false;
+			returnCode = javaTask.executeJava();
 
-		StringBuilder errors = new StringBuilder();
-
-		for (String line : lines) {
-			if (line.startsWith("Error")) {
-				hasErrors = true;
+			try(Scanner scanner = new Scanner(out.toString())){
+				while (scanner.hasNextLine()) {
+					lines.add(scanner.nextLine().replaceAll(".*\\[null\\] ", ""));
+				}
 			}
-			else if (hasErrors) {
-				errors.append(line);
+
+			boolean hasErrors = false;
+
+			StringBuilder errors = new StringBuilder();
+
+			for (String line : lines) {
+				if (line.startsWith("Error")) {
+					hasErrors = true;
+				}
+				else if (hasErrors) {
+					errors.append(line);
+				}
 			}
-		}
 
-		if ((returnCode != 0) || hasErrors) {
-			throw new BladeCLIException(errors.toString());
-		}
+			if ((returnCode != 0) || hasErrors) {
+				throw new BladeCLIException(errors.toString());
+			}
 
+		} catch (IOException e) {
+			throw new BladeCLIException(e.getMessage(),e);
+		}
 		return lines.toArray(new String[0]);
 	}
 

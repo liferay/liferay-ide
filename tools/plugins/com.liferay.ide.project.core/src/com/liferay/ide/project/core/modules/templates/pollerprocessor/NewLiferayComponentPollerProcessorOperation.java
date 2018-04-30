@@ -267,12 +267,12 @@ public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferay
 	private void _sourceCodeOperation(IFile srcFile, String type) throws CoreException {
 		File file = srcFile.getLocation().toFile();
 
-		try (OutputStream fos = Files.newOutputStream(file.toPath())) {
+		try (OutputStream fos = Files.newOutputStream(file.toPath());
+				Writer out = new OutputStreamWriter(fos)) {
+
 			Template temp = cfg.getTemplate(getTemplateFile());
 
 			Map<String, Object> root = _getTemplateMap(type);
-
-			Writer out = new OutputStreamWriter(fos);
 
 			temp.process(root, out);
 

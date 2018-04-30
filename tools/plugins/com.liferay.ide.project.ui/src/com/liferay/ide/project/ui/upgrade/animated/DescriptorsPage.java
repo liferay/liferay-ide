@@ -113,10 +113,11 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 			}
 
 			_removeLayoutWapNode(srcFile, document);
-			OutputStream tmpOutputStream = Files.newOutputStream(
-				templateFile.toPath(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE_NEW);
 
-			domModel.save(tmpOutputStream);
+			try(OutputStream tmpOutputStream = Files.newOutputStream(
+				templateFile.toPath(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE_NEW)){
+				domModel.save(tmpOutputStream);
+			}
 		}
 		catch (Exception e) {
 			ProjectCore.logError(e);

@@ -19,7 +19,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.xml.search.ui.PortalLanguagePropertiesCacheUtil;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import java.util.List;
@@ -51,10 +50,7 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
 			for (IFile languageFile : languageFiles) {
 				Properties properties = new Properties();
 
-				InputStream contents = null;
-
-				try {
-					contents = languageFile.getContents();
+				try(InputStream contents = languageFile.getContents();) {
 
 					properties.load(contents);
 
@@ -68,15 +64,6 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
 					}
 				}
 				catch (Exception e) {
-				}
-				finally {
-					if (contents != null) {
-						try {
-							contents.close();
-						}
-						catch (IOException ioe) {
-						}
-					}
 				}
 			}
 

@@ -37,6 +37,7 @@ import com.liferay.ide.server.util.ServerUtil;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -438,8 +439,9 @@ public class PluginsSDKProjectProvider
 
 				contents = contents.replace("${sdk.dir}/ivy.xml", "../../ivy.xml");
 
-				ivyFile.setContents(
-					new ByteArrayInputStream(contents.getBytes("UTF-8")), IResource.FORCE, new NullProgressMonitor());
+				try(InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"))){
+					ivyFile.setContents(inputStream, IResource.FORCE, new NullProgressMonitor());
+				}
 			}
 			catch (Exception e) {
 				ProjectCore.logError(e);

@@ -82,15 +82,11 @@ public class FileUtil {
 			return;
 		}
 
-		try {
-			RandomAccessFile file = new RandomAccessFile(versionFile, "rw");
-
+		try(RandomAccessFile file = new RandomAccessFile(versionFile, "rw")) {
 			file.setLength(0);
-
-			file.close();
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
+			LiferayCore.logError("Unable clean contents for " + versionFile.getName(), ex);
 		}
 	}
 
@@ -469,36 +465,25 @@ public class FileUtil {
 	public static String readContents(InputStream contents) throws IOException {
 		byte[] buffer = new byte[4096];
 
-		BufferedInputStream bin = new BufferedInputStream(contents);
+		try(BufferedInputStream bin = new BufferedInputStream(contents);
+				StringBufferOutputStream out = new StringBufferOutputStream()) {
 
-		StringBufferOutputStream out = new StringBufferOutputStream();
+			int bytesRead = 0;
 
-		int bytesRead = 0;
+			// int bytesTotal = 0;
 
-		// int bytesTotal = 0;
+			/*
+			 * Keep reading from the file while there is any content when the end of the stream has been reached,
+			 * -1 is returned
+			 */
+			while ((bytesRead = bin.read(buffer)) != -1) {
+				out.write(buffer, 0, bytesRead);
 
-		/*
-		 * Keep reading from the file while there is any content when the end of the stream has been reached,
-		 * -1 is returned
-		 */
-		while ((bytesRead = bin.read(buffer)) != -1) {
-			out.write(buffer, 0, bytesRead);
+				// bytesTotal += bytesRead;
 
-			// bytesTotal += bytesRead;
-
+			}
+			return out.toString();
 		}
-
-		if (bin != null) {
-			bin.close();
-		}
-
-		if (out != null) {
-			out.flush();
-
-			out.close();
-		}
-
-		return out.toString();
 	}
 
 	public static String[] readLinesFromFile(File file) {
@@ -512,12 +497,8 @@ public class FileUtil {
 
 		List<String> lines = new ArrayList<>();
 
-		BufferedReader bufferedReader = null;
-
-		try {
-			FileReader fileReader = new FileReader(file);
-
-			bufferedReader = new BufferedReader(fileReader);
+		try(FileReader fileReader = new FileReader(file)) {
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			String line;
 
@@ -533,18 +514,6 @@ public class FileUtil {
 		}
 		catch (Exception e) {
 			LiferayCore.logError("Could not read file: " + file.getPath());
-		}
-		finally {
-			if (bufferedReader != null) {
-				try {
-					bufferedReader.close();
-				}
-				catch (Exception e) {
-
-					// no need to log, best effort
-
-				}
-			}
 		}
 
 		return lines.toArray(new String[lines.size()]);
@@ -599,7 +568,13 @@ public class FileUtil {
 	}
 
 	public static Document readXML(String content) {
-		return readXML(new ByteArrayInputStream(content.getBytes()), null, null);
+		try(InputStream inputStream = new ByteArrayInputStream(content.getBytes())){
+			return readXML(inputStream, null, null);
+		}
+		catch( Exception e) {
+		}
+
+		return null;
 	}
 
 	public static Document readXMLFile(File file) {
@@ -638,8 +613,9 @@ public class FileUtil {
 
 		boolean replaced = !searchContents.equals(replaceContents);
 
-		CoreUtil.writeStreamFromString(replaceContents, Files.newOutputStream(file.toPath()));
-
+		try(OutputStream out = Files.newOutputStream(file.toPath())){
+			CoreUtil.writeStreamFromString(replaceContents, out);
+		}
 		return replaced;
 	}
 
@@ -682,7 +658,12 @@ public class FileUtil {
 	}
 
 	public static void writeFile(File f, byte[] contents, String expectedProjectName) throws CoreException {
-		writeFile(f, new ByteArrayInputStream(contents), expectedProjectName);
+		try(InputStream inputStream = new ByteArrayInputStream(contents)){
+			writeFile(f, inputStream, expectedProjectName);
+		}
+		catch(Exception e) {
+			throw new CoreException(LiferayCore.createErrorStatus(e));
+		}
 	}
 
 	public static void writeFile(File f, InputStream contents) throws CoreException {
@@ -748,32 +729,22 @@ public class FileUtil {
 
 	public static int writeFileFromStream(File tempFile, InputStream in) throws IOException {
 		byte[] buffer = new byte[1024];
-
-		BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(tempFile.toPath()));
-
-		BufferedInputStream bin = new BufferedInputStream(in);
-
-		int bytesRead = 0;
 		int bytesTotal = 0;
 
-		/*
-		 * Keep reading from the file while there is any content when the end of the stream has been reached, -1 is returned
-		 */
-		while ((bytesRead = bin.read(buffer)) != -1) {
-			out.write(buffer, 0, bytesRead);
-			bytesTotal += bytesRead;
+		try(OutputStream outputStream = Files.newOutputStream(tempFile.toPath());
+				BufferedOutputStream out = new BufferedOutputStream(outputStream);
+				BufferedInputStream bin = new BufferedInputStream(in)) {
+
+			int bytesRead = 0;
+
+			/*
+			 * Keep reading from the file while there is any content when the end of the stream has been reached, -1 is returned
+			 */
+			while ((bytesRead = bin.read(buffer)) != -1) {
+				out.write(buffer, 0, bytesRead);
+				bytesTotal += bytesRead;
+			}
 		}
-
-		if (bin != null) {
-			bin.close();
-		}
-
-		if (out != null) {
-			out.flush();
-
-			out.close();
-		}
-
 		return bytesTotal;
 	}
 

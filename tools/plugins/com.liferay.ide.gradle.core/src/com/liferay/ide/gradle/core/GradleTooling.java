@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.FileUtil;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
@@ -74,7 +75,9 @@ public class GradleTooling {
 				scriptFile.createNewFile();
 			}
 
-			FileUtil.writeFileFromStream(scriptFile, new ByteArrayInputStream(initScriptContents.getBytes()));
+			try(InputStream inputStream = new ByteArrayInputStream(initScriptContents.getBytes())){
+				FileUtil.writeFileFromStream(scriptFile, inputStream);
+			}
 
 			ModelBuilder<T> builder = modelBuilder.withArguments("--init-script", scriptFile.getAbsolutePath());
 

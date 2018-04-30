@@ -22,8 +22,9 @@ import com.liferay.ide.sdk.core.SDKManager;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
 
 import java.lang.reflect.Method;
 
@@ -176,8 +177,9 @@ public class ServerStartup implements IStartup {
 	}
 
 	private void _importGlobalRuntimes(File runtimesFile) {
-		try {
-			IMemento runtimesMemento = XMLMemento.loadMemento(new FileInputStream(runtimesFile));
+		try(InputStream inputStream = new FileInputStream ( runtimesFile )){
+
+			IMemento runtimesMemento = XMLMemento.loadMemento(inputStream);
 
 			if (runtimesMemento != null) {
 				ResourceManager resourceManager = ResourceManager.getInstance();
@@ -214,15 +216,15 @@ public class ServerStartup implements IStartup {
 				}
 			}
 		}
-		catch (FileNotFoundException fnfe) {
+		catch (IOException fnfe) {
 		}
 	}
 
 	private void _importGlobalSDKs(File sdksFile) {
-		try {
+		try(InputStream inputStream = new FileInputStream ( sdksFile ) ){
 			SDKManager manager = SDKManager.getInstance();
 
-			IMemento sdksMemento = XMLMemento.loadMemento(new FileInputStream(sdksFile));
+			IMemento sdksMemento = XMLMemento.loadMemento(inputStream);
 
 			if (sdksMemento != null) {
 				IMemento[] sdks = sdksMemento.getChildren("sdk");
@@ -242,13 +244,13 @@ public class ServerStartup implements IStartup {
 				}
 			}
 		}
-		catch (FileNotFoundException fnfe) {
+		catch (IOException fnfe) {
 		}
 	}
 
 	private void _importGlobalServers(File serversFile) {
-		try {
-			IMemento serversMemento = XMLMemento.loadMemento(new FileInputStream(serversFile));
+		try(InputStream inputStream = new FileInputStream ( serversFile )){
+			IMemento serversMemento = XMLMemento.loadMemento(inputStream);
 
 			if (serversMemento != null) {
 				ResourceManager resourceManager = ResourceManager.getInstance();
@@ -294,7 +296,7 @@ public class ServerStartup implements IStartup {
 				}
 			}
 		}
-		catch (FileNotFoundException fnfe) {
+		catch (IOException fnfe) {
 		}
 	}
 

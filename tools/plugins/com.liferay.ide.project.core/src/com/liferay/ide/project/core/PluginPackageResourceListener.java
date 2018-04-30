@@ -27,7 +27,6 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.server.util.ComponentUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import java.nio.file.Files;
@@ -252,8 +251,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 				for (IPath tldFileToCopy : tldFilesToCopy) {
 					IFile newTldFile = tldFolder.getFile(tldFileToCopy.lastSegment());
 
-					try {
-						newTldFile.create(Files.newInputStream(tldFileToCopy.toFile().toPath()), true, null);
+					try(InputStream inputStream = 
+							Files.newInputStream(tldFileToCopy.toFile().toPath())) {
+						newTldFile.create(inputStream, true, null);
 					}
 					catch (Exception e) {
 						throw new CoreException(ProjectCore.createErrorStatus(e));
@@ -306,10 +306,8 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 		}
 
 		Properties props = new Properties();
-		InputStream contents = null;
 
-		try {
-			contents = pluginPackagePropertiesFile.getContents();
+		try(InputStream contents = pluginPackagePropertiesFile.getContents();) {
 
 			props.load(contents);
 
@@ -319,18 +317,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 		}
 		catch (Exception e) {
 			ProjectCore.logError(e);
-		}
-		finally {
-			if (contents != null) {
-				try {
-					contents.close();
-				}
-				catch (IOException ioe) {
-
-					// ignore, this is best effort
-
-				}
-			}
 		}
 	}
 

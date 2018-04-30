@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.StringPool;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -255,7 +256,12 @@ public abstract class AbstractEditingModel
 	}
 
 	protected InputStream getInputStream(IDocument document) throws UnsupportedEncodingException {
-		return new BufferedInputStream(new ByteArrayInputStream(document.get().getBytes(getCharset())));
+		try(InputStream inputStream = new ByteArrayInputStream(document.get().getBytes(getCharset()))){
+			return new BufferedInputStream(inputStream);	
+		}
+		catch(IOException e) {
+			throw new UnsupportedEncodingException(e.getMessage());
+		}
 	}
 
 	protected boolean fDisposed;

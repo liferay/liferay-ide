@@ -21,6 +21,7 @@ import com.liferay.ide.project.ui.handlers.AbstractCompareFileHandler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.eclipse.core.resources.IFile;
@@ -39,7 +40,9 @@ public class CompareFileHandler extends AbstractCompareFileHandler {
 
 		File templateFile = null;
 
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(bndfile.getContents()))) {
+		try (InputStream inputStream = bndfile.getContents();
+				InputStreamReader inputReader = new InputStreamReader(inputStream);
+				BufferedReader reader = new BufferedReader(inputReader)) {
 			String fragment;
 
 			while ((fragment = reader.readLine()) != null) {

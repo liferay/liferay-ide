@@ -48,36 +48,36 @@ public abstract class LiferayPropertiesFileDescriber implements ITextContentDesc
 
 			inputStreamField.setAccessible(true);
 
-			InputStream inputStream = (InputStream)inputStreamField.get(contents);
+			try(InputStream inputStream = (InputStream)inputStreamField.get(contents)){
+				Class<?> clazz = inputStream.getClass();
 
-			Class<?> clazz = inputStream.getClass();
+				try {
+					Field fileStoreField = clazz.getDeclaredField("target");
 
-			try {
-				Field fileStoreField = clazz.getDeclaredField("target");
+					fileStoreField.setAccessible(true);
 
-				fileStoreField.setAccessible(true);
+					IFileStore fileStore = (IFileStore)fileStoreField.get(inputStream);
 
-				IFileStore fileStore = (IFileStore)fileStoreField.get(inputStream);
+					if (fileStore == null) {
+						return INVALID;
+					}
 
-				if (fileStore == null) {
-					return INVALID;
+					IFile file = CoreUtil.getWorkspaceRoot().getFileForLocation(FileUtil.toPath(fileStore.toURI()));
+
+					if (isPropertiesFile(file)) {
+						return VALID;
+					}
 				}
+				catch (Exception e) {
+					Field pathField = clazz.getDeclaredField("path");
 
-				IFile file = CoreUtil.getWorkspaceRoot().getFileForLocation(FileUtil.toPath(fileStore.toURI()));
+					pathField.setAccessible(true);
 
-				if (isPropertiesFile(file)) {
-					return VALID;
-				}
-			}
-			catch (Exception e) {
-				Field pathField = clazz.getDeclaredField("path");
+					String path = (String)pathField.get(inputStream);
 
-				pathField.setAccessible(true);
-
-				String path = (String)pathField.get(inputStream);
-
-				if (isPropertiesFile(path)) {
-					return VALID;
+					if (isPropertiesFile(path)) {
+						return VALID;
+					}
 				}
 			}
 		}

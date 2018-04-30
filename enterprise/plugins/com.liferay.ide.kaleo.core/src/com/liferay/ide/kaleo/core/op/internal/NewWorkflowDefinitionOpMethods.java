@@ -30,6 +30,7 @@ import com.liferay.ide.kaleo.core.op.NewWorkflowDefinitionOp;
 import com.liferay.ide.kaleo.core.util.KaleoModelUtil;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -111,7 +112,9 @@ public class NewWorkflowDefinitionOpMethods {
 				count++;
 			}
 
-			newDefinitionFile.create(new ByteArrayInputStream("".getBytes()), true, null);
+			try(InputStream inputStream = new ByteArrayInputStream("".getBytes())){
+				newDefinitionFile.create(inputStream, true, null);
+			}
 
 			Value<ScriptLanguageType> scLanguageType = op.getDefaultScriptLanguage();
 

@@ -17,13 +17,14 @@ package com.liferay.ide.core.templates;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ListUtil;
 
-import freemarker.template.Template;
-
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.StringWriter;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import freemarker.template.Template;
 
 /**
  * @author Gregory Amerson
@@ -67,26 +68,29 @@ public class TemplateOperation implements ITemplateOperation {
 			return;
 		}
 
-		StringWriter writer = new StringWriter();
+		try(StringWriter writer = new StringWriter()){
 
-		TemplateContext templateContext = (TemplateContext)getContext();
+			TemplateContext templateContext = (TemplateContext)getContext();
 
-		getTemplate().process(templateContext.getMap(), writer);
+			getTemplate().process(templateContext.getMap(), writer);
 
-		String result = writer.toString();
+			String result = writer.toString();
 
-		if (outputFile != null) {
-			if (outputFile.exists()) {
-				outputFile.setContents(new ByteArrayInputStream(result.getBytes()), true, true, monitor);
-			}
-			else {
-				outputFile.create(new ByteArrayInputStream(result.getBytes()), true, monitor);
-			}
-		}
-		else if (outputBuffer != null) {
-			outputBuffer.delete(0, outputBuffer.length());
+			try(InputStream inputStream = new ByteArrayInputStream(result.getBytes())){
+				if (outputFile != null) {
+					if (outputFile.exists()) {
+						outputFile.setContents(inputStream, true, true, monitor);
+					}
+					else {
+						outputFile.create(inputStream, true, monitor);
+					}
+				}
+				else if (outputBuffer != null) {
+					outputBuffer.delete(0, outputBuffer.length());
 
-			outputBuffer.append(result);
+					outputBuffer.append(result);
+				}
+			}			
 		}
 	}
 

@@ -273,9 +273,7 @@ public class LiferayTomcatUtil {
 		String serverInfo = null;
 
 		if (FileUtil.exists(implJar)) {
-			try {
-				@SuppressWarnings("resource")
-				JarFile jar = new JarFile(implJar);
+			try(JarFile jar = new JarFile(implJar)) {
 
 				Manifest manifest = jar.getManifest();
 
@@ -677,9 +675,10 @@ public class LiferayTomcatUtil {
 
 		File file = idePropertiesPath.toFile();
 
-		try {
-			props.store(Files.newOutputStream(file.toPath()), null);
-		}
+        try(OutputStream outputStream = Files.newOutputStream( file.toPath() ))
+        {
+            props.store( outputStream, null );
+        }
 		catch (Exception e) {
 			LiferayTomcatPlugin.logError(e);
 		}
@@ -720,11 +719,12 @@ public class LiferayTomcatUtil {
 		if (FileUtil.exists(externalPropertiesFile)) {
 			ExternalPropertiesConfiguration props = new ExternalPropertiesConfiguration();
 
-			try (InputStream newInputStream = Files.newInputStream(externalPropertiesFile.toPath())) {
+			try (InputStream newInputStream = Files.newInputStream(externalPropertiesFile.toPath());
+					OutputStream outputStream = Files.newOutputStream( externalPropertiesFile.toPath() )) {
 				props.load(newInputStream);
 				props.setProperty("include-and-override", portalIdePropFile.getAbsolutePath());
 				props.setHeader("# Last modified by Liferay IDE " + new Date());
-				props.save(Files.newOutputStream(externalPropertiesFile.toPath()));
+				props.save(outputStream);
 
 				retval = externalPropertiesFile;
 			}
