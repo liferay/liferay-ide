@@ -99,6 +99,7 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 		@Override
 		public void init(SapphireAction action, ActionHandlerDef def) {
 			super.init(action, def);
+
 			setId(_ADD_LAYOUT_1_2_1_ACTION_HANDLER_ID);
 			setLabel();
 		}
@@ -137,6 +138,7 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 		@Override
 		public void init(SapphireAction action, ActionHandlerDef def) {
 			super.init(action, def);
+
 			setId(_ADD_LAYOUT_1_2_I_ACTION_HANDLER_ID);
 			setLabel();
 		}
@@ -214,6 +216,7 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 		@Override
 		public void init(SapphireAction action, ActionHandlerDef def) {
 			super.init(action, def);
+
 			setId(_ADD_LAYOUT_2_2_ACTION_HANDLER_ID);
 			setLabel();
 		}

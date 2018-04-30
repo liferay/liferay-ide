@@ -37,6 +37,7 @@ public class LayoutTplDiagramEditPart extends PortletRowLayoutEditPart {
 	@Override
 	protected void configurePanel(Panel panel) {
 		super.configurePanel(panel);
+
 		panel.setBackgroundColor(new Color(null, 10, 10, 10));
 	}
 
