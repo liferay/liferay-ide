@@ -31,6 +31,8 @@
 		<programRunner id="Run" implementation="com.liferay.ide.idea.server.LiferayServerRunner" />
 		<programRunner id="Debug" implementation="com.liferay.ide.idea.server.LiferayServerDebugger" />
 		<projectService serviceImplementation="com.liferay.ide.idea.core.LiferayProjectTypeService" />
+		<fileTypeFactory implementation="com.liferay.ide.idea.bndtools.BndFileFactory" />
+		<syntaxHighlighter factoryClass="com.liferay.ide.idea.bndtools.BndFileTypeHighlighterProvider" />
 	</extensions>
 
 </idea-plugin>

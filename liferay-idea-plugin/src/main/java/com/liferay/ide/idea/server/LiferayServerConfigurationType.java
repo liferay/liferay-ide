@@ -22,7 +22,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 
-import com.liferay.ide.idea.ui.LiferayIdeaUI;
+import com.liferay.ide.idea.util.LiferayIcons;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,8 +33,7 @@ public class LiferayServerConfigurationType extends ConfigurationTypeBase implem
 
 	public LiferayServerConfigurationType() {
 		super(
-			"LiferayServerConfiguration", "Liferay Server", "Run or Debug a Liferay Server",
-			LiferayIdeaUI.LIFERAY_ICON);
+			"LiferayServerConfiguration", "Liferay Server", "Run or Debug a Liferay Server", LiferayIcons.LIFERAY_ICON);
 
 		addFactory(
 			new ConfigurationFactoryEx<RunConfiguration>(this) {

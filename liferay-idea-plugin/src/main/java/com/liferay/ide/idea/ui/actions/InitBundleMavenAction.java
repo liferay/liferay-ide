@@ -14,7 +14,7 @@
 
 package com.liferay.ide.idea.ui.actions;
 
-import com.liferay.ide.idea.ui.LiferayIdeaUI;
+import com.liferay.ide.idea.util.LiferayIcons;
 
 import java.util.Arrays;
 
@@ -24,7 +24,7 @@ import java.util.Arrays;
 public class InitBundleMavenAction extends AbstractLiferayMavenGoalAction {
 
 	public InitBundleMavenAction() {
-		super("InitBundle", "Run initBundle goal", LiferayIdeaUI.LIFERAY_ICON);
+		super("InitBundle", "Run initBundle goal", LiferayIcons.LIFERAY_ICON);
 
 		goals = Arrays.asList("bundle-support:init");
 	}

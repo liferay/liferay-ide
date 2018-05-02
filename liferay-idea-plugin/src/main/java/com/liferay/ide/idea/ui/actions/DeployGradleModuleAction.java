@@ -24,7 +24,7 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 
-import com.liferay.ide.idea.ui.LiferayIdeaUI;
+import com.liferay.ide.idea.util.LiferayIcons;
 
 /**
  * @author Andy Wu
@@ -32,7 +32,7 @@ import com.liferay.ide.idea.ui.LiferayIdeaUI;
 public class DeployGradleModuleAction extends AbstractLiferayGradleTaskAction {
 
 	public DeployGradleModuleAction() {
-		super("Deploy", "Run deploy task", LiferayIdeaUI.LIFERAY_ICON, "deploy");
+		super("Deploy", "Run deploy task", LiferayIcons.LIFERAY_ICON, "deploy");
 	}
 
 	@Override

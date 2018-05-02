@@ -12,23 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.idea.ui;
+package com.liferay.ide.idea.util;
 
-import java.io.File;
+import com.intellij.openapi.util.IconLoader;
+
+import javax.swing.Icon;
 
 /**
- * @author Gregory Amerson
+ * @author Joye Luo
  */
-public class LiferayIdeaUI {
+public class LiferayIcons {
 
-	public static final File USER_BUNDLES_DIR = new File(
-		new File(System.getProperty("user.home"), ".liferay-ide"), "bundles");
+	public static final Icon BND_ICON = IconLoader.getIcon("/icons/bnd.png");
 
-	public static final File USER_TEMP_DIR = new File(System.getProperty("user.home"), ".liferay-ide");
-
-	static {
-		USER_TEMP_DIR.mkdirs();
-		USER_BUNDLES_DIR.mkdirs();
-	}
+	public static final Icon LIFERAY_ICON = IconLoader.getIcon("/icons/liferay.png");
 
 }
