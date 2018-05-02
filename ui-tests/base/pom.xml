@@ -41,5 +41,7 @@
 		<module>com.liferay.ide.ui.server.wizard.base</module>
 		<module>com.liferay.ide.ui.layouttpl.deploy.base</module>
 		<module>com.liferay.ide.ui.theme.deploy.base</module>
+		<module>com.liferay.ide.ui.jsf.deploy.base</module>
+		<module>com.liferay.ide.ui.service.builder.deploy.base</module>
 	</modules>
 </project>

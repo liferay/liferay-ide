@@ -47,7 +47,7 @@ public class ProjectSupport extends SupportBase {
 	}
 
 	public String getStartedLabel(String suffix) {
-		return getName() + "  [Started, Synchronized] (" + getName(suffix) + ")";
+		return getName(suffix) + "  [Started, Synchronized] (" + getName(suffix) + ")";
 	}
 
 	protected String name = "test";

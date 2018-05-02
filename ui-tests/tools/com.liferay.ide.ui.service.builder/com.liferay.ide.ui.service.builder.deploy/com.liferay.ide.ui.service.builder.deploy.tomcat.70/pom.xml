@@ -20,20 +20,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.ui.tests</groupId>
-		<artifactId>tools-tests</artifactId>
+		<groupId>com.liferay.ide.ui.tests.service.builder.deploy</groupId>
+		<artifactId>service-builder-deploy-tests</artifactId>
 		<version>3.2.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.ui.tests.service.builder</groupId>
-	<artifactId>service-builder-tests</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>com.liferay.ide.ui.service.builder.deploy.tomcat.70.tests</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
 
-	<name>Liferay IDE UI Service Builder</name>
-
-	<modules>
-		<module>com.liferay.ide.ui.service.builder.wizard</module>
-		<module>com.liferay.ide.ui.service.builder.editor</module>
-		<module>com.liferay.ide.ui.service.builder.deploy</module>
-	</modules>
+	<name>Liferay IDE UI Service Builder Deploy Tomcat 70 Tests</name>
 </project>

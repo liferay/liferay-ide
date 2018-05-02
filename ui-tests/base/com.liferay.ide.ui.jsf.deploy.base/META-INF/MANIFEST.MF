@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE UI Jsf Deploy Base
+Bundle-SymbolicName: com.liferay.ide.ui.jsf.deploy.base
+Bundle-Version: 3.2.0.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: com.liferay.ide.ui.swtbot,
+ com.liferay.ide.ui.liferay,
+ org.eclipse.swtbot.go,
+ org.junit
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: com.liferay.ide.ui.jsf.deploy.base

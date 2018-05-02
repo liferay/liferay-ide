@@ -20,20 +20,20 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.ui.tests</groupId>
-		<artifactId>tools-tests</artifactId>
+		<groupId>com.liferay.ide.ui.tests.jsf</groupId>
+		<artifactId>jsf-tests</artifactId>
 		<version>3.2.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.ui.tests.service.builder</groupId>
-	<artifactId>service-builder-tests</artifactId>
+	<groupId>com.liferay.ide.ui.tests.jsf.deploy</groupId>
+	<artifactId>jsf-deploy-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE UI Service Builder</name>
+	<name>Liferay IDE UI Jsf Deploy</name>
 
 	<modules>
-		<module>com.liferay.ide.ui.service.builder.wizard</module>
-		<module>com.liferay.ide.ui.service.builder.editor</module>
-		<module>com.liferay.ide.ui.service.builder.deploy</module>
+		<module>com.liferay.ide.ui.jsf.deploy.tomcat.70</module>
+		<module>com.liferay.ide.ui.jsf.deploy.tomcat.71</module>
+		<module>com.liferay.ide.ui.jsf.deploy.tomcat.dxp</module>
 	</modules>
 </project>
