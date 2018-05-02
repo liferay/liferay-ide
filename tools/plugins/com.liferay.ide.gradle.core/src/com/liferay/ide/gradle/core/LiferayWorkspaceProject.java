@@ -80,5 +80,4 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 		return Collections.emptyList();
 	}
 
-
 }

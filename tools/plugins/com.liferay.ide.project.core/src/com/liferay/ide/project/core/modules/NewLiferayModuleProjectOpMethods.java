@@ -192,6 +192,7 @@ public class NewLiferayModuleProjectOpMethods {
 		}
 		catch (Exception e) {
 			ProjectCore.logError("error when adding properties to " + dest.getAbsolutePath(), e);
+
 			return false;
 		}
 	}
@@ -265,7 +266,6 @@ public class NewLiferayModuleProjectOpMethods {
 					}
 
 					if (addProperties(finalClassFile, properties)) {
-
 						IProject project = CoreUtil.getProject(op.getProjectName().content());
 
 						project.refreshLocal(IResource.DEPTH_INFINITE, monitor);

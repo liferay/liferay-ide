@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.liferay.ide.eclipse.tools"
-      label="Liferay IDE"
-      version="3.2.0.qualifier"
-      provider-name="Liferay, Inc."
-      plugin="com.liferay.ide.ui">
+	id="com.liferay.ide.eclipse.tools"
+	label="Liferay IDE"
+	version="3.2.0.qualifier"
+	provider-name="Liferay, Inc."
+	  plugin="com.liferay.ide.ui">
 
-   <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
-      Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platform.
-   </description>
+	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
+	  Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platform.
+	</description>
 
-   <copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
-      /**
+	<copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
+	  /**
 * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
 *
 * This library is free software; you can redistribute it and/or
@@ -25,228 +25,228 @@
 * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
 * the GNU Lesser General Public License for more details.
 */
-   </copyright>
+	</copyright>
 
-   <license url="http://www.gnu.org/licenses/lgpl-2.1.html">
-      Liferay IDE is free software distributed under the terms of the Lesser GNU Public License. See URL for full license text.  http://www.gnu.org/licenses/lgpl-2.1.html
-   </license>
+	<license url="http://www.gnu.org/licenses/lgpl-2.1.html">
+	  Liferay IDE is free software distributed under the terms of the Lesser GNU Public License. See URL for full license text.  http://www.gnu.org/licenses/lgpl-2.1.html
+	</license>
 
-   <requires>
-      <import feature="bndtools.main.feature" version="3.4.0" match="greaterOrEqual"/>
-      <import feature="org.apache.ivy.feature" version="2.3.0" match="greaterOrEqual"/>
-      <import feature="org.apache.ivyde.feature" version="2.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.buildship" version="2.1.1" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jsf.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jst.common.fproj.enablement.jdt" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jst.enterprise_ui.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jst.server_adapters.ext.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jst.server_adapters.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jst.server_ui.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jst.web_ui.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.mylyn.commons.notifications" version="1.0.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.sapphire" version="9.1.0" match="compatible"/>
-      <import feature="org.eclipse.sapphire.java" version="9.1.0" match="compatible"/>
-      <import feature="org.eclipse.sapphire.java.jdt" version="9.1.0" match="compatible"/>
-      <import feature="org.eclipse.sapphire.modeling.xml" version="9.1.0" match="compatible"/>
-      <import feature="org.eclipse.sapphire.osgi" version="9.1.0" match="compatible"/>
-      <import feature="org.eclipse.sapphire.platform" version="9.1.0" match="compatible"/>
-      <import feature="org.eclipse.sapphire.ui" version="9.1.0" match="compatible"/>
-      <import feature="org.eclipse.sapphire.ui.swt.gef" version="9.1.0" match="compatible"/>
-      <import feature="org.eclipse.sapphire.ui.swt.xml.editor" version="9.1.0" match="compatible"/>
-      <import feature="org.eclipse.wst.common.fproj" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.wst.common_ui.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.wst.server_adapters.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.wst.server_ui.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.wst.web_ui.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.wst.xml_ui.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.wst.xml.search.core-feature" version="1.0.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.tm.terminal.connector.telnet.feature" version="4.0.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.tm.terminal.view.feature" version="4.0.0" match="greaterOrEqual"/>
-   </requires>
+	<requires>
+		<import feature="bndtools.main.feature" version="3.4.0" match="greaterOrEqual" />
+		<import feature="org.apache.ivy.feature" version="2.3.0" match="greaterOrEqual" />
+		<import feature="org.apache.ivyde.feature" version="2.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.buildship" version="2.1.1" match="greaterOrEqual" />
+		<import feature="org.eclipse.jsf.feature" version="3.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.jst.common.fproj.enablement.jdt" version="3.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.jst.enterprise_ui.feature" version="3.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.jst.server_adapters.ext.feature" version="3.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.jst.server_adapters.feature" version="3.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.jst.server_ui.feature" version="3.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.jst.web_ui.feature" version="3.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.mylyn.commons.notifications" version="1.0.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.sapphire" version="9.1.0" match="compatible" />
+		<import feature="org.eclipse.sapphire.java" version="9.1.0" match="compatible" />
+		<import feature="org.eclipse.sapphire.java.jdt" version="9.1.0" match="compatible" />
+		<import feature="org.eclipse.sapphire.modeling.xml" version="9.1.0" match="compatible" />
+		<import feature="org.eclipse.sapphire.osgi" version="9.1.0" match="compatible" />
+		<import feature="org.eclipse.sapphire.platform" version="9.1.0" match="compatible" />
+		<import feature="org.eclipse.sapphire.ui" version="9.1.0" match="compatible" />
+		<import feature="org.eclipse.sapphire.ui.swt.gef" version="9.1.0" match="compatible" />
+		<import feature="org.eclipse.sapphire.ui.swt.xml.editor" version="9.1.0" match="compatible" />
+		<import feature="org.eclipse.wst.common.fproj" version="3.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.wst.common_ui.feature" version="3.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.wst.server_adapters.feature" version="3.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.wst.server_ui.feature" version="3.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.wst.web_ui.feature" version="3.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.wst.xml_ui.feature" version="3.2.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.wst.xml.search.core-feature" version="1.0.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.tm.terminal.connector.telnet.feature" version="4.0.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.tm.terminal.view.feature" version="4.0.0" match="greaterOrEqual" />
+	</requires>
 
-   <plugin
-         id="com.liferay.ide.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
+	<plugin
+		id="com.liferay.ide.core"
+		download-size="0"
+		install-size="0"
+		 version="0.0.0" />
 
-   <plugin
-         id="com.liferay.ide.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
+	<plugin
+		id="com.liferay.ide.ui"
+		download-size="0"
+		install-size="0"
+		 version="0.0.0" />
 
-   <plugin
-         id="com.liferay.ide.portlet.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
+	<plugin
+		id="com.liferay.ide.portlet.core"
+		download-size="0"
+		install-size="0"
+		 version="0.0.0" />
 
-   <plugin
-         id="com.liferay.ide.portlet.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
+	<plugin
+		id="com.liferay.ide.portlet.ui"
+		download-size="0"
+		install-size="0"
+		 version="0.0.0" />
 
-   <plugin
-         id="com.liferay.ide.project.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.project.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.project.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.project.ui"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.server.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.server.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.server.tomcat.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.server.tomcat.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.server.tomcat.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.server.tomcat.ui"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.server.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.server.ui"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.layouttpl.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.layouttpl.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.layouttpl.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.layouttpl.ui"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.theme.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.theme.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.portlet.vaadin.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.portlet.vaadin.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.portlet.vaadin.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.portlet.vaadin.ui"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.service.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.service.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.service.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.service.ui"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.hook.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.hook.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.hook.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.hook.ui"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.sdk.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.sdk.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.ui.notifications"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.ui.notifications"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.ui.snippets"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.ui.snippets"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.xml.search.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.xml.search.ui"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.gradle.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.gradle.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.gradle.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.gradle.ui"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.bndtools.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.bndtools.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.upgrade.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.upgrade.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
 </feature>

@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.workspace;
 
 import java.io.File;
 
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
@@ -39,13 +40,16 @@ public class WorkspaceLocationValidationService extends ValidationService {
 		 * display the error of project name when project name and location are both
 		 * null.
 		 */
+		Value<Path> locationValue = _op().getLocation();
 
-		Path currentProjectLocation = _op().getLocation().content(true);
-		boolean useDefaultLocation = _op().getUseDefaultLocation().content(true);
+		Path currentProjectLocation = locationValue.content(true);
+
+		Value<Boolean> useDefaultLocationValue = _op().getUseDefaultLocation();
+
+		boolean useDefaultLocation = useDefaultLocationValue.content(true);
 
 		if (!useDefaultLocation) {
 			if (currentProjectLocation != null) {
-
 				String currentPath = currentProjectLocation.toOSString();
 
 				File osPathFile = Path.fromOSString(currentPath).toFile();

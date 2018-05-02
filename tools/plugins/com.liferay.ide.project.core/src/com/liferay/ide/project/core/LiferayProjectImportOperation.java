@@ -54,7 +54,7 @@ public class LiferayProjectImportOperation
 
 		SDK sdk = SDKUtil.getSDKFromProjectDir(projectDir);
 
-		if ((sdk != null) && !(SDKManager.getInstance().containsSDK(sdk))) {
+		if ((sdk != null) && !SDKManager.getInstance().containsSDK(sdk)) {
 			SDKManager.getInstance().addSDK(sdk);
 		}
 

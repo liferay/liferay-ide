@@ -36,7 +36,7 @@ public class BuildThumbnailBuildParticipant extends ThemePluginBuildParticipant 
 
 	@Override
 	public Set<IProject> build(int kind, IProgressMonitor monitor) throws Exception {
-		IProgressMonitor sub = CoreUtil.newSubMonitor(monitor, 100);
+		IProgressMonitor sub = CoreUtil.newSubmonitor(monitor, 100);
 
 		sub.beginTask(Msgs.thumbnailBuilder, 100);
 

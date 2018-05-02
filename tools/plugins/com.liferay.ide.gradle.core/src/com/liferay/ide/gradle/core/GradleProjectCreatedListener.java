@@ -104,7 +104,7 @@ public class GradleProjectCreatedListener implements EventListener {
 
 				@Override
 				public boolean belongsTo(Object family) {
-					if ((family != null) && family.toString().equals(GradleCore.JobFamilyId)) {
+					if ((family != null) && family.toString().equals(GradleCore.JOB_FAMILY_ID)) {
 						return true;
 					}
 

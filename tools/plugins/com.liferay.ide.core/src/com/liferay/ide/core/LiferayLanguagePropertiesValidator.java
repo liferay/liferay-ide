@@ -152,8 +152,8 @@ public class LiferayLanguagePropertiesValidator {
 
 		if (FileUtil.exists(file)) {
 			try {
-				IMarker[] markers =
-					file.findMarkers(LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, false, IResource.DEPTH_INFINITE);
+				IMarker[] markers = file.findMarkers(
+					LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, false, IResource.DEPTH_INFINITE);
 
 				for (IMarker marker : markers) {
 					if (ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT.equals(marker.getAttribute(IMarker.SOURCE_ID))) {

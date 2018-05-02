@@ -40,6 +40,7 @@ public class PluginPackageInputContext extends InputContext {
 
 	public PluginPackageInputContext(IDEFormEditor editor, IEditorInput input, boolean primary) {
 		super(editor, input, primary);
+
 		create();
 	}
 

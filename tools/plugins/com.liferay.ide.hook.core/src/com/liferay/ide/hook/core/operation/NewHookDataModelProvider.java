@@ -350,6 +350,7 @@ public class NewHookDataModelProvider
 			if (CoreUtil.isNullOrEmpty(contentFolder)) {
 				return HookCore.createErrorStatus(Msgs.contentFolderNotConfigured);
 			}
+
 			IPath contentPath = Path.fromPortableString(contentFolder);
 			IProject targetProject = getTargetProject();
 
@@ -357,13 +358,13 @@ public class NewHookDataModelProvider
 
 			if (contentFolder.startsWith("/")) {
 				for (IFolder sourceFolder : sources) {
-
 					IPath sourcePath = sourceFolder.getFullPath();
 
 					if (sourcePath.isPrefixOf(contentPath)) {
 						return Status.OK_STATUS;
 					}
 				}
+
 				return HookCore.createErrorStatus(Msgs.pathUnderSourceFolder);
 			}
 			else {

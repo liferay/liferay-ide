@@ -83,7 +83,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
 	@Override
 	public boolean filterResource(IPath resourcePath) {
-		if (filterResource(resourcePath, _ignorePaths)) {
+		if (filterResource(resourcePath, _IGNORE_PATHS)) {
 			return true;
 		}
 
@@ -191,6 +191,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 					for (File outputFile : outputFiles) {
 						if (outputFile.getName().endsWith(".war")) {
 							bundleFile = outputFile;
+
 							break;
 						}
 					}
@@ -354,6 +355,6 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 		return null;
 	}
 
-	private static final String[] _ignorePaths = {".gradle", "build", "dist", "liferay-theme.json"};
+	private static final String[] _IGNORE_PATHS = {".gradle", "build", "dist", "liferay-theme.json"};
 
 }

@@ -40,6 +40,7 @@ public class DependenciesFormPage extends IDEFormPage {
 
 	protected void createFormContent(IManagedForm managedForm) {
 		super.createFormContent(managedForm);
+
 		ScrolledForm form = managedForm.getForm();
 
 		form.setImage(

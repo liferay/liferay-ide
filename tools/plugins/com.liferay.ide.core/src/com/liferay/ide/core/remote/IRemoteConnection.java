@@ -35,6 +35,6 @@ public interface IRemoteConnection {
 
 	public void setUsername(String username);
 
-	public String _API = "/api/jsonws";
+	public String API = "/api/jsonws";
 
 }

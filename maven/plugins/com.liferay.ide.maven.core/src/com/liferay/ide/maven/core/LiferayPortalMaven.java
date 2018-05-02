@@ -135,6 +135,7 @@ public class LiferayPortalMaven implements ILiferayPortal {
 									dep.getGroupId().startsWith("com.liferay")) {
 
 									liferayVersion = dep.getVersion();
+
 									break;
 								}
 							}

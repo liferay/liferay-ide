@@ -63,6 +63,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 	@Override
 	public void init(SapphireAction action, ActionHandlerDef def) {
 		super.init(action, def);
+
 		Element element = getModelElement();
 
 		listener = new FilteredListener<PropertyEvent>() {
@@ -127,6 +128,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 					 */
 					if (sl.validation().severity() == Severity.ERROR) {
 						enabled = false;
+
 						break;
 					}
 				}

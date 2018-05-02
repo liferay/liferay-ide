@@ -44,6 +44,7 @@ public class LayoutTplPreviewEditor extends GraphicalEditor {
 
 	public LayoutTplPreviewEditor(LayoutTplElement layoutTpl) {
 		modelElement = layoutTpl;
+
 		setEditDomain(new DefaultEditDomain(this));
 	}
 

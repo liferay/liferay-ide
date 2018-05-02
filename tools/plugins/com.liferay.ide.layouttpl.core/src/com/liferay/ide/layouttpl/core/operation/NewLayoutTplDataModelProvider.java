@@ -111,6 +111,7 @@ public class NewLayoutTplDataModelProvider
 		for (int i = 0; i < LAYOUT_PROPERTIES.length; i++) {
 			if (LAYOUT_PROPERTIES[i].equals(propertyName)) {
 				layoutOption = true;
+
 				break;
 			}
 		}

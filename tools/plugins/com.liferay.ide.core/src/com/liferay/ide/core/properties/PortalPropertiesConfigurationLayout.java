@@ -41,7 +41,7 @@ import org.apache.commons.lang.StringUtils;
 @SuppressWarnings("rawtypes")
 public class PortalPropertiesConfigurationLayout extends PropertiesConfigurationLayout {
 
-	public static final String[] sortedKeys = {
+	public static final String[] SORTED_KEYS = {
 		"name", "module-group-id", "module-incremental-version", "tags", "short-description", "change-log", "page-url",
 		"author", "licenses", "portal-dependency-jars", "portal-dependency-tlds"
 	};
@@ -77,12 +77,12 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
 							int index1 = Integer.MAX_VALUE;
 							int index2 = Integer.MAX_VALUE;
 
-							for (int i = 0; i < sortedKeys.length; i++) {
-								if (sortedKeys[i].equals(o1)) {
+							for (int i = 0; i < SORTED_KEYS.length; i++) {
+								if (SORTED_KEYS[i].equals(o1)) {
 									index1 = i;
 								}
 
-								if (sortedKeys[i].equals(o2)) {
+								if (SORTED_KEYS[i].equals(o2)) {
 									index2 = i;
 								}
 							}

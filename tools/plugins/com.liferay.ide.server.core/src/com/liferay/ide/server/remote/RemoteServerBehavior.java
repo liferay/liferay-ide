@@ -604,7 +604,7 @@ public class RemoteServerBehavior
 
 		IProject moduleProject = publishModule.getProject();
 
-		IProgressMonitor submon = CoreUtil.newSubMonitor(monitor, 100);
+		IProgressMonitor submon = CoreUtil.newSubmonitor(monitor, 100);
 
 		submon.subTask("Deploying " + moduleProject.getName() + "  to Liferay...");
 

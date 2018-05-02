@@ -50,7 +50,7 @@ public class LayoutTplUtil {
 	public static IDOMElement[] findChildElementsByClassName(
 		IDOMElement parentElement, String childElementTag, String className) {
 
-		if ((parentElement == null) || !(parentElement.hasChildNodes())) {
+		if ((parentElement == null) || !parentElement.hasChildNodes()) {
 			return null;
 		}
 
@@ -70,7 +70,7 @@ public class LayoutTplUtil {
 	}
 
 	public static IDOMElement findMainContentElement(IDOMDocument rootDocument) {
-		if ((rootDocument == null) || !(rootDocument.hasChildNodes())) {
+		if ((rootDocument == null) || !rootDocument.hasChildNodes()) {
 			return null;
 		}
 

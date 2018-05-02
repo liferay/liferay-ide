@@ -264,6 +264,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 										if (selectedPortletName.equals(mpContentNodePortletName)) {
 											childNode.select();
 											childNode.setExpanded(true);
+
 											break;
 										}
 									}

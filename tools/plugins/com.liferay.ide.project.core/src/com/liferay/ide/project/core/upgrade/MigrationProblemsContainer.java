@@ -21,20 +21,20 @@ public class MigrationProblemsContainer implements ProblemsContainer {
 
 	@Override
 	public MigrationProblems[] getProblemsArray() {
-		return this.problemsArray;
+		return problemsArray;
 	}
 
 	@Override
 	public String getType() {
-		return this.type;
+		return type;
 	}
 
 	public void setProblemsArray(MigrationProblems[] problemsArray) {
 		this.problemsArray = problemsArray;
-		this.type = problemsArray[0].getType();
+		type = problemsArray[0].getType();
 	}
 
-	private MigrationProblems[] problemsArray;
-	private String type;
+	public MigrationProblems[] problemsArray;
+	public String type;
 
 }

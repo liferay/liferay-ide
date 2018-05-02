@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.upgrade;
 import com.liferay.blade.api.Problem;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,21 +27,21 @@ import java.util.List;
 public class FileProblems {
 
 	public void addProblem(Problem problem) {
-		this.problems.add(problem);
+		problems.add(problem);
 	}
 
 	public File getFile() {
-		return this.file;
+		return file;
 	}
 
 	public List<Problem> getProblems() {
-		return this.problems;
+		return problems;
 	}
 
 	public List<Problem> getProblems(int status) {
 		List<Problem> problems = new ArrayList<>();
 
-		for (Problem problem : this.problems) {
+		for (Problem problem : problems) {
 			if (problem.getStatus() == status) {
 				problems.add(problem);
 			}
@@ -57,7 +58,7 @@ public class FileProblems {
 		this.problems = problems;
 	}
 
-	private File file;
-	private List<Problem> problems = new ArrayList<>();
+	public File file;
+	public List<Problem> problems = new ArrayList<>();
 
 }

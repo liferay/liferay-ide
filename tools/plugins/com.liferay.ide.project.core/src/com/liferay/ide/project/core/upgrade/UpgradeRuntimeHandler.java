@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 
 /**
@@ -40,11 +41,11 @@ public class UpgradeRuntimeHandler extends AbstractUpgradeProjectHandler {
 
 		try {
 			int worked = 0;
-			IProgressMonitor submon = CoreUtil.newSubMonitor(monitor, 25);
+			IProgressMonitor submon = CoreUtil.newSubmonitor(monitor, 25);
 
 			submon.subTask("Update project runtime");
 
-			org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime = RuntimeManager.getRuntime(runtimeName);
+			IRuntime runtime = RuntimeManager.getRuntime(runtimeName);
 
 			if (runtime != null) {
 				worked = worked + perUnit;
@@ -54,8 +55,7 @@ public class UpgradeRuntimeHandler extends AbstractUpgradeProjectHandler {
 				if (runtime != null) {
 					IFacetedProject fProject = ProjectUtil.getFacetedProject(project);
 
-					org.eclipse.wst.common.project.facet.core.runtime.IRuntime primaryRuntime =
-						fProject.getPrimaryRuntime();
+					IRuntime primaryRuntime = fProject.getPrimaryRuntime();
 
 					if (!runtime.equals(primaryRuntime)) {
 						worked = worked + perUnit;

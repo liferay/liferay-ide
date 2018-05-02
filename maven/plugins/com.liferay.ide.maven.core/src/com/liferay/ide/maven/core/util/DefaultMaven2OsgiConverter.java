@@ -146,7 +146,7 @@ public class DefaultMaven2OsgiConverter {
 
 		// if it's already OSGi compliant don't touch it
 
-		m = _OSGI_VERSION_PATTERN.matcher(version);
+		m = _osgiVersionPattern.matcher(version);
 
 		if (m.matches()) {
 			return version;
@@ -155,7 +155,7 @@ public class DefaultMaven2OsgiConverter {
 		osgiVersion = version;
 
 		//check for dated snapshot versions with only major or major and minor
-		m = _DATED_SNAPSHOT.matcher(osgiVersion);
+		m = _datedSnapshot.matcher(osgiVersion);
 
 		if (m.matches()) {
 			String major = m.group(1);
@@ -173,7 +173,7 @@ public class DefaultMaven2OsgiConverter {
 		osgiVersion = osgiVersion.replaceFirst("-", "\\.");
 		osgiVersion = osgiVersion.replaceAll("-", "_");
 
-		m = _OSGI_VERSION_PATTERN.matcher(osgiVersion);
+		m = _osgiVersionPattern.matcher(osgiVersion);
 
 		if (m.matches()) {
 			return osgiVersion;
@@ -181,7 +181,7 @@ public class DefaultMaven2OsgiConverter {
 
 		// remove dots in the middle of the qualifier
 
-		m = _DOTS_IN_QUALIFIER.matcher(osgiVersion);
+		m = _dotsInQualifier.matcher(osgiVersion);
 
 		if (m.matches()) {
 			String s1 = m.group(1);
@@ -189,7 +189,7 @@ public class DefaultMaven2OsgiConverter {
 			String s3 = m.group(3);
 			String s4 = m.group(4);
 
-			Matcher qualifierMatcher = _ONLY_NUMBERS.matcher(s3);
+			Matcher qualifierMatcher = _onlyNumbers.matcher(s3);
 			/*
 			 * if last portion before dot is only numbers then it's not in the middle of the
 			 * qualifier
@@ -203,7 +203,7 @@ public class DefaultMaven2OsgiConverter {
 		 * convert 1.string -> 1.0.0.string 1.2.string -> 1.2.0.string 1 -> 1.0.0 1.1 ->
 		 * 1.1.0
 		 */
-		m = _NEED_TO_FILL_ZEROS.matcher(osgiVersion);
+		m = _needToFillZeros.matcher(osgiVersion);
 
 		if (m.matches()) {
 			String major = m.group(1);
@@ -220,7 +220,7 @@ public class DefaultMaven2OsgiConverter {
 
 				// if last portion is only numbers then it's not a qualifier
 
-				Matcher qualifierMatcher = _ONLY_NUMBERS.matcher(qualifier);
+				Matcher qualifierMatcher = _onlyNumbers.matcher(qualifier);
 
 				if (qualifierMatcher.matches()) {
 					if (minor == null) {
@@ -238,7 +238,7 @@ public class DefaultMaven2OsgiConverter {
 			}
 		}
 
-		m = _OSGI_VERSION_PATTERN.matcher(osgiVersion);
+		m = _osgiVersionPattern.matcher(osgiVersion);
 
 		// if still its not OSGi version then add everything as qualifier
 
@@ -361,22 +361,19 @@ public class DefaultMaven2OsgiConverter {
 		return sb.toString();
 	}
 
-	private static final Pattern _DATED_SNAPSHOT = Pattern.compile(
-		"([0-9])(\\.([0-9]))?(\\.([0-9]))?\\-([0-9]{8}\\.[0-9]{6}\\-[0-9]*)");
-
-	private static final Pattern _DOTS_IN_QUALIFIER = Pattern.compile(
-		"([0-9])(\\.[0-9])?\\.([0-9A-Za-z_-]+)\\.([0-9A-Za-z_-]+)");
-
 	private static final String _FILE_SEPARATOR = System.getProperty("file.separator");
 
-	private static final Pattern _NEED_TO_FILL_ZEROS = Pattern.compile("([0-9])(\\.([0-9]))?(\\.([0-9A-Za-z_-]+))?");
+	private static final Pattern _datedSnapshot = Pattern.compile(
+		"([0-9])(\\.([0-9]))?(\\.([0-9]))?\\-([0-9]{8}\\.[0-9]{6}\\-[0-9]*)");
+	private static final Pattern _dotsInQualifier = Pattern.compile(
+		"([0-9])(\\.[0-9])?\\.([0-9A-Za-z_-]+)\\.([0-9A-Za-z_-]+)");
+	private static final Pattern _needToFillZeros = Pattern.compile("([0-9])(\\.([0-9]))?(\\.([0-9A-Za-z_-]+))?");
 
 	/**
 	 * pattern that matches strings that contain only numbers
 	 */
-	private static final Pattern _ONLY_NUMBERS = Pattern.compile("[0-9]+");
+	private static final Pattern _onlyNumbers = Pattern.compile("[0-9]+");
 
-	private static final Pattern _OSGI_VERSION_PATTERN = Pattern.compile(
-		"[0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9A-Za-z_-]+)?");
+	private static final Pattern _osgiVersionPattern = Pattern.compile("[0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9A-Za-z_-]+)?");
 
 }

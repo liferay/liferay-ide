@@ -29,7 +29,9 @@ import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -83,6 +85,44 @@ public class LiferayMavenWorkspaceProjectProvider
 	}
 
 	@Override
+	public String getInitBundleUrl(String workspaceLocation) {
+		File pomFile = new File(workspaceLocation, "pom.xml");
+
+		MavenXpp3Reader mavenReader = new MavenXpp3Reader();
+
+		try (FileReader reader = new FileReader(pomFile)) {
+			Model model = mavenReader.read(reader);
+
+			if (model != null) {
+				Build build = model.getBuild();
+
+				Plugin plugin = build.getPluginsAsMap().get("com.liferay:com.liferay.portal.tools.bundle.support");
+
+				if (plugin != null) {
+					Xpp3Dom config = (Xpp3Dom)plugin.getConfiguration();
+
+					if (config != null) {
+						Xpp3Dom url = config.getChild("url");
+
+						if (url != null) {
+							String urlValue = url.getValue();
+
+							if (!urlValue.isEmpty()) {
+								return urlValue;
+							}
+						}
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			return BaseLiferayWorkspaceOp.LIFERAY_70_BUNDLE_URL;
+		}
+
+		return BaseLiferayWorkspaceOp.LIFERAY_70_BUNDLE_URL;
+	}
+
+	@Override
 	public IStatus importProject(String location, IProgressMonitor monitor, boolean initBundle, String bundleUrl) {
 		IStatus retval = Status.OK_STATUS;
 
@@ -108,44 +148,6 @@ public class LiferayMavenWorkspaceProjectProvider
 		}
 
 		return retval;
-	}
-
-	@Override
-	public String getInitBundleUrl(String workspaceLocation) {
-		File pomFile = new File(workspaceLocation, "pom.xml");
-
-		MavenXpp3Reader mavenReader = new MavenXpp3Reader();
-
-		try (FileReader reader = new FileReader(pomFile)) {
-			Model model = mavenReader.read(reader);
-
-			if (model != null) {
-				Build build = model.getBuild();
-
-				Plugin plugin = build.getPluginsAsMap().get("com.liferay:com.liferay.portal.tools.bundle.support");
-
-				if (plugin != null) {
-					Xpp3Dom config = (Xpp3Dom) plugin.getConfiguration();
-
-					if (config != null) {
-						Xpp3Dom url = config.getChild("url");
-
-						if (url != null) {
-							String urlValue = url.getValue();
-
-							if (!urlValue.isEmpty()) {
-								return urlValue;
-							}
-						}
-					}
-				}
-			}
-		}
-		catch (Exception e) {
-			return BaseLiferayWorkspaceOp.LIFERAY_70_BUNDLE_URL;
-		}
-
-		return BaseLiferayWorkspaceOp.LIFERAY_70_BUNDLE_URL;
 	}
 
 	@Override

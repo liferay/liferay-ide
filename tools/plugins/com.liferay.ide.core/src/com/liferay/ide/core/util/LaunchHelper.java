@@ -69,9 +69,7 @@ public class LaunchHelper implements IDebugEventSetListener {
 
 		List<String> mementos = new ArrayList<>(classpath.length);
 
-		for (int i = 0; i < classpath.length; i++) {
-			IRuntimeClasspathEntry entry = classpath[i];
-
+		for (IRuntimeClasspathEntry entry : classpath) {
 			mementos.add(entry.getMemento());
 		}
 
@@ -267,9 +265,11 @@ public class LaunchHelper implements IDebugEventSetListener {
 			switch (entry.getClasspathProperty()) {
 				case IRuntimeClasspathEntry.USER_CLASSES:
 					model.addEntry(RuntimeClasspathModel.USER, entry);
+
 					break;
 
 				default:
+
 					break;
 			}
 		}

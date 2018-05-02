@@ -323,9 +323,9 @@ public class ProjectUtil {
 			record.description.setName(projectName);
 		}
 
-		project.create(record.description, CoreUtil.newSubMonitor(monitor, 30));
+		project.create(record.description, CoreUtil.newSubmonitor(monitor, 30));
 
-		project.open(IResource.FORCE, CoreUtil.newSubMonitor(monitor, 70));
+		project.open(IResource.FORCE, CoreUtil.newSubmonitor(monitor, 70));
 
 		// need to check to see if we an ext project with source folders with incorrect
 		// parent attributes
@@ -362,6 +362,7 @@ public class ProjectUtil {
 							segment.equals(SDKClasspathContainer.ID)) {
 
 							containerPath = entry.getPath();
+
 							break;
 						}
 
@@ -459,9 +460,9 @@ public class ProjectUtil {
 
 		monitor.beginTask(Msgs.importingProject, 100);
 
-		project.create(record.description, CoreUtil.newSubMonitor(monitor, 30));
+		project.create(record.description, CoreUtil.newSubmonitor(monitor, 30));
 
-		project.open(IResource.FORCE, CoreUtil.newSubMonitor(monitor, 70));
+		project.open(IResource.FORCE, CoreUtil.newSubmonitor(monitor, 70));
 
 		// need to check to see if we an ext project with source folders with incorrect parent attributes
 
@@ -808,9 +809,7 @@ public class ProjectUtil {
 
 		IClasspathEntry[] cp = javaProject.getRawClasspath();
 
-		for (int i = 0; i < cp.length; i++) {
-			IClasspathEntry cpe = cp[i];
-
+		for (IClasspathEntry cpe : cp) {
 			if (cpe.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
 				IPath path = cpe.getPath().removeFirstSegments(1);
 
@@ -1083,6 +1082,7 @@ public class ProjectUtil {
 
 					if (checkProjectFacet.equals(projectFacet)) {
 						retval = true;
+
 						break;
 					}
 				}
@@ -1108,6 +1108,7 @@ public class ProjectUtil {
 		for (Object property : model.getAllProperties()) {
 			if (propertyName.equals(property)) {
 				retval = true;
+
 				break;
 			}
 		}
@@ -1277,6 +1278,7 @@ public class ProjectUtil {
 
 					if (isLiferayFacet(projectFacet)) {
 						retval = true;
+
 						break;
 					}
 				}
@@ -1483,6 +1485,7 @@ public class ProjectUtil {
 
 			if (runtime instanceof BridgedRuntime && ServerUtil.isLiferayRuntime((BridgedRuntime)runtime)) {
 				dataModel.setProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME, runtime);
+
 				break;
 			}
 		}
@@ -1626,6 +1629,7 @@ public class ProjectUtil {
 					path.equals("com.liferay.ide.eclipse.server.tomcat.runtimeClasspathProvider")) {
 
 					retval = true;
+
 					break;
 				}
 			}

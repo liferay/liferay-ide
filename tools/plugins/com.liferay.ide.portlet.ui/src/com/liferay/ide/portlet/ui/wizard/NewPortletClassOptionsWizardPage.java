@@ -37,6 +37,7 @@ public class NewPortletClassOptionsWizardPage
 		IDataModel model, String pageName, String pageDesc, String pageTitle, boolean fragment) {
 
 		super(model, pageName, pageDesc, pageTitle);
+
 		this.fragment = fragment;
 	}
 

@@ -97,6 +97,7 @@ public class BuildLangHandler extends AbstractHandler {
 
 				if (file.exists()) {
 					langFile = file;
+
 					break;
 				}
 			}

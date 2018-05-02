@@ -176,21 +176,27 @@ public class NewLiferayPluginProjectOpMethods {
 			case portlet:
 			case servicebuilder:
 				suffix = "-portlet";
+
 				break;
 			case ext:
 				suffix = "-ext";
+
 				break;
 			case hook:
 				suffix = "-hook";
+
 				break;
 			case layouttpl:
 				suffix = "-layouttpl";
+
 				break;
 			case theme:
 				suffix = "-theme";
+
 				break;
 			case web:
 				suffix = "-web";
+
 				break;
 		}
 
@@ -311,7 +317,7 @@ public class NewLiferayPluginProjectOpMethods {
 				greaterThan700 = true;
 			}
 
-			if ((greaterThan700 && "web".equals(type)) || ("theme".equals(type))) {
+			if ((greaterThan700 && "web".equals(type)) || "theme".equals(type)) {
 				retval = true;
 			}
 
@@ -401,21 +407,27 @@ public class NewLiferayPluginProjectOpMethods {
 						case portlet:
 						case servicebuilder:
 							newLocationBase = sdkLocation.append("portlets");
+
 							break;
 						case ext:
 							newLocationBase = sdkLocation.append("ext");
+
 							break;
 						case hook:
 							newLocationBase = sdkLocation.append("hooks");
+
 							break;
 						case layouttpl:
 							newLocationBase = sdkLocation.append("layouttpl");
+
 							break;
 						case theme:
 							newLocationBase = sdkLocation.append("themes");
+
 							break;
 						case web:
 							newLocationBase = sdkLocation.append("webs");
+
 							break;
 					}
 				}
@@ -470,9 +482,8 @@ public class NewLiferayPluginProjectOpMethods {
 
 				IFolder docroot = webproject.getDefaultDocrootFolder();
 
-				IFile[] sampleFiles = {
-					docroot.getFile("view.jsp"), docroot.getFile("css/main.css"), docroot.getFile("js/main.js")
-				};
+				IFile[] sampleFiles =
+					{docroot.getFile("view.jsp"), docroot.getFile("css/main.css"), docroot.getFile("js/main.js")};
 
 				for (IFile file : sampleFiles) {
 					if (FileUtil.exists(file)) {

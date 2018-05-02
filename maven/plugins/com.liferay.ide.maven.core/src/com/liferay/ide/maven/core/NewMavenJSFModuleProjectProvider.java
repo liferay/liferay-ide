@@ -183,6 +183,7 @@ public class NewMavenJSFModuleProjectProvider
 				for (String folder : folders) {
 					if (projectLocation.lastSegment().endsWith(folder)) {
 						appendWarFolder = true;
+
 						break;
 					}
 				}

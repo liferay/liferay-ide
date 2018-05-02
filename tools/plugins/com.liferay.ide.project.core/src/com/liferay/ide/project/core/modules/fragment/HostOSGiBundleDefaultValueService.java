@@ -50,16 +50,19 @@ public class HostOSGiBundleDefaultValueService extends DerivedValueService {
 		if (FileUtil.notExists(bndFile)) {
 			return null;
 		}
+
 		try {
 			BndProperties bnd = new BndProperties();
+
 			bnd.load(bndFile.getLocation().toFile());
 
-			BndPropertiesValue fragmentHost = (BndPropertiesValue) bnd.get("Fragment-Host");
+			BndPropertiesValue fragmentHost = (BndPropertiesValue)bnd.get("Fragment-Host");
 
 			if (fragmentHost != null) {
 				String fragmentHostValue = fragmentHost.getOriginalValue();
 
 				String[] b = fragmentHostValue.split(";");
+
 				if (ListUtil.isNotEmpty(b) && (b.length > 1)) {
 					String[] f = b[1].split("=");
 
@@ -68,11 +71,13 @@ public class HostOSGiBundleDefaultValueService extends DerivedValueService {
 					return b[0] + "-" + version;
 				}
 			}
+
 			return null;
 		}
-		catch (IOException e) {
-			ProjectCore.logError("Failed to parsed bnd.bnd for project " + project.getName(), e);
+		catch (IOException ioe) {
+			ProjectCore.logError("Failed to parsed bnd.bnd for project " + project.getName(), ioe);
 		}
+
 		return null;
 	}
 

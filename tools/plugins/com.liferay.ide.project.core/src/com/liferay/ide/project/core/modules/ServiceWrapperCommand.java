@@ -177,7 +177,7 @@ public class ServiceWrapperCommand {
 	}
 
 	private void _getServiceWrapperList(Map<String, String[]> wrapperMap, String name, JarInputStream jarInputStream) {
-		if (name.endsWith("ServiceWrapper.class") && !(name.contains("$"))) {
+		if (name.endsWith("ServiceWrapper.class") && !name.contains("$")) {
 			name = name.replaceAll("\\\\", ".").replaceAll("/", ".");
 
 			name = name.substring(0, name.lastIndexOf("."));

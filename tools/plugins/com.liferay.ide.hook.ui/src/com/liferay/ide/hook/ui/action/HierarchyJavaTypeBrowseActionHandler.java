@@ -67,18 +67,23 @@ public final class HierarchyJavaTypeBrowseActionHandler extends BrowseActionHand
 				switch (kind) {
 					case CLASS:
 						browseDialogStyle = IJavaElementSearchConstants.CONSIDER_CLASSES;
+
 						break;
 					case ABSTRACT_CLASS:
 						browseDialogStyle = IJavaElementSearchConstants.CONSIDER_CLASSES;
+
 						break;
 					case INTERFACE:
 						browseDialogStyle = IJavaElementSearchConstants.CONSIDER_INTERFACES;
+
 						break;
 					case ANNOTATION:
 						browseDialogStyle = IJavaElementSearchConstants.CONSIDER_ANNOTATION_TYPES;
+
 						break;
 					case ENUM:
 						browseDialogStyle = IJavaElementSearchConstants.CONSIDER_ENUMS;
+
 						break;
 					default:
 						throw new IllegalStateException();

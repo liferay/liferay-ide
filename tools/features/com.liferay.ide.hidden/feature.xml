@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.liferay.ide.hidden"
-      label="Liferay IDE Hidden"
-      version="3.2.0.qualifier"
-      provider-name="Liferay, Inc.">
+	id="com.liferay.ide.hidden"
+	label="Liferay IDE Hidden"
+	version="3.2.0.qualifier"
+	  provider-name="Liferay, Inc.">
 
-   <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
-      Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platform.
-   </description>
+	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
+	  Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platform.
+	</description>
 
-   <copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
-      /**
+	<copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
+	  /**
 * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
 *
 * This library is free software; you can redistribute it and/or
@@ -24,155 +24,155 @@
 * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
 * the GNU Lesser General Public License for more details.
 */
-   </copyright>
+	</copyright>
 
-   <license url="http://www.gnu.org/licenses/lgpl-2.1.html">
-      Liferay IDE is free software distributed under the terms of the Lesser GNU Public License. See URL for full license text.  http://www.gnu.org/licenses/lgpl-2.1.html
-   </license>
+	<license url="http://www.gnu.org/licenses/lgpl-2.1.html">
+	  Liferay IDE is free software distributed under the terms of the Lesser GNU Public License. See URL for full license text.  http://www.gnu.org/licenses/lgpl-2.1.html
+	</license>
 
-   <includes
-         id="bndtools.main.feature"
-         version="0.0.0"/>
+	<includes
+		id="bndtools.main.feature"
+		 version="0.0.0" />
 
-   <includes
-         id="bndtools.m2e.feature"
-         version="0.0.0"/>
+	<includes
+		id="bndtools.m2e.feature"
+		 version="0.0.0" />
 
-   <includes
-         id="org.eclipse.buildship"
-         version="0.0.0"/>
+	<includes
+		id="org.eclipse.buildship"
+		 version="0.0.0" />
 
-   <plugin
-         id="com.google.guava"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.google.guava"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.google.gson"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.google.gson"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.gradleware.tooling.client"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.gradleware.tooling.client"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.gradleware.tooling.model"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.gradleware.tooling.model"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.gradleware.tooling.utils"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.gradleware.tooling.utils"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="minimal-json"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="minimal-json"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="minimatch.java"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="minimatch.java"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="org.apache.commons.codec"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="org.apache.commons.codec"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="org.apache.commons.collections"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="org.apache.commons.collections"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="org.apache.commons.io"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="org.apache.commons.io"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="org.apache.commons.lang"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="org.apache.commons.lang"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="org.apache.commons.logging"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="org.apache.commons.logging"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="org.eclipse.jst.jsp.search.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="org.eclipse.jst.jsp.search.editor"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="org.eclipse.wst.html.search.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="org.eclipse.wst.html.search.editor"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="org.gradle.toolingapi"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="org.gradle.toolingapi"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="org.json"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="org.json"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="org.objectweb.asm"
-         download-size="0"
-         install-size="0"
-         version="5.2.0.v20170126-0011"
-         unpack="false"/>
+	<plugin
+		id="org.objectweb.asm"
+		download-size="0"
+		install-size="0"
+		version="5.2.0.v20170126-0011"
+		 unpack="false" />
 
-   <plugin
-         id="org.objectweb.asm"
-         download-size="0"
-         install-size="0"
-         version="6.0.0.v20180116-1719"
-         unpack="false"/>
+	<plugin
+		id="org.objectweb.asm"
+		download-size="0"
+		install-size="0"
+		version="6.0.0.v20180116-1719"
+		 unpack="false" />
 
-   <plugin
-         id="javax.websocket-api"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="javax.websocket-api"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
 </feature>

@@ -148,11 +148,10 @@ public class ProjectImportUtil {
 				IPortletFramework[] portletFrameworks = ProjectCore.getPortletFrameworks();
 				String portletFrameworkName = null;
 
-				for (int i = 0; i < portletFrameworks.length; i++) {
-					IPortletFramework portletFramework = portletFrameworks[i];
-
+				for (IPortletFramework portletFramework : portletFrameworks) {
 					if (portletFramework.isDefault() && !portletFramework.isAdvanced()) {
 						portletFrameworkName = portletFramework.getShortName();
+
 						break;
 					}
 				}

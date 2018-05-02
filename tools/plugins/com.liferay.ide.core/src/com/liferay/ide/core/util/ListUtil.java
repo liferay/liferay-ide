@@ -23,8 +23,24 @@ import java.util.Set;
  */
 public class ListUtil {
 
+	public static boolean isEmpty(Collection<?> collection) {
+		if ((collection == null) || collection.isEmpty()) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public static boolean isEmpty(List<?> list) {
 		if ((list == null) || list.isEmpty()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean isEmpty(Object[] array) {
+		if ((array == null) || (array.length == 0)) {
 			return true;
 		}
 
@@ -39,37 +55,20 @@ public class ListUtil {
 		return false;
 	}
 
-	public static boolean isEmpty(Collection<?> collection) {
-		if ((collection == null) || collection.isEmpty()) {
-			return true;
-		}
-		
-		return false;
-	}
-
 	public static boolean isNotEmpty(Collection<?> collection) {
 		return !isEmpty(collection);
-	}
-
-	public static boolean isNotEmpty(Set<?> set) {
-		return !isEmpty(set);
 	}
 
 	public static boolean isNotEmpty(List<?> list) {
 		return !isEmpty(list);
 	}
 
-
-	public static boolean isEmpty(Object[] array) {
-		if ((array == null) || (array.length == 0)) {
-			return true;
-		}
-
-		return false;
-	}
-
 	public static boolean isNotEmpty(Object[] array) {
 		return !isEmpty(array);
+	}
+
+	public static boolean isNotEmpty(Set<?> set) {
+		return !isEmpty(set);
 	}
 
 }

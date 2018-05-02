@@ -63,6 +63,7 @@ public class HookUtil {
 			for (FilterGroup group : validatorTable.getGroups()) {
 				if (group.isExclude()) {
 					excludeGroup = group;
+
 					break;
 				}
 			}
@@ -96,6 +97,7 @@ public class HookUtil {
 						}
 
 						hasCustomJSPFolderRule = true;
+
 						break;
 					}
 				}

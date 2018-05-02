@@ -38,7 +38,7 @@ public class PortletResourcesContentProvider extends AbstractNavigatorContentPro
 	 * (non-Javadoc)
 	 *
 	 * @see
-	 * org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
+	 * org.eclipse.jface.viewers.ITreeContentProvider#getChildren(Object)
 	 */
 	public Object[] getChildren(Object element) {
 		if (element instanceof IProject) {

@@ -90,7 +90,7 @@ public class FindDependenciesVisitor extends CodeVisitorSupport {
 
 	@Override
 	public void visitMethodCallExpression(MethodCallExpression call) {
-		if (!(call.getMethodAsString().equals("buildscript"))) {
+		if (!call.getMethodAsString().equals("buildscript")) {
 			if (call.getMethodAsString().equals("dependencies")) {
 				if (_dependenceLineNum == -1) {
 					_dependenceLineNum = call.getLastLineNumber();

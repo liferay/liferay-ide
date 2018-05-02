@@ -17,6 +17,7 @@ package com.liferay.ide.gradle.core;
 import com.google.common.base.Optional;
 
 import com.gradleware.tooling.toolingutils.binding.Validator;
+
 import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
@@ -158,7 +159,7 @@ public class GradleUtil {
 		try {
 			ResourcesPlugin.getWorkspace().checkpoint(true);
 			Job.getJobManager().join(CorePlugin.GRADLE_JOB_FAMILY, new NullProgressMonitor());
-			Job.getJobManager().join(GradleCore.JobFamilyId, new NullProgressMonitor());
+			Job.getJobManager().join(GradleCore.JOB_FAMILY_ID, new NullProgressMonitor());
 			Thread.sleep(200);
 			Job.getJobManager().beginRule(root = ResourcesPlugin.getWorkspace().getRoot(), null);
 		}

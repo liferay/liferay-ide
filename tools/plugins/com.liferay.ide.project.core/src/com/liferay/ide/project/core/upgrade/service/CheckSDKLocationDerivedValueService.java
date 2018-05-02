@@ -120,6 +120,7 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService {
 			for (File file : exts) {
 				if (file.isDirectory()) {
 					op.setHasExt("true");
+
 					break;
 				}
 			}
@@ -131,6 +132,7 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService {
 			for (File file : layouttpls) {
 				if (file.isDirectory()) {
 					op.setHasLayout("true");
+
 					break;
 				}
 			}
@@ -142,6 +144,7 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService {
 			for (File file : themes) {
 				if (file.isDirectory()) {
 					op.setHasTheme("true");
+
 					break;
 				}
 			}
@@ -153,6 +156,7 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService {
 			for (File file : webs) {
 				if (file.isDirectory()) {
 					op.setHasWeb("true");
+
 					break;
 				}
 			}

@@ -33,10 +33,9 @@ public class BundleUrlValidationService extends ValidationService {
 
 		String bundleUrl = op.getBundleUrl().content();
 
-		UrlValidator urlValidator = new UrlValidator(
-				UrlValidator.ALLOW_LOCAL_URLS | UrlValidator.ALLOW_ALL_SCHEMES);
+		UrlValidator urlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS | UrlValidator.ALLOW_ALL_SCHEMES);
 
-		if ((bundleUrl!= null) && !urlValidator.isValid(bundleUrl)) {
+		if ((bundleUrl != null) && !urlValidator.isValid(bundleUrl)) {
 			retval = Status.createWarningStatus("The bundle URL may not be a vaild URL.");
 		}
 

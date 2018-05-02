@@ -63,7 +63,7 @@ public class MavenUIProjectBuilder extends MavenProjectBuilder {
 
 	@Override
 	public IStatus buildLang(IFile langFile, IProgressMonitor monitor) throws CoreException {
-		IProgressMonitor sub = CoreUtil.newSubMonitor(monitor, 100);
+		IProgressMonitor sub = CoreUtil.newSubmonitor(monitor, 100);
 
 		sub.beginTask(Msgs.buildingLanguages, 100);
 

@@ -35,7 +35,7 @@ public class IJavaProjectConversionService extends UniversalConversionService {
 			return null;
 		}
 
-		NewLiferayComponentOp op = (NewLiferayComponentOp) object;
+		NewLiferayComponentOp op = (NewLiferayComponentOp)object;
 
 		String projectName = op.getProjectName().content(true);
 

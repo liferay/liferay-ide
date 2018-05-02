@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.liferay.ide.enterprise"
-      label="Liferay IDE Enterprise"
-      version="3.2.0.qualifier"
-      provider-name="Liferay, Inc.">
+	id="com.liferay.ide.enterprise"
+	label="Liferay IDE Enterprise"
+	version="3.2.0.qualifier"
+	  provider-name="Liferay, Inc.">
 
-   <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
-      Liferay IDE Enterprise includes Kaleo workflow support
-   </description>
+	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
+	  Liferay IDE Enterprise includes Kaleo workflow support
+	</description>
 
-   <copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
-      /**
+	<copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
+	  /**
 * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
 *
 * This library is free software; you can redistribute it and/or
@@ -24,42 +24,42 @@
 * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
 * the GNU Lesser General Public License for more details.
 */
-   </copyright>
+	</copyright>
 
-   <license url="http://www.gnu.org/licenses/lgpl-2.1.html">
-      Liferay IDE is free software distributed under the terms of the Lesser GNU Public License. See URL for full license text.  http://www.gnu.org/licenses/lgpl-2.1.html
-   </license>
+	<license url="http://www.gnu.org/licenses/lgpl-2.1.html">
+	  Liferay IDE is free software distributed under the terms of the Lesser GNU Public License. See URL for full license text.  http://www.gnu.org/licenses/lgpl-2.1.html
+	</license>
 
-   <requires>
-      <import feature="com.liferay.ide.eclipse.tools" version="3.1.0" match="greaterOrEqual"/>
-   </requires>
+	<requires>
+		<import feature="com.liferay.ide.eclipse.tools" version="3.1.0" match="greaterOrEqual" />
+	</requires>
 
-   <plugin
-         id="com.liferay.ide.kaleo.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.kaleo.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.kaleo.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.kaleo.ui"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-    <plugin
-         id="com.liferay.ide.scripting.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.scripting.core"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
-   <plugin
-         id="com.liferay.ide.studio.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+	<plugin
+		id="com.liferay.ide.studio.ui"
+		download-size="0"
+		install-size="0"
+		version="0.0.0"
+		 unpack="false" />
 
 </feature>

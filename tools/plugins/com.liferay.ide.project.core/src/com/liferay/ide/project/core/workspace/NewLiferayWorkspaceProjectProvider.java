@@ -25,8 +25,8 @@ import org.eclipse.sapphire.ExecutableElement;
  */
 public interface NewLiferayWorkspaceProjectProvider<T extends ExecutableElement> extends NewLiferayProjectProvider<T> {
 
-	public IStatus importProject(String location, IProgressMonitor monitor, boolean initBundle, String bundleUrl);
-
 	public String getInitBundleUrl(String workspaceLocation);
+
+	public IStatus importProject(String location, IProgressMonitor monitor, boolean initBundle, String bundleUrl);
 
 }

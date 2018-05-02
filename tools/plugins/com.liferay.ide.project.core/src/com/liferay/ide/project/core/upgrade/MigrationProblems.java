@@ -45,8 +45,8 @@ public class MigrationProblems implements UpgradeProblems {
 		this.type = type;
 	}
 
-	private FileProblems[] problems;
-	private String suffix;
-	private String type;
+	public FileProblems[] problems;
+	public String suffix;
+	public String type;
 
 }

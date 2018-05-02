@@ -109,9 +109,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 
 		cpDecorations.clearAllDecorations(key);
 
-		for (int i = 0; i < entries.length; i++) {
-			IClasspathEntry entry = entries[i];
-
+		for (IClasspathEntry entry : entries) {
 			IPath srcpath = entry.getSourceAttachmentPath();
 			IPath srcrootpath = entry.getSourceAttachmentRootPath();
 			IClasspathAttribute[] attrs = entry.getExtraAttributes();

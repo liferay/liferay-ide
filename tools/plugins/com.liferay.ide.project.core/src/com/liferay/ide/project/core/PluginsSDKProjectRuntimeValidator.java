@@ -64,7 +64,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
 		if (SDKUtil.isSDKProject(fproj.getProject())) {
 			IJavaProject javaProject = JavaCore.create(project);
 
-			if(JavaProject.hasJavaNature(project)) {
+			if (JavaProject.hasJavaNature(project)) {
 				for (IClasspathEntry entry : javaProject.getRawClasspath()) {
 					String segment = entry.getPath().segment(0);
 

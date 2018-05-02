@@ -139,6 +139,7 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
 		return element.nearest(NewLiferayModuleProjectOp.class);
 	}
 
-	private static final String[] _WAR_TYPE_PROJECT = {"layout-template", "spring-mvc-portlet", "theme", "war-hook", "war-mvc-portlet"};
+	private static final String[] _WAR_TYPE_PROJECT =
+		{"layout-template", "spring-mvc-portlet", "theme", "war-hook", "war-mvc-portlet"};
 
 }

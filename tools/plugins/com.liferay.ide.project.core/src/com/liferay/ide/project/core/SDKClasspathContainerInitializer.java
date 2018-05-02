@@ -98,9 +98,7 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
 
 		cpDecorations.clearAllDecorations(key);
 
-		for (int i = 0; i < entries.length; i++) {
-			IClasspathEntry entry = entries[i];
-
+		for (IClasspathEntry entry : entries) {
 			IPath srcpath = entry.getSourceAttachmentPath();
 
 			IPath srcrootpath = entry.getSourceAttachmentRootPath();

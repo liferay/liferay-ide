@@ -108,7 +108,7 @@ public class NewLayoutTplLayoutWizardPage extends DataModelWizardPage implements
 		rowLayout.pack = false;
 		group.setLayout(rowLayout);
 
-		if ((LAYOUT_PROPERTIES.length == layoutOptionsText.length) &&
+		if ((LAYOUT_PROPERTIES.length == LAYOUT_OPTIONS_TEXT.length) &&
 			(LAYOUT_PROPERTIES.length == layoutOptionsImages.length)) {
 
 			imagesToDispose = new ArrayList<>();
@@ -116,7 +116,7 @@ public class NewLayoutTplLayoutWizardPage extends DataModelWizardPage implements
 			for (int i = 0; i < LAYOUT_PROPERTIES.length; i++) {
 				Image img = layoutOptionsImages[i].createImage();
 
-				createLayoutOption(group, LAYOUT_PROPERTIES[i], layoutOptionsText[i], img);
+				createLayoutOption(group, LAYOUT_PROPERTIES[i], LAYOUT_OPTIONS_TEXT[i], img);
 				imagesToDispose.add(img);
 			}
 		}
@@ -136,6 +136,11 @@ public class NewLayoutTplLayoutWizardPage extends DataModelWizardPage implements
 		return LAYOUT_PROPERTIES;
 	}
 
+	protected static final String[] LAYOUT_OPTIONS_TEXT = {
+		Msgs.oneColumn, Msgs.oneTwoColumns3070, Msgs.oneTwoColumns7030, Msgs.oneTwoOneColumns, Msgs.twoColumns5050,
+		Msgs.twoColumns3070, Msgs.twoColumns7030, Msgs.twoTwoColumns, Msgs.threeColumns
+	};
+
 	protected static final ImageDescriptor[] layoutOptionsImages = {
 		ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/layouts/1_column.png")),
 		ImageDescriptor.createFromURL(LayoutTplUI.
@@ -150,10 +155,6 @@ public class NewLayoutTplLayoutWizardPage extends DataModelWizardPage implements
 			getDefault().getBundle().getEntry("/icons/layouts/2_columns_iii.png")),
 		ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/layouts/2_2_columns.png")),
 		ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/layouts/3_columns.png"))
-	};
-	protected static final String[] layoutOptionsText = {
-		Msgs.oneColumn, Msgs.oneTwoColumns3070, Msgs.oneTwoColumns7030, Msgs.oneTwoOneColumns, Msgs.twoColumns5050,
-		Msgs.twoColumns3070, Msgs.twoColumns7030, Msgs.twoTwoColumns, Msgs.threeColumns
 	};
 
 	protected List<Image> imagesToDispose;

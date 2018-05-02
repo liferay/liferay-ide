@@ -121,6 +121,7 @@ public abstract class PortletRowLayoutEditPart extends BaseGraphicalEditPart {
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
+
 		List<?> children = getChildren();
 
 		for (Object child : children) {

@@ -45,6 +45,7 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.settings.Settings;
 
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -332,7 +333,7 @@ public class MavenUtil {
 		}
 
 		if (retval == null) {
-			retval = org.apache.maven.repository.RepositorySystem.defaultUserLocalRepository.getAbsolutePath();
+			retval = RepositorySystem.defaultUserLocalRepository.getAbsolutePath();
 		}
 
 		return retval;
@@ -349,7 +350,7 @@ public class MavenUtil {
 	public static String getMajorMinorVersionOnly(String version) {
 		String retval = null;
 
-		Matcher matcher = _MAJOR_MINOR_VERSION.matcher(version);
+		Matcher matcher = _majorMinorVersion.matcher(version);
 
 		if (matcher.find()) {
 			try {
@@ -640,6 +641,6 @@ public class MavenUtil {
 		}
 	}
 
-	private static final Pattern _MAJOR_MINOR_VERSION = Pattern.compile("([0-9]\\.[0-9])\\..*");
+	private static final Pattern _majorMinorVersion = Pattern.compile("([0-9]\\.[0-9])\\..*");
 
 }

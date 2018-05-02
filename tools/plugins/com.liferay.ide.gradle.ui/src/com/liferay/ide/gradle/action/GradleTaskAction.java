@@ -88,13 +88,15 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 
 			};
 
-			job.addJobChangeListener(new JobChangeAdapter() {
+			job.addJobChangeListener(
+				new JobChangeAdapter() {
 
-				@Override
-				public void done(IJobChangeEvent event) {
-					afterTask();
-				}
-			});
+					@Override
+					public void done(IJobChangeEvent event) {
+						afterTask();
+					}
+
+				});
 
 			job.schedule();
 		}

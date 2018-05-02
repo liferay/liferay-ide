@@ -57,6 +57,7 @@ public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFac
 	@Override
 	public void init(SapphireAction action, ActionHandlerFactoryDef def) {
 		super.init(action, def);
+
 		LayoutTplElement layoutElement = getModelElement().nearest(LayoutTplElement.class);
 
 		Value<Boolean> bootstrapStyle = layoutElement.getBootstrapStyle();
@@ -83,6 +84,7 @@ public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFac
 		@Override
 		public void init(SapphireAction action, ActionHandlerDef def) {
 			super.init(action, def);
+
 			setId(_ADD_ROW_1_ACTION_HANDLER_ID);
 			setLabel();
 		}
@@ -114,6 +116,7 @@ public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFac
 		@Override
 		public void init(SapphireAction action, ActionHandlerDef def) {
 			super.init(action, def);
+
 			setId(_ADD_ROW_2_I_ACTION_HANDLER_ID);
 			setLabel();
 		}
@@ -145,6 +148,7 @@ public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFac
 		@Override
 		public void init(SapphireAction action, ActionHandlerDef def) {
 			super.init(action, def);
+
 			setId(_ADD_ROW_2_II_ACTION_HANDLER_ID);
 			setLabel();
 		}
@@ -176,6 +180,7 @@ public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFac
 		@Override
 		public void init(SapphireAction action, ActionHandlerDef def) {
 			super.init(action, def);
+
 			setId(_ADD_ROW_2_III_ACTION_HANDLER_ID);
 			setLabel();
 		}
@@ -207,6 +212,7 @@ public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFac
 		@Override
 		public void init(SapphireAction action, ActionHandlerDef def) {
 			super.init(action, def);
+
 			setId(_ADD_ROW_3_ACTION_HANDLER_ID);
 			setLabel();
 		}

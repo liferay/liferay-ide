@@ -72,6 +72,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 
 	public PortalJarsSection(IDEFormPage page, Composite parent, String[] labels) {
 		super(page, parent, Section.DESCRIPTION, labels);
+
 		Section section = getSection();
 
 		section.setText(Msgs.portalDependencyJars);
@@ -121,7 +122,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 	}
 
 	/* * (non-Javadoc)
-	 * @see org.eclipse.pde.internal.ui.editor.PDESection#doGlobalAction(java.lang.String)
+	 * @see org.eclipse.pde.internal.ui.editor.PDESection#doGlobalAction(String)
 	 */
 	public boolean doGlobalAction(String actionId) {
 		if (!isEditable()) {
@@ -209,6 +210,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 
 				if (object instanceof IPluginImport) {
 					ImportObject iobj = new ImportObject((IPluginImport)object);
+
 					fImportViewer.setSelection(new StructuredSelection(iobj), true);
 
 					return true;
@@ -288,7 +290,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 
 	/**
 	 * (non-Javadoc)
-	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#canPaste(java.lang.Object, java.lang.Object[])
+	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#canPaste(Object, Object[])
 	 */
 	protected boolean canPaste(Object targetObject, Object[] sourceObjects) {
 		return false;
@@ -319,7 +321,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 
 	/**
 	 * (non-Javadoc)
-	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#doPaste(java.lang.Object, java.lang.Object[])
+	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#doPaste(Object, Object[])
 	 */
 	protected void doPaste(Object targetObject, Object[] sourceObjects) {
 

@@ -56,7 +56,7 @@ public class UpgradeMetadataHandler extends AbstractUpgradeProjectHandler {
 		try {
 			int worked = 0;
 
-			IProgressMonitor submon = CoreUtil.newSubMonitor(monitor, 25);
+			IProgressMonitor submon = CoreUtil.newSubmonitor(monitor, 25);
 
 			submon.subTask("Prograde Upgrade Update DTD Header");
 
@@ -77,7 +77,7 @@ public class UpgradeMetadataHandler extends AbstractUpgradeProjectHandler {
 
 						String publicId = docType.getPublicId();
 
-						String newPublicId = _getNewDoctTypeSetting(publicId, "6.2.0", _publicid_regrex);
+						String newPublicId = _getNewDoctTypeSetting(publicId, "6.2.0", _PUBLICID_REGREX);
 
 						if (newPublicId != null) {
 							docType.setPublicId(newPublicId);
@@ -89,7 +89,7 @@ public class UpgradeMetadataHandler extends AbstractUpgradeProjectHandler {
 
 						String systemId = docType.getSystemId();
 
-						String newSystemId = _getNewDoctTypeSetting(systemId, "6_2_0", _systemid_regrex);
+						String newSystemId = _getNewDoctTypeSetting(systemId, "6_2_0", _SYSTEMID_REGREX);
 
 						if (newSystemId != null) {
 							docType.setSystemId(newSystemId);
@@ -141,7 +141,7 @@ public class UpgradeMetadataHandler extends AbstractUpgradeProjectHandler {
 	private IFile[] _getUpgradeDTDFiles(IProject project) {
 		List<IFile> files = new ArrayList<>();
 
-		for (String name : _fileNames) {
+		for (String name : _FILE_NAMES) {
 			files.addAll(new SearchFilesVisitor().searchFiles(project, name));
 		}
 
@@ -161,13 +161,15 @@ public class UpgradeMetadataHandler extends AbstractUpgradeProjectHandler {
 		file.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
 	}
 
-	private static final String[] _fileNames = {
+	private static final String[] _FILE_NAMES = {
 		"liferay-portlet.xml", "liferay-display.xml", "service.xml", "liferay-hook.xml", "liferay-layout-templates.xml",
 		"liferay-look-and-feel.xml", "liferay-portlet-ext.xml", "liferay-plugin-package.properties"
 	};
-	private static final String _publicid_regrex =
+
+	private static final String _PUBLICID_REGREX =
 		"-\\//(?:[a-z][a-z]+)\\//(?:[a-z][a-z]+)[\\s+(?:[a-z][a-z0-9_]*)]*\\s+(\\d\\.\\d\\.\\d)\\//(?:[a-z][a-z]+)";
-	private static final String _systemid_regrex =
+
+	private static final String _SYSTEMID_REGREX =
 		"^http://www.liferay.com/dtd/[-A-Za-z0-9+&@#/%?=~_()]*(\\d_\\d_\\d).dtd";
 
 }
