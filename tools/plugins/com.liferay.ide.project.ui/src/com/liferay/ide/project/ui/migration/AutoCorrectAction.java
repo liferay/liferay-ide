@@ -178,7 +178,7 @@ public class AutoCorrectAction extends ProblemAction {
 					String prLastKey =
 						((Problem)lastItem).autoCorrectContext.substring(0, problem.autoCorrectContext.indexOf(":"));
 
-					if (!(prCurrentKey.equals(prLastKey))) {
+					if (!prCurrentKey.equals(prLastKey)) {
 						selectionCompatible = false;
 
 						break;
@@ -195,7 +195,7 @@ public class AutoCorrectAction extends ProblemAction {
 			while (items2.hasNext()) {
 				Object item = items2.next();
 
-				if (item instanceof Problem && ((Problem)item).autoCorrectContext != null) {
+				if ((item instanceof Problem) && (((Problem)item).autoCorrectContext != null)) {
 					autoCorrectContexts.add(((Problem)item).autoCorrectContext);
 				}
 			}

@@ -157,55 +157,57 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		_dirLabel = createLabel(_pageParent, "Plugins SDK or Maven Project Root Location:");
 		_dirField = createTextField(_pageParent, SWT.NONE);
 
-		_dirField.addModifyListener(new ModifyListener() {
+		_dirField.addModifyListener(
+			new ModifyListener() {
 
-			@Override
-			public void modifyText(ModifyEvent e) {
-				dataModel.setSdkLocation(_dirField.getText());
+				@Override
+				public void modifyText(ModifyEvent e) {
+					dataModel.setSdkLocation(_dirField.getText());
 
-				if (_dirField.getText().isEmpty()) {
-					_disposeMigrateLayoutElement();
+					if (_dirField.getText().isEmpty()) {
+						_disposeMigrateLayoutElement();
 
-					_disposeBundleCheckboxElement();
+						_disposeBundleCheckboxElement();
 
-					_disposeBundleElement();
+						_disposeBundleElement();
 
-					_disposeServerEelment();
+						_disposeServerEelment();
 
-					_disposeImportElement();
+						_disposeImportElement();
 
-					_createMigrateLayoutElement();
+						_createMigrateLayoutElement();
 
-					_createDownloaBundleCheckboxElement();
+						_createDownloaBundleCheckboxElement();
 
-					_createBundleElement();
+						_createBundleElement();
 
-					_createImportElement();
+						_createImportElement();
 
-					_pageParent.layout();
+						_pageParent.layout();
 
-					_startCheckThread();
+						_startCheckThread();
+					}
 				}
-			}
 
-		});
+			});
 
-		SWTUtil.createButton(_pageParent, "Browse...").addSelectionListener(new SelectionAdapter() {
+		SWTUtil.createButton(_pageParent, "Browse...").addSelectionListener(
+			new SelectionAdapter() {
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				final DirectoryDialog dd = new DirectoryDialog(getShell());
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					DirectoryDialog dd = new DirectoryDialog(getShell());
 
-				dd.setMessage("Plugins SDK top-level directory or Maven project root directory");
+					dd.setMessage("Plugins SDK top-level directory or Maven project root directory");
 
-				final String selectedDir = dd.open();
+					String selectedDir = dd.open();
 
-				if (selectedDir != null) {
-					_dirField.setText(selectedDir);
+					if (selectedDir != null) {
+						_dirField.setText(selectedDir);
+					}
 				}
-			}
 
-		});
+			});
 
 		_createMigrateLayoutElement();
 
@@ -218,10 +220,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		_startCheckThread();
 	}
 
-	public void checkAndConfigureIvy(final IProject project) {
-		if (project != null && project.getFile(ISDKConstants.IVY_XML_FILE).exists()) {
-			new WorkspaceJob("Configuring project with Ivy dependencies")
-			{
+	public void checkAndConfigureIvy(IProject project) {
+		if ((project != null) && project.getFile(ISDKConstants.IVY_XML_FILE).exists()) {
+			new WorkspaceJob("Configuring project with Ivy dependencies") {
 
 				@Override
 				public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
@@ -253,15 +254,16 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		SWTUtil.createHyperLink(fillLayoutComposite, SWT.WRAP, descriptorBuilder.toString(), 1, url);
 
-		final StringBuilder extensionDecBuilder = new StringBuilder(
-			"The first step will help you convert a Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace.\n");
+		StringBuilder extensionDecBuilder = new StringBuilder(
+			"The first step will help you convert a Liferay Plugins SDK 6.2");
 
+		extensionDecBuilder.append(" to Liferay Plugins SDK 7.0 or to Liferay Workspace.\n");
 		extensionDecBuilder.append(
 			"Click the \"Import Projects\" button to import your project into the Eclipse workspace ");
 		extensionDecBuilder.append("(this process maybe need 5-10 minutes for bundle initialization).\n");
 		extensionDecBuilder.append("Note:\n");
-		extensionDecBuilder.append(
-			"       To save time, downloading the 7.0 ivy cache locally could be a good choice when upgrading to Liferay Plugins SDK 7. \n");
+		extensionDecBuilder.append("       To save time, downloading the 7.0 ivy cache locally could be a good choice");
+		extensionDecBuilder.append(" when upgrading to Liferay Plugins SDK 7. \n");
 		extensionDecBuilder.append(
 			"       Theme and Ext projects will be ignored since this tool does not support them currently. \n");
 
@@ -273,7 +275,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 			fillLayoutComposite.getShell(), PopupDialog.INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false,
 			null, null) {
 
-			private static final int _cursorSize = 15;
+			private static final int _CURSOR_SIZE = 15;
 
 			@Override
 			protected Point getInitialLocation(Point initialSize) {
@@ -281,8 +283,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 				Point location = display.getCursorLocation();
 
-				location.x += _cursorSize;
-				location.y += _cursorSize;
+				location.x += _CURSOR_SIZE;
+				location.y += _CURSOR_SIZE;
 
 				return location;
 			}
@@ -306,23 +308,27 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		};
 
-		image.addListener(SWT.MouseHover, new org.eclipse.swt.widgets.Listener() {
+		image.addListener(
+			SWT.MouseHover,
+			new org.eclipse.swt.widgets.Listener() {
 
-			@Override
-			public void handleEvent(org.eclipse.swt.widgets.Event event) {
-				popupDialog.open();
-			}
+				@Override
+				public void handleEvent(org.eclipse.swt.widgets.Event event) {
+					popupDialog.open();
+				}
 
-		});
+			});
 
-		image.addListener(SWT.MouseExit, new org.eclipse.swt.widgets.Listener() {
+		image.addListener(
+			SWT.MouseExit,
+			new org.eclipse.swt.widgets.Listener() {
 
-			@Override
-			public void handleEvent(org.eclipse.swt.widgets.Event event) {
-				popupDialog.close();
-			}
+				@Override
+				public void handleEvent(org.eclipse.swt.widgets.Event event) {
+					popupDialog.close();
+				}
 
-		});
+			});
 	}
 
 	@Override
@@ -349,34 +355,35 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 	@Override
 	public void serverAdded(IServer server) {
-		UIUtil.async(new Runnable() {
+		UIUtil.async(
+			new Runnable() {
 
-			@Override
-			public void run() {
-				boolean serverExisted = false;
+				@Override
+				public void run() {
+					boolean serverExisted = false;
 
-				if (_serverComb != null && !_serverComb.isDisposed()) {
-					String[] serverNames = _serverComb.getItems();
+					if ((_serverComb != null) && !_serverComb.isDisposed()) {
+						String[] serverNames = _serverComb.getItems();
 
-					List<String> serverList = new ArrayList<>(Arrays.asList(serverNames));
+						List<String> serverList = new ArrayList<>(Arrays.asList(serverNames));
 
-					for (String serverName : serverList) {
-						if (server.getName().equals(serverName)) {
-							serverExisted = true;
+						for (String serverName : serverList) {
+							if (server.getName().equals(serverName)) {
+								serverExisted = true;
+							}
 						}
-					}
 
-					if (serverExisted == false) {
-						serverList.add(server.getName());
-						_serverComb.setItems(serverList.toArray(new String[serverList.size()]));
-						_serverComb.select(serverList.size() - 1);
-					}
+						if (serverExisted == false) {
+							serverList.add(server.getName());
+							_serverComb.setItems(serverList.toArray(new String[serverList.size()]));
+							_serverComb.select(serverList.size() - 1);
+						}
 
-					_startCheckThread();
+						_startCheckThread();
+					}
 				}
-			}
 
-		});
+			});
 	}
 
 	@Override
@@ -385,33 +392,34 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 	@Override
 	public void serverRemoved(IServer server) {
-		UIUtil.async(new Runnable() {
+		UIUtil.async(
+			new Runnable() {
 
-			@Override
-			public void run() {
-				if (_serverComb != null && !_serverComb.isDisposed()) {
-					String[] serverNames = _serverComb.getItems();
+				@Override
+				public void run() {
+					if ((_serverComb != null) && !_serverComb.isDisposed()) {
+						String[] serverNames = _serverComb.getItems();
 
-					List<String> serverList = new ArrayList<>(Arrays.asList(serverNames));
+						List<String> serverList = new ArrayList<>(Arrays.asList(serverNames));
 
-					Iterator<String> serverNameiterator = serverList.iterator();
+						Iterator<String> serverNameiterator = serverList.iterator();
 
-					while (serverNameiterator.hasNext()) {
-						String serverName = serverNameiterator.next();
+						while (serverNameiterator.hasNext()) {
+							String serverName = serverNameiterator.next();
 
-						if (server.getName().equals(serverName)) {
-							serverNameiterator.remove();
+							if (server.getName().equals(serverName)) {
+								serverNameiterator.remove();
+							}
 						}
+
+						_serverComb.setItems(serverList.toArray(new String[serverList.size()]));
+						_serverComb.select(0);
+
+						_startCheckThread();
 					}
-
-					_serverComb.setItems(serverList.toArray(new String[serverList.size()]));
-					_serverComb.select(0);
-
-					_startCheckThread();
 				}
-			}
 
-		});
+			});
 	}
 
 	protected void importProject() throws CoreException {
@@ -423,91 +431,95 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 			Stream.of(CoreUtil.getAllProjects()).forEach(this::_checkProjectType);
 
 			dataModel.setImportFinished(true);
+
 			return;
 		}
 
 		try {
 			IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
 
-			progressService.run(true, true, new IRunnableWithProgress() {
+			progressService.run(
+				true, true,
+				new IRunnableWithProgress() {
 
-				@Override
-				public void run(IProgressMonitor monitor) throws InterruptedException, InvocationTargetException {
-					try {
-						String newPath = "";
+					@Override
+					public void run(IProgressMonitor monitor) throws InterruptedException, InvocationTargetException {
+						try {
+							String newPath = "";
 
-						_backup(monitor);
+							_backup(monitor);
 
-						_clearExistingProjects(location, monitor);
+							_clearExistingProjects(location, monitor);
 
-						_deleteEclipseConfigFiles(location.toFile());
+							_deleteEclipseConfigFiles(location.toFile());
 
-						if (_isMavenProject(location.toPortableString())) {
-							ILiferayProjectImporter importer = LiferayCore.getImporter("maven");
+							if (_isMavenProject(location.toPortableString())) {
+								ILiferayProjectImporter importer = LiferayCore.getImporter("maven");
 
-							List<IProject> projects = importer.importProjects(location.toPortableString(), monitor);
+								List<IProject> projects = importer.importProjects(location.toPortableString(), monitor);
 
-							for (IProject project : projects) {
-								_checkProjectType(project);
-							}
-						}
-						else {
-							if (layout.equals("Upgrade to Liferay Workspace")) {
-								_createLiferayWorkspace(location, monitor);
-
-								_removeIvyPrivateSetting(location.append("plugins-sdk"));
-
-								newPath = _renameProjectFolder(location);
-
-								IPath sdkLocation = new Path(newPath).append("plugins-sdk");
-
-								_deleteSDKLegacyProjects(sdkLocation);
-
-								ILiferayProjectImporter importer = LiferayCore.getImporter("gradle");
-
-								importer.importProjects(newPath, monitor);
-
-								if (dataModel.getDownloadBundle().content()) {
-									_createInitBundle(monitor);
+								for (IProject project : projects) {
+									_checkProjectType(project);
 								}
-
-								_importSDKProject(sdkLocation, monitor);
-
-								dataModel.setConvertLiferayWorkspace(true);
 							}
 							else {
-								_deleteEclipseConfigFiles(location.toFile());
-								_copyNewSDK(location, monitor);
+								if (layout.equals("Upgrade to Liferay Workspace")) {
+									_createLiferayWorkspace(location, monitor);
 
-								_removeIvyPrivateSetting(location);
+									_removeIvyPrivateSetting(location.append("plugins-sdk"));
 
-								_deleteSDKLegacyProjects(location);
+									newPath = _renameProjectFolder(location);
 
-								String serverName = dataModel.getLiferay70ServerName().content();
+									IPath sdkLocation = new Path(newPath).append("plugins-sdk");
 
-								IServer server = ServerUtil.getServer(serverName);
+									_deleteSDKLegacyProjects(sdkLocation);
 
-								newPath = _renameProjectFolder(location);
+									ILiferayProjectImporter importer = LiferayCore.getImporter("gradle");
 
-								SDK sdk = SDKUtil.createSDKFromLocation(new Path(newPath));
+									importer.importProjects(newPath, monitor);
 
-								sdk.addOrUpdateServerProperties(ServerUtil.getLiferayRuntime(server).getLiferayHome());
+									if (dataModel.getDownloadBundle().content()) {
+										_createInitBundle(monitor);
+									}
 
-								SDKUtil.openAsProject(sdk, monitor);
+									_importSDKProject(sdkLocation, monitor);
 
-								_importSDKProject(sdk.getLocation(), monitor);
+									dataModel.setConvertLiferayWorkspace(true);
+								}
+								else {
+									_deleteEclipseConfigFiles(location.toFile());
+									_copyNewSDK(location, monitor);
+
+									_removeIvyPrivateSetting(location);
+
+									_deleteSDKLegacyProjects(location);
+
+									String serverName = dataModel.getLiferay70ServerName().content();
+
+									IServer server = ServerUtil.getServer(serverName);
+
+									newPath = _renameProjectFolder(location);
+
+									SDK sdk = SDKUtil.createSDKFromLocation(new Path(newPath));
+
+									sdk.addOrUpdateServerProperties(
+										ServerUtil.getLiferayRuntime(server).getLiferayHome());
+
+									SDKUtil.openAsProject(sdk, monitor);
+
+									_importSDKProject(sdk.getLocation(), monitor);
+								}
 							}
+
+							dataModel.setImportFinished(true);
 						}
-
-						dataModel.setImportFinished(true);
+						catch (Exception e) {
+							ProjectUI.logError(e);
+							throw new InvocationTargetException(e, e.getMessage());
+						}
 					}
-					catch (Exception e) {
-						ProjectUI.logError(e);
-						throw new InvocationTargetException(e, e.getMessage());
-					}
-				}
 
-			});
+				});
 		}
 		catch (Exception e) {
 			ProjectUI.logError(e);
@@ -587,7 +599,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	private void _clearExistingProjects(IPath location, IProgressMonitor monitor) throws CoreException {
 		IProject sdkProject = SDKUtil.getWorkspaceSDKProject();
 
-		if (sdkProject != null && sdkProject.getLocation().equals(location)) {
+		if ((sdkProject != null) && sdkProject.getLocation().equals(location)) {
 			IProject[] projects = ProjectUtil.getAllPluginsSDKProjects();
 
 			for (IProject project : projects) {
@@ -637,6 +649,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		try {
 			progress.beginTask("Copy new SDK to override target SDK.", 100);
+
 			final URL sdkZipUrl = Platform.getBundle("com.liferay.ide.project.ui").getEntry("resources/sdk70ga2.zip");
 
 			final File sdkZipFile = new File(FileLocator.toFileURL(sdkZipUrl).getFile());
@@ -657,6 +670,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		}
 		catch (Exception e) {
 			ProjectUI.logError(e);
+
 			throw new CoreException(StatusBridge.create(Status.createErrorStatus("Failed copy new SDK..", e)));
 		}
 		finally {
@@ -684,16 +698,17 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		_bundleNameLabel = createLabel(_pageParent, "Server Name:");
 		_bundleNameField = createTextField(_pageParent, SWT.NONE);
 
-		_bundleNameField.addModifyListener(new ModifyListener() {
+		_bundleNameField.addModifyListener(
+			new ModifyListener() {
 
-			@Override
-			public void modifyText(ModifyEvent e) {
-				dataModel.setBundleName(_bundleNameField.getText());
-			}
+				@Override
+				public void modifyText(ModifyEvent e) {
+					dataModel.setBundleName(_bundleNameField.getText());
+				}
 
-		});
+			});
 
-		final String bundleName = dataModel.getBundleName().content();
+		String bundleName = dataModel.getBundleName().content();
 
 		_bundleNameField.setText(bundleName != null ? bundleName : "");
 
@@ -703,71 +718,77 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		_bundleUrlField.setForeground(_pageParent.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
 		_bundleUrlField.setText(dataModel.getBundleUrl().content(true));
-		_bundleUrlField.addModifyListener(new ModifyListener() {
+		_bundleUrlField.addModifyListener(
+			new ModifyListener() {
 
-			@Override
-			public void modifyText(ModifyEvent e) {
-				dataModel.setBundleUrl(_bundleUrlField.getText());
-			}
-
-		});
-
-		_bundleUrlField.addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				String input = ((Text)e.getSource()).getText();
-
-				if (input.equals(LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL)) {
-					_bundleUrlField.setText("");
+				@Override
+				public void modifyText(ModifyEvent e) {
+					dataModel.setBundleUrl(_bundleUrlField.getText());
 				}
 
-				_bundleUrlField.setForeground(_pageParent.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-			}
+			});
 
-			@Override
-			public void focusLost(FocusEvent e) {
-				String input = ((Text)e.getSource()).getText();
+		_bundleUrlField.addFocusListener(
+			new FocusListener() {
 
-				if (CoreUtil.isNullOrEmpty(input)) {
-					_bundleUrlField.setForeground(_pageParent.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
-					_bundleUrlField.setText(LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL);
+				@Override
+				public void focusGained(FocusEvent e) {
+					String input = ((Text)e.getSource()).getText();
+
+					if (input.equals(LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL)) {
+						_bundleUrlField.setText("");
+					}
+
+					_bundleUrlField.setForeground(_pageParent.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 				}
-			}
 
-		});
+				@Override
+				public void focusLost(FocusEvent e) {
+					String input = ((Text)e.getSource()).getText();
+
+					if (CoreUtil.isNullOrEmpty(input)) {
+						_bundleUrlField.setForeground(_pageParent.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+						_bundleUrlField.setText(LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL);
+					}
+				}
+
+			});
+
 		dataModel.setBundleUrl(_bundleUrlField.getText());
 	}
 
 	private void _createDownloaBundleCheckboxElement() {
 		_disposeBundleCheckboxElement();
+
 		_downloadBundleCheckbox = SWTUtil.createCheckButton(
 			_pageParent, "Download Liferay bundle (recommended)", null, true, 1);
 
 		GridDataFactory.generate(_downloadBundleCheckbox, 2, 1);
-		_downloadBundleCheckbox.addSelectionListener(new SelectionAdapter() {
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				dataModel.setDownloadBundle(_downloadBundleCheckbox.getSelection());
+		_downloadBundleCheckbox.addSelectionListener(
+			new SelectionAdapter() {
 
-				if (dataModel.getDownloadBundle().content()) {
-					_disposeImportElement();
-					_createBundleElement();
-					_createImportElement();
-					_pageParent.layout();
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					dataModel.setDownloadBundle(_downloadBundleCheckbox.getSelection());
+
+					if (dataModel.getDownloadBundle().content()) {
+						_disposeImportElement();
+						_createBundleElement();
+						_createImportElement();
+						_pageParent.layout();
+					}
+					else {
+						_disposeBundleElement();
+						_disposeImportElement();
+						_createImportElement();
+						_pageParent.layout();
+					}
+
+					_startCheckThread();
 				}
-				else {
-					_disposeBundleElement();
-					_disposeImportElement();
-					_createImportElement();
-					_pageParent.layout();
-				}
 
-				_startCheckThread();
-			}
-
-		});
+			});
 	}
 
 	private void _createImportElement() {
@@ -778,64 +799,65 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		_importButton = SWTUtil.createButton(_pageParent, "Import Projects");
 
-		_importButton.addSelectionListener(new SelectionAdapter() {
+		_importButton.addSelectionListener(
+			new SelectionAdapter() {
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				try {
-					Boolean importFinished = dataModel.getImportFinished().content();
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					try {
+						Boolean importFinished = dataModel.getImportFinished().content();
 
-					if (_isPageValidate() && !importFinished) {
-						_saveSettings();
+						if (_isPageValidate() && !importFinished) {
+							_saveSettings();
 
-						_importButton.setEnabled(false);
+							_importButton.setEnabled(false);
 
-						importProject();
+							importProject();
 
-						UpgradeView.resetPages();
+							UpgradeView.resetPages();
 
-						PageNavigateEvent event = new PageNavigateEvent();
+							PageNavigateEvent event = new PageNavigateEvent();
 
-						if (UpgradeView.getPageNumber() < 3) {
-							Boolean showAllPages = MessageDialog.openQuestion(
-								UIUtil.getActiveShell(), "Show All Pages",
-								"There is no project need to be upgraded.\n Do you want to show all the following steps?");
+							if (UpgradeView.getPageNumber() < 3) {
+								Boolean showAllPages = MessageDialog.openQuestion(
+									UIUtil.getActiveShell(), "Show All Pages",
+									"There is no project need to be upgraded.\n Show all the following steps?");
 
-							if (showAllPages) {
-								UpgradeView.showAllPages();
+								if (showAllPages) {
+									UpgradeView.showAllPages();
+								}
+								else {
+									event.setTargetPage(1);
+								}
 							}
 							else {
-								event.setTargetPage(1);
+								event.setTargetPage(2);
 							}
+
+							for (PageNavigatorListener listener : naviListeners) {
+								listener.onPageNavigate(event);
+							}
+
+							setNextPage(true);
+
+							_importButton.setEnabled(true);
+
+							setSelectedAction(getSelectedAction("PageFinishAction"));
 						}
-						else {
-							event.setTargetPage(2);
-						}
+					}
+					catch (CoreException ce) {
+						ProjectUI.logError(ce);
 
-						for (PageNavigatorListener listener : naviListeners) {
-							listener.onPageNavigate(event);
-						}
+						PageValidateEvent pe = new PageValidateEvent();
 
-						setNextPage(true);
+						pe.setMessage(ce.getMessage());
+						pe.setType(PageValidateEvent.error);
 
-						_importButton.setEnabled(true);
-
-						setSelectedAction(getSelectedAction("PageFinishAction"));
+						triggerValidationEvent(pe);
 					}
 				}
-				catch (CoreException ce) {
-					ProjectUI.logError(ce);
 
-					PageValidateEvent pe = new PageValidateEvent();
-
-					pe.setMessage(ce.getMessage());
-					pe.setType(PageValidateEvent.error);
-
-					triggerValidationEvent(pe);
-				}
-			}
-
-		});
+			});
 	}
 
 	private void _createInitBundle(IProgressMonitor monitor) throws CoreException {
@@ -843,6 +865,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		try {
 			progress.beginTask("Execute Liferay Worksapce Bundle Init Command...", 100);
+
 			String layout = dataModel.getLayout().content();
 
 			if (layout.equals(_layoutNames[0])) {
@@ -850,15 +873,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 				IProject project = CoreUtil.getProject(sdkLocation.lastSegment());
 
-				final String bundleUrl = dataModel.getBundleUrl().content();
+				String bundleUrl = dataModel.getBundleUrl().content();
 
-				final String bundleName = dataModel.getBundleName().content();
+				String bundleName = dataModel.getBundleName().content();
 
 				IWorkspaceProjectBuilder projectBuilder = _getWorkspaceProjectBuilder(project);
 
 				progress.worked(30);
 
-				if (bundleUrl != null && projectBuilder != null) {
+				if ((bundleUrl != null) && (projectBuilder != null)) {
 					projectBuilder.initBundle(project, bundleUrl, monitor);
 				}
 
@@ -893,8 +916,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		catch (Exception e) {
 			ProjectUI.logError(e);
 			throw new CoreException(
-				StatusBridge
-					.create(Status.createErrorStatus("Failed to execute Liferay Workspace Bundle Init Command...", e)));
+				StatusBridge.create(
+					Status.createErrorStatus("Failed to execute Liferay Workspace Bundle Init Command...", e)));
 		}
 		finally {
 			progress.done();
@@ -935,32 +958,33 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		_layoutComb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		_layoutComb.setItems(_layoutNames);
 		_layoutComb.select(0);
-		_layoutComb.addSelectionListener(new SelectionListener() {
+		_layoutComb.addSelectionListener(
+			new SelectionListener() {
 
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				int sel = _layoutComb.getSelectionIndex();
-
-				if (sel == 1) {
-					_createServerControl();
-
-					dataModel.setDownloadBundle(false);
-				}
-				else {
-					dataModel.setDownloadBundle(true);
-					_createBundleControl();
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
 				}
 
-				dataModel.setLayout(_layoutComb.getText());
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					int sel = _layoutComb.getSelectionIndex();
 
-				_startCheckThread();
-			}
+					if (sel == 1) {
+						_createServerControl();
 
-		});
+						dataModel.setDownloadBundle(false);
+					}
+					else {
+						dataModel.setDownloadBundle(true);
+						_createBundleControl();
+					}
+
+					dataModel.setLayout(_layoutComb.getText());
+
+					_startCheckThread();
+				}
+
+			});
 
 		dataModel.setLayout(_layoutComb.getText());
 	}
@@ -990,14 +1014,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		_serverButton = SWTUtil.createButton(_pageParent, "Add Server...");
 
-		_serverButton.addSelectionListener(new SelectionAdapter() {
+		_serverButton.addSelectionListener(
+			new SelectionAdapter() {
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				ServerUIUtil.showNewServerWizard(_pageParent.getShell(), "liferay.bundle", null, "com.liferay.");
-			}
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					ServerUIUtil.showNewServerWizard(_pageParent.getShell(), "liferay.bundle", null, "com.liferay.");
+				}
 
-		});
+			});
 
 		ServerCore.addServerLifecycleListener(this);
 
@@ -1081,7 +1106,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	}
 
 	private void _disposeMigrateLayoutElement() {
-		if (_layoutLabel != null && _layoutComb != null) {
+		if ((_layoutLabel != null) && (_layoutComb != null)) {
 			_layoutLabel.dispose();
 			_layoutComb.dispose();
 		}
@@ -1136,7 +1161,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 					IProject importProject = ProjectImportUtil.importProject(
 						new Path(project.getPath()), monitor, null);
 
-					if (importProject != null && importProject.isAccessible() && importProject.isOpen()) {
+					if ((importProject != null) && importProject.isAccessible() && importProject.isOpen()) {
 						_checkProjectType(importProject);
 
 						_deleteServiceBuilderJarFile(importProject, monitor);
@@ -1159,7 +1184,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 					IProject importProject = ProjectImportUtil.importProject(
 						new Path(project.getParent()), monitor, null);
 
-					if (importProject != null && importProject.isAccessible() && importProject.isOpen()) {
+					if ((importProject != null) && importProject.isAccessible() && importProject.isOpen()) {
 						_checkProjectType(importProject);
 
 						_deleteServiceBuilderJarFile(importProject, monitor);
@@ -1233,15 +1258,16 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 						List<Element> resolverElements = chainElement.getChildren("resolver");
 
-						for (Iterator<Element> resolverIterator = resolverElements.iterator(); resolverIterator
-							.hasNext();) {
+						Iterator<Element> resolverIterator = resolverElements.iterator();
 
+						while (resolverIterator.hasNext()) {
 							Element resolverItem = resolverIterator.next();
 
 							String resolverRefItem = resolverItem.getAttributeValue("ref");
 
 							if (resolverRefItem.equals("liferay-private")) {
 								resolverIterator.remove();
+
 								itemRem = resolverItem;
 							}
 						}
@@ -1272,9 +1298,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 			ProjectUI.logError(e);
 			throw new CoreException(
 				StatusBridge.create(
-					Status
-						.createErrorStatus(
-							"Failed to remove Liferay private url configuration of ivy-settings.xml.", e)));
+					Status.createErrorStatus(
+						"Failed to remove Liferay private url configuration of ivy-settings.xml.", e)));
 		}
 	}
 
@@ -1291,11 +1316,11 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		dataModel.setHasTheme(false);
 		dataModel.setHasWeb(false);
 
-		if (_bundleNameField != null && !_bundleNameField.isDisposed()) {
+		if ((_bundleNameField != null) && !_bundleNameField.isDisposed()) {
 			dataModel.setLiferay70ServerName(_bundleNameField.getText());
 		}
 
-		if (_serverComb != null && !_serverComb.isDisposed()) {
+		if ((_serverComb != null) && !_serverComb.isDisposed()) {
 			dataModel.setLiferay70ServerName(_serverComb.getText());
 		}
 
@@ -1341,84 +1366,85 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	}
 
 	private void _validate() {
-		UIUtil.async(new Runnable() {
+		UIUtil.async(
+			new Runnable() {
 
-			@Override
-			public void run() {
-				boolean inputValidation = true;
-				boolean layoutValidation = true;
-				boolean downloadBundle = dataModel.getDownloadBundle().content();
-				String bundUrl = dataModel.getBundleUrl().content();
+				@Override
+				public void run() {
+					boolean inputValidation = true;
+					boolean layoutValidation = true;
+					boolean downloadBundle = dataModel.getDownloadBundle().content();
+					String bundUrl = dataModel.getBundleUrl().content();
 
-				String message = "ok";
+					String message = "ok";
 
-				PageValidateEvent pe = new PageValidateEvent();
+					PageValidateEvent pe = new PageValidateEvent();
 
-				pe.setType(PageValidateEvent.error);
+					pe.setType(PageValidateEvent.error);
 
-				Status validation = dataModel.getBackupLocation().validation();
+					Status validation = dataModel.getBackupLocation().validation();
 
-				if (!_sdkValidation.compute().ok()) {
-					message = _sdkValidation.compute().message();
+					if (!_sdkValidation.compute().ok()) {
+						message = _sdkValidation.compute().message();
 
-					inputValidation = false;
-				}
-				else if (!validation.ok()) {
-					message = validation.message();
+						inputValidation = false;
+					}
+					else if (!validation.ok()) {
+						message = validation.message();
 
-					inputValidation = false;
-				}
-				else {
-					inputValidation = true;
-				}
+						inputValidation = false;
+					}
+					else {
+						inputValidation = true;
+					}
 
-				if (!_layoutComb.isDisposed()) {
-					if (_layoutComb.getSelectionIndex() == 1) {
-						final int itemCount = _serverComb.getItemCount();
+					if (!_layoutComb.isDisposed()) {
+						if (_layoutComb.getSelectionIndex() == 1) {
+							final int itemCount = _serverComb.getItemCount();
 
-						if (itemCount < 1) {
-							message = "You should add at least one Liferay 7 portal bundle.";
+							if (itemCount < 1) {
+								message = "You should add at least one Liferay 7 portal bundle.";
 
-							layoutValidation = false;
+								layoutValidation = false;
+							}
+						}
+						else if (_layoutComb.getSelectionIndex() == 0) {
+							if (downloadBundle && !_bundleNameValidation.compute().ok()) {
+								message = _bundleNameValidation.compute().message();
+
+								layoutValidation = false;
+							}
+							else if (downloadBundle && (bundUrl != null) && (bundUrl.length() > 0) &&
+									 !_bundleUrlValidation.compute().ok()) {
+
+								message = _bundleUrlValidation.compute().message();
+
+								layoutValidation = false;
+							}
+							else {
+								layoutValidation = true;
+							}
 						}
 					}
-					else if (_layoutComb.getSelectionIndex() == 0) {
-						if (downloadBundle && !_bundleNameValidation.compute().ok()) {
-							message = _bundleNameValidation.compute().message();
 
-							layoutValidation = false;
-						}
-						else if ((downloadBundle && bundUrl != null) && (bundUrl.length()) > 0 &&
-								 !_bundleUrlValidation.compute().ok()) {
+					if (dataModel.getImportFinished().content()) {
+						message = "Import has finished. If you want to reset, please click reset icon in view toolbar.";
 
-							message = _bundleUrlValidation.compute().message();
+						pe.setType(PageValidateEvent.warning);
 
-							layoutValidation = false;
-						}
-						else {
-							layoutValidation = true;
-						}
+						inputValidation = false;
 					}
+
+					pe.setMessage(message);
+
+					triggerValidationEvent(pe);
+
+					_validationResult = layoutValidation && inputValidation;
+
+					_importButton.setEnabled(_validationResult);
 				}
 
-				if (dataModel.getImportFinished().content()) {
-					message = "Import has finished. If you want to reset, please click reset icon in view toolbar.";
-
-					pe.setType(PageValidateEvent.warning);
-
-					inputValidation = false;
-				}
-
-				pe.setMessage(message);
-
-				triggerValidationEvent(pe);
-
-				_validationResult = layoutValidation && inputValidation;
-
-				_importButton.setEnabled(_validationResult);
-			}
-
-		});
+			});
 	}
 
 	private static Color _gray;
@@ -1460,14 +1486,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 			final Property property = ((ValuePropertyContentEvent)event).property();
 
-			if (!(property.name().equals("SdkLocation"))) {
+			if (!property.name().equals("SdkLocation")) {
 				_startCheckThread();
+
 				return;
 			}
 
 			org.eclipse.sapphire.modeling.Path path = dataModel.getSdkLocation().content();
 
-			if (path == null || !_sdkValidation.compute().ok()) {
+			if ((path == null) || !_sdkValidation.compute().ok()) {
 				if (!_layoutComb.isDisposed()) {
 					_layoutComb.setEnabled(true);
 				}
@@ -1498,9 +1525,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 				_createBundleControl();
 				_pageParent.layout();
-				final String version = SDKUtil.createSDKFromLocation(PathBridge.create(path)).getVersion();
+				String version = SDKUtil.createSDKFromLocation(PathBridge.create(path)).getVersion();
 
-				if (version != null && new Version(version).compareTo(new Version("7.0.0")) >= 0) {
+				if ((version != null) && (CoreUtil.compareVersions(new Version(version), new Version("7.0.0")) >= 0)) {
 					UIUtil.async(
 						new Runnable() {
 

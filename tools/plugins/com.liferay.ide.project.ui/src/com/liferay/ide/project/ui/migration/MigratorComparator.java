@@ -27,7 +27,7 @@ public class MigratorComparator extends ViewerComparator {
 
 	public MigratorComparator() {
 		_columnIndex = 1;
-		_direction = _descending;
+		_direction = _DESCEDING;
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class MigratorComparator extends ViewerComparator {
 				flag = 0;
 		}
 
-		if (_direction != _descending) {
+		if (_direction != _DESCEDING) {
 			flag = -flag;
 		}
 
@@ -79,13 +79,13 @@ public class MigratorComparator extends ViewerComparator {
 		}
 		else {
 			_columnIndex = column;
-			_direction = _descending;
+			_direction = _DESCEDING;
 		}
 	}
 
-	private static final int _descending = 1;
+	private static final int _DESCEDING = 1;
 
 	private int _columnIndex;
-	private int _direction = _descending;
+	private int _direction = _DESCEDING;
 
 }

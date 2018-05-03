@@ -387,8 +387,8 @@ public class BinaryProjectsImportWizardPage
 	protected final class BinaryLabelProvider extends StyledCellLabelProvider {
 
 		public BinaryLabelProvider() {
-			_colorRegistry.put(_greyColor, new RGB(128, 128, 128));
-			_greyedStyler = StyledString.createColorRegistryStyler(_greyColor, null);
+			_colorRegistry.put(_GREY_COLOR, new RGB(128, 128, 128));
+			_greyedStyler = StyledString.createColorRegistryStyler(_GREY_COLOR, null);
 		}
 
 		public Image getImage() {
@@ -442,7 +442,7 @@ public class BinaryProjectsImportWizardPage
 			super.update(cell);
 		}
 
-		private static final String _greyColor = "already_exist_element_color";
+		private static final String _GREY_COLOR = "already_exist_element_color";
 
 		private final ColorRegistry _colorRegistry = JFaceResources.getColorRegistry();
 		private final Styler _greyedStyler;

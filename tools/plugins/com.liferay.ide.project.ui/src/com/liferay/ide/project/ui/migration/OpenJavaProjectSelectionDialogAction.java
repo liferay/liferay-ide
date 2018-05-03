@@ -137,6 +137,7 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 					_combineProject = _combineExistedProblemCheckbox.getSelection();
 
 					_initializeSelectedProject(_selectedProject, _combineProject);
+
 					updateOKButtonState(e);
 				}
 

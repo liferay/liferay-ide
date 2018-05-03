@@ -164,8 +164,8 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
 
-		data.heightHint = _sizingSelectionWidgetHeight;
-		data.widthHint = _sizingSelectionWidgetWidth;
+		data.heightHint = _SIZING_SELECTION_WIDGET_HEIGHT;
+		data.widthHint = _SIZING_SELECTION_WIDGET_WIDTH;
 		fTableViewer.getTable().setLayoutData(data);
 
 		fTableViewer.setLabelProvider(new JavaElementLabelProvider());
@@ -263,8 +263,9 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 		setSelectionResult(objects);
 	}
 
-	private static final int _sizingSelectionWidgetHeight = 250;
-	private static final int _sizingSelectionWidgetWidth = 300;
+	private static final int _SIZING_SELECTION_WIDGET_HEIGHT = 250;
+
+	private static final int _SIZING_SELECTION_WIDGET_WIDTH = 300;
 
 	/**
 	 * The filter for the viewer

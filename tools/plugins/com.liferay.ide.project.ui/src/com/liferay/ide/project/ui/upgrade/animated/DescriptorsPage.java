@@ -101,21 +101,21 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 			if (docType != null) {
 				final String publicId = docType.getPublicId();
 
-				final String newPublicId = _getNewDoctTypeSetting(publicId, "7.0.0", _publicidRegrex);
+				final String newPublicId = _getNewDoctTypeSetting(publicId, "7.0.0", _PUBLICID_REGREX);
 
 				docType.setPublicId(newPublicId);
 
 				final String systemId = docType.getSystemId();
 
-				final String newSystemId = _getNewDoctTypeSetting(systemId, "7_0_0", _systemidRegrex);
+				final String newSystemId = _getNewDoctTypeSetting(systemId, "7_0_0", _SYSTEMID_REGREX);
 
 				docType.setSystemId(newSystemId);
 			}
 
 			_removeLayoutWapNode(srcFile, document);
 
-			try(OutputStream tmpOutputStream = Files.newOutputStream(
-				templateFile.toPath(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE_NEW)) {
+			try (OutputStream tmpOutputStream = Files.newOutputStream(
+					templateFile.toPath(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE_NEW)) {
 
 				domModel.save(tmpOutputStream);
 			}
@@ -143,13 +143,13 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 			if (docType != null) {
 				final String publicId = docType.getPublicId();
 
-				final String newPublicId = _getNewDoctTypeSetting(publicId, "7.0.0", _publicidRegrex);
+				final String newPublicId = _getNewDoctTypeSetting(publicId, "7.0.0", _PUBLICID_REGREX);
 
 				docType.setPublicId(newPublicId);
 
 				final String systemId = docType.getSystemId();
 
-				final String newSystemId = _getNewDoctTypeSetting(systemId, "7_0_0", _systemidRegrex);
+				final String newSystemId = _getNewDoctTypeSetting(systemId, "7_0_0", _SYSTEMID_REGREX);
 
 				docType.setSystemId(newSystemId);
 			}
@@ -166,7 +166,7 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 	protected IFile[] getAvaiableUpgradeFiles(IProject project) {
 		List<IFile> files = new ArrayList<>();
 
-		for (String[] descriptors : _descriptorsAndImages) {
+		for (String[] descriptors : _DESCRIPTORS_AND_IMAGES) {
 			final String searchName = descriptors[0];
 
 			List<IFile> searchFiles = new SearchFilesVisitor().searchFiles(project, searchName);
@@ -194,7 +194,7 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 
 			@Override
 			protected void initalizeImageRegistry(ImageRegistry imageRegistry) {
-				for (String[] descriptorsAndImages : _descriptorsAndImages) {
+				for (String[] descriptorsAndImages : _DESCRIPTORS_AND_IMAGES) {
 					final String descName = descriptorsAndImages[0];
 					final String descImage = descriptorsAndImages[1];
 
@@ -220,11 +220,11 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 			if (docType != null) {
 				final String publicId = docType.getPublicId();
 
-				String oldPublicIdVersion = _getOldVersion(publicId, _publicidRegrex);
+				String oldPublicIdVersion = _getOldVersion(publicId, _PUBLICID_REGREX);
 
 				final String systemId = docType.getSystemId();
 
-				String oldSystemIdVersion = _getOldVersion(systemId, _systemidRegrex);
+				String oldSystemIdVersion = _getOldVersion(systemId, _SYSTEMID_REGREX);
 
 				if (((publicId != null) && !oldPublicIdVersion.equals("7.0.0")) ||
 					((systemId != null) && !oldSystemIdVersion.equals("7_0_0"))) {
@@ -290,15 +290,17 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 		}
 	}
 
-	private static final String[][] _descriptorsAndImages = {
+	private static final String[][] _DESCRIPTORS_AND_IMAGES = {
 		{"liferay-portlet.xml", "/icons/e16/portlet.png"},
 		{"liferay-display.xml", "/icons/e16/liferay_display_xml.png"}, {"service.xml", "/icons/e16/service.png"},
 		{"liferay-hook.xml", "/icons/e16/hook.png"}, {"liferay-layout-templates.xml", "/icons/e16/layout.png"},
 		{"liferay-look-and-feel.xml", "/icons/e16/theme.png"}, {"liferay-portlet-ext.xml", "/icons/e16/ext.png"}
 	};
-	private static final String _publicidRegrex =
+
+	private static final String _PUBLICID_REGREX =
 		"-\\//(?:[a-z][a-z]+)\\//(?:[a-z][a-z]+)[\\s+(?:[a-z][a-z0-9_]*)]*\\s+(\\d\\.\\d\\.\\d)\\//(?:[a-z][a-z]+)";
-	private static final String _systemidRegrex =
+
+	private static final String _SYSTEMID_REGREX =
 		"^http://www.liferay.com/dtd/[-A-Za-z0-9+&@#/%?=~_()]*(\\d_\\d_\\d).dtd";
 
 }

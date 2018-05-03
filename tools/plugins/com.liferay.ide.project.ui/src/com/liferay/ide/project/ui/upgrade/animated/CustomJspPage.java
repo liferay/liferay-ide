@@ -911,6 +911,7 @@ public class CustomJspPage extends Page {
 
 		public CompareItem(String fileName) {
 			_fileName = fileName;
+
 			_time = System.currentTimeMillis();
 		}
 

@@ -60,13 +60,13 @@ public class ImportSDKProjectsWizard
 			final String message = wizardPage.getMessage();
 
 			if (CoreUtil.isNullOrEmpty(message)) {
-				wizardPage.setMessage(_initialMessage);
+				wizardPage.setMessage(_INITIAL_MESSAGE);
 			}
 
 			if ((wizardPage.getMessageType() == IMessageProvider.ERROR) && !_supressedFirstErrorMessage) {
 				_supressedFirstErrorMessage = true;
 
-				wizardPage.setMessage(_initialMessage);
+				wizardPage.setMessage(_INITIAL_MESSAGE);
 			}
 		}
 
@@ -95,7 +95,7 @@ public class ImportSDKProjectsWizard
 		return importOp;
 	}
 
-	private static final String _initialMessage = "Please select at least one project to import.";
+	private static final String _INITIAL_MESSAGE = "Please select at least one project to import.";
 
 	private boolean _supressedFirstErrorMessage = false;
 	private String _title;

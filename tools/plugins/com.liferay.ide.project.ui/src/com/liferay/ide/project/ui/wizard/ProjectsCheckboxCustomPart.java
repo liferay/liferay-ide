@@ -59,8 +59,8 @@ public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomP
 		extends ElementLabelProvider implements IColorProvider, IStyledLabelProvider {
 
 		public SDKImportProjectsLabelProvider() {
-			_color_registry.put(_grey_color, new RGB(128, 128, 128));
-			_greyed_styler = StyledString.createColorRegistryStyler(_grey_color, null);
+			_color_registry.put(_GREY_COLOR, new RGB(128, 128, 128));
+			_greyed_styler = StyledString.createColorRegistryStyler(_GREY_COLOR, null);
 		}
 
 		@Override
@@ -119,7 +119,7 @@ public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomP
 				PluginType.web.name(), ProjectUI.imageDescriptorFromPlugin(ProjectUI.PLUGIN_ID, "/icons/e16/web.png"));
 		}
 
-		private static final String _grey_color = "sdk import projects";
+		private static final String _GREY_COLOR = "sdk import projects";
 
 		private final ColorRegistry _color_registry = JFaceResources.getColorRegistry();
 		private final Styler _greyed_styler;

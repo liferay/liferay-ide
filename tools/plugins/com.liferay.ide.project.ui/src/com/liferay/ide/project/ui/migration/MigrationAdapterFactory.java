@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.ide.IDE.SharedImages;
 import org.eclipse.ui.model.IWorkbenchAdapter;
 
 /**
@@ -61,8 +62,7 @@ public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapt
 			return ImageDescriptor.createFromImage(folderImage);
 		}
 		else if (element instanceof UpgradeProblems) {
-			Image projectImage = ProjectUI.getPluginSharedImages().getImage(
-				org.eclipse.ui.ide.IDE.SharedImages.IMG_OBJ_PROJECT);
+			Image projectImage = ProjectUI.getPluginSharedImages().getImage(SharedImages.IMG_OBJ_PROJECT);
 
 			return ImageDescriptor.createFromImage(projectImage);
 		}
