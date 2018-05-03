@@ -87,6 +87,10 @@ public class ServiceUtil {
 	}
 
 	public static boolean isValidNamespace(String namespace) {
+		if (namespace == null) {
+			return false;
+		}
+
 		for (char c : namespace.toCharArray()) {
 			if ((c != '_') && !isChar(c)) {
 				return false;

@@ -175,6 +175,7 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 	}
 

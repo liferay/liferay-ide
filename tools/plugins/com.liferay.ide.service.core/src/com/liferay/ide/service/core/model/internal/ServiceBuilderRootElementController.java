@@ -26,15 +26,18 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  */
 public class ServiceBuilderRootElementController extends VersionedDTDRootElementController {
 
+	public static final String PUBLIC_IDE_TEMPLATE = "-//Liferay//DTD Service Builder {0}//EN";
+
+	public static final String SYSTEM_ID_TEMPLATE = "http://www.liferay.com/dtd/liferay-service-builder_{0}.dtd";
+
+	public static final String XML_BINDING_PATH = ServiceBuilder6xx.class.getAnnotation(XmlBinding.class).path();
+
 	public static final Pattern publicIdPattern = Pattern.compile("^-//Liferay//DTD Service Builder (.*)//EN$");
-	public static final String publicIdTemplate = "-//Liferay//DTD Service Builder {0}//EN";
 	public static final Pattern systemIdPattern = Pattern.compile(
 		"^http://www.liferay.com/dtd/liferay-service-builder_(.*).dtd$");
-	public static final String systemIdTemplate = "http://www.liferay.com/dtd/liferay-service-builder_{0}.dtd";
-	public static final String xmlBindingPath = ServiceBuilder6xx.class.getAnnotation(XmlBinding.class).path();
 
 	public ServiceBuilderRootElementController() {
-		super(xmlBindingPath, publicIdTemplate, systemIdTemplate, publicIdPattern, systemIdPattern);
+		super(XML_BINDING_PATH, PUBLIC_IDE_TEMPLATE, SYSTEM_ID_TEMPLATE, publicIdPattern, systemIdPattern);
 	}
 
 }

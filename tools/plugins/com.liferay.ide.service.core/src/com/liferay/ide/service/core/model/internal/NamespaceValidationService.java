@@ -35,7 +35,7 @@ public class NamespaceValidationService extends ValidationService {
 
 		String content = namespace.content();
 
-		if ((content != null) && !ServiceUtil.isValidNamespace(content.toString())) {
+		if (!ServiceUtil.isValidNamespace(content)) {
 			return Status.createErrorStatus(Msgs.namespaceElementValidKeyword);
 		}
 

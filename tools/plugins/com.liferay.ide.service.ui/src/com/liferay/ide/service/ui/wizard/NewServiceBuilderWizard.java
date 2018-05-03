@@ -53,6 +53,7 @@ public class NewServiceBuilderWizard
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);
+
 		ValidProjectChecker checker = new ValidProjectChecker(ID);
 
 		checker.checkValidProjectTypes();

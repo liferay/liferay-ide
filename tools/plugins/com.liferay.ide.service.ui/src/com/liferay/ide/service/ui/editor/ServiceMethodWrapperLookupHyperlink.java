@@ -40,6 +40,7 @@ public class ServiceMethodWrapperLookupHyperlink extends ServiceMethodHyperlink 
 		JavaEditor editor, IRegion word, SelectionDispatchAction action, IMethod wrapperMethod, boolean qualify) {
 
 		super(word, action, wrapperMethod, qualify);
+
 		_editor = editor;
 	}
 
