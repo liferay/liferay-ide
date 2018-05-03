@@ -14,10 +14,15 @@
 
 package com.liferay.ide.ui.util;
 
+import com.liferay.ide.ui.LiferayUIPlugin;
+
 import java.io.IOException;
+
 import java.net.URL;
+
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionException;
@@ -58,9 +63,8 @@ import org.eclipse.ui.internal.util.PrefUtil;
 import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
-import org.osgi.framework.Bundle;
 
-import com.liferay.ide.ui.LiferayUIPlugin;
+import org.osgi.framework.Bundle;
 
 /**
  * @author Gregory Amerson
@@ -103,7 +107,7 @@ public class UIUtil {
 
 	public static void executeCommand(String commandId, ISelection selection, Map<String, Object> parameters)
 		throws ExecutionException, NotDefinedException, NotEnabledException,
-			NotHandledException {
+			   NotHandledException {
 
 		IEvaluationContext evaluationContext = new EvaluationContext(null, Collections.emptyList());
 
@@ -117,8 +121,10 @@ public class UIUtil {
 
 		IHandlerService handlerService = (IHandlerService)workbench.getService(IHandlerService.class);
 
-		if (parameters!=null) {
-			parameters.keySet().stream().forEach( parma -> evaluationContext.addVariable(parma, parameters.get(parma)));
+		if (parameters != null) {
+			Set<String> keys = parameters.keySet();
+
+			keys.stream().forEach(parma -> evaluationContext.addVariable(parma, parameters.get(parma)));
 		}
 
 		handlerService.executeCommandInContext(
@@ -297,7 +303,7 @@ public class UIUtil {
 
 		// Return if do not switch perspective setting and are not prompting
 
-		if (!(promptSetting.equals(MessageDialogWithToggle.PROMPT)) &&
+		if (!promptSetting.equals(MessageDialogWithToggle.PROMPT) &&
 			perspSetting.equals(IWorkbenchPreferenceConstants.NO_NEW_PERSPECTIVE)) {
 
 			return;

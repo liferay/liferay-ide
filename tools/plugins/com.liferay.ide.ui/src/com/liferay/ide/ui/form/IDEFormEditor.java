@@ -131,6 +131,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 		}
 
 		super.dispose();
+
 		fInputContextManager.dispose();
 		fInputContextManager = null;
 	}
@@ -240,6 +241,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 
 	public void editorDirtyStateChanged() {
 		super.editorDirtyStateChanged();
+
 		IDEFormEditorContributor contributor = getContributor();
 
 		if (contributor != null) {
@@ -319,9 +321,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 	public IFormPage[] getPages() {
 		ArrayList formPages = new ArrayList();
 
-		for (int i = 0; i < pages.size(); i++) {
-			Object page = pages.get(i);
-
+		for (Object page : pages) {
 			if (page instanceof IFormPage) {
 				formPages.add(page);
 			}
@@ -447,6 +447,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 	 */
 	public void setFocus() {
 		super.setFocus();
+
 		IFormPage page = getActivePageInstance();
 
 		// Could be done on setActive in PDEFormPage;
@@ -583,6 +584,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 
 		createInputContexts(fInputContextManager);
 		super.createPages();
+
 		fInputContextManager.addInputContextListener(this);
 		updateTitle();
 
@@ -638,6 +640,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 	 */
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
+
 		IFormPage page = getActivePageInstance();
 
 		// updateContentOutline(page);

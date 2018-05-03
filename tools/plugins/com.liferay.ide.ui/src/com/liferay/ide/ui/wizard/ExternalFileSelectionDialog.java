@@ -147,9 +147,7 @@ public class ExternalFileSelectionDialog extends FilteredElementTreeSelectionDia
 				return new StatusInfo(IStatus.ERROR, "");
 			}
 
-			for (int i = 0; i < selection.length; i++) {
-				Object curr = selection[i];
-
+			for (Object curr : selection) {
 				if (curr instanceof File) {
 					File file = (File)curr;
 

@@ -62,6 +62,7 @@ public class NotificationsCore extends AbstractUIPlugin implements IStartup {
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 	}
 
@@ -75,9 +76,7 @@ public class NotificationsCore extends AbstractUIPlugin implements IStartup {
 
 		return new AbstractUiNotification("com.liferay.ide.ui.notifications.java8required") {
 
-			@SuppressWarnings( {
-				"rawtypes", "unchecked"
-			})
+			@SuppressWarnings({"rawtypes", "unchecked"})
 			public Object getAdapter(Class adapter) {
 				return null;
 			}

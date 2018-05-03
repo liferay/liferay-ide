@@ -69,6 +69,7 @@ public abstract class IDEFormPage extends FormPage {
 
 	public IDEFormPage(FormEditor editor, String id, String title) {
 		super(editor, id, title);
+
 		_fLastFocusControl = null;
 	}
 
@@ -82,8 +83,7 @@ public abstract class IDEFormPage extends FormPage {
 	public void addLastFocusListeners(Composite composite) {
 		Control[] controls = composite.getChildren();
 
-		for (int i = 0; i < controls.length; i++) {
-			Control control = controls[i];
+		for (Control control : controls) {
 
 			// Add a focus listener if the control is any one of the below types
 			// Note that the controls listed below represent all the controls
@@ -126,9 +126,7 @@ public abstract class IDEFormPage extends FormPage {
 	public void cancelEdit() {
 		IFormPart[] parts = getManagedForm().getParts();
 
-		for (int i = 0; i < parts.length; i++) {
-			IFormPart part = parts[i];
-
+		for (IFormPart part : parts) {
 			if (part instanceof IContextPart) {
 				((IContextPart)part).cancelEdit();
 			}
@@ -546,6 +544,7 @@ public abstract class IDEFormPage extends FormPage {
 
 			if ((data != null) && data instanceof AbstractFormPart) {
 				targetPart = (AbstractFormPart)data;
+
 				break;
 			}
 

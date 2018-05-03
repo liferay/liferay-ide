@@ -112,6 +112,7 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 
 	public void init(IActionBars bars) {
 		super.init(bars);
+
 		makeActions();
 	}
 
@@ -247,6 +248,7 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 
 		public ClipboardAction(String id) {
 			super(id);
+
 			setEnabled(false);
 		}
 
@@ -273,6 +275,7 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 
 		public CopyAction() {
 			super(ActionFactory.COPY.getId());
+
 			setText(Msgs.copy);
 			setImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
 			setDisabledImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_COPY_DISABLED));
@@ -289,6 +292,7 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 
 		public CutAction() {
 			super(ActionFactory.CUT.getId());
+
 			setText(Msgs.cut);
 			setImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 			setDisabledImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_CUT_DISABLED));
@@ -324,6 +328,7 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 
 		public PasteAction() {
 			super(ActionFactory.PASTE.getId());
+
 			setText(Msgs.paste);
 			setImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
 			setDisabledImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_PASTE_DISABLED));

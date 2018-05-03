@@ -79,6 +79,7 @@ public abstract class TableSection extends StructuredViewerSection {
 
 		protected void createButtons(Composite parent, FormToolkit toolkit) {
 			super.createButtons(parent, toolkit);
+
 			enableButtons();
 
 			if (createCount()) {
