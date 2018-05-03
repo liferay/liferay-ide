@@ -108,9 +108,9 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 		MultiMap<TemplatesGroup, ProjectTemplate> groups = new MultiMap<>();
 
 		for (ProjectTemplatesFactory factory : ProjectTemplatesFactory.EP_NAME.getExtensions()) {
-			Stream<String> stream = Stream.of(factory.getGroups());
-
-			stream.map(
+			Stream.of(
+				factory.getGroups()
+			).map(
 				group -> new AbstractMap.SimpleEntry<>(group, factory.createTemplates(group, context))
 			).filter(
 				pair -> !CoreUtil.isNullOrEmpty(pair.getValue())
