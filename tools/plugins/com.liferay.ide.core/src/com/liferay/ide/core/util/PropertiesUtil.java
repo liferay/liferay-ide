@@ -617,8 +617,8 @@ public class PropertiesUtil {
 
 			file.setCharset(null, monitor);
 
-			try( InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"))){
-				file.setContents(inputStream, IResource.FORCE, monitor);	
+			try (InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"))) {
+				file.setContents(inputStream, IResource.FORCE, monitor);
 			}
 		}
 		catch (Exception e) {
@@ -678,7 +678,7 @@ public class PropertiesUtil {
 
 				};
 
-				try(InputStream contents = liferayHookXml.getContents()){
+				try (InputStream contents = liferayHookXml.getContents()) {
 					SAXParser saxParser = _saxParserFactory.newSAXParser();
 
 					XMLReader xmlReader = saxParser.getXMLReader();
@@ -790,7 +790,7 @@ public class PropertiesUtil {
 
 				};
 
-				try(InputStream contents = portletXml.getContents()){
+				try (InputStream contents = portletXml.getContents()) {
 					SAXParser saxParser = _saxParserFactory.newSAXParser();
 
 					XMLReader xmlReader = saxParser.getXMLReader();

@@ -256,11 +256,11 @@ public abstract class AbstractEditingModel
 	}
 
 	protected InputStream getInputStream(IDocument document) throws UnsupportedEncodingException {
-		try(InputStream inputStream = new ByteArrayInputStream(document.get().getBytes(getCharset()))){
-			return new BufferedInputStream(inputStream);	
+		try (InputStream inputStream = new ByteArrayInputStream(document.get().getBytes(getCharset()))) {
+			return new BufferedInputStream(inputStream);
 		}
-		catch(IOException e) {
-			throw new UnsupportedEncodingException(e.getMessage());
+		catch (IOException ioe) {
+			throw new UnsupportedEncodingException(ioe.getMessage());
 		}
 	}
 

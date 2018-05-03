@@ -327,7 +327,7 @@ public class PropertiesFileLookup {
 	}
 
 	private void _parse(InputStream input, String initialLookup, boolean loadValues) throws IOException {
-		try(Reader reader = new InputStreamReader(input)){
+		try (Reader reader = new InputStreamReader(input)) {
 			LineReader lr = new LineReader(reader);
 
 			char[] convtBuf = new char[1024];
@@ -409,4 +409,5 @@ public class PropertiesFileLookup {
 			}
 		}
 	}
+
 }

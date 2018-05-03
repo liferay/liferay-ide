@@ -61,7 +61,7 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
 			char delimiter =
 				getConfiguration().isDelimiterParsingDisabled() ? 0 : getConfiguration().getListDelimiter();
 
-			try(PluginPropertiesWriter writer = new PluginPropertiesWriter(out, delimiter)){
+			try (PluginPropertiesWriter writer = new PluginPropertiesWriter(out, delimiter)) {
 				if (getHeaderComment() != null) {
 					writer.writeln(getCanonicalHeaderComment(true));
 					writer.writeln(null);

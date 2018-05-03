@@ -48,7 +48,7 @@ public abstract class LiferayPropertiesFileDescriber implements ITextContentDesc
 
 			inputStreamField.setAccessible(true);
 
-			try(InputStream inputStream = (InputStream)inputStreamField.get(contents)){
+			try (InputStream inputStream = (InputStream)inputStreamField.get(contents)) {
 				Class<?> clazz = inputStream.getClass();
 
 				try {
