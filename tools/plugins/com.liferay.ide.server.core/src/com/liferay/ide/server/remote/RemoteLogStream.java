@@ -223,13 +223,12 @@ public class RemoteLogStream extends BufferedInputStream {
 		byte[] buf = new byte[256];
 
 		try (BufferedInputStream buffer = new BufferedInputStream(openInputStream(connection, url), 256)) {
-
 			int bufRead = buffer.read(buf);
 
 			if (bufRead != -1) {
 				String peek = new String(buf);
 
-				if (peek != null && (!peek.contains("Error 416: Invalid Range values."))) {
+				if ((peek != null) && !peek.contains("Error 416: Invalid Range values.")) {
 					return true;
 				}
 			}

@@ -230,8 +230,8 @@ public class LayeredModulePathFactory {
 
 		Reader reader = null;
 
-        try(InputStream inputStream = Files.newInputStream(layersList.toPath())) {
-            reader = new InputStreamReader(inputStream, "UTF-8");
+		try (InputStream inputStream = Files.newInputStream(layersList.toPath())) {
+			reader = new InputStreamReader(inputStream, "UTF-8");
 
 			Properties props = new Properties();
 

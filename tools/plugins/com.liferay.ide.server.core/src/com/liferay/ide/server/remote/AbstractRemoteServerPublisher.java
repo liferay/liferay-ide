@@ -136,7 +136,7 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
 
 				zip.putNextEntry(zipEntry);
 
-				try(InputStream inputStream = ( (IFile) resource ).getContents()){
+				try (InputStream inputStream = ((IFile)resource).getContents()) {
 					if (adjustGMTOffset) {
 						TimeZone currentTimeZone = TimeZone.getDefault();
 
