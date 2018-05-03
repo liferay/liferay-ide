@@ -24,6 +24,7 @@ public class AddModelEntityWizard extends AbstractModelWizard {
 
 	public AddModelEntityWizard(IEditorPart fEditorPart) {
 		super(fEditorPart);
+
 		setWindowTitle(Msgs.addModelEntity);
 	}
 

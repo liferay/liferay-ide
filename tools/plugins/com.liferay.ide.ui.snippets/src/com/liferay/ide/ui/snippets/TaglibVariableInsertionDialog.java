@@ -43,6 +43,7 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 
 	public TaglibVariableInsertionDialog(Shell parentShell, IEditorPart editor, boolean clearModality) {
 		super(parentShell, clearModality);
+
 		this.editor = editor;
 	}
 

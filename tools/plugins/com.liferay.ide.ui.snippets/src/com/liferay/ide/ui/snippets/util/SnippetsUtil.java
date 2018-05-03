@@ -79,6 +79,7 @@ public class SnippetsUtil {
 									((PaletteEntry)importCategories.get(i)).getId()) == 0) {
 
 								found = true;
+
 								break;
 							}
 						}

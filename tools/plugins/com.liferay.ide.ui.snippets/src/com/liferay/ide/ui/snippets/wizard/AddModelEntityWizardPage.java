@@ -25,6 +25,7 @@ public class AddModelEntityWizardPage extends AbstractModelWizardPage {
 
 	public AddModelEntityWizardPage(String pageName, IEditorPart editor) {
 		super(pageName, editor);
+
 		setTitle(Msgs.addModelEntity);
 		setDescription(Msgs.insertCode);
 	}

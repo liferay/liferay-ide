@@ -105,12 +105,14 @@ public abstract class AbstractSnippetInsertion extends DefaultSnippetInsertion {
 	@Override
 	public void setEditorPart(IEditorPart editorPart) {
 		super.setEditorPart(editorPart);
+
 		fEditorPart = editorPart;
 	}
 
 	@Override
 	public void setItem(ISnippetItem item) {
 		super.setItem(item);
+
 		fItem = item;
 	}
 

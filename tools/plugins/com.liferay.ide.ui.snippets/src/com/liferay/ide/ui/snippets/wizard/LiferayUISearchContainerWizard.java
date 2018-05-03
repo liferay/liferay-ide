@@ -24,6 +24,7 @@ public class LiferayUISearchContainerWizard extends AbstractModelWizard {
 
 	public LiferayUISearchContainerWizard(IEditorPart fEditorPart) {
 		super(fEditorPart);
+
 		setWindowTitle(Msgs.insertSearchContainer);
 	}
 
