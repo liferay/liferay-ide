@@ -114,8 +114,8 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider 
 		if (liferayHome != null) {
 			File liferayHomeDir = liferayHome.toFile();
 
-			File[] files =
-				liferayHomeDir.listFiles((dir, name) -> dir.equals(liferayHomeDir) && name.endsWith("-ext.properties"));
+			File[] files = liferayHomeDir.listFiles(
+				(dir, name) -> dir.equals(liferayHomeDir) && name.endsWith("-ext.properties"));
 
 			if (files != null) {
 				retVal = files;

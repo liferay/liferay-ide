@@ -177,8 +177,7 @@ public class ServerStartup implements IStartup {
 	}
 
 	private void _importGlobalRuntimes(File runtimesFile) {
-		try(InputStream inputStream = new FileInputStream ( runtimesFile )){
-
+		try (InputStream inputStream = new FileInputStream(runtimesFile)) {
 			IMemento runtimesMemento = XMLMemento.loadMemento(inputStream);
 
 			if (runtimesMemento != null) {
@@ -216,12 +215,12 @@ public class ServerStartup implements IStartup {
 				}
 			}
 		}
-		catch (IOException fnfe) {
+		catch (IOException ioe) {
 		}
 	}
 
 	private void _importGlobalSDKs(File sdksFile) {
-		try(InputStream inputStream = new FileInputStream ( sdksFile ) ){
+		try (InputStream inputStream = new FileInputStream(sdksFile)) {
 			SDKManager manager = SDKManager.getInstance();
 
 			IMemento sdksMemento = XMLMemento.loadMemento(inputStream);
@@ -244,12 +243,12 @@ public class ServerStartup implements IStartup {
 				}
 			}
 		}
-		catch (IOException fnfe) {
+		catch (IOException ioe) {
 		}
 	}
 
 	private void _importGlobalServers(File serversFile) {
-		try(InputStream inputStream = new FileInputStream ( serversFile )){
+		try (InputStream inputStream = new FileInputStream(serversFile)) {
 			IMemento serversMemento = XMLMemento.loadMemento(inputStream);
 
 			if (serversMemento != null) {
@@ -296,7 +295,7 @@ public class ServerStartup implements IStartup {
 				}
 			}
 		}
-		catch (IOException fnfe) {
+		catch (IOException ioe) {
 		}
 	}
 
