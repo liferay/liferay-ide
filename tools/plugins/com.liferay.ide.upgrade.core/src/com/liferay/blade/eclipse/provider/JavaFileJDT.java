@@ -170,7 +170,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 					}
 
 					return false;
-				};
+				}
 
 			});
 
@@ -220,7 +220,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 					}
 
 					return false;
-				};
+				}
 
 			});
 
@@ -261,7 +261,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 						for (int i = 0; i < params.length; i++) {
 							Object x = parmsList.get(i);
 
-							if (!(params[i].trim().equals(x.toString().substring(0, params[i].trim().length())))) {
+							if (!params[i].trim().equals(x.toString().substring(0, params[i].trim().length()))) {
 								sameParmSize = false;
 
 								break;
@@ -294,7 +294,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 										createSearchResult(null, startOffset, endOffset, startLine, endLine, true));
 
 									return false;
-								};
+								}
 
 							});
 					}
@@ -507,7 +507,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 					}
 
 					return false;
-				};
+				}
 
 			});
 

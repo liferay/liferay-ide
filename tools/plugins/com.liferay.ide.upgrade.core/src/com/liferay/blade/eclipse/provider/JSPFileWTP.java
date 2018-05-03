@@ -135,7 +135,7 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 				IDOMNode attrNode = (IDOMNode)domNode.getAttributes().getNamedItem(attrNames[j]);
 
 				if (attrNode != null) {
-					if ((attrValues != null) && !(attrValues[j].equals(attrNode.getNodeValue()))) {
+					if ((attrValues != null) && !attrValues[j].equals(attrNode.getNodeValue())) {
 						continue;
 					}
 

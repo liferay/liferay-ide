@@ -32,10 +32,10 @@ import org.osgi.service.component.annotations.Component;
 public class PortletIconTags extends JSPTagMigrator {
 
 	public PortletIconTags() {
-		super(new String[0], new String[0], new String[0], new String[0], _tagNames, new String[0]);
+		super(new String[0], new String[0], new String[0], new String[0], _TAG_NAMES, new String[0]);
 	}
 
-	private static final String[] _tagNames = {
+	private static final String[] _TAG_NAMES = {
 		"liferay-portlet:icon-close", "liferay-portlet:icon-configuration", "liferay-portlet:icon-edit",
 		"liferay-portlet:icon-edit-defaults", "liferay-portlet:icon-edit-guest", "liferay-portlet:icon-export-import",
 		"liferay-portlet:icon-help", "liferay-portlet:icon-maximize", "liferay-portlet:icon-minimize",

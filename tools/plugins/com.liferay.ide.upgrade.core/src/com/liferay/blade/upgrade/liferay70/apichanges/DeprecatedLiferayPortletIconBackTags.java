@@ -32,9 +32,9 @@ import org.osgi.service.component.annotations.Component;
 public class DeprecatedLiferayPortletIconBackTags extends JSPTagMigrator {
 
 	public DeprecatedLiferayPortletIconBackTags() {
-		super(new String[0], new String[0], new String[0], new String[0], _tagNames, new String[0]);
+		super(new String[0], new String[0], new String[0], new String[0], _TAG_NAMES, new String[0]);
 	}
 
-	private static final String[] _tagNames = {"liferay-portlet:icon-back"};
+	private static final String[] _TAG_NAMES = {"liferay-portlet:icon-back"};
 
 }

@@ -36,10 +36,11 @@ import org.osgi.service.component.annotations.Component;
 public class AssetCategoriesNavigationTags extends JSPTagMigrator {
 
 	public AssetCategoriesNavigationTags() {
-		super(new String[0], new String[0], new String[0], new String[0], _tagNames, _newTagNames);
+		super(new String[0], new String[0], new String[0], new String[0], _TAG_NAMES, _NEW_TAG_NAMES);
 	}
 
-	private static final String[] _newTagNames = {"liferay-asset:asset-categories-navigation"};
-	private static final String[] _tagNames = {"liferay-ui:asset-categories-navigation"};
+	private static final String[] _NEW_TAG_NAMES = {"liferay-asset:asset-categories-navigation"};
+
+	private static final String[] _TAG_NAMES = {"liferay-ui:asset-categories-navigation"};
 
 }

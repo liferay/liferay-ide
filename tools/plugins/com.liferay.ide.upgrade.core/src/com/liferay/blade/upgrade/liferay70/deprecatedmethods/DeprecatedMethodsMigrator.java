@@ -23,7 +23,6 @@ import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,7 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 			Class<? extends DeprecatedMethodsMigrator> class1 = DeprecatedMethodsMigrator.class;
 
 			for (int i = 0; i < jsonFilePaths.length; i++) {
-				try{
+				try {
 					String jsonContent = CoreUtil.readStreamToString(class1.getResourceAsStream(jsonFilePaths[i]));
 
 					deprecatedMethodsList.add(new JSONArray(jsonContent));

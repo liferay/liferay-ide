@@ -177,7 +177,7 @@ public class PropertiesFileChecker {
 	private Map<String, List<KeyInfo>> _parse(InputStream input) throws IOException {
 		Map<String, List<KeyInfo>> keyInfos = new HashMap<>();
 
-		try(InputStreamReader inputReader = new InputStreamReader(input)){
+		try (InputStreamReader inputReader = new InputStreamReader(input)) {
 			LineReader lr = new LineReader(inputReader);
 
 			char[] convtBuf = new char[1024];
@@ -273,6 +273,7 @@ public class PropertiesFileChecker {
 
 		public LineReader(Reader reader) {
 			_reader = reader;
+
 			_inCharBuf = new char[8192];
 		}
 

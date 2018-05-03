@@ -33,10 +33,11 @@ import org.osgi.service.component.annotations.Component;
 public class AUIButtonItemTags extends JSPTagMigrator {
 
 	public AUIButtonItemTags() {
-		super(new String[0], new String[0], new String[0], new String[0], _tagNames, _newTagNames);
+		super(new String[0], new String[0], new String[0], new String[0], _TAG_NAMES, _NEW_TAG_NAMES);
 	}
 
-	private static final String[] _newTagNames = {"aui:button"};
-	private static final String[] _tagNames = {"aui:button-item"};
+	private static final String[] _NEW_TAG_NAMES = {"aui:button"};
+
+	private static final String[] _TAG_NAMES = {"aui:button-item"};
 
 }

@@ -32,9 +32,9 @@ import org.osgi.service.component.annotations.Component;
 public class RemoveAUILayoutTags extends JSPTagMigrator {
 
 	public RemoveAUILayoutTags() {
-		super(new String[0], new String[0], new String[0], new String[0], _tagNames, new String[0]);
+		super(new String[0], new String[0], new String[0], new String[0], _TAG_NAMES, new String[0]);
 	}
 
-	private static final String[] _tagNames = {"aui:layout"};
+	private static final String[] _TAG_NAMES = {"aui:layout"};
 
 }

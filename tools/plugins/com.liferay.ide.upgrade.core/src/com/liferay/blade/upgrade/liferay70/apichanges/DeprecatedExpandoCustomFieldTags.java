@@ -33,14 +33,15 @@ import org.osgi.service.component.annotations.Component;
 public class DeprecatedExpandoCustomFieldTags extends JSPTagMigrator {
 
 	public DeprecatedExpandoCustomFieldTags() {
-		super(new String[0], new String[0], new String[0], new String[0], _tagNames, _newTagNames);
+		super(new String[0], new String[0], new String[0], new String[0], _TAG_NAMES, _NEW_TAG_NAMES);
 	}
 
-	private static final String[] _newTagNames = {
+	private static final String[] _NEW_TAG_NAMES = {
 		"liferay-expando:custom-attribute", "liferay-expando:custom-attribute-list",
 		"liferay-expando:custom-attributes-available"
 	};
-	private static final String[] _tagNames =
+
+	private static final String[] _TAG_NAMES =
 		{"liferay-ui:custom-attribute", "liferay-ui:custom-attribute-list", "liferay-ui:custom-attributes-available"};
 
 }
