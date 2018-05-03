@@ -100,6 +100,7 @@ public class SDK {
 
 			if (buildFilePath.toFile().exists()) {
 				buildFile = buildFilePath.toFile();
+
 				break;
 			}
 		}
@@ -451,7 +452,7 @@ public class SDK {
 			if (originalCreateConetent.contains("DisplayName=\\\"$2\\\"")) {
 				String createContent = originalCreateConetent.replace("DisplayName=\\\"$2\\\"", "DisplayName=\"$2\"");
 
-				try(InputStream input = new ByteArrayInputStream(createContent.toString().getBytes("UTF-8"))) {
+				try (InputStream input = new ByteArrayInputStream(createContent.getBytes("UTF-8"))) {
 					FileUtil.writeFile(createFile, input, null);
 				}
 				catch (Exception e) {
@@ -467,7 +468,7 @@ public class SDK {
 		}
 
 		if (!CoreUtil.isNullOrEmpty(originalCreateConetent)) {
-			try(InputStream input = new ByteArrayInputStream(originalCreateConetent.toString().getBytes("UTF-8"))) {
+			try (InputStream input = new ByteArrayInputStream(originalCreateConetent.getBytes("UTF-8"))) {
 				FileUtil.writeFile(createFile, input, null);
 			}
 			catch (Exception e) {
@@ -740,8 +741,8 @@ public class SDK {
 
 					if (version != null) {
 						if (version.equals(ILiferayConstants.V611.toString())) {
-							Properties buildProperties =
-								_getProperties(sdkLocation.append("build.properties").toFile());
+							Properties buildProperties = _getProperties(
+								sdkLocation.append("build.properties").toFile());
 
 							if (_hasAppServerSpecificProps(buildProperties)) {
 								version = ILiferayConstants.V612.toString();
@@ -749,14 +750,13 @@ public class SDK {
 						}
 
 						if (version.equals(ILiferayConstants.V6120.toString())) {
-							Properties buildProperties =
-								_getProperties(sdkLocation.append("build.properties").toFile());
+							Properties buildProperties = _getProperties(
+								sdkLocation.append("build.properties").toFile());
 
 							if (_hasAppServerSpecificProps(buildProperties)) {
 								version = ILiferayConstants.V6130.toString();
 							}
 						}
-
 					}
 				}
 				catch (Exception e) {
@@ -1077,8 +1077,7 @@ public class SDK {
 	private Properties _getProperties(File file) {
 		Properties properties = new Properties();
 
-		try(InputStream propertiesInput = Files.newInputStream(file.toPath())) {
-
+		try (InputStream propertiesInput = Files.newInputStream(file.toPath())) {
 			properties.load(propertiesInput);
 		}
 		catch (Exception e) {

@@ -90,6 +90,7 @@ public class SDKCorePlugin extends Plugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 
 		_sdkListener = new ISDKListener() {
@@ -168,6 +169,7 @@ public class SDKCorePlugin extends Plugin {
 
 											if (sdkLocation.toFile().equals(loc.toFile())) {
 												duplicate = true;
+
 												break;
 											}
 										}
@@ -197,7 +199,7 @@ public class SDKCorePlugin extends Plugin {
 				_addSDKToMemento(sdk, memento);
 			}
 
-			try(OutputStream fos = Files.newOutputStream(sdkGlobalFile.toPath())){
+			try (OutputStream fos = Files.newOutputStream(sdkGlobalFile.toPath())) {
 				sdkMementos.save(fos);
 			}
 		}
