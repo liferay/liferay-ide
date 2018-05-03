@@ -27,6 +27,7 @@ public class SetServerModeCommand extends ServerCommand {
 
 	public SetServerModeCommand(LiferayTomcatServer server, int serverMode) {
 		super(server, Messages.serverEditorActionSetDeployDirectory);
+
 		this.serverMode = serverMode;
 	}
 

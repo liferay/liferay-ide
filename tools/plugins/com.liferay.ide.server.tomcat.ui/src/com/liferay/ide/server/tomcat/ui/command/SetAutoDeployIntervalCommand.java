@@ -27,6 +27,7 @@ public class SetAutoDeployIntervalCommand extends ServerCommand {
 
 	public SetAutoDeployIntervalCommand(LiferayTomcatServer server, String autoDeployInterval) {
 		super(server, Msgs.setAutoDeployInterval);
+
 		this.autoDeployInterval = autoDeployInterval;
 	}
 

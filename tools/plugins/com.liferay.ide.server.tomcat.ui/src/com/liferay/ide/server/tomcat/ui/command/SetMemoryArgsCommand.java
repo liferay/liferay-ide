@@ -27,6 +27,7 @@ public class SetMemoryArgsCommand extends ServerCommand {
 
 	public SetMemoryArgsCommand(LiferayTomcatServer server, String memoryArgs) {
 		super(server, Messages.serverEditorActionSetDeployDirectory);
+
 		this.memoryArgs = memoryArgs;
 	}
 

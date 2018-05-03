@@ -27,6 +27,7 @@ public class SetAutoDeployDirectoryCommand extends ServerCommand {
 
 	public SetAutoDeployDirectoryCommand(LiferayTomcatServer server, String autoDeployDir) {
 		super(server, Messages.serverEditorActionSetDeployDirectory);
+
 		this.autoDeployDir = autoDeployDir;
 	}
 

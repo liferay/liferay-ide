@@ -47,6 +47,7 @@ public class LiferayTomcatUIPlugin extends AbstractUIPlugin {
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 	}
 
