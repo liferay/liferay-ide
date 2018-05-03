@@ -88,6 +88,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 		_moduleNameLocationComponent.bindModuleSettings(_namePathComponent);
 		_expertDecorator = new HideableDecorator(_expertPlaceholder, "Mor&e Settings", false);
 		_expertPanel.setBorder(IdeBorderFactory.createEmptyBorder(0, IdeBorderFactory.TITLED_BORDER_INDENT, 5, 0));
+
 		_expertDecorator.setContentComponent(_expertPanel);
 
 		if (_context.isCreatingNewProject()) {
@@ -188,6 +189,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 	public void updateDataModel() {
 		_context.setProjectName(_namePathComponent.getNameValue());
 		_context.setProjectFileDirectory(_namePathComponent.getPath());
+
 		_formatPanel.updateData(_context);
 		_moduleNameLocationComponent.updateDataModel();
 

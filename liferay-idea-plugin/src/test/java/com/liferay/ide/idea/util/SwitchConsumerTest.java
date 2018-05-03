@@ -33,8 +33,6 @@ public class SwitchConsumerTest {
 
 		SwitchConsumerBuilder<String> switch_ = SwitchConsumer.newBuilder();
 
-		Stream<String> stream = Stream.of(_STRINGS);
-
 		SwitchConsumer<String> switchConsumer = switch_.addCase(
 			s -> s.equals("foo"), s -> output.append("case1 " + s + "\n")
 		).addCase(
@@ -43,7 +41,9 @@ public class SwitchConsumerTest {
 			s -> output.append("default " + s + "\n")
 		).build();
 
-		stream.filter(
+		Stream.of(
+			_STRINGS
+		).filter(
 			s -> s != null
 		).forEach(
 			switchConsumer
