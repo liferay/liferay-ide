@@ -15,17 +15,36 @@
  *
  *******************************************************************************/
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.ui.tests</groupId>
-		<artifactId>tools-tests</artifactId>
+		<groupId>com.liferay.ide</groupId>
+		<artifactId>ui-tests</artifactId>
 		<version>3.2.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.liferay.ide.ui.preference.tests</artifactId>
-	<packaging>eclipse-test-plugin</packaging>
+	<groupId>com.liferay.ide.ui.tests</groupId>
+	<artifactId>platform-tests</artifactId>
+	<packaging>pom</packaging>
 
-	<name>Liferay IDE UI Preference  Tests</name>
+	<name>Liferay IDE UI Platform Tests</name>
+
+	<properties>
+		<liferay-ide-swtbot-testing-site>file:/${basedir}/../../com.liferay.ide.ui.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>liferay-ide-swtbot-testing-site</id>
+			<layout>p2</layout>
+			<url>${liferay-ide-swtbot-testing-site}</url>
+		</repository>
+	</repositories>
+
+	<modules>
+		<module>com.liferay.ide.ui.preference.tests</module>
+	</modules>
 </project>

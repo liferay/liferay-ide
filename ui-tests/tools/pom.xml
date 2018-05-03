@@ -59,6 +59,5 @@
 		<module>com.liferay.ide.ui.service.builder</module>
 		<module>com.liferay.ide.ui.kaleo.tests</module>
 		<module>com.liferay.ide.ui.kaleo.deploy.tests</module>
-		<module>com.liferay.ide.ui.preference.tests</module>
 	</modules>
 </project>
