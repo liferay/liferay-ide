@@ -59,8 +59,8 @@ public class GroovyScriptingSupport {
 		GroovyShell groovyShell = new GroovyShell(new GroovyClassLoader());
 
 		if ((variableMap != null) && (variableMap.keySet() != null) && (variableMap.keySet().size() > 0)) {
-			for (String key : variableMap.keySet()) {
-				groovyShell.setVariable(key, variableMap.get(key));
+			for (Map.Entry<String, Object> map : variableMap.entrySet()) {
+				groovyShell.setVariable(map.getKey(), map.getValue());
 			}
 		}
 
