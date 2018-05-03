@@ -75,7 +75,7 @@ public class GradleTooling {
 				scriptFile.createNewFile();
 			}
 
-			try(InputStream inputStream = new ByteArrayInputStream(initScriptContents.getBytes())){
+			try (InputStream inputStream = new ByteArrayInputStream(initScriptContents.getBytes())) {
 				FileUtil.writeFileFromStream(scriptFile, inputStream);
 			}
 

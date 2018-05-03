@@ -41,8 +41,9 @@ public class CompareFileHandler extends AbstractCompareFileHandler {
 		File templateFile = null;
 
 		try (InputStream inputStream = bndfile.getContents();
-				InputStreamReader inputReader = new InputStreamReader(inputStream);
-				BufferedReader reader = new BufferedReader(inputReader)) {
+			InputStreamReader inputReader = new InputStreamReader(inputStream);
+			BufferedReader reader = new BufferedReader(inputReader)) {
+
 			String fragment;
 
 			while ((fragment = reader.readLine()) != null) {
