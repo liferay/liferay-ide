@@ -403,6 +403,7 @@ public class BuildHelper {
 					for (int j = 0; j < fromSize; j++) {
 						if (toFileNames[i].equals(fromFileNames[j]) && (dir == (resources[j] instanceof IFolder))) {
 							found = true;
+
 							break;
 						}
 					}
@@ -419,6 +420,7 @@ public class BuildHelper {
 						for (String preserveFileName : ignoreFileNames) {
 							if (toFileNames[i].equals(preserveFileName)) {
 								delete = false;
+
 								break;
 							}
 						}
@@ -541,6 +543,7 @@ public class BuildHelper {
 				for (int j = 0; j < toSize; j++) {
 					if (name.equals(toFileNames[j]) && (mod == toFileMod[j])) {
 						copy = false;
+
 						break;
 					}
 				}
@@ -574,9 +577,7 @@ public class BuildHelper {
 				if (ignore != null) {
 					List<IPath> ignoreChildPaths = new ArrayList<>();
 
-					for (int j = 0; j < ignore.length; j++) {
-						IPath preservePath = ignore[j];
-
+					for (IPath preservePath : ignore) {
 						if (preservePath.segment(0).equals(name)) {
 							ignoreChildPaths.add(preservePath.removeFirstSegments(1));
 						}
@@ -716,6 +717,7 @@ public class BuildHelper {
 					try {
 						FileUtils.copyFile(restoreFile, path2.toFile());
 						restored = true;
+
 						break;
 					}
 					catch (IOException ioe) {
@@ -743,6 +745,7 @@ public class BuildHelper {
 		for (int i = 0; i < diffsPath.segmentCount(); i++) {
 			if ("_diffs".equals(diffsPath.segment(i))) {
 				diffsRelativePath = diffsPath.removeFirstSegments(i + 1);
+
 				break;
 			}
 		}
@@ -897,13 +900,14 @@ public class BuildHelper {
 		IFile file = (IFile)mf.getAdapter(IFile.class);
 
 		if (file != null) {
-			try(InputStream inputStream = file.getContents()){
+			try (InputStream inputStream = file.getContents()) {
 				_copyFile(inputStream, path, file.getLocalTimeStamp());
-			} catch (IOException e) {
+			}
+			catch (IOException ioe) {
 				throw new CoreException(
-						new Status(
-							IStatus.ERROR, ThemeCore.PLUGIN_ID, 0, NLS.bind(Messages.errorReading, file.getLocation()),
-							e));
+					new Status(
+						IStatus.ERROR, ThemeCore.PLUGIN_ID, 0, NLS.bind(Messages.errorReading, file.getLocation()),
+						ioe));
 			}
 		}
 		else {

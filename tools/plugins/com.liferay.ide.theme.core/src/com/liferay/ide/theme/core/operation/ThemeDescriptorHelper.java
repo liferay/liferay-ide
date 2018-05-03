@@ -78,8 +78,7 @@ public class ThemeDescriptorHelper extends LiferayDescriptorHelper {
 			contents = contents.replaceAll("__ID__", id);
 			contents = contents.replaceAll("__NAME__", name);
 
-			try(InputStream inputStream = new ByteArrayInputStream(contents.getBytes())) {
-
+			try (InputStream inputStream = new ByteArrayInputStream(contents.getBytes())) {
 				lookAndFeelFile.create(inputStream, true, null);
 
 				if (!themeType.equals("vm")) {

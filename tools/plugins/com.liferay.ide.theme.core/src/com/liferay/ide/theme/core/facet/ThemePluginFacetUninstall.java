@@ -53,7 +53,7 @@ public class ThemePluginFacetUninstall extends PluginFacetUninstall {
 		List<ICommand> newCommands = new ArrayList<>();
 
 		for (ICommand command : commands) {
-			if (!(ThemeCSSBuilder.ID.equals(command.getBuilderName()))) {
+			if (!ThemeCSSBuilder.ID.equals(command.getBuilderName())) {
 				newCommands.add(command);
 			}
 		}

@@ -115,14 +115,14 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 
 			IResource propertiesFileRes = lrProject.findDocrootResource(
 				new Path("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE));
+
 			String name = id;
 
 			if (propertiesFileRes instanceof IFile && propertiesFileRes.exists()) {
 				Properties props = new Properties();
 				IFile propsFile = (IFile)propertiesFileRes;
 
-				try(InputStream contents = propsFile.getContents()) {
-
+				try (InputStream contents = propsFile.getContents()) {
 					props.load(contents);
 
 					String nameValue = props.getProperty("name");
@@ -164,6 +164,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 
 		switch (deltaKind) {
 			case IResourceDelta.REMOVED_PHANTOM:
+
 				break;
 		}
 

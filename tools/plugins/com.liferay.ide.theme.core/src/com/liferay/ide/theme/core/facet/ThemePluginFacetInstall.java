@@ -152,7 +152,7 @@ public class ThemePluginFacetInstall extends PluginFacetInstall {
 
 		IFile buildXml = project.getFile("build.xml");
 
-		try{
+		try {
 			String strCon = CoreUtil.readStreamToString(buildXml.getContents());
 
 			if (!themeParent.equals(this.masterModel.getDefaultProperty(THEME_PARENT))) {
@@ -166,7 +166,7 @@ public class ThemePluginFacetInstall extends PluginFacetInstall {
 			strCon = strCon.replace(
 				"</project>", "\t<property name=\"theme.type\" value=\"" + tplExtension + "\" />\n</project>");
 
-			try(InputStream input = new ByteArrayInputStream(strCon.getBytes())){
+			try (InputStream input = new ByteArrayInputStream(strCon.getBytes())) {
 				buildXml.setContents(input, IResource.FORCE, null);
 			}
 		}

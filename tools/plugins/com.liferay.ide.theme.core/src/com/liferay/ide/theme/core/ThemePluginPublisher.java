@@ -81,12 +81,8 @@ public class ThemePluginPublisher extends AbstractPluginPublisher {
 			IFolder webappRoot = webproject.getDefaultDocrootFolder();
 
 			if ((webappRoot != null) && webappRoot.exists()) {
-				if (!(
-					webappRoot.exists(
-					new Path(
-						"WEB-INF/" +
-							ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE))) ||
-					!(webappRoot.exists(new Path("css")))) {
+				if (!webappRoot.exists(new Path("WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE)) ||
+					!webappRoot.exists(new Path("css"))) {
 
 					ThemeCSSBuilder.compileTheme(project);
 					((ILiferayServerBehavior)delegate).redeployModule(new IModule[] {module});
