@@ -70,6 +70,7 @@ public class StringArrayTableWizardSection extends Composite {
 		IDataModel model, String propertyName) {
 
 		super(parent, SWT.NONE);
+
 		this.dialogTitle = dialogTitle;
 		this.fieldLabels = fieldLabels;
 		this.labelProviderImage = labelProviderImage;
@@ -332,6 +333,7 @@ public class StringArrayTableWizardSection extends Composite {
 		 */
 		public AddStringArrayDialog(Shell shell, String windowTitle, String[] labelsForTextField) {
 			super(shell);
+
 			this.windowTitle = windowTitle;
 			this.labelsForTextField = labelsForTextField;
 		}
@@ -598,6 +600,7 @@ public class StringArrayTableWizardSection extends Composite {
 			Shell shell, String windowTitle, String[] labelsForTextField, String[] valuesForTextField) {
 
 			super(shell, windowTitle, labelsForTextField);
+
 			this.valuesForTextField = valuesForTextField;
 		}
 

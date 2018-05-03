@@ -14,7 +14,15 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.ide.project.core.upgrade.BreakingChangeSelectedProject;
+import com.liferay.ide.project.core.upgrade.BreakingChangeSimpleProject;
+import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
+import com.liferay.ide.ui.util.SWTUtil;
+
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
@@ -38,13 +46,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.liferay.ide.project.core.upgrade.BreakingChangeSelectedProject;
-import com.liferay.ide.project.core.upgrade.BreakingChangeSimpleProject;
-import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
-import com.liferay.ide.ui.util.SWTUtil;
-
 /**
  * @author Terry Jia
  * @author Simon Jiang
@@ -53,6 +54,7 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 
 	public OpenJavaProjectSelectionDialogAction(String text, Shell shell) {
 		super(text);
+
 		_shell = shell;
 
 		setImageDescriptor(ProjectUI.getPluginImageRegistry().getDescriptor(ProjectUI.MIGRATION_TASKS_IMAGE_ID));
@@ -105,36 +107,11 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 
 		public BreakingChangeProjectDialog(Shell parentShell) {
 			super(parentShell);
+
 			try {
 				_selectedProject = UpgradeAssistantSettingsUtil.getObjectFromStore(BreakingChangeSelectedProject.class);
 			}
 			catch (IOException ioe) {
-			}
-		}
-
-		@Override
-		protected  void selectAllAction() {
-			fTableViewer.setAllChecked(true);
-			_combineExistedProblemCheckbox.setSelection(true);
-			getOkButton().setEnabled(true);
-		}
-
-		@Override
-		protected  void deSelectAllAction() {
-			fTableViewer.setAllChecked(false);
-			_combineExistedProblemCheckbox.setSelection(false);
-			getOkButton().setEnabled(false);
-		}
-
-		@Override
-		protected void updateOKButtonState(EventObject event) {
-			Object[] checkedElements = fTableViewer.getCheckedElements();
-
-			if (checkedElements.length == 0) {
-				getOkButton().setEnabled(false);
-			}
-			else {
-				getOkButton().setEnabled(true);
 			}
 		}
 
@@ -171,12 +148,38 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 		}
 
 		@Override
+		protected void deSelectAllAction() {
+			fTableViewer.setAllChecked(false);
+			_combineExistedProblemCheckbox.setSelection(false);
+			getOkButton().setEnabled(false);
+		}
+
+		@Override
 		protected void initialize() {
 			if ((_selectedProject == null) || (_combineProject == false)) {
 				return;
 			}
 
 			_initializeSelectedProject(_selectedProject, _combineProject);
+		}
+
+		@Override
+		protected void selectAllAction() {
+			fTableViewer.setAllChecked(true);
+			_combineExistedProblemCheckbox.setSelection(true);
+			getOkButton().setEnabled(true);
+		}
+
+		@Override
+		protected void updateOKButtonState(EventObject event) {
+			Object[] checkedElements = fTableViewer.getCheckedElements();
+
+			if (checkedElements.length == 0) {
+				getOkButton().setEnabled(false);
+			}
+			else {
+				getOkButton().setEnabled(true);
+			}
 		}
 
 		private void _initializeSelectedProject(BreakingChangeSelectedProject selectedProject, Boolean combineProject) {
@@ -187,7 +190,7 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 					if (item.getData() instanceof IJavaProject) {
 						IJavaProject projectItem = (IJavaProject)item.getData();
 
-						if ( selectedProject == null ) {
+						if (selectedProject == null) {
 							break;
 						}
 
@@ -209,8 +212,9 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 			}
 		}
 
-		private BreakingChangeSelectedProject _selectedProject = null;
 		private Button _combineExistedProblemCheckbox;
+		private BreakingChangeSelectedProject _selectedProject = null;
+
 	}
 
 }

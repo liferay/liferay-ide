@@ -64,6 +64,7 @@ public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandl
 							for (Profile profile : op.getSelectedProfiles()) {
 								if (profileId.equals(profile.getId().content())) {
 									foundExistingProfile = true;
+
 									break;
 								}
 							}

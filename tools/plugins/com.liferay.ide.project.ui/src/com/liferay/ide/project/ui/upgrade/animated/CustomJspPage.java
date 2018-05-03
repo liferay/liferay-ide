@@ -133,37 +133,37 @@ public class CustomJspPage extends Page {
 
 		_projectLocation.addFocusListener(
 			new FocusListener() {
-	
+
 				@Override
 				public void focusGained(FocusEvent e) {
 					String input = ((Text)e.getSource()).getText();
-	
+
 					if (input.equals(_defaultLocation)) {
 						_projectLocation.setText("");
 					}
-	
+
 					_projectLocation.setForeground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
 				}
-	
+
 				@Override
 				public void focusLost(FocusEvent e) {
 					String input = ((Text)e.getSource()).getText();
-	
+
 					if (CoreUtil.isNullOrEmpty(input)) {
 						_projectLocation.setForeground(getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
 						_projectLocation.setText(_defaultLocation);
 					}
 				}
-	
+
 			});
 
 		_projectLocation.addModifyListener(
 			new ModifyListener() {
-	
+
 				public void modifyText(ModifyEvent e) {
 					dataModel.setConvertedProjectLocation(_projectLocation.getText());
 				}
-	
+
 			});
 
 		dataModel.setConvertedProjectLocation(_projectLocation.getText());
@@ -174,20 +174,20 @@ public class CustomJspPage extends Page {
 
 		browseButton.addSelectionListener(
 			new SelectionAdapter() {
-	
+
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					final DirectoryDialog dd = new DirectoryDialog(getShell());
-	
+
 					dd.setMessage("Select Converted Project Location");
-	
+
 					final String selectedDir = dd.open();
-	
+
 					if (selectedDir != null) {
 						_projectLocation.setText(selectedDir);
 					}
 				}
-	
+
 			});
 
 		Composite buttonContainer = new Composite(this, SWT.NONE);
@@ -208,12 +208,12 @@ public class CustomJspPage extends Page {
 
 		selectButton.addSelectionListener(
 			new SelectionAdapter() {
-	
+
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					_runConvertAction();
 				}
-	
+
 			});
 
 		Button refreshButton = new Button(buttonContainer, SWT.PUSH);
@@ -222,12 +222,12 @@ public class CustomJspPage extends Page {
 
 		refreshButton.addSelectionListener(
 			new SelectionAdapter() {
-	
+
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					refreshTreeViews();
 				}
-	
+
 			});
 
 		Button clearButton = new Button(buttonContainer, SWT.PUSH);
@@ -236,14 +236,14 @@ public class CustomJspPage extends Page {
 
 		clearButton.addSelectionListener(
 			new SelectionAdapter() {
-	
+
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					CustomJspConverter.clearConvertResults();
-	
+
 					refreshTreeViews();
 				}
-	
+
 			});
 
 		SashForm sashForm = new SashForm(this, SWT.HORIZONTAL | SWT.H_SCROLL);
@@ -386,37 +386,38 @@ public class CustomJspPage extends Page {
 
 		_leftTreeViewer.addDoubleClickListener(
 			new IDoubleClickListener() {
-	
+
 				@Override
 				public void doubleClick(DoubleClickEvent event) {
 					ISelection selection = event.getSelection();
-	
+
 					File file = (File)((ITreeSelection)selection).getFirstElement();
-	
+
 					if (file.isDirectory()) {
 						return;
 					}
-	
+
 					if (_is62FileFound(file)) {
 						String[] paths = _get62FilePaths(file);
-	
+
 						compare(paths[0], paths[1], "6.2 original JSP", "custom JSP");
 					}
 					else {
 						MessageDialog.openInformation(
-							Display.getDefault().getActiveShell(), "File not found", "There is no such file in liferay 62");
+							Display.getDefault().getActiveShell(), "File not found",
+							"There is no such file in liferay 62");
 					}
 				}
-	
+
 			});
 
 		_leftTreeViewer.setComparator(
 			new ViewerComparator() {
-	
+
 				@Override
 				public int category(Object element) {
 					File file = (File)element;
-	
+
 					if (file.isDirectory()) {
 						return -1;
 					}
@@ -424,7 +425,7 @@ public class CustomJspPage extends Page {
 						return super.category(element);
 					}
 				}
-	
+
 			});
 	}
 
@@ -462,39 +463,40 @@ public class CustomJspPage extends Page {
 
 		_rightTreeViewer.addDoubleClickListener(
 			new IDoubleClickListener() {
-	
+
 				@Override
 				public void doubleClick(DoubleClickEvent event) {
 					ISelection selection = event.getSelection();
-	
+
 					File file = (File)((ITreeSelection)selection).getFirstElement();
-	
+
 					if (file.isDirectory()) {
 						return;
 					}
-	
+
 					if (_is70FileFound(file)) {
 						String[] paths = _get70FilePaths(file);
-	
+
 						compare(
 							paths[0], paths[1], "6.2 original JSP",
 							"New 7.x JSP in " + CoreUtil.getProject(file).getName());
 					}
 					else {
 						MessageDialog.openInformation(
-							Display.getDefault().getActiveShell(), "file not found", "There is no such file in liferay 7");
+							Display.getDefault().getActiveShell(), "file not found",
+							"There is no such file in liferay 7");
 					}
 				}
-	
+
 			});
 
 		_rightTreeViewer.setComparator(
 			new ViewerComparator() {
-	
+
 				@Override
 				public int category(Object element) {
 					File file = (File)element;
-	
+
 					if (file.isDirectory()) {
 						return -1;
 					}
@@ -502,7 +504,7 @@ public class CustomJspPage extends Page {
 						return super.category(element);
 					}
 				}
-	
+
 			});
 	}
 
@@ -678,16 +680,16 @@ public class CustomJspPage extends Page {
 
 		String[] names = bundleDir.list(
 			new FilenameFilter() {
-	
+
 				@Override
 				public boolean accept(File dir, String name) {
 					if (name.startsWith("tomcat-")) {
 						return true;
 					}
-	
+
 					return false;
 				}
-	
+
 			});
 
 		if ((names != null) && (names.length == 1)) {
@@ -883,12 +885,12 @@ public class CustomJspPage extends Page {
 
 		UIUtil.async(
 			new Runnable() {
-	
+
 				@Override
 				public void run() {
 					_projectLocation.setText(_defaultLocation);
 				}
-	
+
 			});
 	}
 
@@ -1082,7 +1084,7 @@ public class CustomJspPage extends Page {
 
 				String[] files = file.list(
 					new FilenameFilter() {
-	
+
 						@Override
 						public boolean accept(File dir, String name) {
 							if (!name.startsWith(".")) {
@@ -1092,7 +1094,7 @@ public class CustomJspPage extends Page {
 								return false;
 							}
 						}
-	
+
 					});
 
 				if (files != null) {
@@ -1158,7 +1160,7 @@ public class CustomJspPage extends Page {
 
 				String[] files = file.list(
 					new FilenameFilter() {
-	
+
 						@Override
 						public boolean accept(File dir, String name) {
 							if (!name.startsWith(".")) {
@@ -1168,7 +1170,7 @@ public class CustomJspPage extends Page {
 								return false;
 							}
 						}
-	
+
 					});
 
 				if (files != null) {
@@ -1227,16 +1229,16 @@ public class CustomJspPage extends Page {
 
 			File[] files = file.listFiles(
 				new FilenameFilter() {
-	
+
 					@Override
 					public boolean accept(File dir, String name) {
 						if (name.startsWith(".")) {
 							return false;
 						}
-	
+
 						return true;
 					}
-	
+
 				});
 
 			return files;

@@ -248,6 +248,7 @@ public class MigrationUtil {
 	@SuppressWarnings("rawtypes")
 	public static List<Problem> getProblemsFromTreeNode(ISelection selection) {
 		List<Problem> allProblems = new ArrayList<>();
+
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection ss = (IStructuredSelection)selection;
 
@@ -427,6 +428,7 @@ public class MigrationUtil {
 							if (p.equals(problem)) {
 								fileProblem.getProblems().set(i, problem);
 								found = true;
+
 								break;
 							}
 						}
@@ -460,6 +462,7 @@ public class MigrationUtil {
 				if (mp.getSuffix().equals(projectName)) {
 					problems.remove(mp);
 					removed = true;
+
 					break;
 				}
 			}

@@ -32,30 +32,30 @@ import org.eclipse.ui.PlatformUI;
  * @author Terry Jia
  * @author Lovett Li
  */
-public class CodeUpgradeHandler extends AbstractHandler
-{
+public class CodeUpgradeHandler extends AbstractHandler {
 
-    @Override
-    public Object execute( ExecutionEvent event ) throws ExecutionException
-    {
-        IWorkbench workbench = PlatformUI.getWorkbench();
-        IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException
+	{
 
-        if( window != null )
-        {
-            UIUtil.switchToLiferayPerspective( LiferayWorkspacePerspectiveFactory.ID, false );
-            IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		IWorkbench workbench = PlatformUI.getWorkbench();
 
-            try
-            {
-                activePage.showView( UpgradeView.ID );
-            }
-            catch( PartInitException e )
-            {
-            }
-        }
+		IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
 
-        return null;
-    }
+		if (window != null)
+		{
+			UIUtil.switchToLiferayPerspective(LiferayWorkspacePerspectiveFactory.ID, false);
+			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+
+			try
+			{
+				activePage.showView(UpgradeView.ID);
+			}
+			catch (PartInitException e)
+			{}
+		}
+
+		return null;
+	}
 
 }

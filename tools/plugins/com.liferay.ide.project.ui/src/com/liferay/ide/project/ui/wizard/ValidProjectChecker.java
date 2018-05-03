@@ -126,6 +126,7 @@ public class ValidProjectChecker {
 
 					setValidProjectTypes(_getValidProjectTypesFromConfig(element));
 					wizardName = element.getAttribute(_att_name);
+
 					break;
 				}
 			}

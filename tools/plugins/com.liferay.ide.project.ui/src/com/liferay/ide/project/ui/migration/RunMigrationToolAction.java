@@ -44,6 +44,7 @@ public class RunMigrationToolAction extends OpenJavaProjectSelectionDialogAction
 
 	public RunMigrationToolAction(String text, Shell shell, ISelection selection) {
 		super(text, shell);
+
 		_selection = selection;
 	}
 

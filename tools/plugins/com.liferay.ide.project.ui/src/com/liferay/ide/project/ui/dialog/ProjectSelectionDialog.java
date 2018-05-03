@@ -73,6 +73,17 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 
 	// sizing constants
 
+	@Override
+	public void create() {
+		super.create();
+
+		Object[] checkedElements = fTableViewer.getCheckedElements();
+
+		if (ListUtil.isEmpty(checkedElements)) {
+			getOkButton().setEnabled(false);
+		}
+	}
+
 	protected void addSelectionButtons(Composite composite) {
 		Composite buttonComposite = new Composite(composite, SWT.NONE);
 		GridLayout layout = new GridLayout();
@@ -110,29 +121,9 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 		deselectButton.addSelectionListener(listener);
 	}
 
-	protected  void selectAllAction() {
-		fTableViewer.setAllChecked(true);
-		getOkButton().setEnabled(true);
-	}
-
-	protected  void deSelectAllAction() {
-		fTableViewer.setAllChecked(false);
-		getOkButton().setEnabled(false);
-	}
+	protected abstract boolean checkProject(IJavaProject project);
 
 	// initial _fTableViewer status
-
-	@Override
-	public void create() {
-		super.create();
-		Object[] checkedElements = fTableViewer.getCheckedElements();
-
-		if (ListUtil.isEmpty(checkedElements)) {
-			getOkButton().setEnabled(false);
-		}
-	}
-
-	protected abstract boolean checkProject(IJavaProject project);
 
 	/**
 	 * (non-Javadoc)
@@ -196,11 +187,16 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 		return composite;
 	}
 
-	// the visual selection widget group
+	protected void deSelectAllAction() {
+		fTableViewer.setAllChecked(false);
+		getOkButton().setEnabled(false);
+	}
 
 	protected IContentProvider getContentProvider() {
 		return new JavaProjectProvider();
 	}
+
+	// the visual selection widget group
 
 	protected void initialize() {
 		fTableViewer.setAllChecked(true);
@@ -213,6 +209,11 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 		setSelectionResult(checkedElements);
 
 		super.okPressed();
+	}
+
+	protected void selectAllAction() {
+		fTableViewer.setAllChecked(true);
+		getOkButton().setEnabled(true);
 	}
 
 	/**
@@ -234,19 +235,6 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 		}
 	}
 
-	protected CheckboxTableViewer fTableViewer;
-
-	/**
-	 * Handles the change in selection of the viewer and updates the status of the
-	 * dialog at the same time
-	 *
-	 * @param objects
-	 */
-	private void _selectionChanged(Object[] objects) {
-		updateStatus(new Status(IStatus.OK, LiferayUIPlugin.PLUGIN_ID, StringPool.EMPTY));
-		setSelectionResult(objects);
-	}
-
 	protected void updateOKButtonState(EventObject event) {
 		Object element = event.getSource();
 
@@ -260,6 +248,19 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 				getOkButton().setEnabled(true);
 			}
 		}
+	}
+
+	protected CheckboxTableViewer fTableViewer;
+
+	/**
+	 * Handles the change in selection of the viewer and updates the status of the
+	 * dialog at the same time
+	 *
+	 * @param objects
+	 */
+	private void _selectionChanged(Object[] objects) {
+		updateStatus(new Status(IStatus.OK, LiferayUIPlugin.PLUGIN_ID, StringPool.EMPTY));
+		setSelectionResult(objects);
 	}
 
 	private static final int _sizingSelectionWidgetHeight = 250;

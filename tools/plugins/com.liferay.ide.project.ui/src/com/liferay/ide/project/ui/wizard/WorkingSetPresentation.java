@@ -34,6 +34,7 @@ public class WorkingSetPresentation extends FormComponentPresentation {
 		FormComponentPart part, SwtPresentation parent, Composite composite, List<IWorkingSet> workingSets) {
 
 		super(part, parent, composite);
+
 		_workingSets = workingSets;
 	}
 

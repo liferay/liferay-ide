@@ -596,7 +596,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 		return true;
 	}
 
-	@SuppressWarnings({ "deprecation", "rawtypes" })
+	@SuppressWarnings({"deprecation", "rawtypes"})
 	private boolean _shouldSearch(File file) {
 		String path = file.getAbsolutePath().replaceAll("\\\\", "/");
 

@@ -47,6 +47,7 @@ public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomP
 	public class ProjectCheckboxElement extends CheckboxElement {
 		public ProjectCheckboxElement(String name, String context, String location) {
 			super(name, context);
+
 			this.location = location;
 		}
 
@@ -148,6 +149,7 @@ public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomP
 						for (CheckboxElement checkboxElement : checkboxElements) {
 							if (checkboxElement.name.equals(projectItem.getName().content())) {
 								checkBoxViewer.setChecked(checkboxElement, true);
+
 								break;
 							}
 						}

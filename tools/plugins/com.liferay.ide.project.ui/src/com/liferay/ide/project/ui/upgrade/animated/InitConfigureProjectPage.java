@@ -14,13 +14,45 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.ILiferayProjectImporter;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.IOUtil;
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.BladeCLI;
+import com.liferay.ide.project.core.modules.BladeCLIException;
+import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.util.SearchFilesVisitor;
+import com.liferay.ide.project.ui.IvyUtil;
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
+import com.liferay.ide.sdk.core.ISDKConstants;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import java.lang.reflect.InvocationTargetException;
+
 import java.net.URL;
+
 import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -85,46 +117,20 @@ import org.eclipse.wst.validation.internal.ValManager;
 import org.eclipse.wst.validation.internal.ValPrefManagerProject;
 import org.eclipse.wst.validation.internal.ValidatorMutable;
 import org.eclipse.wst.validation.internal.model.ProjectPreferences;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
-import org.osgi.framework.Version;
 
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.ILiferayProjectImporter;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.IOUtil;
-import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.modules.BladeCLIException;
-import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.util.ProjectImportUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.project.core.util.SearchFilesVisitor;
-import com.liferay.ide.project.ui.IvyUtil;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
-import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.util.UIUtil;
+import org.osgi.framework.Version;
 
 /**
  * @author Simon Jiang
  * @author Terry Jia
  */
-@SuppressWarnings({ "unused", "restriction", "deprecation" })
+@SuppressWarnings({"unused", "restriction", "deprecation"})
 public class InitConfigureProjectPage extends Page implements IServerLifecycleListener, SelectionChangedListener {
 
 	public InitConfigureProjectPage(final Composite parent, int style, LiferayUpgradeDataModel dataModel) {
@@ -238,8 +244,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	public void createSpecialDescriptor(Composite parent, int style) {
 		Composite fillLayoutComposite = SWTUtil.createComposite(parent, 2, 2, GridData.FILL_HORIZONTAL);
 
-		final StringBuilder descriptorBuilder =
-			new StringBuilder("The initial step will be to upgrade to Liferay Workspace or Liferay Plugins SDK 7.0. ");
+		final StringBuilder descriptorBuilder = new StringBuilder(
+			"The initial step will be to upgrade to Liferay Workspace or Liferay Plugins SDK 7.0. ");
 
 		descriptorBuilder.append("For more details, please see <a>dev.liferay.com</a>.");
 
@@ -248,18 +254,16 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		SWTUtil.createHyperLink(fillLayoutComposite, SWT.WRAP, descriptorBuilder.toString(), 1, url);
 
 		final StringBuilder extensionDecBuilder = new StringBuilder(
-			"The first step will help you convert a Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace.\n"
-		);
+			"The first step will help you convert a Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace.\n");
 
-		extensionDecBuilder.append("Click the \"Import Projects\" button to import your project into the Eclipse workspace ");
+		extensionDecBuilder.append(
+			"Click the \"Import Projects\" button to import your project into the Eclipse workspace ");
 		extensionDecBuilder.append("(this process maybe need 5-10 minutes for bundle initialization).\n");
 		extensionDecBuilder.append("Note:\n");
 		extensionDecBuilder.append(
-			"       To save time, downloading the 7.0 ivy cache locally could be a good choice when upgrading to Liferay Plugins SDK 7. \n"
-		);
+			"       To save time, downloading the 7.0 ivy cache locally could be a good choice when upgrading to Liferay Plugins SDK 7. \n");
 		extensionDecBuilder.append(
-			"       Theme and Ext projects will be ignored since this tool does not support them currently. \n"
-		);
+			"       Theme and Ext projects will be ignored since this tool does not support them currently. \n");
 
 		Label image = new Label(fillLayoutComposite, SWT.WRAP);
 
@@ -267,8 +271,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		PopupDialog popupDialog = new PopupDialog(
 			fillLayoutComposite.getShell(), PopupDialog.INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false,
-			null, null
-		) {
+			null, null) {
 
 			private static final int _cursorSize = 15;
 
@@ -628,7 +631,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		return retval;
 	}
-	
+
 	private void _copyNewSDK(IPath targetSDKLocation, IProgressMonitor monitor) throws CoreException {
 		SubMonitor progress = SubMonitor.convert(monitor, 100);
 
@@ -738,8 +741,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 	private void _createDownloaBundleCheckboxElement() {
 		_disposeBundleCheckboxElement();
-		_downloadBundleCheckbox =
-			SWTUtil.createCheckButton(_pageParent, "Download Liferay bundle (recommended)", null, true, 1);
+		_downloadBundleCheckbox = SWTUtil.createCheckButton(
+			_pageParent, "Download Liferay bundle (recommended)", null, true, 1);
 
 		GridDataFactory.generate(_downloadBundleCheckbox, 2, 1);
 		_downloadBundleCheckbox.addSelectionListener(new SelectionAdapter() {
@@ -796,8 +799,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 						if (UpgradeView.getPageNumber() < 3) {
 							Boolean showAllPages = MessageDialog.openQuestion(
 								UIUtil.getActiveShell(), "Show All Pages",
-								"There is no project need to be upgraded.\n Do you want to show all the following steps?"
-							);
+								"There is no project need to be upgraded.\n Do you want to show all the following steps?");
 
 							if (showAllPages) {
 								UpgradeView.showAllPages();
@@ -865,8 +867,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 				if (bundleLocationDir.toFile().exists()) {
 					progress.worked(60);
 
-					final IPath runtimeLocation =
-						sdkLocation.append(LiferayWorkspaceUtil.getHomeDir(sdkLocation.toOSString()));
+					final IPath runtimeLocation = sdkLocation.append(
+						LiferayWorkspaceUtil.getHomeDir(sdkLocation.toOSString()));
 
 					ServerUtil.addPortalRuntimeAndServer(bundleName, runtimeLocation, monitor);
 
@@ -892,8 +894,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 			ProjectUI.logError(e);
 			throw new CoreException(
 				StatusBridge
-					.create(Status.createErrorStatus("Failed to execute Liferay Workspace Bundle Init Command...", e))
-			);
+					.create(Status.createErrorStatus("Failed to execute Liferay Workspace Bundle Init Command...", e)));
 		}
 		finally {
 			progress.done();
@@ -919,8 +920,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		catch (BladeCLIException bclie) {
 			ProjectUI.logError(bclie);
 			throw new CoreException(
-				StatusBridge.create(Status.createErrorStatus("Faild execute Liferay Workspace Init Command...", bclie))
-			);
+				StatusBridge.create(
+					Status.createErrorStatus("Faild execute Liferay Workspace Init Command...", bclie)));
 		}
 		finally {
 			progress.done();
@@ -1017,7 +1018,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 	private void _deleteEclipseConfigFiles(File project) {
 		for (File file : project.listFiles()) {
-			if (file.getName().contentEquals(".classpath") || file.getName().contentEquals(".settings") || 
+			if (file.getName().contentEquals(".classpath") || file.getName().contentEquals(".settings") ||
 				file.getName().contentEquals(".project")) {
 
 				if (file.isDirectory()) {
@@ -1030,9 +1031,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	}
 
 	private void _deleteSDKLegacyProjects(IPath sdkLocation) {
-		String[] needDeletedPaths = {
-			"shared/portal-http-service", "webs/resources-importer-web"
-		};
+		String[] needDeletedPaths = {"shared/portal-http-service", "webs/resources-importer-web"};
 
 		for (String path : needDeletedPaths) {
 			File file = sdkLocation.append(path).toFile();
@@ -1128,15 +1127,14 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		Collection<File> liferayProjectDirs = new ArrayList<>();
 
 		if (ProjectUtil.collectSDKProjectsFromDirectory(
-			eclipseProjectFiles, liferayProjectDirs, targetSDKLocation.toFile(), null, true, monitor
-		)) {
+				eclipseProjectFiles, liferayProjectDirs, targetSDKLocation.toFile(), null, true, monitor)) {
 
 			for (File project : liferayProjectDirs) {
 				try {
 					_deleteEclipseConfigFiles(project);
 
-					IProject importProject =
-						ProjectImportUtil.importProject(new Path(project.getPath()), monitor, null);
+					IProject importProject = ProjectImportUtil.importProject(
+						new Path(project.getPath()), monitor, null);
 
 					if (importProject != null && importProject.isAccessible() && importProject.isOpen()) {
 						_checkProjectType(importProject);
@@ -1158,8 +1156,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 				try {
 					_deleteEclipseConfigFiles(project.getParentFile());
 
-					IProject importProject =
-						ProjectImportUtil.importProject(new Path(project.getParent()), monitor, null);
+					IProject importProject = ProjectImportUtil.importProject(
+						new Path(project.getParent()), monitor, null);
 
 					if (importProject != null && importProject.isAccessible() && importProject.isOpen()) {
 						_checkProjectType(importProject);
@@ -1275,9 +1273,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 			throw new CoreException(
 				StatusBridge.create(
 					Status
-						.createErrorStatus("Failed to remove Liferay private url configuration of ivy-settings.xml.", e)
-				)
-			);
+						.createErrorStatus(
+							"Failed to remove Liferay private url configuration of ivy-settings.xml.", e)));
 		}
 	}
 
@@ -1326,8 +1323,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		catch (Exception e) {
 			ProjectUI.logError(e);
 			throw new CoreException(
-				StatusBridge.create(Status.createErrorStatus("Failed to save change for ivy-settings.xml.", e))
-			);
+				StatusBridge.create(Status.createErrorStatus("Failed to save change for ivy-settings.xml.", e)));
 		}
 	}
 
@@ -1392,8 +1388,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 							layoutValidation = false;
 						}
-						else if ((downloadBundle && bundUrl != null) && (bundUrl.length()) > 0 && 
-							!_bundleUrlValidation.compute().ok()) {
+						else if ((downloadBundle && bundUrl != null) && (bundUrl.length()) > 0 &&
+								 !_bundleUrlValidation.compute().ok()) {
 
 							message = _bundleUrlValidation.compute().message();
 
@@ -1444,9 +1440,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	private Button _importButton;
 	private Combo _layoutComb;
 	private Label _layoutLabel;
-	private String[] _layoutNames = {
-		"Upgrade to Liferay Workspace", "Upgrade to Liferay Plugins SDK 7"
-	};
+	private String[] _layoutNames = {"Upgrade to Liferay Workspace", "Upgrade to Liferay Plugins SDK 7"};
 	private Composite _pageParent;
 	private ProjectLocationValidationService _sdkValidation =
 		dataModel.getSdkLocation().service(ProjectLocationValidationService.class);
@@ -1515,7 +1509,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 								if (_layoutComb.getSelectionIndex() != 0) {
 									_layoutComb.select(1);
 								}
-	
+
 								_layoutComb.setEnabled(false);
 								dataModel.setLayout(_layoutComb.getText());
 							}

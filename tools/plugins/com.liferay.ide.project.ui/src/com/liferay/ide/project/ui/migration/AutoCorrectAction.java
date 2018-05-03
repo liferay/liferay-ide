@@ -53,6 +53,7 @@ public class AutoCorrectAction extends ProblemAction {
 
 	public AutoCorrectAction(ISelectionProvider provider) {
 		super(provider, "Correct automatically");
+
 		_provider = provider;
 	}
 
@@ -159,6 +160,7 @@ public class AutoCorrectAction extends ProblemAction {
 
 				if (!(item instanceof Problem)) {
 					selectionCompatible = false;
+
 					break;
 				}
 
@@ -166,6 +168,7 @@ public class AutoCorrectAction extends ProblemAction {
 
 				if (problem.autoCorrectContext == null) {
 					selectionCompatible = false;
+
 					break;
 				}
 
@@ -177,6 +180,7 @@ public class AutoCorrectAction extends ProblemAction {
 
 					if (!(prCurrentKey.equals(prLastKey))) {
 						selectionCompatible = false;
+
 						break;
 					}
 				}

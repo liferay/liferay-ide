@@ -28,6 +28,7 @@ public class ImportLiferayProjectsWizardAction extends NewWizardAction {
 
 	public ImportLiferayProjectsWizardAction() {
 		super(new ImportLiferayProjectElement());
+
 		setText(Msgs.newLiferayProject);
 	}
 

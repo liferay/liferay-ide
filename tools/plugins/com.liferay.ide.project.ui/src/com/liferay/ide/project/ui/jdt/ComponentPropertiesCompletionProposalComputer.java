@@ -68,6 +68,7 @@ public class ComponentPropertiesCompletionProposalComputer implements IJavaCompl
 
 					if ((invocationOffset - prefixStartPos) < 0) {
 						hasQuot = false;
+
 						break;
 					}
 

@@ -156,6 +156,7 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					super.widgetSelected(e);
+
 					enablePreferenceContent(_enableProjectSettings.getSelection());
 				}
 

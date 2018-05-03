@@ -55,6 +55,7 @@ public class WorkingSetCustomPart extends FormComponentPart {
 	@Override
 	protected void init() {
 		super.init();
+
 		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
 		ISelectionService service = (ISelectionService)activeWorkbenchWindow.getSelectionService();

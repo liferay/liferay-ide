@@ -39,10 +39,12 @@ public class MigratorComparator extends ViewerComparator {
 		switch (_columnIndex) {
 			case 0:
 				flag = (t1.getStatus() == Problem.STATUS_RESOLVED) ? 1 : -1;
+
 				break;
 
 			case 1:
 				flag = t1.getLineNumber() >= t2.getLineNumber() ? 1 : -1;
+
 				break;
 
 			case 2:

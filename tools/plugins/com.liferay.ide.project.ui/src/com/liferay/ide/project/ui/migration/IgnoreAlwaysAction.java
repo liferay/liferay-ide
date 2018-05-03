@@ -48,6 +48,7 @@ public class IgnoreAlwaysAction extends SelectionProviderAction implements IActi
 
 	public IgnoreAlwaysAction(ISelectionProvider provider) {
 		super(provider, "Ignore all problems of this type");
+
 		_provider = provider;
 	}
 

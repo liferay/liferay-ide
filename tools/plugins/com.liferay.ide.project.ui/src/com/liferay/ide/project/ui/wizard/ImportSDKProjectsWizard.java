@@ -46,6 +46,7 @@ public class ImportSDKProjectsWizard
 
 	public ImportSDKProjectsWizard(final String newTitle) {
 		super(_createDefaultOp(), DefinitionLoader.sdef(ImportSDKProjectsWizard.class).wizard());
+
 		_title = newTitle;
 	}
 

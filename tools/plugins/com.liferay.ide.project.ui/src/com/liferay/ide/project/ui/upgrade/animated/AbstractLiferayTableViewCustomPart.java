@@ -333,6 +333,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 		@Override
 		public void update(ViewerCell cell) {
 			super.update(cell);
+
 			TableItem item = (TableItem)cell.getItem();
 
 			if (_oddFlag) {

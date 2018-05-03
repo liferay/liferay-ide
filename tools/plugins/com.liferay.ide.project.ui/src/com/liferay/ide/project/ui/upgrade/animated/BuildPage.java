@@ -224,8 +224,7 @@ public class BuildPage extends Page {
 	}
 
 	public void createSpecialDescriptor(Composite parent, int style) {
-		final StringBuilder descriptorBuilder = new StringBuilder(
-			"This step will help you build all your projects.\n");
+		final StringBuilder descriptorBuilder = new StringBuilder("This step will help you build all your projects.\n");
 
 		descriptorBuilder.append("You can rebuild the project by double-clicking it.");
 
