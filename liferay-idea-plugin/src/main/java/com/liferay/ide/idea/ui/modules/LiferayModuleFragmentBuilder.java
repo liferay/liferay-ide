@@ -118,9 +118,9 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 			f -> _copyOtherResource(projectRoot, f)
 		).build();
 
-		Stream<String> stream = Stream.of(_overrideFiles);
-
-		stream.map(
+		Stream.of(
+			_overrideFiles
+		).map(
 			overrideFile -> new File(hostBundle, overrideFile)
 		).filter(
 			file -> file.exists()
