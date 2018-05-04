@@ -1,44 +1,47 @@
-
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
 
 import java.io.File;
+
 import java.nio.file.Files;
+
 import java.util.Collection;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+/**
+ * @author Gregory Amerson
+ * @author Terry Jia
+ */
 public class PortalServiceImportsAutoCorrectTest {
 
 	@Test
 	public void autoCorrectProblems() throws Exception {
 		File tempFolder = Files.createTempDirectory("autocorrect").toFile();
+
 		File testFile = new File(tempFolder, "PortalServiceImports.java");
 
 		tempFolder.deleteOnExit();
@@ -50,31 +53,35 @@ public class PortalServiceImportsAutoCorrectTest {
 		List<Problem> problems = null;
 		FileMigrator migrator = null;
 
-		Collection<ServiceReference<FileMigrator>> mrefs = context.getServiceReferences(FileMigrator.class, null);
-		for (ServiceReference<FileMigrator> mref : mrefs) {
-			migrator = context.getService(mref);
+		Collection<ServiceReference<FileMigrator>> mrefs = _context.getServiceReferences(FileMigrator.class, null);
 
-			if (migrator.getClass().getName().contains("PortalServiceImports")) {
+		for (ServiceReference<FileMigrator> mref : mrefs) {
+			migrator = _context.getService(mref);
+
+			Class<?> clazz = migrator.getClass();
+
+			if (clazz.getName().contains("PortalServiceImports")) {
 				problems = migrator.analyze(testFile);
+
 				break;
 			}
 		}
 
-		assertEquals(2, problems.size());
+		Assert.assertEquals(2, problems.size());
 
-		int problemsFixed = ((AutoMigrator)migrator).correctProblems( testFile, problems );
+		int problemsFixed = ((AutoMigrator)migrator).correctProblems(testFile, problems);
 
-		assertEquals(2, problemsFixed);
+		Assert.assertEquals(2, problemsFixed);
 
 		File dest = new File(tempFolder, "Updated.java");
 
-		assertTrue(testFile.renameTo(dest));
+		Assert.assertTrue(testFile.renameTo(dest));
 
 		problems = migrator.analyze(dest);
 
-		assertEquals(0, problems.size());
+		Assert.assertEquals(0, problems.size());
 	}
 
-	private final BundleContext context = FrameworkUtil.getBundle(
-		this.getClass()).getBundleContext();
+	private final BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();
+
 }

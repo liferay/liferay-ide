@@ -39,6 +39,7 @@ public abstract class IDESection extends SectionPart implements IModelChangedLis
 
 	public IDESection(IDEFormPage page, Composite parent, int style, boolean titleBar) {
 		super(parent, page.getManagedForm().getToolkit(), titleBar ? (ExpandableComposite.TITLE_BAR | style) : style);
+
 		_fPage = page;
 		initialize(page.getManagedForm());
 		getSection().clientVerticalSpacing = FormLayoutFactory.SECTION_HEADER_VERTICAL_SPACING;

@@ -263,6 +263,7 @@ public class LiferayProjectPropertyPage
 						for (IRuntime runtime : ServerCore.getRuntimes()) {
 							if (ServerUtil.isLiferayRuntime(runtime) && FileUtil.exists(runtime.getLocation()) &&
 								(LiferayServerCore.newPortalBundle(runtime.getLocation()) == null)) {
+
 								runtimeNames.add(runtime.getName());
 
 								if (runtime.getName().equals(currentRuntimeName)) {

@@ -311,9 +311,7 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 
 		List<String> items = new ArrayList<>();
 
-		for (int i = 0; i < workspaceProjects.length; i++) {
-			IProject project = workspaceProjects[i];
-
+		for (IProject project : workspaceProjects) {
 			if (isProjectValid(project)) {
 				items.add(project.getName());
 			}

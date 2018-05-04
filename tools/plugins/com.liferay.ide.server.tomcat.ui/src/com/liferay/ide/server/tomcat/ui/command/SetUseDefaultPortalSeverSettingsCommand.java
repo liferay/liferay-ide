@@ -27,6 +27,7 @@ public class SetUseDefaultPortalSeverSettingsCommand extends ServerCommand {
 
 	public SetUseDefaultPortalSeverSettingsCommand(LiferayTomcatServer server, boolean useDefaultPortalServerSettings) {
 		super(server, Messages.serverEditorActionSetDeployDirectory);
+
 		this.useDefaultPortalServerSettings = useDefaultPortalServerSettings;
 	}
 

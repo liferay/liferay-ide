@@ -24,6 +24,7 @@ public class LiferayUISearchContainerWizardPage extends AbstractModelWizardPage 
 
 	public LiferayUISearchContainerWizardPage(String pageName, IEditorPart editor) {
 		super(pageName, editor);
+
 		setTitle(Msgs.liferayUISearchContainer);
 		setDescription(Msgs.insertLiferayUISearchContainerJSPTag);
 	}

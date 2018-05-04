@@ -367,7 +367,7 @@ public class MigrationProblemPreferencePage extends PreferencePage implements IW
 		else {
 			_browser.setUrl("about:blank");
 		}
-	};
+	}
 
 	private Browser _browser;
 	private Label _detailInfoLabel;

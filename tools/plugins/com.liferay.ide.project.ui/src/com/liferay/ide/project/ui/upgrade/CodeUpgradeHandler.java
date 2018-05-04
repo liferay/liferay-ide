@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade;
 
@@ -32,30 +31,29 @@ import org.eclipse.ui.PlatformUI;
  * @author Terry Jia
  * @author Lovett Li
  */
-public class CodeUpgradeHandler extends AbstractHandler
-{
+public class CodeUpgradeHandler extends AbstractHandler {
 
-    @Override
-    public Object execute( ExecutionEvent event ) throws ExecutionException
-    {
-        IWorkbench workbench = PlatformUI.getWorkbench();
-        IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		IWorkbench workbench = PlatformUI.getWorkbench();
 
-        if( window != null )
-        {
-            UIUtil.switchToLiferayPerspective( LiferayWorkspacePerspectiveFactory.ID, false );
-            IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
 
-            try
-            {
-                activePage.showView( UpgradeView.ID );
-            }
-            catch( PartInitException e )
-            {
-            }
-        }
+		if (window != null) {
+			UIUtil.switchToLiferayPerspective(LiferayWorkspacePerspectiveFactory.ID, false);
 
-        return null;
-    }
+			workbench = PlatformUI.getWorkbench();
+
+			IWorkbenchPage activePage = workbench.getActiveWorkbenchWindow().getActivePage();
+
+			try {
+				activePage.showView(UpgradeView.ID);
+			}
+			catch (PartInitException pie) {
+			}
+		}
+
+		return null;
+	}
 
 }

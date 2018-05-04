@@ -32,9 +32,9 @@ import org.osgi.service.component.annotations.Component;
 public class RestoreEntryTags extends JSPTagMigrator {
 
 	public RestoreEntryTags() {
-		super(new String[0], new String[0], new String[0], new String[0], _tagNames, new String[0]);
+		super(new String[0], new String[0], new String[0], new String[0], _TAG_NAMES, new String[0]);
 	}
 
-	private static final String[] _tagNames = {"liferay-ui:restore-entry"};
+	private static final String[] _TAG_NAMES = {"liferay-ui:restore-entry"};
 
 }

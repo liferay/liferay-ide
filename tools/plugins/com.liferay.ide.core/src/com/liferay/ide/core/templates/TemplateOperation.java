@@ -17,14 +17,14 @@ package com.liferay.ide.core.templates;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ListUtil;
 
+import freemarker.template.Template;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
-
-import freemarker.template.Template;
 
 /**
  * @author Gregory Amerson
@@ -68,15 +68,14 @@ public class TemplateOperation implements ITemplateOperation {
 			return;
 		}
 
-		try(StringWriter writer = new StringWriter()){
-
+		try (StringWriter writer = new StringWriter()) {
 			TemplateContext templateContext = (TemplateContext)getContext();
 
 			getTemplate().process(templateContext.getMap(), writer);
 
 			String result = writer.toString();
 
-			try(InputStream inputStream = new ByteArrayInputStream(result.getBytes())){
+			try (InputStream inputStream = new ByteArrayInputStream(result.getBytes())) {
 				if (outputFile != null) {
 					if (outputFile.exists()) {
 						outputFile.setContents(inputStream, true, true, monitor);
@@ -90,7 +89,7 @@ public class TemplateOperation implements ITemplateOperation {
 
 					outputBuffer.append(result);
 				}
-			}			
+			}
 		}
 	}
 

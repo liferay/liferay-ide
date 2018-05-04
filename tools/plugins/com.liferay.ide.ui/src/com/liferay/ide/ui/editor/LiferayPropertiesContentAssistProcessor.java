@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.ListUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.internal.ui.propertiesfileeditor.IPropertiesFilePartitions;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IDocumentPartitioner;
@@ -152,9 +153,7 @@ public class LiferayPropertiesContentAssistProcessor implements IContentAssistPr
 		if (document instanceof IDocumentExtension3) {
 			IDocumentExtension3 doc3 = (IDocumentExtension3)document;
 
-			retval = doc3.getDocumentPartitioner(
-				org.eclipse.jdt.internal.ui.
-					propertiesfileeditor.IPropertiesFilePartitions.PROPERTIES_FILE_PARTITIONING);
+			retval = doc3.getDocumentPartitioner(IPropertiesFilePartitions.PROPERTIES_FILE_PARTITIONING);
 		}
 
 		return retval;

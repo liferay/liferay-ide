@@ -24,6 +24,8 @@ import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.gdvindent;
 import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.glayout;
 import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.glspacing;
 
+import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.ui.SapphirePart.LabelChangedEvent;
 import org.eclipse.sapphire.ui.assist.internal.PropertyEditorAssistDecorator;
@@ -96,10 +98,10 @@ public final class PossibleValuesRadioPropertyEditorPresentation<T> extends Valu
 
 			};
 
-			final org.eclipse.sapphire.Listener listener = new org.eclipse.sapphire.Listener() {
+			Listener listener = new Listener() {
 
 				@Override
-				public void handle(final org.eclipse.sapphire.Event event) {
+				public void handle(Event event) {
 					if (event instanceof LabelChangedEvent) {
 						updateLabelOp.run();
 						PossibleValuesRadioPropertyEditorPresentation.this.layout();

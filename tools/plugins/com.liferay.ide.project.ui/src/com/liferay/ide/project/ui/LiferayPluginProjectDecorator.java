@@ -45,7 +45,7 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
 		if (key != null) {
 			String gif = "/" + key + ".png";
 
-			IPath path = new Path(_iconDir).append(gif);
+			IPath path = new Path(_ICON_DIR).append(gif);
 
 			URL gifImageURL = FileLocator.find(Platform.getBundle(ProjectUI.PLUGIN_ID), path, null);
 
@@ -57,17 +57,20 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
 		return imageDescriptor;
 	}
 
-	private static final String _extFacet = "liferay.ext";
-	private static final String _hookFacet = "liferay.hook";
-	private static final String _iconDir = "icons/ovr";
-	private static final String _layouttplFacet = "liferay.layouttpl";
+	private static final String _EXT_FACET = "liferay.ext";
+
+	private static final String _HOOK_FACET = "liferay.hook";
+
+	private static final String _ICON_DIR = "icons/ovr";
+
+	private static final String _LAYOUTTPL_FACET = "liferay.layouttpl";
 
 	/* The constants are duplicated here to avoid plugin loading. */
-	private static final String _portletFaceT = "liferay.portlet";
+	private static final String _PORTLET_FACET = "liferay.portlet";
 
-	private static final String _themeFacet = "liferay.theme";
+	private static final String _THEME_FACET = "liferay.theme";
 
-	private static final String _webFacet = "liferay.web";
+	private static final String _WEB_FACET = "liferay.web";
 
 	private static ImageDescriptor _liferay;
 
@@ -85,22 +88,22 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
 
 			ImageDescriptor overlay = null;
 
-			if (_hasFacet(project, _portletFaceT)) {
+			if (_hasFacet(project, _PORTLET_FACET)) {
 				overlay = _getLiferay();
 			}
-			else if (_hasFacet(project, _hookFacet)) {
+			else if (_hasFacet(project, _HOOK_FACET)) {
 				overlay = _getLiferay();
 			}
-			else if (_hasFacet(project, _extFacet)) {
+			else if (_hasFacet(project, _EXT_FACET)) {
 				overlay = _getLiferay();
 			}
-			else if (_hasFacet(project, _layouttplFacet)) {
+			else if (_hasFacet(project, _LAYOUTTPL_FACET)) {
 				overlay = _getLiferay();
 			}
-			else if (_hasFacet(project, _themeFacet)) {
+			else if (_hasFacet(project, _THEME_FACET)) {
 				overlay = _getLiferay();
 			}
-			else if (_hasFacet(project, _webFacet)) {
+			else if (_hasFacet(project, _WEB_FACET)) {
 				overlay = _getLiferay();
 			}
 			else if (LiferayNature.hasNature(project)) {

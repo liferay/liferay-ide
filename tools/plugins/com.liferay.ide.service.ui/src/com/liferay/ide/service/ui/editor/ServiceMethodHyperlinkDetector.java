@@ -133,6 +133,7 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 	@Override
 	public void dispose() {
 		super.dispose();
+
 		_lastElements = null;
 		_lastInput = null;
 		_lastWordRegion = null;
@@ -317,18 +318,18 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 	private IJavaElement[] _selectOpenableElements(IJavaElement[] elements) {
 		List<IJavaElement> result = new ArrayList<>(elements.length);
 
-		for (int i = 0; i < elements.length; i++) {
-			IJavaElement element = elements[i];
-
+		for (IJavaElement element : elements) {
 			switch (element.getElementType()) {
 				case IJavaElement.PACKAGE_DECLARATION:
 				case IJavaElement.PACKAGE_FRAGMENT:
 				case IJavaElement.PACKAGE_FRAGMENT_ROOT:
 				case IJavaElement.JAVA_PROJECT:
 				case IJavaElement.JAVA_MODEL:
+
 					break;
 				default:
 					result.add(element);
+
 					break;
 			}
 		}
@@ -394,6 +395,7 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 				for (int i = 0; i < this._method.getTypeParameters().length; i++) {
 					if (!this._method.getParameterTypes()[i].equals(element.getParameterTypes()[i])) {
 						matches = false;
+
 						break;
 					}
 				}

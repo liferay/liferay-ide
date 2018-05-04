@@ -29,6 +29,7 @@ public class FormEntryAdapter implements IFormEntryListener {
 
 	public FormEntryAdapter(IContextPart contextPart, IActionBars actionBars) {
 		_contextPart = contextPart;
+
 		this.actionBars = actionBars;
 	}
 

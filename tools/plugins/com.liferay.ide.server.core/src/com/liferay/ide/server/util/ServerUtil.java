@@ -232,13 +232,11 @@ public class ServerUtil {
 		File implJar = implJarPath.toFile();
 
 		if (FileUtil.exists(implJar)) {
-			try(JarFile jar = new JarFile(implJar);) {
-
+			try (JarFile jar = new JarFile(implJar);) {
 				Properties categories = new Properties();
 				Properties props = new Properties();
 
-				try(InputStream input = jar.getInputStream(jar.getEntry("content/Language.properties"))){
-
+				try (InputStream input = jar.getInputStream(jar.getEntry("content/Language.properties"))) {
 					props.load(input);
 					Enumeration<?> names = props.propertyNames();
 
@@ -398,8 +396,8 @@ public class ServerUtil {
 	public static String getFragemtHostName(File bundleFile) {
 		String fragmentHostName = null;
 
-		try (InputStream input = Files.newInputStream( bundleFile.toPath() );
-				JarInputStream jarStream = new JarInputStream( input )) {
+		try (InputStream input = Files.newInputStream(bundleFile.toPath());
+			JarInputStream jarStream = new JarInputStream(input)) {
 
 			Manifest manifest = jarStream.getManifest();
 
@@ -566,13 +564,10 @@ public class ServerUtil {
 			boolean found = false;
 
 			for (File file : files) {
-
 				try (JarFile jar = new JarFile(file)) {
-
 					Enumeration<JarEntry> enu = jar.entries();
 
 					while (enu.hasMoreElements()) {
-
 						JarEntry entry = enu.nextElement();
 
 						String name = entry.getName();

@@ -33,10 +33,11 @@ import org.osgi.service.component.annotations.Component;
 public class AppViewSearchEntryTags extends JSPTagMigrator {
 
 	public AppViewSearchEntryTags() {
-		super(_attrNames, new String[0], new String[0], new String[0], _tagNames, new String[0]);
+		super(_ATTR_NAMES, new String[0], new String[0], new String[0], _TAG_NAMES, new String[0]);
 	}
 
-	private static final String[] _attrNames = {"mbMessages", "fileEntryTuples"};
-	private static final String[] _tagNames = {"liferay-ui:app-view-search-entry"};
+	private static final String[] _ATTR_NAMES = {"mbMessages", "fileEntryTuples"};
+
+	private static final String[] _TAG_NAMES = {"liferay-ui:app-view-search-entry"};
 
 }

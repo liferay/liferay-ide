@@ -34,10 +34,11 @@ import org.osgi.service.component.annotations.Component;
 public class DeprecatedTrashUndoTags extends JSPTagMigrator {
 
 	public DeprecatedTrashUndoTags() {
-		super(new String[0], new String[0], new String[0], new String[0], _tagNames, _newTagNames);
+		super(new String[0], new String[0], new String[0], new String[0], _TAG_NAMES, _NEW_TAG_NAMES);
 	}
 
-	private static final String[] _newTagNames = {"liferay-trash:undo"};
-	private static final String[] _tagNames = {"liferay-ui:trash-undo"};
+	private static final String[] _NEW_TAG_NAMES = {"liferay-trash:undo"};
+
+	private static final String[] _TAG_NAMES = {"liferay-ui:trash-undo"};
 
 }

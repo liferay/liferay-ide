@@ -56,6 +56,7 @@ public class RenameDialog extends SelectionStatusDialog {
 	 */
 	public RenameDialog(Shell shell, boolean caseSensitive, String[] names, String oldName) {
 		super(shell);
+
 		_caseSensitive = caseSensitive;
 		initialize();
 
@@ -76,6 +77,7 @@ public class RenameDialog extends SelectionStatusDialog {
 	 */
 	public RenameDialog(Shell shell, String oldName) {
 		super(shell);
+
 		_caseSensitive = false;
 		initialize();
 		setOldName(oldName);
@@ -214,6 +216,7 @@ public class RenameDialog extends SelectionStatusDialog {
 				updateStatus(_status);
 
 				okButton.setEnabled(false);
+
 				break;
 			}
 

@@ -33,10 +33,11 @@ import org.osgi.service.component.annotations.Component;
 public class AUIColumnTags extends JSPTagMigrator {
 
 	public AUIColumnTags() {
-		super(new String[0], new String[0], new String[0], new String[0], _tagNames, _newTagNames);
+		super(new String[0], new String[0], new String[0], new String[0], _TAG_NAMES, _NEW_TAG_NAMES);
 	}
 
-	private static final String[] _newTagNames = {"aui:col"};
-	private static final String[] _tagNames = {"aui:column"};
+	private static final String[] _NEW_TAG_NAMES = {"aui:col"};
+
+	private static final String[] _TAG_NAMES = {"aui:column"};
 
 }

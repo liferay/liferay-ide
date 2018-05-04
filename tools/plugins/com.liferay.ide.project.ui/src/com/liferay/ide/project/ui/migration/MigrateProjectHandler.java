@@ -193,8 +193,9 @@ public class MigrateProjectHandler extends AbstractHandler {
 				};
 
 				try {
-					final ServiceReference<Migration> sr = context.getServiceReference(Migration.class);
-					final Migration m = context.getService(sr);
+					ServiceReference<Migration> sr = context.getServiceReference(Migration.class);
+
+					Migration m = context.getService(sr);
 
 					List<Problem> allProblems = null;
 
@@ -596,7 +597,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 		return true;
 	}
 
-	@SuppressWarnings({ "deprecation", "rawtypes" })
+	@SuppressWarnings({"deprecation", "rawtypes"})
 	private boolean _shouldSearch(File file) {
 		String path = file.getAbsolutePath().replaceAll("\\\\", "/");
 

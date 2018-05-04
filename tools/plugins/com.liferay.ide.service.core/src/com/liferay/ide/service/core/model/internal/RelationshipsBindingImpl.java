@@ -156,6 +156,7 @@ public class RelationshipsBindingImpl extends LayeredListPropertyBinding {
 				for (Column column : fromEntity.getColumns()) {
 					if (primaryKeyName.equals(column.getName().content())) {
 						columnToRemove = column;
+
 						break;
 					}
 				}

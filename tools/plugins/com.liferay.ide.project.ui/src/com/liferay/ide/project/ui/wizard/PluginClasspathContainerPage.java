@@ -43,6 +43,7 @@ public class PluginClasspathContainerPage
 
 	public PluginClasspathContainerPage() {
 		super("PluginClasspathContainerPage");
+
 		setTitle(Msgs.liferayPluginAPILibrary);
 		setDescription(Msgs.containerManagesClasspathEntries);
 	}

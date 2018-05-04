@@ -123,7 +123,7 @@ public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler {
 			module = ServerUtil.getModuleFileFrom70Server(runtime, currentOSGiBundle, tempLocation);
 		}
 
-		if(FileUtil.exists(module)) {
+		if (FileUtil.exists(module)) {
 			dialog.setInput(module);
 		}
 

@@ -204,9 +204,9 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 					File setupWizardFile = setupWizardPath.toFile();
 
 					if (FileUtil.exists(setupWizardFile)) {
-                        try(InputStream setupInputStream = Files.newInputStream( setupWizardPath.toFile().toPath() )){
+						try (InputStream setupInputStream = Files.newInputStream(setupWizardPath.toFile().toPath())) {
 							pluginPackageProperties.load(setupInputStream);
-                        }
+						}
 					}
 				}
 			}
@@ -216,9 +216,9 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 				File setupWizardFile = setupWizardPath.toFile();
 
 				if (FileUtil.exists(setupWizardFile)) {
-                    try(InputStream setupInputStream = Files.newInputStream( setupWizardPath.toFile().toPath() )){
+					try (InputStream setupInputStream = Files.newInputStream(setupWizardPath.toFile().toPath())) {
 						pluginPackageProperties.load(setupInputStream);
-                    }
+					}
 				}
 			}
 		}
@@ -241,8 +241,7 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 			return new MysqlLiferayDatabaseConnection(
 				defaultDriverClass, providerId, connectionDesc, driverTemplate, userName, password, connectionUrl);
 		}
-		else if (driverClass.equals("org.postgresql.Driver"))
-		{
+		else if (driverClass.equals("org.postgresql.Driver")) {
 			String defaultDriverClass = "org.postgresql.Driver";
 			String providerId = "org.eclipse.datatools.enablement.postgresql.connectionProfile";
 			String connectionDesc = "Posgresql Connection Profile";

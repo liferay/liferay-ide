@@ -112,20 +112,21 @@ public class ValidProjectChecker {
 		}
 
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(
-			PlatformUI.PLUGIN_ID, _tag_new_wizards);
+			PlatformUI.PLUGIN_ID, _TAG_NEW_WIZARDS);
 
 		if (extensionPoint != null) {
 			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
 			for (IConfigurationElement element : elements) {
-				if (element.getName().equals(_tag_wizard) && element.getAttribute(_att_id).equals(wizardId)) {
+				if (element.getName().equals(_TAG_WIZARD) && element.getAttribute(_ATT_ID).equals(wizardId)) {
 
 					// getValidProjectTypesFromConfig( element )!=null &&
 					// isLiferayArtifactWizard(element,
 					// "liferay_artifact")
 
 					setValidProjectTypes(_getValidProjectTypesFromConfig(element));
-					wizardName = element.getAttribute(_att_name);
+					wizardName = element.getAttribute(_ATT_NAME);
+
 					break;
 				}
 			}
@@ -142,11 +143,11 @@ public class ValidProjectChecker {
 
 		if (ListUtil.isNotEmpty(classElements)) {
 			for (IConfigurationElement classElement : classElements) {
-				IConfigurationElement[] paramElements = classElement.getChildren(_tag_parameter);
+				IConfigurationElement[] paramElements = classElement.getChildren(_TAG_PARAMETER);
 
 				for (IConfigurationElement paramElement : paramElements) {
-					if (_att_valid_project_types.equals(paramElement.getAttribute(_att_name))) {
-						return paramElement.getAttribute(_tag_value);
+					if (_ATT_VALID_PROJECT_TYPES.equals(paramElement.getAttribute(_ATT_NAME))) {
+						return paramElement.getAttribute(_TAG_VALUE);
 					}
 				}
 			}
@@ -155,13 +156,19 @@ public class ValidProjectChecker {
 		return null;
 	}
 
-	private static final String _att_id = "id";
-	private static final String _att_name = "name";
-	private static final String _att_valid_project_types = "validProjectTypes";
-	private static final String _tag_new_wizards = "newWizards";
-	private static final String _tag_parameter = "parameter";
-	private static final String _tag_value = "value";
-	private static final String _tag_wizard = "wizard";
+	private static final String _ATT_ID = "id";
+
+	private static final String _ATT_NAME = "name";
+
+	private static final String _ATT_VALID_PROJECT_TYPES = "validProjectTypes";
+
+	private static final String _TAG_NEW_WIZARDS = "newWizards";
+
+	private static final String _TAG_PARAMETER = "parameter";
+
+	private static final String _TAG_VALUE = "value";
+
+	private static final String _TAG_WIZARD = "wizard";
 
 	private static class Msgs extends NLS {
 

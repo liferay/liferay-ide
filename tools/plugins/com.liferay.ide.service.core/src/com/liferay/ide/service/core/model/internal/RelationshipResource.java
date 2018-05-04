@@ -32,6 +32,7 @@ public class RelationshipResource extends Resource {
 
 	public RelationshipResource(RelationshipObject obj, Resource parent) {
 		super(parent);
+
 		_relationshipObject = obj;
 	}
 
@@ -100,6 +101,7 @@ public class RelationshipResource extends Resource {
 			for (Column column : toEntity.getColumns()) {
 				if (column.isPrimary().content()) {
 					primaryKeyColumn = column;
+
 					break;
 				}
 			}

@@ -82,7 +82,7 @@ public class FileUtil {
 			return;
 		}
 
-		try(RandomAccessFile file = new RandomAccessFile(versionFile, "rw")) {
+		try (RandomAccessFile file = new RandomAccessFile(versionFile, "rw")) {
 			file.setLength(0);
 		}
 		catch (Exception ex) {
@@ -465,8 +465,8 @@ public class FileUtil {
 	public static String readContents(InputStream contents) throws IOException {
 		byte[] buffer = new byte[4096];
 
-		try(BufferedInputStream bin = new BufferedInputStream(contents);
-				StringBufferOutputStream out = new StringBufferOutputStream()) {
+		try (BufferedInputStream bin = new BufferedInputStream(contents);
+			StringBufferOutputStream out = new StringBufferOutputStream()) {
 
 			int bytesRead = 0;
 
@@ -482,6 +482,7 @@ public class FileUtil {
 				// bytesTotal += bytesRead;
 
 			}
+
 			return out.toString();
 		}
 	}
@@ -497,7 +498,7 @@ public class FileUtil {
 
 		List<String> lines = new ArrayList<>();
 
-		try(FileReader fileReader = new FileReader(file)) {
+		try (FileReader fileReader = new FileReader(file)) {
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			String line;
@@ -568,10 +569,10 @@ public class FileUtil {
 	}
 
 	public static Document readXML(String content) {
-		try(InputStream inputStream = new ByteArrayInputStream(content.getBytes())){
+		try (InputStream inputStream = new ByteArrayInputStream(content.getBytes())) {
 			return readXML(inputStream, null, null);
 		}
-		catch( Exception e) {
+		catch (Exception e) {
 		}
 
 		return null;
@@ -613,9 +614,10 @@ public class FileUtil {
 
 		boolean replaced = !searchContents.equals(replaceContents);
 
-		try(OutputStream out = Files.newOutputStream(file.toPath())){
+		try (OutputStream out = Files.newOutputStream(file.toPath())) {
 			CoreUtil.writeStreamFromString(replaceContents, out);
 		}
+
 		return replaced;
 	}
 
@@ -658,10 +660,10 @@ public class FileUtil {
 	}
 
 	public static void writeFile(File f, byte[] contents, String expectedProjectName) throws CoreException {
-		try(InputStream inputStream = new ByteArrayInputStream(contents)){
+		try (InputStream inputStream = new ByteArrayInputStream(contents)) {
 			writeFile(f, inputStream, expectedProjectName);
 		}
-		catch(Exception e) {
+		catch (Exception e) {
 			throw new CoreException(LiferayCore.createErrorStatus(e));
 		}
 	}
@@ -731,9 +733,9 @@ public class FileUtil {
 		byte[] buffer = new byte[1024];
 		int bytesTotal = 0;
 
-		try(OutputStream outputStream = Files.newOutputStream(tempFile.toPath());
-				BufferedOutputStream out = new BufferedOutputStream(outputStream);
-				BufferedInputStream bin = new BufferedInputStream(in)) {
+		try (OutputStream outputStream = Files.newOutputStream(tempFile.toPath());
+			BufferedOutputStream out = new BufferedOutputStream(outputStream);
+			BufferedInputStream bin = new BufferedInputStream(in)) {
 
 			int bytesRead = 0;
 
@@ -745,6 +747,7 @@ public class FileUtil {
 				bytesTotal += bytesRead;
 			}
 		}
+
 		return bytesTotal;
 	}
 

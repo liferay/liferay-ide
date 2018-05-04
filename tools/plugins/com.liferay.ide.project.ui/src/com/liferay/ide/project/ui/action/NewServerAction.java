@@ -31,6 +31,7 @@ public class NewServerAction extends Action {
 		super(
 			Msgs.newLiferayServer,
 			ImageDescriptor.createFromURL(ProjectUI.getPluginBundle().getEntry("/icons/n16/server_new.png")));
+
 		_shell = shell;
 	}
 

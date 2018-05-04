@@ -88,6 +88,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 	public void createSection(Composite parent) {
 		super.createSection(parent);
+
 		FormToolkit toolkit = getFormToolkit(parent.getDisplay());
 
 		section = toolkit.createSection(
@@ -507,7 +508,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 			if (!CoreUtil.isNullOrEmpty(memoryValue)) {
 				for (String str : memory) {
-					if (!(str.startsWith("-X"))) {
+					if (!str.startsWith("-X")) {
 						return new IStatus[] {
 							new Status(
 								IStatus.ERROR, LiferayServerUI.PLUGIN_ID,
@@ -662,9 +663,11 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 			File confFile = basePath.append("conf").toFile();
 
+			IServer original = server.getOriginal();
+
 			if (((basePath != null) && FileUtil.notExists(confFile)) ||
-				((server.getOriginal().getServerPublishState() == IServer.PUBLISH_STATE_NONE) &&
-				 (server.getOriginal().getModules().length == 0))) {
+				((original.getServerPublishState() == IServer.PUBLISH_STATE_NONE) &&
+				 (original.getModules().length == 0))) {
 
 				allowRestrictedEditing = true;
 			}

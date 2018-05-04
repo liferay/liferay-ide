@@ -163,6 +163,7 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog {
 					if ((enabledSettings[j] != null) && enabledSettings[j].equals(id)) {
 						button.setSelection(true);
 						_selectedSettings.add(settingsTransfer);
+
 						break;
 					}
 				}

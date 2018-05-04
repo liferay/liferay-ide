@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.debug.internal.core.XMLMemento;
+
 import org.osgi.framework.Version;
 
 /**
@@ -219,8 +220,9 @@ public final class SDKManager {
 		String sdksXmlString = prefs.get("sdks", null);
 
 		if (!CoreUtil.isNullOrEmpty(sdksXmlString)) {
-			try(InputStream inputStream = new ByteArrayInputStream(sdksXmlString.getBytes("UTF-8"));
-					InputStreamReader reader = new InputStreamReader(inputStream)) {
+			try (InputStream inputStream = new ByteArrayInputStream(sdksXmlString.getBytes("UTF-8"));
+				InputStreamReader reader = new InputStreamReader(inputStream)) {
+
 				XMLMemento root = XMLMemento.createReadRoot(reader, "UTF-8");
 
 				String defaultSDKName = root.getString("default");
@@ -271,7 +273,7 @@ public final class SDKManager {
 			}
 		}
 
-		try(StringWriter writer = new StringWriter()) {
+		try (StringWriter writer = new StringWriter()) {
 			root.save(writer);
 
 			_getPrefs().put("sdks", writer.toString());

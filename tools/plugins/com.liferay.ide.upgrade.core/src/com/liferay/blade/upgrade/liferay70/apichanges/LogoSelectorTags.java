@@ -32,10 +32,11 @@ import org.osgi.service.component.annotations.Component;
 public class LogoSelectorTags extends JSPTagMigrator {
 
 	public LogoSelectorTags() {
-		super(_attrNames, new String[0], new String[0], new String[0], _tagNames, new String[0]);
+		super(_ATTR_NAMES, new String[0], new String[0], new String[0], _TAG_NAMES, new String[0]);
 	}
 
-	private static final String[] _attrNames = {"editLogoURL"};
-	private static final String[] _tagNames = {"liferay-ui:logo-selector"};
+	private static final String[] _ATTR_NAMES = {"editLogoURL"};
+
+	private static final String[] _TAG_NAMES = {"liferay-ui:logo-selector"};
 
 }

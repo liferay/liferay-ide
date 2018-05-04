@@ -32,11 +32,13 @@ import org.osgi.service.component.annotations.Component;
 public class CustomAUIValidatorTags extends JSPTagMigrator {
 
 	public CustomAUIValidatorTags() {
-		super(_attrNames, new String[0], _attrValues, new String[0], _tagNames, new String[0]);
+		super(_ATTR_NAMES, new String[0], _ATTR_VALUES, new String[0], _TAG_NAMES, new String[0]);
 	}
 
-	private static final String[] _attrNames = {"name"};
-	private static final String[] _attrValues = {"custom"};
-	private static final String[] _tagNames = {"aui:validator"};
+	private static final String[] _ATTR_NAMES = {"name"};
+
+	private static final String[] _ATTR_VALUES = {"custom"};
+
+	private static final String[] _TAG_NAMES = {"aui:validator"};
 
 }

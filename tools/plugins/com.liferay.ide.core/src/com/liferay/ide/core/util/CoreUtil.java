@@ -150,10 +150,11 @@ public class CoreUtil {
 		if (newFile.getParent() instanceof IFolder) {
 			prepareFolder((IFolder)newFile.getParent());
 		}
-		try(InputStream inputStream = new ByteArrayInputStream(new byte[0])){
-			newFile.create(inputStream, true, null);	
+
+		try (InputStream inputStream = new ByteArrayInputStream(new byte[0])) {
+			newFile.create(inputStream, true, null);
 		}
-		catch(Exception e) {
+		catch (Exception e) {
 			throw new CoreException(LiferayCore.createErrorStatus(e));
 		}
 	}
@@ -547,7 +548,7 @@ public class CoreUtil {
 
 		StringBuilder out = new StringBuilder();
 
-		try(Reader in = new InputStreamReader(contents, "UTF-8")){
+		try (Reader in = new InputStreamReader(contents, "UTF-8")) {
 			int read;
 
 			do {
@@ -562,7 +563,7 @@ public class CoreUtil {
 
 		if (closeStream) {
 			contents.close();
-		}		
+		}
 
 		return out.toString();
 	}
@@ -603,9 +604,9 @@ public class CoreUtil {
 
 		char[] buffer = new char[0x10000];
 
-		try(InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"));
-				Reader in = new InputStreamReader(inputStream);
-				Writer out = new OutputStreamWriter(outputStream, "UTF-8")) {
+		try (InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"));
+			Reader in = new InputStreamReader(inputStream);
+			Writer out = new OutputStreamWriter(outputStream, "UTF-8")) {
 
 			int read;
 
@@ -616,7 +617,7 @@ public class CoreUtil {
 					out.write(buffer, 0, read);
 				}
 			}
-			while (read >= 0);	
+			while (read >= 0);
 		}
 	}
 

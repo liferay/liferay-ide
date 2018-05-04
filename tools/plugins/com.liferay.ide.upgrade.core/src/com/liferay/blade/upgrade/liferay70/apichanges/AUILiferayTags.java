@@ -33,12 +33,15 @@ import org.osgi.service.component.annotations.Component;
 public class AUILiferayTags extends JSPTagMigrator {
 
 	public AUILiferayTags() {
-		super(_attrNames, new String[0], _attrValues, _newAttrValues, _tagNames, new String[0]);
+		super(_ATTR_NAMES, new String[0], _ATTR_VALUES, _NEW_ATTR_VALUES, _TAG_NAMES, new String[0]);
 	}
 
-	private static final String[] _attrNames = {"uri"};
-	private static final String[] _attrValues = {"http://alloy.liferay.com/tld/aui"};
-	private static final String[] _newAttrValues = {"http://liferay.com/tld/aui"};
-	private static final String[] _tagNames = {"jsp:directive.taglib"};
+	private static final String[] _ATTR_NAMES = {"uri"};
+
+	private static final String[] _ATTR_VALUES = {"http://alloy.liferay.com/tld/aui"};
+
+	private static final String[] _NEW_ATTR_VALUES = {"http://liferay.com/tld/aui"};
+
+	private static final String[] _TAG_NAMES = {"jsp:directive.taglib"};
 
 }

@@ -34,11 +34,13 @@ import org.osgi.service.component.annotations.Component;
 public class DdmTemplateSelectorTags extends JSPTagMigrator {
 
 	public DdmTemplateSelectorTags() {
-		super(_attrNames, _newAttrNames, new String[0], new String[0], _tagNames, new String[0]);
+		super(_ATTR_NAMES, _NEWW_ATTR_NAMES, new String[0], new String[0], _TAG_NAMES, new String[0]);
 	}
 
-	private static final String[] _attrNames = {"classNameId"};
-	private static final String[] _newAttrNames = {"className"};
-	private static final String[] _tagNames = {"liferay-ui:ddm-template-selector"};
+	private static final String[] _ATTR_NAMES = {"classNameId"};
+
+	private static final String[] _NEWW_ATTR_NAMES = {"className"};
+
+	private static final String[] _TAG_NAMES = {"liferay-ui:ddm-template-selector"};
 
 }

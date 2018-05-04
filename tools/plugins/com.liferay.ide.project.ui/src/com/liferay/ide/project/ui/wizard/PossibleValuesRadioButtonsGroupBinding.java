@@ -82,6 +82,7 @@ public final class PossibleValuesRadioButtonsGroupBinding<T> extends AbstractBin
 			for (int i = 0, n = _possibleValues.size(); i < n; i++) {
 				if (_possibleValues.get(i).equals(newValue.toString())) {
 					newSelection = i;
+
 					break;
 				}
 			}

@@ -115,8 +115,7 @@ public class LiferayGradleWorkspaceProjectProvider
 				if (bundleUrl != null) {
 					final IFile gradlePropertiesFile = project.getFile("gradle.properties");
 
-					try(InputStream gradleStream = gradlePropertiesFile.getContents()){
-
+					try (InputStream gradleStream = gradlePropertiesFile.getContents()) {
 						String content = FileUtil.readContents(gradleStream);
 
 						String bundleUrlProp = LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
@@ -125,7 +124,7 @@ public class LiferayGradleWorkspaceProjectProvider
 
 						String newContent = content + separator + bundleUrlProp;
 
-						try(InputStream inputStream = new ByteArrayInputStream(newContent.getBytes())){
+						try (InputStream inputStream = new ByteArrayInputStream(newContent.getBytes())) {
 							gradlePropertiesFile.setContents(inputStream, IResource.FORCE, monitor);
 						}
 					}

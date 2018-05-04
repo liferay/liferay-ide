@@ -375,7 +375,7 @@ public abstract class AbstractCanvas extends Canvas {
 	protected abstract void paint(GC bufferGC);
 
 	protected void scheduleRun() {
-		getDisplay().timerExec(_defaultTimerInterval, _runnable);
+		getDisplay().timerExec(_DEFAULT_TIMER_INTERVAL, _runnable);
 	}
 
 	protected Font baseFont;
@@ -393,7 +393,7 @@ public abstract class AbstractCanvas extends Canvas {
 		return true;
 	}
 
-	private static final int _defaultTimerInterval = 10;
+	private static final int _DEFAULT_TIMER_INTERVAL = 10;
 
 	private final List<Resource> _resources = new ArrayList<>();
 

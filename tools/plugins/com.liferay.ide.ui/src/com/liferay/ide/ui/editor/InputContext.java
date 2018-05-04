@@ -444,9 +444,7 @@ public abstract class InputContext {
 
 		// First dive down to find the right parent.
 
-		for (int i = 0; i < children.length; i++) {
-			TextEdit child = children[i];
-
+		for (TextEdit child : children) {
 			if (covers(child, edit)) {
 				insert(child, edit);
 				return;
@@ -650,7 +648,7 @@ public abstract class InputContext {
 	 */
 	private void _handleSaveAs(IProgressMonitor monitor, IPath path)
 		throws CoreException, Exception, InterruptedException,
-			InvocationTargetException {
+			   InvocationTargetException {
 
 		// Ensure a new location was selected
 

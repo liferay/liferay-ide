@@ -78,7 +78,7 @@ public class WorkspaceHelper implements WorkspaceHelperMBean {
 												@Override
 												public void run(IProgressMonitor monitor)
 													throws InterruptedException,
-														InvocationTargetException {
+														   InvocationTargetException {
 
 													try {
 														importer.importProjects(path, monitor);

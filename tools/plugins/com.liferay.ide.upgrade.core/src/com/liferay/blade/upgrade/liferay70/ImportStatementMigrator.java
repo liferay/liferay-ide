@@ -110,7 +110,7 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 					sb.append(System.getProperty("line.separator"));
 				}
 
-				try(FileWriter writer = new FileWriter(file)){
+				try (FileWriter writer = new FileWriter(file)) {
 					writer.write(sb.toString());
 				}
 
@@ -157,7 +157,8 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 		List<String> lines = new ArrayList<>();
 
 		try (InputStreamReader inputReader = new InputStreamReader(inputStream);
-				BufferedReader bufferedReader = new BufferedReader(inputReader)) {
+			BufferedReader bufferedReader = new BufferedReader(inputReader)) {
+
 			String line;
 
 			while ((line = bufferedReader.readLine()) != null) {

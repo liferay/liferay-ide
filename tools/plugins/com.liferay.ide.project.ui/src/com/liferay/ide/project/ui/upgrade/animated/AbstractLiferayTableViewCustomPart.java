@@ -232,6 +232,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 		public LiferayUpgradeElement(IFile file, IProject project) {
 			_file = file;
 			_project = project;
+
 			_upgradeStatus = false;
 		}
 
@@ -333,6 +334,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 		@Override
 		public void update(ViewerCell cell) {
 			super.update(cell);
+
 			TableItem item = (TableItem)cell.getItem();
 
 			if (_oddFlag) {

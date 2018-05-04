@@ -240,7 +240,7 @@ public class WorkingSetGroup {
 					IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
 
 					IWorkingSetSelectionDialog dialog = workingSetManager.createWorkingSetSelectionDialog(
-						_shell, true, _working_set_ids.toArray(new String[0]));
+						_shell, true, _workingSetIds.toArray(new String[0]));
 
 					if (dialog.open() == Window.OK) {
 						IWorkingSet[] workingSets = dialog.getSelection();
@@ -304,7 +304,7 @@ public class WorkingSetGroup {
 				}
 			}
 			else {
-				if (_working_set_ids.contains(workingSet.getId())) {
+				if (_workingSetIds.contains(workingSet.getId())) {
 					workingSets.add(workingSet);
 				}
 			}
@@ -313,7 +313,7 @@ public class WorkingSetGroup {
 		return workingSets;
 	}
 
-	private static final List<String> _working_set_ids = Arrays.asList(
+	private static final List<String> _workingSetIds = Arrays.asList(
 		//
 		"org.eclipse.ui.resourceWorkingSetPage", "org.eclipse.jdt.ui.JavaWorkingSetPage");
 

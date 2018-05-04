@@ -1,37 +1,30 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.test.apichanges;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author Gregory Amerson
+ * @author Terry Jia
+ */
 public class DeprecatedExpandoCustomFieldTagsAutoCorrectTest extends AutoCorrectJSPTagTestBase {
-
-	@Override
-	public File getOriginalTestFile() {
-		return new File("jsptests/liferay-ui-custom/LiferayUICustom.jsp");
-	}
-
-	@Override
-	public String getImplClassName() {
-		return "DeprecatedExpandoCustomFieldTags";
-	}
 
 	@Override
 	public List<String> getCheckPoints() {
@@ -39,11 +32,11 @@ public class DeprecatedExpandoCustomFieldTagsAutoCorrectTest extends AutoCorrect
 
 		checkPoints.add("58,<liferay-expando:custom-attributes-available className=\"<%= Foo.class.getName() %>\">");
 		checkPoints.add(
-			"59,<liferay-expando:custom-attribute-list className=\"<%= Foo.class.getName() %>\" classPK=\"<%= (foo != null) ? foo.getFooId() : 0 %>\" editable=\"<%= true %>\" label=\"<%= true %>\"></liferay-expando:custom-attribute-list>"
-		);
+			"59,<liferay-expando:custom-attribute-list className=\"<%= Foo.class.getName() %>\" classPK=\"<%= (foo != null) ? foo.getFooId() : 0 %>\" editable=\"<%= true %>\" label=\"<%= true %>\"></liferay-expando:custom-attribute-list>");
 		checkPoints.add("60,</liferay-expando:custom-attributes-available>");
 
-		return Collections.singletonList("58,<liferay-expando:custom-attributes-available className=\"<%= Foo.class.getName() %>\">");
+		return Collections.singletonList(
+			"58,<liferay-expando:custom-attributes-available className=\"<%= Foo.class.getName() %>\">");
 	}
 
 	public int getExpectedFixedNumber() {
@@ -52,6 +45,16 @@ public class DeprecatedExpandoCustomFieldTagsAutoCorrectTest extends AutoCorrect
 
 	public int getExpectedNumber() {
 		return 2;
+	}
+
+	@Override
+	public String getImplClassName() {
+		return "DeprecatedExpandoCustomFieldTags";
+	}
+
+	@Override
+	public File getOriginalTestFile() {
+		return new File("jsptests/liferay-ui-custom/LiferayUICustom.jsp");
 	}
 
 }

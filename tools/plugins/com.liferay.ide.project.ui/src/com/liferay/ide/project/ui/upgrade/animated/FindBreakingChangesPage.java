@@ -175,7 +175,6 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 					if (ListUtil.isNotEmpty(problems)) {
 						_problemsViewer.setSelection(new StructuredSelection(problems.get(0)));
 					}
-
 				}
 
 			});

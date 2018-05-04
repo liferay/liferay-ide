@@ -299,8 +299,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 			return false;
 		}
 
-		try(InputStream inputStream = bndFile.getContents()) {
-
+		try (InputStream inputStream = bndFile.getContents()) {
 			String content = FileUtil.readContents(inputStream);
 
 			if (content.contains("Fragment-Host")) {

@@ -52,13 +52,13 @@ public class ParentSDKProjectImportWizard
 			final String message = wizardPage.getMessage();
 
 			if (CoreUtil.isNullOrEmpty(message)) {
-				wizardPage.setMessage(_initial_message);
+				wizardPage.setMessage(_INITIAL_MESSAGE);
 			}
 
 			if ((wizardPage.getMessageType() == IMessageProvider.ERROR) && !_supressedFirstErrorMessage) {
 				_supressedFirstErrorMessage = true;
 
-				wizardPage.setMessage(_initial_message);
+				wizardPage.setMessage(_INITIAL_MESSAGE);
 			}
 		}
 
@@ -79,7 +79,7 @@ public class ParentSDKProjectImportWizard
 		return ParentSDKProjectImportOp.TYPE.instantiate();
 	}
 
-	private static final String _initial_message =
+	private static final String _INITIAL_MESSAGE =
 		"Please select Liferay Plugins SDK directory to import as a project.";
 
 	private boolean _supressedFirstErrorMessage = false;

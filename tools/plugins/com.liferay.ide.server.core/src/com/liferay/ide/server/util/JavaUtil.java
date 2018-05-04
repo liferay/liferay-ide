@@ -74,12 +74,14 @@ public class JavaUtil {
 			String contents = CoreUtil.readStreamToString(Files.newInputStream(manifestFile.toPath()));
 
 			if (contents != null) {
-				try(InputStream input = new ByteArrayInputStream( contents.getBytes() )){
-                    Manifest mf = new Manifest( input );
-                    Attributes a = mf.getMainAttributes();
-                    String val = a.getValue( propertyName );
+				try (InputStream input = new ByteArrayInputStream(contents.getBytes())) {
+					Manifest mf = new Manifest(input);
 
-                    return val;
+					Attributes a = mf.getMainAttributes();
+
+					String val = a.getValue(propertyName);
+
+					return val;
 				}
 			}
 		}

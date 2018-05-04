@@ -49,7 +49,7 @@ public class CustomPropertiesConfigLayout extends PropertiesConfigurationLayout 
 				delimiter = getConfiguration().getListDelimiter();
 			}
 
-			try(PropertiesConfiguration.PropertiesWriter writer = new CustomPropertiesWriter( out, delimiter )){
+			try (PropertiesConfiguration.PropertiesWriter writer = new CustomPropertiesWriter(out, delimiter)) {
 				if (getHeaderComment() != null) {
 					writer.writeln(getCanonicalHeaderComment(true));
 					writer.writeln(null);

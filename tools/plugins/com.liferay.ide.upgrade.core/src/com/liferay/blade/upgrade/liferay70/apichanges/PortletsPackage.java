@@ -42,7 +42,7 @@ public class PortletsPackage extends JavaFileMigrator {
 	protected List<SearchResult> searchFile(File file, JavaFile javaFileChecker) {
 		List<SearchResult> searchResults = new ArrayList<>();
 
-		for (String packageName : _packages) {
+		for (String packageName : _PACKAGES) {
 			SearchResult packageResult = javaFileChecker.findPackage(packageName);
 
 			if (packageResult != null) {
@@ -53,7 +53,7 @@ public class PortletsPackage extends JavaFileMigrator {
 		return searchResults;
 	}
 
-	private static final String[] _packages = {
+	private static final String[] _PACKAGES = {
 		"com.liferay.portlet.bookmarks.service.persistence", "com.liferay.portlet.dynamicdatalists.service.persistence",
 		"com.liferay.portlet.journal.service.persistence", "com.liferay.portlet.polls.service.persistence",
 		"com.liferay.portlet.wiki.service.persistence"

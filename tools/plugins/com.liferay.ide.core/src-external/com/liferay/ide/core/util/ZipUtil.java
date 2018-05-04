@@ -185,8 +185,9 @@ public final class ZipUtil {
 			_delete(target);
 		}
 
-		try(OutputStream output = Files.newOutputStream(target.toPath());
-				ZipOutputStream zip = new ZipOutputStream(output);) {
+		try (OutputStream output = Files.newOutputStream(target.toPath());
+			ZipOutputStream zip = new ZipOutputStream(output)) {
+
 			_zipDir(target, zip, dir, filenameFilter, "");
 		}
 	}

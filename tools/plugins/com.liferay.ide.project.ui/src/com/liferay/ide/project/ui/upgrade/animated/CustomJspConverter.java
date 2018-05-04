@@ -156,7 +156,8 @@ public class CustomJspConverter {
 						throws IOException, SAXException {
 
 						// don't connect internet to fetch dtd for validation
-						try(InputStream inputStream = new ByteArrayInputStream(new String("").getBytes())){
+
+						try (InputStream inputStream = new ByteArrayInputStream(new String("").getBytes())) {
 							return new InputSource(inputStream);
 						}
 					}
@@ -434,15 +435,16 @@ public class CustomJspConverter {
 		}
 	}
 
-	// the main method of converting jsp hook project
-
+	/**
+	 *  the main method of converting jsp hook project
+	 */
 	private void _copy70JspFile(String portlet, File targetJspDir, String mappedJsp) throws Exception {
 		File module = _getModuleFile(portlet);
 
-		try(JarFile jarFile = new JarFile(module)){
+		try (JarFile jarFile = new JarFile(module)) {
 			JarEntry entry = (JarEntry)jarFile.getEntry("META-INF/resources/" + mappedJsp);
 
-			try(InputStream ins = jarFile.getInputStream(entry)){
+			try (InputStream ins = jarFile.getInputStream(entry)) {
 				File targetFile = new File(targetJspDir, mappedJsp);
 
 				_makeParentDir(targetFile);

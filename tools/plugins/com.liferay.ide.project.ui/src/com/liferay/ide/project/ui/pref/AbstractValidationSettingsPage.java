@@ -309,7 +309,7 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 				excomposite.setExpanded(i == 0); // only expand the first node by default
 			}
 			else {
-				excomposite.setExpanded(settings.getBoolean(_settingsExpanded + String.valueOf(i)));
+				excomposite.setExpanded(settings.getBoolean(_SETTINGS_EXPANDED + String.valueOf(i)));
 			}
 		}
 	}
@@ -332,7 +332,7 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 		for (int i = 0; i < _fExpandables.size(); i++) {
 			ExpandableComposite comp = (ExpandableComposite)_fExpandables.get(i);
 
-			section.put(_settingsExpanded + String.valueOf(i), comp.isExpanded());
+			section.put(_SETTINGS_EXPANDED + String.valueOf(i), comp.isExpanded());
 		}
 	}
 
@@ -376,7 +376,7 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 		}
 	}
 
-	private static final String _settingsExpanded = "expanded";
+	private static final String _SETTINGS_EXPANDED = "expanded";
 
 	private List _fCombos;
 	private List _fExpandables;

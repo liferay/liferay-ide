@@ -38,6 +38,7 @@ public abstract class StructuredViewerSection extends IDESection {
 		IDEFormPage formPage, Composite parent, int style, boolean titleBar, String[] buttonLabels) {
 
 		super(formPage, parent, style, titleBar);
+
 		fViewerPart = createViewerPart(buttonLabels);
 
 		fViewerPart.setMinimumSize(50, 50);

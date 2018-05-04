@@ -78,6 +78,7 @@ public class LaunchWorkspaceHandler extends AbstractHandler {
 			switch (Platform.getOS()) {
 				case Platform.OS_MACOSX:
 					launcher = launchDir.getParentFile().getParentFile();
+
 					break;
 				default:
 					launcher = new File(System.getProperty("eclipse.launcher"));
@@ -96,12 +97,14 @@ public class LaunchWorkspaceHandler extends AbstractHandler {
 					commands.add("--args");
 					commands.add("-data");
 					commands.add(workspaceLocation);
+
 					break;
 
 				case Platform.OS_LINUX:
 					commands.add("/bin/bash");
 					commands.add("-c");
 					commands.add("''./" + launcher.getName() + " -data \"" + workspaceLocation + "\"''");
+
 					break;
 
 				case Platform.OS_WIN32:
@@ -110,6 +113,7 @@ public class LaunchWorkspaceHandler extends AbstractHandler {
 					commands.add(launcher.getName());
 					commands.add("-data");
 					commands.add(workspaceLocation);
+
 					break;
 			}
 

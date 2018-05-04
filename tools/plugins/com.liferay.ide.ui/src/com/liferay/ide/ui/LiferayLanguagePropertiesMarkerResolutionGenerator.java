@@ -135,7 +135,7 @@ public class LiferayLanguagePropertiesMarkerResolutionGenerator implements IMark
 
 						public void run(IProgressMonitor monitor)
 							throws InterruptedException,
-								InvocationTargetException {
+								   InvocationTargetException {
 
 							monitor.beginTask("Encoding Liferay language properties files to default (UTF-8)... ", 10);
 

@@ -34,6 +34,7 @@ public abstract class ModelUndoManager implements IModelUndoManager, IModelChang
 
 	public ModelUndoManager(IDEFormEditor editor) {
 		_editor = editor;
+
 		_operations = new Vector();
 	}
 
@@ -193,12 +194,15 @@ public abstract class ModelUndoManager implements IModelUndoManager, IModelChang
 		switch (op.getChangeType()) {
 			case IModelChangedEvent.INSERT:
 				opText = Msgs.insert;
+
 				break;
 			case IModelChangedEvent.REMOVE:
 				opText = Msgs.remove;
+
 				break;
 			case IModelChangedEvent.CHANGE:
 				opText = Msgs.propertyChange;
+
 				break;
 		}
 

@@ -27,6 +27,7 @@ public class SetExternalPropertiesCommand extends ServerCommand {
 
 	public SetExternalPropertiesCommand(LiferayTomcatServer server, String externalProperties) {
 		super(server, Msgs.setExternalProperties);
+
 		this.externalProperties = externalProperties;
 	}
 

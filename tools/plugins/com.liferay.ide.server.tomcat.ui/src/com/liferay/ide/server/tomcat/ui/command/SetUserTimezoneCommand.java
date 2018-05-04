@@ -27,6 +27,7 @@ public class SetUserTimezoneCommand extends ServerCommand {
 
 	public SetUserTimezoneCommand(LiferayTomcatServer server, String userTimezone) {
 		super(server, Messages.serverEditorActionSetDeployDirectory);
+
 		this.userTimezone = userTimezone;
 	}
 

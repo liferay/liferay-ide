@@ -1,36 +1,34 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
 
 import java.io.File;
+
 import java.nio.file.Files;
+
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
@@ -42,36 +40,33 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class MVCPortletClassInPortletXMLAutoCorrectTest {
 
-	final BundleContext context = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
-	private AutoMigrator autoMigrator = null;
-
 	@Before
 	public void beforeTest() throws Exception {
-		Filter filter = context.createFilter("(implName=MVCPortletClassInPortletXML)");
+		Filter filter = _context.createFilter("(implName=MVCPortletClassInPortletXML)");
 
-		ServiceTracker<AutoMigrator, AutoMigrator> tracker = new ServiceTracker<AutoMigrator, AutoMigrator>(context, filter, null);
+		ServiceTracker<AutoMigrator, AutoMigrator> tracker = new ServiceTracker<>(_context, filter, null);
 
 		tracker.open();
 
 		ServiceReference<AutoMigrator>[] refs = tracker.getServiceReferences();
 
-		assertNotNull(refs);
+		Assert.assertNotNull(refs);
 
-		assertEquals(1, refs.length);
+		Assert.assertEquals(1, refs.length);
 
-		autoMigrator = context.getService(refs[0]);
+		_autoMigrator = _context.getService(refs[0]);
 	}
 
 	@Test
 	public void testAutoCorrectPortletXmlBoth() throws Exception {
-		assertNotNull(autoMigrator);
+		Assert.assertNotNull(_autoMigrator);
 
-		FileMigrator fileMigrator = (FileMigrator) autoMigrator;
+		FileMigrator fileMigrator = (FileMigrator)_autoMigrator;
 
 		File testfile = new File("target/test/MVCPortletClassInPortletXMLAutoCorrectTest/portlet.xml");
 
 		if (testfile.exists()) {
-			assertTrue(testfile.delete());
+			Assert.assertTrue(testfile.delete());
 		}
 
 		testfile.getParentFile().mkdirs();
@@ -80,27 +75,27 @@ public class MVCPortletClassInPortletXMLAutoCorrectTest {
 
 		List<Problem> problems = fileMigrator.analyze(testfile);
 
-		assertEquals(2, problems.size());
+		Assert.assertEquals(2, problems.size());
 
-		int corrected = autoMigrator.correctProblems(testfile, problems);
+		int corrected = _autoMigrator.correctProblems(testfile, problems);
 
-		assertEquals(2, corrected);
+		Assert.assertEquals(2, corrected);
 
 		problems = fileMigrator.analyze(testfile);
 
-		assertEquals(0, problems.size());
+		Assert.assertEquals(0, problems.size());
 	}
 
 	@Test
 	public void testAutoCorrectPortletXmlSingle() throws Exception {
-		assertNotNull(autoMigrator);
+		Assert.assertNotNull(_autoMigrator);
 
-		FileMigrator fileMigrator = (FileMigrator) autoMigrator;
+		FileMigrator fileMigrator = (FileMigrator)_autoMigrator;
 
 		File testfile = new File("generated/test/MVCPortletClassInPortletXMLAutoCorrectTest/portlet.xml");
 
 		if (testfile.exists()) {
-			assertTrue(testfile.delete());
+			Assert.assertTrue(testfile.delete());
 		}
 
 		testfile.getParentFile().mkdirs();
@@ -109,22 +104,26 @@ public class MVCPortletClassInPortletXMLAutoCorrectTest {
 
 		List<Problem> problems = fileMigrator.analyze(testfile);
 
-		assertEquals(2, problems.size());
+		Assert.assertEquals(2, problems.size());
 
-		int corrected = autoMigrator.correctProblems(testfile, Collections.singletonList(problems.get(0)));
+		int corrected = _autoMigrator.correctProblems(testfile, Collections.singletonList(problems.get(0)));
 
-		assertEquals(1, corrected);
-
-		problems = fileMigrator.analyze(testfile);
-
-		assertEquals(1, problems.size());
-
-		corrected = autoMigrator.correctProblems(testfile, Collections.singletonList(problems.get(0)));
-
-		assertEquals(1, corrected);
+		Assert.assertEquals(1, corrected);
 
 		problems = fileMigrator.analyze(testfile);
 
-		assertEquals(0, problems.size());
+		Assert.assertEquals(1, problems.size());
+
+		corrected = _autoMigrator.correctProblems(testfile, Collections.singletonList(problems.get(0)));
+
+		Assert.assertEquals(1, corrected);
+
+		problems = fileMigrator.analyze(testfile);
+
+		Assert.assertEquals(0, problems.size());
 	}
+
+	private AutoMigrator _autoMigrator = null;
+	private BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();
+
 }

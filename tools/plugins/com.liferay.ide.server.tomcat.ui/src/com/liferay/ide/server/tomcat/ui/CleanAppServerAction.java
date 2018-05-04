@@ -24,6 +24,7 @@ import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.action.AbstractObjectAction;
 
 import java.io.InputStream;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -177,7 +178,7 @@ public class CleanAppServerAction extends AbstractObjectAction {
 			String rootEntryName = null;
 
 			try (InputStream input = Files.newInputStream(Paths.get(bundleZipLocation));
-					ZipInputStream zis = new ZipInputStream(input)) {
+				ZipInputStream zis = new ZipInputStream(input)) {
 
 				ZipEntry rootEntry = zis.getNextEntry();
 
