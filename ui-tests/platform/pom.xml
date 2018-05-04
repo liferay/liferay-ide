@@ -46,5 +46,6 @@
 
 	<modules>
 		<module>com.liferay.ide.ui.preference.tests</module>
+		<module>com.liferay.ide.ui.code.upgrade.tests</module>
 	</modules>
 </project>

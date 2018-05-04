@@ -45,7 +45,6 @@
 	</repositories>
 
 	<modules>
-		<module>com.liferay.ide.ui.code.upgrade.tests</module>
 		<module>com.liferay.ide.ui.fragment</module>
 		<module>com.liferay.ide.ui.theme</module>
 		<module>com.liferay.ide.ui.hook</module>
