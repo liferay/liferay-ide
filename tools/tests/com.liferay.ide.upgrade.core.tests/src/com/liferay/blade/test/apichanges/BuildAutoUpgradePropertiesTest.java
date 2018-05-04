@@ -19,7 +19,7 @@ import java.io.File;
 /**
  * @author Joye Luo
  */
-public class BuildAutoUpgradePropertiesTest extends APITestBase{
+public class BuildAutoUpgradePropertiesTest extends APITestBase {
 
 	@Override
 	public int getExpectedNumber() {
@@ -35,4 +35,5 @@ public class BuildAutoUpgradePropertiesTest extends APITestBase{
 	public File getTestFile() {
 		return new File("projects/knowledge-base-portlet-6.2.x/docroot/WEB-INF/src/service-ext.properties");
 	}
+
 }

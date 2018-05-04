@@ -1,23 +1,18 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.test.apichanges;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
@@ -27,19 +22,96 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+/**
+ * @author Gregory Amerson
+ * @author Terry Jia
+ */
 public abstract class AutoCorrectJSPTagTestBase {
 
-	protected final BundleContext context = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
+	@Test
+	public void autoCorrectProblems() throws Exception {
+		File tempFolder = Files.createTempDirectory("autocorrect").toFile();
+
+		File testFile = new File(tempFolder, "test.jsp");
+
+		tempFolder.deleteOnExit();
+
+		Files.copy(getOriginalTestFile().toPath(), testFile.toPath());
+
+		List<Problem> problems = null;
+		FileMigrator migrator = null;
+
+		Collection<ServiceReference<FileMigrator>> mrefs = context.getServiceReferences(FileMigrator.class, null);
+
+		for (ServiceReference<FileMigrator> mref : mrefs) {
+			migrator = context.getService(mref);
+
+			Class<?> clazz = migrator.getClass();
+
+			if (clazz.getName().contains(getImplClassName())) {
+				problems = migrator.analyze(testFile);
+
+				break;
+			}
+		}
+
+		Assert.assertEquals(getExpectedNumber(), problems.size());
+
+		int problemsFixed = ((AutoMigrator)migrator).correctProblems(testFile, problems);
+
+		Assert.assertEquals(getExpectedFixedNumber(), problemsFixed);
+
+		File dest = new File(tempFolder, "Updated.jsp");
+
+		Assert.assertTrue(testFile.renameTo(dest));
+
+		problems = migrator.analyze(dest);
+
+		Assert.assertEquals(0, problems.size());
+
+		for (String checkPoint : getCheckPoints()) {
+			int lineNumber = Integer.parseInt(checkPoint.split(",")[0]);
+			String lineContent = checkPoint.split(",")[1];
+
+			try {
+				String[] lines = _readLines(Files.newInputStream(dest.toPath()));
+
+				Assert.assertTrue(lines[lineNumber - 1].trim().equals(lineContent));
+			}
+			catch (Exception e) {
+			}
+		}
+	}
+
+	public abstract List<String> getCheckPoints();
+
+	public int getExpectedFixedNumber() {
+		return 1;
+	}
+
+	public int getExpectedNumber() {
+		return 1;
+	}
+
+	public abstract String getImplClassName();
+
+	public abstract File getOriginalTestFile();
+
+	protected BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();
 
 	private String[] _readLines(InputStream inputStream) {
 		if (inputStream == null) {
@@ -65,69 +137,4 @@ public abstract class AutoCorrectJSPTagTestBase {
 		return lines.toArray(new String[lines.size()]);
 	}
 
-	@Test
-	public void autoCorrectProblems() throws Exception {
-		File tempFolder = Files.createTempDirectory("autocorrect").toFile();
-		File testFile = new File(tempFolder, "test.jsp");
-
-		tempFolder.deleteOnExit();
-
-		Files.copy(getOriginalTestFile().toPath(), testFile.toPath());
-
-		List<Problem> problems = null;
-		FileMigrator migrator = null;
-
-		Collection<ServiceReference<FileMigrator>> mrefs = context.getServiceReferences(FileMigrator.class, null);
-
-		for (ServiceReference<FileMigrator> mref : mrefs) {
-			migrator = context.getService(mref);
-
-			if (migrator.getClass().getName().contains(getImplClassName())) {
-				problems = migrator.analyze(testFile);
-
-				break;
-			}
-		}
-
-		assertEquals(getExpectedNumber(), problems.size());
-
-		int problemsFixed = ((AutoMigrator) migrator).correctProblems(testFile, problems);
-
-		assertEquals(getExpectedFixedNumber(), problemsFixed);
-
-		File dest = new File(tempFolder, "Updated.jsp");
-
-		assertTrue(testFile.renameTo(dest));
-
-		problems = migrator.analyze(dest);
-
-		assertEquals(0, problems.size());
-
-		for (String checkPoint : getCheckPoints()) {
-			int lineNumber = Integer.parseInt(checkPoint.split(",")[0]);
-			String lineContent = checkPoint.split(",")[1];
-
-			try {
-				String[] lines = _readLines(Files.newInputStream(dest.toPath()));
-
-				assertTrue(lines[lineNumber - 1].trim().equals(lineContent));
-			}
-			catch (Exception e) {
-			}
-		}
-	}
-
-	public abstract List<String> getCheckPoints();
-
-	public int getExpectedFixedNumber() {
-		return 1;
-	}
-
-	public int getExpectedNumber() {
-		return 1;
-	}
-
-	public abstract String getImplClassName();
-
-	public abstract File getOriginalTestFile();
 }

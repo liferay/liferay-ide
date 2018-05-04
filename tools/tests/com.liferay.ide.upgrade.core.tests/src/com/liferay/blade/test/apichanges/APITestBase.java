@@ -1,66 +1,64 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.test.apichanges;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
 
 import java.io.File;
+
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 
+/**
+ * @author Gregory Amerson
+ * @author Terry Jia
+ */
 public abstract class APITestBase {
-
-    protected final BundleContext context = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
-
-    protected ServiceReference<FileMigrator>[] fileMigrators;
 
 	@Before
 	public void beforeTest() throws Exception {
 		Filter filter = context.createFilter("(implName=" + getImplClassName() + ")");
 
-		ServiceTracker<FileMigrator, FileMigrator> fileMigratorTracker = new ServiceTracker<FileMigrator, FileMigrator>(context, filter, null);
+		ServiceTracker<FileMigrator, FileMigrator> fileMigratorTracker = new ServiceTracker<>(context, filter, null);
 
 		fileMigratorTracker.open();
 
 		fileMigrators = fileMigratorTracker.getServiceReferences();
 
-		assertNotNull(fileMigrators);
+		Assert.assertNotNull(fileMigrators);
 
-		assertEquals(1, fileMigrators.length);
+		Assert.assertEquals(1, fileMigrators.length);
+	}
+
+	public int getExpectedNumber() {
+		return 1;
 	}
 
 	public abstract String getImplClassName();
 
 	public abstract File getTestFile();
-
-	public int getExpectedNumber() {
-		return 1;
-	}
 
 	@Test
 	public void test() throws Exception {
@@ -70,9 +68,9 @@ public abstract class APITestBase {
 
 		context.ungetService(fileMigrators[0]);
 
-		assertNotNull(problems);
+		Assert.assertNotNull(problems);
 
-		assertEquals(getExpectedNumber(), problems.size());
+		Assert.assertEquals(getExpectedNumber(), problems.size());
 	}
 
 	@Test
@@ -85,8 +83,11 @@ public abstract class APITestBase {
 
 		context.ungetService(fileMigrators[0]);
 
-		assertNotNull(problems);
-		assertEquals(getExpectedNumber(), problems.size());
+		Assert.assertNotNull(problems);
+		Assert.assertEquals(getExpectedNumber(), problems.size());
 	}
+
+	protected BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();
+	protected ServiceReference<FileMigrator>[] fileMigrators;
 
 }

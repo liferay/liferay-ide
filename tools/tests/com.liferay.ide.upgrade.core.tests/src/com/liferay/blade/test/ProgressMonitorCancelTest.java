@@ -1,56 +1,60 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.test;
-
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.blade.api.Migration;
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.ProgressMonitor;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+/**
+ * @author Gregory Amerson
+ * @author Terry Jia
+ */
 public class ProgressMonitorCancelTest {
 
 	@Test
 	public void cancelableProgressMonitor() throws Exception {
-		ServiceReference<Migration> sr = context
-			.getServiceReference(Migration.class);
-		final Migration m = context.getService(sr);
+		ServiceReference<Migration> sr = _context .getServiceReference(Migration.class);
 
-		final List<Problem> result = new ArrayList<>();
+		Migration m = _context.getService(sr);
 
-		final CancelableProgressMonitor cancelable = new CancelableProgressMonitor();
+		List<Problem> result = new ArrayList<>();
 
-		final Thread t = new Thread() {
+		CancelableProgressMonitor cancelable = new CancelableProgressMonitor();
+
+		Thread t = new Thread() {
+
 			@Override
 			public void run() {
-				List<Problem> problems = m
-						.findProblems(new File(
-								"projects"), cancelable);
+				List<Problem> problems = m .findProblems(new File("projects"), cancelable);
+
 				result.addAll(problems);
 			}
+
 		};
 
 		t.start();
@@ -64,15 +68,10 @@ public class ProgressMonitorCancelTest {
 		final int expectedSize = 1324;
 		final int size = result.size();
 
-		assertTrue(size < expectedSize);
+		Assert.assertTrue(size < expectedSize);
 	}
 
-	private final BundleContext context = FrameworkUtil.getBundle(
-		this.getClass()).getBundleContext();
-
-	static class CancelableProgressMonitor implements ProgressMonitor {
-
-		boolean canceled = false;
+	public static class CancelableProgressMonitor implements ProgressMonitor {
 
 		@Override
 		public void beginTask(String taskName, int totalWork) {
@@ -95,6 +94,10 @@ public class ProgressMonitorCancelTest {
 		public void worked(int work) {
 		}
 
+		public boolean canceled = false;
+
 	}
+
+	private final BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();
 
 }
