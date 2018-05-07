@@ -356,7 +356,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployThemeContributor() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), THEME_CONTRIBUTOR);
+		wizardAction.newModule.prepareGradle(project.getName(), THEME_CONTRIBUTOR, envAction.getTempDir().getPath());
 
 		wizardAction.finish();
 
