@@ -14,30 +14,29 @@
  * details.
  *
  *******************************************************************************/
- -->
+-->
 
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.liferay.ide</groupId>
-        <artifactId>parent</artifactId>
-        <version>3.2.0-SNAPSHOT</version>
-        <relativePath>../build/parent/pom.xml</relativePath>
-    </parent>
+	<parent>
+		<groupId>com.liferay.ide</groupId>
+		<artifactId>parent</artifactId>
+		<version>3.2.0-SNAPSHOT</version>
+		<relativePath>../build/parent/pom.xml</relativePath>
+	</parent>
 
-    <groupId>com.liferay.ide.maven</groupId>
-    <artifactId>maven</artifactId>
-    <name>Liferay IDE Maven All</name>
+	<groupId>com.liferay.ide.maven</groupId>
+	<artifactId>maven</artifactId>
+	<name>Liferay IDE Maven All</name>
 
-    <packaging>pom</packaging>
+	<packaging>pom</packaging>
 
-    <modules>
-        <module>plugins</module>
-        <module>features</module>
-        <module>tests</module>
-    </modules>
+	<modules>
+		<module>plugins</module>
+		<module>features</module>
+		<module>tests</module>
+	</modules>
 
 </project>
-

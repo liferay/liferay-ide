@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,13 +10,9 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.core.tests;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
@@ -28,6 +24,7 @@ import com.liferay.ide.maven.core.LiferayMavenLegacyProjectUpdater;
 
 import java.io.File;
 import java.io.InputStream;
+
 import java.net.URL;
 
 import org.eclipse.core.resources.IFile;
@@ -36,122 +33,128 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Andy Wu
  */
-public class LiferayMavenLegacyProjectUpdaterTests
-{
+public class LiferayMavenLegacyProjectUpdaterTests {
 
-    private boolean containString( IProject project, String containStr )
-    {
-        IFile pomFile = project.getFile( "pom.xml" );
+	@Test
+	public void testUpgrade() throws Exception {
+		IProject project = CoreUtil.getProject("testMavenProjects");
 
-        try(InputStream ins = pomFile.getContents())
-        {
-            String content = FileUtil.readContents( ins );
+		if (FileUtil.exists(project)) {
+			project.delete(true, true, new NullProgressMonitor());
+		}
 
-            if( !CoreUtil.empty( content ) )
-            {
-                return content.contains( containStr );
-            }
-        }
-        catch( Exception e )
-        {
-        }
+		URL projectZipUrl = Platform.getBundle(
+			"com.liferay.ide.maven.core.tests").getEntry("projects/testMavenProjects.zip");
 
-        return false;
-    }
+		File projectZipFile = new File(FileLocator.toFileURL(projectZipUrl).getFile());
 
-    private void makeSureNoLegacyElememnts( IProject project )
-    {
-        assertFalse( containString( project, "liferay-maven-plugin" ) );
-        assertFalse( containString( project, "portal-service" ) );
-        assertFalse( containString( project, "util-java" ) );
-        assertFalse( containString( project, "util-bridges" ) );
-        assertFalse( containString( project, "util-taglib" ) );
-        assertFalse( containString( project, "util-slf4j" ) );
-    }
+		IPath stateLocation = LiferayMavenCore.getDefault().getStateLocation();
 
-    @Test
-    public void testUpgrade() throws Exception
-    {
-        IProject project = CoreUtil.getProject( "testMavenProjects" );
+		File targetFolder = new File(stateLocation.toFile(), "testMavenProjects");
 
-        if( project != null && project.exists() )
-        {
-            project.delete( true, true, new NullProgressMonitor() );
-        }
+		if (targetFolder.exists()) {
+			targetFolder.delete();
+		}
 
-        final URL projectZipUrl =
-            Platform.getBundle( "com.liferay.ide.maven.core.tests" ).getEntry( "projects/testMavenProjects.zip" );
+		ZipUtil.unzip(projectZipFile, stateLocation.toFile());
 
-        final File projectZipFile = new File( FileLocator.toFileURL( projectZipUrl ).getFile() );
+		Assert.assertTrue(targetFolder.exists());
 
-        IPath stateLocation = LiferayMavenCore.getDefault().getStateLocation();
+		ILiferayProjectImporter importer = LiferayCore.getImporter("maven");
 
-        File targetFolder = new File( stateLocation.toFile(), "testMavenProjects" );
+		importer.importProjects(targetFolder.getAbsolutePath(), new NullProgressMonitor());
 
-        if( targetFolder.exists() )
-        {
-            targetFolder.delete();
-        }
+		LiferayMavenLegacyProjectUpdater updater = new LiferayMavenLegacyProjectUpdater();
 
-        ZipUtil.unzip( projectZipFile, stateLocation.toFile() );
+		// portlet project
 
-        assertTrue( targetFolder.exists() );
+		IProject ppProject = CoreUtil.getProject("testpp");
 
-        ILiferayProjectImporter importer = LiferayCore.getImporter( "maven" );
+		Assert.assertTrue(updater.isNeedUpgrade(ppProject));
+		updater.upgradePomFile(ppProject, null);
+		Assert.assertFalse(updater.isNeedUpgrade(ppProject));
+		Assert.assertTrue(_containString(ppProject, "com.liferay.css.builder"));
+		_makeSureNoLegacyElememnts(ppProject);
 
-        importer.importProjects( targetFolder.getAbsolutePath(), new NullProgressMonitor() );
+		// service builder parent project
 
-        LiferayMavenLegacyProjectUpdater updater = new LiferayMavenLegacyProjectUpdater();
+		IProject testsbProject = CoreUtil.getProject("testsb");
 
-        // portlet project
-        IProject ppProject = CoreUtil.getProject( "testpp" );
-        assertTrue( updater.isNeedUpgrade( ppProject ) );
-        updater.upgradePomFile( ppProject, null );
-        assertFalse( updater.isNeedUpgrade( ppProject ) );
-        assertTrue( containString( ppProject, "com.liferay.css.builder" ) );
-        makeSureNoLegacyElememnts( ppProject );
+		Assert.assertTrue(updater.isNeedUpgrade(testsbProject));
+		updater.upgradePomFile(testsbProject, null);
+		Assert.assertFalse(updater.isNeedUpgrade(testsbProject));
+		_makeSureNoLegacyElememnts(testsbProject);
 
-        // service builder parent project
-        IProject testsbProject = CoreUtil.getProject( "testsb" );
-        assertTrue( updater.isNeedUpgrade( testsbProject ) );
-        updater.upgradePomFile( testsbProject, null );
-        assertFalse( updater.isNeedUpgrade( testsbProject ) );
-        makeSureNoLegacyElememnts( testsbProject );
+		// service builder -portlet subproject
 
-        // service builder -portlet subproject
-        IProject testsbPortletProject = CoreUtil.getProject( "testsb-portlet" );
-        assertTrue( updater.isNeedUpgrade( testsbPortletProject ) );
-        updater.upgradePomFile( testsbPortletProject, null );
-        assertFalse( updater.isNeedUpgrade( testsbPortletProject ) );
-        assertTrue( containString( testsbPortletProject, "com.liferay.css.builder" ) );
-        assertTrue( containString( testsbPortletProject, "com.liferay.portal.tools.service.builder" ) );
-        assertTrue( containString( testsbPortletProject, "biz.aQute.bnd.annotation" ) );
-        makeSureNoLegacyElememnts( testsbPortletProject );
+		IProject testsbPortletProject = CoreUtil.getProject("testsb-portlet");
 
-        //// service builder -service subproject
-        IProject testsbPortletServiceProject = CoreUtil.getProject( "testsb-portlet-service" );
-        assertTrue( updater.isNeedUpgrade( testsbPortletServiceProject ) );
-        updater.upgradePomFile( testsbPortletServiceProject, null );
-        assertFalse( updater.isNeedUpgrade( testsbPortletServiceProject ) );
-        assertTrue( containString( testsbPortletServiceProject, "biz.aQute.bnd.annotation" ) );
-        makeSureNoLegacyElememnts( testsbPortletServiceProject );
+		Assert.assertTrue(updater.isNeedUpgrade(testsbPortletProject));
+		updater.upgradePomFile(testsbPortletProject, null);
+		Assert.assertFalse(updater.isNeedUpgrade(testsbPortletProject));
+		Assert.assertTrue(_containString(testsbPortletProject, "com.liferay.css.builder"));
+		Assert.assertTrue(_containString(testsbPortletProject, "com.liferay.portal.tools.service.builder"));
+		Assert.assertTrue(_containString(testsbPortletProject, "biz.aQute.bnd.annotation"));
+		_makeSureNoLegacyElememnts(testsbPortletProject);
 
-        // theme project
-        IProject testthemeProject = CoreUtil.getProject( "testtheme" );
-        assertTrue( updater.isNeedUpgrade( testthemeProject ) );
-        updater.upgradePomFile( testthemeProject, null );
-        assertFalse( updater.isNeedUpgrade( testthemeProject ) );
-        assertTrue( containString( testthemeProject, "com.liferay.portal.tools.theme.builder.outputDir" ) );
-        assertTrue( containString( testthemeProject, "project.build.sourceEncoding" ) );
-        assertTrue( containString( testthemeProject, "maven-war-plugin" ) );
-        assertTrue( containString( testthemeProject, "maven-dependency-plugin" ) );
-        assertTrue( containString( testthemeProject, "com.liferay.css.builder" ) );
-        assertTrue( containString( testthemeProject, "com.liferay.portal.tools.theme.builder" ) );
-        makeSureNoLegacyElememnts( testthemeProject );
-    }
+		//// service builder -service subproject
+		IProject testsbPortletServiceProject = CoreUtil.getProject("testsb-portlet-service");
+
+		Assert.assertTrue(updater.isNeedUpgrade(testsbPortletServiceProject));
+		updater.upgradePomFile(testsbPortletServiceProject, null);
+		Assert.assertFalse(updater.isNeedUpgrade(testsbPortletServiceProject));
+		Assert.assertTrue(_containString(testsbPortletServiceProject, "biz.aQute.bnd.annotation"));
+		_makeSureNoLegacyElememnts(testsbPortletServiceProject);
+
+		// theme project
+
+		IProject testthemeProject = CoreUtil.getProject("testtheme");
+
+		Assert.assertTrue(updater.isNeedUpgrade(testthemeProject));
+
+		updater.upgradePomFile(testthemeProject, null);
+
+		Assert.assertFalse(updater.isNeedUpgrade(testthemeProject));
+		Assert.assertTrue(_containString(testthemeProject, "com.liferay.portal.tools.theme.builder.outputDir"));
+		Assert.assertTrue(_containString(testthemeProject, "project.build.sourceEncoding"));
+		Assert.assertTrue(_containString(testthemeProject, "maven-war-plugin"));
+		Assert.assertTrue(_containString(testthemeProject, "maven-dependency-plugin"));
+		Assert.assertTrue(_containString(testthemeProject, "com.liferay.css.builder"));
+		Assert.assertTrue(_containString(testthemeProject, "com.liferay.portal.tools.theme.builder"));
+
+		_makeSureNoLegacyElememnts(testthemeProject);
+	}
+
+	private boolean _containString(IProject project, String containStr) {
+		IFile pomFile = project.getFile("pom.xml");
+
+		try (InputStream ins = pomFile.getContents()) {
+			String content = FileUtil.readContents(ins);
+
+			if (!CoreUtil.empty(content)) {
+				return content.contains(containStr);
+			}
+		}
+		catch (Exception e) {
+		}
+
+		return false;
+	}
+
+	private void _makeSureNoLegacyElememnts(IProject project) {
+		Assert.assertFalse(_containString(project, "liferay-maven-plugin"));
+		Assert.assertFalse(_containString(project, "portal-service"));
+		Assert.assertFalse(_containString(project, "util-java"));
+		Assert.assertFalse(_containString(project, "util-bridges"));
+		Assert.assertFalse(_containString(project, "util-taglib"));
+		Assert.assertFalse(_containString(project, "util-slf4j"));
+	}
+
 }

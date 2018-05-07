@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.core.tests;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -20,66 +20,63 @@ import com.liferay.ide.project.core.tests.ProjectCoreBase;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
-import org.junit.Test;
 
+import org.junit.Test;
 
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class ArchetypeTests extends AbstractMavenProjectTestCase
-{
+@SuppressWarnings("restriction")
+public class ArchetypeTests extends AbstractMavenProjectTestCase {
 
-    protected IProject createMavenProject( NewLiferayPluginProjectOp op ) throws Exception
-    {
-        IProject project = new ProjectCoreBase().createProject( op );
+	@Test
+	public void testArchetypeCustomValue() throws Exception {
+		NewLiferayPluginProjectOp op = newProjectOp("test-archetype-value");
 
-        assertEquals( true, project.getFolder( "src" ).exists() );
+		op.setProjectProvider("maven");
+		op.setPluginType("hook");
+		op.setArchetype("com.liferay.maven.archetypes:liferay-hook-archetype:6.2.10.9");
 
-        return project;
-    }
+		IProject project = createMavenProject(op);
 
-    protected NewLiferayPluginProjectOp newProjectOp( final String projectName ) throws Exception
-    {
-        final NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
-        op.setProjectName( projectName );
+		String pomContents = CoreUtil.readStreamToString(project.getFile("pom.xml").getContents());
 
-        return op;
-    }
+		assertTrue(pomContents.contains("<pluginType>hook</pluginType>"));
+	}
 
-    @Test
-    public void testArchetypeCustomValue() throws Exception
-    {
-        final NewLiferayPluginProjectOp op = newProjectOp( "test-archetype-value" );
-        op.setProjectProvider( "maven" );
-        op.setPluginType( "hook" );
-        op.setArchetype( "com.liferay.maven.archetypes:liferay-hook-archetype:6.2.10.9" );
+	@Test
+	public void testArchetypeDefaultValueService() throws Exception {
+		NewLiferayPluginProjectOp op = newProjectOp("test-archetype-default-value-service");
 
-        final IProject project = createMavenProject( op );
+		op.setProjectProvider("maven");
 
-        final String pomContents = CoreUtil.readStreamToString( project.getFile( "pom.xml" ).getContents() );
+		assertEquals("com.liferay.maven.archetypes:liferay-portlet-archetype:6.2.5", op.getArchetype().content());
 
-        assertTrue( pomContents.contains( "<pluginType>hook</pluginType>" ) );
-    }
+		op.setPortletFramework("jsf-2.x");
 
-    @Test
-    public void testArchetypeDefaultValueService() throws Exception
-    {
-        final NewLiferayPluginProjectOp op = newProjectOp( "test-archetype-default-value-service" );
-        op.setProjectProvider( "maven" );
+		assertEquals("com.liferay.maven.archetypes:liferay-portlet-jsf-archetype:6.2.5", op.getArchetype().content());
 
-        assertEquals(
-            "com.liferay.maven.archetypes:liferay-portlet-archetype:6.2.5", op.getArchetype().content() );
+		op.setPortletFrameworkAdvanced("primefaces");
 
-        op.setPortletFramework( "jsf-2.x" );
-        assertEquals(
-            "com.liferay.maven.archetypes:liferay-portlet-jsf-archetype:6.2.5", op.getArchetype().content() );
+		assertEquals(
+			"com.liferay.maven.archetypes:liferay-portlet-primefaces-archetype:6.2.5", op.getArchetype().content());
+	}
 
-        op.setPortletFrameworkAdvanced( "primefaces" );
-        assertEquals(
-            "com.liferay.maven.archetypes:liferay-portlet-primefaces-archetype:6.2.5",
-            op.getArchetype().content() );
-    }
+	protected IProject createMavenProject(NewLiferayPluginProjectOp op) throws Exception {
+		IProject project = new ProjectCoreBase().createProject(op);
+
+		assertEquals(true, project.getFolder("src").exists());
+
+		return project;
+	}
+
+	protected NewLiferayPluginProjectOp newProjectOp(String projectName) throws Exception {
+		NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
+
+		op.setProjectName(projectName);
+
+		return op;
+	}
 
 }

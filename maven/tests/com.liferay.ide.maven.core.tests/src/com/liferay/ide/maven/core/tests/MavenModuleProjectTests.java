@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.core.tests;
 
@@ -32,13 +31,16 @@ import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+
 import java.net.URL;
+
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -58,1150 +60,1131 @@ import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
-{
+@SuppressWarnings("restriction")
+public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
-    private static void importExistingProject( File dir, IProgressMonitor monitor ) throws CoreException
-    {
-        final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+	@Test
+	public void testMavenDependencyUpdate() throws Exception {
+		String[][] dependency = {{"com.liferay.portal", "com.liferay.portal.kernel", "2.6.0"}};
 
-        final IProjectDescription description =
-            workspace.loadProjectDescription( new Path( dir.getAbsolutePath() ).append( ".project" ) );
+		Dependency mavenDependency = new Dependency();
 
-        final String name = description.getName();
+		mavenDependency.setGroupId(dependency[0][0]);
+		mavenDependency.setArtifactId(dependency[0][1]);
+		mavenDependency.setVersion(dependency[0][2]);
 
-        final IProject project = workspace.getRoot().getProject( name );
+		URL wsZipUrl = Platform.getBundle(
+			"com.liferay.ide.maven.core.tests").getEntry("projects/MavenDependencyTestProject.zip");
 
-        if( project.exists() )
-        {
-            return;
-        }
-        else
-        {
-            project.create( description, monitor );
-            project.open( IResource.BACKGROUND_REFRESH, monitor );
+		File wsZipFile = new File(FileLocator.toFileURL(wsZipUrl).getFile());
 
-            project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-        }
-    }
+		File eclipseWorkspaceLocation = CoreUtil.getWorkspaceRootLocation().toFile();
 
-    private boolean checkDependency( List<Dependency> existedDependencies, Dependency mavenDependency )
-    {
-        for( Dependency existedDependency : existedDependencies )
-        {
-            String existedKey = existedDependency.getManagementKey();
-            if( existedKey.equals( mavenDependency.getManagementKey() ) )
-            {
-                return true;
-            }
-        }
+		ZipUtil.unzip(wsZipFile, eclipseWorkspaceLocation);
 
-        return false;
-    }
+		File mavenDependencyTestProjectFolder = new File(eclipseWorkspaceLocation, "MavenDependencyTestProject");
 
-    private IProject create( NewLiferayModuleProjectOp op ) throws InterruptedException, CoreException
-    {
-        Status status = op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+		MavenUtil.importProject(mavenDependencyTestProjectFolder.getAbsolutePath(), monitor);
 
-        assertNotNull( status );
-        assertTrue( status.message(), status.ok() );
+		waitForJobsToComplete(monitor);
 
-        waitForJobsToComplete();
+		IProject mavenDependencyTestProject = CoreUtil.getProject("MavenDependencyTestProject");
 
-        return CoreUtil.getProject( op.getProjectName().content() );
-    }
+		assertNotNull(mavenDependencyTestProject);
 
-    private IProject createAndBuild( NewLiferayModuleProjectOp op ) throws Exception
-    {
-        assertTrue( op.validation().message(), op.validation().ok() );
+		assertTrue(mavenDependencyTestProject.exists());
 
-        IProject project = create( op );
+		IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade(
+			mavenDependencyTestProject, new NullProgressMonitor());
 
-        verifyProject( project );
+		assertNotNull(projectFacade);
 
-        return project;
-    }
+		MavenProject mavenProject = projectFacade.getMavenProject(new NullProgressMonitor());
 
-    @Test
-    public void testMavenDependencyUpdate() throws Exception
-    {
+		List<Dependency> existedDependencies = mavenProject.getDependencies();
 
-        String[][] dependency = new String[][] { { "com.liferay.portal", "com.liferay.portal.kernel", "2.6.0" } };
+		assertFalse(_checkDependency(existedDependencies, mavenDependency));
 
-        Dependency mavenDependency = new Dependency();
-        mavenDependency.setGroupId( dependency[0][0] );
-        mavenDependency.setArtifactId( dependency[0][1] );
-        mavenDependency.setVersion( dependency[0][2] );
+		ILiferayProject liferayMavenDependencyProject = LiferayCore.create(mavenDependencyTestProject);
 
-        final URL wsZipUrl = Platform.getBundle( "com.liferay.ide.maven.core.tests" ).getEntry(
-            "projects/MavenDependencyTestProject.zip" );
+		IProjectBuilder projectBuilder = liferayMavenDependencyProject.adapt(IProjectBuilder.class);
 
-        final File wsZipFile = new File( FileLocator.toFileURL( wsZipUrl ).getFile() );
+		projectBuilder.updateProjectDependency(mavenDependencyTestProject, Arrays.asList(dependency));
 
-        File eclipseWorkspaceLocation = CoreUtil.getWorkspaceRoot().getLocation().toFile();
+		waitForJobsToComplete(monitor);
 
-        ZipUtil.unzip( wsZipFile, eclipseWorkspaceLocation );
+		MavenProject updateMavenProject = projectFacade.getMavenProject(new NullProgressMonitor());
 
-        File mavenDependencyTestProjectFolder = new File( eclipseWorkspaceLocation, "MavenDependencyTestProject" );
+		List<Dependency> updateDependencies = updateMavenProject.getDependencies();
 
-        MavenUtil.importProject( mavenDependencyTestProjectFolder.getAbsolutePath(), monitor );
+		assertTrue(_checkDependency(updateDependencies, mavenDependency));
+	}
 
-        waitForJobsToComplete( monitor );
+	@Test
+	public void testNewLiferayComponentBndAndMavenForPortleActionCommandAndRest() throws Exception {
+		NewLiferayModuleProjectOp pop = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        IProject mavenDependencyTestProject = CoreUtil.getProject( "MavenDependencyTestProject" );
+		pop.setProjectName("testMavenModuleComponentBnd");
+		pop.setProjectTemplateName("portlet");
+		pop.setProjectProvider("maven-module");
 
-        assertNotNull( mavenDependencyTestProject );
+		Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute(
+			pop, ProgressMonitorBridge.create(new NullProgressMonitor()));
 
-        assertTrue( mavenDependencyTestProject.exists() );
+		assertTrue(modulePorjectStatus.ok());
 
-        IMavenProjectFacade projectFacade =
-            MavenUtil.getProjectFacade( mavenDependencyTestProject, new NullProgressMonitor() );
+		IProject modPorject = CoreUtil.getProject(pop.getProjectName().content());
 
-        assertNotNull( projectFacade );
+		modPorject.open(new NullProgressMonitor());
 
-        MavenProject mavenProject = projectFacade.getMavenProject( new NullProgressMonitor() );
-        List<Dependency> existedDependencies = mavenProject.getDependencies();
+		NewLiferayComponentOp cop = NewLiferayComponentOp.TYPE.instantiate();
 
-        assertFalse( checkDependency( existedDependencies, mavenDependency ) );
+		cop.setProjectName(pop.getProjectName().content());
+		cop.setComponentClassTemplateName("PortletActionCommand");
 
-        ILiferayProject liferayMavenDependencyProject = LiferayCore.create( mavenDependencyTestProject );
-        IProjectBuilder projectBuilder = liferayMavenDependencyProject.adapt( IProjectBuilder.class );
-        projectBuilder.updateProjectDependency( mavenDependencyTestProject, Arrays.asList( dependency ) );
+		NewLiferayComponentOpMethods.execute(cop, ProgressMonitorBridge.create(new NullProgressMonitor()));
 
-        waitForJobsToComplete( monitor );
-        MavenProject updateMavenProject = projectFacade.getMavenProject( new NullProgressMonitor() );
-        List<Dependency> updateDependencies = updateMavenProject.getDependencies();
-        assertTrue( checkDependency( updateDependencies, mavenDependency ) );
-    }
+		IFile bgd = modPorject.getFile("bnd.bnd");
 
-    @Test
-    public void testNewLiferayComponentBndAndMavenForPortleActionCommandAndRest() throws Exception
-    {
-        NewLiferayModuleProjectOp pop = NewLiferayModuleProjectOp.TYPE.instantiate();
+		String bndcontent = FileUtil.readContents(bgd.getLocation().toFile(), true);
 
-        pop.setProjectName( "testMavenModuleComponentBnd" );
-        pop.setProjectTemplateName( "portlet" );
-        pop.setProjectProvider( "maven-module" );
+		String bndConfig =
+			"-includeresource: \\" + System.getProperty("line.separator") + "\t" +
+				"@com.liferay.util.bridges-2.0.0.jar!/com/liferay/util/bridges/freemarker/FreeMarkerPortlet.class,\\" +
+					System.getProperty("line.separator") + "\t@com.liferay.util.taglib-2.0.0.jar!/META-INF/*.tld" +
+						System.getProperty("line.separator");
 
-        Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( pop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-        assertTrue( modulePorjectStatus.ok() );
+		assertTrue(bndcontent.contains(bndConfig));
 
-        IProject modPorject = CoreUtil.getProject( pop.getProjectName().content() );
-        modPorject.open( new NullProgressMonitor() );
+		IFile pomFile = modPorject.getFile(IMavenConstants.POM_FILE_NAME);
 
-        NewLiferayComponentOp cop = NewLiferayComponentOp.TYPE.instantiate();
-        cop.setProjectName( pop.getProjectName().content() );
-        cop.setComponentClassTemplateName( "PortletActionCommand" );
+		IMaven maven = MavenPlugin.getMaven();
 
-        NewLiferayComponentOpMethods.execute( cop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+		Model model = maven.readModel(pomFile.getLocation().toFile());
 
-        IFile bgd = modPorject.getFile( "bnd.bnd" );
-        String bndcontent = FileUtil.readContents( bgd.getLocation().toFile(), true );
+		List<Dependency> dependencies = model.getDependencies();
 
-        String bndConfig = "-includeresource: \\" + System.getProperty( "line.separator" ) +
-                        "\t" + "@com.liferay.util.bridges-2.0.0.jar!/com/liferay/util/bridges/freemarker/FreeMarkerPortlet.class,\\" + System.getProperty( "line.separator" ) +
-                        "\t" + "@com.liferay.util.taglib-2.0.0.jar!/META-INF/*.tld" + System.getProperty( "line.separator" );
+		boolean hasDependency = false;
 
-        assertTrue( bndcontent.contains( bndConfig ) );
+		for (Dependency de : dependencies) {
+			String managementKey = de.getManagementKey();
 
-        IFile pomFile = modPorject.getFile( IMavenConstants.POM_FILE_NAME );
-        final IMaven maven = MavenPlugin.getMaven();
-        Model model = maven.readModel( pomFile.getLocation().toFile() );
-        List<Dependency> dependencies = model.getDependencies();
+			if (managementKey.equals("com.liferay.portal:com.liferay.util.bridges:jar")) {
+				hasDependency = true;
 
-        boolean hasDependency = false;
-        for ( Dependency de : dependencies )
-        {
-            String managementKey = de.getManagementKey();
+				break;
+			}
+		}
 
-            if ( managementKey.equals( "com.liferay.portal:com.liferay.util.bridges:jar" ))
-            {
-                hasDependency = true;
-                break;
-            }
-        }
+		assertTrue(hasDependency);
 
-        assertTrue( hasDependency );
+		NewLiferayComponentOp copRest = NewLiferayComponentOp.TYPE.instantiate();
 
-        NewLiferayComponentOp copRest = NewLiferayComponentOp.TYPE.instantiate();
-        copRest.setProjectName( pop.getProjectName().content() );
-        copRest.setComponentClassTemplateName( "RestService" );
+		copRest.setProjectName(pop.getProjectName().content());
+		copRest.setComponentClassTemplateName("RestService");
 
-        NewLiferayComponentOpMethods.execute( copRest, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+		NewLiferayComponentOpMethods.execute(copRest, ProgressMonitorBridge.create(new NullProgressMonitor()));
 
-        bgd = modPorject.getFile( "bnd.bnd" );
-        bndcontent = FileUtil.readContents( bgd.getLocation().toFile(), true );
-        assertTrue( bndcontent.contains( bndConfig ) );
+		bgd = modPorject.getFile("bnd.bnd");
 
-        final String restConfig = "Require-Capability: osgi.contract; filter:=\"(&(osgi.contract=JavaJAXRS)(version=2))\"";
-        assertTrue( bndcontent.contains( restConfig ) );
+		bndcontent = FileUtil.readContents(bgd.getLocation().toFile(), true);
 
-        model = maven.readModel( pomFile.getLocation().toFile() );
-        dependencies = model.getDependencies();
+		assertTrue(bndcontent.contains(bndConfig));
 
-        hasDependency = false;
-        for ( Dependency de : dependencies )
-        {
-            String managementKey = de.getManagementKey();
+		String restConfig =
+			"Require-Capability: osgi.contract; filter:=\"(&(osgi.contract=JavaJAXRS)(version=2))\"";
 
-            if ( managementKey.equals( "javax.ws.rs:javax.ws.rs-api:jar" ))
-            {
-                hasDependency = true;
-                break;
-            }
-        }
+		assertTrue(bndcontent.contains(restConfig));
 
-        assertTrue( hasDependency );
+		model = maven.readModel(pomFile.getLocation().toFile());
 
-        NewLiferayComponentOp copAuth = NewLiferayComponentOp.TYPE.instantiate();
-        copAuth.setProjectName( pop.getProjectName().content() );
-        copAuth.setComponentClassTemplateName( "Authenticator" );
+		dependencies = model.getDependencies();
 
-        NewLiferayComponentOpMethods.execute( copAuth, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+		hasDependency = false;
 
-        bgd = modPorject.getFile( "bnd.bnd" );
-        bndcontent = FileUtil.readContents( bgd.getLocation().toFile(), true );
+		for (Dependency de : dependencies) {
+			String managementKey = de.getManagementKey();
 
-        bndConfig = "-includeresource: \\" + System.getProperty( "line.separator" ) +
-                        "\t" + "@com.liferay.util.bridges-2.0.0.jar!/com/liferay/util/bridges/freemarker/FreeMarkerPortlet.class,\\" + System.getProperty( "line.separator" ) +
-                        "\t" + "@com.liferay.util.taglib-2.0.0.jar!/META-INF/*.tld,\\" + System.getProperty( "line.separator" ) +
-                        "\t" + "@shiro-core-1.1.0.jar";
+			if (managementKey.equals("javax.ws.rs:javax.ws.rs-api:jar")) {
+				hasDependency = true;
 
-        assertTrue( bndcontent.contains( bndConfig ) );
+				break;
+			}
+		}
 
-        model = maven.readModel( pomFile.getLocation().toFile() );
-        dependencies = model.getDependencies();
+		assertTrue(hasDependency);
 
-        hasDependency = false;
-        for ( Dependency de : dependencies )
-        {
-            String managementKey = de.getManagementKey();
+		NewLiferayComponentOp copAuth = NewLiferayComponentOp.TYPE.instantiate();
 
-            if ( managementKey.equals( "org.apache.shiro:shiro-core:jar" ))
-            {
-                hasDependency = true;
-                break;
-            }
-        }
+		copAuth.setProjectName(pop.getProjectName().content());
+		copAuth.setComponentClassTemplateName("Authenticator");
 
-        assertTrue( hasDependency );
-    }
+		NewLiferayComponentOpMethods.execute(copAuth, ProgressMonitorBridge.create(new NullProgressMonitor()));
 
-    @Test
-    public void testNewLiferayMavenModuleMVCPortletProject() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		bgd = modPorject.getFile("bnd.bnd");
 
-        op.setProjectName( "foo" );
-        op.setProjectProvider( "maven-module" );
-        op.setComponentName( "Foo" );
-        IProject project = create( op );
+		bndcontent = FileUtil.readContents(bgd.getLocation().toFile(), true);
 
-        assertTrue( project.getFile( "src/main/java/foo/portlet/FooPortlet.java" ).exists() );
+		bndConfig =
+			"-includeresource: \\" + System.getProperty("line.separator") + "\t" +
+				"@com.liferay.util.bridges-2.0.0.jar!/com/liferay/util/bridges/freemarker/FreeMarkerPortlet.class,\\" +
+					System.getProperty("line.separator") + "\t@com.liferay.util.taglib-2.0.0.jar!/META-INF/*.tld,\\" +
+						System.getProperty("line.separator") + "\t@shiro-core-1.1.0.jar";
 
-        verifyProject( project );
-    }
+		assertTrue(bndcontent.contains(bndConfig));
 
-    @Test
-    public void testNewLiferayMavenModuleMVCPortletProjectCustomPackage() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		model = maven.readModel(pomFile.getLocation().toFile());
 
-        op.setProjectName( "foo-bar" );
-        op.setProjectProvider( "maven-module" );
-        op.setComponentName( "FooBar" );
-        op.setPackageName( "my.custom.pname" );
-        IProject project = create( op );
+		dependencies = model.getDependencies();
 
-        assertTrue( project.getFile( "src/main/java/my/custom/pname/portlet/FooBarPortlet.java" ).exists() );
+		hasDependency = false;
 
-        verifyProject( project );
-    }
+		for (Dependency de : dependencies) {
+			String managementKey = de.getManagementKey();
 
-    @Test
-    public void testNewLiferayMavenModuleMVCPortletProjectWithDashes() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+			if (managementKey.equals("org.apache.shiro:shiro-core:jar")) {
+				hasDependency = true;
 
-        op.setProjectName( "foo-bar" );
-        op.setProjectProvider( "maven-module" );
-        op.setComponentName( "FooBar" );
-        op.setPackageName( "foo.bar" );
-        IProject project = create( op );
+				break;
+			}
+		}
 
-        assertTrue( project.getFile( "src/main/java/foo/bar/portlet/FooBarPortlet.java" ).exists() );
+		assertTrue(hasDependency);
+	}
 
-        verifyProject( project );
-    }
+	@Test
+	public void testNewLiferayMavenModuleMVCPortletProject() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Test
-    public void testNewLiferayMavenModuleMVCPortletProjectWithDots() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("foo");
+		op.setProjectProvider("maven-module");
+		op.setComponentName("Foo");
 
-        op.setProjectName( "foo.bar" );
-        op.setProjectProvider( "maven-module" );
+		IProject project = _create(op);
 
-        IProject project = create( op );
+		assertTrue(project.getFile("src/main/java/foo/portlet/FooPortlet.java").exists());
 
-        verifyProject(project);
-    }
+		_verifyProject(project);
+	}
 
-    @Test
-    public void testNewLiferayModuleProjectDefaultLocation() throws Exception
-    {
-        final URL wsZipUrl = Platform.getBundle( "com.liferay.ide.maven.core.tests" ).getEntry(
-            "projects/gradle-liferay-workspace.zip" );
+	@Test
+	public void testNewLiferayMavenModuleMVCPortletProjectCustomPackage() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        final File wsZipFile = new File( FileLocator.toFileURL( wsZipUrl ).getFile() );
+		op.setProjectName("foo-bar");
+		op.setProjectProvider("maven-module");
+		op.setComponentName("FooBar");
+		op.setPackageName("my.custom.pname");
 
-        File eclipseWorkspaceLocation = CoreUtil.getWorkspaceRoot().getLocation().toFile();
+		IProject project = _create(op);
 
-        ZipUtil.unzip( wsZipFile, eclipseWorkspaceLocation );
+		assertTrue(project.getFile("src/main/java/my/custom/pname/portlet/FooBarPortlet.java").exists());
 
-        File wsFolder = new File( eclipseWorkspaceLocation, "gradle-liferay-workspace" );
+		_verifyProject(project);
+	}
 
-        importExistingProject( wsFolder, new NullProgressMonitor() );
+	@Test
+	public void testNewLiferayMavenModuleMVCPortletProjectWithDashes() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("foo-bar");
+		op.setProjectProvider("maven-module");
+		op.setComponentName("FooBar");
+		op.setPackageName("foo.bar");
 
-        op.setProjectName( "my-test-project" );
+		IProject project = _create(op);
 
-        op.setProjectTemplateName( "mvc-portlet" );
+		assertTrue(project.getFile("src/main/java/foo/bar/portlet/FooBarPortlet.java").exists());
 
-        op.setProjectProvider( "maven-module" );
+		_verifyProject(project);
+	}
 
-        // don't put maven type project inside liferay-workspace
-        assertTrue( op.getLocation().content().toFile().equals( eclipseWorkspaceLocation ) );
+	@Test
+	public void testNewLiferayMavenModuleMVCPortletProjectWithDots() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectProvider( "gradle-module" );
+		op.setProjectName("foo.bar");
+		op.setProjectProvider("maven-module");
 
-        op.setProjectTemplateName( "theme" );
+		IProject project = _create(op);
 
-        // put gradle type theme project inside liferay-workspace/wars
-        assertTrue( op.getLocation().content().toPortableString().contains( "gradle-liferay-workspace/wars" ) );
+		_verifyProject(project);
+	}
 
-        op.setProjectTemplateName( "mvc-portlet" );
+	@Test
+	public void testNewLiferayModuleProjectDefaultLocation() throws Exception {
+		URL wsZipUrl = Platform.getBundle(
+			"com.liferay.ide.maven.core.tests").getEntry("projects/gradle-liferay-workspace.zip");
 
-        // put gradle type project inside liferay-workspace/modules
-        assertTrue( op.getLocation().content().toPortableString().contains( "gradle-liferay-workspace/modules" ) );
+		File wsZipFile = new File(FileLocator.toFileURL(wsZipUrl).getFile());
 
-        IProject project = CoreUtil.getProject( "gradle-liferay-workspace" );
+		File eclipseWorkspaceLocation = CoreUtil.getWorkspaceRootLocation().toFile();
 
-        if( project != null && project.isAccessible() && project.exists() )
-        {
-            project.delete( true, true, new NullProgressMonitor() );
-        }
+		ZipUtil.unzip(wsZipFile, eclipseWorkspaceLocation);
 
-        op.setProjectTemplateName( "service-builder" );
+		File wsFolder = new File(eclipseWorkspaceLocation, "gradle-liferay-workspace");
 
-        // no liferay-workspace
-        assertTrue( op.getLocation().content().toFile().equals( eclipseWorkspaceLocation ) );
-    }
+		_importExistingProject(wsFolder, new NullProgressMonitor());
 
-    @Test
-    public void testNewLiferayModuleProjectNewProperties() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "test-properties-in-portlet" );
+		op.setProjectName("my-test-project");
 
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "portlet" );
-        op.setComponentName( "Test" );
+		op.setProjectTemplateName("mvc-portlet");
 
-        PropertyKey pk = op.getPropertyKeys().insert();
+		op.setProjectProvider("maven-module");
 
-        pk.setName( "property-test-key" );
-        pk.setValue( "property-test-value" );
+		// don't put maven type project inside liferay-workspace
 
-        Status exStatus =
-            NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( monitor ) );
+		Value<org.eclipse.sapphire.modeling.Path> pathValue = op.getLocation();
 
-        assertEquals( "OK", exStatus.message() );
+		org.eclipse.sapphire.modeling.Path path = pathValue.content();
 
-        IProject modProject = CoreUtil.getProject( op.getProjectName().content() );
-        modProject.open( new NullProgressMonitor() );
+		assertTrue(path.toFile().equals(eclipseWorkspaceLocation));
 
-        SearchFilesVisitor sv = new SearchFilesVisitor();
-        List<IFile> searchFiles = sv.searchFiles( modProject, "TestPortlet.java" );
-        IFile componentClassFile = searchFiles.get( 0 );
+		op.setProjectProvider("gradle-module");
 
-        assertEquals( componentClassFile.exists(), true );
+		op.setProjectTemplateName("theme");
 
-        String actual = CoreUtil.readStreamToString( componentClassFile.getContents() );
+		// put gradle type theme project inside liferay-workspace/wars
 
-        assertTrue( actual, actual.contains( "\"property-test-key=property-test-value\"" ) );
-    }
+		assertTrue(op.getLocation().content().toPortableString().contains("gradle-liferay-workspace/wars"));
 
-    @Test
-    public void testNewLiferayModuleProjectNoGradleFiles() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectTemplateName("mvc-portlet");
 
-        op.setProjectName( "test-servicebuilder-no-gradlefiles" );
-        op.setProjectTemplateName( "service-builder" );
-        op.setProjectProvider( "maven-module" );
+		// put gradle type project inside liferay-workspace/modules
 
-        Status exStatus =
-            NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+		assertTrue(op.getLocation().content().toPortableString().contains("gradle-liferay-workspace/modules"));
 
-        assertEquals( "OK", exStatus.message() );
+		IProject project = CoreUtil.getProject("gradle-liferay-workspace");
 
-        IProject parentProject = CoreUtil.getProject( op.getProjectName().content() );
-        parentProject.open( new NullProgressMonitor() );
+		if ((project != null) && project.isAccessible() && project.exists()) {
+			project.delete(true, true, new NullProgressMonitor());
+		}
 
-        IFile gradleFile = parentProject.getFile( "build.gradle" );
-        IFile settingsFile = parentProject.getFile( "settings.gradle" );
+		op.setProjectTemplateName("service-builder");
 
-        assertFalse( gradleFile.exists() );
-        assertFalse( settingsFile.exists() );
+		// no liferay-workspace
 
-        IProject apiProject = CoreUtil.getProject( op.getProjectName().content() + "-api" );
-        apiProject.open( new NullProgressMonitor() );
+		Value<org.eclipse.sapphire.modeling.Path> location = op.getLocation();
 
-        gradleFile = apiProject.getFile( "build.gradle" );
-        settingsFile = apiProject.getFile( "settings.gradle" );
+		path = location.content();
 
-        assertFalse( gradleFile.exists() );
-        assertFalse( settingsFile.exists() );
+		assertTrue(path.toFile().equals(eclipseWorkspaceLocation));
+	}
 
-        IProject serviceProject = CoreUtil.getProject( op.getProjectName().content() + "-service" );
-        serviceProject.open( new NullProgressMonitor() );
+	@Test
+	public void testNewLiferayModuleProjectNewProperties() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        gradleFile = serviceProject.getFile( "build.gradle" );
-        settingsFile = serviceProject.getFile( "settings.gradle" );
+		op.setProjectName("test-properties-in-portlet");
 
-        assertFalse( gradleFile.exists() );
-        assertFalse( settingsFile.exists() );
-    }
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("portlet");
+		op.setComponentName("Test");
 
-    @Test
-    public void testProjectTemplateActivator() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		PropertyKey pk = op.getPropertyKeys().insert();
 
-        op.setProjectName( "activator-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "activator" );
+		pk.setName("property-test-key");
+		pk.setValue("property-test-value");
 
-        createAndBuild(op);
-    }
+		Status exStatus = NewLiferayModuleProjectOpMethods.execute(op, ProgressMonitorBridge.create(monitor));
 
-    @Test
-    public void testProjectTemplateApi() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		assertEquals("OK", exStatus.message());
 
-        op.setProjectName( "api-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "api" );
+		IProject modProject = CoreUtil.getProject(op.getProjectName().content());
 
-        createAndBuild( op );
-    }
+		modProject.open(new NullProgressMonitor());
 
-    @Test
-    public void testProjectTemplateApiWithInvalidPackageName() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		SearchFilesVisitor sv = new SearchFilesVisitor();
 
-        op.setProjectName( "api-test-1" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "api" );
+		List<IFile> searchFiles = sv.searchFiles(modProject, "TestPortlet.java");
 
-        assertFalse( op.validation().ok() );
+		IFile componentClassFile = searchFiles.get(0);
 
-        assertTrue( op.validation().message().contains( "not a valid Java identifier" ) );
+		assertEquals(componentClassFile.exists(), true);
 
-        op.setPackageName( "api.test.one" );
+		String actual = CoreUtil.readStreamToString(componentClassFile.getContents());
 
-        assertTrue( op.validation().message(), op.validation().ok() );
+		assertTrue(actual, actual.contains("\"property-test-key=property-test-value\""));
+	}
 
-        createAndBuild( op );
-    }
+	@Test
+	public void testNewLiferayModuleProjectNoGradleFiles() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Test
-    public void testProjectTemplateContentTargetingReport() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("test-servicebuilder-no-gradlefiles");
+		op.setProjectTemplateName("service-builder");
+		op.setProjectProvider("maven-module");
 
-        op.setProjectName( "content-targeting-report-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "content-targeting-report" );
+		Status exStatus = NewLiferayModuleProjectOpMethods.execute(
+			op, ProgressMonitorBridge.create(new NullProgressMonitor()));
 
-        createAndBuild(op);
-    }
+		assertEquals("OK", exStatus.message());
 
-    @Test
-    public void testProjectTemplateContentTargetingRule() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		IProject parentProject = CoreUtil.getProject(op.getProjectName().content());
 
-        op.setProjectName( "content-targeting-rule-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "content-targeting-rule" );
+		parentProject.open(new NullProgressMonitor());
 
-        createAndBuild(op);
-    }
+		IFile gradleFile = parentProject.getFile("build.gradle");
+		IFile settingsFile = parentProject.getFile("settings.gradle");
 
-    @Test
-    public void testProjectTemplateContentTargetingTrackingAction() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		assertFalse(gradleFile.exists());
+		assertFalse(settingsFile.exists());
 
-        op.setProjectName( "content-targeting-tracking-action-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "content-targeting-tracking-action" );
+		IProject apiProject = CoreUtil.getProject(op.getProjectName().content() + "-api");
 
-        createAndBuild(op);
-    }
+		apiProject.open(new NullProgressMonitor());
 
-    @Test
-    public void testProjectTemplateControlMenuEntry() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		gradleFile = apiProject.getFile("build.gradle");
+		settingsFile = apiProject.getFile("settings.gradle");
 
-        op.setProjectName( "control-menu-entry-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "control-menu-entry" );
+		assertFalse(gradleFile.exists());
+		assertFalse(settingsFile.exists());
 
-        createAndBuild(op);
-    }
+		IProject serviceProject = CoreUtil.getProject(op.getProjectName().content() + "-service");
 
-    @Test
-    public void testProjectTemplateFormField() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		serviceProject.open(new NullProgressMonitor());
 
-        op.setProjectName( "form-field-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "form-field" );
+		gradleFile = serviceProject.getFile("build.gradle");
+		settingsFile = serviceProject.getFile("settings.gradle");
 
-        createAndBuild(op);
-    }
+		assertFalse(gradleFile.exists());
+		assertFalse(settingsFile.exists());
+	}
 
-    @Test
-    public void testProjectTemplateLayoutTemplate() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateActivator() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "layout-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "layout-template" );
+		op.setProjectName("activator-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("activator");
 
-        IProject project = createAndBuild(op);
+		_createAndBuild(op);
+	}
 
-        project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
+	@Test
+	public void testProjectTemplateApi() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        assertTrue( project.getFile( "target/layout-test-1.0.0.war" ).exists() );
-    }
+		op.setProjectName("api-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("api");
 
-    @Test
-    public void testProjectTemplateMvcPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
 
-        op.setProjectName( "mvc-portlet-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "mvc-portlet" );
+	@Test
+	public void testProjectTemplateApiWithInvalidPackageName() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("api-test-1");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("api");
 
-    @Test
-    public void testProjectTemplateNpmAngularPortlet () throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		Status status = op.validation();
 
-        op.setProjectName( "npm-angular-portlet-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-angular-portlet" );
+		assertFalse(status.ok());
 
-        createAndBuild(op);
-    }
+		assertTrue(status.message().contains("not a valid Java identifier"));
 
-    @Ignore("Re-enable NPM tests")
-    @Test
-    public void testProjectTemplateNpmBillboardjsPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setPackageName("api.test.one");
 
-        op.setProjectName( "npm-billboardjs-portlet-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-billboardjs-portlet" );
+		assertTrue(op.validation().message(), op.validation().ok());
 
-        createAndBuild(op);
-    }
+		_createAndBuild(op);
+	}
 
-    @Ignore("Re-enable NPM Tests")
-    @Test
-    public void testProjectTemplateNpmIsomorphicPortlet () throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateContentTargetingReport() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "npm-isomorphic-portlet-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-isomorphic-portlet" );
+		op.setProjectName("content-targeting-report-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("content-targeting-report");
 
-        createAndBuild(op);
-    }
+		_createAndBuild(op);
+	}
 
-    @Ignore("Re-enable NPM Tests")
-    @Test
-    public void testProjectTemplateNpmJqueryPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateContentTargetingRule() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "npm-jquery-portlet-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-jquery-portlet" );
+		op.setProjectName("content-targeting-rule-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("content-targeting-rule");
 
-        createAndBuild(op);
-    }
+		_createAndBuild(op);
+	}
 
-    @Ignore("Re-enable NPM Tests")
-    @Test
-    public void testProjectTemplateNpmMetaljsPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateContentTargetingTrackingAction() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "npm-metaljs-portlet-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-metaljs-portlet" );
+		op.setProjectName("content-targeting-tracking-action-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("content-targeting-tracking-action");
 
-        createAndBuild(op);
-    }
+		_createAndBuild(op);
+	}
 
-    @Ignore("Re-enable NPM Tests")
-    @Test
-    public void testProjectTemplateNpmPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateControlMenuEntry() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "npm-portlet-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-portlet" );
+		op.setProjectName("control-menu-entry-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("control-menu-entry");
 
-        createAndBuild(op);
-    }
+		_createAndBuild(op);
+	}
 
-    @Ignore("Re-enable NPM Tests")
-    @Test
-    public void testProjectTemplateNpmReactPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateFormField() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "npm-react-portlet-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-react-portlet" );
+		op.setProjectName("form-field-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("form-field");
 
-        createAndBuild(op);
-    }
+		_createAndBuild(op);
+	}
 
-    @Ignore("Re-enable NPM Tests")
-    @Test
-    public void testProjectTemplateNpmVuejsPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateLayoutTemplate() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "npm-vuejs-portlet-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-vuejs-portlet" );
+		op.setProjectName("layout-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("layout-template");
 
-        createAndBuild(op);
-    }
+		IProject project = _createAndBuild(op);
 
-    @Test
-    public void testProjectTemplateNpmAngularPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 
-        op.setProjectName( "npm-angular-portlet-test-v71" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-angular-portlet" );
-        op.setLiferayVersion( "7.1" );
+		assertTrue(project.getFile("target/layout-test-1.0.0.war").exists());
+	}
 
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
+	@Test
+	public void testProjectTemplateMvcPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Ignore("Re-enable NPM Tests")
-    @Test
-    public void testProjectTemplateNpmBillboardjsPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("mvc-portlet-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("mvc-portlet");
 
-        op.setProjectName( "npm-billboardjs-portlet-test-v71" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-billboardjs-portlet" );
-        op.setLiferayVersion( "7.1" );
+		_createAndBuild(op);
+	}
 
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
+	@Test
+	public void testProjectTemplateNpmAngularPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Ignore("Re-enable NPM Tests")
-    @Test
-    public void testProjectTemplateNpmIsomorphicPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("npm-angular-portlet-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-angular-portlet");
 
-        op.setProjectName( "npm-isomorphic-portlet-test-v71" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-isomorphic-portlet" );
-        op.setLiferayVersion( "7.1" );
+		_createAndBuild(op);
+	}
 
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
+	@Test
+	public void testProjectTemplateNpmAngularPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Ignore("Re-enable NPM Tests")
-    @Test
-    public void testProjectTemplateNpmJqueryPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("npm-angular-portlet-test-v71");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-angular-portlet");
+		op.setLiferayVersion("7.1");
 
-        op.setProjectName( "npm-jquery-portlet-test-v71" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-jquery-portlet" );
-        op.setLiferayVersion( "7.1" );
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
 
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
+	@Ignore("Re-enable NPM tests")
+	@Test
+	public void testProjectTemplateNpmBillboardjsPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Ignore("Re-enable NPM Tests")
-    @Test
-    public void testProjectTemplateNpmMetaljsPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("npm-billboardjs-portlet-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-billboardjs-portlet");
 
-        op.setProjectName( "npm-metaljs-portlet-test-v71" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-metaljs-portlet" );
-        op.setLiferayVersion( "7.1" );
+		_createAndBuild(op);
+	}
 
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
+	@Ignore("Re-enable NPM Tests")
+	@Test
+	public void testProjectTemplateNpmBillboardjsPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Ignore("Re-enable NPM Tests")
-    @Test
-    public void testProjectTemplateNpmPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("npm-billboardjs-portlet-test-v71");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-billboardjs-portlet");
+		op.setLiferayVersion("7.1");
 
-        op.setProjectName( "npm-portlet-test-v71" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-portlet" );
-        op.setLiferayVersion( "7.1" );
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
 
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
+	@Ignore("Re-enable NPM Tests")
+	@Test
+	public void testProjectTemplateNpmIsomorphicPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Ignore("Re-enable NPM Tests")
-    @Test
-    public void testProjectTemplateNpmReactPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("npm-isomorphic-portlet-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-isomorphic-portlet");
 
-        op.setProjectName( "npm-react-portlet-test-v71" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-react-portlet" );
-        op.setLiferayVersion( "7.1" );
+		_createAndBuild(op);
+	}
 
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
+	@Ignore("Re-enable NPM Tests")
+	@Test
+	public void testProjectTemplateNpmIsomorphicPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Ignore("Re-enable NPM Tests")
-    @Test
-    public void testProjectTemplateNpmVuejsPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("npm-isomorphic-portlet-test-v71");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-isomorphic-portlet");
+		op.setLiferayVersion("7.1");
 
-        op.setProjectName( "npm-vuejs-portlet-test-v71" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "npm-vuejs-portlet" );
-        op.setLiferayVersion( "7.1" );
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
 
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
+	@Ignore("Re-enable NPM Tests")
+	@Test
+	public void testProjectTemplateNpmJqueryPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
+		op.setProjectName("npm-jquery-portlet-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-jquery-portlet");
 
-    @Test
-    public void testProjectTemplatePanelApp() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
 
-        op.setProjectName( "panel-app-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "panel-app" );
+	@Ignore("Re-enable NPM Tests")
+	@Test
+	public void testProjectTemplateNpmJqueryPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("npm-jquery-portlet-test-v71");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-jquery-portlet");
+		op.setLiferayVersion("7.1");
 
-    @Test
-    public void testProjectTemplatePortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
 
-        op.setProjectName( "portlet-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "portlet" );
+	@Ignore("Re-enable NPM Tests")
+	@Test
+	public void testProjectTemplateNpmMetaljsPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("npm-metaljs-portlet-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-metaljs-portlet");
 
-    @Test
-    public void testProjectTemplatePortletConfigurationIcon() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
 
-        op.setProjectName( "portlet-configuration-icon-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "portlet-configuration-icon" );
+	@Ignore("Re-enable NPM Tests")
+	@Test
+	public void testProjectTemplateNpmMetaljsPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("npm-metaljs-portlet-test-v71");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-metaljs-portlet");
+		op.setLiferayVersion("7.1");
 
-    @Test
-    public void testProjectTemplatePortletProvider() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
 
-        op.setProjectName( "portlet-provider-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "portlet-provider" );
+	@Ignore("Re-enable NPM Tests")
+	@Test
+	public void testProjectTemplateNpmPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("npm-portlet-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-portlet");
 
-    @Test
-    public void testProjectTemplatePortletToolbarContributor() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
 
-        op.setProjectName( "portlet-toolbar-contributor-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "portlet-toolbar-contributor" );
+	@Ignore("Re-enable NPM Tests")
+	@Test
+	public void testProjectTemplateNpmPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("npm-portlet-test-v71");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-portlet");
+		op.setLiferayVersion("7.1");
 
-    @Test
-    public void testProjectTemplateRest() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
 
-        op.setProjectName( "rest-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "rest" );
+	@Ignore("Re-enable NPM Tests")
+	@Test
+	public void testProjectTemplateNpmReactPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("npm-react-portlet-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-react-portlet");
 
-    @Test
-    public void testProjectTemplateService() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
 
-        op.setProjectName( "service-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "service" );
-        op.setServiceName( "com.liferay.portal.kernel.events.LifecycleAction" );
+	@Ignore("Re-enable NPM Tests")
+	@Test
+	public void testProjectTemplateNpmReactPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        IProject project = create( op );
+		op.setProjectName("npm-react-portlet-test-v71");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-react-portlet");
+		op.setLiferayVersion("7.1");
 
-        IFile serviceFile = project.getFile( "src/main/java/service/test/ServiceTest.java" );
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
 
-        assertTrue( serviceFile.exists() );
+	@Ignore("Re-enable NPM Tests")
+	@Test
+	public void testProjectTemplateNpmVuejsPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        String contents =
-            "package service.test;\n" +
-            "import com.liferay.portal.kernel.events.ActionException;\n" +
-            "import com.liferay.portal.kernel.events.LifecycleAction;\n" +
-            "import com.liferay.portal.kernel.events.LifecycleEvent;\n" +
-            "import org.osgi.service.component.annotations.Component;\n" +
-            "@Component(\n" +
-                "immediate = true, property = {\"key=login.events.pre\"},\n" +
-                "service = LifecycleAction.class\n" +
-            ")\n" +
-            "public class ServiceTest implements LifecycleAction {\n" +
-                "@Override public void processLifecycleEvent(LifecycleEvent lifecycleEvent) throws ActionException { }\n" +
-            "}";
+		op.setProjectName("npm-vuejs-portlet-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-vuejs-portlet");
 
-        serviceFile.setContents( new ByteArrayInputStream( contents.getBytes() ), IResource.FORCE, monitor );
+		_createAndBuild(op);
+	}
 
-        verifyProject( project );
-    }
+	@Ignore("Re-enable NPM Tests")
+	@Test
+	public void testProjectTemplateNpmVuejsPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Test
-    public void testProjectTemplateServiceBuilder() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("npm-vuejs-portlet-test-v71");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("npm-vuejs-portlet");
+		op.setLiferayVersion("7.1");
 
-        op.setProjectName( "service-builder-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "service-builder" );
-        op.setPackageName( "com.liferay.test" );
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
 
-        IProject parent = create( op );
+	@Test
+	public void testProjectTemplatePanelApp() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        assertTrue( parent != null && parent.exists() );
+		op.setProjectName("panel-app-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("panel-app");
 
-        IProject api = CoreUtil.getProject( "service-builder-test-api" );
+		_createAndBuild(op);
+	}
 
-        assertTrue( api != null && api.exists() );
+	@Test
+	public void testProjectTemplatePortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        IProject service = CoreUtil.getProject( "service-builder-test-service" );
+		op.setProjectName("portlet-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("portlet");
 
-        assertTrue( service != null && service.exists() );
+		_createAndBuild(op);
+	}
 
-        IProjectBuilder builder = LiferayCore.create( IProjectBuilder.class, service );
+	@Test
+	public void testProjectTemplatePortletConfigurationIcon() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        builder.buildService( monitor );
+		op.setProjectName("portlet-configuration-icon-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("portlet-configuration-icon");
 
-        api.build( IncrementalProjectBuilder.FULL_BUILD, monitor );
+		_createAndBuild(op);
+	}
 
-        service.build( IncrementalProjectBuilder.FULL_BUILD, monitor );
+	@Test
+	public void testProjectTemplatePortletProvider() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        IBundleProject apiBundle = LiferayCore.create( IBundleProject.class, api );
+		op.setProjectName("portlet-provider-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("portlet-provider");
 
-        assertNotNull( apiBundle );
+		_createAndBuild(op);
+	}
 
-        IPath apiOutput = apiBundle.getOutputBundle( true, monitor );
+	@Test
+	public void testProjectTemplatePortletToolbarContributor() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        assertNotNull( apiOutput );
+		op.setProjectName("portlet-toolbar-contributor-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("portlet-toolbar-contributor");
 
-        assertTrue( apiOutput.toFile().exists() );
+		_createAndBuild(op);
+	}
 
-        assertEquals( "service-builder-test-api-1.0.0.jar", apiOutput.lastSegment() );
+	@Test
+	public void testProjectTemplateRest() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        IBundleProject serviceBundle = LiferayCore.create( IBundleProject.class, service );
+		op.setProjectName("rest-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("rest");
 
-        IPath serviceOutput = serviceBundle.getOutputBundle( true, monitor );
+		_createAndBuild(op);
+	}
 
-        assertNotNull( serviceOutput );
+	@Test
+	public void testProjectTemplateService() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        assertTrue( serviceOutput.toFile().exists() );
+		op.setProjectName("service-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("service");
+		op.setServiceName("com.liferay.portal.kernel.events.LifecycleAction");
 
-        assertEquals( "service-builder-test-service-1.0.0.jar", serviceOutput.lastSegment() );
-    }
+		IProject project = _create(op);
 
-    @Test
-    public void testProjectTemplateServiceWrapper() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		IFile serviceFile = project.getFile("src/main/java/service/test/ServiceTest.java");
 
-        op.setProjectName( "service-wrapper-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "service-wrapper" );
-        op.setServiceName( "com.liferay.portal.kernel.service.UserLocalServiceWrapper" );
-        op.setComponentName( "MyServiceWrapper" );
+		assertTrue(serviceFile.exists());
 
-        createAndBuild(op);
-    }
+		String contents =
+			"package service.test;\n" + "import com.liferay.portal.kernel.events.ActionException;\n" +
+				"import com.liferay.portal.kernel.events.LifecycleAction;\n" +
+					"import com.liferay.portal.kernel.events.LifecycleEvent;\n" +
+						"import org.osgi.service.component.annotations.Component;\n@Component(\n" +
+							"immediate = true, property = {\"key=login.events.pre\"},\n" +
+								"service = LifecycleAction.class\n" + ")\n" +
+									"public class ServiceTest implements LifecycleAction {\n" +
+										"@Override public void processLifecycleEvent(LifecycleEvent lifecycleEvent) throws ActionException { }\n}";
 
-    @Test
-    public void testProjectTemplateSimulationPanelEntry() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		serviceFile.setContents(new ByteArrayInputStream(contents.getBytes()), IResource.FORCE, monitor);
 
-        op.setProjectName( "simulation-panel-entry-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "simulation-panel-entry" );
+		_verifyProject(project);
+	}
 
-        createAndBuild(op);
-    }
+	@Test
+	public void testProjectTemplateServiceBuilder() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Test
-    public void testProjectTemplateSoyPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("service-builder-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("service-builder");
+		op.setPackageName("com.liferay.test");
 
-        op.setProjectName( "soy-portlet-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "soy-portlet" );
+		IProject parent = _create(op);
 
-        createAndBuild(op);
-    }
+		assertTrue(parent != null && parent.exists());
 
-    @Test
-    public void testProjectTemplateSpringMvcPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		IProject api = CoreUtil.getProject("service-builder-test-api");
 
-        op.setProjectName( "spring-mvc-portlet-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "spring-mvc-portlet" );
+		assertTrue(api != null && api.exists());
 
-        IProject project = createAndBuild(op);
+		IProject service = CoreUtil.getProject("service-builder-test-service");
 
-        project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
+		assertTrue(service != null && service.exists());
 
-        assertTrue( project.getFile( "target/spring-mvc-portlet-test-1.0.0.war" ).exists() );
-    }
+		IProjectBuilder builder = LiferayCore.create(IProjectBuilder.class, service);
 
-    @Test
-    public void testProjectTemplateTemplateContextContributor() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		builder.buildService(monitor);
 
-        op.setProjectName( "template-context-contributor-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "template-context-contributor" );
+		api.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
 
-        createAndBuild(op);
-    }
+		service.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
 
-    @Test
-    public void testProjectTemplateTheme() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		IBundleProject apiBundle = LiferayCore.create(IBundleProject.class, api);
 
-        op.setProjectName( "theme-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "theme" );
+		assertNotNull(apiBundle);
 
-        createAndBuild(op);
-    }
+		IPath apiOutput = apiBundle.getOutputBundle(true, monitor);
 
-    @Test
-    public void testProjectTemplateThemeContributor() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		assertNotNull(apiOutput);
 
-        op.setProjectName( "theme-contributor-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "theme-contributor" );
+		assertTrue(apiOutput.toFile().exists());
 
-        createAndBuild(op);
-    }
+		assertEquals("service-builder-test-api-1.0.0.jar", apiOutput.lastSegment());
 
-    @Test
-    public void testProjectTemplateWarHook() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		IBundleProject serviceBundle = LiferayCore.create(IBundleProject.class, service);
 
-        op.setProjectName( "war-hook-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "war-hook" );
+		IPath serviceOutput = serviceBundle.getOutputBundle(true, monitor);
 
-        IProject project = createAndBuild(op);
+		assertNotNull(serviceOutput);
 
-        project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
+		assertTrue(serviceOutput.toFile().exists());
 
-        assertTrue( project.getFile( "target/war-hook-test-1.0.0.war" ).exists() );
-    }
+		assertEquals("service-builder-test-service-1.0.0.jar", serviceOutput.lastSegment());
+	}
 
-    @Test
-    public void testProjectTemplateWarMvcPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateServiceWrapper() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "war-mvc-portlet-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "war-mvc-portlet" );
+		op.setProjectName("service-wrapper-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("service-wrapper");
+		op.setServiceName("com.liferay.portal.kernel.service.UserLocalServiceWrapper");
+		op.setComponentName("MyServiceWrapper");
 
-        IProject project = createAndBuild(op);
+		_createAndBuild(op);
+	}
 
-        project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
+	@Test
+	public void testProjectTemplateSimulationPanelEntry() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        assertTrue( project.getFile( "target/war-mvc-portlet-test-1.0.0.war" ).exists() );
-    }
+		op.setProjectName("simulation-panel-entry-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("simulation-panel-entry");
 
-    @Test
-    public void testThemeProjectComponentConfiguration() throws Exception
-    {
-       NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
 
-       op.setProjectName( "maven-theme-component-test" );
-       op.setProjectProvider( "maven-module" );
-       op.setProjectTemplateName( "theme" );
+	@Test
+	public void testProjectTemplateSoyPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-       op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+		op.setProjectName("soy-portlet-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("soy-portlet");
 
-       IProject project = CoreUtil.getProject( "maven-theme-component-test" );
+		_createAndBuild(op);
+	}
 
-       assertNotNull( project );
+	@Test
+	public void testProjectTemplateSpringMvcPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-       IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+		op.setProjectName("spring-mvc-portlet-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("spring-mvc-portlet");
 
-       assertNotNull( bundleProject );
-    }
+		IProject project = _createAndBuild(op);
 
-    @Test
-    public void testThemeProjectPluginDetection() throws Exception
-    {
-       NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 
-       op.setProjectName( "maven-theme-test" );
-       op.setProjectProvider( "maven-module" );
-       op.setProjectTemplateName( "theme" );
+		assertTrue(project.getFile("target/spring-mvc-portlet-test-1.0.0.war").exists());
+	}
 
-       op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+	@Test
+	public void testProjectTemplateTemplateContextContributor() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-       IProject project = CoreUtil.getProject( "maven-theme-test" );
+		op.setProjectName("template-context-contributor-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("template-context-contributor");
 
-       assertNotNull( project );
+		_createAndBuild(op);
+	}
 
-       IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+	@Test
+	public void testProjectTemplateTheme() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-       assertNotNull( bundleProject );
-    }
+		op.setProjectName("theme-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("theme");
 
-    private void verifyNpmPortletV71( NewLiferayModuleProjectOp op ) {
+		_createAndBuild(op);
+	}
 
-        IProject project = CoreUtil.getProject( op.getProjectName().content() );
+	@Test
+	public void testProjectTemplateThemeContributor() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        assertNotNull( project );
+		op.setProjectName("theme-contributor-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("theme-contributor");
 
-        IFile viewFile = project.getFile( "src/main/resources/META-INF/resources/view.jsp" );
+		_createAndBuild(op);
+	}
 
-        assertTrue( viewFile.exists() );
+	@Test
+	public void testProjectTemplateWarHook() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        String viewFileContent = FileUtil.readContents( viewFile.getLocation().toFile() );
+		op.setProjectName("war-hook-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("war-hook");
 
-        assertTrue( viewFileContent.contains( "<aui:script require=\"<%= bootstrapRequire %>\">" ) );
-    }
+		IProject project = _createAndBuild(op);
 
-    private void verifyProject(IProject project ) throws Exception
-    {
-        assertNotNull( project );
-        assertTrue( project.exists() );
+		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 
-        assertFalse(project.getFile( "build.gradle" ).exists());
+		assertTrue(project.getFile("target/war-hook-test-1.0.0.war").exists());
+	}
 
-        project.build( IncrementalProjectBuilder.CLEAN_BUILD, monitor );
+	@Test
+	public void testProjectTemplateWarMvcPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        waitForJobsToComplete();
+		op.setProjectName("war-mvc-portlet-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("war-mvc-portlet");
 
-        project.build( IncrementalProjectBuilder.FULL_BUILD, monitor );
+		IProject project = _createAndBuild(op);
 
-        waitForJobsToComplete();
+		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 
-        assertNoErrors( project );
+		assertTrue(project.getFile("target/war-mvc-portlet-test-1.0.0.war").exists());
+	}
 
-        IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+	@Test
+	public void testThemeProjectComponentConfiguration() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        assertNotNull( bundleProject );
+		op.setProjectName("maven-theme-component-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("theme");
 
-        IPath outputBundle = bundleProject.getOutputBundle( true, monitor );
+		op.execute(ProgressMonitorBridge.create(new NullProgressMonitor()));
 
-        assertNotNull( outputBundle );
+		IProject project = CoreUtil.getProject("maven-theme-component-test");
 
-        assertTrue( outputBundle.toFile().exists() );
-    }
+		assertNotNull(project);
+
+		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
+
+		assertNotNull(bundleProject);
+	}
+
+	@Test
+	public void testThemeProjectPluginDetection() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName("maven-theme-test");
+		op.setProjectProvider("maven-module");
+		op.setProjectTemplateName("theme");
+
+		op.execute(ProgressMonitorBridge.create(new NullProgressMonitor()));
+
+		IProject project = CoreUtil.getProject("maven-theme-test");
+
+		assertNotNull(project);
+
+		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
+
+		assertNotNull(bundleProject);
+	}
+
+	private static void _importExistingProject(File dir, IProgressMonitor monitor) throws CoreException {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		IProjectDescription description = workspace.loadProjectDescription(
+			new Path(dir.getAbsolutePath()).append(".project"));
+
+		String name = description.getName();
+
+		IProject project = workspace.getRoot().getProject(name);
+
+		if (project.exists()) {
+			return;
+		}
+		else {
+			project.create(description, monitor);
+			project.open(IResource.BACKGROUND_REFRESH, monitor);
+
+			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		}
+	}
+
+	private boolean _checkDependency(List<Dependency> existedDependencies, Dependency mavenDependency) {
+		for (Dependency existedDependency : existedDependencies) {
+			String existedKey = existedDependency.getManagementKey();
+
+			if (existedKey.equals(mavenDependency.getManagementKey())) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private IProject _create(NewLiferayModuleProjectOp op) throws CoreException, InterruptedException {
+		Status status = op.execute(ProgressMonitorBridge.create(new NullProgressMonitor()));
+
+		assertNotNull(status);
+		assertTrue(status.message(), status.ok());
+
+		waitForJobsToComplete();
+
+		return CoreUtil.getProject(op.getProjectName().content());
+	}
+
+	private IProject _createAndBuild(NewLiferayModuleProjectOp op) throws Exception {
+		assertTrue(op.validation().message(), op.validation().ok());
+
+		IProject project = _create(op);
+
+		_verifyProject(project);
+
+		return project;
+	}
+
+	private void _verifyNpmPortletV71(NewLiferayModuleProjectOp op) {
+		IProject project = CoreUtil.getProject(op.getProjectName().content());
+
+		assertNotNull(project);
+
+		IFile viewFile = project.getFile("src/main/resources/META-INF/resources/view.jsp");
+
+		assertTrue(viewFile.exists());
+
+		String viewFileContent = FileUtil.readContents(viewFile.getLocation().toFile());
+
+		assertTrue(viewFileContent.contains("<aui:script require=\"<%= bootstrapRequire %>\">"));
+	}
+
+	private void _verifyProject(IProject project) throws Exception {
+		assertNotNull(project);
+		assertTrue(project.exists());
+
+		assertFalse(project.getFile("build.gradle").exists());
+
+		project.build(IncrementalProjectBuilder.CLEAN_BUILD, monitor);
+
+		waitForJobsToComplete();
+
+		project.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
+
+		waitForJobsToComplete();
+
+		assertNoErrors(project);
+
+		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
+
+		assertNotNull(bundleProject);
+
+		IPath outputBundle = bundleProject.getOutputBundle(true, monitor);
+
+		assertNotNull(outputBundle);
+
+		assertTrue(outputBundle.toFile().exists());
+	}
+
 }

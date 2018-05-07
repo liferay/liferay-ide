@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.core.tests;
 
@@ -24,10 +23,6 @@ import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
 import com.liferay.ide.server.core.tests.ServerCoreBase;
 import com.liferay.ide.server.util.ServerUtil;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -39,207 +34,206 @@ import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Joye Luo
  */
-public class MavenModuleFragmentProjectTests extends ServerCoreBase
-{
+public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 
-    @Override
-    protected IPath getLiferayRuntimeDir()
-    {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-ce-portal-7.0-ga5/tomcat-8.0.32" );
-    }
+	@Override
+	public void setupRuntime() throws Exception {
+		if (shouldSkipBundleTests()) {
+			return;
+		}
 
-    @Override
-    protected IPath getLiferayRuntimeZip()
-    {
-        return getLiferayBundlesPath().append( "liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip" );
-    }
+		extractRuntime(getLiferayRuntimeZip(), getLiferayRuntimeDir());
+	}
 
-    @Override
-    protected String getRuntimeId()
-    {
-        return "com.liferay.ide.server.portal.runtime";
-    }
+	@Test
+	public void testNewModuleFragmentFileProjectValidation() throws Exception {
+		deleteAllWorkspaceProjects();
 
-    @Override
-    public void setupRuntime() throws Exception
-    {
-        if( shouldSkipBundleTests() )
-            return;
+		NewModuleFragmentFilesOp fop = NewModuleFragmentFilesOp.TYPE.instantiate();
 
-        extractRuntime( getLiferayRuntimeZip(), getLiferayRuntimeDir() );
-    }
+		Status projectValidationStatus = fop.getProjectName().validation();
 
-    @Test
-    public void testNewModuleFragmentFileProjectValidation() throws Exception
-    {
-        deleteAllWorkspaceProjects();
+		Assert.assertEquals("No suitable Liferay fragment project.", projectValidationStatus.message());
 
-        NewModuleFragmentFilesOp fop = NewModuleFragmentFilesOp.TYPE.instantiate();
+		NewModuleFragmentOp op = NewModuleFragmentOp.TYPE.instantiate();
 
-        Status projectValidationStatus = fop.getProjectName().validation();
+		String runtimeName = "liferay-portal-7.0";
 
-        assertEquals("No suitable Liferay fragment project.", projectValidationStatus.message() );
+		NullProgressMonitor npm = new NullProgressMonitor();
 
-        NewModuleFragmentOp op = NewModuleFragmentOp.TYPE.instantiate();
-        final String runtimeName = "liferay-portal-7.0";
-        final NullProgressMonitor npm = new NullProgressMonitor();
+		IRuntime runtime = ServerCore.findRuntime(runtimeName);
 
-        IRuntime runtime = ServerCore.findRuntime( runtimeName );
+		if (runtime == null) {
+			IRuntimeWorkingCopy runtimeWC = ServerCore.findRuntimeType(getRuntimeId()).createRuntime(runtimeName, npm);
 
-        if( runtime == null )
-        {
-            final IRuntimeWorkingCopy runtimeWC =
-                ServerCore.findRuntimeType( getRuntimeId() ).createRuntime( runtimeName, npm );
+			runtimeWC.setName(runtimeName);
+			runtimeWC.setLocation(getLiferayRuntimeDir());
 
-            runtimeWC.setName( runtimeName );
-            runtimeWC.setLocation( getLiferayRuntimeDir() );
+			runtime = runtimeWC.save(true, npm);
+		}
 
-            runtime = runtimeWC.save( true, npm );
-        }
+		Assert.assertNotNull(runtime);
 
-        assertNotNull( runtime );
+		List<String> bundles = ServerUtil.getModuleFileListFrom70Server(runtime);
 
-        List<String> bundles = ServerUtil.getModuleFileListFrom70Server( runtime );
+		Assert.assertNotNull(bundles);
 
-        assertNotNull( bundles );
+		for (String hostOsgiBundle : bundles) {
+			if (hostOsgiBundle.contains("com.liferay.asset.display.web")) {
+				op.setProjectName("test-project-validation");
+				op.setProjectProvider("gradle-module-fragment");
+				op.setLiferayRuntimeName(runtimeName);
+				op.setHostOsgiBundle(hostOsgiBundle);
 
-        for( String hostOsgiBundle : bundles )
-        {
-            if( hostOsgiBundle.contains( "com.liferay.asset.display.web" ) )
-            {
-                op.setProjectName( "test-project-validation" );
-                op.setProjectProvider( "gradle-module-fragment" );
-                op.setLiferayRuntimeName( runtimeName );
-                op.setHostOsgiBundle( hostOsgiBundle );
-                OverrideFilePath overrideFilePath = op.getOverrideFiles().insert();
-                overrideFilePath.setValue( "META-INF/resources/view.jsp" );
+				OverrideFilePath overrideFilePath = op.getOverrideFiles().insert();
 
-                Status gradleExeStatus =
-                    NewModuleFragmentOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+				overrideFilePath.setValue("META-INF/resources/view.jsp");
 
-                assertTrue( gradleExeStatus.ok() );
+				Status gradleExeStatus = NewModuleFragmentOpMethods.execute(
+					op, ProgressMonitorBridge.create(new NullProgressMonitor()));
 
-                IProject existedGradleProject = CoreUtil.getProject( op.getProjectName().content() );
+				Assert.assertTrue(gradleExeStatus.ok());
 
-                assertNotNull( existedGradleProject );
+				IProject existedGradleProject = CoreUtil.getProject(op.getProjectName().content());
 
-                IFile bndFile = existedGradleProject.getFile( "bnd.bnd" );
+				Assert.assertNotNull(existedGradleProject);
 
-                bndFile.delete( true, true, new NullProgressMonitor() );
+				IFile bndFile = existedGradleProject.getFile("bnd.bnd");
 
-                fop.setProjectName( op.getProjectName().content() );
+				bndFile.delete(true, true, new NullProgressMonitor());
 
-                projectValidationStatus = fop.getProjectName().validation();
+				fop.setProjectName(op.getProjectName().content());
 
-                assertEquals( "Can't find bnd.bnd file in the project.", projectValidationStatus.message() );
-            }
-        }
-    }
+				projectValidationStatus = fop.getProjectName().validation();
 
-    @Test
-    public void testNewModuleFragmentProjectOpProjectName()
-    {
-        NewModuleFragmentOp op = NewModuleFragmentOp.TYPE.instantiate();
+				Assert.assertEquals("Can't find bnd.bnd file in the project.", projectValidationStatus.message());
+			}
+		}
+	}
 
-        op.setProjectName( "test-module-fragment" );
-        Status projectNameOkValidationStatus1 = op.getProjectName().validation();
-        assertEquals( "ok", projectNameOkValidationStatus1.message() );
+	@Test
+	public void testNewModuleFragmentProjectOpProject() throws Exception {
+		NewModuleFragmentOp op = NewModuleFragmentOp.TYPE.instantiate();
+		String runtimeName = "liferay-portal-7.0";
+		NullProgressMonitor npm = new NullProgressMonitor();
 
-        op.setProjectName( "#test-module-fragment" );
-        Status projectNameErrorValidationStatus = op.getProjectName().validation();
-        assertEquals( "The project name is invalid.", projectNameErrorValidationStatus.message() );
+		IRuntime runtime = ServerCore.findRuntime(runtimeName);
 
-        op.setProjectName( "test_module_fragment" );
-        Status projectNameOkValidationStatus2 = op.getProjectName().validation();
-        assertEquals( "ok", projectNameOkValidationStatus2.message() );
-    }
+		if (runtime == null) {
+			IRuntimeWorkingCopy runtimeWC = ServerCore.findRuntimeType(getRuntimeId()).createRuntime(runtimeName, npm);
 
-    @Test
-    public void testNewModuleFragmentProjectOpProject() throws Exception
-    {
-        NewModuleFragmentOp op = NewModuleFragmentOp.TYPE.instantiate();
-        final String runtimeName = "liferay-portal-7.0";
-        final NullProgressMonitor npm = new NullProgressMonitor();
+			runtimeWC.setName(runtimeName);
+			runtimeWC.setLocation(getLiferayRuntimeDir());
 
-        IRuntime runtime = ServerCore.findRuntime( runtimeName );
+			runtime = runtimeWC.save(true, npm);
+		}
 
-        if( runtime == null )
-        {
-            final IRuntimeWorkingCopy runtimeWC =
-                ServerCore.findRuntimeType( getRuntimeId() ).createRuntime( runtimeName, npm );
+		Assert.assertNotNull(runtime);
 
-            runtimeWC.setName( runtimeName );
-            runtimeWC.setLocation( getLiferayRuntimeDir() );
+		List<String> bundles = ServerUtil.getModuleFileListFrom70Server(runtime);
 
-            runtime = runtimeWC.save( true, npm );
-        }
+		Assert.assertNotNull(bundles);
 
-        assertNotNull( runtime );
+		for (String hostOsgiBundle : bundles) {
+			if (hostOsgiBundle.contains("com.liferay.asset.display.web")) {
+				op.setProjectName("test-gradle-module-fragment");
+				op.setProjectProvider("gradle-module-fragment");
+				op.setLiferayRuntimeName(runtimeName);
+				op.setHostOsgiBundle(hostOsgiBundle);
 
-        List<String> bundles = ServerUtil.getModuleFileListFrom70Server( runtime );
+				OverrideFilePath overrideFilePath = op.getOverrideFiles().insert();
 
-        assertNotNull( bundles );
+				overrideFilePath.setValue("META-INF/resources/view.jsp");
 
-        for( String hostOsgiBundle : bundles )
-        {
-            if( hostOsgiBundle.contains( "com.liferay.asset.display.web" ) )
-            {
-                op.setProjectName( "test-gradle-module-fragment" );
-                op.setProjectProvider( "gradle-module-fragment" );
-                op.setLiferayRuntimeName( runtimeName );
-                op.setHostOsgiBundle( hostOsgiBundle );
-                OverrideFilePath overrideFilePath = op.getOverrideFiles().insert();
-                overrideFilePath.setValue( "META-INF/resources/view.jsp" );
+				Status gradleExeStatus = NewModuleFragmentOpMethods.execute(
+					op, ProgressMonitorBridge.create(new NullProgressMonitor()));
 
-                Status gradleExeStatus =
-                    NewModuleFragmentOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+				Assert.assertTrue(gradleExeStatus.ok());
 
-                assertTrue( gradleExeStatus.ok() );
+				IProject existedGradleProject = CoreUtil.getProject(op.getProjectName().content());
 
-                IProject existedGradleProject = CoreUtil.getProject( op.getProjectName().content() );
+				Assert.assertNotNull(existedGradleProject);
 
-                assertNotNull( existedGradleProject );
+				IFile gradleFile = existedGradleProject.getFile("build.gradle");
 
-                IFile gradleFile = existedGradleProject.getFile( "build.gradle" );
+				Assert.assertTrue(gradleFile.exists());
 
-                assertTrue( gradleFile.exists() );
+				IFile overrideFile = existedGradleProject.getFile("src/main/resources/META-INF/resources/view.jsp");
 
-                IFile overrideFile = existedGradleProject.getFile( "src/main/resources/META-INF/resources/view.jsp" );
+				Assert.assertTrue(overrideFile.exists());
+			}
 
-                assertTrue( overrideFile.exists() );
-            }
+			if (hostOsgiBundle.contains("com.liferay.login.web")) {
+				op.setProjectName("test-maven-module-fragment");
+				op.setProjectProvider("maven-module-fragment");
+				op.setLiferayRuntimeName(runtimeName);
+				op.setHostOsgiBundle(hostOsgiBundle);
+				OverrideFilePath file = op.getOverrideFiles().insert();
 
-            if( hostOsgiBundle.contains( "com.liferay.login.web" ) )
-            {
-                op.setProjectName( "test-maven-module-fragment" );
-                op.setProjectProvider( "maven-module-fragment" );
-                op.setLiferayRuntimeName( runtimeName );
-                op.setHostOsgiBundle( hostOsgiBundle );
-                OverrideFilePath file = op.getOverrideFiles().insert();
-                file.setValue( "META-INF/resources/login.jsp" );
+				file.setValue("META-INF/resources/login.jsp");
 
-                Status mavenExeStatus =
-                    NewModuleFragmentOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+				Status mavenExeStatus = NewModuleFragmentOpMethods.execute(
+					op, ProgressMonitorBridge.create(new NullProgressMonitor()));
 
-                assertTrue( mavenExeStatus.ok() );
+				Assert.assertTrue(mavenExeStatus.ok());
 
-                IProject existedMavenProject = CoreUtil.getProject( op.getProjectName().content() );
+				IProject existedMavenProject = CoreUtil.getProject(op.getProjectName().content());
 
-                assertNotNull( existedMavenProject );
+				Assert.assertNotNull(existedMavenProject);
 
-                IFile pomFile = existedMavenProject.getFile( "pom.xml" );
+				IFile pomFile = existedMavenProject.getFile("pom.xml");
 
-                assertTrue( pomFile.exists() );
+				Assert.assertTrue(pomFile.exists());
 
-                IFile overrideFile1 = existedMavenProject.getFile( "src/main/resources/META-INF/resources/login.jsp" );
+				IFile overrideFile1 = existedMavenProject.getFile("src/main/resources/META-INF/resources/login.jsp");
 
-                assertTrue( overrideFile1.exists() );
-            }
-        }
-    }
+				Assert.assertTrue(overrideFile1.exists());
+			}
+		}
+	}
+
+	@Test
+	public void testNewModuleFragmentProjectOpProjectName() {
+		NewModuleFragmentOp op = NewModuleFragmentOp.TYPE.instantiate();
+
+		op.setProjectName("test-module-fragment");
+		Status projectNameOkValidationStatus1 = op.getProjectName().validation();
+
+		Assert.assertEquals("ok", projectNameOkValidationStatus1.message());
+
+		op.setProjectName("#test-module-fragment");
+		Status projectNameErrorValidationStatus = op.getProjectName().validation();
+
+		Assert.assertEquals("The project name is invalid.", projectNameErrorValidationStatus.message());
+
+		op.setProjectName("test_module_fragment");
+		Status projectNameOkValidationStatus2 = op.getProjectName().validation();
+
+		Assert.assertEquals("ok", projectNameOkValidationStatus2.message());
+	}
+
+	@Override
+	protected IPath getLiferayRuntimeDir() {
+		ProjectCore plugin = ProjectCore.getDefault();
+
+		return plugin.getStateLocation().append("liferay-ce-portal-7.0-ga5/tomcat-8.0.32");
+	}
+
+	@Override
+	protected IPath getLiferayRuntimeZip() {
+		return getLiferayBundlesPath().append("liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip");
+	}
+
+	@Override
+	protected String getRuntimeId() {
+		return "com.liferay.ide.server.portal.runtime";
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,73 +10,54 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.core.tests;
 
-import static org.junit.Assert.assertEquals;
-
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Gregory Amerson
  */
-public class NewLiferayPluginProjectProfileTests
-{
+public class NewLiferayPluginProjectProfileTests {
 
-    @Test
-    public void testProfiles() throws Exception
-    {
-        final NewLiferayPluginProjectOp op = newMavenProjectOp();
+	@Test
+	public void testProfiles() throws Exception {
+		NewLiferayPluginProjectOp op = _newMavenProjectOp();
 
-        final String emptyActiveProfilesValue = op.getActiveProfilesValue().content();
+		String emptyActiveProfilesValue = op.getActiveProfilesValue().content();
 
-        assertEquals( emptyActiveProfilesValue, null );
+		Assert.assertEquals(emptyActiveProfilesValue, null);
 
-        op.setActiveProfilesValue( "foo,bar" );
+		op.setActiveProfilesValue("foo,bar");
 
-        assertEquals( "foo,bar", op.getActiveProfilesValue().content() );
+		Assert.assertEquals("foo,bar", op.getActiveProfilesValue().content());
 
-        assertEquals( 0, op.getSelectedProfiles().size() );
+		Assert.assertEquals(0, op.getSelectedProfiles().size());
 
-        assertEquals( 0, op.getNewLiferayProfiles().size() );
-    }
+		Assert.assertEquals(0, op.getNewLiferayProfiles().size());
+	}
 
+	@Test
+	public void testSelectProfiles() throws Exception {
+		NewLiferayPluginProjectOp op = _newMavenProjectOp();
 
-    @Test
-    public void testSelectProfiles() throws Exception
-    {
-        final NewLiferayPluginProjectOp op = newMavenProjectOp();
+		Assert.assertEquals(0, op.getSelectedProfiles().size());
+	}
 
-        assertEquals( 0, op.getSelectedProfiles().size() );
-    }
+	protected NewLiferayPluginProjectOp newProjectOp() {
+		return NewLiferayPluginProjectOp.TYPE.instantiate();
+	}
 
-//    @Test
-//    public void testNewLiferayProfileIdDefaultValue() throws Exception
-//    {
-//        final NewLiferayPluginProjectOp op = newMavenProjectOp();
-//
-//        op.getSelectedProfiles().insert().setId( "foo" );
-//
-//        final NewLiferayProfile newLiferayProfile = op.getNewLiferayProfiles().insert();
-//
-//        newLiferayProfile.getId().content();
-//    }
+	private NewLiferayPluginProjectOp _newMavenProjectOp() {
+		NewLiferayPluginProjectOp op = newProjectOp();
 
-    private NewLiferayPluginProjectOp newMavenProjectOp()
-    {
-        final NewLiferayPluginProjectOp op = newProjectOp();
-        op.setProjectProvider( "maven" );
+		op.setProjectProvider("maven");
 
-        return op;
-    }
-
-    protected NewLiferayPluginProjectOp newProjectOp()
-    {
-        return NewLiferayPluginProjectOp.TYPE.instantiate();
-    }
+		return op;
+	}
 
 }

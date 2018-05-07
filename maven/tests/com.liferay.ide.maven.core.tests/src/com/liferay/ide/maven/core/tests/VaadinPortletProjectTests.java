@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.core.tests;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -21,66 +21,73 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
-import org.junit.Test;
 
+import org.junit.Test;
 
 /**
  * @author Gregory Amerson
  */
-public class VaadinPortletProjectTests extends LiferayMavenProjectTestCase
-{
+public class VaadinPortletProjectTests extends LiferayMavenProjectTestCase {
 
-    @Test
-    public void testNewVaadin7PortletProject() throws Exception
-    {
-        NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
-        op.setProjectName( "vaadin7" );
-        op.setProjectProvider( "maven" );
-        op.setPortletFramework( "vaadin" );
+	@Test
+	public void testNewVaadin7PortletProject() throws Exception {
+		NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
 
-        createTestBundleProfile( op );
+		op.setProjectName("vaadin7");
+		op.setProjectProvider("maven");
+		op.setPortletFramework("vaadin");
 
-        final IProject newProject = base.createProject( op );
+		createTestBundleProfile(op);
 
-        assertNotNull( newProject );
+		final IProject newProject = base.createProject(op);
 
-        String pomContents = CoreUtil.readStreamToString( newProject.getFile( "pom.xml" ).getContents() );
+		assertNotNull(newProject);
 
-        assertTrue( pomContents.contains( "<artifactId>vaadin-server</artifactId>" ) );
-        assertTrue( pomContents.contains( "<artifactId>vaadin-client</artifactId>" ) );
-        assertTrue( pomContents.contains( "<artifactId>portal-service</artifactId>" ) );
-    }
+		String pomContents = CoreUtil.readStreamToString(newProject.getFile("pom.xml").getContents());
 
-    @Test
-    public void testProfileLiferayMavenPluginVersionCheck() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
+		assertTrue(pomContents.contains("<artifactId>vaadin-server</artifactId>"));
+		assertTrue(pomContents.contains("<artifactId>vaadin-client</artifactId>"));
+		assertTrue(pomContents.contains("<artifactId>portal-service</artifactId>"));
+	}
 
-        NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
-        op.setProjectName( "profileCheck" );
-        op.setProjectProvider( "maven" );
-        op.setPortletFramework( "vaadin" );
+	@Test
+	public void testProfileLiferayMavenPluginVersionCheck() throws Exception {
+		if (shouldSkipBundleTests()) {
+			return;
+		}
 
-        createTestBundleProfile( op );
+		NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
 
-        final IProject newProject = base.createProject( op );
+		op.setProjectName("profileCheck");
+		op.setProjectProvider("maven");
+		op.setPortletFramework("vaadin");
 
-        assertNotNull( newProject );
+		createTestBundleProfile(op);
 
-        String pomContents = CoreUtil.readStreamToString( newProject.getFile( "pom.xml" ).getContents() );
+		final IProject newProject = base.createProject(op);
 
-        Matcher matcher =
-            Pattern.compile( ".*<liferay.version>(.*)</liferay.version>.*", Pattern.MULTILINE | Pattern.DOTALL ).matcher(
-                pomContents );
-        matcher.matches();
-        String extractedLiferayVersion = matcher.group( 1 );
+		assertNotNull(newProject);
 
-        Matcher matcher2 = Pattern.compile(
-            ".*<liferay.maven.plugin.version>(.*)</liferay.maven.plugin.version>.*",
-            Pattern.MULTILINE | Pattern.DOTALL ).matcher( pomContents );
-        matcher2.matches();
-        String extractedLiferayPluginVersion = matcher2.group( 1 );
+		String pomContents = CoreUtil.readStreamToString(newProject.getFile("pom.xml").getContents());
 
-        assertEquals( extractedLiferayVersion, extractedLiferayPluginVersion );
-    }
+		Matcher matcher = _pattern1.matcher(pomContents);
+
+		matcher.matches();
+
+		String extractedLiferayVersion = matcher.group(1);
+
+		Matcher matcher2 = _pattern2.matcher(pomContents);
+
+		matcher2.matches();
+
+		String extractedLiferayPluginVersion = matcher2.group(1);
+
+		assertEquals(extractedLiferayVersion, extractedLiferayPluginVersion);
+	}
+
+	private Pattern _pattern1 = Pattern.compile(
+		".*<liferay.version>(.*)</liferay.version>.*", Pattern.MULTILINE | Pattern.DOTALL);
+	private Pattern _pattern2 = Pattern.compile(
+		".*<liferay.maven.plugin.version>(.*)</liferay.maven.plugin.version>.*", Pattern.MULTILINE | Pattern.DOTALL);
+
 }
