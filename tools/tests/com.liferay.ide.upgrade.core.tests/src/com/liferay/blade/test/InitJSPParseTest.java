@@ -43,7 +43,7 @@ public class InitJSPParseTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/jukebox-portlet/"), new NullProgressMonitor());
 
-		Assert.assertEquals(327, problems.size());
+		Assert.assertEquals("", 327, problems.size());
 
 		boolean found = false;
 

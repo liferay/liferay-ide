@@ -40,24 +40,24 @@ public class DDMLegacyAPITest extends APITestBase {
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals(5, problems.size());
+		Assert.assertEquals("", 5, problems.size());
 
 		Problem problem = problems.get(0);
 
-		Assert.assertEquals(36, problem.lineNumber);
+		Assert.assertEquals("", 36, problem.lineNumber);
 
 		if (Util.isWindows()) {
-			Assert.assertEquals(1704, problem.startOffset);
-			Assert.assertEquals(1779, problem.endOffset);
+			Assert.assertEquals("", 1704, problem.startOffset);
+			Assert.assertEquals("", 1779, problem.endOffset);
 		}
 		else {
-			Assert.assertEquals(1669, problem.startOffset);
-			Assert.assertEquals(1744, problem.endOffset);
+			Assert.assertEquals("", 1669, problem.startOffset);
+			Assert.assertEquals("", 1744, problem.endOffset);
 		}
 
 		problem = problems.get(1);
 
-		Assert.assertEquals(134, problem.lineNumber);
+		Assert.assertEquals("", 134, problem.lineNumber);
 
 		if (Util.isWindows()) {
 			Assert.assertTrue(problem.startOffset >= 4829 && problem.startOffset <= 4832);
@@ -70,7 +70,7 @@ public class DDMLegacyAPITest extends APITestBase {
 
 		problem = problems.get(2);
 
-		Assert.assertEquals(147, problem.lineNumber);
+		Assert.assertEquals("", 147, problem.lineNumber);
 
 		if (Util.isWindows()) {
 			Assert.assertTrue(problem.startOffset >= 5177 && problem.startOffset <= 5180);
@@ -83,20 +83,20 @@ public class DDMLegacyAPITest extends APITestBase {
 
 		problem = problems.get(3);
 
-		Assert.assertEquals(37, problem.lineNumber);
+		Assert.assertEquals("", 37, problem.lineNumber);
 
 		if (Util.isWindows()) {
 			Assert.assertTrue(problem.startOffset >= 1789 && problem.startOffset <= 1792);
 			Assert.assertTrue(problem.endOffset >= 1859 && problem.endOffset <= 1862);
 		}
 		else {
-			Assert.assertEquals(1753, problem.startOffset);
-			Assert.assertEquals(1823, problem.endOffset);
+			Assert.assertEquals("", 1753, problem.startOffset);
+			Assert.assertEquals("", 1823, problem.endOffset);
 		}
 
 		problem = problems.get(4);
 
-		Assert.assertEquals(162, problem.lineNumber);
+		Assert.assertEquals("", 162, problem.lineNumber);
 
 		if (Util.isWindows()) {
 			Assert.assertTrue(problem.startOffset >= 5573 && problem.startOffset <= 5576);

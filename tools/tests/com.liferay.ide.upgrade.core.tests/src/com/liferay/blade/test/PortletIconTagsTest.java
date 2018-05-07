@@ -43,7 +43,7 @@ public class PortletIconTagsTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/portlet-icon/"), new NullProgressMonitor());
 
-		Assert.assertEquals(13, problems.size());
+		Assert.assertEquals("", 13, problems.size());
 	}
 
 	private final BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();

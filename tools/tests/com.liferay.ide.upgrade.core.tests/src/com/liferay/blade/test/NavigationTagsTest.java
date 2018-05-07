@@ -43,13 +43,13 @@ public class NavigationTagsTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/navigation-tags/"), new NullProgressMonitor());
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		boolean found = false;
 
 		for (Problem problem : problems) {
 			if (problem.file.getName().endsWith("NavigationTagsTest.jsp")) {
-				if (problem.lineNumber == 3 && problem.startOffset >= 57 && problem.endOffset >= 374) {
+				if ((problem.lineNumber == 3) && (problem.startOffset >= 57) && (problem.endOffset >= 374)) {
 					found = true;
 				}
 			}

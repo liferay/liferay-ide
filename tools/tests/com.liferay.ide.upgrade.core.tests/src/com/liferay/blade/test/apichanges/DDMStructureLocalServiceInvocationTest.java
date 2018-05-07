@@ -40,18 +40,19 @@ public class DDMStructureLocalServiceInvocationTest extends APITestBase {
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		Problem problem = problems.get(0);
 
-		Assert.assertEquals(7, problem.lineNumber);
+		Assert.assertEquals("", 7, problem.lineNumber);
 
 		if (Util.isWindows()) {
-			Assert.assertEquals(144, problem.startOffset);
-			Assert.assertEquals(270, problem.endOffset);
-		} else {
-			Assert.assertEquals(138, problem.startOffset);
-			Assert.assertEquals(264, problem.endOffset);
+			Assert.assertEquals("", 144, problem.startOffset);
+			Assert.assertEquals("", 270, problem.endOffset);
+		}
+		else {
+			Assert.assertEquals("", 138, problem.startOffset);
+			Assert.assertEquals("", 264, problem.endOffset);
 		}
 	}
 

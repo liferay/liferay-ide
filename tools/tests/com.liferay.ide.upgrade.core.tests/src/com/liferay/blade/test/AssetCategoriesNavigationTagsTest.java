@@ -44,13 +44,13 @@ public class AssetCategoriesNavigationTagsTest {
 		List<Problem> problems = m.findProblems(
 			new File("jsptests/asset-categories-navigation/"), new NullProgressMonitor());
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		boolean found = false;
 
 		for (Problem problem : problems) {
 			if (problem.file.getName().endsWith("AssetCategoriesNavigationTagsTest.jsp")) {
-				if (problem.lineNumber == 48 && problem.startOffset >= 1530 && problem.endOffset >= 1616) {
+				if ((problem.lineNumber == 48) && (problem.startOffset >= 1530) && (problem.endOffset >= 1616)) {
 					found = true;
 				}
 			}

@@ -43,13 +43,13 @@ public class AUIButtonItemTagsTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/aui-button/"), new NullProgressMonitor());
 
-		Assert.assertEquals(2, problems.size());
+		Assert.assertEquals("", 2, problems.size());
 
 		boolean found = false;
 
 		for (Problem problem : problems) {
 			if (problem.file.getName().endsWith("AUIButtonItemTagTest.jsp")) {
-				if (problem.lineNumber == 3 && problem.startOffset >= 94 && problem.endOffset >= 129) {
+				if ((problem.lineNumber == 3) && (problem.startOffset >= 94) && (problem.endOffset >= 129)) {
 					found = true;
 				}
 			}

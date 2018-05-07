@@ -57,7 +57,7 @@ public class JSPTagImportsTest {
 
 		List<Problem> problems = migration.findProblems(testFile, new NullProgressMonitor());
 
-		Assert.assertEquals(6, problems.size());
+		Assert.assertEquals("", 6, problems.size());
 
 		Collection<ServiceReference<AutoMigrator>> refs = _context.getServiceReferences(
 			AutoMigrator.class, "(auto.correct=import)");
@@ -74,7 +74,7 @@ public class JSPTagImportsTest {
 
 		List<Problem> problems2 = migration.findProblems(dest, new NullProgressMonitor());
 
-		Assert.assertEquals(0, problems2.size());
+		Assert.assertEquals("", 0, problems2.size());
 	}
 
 	private final BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();

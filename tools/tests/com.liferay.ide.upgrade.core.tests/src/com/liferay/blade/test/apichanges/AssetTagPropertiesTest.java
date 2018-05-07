@@ -39,7 +39,7 @@ public class AssetTagPropertiesTest extends APITestBase {
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals(4, problems.size());
+		Assert.assertEquals("", 4, problems.size());
 	}
 
 	@Override

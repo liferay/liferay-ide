@@ -55,19 +55,19 @@ public class WebContentLegacyAPITest extends APITestBase {
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals(5, problems.size());
+		Assert.assertEquals("", 5, problems.size());
 
 		Problem problem = problems.get(0);
 
 		Assert.assertEquals(20, problem.lineNumber);
 
 		if (Util.isWindows()) {
-			Assert.assertEquals(961, problem.startOffset);
-			Assert.assertEquals(1023, problem.endOffset);
+			Assert.assertEquals("", 961, problem.startOffset);
+			Assert.assertEquals("", 1023, problem.endOffset);
 		}
 		else {
-			Assert.assertEquals(942, problem.startOffset);
-			Assert.assertEquals(1004, problem.endOffset);
+			Assert.assertEquals("", 942, problem.startOffset);
+			Assert.assertEquals("", 1004, problem.endOffset);
 		}
 
 		problem = problems.get(1);
@@ -75,12 +75,12 @@ public class WebContentLegacyAPITest extends APITestBase {
 		Assert.assertEquals(47, problem.lineNumber);
 
 		if (Util.isWindows()) {
-			Assert.assertEquals(1917, problem.startOffset);
-			Assert.assertEquals(1950, problem.endOffset);
+			Assert.assertEquals("", 1917, problem.startOffset);
+			Assert.assertEquals("", 1950, problem.endOffset);
 		}
 		else {
-			Assert.assertEquals(1871, problem.startOffset);
-			Assert.assertEquals(1904, problem.endOffset);
+			Assert.assertEquals("", 1871, problem.startOffset);
+			Assert.assertEquals("", 1904, problem.endOffset);
 		}
 
 		problem = problems.get(2);
@@ -88,25 +88,25 @@ public class WebContentLegacyAPITest extends APITestBase {
 		Assert.assertEquals(21, problem.lineNumber);
 
 		if (Util.isWindows()) {
-			Assert.assertEquals(1033, problem.startOffset);
-			Assert.assertEquals(1099, problem.endOffset);
+			Assert.assertEquals("", 1033, problem.startOffset);
+			Assert.assertEquals("", 1099, problem.endOffset);
 		}
 		else {
-			Assert.assertEquals(1013, problem.startOffset);
-			Assert.assertEquals(1079, problem.endOffset);
+			Assert.assertEquals("", 1013, problem.startOffset);
+			Assert.assertEquals("", 1079, problem.endOffset);
 		}
 
 		problem = problems.get(3);
 
-		Assert.assertEquals(41, problem.lineNumber);
+		Assert.assertEquals("", 41, problem.lineNumber);
 
 		if (Util.isWindows()) {
-			Assert.assertEquals(1637, problem.startOffset);
-			Assert.assertEquals(1695, problem.endOffset);
+			Assert.assertEquals("", 1637, problem.startOffset);
+			Assert.assertEquals("", 1695, problem.endOffset);
 		}
 		else {
-			Assert.assertEquals(1597, problem.startOffset);
-			Assert.assertEquals(1655, problem.endOffset);
+			Assert.assertEquals("", 1597, problem.startOffset);
+			Assert.assertEquals("", 1655, problem.endOffset);
 		}
 
 		problem = problems.get(4);
@@ -114,12 +114,12 @@ public class WebContentLegacyAPITest extends APITestBase {
 		Assert.assertEquals(45, problem.lineNumber);
 
 		if (Util.isWindows()) {
-			Assert.assertEquals(1830, problem.startOffset);
-			Assert.assertEquals(1873, problem.endOffset);
+			Assert.assertEquals("", 1830, problem.startOffset);
+			Assert.assertEquals("", 1873, problem.endOffset);
 		}
 		else {
-			Assert.assertEquals(1786, problem.startOffset);
-			Assert.assertEquals(1829, problem.endOffset);
+			Assert.assertEquals("", 1786, problem.startOffset);
+			Assert.assertEquals("", 1829, problem.endOffset);
 		}
 	}
 

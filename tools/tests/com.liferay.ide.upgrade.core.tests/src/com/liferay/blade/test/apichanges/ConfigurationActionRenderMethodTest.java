@@ -40,7 +40,7 @@ public class ConfigurationActionRenderMethodTest extends APITestBase {
 
 		Assert.assertNotNull(problems);
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 	}
 
 	@Override
@@ -51,7 +51,8 @@ public class ConfigurationActionRenderMethodTest extends APITestBase {
 	@Override
 	public File getTestFile() {
 		return new File(
-			"projects/opensocial-portlet-6.2.x/docroot/WEB-INF/src/com/liferay/opensocial/gadget/action/ConfigurationActionImpl.java");
+			"projects/opensocial-portlet-6.2.x/docroot/WEB-INF/src/com/liferay/opensocial/gadget/action" +
+				"/ConfigurationActionImpl.java");
 	}
 
 	public File editConfigurationActionFile = new File("projects/filetests/EditConfigurationAction.java");

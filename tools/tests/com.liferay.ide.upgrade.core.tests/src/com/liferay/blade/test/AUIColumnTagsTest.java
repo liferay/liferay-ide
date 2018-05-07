@@ -43,13 +43,13 @@ public class AUIColumnTagsTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/aui-column/"), new NullProgressMonitor());
 
-		Assert.assertEquals(2, problems.size());
+		Assert.assertEquals("", 2, problems.size());
 
 		boolean found = false;
 
 		for (Problem problem : problems) {
 			if (problem.file.getName().endsWith("AUIColumnTagTest.jsp")) {
-				if (problem.lineNumber == 2 && problem.startOffset >= 58 && problem.endOffset >= 461) {
+				if ((problem.lineNumber == 2) && (problem.startOffset >= 58) && (problem.endOffset >= 461)) {
 					found = true;
 				}
 			}

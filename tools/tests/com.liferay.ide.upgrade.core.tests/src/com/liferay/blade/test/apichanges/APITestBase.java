@@ -49,7 +49,7 @@ public abstract class APITestBase {
 
 		Assert.assertNotNull(fileMigrators);
 
-		Assert.assertEquals(1, fileMigrators.length);
+		Assert.assertEquals("", 1, fileMigrators.length);
 	}
 
 	public int getExpectedNumber() {
@@ -70,7 +70,7 @@ public abstract class APITestBase {
 
 		Assert.assertNotNull(problems);
 
-		Assert.assertEquals(getExpectedNumber(), problems.size());
+		Assert.assertEquals("", getExpectedNumber(), problems.size());
 	}
 
 	@Test
@@ -84,7 +84,7 @@ public abstract class APITestBase {
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals(getExpectedNumber(), problems.size());
+		Assert.assertEquals("", getExpectedNumber(), problems.size());
 	}
 
 	protected BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();

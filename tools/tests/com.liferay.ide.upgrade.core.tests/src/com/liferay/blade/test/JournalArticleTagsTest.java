@@ -43,15 +43,15 @@ public class JournalArticleTagsTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/journal-article-tags/"), new NullProgressMonitor());
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		Problem problem = problems.get(0);
 
 		Assert.assertTrue(problem.file.getName().endsWith("JournalArticleTagsTest.jsp"));
 
-		Assert.assertEquals(4, problem.lineNumber);
+		Assert.assertEquals("", 4, problem.lineNumber);
 
-		Assert.assertEquals("LPS-69321", problem.ticket);
+		Assert.assertEquals("", "LPS-69321", problem.ticket);
 	}
 
 	private final BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();

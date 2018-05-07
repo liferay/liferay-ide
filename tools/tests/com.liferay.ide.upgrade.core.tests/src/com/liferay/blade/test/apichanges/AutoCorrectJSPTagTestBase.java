@@ -69,11 +69,11 @@ public abstract class AutoCorrectJSPTagTestBase {
 			}
 		}
 
-		Assert.assertEquals(getExpectedNumber(), problems.size());
+		Assert.assertEquals("", getExpectedNumber(), problems.size());
 
 		int problemsFixed = ((AutoMigrator)migrator).correctProblems(testFile, problems);
 
-		Assert.assertEquals(getExpectedFixedNumber(), problemsFixed);
+		Assert.assertEquals("", getExpectedFixedNumber(), problemsFixed);
 
 		File dest = new File(tempFolder, "Updated.jsp");
 
@@ -81,7 +81,7 @@ public abstract class AutoCorrectJSPTagTestBase {
 
 		problems = migrator.analyze(dest);
 
-		Assert.assertEquals(0, problems.size());
+		Assert.assertEquals("", 0, problems.size());
 
 		for (String checkPoint : getCheckPoints()) {
 			int lineNumber = Integer.parseInt(checkPoint.split(",")[0]);
@@ -120,9 +120,7 @@ public abstract class AutoCorrectJSPTagTestBase {
 
 		List<String> lines = new ArrayList<>();
 
-		try (BufferedReader bufferedReader =
-				new BufferedReader(new InputStreamReader(inputStream))) {
-
+		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
 			String line;
 
 			while ((line = bufferedReader.readLine()) != null) {

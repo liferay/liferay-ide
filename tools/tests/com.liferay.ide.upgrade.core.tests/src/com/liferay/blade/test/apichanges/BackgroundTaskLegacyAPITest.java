@@ -44,7 +44,8 @@ public class BackgroundTaskLegacyAPITest extends APITestBase {
 	@Override
 	public File getTestFile() {
 		return new File(
-			"projects/legacy-apis-ant-portlet/docroot/WEB-INF/src/com/liferay/DLFileNameBackgroundTaskServiceImpl.java");
+			"projects/legacy-apis-ant-portlet/docroot/WEB-INF/src/com/liferay" +
+				"/DLFileNameBackgroundTaskServiceImpl.java");
 	}
 
 	@Test
@@ -56,31 +57,32 @@ public class BackgroundTaskLegacyAPITest extends APITestBase {
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals(2, problems.size());
+		Assert.assertEquals("", 2, problems.size());
 
 		Problem problem = problems.get(0);
 
-		Assert.assertEquals(18, problem.lineNumber);
+		Assert.assertEquals("", 18, problem.lineNumber);
 
 		if (Util.isWindows()) {
-			Assert.assertEquals(688, problem.startOffset);
-			Assert.assertEquals(736, problem.endOffset);
+			Assert.assertEquals("", 688, problem.startOffset);
+			Assert.assertEquals("", 736, problem.endOffset);
 		}
 		else {
-			Assert.assertEquals(671, problem.startOffset);
-			Assert.assertEquals(719, problem.endOffset);
+			Assert.assertEquals("", 671, problem.startOffset);
+			Assert.assertEquals("", 719, problem.endOffset);
 		}
 
 		problem = problems.get(1);
 
-		Assert.assertEquals(19, problem.lineNumber);
+		Assert.assertEquals("", 19, problem.lineNumber);
 
 		if (Util.isWindows()) {
-			Assert.assertEquals(746, problem.startOffset);
-			Assert.assertEquals(801, problem.endOffset);
-		} else {
-			Assert.assertEquals(728, problem.startOffset);
-			Assert.assertEquals(783, problem.endOffset);
+			Assert.assertEquals("", 746, problem.startOffset);
+			Assert.assertEquals("", 801, problem.endOffset);
+		}
+		else {
+			Assert.assertEquals("", 728, problem.startOffset);
+			Assert.assertEquals("", 783, problem.endOffset);
 		}
 	}
 

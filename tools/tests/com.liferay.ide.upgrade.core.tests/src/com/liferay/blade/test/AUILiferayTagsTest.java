@@ -43,13 +43,13 @@ public class AUILiferayTagsTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/aui-liferay/"), new NullProgressMonitor());
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		boolean found = false;
 
 		for (Problem problem : problems) {
 			if (problem.file.getName().endsWith("AUILiferayTagTest.jsp")) {
-				if (problem.lineNumber == 1 && problem.startOffset == 16 && problem.endOffset == 48) {
+				if ((problem.lineNumber == 1) && (problem.startOffset == 16) && (problem.endOffset == 48)) {
 					found = true;
 				}
 			}

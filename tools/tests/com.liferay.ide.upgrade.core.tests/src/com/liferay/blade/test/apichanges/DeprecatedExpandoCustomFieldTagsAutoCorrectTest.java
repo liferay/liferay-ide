@@ -31,8 +31,17 @@ public class DeprecatedExpandoCustomFieldTagsAutoCorrectTest extends AutoCorrect
 		List<String> checkPoints = new ArrayList<>();
 
 		checkPoints.add("58,<liferay-expando:custom-attributes-available className=\"<%= Foo.class.getName() %>\">");
+
 		checkPoints.add(
-			"59,<liferay-expando:custom-attribute-list className=\"<%= Foo.class.getName() %>\" classPK=\"<%= (foo != null) ? foo.getFooId() : 0 %>\" editable=\"<%= true %>\" label=\"<%= true %>\"></liferay-expando:custom-attribute-list>");
+			"59,<liferay-expando:custom-attribute-list className=\"<%= Foo.class.getName() %>\" classPK=" +
+				"\"<%= (foo != null) ? foo.getFooId() : 0 %>\" editable=\"<%= true %>\" label=\"<%= true %>\">" +
+					"</liferay-expando:custom-attribute-list>");
+
+		checkPoints.add(
+			"59,<liferay-expando:custom-attribute-list className=\"<%= Foo.class.getName() %>\"" +
+				"classPK=\"<%= (foo != null) ? foo.getFooId() : 0 %>" +
+					"\" editable=\"<%= true %>\" label=\"<%= true %>\">" + "</liferay-expando:custom-attribute-list>");
+
 		checkPoints.add("60,</liferay-expando:custom-attributes-available>");
 
 		return Collections.singletonList(

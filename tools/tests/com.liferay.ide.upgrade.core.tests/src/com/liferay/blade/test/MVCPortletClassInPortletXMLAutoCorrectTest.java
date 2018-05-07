@@ -52,7 +52,7 @@ public class MVCPortletClassInPortletXMLAutoCorrectTest {
 
 		Assert.assertNotNull(refs);
 
-		Assert.assertEquals(1, refs.length);
+		Assert.assertEquals("", 1, refs.length);
 
 		_autoMigrator = _context.getService(refs[0]);
 	}
@@ -75,15 +75,15 @@ public class MVCPortletClassInPortletXMLAutoCorrectTest {
 
 		List<Problem> problems = fileMigrator.analyze(testfile);
 
-		Assert.assertEquals(2, problems.size());
+		Assert.assertEquals("", 2, problems.size());
 
 		int corrected = _autoMigrator.correctProblems(testfile, problems);
 
-		Assert.assertEquals(2, corrected);
+		Assert.assertEquals("", 2, corrected);
 
 		problems = fileMigrator.analyze(testfile);
 
-		Assert.assertEquals(0, problems.size());
+		Assert.assertEquals("", 0, problems.size());
 	}
 
 	@Test
@@ -104,23 +104,23 @@ public class MVCPortletClassInPortletXMLAutoCorrectTest {
 
 		List<Problem> problems = fileMigrator.analyze(testfile);
 
-		Assert.assertEquals(2, problems.size());
+		Assert.assertEquals("", 2, problems.size());
 
 		int corrected = _autoMigrator.correctProblems(testfile, Collections.singletonList(problems.get(0)));
 
-		Assert.assertEquals(1, corrected);
+		Assert.assertEquals("", 1, corrected);
 
 		problems = fileMigrator.analyze(testfile);
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		corrected = _autoMigrator.correctProblems(testfile, Collections.singletonList(problems.get(0)));
 
-		Assert.assertEquals(1, corrected);
+		Assert.assertEquals("", 1, corrected);
 
 		problems = fileMigrator.analyze(testfile);
 
-		Assert.assertEquals(0, problems.size());
+		Assert.assertEquals("", 0, problems.size());
 	}
 
 	private AutoMigrator _autoMigrator = null;

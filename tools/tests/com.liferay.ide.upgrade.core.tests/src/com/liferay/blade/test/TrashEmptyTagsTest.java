@@ -44,7 +44,7 @@ public class TrashEmptyTagsTest {
 		List<Problem> problems = m.findProblems(
 			new File("jsptests/liferay-ui-trash-empty/"), new NullProgressMonitor());
 
-		Assert.assertEquals(3, problems.size());
+		Assert.assertEquals("", 3, problems.size());
 	}
 
 	private final BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();

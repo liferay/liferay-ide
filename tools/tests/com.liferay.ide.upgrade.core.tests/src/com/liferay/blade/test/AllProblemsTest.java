@@ -43,11 +43,11 @@ public class AllProblemsTest {
 
 		Migration m = _context.getService(sr);
 
-		List<Problem> problems = m
-			.findProblems(new File("../com.liferay.blade.upgrade.liferay70/projects/"), new NullProgressMonitor());
+		List<Problem> problems = m.findProblems(
+			new File("../com.liferay.blade.upgrade.liferay70/projects/"), new NullProgressMonitor());
 
-		final int expectedSize = 304;
-		final int size = problems.size();
+		int expectedSize = 304;
+		int size = problems.size();
 
 		if (size != expectedSize) {
 			System.err.println("All problems size is " + size + ", expected size is " + expectedSize);
@@ -56,7 +56,9 @@ public class AllProblemsTest {
 		Assert.assertEquals(expectedSize, size);
 
 		for (Problem problem : problems) {
-			if (problem.html != null && problem.html.equals("#legacy"))continue;
+			if ((problem.html != null) && problem.html.equals("#legacy")) {
+				continue;
+			}
 
 			Assert.assertNotNull("problem.title=" + problem.title + ", problem.file=" + problem.file, problem.html);
 			Assert.assertTrue(
@@ -64,6 +66,6 @@ public class AllProblemsTest {
 		}
 	}
 
-	private final BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();
+	private BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();
 
 }

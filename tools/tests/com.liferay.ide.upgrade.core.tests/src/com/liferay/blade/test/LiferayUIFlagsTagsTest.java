@@ -43,13 +43,13 @@ public class LiferayUIFlagsTagsTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/liferayui-flags/"), new NullProgressMonitor());
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		boolean found = false;
 
 		for (Problem problem : problems) {
 			if (problem.file.getName().endsWith("LiferayUIFlagsTagsTest.jsp")) {
-				if (problem.lineNumber == 3 && problem.startOffset >= 65 && problem.endOffset >= 273) {
+				if ((problem.lineNumber == 3) && (problem.startOffset >= 65) && (problem.endOffset >= 273)) {
 					found = true;
 				}
 			}

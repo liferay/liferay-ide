@@ -40,45 +40,45 @@ public class DDLRecordLegacyAPITest extends APITestBase {
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals(3, problems.size());
+		Assert.assertEquals("", 3, problems.size());
 
 		Problem problem = problems.get(0);
 
-		Assert.assertEquals(30, problem.lineNumber);
+		Assert.assertEquals("", 30, problem.lineNumber);
 
 		if (Util.isWindows()) {
-			Assert.assertEquals(1361, problem.startOffset);
-			Assert.assertEquals(1426, problem.endOffset);
+			Assert.assertEquals("", 1361, problem.startOffset);
+			Assert.assertEquals("", 1426, problem.endOffset);
 		}
 		else {
-			Assert.assertEquals(1332, problem.startOffset);
-			Assert.assertEquals(1397, problem.endOffset);
+			Assert.assertEquals("", 1332, problem.startOffset);
+			Assert.assertEquals("", 1397, problem.endOffset);
 		}
 
 		problem = problems.get(1);
 
-		Assert.assertEquals(132, problem.lineNumber);
+		Assert.assertEquals("", 132, problem.lineNumber);
 
 		if (Util.isWindows()) {
-			Assert.assertEquals(4220, problem.startOffset);
-			Assert.assertEquals(4263, problem.endOffset);
+			Assert.assertEquals("", 4220, problem.startOffset);
+			Assert.assertEquals("", 4263, problem.endOffset);
 		}
 		else {
-			Assert.assertEquals(4089, problem.startOffset);
-			Assert.assertEquals(4132, problem.endOffset);
+			Assert.assertEquals("", 4089, problem.startOffset);
+			Assert.assertEquals("", 4132, problem.endOffset);
 		}
 
 		problem = problems.get(2);
 
-		Assert.assertEquals(145, problem.lineNumber);
+		Assert.assertEquals("", 145, problem.lineNumber);
 
 		if (Util.isWindows()) {
-			Assert.assertEquals(4619, problem.startOffset);
-			Assert.assertEquals(4699, problem.endOffset);
+			Assert.assertEquals("", 4619, problem.startOffset);
+			Assert.assertEquals("", 4699, problem.endOffset);
 		}
 		else {
-			Assert.assertEquals(4475, problem.startOffset);
-			Assert.assertEquals(4554, problem.endOffset);
+			Assert.assertEquals("", 4475, problem.startOffset);
+			Assert.assertEquals("", 4554, problem.endOffset);
 		}
 	}
 

@@ -29,7 +29,8 @@ public class MVCPortletInitParamsChangeClassTest extends APITestBase {
 	@Override
 	public File getTestFile() {
 		return new File(
-			"projects/knowledge-base-portlet-6.2.x/docroot/WEB-INF/src/com/liferay/knowledgebase/portlet/BaseKBPortlet.java");
+			"projects/knowledge-base-portlet-6.2.x/docroot/WEB-INF/src/com/liferay/knowledgebase/portlet" +
+				"/BaseKBPortlet.java");
 	}
 
 }

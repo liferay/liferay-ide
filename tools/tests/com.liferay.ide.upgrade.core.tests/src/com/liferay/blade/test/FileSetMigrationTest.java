@@ -50,13 +50,13 @@ public class FileSetMigrationTest {
 
 		List<Problem> problems = m.findProblems(fileset, new NullProgressMonitor());
 
-		Assert.assertEquals(4, problems.size());
+		Assert.assertEquals("", 4, problems.size());
 
 		boolean found = false;
 
 		for (Problem problem : problems) {
-			if (problem.file.getName().endsWith("AssetPreviewTest.jsp") && problem.lineNumber == 7 &&
-				problem.startOffset >= 230 && problem.endOffset >= 310) {
+			if (problem.file.getName().endsWith("AssetPreviewTest.jsp") && (problem.lineNumber == 7) &&
+				(problem.startOffset >= 230) && (problem.endOffset >= 310)) {
 
 				found = true;
 			}

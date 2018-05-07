@@ -67,11 +67,11 @@ public class PortalServiceImportsAutoCorrectTest {
 			}
 		}
 
-		Assert.assertEquals(2, problems.size());
+		Assert.assertEquals("", 2, problems.size());
 
 		int problemsFixed = ((AutoMigrator)migrator).correctProblems(testFile, problems);
 
-		Assert.assertEquals(2, problemsFixed);
+		Assert.assertEquals("", 2, problemsFixed);
 
 		File dest = new File(tempFolder, "Updated.java");
 
@@ -79,7 +79,7 @@ public class PortalServiceImportsAutoCorrectTest {
 
 		problems = migrator.analyze(dest);
 
-		Assert.assertEquals(0, problems.size());
+		Assert.assertEquals("", 0, problems.size());
 	}
 
 	private final BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();

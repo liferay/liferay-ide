@@ -43,7 +43,7 @@ public class RestoreEntryTagsTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/restore-entry/"), new NullProgressMonitor());
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		boolean found = false;
 
