@@ -27,12 +27,14 @@
 
 	<extensions defaultExtensionNs="com.intellij">
 		<projectTemplatesFactory implementation="com.liferay.ide.idea.ui.modules.LiferayWorkspaceTemplatesFactory"/>
-		<configurationType implementation="com.liferay.ide.idea.server.LiferayServerConfigurationType" />
-		<programRunner id="Run" implementation="com.liferay.ide.idea.server.LiferayServerRunner" />
-		<programRunner id="Debug" implementation="com.liferay.ide.idea.server.LiferayServerDebugger" />
-		<projectService serviceImplementation="com.liferay.ide.idea.core.LiferayProjectTypeService" />
-		<fileTypeFactory implementation="com.liferay.ide.idea.bndtools.BndFileFactory" />
-		<syntaxHighlighter factoryClass="com.liferay.ide.idea.bndtools.BndFileTypeHighlighterProvider" />
+		<configurationType implementation="com.liferay.ide.idea.server.LiferayServerConfigurationType"/>
+		<programRunner id="Run" implementation="com.liferay.ide.idea.server.LiferayServerRunner"/>
+		<programRunner id="Debug" implementation="com.liferay.ide.idea.server.LiferayServerDebugger"/>
+		<projectService serviceImplementation="com.liferay.ide.idea.core.LiferayProjectTypeService"/>
+		<fileTypeFactory implementation="com.liferay.ide.idea.bndtools.BndFileFactory"/>
+		<syntaxHighlighter factoryClass="com.liferay.ide.idea.bndtools.BndFileTypeHighlighterProvider"/>
+		<codeInsight.lineMarkerProvider language="XML" implementationClass="com.liferay.ide.idea.language.LiferayServiceXMLLineMarkerProvider"/>
+		<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.liferay.ide.idea.language.LiferayServiceJavaImplLineMarkerProvider"/>
 	</extensions>
 
 </idea-plugin>
