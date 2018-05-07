@@ -56,7 +56,7 @@ public class PortletConfigGetFormatMethodsTest extends APITestBase {
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals(5, problems.size());
+		Assert.assertEquals("", 5, problems.size());
 	}
 
 	@Test
@@ -68,7 +68,7 @@ public class PortletConfigGetFormatMethodsTest extends APITestBase {
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals(23, problems.size());
+		Assert.assertEquals("", 23, problems.size());
 	}
 
 	public File languageUtilJspFile = new File("jsptests/language-util/edit_task.jsp");

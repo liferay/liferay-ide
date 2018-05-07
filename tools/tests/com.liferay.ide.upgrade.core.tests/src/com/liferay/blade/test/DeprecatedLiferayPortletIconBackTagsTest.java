@@ -44,7 +44,7 @@ public class DeprecatedLiferayPortletIconBackTagsTest {
 		List<Problem> problems = m.findProblems(
 			new File("jsptests/liferay-portlet-icon-back/"), new NullProgressMonitor());
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		boolean found = false;
 

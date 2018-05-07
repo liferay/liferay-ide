@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.core.tests;
 
@@ -28,6 +27,7 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.MavenUpdateRequest;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -35,90 +35,84 @@ import org.junit.Test;
  * @author Simon Jiang
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
+@SuppressWarnings("restriction")
 @Ignore
-public class LiferayMavenProjectCustomJSPValidationTest extends LiferayMavenProjectTestCase
-{
+public class LiferayMavenProjectCustomJSPValidationTest extends LiferayMavenProjectTestCase {
 
-    @Test
-    @Ignore
-    public void testCustomJspValidationConfigured() throws Exception
-    {
-        final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayMavenCore.PLUGIN_ID );;
+	@Test
+	@Ignore
+	public void testCustomJspValidationConfigured() throws Exception {
+		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(LiferayMavenCore.PLUGIN_ID);
 
-        prefs.putBoolean( LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, true );
+		prefs.putBoolean(LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, true);
 
-        IProject project = importProject( "projects/configurators/customJspValidation/pom.xml" );
+		IProject project = importProject("projects/configurators/customJspValidation/pom.xml");
 
-        assertNotNull( project );
+		assertNotNull(project);
 
-        IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create( project, monitor );
+		IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project, monitor);
 
-        assertNotNull( facade );
+		assertNotNull(facade);
 
-        assertTrue( CoreUtil.isLiferayProject( project ) );
+		assertTrue(CoreUtil.isLiferayProject(project));
 
-        final IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
-        projectConfigurationManager.updateProjectConfiguration(
-            new MavenUpdateRequest( project, mavenConfiguration.isOffline(), true ), monitor );
+		projectConfigurationManager.updateProjectConfiguration(
+			new MavenUpdateRequest(project, mavenConfiguration.isOffline(), true), monitor);
 
-        waitForBuildAndValidation( project );
+		waitForBuildAndValidation(project);
 
-        final IMarker[] markers =
-            project.findMarkers( "org.eclipse.jst.jsp.core.validationMarker", true, IResource.DEPTH_INFINITE );
+		IMarker[] markers = project.findMarkers(
+			"org.eclipse.jst.jsp.core.validationMarker", true, IResource.DEPTH_INFINITE);
 
-        for( IMarker marker : markers )
-        {
-            assertEquals( false, marker.getAttribute( IMarker.SEVERITY ).equals( IMarker.SEVERITY_ERROR ) );
-        }
+		for (IMarker marker : markers) {
+			assertEquals(false, marker.getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_ERROR));
+		}
 
-        project.delete( true, monitor );
-    }
+		project.delete(true, monitor);
+	}
 
-    @Test
-    @Ignore
-    public void testCustomJspValidationDefaults() throws Exception
-    {
-        final IEclipsePreferences prefs = DefaultScope.INSTANCE.getNode( LiferayMavenCore.PLUGIN_ID );;
+	@Test
+	@Ignore
+	public void testCustomJspValidationDefaults() throws Exception {
+		IEclipsePreferences prefs = DefaultScope.INSTANCE.getNode(LiferayMavenCore.PLUGIN_ID);
 
-        assertTrue( prefs.getBoolean( LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, false ) );
-    }
+		assertTrue(prefs.getBoolean(LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, false));
+	}
 
-    @Test
-    @Ignore
-    public void testNoCustomJspValidationConfigured() throws Exception
-    {
-        final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayMavenCore.PLUGIN_ID );;
+	@Test
+	@Ignore
+	public void testNoCustomJspValidationConfigured() throws Exception {
+		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(LiferayMavenCore.PLUGIN_ID);
 
-        prefs.putBoolean( LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, false );
+		prefs.putBoolean(LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, false);
 
-        IProject project = importProject( "projects/configurators/customJspValidation/pom.xml" );
+		IProject project = importProject("projects/configurators/customJspValidation/pom.xml");
 
-        assertNotNull( project );
+		assertNotNull(project);
 
-        IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create( project, monitor );
+		IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project, monitor);
 
-        assertNotNull( facade );
+		assertNotNull(facade);
 
-        assertTrue( CoreUtil.isLiferayProject( project ) );
+		assertTrue(CoreUtil.isLiferayProject(project));
 
-        final IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
-        projectConfigurationManager.updateProjectConfiguration(
-            new MavenUpdateRequest( project, mavenConfiguration.isOffline(), true ), monitor );
+		projectConfigurationManager.updateProjectConfiguration(
+			new MavenUpdateRequest(project, mavenConfiguration.isOffline(), true), monitor);
 
-        waitForBuildAndValidation( project );
+		waitForBuildAndValidation(project);
 
-        final IMarker[] markers =
-            project.findMarkers( "org.eclipse.jst.jsp.core.validationMarker", true, IResource.DEPTH_INFINITE );
+		IMarker[] markers = project.findMarkers(
+			"org.eclipse.jst.jsp.core.validationMarker", true, IResource.DEPTH_INFINITE);
 
-        for( IMarker marker : markers )
-        {
-            assertEquals( true, marker.getAttribute( IMarker.SEVERITY ).equals( IMarker.SEVERITY_ERROR ) );
-        }
+		for (IMarker marker : markers) {
+			assertEquals(true, marker.getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_ERROR));
+		}
 
-        project.delete( true, monitor );
-    }
+		project.delete(true, monitor);
+	}
 
 }

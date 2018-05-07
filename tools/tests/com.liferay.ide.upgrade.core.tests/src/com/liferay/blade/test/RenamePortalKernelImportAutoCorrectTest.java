@@ -67,11 +67,11 @@ public class RenamePortalKernelImportAutoCorrectTest {
 			}
 		}
 
-		Assert.assertEquals(10, problems.size());
+		Assert.assertEquals("", 10, problems.size());
 
 		int problemsFixed = ((AutoMigrator)migrator).correctProblems(testFile, problems);
 
-		Assert.assertEquals(10, problemsFixed);
+		Assert.assertEquals("", 10, problemsFixed);
 
 		File dest = new File(tempFolder, "Updated.java");
 
@@ -79,7 +79,7 @@ public class RenamePortalKernelImportAutoCorrectTest {
 
 		problems = migrator.analyze(dest);
 
-		Assert.assertEquals(0, problems.size());
+		Assert.assertEquals("", 0, problems.size());
 	}
 
 	private final BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();

@@ -43,13 +43,13 @@ public class DdmTemplateSelectorTagsTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/ddm-template-selector/"), new NullProgressMonitor());
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		boolean found = false;
 
 		for (Problem problem : problems) {
 			if (problem.file.getName().endsWith("DdmTemplateSelectorTagsTest.jsp")) {
-				if (problem.lineNumber == 70 && problem.startOffset >= 2538 && problem.endOffset >= 2549) {
+				if ((problem.lineNumber == 70) && (problem.startOffset >= 2538) && (problem.endOffset >= 2549)) {
 					found = true;
 				}
 			}

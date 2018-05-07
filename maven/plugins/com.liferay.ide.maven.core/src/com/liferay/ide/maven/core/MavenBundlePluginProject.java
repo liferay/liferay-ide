@@ -242,7 +242,7 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 		IFile bndFile = getProject().getFile("bnd.bnd");
 
 		if (FileUtil.exists(bndFile)) {
-			try(InputStream inputStream = bndFile.getContents()) {
+			try (InputStream inputStream = bndFile.getContents()) {
 				String content = FileUtil.readContents(inputStream);
 
 				if (content.contains("Fragment-Host")) {

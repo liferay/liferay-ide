@@ -43,7 +43,7 @@ public class AUILayoutTagsTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/aui-layout/"), new NullProgressMonitor());
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		boolean found = false;
 

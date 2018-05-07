@@ -54,7 +54,8 @@ public class TemplatesTests extends ProjectCoreBase {
 		};
 
 		for (String expectedProposalString : expectedProposalStrings) {
-			assertTrue("can't get proposal at " + expectedProposalString,
+			assertTrue(
+				"can't get proposal at " + expectedProposalString,
 				containsProposal(proposals, expectedProposalString, true));
 		}
 	}

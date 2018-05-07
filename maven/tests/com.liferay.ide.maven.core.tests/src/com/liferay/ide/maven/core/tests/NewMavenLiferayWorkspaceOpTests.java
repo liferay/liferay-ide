@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,15 +10,9 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.core.tests;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -26,6 +20,7 @@ import com.liferay.ide.project.core.workspace.BaseLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
 import java.io.File;
+
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
@@ -35,6 +30,7 @@ import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerCore;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,119 +39,110 @@ import org.junit.Test;
  * @author Andy Wu
  * @author Joye Luo
  */
-public class NewMavenLiferayWorkspaceOpTests
-{
+public class NewMavenLiferayWorkspaceOpTests {
 
-    @Before
-    public void clearWorkspace() throws Exception
-    {
-        for( IProject project : CoreUtil.getAllProjects() )
-        {
-            project.delete( true, new NullProgressMonitor() );
-        }
-    }
+	@Before
+	public void clearWorkspace() throws Exception {
+		for (IProject project : CoreUtil.getAllProjects()) {
+			project.delete(true, new NullProgressMonitor());
+		}
+	}
 
-    @Test
-    public void testNewMavenLiferayWorkspaceSetUrl() throws Exception
-    {
-        NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
+	@Test
+	public void testNewLiferayWorkspaceOpWithInvalidBundleUrl() throws Exception {
+		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-        String projectName = "test-liferay-workspace-url";
+		op.setWorkspaceName("NewGradleWorkspaceWithInvalidBundleUrl");
+		op.setProjectProvider("maven-liferay-workspace");
+		op.setUseDefaultLocation(false);
+		op.setProvisionLiferayBundle(true);
+		op.setBundleUrl("https://issues.liferay.com/browse/IDE-3605");
 
-        String bundleUrl =
-            "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
+		String serverName = "NewServerNameWithInvalidBundleUrl";
 
-        IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+		op.setServerName(serverName);
 
-        op.setWorkspaceName( projectName );
-        op.setUseDefaultLocation( false );
-        op.setLocation( workspaceLocation.toPortableString() );
-        op.setProjectProvider( "maven-liferay-workspace" );
-        op.setProvisionLiferayBundle( true );
-        op.setBundleUrl( bundleUrl );
+		op.execute(new ProgressMonitor());
 
-        op.execute( new ProgressMonitor() );
+		IProject workspaceProject = CoreUtil.getProject("NewGradleWorkspaceWithInvalidBundleUrl");
 
-        String projectLocation = workspaceLocation.append( projectName ).toPortableString();
+		Assert.assertNotNull(workspaceProject);
 
-        File pomFile = new File( projectLocation, "pom.xml" );
+		Assert.assertTrue(workspaceProject.exists());
 
-        assertTrue( pomFile.exists() );
+		Stream<IServer> serverStream = Stream.of(ServerCore.getServers());
 
-        File bundleDir = new File( projectLocation, "bundles" );
+		boolean serverCreated = serverStream.filter(
+			server -> server.getName().equals(serverName)
+		).findAny(
+		).isPresent();
 
-        assertTrue( bundleDir.exists() );
+		Assert.assertFalse(serverCreated);
+	}
 
-        String content = FileUtil.readContents( pomFile );
+	@Test
+	public void testNewMavenLiferayWorkspaceInitBundle() throws Exception {
+		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-        assertEquals( content.contains( bundleUrl ), true );
+		String projectName = "test-liferay-workspace-init";
 
-    }
+		IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
 
-    @Test
-    public void testNewMavenLiferayWorkspaceInitBundle() throws Exception
-    {
-        NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
+		op.setWorkspaceName(projectName);
+		op.setUseDefaultLocation(false);
+		op.setLocation(workspaceLocation.toPortableString());
+		op.setProjectProvider("maven-liferay-workspace");
+		op.setProvisionLiferayBundle(true);
 
-        String projectName = "test-liferay-workspace-init";
+		String bundleUrl = op.getBundleUrl().content(true);
 
-        IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+		Assert.assertEquals(
+			"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5" +
+				"/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip",
+			bundleUrl);
 
-        op.setWorkspaceName( projectName );
-        op.setUseDefaultLocation( false );
-        op.setLocation( workspaceLocation.toPortableString() );
-        op.setProjectProvider( "maven-liferay-workspace" );
-        op.setProvisionLiferayBundle( true );
+		op.execute(new ProgressMonitor());
 
-        String bundleUrl = op.getBundleUrl().content( true );
+		String projectLocation = workspaceLocation.append(projectName).toPortableString();
 
-        assertEquals(
-            "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip",
-            bundleUrl );
+		File pomFile = new File(projectLocation, "pom.xml");
 
-        op.execute( new ProgressMonitor() );
+		Assert.assertTrue(pomFile.exists());
 
-        String projectLocation = workspaceLocation.append( projectName ).toPortableString();
+		File bundleDir = new File(projectLocation, "bundles");
 
-        File pomFile = new File( projectLocation, "pom.xml" );
+		Assert.assertTrue(bundleDir.exists());
 
-        assertTrue( pomFile.exists() );
+		String content = FileUtil.readContents(pomFile);
 
-        File bundleDir = new File( projectLocation, "bundles" );
+		Assert.assertTrue(content.contains("com.liferay.portal.tools.bundle.support"));
+	}
 
-        assertTrue( bundleDir.exists() );
+	@Test
+	public void testNewMavenLiferayWorkspaceOp() throws Exception {
+		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-        String content = FileUtil.readContents( pomFile );
+		String projectName = "test-liferay-workspace";
 
-        assertTrue( content.contains("com.liferay.portal.tools.bundle.support") );
-    }
+		IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
 
-    @Test
-    public void testNewMavenLiferayWorkspaceOp() throws Exception
-    {
-        NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
+		op.setWorkspaceName(projectName);
+		op.setUseDefaultLocation(false);
+		op.setLocation(workspaceLocation.toPortableString());
+		op.setProjectProvider("maven-liferay-workspace");
 
-        String projectName = "test-liferay-workspace";
+		op.execute(new ProgressMonitor());
 
-        IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+		String projectLocation = workspaceLocation.append(projectName).toPortableString();
 
-        op.setWorkspaceName( projectName );
-        op.setUseDefaultLocation( false );
-        op.setLocation( workspaceLocation.toPortableString() );
-        op.setProjectProvider( "maven-liferay-workspace" );
+		File pomFile = new File(projectLocation, "pom.xml");
 
-        op.execute( new ProgressMonitor() );
+		Assert.assertTrue(pomFile.exists());
 
-        String projectLocation = workspaceLocation.append( projectName ).toPortableString();
+		String content = FileUtil.readContents(pomFile);
 
-        File pomFile = new File( projectLocation, "pom.xml" );
-
-        assertTrue( pomFile.exists() );
-
-        String content = FileUtil.readContents( pomFile );
-
-        assertTrue( content.contains("com.liferay.portal.tools.bundle.support") );
-    }
+		Assert.assertTrue(content.contains("com.liferay.portal.tools.bundle.support"));
+	}
 
 	@Test
 	public void testNewMavenLiferayWorkspaceOpWithBundle71() throws Exception {
@@ -181,7 +168,7 @@ public class NewMavenLiferayWorkspaceOpTests
 
 		File pomFile = new File(wsFile, "pom.xml");
 
-		Assert.assertTrue( pomFile.exists() );
+		Assert.assertTrue(pomFile.exists());
 
 		String xml = FileUtil.readContents(pomFile);
 
@@ -189,35 +176,39 @@ public class NewMavenLiferayWorkspaceOpTests
 	}
 
 	@Test
-	public void testNewLiferayWorkspaceOpWithInvalidBundleUrl() throws Exception
-	{
-
+	public void testNewMavenLiferayWorkspaceSetUrl() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		op.setWorkspaceName("NewGradleWorkspaceWithInvalidBundleUrl");
-		op.setProjectProvider("maven-liferay-workspace");
+		String projectName = "test-liferay-workspace-url";
+
+		String bundleUrl =
+			"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5" +
+				"/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
+
+		IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+
+		op.setWorkspaceName(projectName);
 		op.setUseDefaultLocation(false);
+		op.setLocation(workspaceLocation.toPortableString());
+		op.setProjectProvider("maven-liferay-workspace");
 		op.setProvisionLiferayBundle(true);
-		op.setBundleUrl("https://issues.liferay.com/browse/IDE-3605");
-
-		String serverName = "NewServerNameWithInvalidBundleUrl";
-
-		op.setServerName(serverName);
+		op.setBundleUrl(bundleUrl);
 
 		op.execute(new ProgressMonitor());
 
-		IProject workspaceProject = CoreUtil.getProject("NewGradleWorkspaceWithInvalidBundleUrl");
+		String projectLocation = workspaceLocation.append(projectName).toPortableString();
 
-		assertNotNull(workspaceProject);
+		File pomFile = new File(projectLocation, "pom.xml");
 
-		assertTrue(workspaceProject.exists());
+		Assert.assertTrue(pomFile.exists());
 
-		Stream<IServer> serverStream = Stream.of(ServerCore.getServers());
+		File bundleDir = new File(projectLocation, "bundles");
 
-		boolean serverCreated = serverStream.filter(
-			server -> server.getName().equals(serverName)
-		).findAny().isPresent();
+		Assert.assertTrue(bundleDir.exists());
 
-		assertFalse(serverCreated);
+		String content = FileUtil.readContents(pomFile);
+
+		Assert.assertEquals(content.contains(bundleUrl), true);
 	}
+
 }

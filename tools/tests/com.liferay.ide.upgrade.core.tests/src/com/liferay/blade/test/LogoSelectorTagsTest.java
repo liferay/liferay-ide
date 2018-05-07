@@ -43,13 +43,13 @@ public class LogoSelectorTagsTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/logo-selector/"), new NullProgressMonitor());
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		boolean found = false;
 
 		for (Problem problem : problems) {
-			if (problem.file.getName().endsWith("LogoSelectorTagsTest.jsp") && problem.lineNumber == 11 &&
-				problem.startOffset >= 595 && problem.endOffset >= 606) {
+			if (problem.file.getName().endsWith("LogoSelectorTagsTest.jsp") && (problem.lineNumber == 11) &&
+				(problem.startOffset >= 595) && (problem.endOffset >= 606)) {
 
 				found = true;
 			}

@@ -69,15 +69,18 @@ public class JSPFileTests extends XmlSearchTestsBase {
 		String attrName = "type";
 
 		_jspFile = _getJspFile("test-jsp-validation.jsp");
+
 		setAttrValue(_jspFile, elementName, attrName, "");
+
 		buildAndValidate(_jspFile);
 
 		ICompletionProposal[] proposals = getProposalsForAttr(_jspFile, elementName, attrName);
+
 		assertNotNull(proposals);
 		assertEquals(true, proposals.length > 0);
-		String[] expectedProposalString = {"assetCategories", "assetTags", "checkbox", "hidden", "radio", "text",
-				"textarea", "timeZone"
-			};
+
+		String[] expectedProposalString =
+			{"assetCategories", "assetTags", "checkbox", "hidden", "radio", "text", "textarea", "timeZone"};
 
 		for (String proposal : expectedProposalString) {
 			assertTrue(containsProposal(proposals, proposal, true));
@@ -86,6 +89,7 @@ public class JSPFileTests extends XmlSearchTestsBase {
 		setAttrValue(_jspFile, elementName, attrName, "asse");
 
 		proposals = getProposalsForAttr(_jspFile, elementName, attrName);
+
 		assertEquals(true, proposals.length > 0);
 		assertTrue(containsProposal(proposals, "assetCategories", true));
 	}
@@ -147,11 +151,14 @@ public class JSPFileTests extends XmlSearchTestsBase {
 		_jspFile = _getJspFile("test-jsp-validation.jsp");
 
 		ICompletionProposal[] proposals = getProposalsForAttr(_jspFile, elementName, attrName);
+
 		assertNotNull(proposals);
 		assertEquals(true, proposals.length > 0);
-		String[] expectedProposalString = {"acceptFiles", "alpha", "alphanum", "date", "digits", "email",
-				"equalTo", "iri", "max", "min", "minLength", "number", "range", "rangeLength", "required", "url"
-			};
+
+		String[] expectedProposalString = {
+			"acceptFiles", "alpha", "alphanum", "date", "digits", "email", "equalTo", "iri", "max", "min", "minLength",
+			"number", "range", "rangeLength", "required", "url"
+		};
 
 		for (String proposal : expectedProposalString) {
 			assertTrue("can't get proposal of " + expectedProposalString, containsProposal(proposals, proposal, true));
@@ -168,12 +175,16 @@ public class JSPFileTests extends XmlSearchTestsBase {
 		String attrName = "type";
 
 		_jspFile = _getJspFile("test-jsp-validation.jsp");
+
 		setAttrValue(_jspFile, elementName, attrName, "");
+
 		buildAndValidate(_jspFile);
 
 		ICompletionProposal[] proposals = getProposalsForAttr(_jspFile, elementName, attrName);
+
 		assertNotNull(proposals);
 		assertEquals(true, proposals.length > 0);
+
 		String[] expectedProposalString = {"cancel", "reset", "submit"};
 
 		for (String proposal : expectedProposalString) {
@@ -183,7 +194,9 @@ public class JSPFileTests extends XmlSearchTestsBase {
 		setAttrValue(_jspFile, elementName, attrName, "can");
 
 		proposals = getProposalsForAttr(_jspFile, elementName, attrName);
+
 		assertEquals(true, proposals.length > 0);
+
 		assertTrue(containsProposal(proposals, "cancel", true));
 	}
 
@@ -219,11 +232,14 @@ public class JSPFileTests extends XmlSearchTestsBase {
 		// test on IDE-1774
 
 		_jspFile = _getJspFile("test-jsp-validation.jsp");
+
 		setAttrValue(_jspFile, elementName, attrName, "aaa-bb");
+
 		buildAndValidate(_jspFile);
 
 		String[] hover = getTextHoverForAttr(_jspFile, elementName, attrName);
-		String expectMessageRegex = ".*" + "aaa bb" + ".*" + "src/content/Language.properties.*";
+
+		String expectMessageRegex = ".*aaa bb.*src/content/Language.properties.*";
 
 		assertTrue(hover[0].toString().matches(expectMessageRegex));
 	}
@@ -283,7 +299,9 @@ public class JSPFileTests extends XmlSearchTestsBase {
 		String attrName = "checked";
 
 		_jspFile = _getJspFile("test-jsp-validation.jsp");
+
 		ICompletionProposal[] proposals = getProposalsForAttr(_jspFile, elementName, attrName);
+
 		assertNotNull(proposals);
 		assertEquals(true, proposals.length > 0);
 		assertTrue(containsProposal(proposals, "false", true));
@@ -300,7 +318,9 @@ public class JSPFileTests extends XmlSearchTestsBase {
 		String attrName = "disabled";
 
 		_jspFile = _getJspFile("test-jsp-validation.jsp");
+
 		ICompletionProposal[] proposals = getProposalsForAttr(_jspFile, elementName, attrName);
+
 		assertNotNull(proposals);
 		assertEquals(true, proposals.length > 0);
 		assertTrue(containsProposal(proposals, "false", true));
@@ -317,7 +337,9 @@ public class JSPFileTests extends XmlSearchTestsBase {
 		String attrName = "inlineLabel";
 
 		_jspFile = _getJspFile("test-jsp-validation.jsp");
+
 		ICompletionProposal[] proposals = getProposalsForAttr(_jspFile, elementName, attrName);
+
 		assertNotNull(proposals);
 		assertEquals(true, proposals.length > 0);
 		assertTrue(containsProposal(proposals, "left", true));
@@ -500,12 +522,16 @@ public class JSPFileTests extends XmlSearchTestsBase {
 
 	public void validateContentAssistForAttr(String elementName, String attrName) throws Exception {
 		_jspFile = _getJspFile("test-jsp-validation.jsp");
+
 		setAttrValue(_jspFile, elementName, attrName, "MessageKeyHove");
+
 		buildAndValidate(_jspFile);
+
 		ICompletionProposal[] proposals = getProposalsForAttr(_jspFile, elementName, attrName);
 
 		assertNotNull(proposals);
 		assertEquals(true, proposals.length > 0);
+
 		String expectedProposalString = "MessageKeyHoverTest - [Language.properties]";
 
 		assertEquals(true, containsProposal(proposals, expectedProposalString, true));
@@ -513,18 +539,24 @@ public class JSPFileTests extends XmlSearchTestsBase {
 
 	public void validateContentAssistForEmptyAttr(String elementName, String attrName) throws Exception {
 		_jspFile = _getJspFile("test-jsp-validation.jsp");
+
 		setAttrValue(_jspFile, elementName, attrName, "");
+
 		buildAndValidate(_jspFile);
 
 		ICompletionProposal[] proposals = getProposalsForAttr(_jspFile, elementName, attrName);
+
 		assertNotNull(proposals);
 		assertEquals(true, proposals.length > 0);
-		String[] expectedProposalString = {"javax.portlet.title - [Language.properties]",
-				"MessageKeyHoverTest - [Language.properties]", "Test - [Language.properties]"
-			};
+
+		String[] expectedProposalString = {
+			"javax.portlet.title - [Language.properties]", "MessageKeyHoverTest - [Language.properties]",
+			"Test - [Language.properties]"
+		};
 
 		for (String proposal : expectedProposalString) {
-			assertTrue("can't get proposal " + proposal + " in " + elementName + attrName,
+			assertTrue(
+				"can't get proposal " + proposal + " in " + elementName + attrName,
 				containsProposal(proposals, proposal, true));
 		}
 	}
@@ -554,7 +586,8 @@ public class JSPFileTests extends XmlSearchTestsBase {
 		String[] hover = getTextHoverForAttr(_jspFile, elementName, attrName);
 
 		String expectMessageRegex =
-			".*this is the test for message key text hover.* in /Portlet-Xml-Test-portlet/docroot/WEB-INF/src/content/Language.properties.*";
+			".*this is the test for message key text hover.* in /Portlet-Xml-Test-portlet/docroot/WEB-INF/src/content" +
+				"/Language.properties.*";
 
 		hover = getTextHoverForAttr(_jspFile, elementName, attrName);
 

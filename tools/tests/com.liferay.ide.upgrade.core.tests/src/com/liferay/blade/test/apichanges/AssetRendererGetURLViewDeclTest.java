@@ -30,7 +30,8 @@ public class AssetRendererGetURLViewDeclTest extends APITestBase {
 	@Override
 	public File getTestFile() {
 		return new File(
-			"projects/knowledge-base-portlet-6.2.x/docroot/WEB-INF/src/com/liferay/knowledgebase/admin/asset/KBArticleAssetRenderer.java");
+			"projects/knowledge-base-portlet-6.2.x/docroot/WEB-INF/src/com/liferay/knowledgebase/admin/asset" +
+				"/KBArticleAssetRenderer.java");
 	}
 
 }

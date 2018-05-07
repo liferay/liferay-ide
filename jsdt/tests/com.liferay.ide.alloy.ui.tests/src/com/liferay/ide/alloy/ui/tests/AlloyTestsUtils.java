@@ -40,13 +40,15 @@ public class AlloyTestsUtils {
 
 		ContentAssistant contentAssistant = (ContentAssistant)srcViewConf.getContentAssistant(viewer);
 
-		String partitionTypeID = viewer.getDocument().getPartition(getElementContentEndOffset(file, elementName))
-			.getType();
+		String partitionTypeID = viewer.getDocument(
+		).getPartition(
+			getElementContentEndOffset(file, elementName)
+		).getType();
 
 		IContentAssistProcessor processor = contentAssistant.getContentAssistProcessor(partitionTypeID);
 
-		ICompletionProposal[] proposals = processor.computeCompletionProposals(viewer,
-			getElementContentEndOffset(file, elementName));
+		ICompletionProposal[] proposals = processor.computeCompletionProposals(
+			viewer, getElementContentEndOffset(file, elementName));
 
 		return proposals;
 	}

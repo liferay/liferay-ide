@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.maven.core.tests;
 
 import com.liferay.ide.core.ILiferayProject;
@@ -13,177 +27,190 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+
 import org.junit.After;
 import org.junit.Test;
-
 
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class LiferayMavenProjectTests extends LiferayMavenProjectTestCase
-{
+@SuppressWarnings("restriction")
+public class LiferayMavenProjectTests extends LiferayMavenProjectTestCase {
 
-    @After
-    public void afterTestDeleteAllProjects() throws Exception
-    {
-        for( IProject project : CoreUtil.getAllProjects() )
-        {
-            project.delete( true, new NullProgressMonitor() );
-        }
+	@After
+	public void afterTestDeleteAllProjects() throws Exception {
+		for (IProject project : CoreUtil.getAllProjects()) {
+			project.delete(true, new NullProgressMonitor());
+		}
 
-        IProject[] projects = CoreUtil.getAllProjects();
+		IProject[] projects = CoreUtil.getAllProjects();
 
-        assertEquals( 0, projects.length );
-    }
+		assertEquals(0, projects.length);
+	}
 
-    @Test
-    public void testNewLiferayHookProject() throws Exception
-    {
-        NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
-        op.setProjectName( "hookproject" );
-        op.setProjectProvider( "maven" );
-        op.setPluginType( PluginType.hook );
+	@Test
+	public void testNewLiferayHookProject() throws Exception {
+		NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
 
-        createTestBundleProfile( op );
+		op.setProjectName("hookproject");
+		op.setProjectProvider("maven");
+		op.setPluginType(PluginType.hook);
 
-        final IProject project = base.createProject( op );
+		createTestBundleProfile(op);
 
-        assertNotNull( project );
+		final IProject project = base.createProject(op);
 
-        String pomContents = CoreUtil.readStreamToString( project.getFile( "pom.xml" ).getContents() );
+		assertNotNull(project);
 
-        assertTrue( pomContents.contains( "<pluginType>hook</pluginType>" ) );
-        assertTrue( pomContents.contains( "<artifactId>liferay-maven-plugin</artifactId>" ) );
-        assertTrue( pomContents.contains( "<artifactId>portal-service</artifactId>" ) );
+		String pomContents = CoreUtil.readStreamToString(project.getFile("pom.xml").getContents());
 
-        waitForJobsToComplete();
-        project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
-        waitForJobsToComplete();
+		assertTrue(pomContents.contains("<pluginType>hook</pluginType>"));
+		assertTrue(pomContents.contains("<artifactId>liferay-maven-plugin</artifactId>"));
+		assertTrue(pomContents.contains("<artifactId>portal-service</artifactId>"));
 
-        IVirtualComponent projectComponent = ComponentCore.createComponent( project );
-        assertEquals( "hookproject-hook", projectComponent.getDeployedName() );
-    }
+		waitForJobsToComplete();
+		project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+		waitForJobsToComplete();
 
-    @Test
-    public void testNewLiferayLayouttplProject() throws Exception
-    {
-        NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
-        op.setProjectName( "template" );
-        op.setProjectProvider( "maven" );
-        op.setPluginType( PluginType.layouttpl );
+		IVirtualComponent projectComponent = ComponentCore.createComponent(project);
 
-        createTestBundleProfile( op );
+		assertEquals("hookproject-hook", projectComponent.getDeployedName());
+	}
 
-        final IProject project = base.createProject( op );
+	@Test
+	public void testNewLiferayLayouttplProject() throws Exception {
+		NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
 
-        assertNotNull( project );
+		op.setProjectName("template");
+		op.setProjectProvider("maven");
+		op.setPluginType(PluginType.layouttpl);
 
-        String pomContents = CoreUtil.readStreamToString( project.getFile( "pom.xml" ).getContents() );
+		createTestBundleProfile(op);
 
-        assertTrue( pomContents.contains( "<pluginType>layouttpl</pluginType>" ) );
-        assertTrue( pomContents.contains( "<artifactId>liferay-maven-plugin</artifactId>" ) );
+		final IProject project = base.createProject(op);
 
-        waitForJobsToComplete();
-        project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
-        waitForJobsToComplete();
+		assertNotNull(project);
 
-        IVirtualComponent projectComponent = ComponentCore.createComponent( project );
-        assertEquals( "template-layouttpl", projectComponent.getDeployedName() );
-    }
+		String pomContents = CoreUtil.readStreamToString(project.getFile("pom.xml").getContents());
 
-    @Test
-    public void testNewLiferayPortletProject() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
+		assertTrue(pomContents.contains("<pluginType>layouttpl</pluginType>"));
+		assertTrue(pomContents.contains("<artifactId>liferay-maven-plugin</artifactId>"));
 
-        NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
-        op.setProjectName( "mvc" );
-        op.setProjectProvider( "maven" );
-        op.setPortletFramework( "mvc" );
+		waitForJobsToComplete();
+		project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+		waitForJobsToComplete();
 
-        createTestBundleProfile( op );
+		IVirtualComponent projectComponent = ComponentCore.createComponent(project);
 
-        final IProject project = base.createProject( op );
+		assertEquals("template-layouttpl", projectComponent.getDeployedName());
+	}
 
-        assertNotNull( project );
+	@Test
+	public void testNewLiferayPortletProject() throws Exception {
+		if (shouldSkipBundleTests()) {
+			return;
+		}
 
-        String pomContents = CoreUtil.readStreamToString( project.getFile( "pom.xml" ).getContents() );
+		NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
 
-        assertTrue( pomContents.contains( "<liferay.version>" ) );
-        assertTrue( pomContents.contains( "<artifactId>liferay-maven-plugin</artifactId>" ) );
-        assertTrue( pomContents.contains( "<artifactId>portal-service</artifactId>" ) );
+		op.setProjectName("mvc");
+		op.setProjectProvider("maven");
+		op.setPortletFramework("mvc");
 
-        waitForJobsToComplete();
-        project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
-        waitForJobsToComplete();
+		createTestBundleProfile(op);
 
-        IVirtualComponent projectComponent = ComponentCore.createComponent( project );
-        assertEquals( "mvc-portlet", projectComponent.getDeployedName() );
-    }
+		final IProject project = base.createProject(op);
 
-    @Test
-    public void testNewLiferayRemoteServiceBuilderProject() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
+		assertNotNull(project);
 
-        NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
-        op.setProjectName( "servicebuilder" );
-        op.setProjectProvider( "maven" );
-        op.setPluginType( PluginType.servicebuilder );
+		String pomContents = CoreUtil.readStreamToString(project.getFile("pom.xml").getContents());
 
-        createTestBundleProfile( op );
+		assertTrue(pomContents.contains("<liferay.version>"));
+		assertTrue(pomContents.contains("<artifactId>liferay-maven-plugin</artifactId>"));
+		assertTrue(pomContents.contains("<artifactId>portal-service</artifactId>"));
 
-        final IProject project = base.createProject( op, op.getProjectName() + "-portlet" );
+		waitForJobsToComplete();
+		project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+		waitForJobsToComplete();
 
-        assertEquals( project.getName(), op.getProjectName() + "-portlet" );
+		IVirtualComponent projectComponent = ComponentCore.createComponent(project);
 
-        assertNotNull( project );
+		assertEquals("mvc-portlet", projectComponent.getDeployedName());
+	}
 
-        String pomContents = CoreUtil.readStreamToString( project.getFile( "pom.xml" ).getContents() );
+	@Test
+	public void testNewLiferayRemoteServiceBuilderProject() throws Exception {
+		if (shouldSkipBundleTests()) {
+			return;
+		}
 
-        assertTrue( pomContents.contains( "<artifactId>servicebuilder-portlet</artifactId>" ) );
-        assertTrue( pomContents.contains( "<artifactId>liferay-maven-plugin</artifactId>" ) );
-        assertTrue( pomContents.contains( "<name>servicebuilder Portlet</name>" ) );
+		NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
 
-        waitForJobsToComplete();
-        project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
-        waitForJobsToComplete();
+		op.setProjectName("servicebuilder");
+		op.setProjectProvider("maven");
+		op.setPluginType(PluginType.servicebuilder);
 
-        IVirtualComponent projectComponent = ComponentCore.createComponent( project );
-        assertEquals( "servicebuilder-portlet", projectComponent.getDeployedName() );
+		createTestBundleProfile(op);
 
-        final ILiferayProject liferayProject = LiferayCore.create( project );
-        final IRemoteServerPublisher publisher = liferayProject.adapt( IRemoteServerPublisher.class );
+		final IProject project = base.createProject(op, op.getProjectName() + "-portlet");
 
-        final IPath warPath = publisher.publishModuleFull( monitor );
-        assertTrue( warPath.toFile().exists() );
-    }
+		assertEquals(project.getName(), op.getProjectName() + "-portlet");
 
-    @Test
-    public void testNewLiferayThemeProject() throws Exception
-    {
-        NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
-        op.setProjectName( "mytheme" );
-        op.setProjectProvider( "maven" );
-        op.setPluginType( PluginType.theme );
+		assertNotNull(project);
 
-        createTestBundleProfile( op );
+		String pomContents = CoreUtil.readStreamToString(project.getFile("pom.xml").getContents());
 
-        final IProject project = base.createProject( op );
+		assertTrue(pomContents.contains("<artifactId>servicebuilder-portlet</artifactId>"));
+		assertTrue(pomContents.contains("<artifactId>liferay-maven-plugin</artifactId>"));
+		assertTrue(pomContents.contains("<name>servicebuilder Portlet</name>"));
 
-        assertNotNull( project );
+		waitForJobsToComplete();
 
-        String pomContents = CoreUtil.readStreamToString( project.getFile( "pom.xml" ).getContents() );
+		project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
 
-        assertTrue( pomContents.contains( "<pluginType>theme</pluginType>" ) );
-        assertTrue( pomContents.contains( "<artifactId>liferay-maven-plugin</artifactId>" ) );
+		waitForJobsToComplete();
 
-        waitForJobsToComplete();
-        project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
-        waitForJobsToComplete();
+		IVirtualComponent projectComponent = ComponentCore.createComponent(project);
 
-        IVirtualComponent projectComponent = ComponentCore.createComponent( project );
-        assertEquals( "mytheme-theme", projectComponent.getDeployedName() );
-    }
+		assertEquals("servicebuilder-portlet", projectComponent.getDeployedName());
+
+		final ILiferayProject liferayProject = LiferayCore.create(project);
+
+		final IRemoteServerPublisher publisher = liferayProject.adapt(IRemoteServerPublisher.class);
+
+		final IPath warPath = publisher.publishModuleFull(monitor);
+
+		assertTrue(warPath.toFile().exists());
+	}
+
+	@Test
+	public void testNewLiferayThemeProject() throws Exception {
+		NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
+
+		op.setProjectName("mytheme");
+		op.setProjectProvider("maven");
+		op.setPluginType(PluginType.theme);
+
+		createTestBundleProfile(op);
+
+		final IProject project = base.createProject(op);
+
+		assertNotNull(project);
+
+		String pomContents = CoreUtil.readStreamToString(project.getFile("pom.xml").getContents());
+
+		assertTrue(pomContents.contains("<pluginType>theme</pluginType>"));
+		assertTrue(pomContents.contains("<artifactId>liferay-maven-plugin</artifactId>"));
+
+		waitForJobsToComplete();
+
+		project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+
+		waitForJobsToComplete();
+
+		IVirtualComponent projectComponent = ComponentCore.createComponent(project);
+
+		assertEquals("mytheme-theme", projectComponent.getDeployedName());
+	}
+
 }

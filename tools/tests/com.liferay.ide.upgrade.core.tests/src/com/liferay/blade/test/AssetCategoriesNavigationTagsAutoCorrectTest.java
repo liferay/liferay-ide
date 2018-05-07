@@ -30,7 +30,8 @@ public class AssetCategoriesNavigationTagsAutoCorrectTest extends AutoCorrectJSP
 	@Override
 	public List<String> getCheckPoints() {
 		return Collections.singletonList(
-			"48,<liferay-asset:asset-categories-navigation hidePortletWhenEmpty=\"<%= true %>\"></liferay-asset:asset-categories-navigation>");
+			"48,<liferay-asset:asset-categories-navigation hidePortletWhenEmpty=\"<%= true %>\">" +
+				"</liferay-asset:asset-categories-navigation>");
 	}
 
 	@Override

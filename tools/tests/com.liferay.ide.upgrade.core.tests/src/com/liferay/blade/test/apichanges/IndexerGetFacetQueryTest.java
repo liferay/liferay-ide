@@ -49,7 +49,7 @@ public class IndexerGetFacetQueryTest extends APITestBase {
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 	}
 
 	public File indexerWrapper = new File("projects/filetests/IndexerWrapper.java");

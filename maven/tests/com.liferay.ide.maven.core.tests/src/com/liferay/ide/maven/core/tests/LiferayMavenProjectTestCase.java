@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.core.tests;
 
 import com.liferay.ide.core.tests.TestUtil;
@@ -28,77 +28,73 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Value;
+
 import org.osgi.framework.Version;
-
-
 
 /**
  * @author Gregory Amerson
- * @author Simon Jiang *
+ * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public abstract class LiferayMavenProjectTestCase extends AbstractMavenProjectTestCase
-{
-    private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
+@SuppressWarnings("restriction")
+public abstract class LiferayMavenProjectTestCase extends AbstractMavenProjectTestCase {
 
-    protected final ProjectCoreBase base = new ProjectCoreBase();
+	public void waitForBuildAndValidation(IProject project) throws Exception {
+		project.build(IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor());
+		TestUtil.waitForBuildAndValidation();
+		project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
+		TestUtil.waitForBuildAndValidation();
+	}
 
-    protected void createTestBundleProfile( NewLiferayPluginProjectOp op )
-    {
-        NewLiferayProfile profile = op.getNewLiferayProfiles().insert();
+	protected void createTestBundleProfile(NewLiferayPluginProjectOp op) {
+		NewLiferayProfile profile = op.getNewLiferayProfiles().insert();
 
-        Set<String> vals = profile.getLiferayVersion().service( PossibleValuesService.class ).values();
+		Value<String> version = profile.getLiferayVersion();
 
-        Version greatest = new Version( "6.2.2" );
+		Set<String> vals = version.service(PossibleValuesService.class).values();
 
-        for( final String val : vals )
-        {
-            try
-            {
-                final Version v = new Version( val );
+		Version greatest = new Version("6.2.2");
 
-                if( greatest == null )
-                {
-                    greatest = v;
-                }
-                else
-                {
-                    if( CoreUtil.compareVersions( greatest, v ) < 0 )
-                    {
-                        greatest = v;
-                        break;
-                    }
-                }
-            }
-            catch( Exception e )
-            {
-            }
-        }
+		for (final String val : vals) {
+			try {
+				final Version v = new Version(val);
 
-        profile.setLiferayVersion( greatest.getMajor() + "." + greatest.getMicro() + "." + greatest.getMinor() );
-        profile.setId( "test-bundle" );
-        profile.setRuntimeName( base.getRuntimeVersion() );
-        profile.setProfileLocation( ProfileLocation.projectPom );
+				if (greatest == null) {
+					greatest = v;
+				}
+				else {
+					if (CoreUtil.compareVersions(greatest, v) < 0) {
+						greatest = v;
 
-        op.setActiveProfilesValue( "test-bundle" );
-    }
+						break;
+					}
+				}
+			}
+			catch (Exception e) {
+			}
+		}
 
-    @Override
-    protected void setUp() throws Exception
-    {
-        super.setUp();
+		profile.setLiferayVersion(greatest.getMajor() + "." + greatest.getMicro() + "." + greatest.getMinor());
+		profile.setId("test-bundle");
+		profile.setRuntimeName(base.getRuntimeVersion());
+		profile.setProfileLocation(ProfileLocation.projectPom);
 
-        base.setupRuntime();
-    }
+		op.setActiveProfilesValue("test-bundle");
+	}
 
-    protected boolean shouldSkipBundleTests() { return "true".equals( skipBundleTests ); }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
 
-    public void waitForBuildAndValidation( IProject project ) throws Exception
-    {
-        project.build( IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor() );
-        TestUtil.waitForBuildAndValidation();
-        project.build( IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor() );
-        TestUtil.waitForBuildAndValidation();
-    }
+		base.setupRuntime();
+	}
+
+	protected boolean shouldSkipBundleTests() {
+		return "true".equals(_SKIP_BUNDLE_TESTS);
+	}
+
+	protected final ProjectCoreBase base = new ProjectCoreBase();
+
+	private static final String _SKIP_BUNDLE_TESTS = System.getProperty("skipBundleTests");
 
 }

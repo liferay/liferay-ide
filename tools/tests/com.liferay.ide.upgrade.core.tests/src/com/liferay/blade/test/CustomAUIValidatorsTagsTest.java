@@ -43,13 +43,13 @@ public class CustomAUIValidatorsTagsTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/custom-aui-validators/"), new NullProgressMonitor());
 
-		Assert.assertEquals(9, problems.size());
+		Assert.assertEquals("", 9, problems.size());
 
 		boolean found = false;
 
 		for (Problem problem : problems) {
-			if (problem.file.getName().endsWith("CustomAUIValidatorsTest.jsp") && problem.lineNumber == 314 &&
-				problem.startOffset >= 11387 && problem.endOffset >= 11393) {
+			if (problem.file.getName().endsWith("CustomAUIValidatorsTest.jsp") && (problem.lineNumber == 314) &&
+				(problem.startOffset >= 11387) && (problem.endOffset >= 11393)) {
 
 				found = true;
 			}

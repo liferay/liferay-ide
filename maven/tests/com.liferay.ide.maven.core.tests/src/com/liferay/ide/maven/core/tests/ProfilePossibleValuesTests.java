@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,57 +10,52 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.core.tests;
-
-import static org.junit.Assert.assertEquals;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.Profile;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Gregory Amerson
  */
-public class ProfilePossibleValuesTests
-{
+public class ProfilePossibleValuesTests {
 
-    @Test
-    public void testActiveProfilesValue() throws Exception
-    {
-        final NewLiferayPluginProjectOp op = newMavenProjectOp();
+	@Test
+	public void testActiveProfilesValue() throws Exception {
+		NewLiferayPluginProjectOp op = _newMavenProjectOp();
 
-        final Profile firstProfile = op.getSelectedProfiles().insert();
+		Profile firstProfile = op.getSelectedProfiles().insert();
 
-        final String firstProfileId = "__first_profile__";
+		String firstProfileId = "__first_profile__";
 
-        firstProfile.setId( firstProfileId );
+		firstProfile.setId(firstProfileId);
 
-        assertEquals( firstProfileId, op.getActiveProfilesValue().content() );
+		Assert.assertEquals(firstProfileId, op.getActiveProfilesValue().content());
 
-        final Profile secondProfile = op.getSelectedProfiles().insert();
+		Profile secondProfile = op.getSelectedProfiles().insert();
 
-        final String secondProfileId = "__second_profile__";
+		String secondProfileId = "__second_profile__";
 
-        secondProfile.setId( secondProfileId );
+		secondProfile.setId(secondProfileId);
 
-        assertEquals( firstProfileId + ',' + secondProfileId, op.getActiveProfilesValue().content() );
-    }
+		Assert.assertEquals(firstProfileId + ',' + secondProfileId, op.getActiveProfilesValue().content());
+	}
 
-    private NewLiferayPluginProjectOp newMavenProjectOp()
-    {
-        final NewLiferayPluginProjectOp op = newProjectOp();
-        op.setProjectProvider( "maven" );
+	protected NewLiferayPluginProjectOp newProjectOp() {
+		return NewLiferayPluginProjectOp.TYPE.instantiate();
+	}
 
-        return op;
-    }
+	private NewLiferayPluginProjectOp _newMavenProjectOp() {
+		NewLiferayPluginProjectOp op = newProjectOp();
 
-    protected NewLiferayPluginProjectOp newProjectOp()
-    {
-        return NewLiferayPluginProjectOp.TYPE.instantiate();
-    }
+		op.setProjectProvider("maven");
+
+		return op;
+	}
 
 }

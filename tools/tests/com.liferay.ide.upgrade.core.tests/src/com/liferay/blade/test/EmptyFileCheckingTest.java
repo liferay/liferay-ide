@@ -43,7 +43,7 @@ public class EmptyFileCheckingTest {
 
 		List<Problem> problems = m.findProblems(new File("projects/emptyfiles/"), new NullProgressMonitor());
 
-		Assert.assertEquals(0, problems.size());
+		Assert.assertEquals("", 0, problems.size());
 	}
 
 	private final BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();

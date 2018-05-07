@@ -44,7 +44,7 @@ public class DeprecatedLiferaySecurityEncryptTagsTest {
 		List<Problem> problems = m.findProblems(
 			new File("jsptests/liferay-security-encrypt/"), new NullProgressMonitor());
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		boolean found = false;
 

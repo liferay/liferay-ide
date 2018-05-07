@@ -41,16 +41,16 @@ public class RepositoryServiceUtilTest {
 
 		Migration m = _context.getService(sr);
 
-		List<Problem> problems = m
-			.findProblems(new File("jsptests/repository-service-util"), new NullProgressMonitor());
+		List<Problem> problems = m.findProblems(
+			new File("jsptests/repository-service-util"), new NullProgressMonitor());
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 
 		boolean found = false;
 
 		for (Problem problem : problems) {
 			if (problem.file.getName().endsWith("RepositoryServiceUtilTest.jsp")) {
-				if (problem.lineNumber == 9 && problem.startOffset >= 104 && problem.endOffset >= 171) {
+				if ((problem.lineNumber == 9) && (problem.startOffset >= 104) && (problem.endOffset >= 171)) {
 					found = true;
 				}
 			}

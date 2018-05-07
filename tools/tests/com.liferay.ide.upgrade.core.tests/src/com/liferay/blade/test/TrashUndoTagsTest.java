@@ -43,7 +43,7 @@ public class TrashUndoTagsTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/liferay-ui-trash-undo/"), new NullProgressMonitor());
 
-		Assert.assertEquals(1, problems.size());
+		Assert.assertEquals("", 1, problems.size());
 	}
 
 	private final BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();

@@ -38,7 +38,8 @@ public class ActionCommandImportsTest extends APITestBase {
 	@Override
 	public File getTestFile() {
 		return new File(
-			"projects/actioncommand-demo-portlet/docroot/WEB-INF/src/com/liferay/demo/portlet/action/SayHelloActionCommand.java");
+			"projects/actioncommand-demo-portlet/docroot/WEB-INF/src/com/liferay/demo/portlet/action" +
+				"/SayHelloActionCommand.java");
 	}
 
 	@Test
@@ -50,10 +51,11 @@ public class ActionCommandImportsTest extends APITestBase {
 		context.ungetService(fileMigrators[0]);
 
 		Assert.assertNotNull(problems);
-		Assert.assertEquals(2, problems.size());
+		Assert.assertEquals("", 2, problems.size());
 	}
 
 	public File sayHelloActionCommandFile2 = new File(
-		"projects/actioncommand-demo-portlet/docroot/WEB-INF/src/com/liferay/demo/portlet/action/SayHelloActionCommand2.java");
+		"projects/actioncommand-demo-portlet/docroot/WEB-INF/src/com/liferay/demo/portlet/action" +
+			"/SayHelloActionCommand2.java");
 
 }
