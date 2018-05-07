@@ -260,24 +260,6 @@ public class ValidationFragmentTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
-	@Ignore("we should open a new test file to test without runtimes")
-	@Test
-	public void createFragmentWithoutRuntime() {
-		wizardAction.openNewFragmentWizard();
-
-		wizardAction.newFragment.prepareGradle(project.getName());
-
-		validationAction.assertEnabledFalse(wizardAction.getNextBtn());
-
-		validationAction.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, wizardAction.getValidationMsg(2));
-
-		wizardAction.cancel();
-	}
-
-	@Test
-	public void createFragmentWithoutRuntimeLiferayWorkspace() {
-	}
-
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
 
