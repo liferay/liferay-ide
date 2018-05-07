@@ -27,13 +27,13 @@
 	</parent>
 
 	<groupId>com.liferay.ide.ui.tests</groupId>
-	<artifactId>tools-tests</artifactId>
+	<artifactId>platform-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE UI Tools Tests</name>
+	<name>Liferay IDE UI Platform Tests</name>
 
 	<properties>
-		<liferay-ide-swtbot-testing-site>file:/${basedir}/../../../../com.liferay.ide.ui.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
+		<liferay-ide-swtbot-testing-site>file:/${basedir}/../../com.liferay.ide.ui.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
 	</properties>
 
 	<repositories>
@@ -45,18 +45,7 @@
 	</repositories>
 
 	<modules>
-		<module>com.liferay.ide.ui.fragment</module>
-		<module>com.liferay.ide.ui.theme</module>
-		<module>com.liferay.ide.ui.hook</module>
-		<module>com.liferay.ide.ui.jsf</module>
-		<module>com.liferay.ide.ui.layouttpl</module>
-		<module>com.liferay.ide.ui.module</module>
-		<module>com.liferay.ide.ui.portlet</module>
-		<module>com.liferay.ide.ui.sdk.tests</module>
-		<module>com.liferay.ide.ui.server</module>
-		<module>com.liferay.ide.ui.workspace</module>
-		<module>com.liferay.ide.ui.service.builder</module>
-		<module>com.liferay.ide.ui.kaleo.tests</module>
-		<module>com.liferay.ide.ui.kaleo.deploy.tests</module>
+		<module>com.liferay.ide.ui.preference.tests</module>
+		<module>com.liferay.ide.ui.code.upgrade.tests</module>
 	</modules>
 </project>

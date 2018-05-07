@@ -118,6 +118,7 @@
 			<id>ui-tests-mac</id>
 			<modules>
 				<module>tools</module>
+				<module>platform</module>
 			</modules>
 			<build>
 				<pluginManagement>
@@ -199,6 +200,7 @@
 			<id>ui-tests-linux</id>
 			<modules>
 				<module>tools</module>
+				<module>platform</module>
 			</modules>
 			<build>
 				<pluginManagement>
@@ -280,6 +282,7 @@
 			<id>ui-tests-win</id>
 			<modules>
 				<module>tools</module>
+				<module>platform</module>
 			</modules>
 			<build>
 				<pluginManagement>
