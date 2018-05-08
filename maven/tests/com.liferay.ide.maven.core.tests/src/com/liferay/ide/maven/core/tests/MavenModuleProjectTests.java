@@ -201,8 +201,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
 		assertTrue(bndcontent.contains(bndConfig));
 
-		String restConfig =
-			"Require-Capability: osgi.contract; filter:=\"(&(osgi.contract=JavaJAXRS)(version=2))\"";
+		String restConfig = "Require-Capability: osgi.contract; filter:=\"(&(osgi.contract=JavaJAXRS)(version=2))\"";
 
 		assertTrue(bndcontent.contains(restConfig));
 
@@ -358,13 +357,21 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
 		// put gradle type theme project inside liferay-workspace/wars
 
-		assertTrue(op.getLocation().content().toPortableString().contains("gradle-liferay-workspace/wars"));
+		pathValue = op.getLocation();
+
+		path = pathValue.content();
+
+		assertTrue(path.toPortableString().contains("gradle-liferay-workspace/wars"));
 
 		op.setProjectTemplateName("mvc-portlet");
 
+		pathValue = op.getLocation();
+
+		path = pathValue.content();
+
 		// put gradle type project inside liferay-workspace/modules
 
-		assertTrue(op.getLocation().content().toPortableString().contains("gradle-liferay-workspace/modules"));
+		assertTrue(path.toPortableString().contains("gradle-liferay-workspace/modules"));
 
 		IProject project = CoreUtil.getProject("gradle-liferay-workspace");
 
@@ -376,9 +383,9 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
 		// no liferay-workspace
 
-		Value<org.eclipse.sapphire.modeling.Path> location = op.getLocation();
+		pathValue = op.getLocation();
 
-		path = location.content();
+		path = pathValue.content();
 
 		assertTrue(path.toFile().equals(eclipseWorkspaceLocation));
 	}
@@ -875,14 +882,15 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		assertTrue(serviceFile.exists());
 
 		String contents =
-			"package service.test;\n" + "import com.liferay.portal.kernel.events.ActionException;\n" +
+			"package service.test;\nimport com.liferay.portal.kernel.events.ActionException;\n" +
 				"import com.liferay.portal.kernel.events.LifecycleAction;\n" +
 					"import com.liferay.portal.kernel.events.LifecycleEvent;\n" +
 						"import org.osgi.service.component.annotations.Component;\n@Component(\n" +
 							"immediate = true, property = {\"key=login.events.pre\"},\n" +
-								"service = LifecycleAction.class\n" + ")\n" +
+								"service = LifecycleAction.class\n)\n" +
 									"public class ServiceTest implements LifecycleAction {\n" +
-										"@Override public void processLifecycleEvent(LifecycleEvent lifecycleEvent) throws ActionException { }\n}";
+										"@Override public void processLifecycleEvent" +
+											"(LifecycleEvent lifecycleEvent) throws ActionException { }\n}";
 
 		serviceFile.setContents(new ByteArrayInputStream(contents.getBytes()), IResource.FORCE, monitor);
 

@@ -32,8 +32,6 @@ public class LiferayMavenUI extends Plugin {
 
 	// The shared instance
 
-	private static LiferayMavenUI _plugin;
-
 	/**
 	 * Returns the shared instance
 	 *
@@ -59,7 +57,7 @@ public class LiferayMavenUI extends Plugin {
 	public LiferayMavenUI() {
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 *
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.
@@ -67,10 +65,11 @@ public class LiferayMavenUI extends Plugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 *
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(BundleContext)
@@ -79,5 +78,7 @@ public class LiferayMavenUI extends Plugin {
 		_plugin = null;
 		super.stop(context);
 	}
+
+	private static LiferayMavenUI _plugin;
 
 }

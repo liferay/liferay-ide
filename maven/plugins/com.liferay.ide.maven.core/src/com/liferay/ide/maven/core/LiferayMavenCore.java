@@ -139,17 +139,18 @@ public class LiferayMavenCore extends Plugin {
 	public LiferayMavenCore() {
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 *
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 *
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(BundleContext)
@@ -160,8 +161,8 @@ public class LiferayMavenCore extends Plugin {
 	}
 
 	// The plug-in ID
+
 	private static LiferayMavenCore _plugin;
-	
 	private static final IScopeContext[] _scopes = {InstanceScope.INSTANCE, DefaultScope.INSTANCE};
 
 }
