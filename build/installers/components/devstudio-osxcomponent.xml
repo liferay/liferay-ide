@@ -1,28 +1,28 @@
 <component>
-    <name>osxcomponent</name>
-    <description>osxComponent</description>
-    <canBeEdited>0</canBeEdited>
-    <selected>1</selected>
-    <show>1</show>
-    <folderList>
-        <folder>
-            <description>Program Files</description>
-            <destination>${installdir}</destination>
-            <name>programfiles</name>
-            <platforms>all</platforms>
-            <distributionFileList>
-                <distributionFile>
-                    <origin>../../com.liferay.ide-repository/target/products/com.liferay.ide.studio-macosx.cocoa.x86_64.zip</origin>
-                </distributionFile>
-            </distributionFileList>
-        </folder>
-    </folderList>
-    <shouldPackRuleList>
-        <compareText>
-            <logic>contains</logic>
-            <nocase>1</nocase>
-            <text>${platform_name}</text>
-            <value>osx</value>
-        </compareText>
-    </shouldPackRuleList>
+	<name>osxcomponent</name>
+	<description>osxComponent</description>
+	<canBeEdited>0</canBeEdited>
+	<selected>1</selected>
+	<show>1</show>
+	<folderList>
+		<folder>
+			<description>Program Files</description>
+			<destination>${installdir}</destination>
+			<name>programfiles</name>
+			<platforms>all</platforms>
+			<distributionFileList>
+				<distributionFile>
+					<origin>../../com.liferay.ide-repository/target/products/com.liferay.ide.studio-macosx.cocoa.x86_64.zip</origin>
+				</distributionFile>
+			</distributionFileList>
+		</folder>
+	</folderList>
+	<shouldPackRuleList>
+		<compareText>
+			<logic>contains</logic>
+			<nocase>1</nocase>
+			<text>${platform_name}</text>
+			<value>osx</value>
+		</compareText>
+	</shouldPackRuleList>
 </component>

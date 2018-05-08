@@ -18,70 +18,70 @@
 
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
     xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.liferay.ide.build</groupId>
-        <artifactId>build</artifactId>
-        <version>3.2.0-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>com.liferay.ide.build</groupId>
+		<artifactId>build</artifactId>
+		<version>3.2.0-SNAPSHOT</version>
+	</parent>
 
-    <artifactId>installers</artifactId>
+	<artifactId>installers</artifactId>
 
-    <name>Liferay IDE Installers</name>
+	<name>Liferay IDE Installers</name>
 
-    <packaging>pom</packaging>
+	<packaging>pom</packaging>
 
-    <properties>
-        <install-builder-executable>${install-builder-home}/bin/builder</install-builder-executable>
-        <bundle-support-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.portal.tools.bundle.support</bundle-support-download-base>
-        <bundle-support-name>com.liferay.portal.tools.bundle.support-3.2.2.jar</bundle-support-name>
-        <bundle-support-version>3.2.2</bundle-support-version>
-        <bundle-support-md5>ee67fb9d9051c32e62ef2fbabc0cd505</bundle-support-md5>
-        <gw-latest-download-url>https://github.com/david-truong/gw/releases/download/v1.0.1/gw.jar</gw-latest-download-url>
-        <gw-latest-md5>488ddaed413c0f7ea67df049175380eb</gw-latest-md5>
-        <portal-download-base>http://mirrors/files.liferay.com/private/ee/portal</portal-download-base>
-        <portal-version>7.0.10.7</portal-version>
-        <portal-zip-name>liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</portal-zip-name>
-        <portal-ce-download-base>http://mirrors/releases.liferay.com/portal</portal-ce-download-base>
-        <portal-ce-version>7.1.0-a1</portal-ce-version>
-        <portal-ce-zip-name>liferay-ce-portal-tomcat-7.1-a1-20180410105031513.zip</portal-ce-zip-name>
-        <plugin-sdk-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
-        <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</plugin-sdk-zip-name>
-        <plugin-sdk-version>1.0.16</plugin-sdk-version>
-        <jpmcli-latest-download-url>https://oss.sonatype.org/content/repositories/snapshots/biz/aQute/bnd/biz.aQute.jpm.run/4.0.0-SNAPSHOT/biz.aQute.jpm.run-4.0.0-20180307.045202-5.jar</jpmcli-latest-download-url>
-        <jpmcli-latest-md5>9e85875c0903d986e11f1eea624325fe</jpmcli-latest-md5>
-        <bnd-latest-download-url>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/biz/aQute/bnd/biz.aQute.bnd/3.5.0/biz.aQute.bnd-3.5.0.jar</bnd-latest-download-url>
-        <bnd-latest-md5>19983bd645ec65d162355bd4dac910fa</bnd-latest-md5>
-    </properties>
+	<properties>
+		<install-builder-executable>${install-builder-home}/bin/builder</install-builder-executable>
+		<bundle-support-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.portal.tools.bundle.support</bundle-support-download-base>
+		<bundle-support-name>com.liferay.portal.tools.bundle.support-3.2.2.jar</bundle-support-name>
+		<bundle-support-version>3.2.2</bundle-support-version>
+		<bundle-support-md5>ee67fb9d9051c32e62ef2fbabc0cd505</bundle-support-md5>
+		<gw-latest-download-url>https://github.com/david-truong/gw/releases/download/v1.0.1/gw.jar</gw-latest-download-url>
+		<gw-latest-md5>488ddaed413c0f7ea67df049175380eb</gw-latest-md5>
+		<portal-download-base>http://mirrors/files.liferay.com/private/ee/portal</portal-download-base>
+		<portal-version>7.0.10.7</portal-version>
+		<portal-zip-name>liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</portal-zip-name>
+		<portal-ce-download-base>http://mirrors/releases.liferay.com/portal</portal-ce-download-base>
+		<portal-ce-version>7.1.0-a1</portal-ce-version>
+		<portal-ce-zip-name>liferay-ce-portal-tomcat-7.1-a1-20180410105031513.zip</portal-ce-zip-name>
+		<plugin-sdk-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
+		<plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</plugin-sdk-zip-name>
+		<plugin-sdk-version>1.0.16</plugin-sdk-version>
+		<jpmcli-latest-download-url>https://oss.sonatype.org/content/repositories/snapshots/biz/aQute/bnd/biz.aQute.jpm.run/4.0.0-SNAPSHOT/biz.aQute.jpm.run-4.0.0-20180307.045202-5.jar</jpmcli-latest-download-url>
+		<jpmcli-latest-md5>9e85875c0903d986e11f1eea624325fe</jpmcli-latest-md5>
+		<bnd-latest-download-url>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/biz/aQute/bnd/biz.aQute.bnd/3.5.0/biz.aQute.bnd-3.5.0.jar</bnd-latest-download-url>
+		<bnd-latest-md5>19983bd645ec65d162355bd4dac910fa</bnd-latest-md5>
+	</properties>
 
-    <modules>
-        <module>liferay-project-sdk</module>
-        <module>liferay-project-sdk-with-devstudio-ce</module>
-        <module>liferay-project-sdk-with-devstudio-dxp</module>
-        <module>installer-tests</module>
-    </modules>
+	<modules>
+		<module>liferay-project-sdk</module>
+		<module>liferay-project-sdk-with-devstudio-ce</module>
+		<module>liferay-project-sdk-with-devstudio-dxp</module>
+		<module>installer-tests</module>
+	</modules>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>outputs</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>shared/download</directory>
-                            <includes>
-                                <include>blade.jar</include>
-                                <include>gw.jar</include>
-                            </includes>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>outputs</directory>
+						</fileset>
+						<fileset>
+							<directory>shared/download</directory>
+							<includes>
+								<include>blade.jar</include>
+								<include>gw.jar</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

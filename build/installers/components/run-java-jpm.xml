@@ -1,4 +1,4 @@
 <runProgram>
-    <program>${java_executable}</program>
-    <programArguments>-jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" -u init</programArguments>
+	<program>${java_executable}</program>
+	<programArguments>-jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" -u init</programArguments>
 </runProgram>

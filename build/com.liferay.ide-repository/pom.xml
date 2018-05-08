@@ -17,154 +17,154 @@
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.liferay.ide.build</groupId>
-        <artifactId>build</artifactId>
-        <version>3.2.0-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>com.liferay.ide.build</groupId>
+		<artifactId>build</artifactId>
+		<version>3.2.0-SNAPSHOT</version>
+	</parent>
 
-    <artifactId>com.liferay.ide-repository</artifactId>
-    <packaging>eclipse-repository</packaging>
+	<artifactId>com.liferay.ide-repository</artifactId>
+	<packaging>eclipse-repository</packaging>
 
-    <name>Liferay IDE Repository</name>
+	<name>Liferay IDE Repository</name>
 
-    <build>
-        <plugins>
-            <!-- Added the switch to final name in the AddAssociateSites -->
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-p2-repository-plugin</artifactId>
-                <version>${tycho-version}</version>
-                <configuration>
-                    <includeAllDependencies>false</includeAllDependencies>
-                    <finalName>liferay-ide-${unqualifiedVersion}.${buildQualifier}-updatesite</finalName>
-                </configuration>
-            </plugin>
+	<build>
+		<plugins>
+			<!-- Added the switch to final name in the AddAssociateSites -->
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-repository-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<includeAllDependencies>false</includeAllDependencies>
+					<finalName>liferay-ide-${unqualifiedVersion}.${buildQualifier}-updatesite</finalName>
+				</configuration>
+			</plugin>
 
-            <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <version>1.4</version>
-                <executions>
-                    <execution>
-                        <id>fix-repository</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <source>${pom.basedir}/src/main/assembly/RemoveUnwantedInstallUnits.groovy</source>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>verify</id>
-                        <phase>verify</phase>
-                        <configuration>
-                            <target>
-                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath"/>
+			<plugin>
+				<groupId>org.codehaus.gmaven</groupId>
+				<artifactId>gmaven-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<id>fix-repository</id>
+						<phase>package</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<source>${pom.basedir}/src/main/assembly/RemoveUnwantedInstallUnits.groovy</source>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>verify</id>
+						<phase>verify</phase>
+						<configuration>
+							<target>
+								<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
 
-                                <property name="compile_classpath" refid="maven.compile.classpath" />
-                                <property name="runtime_classpath" refid="maven.runtime.classpath" />
-                                <property name="test_classpath" refid="maven.test.classpath" />
-                                <property name="plugin_classpath" refid="maven.plugin.classpath" />
+								<property name="compile_classpath" refid="maven.compile.classpath" />
+								<property name="runtime_classpath" refid="maven.runtime.classpath" />
+								<property name="test_classpath" refid="maven.test.classpath" />
+								<property name="plugin_classpath" refid="maven.plugin.classpath" />
 
-                                <ant antfile="${basedir}/bundle/build.xml">
-                                    <target name="maven-build" />
-                                </ant>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>ant-contrib</groupId>
-                        <artifactId>ant-contrib</artifactId>
-                        <version>1.0b3</version>
-                        <exclusions>
-                            <exclusion>
-                                <groupId>ant</groupId>
-                                <artifactId>ant</artifactId>
-                            </exclusion>
-                        </exclusions>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.ant</groupId>
-                        <artifactId>ant-nodeps</artifactId>
-                        <version>1.8.1</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-        </plugins>
-    </build>
+								<ant antfile="${basedir}/bundle/build.xml">
+									<target name="maven-build" />
+								</ant>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>1.0b3</version>
+						<exclusions>
+							<exclusion>
+								<groupId>ant</groupId>
+								<artifactId>ant</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant-nodeps</artifactId>
+						<version>1.8.1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
 
-    <profiles>
-        <profile>
-            <id>installers</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.eclipse.tycho</groupId>
-                        <artifactId>tycho-p2-director-plugin</artifactId>
-                        <version>${tycho-version}</version>
-                        <executions>
-                            <execution>
-                                <id>create-product-distributions</id>
-                                <goals>
-                                    <goal>materialize-products</goal>
-                                    <goal>archive-products</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <products>
-                                <product>
-                                    <id>com.liferay.ide.studio</id>
-                                    <rootFolder>liferay-developer-studio</rootFolder>
-                                    <rootFolders>
-                                        <macosx>LiferayDeveloperStudio.app</macosx>
-                                    </rootFolders>
-                                </product>
-                            </products>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.gmaven</groupId>
-                        <artifactId>groovy-maven-plugin</artifactId>
-                        <version>2.0</version>
-                        <executions>
-                            <execution>
-                                <id>sign-app</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>execute</goal>
-                                </goals>
-                                <configuration>
-                                    <properties>
-                                        <appPath>${pom.basedir}/target/products/com.liferay.ide.studio-macosx.cocoa.x86_64.zip</appPath>
-                                        <signingServerURL>${signingServerURL}</signingServerURL>
-                                        <signApps>${signApps}</signApps>
-                                        <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
-                                        <createDmg>false</createDmg>
-                                    </properties>
-                                    <source>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</source>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+	<profiles>
+		<profile>
+			<id>installers</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-p2-director-plugin</artifactId>
+						<version>${tycho-version}</version>
+						<executions>
+							<execution>
+								<id>create-product-distributions</id>
+								<goals>
+									<goal>materialize-products</goal>
+									<goal>archive-products</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<products>
+								<product>
+									<id>com.liferay.ide.studio</id>
+									<rootFolder>liferay-developer-studio</rootFolder>
+									<rootFolders>
+										<macosx>LiferayDeveloperStudio.app</macosx>
+									</rootFolders>
+								</product>
+							</products>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.gmaven</groupId>
+						<artifactId>groovy-maven-plugin</artifactId>
+						<version>2.0</version>
+						<executions>
+							<execution>
+								<id>sign-app</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>execute</goal>
+								</goals>
+								<configuration>
+									<properties>
+										<appPath>${pom.basedir}/target/products/com.liferay.ide.studio-macosx.cocoa.x86_64.zip</appPath>
+										<signingServerURL>${signingServerURL}</signingServerURL>
+										<signApps>${signApps}</signApps>
+										<certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
+										<createDmg>false</createDmg>
+									</properties>
+									<source>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</source>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

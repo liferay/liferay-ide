@@ -1,4 +1,4 @@
 <setInstallerVariable>
-    <name>gwFilePath</name>
-    <value>${installdir}${platform_path_separator}gw.jar</value>
+	<name>gwFilePath</name>
+	<value>${installdir}${platform_path_separator}gw.jar</value>
 </setInstallerVariable>
