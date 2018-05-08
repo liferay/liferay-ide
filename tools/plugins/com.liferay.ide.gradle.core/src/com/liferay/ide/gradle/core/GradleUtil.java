@@ -62,7 +62,15 @@ import org.eclipse.debug.core.ILaunchManager;
 @SuppressWarnings("restriction")
 public class GradleUtil {
 
+	public static IStatus importGradleProject(String dir, IProgressMonitor monitor) throws CoreException {
+		return importGradleProject(new File(dir), monitor);
+	}
+
 	public static IStatus importGradleProject(File dir, IProgressMonitor monitor) throws CoreException {
+		if (FileUtil.notExists(dir)) {
+			return GradleCore.createErrorStatus("Unbale to find gralde project under " + dir);
+		}
+
 		Validator<File> projectDirValidator = Validators.and(
 			Validators.requiredDirectoryValidator("Project root directory"),
 			Validators.nonWorkspaceFolderValidator("Project root directory"));

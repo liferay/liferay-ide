@@ -29,6 +29,6 @@ public interface NewLiferayWorkspaceProjectProvider<T extends ExecutableElement>
 
 	public IStatus importProject(String location, IProgressMonitor monitor);
 
-	public void initBundle(IProgressMonitor monitor, String bundleUrl, String serverName, String workspaceName);
+	public void initBundle(String bundleUrl, String serverName, String workspaceName, IProgressMonitor monitor);
 
 }

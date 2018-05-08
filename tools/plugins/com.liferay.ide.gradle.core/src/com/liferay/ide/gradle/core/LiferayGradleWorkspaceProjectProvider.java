@@ -30,7 +30,6 @@ import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 
 import java.util.Optional;
@@ -65,27 +64,23 @@ public class LiferayGradleWorkspaceProjectProvider
 
 		IPath location = PathBridge.create(locationPath.content());
 
-		Value<String> workspaceName = op.getWorkspaceName();
+		Value<String> workspaceNameValue = op.getWorkspaceName();
 
-		String wsName = workspaceName.toString();
+		String workspaceName = workspaceNameValue.toString();
 
-		IPath wsLocation = location.append(wsName);
+		IPath fullLocation = location.append(workspaceName);
 
 		Value<String> version = op.getLiferayVersion();
 
-		String liferayVersion = version.content();
-
 		StringBuilder sb = new StringBuilder();
-
-		File workspace = wsLocation.toFile();
 
 		sb.append("--base ");
 		sb.append("\"");
-		sb.append(workspace.getAbsolutePath());
+		sb.append(fullLocation.toOSString());
 		sb.append("\" ");
 		sb.append("init ");
 		sb.append("-v ");
-		sb.append(liferayVersion);
+		sb.append(version.content());
 
 		try {
 			BladeCLI.execute(sb.toString());
@@ -94,26 +89,16 @@ public class LiferayGradleWorkspaceProjectProvider
 			return ProjectCore.createErrorStatus(bclie);
 		}
 
-		IPath wsPath = location.append(wsName);
+		IStatus status = importProject(fullLocation.toOSString(), monitor);
 
-		String workspaceLocation = wsPath.toPortableString();
+		Value<Boolean> initBundle = op.getProvisionLiferayBundle();
 
-		Value<Boolean> provisionLiferayBundle = op.getProvisionLiferayBundle();
+		if (initBundle.content()) {
+			Value<String> bundleUrl = op.getBundleUrl();
 
-		boolean initBundle = provisionLiferayBundle.content();
+			Value<String> serverName = op.getServerName();
 
-		Value<String> url = op.getBundleUrl();
-
-		String bundleUrl = url.content(false);
-
-		Value<String> server = op.getServerName();
-
-		String serverName = server.content();
-
-		IStatus status = importProject(workspaceLocation, monitor);
-
-		if (initBundle) {
-			initBundle(monitor, bundleUrl, serverName, wsName);
+			initBundle(bundleUrl.content(), serverName.content(), workspaceName, monitor);
 		}
 
 		return status;
@@ -128,27 +113,25 @@ public class LiferayGradleWorkspaceProjectProvider
 
 	@Override
 	public IStatus importProject(String location, IProgressMonitor monitor) {
+		IStatus status = Status.OK_STATUS;
+
 		try {
-			final IStatus importJob = GradleUtil.importGradleProject(new File(location), monitor);
-
-			if (!importJob.isOK() || (importJob.getException() != null)) {
-				return importJob;
-			}
+			status = GradleUtil.importGradleProject(location, monitor);
 		}
-		catch (Exception e) {
-			return GradleCore.createErrorStatus("import Liferay workspace project error", e);
+		catch (CoreException e) {
+			status = ProjectCore.createErrorStatus(e);
 		}
 
-		return Status.OK_STATUS;
+		return status;
 	}
 
 	@Override
-	public void initBundle(IProgressMonitor monitor, String bundleUrl, String serverName, String workspaceName) {
+	public void initBundle(String bundleUrl, String serverName, String workspaceName, IProgressMonitor monitor) {
 		IProject project = ProjectUtil.getProject(workspaceName);
 
 		try {
 			if (bundleUrl != null) {
-				final IFile gradlePropertiesFile = project.getFile("gradle.properties");
+				IFile gradlePropertiesFile = project.getFile("gradle.properties");
 
 				try (InputStream gradleStream = gradlePropertiesFile.getContents()) {
 					String content = FileUtil.readContents(gradleStream);
