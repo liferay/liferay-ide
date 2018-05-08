@@ -177,7 +177,7 @@ to distribution rights of the Software.
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="4" />
       <property name="eclipse.buildId" value="${unqualifiedVersion}.${buildQualifier}" />
-      <property name="osgi.instance.area.default" value="@user.home/workspace" />
+      <property name="osgi.instance.area.default" value="@user.home/eclipse-workspace" />
    </configurations>
 
 </product>
