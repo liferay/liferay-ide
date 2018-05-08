@@ -54,6 +54,21 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 	}
 
 	@Test
+	public void createLiferayWorkspace71() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.1");
+
+		wizardAction.newLiferayWorkspace.deselectDownloadLiferayBundle();
+
+		wizardAction.finish();
+
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
 	public void createLiferayWorkspaceChangeLocation() {
 		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
 
@@ -158,21 +173,6 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		String[] newModuleNames = {project.getName(), newWarsFolderName};
 
 		viewAction.project.closeAndDelete(newModuleNames);
-
-		viewAction.project.closeAndDelete(project.getName());
-	}
-
-	@Test
-	public void createLiferayWorkspace71() {
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.1");
-
-		wizardAction.newLiferayWorkspace.deselectDownloadLiferayBundle();
-
-		wizardAction.finish();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}

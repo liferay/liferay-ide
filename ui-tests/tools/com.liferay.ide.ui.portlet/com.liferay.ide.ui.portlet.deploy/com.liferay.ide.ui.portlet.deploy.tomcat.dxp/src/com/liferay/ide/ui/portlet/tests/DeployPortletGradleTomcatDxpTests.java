@@ -18,6 +18,7 @@ import com.liferay.ide.ui.liferay.support.server.PureTomcatDxpSupport;
 import com.liferay.ide.ui.liferay.support.server.ServerSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 import com.liferay.ide.ui.portlet.deploy.base.DeployPortletGradleTomcat7xBase;
+
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;

@@ -37,7 +37,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenTomcat71Tests extends NewFrag
 
 	@Test
 	public void createFragmentWithJsp() {
-	super.createFragmentWithJsp();
+		super.createFragmentWithJsp();
 	}
 
 	@Test
@@ -52,7 +52,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenTomcat71Tests extends NewFrag
 
 	@Test
 	public void createFragmentWithPortletProperites() {
-	super.createFragmentWithPortletProperites();
+		super.createFragmentWithPortletProperites();
 	}
 
 	@Test

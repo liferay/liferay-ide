@@ -24,6 +24,7 @@ import com.liferay.ide.ui.liferay.action.ViewAction;
 import com.liferay.ide.ui.liferay.action.WizardAction;
 import com.liferay.ide.ui.liferay.page.LiferayIDE;
 import com.liferay.ide.ui.swtbot.Keys;
+import com.liferay.ide.ui.swtbot.Times;
 import com.liferay.ide.ui.swtbot.UI;
 import com.liferay.ide.ui.swtbot.page.Shell;
 
@@ -46,7 +47,7 @@ import org.junit.runner.RunWith;
  * @author Ying Xu
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class SwtbotBase implements UI, Keys, Messages, FileConstants {
+public class SwtbotBase implements UI, Keys, Messages, FileConstants, Times {
 
 	public static SWTWorkbenchBot bot = new SWTWorkbenchBot();
 	public static BrowserAction browserAction;
