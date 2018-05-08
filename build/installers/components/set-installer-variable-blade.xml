@@ -1,4 +1,4 @@
 <setInstallerVariable>
-    <name>bladeFilePath</name>
-    <value>${installdir}${platform_path_separator}blade.jar</value>
+	<name>bladeFilePath</name>
+	<value>${installdir}${platform_path_separator}blade.jar</value>
 </setInstallerVariable>

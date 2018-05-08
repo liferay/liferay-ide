@@ -14,19 +14,6 @@
 
 package com.liferay.ide.servlet;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionMapping;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionsManagerUtil;
 import com.liferay.portal.kernel.util.CharPool;
@@ -38,6 +25,20 @@ import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 
+import java.io.File;
+import java.io.IOException;
+
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author Terry Jia
  */
@@ -45,33 +46,25 @@ public class WebServicesServlet extends HttpServlet {
 
 	protected Map<String, Set<JSONWebServiceActionMapping>> getJSONWebServiceClazz() {
 		List<JSONWebServiceActionMapping> jsonWebServiceActionMappings =
-			JSONWebServiceActionsManagerUtil.getJSONWebServiceActionMappings(
-				StringPool.BLANK);
+			JSONWebServiceActionsManagerUtil.getJSONWebServiceActionMappings(StringPool.BLANK);
 
-		Map<String, Set<JSONWebServiceActionMapping>> jsonWebServiceClazz =
-			new LinkedHashMap<String, Set<JSONWebServiceActionMapping>>();
+		Map<String, Set<JSONWebServiceActionMapping>> jsonWebServiceClazz = new LinkedHashMap<>();
 
-		for (JSONWebServiceActionMapping jsonWebServiceActionMapping :
-			jsonWebServiceActionMappings) {
-
+		for (JSONWebServiceActionMapping jsonWebServiceActionMapping : jsonWebServiceActionMappings) {
 			Class<?> actionClass = jsonWebServiceActionMapping.getActionClass();
 
 			String actionClassName = actionClass.getSimpleName();
 
 			if (actionClassName.endsWith("ServiceUtil")) {
-				actionClassName = actionClassName.substring(0,
-						actionClassName.length() - 11);
+				actionClassName = actionClassName.substring(0, actionClassName.length() - 11);
 			}
 
-			Set<JSONWebServiceActionMapping> jsonWebServiceMappings =
-				jsonWebServiceClazz.get(actionClassName);
+			Set<JSONWebServiceActionMapping> jsonWebServiceMappings = jsonWebServiceClazz.get(actionClassName);
 
 			if (Validator.isNull(jsonWebServiceMappings)) {
-				jsonWebServiceMappings =
-					new LinkedHashSet<JSONWebServiceActionMapping>();
+				jsonWebServiceMappings = new LinkedHashSet<>();
 
-				jsonWebServiceClazz.put(
-					actionClassName, jsonWebServiceMappings);
+				jsonWebServiceClazz.put(actionClassName, jsonWebServiceMappings);
 			}
 
 			jsonWebServiceMappings.add(jsonWebServiceActionMapping);
@@ -81,8 +74,7 @@ public class WebServicesServlet extends HttpServlet {
 	}
 
 	protected String getWebServicesXML() {
-		Map<String, Set<JSONWebServiceActionMapping>> jsonWebServiceClazz =
-			getJSONWebServiceClazz();
+		Map<String, Set<JSONWebServiceActionMapping>> jsonWebServiceClazz = getJSONWebServiceClazz();
 
 		Document document = SAXReaderUtil.createDocument("UTF-8");
 
@@ -91,8 +83,7 @@ public class WebServicesServlet extends HttpServlet {
 		document.add(root);
 
 		for (String jsonWebServiceClassName : jsonWebServiceClazz.keySet()) {
-			Set<JSONWebServiceActionMapping> jsonWebServiceMappings =
-				jsonWebServiceClazz.get(jsonWebServiceClassName);
+			Set<JSONWebServiceActionMapping> jsonWebServiceMappings = jsonWebServiceClazz.get(jsonWebServiceClassName);
 
 			String className = jsonWebServiceClassName;
 
@@ -104,9 +95,7 @@ public class WebServicesServlet extends HttpServlet {
 				className = className.substring(0, className.length() - 7);
 			}
 
-			for (JSONWebServiceActionMapping jsonWebServiceActionMapping :
-				jsonWebServiceMappings) {
-
+			for (JSONWebServiceActionMapping jsonWebServiceActionMapping : jsonWebServiceMappings) {
 				Element element = SAXReaderUtil.createElement("template");
 
 				String path = jsonWebServiceActionMapping.getPath();
@@ -115,56 +104,52 @@ public class WebServicesServlet extends HttpServlet {
 
 				String actionName = path.substring(pos + 1);
 
-				element.add(SAXReaderUtil.createAttribute(
-					element, "name",
-					"jsonws-" + className + "-" + actionName));
-				element.add(SAXReaderUtil.createAttribute(
-					element, "description",
-					"jsonws-" + className + "-" + actionName));
-				element.add(SAXReaderUtil.createAttribute(
-					element, "context", "javaScript"));
-				element.add(SAXReaderUtil.createAttribute(
-					element, "enabled", "true"));
-				element.add(SAXReaderUtil.createAttribute(
-					element, "autoinsert", "true"));
+				element.add(SAXReaderUtil.createAttribute(element, "name", "jsonws-" + className + "-" + actionName));
+
+				element.add(
+					SAXReaderUtil.createAttribute(element, "description", "jsonws-" + className + "-" + actionName));
+
+				element.add(SAXReaderUtil.createAttribute(element, "context", "javaScript"));
+				element.add(SAXReaderUtil.createAttribute(element, "enabled", "true"));
+				element.add(SAXReaderUtil.createAttribute(element, "autoinsert", "true"));
 
 				StringBuffer sb = new StringBuffer();
-				sb.append("Liferay.Service(\n	'");
-				sb.append(path);
-				sb.append("',\n	{\n");
 
-				MethodParameter[] methodParameters = jsonWebServiceActionMapping
-						.getMethodParameters();
+				sb.append("Liferay.Service(\n '");
+				sb.append(path);
+				sb.append("',\n {\n");
+
+				MethodParameter[] methodParameters = jsonWebServiceActionMapping .getMethodParameters();
 
 				if (methodParameters.length > 0) {
 					for (int t = 0; t < methodParameters.length; t++) {
 						String parameterName = methodParameters[t].getName();
 
-						sb.append("		");
+						sb.append("  ");
 						sb.append(parameterName);
 						sb.append(":");
-						sb.append( "${");
+						sb.append("${");
 						sb.append(parameterName);
 						sb.append("}");
 
-						if (t < methodParameters.length - 1) {
+						if (t < (methodParameters.length - 1)) {
 							sb.append(",\n");
 						}
 					}
 
-					element.add(SAXReaderUtil.createAttribute(
-						element, "id",
-						"com.liferay.ide.ui.templates." + className + "." +
-						actionName + methodParameters.length));
+					element.add(
+						SAXReaderUtil.createAttribute(
+							element, "id",
+							"com.liferay.ide.ui.templates." + className + "." + actionName + methodParameters.length));
 				}
 				else {
-					element.add(SAXReaderUtil.createAttribute(
-						element, "id",
-						"com.liferay.ide.ui.templates." + className + "." +
-						actionName));
+					element.add(
+						SAXReaderUtil.createAttribute(
+							element, "id", "com.liferay.ide.ui.templates." + className + "." + actionName));
 				}
 
-				sb.append("\n	},\n	function(obj) {\n		console.log(obj);\n	}\n);");
+				sb.append("\n },\n function(obj) {\n  console.log(obj);\n }\n);");
+
 				element.add(SAXReaderUtil.createText(sb.toString()));
 
 				root.add(element);
@@ -175,12 +160,8 @@ public class WebServicesServlet extends HttpServlet {
 	}
 
 	@Override
-	protected void service(HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-
-		String path =
-			this.getServletContext().getRealPath("/") +
-			"jsonws-js-templates.xml";
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String path = getServletContext().getRealPath("/") + "jsonws-js-templates.xml";
 
 		ServletOutputStream out = response.getOutputStream();
 

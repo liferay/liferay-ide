@@ -1,621 +1,620 @@
 <project>
-    <shortName>LiferayProjectSDK</shortName>
-    <fullName>Liferay Project SDK</fullName>
-    <version>2018.4.27</version>
-    <logoImage>../shared/images/liferay_logo_large.png</logoImage>
-    <componentList>
-        <component>
-            <name>default</name>
-            <description>Default Component</description>
-            <canBeEdited>1</canBeEdited>
-            <selected>1</selected>
-            <show>1</show>
-            <folderList>
-                <folder>
-                    <description>Program Files</description>
-                    <destination>${installdir}</destination>
-                    <name>programfiles</name>
-                    <platforms>all</platforms>
-                    <distributionFileList>
-                        <distributionFile>
-                            <origin>../shared/download/biz.aQute.jpm.run.jar</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>../shared/download/blade.jar</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>../shared/download/com.liferay.portal.tools.bundle.support.jar</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>../shared/download/biz.aQute.bnd.jar</origin>
-                        </distributionFile>
-                        <distributionFile>
-                            <origin>../shared/download/gw.jar</origin>
-                        </distributionFile>
-                    </distributionFileList>
-                </folder>
-                <folder>
-                    <description>Program Files</description>
-                    <destination>${installdir}</destination>
-                    <name>programfileslinux</name>
-                    <platforms>linux</platforms>
-                </folder>
-                <folder>
-                    <description>Program Files</description>
-                    <destination>${installdir}</destination>
-                    <name>programfileswindows</name>
-                    <platforms>windows</platforms>
-                </folder>
-                <folder>
-                    <description>Program Files</description>
-                    <destination>${installdir}</destination>
-                    <name>programfilesosx</name>
-                    <platforms>osx</platforms>
-                </folder>
-            </folderList>
-        </component>
-    </componentList>
-    <preInstallationActionList>
-        <include file="../components/autodetect-java.xml" />
-    </preInstallationActionList>
-    <postInstallationActionList>
-        <createDirectory>
-            <path>${user_home_directory}${platform_path_separator}.liferay</path>
-        </createDirectory>
-        <if>
-            <actionList>
-                <writeFile>
-                    <encoding>utf-8</encoding>
-                    <path>${installdir}${platform_path_separator}pwd</path>
-                    <text>${password.password}</text>
-                </writeFile>
-                <runProgram>
-                    <customErrorMessage>Could not create DXP download token. Make sure you type correct email address and password and are connected to the internet.</customErrorMessage>
-                    <program>${java_executable}</program>
-                    <programArguments>-jar "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email "${email}" --password-file "${installdir}${platform_path_separator}pwd"</programArguments>
-                    <onErrorActionList>
-                        <deleteFile>
-                            <path>${installdir}</path>
-                        </deleteFile>
-                    </onErrorActionList>
-                </runProgram>
-                <deleteFile>
-                    <path>${installdir}${platform_path_separator}pwd</path>
-                </deleteFile>
-            </actionList>
-            <conditionRuleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-                <fileTest>
-                    <condition>not_exists</condition>
-                    <path>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}token</path>
-                </fileTest>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${initlrws}</value1>
-                    <value2>lrws</value2>
-                </compareValues>
-            </conditionRuleList>
-        </if>
-        <include file="../components/run-java-jpm.xml" />
-        <if>
-            <explanation>is linux</explanation>
-            <actionList>
-                <setInstallerVariable name="jpmSystemPath" value="${user_home_directory}/jpm/bin"/>
-                <setInstallerVariable name="jpmSettingPath" value="${user_home_directory}/.jpm"/>
-            </actionList>
-            <conditionRuleList>
-                <compareText>
-                    <logic>contains</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>linux</value>
-                </compareText>
-            </conditionRuleList>
-            <elseActionList>
-                <if>
-                    <explanation>is mac</explanation>
-                    <actionList>
-                        <setInstallerVariable name="jpmSystemPath" value="${user_home_directory}/Library/PackageManager/bin"/>
-                        <setInstallerVariable name="jpmSettingPath" value="${user_home_directory}/.jpm"/>
-                    </actionList>
-                    <conditionRuleList>
-                        <compareText>
-                            <logic>contains</logic>
-                            <nocase>1</nocase>
-                            <text>${platform_name}</text>
-                            <value>osx</value>
-                        </compareText>
-                    </conditionRuleList>
-                    <elseActionList>
-                        <setInstallerVariable>
-                            <name>jpmSystemPath</name>
-                            <value>${user_home_directory}\.jpm\windows\bin</value>
-                        </setInstallerVariable>
-                    </elseActionList>
-                </if>
-            </elseActionList>
-        </if>
-        <addDirectoryToPath>
-            <insertAt>end</insertAt>
-            <path>${jpmSystemPath}</path>
-            <scope>user</scope>
-        </addDirectoryToPath>
-        <include file="../components/set-installer-variable-jpm.xml" />
-        <include file="../components/set-installer-variable-blade.xml" />
-        <include file="../components/set-installer-variable-gw.xml" />
-        <include file="../components/set-installer-variable-bnd.xml" />
-        <include file="../components/run-jpm-install-blade.xml" />
-        <include file="../components/run-jpm-install-gw.xml" />
-        <include file="../components/run-jpm-install-bnd.xml" />
-        <runProgram>
-            <program>chown</program>
-            <programArguments>-R ${env(SUDO_USER)} "${user_home_directory}/jpm"</programArguments>
-            <ruleList>
-                <isTrue>
-                    <value>${installer_is_root_install}</value>
-                </isTrue>
-                <compareText>
-                    <logic>does_not_contain</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>win</value>
-                </compareText>
-                <fileExists>
-                    <path>${user_home_directory}/jpm</path>
-                </fileExists>
-            </ruleList>
-        </runProgram>
-        <runProgram>
-            <program>chown</program>
-            <programArguments>-R ${env(SUDO_USER)} ${jpmSettingPath}</programArguments>
-            <ruleList>
-                <isTrue>
-                    <value>${installer_is_root_install}</value>
-                </isTrue>
-                <compareText>
-                    <logic>does_not_contain</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>win</value>
-                </compareText>
-                <fileExists>
-                    <path>${jpmSettingPath}</path>
-                </fileExists>
-            </ruleList>
-        </runProgram>
-        <if>
-            <explanation>need to install liferay workspace</explanation>
-            <actionList>
-                <if>
-                    <actionList>
-                        <setInstallerVariable name="selectbundleversion" value="7.1"/>
-                    </actionList>
-                    <conditionRuleList>
-                        <compareText>
-                            <logic>contains</logic>
-                            <text>${bundleversion}</text>
-                            <value>7_1</value>
-                        </compareText>
-                    </conditionRuleList>
-                    <elseActionList>
-                            <setInstallerVariable name="selectbundleversion" value="7.0"/>
-                    </elseActionList>
-                </if>
-                <setInstallerVariable>
-                    <name>bladeCommondPath</name>
-                    <value>${jpmSystemPath}${platform_path_separator}blade</value>
-                </setInstallerVariable>
-                <runProgram>
-                    <program>${bladeCommondPath}</program>
-                    <programArguments>--base "${lrws}" init -v "${selectbundleversion}"</programArguments>
-                </runProgram>
-                <propertiesFileSet>
-                    <file>${lrws}${platform_path_separator}gradle.properties</file>
-                    <key>liferay.workspace.bundle.url</key>
-                    <value>https://api.liferay.com/downloads/portal/7.0.10.7/liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</value>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${isdxp}</value1>
-                            <value2>dxp</value2>
-                        </compareValues>
-                    </ruleList>
-                </propertiesFileSet>
-                <propertiesFileSet>
-                    <file>${lrws}${platform_path_separator}gradle.properties</file>
-                    <key>liferay.workspace.bundle.token.download</key>
-                    <value>true</value>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${isdxp}</value1>
-                            <value2>dxp</value2>
-                        </compareValues>
-                    </ruleList>
-                </propertiesFileSet>
-                <if>
-                    <actionList>
-                        <createDirectory>
-                            <path>${user_home_directory}${platform_path_separator}.gradle</path>
-                        </createDirectory>
-                        <if>
-                            <actionList>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.https.proxyHost</key>
-                                    <value>${proxyhost}</value>
-                                </propertiesFileSet>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.https.proxyPort</key>
-                                    <value>${proxyport}</value>
-                                </propertiesFileSet>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.https.proxyUser</key>
-                                    <value>${proxyusername}</value>
-                                </propertiesFileSet>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.https.proxyPassword</key>
-                                    <value>${proxypassword}</value>
-                                </propertiesFileSet>
-                            </actionList>
-                            <conditionRuleList>
-                                <isTrue>
-                                    <value>${proxyhttps}</value>
-                                </isTrue>
-                            </conditionRuleList>
-                            <elseActionList>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.http.proxyHost</key>
-                                    <value>${proxyhost}</value>
-                                </propertiesFileSet>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.http.proxyPort</key>
-                                    <value>${proxyport}</value>
-                                </propertiesFileSet>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.http.proxyUser</key>
-                                    <value>${proxyusername}</value>
-                                </propertiesFileSet>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.http.proxyPassword</key>
-                                    <value>${proxypassword}</value>
-                                </propertiesFileSet>
-                            </elseActionList>
-                        </if>
-                    </actionList>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxy}</value1>
-                            <value2>proxysetting</value2>
-                        </compareValues>
-                    </ruleList>
-                </if>
-            </actionList>
-            <conditionRuleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${initlrws}</value1>
-                    <value2>lrws</value2>
-                </compareValues>
-            </conditionRuleList>
-        </if>
-        <deleteFile>
-            <path>${installdir}</path>
-        </deleteFile>
-        <deleteFile>
-            <path>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Liferay Project SDK</path>
-            <ruleList>
-                <compareText>
-                    <logic>contains</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>win</value>
-                </compareText>
-            </ruleList>
-        </deleteFile>
-        <runProgram>
-            <program>chown</program>
-            <programArguments>-R ${env(SUDO_USER)} ${lrws}</programArguments>
-            <ruleList>
-                <isTrue>
-                    <value>${installer_is_root_install}</value>
-                </isTrue>
-                <compareText>
-                    <logic>does_not_contain</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>win</value>
-                </compareText>
-                <fileExists>
-                    <path>${lrws}</path>
-                </fileExists>
-            </ruleList>
-        </runProgram>
-    </postInstallationActionList>
-    <allowWindowResize>1</allowWindowResize>
-    <createOsxBundleDmg>1</createOsxBundleDmg>
-    <createUninstaller>0</createUninstaller>
-    <disableSplashScreen>1</disableSplashScreen>
-    <enableRollback>1</enableRollback>
-    <enableTimestamp>1</enableTimestamp>
-    <outputDirectory>../outputs</outputDirectory>
-    <startMenuGroupName></startMenuGroupName>
-    <vendor>Liferay, Inc</vendor>
-    <parameterList>
-        <directoryParameter>
-            <name>installdir</name>
-            <description>Installer.Parameter.installdir.description</description>
-            <explanation>Installer.Parameter.installdir.explanation</explanation>
-            <value></value>
-            <default>${system_temp_directory}${platform_path_separator}${product_shortname}</default>
-            <allowEmptyValue>0</allowEmptyValue>
-            <ask>0</ask>
-            <cliOptionName>prefix</cliOptionName>
-            <mustBeWritable>1</mustBeWritable>
-            <mustExist>0</mustExist>
-            <width>30</width>
-        </directoryParameter>
-        <choiceParameterGroup>
-            <name>initlrws</name>
-            <title>Select directory to initialize a Liferay Workspace</title>
-            <description>Initilalize Liferay Workspace directory</description>
-            <explanation></explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <directoryParameter>
-                    <name>lrws</name>
-                    <title>Liferay Workspace</title>
-                    <description>Directory:</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default>${user_home_directory}${platform_path_separator}/liferay-workspace</default>
-                    <allowEmptyValue>0</allowEmptyValue>
-                    <mustBeWritable>1</mustBeWritable>
-                    <mustExist>0</mustExist>
-                    <width>30</width>
-                </directoryParameter>
-                <labelParameter>
-                    <name>skiplsws</name>
-                    <title>skipLrws</title>
-                    <description>Don't initialize Liferay Workspace directory</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-            </parameterList>
-            <validationActionList>
-                <if>
-                    <explanation>lrws path is empty</explanation>
-                    <actionList>
-                        <throwError>
-                            <text>the folder must be empty</text>
-                        </throwError>
-                    </actionList>
-                    <conditionRuleList>
-                        <fileTest>
-                            <condition>is_not_empty</condition>
-                            <path>${lrws}</path>
-                        </fileTest>
-                    </conditionRuleList>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${initlrws}</value1>
-                            <value2>lrws</value2>
-                        </compareValues>
-                    </ruleList>
-                </if>
-            </validationActionList>
-        </choiceParameterGroup>
-        <choiceParameterGroup>
-            <name>isdxp</name>
-            <title>Configure Liferay Workspace Server Bundle</title>
-            <description></description>
-            <explanation>When initializing a new Liferay Workspace, Liferay Customers can use Liferay DXP Bundle. Community members should choose Liferay Portal Community Edition.</explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <labelParameter>
-                    <name>dxp</name>
-                    <title>dxp</title>
-                    <description>Liferay DXP Bundle</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-                <labelParameter>
-                    <name>ce</name>
-                    <title>ce</title>
-                    <description>Liferay Portal Community Edition Bundle</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-            </parameterList>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${initlrws}</value1>
-                    <value2>lrws</value2>
-                </compareValues>
-            </ruleList>
-        </choiceParameterGroup>
-        <choiceParameterGroup>
-            <name>bundleversion</name>
-            <title>Select Bundle Version</title>
-            <description></description>
-            <explanation>Specify initialized liferay bundle version.</explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <labelParameter>
-                    <name>7_0</name>
-                    <title>7.0</title>
-                    <description>Liferay Bundle 7.0</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-                <labelParameter>
-                    <name>7_1</name>
-                    <title>7.1</title>
-                    <description>Liferay Bundle 7.1</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-            </parameterList>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>ce</value2>
-                </compareValues>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${initlrws}</value1>
-                    <value2>lrws</value2>
-                </compareValues>
-            </ruleList>
-        </choiceParameterGroup>
-        <parameterGroup>
-            <name>dxpinfo</name>
-            <title>Liferay DXP Customer Credentials</title>
-            <explanation>Email address and password are used for generating a download token. Your password will not be saved locally.</explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <stringParameter>
-                    <name>email</name>
-                    <title>Email</title>
-                    <description>liferay.com Email Address:</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-                <passwordParameter>
-                    <name>password</name>
-                    <title>Password</title>
-                    <description>liferay.com Password:</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <askForConfirmation>0</askForConfirmation>
-                    <descriptionRetype></descriptionRetype>
-                    <width>20</width>
-                </passwordParameter>
-            </parameterList>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-                <fileTest>
-                    <condition>not_exists</condition>
-                    <path>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}token</path>
-                </fileTest>
-            </ruleList>
-        </parameterGroup>
-        <choiceParameterGroup>
-            <name>proxy</name>
-            <description>Proxy Config</description>
-            <explanation>The proxy is for gradle, and the config will be saved at .gradle/gradle.properties file in user's home directory.</explanation>
-            <value></value>
-            <default>skipproxysetting</default>
-            <parameterList>
-                <labelParameter>
-                    <name>skipproxysetting</name>
-                    <description>Skip proxy setting</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-                <labelParameter>
-                    <name>proxysetting</name>
-                    <description>Config proxy setting</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-            </parameterList>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${initlrws}</value1>
-                    <value2>lrws</value2>
-                </compareValues>
-            </ruleList>
-        </choiceParameterGroup>
-        <parameterGroup>
-            <name>proxyinfo</name>
-            <title>Proxy Information</title>
-            <explanation></explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <stringParameter>
-                    <name>proxyhost</name>
-                    <description>proxy host</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-                <stringParameter>
-                    <name>proxyport</name>
-                    <description>proxy port</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-                <stringParameter>
-                    <name>proxyusername</name>
-                    <description>proxy username</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-                <stringParameter>
-                    <name>proxypassword</name>
-                    <description>proxy password</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-                <booleanParameter>
-                    <name>proxyhttps</name>
-                    <description>proxy requires https</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <displayStyle>checkbox-right</displayStyle>
-                </booleanParameter>
-            </parameterList>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxy}</value1>
-                    <value2>proxysetting</value2>
-                </compareValues>
-            </ruleList>
-        </parameterGroup>
-    </parameterList>
+	<shortName>LiferayProjectSDK</shortName>
+	<fullName>Liferay Project SDK</fullName>
+	<version>2018.4.27</version>
+	<logoImage>../shared/images/liferay_logo_large.png</logoImage>
+	<componentList>
+		<component>
+			<name>default</name>
+			<description>Default Component</description>
+			<canBeEdited>1</canBeEdited>
+			<selected>1</selected>
+			<show>1</show>
+			<folderList>
+				<folder>
+					<description>Program Files</description>
+					<destination>${installdir}</destination>
+					<name>programfiles</name>
+					<platforms>all</platforms>
+					<distributionFileList>
+						<distributionFile>
+							<origin>../shared/download/biz.aQute.jpm.run.jar</origin>
+						</distributionFile>
+						<distributionFile>
+							<origin>../shared/download/blade.jar</origin>
+						</distributionFile>
+						<distributionFile>
+							<origin>../shared/download/com.liferay.portal.tools.bundle.support.jar</origin>
+						</distributionFile>
+						<distributionFile>
+							<origin>../shared/download/biz.aQute.bnd.jar</origin>
+						</distributionFile>
+						<distributionFile>
+							<origin>../shared/download/gw.jar</origin>
+						</distributionFile>
+					</distributionFileList>
+				</folder>
+				<folder>
+					<description>Program Files</description>
+					<destination>${installdir}</destination>
+					<name>programfileslinux</name>
+					<platforms>linux</platforms>
+				</folder>
+				<folder>
+					<description>Program Files</description>
+					<destination>${installdir}</destination>
+					<name>programfileswindows</name>
+					<platforms>windows</platforms>
+				</folder>
+				<folder>
+					<description>Program Files</description>
+					<destination>${installdir}</destination>
+					<name>programfilesosx</name>
+					<platforms>osx</platforms>
+				</folder>
+			</folderList>
+		</component>
+	</componentList>
+	<preInstallationActionList>
+		<include file="../components/autodetect-java.xml" />
+	</preInstallationActionList>
+	<postInstallationActionList>
+		<createDirectory>
+			<path>${user_home_directory}${platform_path_separator}.liferay</path>
+		</createDirectory>
+		<if>
+			<actionList>
+				<writeFile>
+					<encoding>utf-8</encoding>
+					<path>${installdir}${platform_path_separator}pwd</path>
+					<text>${password.password}</text>
+				</writeFile>
+				<runProgram>
+					<customErrorMessage>Could not create DXP download token. Make sure you type correct email address and password and are connected to the internet.</customErrorMessage>
+					<program>${java_executable}</program>
+					<programArguments>-jar "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email "${email}" --password-file "${installdir}${platform_path_separator}pwd"</programArguments>
+					<onErrorActionList>
+						<deleteFile>
+							<path>${installdir}</path>
+						</deleteFile>
+					</onErrorActionList>
+				</runProgram>
+				<deleteFile>
+					<path>${installdir}${platform_path_separator}pwd</path>
+				</deleteFile>
+			</actionList>
+			<conditionRuleList>
+				<compareValues>
+					<logic>equals</logic>
+					<value1>${isdxp}</value1>
+					<value2>dxp</value2>
+				</compareValues>
+				<fileTest>
+					<condition>not_exists</condition>
+					<path>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}token</path>
+				</fileTest>
+				<compareValues>
+					<logic>equals</logic>
+					<value1>${initlrws}</value1>
+					<value2>lrws</value2>
+				</compareValues>
+			</conditionRuleList>
+		</if>
+		<include file="../components/run-java-jpm.xml" />
+		<if>
+			<explanation>is linux</explanation>
+			<actionList>
+				<setInstallerVariable name="jpmSystemPath" value="${user_home_directory}/jpm/bin" />
+				<setInstallerVariable name="jpmSettingPath" value="${user_home_directory}/.jpm" />
+			</actionList>
+			<conditionRuleList>
+				<compareText>
+					<logic>contains</logic>
+					<nocase>1</nocase>
+					<text>${platform_name}</text>
+					<value>linux</value>
+				</compareText>
+			</conditionRuleList>
+			<elseActionList>
+				<if>
+					<explanation>is mac</explanation>
+					<actionList>
+						<setInstallerVariable name="jpmSystemPath" value="${user_home_directory}/Library/PackageManager/bin" />
+						<setInstallerVariable name="jpmSettingPath" value="${user_home_directory}/.jpm" />
+					</actionList>
+					<conditionRuleList>
+						<compareText>
+							<logic>contains</logic>
+							<nocase>1</nocase>
+							<text>${platform_name}</text>
+							<value>osx</value>
+						</compareText>
+					</conditionRuleList>
+					<elseActionList>
+						<setInstallerVariable>
+							<name>jpmSystemPath</name>
+							<value>${user_home_directory}\.jpm\windows\bin</value>
+						</setInstallerVariable>
+					</elseActionList>
+				</if>
+			</elseActionList>
+		</if>
+		<addDirectoryToPath>
+			<insertAt>end</insertAt>
+			<path>${jpmSystemPath}</path>
+			<scope>user</scope>
+		</addDirectoryToPath>
+		<include file="../components/set-installer-variable-jpm.xml" />
+		<include file="../components/set-installer-variable-blade.xml" />
+		<include file="../components/set-installer-variable-gw.xml" />
+		<include file="../components/set-installer-variable-bnd.xml" />
+		<include file="../components/run-jpm-install-blade.xml" />
+		<include file="../components/run-jpm-install-gw.xml" />
+		<include file="../components/run-jpm-install-bnd.xml" />
+		<runProgram>
+			<program>chown</program>
+			<programArguments>-R ${env(SUDO_USER)} "${user_home_directory}/jpm"</programArguments>
+			<ruleList>
+				<isTrue>
+					<value>${installer_is_root_install}</value>
+				</isTrue>
+				<compareText>
+					<logic>does_not_contain</logic>
+					<nocase>1</nocase>
+					<text>${platform_name}</text>
+					<value>win</value>
+				</compareText>
+				<fileExists>
+					<path>${user_home_directory}/jpm</path>
+				</fileExists>
+			</ruleList>
+		</runProgram>
+		<runProgram>
+			<program>chown</program>
+			<programArguments>-R ${env(SUDO_USER)} ${jpmSettingPath}</programArguments>
+			<ruleList>
+				<isTrue>
+					<value>${installer_is_root_install}</value>
+				</isTrue>
+				<compareText>
+					<logic>does_not_contain</logic>
+					<nocase>1</nocase>
+					<text>${platform_name}</text>
+					<value>win</value>
+				</compareText>
+				<fileExists>
+					<path>${jpmSettingPath}</path>
+				</fileExists>
+			</ruleList>
+		</runProgram>
+		<if>
+			<explanation>need to install liferay workspace</explanation>
+			<actionList>
+				<if>
+					<actionList>
+						<setInstallerVariable name="selectbundleversion" value="7.1" />
+					</actionList>
+					<conditionRuleList>
+						<compareText>
+							<logic>contains</logic>
+							<text>${bundleversion}</text>
+							<value>7_1</value>
+						</compareText>
+					</conditionRuleList>
+					<elseActionList>
+						<setInstallerVariable name="selectbundleversion" value="7.0" />
+					</elseActionList>
+				</if>
+				<setInstallerVariable>
+					<name>bladeCommondPath</name>
+					<value>${jpmSystemPath}${platform_path_separator}blade</value>
+				</setInstallerVariable>
+				<runProgram>
+					<program>${bladeCommondPath}</program>
+					<programArguments>--base "${lrws}" init -v "${selectbundleversion}"</programArguments>
+				</runProgram>
+				<propertiesFileSet>
+					<file>${lrws}${platform_path_separator}gradle.properties</file>
+					<key>liferay.workspace.bundle.url</key>
+					<value>https://api.liferay.com/downloads/portal/7.0.10.7/liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</value>
+					<ruleList>
+						<compareValues>
+							<logic>equals</logic>
+							<value1>${isdxp}</value1>
+							<value2>dxp</value2>
+						</compareValues>
+					</ruleList>
+				</propertiesFileSet>
+				<propertiesFileSet>
+					<file>${lrws}${platform_path_separator}gradle.properties</file>
+					<key>liferay.workspace.bundle.token.download</key>
+					<value>true</value>
+					<ruleList>
+						<compareValues>
+							<logic>equals</logic>
+							<value1>${isdxp}</value1>
+							<value2>dxp</value2>
+						</compareValues>
+					</ruleList>
+				</propertiesFileSet>
+				<if>
+					<actionList>
+						<createDirectory>
+							<path>${user_home_directory}${platform_path_separator}.gradle</path>
+						</createDirectory>
+						<if>
+							<actionList>
+								<propertiesFileSet>
+									<file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+									<key>systemProp.https.proxyHost</key>
+									<value>${proxyhost}</value>
+								</propertiesFileSet>
+								<propertiesFileSet>
+									<file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+									<key>systemProp.https.proxyPort</key>
+									<value>${proxyport}</value>
+								</propertiesFileSet>
+								<propertiesFileSet>
+									<file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+									<key>systemProp.https.proxyUser</key>
+									<value>${proxyusername}</value>
+								</propertiesFileSet>
+								<propertiesFileSet>
+									<file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+									<key>systemProp.https.proxyPassword</key>
+									<value>${proxypassword}</value>
+								</propertiesFileSet>
+							</actionList>
+							<conditionRuleList>
+								<isTrue>
+									<value>${proxyhttps}</value>
+								</isTrue>
+							</conditionRuleList>
+							<elseActionList>
+								<propertiesFileSet>
+									<file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+									<key>systemProp.http.proxyHost</key>
+									<value>${proxyhost}</value>
+								</propertiesFileSet>
+								<propertiesFileSet>
+									<file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+									<key>systemProp.http.proxyPort</key>
+									<value>${proxyport}</value>
+								</propertiesFileSet>
+								<propertiesFileSet>
+									<file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+									<key>systemProp.http.proxyUser</key>
+									<value>${proxyusername}</value>
+								</propertiesFileSet>
+								<propertiesFileSet>
+									<file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+									<key>systemProp.http.proxyPassword</key>
+									<value>${proxypassword}</value>
+								</propertiesFileSet>
+							</elseActionList>
+						</if>
+					</actionList>
+					<ruleList>
+						<compareValues>
+							<logic>equals</logic>
+							<value1>${proxy}</value1>
+							<value2>proxysetting</value2>
+						</compareValues>
+					</ruleList>
+				</if>
+			</actionList>
+			<conditionRuleList>
+				<compareValues>
+					<logic>equals</logic>
+					<value1>${initlrws}</value1>
+					<value2>lrws</value2>
+				</compareValues>
+			</conditionRuleList>
+		</if>
+		<deleteFile>
+			<path>${installdir}</path>
+		</deleteFile>
+		<deleteFile>
+			<path>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Liferay Project SDK</path>
+			<ruleList>
+				<compareText>
+					<logic>contains</logic>
+					<nocase>1</nocase>
+					<text>${platform_name}</text>
+					<value>win</value>
+				</compareText>
+			</ruleList>
+		</deleteFile>
+		<runProgram>
+			<program>chown</program>
+			<programArguments>-R ${env(SUDO_USER)} ${lrws}</programArguments>
+			<ruleList>
+				<isTrue>
+					<value>${installer_is_root_install}</value>
+				</isTrue>
+				<compareText>
+					<logic>does_not_contain</logic>
+					<nocase>1</nocase>
+					<text>${platform_name}</text>
+					<value>win</value>
+				</compareText>
+				<fileExists>
+					<path>${lrws}</path>
+				</fileExists>
+			</ruleList>
+		</runProgram>
+	</postInstallationActionList>
+	<allowWindowResize>1</allowWindowResize>
+	<createOsxBundleDmg>1</createOsxBundleDmg>
+	<createUninstaller>0</createUninstaller>
+	<disableSplashScreen>1</disableSplashScreen>
+	<enableRollback>1</enableRollback>
+	<enableTimestamp>1</enableTimestamp>
+	<outputDirectory>../outputs</outputDirectory>
+	<startMenuGroupName></startMenuGroupName>
+	<vendor>Liferay, Inc</vendor>
+	<parameterList>
+		<directoryParameter>
+			<name>installdir</name>
+			<description>Installer.Parameter.installdir.description</description>
+			<explanation>Installer.Parameter.installdir.explanation</explanation>
+			<value></value>
+			<default>${system_temp_directory}${platform_path_separator}${product_shortname}</default>
+			<allowEmptyValue>0</allowEmptyValue>
+			<ask>0</ask>
+			<cliOptionName>prefix</cliOptionName>
+			<mustBeWritable>1</mustBeWritable>
+			<mustExist>0</mustExist>
+			<width>30</width>
+		</directoryParameter>
+		<choiceParameterGroup>
+			<name>initlrws</name>
+			<title>Select directory to initialize a Liferay Workspace</title>
+			<description>Initilalize Liferay Workspace directory</description>
+			<explanation></explanation>
+			<value></value>
+			<default></default>
+			<parameterList>
+				<directoryParameter>
+					<name>lrws</name>
+					<title>Liferay Workspace</title>
+					<description>Directory:</description>
+					<explanation></explanation>
+					<value></value>
+					<default>${user_home_directory}${platform_path_separator}/liferay-workspace</default>
+					<allowEmptyValue>0</allowEmptyValue>
+					<mustBeWritable>1</mustBeWritable>
+					<mustExist>0</mustExist>
+					<width>30</width>
+				</directoryParameter>
+				<labelParameter>
+					<name>skiplsws</name>
+					<title>skipLrws</title>
+					<description>Don't initialize Liferay Workspace directory</description>
+					<explanation></explanation>
+					<image></image>
+				</labelParameter>
+			</parameterList>
+			<validationActionList>
+				<if>
+					<explanation>lrws path is empty</explanation>
+					<actionList>
+						<throwError>
+							<text>the folder must be empty</text>
+						</throwError>
+					</actionList>
+					<conditionRuleList>
+						<fileTest>
+							<condition>is_not_empty</condition>
+							<path>${lrws}</path>
+						</fileTest>
+					</conditionRuleList>
+					<ruleList>
+						<compareValues>
+							<logic>equals</logic>
+							<value1>${initlrws}</value1>
+							<value2>lrws</value2>
+						</compareValues>
+					</ruleList>
+				</if>
+			</validationActionList>
+		</choiceParameterGroup>
+		<choiceParameterGroup>
+			<name>isdxp</name>
+			<title>Configure Liferay Workspace Server Bundle</title>
+			<description></description>
+			<explanation>When initializing a new Liferay Workspace, Liferay Customers can use Liferay DXP Bundle. Community members should choose Liferay Portal Community Edition.</explanation>
+			<value></value>
+			<default></default>
+			<parameterList>
+				<labelParameter>
+					<name>dxp</name>
+					<title>dxp</title>
+					<description>Liferay DXP Bundle</description>
+					<explanation></explanation>
+					<image></image>
+				</labelParameter>
+				<labelParameter>
+					<name>ce</name>
+					<title>ce</title>
+					<description>Liferay Portal Community Edition Bundle</description>
+					<explanation></explanation>
+					<image></image>
+				</labelParameter>
+			</parameterList>
+			<ruleList>
+				<compareValues>
+					<logic>equals</logic>
+					<value1>${initlrws}</value1>
+					<value2>lrws</value2>
+				</compareValues>
+			</ruleList>
+		</choiceParameterGroup>
+		<choiceParameterGroup>
+			<name>bundleversion</name>
+			<title>Select Bundle Version</title>
+			<description></description>
+			<explanation>Specify initialized liferay bundle version.</explanation>
+			<value></value>
+			<default></default>
+			<parameterList>
+				<labelParameter>
+					<name>7_0</name>
+					<title>7.0</title>
+					<description>Liferay Bundle 7.0</description>
+					<explanation></explanation>
+					<image></image>
+				</labelParameter>
+				<labelParameter>
+					<name>7_1</name>
+					<title>7.1</title>
+					<description>Liferay Bundle 7.1</description>
+					<explanation></explanation>
+					<image></image>
+				</labelParameter>
+			</parameterList>
+			<ruleList>
+				<compareValues>
+					<logic>equals</logic>
+					<value1>${isdxp}</value1>
+					<value2>ce</value2>
+				</compareValues>
+				<compareValues>
+					<logic>equals</logic>
+					<value1>${initlrws}</value1>
+					<value2>lrws</value2>
+				</compareValues>
+			</ruleList>
+		</choiceParameterGroup>
+		<parameterGroup>
+			<name>dxpinfo</name>
+			<title>Liferay DXP Customer Credentials</title>
+			<explanation>Email address and password are used for generating a download token. Your password will not be saved locally.</explanation>
+			<value></value>
+			<default></default>
+			<parameterList>
+				<stringParameter>
+					<name>email</name>
+					<title>Email</title>
+					<description>liferay.com Email Address:</description>
+					<explanation></explanation>
+					<value></value>
+					<default></default>
+					<allowEmptyValue>1</allowEmptyValue>
+					<width>30</width>
+				</stringParameter>
+				<passwordParameter>
+					<name>password</name>
+					<title>Password</title>
+					<description>liferay.com Password:</description>
+					<explanation></explanation>
+					<value></value>
+					<default></default>
+					<allowEmptyValue>1</allowEmptyValue>
+					<askForConfirmation>0</askForConfirmation>
+					<descriptionRetype></descriptionRetype>
+					<width>20</width>
+				</passwordParameter>
+			</parameterList>
+			<ruleList>
+				<compareValues>
+					<logic>equals</logic>
+					<value1>${isdxp}</value1>
+					<value2>dxp</value2>
+				</compareValues>
+				<fileTest>
+					<condition>not_exists</condition>
+					<path>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}token</path>
+				</fileTest>
+			</ruleList>
+		</parameterGroup>
+		<choiceParameterGroup>
+			<name>proxy</name>
+			<description>Proxy Config</description>
+			<explanation>The proxy is for gradle, and the config will be saved at .gradle/gradle.properties file in user's home directory.</explanation>
+			<value></value>
+			<default>skipproxysetting</default>
+			<parameterList>
+				<labelParameter>
+					<name>skipproxysetting</name>
+					<description>Skip proxy setting</description>
+					<explanation></explanation>
+					<image></image>
+				</labelParameter>
+				<labelParameter>
+					<name>proxysetting</name>
+					<description>Config proxy setting</description>
+					<explanation></explanation>
+					<image></image>
+				</labelParameter>
+			</parameterList>
+			<ruleList>
+				<compareValues>
+					<logic>equals</logic>
+					<value1>${initlrws}</value1>
+					<value2>lrws</value2>
+				</compareValues>
+			</ruleList>
+		</choiceParameterGroup>
+		<parameterGroup>
+			<name>proxyinfo</name>
+			<title>Proxy Information</title>
+			<explanation></explanation>
+			<value></value>
+			<default></default>
+			<parameterList>
+				<stringParameter>
+					<name>proxyhost</name>
+					<description>proxy host</description>
+					<explanation></explanation>
+					<value></value>
+					<default></default>
+					<allowEmptyValue>1</allowEmptyValue>
+					<width>30</width>
+				</stringParameter>
+				<stringParameter>
+					<name>proxyport</name>
+					<description>proxy port</description>
+					<explanation></explanation>
+					<value></value>
+					<default></default>
+					<allowEmptyValue>1</allowEmptyValue>
+					<width>30</width>
+				</stringParameter>
+				<stringParameter>
+					<name>proxyusername</name>
+					<description>proxy username</description>
+					<explanation></explanation>
+					<value></value>
+					<default></default>
+					<allowEmptyValue>1</allowEmptyValue>
+					<width>30</width>
+				</stringParameter>
+				<stringParameter>
+					<name>proxypassword</name>
+					<description>proxy password</description>
+					<explanation></explanation>
+					<value></value>
+					<default></default>
+					<allowEmptyValue>1</allowEmptyValue>
+					<width>30</width>
+				</stringParameter>
+				<booleanParameter>
+					<name>proxyhttps</name>
+					<description>proxy requires https</description>
+					<explanation></explanation>
+					<value></value>
+					<default></default>
+					<displayStyle>checkbox-right</displayStyle>
+				</booleanParameter>
+			</parameterList>
+			<ruleList>
+				<compareValues>
+					<logic>equals</logic>
+					<value1>${proxy}</value1>
+					<value2>proxysetting</value2>
+				</compareValues>
+			</ruleList>
+		</parameterGroup>
+	</parameterList>
 </project>
-

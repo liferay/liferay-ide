@@ -1,4 +1,4 @@
 <runProgram>
-    <program>${jpmFilePath}</program>
-    <programArguments>install -fl "${bladeFilePath}"</programArguments>
+	<program>${jpmFilePath}</program>
+	<programArguments>install -fl "${bladeFilePath}"</programArguments>
 </runProgram>

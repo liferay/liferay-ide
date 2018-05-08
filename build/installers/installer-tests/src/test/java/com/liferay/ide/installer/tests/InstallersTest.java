@@ -23,15 +23,6 @@ import org.junit.jupiter.api.Test;
 public class InstallersTest {
 
 	@Test
-	public void checkProjectSDKInstallerFiles() {
-		Assertions.assertTrue(InstallerUtil.getProjectSdkWinFile().exists());
-
-		Assertions.assertTrue(InstallerUtil.getProjectSdkLinuxFile().exists());
-
-		Assertions.assertTrue(InstallerUtil.getProjectSdkMacosFile().exists());
-	}
-
-	@Test
 	public void checkDevStudioCEInstallerFiles() {
 		Assertions.assertTrue(InstallerUtil.getDevStudioCEWinFile().exists());
 
@@ -47,6 +38,15 @@ public class InstallersTest {
 		Assertions.assertTrue(InstallerUtil.getDevStudioDXPLinuxFile().exists());
 
 		Assertions.assertTrue(InstallerUtil.getDevStudioDXPMacosFile().exists());
+	}
+
+	@Test
+	public void checkProjectSDKInstallerFiles() {
+		Assertions.assertTrue(InstallerUtil.getProjectSdkWinFile().exists());
+
+		Assertions.assertTrue(InstallerUtil.getProjectSdkLinuxFile().exists());
+
+		Assertions.assertTrue(InstallerUtil.getProjectSdkMacosFile().exists());
 	}
 
 }

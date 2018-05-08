@@ -19,6 +19,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.LaunchHelper;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.server.remote.AbstractRemoteServerPublisher;
@@ -199,7 +200,7 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 	private boolean _isServiceBuilderProject(IProject project, String pluginType, MavenProject parentProject) {
 		List<IFile> serviceXmls = (new SearchFilesVisitor()).searchFiles(project, "service.xml");
 
-		if ((serviceXmls != null) && (serviceXmls.size() > 0) &&
+		if (ListUtil.isNotEmpty(serviceXmls) &&
 			pluginType.equalsIgnoreCase(ILiferayMavenConstants.DEFAULT_PLUGIN_TYPE) && (parentProject != null)) {
 
 			return true;

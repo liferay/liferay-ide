@@ -24,15 +24,15 @@ import org.junit.jupiter.api.condition.OS;
  */
 public class DevStudioCETest {
 
-	@EnabledOnOs(OS.WINDOWS)
-	@Test
-	public void quickInstallOnWindows() {
-		Assertions.assertTrue(true);
-	}
-
 	@EnabledOnOs(OS.LINUX)
 	@Test
 	public void quickInstallOnLinux() {
+		Assertions.assertTrue(true);
+	}
+
+	@EnabledOnOs(OS.WINDOWS)
+	@Test
+	public void quickInstallOnWindows() {
 		Assertions.assertTrue(true);
 	}
 

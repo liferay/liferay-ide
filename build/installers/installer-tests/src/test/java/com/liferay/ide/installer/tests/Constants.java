@@ -19,20 +19,20 @@ package com.liferay.ide.installer.tests;
  */
 public class Constants {
 
-	public static String LINUX_X64 = "linux-x64";
+	public static final String DASH = "-";
 
-	public static String INSTALLER = "installer";
+	public static final String INSTALLER = "installer";
 
-	public static String WINDOWS = "windows";
+	public static final String LINUX_SUFFIX = ".run";
 
-	public static String OSX = "osx";
+	public static final String LINUX_X64 = "linux-x64";
 
-	public static String LINUX_SUFFIX = ".run";
+	public static final String OSX = "osx";
 
-	public static String WINDOWS_SUFFIX = ".exe";
+	public static final String OSX_SUFFIX = ".dmg";
 
-	public static String OSX_SUFFIX = ".dmg";
+	public static final String WINDOWS = "windows";
 
-	public static String DASH = "-";
+	public static final String WINDOWS_SUFFIX = ".exe";
 
 }

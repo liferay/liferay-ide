@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-    <feature id="com.liferay.ide.eclipse.tools" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
-    <feature id="com.liferay.ide.alloy" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
-    <feature id="com.liferay.ide.maven" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
-    <feature id="com.liferay.ide.enterprise" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
-    <feature id="org.eclipse.buildship" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
-    <feature id="org.eclipse.m2e.feature" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
-    <feature id="org.eclipse.m2e.wtp.feature" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
-    <feature id="org.eclipse.m2e.wtp.jsf.feature" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
-    <feature id="org.eclipse.m2e.logback.feature" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
-    <feature id="org.eclipse.m2e.wtp.jpa.feature" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
+	<feature id="com.liferay.ide.eclipse.tools" version="0.0.0">
+		<category name="liferay-ide" />
+	</feature>
+	<feature id="com.liferay.ide.alloy" version="0.0.0">
+		<category name="liferay-ide" />
+	</feature>
+	<feature id="com.liferay.ide.maven" version="0.0.0">
+		<category name="liferay-ide" />
+	</feature>
+	<feature id="com.liferay.ide.enterprise" version="0.0.0">
+		<category name="liferay-ide" />
+	</feature>
+	<feature id="org.eclipse.buildship" version="0.0.0">
+		<category name="liferay-ide" />
+	</feature>
+	<feature id="org.eclipse.m2e.feature" version="0.0.0">
+		<category name="liferay-ide" />
+	</feature>
+	<feature id="org.eclipse.m2e.wtp.feature" version="0.0.0">
+		<category name="liferay-ide" />
+	</feature>
+	<feature id="org.eclipse.m2e.wtp.jsf.feature" version="0.0.0">
+		<category name="liferay-ide" />
+	</feature>
+	<feature id="org.eclipse.m2e.logback.feature" version="0.0.0">
+		<category name="liferay-ide" />
+	</feature>
+	<feature id="org.eclipse.m2e.wtp.jpa.feature" version="0.0.0">
+		<category name="liferay-ide" />
+	</feature>
 
-    <category-def name="liferay-ide" label="Liferay IDE">
-        <description>
+	<category-def name="liferay-ide" label="Liferay IDE">
+		<description>
             Liferay IDE is the official set of Eclipse plug-ins supporting development for the Liferay Portal application platform.
-        </description>
-    </category-def>
+		</description>
+	</category-def>
 </site>
