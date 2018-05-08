@@ -24,8 +24,11 @@ import java.io.File;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.m2e.tests.common.JobHelpers;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.wst.server.core.IServer;
@@ -39,11 +42,13 @@ import org.junit.Test;
  * @author Andy Wu
  * @author Joye Luo
  */
+@SuppressWarnings("restriction")
 public class NewMavenLiferayWorkspaceOpTests {
 
 	@Before
 	public void clearWorkspace() throws Exception {
 		for (IProject project : CoreUtil.getAllProjects()) {
+			project.close(new NullProgressMonitor());
 			project.delete(true, new NullProgressMonitor());
 		}
 	}
@@ -86,7 +91,9 @@ public class NewMavenLiferayWorkspaceOpTests {
 
 		String projectName = "test-liferay-workspace-init";
 
-		IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+		IWorkspaceRoot wsRoot = CoreUtil.getWorkspaceRoot();
+
+		IPath workspaceLocation = wsRoot.getLocation();
 
 		op.setWorkspaceName(projectName);
 		op.setUseDefaultLocation(false);
@@ -94,7 +101,9 @@ public class NewMavenLiferayWorkspaceOpTests {
 		op.setProjectProvider("maven-liferay-workspace");
 		op.setProvisionLiferayBundle(true);
 
-		String bundleUrl = op.getBundleUrl().content(true);
+		Value<String> url = op.getBundleUrl();
+
+		String bundleUrl = url.content(true);
 
 		Assert.assertEquals(
 			"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5" +
@@ -103,7 +112,22 @@ public class NewMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
-		String projectLocation = workspaceLocation.append(projectName).toPortableString();
+		JobHelpers.waitForJobs(
+			job -> {
+				String jobName = job.getName();
+
+				if (jobName.equals("Init Liferay Bundle")) {
+					return true;
+				}
+
+				return false;
+			},
+
+			30 * 60 * 1000);
+
+		IPath wslocation = workspaceLocation.append(projectName);
+
+		String projectLocation = wslocation.toPortableString();
 
 		File pomFile = new File(projectLocation, "pom.xml");
 
@@ -124,7 +148,9 @@ public class NewMavenLiferayWorkspaceOpTests {
 
 		String projectName = "test-liferay-workspace";
 
-		IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+		IWorkspaceRoot wsRoot = CoreUtil.getWorkspaceRoot();
+
+		IPath workspaceLocation = wsRoot.getLocation();
 
 		op.setWorkspaceName(projectName);
 		op.setUseDefaultLocation(false);
@@ -133,7 +159,9 @@ public class NewMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
-		String projectLocation = workspaceLocation.append(projectName).toPortableString();
+		IPath wslocation = workspaceLocation.append(projectName);
+
+		String projectLocation = wslocation.toPortableString();
 
 		File pomFile = new File(projectLocation, "pom.xml");
 
@@ -150,7 +178,9 @@ public class NewMavenLiferayWorkspaceOpTests {
 
 		String projectName = "test-liferay-workspace-71";
 
-		IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+		IWorkspaceRoot wsRoot = CoreUtil.getWorkspaceRoot();
+
+		IPath workspaceLocation = wsRoot.getLocation();
 
 		op.setWorkspaceName(projectName);
 		op.setLiferayVersion("7.1");
@@ -162,7 +192,9 @@ public class NewMavenLiferayWorkspaceOpTests {
 		Assert.assertNotNull(status);
 		Assert.assertEquals("OK", status.message());
 
-		String wsLocation = workspaceLocation.append(projectName).toPortableString();
+		IPath wsPath = workspaceLocation.append(projectName);
+
+		String wsLocation = wsPath.toPortableString();
 
 		File wsFile = new File(wsLocation);
 
@@ -185,7 +217,9 @@ public class NewMavenLiferayWorkspaceOpTests {
 			"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5" +
 				"/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
 
-		IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+		IWorkspaceRoot wsRoot = CoreUtil.getWorkspaceRoot();
+
+		IPath workspaceLocation = wsRoot.getLocation();
 
 		op.setWorkspaceName(projectName);
 		op.setUseDefaultLocation(false);
@@ -196,7 +230,22 @@ public class NewMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
-		String projectLocation = workspaceLocation.append(projectName).toPortableString();
+		JobHelpers.waitForJobs(
+			job -> {
+				String jobName = job.getName();
+
+				if (jobName.equals("Init Liferay Bundle")) {
+					return true;
+				}
+
+				return false;
+			},
+
+			30 * 60 * 1000);
+
+		IPath wslocation = workspaceLocation.append(projectName);
+
+		String projectLocation = wslocation.toPortableString();
 
 		File pomFile = new File(projectLocation, "pom.xml");
 

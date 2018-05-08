@@ -18,12 +18,12 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.workspace.BaseLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
@@ -42,8 +42,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.wst.server.core.IServer;
 
@@ -60,18 +61,27 @@ public class LiferayGradleWorkspaceProjectProvider
 
 	@Override
 	public IStatus createNewProject(NewLiferayWorkspaceOp op, IProgressMonitor monitor) throws CoreException {
-		IPath location = PathBridge.create(op.getLocation().content());
-		String wsName = op.getWorkspaceName().toString();
+		Value<Path> locationPath = op.getLocation();
+
+		IPath location = PathBridge.create(locationPath.content());
+
+		Value<String> workspaceName = op.getWorkspaceName();
+
+		String wsName = workspaceName.toString();
 
 		IPath wsLocation = location.append(wsName);
 
-		String liferayVersion = op.getLiferayVersion().content();
+		Value<String> version = op.getLiferayVersion();
+
+		String liferayVersion = version.content();
 
 		StringBuilder sb = new StringBuilder();
 
+		File workspace = wsLocation.toFile();
+
 		sb.append("--base ");
 		sb.append("\"");
-		sb.append(wsLocation.toFile().getAbsolutePath());
+		sb.append(workspace.getAbsolutePath());
 		sb.append("\" ");
 		sb.append("init ");
 		sb.append("-v ");
@@ -84,11 +94,29 @@ public class LiferayGradleWorkspaceProjectProvider
 			return ProjectCore.createErrorStatus(bclie);
 		}
 
-		String workspaceLocation = location.append(wsName).toPortableString();
-		boolean initBundle = op.getProvisionLiferayBundle().content();
-		String bundleUrl = op.getBundleUrl().content(false);
+		IPath wsPath = location.append(wsName);
 
-		return importProject(workspaceLocation, monitor, initBundle, bundleUrl);
+		String workspaceLocation = wsPath.toPortableString();
+
+		Value<Boolean> provisionLiferayBundle = op.getProvisionLiferayBundle();
+
+		boolean initBundle = provisionLiferayBundle.content();
+
+		Value<String> url = op.getBundleUrl();
+
+		String bundleUrl = url.content(false);
+
+		Value<String> server = op.getServerName();
+
+		String serverName = server.content();
+
+		IStatus status = importProject(workspaceLocation, monitor);
+
+		if (initBundle) {
+			initBundle(monitor, bundleUrl, serverName, wsName);
+		}
+
+		return status;
 	}
 
 	@Override
@@ -99,40 +127,12 @@ public class LiferayGradleWorkspaceProjectProvider
 	}
 
 	@Override
-	public IStatus importProject(String location, IProgressMonitor monitor, boolean initBundle, String bundleUrl) {
+	public IStatus importProject(String location, IProgressMonitor monitor) {
 		try {
 			final IStatus importJob = GradleUtil.importGradleProject(new File(location), monitor);
 
 			if (!importJob.isOK() || (importJob.getException() != null)) {
 				return importJob;
-			}
-
-			if (initBundle) {
-				IPath path = new Path(location);
-
-				IProject project = CoreUtil.getProject(path.lastSegment());
-
-				if (bundleUrl != null) {
-					final IFile gradlePropertiesFile = project.getFile("gradle.properties");
-
-					try (InputStream gradleStream = gradlePropertiesFile.getContents()) {
-						String content = FileUtil.readContents(gradleStream);
-
-						String bundleUrlProp = LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
-
-						String separator = System.getProperty("line.separator", "\n");
-
-						String newContent = content + separator + bundleUrlProp;
-
-						try (InputStream inputStream = new ByteArrayInputStream(newContent.getBytes())) {
-							gradlePropertiesFile.setContents(inputStream, IResource.FORCE, monitor);
-						}
-					}
-				}
-
-				GradleUtil.runGradleTask(project, "initBundle", monitor);
-
-				project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 			}
 		}
 		catch (Exception e) {
@@ -140,6 +140,38 @@ public class LiferayGradleWorkspaceProjectProvider
 		}
 
 		return Status.OK_STATUS;
+	}
+
+	@Override
+	public void initBundle(IProgressMonitor monitor, String bundleUrl, String serverName, String workspaceName) {
+		IProject project = ProjectUtil.getProject(workspaceName);
+
+		try {
+			if (bundleUrl != null) {
+				final IFile gradlePropertiesFile = project.getFile("gradle.properties");
+
+				try (InputStream gradleStream = gradlePropertiesFile.getContents()) {
+					String content = FileUtil.readContents(gradleStream);
+
+					String bundleUrlProp = LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
+
+					String separator = System.getProperty("line.separator", "\n");
+
+					String newContent = content + separator + bundleUrlProp;
+
+					try (InputStream inputStream = new ByteArrayInputStream(newContent.getBytes())) {
+						gradlePropertiesFile.setContents(inputStream, IResource.FORCE, monitor);
+					}
+				}
+			}
+
+			GradleUtil.runGradleTask(project, "initBundle", monitor);
+
+			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		}
+		catch (Exception e) {
+			GradleCore.createErrorStatus("Init Liferay Bundle failed", e);
+		}
 	}
 
 	@Override
@@ -152,9 +184,9 @@ public class LiferayGradleWorkspaceProjectProvider
 			}
 		}
 
-		return Optional.ofNullable(
-			adaptable
-		).filter(
+		Optional<Object> nullableAdaptable = Optional.ofNullable(adaptable);
+
+		return nullableAdaptable.filter(
 			i -> i instanceof IServer
 		).map(
 			IServer.class::cast
@@ -179,9 +211,9 @@ public class LiferayGradleWorkspaceProjectProvider
 	}
 
 	private static IWorkspaceProject _getWorkspaceProjectFromLiferayHome(final IPath liferayHome) {
-		return Optional.ofNullable(
-			LiferayWorkspaceUtil.getWorkspaceProject()
-		).filter(
+		Optional<IProject> workspace = Optional.ofNullable(LiferayWorkspaceUtil.getWorkspaceProject());
+
+		return workspace.filter(
 			workspaceProject -> {
 				IPath workspaceProjectLocation = workspaceProject.getRawLocation();
 
