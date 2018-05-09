@@ -82,7 +82,7 @@ public class ImportLiferayWorkspaceOpMethods {
 
 					String workspaceName = workspaceLocation.lastSegment();
 
-					provider.initBundle(bundleUrl.content(), serverName, workspaceName, monitor);
+					provider.initBundle(bundleUrl.content(false), serverName, workspaceName, monitor);
 				}
 
 				if (initBundle || hasBundlesDir) {

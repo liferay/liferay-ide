@@ -99,7 +99,9 @@ public class NewMavenLiferayWorkspaceOpTests {
 		op.setProjectProvider("maven-liferay-workspace");
 		op.setProvisionLiferayBundle(true);
 
-		Value<String> bundleUrl = op.getBundleUrl();
+		Value<String> url = op.getBundleUrl();
+
+		String bundleUrl = url.content();
 
 		Assert.assertEquals(
 			"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5" +

@@ -130,7 +130,7 @@ public class ImportWorkspaceProjectTests {
 		originalContent = originalContent.replaceAll("\r", "");
 		importedContent = importedContent.replaceAll("\r", "");
 
-		Assert.assertEquals(importedContent, originalContent, importedContent);
+		Assert.assertEquals(importedContent, originalContent);
 	}
 
 	@Test
