@@ -18,6 +18,7 @@ import com.liferay.ide.installer.tests.util.InstallerUtil;
 
 /**
  * @author Terry Jia
+ * @author Ashley Yuan
  */
 public class DevStudioCE extends Installer {
 
@@ -48,7 +49,7 @@ public class DevStudioCE extends Installer {
 
 		sb.append(" --proxyhttps nothing");
 
-		return command;
+		return sb.toString();
 	}
 
 }

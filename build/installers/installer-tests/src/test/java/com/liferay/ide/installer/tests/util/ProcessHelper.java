@@ -53,6 +53,8 @@ public class ProcessHelper {
 			}
 		}
 
+		Thread.sleep(1000);
+
 		return finished;
 	}
 

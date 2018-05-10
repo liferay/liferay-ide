@@ -29,6 +29,7 @@ import com.liferay.ide.installer.tests.util.ProcessHelper;
 
 /**
  * @author Terry Jia
+ * @author Ashley Yuan
  */
 public class DevStudioCETest {
 
@@ -45,9 +46,7 @@ public class DevStudioCETest {
 
 		Assertions.assertTrue(ProcessHelper.waitProcessWin(processName));
 
-		Thread.sleep(1000);
-
-		Assertions.assertTrue(FileChecker.tokenExistsWin());
+		Assertions.assertFalse(FileChecker.tokenExistsWin());
 
 		Assertions.assertTrue(AppChecker.jpmInstalled());	
 		Assertions.assertTrue(AppChecker.bladeInstalled());
