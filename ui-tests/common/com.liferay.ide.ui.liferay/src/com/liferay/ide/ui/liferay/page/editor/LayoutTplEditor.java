@@ -26,6 +26,7 @@ public class LayoutTplEditor extends Editor {
 
 	public LayoutTplEditor(SWTWorkbenchBot bot) {
 		super(bot);
+
 		_preview = new CTabItem(bot, PREVIEW);
 		_design = new CTabItem(bot, DESIGN);
 		_source = new CTabItem(bot, SOURCE);
@@ -33,6 +34,7 @@ public class LayoutTplEditor extends Editor {
 
 	public LayoutTplEditor(SWTWorkbenchBot bot, String editorName) {
 		super(bot, editorName);
+
 		_preview = new CTabItem(bot, PREVIEW);
 		_design = new CTabItem(bot, DESIGN);
 		_source = new CTabItem(bot, SOURCE);

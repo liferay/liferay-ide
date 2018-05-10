@@ -61,6 +61,9 @@ public interface Messages {
 
 	public static final String DIRECTORY_DOESNT_EXIST = "Directory doesn't exist.";
 
+	public static final String ENTER_A_NAME_AND_CHOOSE_A_TEMPLATE_FOR_A_NEW_LIFERAY_MODULE =
+		"Enter a name and choose a template to use for a new Liferay module.";
+
 	public static final String ENTER_A_NAME_AND_CHOOSE_TEMPLATE_FOR_NEW_JSF_PROJECT =
 		"Enter a name and choose a template to use for a new Liferay JSF project.";
 
@@ -260,9 +263,6 @@ public interface Messages {
 			"greater.";
 
 	public static final String WORKSPACE_LOCATION_MUST_BE_SPECIFIED = "Workspace location must be specified";
-
-	public static final String ENTER_A_NAME_AND_CHOOSE_A_TEMPlATE_FOR_A_NEW_LIFERAY_MODULE =
-		"Enter a name and choose a template to use for a new Liferay module.";
 
 	public static final String INVALID_JAVA_CLASS_NAME = "Invalid Java class name: The type name ";
 

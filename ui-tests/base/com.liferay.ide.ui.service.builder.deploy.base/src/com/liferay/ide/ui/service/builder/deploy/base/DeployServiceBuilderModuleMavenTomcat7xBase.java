@@ -43,10 +43,9 @@ public class DeployServiceBuilderModuleMavenTomcat7xBase extends ServerTestBase 
 
 		viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName("-service"));
 
-		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName(".api") + "_", 20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName(".api") + "_", S20);
 
-		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName(".service") + "_",
-				20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName(".service") + "_", S20);
 
 		viewAction.servers.removeModule(server.getStartedLabel(), project.getStartedLabel("-api"));
 

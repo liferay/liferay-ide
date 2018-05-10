@@ -26,7 +26,7 @@ import org.junit.rules.RuleChain;
  * @author Ashley Yuan
  * @author Ying Xu
  */
-public class NewFragmentWizardMavenTomcat70Tests extends NewFragmentWizardMavenBase{
+public class NewFragmentWizardMavenTomcat70Tests extends NewFragmentWizardMavenBase {
 
 	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
 

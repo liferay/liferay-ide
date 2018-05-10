@@ -14,10 +14,10 @@
 
 package com.liferay.ide.ui.jsf.deploy.base;
 
-import org.junit.Rule;
-
 import com.liferay.ide.ui.liferay.ServerTestBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+
+import org.junit.Rule;
 
 /**
  * @author Lily Li

@@ -17,6 +17,7 @@ package com.liferay.ide.ui.server.tests;
 import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
 import com.liferay.ide.ui.liferay.support.server.ServerSupport;
 import com.liferay.ide.ui.server.wizard.base.ServerTomcat7xBase;
+
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;

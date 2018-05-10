@@ -17,7 +17,6 @@ package com.liferay.ide.ui.portlet.deploy.base;
 import com.liferay.ide.ui.liferay.ServerTestBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 

@@ -67,7 +67,6 @@ public class ValidationComponentTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projectName);
 	}
 
-	@Ignore("wait for IDE-3585 fixed")
 	@Test
 	public void checkComponentClassName() {
 		String projectName = "test-myclass-name";
@@ -153,7 +152,7 @@ public class ValidationComponentTests extends SwtbotBase {
 	public void checkInitialState() {
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		//Assert.assertEquals(NO_SUITABLE_LIFERAY_MODULE_PROJECT, wizardAction.getValidationMsg(2));
+		Assert.assertEquals(NO_SUITABLE_LIFERAY_MODULE_PROJECT, wizardAction.getValidationMsg(2));
 
 		Assert.assertEquals(StringPool.BLANK, wizardAction.newLiferayComponent.projectName().getText());
 
@@ -184,8 +183,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.newLiferayComponent.prepare(template);
 
-		// wait for IDE-3585 fixed
-		// Assert.assertEquals(MODEL_CLASS_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(3));
+		Assert.assertEquals(MODEL_CLASS_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(3));
 
 		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
 
@@ -216,7 +214,6 @@ public class ValidationComponentTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projectName);
 	}
 
-	@Ignore("wait for IDE-3585 fixed")
 	@Test
 	public void checkPackageName() {
 		String projectName = "test-mypackage-name";
@@ -261,7 +258,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName2);
+		wizardAction.newModule.prepareGradle(projectName2, PORTLET);
 
 		wizardAction.finish();
 
@@ -275,9 +272,8 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.newLiferayComponent.prepare(projectName2, packageName);
 
-		// wait for IDE-3585 fixed
-		// Assert.assertEquals(
-		// "portlet.test.portlet.PortletTestPortlet" + ALREADY_EXISTS, wizardAction.getValidationMsg(2));
+		Assert.assertEquals(
+			"portlet.test.portlet.PortletTestPortlet" + ALREADY_EXISTS, wizardAction.getValidationMsg(2));
 
 		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
 
@@ -305,8 +301,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.newLiferayComponent.prepare(template);
 
-		// wait for IDE-3585 fixed
-		// Assert.assertEquals(SERVICE_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(3));
+		Assert.assertEquals(SERVICE_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(3));
 
 		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
 

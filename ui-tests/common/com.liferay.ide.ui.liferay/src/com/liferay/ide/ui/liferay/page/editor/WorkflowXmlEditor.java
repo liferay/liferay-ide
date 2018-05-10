@@ -26,12 +26,14 @@ public class WorkflowXmlEditor extends Editor {
 
 	public WorkflowXmlEditor(SWTWorkbenchBot bot) {
 		super(bot);
+
 		_diagram = new CTabItem(bot, DIAGRAM);
 		_source = new CTabItem(bot, SOURCE);
 	}
 
 	public WorkflowXmlEditor(SWTWorkbenchBot bot, String editorName) {
 		super(bot, editorName);
+
 		_diagram = new CTabItem(bot, DIAGRAM);
 		_source = new CTabItem(bot, SOURCE);
 	}

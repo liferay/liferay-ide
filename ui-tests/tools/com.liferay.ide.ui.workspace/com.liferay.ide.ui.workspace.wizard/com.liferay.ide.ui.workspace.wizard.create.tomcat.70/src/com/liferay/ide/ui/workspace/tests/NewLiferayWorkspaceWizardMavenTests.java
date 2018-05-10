@@ -61,18 +61,14 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createLiferayWorkspaceChangeLocation() {
-		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
-
+	public void createLiferayWorkspace71() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareMaven(project.getName());
+		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
 
-		wizardAction.newLiferayWorkspace.deselectUseDefaultLocation();
+		wizardAction.newLiferayWorkspace.prepareMaven(project.getName(), "7.1");
 
-		String newFolderName = "changeLocation";
-
-		wizardAction.newLiferayWorkspace.location().setText(workspacePath + "/" + newFolderName);
+		wizardAction.newLiferayWorkspace.deselectDownloadLiferayBundle();
 
 		wizardAction.finish();
 
@@ -88,14 +84,18 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createLiferayWorkspace71() {
+	public void createLiferayWorkspaceChangeLocation() {
+		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
+
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
+		wizardAction.newLiferayWorkspace.prepareMaven(project.getName());
 
-		wizardAction.newLiferayWorkspace.prepareMaven(project.getName(), "7.1");
+		wizardAction.newLiferayWorkspace.deselectUseDefaultLocation();
 
-		wizardAction.newLiferayWorkspace.deselectDownloadLiferayBundle();
+		String newFolderName = "changeLocation";
+
+		wizardAction.newLiferayWorkspace.location().setText(workspacePath + "/" + newFolderName);
 
 		wizardAction.finish();
 

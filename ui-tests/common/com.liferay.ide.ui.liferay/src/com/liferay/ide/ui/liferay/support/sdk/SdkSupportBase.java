@@ -80,7 +80,8 @@ public class SdkSupportBase extends SupportBase {
 
 			String appServerParentDir = "app.server.parent.dir=" + _server.getFullServerDir().replace("\\", "/");
 
-			String appServerTomcatDir = "app.server.tomcat.dir=" + _server.getFullServerDir().replace("\\", "/") + "/" + _server.getServerDir();
+			String appServerTomcatDir =
+				"app.server.tomcat.dir=" + _server.getFullServerDir().replace("\\", "/") + "/" + _server.getServerDir();
 
 			FileWriter writer = new FileWriter(userBuildFile.getPath(), true);
 

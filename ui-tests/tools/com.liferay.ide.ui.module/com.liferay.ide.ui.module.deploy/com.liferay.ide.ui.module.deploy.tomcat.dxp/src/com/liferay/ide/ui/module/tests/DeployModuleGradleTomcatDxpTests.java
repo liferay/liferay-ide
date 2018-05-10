@@ -108,7 +108,6 @@ public class DeployModuleGradleTomcatDxpTests extends DeployModuleGradleTomcat7x
 		super.deployTemplateContextContributor();
 	}
 
-	@Ignore("ignore since scss file unreadable on windows because of long path")
 	@Test
 	public void deployThemeContributor() {
 		super.deployThemeContributor();
