@@ -11,23 +11,33 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-package com.liferay.ide.install;
+
+package com.liferay.ide.installer.tests.model;
+
+import com.liferay.ide.installer.tests.util.Constants;
 
 /**
- * @author Ashley Yuan
  * @author Terry Jia
  */
-public interface Values {
+public abstract class Installer implements Constants {
 
-	public static final String JPM_VERSION = "4.0.0.201803070452";
+	public Installer(String type) {
+		_type = type;
+	}
 
-	public static final String BND_VERSION = "3.5.0.201709291849";
+	public boolean isWindow() {
+		return _type.equals(WINDOWS);
+	}
 
-	public static final String BLADE_VERSION = "3.0.0.201803070356";
+	public boolean isLinux() {
+		return _type.equals(LINUX_X64);
+	}
 
-	public static final String GW_OUTPUT = "Error executing gradle wrapper";
-	
-	public static final String JPM_DIR = ".jpm";
-	
-	public static final String LIFERAY_DIR = ".liferay";
+	public boolean isMacos() {
+		return _type.equals(OSX);
+	}
+
+	private String _type;
+	public abstract String command();
+
 }

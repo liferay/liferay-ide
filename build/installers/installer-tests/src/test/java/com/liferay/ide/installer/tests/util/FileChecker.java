@@ -14,30 +14,27 @@
 
 package com.liferay.ide.installer.tests.util;
 
-import com.liferay.ide.install.Constants;
+import java.io.File;
 
 /**
+ * @author Ashley Yuan
  * @author Terry Jia
  */
-public abstract class Installer implements Constants{
+public class FileChecker {
 
-	public Installer(String type) {
-		_type = type;
+	public static boolean fileExists(File dir, String filename) {
+		File file = new File(dir, filename);
+
+		return file.exists();
+
 	}
 
-	public boolean isWindow() {
-		return _type.equals(WINDOWS);
+	public static boolean tokenExistsWin() {
+		return fileExists(InstallerUtil.getLiferayHomeDir(), "token");
 	}
 
-	public boolean isLinux() {
-		return _type.equals(LINUX_X64);
+	public static boolean bundleExistsWin(String portal) {
+		return fileExists(InstallerUtil.getBundleHomeDir(), portal);
 	}
-
-	public boolean isMacos() {
-		return _type.equals(OSX);
-	}
-
-	private String _type;
-	public abstract String command();
 
 }

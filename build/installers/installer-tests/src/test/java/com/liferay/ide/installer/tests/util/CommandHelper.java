@@ -11,8 +11,9 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-package com.liferay.ide.install;
+package com.liferay.ide.installer.tests.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,7 +25,7 @@ import java.io.Reader;
  */
 public class CommandHelper {
 
-	private String _readStreamToString(InputStream contents) throws IOException {
+	private static String _readStreamToString(InputStream contents) throws IOException {
 		if (contents == null) {
 			return null;
 		}
@@ -50,17 +51,25 @@ public class CommandHelper {
 		return out.toString();
 	}
 
-	public String execWithResult(String cmd) throws IOException {
+	public static String execWithResult(String cmd) throws IOException {
 		return execWithResult(cmd, false);
 	}
 
-	public Process exec(String cmd) throws IOException {
+	public static Process exec(File dir, String cmd) throws IOException {
+		String fullCmd = dir.getPath() + "/" + cmd;
+
 		Runtime runtime = Runtime.getRuntime();
 
-		return runtime.exec(cmd);
+		return runtime.exec(fullCmd);
 	}
 
-	public String execWithResult(String cmd, boolean error) throws IOException {
+	public static Process exec(String fullCmd) throws IOException {
+		Runtime runtime = Runtime.getRuntime();
+
+		return runtime.exec(fullCmd);
+	}
+
+	public static String execWithResult(String cmd, boolean error) throws IOException {
 		Process process = exec(cmd);
 
 		InputStream in = null;

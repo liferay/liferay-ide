@@ -12,14 +12,16 @@
  * details.
  */
 
-package com.liferay.ide.installer.tests.util;
+package com.liferay.ide.installer.tests.model;
+
+import com.liferay.ide.installer.tests.util.InstallerUtil;
 
 /**
  * @author Terry Jia
  */
-public class LiferayProjectSdk extends Installer {
+public class DevStudioCE extends Installer {
 
-	public LiferayProjectSdk(String type) {
+	public DevStudioCE(String type) {
 		super(type);
 	}
 
@@ -28,17 +30,25 @@ public class LiferayProjectSdk extends Installer {
 		String command = "";
 
 		if (isWindow()) {
-			command = InstallerUtil.getProjectSdkFullNameWin();
+			command = InstallerUtil.getDevStudioCEFullNameWin();
 		}
 		else if (isLinux()) {
-			command = InstallerUtil.getProjectSdkFullNameLinux();
+			command = InstallerUtil.getDevStudioCEFullNameMacos();
 		}
 		else if (isMacos()) {
 			// need more research to how to run installer on command line of Macos
 		}
 
-		command = command + " --mode unattended";
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(command);
+		sb.append(" --mode unattended");
+
+		// Need to add something for proxy config
+
+		sb.append(" --proxyhttps nothing");
 
 		return command;
 	}
+
 }

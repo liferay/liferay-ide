@@ -11,7 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-package com.liferay.ide.install;
+
+package com.liferay.ide.installer.tests.util;
 
 import java.io.IOException;
 
@@ -21,21 +22,19 @@ import java.io.IOException;
  */
 public class ProcessHelper {
 
-	public boolean checkProcessWin(String processName) throws IOException {
+	public static boolean checkProcessWin(String processName) throws IOException {
 		return checkProcess("wmic process get name", processName);
 	}
 
-	public boolean checkProcess(String cmd, String processName) throws IOException {
-		CommandHelper helper = new CommandHelper();
-
-		if (helper.execWithResult(cmd).contains(processName)) {
+	public static boolean checkProcess(String cmd, String processName) throws IOException {
+		if (CommandHelper.execWithResult(cmd).contains(processName)) {
 			return true;
 		}
 
 		return false;
 	}
 
-	public boolean waitProcessWin(String processName) throws InterruptedException, IOException {
+	public static boolean waitProcessWin(String processName) throws InterruptedException, IOException {
 		long timeout = System.currentTimeMillis() + 120 * 1000;
 
 		boolean finished = false;

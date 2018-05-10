@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.liferay.ide.install.Constants;
-
 /**
  * @author Terry Jia
  */
@@ -91,6 +89,48 @@ public class InstallerUtil implements Constants {
 				+ DASH + INSTALLER + OSX_SUFFIX;
 	}
 
+	public static String getJpmVersion() {
+		return _getInfo().getProperty("jpm.version");
+	}
+
+	public static String getBndVersion() {
+		return _getInfo().getProperty("bnd.version");
+	}
+
+	public static String getBladeVersion() {
+		return _getInfo().getProperty("blade.version");
+	}
+
+	public static String getGwOutput() {
+		return _getInfo().getProperty("gw.output");
+	}
+
+	public static String getJpmHome() {
+		return _getInfo().getProperty("jpm.home.dir");
+	}
+
+	public static String getLiferayHome() {
+		return _getInfo().getProperty("liferay.home.dir");
+	}
+
+	public static File getUserHome() {
+		String userHome = System.getProperty("user.home");
+
+		return new File(userHome);
+	}
+
+	public static File getJpmHomeDir() {
+		return new File(getUserHome(), getJpmHome());
+	}
+
+	public static File getLiferayHomeDir() {
+		return new File(getUserHome(), getLiferayHome());
+	}
+
+	public static File getBundleHomeDir() {
+		return new File(getLiferayHomeDir(), "bundles");
+	}
+
 	public static File getOutputDir() {
 		Class<?> clazz = InstallerUtil.class;
 
@@ -139,4 +179,5 @@ public class InstallerUtil implements Constants {
 	public static File getDevStudioDXPMacosFile() {
 		return new File(getOutputDir(), getDevStudioDXPFullNameMacos());
 	}
+
 }

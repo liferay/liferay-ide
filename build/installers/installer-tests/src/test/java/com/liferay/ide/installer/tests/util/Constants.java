@@ -11,22 +11,29 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-package com.liferay.ide.install;
 
-import java.io.IOException;
+package com.liferay.ide.installer.tests.util;
 
 /**
  * @author Ashley Yuan
  * @author Terry Jia
  */
-public class AppChecker {
+public interface Constants {
 
-	public boolean isAppInstalled(String appCmd, String exceptResult) throws IOException {
-		CommandHelper helper = new CommandHelper();
-		
-		boolean execOutput = helper.execWithResult(appCmd).contains(exceptResult);
-		boolean execResult = helper.execWithResult(appCmd, true).contains(exceptResult);
-		
-		return (execOutput || execResult);
-	}
+	public final static String LINUX_X64 = "linux-x64";
+
+	public final static String INSTALLER = "installer";
+
+	public final static String WINDOWS = "windows";
+
+	public final static String OSX = "osx";
+
+	public final static String LINUX_SUFFIX = ".run";
+
+	public final static String WINDOWS_SUFFIX = ".exe";
+
+	public final static String OSX_SUFFIX = ".dmg";
+
+	public final static String DASH = "-";
+
 }

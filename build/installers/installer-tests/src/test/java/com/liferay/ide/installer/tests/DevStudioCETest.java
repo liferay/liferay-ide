@@ -19,36 +19,40 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
-import com.liferay.ide.install.InstallerTestsBase;
+import com.liferay.ide.installer.tests.model.DevStudioCE;
+import com.liferay.ide.installer.tests.model.Installer;
+import com.liferay.ide.installer.tests.util.AppChecker;
+import com.liferay.ide.installer.tests.util.CommandHelper;
+import com.liferay.ide.installer.tests.util.FileChecker;
 import com.liferay.ide.installer.tests.util.InstallerUtil;
+import com.liferay.ide.installer.tests.util.ProcessHelper;
 
 /**
  * @author Terry Jia
  */
-public class DevStudioCETest extends InstallerTestsBase{
+public class DevStudioCETest {
 
 	@EnabledOnOs(OS.WINDOWS)
 	@Test
 	public void quickInstallOnWindows() throws Exception{
-
-		String cmd = InstallerUtil.getDevStudioCEWinFile().getPath() + " --mode unattended --proxyhttps jj";
+		DevStudioCE installer = new DevStudioCE(Installer.WINDOWS);
 
 		String processName = InstallerUtil.getDevStudioCEFullNameWin();
 
-		commandHelper.exec(cmd);
+		CommandHelper.exec(InstallerUtil.getOutputDir(), installer.command());
 
-		Assertions.assertTrue(processHelper.checkProcessWin(processName));
-		
-		Assertions.assertTrue(processHelper.waitProcessWin(processName));
-		
+		Assertions.assertTrue(ProcessHelper.checkProcessWin(processName));
+
+		Assertions.assertTrue(ProcessHelper.waitProcessWin(processName));
+
 		Thread.sleep(1000);
 
-		Assertions.assertTrue(fileChecker.isTokenExistsWin());
-		
-		Assertions.assertTrue(appChecker.isAppInstalled("jpm version", JPM_VERSION));	
-		Assertions.assertTrue(appChecker.isAppInstalled("blade version", BLADE_VERSION));
-		Assertions.assertTrue(appChecker.isAppInstalled("bnd version", BND_VERSION));
-		Assertions.assertTrue(appChecker.isAppInstalled("gw",GW_OUTPUT));
+		Assertions.assertTrue(FileChecker.tokenExistsWin());
+
+		Assertions.assertTrue(AppChecker.jpmInstalled());	
+		Assertions.assertTrue(AppChecker.bladeInstalled());
+		Assertions.assertTrue(AppChecker.bndInstalled());
+		Assertions.assertTrue(AppChecker.gwInstalled());
 	}
 
 	@EnabledOnOs(OS.LINUX)
