@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import org.gradle.internal.UncheckedException;
 import org.gradle.tooling.GradleConnectionException;
 import org.gradle.tooling.ResultHandler;
 
