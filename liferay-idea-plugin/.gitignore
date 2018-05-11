@@ -1,9 +1,0 @@
-.classpath
-.gradle/
-.idea/
-.project
-.settings/
-build/
-*.iml
-out/
-src/main/resources/libs/blade.jar
