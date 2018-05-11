@@ -19,15 +19,39 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
+import com.liferay.ide.installer.tests.model.DevStudioCE;
+import com.liferay.ide.installer.tests.model.Installer;
+import com.liferay.ide.installer.tests.util.AppChecker;
+import com.liferay.ide.installer.tests.util.CommandHelper;
+import com.liferay.ide.installer.tests.util.FileChecker;
+import com.liferay.ide.installer.tests.util.InstallerUtil;
+import com.liferay.ide.installer.tests.util.ProcessHelper;
+
 /**
  * @author Terry Jia
+ * @author Ashley Yuan
  */
 public class DevStudioCETest {
 
 	@EnabledOnOs(OS.WINDOWS)
 	@Test
-	public void quickInstallOnWindows() {
-		Assertions.assertTrue(true);
+	public void quickInstallOnWindows() throws Exception{
+		DevStudioCE installer = new DevStudioCE(Installer.WINDOWS);
+
+		String processName = InstallerUtil.getDevStudioCEFullNameWin();
+
+		CommandHelper.exec(InstallerUtil.getOutputDir(), installer.command());
+
+		Assertions.assertTrue(ProcessHelper.checkProcessWin(processName));
+
+		Assertions.assertTrue(ProcessHelper.waitProcessWin(processName));
+
+		Assertions.assertFalse(FileChecker.tokenExistsWin());
+
+		Assertions.assertTrue(AppChecker.jpmInstalled());	
+		Assertions.assertTrue(AppChecker.bladeInstalled());
+		Assertions.assertTrue(AppChecker.bndInstalled());
+		Assertions.assertTrue(AppChecker.gwInstalled());
 	}
 
 	@EnabledOnOs(OS.LINUX)

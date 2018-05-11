@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.installer.tests;
+package com.liferay.ide.installer.tests.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,7 @@ import java.util.Properties;
 /**
  * @author Terry Jia
  */
-public class InstallerUtil extends Constants {
+public class InstallerUtil implements Constants {
 
 	private static Properties _installerInfo = null;
 
@@ -44,51 +44,94 @@ public class InstallerUtil extends Constants {
 		return _installerInfo;
 	}
 
-	private static String _getProjectSdkFullNameWin() {
+	public static String getProjectSdkFullNameWin() {
 		return _getInfo().getProperty("project.sdk.name") + DASH + _getInfo().getProperty("version") + DASH + WINDOWS
 				+ DASH + INSTALLER + WINDOWS_SUFFIX;
 	}
 
-	private static String _getProjectSdkFullNameLinux() {
+	public static String getProjectSdkFullNameLinux() {
 		return _getInfo().getProperty("project.sdk.name") + DASH + _getInfo().getProperty("version") + DASH + LINUX_X64
 				+ DASH + INSTALLER + LINUX_SUFFIX;
 	}
 
-	private static String _getProjectSdkFullNameMacos() {
+	public static String getProjectSdkFullNameMacos() {
 		return _getInfo().getProperty("project.sdk.name") + DASH + _getInfo().getProperty("version") + DASH + OSX
 				+ DASH + INSTALLER + OSX_SUFFIX;
 	}
 
-	private static String _getDevStudioCEFullNameWin() {
+	public static String getDevStudioCEFullNameWin() {
 		return _getInfo().getProperty("dev.studio.ce.name") + DASH + _getInfo().getProperty("version") + DASH + WINDOWS
 				+ DASH + INSTALLER + WINDOWS_SUFFIX;
 	}
 
-	private static String _getDevStudioCEFullNameLinux() {
+	public static String getDevStudioCEFullNameLinux() {
 		return _getInfo().getProperty("dev.studio.ce.name") + DASH + _getInfo().getProperty("version") + DASH + LINUX_X64
 				+ DASH + INSTALLER + LINUX_SUFFIX;
 	}
 
-	private static String _getDevStudioCEFullNameMacos() {
+	public static String getDevStudioCEFullNameMacos() {
 		return _getInfo().getProperty("dev.studio.ce.name") + DASH + _getInfo().getProperty("version") + DASH + OSX
 				+ DASH + INSTALLER + OSX_SUFFIX;
 	}
 
-	private static String _getDevStudioDXPFullNameWin() {
+	public static String getDevStudioDXPFullNameWin() {
 		return _getInfo().getProperty("dev.studio.dxp.name") + DASH + _getInfo().getProperty("version") + DASH + WINDOWS
 				+ DASH + INSTALLER + WINDOWS_SUFFIX;
 	}
 
-	private static String _getDevStudioDXPFullNameLinux() {
+	public static String getDevStudioDXPFullNameLinux() {
 		return _getInfo().getProperty("dev.studio.dxp.name") + DASH + _getInfo().getProperty("version") + DASH + LINUX_X64
 				+ DASH + INSTALLER + LINUX_SUFFIX;
 	}
 
-	private static String _getDevStudioDXPFullNameMacos() {
+	public static String getDevStudioDXPFullNameMacos() {
 		return _getInfo().getProperty("dev.studio.dxp.name") + DASH + _getInfo().getProperty("version") + DASH + OSX
 				+ DASH + INSTALLER + OSX_SUFFIX;
 	}
-	private static File _getOutputDir() {
+
+	public static String getJpmVersion() {
+		return _getInfo().getProperty("jpm.version");
+	}
+
+	public static String getBndVersion() {
+		return _getInfo().getProperty("bnd.version");
+	}
+
+	public static String getBladeVersion() {
+		return _getInfo().getProperty("blade.version");
+	}
+
+	public static String getGwOutput() {
+		return _getInfo().getProperty("gw.output");
+	}
+
+	public static String getJpmHome() {
+		return _getInfo().getProperty("jpm.home.dir");
+	}
+
+	public static String getLiferayHome() {
+		return _getInfo().getProperty("liferay.home.dir");
+	}
+
+	public static File getUserHome() {
+		String userHome = System.getProperty("user.home");
+
+		return new File(userHome);
+	}
+
+	public static File getJpmHomeDir() {
+		return new File(getUserHome(), getJpmHome());
+	}
+
+	public static File getLiferayHomeDir() {
+		return new File(getUserHome(), getLiferayHome());
+	}
+
+	public static File getBundleHomeDir() {
+		return new File(getLiferayHomeDir(), "bundles");
+	}
+
+	public static File getOutputDir() {
 		Class<?> clazz = InstallerUtil.class;
 
 		ClassLoader classLoader = clazz.getClassLoader();
@@ -101,38 +144,40 @@ public class InstallerUtil extends Constants {
 	}
 
 	public static File getProjectSdkWinFile() {
-		return new File(_getOutputDir(), _getProjectSdkFullNameWin());
+		return new File(getOutputDir(), getProjectSdkFullNameWin());
 	}
 
 	public static File getProjectSdkLinuxFile() {
-		return new File(_getOutputDir(), _getProjectSdkFullNameLinux());
+		return new File(getOutputDir(), getProjectSdkFullNameLinux());
 	}
 
 	public static File getProjectSdkMacosFile() {
-		return new File(_getOutputDir(), _getProjectSdkFullNameMacos());
+		return new File(getOutputDir(), getProjectSdkFullNameMacos());
 	}
 
 	public static File getDevStudioCEWinFile() {
-		return new File(_getOutputDir(), _getDevStudioCEFullNameWin());
+		return new File(getOutputDir(), getDevStudioCEFullNameWin());
 	}
 
 	public static File getDevStudioCELinuxFile() {
-		return new File(_getOutputDir(), _getDevStudioCEFullNameLinux());
+		
+		return new File(getOutputDir(), getDevStudioCEFullNameLinux());
 	}
 
 	public static File getDevStudioCEMacosFile() {
-		return new File(_getOutputDir(), _getDevStudioCEFullNameMacos());
+		return new File(getOutputDir(), getDevStudioCEFullNameMacos());
 	}
 
 	public static File getDevStudioDXPWinFile() {
-		return new File(_getOutputDir(), _getDevStudioDXPFullNameWin());
+		return new File(getOutputDir(), getDevStudioDXPFullNameWin());
 	}
 
 	public static File getDevStudioDXPLinuxFile() {
-		return new File(_getOutputDir(), _getDevStudioDXPFullNameLinux());
+		return new File(getOutputDir(), getDevStudioDXPFullNameLinux());
 	}
 
 	public static File getDevStudioDXPMacosFile() {
-		return new File(_getOutputDir(), _getDevStudioDXPFullNameMacos());
+		return new File(getOutputDir(), getDevStudioDXPFullNameMacos());
 	}
+
 }
