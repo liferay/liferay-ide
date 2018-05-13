@@ -99,6 +99,7 @@ public class GradleDependencyUpdater {
 				StringBuilder builder = new StringBuilder(_gradleFileContents.get(visitor.getDependenceLineNum() - 1));
 
 				builder.insert(visitor.getColumnNum() - 2, "\n" + dependency + "\n");
+
 				String dep = builder.toString();
 
 				if (CoreUtil.isWindows()) {
