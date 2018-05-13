@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -39,6 +40,10 @@ public class GradleUI extends Plugin {
 	 */
 	public static GradleUI getDefault() {
 		return _plugin;
+	}
+
+	public static Bundle getDefaultBundle() {
+		return _plugin.getBundle();
 	}
 
 	public static void logError(String msg, Throwable t) {

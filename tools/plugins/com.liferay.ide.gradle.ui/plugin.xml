@@ -94,15 +94,19 @@
 				<adapt type="org.eclipse.core.resources.IResource">
 					<or>
 						<adapt type="org.eclipse.core.resources.IFile">
-							<test forcePluginActivation="true"
-							   property="com.liferay.ide.gradle.ui.isBuildFile"
-							   value="true" />
+							<test
+								forcePluginActivation="true"
+								property="com.liferay.ide.gradle.ui.isBuildFile"
+								value="true"
+							/>
 						</adapt>
 						<and>
 							<adapt type="org.eclipse.core.resources.IProject">
-								<test forcePluginActivation="true"
-								   property="com.liferay.ide.gradle.ui.isGradleProject"
-								   value="true" />
+								<test
+									forcePluginActivation="true"
+									property="com.liferay.ide.gradle.ui.isGradleProject"
+									value="true"
+								/>
 							</adapt>
 						</and>
 					</or>
@@ -230,14 +234,18 @@
 			<iterate>
 				<and>
 					<adapt type="org.eclipse.core.resources.IResource">
-						<test forcePluginActivation="true"
+						<test
+							forcePluginActivation="true"
 							property="com.liferay.ide.gradle.ui.isGradleProject"
-							value="true" />
+							value="true"
+						/>
 					</adapt>
 					<adapt type="org.eclipse.core.resources.IResource">
-						<test forcePluginActivation="true"
+						<test
+							forcePluginActivation="true"
 							property="com.liferay.ide.gradle.ui.isFragmentProject"
-							value="true" />
+							value="true"
+						/>
 					</adapt>
 					<or>
 						<adapt type="org.eclipse.core.resources.IResource">

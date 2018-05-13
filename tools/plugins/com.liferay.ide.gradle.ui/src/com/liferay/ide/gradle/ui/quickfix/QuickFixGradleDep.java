@@ -28,6 +28,8 @@ import com.liferay.ide.ui.util.UIUtil;
 import java.io.File;
 import java.io.IOException;
 
+import java.net.URL;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
@@ -66,10 +68,12 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 	@Override
 	public IJavaCompletionProposal[] getCorrections(IInvocationContext context, IProblemLocation[] locations) {
 		if (ListUtil.isEmpty(locations)) {
-			return null;
+			return new IJavaCompletionProposal[0];
 		}
 
-		IResource resource = context.getCompilationUnit().getResource();
+		ICompilationUnit unit = context.getCompilationUnit();
+
+		IResource resource = unit.getResource();
 
 		IProject project = resource.getProject();
 
@@ -110,8 +114,9 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 				@Override
 				public void apply(IDocument document) {
 					try {
-						GradleDependencyUpdater updater = new GradleDependencyUpdater(
-							_gradleFile.getLocation().toFile());
+						File gradleFile = FileUtil.getFile(_gradleFile);
+
+						GradleDependencyUpdater updater = new GradleDependencyUpdater(gradleFile);
 
 						List<GradleDependency> existDependencies = updater.getAllDependencies();
 
@@ -120,15 +125,13 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 						if (!existDependencies.contains(gd)) {
 							updater.insertDependency(gd);
 
-							File gradleFile = _gradleFile.getLocation().toFile();
-
 							Files.write(gradleFile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8);
 
-							IResource resource = context.getCompilationUnit().getResource();
+							ICompilationUnit unit = context.getCompilationUnit();
 
-							IProject project = resource.getProject();
+							IResource resource = unit.getResource();
 
-							GradleUtil.refreshGradleProject(project);
+							GradleUtil.refreshGradleProject(resource.getProject());
 						}
 					}
 					catch (Exception e) {
@@ -143,19 +146,20 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 
 				@Override
 				public Image getImage() {
-					Display display = UIUtil.getActiveShell().getDisplay();
-					String file = null;
+					Display display = UIUtil.getActiveShellDisplay();
 
 					try {
-						Bundle bundle = GradleUI.getDefault().getBundle();
+						Bundle bundle = GradleUI.getDefaultBundle();
 
-						file = FileLocator.toFileURL(bundle.getEntry("icons/e16/liferay_logo_16.png")).getFile();
+						URL url = FileLocator.toFileURL(bundle.getEntry("icons/e16/liferay_logo_16.png"));
+
+						return new Image(display, url.getFile());
 					}
 					catch (IOException ioe) {
 						GradleUI.logError(ioe);
 					}
 
-					return new Image(display, file);
+					return null;
 				}
 
 			});
@@ -177,22 +181,25 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 			return;
 		}
 
-		String importName = importDeclaration.getName().toString();
-		List<String> serviceWrapperList;
-		List<String> servicesList;
-		boolean depWrapperCanFixed = false;
-
 		try {
-			serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
-			servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+			List<String> serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
+
+			Name name = importDeclaration.getName();
+
+			String importName = name.toString();
+
+			boolean depWrapperCanFixed = false;
 
 			if (serviceWrapperList.contains(importName)) {
 				ServiceContainer bundle = TargetPlatformUtil.getServiceWrapperBundle(importName);
 				depWrapperCanFixed = true;
+
 				_createDepProposal(context, proposals, bundle);
 			}
 
 			if (!depWrapperCanFixed) {
+				List<String> servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+
 				if (servicesList.contains(importName)) {
 					ServiceContainer bundle = TargetPlatformUtil.getServiceBundle(importName);
 
@@ -244,13 +251,10 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 			fullyQualifiedName = node.getFullyQualifiedName();
 		}
 
-		List<String> serviceWrapperList;
-		List<String> servicesList;
 		boolean depWrapperCanFixed = false;
 
 		try {
-			serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
-			servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+			List<String> serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
 
 			for (String wrapper : serviceWrapperList) {
 				if (wrapper.endsWith(fullyQualifiedName)) {
@@ -261,6 +265,8 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 			}
 
 			if (!depWrapperCanFixed) {
+				List<String> servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+
 				for (String service : servicesList) {
 					if (service.endsWith(fullyQualifiedName)) {
 						ServiceContainer bundle = TargetPlatformUtil.getServiceBundle(service);

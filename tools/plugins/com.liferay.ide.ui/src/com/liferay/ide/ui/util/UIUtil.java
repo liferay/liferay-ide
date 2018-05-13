@@ -168,6 +168,10 @@ public class UIUtil {
 		return retval[0];
 	}
 
+	public static Display getActiveShellDisplay() {
+		return getActiveShell().getDisplay();
+	}
+
 	public static ImageDescriptor getPluginImageDescriptor(String symbolicName, String imagePath) {
 		Bundle bundle = Platform.getBundle(symbolicName);
 
