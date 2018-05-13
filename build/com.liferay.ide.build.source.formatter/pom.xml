@@ -13,7 +13,7 @@
 			<plugin>
 				<groupId>com.liferay</groupId>
 				<artifactId>com.liferay.source.formatter</artifactId>
-				<version>1.0.595</version>
+				<version>1.0.626</version>
 				<configuration>
 					<maxLineLength>120</maxLineLength>
 					<baseDir>${baseDir}</baseDir>
