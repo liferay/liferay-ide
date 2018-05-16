@@ -39,7 +39,7 @@ public class OpenLiferayHomeFolderServerAction extends AbstractServerRunningActi
 	public OpenLiferayHomeFolderServerAction() {
 	}
 
-	public void run(IAction action) {
+	public void runAction(IAction action) {
 		if (selectedServer != null) {
 			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(selectedServer.getRuntime());
 

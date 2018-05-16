@@ -48,7 +48,7 @@ public class TestWebServicesAction extends AbstractServerRunningAction {
 	public TestWebServicesAction() {
 	}
 
-	public void run(IAction action) {
+	public void runAction(IAction action) {
 		if ((selectedServer == null) && (selectedModule == null)) {
 			return;
 		}

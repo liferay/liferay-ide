@@ -70,7 +70,7 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 	}
 
 	@SuppressWarnings("resource")
-	public void run(IAction action) {
+	public void runAction(IAction action) {
 		if (selectedServer != null) {
 			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(selectedServer);
 

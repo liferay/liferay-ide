@@ -34,7 +34,7 @@ public class OpenGogoShellAction extends AbstractServerRunningAction {
 	public OpenGogoShellAction() {
 	}
 
-	public void run(IAction action) {
+	public void runAction(IAction action) {
 		if (selectedServer != null) {
 			String host = selectedServer.getHost();
 

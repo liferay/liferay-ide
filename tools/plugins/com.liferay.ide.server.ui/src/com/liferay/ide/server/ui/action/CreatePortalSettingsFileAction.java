@@ -46,7 +46,7 @@ public class CreatePortalSettingsFileAction extends AbstractServerRunningAction 
 	public CreatePortalSettingsFileAction() {
 	}
 
-	public void run(IAction action) {
+	public void runAction(IAction action) {
 		IPath settingsFilePath = _getSettingsFilePath();
 
 		if (settingsFilePath != null) {
