@@ -21,6 +21,7 @@ import java.io.File;
 import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
@@ -70,6 +71,10 @@ public class GradleCore extends Plugin {
 	 */
 	public static GradleCore getDefault() {
 		return _plugin;
+	}
+
+	public static IPath getDefaultStateLocation() {
+		return _plugin.getStateLocation();
 	}
 
 	public static <T> T getToolingModel(Class<T> modelClass, File projectDir) {

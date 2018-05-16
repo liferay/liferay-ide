@@ -48,19 +48,23 @@ public class CompareFileHandler extends AbstractCompareFileHandler {
 
 			while ((fragment = reader.readLine()) != null) {
 				if (fragment.startsWith("Fragment-Host:")) {
-					fragment = fragment.substring(fragment.indexOf(":") + 1, fragment.indexOf(";")).trim();
+					fragment = fragment.substring(fragment.indexOf(":") + 1, fragment.indexOf(";"));
+
+					fragment = fragment.trim();
 
 					break;
 				}
 			}
 
-			String currentLocation = currentFile.getFullPath().toOSString();
+			IPath fullPath = currentFile.getFullPath();
+
+			String currentLocation = fullPath.toOSString();
 
 			String hookFolder = currentLocation.substring(currentLocation.lastIndexOf("META-INF"));
 
-			IPath stateLocation = GradleCore.getDefault().getStateLocation();
+			IPath stateLocation = GradleCore.getDefaultStateLocation();
 
-			IPath templateLocation = stateLocation.append(fragment).append(hookFolder);
+			IPath templateLocation = FileUtil.pathAppend(stateLocation, fragment, hookFolder);
 
 			templateFile = new File(templateLocation.toOSString());
 

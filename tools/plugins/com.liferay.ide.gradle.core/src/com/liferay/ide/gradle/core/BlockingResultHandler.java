@@ -41,6 +41,7 @@ public class BlockingResultHandler<T> implements ResultHandler<T> {
 
 	public T getResult() {
 		Object result;
+
 		try {
 			result = _queue.take();
 		}

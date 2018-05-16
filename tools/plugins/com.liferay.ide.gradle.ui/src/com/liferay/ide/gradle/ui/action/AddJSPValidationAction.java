@@ -14,6 +14,7 @@
 
 package com.liferay.ide.gradle.ui.action;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.ModuleCoreUtil;
 import com.liferay.ide.ui.action.AbstractObjectAction;
 
@@ -41,7 +42,8 @@ public class AddJSPValidationAction extends AbstractObjectAction {
 				project = (IProject)elem;
 
 				try {
-					ModuleCoreUtil.addFacetsIfNeeded(project.getLocation().toFile(), new NullProgressMonitor());
+					ModuleCoreUtil.addFacetsIfNeeded(
+						FileUtil.getFile(project.getLocation()), new NullProgressMonitor());
 				}
 				catch (CoreException ce) {
 				}

@@ -427,6 +427,18 @@ public class FileUtil {
 		return false;
 	}
 
+	public static IPath pathAppend(IPath path, String... folders) {
+		if (path == null) {
+			return null;
+		}
+
+		for (String folder : folders) {
+			path = path.append(folder);
+		}
+
+		return path;
+	}
+
 	public static String readContents(File file) {
 		return readContents(file, false);
 	}
