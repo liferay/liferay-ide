@@ -2,9 +2,10 @@
 <feature
 	id="com.liferay.ide.alloy"
 	label="Liferay IDE AlloyUI"
-	version="3.2.0.qualifier"
+	plugin="com.liferay.ide.alloy.ui"
 	provider-name="Liferay, Inc."
-	  plugin="com.liferay.ide.alloy.ui">
+	version="3.2.0.qualifier"
+>
 
 	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
 	  Liferay IDE AlloyUI includes javascript development tooling for AlloyUI framework including Tern integration, and css webresources feature.
@@ -32,25 +33,27 @@
 	</license>
 
 	<requires>
-		<import feature="com.liferay.ide.eclipse.tools" version="3.0.0" match="greaterOrEqual" />
-		<import feature="tern-feature" version="0.9.0" match="greaterOrEqual" />
-		<import feature="tern-jsdt-feature" version="0.9.0" match="greaterOrEqual" />
-		<import feature="tern-server-nodejs-feature" version="0.9.0" match="greaterOrEqual" />
-		<import feature="tern.eclipse.ide.server.nodejs.embed" version="0.9.0" match="greaterOrEqual" />
+		<import feature="com.liferay.ide.eclipse.tools" match="greaterOrEqual" version="3.0.0" />
+		<import feature="tern-feature" match="greaterOrEqual" version="0.9.0" />
+		<import feature="tern-jsdt-feature" match="greaterOrEqual" version="0.9.0" />
+		<import feature="tern-server-nodejs-feature" match="greaterOrEqual" version="0.9.0" />
+		<import feature="tern.eclipse.ide.server.nodejs.embed" match="greaterOrEqual" version="0.9.0" />
 	</requires>
 
 	<plugin
-		id="com.liferay.ide.alloy.core"
 		download-size="0"
+		id="com.liferay.ide.alloy.core"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
-		id="com.liferay.ide.alloy.ui"
 		download-size="0"
+		id="com.liferay.ide.alloy.ui"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 </feature>

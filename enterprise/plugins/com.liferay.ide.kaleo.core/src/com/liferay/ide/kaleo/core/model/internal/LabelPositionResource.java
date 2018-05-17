@@ -75,14 +75,6 @@ public class LabelPositionResource extends Resource {
 						LabelPositionResource.this._point.setY(Integer.parseInt(value));
 					}
 
-					/*
-					 * if (Position.PROP_X.equals( def ) ||
-					 * Position.PROP_Y.equals( def )) {
-					 * WorkflowNodeMetadataObject parentMetadata =
-					 * parent().adapt( WorkflowNodeMetadataResource.class
-					 * ).getMetadata(); parentMetadata.setNodeLocation(
-					 * LabelPositionResource.this.point ); }
-					 */
 					WorkflowNodeMetadataResource metadataResource = parent().adapt(WorkflowNodeMetadataResource.class);
 
 					metadataResource.saveMetadata();

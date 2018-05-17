@@ -140,6 +140,7 @@ public class AlloyJsTranslator extends JsTranslator {
 			if (r.getType() == DOMRegionContext.XML_TAG_ATTRIBUTE_NAME) {
 				r.getStart();
 				r.getTextEnd();
+
 				String tagAttrname = container.getText(r);
 				/*
 				 * Attribute values aren't case sensative, also make sure next region is attrib
