@@ -56,6 +56,7 @@ public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerReso
 		SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), newLiferayProfile, dialogRef);
 
 		dialog.setBlockOnOpen(true);
+
 		int result = dialog.open();
 
 		if (result == SapphireDialog.OK) {

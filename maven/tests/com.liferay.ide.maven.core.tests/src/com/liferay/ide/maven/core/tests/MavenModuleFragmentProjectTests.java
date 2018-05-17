@@ -175,6 +175,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 				op.setProjectProvider("maven-module-fragment");
 				op.setLiferayRuntimeName(runtimeName);
 				op.setHostOsgiBundle(hostOsgiBundle);
+
 				OverrideFilePath file = op.getOverrideFiles().insert();
 
 				file.setValue("META-INF/resources/login.jsp");
@@ -204,16 +205,19 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 		NewModuleFragmentOp op = NewModuleFragmentOp.TYPE.instantiate();
 
 		op.setProjectName("test-module-fragment");
+
 		Status projectNameOkValidationStatus1 = op.getProjectName().validation();
 
 		Assert.assertEquals("ok", projectNameOkValidationStatus1.message());
 
 		op.setProjectName("#test-module-fragment");
+
 		Status projectNameErrorValidationStatus = op.getProjectName().validation();
 
 		Assert.assertEquals("The project name is invalid.", projectNameErrorValidationStatus.message());
 
 		op.setProjectName("test_module_fragment");
+
 		Status projectNameOkValidationStatus2 = op.getProjectName().validation();
 
 		Assert.assertEquals("ok", projectNameOkValidationStatus2.message());

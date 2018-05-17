@@ -68,6 +68,7 @@ public class ImportLiferayModuleProjectOpTest {
 		importOp = ImportLiferayModuleProjectOp.TYPE.instantiate();
 
 		importOp.setLocation(projectLocation);
+
 		Assert.assertEquals("A project with that name already exists.", importOp.validation().message());
 
 		projectLocation = _unzipFile("gradle-liferay-workspace");

@@ -127,9 +127,9 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 
 		IMarker[] buildProblems = JavaBuilder.getProblemsFor(getProject());
 
-		Stream<IMarker> buildProblemsStream = Stream.of(buildProblems);
-
-		List<IMarker> errorMarkerList = buildProblemsStream.filter(
+		List<IMarker> errorMarkerList = Stream.of(
+			buildProblems
+		).filter(
 			marker -> {
 				try {
 					int severirty = (int)marker.getAttribute(IMarker.SEVERITY);
@@ -139,7 +139,10 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 				catch (CoreException ce) {
 					return false;
 				}
-			}).collect(Collectors.toList());
+			}
+		).collect(
+			Collectors.toList()
+		);
 
 		if (ListUtil.isNotEmpty(errorMarkerList)) {
 			return outputJar;

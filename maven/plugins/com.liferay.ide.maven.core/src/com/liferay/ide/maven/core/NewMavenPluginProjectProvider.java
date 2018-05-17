@@ -336,7 +336,7 @@ public class NewMavenPluginProjectProvider
 			return retval;
 		}
 
-		File pomFile = path.append(IMavenConstants.POM_FILE_NAME).toFile();
+		File pomFile = FileUtil.getFile(path.append(IMavenConstants.POM_FILE_NAME));
 
 		if (FileUtil.exists(pomFile)) {
 			IMaven maven = MavenPlugin.getMaven();

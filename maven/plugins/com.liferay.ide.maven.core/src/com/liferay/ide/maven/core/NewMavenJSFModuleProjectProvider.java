@@ -117,17 +117,17 @@ public class NewMavenJSFModuleProjectProvider
 
 	public String getHttpResponse(String request) {
 		StringBuilder retVal = new StringBuilder();
-		HttpClient httpclient = new DefaultHttpClient();
+		HttpClient httpClient = new DefaultHttpClient();
 
 		try {
 
 			// create httpget
 
-			HttpGet httpget = new HttpGet(request);
+			HttpGet httpGet = new HttpGet(request);
 
 			// execute httpRequest
 
-			HttpResponse response = httpclient.execute(httpget);
+			HttpResponse response = httpClient.execute(httpGet);
 
 			int statusCode = response.getStatusLine().getStatusCode();
 

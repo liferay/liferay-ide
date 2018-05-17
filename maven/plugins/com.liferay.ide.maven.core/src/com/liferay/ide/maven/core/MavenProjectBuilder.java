@@ -407,6 +407,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 			List<Dependency> existedDependencies = mavenProject.getDependencies();
 
 			IMaven maven = MavenPlugin.getMaven();
+
 			File pomFile = new File(project.getLocation().toOSString(), IMavenConstants.POM_FILE_NAME);
 
 			Model model = maven.readModel(pomFile);
@@ -417,6 +418,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 				de.setGroupId(dependency[0]);
 				de.setArtifactId(dependency[1]);
 				de.setVersion(dependency[2]);
+
 				String newKey = de.getManagementKey();
 
 				boolean existed = false;
@@ -445,6 +447,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 					public IStatus runInWorkspace(IProgressMonitor monitor) {
 						try {
 							project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+
 							MavenPlugin.getProjectConfigurationManager().updateProjectConfiguration(project, monitor);
 						}
 						catch (CoreException ce) {

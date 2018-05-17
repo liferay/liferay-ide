@@ -78,9 +78,12 @@ public class LiferayMavenLegacyProjectUpdaterTests {
 		IProject ppProject = CoreUtil.getProject("testpp");
 
 		Assert.assertTrue(updater.isNeedUpgrade(ppProject));
+
 		updater.upgradePomFile(ppProject, null);
+
 		Assert.assertFalse(updater.isNeedUpgrade(ppProject));
 		Assert.assertTrue(_containString(ppProject, "com.liferay.css.builder"));
+
 		_makeSureNoLegacyElememnts(ppProject);
 
 		// service builder parent project
@@ -88,8 +91,11 @@ public class LiferayMavenLegacyProjectUpdaterTests {
 		IProject testsbProject = CoreUtil.getProject("testsb");
 
 		Assert.assertTrue(updater.isNeedUpgrade(testsbProject));
+
 		updater.upgradePomFile(testsbProject, null);
+
 		Assert.assertFalse(updater.isNeedUpgrade(testsbProject));
+
 		_makeSureNoLegacyElememnts(testsbProject);
 
 		// service builder -portlet subproject
@@ -97,20 +103,26 @@ public class LiferayMavenLegacyProjectUpdaterTests {
 		IProject testsbPortletProject = CoreUtil.getProject("testsb-portlet");
 
 		Assert.assertTrue(updater.isNeedUpgrade(testsbPortletProject));
+
 		updater.upgradePomFile(testsbPortletProject, null);
+
 		Assert.assertFalse(updater.isNeedUpgrade(testsbPortletProject));
 		Assert.assertTrue(_containString(testsbPortletProject, "com.liferay.css.builder"));
 		Assert.assertTrue(_containString(testsbPortletProject, "com.liferay.portal.tools.service.builder"));
 		Assert.assertTrue(_containString(testsbPortletProject, "biz.aQute.bnd.annotation"));
+
 		_makeSureNoLegacyElememnts(testsbPortletProject);
 
 		//// service builder -service subproject
 		IProject testsbPortletServiceProject = CoreUtil.getProject("testsb-portlet-service");
 
 		Assert.assertTrue(updater.isNeedUpgrade(testsbPortletServiceProject));
+
 		updater.upgradePomFile(testsbPortletServiceProject, null);
+
 		Assert.assertFalse(updater.isNeedUpgrade(testsbPortletServiceProject));
 		Assert.assertTrue(_containString(testsbPortletServiceProject, "biz.aQute.bnd.annotation"));
+
 		_makeSureNoLegacyElememnts(testsbPortletServiceProject);
 
 		// theme project

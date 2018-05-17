@@ -115,8 +115,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase {
 		Assert.assertEquals(expectedProjectName, actualProjectName);
 	}
 
-	@Test
 	@Ignore
+	@Test
 	public void testLocationValidation() throws Exception {
 		NewLiferayPluginProjectOp op = newProjectOp("test-location-validation-service");
 
@@ -230,8 +230,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase {
 		Assert.assertEquals(expected, location.validation().message());
 	}
 
-	@Test
 	@Ignore
+	@Test
 	public void testPortletFrameworkValidation() throws Exception {
 		if (shouldSkipBundleTests()) {
 			return;

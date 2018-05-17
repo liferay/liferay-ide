@@ -112,6 +112,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 		if (!_shouldConfigure(liferayMavenPlugin, request)) {
 			monitor.done();
+
 			return;
 		}
 

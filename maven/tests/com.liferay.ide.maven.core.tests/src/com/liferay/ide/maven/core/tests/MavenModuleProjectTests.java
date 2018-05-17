@@ -201,8 +201,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
 		assertTrue(bndcontent.contains(bndConfig));
 
-		String restConfig =
-			"Require-Capability: osgi.contract; filter:=\"(&(osgi.contract=JavaJAXRS)(version=2))\"";
+		String restConfig = "Require-Capability: osgi.contract; filter:=\"(&(osgi.contract=JavaJAXRS)(version=2))\"";
 
 		assertTrue(bndcontent.contains(restConfig));
 
