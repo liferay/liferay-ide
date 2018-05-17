@@ -21,12 +21,12 @@
 		</editor>
 		<!--
 		<editor
-				class="com.liferay.ide.kaleo.ui.editor.KaleoFreemarkerEditor"
-				contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
-				default="false"
-				icon="icons/e16/freemarker.gif"
-				id="com.liferay.ide.kaleo.ui.editor.freemarker"
-				name="Workflow Freemarker Editor"
+			class="com.liferay.ide.kaleo.ui.editor.KaleoFreemarkerEditor"
+			contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+			default="false"
+			icon="icons/e16/freemarker.gif"
+			id="com.liferay.ide.kaleo.ui.editor.freemarker"
+			name="Workflow Freemarker Editor"
 		>
 		</editor>
 		-->
@@ -228,35 +228,35 @@
 		</editorHelper>
 		<!--
 		<editorHelper
-				class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
-				editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
-				fileExtension="bsh"
-				languageType="beanshell"
+			class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
+			editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
+			fileExtension="bsh"
+			languageType="beanshell"
 		>
 		</editorHelper>
 
 		<editorHelper
-				class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
-				editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
-				fileExtension="py"
-				languageType="python"
-				>
+			class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
+			editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
+			fileExtension="py"
+			languageType="python"
+		>
 		</editorHelper>
 
 		<editorHelper
-				class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
-				editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
-				fileExtension="rb"
-				languageType="ruby"
-				>
+			class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
+			editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
+			fileExtension="rb"
+			languageType="ruby"
+		>
 		</editorHelper>
 
 		<editorHelper
-				class="com.liferay.ide.kaleo.ui.helpers.FreemarkerEditorHelper"
-				editorId="com.liferay.ide.kaleo.ui.editor.freemarker"
-				fileExtension="ftl"
-				languageType="freemarker"
-				>
+			class="com.liferay.ide.kaleo.ui.helpers.FreemarkerEditorHelper"
+			editorId="com.liferay.ide.kaleo.ui.editor.freemarker"
+			fileExtension="ftl"
+			languageType="freemarker"
+		>
 		</editorHelper>
 		-->
 		<editorHelper

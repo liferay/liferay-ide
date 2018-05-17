@@ -14,10 +14,9 @@
 
 package com.liferay.ide.kaleo.core.model.internal;
 
-import static com.liferay.ide.core.util.CoreUtil.empty;
-import static com.liferay.ide.kaleo.core.util.KaleoModelUtil.DEFAULT_POINT;
-
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.kaleo.core.KaleoCore;
+import com.liferay.ide.kaleo.core.util.KaleoModelUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -37,7 +36,7 @@ public class WorkflowNodeMetadataObject {
 	}
 
 	public WorkflowNodeMetadataObject(String contents) {
-		if (!empty(contents)) {
+		if (!CoreUtil.empty(contents)) {
 			_initialize(contents);
 		}
 	}
@@ -110,7 +109,7 @@ public class WorkflowNodeMetadataObject {
 			for (TransitionMetadataObject transitionMetadata : _transitionsMetadata) {
 				String transitionName = transitionMetadata.getName();
 
-				if (!empty(transitionName)) {
+				if (!CoreUtil.empty(transitionName)) {
 					JSONObject jsonTransitionMetadata = new JSONObject();
 
 					JSONArray jsonBendpoints = new JSONArray();
@@ -123,7 +122,7 @@ public class WorkflowNodeMetadataObject {
 
 					Point labelPosition = transitionMetadata.getLabelPosition();
 
-					if (!labelPosition.equals(DEFAULT_POINT)) {
+					if (!labelPosition.equals(KaleoModelUtil.DEFAULT_POINT)) {
 						JSONArray xy = _pointToJSONPoint(labelPosition);
 
 						jsonTransitionMetadata.put("xy", xy);
@@ -200,7 +199,7 @@ public class WorkflowNodeMetadataObject {
 	}
 
 	private Point _jsonArrayToPoint(JSONArray jsonArray) {
-		Point point = DEFAULT_POINT;
+		Point point = KaleoModelUtil.DEFAULT_POINT;
 
 		try {
 			if ((jsonArray.length() == 2) && !jsonArray.isNull(0) && !jsonArray.isNull(1)) {
@@ -221,7 +220,7 @@ public class WorkflowNodeMetadataObject {
 			return _jsonArrayToPoint(jsonXY);
 		}
 		else {
-			return DEFAULT_POINT;
+			return KaleoModelUtil.DEFAULT_POINT;
 		}
 	}
 

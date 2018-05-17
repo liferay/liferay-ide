@@ -35,6 +35,7 @@ public abstract class AbstractWorkflowDefinitionAction extends SelectionProvider
 
 	public AbstractWorkflowDefinitionAction(Shell shell, ISelectionProvider selectionProvider, String text) {
 		super(selectionProvider, text);
+
 		this.shell = shell;
 		setEnabled(false);
 	}
@@ -74,6 +75,7 @@ public abstract class AbstractWorkflowDefinitionAction extends SelectionProvider
 	public void selectionChanged(IStructuredSelection sel) {
 		if (sel.isEmpty()) {
 			setEnabled(false);
+
 			return;
 		}
 
@@ -99,6 +101,7 @@ public abstract class AbstractWorkflowDefinitionAction extends SelectionProvider
 			}
 			else {
 				setEnabled(false);
+
 				return;
 			}
 		}

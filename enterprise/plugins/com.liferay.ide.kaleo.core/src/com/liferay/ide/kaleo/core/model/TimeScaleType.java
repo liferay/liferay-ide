@@ -46,4 +46,5 @@ public enum TimeScaleType {
 	@Label(standard = "year")
 		@EnumSerialization(primary = "year")
 	YEAR,
+
 }

@@ -42,6 +42,7 @@ public class NewNodeNameValidationService extends ValidationService {
 
 				if ((name != null) && name.equals(newNode.getName().content())) {
 					retval = Status.createErrorStatus("Name already in use.");
+
 					break;
 				}
 			}

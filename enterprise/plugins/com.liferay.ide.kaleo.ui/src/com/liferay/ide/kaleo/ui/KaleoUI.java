@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -95,6 +96,7 @@ public class KaleoUI extends AbstractUIPlugin {
 		for (IKaleoEditorHelper editoHelper : getDefault().getKaleoEditorHelpers()) {
 			if (editoHelper.getLanguageType().equals(languageType)) {
 				retval = editoHelper;
+
 				break;
 			}
 		}
@@ -112,6 +114,7 @@ public class KaleoUI extends AbstractUIPlugin {
 		for (IKaleoEditorHelper editoHelper : getDefault().getKaleoEditorHelpers()) {
 			if (editoHelper.getEditorId().equals(editorId)) {
 				retval = editoHelper;
+
 				break;
 			}
 		}
@@ -155,8 +158,9 @@ public class KaleoUI extends AbstractUIPlugin {
 
 	public IKaleoEditorHelper[] getKaleoEditorHelpers() {
 		if (_kaleoEditorHelpers == null) {
-			IConfigurationElement[] elements =
-				Platform.getExtensionRegistry().getConfigurationElementsFor(IKaleoEditorHelper.EXTENSION_ID);
+			IExtensionRegistry registry = Platform.getExtensionRegistry();
+
+			IConfigurationElement[] elements = registry.getConfigurationElementsFor(IKaleoEditorHelper.EXTENSION_ID);
 
 			try {
 				List<IKaleoEditorHelper> helpers = new ArrayList<>();
@@ -218,6 +222,7 @@ public class KaleoUI extends AbstractUIPlugin {
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 	}
 

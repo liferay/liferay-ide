@@ -49,6 +49,7 @@ public class WorkflowNodeAddHandlerFactory extends SapphireActionHandlerFactory 
 					@Override
 					public void init(SapphireAction action, ActionHandlerDef def) {
 						super.init(action, def);
+
 						addImage(Action.TYPE.image());
 						setLabel("Task Action");
 					}
@@ -70,6 +71,7 @@ public class WorkflowNodeAddHandlerFactory extends SapphireActionHandlerFactory 
 					@Override
 					public void init(SapphireAction action, ActionHandlerDef def) {
 						super.init(action, def);
+
 						addImage(ActionNotification.TYPE.image());
 						setLabel("Task Notification");
 					}
@@ -94,6 +96,7 @@ public class WorkflowNodeAddHandlerFactory extends SapphireActionHandlerFactory 
 					@Override
 					public void init(SapphireAction action, ActionHandlerDef def) {
 						super.init(action, def);
+
 						addImage(Action.TYPE.image());
 						setLabel("Action");
 					}
@@ -115,6 +118,7 @@ public class WorkflowNodeAddHandlerFactory extends SapphireActionHandlerFactory 
 					@Override
 					public void init(SapphireAction action, ActionHandlerDef def) {
 						super.init(action, def);
+
 						addImage(Notification.TYPE.image());
 						setLabel("Notification");
 					}

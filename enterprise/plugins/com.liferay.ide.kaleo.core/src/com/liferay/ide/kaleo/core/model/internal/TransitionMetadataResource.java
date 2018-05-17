@@ -36,6 +36,7 @@ public class TransitionMetadataResource extends Resource {
 
 	public TransitionMetadataResource(TransitionMetadataObject metadata, Resource parent) {
 		super(parent);
+
 		_metadata = metadata;
 	}
 

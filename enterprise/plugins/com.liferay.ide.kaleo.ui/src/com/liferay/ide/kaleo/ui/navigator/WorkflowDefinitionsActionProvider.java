@@ -90,16 +90,18 @@ public class WorkflowDefinitionsActionProvider extends CommonActionProvider {
 		}
 
 		menu.add(_invisibleSeparator(TOP_SECTION_START_SEPARATOR));
+
 		addTopSection(menu, definition, definitionsFolder);
+
 		menu.add(_invisibleSeparator(TOP_SECTION_END_SEPARATOR));
 		menu.add(new Separator());
-
 		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS + "-end"));
 	}
 
 	public void init(ICommonActionExtensionSite site) {
 		super.init(site);
+
 		_actionSite = site;
 		ICommonViewerSite viewerSite = site.getViewSite();
 

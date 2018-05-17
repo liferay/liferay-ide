@@ -30,11 +30,7 @@ import org.w3c.dom.Node;
  */
 public enum KaleoTemplateContext {
 
-	DOCUMENT("#document"),
-
-	UNKNOWN("unknown"),
-
-	WORKFLOW_DEFINITION("workflow-definition");
+	DOCUMENT("#document"), UNKNOWN("unknown"), WORKFLOW_DEFINITION("workflow-definition");
 
 	public static KaleoTemplateContext fromId(String contextTypeId) {
 		for (KaleoTemplateContext context : values()) {

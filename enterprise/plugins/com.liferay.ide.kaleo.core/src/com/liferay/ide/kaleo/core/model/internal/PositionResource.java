@@ -30,6 +30,7 @@ public class PositionResource extends Resource {
 
 	public PositionResource(Point point, Resource parent) {
 		super(parent);
+
 		_point = point;
 	}
 
@@ -53,10 +54,10 @@ public class PositionResource extends Resource {
 
 					if (PositionResource.this._point != null) {
 						if (Position.PROP_X.equals(def) || ConnectionBendpoint.PROP_X.equals(def)) {
-							retval = Integer.toString(PositionResource.this._point.getX());
+							retval = String.valueOf(PositionResource.this._point.getX());
 						}
 						else if (Position.PROP_Y.equals(def) || ConnectionBendpoint.PROP_Y.equals(def)) {
-							retval = Integer.toString(PositionResource.this._point.getY());
+							retval = String.valueOf(PositionResource.this._point.getY());
 						}
 					}
 

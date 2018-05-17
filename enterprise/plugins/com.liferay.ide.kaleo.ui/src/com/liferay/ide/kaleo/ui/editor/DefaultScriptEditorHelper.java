@@ -45,19 +45,11 @@ public class DefaultScriptEditorHelper extends AbstractKaleoEditorHelper {
 
 			IContentType contentType = null;
 
-			/*
-			 * if ( editorInput.getProperty().hasAnnotation( ContentType.class )
-			 * ) { String contentTypeId =
-			 * editorInput.getProperty().getAnnotation( ContentType.class
-			 * ).contentTypeId(); contentType =
-			 * Platform.getContentTypeManager().getContentType( contentTypeId );
-			 * } else
-			 */
 			IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
 
-			try(InputStream inputStream = editorInput.getStorage().getContents()){
+			try (InputStream inputStream = editorInput.getStorage().getContents()) {
 				IContentDescription contentDescription = contentTypeManager.getDescriptionFor(
-						inputStream, fileName, IContentDescription.ALL);
+					inputStream, fileName, IContentDescription.ALL);
 
 				if (contentDescription != null) {
 					contentType = contentDescription.getContentType();
@@ -87,6 +79,7 @@ public class DefaultScriptEditorHelper extends AbstractKaleoEditorHelper {
 			for (IConfigurationElement config : editorConfigs) {
 				if (editorId.equals(config.getAttribute("id"))) {
 					editorPart = (IEditorPart)config.createExecutableExtension("class");
+
 					break;
 				}
 			}

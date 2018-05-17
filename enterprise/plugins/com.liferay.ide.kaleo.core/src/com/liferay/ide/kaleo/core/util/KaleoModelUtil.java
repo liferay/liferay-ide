@@ -67,18 +67,21 @@ public class KaleoModelUtil {
 		switch (op.getAssignmentType().content(true)) {
 			case CREATOR:
 				user.content(true);
+
 				break;
 
 			case USER:
 				User content = user.content(true);
 
 				content.copy(op.getImpliedUser());
+
 				break;
 
 			case ROLE:
 				final Role newRole = taskRole.insert();
 
 				newRole.copy(op.getImpliedRole());
+
 				break;
 
 			case ROLE_TYPE:

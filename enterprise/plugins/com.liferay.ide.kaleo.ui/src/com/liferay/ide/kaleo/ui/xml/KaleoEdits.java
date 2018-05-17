@@ -533,6 +533,7 @@ public class KaleoEdits {
 					// shall be ok here..let the model know we make changes
 
 					domModel.aboutToChangeModel();
+
 					undo = domModel.getStructuredDocument().getUndoManager();
 
 					// let the document know we make changes
