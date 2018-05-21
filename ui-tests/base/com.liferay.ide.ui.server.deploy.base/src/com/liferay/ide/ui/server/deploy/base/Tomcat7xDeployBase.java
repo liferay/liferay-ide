@@ -56,7 +56,7 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 
 		jobAction.waitForConsoleContent(server.getServerName(), "STARTED com.liferay.blogs.web", 20 * 1000);
 
-		viewAction.servers.removeModule(server.getStartedLabel(), project.getStartedLabel());
+		viewAction.servers.removeModule(server.getServerName(), project.getName());
 
 		dialogAction.confirm();
 
@@ -80,7 +80,7 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 
 		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName() + "_", 20 * 1000);
 
-		viewAction.servers.removeModule(server.getStartedLabel(), project.getStartedLabel());
+		viewAction.servers.removeModule(server.getServerName(), project.getName());
 
 		dialogAction.confirm();
 
@@ -131,7 +131,7 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 		jobAction.waitForConsoleContent(
 			server.getServerName(), "1 portlet for " + project.getName() + " is available for use", M1);
 
-		viewAction.servers.removeModule(server.getStartedLabel(), project.getStartedLabel());
+		viewAction.servers.removeModule(server.getServerName(), project.getName());
 
 		dialogAction.confirm();
 
