@@ -30,6 +30,8 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.m2e.tests.common.JobHelpers;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.wst.server.core.IServer;
@@ -38,10 +40,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Andy Wu
  * @author Joye Luo
+ * @author Terry Jia
  */
+@SuppressWarnings("restriction")
 public class ImportMavenLiferayWorkspaceOpTests {
 
 	@Before
@@ -55,22 +61,25 @@ public class ImportMavenLiferayWorkspaceOpTests {
 	public void testImportMavenLiferayWorkspaceInitBundle() throws Exception {
 		ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
 
-		URL wsZipUrl = Platform.getBundle(
-			"com.liferay.ide.maven.core.tests").getEntry("projects/maven-liferay-workspace.zip");
+		Bundle bundle = Platform.getBundle("com.liferay.ide.maven.core.tests");
 
-		File wsZipFile = new File(FileLocator.toFileURL(wsZipUrl).getFile());
+		URL zipUrl = FileLocator.toFileURL(bundle.getEntry("projects/maven-liferay-workspace.zip"));
 
-		File eclipseWorkspaceLocation = CoreUtil.getWorkspaceRootLocation().toFile();
+		File zipFile = new File(zipUrl.getFile());
 
-		ZipUtil.unzip(wsZipFile, eclipseWorkspaceLocation);
+		File rootFile = CoreUtil.getWorkspaceRootFile();
 
-		File wsFolder = new File(eclipseWorkspaceLocation, "maven-liferay-workspace");
+		ZipUtil.unzip(zipFile, rootFile);
 
-		op.setWorkspaceLocation(wsFolder.getAbsolutePath());
+		File workspaceFolder = new File(rootFile, "maven-liferay-workspace");
+
+		op.setWorkspaceLocation(workspaceFolder.getAbsolutePath());
 
 		op.setProvisionLiferayBundle(true);
 
-		String bundleUrl = op.getBundleUrl().content(true);
+		Value<String> url = op.getBundleUrl();
+
+		String bundleUrl = url.content(true);
 
 		Assert.assertEquals(
 			"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5" +
@@ -85,11 +94,26 @@ public class ImportMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
-		File bundleDir = new File(wsFolder, "bundles");
+		JobHelpers.waitForJobs(
+			job -> {
+				String jobName = job.getName();
+
+				if (jobName.equals("Init Liferay Bundle")) {
+					return true;
+				}
+
+				return false;
+			},
+
+			30 * 60 * 1000);
+
+		File bundleDir = new File(workspaceFolder, "bundles");
 
 		Assert.assertTrue(bundleDir.exists());
 
-		IServer server = ServerUtil.getServer(op.getServerName().content());
+		Value<String> serverName = op.getServerName();
+
+		IServer server = ServerUtil.getServer(serverName.content());
 
 		Assert.assertTrue(ServerUtil.isLiferayRuntime(server));
 
@@ -99,7 +123,9 @@ public class ImportMavenLiferayWorkspaceOpTests {
 
 		op = ImportLiferayWorkspaceOp.TYPE.instantiate();
 
-		Assert.assertEquals(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, op.validation().message());
+		Status status = op.validation();
+
+		Assert.assertEquals(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, status.message());
 
 		project = CoreUtil.getProject("maven-liferay-workspace");
 
@@ -110,25 +136,23 @@ public class ImportMavenLiferayWorkspaceOpTests {
 	public void testImportMavenLiferayWorkspaceInitBundleSetUrl() throws Exception {
 		ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
 
-		URL wsZipUrl = Platform.getBundle(
-			"com.liferay.ide.maven.core.tests").getEntry("projects/maven-liferay-workspace-bundleUrl.zip");
+		Bundle bundle = Platform.getBundle("com.liferay.ide.maven.core.tests");
 
-		String bundleUrl =
-			"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5" +
-				"/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
-		String existUrl = "http://www.example.com/";
-		String emailConfig = "<emailAddress>example@liferay.com</emailAddress>";
+		URL zipUrl = FileLocator.toFileURL(bundle.getEntry("projects/maven-liferay-workspace-bundleUrl.zip"));
+
+		File zipFile = new File(zipUrl.getFile());
+
+		IPath rootLocation = CoreUtil.getWorkspaceRootLocation();
+
+		File rootFile = CoreUtil.getWorkspaceRootFile();
+
 		String projectName = "maven-liferay-workspace";
 
-		File wsZipFile = new File(FileLocator.toFileURL(wsZipUrl).getFile());
+		IPath fullLocation = rootLocation.append(projectName);
 
-		IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+		String projectLocation = fullLocation.toPortableString();
 
-		String projectLocation = workspaceLocation.append(projectName).toPortableString();
-
-		ZipUtil.unzip(wsZipFile, workspaceLocation.toFile());
-
-		File wsFolder = new File(workspaceLocation.toFile(), projectName);
+		ZipUtil.unzip(zipFile, rootFile);
 
 		File pomFile = new File(projectLocation, "pom.xml");
 
@@ -136,19 +160,46 @@ public class ImportMavenLiferayWorkspaceOpTests {
 
 		String content = FileUtil.readContents(pomFile);
 
+		String existUrl = "http://www.example.com/";
+
 		Assert.assertTrue(content.contains(existUrl));
+
+		String emailConfig = "<emailAddress>example@liferay.com</emailAddress>";
+
 		Assert.assertTrue(content.contains(emailConfig));
 
+		File wsFolder = new File(rootFile, projectName);
+
 		op.setWorkspaceLocation(wsFolder.getAbsolutePath());
+
 		op.setProvisionLiferayBundle(true);
 
-		String defaultUrl = op.getBundleUrl().content(true);
+		Value<String> url = op.getBundleUrl();
+
+		String defaultUrl = url.content(true);
 
 		Assert.assertEquals(existUrl, defaultUrl);
+
+		String bundleUrl =
+			"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5" +
+				"/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
 
 		op.setBundleUrl(bundleUrl);
 
 		op.execute(new ProgressMonitor());
+
+		JobHelpers.waitForJobs(
+			job -> {
+				String jobName = job.getName();
+
+				if (jobName.equals("Init Liferay Bundle")) {
+					return true;
+				}
+
+				return false;
+			},
+
+			30 * 60 * 1000);
 
 		content = FileUtil.readContents(pomFile);
 
@@ -169,18 +220,19 @@ public class ImportMavenLiferayWorkspaceOpTests {
 	public void testImportMavenLiferayWorkspaceOp() throws Exception {
 		ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
 
-		URL wsZipUrl = Platform.getBundle(
-			"com.liferay.ide.maven.core.tests").getEntry("projects/maven-liferay-workspace.zip");
+		Bundle bundle = Platform.getBundle("com.liferay.ide.maven.core.tests");
 
-		File wsZipFile = new File(FileLocator.toFileURL(wsZipUrl).getFile());
+		URL zipUrl = FileLocator.toFileURL(bundle.getEntry("projects/maven-liferay-workspace.zip"));
 
-		File eclipseWorkspaceLocation = CoreUtil.getWorkspaceRootLocation().toFile();
+		File zipFile = new File(zipUrl.getFile());
 
-		ZipUtil.unzip(wsZipFile, eclipseWorkspaceLocation);
+		File rootFile = CoreUtil.getWorkspaceRootFile();
 
-		File wsFolder = new File(eclipseWorkspaceLocation, "maven-liferay-workspace");
+		ZipUtil.unzip(zipFile, rootFile);
 
-		op.setWorkspaceLocation(wsFolder.getAbsolutePath());
+		File workspaceFolder = new File(rootFile, "maven-liferay-workspace");
+
+		op.setWorkspaceLocation(workspaceFolder.getAbsolutePath());
 
 		Status validationStatus = op.validation();
 
@@ -206,7 +258,9 @@ public class ImportMavenLiferayWorkspaceOpTests {
 
 		op = ImportLiferayWorkspaceOp.TYPE.instantiate();
 
-		Assert.assertEquals(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, op.validation().message());
+		Status status = op.validation();
+
+		Assert.assertEquals(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, status.message());
 
 		project = CoreUtil.getProject("maven-liferay-workspace");
 

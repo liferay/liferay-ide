@@ -415,6 +415,10 @@ public class CoreUtil {
 		return ResourcesPlugin.getWorkspace().getRoot();
 	}
 
+	public static File getWorkspaceRootFile() {
+		return getWorkspaceRootLocation().toFile();
+	}
+
 	public static IPath getWorkspaceRootLocation() {
 		return getWorkspaceRoot().getLocation();
 	}
