@@ -129,7 +129,7 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 		Assert.assertTrue(viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName()));
 
 		jobAction.waitForConsoleContent(
-			server.getServerName(), "1 portlet for " + project.getName() + " is available for use", M1);
+			server.getServerName(), "1 portlet for " + project.getName() + " is available for use", M2);
 
 		viewAction.servers.removeModule(server.getServerName(), project.getName());
 
