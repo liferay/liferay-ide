@@ -314,7 +314,7 @@ public class ViewAction extends UIAction {
 		}
 
 		public void openAddAndRemoveDialog(String serverLabel) {
-			_serversView.getServers().contextMenu(ADD_AND_REMOVE, serverLabel);
+			_serversView.getServers().contextMenu(true, ADD_AND_REMOVE, serverLabel);
 		}
 
 		public void openEditor(String serverLabel) {
@@ -322,7 +322,7 @@ public class ViewAction extends UIAction {
 		}
 
 		public void openLiferayPortalHome(String serverLabel) {
-			_serversView.getServers().contextMenu(OPEN_LIFERAY_PORTAL_HOME, serverLabel);
+			_serversView.getServers().contextMenu(true, OPEN_LIFERAY_PORTAL_HOME, serverLabel);
 
 			_jobAction.waitForBrowserLoaded();
 		}
@@ -330,7 +330,7 @@ public class ViewAction extends UIAction {
 		public void removeModule(String serverLabel, String projectName) {
 			ide.sleep(2000);
 
-			_serversView.getServers().contextMenu("Remove", serverLabel, projectName);
+			_serversView.getServers().contextMenu(true, "Remove", serverLabel, projectName);
 		}
 
 		public void start(String serverLabel) {
@@ -344,7 +344,7 @@ public class ViewAction extends UIAction {
 		public void stop(String serverLabel) {
 			ide.sleep(2000);
 
-			_serversView.getServers().contextMenu(STOP, serverLabel);
+			_serversView.getServers().contextMenu(true, STOP, serverLabel);
 		}
 
 		public boolean visibleModuleTry(String serverLabel, String projectName) {

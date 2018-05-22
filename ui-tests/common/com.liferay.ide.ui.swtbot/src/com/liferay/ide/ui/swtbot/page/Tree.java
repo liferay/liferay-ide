@@ -40,47 +40,78 @@ public class Tree extends AbstractWidget {
 	}
 
 	public void contextMenu(String menu, String... items) {
+		contextMenu(false, menu, items);
+	}
+
+	public void contextMenu(boolean fuzzy, String menu, String... items) {
 		SWTBotTreeItem item = null;
 
-		int timeout = 60 * 1000;
+		if (fuzzy) {
+			SWTBotTreeItem[] treeItems = getWidget().getAllItems();
 
-		long current = System.currentTimeMillis();
+			for (int m = 0; m < items.length; m++) {
+				String itemLabel = items[m];
 
-		while (true) {
-			if ((item != null) || (System.currentTimeMillis() > (current + timeout))) {
-				break;
-			}
+				for (int i = 0; i < treeItems.length; i++) {
+					SWTBotTreeItem currentItem = treeItems[i];
 
-			sleep();
+					String label = currentItem.getText();
 
-			try {
-				getWidget().setFocus();
+					if (label.startsWith(itemLabel)) {
+						item = currentItem;
 
-				if (items.length > 1) {
-					item = getWidget().expandNode(items);
+						break;
+					}
 				}
-				else {
-					item = getWidget().getTreeItem(items[0]);
+
+				if (m != (items.length - 1)) {
+					item.expand();
+
+					treeItems = item.getItems();
 				}
-			}
-			catch (Exception e) {
 			}
 		}
+		else {
+			int timeout = 60 * 1000;
 
-		StringBuffer sb = new StringBuffer();
+			long current = System.currentTimeMillis();
 
-		sb.append("Could not find expected tree node ");
-		sb.append(items[items.length - 1]);
-		sb.append(" after ");
-		sb.append(timeout);
-		sb.append(" millis, and the current tree is: ");
+			while (true) {
+				if ((item != null) || (System.currentTimeMillis() > (current + timeout))) {
+					break;
+				}
 
-		for (SWTBotTreeItem treeItem : getWidget().getAllItems()) {
-			sb.append(treeItem.getText());
-			sb.append(" ");
+				sleep();
+
+				try {
+					getWidget().setFocus();
+	
+					if (items.length > 1) {
+						item = getWidget().expandNode(items);
+					}
+					else {
+						item = getWidget().getTreeItem(items[0]);
+					}
+				}
+				catch (Exception e) {
+				}
+			}
+
+			StringBuffer sb = new StringBuffer();
+
+			sb.append("Could not find expected tree node ");
+			sb.append(items[items.length - 1]);
+			sb.append(" after ");
+			sb.append(timeout);
+			sb.append(" millis, and the current tree is: ");
+
+			for (SWTBotTreeItem treeItem : getWidget().getAllItems()) {
+				sb.append(treeItem.getText());
+				sb.append(" ");
+			}
+	
+			Assert.assertNotNull(sb.toString(), item);
 		}
-
-		Assert.assertNotNull(sb.toString(), item);
 
 		SWTBotMenu botMenu = item.contextMenu(menu);
 
