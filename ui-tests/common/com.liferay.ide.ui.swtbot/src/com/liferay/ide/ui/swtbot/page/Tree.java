@@ -46,6 +46,8 @@ public class Tree extends AbstractWidget {
 	public void contextMenu(boolean fuzzy, String menu, String... items) {
 		SWTBotTreeItem item = null;
 
+		StringBuffer sb = new StringBuffer();
+
 		if (fuzzy) {
 			SWTBotTreeItem[] treeItems = getWidget().getAllItems();
 
@@ -54,6 +56,10 @@ public class Tree extends AbstractWidget {
 
 				for (int i = 0; i < treeItems.length; i++) {
 					SWTBotTreeItem currentItem = treeItems[i];
+
+					currentItem.setFocus();
+
+					sleep();
 
 					String label = currentItem.getText();
 
@@ -69,6 +75,22 @@ public class Tree extends AbstractWidget {
 
 					treeItems = item.getItems();
 				}
+			}
+
+			sb.append("Used fuzzy and expected tree is ");
+
+			for (String treeItem : items) {
+				sb.append(treeItem);
+
+				sb.append(" ");
+			}
+
+			sb.append(" but current one is");
+
+			for (SWTBotTreeItem treeItem : treeItems) {
+				sb.append(treeItem.getText());
+
+				sb.append(" ");
 			}
 		}
 		else {
@@ -97,8 +119,6 @@ public class Tree extends AbstractWidget {
 				}
 			}
 
-			StringBuffer sb = new StringBuffer();
-
 			sb.append("Could not find expected tree node ");
 			sb.append(items[items.length - 1]);
 			sb.append(" after ");
@@ -109,9 +129,10 @@ public class Tree extends AbstractWidget {
 				sb.append(treeItem.getText());
 				sb.append(" ");
 			}
-	
-			Assert.assertNotNull(sb.toString(), item);
+
 		}
+
+		Assert.assertNotNull(sb.toString(), item);
 
 		SWTBotMenu botMenu = item.contextMenu(menu);
 
