@@ -42,7 +42,7 @@
         <m2e-archiver-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/0.17.2.201606141937/</m2e-archiver-site>
         <eclipse-xml-search-site>https://dl.bintray.com/gamerson/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <tern-site>http://oss.opensagres.fr/tern.repository/1.2.1/</tern-site>
-        <bndtools-site>https://bndtools.ci.cloudbees.com/job/bndtools.master/lastSuccessfulBuild/artifact/build/generated/p2/</bndtools-site>
+        <bndtools-site>https://dl.bintray.com/bndtools/bndtools/4.0.0/</bndtools-site>
         <gradle-site>http://download.eclipse.org/buildship/updates/e47/snapshots/3.x</gradle-site>
         <tycho-m2e-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.9.0/N/0.9.0.201412222151/</tycho-m2e-site>
         <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/2.6.0/</swtbot-site>
