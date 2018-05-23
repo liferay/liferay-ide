@@ -35,12 +35,12 @@ import org.junit.Test;
  * @author Simon Jiang
  * @author Gregory Amerson
  */
-@SuppressWarnings("restriction")
 @Ignore
+@SuppressWarnings("restriction")
 public class LiferayMavenProjectCustomJSPValidationTest extends LiferayMavenProjectTestCase {
 
-	@Test
 	@Ignore
+	@Test
 	public void testCustomJspValidationConfigured() throws Exception {
 		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(LiferayMavenCore.PLUGIN_ID);
 
@@ -73,16 +73,16 @@ public class LiferayMavenProjectCustomJSPValidationTest extends LiferayMavenProj
 		project.delete(true, monitor);
 	}
 
-	@Test
 	@Ignore
+	@Test
 	public void testCustomJspValidationDefaults() throws Exception {
 		IEclipsePreferences prefs = DefaultScope.INSTANCE.getNode(LiferayMavenCore.PLUGIN_ID);
 
 		assertTrue(prefs.getBoolean(LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, false));
 	}
 
-	@Test
 	@Ignore
+	@Test
 	public void testNoCustomJspValidationConfigured() throws Exception {
 		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(LiferayMavenCore.PLUGIN_ID);
 

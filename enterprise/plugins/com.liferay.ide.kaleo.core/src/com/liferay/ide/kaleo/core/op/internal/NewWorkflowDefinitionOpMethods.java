@@ -112,7 +112,7 @@ public class NewWorkflowDefinitionOpMethods {
 				count++;
 			}
 
-			try(InputStream inputStream = new ByteArrayInputStream("".getBytes())){
+			try (InputStream inputStream = new ByteArrayInputStream("".getBytes())) {
 				newDefinitionFile.create(inputStream, true, null);
 			}
 

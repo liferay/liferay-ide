@@ -59,17 +59,14 @@ public class BuildCSSBuildParticipant extends ThemePluginBuildParticipant {
 
 		// Must use full path because sassDirNames is a string and not a "file"
 
-		File projectDir = new File(facade.getProject().getLocationURI());
+		IProject project = facade.getProject();
+
+		File projectDir = new File(project.getLocationURI());
 
 		File themeResourcesDir = new File(projectDir, themeResourcesFolder.toOSString());
 
 		MavenUtil.setConfigValue(
 			config, ILiferayMavenConstants.PLUGIN_CONFIG_SASS_DIR_NAMES, themeResourcesDir.getAbsolutePath());
-
-		// MavenUtil.setConfigValue(
-		// config, ILiferayMavenConstants.PLUGIN_CONFIG_SASS_DIR_NAMES,
-		// "/../m2e-liferay/theme-resources" );
-
 	}
 
 	@Override
@@ -86,7 +83,9 @@ public class BuildCSSBuildParticipant extends ThemePluginBuildParticipant {
 		String warSourceDirectory = MavenUtil.getWarSourceDirectory(facade);
 
 		if (!CoreUtil.isNullOrEmpty(warSourceDirectory)) {
-			IFolder folder = facade.getProject().getFolder(warSourceDirectory + "/css");
+			IProject project = facade.getProject();
+
+			IFolder folder = project.getFolder(warSourceDirectory + "/css");
 
 			IPath cssFolderPath = folder.getProjectRelativePath();
 

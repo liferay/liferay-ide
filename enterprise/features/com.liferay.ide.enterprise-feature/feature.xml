@@ -2,8 +2,9 @@
 <feature
 	id="com.liferay.ide.enterprise"
 	label="Liferay IDE Enterprise"
+	provider-name="Liferay, Inc."
 	version="3.2.0.qualifier"
-	  provider-name="Liferay, Inc.">
+>
 
 	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
 	  Liferay IDE Enterprise includes Kaleo workflow support
@@ -31,35 +32,39 @@
 	</license>
 
 	<requires>
-		<import feature="com.liferay.ide.eclipse.tools" version="3.1.0" match="greaterOrEqual" />
+		<import feature="com.liferay.ide.eclipse.tools" match="greaterOrEqual" version="3.1.0" />
 	</requires>
 
 	<plugin
+		download-size="0"
 		id="com.liferay.ide.kaleo.core"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="com.liferay.ide.kaleo.ui"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="com.liferay.ide.scripting.core"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
-		id="com.liferay.ide.studio.ui"
 		download-size="0"
+		id="com.liferay.ide.studio.ui"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 </feature>

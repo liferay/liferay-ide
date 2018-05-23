@@ -52,10 +52,10 @@ public class LabelPositionResource extends Resource {
 
 					if (LabelPositionResource.this._point != null) {
 						if (Position.PROP_X.equals(def)) {
-							retval = Integer.toString(LabelPositionResource.this._point.getX());
+							retval = String.valueOf(LabelPositionResource.this._point.getX());
 						}
 						else if (Position.PROP_Y.equals(def)) {
-							retval = Integer.toString(LabelPositionResource.this._point.getY());
+							retval = String.valueOf(LabelPositionResource.this._point.getY());
 						}
 					}
 
@@ -75,14 +75,6 @@ public class LabelPositionResource extends Resource {
 						LabelPositionResource.this._point.setY(Integer.parseInt(value));
 					}
 
-					/*
-					 * if (Position.PROP_X.equals( def ) ||
-					 * Position.PROP_Y.equals( def )) {
-					 * WorkflowNodeMetadataObject parentMetadata =
-					 * parent().adapt( WorkflowNodeMetadataResource.class
-					 * ).getMetadata(); parentMetadata.setNodeLocation(
-					 * LabelPositionResource.this.point ); }
-					 */
 					WorkflowNodeMetadataResource metadataResource = parent().adapt(WorkflowNodeMetadataResource.class);
 
 					metadataResource.saveMetadata();

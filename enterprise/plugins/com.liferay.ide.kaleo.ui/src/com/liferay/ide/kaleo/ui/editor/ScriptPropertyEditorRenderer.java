@@ -14,7 +14,6 @@
 
 package com.liferay.ide.kaleo.ui.editor;
 
-import static org.eclipse.sapphire.ui.forms.PropertyEditorPart.RELATED_CONTROLS;
 import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.gd;
 import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.gdfill;
 import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.gdvalign;
@@ -135,10 +134,10 @@ public class ScriptPropertyEditorRenderer extends PropertyEditorPresentation {
 
 			Control editorControl = _editorPart.getAdapter(Control.class);
 
-			// need to find the first child of nestedComposite to relayout
-			// editor control
+			// need to find the first child of nestedComposite to relayout editor control
 
 			Composite editorControlParent = null;
+
 			Control control = editorControl;
 
 			while ((editorControlParent == null) && (control != null) && !nestedComposite.equals(control.getParent())) {
@@ -150,7 +149,7 @@ public class ScriptPropertyEditorRenderer extends PropertyEditorPresentation {
 
 			decorator.addEditorControl(editorControl, true);
 
-			editorControl.setData(RELATED_CONTROLS, relatedControls);
+			editorControl.setData(PropertyEditorPart.RELATED_CONTROLS, relatedControls);
 		}
 		catch (Exception e) {
 			KaleoUI.logError(e);
@@ -160,6 +159,7 @@ public class ScriptPropertyEditorRenderer extends PropertyEditorPresentation {
 			ToolBar toolbar = new ToolBar(codeEditorParent, SWT.FLAT | SWT.HORIZONTAL);
 
 			toolbar.setLayoutData(gdvfill());
+
 			toolBarActionsPresentation.setToolBar(toolbar);
 
 			toolBarActionsPresentation.render();
@@ -180,6 +180,7 @@ public class ScriptPropertyEditorRenderer extends PropertyEditorPresentation {
 					ValuePropertyEditorListener listener = (ValuePropertyEditorListener)cl.newInstance();
 
 					listener.initialize(this);
+
 					listeners.add(listener);
 				}
 				catch (Exception e) {

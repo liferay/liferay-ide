@@ -78,7 +78,7 @@ public class UploadWorkflowFileJob extends Job {
 
 			String content = CoreUtil.readStreamToString(_workflowFile.getContents());
 
-			try(InputStream inputStream =_workflowFile.getContents()){
+			try (InputStream inputStream = _workflowFile.getContents()) {
 				RootXmlResource rootXmlResource = new RootXmlResource(new XmlResourceStore(inputStream));
 
 				WorkflowDefinition workflowDefinition = WorkflowDefinition.TYPE.instantiate(
@@ -144,7 +144,6 @@ public class UploadWorkflowFileJob extends Job {
 				_kaleoConnection.publishKaleoDraftDefinition(
 					name, titleMap, content, companyId + "", userId + "", groupId + "");
 			}
-
 		}
 		catch (Exception e) {
 			return KaleoUI.createErrorStatus("Error uploading new kaleo workflow file.", e);

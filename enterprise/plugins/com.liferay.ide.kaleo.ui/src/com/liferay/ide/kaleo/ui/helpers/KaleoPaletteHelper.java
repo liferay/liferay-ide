@@ -108,6 +108,7 @@ public class KaleoPaletteHelper {
 			@Override
 			protected void configurePaletteViewer(PaletteViewer viewer) {
 				super.configurePaletteViewer(viewer);
+
 				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
 				viewer.addSelectionChangedListener(_getViewerSelectionChangedListener());
 			}

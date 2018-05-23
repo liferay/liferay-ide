@@ -43,6 +43,7 @@ public abstract class DefaultListAddActionHandler extends PropertyEditorActionHa
 			for (Node node : nodes) {
 				if (newName.equals(node.getName().content())) {
 					newNameIsValid = false;
+
 					break;
 				}
 			}

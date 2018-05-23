@@ -92,6 +92,7 @@ public class MavenProjectPreferencePage extends FieldEditorPreferencePage implem
 		BooleanFieldEditor booleanEditor = new BooleanFieldEditor(key, label, parent);
 
 		booleanEditor.setPreferenceStore(getPreferenceStore());
+
 		addField(booleanEditor);
 	}
 
@@ -111,6 +112,7 @@ public class MavenProjectPreferencePage extends FieldEditorPreferencePage implem
 		StringFieldEditor stringEditor = new StringFieldEditor(key, label, parent);
 
 		stringEditor.setPreferenceStore(getPreferenceStore());
+
 		addField(stringEditor);
 	}
 

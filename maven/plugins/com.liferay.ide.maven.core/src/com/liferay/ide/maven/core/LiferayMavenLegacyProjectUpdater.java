@@ -455,8 +455,11 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 		resource.appendChild(excludes);
 
 		webResources.appendChild(resource);
+
 		configuration.appendChild(webResources);
+
 		mavenWarPlguin.appendChild(configuration);
+
 		pluginsNode.appendChild(mavenWarPlguin);
 
 		_formatNode(mavenWarPlguin);

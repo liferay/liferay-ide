@@ -222,15 +222,19 @@
 				<adapt type="org.eclipse.core.resources.IResource">
 					<or>
 						<adapt type="org.eclipse.core.resources.IFile">
-							<test forcePluginActivation="true"
-							   property="com.liferay.ide.maven.ui.isPomFile"
-							   value="true" />
+							<test
+								forcePluginActivation="true"
+								property="com.liferay.ide.maven.ui.isPomFile"
+								value="true"
+							/>
 						</adapt>
 						<and>
 							<adapt type="org.eclipse.core.resources.IProject">
-								<test forcePluginActivation="true"
-								   property="com.liferay.ide.maven.ui.isMavenProject"
-								   value="true" />
+								<test
+									forcePluginActivation="true"
+									property="com.liferay.ide.maven.ui.isMavenProject"
+									value="true"
+								/>
 							</adapt>
 						</and>
 					</or>

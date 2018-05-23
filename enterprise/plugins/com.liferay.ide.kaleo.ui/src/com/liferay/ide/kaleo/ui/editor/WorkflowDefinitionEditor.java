@@ -331,11 +331,13 @@ public class WorkflowDefinitionEditor extends SapphireEditorForXml {
 
 					if ((value != null) && value.contains(titleCurrentValue)) {
 						localeCode = key.toString();
+
 						break;
 					}
 				}
 
 				jsonTitleMap.put(localeCode, titleCurrentValue);
+
 				newTitleMap[0] = jsonTitleMap.toString();
 			}
 			catch (Exception e) {

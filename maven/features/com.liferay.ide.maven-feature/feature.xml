@@ -2,9 +2,10 @@
 <feature
 	id="com.liferay.ide.maven"
 	label="Liferay IDE Maven Support (includes Eclipse m2e plugins)"
-	version="3.2.0.qualifier"
+	plugin="com.liferay.ide.maven.ui"
 	provider-name="Liferay, Inc."
-	  plugin="com.liferay.ide.maven.ui">
+	version="3.2.0.qualifier"
+>
 
 	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
 	  Maven integration for Liferay IDE. Extends m2e-core and m2e-wtp plugins to support Liferay IDE development
@@ -33,29 +34,31 @@
 	</license>
 
 	<requires>
-		<import feature="org.eclipse.m2e.wtp.feature" version="1.3.2" match="greaterOrEqual" />
-		<import feature="org.eclipse.m2e.wtp.jsf.feature" version="1.3.2" match="greaterOrEqual" />
-		<import feature="org.eclipse.m2e.feature" version="1.8.0" match="greaterOrEqual" />
-		<import feature="org.sonatype.m2e.mavenarchiver.feature" version="0.17" match="greaterOrEqual" />
-		<import feature="com.liferay.ide.eclipse.tools" version="3.0.0" match="greaterOrEqual" />
-		<import feature="org.sonatype.tycho.m2e.feature" version="0.8.0" match="greaterOrEqual" />
-		<import feature="com.ianbrandt.tools.m2e.mdp.feature" version="0.0.4" match="greaterOrEqual" />
-		<import feature="bndtools.m2e.feature" version="4.0.0" match="greaterOrEqual" />
+		<import feature="org.eclipse.m2e.wtp.feature" match="greaterOrEqual" version="1.3.2" />
+		<import feature="org.eclipse.m2e.wtp.jsf.feature" match="greaterOrEqual" version="1.3.2" />
+		<import feature="org.eclipse.m2e.feature" match="greaterOrEqual" version="1.8.0" />
+		<import feature="org.sonatype.m2e.mavenarchiver.feature" match="greaterOrEqual" version="0.17" />
+		<import feature="com.liferay.ide.eclipse.tools" match="greaterOrEqual" version="3.0.0" />
+		<import feature="org.sonatype.tycho.m2e.feature" match="greaterOrEqual" version="0.8.0" />
+		<import feature="com.ianbrandt.tools.m2e.mdp.feature" match="greaterOrEqual" version="0.0.4" />
+		<import feature="bndtools.m2e.feature" match="greaterOrEqual" version="4.0.0" />
 	</requires>
 
 	<plugin
-		id="com.liferay.ide.maven.core"
 		download-size="0"
+		id="com.liferay.ide.maven.core"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
-		id="com.liferay.ide.maven.ui"
 		download-size="0"
+		id="com.liferay.ide.maven.ui"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<!--plugin
 		 id="org.slf4j.api"

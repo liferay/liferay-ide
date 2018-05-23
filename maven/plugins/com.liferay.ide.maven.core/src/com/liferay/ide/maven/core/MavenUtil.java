@@ -116,7 +116,9 @@ public class MavenUtil {
 
 			if (profiles != null) {
 				NodeUtil.appendTextNode(profiles, "\n");
+
 				newProfile = NodeUtil.appendChildElement(profiles, "profile");
+
 				NodeUtil.appendTextNode(profiles, "\n");
 
 				if (newNode == null) {

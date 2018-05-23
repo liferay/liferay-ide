@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -80,12 +81,15 @@ public class DefaultMaven2OsgiConverter {
 				if (jar.getManifest() != null) {
 					Manifest manifestFile = jar.getManifest();
 
-					String symbolicNameAttribute =
-						manifestFile.getMainAttributes().getValue(Analyzer.BUNDLE_SYMBOLICNAME);
+					Attributes attributes = manifestFile.getMainAttributes();
+
+					String symbolicNameAttribute = attributes.getValue(Analyzer.BUNDLE_SYMBOLICNAME);
 
 					Map<String, Attrs> bundleSymbolicNameHeader = analyzer.parseHeader(symbolicNameAttribute);
 
-					Iterator<String> it = bundleSymbolicNameHeader.keySet().iterator();
+					Set<String> set = bundleSymbolicNameHeader.keySet();
+
+					Iterator<String> it = set.iterator();
 
 					if (it.hasNext()) {
 						return (String)it.next();
@@ -93,35 +97,38 @@ public class DefaultMaven2OsgiConverter {
 				}
 			}
 			catch (IOException ioe) {
-				throw new RuntimeException(
-					"Error reading manifest in jar " + artifact.getFile().getAbsolutePath(), ioe);
+				throw new RuntimeException("Error reading manifest in jar " + artifactFile.getAbsolutePath(), ioe);
 			}
 		}
 
-		int i = artifact.getGroupId().lastIndexOf('.');
+		String groupId = artifact.getGroupId();
+
+		int i = groupId.lastIndexOf('.');
 
 		if ((i < 0) && FileUtil.exists(artifactFile)) {
-			String groupIdFromPackage = _getGroupIdFromPackage(artifact.getFile());
+			String groupIdFromPackage = _getGroupIdFromPackage(artifactFile);
 
 			if (groupIdFromPackage != null) {
 				return groupIdFromPackage;
 			}
 		}
 
-		String lastSection = artifact.getGroupId().substring(++i);
+		String lastSection = groupId.substring(++i);
 
-		if (artifact.getArtifactId().equals(lastSection)) {
-			return artifact.getGroupId();
+		String id = artifact.getArtifactId();
+
+		if (id.equals(lastSection)) {
+			return groupId;
 		}
 
-		if (artifact.getArtifactId().startsWith(lastSection)) {
-			String artifactId = artifact.getArtifactId().substring(lastSection.length());
+		if (id.startsWith(lastSection)) {
+			String artifactId = id.substring(lastSection.length());
 
 			if (Character.isLetterOrDigit(artifactId.charAt(0))) {
-				return _getBundleSymbolicName(artifact.getGroupId(), artifactId);
+				return _getBundleSymbolicName(groupId, artifactId);
 			}
 			else {
-				return _getBundleSymbolicName(artifact.getGroupId(), artifactId.substring(1));
+				return _getBundleSymbolicName(groupId, artifactId.substring(1));
 			}
 		}
 
@@ -163,7 +170,9 @@ public class DefaultMaven2OsgiConverter {
 			String service = (m.group(5) != null) ? m.group(5) : "0";
 			String group = m.group(6);
 
-			String qualifier = group.replaceAll("-", "_").replaceAll("\\.", "_");
+			String qualifier = group.replaceAll("-", "_");
+
+			qualifier = qualifier.replaceAll("\\.", "_");
 
 			osgiVersion = major + "." + minor + "." + service + "." + qualifier;
 		}
@@ -269,7 +278,9 @@ public class DefaultMaven2OsgiConverter {
 			while (entries.hasMoreElements()) {
 				ZipEntry entry = (ZipEntry)entries.nextElement();
 
-				if (entry.getName().endsWith(".class")) {
+				String name = entry.getName();
+
+				if (name.endsWith(".class")) {
 					File f = new File(entry.getName());
 
 					String packageName = f.getParent();

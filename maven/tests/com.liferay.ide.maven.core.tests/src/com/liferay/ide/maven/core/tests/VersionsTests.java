@@ -29,8 +29,8 @@ import org.junit.Test;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings("restriction")
 @RequireMavenExecutionContext
+@SuppressWarnings("restriction")
 public class VersionsTests extends AbstractMavenProjectTestCase {
 
 	@Test

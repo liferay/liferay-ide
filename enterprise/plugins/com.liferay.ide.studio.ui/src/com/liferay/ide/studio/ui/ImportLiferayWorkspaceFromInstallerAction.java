@@ -70,6 +70,7 @@ public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction {
 			MessageDialog.openInformation(
 				site.getShell(), "Liferay",
 				"Can't import liferay workspace.\nDirectory \"" + workspaceDir.getAbsolutePath() + "\" doesn't exist.");
+
 			return;
 		}
 

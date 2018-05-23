@@ -27,6 +27,7 @@ public class KaleoUIPreferencePage extends FieldEditorPreferencePage implements 
 
 	public KaleoUIPreferencePage() {
 		super(GRID);
+
 		setPreferenceStore(KaleoUI.getDefault().getPreferenceStore());
 	}
 

@@ -1,84 +1,114 @@
 <templates>
 
-	<template name="aui-a" description="An aui:a tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-a" context="jsp_all" enabled="true" autoinsert="true"
+	<template
+		name="aui-a" description="An aui:a tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-a" context="jsp_all" enabled="true" autoinsert="true"
 	>&lt;aui:a href="&lt;%= ${href} %&gt;" &gt;
 ${cursor}
 &lt;/aui:a&gt;
-	</template>
+	</template
+>
 
-	<template name="aui-button" description="An aui:button tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-button" context="jsp_all" enabled="true" autoinsert="true"
-	>&lt;aui:button name="${name}" value="${value}" /&gt;</template>
+	<template
+		name="aui-button" description="An aui:button tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-button" context="jsp_all" enabled="true" autoinsert="true"
+	>&lt;aui:button name="${name}" value="${value}" /&gt;</template
+>
 
-	<template name="aui-col" description="An aui:col tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-col" context="jsp_all" enabled="true" autoinsert="true"
-	>&lt;aui:col width="&lt;%= ${width} %&gt;" /&gt;</template>
+	<template
+		name="aui-col" description="An aui:col tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-col" context="jsp_all" enabled="true" autoinsert="true"
+	>&lt;aui:col width="&lt;%= ${width} %&gt;" /&gt;</template
+>
 
-	<template name="aui-column" description="An aui:column tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-column" context="jsp_all" enabled="true" autoinsert="true"
-	>&lt;aui:column columnWidth="&lt;%= ${columnWidth} %&gt;" /&gt;</template>
+	<template
+		name="aui-column" description="An aui:column tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-column" context="jsp_all" enabled="true" autoinsert="true"
+	>&lt;aui:column columnWidth="&lt;%= ${columnWidth} %&gt;" /&gt;</template
+>
 
-	<template name="aui-field-wrapper" description="An aui:field-wrapper tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-field-wrapper" context="jsp_all" enabled="true" autoinsert="true"
+	<template
+		name="aui-field-wrapper" description="An aui:field-wrapper tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-field-wrapper" context="jsp_all" enabled="true" autoinsert="true"
 	>&lt;aui:field-wrapper label="${label}" &gt;
 ${cursor}
 &lt;/aui:field-wrapper&gt;
-	</template>
+	</template
+>
 
-	<template name="aui-form" description="An aui:form tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-form" context="jsp_all" enabled="true" autoinsert="true"
+	<template
+		name="aui-form" description="An aui:form tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-form" context="jsp_all" enabled="true" autoinsert="true"
 	>&lt;aui:form action="${action}" method="post" name="${name}"&gt;
 ${cursor}
 &lt;/aui:form&gt;
-	</template>
+	</template
+>
 
-	<template name="aui-input" description="An aui:input tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-input" context="jsp_all" enabled="true" autoinsert="true"
-	>&lt;aui:input name="${name}" type="${type}" value="${value}" /&gt;</template>
+	<template
+		name="aui-input" description="An aui:input tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-input" context="jsp_all" enabled="true" autoinsert="true"
+	>&lt;aui:input name="${name}" type="${type}" value="${value}" /&gt;</template
+>
 
-	<template name="aui-layout" description="An aui:layout tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-layout" context="jsp_all" enabled="true" autoinsert="true"
+	<template
+		name="aui-layout" description="An aui:layout tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-layout" context="jsp_all" enabled="true" autoinsert="true"
 	>&lt;aui:layout cssClass="${cssClass}" &gt;
 ${cursor}
 &lt;/aui:layout&gt;
-	</template>
+	</template
+>
 
-	<template name="aui-model-context" description="An aui:model-context tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-model-context" context="jsp_all" enabled="true" autoinsert="true"
-	>&lt;aui:model-context bean="&lt;%= ${bean} %&gt;" model="&lt;%= ${model} %&gt;"/&gt;</template>
+	<template
+		name="aui-model-context" description="An aui:model-context tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-model-context" context="jsp_all" enabled="true" autoinsert="true"
+	>&lt;aui:model-context bean="&lt;%= ${bean} %&gt;" model="&lt;%= ${model} %&gt;"/&gt;</template
+>
 
-	<template name="aui-nav" description="An aui:nav tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-nav" context="jsp_all" enabled="true" autoinsert="true"
+	<template
+		name="aui-nav" description="An aui:nav tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-nav" context="jsp_all" enabled="true" autoinsert="true"
 	>&lt;aui:nav cssClass="${cssClass}" &gt;
 ${cursor}
 &lt;/aui:nav&gt;
-	</template>
+	</template
+>
 
-	<template name="aui-nav-item" description="An aui:nav-item tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-nav-item" context="jsp_all" enabled="true" autoinsert="true"
-	>&lt;aui:nav-item href="&lt;%= ${href} %&gt;" label="${label}" selected="&lt;%= ${selected} %&gt;" /&gt;</template>
+	<template
+		name="aui-nav-item" description="An aui:nav-item tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-nav-item" context="jsp_all" enabled="true" autoinsert="true"
+	>&lt;aui:nav-item href="&lt;%= ${href} %&gt;" label="${label}" selected="&lt;%= ${selected} %&gt;" /&gt;</template
+>
 
-	<template name="aui-option" description="An aui:option tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-option" context="jsp_all" enabled="true" autoinsert="true"
-	>&lt;aui:option label="${label}" selected="&lt;%= ${selected} %&gt;" value="&lt;%= ${value} %&gt;" /&gt;</template>
+	<template
+		name="aui-option" description="An aui:option tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-option" context="jsp_all" enabled="true" autoinsert="true"
+	>&lt;aui:option label="${label}" selected="&lt;%= ${selected} %&gt;" value="&lt;%= ${value} %&gt;" /&gt;</template
+>
 
-	<template name="aui-script" description="An aui:script tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-script" context="jsp_all" enabled="true" autoinsert="true"
+	<template
+		name="aui-script" description="An aui:script tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-script" context="jsp_all" enabled="true" autoinsert="true"
 	>&lt;aui:script use="${use}" &gt;
 ${cursor}
 &lt;/aui:script&gt;
-	</template>
+	</template
+>
 
-	<template name="aui-select" description="An aui:select tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-select" context="jsp_all" enabled="true" autoinsert="true"
+	<template
+		name="aui-select" description="An aui:select tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-select" context="jsp_all" enabled="true" autoinsert="true"
 	>&lt;aui:select label="${label}" name="${newSelect}" &gt;
 ${cursor}
 &lt;/aui:select&gt;
-	</template>
+	</template
+>
 
-	<template name="aui-validator" description="An aui:validator tag with all of the most commonly used attributes"
-	id="com.liferay.ide.alloy.ui.templates.aui-validator" context="jsp_all" enabled="true" autoinsert="true"
-	>&lt;aui:validator name="${name}" &gt;&lt;/aui:validator&gt;</template>
+	<template
+		name="aui-validator" description="An aui:validator tag with all of the most commonly used attributes"
+		id="com.liferay.ide.alloy.ui.templates.aui-validator" context="jsp_all" enabled="true" autoinsert="true"
+	>&lt;aui:validator name="${name}" &gt;&lt;/aui:validator&gt;</template
+>
 
 </templates>

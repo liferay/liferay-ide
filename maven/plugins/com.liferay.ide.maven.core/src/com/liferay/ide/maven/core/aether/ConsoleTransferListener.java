@@ -55,7 +55,9 @@ public class ConsoleTransferListener extends AbstractTransferListener {
 	public void transferInitiated(TransferEvent event) {
 		String message = event.getRequestType() == TransferEvent.RequestType.PUT ? "Uploading" : "Downloading";
 
-		_out.println(message + ": " + event.getResource().getRepositoryUrl() + event.getResource().getResourceName());
+		TransferResource resource = event.getResource();
+
+		_out.println(message + ": " + resource.getRepositoryUrl() + resource.getResourceName());
 	}
 
 	@Override
@@ -67,10 +69,11 @@ public class ConsoleTransferListener extends AbstractTransferListener {
 		StringBuilder buffer = new StringBuilder(64);
 
 		for (Map.Entry<TransferResource, Long> entry : _downloads.entrySet()) {
-			long total = entry.getKey().getContentLength();
-			long complete = entry.getValue().longValue();
+			TransferResource transferResource = entry.getKey();
 
-			buffer.append(_getStatus(complete, total)).append("  ");
+			buffer.append(_getStatus(entry.getValue(), transferResource.getContentLength()));
+
+			buffer.append("  ");
 		}
 
 		int pad = _lastLength - buffer.length();
@@ -151,6 +154,7 @@ public class ConsoleTransferListener extends AbstractTransferListener {
 		_pad(buffer, _lastLength);
 
 		buffer.append('\r');
+
 		_out.print(buffer);
 	}
 

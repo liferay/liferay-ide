@@ -3,36 +3,36 @@
 <plugin>
 	<!--
 	<extension
-			point="org.eclipse.ui.popupMenus"
+		point="org.eclipse.ui.popupMenus"
 	>
 		<objectContribution
-				adaptable="true"
-				id="com.liferay.ide.ui.popupmenu"
-				objectClass="org.eclipse.core.resources.IResource"
+			adaptable="true"
+			id="com.liferay.ide.ui.popupmenu"
+			objectClass="org.eclipse.core.resources.IResource"
 		>
 			<menu
-					icon="icons/e16/liferay.png"
-					id="liferayPopupMenuCategory"
-					label="Liferay"
+				icon="icons/e16/liferay.png"
+				id="liferayPopupMenuCategory"
+				label="Liferay"
 			>
 				<separator
-						name="slot1"
+					name="slot1"
 				>
 				</separator>
 			</menu>
 		</objectContribution>
 		<objectContribution
-				adaptable="true"
-				id="com.liferay.ide.alloy.ui.popup1"
-				objectClass="org.eclipse.core.resources.IResource"
+			adaptable="true"
+			id="com.liferay.ide.alloy.ui.popup1"
+			objectClass="org.eclipse.core.resources.IResource"
 		>
 			<action
-					class="com.liferay.ide.alloy.ui.action.UpgradeToolAction"
-					enablesFor="1"
-					icon="icons/e16/laut.png"
-					id="com.liferay.ide.alloy.ui.popup.laut"
-					label="Run Liferay AUI Upgrade Tool"
-					menubarPath="liferayPopupMenuCategory/slot1"
+				class="com.liferay.ide.alloy.ui.action.UpgradeToolAction"
+				enablesFor="1"
+				icon="icons/e16/laut.png"
+				id="com.liferay.ide.alloy.ui.popup.laut"
+				label="Run Liferay AUI Upgrade Tool"
+				menubarPath="liferayPopupMenuCategory/slot1"
 			>
 			</action>
 			<enablement>
@@ -44,10 +44,10 @@
 									value="liferay.portlet" />
 						</adapt>
 						<test
-								args="6.2.0"
-								forcePluginActivation="true"
-								property="com.liferay.ide.core.minimumRequiredPortalVersion"
-								value="true"
+							args="6.2.0"
+							forcePluginActivation="true"
+							property="com.liferay.ide.core.minimumRequiredPortalVersion"
+							value="true"
 						>
 						</test>
 					</and>

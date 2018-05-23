@@ -21,6 +21,7 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressConstants;
@@ -49,8 +50,9 @@ public class WorkflowDesignerPerspectiveFactory extends LiferayPerspectiveFactor
 
 		IWorkbench workBench = PlatformUI.getWorkbench();
 
-		IPerspectiveDescriptor desc =
-			workBench.getPerspectiveRegistry().findPerspectiveWithId("org.eclipse.team.cvs.ui.cvsPerspective");
+		IPerspectiveRegistry registry = workBench.getPerspectiveRegistry();
+
+		IPerspectiveDescriptor desc = registry.findPerspectiveWithId("org.eclipse.team.cvs.ui.cvsPerspective");
 
 		if (desc != null) {
 			layout.addPerspectiveShortcut("org.eclipse.team.cvs.ui.cvsPerspective");
@@ -58,7 +60,7 @@ public class WorkflowDesignerPerspectiveFactory extends LiferayPerspectiveFactor
 
 		String svnPerspectiveQName = "org.tigris.subversion.subclipse.ui.svnPerspective";
 
-		desc = workBench.getPerspectiveRegistry().findPerspectiveWithId(svnPerspectiveQName);
+		desc = registry.findPerspectiveWithId(svnPerspectiveQName);
 
 		if (desc != null) {
 			layout.addPerspectiveShortcut(svnPerspectiveQName);
@@ -66,7 +68,7 @@ public class WorkflowDesignerPerspectiveFactory extends LiferayPerspectiveFactor
 
 		String repositoryPerspectiveQName = "org.eclipse.team.svn.ui.repository.RepositoryPerspective";
 
-		desc = workBench.getPerspectiveRegistry().findPerspectiveWithId(repositoryPerspectiveQName);
+		desc = registry.findPerspectiveWithId(repositoryPerspectiveQName);
 
 		if (desc != null) {
 			layout.addPerspectiveShortcut(repositoryPerspectiveQName);

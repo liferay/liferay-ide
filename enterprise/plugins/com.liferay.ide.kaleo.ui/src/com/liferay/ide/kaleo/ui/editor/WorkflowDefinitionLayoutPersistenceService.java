@@ -14,8 +14,6 @@
 
 package com.liferay.ide.kaleo.ui.editor;
 
-import static com.liferay.ide.kaleo.core.util.KaleoModelUtil.DEFAULT_POINT;
-
 import static java.lang.Math.min;
 
 import com.liferay.ide.core.util.ListUtil;
@@ -27,6 +25,7 @@ import com.liferay.ide.kaleo.core.model.TransitionMetadata;
 import com.liferay.ide.kaleo.core.model.WorkflowDefinition;
 import com.liferay.ide.kaleo.core.model.WorkflowNode;
 import com.liferay.ide.kaleo.core.model.WorkflowNodeMetadata;
+import com.liferay.ide.kaleo.core.util.KaleoModelUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -310,6 +309,7 @@ public class WorkflowDefinitionLayoutPersistenceService extends DiagramLayoutPer
 				}
 
 				retval = transitionData;
+
 				break;
 			}
 		}
@@ -380,17 +380,21 @@ public class WorkflowDefinitionLayoutPersistenceService extends DiagramLayoutPer
 		switch (event.getDiagramPageEventType()) {
 			case GridStateChange:
 				_setGridVisible(diagramPart.isGridVisible());
+
 				break;
 
 			case GuideStateChange:
 				_setGuidesVisible(diagramPart.isShowGuides());
+
 				break;
 
 			case DiagramSave:
 				_save();
+
 				break;
 
 			default:
+
 				break;
 		}
 	}
@@ -483,6 +487,7 @@ public class WorkflowDefinitionLayoutPersistenceService extends DiagramLayoutPer
 
 					if ((newPt.getX() != oldPt.getX()) || (newPt.getY() != oldPt.getY())) {
 						changed = true;
+
 						break;
 					}
 				}
@@ -521,6 +526,7 @@ public class WorkflowDefinitionLayoutPersistenceService extends DiagramLayoutPer
 			for (DiagramNodePart nodePart : part.getNodes()) {
 				if (!nodePart.getLocalModelElement().disposed() && _isNodeLayoutChanged(nodePart)) {
 					changed = true;
+
 					break;
 				}
 			}
@@ -528,6 +534,7 @@ public class WorkflowDefinitionLayoutPersistenceService extends DiagramLayoutPer
 			for (DiagramConnectionPart connPart : connService.list()) {
 				if (!connPart.getLocalModelElement().disposed() && _isConnectionLayoutChanged(connPart)) {
 					changed = true;
+
 					break;
 				}
 			}
@@ -873,9 +880,13 @@ public class WorkflowDefinitionLayoutPersistenceService extends DiagramLayoutPer
 			}
 		}
 
-		if ((connPart.getLabelPosition() != null) && !connPart.getLabelPosition().equals(DEFAULT_POINT)) {
-			transitionMetadata.getLabelLocation().setX(connPart.getLabelPosition().getX());
-			transitionMetadata.getLabelLocation().setY(connPart.getLabelPosition().getY());
+		Point connPartLabelPosition = connPart.getLabelPosition();
+
+		if ((connPartLabelPosition != null) && !connPartLabelPosition.equals(KaleoModelUtil.DEFAULT_POINT)) {
+			Position transitionMetadataLabelLocation = transitionMetadata.getLabelLocation();
+
+			transitionMetadataLabelLocation.setX(connPartLabelPosition.getX());
+			transitionMetadataLabelLocation.setY(connPartLabelPosition.getY());
 		}
 	}
 

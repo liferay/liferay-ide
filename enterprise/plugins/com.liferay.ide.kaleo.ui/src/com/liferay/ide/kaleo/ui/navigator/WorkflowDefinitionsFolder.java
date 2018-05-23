@@ -42,7 +42,9 @@ public class WorkflowDefinitionsFolder {
 	public WorkflowDefinitionsFolder(ICommonContentExtensionSite site, IServer server) {
 		_site = site;
 		_input = server;
+
 		KaleoCore.updateKaleoConnectionSettings(_getLiferayServer());
+
 		_scheduleCacheDefinitionsJob();
 	}
 
