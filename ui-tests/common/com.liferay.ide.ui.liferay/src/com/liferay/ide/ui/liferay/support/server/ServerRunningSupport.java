@@ -33,7 +33,7 @@ public class ServerRunningSupport extends SupportBase {
 
 	@Override
 	public void after() {
-		viewAction.servers.stop(_server.getStartedLabel());
+		viewAction.servers.stop(_server.getServerName());
 
 		jobAction.waitForServerStopped(_server.getServerName());
 
