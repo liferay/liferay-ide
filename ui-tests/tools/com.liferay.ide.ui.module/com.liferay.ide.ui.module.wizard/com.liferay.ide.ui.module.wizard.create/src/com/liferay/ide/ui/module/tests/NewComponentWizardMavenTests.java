@@ -16,6 +16,7 @@ package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.project.ProjectsSupport;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -28,7 +29,32 @@ import org.junit.Test;
  */
 public class NewComponentWizardMavenTests extends SwtbotBase {
 
-	@Ignore("ignore as it may fails but happen unstable, need more research for it")
+	@Test
+	public void createComponentBrowsePackage() {
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(project.getName());
+		wizardAction.finish();
+
+		wizardAction.openNewLiferayComponentClassWizard();
+
+		String className = project.getName().substring(0, 1).toUpperCase() + project.getName().substring(1);
+		String packageName = project.getName();
+
+		wizardAction.newLiferayComponent.openSelectPackageNameDialog();
+
+		dialogAction.prepareText(packageName);
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				project.getName(), "src/main/java", packageName, className + "Portlet.java [Component]"));
+
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
 	@Test
 	public void createComponentModelListener() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -53,23 +79,22 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		wizardAction.finish();
 
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(
+				project.getName(), "src/main/java", packageName, className + ".java [Component]"));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Ignore("ignore as it may fails but happen unstable, need more research for it")
 	@Test
 	public void createComponentOnMultipleProjects() {
-		String projectName1 = "test-component-on-multiple-maven1";
-		String projectName2 = "test-component-on-multiple-maven2";
-
 		wizardAction.openNewLiferayModuleWizard();
-		wizardAction.newModule.prepareMaven(projectName1);
+
+		wizardAction.newModule.prepareMaven(projects.getName(0));
 		wizardAction.finish();
 
 		wizardAction.openNewLiferayModuleWizard();
-		wizardAction.newModule.prepareMaven(projectName2);
+
+		wizardAction.newModule.prepareMaven(projects.getName(1));
 		wizardAction.finish();
 
 		String className = "MyMultipleComponent";
@@ -77,52 +102,32 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		String template = PORTLET_UPCASE;
 
 		wizardAction.openNewLiferayComponentClassWizard();
-		wizardAction.newLiferayComponent.prepare(projectName1, template, className, packageName);
+
+		wizardAction.newLiferayComponent.prepare(projects.getName(0), template, className, packageName);
 		wizardAction.finish();
 
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(projectName1, "src/main/java", packageName, className + ".java"));
-
-		wizardAction.openNewLiferayComponentClassWizard();
-		wizardAction.newLiferayComponent.prepare(projectName2, template, className, packageName);
-		wizardAction.finish();
-
-		Assert.assertTrue(
-			viewAction.project.visibleFileTry(projectName2, "src/main/java", packageName, className + ".java"));
-
-		viewAction.project.closeAndDelete(projectName1);
-		viewAction.project.closeAndDelete(projectName2);
-	}
-
-	@Ignore("ignore as it may fails but happen unstable, need more research for it")
-	@Test
-	public void createComponentPortlet() {
-		wizardAction.openNewLiferayModuleWizard();
-
-		wizardAction.newModule.prepareMaven(project.getName());
-
-		wizardAction.finish();
+			viewAction.project.visibleFileTry(
+				projects.getName(0), "src/main/java", packageName, className + ".java [Component]"));
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		String className = "MyPortlet";
-		String packageName = "com.liferay.ide.test";
-		String template = PORTLET_UPCASE;
-
-		wizardAction.newLiferayComponent.prepare(project.getName(), template, className, packageName);
-
+		wizardAction.newLiferayComponent.prepare(projects.getName(1), template, className, packageName);
 		wizardAction.finish();
 
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(
+				projects.getName(1), "src/main/java", packageName, className + ".java [Component]"));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDelete(projects.getName(0));
+		viewAction.project.closeAndDelete(projects.getName(1));
 	}
 
-	@Ignore("ignore as it may fails but happen unstable, need more research for it")
+	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createComponentServiceWrapper() {
 		wizardAction.openNewLiferayModuleWizard();
+
 		wizardAction.newModule.prepareMaven(project.getName());
 		wizardAction.finish();
 
@@ -142,40 +147,16 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		wizardAction.finish();
 
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(
+				project.getName(), "src/main/java", packageName, className + ".java [Component]"));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Ignore("ignore as it may fails but happen unstable, need more research for it")
-	@Test
-	public void createComponentWithPackage() {
-		wizardAction.openNewLiferayModuleWizard();
-		wizardAction.newModule.prepareMaven(project.getName());
-		wizardAction.finish();
-
-		wizardAction.openNewLiferayComponentClassWizard();
-
-		String className = "TestComponentWithPackagesMavenPortlet";
-		String packageName = "test.component.with.packages";
-
-		wizardAction.newLiferayComponent.openSelectPackageNameDialog();
-
-		dialogAction.prepareText(packageName);
-		dialogAction.confirm();
-
-		wizardAction.finish();
-
-		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
-
-		viewAction.project.closeAndDelete(project.getName());
-	}
-
-	@Ignore("ignore as it may fails but happen unstable, need more research for it")
 	@Test
 	public void createComponentWithShortcuts() {
 		wizardAction.openNewLiferayModuleWizard();
+
 		wizardAction.newModule.prepareMaven(project.getName());
 		wizardAction.finish();
 
@@ -190,7 +171,8 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		wizardAction.finish();
 
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(
+				project.getName(), "src/main/java", packageName, className + ".java [Component]"));
 
 		viewAction.project.delete(project.getName(), "src/main/java", packageName);
 
@@ -200,7 +182,8 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		wizardAction.finish();
 
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(
+				project.getName(), "src/main/java", packageName, className + ".java [Component]"));
 
 		viewAction.project.delete(project.getName(), "src/main/java", packageName);
 
@@ -210,32 +193,60 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		wizardAction.finish();
 
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(
+				project.getName(), "src/main/java", packageName, className + ".java [Component]"));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Ignore("ignore as it may fails but happen unstable, need more research for it")
 	@Test
-	public void createDefaultComponent() {
+	public void createDefaultComponentOnNonPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
-		wizardAction.newModule.prepareMaven(project.getName());
+
+		wizardAction.newModule.prepareMaven(project.getName(), ACTIVATOR);
 		wizardAction.finish();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		wizardAction.finish();
 
-		String className = "TestComponentDefaultMavenPortlet";
-		String packageName = "test.componentDefault.maven.portlet";
+		String className = project.getName().substring(0, 1).toUpperCase() + project.getName().substring(1);
+		String packageName = project.getName();
 
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(
+				project.getName(), "src/main/java", packageName, className + "Portlet.java [Component]"));
+
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Ignore ("ignore to wait for IDE-4059 fixed then remove to validation test")
+	@Test
+	public void createDefaultComponentOnPortlet() {
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(project.getName());
+
+		wizardAction.finish();
+
+		wizardAction.openNewLiferayComponentClassWizard();
+
+		String className = "MyPortlet";
+		String packageName = "com.liferay.ide.test";
+
+		wizardAction.finish();
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				project.getName(), "src/main/java", packageName, className + ".java [Component]"));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
+
+	@Rule
+	public ProjectsSupport projects = new ProjectsSupport(bot);
 
 }
