@@ -52,9 +52,9 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 
 		dialogAction.confirm(FINISH);
 
-		jobAction.waitForConsoleContent(server.getServerName(), "STOPPED com.liferay.blogs.web", 20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STOPPED com.liferay.blogs.web", M1);
 
-		jobAction.waitForConsoleContent(server.getServerName(), "STARTED com.liferay.blogs.web", 20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STARTED com.liferay.blogs.web", M1);
 
 		viewAction.servers.removeModule(server.getServerName(), project.getName());
 
@@ -78,13 +78,13 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 
 		Assert.assertTrue(viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName()));
 
-		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName() + "_", 20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName() + "_", M1);
 
 		viewAction.servers.removeModule(server.getServerName(), project.getName());
 
 		dialogAction.confirm();
 
-		jobAction.waitForConsoleContent(server.getServerName(), "STOPPED " + project.getName() + "_", 20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STOPPED " + project.getName() + "_", M1);
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -129,13 +129,13 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 		Assert.assertTrue(viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName()));
 
 		jobAction.waitForConsoleContent(
-			server.getServerName(), "1 portlet for " + project.getName() + " is available for use", M2);
+			server.getServerName(), "1 portlet for " + project.getName() + " is available for use", M5);
 
 		viewAction.servers.removeModule(server.getServerName(), project.getName());
 
 		dialogAction.confirm();
 
-		jobAction.waitForConsoleContent(server.getServerName(), "STOPPED " + project.getName() + "_", S20);
+		jobAction.waitForConsoleContent(server.getServerName(), "STOPPED " + project.getName() + "_", M1);
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
