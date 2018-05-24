@@ -15,10 +15,9 @@ Require-Bundle: org.eclipse.core.runtime,
  biz.aQute.bndlib;bundle-version="[4,5)",
  org.eclipse.buildship.core;bundle-version="[3.0.0,4.0.0)",
  com.liferay.ide.project.core,
- com.gradleware.tooling.client;bundle-version="[0.19.3,0.20.0)",
- com.gradleware.tooling.model;bundle-version="[0.19.3,0.20.0)",
- com.gradleware.tooling.utils;bundle-version="[0.19.3,0.20.0)",
- org.apache.commons.io
+ org.apache.commons.io,
+ org.gradle.toolingapi;bundle-version="4.3.0",
+ com.google.guava
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.blade.gradle.model,
