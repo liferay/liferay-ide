@@ -39,7 +39,7 @@ public class DeployJsfGradleTomcat7xBase extends ServerTestBase {
 
 		viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName());
 
-		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName() + "_", 20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName() + "_", M1);
 
 		viewAction.servers.removeModule(server.getServerName(), project.getName());
 

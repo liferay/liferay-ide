@@ -64,7 +64,7 @@ public class DeployModuleLiferayWorkspaceMavenTomcatTests extends SwtbotBase {
 
 		viewAction.servers.visibleModuleTry(tomcat.getStartedLabel(), project.getName());
 
-		jobAction.waitForConsoleContent(tomcat.getServerName(), "STARTED " + project.getName() + "_", 20 * 1000);
+		jobAction.waitForConsoleContent(tomcat.getServerName(), "STARTED " + project.getName() + "_", M1);
 
 		viewAction.project.closeAndDelete(liferayWorkspace.getModuleFiles(project.getName()));
 	}

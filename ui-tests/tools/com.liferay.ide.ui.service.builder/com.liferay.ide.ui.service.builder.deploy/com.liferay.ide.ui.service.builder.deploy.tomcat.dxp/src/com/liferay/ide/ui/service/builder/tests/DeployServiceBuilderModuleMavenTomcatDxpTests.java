@@ -20,6 +20,7 @@ import com.liferay.ide.ui.liferay.util.RuleUtil;
 import com.liferay.ide.ui.service.builder.deploy.base.DeployServiceBuilderModuleMavenTomcat7xBase;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -39,6 +40,7 @@ public class DeployServiceBuilderModuleMavenTomcatDxpTests extends DeployService
 		return server;
 	}
 
+	@Ignore("ignore as unstable need more research")
 	@Test
 	public void deployServiceBuilder() {
 		super.deployServiceBuilder();

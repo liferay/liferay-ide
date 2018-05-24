@@ -23,6 +23,8 @@ public interface Times {
 
 	public static final long M2 = 2 * 60 * 1000;
 
+	public static final long M5 = 5 * 60 * 1000;
+
 	public static final long S10 = 10 * 1000;
 
 	public static final long S20 = 20 * 1000;

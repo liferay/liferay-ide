@@ -40,7 +40,7 @@ public class DeployServiceBuilderModuleGradleTomcat71Tests extends DeployService
 		return server;
 	}
 
-	@Ignore("ignore as unstable")
+	@Ignore("ignore as unstable need more research")
 	@Test
 	public void deployServiceBuilder() {
 		super.deployServiceBuilder();
