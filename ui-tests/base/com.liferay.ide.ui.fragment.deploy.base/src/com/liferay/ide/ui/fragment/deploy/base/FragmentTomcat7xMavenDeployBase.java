@@ -51,9 +51,9 @@ public class FragmentTomcat7xMavenDeployBase extends ServerTestBase {
 
 		dialogAction.confirm(FINISH);
 
-		jobAction.waitForConsoleContent(server.getServerName(), "STOPPED com.liferay.blogs.web", 20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STOPPED com.liferay.blogs.web", M1);
 
-		jobAction.waitForConsoleContent(server.getServerName(), "STARTED com.liferay.blogs.web", 20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STARTED com.liferay.blogs.web", M1);
 
 		viewAction.servers.removeModule(server.getServerName(), project.getName());
 
