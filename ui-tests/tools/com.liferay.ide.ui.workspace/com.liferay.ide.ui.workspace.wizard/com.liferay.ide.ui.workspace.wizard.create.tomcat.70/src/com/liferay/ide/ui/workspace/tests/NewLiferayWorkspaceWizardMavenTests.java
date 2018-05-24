@@ -16,6 +16,9 @@ package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.project.ProjectsSupport;
+
+import org.eclipse.swtbot.swt.finder.SWTBotAssert;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -108,6 +111,104 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(warNames);
 
 		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
+	public void createLiferayWorkspaceCheckPomWithDeleteModule() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareMaven(projects.getName(0));
+
+		wizardAction.finish();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projects.getName(1), PORTLET);
+
+		wizardAction.finish();
+
+		String[] moduleNames = {projects.getName(0), projects.getName(0) + "-modules (in modules)"};
+		String[] themeNames = {projects.getName(0), projects.getName(0) + "-themes (in themes)"};
+		String[] warNames = {projects.getName(0), projects.getName(0) + "-wars (in wars)"};
+
+		String modulePomXmlText = "<module>" + projects.getName(1) + "</module>";
+
+		viewAction.project.openFile(moduleNames[0], moduleNames[1], "pom.xml");
+
+		editorAction.pomXml.switchTabPomXml();
+
+		SWTBotAssert.assertContains(modulePomXmlText, editorAction.getContent());
+
+		editorAction.close();
+
+		String[] projectNames = {moduleNames[0], moduleNames[1], projects.getName(1)};
+
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
+
+		// wait for IDE-3987 fixed
+
+		// viewAction.project.openFile(moduleNames[0], moduleNames[1], "pom.xml");
+
+		// editorAction.pomXml.switchTabPomXml();
+
+		// SWTBotAssert.assertDoesNotContain(modulePomXmlText, editorAction.getContent());
+
+		// editorAction.close();
+
+		viewAction.project.closeAndDelete(moduleNames);
+		viewAction.project.closeAndDelete(themeNames);
+		viewAction.project.closeAndDelete(warNames);
+
+		viewAction.project.closeAndDelete(projects.getName(0));
+	}
+
+	@Test
+	public void createLiferayWorkspaceCheckPomWithDeleteWar() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareMaven(projects.getName(0));
+
+		wizardAction.finish();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projects.getName(1), LAYOUT_TEMPLATE);
+
+		wizardAction.finish();
+
+		String[] moduleNames = {projects.getName(0), projects.getName(0) + "-modules (in modules)"};
+		String[] themeNames = {projects.getName(0), projects.getName(0) + "-themes (in themes)"};
+		String[] warNames = {projects.getName(0), projects.getName(0) + "-wars (in wars)"};
+
+		String modulePomXmlText = "<module>" + projects.getName(1) + "</module>";
+
+		viewAction.project.openFile(warNames[0], warNames[1], "pom.xml");
+
+		editorAction.pomXml.switchTabPomXml();
+
+		SWTBotAssert.assertContains(modulePomXmlText, editorAction.getContent());
+
+		editorAction.close();
+
+		String[] projectNames = {warNames[0], warNames[1], projects.getName(1)};
+
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
+
+		// wait for IDE-3987 fixed
+
+		// viewAction.project.openFile(warNames[0], warNames[1], "pom.xml");
+
+		// editorAction.pomXml.switchTabPomXml();
+
+		// SWTBotAssert.assertDoesNotContain(modulePomXmlText, editorAction.getContent());
+
+		// editorAction.close();
+
+		viewAction.project.closeAndDelete(moduleNames);
+		viewAction.project.closeAndDelete(themeNames);
+		viewAction.project.closeAndDelete(warNames);
+
+		viewAction.project.closeAndDelete(projects.getName(0));
 	}
 
 	@Ignore
@@ -234,5 +335,8 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
+
+	@Rule
+	public ProjectsSupport projects = new ProjectsSupport(bot);
 
 }
