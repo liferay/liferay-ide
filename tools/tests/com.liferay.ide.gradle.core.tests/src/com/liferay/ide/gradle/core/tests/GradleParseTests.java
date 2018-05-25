@@ -208,6 +208,6 @@ public class GradleParseTests {
 		}
 	}
 
-	private static final File _outputfile = new File("generated/test/testbuild.gradle");
+	private static final File _outputfile = new File("target/test/testbuild.gradle");
 
 }
