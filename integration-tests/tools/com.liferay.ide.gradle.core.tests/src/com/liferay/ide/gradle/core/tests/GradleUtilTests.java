@@ -36,15 +36,15 @@ public class GradleUtilTests extends ProjectBase {
 
 	@Test
 	public void importLiferayWorkspace() throws CoreException {
-		ImportProjectSupport ips = new ImportProjectSupport("test-liferay-workspace");
+		ImportProjectSupport importProjectSupport = new ImportProjectSupport("test-liferay-workspace");
 
-		ips.before();
+		importProjectSupport.before();
 
-		GradleUtil.importGradleProject(ips.getProjectFile(), npm);
+		GradleUtil.importGradleProject(importProjectSupport.getProjectFile(), npm);
 
 		waitForBuildAndValidation();
 
-		assertNotLiferayProject(ips.getName());
+		assertNotLiferayProject(importProjectSupport.getName());
 
 		assertLiferayProject("jstl.test");
 		assertLiferayProject("roster-api");
@@ -56,7 +56,7 @@ public class GradleUtilTests extends ProjectBase {
 
 		assertSourceFolders("sample-theme", "src");
 
-		deleteProject(ips.getName());
+		deleteProject(importProjectSupport.getName());
 	}
 
 	@Test
