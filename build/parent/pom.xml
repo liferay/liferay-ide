@@ -37,7 +37,7 @@
         <osgi-bundles-site>https://repos-ide.wedeploy.io/liferay-ide-osgi-deps/</osgi-bundles-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
-        <m2e-site>http://download.eclipse.org/technology/m2e/releases/1.8/1.8.2.20171007-0217/</m2e-site>
+        <m2e-site>http://download.eclipse.org/technology/m2e/releases/1.8/1.8.3.20180227-2137/</m2e-site>
         <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/releases/oxygen/1.3/1.3.2.20170517-2015/</m2e-wtp-site>
         <m2e-archiver-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/0.17.2.201606141937/</m2e-archiver-site>
         <eclipse-xml-search-site>https://dl.bintray.com/gamerson/eclipse-wtp-xml-search/</eclipse-xml-search-site>
