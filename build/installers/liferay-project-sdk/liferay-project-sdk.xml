@@ -1,7 +1,7 @@
 <project>
     <shortName>LiferayProjectSDK</shortName>
     <fullName>Liferay Project SDK</fullName>
-    <version>2018.4.27</version>
+    <version>2018.6.1</version>
     <logoImage>../shared/images/liferay_logo_large.png</logoImage>
     <componentList>
         <component>
