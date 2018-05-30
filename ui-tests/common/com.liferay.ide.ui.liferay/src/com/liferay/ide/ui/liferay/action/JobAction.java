@@ -73,7 +73,7 @@ public class JobAction extends UIAction {
 	}
 
 	public void waitForNoRunningJobs() {
-		ide.waitUntil(new NoRunningJobsCondition());
+		ide.waitUntil(new NoRunningJobsCondition(), 5 * 60 * 1000);
 	}
 
 	public void waitForServerStarted(String serverName) {

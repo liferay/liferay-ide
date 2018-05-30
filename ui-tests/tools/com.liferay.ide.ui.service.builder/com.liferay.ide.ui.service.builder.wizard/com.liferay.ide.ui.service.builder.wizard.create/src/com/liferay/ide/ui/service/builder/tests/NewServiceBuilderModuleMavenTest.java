@@ -49,9 +49,9 @@ public class NewServiceBuilderModuleMavenTest extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(serviceXmlNames));
 
-		viewAction.project.closeAndDelete(apiNames);
-		viewAction.project.closeAndDelete(serviceNames);
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteWithNoRunningJobs(apiNames);
+		viewAction.project.closeAndDeleteWithNoRunningJobs(serviceNames);
+		viewAction.project.closeAndDeleteWithNoRunningJobs(project.getName());
 	}
 
 	@Rule
