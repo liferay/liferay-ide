@@ -49,8 +49,8 @@
         <plugin-sdk-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
         <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</plugin-sdk-zip-name>
         <plugin-sdk-version>1.0.16</plugin-sdk-version>
-        <jpmcli-latest-download-url>https://oss.sonatype.org/content/repositories/snapshots/biz/aQute/bnd/biz.aQute.jpm.run/4.0.0-SNAPSHOT/biz.aQute.jpm.run-4.0.0-20180307.045202-5.jar</jpmcli-latest-download-url>
-        <jpmcli-latest-md5>9e85875c0903d986e11f1eea624325fe</jpmcli-latest-md5>
+        <jpmcli-latest-download-url>https://oss.sonatype.org/content/repositories/snapshots/biz/aQute/bnd/biz.aQute.jpm.run/4.0.0-SNAPSHOT/biz.aQute.jpm.run-4.0.0-20180530.041903-6.jar</jpmcli-latest-download-url>
+        <jpmcli-latest-md5>219dd25224a9ac3a7af5ffb3bd199598</jpmcli-latest-md5>
         <bnd-latest-download-url>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/biz/aQute/bnd/biz.aQute.bnd/3.5.0/biz.aQute.bnd-3.5.0.jar</bnd-latest-download-url>
         <bnd-latest-md5>19983bd645ec65d162355bd4dac910fa</bnd-latest-md5>
     </properties>
