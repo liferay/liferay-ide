@@ -30,7 +30,7 @@
                             <origin>../shared/download/com.liferay.portal.tools.bundle.support.jar</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../shared/download/liferay-ce-portal-tomcat-7.1-a1-20180410105031513.zip</origin>
+                            <origin>../shared/download/liferay-ce-portal-tomcat-7.1-b2-20180525120518222.zip</origin>
                         </distributionFile>
                         <distributionFile>
                             <origin>../shared/download/com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</origin>
@@ -149,8 +149,8 @@
             <progressText>Creating directory...</progressText>
         </createDirectory>
         <copyFile>
-            <destination>${liferayBundlesPath}${platform_path_separator}liferay-ce-portal-tomcat-7.1-a1-20180410105031513.zip</destination>
-            <origin>${installdir}${platform_path_separator}liferay-ce-portal-tomcat-7.1-a1-20180410105031513.zip</origin>
+            <destination>${liferayBundlesPath}${platform_path_separator}liferay-ce-portal-tomcat-7.1-b2-20180525120518222.zip</destination>
+            <origin>${installdir}${platform_path_separator}liferay-ce-portal-tomcat-7.1-b2-20180525120518222.zip</origin>
         </copyFile>
         <copyFile>
             <destination>${liferayBundlesPath}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</destination>
@@ -268,7 +268,7 @@
         <propertiesFileSet>
             <file>${lrws}${platform_path_separator}gradle.properties</file>
             <key>liferay.workspace.bundle.url</key>
-            <value>https://cdn.lfrs.sl/releases.liferay.com/portal/7.1.0-a1/liferay-ce-portal-tomcat-7.1-a1-20180410105031513.zip</value>
+            <value>https://cdn.lfrs.sl/releases.liferay.com/portal/7.1.0-b2/liferay-ce-portal-tomcat-7.1-b2-20180525120518222.zip</value>
         </propertiesFileSet>
         <createDirectory>
             <path>${user_home_directory}${platform_path_separator}.gradle</path>
@@ -350,7 +350,7 @@
             </ruleList>
         </runProgram>
         <deleteFile>
-            <path>${installdir}${platform_path_separator}liferay-ce-portal-tomcat-7.1-a1-20180410105031513.zip</path>
+            <path>${installdir}${platform_path_separator}liferay-ce-portal-tomcat-7.1-b2-20180525120518222.zip</path>
         </deleteFile>
         <deleteFile>
             <path>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</path>
