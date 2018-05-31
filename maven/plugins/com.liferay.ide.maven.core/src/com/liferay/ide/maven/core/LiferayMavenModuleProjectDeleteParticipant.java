@@ -32,7 +32,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.ltk.core.refactoring.Change;
-import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.DeleteParticipant;
@@ -56,16 +55,12 @@ public class LiferayMavenModuleProjectDeleteParticipant extends DeleteParticipan
 
 	@Override
 	public Change createChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		CompositeChange change = new CompositeChange(getName());
-
-		change.add(new RemoveModuleFromParentChange(_parentMavenProject));
-
-		return change;
+		return new RemoveModuleFromParentChange(_parentMavenProject);
 	}
 
 	@Override
 	public String getName() {
-		return "Remove module from parent maven project " + _parentMavenProject.getName();
+		return null;
 	}
 
 	public class RemoveModuleFromParentChange extends Change {
@@ -81,7 +76,7 @@ public class LiferayMavenModuleProjectDeleteParticipant extends DeleteParticipan
 
 		@Override
 		public String getName() {
-			return "Remove module project " + _moduleProject.getName();
+			return "Remove module from parent maven project '" + _parentMavenProject.getName() + "'";
 		}
 
 		@Override
@@ -95,9 +90,13 @@ public class LiferayMavenModuleProjectDeleteParticipant extends DeleteParticipan
 
 		@Override
 		public Change perform(IProgressMonitor pm) throws CoreException {
-			String parentProjectName = _mavenProject.getName();
+			File pomFile = _mavenProject.getFile();
 
-			IProject parentProject = CoreUtil.getProject(parentProjectName);
+			if (FileUtil.notExists(pomFile)) {
+				return null;
+			}
+
+			IProject parentProject = CoreUtil.getProject(pomFile);
 
 			if (FileUtil.notExists(parentProject)) {
 				return null;
@@ -107,12 +106,6 @@ public class LiferayMavenModuleProjectDeleteParticipant extends DeleteParticipan
 
 			parentModel.removeModule(_moduleProject.getName());
 
-			File pomFile = _mavenProject.getFile();
-
-			if (FileUtil.notExists(pomFile)) {
-				return null;
-			}
-
 			try (FileWriter fileWriter = new FileWriter(pomFile)) {
 				MavenXpp3Writer mavenWriter = new MavenXpp3Writer();
 
@@ -121,7 +114,7 @@ public class LiferayMavenModuleProjectDeleteParticipant extends DeleteParticipan
 			catch (Exception e) {
 			}
 
-			return this;
+			return null;
 		}
 
 		private MavenProject _mavenProject;
@@ -141,21 +134,14 @@ public class LiferayMavenModuleProjectDeleteParticipant extends DeleteParticipan
 		try {
 			MavenProject selectedMavenProject = mavenFacade.getMavenProject(new NullProgressMonitor());
 
-			if (!selectedMavenProject.hasParent()) {
-				return false;
-			}
-
 			_parentMavenProject = selectedMavenProject.getParent();
-
-			if (_parentMavenProject == null) {
-				return false;
-			}
 
 			List<String> modules = _parentMavenProject.getModules();
 
 			return modules.contains(_moduleProject.getName());
 		}
-		catch (CoreException ce) {
+		catch (Exception ce) {
+			// skip all exceptions
 		}
 
 		return false;
