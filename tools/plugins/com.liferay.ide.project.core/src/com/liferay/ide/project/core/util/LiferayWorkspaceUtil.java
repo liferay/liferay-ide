@@ -36,8 +36,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 
 /**
  * @author Andy Wu
@@ -78,12 +80,16 @@ public class LiferayWorkspaceUtil {
 		"A Liferay Workspace project already exists in this Eclipse instance.";
 	public static String multiWorkspaceErrorMsg = "More than one Liferay workspace build in current Eclipse workspace.";
 
-	public static void addPortalRuntime() {
+	public static IStatus addPortalRuntime() {
+		return addPortalRuntime(null);
+	}
+
+	public static IStatus addPortalRuntime(String serverName) {
 		IProject project = getWorkspaceProject();
 
 		try {
 			if (project == null) {
-				throw new CoreException(ProjectCore.createErrorStatus("Cann't get a valid Liferay Workspace project."));
+				return ProjectCore.createErrorStatus("Can't get a valid Liferay Workspace project.");
 			}
 
 			IPath bundlesLocation = getHomeLocation(project);
@@ -92,12 +98,12 @@ public class LiferayWorkspaceUtil {
 				PortalBundle bundle = LiferayServerCore.newPortalBundle(bundlesLocation);
 
 				if (bundle == null) {
-					ProjectCore.logError("Can not create bundle from location :" + bundlesLocation);
-
-					return;
+					return ProjectCore.createErrorStatus("Bundle can't be found in:" + bundlesLocation);
 				}
 
-				String serverName = bundle.getServerReleaseInfo();
+				if (serverName == null) {
+					serverName = bundle.getServerReleaseInfo();
+				}
 
 				ServerUtil.addPortalRuntimeAndServer(serverName, bundlesLocation, new NullProgressMonitor());
 
@@ -114,8 +120,10 @@ public class LiferayWorkspaceUtil {
 			}
 		}
 		catch (Exception e) {
-			ProjectCore.logError("Add Liferay server failed", e);
+			return ProjectCore.createErrorStatus("Add Liferay server failed", e);
 		}
+
+		return Status.OK_STATUS;
 	}
 
 	public static void clearWorkspace(String location) {

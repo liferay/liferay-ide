@@ -16,7 +16,6 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.LiferayNature;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -27,28 +26,25 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import org.eclipse.buildship.core.configuration.GradleProjectNature;
+import org.eclipse.buildship.core.configuration.GradleProjectNatureConfiguredEvent;
 import org.eclipse.buildship.core.event.Event;
 import org.eclipse.buildship.core.event.EventListener;
-import org.eclipse.buildship.core.workspace.ProjectCreatedEvent;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
  * @author Andy Wu
+ * @author Charles Wu
  */
 @SuppressWarnings("restriction")
 public class GradleProjectCreatedListener implements EventListener {
 
 	@Override
 	public void onEvent(Event event) {
-		if (event instanceof ProjectCreatedEvent) {
-			ProjectCreatedEvent createEvent = (ProjectCreatedEvent)event;
+		if (event instanceof GradleProjectNatureConfiguredEvent) {
+			GradleProjectNatureConfiguredEvent createEvent = (GradleProjectNatureConfiguredEvent)event;
 
 			IProject project = createEvent.getProject();
 
@@ -83,7 +79,7 @@ public class GradleProjectCreatedListener implements EventListener {
 				if (FileUtil.exists(gulpFile)) {
 					String gulpFileContent;
 
-					File file = gulpFile.getLocation().toFile();
+					File file = FileUtil.getFile(gulpFile);
 
 					try {
 						gulpFileContent = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
@@ -100,51 +96,30 @@ public class GradleProjectCreatedListener implements EventListener {
 				}
 			}
 
-			Job job = new WorkspaceJob("Checking gradle configuration") {
+			try {
+				NullProgressMonitor monitor = new NullProgressMonitor();
 
-				@Override
-				public boolean belongsTo(Object family) {
-					if ((family != null) && family.toString().equals(GradleCore.JOB_FAMILY_ID)) {
-						return true;
-					}
+				if (needAddNature[0]) {
+					LiferayNature.addLiferayNature(project, monitor);
 
-					return false;
+					return;
 				}
 
-				@Override
-				public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-					try {
-						if (needAddNature[0]) {
-							LiferayNature.addLiferayNature(project, monitor);
+				final CustomModel customModel = GradleCore.getToolingModel(CustomModel.class, project);
 
-							return Status.OK_STATUS;
-						}
-
-						final CustomModel customModel = GradleCore.getToolingModel(CustomModel.class, project);
-
-						if (customModel == null) {
-							throw new CoreException(
-								GradleCore.createErrorStatus("Unable to get read gradle configuration"));
-						}
-
-						if (customModel.isLiferayModule() ||
-							customModel.hasPlugin("org.gradle.api.plugins.WarPlugin") ||
-							customModel.hasPlugin("com.liferay.gradle.plugins.theme.builder.ThemeBuilderPlugin")) {
-
-							LiferayNature.addLiferayNature(project, monitor);
-						}
-					}
-					catch (Exception e) {
-						GradleCore.logError("Unable to get tooling model", e);
-					}
-
-					return Status.OK_STATUS;
+				if (customModel == null) {
+					throw new CoreException(GradleCore.createErrorStatus("Unable to get read gradle configuration"));
 				}
 
-			};
+				if (customModel.isLiferayModule() || customModel.hasPlugin("org.gradle.api.plugins.WarPlugin") ||
+					customModel.hasPlugin("com.liferay.gradle.plugins.theme.builder.ThemeBuilderPlugin")) {
 
-			job.setRule(CoreUtil.getWorkspaceRoot());
-			job.schedule();
+					LiferayNature.addLiferayNature(project, monitor);
+				}
+			}
+			catch (Exception e) {
+				GradleCore.logError("Unable to get tooling model", e);
+			}
 		}
 	}
 

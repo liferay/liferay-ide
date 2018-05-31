@@ -38,12 +38,6 @@ import org.osgi.framework.BundleContext;
 @SuppressWarnings("restriction")
 public class GradleCore extends Plugin {
 
-	// The shared instance
-
-	public static final String JOB_FAMILY_ID = "CheckingGradleConfiguration";
-
-	// The plugin ID
-
 	public static final String PLUGIN_ID = "com.liferay.ide.gradle.core";
 
 	public static final File customModelCache = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();

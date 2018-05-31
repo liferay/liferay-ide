@@ -229,7 +229,7 @@ public class NewLiferayModuleProjectOpMethods {
 
 		monitor.beginTask("Creating Liferay module project (this process may take several minutes)", 100);
 
-		Status retval = null;
+		Status retval = Status.createOkStatus();
 
 		try {
 			NewLiferayProjectProvider<BaseModuleOp> projectProvider = op.getProjectProvider().content(true);

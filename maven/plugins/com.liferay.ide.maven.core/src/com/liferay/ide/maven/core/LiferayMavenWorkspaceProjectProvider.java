@@ -15,7 +15,6 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
@@ -24,8 +23,6 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.workspace.BaseLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileReader;
@@ -67,9 +64,9 @@ public class LiferayMavenWorkspaceProjectProvider
 
 		Value<String> workspaceNameValue = op.getWorkspaceName();
 
-		String workspaceName = workspaceNameValue.content();
+		String wsName = workspaceNameValue.content();
 
-		IPath fullLocation = location.append(workspaceName);
+		IPath wsLocation = location.append(wsName);
 
 		Value<String> version = op.getLiferayVersion();
 
@@ -77,7 +74,7 @@ public class LiferayMavenWorkspaceProjectProvider
 
 		sb.append("--base ");
 		sb.append("\"");
-		sb.append(fullLocation.toOSString());
+		sb.append(wsLocation.toOSString());
 		sb.append("\" ");
 		sb.append("init ");
 		sb.append("-b ");
@@ -92,30 +89,23 @@ public class LiferayMavenWorkspaceProjectProvider
 			return ProjectCore.createErrorStatus(bclie);
 		}
 
-		IStatus status = Status.OK_STATUS;
+		IStatus importProjectStatus = importProject(wsLocation, monitor);
 
-		if (FileUtil.exists(fullLocation)) {
-			status = importProject(fullLocation.toOSString(), monitor);
-
-			if (!status.isOK()) {
-				return status;
-			}
-
-			Value<Boolean> initBundle = op.getProvisionLiferayBundle();
-
-			if (initBundle.content()) {
-				Value<String> bundleUrl = op.getBundleUrl();
-
-				Value<String> serverName = op.getServerName();
-
-				initBundle(bundleUrl.content(), serverName.content(), workspaceName, monitor);
-			}
-		}
-		else {
-			status = ProjectCore.createErrorStatus("Unable to find the liferay workspace under " + fullLocation);
+		if (importProjectStatus != Status.OK_STATUS) {
+			return importProjectStatus;
 		}
 
-		return status;
+		Value<Boolean> initBundle = op.getProvisionLiferayBundle();
+
+		if (initBundle.content()) {
+			Value<String> bundleUrl = op.getBundleUrl();
+
+			Value<String> serverName = op.getServerName();
+
+			initBundle(bundleUrl.content(), serverName.content(), wsName);
+		}
+
+		return Status.OK_STATUS;
 	}
 
 	@Override
@@ -159,43 +149,47 @@ public class LiferayMavenWorkspaceProjectProvider
 	}
 
 	@Override
-	public IStatus importProject(String location, IProgressMonitor monitor) {
-		IStatus status = Status.OK_STATUS;
-
+	public IStatus importProject(IPath wsLocation, IProgressMonitor monitor) {
 		try {
-			MavenUtil.importProject(location, monitor);
+			String wsName = wsLocation.lastSegment();
+
+			ProjectCore.openProject(wsName, wsLocation, monitor);
+			MavenUtil.importOpenedProject(wsName, wsLocation.toOSString(), monitor);
 		}
-		catch (CoreException ce) {
-			status = ProjectCore.createErrorStatus(ce);
-		}
-		catch (InterruptedException ie) {
-			status = ProjectCore.createErrorStatus(ie);
+		catch (Exception ce) {
+			return ProjectCore.createErrorStatus(ce);
 		}
 
-		return status;
+		return Status.OK_STATUS;
 	}
 
 	@Override
-	public void initBundle(String bundleUrl, String serverName, String workspaceName, IProgressMonitor monitor) {
-		Job job = new Job("Init Liferay Bundle") {
+	public void initBundle(String bundleUrl, String serverName, String wsName) {
+		String jobName = "Init Liferay Bundle";
+
+		Job job = new Job(jobName) {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				IProject workspaceProject = ProjectUtil.getProject(workspaceName);
+				IProject workspaceProject = ProjectUtil.getProject(wsName);
 
 				MavenProjectBuilder builder = new MavenProjectBuilder(workspaceProject);
+
+				monitor.beginTask(jobName, 100);
 
 				try {
 					builder.initBundle(workspaceProject, bundleUrl, monitor);
 
+					monitor.worked(95);
+
 					workspaceProject.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 
-					IPath location = workspaceProject.getLocation();
+					monitor.worked(5);
 
-					IPath bundlesPath = location.append("bundles");
+					IStatus addPortalRuntime = LiferayWorkspaceUtil.addPortalRuntime(serverName);
 
-					if (LiferayServerCore.isPortalBundlePath(bundlesPath)) {
-						ServerUtil.addPortalRuntimeAndServer(serverName, bundlesPath, monitor);
+					if (addPortalRuntime != Status.OK_STATUS) {
+						return addPortalRuntime;
 					}
 				}
 				catch (CoreException ce) {

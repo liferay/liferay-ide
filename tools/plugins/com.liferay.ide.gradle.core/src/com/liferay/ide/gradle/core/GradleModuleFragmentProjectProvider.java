@@ -119,7 +119,7 @@ public class GradleModuleFragmentProjectProvider
 			GradleUtil.refreshGradleProject(liferayWorkspaceProject);
 		}
 		else {
-			GradleUtil.importGradleProject(projecLocation.toFile(), monitor);
+			GradleUtil.importGradleProject(projecLocation, monitor);
 		}
 
 		return retval;
