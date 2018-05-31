@@ -54,11 +54,11 @@ public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends SwtbotBase
 			viewAction.project.visibleFileTry(
 				liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service", "service.xml")));
 
-		viewAction.project.closeAndDelete(
+		viewAction.project.closeAndDeleteWithNoRunningJobs(
 			liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-api"));
-		viewAction.project.closeAndDelete(
+		viewAction.project.closeAndDeleteWithNoRunningJobs(
 			liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service"));
-		viewAction.project.closeAndDelete(liferayWorkspace.getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteWithNoRunningJobs(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Rule

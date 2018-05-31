@@ -31,7 +31,7 @@
     <name>Liferay Project SDK with DevStudio Community Edition Installer</name>
 
     <properties>
-        <studio-installer-version>2018.4.27</studio-installer-version>
+        <studio-installer-version>2018.6.1</studio-installer-version>
     </properties>
 
     <build>
