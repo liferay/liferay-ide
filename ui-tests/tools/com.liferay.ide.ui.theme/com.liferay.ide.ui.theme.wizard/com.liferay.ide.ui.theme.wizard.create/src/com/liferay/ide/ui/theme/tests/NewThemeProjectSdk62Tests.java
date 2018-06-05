@@ -20,6 +20,7 @@ import com.liferay.ide.ui.liferay.support.server.PureTomcat62Support;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -27,6 +28,7 @@ import org.junit.rules.RuleChain;
 /**
  * @author Terry Jia
  */
+@Ignore("ignore sdk 6.2 tests")
 public class NewThemeProjectSdk62Tests extends SwtbotBase {
 
 	public static PureTomcat62Support tomcat62 = new PureTomcat62Support(bot);
