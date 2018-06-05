@@ -395,6 +395,24 @@ public class LiferayWorkspaceUtil {
 		return false;
 	}
 
+	public static boolean inLiferayWorkspace(IProject project) {
+		return inLiferayWorkspace(project.getLocation());
+	}
+
+	public static boolean inLiferayWorkspace(IPath location) {
+		if (FileUtil.notExists(location) || FileUtil.notExists(getWorkspaceProject())) {
+			return false;
+		}
+
+		IPath workspaceLocation = getWorkspaceProject().getLocation();
+
+		if (workspaceLocation.isPrefixOf(location) && !workspaceLocation.equals(location)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public static boolean isValidGradleWorkspaceLocation(String location) {
 		File workspaceDir = new File(location);
 

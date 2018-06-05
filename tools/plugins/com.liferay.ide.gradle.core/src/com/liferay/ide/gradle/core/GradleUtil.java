@@ -16,14 +16,18 @@ package com.liferay.ide.gradle.core;
 
 import com.google.common.base.Optional;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.gradle.core.parser.GradleDependency;
+import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 
 import java.io.File;
-
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.buildship.core.configuration.BuildConfiguration;
 import org.eclipse.buildship.core.configuration.ConfigurationManager;
@@ -61,6 +65,8 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 
 import org.gradle.tooling.GradleConnector;
+
+import org.osgi.framework.Version;
 
 /**
  * @author Andy Wu
@@ -148,6 +154,51 @@ public class GradleUtil {
 		return GradleProjectNature.isPresentOn(project);
 	}
 
+	public static boolean isWatchable(IFile file) {
+		if (FileUtil.notExists(file)) {
+			return false;
+		}
+
+		boolean watchable = false;
+
+		try {
+			GradleDependencyUpdater updater = new GradleDependencyUpdater(file);
+
+			List<GradleDependency> dependencies = updater.getAllBuildDependencies();
+
+			for (GradleDependency dependency : dependencies) {
+				String group = dependency.getGroup();
+				String name = dependency.getName();
+				Version version = new Version("0");
+				String dependencyVersion = dependency.getVersion();
+
+				if (dependencyVersion != null && !dependencyVersion.equals("") ) { 
+					version = new Version(dependencyVersion);
+				}
+
+				if ("com.liferay".equals(group) && "com.liferay.gradle.plugins".equals(name)
+						&& CoreUtil.compareVersions(version, new Version("3.11.0")) >= 0) {
+					watchable = true;
+
+					break;
+				}
+
+				if ("com.liferay".equals(group) && "com.liferay.gradle.plugins.workspace".equals(name)
+						&& CoreUtil.compareVersions(version, new Version("1.9.2")) >= 0) {
+					watchable = true;
+
+					break;
+				}
+			}
+		}
+		catch (MultipleCompilationErrorsException e) {
+		}
+		catch (IOException e) {
+		}
+
+		return watchable;
+	}
+
 	public static void refreshGradleProject(IProject project) {
 		GradleWorkspaceManager gradleWorkspaceManager = CorePlugin.gradleWorkspaceManager();
 
@@ -165,15 +216,23 @@ public class GradleUtil {
 		}
 	}
 
+	public static void runGradleTask(IProject project, String[] tasks, IProgressMonitor monitor)
+		throws CoreException {
+
+		runGradleTask(project, tasks, new String[0], monitor);
+	}
+
 	public static void runGradleTask(IProject project, String task, IProgressMonitor monitor) throws CoreException {
 		runGradleTask(project, new String[] {task}, monitor);
 	}
 
-	public static void runGradleTask(IProject project, String[] tasks, IProgressMonitor monitor) throws CoreException {
+	public static void runGradleTask(IProject project, String[] tasks, String[] arguments, IProgressMonitor monitor)
+		throws CoreException {
+
 		GradleLaunchConfigurationManager launchConfigManager = CorePlugin.gradleLaunchConfigurationManager();
 
 		ILaunchConfiguration launchConfiguration = launchConfigManager.getOrCreateRunConfiguration(
-			_getRunConfigurationAttributes(project, tasks));
+			_getRunConfigurationAttributes(project, Arrays.asList(tasks), Arrays.asList(arguments)));
 
 		final ILaunchConfigurationWorkingCopy launchConfigurationWC = launchConfiguration.getWorkingCopy();
 
@@ -214,7 +273,9 @@ public class GradleUtil {
 		}
 	}
 
-	private static GradleRunConfigurationAttributes _getRunConfigurationAttributes(IProject project, String[] tasks) {
+	private static GradleRunConfigurationAttributes _getRunConfigurationAttributes(
+		IProject project, List<String> tasks, List<String> arguments) {
+
 		IPath projecLocation = project.getLocation();
 
 		File rootDir = projecLocation.toFile();
@@ -240,20 +301,14 @@ public class GradleUtil {
 
 		String gradleUserHome = gradleHome == null ? "" : gradleHome.getAbsolutePath();
 
-		List<String> taskList = new ArrayList<>();
-
-		for (String task : tasks) {
-			taskList.add(task);
-		}
-
 		GradleDistribution gradleDistribution = buildConfig.getGradleDistribution();
 
 		String serializeString = gradleDistribution.serializeToString();
 
 		return new GradleRunConfigurationAttributes(
-			taskList, projectDirectoryExpression, serializeString, gradleUserHome, null,
-			Collections.<String>emptyList(), Collections.<String>emptyList(), true, true,
-			buildConfig.isOverrideWorkspaceSettings(), buildConfig.isOfflineMode(), buildConfig.isBuildScansEnabled());
+			tasks, projectDirectoryExpression, serializeString, gradleUserHome, null,
+			Collections.<String>emptyList(), arguments, true, true, buildConfig.isOverrideWorkspaceSettings(),
+			buildConfig.isOfflineMode(), buildConfig.isBuildScansEnabled());
 	}
 
 }
