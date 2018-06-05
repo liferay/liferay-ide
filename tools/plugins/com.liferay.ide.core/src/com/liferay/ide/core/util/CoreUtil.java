@@ -208,7 +208,7 @@ public class CoreUtil {
 
 	public static IClasspathEntry[] getClasspathEntries(IProject project) {
 		if (project == null) {
-			return null;
+			return new IClasspathEntry[0];
 		}
 
 		IJavaProject javaProject = JavaCore.create(project);
@@ -219,7 +219,7 @@ public class CoreUtil {
 		catch (JavaModelException jme) {
 		}
 
-		return null;
+		return new IClasspathEntry[0];
 	}
 
 	public static IProject[] getClasspathProjects(IProject project) {
