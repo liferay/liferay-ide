@@ -26,7 +26,6 @@ import java.io.File;
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -128,25 +127,6 @@ public class ValidationFragmentTests extends SwtbotBase {
 		validationAction.assertEnabledFalse(wizardAction.getNextBtn());
 
 		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
-
-		wizardAction.cancel();
-	}
-
-	@Ignore("we should open a new test file to test without runtimes")
-	@Test
-	public void checkLiferayRuntime() {
-		wizardAction.openNewFragmentWizard();
-
-		wizardAction.newFragment.prepareGradle(project.getName());
-
-		validationAction.assertEnabledFalse(wizardAction.getNextBtn());
-
-		validationAction.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, wizardAction.getValidationMsg(2));
-
-		validationAction.assertEnabledTrue(wizardAction.getNextBtn());
-
-		validationAction.assertEquals(
-			CREATE_A_NEW_PROJECT_CONFIGURED_AS_A_LIFERAY_MODULE_PROJECT_FRAGMENT, wizardAction.getValidationMsg(2));
 
 		wizardAction.cancel();
 	}
