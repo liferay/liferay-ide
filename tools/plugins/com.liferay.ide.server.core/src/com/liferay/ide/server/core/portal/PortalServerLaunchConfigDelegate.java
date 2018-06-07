@@ -19,11 +19,17 @@ import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
 
+import java.lang.reflect.Method;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
@@ -42,10 +48,27 @@ import org.eclipse.wst.server.core.ServerUtil;
 /**
  * @author Gregory Amerson
  * @author Charles Wu
+ * @author Simon Jiang
  */
 public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigurationDelegate {
 
 	public static final String ID = "com.liferay.ide.server.portal.launch";
+
+	public PortalServerLaunchConfigDelegate() {
+		super();
+
+		Method allowAdvancedSourcelookupMethod = _getSuperClassMethod("allowAdvancedSourcelookup", new Class<?>[0]);
+
+		if (allowAdvancedSourcelookupMethod != null) {
+			try {
+				allowAdvancedSourcelookupMethod.invoke(this);
+
+				_allowAdvancedSourceLookup = true;
+			}
+			catch (Exception e) {
+			}
+		}
+	}
 
 	@Override
 	public void launch(ILaunchConfiguration config, String mode, ILaunch launch, IProgressMonitor monitor)
@@ -74,6 +97,20 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 
 			_launchServer(server, config, mode, launch, monitor);
 		}
+	}
+
+	private Method _getSuperClassMethod(String methodName, Class<?>... parameterTypes) {
+		Method superClassMethod = null;
+
+		try {
+			Class<?> superclass = getClass().getSuperclass();
+
+			superClassMethod = superclass.getDeclaredMethod(methodName, parameterTypes);
+		}
+		catch (Exception e) {
+		}
+
+		return superClassMethod;
 	}
 
 	private void _launchServer(
@@ -113,7 +150,29 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 		VMRunnerConfiguration runConfig = new VMRunnerConfiguration(classToLaunch, classpath);
 
 		runConfig.setProgramArguments(execArgs.getProgramArgumentsArray());
-		runConfig.setVMArguments(execArgs.getVMArgumentsArray());
+
+		if (_allowAdvancedSourceLookup) {
+			try {
+				Method getVMArgumentsMethod = _getSuperClassMethod(
+					"getVMArguments", new Class<?>[] {ILaunchConfiguration.class, String.class});
+
+				if (getVMArgumentsMethod != null) {
+					List<String> vmArguments = new ArrayList<>();
+					String vmArgumentResult = (String)getVMArgumentsMethod.invoke(this, new Object[] {config, mode});
+
+					Collections.addAll(vmArguments, DebugPlugin.parseArguments(vmArgumentResult));
+					Collections.addAll(vmArguments, execArgs.getVMArgumentsArray());
+
+					runConfig.setVMArguments(vmArguments.toArray(new String[vmArguments.size()]));
+				}
+			}
+			catch (Exception e) {
+			}
+		}
+		else {
+			runConfig.setVMArguments(execArgs.getVMArgumentsArray());
+		}
+
 		runConfig.setWorkingDirectory(workingDirPath);
 		runConfig.setEnvironment(envp);
 		runConfig.setVMSpecificAttributesMap(vmAttributesMap);
@@ -167,5 +226,7 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 			portalServer.cleanup();
 		}
 	}
+
+	private boolean _allowAdvancedSourceLookup = false;
 
 }
