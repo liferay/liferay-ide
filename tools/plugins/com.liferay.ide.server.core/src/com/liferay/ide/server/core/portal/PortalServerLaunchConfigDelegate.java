@@ -55,12 +55,15 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 	public static final String ID = "com.liferay.ide.server.portal.launch";
 
 	public PortalServerLaunchConfigDelegate() {
+		super();
+
 		Method allowAdvancedSourcelookupMethod = _getSuperClassMethod("allowAdvancedSourcelookup", new Class<?>[0]);
 
 		if (allowAdvancedSourcelookupMethod != null) {
 			try {
-				allowAdvancedSourcelookupMethod.invoke(this, new Object[0]);
-				_canApplyAdvancedSourcelookup = true;
+				allowAdvancedSourcelookupMethod.invoke(this);
+
+				_allowAdvancedSourceLookup = true;
 			}
 			catch (Exception e) {
 			}
@@ -148,7 +151,7 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 
 		runConfig.setProgramArguments(execArgs.getProgramArgumentsArray());
 
-		if (_canApplyAdvancedSourcelookup) {
+		if (_allowAdvancedSourceLookup) {
 			try {
 				Method getVMArgumentsMethod = _getSuperClassMethod(
 					"getVMArguments", new Class<?>[] {ILaunchConfiguration.class, String.class});
@@ -224,6 +227,6 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 		}
 	}
 
-	private boolean _canApplyAdvancedSourcelookup = false;
+	private boolean _allowAdvancedSourceLookup = false;
 
 }
