@@ -21,11 +21,12 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
+ * @author Ying Xu
  */
 public class ErrorLogView extends View {
 
 	public ErrorLogView(SWTWorkbenchBot bot) {
-		super(bot, ERROR_LOG);
+		super(bot, ERROR_LOG_WORKSPACE_LOG);
 	}
 
 	public void clickDeleteLogBtn() {
