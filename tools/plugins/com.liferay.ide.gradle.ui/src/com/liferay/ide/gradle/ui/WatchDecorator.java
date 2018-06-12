@@ -17,6 +17,7 @@ package com.liferay.ide.gradle.ui;
 import com.liferay.ide.core.util.ListUtil;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
@@ -37,7 +38,9 @@ public class WatchDecorator extends LabelProvider implements ILightweightLabelDe
 
 		String jobName = project.getName() + " - watch";
 
-		Job[] jobs = Job.getJobManager().find(jobName);
+		IJobManager jobManager = Job.getJobManager();
+
+		Job[] jobs = jobManager.find(jobName);
 
 		if (ListUtil.isNotEmpty(jobs)) {
 			decoration.addSuffix(" [watching]");

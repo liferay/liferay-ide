@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -32,6 +33,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
  */
 public class WatchTaskAction extends AbstractObjectAction {
 
+	@Override
 	public void run(IAction action) {
 		if (fSelection instanceof IStructuredSelection) {
 			Object[] elems = ((IStructuredSelection)fSelection).toArray();
@@ -48,7 +50,9 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 			String jobName = project.getName() + " - " + task;
 
-			Job[] jobs = Job.getJobManager().find(jobName);
+			IJobManager jobManager = Job.getJobManager();
+
+			Job[] jobs = jobManager.find(jobName);
 
 			if (ListUtil.isNotEmpty(jobs)) {
 				return;
@@ -56,6 +60,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 			Job job = new Job(jobName) {
 
+				@Override
 				public boolean belongsTo(Object family) {
 					return jobName.equals(family);
 				}
@@ -70,7 +75,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 						}, monitor);
 					}
 					catch (Exception e) {
-						return ProjectUI.createErrorStatus("Error running Gradle goal " + task, e);
+						return ProjectUI.createErrorStatus("Error running Gradle task " + task, e);
 					}
 
 					return Status.OK_STATUS;

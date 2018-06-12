@@ -15,7 +15,6 @@
 package com.liferay.ide.gradle.core;
 
 import com.google.common.base.Optional;
-
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.parser.GradleDependency;
@@ -63,9 +62,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
-
 import org.gradle.tooling.GradleConnector;
-
 import org.osgi.framework.Version;
 
 /**
@@ -154,15 +151,15 @@ public class GradleUtil {
 		return GradleProjectNature.isPresentOn(project);
 	}
 
-	public static boolean isWatchable(IFile file) {
-		if (FileUtil.notExists(file)) {
+	public static boolean isWatchableProject(IFile buildFile) {
+		if (FileUtil.notExists(buildFile)) {
 			return false;
 		}
 
 		boolean watchable = false;
 
 		try {
-			GradleDependencyUpdater updater = new GradleDependencyUpdater(file);
+			GradleDependencyUpdater updater = new GradleDependencyUpdater(buildFile);
 
 			List<GradleDependency> dependencies = updater.getAllBuildDependencies();
 
@@ -172,7 +169,7 @@ public class GradleUtil {
 				Version version = new Version("0");
 				String dependencyVersion = dependency.getVersion();
 
-				if (dependencyVersion != null && !dependencyVersion.equals("") ) { 
+				if (dependencyVersion != null && !dependencyVersion.equals("") ) {
 					version = new Version(dependencyVersion);
 				}
 
@@ -191,9 +188,9 @@ public class GradleUtil {
 				}
 			}
 		}
-		catch (MultipleCompilationErrorsException e) {
-		}
 		catch (IOException e) {
+		}
+		catch (MultipleCompilationErrorsException e) {
 		}
 
 		return watchable;
