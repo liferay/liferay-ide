@@ -139,6 +139,30 @@
 				</and>
 			</visibility>
 		</objectContribution>
+		<objectContribution
+			adaptable="true"
+			id="com.liferay.ide.gradle.ui.watch"
+			objectClass="org.eclipse.core.resources.IProject"
+		>
+			<action
+				class="com.liferay.ide.gradle.action.WatchTaskAction"
+				enablesFor="1"
+				icon="icons/e16/liferay_logo_16.png"
+				id="com.liferay.ide.gradle.popup.action.watch"
+				label="watch"
+				menubarPath="liferayPopupMenuCategory/watch"
+			>
+			</action>
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IProject">
+					<test
+						forcePluginActivation="true"
+						property="com.liferay.ide.gradle.ui.isWatchableProject"
+						value="true"
+					/>
+				</adapt>
+			</enablement>
+		</objectContribution>
 	</extension>
 	<extension
 		point="org.eclipse.core.expressions.propertyTesters"
@@ -165,6 +189,14 @@
 			namespace="com.liferay.ide.gradle.ui"
 			properties="isBuildFile"
 			type="org.eclipse.core.resources.IFile"
+		>
+		</propertyTester>
+		<propertyTester
+			class="com.liferay.ide.gradle.ui.WatchableProjectPropertyTester"
+			id="com.liferay.ide.gradle.ui.isWatchableProject"
+			namespace="com.liferay.ide.gradle.ui"
+			properties="isWatchableProject"
+			type="org.eclipse.core.resources.IResource"
 		>
 		</propertyTester>
 	</extension>
@@ -269,5 +301,20 @@
 			sequence="M1+F5"
 		>
 		</key>
+	</extension>
+	<extension point="org.eclipse.ui.decorators">
+		<decorator
+			id="com.liferay.ide.gradle.ui.watchDecorator"
+			adaptable="true"
+			label="watch decorator"
+			lightweight="true"
+			class="com.liferay.ide.gradle.ui.WatchDecorator"
+			state="true"
+		>
+			<description>watch decorator</description>
+			<enablement>
+				<objectState name="nature" value="org.eclipse.buildship.core.gradleprojectnature"/>
+			</enablement>
+		</decorator>
 	</extension>
 </plugin>

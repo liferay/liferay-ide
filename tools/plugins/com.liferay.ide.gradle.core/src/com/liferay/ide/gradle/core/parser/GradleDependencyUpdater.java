@@ -15,6 +15,7 @@
 package com.liferay.ide.gradle.core.parser;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,14 +33,23 @@ import org.codehaus.groovy.ast.GroovyCodeVisitor;
 import org.codehaus.groovy.ast.builder.AstBuilder;
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 
+import org.eclipse.core.resources.IFile;
+
 /**
  * @author Lovett Li
  * @author Simon Jiang
  */
 public class GradleDependencyUpdater {
 
+	public GradleDependencyUpdater(IFile file) throws IOException, MultipleCompilationErrorsException {
+		this(FileUtils.readFileToString(FileUtil.getFile(file), "UTF-8"));
+
+		_file = FileUtil.getFile(file);
+	}
+
 	public GradleDependencyUpdater(File file) throws IOException, MultipleCompilationErrorsException {
 		this(FileUtils.readFileToString(file, "UTF-8"));
+
 		_file = file;
 	}
 
@@ -51,6 +61,14 @@ public class GradleDependencyUpdater {
 
 	public List<GradleDependency> getAllDependencies() {
 		FindDependenciesVisitor visitor = new FindDependenciesVisitor();
+
+		walkScript(visitor);
+
+		return visitor.getDependencies();
+	}
+
+	public List<GradleDependency> getAllBuildDependencies() {
+		FindBuildDependenciesVisitor visitor = new FindBuildDependenciesVisitor();
 
 		walkScript(visitor);
 
