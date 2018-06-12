@@ -119,6 +119,8 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		viewAction.project.refreshGradleProject(project.getName());
+
 		String[] projectNames = {project.getName(), newModulesFolderName, projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
@@ -163,6 +165,8 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle("test-theme", THEME);
 
 		wizardAction.finish();
+
+		viewAction.project.refreshGradleProject(project.getName());
 
 		String[] projectNames = {project.getName(), newWarsFolderName, projectName};
 
