@@ -40,6 +40,7 @@ import org.eclipse.wst.server.core.ServerCore;
 public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant {
 
 	public LiferayWorkspaceProjectDeleteParticipant() {
+		super();
 	}
 
 	@Override
@@ -63,9 +64,7 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 			return change;
 		}
 
-		IServer[] servers = ServerCore.getServers();
-
-		Stream<IServer> serversStream = Stream.of(servers);
+		Stream<IServer> serversStream = Stream.of(ServerCore.getServers());
 
 		serversStream.filter(
 			server -> server != null
@@ -88,7 +87,7 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 
 	@Override
 	public String getName() {
-		return _delete_server_and_runtime_from_workspace_project;
+		return "Liferay Workpsace Project Bundle's Runtime Cleanup";
 	}
 
 	@Override
@@ -101,10 +100,6 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 
 		return true;
 	}
-
-	private static String _actions_delete_for_workspace_project = "Delete runtime and server.";
-	private static String _delete_server_and_runtime_from_workspace_project =
-		"Liferay Workpsace Project Bundle's Runtime Cleanup";
 
 	private IProject _workspaceProject;
 
@@ -121,7 +116,7 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 
 		@Override
 		public String getName() {
-			return _actions_delete_for_workspace_project;
+			return "Delete runtime and server.";
 		}
 
 		@Override
@@ -137,6 +132,7 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 		public Change perform(IProgressMonitor pm) throws CoreException {
 			try {
 				IRuntime runtime = _server.getRuntime();
+
 				_server.delete();
 
 				if (runtime != null) {
