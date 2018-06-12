@@ -14,48 +14,31 @@
 
 package com.liferay.ide.gradle.core;
 
-import com.liferay.ide.core.BaseLiferayProject;
-import com.liferay.ide.core.ILiferayPortal;
-import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.PortalBundle;
+import com.liferay.ide.project.core.LiferayWorkspaceProject;
 
-import java.util.Collections;
-import java.util.List;
+import java.io.File;
 
-import org.eclipse.core.resources.IFolder;
+import java.util.Properties;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Andy Wu
+ * @author Simon Jiang
  */
-public class LiferayWorkspaceProject extends BaseLiferayProject implements IWorkspaceProject {
+public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
-	public LiferayWorkspaceProject(IProject project) {
+	public LiferayGradleWorkspaceProject(IProject project) {
 		super(project);
 	}
 
 	@Override
 	public <T> T adapt(Class<T> adapterType) {
-		if (ILiferayPortal.class.equals(adapterType)) {
-
-			// check for bundles/ directory
-
-			IFolder bundlesFolder = getProject().getFolder("bundles");
-
-			if (FileUtil.exists(bundlesFolder)) {
-				PortalBundle portalBundle = LiferayServerCore.newPortalBundle(bundlesFolder.getLocation());
-
-				if (portalBundle != null) {
-					return adapterType.cast(portalBundle);
-				}
-			}
-		}
-
 		if (IProjectBuilder.class.equals(adapterType) || IWorkspaceProjectBuilder.class.equals(adapterType)) {
 			IProjectBuilder projectBuilder = new GradleProjectBuilder(getProject());
 
@@ -67,17 +50,23 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 
 	@Override
 	public String getProperty(String key, String defaultValue) {
-		return null;
-	}
+		if (getProject() == null) {
+			return null;
+		}
 
-	@Override
-	public IFolder[] getSourceFolders() {
-		return null;
-	}
+		IPath projectLocation = getProject().getLocation();
 
-	@Override
-	public List<IPath> getTargetPlatformArtifacts() {
-		return Collections.emptyList();
+		File gradleProperties = new File(projectLocation.toFile(), "gradle.properties");
+
+		String retVal = null;
+
+		if (FileUtil.exists(gradleProperties)) {
+			Properties properties = PropertiesUtil.loadProperties(gradleProperties);
+
+			retVal = properties.getProperty(key, defaultValue);
+		}
+
+		return retVal;
 	}
 
 }
