@@ -202,7 +202,7 @@
                         </compareText>
                     </conditionRuleList>
                     <elseActionList>
-                            <setInstallerVariable name="selectbundleversion" value="7.0"/>
+                        <setInstallerVariable name="selectbundleversion" value="7.0"/>
                     </elseActionList>
                 </if>
                 <setInstallerVariable>
@@ -239,67 +239,112 @@
                 </propertiesFileSet>
                 <if>
                     <actionList>
-                        <createDirectory>
-                            <path>${user_home_directory}${platform_path_separator}.gradle</path>
-                        </createDirectory>
-                        <if>
-                            <actionList>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.https.proxyHost</key>
-                                    <value>${proxyhost}</value>
-                                </propertiesFileSet>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.https.proxyPort</key>
-                                    <value>${proxyport}</value>
-                                </propertiesFileSet>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.https.proxyUser</key>
-                                    <value>${proxyusername}</value>
-                                </propertiesFileSet>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.https.proxyPassword</key>
-                                    <value>${proxypassword}</value>
-                                </propertiesFileSet>
-                            </actionList>
-                            <conditionRuleList>
-                                <isTrue>
-                                    <value>${proxyhttps}</value>
-                                </isTrue>
-                            </conditionRuleList>
-                            <elseActionList>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.http.proxyHost</key>
-                                    <value>${proxyhost}</value>
-                                </propertiesFileSet>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.http.proxyPort</key>
-                                    <value>${proxyport}</value>
-                                </propertiesFileSet>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.http.proxyUser</key>
-                                    <value>${proxyusername}</value>
-                                </propertiesFileSet>
-                                <propertiesFileSet>
-                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                                    <key>systemProp.http.proxyPassword</key>
-                                    <value>${proxypassword}</value>
-                                </propertiesFileSet>
-                            </elseActionList>
-                        </if>
+                        <propertiesFileSet>
+                            <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                            <key>systemProp.http.proxyHost</key>
+                            <value>${httpproxyhost}</value>
+                        </propertiesFileSet>
+                        <propertiesFileSet>
+                            <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                            <key>systemProp.http.proxyPort</key>
+                            <value>${httpproxyport}</value>
+                        </propertiesFileSet>
+                        <propertiesFileSet>
+                            <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                            <key>systemProp.http.proxyUser</key>
+                            <value>${httpproxyusername}</value>
+                        </propertiesFileSet>
+                        <propertiesFileSet>
+                            <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                            <key>systemProp.http.proxyPassword</key>
+                            <value>${httpproxypassword}</value>
+                        </propertiesFileSet>
                     </actionList>
                     <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${proxy}</value1>
-                            <value2>proxysetting</value2>
-                        </compareValues>
+                        <ruleGroup>
+                            <ruleList>
+                                <compareValues>
+                                    <logic>equals</logic>
+                                    <value1>${proxy}</value1>
+                                    <value2>proxysetting</value2>
+                                </compareValues>
+                                <compareValues>
+                                    <logic>equals</logic>
+                                    <value1>${proxysetting}</value1>
+                                    <value2>httpProxy</value2>
+                                </compareValues>
+                            </ruleList>
+                        </ruleGroup>
+                    </ruleList>
+                </if>
+                <if>
+                    <actionList>
+                        <propertiesFileSet>
+                            <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                            <key>systemProp.https.proxyHost</key>
+                            <value>${httpsproxyhost}</value>
+                        </propertiesFileSet>
+                        <propertiesFileSet>
+                            <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                            <key>systemProp.https.proxyPort</key>
+                            <value>${httpsproxyport}</value>
+                        </propertiesFileSet>
+                        <propertiesFileSet>
+                            <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                            <key>systemProp.https.proxyUser</key>
+                            <value>${httpsproxyusername}</value>
+                        </propertiesFileSet>
+                        <propertiesFileSet>
+                            <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                            <key>systemProp.https.proxyPassword</key>
+                            <value>${httpsproxypassword}</value>
+                        </propertiesFileSet>
+                    </actionList>
+                    <ruleList>
+                        <ruleGroup>
+                            <ruleList>
+                                <compareValues>
+                                    <logic>equals</logic>
+                                    <value1>${proxy}</value1>
+                                    <value2>proxysetting</value2>
+                                </compareValues>
+                                <compareValues>
+                                    <logic>equals</logic>
+                                    <value1>${proxysetting}</value1>
+                                    <value2>httpsProxy</value2>
+                                </compareValues>
+                            </ruleList>
+                        </ruleGroup>
+                    </ruleList>
+                </if>
+                <if>
+                    <actionList>
+                        <propertiesFileSet>
+                            <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                            <key>systemProp.socks.proxyHost</key>
+                            <value>${socksproxyhost}</value>
+                        </propertiesFileSet>
+                        <propertiesFileSet>
+                            <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                            <key>systemProp.socks.proxyPort</key>
+                            <value>${socksproxyport}</value>
+                        </propertiesFileSet>
+                    </actionList>
+                    <ruleList>
+                        <ruleGroup>
+                            <ruleList>
+                                <compareValues>
+                                    <logic>equals</logic>
+                                    <value1>${proxy}</value1>
+                                    <value2>proxysetting</value2>
+                                </compareValues>
+                                <compareValues>
+                                    <logic>equals</logic>
+                                    <value1>${proxysetting}</value1>
+                                    <value2>socksProxy</value2>
+                                </compareValues>
+                            </ruleList>
+                        </ruleGroup>
                     </ruleList>
                 </if>
             </actionList>
@@ -541,12 +586,37 @@
                     <explanation></explanation>
                     <image></image>
                 </labelParameter>
-                <labelParameter>
+                <choiceParameter>
                     <name>proxysetting</name>
                     <description>Config proxy setting</description>
                     <explanation></explanation>
-                    <image></image>
-                </labelParameter>
+                    <value></value>
+                    <default>httpProxy</default>
+                    <allowEmptyValue>0</allowEmptyValue>
+                    <displayType>combobox</displayType>
+                    <ordering>default</ordering>
+                    <width>40</width>
+                    <optionList>
+                        <option>
+                            <description></description>
+                            <image></image>
+                            <text>HTTP Proxy</text>
+                            <value>httpProxy</value>
+                        </option>
+                        <option>
+                            <description></description>
+                            <image></image>
+                            <text>HTTPS Proxy</text>
+                            <value>httpsProxy</value>
+                        </option>
+                        <option>
+                            <description></description>
+                            <image></image>
+                            <text>SOCKS5 Proxy</text>
+                            <value>socksProxy</value>
+                        </option>
+                    </optionList>
+                </choiceParameter>
             </parameterList>
             <ruleList>
                 <compareValues>
@@ -557,14 +627,14 @@
             </ruleList>
         </choiceParameterGroup>
         <parameterGroup>
-            <name>proxyinfo</name>
-            <title>Proxy Information</title>
+            <name>httpproxyinfo</name>
+            <title>HTTP Proxy Information</title>
             <explanation></explanation>
             <value></value>
             <default></default>
             <parameterList>
                 <stringParameter>
-                    <name>proxyhost</name>
+                    <name>httpproxyhost</name>
                     <description>proxy host</description>
                     <explanation></explanation>
                     <value></value>
@@ -573,7 +643,7 @@
                     <width>30</width>
                 </stringParameter>
                 <stringParameter>
-                    <name>proxyport</name>
+                    <name>httpproxyport</name>
                     <description>proxy port</description>
                     <explanation></explanation>
                     <value></value>
@@ -582,7 +652,7 @@
                     <width>30</width>
                 </stringParameter>
                 <stringParameter>
-                    <name>proxyusername</name>
+                    <name>httpproxyusername</name>
                     <description>proxy username</description>
                     <explanation></explanation>
                     <value></value>
@@ -591,7 +661,7 @@
                     <width>30</width>
                 </stringParameter>
                 <stringParameter>
-                    <name>proxypassword</name>
+                    <name>httpproxypassword</name>
                     <description>proxy password</description>
                     <explanation></explanation>
                     <value></value>
@@ -599,21 +669,126 @@
                     <allowEmptyValue>1</allowEmptyValue>
                     <width>30</width>
                 </stringParameter>
-                <booleanParameter>
-                    <name>proxyhttps</name>
-                    <description>proxy requires https</description>
+            </parameterList>
+            <ruleList>
+                <ruleGroup>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxy}</value1>
+                            <value2>proxysetting</value2>
+                        </compareValues>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxysetting}</value1>
+                            <value2>httpProxy</value2>
+                        </compareValues>
+                    </ruleList>
+                </ruleGroup>
+            </ruleList>
+        </parameterGroup>
+        <parameterGroup>
+            <name>httppsroxyinfo</name>
+            <title>HTTPS Proxy Information</title>
+            <explanation></explanation>
+            <value></value>
+            <default></default>
+            <parameterList>
+                <stringParameter>
+                    <name>httpsproxyhost</name>
+                    <description>proxy host</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
-                    <displayStyle>checkbox-right</displayStyle>
-                </booleanParameter>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+                <stringParameter>
+                    <name>httpsproxyport</name>
+                    <description>proxy port</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+                <stringParameter>
+                    <name>httpsproxyusername</name>
+                    <description>proxy username</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+                <stringParameter>
+                    <name>httpsproxypassword</name>
+                    <description>proxy password</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
             </parameterList>
             <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxy}</value1>
-                    <value2>proxysetting</value2>
-                </compareValues>
+                <ruleGroup>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxy}</value1>
+                            <value2>proxysetting</value2>
+                        </compareValues>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxysetting}</value1>
+                            <value2>httpsProxy</value2>
+                        </compareValues>
+                    </ruleList>
+                </ruleGroup>
+            </ruleList>
+        </parameterGroup>
+        <parameterGroup>
+            <name>socksroxyinfo</name>
+            <title>SOCKS5 Proxy Information</title>
+            <explanation></explanation>
+            <value></value>
+            <default></default>
+            <parameterList>
+                <stringParameter>
+                    <name>socksproxyhost</name>
+                    <description>proxy host</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+                <stringParameter>
+                    <name>socksproxyport</name>
+                    <description>proxy port</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+            </parameterList>
+            <ruleList>
+                <ruleGroup>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxy}</value1>
+                            <value2>proxysetting</value2>
+                        </compareValues>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxysetting}</value1>
+                            <value2>socksProxy</value2>
+                        </compareValues>
+                    </ruleList>
+                </ruleGroup>
             </ruleList>
         </parameterGroup>
     </parameterList>
