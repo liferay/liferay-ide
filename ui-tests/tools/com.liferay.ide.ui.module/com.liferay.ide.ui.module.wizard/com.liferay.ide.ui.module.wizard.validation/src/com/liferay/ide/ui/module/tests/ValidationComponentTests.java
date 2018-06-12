@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
@@ -24,21 +25,21 @@ import org.eclipse.core.runtime.Platform;
 
 import org.junit.Assert;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
  * @author Ashley Yuan
  * @author Lily Li
+ * @author Ying Xu
  */
 public class ValidationComponentTests extends SwtbotBase {
 
 	@Test
 	public void checkBrowsePackageNameDialog() {
-		String projectName = "test-browse-dialog";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName);
+		wizardAction.newModule.prepareGradle(project.getName());
 
 		wizardAction.finish();
 
@@ -52,13 +53,13 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
-		dialogAction.prepareText("*test.browse.dialog");
+		dialogAction.prepareText(project.getName());
 
-		dialogAction.selectTableItem("test.browse.dialog");
+		dialogAction.selectTableItem(project.getName());
 
-		dialogAction.selectTableItem("test.browse.dialog.constants");
+		dialogAction.selectTableItem(project.getName() + ".constants");
 
-		dialogAction.selectTableItem("test.browse.dialog.portlet");
+		dialogAction.selectTableItem(project.getName()+ ".portlet");
 
 		Assert.assertTrue(dialogAction.getConfirmBtn().isEnabled());
 
@@ -66,16 +67,14 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void checkComponentClassName() {
-		String projectName = "test-myclass-name";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName);
+		wizardAction.newModule.prepareGradle(project.getName());
 
 		wizardAction.finish();
 
@@ -98,16 +97,14 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void checkComponentClassTemplate() {
-		String projectName = "test-template";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName);
+		wizardAction.newModule.prepareGradle(project.getName());
 
 		wizardAction.finish();
 
@@ -126,16 +123,41 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
+	public void checkExistingComponentClass() {
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(project.getName());
+
+		wizardAction.finish();
+
+		String packageName = project.getName() + ".portlet";
+		String className = project.getName().substring(0, 1).toUpperCase() + project.getName().substring(1);
+
+		wizardAction.openNewLiferayComponentClassWizard();
+
+		wizardAction.newLiferayComponent.packageName().setText(packageName);
+
+		Assert.assertEquals(packageName + "." + className + "Portlet" + ALREADY_EXISTS, wizardAction.getValidationMsg(2));
+
+		wizardAction.newLiferayComponent.componentClassName().setText(project.getName() + "portlet");
+
+		// wait for IDE-4059 fixed
+		// Assert.assertEquals(packageName + "." + className + "Portlet" + ALREADY_EXISTS, wizardAction.getValidationMsg(2));
+
+		wizardAction.cancel();
+
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void checkInfoInitialState() {
-		String projectName = "test-component-info-initial-state";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName);
+		wizardAction.newModule.prepareGradle(project.getName());
 
 		wizardAction.finish();
 
@@ -145,7 +167,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		Assert.assertEquals(CREATE_A_NEW_LIEFRAY_COMPONENT_CLASS, wizardAction.getValidationMsg(2));
 
-		Assert.assertEquals(projectName, wizardAction.newLiferayComponent.projectName().getText());
+		Assert.assertEquals(project.getName(), wizardAction.newLiferayComponent.projectName().getText());
 
 		Assert.assertTrue(wizardAction.newLiferayComponent.browsePackageBtn().isEnabled());
 
@@ -153,7 +175,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
@@ -177,11 +199,9 @@ public class ValidationComponentTests extends SwtbotBase {
 
 	@Test
 	public void checkModelListenerTemplate() {
-		String projectName = "test-model-listener-template";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName);
+		wizardAction.newModule.prepareGradle(project.getName());
 
 		wizardAction.finish();
 
@@ -221,16 +241,14 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void checkPackageName() {
-		String projectName = "test-mypackage-name";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName);
+		wizardAction.newModule.prepareGradle(project.getName());
 
 		wizardAction.finish();
 
@@ -253,7 +271,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
@@ -303,11 +321,9 @@ public class ValidationComponentTests extends SwtbotBase {
 	@Ignore("ignore to wait target platform way")
 	@Test
 	public void checkServiceWrapperTemplate() {
-		String projectName = "test-service-wrapper-template";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName);
+		wizardAction.newModule.prepareGradle(project.getName());
 
 		wizardAction.finish();
 
@@ -325,10 +341,9 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.newLiferayComponent.prepareServiceName("serviceName");
 
-		// wait for IDE-3599 fixed
-		// Assert.assertEquals("\"serviceName\"" + IS_NOT_AMONG_POSSIBLE_VALUES, wizardAction.getValidationMsg(3));
+		Assert.assertEquals(CREATE_A_NEW_LIEFRAY_COMPONENT_CLASS, wizardAction.getValidationMsg(3));
 
-		// Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+		Assert.assertTrue(wizardAction.getFinishBtn().isEnabled());
 
 		wizardAction.newLiferayComponent.openSelectModelClassAndServiceDialog();
 
@@ -348,7 +363,10 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }
