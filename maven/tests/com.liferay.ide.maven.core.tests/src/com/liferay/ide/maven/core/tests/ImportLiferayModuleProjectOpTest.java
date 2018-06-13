@@ -61,7 +61,7 @@ public class ImportLiferayModuleProjectOpTest {
 		Assert.assertTrue(importOp.validation().ok());
 		Assert.assertTrue(importOp.execute(ProgressMonitorBridge.create(new NullProgressMonitor())).ok());
 
-		Util._waitForJobsToComplete();
+		Util.waitForJobsToComplete();
 
 		IProject project = ProjectUtil.getProject(projectName);
 

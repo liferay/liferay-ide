@@ -31,35 +31,34 @@ import org.eclipse.m2e.tests.common.WorkspaceHelpers;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
-
-import junit.framework.Assert;
+import org.junit.Assert;
 
 /**
  * @author Charles Wu
  */
-@SuppressWarnings({"restriction","deprecation"})
-public class Util{
+@SuppressWarnings("restriction")
+public class Util {
 
-	public static IProject _create(BaseModuleOp op) throws InterruptedException, CoreException{
+	public static IProject create(BaseModuleOp op) throws InterruptedException, CoreException {
 		Status status = op.execute(ProgressMonitorBridge.create(new NullProgressMonitor()));
 
 		Assert.assertNotNull(status);
 
 		Assert.assertTrue(status.message(), status.ok());
 
-		_waitForJobsToComplete();
+		waitForJobsToComplete();
 
 		Value<String> projectName = op.getProjectName();
 
 		return CoreUtil.getProject(projectName.content());
 	}
 
-	public static IProject _createAndBuild(BaseModuleOp op) throws Exception {
+	public static IProject createAndBuild(BaseModuleOp op) throws Exception {
 		Status validation = op.validation();
 
 		Assert.assertTrue(validation.message(), validation.ok());
 
-		IProject project = Util._create(op);
+		IProject project = Util.create(op);
 
 		_verifyProject(project);
 
@@ -68,7 +67,7 @@ public class Util{
 
 	public static void _verifyProject(IProject project) throws Exception {
 		IProgressMonitor monitor = new NullProgressMonitor();
-		
+
 		Assert.assertNotNull(project);
 		Assert.assertTrue(project.exists());
 
@@ -95,7 +94,7 @@ public class Util{
 		Assert.assertTrue(FileUtil.exists(outputBundle.toFile()));
 	}
 
-	public static void _waitForJobsToComplete() throws InterruptedException, CoreException {
+	public static void waitForJobsToComplete() throws InterruptedException, CoreException {
 		JobHelpers.waitForJobs(job -> {
 			String jobName = job.getName();
 
