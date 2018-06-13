@@ -92,7 +92,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 
 				overrideFilePath.setValue("META-INF/resources/view.jsp");
 
-				IProject existedGradleProject = Util.create(op);
+				IProject existedGradleProject = MavenTestUtil.create(op);
 
 				Assert.assertNotNull(existedGradleProject);
 
@@ -143,7 +143,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 
 				overrideFilePath.setValue("META-INF/resources/view.jsp");
 
-				IProject existedGradleProject = Util.create(op);
+				IProject existedGradleProject = MavenTestUtil.create(op);
 
 				Assert.assertNotNull(existedGradleProject);
 
@@ -166,7 +166,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 
 				file.setValue("META-INF/resources/login.jsp");
 
-				IProject existedMavenProject = Util.create(op);
+				IProject existedMavenProject = MavenTestUtil.create(op);
 
 				Assert.assertNotNull(existedMavenProject);
 

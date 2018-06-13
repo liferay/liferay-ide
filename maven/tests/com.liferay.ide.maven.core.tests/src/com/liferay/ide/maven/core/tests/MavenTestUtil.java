@@ -37,7 +37,7 @@ import org.junit.Assert;
  * @author Charles Wu
  */
 @SuppressWarnings("restriction")
-public class Util {
+public class MavenTestUtil {
 
 	public static IProject create(BaseModuleOp op) throws InterruptedException, CoreException {
 		Status status = op.execute(ProgressMonitorBridge.create(new NullProgressMonitor()));
@@ -58,14 +58,14 @@ public class Util {
 
 		Assert.assertTrue(validation.message(), validation.ok());
 
-		IProject project = Util.create(op);
+		IProject project = MavenTestUtil.create(op);
 
-		_verifyProject(project);
+		verifyProject(project);
 
 		return project;
 	}
 
-	public static void _verifyProject(IProject project) throws Exception {
+	public static void verifyProject(IProject project) throws Exception {
 		IProgressMonitor monitor = new NullProgressMonitor();
 
 		Assert.assertNotNull(project);

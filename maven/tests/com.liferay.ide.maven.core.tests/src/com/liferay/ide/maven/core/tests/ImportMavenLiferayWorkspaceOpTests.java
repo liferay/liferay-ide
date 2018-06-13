@@ -94,7 +94,7 @@ public class ImportMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
-		Util.waitForJobsToComplete();
+		MavenTestUtil.waitForJobsToComplete();
 
 		JobHelpers.waitForJobs(
 			job -> {
@@ -190,7 +190,7 @@ public class ImportMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
-		Util.waitForJobsToComplete();
+		MavenTestUtil.waitForJobsToComplete();
 
 		JobHelpers.waitForJobs(
 			job -> {
