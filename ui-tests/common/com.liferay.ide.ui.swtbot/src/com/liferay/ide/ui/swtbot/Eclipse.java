@@ -29,6 +29,7 @@ import org.eclipse.swtbot.swt.finder.waits.ICondition;
  * @author Terry Jia
  * @author Ying Xu
  * @author Vicky Wang
+ * @author Lily Li
  */
 public class Eclipse extends BasePageObject {
 
@@ -48,6 +49,12 @@ public class Eclipse extends BasePageObject {
 
 	public Menu getFileMenu() {
 		return new Menu(bot.shell(label).bot(), FILE);
+	}
+
+	public Menu getInstallMenu() {
+		String[] installLabel = {HELP, INSTALL_NEW_SOFTWARE};
+
+		return new Menu(bot.shell(label).bot(), installLabel);
 	}
 
 	public String getLabel() {

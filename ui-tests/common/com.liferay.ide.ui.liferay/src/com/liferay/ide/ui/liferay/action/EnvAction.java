@@ -194,6 +194,16 @@ public class EnvAction extends UIAction {
 		return retval;
 	}
 
+	public boolean isEclipse() {
+		if ((_eclipseDir == null) || _eclipseDir.equals("") || _eclipseDir.equals("null")) {
+			return false;
+		}
+
+		_eclipsePath = new Path(_eclipseDir);
+
+		return _eclipsePath.toFile().exists();
+	}
+
 	public boolean localConnected() {
 		boolean connected = true;
 
@@ -316,6 +326,8 @@ public class EnvAction extends UIAction {
 	private final BundleInfo[] _bundleInfos;
 	private String _bundlesDir = System.getProperty("liferay.bundles.dir");
 	private IPath _bundlesPath;
+	private String _eclipseDir = System.getProperty("eclipse.dir");
+	private IPath _eclipsePath;
 	private String _internal = System.getProperty("internal");
 	private byte[] _internalServerIp = {(byte)192, (byte)168, (byte)130, 84};
 	private final SdkInfo[] _sdkInfos;

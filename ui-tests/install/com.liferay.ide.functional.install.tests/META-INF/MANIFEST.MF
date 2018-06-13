@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Functional Install Tests
+Bundle-SymbolicName: com.liferay.ide.functional.install.tests
+Bundle-Version: 3.2.0.qualifier
+Bundle-Vendor: Liferay
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Require-Bundle: com.liferay.ide.ui.swtbot,
+ org.junit,
+ org.eclipse.swtbot.eclipse.finder,
+ com.liferay.ide.ui.liferay

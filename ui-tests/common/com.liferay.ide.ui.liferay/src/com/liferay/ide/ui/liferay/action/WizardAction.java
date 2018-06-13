@@ -38,12 +38,14 @@ import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayWorkspaceWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewProjectWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.SetSDKLocationWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.ImportProjectWizard;
+import com.liferay.ide.ui.swtbot.eclipse.page.InstallNewSoftwareWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.NewRuntimeWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.NewServerWizard;
 import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.page.MenuItem;
+import com.liferay.ide.ui.swtbot.page.Radio;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.ui.swtbot.page.Wizard;
@@ -124,6 +126,10 @@ public class WizardAction extends UIAction {
 
 	public void openFileMenuLiferayComponentClassWizard() {
 		ide.getFileMenu().clickMenu(NEW, LIFERAY_COMPONENT_CLASS);
+	}
+
+	public void openInstallNewSoftwareWizard() {
+		ide.getInstallMenu().click();
 	}
 
 	public void openNewBtnFragmentFilesWizard() {
@@ -233,6 +239,7 @@ public class WizardAction extends UIAction {
 	public ChooseAssignmentTypeWizardAction chooseAssignmentType = new ChooseAssignmentTypeWizardAction();
 	public ImportLiferayWorkspaceWizardAction importLiferayWorkspace = new ImportLiferayWorkspaceWizardAction();
 	public ImportProjectWizardAction importProject = new ImportProjectWizardAction();
+	public InstallNewSoftwareWizardAction installNewSoftware = new InstallNewSoftwareWizardAction();
 	public MakeTaskAssignActionWizardAction makeTaskAssignAction = new MakeTaskAssignActionWizardAction();
 	public MakeTaskAssignRoleByIdWizardAction makeTaskAssignRoleById = new MakeTaskAssignRoleByIdWizardAction();
 	public MakeTaskAssignRoleTypeWizardAction makeTaskAssignRoleType = new MakeTaskAssignRoleTypeWizardAction();
@@ -366,6 +373,34 @@ public class WizardAction extends UIAction {
 		}
 
 		private final ImportProjectWizard _importProjectWizard = new ImportProjectWizard(bot);
+
+	}
+
+	public class InstallNewSoftwareWizardAction {
+
+		public Radio acceptTerms() {
+			return _installNewSoftwareWizard.acceptTermsOfLicenseAgreement();
+		}
+
+		public CheckBox contactAllUpdateSites() {
+			return _installNewSoftwareWizard.contactAllUpdateSites();
+		}
+
+		public void prepareUpdatesiteUrl(String updatesiteUrl) {
+			_installNewSoftwareWizard.getSiteUrl().setText(updatesiteUrl);
+
+			_keyboradAction.pressKeyEnter();
+		}
+
+		public void selectAcceptTerms() {
+			acceptTerms().click();
+		}
+
+		public void selectAll() {
+			_installNewSoftwareWizard.selectAllBtn().click();
+		}
+
+		private final InstallNewSoftwareWizard _installNewSoftwareWizard = new InstallNewSoftwareWizard(bot);
 
 	}
 
@@ -1070,5 +1105,6 @@ public class WizardAction extends UIAction {
 	private static WizardAction _wizardAction;
 
 	private final JobAction _jobAction = JobAction.getInstance(bot);
+	private final KeyboardAction _keyboradAction = KeyboardAction.getInstance(bot);
 
 }
