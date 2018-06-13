@@ -63,7 +63,7 @@ public class NewGradleLiferayWorkspaceOpTests {
 
 		Status status = op.execute(new ProgressMonitor());
 
-		Util.waitForBuildAndValidation();
+		GradleTestUtil.waitForBuildAndValidation();
 
 		Assert.assertNotNull(status);
 		Assert.assertEquals("OK", status.message());

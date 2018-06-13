@@ -43,7 +43,7 @@ import org.junit.Assert;
  * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
-public class Util {
+public class GradleTestUtil {
 
 	public static void deleteAllWorkspaceProjects() throws Exception {
 		for (IProject project : CoreUtil.getAllProjects()) {

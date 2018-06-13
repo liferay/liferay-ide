@@ -59,7 +59,7 @@ public class AllBladeSamplesPublishTest {
 
 	@BeforeClass
 	public static void importAllBladeSamples() throws Exception {
-		Util.deleteAllWorkspaceProjects();
+		GradleTestUtil.deleteAllWorkspaceProjects();
 
 		ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
 
@@ -75,7 +75,7 @@ public class AllBladeSamplesPublishTest {
 
 		op.execute(ProgressMonitorBridge.create(monitor));
 
-		Util.waitForBuildAndValidation();
+		GradleTestUtil.waitForBuildAndValidation();
 
 		IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
 
@@ -158,7 +158,7 @@ public class AllBladeSamplesPublishTest {
 
 		server = serverWC.save(true, monitor);
 
-		Util.waitForBuildAndValidation();
+		GradleTestUtil.waitForBuildAndValidation();
 
 		IModule[] serverModules = server.getModules();
 

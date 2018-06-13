@@ -603,7 +603,7 @@ public class GradleModuleProjectTests extends BaseTests {
 		Assert.assertNotNull(status);
 		Assert.assertTrue(status.message(), status.ok());
 
-		Util.waitForBuildAndValidation();
+		GradleTestUtil.waitForBuildAndValidation();
 
 		Value<String> projectNameValue = op.getProjectName();
 
@@ -647,11 +647,11 @@ public class GradleModuleProjectTests extends BaseTests {
 
 		project.build(IncrementalProjectBuilder.CLEAN_BUILD, _monitor);
 
-		Util.waitForBuildAndValidation();
+		GradleTestUtil.waitForBuildAndValidation();
 
 		project.build(IncrementalProjectBuilder.FULL_BUILD, _monitor);
 
-		Util.waitForBuildAndValidation();
+		GradleTestUtil.waitForBuildAndValidation();
 
 		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 
