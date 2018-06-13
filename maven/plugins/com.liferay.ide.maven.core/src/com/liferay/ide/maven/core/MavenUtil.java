@@ -24,10 +24,8 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileReader;
-
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -47,9 +45,7 @@ import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.settings.Settings;
-
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -81,9 +77,7 @@ import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.m2e.wtp.ProjectUtils;
 import org.eclipse.m2e.wtp.WarPluginConfiguration;
 import org.eclipse.wst.xml.core.internal.provisional.format.NodeFormatter;
-
 import org.osgi.framework.Version;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -493,7 +487,7 @@ public class MavenUtil {
 		return false;
 	}
 
-	public static void importOpenedProject(String projectName, String location, IProgressMonitor monitor)
+	public static void updateProjectConfiguration(String projectName, String location, IProgressMonitor monitor)
 		throws InterruptedException {
 
 		MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
@@ -513,7 +507,7 @@ public class MavenUtil {
 
 		_findChildMavenProjects(mavenProjects, projects);
 
-		mavenProjects = _filterProjects(mavenProjects);
+		List<MavenProjectInfo> projectsToImport = _filterProjects(mavenProjects);
 
 		ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration();
 
@@ -521,9 +515,7 @@ public class MavenUtil {
 
 		IProject project = CoreUtil.getProject(projectName);
 
-		List<MavenProjectInfo> resultProjects = mavenProjects;
-
-		Job job = new Job("Updating Maven Project") {
+		Job job = new Job("Updating maven project configuration") {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
@@ -534,7 +526,7 @@ public class MavenUtil {
 					configuration.setSelectedProfiles("");
 
 					projectConfigurationManager.enableMavenNature(project, configuration, monitor);
-					projectConfigurationManager.importProjects(resultProjects, importConfiguration, monitor);
+					projectConfigurationManager.importProjects(projectsToImport, importConfiguration, monitor);
 					projectConfigurationManager.updateProjectConfiguration(project, monitor);
 				}
 				catch (Exception e) {
@@ -545,6 +537,8 @@ public class MavenUtil {
 			}
 
 		};
+
+		job.setRule(project);
 
 		job.schedule();
 	}
@@ -567,13 +561,13 @@ public class MavenUtil {
 
 		_findChildMavenProjects(mavenProjects, projects);
 
-		mavenProjects = _filterProjects(mavenProjects);
+		final List<MavenProjectInfo> projectsToImport = _filterProjects(mavenProjects);
 
 		ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration();
 
 		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
-		return projectConfigurationManager.importProjects(mavenProjects, importConfiguration, monitor);
+		return projectConfigurationManager.importProjects(projectsToImport, importConfiguration, monitor);
 	}
 
 	public static boolean isMavenProject(IProject project) throws CoreException {
