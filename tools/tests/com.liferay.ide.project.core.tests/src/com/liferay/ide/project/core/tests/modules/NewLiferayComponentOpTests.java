@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.tests.BaseTests;
+import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
@@ -135,6 +136,8 @@ public class NewLiferayComponentOpTests extends BaseTests
         Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( pop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
         assertTrue( modulePorjectStatus.ok() );
 
+        TestUtil.waitForBuildAndValidation();
+
         IProject modPorject = CoreUtil.getProject( pop.getProjectName().content() );
         modPorject.open( new NullProgressMonitor() );
 
@@ -221,6 +224,8 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         assertTrue( modulePorjectStatus.ok() );
 
+        TestUtil.waitForBuildAndValidation();
+
         IProject modProject = CoreUtil.getProject( op.getProjectName().content() );
 
         modProject.open( new NullProgressMonitor() );
@@ -263,6 +268,8 @@ public class NewLiferayComponentOpTests extends BaseTests
         Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
         assertTrue( modulePorjectStatus.ok() );
+
+        TestUtil.waitForBuildAndValidation();
 
         IProject modProject = CoreUtil.getProject( op.getProjectName().content() );
 
@@ -308,6 +315,8 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         assertTrue( modulePorjectStatus.ok() );
 
+        TestUtil.waitForBuildAndValidation();
+
         IProject modProject = CoreUtil.getProject( op.getProjectName().content() );
 
         modProject.open( new NullProgressMonitor() );
@@ -348,6 +357,8 @@ public class NewLiferayComponentOpTests extends BaseTests
         Status moduleProjectStatus = NewLiferayModuleProjectOpMethods.execute( pop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
         assertTrue( moduleProjectStatus.ok() );
+
+        TestUtil.waitForBuildAndValidation();
 
         IProject modProject = CoreUtil.getProject( pop.getProjectName().content() );
         modProject.open( new NullProgressMonitor() );

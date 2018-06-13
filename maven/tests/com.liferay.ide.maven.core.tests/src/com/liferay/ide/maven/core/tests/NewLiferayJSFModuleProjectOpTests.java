@@ -304,6 +304,8 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 	public void testNewLiferayJSFWarWorkspaceMavenJsfProject() throws Exception {
 		_importWorkspaceProject("testWorkspace");
 
+		_waitForBuildAndValidation2();
+
 		IProject workspaceProject = CoreUtil.getProject("testWorkspace");
 
 		Assert.assertNotNull(workspaceProject);
@@ -322,8 +324,6 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 
 		Status status = NewLiferayJSFModuleProjectOpMethods.execute(
 			op, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		_waitForBuildAndValidation2();
 
 		Assert.assertTrue(status.ok());
 

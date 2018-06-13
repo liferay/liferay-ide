@@ -36,6 +36,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -56,6 +58,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 		wizardAction.newModule.prepareMaven(project.getName(), API);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -78,6 +82,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -98,6 +104,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 		wizardAction.newModule.prepareMaven(project.getName(), CONTENT_TARGETING_RULE);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -120,6 +128,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -140,6 +150,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 		wizardAction.newModule.prepareMaven(project.getName(), CONTROL_MENU_ENTRY);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -162,6 +174,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -182,6 +196,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 		wizardAction.newModule.prepareMaven(project.getName(), PANEL_APP);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -204,6 +220,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -224,6 +242,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 		wizardAction.newModule.prepareMaven(project.getName(), PORTLET_PROVIDER);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -246,6 +266,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -266,6 +288,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 		wizardAction.newModule.prepareMaven(project.getName(), REST);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -297,6 +321,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -327,6 +353,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -347,6 +375,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 		wizardAction.newModule.prepareMaven(project.getName(), SIMULATION_PANEL_ENTRY);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -369,6 +399,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -389,6 +421,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 		wizardAction.newModule.prepareMaven(project.getName(), THEME_CONTRIBUTOR);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -411,6 +445,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -431,6 +467,8 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 		wizardAction.newModule.prepareMaven(project.getName(), WAR_MVC_PORTLET);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 

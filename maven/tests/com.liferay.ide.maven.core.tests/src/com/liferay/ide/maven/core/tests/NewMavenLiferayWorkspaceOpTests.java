@@ -69,6 +69,8 @@ public class NewMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
+		Util._waitForJobsToComplete();
+
 		IProject workspaceProject = CoreUtil.getProject("NewGradleWorkspaceWithInvalidBundleUrl");
 
 		Assert.assertNotNull(workspaceProject);
@@ -109,6 +111,8 @@ public class NewMavenLiferayWorkspaceOpTests {
 				bundleUrl);
 
 		op.execute(new ProgressMonitor());
+
+		Util._waitForJobsToComplete();
 
 		JobHelpers.waitForJobs(
 			job -> {
@@ -153,6 +157,8 @@ public class NewMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
+		Util._waitForJobsToComplete();
+
 		IPath wslocation = rootLocation.append(projectName);
 
 		String projectLocation = wslocation.toPortableString();
@@ -182,6 +188,8 @@ public class NewMavenLiferayWorkspaceOpTests {
 		op.setLocation(workspaceLocation.toPortableString());
 
 		Status status = op.execute(new ProgressMonitor());
+
+		Util._waitForJobsToComplete();
 
 		Assert.assertNotNull(status);
 		Assert.assertEquals("OK", status.message());
@@ -223,6 +231,8 @@ public class NewMavenLiferayWorkspaceOpTests {
 		op.setBundleUrl(bundleUrl);
 
 		op.execute(new ProgressMonitor());
+
+		Util._waitForJobsToComplete();
 
 		JobHelpers.waitForJobs(
 			job -> {

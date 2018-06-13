@@ -174,11 +174,11 @@ public class ImportWorkspaceProjectTests {
 
 		op.execute(ProgressMonitorBridge.create(monitor));
 
+		Util.waitForBuildAndValidation();
+
 		IProject eeProject = CoreUtil.getProject("testWorkspace");
 
 		Assert.assertNotNull(eeProject);
-
-		Util.waitForBuildAndValidation();
 
 		eeProject.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 

@@ -16,7 +16,6 @@ package com.liferay.ide.gradle.core.tests;
 
 import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleProject;
 
@@ -34,6 +33,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 
@@ -71,7 +71,7 @@ public class Util {
 
 		IProgressMonitor monitor = new NullProgressMonitor();
 
-		IStatus status = GradleUtil.importGradleProject(dst, monitor);
+		IStatus status = GradleUtil.importGradleProject(new Path(dst.toString()), monitor);
 
 		waitForBuildAndValidation();
 
@@ -99,7 +99,6 @@ public class Util {
 			manager.join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
 			manager.join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
 			manager.join(CorePlugin.GRADLE_JOB_FAMILY, new NullProgressMonitor());
-			manager.join(GradleCore.JOB_FAMILY_ID, new NullProgressMonitor());
 
 			Thread.sleep(200);
 

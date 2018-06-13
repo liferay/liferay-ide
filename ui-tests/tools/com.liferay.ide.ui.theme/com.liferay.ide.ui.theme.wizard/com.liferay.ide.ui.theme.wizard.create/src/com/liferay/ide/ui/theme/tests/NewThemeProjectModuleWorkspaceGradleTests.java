@@ -40,6 +40,8 @@ public class NewThemeProjectModuleWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getWarFiles(project.getName())));

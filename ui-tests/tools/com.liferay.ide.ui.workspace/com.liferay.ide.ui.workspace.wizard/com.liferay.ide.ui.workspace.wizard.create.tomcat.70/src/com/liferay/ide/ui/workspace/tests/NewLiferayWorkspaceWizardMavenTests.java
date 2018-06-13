@@ -37,6 +37,8 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(moduleNames));
@@ -72,6 +74,8 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
 		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
@@ -98,6 +102,8 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		wizardAction.newLiferayWorkspace.location().setText(workspacePath + "/" + newFolderName);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
@@ -127,6 +133,8 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 			"http://ide-resources-site/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip");
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "bundles"));
 
@@ -187,7 +195,6 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		dialogAction.preferences.confirm();
 	}
 
-	@Ignore("waiting for server configuration")
 	@Test
 	public void createLiferayWorkspaceWithDownloadBundleChangeBundleUrl() {
 		if (!envAction.internal()) {
@@ -211,6 +218,8 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
 		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
@@ -221,14 +230,13 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(project.getName());
 
-		// wait for IDE-3595 fixed
-		// dialogAction.openPreferencesDialog();
+		dialogAction.openPreferencesDialog();
 
-		// dialogAction.preferences.openServerRuntimeEnvironmentsTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		// dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
 
-		// dialogAction.preferences.confirm();
+		dialogAction.preferences.confirm();
 
 	}
 

@@ -39,6 +39,8 @@ public class NewLayoutTemplateModuleWizardLiferayWorkspaceMavenTests extends Swt
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();

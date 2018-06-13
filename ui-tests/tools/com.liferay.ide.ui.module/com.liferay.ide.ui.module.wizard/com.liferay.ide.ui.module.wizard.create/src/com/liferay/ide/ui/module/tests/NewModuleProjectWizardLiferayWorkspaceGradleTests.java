@@ -41,6 +41,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
@@ -55,6 +57,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		wizardAction.newModule.prepareGradle(project.getName(), API);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -71,6 +75,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
@@ -85,6 +91,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		wizardAction.newModule.prepareGradle(project.getName(), CONTENT_TARGETING_RULE);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -101,6 +109,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
@@ -115,6 +125,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		wizardAction.newModule.prepareGradle(project.getName(), CONTROL_MENU_ENTRY);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -131,6 +143,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
@@ -145,6 +159,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		wizardAction.newModule.prepareGradle(project.getName(), PANEL_APP);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -161,6 +177,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
@@ -175,6 +193,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		wizardAction.newModule.prepareGradle(project.getName(), PORTLET_PROVIDER);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -191,6 +211,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
@@ -205,6 +227,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		wizardAction.newModule.prepareGradle(project.getName(), REST);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -221,6 +245,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
@@ -235,6 +261,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_WRAPPER);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -251,6 +279,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
@@ -265,6 +295,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		wizardAction.newModule.prepareGradle(project.getName(), TEMPLATE_CONTEXT_CONCONTRIBUTOR);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -281,6 +313,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
@@ -296,6 +330,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getWarFiles(project.getName())));
@@ -310,6 +346,8 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 

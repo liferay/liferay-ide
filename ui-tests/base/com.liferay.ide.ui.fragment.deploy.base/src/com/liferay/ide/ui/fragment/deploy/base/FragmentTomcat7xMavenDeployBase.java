@@ -45,6 +45,8 @@ public class FragmentTomcat7xMavenDeployBase extends ServerTestBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());

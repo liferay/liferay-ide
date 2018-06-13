@@ -14,11 +14,9 @@
 
 package com.liferay.ide.maven.core.tests;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentFilesOp;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
-import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOpMethods;
 import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
 import com.liferay.ide.server.core.tests.ServerCoreBase;
 import com.liferay.ide.server.util.ServerUtil;
@@ -30,11 +28,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -96,12 +92,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 
 				overrideFilePath.setValue("META-INF/resources/view.jsp");
 
-				Status gradleExeStatus = NewModuleFragmentOpMethods.execute(
-					op, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-				Assert.assertTrue(gradleExeStatus.ok());
-
-				IProject existedGradleProject = CoreUtil.getProject(op.getProjectName().content());
+				IProject existedGradleProject = Util._create(op);
 
 				Assert.assertNotNull(existedGradleProject);
 
@@ -152,12 +143,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 
 				overrideFilePath.setValue("META-INF/resources/view.jsp");
 
-				Status gradleExeStatus = NewModuleFragmentOpMethods.execute(
-					op, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-				Assert.assertTrue(gradleExeStatus.ok());
-
-				IProject existedGradleProject = CoreUtil.getProject(op.getProjectName().content());
+				IProject existedGradleProject = Util._create(op);
 
 				Assert.assertNotNull(existedGradleProject);
 
@@ -180,12 +166,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 
 				file.setValue("META-INF/resources/login.jsp");
 
-				Status mavenExeStatus = NewModuleFragmentOpMethods.execute(
-					op, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-				Assert.assertTrue(mavenExeStatus.ok());
-
-				IProject existedMavenProject = CoreUtil.getProject(op.getProjectName().content());
+				IProject existedMavenProject = Util._create(op);
 
 				Assert.assertNotNull(existedMavenProject);
 

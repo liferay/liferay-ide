@@ -32,6 +32,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
@@ -55,6 +57,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 		wizardAction.newModule.prepareGradle(project.getName(), API);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
@@ -80,6 +84,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
@@ -103,6 +109,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 		wizardAction.newModule.prepareGradle(project.getName(), FORM_FIELD);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
@@ -128,6 +136,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
@@ -151,6 +161,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 		wizardAction.newModule.prepareGradle(project.getName(), PORTLET_CONFIGURATION_ICON);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
@@ -176,6 +188,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
@@ -200,6 +214,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
@@ -223,6 +239,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 		wizardAction.newModule.prepareGradle(project.getName(), REST);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
@@ -256,6 +274,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
@@ -288,6 +308,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
@@ -311,6 +333,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 		wizardAction.newModule.prepareGradle(project.getName(), SIMULATION_PANEL_ENTRY);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
@@ -336,6 +360,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
@@ -359,6 +385,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 		wizardAction.newModule.prepareGradle(project.getName(), THEME_CONTRIBUTOR, envAction.getTempDir().getPath());
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
@@ -384,6 +412,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
@@ -407,6 +437,8 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 

@@ -94,6 +94,8 @@ public class ImportMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
+		Util._waitForJobsToComplete();
+
 		JobHelpers.waitForJobs(
 			job -> {
 				String jobName = job.getName();
@@ -188,6 +190,8 @@ public class ImportMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
+		Util._waitForJobsToComplete();
+
 		JobHelpers.waitForJobs(
 			job -> {
 				String jobName = job.getName();
@@ -239,6 +243,8 @@ public class ImportMavenLiferayWorkspaceOpTests {
 		Assert.assertTrue(validationStatus.ok());
 
 		op.execute(new ProgressMonitor());
+
+		JobHelpers.waitForJobsToComplete(new NullProgressMonitor());
 
 		IProject project = CoreUtil.getProject("maven-liferay-workspace");
 

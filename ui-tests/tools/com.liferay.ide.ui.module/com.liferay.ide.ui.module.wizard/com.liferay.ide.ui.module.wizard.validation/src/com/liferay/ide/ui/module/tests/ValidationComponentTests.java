@@ -42,6 +42,8 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		wizardAction.newLiferayComponent.openSelectPackageNameDialog();
@@ -77,6 +79,8 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		for (ValidationMsg msg :
@@ -107,6 +111,8 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		String[] templates = {
 			AUTH_FAILURES, AUTH_MAX_FAILURE, AUTHENTICATOR, FRIENDLY_URL_MAPPER, GOGO_COMMAND, INDEXER_POST_PROCESSOR,
 			LOGIN_PRE_ACTION, MVC_PORTLET_UPCASE, MODEL_LISTENER, POLLER_PROCESSOR, PORTLET_UPCASE,
@@ -132,6 +138,8 @@ public class ValidationComponentTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(projectName);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -176,6 +184,8 @@ public class ValidationComponentTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(projectName);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		String template = MODEL_LISTENER;
 
@@ -224,6 +234,8 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		for (ValidationMsg msg :
@@ -254,6 +266,8 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		String projectName2 = "portlet-test";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -261,6 +275,8 @@ public class ValidationComponentTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(projectName2, PORTLET);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		String[] projectNames = {projectName1, projectName2};
 
@@ -294,6 +310,8 @@ public class ValidationComponentTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(projectName);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		String template = SERVICE_WRAPPER_UPCASE;
 

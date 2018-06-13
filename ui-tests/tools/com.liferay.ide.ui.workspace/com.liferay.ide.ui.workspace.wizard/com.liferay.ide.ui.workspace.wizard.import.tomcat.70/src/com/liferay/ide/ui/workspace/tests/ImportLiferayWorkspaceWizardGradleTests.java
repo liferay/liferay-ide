@@ -45,6 +45,8 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		ide.sleepLinux(10000);
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "bundles"));
@@ -75,6 +77,8 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		ide.sleepLinux(10000);
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "bundles"));
@@ -95,6 +99,8 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		wizardAction.importLiferayWorkspace.prepareLocation(project.getPath());
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "configs"));
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "gradle"));
@@ -127,6 +133,8 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		wizardAction.importLiferayWorkspace.prepareServerName(project.getName());
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "plugins-sdk"));
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "configs"));
@@ -171,6 +179,8 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		wizardAction.importLiferayWorkspace.prepareBundleUrl(bundleUrl);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		ide.sleepLinux(10000);
 
