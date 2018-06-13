@@ -297,11 +297,20 @@
                 </propertiesFileSet>
             </actionList>
             <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxysetting}</value1>
-                    <value2>httpProxy</value2>
-                </compareValues>
+                <ruleGroup>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxy}</value1>
+                            <value2>proxysetting</value2>
+                        </compareValues>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxysetting}</value1>
+                            <value2>httpProxy</value2>
+                        </compareValues>
+                    </ruleList>
+                </ruleGroup>
             </ruleList>
         </if>
         <if>
@@ -328,11 +337,20 @@
                 </propertiesFileSet>
             </actionList>
             <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxysetting}</value1>
-                    <value2>httpsProxy</value2>
-                </compareValues>
+                <ruleGroup>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxy}</value1>
+                            <value2>proxysetting</value2>
+                        </compareValues>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxysetting}</value1>
+                            <value2>httpsProxy</value2>
+                        </compareValues>
+                    </ruleList>
+                </ruleGroup>
             </ruleList>
         </if>
         <if>
@@ -349,11 +367,20 @@
                 </propertiesFileSet>
             </actionList>
             <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxysetting}</value1>
-                    <value2>socksProxy</value2>
-                </compareValues>
+                <ruleGroup>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxy}</value1>
+                            <value2>proxysetting</value2>
+                        </compareValues>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxysetting}</value1>
+                            <value2>socksProxy</value2>
+                        </compareValues>
+                    </ruleList>
+                </ruleGroup>
             </ruleList>
         </if>
         <runProgram>
@@ -480,7 +507,6 @@
                 </labelParameter>
                 <choiceParameter>
                     <name>proxysetting</name>
-                    <title>proxysetting</title>
                     <description>Config proxy setting</description>
                     <explanation></explanation>
                     <value></value>
@@ -557,11 +583,20 @@
                 </stringParameter>
             </parameterList>
             <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxysetting}</value1>
-                    <value2>httpProxy</value2>
-                </compareValues>
+                <ruleGroup>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxy}</value1>
+                            <value2>proxysetting</value2>
+                        </compareValues>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxysetting}</value1>
+                            <value2>httpProxy</value2>
+                        </compareValues>
+                    </ruleList>
+                </ruleGroup>
             </ruleList>
         </parameterGroup>
         <parameterGroup>
@@ -609,11 +644,20 @@
                 </stringParameter>
             </parameterList>
             <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxysetting}</value1>
-                    <value2>httpsProxy</value2>
-                </compareValues>
+                <ruleGroup>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxy}</value1>
+                            <value2>proxysetting</value2>
+                        </compareValues>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxysetting}</value1>
+                            <value2>httpsProxy</value2>
+                        </compareValues>
+                    </ruleList>
+                </ruleGroup>
             </ruleList>
         </parameterGroup>
         <parameterGroup>
@@ -643,11 +687,20 @@
                 </stringParameter>
             </parameterList>
             <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${proxysetting}</value1>
-                    <value2>socksProxy</value2>
-                </compareValues>
+                <ruleGroup>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxy}</value1>
+                            <value2>proxysetting</value2>
+                        </compareValues>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxysetting}</value1>
+                            <value2>socksProxy</value2>
+                        </compareValues>
+                    </ruleList>
+                </ruleGroup>
             </ruleList>
         </parameterGroup>
     </parameterList>
