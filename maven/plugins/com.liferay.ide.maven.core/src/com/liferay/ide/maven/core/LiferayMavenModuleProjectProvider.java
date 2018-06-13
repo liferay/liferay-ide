@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.ProjectName;
@@ -130,7 +131,7 @@ public class LiferayMavenModuleProjectProvider
 				}
 			}
 
-			ProjectCore.openProject(projectName, projectLocation, monitor);
+			CoreUtil.openProject(projectName, projectLocation, monitor);
 
 			MavenUtil.updateProjectConfiguration(projectName, projectLocation.toOSString(), monitor);
 		}

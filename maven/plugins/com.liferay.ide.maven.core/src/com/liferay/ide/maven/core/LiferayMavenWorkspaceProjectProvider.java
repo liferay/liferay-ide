@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
@@ -150,7 +151,7 @@ public class LiferayMavenWorkspaceProjectProvider
 		try {
 			String wsName = workspaceLocation.lastSegment();
 
-			ProjectCore.openProject(wsName, workspaceLocation, monitor);
+			CoreUtil.openProject(wsName, workspaceLocation, monitor);
 			MavenUtil.updateProjectConfiguration(wsName, workspaceLocation.toOSString(), monitor);
 		}
 		catch (Exception ce) {

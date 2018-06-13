@@ -109,7 +109,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 
 					FileUtils.writeLines(_gradleBuildFile.getLocation().toFile(), updater.getGradleFileContents());
 
-					GradleUtil.refreshGradleProject(project);
+					GradleUtil.refreshProject(project);
 				}
 			}
 		}

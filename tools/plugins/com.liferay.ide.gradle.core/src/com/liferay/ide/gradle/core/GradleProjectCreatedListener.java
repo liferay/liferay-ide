@@ -21,7 +21,6 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
@@ -32,6 +31,7 @@ import org.eclipse.buildship.core.event.EventListener;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
@@ -97,7 +97,7 @@ public class GradleProjectCreatedListener implements EventListener {
 			}
 
 			try {
-				NullProgressMonitor monitor = new NullProgressMonitor();
+				IProgressMonitor monitor = new NullProgressMonitor();
 
 				if (needAddNature[0]) {
 					LiferayNature.addLiferayNature(project, monitor);

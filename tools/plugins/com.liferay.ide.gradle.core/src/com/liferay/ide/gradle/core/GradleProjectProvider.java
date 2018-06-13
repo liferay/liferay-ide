@@ -17,8 +17,8 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
-import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
@@ -157,12 +157,12 @@ public class GradleProjectProvider
 			}
 
 			if ((hasGradleWorkspace && useDefaultLocation) || inWorkspacePath) {
-				GradleUtil.refreshGradleProject(liferayWorkspaceProject);
+				GradleUtil.refreshProject(liferayWorkspaceProject);
 			}
 			else {
-				ProjectCore.openProject(projectName, projectLocation, monitor);
+				CoreUtil.openProject(projectName, projectLocation, monitor);
 
-				GradleUtil.importGradleProject(projectLocation, monitor);
+				GradleUtil.sychronizeProject(projectLocation, monitor);
 			}
 		}
 		catch (Exception e) {

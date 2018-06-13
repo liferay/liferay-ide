@@ -31,7 +31,6 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-
 import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
@@ -70,9 +69,9 @@ public class LiferayGradleWorkspaceProjectProvider
 
 		Value<String> workspaceNameValue = op.getWorkspaceName();
 
-		String wsName = workspaceNameValue.toString();
+		String workspaceName = workspaceNameValue.toString();
 
-		IPath fullLocation = location.append(wsName);
+		IPath workspaceLocation = location.append(workspaceName);
 
 		Value<String> version = op.getLiferayVersion();
 
@@ -80,7 +79,7 @@ public class LiferayGradleWorkspaceProjectProvider
 
 		sb.append("--base ");
 		sb.append("\"");
-		sb.append(fullLocation.toOSString());
+		sb.append(workspaceLocation.toOSString());
 		sb.append("\" ");
 		sb.append("init ");
 		sb.append("-v ");
@@ -93,7 +92,7 @@ public class LiferayGradleWorkspaceProjectProvider
 			return ProjectCore.createErrorStatus(bclie);
 		}
 
-		IPath wsLocation = location.append(wsName);
+		IPath wsLocation = location.append(workspaceName);
 
 		IStatus importProjectStatus = importProject(wsLocation, monitor);
 
@@ -114,7 +113,7 @@ public class LiferayGradleWorkspaceProjectProvider
 
 			String serverName = serverNameValue.content(true);
 
-			initBundle(bundleUrl, serverName, wsName);
+			initBundle(bundleUrl, serverName, workspaceName);
 		}
 
 		return Status.OK_STATUS;
@@ -130,22 +129,20 @@ public class LiferayGradleWorkspaceProjectProvider
 	@Override
 	public IStatus importProject(IPath wsLocation, IProgressMonitor monitor) {
 		try {
-			ProjectCore.openProject(wsLocation.lastSegment(), wsLocation, monitor);
+			CoreUtil.openProject(wsLocation.lastSegment(), wsLocation, monitor);
 		}
 		catch (CoreException ce) {
 			return ProjectCore.createErrorStatus(ce);
 		}
 
-		return GradleUtil.importGradleProject(wsLocation, monitor);
+		return GradleUtil.sychronizeProject(wsLocation, monitor);
 	}
 
 	@Override
 	public void initBundle(String bundleUrl, String serverName, String wsName) {
 		IProject project = CoreUtil.getProject(wsName);
 
-		String task = "initBundle";
-
-		String jobName = "Init Liferay Bundle";
+		String jobName = "Initializing Liferay bundle";
 
 		Job job = new Job(jobName) {
 
@@ -170,7 +167,7 @@ public class LiferayGradleWorkspaceProjectProvider
 						}
 					}
 
-					GradleUtil.runGradleTask(project, task, monitor);
+					GradleUtil.runGradleTask(project, jobName, monitor);
 
 					monitor.worked(95);
 
@@ -196,8 +193,6 @@ public class LiferayGradleWorkspaceProjectProvider
 				}
 
 			});
-
-		job.setSystem(true);
 
 		job.schedule();
 	}

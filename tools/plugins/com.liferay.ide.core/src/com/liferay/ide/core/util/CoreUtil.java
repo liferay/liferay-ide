@@ -625,4 +625,18 @@ public class CoreUtil {
 		}
 	}
 
+	public static IProject openProject(String projectName, IPath dir, IProgressMonitor monitor) throws CoreException {
+		IWorkspace workspace = getWorkspace();
+	
+		IProject project = getProject(projectName);
+	
+		IProjectDescription desc = workspace.newProjectDescription(project.getName());
+	
+		desc.setLocation(dir);
+		project.create(desc, monitor);
+		project.open(monitor);
+	
+		return project;
+	}
+
 }

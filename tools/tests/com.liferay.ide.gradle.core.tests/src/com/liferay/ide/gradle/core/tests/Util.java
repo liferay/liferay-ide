@@ -71,7 +71,7 @@ public class Util {
 
 		IProgressMonitor monitor = new NullProgressMonitor();
 
-		IStatus status = GradleUtil.importGradleProject(new Path(dst.toString()), monitor);
+		IStatus status = GradleUtil.sychronizeProject(new Path(dst.toString()), monitor);
 
 		waitForBuildAndValidation();
 

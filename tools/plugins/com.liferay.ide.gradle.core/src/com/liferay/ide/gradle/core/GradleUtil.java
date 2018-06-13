@@ -65,9 +65,9 @@ import org.osgi.framework.Version;
 @SuppressWarnings("restriction")
 public class GradleUtil {
 
-	public static IStatus importGradleProject(IPath dir, IProgressMonitor monitor) {
+	public static IStatus sychronizeProject(IPath dir, IProgressMonitor monitor) {
 		if (FileUtil.notExists(dir)) {
-			return GradleCore.createErrorStatus("Unbale to find gralde project under " + dir);
+			return GradleCore.createErrorStatus("Unable to find gradle project at " + dir);
 		}
 
 		Validator<File> projectDirValidator = Validators.and(
@@ -182,7 +182,7 @@ public class GradleUtil {
 		return watchable;
 	}
 
-	public static void refreshGradleProject(IProject project) {
+	public static void refreshProject(IProject project) {
 		GradleWorkspaceManager gradleWorkspaceManager = CorePlugin.gradleWorkspaceManager();
 
 		Optional<GradleBuild> optional = gradleWorkspaceManager.getGradleBuild(project);
