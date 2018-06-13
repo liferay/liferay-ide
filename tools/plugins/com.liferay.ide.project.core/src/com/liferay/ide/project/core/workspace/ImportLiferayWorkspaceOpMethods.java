@@ -52,15 +52,15 @@ public class ImportLiferayWorkspaceOpMethods {
 
 			Value<Path> locationValue = op.getWorkspaceLocation();
 
-			Path wsLocation = locationValue.content();
+			Path workspaceLocation = locationValue.content();
 
-			String location = wsLocation.toOSString();
+			String location = workspaceLocation.toOSString();
 
-			String wsName = wsLocation.lastSegment();
+			String workspaceName = workspaceLocation.lastSegment();
 
 			LiferayWorkspaceUtil.clearWorkspace(location);
 
-			IStatus importStatus = provider.importProject(PathBridge.create(wsLocation), monitor);
+			IStatus importStatus = provider.importProject(PathBridge.create(workspaceLocation), monitor);
 
 			if (importStatus != org.eclipse.core.runtime.Status.OK_STATUS) {
 				return StatusBridge.create(importStatus);
@@ -81,7 +81,7 @@ public class ImportLiferayWorkspaceOpMethods {
 			if (initBundle && !hasBundlesDir) {
 				Value<String> bundleUrl = op.getBundleUrl();
 
-				provider.initBundle(bundleUrl.content(false), serverName, wsName);
+				provider.initBundle(bundleUrl.content(false), serverName, workspaceName);
 			}
 
 			if (!initBundle && hasBundlesDir) {

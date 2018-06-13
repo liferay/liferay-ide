@@ -28,8 +28,8 @@ public interface NewLiferayWorkspaceProjectProvider<T extends ExecutableElement>
 
 	public String getInitBundleUrl(String workspaceLocation);
 
-	public IStatus importProject(IPath wsLocation, IProgressMonitor monitor);
+	public IStatus importProject(IPath workspaceLocation, IProgressMonitor monitor);
 
-	public void initBundle(String bundleUrl, String serverName, String wsName);
+	public void initBundle(String bundleUrl, String serverName, String workspaceName);
 
 }
