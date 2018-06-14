@@ -167,7 +167,7 @@ public class LiferayGradleWorkspaceProjectProvider
 						}
 					}
 
-					GradleUtil.runGradleTask(project, jobName, monitor);
+					GradleUtil.runGradleTask(project, "initBundle", monitor);
 
 					monitor.worked(95);
 

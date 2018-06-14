@@ -58,6 +58,7 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
@@ -513,6 +514,8 @@ public class MavenUtil {
 
 		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
+		ISchedulingRule mavenResolvingRule = projectConfigurationManager.getRule();
+
 		IProject project = CoreUtil.getProject(projectName);
 
 		Job job = new Job("Updating maven project configuration") {
@@ -538,7 +541,7 @@ public class MavenUtil {
 
 		};
 
-		job.setRule(project);
+		job.setRule(mavenResolvingRule);
 
 		job.schedule();
 	}

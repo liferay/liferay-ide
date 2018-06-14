@@ -136,6 +136,8 @@ public class LiferayMavenModuleProjectProvider
 			MavenUtil.updateProjectConfiguration(projectName, projectLocation.toOSString(), monitor);
 		}
 		catch (Exception e) {
+			ProjectCore.logError(e);
+
 			retval = ProjectCore.createErrorStatus("can't create module project.", e);
 		}
 

@@ -98,7 +98,9 @@ public class MavenTestUtil {
 		JobHelpers.waitForJobs(job -> {
 			String jobName = job.getName();
 
-			if (jobName.equals("Updating Maven Project")) {
+			if (jobName.equals("Updating maven project configuration") ||
+				jobName.equals("Initializing Liferay bundle")) {
+
 				return true;
 			}
 
