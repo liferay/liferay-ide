@@ -16,6 +16,7 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -193,6 +194,8 @@ public class LiferayGradleWorkspaceProjectProvider
 				}
 
 			});
+
+		job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT, new Object());
 
 		job.schedule();
 	}

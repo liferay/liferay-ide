@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
@@ -198,6 +199,8 @@ public class LiferayMavenWorkspaceProjectProvider
 			}
 
 		};
+
+		job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT, new Object());
 
 		job.schedule();
 	}

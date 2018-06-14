@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core.tests;
 
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -96,11 +97,9 @@ public class MavenTestUtil {
 
 	public static void waitForJobsToComplete() throws InterruptedException, CoreException {
 		JobHelpers.waitForJobs(job -> {
-			String jobName = job.getName();
+			Object property = job.getProperty(ILiferayProjectProvider.LIFERAY_PROJECT);
 
-			if (jobName.equals("Updating maven project configuration") ||
-				jobName.equals("Initializing Liferay bundle")) {
-
+			if (property != null) {
 				return true;
 			}
 

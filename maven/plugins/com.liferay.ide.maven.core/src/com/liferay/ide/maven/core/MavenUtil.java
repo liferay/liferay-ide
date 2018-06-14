@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
@@ -540,6 +541,8 @@ public class MavenUtil {
 			}
 
 		};
+
+		job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT, new Object());
 
 		job.setRule(mavenResolvingRule);
 
