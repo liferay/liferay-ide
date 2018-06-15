@@ -138,10 +138,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		pop.setProjectTemplateName("portlet");
 		pop.setProjectProvider("maven-module");
 
-		Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute(
-			pop, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		assertTrue(modulePorjectStatus.ok());
+		MavenTestUtil.create(pop);
 
 		IProject modPorject = CoreUtil.getProject(pop.getProjectName().content());
 
@@ -269,11 +266,11 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setComponentName("Foo");
 
-		IProject project = _create(op);
+		IProject project = MavenTestUtil.create(op);
 
 		assertTrue(project.getFile("src/main/java/foo/portlet/FooPortlet.java").exists());
 
-		_verifyProject(project);
+		MavenTestUtil.verifyProject(project);
 	}
 
 	@Test
@@ -285,11 +282,11 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setComponentName("FooBar");
 		op.setPackageName("my.custom.pname");
 
-		IProject project = _create(op);
+		IProject project = MavenTestUtil.create(op);
 
 		assertTrue(project.getFile("src/main/java/my/custom/pname/portlet/FooBarPortlet.java").exists());
 
-		_verifyProject(project);
+		MavenTestUtil.verifyProject(project);
 	}
 
 	@Test
@@ -301,11 +298,11 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setComponentName("FooBar");
 		op.setPackageName("foo.bar");
 
-		IProject project = _create(op);
+		IProject project = MavenTestUtil.create(op);
 
 		assertTrue(project.getFile("src/main/java/foo/bar/portlet/FooBarPortlet.java").exists());
 
-		_verifyProject(project);
+		MavenTestUtil.verifyProject(project);
 	}
 
 	@Test
@@ -315,9 +312,9 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectName("foo.bar");
 		op.setProjectProvider("maven-module");
 
-		IProject project = _create(op);
+		IProject project = MavenTestUtil.create(op);
 
-		_verifyProject(project);
+		MavenTestUtil.verifyProject(project);
 	}
 
 	@Test
@@ -426,10 +423,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectTemplateName("service-builder");
 		op.setProjectProvider("maven-module");
 
-		Status exStatus = NewLiferayModuleProjectOpMethods.execute(
-			op, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		assertEquals("OK", exStatus.message());
+		MavenTestUtil.create(op);
 
 		IProject parentProject = CoreUtil.getProject(op.getProjectName().content());
 
@@ -470,7 +464,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("activator");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -481,7 +475,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("api");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -502,7 +496,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
 		assertTrue(op.validation().message(), op.validation().ok());
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -513,7 +507,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("content-targeting-report");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -524,7 +518,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("content-targeting-rule");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -535,7 +529,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("content-targeting-tracking-action");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -546,7 +540,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("control-menu-entry");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -557,7 +551,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("form-field");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -568,7 +562,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("layout-template");
 
-		IProject project = _createAndBuild(op);
+		IProject project = MavenTestUtil.createAndBuild(op);
 
 		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 
@@ -583,7 +577,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("mvc-portlet");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -594,7 +588,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("npm-angular-portlet");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -606,7 +600,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectTemplateName("npm-angular-portlet");
 		op.setLiferayVersion("7.1");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 		_verifyNpmPortletV71(op);
 	}
 
@@ -619,7 +613,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("npm-billboardjs-portlet");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Ignore("Re-enable NPM Tests")
@@ -632,7 +626,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectTemplateName("npm-billboardjs-portlet");
 		op.setLiferayVersion("7.1");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 		_verifyNpmPortletV71(op);
 	}
 
@@ -645,7 +639,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("npm-isomorphic-portlet");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Ignore("Re-enable NPM Tests")
@@ -658,7 +652,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectTemplateName("npm-isomorphic-portlet");
 		op.setLiferayVersion("7.1");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 		_verifyNpmPortletV71(op);
 	}
 
@@ -671,7 +665,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("npm-jquery-portlet");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Ignore("Re-enable NPM Tests")
@@ -684,7 +678,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectTemplateName("npm-jquery-portlet");
 		op.setLiferayVersion("7.1");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 		_verifyNpmPortletV71(op);
 	}
 
@@ -697,7 +691,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("npm-metaljs-portlet");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Ignore("Re-enable NPM Tests")
@@ -710,7 +704,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectTemplateName("npm-metaljs-portlet");
 		op.setLiferayVersion("7.1");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 		_verifyNpmPortletV71(op);
 	}
 
@@ -723,7 +717,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("npm-portlet");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Ignore("Re-enable NPM Tests")
@@ -736,7 +730,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectTemplateName("npm-portlet");
 		op.setLiferayVersion("7.1");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 		_verifyNpmPortletV71(op);
 	}
 
@@ -749,7 +743,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("npm-react-portlet");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Ignore("Re-enable NPM Tests")
@@ -762,7 +756,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectTemplateName("npm-react-portlet");
 		op.setLiferayVersion("7.1");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 		_verifyNpmPortletV71(op);
 	}
 
@@ -775,7 +769,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("npm-vuejs-portlet");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Ignore("Re-enable NPM Tests")
@@ -788,7 +782,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectTemplateName("npm-vuejs-portlet");
 		op.setLiferayVersion("7.1");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 		_verifyNpmPortletV71(op);
 	}
 
@@ -800,7 +794,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("panel-app");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -811,7 +805,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("portlet");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -822,7 +816,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("portlet-configuration-icon");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -833,7 +827,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("portlet-provider");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -844,7 +838,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("portlet-toolbar-contributor");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -855,7 +849,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("rest");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -867,7 +861,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectTemplateName("service");
 		op.setServiceName("com.liferay.portal.kernel.events.LifecycleAction");
 
-		IProject project = _create(op);
+		IProject project = MavenTestUtil.create(op);
 
 		IFile serviceFile = project.getFile("src/main/java/service/test/ServiceTest.java");
 
@@ -885,7 +879,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
 		serviceFile.setContents(new ByteArrayInputStream(contents.getBytes()), IResource.FORCE, monitor);
 
-		_verifyProject(project);
+		MavenTestUtil.verifyProject(project);
 	}
 
 	@Test
@@ -897,7 +891,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectTemplateName("service-builder");
 		op.setPackageName("com.liferay.test");
 
-		IProject parent = _create(op);
+		IProject parent = MavenTestUtil.create(op);
 
 		assertTrue(parent != null && parent.exists());
 
@@ -950,7 +944,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setServiceName("com.liferay.portal.kernel.service.UserLocalServiceWrapper");
 		op.setComponentName("MyServiceWrapper");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -961,7 +955,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("simulation-panel-entry");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -972,7 +966,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("soy-portlet");
 
-		_createAndBuild(op);
+		MavenTestUtil.create(op);
 	}
 
 	@Test
@@ -983,7 +977,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("spring-mvc-portlet");
 
-		IProject project = _createAndBuild(op);
+		IProject project = MavenTestUtil.createAndBuild(op);
 
 		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 
@@ -998,7 +992,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("template-context-contributor");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -1009,7 +1003,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("theme");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -1020,7 +1014,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("theme-contributor");
 
-		_createAndBuild(op);
+		MavenTestUtil.createAndBuild(op);
 	}
 
 	@Test
@@ -1031,7 +1025,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("war-hook");
 
-		IProject project = _createAndBuild(op);
+		IProject project = MavenTestUtil.createAndBuild(op);
 
 		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 
@@ -1046,7 +1040,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("war-mvc-portlet");
 
-		IProject project = _createAndBuild(op);
+		IProject project = MavenTestUtil.createAndBuild(op);
 
 		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 
@@ -1061,7 +1055,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("theme");
 
-		op.execute(ProgressMonitorBridge.create(new NullProgressMonitor()));
+		MavenTestUtil.createAndBuild(op);
 
 		IProject project = CoreUtil.getProject("maven-theme-component-test");
 
@@ -1080,9 +1074,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("theme");
 
-		op.execute(ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		IProject project = CoreUtil.getProject("maven-theme-test");
+		IProject project = MavenTestUtil.createAndBuild(op);
 
 		assertNotNull(project);
 
@@ -1124,27 +1116,6 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		return false;
 	}
 
-	private IProject _create(NewLiferayModuleProjectOp op) throws CoreException, InterruptedException {
-		Status status = op.execute(ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		assertNotNull(status);
-		assertTrue(status.message(), status.ok());
-
-		waitForJobsToComplete();
-
-		return CoreUtil.getProject(op.getProjectName().content());
-	}
-
-	private IProject _createAndBuild(NewLiferayModuleProjectOp op) throws Exception {
-		assertTrue(op.validation().message(), op.validation().ok());
-
-		IProject project = _create(op);
-
-		_verifyProject(project);
-
-		return project;
-	}
-
 	private void _verifyNpmPortletV71(NewLiferayModuleProjectOp op) {
 		IProject project = CoreUtil.getProject(op.getProjectName().content());
 
@@ -1157,33 +1128,6 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 		String viewFileContent = FileUtil.readContents(viewFile.getLocation().toFile());
 
 		assertTrue(viewFileContent.contains("<aui:script require=\"<%= bootstrapRequire %>\">"));
-	}
-
-	private void _verifyProject(IProject project) throws Exception {
-		assertNotNull(project);
-		assertTrue(project.exists());
-
-		assertFalse(project.getFile("build.gradle").exists());
-
-		project.build(IncrementalProjectBuilder.CLEAN_BUILD, monitor);
-
-		waitForJobsToComplete();
-
-		project.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
-
-		waitForJobsToComplete();
-
-		assertNoErrors(project);
-
-		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
-
-		assertNotNull(bundleProject);
-
-		IPath outputBundle = bundleProject.getOutputBundle(true, monitor);
-
-		assertNotNull(outputBundle);
-
-		assertTrue(outputBundle.toFile().exists());
 	}
 
 }

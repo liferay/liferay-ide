@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.ExecutableElement;
@@ -27,8 +28,8 @@ public interface NewLiferayWorkspaceProjectProvider<T extends ExecutableElement>
 
 	public String getInitBundleUrl(String workspaceLocation);
 
-	public IStatus importProject(String location, IProgressMonitor monitor);
+	public IStatus importProject(IPath workspaceLocation, IProgressMonitor monitor);
 
-	public void initBundle(String bundleUrl, String serverName, String workspaceName, IProgressMonitor monitor);
+	public void initBundle(String bundleUrl, String serverName, String workspaceName);
 
 }

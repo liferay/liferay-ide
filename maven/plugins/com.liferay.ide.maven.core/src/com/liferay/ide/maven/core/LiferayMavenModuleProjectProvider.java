@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.ProjectName;
@@ -36,6 +37,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Joye Luo
+ * @author Charles Wu
  */
 public class LiferayMavenModuleProjectProvider
 	extends LiferayMavenProjectProvider implements NewLiferayProjectProvider<NewLiferayModuleProjectOp> {
@@ -129,9 +131,13 @@ public class LiferayMavenModuleProjectProvider
 				}
 			}
 
-			MavenUtil.importProject(projectLocation.toPortableString(), monitor);
+			CoreUtil.openProject(projectName, projectLocation, monitor);
+
+			MavenUtil.updateProjectConfiguration(projectName, projectLocation.toOSString(), monitor);
 		}
 		catch (Exception e) {
+			ProjectCore.logError(e);
+
 			retval = ProjectCore.createErrorStatus("can't create module project.", e);
 		}
 

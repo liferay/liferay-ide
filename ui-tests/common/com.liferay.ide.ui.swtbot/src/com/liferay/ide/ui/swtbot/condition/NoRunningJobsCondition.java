@@ -61,8 +61,8 @@ public class NoRunningJobsCondition extends JobCondition {
 		for (Job job : jobs) {
 			boolean found = false;
 
-			for (String expectedJob : _expectedJobs) {
-				if (job.getName().equals(expectedJob)) {
+			for (String excludedJob : _excludedJobs) {
+				if (job.getName().equals(excludedJob) || job.getState() == Job.SLEEPING) {
 					found = true;
 
 					break;
@@ -77,11 +77,11 @@ public class NoRunningJobsCondition extends JobCondition {
 		return runningJobs;
 	}
 
-	private final String[] _expectedJobs = {
+	private final String[] _excludedJobs = {
 		"Open Notification Job", "Activity Monitor Job", "Task List Save Job", "Git Repository Change Scanner",
 		"Workbench Auto-Save Job", "Compacting resource model", "Synchronizing Relevant Tasks",
 		"Periodic workspace save.", "Synchronizing Task List", "Task Data Snapshot", "Refreshing server adapter list",
-		"File Transport Reader", "File Transport Cancel Handler"
+		"File Transport Reader", "File Transport Cancel Handler", "Process Console Input Job"
 	};
 
 }

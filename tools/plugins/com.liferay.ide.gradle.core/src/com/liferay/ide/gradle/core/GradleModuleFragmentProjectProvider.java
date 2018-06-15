@@ -116,10 +116,10 @@ public class GradleModuleFragmentProjectProvider
 		}
 
 		if ((hasGradleWorkspace && useDefaultLocation) || inWorkspacePath) {
-			GradleUtil.refreshGradleProject(liferayWorkspaceProject);
+			GradleUtil.refreshProject(liferayWorkspaceProject);
 		}
 		else {
-			GradleUtil.importGradleProject(projecLocation.toFile(), monitor);
+			GradleUtil.sychronizeProject(projecLocation, monitor);
 		}
 
 		return retval;

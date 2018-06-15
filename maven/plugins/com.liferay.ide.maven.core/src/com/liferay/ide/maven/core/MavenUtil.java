@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
@@ -24,10 +25,8 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileReader;
-
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -47,9 +46,7 @@ import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.settings.Settings;
-
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -62,6 +59,8 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.embedder.IMavenConfiguration;
@@ -80,9 +79,7 @@ import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.m2e.wtp.ProjectUtils;
 import org.eclipse.m2e.wtp.WarPluginConfiguration;
 import org.eclipse.wst.xml.core.internal.provisional.format.NodeFormatter;
-
 import org.osgi.framework.Version;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -492,8 +489,8 @@ public class MavenUtil {
 		return false;
 	}
 
-	public static List<IMavenProjectImportResult> importProject(String location, IProgressMonitor monitor)
-		throws CoreException, InterruptedException {
+	public static void updateProjectConfiguration(String projectName, String location, IProgressMonitor monitor)
+		throws InterruptedException {
 
 		MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
 
@@ -512,13 +509,71 @@ public class MavenUtil {
 
 		_findChildMavenProjects(mavenProjects, projects);
 
-		mavenProjects = _filterProjects(mavenProjects);
+		List<MavenProjectInfo> projectsToImport = _filterProjects(mavenProjects);
 
 		ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration();
 
 		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
-		return projectConfigurationManager.importProjects(mavenProjects, importConfiguration, monitor);
+		ISchedulingRule mavenResolvingRule = projectConfigurationManager.getRule();
+
+		IProject project = CoreUtil.getProject(projectName);
+
+		Job job = new Job("Updating maven project configuration") {
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					ResolverConfiguration configuration = new ResolverConfiguration();
+
+					configuration.setResolveWorkspaceProjects(true);
+					configuration.setSelectedProfiles("");
+
+					projectConfigurationManager.enableMavenNature(project, configuration, monitor);
+					projectConfigurationManager.importProjects(projectsToImport, importConfiguration, monitor);
+					projectConfigurationManager.updateProjectConfiguration(project, monitor);
+				}
+				catch (Exception e) {
+					return LiferayMavenCore.createErrorStatus("Error Updating project:" + project.getName(), e);
+				}
+
+				return Status.OK_STATUS;
+			}
+
+		};
+
+		job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT, new Object());
+
+		job.setRule(mavenResolvingRule);
+
+		job.schedule();
+	}
+
+	public static List<IMavenProjectImportResult> importProject(String location, IProgressMonitor monitor)
+		throws CoreException, InterruptedException {
+
+		MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
+
+		File root = CoreUtil.getWorkspaceRootFile();
+
+		AbstractProjectScanner<MavenProjectInfo> scanner = new LocalProjectScanner(
+			root, location, false, mavenModelManager);
+
+		scanner.run(monitor);
+
+		List<MavenProjectInfo> projects = scanner.getProjects();
+
+		List<MavenProjectInfo> mavenProjects = new ArrayList<>();
+
+		_findChildMavenProjects(mavenProjects, projects);
+
+		final List<MavenProjectInfo> projectsToImport = _filterProjects(mavenProjects);
+
+		ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration();
+
+		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+
+		return projectConfigurationManager.importProjects(projectsToImport, importConfiguration, monitor);
 	}
 
 	public static boolean isMavenProject(IProject project) throws CoreException {

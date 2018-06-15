@@ -50,7 +50,7 @@ public class NewGradleLiferayWorkspaceOpTests {
 	public void testNewGradleLiferayWorkspaceOpWithBundle71() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		String projectName = "test-liferay-workspace-gradle";
+		String projectName = "test-liferay-workspace-gradle-init";
 
 		IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
 
@@ -62,6 +62,8 @@ public class NewGradleLiferayWorkspaceOpTests {
 		op.setLiferayVersion("7.1");
 
 		Status status = op.execute(new ProgressMonitor());
+
+		GradleTestUtil.waitForBuildAndValidation();
 
 		Assert.assertNotNull(status);
 		Assert.assertEquals("OK", status.message());

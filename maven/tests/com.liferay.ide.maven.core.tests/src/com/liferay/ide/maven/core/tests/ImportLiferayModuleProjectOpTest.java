@@ -61,6 +61,8 @@ public class ImportLiferayModuleProjectOpTest {
 		Assert.assertTrue(importOp.validation().ok());
 		Assert.assertTrue(importOp.execute(ProgressMonitorBridge.create(new NullProgressMonitor())).ok());
 
+		MavenTestUtil.waitForJobsToComplete();
+
 		IProject project = ProjectUtil.getProject(projectName);
 
 		Assert.assertTrue(project.exists());

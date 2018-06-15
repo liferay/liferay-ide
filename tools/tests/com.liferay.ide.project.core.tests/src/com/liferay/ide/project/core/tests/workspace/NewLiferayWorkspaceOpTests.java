@@ -79,9 +79,9 @@ public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
 
         File projectFolder = new File( eclipseWorkspaceLocation, "existingProject" );
 
-        waitForBuildAndValidation();
-
         importer.importProjects( projectFolder.getAbsolutePath(), new NullProgressMonitor() );
+
+        waitForBuildAndValidation();
 
         NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
@@ -108,6 +108,8 @@ public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
         op.setLocation( workspaceLocation.toPortableString() );
 
         op.execute( new ProgressMonitor() );
+
+        waitForBuildAndValidation();
 
         String wsLocation = workspaceLocation.append( projectName ).toPortableString();
 

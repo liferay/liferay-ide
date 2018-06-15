@@ -46,16 +46,16 @@ public class ImportWorkspaceProjectTests {
 
 	@Before
 	public void clearWorkspace() throws Exception {
-		Util.deleteAllWorkspaceProjects();
+		GradleTestUtil.deleteAllWorkspaceProjects();
 	}
 
 	@Test
 	public void testImportLiferayWorkspace() throws Exception {
-		LiferayGradleProject rootProject = Util.fullImportGradleProject("projects/testWorkspace");
+		LiferayGradleProject rootProject = GradleTestUtil.fullImportGradleProject("projects/testWorkspace");
 
 		Assert.assertNotNull(rootProject);
 
-		Util.waitForBuildAndValidation();
+		GradleTestUtil.waitForBuildAndValidation();
 
 		_assertLiferayProject("jstl.test");
 		_assertLiferayProject("roster-api");
@@ -111,7 +111,7 @@ public class ImportWorkspaceProjectTests {
 
 		Assert.assertNotNull(eeProject);
 
-		Util.waitForBuildAndValidation();
+		GradleTestUtil.waitForBuildAndValidation();
 
 		_assertNotLiferayProject("testWorkspace");
 		_assertLiferayProject("sample-portlet");
@@ -135,11 +135,11 @@ public class ImportWorkspaceProjectTests {
 
 	@Test
 	public void testImportLiferayWorkspaceEE() throws Exception {
-		LiferayGradleProject eeProject = Util.fullImportGradleProject("projects/liferay-workspace-ee");
+		LiferayGradleProject eeProject = GradleTestUtil.fullImportGradleProject("projects/liferay-workspace-ee");
 
 		Assert.assertNotNull(eeProject);
 
-		Util.waitForBuildAndValidation();
+		GradleTestUtil.waitForBuildAndValidation();
 
 		_assertNotLiferayProject("liferay-workspace-ee");
 		_assertNotLiferayProject("aws");
@@ -174,11 +174,11 @@ public class ImportWorkspaceProjectTests {
 
 		op.execute(ProgressMonitorBridge.create(monitor));
 
+		GradleTestUtil.waitForBuildAndValidation();
+
 		IProject eeProject = CoreUtil.getProject("testWorkspace");
 
 		Assert.assertNotNull(eeProject);
-
-		Util.waitForBuildAndValidation();
 
 		eeProject.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 

@@ -27,7 +27,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.m2e.tests.common.JobHelpers;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -68,6 +67,8 @@ public class NewMavenLiferayWorkspaceOpTests {
 		op.setServerName(serverName);
 
 		op.execute(new ProgressMonitor());
+
+		MavenTestUtil.waitForJobsToComplete();
 
 		IProject workspaceProject = CoreUtil.getProject("NewGradleWorkspaceWithInvalidBundleUrl");
 
@@ -110,18 +111,7 @@ public class NewMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
-		JobHelpers.waitForJobs(
-			job -> {
-				String jobName = job.getName();
-
-				if (jobName.equals("Init Liferay Bundle")) {
-					return true;
-				}
-
-				return false;
-			},
-
-			30 * 60 * 1000);
+		MavenTestUtil.waitForJobsToComplete();
 
 		IPath fullLocation = rootLocation.append(projectName);
 
@@ -153,6 +143,8 @@ public class NewMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
+		MavenTestUtil.waitForJobsToComplete();
+
 		IPath wslocation = rootLocation.append(projectName);
 
 		String projectLocation = wslocation.toPortableString();
@@ -182,6 +174,8 @@ public class NewMavenLiferayWorkspaceOpTests {
 		op.setLocation(workspaceLocation.toPortableString());
 
 		Status status = op.execute(new ProgressMonitor());
+
+		MavenTestUtil.waitForJobsToComplete();
 
 		Assert.assertNotNull(status);
 		Assert.assertEquals("OK", status.message());
@@ -224,18 +218,7 @@ public class NewMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
-		JobHelpers.waitForJobs(
-			job -> {
-				String jobName = job.getName();
-
-				if (jobName.equals("Init Liferay Bundle")) {
-					return true;
-				}
-
-				return false;
-			},
-
-			30 * 60 * 1000);
+		MavenTestUtil.waitForJobsToComplete();
 
 		IPath wslocation = workspaceLocation.append(projectName);
 

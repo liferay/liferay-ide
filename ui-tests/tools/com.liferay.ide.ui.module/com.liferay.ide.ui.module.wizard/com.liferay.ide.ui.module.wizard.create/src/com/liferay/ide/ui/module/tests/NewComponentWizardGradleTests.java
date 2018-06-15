@@ -37,6 +37,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		String className = "MyListener";
@@ -70,15 +72,21 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(secondProjectName);
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
@@ -93,6 +101,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		wizardAction.newLiferayComponent.prepareProjectName(secondProjectName);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
@@ -121,6 +131,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
 
@@ -135,6 +147,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(project.getName());
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -152,6 +166,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
 
@@ -167,11 +183,15 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openFileMenuLiferayComponentClassWizard();
 
 		wizardAction.newLiferayComponent.prepare(MVC_PORTLET_UPCASE);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
@@ -185,6 +205,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
 				project.getName(), "src/main/java", "content", "ShortcutComponentGradleRestService.java"));
@@ -194,6 +216,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		wizardAction.openNewBtnLiferayComponentClassWizard();
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
@@ -211,6 +235,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		String className = "TestComponentWithPackagesGradlePortlet";
@@ -223,6 +249,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		dialogAction.confirm();
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
@@ -239,9 +267,13 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		String className = "TestComponentdefaultGradlePortlet";
 		String packageName = "content";

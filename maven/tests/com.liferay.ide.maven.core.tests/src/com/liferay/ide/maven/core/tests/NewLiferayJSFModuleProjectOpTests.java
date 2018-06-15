@@ -71,7 +71,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 
 		Assert.assertTrue(status.ok());
 
-		_waitForBuildAndValidation2();
+		_waitForBuildAndValidation();
 
 		IProject project = CoreUtil.getProject("Test14");
 
@@ -91,7 +91,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 
 		Assert.assertTrue(status.ok());
 
-		_waitForBuildAndValidation2();
+		_waitForBuildAndValidation();
 
 		IProject project = CoreUtil.getProject("Test15");
 
@@ -304,6 +304,8 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 	public void testNewLiferayJSFWarWorkspaceMavenJsfProject() throws Exception {
 		_importWorkspaceProject("testWorkspace");
 
+		_waitForBuildAndValidation();
+
 		IProject workspaceProject = CoreUtil.getProject("testWorkspace");
 
 		Assert.assertNotNull(workspaceProject);
@@ -322,8 +324,6 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 
 		Status status = NewLiferayJSFModuleProjectOpMethods.execute(
 			op, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		_waitForBuildAndValidation2();
 
 		Assert.assertTrue(status.ok());
 
@@ -345,7 +345,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 
 		Assert.assertTrue(status.ok());
 
-		_waitForBuildAndValidation2();
+		_waitForBuildAndValidation();
 
 		IProject project = CoreUtil.getProject("Test16");
 
@@ -365,7 +365,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 
 		Assert.assertTrue(status.ok());
 
-		_waitForBuildAndValidation2();
+		_waitForBuildAndValidation();
 
 		IProject project = CoreUtil.getProject("Test17");
 
@@ -376,14 +376,14 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 	protected void waitForBuildAndValidation(IProject project) throws Exception {
 		project.build(IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor());
 
-		_waitForBuildAndValidation2();
+		_waitForBuildAndValidation();
 
 		project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
 
-		_waitForBuildAndValidation2();
+		_waitForBuildAndValidation();
 	}
 
-	private static void _waitForBuildAndValidation2() throws Exception {
+	private static void _waitForBuildAndValidation() throws Exception {
 		IWorkspaceRoot root = null;
 
 		try {

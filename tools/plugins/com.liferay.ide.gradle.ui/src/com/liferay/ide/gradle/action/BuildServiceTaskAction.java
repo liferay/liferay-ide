@@ -59,7 +59,7 @@ public class BuildServiceTaskAction extends GradleTaskAction {
 
 			// refresh this project will also transmit to refresh -api project
 
-			GradleUtil.refreshGradleProject(project);
+			GradleUtil.refreshProject(project);
 		}
 		else {
 			try {

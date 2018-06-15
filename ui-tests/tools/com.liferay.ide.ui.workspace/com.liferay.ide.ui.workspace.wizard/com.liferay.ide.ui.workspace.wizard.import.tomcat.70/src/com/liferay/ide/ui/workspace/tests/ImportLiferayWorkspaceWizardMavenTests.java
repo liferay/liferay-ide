@@ -22,7 +22,6 @@ import java.io.IOException;
 import org.eclipse.swtbot.swt.finder.SWTBotAssert;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -44,23 +43,23 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.importLiferayWorkspace.prepareLocation(project.getPath());
 
-		wizardAction.importLiferayWorkspace.prepareServerName(project.getName());
+		wizardAction.importLiferayWorkspace.prepareServerName(projectName);
 
 		wizardAction.finish();
 
-		String eclipseWorkspaceName = liferayWorkspaceName + " (in " + projectName + ")";
+		jobAction.waitForNoRunningJobs();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(eclipseWorkspaceName, "bundles"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "bundles"));
 
-		String[] moduleNames = {eclipseWorkspaceName, liferayWorkspaceName + "-modules (in modules)"};
-		String[] themeNames = {eclipseWorkspaceName, liferayWorkspaceName + "-themes (in themes)"};
-		String[] warNames = {eclipseWorkspaceName, liferayWorkspaceName + "-wars (in wars)"};
+		String[] moduleNames = {projectName, liferayWorkspaceName + "-modules (in modules)"};
+		String[] themeNames = {projectName, liferayWorkspaceName + "-themes (in themes)"};
+		String[] warNames = {projectName, liferayWorkspaceName + "-wars (in wars)"};
 
 		viewAction.project.closeAndDelete(moduleNames);
 		viewAction.project.closeAndDelete(themeNames);
 		viewAction.project.closeAndDelete(warNames);
 
-		viewAction.project.closeAndDelete(eclipseWorkspaceName);
+		viewAction.project.closeAndDelete(projectName);
 
 		// TODO need to check with Charles
 
@@ -69,8 +68,6 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		dialogAction.deleteRuntimFromPreferences(projectName);
 	}
 
-	//init code is commented out in pom file now
-	@Ignore("wait for IDE-3691 fixed")
 	@Test
 	public void importLiferayWorkspaceWithDownloadBundle() throws IOException {
 		if (!envAction.internal()) {
@@ -92,19 +89,19 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String eclipseWorkspaceName = liferayWorkspaceName + " (in " + projectName + ")";
+		jobAction.waitForNoRunningJobs();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(eclipseWorkspaceName, "bundles"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "bundles"));
 
-		String[] moduleNames = {eclipseWorkspaceName, liferayWorkspaceName + "-modules (in modules)"};
-		String[] themeNames = {eclipseWorkspaceName, liferayWorkspaceName + "-themes (in themes)"};
-		String[] warNames = {eclipseWorkspaceName, liferayWorkspaceName + "-wars (in wars)"};
+		String[] moduleNames = {projectName, liferayWorkspaceName + "-modules (in modules)"};
+		String[] themeNames = {projectName, liferayWorkspaceName + "-themes (in themes)"};
+		String[] warNames = {projectName, liferayWorkspaceName + "-wars (in wars)"};
 
 		viewAction.project.closeAndDelete(moduleNames);
 		viewAction.project.closeAndDelete(themeNames);
 		viewAction.project.closeAndDelete(warNames);
 
-		viewAction.project.closeAndDelete(eclipseWorkspaceName);
+		viewAction.project.closeAndDelete(projectName);
 
 		dialogAction.deleteRuntimFromPreferences(projectName);
 	}
@@ -117,11 +114,13 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		String liferayWorkspaceName = "test-liferay-workspace-maven";
 
-		String eclipseWorkspaceName = liferayWorkspaceName + " (in " + project.getName() + ")";
+		String projectName = project.getName();
 
-		viewAction.project.openFile(eclipseWorkspaceName, "pom.xml");
+		viewAction.project.openFile(projectName, "pom.xml");
 
 		editorAction.pomXml.switchTabPomXml();
 
@@ -133,15 +132,15 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		editorAction.close();
 
-		String[] moduleNames = {eclipseWorkspaceName, liferayWorkspaceName + "-modules (in modules)"};
+		String[] moduleNames = {projectName, liferayWorkspaceName + "-modules (in modules)"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(moduleNames));
 
-		String[] themeNames = {eclipseWorkspaceName, liferayWorkspaceName + "-themes (in themes)"};
+		String[] themeNames = {projectName, liferayWorkspaceName + "-themes (in themes)"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(themeNames));
 
-		String[] warNames = {eclipseWorkspaceName, liferayWorkspaceName + "-wars (in wars)"};
+		String[] warNames = {projectName, liferayWorkspaceName + "-wars (in wars)"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(warNames));
 
@@ -149,7 +148,7 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(themeNames);
 		viewAction.project.closeAndDelete(warNames);
 
-		viewAction.project.closeAndDelete(eclipseWorkspaceName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Rule

@@ -31,6 +31,8 @@ public class DeployLayoutTemplateModuleGradleTomcat7xBase extends ServerTestBase
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());

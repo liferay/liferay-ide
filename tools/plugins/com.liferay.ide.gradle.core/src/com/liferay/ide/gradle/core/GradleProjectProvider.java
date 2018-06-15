@@ -17,6 +17,7 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.BladeCLI;
@@ -156,14 +157,16 @@ public class GradleProjectProvider
 			}
 
 			if ((hasGradleWorkspace && useDefaultLocation) || inWorkspacePath) {
-				GradleUtil.refreshGradleProject(liferayWorkspaceProject);
+				GradleUtil.refreshProject(liferayWorkspaceProject);
 			}
 			else {
-				GradleUtil.importGradleProject(projectLocation.toFile(), monitor);
+				CoreUtil.openProject(projectName, projectLocation, monitor);
+
+				GradleUtil.sychronizeProject(projectLocation, monitor);
 			}
 		}
 		catch (Exception e) {
-			retval = GradleCore.createErrorStatus("can't create module project.", e);
+			retval = GradleCore.createErrorStatus("Can't create module project: " + e.getMessage(), e);
 		}
 
 		return retval;

@@ -36,6 +36,8 @@ public class NewThemeProjectModuleMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		jobAction.waitForValidate(project.getName());

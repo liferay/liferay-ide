@@ -54,12 +54,12 @@ public class GradleProjectTests {
 
 	@BeforeClass
 	public static void deleteAllWorkspaceProjects() throws Exception {
-		Util.deleteAllWorkspaceProjects();
+		GradleTestUtil.deleteAllWorkspaceProjects();
 	}
 
 	@Test
 	public void getOutputJar() throws Exception {
-		LiferayGradleProject gradleProject = Util.fullImportGradleProject("projects/getOutputJar");
+		LiferayGradleProject gradleProject = GradleTestUtil.fullImportGradleProject("projects/getOutputJar");
 
 		Assert.assertNotNull(gradleProject);
 
@@ -84,7 +84,7 @@ public class GradleProjectTests {
 
 	@Test
 	public void getSymbolicName() throws Exception {
-		LiferayGradleProject gradleProject = Util.fullImportGradleProject("projects/getSymbolicName");
+		LiferayGradleProject gradleProject = GradleTestUtil.fullImportGradleProject("projects/getSymbolicName");
 
 		Assert.assertNotNull(gradleProject);
 
@@ -103,7 +103,7 @@ public class GradleProjectTests {
 
 	@Test
 	public void hasGradleBundlePluginDetection() throws Exception {
-		LiferayGradleProject gradleProject = Util.fullImportGradleProject("projects/biz.aQute.bundle");
+		LiferayGradleProject gradleProject = GradleTestUtil.fullImportGradleProject("projects/biz.aQute.bundle");
 
 		Assert.assertNotNull(gradleProject);
 
@@ -130,7 +130,7 @@ public class GradleProjectTests {
 
 	@Test
 	public void testAddGradleDependency() throws Exception {
-		LiferayGradleProject gradleProject = Util.fullImportGradleProject("projects/GradleDependencyTestProject");
+		LiferayGradleProject gradleProject = GradleTestUtil.fullImportGradleProject("projects/GradleDependencyTestProject");
 		String[][] gradleDependencies = {{"com.liferay.portal", "com.liferay.portal.kernel", "2.6.0"}};
 
 		GradleDependency gd = new GradleDependency(
@@ -173,7 +173,7 @@ public class GradleProjectTests {
 
 		Assert.assertNotNull(project);
 
-		Util.waitForBuildAndValidation();
+		GradleTestUtil.waitForBuildAndValidation();
 
 		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 
@@ -182,7 +182,7 @@ public class GradleProjectTests {
 
 	@Test
 	public void toolingApiCustomModel() throws Exception {
-		LiferayGradleProject gradleProject = Util.fullImportGradleProject("projects/customModel");
+		LiferayGradleProject gradleProject = GradleTestUtil.fullImportGradleProject("projects/customModel");
 
 		Assert.assertNotNull(gradleProject);
 

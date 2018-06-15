@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.m2e.tests.common.JobHelpers;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -94,18 +93,7 @@ public class ImportMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
-		JobHelpers.waitForJobs(
-			job -> {
-				String jobName = job.getName();
-
-				if (jobName.equals("Init Liferay Bundle")) {
-					return true;
-				}
-
-				return false;
-			},
-
-			30 * 60 * 1000);
+		MavenTestUtil.waitForJobsToComplete();
 
 		File bundleDir = new File(workspaceFolder, "bundles");
 
@@ -188,18 +176,7 @@ public class ImportMavenLiferayWorkspaceOpTests {
 
 		op.execute(new ProgressMonitor());
 
-		JobHelpers.waitForJobs(
-			job -> {
-				String jobName = job.getName();
-
-				if (jobName.equals("Init Liferay Bundle")) {
-					return true;
-				}
-
-				return false;
-			},
-
-			30 * 60 * 1000);
+		MavenTestUtil.waitForJobsToComplete();
 
 		content = FileUtil.readContents(pomFile);
 
@@ -239,6 +216,8 @@ public class ImportMavenLiferayWorkspaceOpTests {
 		Assert.assertTrue(validationStatus.ok());
 
 		op.execute(new ProgressMonitor());
+
+		MavenTestUtil.waitForJobsToComplete();
 
 		IProject project = CoreUtil.getProject("maven-liferay-workspace");
 

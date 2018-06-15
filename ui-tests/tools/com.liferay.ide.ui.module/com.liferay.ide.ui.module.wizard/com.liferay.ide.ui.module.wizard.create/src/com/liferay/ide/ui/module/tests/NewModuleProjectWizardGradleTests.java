@@ -36,6 +36,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -48,6 +50,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(project.getName(), API);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
@@ -62,6 +66,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -74,6 +80,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(project.getName(), CONTENT_TARGETING_RULE);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
@@ -88,6 +96,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -100,6 +110,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(project.getName(), CONTROL_MENU_ENTRY);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
@@ -114,6 +126,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -126,6 +140,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(project.getName(), PANEL_APP);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
@@ -140,6 +156,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -152,6 +170,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(project.getName(), PORTLET_PROVIDER);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
@@ -166,6 +186,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -178,6 +200,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(project.getName(), REST);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
@@ -201,6 +225,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -223,6 +249,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -235,6 +263,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(project.getName(), SIMULATION_PANEL_ENTRY);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
@@ -249,6 +279,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -261,6 +293,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(project.getName(), THEME_CONTRIBUTOR);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
@@ -275,6 +309,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -287,6 +323,8 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 

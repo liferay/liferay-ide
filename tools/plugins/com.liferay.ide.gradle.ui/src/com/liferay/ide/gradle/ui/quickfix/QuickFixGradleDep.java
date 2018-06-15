@@ -131,7 +131,7 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 
 							IResource resource = unit.getResource();
 
-							GradleUtil.refreshGradleProject(resource.getProject());
+							GradleUtil.refreshProject(resource.getProject());
 						}
 					}
 					catch (Exception e) {

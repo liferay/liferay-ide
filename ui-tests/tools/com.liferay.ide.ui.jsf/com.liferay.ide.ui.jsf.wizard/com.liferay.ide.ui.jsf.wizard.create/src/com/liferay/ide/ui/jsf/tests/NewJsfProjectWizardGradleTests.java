@@ -34,6 +34,8 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -46,6 +48,8 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.newLiferayJsf.prepareGradle(project.getName(), JSF_STANDARD);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
@@ -60,6 +64,8 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -73,6 +79,8 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -85,6 +93,8 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.newLiferayJsf.prepareGradle(project.getName(), RICHFACES);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 

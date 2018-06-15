@@ -16,14 +16,15 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.workspace.BaseLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
@@ -31,7 +32,6 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-
 import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
@@ -42,6 +42,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -50,6 +53,7 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Andy Wu
  * @author Terry Jia
+ * @author Charles Wu
  */
 public class LiferayGradleWorkspaceProjectProvider
 	extends AbstractLiferayProjectProvider implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> {
@@ -68,7 +72,7 @@ public class LiferayGradleWorkspaceProjectProvider
 
 		String workspaceName = workspaceNameValue.toString();
 
-		IPath fullLocation = location.append(workspaceName);
+		IPath workspaceLocation = location.append(workspaceName);
 
 		Value<String> version = op.getLiferayVersion();
 
@@ -76,7 +80,7 @@ public class LiferayGradleWorkspaceProjectProvider
 
 		sb.append("--base ");
 		sb.append("\"");
-		sb.append(fullLocation.toOSString());
+		sb.append(workspaceLocation.toOSString());
 		sb.append("\" ");
 		sb.append("init ");
 		sb.append("-v ");
@@ -89,19 +93,31 @@ public class LiferayGradleWorkspaceProjectProvider
 			return ProjectCore.createErrorStatus(bclie);
 		}
 
-		IStatus status = importProject(fullLocation.toOSString(), monitor);
+		IPath wsLocation = location.append(workspaceName);
 
-		Value<Boolean> initBundle = op.getProvisionLiferayBundle();
+		IStatus importProjectStatus = importProject(wsLocation, monitor);
 
-		if (initBundle.content()) {
-			Value<String> bundleUrl = op.getBundleUrl();
-
-			Value<String> serverName = op.getServerName();
-
-			initBundle(bundleUrl.content(), serverName.content(), workspaceName, monitor);
+		if (importProjectStatus != Status.OK_STATUS) {
+			return importProjectStatus;
 		}
 
-		return status;
+		Value<Boolean> provisionLiferayBundleValue = op.getProvisionLiferayBundle();
+
+		boolean initBundle = provisionLiferayBundleValue.content();
+
+		if (initBundle) {
+			Value<String> bundleUrlValue = op.getBundleUrl();
+
+			String bundleUrl = bundleUrlValue.content(false);
+
+			Value<String> serverNameValue = op.getServerName();
+
+			String serverName = serverNameValue.content(true);
+
+			initBundle(bundleUrl, serverName, workspaceName);
+		}
+
+		return Status.OK_STATUS;
 	}
 
 	@Override
@@ -112,49 +128,76 @@ public class LiferayGradleWorkspaceProjectProvider
 	}
 
 	@Override
-	public IStatus importProject(String location, IProgressMonitor monitor) {
-		IStatus status = Status.OK_STATUS;
-
+	public IStatus importProject(IPath wsLocation, IProgressMonitor monitor) {
 		try {
-			status = GradleUtil.importGradleProject(location, monitor);
+			CoreUtil.openProject(wsLocation.lastSegment(), wsLocation, monitor);
 		}
 		catch (CoreException ce) {
-			status = ProjectCore.createErrorStatus(ce);
+			return ProjectCore.createErrorStatus(ce);
 		}
 
-		return status;
+		return GradleUtil.sychronizeProject(wsLocation, monitor);
 	}
 
 	@Override
-	public void initBundle(String bundleUrl, String serverName, String workspaceName, IProgressMonitor monitor) {
-		IProject project = ProjectUtil.getProject(workspaceName);
+	public void initBundle(String bundleUrl, String serverName, String wsName) {
+		IProject project = CoreUtil.getProject(wsName);
 
-		try {
-			if (bundleUrl != null) {
-				IFile gradlePropertiesFile = project.getFile("gradle.properties");
+		String jobName = "Initializing Liferay bundle";
 
-				try (InputStream gradleStream = gradlePropertiesFile.getContents()) {
-					String content = FileUtil.readContents(gradleStream);
+		Job job = new Job(jobName) {
 
-					String bundleUrlProp = LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					if (bundleUrl != null) {
+						IFile gradlePropertiesFile = project.getFile("gradle.properties");
 
-					String separator = System.getProperty("line.separator", "\n");
+						try (InputStream gradleStream = gradlePropertiesFile.getContents()) {
+							String content = FileUtil.readContents(gradleStream);
 
-					String newContent = content + separator + bundleUrlProp;
+							String bundleUrlProp = LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
 
-					try (InputStream inputStream = new ByteArrayInputStream(newContent.getBytes())) {
-						gradlePropertiesFile.setContents(inputStream, IResource.FORCE, monitor);
+							String separator = System.getProperty("line.separator", "\n");
+
+							String newContent = content + separator + bundleUrlProp;
+
+							try (InputStream inputStream = new ByteArrayInputStream(newContent.getBytes())) {
+								gradlePropertiesFile.setContents(inputStream, IResource.FORCE, monitor);
+							}
+						}
 					}
+
+					GradleUtil.runGradleTask(project, "initBundle", monitor);
+
+					monitor.worked(95);
+
+					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+
+					monitor.worked(5);
 				}
+				catch (Exception e) {
+					return GradleCore.createErrorStatus("Init Liferay Bundle failed", e);
+				}
+
+				return Status.OK_STATUS;
 			}
 
-			GradleUtil.runGradleTask(project, "initBundle", monitor);
+		};
 
-			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		}
-		catch (Exception e) {
-			GradleCore.createErrorStatus("Init Liferay Bundle failed", e);
-		}
+		job.addJobChangeListener(
+			new JobChangeAdapter() {
+
+				@Override
+				public void done(IJobChangeEvent event) {
+					LiferayWorkspaceUtil.addPortalRuntime(serverName);
+				}
+
+			});
+
+		job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT, new Object());
+
+		job.schedule();
 	}
 
 	@Override

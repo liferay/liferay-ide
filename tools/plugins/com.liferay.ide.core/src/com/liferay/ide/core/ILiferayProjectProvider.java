@@ -16,6 +16,8 @@ package com.liferay.ide.core;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.QualifiedName;
+
 /**
  * @author Gregory Amerson
  */
@@ -34,5 +36,7 @@ public interface ILiferayProjectProvider {
 	public ILiferayProject provide(Object adaptable);
 
 	public boolean provides(Class<?> type);
+
+	public QualifiedName LIFERAY_PROJECT = new QualifiedName(LiferayCore.PLUGIN_ID, "LIFERAY_PROJECT");
 
 }

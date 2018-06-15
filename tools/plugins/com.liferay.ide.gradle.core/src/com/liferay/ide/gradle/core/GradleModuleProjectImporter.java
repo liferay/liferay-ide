@@ -90,11 +90,11 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter 
 	@Override
 	public List<IProject> importProjects(String location, IProgressMonitor monitor) throws CoreException {
 		if (_refreshProject != null) {
-			GradleUtil.refreshGradleProject(_refreshProject);
+			GradleUtil.refreshProject(_refreshProject);
 			_refreshProject = null;
 		}
 		else {
-			GradleUtil.importGradleProject(new File(location), monitor);
+			GradleUtil.sychronizeProject(new Path(location), monitor);
 		}
 
 		// To-Do need return the projects added
