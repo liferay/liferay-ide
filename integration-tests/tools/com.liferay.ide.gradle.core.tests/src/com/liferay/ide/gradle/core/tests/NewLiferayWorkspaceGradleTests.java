@@ -18,8 +18,6 @@ import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.test.core.base.support.LiferayWorkspaceSupport;
 import com.liferay.ide.test.project.core.base.NewProjectOpBase;
 
-import org.eclipse.core.resources.IProject;
-
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -49,9 +47,9 @@ public class NewLiferayWorkspaceGradleTests extends NewProjectOpBase<NewLiferayW
 		return "gradle-liferay-workspace";
 	}
 
-	protected void verifyProjectFiles(IProject project) {
-		assertFileExists(project.getFile("build.gradle"));
-		assertFileNotExists(project.getFile("pom.xml"));
+	protected void verifyProjectFiles(String projectName) {
+		assertProjectFileExists(projectName, "build.gradle");
+		assertProjectFileNotExists(projectName, "pom.xml");
 	}
 
 }

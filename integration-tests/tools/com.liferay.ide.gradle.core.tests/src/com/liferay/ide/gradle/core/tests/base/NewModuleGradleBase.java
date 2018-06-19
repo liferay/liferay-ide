@@ -32,7 +32,7 @@ public abstract class NewModuleGradleBase extends NewModuleOpBase<NewLiferayModu
 	@Override
 	protected void needJobsToBuild(IJobManager manager) throws InterruptedException, OperationCanceledException {
 		manager.join(CorePlugin.GRADLE_JOB_FAMILY, new NullProgressMonitor());
-		manager.join(GradleCore.JobFamilyId, new NullProgressMonitor());
+		manager.join(GradleCore.JOB_FAMILY_ID, new NullProgressMonitor());
 	}
 
 	@Override

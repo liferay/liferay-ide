@@ -90,6 +90,12 @@ public class EnvAction {
 		return root.getLocation();
 	}
 
+	public File getFilesDir() {
+		IPath path = getBundlesPath().append("files");
+
+		return path.toFile();
+	}
+
 	public File getProjectsDir() {
 		IPath path = getBundlesPath().append("projects");
 
