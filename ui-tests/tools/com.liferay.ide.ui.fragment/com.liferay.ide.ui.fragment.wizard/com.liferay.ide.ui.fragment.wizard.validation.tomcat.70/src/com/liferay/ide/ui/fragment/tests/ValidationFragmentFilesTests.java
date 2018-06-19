@@ -18,8 +18,8 @@ import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
-import com.liferay.ide.ui.swtbot.util.StringPool;
 
+import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,31 +35,6 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 	@ClassRule
 	public static RuleChain chain = RuleUtil.getTomcat7xRuleChain(bot, tomcat);
-
-	@Test
-	public void checkInitialState() {
-		wizardAction.openFileMenuFragmentFilesWizard();
-
-		validationAction.assertEquals(NO_SUITABLE_LIFERAY_FRAGMENT_PROJECT, wizardAction.getValidationMsg(1));
-
-		validationAction.assertEquals(StringPool.BLANK, wizardAction.newFragmentFiles.projectName());
-
-		// Assert.assertEquals("<None>", _newFragmentFilesWizard.getLiferyRuntimes().getText());
-
-		validationAction.assertEnabledTrue(wizardAction.newFragmentFiles.newRuntimeBtn());
-
-		validationAction.assertEquals(StringPool.BLANK, wizardAction.newFragmentFiles.hostOsgiBundle());
-
-		validationAction.assertEnabledFalse(wizardAction.newFragmentFiles.addOverrideFilesBtn());
-
-		validationAction.assertEnabledFalse(wizardAction.newFragmentFiles.deleteBtn());
-
-		validationAction.assertEnabledFalse(wizardAction.getNextBtn());
-
-		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
-
-		wizardAction.cancel();
-	}
 
 	@Test
 	public void testAddAllFilesOnFragment() {
@@ -136,8 +111,7 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
-		// wait for IDE-3566 fixed
-		// Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
+		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
 		dialogAction.cancel();
 
