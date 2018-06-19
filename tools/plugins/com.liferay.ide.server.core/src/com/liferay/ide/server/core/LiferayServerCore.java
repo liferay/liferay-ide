@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -56,6 +57,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobManager;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.wst.server.core.IRuntime;
@@ -614,6 +617,20 @@ public class LiferayServerCore extends Plugin {
 
 		ServerCore.removeRuntimeLifecycleListener(_runtimeLifecycleListener);
 		ServerCore.removeServerLifecycleListener(_serverLifecycleListener);
+
+		IJobManager jobManager = Job.getJobManager();
+
+		IProject[] projects = CoreUtil.getAllProjects();
+
+		for (IProject project : projects) {
+			String jobName = project.getName() + " - watch";
+
+			Job[] jobs = jobManager.find(jobName);
+
+			for (Job job : jobs) {
+				job.cancel();
+			}
+		}
 	}
 
 	private boolean _addRuntimeToMemento(IRuntime runtime, IMemento memento) {
