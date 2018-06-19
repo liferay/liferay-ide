@@ -74,8 +74,6 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		jobAction.waitForNoRunningJobs();
-
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
@@ -125,8 +123,6 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET);
 
 		wizardAction.finish();
-
-		jobAction.waitForNoRunningJobs();
 
 		jobAction.waitForNoRunningJobs();
 

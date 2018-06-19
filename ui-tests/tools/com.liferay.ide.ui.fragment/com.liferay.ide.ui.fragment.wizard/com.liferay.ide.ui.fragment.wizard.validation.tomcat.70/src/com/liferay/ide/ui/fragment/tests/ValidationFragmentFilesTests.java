@@ -77,6 +77,8 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openFileMenuFragmentFilesWizard();
 
 		String[] files = {
@@ -128,6 +130,8 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openFileMenuFragmentFilesWizard();
 
 		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
@@ -158,6 +162,8 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openFileMenuFragmentFilesWizard();
 
 		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
@@ -178,6 +184,8 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 		wizardAction.newModule.prepareGradle(project.getName());
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openFileMenuFragmentFilesWizard();
 

@@ -16,6 +16,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
@@ -36,6 +37,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.sapphire.Value;
 
 /**
  * @author Simon Jiang
@@ -88,12 +90,20 @@ public class NewGradleJSFModuleProjectProvider extends NewMavenJSFModuleProjectP
 				buildPom.toFile().delete();
 			}
 
+			Value<String> projectNameValue = op.getProjectName();
+
+			String projectName = projectNameValue.content();
+
+			CoreUtil.openProject(projectName, projectLocation, monitor);
+
 			ILiferayProjectImporter importer = LiferayCore.getImporter("gradle");
 
-			IStatus canImport = importer.canImport(projectLocation.toOSString());
+			String location = projectLocation.toOSString();
+
+			IStatus canImport = importer.canImport(location);
 
 			if (canImport.getCode() != Status.ERROR) {
-				importer.importProjects(projectLocation.toOSString(), monitor);
+				importer.importProjects(location, monitor);
 			}
 		}
 		catch (Exception e) {

@@ -46,6 +46,8 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
@@ -75,6 +77,8 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
@@ -98,6 +102,8 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 		dialogAction.cancel();
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -125,6 +131,8 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
@@ -148,6 +156,8 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 		dialogAction.confirm();
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -193,6 +203,8 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 		dialogAction.confirm();
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}

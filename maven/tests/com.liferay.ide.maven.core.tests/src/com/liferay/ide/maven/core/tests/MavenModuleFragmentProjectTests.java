@@ -31,6 +31,7 @@ import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+
 import org.junit.Assert;
 import org.junit.Test;
 

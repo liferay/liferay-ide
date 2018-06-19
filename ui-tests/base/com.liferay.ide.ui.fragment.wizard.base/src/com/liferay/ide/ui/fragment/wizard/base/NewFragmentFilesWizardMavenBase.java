@@ -43,6 +43,8 @@ public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openNewBtnFragmentFilesWizard();
 
 		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
@@ -104,6 +106,8 @@ public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openFragmentFilesWizard();
 
 		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
@@ -137,6 +141,8 @@ public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openFragmentFilesWizard();
 
 		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
@@ -169,6 +175,8 @@ public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openFragmentFilesWizard();
 
 		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
@@ -200,6 +208,8 @@ public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 		dialogAction.confirm();
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openFragmentFilesWizard();
 
@@ -237,6 +247,8 @@ public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 		dialogAction.confirm();
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		String[] files =
 			{"META-INF/resources/init-ext.jsp", "META-INF/resources/view.jsp", "META-INF/resources/init.jsp"};
