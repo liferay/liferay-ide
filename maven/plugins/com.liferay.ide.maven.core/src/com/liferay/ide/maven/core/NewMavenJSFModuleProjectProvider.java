@@ -14,7 +14,6 @@
 
 package com.liferay.ide.maven.core;
 
-import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -50,6 +49,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.internal.MavenPluginActivator;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 
@@ -70,7 +70,9 @@ public class NewMavenJSFModuleProjectProvider
 	}
 
 	@Override
-	public IStatus createNewProject(NewLiferayJSFModuleProjectOp op, IProgressMonitor monitor) throws CoreException {
+	public IStatus createNewProject(NewLiferayJSFModuleProjectOp op, IProgressMonitor monitor)
+		throws CoreException, InterruptedException {
+
 		IStatus retval = null;
 
 		IPath projectLocation = createArchetypeProject(op, monitor);
@@ -81,13 +83,13 @@ public class NewMavenJSFModuleProjectProvider
 			buildGradle.toFile().delete();
 		}
 
-		ILiferayProjectImporter importer = LiferayCore.getImporter("maven");
+		Value<String> projectNameValue = op.getProjectName();
 
-		IStatus canImport = importer.canImport(projectLocation.toOSString());
+		String projectName = projectNameValue.content();
 
-		if (canImport.getCode() != Status.ERROR) {
-			importer.importProjects(projectLocation.toOSString(), monitor);
-		}
+		CoreUtil.openProject(projectName, projectLocation, monitor);
+
+		MavenUtil.updateProjectConfiguration(projectName, projectLocation.toOSString(), monitor);
 
 		retval = Status.OK_STATUS;
 

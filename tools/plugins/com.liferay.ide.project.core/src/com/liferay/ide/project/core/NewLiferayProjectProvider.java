@@ -27,7 +27,7 @@ import org.eclipse.sapphire.ExecutableElement;
  */
 public abstract interface NewLiferayProjectProvider<T extends ExecutableElement> extends ILiferayProjectProvider {
 
-	public abstract IStatus createNewProject(T op, IProgressMonitor monitor) throws CoreException;
+	public abstract IStatus createNewProject(T op, IProgressMonitor monitor) throws CoreException, InterruptedException;
 
 	public abstract IStatus validateProjectLocation(String projectName, IPath path);
 

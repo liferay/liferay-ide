@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
@@ -33,7 +34,9 @@ public class MavenModuleFragmentProjectProvider
 	extends LiferayMavenProjectProvider implements NewLiferayProjectProvider<NewModuleFragmentOp> {
 
 	@Override
-	public IStatus createNewProject(NewModuleFragmentOp op, IProgressMonitor monitor) throws CoreException {
+	public IStatus createNewProject(NewModuleFragmentOp op, IProgressMonitor monitor)
+		throws CoreException, InterruptedException {
+
 		IStatus retval = Status.OK_STATUS;
 
 		String projectName = op.getProjectName().content();
@@ -82,12 +85,9 @@ public class MavenModuleFragmentProjectProvider
 
 		IPath projectLocation = location.append(projectName);
 
-		try {
-			MavenUtil.importProject(projectLocation.toPortableString(), monitor);
-		}
-		catch (InterruptedException ie) {
-			return LiferayMavenCore.createErrorStatus("fail to import liferay module fragment project.", ie);
-		}
+		CoreUtil.openProject(projectName, projectLocation, monitor);
+
+		MavenUtil.updateProjectConfiguration(projectName, projectLocation.toOSString(), monitor);
 
 		return retval;
 	}

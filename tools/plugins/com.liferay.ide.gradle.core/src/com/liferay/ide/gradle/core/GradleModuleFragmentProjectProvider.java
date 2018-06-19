@@ -16,6 +16,7 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
@@ -92,6 +93,8 @@ public class GradleModuleFragmentProjectProvider
 		NewModuleFragmentOpMethods.copyOverrideFiles(op);
 
 		IPath projecLocation = location.append(projectName);
+
+		CoreUtil.openProject(projectName, projecLocation, monitor);
 
 		boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
 		boolean useDefaultLocation = op.getUseDefaultLocation().content(true);
