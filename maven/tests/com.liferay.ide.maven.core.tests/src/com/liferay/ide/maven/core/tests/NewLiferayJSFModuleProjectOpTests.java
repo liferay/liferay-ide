@@ -19,27 +19,18 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
-import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOpMethods;
-import com.liferay.ide.project.core.tests.ProjectCoreBase;
 
 import java.io.File;
 
 import java.net.URL;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.platform.ProgressMonitorBridge;
-import org.eclipse.wst.validation.internal.operations.ValidatorManager;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -48,8 +39,7 @@ import org.junit.Test;
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings("restriction")
-public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
+public class NewLiferayJSFModuleProjectOpTests {
 
 	@Before
 	public void clearWorkspace() throws Exception {
@@ -66,14 +56,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 		op.setProjectName("Test14");
 		op.setTemplateName("alloy");
 
-		Status status = NewLiferayJSFModuleProjectOpMethods.execute(
-			op, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(status.ok());
-
-		_waitForBuildAndValidation();
-
-		IProject project = CoreUtil.getProject("Test14");
+		IProject project = MavenTestUtil.create(op);
 
 		Assert.assertNotNull(project);
 	}
@@ -86,14 +69,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 		op.setProjectName("Test15");
 		op.setTemplateName("icefaces");
 
-		Status status = NewLiferayJSFModuleProjectOpMethods.execute(
-			op, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(status.ok());
-
-		_waitForBuildAndValidation();
-
-		IProject project = CoreUtil.getProject("Test15");
+		IProject project = MavenTestUtil.create(op);
 
 		Assert.assertNotNull(project);
 	}
@@ -106,12 +82,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 		existedProjectop.setProjectName("Testq10");
 		existedProjectop.setTemplateName("alloy");
 
-		Status exStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-			existedProjectop, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(exStatus.ok());
-
-		IProject existedProject = CoreUtil.getProject(existedProjectop.getProjectName().content());
+		IProject existedProject = MavenTestUtil.create(existedProjectop);
 
 		Assert.assertNotNull(existedProject);
 	}
@@ -124,12 +95,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 		existedProjectop.setProjectName("Test11");
 		existedProjectop.setTemplateName("jsf");
 
-		Status exStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-			existedProjectop, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(exStatus.ok());
-
-		IProject existedProject = CoreUtil.getProject(existedProjectop.getProjectName().content());
+		IProject existedProject = MavenTestUtil.create(existedProjectop);
 
 		Assert.assertNotNull(existedProject);
 	}
@@ -142,12 +108,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 		existedProjectop.setProjectName("Test9");
 		existedProjectop.setTemplateName("icefaces");
 
-		Status exStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-			existedProjectop, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(exStatus.ok());
-
-		IProject existedProject = CoreUtil.getProject(existedProjectop.getProjectName().content());
+		IProject existedProject = MavenTestUtil.create(existedProjectop);
 
 		Assert.assertNotNull(existedProject);
 	}
@@ -160,12 +121,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 		existedProjectop.setProjectName("Test8");
 		existedProjectop.setTemplateName("primefaces");
 
-		Status exStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-			existedProjectop, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(exStatus.ok());
-
-		IProject existedProject = CoreUtil.getProject(existedProjectop.getProjectName().content());
+		IProject existedProject = MavenTestUtil.create(existedProjectop);
 
 		Assert.assertNotNull(existedProject);
 	}
@@ -178,12 +134,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 		existedProjectop.setProjectName("Test7");
 		existedProjectop.setTemplateName("richfaces");
 
-		Status exStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-			existedProjectop, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(exStatus.ok());
-
-		IProject existedProject = CoreUtil.getProject(existedProjectop.getProjectName().content());
+		IProject existedProject = MavenTestUtil.create(existedProjectop);
 
 		Assert.assertNotNull(existedProject);
 	}
@@ -196,12 +147,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 		existedProjectop.setProjectProvider("gradle-jsf");
 		existedProjectop.setTemplateName("primefaces");
 
-		Status exStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-			existedProjectop, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(exStatus.ok());
-
-		IProject existedProject = CoreUtil.getProject(existedProjectop.getProjectName().content());
+		IProject existedProject = MavenTestUtil.create(existedProjectop);
 
 		Assert.assertNotNull(existedProject);
 
@@ -221,12 +167,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 		existedProjectop.setProjectName("Test2");
 		existedProjectop.setTemplateName("richfaces");
 
-		Status exStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-			existedProjectop, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(exStatus.ok());
-
-		IProject existedProject = CoreUtil.getProject(existedProjectop.getProjectName().content());
+		IProject existedProject = MavenTestUtil.create(existedProjectop);
 
 		Assert.assertNotNull(existedProject);
 
@@ -274,12 +215,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 		mavenProjectop.setProjectName("Test4");
 		mavenProjectop.setTemplateName("icefaces");
 
-		Status mavenProjectStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-			mavenProjectop, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(mavenProjectStatus.ok());
-
-		IProject mavenProject = CoreUtil.getProject("Test4");
+		IProject mavenProject = MavenTestUtil.create(mavenProjectop);
 
 		Assert.assertNotNull(mavenProject);
 
@@ -290,12 +226,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 
 		mavenProjectop.setTemplateName("alloy");
 
-		Status gradleProjectStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-			graldeProjectop, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(gradleProjectStatus.ok());
-
-		IProject gradleProject = CoreUtil.getProject("Test5");
+		IProject gradleProject = MavenTestUtil.create(graldeProjectop);
 
 		Assert.assertNotNull(gradleProject);
 	}
@@ -304,7 +235,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 	public void testNewLiferayJSFWarWorkspaceMavenJsfProject() throws Exception {
 		_importWorkspaceProject("testWorkspace");
 
-		_waitForBuildAndValidation();
+		MavenTestUtil.waitForJobsToComplete();
 
 		IProject workspaceProject = CoreUtil.getProject("testWorkspace");
 
@@ -322,12 +253,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 
 		op.setLocation(location.append("wars").toOSString());
 
-		Status status = NewLiferayJSFModuleProjectOpMethods.execute(
-			op, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(status.ok());
-
-		IProject project = CoreUtil.getProject("Test13");
+		IProject project = MavenTestUtil.create(op);
 
 		Assert.assertNotNull(project);
 	}
@@ -340,14 +266,7 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 		op.setProjectName("Test16");
 		op.setTemplateName("primefaces");
 
-		Status status = NewLiferayJSFModuleProjectOpMethods.execute(
-			op, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(status.ok());
-
-		_waitForBuildAndValidation();
-
-		IProject project = CoreUtil.getProject("Test16");
+		IProject project = MavenTestUtil.create(op);
 
 		Assert.assertNotNull(project);
 	}
@@ -360,54 +279,9 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase {
 		op.setProjectName("Test17");
 		op.setTemplateName("richfaces");
 
-		Status status = NewLiferayJSFModuleProjectOpMethods.execute(
-			op, ProgressMonitorBridge.create(new NullProgressMonitor()));
-
-		Assert.assertTrue(status.ok());
-
-		_waitForBuildAndValidation();
-
-		IProject project = CoreUtil.getProject("Test17");
+		IProject project = MavenTestUtil.create(op);
 
 		Assert.assertNotNull(project);
-	}
-
-	@Override
-	protected void waitForBuildAndValidation(IProject project) throws Exception {
-		project.build(IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor());
-
-		_waitForBuildAndValidation();
-
-		project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
-
-		_waitForBuildAndValidation();
-	}
-
-	private static void _waitForBuildAndValidation() throws Exception {
-		IWorkspaceRoot root = null;
-
-		try {
-			ResourcesPlugin.getWorkspace().checkpoint(true);
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
-			Job.getJobManager().join(ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor());
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
-			Thread.sleep(800);
-			Job.getJobManager().beginRule(root = ResourcesPlugin.getWorkspace().getRoot(), null);
-		}
-		catch (InterruptedException ie) {
-			failTest(ie);
-		}
-		catch (IllegalArgumentException iae) {
-			failTest(iae);
-		}
-		catch (OperationCanceledException oce) {
-			failTest(oce);
-		}
-		finally {
-			if (root != null) {
-				Job.getJobManager().endRule(root);
-			}
-		}
 	}
 
 	private void _importWorkspaceProject(String name) throws Exception {

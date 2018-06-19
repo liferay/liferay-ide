@@ -192,6 +192,8 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.closeAndDelete(project.getName());
 	}
 

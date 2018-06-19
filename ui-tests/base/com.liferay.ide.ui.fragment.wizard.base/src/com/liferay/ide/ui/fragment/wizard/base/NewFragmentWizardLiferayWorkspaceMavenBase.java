@@ -51,6 +51,8 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -85,6 +87,8 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -118,6 +122,8 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 		dialogAction.cancel();
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
@@ -155,6 +161,8 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
@@ -188,6 +196,8 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 		dialogAction.confirm();
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
@@ -243,6 +253,8 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 		dialogAction.confirm();
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
