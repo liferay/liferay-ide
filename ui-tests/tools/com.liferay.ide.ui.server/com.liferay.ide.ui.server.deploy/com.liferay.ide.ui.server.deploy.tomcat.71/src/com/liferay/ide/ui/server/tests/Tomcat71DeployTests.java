@@ -20,6 +20,7 @@ import com.liferay.ide.ui.liferay.util.RuleUtil;
 import com.liferay.ide.ui.server.deploy.base.Tomcat7xDeployBase;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -54,6 +55,7 @@ public class Tomcat71DeployTests extends Tomcat7xDeployBase {
 		super.deployPluginPortlet();
 	}
 
+	@Ignore("unstable caused by css task using slowly net")
 	@Test
 	public void deployWar() {
 		super.deployWar();

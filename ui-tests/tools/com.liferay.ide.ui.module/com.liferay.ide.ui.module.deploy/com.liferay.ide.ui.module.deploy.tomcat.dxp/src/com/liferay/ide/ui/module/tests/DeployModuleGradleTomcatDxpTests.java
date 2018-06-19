@@ -118,6 +118,7 @@ public class DeployModuleGradleTomcatDxpTests extends DeployModuleGradleTomcat7x
 		super.deployWarHook();
 	}
 
+	@Ignore("unstable caused by css task using slowly net")
 	@Test
 	public void deployWarMvcPortlet() {
 		super.deployWarMvcPortlet();
