@@ -70,38 +70,7 @@ public class GradleUtil {
 			return GradleCore.createErrorStatus("Unable to find gradle project at " + dir);
 		}
 
-		Validator<File> projectDirValidator = Validators.and(
-			Validators.requiredDirectoryValidator("Project root directory"),
-			Validators.nonWorkspaceFolderValidator("Project root directory"));
-
-		Validator<GradleDistributionInfo> gradleDistributionValidator = GradleDistributionInfo.validator();
-
-		Validator<Boolean> applyWorkingSetsValidator = Validators.nullValidator();
-		Validator<List<String>> workingSetsValidator = Validators.nullValidator();
-		Validator<File> gradleUserHomeValidator = Validators.optionalDirectoryValidator("Gradle user home");
-
-		ProjectImportConfiguration configuration = new ProjectImportConfiguration(
-			projectDirValidator, gradleDistributionValidator, gradleUserHomeValidator, applyWorkingSetsValidator,
-			workingSetsValidator);
-
-		// read configuration from gradle preference
-
-		ConfigurationManager configurationManager = CorePlugin.configurationManager();
-
-		WorkspaceConfiguration gradleConfig = configurationManager.loadWorkspaceConfiguration();
-
-		GradleDistribution gradleDistribution = gradleConfig.getGradleDistribution();
-
-		configuration.setProjectDir(dir.toFile());
-		configuration.setOverwriteWorkspaceSettings(false);
-		configuration.setDistributionInfo(gradleDistribution.getDistributionInfo());
-		configuration.setGradleUserHome(gradleConfig.getGradleUserHome());
-		configuration.setApplyWorkingSets(false);
-		configuration.setBuildScansEnabled(gradleConfig.isBuildScansEnabled());
-		configuration.setOfflineMode(gradleConfig.isOffline());
-		configuration.setAutoSync(true);
-
-		BuildConfiguration buildConfig = configuration.toBuildConfig();
+		BuildConfiguration buildConfig = _createBuildConfiguration(dir.toFile());
 
 		GradleWorkspaceManager gradleWorkspaceManager = CorePlugin.gradleWorkspaceManager();
 
@@ -187,7 +156,18 @@ public class GradleUtil {
 
 		Optional<GradleBuild> optional = gradleWorkspaceManager.getGradleBuild(project);
 
-		GradleBuild build = optional.get();
+		IPath path = project.getFullPath();
+
+		GradleBuild build = null;
+
+		if (!optional.isPresent()) {
+			BuildConfiguration buildConfig = _createBuildConfiguration(path.toFile());
+
+			build = gradleWorkspaceManager.getGradleBuild(buildConfig);
+		}
+		else {
+			build = optional.get();
+		}
 
 		new SynchronizationJob(NewProjectHandler.IMPORT_AND_MERGE, build).schedule();
 	}
@@ -219,6 +199,43 @@ public class GradleUtil {
 		launchConfigurationWC.doSave();
 
 		launchConfigurationWC.launch(ILaunchManager.RUN_MODE, monitor);
+	}
+
+	private static BuildConfiguration _createBuildConfiguration(File file) {
+		Validator<File> projectDirValidator = Validators.and(
+			Validators.requiredDirectoryValidator("Project root directory"),
+			Validators.nonWorkspaceFolderValidator("Project root directory"));
+
+		Validator<GradleDistributionInfo> gradleDistributionValidator = GradleDistributionInfo.validator();
+
+		Validator<Boolean> applyWorkingSetsValidator = Validators.nullValidator();
+		Validator<List<String>> workingSetsValidator = Validators.nullValidator();
+		Validator<File> gradleUserHomeValidator = Validators.optionalDirectoryValidator("Gradle user home");
+
+		ProjectImportConfiguration configuration = new ProjectImportConfiguration(
+			projectDirValidator, gradleDistributionValidator, gradleUserHomeValidator, applyWorkingSetsValidator,
+			workingSetsValidator);
+
+		// read configuration from gradle preference
+
+		ConfigurationManager configurationManager = CorePlugin.configurationManager();
+
+		WorkspaceConfiguration gradleConfig = configurationManager.loadWorkspaceConfiguration();
+
+		GradleDistribution gradleDistribution = gradleConfig.getGradleDistribution();
+
+		configuration.setProjectDir(file);
+		configuration.setOverwriteWorkspaceSettings(false);
+		configuration.setDistributionInfo(gradleDistribution.getDistributionInfo());
+		configuration.setGradleUserHome(gradleConfig.getGradleUserHome());
+		configuration.setApplyWorkingSets(false);
+		configuration.setBuildScansEnabled(gradleConfig.isBuildScansEnabled());
+		configuration.setOfflineMode(gradleConfig.isOffline());
+		configuration.setAutoSync(true);
+
+		BuildConfiguration buildConfig = configuration.toBuildConfig();
+
+		return buildConfig;
 	}
 
 	private static GradleRunConfigurationAttributes _getRunConfigurationAttributes(
