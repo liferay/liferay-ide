@@ -1239,60 +1239,62 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		builder.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
 		builder.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 
+		if (FileUtil.notExists(ivySettingFile)) {
+			return;
+		}
+
 		try (InputStream ivyInput = Files.newInputStream(ivySettingFile.toPath())) {
-			if (ivySettingFile.exists()) {
-				Document doc = builder.build(ivyInput);
+			Document doc = builder.build(ivyInput);
 
-				Element itemRem = null;
-				Element elementRoot = doc.getRootElement();
+			Element itemRem = null;
+			Element elementRoot = doc.getRootElement();
 
-				List<Element> resolversElements = elementRoot.getChildren("resolvers");
+			List<Element> resolversElements = elementRoot.getChildren("resolvers");
 
-				for (Iterator<Element> resolversIterator = resolversElements.iterator(); resolversIterator.hasNext();) {
-					Element resolversElement = resolversIterator.next();
+			for (Iterator<Element> resolversIterator = resolversElements.iterator(); resolversIterator.hasNext();) {
+				Element resolversElement = resolversIterator.next();
 
-					List<Element> chainElements = resolversElement.getChildren("chain");
+				List<Element> chainElements = resolversElement.getChildren("chain");
 
-					for (Iterator<Element> chainIterator = chainElements.iterator(); chainIterator.hasNext();) {
-						Element chainElement = chainIterator.next();
+				for (Iterator<Element> chainIterator = chainElements.iterator(); chainIterator.hasNext();) {
+					Element chainElement = chainIterator.next();
 
-						List<Element> resolverElements = chainElement.getChildren("resolver");
+					List<Element> resolverElements = chainElement.getChildren("resolver");
 
-						Iterator<Element> resolverIterator = resolverElements.iterator();
+					Iterator<Element> resolverIterator = resolverElements.iterator();
 
-						while (resolverIterator.hasNext()) {
-							Element resolverItem = resolverIterator.next();
+					while (resolverIterator.hasNext()) {
+						Element resolverItem = resolverIterator.next();
 
-							String resolverRefItem = resolverItem.getAttributeValue("ref");
+						String resolverRefItem = resolverItem.getAttributeValue("ref");
 
-							if (resolverRefItem.equals("liferay-private")) {
-								resolverIterator.remove();
+						if (resolverRefItem.equals("liferay-private")) {
+							resolverIterator.remove();
 
-								itemRem = resolverItem;
-							}
+							itemRem = resolverItem;
 						}
 					}
-
-					elementRoot.removeContent(itemRem);
-
-					List<Element> ibiblioElements = resolversElement.getChildren("ibiblio");
-
-					for (Iterator<Element> ibiblioIterator = ibiblioElements.iterator(); ibiblioIterator.hasNext();) {
-						Element ibiblioElement = ibiblioIterator.next();
-
-						String liferayPrivateName = ibiblioElement.getAttributeValue("name");
-
-						if (liferayPrivateName.equals("liferay-private")) {
-							ibiblioIterator.remove();
-							itemRem = ibiblioElement;
-						}
-					}
-
-					elementRoot.removeContent(itemRem);
 				}
 
-				_saveXML(ivySettingFile, doc);
+				elementRoot.removeContent(itemRem);
+
+				List<Element> ibiblioElements = resolversElement.getChildren("ibiblio");
+
+				for (Iterator<Element> ibiblioIterator = ibiblioElements.iterator(); ibiblioIterator.hasNext();) {
+					Element ibiblioElement = ibiblioIterator.next();
+
+					String liferayPrivateName = ibiblioElement.getAttributeValue("name");
+
+					if (liferayPrivateName.equals("liferay-private")) {
+						ibiblioIterator.remove();
+						itemRem = ibiblioElement;
+					}
+				}
+
+				elementRoot.removeContent(itemRem);
 			}
+
+			_saveXML(ivySettingFile, doc);
 		}
 		catch (CoreException | IOException | JDOMException e) {
 			ProjectUI.logError(e);
