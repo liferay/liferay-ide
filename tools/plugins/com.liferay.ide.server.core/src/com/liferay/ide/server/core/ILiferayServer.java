@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.StringPool;
 
 import java.net.URL;
 
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
@@ -54,5 +55,7 @@ public interface ILiferayServer {
 	public String DEFAULT_PASSWORD = defaultPrefs.get("default.password", StringPool.EMPTY);
 
 	public String DEFAULT_USERNAME = defaultPrefs.get("default.username", StringPool.EMPTY);
+
+	public QualifiedName LIFERAY_SERVER_JOB = new QualifiedName(LiferayServerCore.PLUGIN_ID, "LIFERAY_SERVER_JOB");
 
 }

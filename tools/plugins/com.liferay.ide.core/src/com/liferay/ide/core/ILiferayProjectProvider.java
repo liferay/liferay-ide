@@ -37,6 +37,6 @@ public interface ILiferayProjectProvider {
 
 	public boolean provides(Class<?> type);
 
-	public QualifiedName LIFERAY_PROJECT = new QualifiedName(LiferayCore.PLUGIN_ID, "LIFERAY_PROJECT");
+	public QualifiedName LIFERAY_PROJECT_JOB = new QualifiedName(LiferayCore.PLUGIN_ID, "LIFERAY_PROJECT_JOB");
 
 }
