@@ -200,7 +200,7 @@ public class LiferayMavenWorkspaceProjectProvider
 
 		};
 
-		job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT, new Object());
+		job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
 
 		job.schedule();
 	}

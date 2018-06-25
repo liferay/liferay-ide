@@ -97,7 +97,7 @@ public class MavenTestUtil {
 
 	public static void waitForJobsToComplete() throws InterruptedException, CoreException {
 		JobHelpers.waitForJobs(job -> {
-			Object property = job.getProperty(ILiferayProjectProvider.LIFERAY_PROJECT);
+			Object property = job.getProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB);
 
 			if (property != null) {
 				return true;
