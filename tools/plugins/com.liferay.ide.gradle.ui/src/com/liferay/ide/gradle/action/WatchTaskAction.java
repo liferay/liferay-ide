@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.ui.GradleUI;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.gogo.GogoTelnetClient;
 import com.liferay.ide.ui.action.AbstractObjectAction;
 
@@ -66,9 +67,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 			IProject project = (IProject)elem;
 
-			String task = "watch";
-
-			String jobName = project.getName() + " - " + task;
+			String jobName = project.getName() + " - watch";
 
 			IJobManager jobManager = Job.getJobManager();
 
@@ -88,14 +87,15 @@ public class WatchTaskAction extends AbstractObjectAction {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
-						GradleUtil.runGradleTask((IProject)elem, new String[] {
+
+						GradleUtil.runGradleTask(project, new String[] {
 							"watch"
 						}, new String[] {
 							"--continuous"
 						}, monitor);
 					}
 					catch (Exception e) {
-						return ProjectUI.createErrorStatus("Error running Gradle task " + task, e);
+						return ProjectUI.createErrorStatus("Error running Gradle watch task for project " + project, e);
 					}
 
 					return Status.OK_STATUS;
@@ -140,6 +140,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 				});
 
+			job.setProperty(ILiferayServer.LIFERAY_SERVER_JOB, this);
 			job.setSystem(true);
 			job.schedule();
 		}

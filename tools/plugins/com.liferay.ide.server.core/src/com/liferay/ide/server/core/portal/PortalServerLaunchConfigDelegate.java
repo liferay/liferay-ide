@@ -14,20 +14,17 @@
 
 package com.liferay.ide.server.core.portal;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
-
 import java.lang.reflect.Method;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -223,14 +220,10 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 
 						IJobManager jobManager = Job.getJobManager();
 
-						IProject[] projects = CoreUtil.getAllProjects();
+						Job[] jobs = jobManager.find(null);
 
-						for (IProject project : projects) {
-							String jobName = project.getName() + " - watch";
-
-							Job[] jobs = jobManager.find(jobName);
-
-							for (Job job : jobs) {
+						for (Job job : jobs) {
+							if (job.getProperty(ILiferayServer.LIFERAY_SERVER_JOB) != null) {
 								job.cancel();
 							}
 						}

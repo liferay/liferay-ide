@@ -32,13 +32,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import java.lang.reflect.Method;
-
 import java.net.URL;
-
 import java.nio.file.Files;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -72,7 +67,6 @@ import org.eclipse.wst.server.core.internal.Base;
 import org.eclipse.wst.server.core.internal.IMemento;
 import org.eclipse.wst.server.core.internal.XMLMemento;
 import org.eclipse.wst.server.core.model.RuntimeDelegate;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.prefs.BackingStoreException;
@@ -620,14 +614,10 @@ public class LiferayServerCore extends Plugin {
 
 		IJobManager jobManager = Job.getJobManager();
 
-		IProject[] projects = CoreUtil.getAllProjects();
+		Job[] jobs = jobManager.find(null);
 
-		for (IProject project : projects) {
-			String jobName = project.getName() + " - watch";
-
-			Job[] jobs = jobManager.find(jobName);
-
-			for (Job job : jobs) {
+		for (Job job : jobs) {
+			if (job.getProperty(ILiferayServer.LIFERAY_SERVER_JOB) != null) {
 				job.cancel();
 			}
 		}
