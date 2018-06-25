@@ -46,6 +46,8 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
@@ -66,6 +68,8 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 		wizardAction.newModuleInfo.preparePackageName(packageName);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
@@ -90,6 +94,8 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
@@ -110,6 +116,8 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 		wizardAction.newModuleInfo.preparePackageName(packageName);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
@@ -132,6 +140,8 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
@@ -152,6 +162,8 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 		wizardAction.newModuleInfo.preparePackageName(packageName);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
@@ -174,6 +186,8 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
@@ -194,6 +208,8 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 		wizardAction.newModuleInfo.preparePackageName(packageName);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
@@ -216,6 +232,8 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
@@ -237,6 +255,8 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
@@ -257,6 +277,8 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 		wizardAction.newModuleInfo.preparePackageName(packageName);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 

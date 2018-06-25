@@ -746,6 +746,8 @@ public interface UI {
 
 	public final String SIMULATION_PANEL_ENTRY = "simulation-panel-entry";
 
+	public final String SOCIAL_BOOKMARK = "social-bookmark";
+
 	public final String SOURCE = "Source";
 
 	public final String SOURCE_FOLDER = "Source folder:";
