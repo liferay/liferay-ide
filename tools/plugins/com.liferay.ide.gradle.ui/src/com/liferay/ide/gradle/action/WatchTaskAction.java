@@ -17,6 +17,7 @@ package com.liferay.ide.gradle.action;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
+import com.liferay.ide.gradle.ui.GradleUI;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.server.core.gogo.GogoTelnetClient;
 import com.liferay.ide.ui.action.AbstractObjectAction;
@@ -107,82 +108,90 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 					@Override
 					public void done(IJobChangeEvent event) {
-						IFile bndFile = project.getFile("bnd.bnd");
+						List<Path> bndPaths = _getBndPaths(project);
 
-						List<Path> bndFiles = new ArrayList<>();
-
-						if (FileUtil.notExists(bndFile)) {
-							IPath location = project.getLocation();
-
-							try {
-								Files.walkFileTree(
-									Paths.get(location.toOSString()), new SimpleFileVisitor<Path>() {
-
-										@Override
-										public FileVisitResult postVisitDirectory(Path dir, IOException e)
-											throws IOException {
-
-											if (FileUtil.exists(new File(dir.toFile(), "bnd.bnd"))) {
-												return FileVisitResult.SKIP_SUBTREE;
-											}
-
-											return FileVisitResult.CONTINUE;
-										}
-
-										@Override
-										public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-											throws IOException {
-
-											if (file.endsWith("bnd.bnd")) {
-												bndFiles.add(file);
-
-												return FileVisitResult.SKIP_SIBLINGS;
-											}
-
-											return FileVisitResult.CONTINUE;
-										}
-									});
-							}
-							catch (IOException e) {
-							}
-						}
-						else {
-							File bnd = FileUtil.getFile(bndFile);
-
-							bndFiles.add(bnd.toPath());
-						}
-
-						if (ListUtil.isEmpty(bndFiles)) {
+						if (ListUtil.isEmpty(bndPaths)) {
 							return;
 						}
 
-						for (Path bndPath : bndFiles) {
-							Properties properties = new Properties();
+						try (GogoTelnetClient client = new GogoTelnetClient("localhost", 11311)) {
+							for (Path bndPath : bndPaths) {
+								Properties properties = new Properties();
 
-							try (InputStream in = Files.newInputStream(bndPath)) {
-								properties.load(in);
+								try (InputStream in = Files.newInputStream(bndPath)) {
 
-								String bsn = properties.getProperty("Bundle-SymbolicName");
+									properties.load(in);
 
-								GogoTelnetClient client = new GogoTelnetClient("localhost", 11311);
+									String bsn = properties.getProperty("Bundle-SymbolicName");
 
-								String cmd = "uninstall " + bsn;
 
-								client.send(cmd);
+									String cmd = "uninstall " + bsn;
 
-								client.close();
+									client.send(cmd);
+								}
+								catch (IOException ioe) {
+								}
 							}
-							catch (IOException ioe) {
-							}
+						}
+						catch (IOException e) {
+							GradleUI.logError("Could not uninstall bundles installed by watch task", e);
 						}
 					}
 
 				});
 
 			job.setSystem(true);
-
 			job.schedule();
 		}
+	}
+
+	private List<Path> _getBndPaths(IProject project) {
+		List<Path> bndPaths = new ArrayList<>();
+
+		IFile projectBndFile = project.getFile("bnd.bnd");
+
+		if (FileUtil.notExists(projectBndFile)) {
+			IPath location = project.getLocation();
+
+			try {
+				Files.walkFileTree(
+					Paths.get(location.toOSString()), new SimpleFileVisitor<Path>() {
+
+						@Override
+						public FileVisitResult postVisitDirectory(Path dir, IOException e)
+							throws IOException {
+
+							if (FileUtil.exists(new File(dir.toFile(), "bnd.bnd"))) {
+								return FileVisitResult.SKIP_SUBTREE;
+							}
+
+							return FileVisitResult.CONTINUE;
+						}
+
+						@Override
+						public FileVisitResult visitFile(Path path, BasicFileAttributes attrs)
+							throws IOException {
+
+							if (path.endsWith("bnd.bnd")) {
+								bndPaths.add(path);
+
+								return FileVisitResult.SKIP_SIBLINGS;
+							}
+
+							return FileVisitResult.CONTINUE;
+						}
+					});
+			}
+			catch (IOException e) {
+			}
+		}
+		else {
+			File bndFile = FileUtil.getFile(projectBndFile);
+
+			bndPaths.add(bndFile.toPath());
+		}
+
+		return bndPaths;
 	}
 
 }
