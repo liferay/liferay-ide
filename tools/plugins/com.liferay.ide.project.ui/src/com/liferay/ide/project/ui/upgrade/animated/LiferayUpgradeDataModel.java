@@ -172,8 +172,7 @@ public interface LiferayUpgradeDataModel extends Element {
 	public void setSdkLocation(String sdkLocation);
 
 	public String DEFAULT_BUNDLE_URL =
-		"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tom" +
-			"cat-7.0-ga5-20171018150113838.zip";
+		"https://releases-cdn.liferay.com/portal/7.0.6-ga7/liferay-ce-portal-tomcat-7.0-ga7-20180507111753223.zip";
 
 	// *** ConvertLiferayWorkspace ***
 

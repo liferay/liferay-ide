@@ -105,8 +105,7 @@ public class NewMavenLiferayWorkspaceOpTests {
 		String bundleUrl = url.content();
 
 		Assert.assertEquals(
-			"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5" +
-				"/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip",
+			"https://releases-cdn.liferay.com/portal/7.0.6-ga7/liferay-ce-portal-tomcat-7.0-ga7-20180507111753223.zip",
 				bundleUrl);
 
 		op.execute(new ProgressMonitor());
@@ -202,8 +201,7 @@ public class NewMavenLiferayWorkspaceOpTests {
 		String projectName = "test-liferay-workspace-url";
 
 		String bundleUrl =
-			"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5" +
-				"/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
+			"https://releases-cdn.liferay.com/portal/7.0.6-ga7/liferay-ce-portal-tomcat-7.0-ga7-20180507111753223.zip";
 
 		IWorkspaceRoot wsRoot = CoreUtil.getWorkspaceRoot();
 
