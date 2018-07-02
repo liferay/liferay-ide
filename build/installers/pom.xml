@@ -34,24 +34,24 @@
 
     <properties>
         <install-builder-executable>${install-builder-home}/bin/builder</install-builder-executable>
-        <bundle-support-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.portal.tools.bundle.support</bundle-support-download-base>
-        <bundle-support-name>com.liferay.portal.tools.bundle.support-3.2.2.jar</bundle-support-name>
-        <bundle-support-version>3.2.2</bundle-support-version>
-        <bundle-support-md5>ee67fb9d9051c32e62ef2fbabc0cd505</bundle-support-md5>
+        <bundle-support-download-base>https://repository-cdn.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.portal.tools.bundle.support</bundle-support-download-base>
+        <bundle-support-name>com.liferay.portal.tools.bundle.support-3.2.5.jar</bundle-support-name>
+        <bundle-support-version>3.2.5</bundle-support-version>
+        <bundle-support-md5>ae70a9f3dc7875a08f7cbe729bee07d2</bundle-support-md5>
         <gw-latest-download-url>https://github.com/david-truong/gw/releases/download/v1.0.1/gw.jar</gw-latest-download-url>
         <gw-latest-md5>488ddaed413c0f7ea67df049175380eb</gw-latest-md5>
-        <portal-download-base>http://mirrors/files.liferay.com/private/ee/portal</portal-download-base>
+        <portal-download-base>https://files-cdn.liferay.com/private/ee/portal</portal-download-base>
         <portal-version>7.0.10.7</portal-version>
         <portal-zip-name>liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</portal-zip-name>
-        <portal-ce-download-base>http://mirrors/releases.liferay.com/portal</portal-ce-download-base>
-        <portal-ce-version>7.1.0-b2</portal-ce-version>
-        <portal-ce-zip-name>liferay-ce-portal-tomcat-7.1-b2-20180525120518222.zip</portal-ce-zip-name>
-        <plugin-sdk-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
-        <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</plugin-sdk-zip-name>
-        <plugin-sdk-version>1.0.16</plugin-sdk-version>
+        <portal-ce-download-base>https://releases-cdn.liferay.com/portal</portal-ce-download-base>
+        <portal-ce-version>7.1.0-rc1</portal-ce-version>
+        <portal-ce-zip-name>liferay-ce-portal-tomcat-7.1-rc1-20180626164228923.zip</portal-ce-zip-name>
+        <plugin-sdk-download-base>https://repository-cdn.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
+        <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.19-withdependencies.zip</plugin-sdk-zip-name>
+        <plugin-sdk-version>1.0.19</plugin-sdk-version>
         <jpmcli-latest-download-url>https://oss.sonatype.org/content/repositories/snapshots/biz/aQute/bnd/biz.aQute.jpm.run/4.0.0-SNAPSHOT/biz.aQute.jpm.run-4.0.0-20180530.041903-6.jar</jpmcli-latest-download-url>
         <jpmcli-latest-md5>219dd25224a9ac3a7af5ffb3bd199598</jpmcli-latest-md5>
-        <bnd-latest-download-url>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/biz/aQute/bnd/biz.aQute.bnd/3.5.0/biz.aQute.bnd-3.5.0.jar</bnd-latest-download-url>
+        <bnd-latest-download-url>https://repository-cdn.liferay.com/nexus/content/groups/public/biz/aQute/bnd/biz.aQute.bnd/3.5.0/biz.aQute.bnd-3.5.0.jar</bnd-latest-download-url>
         <bnd-latest-md5>19983bd645ec65d162355bd4dac910fa</bnd-latest-md5>
     </properties>
 
@@ -76,6 +76,7 @@
                             <directory>shared/download</directory>
                             <includes>
                                 <include>blade.jar</include>
+                                <include>com.liferay.portal.tools.bundle.support.jar</include>
                                 <include>gw.jar</include>
                             </includes>
                         </fileset>
