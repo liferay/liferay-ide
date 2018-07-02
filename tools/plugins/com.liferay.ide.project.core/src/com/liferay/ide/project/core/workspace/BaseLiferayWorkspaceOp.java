@@ -53,10 +53,10 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 	public void setServerName(String value);
 
 	public final String LIFERAY_70_BUNDLE_URL =
-		"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
+		"https://releases-cdn.liferay.com/portal/7.0.6-ga7/liferay-ce-portal-tomcat-7.0-ga7-20180507111753223.zip";
 
 	public final String LIFERAY_71_BUNDLE_URL =
-		"https://cdn.lfrs.sl/releases.liferay.com/portal/7.1.0-m1/liferay-ce-portal-tomcat-7.1-m1-20180223151209360.zip";
+		"https://releases-cdn.liferay.com/portal/7.1.0-b3/liferay-ce-portal-tomcat-7.1-b3-20180611140920623.zip";
 
 	// BundleUrl
 
