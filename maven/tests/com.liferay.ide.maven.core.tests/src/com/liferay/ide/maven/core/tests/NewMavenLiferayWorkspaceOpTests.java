@@ -191,7 +191,8 @@ public class NewMavenLiferayWorkspaceOpTests {
 
 		String xml = FileUtil.readContents(pomFile);
 
-		Assert.assertTrue(xml.contains(BaseLiferayWorkspaceOp.LIFERAY_71_BUNDLE_URL));
+		Assert.assertTrue(xml.contains("https://releases-cdn.liferay.com/portal/7.1.0-m1/"
+			+ "liferay-ce-portal-tomcat-7.1-m1-20180223151209360.zip"));
 	}
 
 	@Test
