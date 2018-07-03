@@ -57,7 +57,7 @@
                             <goal>wget</goal>
                         </goals>
                         <configuration>
-                            <url>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk/1.0.16/com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</url>
+                            <url>https://repository-cdn.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk/1.0.16/com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</url>
                             <outputDirectory>${liferay.bundles.dir}</outputDirectory>
                             <outputFileName>com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</outputFileName>
                             <md5>74498e30292fcde3f007a159ba283ed2</md5>
