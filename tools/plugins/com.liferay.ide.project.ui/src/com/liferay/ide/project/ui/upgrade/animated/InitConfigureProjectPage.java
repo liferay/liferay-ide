@@ -74,6 +74,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.jobs.IJobManager;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -125,6 +127,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
 import org.osgi.framework.Version;
+
 
 /**
  * @author Simon Jiang
@@ -477,6 +480,10 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 									ILiferayProjectImporter importer = LiferayCore.getImporter("gradle");
 
 									importer.importProjects(newPath, monitor);
+
+									IJobManager jobManager = Job.getJobManager();
+
+									jobManager.join("org.eclipse.buildship.core.jobs", null);
 
 									if (dataModel.getDownloadBundle().content()) {
 										_createInitBundle(monitor);
