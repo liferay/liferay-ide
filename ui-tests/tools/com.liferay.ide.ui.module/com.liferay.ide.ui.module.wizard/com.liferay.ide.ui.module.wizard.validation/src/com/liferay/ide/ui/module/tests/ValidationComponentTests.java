@@ -134,6 +134,8 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		String packageName = project.getName() + ".portlet";
 		String className = project.getName().substring(0, 1).toUpperCase() + project.getName().substring(1);
 
