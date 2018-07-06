@@ -57,9 +57,9 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory {
 		if (FileUtil.exists(modulesPath) && FileUtil.exists(standalonePath) && FileUtil.exists(binPath)) {
 			String vers = getManifestPropFromJBossModulesFolder(
 				new File[] {new File(path.toPortableString(), "modules")}, "org.jboss.as.product",
-				"wildfly-full/dir/META-INF", _WF_100_RELEASE_MANIFEST_KEY);
+				"wildfly-full/dir/META-INF", _WF_RELEASE_MANIFEST_KEY);
 
-			if ((vers != null) && vers.startsWith("10.")) {
+			if ((vers != null) && (vers.startsWith("10.") || vers.startsWith("11."))) {
 				return true;
 			}
 			else {
@@ -150,6 +150,6 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory {
 		};
 	}
 
-	private static final String _WF_100_RELEASE_MANIFEST_KEY = "JBoss-Product-Release-Version";
+	private static final String _WF_RELEASE_MANIFEST_KEY = "JBoss-Product-Release-Version";
 
 }
