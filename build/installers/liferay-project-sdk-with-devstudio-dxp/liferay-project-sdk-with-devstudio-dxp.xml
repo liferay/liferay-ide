@@ -30,7 +30,7 @@
                             <origin>../shared/download/com.liferay.portal.tools.bundle.support.jar</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../shared/download/liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</origin>
+                            <origin>../shared/download/liferay-dxp-tomcat-7.1.10-ga1-20180703090613030.zip</origin>
                         </distributionFile>
                         <distributionFile>
                             <origin>../shared/download/com.liferay.portal.plugins.sdk-1.0.19-withdependencies.zip</origin>
@@ -177,8 +177,8 @@
             <progressText>Creating directory...</progressText>
         </createDirectory>
         <copyFile>
-            <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</destination>
-            <origin>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</origin>
+            <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-tomcat-7.1.10-ga1-20180703090613030.zip</destination>
+            <origin>${installdir}${platform_path_separator}liferay-dxp-tomcat-7.1.10-ga1-20180703090613030.zip</origin>
         </copyFile>
         <copyFile>
             <destination>${liferayBundlesPath}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.19-withdependencies.zip</destination>
@@ -301,7 +301,7 @@
         <propertiesFileSet>
             <file>${lrws}${platform_path_separator}gradle.properties</file>
             <key>liferay.workspace.bundle.url</key>
-            <value>https://api.liferay.com/downloads/portal/7.0.10.7/liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</value>
+            <value>https://api.liferay.com/downloads/portal/7.1.10/liferay-dxp-tomcat-7.1.10-ga1-20180703090613030.zip</value>
         </propertiesFileSet>
         <createDirectory>
             <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
@@ -454,7 +454,7 @@
             </ruleList>
         </runProgram>
         <deleteFile>
-            <path>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</path>
+            <path>${installdir}${platform_path_separator}liferay-dxp-tomcat-7.1.10-ga1-20180703090613030.zip</path>
         </deleteFile>
         <deleteFile>
             <path>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.19-withdependencies.zip</path>
