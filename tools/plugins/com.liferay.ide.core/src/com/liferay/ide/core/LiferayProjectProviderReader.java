@@ -50,7 +50,9 @@ public class LiferayProjectProviderReader extends ExtensionReader<ILiferayProjec
 		ILiferayProjectProvider[] providers = getProviders();
 
 		for (ILiferayProjectProvider provider : providers) {
-			if (provider.getProjectType().equals(projectType)) {
+			String type = provider.getProjectType();
+
+			if (type.equals(projectType)) {
 				retval.add(provider);
 			}
 		}

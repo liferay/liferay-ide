@@ -20,6 +20,14 @@ package com.liferay.ide.core.util;
  */
 public class StringUtil {
 
+	public static boolean equals(String s1, String s2) {
+		if ((s1 == null) || (s2 == null)) {
+			return false;
+		}
+
+		return s1.equals(s2);
+	}
+
 	public static boolean isQuoted(String string) {
 		if ((string == null) || (string.length() < 2)) {
 			return false;
@@ -86,6 +94,24 @@ public class StringUtil {
 		sb.append(content.substring(position, content.length()));
 
 		return sb.toString();
+	}
+
+	public static String trim(String string) {
+		if (string == null) {
+			return null;
+		}
+
+		return string.trim();
+	}
+
+	public static String trim(StringBuffer sb) {
+		if (sb == null) {
+			return null;
+		}
+
+		String string = sb.toString();
+
+		return string.trim();
 	}
 
 }

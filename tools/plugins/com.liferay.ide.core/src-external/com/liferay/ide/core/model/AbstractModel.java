@@ -138,7 +138,9 @@ public abstract class AbstractModel
 	}
 
 	protected SAXParser getSaxParser() throws FactoryConfigurationError, ParserConfigurationException, SAXException {
-		return SAXParserFactory.newInstance().newSAXParser();
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+
+		return factory.newSAXParser();
 	}
 
 	protected boolean isInSync(File localFile) {

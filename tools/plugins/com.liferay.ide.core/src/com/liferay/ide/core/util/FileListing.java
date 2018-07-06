@@ -94,7 +94,7 @@ public class FileListing {
 	 */
 	private static void _validateDirectory(File aDirectory) throws FileNotFoundException {
 		if (aDirectory == null) {
-			throw new IllegalArgumentException("Directory should not be null.");
+			throw new IllegalArgumentException("Directory should not be null");
 		}
 
 		if (!aDirectory.exists()) {

@@ -170,7 +170,9 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
 				}
 			}
 			else if (wrappedProperty) {
-				String[] values = value.toString().split(StringPool.COMMA);
+				String s = value.toString();
+
+				String[] values = s.split(StringPool.COMMA);
 
 				if (values.length == 1) {
 					v = _escapeValue(values[0]);
@@ -252,7 +254,8 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
 				 * itself; otherwise the list delimiter will be escaped
 				 */
 				if (lastValue.endsWith(_ESCAPE)) {
-					buf.append(_ESCAPE).append(_ESCAPE);
+					buf.append(_ESCAPE);
+					buf.append(_ESCAPE);
 				}
 
 				buf.append(_delimiter);

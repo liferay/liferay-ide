@@ -129,7 +129,9 @@ public class CoreUtil {
 			return result;
 		}
 
-		return v1.getQualifier().compareTo(v2.getQualifier());
+		String s1 = v1.getQualifier();
+
+		return s1.compareTo(v2.getQualifier());
 	}
 
 	public static boolean containsNullElement(Object[] array) {
@@ -266,6 +268,10 @@ public class CoreUtil {
 		return null;
 	}
 
+	public static IFile getIFileFromWorkspaceRoot(IPath path) {
+		return getWorkspaceRoot().getFile(path);
+	}
+
 	public static IProject getLiferayProject(IResource resource) {
 		IProject project = null;
 
@@ -283,10 +289,12 @@ public class CoreUtil {
 				for (IProject proj : projects) {
 					IPath location = proj.getLocation();
 
-					if ((location != null) && (project != null) && project.getLocation().isPrefixOf(location) &&
-						isLiferayProject(proj)) {
+					if ((location != null) && (project != null) && isLiferayProject(proj)) {
+						IPath projectLocation = project.getLocation();
 
-						return proj;
+						if (projectLocation.isPrefixOf(location)) {
+							return proj;
+						}
 					}
 				}
 			}
@@ -328,9 +336,6 @@ public class CoreUtil {
 	/**
 	 * try to get leaf child project that contains this file, cause a file also be
 	 * contained in the parent project
-	 *
-	 * @param file
-	 * @return
 	 */
 	public static IProject getProject(File file) {
 		IWorkspaceRoot ws = getWorkspaceRoot();
@@ -343,10 +348,13 @@ public class CoreUtil {
 			if (resource == null) {
 				resource = container;
 			}
-			else if (container.getProjectRelativePath().segmentCount() <
-						resource.getProjectRelativePath().segmentCount()) {
+			else {
+				IPath containerPath = container.getProjectRelativePath();
+				IPath resourcePath = resource.getProjectRelativePath();
 
-				resource = container;
+				if (containerPath.segmentCount() < resourcePath.segmentCount()) {
+					resource = container;
+				}
 			}
 		}
 
@@ -385,14 +393,20 @@ public class CoreUtil {
 		IClasspathEntry[] entries = project.readRawClasspath();
 
 		for (IClasspathEntry entry : entries) {
-			if ((entry.getEntryKind() != IClasspathEntry.CPE_SOURCE) || (entry.getPath().segmentCount() == 0)) {
+			if (entry.getEntryKind() != IClasspathEntry.CPE_SOURCE) {
+				continue;
+			}
+
+			IPath path = entry.getPath();
+
+			if (path.segmentCount() == 0) {
 				continue;
 			}
 
 			IContainer container = null;
 
-			if (entry.getPath().segmentCount() == 1) {
-				container = getProject(entry.getPath().segment(0));
+			if (path.segmentCount() == 1) {
+				container = getProject(path.segment(0));
 			}
 			else {
 				container = getWorkspaceRoot().getFolder(entry.getPath());
@@ -411,7 +425,7 @@ public class CoreUtil {
 	}
 
 	public static IWorkspaceRoot getWorkspaceRoot() {
-		return ResourcesPlugin.getWorkspace().getRoot();
+		return getWorkspace().getRoot();
 	}
 
 	public static File getWorkspaceRootFile() {
@@ -470,7 +484,13 @@ public class CoreUtil {
 	}
 
 	public static boolean isNullOrEmpty(String val) {
-		if ((val == null) || val.equals(StringPool.EMPTY) || val.trim().equals(StringPool.EMPTY)) {
+		if ((val == null) || val.equals(StringPool.EMPTY)) {
+			return true;
+		}
+
+		String s = val.trim();
+
+		if (s.equals(StringPool.EMPTY)) {
 			return true;
 		}
 

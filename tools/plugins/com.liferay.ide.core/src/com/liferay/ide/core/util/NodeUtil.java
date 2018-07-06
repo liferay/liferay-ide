@@ -78,7 +78,7 @@ public class NodeUtil {
 		for (int i = 0; i < children.getLength(); i++) {
 			Node child = children.item(i);
 
-			if (child instanceof Element && child.getNodeName().equals(elementName)) {
+			if (child instanceof Element && StringUtil.equals(child.getNodeName(), elementName)) {
 				return (Element)child;
 			}
 		}
@@ -140,7 +140,7 @@ public class NodeUtil {
 		for (int i = 0; i < children.getLength(); i++) {
 			Node child = children.item(i);
 
-			if (child instanceof Element && child.getNodeName().equals(childElement)) {
+			if (child instanceof Element && StringUtil.equals(child.getNodeName(), childElement)) {
 				return getTextContent((Element)child);
 			}
 		}
@@ -158,7 +158,7 @@ public class NodeUtil {
 		for (int i = 0; i < children.getLength(); i++) {
 			Node item = children.item(i);
 
-			if (item.getNodeName().equals(string)) {
+			if (StringUtil.equals(item.getNodeName(), string)) {
 				return item;
 			}
 		}
@@ -170,9 +170,9 @@ public class NodeUtil {
 		NodeList children = node.getChildNodes();
 
 		if (children.getLength() == 1) {
-			String value = children.item(0).getNodeValue();
+			Node childNode = children.item(0);
 
-			return value.trim();
+			return StringUtil.trim(childNode.getNodeValue());
 		}
 
 		StringBuffer sb = new StringBuffer();
@@ -180,12 +180,12 @@ public class NodeUtil {
 		Node child = node.getFirstChild();
 
 		while (child != null) {
-			sb.append(child.getNodeValue().trim());
+			sb.append(StringUtil.trim(child.getNodeValue()));
 
 			child = child.getNextSibling();
 		}
 
-		return sb.toString().trim();
+		return StringUtil.trim(sb);
 	}
 
 	public static Element insertChildElement(
@@ -222,7 +222,9 @@ public class NodeUtil {
 				newChildElement.appendChild(ownerDocument.createTextNode(initialTextContent));
 			}
 
-			if (parentElement.getLastChild().equals(refNode)) {
+			Node lastChild = parentElement.getLastChild();
+
+			if (lastChild.equals(refNode)) {
 				parentElement.appendChild(newChildElement);
 			}
 			else {
@@ -248,11 +250,15 @@ public class NodeUtil {
 	}
 
 	public static void removeChildren(Node node) {
-		if ((node == null) || (node.getChildNodes() == null) || (node.getChildNodes().getLength() <= 0)) {
+		if ((node == null) || (node.getChildNodes() == null)) {
 			return;
 		}
 
 		NodeList children = node.getChildNodes();
+
+		if (children.getLength() <= 0) {
+			return;
+		}
 
 		for (int i = 0; i < children.getLength(); i++) {
 			node.removeChild(children.item(i));
@@ -272,7 +278,9 @@ public class NodeUtil {
 
 			removeChildren(namespaceElement);
 
-			retval = namespaceElement.getOwnerDocument().createTextNode(textContent);
+			Document document = namespaceElement.getOwnerDocument();
+
+			retval = document.createTextNode(textContent);
 
 			namespaceElement.appendChild(retval);
 		}

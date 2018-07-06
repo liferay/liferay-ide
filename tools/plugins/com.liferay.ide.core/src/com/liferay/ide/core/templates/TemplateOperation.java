@@ -17,6 +17,7 @@ package com.liferay.ide.core.templates;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ListUtil;
 
+import freemarker.template.Configuration;
 import freemarker.template.Template;
 
 import java.io.ByteArrayInputStream;
@@ -119,7 +120,9 @@ public class TemplateOperation implements ITemplateOperation {
 		}
 
 		if (template == null) {
-			template = model.getConfig().getTemplate(model.getResource());
+			Configuration configuration = model.getConfig();
+
+			template = configuration.getTemplate(model.getResource());
 		}
 
 		return template;

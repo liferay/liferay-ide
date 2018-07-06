@@ -34,7 +34,9 @@ public class LiferayProjectImporterReader extends ExtensionReader<ILiferayProjec
 		ILiferayProjectImporter[] importers = getImporters();
 
 		for (ILiferayProjectImporter importer : importers) {
-			if (importer.getBuildType().equals(buildType)) {
+			String type = importer.getBuildType();
+
+			if (type.equals(buildType)) {
 				retval = importer;
 			}
 		}

@@ -78,17 +78,19 @@ public abstract class BaseLiferayProject implements ILiferayProject {
 				return null;
 			}
 
-			IJavaProject javaproject = JavaCore.create(project);
+			IJavaProject javaProject = JavaCore.create(project);
 
-			if (FileUtil.notExists(javaproject)) {
+			if (FileUtil.notExists(javaProject)) {
 				return null;
 			}
 
-			if (!javaproject.isOpen()) {
-				javaproject.open(new NullProgressMonitor());
+			if (!javaProject.isOpen()) {
+				javaProject.open(new NullProgressMonitor());
 			}
 
-			return CoreUtil.getSourceFolders(javaproject).toArray(new IFolder[0]);
+			List<IFolder> folders = CoreUtil.getSourceFolders(javaProject);
+
+			return folders.toArray(new IFolder[0]);
 		}
 		catch (JavaModelException jme) {
 			LiferayCore.logWarning(jme);
@@ -103,7 +105,9 @@ public abstract class BaseLiferayProject implements ILiferayProject {
 		}
 
 		for (String ignorePath : ignorePaths) {
-			if (resourcePath.segment(0).equals(ignorePath)) {
+			String s = resourcePath.segment(0);
+
+			if (s.equals(ignorePath)) {
 				return true;
 			}
 		}
