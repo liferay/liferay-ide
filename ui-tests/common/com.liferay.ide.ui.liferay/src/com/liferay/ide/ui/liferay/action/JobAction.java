@@ -22,6 +22,7 @@ import com.liferay.ide.ui.swtbot.condition.CloseProjectJobCondition;
 import com.liferay.ide.ui.swtbot.condition.ConsoleContentCondition;
 import com.liferay.ide.ui.swtbot.condition.IvyJobsCondition;
 import com.liferay.ide.ui.swtbot.condition.NoRunningJobsCondition;
+import com.liferay.ide.ui.swtbot.condition.NoRunningProjectBuildingJobs;
 import com.liferay.ide.ui.swtbot.condition.RefreshForSubnodeCondition;
 import com.liferay.ide.ui.swtbot.condition.ServerStartJobCondition;
 import com.liferay.ide.ui.swtbot.condition.ServerStopJobCondition;
@@ -74,6 +75,10 @@ public class JobAction extends UIAction {
 
 	public void waitForNoRunningJobs() {
 		ide.waitUntil(new NoRunningJobsCondition(), 5 * 60 * 1000);
+	}
+
+	public void waitForNoRunningProjectBuildingJobs() {
+		ide.waitUntil(new NoRunningProjectBuildingJobs(), 5 * 60 * 1000);
 	}
 
 	public void waitForServerStarted(String serverName) {
