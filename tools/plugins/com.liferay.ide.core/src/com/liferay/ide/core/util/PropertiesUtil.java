@@ -756,7 +756,7 @@ public class PropertiesUtil {
 
 								if (!resourceBundle.endsWith(PROPERTIES_FILE_SUFFIX) &&
 									!resourceBundle.contains(IPath.SEPARATOR + "") &&
-									 !(CoreUtil.isWindows() && resourceBundle.contains("\\"))) {
+									!(CoreUtil.isWindows() && resourceBundle.contains("\\"))) {
 
 									resourceBundle = new Path(
 										resourceBundle.replace(".", IPath.SEPARATOR + "")).toString();

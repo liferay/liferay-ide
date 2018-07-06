@@ -239,9 +239,7 @@ public abstract class AbstractEditingModel
 	public void transferListenersTo(IModelChangeProviderExtension target, IModelChangedListenerFilter filter) {
 		List<IModelChangedListener> oldList = (List<IModelChangedListener>)_fListeners.clone();
 
-		for (int i = 0; i < oldList.size(); i++) {
-			IModelChangedListener listener = (IModelChangedListener)oldList.get(i);
-
+		for (IModelChangedListener listener : oldList) {
 			if ((filter == null) || filter.accept(listener)) {
 
 				// add the listener to the target

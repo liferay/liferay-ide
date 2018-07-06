@@ -165,6 +165,7 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
 				}
 				else {
 					writeProperty(key, values);
+
 					return;
 				}
 			}

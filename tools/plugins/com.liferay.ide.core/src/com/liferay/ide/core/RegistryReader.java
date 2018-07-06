@@ -78,10 +78,8 @@ public abstract class RegistryReader {
 		IExtensionPoint point = Platform.getExtensionRegistry().getExtensionPoint(pluginId, extensionPointId);
 
 		if (point != null) {
-			IConfigurationElement[] elements = point.getConfigurationElements();
-
-			for (int i = 0; i < elements.length; i++) {
-				_internalReadElement(elements[i]);
+			for (IConfigurationElement element : point.getConfigurationElements()) {
+				_internalReadElement(element);
 			}
 		}
 
@@ -97,10 +95,8 @@ public abstract class RegistryReader {
 			return;
 		}
 
-		IConfigurationElement[] elements = point.getConfigurationElements();
-
-		for (int i = 0; i < elements.length; i++) {
-			_internalReadElement(elements[i]);
+		for (IConfigurationElement element : point.getConfigurationElements()) {
+			_internalReadElement(element);
 		}
 	}
 

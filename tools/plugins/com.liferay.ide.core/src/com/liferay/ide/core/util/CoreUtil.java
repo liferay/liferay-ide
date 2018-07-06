@@ -137,8 +137,8 @@ public class CoreUtil {
 			return true;
 		}
 
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == null) {
+		for (Object object : array) {
+			if (object == null) {
 				return true;
 			}
 		}
@@ -173,8 +173,8 @@ public class CoreUtil {
 
 			StringBuilder buf = new StringBuilder();
 
-			for (int i = 0; i < digest.length; i++) {
-				String hex = Integer.toHexString(0xFF & digest[i]);
+			for (byte d : digest) {
+				String hex = Integer.toHexString(0xFF & d);
 
 				if (hex.length() == 1) {
 					buf.append('0');
@@ -301,12 +301,11 @@ public class CoreUtil {
 
 	public static Object getNewObject(Object[] oldObjects, Object[] newObjects) {
 		if ((oldObjects != null) && (newObjects != null) && (oldObjects.length < newObjects.length)) {
-			for (int i = 0; i < newObjects.length; i++) {
+			for (Object newObject : newObjects) {
 				boolean found = false;
-				Object object = newObjects[i];
 
-				for (int j = 0; j < oldObjects.length; j++) {
-					if (oldObjects[j] == object) {
+				for (Object oldObject : oldObjects) {
+					if (oldObject == newObject) {
 						found = true;
 
 						break;
@@ -314,7 +313,7 @@ public class CoreUtil {
 				}
 
 				if (!found) {
-					return object;
+					return newObject;
 				}
 			}
 		}
@@ -517,6 +516,22 @@ public class CoreUtil {
 		return SubMonitor.convert(parent, ticks);
 	}
 
+	public static IProject openProject(String projectName, IPath dir, IProgressMonitor monitor) throws CoreException {
+		IWorkspace workspace = getWorkspace();
+
+		IProject project = getProject(projectName);
+
+		IProjectDescription desc = workspace.newProjectDescription(project.getName());
+
+		desc.setLocation(dir);
+
+		project.create(desc, monitor);
+
+		project.open(monitor);
+
+		return project;
+	}
+
 	public static void prepareFolder(IFolder folder) throws CoreException {
 		IContainer parent = folder.getParent();
 
@@ -623,20 +638,6 @@ public class CoreUtil {
 			}
 			while (read >= 0);
 		}
-	}
-
-	public static IProject openProject(String projectName, IPath dir, IProgressMonitor monitor) throws CoreException {
-		IWorkspace workspace = getWorkspace();
-	
-		IProject project = getProject(projectName);
-	
-		IProjectDescription desc = workspace.newProjectDescription(project.getName());
-	
-		desc.setLocation(dir);
-		project.create(desc, monitor);
-		project.open(monitor);
-	
-		return project;
 	}
 
 }
