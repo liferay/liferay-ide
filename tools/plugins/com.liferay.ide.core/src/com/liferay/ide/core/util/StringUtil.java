@@ -14,9 +14,6 @@
 
 package com.liferay.ide.core.util;
 
-import static com.liferay.ide.core.util.StringPool.DOUBLE_QUOTE_CHAR;
-import static com.liferay.ide.core.util.StringPool.SINGLE_QUOTE_CHAR;
-
 /**
  * @author Kuo Zhang
  * @author Terry Jia
@@ -32,8 +29,8 @@ public class StringUtil {
 		char firstChar = string.charAt(0);
 		char lastChar = string.charAt(lastIndex);
 
-		if (((firstChar == SINGLE_QUOTE_CHAR) && (lastChar == SINGLE_QUOTE_CHAR)) ||
-			((firstChar == DOUBLE_QUOTE_CHAR) && (lastChar == DOUBLE_QUOTE_CHAR))) {
+		if (((firstChar == StringPool.SINGLE_QUOTE_CHAR) && (lastChar == StringPool.SINGLE_QUOTE_CHAR)) ||
+			((firstChar == StringPool.DOUBLE_QUOTE_CHAR) && (lastChar == StringPool.DOUBLE_QUOTE_CHAR))) {
 
 			return true;
 		}
