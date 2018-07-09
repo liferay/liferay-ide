@@ -38,7 +38,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		String[] moduleNames = {project.getName(), "modules"};
 
@@ -67,7 +67,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -88,7 +88,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -101,7 +101,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.openFile(project.getName(), "gradle.properties");
 
@@ -129,7 +129,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		viewAction.project.refreshGradleProject(project.getName());
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		String[] projectNames = {project.getName(), newModulesFolderName, projectName};
 
@@ -152,7 +152,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.openFile(project.getName(), "gradle.properties");
 
@@ -180,7 +180,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		viewAction.project.refreshGradleProject(project.getName());
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		String[] projectNames = {project.getName(), newWarsFolderName, projectName};
 
@@ -240,7 +240,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 

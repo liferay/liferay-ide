@@ -35,6 +35,8 @@ public class NewServiceBuilderModuleGradleTest extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		String[] serviceNames = {project.getName(), project.getName() + "-service"};

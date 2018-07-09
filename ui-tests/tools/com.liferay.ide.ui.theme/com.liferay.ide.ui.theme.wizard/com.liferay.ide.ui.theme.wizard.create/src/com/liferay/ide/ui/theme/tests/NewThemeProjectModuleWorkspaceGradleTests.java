@@ -40,7 +40,7 @@ public class NewThemeProjectModuleWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 

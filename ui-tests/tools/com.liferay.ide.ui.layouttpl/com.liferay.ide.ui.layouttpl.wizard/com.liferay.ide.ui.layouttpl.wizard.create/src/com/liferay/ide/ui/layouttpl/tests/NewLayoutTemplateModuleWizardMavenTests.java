@@ -34,7 +34,7 @@ public class NewLayoutTemplateModuleWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
