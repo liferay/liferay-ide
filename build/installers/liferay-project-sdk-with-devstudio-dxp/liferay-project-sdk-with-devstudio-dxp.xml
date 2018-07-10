@@ -594,20 +594,20 @@
         </fileParameter>
         <choiceParameterGroup>
             <name>proxy</name>
-            <description>Proxy Config</description>
-            <explanation>The proxy is for gradle, and the config will be saved at .gradle/gradle.properties file in user's home directory.</explanation>
+            <description>Proxy Configuration</description>
+            <explanation>To configure the proxy settings for Liferay workspace, select "Configure proxy settings" below.  These settings will be saved in ~/.gradle/gradle.properties.</explanation>
             <value></value>
             <default>skipproxysetting</default>
             <parameterList>
                 <labelParameter>
                     <name>skipproxysetting</name>
-                    <description>Skip proxy setting</description>
+                    <description>Skip proxy configuration</description>
                     <explanation></explanation>
                     <image></image>
                 </labelParameter>
                 <choiceParameter>
                     <name>proxysetting</name>
-                    <description>Config proxy setting</description>
+                    <description>Configure proxy settings</description>
                     <explanation></explanation>
                     <value></value>
                     <default>httpProxy</default>
@@ -647,7 +647,7 @@
             <parameterList>
                 <stringParameter>
                     <name>httpproxyhost</name>
-                    <description>proxy host</description>
+                    <description>Proxy Host</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
@@ -656,7 +656,7 @@
                 </stringParameter>
                 <stringParameter>
                     <name>httpproxyport</name>
-                    <description>proxy port</description>
+                    <description>Proxy Port</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
@@ -665,7 +665,7 @@
                 </stringParameter>
                 <stringParameter>
                     <name>httpproxyusername</name>
-                    <description>proxy username</description>
+                    <description>Proxy Username</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
@@ -674,7 +674,7 @@
                 </stringParameter>
                 <stringParameter>
                     <name>httpproxypassword</name>
-                    <description>proxy password</description>
+                    <description>Proxy Password</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
@@ -708,7 +708,7 @@
             <parameterList>
                 <stringParameter>
                     <name>httpsproxyhost</name>
-                    <description>proxy host</description>
+                    <description>Proxy Host</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
@@ -717,7 +717,7 @@
                 </stringParameter>
                 <stringParameter>
                     <name>httpsproxyport</name>
-                    <description>proxy port</description>
+                    <description>Proxy Port</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
@@ -726,7 +726,7 @@
                 </stringParameter>
                 <stringParameter>
                     <name>httpsproxyusername</name>
-                    <description>proxy username</description>
+                    <description>Proxy Username</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
@@ -735,7 +735,7 @@
                 </stringParameter>
                 <stringParameter>
                     <name>httpsproxypassword</name>
-                    <description>proxy password</description>
+                    <description>Proxy Password</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
@@ -769,7 +769,7 @@
             <parameterList>
                 <stringParameter>
                     <name>socksproxyhost</name>
-                    <description>proxy host</description>
+                    <description>Proxy Host</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
@@ -778,7 +778,7 @@
                 </stringParameter>
                 <stringParameter>
                     <name>socksproxyport</name>
-                    <description>proxy port</description>
+                    <description>Proxy Port</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
