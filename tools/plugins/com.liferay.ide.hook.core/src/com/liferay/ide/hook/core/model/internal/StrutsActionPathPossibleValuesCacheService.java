@@ -23,12 +23,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.services.Service;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -51,15 +53,20 @@ public class StrutsActionPathPossibleValuesCacheService extends Service {
 
 					newInstance.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 					newInstance.setValidating(false);
-					Document doc = newInstance.newDocumentBuilder().parse(strutsConfigFile);
+
+					DocumentBuilder documentBuilder = newInstance.newDocumentBuilder();
+
+					Document doc = documentBuilder.parse(strutsConfigFile);
 
 					NodeList actions = doc.getElementsByTagName("action");
 
 					if (actions != null) {
 						for (int i = 0; i < actions.getLength(); i++) {
-							final Node action = actions.item(i);
+							Node action = actions.item(i);
 
-							final Node path = action.getAttributes().getNamedItem("path");
+							NamedNodeMap attributes = action.getAttributes();
+
+							Node path = attributes.getNamedItem("path");
 
 							if (path != null) {
 								possibleValues.add(path.getNodeValue());

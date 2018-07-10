@@ -57,7 +57,7 @@ public class CustomJspPossibleValuesService extends PossibleValuesService {
 				ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
 				if (portal != null) {
-					_portalDir = new Path(portal.getAppServerPortalDir().toPortableString());
+					_portalDir = new Path(FileUtil.toPortableString(portal.getAppServerPortalDir()));
 
 					if (_portalDir != null) {
 						File portalDirFile = _portalDir.toFile();
@@ -83,7 +83,9 @@ public class CustomJspPossibleValuesService extends PossibleValuesService {
 
 		if (_possibleValues != null) {
 			for (File file : _possibleValues) {
-				values.add(new Path(file.getAbsolutePath()).makeRelativeTo(_portalDir).toPortableString());
+				Path path = new Path(file.getAbsolutePath()).makeRelativeTo(_portalDir);
+
+				values.add(path.toPortableString());
 			}
 		}
 	}
@@ -91,7 +93,9 @@ public class CustomJspPossibleValuesService extends PossibleValuesService {
 	protected IProject project() {
 		Element root = context(Element.class).root();
 
-		return root.adapt(IFile.class).getProject();
+		IFile file = root.adapt(IFile.class);
+
+		return file.getProject();
 	}
 
 	private void _findJSPFiles(File[] files, List<File> fileValues) {
@@ -110,7 +114,9 @@ public class CustomJspPossibleValuesService extends PossibleValuesService {
 	private final FileFilter _jspfilter = new FileFilter() {
 
 		public boolean accept(File pathname) {
-			if (pathname.isDirectory() || pathname.getName().endsWith(".jsp") || pathname.getName().endsWith(".jspf")) {
+			String name = pathname.getName();
+
+			if (pathname.isDirectory() || name.endsWith(".jsp") || name.endsWith(".jspf")) {
 				return true;
 			}
 

@@ -14,11 +14,6 @@
 
 package com.liferay.ide.hook.core.operation;
 
-import static org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties.JAVA_PACKAGE_FRAGMENT_ROOT;
-import static org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties.JAVA_SOURCE_FOLDER;
-import static org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties.PROJECT;
-import static org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties.SOURCE_FOLDER;
-
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
@@ -37,6 +32,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -46,6 +42,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jem.workbench.utility.JemProjectUtilities;
+import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.internal.operation.ArtifactEditOperationDataModelProvider;
@@ -85,7 +82,9 @@ public class NewHookDataModelProvider
 			if (webproject != null) {
 				IFolder defaultWebappRootFolder = webproject.getDefaultDocrootFolder();
 
-				String defaultWebappRootPath = defaultWebappRootFolder.getFullPath().toPortableString();
+				IPath fullPath = defaultWebappRootFolder.getFullPath();
+
+				String defaultWebappRootPath = fullPath.toPortableString();
 
 				if (targetProject != null) {
 					HookDescriptorHelper hookDescriptorHelper = new HookDescriptorHelper(targetProject);
@@ -102,7 +101,9 @@ public class NewHookDataModelProvider
 						if (defaultDocroot != null) {
 							IPath defaultDocrootPath = defaultDocroot.getFullPath();
 
-							String containerFullPath = defaultDocrootPath.append(customJspFolder).toPortableString();
+							IPath path = defaultDocrootPath.append(customJspFolder);
+
+							String containerFullPath = path.toPortableString();
 
 							int index = containerFullPath.indexOf(defaultWebappRootPath);
 
@@ -128,9 +129,13 @@ public class NewHookDataModelProvider
 			List<IFolder> sources = CoreUtil.getSourceFolders(JavaCore.create(targetProject));
 
 			if ((targetProject != null) && ListUtil.isNotEmpty(sources)) {
-				IPath sourcePath = sources.get(0).getFullPath();
+				IFolder source = sources.get(0);
 
-				return sourcePath.append("portal.properties").toPortableString();
+				IPath sourcePath = source.getFullPath();
+
+				sourcePath = sourcePath.append("portal.properties");
+
+				return sourcePath.toPortableString();
 			}
 		}
 		else if (CONTENT_FOLDER.equals(propertyName)) {
@@ -139,9 +144,13 @@ public class NewHookDataModelProvider
 			List<IFolder> sources = CoreUtil.getSourceFolders(JavaCore.create(targetProject));
 
 			if ((targetProject != null) && !sources.isEmpty()) {
-				IPath sourcePath = sources.get(0).getFullPath();
+				IFolder source = sources.get(0);
 
-				return sourcePath.append("content").toPortableString();
+				IPath sourcePath = source.getFullPath();
+
+				sourcePath = sourcePath.append("content");
+
+				return sourcePath.toPortableString();
 			}
 		}
 		else if (SELECTED_PROJECT.equals(propertyName)) {
@@ -157,23 +166,27 @@ public class NewHookDataModelProvider
 			IWebProject webproject = LiferayCore.create(IWebProject.class, targetProject);
 
 			if ((targetProject != null) && (webproject != null)) {
-				return webproject.getDefaultDocrootFolder().getName();
+				IFolder folder = webproject.getDefaultDocrootFolder();
+
+				return folder.getName();
 			}
 		}
-		else if (propertyName.equals(PROJECT)) {
+		else if (propertyName.equals(INewJavaClassDataModelProperties.PROJECT)) {
 			return getTargetProject();
 		}
-		else if (propertyName.equals(SOURCE_FOLDER)) {
+		else if (propertyName.equals(INewJavaClassDataModelProperties.SOURCE_FOLDER)) {
 			IFolder sourceFolder = getDefaultJavaSourceFolder();
 
 			if (FileUtil.exists(sourceFolder)) {
-				return sourceFolder.getFullPath().toPortableString();
+				IPath fullPath = sourceFolder.getFullPath();
+
+				return fullPath.toPortableString();
 			}
 		}
-		else if (propertyName.equals(JAVA_SOURCE_FOLDER)) {
+		else if (propertyName.equals(INewJavaClassDataModelProperties.JAVA_SOURCE_FOLDER)) {
 			return getJavaSourceFolder();
 		}
-		else if (propertyName.equals(JAVA_PACKAGE_FRAGMENT_ROOT)) {
+		else if (propertyName.equals(INewJavaClassDataModelProperties.JAVA_PACKAGE_FRAGMENT_ROOT)) {
 			return getJavaPackageFragmentRoot();
 		}
 		else if (CUSTOM_JSPS_FILES_CREATED.equals(propertyName)) {
@@ -208,10 +221,10 @@ public class NewHookDataModelProvider
 		propertyNames.add(LANGUAGE_PROPERTIES_ITEMS);
 		propertyNames.add(LANGUAGE_PROPERTIES_FILES_CREATED);
 		propertyNames.add(SELECTED_PROJECT);
-		propertyNames.add(SOURCE_FOLDER);
+		propertyNames.add(INewJavaClassDataModelProperties.SOURCE_FOLDER);
 		propertyNames.add(WEB_ROOT_FOLDER);
-		propertyNames.add(JAVA_SOURCE_FOLDER);
-		propertyNames.add(JAVA_PACKAGE_FRAGMENT_ROOT);
+		propertyNames.add(INewJavaClassDataModelProperties.JAVA_SOURCE_FOLDER);
+		propertyNames.add(INewJavaClassDataModelProperties.JAVA_PACKAGE_FRAGMENT_ROOT);
 		propertyNames.add(DISABLE_CUSTOM_JSP_FOLDER_VALIDATION);
 
 		return propertyNames;
@@ -257,9 +270,13 @@ public class NewHookDataModelProvider
 
 				IPath defaultWebappRootFolderPath = defaultWebappRootFolder.getFullPath();
 
-				String jspFolderPath = defaultWebappRootFolderPath.append(jspFolder).toPortableString();
+				IPath path = defaultWebappRootFolderPath.append(jspFolder);
 
-				IStatus validateStatus = CoreUtil.getWorkspace().validatePath(jspFolderPath, IResource.FOLDER);
+				String jspFolderPath = path.toPortableString();
+
+				IWorkspace workspace = CoreUtil.getWorkspace();
+
+				IStatus validateStatus = workspace.validatePath(jspFolderPath, IResource.FOLDER);
 
 				if (!validateStatus.isOK()) {
 					return HookCore.createErrorStatus(validateStatus.getMessage());
@@ -433,7 +450,7 @@ public class NewHookDataModelProvider
 			// project
 
 			if (aJavaProject != null) {
-				IFolder sourcefolder = (IFolder)getProperty(JAVA_SOURCE_FOLDER);
+				IFolder sourcefolder = (IFolder)getProperty(INewJavaClassDataModelProperties.JAVA_SOURCE_FOLDER);
 
 				if (sourcefolder != null) {
 					return aJavaProject.getPackageFragmentRoot(sourcefolder);
@@ -454,15 +471,17 @@ public class NewHookDataModelProvider
 			return null;
 		}
 
-		String folderFullPath = getStringProperty(SOURCE_FOLDER);
+		String folderFullPath = getStringProperty(INewJavaClassDataModelProperties.SOURCE_FOLDER);
 
 		// Get the source folder whose path matches the source folder name value
 		// in the data model
 
-		for (int i = 0; i < sources.length; i++) {
-			if (sources[i].getPath().equals(new Path(folderFullPath))) {
+		for (IPackageFragmentRoot source : sources) {
+			IPath path = source.getPath();
+
+			if (path.equals(new Path(folderFullPath))) {
 				try {
-					return (IFolder)sources[i].getCorrespondingResource();
+					return (IFolder)source.getCorrespondingResource();
 				}
 				catch (Exception e) {
 					break;

@@ -29,6 +29,7 @@ import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
@@ -44,6 +45,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -149,7 +151,9 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
 		if (FileUtil.notExists(newJspFile)) {
 			if (FileUtil.exists(originalPortalJspPath)) {
-				try (InputStream fis = Files.newInputStream(originalPortalJspPath.toFile().toPath())) {
+				File file = originalPortalJspPath.toFile();
+
+				try (InputStream fis = Files.newInputStream(file.toPath())) {
 					if (newJspFile.exists()) {
 						newJspFile.setContents(fis, IResource.FORCE, null);
 					}
@@ -169,15 +173,19 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 	protected IStatus createCustomJSPs(IDataModel dm) {
 		IProject project = getTargetProject();
 
-		IFolder defaultWebappRootFolder = LiferayCore.create(IWebProject.class, project).getDefaultDocrootFolder();
+		IWebProject webProject = LiferayCore.create(IWebProject.class, project);
+
+		IFolder defaultWebappRootFolder = webProject.getDefaultDocrootFolder();
 
 		String customJSPsFolder = dm.getStringProperty(CUSTOM_JSPS_FOLDER);
 
 		IPath fullPath = defaultWebappRootFolder.getFullPath();
 
-		String customFolderValue = fullPath.append(customJSPsFolder).toPortableString();
+		String customFolderValue = FileUtil.toPortableString(fullPath.append(customJSPsFolder));
 
-		IWorkspaceRoot root = project.getWorkspace().getRoot();
+		IWorkspace workspace = project.getWorkspace();
+
+		IWorkspaceRoot root = workspace.getRoot();
 
 		IFolder customFolder = root.getFolder(new Path(customFolderValue));
 
@@ -248,12 +256,18 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		IPath contentFolderPath = new Path(contentFolderStr);
 
 		if (!contentFolderStr.startsWith("/")) {
-			IFolder sourceFolder = CoreUtil.getSourceFolders(JavaCore.create(project)).get(0);
+			List<IFolder> sourceFolders = CoreUtil.getSourceFolders(JavaCore.create(project));
 
-			contentFolderPath = sourceFolder.getFullPath().append(contentFolderStr);
+			IFolder sourceFolder = sourceFolders.get(0);
+
+			IPath fullPath = sourceFolder.getFullPath();
+
+			contentFolderPath = fullPath.append(contentFolderStr);
 		}
 
-		IWorkspaceRoot root = project.getWorkspace().getRoot();
+		IWorkspace workspace = project.getWorkspace();
+
+		IWorkspaceRoot root = workspace.getRoot();
 
 		IFolder contentFolder = root.getFolder(contentFolderPath);
 
@@ -301,10 +315,12 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
 		if (packRoot != null) {
 			for (IFile languageFile : languageFilesCreated) {
-				if (packRoot.getPath().isPrefixOf(languageFile.getFullPath())) {
+				IPath packRootPath = packRoot.getPath();
+
+				if (packRootPath.isPrefixOf(languageFile.getFullPath())) {
 					IPath fullPath = languageFile.getFullPath();
 
-					String languageProperty = fullPath.makeRelativeTo(packRoot.getPath()).toPortableString();
+					String languageProperty = FileUtil.toPortableString(fullPath.makeRelativeTo(packRoot.getPath()));
 
 					languageProperties.add(languageProperty);
 				}
@@ -326,9 +342,13 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		IPath portalPropertiesPath = new Path(portalPropertiesFile);
 
 		if (!portalPropertiesFile.startsWith("/")) {
-			IFolder sourceFolder = CoreUtil.getSourceFolders(JavaCore.create(project)).get(0);
+			List<IFolder> sourceFolders = CoreUtil.getSourceFolders(JavaCore.create(project));
 
-			portalPropertiesPath = sourceFolder.getFullPath().append(portalPropertiesFile);
+			IFolder sourceFolder = sourceFolders.get(0);
+
+			IPath fullPath = sourceFolder.getFullPath();
+
+			portalPropertiesPath = fullPath.append(portalPropertiesFile);
 		}
 
 		IPath propertiesFilesPath = portalPropertiesPath.makeRelativeTo(project.getFullPath());
@@ -338,7 +358,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		Properties properties = new Properties();
 
 		if (FileUtil.exists(propertiesFile)) {
-			try(InputStream inputStream = propertiesFile.getContents()) {
+			try (InputStream inputStream = propertiesFile.getContents()) {
 				properties.load(propertiesFile.getContents());
 			}
 			catch (Exception e) {
@@ -362,8 +382,8 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 			}
 		}
 
-		try(StringBufferOutputStream buffer = new StringBufferOutputStream();
-				ByteArrayInputStream bis = new ByteArrayInputStream(buffer.toString().getBytes("UTF-8"))){
+		try (StringBufferOutputStream buffer = new StringBufferOutputStream();
+			ByteArrayInputStream bis = new ByteArrayInputStream("".getBytes("UTF-8"))) {
 
 			properties.store(buffer, StringPool.EMPTY);
 
@@ -387,10 +407,14 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		IPackageFragmentRoot packRoot = (IPackageFragmentRoot)model.getProperty(
 			INewJavaClassDataModelProperties.JAVA_PACKAGE_FRAGMENT_ROOT);
 
-		if ((packRoot != null) && packRoot.getPath().isPrefixOf(propertiesFile.getFullPath())) {
-			IPath fullPath = propertiesFile.getFullPath();
+		if (packRoot != null) {
+			IPath packRootPath = packRoot.getPath();
 
-			propertiesClasspath = fullPath.makeRelativeTo(packRoot.getPath()).toPortableString();
+			if (packRootPath.isPrefixOf(propertiesFile.getFullPath())) {
+				IPath fullPath = propertiesFile.getFullPath();
+
+				propertiesClasspath = FileUtil.toPortableString(fullPath.makeRelativeTo(packRootPath));
+			}
 		}
 
 		IStatus status = hookDescHelper.setPortalProperties(model, propertiesClasspath);

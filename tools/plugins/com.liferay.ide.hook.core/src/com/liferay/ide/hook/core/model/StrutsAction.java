@@ -59,7 +59,7 @@ public interface StrutsAction extends Element {
 	// ** StrutsActionImpl
 
 	@JavaTypeConstraint(
-		behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE, kind = {JavaTypeKind.CLASS},
+		behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE, kind = JavaTypeKind.CLASS,
 		type = {"com.liferay.portal.kernel.struts.StrutsAction", "com.liferay.portal.kernel.struts.StrutsPortletAction"}
 	)
 	@Label(standard = "Struts Action Impl")

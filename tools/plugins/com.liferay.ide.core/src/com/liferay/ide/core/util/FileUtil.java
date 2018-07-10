@@ -270,6 +270,22 @@ public class FileUtil {
 		return path.toFile();
 	}
 
+	public static String toPortableString(IPath path) {
+		if (path == null) {
+			return null;
+		}
+
+		return path.toPortableString();
+	}
+
+	public static String toOSString(IPath path) {
+		if (path == null) {
+			return null;
+		}
+
+		return path.toOSString();
+	}
+
 	public static File getFile(URL url) {
 		if (url == null) {
 			return null;

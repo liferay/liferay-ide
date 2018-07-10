@@ -15,6 +15,7 @@
 package com.liferay.ide.hook.core.model.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.hook.core.model.Hook;
 
 import java.util.ArrayList;
@@ -41,8 +42,8 @@ public class SrcFoldersRelativePathService extends RelativePathService {
 
 			List<IFolder> folders = CoreUtil.getSourceFolders(JavaCore.create(project));
 
-			for (final IFolder folder : folders) {
-				roots.add(new Path(folder.getLocation().toPortableString()));
+			for (IFolder folder : folders) {
+				roots.add(new Path(FileUtil.toPortableString(folder.getLocation())));
 			}
 		}
 

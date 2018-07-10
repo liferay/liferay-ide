@@ -28,6 +28,7 @@ import org.eclipse.sapphire.EnablementService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyEvent;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 
@@ -46,7 +47,9 @@ public class CustomJspsEnablementService extends EnablementService {
 
 		if (customJspDir != null) {
 			IProject project = _hook().adapt(IProject.class);
-			Path customJspDirPath = customJspDir.getValue().content(true);
+			Value<Path> customJspDirValue = customJspDir.getValue();
+
+			Path customJspDirPath = customJspDirValue.content(true);
 
 			if ((project != null) && (customJspDirPath != null)) {
 				IWebProject lrproject = LiferayCore.create(IWebProject.class, project);
