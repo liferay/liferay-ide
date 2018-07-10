@@ -15,6 +15,7 @@
 package com.liferay.ide.gradle.core;
 
 import com.google.common.base.Optional;
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.parser.GradleDependency;
@@ -77,6 +78,8 @@ public class GradleUtil {
 		GradleBuild build = gradleWorkspaceManager.getGradleBuild(buildConfig);
 
 		SynchronizationJob synchronizeJob = new SynchronizationJob(NewProjectHandler.IMPORT_AND_MERGE, build);
+
+		synchronizeJob.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
 
 		synchronizeJob.schedule();
 
@@ -173,7 +176,11 @@ public class GradleUtil {
 			build = optional.get();
 		}
 
-		new SynchronizationJob(NewProjectHandler.IMPORT_AND_MERGE, build).schedule();
+		SynchronizationJob job = new SynchronizationJob(NewProjectHandler.IMPORT_AND_MERGE, build);
+
+		job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
+
+		job.schedule();
 	}
 
 	public static void runGradleTask(IProject project, String[] tasks, IProgressMonitor monitor)
