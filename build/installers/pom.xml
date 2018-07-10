@@ -44,8 +44,8 @@
         <portal-version>7.1.10</portal-version>
         <portal-zip-name>liferay-dxp-tomcat-7.1.10-ga1-20180703090613030.zip</portal-zip-name>
         <portal-ce-download-base>https://releases-cdn.liferay.com/portal</portal-ce-download-base>
-        <portal-ce-version>7.1.0-rc1</portal-ce-version>
-        <portal-ce-zip-name>liferay-ce-portal-tomcat-7.1-rc1-20180626164228923.zip</portal-ce-zip-name>
+        <portal-ce-version>7.1.0-ga1</portal-ce-version>
+        <portal-ce-zip-name>liferay-ce-portal-tomcat-7.1.0-ga1-20180703012531655.zip</portal-ce-zip-name>
         <plugin-sdk-download-base>https://repository-cdn.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
         <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.19-withdependencies.zip</plugin-sdk-zip-name>
         <plugin-sdk-version>1.0.19</plugin-sdk-version>
