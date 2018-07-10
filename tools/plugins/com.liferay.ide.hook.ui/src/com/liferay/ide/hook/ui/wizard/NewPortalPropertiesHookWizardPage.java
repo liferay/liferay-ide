@@ -17,15 +17,18 @@ package com.liferay.ide.hook.ui.wizard;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSectionCallback;
 import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -47,7 +50,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IDecoratorManager;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchContentProvider;
@@ -193,7 +195,7 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 
 					Object property = model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
 
-					return project.getName().equals(property);
+					return StringUtil.equals(project.getName(), property);
 				}
 				else if (element instanceof IFolder) {
 					IFolder folder = (IFolder)element;
@@ -205,11 +207,13 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 
 					IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers(project);
 
-					for (int i = 0; i < sourceFolders.length; i++) {
-						if ((sourceFolders[i].getResource() != null) && sourceFolders[i].getResource().equals(folder)) {
+					for (IPackageFragmentRoot sourceFolder : sourceFolders) {
+						IResource resource = sourceFolder.getResource();
+
+						if ((resource != null) && resource.equals(folder)) {
 							return true;
 						}
-						else if (ProjectUtil.isParent(folder, sourceFolders[i].getResource())) {
+						else if (ProjectUtil.isParent(folder, resource)) {
 							return true;
 						}
 					}
@@ -217,7 +221,7 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 				else if (element instanceof IFile) {
 					IFile file = (IFile)element;
 
-					if (FileUtil.exists(file) && file.getName().equals("portal.properties")) {
+					if (FileUtil.exists(file) && StringUtil.equals(file.getName(), "portal.properties")) {
 						return true;
 					}
 
@@ -242,7 +246,7 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 
 		ITreeContentProvider contentProvider = new WorkbenchContentProvider();
 
-		IDecoratorManager decoratorManager = PlatformUI.getWorkbench().getDecoratorManager();
+		IDecoratorManager decoratorManager = UIUtil.getDecoratorManager();
 
 		ILabelProvider labelProvider = new DecoratingLabelProvider(
 			new WorkbenchLabelProvider(), decoratorManager.getLabelDecorator());
@@ -262,12 +266,14 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 				if (element instanceof IFile) {
 					IFile file = (IFile)element;
 
-					text.setText(file.getFullPath().toPortableString());
+					text.setText(FileUtil.toPortableString(file.getFullPath()));
 				}
 				else if (element instanceof IFolder) {
 					IFolder folder = (IFolder)element;
 
-					IPath portalPropertiesPath = folder.getFullPath().append("portal.properties");
+					IPath fullPath = folder.getFullPath();
+
+					IPath portalPropertiesPath = fullPath.append("portal.properties");
 
 					text.setText(portalPropertiesPath.toPortableString());
 				}

@@ -270,28 +270,44 @@ public class FileUtil {
 		return path.toFile();
 	}
 
-	public static String toPortableString(IPath path) {
-		if (path == null) {
-			return null;
-		}
-
-		return path.toPortableString();
-	}
-
-	public static String toOSString(IPath path) {
-		if (path == null) {
-			return null;
-		}
-
-		return path.toOSString();
-	}
-
 	public static File getFile(URL url) {
 		if (url == null) {
 			return null;
 		}
 
 		return new File(url.getFile());
+	}
+
+	public static String getFullPathPortableString(IFile file) {
+		if (file == null) {
+			return null;
+		}
+
+		return toPortableString(file.getFullPath());
+	}
+
+	public static String getFullPathPortableString(IFolder folder) {
+		if (folder == null) {
+			return null;
+		}
+
+		return toPortableString(folder.getFullPath());
+	}
+
+	public static String getLocationPortableString(IFile file) {
+		if (file == null) {
+			return null;
+		}
+
+		return toPortableString(file.getLocation());
+	}
+
+	public static String getLocationPortableString(IFolder folder) {
+		if (folder == null) {
+			return null;
+		}
+
+		return toPortableString(folder.getLocation());
 	}
 
 	public static IContainer getWorkspaceContainer(File file) {
@@ -681,6 +697,22 @@ public class FileUtil {
 		}
 
 		return replaced;
+	}
+
+	public static String toOSString(IPath path) {
+		if (path == null) {
+			return null;
+		}
+
+		return path.toOSString();
+	}
+
+	public static String toPortableString(IPath path) {
+		if (path == null) {
+			return null;
+		}
+
+		return path.toPortableString();
 	}
 
 	public static void validateEdit(IFile... files) throws CoreException {
