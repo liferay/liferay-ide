@@ -30,7 +30,7 @@ public class NoRunningJobsCondition extends JobCondition {
 
 	@Override
 	public String getFailureMessage() {
-		Job[] jobs = _checkRunningJobs().toArray(new Job[0]);
+		Job[] jobs = checkRunningJobs().toArray(new Job[0]);
 
 		StringBuilder sb = new StringBuilder();
 
@@ -46,14 +46,14 @@ public class NoRunningJobsCondition extends JobCondition {
 
 	@Override
 	public boolean test() {
-		if (_checkRunningJobs().size() == 0) {
+		if (checkRunningJobs().size() == 0) {
 			return true;
 		}
 
 		return false;
 	}
 
-	private List<Job> _checkRunningJobs() {
+	protected List<Job> checkRunningJobs() {
 		Job[] jobs = Job.getJobManager().find(family);
 
 		List<Job> runningJobs = new ArrayList<>();
@@ -61,7 +61,8 @@ public class NoRunningJobsCondition extends JobCondition {
 		for (Job job : jobs) {
 			boolean found = false;
 			String name = job.getName();
-			if(name.equals("Refreshing server adapter list")) {
+
+			if (name.equals("Refreshing server adapter list")) {
 				job.cancel();
 			}
 

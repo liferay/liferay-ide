@@ -43,7 +43,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -78,7 +78,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -108,7 +108,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		String[] templates = {
 			AUTH_FAILURES, AUTH_MAX_FAILURE, AUTHENTICATOR, FRIENDLY_URL_MAPPER, GOGO_COMMAND, INDEXER_POST_PROCESSOR,
@@ -134,7 +134,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		String packageName = project.getName() + ".portlet";
 		String className = project.getName().substring(0, 1).toUpperCase() + project.getName().substring(1);
@@ -163,7 +163,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -207,7 +207,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		String template = MODEL_LISTENER;
 
@@ -254,7 +254,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -286,7 +286,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		String projectName2 = "portlet-test";
 
@@ -296,7 +296,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		String[] projectNames = {projectName1, projectName2};
 
@@ -329,7 +329,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		String template = SERVICE_WRAPPER_UPCASE;
 

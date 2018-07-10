@@ -72,7 +72,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -119,7 +119,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -149,7 +149,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -179,7 +179,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -214,7 +214,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -244,7 +244,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -293,7 +293,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 

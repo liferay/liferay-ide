@@ -34,7 +34,7 @@ public class NewLayoutTemplateModuleWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 

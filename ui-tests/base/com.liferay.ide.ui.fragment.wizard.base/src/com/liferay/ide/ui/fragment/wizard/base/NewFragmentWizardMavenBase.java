@@ -46,7 +46,7 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -77,7 +77,7 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -103,7 +103,7 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -131,7 +131,7 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -157,7 +157,7 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -204,7 +204,7 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}

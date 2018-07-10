@@ -39,7 +39,7 @@ public class NewLayoutTemplateModuleWizardLiferayWorkspaceGradleTests extends Sw
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 

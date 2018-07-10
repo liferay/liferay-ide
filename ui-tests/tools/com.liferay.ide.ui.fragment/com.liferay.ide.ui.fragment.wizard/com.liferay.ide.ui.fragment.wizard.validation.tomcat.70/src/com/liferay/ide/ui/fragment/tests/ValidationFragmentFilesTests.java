@@ -52,7 +52,7 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		wizardAction.openFileMenuFragmentFilesWizard();
 
@@ -105,7 +105,7 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		wizardAction.openFileMenuFragmentFilesWizard();
 
@@ -136,7 +136,7 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		wizardAction.openFileMenuFragmentFilesWizard();
 
@@ -159,7 +159,7 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		wizardAction.openFileMenuFragmentFilesWizard();
 

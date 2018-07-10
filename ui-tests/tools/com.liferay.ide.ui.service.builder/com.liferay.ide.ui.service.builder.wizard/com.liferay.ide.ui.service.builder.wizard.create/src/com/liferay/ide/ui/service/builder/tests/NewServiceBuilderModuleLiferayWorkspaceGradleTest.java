@@ -40,7 +40,7 @@ public class NewServiceBuilderModuleLiferayWorkspaceGradleTest extends SwtbotBas
 
 		wizardAction.finish();
 
-		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 

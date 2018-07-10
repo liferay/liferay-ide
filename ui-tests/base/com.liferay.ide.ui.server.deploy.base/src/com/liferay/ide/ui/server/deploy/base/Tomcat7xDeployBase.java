@@ -46,7 +46,7 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
@@ -72,7 +72,7 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
@@ -124,7 +124,7 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 

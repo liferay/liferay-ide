@@ -42,7 +42,7 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		wizardAction.openNewBtnFragmentFilesWizard();
 
@@ -106,7 +106,7 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.openFragmentFilesWizard();
 
@@ -141,7 +141,7 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.openFragmentFilesWizard();
 
@@ -175,7 +175,7 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.openFragmentFilesWizard();
 
@@ -209,7 +209,7 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.openFragmentFilesWizard();
 
@@ -244,7 +244,7 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		String[] files =
 			{"META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp", "META-INF/resources/view.jsp"};

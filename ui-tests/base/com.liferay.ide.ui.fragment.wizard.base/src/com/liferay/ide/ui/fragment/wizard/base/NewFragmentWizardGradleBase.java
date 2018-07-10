@@ -49,7 +49,7 @@ public class NewFragmentWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -75,7 +75,7 @@ public class NewFragmentWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -101,7 +101,7 @@ public class NewFragmentWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -133,7 +133,7 @@ public class NewFragmentWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -159,7 +159,7 @@ public class NewFragmentWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -206,7 +206,7 @@ public class NewFragmentWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}

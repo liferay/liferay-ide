@@ -31,7 +31,7 @@ public class DeployJsfGradleTomcat7xBase extends ServerTestBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 

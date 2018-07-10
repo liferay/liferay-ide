@@ -47,7 +47,7 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "bundles"));
 
@@ -89,7 +89,7 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "bundles"));
 
@@ -114,7 +114,7 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		String liferayWorkspaceName = "test-liferay-workspace-maven";
 
