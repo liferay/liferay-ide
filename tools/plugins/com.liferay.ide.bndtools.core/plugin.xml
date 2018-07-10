@@ -16,12 +16,12 @@
 	<!--extension
 			point="bndtools.core.projectTemplates">
 		<template
-				category="Liferay"
-				class="com.liferay.ide.bndtools.core.templates.PortletTemplate"
-				doc="html/portletTemplate.xml"
-				icon="html/portlet.png"
-				name="Portlet"
-				priority="510"
+			category="Liferay"
+			class="com.liferay.ide.bndtools.core.templates.PortletTemplate"
+			doc="html/portletTemplate.xml"
+			icon="html/portlet.png"
+			name="Portlet"
+			priority="510"
 		>
 		</template>
 	</extension-->
