@@ -35,12 +35,15 @@ import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.DeleteParticipant;
+import org.eclipse.ltk.core.refactoring.participants.RefactoringProcessor;
+import org.eclipse.ltk.internal.core.refactoring.resource.DeleteResourcesProcessor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 
 /**
  * @author Charles Wu
  * @author Simon Jiang
  */
+@SuppressWarnings("restriction")
 public class LiferayMavenModuleProjectDeleteParticipant extends DeleteParticipant {
 
 	public LiferayMavenModuleProjectDeleteParticipant() {
@@ -127,6 +130,16 @@ public class LiferayMavenModuleProjectDeleteParticipant extends DeleteParticipan
 			return false;
 		}
 
+		RefactoringProcessor processor = getProcessor();
+
+		if (processor instanceof DeleteResourcesProcessor) {
+			DeleteResourcesProcessor deleteProcessor = (DeleteResourcesProcessor)processor;
+
+			if (!deleteProcessor.isDeleteContents()) {
+				return false;
+			}
+		}
+
 		_moduleProject = (IProject)element;
 
 		IMavenProjectFacade mavenFacade = MavenUtil.getProjectFacade((IProject)element, new NullProgressMonitor());
@@ -141,7 +154,9 @@ public class LiferayMavenModuleProjectDeleteParticipant extends DeleteParticipan
 			return modules.contains(_moduleProject.getName());
 		}
 		catch (Exception ce) {
+
 			// skip all exceptions
+
 		}
 
 		return false;
