@@ -24,8 +24,6 @@ import java.io.File;
 public class FileSupport extends SupportBase {
 
 	public FileSupport(String fileName, boolean needTimestamp) {
-		super();
-
 		_fileName = fileName;
 		_needTimestamp = needTimestamp;
 	}
@@ -39,7 +37,7 @@ public class FileSupport extends SupportBase {
 	public void before() {
 		super.before();
 
-		File source = new File(envAction.getProjectsDir(), _fileName);
+		File source = new File(envAction.getFilesDir(), _fileName);
 
 		String sourceName = source.getName();
 
@@ -54,16 +52,15 @@ public class FileSupport extends SupportBase {
 		_file = dist;
 	}
 
+	public File getFile() {
+		return _file;
+	}
+
 	public String getPath() {
 		return _file.getPath();
 	}
 
-	public File getProjectFile() {
-		return _file;
-	}
-
 	private File _file;
-
 	private final String _fileName;
 	private final boolean _needTimestamp;
 

@@ -18,11 +18,21 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.test.core.base.support.FileSupport;
+import com.liferay.ide.test.core.base.support.ImportProjectSupport;
 import com.liferay.ide.test.core.base.util.FileUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+
+import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -71,6 +81,14 @@ public class BaseTests {
 		Assert.assertNotNull(LiferayCore.create(IBundleProject.class, project));
 	}
 
+	protected void assertFileContains(FileSupport fs, String expectedContent) {
+		File file = fs.getFile();
+
+		String content = FileUtil.readContents(file);
+
+		Assert.assertTrue(content.contains(expectedContent));
+	}
+
 	protected void assertFileExists(File file) {
 		Assert.assertTrue(FileUtil.exists(file));
 	}
@@ -82,15 +100,31 @@ public class BaseTests {
 		catch (CoreException ce) {
 		}
 
-		Assert.assertTrue(FileUtil.exists(file));
+		Assert.assertTrue(FileUtil.exists(file.getLocation()));
 	}
 
 	protected void assertFileExists(IPath path) {
 		Assert.assertTrue(FileUtil.exists(path));
 	}
 
+	protected void assertFileNotContains(FileSupport fs, String expectedContent) {
+		File file = fs.getFile();
+
+		String content = FileUtil.readContents(file);
+
+		Assert.assertFalse(content.contains(expectedContent));
+	}
+
+	protected void assertFileNotExists(File file) {
+		Assert.assertTrue(FileUtil.notExists(file));
+	}
+
 	protected void assertFileNotExists(IFile file) {
 		Assert.assertTrue(FileUtil.notExists(file));
+	}
+
+	protected void assertFileNotExists(IPath path) {
+		Assert.assertTrue(FileUtil.notExists(path));
 	}
 
 	protected void assertFileSuffix(IFile file, String expectedSuffix) {
@@ -127,6 +161,10 @@ public class BaseTests {
 		Assert.assertFalse("Project " + projectName + " has a liferay nature", LiferayNature.hasNature(project));
 	}
 
+	protected void assertProjectExists(ImportProjectSupport ips) {
+		Assert.assertTrue(FileUtil.exists(project(ips.getName())));
+	}
+
 	protected void assertProjectExists(IProject project) {
 		Assert.assertTrue(FileUtil.exists(project));
 	}
@@ -144,9 +182,27 @@ public class BaseTests {
 
 		assertFileExists(file);
 
-		String content = FileUtil.readContents(file.getLocation().toFile());
+		IPath location = file.getLocation();
+
+		String content = FileUtil.readContents(location.toFile());
 
 		Assert.assertTrue(content.contains(expectedContent));
+	}
+
+	protected void assertProjectFileEquals(String projectName, String filePath, String expectedContent) {
+		IProject project = project(projectName);
+
+		assertProjectExists(project);
+
+		IFile file = project.getFile(filePath);
+
+		assertFileExists(file);
+
+		IPath location = file.getLocation();
+
+		String content = FileUtil.readContents(location.toFile());
+
+		Assert.assertEquals(expectedContent, content);
 	}
 
 	protected void assertProjectFileExists(String projectName, String filePath) {
@@ -165,6 +221,31 @@ public class BaseTests {
 		assertFileNotExists(project.getFile(filePath));
 	}
 
+	protected void assertPropertyValue(String projectName, String filePath, String key, String expectedValue) {
+		IProject project = project(projectName);
+
+		assertProjectExists(project);
+
+		IFile propertiesFile = project.getFile(filePath);
+
+		IPath location = propertiesFile.getLocation();
+
+		assertFileExists(propertiesFile);
+
+		Properties properties = new Properties();
+
+		try (InputStream in = new FileInputStream(location.toOSString())) {
+			properties.load(in);
+
+			String value = properties.getProperty(key);
+
+			Assert.assertEquals(expectedValue, value);
+		}
+		catch (Exception e) {
+			failTest(e);
+		}
+	}
+
 	protected void assertSourceFolders(String projectName, String expectedSourceFolderName) {
 		IProject project = project(projectName);
 
@@ -175,6 +256,10 @@ public class BaseTests {
 		IFolder[] srcFolders = liferayProject.getSourceFolders();
 
 		Assert.assertEquals(expectedSourceFolderName, srcFolders[0].getName());
+	}
+
+	protected final void deleteProject(ImportProjectSupport ips) {
+		deleteProject(ips.getName());
 	}
 
 	protected final void deleteProject(String projectName) {
@@ -190,6 +275,12 @@ public class BaseTests {
 		catch (CoreException ce) {
 			failTest(ce);
 		}
+	}
+
+	protected void writeFile(FileSupport fs, Iterable<? extends CharSequence> lines) throws IOException {
+		File file = fs.getFile();
+
+		Files.write(file.toPath(), lines, StandardCharsets.UTF_8);
 	}
 
 	protected IProgressMonitor npm = new NullProgressMonitor();

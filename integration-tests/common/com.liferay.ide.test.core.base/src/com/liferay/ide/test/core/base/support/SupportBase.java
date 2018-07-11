@@ -35,7 +35,11 @@ public class SupportBase extends ExternalResource {
 	public void before() {
 		String tt = String.valueOf(System.currentTimeMillis());
 
-		timestamp = Long.parseLong(tt.substring(6));
+		try {
+			timestamp = Long.parseLong(tt.substring(6));
+		}
+		catch (NumberFormatException nfe) {
+		}
 	}
 
 	public EnvAction envAction;

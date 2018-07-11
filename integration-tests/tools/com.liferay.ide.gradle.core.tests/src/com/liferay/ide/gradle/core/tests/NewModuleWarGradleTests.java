@@ -14,9 +14,14 @@
 
 package com.liferay.ide.gradle.core.tests;
 
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.gradle.core.tests.base.NewModuleGradleBase;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
+import org.eclipse.core.resources.IProject;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -33,7 +38,7 @@ public class NewModuleWarGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("layout-template");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -46,7 +51,7 @@ public class NewModuleWarGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("spring-mvc-portlet");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -59,7 +64,11 @@ public class NewModuleWarGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("theme");
 
-		createAndBuild(op, project.getName());
+		IProject themeProject = createOrImportAndBuild(op, project.getName());
+
+		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, themeProject);
+
+		Assert.assertNotNull(bundleProject);
 
 		deleteProject(project.getName());
 	}
@@ -72,7 +81,7 @@ public class NewModuleWarGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("war-hook");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -85,7 +94,7 @@ public class NewModuleWarGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("war-mvc-portlet");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}

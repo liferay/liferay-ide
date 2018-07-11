@@ -16,7 +16,7 @@ package com.liferay.ide.maven.core.tests;
 
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.test.core.base.support.LiferayWorkspaceSupport;
-import com.liferay.ide.test.project.core.base.NewProjectOpBase;
+import com.liferay.ide.test.project.core.base.ProjectOpBase;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,7 +25,7 @@ import org.junit.Test;
  * @author Andy Wu
  * @author Joye Luo
  */
-public class NewLiferayWorkspaceMavenTests extends NewProjectOpBase<NewLiferayWorkspaceOp> {
+public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorkspaceOp> {
 
 	@Test
 	public void createLiferayWorkspace() throws Exception {
@@ -34,7 +34,7 @@ public class NewLiferayWorkspaceMavenTests extends NewProjectOpBase<NewLiferayWo
 		op.setWorkspaceName(workspace.getName());
 		op.setProjectProvider(provider());
 
-		createAndBuild(op, workspace.getName());
+		createOrImportAndBuild(op, workspace.getName());
 
 		deleteProject(workspace.getName());
 	}

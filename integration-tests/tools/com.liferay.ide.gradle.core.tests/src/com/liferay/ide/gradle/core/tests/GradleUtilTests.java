@@ -14,7 +14,6 @@
 
 package com.liferay.ide.gradle.core.tests;
 
-import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.test.core.base.support.ImportProjectSupport;
 import com.liferay.ide.test.project.core.base.ProjectBase;
@@ -36,15 +35,15 @@ public class GradleUtilTests extends ProjectBase {
 
 	@Test
 	public void importLiferayWorkspace() throws CoreException {
-		ImportProjectSupport importProjectSupport = new ImportProjectSupport("test-liferay-workspace");
+		ImportProjectSupport ips = new ImportProjectSupport("test-liferay-workspace");
 
-		importProjectSupport.before();
+		ips.before();
 
-		GradleUtil.importGradleProject(importProjectSupport.getProjectFile(), npm);
+		GradleUtil.sychronizeProject(ips.getIPath(), npm);
 
 		waitForBuildAndValidation();
 
-		assertNotLiferayProject(importProjectSupport.getName());
+		assertNotLiferayProject(ips.getName());
 
 		assertLiferayProject("jstl.test");
 		assertLiferayProject("roster-api");
@@ -56,7 +55,7 @@ public class GradleUtilTests extends ProjectBase {
 
 		assertSourceFolders("sample-theme", "src");
 
-		deleteProject(importProjectSupport.getName());
+		deleteProject(ips.getName());
 	}
 
 	@Test
@@ -65,12 +64,7 @@ public class GradleUtilTests extends ProjectBase {
 
 		ips.before();
 
-		try {
-			GradleUtil.importGradleProject(ips.getProjectFile(), npm);
-		}
-		catch (CoreException ce) {
-			failTest(ce);
-		}
+		GradleUtil.sychronizeProject(ips.getIPath(), npm);
 
 		waitForBuildAndValidation();
 
@@ -107,7 +101,6 @@ public class GradleUtilTests extends ProjectBase {
 	@Override
 	protected void needJobsToBuild(IJobManager manager) throws InterruptedException, OperationCanceledException {
 		manager.join(CorePlugin.GRADLE_JOB_FAMILY, new NullProgressMonitor());
-		manager.join(GradleCore.JOB_FAMILY_ID, new NullProgressMonitor());
 	}
 
 }

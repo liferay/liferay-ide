@@ -27,7 +27,7 @@ import org.junit.Assert;
 /**
  * @author Terry Jia
  */
-public abstract class NewModuleOpBase<T extends ExecutableElement> extends NewProjectOpBase<T> {
+public abstract class NewModuleOpBase<T extends ExecutableElement> extends ProjectOpBase<T> {
 
 	protected abstract String shape();
 

@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 /**
  * @author Terry Jia
@@ -31,7 +33,7 @@ public class ImportProjectSupport extends ProjectSupport {
 	}
 
 	public void after() {
-		_projectFile.delete();
+		FileUtil.deleteDir(_projectFile, true);
 
 		super.after();
 	}
@@ -50,6 +52,14 @@ public class ImportProjectSupport extends ProjectSupport {
 		}
 		catch (IOException ioe) {
 		}
+	}
+
+	public IPath getFile(String filePath) {
+		return new Path(_projectFile.getPath()).append(filePath);
+	}
+
+	public IPath getIPath() {
+		return new Path(_projectFile.getPath());
 	}
 
 	public String getPath() {

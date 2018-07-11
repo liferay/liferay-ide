@@ -16,7 +16,7 @@ package com.liferay.ide.gradle.core.tests;
 
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.test.core.base.support.LiferayWorkspaceSupport;
-import com.liferay.ide.test.project.core.base.NewProjectOpBase;
+import com.liferay.ide.test.project.core.base.ProjectOpBase;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,16 +25,33 @@ import org.junit.Test;
  * @author Andy Wu
  * @author Joye Luo
  */
-public class NewLiferayWorkspaceGradleTests extends NewProjectOpBase<NewLiferayWorkspaceOp> {
+public class NewLiferayWorkspaceGradleTests extends ProjectOpBase<NewLiferayWorkspaceOp> {
 
 	@Test
-	public void testWorkspace() throws Exception {
+	public void createWorkspace() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
 		op.setWorkspaceName(workspace.getName());
 		op.setProjectProvider(provider());
 
-		createAndBuild(op, workspace.getName());
+		createOrImportAndBuild(op, workspace.getName());
+
+		deleteProject(workspace.getName());
+	}
+
+	@Test
+	public void createWorkspace71() throws Exception {
+		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
+
+		op.setWorkspaceName(workspace.getName());
+		op.setProjectProvider(provider());
+		op.setLiferayVersion("7.1");
+
+		createOrImportAndBuild(op, workspace.getName());
+
+		assertPropertyValue(
+			workspace.getName(), "gradle.properties", "liferay.workspace.bundle.url",
+			"https://releases-cdn.liferay.com/portal/7.1.0-b3/liferay-ce-portal-tomcat-7.1-b3-20180611140920623.zip");
 
 		deleteProject(workspace.getName());
 	}
