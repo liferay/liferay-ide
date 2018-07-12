@@ -7,7 +7,8 @@ Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.junit;visibility:=reexport,
  com.liferay.ide.core;visibility:=reexport,
  org.eclipse.jdt.core,
- org.eclipse.wst.validation
+ org.eclipse.wst.validation,
+ org.eclipse.sapphire.modeling;bundle-version="[9.0.0,10.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.test.core.base,

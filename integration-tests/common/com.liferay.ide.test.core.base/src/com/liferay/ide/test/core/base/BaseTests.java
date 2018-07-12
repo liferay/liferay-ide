@@ -44,6 +44,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.sapphire.Value;
 
 import org.junit.Assert;
 
@@ -79,6 +80,10 @@ public class BaseTests {
 		assertProjectExists(project);
 
 		Assert.assertNotNull(LiferayCore.create(IBundleProject.class, project));
+	}
+
+	protected void assertComponentValue(Value<?> component, String expectedValue) {
+		Assert.assertEquals(component.content(), expectedValue);
 	}
 
 	protected void assertFileContains(FileSupport fs, String expectedContent) {
@@ -186,7 +191,9 @@ public class BaseTests {
 
 		String content = FileUtil.readContents(location.toFile());
 
-		Assert.assertTrue(content.contains(expectedContent));
+		Assert.assertTrue(
+			"Expected " + filePath + " in " + projectName + " contains content " + expectedContent,
+			content.contains(expectedContent));
 	}
 
 	protected void assertProjectFileEquals(String projectName, String filePath, String expectedContent) {
@@ -275,6 +282,16 @@ public class BaseTests {
 		catch (CoreException ce) {
 			failTest(ce);
 		}
+	}
+
+	protected String getProjectFileContents(String projectName, String fileName) {
+		IProject project = project(projectName);
+
+		assertProjectExists(project);
+
+		IFile file = project.getFile(fileName);
+
+		return FileUtil.readContents(file);
 	}
 
 	protected void writeFile(FileSupport fs, Iterable<? extends CharSequence> lines) throws IOException {
