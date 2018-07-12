@@ -3,7 +3,6 @@
     <!--bundle id="com.liferay.ide.alloy.ui.tests" version="0.0.0" /-->
     <bundle id="com.liferay.ide.maven.core.tests" version="0.0.0" />
     <bundle id="com.liferay.ide.core.tests" version="0.0.0" />
-    <bundle id="com.liferay.ide.gradle.core.tests" version="0.0.0" />
     <bundle id="com.liferay.ide.hook.core.tests" version="0.0.0" />
     <!--bundle id="com.liferay.ide.hook.ui.tests" version="0.0.0" /-->
     <bundle id="com.liferay.ide.layouttpl.core.tests" version="0.0.0" />
