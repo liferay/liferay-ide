@@ -73,8 +73,8 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 				for (SearchResult searchResult : results) {
 					problems.add(
 						new Problem(
-							problemTitle, problemSummary, problemType, problemTickets, file, searchResult.startLine,
-							searchResult.startOffset, searchResult.endOffset, sectionHtml,
+							problemTitle, problemSummary, problemType, problemTickets, version, file,
+							searchResult.startLine, searchResult.startOffset, searchResult.endOffset, sectionHtml,
 							searchResult.autoCorrectContext, Problem.STATUS_NOT_RESOLVED, Problem.DEFAULT_MARKER_ID,
 							Problem.MARKER_ERROR));
 				}

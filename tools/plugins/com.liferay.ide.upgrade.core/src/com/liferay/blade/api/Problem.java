@@ -39,24 +39,26 @@ public class Problem {
 	}
 
 	public Problem(
-		String title, String summary, String type, String ticket, File file, int lineNumber, int startOffset,
-		int endOffset, String html, String autoCorrectContext, int status, long markerId, int markerType) {
+		String title, String summary, String type, String ticket, String version, File file, int lineNumber,
+		int startOffset, int endOffset, String html, String autoCorrectContext, int status, long markerId,
+		int markerType) {
 
 		this(
-			UUID.randomUUID().toString(), title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html,
-			autoCorrectContext, status, markerId, markerType);
+			UUID.randomUUID().toString(), title, summary, type, ticket, version, file, lineNumber, startOffset,
+			endOffset, html, autoCorrectContext, status, markerId, markerType);
 	}
 
 	public Problem(
-		String uuid, String title, String summary, String type, String ticket, File file, int lineNumber,
-		int startOffset, int endOffset, String html, String autoCorrectContext, int status, long markerId,
-		int markerType) {
+		String uuid, String title, String summary, String type, String ticket, String version, File file,
+		int lineNumber, int startOffset, int endOffset, String html, String autoCorrectContext, int status,
+		long markerId, int markerType) {
 
 		this.uuid = uuid;
 		this.title = title;
 		this.summary = summary;
 		this.type = type;
 		this.ticket = ticket;
+		this.version = version;
 		this.file = file;
 		this.lineNumber = lineNumber;
 		this.startOffset = startOffset;
@@ -149,6 +151,15 @@ public class Problem {
 			return false;
 		}
 
+		if (version == null) {
+			if (other.version != null) {
+				return false;
+			}
+		}
+		else if (!version.equals(other.version)) {
+			return false;
+		}
+
 		if (autoCorrectContext == null) {
 			if (other.autoCorrectContext != null) {
 				return false;
@@ -229,6 +240,10 @@ public class Problem {
 		return uuid;
 	}
 
+	public String getVersion() {
+		return version;
+	}
+
 	public void setAutoCorrectContext(String autoCorrectContext) {
 		this.autoCorrectContext = autoCorrectContext;
 	}
@@ -285,6 +300,10 @@ public class Problem {
 		this.uuid = uuid;
 	}
 
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
 	public String autoCorrectContext;
 	public int endOffset;
 	public File file;
@@ -300,5 +319,6 @@ public class Problem {
 	public String title;
 	public String type;
 	public String uuid;
+	public String version;
 
 }

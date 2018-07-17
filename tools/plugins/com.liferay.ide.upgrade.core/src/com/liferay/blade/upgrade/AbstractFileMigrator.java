@@ -87,8 +87,8 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 				if (searchResult != null) {
 					problems.add(
 						new Problem(
-							problemTitle, problemSummary, fileExtension, problemTickets, file, searchResult.startLine,
-							searchResult.startOffset, searchResult.endOffset, sectionHtml,
+							problemTitle, problemSummary, fileExtension, problemTickets, version, file,
+							searchResult.startLine, searchResult.startOffset, searchResult.endOffset, sectionHtml,
 							searchResult.autoCorrectContext, Problem.STATUS_NOT_RESOLVED, Problem.DEFAULT_MARKER_ID,
 							Problem.MARKER_ERROR));
 				}
