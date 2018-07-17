@@ -6,6 +6,7 @@
    <property name="problem.summary" value="Removed the DLFileEntryTypes_DDMStructures Mapping Table"/>
    <property name="problem.tickets" value="LPS-56660"/>
    <property name="implName" value="DLFileEntryTypeDDMStructureInvocation"/>
+   <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>

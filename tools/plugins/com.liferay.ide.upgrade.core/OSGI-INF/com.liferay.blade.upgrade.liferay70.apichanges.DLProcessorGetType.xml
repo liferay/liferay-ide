@@ -6,6 +6,7 @@
    <property name="problem.tickets" value="LPS-53574"/>
    <property name="problem.section" value="#created-a-new-gettype-method-that-is-implemented-in-dlprocessor"/>
    <property name="implName" value="DLProcessorGetType"/>
+   <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>

@@ -16,7 +16,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=jsp,jspf", "problem.title=Moved the Expando Custom Field Tags to liferay-expando Taglib",
 	"problem.section=#moved-the-expando-custom-field-tags-to-liferay-expando-taglib",
 	"problem.summary=Moved the Expando Custom Field Tags to liferay-expando Taglib", "problem.tickets=LPS-69400",
-	"auto.correct=jsptag", "implName=DeprecatedExpandoCustomFieldTags"
+	"auto.correct=jsptag", "implName=DeprecatedExpandoCustomFieldTags", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class DeprecatedExpandoCustomFieldTags extends JSPTagMigrator {

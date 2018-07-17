@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=java,jsp,jspf", "problem.title=Changed Java Package Names for Portlets Extracted as Modules",
 	"problem.summary=The Java package names changed for portlets that were extracted as OSGi modules in 7.0.",
 	"problem.tickets=LPS-56383", "problem.section=#changed-java-package-names-for-portlets-extracted-as-modules",
-	"implName=PortletsPackage"
+	"implName=PortletsPackage", "version=7.0"
 },
 	service = FileMigrator.class)
 public class PortletsPackage extends JavaFileMigrator {

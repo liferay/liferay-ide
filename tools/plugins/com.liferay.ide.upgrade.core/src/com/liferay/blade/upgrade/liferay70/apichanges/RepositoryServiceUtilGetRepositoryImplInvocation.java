@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.section=#removed-methods-getgrouplocalrepositoryimpl-and-getlocalrepositoryimpl-from",
 	"problem.summary=Removed Methods getGroupLocalRepositoryImpl and getLocalRepositoryImpl from " +
 		"RepositoryLocalService and RepositoryService",
-	"problem.tickets=LPS-55566", "implName=RepositoryServiceUtilGetRepositoryImplInvocation"
+	"problem.tickets=LPS-55566", "implName=RepositoryServiceUtilGetRepositoryImplInvocation", "version=7.0"
 },
 	service = FileMigrator.class)
 public class RepositoryServiceUtilGetRepositoryImplInvocation extends JavaFileMigrator {

@@ -6,6 +6,7 @@
    <property name="problem.summary" value="Changes in Exceptions Thrown by User Services"/>
    <property name="problem.tickets" value="LPS-47130"/>
    <property name="implName" value="UserServicesThrownExceptionsChanges"/>
+   <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>

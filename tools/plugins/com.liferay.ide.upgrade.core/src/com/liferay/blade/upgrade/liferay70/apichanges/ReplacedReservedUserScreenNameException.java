@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.section=#replaced-the-reserveduserscreennameexception-with-userscreennameexception-m",
 	"problem.summary=Replaced the ReservedUserScreenNameException with UserScreenNameException.MustNotBeReserved in " +
 		"UserLocalService",
-	"problem.tickets=LPS-53113", "implName=ReplacedReservedUserScreenNameException"
+	"problem.tickets=LPS-53113", "implName=ReplacedReservedUserScreenNameException", "version=7.0"
 },
 	service = FileMigrator.class)
 public class ReplacedReservedUserScreenNameException extends JavaFileMigrator {

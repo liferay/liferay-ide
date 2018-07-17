@@ -16,7 +16,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.title=Removed the liferay-ui:trash-empty Tag and Replaced with liferay-trash:empty",
 	"problem.section=#removed-the-liferay-uitrash-empty-tag-and-replaced-with-liferay-trashempty",
 	"problem.summary=Removed the liferay-ui:trash-empty Tag and Replaced with liferay-trash:empty",
-	"problem.tickets=LPS-60779", "auto.correct=jsptag", "implName=DeprecatedTrashEmptyTags"
+	"problem.tickets=LPS-60779", "auto.correct=jsptag", "implName=DeprecatedTrashEmptyTags", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class DeprecatedTrashEmptyTags extends JSPTagMigrator {

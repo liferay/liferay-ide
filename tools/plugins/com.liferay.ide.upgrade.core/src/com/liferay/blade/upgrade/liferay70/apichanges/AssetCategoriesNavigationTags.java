@@ -16,7 +16,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.section=#removed-the-liferay-uiasset-categories-navigation-tag-and-replaced-with-lif",
 	"problem.summary=Removed the liferay-ui:asset-categories-navigation Tag and Replaced with liferay-asset:asset-" +
 		"categories-navigation",
-	"problem.tickets=LPS-60753", "auto.correct=jsptag", "implName=AssetCategoriesNavigationTags"
+	"problem.tickets=LPS-60753", "auto.correct=jsptag", "implName=AssetCategoriesNavigationTags", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class AssetCategoriesNavigationTags extends JSPTagMigrator {

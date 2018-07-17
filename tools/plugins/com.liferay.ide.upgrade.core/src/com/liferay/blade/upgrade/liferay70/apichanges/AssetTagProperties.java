@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -34,7 +34,8 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=The Asset Tag Properties have been removed. The service no longer exists and the Asset Tag " +
 		"Service API no longer has this parameter. The behavior associated with tag properties in the Asset " +
 			"Publisher and XSL portlets has also been removed.",
-	"problem.tickets=LPS-52588", "problem.section=#removed-asset-tag-properties", "implName=AssetTagProperties"
+	"problem.tickets=LPS-52588", "problem.section=#removed-asset-tag-properties", "implName=AssetTagProperties",
+	"version=7.0"
 },
 	service = FileMigrator.class)
 public class AssetTagProperties extends JavaFileMigrator {

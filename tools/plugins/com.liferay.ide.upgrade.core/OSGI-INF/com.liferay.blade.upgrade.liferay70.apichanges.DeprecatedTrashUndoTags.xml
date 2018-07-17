@@ -7,6 +7,7 @@
    <property name="problem.tickets" value="LPS-60779"/>
    <property name="auto.correct" value="jsptag"/>
    <property name="implName" value="DeprecatedTrashUndoTags"/>
+   <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.AutoMigrator"/>
       <provide interface="com.liferay.blade.api.FileMigrator"/>

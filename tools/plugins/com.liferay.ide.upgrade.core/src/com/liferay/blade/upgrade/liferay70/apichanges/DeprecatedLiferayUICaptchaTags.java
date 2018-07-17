@@ -16,7 +16,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.title=Deprecated the liferay-ui:captcha Tag and Replaced with liferay-captcha:captcha",
 	"problem.section=#deprecated-the-liferay-uicaptcha-tag-and-replaced-with-liferay-captchacaptc",
 	"problem.summary=Deprecated the liferay-ui:captcha Tag and Replaced with liferay-captcha:captcha",
-	"problem.tickets=LPS-69383", "auto.correct=jsptag", "implName=DeprecatedLiferayUICaptchaTags"
+	"problem.tickets=LPS-69383", "auto.correct=jsptag", "implName=DeprecatedLiferayUICaptchaTags", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class DeprecatedLiferayUICaptchaTags extends JSPTagMigrator {

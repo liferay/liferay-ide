@@ -7,6 +7,7 @@
    <property name="problem.type" value="java,jsp"/>
    <property name="problem.tickets" value="LPS-52990"/>
    <property name="implName" value="DDMTemplateLocalServiceUtilInvocation"/>
+   <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>

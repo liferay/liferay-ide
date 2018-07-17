@@ -15,6 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.PropertiesFileMigrator;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = {
 	"file.extensions=properties", "problem.title=Asset Entry Validator Property",
 	"problem.summary=Removed the asset.entry.validator Property", "problem.tickets=LPS-64370",
-	"problem.section=#removed-the-asset-entry-validator-property", "implName=AssetEntryValidatorProperties"
+	"problem.section=#removed-the-asset-entry-validator-property", "implName=AssetEntryValidatorProperties", "version=7.0"
 },
 	service = FileMigrator.class)
 public class AssetEntryValidatorProperties extends PropertiesFileMigrator {

@@ -20,7 +20,7 @@ import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.SearchResult;
 import com.liferay.blade.api.XMLFile;
-import com.liferay.blade.upgrade.liferay70.XMLFileMigrator;
+import com.liferay.blade.upgrade.XMLFileMigrator;
 
 import java.io.File;
 import java.io.InputStream;
@@ -54,7 +54,7 @@ import org.w3c.dom.Text;
 	"problem.tickets=LPS-50156",
 	"problem.title=Moved MVCPortlet, ActionCommand and ActionCommandCache from util-bridges.jar to portal-service.jar",
 	"problem.section=#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar",
-	"implName=MVCPortletClassInPortletXML", "auto.correct=portlet-xml-portlet-class"
+	"implName=MVCPortletClassInPortletXML", "auto.correct=portlet-xml-portlet-class", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 @SuppressWarnings("restriction")

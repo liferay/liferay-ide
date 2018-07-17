@@ -6,6 +6,7 @@
    <property name="problem.summary" value="Moved Recycle Bin Logic Into a New DLTrashService Interface"/>
    <property name="problem.tickets" value="LPS-60810"/>
    <property name="implName" value="DLAppServiceUtilInvocation"/>
+   <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>

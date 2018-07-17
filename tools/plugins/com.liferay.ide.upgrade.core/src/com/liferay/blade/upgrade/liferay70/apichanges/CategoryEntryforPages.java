@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.SearchResult;
 import com.liferay.blade.api.XMLFile;
-import com.liferay.blade.upgrade.liferay70.XMLFileMigrator;
+import com.liferay.blade.upgrade.XMLFileMigrator;
 
 import java.io.File;
 
@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=The category entry for Site Administration > Pages has been deprecated in favor of Site " +
 		"Administration > Navigation.",
 	"problem.tickets=LPS-63667", "problem.section=#deprecated-category-entry-for-pages",
-	"implName=CategoryEntryforPages"
+	"implName=CategoryEntryforPages", "version=7.0"
 },
 	service = FileMigrator.class)
 public class CategoryEntryforPages extends XMLFileMigrator {

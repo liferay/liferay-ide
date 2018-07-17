@@ -16,7 +16,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.title=Deprecated the liferay-ui:flags Tag and Replaced with liferay-flags:flags",
 	"problem.section=#deprecated-the-liferay-uiflags-tag-and-replaced-with-liferay-flagsflags",
 	"problem.summary=Deprecated the liferay-ui:flags Tag and Replaced with liferay-flags:flags",
-	"problem.tickets=LPS-60967", "auto.correct=jsptag", "implName=LiferayUIFlagsTags"
+	"problem.tickets=LPS-60967", "auto.correct=jsptag", "implName=LiferayUIFlagsTags", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class LiferayUIFlagsTags extends JSPTagMigrator {

@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = {
 	"file.extensions=java,jsp,jspf", "problem.title=DateUtil.compareTo method removed",
 	"problem.section=#dateutil-compareto-method-removed", "problem.summary=DateUtil.compareTo method removed",
-	"problem.tickets=LPS-59192", "implName=DateUtilApiChange"
+	"problem.tickets=LPS-59192", "implName=DateUtilApiChange", "version=7.0"
 },
 	service = FileMigrator.class)
 public class DateUtilApiChange extends JavaFileMigrator {

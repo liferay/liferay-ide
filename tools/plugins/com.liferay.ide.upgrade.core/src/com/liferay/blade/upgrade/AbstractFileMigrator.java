@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.blade.upgrade.liferay70;
+package com.liferay.blade.upgrade;
 
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
@@ -57,6 +57,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 		problemSummary = (String)properties.get("problem.summary");
 		problemTickets = (String)properties.get("problem.tickets");
 		sectionKey = (String)properties.get("problem.section");
+		version = (String)properties.get("version");
 	}
 
 	@Override
@@ -67,7 +68,16 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 		List<SearchResult> searchResults = searchFile(file, createFileChecker(type, file, fileExtension));
 
 		if (ListUtil.isNotEmpty(searchResults)) {
-			String sectionHtml = MarkdownParser.getSection("BREAKING_CHANGES.markdown", sectionKey);
+			String fileName = "BREAKING_CHANGES.markdown";
+
+			if ("7.0".equals(version)) {
+				fileName = "liferay70/" + fileName;
+			}
+			else if ("7.1".equals(version)) {
+				fileName = "liferay71/" + fileName;
+			}
+
+			String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);
 
 			if ((sectionHtml != null) && sectionHtml.equals("#legacy")) {
 				sectionHtml = problemSummary;
@@ -123,6 +133,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 	protected String problemTickets;
 	protected String problemTitle;
 	protected String sectionKey;
+	protected String version;
 	protected final Class<T> type;
 
 }

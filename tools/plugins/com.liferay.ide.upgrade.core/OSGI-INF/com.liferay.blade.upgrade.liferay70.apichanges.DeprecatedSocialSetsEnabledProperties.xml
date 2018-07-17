@@ -6,6 +6,7 @@
    <property name="problem.tickets" value="LPS-63635"/>
    <property name="problem.section" value="#deprecated-the-social-activity-sets-enabled-Property"/>
    <property name="implName" value="DeprecatedSocialSetsEnabledProperties"/>
+   <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>

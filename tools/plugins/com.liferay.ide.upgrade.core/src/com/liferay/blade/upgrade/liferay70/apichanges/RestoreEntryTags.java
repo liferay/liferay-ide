@@ -15,7 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=jsp,jspf", "problem.title=Changed the Usage of the liferay-ui:restore-entry Tag",
 	"problem.section=#changed-the-usage-of-the-liferay-uirestore-entry-tag",
 	"problem.summary=Changed the Usage of the liferay-ui:restore-entry Tag", "problem.tickets=LPS-54106",
-	"implName=RestoreEntryTags"
+	"implName=RestoreEntryTags", "version=7.0"
 },
 	service = FileMigrator.class)
 public class RestoreEntryTags extends JSPTagMigrator {

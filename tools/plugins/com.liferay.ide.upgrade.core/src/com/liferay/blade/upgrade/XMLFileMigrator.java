@@ -12,17 +12,27 @@
  * details.
  */
 
-package com.liferay.blade.upgrade.liferay70;
+package com.liferay.blade.upgrade;
 
-import com.liferay.blade.api.JavaFile;
+import com.liferay.blade.api.XMLFile;
+
+import java.io.File;
+
+import org.eclipse.core.resources.IFile;
 
 /**
  * @author Gregory Amerson
  */
-public abstract class JavaFileMigrator extends AbstractFileMigrator<JavaFile> {
+public abstract class XMLFileMigrator extends AbstractFileMigrator<XMLFile> {
 
-	public JavaFileMigrator() {
-		super(JavaFile.class);
+	public XMLFileMigrator() {
+		super(XMLFile.class);
+	}
+
+	protected IFile getXmlFile(File file) {
+		XMLFile xmlFileService = context.getService(context.getServiceReference(XMLFile.class));
+
+		return xmlFileService.getIFile(file);
 	}
 
 }

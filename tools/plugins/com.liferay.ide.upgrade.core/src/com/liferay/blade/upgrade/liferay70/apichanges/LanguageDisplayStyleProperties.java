@@ -15,6 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.PropertiesFileMigrator;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=properties", "problem.title=Language Display Style Properties",
 	"problem.summary=Replaced the Language Portlet's Display Styles with ADTs", "problem.tickets=LPS-54419",
 	"problem.section=#replaced-the-language-portlets-display-styles-with-adts",
-	"implName=LanguageDisplayStyleProperties"
+	"implName=LanguageDisplayStyleProperties", "version=7.0"
 },
 	service = FileMigrator.class)
 public class LanguageDisplayStyleProperties extends PropertiesFileMigrator {

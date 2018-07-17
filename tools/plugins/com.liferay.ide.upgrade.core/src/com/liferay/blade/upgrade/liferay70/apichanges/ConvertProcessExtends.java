@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -36,7 +36,7 @@ import org.osgi.service.component.annotations.Component;
 				"lementations must register as OSGi components.",
 	"problem.tickets=LPS-50604",
 	"problem.section=#convert-process-classes-are-no-longer-specified-via-the-convert-processes-p",
-	"implName=ConvertProcessExtends"
+	"implName=ConvertProcessExtends", "version=7.0"
 },
 	service = FileMigrator.class)
 public class ConvertProcessExtends extends JavaFileMigrator {

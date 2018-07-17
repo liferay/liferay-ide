@@ -15,7 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=jsp,jspf", "problem.title=Removed the liferay-ui:journal-article tag",
 	"problem.section=#removed-the-liferay-uijournal-article-tag",
 	"problem.summary=Removed the liferay-ui:journal-article Tag", "problem.tickets=LPS-69321",
-	"implName=JournalArticleTags"
+	"implName=JournalArticleTags", "version=7.0"
 },
 	service = FileMigrator.class)
 public class JournalArticleTags extends JSPTagMigrator {

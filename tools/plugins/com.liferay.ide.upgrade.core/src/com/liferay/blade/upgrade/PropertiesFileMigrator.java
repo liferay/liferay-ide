@@ -12,13 +12,12 @@
  * details.
  */
 
-package com.liferay.blade.upgrade.liferay70.apichanges;
+package com.liferay.blade.upgrade;
 
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.MarkdownParser;
-import com.liferay.blade.upgrade.liferay70.PropertiesFileChecker;
+import com.liferay.blade.upgrade.MarkdownParser;
 
 import java.io.File;
 
@@ -45,6 +44,7 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 		problemType = (String)properties.get("file.extensions");
 		problemTickets = (String)properties.get("problem.tickets");
 		sectionKey = (String)properties.get("problem.section");
+		version = (String)properties.get("version");
 
 		addPropertiesToSearch(this.properties);
 	}
@@ -59,7 +59,16 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 			List<SearchResult> results = propertiesFileChecker.findProperties(key);
 
 			if (results != null) {
-				String sectionHtml = MarkdownParser.getSection("BREAKING_CHANGES.markdown", sectionKey);
+				String fileName = "BREAKING_CHANGES.markdown";
+
+				if ("7.0".equals(version)) {
+					fileName = "liferay70/" + fileName;
+				}
+				else if ("7.1".equals(version)) {
+					fileName = "liferay71/" + fileName;
+				}
+
+				String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);
 
 				for (SearchResult searchResult : results) {
 					problems.add(
@@ -84,5 +93,6 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 	protected String problemType;
 	protected final List<String> properties = new ArrayList<>();
 	protected String sectionKey = "";
+	protected String version = "";
 
 }

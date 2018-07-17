@@ -6,6 +6,7 @@
    <property name="problem.tickets" value="LPS-54798"/>
    <property name="problem.section" value="#changed-the-default-value-of-the-copy-request-parameters-init-parameter-for"/>
    <property name="implName" value="MVCPortletInitParamsChangeXML"/>
+   <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>

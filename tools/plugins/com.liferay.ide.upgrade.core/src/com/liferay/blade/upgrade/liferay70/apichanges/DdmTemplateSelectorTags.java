@@ -16,7 +16,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.section=#changed-usage-of-the-liferay-uiddm-template-selector-tag",
 	"problem.summary=The attribute classNameId of the liferay-ui:ddm-template-selector taglib tag has been renamed c" +
 		"lassName",
-	"problem.tickets=LPS-53790", "auto.correct=jsptag", "implName=DdmTemplateSelectorTags"
+	"problem.tickets=LPS-53790", "auto.correct=jsptag", "implName=DdmTemplateSelectorTags", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class DdmTemplateSelectorTags extends JSPTagMigrator {

@@ -6,6 +6,7 @@
    <property name="problem.tickets" value="LPS-54956"/>
    <property name="problem.section" value="#removed-userslastnamerequired-from-portal-properties-in-favor-of-language-p"/>
    <property name="implName" value="UsersLastNameRequiredProperties"/>
+   <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>

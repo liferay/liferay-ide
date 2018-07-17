@@ -15,7 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=jsp,jspf", "problem.title=Deprecated the liferay-security:encrypt Tag with No Direct Replacement",
 	"problem.section=#deprecated-the-liferay-securityencrypt-tag-with-no-direct-replacement",
 	"problem.summary=Deprecated the liferay-security:encrypt Tag with No Direct Replacement",
-	"problem.tickets=LPS-63106", "implName=DeprecatedLiferaySecurityEncryptTag"
+	"problem.tickets=LPS-63106", "implName=DeprecatedLiferaySecurityEncryptTag", "version=7.0"
 },
 	service = FileMigrator.class)
 public class DeprecatedLiferaySecurityEncryptTag extends JSPTagMigrator {

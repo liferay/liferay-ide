@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=The getURLView method of AssetRenderer returns String instead of PortletURL",
 	"problem.tickets=LPS-61853", "problem.title=AssetRenderer API Changes",
 	"problem.section=#the-geturlview-method-of-assetrenderer-returns-string-instead-of-portleturl",
-	"implName=AssetRendererGetURLViewDecl"
+	"implName=AssetRendererGetURLViewDecl", "version=7.0"
 },
 	service = FileMigrator.class)
 public class AssetRendererGetURLViewDecl extends JavaFileMigrator {

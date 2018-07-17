@@ -131,6 +131,7 @@ Service-Component: OSGI-INF/com.liferay.blade.eclipse.provider.CUCacheWTP.xml,
  OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.DateUtilApiChange.xml,
  OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.BuildAutoUpgradeProperties.xml,
  OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.DynamicDataListsWebImport.xml,
- OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.DeprecatedSocialSetsEnabledProperties.xml
+ OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.DeprecatedSocialSetsEnabledProperties.xml,
+ OSGI-INF/com.liferay.blade.upgrade.liferay71.apichanges.MovedUsersFileUploadsPortletProperties.xml
 Bundle-ClassPath: .,
  libs/com.liferay.markdown.parser.jar

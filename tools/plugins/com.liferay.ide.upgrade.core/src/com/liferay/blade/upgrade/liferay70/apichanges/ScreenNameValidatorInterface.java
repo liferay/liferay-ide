@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=java", "problem.title=Added New Methods in the ScreenNameValidator Interface",
 	"problem.summary=The ScreenNameValidator interface has new methods getDescription(Locale) and getJSValidation().",
 	"problem.tickets=LPS-53409", "problem.section=#added-new-methods-in-the-screennamevalidator-interface",
-	"implName=ScreenNameValidatorInterface"
+	"implName=ScreenNameValidatorInterface", "version=7.0"
 },
 	service = FileMigrator.class)
 public class ScreenNameValidatorInterface extends JavaFileMigrator {

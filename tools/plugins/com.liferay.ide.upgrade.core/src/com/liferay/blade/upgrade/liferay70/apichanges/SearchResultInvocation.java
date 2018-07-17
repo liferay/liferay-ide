@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=java,jsp,jspf", "problem.title=Methods removed in SearchResult API",
 	"problem.section=#removed-mbmessages-and-fileentrytuples-attributes-from-app-view-search-entr",
 	"problem.summary=Removed getMbMessages , getFileEntryTuples and addMbMessage Methods from SearchResult Class",
-	"problem.tickets=LPS-55886", "implName=SearchResultInvocation"
+	"problem.tickets=LPS-55886", "implName=SearchResultInvocation", "version=7.0"
 },
 	service = FileMigrator.class)
 public class SearchResultInvocation extends JavaFileMigrator {

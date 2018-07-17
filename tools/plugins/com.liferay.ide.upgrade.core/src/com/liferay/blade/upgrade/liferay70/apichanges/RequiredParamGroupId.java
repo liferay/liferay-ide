@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
 		"parameter. Previously, it had to be included in the ServiceContext parameter passed to the method.",
 	"problem.tickets=LPS-54570",
 	"problem.section=#added-required-parameter-groupid-for-adding-tags-categories-and-vocabularie",
-	"implName=RequiredParamGroupId"
+	"implName=RequiredParamGroupId", "version=7.0"
 },
 	service = FileMigrator.class)
 public class RequiredParamGroupId extends JavaFileMigrator {
