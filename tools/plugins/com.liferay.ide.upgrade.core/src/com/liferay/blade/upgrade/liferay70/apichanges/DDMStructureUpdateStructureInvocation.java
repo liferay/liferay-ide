@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 		"DDMTemplateLocalService",
 	"problem.tickets=LPS-50939", "problem.title=DDMStructureLocalService add new param userId",
 	"problem.section=#added-userid-parameter-to-update-operations-of-ddmstructurelocalservice-and",
-	"implName=DDMStructureUpdateStructureInvocation"
+	"implName=DDMStructureUpdateStructureInvocation", "version=7.0"
 },
 	service = FileMigrator.class)
 public class DDMStructureUpdateStructureInvocation extends JavaFileMigrator {

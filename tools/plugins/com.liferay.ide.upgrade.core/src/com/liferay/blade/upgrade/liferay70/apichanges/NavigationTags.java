@@ -16,7 +16,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.title=Removed the liferay-ui:navigation Tag and Replaced with liferay-site-navigation:navigation Tag",
 	"problem.section=#removed-the-liferay-uinavigation-tag-and-replaced-with-liferay-site-navigat",
 	"problem.summary=Removed the liferay-ui:navigation Tag and Replaced with liferay-site-navigation:navigation Tag",
-	"problem.tickets=LPS-60328", "auto.correct=jsptag", "implName=NavigationTags"
+	"problem.tickets=LPS-60328", "auto.correct=jsptag", "implName=NavigationTags", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class NavigationTags extends JSPTagMigrator {

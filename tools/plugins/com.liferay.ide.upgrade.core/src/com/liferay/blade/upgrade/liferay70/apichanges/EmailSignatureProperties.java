@@ -15,6 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.PropertiesFileMigrator;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ import org.osgi.service.component.annotations.Component;
 		"d Wiki",
 	"problem.tickets=LPS-44599",
 	"problem.section=#merged-configured-email-signature-field-into-the-body-of-email-messages-fro",
-	"implName=EmailSignatureProperties"
+	"implName=EmailSignatureProperties", "version=7.0"
 },
 	service = FileMigrator.class)
 public class EmailSignatureProperties extends PropertiesFileMigrator {

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.blade.upgrade.liferay70;
+package com.liferay.blade.upgrade;
 
 import java.util.ArrayList;
 import java.util.List;

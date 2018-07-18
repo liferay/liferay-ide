@@ -15,6 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.PropertiesFileMigrator;
 
 import java.util.List;
 
@@ -26,7 +27,8 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = {
 	"file.extensions=properties", "problem.title=Moved Journal Portlet Properties to OSGi Configuration",
 	"problem.summary=Moved Journal Portlet Properties to OSGi Configuration", "problem.tickets=LPS-58672",
-	"problem.section=#moved-journal-portlet-properties-to-osgi-configuration", "implName=JournalPortletProperties"
+	"problem.section=#moved-journal-portlet-properties-to-osgi-configuration", "implName=JournalPortletProperties",
+	"version=7.0"
 },
 	service = FileMigrator.class)
 public class JournalPortletProperties extends PropertiesFileMigrator {

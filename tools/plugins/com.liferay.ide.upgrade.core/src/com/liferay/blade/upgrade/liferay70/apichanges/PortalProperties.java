@@ -15,6 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.PropertiesFileMigrator;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=Removed Portal Properties Used to Display Sections in Form Navigators",
 	"problem.tickets=LPS-54903",
 	"problem.section=#removed-portal-properties-used-to-display-sections-in-form-navigators",
-	"implName=PortalProperties"
+	"implName=PortalProperties", "version=7.0"
 },
 	service = FileMigrator.class)
 public class PortalProperties extends PropertiesFileMigrator {

@@ -15,7 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=jsp,jspf", "problem.title=Custom AUI Validators Are No Longer Implicitly Required",
 	"problem.section=#custom-aui-validators-are-no-longer-implicitly-required",
 	"problem.summary=The AUI Validator tag no longer forces custom validators to be required",
-	"problem.tickets=LPS-60995", "implName=CustomAUIValidatorTags"
+	"problem.tickets=LPS-60995", "implName=CustomAUIValidatorTags", "version=7.0"
 },
 	service = FileMigrator.class)
 public class CustomAUIValidatorTags extends JSPTagMigrator {

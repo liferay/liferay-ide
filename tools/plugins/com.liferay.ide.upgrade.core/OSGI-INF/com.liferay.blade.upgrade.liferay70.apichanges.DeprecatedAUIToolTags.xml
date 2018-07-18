@@ -6,6 +6,7 @@
    <property name="problem.summary" value="Deprecated the aui:tool Tag with No Direct Replacement"/>
    <property name="problem.tickets" value="LPS-70422"/>
    <property name="implName" value="DeprecatedAUIToolTags"/>
+   <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>

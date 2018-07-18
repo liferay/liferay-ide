@@ -15,6 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.PropertiesFileMigrator;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
 			"It has also been removed as an option from the Portal Settings section of the Control Panel.",
 	"problem.tickets=LPS-54956",
 	"problem.section=#removed-userslastnamerequired-from-portal-properties-in-favor-of-language-p",
-	"implName=UsersLastNameRequiredProperties"
+	"implName=UsersLastNameRequiredProperties", "version=7.0"
 },
 	service = FileMigrator.class)
 public class UsersLastNameRequiredProperties extends PropertiesFileMigrator {

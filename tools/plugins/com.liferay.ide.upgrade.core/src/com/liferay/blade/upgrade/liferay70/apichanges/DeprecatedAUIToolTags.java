@@ -15,7 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=jsp,jspf", "problem.title=Deprecated the aui:tool Tag with No Direct Replacement",
 	"problem.section=#deprecated-the-auitool-tag-with-no-direct-replacement",
 	"problem.summary=Deprecated the aui:tool Tag with No Direct Replacement", "problem.tickets=LPS-70422",
-	"implName=DeprecatedAUIToolTags"
+	"implName=DeprecatedAUIToolTags", "version=7.0"
 },
 	service = FileMigrator.class)
 public class DeprecatedAUIToolTags extends JSPTagMigrator {

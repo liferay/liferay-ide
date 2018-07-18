@@ -16,7 +16,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=jsp,jspf", "problem.title=The aui:column taglib has been removed and replaced with aui:col taglib",
 	"problem.section=#removed-the-auicolumn-tag-and-replaced-with-auicol",
 	"problem.summary=The aui:column taglib has been removed and replaced with aui:col taglib",
-	"problem.tickets=LPS-62208", "auto.correct=jsptag", "implName=AUIColumnTags"
+	"problem.tickets=LPS-62208", "auto.correct=jsptag", "implName=AUIColumnTags", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class AUIColumnTags extends JSPTagMigrator {

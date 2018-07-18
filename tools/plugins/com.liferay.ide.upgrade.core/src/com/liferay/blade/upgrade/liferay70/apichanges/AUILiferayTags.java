@@ -16,7 +16,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=jsp,jspf", "problem.title=Renamed URI Attribute Used to Generate AUI Tag Library",
 	"problem.section=#renamed-uri-attribute-used-to-generate-aui-tag-library",
 	"problem.summary=We should use the new AUI URI declaration:http://liferay.com/tld/aui", "problem.tickets=LPS-57809",
-	"auto.correct=jsptag", "implName=AUILiferayTags"
+	"auto.correct=jsptag", "implName=AUILiferayTags", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class AUILiferayTags extends JSPTagMigrator {

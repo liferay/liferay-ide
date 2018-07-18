@@ -15,6 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.PropertiesFileMigrator;
 
 import java.util.List;
 
@@ -25,7 +26,8 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(property = {
 	"file.extensions=properties", "problem.title=Build Auto Upgrade", "problem.summary=Build Auto Upgrade",
-	"problem.tickets=LPS-73967", "problem.section=#build-auto-upgrade", "implName=BuildAutoUpgradeProperties"
+	"problem.tickets=LPS-73967", "problem.section=#build-auto-upgrade", "implName=BuildAutoUpgradeProperties",
+	"version=7.0"
 },
 	service = FileMigrator.class)
 public class BuildAutoUpgradeProperties extends PropertiesFileMigrator {

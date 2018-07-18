@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=The method render has been removed from the interfaces AssetRenderer and WorkflowHandler.",
 	"problem.tickets=LPS-56705", "problem.title=Removed render Method from AssetRenderer API and WorkflowHandler API",
 	"problem.section=#removed-render-method-from-assetrenderer-api-and-workflowhandler-api",
-	"implName=AssetRendererAndWorkflowHandlerRenderInvocation"
+	"implName=AssetRendererAndWorkflowHandlerRenderInvocation", "version=7.0"
 },
 	service = FileMigrator.class)
 public class AssetRendererAndWorkflowHandlerRenderInvocation extends JavaFileMigrator {

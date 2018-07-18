@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=The `Dynamic Data Lists Web` module no longer exports the " +
 		"`com.liferay.dynamic.data.lists.web.asset` package.",
 	"problem.tickets=LPS-75778", "problem.section=#removed-exports-from-dynamic-data-lists-web",
-	"implName=DynamicDataListsWebImport"
+	"implName=DynamicDataListsWebImport", "version=7.0"
 },
 	service = FileMigrator.class)
 public class DynamicDataListsWebImport extends JavaFileMigrator {

@@ -18,7 +18,7 @@ import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.ImportStatementMigrator;
+import com.liferay.blade.upgrade.ImportStatementMigrator;
 import com.liferay.ide.core.util.ListUtil;
 
 import java.io.BufferedReader;
@@ -43,7 +43,7 @@ import org.osgi.service.component.annotations.Component;
 		"l of these packages are affected by the split package problem",
 	"problem.tickets=LPS-61952", "problem.title=Renamed Packages to Fix the Split Packages Problem",
 	"problem.section=#renamed-packages-to-fix-the-split-packages-problem", "auto.correct=import",
-	"implName=RenamePortalKernelImports"
+	"implName=RenamePortalKernelImports", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class RenamePortalKernelImports extends ImportStatementMigrator {

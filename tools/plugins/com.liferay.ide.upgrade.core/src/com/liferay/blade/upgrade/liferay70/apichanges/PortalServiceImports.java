@@ -16,7 +16,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.ImportStatementMigrator;
+import com.liferay.blade.upgrade.ImportStatementMigrator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=Many classes from former portal-service.jar from Liferay Portal 6.x have been moved into " +
 		"application and framework API modules.",
 	"problem.tickets=", "problem.section=#classes-in-portal-service-jar-moved", "auto.correct=import",
-	"implName=PortalServiceImports"
+	"implName=PortalServiceImports", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class PortalServiceImports extends ImportStatementMigrator {

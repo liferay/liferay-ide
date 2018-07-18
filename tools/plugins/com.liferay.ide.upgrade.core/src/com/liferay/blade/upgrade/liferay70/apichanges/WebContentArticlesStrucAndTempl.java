@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=Web content is now required to use a structure and template. A default structure and template " +
 		"named Basic Web Content was added to the global scope, and can be modified or deleted.",
 	"problem.tickets=LPS-45107", "problem.section=#web-content-articles-now-require-a-structure-and-template",
-	"implName=WebContentArticlesStrucAndTempl"
+	"implName=WebContentArticlesStrucAndTempl", "version=7.0"
 },
 	service = FileMigrator.class)
 public class WebContentArticlesStrucAndTempl extends JavaFileMigrator {

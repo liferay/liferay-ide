@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
@@ -38,7 +38,7 @@ import org.osgi.service.component.annotations.Component;
 				"SearchContext, Query)",
 	"problem.tickets=LPS-55928",
 	"problem.section=#moved-indexer-addrelatedentryfields-and-indexer-reindexddmstructures-and-re",
-	"implName=IndexerThreeMethodsChange"
+	"implName=IndexerThreeMethodsChange", "version=7.0"
 },
 	service = FileMigrator.class)
 public class IndexerThreeMethodsChange extends JavaFileMigrator {

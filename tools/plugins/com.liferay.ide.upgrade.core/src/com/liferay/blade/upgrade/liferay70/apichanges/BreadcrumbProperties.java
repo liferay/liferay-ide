@@ -15,6 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.PropertiesFileMigrator;
 
 import java.util.List;
 
@@ -26,7 +27,8 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = {
 	"file.extensions=properties", "problem.title=Breadcrumb Portlet's Display Styles Changes",
 	"problem.summary=Replaced the Breadcrumb Portlet's Display Styles with ADTs", "problem.tickets=LPS-53577",
-	"problem.section=#replaced-the-breadcrumb-portlets-display-styles-with-adts", "implName=BreadcrumbProperties"
+	"problem.section=#replaced-the-breadcrumb-portlets-display-styles-with-adts", "implName=BreadcrumbProperties",
+	"version=7.0"
 },
 	service = FileMigrator.class)
 public class BreadcrumbProperties extends PropertiesFileMigrator {

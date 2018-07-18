@@ -20,8 +20,9 @@ import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.PropertiesFileChecker;
-import com.liferay.blade.upgrade.liferay70.PropertiesFileChecker.KeyInfo;
+import com.liferay.blade.upgrade.PropertiesFileChecker;
+import com.liferay.blade.upgrade.PropertiesFileChecker.KeyInfo;
+import com.liferay.blade.upgrade.PropertiesFileMigrator;
 import com.liferay.ide.core.util.ListUtil;
 
 import java.io.ByteArrayInputStream;
@@ -45,7 +46,8 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = {
 	"file.extensions=properties", "problem.title=liferay-versions key in Liferay Plugin Packages Properties",
 	"problem.summary=In order to deploy this project to 7.0 the liferay-versions property must be set to 7.0.0+",
-	"problem.tickets=", "problem.section=", "auto.correct=property", "implName=LiferayVersionsProperties"
+	"problem.tickets=", "problem.section=", "auto.correct=property", "implName=LiferayVersionsProperties",
+	"version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class LiferayVersionsProperties extends PropertiesFileMigrator implements AutoMigrator {
@@ -73,7 +75,7 @@ public class LiferayVersionsProperties extends PropertiesFileMigrator implements
 
 							problems.add(
 								new Problem(
-									problemTitle, problemSummary, problemType, problemTickets, file,
+									problemTitle, problemSummary, problemType, problemTickets, version, file,
 									searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
 									sectionHtml, searchResult.autoCorrectContext, Problem.STATUS_NOT_RESOLVED,
 									Problem.DEFAULT_MARKER_ID, Problem.MARKER_ERROR));

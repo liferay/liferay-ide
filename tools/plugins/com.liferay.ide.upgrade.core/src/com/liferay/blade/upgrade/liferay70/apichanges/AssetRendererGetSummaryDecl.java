@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=Changed the AssetRenderer API to Include the PortletRequest and PortletResponse Parameters",
 	"problem.tickets=LPS-44639,LPS-44894", "problem.title=AssetRenderer API Changes",
 	"problem.section=#changed-the-assetrenderer-and-indexer-apis-to-include-the-portletrequest-an",
-	"implName=AssetRendererGetSummaryDecl"
+	"implName=AssetRendererGetSummaryDecl", "version=7.0"
 },
 	service = FileMigrator.class)
 public class AssetRendererGetSummaryDecl extends JavaFileMigrator {

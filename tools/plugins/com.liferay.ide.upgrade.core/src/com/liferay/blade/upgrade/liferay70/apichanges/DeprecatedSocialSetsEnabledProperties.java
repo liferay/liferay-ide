@@ -15,6 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.PropertiesFileMigrator;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=properties", "problem.title=Social Activity Properties Deprecated",
 	"problem.summary=Deprecated the social.activity.sets.enabled Property", "problem.tickets=LPS-63635",
 	"problem.section=#deprecated-the-social-activity-sets-enabled-Property",
-	"implName=DeprecatedSocialSetsEnabledProperties"
+	"implName=DeprecatedSocialSetsEnabledProperties", "version=7.0"
 }, service = FileMigrator.class)
 public class DeprecatedSocialSetsEnabledProperties extends PropertiesFileMigrator {
 

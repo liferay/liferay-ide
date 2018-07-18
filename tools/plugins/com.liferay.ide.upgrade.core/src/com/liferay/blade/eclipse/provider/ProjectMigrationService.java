@@ -72,6 +72,11 @@ public class ProjectMigrationService implements Migration {
 
 	@Override
 	public List<Problem> findProblems(File projectDir, ProgressMonitor monitor) {
+		return findProblems(projectDir, Collections.emptyList(), monitor);
+	}
+
+	@Override
+	public List<Problem> findProblems(File projectDir, List<String> versions, ProgressMonitor monitor) {
 		monitor.beginTask("Searching for migration problems in " + projectDir, -1);
 
 		List<Problem> problems = Collections.synchronizedList(new ArrayList<Problem>());
@@ -80,7 +85,7 @@ public class ProjectMigrationService implements Migration {
 
 		_countTotal(projectDir);
 
-		_walkFiles(projectDir, problems, monitor);
+		_walkFiles(projectDir, problems, versions, monitor);
 
 		_updateListeners(problems);
 
@@ -94,6 +99,11 @@ public class ProjectMigrationService implements Migration {
 
 	@Override
 	public List<Problem> findProblems(Set<File> files, ProgressMonitor monitor) {
+		return findProblems(files, Collections.emptyList(), monitor);
+	}
+
+	@Override
+	public List<Problem> findProblems(Set<File> files, List<String> versions, ProgressMonitor monitor) {
 		List<Problem> problems = Collections.synchronizedList(new ArrayList<Problem>());
 
 		monitor.beginTask("Analyzing files", -1);
@@ -107,7 +117,7 @@ public class ProjectMigrationService implements Migration {
 				return Collections.emptyList();
 			}
 
-			analyzeFile(file, problems, monitor);
+			analyzeFile(file, problems, versions, monitor);
 		}
 
 		_updateListeners(problems);
@@ -182,7 +192,7 @@ public class ProjectMigrationService implements Migration {
 		}
 	}
 
-	protected FileVisitResult analyzeFile(File file, final List<Problem> problems, ProgressMonitor monitor) {
+	protected FileVisitResult analyzeFile(File file, List<Problem> problems, List<String> versions, ProgressMonitor monitor) {
 		Path path = file.toPath();
 
 		String fileName = path.getFileName().toString();
@@ -203,6 +213,16 @@ public class ProjectMigrationService implements Migration {
 					List<String> extensionList = Arrays.asList(fileExtensionString.split(","));
 
 					return extensionList.contains(extension);
+				}).filter(
+					predicate -> {
+						if (ListUtil.isNotEmpty(versions)) {
+							String version = (String)predicate.getProperty("version");
+
+							return versions.contains(version);
+						}
+						else {
+							return true;
+						}
 				}).collect(Collectors.toList());
 
 			if (ListUtil.isNotEmpty(fileMigratorList)) {
@@ -298,7 +318,7 @@ public class ProjectMigrationService implements Migration {
 		}
 	}
 
-	private void _walkFiles(File startDir, List<Problem> problems, ProgressMonitor monitor) {
+	private void _walkFiles(File startDir, List<Problem> problems, List<String> versions, ProgressMonitor monitor) {
 		FileVisitor<Path> visitor = new SimpleFileVisitor<Path>() {
 
 			@Override
@@ -335,7 +355,7 @@ public class ProjectMigrationService implements Migration {
 				File file = path.toFile();
 
 				if (file.isFile() && attrs.isRegularFile() && (attrs.size() > 0)) {
-					FileVisitResult result = analyzeFile(file, problems, monitor);
+					FileVisitResult result = analyzeFile(file, problems, versions, monitor);
 
 					if (result.equals(FileVisitResult.TERMINATE)) {
 						return result;

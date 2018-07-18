@@ -16,7 +16,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.ImportStatementMigrator;
+import com.liferay.blade.upgrade.ImportStatementMigrator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.tickets=LPS-50156",
 	"problem.title=Moved MVCPortlet, ActionCommand and ActionCommandCache from util-bridges.jar to portal-service.jar",
 	"problem.section=#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar",
-	"auto.correct=import", "implName=MVCPortletActionCommandImports"
+	"auto.correct=import", "implName=MVCPortletActionCommandImports", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class MVCPortletActionCommandImports extends ImportStatementMigrator {

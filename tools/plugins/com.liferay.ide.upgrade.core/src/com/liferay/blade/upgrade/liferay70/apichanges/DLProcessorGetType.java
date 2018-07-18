@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -31,7 +31,8 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = {
 	"file.extensions=java", "problem.title=Created a New getType Method That is Implemented in DLProcessor",
 	"problem.summary=The DLProcessor interface has a new method getType().", "problem.tickets=LPS-53574",
-	"problem.section=#created-a-new-gettype-method-that-is-implemented-in-dlprocessor", "implName=DLProcessorGetType"
+	"problem.section=#created-a-new-gettype-method-that-is-implemented-in-dlprocessor", "implName=DLProcessorGetType",
+	"version=7.0"
 },
 	service = FileMigrator.class)
 public class DLProcessorGetType extends JavaFileMigrator {

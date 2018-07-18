@@ -21,12 +21,17 @@ import java.util.Set;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public interface Migration {
 
 	public List<Problem> findProblems(File projectDir, ProgressMonitor monitor);
 
+	public List<Problem> findProblems(File projectDir, List<String> versions, ProgressMonitor monitor);
+
 	public List<Problem> findProblems(Set<File> files, ProgressMonitor monitor);
+
+	public List<Problem> findProblems(Set<File> files, List<String> versions, ProgressMonitor monitor);
 
 	public void reportProblems(List<Problem> problems, int detail, String format, Object... args);
 

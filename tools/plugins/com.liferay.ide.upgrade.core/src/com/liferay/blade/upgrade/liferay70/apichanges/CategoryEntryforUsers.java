@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.SearchResult;
 import com.liferay.blade.api.XMLFile;
-import com.liferay.blade.upgrade.liferay70.XMLFileMigrator;
+import com.liferay.blade.upgrade.XMLFileMigrator;
 
 import java.io.File;
 
@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=The category entry for Site Administration > Users has been deprecated in favor of Site " +
 		"Administration > Members.",
 	"problem.tickets=LPS-63466", "problem.section=#deprecated-category-entry-for-users",
-	"implName=CategoryEntryforUsers"
+	"implName=CategoryEntryforUsers", "version=7.0"
 },
 	service = FileMigrator.class)
 public class CategoryEntryforUsers extends XMLFileMigrator {

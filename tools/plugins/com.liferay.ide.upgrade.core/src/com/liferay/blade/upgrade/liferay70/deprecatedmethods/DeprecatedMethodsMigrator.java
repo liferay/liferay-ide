@@ -18,7 +18,7 @@ import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.File;
@@ -93,7 +93,7 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 						problems.add(
 							new Problem(
 								_tempMethod.getString("javadoc"), _tempMethod.getString("javadoc"), fileExtension, "",
-								file, searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
+								"7.0", file, searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
 								_tempMethod.getString("javadoc"), searchResult.autoCorrectContext,
 								Problem.STATUS_NOT_RESOLVED, Problem.DEFAULT_MARKER_ID, makerType));
 					}

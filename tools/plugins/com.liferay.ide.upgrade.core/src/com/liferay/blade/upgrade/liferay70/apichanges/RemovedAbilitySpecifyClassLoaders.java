@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=java", "problem.title=Removed the Ability to Specify Class Loaders in Scripting",
 	"problem.summary=Removed the Ability to Specify Class Loaders in Scripting.", "problem.tickets=LPS-63180",
 	"problem.section=#removed-the-ability-to-specify-class-loaders-in-scripting",
-	"implName=RemovedAbilitySpecifyClassLoaders"
+	"implName=RemovedAbilitySpecifyClassLoaders", "version=7.0"
 },
 	service = FileMigrator.class)
 public class RemovedAbilitySpecifyClassLoaders extends JavaFileMigrator {

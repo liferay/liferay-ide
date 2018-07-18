@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.blade.upgrade.liferay70;
+package com.liferay.blade.upgrade;
 
 import com.liferay.blade.api.AutoMigrateException;
 import com.liferay.blade.api.AutoMigrator;

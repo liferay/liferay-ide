@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.title=Added Required Parameter resourceClassNameId for DDM Template Search Operations",
 	"problem.section=#added-required-parameter-resourceclassnameid-for-ddm-template-search-operat",
 	"problem.summary=Added Required Parameter resourceClassNameId for DDM Template Search Operations",
-	"problem.tickets=LPS-52990", "implName=DDMTemplateServiceUtilInvocation"
+	"problem.tickets=LPS-52990", "implName=DDMTemplateServiceUtilInvocation", "version=7.0"
 },
 	service = FileMigrator.class)
 public class DDMTemplateServiceUtilInvocation extends JavaFileMigrator {

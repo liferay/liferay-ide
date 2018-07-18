@@ -17,7 +17,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.blade.upgrade.JavaFileMigrator;
 
 import java.io.File;
 
@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=All Lock APIs previously exposed as Liferay Portal API in 6.2 have been move out from " +
 		"portal-service into separate OSGi modules",
 	"problem.tickets=LPS-55791", "problem.title=Lock APIs migrated to OSGi module", "problem.section=#legacy",
-	"implName=LockLegacyAPI"
+	"implName=LockLegacyAPI", "version=7.0"
 },
 	service = FileMigrator.class)
 public class LockLegacyAPI extends JavaFileMigrator {

@@ -6,6 +6,7 @@
    <property name="problem.summary" value="=User Operation and Importer/Exporter Classes and Utilities Moved or Removed"/>
    <property name="problem.tickets" value="LPS-63205"/>
    <property name="implName" value="UserImporterExporter"/>
+   <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>

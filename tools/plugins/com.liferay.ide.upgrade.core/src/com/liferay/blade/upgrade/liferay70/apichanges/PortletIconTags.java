@@ -15,7 +15,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
+import com.liferay.blade.upgrade.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=jsp,jspf", "problem.title=Removed the Tags that Start with portlet:icon-",
 	"problem.section=#removed-the-tags-that-start-with-portleticon-",
 	"problem.summary=Removed the Tags that Start with portlet:icon-", "problem.tickets=LPS-54620",
-	"implName=PortletIconTags"
+	"implName=PortletIconTags", "version=7.0"
 },
 	service = FileMigrator.class)
 public class PortletIconTags extends JSPTagMigrator {

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.blade.upgrade.liferay70;
+package com.liferay.blade.upgrade;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.knowledge.base.markdown.converter.factory.MarkdownConverterFactoryUtil;

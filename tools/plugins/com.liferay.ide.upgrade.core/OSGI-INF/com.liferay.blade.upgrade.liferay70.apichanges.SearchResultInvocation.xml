@@ -6,6 +6,7 @@
    <property name="problem.summary" value="Removed getMbMessages , getFileEntryTuples and addMbMessage Methods from SearchResult Class"/>
    <property name="problem.tickets" value="LPS-55886"/>
    <property name="implName" value="SearchResultInvocation"/>
+   <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>
