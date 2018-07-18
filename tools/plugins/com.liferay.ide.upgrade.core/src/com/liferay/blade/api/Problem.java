@@ -319,6 +319,6 @@ public class Problem {
 	public String title;
 	public String type;
 	public String uuid;
-	public String version;
+	public String version = "7.0";
 
 }

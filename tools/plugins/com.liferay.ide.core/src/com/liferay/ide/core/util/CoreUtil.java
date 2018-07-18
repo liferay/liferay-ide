@@ -29,12 +29,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import java.security.MessageDigest;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -60,9 +57,7 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-
 import org.osgi.framework.Version;
-
 import org.w3c.dom.Node;
 
 /**
@@ -374,6 +369,30 @@ public class CoreUtil {
 		}
 
 		return location;
+	}
+
+	public static IPath getReourcePath(IResource resource) {
+		return resource.getLocation();
+	}
+
+	public static int getReourceSegmentCount(IPath resourcePath) {
+		return resourcePath.segmentCount();
+	}
+
+	public static String getReourceFilePath(IPath resourcePath) {
+		File resourceFile = resourcePath.toFile();
+
+		return resourceFile.getPath();
+	}
+
+	public static String getReourcePortableString(IResource resource) {
+		IPath location = resource.getLocation();
+
+		return location.toPortableString();
+	}
+
+	public static String getReourceFilePath(File resourceFile) {
+		return resourceFile.getPath();
 	}
 
 	public static final List<IFolder> getSourceFolders(IJavaProject project) {

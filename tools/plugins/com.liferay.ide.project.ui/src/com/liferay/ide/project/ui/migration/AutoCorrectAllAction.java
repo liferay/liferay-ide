@@ -26,6 +26,9 @@ import com.liferay.ide.project.core.upgrade.ProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.upgrade.animated.FindBreakingChangesPage;
+import com.liferay.ide.project.ui.upgrade.animated.LiferayUpgradeDataModel;
+import com.liferay.ide.project.ui.upgrade.animated.Page;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -36,19 +39,22 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IViewPart;
-
+import org.eclipse.ui.IViewSite;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -64,7 +70,14 @@ public class AutoCorrectAllAction extends Action {
 	}
 
 	public void run() {
-		final BundleContext context = FrameworkUtil.getBundle(AutoCorrectAction.class).getBundleContext();
+		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectAction.class);
+
+		final BundleContext context = bundle.getBundleContext();
+
+		final FindBreakingChangesPage page = UpgradeView.getPage(
+			Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
+
+		LiferayUpgradeDataModel dataModel = page.getDataModel();
 
 		WorkspaceJob job = new WorkspaceJob("Auto correcting all of migration problem.") {
 
@@ -94,8 +107,10 @@ public class AutoCorrectAllAction extends Action {
 											continue;
 										}
 
+										IPath fileLocation = file.getLocation();
+
 										String fixedKey =
-											file.getLocation().toString() + "," + problem.autoCorrectContext;
+												fileLocation.toString() + "," + problem.autoCorrectContext;
 
 										if ((problem.autoCorrectContext == null) || fixed.contains(fixedKey)) {
 											continue;
@@ -159,15 +174,19 @@ public class AutoCorrectAllAction extends Action {
 										List<BreakingChangeSimpleProject> selectedProjects =
 											selectedProject.getSelectedProjects();
 
-										selectedProjects.stream().forEach(
+										Stream<BreakingChangeSimpleProject> stream = selectedProjects.stream();
+
+										stream.forEach(
 											breakingProject -> projects.add(
 												CoreUtil.getProject(breakingProject.getName())));
 
 										projectSelection = new StructuredSelection(projects.toArray(new IProject[0]));
 									}
 
+									IViewSite viewSite = view.getViewSite();
+
 									new RunMigrationToolAction(
-										"Run Migration Tool", view.getViewSite().getShell(), projectSelection).run();
+										"Run Migration Tool", viewSite.getShell(), projectSelection, dataModel).run();
 								}
 								catch (IOException ioe) {
 									ProjectUI.logError(ioe);
