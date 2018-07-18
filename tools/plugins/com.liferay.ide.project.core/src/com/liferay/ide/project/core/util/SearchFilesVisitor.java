@@ -15,8 +15,10 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
@@ -33,6 +35,10 @@ public class SearchFilesVisitor implements IResourceProxyVisitor {
 
 	public List<IFile> searchFiles(IResource container, String searchFileName) {
 		this.searchFileName = searchFileName;
+
+		if (FileUtil.notExists(container)) {
+			return Collections.emptyList();
+		}
 
 		try {
 			container.accept(this, IContainer.EXCLUDE_DERIVED);
