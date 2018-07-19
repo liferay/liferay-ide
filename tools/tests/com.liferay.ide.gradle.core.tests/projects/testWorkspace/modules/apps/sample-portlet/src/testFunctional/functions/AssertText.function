@@ -1,9 +1,0 @@
-<definition default="assertText">
-	<command name="assertText">
-		<execute selenium="waitForVisible" />
-
-		<execute selenium="waitForText" />
-
-		<execute selenium="assertText" />
-	</command>
-</definition>

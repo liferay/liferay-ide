@@ -1,5 +1,0 @@
-# Ignore all files by default
-**/**
-
-# Whitelist the files we want to send as the Docker context
-!/Dockerfile

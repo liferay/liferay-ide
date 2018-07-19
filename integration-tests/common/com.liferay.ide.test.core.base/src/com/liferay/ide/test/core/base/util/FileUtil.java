@@ -25,19 +25,19 @@ public class FileUtil extends com.liferay.ide.core.util.FileUtil {
 	public static void copyDirectiory(String sourceDir, String targetDir) throws IOException {
 		(new File(targetDir)).mkdirs();
 
-		File[] file = (new File(sourceDir)).listFiles();
+		File[] files = (new File(sourceDir)).listFiles();
 
-		for (int i = 0; i < file.length; i++) {
-			if (file[i].isFile()) {
-				File sourceFile = file[i];
-				File targetFile = new File(new File(targetDir).getAbsolutePath() + File.separator + file[i].getName());
+		for (File file : files) {
+			if (file.isFile()) {
+				File sourceFile = file;
+				File targetFile = new File(new File(targetDir).getAbsolutePath() + File.separator + file.getName());
 
 				copyFile(sourceFile, targetFile);
 			}
 
-			if (file[i].isDirectory()) {
-				String dir1 = sourceDir + "/" + file[i].getName();
-				String dir2 = targetDir + "/" + file[i].getName();
+			if (file.isDirectory()) {
+				String dir1 = sourceDir + "/" + file.getName();
+				String dir2 = targetDir + "/" + file.getName();
 
 				copyDirectiory(dir1, dir2);
 			}

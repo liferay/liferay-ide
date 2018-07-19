@@ -35,7 +35,7 @@ public class NewModuleNpm71GradleTests extends NewModuleGradleBase {
 		op.setProjectTemplateName("npm-angular-portlet");
 		op.setLiferayVersion("7.1");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -50,7 +50,7 @@ public class NewModuleNpm71GradleTests extends NewModuleGradleBase {
 		op.setProjectTemplateName("npm-billboardjs-portlet");
 		op.setLiferayVersion("7.1");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -65,7 +65,7 @@ public class NewModuleNpm71GradleTests extends NewModuleGradleBase {
 		op.setProjectTemplateName("npm-isomorphic-portlet");
 		op.setLiferayVersion("7.1");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -80,7 +80,7 @@ public class NewModuleNpm71GradleTests extends NewModuleGradleBase {
 		op.setProjectTemplateName("npm-jquery-portlet");
 		op.setLiferayVersion("7.1");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -95,7 +95,7 @@ public class NewModuleNpm71GradleTests extends NewModuleGradleBase {
 		op.setProjectTemplateName("npm-metaljs-portlet");
 		op.setLiferayVersion("7.1");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -110,7 +110,7 @@ public class NewModuleNpm71GradleTests extends NewModuleGradleBase {
 		op.setProjectTemplateName("npm-portlet");
 		op.setLiferayVersion("7.1");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -125,7 +125,7 @@ public class NewModuleNpm71GradleTests extends NewModuleGradleBase {
 		op.setProjectTemplateName("npm-react-portlet");
 		op.setLiferayVersion("7.1");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -140,7 +140,7 @@ public class NewModuleNpm71GradleTests extends NewModuleGradleBase {
 		op.setProjectTemplateName("npm-vuejs-portlet");
 		op.setLiferayVersion("7.1");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}

@@ -38,7 +38,7 @@ public class NewModuleMavenTests extends NewModuleOpBase<NewLiferayModuleProject
 		op.setProjectProvider("maven-module");
 		op.setProjectTemplateName("activator");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}

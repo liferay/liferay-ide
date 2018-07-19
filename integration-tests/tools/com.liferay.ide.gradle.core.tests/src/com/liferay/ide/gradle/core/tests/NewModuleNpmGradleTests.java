@@ -34,7 +34,7 @@ public class NewModuleNpmGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("npm-angular-portlet");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -48,7 +48,7 @@ public class NewModuleNpmGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("npm-billboardjs-portlet");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -62,7 +62,7 @@ public class NewModuleNpmGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("npm-isomorphic-portlet");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -76,7 +76,7 @@ public class NewModuleNpmGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("npm-jquery-portlet");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -90,7 +90,7 @@ public class NewModuleNpmGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("npm-metaljs-portlet");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -104,7 +104,7 @@ public class NewModuleNpmGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("npm-portlet");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -118,7 +118,7 @@ public class NewModuleNpmGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("npm-react-portlet");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -132,7 +132,7 @@ public class NewModuleNpmGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("npm-vuejs-portlet");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}

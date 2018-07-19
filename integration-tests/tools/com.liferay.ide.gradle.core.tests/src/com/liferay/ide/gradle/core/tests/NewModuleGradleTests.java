@@ -33,7 +33,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("activator");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -46,7 +46,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("api");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -59,7 +59,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("content-targeting-report");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -72,7 +72,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("content-targeting-rule");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -85,7 +85,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("content-targeting-tracking-action");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -98,7 +98,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("control-menu-entry");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -111,7 +111,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("form-field");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -124,7 +124,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("mvc-portlet");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -137,7 +137,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("panel-app");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -150,7 +150,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("portlet");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -163,7 +163,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("portlet-configuration-icon");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -176,7 +176,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("portlet-provider");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -189,7 +189,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("portlet-toolbar-contributor");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -202,7 +202,39 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("rest");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createService() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("service");
+		op.setComponentName("MyService");
+		op.setPackageName("com.liferay.test");
+		op.setServiceName("com.liferay.portal.kernel.json.JSONFactoryUtil");
+
+		createOrImportAndBuild(op, project.getName(), false);
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createServiceWrapper() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("service-wrapper");
+		op.setPackageName("com.liferay.test");
+		op.setServiceName("com.liferay.portal.kernel.service.UserLocalServiceWrapper");
+		op.setComponentName("MyServiceWrapper");
+
+		createOrImportAndBuild(op, project.getName(), false);
 
 		deleteProject(project.getName());
 	}
@@ -215,7 +247,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("simulation-panel-entry");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -228,7 +260,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("soy-portlet");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -241,7 +273,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("template-context-contributor");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -254,7 +286,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("theme-contributor");
 
-		createAndBuild(op, project.getName());
+		createOrImportAndBuild(op, project.getName());
 
 		deleteProject(project.getName());
 	}
@@ -268,7 +300,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectTemplateName("service-builder");
 		op.setPackageName("com.liferay.test");
 
-		create(op, project.getName());
+		createOrImport(op, project.getName());
 
 		assertProjectExists(project.getName());
 

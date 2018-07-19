@@ -30,27 +30,6 @@ import org.junit.Test;
 public class VaadinPortletProjectTests extends LiferayMavenProjectTestCase {
 
 	@Test
-	public void testNewVaadin7PortletProject() throws Exception {
-		NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
-
-		op.setProjectName("vaadin7");
-		op.setProjectProvider("maven");
-		op.setPortletFramework("vaadin");
-
-		createTestBundleProfile(op);
-
-		final IProject newProject = base.createProject(op);
-
-		assertNotNull(newProject);
-
-		String pomContents = CoreUtil.readStreamToString(newProject.getFile("pom.xml").getContents());
-
-		assertTrue(pomContents.contains("<artifactId>vaadin-server</artifactId>"));
-		assertTrue(pomContents.contains("<artifactId>vaadin-client</artifactId>"));
-		assertTrue(pomContents.contains("<artifactId>portal-service</artifactId>"));
-	}
-
-	@Test
 	public void testProfileLiferayMavenPluginVersionCheck() throws Exception {
 		if (shouldSkipBundleTests()) {
 			return;

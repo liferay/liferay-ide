@@ -14,7 +14,6 @@
 
 package com.liferay.ide.gradle.core.tests.base;
 
-import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.test.project.core.base.NewModuleOpBase;
 
@@ -32,7 +31,6 @@ public abstract class NewModuleGradleBase extends NewModuleOpBase<NewLiferayModu
 	@Override
 	protected void needJobsToBuild(IJobManager manager) throws InterruptedException, OperationCanceledException {
 		manager.join(CorePlugin.GRADLE_JOB_FAMILY, new NullProgressMonitor());
-		manager.join(GradleCore.JOB_FAMILY_ID, new NullProgressMonitor());
 	}
 
 	@Override
