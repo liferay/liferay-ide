@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.blade.upgrade.liferay71.apichanges.RemovedJavaScriptMinificationProperties">
+   <property name="file.extensions" value="properties"/>
+   <property name="problem.title" value="Removed JavaScript Minification Properties minifier.javascript.impl and yui.compressor.* from portal.properties"/>
+   <property name="problem.summary" value="Removed JavaScript Minification Properties From Portal Properties"/>
+   <property name="problem.tickets" value="LPS-74375"/>
+   <property name="problem.section" value="#removed-javascript-minification-properties-from-portal-properties"/>
+   <property name="implName" value="RemovedJavaScriptMinificationProperties"/>
+   <property name="version" value="7.1"/>
+   <service>
+      <provide interface="com.liferay.blade.api.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.blade.upgrade.liferay71.apichanges.RemovedJavaScriptMinificationProperties"/>
+</scr:component>

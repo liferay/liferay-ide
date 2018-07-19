@@ -158,13 +158,13 @@ portlet URLs without passing the request as a necessary parameter.
 - **Date:** 2017-Feb-06
 - **JIRA Ticket:** LPS-69211
 
-#### What changed? [](id=what-changed-2)
+#### What changed? [](id=what-changed-3)
 
 The Users File Uploads portlet properties have been moved from Server
 Administration to an OSGi configuration named
 `UserFileUploadsConfiguration.java` in the `users-admin-api` module.
 
-#### Who is affected? [](id=who-is-affected-2)
+#### Who is affected? [](id=who-is-affected-3)
 
 This affects anyone using the following portlet properties:
 
@@ -173,7 +173,7 @@ This affects anyone using the following portlet properties:
 - `users.image.max.height`
 - `users.image.max.width`
 
-#### How should I update my code? [](id=how-should-i-update-my-code-2)
+#### How should I update my code? [](id=how-should-i-update-my-code-3)
 
 Instead of overriding the `portal.properties` file, you can manage the
 properties from Portal's configuration administrator. This can be accessed by
@@ -185,7 +185,7 @@ If you would like to include the new configuration in your application, follow
 the instructions for
 [making your applications configurable in Liferay 7.0](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable).
 
-#### Why was this change made? [](id=why-was-this-change-made-2)
+#### Why was this change made? [](id=why-was-this-change-made-3)
 
 This change was made as part of the modularization efforts to ease portal
 configuration changes.
@@ -196,13 +196,13 @@ configuration changes.
 - **Date:** 2017-Feb-13
 - **JIRA Ticket:** LPS-67830
 
-#### What changed? [](id=what-changed-3)
+#### What changed? [](id=what-changed-4)
 
 The CAPTCHA properties have been moved from `portal.properties` and Server
 Administration to an OSGi configuration named `CaptchaConfiguration.java` in the
 `captcha-api` module.
 
-#### Who is affected? [](id=who-is-affected-3)
+#### Who is affected? [](id=who-is-affected-4)
 
 This affects anyone using the following portal properties:
 
@@ -225,7 +225,7 @@ This affects anyone using the following portal properties:
 - `captcha.engine.simplecaptcha.text.producers`
 - `captcha.engine.simplecaptcha.word.renderers`
 
-#### How should I update my code? [](id=how-should-i-update-my-code-3)
+#### How should I update my code? [](id=how-should-i-update-my-code-4)
 
 Instead of overriding the `portal.properties` file, you can manage the
 properties from Portal's configuration administrator. This can be accessed by
@@ -236,7 +236,7 @@ If you would like to include the new configuration in your application, follow
 the instructions for
 [making your applications configurable in Liferay 7.0](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable).
 
-#### Why was this change made? [](id=why-was-this-change-made-3)
+#### Why was this change made? [](id=why-was-this-change-made-4)
 
 This change was made as part of the modularization efforts to ease portal
 configuration changes.
@@ -247,13 +247,13 @@ configuration changes.
 - **Date:** 2017-Mar-24
 - **JIRA Ticket:** LPS-71382
 
-#### What changed? [](id=what-changed-4)
+#### What changed? [](id=what-changed-5)
 
 The OpenOffice properties have been moved from Server Administration to an OSGi
 configuration named `OpenOfficeConfiguration.java` in the
 `document-library-document-conversion` module.
 
-#### Who is affected? [](id=who-is-affected-4)
+#### Who is affected? [](id=who-is-affected-5)
 
 This affects anyone using the following portal properties:
 
@@ -262,7 +262,7 @@ This affects anyone using the following portal properties:
 - `openoffice.server.host`
 - `openoffice.server.port`
 
-#### How should I update my code? [](id=how-should-i-update-my-code-4)
+#### How should I update my code? [](id=how-should-i-update-my-code-5)
 
 Instead of overriding the `portal.properties` file, you can manage the
 properties from Portal's configuration administrator. This can be accessed by
@@ -274,7 +274,7 @@ If you would like to include the new configuration in your application, follow
 the instructions for
 [making your applications configurable in Liferay 7.0](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable).
 
-#### Why was this change made? [](id=why-was-this-change-made-4)
+#### Why was this change made? [](id=why-was-this-change-made-5)
 
 This change was made as part of the modularization efforts to ease portal
 configuration changes.
@@ -321,20 +321,20 @@ more information about this in the `portal.properties` file.
 - **Date:** 2017-May-30
 - **JIRA Ticket:** LPS-69102
 
-#### What changed? [](id=what-changed-6)
+#### What changed? [](id=what-changed-7)
 
 The Upload Servlet Request properties have been moved from the
 `portal.properties` file and Server Administration to an OSGi configuration
 named `UploadServletRequestConfiguration.java` in the `portal-upload` module.
 
-#### Who is affected? [](id=who-is-affected-6)
+#### Who is affected? [](id=who-is-affected-7)
 
 This affects anyone using the following portal properties:
 
 - `com.liferay.portal.upload.UploadServletRequestImpl.max.size`
 - `com.liferay.portal.upload.UploadServletRequestImpl.temp.dir`
 
-#### How should I update my code? [](id=how-should-i-update-my-code-6)
+#### How should I update my code? [](id=how-should-i-update-my-code-7)
 
 Instead of overriding the `portal.properties` file, you can manage the
 properties from Portal's configuration administrator. This can be accessed by
@@ -346,7 +346,7 @@ If you would like to include the new configuration in your application, follow
 the instructions for
 [making your applications configurable in Liferay 7.0](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable).
 
-#### Why was this change made? [](id=why-was-this-change-made-6)
+#### Why was this change made? [](id=why-was-this-change-made-7)
 
 This change was made as part of the modularization efforts to ease portal
 configuration changes.
@@ -357,13 +357,13 @@ configuration changes.
 - **Date:** 2017-Aug-01
 - **JIRA Ticket:** LPS-69208
 
-#### What changed? [](id=what-changed-7)
+#### What changed? [](id=what-changed-8)
 
 Two DL File properties have been moved from Server Administration to the OSGi
 configuration `DLConfiguration`, and one to `DLFileEntryConfiguration`. Both
 configurations are located in the `document-library-api` module.
 
-#### Who is affected? [](id=who-is-affected-7)
+#### Who is affected? [](id=who-is-affected-8)
 
 This affects anyone who is using the following portal properties:
 
@@ -371,7 +371,7 @@ This affects anyone who is using the following portal properties:
 - `dl.file.extensions`
 - `dl.file.max.size`
 
-#### How should I update my code? [](id=how-should-i-update-my-code-7)
+#### How should I update my code? [](id=how-should-i-update-my-code-8)
 
 Instead of overriding the `portal.properties` file, you can manage the
 properties from Portal's configuration administrator. This can be accessed by
@@ -383,7 +383,7 @@ If you would like to include the new configuration in your application, follow
 the instructions for
 [making your applications configurable](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable).
 
-#### Why was this change made? [](id=why-was-this-change-made-7)
+#### Why was this change made? [](id=why-was-this-change-made-8)
 
 This change was made as part of the modularization efforts to ease portal
 configuration changes.
@@ -420,22 +420,22 @@ Closure Template library.
 - **Date:** 2017-Sep-05
 - **JIRA Ticket:** LPS-74452
 
-#### What changed? [](id=what-changed-9)
+#### What changed? [](id=what-changed-10)
 
 The default values for the portal properties `browser.cache.disabled` and
 `browser.cache.signed.in.disabled` were changed to `true`.
 
-#### Who is affected? [](id=who-is-affected-9)
+#### Who is affected? [](id=who-is-affected-10)
 
 This affects anyone relying on proxies and load balancers to cache HTML content.
 
-#### How should I update my code? [](id=how-should-i-update-my-code-9)
+#### How should I update my code? [](id=how-should-i-update-my-code-10)
 
 You should set both properties `browser.cache.disabled` and
 `browser.cache.signed.in.disabled` to `false`, as documented in
 `portal-legacy-7.0.properties`.
 
-#### Why was this change made? [](id=why-was-this-change-made-9)
+#### Why was this change made? [](id=why-was-this-change-made-10)
 
 The load balancer and web proxy's behavior when Cache-Control headers are
 missing is not defined. In the past, many preferred to not cache the content for
@@ -557,13 +557,13 @@ increased focus on existing and new template engines.
 - **Date:** 2018-Jan-19
 - **JIRA Ticket:** LPS-77183
 
-#### What changed? [](id=what-changed-12)
+#### What changed? [](id=what-changed-13)
 
 The organization type properties have been moved from `portal.properties` to an
 OSGi configuration named `OrganizationsTypesConfiguration.java` in the
 `users-admin-api` module.
 
-#### Who is affected? [](id=who-is-affected-12)
+#### Who is affected? [](id=who-is-affected-13)
 
 This affects anyone using the following portal properties:
 
@@ -573,7 +573,7 @@ This affects anyone using the following portal properties:
 - `organizations.country.enabled`
 - `organizations.country.required`
 
-#### How should I update my code? [](id=how-should-i-update-my-code-12)
+#### How should I update my code? [](id=how-should-i-update-my-code-13)
 
 Instead of overriding the `portal.properties` file, you can manage the
 properties from Portal's configuration administrator. This can be accessed by
@@ -585,7 +585,7 @@ If you would like to include the new configuration in your application, follow
 the instructions for
 [making your applications configurable](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable).
 
-#### Why was this change made? [](id=why-was-this-change-made-12)
+#### Why was this change made? [](id=why-was-this-change-made-13)
 
 This change was made as part of the modularization efforts to ease portal
 configuration changes.
@@ -617,29 +617,29 @@ This change provides the latest jQuery and Lodash versions available.
 
 ---------------------------------------
 
-### Removed JavaScript Minification Properties minifier.javascript.impl and yui.compressor.* from portal.properties
+### Removed JavaScript Minification Properties minifier.javascript.impl and yui.compressor.* from portal.properties [](removed-javascript-minification-properties-minifier-javascript-impl-and-yui-compressor-from-portal-properties)
 - **Date:** 2018-Feb-28
 - **JIRA Ticket:** LPS-74375
 
-#### What changed?
+#### What changed? [](id=what-changed-15)
 
 The JavaScript minifiers have been extracted from `portal-kernel` and moved to
 their own OSGi module. Thus, they are not configured in `portal.properties` any
 more, but rather, through OSGi configuration.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-15)
 
 This affects anyone who had the Yahoo JavaScript minifier active and configured
 to override its default settings.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-15)
 
 If you are implementing your own JavaScript minifier, you should extract it to
 its own OSGi module. See module
 [frontend-js-minifier](https://github.com/liferay/liferay-portal/tree/master/modules/apps/frontend-js/frontend-js-minifier)
 for an example of how to do this.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-15)
 
 The JavaScript minifiers were not easy to customize. For example, the Google
 minifier used an old version of the closure-compiler, which was difficult to
@@ -652,28 +652,28 @@ minifiers. Also, configuration can now be done using OSGi standards.
 
 ---------------------------------------
 
-### Changed Behavior of liferay-ui:input-date Taglib's showDisableCheckbox Argument
+### Changed Behavior of liferay-ui:input-date Taglib's showDisableCheckbox Argument [](changed-behavior-of-liferay-ui-input-date-taglib-showdisablecheckbox-argument)
 - **Date:** 2018-Mar-06
 - **JIRA Ticket:** LPS-78475
 
-#### What changed?
+#### What changed? [](id=what-changed-16)
 
 Previously, when the `liferay-ui:input-date` taglib's `showDisableCheckbox`
 argument was set to `true`, the disable checkbox was hidden. Now, the value
 `true` displays it, and `false` hides it.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-16)
 
 This affects anyone trying to hide the `liferay-ui:input-date` taglib's disable
 checkbox.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-16)
 
 If you are setting the `showDisableCheckbox` argument to `true` to hide the
 `liferay-ui:input-date` taglib's disable checkbox, you should now set it to
 `false`, and vice versa.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-16)
 
 The behavior did not match with the name of the argument and was
 counter-intuitive.
@@ -804,20 +804,20 @@ Specification, which was released in early 2017.
 
 ---------------------------------------
 
-### Changed the Dependency for the liferay-util:html-top JSP tag
+### Changed the Dependency for the liferay-util:html-top JSP tag [](id=changed-the-dependency-for-the-liferay-util-html-jsp-tag)
 - **Date:** 2018-Jun-07
 - **JIRA Ticket:** LPS-81983
 
-#### What changed?
+#### What changed? [](id=what-changed-18)
 
 The usage of `portal-kernel`'s `StringBundler` has been deprecated in favor of
 Liferay's Petra `StringBundler`.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-18)
 
 This affects anyone using the `<liferay-util:html-top>` JSP tag.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-18)
 
 You must add the following dependency in your build file for your JSPs to
 compile successfully:
@@ -839,26 +839,26 @@ compile successfully:
         <scope>provided</scope>
     </dependency>
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-18)
 
 This change helps stabilize the foundation of Liferay Portal's utilities.
 
 ---------------------------------------
 
-### Changed the From Last Publish Date Option in Staging
+### Changed the From Last Publish Date Option in Staging [](id=changed-the-from-last-publish-date-option-in-staging)
 - **Date:** 2018-Jun-06
 - **JIRA Ticket:** LPS-81695
 
-#### What changed?
+#### What changed? [](id=what-changed-19)
 
 The *From Last Publish Date* option used in the publication process has
 programmatically changed.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-19)
 
 This affects anyone who implemented Staging support for their custom entities.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-19)
 
 You must create a `*StagingModelListener` class for your custom entity, which
 extends the
@@ -874,7 +874,7 @@ in case of a *From Last Publish Date* publication. See the
 [`BlogsPortletDataHandler`](https://github.com/liferay/liferay-portal/blob/7.1.0-ga1/modules/apps/blogs/blogs-web/src/main/java/com/liferay/blogs/web/internal/exportimport/data/handler/BlogsPortletDataHandler.java)
 as an example.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-19)
 
 It was hard to collect which entities should be published to the live site.
 Instead of running queries to find the contents that were modified since the
@@ -882,11 +882,11 @@ last publication, now changesets are used to track this information.
 
 ---------------------------------------
 
-### Decoupled Several Classes from PortletURLImpl
+### Decoupled Several Classes from PortletURLImpl [](id=decoupled-several-classes-from-portleturlimpl)
 - **Date:** 2018-Jun-08
 - **JIRA Ticket:** LPS-82119
 
-#### What changed?
+#### What changed? [](id=what-changed-20)
 
 All classes implementing `javax.portlet.BaseURL` have had their inheritance
 hierarchy change. These classes include
@@ -895,12 +895,12 @@ hierarchy change. These classes include
 - `LiferayStrutsPortletURLImpl`
 - `StrutsActionPortletURL`
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-20)
 
 This affects code that attempts to subclass or create a new instance of the
 classes listed previously.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-20)
 
 You must refactor the constructors of your affected classes to receive
 `com.liferay.portal.kernel.portlet.LiferayPortletResponse` instead of
@@ -923,7 +923,7 @@ to
                 - `com.liferay.portlet.PortletURLImplWrapper`
                     - `com.liferay.portal.struts.StrutsActionPortletURL`
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-20)
 
 This change corrects a best practice violation regarding
 implementation-specific details being included within an API.
@@ -992,5 +992,31 @@ Developer Mode is enabled upon starting your app server.
 
 This was done to strengthen Liferay Portal's security due to potential XXE/SSRF
 vulnerabilities.
+
+---------------------------------------
+
+### Removed description html escaping in PortletDisplay [](id=removed-description-html-escaping-in-portletdisplay)
+- **Date:** 2018-Jul-17
+- **JIRA Ticket:** LPS-83185
+
+#### What changed? [](id=what-changed-23)
+
+The portlet description stored inside `PortletDisplay.java` is no longer escaped
+automatically.
+
+#### Who is affected? [](id=what-is-affected-23)
+
+This affects anyone who relied on the value of the portlet description being
+already escaped and using it to generate some html. In that case, a small UI
+change might be observed as some characters might become unescaped.
+
+#### How should I update my code? [](id=how-should-i-update-my-code-23)
+
+If you were using the `portletDescription` value to generate some html, you
+should escape it using the proper escape sequence using `HtmlUtil.escape`.
+
+#### Why was this change made? [](id=why-was-this-change-made-23)
+
+This change corrects a best practice violation regarding content escaping.
 
 ---------------------------------------
