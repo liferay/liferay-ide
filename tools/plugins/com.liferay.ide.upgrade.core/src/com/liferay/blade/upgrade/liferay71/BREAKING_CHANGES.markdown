@@ -192,17 +192,17 @@ configuration changes.
 
 ---------------------------------------
 
-### Moved CAPTCHA Portal Properties to OSGi Configuration
+### Moved CAPTCHA Portal Properties to OSGi Configuration [](id=moved-captcha-portal-properties)
 - **Date:** 2017-Feb-13
 - **JIRA Ticket:** LPS-67830
 
-#### What changed?
+#### What changed? [](id=what-changed-3)
 
 The CAPTCHA properties have been moved from `portal.properties` and Server
 Administration to an OSGi configuration named `CaptchaConfiguration.java` in the
 `captcha-api` module.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-3)
 
 This affects anyone using the following portal properties:
 
@@ -225,7 +225,7 @@ This affects anyone using the following portal properties:
 - `captcha.engine.simplecaptcha.text.producers`
 - `captcha.engine.simplecaptcha.word.renderers`
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-3)
 
 Instead of overriding the `portal.properties` file, you can manage the
 properties from Portal's configuration administrator. This can be accessed by
@@ -236,24 +236,24 @@ If you would like to include the new configuration in your application, follow
 the instructions for
 [making your applications configurable in Liferay 7.0](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable).
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-3)
 
 This change was made as part of the modularization efforts to ease portal
 configuration changes.
 
 ---------------------------------------
 
-### Moved OpenOffice Properties to OSGi Configuration
+### Moved OpenOffice Properties to OSGi Configuration [](id=moved-openOffice-properties)
 - **Date:** 2017-Mar-24
 - **JIRA Ticket:** LPS-71382
 
-#### What changed?
+#### What changed? [](id=what-changed-4)
 
 The OpenOffice properties have been moved from Server Administration to an OSGi
 configuration named `OpenOfficeConfiguration.java` in the
 `document-library-document-conversion` module.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-4)
 
 This affects anyone using the following portal properties:
 
@@ -262,7 +262,7 @@ This affects anyone using the following portal properties:
 - `openoffice.server.host`
 - `openoffice.server.port`
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-4)
 
 Instead of overriding the `portal.properties` file, you can manage the
 properties from Portal's configuration administrator. This can be accessed by
@@ -274,7 +274,7 @@ If you would like to include the new configuration in your application, follow
 the instructions for
 [making your applications configurable in Liferay 7.0](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable).
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-4)
 
 This change was made as part of the modularization efforts to ease portal
 configuration changes.
@@ -317,24 +317,24 @@ more information about this in the `portal.properties` file.
 
 ---------------------------------------
 
-### Moved Upload Servlet Request Portal Properties to OSGi Configuration
+### Moved Upload Servlet Request Portal Properties to OSGi Configuration [](id=moved-upload-servlet-request-portal-properties)
 - **Date:** 2017-May-30
 - **JIRA Ticket:** LPS-69102
 
-#### What changed?
+#### What changed? [](id=what-changed-6)
 
 The Upload Servlet Request properties have been moved from the
 `portal.properties` file and Server Administration to an OSGi configuration
 named `UploadServletRequestConfiguration.java` in the `portal-upload` module.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-6)
 
 This affects anyone using the following portal properties:
 
 - `com.liferay.portal.upload.UploadServletRequestImpl.max.size`
 - `com.liferay.portal.upload.UploadServletRequestImpl.temp.dir`
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-6)
 
 Instead of overriding the `portal.properties` file, you can manage the
 properties from Portal's configuration administrator. This can be accessed by
@@ -346,24 +346,24 @@ If you would like to include the new configuration in your application, follow
 the instructions for
 [making your applications configurable in Liferay 7.0](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable).
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-6)
 
 This change was made as part of the modularization efforts to ease portal
 configuration changes.
 
 ---------------------------------------
 
-### Moved Three DL File Properties to OSGi Configuration
+### Moved Three DL File Properties to OSGi Configuration [](id=moved-three-dl-file-properties)
 - **Date:** 2017-Aug-01
 - **JIRA Ticket:** LPS-69208
 
-#### What changed?
+#### What changed? [](id=what-changed-7)
 
 Two DL File properties have been moved from Server Administration to the OSGi
 configuration `DLConfiguration`, and one to `DLFileEntryConfiguration`. Both
 configurations are located in the `document-library-api` module.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-7)
 
 This affects anyone who is using the following portal properties:
 
@@ -371,7 +371,7 @@ This affects anyone who is using the following portal properties:
 - `dl.file.extensions`
 - `dl.file.max.size`
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-7)
 
 Instead of overriding the `portal.properties` file, you can manage the
 properties from Portal's configuration administrator. This can be accessed by
@@ -383,7 +383,7 @@ If you would like to include the new configuration in your application, follow
 the instructions for
 [making your applications configurable](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable).
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-7)
 
 This change was made as part of the modularization efforts to ease portal
 configuration changes.
@@ -416,26 +416,26 @@ Closure Template library.
 
 ---------------------------------------
 
-### Changed Default Value for Browser Cache Properties
+### Changed Default Value for Browser Cache Properties [](id=changed-default-value-for-browser-cache-properties)
 - **Date:** 2017-Sep-05
 - **JIRA Ticket:** LPS-74452
 
-#### What changed?
+#### What changed? [](id=what-changed-9)
 
 The default values for the portal properties `browser.cache.disabled` and
 `browser.cache.signed.in.disabled` were changed to `true`.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-9)
 
 This affects anyone relying on proxies and load balancers to cache HTML content.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-9)
 
 You should set both properties `browser.cache.disabled` and
 `browser.cache.signed.in.disabled` to `false`, as documented in
 `portal-legacy-7.0.properties`.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-9)
 
 The load balancer and web proxy's behavior when Cache-Control headers are
 missing is not defined. In the past, many preferred to not cache the content for
@@ -553,17 +553,17 @@ increased focus on existing and new template engines.
 
 ---------------------------------------
 
-### Moved Organization Type Properties to OSGi Configuration
+### Moved Organization Type Properties to OSGi Configuration [](id=moved-organization-type-properties)
 - **Date:** 2018-Jan-19
 - **JIRA Ticket:** LPS-77183
 
-#### What changed?
+#### What changed? [](id=what-changed-12)
 
 The organization type properties have been moved from `portal.properties` to an
 OSGi configuration named `OrganizationsTypesConfiguration.java` in the
 `users-admin-api` module.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-12)
 
 This affects anyone using the following portal properties:
 
@@ -573,7 +573,7 @@ This affects anyone using the following portal properties:
 - `organizations.country.enabled`
 - `organizations.country.required`
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-12)
 
 Instead of overriding the `portal.properties` file, you can manage the
 properties from Portal's configuration administrator. This can be accessed by
@@ -585,7 +585,7 @@ If you would like to include the new configuration in your application, follow
 the instructions for
 [making your applications configurable](https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable).
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-12)
 
 This change was made as part of the modularization efforts to ease portal
 configuration changes.
