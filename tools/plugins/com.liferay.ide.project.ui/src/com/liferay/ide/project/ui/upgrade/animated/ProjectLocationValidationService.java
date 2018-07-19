@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
@@ -48,11 +49,15 @@ public class ProjectLocationValidationService extends ValidationService {
 
 		Value<Path> sdkLocation = _op().getSdkLocation();
 
-		final Path location = sdkLocation.content(true);
+		Path location = sdkLocation.content(true);
 
 		if ((location == null) || location.isEmpty()) {
 			return StatusBridge.create(
 				ProjectCore.createErrorStatus("Liferay Plugins SDK or Maven location is empty."));
+		}
+
+		if (LiferayWorkspaceUtil.isValidWorkspaceLocation(location.toPortableString())) {
+			return retval;
 		}
 
 		IStatus buildType = ImportLiferayModuleProjectOpMethods.getBuildType(

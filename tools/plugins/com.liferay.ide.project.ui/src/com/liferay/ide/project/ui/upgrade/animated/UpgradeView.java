@@ -111,6 +111,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 		addPage(Page.initConfigureProjectPageId);
 
 		boolean hasMavenProject = _dataModel.getHasMavenProject().content();
+		boolean hasGradleProject = _dataModel.getHasGradleProject().content();
 		boolean hasPortlet = _dataModel.getHasPortlet().content();
 		boolean hasServiceBuilder = _dataModel.getHasServiceBuilder().content();
 		boolean hasHook = _dataModel.getHasHook().content();
@@ -124,7 +125,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 			addPage(Page.upgradePomPageId);
 		}
 
-		if (hasPortlet || hasHook || hasServiceBuilder || hasMavenProject) {
+		if (hasPortlet || hasHook || hasServiceBuilder || hasMavenProject || hasGradleProject) {
 			addPage(Page.findbreackingchangesPageId);
 		}
 
@@ -148,7 +149,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 		 * if( hasExt || hasTheme || hasWorkspace ) { addPage( Page.EXTANDTHEME_PAGE_ID
 		 * ); }
 		 */
-		if (hasPortlet || hasHook || hasServiceBuilder || hasLayout || hasMavenProject) {
+		if (hasPortlet || hasHook || hasServiceBuilder || hasLayout || hasMavenProject || hasGradleProject) {
 			addPage(Page.buildPageId);
 			addPage(Page.summaryPageId);
 		}

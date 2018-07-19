@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.ILiferayProjectImporter;
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -31,6 +32,7 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 import com.liferay.ide.project.ui.IvyUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
@@ -456,10 +458,64 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 							_deleteEclipseConfigFiles(location.toFile());
 
-							if (_isMavenProject(location.toPortableString())) {
+							String locationString = location.toPortableString();
+
+							if (LiferayWorkspaceUtil.isValidWorkspaceLocation(locationString)) {
+								String type = LiferayWorkspaceUtil.getWorkspaceType(locationString);
+
+								ILiferayProjectProvider provider = null;
+
+								ILiferayProjectProvider[] providers = LiferayCore.getProviders("workspace");
+
+								if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(locationString)) {
+									for (ILiferayProjectProvider projectProvider : providers) {
+										String name = projectProvider.getShortName();
+
+										if (name.contains("gradle")) {
+											provider = projectProvider;
+
+											break;
+										}
+									}
+								}
+								else {
+									for (ILiferayProjectProvider projectProvider : providers) {
+										String name = projectProvider.getShortName();
+
+										if (name.contains("maven")) {
+											provider = projectProvider;
+
+											break;
+										}
+									}
+								}
+
+								if ((provider != null) && (provider instanceof NewLiferayWorkspaceProjectProvider)) {
+									((NewLiferayWorkspaceProjectProvider<?>) provider).importProject(location, monitor);
+
+									IJobManager jobManager = Job.getJobManager();
+
+									Job[] jobs = jobManager.find(null);
+
+									for (Job job : jobs) {
+										if (job.getProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB) != null) {
+											job.join();
+										}
+									}
+
+									IProject[] projects = CoreUtil.getAllProjects();
+
+									for (IProject project : projects) {
+										_checkProjectType(project);
+									}
+
+									dataModel.setConvertLiferayWorkspace(true);
+								}
+							}
+							else if (_isMavenProject(location.toPortableString())) {
 								ILiferayProjectImporter importer = LiferayCore.getImporter("maven");
 
-								List<IProject> projects = importer.importProjects(location.toPortableString(), monitor);
+								List<IProject> projects = importer.importProjects(locationString, monitor);
 
 								for (IProject project : projects) {
 									_checkProjectType(project);
@@ -568,6 +624,14 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	}
 
 	private void _checkProjectType(IProject project) {
+		if (FileUtil.notExists(project)) {
+			return;
+		}
+
+		if (ProjectUtil.isGradleProject(project)) {
+			dataModel.setHasGradleProject(true);
+		}
+
 		if (ProjectUtil.isMavenProject(project)) {
 			dataModel.setHasMavenProject(true);
 		}
@@ -1521,6 +1585,14 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 				_importButton.setText("Continue");
 				_pageParent.layout();
 			}
+			else if (LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toPortableString())) {
+				_disposeMigrateLayoutElement();
+				_disposeBundleCheckboxElement();
+				_disposeBundleElement();
+				_disposeServerEelment();
+
+				_pageParent.layout();
+			}
 			else if (_isMavenProject(path.toPortableString())) {
 				_disposeBundleCheckboxElement();
 				_disposeBundleElement();
@@ -1534,26 +1606,31 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 				_createBundleControl();
 				_pageParent.layout();
-				String version = SDKUtil.createSDKFromLocation(PathBridge.create(path)).getVersion();
 
-				if ((version != null) && (CoreUtil.compareVersions(new Version(version), new Version("7.0.0")) >= 0)) {
-					UIUtil.async(
-						new Runnable() {
+				SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(path));
 
-							@Override
-							public void run() {
-								if (_layoutComb.getSelectionIndex() != 0) {
-									_layoutComb.select(1);
+				if (sdk != null) {
+					String version = sdk.getVersion();
+
+					if ((version != null) && (CoreUtil.compareVersions(new Version(version), new Version("7.0.0")) >= 0)) {
+						UIUtil.async(
+							new Runnable() {
+
+								@Override
+								public void run() {
+									if (_layoutComb.getSelectionIndex() != 0) {
+										_layoutComb.select(1);
+									}
+
+									_layoutComb.setEnabled(false);
+									dataModel.setLayout(_layoutComb.getText());
 								}
-
-								_layoutComb.setEnabled(false);
-								dataModel.setLayout(_layoutComb.getText());
-							}
-
-						});
-				}
-				else {
-					_layoutComb.setEnabled(true);
+	
+							});
+					}
+					else {
+						_layoutComb.setEnabled(true);
+					}
 				}
 			}
 
