@@ -19,22 +19,18 @@ import com.liferay.blade.test.apichanges.APITestBase;
 import java.io.File;
 
 /**
- * @author Terry Jia
+ * @author Haoyi Sun
  */
-public class MovedUsersFileUploadsPortletPropertiesTest extends APITestBase {
-
-	public int getExpectedNumber() {
-		return 4;
-	}
+public class RemovedDescriptionHtmlEscapingTest extends APITestBase {
 
 	@Override
 	public String getImplClassName() {
-		return "MovedUsersFileUploadsPortletProperties";
+		return "RemovedDescriptionHtmlEscaping";
 	}
 
 	@Override
 	public File getTestFile() {
-		return new File("projects/test-portlet71/docroot/WEB-INF/src/portal.properties");
+		return new File("javatests/PortletHeaderProductNavigationControlMenuEntry.java");
 	}
 
 }

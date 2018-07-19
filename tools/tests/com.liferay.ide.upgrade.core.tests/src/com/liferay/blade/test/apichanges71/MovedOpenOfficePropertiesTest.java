@@ -19,9 +19,9 @@ import com.liferay.blade.test.apichanges.APITestBase;
 import java.io.File;
 
 /**
- * @author Terry Jia
+ * @author Charles Wu
  */
-public class MovedUsersFileUploadsPortletPropertiesTest extends APITestBase {
+public class MovedOpenOfficePropertiesTest extends APITestBase {
 
 	public int getExpectedNumber() {
 		return 4;
@@ -29,7 +29,7 @@ public class MovedUsersFileUploadsPortletPropertiesTest extends APITestBase {
 
 	@Override
 	public String getImplClassName() {
-		return "MovedUsersFileUploadsPortletProperties";
+		return "MovedOpenOfficeProperties";
 	}
 
 	@Override

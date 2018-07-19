@@ -19,17 +19,17 @@ import com.liferay.blade.test.apichanges.APITestBase;
 import java.io.File;
 
 /**
- * @author Terry Jia
+ * @author Haoyi Sun
  */
-public class MovedUsersFileUploadsPortletPropertiesTest extends APITestBase {
+public class RemovedJavaScriptMinificationPropertiesTest extends APITestBase {
 
 	public int getExpectedNumber() {
-		return 4;
+		return 7;
 	}
 
 	@Override
 	public String getImplClassName() {
-		return "MovedUsersFileUploadsPortletProperties";
+		return "RemovedJavaScriptMinificationProperties";
 	}
 
 	@Override

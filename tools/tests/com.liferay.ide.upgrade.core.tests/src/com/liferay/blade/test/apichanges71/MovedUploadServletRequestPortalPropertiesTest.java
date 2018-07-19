@@ -19,17 +19,17 @@ import com.liferay.blade.test.apichanges.APITestBase;
 import java.io.File;
 
 /**
- * @author Terry Jia
+ * @author Charles Wu
  */
-public class MovedUsersFileUploadsPortletPropertiesTest extends APITestBase {
+public class MovedUploadServletRequestPortalPropertiesTest extends APITestBase {
 
 	public int getExpectedNumber() {
-		return 4;
+		return 2;
 	}
 
 	@Override
 	public String getImplClassName() {
-		return "MovedUsersFileUploadsPortletProperties";
+		return "MovedUploadServletRequestPortalProperties";
 	}
 
 	@Override

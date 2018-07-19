@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.blade.upgrade.liferay71.apichanges.ChangedLastPublishDateOption">
+   <property name="file.extensions" value="java"/>
+   <property name="problem.title" value="Changed the From Last Publish Date Option in Staging"/>
+   <property name="problem.summary" value="Changed Last Publish Date Option"/>
+   <property name="problem.tickets" value="LPS-81695"/>
+   <property name="problem.section" value="#changed-last-publish-date-option"/>
+   <property name="implName" value="ChangedLastPublishDateOption"/>
+   <property name="version" value="7.1"/>
+   <service>
+      <provide interface="com.liferay.blade.api.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.blade.upgrade.liferay71.apichanges.ChangedLastPublishDateOption"/>
+</scr:component>
