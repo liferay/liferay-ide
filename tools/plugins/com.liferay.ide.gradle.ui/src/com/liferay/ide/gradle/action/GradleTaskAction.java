@@ -14,6 +14,7 @@
 
 package com.liferay.ide.gradle.action;
 
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -97,6 +98,8 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 					}
 
 				});
+
+			job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
 
 			job.schedule();
 		}

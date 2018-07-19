@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.ui.action;
 
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
 import com.liferay.ide.maven.core.MavenUtil;
@@ -133,6 +134,8 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 						}
 
 					});
+
+				job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
 
 				job.schedule();
 			}

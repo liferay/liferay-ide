@@ -41,7 +41,6 @@ public class NoRunningProjectBuildingJobs extends NoRunningJobsCondition {
 			String jobName = job.getName();
 
 			if (job.getProperty(_liferayProjectJob) != null ||
-				jobName.equals("Synchronize Gradle projects with workspace") ||
 				jobName.equals("Updating Maven Dependencies")) {
 
 				runningJobs.add(job);
