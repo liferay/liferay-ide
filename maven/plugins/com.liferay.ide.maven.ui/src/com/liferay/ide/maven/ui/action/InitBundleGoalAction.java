@@ -20,13 +20,23 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.ISelection;
 
 /**
  * @author Gregory Amerson
  * @author Terry Jia
  * @author Charles Wu
+ * @author Simon Jiang
  */
 public class InitBundleGoalAction extends MavenGoalAction {
+
+	@Override
+	public void selectionChanged(IAction action, ISelection selection) {
+		super.selectionChanged(action, selection);
+
+		action.setEnabled(LiferayWorkspaceUtil.isValidWorkspace(project));
+	}
 
 	@Override
 	protected void afterGoal() {

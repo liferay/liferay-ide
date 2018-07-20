@@ -30,12 +30,14 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 /**
  * @author Lovett Li
  * @author Terry Jia
  * @author Charles Wu
+ * @author Simon Jiang
  */
 public abstract class GradleTaskAction extends AbstractObjectAction {
 
@@ -44,23 +46,6 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 
 	public void run(IAction action) {
 		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection)fSelection).toArray();
-
-			IFile gradleBuildFile = null;
-
-			Object elem = elems[0];
-
-			if (elem instanceof IFile) {
-				gradleBuildFile = (IFile)elem;
-
-				project = gradleBuildFile.getProject();
-			}
-			else if (elem instanceof IProject) {
-				project = (IProject)elem;
-
-				gradleBuildFile = project.getFile("build.gradle");
-			}
-
 			if (FileUtil.notExists(gradleBuildFile)) {
 				return;
 			}
@@ -105,11 +90,34 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 		}
 	}
 
+	@Override
+	public void selectionChanged(IAction action, ISelection selection) {
+		super.selectionChanged(action, selection);
+
+		if (fSelection instanceof IStructuredSelection) {
+			Object[] elems = ((IStructuredSelection)fSelection).toArray();
+
+			Object elem = elems[0];
+
+			if (elem instanceof IFile) {
+				gradleBuildFile = (IFile)elem;
+
+				project = gradleBuildFile.getProject();
+			}
+			else if (elem instanceof IProject) {
+				project = (IProject)elem;
+
+				gradleBuildFile = project.getFile("build.gradle");
+			}
+		}
+	}
+
 	protected void afterTask() {
 	}
 
 	protected abstract String getGradleTask();
 
+	protected IFile gradleBuildFile = null;
 	protected IProject project = null;
 
 }

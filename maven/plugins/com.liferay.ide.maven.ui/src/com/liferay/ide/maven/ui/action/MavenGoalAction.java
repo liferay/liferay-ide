@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
@@ -47,6 +48,7 @@ import org.eclipse.m2e.core.project.IMavenProjectRegistry;
  * @author Gregory Amerson
  * @author Terry Jia
  * @author Charles Wu
+ * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
 public abstract class MavenGoalAction extends AbstractObjectAction {
@@ -56,24 +58,6 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 
 	public void run(IAction action) {
 		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection)fSelection).toArray();
-
-			IFile pomXml = null;
-			IProject project = null;
-
-			Object elem = elems[0];
-
-			if (elem instanceof IFile) {
-				pomXml = (IFile)elem;
-
-				project = pomXml.getProject();
-			}
-			else if (elem instanceof IProject) {
-				project = (IProject)elem;
-
-				pomXml = project.getFile(IMavenConstants.POM_FILE_NAME);
-			}
-
 			if (FileUtil.exists(pomXml)) {
 				IProject p = project;
 				IFile pomXmlFile = pomXml;
@@ -142,6 +126,28 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 		}
 	}
 
+	@Override
+	public void selectionChanged(IAction action, ISelection selection) {
+		super.selectionChanged(action, selection);
+
+		if (fSelection instanceof IStructuredSelection) {
+			Object[] elems = ((IStructuredSelection)fSelection).toArray();
+
+			Object elem = elems[0];
+
+			if (elem instanceof IFile) {
+				pomXml = (IFile)elem;
+
+				project = pomXml.getProject();
+			}
+			else if (elem instanceof IProject) {
+				project = (IProject)elem;
+
+				pomXml = project.getFile(IMavenConstants.POM_FILE_NAME);
+			}
+		}
+	}
+
 	public Plugin plugin = null;
 
 	protected void afterGoal() {
@@ -165,6 +171,9 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 			LiferayMavenUI.logError("Error refreshing project after " + getMavenGoals(), ce);
 		}
 	}
+
+	protected IFile pomXml;
+	protected IProject project;
 
 	private void _runMavenGoal(IFile pomFile, String goal, IProgressMonitor monitor) throws CoreException {
 		IMavenProjectRegistry projectManager = MavenPlugin.getMavenProjectRegistry();
