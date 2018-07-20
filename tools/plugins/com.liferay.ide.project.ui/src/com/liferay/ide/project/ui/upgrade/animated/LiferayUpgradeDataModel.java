@@ -33,8 +33,6 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public ElementType TYPE = new ElementType(LiferayUpgradeDataModel.class);
 
-	// *** SdkLocation ***
-
 	public Value<Boolean> getBackupSdk();
 
 	public Value<String> getBundleName();
@@ -43,15 +41,11 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public Value<Path> getConvertedProjectLocation();
 
-	// *** Layout ***
-
 	public Value<Boolean> getConvertLiferayWorkspace();
 
 	public Value<Boolean> getDownloadBundle();
 
 	public Value<Boolean> getHasExt();
-
-	// *** Liferay70ServerName ***
 
 	public Value<Boolean> getHasHook();
 
@@ -59,7 +53,7 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public Value<Boolean> getHasMavenProject();
 
-	// *** Liferay62ServerLocation ***
+	public Value<Boolean> getHasGradleProject();
 
 	public Value<Boolean> getHasPortlet();
 
@@ -67,23 +61,17 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public Value<Boolean> getHasTheme();
 
-	// *** BundleName ***
-
 	public Value<Boolean> getHasWeb();
 
 	public Value<Boolean> getImportFinished();
 
 	public Value<String> getLayout();
 
-	// *** BundleUrl ***
-
 	public Value<String> getLiferay62ServerLocation();
 
 	public Value<String> getLiferay70ServerName();
 
 	public Value<Path> getSdkLocation();
-
-	// *** HasMavenProject ***
 
 	public void setBackupLocation(Path backupLocation);
 
@@ -93,8 +81,6 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public void setBackupSdk(String backupSdk);
 
-	// *** HasHook ***
-
 	public void setBundleName(String bundleName);
 
 	public void setBundleUrl(String bundleUrl);
@@ -102,8 +88,6 @@ public interface LiferayUpgradeDataModel extends Element {
 	public void setConvertedProjectLocation(Path convertedProjectLocation);
 
 	public void setConvertedProjectLocation(String convertedProjectLocation);
-
-	// *** HasPortlet ***
 
 	public void setConvertLiferayWorkspace(Boolean convertLiferayWorkspace);
 
@@ -113,8 +97,6 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public void setDownloadBundle(String downloadBundle);
 
-	// *** HasTheme ***
-
 	public void setHasExt(Boolean hasExt);
 
 	public void setHasExt(String hasExt);
@@ -123,17 +105,17 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public void setHasHook(String hasHook);
 
-	// *** HasExt ***
-
 	public void setHasLayout(Boolean hasLayout);
 
 	public void setHasLayout(String hasLayout);
 
+	public void setHasGradleProject(Boolean hasGradleProject);
+
+	public void setHasGradleProject(String hasGradleProject);
+
 	public void setHasMavenProject(Boolean hasMavenProject);
 
 	public void setHasMavenProject(String hasMavenProject);
-
-	// *** HasServiceBuilder ***
 
 	public void setHasPortlet(Boolean hasPortlet);
 
@@ -143,8 +125,6 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public void setHasServiceBuilder(String hasServiceBuilder);
 
-	// *** HasLayout ***
-
 	public void setHasTheme(Boolean hasTheme);
 
 	public void setHasTheme(String hasTheme);
@@ -153,8 +133,6 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public void setHasWeb(String hasWeb);
 
-	// *** HasWeb ***
-
 	public void setImportFinished(Boolean importFinished);
 
 	public void setImportFinished(String importFinished);
@@ -162,8 +140,6 @@ public interface LiferayUpgradeDataModel extends Element {
 	public void setLayout(String layout);
 
 	public void setLiferay62ServerLocation(String value);
-
-	// *** ConvertedProjectLocation ***
 
 	public void setLiferay70ServerName(String value);
 
@@ -223,6 +199,10 @@ public interface LiferayUpgradeDataModel extends Element {
 	@DefaultValue(text = "false")
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_HAS_MAVEN_PROJECT = new ValueProperty(TYPE, "HasMavenProject");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_HAS_GRADLE_PROJECT = new ValueProperty(TYPE, "HasGradleProject");
 
 	@DefaultValue(text = "false")
 	@Type(base = Boolean.class)

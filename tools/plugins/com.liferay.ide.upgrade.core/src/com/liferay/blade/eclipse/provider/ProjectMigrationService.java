@@ -331,6 +331,10 @@ public class ProjectMigrationService implements Migration {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
+				if (dir.endsWith("bin") && dir.startsWith(startDir.getPath())) {
+					return FileVisitResult.SKIP_SUBTREE;
+				}
+
 				if (dir.endsWith("target") && dir.startsWith(startDir.getPath())) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}

@@ -90,6 +90,7 @@ public class UpgradeSettingsUtil {
 		}
 
 		dataModel.setHasMavenProject(Boolean.parseBoolean(getProperty("HasMavenProject", "false")));
+		dataModel.setHasGradleProject(Boolean.parseBoolean(getProperty("HasGradleProject", "false")));
 		dataModel.setHasPortlet(Boolean.parseBoolean(getProperty("HasPortlet", "false")));
 		dataModel.setHasServiceBuilder(Boolean.parseBoolean(getProperty("HasServiceBuilder", "false")));
 		dataModel.setHasHook(Boolean.parseBoolean(getProperty("HasHook", "false")));
