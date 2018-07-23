@@ -18,9 +18,17 @@ import com.liferay.blade.api.AutoMigrateException;
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.upgrade.animated.FindBreakingChangesPage;
+import com.liferay.ide.project.ui.upgrade.animated.LiferayUpgradeDataModel;
+import com.liferay.ide.project.ui.upgrade.animated.Page;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
+
+import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -38,7 +46,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.sapphire.Value;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -66,7 +76,24 @@ public class AutoCorrectAction extends ProblemAction {
 
 	public IStatus runWithAutoCorrect(final List<Problem> problems) {
 		final IResource file = MigrationUtil.getIResourceFromProblem(problems.get(0));
-		final BundleContext context = FrameworkUtil.getBundle(AutoCorrectAction.class).getBundleContext();
+		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectAction.class);
+
+		final BundleContext context = bundle.getBundleContext();
+
+		final FindBreakingChangesPage page = UpgradeView.getPage(
+			Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
+
+		LiferayUpgradeDataModel dataModel = page.getDataModel();
+
+		Value<String> breakingChangeVersionValue = dataModel.getBreakingChangeVersion();
+
+		String versions = breakingChangeVersionValue.content();
+
+		String[] versionArray = versions.split(",");
+
+		if (ListUtil.isNotEmpty(versionArray)) {
+			_breakingChangeVersions = Arrays.asList(versionArray);
+		}
 
 		WorkspaceJob job = new WorkspaceJob("Auto correcting migration problem.") {
 
@@ -114,7 +141,10 @@ public class AutoCorrectAction extends ProblemAction {
 
 					MigrateProjectHandler migrateHandler = new MigrateProjectHandler();
 
-					Path path = new Path(problem.getFile().getPath());
+					File problemFile = problem.getFile();
+
+					Path path = new Path(problemFile.getPath());
+
 					String projectName = "";
 					IProject project = CoreUtil.getProject(problem.getFile());
 
@@ -127,7 +157,8 @@ public class AutoCorrectAction extends ProblemAction {
 					}
 
 					if (!projectName.equals("")) {
-						migrateHandler.findMigrationProblems(new Path[] {path}, new String[] {projectName});
+						migrateHandler.findMigrationProblems(
+							new Path[] {path}, new String[] {projectName}, _breakingChangeVersions);
 					}
 				}
 				catch (AutoMigrateException | CoreException | InvalidSyntaxException e) {
@@ -242,6 +273,7 @@ public class AutoCorrectAction extends ProblemAction {
 		return null;
 	}
 
+	private List<String> _breakingChangeVersions;
 	private ISelectionProvider _provider;
 
 }
