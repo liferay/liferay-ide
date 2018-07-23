@@ -225,11 +225,7 @@
                     <text>${platform_name}</text>
                     <value>linux</value>
                 </compareText>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${clitools}</value1>
-                    <value2>devstudiowithcli</value2>
-                </compareValues>
+                <isFalse value="${clitools}"/>
             </conditionRuleList>
             <elseActionList>
                 <if>
@@ -304,11 +300,7 @@
                 <include file="../components/run-java-jpm.xml" />
             </actionList>
             <conditionRuleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${clitools}</value1>
-                    <value2>devstudiowithcli</value2>
-                </compareValues>
+                <isFalse value="${clitools}"/>
             </conditionRuleList>
         </if>
         <if>
@@ -339,11 +331,7 @@
                             <text>${platform_name}</text>
                             <value>osx</value>
                         </compareText>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${clitools}</value1>
-                            <value2>devstudiowithcli</value2>
-                        </compareValues>
+                        <isFalse value="${clitools}"/>
                     </conditionRuleList>
                     <elseActionList>
                         <if>
@@ -354,11 +342,7 @@
                                 </setInstallerVariable>
                             </actionList>
                             <conditionRuleList>
-                                <compareValues>
-                                    <logic>equals</logic>
-                                    <value1>${clitools}</value1>
-                                    <value2>devstudiowithcli</value2>
-                                </compareValues>
+                                <isFalse value="${clitools}"/>
                             </conditionRuleList>
                         </if>
                     </elseActionList>
@@ -471,11 +455,7 @@
                 </createDirectory>
             </actionList>
             <conditionRuleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${clitools}</value1>
-                    <value2>devstudiowithcli</value2>
-                </compareValues>
+                <isFalse value="${clitools}"/>
             </conditionRuleList>
         </if>
         <if>
@@ -696,27 +676,13 @@
             <mustExist>0</mustExist>
             <width>30</width>
         </directoryParameter>
-        <choiceParameterGroup>
-            <name>clitools</name>
-            <description>Install Command Line Tools</description>
-            <explanation>Choose which installation option, whether to install both Developer Studio and Command Line Tools or just Developer Studio.</explanation>
-            <value></value>
-            <default>devstudiowithcli</default>
-            <parameterList>
-                <labelParameter>
-                    <name>devstudiowithcli</name>
-                    <description>Developer Studio with Command Line Tools</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-                <labelParameter>
-                    <name>devstudioonly</name>
-                    <description>Developer Studio Only</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-            </parameterList>
-        </choiceParameterGroup>
+        <booleanParameter>
+          <name>clitools</name>
+          <description>Developer Studio Only</description>
+          <explanation>Whether to install both Developer Studio and Command Line Tools or just Developer Studio.</explanation>
+          <displayStyle>checkbox-left</displayStyle>
+          <default>0</default>
+        </booleanParameter>
         <parameterGroup>
             <name>dxpinfo</name>
             <title>Download Liferay DXP Bundle</title>
@@ -752,6 +718,7 @@
                     <condition>not_exists</condition>
                     <path>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}token</path>
                 </fileTest>
+                <isFalse value="${clitools}"/>
             </ruleList>
         </parameterGroup>
         <fileParameter>
@@ -765,6 +732,9 @@
             <mustBeWritable>0</mustBeWritable>
             <mustExist>1</mustExist>
             <width>30</width>
+            <ruleList>
+                <isFalse value="${clitools}"/>
+            </ruleList>
         </fileParameter>
         <choiceParameterGroup>
             <name>proxy</name>
@@ -811,6 +781,9 @@
                     </optionList>
                 </choiceParameter>
             </parameterList>
+            <ruleList>
+                <isFalse value="${clitools}"/>
+            </ruleList>
         </choiceParameterGroup>
         <parameterGroup>
             <name>httpproxyinfo</name>
