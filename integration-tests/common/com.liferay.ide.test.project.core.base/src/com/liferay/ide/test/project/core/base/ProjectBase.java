@@ -14,6 +14,7 @@
 
 package com.liferay.ide.test.project.core.base;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.test.core.base.BaseTests;
 
 import org.eclipse.core.resources.IProject;
@@ -27,12 +28,27 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.validation.internal.operations.ValidatorManager;
+import org.junit.AfterClass;
 
 /**
  * @author Terry Jia
  */
 @SuppressWarnings("restriction")
 public class ProjectBase extends BaseTests {
+
+	@AfterClass
+	public static void cleanUp() {
+		for (IProject project : CoreUtil.getAllProjects()) {
+			try {
+				project.close(npm);
+
+				project.delete(true, npm);
+			}
+			catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	protected void needJobsToBuild(IJobManager manager) throws InterruptedException, OperationCanceledException {
 	}

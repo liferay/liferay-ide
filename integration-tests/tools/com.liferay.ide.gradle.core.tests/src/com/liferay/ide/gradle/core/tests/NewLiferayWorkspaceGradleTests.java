@@ -51,7 +51,7 @@ public class NewLiferayWorkspaceGradleTests extends ProjectOpBase<NewLiferayWork
 
 		assertPropertyValue(
 			workspace.getName(), "gradle.properties", "liferay.workspace.bundle.url",
-			"https://releases-cdn.liferay.com/portal/7.1.0-b3/liferay-ce-portal-tomcat-7.1-b3-20180611140920623.zip");
+			"https://releases-cdn.liferay.com/portal/7.1.0-ga1/liferay-ce-portal-tomcat-7.1.0-ga1-20180703012531655.zip");
 
 		deleteProject(workspace.getName());
 	}

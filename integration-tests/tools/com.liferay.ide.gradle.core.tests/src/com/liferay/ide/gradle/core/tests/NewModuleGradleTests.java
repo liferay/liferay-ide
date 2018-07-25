@@ -292,7 +292,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 	}
 
 	@Test
-	public void testServiceBuilder() throws Exception {
+	public void createServiceBuilder() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
 		op.setProjectName(project.getName());
