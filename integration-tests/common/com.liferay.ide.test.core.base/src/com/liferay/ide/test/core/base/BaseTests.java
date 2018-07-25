@@ -300,6 +300,6 @@ public class BaseTests {
 		Files.write(file.toPath(), lines, StandardCharsets.UTF_8);
 	}
 
-	protected IProgressMonitor npm = new NullProgressMonitor();
+	protected static IProgressMonitor npm = new NullProgressMonitor();
 
 }
