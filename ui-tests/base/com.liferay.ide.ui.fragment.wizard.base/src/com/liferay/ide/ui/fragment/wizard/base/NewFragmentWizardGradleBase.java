@@ -147,7 +147,7 @@ public class NewFragmentWizardGradleBase extends SwtbotBase {
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.bookmarks.web");
+		dialogAction.prepareText("com.liferay.password.policies.admin.web");
 
 		dialogAction.confirm();
 
