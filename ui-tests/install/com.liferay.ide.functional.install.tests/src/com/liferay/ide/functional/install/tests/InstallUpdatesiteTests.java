@@ -36,7 +36,9 @@ public class InstallUpdatesiteTests extends SwtbotBase {
 		Assert.assertFalse(wizardAction.getNextBtn().isEnabled());
 		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
 
-		wizardAction.installNewSoftware.prepareUpdatesiteUrl(updatesiteUrl);
+		wizardAction.installNewSoftware.addRepository();
+
+		dialogAction.addRepository.addLocation(updatesiteUrl);
 
 		Assert.assertEquals(CHECK_THE_ITEMS_THAT_YOU_WISH_TO_INSTALL, wizardAction.getValidationMsg(1));
 

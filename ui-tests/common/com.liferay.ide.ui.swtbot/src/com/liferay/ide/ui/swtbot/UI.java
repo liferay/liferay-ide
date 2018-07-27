@@ -30,6 +30,8 @@ public interface UI {
 
 	public final String ACTIVATOR = "activator";
 
+	public final String ADD = "Add";
+
 	public final String ADD_ALL = "Add All >>";
 
 	public final String ADD_AND_REMOVE = "Add and Remove...";
@@ -871,8 +873,6 @@ public interface UI {
 	public final String WELCOME = "Welcome";
 
 	public final String WINDOW = "Window";
-
-	public final String WORK_WITH = "Work with:";
 
 	public final String WORKING_SET = "Working set:";
 

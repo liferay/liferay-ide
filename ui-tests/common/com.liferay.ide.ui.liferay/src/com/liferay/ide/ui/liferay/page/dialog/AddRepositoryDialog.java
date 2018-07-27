@@ -12,39 +12,35 @@
  * details.
  */
 
-package com.liferay.ide.ui.swtbot.eclipse.page;
+package com.liferay.ide.ui.liferay.page.dialog;
 
 import com.liferay.ide.ui.swtbot.page.Button;
-import com.liferay.ide.ui.swtbot.page.CheckBox;
-import com.liferay.ide.ui.swtbot.page.Radio;
-import com.liferay.ide.ui.swtbot.page.Wizard;
+import com.liferay.ide.ui.swtbot.page.Dialog;
+import com.liferay.ide.ui.swtbot.page.Text;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Lily Li
  */
-public class InstallNewSoftwareWizard extends Wizard {
+public class AddRepositoryDialog extends Dialog {
 
-	public InstallNewSoftwareWizard(SWTBot bot) {
+	public AddRepositoryDialog(SWTBot bot) {
 		super(bot);
-	}
 
-	public Radio acceptTermsOfLicenseAgreement() {
-		return new Radio(getShell().bot(), I_ACCEPT_THE_TERMS_OF_THE_LICENSE_AGREEMENTS);
+		_addBtn = new Button(bot, ADD);
+		_getLocation = new Text(bot, LOCATION_WITH_COLON);
 	}
 
 	public Button addBtn() {
-		return new Button(getShell().bot(), ADD_WITH_DOT);
+		return _addBtn;
 	}
 
-	public CheckBox contactAllUpdateSites() {
-		return new CheckBox(
-			getShell().bot(), CONTACT_ALL_UPDATE_SITES_DURING_SITES_DURING_INSTALL_TO_FIND_REQUIRED_SOFTWARE);
+	public Text getLocation() {
+		return _getLocation;
 	}
 
-	public Button selectAllBtn() {
-		return new Button(getShell().bot(), SELECT_ALL);
-	}
+	private Button _addBtn;
+	private Text _getLocation;
 
 }

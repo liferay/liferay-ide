@@ -382,14 +382,12 @@ public class WizardAction extends UIAction {
 			return _installNewSoftwareWizard.acceptTermsOfLicenseAgreement();
 		}
 
-		public CheckBox contactAllUpdateSites() {
-			return _installNewSoftwareWizard.contactAllUpdateSites();
+		public void addRepository() {
+			_installNewSoftwareWizard.addBtn().click();
 		}
 
-		public void prepareUpdatesiteUrl(String updatesiteUrl) {
-			_installNewSoftwareWizard.getSiteUrl().setText(updatesiteUrl);
-
-			_keyboradAction.pressKeyEnter();
+		public CheckBox contactAllUpdateSites() {
+			return _installNewSoftwareWizard.contactAllUpdateSites();
 		}
 
 		public void selectAcceptTerms() {
@@ -1105,6 +1103,5 @@ public class WizardAction extends UIAction {
 	private static WizardAction _wizardAction;
 
 	private final JobAction _jobAction = JobAction.getInstance(bot);
-	private final KeyboardAction _keyboradAction = KeyboardAction.getInstance(bot);
 
 }
