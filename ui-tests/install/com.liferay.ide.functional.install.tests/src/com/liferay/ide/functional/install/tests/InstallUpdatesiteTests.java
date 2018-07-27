@@ -48,7 +48,7 @@ public class InstallUpdatesiteTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		ide.sleep();
+		ide.sleep(2500);
 
 		Assert.assertEquals(YOUR_ORIGINAL_REQUEST_HAS_BEEN_MODIFIED_SEE_THE_DETAILS, wizardAction.getValidationMsg(1));
 		Assert.assertTrue(wizardAction.getBackBtn().isEnabled());
