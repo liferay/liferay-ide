@@ -16,6 +16,7 @@ package com.liferay.ide.maven.ui.action;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
 import com.liferay.ide.maven.core.MavenUtil;
 import com.liferay.ide.maven.ui.LiferayMavenUI;
@@ -133,17 +134,19 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 		if (fSelection instanceof IStructuredSelection) {
 			Object[] elems = ((IStructuredSelection)fSelection).toArray();
 
-			Object elem = elems[0];
+			if (ListUtil.isNotEmpty(elems)) {
+				Object elem = elems[0];
 
-			if (elem instanceof IFile) {
-				pomXml = (IFile)elem;
+				if (elem instanceof IFile) {
+					pomXml = (IFile)elem;
 
-				project = pomXml.getProject();
-			}
-			else if (elem instanceof IProject) {
-				project = (IProject)elem;
+					project = pomXml.getProject();
+				}
+				else if (elem instanceof IProject) {
+					project = (IProject)elem;
 
-				pomXml = project.getFile(IMavenConstants.POM_FILE_NAME);
+					pomXml = project.getFile(IMavenConstants.POM_FILE_NAME);
+				}
 			}
 		}
 	}
