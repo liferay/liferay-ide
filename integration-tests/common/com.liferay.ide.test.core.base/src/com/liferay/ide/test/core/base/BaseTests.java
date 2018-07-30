@@ -112,6 +112,8 @@ public class BaseTests {
 	}
 
 	protected void assertFileExists(IPath path) {
+		Assert.assertNotNull("Expected path not be null", path);
+
 		Assert.assertTrue("Expected path " + path + " exists", FileUtil.exists(path));
 	}
 

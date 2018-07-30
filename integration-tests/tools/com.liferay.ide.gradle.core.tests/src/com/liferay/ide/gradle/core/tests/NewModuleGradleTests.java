@@ -17,6 +17,7 @@ package com.liferay.ide.gradle.core.tests;
 import com.liferay.ide.gradle.core.tests.base.NewModuleGradleBase;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -252,6 +253,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		deleteProject(project.getName());
 	}
 
+	@Ignore("")
 	@Test
 	public void createSoyPortlet() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();

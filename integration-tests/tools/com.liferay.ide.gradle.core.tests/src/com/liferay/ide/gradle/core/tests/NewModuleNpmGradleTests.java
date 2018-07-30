@@ -26,6 +26,7 @@ import org.junit.Test;
  */
 public class NewModuleNpmGradleTests extends NewModuleGradleBase {
 
+	@Ignore("Re-enable NPM Tests")
 	@Test
 	public void createNpmAngularPortlet() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
