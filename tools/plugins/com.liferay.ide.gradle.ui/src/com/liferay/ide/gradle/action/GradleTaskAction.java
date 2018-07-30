@@ -16,6 +16,7 @@ package com.liferay.ide.gradle.action;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.action.AbstractObjectAction;
@@ -97,17 +98,19 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 		if (fSelection instanceof IStructuredSelection) {
 			Object[] elems = ((IStructuredSelection)fSelection).toArray();
 
-			Object elem = elems[0];
+			if (ListUtil.isNotEmpty(elems)) {
+				Object elem = elems[0];
 
-			if (elem instanceof IFile) {
-				gradleBuildFile = (IFile)elem;
+				if (elem instanceof IFile) {
+					gradleBuildFile = (IFile)elem;
 
-				project = gradleBuildFile.getProject();
-			}
-			else if (elem instanceof IProject) {
-				project = (IProject)elem;
+					project = gradleBuildFile.getProject();
+				}
+				else if (elem instanceof IProject) {
+					project = (IProject)elem;
 
-				gradleBuildFile = project.getFile("build.gradle");
+					gradleBuildFile = project.getFile("build.gradle");
+				}
 			}
 		}
 	}
