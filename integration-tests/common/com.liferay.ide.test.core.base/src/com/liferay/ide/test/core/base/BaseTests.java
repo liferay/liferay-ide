@@ -79,7 +79,8 @@ public class BaseTests {
 
 		assertProjectExists(project);
 
-		Assert.assertNotNull(LiferayCore.create(IBundleProject.class, project));
+		Assert.assertNotNull(
+			"Expected project " + project + " is IBundleProject", LiferayCore.create(IBundleProject.class, project));
 	}
 
 	protected void assertComponentValue(Value<?> component, String expectedValue) {
@@ -91,11 +92,13 @@ public class BaseTests {
 
 		String content = FileUtil.readContents(file);
 
-		Assert.assertTrue(content.contains(expectedContent));
+		Assert.assertTrue(
+			"Expected file " + file + " contains " + expectedContent +" but now content is " + content,
+			content.contains(expectedContent));
 	}
 
 	protected void assertFileExists(File file) {
-		Assert.assertTrue(FileUtil.exists(file));
+		Assert.assertTrue("Expected file " + file + " exists", FileUtil.exists(file));
 	}
 
 	protected void assertFileExists(IFile file) {
@@ -105,11 +108,11 @@ public class BaseTests {
 		catch (CoreException ce) {
 		}
 
-		Assert.assertTrue(FileUtil.exists(file.getLocation()));
+		Assert.assertTrue("Expected file " + file.getLocation() + " exists", FileUtil.exists(file.getLocation()));
 	}
 
 	protected void assertFileExists(IPath path) {
-		Assert.assertTrue(FileUtil.exists(path));
+		Assert.assertTrue("Expected path " + path + " exists", FileUtil.exists(path));
 	}
 
 	protected void assertFileNotContains(FileSupport fs, String expectedContent) {
@@ -121,7 +124,7 @@ public class BaseTests {
 	}
 
 	protected void assertFileNotExists(File file) {
-		Assert.assertTrue(FileUtil.notExists(file));
+		Assert.assertTrue("Expected file " + file + " not exists", FileUtil.notExists(file));
 	}
 
 	protected void assertFileNotExists(IFile file) {
@@ -280,7 +283,9 @@ public class BaseTests {
 			project.delete(true, true, npm);
 		}
 		catch (CoreException ce) {
-			failTest(ce);
+			// failTest(ce);
+
+			ce.printStackTrace();
 		}
 	}
 
