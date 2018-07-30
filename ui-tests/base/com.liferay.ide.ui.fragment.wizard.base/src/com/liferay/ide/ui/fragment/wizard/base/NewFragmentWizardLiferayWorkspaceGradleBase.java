@@ -202,7 +202,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 		dialogAction.confirm();
 
 		String[] files = {
-			"META-INF/resources/template_add_buttons.jsp", "META-INF/resources/error.jsp",
+			"META-INF/resources/view.jsp", "META-INF/resources/error.jsp",
 			"META-INF/resources/init.jsp", "portlet.properties"
 		};
 
@@ -260,13 +260,13 @@ public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.xsl.content.web");
+		dialogAction.prepareText("com.liferay.asset.browser.web");
 
 		dialogAction.confirm();
 
 		String[] files = {
-			"META-INF/resources/configuration.jsp", "META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp",
-			"META-INF/resources/view.jsp", "portlet.properties", "resource-actions/default.xml"
+			"META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp", "META-INF/resources/view.jsp",
+			"portlet.properties"
 		};
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
@@ -281,13 +281,13 @@ public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 
 		dialogAction.cancel();
 
-		wizardAction.newFragmentInfo.selectFile("META-INF/resources/configuration.jsp");
+		wizardAction.newFragmentInfo.selectFile("META-INF/resources/init-ext.jsp");
 
 		wizardAction.newFragmentInfo.deleteFile();
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
-		dialogAction.selectItems("META-INF/resources/configuration.jsp");
+		dialogAction.selectItems("META-INF/resources/init-ext.jsp");
 
 		dialogAction.confirm();
 

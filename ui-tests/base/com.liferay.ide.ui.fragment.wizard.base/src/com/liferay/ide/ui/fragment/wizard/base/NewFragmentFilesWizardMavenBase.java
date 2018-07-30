@@ -100,7 +100,7 @@ public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.directory.web");
+		dialogAction.prepareText("com.liferay.password.policies.admin.web");
 
 		dialogAction.confirm();
 
@@ -112,14 +112,14 @@ public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
 		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
-		dialogAction.selectItems("META-INF/resources/user/search_columns.jspf");
+		dialogAction.selectItems("META-INF/resources/user_search_columns.jspf");
 
 		dialogAction.confirm();
 
 		wizardAction.finish();
 
 		String[] jspfFile =
-			{project.getName(), "src", "main", "resources", "META-INF", "resources", "user", "search_columns.jspf"};
+			{project.getName(), "src", "main", "resources", "META-INF", "resources", "user_search_columns.jspf"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspfFile));
 
