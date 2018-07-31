@@ -28,6 +28,7 @@ import org.junit.rules.RuleChain;
  * @author Terry Jia
  * @author Lily Li
  */
+@Ignore("only test deploy71 now")
 public class DeployModuleGradleTomcat70Tests extends DeployModuleGradleTomcat7xBase {
 
 	@ClassRule

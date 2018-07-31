@@ -883,6 +883,17 @@ public class WizardAction extends UIAction {
 			_newModuleWizard.getLocation().setText(location);
 		}
 
+		public void prepareGradle71(String projectName, String template, String version) {
+			_prepare(projectName, GRADLE, template, version);
+		}
+
+		public void prepareGradle71(String projectName, String template, String location, String version) {
+			_prepare(projectName, GRADLE, template);
+			_newModuleWizard.getUseDefaultLocation().deselect();
+			_newModuleWizard.getLocation().setText(location);
+			_newModuleWizard.getLiferayVersion().setSelection(version);
+		}
+
 		public void prepareMaven(String projectName) {
 			_prepare(projectName, MAVEN, MVC_PORTLET);
 		}
@@ -899,6 +910,13 @@ public class WizardAction extends UIAction {
 			_newModuleWizard.getProjectName().setText(projectName);
 			_newModuleWizard.getBuildTypes().setSelection(buildType);
 			projectTemplateName().setSelection(template);
+		}
+
+		private void _prepare(String projectName, String buildType, String template, String version) {
+			_newModuleWizard.getProjectName().setText(projectName);
+			_newModuleWizard.getBuildTypes().setSelection(buildType);
+			projectTemplateName().setSelection(template);
+			_newModuleWizard.getLiferayVersion().setSelection(version);
 		}
 
 		private final NewLiferayModuleWizard _newModuleWizard = new NewLiferayModuleWizard(bot);

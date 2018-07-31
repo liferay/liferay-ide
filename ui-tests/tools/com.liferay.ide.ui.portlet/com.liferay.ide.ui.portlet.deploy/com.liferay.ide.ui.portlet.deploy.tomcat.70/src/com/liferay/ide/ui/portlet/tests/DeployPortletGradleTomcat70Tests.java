@@ -20,6 +20,7 @@ import com.liferay.ide.ui.liferay.util.RuleUtil;
 import com.liferay.ide.ui.portlet.deploy.base.DeployPortletGradleTomcat7xBase;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -27,6 +28,7 @@ import org.junit.rules.RuleChain;
  * @author Terry Jia
  * @author Rui Wang
  */
+@Ignore("only test deploy71 now")
 public class DeployPortletGradleTomcat70Tests extends DeployPortletGradleTomcat7xBase {
 
 	@ClassRule

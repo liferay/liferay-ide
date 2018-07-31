@@ -28,7 +28,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployActivator() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), ACTIVATOR);
+		wizardAction.newModule.prepareGradle71(project.getName(), ACTIVATOR, "7.1");
 
 		wizardAction.finish();
 
@@ -54,7 +54,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployApi() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), API);
+		wizardAction.newModule.prepareGradle71(project.getName(), API, "7.1");
 
 		wizardAction.finish();
 
@@ -80,7 +80,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployControlMenuEntry() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), CONTROL_MENU_ENTRY);
+		wizardAction.newModule.prepareGradle71(project.getName(), CONTROL_MENU_ENTRY, "7.1");
 
 		wizardAction.finish();
 
@@ -106,7 +106,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployFormField() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), FORM_FIELD);
+		wizardAction.newModule.prepareGradle71(project.getName(), FORM_FIELD, "7.1");
 
 		wizardAction.finish();
 
@@ -132,7 +132,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployPanelApp() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), PANEL_APP);
+		wizardAction.newModule.prepareGradle71(project.getName(), PANEL_APP, "7.1");
 
 		wizardAction.finish();
 
@@ -158,7 +158,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployPortletConfigurationIcon() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), PORTLET_CONFIGURATION_ICON);
+		wizardAction.newModule.prepareGradle71(project.getName(), PORTLET_CONFIGURATION_ICON, "7.1");
 
 		wizardAction.finish();
 
@@ -184,7 +184,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployPortletProvider() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), PORTLET_PROVIDER);
+		wizardAction.newModule.prepareGradle71(project.getName(), PORTLET_PROVIDER, "7.1");
 
 		wizardAction.finish();
 
@@ -210,7 +210,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployPortletToolbarContributor() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), PORTLET_TOOLBAR_CONTRIBUTOR);
+		wizardAction.newModule.prepareGradle71(project.getName(), PORTLET_TOOLBAR_CONTRIBUTOR, "7.1");
 
 		wizardAction.finish();
 
@@ -236,7 +236,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployRest() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), REST);
+		wizardAction.newModule.prepareGradle71(project.getName(), REST, "7.1");
 
 		wizardAction.finish();
 
@@ -262,7 +262,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployService() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), SERVICE);
+		wizardAction.newModule.prepareGradle71(project.getName(), SERVICE, "7.1");
 
 		wizardAction.next();
 
@@ -296,7 +296,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployServiceWrapper() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_WRAPPER);
+		wizardAction.newModule.prepareGradle71(project.getName(), SERVICE_WRAPPER, "7.1");
 
 		wizardAction.next();
 
@@ -330,7 +330,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deploySimulationPanelEntry() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), SIMULATION_PANEL_ENTRY);
+		wizardAction.newModule.prepareGradle71(project.getName(), SIMULATION_PANEL_ENTRY, "7.1");
 
 		wizardAction.finish();
 
@@ -356,7 +356,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployTemplateContextContributor() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), TEMPLATE_CONTEXT_CONCONTRIBUTOR);
+		wizardAction.newModule.prepareGradle71(project.getName(), TEMPLATE_CONTEXT_CONCONTRIBUTOR, "7.1");
 
 		wizardAction.finish();
 
@@ -382,7 +382,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployThemeContributor() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), THEME_CONTRIBUTOR, envAction.getTempDir().getPath());
+		wizardAction.newModule.prepareGradle71(project.getName(), THEME_CONTRIBUTOR, envAction.getTempDir().getPath(), "7.1");
 
 		wizardAction.finish();
 
@@ -408,7 +408,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployWarHook() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), WAR_HOOK);
+		wizardAction.newModule.prepareGradle71(project.getName(), WAR_HOOK, "7.1");
 
 		wizardAction.finish();
 
@@ -434,7 +434,7 @@ public class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployWarMvcPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET);
+		wizardAction.newModule.prepareGradle71(project.getName(), WAR_MVC_PORTLET, "7.1");
 
 		wizardAction.finish();
 
