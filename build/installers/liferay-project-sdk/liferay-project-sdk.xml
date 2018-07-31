@@ -64,6 +64,116 @@
         </createDirectory>
         <if>
             <actionList>
+                <if>
+                    <actionList>
+                        <if>
+                            <actionList>
+                                <setInstallerVariable>
+                                    <name>proxyHostArg</name>
+                                    <value> -Dhttp.proxyHost=${httpproxyhost}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyPortArg</name>
+                                    <value> -Dhttp.proxyPort=${httpproxyport}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyUsernameArg</name>
+                                    <value> -Dhttp.proxyUser=${httpproxyusername}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyPasswordArg</name>
+                                    <value> -Dhttp.proxyPassword=${httpproxypassword}</value>
+                                </setInstallerVariable>
+                            </actionList>
+                            <ruleList>
+                                <compareValues>
+                                    <logic>equals</logic>
+                                    <value1>${proxysetting}</value1>
+                                    <value2>httpProxy</value2>
+                                </compareValues>
+                            </ruleList>
+                        </if>
+                        <if>
+                            <actionList>
+                                <setInstallerVariable>
+                                    <name>proxyHostArg</name>
+                                    <value> -Dhttps.proxyHost=${httpsproxyhost}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyPortArg</name>
+                                    <value> -Dhttps.proxyPort=${httpsproxyport}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyUsernameArg</name>
+                                    <value> -Dhttps.proxyUser=${httpsproxyusername}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyPasswordArg</name>
+                                    <value> -Dhttps.proxyPassword=${httpsproxypassword}</value>
+                                </setInstallerVariable>
+                            </actionList>
+                            <ruleList>
+                                <compareValues>
+                                    <logic>equals</logic>
+                                    <value1>${proxysetting}</value1>
+                                    <value2>httpsProxy</value2>
+                                </compareValues>
+                            </ruleList>
+                        </if>
+                        <if>
+                            <actionList>
+                                <setInstallerVariable>
+                                    <name>proxyHostArg</name>
+                                    <value> -DsocksProxyHost=${socksproxyhost}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyPortArg</name>
+                                    <value> -DsocksProxyPort=${socksproxyport}</value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyUsernameArg</name>
+                                    <value></value>
+                                </setInstallerVariable>
+                                <setInstallerVariable>
+                                    <name>proxyPasswordArg</name>
+                                    <value></value>
+                                </setInstallerVariable>
+                            </actionList>
+                            <ruleList>
+                                <compareValues>
+                                    <logic>equals</logic>
+                                    <value1>${proxysetting}</value1>
+                                    <value2>socksProxy</value2>
+                                </compareValues>
+                            </ruleList>
+                        </if>
+                    </actionList>
+                    <conditionRuleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxy}</value1>
+                            <value2>proxysetting</value2>
+                        </compareValues>
+                    </conditionRuleList>
+                    <elseActionList>
+                        <setInstallerVariable>
+                            <name>proxyHostArg</name>
+                            <value></value>
+                        </setInstallerVariable>
+                        <setInstallerVariable>
+                            <name>proxyPortArg</name>
+                            <value></value>
+                        </setInstallerVariable>
+                        <setInstallerVariable>
+                            <name>proxyUsernameArg</name>
+                            <value></value>
+                        </setInstallerVariable>
+                        <setInstallerVariable>
+                            <name>proxyPasswordArg</name>
+                            <value></value>
+                        </setInstallerVariable>
+                    </elseActionList>
+                </if>
                 <writeFile>
                     <encoding>utf-8</encoding>
                     <path>${installdir}${platform_path_separator}pwd</path>
@@ -72,7 +182,7 @@
                 <runProgram>
                     <customErrorMessage>Could not create DXP download token. Make sure you type correct email address and password and are connected to the internet.</customErrorMessage>
                     <program>${java_executable}</program>
-                    <programArguments>-jar "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email "${email}" --password-file "${installdir}${platform_path_separator}pwd"</programArguments>
+                    <programArguments>-jar${proxyHostArg}${proxyPortArg}${proxyUsernameArg}${proxyPasswordArg} "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email "${email}" --password-file "${installdir}${platform_path_separator}pwd"</programArguments>
                     <onErrorActionList>
                         <deleteFile>
                             <path>${installdir}</path>
