@@ -43,8 +43,10 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IDecoratorManager;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveRegistry;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
@@ -103,6 +105,18 @@ public class UIUtil {
 		};
 
 		async(delayer);
+	}
+
+	public static IDecoratorManager getDecoratorManager() {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+
+		return workbench.getDecoratorManager();
+	}
+
+	public static ISharedImages getSharedImages() {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+
+		return workbench.getSharedImages();
 	}
 
 	public static void executeCommand(String commandId, ISelection selection, Map<String, Object> parameters)

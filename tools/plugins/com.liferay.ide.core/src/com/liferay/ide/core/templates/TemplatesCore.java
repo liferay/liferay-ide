@@ -15,11 +15,10 @@
 package com.liferay.ide.core.templates;
 
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 
 import freemarker.template.Configuration;
 import freemarker.template.ObjectWrapper;
-
-import java.io.File;
 
 import java.net.URL;
 
@@ -30,7 +29,9 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
 import org.osgi.framework.Bundle;
@@ -108,7 +109,9 @@ public class TemplatesCore {
 
 		IConfigurationElement element = _getTplDefinitionElement(templateId);
 
-		String pluginName = element.getContributor().getName();
+		IContributor contributor = element.getContributor();
+
+		String pluginName = contributor.getName();
 
 		model = _createTemplateModel(element, pluginName);
 
@@ -149,8 +152,9 @@ public class TemplatesCore {
 			return _tplDefinitionElements;
 		}
 
-		_tplDefinitionElements =
-			Platform.getExtensionRegistry().getConfigurationElementsFor(LiferayCore.PLUGIN_ID + ".templateDefinitions");
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+
+		_tplDefinitionElements = registry.getConfigurationElementsFor(LiferayCore.PLUGIN_ID + ".templateDefinitions");
 
 		return _tplDefinitionElements;
 	}
@@ -170,7 +174,7 @@ public class TemplatesCore {
 
 		URL fileUrl = FileLocator.toFileURL(loaderRoot);
 
-		config.setDirectoryForTemplateLoading(new File(fileUrl.getFile().toString()));
+		config.setDirectoryForTemplateLoading(FileUtil.getFile(fileUrl));
 
 		config.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER);
 

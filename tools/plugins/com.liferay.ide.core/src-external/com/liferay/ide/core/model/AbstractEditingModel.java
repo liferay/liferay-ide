@@ -26,6 +26,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -59,8 +60,10 @@ public abstract class AbstractEditingModel
 	}
 
 	public void fireModelChanged(IModelChangedEvent event) {
-		if ((event.getChangeType() == IModelChangedEvent.CHANGE) && (event.getOldValue() != null) &&
-			event.getOldValue().equals(event.getNewValue())) {
+		Object oldValue = event.getOldValue();
+
+		if ((event.getChangeType() == IModelChangedEvent.CHANGE) && (oldValue != null) &&
+			oldValue.equals(event.getNewValue())) {
 
 			return;
 		}
@@ -92,10 +95,14 @@ public abstract class AbstractEditingModel
 
 	public String getInstallLocation() {
 		if ((_fInstallLocation == null) && (_fUnderlyingResource != null)) {
-			IPath path = _fUnderlyingResource.getProject().getLocation();
+			IProject project = _fUnderlyingResource.getProject();
+
+			IPath path = project.getLocation();
 
 			if (path != null) {
-				return path.addTrailingSeparator().toString();
+				path = path.addTrailingSeparator();
+
+				return path.toString();
 			}
 
 			return null;
@@ -239,9 +246,7 @@ public abstract class AbstractEditingModel
 	public void transferListenersTo(IModelChangeProviderExtension target, IModelChangedListenerFilter filter) {
 		List<IModelChangedListener> oldList = (List<IModelChangedListener>)_fListeners.clone();
 
-		for (int i = 0; i < oldList.size(); i++) {
-			IModelChangedListener listener = (IModelChangedListener)oldList.get(i);
-
+		for (IModelChangedListener listener : oldList) {
 			if ((filter == null) || filter.accept(listener)) {
 
 				// add the listener to the target
@@ -256,7 +261,9 @@ public abstract class AbstractEditingModel
 	}
 
 	protected InputStream getInputStream(IDocument document) throws UnsupportedEncodingException {
-		try (InputStream inputStream = new ByteArrayInputStream(document.get().getBytes(getCharset()))) {
+		String s = document.get();
+
+		try (InputStream inputStream = new ByteArrayInputStream(s.getBytes(getCharset()))) {
 			return new BufferedInputStream(inputStream);
 		}
 		catch (IOException ioe) {

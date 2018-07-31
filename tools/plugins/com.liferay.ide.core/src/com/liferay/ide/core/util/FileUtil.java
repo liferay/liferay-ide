@@ -32,6 +32,8 @@ import java.io.RandomAccessFile;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
+import java.net.URL;
+
 import java.nio.file.Files;
 
 import java.util.ArrayList;
@@ -211,8 +213,12 @@ public class FileUtil {
 	}
 
 	public static boolean exists(IPath path) {
-		if ((path != null) && path.toFile().exists()) {
-			return true;
+		if (path != null) {
+			File file = path.toFile();
+
+			if (file.exists()) {
+				return true;
+			}
 		}
 
 		return false;
@@ -251,7 +257,9 @@ public class FileUtil {
 			return null;
 		}
 
-		return file.getLocation().toFile();
+		IPath location = file.getLocation();
+
+		return location.toFile();
 	}
 
 	public static File getFile(IPath path) {
@@ -262,12 +270,54 @@ public class FileUtil {
 		return path.toFile();
 	}
 
+	public static File getFile(URL url) {
+		if (url == null) {
+			return null;
+		}
+
+		return new File(url.getFile());
+	}
+
+	public static String getFullPathPortableString(IFile file) {
+		if (file == null) {
+			return null;
+		}
+
+		return toPortableString(file.getFullPath());
+	}
+
+	public static String getFullPathPortableString(IFolder folder) {
+		if (folder == null) {
+			return null;
+		}
+
+		return toPortableString(folder.getFullPath());
+	}
+
+	public static String getLocationPortableString(IFile file) {
+		if (file == null) {
+			return null;
+		}
+
+		return toPortableString(file.getLocation());
+	}
+
+	public static String getLocationPortableString(IFolder folder) {
+		if (folder == null) {
+			return null;
+		}
+
+		return toPortableString(folder.getLocation());
+	}
+
 	public static IContainer getWorkspaceContainer(File file) {
 		IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
 
 		IPath path = new Path(file.getAbsolutePath());
 
-		IContainer[] containers = root.findContainersForLocationURI(path.toFile().toURI());
+		File f = path.toFile();
+
+		IContainer[] containers = root.findContainersForLocationURI(f.toURI());
 
 		if (containers.length == 0) {
 			return null;
@@ -281,14 +331,18 @@ public class FileUtil {
 
 		IPath path = new Path(file.getAbsolutePath());
 
-		IFile[] files = root.findFilesForLocationURI(path.toFile().toURI());
+		File f = path.toFile();
+
+		IFile[] files = root.findFilesForLocationURI(f.toURI());
 
 		if (files.length == 0) {
 			return null;
 		}
 
 		for (IFile wsFile : files) {
-			String projectName = wsFile.getProject().getName();
+			IProject project = wsFile.getProject();
+
+			String projectName = project.getName();
 
 			if (projectName.equals(expectedProjectName)) {
 				return wsFile;
@@ -299,7 +353,7 @@ public class FileUtil {
 	}
 
 	public static boolean hasChildren(File dir) {
-		if (isDir(dir) && (dir.list().length > 0)) {
+		if (isDir(dir) && ListUtil.isNotEmpty(dir.list())) {
 			return true;
 		}
 
@@ -396,7 +450,13 @@ public class FileUtil {
 	}
 
 	public static boolean notExists(IPath path) {
-		if ((path == null) || !path.toFile().exists()) {
+		if (path == null) {
+			return true;
+		}
+
+		File file = path.toFile();
+
+		if (!file.exists()) {
 			return true;
 		}
 
@@ -420,7 +480,13 @@ public class FileUtil {
 	}
 
 	public static boolean notExists(org.eclipse.sapphire.modeling.Path path) {
-		if ((path == null) || !path.toFile().exists()) {
+		if (path == null) {
+			return true;
+		}
+
+		File file = path.toFile();
+
+		if (!file.exists()) {
 			return true;
 		}
 
@@ -633,6 +699,22 @@ public class FileUtil {
 		return replaced;
 	}
 
+	public static String toOSString(IPath path) {
+		if (path == null) {
+			return null;
+		}
+
+		return path.toOSString();
+	}
+
+	public static String toPortableString(IPath path) {
+		if (path == null) {
+			return null;
+		}
+
+		return path.toPortableString();
+	}
+
 	public static void validateEdit(IFile... files) throws CoreException {
 		IWorkspace ws = CoreUtil.getWorkspace();
 
@@ -656,15 +738,19 @@ public class FileUtil {
 			return Msgs.folderValueInvalid;
 		}
 
-		IPath path = folder.getFolder(folderValue).getFullPath();
+		IFolder newFolder = folder.getFolder(folderValue);
 
-		IStatus result = CoreUtil.getWorkspace().validatePath(path.toString(), IResource.FOLDER);
+		IPath path = newFolder.getFullPath();
+
+		IWorkspace workspace = CoreUtil.getWorkspace();
+
+		IStatus result = workspace.validatePath(path.toString(), IResource.FOLDER);
 
 		if (!result.isOK()) {
 			return result.getMessage();
 		}
 
-		if (folder.getFolder(new Path(folderValue)).exists()) {
+		if (exists(folder.getFolder(new Path(folderValue)))) {
 			return Msgs.folderAlreadyExists;
 		}
 
@@ -772,7 +858,9 @@ public class FileUtil {
 
 		transformer.transform(new DOMSource(document), new StreamResult(writer));
 
-		return writer.getBuffer().toString();
+		StringBuffer sb = writer.getBuffer();
+
+		return sb.toString();
 	}
 
 	private static class Msgs extends NLS {

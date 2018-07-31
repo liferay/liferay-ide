@@ -243,13 +243,6 @@
             type="org.eclipse.core.resources.IFile">
       </propertyTester>
       <propertyTester
-            class="com.liferay.ide.project.ui.HasNonDefaultEncodingLanguagePropertiesFileTester"
-            id="com.liferay.ide.project.ui.hasNonDefaultEncodingLanguageFile"
-            namespace="com.liferay.ide.project.ui"
-            properties="hasNonDefaultEncodingLanguagePropertiesFile"
-            type="org.eclipse.core.resources.IResource">
-      </propertyTester>
-      <propertyTester
             class="com.liferay.ide.project.ui.NotLiferayProjectInSDKPropertyTester"
             id="com.liferay.ide.project.ui.notLiferayProjectInSDK"
             namespace="com.liferay.ide.project.ui"
@@ -257,8 +250,6 @@
             type="org.eclipse.core.resources.IProject">
       </propertyTester>
    </extension>
-
-
    <extension
          point="org.eclipse.ui.keywords">
       <keyword
@@ -993,27 +984,6 @@
                         value="true">
                   </test>
                </and>
-            </adapt>
-         </enablement>
-      </objectContribution>
-      <objectContribution
-            adaptable="true"
-            id="com.liferay.ide.project.ui.encode"
-            objectClass="org.eclipse.core.resources.IResource">
-         <action
-               class="com.liferay.ide.project.ui.action.EncodeLanguagePropertiesFilesToDefaultAction"
-               icon="icons/e16/encode.png"
-               id="com.liferay.ide.project.ui.encode.language"
-               label="%encode.language.files"
-               menubarPath="liferayPopupMenuCategory/slot1">
-         </action>
-         <enablement>
-            <adapt
-                  type="org.eclipse.core.resources.IResource">
-               <test
-                     forcePluginActivation="true"
-                     property="com.liferay.ide.project.ui.hasNonDefaultEncodingLanguagePropertiesFile">
-               </test>
             </adapt>
          </enablement>
       </objectContribution>

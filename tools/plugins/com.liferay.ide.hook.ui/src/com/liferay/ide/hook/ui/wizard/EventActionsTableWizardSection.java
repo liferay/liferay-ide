@@ -18,9 +18,11 @@ import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSection;
 import com.liferay.ide.ui.dialog.FilteredTypesSelectionDialogEx;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
@@ -56,7 +58,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
@@ -94,7 +95,7 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 		public Control createDialogArea(Composite parent) {
 			super.createDialogArea(parent);
 
-			ISharedImages sharedImage = PlatformUI.getWorkbench().getSharedImages();
+			ISharedImages sharedImage = UIUtil.getSharedImages();
 
 			errorMessageLabel = new CLabel(parent, SWT.LEFT_TO_RIGHT);
 
@@ -109,7 +110,7 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 		public void modifyText(ModifyEvent e) {
 			boolean classNameValid = false;
 
-			String test = texts[1].getText().trim();
+			String test = StringUtil.trim(texts[1].getText());
 
 			if (test.length() > 0) {
 				IStatus status = JavaConventions.validateJavaTypeName(
@@ -192,7 +193,7 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 		public Control createDialogArea(Composite parent) {
 			super.createDialogArea(parent);
 
-			ISharedImages images = PlatformUI.getWorkbench().getSharedImages();
+			ISharedImages images = UIUtil.getSharedImages();
 
 			errorMessageLabel = new CLabel(parent, SWT.LEFT_TO_RIGHT);
 
@@ -207,7 +208,7 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 		public void modifyText(ModifyEvent e) {
 			boolean classNameValid = false;
 
-			String text = texts[1].getText().trim();
+			String text = StringUtil.trim(texts[1].getText());
 
 			if (text.length() > 0) {
 				IStatus status = JavaConventions.validateJavaTypeName(

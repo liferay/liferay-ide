@@ -129,7 +129,9 @@ public class CoreUtil {
 			return result;
 		}
 
-		return v1.getQualifier().compareTo(v2.getQualifier());
+		String s1 = v1.getQualifier();
+
+		return s1.compareTo(v2.getQualifier());
 	}
 
 	public static boolean containsNullElement(Object[] array) {
@@ -137,8 +139,8 @@ public class CoreUtil {
 			return true;
 		}
 
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == null) {
+		for (Object object : array) {
+			if (object == null) {
 				return true;
 			}
 		}
@@ -173,8 +175,8 @@ public class CoreUtil {
 
 			StringBuilder buf = new StringBuilder();
 
-			for (int i = 0; i < digest.length; i++) {
-				String hex = Integer.toHexString(0xFF & digest[i]);
+			for (byte d : digest) {
+				String hex = Integer.toHexString(0xFF & d);
 
 				if (hex.length() == 1) {
 					buf.append('0');
@@ -266,6 +268,10 @@ public class CoreUtil {
 		return null;
 	}
 
+	public static IFile getIFileFromWorkspaceRoot(IPath path) {
+		return getWorkspaceRoot().getFile(path);
+	}
+
 	public static IProject getLiferayProject(IResource resource) {
 		IProject project = null;
 
@@ -283,10 +289,12 @@ public class CoreUtil {
 				for (IProject proj : projects) {
 					IPath location = proj.getLocation();
 
-					if ((location != null) && (project != null) && project.getLocation().isPrefixOf(location) &&
-						isLiferayProject(proj)) {
+					if ((location != null) && (project != null) && isLiferayProject(proj)) {
+						IPath projectLocation = project.getLocation();
 
-						return proj;
+						if (projectLocation.isPrefixOf(location)) {
+							return proj;
+						}
 					}
 				}
 			}
@@ -301,12 +309,11 @@ public class CoreUtil {
 
 	public static Object getNewObject(Object[] oldObjects, Object[] newObjects) {
 		if ((oldObjects != null) && (newObjects != null) && (oldObjects.length < newObjects.length)) {
-			for (int i = 0; i < newObjects.length; i++) {
+			for (Object newObject : newObjects) {
 				boolean found = false;
-				Object object = newObjects[i];
 
-				for (int j = 0; j < oldObjects.length; j++) {
-					if (oldObjects[j] == object) {
+				for (Object oldObject : oldObjects) {
+					if (oldObject == newObject) {
 						found = true;
 
 						break;
@@ -314,7 +321,7 @@ public class CoreUtil {
 				}
 
 				if (!found) {
-					return object;
+					return newObject;
 				}
 			}
 		}
@@ -329,9 +336,6 @@ public class CoreUtil {
 	/**
 	 * try to get leaf child project that contains this file, cause a file also be
 	 * contained in the parent project
-	 *
-	 * @param file
-	 * @return
 	 */
 	public static IProject getProject(File file) {
 		IWorkspaceRoot ws = getWorkspaceRoot();
@@ -344,10 +348,13 @@ public class CoreUtil {
 			if (resource == null) {
 				resource = container;
 			}
-			else if (container.getProjectRelativePath().segmentCount() <
-						resource.getProjectRelativePath().segmentCount()) {
+			else {
+				IPath containerPath = container.getProjectRelativePath();
+				IPath resourcePath = resource.getProjectRelativePath();
 
-				resource = container;
+				if (containerPath.segmentCount() < resourcePath.segmentCount()) {
+					resource = container;
+				}
 			}
 		}
 
@@ -386,14 +393,20 @@ public class CoreUtil {
 		IClasspathEntry[] entries = project.readRawClasspath();
 
 		for (IClasspathEntry entry : entries) {
-			if ((entry.getEntryKind() != IClasspathEntry.CPE_SOURCE) || (entry.getPath().segmentCount() == 0)) {
+			if (entry.getEntryKind() != IClasspathEntry.CPE_SOURCE) {
+				continue;
+			}
+
+			IPath path = entry.getPath();
+
+			if (path.segmentCount() == 0) {
 				continue;
 			}
 
 			IContainer container = null;
 
-			if (entry.getPath().segmentCount() == 1) {
-				container = getProject(entry.getPath().segment(0));
+			if (path.segmentCount() == 1) {
+				container = getProject(path.segment(0));
 			}
 			else {
 				container = getWorkspaceRoot().getFolder(entry.getPath());
@@ -412,7 +425,7 @@ public class CoreUtil {
 	}
 
 	public static IWorkspaceRoot getWorkspaceRoot() {
-		return ResourcesPlugin.getWorkspace().getRoot();
+		return getWorkspace().getRoot();
 	}
 
 	public static File getWorkspaceRootFile() {
@@ -471,7 +484,13 @@ public class CoreUtil {
 	}
 
 	public static boolean isNullOrEmpty(String val) {
-		if ((val == null) || val.equals(StringPool.EMPTY) || val.trim().equals(StringPool.EMPTY)) {
+		if ((val == null) || val.equals(StringPool.EMPTY)) {
+			return true;
+		}
+
+		String s = val.trim();
+
+		if (s.equals(StringPool.EMPTY)) {
 			return true;
 		}
 
@@ -515,6 +534,22 @@ public class CoreUtil {
 		}
 
 		return SubMonitor.convert(parent, ticks);
+	}
+
+	public static IProject openProject(String projectName, IPath dir, IProgressMonitor monitor) throws CoreException {
+		IWorkspace workspace = getWorkspace();
+
+		IProject project = getProject(projectName);
+
+		IProjectDescription desc = workspace.newProjectDescription(project.getName());
+
+		desc.setLocation(dir);
+
+		project.create(desc, monitor);
+
+		project.open(monitor);
+
+		return project;
 	}
 
 	public static void prepareFolder(IFolder folder) throws CoreException {
@@ -623,20 +658,6 @@ public class CoreUtil {
 			}
 			while (read >= 0);
 		}
-	}
-
-	public static IProject openProject(String projectName, IPath dir, IProgressMonitor monitor) throws CoreException {
-		IWorkspace workspace = getWorkspace();
-	
-		IProject project = getProject(projectName);
-	
-		IProjectDescription desc = workspace.newProjectDescription(project.getName());
-	
-		desc.setLocation(dir);
-		project.create(desc, monitor);
-		project.open(monitor);
-	
-		return project;
 	}
 
 }

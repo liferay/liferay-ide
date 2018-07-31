@@ -37,8 +37,8 @@ import java.util.EnumSet;
 public class IOUtil {
 
 	public static void copyDirToDir(File src, File dest) {
-		Path targetPath = Paths.get(dest.getPath().toString());
-		Path sourcePath = Paths.get(src.getPath().toString());
+		Path targetPath = Paths.get(dest.getPath());
+		Path sourcePath = Paths.get(src.getPath());
 
 		EnumSet<FileVisitOption> opts = EnumSet.of(FileVisitOption.FOLLOW_LINKS);
 		TreeCopier tc = new TreeCopier(sourcePath, targetPath);
@@ -84,7 +84,9 @@ public class IOUtil {
 			CopyOption[] options = {StandardCopyOption.REPLACE_EXISTING};
 
 			try {
-				File folder = target.toFile().getParentFile();
+				File file = target.toFile();
+
+				File folder = file.getParentFile();
 
 				if (!folder.exists()) {
 					folder.mkdirs();
@@ -93,7 +95,9 @@ public class IOUtil {
 				Files.copy(source, target, options);
 			}
 			catch (IOException ioe) {
-				LiferayCore.logError("copy file " + source.toFile().getName() + " error", ioe);
+				File file = source.toFile();
+
+				LiferayCore.logError("copy file " + file.getName() + " error", ioe);
 			}
 		}
 

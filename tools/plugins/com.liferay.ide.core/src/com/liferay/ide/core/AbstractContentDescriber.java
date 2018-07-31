@@ -96,7 +96,7 @@ public abstract class AbstractContentDescriber extends XMLContentDescriber imple
 			// some bad thing happened - force this describer to be disabled
 
 			String message =
-				"Internal Error: XML parser configuration error during content description for Service Builder files";
+				pce + ": XML parser configuration error during content description for Service Builder files";
 
 			throw new RuntimeException(message);
 		}

@@ -17,6 +17,7 @@ package com.liferay.ide.hook.core.model.internal;
 import com.liferay.ide.hook.core.model.BeforeAfterFilterType;
 import com.liferay.ide.hook.core.model.ServletFilterMapping;
 
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 
@@ -59,7 +60,9 @@ public class BeforeAfterFilterNameBinding extends XmlValueBindingImpl {
 	private BeforeAfterFilterType _getFilterType() {
 		ServletFilterMapping servletFilterMapping = property().nearest(ServletFilterMapping.class);
 
-		return servletFilterMapping.getBeforeAfterFilterType().content(true);
+		Value<BeforeAfterFilterType> typeValue = servletFilterMapping.getBeforeAfterFilterType();
+
+		return typeValue.content(true);
 	}
 
 }

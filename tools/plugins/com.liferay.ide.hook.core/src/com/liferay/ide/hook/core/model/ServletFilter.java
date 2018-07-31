@@ -63,7 +63,7 @@ public interface ServletFilter extends Element {
 
 	// ** ServletFilterImpl
 
-	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = {"javax.servlet.Filter"})
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "javax.servlet.Filter")
 	@Label(standard = "Servlet Filter Implementation")
 	@MustExist
 	@Reference(target = JavaType.class)

@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.sapphire.Element;
@@ -47,13 +48,13 @@ public class GenericResourceBundlePathService extends RelativePathService {
 
 		for (IClasspathEntry iClasspathEntry : cpEntries) {
 			if (IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind()) {
-				IFolder folder = CoreUtil.getWorkspaceRoot().getFolder(iClasspathEntry.getPath());
+				IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
+
+				IFolder folder = workspaceRoot.getFolder(iClasspathEntry.getPath());
 
 				IPath entryPath = folder.getLocation();
 
-				String fullPath = entryPath.toOSString();
-
-				Path sapphirePath = new Path(fullPath);
+				Path sapphirePath = new Path(entryPath.toOSString());
 
 				roots.add(sapphirePath);
 			}

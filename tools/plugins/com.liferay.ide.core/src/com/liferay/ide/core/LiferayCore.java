@@ -16,6 +16,8 @@ package com.liferay.ide.core;
 
 import com.liferay.ide.core.util.ListUtil;
 
+import java.util.List;
+
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
@@ -157,12 +159,16 @@ public class LiferayCore extends Plugin {
 	}
 
 	public static synchronized ILiferayProjectAdapter[] getProjectAdapters() {
-		return _adapterReader.getExtensions().toArray(new ILiferayProjectAdapter[0]);
+		List<ILiferayProjectAdapter> extensions = _adapterReader.getExtensions();
+
+		return extensions.toArray(new ILiferayProjectAdapter[0]);
 	}
 
 	public static synchronized ILiferayProjectProvider getProvider(String shortName) {
 		for (ILiferayProjectProvider provider : getProviders()) {
-			if (provider.getShortName().equals(shortName)) {
+			String name = provider.getShortName();
+
+			if (name.equals(shortName)) {
 				return provider;
 			}
 		}

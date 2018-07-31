@@ -43,7 +43,9 @@ public final class ZipUtil {
 	public static String getFirstZipEntryName(File zipFile) throws Exception {
 		ZipFile zip = new ZipFile(zipFile);
 
-		ZipEntry nextEntry = zip.entries().nextElement();
+		Enumeration<? extends ZipEntry> itr = zip.entries();
+
+		ZipEntry nextEntry = itr.nextElement();
 
 		String name = nextEntry.getName();
 
@@ -53,15 +55,15 @@ public final class ZipUtil {
 	}
 
 	public static ZipEntry getZipEntry(ZipFile zip, String name) {
-		String lcasename = name.toLowerCase();
+		String lowerCaseName = name.toLowerCase();
 
 		for (Enumeration<? extends ZipEntry> itr = zip.entries(); itr.hasMoreElements();) {
-			ZipEntry zipentry = itr.nextElement();
+			ZipEntry zipEntry = itr.nextElement();
 
-			String entryName = zipentry.getName().toLowerCase();
+			String zipEntryName = zipEntry.getName();
 
-			if (entryName.equals(lcasename)) {
-				return zipentry;
+			if (lowerCaseName.equals(zipEntryName.toLowerCase())) {
+				return zipEntry;
 			}
 		}
 
@@ -116,8 +118,10 @@ public final class ZipUtil {
 
 				ZipEntry entry = entries.nextElement();
 
+				String name = entry.getName();
+
 				if (!foundStartEntry) {
-					foundStartEntry = entryToStart.equals(entry.getName());
+					foundStartEntry = entryToStart.equals(name);
 					continue;
 				}
 
@@ -130,10 +134,10 @@ public final class ZipUtil {
 				String entryName = null;
 
 				if (entryToStart == null) {
-					entryName = entry.getName();
+					entryName = name;
 				}
 				else {
-					entryName = entry.getName().replaceFirst(entryToStart, "");
+					entryName = name.replaceFirst(entryToStart, "");
 				}
 
 				if (entry.isDirectory()) {

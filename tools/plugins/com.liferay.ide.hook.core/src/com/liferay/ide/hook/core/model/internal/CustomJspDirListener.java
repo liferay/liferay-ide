@@ -17,6 +17,9 @@ package com.liferay.ide.hook.core.model.internal;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.core.model.Hook;
 
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementHandle;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -33,7 +36,9 @@ public class CustomJspDirListener extends FilteredListener<PropertyContentEvent>
 	protected void handleTypedEvent(PropertyContentEvent event) {
 		Property prop = event.property();
 
-		Hook hook = prop.element().nearest(Hook.class);
+		Element element = prop.element();
+
+		Hook hook = element.nearest(Hook.class);
 
 		if (hook != null) {
 			if (CustomJspDir.PROP_VALUE.equals(prop.definition())) {
@@ -41,14 +46,18 @@ public class CustomJspDirListener extends FilteredListener<PropertyContentEvent>
 				// IDE-1132, Listen the change of Property CustomJspDir, and refresh the
 				// Property CustomJsps.
 
-				hook.property(Hook.PROP_CUSTOM_JSPS).refresh();
+				ElementList<Element> list = hook.property(Hook.PROP_CUSTOM_JSPS);
+
+				list.refresh();
 			}
 			else if (Hook.PROP_CUSTOM_JSP_DIR.equals(prop.definition())) {
 
 				// IDE-1251 listen for changes to custom_jsp_dir and if it is empty initialize
 				// initial content @InitialValue
 
-				CustomJspDir customJspDir = hook.getCustomJspDir().content(false);
+				ElementHandle<CustomJspDir> handle = hook.getCustomJspDir();
+
+				CustomJspDir customJspDir = handle.content(false);
 
 				if (customJspDir != null) {
 					Value<Path> value = customJspDir.getValue();

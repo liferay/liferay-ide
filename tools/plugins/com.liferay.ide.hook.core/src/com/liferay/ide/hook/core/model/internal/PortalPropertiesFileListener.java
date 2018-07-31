@@ -17,6 +17,8 @@ package com.liferay.ide.hook.core.model.internal;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.PortalPropertiesFile;
 
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementHandle;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -33,9 +35,13 @@ public class PortalPropertiesFileListener extends FilteredListener<PropertyConte
 		Property prop = event.property();
 
 		if (Hook.PROP_PORTAL_PROPERTIES_FILE.equals(prop.definition())) {
-			Hook hook = prop.element().nearest(Hook.class);
+			Element element = prop.element();
 
-			PortalPropertiesFile ppf = hook.getPortalPropertiesFile().content(false);
+			Hook hook = element.nearest(Hook.class);
+
+			ElementHandle<PortalPropertiesFile> handle = hook.getPortalPropertiesFile();
+
+			PortalPropertiesFile ppf = handle.content(false);
 
 			if (ppf != null) {
 				Value<Path> value = ppf.getValue();

@@ -30,6 +30,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -38,6 +39,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -45,6 +47,7 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 import org.eclipse.core.net.proxy.IProxyData;
@@ -82,7 +85,10 @@ public class RemoteConnection implements IRemoteConnection {
 			return;
 		}
 
-		_httpClient.getConnectionManager().shutdown();
+		ClientConnectionManager manager = _httpClient.getConnectionManager();
+
+		manager.shutdown();
+
 		_httpClient = null;
 	}
 
@@ -94,7 +100,12 @@ public class RemoteConnection implements IRemoteConnection {
 
 	public void setHttpPort(String httpPort) {
 		if (httpPort != null) {
-			_httpPort = Integer.parseInt(httpPort);
+			try {
+				_httpPort = Integer.parseInt(httpPort);
+			}
+			catch (NumberFormatException nfe) {
+				_httpPort = -1;
+			}
 		}
 		else {
 			_httpPort = -1;
@@ -117,7 +128,7 @@ public class RemoteConnection implements IRemoteConnection {
 
 	protected Object deleteJSONAPI(Object... args) throws APIException {
 		if (!(args[0] instanceof String)) {
-			throw new IllegalArgumentException("First argument must be a string.");
+			throw new IllegalArgumentException("First argument must be a string");
 		}
 
 		HttpDelete deleteAPIMethod = new HttpDelete();
@@ -134,7 +145,9 @@ public class RemoteConnection implements IRemoteConnection {
 
 		HttpResponse response = _getHttpClient().execute(request);
 
-		int statusCode = response.getStatusLine().getStatusCode();
+		StatusLine statusLine = response.getStatusLine();
+
+		int statusCode = statusLine.getStatusCode();
 
 		if (statusCode == HttpStatus.SC_OK) {
 			HttpEntity entity = response.getEntity();
@@ -146,13 +159,13 @@ public class RemoteConnection implements IRemoteConnection {
 			return body;
 		}
 		else {
-			return response.getStatusLine().getReasonPhrase();
+			return statusLine.getReasonPhrase();
 		}
 	}
 
 	protected Object getJSONAPI(Object... args) throws APIException {
 		if (!(args[0] instanceof String)) {
-			throw new IllegalArgumentException("First argument must be a string.");
+			throw new IllegalArgumentException("First argument must be a string");
 		}
 
 		HttpGet getAPIMethod = new HttpGet();
@@ -162,7 +175,7 @@ public class RemoteConnection implements IRemoteConnection {
 
 	protected Object httpJSONAPI(Object... args) throws APIException {
 		if (!(args[0] instanceof HttpRequestBase)) {
-			throw new IllegalArgumentException("First argument must be a HttpRequestBase.");
+			throw new IllegalArgumentException("First argument must be a HttpRequestBase");
 		}
 
 		Object retval = null;
@@ -268,7 +281,7 @@ public class RemoteConnection implements IRemoteConnection {
 
 	protected Object postJSONAPI(Object... args) throws APIException {
 		if (!(args[0] instanceof String)) {
-			throw new IllegalArgumentException("First argument must be a string.");
+			throw new IllegalArgumentException("First argument must be a string");
 		}
 
 		HttpPost post = new HttpPost();
@@ -310,7 +323,9 @@ public class RemoteConnection implements IRemoteConnection {
 
 					HttpHost proxy = new HttpHost(data.getHost(), data.getPort());
 
-					newHttpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+					HttpParams params = newHttpClient.getParams();
+
+					params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
 
 					newDefaultHttpClient = newHttpClient;
 
@@ -329,10 +344,14 @@ public class RemoteConnection implements IRemoteConnection {
 
 						DefaultHttpClient newHttpClient = new DefaultHttpClient();
 
-						newHttpClient.getParams().setParameter("socks.host", data.getHost());
-						newHttpClient.getParams().setParameter("socks.port", data.getPort());
+						HttpParams params = newHttpClient.getParams();
 
-						SchemeRegistry registry = newHttpClient.getConnectionManager().getSchemeRegistry();
+						params.setParameter("socks.host", data.getHost());
+						params.setParameter("socks.port", data.getPort());
+
+						ClientConnectionManager manager = newHttpClient.getConnectionManager();
+
+						SchemeRegistry registry = manager.getSchemeRegistry();
 
 						Scheme scheme = new Scheme("socks", data.getPort(), PlainSocketFactory.getSocketFactory());
 

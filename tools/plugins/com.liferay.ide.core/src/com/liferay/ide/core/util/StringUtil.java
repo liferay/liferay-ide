@@ -14,14 +14,27 @@
 
 package com.liferay.ide.core.util;
 
-import static com.liferay.ide.core.util.StringPool.DOUBLE_QUOTE_CHAR;
-import static com.liferay.ide.core.util.StringPool.SINGLE_QUOTE_CHAR;
-
 /**
  * @author Kuo Zhang
  * @author Terry Jia
  */
 public class StringUtil {
+
+	public static boolean equals(String s1, Object o) {
+		if ((s1 == null) || (o == null)) {
+			return false;
+		}
+
+		return s1.equals(o.toString());
+	}
+
+	public static boolean equals(String s1, String s2) {
+		if ((s1 == null) || (s2 == null)) {
+			return false;
+		}
+
+		return s1.equals(s2);
+	}
 
 	public static boolean isQuoted(String string) {
 		if ((string == null) || (string.length() < 2)) {
@@ -32,8 +45,8 @@ public class StringUtil {
 		char firstChar = string.charAt(0);
 		char lastChar = string.charAt(lastIndex);
 
-		if (((firstChar == SINGLE_QUOTE_CHAR) && (lastChar == SINGLE_QUOTE_CHAR)) ||
-			((firstChar == DOUBLE_QUOTE_CHAR) && (lastChar == DOUBLE_QUOTE_CHAR))) {
+		if (((firstChar == StringPool.SINGLE_QUOTE_CHAR) && (lastChar == StringPool.SINGLE_QUOTE_CHAR)) ||
+			((firstChar == StringPool.DOUBLE_QUOTE_CHAR) && (lastChar == StringPool.DOUBLE_QUOTE_CHAR))) {
 
 			return true;
 		}
@@ -89,6 +102,24 @@ public class StringUtil {
 		sb.append(content.substring(position, content.length()));
 
 		return sb.toString();
+	}
+
+	public static String trim(String string) {
+		if (string == null) {
+			return null;
+		}
+
+		return string.trim();
+	}
+
+	public static String trim(StringBuffer sb) {
+		if (sb == null) {
+			return null;
+		}
+
+		String string = sb.toString();
+
+		return string.trim();
 	}
 
 }

@@ -26,6 +26,8 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.sapphire.ElementHandle;
+import org.eclipse.sapphire.Value;
 import org.eclipse.wst.validation.Validator;
 import org.eclipse.wst.validation.internal.ConfigurationManager;
 import org.eclipse.wst.validation.internal.ProjectConfiguration;
@@ -52,7 +54,9 @@ public class HookUtil {
 		boolean retval = false;
 
 		try {
-			Validator validator = ValManager.getDefault().getValidator(HookCore.VALIDATOR_ID, project);
+			ValManager valManager = ValManager.getDefault();
+
+			Validator validator = valManager.getValidator(HookCore.VALIDATOR_ID, project);
 
 			ValidatorMutable validatorTable = new ValidatorMutable(validator);
 
@@ -69,9 +73,14 @@ public class HookUtil {
 			}
 
 			IPath customFolderPath = customFolder.getFullPath();
-			IPath projectPath = customFolder.getProject().getFullPath();
 
-			String customJSPFolderPattern = customFolderPath.makeRelativeTo(projectPath).toPortableString();
+			IProject p = customFolder.getProject();
+
+			IPath projectPath = p.getFullPath();
+
+			IPath path = customFolderPath.makeRelativeTo(projectPath);
+
+			String customJSPFolderPattern = path.toPortableString();
 
 			FilterRule folderRule = FilterRule.createFile(customJSPFolderPattern, true, FilterRule.File.FileTypeFolder);
 
@@ -112,7 +121,9 @@ public class HookUtil {
 			}
 
 			if (configureRule) {
-				ProjectConfiguration pc = ConfigurationManager.getManager().getProjectConfiguration(project);
+				ConfigurationManager configurationManager = ConfigurationManager.getManager();
+
+				ProjectConfiguration pc = configurationManager.getProjectConfiguration(project);
 
 				pc.setDoesProjectOverride(true);
 
@@ -133,21 +144,27 @@ public class HookUtil {
 	}
 
 	public static IFolder getCustomJspFolder(Hook hook, IProject project) {
-		CustomJspDir element = hook.getCustomJspDir().content();
+		ElementHandle<CustomJspDir> customJspDirHandle = hook.getCustomJspDir();
 
-		if ((element != null) && !element.getValue().empty()) {
+		CustomJspDir element = customJspDirHandle.content();
 
-			// IDE-110 IDE-648
+		if (element != null) {
+			Value<org.eclipse.sapphire.modeling.Path> pathValue = element.getValue();
 
-			final IWebProject webproject = LiferayCore.create(IWebProject.class, project);
+			if (!pathValue.empty()) {
 
-			if ((webproject != null) && (webproject.getDefaultDocrootFolder() != null)) {
-				IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
+				// IDE-110 IDE-648
 
-				if (defaultDocroot != null) {
-					org.eclipse.sapphire.modeling.Path customJspDir = element.getValue().content();
+				IWebProject webproject = LiferayCore.create(IWebProject.class, project);
 
-					return defaultDocroot.getFolder(customJspDir.toPortableString());
+				if ((webproject != null) && (webproject.getDefaultDocrootFolder() != null)) {
+					IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
+
+					if (defaultDocroot != null) {
+						org.eclipse.sapphire.modeling.Path customJspDir = pathValue.content();
+
+						return defaultDocroot.getFolder(customJspDir.toPortableString());
+					}
 				}
 			}
 		}
@@ -166,7 +183,9 @@ public class HookUtil {
 			if (docFolder != null) {
 				IPath newPath = Path.fromOSString(customJSPFolder);
 
-				IPath pathValue = docFolder.getFullPath().append(newPath);
+				IPath pathValue = docFolder.getFullPath();
+
+				pathValue = pathValue.append(newPath);
 
 				return pathValue;
 			}

@@ -75,7 +75,9 @@ public class CustomJspValidationService extends ValidationService {
 			try {
 				Element element = context().find(Element.class);
 
-				IFile file = element.nearest(Hook.class).adapt(IFile.class);
+				Hook hook = element.nearest(Hook.class);
+
+				IFile file = hook.adapt(IFile.class);
 
 				IProject project = file.getProject();
 
@@ -98,9 +100,9 @@ public class CustomJspValidationService extends ValidationService {
 	}
 
 	private boolean _isValidPortalJsp(Value<?> value) {
-		String customJsp = value.content().toString();
+		Object fileName = value.content();
 
-		IPath customJspPath = _getPortalDir().append(customJsp);
+		IPath customJspPath = _getPortalDir().append(fileName.toString());
 
 		if (FileUtil.exists(customJspPath)) {
 			return true;
@@ -110,12 +112,12 @@ public class CustomJspValidationService extends ValidationService {
 	}
 
 	private boolean _isValidProjectJsp(Value<?> value) {
-		String customJsp = value.content().toString();
+		Object fileName = value.content();
 
 		IFolder customFolder = HookUtil.getCustomJspFolder(hook(), project());
 
 		if (FileUtil.exists(customFolder)) {
-			IFile customJspFile = customFolder.getFile(customJsp);
+			IFile customJspFile = customFolder.getFile(fileName.toString());
 
 			if (FileUtil.exists(customJspFile)) {
 				return true;
