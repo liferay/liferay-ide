@@ -15,19 +15,23 @@
 package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSection;
 import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSectionCallback;
 import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -50,7 +54,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IDecoratorManager;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchContentProvider;
@@ -144,8 +147,8 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
 		return new ISelectionStatusValidator() {
 
 			public IStatus validate(Object[] selection) {
-				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) &&
-					!(selection[0] instanceof IProject) && !(selection[0] instanceof IFile)) {
+				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) && !(selection[0] instanceof IProject) &&
+					!(selection[0] instanceof IFile)) {
 
 					return Status.OK_STATUS;
 				}
@@ -166,7 +169,7 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
 
 					Object property = model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
 
-					return project.getName().equals(property);
+					return StringUtil.equals(project.getName(), property);
 				}
 				else if (element instanceof IFolder) {
 					IFolder folder = (IFolder)element;
@@ -178,11 +181,13 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
 
 					IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers(project);
 
-					for (int i = 0; i < sourceFolders.length; i++) {
-						if ((sourceFolders[i].getResource() != null) && sourceFolders[i].getResource().equals(folder)) {
+					for (IPackageFragmentRoot sourceFolder : sourceFolders) {
+						IResource resource = sourceFolder.getResource();
+
+						if ((resource != null) && resource.equals(folder)) {
 							return true;
 						}
-						else if (ProjectUtil.isParent(folder, sourceFolders[i].getResource())) {
+						else if (ProjectUtil.isParent(folder, resource)) {
 							return true;
 						}
 					}
@@ -206,7 +211,7 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
 
 		ITreeContentProvider contentProvider = new WorkbenchContentProvider();
 
-		IDecoratorManager decoratorManager = PlatformUI.getWorkbench().getDecoratorManager();
+		IDecoratorManager decoratorManager = UIUtil.getDecoratorManager();
 
 		ILabelProvider labelProvider = new DecoratingLabelProvider(
 			new WorkbenchLabelProvider(), decoratorManager.getLabelDecorator());
@@ -234,7 +239,7 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
 						folder = folder.getFolder("content");
 					}
 
-					text.setText(folder.getFullPath().toPortableString());
+					text.setText(FileUtil.toPortableString(folder.getFullPath()));
 				}
 			}
 			catch (Exception ex) {

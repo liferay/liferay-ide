@@ -105,6 +105,7 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 		projectNameCombo = new Combo(parent, SWT.BORDER | SWT.READ_ONLY);
 
 		projectNameCombo.setLayoutData(data);
+
 		synchHelper.synchCombo(projectNameCombo, PROJECT_NAME, null);
 
 		initializeProjectList();
@@ -197,9 +198,7 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 			projectName = names[0];
 		}
 
-		if (((projectNameCombo.getText() == null) || (projectNameCombo.getText().length() == 0)) &&
-			(projectName != null)) {
-
+		if (CoreUtil.isNullOrEmpty(projectNameCombo.getText()) && (projectName != null)) {
 			projectNameCombo.setText(projectName);
 
 			validateProjectRequirements(CoreUtil.getProject(projectName));
@@ -217,11 +216,15 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 	}
 
 	protected void setShellImage() {
-		Bundle bundle = HookUI.getDefault().getBundle();
+		HookUI hookUI = HookUI.getDefault();
+
+		Bundle bundle = hookUI.getBundle();
 
 		URL url = bundle.getEntry("/icons/e16/hook.png");
 
-		Image shellImage = ImageDescriptor.createFromURL(url).createImage();
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
+
+		Image shellImage = imageDescriptor.createImage();
 
 		getShell().setImage(shellImage);
 	}

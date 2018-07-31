@@ -20,7 +20,6 @@ import com.liferay.ide.core.IResourceBundleProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,9 +44,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceProxy;
 import org.eclipse.core.resources.IResourceProxyVisitor;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaElement;
@@ -82,21 +81,6 @@ public class PropertiesUtil {
 	public static final String ELEMENT_SUPPORTED_LOCALE = "supported-locale";
 
 	public static final String PROPERTIES_FILE_SUFFIX = ".properties";
-
-	public static void encodeLanguagePropertiesFilesToDefault(IResource resource, IProgressMonitor monitor) {
-		if (resource.getType() == IResource.PROJECT) {
-			IFile[] languagePropertiesFiles = getAllLanguagePropertiesFiles((IProject)resource);
-
-			for (IFile file : languagePropertiesFiles) {
-				_encodeLanguagePropertyFile(file, monitor);
-			}
-		}
-		else if (resource.getType() == IResource.FILE) {
-			IFile file = (IFile)resource;
-
-			_encodeLanguagePropertyFile(file, monitor);
-		}
-	}
 
 	/**
 	 * Convert the element values of <resource-bundle> in portlet.xml and
@@ -246,9 +230,9 @@ public class PropertiesUtil {
 			String resourceBundleValue = null;
 
 			for (IType type : srcJavaTypes) {
-				IPath path = type.getResource().getLocation();
+				IResource resource = type.getResource();
 
-				File file = path.toFile();
+				File file = FileUtil.getFile(resource.getLocation());
 
 				String content = FileUtil.readContents(file);
 
@@ -296,9 +280,11 @@ public class PropertiesUtil {
 			IFolder[] srcFolders = lrproject.getSourceFolders();
 
 			for (IFolder srcFolder : srcFolders) {
-				IPath path = srcFolder.getFullPath().append(resourceBundle + PROPERTIES_FILE_SUFFIX);
+				IPath path = srcFolder.getFullPath();
 
-				IFile languageFile = CoreUtil.getWorkspaceRoot().getFile(path);
+				path = path.append(resourceBundle + PROPERTIES_FILE_SUFFIX);
+
+				IFile languageFile = CoreUtil.getIFileFromWorkspaceRoot(path);
 
 				if (FileUtil.exists(languageFile)) {
 					retvals.add(languageFile);
@@ -340,9 +326,11 @@ public class PropertiesUtil {
 			String resourceBundleValue = (String)resourceBundles.toArray()[i];
 
 			for (IFolder srcFolder : srcFolders) {
-				IPath path = srcFolder.getFullPath().append(resourceBundleValue + PROPERTIES_FILE_SUFFIX);
+				IPath path = srcFolder.getFullPath();
 
-				IFile languageFile = CoreUtil.getWorkspaceRoot().getFile(path);
+				path = path.append(resourceBundleValue + PROPERTIES_FILE_SUFFIX);
+
+				IFile languageFile = CoreUtil.getIFileFromWorkspaceRoot(path);
 
 				if (FileUtil.exists(languageFile)) {
 					retvals.add(languageFile);
@@ -454,52 +442,17 @@ public class PropertiesUtil {
 		return retval.toArray(new IFile[0]);
 	}
 
-	public static boolean hasNonDefaultEncodingLanguagePropertiesFile(IProject project) {
-		if (!CoreUtil.isLiferayProject(project)) {
-			project = CoreUtil.getLiferayProject(project);
-		}
-
-		if (project == null) {
-			return false;
-		}
-
-		try {
-			IWebProject webProject = LiferayCore.create(IWebProject.class, project);
-
-			if (webProject == null) {
-				return false;
-			}
-
-			IFile[] resourceFiles = getLanguagePropertiesFromPortletXml(
-				webProject.getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE));
-
-			for (IFile file : resourceFiles) {
-				if (!ILiferayConstants.LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals(file.getCharset())) {
-					return true;
-				}
-			}
-
-			IFile[] languageFiles = getLanguagePropertiesFromLiferayHookXml(
-				webProject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE));
-
-			for (IFile file : languageFiles) {
-				if (!ILiferayConstants.LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals(file.getCharset())) {
-					return true;
-				}
-			}
-		}
-		catch (CoreException ce) {
-			LiferayCore.logError(ce);
-		}
-
-		return false;
-	}
-
 	/**
 	 *  Check if the file is a language properties file referenced from portlet.xml or liferay-hook.xml
 	 */
 	public static boolean isLanguagePropertiesFile(IFile targetFile) {
-		if (!targetFile.getName().endsWith(PROPERTIES_FILE_SUFFIX)) {
+		if (FileUtil.notExists(targetFile)) {
+			return false;
+		}
+
+		String fileName = targetFile.getName();
+
+		if (!fileName.endsWith(PROPERTIES_FILE_SUFFIX)) {
 			return false;
 		}
 
@@ -527,9 +480,13 @@ public class PropertiesUtil {
 
 				for (String resourceBundleValue : resourceBundleValues) {
 					for (IFolder srcFolder : srcFolders) {
-						String location = targetFileLocation.makeRelativeTo(srcFolder.getLocation()).toString();
+						IPath location = targetFileLocation.makeRelativeTo(srcFolder.getLocation());
 
-						if (location.replace(PROPERTIES_FILE_SUFFIX, "").matches(resourceBundleValue)) {
+						String locationString = location.toString();
+
+						locationString = locationString.replace(PROPERTIES_FILE_SUFFIX, "");
+
+						if (locationString.matches(resourceBundleValue)) {
 							return true;
 						}
 					}
@@ -539,9 +496,13 @@ public class PropertiesUtil {
 
 				for (String suportedLocaleValue : supportedLocaleValues) {
 					for (IFolder srcFolder : srcFolders) {
-						String location = targetFileLocation.makeRelativeTo(srcFolder.getLocation()).toString();
+						IPath location = targetFileLocation.makeRelativeTo(srcFolder.getLocation());
 
-						if (location.replace(PROPERTIES_FILE_SUFFIX, "").matches(suportedLocaleValue)) {
+						String locationString = location.toString();
+
+						locationString = locationString.replace(PROPERTIES_FILE_SUFFIX, "");
+
+						if (locationString.matches(suportedLocaleValue)) {
 							return true;
 						}
 					}
@@ -553,9 +514,13 @@ public class PropertiesUtil {
 
 				for (String languagePropertyValue : languagePropertyValues) {
 					for (IFolder srcFolder : srcFolders) {
-						String location = targetFileLocation.makeRelativeTo(srcFolder.getLocation()).toString();
+						IPath location = targetFileLocation.makeRelativeTo(srcFolder.getLocation());
 
-						if (location.replace(PROPERTIES_FILE_SUFFIX, "").matches(languagePropertyValue)) {
+						String locationString = location.toString();
+
+						locationString = locationString.replace(PROPERTIES_FILE_SUFFIX, "");
+
+						if (locationString.matches(languagePropertyValue)) {
 							return true;
 						}
 					}
@@ -597,9 +562,13 @@ public class PropertiesUtil {
 		}
 
 		try {
-			IPath path = container.getFullPath().append(relativePath + PROPERTIES_FILE_SUFFIX);
+			IPath path = container.getFullPath();
 
-			IFile file = CoreUtil.getWorkspaceRoot().getFile(path);
+			path = path.append(relativePath + PROPERTIES_FILE_SUFFIX);
+
+			IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
+
+			IFile file = workspaceRoot.getFile(path);
 
 			if (FileUtil.exists(file)) {
 				return new IFile[] {file};
@@ -611,26 +580,11 @@ public class PropertiesUtil {
 		return new IFile[0];
 	}
 
-	private static void _encodeLanguagePropertyFile(IFile file, IProgressMonitor monitor) {
-		try {
-			String contents = CoreUtil.readStreamToString(file.getContents());
-
-			file.setCharset(null, monitor);
-
-			try (InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"))) {
-				file.setContents(inputStream, IResource.FORCE, monitor);
-			}
-		}
-		catch (Exception e) {
-			LiferayCore.logError(e);
-		}
-	}
-
 	/**
 	 * Search all language properties files referenced by liferay-hook.xml
 	 */
 	private static synchronized LanguageFileInfo _getLanguageFileInfo(IFile liferayHookXml) {
-		if ((_tmpLanguageFileInfo == null) || !_tmpLanguageFileInfo.getLiferayHookXml().equals(liferayHookXml) ||
+		if ((_tmpLanguageFileInfo == null) || !liferayHookXml.equals(_tmpLanguageFileInfo.getLiferayHookXml()) ||
 			(_tmpLanguageFileInfo.getModificationStamp() != liferayHookXml.getModificationStamp())) {
 
 			LanguageFileInfo retval = new LanguageFileInfo(liferayHookXml);
@@ -700,7 +654,7 @@ public class PropertiesUtil {
 	}
 
 	private static synchronized ResourceNodeInfo _getResourceNodeInfo(IFile portletXml) {
-		if ((_tmpResourceNodeInfo == null) || !_tmpResourceNodeInfo.getPortletXml().equals(portletXml) ||
+		if ((_tmpResourceNodeInfo == null) || !portletXml.equals(_tmpResourceNodeInfo.getPortletXml()) ||
 			(_tmpResourceNodeInfo.getModificationStamp() != portletXml.getModificationStamp())) {
 
 			ResourceNodeInfo retval = new ResourceNodeInfo(portletXml);
@@ -756,7 +710,7 @@ public class PropertiesUtil {
 
 								if (!resourceBundle.endsWith(PROPERTIES_FILE_SUFFIX) &&
 									!resourceBundle.contains(IPath.SEPARATOR + "") &&
-									 !(CoreUtil.isWindows() && resourceBundle.contains("\\"))) {
+									!(CoreUtil.isWindows() && resourceBundle.contains("\\"))) {
 
 									resourceBundle = new Path(
 										resourceBundle.replace(".", IPath.SEPARATOR + "")).toString();
@@ -863,9 +817,9 @@ public class PropertiesUtil {
 
 		@Override
 		public boolean visit(IResourceProxy resourceProxy) {
-			if ((resourceProxy.getType() != IResource.FILE) ||
-				!resourceProxy.getName().endsWith(PROPERTIES_FILE_SUFFIX)) {
+			String proxyName = resourceProxy.getName();
 
+			if ((resourceProxy.getType() != IResource.FILE) || !proxyName.endsWith(PROPERTIES_FILE_SUFFIX)) {
 				return true;
 			}
 
@@ -875,9 +829,13 @@ public class PropertiesUtil {
 				return true;
 			}
 
-			IPath path = resource.getLocation().makeRelativeTo(_entryResource.getLocation());
+			IPath resourcePath = resource.getLocation();
 
-			String relativePath = path.toString().replace(PROPERTIES_FILE_SUFFIX, "");
+			IPath path = resourcePath.makeRelativeTo(_entryResource.getLocation());
+
+			String pathString = path.toString();
+
+			String relativePath = pathString.replace(PROPERTIES_FILE_SUFFIX, "");
 
 			try {
 				if (relativePath.matches(_matchedRelativePath)) {

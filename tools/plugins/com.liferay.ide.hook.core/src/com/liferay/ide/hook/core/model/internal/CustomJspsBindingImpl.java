@@ -57,7 +57,9 @@ public class CustomJspsBindingImpl extends HookListBindingImpl {
 
 	@Override
 	public void remove(Resource resource) {
-		ObjectValue<String> customJsp = resource.adapt(CustomJspResource.class).getCustomJsp();
+		CustomJspResource customJspResource = resource.adapt(CustomJspResource.class);
+
+		ObjectValue<String> customJsp = customJspResource.getCustomJsp();
 
 		_customJsps.remove(customJsp);
 	}

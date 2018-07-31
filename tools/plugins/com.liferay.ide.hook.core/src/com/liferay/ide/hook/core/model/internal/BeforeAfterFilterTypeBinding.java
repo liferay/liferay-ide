@@ -17,6 +17,7 @@ package com.liferay.ide.hook.core.model.internal;
 import com.liferay.ide.hook.core.model.BeforeAfterFilterType;
 
 import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
@@ -30,7 +31,9 @@ public class BeforeAfterFilterTypeBinding extends XmlValueBindingImpl {
 	public void init(Property property) {
 		super.init(property);
 
-		DefaultValue defaultValue = property.definition().getAnnotation(DefaultValue.class);
+		PropertyDef propertyDef = property.definition();
+
+		DefaultValue defaultValue = propertyDef.getAnnotation(DefaultValue.class);
 
 		_defaultValueText = defaultValue.text();
 	}

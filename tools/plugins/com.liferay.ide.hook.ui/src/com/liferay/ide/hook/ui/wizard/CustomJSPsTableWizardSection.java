@@ -105,8 +105,8 @@ public class CustomJSPsTableWizardSection extends StringArrayTableWizardSection 
 		if (dialog.open() == Window.OK) {
 			Object[] selected = dialog.getResult();
 
-			for (int i = 0; i < selected.length; i++) {
-				IPath filePath = Path.fromOSString(((File)selected[i]).getPath());
+			for (Object object : selected) {
+				IPath filePath = Path.fromOSString(((File)object).getPath());
 
 				addStringArray(new String[] {"/" + filePath.makeRelativeTo(rootPath).toPortableString()});
 			}

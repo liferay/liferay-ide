@@ -21,10 +21,12 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSectionCallback;
 import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -49,7 +51,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IDecoratorManager;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchContentProvider;
@@ -122,6 +123,7 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 		disableJSPFolderValidation = new Button(composite, SWT.CHECK);
 
 		disableJSPFolderValidation.setText(Msgs.disableJSPSyntaxValidation);
+
 		this.synchHelper.synchCheckbox(disableJSPFolderValidation, DISABLE_CUSTOM_JSP_FOLDER_VALIDATION, null);
 	}
 
@@ -207,8 +209,8 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 		return new ISelectionStatusValidator() {
 
 			public IStatus validate(Object[] selection) {
-				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) &&
-					!(selection[0] instanceof IProject) && !(selection[0] instanceof IFile)) {
+				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) && !(selection[0] instanceof IProject) &&
+					!(selection[0] instanceof IFile)) {
 
 					return Status.OK_STATUS;
 				}
@@ -228,17 +230,19 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
 					Object projectName = model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
 
-					return project.getName().equals(projectName);
+					return StringUtil.equals(project.getName(), projectName);
 				}
 				else if (element instanceof IFolder) {
 					IFolder folder = (IFolder)element;
 
 					IWebProject webproject = LiferayCore.create(IWebProject.class, folder.getProject());
 
-					if (((webproject != null) && webproject.getDefaultDocrootFolder().contains(folder)) ||
-						folder.contains(webproject.getDefaultDocrootFolder())) {
+					if (webproject != null) {
+						IFolder defaultDocrootFolder = webproject.getDefaultDocrootFolder();
 
-						return true;
+						if (defaultDocrootFolder.contains(folder) || folder.contains(defaultDocrootFolder)) {
+							return true;
+						}
 					}
 				}
 
@@ -260,7 +264,7 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
 		ITreeContentProvider contentProvider = new WorkbenchContentProvider();
 
-		IDecoratorManager decoratorManager = PlatformUI.getWorkbench().getDecoratorManager();
+		IDecoratorManager decoratorManager = UIUtil.getDecoratorManager();
 
 		ILabelProvider labelProvider = new DecoratingLabelProvider(
 			new WorkbenchLabelProvider(), decoratorManager.getLabelDecorator());
@@ -291,10 +295,10 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 							folder = folder.getFolder("custom_jsps");
 						}
 
-						String defaultWebappRootFolderFullPath =
-							defaultWebappRootFolder.getFullPath().toPortableString();
+						String defaultWebappRootFolderFullPath = FileUtil.toPortableString(
+							defaultWebappRootFolder.getFullPath());
 
-						String folderFullPath = folder.getFullPath().toPortableString();
+						String folderFullPath = FileUtil.toPortableString(folder.getFullPath());
 
 						int index = folderFullPath.indexOf(defaultWebappRootFolderFullPath);
 

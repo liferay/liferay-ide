@@ -51,13 +51,13 @@ public class LaunchHelper implements IDebugEventSetListener {
 	}
 
 	public ILaunchConfigurationWorkingCopy createLaunchConfiguration() throws CoreException {
-		ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+		DebugPlugin debugPlugin = DebugPlugin.getDefault();
+
+		ILaunchManager manager = debugPlugin.getLaunchManager();
 
 		ILaunchConfigurationType type = manager.getLaunchConfigurationType(launchConfigTypeId);
 
-		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-
-		String name = launchManager.generateLaunchConfigurationName(getNewLaunchConfigurationName());
+		String name = manager.generateLaunchConfigurationName(getNewLaunchConfigurationName());
 
 		ILaunchConfigurationWorkingCopy launchConfig = type.newInstance(null, name);
 
@@ -83,9 +83,9 @@ public class LaunchHelper implements IDebugEventSetListener {
 		if (ListUtil.isNotEmpty(launchArgs)) {
 			StringBuilder sb = new StringBuilder();
 
-			for (int i = 0; i < launchArgs.length; i++) {
+			for (String s : launchArgs) {
 				sb.append("\"");
-				sb.append(launchArgs[i]);
+				sb.append(s);
 				sb.append("\" ");
 			}
 
@@ -113,9 +113,13 @@ public class LaunchHelper implements IDebugEventSetListener {
 			Object source = event.getSource();
 
 			if (source instanceof IProcess) {
-				if (((IProcess)source).getLaunch().equals(runningLaunch) && (event.getKind() == DebugEvent.TERMINATE)) {
+				ILaunch launch = ((IProcess)source).getLaunch();
+
+				if (launch.equals(runningLaunch) && (event.getKind() == DebugEvent.TERMINATE)) {
 					synchronized (this) {
-						DebugPlugin.getDefault().removeDebugEventListener(this);
+						DebugPlugin debugPlugin = DebugPlugin.getDefault();
+
+						debugPlugin.removeDebugEventListener(this);
 
 						// launchRunning = false;
 
@@ -171,12 +175,16 @@ public class LaunchHelper implements IDebugEventSetListener {
 		}
 
 		if (isLaunchSync()) {
-			DebugPlugin.getDefault().addDebugEventListener(this);
+			DebugPlugin debugPlugin = DebugPlugin.getDefault();
+
+			debugPlugin.addDebugEventListener(this);
 		}
 
 		ILaunch launch = config.launch(mode, new NullProgressMonitor());
 
-		IProcess process = launch.getProcesses().length > 0 ? launch.getProcesses()[0] : null;
+		IProcess[] processes = launch.getProcesses();
+
+		IProcess process = processes.length > 0 ? processes[0] : null;
 
 		if (isLaunchSync()) {
 			runningLaunch = launch;
@@ -257,11 +265,7 @@ public class LaunchHelper implements IDebugEventSetListener {
 
 		IRuntimeClasspathEntry[] defaultEntries = JavaRuntime.computeUnresolvedRuntimeClasspath(config);
 
-		IRuntimeClasspathEntry entry;
-
-		for (int i = 0; i < defaultEntries.length; i++) {
-			entry = defaultEntries[i];
-
+		for (IRuntimeClasspathEntry entry : defaultEntries) {
 			switch (entry.getClasspathProperty()) {
 				case IRuntimeClasspathEntry.USER_CLASSES:
 					model.addEntry(RuntimeClasspathModel.USER, entry);
@@ -284,17 +288,11 @@ public class LaunchHelper implements IDebugEventSetListener {
 
 		List<IRuntimeClasspathEntry> entries = new ArrayList<>();
 
-		IRuntimeClasspathEntry entry;
-
-		IClasspathEntry userEntry;
-
-		for (int i = 0; i < users.length; i++) {
-			userEntry = users[i];
-
-			entry = null;
+		for (IClasspathEntry userEntry : users) {
+			IRuntimeClasspathEntry entry = null;
 
 			if (userEntry instanceof IRuntimeClasspathEntry) {
-				entry = (IRuntimeClasspathEntry)users[i];
+				entry = (IRuntimeClasspathEntry)userEntry;
 			}
 			else if (userEntry instanceof IClasspathEntry) {
 				entry = new LiferayRuntimeClasspathEntry(userEntry);

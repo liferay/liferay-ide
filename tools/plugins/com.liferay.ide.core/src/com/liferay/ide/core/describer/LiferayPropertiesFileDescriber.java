@@ -25,6 +25,7 @@ import java.lang.reflect.Field;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.internal.utils.FileUtil;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.content.IContentDescription;
@@ -62,7 +63,9 @@ public abstract class LiferayPropertiesFileDescriber implements ITextContentDesc
 						return INVALID;
 					}
 
-					IFile file = CoreUtil.getWorkspaceRoot().getFileForLocation(FileUtil.toPath(fileStore.toURI()));
+					IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
+
+					IFile file = workspaceRoot.getFileForLocation(FileUtil.toPath(fileStore.toURI()));
 
 					if (isPropertiesFile(file)) {
 						return VALID;
@@ -112,7 +115,9 @@ public abstract class LiferayPropertiesFileDescriber implements ITextContentDesc
 
 			Class<?> clazz = documentClass.getSuperclass();
 
-			Field fDocumentListenersField = clazz.getSuperclass().getDeclaredField("fDocumentListeners");
+			Class<?> superClazz = clazz.getSuperclass();
+
+			Field fDocumentListenersField = superClazz.getDeclaredField("fDocumentListeners");
 
 			fDocumentListenersField.setAccessible(true);
 
@@ -124,7 +129,9 @@ public abstract class LiferayPropertiesFileDescriber implements ITextContentDesc
 				try {
 					Class<?> listenerClass = listener.getClass();
 
-					Class<?> superClass = listenerClass.getEnclosingClass().getSuperclass();
+					Class<?> enclosingClass = listenerClass.getEnclosingClass();
+
+					Class<?> superClass = enclosingClass.getSuperclass();
 
 					Field fFileField = superClass.getDeclaredField("fFile");
 

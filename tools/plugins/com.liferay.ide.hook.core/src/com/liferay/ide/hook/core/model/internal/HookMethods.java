@@ -23,6 +23,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.sapphire.ElementHandle;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 
 /**
@@ -38,10 +40,14 @@ public class HookMethods {
 		IFile retval = null;
 
 		if (hook != null) {
-			PortalPropertiesFile portalPropertiesFileElement = hook.getPortalPropertiesFile().content();
+			ElementHandle<PortalPropertiesFile> handle = hook.getPortalPropertiesFile();
+
+			PortalPropertiesFile portalPropertiesFileElement = handle.content();
 
 			if (portalPropertiesFileElement != null) {
-				Path filePath = portalPropertiesFileElement.getValue().content();
+				Value<Path> pathValue = portalPropertiesFileElement.getValue();
+
+				Path filePath = pathValue.content();
 
 				if (filePath != null) {
 					for (IFolder folder : CoreUtil.getSourceFolders(JavaCore.create(hook.adapt(IProject.class)))) {

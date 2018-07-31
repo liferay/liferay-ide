@@ -126,9 +126,7 @@ public abstract class AbstractModel
 	public void transferListenersTo(IModelChangeProviderExtension target, IModelChangedListenerFilter filter) {
 		ArrayList<IModelChangedListener> removed = new ArrayList<>();
 
-		for (int i = 0; i < _fListeners.size(); i++) {
-			IModelChangedListener listener = (IModelChangedListener)_fListeners.get(i);
-
+		for (IModelChangedListener listener : _fListeners) {
 			if ((filter == null) || filter.accept(listener)) {
 				target.addModelChangedListener(listener);
 
@@ -140,7 +138,9 @@ public abstract class AbstractModel
 	}
 
 	protected SAXParser getSaxParser() throws FactoryConfigurationError, ParserConfigurationException, SAXException {
-		return SAXParserFactory.newInstance().newSAXParser();
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+
+		return factory.newSAXParser();
 	}
 
 	protected boolean isInSync(File localFile) {

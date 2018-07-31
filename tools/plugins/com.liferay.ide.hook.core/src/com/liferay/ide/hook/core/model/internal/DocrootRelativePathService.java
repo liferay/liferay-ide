@@ -49,7 +49,7 @@ public class DocrootRelativePathService extends RelativePathService {
 				IFolder defaultDocroot = lrproject.getDefaultDocrootFolder();
 
 				if (FileUtil.exists(defaultDocroot)) {
-					roots.add(new Path(defaultDocroot.getLocation().toPortableString()));
+					roots.add(new Path(FileUtil.toPortableString(defaultDocroot.getLocation())));
 				}
 			}
 		}

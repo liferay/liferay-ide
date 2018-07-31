@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.operation.NewEventActionClassDataModelProvider;
 import com.liferay.ide.hook.core.operation.NewEventActionClassOperation;
 import com.liferay.ide.hook.ui.HookUI;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IStatus;
@@ -51,7 +52,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -238,20 +238,22 @@ public class NewEventActionClassDialog extends Dialog {
 
 		int packageNameSeverity = packageNameStatus.getSeverity();
 
+		String classTextString = classText.getText();
+
 		IStatus classNameStauts = JavaConventions.validateJavaTypeName(
-			classText.getText(), CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
+			classTextString, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
 
 		int classNameSeverity = classNameStauts.getSeverity();
 
 		if (!CoreUtil.isNullOrEmpty(packageText.getText())) {
-			qualifiedClassname = packageText.getText() + "." + classText.getText();
+			qualifiedClassname = packageText.getText() + "." + classTextString;
 		}
 		else {
-			qualifiedClassname = classText.getText();
+			qualifiedClassname = classTextString;
 			packageNameSeverity = IStatus.WARNING;
 		}
 
-		if (classText.getText().indexOf('.') != -1) {
+		if (classTextString.indexOf('.') != -1) {
 			classNameSeverity = IStatus.ERROR;
 		}
 
@@ -289,7 +291,7 @@ public class NewEventActionClassDialog extends Dialog {
 	protected Label superLabel;
 
 	private void _createErrorMessageGroup(Composite parent) {
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		ISharedImages sharedImages = UIUtil.getSharedImages();
 
 		errorMessageLabel = new CLabel(parent, SWT.LEFT_TO_RIGHT);
 

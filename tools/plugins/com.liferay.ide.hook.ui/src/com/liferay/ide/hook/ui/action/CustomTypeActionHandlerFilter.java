@@ -25,7 +25,7 @@ public class CustomTypeActionHandlerFilter extends SapphireActionHandlerFilter {
 	@Override
 	public boolean check(SapphireActionHandler handler) {
 		if (!(handler.getId().contains("Sapphire.Create.Java") ||
-			 "Sapphire.Browse.Java.Type".equals(handler.getId()))) {
+			  "Sapphire.Browse.Java.Type".equals(handler.getId()))) {
 
 			return true;
 		}

@@ -52,7 +52,7 @@ public interface IndexerPostProcessor extends Element {
 
 	// *** Implementation Class ***
 
-	@JavaTypeConstraint(kind = {JavaTypeKind.CLASS}, type = "com.liferay.portal.kernel.search.IndexerPostProcessor")
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.search.IndexerPostProcessor")
 	@Label(standard = "Indexer Post Processor Impl")
 	@MustExist
 	@Reference(target = JavaType.class)

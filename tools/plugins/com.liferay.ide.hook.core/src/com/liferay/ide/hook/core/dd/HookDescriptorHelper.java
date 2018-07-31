@@ -26,6 +26,7 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -130,10 +131,12 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 		IWebProject lrproject = LiferayCore.create(IWebProject.class, project);
 
 		if (lrproject != null) {
-			IPath defaultWebappRootFolderFullPath = lrproject.getDefaultDocrootFolder().getFullPath();
+			IFolder folder = lrproject.getDefaultDocrootFolder();
+
+			IPath defaultWebappRootFolderFullPath = folder.getFullPath();
 
 			String relativeJspFolderPath = ProjectUtil.getRelativePathFromDocroot(
-				lrproject, defaultWebappRootFolderFullPath.append(customJSPsFolder).toPortableString());
+				lrproject, FileUtil.toPortableString(defaultWebappRootFolderFullPath.append(customJSPsFolder)));
 
 			Element customJspElement = null;
 
@@ -228,7 +231,9 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 		if ((nodeList != null) && (nodeList.getLength() > 0)) {
 			customJspElement = (Element)nodeList.item(0);
 
-			return customJspElement.getFirstChild().getNodeValue();
+			Node node = customJspElement.getFirstChild();
+
+			return node.getNodeValue();
 		}
 
 		return null;

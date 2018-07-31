@@ -84,9 +84,9 @@ public class LiferayNature implements IProjectNature {
 
 			int k = 0;
 
-			for (int i = 0; i < prevNatures.length; i++) {
-				if (!prevNatures[i].equals(NATURE_ID)) {
-					newNatures[k++] = prevNatures[i];
+			for (String nature : prevNatures) {
+				if (!nature.equals(NATURE_ID)) {
+					newNatures[k++] = nature;
 				}
 			}
 

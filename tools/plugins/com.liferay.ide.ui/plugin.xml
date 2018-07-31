@@ -132,15 +132,6 @@
 		</startup>
 	</extension>
 	<extension
-		point="org.eclipse.ui.ide.markerResolution"
-	>
-		<markerResolutionGenerator
-			class="com.liferay.ide.ui.LiferayLanguagePropertiesMarkerResolutionGenerator"
-			markerType="com.liferay.ide.core.LiferayLanguagePropertiesMarker"
-		>
-		</markerResolutionGenerator>
-	</extension>
-	<extension
 		point="org.eclipse.ui.editors"
 	>
 		<editor

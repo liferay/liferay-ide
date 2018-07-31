@@ -15,8 +15,10 @@
 package com.liferay.ide.core;
 
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPluginRegistry;
 import org.eclipse.core.runtime.Platform;
 
@@ -51,7 +53,9 @@ public abstract class RegistryReader {
 		IExtension extension = configurationElement.getDeclaringExtension();
 
 		if (extension != null) {
-			return extension.getContributor().getName();
+			IContributor contributor = extension.getContributor();
+
+			return contributor.getName();
 		}
 
 		return null;
@@ -75,13 +79,13 @@ public abstract class RegistryReader {
 	public abstract boolean readElement(IConfigurationElement element);
 
 	public void readRegistry() {
-		IExtensionPoint point = Platform.getExtensionRegistry().getExtensionPoint(pluginId, extensionPointId);
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+
+		IExtensionPoint point = registry.getExtensionPoint(pluginId, extensionPointId);
 
 		if (point != null) {
-			IConfigurationElement[] elements = point.getConfigurationElements();
-
-			for (int i = 0; i < elements.length; i++) {
-				_internalReadElement(elements[i]);
+			for (IConfigurationElement element : point.getConfigurationElements()) {
+				_internalReadElement(element);
 			}
 		}
 
@@ -91,16 +95,14 @@ public abstract class RegistryReader {
 			return;
 		}
 
-		point = Platform.getExtensionRegistry().getExtensionPoint(_JEM_PLUGIN_ID, extensionPointId);
+		point = registry.getExtensionPoint(_JEM_PLUGIN_ID, extensionPointId);
 
 		if (point == null) {
 			return;
 		}
 
-		IConfigurationElement[] elements = point.getConfigurationElements();
-
-		for (int i = 0; i < elements.length; i++) {
-			_internalReadElement(elements[i]);
+		for (IConfigurationElement element : point.getConfigurationElements()) {
+			_internalReadElement(element);
 		}
 	}
 
@@ -122,10 +124,12 @@ public abstract class RegistryReader {
 	protected void logError(IConfigurationElement element, String text) {
 		IExtension extension = element.getDeclaringExtension();
 
+		IContributor contributor = extension.getContributor();
+
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("Plugin ");
-		sb.append(extension.getContributor().getName());
+		sb.append(contributor.getName());
 		sb.append(", extension ");
 		sb.append(extension.getExtensionPointUniqueIdentifier());
 		sb.append("\n");
