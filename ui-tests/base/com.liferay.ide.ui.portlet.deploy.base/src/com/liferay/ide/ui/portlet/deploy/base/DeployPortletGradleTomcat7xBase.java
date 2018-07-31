@@ -29,7 +29,7 @@ public class DeployPortletGradleTomcat7xBase extends ServerTestBase {
 	public void deployFreemarkerPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle71(project.getName(), FREEMARKER_PORTLET, "7.1");
+		wizardAction.newModule.prepareGradle71(project.getName(), FREEMARKER_PORTLET);
 
 		wizardAction.finish();
 

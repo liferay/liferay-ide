@@ -883,15 +883,15 @@ public class WizardAction extends UIAction {
 			_newModuleWizard.getLocation().setText(location);
 		}
 
-		public void prepareGradle71(String projectName, String template, String version) {
-			_prepare(projectName, GRADLE, template, version);
+		public void prepareGradle71(String projectName, String template) {
+			_prepare(projectName, GRADLE, template, "7.1");
 		}
 
-		public void prepareGradle71(String projectName, String template, String location, String version) {
+		public void prepareGradle71(String projectName, String template, String location) {
 			_prepare(projectName, GRADLE, template);
 			_newModuleWizard.getUseDefaultLocation().deselect();
 			_newModuleWizard.getLocation().setText(location);
-			_newModuleWizard.getLiferayVersion().setSelection(version);
+			_newModuleWizard.getLiferayVersion().setSelection("7.1");
 		}
 
 		public void prepareMaven(String projectName) {
