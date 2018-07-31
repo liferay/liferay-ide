@@ -17,6 +17,7 @@ package com.liferay.ide.ui.liferay;
 /**
  * @author Terry Jia
  * @author Ying Xu
+ * @author Lily Li
  */
 public interface Messages {
 
@@ -32,7 +33,11 @@ public interface Messages {
 
 	public static final String AT_LEAST_ONE_PROJECT_MUST_BE_SPECIFY = "At least one project must be specified.";
 
+	public static final String BEFORE_THE_SOFTWARE_CAN_BE_INSTALLED = "before the software can be installed.";
+
 	public static final String CATEGORY_NAME_IS_EMPTY = "Category name is empty.";
+
+	public static final String CHECK_THE_ITEMS_THAT_YOU_WISH_TO_INSTALL = "Check the items that you wish to install.";
 
 	public static final String CONFIGURE_COMPONENT_CLASS = "Configure Component Class";
 
@@ -111,6 +116,8 @@ public interface Messages {
 	public static final String LANGUAGE_PROPERTIES_IN_SDK7_IS_NOT_SUPPORTED =
 		"Modifying Language properties in Plugins SDK 7.0 is not supported, use Liferay module instead.";
 
+	public static final String LICENSES_MUST_BE_REVIEWED = "Licenses must be reviewed";
+
 	public static final String LIFERAY_RUNTIME_MUST_BE_CONFIGURED = "Liferay runtime must be configured.";
 
 	public static final String LIFERAY_WORKSPACE_NAME_COULD_NOT_EMPTY =
@@ -180,6 +187,9 @@ public interface Messages {
 
 	public static final String SDK_NOT_SUPPORT =
 		"The selected Plugins SDK does not support creating ext type plugins.  Please configure version 6.2 or less.";
+
+	public static final String SELECT_A_SITE_OR_ENTER_THE_LOCATION_OF_A_SITE =
+		"Select a site or enter the location of a site.";
 
 	public static final String SELECT_LOCATION_OF_LIFERAY_WORKSPACE_PARENT_DIRECTORY =
 		"Select location of Liferay workspace parent directory.";
@@ -263,6 +273,9 @@ public interface Messages {
 			"greater.";
 
 	public static final String WORKSPACE_LOCATION_MUST_BE_SPECIFIED = "Workspace location must be specified";
+
+	public static final String YOUR_ORIGINAL_REQUEST_HAS_BEEN_MODIFIED_SEE_THE_DETAILS =
+		"Your original request has been modified.  See the details.";
 
 	public static final String INVALID_JAVA_CLASS_NAME = "Invalid Java class name: The type name ";
 

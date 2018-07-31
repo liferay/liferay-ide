@@ -20,6 +20,7 @@ package com.liferay.ide.ui.swtbot;
  * @author Ying Xu
  * @author Vicky Wang
  * @author Li Lu
+ * @author Lily Li
  */
 public interface UI {
 
@@ -28,6 +29,8 @@ public interface UI {
 	public final String ABSTRACT = "abstract";
 
 	public final String ACTIVATOR = "activator";
+
+	public final String ADD = "Add";
 
 	public final String ADD_ALL = "Add All >>";
 
@@ -144,6 +147,9 @@ public interface UI {
 	public final String CONSOLE = "Console";
 
 	public final String CONSTRUCTORS_FROM_SUPERCLASS = "Constructors from superclass";
+
+	public final String CONTACT_ALL_UPDATE_SITES_DURING_SITES_DURING_INSTALL_TO_FIND_REQUIRED_SOFTWARE =
+		"Contact all update sites during install to find required software";
 
 	public final String CONTENT_FOLDER = "Content folder:";
 
@@ -306,6 +312,8 @@ public interface UI {
 
 	public final String HOST_OSGI_BUNDLE = "Host OSGi Bundle:";
 
+	public final String I_ACCEPT_THE_TERMS_OF_THE_LICENSE_AGREEMENTS = "I accept the terms of the license agreements";
+
 	public final String ICEFACES = "ICEFaces";
 
 	public final String ICON = "Icon:";
@@ -340,6 +348,8 @@ public interface UI {
 	public final String INIT_BUNDLE = "init-bundle";
 
 	public final String INITIALIZE_SERVER_BUNDLE = "Initialize Server Bundle";
+
+	public final String INSTALL_NEW_SOFTWARE = "Install New Software...";
 
 	public final String INSTALL_UPDATE = "Install/Update";
 

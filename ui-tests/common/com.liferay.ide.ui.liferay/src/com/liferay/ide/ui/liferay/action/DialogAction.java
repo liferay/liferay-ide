@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
+import com.liferay.ide.ui.liferay.page.dialog.AddRepositoryDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.AddAndRemoveDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.AvailableSoftwareSitesPreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.GradlePreferencesDialog;
@@ -116,6 +117,7 @@ public class DialogAction extends UIAction {
 	}
 
 	public AddAndRemoveDialogAction addAndRemove = new AddAndRemoveDialogAction();
+	public AddRepositoryDialogAction addRepository = new AddRepositoryDialogAction();
 	public AvailableSoftwareSitesDialogAction availableSoftwareSites = new AvailableSoftwareSitesDialogAction();
 	public GradleDialogAction gradle = new GradleDialogAction();
 	public PreferencesDialogAction preferences = new PreferencesDialogAction();
@@ -140,6 +142,18 @@ public class DialogAction extends UIAction {
 		}
 
 		private final AddAndRemoveDialog _addAndRemoveDialog = new AddAndRemoveDialog(bot);
+
+	}
+
+	public class AddRepositoryDialogAction {
+
+		public void addLocation(String updatesiteUrl) {
+			_addRepositoryDialog.getLocation().setText(updatesiteUrl);
+
+			_addRepositoryDialog.addBtn().click();
+		}
+
+		private final AddRepositoryDialog _addRepositoryDialog = new AddRepositoryDialog(bot);
 
 	}
 

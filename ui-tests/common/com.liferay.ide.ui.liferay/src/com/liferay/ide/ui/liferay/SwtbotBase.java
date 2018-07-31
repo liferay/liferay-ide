@@ -111,7 +111,9 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants, Times {
 		catch (Exception e) {
 		}
 
-		ide.getLiferayWorkspacePerspective().activate();
+		if (!envAction.isEclipse()) {
+			ide.getLiferayWorkspacePerspective().activate();
+		}
 
 		SWTBotPreferences.TIMEOUT = 30 * 1000;
 
