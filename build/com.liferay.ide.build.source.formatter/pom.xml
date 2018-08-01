@@ -6,6 +6,7 @@
 
 	<properties>
 		<baseDir>./</baseDir>
+		<autoFix>true</autoFix>
 	</properties>
 
 	<build>
@@ -13,10 +14,11 @@
 			<plugin>
 				<groupId>com.liferay</groupId>
 				<artifactId>com.liferay.source.formatter</artifactId>
-				<version>1.0.675</version>
+				<version>1.0.694</version>
 				<configuration>
 					<maxLineLength>120</maxLineLength>
 					<baseDir>${baseDir}</baseDir>
+					<autoFix>${autoFix}</autoFix>
 					<processorThreadCount>1</processorThreadCount>
 				</configuration>
 			</plugin>

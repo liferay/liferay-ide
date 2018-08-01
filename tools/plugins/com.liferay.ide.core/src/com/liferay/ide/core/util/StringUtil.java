@@ -20,6 +20,32 @@ package com.liferay.ide.core.util;
  */
 public class StringUtil {
 
+	public static boolean contains(String s1, String s2) {
+		if ((s1 == null) || (s2 == null)) {
+			return false;
+		}
+
+		return s1.contains(s2);
+	}
+
+	public static boolean endsWith(Object o, String s2) {
+		if ((o == null) || (s2 == null)) {
+			return false;
+		}
+
+		String s1 = o.toString();
+
+		return s1.endsWith(s2);
+	}
+
+	public static boolean endsWith(String s1, String s2) {
+		if ((s1 == null) || (s2 == null)) {
+			return false;
+		}
+
+		return s1.endsWith(s2);
+	}
+
 	public static boolean equals(String s1, Object o) {
 		if ((s1 == null) || (o == null)) {
 			return false;
@@ -102,6 +128,14 @@ public class StringUtil {
 		sb.append(content.substring(position, content.length()));
 
 		return sb.toString();
+	}
+
+	public static boolean startsWith(String s1, String s2) {
+		if ((s1 == null) || (s2 == null)) {
+			return false;
+		}
+
+		return s1.startsWith(s2);
 	}
 
 	public static String trim(String string) {
