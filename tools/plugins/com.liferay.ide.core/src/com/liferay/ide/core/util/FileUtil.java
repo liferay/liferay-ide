@@ -140,6 +140,47 @@ public class FileUtil {
 		}
 	}
 
+	public static void delete(File file) {
+		if (notExists(file)) {
+			return;
+		}
+
+		try {
+			Files.delete(file.toPath());
+		}
+		catch (IOException ioe) {
+			LiferayCore.logWarning(ioe);
+		}
+	}
+
+	public static void delete(IFile file) {
+		if (notExists(file)) {
+			return;
+		}
+
+		try {
+			file.delete(true, null);
+		}
+		catch (CoreException ce) {
+			LiferayCore.logWarning(ce);
+		}
+	}
+
+	public static void delete(IPath path) {
+		if (notExists(path)) {
+			return;
+		}
+
+		File file = path.toFile();
+
+		try {
+			Files.delete(file.toPath());
+		}
+		catch (IOException ioe) {
+			LiferayCore.logWarning(ioe);
+		}
+	}
+
 	public static void deleteDir(File dir, boolean removeAll) {
 		if (isNotDir(dir)) {
 			return;
@@ -292,6 +333,30 @@ public class FileUtil {
 		}
 
 		return toPortableString(folder.getFullPath());
+	}
+
+	public static String getLastSegment(IPath path) {
+		if (path == null) {
+			return null;
+		}
+
+		return path.lastSegment();
+	}
+
+	public static String getLastSegment(IProject project) {
+		if (project == null) {
+			return null;
+		}
+
+		return getLastSegment(project.getLocation());
+	}
+
+	public static String getLocationOSString(IProject project) {
+		if (project == null) {
+			return null;
+		}
+
+		return toOSString(project.getLocation());
 	}
 
 	public static String getLocationPortableString(IFile file) {
