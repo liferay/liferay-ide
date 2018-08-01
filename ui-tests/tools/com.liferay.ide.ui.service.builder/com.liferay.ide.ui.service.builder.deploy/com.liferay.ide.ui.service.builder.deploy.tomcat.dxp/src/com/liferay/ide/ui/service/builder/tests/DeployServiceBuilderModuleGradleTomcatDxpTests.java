@@ -46,4 +46,9 @@ public class DeployServiceBuilderModuleGradleTomcatDxpTests extends DeployServic
 		super.deployServiceBuilder();
 	}
 
+	@Override
+	protected String getVersion() {
+		return "7.1";
+	}
+
 }

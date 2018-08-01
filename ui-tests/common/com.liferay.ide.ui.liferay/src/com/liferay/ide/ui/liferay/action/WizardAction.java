@@ -874,11 +874,15 @@ public class WizardAction extends UIAction {
 		}
 
 		public void prepareGradle(String projectName, String template) {
-			_prepare(projectName, GRADLE, template);
+			_prepare(projectName, GRADLE, template, "7.0");
 		}
 
-		public void prepareGradle(String projectName, String template, String location) {
-			_prepare(projectName, GRADLE, template);
+		public void prepareGradle(String projectName, String template, String version) {
+			_prepare(projectName, GRADLE, template, version);
+		}
+
+		public void prepareGradle(String projectName, String template, String location, String version) {
+			_prepare(projectName, GRADLE, template, version);
 			_newModuleWizard.getUseDefaultLocation().deselect();
 			_newModuleWizard.getLocation().setText(location);
 		}
@@ -899,6 +903,13 @@ public class WizardAction extends UIAction {
 			_newModuleWizard.getProjectName().setText(projectName);
 			_newModuleWizard.getBuildTypes().setSelection(buildType);
 			projectTemplateName().setSelection(template);
+		}
+
+		private void _prepare(String projectName, String buildType, String template, String version) {
+			_newModuleWizard.getProjectName().setText(projectName);
+			_newModuleWizard.getBuildTypes().setSelection(buildType);
+			projectTemplateName().setSelection(template);
+			_newModuleWizard.getLiferayVersion().setSelection(version);
 		}
 
 		private final NewLiferayModuleWizard _newModuleWizard = new NewLiferayModuleWizard(bot);

@@ -23,13 +23,13 @@ import org.junit.Test;
 /**
  * @author Rui Wang
  */
-public class DeployPortletGradleTomcat7xBase extends ServerTestBase {
+public abstract class DeployPortletGradleTomcat7xBase extends ServerTestBase {
 
 	@Test
 	public void deployFreemarkerPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), FREEMARKER_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), FREEMARKER_PORTLET, getVersion());
 
 		wizardAction.finish();
 
@@ -51,6 +51,8 @@ public class DeployPortletGradleTomcat7xBase extends ServerTestBase {
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	protected abstract String getVersion();
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);

@@ -45,4 +45,9 @@ public class DeployThemeGradleTomcat70Tests extends DeployThemeGradleTomcat7xBas
 		super.deployTheme();
 	}
 
+	@Override
+	protected String getVersion() {
+		return "7.0";
+	}
+
 }

@@ -44,4 +44,9 @@ public class DeployLayoutTemplateModuleGradleTomcatDxpTests extends DeployLayout
 		super.deployLayoutTemplate();
 	}
 
+	@Override
+	protected String getVersion() {
+		return "7.1";
+	}
+
 }

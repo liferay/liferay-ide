@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.portlet.tests;
 
-import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
+import com.liferay.ide.ui.liferay.support.server.PureTomcat71Support;
 import com.liferay.ide.ui.liferay.support.server.ServerSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 import com.liferay.ide.ui.portlet.deploy.base.DeployPortletGradleTomcat7xBase;
@@ -33,8 +33,8 @@ public class DeployPortletGradleTomcat71Tests extends DeployPortletGradleTomcat7
 	public static RuleChain chain = RuleUtil.getTomcat7xRunningRuleChain(bot, getServer());
 
 	public static ServerSupport getServer() {
-		if (PureTomcat70Support.isNot(server)) {
-			server = new PureTomcat70Support(bot);
+		if (PureTomcat71Support.isNot(server)) {
+			server = new PureTomcat71Support(bot);
 		}
 
 		return server;
@@ -43,6 +43,11 @@ public class DeployPortletGradleTomcat71Tests extends DeployPortletGradleTomcat7
 	@Test
 	public void deployFreemarkerPortlet() {
 		super.deployFreemarkerPortlet();
+	}
+
+	@Override
+	protected String getVersion() {
+		return "7.1";
 	}
 
 }
