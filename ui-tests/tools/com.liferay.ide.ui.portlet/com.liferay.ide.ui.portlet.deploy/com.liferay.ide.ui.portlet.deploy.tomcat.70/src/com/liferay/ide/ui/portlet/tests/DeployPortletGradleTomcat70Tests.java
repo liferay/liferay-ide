@@ -20,7 +20,6 @@ import com.liferay.ide.ui.liferay.util.RuleUtil;
 import com.liferay.ide.ui.portlet.deploy.base.DeployPortletGradleTomcat7xBase;
 
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -28,7 +27,6 @@ import org.junit.rules.RuleChain;
  * @author Terry Jia
  * @author Rui Wang
  */
-@Ignore("only test deployment on 71 right now")
 public class DeployPortletGradleTomcat70Tests extends DeployPortletGradleTomcat7xBase {
 
 	@ClassRule
@@ -45,6 +43,11 @@ public class DeployPortletGradleTomcat70Tests extends DeployPortletGradleTomcat7
 	@Test
 	public void deployFreemarkerPortlet() {
 		super.deployFreemarkerPortlet();
+	}
+
+	@Override
+	protected String getVersion() {
+		return "7.0";
 	}
 
 }

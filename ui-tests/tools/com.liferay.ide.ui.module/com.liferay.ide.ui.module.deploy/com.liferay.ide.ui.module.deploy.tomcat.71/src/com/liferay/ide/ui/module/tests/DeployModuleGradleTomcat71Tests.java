@@ -123,4 +123,9 @@ public class DeployModuleGradleTomcat71Tests extends DeployModuleGradleTomcat7xB
 		super.deployWarMvcPortlet();
 	}
 
+	@Override
+	protected String getVersion() {
+		return "7.1";
+	}
+
 }

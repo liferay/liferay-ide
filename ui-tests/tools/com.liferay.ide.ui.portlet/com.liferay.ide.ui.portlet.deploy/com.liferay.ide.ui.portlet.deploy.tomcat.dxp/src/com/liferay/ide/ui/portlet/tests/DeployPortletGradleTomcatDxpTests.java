@@ -44,4 +44,9 @@ public class DeployPortletGradleTomcatDxpTests extends DeployPortletGradleTomcat
 		super.deployFreemarkerPortlet();
 	}
 
+	@Override
+	protected String getVersion() {
+		return "7.1";
+	}
+
 }

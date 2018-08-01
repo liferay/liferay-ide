@@ -46,4 +46,8 @@ public class DeployServiceBuilderModuleGradleTomcat71Tests extends DeployService
 		super.deployServiceBuilder();
 	}
 
+	protected String getVersion() {
+		return "7.1";
+	}
+
 }

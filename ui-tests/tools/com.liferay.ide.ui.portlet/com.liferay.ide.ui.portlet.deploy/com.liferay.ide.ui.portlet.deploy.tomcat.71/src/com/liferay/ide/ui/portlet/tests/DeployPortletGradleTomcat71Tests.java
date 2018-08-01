@@ -45,4 +45,9 @@ public class DeployPortletGradleTomcat71Tests extends DeployPortletGradleTomcat7
 		super.deployFreemarkerPortlet();
 	}
 
+	@Override
+	protected String getVersion() {
+		return "7.1";
+	}
+
 }

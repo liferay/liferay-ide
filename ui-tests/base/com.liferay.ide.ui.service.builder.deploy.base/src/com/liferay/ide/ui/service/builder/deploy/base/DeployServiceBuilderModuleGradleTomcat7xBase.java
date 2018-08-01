@@ -22,12 +22,12 @@ import org.junit.Rule;
 /**
  * @author Ying Xu
  */
-public class DeployServiceBuilderModuleGradleTomcat7xBase extends ServerTestBase {
+public abstract class DeployServiceBuilderModuleGradleTomcat7xBase extends ServerTestBase {
 
 	public void deployServiceBuilder() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_BUILDER);
+		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_BUILDER, getVersion());
 
 		wizardAction.finish();
 
@@ -59,6 +59,8 @@ public class DeployServiceBuilderModuleGradleTomcat7xBase extends ServerTestBase
 		viewAction.project.closeAndDelete(project.getName() + "-api");
 		viewAction.project.closeAndDelete(project.getName() + "-service");
 	}
+
+	protected abstract String getVersion();
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);

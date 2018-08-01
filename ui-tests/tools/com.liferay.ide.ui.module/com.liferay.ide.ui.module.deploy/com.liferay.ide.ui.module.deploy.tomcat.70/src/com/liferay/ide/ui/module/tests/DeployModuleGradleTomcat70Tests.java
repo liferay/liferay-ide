@@ -28,7 +28,6 @@ import org.junit.rules.RuleChain;
  * @author Terry Jia
  * @author Lily Li
  */
-@Ignore("only test deployment on 71 right now")
 public class DeployModuleGradleTomcat70Tests extends DeployModuleGradleTomcat7xBase {
 
 	@ClassRule
@@ -122,6 +121,11 @@ public class DeployModuleGradleTomcat70Tests extends DeployModuleGradleTomcat7xB
 	@Test
 	public void deployWarMvcPortlet() {
 		super.deployWarMvcPortlet();
+	}
+
+	@Override
+	protected String getVersion() {
+		return "7.0";
 	}
 
 }
