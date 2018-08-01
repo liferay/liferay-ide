@@ -23,12 +23,12 @@ import org.junit.Rule;
  * @author Terry Jia
  * @author Lily Li
  */
-public class DeployThemeGradleTomcat7xBase extends ServerTestBase {
+public abstract class DeployThemeGradleTomcat7xBase extends ServerTestBase {
 
 	public void deployTheme() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), THEME, envAction.getTempDir().getPath());
+		wizardAction.newModule.prepareGradle(project.getName(), THEME, getVersion());
 
 		wizardAction.finish();
 
@@ -50,6 +50,8 @@ public class DeployThemeGradleTomcat7xBase extends ServerTestBase {
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	protected abstract String getVersion();
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);

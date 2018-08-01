@@ -44,4 +44,9 @@ public class DeployThemeGradleTomcatDxpTests extends DeployThemeGradleTomcat7xBa
 		super.deployTheme();
 	}
 
+	@Override
+	protected String getVersion() {
+		return "7.1";
+	}
+
 }
