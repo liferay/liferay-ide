@@ -572,6 +572,16 @@ public class FileUtil {
 		}
 	}
 
+	public static boolean nameEndsWith(File file, String suffix) {
+		if (file == null) {
+			return false;
+		}
+
+		String name = file.getName();
+
+		return name.endsWith(suffix);
+	}
+
 	public static boolean nameEndsWith(IResource resource, String suffix) {
 		if ((resource == null) || (suffix == null)) {
 			return false;
