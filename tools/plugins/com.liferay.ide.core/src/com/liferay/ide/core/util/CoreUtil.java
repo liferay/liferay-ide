@@ -369,20 +369,6 @@ public class CoreUtil {
 		return getWorkspaceRoot().getProject(projectName);
 	}
 
-	public static IPath getResourceLocation(IResource resource) {
-		if (resource == null) {
-			return null;
-		}
-
-		IPath location = resource.getLocation();
-
-		if (location == null) {
-			return resource.getRawLocation();
-		}
-
-		return location;
-	}
-
 	public static final List<IFolder> getSourceFolders(IJavaProject project) {
 		if (FileUtil.notExists(project)) {
 			return new ArrayList<>();

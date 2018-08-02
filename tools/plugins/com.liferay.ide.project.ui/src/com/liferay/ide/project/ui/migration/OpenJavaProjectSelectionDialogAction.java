@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.upgrade.BreakingChangeSelectedProject;
 import com.liferay.ide.project.core.upgrade.BreakingChangeSimpleProject;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
@@ -26,12 +27,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -44,6 +46,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
 /**
@@ -57,7 +60,9 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 
 		_shell = shell;
 
-		setImageDescriptor(ProjectUI.getPluginImageRegistry().getDescriptor(ProjectUI.MIGRATION_TASKS_IMAGE_ID));
+		ImageRegistry pluginImageRegistry = ProjectUI.getPluginImageRegistry();
+
+		setImageDescriptor(pluginImageRegistry.getDescriptor(ProjectUI.MIGRATION_TASKS_IMAGE_ID));
 	}
 
 	protected Boolean getCombineExistedProjects() {
@@ -84,9 +89,12 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 				try {
 					BreakingChangeSelectedProject bkProject = new BreakingChangeSelectedProject();
 
-					projects.stream().forEach(
+					Stream<IProject> projectStream = projects.stream();
+
+					projectStream.forEach(
 						project -> bkProject.addSimpleProject(
-							new BreakingChangeSimpleProject(project.getName(), project.getLocation().toOSString())));
+							new BreakingChangeSimpleProject(project.getName(), FileUtil.getLocationOSString(project))));
+
 					UpgradeAssistantSettingsUtil.setObjectToStore(BreakingChangeSelectedProject.class, bkProject);
 				}
 				catch (IOException ioe) {
@@ -184,7 +192,9 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 		}
 
 		private void _initializeSelectedProject(BreakingChangeSelectedProject selectedProject, Boolean combineProject) {
-			TableItem[] children = fTableViewer.getTable().getItems();
+			Table table = fTableViewer.getTable();
+
+			TableItem[] children = table.getItems();
 
 			for (TableItem item : children) {
 				if (item.getData() != null) {
@@ -200,10 +210,12 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 						for (BreakingChangeSimpleProject sProject : simpleProjects) {
 							IProject project = projectItem.getProject();
 
-							IPath projectLocation = project.getLocation();
+							String projectLocationValue = FileUtil.getLocationString(project);
 
-							if (project.getName().equals(sProject.getName()) &&
-								projectLocation.toOSString().equals(sProject.getLocation())) {
+							String projectName = project.getName();
+
+							if (projectName.equals(sProject.getName()) &&
+								projectLocationValue.equals(sProject.getLocation())) {
 
 								item.setChecked(combineProject);
 							}

@@ -27,6 +27,7 @@ import com.liferay.ide.project.core.upgrade.FileProblemsUtil;
 import com.liferay.ide.project.core.upgrade.IgnoredProblemsContainer;
 import com.liferay.ide.project.core.upgrade.MigrationProblems;
 import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
+import com.liferay.ide.project.core.upgrade.ProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 import com.liferay.ide.project.core.util.ValidationUtil;
@@ -44,6 +45,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -54,9 +56,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -73,11 +73,14 @@ import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.ui.progress.IProgressService;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -161,7 +164,9 @@ public class MigrateProjectHandler extends AbstractHandler {
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 				IStatus retval = Status.OK_STATUS;
 
-				final BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();
+				Bundle bundle = FrameworkUtil.getBundle(getClass());
+
+				BundleContext context = bundle.getBundleContext();
 
 				ProgressMonitor override = new ProgressMonitor() {
 
@@ -201,7 +206,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 
 					boolean singleFile = false;
 
-					if ((locations.length == 1) && locations[0].toFile().exists() && locations[0].toFile().isFile()) {
+					if ((locations.length == 1) && FileUtil.isFile(locations[0])) {
 						singleFile = true;
 					}
 
@@ -225,23 +230,25 @@ public class MigrateProjectHandler extends AbstractHandler {
 						}
 					}
 
-					for (int j = 0; j < locations.length; j++) {
+					for (int i = 0; i < locations.length; i++) {
 						allProblems = new ArrayList<>();
 
-						if (!override.isCanceled() && _shouldSearch(locations[j].toFile())) {
+						File searchFile = locations[i].toFile();
+
+						if (!override.isCanceled() && _shouldSearch(searchFile)) {
 							List<Problem> problems = null;
 
 							if (singleFile) {
-								_clearFileMarkers(locations[j].toFile());
+								_clearFileMarkers(searchFile);
 
 								Set<File> files = new HashSet<>();
 
-								files.add(locations[j].toFile());
+								files.add(searchFile);
 
 								problems = m.findProblems(files, override);
 							}
 							else {
-								problems = m.findProblems(locations[j].toFile(), override);
+								problems = m.findProblems(searchFile, override);
 							}
 
 							for (Problem problem : problems) {
@@ -262,9 +269,9 @@ public class MigrateProjectHandler extends AbstractHandler {
 							migrationProblems.setProblems(fileProblems);
 
 							migrationProblems.setType("Code Problems");
-							migrationProblems.setSuffix(projectName[j]);
+							migrationProblems.setSuffix(projectName[i]);
 
-							int index = _isAlreadyExist(migrationProblemsList, projectName, j);
+							int index = _isAlreadyExist(migrationProblemsList, projectName, i);
 
 							if (index != -1) {
 								if (singleFile) {
@@ -275,9 +282,9 @@ public class MigrateProjectHandler extends AbstractHandler {
 									for (int n = 0; n < problems.length; n++) {
 										FileProblems fp = problems[n];
 
-										String problemFilePath = fp.getFile().getPath();
+										String problemFilePath = FileUtil.getFilePath(fp.getFile());
 
-										String initProblemFilePath = locations[0].toFile().getPath();
+										String initProblemFilePath = FileUtil.getFilePath(locations[0]);
 
 										if (problemFilePath.equals(initProblemFilePath)) {
 											problems[n] = fileProblems[0];
@@ -296,7 +303,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 							}
 						}
 						else {
-							int index = _isAlreadyExist(migrationProblemsList, projectName, j);
+							int index = _isAlreadyExist(migrationProblemsList, projectName, i);
 
 							if (index != -1) {
 								if (singleFile) {
@@ -309,8 +316,11 @@ public class MigrateProjectHandler extends AbstractHandler {
 									List<FileProblems> newFPList = new ArrayList<>();
 
 									for (FileProblems fp : fpList) {
-										String problemFilePath = fp.getFile().getPath();
-										String initProblemFilePath = locations[0].toFile().getPath();
+										File file = fp.getFile();
+
+										String problemFilePath = file.getPath();
+
+										String initProblemFilePath = FileUtil.getFilePath(locations[0]);
 
 										if (!problemFilePath.equals(initProblemFilePath)) {
 											newFPList.add(fp);
@@ -342,6 +352,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 					}
 					else {
 						allProblems.add(new Problem());
+
 						m.reportProblems(allProblems, Migration.DETAIL_LONG, "ide");
 					}
 				}
@@ -355,7 +366,11 @@ public class MigrateProjectHandler extends AbstractHandler {
 		};
 
 		try {
-			ProjectUI.getProgressService().showInDialog(Display.getDefault().getActiveShell(), job);
+			IProgressService progressService = ProjectUI.getProgressService();
+
+			Display defaultDisplay = Display.getDefault();
+
+			progressService.showInDialog(defaultDisplay.getActiveShell(), job);
 		}
 		catch (Exception e) {
 		}
@@ -377,7 +392,10 @@ public class MigrateProjectHandler extends AbstractHandler {
 				public void run() {
 					problemsViewer.setInput(allProblems);
 
-					Object currentTreeNode = treeViewer.getStructuredSelection().getFirstElement();
+					ITreeSelection treeSelection = treeViewer.getStructuredSelection();
+
+					Object currentTreeNode = treeSelection.getFirstElement();
+
 					String currentPath = null;
 
 					if (currentTreeNode instanceof FileProblems) {
@@ -391,7 +409,9 @@ public class MigrateProjectHandler extends AbstractHandler {
 					MigrationContentProvider contentProvider =
 						(MigrationContentProvider)treeViewer.getContentProvider();
 
-					MigrationProblemsContainer mc = (MigrationProblemsContainer)contentProvider.getProblems().get(0);
+					List<ProblemsContainer> problemsContainer = contentProvider.getProblems();
+
+					MigrationProblemsContainer mc = (MigrationProblemsContainer)problemsContainer.get(0);
 
 					for (MigrationProblems project : mc.getProblemsArray()) {
 						Iterator<FileProblems> fileProblemItertor = new LinkedList<>(
@@ -425,9 +445,9 @@ public class MigrateProjectHandler extends AbstractHandler {
 		for (Problem problem : problems) {
 			IResource workspaceResource = null;
 
-			File file = problem.file;
+			File problemFile = problem.file;
 
-			IResource[] containers = ws.findContainersForLocationURI(file.toURI());
+			IResource[] containers = ws.findContainersForLocationURI(problemFile.toURI());
 
 			if (ListUtil.isNotEmpty(containers)) {
 
@@ -453,23 +473,23 @@ public class MigrateProjectHandler extends AbstractHandler {
 				}
 
 				if (workspaceResource == null) {
-					final IFile[] files = ws.findFilesForLocationURI(file.toURI());
+					final IFile[] files = ws.findFilesForLocationURI(problemFile.toURI());
 
-					for (IFile ifile : files) {
-						if (ifile.exists()) {
+					for (IFile file : files) {
+						if (file.exists()) {
 							if (workspaceResource == null) {
-								if (CoreUtil.isLiferayProject(ifile.getProject())) {
-									workspaceResource = ifile;
+								if (CoreUtil.isLiferayProject(file.getProject())) {
+									workspaceResource = file;
 								}
 							}
 							else {
 
 								// prefer the path that is shortest (to avoid a nested version)
 
-								if (ifile.getFullPath().segmentCount() <
-										workspaceResource.getFullPath().segmentCount()) {
+								if (FileUtil.getSegmentCount(file.getFullPath()) <
+										FileUtil.getSegmentCount(workspaceResource.getFullPath())) {
 
-									workspaceResource = ifile;
+									workspaceResource = file;
 								}
 							}
 						}
@@ -485,8 +505,8 @@ public class MigrateProjectHandler extends AbstractHandler {
 
 							// prefer the path that is shortest (to avoid a nested version)
 
-							if (container.getLocation().segmentCount() <
-									workspaceResource.getLocation().segmentCount()) {
+							if (FileUtil.getSegmentCount(container.getLocation()) <
+									FileUtil.getSegmentCount(workspaceResource.getLocation())) {
 
 								workspaceResource = container;
 							}
@@ -495,11 +515,12 @@ public class MigrateProjectHandler extends AbstractHandler {
 				}
 			}
 
-			if ((workspaceResource != null) && workspaceResource.exists()) {
+			if (FileUtil.exists(workspaceResource)) {
 				try {
-					final IMarker marker = workspaceResource.createMarker(MigrationConstants.MARKER_TYPE);
+					IMarker marker = workspaceResource.createMarker(MigrationConstants.MARKER_TYPE);
 
 					problem.setMarkerId(marker.getId());
+
 					MigrationUtil.problemToMarker(problem, marker);
 				}
 				catch (CoreException ce) {
@@ -515,7 +536,9 @@ public class MigrateProjectHandler extends AbstractHandler {
 			String fullClassName = "";
 
 			for (ImportDeclaration importDeclaration : importDeclarationList) {
-				String importName = importDeclaration.getName().toString();
+				Name name = importDeclaration.getName();
+
+				String importName = name.toString();
 
 				if (importName.endsWith(className)) {
 					fullClassName = importName;
@@ -537,12 +560,13 @@ public class MigrateProjectHandler extends AbstractHandler {
 	}
 
 	private void _clearFileMarkers(File file) {
-		IWorkspace ws = ResourcesPlugin.getWorkspace();
 		IPath location = Path.fromOSString(file.getAbsolutePath());
 
-		IFile projectFile = ws.getRoot().getFileForLocation(location);
+		IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
 
-		if (projectFile.exists() && (projectFile != null)) {
+		IFile projectFile = root.getFileForLocation(location);
+
+		if (FileUtil.exists(projectFile)) {
 			MarkerUtil.clearMarkers(projectFile, MigrationConstants.MARKER_TYPE, null);
 		}
 	}
@@ -553,7 +577,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 		for (int i = 0; i < migrationProblemsList.size(); i++) {
 			UpgradeProblems upgradeProblems = migrationProblemsList.get(i);
 
-			if (((MigrationProblems)upgradeProblems).getSuffix().equals(projectName[projectIndex])) {
+			if (projectName[projectIndex].equals(((MigrationProblems)upgradeProblems).getSuffix())) {
 				index = i;
 
 				break;
@@ -574,14 +598,16 @@ public class MigrateProjectHandler extends AbstractHandler {
 		IgnoredProblemsContainer ignoredProblemsContainer = MigrationUtil.getIgnoredProblemsContainer();
 
 		if (ignoredProblemsContainer != null) {
-			Set<String> ticketSet = ignoredProblemsContainer.getProblemMap().keySet();
+			Map<String, Problem> problemMap = ignoredProblemsContainer.getProblemMap();
+
+			Set<String> ticketSet = problemMap.keySet();
 
 			if ((ticketSet != null) && ticketSet.contains(problem.getTicket())) {
-				final IResource resource = MigrationUtil.getIResourceFromProblem(problem);
+				IResource resource = MigrationUtil.getIResourceFromProblem(problem);
 
-				final IMarker marker = resource.getMarker(problem.getMarkerId());
+				IMarker marker = resource.getMarker(problem.getMarkerId());
 
-				if (marker.exists()) {
+				if (MarkerUtil.exists(marker)) {
 					try {
 						marker.delete();
 					}
@@ -599,7 +625,9 @@ public class MigrateProjectHandler extends AbstractHandler {
 
 	@SuppressWarnings({"deprecation", "rawtypes"})
 	private boolean _shouldSearch(File file) {
-		String path = file.getAbsolutePath().replaceAll("\\\\", "/");
+		String absolutePath = file.getAbsolutePath();
+
+		String path = absolutePath.replaceAll("\\\\", "/");
 
 		if (path.contains("WEB-INF/classes") || path.contains("WEB-INF/service") ||
 			ValidationUtil.isProjectTargetDirFile(file)) {
@@ -608,7 +636,9 @@ public class MigrateProjectHandler extends AbstractHandler {
 		}
 
 		if (path.endsWith("java")) {
-			CompilationUnit ast = CUCache.getCU(file, FileUtil.readContents(file).toCharArray());
+			String fileContents = FileUtil.readContents(file);
+
+			CompilationUnit ast = CUCache.getCU(file, fileContents.toCharArray());
 
 			List types = ast.types();
 
@@ -619,7 +649,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 					return !_checkClassIgnore(ast, superClass.toString());
 				}
 
-				List<ASTNode> interfaces = ((TypeDeclaration)ast.types().get(0)).superInterfaces();
+				List<ASTNode> interfaces = ((TypeDeclaration)types.get(0)).superInterfaces();
 
 				if (interfaces != null) {
 					for (ASTNode n : interfaces) {

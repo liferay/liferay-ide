@@ -150,8 +150,6 @@ public interface LiferayUpgradeDataModel extends Element {
 	public String DEFAULT_BUNDLE_URL =
 		"https://releases-cdn.liferay.com/portal/7.0.6-ga7/liferay-ce-portal-tomcat-7.0-ga7-20180507111753223.zip";
 
-	// *** ConvertLiferayWorkspace ***
-
 	@Service(impl = BackupLocationValidationService.class)
 	@Type(base = Path.class)
 	public ValueProperty PROP_BACKUP_LOCATION = new ValueProperty(TYPE, "BackupLocation");
@@ -168,8 +166,6 @@ public interface LiferayUpgradeDataModel extends Element {
 	@Service(impl = BundleUrlValidationService.class)
 	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, "BundleUrl");
 
-	// *** DownloadBundle ***
-
 	@DefaultValue(text = "false")
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_CONVERT_LIFERAY_WORKSPACE = new ValueProperty(TYPE, "ConvertLiferayWorkspace");
@@ -185,8 +181,6 @@ public interface LiferayUpgradeDataModel extends Element {
 	@DefaultValue(text = "false")
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_HAS_EXT = new ValueProperty(TYPE, "HasExt");
-
-	// *** BackupSdk ***
 
 	@DefaultValue(text = "false")
 	@Type(base = Boolean.class)
@@ -208,8 +202,6 @@ public interface LiferayUpgradeDataModel extends Element {
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_HAS_PORTLET = new ValueProperty(TYPE, "HasPortlet");
 
-	// *** BackupLocation ***
-
 	@DefaultValue(text = "false")
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_HAS_SERVICE_BUILDER = new ValueProperty(TYPE, "HasServiceBuilder");
@@ -225,8 +217,6 @@ public interface LiferayUpgradeDataModel extends Element {
 	@DefaultValue(text = "false")
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_IMPORT_FINISHED = new ValueProperty(TYPE, "ImportFinished");
-
-	// *** ImportFinished ***
 
 	public ValueProperty PROP_LAYOUT = new ValueProperty(TYPE, "Layout");
 

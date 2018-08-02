@@ -22,6 +22,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.IOUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
@@ -39,6 +40,7 @@ import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorList
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.SWTUtil;
@@ -60,6 +62,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
@@ -67,6 +70,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -85,6 +89,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValuePropertyContentEvent;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -110,8 +115,10 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
@@ -128,8 +135,8 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
-
 
 /**
  * @author Simon Jiang
@@ -169,7 +176,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 				public void modifyText(ModifyEvent e) {
 					dataModel.setSdkLocation(_dirField.getText());
 
-					if (_dirField.getText().isEmpty()) {
+					if (CoreUtil.isNullOrEmpty(_dirField.getText())) {
 						_disposeMigrateLayoutElement();
 
 						_disposeBundleCheckboxElement();
@@ -196,7 +203,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 			});
 
-		SWTUtil.createButton(_pageParent, "Browse...").addSelectionListener(
+		Button createButton = SWTUtil.createButton(_pageParent, "Browse...");
+
+		createButton.addSelectionListener(
 			new SelectionAdapter() {
 
 				@Override
@@ -226,7 +235,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	}
 
 	public void checkAndConfigureIvy(IProject project) {
-		if ((project != null) && project.getFile(ISDKConstants.IVY_XML_FILE).exists()) {
+		if ((project != null) && FileUtil.exists(project.getFile(ISDKConstants.IVY_XML_FILE))) {
 			new WorkspaceJob("Configuring project with Ivy dependencies") {
 
 				@Override
@@ -373,13 +382,14 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 						List<String> serverList = new ArrayList<>(Arrays.asList(serverNames));
 
 						for (String serverName : serverList) {
-							if (server.getName().equals(serverName)) {
+							if (serverName.equals(server.getName())) {
 								serverExisted = true;
 							}
 						}
 
-						if (serverExisted == false) {
+						if (!serverExisted) {
 							serverList.add(server.getName());
+
 							_serverComb.setItems(serverList.toArray(new String[serverList.size()]));
 							_serverComb.select(serverList.size() - 1);
 						}
@@ -412,7 +422,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 						while (serverNameiterator.hasNext()) {
 							String serverName = serverNameiterator.next();
 
-							if (server.getName().equals(serverName)) {
+							if (serverName.equals(server.getName())) {
 								serverNameiterator.remove();
 							}
 						}
@@ -428,9 +438,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	}
 
 	protected void importProject() throws CoreException {
-		String layout = dataModel.getLayout().content();
+		String layout = SapphireUtil.getContent(dataModel.getLayout());
 
-		IPath location = PathBridge.create(dataModel.getSdkLocation().content());
+		IPath location = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
 
 		if (_isAlreadyImported(location)) {
 			Stream.of(CoreUtil.getAllProjects()).forEach(this::_checkProjectType);
@@ -441,7 +451,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		}
 
 		try {
-			IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
+			IWorkbench workbench = PlatformUI.getWorkbench();
+
+			IProgressService progressService = workbench.getProgressService();
 
 			progressService.run(
 				true, true,
@@ -461,8 +473,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 							String locationString = location.toPortableString();
 
 							if (LiferayWorkspaceUtil.isValidWorkspaceLocation(locationString)) {
-								String type = LiferayWorkspaceUtil.getWorkspaceType(locationString);
-
 								ILiferayProjectProvider provider = null;
 
 								ILiferayProjectProvider[] providers = LiferayCore.getProviders("workspace");
@@ -491,7 +501,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 								}
 
 								if ((provider != null) && (provider instanceof NewLiferayWorkspaceProjectProvider)) {
-									((NewLiferayWorkspaceProjectProvider<?>) provider).importProject(location, monitor);
+									((NewLiferayWorkspaceProjectProvider<?>)provider).importProject(location, monitor);
 
 									IJobManager jobManager = Job.getJobManager();
 
@@ -541,7 +551,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 									jobManager.join("org.eclipse.buildship.core.jobs", null);
 
-									if (dataModel.getDownloadBundle().content()) {
+									if (SapphireUtil.getContent(dataModel.getDownloadBundle())) {
 										_createInitBundle(monitor);
 									}
 
@@ -557,7 +567,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 									_deleteSDKLegacyProjects(location);
 
-									String serverName = dataModel.getLiferay70ServerName().content();
+									String serverName = SapphireUtil.getContent(dataModel.getLiferay70ServerName());
 
 									IServer server = ServerUtil.getServer(serverName);
 
@@ -565,8 +575,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 									SDK sdk = SDKUtil.createSDKFromLocation(new Path(newPath));
 
-									sdk.addOrUpdateServerProperties(
-										ServerUtil.getLiferayRuntime(server).getLiferayHome());
+									ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(server);
+
+									sdk.addOrUpdateServerProperties(liferayRuntime.getLiferayHome());
 
 									SDKUtil.openAsProject(sdk, monitor);
 
@@ -578,6 +589,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 						}
 						catch (Exception e) {
 							ProjectUI.logError(e);
+
 							throw new InvocationTargetException(e, e.getMessage());
 						}
 					}
@@ -586,14 +598,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		}
 		catch (Exception e) {
 			ProjectUI.logError(e);
+
 			throw new CoreException(StatusBridge.create(Status.createErrorStatus(e.getMessage(), e)));
 		}
 	}
 
 	private void _backup(IProgressMonitor monitor) {
-		Boolean backup = dataModel.getBackupSdk().content();
+		Boolean backup = SapphireUtil.getContent(dataModel.getBackupSdk());
 
-		if (backup == false) {
+		if (!backup) {
 			return;
 		}
 
@@ -601,22 +614,25 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		try {
 			progress.setTaskName("Backup origial project folder into Eclipse workspace...");
-			org.eclipse.sapphire.modeling.Path originalPath = dataModel.getSdkLocation().content();
+
+			org.eclipse.sapphire.modeling.Path originalPath = SapphireUtil.getContent(dataModel.getSdkLocation());
 
 			if (originalPath != null) {
-				IPath backupLocation = PathBridge.create(dataModel.getBackupLocation().content());
+				IPath backupLocation = PathBridge.create(SapphireUtil.getContent(dataModel.getBackupLocation()));
 
-				backupLocation.toFile().mkdirs();
+				FileUtil.mkdirs(backupLocation.toFile());
 
 				progress.worked(30);
 
-				ZipUtil.zip(originalPath.toFile(), backupLocation.append("backup.zip").toFile());
+				IPath backupPath = backupLocation.append("backup.zip");
+
+				ZipUtil.zip(originalPath.toFile(), backupPath.toFile());
 
 				progress.setWorkRemaining(70);
 			}
 		}
-		catch (IOException ioe) {
-			ProjectUI.logError("Error to backup original project folder.", ioe);
+		catch (Exception e) {
+			ProjectUI.logError("Error to backup original project folder.", e);
 		}
 		finally {
 			progress.done();
@@ -670,7 +686,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	private void _clearExistingProjects(IPath location, IProgressMonitor monitor) throws CoreException {
 		IProject sdkProject = SDKUtil.getWorkspaceSDKProject();
 
-		if ((sdkProject != null) && sdkProject.getLocation().equals(location)) {
+		if ((sdkProject != null) && location.equals(sdkProject.getLocation())) {
 			IProject[] projects = ProjectUtil.getAllPluginsSDKProjects();
 
 			for (IProject project : projects) {
@@ -683,7 +699,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		IProject[] projects = CoreUtil.getAllProjects();
 
 		for (IProject project : projects) {
-			String projectPortableLocation = project.getLocation().toPortableString();
+			String projectPortableLocation = FileUtil.getLocationPortableString(project);
 
 			if (projectPortableLocation.startsWith(location.toPortableString())) {
 				project.delete(false, true, monitor);
@@ -695,7 +711,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		boolean retval = false;
 
 		try {
-			Validator[] vals = ValManager.getDefault().getValidators(project, true);
+			ValManager valManager = ValManager.getDefault();
+
+			Validator[] vals = valManager.getValidators(project, true);
 
 			ValidatorMutable[] validators = new ValidatorMutable[vals.length];
 
@@ -721,11 +739,17 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		try {
 			progress.beginTask("Copy new SDK to override target SDK.", 100);
 
-			final URL sdkZipUrl = Platform.getBundle("com.liferay.ide.project.ui").getEntry("resources/sdk70ga2.zip");
+			Bundle projectCoreBundle = Platform.getBundle("com.liferay.ide.project.ui");
 
-			final File sdkZipFile = new File(FileLocator.toFileURL(sdkZipUrl).getFile());
+			final URL sdkZipUrl = projectCoreBundle.getEntry("resources/sdk70ga2.zip");
 
-			final IPath stateLocation = ProjectCore.getDefault().getStateLocation();
+			URL fileURL = FileLocator.toFileURL(sdkZipUrl);
+
+			final File sdkZipFile = new File(fileURL.getFile());
+
+			ProjectCore projectCore = ProjectCore.getDefault();
+
+			final IPath stateLocation = projectCore.getStateLocation();
 
 			File stateDir = stateLocation.toFile();
 
@@ -779,7 +803,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 			});
 
-		String bundleName = dataModel.getBundleName().content();
+		Display pageDdisplay = _pageParent.getDisplay();
+
+		String bundleName = SapphireUtil.getContent(dataModel.getBundleName());
 
 		_bundleNameField.setText(bundleName != null ? bundleName : "");
 
@@ -787,8 +813,10 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		_bundleUrlField = createTextField(_pageParent, SWT.NONE);
 
-		_bundleUrlField.setForeground(_pageParent.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
-		_bundleUrlField.setText(dataModel.getBundleUrl().content(true));
+		_bundleUrlField.setForeground(pageDdisplay.getSystemColor(SWT.COLOR_DARK_GRAY));
+
+		_bundleUrlField.setText(SapphireUtil.getContent(dataModel.getBundleUrl()));
+
 		_bundleUrlField.addModifyListener(
 			new ModifyListener() {
 
@@ -810,7 +838,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 						_bundleUrlField.setText("");
 					}
 
-					_bundleUrlField.setForeground(_pageParent.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+					_bundleUrlField.setForeground(pageDdisplay.getSystemColor(SWT.COLOR_BLACK));
 				}
 
 				@Override
@@ -818,7 +846,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 					String input = ((Text)e.getSource()).getText();
 
 					if (CoreUtil.isNullOrEmpty(input)) {
-						_bundleUrlField.setForeground(_pageParent.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+						_bundleUrlField.setForeground(pageDdisplay.getSystemColor(SWT.COLOR_DARK_GRAY));
 						_bundleUrlField.setText(LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL);
 					}
 				}
@@ -841,9 +869,11 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					dataModel.setDownloadBundle(_downloadBundleCheckbox.getSelection());
+					boolean downloadBundle = _downloadBundleCheckbox.getSelection();
 
-					if (dataModel.getDownloadBundle().content()) {
+					dataModel.setDownloadBundle(downloadBundle);
+
+					if (downloadBundle) {
 						_disposeImportElement();
 						_createBundleElement();
 						_createImportElement();
@@ -866,8 +896,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		_createHorizontalSpacer = createHorizontalSpacer(_pageParent, 3);
 		_createSeparator = createSeparator(_pageParent, 3);
 
-		String backupFolderName = "Backup project into folder";
-
 		_importButton = SWTUtil.createButton(_pageParent, "Import Projects");
 
 		_importButton.addSelectionListener(
@@ -876,7 +904,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					try {
-						Boolean importFinished = dataModel.getImportFinished().content();
+						Boolean importFinished = SapphireUtil.getContent(dataModel.getImportFinished());
 
 						if (_isPageValidate() && !importFinished) {
 							_saveSettings();
@@ -937,16 +965,16 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		try {
 			progress.beginTask("Execute Liferay Worksapce Bundle Init Command...", 100);
 
-			String layout = dataModel.getLayout().content();
+			String layout = SapphireUtil.getContent(dataModel.getLayout());
 
 			if (layout.equals(_layoutNames[0])) {
-				IPath sdkLocation = PathBridge.create(dataModel.getSdkLocation().content());
+				IPath sdkLocation = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
 
 				IProject project = CoreUtil.getProject(sdkLocation.lastSegment());
 
-				String bundleUrl = dataModel.getBundleUrl().content();
+				String bundleUrl = SapphireUtil.getContent(dataModel.getBundleUrl());
 
-				String bundleName = dataModel.getBundleName().content();
+				String bundleName = SapphireUtil.getContent(dataModel.getBundleName());
 
 				IWorkspaceProjectBuilder projectBuilder = _getWorkspaceProjectBuilder(project);
 
@@ -958,7 +986,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 				IPath bundleLocationDir = sdkLocation.append("bundles");
 
-				if (bundleLocationDir.toFile().exists()) {
+				if (FileUtil.exists(bundleLocationDir)) {
 					progress.worked(60);
 
 					final IPath runtimeLocation = sdkLocation.append(
@@ -966,14 +994,16 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 					ServerUtil.addPortalRuntimeAndServer(bundleName, runtimeLocation, monitor);
 
-					IServer bundleServer = ServerCore.findServer(dataModel.getBundleName().content());
+					IServer bundleServer = ServerCore.findServer(SapphireUtil.getContent(dataModel.getBundleName()));
 
 					if (bundleServer != null) {
-						org.eclipse.sapphire.modeling.Path newPath = dataModel.getSdkLocation().content();
+						IPath newIpath = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
 
-						SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(newPath).append("plugins-sdk"));
+						SDK sdk = SDKUtil.createSDKFromLocation(newIpath.append("plugins-sdk"));
 
-						IPath bundleLocation = bundleServer.getRuntime().getLocation();
+						IRuntime runtime = bundleServer.getRuntime();
+
+						IPath bundleLocation = runtime.getLocation();
 
 						sdk.addOrUpdateServerProperties(bundleLocation);
 					}
@@ -986,6 +1016,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		}
 		catch (Exception e) {
 			ProjectUI.logError(e);
+
 			throw new CoreException(
 				StatusBridge.create(
 					Status.createErrorStatus("Failed to execute Liferay Workspace Bundle Init Command...", e)));
@@ -1004,7 +1035,11 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("--base ");
-			sb.append("\"" + targetSDKLocation.toFile().getAbsolutePath() + "\" ");
+
+			File targetSdkFile = targetSDKLocation.toFile();
+
+			sb.append("\"" + targetSdkFile.getAbsolutePath() + "\" ");
+
 			sb.append("init -u");
 
 			progress.worked(30);
@@ -1013,6 +1048,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		}
 		catch (BladeCLIException bclie) {
 			ProjectUI.logError(bclie);
+
 			throw new CoreException(
 				StatusBridge.create(
 					Status.createErrorStatus("Faild execute Liferay Workspace Init Command...", bclie)));
@@ -1102,7 +1138,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		if (ListUtil.isNotEmpty(servers)) {
 			for (IServer server : servers) {
-				if (LiferayServerCore.newPortalBundle(server.getRuntime().getLocation()) != null) {
+				IRuntime runtime = server.getRuntime();
+
+				if (LiferayServerCore.newPortalBundle(runtime.getLocation()) != null) {
 					serverNames.add(server.getName());
 				}
 			}
@@ -1114,8 +1152,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 	private void _deleteEclipseConfigFiles(File project) {
 		for (File file : project.listFiles()) {
-			if (file.getName().contentEquals(".classpath") || file.getName().contentEquals(".settings") ||
-				file.getName().contentEquals(".project")) {
+			if (".classpath".contentEquals(file.getName()) || ".settings".contentEquals(file.getName()) ||
+				".project".contentEquals(file.getName())) {
 
 				if (file.isDirectory()) {
 					FileUtil.deleteDir(file, true);
@@ -1130,7 +1168,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		String[] needDeletedPaths = {"shared/portal-http-service", "webs/resources-importer-web"};
 
 		for (String path : needDeletedPaths) {
-			File file = sdkLocation.append(path).toFile();
+			IPath sdkPath = sdkLocation.append(path);
+
+			File file = sdkPath.toFile();
 
 			if (file.exists()) {
 				FileUtil.deleteDir(file, true);
@@ -1171,9 +1211,17 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	}
 
 	private void _disposeImportElement() {
-		_createSeparator.dispose();
-		_createHorizontalSpacer.dispose();
-		_importButton.dispose();
+		if (_createSeparator != null) {
+			_createSeparator.dispose();
+		}
+
+		if (_createHorizontalSpacer != null) {
+			_createHorizontalSpacer.dispose();
+		}
+
+		if (_importButton != null) {
+			_importButton.dispose();
+		}
 	}
 
 	private void _disposeMigrateLayoutElement() {
@@ -1195,7 +1243,11 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("--base ");
-		sb.append("\"" + targetSDKLocation.toFile().getAbsolutePath() + "\" ");
+
+		File sdkLocation = targetSDKLocation.toFile();
+
+		sb.append("\"" + sdkLocation.getAbsolutePath() + "\" ");
+
 		sb.append("init");
 
 		BladeCLI.execute(sb.toString());
@@ -1274,11 +1326,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	}
 
 	private boolean _isAlreadyImported(IPath path) {
-		IContainer[] containers = CoreUtil.getWorkspaceRoot().findContainersForLocationURI(path.toFile().toURI());
+		IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
 
-		Stream<IContainer> containerStreams = Stream.of(containers).filter(container -> container instanceof IProject);
+		IContainer[] containers = workspaceRoot.findContainersForLocationURI(FileUtil.toURI(path));
 
-		long projectCount = containerStreams.count();
+		long projectCount = Stream.of(
+			containers
+		).filter(
+			container -> container instanceof IProject
+		).count();
 
 		if (projectCount > 0) {
 			return true;
@@ -1290,7 +1346,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	private boolean _isMavenProject(String path) {
 		IStatus buildType = ImportLiferayModuleProjectOpMethods.getBuildType(path);
 
-		return buildType.getMessage().equals("maven");
+		return "maven".equals(buildType.getMessage());
 	}
 
 	private boolean _isPageValidate() {
@@ -1369,6 +1425,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		}
 		catch (CoreException | IOException | JDOMException e) {
 			ProjectUI.logError(e);
+
 			throw new CoreException(
 				StatusBridge.create(
 					Status.createErrorStatus(
@@ -1401,8 +1458,10 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		try {
 			if (sdk != null) {
-				final String liferay62ServerLocation =
-					(String)(sdk.getBuildProperties(true).get(ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR));
+				Map<String, Object> buildPropertiesMap = sdk.getBuildProperties(true);
+
+				String liferay62ServerLocation =
+					(String)(buildPropertiesMap.get(ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR));
 
 				dataModel.setLiferay62ServerLocation(liferay62ServerLocation);
 			}
@@ -1420,6 +1479,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		}
 		catch (Exception e) {
 			ProjectUI.logError(e);
+
 			throw new CoreException(
 				StatusBridge.create(Status.createErrorStatus("Failed to save change for ivy-settings.xml.", e)));
 		}
@@ -1446,8 +1506,10 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 				public void run() {
 					boolean inputValidation = true;
 					boolean layoutValidation = true;
-					boolean downloadBundle = dataModel.getDownloadBundle().content();
-					String bundUrl = dataModel.getBundleUrl().content();
+
+					boolean downloadBundle = SapphireUtil.getContent(dataModel.getDownloadBundle());
+
+					String bundUrl = SapphireUtil.getContent(dataModel.getBundleUrl());
 
 					String message = "ok";
 
@@ -1455,10 +1517,14 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 					pe.setType(PageValidateEvent.error);
 
-					Status validation = dataModel.getBackupLocation().validation();
+					Value<org.eclipse.sapphire.modeling.Path> backupLocationValue = dataModel.getBackupLocation();
 
-					if (!_sdkValidation.compute().ok()) {
-						message = _sdkValidation.compute().message();
+					Status validation = backupLocationValue.validation();
+
+					Status sdkValidation = _sdkValidation.compute();
+
+					if (!sdkValidation.ok()) {
+						message = sdkValidation.message();
 
 						inputValidation = false;
 					}
@@ -1482,15 +1548,18 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 							}
 						}
 						else if (_layoutComb.getSelectionIndex() == 0) {
-							if (downloadBundle && !_bundleNameValidation.compute().ok()) {
-								message = _bundleNameValidation.compute().message();
+							Status bundleUrlValidation = _bundleUrlValidation.compute();
+							Status bundleNameValidation = _bundleNameValidation.compute();
+
+							if (downloadBundle && !bundleNameValidation.ok()) {
+								message = bundleUrlValidation.message();
 
 								layoutValidation = false;
 							}
 							else if (downloadBundle && (bundUrl != null) && (bundUrl.length() > 0) &&
-									 !_bundleUrlValidation.compute().ok()) {
+									 !bundleUrlValidation.ok()) {
 
-								message = _bundleUrlValidation.compute().message();
+								message = bundleUrlValidation.message();
 
 								layoutValidation = false;
 							}
@@ -1500,7 +1569,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 						}
 					}
 
-					if (dataModel.getImportFinished().content()) {
+					Boolean importFinished = SapphireUtil.getContent(dataModel.getImportFinished());
+
+					if (importFinished) {
 						message = "Import has finished. If you want to reset, please click reset icon in view toolbar.";
 
 						pe.setType(PageValidateEvent.warning);
@@ -1541,6 +1612,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	private Label _layoutLabel;
 	private String[] _layoutNames = {"Upgrade to Liferay Workspace", "Upgrade to Liferay Plugins SDK 7"};
 	private Composite _pageParent;
+
 	private ProjectLocationValidationService _sdkValidation =
 		dataModel.getSdkLocation().service(ProjectLocationValidationService.class);
 	private Button _serverButton;
@@ -1559,15 +1631,17 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 			final Property property = ((ValuePropertyContentEvent)event).property();
 
-			if (!property.name().equals("SdkLocation")) {
+			if (!"SdkLocation".equals(property.name())) {
 				_startCheckThread();
 
 				return;
 			}
 
-			org.eclipse.sapphire.modeling.Path path = dataModel.getSdkLocation().content();
+			org.eclipse.sapphire.modeling.Path path = SapphireUtil.getContent(dataModel.getSdkLocation());
 
-			if ((path == null) || !_sdkValidation.compute().ok()) {
+			Status compute = _sdkValidation.compute();
+
+			if ((path == null) || !compute.ok()) {
 				if (!_layoutComb.isDisposed()) {
 					_layoutComb.setEnabled(true);
 				}
@@ -1612,7 +1686,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 				if (sdk != null) {
 					String version = sdk.getVersion();
 
-					if ((version != null) && (CoreUtil.compareVersions(new Version(version), new Version("7.0.0")) >= 0)) {
+					if ((version != null) &&
+						(CoreUtil.compareVersions(new Version(version), new Version("7.0.0")) >= 0)) {
+
 						UIUtil.async(
 							new Runnable() {
 
@@ -1623,9 +1699,10 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 									}
 
 									_layoutComb.setEnabled(false);
+
 									dataModel.setLayout(_layoutComb.getText());
 								}
-	
+
 							});
 					}
 					else {
