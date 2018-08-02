@@ -292,6 +292,23 @@ public class FileUtil {
 		return false;
 	}
 
+	public static File getCanonicalFile(IPath location) {
+		if (location == null) {
+			return null;
+		}
+
+		File file = location.toFile();
+
+		try {
+			return file.getCanonicalFile();
+		}
+		catch (IOException ioe) {
+			LiferayCore.logWarning(ioe);
+		}
+
+		return null;
+	}
+
 	public static File[] getDirectories(File directory) {
 		return directory.listFiles(
 			new FileFilter() {
@@ -320,6 +337,16 @@ public class FileUtil {
 		}
 
 		return path.toFile();
+	}
+
+	public static File getFile(IProject project) {
+		if (notExists(project)) {
+			return null;
+		}
+
+		IPath location = project.getLocation();
+
+		return location.toFile();
 	}
 
 	public static File getFile(URL url) {
@@ -392,6 +419,14 @@ public class FileUtil {
 		}
 
 		return toPortableString(folder.getLocation());
+	}
+
+	public static String getLocationPortableString(IResource resource) {
+		if (resource == null) {
+			return null;
+		}
+
+		return toPortableString(resource.getLocation());
 	}
 
 	public static IPath getRawLocation(IContainer container) {
@@ -535,6 +570,16 @@ public class FileUtil {
 				}
 			}
 		}
+	}
+
+	public static boolean nameEndsWith(IResource resource, String suffix) {
+		if ((resource == null) || (suffix == null)) {
+			return false;
+		}
+
+		String name = resource.getName();
+
+		return name.endsWith(suffix);
 	}
 
 	public static boolean notExists(File file) {
