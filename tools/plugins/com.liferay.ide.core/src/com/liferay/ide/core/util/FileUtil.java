@@ -357,6 +357,24 @@ public class FileUtil {
 		return new File(url.getFile());
 	}
 
+	public static String getFilePath(File file) {
+		if (file == null) {
+			return "";
+		}
+
+		return file.getPath();
+	}
+
+	public static String getFilePath(IPath path) {
+		if (path == null) {
+			return "";
+		}
+
+		File file = path.toFile();
+
+		return file.getPath();
+	}
+
 	public static String getFullPathPortableString(IFile file) {
 		if (file == null) {
 			return null;
@@ -397,6 +415,14 @@ public class FileUtil {
 		return getLastSegment(project.getLocation());
 	}
 
+	public static IPath getLocation(IResource resource) {
+		if (resource == null) {
+			return null;
+		}
+
+		return resource.getLocation();
+	}
+
 	public static String getLocationOSString(IProject project) {
 		if (project == null) {
 			return null;
@@ -423,10 +449,20 @@ public class FileUtil {
 
 	public static String getLocationPortableString(IResource resource) {
 		if (resource == null) {
-			return null;
+			return "";
 		}
 
 		return toPortableString(resource.getLocation());
+	}
+
+	public static String getLocationString(IResource resource) {
+		if (resource == null) {
+			return "";
+		}
+
+		IPath location = resource.getLocation();
+
+		return location.toString();
 	}
 
 	public static IPath getRawLocation(IContainer container) {
@@ -463,6 +499,28 @@ public class FileUtil {
 		IPath location = file.getRawLocation();
 
 		return location.toOSString();
+	}
+
+	public static IPath getResourceLocation(IResource resource) {
+		if (resource == null) {
+			return null;
+		}
+
+		IPath location = resource.getLocation();
+
+		if (location == null) {
+			return resource.getRawLocation();
+		}
+
+		return location;
+	}
+
+	public static int getSegmentCount(IPath path) {
+		if (path == null) {
+			return -1;
+		}
+
+		return path.segmentCount();
 	}
 
 	public static IContainer getWorkspaceContainer(File file) {
@@ -526,6 +584,18 @@ public class FileUtil {
 	public static boolean isFile(File file) {
 		if (exists(file) && file.isFile()) {
 			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean isFile(IPath location) {
+		if (exists(location)) {
+			File file = location.toFile();
+
+			if (file.isFile()) {
+				return true;
+			}
 		}
 
 		return false;
