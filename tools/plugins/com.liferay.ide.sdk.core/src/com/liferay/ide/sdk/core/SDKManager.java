@@ -18,6 +18,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -91,7 +92,10 @@ public final class SDKManager {
 	public boolean containsSDK(SDK theSDK) {
 		if ((theSDK != null) && ListUtil.isNotEmpty(getSDKs())) {
 			for (SDK sdk : getSDKs()) {
-				if (theSDK.getName().equals(sdk.getName()) && theSDK.getLocation().equals(sdk.getLocation())) {
+				String sdkName = theSDK.getName();
+				IPath sdkLocation = theSDK.getLocation();
+
+				if (sdkName.equals(sdk.getName()) && sdkLocation.equals(sdk.getLocation())) {
 					return true;
 				}
 			}
@@ -114,7 +118,7 @@ public final class SDKManager {
 
 	public SDK getSDK(IPath sdkLocation) {
 		for (SDK sdk : getSDKs()) {
-			if (sdk.getLocation().equals(sdkLocation)) {
+			if (sdkLocation.equals(sdk.getLocation())) {
 				return sdk;
 			}
 		}
@@ -238,12 +242,13 @@ public final class SDKManager {
 
 					boolean def = false;
 
-					if ((sdk.getName() != null) && sdk.getName().equals(defaultSDKName) && (defaultSDK == null)) {
+					if (StringUtil.equals(sdk.getName(), defaultSDKName) && (defaultSDK == null)) {
 						def = true;
 					}
 
 					if (def) {
 						sdk.setDefault(def);
+
 						defaultSDK = sdk;
 					}
 

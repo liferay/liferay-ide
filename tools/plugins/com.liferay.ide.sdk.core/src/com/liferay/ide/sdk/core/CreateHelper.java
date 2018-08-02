@@ -14,7 +14,11 @@
 
 package com.liferay.ide.sdk.core;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.LaunchHelper;
+import com.liferay.ide.core.util.StringUtil;
+
+import java.io.File;
 
 import java.util.ArrayList;
 
@@ -67,14 +71,16 @@ public class CreateHelper extends LaunchHelper {
 
 		ILaunchConfigurationWorkingCopy launchConfig = super.createLaunchConfiguration();
 
-		IPath sdkPluginLocation = SDKCorePlugin.getDefault().getStateLocation();
+		SDKCorePlugin sdkCorePlugin = SDKCorePlugin.getDefault();
+
+		IPath sdkPluginLocation = sdkCorePlugin.getStateLocation();
 
 		launchConfig.setAttribute(IExternalToolConstants.ATTR_LOCATION, buildFile.toOSString());
 		launchConfig.setAttribute(IExternalToolConstants.ATTR_WORKING_DIRECTORY, workingDir);
-		launchConfig.setAttribute(IExternalToolConstants.ATTR_TOOL_ARGUMENTS, sb.toString().trim());
+		launchConfig.setAttribute(IExternalToolConstants.ATTR_TOOL_ARGUMENTS, StringUtil.trim(sb.toString()));
 		launchConfig.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, Boolean.TRUE);
 		launchConfig.setAttribute(
-			"org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", sdkPluginLocation.append("sdk.log").toOSString());
+			"org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", FileUtil.toOSString(sdkPluginLocation.append("sdk.log")));
 
 		return launchConfig;
 	}
@@ -86,7 +92,9 @@ public class CreateHelper extends LaunchHelper {
 
 		currentCreateFile = createFile;
 
-		currentCreateFile.toFile().setExecutable(true);
+		File file = currentCreateFile.toFile();
+
+		file.setExecutable(true);
 
 		ILaunchConfiguration launchConfig = createLaunchConfiguration(createFile, arguments, workingDir);
 

@@ -15,6 +15,7 @@
 package com.liferay.ide.sdk.core;
 
 import com.liferay.ide.core.LiferayRuntimeClasspathEntry;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.RuntimeClasspathModel;
@@ -31,6 +32,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -79,10 +81,12 @@ public class SDKHelper extends LaunchHelper {
 
 		launchConfig.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, Boolean.TRUE);
 
-		IPath sdkPluginLocation = SDKCorePlugin.getDefault().getStateLocation();
+		SDKCorePlugin sdkCorePlugin = SDKCorePlugin.getDefault();
+
+		IPath sdkPluginLocation = sdkCorePlugin.getStateLocation();
 
 		launchConfig.setAttribute(
-			"org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", sdkPluginLocation.append("sdk.log").toOSString());
+			"org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", FileUtil.toOSString(sdkPluginLocation.append("sdk.log")));
 
 		launchConfig.setAttribute(DebugPlugin.ATTR_PROCESS_FACTORY_ID, "org.eclipse.ant.ui.remoteAntProcessFactory");
 
@@ -157,7 +161,7 @@ public class SDKHelper extends LaunchHelper {
 		IPath[] antLibs = sdk.getAntLibraries();
 
 		for (IPath antLib : antLibs) {
-			if (antLib.toFile().exists()) {
+			if (FileUtil.exists(antLib)) {
 				model.addEntry(
 					RuntimeClasspathModel.USER,
 					new LiferayRuntimeClasspathEntry(JavaCore.newLibraryEntry(antLib.makeAbsolute(), null, null)));
@@ -167,7 +171,9 @@ public class SDKHelper extends LaunchHelper {
 		// IDE-862 need to add Eclipse's own jdt.core that contains the necessary classes.
 
 		try {
-			File bundleFile = FileLocator.getBundleFile(JavaCore.getPlugin().getBundle());
+			Plugin plugin = JavaCore.getPlugin();
+
+			File bundleFile = FileLocator.getBundleFile(plugin.getBundle());
 
 			if (bundleFile.exists()) {
 				model.addEntry(

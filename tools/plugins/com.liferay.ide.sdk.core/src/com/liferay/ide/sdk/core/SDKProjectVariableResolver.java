@@ -15,6 +15,7 @@
 package com.liferay.ide.sdk.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.variables.IDynamicVariable;
@@ -30,14 +31,16 @@ public class SDKProjectVariableResolver implements IDynamicVariableResolver {
 		SDK sdk = null;
 
 		if (CoreUtil.isNullOrEmpty(argument)) {
-			sdk = SDKManager.getInstance().getDefaultSDK();
+			SDKManager sdkManager = SDKManager.getInstance();
+
+			sdk = sdkManager.getDefaultSDK();
 		}
 		else {
 			sdk = SDKUtil.getSDK(CoreUtil.getProject(argument));
 		}
 
 		if (sdk != null) {
-			retval = sdk.getLocation().toOSString();
+			retval = FileUtil.toOSString(sdk.getLocation());
 		}
 
 		return retval;
