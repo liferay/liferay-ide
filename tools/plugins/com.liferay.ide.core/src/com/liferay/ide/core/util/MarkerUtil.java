@@ -57,6 +57,14 @@ public class MarkerUtil {
 		}
 	}
 
+	public static boolean exists(IMarker marker) {
+		if ((marker != null) && marker.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public static IMarker[] findMarkers(IResource resource, String markerType, String sourceId) {
 		if (!resource.isAccessible()) {
 			return new IMarker[0];
