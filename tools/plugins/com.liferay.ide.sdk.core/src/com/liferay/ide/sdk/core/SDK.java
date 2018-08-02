@@ -18,6 +18,8 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -98,7 +100,7 @@ public class SDK {
 		for (String name : buildFileNames) {
 			IPath buildFilePath = getLocation().append(name);
 
-			if (buildFilePath.toFile().exists()) {
+			if (FileUtil.exists(buildFilePath)) {
 				buildFile = buildFilePath.toFile();
 
 				break;
@@ -143,16 +145,10 @@ public class SDK {
 				properties.putAll(overrideProperties);
 			}
 
-			IPath langDirLocation = langFile.getParent().getRawLocation();
+			properties.put(ISDKConstants.PROPERTY_LANG_DIR, FileUtil.getRawLocationOSString(langFile.getParent()));
+			properties.put(ISDKConstants.PROPERTY_LANG_FILE, FileUtil.getLastSegment(langFile.getFullPath(), true));
 
-			IPath langFilePath = langFile.getFullPath();
-
-			String langFileName = langFilePath.removeFileExtension().lastSegment();
-
-			properties.put(ISDKConstants.PROPERTY_LANG_DIR, langDirLocation.toOSString());
-			properties.put(ISDKConstants.PROPERTY_LANG_FILE, langFileName);
-
-			IPath buildFile = project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation();
+			IPath buildFile = FileUtil.getRawLocation(project.getFile(ISDKConstants.PROJECT_BUILD_XML));
 
 			String workingDir = _getDefaultWorkingDir(buildFile);
 
@@ -175,12 +171,12 @@ public class SDK {
 				properties.putAll(overrideProperties);
 			}
 
-			String serviceFile = serviceXmlFile.getRawLocation().toOSString();
+			String serviceFile = FileUtil.getRawLocationOSString(serviceXmlFile);
 
-			properties.put(ISDKConstants.PROPERTY_SERVICE_FILE, serviceXmlFile.getRawLocation().toOSString());
+			properties.put(ISDKConstants.PROPERTY_SERVICE_FILE, serviceFile);
 			properties.put(ISDKConstants.PROPERTY_SERVICE_INPUT_FILE, serviceFile);
 
-			IPath buildFile = project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation();
+			IPath buildFile = FileUtil.getRawLocation(project.getFile(ISDKConstants.PROJECT_BUILD_XML));
 
 			String workingDir = _getDefaultWorkingDir(buildFile);
 
@@ -203,12 +199,12 @@ public class SDK {
 				properties.putAll(overrideProperties);
 			}
 
-			String serviceFile = serviceXmlFile.getRawLocation().toOSString();
+			String serviceFile = FileUtil.getRawLocationOSString(serviceXmlFile);
 
-			properties.put(ISDKConstants.PROPERTY_SERVICE_FILE, serviceXmlFile.getRawLocation().toOSString());
+			properties.put(ISDKConstants.PROPERTY_SERVICE_FILE, serviceFile);
 			properties.put(ISDKConstants.PROPERTY_SERVICE_INPUT_FILE, serviceFile);
 
-			IPath buildFile = project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation();
+			IPath buildFile = FileUtil.getRawLocation(project.getFile(ISDKConstants.PROJECT_BUILD_XML));
 
 			String workingDir = _getDefaultWorkingDir(buildFile);
 
@@ -255,7 +251,7 @@ public class SDK {
 				properties.putAll(overrideProperties);
 			}
 
-			IPath buildFile = project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation();
+			IPath buildFile = FileUtil.getRawLocation(project.getFile(ISDKConstants.PROJECT_BUILD_XML));
 
 			String workingDir = _getDefaultWorkingDir(buildFile);
 
@@ -293,8 +289,8 @@ public class SDK {
 
 			// create a space for new portlet template to get built
 
-			IPath tempPath = _sdkPluginLocation.append(
-				ISDKConstants.TARGET_CREATE).append(String.valueOf(System.currentTimeMillis()));
+			IPath tempPath = FileUtil.pathAppend(
+				_sdkPluginLocation, ISDKConstants.TARGET_CREATE, String.valueOf(System.currentTimeMillis()));
 
 			properties.put(ISDKConstants.PROPERTY_EXT_PARENT_DIR, tempPath.toOSString());
 
@@ -329,8 +325,8 @@ public class SDK {
 
 			// create a space for new portlet template to get built
 
-			IPath newHookPath = _sdkPluginLocation.append(
-				ISDKConstants.TARGET_CREATE).append(String.valueOf(System.currentTimeMillis()));
+			IPath newHookPath = FileUtil.pathAppend(
+				_sdkPluginLocation, ISDKConstants.TARGET_CREATE, String.valueOf(System.currentTimeMillis()));
 
 			properties.put(ISDKConstants.PROPERTY_HOOK_PARENT_DIR, newHookPath.toOSString());
 
@@ -365,8 +361,8 @@ public class SDK {
 
 			// create a space for new layouttpm template to get built
 
-			IPath newLayoutTplPath = _sdkPluginLocation.append(ISDKConstants.TARGET_CREATE).append(
-				String.valueOf(System.currentTimeMillis()));
+			IPath newLayoutTplPath = FileUtil.pathAppend(
+				_sdkPluginLocation, ISDKConstants.TARGET_CREATE, String.valueOf(System.currentTimeMillis()));
 
 			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_PARENT_DIR, newLayoutTplPath.toOSString());
 
@@ -402,8 +398,8 @@ public class SDK {
 
 			// create a space for new portlet template to get built
 
-			IPath newPortletPath = _sdkPluginLocation.append(
-				ISDKConstants.TARGET_CREATE).append(String.valueOf(System.currentTimeMillis()));
+			IPath newPortletPath = FileUtil.pathAppend(
+				_sdkPluginLocation, ISDKConstants.TARGET_CREATE, String.valueOf(System.currentTimeMillis()));
 
 			properties.put(ISDKConstants.PROPERTY_PORTLET_PARENT_DIR, newPortletPath.toOSString());
 
@@ -463,7 +459,7 @@ public class SDK {
 
 		createHelper.runTarget(createFilePath, arguments, workingDir);
 
-		if (!newPath.toFile().exists()) {
+		if (FileUtil.notExists(newPath)) {
 			throw new CoreException(SDKCorePlugin.createErrorStatus("Create script did not complete successfully."));
 		}
 
@@ -493,8 +489,8 @@ public class SDK {
 
 			// create a space for new portlet template to get built
 
-			IPath tempPath = _sdkPluginLocation.append(ISDKConstants.TARGET_CREATE).append(
-				String.valueOf(System.currentTimeMillis()));
+			IPath tempPath = FileUtil.pathAppend(
+				_sdkPluginLocation, ISDKConstants.TARGET_CREATE, String.valueOf(System.currentTimeMillis()));
 
 			properties.put(ISDKConstants.PROPERTY_THEME_PARENT_DIR, tempPath.toOSString());
 
@@ -529,8 +525,8 @@ public class SDK {
 
 			// create a space for new web template to get built
 
-			IPath newWebPath = _sdkPluginLocation.append(ISDKConstants.TARGET_CREATE).append(
-				String.valueOf(System.currentTimeMillis()));
+			IPath newWebPath = FileUtil.pathAppend(
+				_sdkPluginLocation, ISDKConstants.TARGET_CREATE, String.valueOf(System.currentTimeMillis()));
 
 			properties.put(ISDKConstants.PROPERTY_WEB_PARENT_DIR, newWebPath.toOSString());
 
@@ -567,7 +563,7 @@ public class SDK {
 				properties.putAll(overrideProperties);
 			}
 
-			IPath buildFile = project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation();
+			IPath buildFile = FileUtil.getRawLocation(project.getFile(ISDKConstants.PROJECT_BUILD_XML));
 
 			String workingDir = _getDefaultWorkingDir(buildFile);
 
@@ -586,7 +582,7 @@ public class SDK {
 		for (String antLib : ISDKConstants.ANT_LIBRARIES) {
 			IPath antLibPath = getLocation().append(antLib);
 
-			if (antLibPath.toFile().exists()) {
+			if (FileUtil.exists(antLibPath)) {
 				antLibs.add(antLibPath);
 			}
 		}
@@ -604,7 +600,7 @@ public class SDK {
 		Map<String, Object> sdkProperties = buildPropertiesCache.get(getLocation().toPortableString());
 
 		try {
-			if ((sdkProperties == null) || (reload == true)) {
+			if ((sdkProperties == null) || reload) {
 				_loadPropertiesFile(project, "build." + project.getProperty("user.name") + ".properties");
 				_loadPropertiesFile(project, "build." + project.getProperty("env.COMPUTERNAME") + ".properties");
 				_loadPropertiesFile(project, "build." + project.getProperty("env.HOST") + ".properties");
@@ -654,7 +650,7 @@ public class SDK {
 				sdkProperties = project.getProperties();
 
 				for (String propertyKey : appServerPropertiesKeys) {
-					if (!sdkProperties.keySet().contains(propertyKey)) {
+					if (ListUtil.notContains(sdkProperties.keySet(), propertyKey)) {
 						throw new CoreException(
 							SDKCorePlugin.createErrorStatus(
 								"Missing ${" + propertyKey + "} setting in build.properties file."));
@@ -679,11 +675,11 @@ public class SDK {
 
 			int compareVersions = CoreUtil.compareVersions(new Version(getVersion()), ILiferayConstants.V700);
 
-			if (sdkLibPath.toFile().exists() && (compareVersions >= 0)) {
+			if (FileUtil.exists(sdkLibPath) && (compareVersions >= 0)) {
 				List<File> libFiles = FileListing.getFileListing(new File(sdkLibPath.toOSString()));
 
 				for (File lib : libFiles) {
-					if (lib.exists() && lib.getName().endsWith(".jar")) {
+					if (lib.exists() && StringUtil.endsWith(lib.getName(), ".jar")) {
 						retval.add(new Path(lib.getPath()));
 					}
 				}
@@ -732,36 +728,36 @@ public class SDK {
 	}
 
 	public String getVersion() {
-		if (version == null) {
-			IPath sdkLocation = getLocation().makeAbsolute();
+		if (version != null) {
+			return version;
+		}
 
-			if (!sdkLocation.isEmpty()) {
-				try {
-					version = SDKUtil.readSDKVersion(sdkLocation.toOSString());
+		IPath sdkLocation = getLocation().makeAbsolute();
 
-					if (version != null) {
-						if (version.equals(ILiferayConstants.V611.toString())) {
-							Properties buildProperties = _getProperties(
-								sdkLocation.append("build.properties").toFile());
+		if (!sdkLocation.isEmpty()) {
+			try {
+				version = SDKUtil.readSDKVersion(sdkLocation.toOSString());
 
-							if (_hasAppServerSpecificProps(buildProperties)) {
-								version = ILiferayConstants.V612.toString();
-							}
+				if (version != null) {
+					if (version.equals(ILiferayConstants.V611.toString())) {
+						Properties buildProperties = _getProperties(sdkLocation.append("build.properties"));
+
+						if (_hasAppServerSpecificProps(buildProperties)) {
+							version = ILiferayConstants.V612.toString();
 						}
+					}
 
-						if (version.equals(ILiferayConstants.V6120.toString())) {
-							Properties buildProperties = _getProperties(
-								sdkLocation.append("build.properties").toFile());
+					if (version.equals(ILiferayConstants.V6120.toString())) {
+						Properties buildProperties = _getProperties(sdkLocation.append("build.properties"));
 
-							if (_hasAppServerSpecificProps(buildProperties)) {
-								version = ILiferayConstants.V6130.toString();
-							}
+						if (_hasAppServerSpecificProps(buildProperties)) {
+							version = ILiferayConstants.V6130.toString();
 						}
 					}
 				}
-				catch (Exception e) {
-					SDKCorePlugin.logError("Could not detect the sdk version.", e);
-				}
+			}
+			catch (Exception e) {
+				SDKCorePlugin.logError("Could not detect the sdk version.", e);
 			}
 		}
 
@@ -769,9 +765,7 @@ public class SDK {
 	}
 
 	public boolean hasProjectFile() {
-		File dotProjectFile = location.append(".project").toFile();
-
-		if ((location != null) && dotProjectFile.exists()) {
+		if ((location != null) && FileUtil.exists(location.append(".project"))) {
 			return true;
 		}
 
@@ -797,7 +791,7 @@ public class SDK {
 			return false;
 		}
 
-		if (!SDKUtil.isValidSDKLocation(sdkLocation.toOSString())) {
+		if (!SDKUtil.isValidSDKLocation(sdkLocation)) {
 			return false;
 		}
 
@@ -887,7 +881,7 @@ public class SDK {
 	public IStatus validate(boolean reload) {
 		MultiStatus status = new MultiStatus(SDKCorePlugin.PLUGIN_ID, IStatus.OK, "", null);
 
-		boolean validLocation = SDKUtil.isValidSDKLocation(getLocation().toOSString());
+		boolean validLocation = SDKUtil.isValidSDKLocation(getLocation());
 
 		IPath buildXmlLocation = getLocation().append("build.xml");
 
@@ -897,7 +891,7 @@ public class SDK {
 			return status;
 		}
 
-		if (!buildXmlLocation.toFile().exists()) {
+		if (FileUtil.notExists(buildXmlLocation)) {
 			status.add(SDKCorePlugin.createErrorStatus(Msgs.buildXmlFileNotExist));
 
 			return status;
@@ -952,7 +946,7 @@ public class SDK {
 					case "app.server.portal.dir":
 						IPath propertyPath = new Path(propertyValue);
 
-						if (!propertyPath.toFile().exists()) {
+						if (FileUtil.notExists(propertyPath)) {
 							String errorMessage = new String(
 								propertyKey + " is invalid. Please reconfigure Plugins SDK setting: " + propertyKey +
 									"=" + propertyValue);
@@ -991,7 +985,7 @@ public class SDK {
 				properties.putAll(overrideProperties);
 			}
 
-			IPath buildFile = project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation();
+			IPath buildFile = FileUtil.getRawLocation(project.getFile(ISDKConstants.PROJECT_BUILD_XML));
 
 			String workingDir = _getDefaultWorkingDir(buildFile);
 
@@ -1015,7 +1009,9 @@ public class SDK {
 		SDKHelper antHelper = new SDKHelper(this, monitor);
 
 		try {
-			IPath buildFile = project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation();
+			IFile file = project.getFile(ISDKConstants.PROJECT_BUILD_XML);
+
+			IPath buildFile = file.getRawLocation();
 
 			String workingDir = _getDefaultWorkingDir(buildFile);
 
@@ -1035,7 +1031,9 @@ public class SDK {
 	protected String version;
 
 	private String[] _getAntHomeVMArg() {
-		AntCorePreferences prefs = AntCorePlugin.getPlugin().getPreferences();
+		AntCorePlugin antCorePlugin = AntCorePlugin.getPlugin();
+
+		AntCorePreferences prefs = antCorePlugin.getPreferences();
 
 		String antHome = prefs.getAntHome();
 
@@ -1047,7 +1045,7 @@ public class SDK {
 	}
 
 	private String _getDefaultWorkingDir(IPath buildFile) {
-		return buildFile.removeLastSegments(1).toOSString();
+		return FileUtil.toOSString(buildFile.removeLastSegments(1));
 	}
 
 	private String _getPluginSuffix(String type) {
@@ -1087,6 +1085,10 @@ public class SDK {
 		return properties;
 	}
 
+	private Properties _getProperties(IPath location) {
+		return _getProperties(location.toFile());
+	}
+
 	private Project _getSDKAntProject() {
 		Project project = new Project();
 
@@ -1114,7 +1116,9 @@ public class SDK {
 		Enumeration<?> names = props.propertyNames();
 
 		while (names.hasMoreElements()) {
-			String name = names.nextElement().toString();
+			Object o = names.nextElement();
+
+			String name = o.toString();
 
 			if (name.matches("app.server.tomcat.*")) {
 				return true;

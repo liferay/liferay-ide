@@ -112,14 +112,16 @@ public class SDKCorePlugin extends Plugin {
 
 		};
 
-		SDKManager.getInstance().addSDKListener(_sdkListener);
+		SDKManager sdkManager = SDKManager.getInstance();
+
+		sdkManager.addSDKListener(_sdkListener);
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		IPath sdkPluginLocation = getDefault().getStateLocation();
 
-		File createDir = sdkPluginLocation.append("create").toFile();
+		File createDir = FileUtil.getFile(sdkPluginLocation.append("create"));
 
 		if (createDir.exists()) {
 			FileUtil.deleteDir(createDir, true);
@@ -131,7 +133,7 @@ public class SDKCorePlugin extends Plugin {
 
 	private void _addSDKToMemento(SDK sdk, IMemento memento) {
 		memento.putString("name", sdk.getName());
-		memento.putString("location", sdk.getLocation().toPortableString());
+		memento.putString("location", FileUtil.toPortableString(sdk.getLocation()));
 		memento.putBoolean("default", sdk.isDefault());
 	}
 
@@ -143,9 +145,13 @@ public class SDKCorePlugin extends Plugin {
 
 	private synchronized void _saveGlobalSDKSettings(SDK[] sdks) {
 		try {
-			LiferayCore.GLOBAL_SETTINGS_PATH.toFile().mkdirs();
+			IPath globalSettingsPath = LiferayCore.GLOBAL_SETTINGS_PATH;
 
-			File sdkGlobalFile = LiferayCore.GLOBAL_SETTINGS_PATH.append("sdks.xml").toFile();
+			File settingsFile = globalSettingsPath.toFile();
+
+			settingsFile.mkdirs();
+
+			File sdkGlobalFile = FileUtil.getFile(globalSettingsPath.append("sdks.xml"));
 
 			Set<IMemento> existing = new HashSet<>();
 
@@ -161,13 +167,15 @@ public class SDKCorePlugin extends Plugin {
 								for (IMemento child : children) {
 									IPath loc = Path.fromPortableString(child.getString("location"));
 
-									if ((loc != null) && loc.toFile().exists()) {
+									if (FileUtil.exists(loc)) {
 										boolean duplicate = false;
 
 										for (SDK sdk : sdks) {
 											IPath sdkLocation = sdk.getLocation();
 
-											if (sdkLocation.toFile().equals(loc.toFile())) {
+											File file = sdkLocation.toFile();
+
+											if (file.equals(loc.toFile())) {
 												duplicate = true;
 
 												break;

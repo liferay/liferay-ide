@@ -32,6 +32,7 @@ import java.io.RandomAccessFile;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
+import java.net.URI;
 import java.net.URL;
 
 import java.nio.file.Files;
@@ -265,6 +266,16 @@ public class FileUtil {
 		return false;
 	}
 
+	public static boolean exists(IPath path, String... subpaths) {
+		if (path != null) {
+			path = pathAppend(path, subpaths);
+
+			return exists(path);
+		}
+
+		return false;
+	}
+
 	public static boolean exists(IProject project) {
 		if ((project != null) && project.exists()) {
 			return true;
@@ -279,6 +290,23 @@ public class FileUtil {
 		}
 
 		return false;
+	}
+
+	public static File getCanonicalFile(IPath location) {
+		if (location == null) {
+			return null;
+		}
+
+		File file = location.toFile();
+
+		try {
+			return file.getCanonicalFile();
+		}
+		catch (IOException ioe) {
+			LiferayCore.logWarning(ioe);
+		}
+
+		return null;
 	}
 
 	public static File[] getDirectories(File directory) {
@@ -311,6 +339,16 @@ public class FileUtil {
 		return path.toFile();
 	}
 
+	public static File getFile(IProject project) {
+		if (notExists(project)) {
+			return null;
+		}
+
+		IPath location = project.getLocation();
+
+		return location.toFile();
+	}
+
 	public static File getFile(URL url) {
 		if (url == null) {
 			return null;
@@ -336,8 +374,16 @@ public class FileUtil {
 	}
 
 	public static String getLastSegment(IPath path) {
+		return getLastSegment(path, false);
+	}
+
+	public static String getLastSegment(IPath path, boolean removeFileExtension) {
 		if (path == null) {
 			return null;
+		}
+
+		if (removeFileExtension) {
+			path.removeFileExtension();
 		}
 
 		return path.lastSegment();
@@ -373,6 +419,50 @@ public class FileUtil {
 		}
 
 		return toPortableString(folder.getLocation());
+	}
+
+	public static String getLocationPortableString(IResource resource) {
+		if (resource == null) {
+			return null;
+		}
+
+		return toPortableString(resource.getLocation());
+	}
+
+	public static IPath getRawLocation(IContainer container) {
+		if (container == null) {
+			return null;
+		}
+
+		return container.getRawLocation();
+	}
+
+	public static IPath getRawLocation(IFile file) {
+		if (file == null) {
+			return null;
+		}
+
+		return file.getRawLocation();
+	}
+
+	public static String getRawLocationOSString(IContainer container) {
+		if (container == null) {
+			return null;
+		}
+
+		IPath location = container.getRawLocation();
+
+		return location.toOSString();
+	}
+
+	public static String getRawLocationOSString(IFile file) {
+		if (file == null) {
+			return null;
+		}
+
+		IPath location = file.getRawLocation();
+
+		return location.toOSString();
 	}
 
 	public static IContainer getWorkspaceContainer(File file) {
@@ -480,6 +570,26 @@ public class FileUtil {
 				}
 			}
 		}
+	}
+
+	public static boolean nameEndsWith(File file, String suffix) {
+		if (file == null) {
+			return false;
+		}
+
+		String name = file.getName();
+
+		return name.endsWith(suffix);
+	}
+
+	public static boolean nameEndsWith(IResource resource, String suffix) {
+		if ((resource == null) || (suffix == null)) {
+			return false;
+		}
+
+		String name = resource.getName();
+
+		return name.endsWith(suffix);
 	}
 
 	public static boolean notExists(File file) {
@@ -778,6 +888,24 @@ public class FileUtil {
 		}
 
 		return path.toPortableString();
+	}
+
+	public static URI toURI(File file) {
+		if (file == null) {
+			return null;
+		}
+
+		return file.toURI();
+	}
+
+	public static URI toURI(IPath path) {
+		if (path == null) {
+			return null;
+		}
+
+		File file = path.toFile();
+
+		return file.toURI();
 	}
 
 	public static void validateEdit(IFile... files) throws CoreException {

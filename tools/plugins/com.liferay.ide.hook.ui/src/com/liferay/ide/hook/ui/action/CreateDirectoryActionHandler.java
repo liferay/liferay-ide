@@ -18,8 +18,11 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.ui.HookUI;
+
+import java.io.File;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -29,6 +32,7 @@ import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.PropertyEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
@@ -89,11 +93,11 @@ public class CreateDirectoryActionHandler extends PropertyEditorActionHandler {
 			Property property = part.property();
 			Element element = part.getModelElement();
 
-			if ((property.definition() instanceof ValueProperty) && (element != null) &&
-				property.definition().isOfType(Path.class)) {
+			PropertyDef propertyDef = property.definition();
 
-				ValidFileSystemResourceType typeAnnotation =
-					property.definition().getAnnotation(ValidFileSystemResourceType.class);
+			if ((propertyDef instanceof ValueProperty) && (element != null) && propertyDef.isOfType(Path.class)) {
+				ValidFileSystemResourceType typeAnnotation = propertyDef.getAnnotation(
+					ValidFileSystemResourceType.class);
 
 				if ((typeAnnotation != null) && (typeAnnotation.value() == FileSystemResourceType.FOLDER)) {
 					return true;
@@ -119,7 +123,11 @@ public class CreateDirectoryActionHandler extends PropertyEditorActionHandler {
 
 			Path absolutePath = service.convertToAbsolute(path);
 
-			enabled = (absolutePath != null) && (!absolutePath.toFile().exists());
+			if (absolutePath != null) {
+				File file = absolutePath.toFile();
+
+				enabled = !file.exists();
+			}
 		}
 
 		return enabled;
@@ -134,10 +142,10 @@ public class CreateDirectoryActionHandler extends PropertyEditorActionHandler {
 
 			CustomJspDir customJspDir = (CustomJspDir)element;
 
-			Path customJspDirValue = customJspDir.getValue().content(false);
+			Path customJspDirValue = SapphireUtil.getContent(customJspDir.getValue(), false);
 
 			if (customJspDirValue == null) {
-				customJspDirValue = customJspDir.getValue().content(true);
+				customJspDirValue = SapphireUtil.getContent(customJspDir.getValue());
 
 				customJspDir.setValue(customJspDirValue);
 			}

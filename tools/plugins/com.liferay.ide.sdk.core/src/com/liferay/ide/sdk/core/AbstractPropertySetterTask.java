@@ -56,7 +56,7 @@ public abstract class AbstractPropertySetterTask extends Task {
 
 	protected void validate() {
 		if (_property == null) {
-			throw new BuildException("You must specify a property to set.");
+			throw new BuildException("You must specify a property to set");
 		}
 	}
 

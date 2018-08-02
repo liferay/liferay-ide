@@ -56,7 +56,7 @@ public class AntPropertyCopy extends AbstractPropertySetterTask {
 		super.validate();
 
 		if (_from == null) {
-			throw new BuildException("Missing the 'from' attribute.");
+			throw new BuildException("Missing the 'from' attribute");
 		}
 	}
 

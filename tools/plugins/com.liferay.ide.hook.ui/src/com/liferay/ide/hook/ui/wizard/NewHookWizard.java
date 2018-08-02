@@ -19,9 +19,11 @@ import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.core.operation.NewHookDataModelProvider;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.lang.reflect.InvocationTargetException;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -33,7 +35,6 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
@@ -194,9 +195,7 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 
 					public void run() {
 						try {
-							IWorkbench workbench = PlatformUI.getWorkbench();
-
-							IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
+							IWorkbenchPage page = UIUtil.getActivePage();
 
 							IDE.openEditor(page, file, true);
 						}
@@ -226,17 +225,20 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 		Set<IFile> jspFiles = (Set<IFile>)getDataModel().getProperty(CUSTOM_JSPS_FILES_CREATED);
 
 		if (ListUtil.isNotEmpty(jspFiles)) {
-			openWebFile(jspFiles.iterator().next()); // just open the first one
+			Iterator<IFile> iterator = jspFiles.iterator();
+
+			// just open the first one
+
+			openWebFile(iterator.next());
 		}
 
 		Set<IFile> languagePropertiesFiles = (Set<IFile>)getDataModel().getProperty(LANGUAGE_PROPERTIES_FILES_CREATED);
 
 		if (ListUtil.isNotEmpty(languagePropertiesFiles)) {
-			openWebFile(languagePropertiesFiles.iterator().next()); // just
+			Iterator<IFile> iterator = languagePropertiesFiles.iterator();
 
-			// openthe
-			// first one
-
+			 // just openthe first one
+			openWebFile(iterator.next());
 		}
 	}
 

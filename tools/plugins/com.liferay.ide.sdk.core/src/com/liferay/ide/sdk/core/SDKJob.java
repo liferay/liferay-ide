@@ -15,8 +15,6 @@
 package com.liferay.ide.sdk.core;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.jobs.Job;
 
@@ -42,23 +40,23 @@ public abstract class SDKJob extends Job {
 
 		// try to determine SDK based on project location
 
-		IPath sdkLocation = this.project.getRawLocation().removeLastSegments(2);
+		IPath rawLocation = project.getRawLocation();
 
-		retval = SDKManager.getInstance().getSDK(sdkLocation);
+		IPath sdkLocation = rawLocation.removeLastSegments(2);
+
+		SDKManager sdkManager = SDKManager.getInstance();
+
+		retval = sdkManager.getSDK(sdkLocation);
 
 		if (retval == null) {
 			retval = SDKUtil.createSDKFromLocation(sdkLocation);
 
 			if ((retval != null) && retval.isValid()) {
-				SDKManager.getInstance().addSDK(retval);
+				sdkManager.addSDK(retval);
 			}
 		}
 
 		return retval;
-	}
-
-	protected IWorkspace getWorkspace() {
-		return ResourcesPlugin.getWorkspace();
 	}
 
 	protected void setProject(IProject project) {

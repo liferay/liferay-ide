@@ -54,12 +54,14 @@ public class SDKClasspathProvider extends AntClasspathProvider {
 
 			Collections.addAll(newEntries, superEntries);
 
-			AntCorePreferences prefs = AntCorePlugin.getPlugin().getPreferences();
+			AntCorePlugin antCorePlugin = AntCorePlugin.getPlugin();
+
+			AntCorePreferences prefs = antCorePlugin.getPreferences();
 
 			IAntClasspathEntry[] antClasspathEntries = prefs.getContributedClasspathEntries();
 
-			for (int i = 0; i < antClasspathEntries.length; i++) {
-				newEntries.add(JavaRuntime.newStringVariableClasspathEntry(antClasspathEntries[i].getLabel()));
+			for (IAntClasspathEntry antClasspathEntry : antClasspathEntries) {
+				newEntries.add(JavaRuntime.newStringVariableClasspathEntry(antClasspathEntry.getLabel()));
 			}
 
 			retval = newEntries.toArray(new IRuntimeClasspathEntry[0]);

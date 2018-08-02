@@ -23,6 +23,22 @@ import java.util.Set;
  */
 public class ListUtil {
 
+	public static boolean contains(List<?> list, Object o) {
+		if ((list == null) || (o == null)) {
+			return false;
+		}
+
+		return list.contains(o);
+	}
+
+	public static boolean contains(Set<?> set, Object o) {
+		if ((set == null) || (o == null)) {
+			return false;
+		}
+
+		return set.contains(o);
+	}
+
 	public static boolean isEmpty(Collection<?> collection) {
 		if ((collection == null) || collection.isEmpty()) {
 			return true;
@@ -69,6 +85,10 @@ public class ListUtil {
 
 	public static boolean isNotEmpty(Set<?> set) {
 		return !isEmpty(set);
+	}
+
+	public static boolean notContains(Set<?> set, Object o) {
+		return !contains(set, o);
 	}
 
 }

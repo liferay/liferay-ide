@@ -30,11 +30,11 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
@@ -95,11 +95,11 @@ public class CreateSrcFileActionHandler extends PropertyEditorActionHandler {
 			Property property = part.property();
 			Element element = part.getModelElement();
 
-			if ((property.definition() instanceof ValueProperty) && (element != null) &&
-				property.definition().isOfType(Path.class)) {
+			PropertyDef propertyDef = property.definition();
 
-				ValidFileSystemResourceType typeAnnotation =
-					property.definition().getAnnotation(ValidFileSystemResourceType.class);
+			if ((propertyDef instanceof ValueProperty) && (element != null) && propertyDef.isOfType(Path.class)) {
+				ValidFileSystemResourceType typeAnnotation = propertyDef.getAnnotation(
+					ValidFileSystemResourceType.class);
 
 				if ((typeAnnotation != null) && (typeAnnotation.value() == FileSystemResourceType.FILE)) {
 					return true;
@@ -135,7 +135,9 @@ public class CreateSrcFileActionHandler extends PropertyEditorActionHandler {
 		List<IFolder> folders = CoreUtil.getSourceFolders(JavaCore.create(project));
 
 		if (ListUtil.isNotEmpty(folders)) {
-			return folders.get(0).getFullPath();
+			IFolder folder = folders.get(0);
+
+			return folder.getFullPath();
 		}
 
 		return null;
@@ -154,7 +156,7 @@ public class CreateSrcFileActionHandler extends PropertyEditorActionHandler {
 			if (defaultSrcFolderPath != null) {
 				IPath filePath = defaultSrcFolderPath.append(value.text());
 
-				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+				IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
 
 				retval = root.getFile(filePath);
 			}

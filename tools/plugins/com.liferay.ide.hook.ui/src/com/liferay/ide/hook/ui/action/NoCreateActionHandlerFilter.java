@@ -14,6 +14,8 @@
 
 package com.liferay.ide.hook.ui.action;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireActionHandlerFilter;
 
@@ -24,7 +26,7 @@ public class NoCreateActionHandlerFilter extends SapphireActionHandlerFilter {
 
 	@Override
 	public boolean check(SapphireActionHandler handler) {
-		return !(handler.getId().contains("Sapphire.Create.Java"));
+		return !(StringUtil.contains(handler.getId(), "Sapphire.Create.Java"));
 	}
 
 }

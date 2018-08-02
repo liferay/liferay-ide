@@ -17,8 +17,10 @@ package com.liferay.ide.hook.ui.action;
 import com.liferay.ide.hook.ui.HookUI;
 
 import java.util.EnumSet;
+import java.util.Iterator;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
@@ -29,6 +31,7 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.java.JavaTypeConstraintService;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.modeling.CapitalizationType;
@@ -62,7 +65,9 @@ public final class HierarchyJavaTypeBrowseActionHandler extends BrowseActionHand
 			int count = kinds.size();
 
 			if (count == 1) {
-				JavaTypeKind kind = kinds.iterator().next();
+				Iterator<JavaTypeKind> iterator = kinds.iterator();
+
+				JavaTypeKind kind = iterator.next();
 
 				switch (kind) {
 					case CLASS:
@@ -102,7 +107,9 @@ public final class HierarchyJavaTypeBrowseActionHandler extends BrowseActionHand
 
 			IJavaSearchScope scope = null;
 
-			IType type = JavaCore.create(project).findType(_typeName);
+			IJavaProject javaProject = JavaCore.create(project);
+
+			IType type = javaProject.findType(_typeName);
 
 			if (type != null) {
 				scope = SearchEngine.createHierarchyScope(type);
@@ -113,7 +120,9 @@ public final class HierarchyJavaTypeBrowseActionHandler extends BrowseActionHand
 			SelectionDialog dlg = JavaUI.createTypeDialog(
 				swt.shell(), null, scope, browseDialogStyle, false, _filter, null);
 
-			String title = property.definition().getLabel(true, CapitalizationType.TITLE_STYLE, false);
+			PropertyDef propertyDef = property.definition();
+
+			String title = propertyDef.getLabel(true, CapitalizationType.TITLE_STYLE, false);
 
 			dlg.setTitle(Msgs.select + title);
 

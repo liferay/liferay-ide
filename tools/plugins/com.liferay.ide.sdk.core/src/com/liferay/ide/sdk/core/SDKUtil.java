@@ -34,7 +34,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ProjectScope;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
@@ -43,6 +42,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 
 import org.osgi.framework.Bundle;
@@ -58,10 +58,9 @@ public class SDKUtil {
 
 	public static int countPossibleWorkspaceSDKProjects() {
 		int sdkCount = 0;
-		IProject[] projects = CoreUtil.getAllProjects();
 
-		for (IProject project : projects) {
-			if (isValidSDKLocation(project.getLocation().toOSString())) {
+		for (IProject project : CoreUtil.getAllProjects()) {
+			if (isValidSDKProject(project)) {
 				sdkCount++;
 			}
 		}
@@ -71,7 +70,7 @@ public class SDKUtil {
 
 	public static SDK createSDKFromLocation(IPath path) {
 		try {
-			if (isValidSDKLocation(path.toOSString())) {
+			if (isValidSDKLocation(path)) {
 				SDK sdk = new SDK(path);
 
 				sdk.setName(path.lastSegment());
@@ -96,10 +95,12 @@ public class SDKUtil {
 			projectLocation = project.getLocation();
 		}
 
+		SDKManager sdkManager = SDKManager.getInstance();
+
 		if (projectLocation != null) {
 			IPath sdkLocation = projectLocation.removeLastSegments(2);
 
-			retval = SDKManager.getInstance().getSDK(sdkLocation);
+			retval = sdkManager.getSDK(sdkLocation);
 
 			if (retval == null) {
 				retval = createSDKFromLocation(sdkLocation);
@@ -107,7 +108,7 @@ public class SDKUtil {
 				if (retval != null) {
 					SDK newSDK = retval;
 
-					SDKManager.getInstance().addSDK(newSDK);
+					sdkManager.addSDK(newSDK);
 				}
 			}
 		}
@@ -115,29 +116,34 @@ public class SDKUtil {
 		if (retval == null) {
 
 			/**
-			 *  this means the sdk could not be determined by location (user is
-			 *using out-of-sdk style projects)
-			 *so we should check to see if the sdk name is persisted to the
-			 *project prefs
+			 * this means the sdk could not be determined by location (user is using
+			 * out-of-sdk style projects) so we should check to see if the sdk name is
+			 * persisted to the project prefs
 			 */
 			IScopeContext[] context = {new ProjectScope(project)};
 
-			String sdkName = Platform.getPreferencesService().getString(
+			IPreferencesService preferencesService = Platform.getPreferencesService();
+
+			String sdkName = preferencesService.getString(
 				SDKCorePlugin.PLUGIN_ID, SDKCorePlugin.PREF_KEY_SDK_NAME, null, context);
 
-			retval = SDKManager.getInstance().getSDK(sdkName);
+			retval = sdkManager.getSDK(sdkName);
 		}
 
 		return retval;
 	}
 
 	public static SDK getSDKFromProjectDir(File projectDir) {
-		File sdkDir = projectDir.getParentFile().getParentFile();
+		File parentFile = projectDir.getParentFile();
+
+		File sdkDir = parentFile.getParentFile();
 
 		if (sdkDir.exists() && isValidSDKLocation(sdkDir.getPath())) {
 			Path sdkLocation = new Path(sdkDir.getPath());
 
-			SDK existingSDK = SDKManager.getInstance().getSDK(sdkLocation);
+			SDKManager sdkManager = SDKManager.getInstance();
+
+			SDK existingSDK = sdkManager.getSDK(sdkLocation);
 
 			if (existingSDK != null) {
 				return existingSDK;
@@ -163,10 +169,9 @@ public class SDKUtil {
 
 	public static IProject getWorkspaceSDKProject() throws CoreException {
 		IProject retval = null;
-		IProject[] projects = CoreUtil.getAllProjects();
 
-		for (IProject project : projects) {
-			if (isValidSDKLocation(project.getLocation().toOSString())) {
+		for (IProject project : CoreUtil.getAllProjects()) {
+			if (isValidSDKProject(project)) {
 				if (retval != null) {
 					throw new CoreException(
 						SDKCorePlugin.createErrorStatus(
@@ -182,10 +187,9 @@ public class SDKUtil {
 
 	public static IProject[] getWorkspaceSDKs() {
 		List<IProject> sdkProjects = new ArrayList<>();
-		IProject[] projects = CoreUtil.getAllProjects();
 
-		for (IProject project : projects) {
-			if (isValidSDKLocation(project.getLocation().toOSString())) {
+		for (IProject project : CoreUtil.getAllProjects()) {
+			if (isValidSDKProject(project)) {
 				sdkProjects.add(project);
 			}
 		}
@@ -194,9 +198,7 @@ public class SDKUtil {
 	}
 
 	public static boolean hasGradleTools(IPath path) {
-		IPath gradleToolPath = path.append("tools").append("gradle");
-
-		return gradleToolPath.toFile().exists();
+		return FileUtil.exists(path, "tools", "gradle");
 	}
 
 	public static boolean isIvyProject(IProject project) {
@@ -242,11 +244,19 @@ public class SDKUtil {
 		return retval;
 	}
 
-	public static boolean isValidSDKLocation(String loc) {
+	public static boolean isValidSDKLocation(IPath location) {
+		if (location == null) {
+			return false;
+		}
+
+		return isValidSDKLocation(location.toOSString());
+	}
+
+	public static boolean isValidSDKLocation(String locaction) {
 		boolean retval = false;
 
 		try {
-			File sdkDir = new File(loc);
+			File sdkDir = new File(locaction);
 
 			File buildProperties = new File(sdkDir, ISDKConstants.BUILD_PROPERTIES);
 			File portletsBuildXml = new File(sdkDir, ISDKConstants.PORTLET_PLUGIN_ANT_BUILD);
@@ -261,6 +271,14 @@ public class SDKUtil {
 		}
 
 		return retval;
+	}
+
+	public static boolean isValidSDKProject(IProject project) {
+		if (project == null) {
+			return false;
+		}
+
+		return isValidSDKLocation(project.getLocation());
 	}
 
 	public static boolean isValidSDKVersion(String sdkVersion, Version lowestValidVersion) {
@@ -289,18 +307,19 @@ public class SDKUtil {
 	public static void openAsProject(SDK sdk, IProgressMonitor monitor) throws CoreException {
 		IProject sdkProject = CoreUtil.getProject(sdk.getName());
 
-		if ((sdkProject == null) || !sdkProject.exists()) {
-			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		if (FileUtil.notExists(sdkProject)) {
+			IWorkspace workspace = CoreUtil.getWorkspace();
 
-			IProjectDescription description = workspace.newProjectDescription(sdk.getLocation().lastSegment());
+			IProjectDescription description = workspace.newProjectDescription(
+				FileUtil.getLastSegment(sdk.getLocation()));
 
-			File sdkLocation = sdk.getLocation().toFile();
-
-			description.setLocationURI(sdkLocation.toURI());
+			description.setLocationURI(FileUtil.toURI(sdk.getLocation()));
 
 			sdkProject.create(description, monitor);
 
-			IPath settingFolderPath = sdkProject.getLocation().append(".settings");
+			IPath location = sdkProject.getLocation();
+
+			IPath settingFolderPath = location.append(".settings");
 
 			File settingFolder = settingFolderPath.toFile();
 
@@ -308,11 +327,11 @@ public class SDKUtil {
 				settingFolder.mkdir();
 			}
 
-			File settingFile = settingFolderPath.append("org.eclipse.wst.validation.prefs").toFile();
-
-			if (!settingFile.exists()) {
+			if (FileUtil.notExists(settingFolderPath.append("org.eclipse.wst.validation.prefs"))) {
 				try {
-					Bundle bundle = SDKCorePlugin.getDefault().getBundle();
+					SDKCorePlugin plugin = SDKCorePlugin.getDefault();
+
+					Bundle bundle = plugin.getBundle();
 
 					URL url = FileLocator.toFileURL(bundle.getEntry("files/org.eclipse.wst.validation.prefs"));
 
@@ -333,7 +352,7 @@ public class SDKUtil {
 
 		Path sdkPath = new Path(path);
 
-		File propertiesFile = sdkPath.append("build.properties").toFile();
+		File propertiesFile = FileUtil.getFile(sdkPath.append("build.properties"));
 
 		try (InputStream in = Files.newInputStream(propertiesFile.toPath())) {
 			properties.load(in);
