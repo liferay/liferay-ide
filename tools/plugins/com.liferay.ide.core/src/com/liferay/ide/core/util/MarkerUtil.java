@@ -21,8 +21,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Gregory Amerson
@@ -81,6 +83,26 @@ public class MarkerUtil {
 		}
 
 		return retval.toArray(new IMarker[0]);
+	}
+
+	public static IProject getProject(IMarker marker) {
+		if (marker == null) {
+			return null;
+		}
+
+		IResource resource = marker.getResource();
+
+		return resource.getProject();
+	}
+
+	public static IPath getProjectRelativePath(IMarker marker) {
+		if (marker == null) {
+			return null;
+		}
+
+		IResource resource = marker.getResource();
+
+		return resource.getProjectRelativePath();
 	}
 
 	public static void setMarker(
