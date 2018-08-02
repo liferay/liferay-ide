@@ -28,6 +28,8 @@ public class BundlesImages {
 
 	public static final Image IMG_BUNDLE_ERROR = _createImage("e16/bundle_error.png");
 
+	public static final Image IMG_BUNDLE_WARNING = _createImage("e16/bundle_warning.png");
+
 	public static final Image IMG_BUNDLES_FOLDER = _createImage("e16/bundlefolder.png");
 
 	public static final Image IMG_LOADING = _createImage("e16/waiting_16x16.gif");

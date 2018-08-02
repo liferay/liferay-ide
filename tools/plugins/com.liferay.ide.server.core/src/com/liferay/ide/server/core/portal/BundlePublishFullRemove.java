@@ -66,6 +66,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation {
 						new IModule[] {module}, IServer.PUBLISH_STATE_NONE);
 
 					project.deleteMarkers(LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0);
+					project.deleteMarkers(LiferayServerCore.BUNDLE_OUTPUT_WARNING_MARKER_TYPE, false, 0);
 				}
 			}
 			else {

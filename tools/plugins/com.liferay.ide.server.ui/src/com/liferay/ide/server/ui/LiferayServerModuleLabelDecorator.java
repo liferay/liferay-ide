@@ -79,10 +79,16 @@ public class LiferayServerModuleLabelDecorator extends ModuleLabelDecorator {
 				return null;
 			}
 
-			IMarker[] markers = project.findMarkers(LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0);
+			IMarker[] errorMarkers = project.findMarkers(LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0);
 
-			if (ListUtil.isNotEmpty(markers)) {
+			IMarker[] warningMarkers = project.findMarkers(
+				LiferayServerCore.BUNDLE_OUTPUT_WARNING_MARKER_TYPE, false, 0);
+
+			if (ListUtil.isNotEmpty(errorMarkers)) {
 				bundleImage = BundlesImages.IMG_BUNDLE_ERROR;
+			}
+			else if (ListUtil.isNotEmpty(warningMarkers)) {
+				bundleImage = BundlesImages.IMG_BUNDLE_WARNING;
 			}
 
 			IWorkbench workbench = PlatformUI.getWorkbench();

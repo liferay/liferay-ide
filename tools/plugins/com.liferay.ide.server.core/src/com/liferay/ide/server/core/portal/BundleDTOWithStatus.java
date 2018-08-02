@@ -14,6 +14,8 @@
 
 package com.liferay.ide.server.core.portal;
 
+import org.eclipse.core.runtime.IStatus;
+
 import org.osgi.framework.dto.BundleDTO;
 
 /**
@@ -22,7 +24,7 @@ import org.osgi.framework.dto.BundleDTO;
  */
 public class BundleDTOWithStatus extends BundleDTO {
 
-	public BundleDTOWithStatus(BundleDTO original, String status) {
+	public BundleDTOWithStatus(BundleDTO original, IStatus status) {
 		id = original.id;
 		lastModified = original.lastModified;
 		state = original.state;
@@ -31,12 +33,12 @@ public class BundleDTOWithStatus extends BundleDTO {
 		this.status = status;
 	}
 
-	public BundleDTOWithStatus(long id, String status, String symbolicName) {
+	public BundleDTOWithStatus(long id, IStatus status, String symbolicName) {
 		this.id = id;
 		this.status = status;
 		this.symbolicName = symbolicName;
 	}
 
-	public String status;
+	public IStatus status;
 
 }

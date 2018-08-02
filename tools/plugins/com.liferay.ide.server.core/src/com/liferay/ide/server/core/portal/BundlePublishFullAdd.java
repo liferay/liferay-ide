@@ -101,16 +101,20 @@ public class BundlePublishFullAdd extends BundlePublishOperation {
 				retval = LiferayServerCore.error("Unable to get bundle project for " + project.getName());
 			}
 
+			project.deleteMarkers(LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0);
+			project.deleteMarkers(LiferayServerCore.BUNDLE_OUTPUT_WARNING_MARKER_TYPE, false, 0);
+
 			if (retval.isOK()) {
 				portalServerBehavior.setModulePublishState2(new IModule[] {module}, IServer.PUBLISH_STATE_NONE);
-
-				project.deleteMarkers(LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0);
+			}
+			else if (retval.getSeverity() == IStatus.WARNING) {
+				portalServerBehavior.setModulePublishState2(new IModule[] {module}, IServer.PUBLISH_STATE_NONE);
+				project.createMarker(LiferayServerCore.BUNDLE_OUTPUT_WARNING_MARKER_TYPE);
+				LiferayServerCore.logError(retval);
 			}
 			else {
 				portalServerBehavior.setModulePublishState2(new IModule[] {module}, IServer.PUBLISH_STATE_NONE);
-
 				project.createMarker(LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE);
-
 				LiferayServerCore.logError(retval);
 			}
 		}
@@ -183,7 +187,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation {
 				if (deployed instanceof BundleDTOWithStatus) {
 					BundleDTOWithStatus withStatus = (BundleDTOWithStatus)deployed;
 
-					retval = LiferayServerCore.error("Problem with deploying bundle: " + withStatus.status);
+					retval = withStatus.status;
 				}
 				else {
 					retval = new Status(IStatus.OK, LiferayServerCore.PLUGIN_ID, (int)deployed.id, null, null);
