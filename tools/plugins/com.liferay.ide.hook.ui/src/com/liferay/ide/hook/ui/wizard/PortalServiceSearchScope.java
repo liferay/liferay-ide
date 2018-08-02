@@ -14,6 +14,8 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaElement;
@@ -33,7 +35,7 @@ public class PortalServiceSearchScope implements IJavaSearchScope {
 
 			if (elementPath != null) {
 				for (IPath enclosingJar : enclosingJars) {
-					if (elementPath.lastSegment().equals(enclosingJar.lastSegment())) {
+					if (StringUtil.equals(elementPath.lastSegment(), enclosingJar.lastSegment())) {
 						return true;
 					}
 				}
@@ -48,7 +50,9 @@ public class PortalServiceSearchScope implements IJavaSearchScope {
 
 		if (path != null) {
 			for (String pattern : resourcePatterns) {
-				if (path.toPortableString().matches(pattern)) {
+				String s = path.toPortableString();
+
+				if (s.matches(pattern)) {
 					return true;
 				}
 			}

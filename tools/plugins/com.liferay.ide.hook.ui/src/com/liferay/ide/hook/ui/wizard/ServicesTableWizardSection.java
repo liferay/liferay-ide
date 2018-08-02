@@ -18,16 +18,19 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSection;
 import com.liferay.ide.ui.dialog.FilteredTypesSelectionDialogEx;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaConventions;
@@ -60,7 +63,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
@@ -104,7 +106,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 		public Control createDialogArea(Composite parent) {
 			super.createDialogArea(parent);
 
-			ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+			ISharedImages sharedImages = UIUtil.getSharedImages();
 
 			errorMessageLabel = new CLabel(parent, SWT.LEFT_TO_RIGHT);
 
@@ -120,7 +122,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 			boolean serviceTypeValid = false;
 			boolean implClassValid = false;
 
-			String text0 = texts[0].getText().trim();
+			String text0 = StringUtil.trim(texts[0].getText());
 
 			if (text0.length() > 0) {
 				IStatus status = JavaConventions.validateJavaTypeName(
@@ -131,7 +133,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 				serviceTypeValid = (serviceTypeStatus != IStatus.ERROR) ? true : false;
 			}
 
-			String text1 = texts[1].getText().trim();
+			String text1 = StringUtil.trim(texts[1].getText());
 
 			if (text1.length() > 0) {
 				IStatus status = JavaConventions.validateJavaTypeName(
@@ -277,7 +279,9 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 				if (serviceType.endsWith("Service")) {
 					String wrapperType = serviceType + "Wrapper";
 
-					scope = BasicSearchEngine.createHierarchyScope(packRoot.getJavaProject().findType(wrapperType));
+					IJavaProject javaProject = packRoot.getJavaProject();
+
+					scope = BasicSearchEngine.createHierarchyScope(javaProject.findType(wrapperType));
 				}
 			}
 			catch (JavaModelException jme) {
@@ -357,7 +361,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 		public Control createDialogArea(Composite parent) {
 			super.createDialogArea(parent);
 
-			ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+			ISharedImages sharedImages = UIUtil.getSharedImages();
 
 			errorMessageLabel = new CLabel(parent, SWT.LEFT_TO_RIGHT);
 
@@ -373,7 +377,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 			boolean serviceTypeValid = false;
 			boolean implClassValid = false;
 
-			String text0 = texts[0].getText().trim();
+			String text0 = StringUtil.trim(texts[0].getText());
 
 			if (text0.length() > 0) {
 				IStatus status = JavaConventions.validateJavaTypeName(
@@ -384,7 +388,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 				serviceTypeValid = (serviceTypeStatus != IStatus.ERROR) ? true : false;
 			}
 
-			String text1 = texts[1].getText().trim();
+			String text1 = StringUtil.trim(texts[1].getText());
 
 			if (text1.length() > 0) {
 				IStatus status = JavaConventions.validateJavaTypeName(

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.hook.ui;
 
+import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -48,11 +49,15 @@ public class HookCustomJspValidationResolution implements IMarkerResolution2 {
 	}
 
 	public Image getImage() {
-		Bundle bundle = HookUI.getDefault().getBundle();
+		HookUI hookUI = HookUI.getDefault();
+
+		Bundle bundle = hookUI.getBundle();
 
 		URL url = bundle.getEntry("/icons/e16/disabled.png");
 
-		return ImageDescriptor.createFromURL(url).createImage();
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
+
+		return imageDescriptor.createImage();
 	}
 
 	public String getLabel() {
@@ -60,7 +65,7 @@ public class HookCustomJspValidationResolution implements IMarkerResolution2 {
 	}
 
 	public void run(IMarker marker) {
-		IProject project = marker.getResource().getProject();
+		IProject project = MarkerUtil.getProject(marker);
 
 		IPath customJspPath = HookUtil.getCustomJspPath(project);
 

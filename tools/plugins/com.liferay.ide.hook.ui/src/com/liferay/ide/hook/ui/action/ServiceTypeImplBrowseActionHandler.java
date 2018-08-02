@@ -14,7 +14,9 @@
 
 package com.liferay.ide.hook.ui.action;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.hook.core.model.ServiceWrapper;
 import com.liferay.ide.hook.ui.HookUI;
 
@@ -34,6 +36,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.ui.Presentation;
@@ -72,8 +75,8 @@ public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandle
 						return new ITypeInfoFilterExtension() {
 
 							public boolean select(ITypeInfoRequestor typeInfoRequestor) {
-								if (typeInfoRequestor.getPackageName().startsWith("com.liferay") &&
-									typeInfoRequestor.getTypeName().endsWith("Service")) {
+								if (StringUtil.startsWith(typeInfoRequestor.getPackageName(), "com.liferay") &&
+									StringUtil.endsWith(typeInfoRequestor.getTypeName(), "Service")) {
 
 									return true;
 								}
@@ -92,7 +95,9 @@ public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandle
 				if (serviceType != null) {
 					String wrapperType = serviceType + "Wrapper";
 
-					scope = SearchEngine.createHierarchyScope(JavaCore.create(project).findType(wrapperType));
+					IJavaProject javaProject = JavaCore.create(project);
+
+					scope = SearchEngine.createHierarchyScope(javaProject.findType(wrapperType));
 				}
 				else {
 					Shell shell = ((SwtPresentation)context).shell();
@@ -108,7 +113,9 @@ public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandle
 			SelectionDialog dlg = JavaUI.createTypeDialog(
 				shell, null, scope, _browseDialogStyle, false, StringPool.DOUBLE_ASTERISK, extension);
 
-			String title = property.definition().getLabel(true, CapitalizationType.TITLE_STYLE, false);
+			PropertyDef propertyDef = property.definition();
+
+			String title = propertyDef.getLabel(true, CapitalizationType.TITLE_STYLE, false);
 
 			dlg.setTitle(Msgs.select + title);
 
@@ -150,7 +157,7 @@ public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandle
 
 		ServiceWrapper service = element.nearest(ServiceWrapper.class);
 
-		JavaTypeName javaTypeName = service.getServiceType().content(false);
+		JavaTypeName javaTypeName = SapphireUtil.getContent(service.getServiceType(), false);
 
 		if (javaTypeName != null) {
 			retval = javaTypeName.qualified();

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.hook.ui;
 
+import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.util.HookUtil;
 
@@ -41,18 +42,19 @@ public class HookCustomJspValidationResolutionGenerator implements IMarkerResolu
 		boolean hasResolution = false;
 
 		try {
-			if ((marker.getAttribute(IMarker.SEVERITY) != null) &&
-				marker.getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_ERROR)) {
+			Object severity = marker.getAttribute(IMarker.SEVERITY);
 
+			if ((severity != null) && severity.equals(IMarker.SEVERITY_ERROR)) {
 				String validationId = (String)marker.getAttribute("ValidationId");
 
 				if (validationId.equalsIgnoreCase(HookCore.VALIDATOR_ID)) {
-					IProject project = marker.getResource().getProject();
+					IProject project = MarkerUtil.getProject(marker);
 
 					IPath customJspPath = HookUtil.getCustomJspPath(project);
 
 					if (customJspPath != null) {
-						IPath jspPath = marker.getResource().getProjectRelativePath();
+						IPath jspPath = MarkerUtil.getProjectRelativePath(marker);
+
 						IPath relativeCustomJspPath = customJspPath.makeRelativeTo(project.getFullPath());
 
 						if (relativeCustomJspPath.isPrefixOf(jspPath)) {

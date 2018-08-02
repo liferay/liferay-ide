@@ -99,8 +99,12 @@ public class PropertiesFilteredDialog extends FilteredElementTreeSelectionDialog
 				return true;
 			}
 
-			if ((element != null) && element.toString().matches(fixedPattern)) {
-				return true;
+			if (element != null) {
+				String s = element.toString();
+
+				if (s.matches(fixedPattern)) {
+					return true;
+				}
 			}
 
 			return false;

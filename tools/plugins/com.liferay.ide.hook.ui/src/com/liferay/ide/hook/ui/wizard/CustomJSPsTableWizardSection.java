@@ -16,6 +16,7 @@ package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSection;
 import com.liferay.ide.ui.wizard.ExternalFileSelectionDialog;
 
@@ -108,7 +109,7 @@ public class CustomJSPsTableWizardSection extends StringArrayTableWizardSection 
 			for (Object object : selected) {
 				IPath filePath = Path.fromOSString(((File)object).getPath());
 
-				addStringArray(new String[] {"/" + filePath.makeRelativeTo(rootPath).toPortableString()});
+				addStringArray(new String[] {"/" + FileUtil.toPortableString(filePath.makeRelativeTo(rootPath))});
 			}
 		}
 	}
@@ -170,7 +171,7 @@ public class CustomJSPsTableWizardSection extends StringArrayTableWizardSection 
 					}
 				}
 				else {
-					if (filePath.getFileExtension().contains("jsp")) {
+					if (StringUtil.contains(filePath.getFileExtension(), "jsp")) {
 						return true;
 					}
 				}
@@ -186,7 +187,7 @@ public class CustomJSPsTableWizardSection extends StringArrayTableWizardSection 
 				for (File file : files) {
 					IPath filePath = new Path(file.getPath());
 
-					if ((filePath.getFileExtension() != null) && filePath.getFileExtension().contains(ext)) {
+					if (StringUtil.contains(filePath.getFileExtension(), ext)) {
 						return true;
 					}
 				}

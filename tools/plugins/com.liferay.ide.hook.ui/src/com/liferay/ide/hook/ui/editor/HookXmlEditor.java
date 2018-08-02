@@ -21,6 +21,8 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.hook.core.model.CustomJsp;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.core.model.Hook;
@@ -29,10 +31,12 @@ import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.ui.util.UIUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 
 import java.nio.file.Files;
@@ -40,6 +44,7 @@ import java.nio.file.Files;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -105,9 +110,13 @@ public class HookXmlEditor extends SapphireEditorForXml {
 			ElementHandle<CustomJspDir> customJspDir = hook.getCustomJspDir();
 
 			if ((customJspDir != null) && !customJspDir.empty()) {
-				Value<Path> customJspPath = customJspDir.content().getValue();
+				CustomJspDir jspDir = customJspDir.content();
 
-				Path path = customJspPath.content().makeRelative();
+				Value<Path> customJspPath = jspDir.getValue();
+
+				Path path = customJspPath.content();
+
+				path = path.makeRelative();
 
 				String customeJspValue = path.toPortableString();
 
@@ -123,13 +132,19 @@ public class HookXmlEditor extends SapphireEditorForXml {
 		IEditorInput editorInput = getEditorInput();
 
 		if (editorInput instanceof FileEditorInput) {
-			return ((FileEditorInput)editorInput).getFile().getContents();
+			IFile file = ((FileEditorInput)editorInput).getFile();
+
+			return file.getContents();
 		}
 		else if (editorInput instanceof IStorageEditorInput) {
-			return ((IStorageEditorInput)editorInput).getStorage().getContents();
+			IStorage storage = ((IStorageEditorInput)editorInput).getStorage();
+
+			return storage.getContents();
 		}
 		else if (editorInput instanceof FileStoreEditorInput) {
-			URL url = ((FileStoreEditorInput)editorInput).getURI().toURL();
+			URI uri = ((FileStoreEditorInput)editorInput).getURI();
+
+			URL url = uri.toURL();
 
 			return url.openStream();
 		}
@@ -195,7 +210,9 @@ public class HookXmlEditor extends SapphireEditorForXml {
 		if (docFolder != null) {
 			IPath newPath = org.eclipse.core.runtime.Path.fromOSString(customerJspPath);
 
-			IPath pathValue = docFolder.getFullPath().append(newPath);
+			IPath fullPath = docFolder.getFullPath();
+
+			IPath pathValue = fullPath.append(newPath);
 
 			IFolder customJspFolder = project.getFolder(pathValue.makeRelativeTo(project.getFullPath()));
 
@@ -239,8 +256,9 @@ public class HookXmlEditor extends SapphireEditorForXml {
 
 			CustomJspDir customJspDirElement = element.content();
 
-			if ((customJspDirElement != null) && customJspDirElement.validation().ok()) {
-				Path customJspDir = customJspDirElement.getValue().content();
+			if (SapphireUtil.ok(customJspDirElement)) {
+				Path customJspDir = SapphireUtil.getContent(customJspDirElement.getValue());
+
 				IWebProject webproject = LiferayCore.create(IWebProject.class, getProject());
 
 				if (webproject != null) {
@@ -249,21 +267,24 @@ public class HookXmlEditor extends SapphireEditorForXml {
 					IFolder customJspFolder = defaultDocroot.getFolder(customJspDir.toPortableString());
 
 					for (CustomJsp customJsp : customJsps) {
-						String content = customJsp.getValue().content();
+						String content = SapphireUtil.getContent(customJsp.getValue());
 
 						if (!empty(content)) {
 							IFile customJspFile = customJspFolder.getFile(content);
 
-							if (!customJspFile.exists()) {
+							if (FileUtil.notExists(customJspFile)) {
 								IPath portalJsp = portalDir.append(content);
 
 								try {
 									CoreUtil.makeFolders((IFolder)customJspFile.getParent());
 
-									if (portalJsp.toFile().exists()) {
-										try(InputStream jspInputStream = 
-												Files.newInputStream(portalJsp.toFile().toPath())){
-											customJspFile.create(jspInputStream, true, null);											
+									if (FileUtil.exists(portalJsp)) {
+										File portalJspFile = portalJsp.toFile();
+
+										try (InputStream jspInputStream =
+												Files.newInputStream(portalJspFile.toPath())) {
+
+											customJspFile.create(jspInputStream, true, null);
 										}
 									}
 									else {

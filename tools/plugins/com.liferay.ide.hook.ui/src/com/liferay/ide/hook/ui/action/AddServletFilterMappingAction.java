@@ -15,10 +15,13 @@
 package com.liferay.ide.hook.ui.action;
 
 import com.liferay.ide.hook.core.model.Hook;
+import com.liferay.ide.hook.core.model.ServletFilterMapping;
 
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.SapphirePart;
 
 /**
  * @author Gregory Amerson
@@ -30,11 +33,15 @@ public class AddServletFilterMappingAction extends SapphireActionHandler {
 
 	@Override
 	protected Object run(Presentation context) {
-		Element element = context.part().getLocalModelElement();
+		SapphirePart part = context.part();
+
+		Element element = part.getLocalModelElement();
 
 		Hook hook = element.nearest(Hook.class);
 
-		return hook.getServletFilterMappings().insert();
+		ElementList<ServletFilterMapping> elementList = hook.getServletFilterMappings();
+
+		return elementList.insert();
 	}
 
 }
