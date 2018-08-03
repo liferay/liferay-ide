@@ -34,8 +34,9 @@ public class SelectActiveProfilesMarkerResolution extends AbstractProjectMarkerR
 	}
 
 	protected int promptUser(IProject project, NewLiferayPluginProjectOp op) {
-		Reference<DialogDef> dialogRef = DefinitionLoader.sdef(
-			NewLiferayPluginProjectWizard.class).dialog("SelectActiveProfiles");
+		DefinitionLoader definitionLoader = DefinitionLoader.sdef(NewLiferayPluginProjectWizard.class);
+
+		Reference<DialogDef> dialogRef = definitionLoader.dialog("SelectActiveProfiles");
 
 		SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), op, dialogRef);
 

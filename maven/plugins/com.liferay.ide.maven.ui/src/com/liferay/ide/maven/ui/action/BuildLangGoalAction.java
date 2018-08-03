@@ -32,7 +32,7 @@ public class BuildLangGoalAction extends MavenGoalAction {
 		}
 
 		if ((CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("1.0.11")) >= 0) &&
-			plugin.getArtifactId().equals(getPluginKey())) {
+			getPluginKey().equals(plugin.getArtifactId())) {
 
 			return "lang-builder:build";
 		}

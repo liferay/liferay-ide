@@ -35,6 +35,7 @@ import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchListener;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.eclipse.m2e.core.internal.IMavenConstants;
@@ -103,7 +104,13 @@ public class MavenUIProjectBuilder extends MavenProjectBuilder {
 
 		IStatus retval = Status.OK_STATUS;
 
-		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
+		if (projectFacade == null) {
+			return retval;
+		}
+
+		DebugPlugin debugPlugin = DebugPlugin.getDefault();
+
+		ILaunchManager launchManager = debugPlugin.getLaunchManager();
 
 		ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(
 			MavenLaunchConstants.LAUNCH_CONFIGURATION_TYPE_ID);
@@ -120,85 +127,70 @@ public class MavenUIProjectBuilder extends MavenProjectBuilder {
 		workingCopy.setAttribute(MavenLaunchConstants.ATTR_WORKSPACE_RESOLUTION, Boolean.TRUE);
 		workingCopy.setAttribute(MavenLaunchConstants.ATTR_SKIP_TESTS, Boolean.TRUE);
 
-		if (projectFacade != null) {
-			ResolverConfiguration configuration = projectFacade.getResolverConfiguration();
+		ResolverConfiguration configuration = projectFacade.getResolverConfiguration();
 
-			String selectedProfiles = configuration.getSelectedProfiles();
+		String selectedProfiles = configuration.getSelectedProfiles();
 
-			if ((selectedProfiles != null) && (selectedProfiles.length() > 0)) {
-				workingCopy.setAttribute(MavenLaunchConstants.ATTR_PROFILES, selectedProfiles);
+		if ((selectedProfiles != null) && (selectedProfiles.length() > 0)) {
+			workingCopy.setAttribute(MavenLaunchConstants.ATTR_PROFILES, selectedProfiles);
+		}
+
+		UIJob launchJob = new UIJob("maven launch") {
+
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				DebugUITools.launch(workingCopy, mode);
+
+				return Status.OK_STATUS;
 			}
 
-			/*
-			 * <?xml version="1.0" encoding="UTF-8" standalone="no"?> <launchConfiguration
-			 * type="org.eclipse.m2e.Maven2LaunchConfigurationType"> <booleanAttribute
-			 * key="M2_DEBUG_OUTPUT" value="false"/> <booleanAttribute
-			 * key="M2_NON_RECURSIVE" value="false"/> <booleanAttribute key="M2_OFFLINE"
-			 * value="false"/> <stringAttribute key="M2_PROFILES" value="v6.2.0"/>
-			 * <listAttribute key="M2_PROPERTIES"/> <stringAttribute key="M2_RUNTIME"
-			 * value="EMBEDDED"/> <intAttribute key="M2_THREADS" value="1"/>
-			 * <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY"
-			 * value="D:/dev java/workspaces/runtime-eclipse-ide-juno-sr2/WorldDatabase/WorldDatabase-portlet"
-			 * /> </launchConfiguration>
-			 */
-			UIJob launchJob = new UIJob("maven launch") {
+		};
 
-				@Override
-				public IStatus runInUIThread(IProgressMonitor monitor) {
-					DebugUITools.launch(workingCopy, mode);
+		boolean[] launchTerminated = new boolean[1];
+		ILaunchListener[] listener = new ILaunchListener[1];
 
-					return Status.OK_STATUS;
-				}
+		listener[0] = new LaunchAdapter() {
 
-			};
+			public void launchChanged(ILaunch launch) {
+				if (workingCopy.equals(launch.getLaunchConfiguration())) {
+					Thread t = new Thread() {
 
-			boolean[] launchTerminated = new boolean[1];
-			ILaunchListener[] listener = new ILaunchListener[1];
+						@Override
+						public void run() {
+							IProcess[] processes = launch.getProcesses();
 
-			listener[0] = new LaunchAdapter() {
-
-				public void launchChanged(ILaunch launch) {
-					if (launch.getLaunchConfiguration().equals(workingCopy)) {
-						Thread t = new Thread() {
-
-							@Override
-							public void run() {
-								while ((launch.getProcesses().length > 0) && !launch.getProcesses()[0].isTerminated()) {
-									try {
-										sleep(100);
-									}
-									catch (InterruptedException ie) {
-									}
+							while ((processes.length > 0) && !processes[0].isTerminated()) {
+								try {
+									sleep(100);
 								}
-
-								launchTerminated[0] = true;
-								ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-
-								launchManager.removeLaunchListener(listener[0]);
+								catch (InterruptedException ie) {
+								}
 							}
 
-						};
+							launchTerminated[0] = true;
 
-						t.start();
-					}
+							launchManager.removeLaunchListener(listener[0]);
+						}
+
+					};
+
+					t.start();
 				}
+			}
 
-			};
+		};
 
-			launchManager = DebugPlugin.getDefault().getLaunchManager();
+		launchManager.addLaunchListener(listener[0]);
 
-			launchManager.addLaunchListener(listener[0]);
+		launchJob.schedule();
 
-			launchJob.schedule();
+		// make sure that we aren't on display thread before sleeping
 
-			// make sure that we aren't on display thread before sleeping
-
-			while ((Display.getCurrent() == null) && !launchTerminated[0]) {
-				try {
-					Thread.sleep(100);
-				}
-				catch (InterruptedException ie) {
-				}
+		while ((Display.getCurrent() == null) && !launchTerminated[0]) {
+			try {
+				Thread.sleep(100);
+			}
+			catch (InterruptedException ie) {
 			}
 		}
 

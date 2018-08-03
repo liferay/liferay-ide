@@ -14,6 +14,8 @@
 
 package com.liferay.ide.maven.ui;
 
+import com.liferay.ide.core.util.MarkerUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.maven.core.model.NewLiferayProfileOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.Profile;
@@ -38,6 +40,8 @@ import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMarkerResolution2;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Gregory Amerson
  */
@@ -50,13 +54,18 @@ public abstract class AbstractProjectMarkerResolution implements IMarkerResoluti
 	public Image getImage() {
 		LiferayMavenUI plugin = LiferayMavenUI.getDefault();
 
-		URL url = plugin.getBundle().getEntry("/icons/e16/m2e-liferay.png");
+		Bundle bundle = plugin.getBundle();
 
-		return ImageDescriptor.createFromURL(url).createImage();
+		URL url = bundle.getEntry("/icons/e16/m2e-liferay.png");
+
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
+
+		return imageDescriptor.createImage();
 	}
 
 	public void run(IMarker marker) {
-		IProject project = marker.getResource().getProject();
+		IProject project = MarkerUtil.getProject(marker);
+
 		IProjectConfigurationManager projectManager = MavenPlugin.getProjectConfigurationManager();
 
 		ResolverConfiguration configuration = projectManager.getResolverConfiguration(project);
@@ -68,35 +77,38 @@ public abstract class AbstractProjectMarkerResolution implements IMarkerResoluti
 		ElementList<Profile> selectedProfiles = op.getSelectedProfiles();
 
 		for (String currentProfile : currentProfiles) {
-			selectedProfiles.insert().setId(currentProfile);
+			Profile profile = selectedProfiles.insert();
+
+			profile.setId(currentProfile);
 		}
 
-		int result = promptUser(project, op);
+		if (promptUser(project, op) != SapphireDialog.OK) {
+			return;
+		}
 
-		if (result == SapphireDialog.OK) {
-			configuration.setSelectedProfiles(op.getActiveProfilesValue().content());
+		configuration.setSelectedProfiles(SapphireUtil.getContent(op.getActiveProfilesValue()));
 
-			boolean changed = projectManager.setResolverConfiguration(project, configuration);
+		boolean changed = projectManager.setResolverConfiguration(project, configuration);
 
-			if (changed) {
-				WorkspaceJob job = new WorkspaceJob("Updating project " + project.getName()) {
+		if (changed) {
+			WorkspaceJob job = new WorkspaceJob("Updating project " + project.getName()) {
 
-					public IStatus runInWorkspace(IProgressMonitor monitor) {
-						try {
-							MavenPlugin.getProjectConfigurationManager().updateProjectConfiguration(project, monitor);
-						}
-						catch (CoreException ce) {
-							return ce.getStatus();
-						}
-
-						return Status.OK_STATUS;
+				public IStatus runInWorkspace(IProgressMonitor monitor) {
+					try {
+						projectManager.updateProjectConfiguration(project, monitor);
+					}
+					catch (CoreException ce) {
+						return ce.getStatus();
 					}
 
-				};
+					return Status.OK_STATUS;
+				}
 
-				job.setRule(MavenPlugin.getProjectConfigurationManager().getRule());
-				job.schedule();
-			}
+			};
+
+			job.setRule(projectManager.getRule());
+
+			job.schedule();
 		}
 	}
 

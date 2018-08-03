@@ -34,13 +34,13 @@ public class BuildCSSGoalAction extends MavenGoalAction {
 		String goals = "compile ";
 
 		if ((CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("1.0.24")) >= 0) &&
-			plugin.getArtifactId().equals(getPluginKey())) {
+			getPluginKey().equals(plugin.getArtifactId())) {
 
 			goals = goals + "css-builder:build";
 		}
 		else if ((CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("1.0.21")) >= 0) &&
 				 (CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("1.0.23")) <= 0) &&
-				 plugin.getArtifactId().equals(getPluginKey())) {
+				 getPluginKey().equals(plugin.getArtifactId())) {
 
 			goals = goals + "liferay-css:build-css";
 		}
