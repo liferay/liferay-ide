@@ -212,6 +212,27 @@ public class SWTUtil {
 		return group;
 	}
 
+	public static Group createGroup(Composite parent, String text, int numColumns, int hSpan) {
+		Group group = new Group(parent, SWT.NULL);
+
+		group.setText(text);
+
+		GridLayout layout = new GridLayout(numColumns, true);
+
+		group.setLayout(layout);
+
+		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
+
+		data.verticalAlignment = GridData.FILL;
+		data.horizontalAlignment = GridData.FILL;
+		data.horizontalSpan = hSpan;
+		data.grabExcessHorizontalSpace = true;
+
+		group.setLayoutData(data);
+
+		return group;
+	}
+
 	public static void createHorizontalSpacer(Composite comp, int hSpan) {
 		Label l = new Label(comp, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);

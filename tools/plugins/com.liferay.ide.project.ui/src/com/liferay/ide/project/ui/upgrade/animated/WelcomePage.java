@@ -40,7 +40,7 @@ public class WelcomePage extends Page {
 		desriptors.append("projects into Liferay 7.0 projects.\n\n");
 		desriptors.append("The key functions are described below:\n");
 		desriptors.append(
-			"       1. Convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace\n");
+			"       1. Convert Liferay Plugins SDK 6.2 to Liferay Workspace\n");
 		desriptors.append("       2. Update Descriptor files from 6.2 to 7.0\n");
 		desriptors.append("       3. Find Breaking Changes in the API stages that need to be migrated to Liferay 7\n");
 		desriptors.append("       4. Update Layout Template files from 6.2 to 7.0 format\n");
