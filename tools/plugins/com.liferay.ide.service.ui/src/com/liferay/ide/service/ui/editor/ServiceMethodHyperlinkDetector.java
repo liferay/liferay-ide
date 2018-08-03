@@ -15,6 +15,7 @@
 package com.liferay.ide.service.ui.editor;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.service.core.util.ServiceUtil;
 
 import java.util.ArrayList;
@@ -26,8 +27,10 @@ import org.eclipse.jdt.core.ICodeAssist;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
+import org.eclipse.jdt.core.ITypeParameter;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
@@ -167,7 +170,9 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 	}
 
 	private IType _findType(IJavaElement parent, String fullyQualifiedName) throws JavaModelException {
-		IType retval = parent.getJavaProject().findType(fullyQualifiedName);
+		IJavaProject javaProject = parent.getJavaProject();
+
+		IType retval = javaProject.findType(fullyQualifiedName);
 
 		if (retval == null) {
 			IJavaProject[] serviceProjects = ServiceUtil.getAllServiceProjects();
@@ -197,7 +202,10 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 			String methodClassName = methodClass.getElementName();
 
 			if (methodClassName.endsWith("Util") && JdtFlags.isPublic(method) && JdtFlags.isStatic(method)) {
-				String packageName = methodClassType.getPackageFragment().getElementName();
+				IPackageFragment packageFragment = methodClassType.getPackageFragment();
+
+				String packageName = packageFragment.getElementName();
+
 				String baseServiceName = methodClassName.substring(0, methodClassName.length() - 4);
 
 				/*
@@ -247,7 +255,10 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 			String methodClassName = methodClass.getElementName();
 
 			if (methodClassName.endsWith("Util") && JdtFlags.isPublic(method) && JdtFlags.isStatic(method)) {
-				String packageName = methodClassType.getPackageFragment().getElementName();
+				IPackageFragment packageFragment = methodClassType.getPackageFragment();
+
+				String packageName = packageFragment.getElementName();
+
 				String baseServiceName = methodClassName.substring(0, methodClassName.length() - 4);
 
 				/*
@@ -389,11 +400,13 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 		private boolean _matches(IMethod element) throws JavaModelException {
 			boolean matches = false;
 
-			if (this._method.getNumberOfParameters() == element.getNumberOfParameters()) {
+			if (_method.getNumberOfParameters() == element.getNumberOfParameters()) {
 				matches = true;
 
-				for (int i = 0; i < this._method.getTypeParameters().length; i++) {
-					if (!this._method.getParameterTypes()[i].equals(element.getParameterTypes()[i])) {
+				ITypeParameter[] typeParameters = _method.getTypeParameters();
+
+				for (int i = 0; i < typeParameters.length; i++) {
+					if (!StringUtil.equals(_method.getParameterTypes()[i], element.getParameterTypes()[i])) {
 						matches = false;
 
 						break;

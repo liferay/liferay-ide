@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.SapphirePart;
 
 /**
  * @author Gregory Amerson
@@ -30,7 +31,9 @@ public class BuildWSDDActionHandler extends SapphireActionHandler {
 
 	@Override
 	protected Object run(Presentation context) {
-		Element modelElement = context.part().getModelElement();
+		SapphirePart sapphirePart = context.part();
+
+		Element modelElement = sapphirePart.getModelElement();
 
 		IFile file = modelElement.adapt(IFile.class);
 

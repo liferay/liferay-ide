@@ -74,9 +74,11 @@
 
 			<enablement>
 				<adapt type="org.eclipse.core.resources.IResource">
-					<test forcePluginActivation="true"
-				   property="com.liferay.ide.service.ui.hasServiceFile"
-				   value="true" />
+					<test
+						forcePluginActivation="true"
+						property="com.liferay.ide.service.ui.hasServiceFile"
+						value="true"
+					/>
 				</adapt>
 			</enablement>
 		</objectContribution>
