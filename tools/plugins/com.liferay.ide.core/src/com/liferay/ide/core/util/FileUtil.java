@@ -284,6 +284,16 @@ public class FileUtil {
 		return false;
 	}
 
+	public static boolean exists(IProject project, String fileName) {
+		if (exists(project) && (fileName != null)) {
+			IFile file = project.getFile(fileName);
+
+			return exists(file);
+		}
+
+		return false;
+	}
+
 	public static boolean exists(IResource resource) {
 		if ((resource != null) && resource.exists()) {
 			return true;
@@ -373,6 +383,14 @@ public class FileUtil {
 		File file = path.toFile();
 
 		return file.getPath();
+	}
+
+	public static IFolder getFolder(IProject project, String folderName) {
+		if ((project == null) || (folderName == null)) {
+			return null;
+		}
+
+		return project.getFolder(folderName);
 	}
 
 	public static String getFullPathPortableString(IFile file) {
