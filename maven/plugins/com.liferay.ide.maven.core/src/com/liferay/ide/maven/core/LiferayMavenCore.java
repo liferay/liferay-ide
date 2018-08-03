@@ -138,28 +138,15 @@ public class LiferayMavenCore extends Plugin {
 		return new MultiStatusBuilder(PLUGIN_ID);
 	}
 
-	/**
-	 * The constructor
-	 */
 	public LiferayMavenCore() {
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
 		_plugin = this;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 		super.stop(context);
