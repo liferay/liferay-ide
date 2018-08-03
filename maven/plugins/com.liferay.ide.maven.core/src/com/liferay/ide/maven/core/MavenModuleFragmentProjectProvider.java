@@ -15,16 +15,20 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOpMethods;
+
+import java.io.File;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 
 /**
@@ -39,8 +43,9 @@ public class MavenModuleFragmentProjectProvider
 
 		IStatus retval = Status.OK_STATUS;
 
-		String projectName = op.getProjectName().content();
-		IPath location = PathBridge.create(op.getLocation().content());
+		String projectName = SapphireUtil.getContent(op.getProjectName());
+
+		Path location = SapphireUtil.getContent(op.getLocation());
 
 		String[] bsnAndVersion = NewModuleFragmentOpMethods.getBsnAndVersion(op);
 
@@ -51,7 +56,11 @@ public class MavenModuleFragmentProjectProvider
 
 		sb.append("create ");
 		sb.append("-d \"");
-		sb.append(location.toFile().getAbsolutePath());
+
+		File file = location.toFile();
+
+		sb.append(file.getAbsolutePath());
+
 		sb.append("\" ");
 		sb.append("-b ");
 		sb.append("maven ");
@@ -83,7 +92,9 @@ public class MavenModuleFragmentProjectProvider
 
 		NewModuleFragmentOpMethods.copyOverrideFiles(op);
 
-		IPath projectLocation = location.append(projectName);
+		IPath l = PathBridge.create(location);
+
+		IPath projectLocation = l.append(projectName);
 
 		CoreUtil.openProject(projectName, projectLocation, monitor);
 

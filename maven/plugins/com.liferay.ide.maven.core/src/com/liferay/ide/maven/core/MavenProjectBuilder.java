@@ -31,7 +31,9 @@ import java.nio.file.Files;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.model.Build;
@@ -48,8 +50,7 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -71,6 +72,7 @@ import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
+import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.osgi.util.NLS;
 
@@ -175,7 +177,9 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
 				MavenSession session = context.getSession();
 
-				List<Throwable> exceptions = session.getResult().getExceptions();
+				MavenExecutionResult executionResult = session.getResult();
+
+				List<Throwable> exceptions = executionResult.getExceptions();
 
 				MultiStatusBuilder multiStatusBuilder = LiferayMavenCore.newMultiStatus();
 
@@ -213,7 +217,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
 				if (mojoExecutions != null) {
 					for (MojoExecution mojoExecution : mojoExecutions) {
-						MavenPlugin.getMaven().execute(mavenProject, mojoExecution, monitor);
+						maven.execute(mavenProject, mojoExecution, monitor);
 					}
 				}
 
@@ -243,11 +247,11 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 				if (webAppDir != null) {
 					String webAppDirValue = webAppDir.getValue();
 
-					String projectPath = Path.fromOSString(webAppDirValue).lastSegment();
+					IPath path = Path.fromOSString(webAppDirValue);
 
-					IWorkspace workspace = ResourcesPlugin.getWorkspace();
+					String projectPath = path.lastSegment();
 
-					retVal = workspace.getRoot().getProject(projectPath);
+					retVal = CoreUtil.getProject(projectPath);
 				}
 				else if (pluginName != null) {
 					String pluginNameValue = pluginName.getValue();
@@ -276,7 +280,9 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 				if (model != null) {
 					Build build = model.getBuild();
 
-					Plugin plugin = build.getPluginsAsMap().get("com.liferay:com.liferay.portal.tools.bundle.support");
+					Map<String, Plugin> map = build.getPluginsAsMap();
+
+					Plugin plugin = map.get("com.liferay:com.liferay.portal.tools.bundle.support");
 
 					if (plugin != null) {
 						try (FileWriter fileWriter = new FileWriter(pomFile)) {
@@ -353,14 +359,16 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
 				String apiBaseDirValue = apiBaseDir.getValue();
 
-				IWorkspace workspace = ResourcesPlugin.getWorkspace();
+				IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
 
-				IFile apiBasePomFile = workspace.getRoot().getFileForLocation(
+				IFile apiBasePomFile = workspaceRoot.getFileForLocation(
 					new Path(apiBaseDirValue).append(IMavenConstants.POM_FILE_NAME));
 
 				IMavenProjectFacade apiBaseFacade = this.projectManager.create(apiBasePomFile, true, monitor);
 
-				apiBaseFacade.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+				IProject apiProject = apiBaseFacade.getProject();
+
+				apiProject.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 			}
 			else {
 				Plugin plugin7x = MavenUtil.getPlugin(
@@ -408,7 +416,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
 			IMaven maven = MavenPlugin.getMaven();
 
-			File pomFile = new File(project.getLocation().toOSString(), IMavenConstants.POM_FILE_NAME);
+			File pomFile = new File(FileUtil.getLocationOSString(project), IMavenConstants.POM_FILE_NAME);
 
 			Model model = maven.readModel(pomFile);
 
@@ -433,7 +441,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 					}
 				}
 
-				if ((existed == false) && (model != null)) {
+				if (!existed && (model != null)) {
 					model.addDependency(de);
 				}
 			}
@@ -448,7 +456,10 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 						try {
 							project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 
-							MavenPlugin.getProjectConfigurationManager().updateProjectConfiguration(project, monitor);
+							IProjectConfigurationManager configurationManager =
+								MavenPlugin.getProjectConfigurationManager();
+
+							configurationManager.updateProjectConfiguration(project, monitor);
 						}
 						catch (CoreException ce) {
 							return ce.getStatus();
@@ -503,7 +514,9 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 			IProject project, String goal, IMavenProjectFacade facade, IProgressMonitor monitor)
 		throws CoreException {
 
-		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
+		DebugPlugin debugPlugin = DebugPlugin.getDefault();
+
+		ILaunchManager launchManager = debugPlugin.getLaunchManager();
 
 		ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(
 			_launchConfigurationTypeId);

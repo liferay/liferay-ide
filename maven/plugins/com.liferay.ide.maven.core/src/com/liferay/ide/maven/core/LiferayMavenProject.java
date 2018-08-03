@@ -16,7 +16,9 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
@@ -36,6 +38,7 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.jdt.IClasspathManager;
 import org.eclipse.m2e.jdt.MavenJdtPlugin;
 
@@ -80,7 +83,7 @@ public abstract class LiferayMavenProject extends BaseLiferayProject implements 
 
 		if (ListUtil.isNotEmpty(libs)) {
 			for (IPath lib : libs) {
-				String lastSegment = lib.removeFileExtension().lastSegment();
+				String lastSegment = FileUtil.getLastSegment(lib.removeFileExtension());
 
 				if (lastSegment.startsWith(filename)) {
 					return lib;
@@ -94,7 +97,9 @@ public abstract class LiferayMavenProject extends BaseLiferayProject implements 
 	public String getLiferayMavenPluginVersion() {
 		String retval = null;
 
-		IMavenProjectFacade projectFacade = MavenPlugin.getMavenProjectRegistry().getProject(getProject());
+		IMavenProjectRegistry registry = MavenPlugin.getMavenProjectRegistry();
+
+		IMavenProjectFacade projectFacade = registry.getProject(getProject());
 
 		if (projectFacade != null) {
 			try {
@@ -147,7 +152,7 @@ public abstract class LiferayMavenProject extends BaseLiferayProject implements 
 		List<IFolder> sourceFolders = CoreUtil.getSourceFolders(JavaCore.create(getProject()));
 
 		for (IFolder folder : sourceFolders) {
-			if (folder.getName().equals(classification)) {
+			if (StringUtil.equals(folder.getName(), classification)) {
 				retval = folder;
 
 				break;
@@ -161,7 +166,9 @@ public abstract class LiferayMavenProject extends BaseLiferayProject implements 
 	public IPath[] getUserLibs() {
 		List<IPath> libs = new ArrayList<>();
 
-		IClasspathManager buildPathManager = MavenJdtPlugin.getDefault().getBuildpathManager();
+		MavenJdtPlugin plugin = MavenJdtPlugin.getDefault();
+
+		IClasspathManager buildPathManager = plugin.getBuildpathManager();
 
 		try {
 			IClasspathEntry[] classpath = buildPathManager.getClasspath(

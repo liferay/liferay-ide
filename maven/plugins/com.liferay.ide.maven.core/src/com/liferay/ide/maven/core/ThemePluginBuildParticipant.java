@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.plugin.MojoExecution;
@@ -78,7 +79,9 @@ public abstract class ThemePluginBuildParticipant extends AbstractBuildParticipa
 		}
 
 		try {
-			facade.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+			IProject project = facade.getProject();
+
+			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 		}
 		catch (CoreException ce) {
 		}
@@ -155,7 +158,9 @@ public abstract class ThemePluginBuildParticipant extends AbstractBuildParticipa
 
 			MavenSession mavenSession = context.getSession();
 
-			List<Throwable> exceptions = mavenSession.getResult().getExceptions();
+			MavenExecutionResult executionResult = mavenSession.getResult();
+
+			List<Throwable> exceptions = executionResult.getExceptions();
 
 			if (exceptions.size() == 1) {
 				retval = LiferayMavenCore.createErrorStatus(exceptions.get(0));

@@ -18,6 +18,8 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.descriptor.UpdateDescriptorVersionOperation;
@@ -36,7 +38,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.maven.model.Model;
+import org.apache.maven.settings.Activation;
 import org.apache.maven.settings.Profile;
+import org.apache.maven.settings.Settings;
 
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
@@ -54,8 +58,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.internal.IMavenConstants;
-import org.eclipse.sapphire.Value;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.document.DocumentTypeImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
@@ -84,13 +88,15 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 			try {
 				IMaven maven = MavenPlugin.getMaven();
 
-				List<Profile> profiles = maven.getSettings().getProfiles();
+				Settings settings = maven.getSettings();
+
+				List<Profile> profiles = settings.getProfiles();
 
 				for (Profile profile : profiles) {
-					if (profile.getActivation() != null) {
-						if (profile.getActivation().isActiveByDefault()) {
-							continue;
-						}
+					Activation activation = profile.getActivation();
+
+					if ((activation != null) && activation.isActiveByDefault()) {
+						continue;
 					}
 
 					profileIds.add(type.cast(profile.getId()));
@@ -286,7 +292,9 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 		try {
 			IMaven maven = MavenPlugin.getMaven();
 
-			List<Profile> profiles = maven.getSettings().getProfiles();
+			Settings settings = maven.getSettings();
+
+			List<Profile> profiles = settings.getProfiles();
 
 			org.osgi.framework.Version minNewVersion = new org.osgi.framework.Version(archetypeVersion.substring(0, 3));
 
@@ -295,8 +303,8 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 			for (String activeProfile : activeProfiles) {
 				for (NewLiferayProfile newProfile : newLiferayProfiles) {
-					if (activeProfile.equals(newProfile.getId().content())) {
-						String liferayVersion = newProfile.getLiferayVersion().content();
+					if (StringUtil.equals(activeProfile, SapphireUtil.getContent(newProfile.getId()))) {
+						String liferayVersion = SapphireUtil.getContent(newProfile.getLiferayVersion());
 
 						org.osgi.framework.Version shortLiferayVersion = new org.osgi.framework.Version(
 							liferayVersion.substring(0, 3));
@@ -355,9 +363,9 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 		for (String activeProfile : activeProfiles) {
 			for (NewLiferayProfile newProfile : newLiferayProfiles) {
-				Value<ProfileLocation> profileLocation = newProfile.getProfileLocation();
+				if (StringUtil.equals(activeProfile, SapphireUtil.getContent(newProfile.getId())) &&
+					location.equals(SapphireUtil.getContent(newProfile.getProfileLocation()))) {
 
-				if (activeProfile.equals(newProfile.getId().content()) && profileLocation.content().equals(location)) {
 					profilesToSave.add(newProfile);
 				}
 			}
@@ -376,7 +384,9 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 		for (IFile file : metaFiles) {
 			try {
-				editModel = StructuredModelManager.getModelManager().getModelForEdit(file);
+				IModelManager modelManager = StructuredModelManager.getModelManager();
+
+				editModel = modelManager.getModelForEdit(file);
 
 				if ((editModel != null) && editModel instanceof IDOMModel) {
 					IDOMDocument xmlDocument = ((IDOMModel)editModel).getDocument();

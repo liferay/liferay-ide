@@ -39,15 +39,19 @@ public class ConsoleTransferListener extends AbstractTransferListener {
 	}
 
 	public void transferCorrupted(TransferEvent event) {
-		event.getException().printStackTrace(_out);
+		Exception exception = event.getException();
+
+		exception.printStackTrace(_out);
 	}
 
 	@Override
 	public void transferFailed(TransferEvent event) {
 		_transferCompleted(event);
 
-		if (!(event.getException() instanceof MetadataNotFoundException)) {
-			event.getException().printStackTrace(_out);
+		Exception exception = event.getException();
+
+		if (!(exception instanceof MetadataNotFoundException)) {
+			exception.printStackTrace(_out);
 		}
 	}
 

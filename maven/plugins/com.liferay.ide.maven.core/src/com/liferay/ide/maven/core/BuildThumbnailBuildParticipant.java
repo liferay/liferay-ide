@@ -68,7 +68,9 @@ public class BuildThumbnailBuildParticipant extends ThemePluginBuildParticipant 
 		String warSourceDirectory = MavenUtil.getWarSourceDirectory(facade);
 
 		if (!CoreUtil.isNullOrEmpty(warSourceDirectory)) {
-			IFolder folder = facade.getProject().getFolder(warSourceDirectory + "/images/screenshot.png");
+			IProject project = facade.getProject();
+
+			IFolder folder = project.getFolder(warSourceDirectory + "/images/screenshot.png");
 
 			IPath screenshotPath = folder.getProjectRelativePath();
 
