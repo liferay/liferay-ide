@@ -17,13 +17,16 @@ package com.liferay.ide.ui.notifications;
 import java.util.Collections;
 import java.util.Date;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.mylyn.commons.notifications.core.AbstractNotification;
+import org.eclipse.mylyn.commons.notifications.core.INotificationService;
 import org.eclipse.mylyn.commons.notifications.ui.AbstractUiNotification;
 import org.eclipse.mylyn.commons.notifications.ui.NotificationsUi;
 import org.eclipse.swt.graphics.Image;
@@ -48,15 +51,17 @@ public class NotificationsCore extends AbstractUIPlugin implements IStartup {
 	}
 
 	public static void logError(Exception e) {
-		NotificationsCore plugin = getDefault();
+		ILog log = getDefault().getLog();
 
-		plugin.getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
+		log.log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
 	}
 
 	@Override
 	public void earlyStartup() {
 		if (_shouldShowNotifications() && !_matchRequiredJavaVersion()) {
-			NotificationsUi.getService().notify(Collections.singletonList(_createJava8RequiredNotification()));
+			INotificationService notificationService = NotificationsUi.getService();
+
+			notificationService.notify(Collections.singletonList(_createJava8RequiredNotification()));
 		}
 	}
 
@@ -136,7 +141,9 @@ public class NotificationsCore extends AbstractUIPlugin implements IStartup {
 	private boolean _shouldShowNotifications() {
 		IScopeContext[] scopes = {ConfigurationScope.INSTANCE, InstanceScope.INSTANCE};
 
-		return Platform.getPreferencesService().getBoolean(PLUGIN_ID, SHOULD_SHOW_NOTIFICATIONS, true, scopes);
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		return preferencesService.getBoolean(PLUGIN_ID, SHOULD_SHOW_NOTIFICATIONS, true, scopes);
 	}
 
 	private static NotificationsCore _plugin;
