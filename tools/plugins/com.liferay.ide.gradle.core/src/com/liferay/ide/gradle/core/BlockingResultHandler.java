@@ -72,7 +72,9 @@ public class BlockingResultHandler<T> implements ResultHandler<T> {
 
 		Collections.addAll(adjusted, failure.getStackTrace());
 
-		List<StackTraceElement> currentThreadStack = Arrays.asList(Thread.currentThread().getStackTrace());
+		Thread thread = Thread.currentThread();
+
+		List<StackTraceElement> currentThreadStack = Arrays.asList(thread.getStackTrace());
 
 		if (ListUtil.isNotEmpty(currentThreadStack)) {
 			adjusted.addAll(currentThreadStack.subList(2, currentThreadStack.size()));

@@ -17,11 +17,14 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOpMethods;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+
+import java.io.File;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -46,8 +49,8 @@ public class GradleModuleFragmentProjectProvider
 	public IStatus createNewProject(NewModuleFragmentOp op, IProgressMonitor monitor) throws CoreException {
 		IStatus retval = Status.OK_STATUS;
 
-		String projectName = op.getProjectName().content();
-		IPath location = PathBridge.create(op.getLocation().content());
+		String projectName = SapphireUtil.getContent(op.getProjectName());
+		IPath location = PathBridge.create(SapphireUtil.getContent(op.getLocation()));
 
 		String[] bsnAndVersion = NewModuleFragmentOpMethods.getBsnAndVersion(op);
 
@@ -56,10 +59,12 @@ public class GradleModuleFragmentProjectProvider
 
 		StringBuilder sb = new StringBuilder();
 
+		File locationFile = location.toFile();
+
 		sb.append("create ");
 		sb.append("");
 		sb.append("-d \"");
-		sb.append(location.toFile().getAbsolutePath());
+		sb.append(locationFile.getAbsolutePath());
 		sb.append("\" ");
 		sb.append("");
 		sb.append("-t ");
@@ -97,7 +102,7 @@ public class GradleModuleFragmentProjectProvider
 		CoreUtil.openProject(projectName, projecLocation, monitor);
 
 		boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
-		boolean useDefaultLocation = op.getUseDefaultLocation().content(true);
+		boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
 		boolean inWorkspacePath = false;
 
 		final IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();

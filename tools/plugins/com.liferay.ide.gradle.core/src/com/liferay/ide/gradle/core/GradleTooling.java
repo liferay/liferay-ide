@@ -16,6 +16,7 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -24,6 +25,7 @@ import java.io.InputStream;
 
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
 import org.eclipse.core.runtime.FileLocator;
 
@@ -44,7 +46,9 @@ public class GradleTooling {
 	public static <T> T getModel(Class<T> modelClass, File cacheDir, File projectDir) throws Exception {
 		T retval = null;
 
-		GradleConnector connector = GradleConnector.newConnector().forProjectDirectory(projectDir);
+		GradleConnector connector = GradleConnector.newConnector();
+
+		connector = connector.forProjectDirectory(projectDir);
 
 		ProjectConnection connection = null;
 
@@ -103,7 +107,9 @@ public class GradleTooling {
 		// clear legacy dependency files
 
 		for (File file : files) {
-			if (file.isFile() && file.getName().startsWith(jarName) && !file.getName().equals(fullFileName)) {
+			if (file.isFile() && StringUtil.startsWith(file.getName(), jarName) &&
+				!StringUtil.equals(file.getName(), fullFileName)) {
+
 				if (!file.delete()) {
 					GradleCore.logError("Error: delete file " + file.getAbsolutePath() + " fail");
 				}
@@ -112,12 +118,16 @@ public class GradleTooling {
 
 		String embeddedJarVersion = null;
 
-		Bundle bundle = GradleCore.getDefault().getBundle();
+		GradleCore gradleCore = GradleCore.getDefault();
 
-		File embeddedJarFile = new File(FileLocator.toFileURL(bundle.getEntry("lib/" + fullFileName)).getFile());
+		Bundle bundle = gradleCore.getBundle();
+
+		File embeddedJarFile = FileUtil.getFile(FileLocator.toFileURL(bundle.getEntry("lib/" + fullFileName)));
 
 		try (JarFile embededJarFile = new JarFile(embeddedJarFile)) {
-			Attributes attributes = embededJarFile.getManifest().getMainAttributes();
+			Manifest manifest = embededJarFile.getManifest();
+
+			Attributes attributes = manifest.getMainAttributes();
 
 			embeddedJarVersion = attributes.getValue("Bundle-Version");
 		}
@@ -130,7 +140,9 @@ public class GradleTooling {
 			boolean shouldDelete = false;
 
 			try (JarFile jar = new JarFile(jarFile)) {
-				Attributes attributes = jar.getManifest().getMainAttributes();
+				Manifest manifest = jar.getManifest();
+
+				Attributes attributes = manifest.getMainAttributes();
 
 				String bundleVersion = attributes.getValue("Bundle-Version");
 

@@ -18,6 +18,7 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.BladeCLI;
@@ -59,31 +60,32 @@ public class GradleProjectProvider
 	public IStatus createNewProject(NewLiferayModuleProjectOp op, IProgressMonitor monitor) throws CoreException {
 		IStatus retval = Status.OK_STATUS;
 
-		String projectName = op.getProjectName().content();
+		String projectName = SapphireUtil.getContent(op.getProjectName());
 
-		IPath location = PathBridge.create(op.getLocation().content());
+		IPath location = PathBridge.create(SapphireUtil.getContent(op.getLocation()));
 
-		String className = op.getComponentName().content();
+		String className = SapphireUtil.getContent(op.getComponentName());
 
-		String liferayVersion = op.getLiferayVersion().content();
+		String liferayVersion = SapphireUtil.getContent(op.getLiferayVersion());
 
-		String serviceName = op.getServiceName().content();
+		String serviceName = SapphireUtil.getContent(op.getServiceName());
 
-		String packageName = op.getPackageName().content();
+		String packageName = SapphireUtil.getContent(op.getPackageName());
 
 		ElementList<PropertyKey> propertyKeys = op.getPropertyKeys();
 
 		List<String> properties = new ArrayList<>();
 
 		for (PropertyKey propertyKey : propertyKeys) {
-			properties.add(propertyKey.getName().content(true) + "=" + propertyKey.getValue().content(true));
+			properties.add(
+				SapphireUtil.getContent(propertyKey.getName()) + "=" + SapphireUtil.getContent(propertyKey.getValue()));
 		}
 
 		File targetDir = location.toFile();
 
 		targetDir.mkdirs();
 
-		String projectTemplateName = op.getProjectTemplateName().content();
+		String projectTemplateName = SapphireUtil.getContent(op.getProjectTemplateName());
 
 		StringBuilder sb = new StringBuilder();
 
@@ -125,11 +127,18 @@ public class GradleProjectProvider
 
 			ElementList<ProjectName> projectNames = op.getProjectNames();
 
-			projectNames.insert().setName(projectName);
+			ProjectName name = projectNames.insert();
+
+			name.setName(projectName);
 
 			if (projectTemplateName.equals("service-builder")) {
-				projectNames.insert().setName(projectName + "-api");
-				projectNames.insert().setName(projectName + "-service");
+				name = projectNames.insert();
+
+				name.setName(projectName + "-api");
+
+				name = projectNames.insert();
+
+				name.setName(projectName + "-service");
 			}
 
 			IPath projectLocation = location;
@@ -143,7 +152,7 @@ public class GradleProjectProvider
 			}
 
 			boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
-			boolean useDefaultLocation = op.getUseDefaultLocation().content(true);
+			boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
 			boolean inWorkspacePath = false;
 
 			IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
