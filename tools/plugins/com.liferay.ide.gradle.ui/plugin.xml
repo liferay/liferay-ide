@@ -304,16 +304,16 @@
 	</extension>
 	<extension point="org.eclipse.ui.decorators">
 		<decorator
-			id="com.liferay.ide.gradle.ui.watchDecorator"
 			adaptable="true"
+			class="com.liferay.ide.gradle.ui.WatchDecorator"
+			id="com.liferay.ide.gradle.ui.watchDecorator"
 			label="watch decorator"
 			lightweight="true"
-			class="com.liferay.ide.gradle.ui.WatchDecorator"
 			state="true"
 		>
 			<description>watch decorator</description>
 			<enablement>
-				<objectState name="nature" value="org.eclipse.buildship.core.gradleprojectnature"/>
+				<objectState name="nature" value="org.eclipse.buildship.core.gradleprojectnature" />
 			</enablement>
 		</decorator>
 	</extension>

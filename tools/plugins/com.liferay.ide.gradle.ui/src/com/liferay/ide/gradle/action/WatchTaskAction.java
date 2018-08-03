@@ -26,12 +26,14 @@ import com.liferay.ide.ui.action.AbstractObjectAction;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -87,12 +89,8 @@ public class WatchTaskAction extends AbstractObjectAction {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
-
-						GradleUtil.runGradleTask(project, new String[] {
-							"watch"
-						}, new String[] {
-							"--continuous"
-						}, monitor);
+						GradleUtil.runGradleTask(
+							project, new String[] {"watch"}, new String[] {"--continuous"}, monitor);
 					}
 					catch (Exception e) {
 						return ProjectUI.createErrorStatus("Error running Gradle watch task for project " + project, e);
@@ -119,11 +117,9 @@ public class WatchTaskAction extends AbstractObjectAction {
 								Properties properties = new Properties();
 
 								try (InputStream in = Files.newInputStream(bndPath)) {
-
 									properties.load(in);
 
 									String bsn = properties.getProperty("Bundle-SymbolicName");
-
 
 									String cmd = "uninstall " + bsn;
 
@@ -133,8 +129,8 @@ public class WatchTaskAction extends AbstractObjectAction {
 								}
 							}
 						}
-						catch (IOException e) {
-							GradleUI.logError("Could not uninstall bundles installed by watch task", e);
+						catch (IOException ioe) {
+							GradleUI.logError("Could not uninstall bundles installed by watch task", ioe);
 						}
 					}
 
@@ -156,12 +152,11 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 			try {
 				Files.walkFileTree(
-					Paths.get(location.toOSString()), new SimpleFileVisitor<Path>() {
+					Paths.get(location.toOSString()),
+					new SimpleFileVisitor<Path>() {
 
 						@Override
-						public FileVisitResult postVisitDirectory(Path dir, IOException e)
-							throws IOException {
-
+						public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
 							if (FileUtil.exists(new File(dir.toFile(), "bnd.bnd"))) {
 								return FileVisitResult.SKIP_SUBTREE;
 							}
@@ -170,9 +165,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 						}
 
 						@Override
-						public FileVisitResult visitFile(Path path, BasicFileAttributes attrs)
-							throws IOException {
-
+						public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
 							if (path.endsWith("bnd.bnd")) {
 								bndPaths.add(path);
 
@@ -181,9 +174,10 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 							return FileVisitResult.CONTINUE;
 						}
+
 					});
 			}
-			catch (IOException e) {
+			catch (IOException ioe) {
 			}
 		}
 		else {
