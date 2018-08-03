@@ -41,7 +41,6 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -101,7 +100,9 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-				IProject project = delta.getResource().getProject();
+				IResource resource = delta.getResource();
+
+				IProject project = resource.getProject();
 
 				SDK sdk = SDKUtil.getSDK(project);
 
@@ -134,8 +135,9 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 				}
 
 				if (lookAndFeelFile == null) {
-					String id = project.getName().replaceAll(
-						ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, StringPool.EMPTY);
+					String projectName = project.getName();
+
+					String id = projectName.replaceAll(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, StringPool.EMPTY);
 
 					IResource propsRes = webproject.findDocrootResource(
 						new Path("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE));
@@ -173,11 +175,12 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 						version = portal.getVersion();
 					}
 
-					themeDescriptorHelper.createDefaultFile(
-						webproject.getDefaultDocrootFolder(), version, id, name, type);
+					IFolder defaultDocrootFolder = webproject.getDefaultDocrootFolder();
+
+					themeDescriptorHelper.createDefaultFile(defaultDocrootFolder, version, id, name, type);
 
 					try {
-						webproject.getDefaultDocrootFolder().refreshLocal(IResource.DEPTH_INFINITE, null);
+						defaultDocrootFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
 					}
 					catch (Exception e) {
 						ThemeCore.logError(e);
@@ -211,7 +214,9 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 
 		// IDE-110 IDE-648
 
-		IWebProject webproject = LiferayCore.create(IWebProject.class, delta.getResource().getProject());
+		IResource resource = delta.getResource();
+
+		IWebProject webproject = LiferayCore.create(IWebProject.class, resource.getProject());
 
 		if ((webproject == null) || (webproject.getDefaultDocrootFolder() == null)) {
 			return false;
@@ -219,13 +224,15 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 
 		IFolder webappRoot = webproject.getDefaultDocrootFolder();
 
-		IPath diffPath = webappRoot.getFolder(new Path("_diffs")).getFullPath();
+		IFolder diffs = webappRoot.getFolder(new Path("_diffs"));
+
+		IPath diffPath = diffs.getFullPath();
 
 		return diffPath.isPrefixOf(fullPath);
 	}
 
 	private IFile _getWorkspaceFile(IPath path) {
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
 
 		return root.getFile(path);
 	}

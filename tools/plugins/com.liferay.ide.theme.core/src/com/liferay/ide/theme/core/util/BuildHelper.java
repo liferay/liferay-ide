@@ -15,6 +15,7 @@
 package com.liferay.ide.theme.core.util;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.theme.core.ThemeCore;
 
 import java.io.File;
@@ -96,6 +97,7 @@ public class BuildHelper {
 							new Status(
 								IStatus.ERROR, ThemeCore.PLUGIN_ID, 0,
 								NLS.bind(Messages.errorDeleting, files[i].getAbsolutePath()), null));
+
 						deleteCurrent = false;
 					}
 
@@ -103,6 +105,7 @@ public class BuildHelper {
 				}
 				else if (current.isDirectory()) {
 					monitor.subTask(NLS.bind(Messages.deletingTask, new String[] {current.getAbsolutePath()}));
+
 					IStatus[] stat = deleteDirectory(current, ProgressUtil.getSubMonitorFor(monitor, 10));
 
 					if (ListUtil.isNotEmpty(stat)) {
@@ -123,6 +126,7 @@ public class BuildHelper {
 		}
 		catch (Exception e) {
 			ThemeCore.logError("Error deleting directory " + dir.getAbsolutePath(), e);
+
 			status.add(new Status(IStatus.ERROR, ThemeCore.PLUGIN_ID, 0, e.getLocalizedMessage(), null));
 		}
 
@@ -182,10 +186,12 @@ public class BuildHelper {
 					if (diffsRelativePath != null) {
 						IPath path2 = path.append(diffsRelativePath);
 
-						File f = path2.toFile().getParentFile();
+						File file2 = path2.toFile();
 
-						if (!f.exists()) {
-							f.mkdirs();
+						File parentFile = file2.getParentFile();
+
+						if (!parentFile.exists()) {
+							parentFile.mkdirs();
 						}
 
 						_copyFile(file, path2);
@@ -219,6 +225,7 @@ public class BuildHelper {
 				if (!file.exists() && !file.mkdirs()) {
 					status.add(
 						new Status(IStatus.ERROR, ThemeCore.PLUGIN_ID, 0, NLS.bind(Messages.errorMkdir, path2), null));
+
 					IStatus[] stat = new IStatus[status.size()];
 
 					status.toArray(stat);
@@ -342,7 +349,7 @@ public class BuildHelper {
 	 *            an array of module resources
 	 * @param path
 	 *            an external path to copy to
-	 * @param ignore
+	 * @param ignorePaths
 	 *            an array of paths relative to path to ignore, i.e. not delete
 	 *            or copy over
 	 * @param monitor
@@ -350,7 +357,7 @@ public class BuildHelper {
 	 *            and cancellation are not desired
 	 * @return a possibly-empty array of error and warning status
 	 */
-	public IStatus[] publishSmart(IResource[] resources, IPath path, IPath[] ignore, IProgressMonitor monitor) {
+	public IStatus[] publishSmart(IResource[] resources, IPath path, IPath[] ignorePaths, IProgressMonitor monitor) {
 		if (resources == null) {
 			return _EMPTY_STATUS;
 		}
@@ -369,10 +376,10 @@ public class BuildHelper {
 
 		List<String> ignoreFileNames = new ArrayList<>();
 
-		if (ignore != null) {
-			for (int i = 0; i < ignore.length; i++) {
-				if (ignore[i].segmentCount() == 1) {
-					ignoreFileNames.add(ignore[i].toOSString());
+		if (ignorePaths != null) {
+			for (IPath ignorePath : ignorePaths) {
+				if (ignorePath.segmentCount() == 1) {
+					ignoreFileNames.add(ignorePath.toOSString());
 				}
 			}
 		}
@@ -452,6 +459,7 @@ public class BuildHelper {
 						new Status(
 							IStatus.ERROR, ThemeCore.PLUGIN_ID, 0,
 							NLS.bind(Messages.errorDeleting, toDir.getAbsolutePath()), null));
+
 					IStatus[] stat = new IStatus[status.size()];
 
 					status.toArray(stat);
@@ -466,6 +474,7 @@ public class BuildHelper {
 				new Status(
 					IStatus.ERROR, ThemeCore.PLUGIN_ID, 0, NLS.bind(Messages.errorMkdir, toDir.getAbsolutePath()),
 					null));
+
 			IStatus[] stat = new IStatus[status.size()];
 
 			status.toArray(stat);
@@ -574,11 +583,11 @@ public class BuildHelper {
 
 				IPath[] ignoreChildren = null;
 
-				if (ignore != null) {
+				if (ignorePaths != null) {
 					List<IPath> ignoreChildPaths = new ArrayList<>();
 
-					for (IPath preservePath : ignore) {
-						if (preservePath.segment(0).equals(name)) {
+					for (IPath preservePath : ignorePaths) {
+						if (StringUtil.equals(preservePath.segment(0), name)) {
 							ignoreChildPaths.add(preservePath.removeFirstSegments(1));
 						}
 					}
@@ -589,6 +598,7 @@ public class BuildHelper {
 				}
 
 				monitor.subTask(NLS.bind(Messages.copyingTask, new String[] {name, name}));
+
 				IStatus[] stat = publishSmart(
 					children, path.append(name), ignoreChildren, ProgressUtil.getSubMonitorFor(monitor, dw));
 
@@ -711,7 +721,9 @@ public class BuildHelper {
 			boolean restored = false;
 
 			for (IPath restorePath : restorePaths) {
-				File restoreFile = restorePath.append(diffsRelativePath).toFile();
+				IPath p = restorePath.append(diffsRelativePath);
+
+				File restoreFile = p.toFile();
 
 				if (restoreFile.exists()) {
 					try {
@@ -730,7 +742,9 @@ public class BuildHelper {
 			}
 
 			if (!restored) {
-				if (path2.toFile().exists() && !path2.toFile().delete()) {
+				File file2 = path2.toFile();
+
+				if (file2.exists() && !file2.delete()) {
 					throw new CoreException(
 						new Status(
 							IStatus.ERROR, ThemeCore.PLUGIN_ID, 0, NLS.bind(Messages.errorDeleting, path2), null));
@@ -853,9 +867,11 @@ public class BuildHelper {
 			if (diffsRelativePath != null) {
 				path = path.append(diffsRelativePath);
 
-				File f = path.toFile().getParentFile();
+				File file = path.toFile();
 
-				if (f.exists()) {
+				File parentFile = file.getParentFile();
+
+				if (parentFile.exists()) {
 					try {
 						_copyFile(mf, path);
 					}
@@ -867,7 +883,7 @@ public class BuildHelper {
 
 					// Create the parent directory.
 
-					if (f.mkdirs()) {
+					if (parentFile.mkdirs()) {
 						try {
 							_copyFile(mf, path);
 						}
@@ -879,7 +895,7 @@ public class BuildHelper {
 						status.add(
 							new Status(
 								IStatus.ERROR, ThemeCore.PLUGIN_ID, 0,
-								NLS.bind(Messages.errorMkdir, f.getAbsolutePath()), null));
+								NLS.bind(Messages.errorMkdir, parentFile.getAbsolutePath()), null));
 					}
 				}
 			}
@@ -954,8 +970,10 @@ public class BuildHelper {
 			// file.renameTo() will never fail due to source/destination being
 			// on two different file systems
 
-			if ((file != null) && file.getParentFile().exists()) {
-				tempFileParentDir = to.toFile().getParentFile();
+			File parentFile = file.getParentFile();
+
+			if ((file != null) && parentFile.exists()) {
+				tempFileParentDir = parentFile;
 			}
 			else {
 				tempFileParentDir = _tempDir;
@@ -973,6 +991,7 @@ public class BuildHelper {
 			}
 
 			out.close();
+
 			out = null;
 
 			_moveTempFile(tempFile, file);
@@ -1085,6 +1104,7 @@ public class BuildHelper {
 							ThemeCore.PLUGIN_ID, 0, NLS.bind(Messages.errorDeleting, file.toString()), null);
 
 						status2.add(status);
+
 						throw new CoreException(status2);
 					}
 

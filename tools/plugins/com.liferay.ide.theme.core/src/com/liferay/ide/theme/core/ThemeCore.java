@@ -16,6 +16,7 @@ package com.liferay.ide.theme.core;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
@@ -62,21 +63,21 @@ public class ThemeCore extends Plugin {
 	}
 
 	public static void logError(Exception ex) {
-		ThemeCore plugin = getDefault();
+		ILog log = getDefault().getLog();
 
-		plugin.getLog().log(createErrorStatus(ex));
+		log.log(createErrorStatus(ex));
 	}
 
 	public static void logError(String msg) {
-		ThemeCore plugin = getDefault();
+		ILog log = getDefault().getLog();
 
-		plugin.getLog().log(createErrorStatus(msg));
+		log.log(createErrorStatus(msg));
 	}
 
 	public static void logError(String msg, Exception e) {
-		ThemeCore plugin = getDefault();
+		ILog log = getDefault().getLog();
 
-		plugin.getLog().log(createErrorStatus(msg, e));
+		log.log(createErrorStatus(msg, e));
 	}
 
 	/**
