@@ -68,21 +68,28 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 		return null;
 	}
 
-	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) throws CoreException {
-		String bundleUrlProperty = "\n\n" + LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
+	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) {
+		if (bundleUrl != null) {
+			String bundleUrlProperty = "\n\n" + LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
 
-		File gradlePropertiesFile = FileUtil.getFile(project.getFile("gradle.properties"));
+			File gradlePropertiesFile = FileUtil.getFile(project.getFile("gradle.properties"));
 
-		try {
-			Files.write(gradlePropertiesFile.toPath(), bundleUrlProperty.getBytes(), StandardOpenOption.APPEND);
+			try {
+				Files.write(gradlePropertiesFile.toPath(), bundleUrlProperty.getBytes(), StandardOpenOption.APPEND);
+			}
+			catch (IOException ioe) {
+				GradleCore.logError("Error append bundle url property", ioe);
+			}
+
+			_runGradleTask("initBundle", monitor);
+
+			try {
+				project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+			}
+			catch (CoreException ce) {
+				GradleCore.logError(ce);
+			}
 		}
-		catch (IOException ioe) {
-			GradleCore.logError("Error append bundle url property", ioe);
-		}
-
-		_runGradleTask("initBundle", monitor);
-
-		project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 
 		return Status.OK_STATUS;
 	}

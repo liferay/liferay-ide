@@ -267,7 +267,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 		return retVal;
 	}
 
-	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) throws CoreException {
+	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) {
 		if (bundleUrl != null) {
 			File pomFile = FileUtil.getFile(project.getFile("pom.xml"));
 
@@ -308,11 +308,16 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
 		IMavenProjectFacade facade = MavenUtil.getProjectFacade(project, monitor);
 
-		if (_execMavenLaunch(project, MavenGoalUtil.getMavenInitBundleGoal(project), facade, monitor)) {
-			return Status.OK_STATUS;
+		try {
+			_execMavenLaunch(project, MavenGoalUtil.getMavenInitBundleGoal(project), facade, monitor);
+
+			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		}
+		catch (CoreException ce) {
+			return LiferayMavenCore.createErrorStatus("Init Liferay Bundle failed", ce);
 		}
 
-		return LiferayMavenCore.createErrorStatus("run init-bundle error");
+		return Status.OK_STATUS;
 	}
 
 	public IFile preBuildService(IProgressMonitor monitor) throws CoreException {
