@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.validation.internal.operations.ValidatorManager;
+
 import org.junit.AfterClass;
 
 /**
@@ -44,8 +45,8 @@ public class ProjectBase extends BaseTests {
 
 				project.delete(true, npm);
 			}
-			catch (CoreException e) {
-				e.printStackTrace();
+			catch (CoreException ce) {
+				ce.printStackTrace();
 			}
 		}
 	}

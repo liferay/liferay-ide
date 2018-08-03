@@ -93,7 +93,7 @@ public class BaseTests {
 		String content = FileUtil.readContents(file);
 
 		Assert.assertTrue(
-			"Expected file " + file + " contains " + expectedContent +" but now content is " + content,
+			"Expected file " + file + " contains " + expectedContent + " but now content is " + content,
 			content.contains(expectedContent));
 	}
 
@@ -285,6 +285,7 @@ public class BaseTests {
 			project.delete(true, true, npm);
 		}
 		catch (CoreException ce) {
+
 			// failTest(ce);
 
 			ce.printStackTrace();
