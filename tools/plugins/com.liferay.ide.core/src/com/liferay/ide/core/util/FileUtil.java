@@ -332,7 +332,7 @@ public class FileUtil {
 	}
 
 	public static File getFile(IFile file) {
-		if (notExists(file)) {
+		if (file == null) {
 			return null;
 		}
 
@@ -342,7 +342,7 @@ public class FileUtil {
 	}
 
 	public static File getFile(IPath path) {
-		if (notExists(path)) {
+		if (path == null) {
 			return null;
 		}
 
@@ -350,7 +350,7 @@ public class FileUtil {
 	}
 
 	public static File getFile(IProject project) {
-		if (notExists(project)) {
+		if (project == null) {
 			return null;
 		}
 
@@ -443,7 +443,7 @@ public class FileUtil {
 
 	public static String getLocationOSString(IProject project) {
 		if (project == null) {
-			return null;
+			return "";
 		}
 
 		return toOSString(project.getLocation());
@@ -451,7 +451,7 @@ public class FileUtil {
 
 	public static String getLocationPortableString(IFile file) {
 		if (file == null) {
-			return null;
+			return "";
 		}
 
 		return toPortableString(file.getLocation());
@@ -459,7 +459,7 @@ public class FileUtil {
 
 	public static String getLocationPortableString(IFolder folder) {
 		if (folder == null) {
-			return null;
+			return "";
 		}
 
 		return toPortableString(folder.getLocation());
