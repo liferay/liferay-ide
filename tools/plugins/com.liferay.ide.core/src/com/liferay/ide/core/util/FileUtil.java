@@ -393,6 +393,16 @@ public class FileUtil {
 		return project.getFolder(folderName);
 	}
 
+	public static String getFullPathOSString(IFolder folder) {
+		if (folder == null) {
+			return "";
+		}
+
+		IPath path = folder.getFullPath();
+
+		return path.toOSString();
+	}
+
 	public static String getFullPathPortableString(IFile file) {
 		if (file == null) {
 			return null;
