@@ -16,6 +16,7 @@ package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.project.ProjectsSupport;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -114,6 +115,183 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(warNames);
 
 		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
+	public void createLiferayWorkspaceCheckPomWithDeleteModule() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareMaven(projects.getName(0));
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projects.getName(1), PORTLET);
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-modules (in modules)", "pom.xml");
+
+		editorAction.pomXml.switchTabPomXml();
+
+		validationAction.assertContains("<module>" + projects.getName(1) + "</module>", editorAction.getContent());
+
+		editorAction.close();
+
+		viewAction.project.delete(
+			projects.getName(0), projects.getName(0) + "-modules (in modules)", projects.getName(1));
+
+		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-modules (in modules)", "pom.xml");
+
+		editorAction.pomXml.switchTabPomXml();
+
+		validationAction.assertContains("<module>" + projects.getName(1) + "</module>", editorAction.getContent());
+
+		editorAction.close();
+
+		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-modules (in modules)");
+		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-themes (in themes)");
+		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-wars (in wars)");
+
+		viewAction.project.closeAndDelete(projects.getName(0));
+	}
+
+	@Test
+	public void createLiferayWorkspaceCheckPomWithDeleteModuleFromDisk() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareMaven(projects.getName(0));
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projects.getName(1), PORTLET);
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-modules (in modules)", "pom.xml");
+
+		editorAction.pomXml.switchTabPomXml();
+
+		validationAction.assertContains("<module>" + projects.getName(1) + "</module>", editorAction.getContent());
+
+		editorAction.close();
+
+		viewAction.project.deleteProjectFromDisk(
+			projects.getName(0), projects.getName(0) + "-modules (in modules)", projects.getName(1));
+
+		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-modules (in modules)", "pom.xml");
+
+		editorAction.pomXml.switchTabPomXml();
+
+		validationAction.assertDoesNotContains(
+			"<module>" + projects.getName(1) + "</module>", editorAction.getContent());
+
+		editorAction.close();
+
+		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-modules (in modules)");
+		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-themes (in themes)");
+		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-wars (in wars)");
+
+		viewAction.project.closeAndDelete(projects.getName(0));
+	}
+
+	@Test
+	public void createLiferayWorkspaceCheckPomWithDeleteWar() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareMaven(projects.getName(0));
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projects.getName(1), LAYOUT_TEMPLATE);
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-wars (in wars)", "pom.xml");
+
+		editorAction.pomXml.switchTabPomXml();
+
+		validationAction.assertContains("<module>" + projects.getName(1) + "</module>", editorAction.getContent());
+
+		editorAction.close();
+
+		viewAction.project.delete(projects.getName(0), projects.getName(0) + "-wars (in wars)", projects.getName(1));
+
+		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-wars (in wars)", "pom.xml");
+
+		editorAction.pomXml.switchTabPomXml();
+
+		validationAction.assertContains("<module>" + projects.getName(1) + "</module>", editorAction.getContent());
+
+		editorAction.close();
+
+		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-modules (in modules)");
+		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-themes (in themes)");
+		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-wars (in wars)");
+
+		viewAction.project.closeAndDelete(projects.getName(0));
+	}
+
+	@Test
+	public void createLiferayWorkspaceCheckPomWithDeleteWarFromDisk() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareMaven(projects.getName(0));
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projects.getName(1), LAYOUT_TEMPLATE);
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-wars (in wars)", "pom.xml");
+
+		editorAction.pomXml.switchTabPomXml();
+
+		validationAction.assertContains("<module>" + projects.getName(1) + "</module>", editorAction.getContent());
+
+		editorAction.close();
+
+		viewAction.project.deleteProjectFromDisk(
+			projects.getName(0), projects.getName(0) + "-wars (in wars)", projects.getName(1));
+
+		viewAction.project.openFile(projects.getName(0), projects.getName(0) + "-wars (in wars)", "pom.xml");
+
+		editorAction.pomXml.switchTabPomXml();
+
+		validationAction.assertDoesNotContains(
+			"<module>" + projects.getName(1) + "</module>", editorAction.getContent());
+
+		editorAction.close();
+
+		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-modules (in modules)");
+		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-themes (in themes)");
+		viewAction.project.closeAndDelete(projects.getName(0), projects.getName(0) + "-wars (in wars)");
+
+		viewAction.project.closeAndDelete(projects.getName(0));
 	}
 
 	@Ignore
@@ -241,5 +419,8 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
+
+	@Rule
+	public ProjectsSupport projects = new ProjectsSupport(bot);
 
 }
