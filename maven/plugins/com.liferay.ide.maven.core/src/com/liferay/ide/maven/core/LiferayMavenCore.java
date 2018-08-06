@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
@@ -108,11 +109,15 @@ public class LiferayMavenCore extends Plugin {
 	}
 
 	public static boolean getPreferenceBoolean(String key) {
-		return Platform.getPreferencesService().getBoolean(PLUGIN_ID, key, false, _scopes);
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		return preferencesService.getBoolean(PLUGIN_ID, key, false, _scopes);
 	}
 
 	public static String getPreferenceString(final String key, final String defaultValue) {
-		return Platform.getPreferencesService().getString(PLUGIN_ID, key, defaultValue, _scopes);
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		return preferencesService.getString(PLUGIN_ID, key, defaultValue, _scopes);
 	}
 
 	public static void log(IStatus status) {
@@ -133,35 +138,23 @@ public class LiferayMavenCore extends Plugin {
 		return new MultiStatusBuilder(PLUGIN_ID);
 	}
 
-	/**
-	 * The constructor
-	 */
 	public LiferayMavenCore() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 		super.stop(context);
 	}
 
 	// The plug-in ID
+
 	private static LiferayMavenCore _plugin;
-	
 	private static final IScopeContext[] _scopes = {InstanceScope.INSTANCE, DefaultScope.INSTANCE};
 
 }

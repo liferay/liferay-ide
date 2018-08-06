@@ -17,6 +17,7 @@ package com.liferay.ide.functional.install.tests;
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
 import org.eclipse.swtbot.swt.finder.SWTBotAssert;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -55,8 +56,8 @@ public class InstallUpdatesiteTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		SWTBotAssert.assertContains(LICENSES_MUST_BE_REVIEWED,wizardAction.getValidationMsg(1));
-		SWTBotAssert.assertContains(BEFORE_THE_SOFTWARE_CAN_BE_INSTALLED,wizardAction.getValidationMsg(1));
+		SWTBotAssert.assertContains(LICENSES_MUST_BE_REVIEWED, wizardAction.getValidationMsg(1));
+		SWTBotAssert.assertContains(BEFORE_THE_SOFTWARE_CAN_BE_INSTALLED, wizardAction.getValidationMsg(1));
 		Assert.assertFalse(wizardAction.getNextBtn().isEnabled());
 		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
 

@@ -51,9 +51,9 @@ public abstract class DeployThemeGradleTomcat7xBase extends ServerTestBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	protected abstract String getVersion();
-
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
+
+	protected abstract String getVersion();
 
 }

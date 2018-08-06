@@ -30,6 +30,7 @@ import java.nio.file.Paths;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.CoreException;
@@ -53,9 +54,11 @@ public class NewGradleJSFModuleProjectProvider extends NewMavenJSFModuleProjectP
 
 			IPath buildGradlePath = projectLocation.append("build.gradle");
 
+			File buildGradleFile = buildGradlePath.toFile();
+
 			if (FileUtil.exists(buildGradlePath)) {
 				try {
-					File workspaceDir = LiferayWorkspaceUtil.getWorkspaceDir(buildGradlePath.toFile());
+					File workspaceDir = LiferayWorkspaceUtil.getWorkspaceDir(buildGradleFile);
 
 					if (FileUtil.exists(workspaceDir)) {
 						boolean hasLiferayWorkspace = LiferayWorkspaceUtil.isValidWorkspaceLocation(
@@ -63,19 +66,21 @@ public class NewGradleJSFModuleProjectProvider extends NewMavenJSFModuleProjectP
 
 						if (hasLiferayWorkspace) {
 							List<String> buildGradleContents = Files.readAllLines(
-								Paths.get(buildGradlePath.toFile().toURI()), StandardCharsets.UTF_8);
+								Paths.get(buildGradleFile.toURI()), StandardCharsets.UTF_8);
 
 							List<String> modifyContents = new ArrayList<>();
 
 							for (String line : buildGradleContents) {
-								if (_liferayWarPluginPattern.matcher(line).matches()) {
+								Matcher matcher = _liferayWarPluginPattern.matcher(line);
+
+								if (matcher.matches()) {
 									continue;
 								}
 
 								modifyContents.add(line);
 							}
 
-							Files.write(buildGradlePath.toFile().toPath(), modifyContents, StandardCharsets.UTF_8);
+							Files.write(buildGradleFile.toPath(), modifyContents, StandardCharsets.UTF_8);
 						}
 					}
 				}
@@ -84,11 +89,7 @@ public class NewGradleJSFModuleProjectProvider extends NewMavenJSFModuleProjectP
 				}
 			}
 
-			IPath buildPom = projectLocation.append("pom.xml");
-
-			if (FileUtil.exists(buildPom)) {
-				buildPom.toFile().delete();
-			}
+			FileUtil.delete(projectLocation.append("pom.xml"));
 
 			Value<String> projectNameValue = op.getProjectName();
 

@@ -112,7 +112,9 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 
 			// need to generate a new lnf file in deafult docroot
 
-			String id = project.getName().replaceAll(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, StringPool.EMPTY);
+			String projectName = project.getName();
+
+			String id = projectName.replaceAll(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, StringPool.EMPTY);
 
 			IResource propertiesFileRes = lrProject.findDocrootResource(
 				new Path("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE));
@@ -146,8 +148,9 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 
 					String themeType = lProject.getProperty("theme.type", "vm");
 
-					themeDescriptorHelper.createDefaultFile(
-						lrProject.getDefaultDocrootFolder().getFolder("WEB-INF"), version, id, name, themeType);
+					IFolder folder = lrProject.getDefaultDocrootFolder();
+
+					themeDescriptorHelper.createDefaultFile(folder.getFolder("WEB-INF"), version, id, name, themeType);
 				}
 				catch (IOException ioe) {
 					ThemeCore.logError("Unable to load plugin package properties.", ioe);
@@ -178,7 +181,10 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 		ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
 		if (portal != null) {
-			IPath themesPath = portal.getAppServerPortalDir().append("html/themes");
+			IPath appServerDir = portal.getAppServerPortalDir();
+
+			IPath themesPath = appServerDir.append("html/themes");
+
 			List<IPath> restorePaths = new ArrayList<>();
 
 			for (int i = 0; i < IPluginProjectDataModelProperties.THEME_PARENTS.length; i++) {
@@ -275,12 +281,14 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 									if (webappRoot != null) {
 										IFolder diffs = webappRoot.getFolder(new Path("_diffs"));
 
-										if ((diffs != null) && diffs.exists() &&
-											diffs.getFullPath().isPrefixOf(fullResourcePath)) {
+										if (FileUtil.exists(diffs)) {
+											IPath fullPath = diffs.getFullPath();
 
-											applyDiffsDeltaToDocroot(delta, diffs.getParent(), monitor);
+											if (fullPath.isPrefixOf(fullResourcePath)) {
+												applyDiffsDeltaToDocroot(delta, diffs.getParent(), monitor);
 
-											return false;
+												return false;
+											}
 										}
 									}
 								}
@@ -310,8 +318,12 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 	}
 
 	protected boolean shouldFullBuild(Map args) throws CoreException {
-		if ((args != null) && (args.get("force") != null) && args.get("force").equals("true")) {
-			return true;
+		if (args != null) {
+			Object force = args.get("force");
+
+			if ((force != null) && force.equals("true")) {
+				return true;
+			}
 		}
 
 		// check to see if there is any files in the _diffs folder

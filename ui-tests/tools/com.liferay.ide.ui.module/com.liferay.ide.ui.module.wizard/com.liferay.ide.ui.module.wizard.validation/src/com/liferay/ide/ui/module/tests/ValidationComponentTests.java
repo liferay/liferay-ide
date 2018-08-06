@@ -59,7 +59,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		dialogAction.selectTableItem(project.getName() + ".constants");
 
-		dialogAction.selectTableItem(project.getName()+ ".portlet");
+		dialogAction.selectTableItem(project.getName() + ".portlet");
 
 		Assert.assertTrue(dialogAction.getConfirmBtn().isEnabled());
 
@@ -143,12 +143,14 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.newLiferayComponent.packageName().setText(packageName);
 
-		Assert.assertEquals(packageName + "." + className + "Portlet" + ALREADY_EXISTS, wizardAction.getValidationMsg(2));
+		Assert.assertEquals(
+			packageName + "." + className + "Portlet" + ALREADY_EXISTS, wizardAction.getValidationMsg(2));
 
 		wizardAction.newLiferayComponent.componentClassName().setText(project.getName() + "portlet");
 
 		// wait for IDE-4059 fixed
-		// Assert.assertEquals(packageName + "." + className + "Portlet" + ALREADY_EXISTS, wizardAction.getValidationMsg(2));
+		// Assert.assertEquals(packageName + "." + className + "Portlet" + ALREADY_EXISTS,
+		// wizardAction.getValidationMsg(2));
 
 		wizardAction.cancel();
 

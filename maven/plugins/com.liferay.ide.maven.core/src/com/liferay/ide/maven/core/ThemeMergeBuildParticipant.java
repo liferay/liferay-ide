@@ -15,10 +15,12 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.theme.core.ThemeCSSBuilder;
 
 import java.util.Set;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
@@ -68,10 +70,10 @@ public class ThemeMergeBuildParticipant extends ThemePluginBuildParticipant {
 
 		String warSourceDirectory = MavenUtil.getWarSourceDirectory(facade);
 
-		if (!CoreUtil.isNullOrEmpty(warSourceDirectory)) {
-			IProject project = facade.getProject();
+		if (CoreUtil.isNotNullOrEmpty(warSourceDirectory)) {
+			IFolder folder = FileUtil.getFolder(facade.getProject(), warSourceDirectory);
 
-			IPath warSourceProjectPath = project.getFolder(warSourceDirectory).getProjectRelativePath();
+			IPath warSourceProjectPath = folder.getProjectRelativePath();
 
 			if ((delta != null) &&
 				((delta.findMember(warSourceProjectPath) != null) ||

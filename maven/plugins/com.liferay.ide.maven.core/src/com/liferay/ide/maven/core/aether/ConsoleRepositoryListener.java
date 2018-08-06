@@ -42,8 +42,9 @@ public class ConsoleRepositoryListener extends AbstractRepositoryListener {
 	}
 
 	public void artifactDescriptorInvalid(RepositoryEvent event) {
-		_out.println(
-			"Invalid artifact descriptor for " + event.getArtifact() + ": " + event.getException().getMessage());
+		Exception exception = event.getException();
+
+		_out.println("Invalid artifact descriptor for " + event.getArtifact() + ": " + exception.getMessage());
 	}
 
 	public void artifactDescriptorMissing(RepositoryEvent event) {

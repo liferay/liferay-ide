@@ -25,11 +25,13 @@ import com.liferay.ide.ui.util.UIUtil;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.m2e.core.internal.IMavenConstants;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.forms.DialogDef;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
 /**
@@ -48,10 +50,13 @@ public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerReso
 
 	@Override
 	protected int promptUser(IProject project, NewLiferayPluginProjectOp op) {
-		NewLiferayProfile newLiferayProfile = op.getNewLiferayProfiles().insert();
+		ElementList<NewLiferayProfile> profiles = op.getNewLiferayProfiles();
 
-		Reference<DialogDef> dialogRef = DefinitionLoader.sdef(
-			NewLiferayPluginProjectWizard.class).dialog("NewLiferayProfile");
+		NewLiferayProfile newLiferayProfile = profiles.insert();
+
+		DefinitionLoader definitionLoader = DefinitionLoader.sdef(NewLiferayPluginProjectWizard.class);
+
+		Reference<DialogDef> dialogRef = definitionLoader.dialog("NewLiferayProfile");
 
 		SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), newLiferayProfile, dialogRef);
 
@@ -65,7 +70,9 @@ public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerReso
 			try {
 				IFile pomFile = project.getFile(IMavenConstants.POM_FILE_NAME);
 
-				domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForEdit(pomFile);
+				IModelManager modelManager = StructuredModelManager.getModelManager();
+
+				domModel = (IDOMModel)modelManager.getModelForEdit(pomFile);
 
 				MavenUtil.createNewLiferayProfileNode(domModel.getDocument(), newLiferayProfile);
 
@@ -83,7 +90,9 @@ public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerReso
 			NewLiferayProfileActionHandler.addToActiveProfiles(op, newLiferayProfile);
 		}
 		else {
-			op.getNewLiferayProfiles().remove(newLiferayProfile);
+			ElementList<NewLiferayProfile> elementList = op.getNewLiferayProfiles();
+
+			elementList.remove(newLiferayProfile);
 		}
 
 		return result;

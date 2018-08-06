@@ -116,7 +116,7 @@ public class PortletModelUtil {
 		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
-		try(OutputStreamWriter outputStream = new OutputStreamWriter(out, "UTF-8")){
+		try (OutputStreamWriter outputStream = new OutputStreamWriter(out, "UTF-8")) {
 			transformer.transform(new DOMSource(doc), new StreamResult(outputStream));
 		}
 	}

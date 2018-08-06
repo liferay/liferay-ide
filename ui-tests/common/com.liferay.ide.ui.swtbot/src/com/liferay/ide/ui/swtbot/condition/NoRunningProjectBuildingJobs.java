@@ -40,9 +40,7 @@ public class NoRunningProjectBuildingJobs extends NoRunningJobsCondition {
 		for (Job job : jobs) {
 			String jobName = job.getName();
 
-			if (job.getProperty(_liferayProjectJob) != null ||
-				jobName.equals("Updating Maven Dependencies")) {
-
+			if ((job.getProperty(_liferayProjectJob) != null) || jobName.equals("Updating Maven Dependencies")) {
 				runningJobs.add(job);
 			}
 		}

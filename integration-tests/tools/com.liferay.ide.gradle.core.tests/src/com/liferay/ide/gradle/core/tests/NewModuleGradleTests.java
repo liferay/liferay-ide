@@ -225,6 +225,38 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 	}
 
 	@Test
+	public void createServiceBuilder() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("service-builder");
+		op.setPackageName("com.liferay.test");
+
+		createOrImport(op, project.getName());
+
+		assertProjectExists(project.getName());
+
+		assertBundleProject(project.getName() + "-api");
+
+		verifyProject(project.getName() + "-api");
+
+		assertProjectFileExists(project.getName() + "-api", "build/libs/com.liferay.test.api-1.0.0.jar");
+
+		assertBundleProject(project.getName() + "-service");
+
+		verifyProject(project.getName() + "-service");
+
+		assertProjectFileExists(project.getName() + "-service", "build/libs/com.liferay.test.service-1.0.0.jar");
+
+		deleteProject(project.getName() + "-api");
+
+		deleteProject(project.getName() + "-service");
+
+		deleteProject(project.getName());
+	}
+
+	@Test
 	public void createServiceWrapper() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
@@ -289,38 +321,6 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setProjectTemplateName("theme-contributor");
 
 		createOrImportAndBuild(op, project.getName());
-
-		deleteProject(project.getName());
-	}
-
-	@Test
-	public void createServiceBuilder() throws Exception {
-		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-		op.setProjectName(project.getName());
-		op.setProjectProvider(provider());
-		op.setProjectTemplateName("service-builder");
-		op.setPackageName("com.liferay.test");
-
-		createOrImport(op, project.getName());
-
-		assertProjectExists(project.getName());
-
-		assertBundleProject(project.getName() + "-api");
-
-		verifyProject(project.getName() + "-api");
-
-		assertProjectFileExists(project.getName() + "-api", "build/libs/com.liferay.test.api-1.0.0.jar");
-
-		assertBundleProject(project.getName() + "-service");
-
-		verifyProject(project.getName() + "-service");
-
-		assertProjectFileExists(project.getName() + "-service", "build/libs/com.liferay.test.service-1.0.0.jar");
-
-		deleteProject(project.getName() + "-api");
-
-		deleteProject(project.getName() + "-service");
 
 		deleteProject(project.getName());
 	}

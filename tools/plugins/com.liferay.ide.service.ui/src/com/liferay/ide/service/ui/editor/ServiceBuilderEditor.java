@@ -20,8 +20,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 import org.eclipse.ui.IEditorInput;
@@ -45,13 +48,19 @@ public class ServiceBuilderEditor extends SapphireEditorForXml {
 		IEditorInput editorInput = getEditorInput();
 
 		if (editorInput instanceof FileEditorInput) {
-			retval = ((FileEditorInput)editorInput).getFile().getContents();
+			IFile file = ((FileEditorInput)editorInput).getFile();
+
+			retval = file.getContents();
 		}
 		else if (editorInput instanceof IStorageEditorInput) {
-			retval = ((IStorageEditorInput)editorInput).getStorage().getContents();
+			IStorage storage = ((IStorageEditorInput)editorInput).getStorage();
+
+			retval = storage.getContents();
 		}
 		else if (editorInput instanceof FileStoreEditorInput) {
-			URL editorInputURL = ((FileStoreEditorInput)editorInput).getURI().toURL();
+			URI uri = ((FileStoreEditorInput)editorInput).getURI();
+
+			URL editorInputURL = uri.toURL();
 
 			retval = editorInputURL.openStream();
 		}

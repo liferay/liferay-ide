@@ -25,9 +25,7 @@ public class RefreshForSubnodeCondition implements ICondition {
 
 	public RefreshForSubnodeCondition(SWTBotTreeItem parent, String subnode, String refreshText) {
 		_parent = parent;
-
 		_subnode = subnode;
-
 		_refreshText = refreshText;
 	}
 

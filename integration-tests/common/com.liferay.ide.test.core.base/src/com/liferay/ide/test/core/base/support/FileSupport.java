@@ -18,6 +18,8 @@ import com.liferay.ide.test.core.base.util.FileUtil;
 
 import java.io.File;
 
+import org.junit.Assert;
+
 /**
  * @author Terry Jia
  */
@@ -39,6 +41,8 @@ public class FileSupport extends SupportBase {
 
 		File source = new File(envAction.getFilesDir(), _fileName);
 
+		Assert.assertTrue("Expected source file " + source + " exists", source.exists());
+
 		String sourceName = source.getName();
 
 		if (_needTimestamp) {
@@ -48,6 +52,8 @@ public class FileSupport extends SupportBase {
 		File dist = new File(envAction.getTempDir(), sourceName);
 
 		FileUtil.copyFile(source, dist);
+
+		Assert.assertTrue("Expected dist file " + dist + " exists", dist.exists());
 
 		_file = dist;
 	}

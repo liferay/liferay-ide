@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.maven.model.Build;
 import org.apache.maven.project.MavenProject;
 
 import org.eclipse.core.resources.IFile;
@@ -116,8 +117,10 @@ public class FacetedMavenProject extends LiferayMavenProject implements IWebProj
 
 			MavenProject mavenProject = projectFacade.getMavenProject(monitor);
 
-			String targetFolder = mavenProject.getBuild().getDirectory();
-			String targetWar = mavenProject.getBuild().getFinalName() + "." + mavenProject.getPackaging();
+			Build build = mavenProject.getBuild();
+
+			String targetFolder = build.getDirectory();
+			String targetWar = build.getFinalName() + "." + mavenProject.getPackaging();
 
 			IFile output = getProject().getFile(new Path(targetFolder).append(targetWar));
 

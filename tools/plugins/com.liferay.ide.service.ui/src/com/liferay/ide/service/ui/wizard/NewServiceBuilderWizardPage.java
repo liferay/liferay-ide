@@ -21,12 +21,14 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.service.core.operation.INewServiceBuilderDataModelProperties;
 import com.liferay.ide.service.ui.ServiceUI;
 import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.net.URL;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
@@ -47,8 +49,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
@@ -92,7 +94,9 @@ public class NewServiceBuilderWizardPage
 		String targetProject = model.getStringProperty(PROJECT_NAME);
 
 		if ((packageFragment != null) && packageFragment.exists()) {
-			String packageFragmentName = packageFragment.getJavaProject().getElementName();
+			IJavaProject javaProject = packageFragment.getJavaProject();
+
+			String packageFragmentName = javaProject.getElementName();
 
 			if (packageFragmentName.equals(targetProject)) {
 				model.setProperty(PACKAGE_PATH, packageFragment.getElementName());
@@ -119,6 +123,7 @@ public class NewServiceBuilderWizardPage
 			});
 
 		SWTUtil.createLabel(group, SWT.LEAD, Msgs.namespace, 1);
+
 		namespace = SWTUtil.createText(group, 1);
 
 		this.synchHelper.synchText(namespace, NAMESPACE, null);
@@ -126,6 +131,7 @@ public class NewServiceBuilderWizardPage
 		SWTUtil.createLabel(group, SWT.LEAD, StringPool.EMPTY, 1);
 
 		SWTUtil.createLabel(group, SWT.LEAD, Msgs.author, 1);
+
 		author = SWTUtil.createText(group, 1);
 
 		this.synchHelper.synchText(author, AUTHOR, null);
@@ -133,6 +139,7 @@ public class NewServiceBuilderWizardPage
 		SWTUtil.createLabel(group, StringPool.EMPTY, 1);
 
 		SWTUtil.createLabel(group, StringPool.EMPTY, 1);
+
 		Composite checkboxParent = SWTUtil.createComposite(group, 1, 1, SWT.FILL, 0, 3);
 
 		useSampleTemplate = SWTUtil.createCheckButton(checkboxParent, Msgs.includeSampleEntity, null, true, 1);
@@ -170,6 +177,7 @@ public class NewServiceBuilderWizardPage
 		}
 
 		SWTUtil.createLabel(parent, SWT.LEAD, Msgs.serviceFile, 1);
+
 		serviceFile = SWTUtil.createText(parent, 1);
 
 		this.synchHelper.synchText(serviceFile, SERVICE_FILE, null);
@@ -206,13 +214,15 @@ public class NewServiceBuilderWizardPage
 	}
 
 	protected IPackageFragment getSelectedPackageFragment() {
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchWindow window = UIUtil.getActiveWorkbenchWindow();
 
 		if (window == null) {
 			return null;
 		}
 
-		ISelection selection = window.getSelectionService().getSelection();
+		ISelectionService selectionService = window.getSelectionService();
+
+		ISelection selection = selectionService.getSelection();
 
 		if (selection == null) {
 			return null;
@@ -240,13 +250,15 @@ public class NewServiceBuilderWizardPage
 	}
 
 	protected IPackageFragmentRoot getSelectedPackageFragmentRoot() {
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchWindow window = UIUtil.getActiveWorkbenchWindow();
 
 		if (window == null) {
 			return null;
 		}
 
-		ISelection selection = window.getSelectionService().getSelection();
+		ISelectionService selectionService = window.getSelectionService();
+
+		ISelection selection = selectionService.getSelection();
 
 		if (selection == null) {
 			return null;
@@ -321,11 +333,15 @@ public class NewServiceBuilderWizardPage
 	}
 
 	protected void setShellImage() {
-		Bundle bundle = ServiceUI.getDefault().getBundle();
+		ServiceUI serviceUI = ServiceUI.getDefault();
+
+		Bundle bundle = serviceUI.getBundle();
 
 		URL url = bundle.getEntry("/icons/e16/service.png");
 
-		Image shellImage = ImageDescriptor.createFromURL(url).createImage();
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
+
+		Image shellImage = imageDescriptor.createImage();
 
 		getShell().setImage(shellImage);
 	}

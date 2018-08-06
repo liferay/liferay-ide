@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.liferay.support.project;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+
 import org.junit.rules.ExternalResource;
 
 /**

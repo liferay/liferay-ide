@@ -21,6 +21,7 @@ import com.liferay.ide.core.util.FileUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.maven.model.Build;
 import org.apache.maven.project.MavenProject;
 
 import org.eclipse.core.resources.IFolder;
@@ -84,7 +85,9 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
 
 		MavenProject mavenProject = projectFacade.getMavenProject(monitor);
 
-		String targetName = mavenProject.getBuild().getFinalName() + "." + getBundleShape();
+		Build build = mavenProject.getBuild();
+
+		String targetName = build.getFinalName() + "." + getBundleShape();
 
 		IFolder targetFolder = getProject().getFolder("target");
 
@@ -92,7 +95,9 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
 
 			// targetFolder.refreshLocal( IResource.DEPTH_ONE, monitor );
 
-			IPath targetFile = targetFolder.getRawLocation().append(targetName);
+			IPath rawLocation = targetFolder.getRawLocation();
+
+			IPath targetFile = rawLocation.append(targetName);
 
 			if (FileUtil.exists(targetFile)) {
 				outputJar = targetFile;
@@ -117,12 +122,16 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
 
 			MavenProject mavenProject = projectFacade.getMavenProject(null);
 
-			String targetName = mavenProject.getBuild().getFinalName() + "." + getBundleShape();
+			Build build = mavenProject.getBuild();
+
+			String targetName = build.getFinalName() + "." + getBundleShape();
 
 			IFolder targetFolder = getProject().getFolder("target");
 
 			if (FileUtil.exists(targetFolder)) {
-				IPath targetFile = targetFolder.getRawLocation().append(targetName);
+				IPath rawLocation = targetFolder.getRawLocation();
+
+				IPath targetFile = rawLocation.append(targetName);
 
 				if (FileUtil.exists(targetFile)) {
 					outputJar = targetFile;

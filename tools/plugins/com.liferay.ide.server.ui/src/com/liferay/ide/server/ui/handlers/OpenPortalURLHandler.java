@@ -125,9 +125,9 @@ public abstract class OpenPortalURLHandler extends AbstractHandler {
 
 				public void run() {
 					try {
-						ServerUIPlugin serverUiPlugin = ServerUIPlugin.getInstance();
+						ServerUIPlugin serverUIPlugin = ServerUIPlugin.getInstance();
 
-						IWorkbench workbench = serverUiPlugin.getWorkbench();
+						IWorkbench workbench = serverUIPlugin.getWorkbench();
 
 						IWorkbenchBrowserSupport browserSupport = workbench.getBrowserSupport();
 

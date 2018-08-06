@@ -16,6 +16,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.upgrade.ILiferayLegacyProjectUpdater;
 
 import java.io.File;
@@ -38,6 +39,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.format.IStructuredFormatProcessor;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
@@ -66,7 +68,9 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 		boolean retval = false;
 
 		try {
-			domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(pomFile);
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			domModel = (IDOMModel)modelManager.getModelForRead(pomFile);
 
 			IDOMDocument document = domModel.getDocument();
 
@@ -128,7 +132,9 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 				pomFile = tempPomFile;
 			}
 
-			domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(pomFile);
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			domModel = (IDOMModel)modelManager.getModelForRead(pomFile);
 
 			if (needUpgrade) {
 				IDOMDocument document = domModel.getDocument();
@@ -169,8 +175,10 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 								String[] fixArtifactIdandVersion = _getFixedArtifactIdAndVersion(textContent);
 
 								_removeChildren(element);
-								Text artifactIdTextContent =
-									element.getOwnerDocument().createTextNode(fixArtifactIdandVersion[0]);
+
+								Document ownerDocument = element.getOwnerDocument();
+
+								Text artifactIdTextContent = ownerDocument.createTextNode(fixArtifactIdandVersion[0]);
 
 								element.appendChild(artifactIdTextContent);
 
@@ -181,8 +189,7 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 
 									_removeChildren(versionElement);
 
-									Text versionTextContent =
-										element.getOwnerDocument().createTextNode(fixArtifactIdandVersion[1]);
+									Text versionTextContent = ownerDocument.createTextNode(fixArtifactIdandVersion[1]);
 
 									versionElement.appendChild(versionTextContent);
 								}
@@ -337,11 +344,15 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 			for (int i = 0; i < dependencyList.getLength(); i++) {
 				Element dependency = (Element)dependencyList.item(i);
 
-				Node groupIdNode = dependency.getElementsByTagName("groupId").item(0);
+				NodeList groupIdNodeList = dependency.getElementsByTagName("groupId");
+
+				Node groupIdNode = groupIdNodeList.item(0);
 
 				String tempGroupId = groupIdNode.getTextContent();
 
-				Node artifactIdNode = dependency.getElementsByTagName("artifactId").item(0);
+				NodeList artifactIdNodeList = dependency.getElementsByTagName("artifactId");
+
+				Node artifactIdNode = artifactIdNodeList.item(0);
 
 				String tempArtifactId = artifactIdNode.getTextContent();
 
@@ -586,13 +597,17 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 				boolean deleteBuildNode = true;
 
 				for (int i = 0; i < buildChildrenList.getLength(); i++) {
-					if (buildChildrenList.item(i).getNodeType() != Node.TEXT_NODE) {
+					Node node = buildChildrenList.item(i);
+
+					if (node.getNodeType() != Node.TEXT_NODE) {
 						deleteBuildNode = false;
 					}
 				}
 
 				if (deleteBuildNode) {
-					buildNode.getParentNode().removeChild(buildNode);
+					Node parentNode = buildNode.getParentNode();
+
+					parentNode.removeChild(buildNode);
 				}
 			}
 		}
@@ -611,7 +626,9 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 		else {
 			Element dependenciesNode = document.createElement("dependencies");
 
-			Node node = document.getElementsByTagName("project").item(0);
+			NodeList projectNodeList = document.getElementsByTagName("project");
+
+			Node node = projectNodeList.item(0);
 
 			node.appendChild(dependenciesNode);
 
@@ -669,7 +686,9 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 
 			buildNode.appendChild(pluginsNode);
 
-			Node node = document.getElementsByTagName("project").item(0);
+			NodeList projectNodeList = document.getElementsByTagName("project");
+
+			Node node = projectNodeList.item(0);
 
 			node.appendChild(buildNode);
 
@@ -687,7 +706,9 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 				if (node instanceof Element) {
 					Element element = (Element)node;
 
-					String nodeName = element.getParentNode().getNodeName();
+					Node parentNode = element.getParentNode();
+
+					String nodeName = parentNode.getNodeName();
 
 					if (nodeName.equals("project")) {
 						return node;
@@ -698,7 +719,9 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 
 		Element propertiesListNode = document.createElement("properties");
 
-		Node node = document.getElementsByTagName("project").item(0);
+		NodeList projectNodeList = document.getElementsByTagName("project");
+
+		Node node = projectNodeList.item(0);
 
 		node.appendChild(propertiesListNode);
 
@@ -706,11 +729,9 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 	}
 
 	private boolean _hasDependency(IProject project, String groupId, String artifactId) {
-		boolean retVal = false;
+		boolean retval = false;
 
-		IFile iFile = project.getFile("pom.xml");
-
-		File pomFile = iFile.getLocation().toFile();
+		File pomFile = FileUtil.getFile(project.getFile("pom.xml"));
 
 		MavenXpp3Reader mavenReader = new MavenXpp3Reader();
 
@@ -721,7 +742,7 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 
 			for (Dependency dependency : dependencies) {
 				if (groupId.equals(dependency.getGroupId()) && artifactId.equals(dependency.getArtifactId())) {
-					retVal = true;
+					retval = true;
 
 					break;
 				}
@@ -734,7 +755,7 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 		catch (XmlPullParserException xppe) {
 		}
 
-		return retVal;
+		return retval;
 	}
 
 	private boolean _isProtletProject(IProject project) {
@@ -759,7 +780,9 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 	}
 
 	private boolean _isServiceBuildersubProject(IProject project) {
-		if (project.getName().endsWith("-service") && _hasDependency(project, "com.liferay.portal", "portal-service")) {
+		if (StringUtil.endsWith(project.getName(), "-service") &&
+			_hasDependency(project, "com.liferay.portal", "portal-service")) {
+
 			return true;
 		}
 

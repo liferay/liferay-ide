@@ -15,6 +15,7 @@
 package com.liferay.ide.service.ui.actions;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.service.core.model.Entity;
 import com.liferay.ide.service.core.operation.ServiceBuilderDescriptorHelper;
 import com.liferay.ide.ui.util.UIUtil;
@@ -24,6 +25,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.SapphirePart;
 
 /**
  * @author Kuo Zhang
@@ -35,10 +37,12 @@ public class AddDefaultColumnsAction extends SapphireActionHandler {
 
 	@Override
 	protected Object run(Presentation context) {
-		Element element = context.part().getLocalModelElement();
+		SapphirePart sapphirePart = context.part();
+
+		Element element = sapphirePart.getLocalModelElement();
 
 		if (element instanceof Entity) {
-			String entityName = ((Entity)element).getName().content();
+			String entityName = SapphireUtil.getContent(((Entity)element).getName());
 
 			if (CoreUtil.isNullOrEmpty(entityName)) {
 				String title = "Add Liferay Default Columns";

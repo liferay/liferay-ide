@@ -192,7 +192,7 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 
 		try {
 			if (FileUtil.exists(bundleExtFile)) {
-				try (InputStream extInputStream = Files.newInputStream(bundleExtPath.toFile().toPath())) {
+				try (InputStream extInputStream = Files.newInputStream(bundleExtFile.toPath())) {
 					pluginPackageProperties.load(extInputStream);
 				}
 
@@ -204,7 +204,9 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 					File setupWizardFile = setupWizardPath.toFile();
 
 					if (FileUtil.exists(setupWizardFile)) {
-						try (InputStream setupInputStream = Files.newInputStream(setupWizardPath.toFile().toPath())) {
+						File file = setupWizardPath.toFile();
+
+						try (InputStream setupInputStream = Files.newInputStream(file.toPath())) {
 							pluginPackageProperties.load(setupInputStream);
 						}
 					}
@@ -216,7 +218,9 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 				File setupWizardFile = setupWizardPath.toFile();
 
 				if (FileUtil.exists(setupWizardFile)) {
-					try (InputStream setupInputStream = Files.newInputStream(setupWizardPath.toFile().toPath())) {
+					File file = setupWizardPath.toFile();
+
+					try (InputStream setupInputStream = Files.newInputStream(file.toPath())) {
 						pluginPackageProperties.load(setupInputStream);
 					}
 				}

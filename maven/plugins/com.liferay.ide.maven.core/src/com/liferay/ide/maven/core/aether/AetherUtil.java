@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core.aether;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.maven.core.LiferayMavenCore;
 import com.liferay.ide.maven.core.MavenUtil;
 
@@ -75,7 +76,9 @@ public class AetherUtil {
 			artifactRequest.setArtifact(new DefaultArtifact(gavCoords));
 
 			try {
-				retval = system.resolveArtifact(session, artifactRequest).getArtifact();
+				ArtifactResult artifactResult = system.resolveArtifact(session, artifactRequest);
+
+				retval = artifactResult.getArtifact();
 			}
 			catch (ArtifactResolutionException e1) {
 				LiferayMavenCore.logError("Unable to get default Liferay archetype", e1);
@@ -113,8 +116,10 @@ public class AetherUtil {
 			Version newestVersion = rangeResult.getHighestVersion();
 			List<Version> versions = rangeResult.getVersions();
 
-			if ((versions.size() > 1) && newestVersion.toString().endsWith("-SNAPSHOT")) {
-				retval = versions.get(versions.size() - 2).toString();
+			if ((versions.size() > 1) && StringUtil.endsWith(newestVersion, "-SNAPSHOT")) {
+				Version version = versions.get(versions.size() - 2);
+
+				retval = version.toString();
 			}
 			else if (newestVersion != null) {
 				retval = newestVersion.toString();
@@ -142,7 +147,9 @@ public class AetherUtil {
 	}
 
 	public static RepositorySystem newRepositorySystem() {
-		return MavenPluginActivator.getDefault().getRepositorySystem();
+		MavenPluginActivator activator = MavenPluginActivator.getDefault();
+
+		return activator.getRepositorySystem();
 	}
 
 	public static DefaultRepositorySystemSession newRepositorySystemSession(RepositorySystem system) {

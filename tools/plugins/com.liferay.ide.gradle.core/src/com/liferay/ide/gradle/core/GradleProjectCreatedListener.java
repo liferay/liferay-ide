@@ -21,6 +21,7 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 

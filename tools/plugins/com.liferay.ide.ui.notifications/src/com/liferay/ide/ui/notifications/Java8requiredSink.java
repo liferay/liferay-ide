@@ -28,6 +28,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
@@ -49,7 +50,9 @@ public class Java8requiredSink extends PopupNotificationSink {
 			_popup.close();
 		}
 
-		Shell shell = new Shell(PlatformUI.getWorkbench().getDisplay());
+		IWorkbench workbench = PlatformUI.getWorkbench();
+
+		Shell shell = new Shell(workbench.getDisplay());
 
 		_popup = new NotificationPopup(shell) {
 

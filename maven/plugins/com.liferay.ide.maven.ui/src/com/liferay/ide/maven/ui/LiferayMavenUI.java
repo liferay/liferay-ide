@@ -30,15 +30,6 @@ public class LiferayMavenUI extends Plugin {
 
 	public static final String PLUGIN_ID = "com.liferay.ide.maven.ui";
 
-	// The shared instance
-
-	private static LiferayMavenUI _plugin;
-
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
 	public static LiferayMavenUI getDefault() {
 		return _plugin;
 	}
@@ -53,31 +44,20 @@ public class LiferayMavenUI extends Plugin {
 		logError(t.getMessage(), t);
 	}
 
-	/**
-	 * The constructor
-	 */
 	public LiferayMavenUI() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.
-	 *      BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 		super.stop(context);
 	}
+
+	private static LiferayMavenUI _plugin;
 
 }

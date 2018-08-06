@@ -469,6 +469,14 @@ public class LiferayWorkspaceUtil {
 		return false;
 	}
 
+	public static boolean isValidWorkspaceLocation(IPath path) {
+		if (FileUtil.notExists(path)) {
+			return false;
+		}
+
+		return isValidWorkspaceLocation(path.toOSString());
+	}
+
 	public static boolean isValidWorkspaceLocation(String location) {
 		if (isValidMavenWorkspaceLocation(location) || isValidGradleWorkspaceLocation(location)) {
 			return true;

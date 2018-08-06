@@ -35,7 +35,6 @@ public class ViewVisibleCondition implements ICondition {
 		_identifier = viewIdentifier;
 
 		_visible = visible;
-
 		_id = id;
 	}
 

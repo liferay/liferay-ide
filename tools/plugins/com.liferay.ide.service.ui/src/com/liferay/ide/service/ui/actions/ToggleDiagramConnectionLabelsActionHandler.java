@@ -18,6 +18,7 @@ import com.liferay.ide.service.core.model.ServiceBuilder;
 
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.SapphirePart;
 
 /**
  * @author Gregory Amerson
@@ -33,9 +34,12 @@ public class ToggleDiagramConnectionLabelsActionHandler extends SapphireActionHa
 	protected Object run(Presentation context) {
 		checked = !checked;
 
-		ServiceBuilder serviceBuilder = (ServiceBuilder)context.part().getModelElement();
+		SapphirePart sapphirePart = context.part();
+
+		ServiceBuilder serviceBuilder = (ServiceBuilder)sapphirePart.getModelElement();
 
 		serviceBuilder.setShowRelationshipLabels(checked);
+
 		serviceBuilder.refresh();
 
 		return null;

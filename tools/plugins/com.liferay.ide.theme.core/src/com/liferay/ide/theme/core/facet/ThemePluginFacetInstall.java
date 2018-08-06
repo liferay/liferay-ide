@@ -226,11 +226,13 @@ public class ThemePluginFacetInstall extends PluginFacetInstall {
 					continue;
 				}
 				else if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
-					String path = entry.getPath().toPortableString();
+					IPath path = entry.getPath();
 
-					if (path.contains("org.eclipse.jdt.launching.JRE_CONTAINER") ||
-						path.contains("org.eclipse.jst.j2ee.internal.web.container") ||
-						path.contains("org.eclipse.jst.j2ee.internal.module.container")) {
+					String pathString = path.toPortableString();
+
+					if (pathString.contains("org.eclipse.jdt.launching.JRE_CONTAINER") ||
+						pathString.contains("org.eclipse.jst.j2ee.internal.web.container") ||
+						pathString.contains("org.eclipse.jst.j2ee.internal.module.container")) {
 
 						continue;
 					}
@@ -241,8 +243,9 @@ public class ThemePluginFacetInstall extends PluginFacetInstall {
 
 			javaProject.setRawClasspath(newClasspath.toArray(new IClasspathEntry[0]), null);
 
-			IResource sourceFolder = javaProject.getProject().findMember(
-				IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
+			IProject project = javaProject.getProject();
+
+			IResource sourceFolder = project.findMember(IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
 
 			if (sourceFolder.exists()) {
 				sourceFolder.delete(true, null);

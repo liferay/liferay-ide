@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.SapphirePart;
 
 /**
  * @author Kuo Zhang
@@ -31,7 +32,9 @@ public class AddDefaultEntityAction extends SapphireActionHandler {
 
 	@Override
 	protected Object run(Presentation context) {
-		Element localModelElement = context.part().getLocalModelElement();
+		SapphirePart sapphirePart = context.part();
+
+		Element localModelElement = sapphirePart.getLocalModelElement();
 
 		IFile serviceXML = localModelElement.adapt(IFile.class);
 

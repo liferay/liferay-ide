@@ -19,14 +19,17 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.NodeUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileReader;
+
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -36,8 +39,10 @@ import java.util.regex.Pattern;
 
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.cli.configuration.SettingsXmlConfigurationProcessor;
+import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
+import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
@@ -46,11 +51,12 @@ import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.settings.Settings;
+
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -79,7 +85,9 @@ import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.m2e.wtp.ProjectUtils;
 import org.eclipse.m2e.wtp.WarPluginConfiguration;
 import org.eclipse.wst.xml.core.internal.provisional.format.NodeFormatter;
+
 import org.osgi.framework.Version;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -94,10 +102,10 @@ public class MavenUtil {
 	public static Node createNewLiferayProfileNode(Document pomDocument, NewLiferayProfile newLiferayProfile) {
 		Node newNode = null;
 
-		String liferayVersion = newLiferayProfile.getLiferayVersion().content();
+		String liferayVersion = SapphireUtil.getContent(newLiferayProfile.getLiferayVersion());
 
 		try {
-			String runtimeName = newLiferayProfile.getRuntimeName().content();
+			String runtimeName = SapphireUtil.getContent(newLiferayProfile.getRuntimeName());
 
 			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(ServerUtil.getRuntime(runtimeName));
 
@@ -126,11 +134,13 @@ public class MavenUtil {
 			if (newProfile != null) {
 				IPath serverDir = liferayRuntime.getAppServerDir();
 
-				IPath autoDeployDir = serverDir.removeLastSegments(1).append("deploy");
+				IPath rootPath = serverDir.removeLastSegments(1);
+
+				IPath autoDeployDir = rootPath.append("deploy");
 
 				NodeUtil.appendTextNode(newProfile, "\n\t");
 
-				NodeUtil.appendChildElement(newProfile, "id", newLiferayProfile.getId().content());
+				NodeUtil.appendChildElement(newProfile, "id", SapphireUtil.getContent(newLiferayProfile.getId()));
 				NodeUtil.appendTextNode(newProfile, "\n\t");
 
 				Element propertiesElement = NodeUtil.appendChildElement(newProfile, "properties");
@@ -145,15 +155,15 @@ public class MavenUtil {
 				NodeUtil.appendTextNode(propertiesElement, "\n\t\t");
 				NodeUtil.appendChildElement(
 					propertiesElement, "liferay.app.server.deploy.dir",
-					liferayRuntime.getAppServerDeployDir().toOSString());
+					FileUtil.toOSString(liferayRuntime.getAppServerDeployDir()));
 				NodeUtil.appendTextNode(propertiesElement, "\n\t\t");
 				NodeUtil.appendChildElement(
 					propertiesElement, "liferay.app.server.lib.global.dir",
-					liferayRuntime.getAppServerLibGlobalDir().toOSString());
+					FileUtil.toOSString(liferayRuntime.getAppServerLibGlobalDir()));
 				NodeUtil.appendTextNode(propertiesElement, "\n\t\t");
 				NodeUtil.appendChildElement(
 					propertiesElement, "liferay.app.server.portal.dir",
-					liferayRuntime.getAppServerPortalDir().toOSString());
+					FileUtil.toOSString(liferayRuntime.getAppServerPortalDir()));
 				NodeUtil.appendTextNode(propertiesElement, "\n\t");
 
 				NodeFormatter formatter = new NodeFormatter();
@@ -229,7 +239,9 @@ public class MavenUtil {
 
 		MavenSession session = context.getSession();
 
-		List<Throwable> exceptions = session.getResult().getExceptions();
+		MavenExecutionResult executionResult = session.getResult();
+
+		List<Throwable> exceptions = executionResult.getExceptions();
 
 		if (exceptions.size() == 1) {
 			retval = LiferayMavenCore.createErrorStatus(exceptions.get(0));
@@ -268,9 +280,11 @@ public class MavenUtil {
 	}
 
 	public static IFolder getGeneratedThemeResourcesFolder(MavenProject mavenProject, IProject project) {
-		IPath m2eLiferayFolder = getM2eLiferayFolder(mavenProject, project);
+		IPath m2eLiferayFolderPath = getM2eLiferayFolder(mavenProject, project);
 
-		return project.getFolder(m2eLiferayFolder).getFolder(ILiferayMavenConstants.THEME_RESOURCES_FOLDER);
+		IFolder m2eLiferayFolder = project.getFolder(m2eLiferayFolderPath);
+
+		return m2eLiferayFolder.getFolder(ILiferayMavenConstants.THEME_RESOURCES_FOLDER);
 	}
 
 	public static Xpp3Dom getLiferayMavenPluginConfig(MavenProject mavenProject) {
@@ -314,11 +328,11 @@ public class MavenUtil {
 
 		String userSettings = mavenConfiguration.getUserSettingsFile();
 
-		if ((userSettings == null) || (userSettings.length() == 0)) {
+		if (CoreUtil.isNullOrEmpty(userSettings)) {
 			userSettings = SettingsXmlConfigurationProcessor.DEFAULT_USER_SETTINGS_FILE.getAbsolutePath();
 		}
 
-		String globalSettings = MavenPlugin.getMavenConfiguration().getGlobalSettingsFile();
+		String globalSettings = mavenConfiguration.getGlobalSettingsFile();
 
 		IMaven maven = MavenPlugin.getMaven();
 
@@ -339,7 +353,9 @@ public class MavenUtil {
 	}
 
 	public static IPath getM2eLiferayFolder(MavenProject mavenProject, IProject project) {
-		String buildOutputDir = mavenProject.getBuild().getDirectory();
+		Build build = mavenProject.getBuild();
+
+		String buildOutputDir = build.getDirectory();
 
 		String relativeBuildOutputDir = ProjectUtils.getRelativePath(project, buildOutputDir);
 
@@ -467,7 +483,7 @@ public class MavenUtil {
 			return false;
 		}
 
-		try (FileReader reader = new FileReader(pomFile.getLocation().toFile())) {
+		try (FileReader reader = new FileReader(FileUtil.getFile(pomFile))) {
 			Model model = mavenReader.read(reader);
 
 			if (model != null) {
@@ -487,66 +503,6 @@ public class MavenUtil {
 		}
 
 		return false;
-	}
-
-	public static void updateProjectConfiguration(String projectName, String location, IProgressMonitor monitor)
-		throws InterruptedException {
-
-		MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
-
-		IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
-
-		File root = workspaceRoot.getLocation().toFile();
-
-		AbstractProjectScanner<MavenProjectInfo> scanner = new LocalProjectScanner(
-			root, location, false, mavenModelManager);
-
-		scanner.run(monitor);
-
-		List<MavenProjectInfo> projects = scanner.getProjects();
-
-		List<MavenProjectInfo> mavenProjects = new ArrayList<>();
-
-		_findChildMavenProjects(mavenProjects, projects);
-
-		List<MavenProjectInfo> projectsToImport = _filterProjects(mavenProjects);
-
-		ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration();
-
-		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
-
-		ISchedulingRule mavenResolvingRule = projectConfigurationManager.getRule();
-
-		IProject project = CoreUtil.getProject(projectName);
-
-		Job job = new Job("Updating maven project configuration") {
-
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					ResolverConfiguration configuration = new ResolverConfiguration();
-
-					configuration.setResolveWorkspaceProjects(true);
-					configuration.setSelectedProfiles("");
-
-					projectConfigurationManager.enableMavenNature(project, configuration, monitor);
-					projectConfigurationManager.importProjects(projectsToImport, importConfiguration, monitor);
-					projectConfigurationManager.updateProjectConfiguration(project, monitor);
-				}
-				catch (Exception e) {
-					return LiferayMavenCore.createErrorStatus("Error Updating project:" + project.getName(), e);
-				}
-
-				return Status.OK_STATUS;
-			}
-
-		};
-
-		job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
-
-		job.setRule(mavenResolvingRule);
-
-		job.schedule();
 	}
 
 	public static List<IMavenProjectImportResult> importProject(String location, IProgressMonitor monitor)
@@ -605,7 +561,9 @@ public class MavenUtil {
 		MavenProject mavenProject = facade.getMavenProject(monitor);
 
 		try {
-			if ((mavenProject.getModel().getParent() == null) || (mavenProject.getParent() != null)) {
+			Model model = mavenProject.getModel();
+
+			if ((model.getParent() == null) || (mavenProject.getParent() != null)) {
 
 				/*
 				 *  If the method is called without error, we can assume the project has been fully loaded
@@ -620,19 +578,27 @@ public class MavenUtil {
 
 		}
 
-		while ((mavenProject != null) && (mavenProject.getModel().getParent() != null)) {
-			if (monitor.isCanceled()) {
-				break;
+		if (mavenProject != null) {
+			Model model = mavenProject.getModel();
+
+			while ((mavenProject != null) && (model.getParent() != null)) {
+				if (monitor.isCanceled()) {
+					break;
+				}
+
+				IMaven maven = MavenPlugin.getMaven();
+
+				MavenProject parentProject = maven.resolveParentProject(mavenProject, monitor);
+
+				if (parentProject != null) {
+					mavenProject.setParent(parentProject);
+					loadedParent = true;
+				}
+
+				mavenProject = parentProject;
+
+				model = mavenProject.getModel();
 			}
-
-			MavenProject parentProject = MavenPlugin.getMaven().resolveParentProject(mavenProject, monitor);
-
-			if (parentProject != null) {
-				mavenProject.setParent(parentProject);
-				loadedParent = true;
-			}
-
-			mavenProject = parentProject;
 		}
 
 		return loadedParent;
@@ -650,6 +616,66 @@ public class MavenUtil {
 		childNode.setValue((value == null) ? null : value.toString());
 	}
 
+	public static void updateProjectConfiguration(String projectName, String location, IProgressMonitor monitor)
+		throws InterruptedException {
+
+		MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
+
+		File root = CoreUtil.getWorkspaceRootFile();
+
+		AbstractProjectScanner<MavenProjectInfo> scanner = new LocalProjectScanner(
+			root, location, false, mavenModelManager);
+
+		scanner.run(monitor);
+
+		List<MavenProjectInfo> projects = scanner.getProjects();
+
+		List<MavenProjectInfo> mavenProjects = new ArrayList<>();
+
+		_findChildMavenProjects(mavenProjects, projects);
+
+		List<MavenProjectInfo> projectsToImport = _filterProjects(mavenProjects);
+
+		ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration();
+
+		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+
+		ISchedulingRule mavenResolvingRule = projectConfigurationManager.getRule();
+
+		IProject project = CoreUtil.getProject(projectName);
+
+		Job job = new Job("Updating maven project configuration") {
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					ResolverConfiguration configuration = new ResolverConfiguration();
+
+					configuration.setResolveWorkspaceProjects(true);
+					configuration.setSelectedProfiles("");
+
+					projectConfigurationManager.enableMavenNature(project, configuration, monitor);
+
+					projectConfigurationManager.importProjects(projectsToImport, importConfiguration, monitor);
+
+					projectConfigurationManager.updateProjectConfiguration(project, monitor);
+				}
+				catch (Exception e) {
+					return LiferayMavenCore.createErrorStatus("Error Updating project:" + project.getName(), e);
+				}
+
+				return Status.OK_STATUS;
+			}
+
+		};
+
+		job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
+
+		job.setRule(mavenResolvingRule);
+
+		job.schedule();
+	}
+
 	private static List<MavenProjectInfo> _filterProjects(List<MavenProjectInfo> mavenProjects) {
 		List<MavenProjectInfo> result = new ArrayList<>();
 
@@ -657,11 +683,15 @@ public class MavenUtil {
 			if (info != null) {
 				File pomFile = info.getPomFile();
 
-				URI mavenuri = pomFile.getParentFile().toURI();
+				File parentFile = pomFile.getParentFile();
 
-				if (mavenuri.toString().endsWith("/")) {
+				URI mavenUri = parentFile.toURI();
+
+				String uriString = mavenUri.toString();
+
+				if (uriString.endsWith("/")) {
 					try {
-						mavenuri = new URI(mavenuri.toString().substring(0, mavenuri.toString().length() - 1));
+						mavenUri = new URI(uriString.substring(0, uriString.length() - 1));
 					}
 					catch (URISyntaxException urise) {
 					}
@@ -670,10 +700,14 @@ public class MavenUtil {
 				boolean alreadyExists = false;
 
 				for (IProject project : CoreUtil.getAllProjects()) {
-					if (FileUtil.exists(project) && project.getLocationURI().equals(mavenuri)) {
-						alreadyExists = true;
+					if (FileUtil.exists(project)) {
+						URI uri = project.getLocationURI();
 
-						break;
+						if (uri.equals(mavenUri)) {
+							alreadyExists = true;
+
+							break;
+						}
 					}
 				}
 

@@ -29,7 +29,6 @@ public class ConsoleContentCondition implements ICondition {
 
 	public ConsoleContentCondition(String consoleName, String content) {
 		_consoleName = consoleName;
-
 		_content = content;
 
 		_lastContent = "No Text Console be found.";

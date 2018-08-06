@@ -67,7 +67,7 @@ public class NoRunningJobsCondition extends JobCondition {
 			}
 
 			for (String excludedJob : _excludedJobs) {
-				if (name.equals(excludedJob) || job.getState() == Job.SLEEPING) {
+				if (name.equals(excludedJob) || (job.getState() == Job.SLEEPING)) {
 					found = true;
 
 					break;

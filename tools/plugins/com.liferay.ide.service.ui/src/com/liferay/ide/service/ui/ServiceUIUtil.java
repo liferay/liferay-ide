@@ -14,6 +14,8 @@
 
 package com.liferay.ide.service.ui;
 
+import com.liferay.ide.ui.util.UIUtil;
+
 import java.lang.reflect.Method;
 
 import org.eclipse.core.resources.IFile;
@@ -22,7 +24,6 @@ import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.SaveableHelper;
 
 /**
@@ -32,7 +33,7 @@ import org.eclipse.ui.internal.SaveableHelper;
 public class ServiceUIUtil {
 
 	public static boolean shouldCreateServiceBuilderJob(IFile file) {
-		IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+		IWorkbenchWindow[] windows = UIUtil.getWorkbenchWindows();
 
 		for (IWorkbenchWindow window : windows) {
 			IWorkbenchPage[] pages = window.getPages();
@@ -41,7 +42,9 @@ public class ServiceUIUtil {
 				IEditorReference[] editorReferences = page.getEditorReferences();
 
 				for (IEditorReference editorReference : editorReferences) {
-					if (file.getName().equals(editorReference.getName())) {
+					String fileName = file.getName();
+
+					if (fileName.equals(editorReference.getName())) {
 						IWorkbenchPart part = editorReference.getPart(true);
 
 						// SaveableHelper.savePart is not visible on Indigo so must use reflection

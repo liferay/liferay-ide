@@ -32,6 +32,7 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+
 import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
@@ -215,9 +216,9 @@ public class LiferayGradleWorkspaceProjectProvider
 			}
 		}
 
-		Optional<Object> nullableAdaptable = Optional.ofNullable(adaptable);
-
-		return nullableAdaptable.filter(
+		return Optional.ofNullable(
+			adaptable
+		).filter(
 			i -> i instanceof IServer
 		).map(
 			IServer.class::cast
@@ -242,9 +243,9 @@ public class LiferayGradleWorkspaceProjectProvider
 	}
 
 	private static IWorkspaceProject _getWorkspaceProjectFromLiferayHome(final IPath liferayHome) {
-		Optional<IProject> workspace = Optional.ofNullable(LiferayWorkspaceUtil.getWorkspaceProject());
-
-		return workspace.filter(
+		return Optional.ofNullable(
+			LiferayWorkspaceUtil.getWorkspaceProject()
+		).filter(
 			workspaceProject -> {
 				IPath workspaceProjectLocation = workspaceProject.getRawLocation();
 

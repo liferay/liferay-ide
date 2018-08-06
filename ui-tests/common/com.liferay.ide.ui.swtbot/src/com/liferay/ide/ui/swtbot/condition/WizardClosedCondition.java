@@ -25,7 +25,6 @@ public class WizardClosedCondition implements ICondition {
 
 	public WizardClosedCondition(SWTBot bot, String title) {
 		_bot = bot;
-
 		_title = title;
 	}
 

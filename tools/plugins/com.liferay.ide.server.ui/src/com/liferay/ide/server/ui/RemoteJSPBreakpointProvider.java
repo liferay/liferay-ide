@@ -210,8 +210,8 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 
 				StringBuffer patternBuffer = new StringBuffer("_" + shortName);
 
-				for (int i = 0; i < types.length; i++) {
-					Object pattern = ((Map)initData).get(types[i].getId());
+				for (IContentType type : types) {
+					Object pattern = ((Map)initData).get(type.getId());
 
 					if (pattern != null) {
 						patternBuffer.append(StringPool.COMMA);

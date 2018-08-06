@@ -138,6 +138,32 @@ public class StringUtil {
 		return s1.startsWith(s2);
 	}
 
+	public static String toLowerCase(String s) {
+		if (s == null) {
+			return null;
+		}
+
+		return s.toLowerCase();
+	}
+
+	public static String toLowerCase(StringBuilder sb) {
+		if (sb == null) {
+			return null;
+		}
+
+		String string = sb.toString();
+
+		return string.toLowerCase();
+	}
+
+	public static String toUpperCase(String s) {
+		if (s == null) {
+			return null;
+		}
+
+		return s.toUpperCase();
+	}
+
 	public static String trim(String string) {
 		if (string == null) {
 			return null;
@@ -147,6 +173,16 @@ public class StringUtil {
 	}
 
 	public static String trim(StringBuffer sb) {
+		if (sb == null) {
+			return null;
+		}
+
+		String string = sb.toString();
+
+		return string.trim();
+	}
+
+	public static String trim(StringBuilder sb) {
 		if (sb == null) {
 			return null;
 		}

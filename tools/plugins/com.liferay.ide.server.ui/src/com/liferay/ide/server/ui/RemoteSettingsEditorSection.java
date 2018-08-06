@@ -91,6 +91,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 		data.widthHint = 50;
 
 		textHttpPort.setLayoutData(data);
+
 		textHttpPort.addModifyListener(
 			new ModifyListener() {
 
@@ -238,6 +239,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 		gd.horizontalSpan = 2;
 
 		adjustTimestamp.setLayoutData(gd);
+
 		adjustTimestamp.addSelectionListener(
 			new SelectionAdapter() {
 
@@ -380,6 +382,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 		layout.horizontalSpacing = 15;
 
 		composite.setLayout(layout);
+
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL));
 
 		toolkit.paintBordersFor(composite);

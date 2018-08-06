@@ -15,6 +15,7 @@
 package com.liferay.ide.gradle.core;
 
 import com.google.common.base.Optional;
+
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -23,11 +24,13 @@ import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
+
 import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.buildship.core.configuration.BuildConfiguration;
 import org.eclipse.buildship.core.configuration.ConfigurationManager;
@@ -56,6 +59,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
+
 import org.osgi.framework.Version;
 
 /**
@@ -65,26 +69,6 @@ import org.osgi.framework.Version;
  */
 @SuppressWarnings("restriction")
 public class GradleUtil {
-
-	public static IStatus sychronizeProject(IPath dir, IProgressMonitor monitor) {
-		if (FileUtil.notExists(dir)) {
-			return GradleCore.createErrorStatus("Unable to find gradle project at " + dir);
-		}
-
-		BuildConfiguration buildConfig = _createBuildConfiguration(dir.toFile());
-
-		GradleWorkspaceManager gradleWorkspaceManager = CorePlugin.gradleWorkspaceManager();
-
-		GradleBuild build = gradleWorkspaceManager.getGradleBuild(buildConfig);
-
-		SynchronizationJob synchronizeJob = new SynchronizationJob(NewProjectHandler.IMPORT_AND_MERGE, build);
-
-		synchronizeJob.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
-
-		synchronizeJob.schedule();
-
-		return Status.OK_STATUS;
-	}
 
 	public static boolean isBuildFile(IFile buildFile) {
 		if (FileUtil.exists(buildFile) && "build.gradle".equals(buildFile.getName()) &&
@@ -128,21 +112,23 @@ public class GradleUtil {
 				String dependencyVersion = dependency.getVersion();
 
 				try {
-					if (dependencyVersion != null && !dependencyVersion.equals("") ) {
+					if ((dependencyVersion != null) && !dependencyVersion.equals("")) {
 						version = new Version(dependencyVersion);
 					}
-	
-					if ("com.liferay".equals(group) && "com.liferay.gradle.plugins".equals(name)
-							&& CoreUtil.compareVersions(version, new Version("3.11.0")) >= 0) {
+
+					if ("com.liferay".equals(group) && "com.liferay.gradle.plugins".equals(name) &&
+						(CoreUtil.compareVersions(version, new Version("3.11.0")) >= 0)) {
+
 						watchable = true;
-	
+
 						break;
 					}
-	
-					if ("com.liferay".equals(group) && "com.liferay.gradle.plugins.workspace".equals(name)
-							&& CoreUtil.compareVersions(version, new Version("1.9.2")) >= 0) {
+
+					if ("com.liferay".equals(group) && "com.liferay.gradle.plugins.workspace".equals(name) &&
+						(CoreUtil.compareVersions(version, new Version("1.9.2")) >= 0)) {
+
 						watchable = true;
-	
+
 						break;
 					}
 				}
@@ -150,9 +136,9 @@ public class GradleUtil {
 				}
 			}
 		}
-		catch (IOException e) {
+		catch (IOException ioe) {
 		}
-		catch (MultipleCompilationErrorsException e) {
+		catch (MultipleCompilationErrorsException mcee) {
 		}
 
 		return watchable;
@@ -183,14 +169,12 @@ public class GradleUtil {
 		job.schedule();
 	}
 
-	public static void runGradleTask(IProject project, String[] tasks, IProgressMonitor monitor)
-		throws CoreException {
-
-		runGradleTask(project, tasks, new String[0], monitor);
-	}
-
 	public static void runGradleTask(IProject project, String task, IProgressMonitor monitor) throws CoreException {
 		runGradleTask(project, new String[] {task}, monitor);
+	}
+
+	public static void runGradleTask(IProject project, String[] tasks, IProgressMonitor monitor) throws CoreException {
+		runGradleTask(project, tasks, new String[0], monitor);
 	}
 
 	public static void runGradleTask(IProject project, String[] tasks, String[] arguments, IProgressMonitor monitor)
@@ -210,6 +194,26 @@ public class GradleUtil {
 		launchConfigurationWC.doSave();
 
 		launchConfigurationWC.launch(ILaunchManager.RUN_MODE, monitor);
+	}
+
+	public static IStatus sychronizeProject(IPath dir, IProgressMonitor monitor) {
+		if (FileUtil.notExists(dir)) {
+			return GradleCore.createErrorStatus("Unable to find gradle project at " + dir);
+		}
+
+		BuildConfiguration buildConfig = _createBuildConfiguration(dir.toFile());
+
+		GradleWorkspaceManager gradleWorkspaceManager = CorePlugin.gradleWorkspaceManager();
+
+		GradleBuild build = gradleWorkspaceManager.getGradleBuild(buildConfig);
+
+		SynchronizationJob synchronizeJob = new SynchronizationJob(NewProjectHandler.IMPORT_AND_MERGE, build);
+
+		synchronizeJob.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
+
+		synchronizeJob.schedule();
+
+		return Status.OK_STATUS;
 	}
 
 	private static BuildConfiguration _createBuildConfiguration(File file) {
@@ -282,9 +286,9 @@ public class GradleUtil {
 		String serializeString = gradleDistribution.serializeToString();
 
 		return new GradleRunConfigurationAttributes(
-			tasks, projectDirectoryExpression, serializeString, gradleUserHome, null,
-			Collections.<String>emptyList(), arguments, true, true, buildConfig.isOverrideWorkspaceSettings(),
-			buildConfig.isOfflineMode(), buildConfig.isBuildScansEnabled());
+			tasks, projectDirectoryExpression, serializeString, gradleUserHome, null, Collections.<String>emptyList(),
+			arguments, true, true, buildConfig.isOverrideWorkspaceSettings(), buildConfig.isOfflineMode(),
+			buildConfig.isBuildScansEnabled());
 	}
 
 }

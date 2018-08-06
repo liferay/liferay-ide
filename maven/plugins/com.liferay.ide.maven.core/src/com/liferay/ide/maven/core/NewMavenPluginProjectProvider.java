@@ -17,6 +17,8 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -71,9 +73,9 @@ import org.eclipse.m2e.core.project.MavenUpdateRequest;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.sapphire.ElementList;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
 import org.w3c.dom.Document;
@@ -98,19 +100,19 @@ public class NewMavenPluginProjectProvider
 		IMavenProjectRegistry mavenProjectRegistry = MavenPlugin.getMavenProjectRegistry();
 		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
-		String groupId = op.getGroupId().content();
-		String artifactId = op.getProjectName().content();
-		String version = op.getArtifactVersion().content();
-		String javaPackage = op.getGroupId().content();
-		String activeProfilesValue = op.getActiveProfilesValue().content();
-		IPortletFramework portletFramework = op.getPortletFramework().content(true);
+		String groupId = SapphireUtil.getContent(op.getGroupId());
+		String artifactId = SapphireUtil.getContent(op.getProjectName());
+		String version = SapphireUtil.getContent(op.getArtifactVersion());
+		String javaPackage = SapphireUtil.getContent(op.getGroupId());
+		String activeProfilesValue = SapphireUtil.getContent(op.getActiveProfilesValue());
+		IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
 		String frameworkName = NewLiferayPluginProjectOpMethods.getFrameworkName(op);
 
-		IPath location = PathBridge.create(op.getLocation().content());
+		IPath location = PathBridge.create(SapphireUtil.getContent(op.getLocation()));
 
 		// for location we should use the parent location
 
-		if (location.lastSegment().equals(artifactId)) {
+		if (StringUtil.equals(location.lastSegment(), artifactId)) {
 
 			// use parent dir since maven archetype will generate new dir under this
 			// location
@@ -118,7 +120,7 @@ public class NewMavenPluginProjectProvider
 			location = location.removeLastSegments(1);
 		}
 
-		String archetypeArtifactId = op.getArchetype().content(true);
+		String archetypeArtifactId = SapphireUtil.getContent(op.getArchetype());
 
 		Archetype archetype = new Archetype();
 
@@ -131,7 +133,9 @@ public class NewMavenPluginProjectProvider
 
 		archetype.setVersion(archetypeVersion);
 
-		ArchetypeManager archetypeManager = MavenPluginActivator.getDefault().getArchetypeManager();
+		MavenPluginActivator pluginActivator = MavenPluginActivator.getDefault();
+
+		ArchetypeManager archetypeManager = pluginActivator.getArchetypeManager();
 
 		ArtifactRepository remoteArchetypeRepository = archetypeManager.getArchetypeRepository(archetype);
 
@@ -144,17 +148,19 @@ public class NewMavenPluginProjectProvider
 				for (Object prop : archProps) {
 					if (prop instanceof RequiredProperty) {
 						RequiredProperty rProp = (RequiredProperty)prop;
-						Value<PluginType> pluginType = op.getPluginType();
 
-						if (pluginType.content().equals(PluginType.theme)) {
+						PluginType pluginType = SapphireUtil.getContent(op.getPluginType());
+
+						if (pluginType.equals(PluginType.theme)) {
 							String key = rProp.getKey();
 
 							if (key.equals("themeParent")) {
-								properties.put(key, op.getThemeParent().content(true));
+								properties.put(key, SapphireUtil.getContent(op.getThemeParent()));
 							}
 							else if (key.equals("themeType")) {
 								properties.put(
-									key, ThemeUtil.getTemplateExtension(op.getThemeFramework().content(true)));
+									key,
+									ThemeUtil.getTemplateExtension(SapphireUtil.getContent(op.getThemeFramework())));
 							}
 						}
 						else {
@@ -183,7 +189,9 @@ public class NewMavenPluginProjectProvider
 			op.setImportProjectStatus(true);
 
 			for (IProject project : newProjects) {
-				projectNames.insert().setName(project.getName());
+				ProjectName projectName = projectNames.insert();
+
+				projectName.setName(project.getName());
 			}
 		}
 
@@ -266,7 +274,9 @@ public class NewMavenPluginProjectProvider
 				IDOMModel domModel = null;
 
 				try {
-					domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForEdit(pomFile);
+					IModelManager modelManager = StructuredModelManager.getModelManager();
+
+					domModel = (IDOMModel)modelManager.getModelForEdit(pomFile);
 
 					for (NewLiferayProfile newProfile : newProjectPomProfiles) {
 						MavenUtil.createNewLiferayProfileNode(domModel.getDocument(), newProfile);
@@ -301,10 +311,10 @@ public class NewMavenPluginProjectProvider
 				updateDtdVersion(firstProject, pluginVersion, archVersion);
 			}
 
-			Value<PluginType> pluginType = op.getPluginType();
+			PluginType pluginType = SapphireUtil.getContent(op.getPluginType());
 
-			if (pluginType.content().equals(PluginType.portlet)) {
-				String portletName = op.getPortletName().content(false);
+			if (pluginType.equals(PluginType.portlet)) {
+				String portletName = SapphireUtil.getContent(op.getPortletName(), false);
 
 				retval = portletFramework.postProjectCreated(firstProject, frameworkName, portletName, monitor);
 			}
@@ -369,9 +379,7 @@ public class NewMavenPluginProjectProvider
 			}
 		}
 		else {
-			File[] files = dir.listFiles();
-
-			if (ListUtil.isNotEmpty(files)) {
+			if (ListUtil.isNotEmpty(dir.listFiles())) {
 				retval = LiferayMavenCore.createErrorStatus("Project location is not empty or a parent pom.");
 			}
 		}
@@ -380,7 +388,9 @@ public class NewMavenPluginProjectProvider
 	}
 
 	private File _getBackupFile(File file) {
-		String suffix = new SimpleDateFormat("yyyyMMddhhmmss").format(Calendar.getInstance().getTime());
+		Calendar calendar = Calendar.getInstance();
+
+		String suffix = new SimpleDateFormat("yyyyMMddhhmmss").format(calendar.getTime());
 
 		return new File(file.getParentFile(), file.getName() + "." + suffix);
 	}

@@ -18,6 +18,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.project.core.descriptor.AddNewPortletOperation;
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
@@ -32,6 +33,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jst.j2ee.common.ParamValue;
+import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
@@ -75,7 +77,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 	}
 
 	public boolean canAddNewPortlet(IDataModel model) {
-		return model.getID().contains("NewPortlet");
+		return StringUtil.contains(model.getID(), "NewPortlet");
 	}
 
 	public IStatus configurePortletXml(String newPortletName) {
@@ -146,9 +148,10 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
 		for (String portletMode : ALL_PORTLET_MODES) {
 			if (model.getBooleanProperty(portletMode)) {
+				DataModelPropertyDescriptor modelPropertyDescriptor = model.getPropertyDescriptor(portletMode);
+
 				NodeUtil.appendChildElement(
-					newSupportsElement, "portlet-mode",
-					model.getPropertyDescriptor(portletMode).getPropertyDescription());
+					newSupportsElement, "portlet-mode", modelPropertyDescriptor.getPropertyDescription());
 			}
 		}
 
@@ -192,8 +195,8 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 			"container-runtime-option"
 		};
 
-		for (int i = 0; i < refElementNames.length; i++) {
-			refNode = NodeUtil.findFirstChild(rootElement, refElementNames[i]);
+		for (String refElementName : refElementNames) {
+			refNode = NodeUtil.findFirstChild(rootElement, refElementName);
 
 			if (refNode != null) {
 				break;
@@ -297,7 +300,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 			@Override
 			public IStatus removeSampleElements() {
 				return doRemoveAllPortlets();
-			};
+			}
 
 		};
 
@@ -353,11 +356,13 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
 		NodeList portletNameList = document.getElementsByTagName("portlet-name");
 
-		if ((portletNameList != null) && (portletNameList.getLength() > 0) && !CoreUtil.isNullOrEmpty(resourceBundle)) {
+		if ((portletNameList != null) && (portletNameList.getLength() > 0) &&
+			CoreUtil.isNotNullOrEmpty(resourceBundle)) {
+
 			Node portletNameNode = null;
 
 			for (int i = 0; i < portletNameList.getLength(); i++) {
-				if (NodeUtil.getTextContent(portletNameList.item(i)).equals(portletName)) {
+				if (StringUtil.equals(NodeUtil.getTextContent(portletNameList.item(i)), portletName)) {
 					portletNameNode = portletNameList.item(i);
 				}
 			}

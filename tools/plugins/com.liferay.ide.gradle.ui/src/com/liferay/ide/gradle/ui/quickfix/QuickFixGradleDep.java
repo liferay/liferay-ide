@@ -182,7 +182,7 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 		}
 
 		try {
-			List<String> serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
+			ServiceContainer sserviceWrapperList = TargetPlatformUtil.getServiceWrapperList();
 
 			Name name = importDeclaration.getName();
 
@@ -190,7 +190,7 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 
 			boolean depWrapperCanFixed = false;
 
-			if (serviceWrapperList.contains(importName)) {
+			if (ListUtil.contains(sserviceWrapperList.getServiceList(), importName)) {
 				ServiceContainer bundle = TargetPlatformUtil.getServiceWrapperBundle(importName);
 				depWrapperCanFixed = true;
 
@@ -198,9 +198,9 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 			}
 
 			if (!depWrapperCanFixed) {
-				List<String> servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+				ServiceContainer servicesList = TargetPlatformUtil.getServicesList();
 
-				if (servicesList.contains(importName)) {
+				if (ListUtil.contains(servicesList.getServiceList(), importName)) {
 					ServiceContainer bundle = TargetPlatformUtil.getServiceBundle(importName);
 
 					_createDepProposal(context, proposals, bundle);
@@ -254,9 +254,9 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 		boolean depWrapperCanFixed = false;
 
 		try {
-			List<String> serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
+			ServiceContainer servicesWrapperList = TargetPlatformUtil.getServiceWrapperList();
 
-			for (String wrapper : serviceWrapperList) {
+			for (String wrapper : servicesWrapperList.getServiceList()) {
 				if (wrapper.endsWith(fullyQualifiedName)) {
 					ServiceContainer bundle = TargetPlatformUtil.getServiceWrapperBundle(wrapper);
 
@@ -265,9 +265,9 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 			}
 
 			if (!depWrapperCanFixed) {
-				List<String> servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+				ServiceContainer servicesList = TargetPlatformUtil.getServicesList();
 
-				for (String service : servicesList) {
+				for (String service : servicesList.getServiceList()) {
 					if (service.endsWith(fullyQualifiedName)) {
 						ServiceContainer bundle = TargetPlatformUtil.getServiceBundle(service);
 

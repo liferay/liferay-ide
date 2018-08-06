@@ -19,6 +19,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.LaunchHelper;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.server.remote.AbstractRemoteServerPublisher;
@@ -30,6 +31,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.maven.model.Build;
 import org.apache.maven.project.MavenProject;
 
 import org.eclipse.core.resources.IFile;
@@ -44,10 +46,12 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
+import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 
 /**
@@ -67,7 +71,9 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 		throws CoreException, IOException {
 
 		for (IModuleResourceDelta delta : deltas) {
-			IResource deltaResource = (IResource)delta.getModuleResource().getAdapter(IResource.class);
+			IModuleResource moduleResource = delta.getModuleResource();
+
+			IResource deltaResource = (IResource)moduleResource.getAdapter(IResource.class);
 
 			IProject deltaProject = deltaResource.getProject();
 
@@ -94,7 +100,7 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 				}
 			}
 
-			if ((deltaZip == false) && new Path("WEB-INF").isPrefixOf(delta.getModuleRelativePath())) {
+			if (!deltaZip && new Path("WEB-INF").isPrefixOf(delta.getModuleRelativePath())) {
 				List<IFolder> folders = CoreUtil.getSourceFolders(JavaCore.create(deltaProject));
 
 				for (IFolder folder : folders) {
@@ -108,11 +114,13 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 				}
 			}
 
-			if ((deltaZip == false) &&
+			if (!deltaZip &&
 				((deltaKind == IModuleResourceDelta.ADDED) || (deltaKind == IModuleResourceDelta.CHANGED) ||
 				 (deltaKind == IModuleResourceDelta.REMOVED))) {
 
-				IPath targetPath = JavaCore.create(deltaProject).getOutputLocation();
+				IJavaProject javaProject = JavaCore.create(deltaProject);
+
+				IPath targetPath = javaProject.getOutputLocation();
 
 				deltaZip = true;
 				deltaPath = new Path("WEB-INF/classes").append(deltaFullPath.makeRelativeTo(targetPath));
@@ -142,8 +150,10 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 
 			MavenProject mavenProject = projectFacade.getMavenProject(monitor);
 
-			String targetFolder = mavenProject.getBuild().getDirectory();
-			String targetWar = mavenProject.getBuild().getFinalName() + "." + mavenProject.getPackaging();
+			Build build = mavenProject.getBuild();
+
+			String targetFolder = build.getDirectory();
+			String targetWar = build.getFinalName() + "." + mavenProject.getPackaging();
 
 			retval = new Path(targetFolder).append(targetWar);
 		}
@@ -155,7 +165,9 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 			IProject project, String goal, IMavenProjectFacade facade, IProgressMonitor monitor)
 		throws CoreException {
 
-		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
+		DebugPlugin debugPlugin = DebugPlugin.getDefault();
+
+		ILaunchManager launchManager = debugPlugin.getLaunchManager();
 
 		ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(
 			_launchConfigurationTypeId);
@@ -199,7 +211,7 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 	private boolean _isServiceBuilderProject(IProject project, String pluginType, MavenProject parentProject) {
 		List<IFile> serviceXmls = (new SearchFilesVisitor()).searchFiles(project, "service.xml");
 
-		if ((serviceXmls != null) && (serviceXmls.size() > 0) &&
+		if (ListUtil.isNotEmpty(serviceXmls) &&
 			pluginType.equalsIgnoreCase(ILiferayMavenConstants.DEFAULT_PLUGIN_TYPE) && (parentProject != null)) {
 
 			return true;
@@ -219,7 +231,10 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 			pluginType = ILiferayMavenConstants.DEFAULT_PLUGIN_TYPE;
 		}
 
-		MavenProject parentProject = facade.getMavenProject(monitor).getParent();
+		MavenProject mavenProject = facade.getMavenProject(monitor);
+
+		MavenProject parentProject = mavenProject.getParent();
+
 		String goal = _getMavenDeployGoals();
 
 		if (_isServiceBuilderProject(project, pluginType, parentProject)) {

@@ -20,8 +20,10 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.dd.LiferayDisplayDescriptorHelper;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
@@ -32,6 +34,7 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -275,8 +278,9 @@ public class NewPortletClassDataModelProvider
 
 				Properties entryCategories = getEntryCategories();
 
-				DataModelPropertyDescriptor descriptor = new DataModelPropertyDescriptor(
-					entryCategory, entryCategories.get(entryCategory).toString());
+				Object o = entryCategories.get(entryCategory);
+
+				DataModelPropertyDescriptor descriptor = new DataModelPropertyDescriptor(entryCategory, o.toString());
 
 				return descriptor;
 			}
@@ -408,11 +412,11 @@ public class NewPortletClassDataModelProvider
 					IJavaSearchScope scope = BasicSearchEngine.createStrictHierarchyScope(
 						javaProject, portletType, true, true, null);
 
-					for (int i = 0; i < customVals.length; i++) {
-						IType type = JavaModelUtil.findType(javaProject, customVals[i]);
+					for (String customVal : customVals) {
+						IType type = JavaModelUtil.findType(javaProject, customVal);
 
 						if ((type != null) && scope.encloses(type)) {
-							list.add(customVals[i]);
+							list.add(customVal);
 						}
 					}
 
@@ -428,15 +432,20 @@ public class NewPortletClassDataModelProvider
 			Properties categories = getCategories();
 
 			if ((categories != null) && (categories.size() > 0)) {
+				Set<Object> set = categories.keySet();
+				Collection<Object> values = categories.values();
+
 				return DataModelPropertyDescriptor.createDescriptors(
-					categories.keySet().toArray(new Object[0]), categories.values().toArray(new String[0]));
+					set.toArray(new Object[0]), values.toArray(new String[0]));
 			}
 		}
 		else if (ENTRY_CATEGORY.equals(propertyName)) {
 			Properties entryCategories = getEntryCategories();
 
 			if ((entryCategories != null) && (entryCategories.size() > 0)) {
-				Object[] keys = entryCategories.keySet().toArray();
+				Set<Object> set = entryCategories.keySet();
+
+				Object[] keys = set.toArray();
 
 				Arrays.sort(keys);
 
@@ -799,11 +808,7 @@ public class NewPortletClassDataModelProvider
 			if (portal != null) {
 				categories = portal.getPortletCategories();
 
-				IWorkspace workspace = ResourcesPlugin.getWorkspace();
-
-				IProject[] workspaceProjects = workspace.getRoot().getProjects();
-
-				for (IProject workspaceProject : workspaceProjects) {
+				for (IProject workspaceProject : CoreUtil.getAllProjects()) {
 					if (ProjectUtil.isPortletProject(workspaceProject)) {
 						LiferayDisplayDescriptorHelper liferayDisplayDH = new LiferayDisplayDescriptorHelper(
 							workspaceProject);
@@ -872,14 +877,14 @@ public class NewPortletClassDataModelProvider
 				Version portalVersion = Version.parseVersion(version);
 
 				if (CoreUtil.compareVersions(portalVersion, ILiferayConstants.V610) >= 0) {
-					paramVals = createDefaultParamValuesForModes(modes, initNames61, initValues);
+					paramVals = createDefaultParamValuesForModes(modes, INIT_NAME_61, INIT_VALUES);
 				}
 			}
 			catch (Exception e) {
 			}
 
 			if (paramVals == null) {
-				paramVals = createDefaultParamValuesForModes(modes, initNames60, initValues);
+				paramVals = createDefaultParamValuesForModes(modes, INIT_NAME_60, INIT_VALUES);
 			}
 
 			Collections.addAll(initParams, paramVals);
@@ -898,7 +903,9 @@ public class NewPortletClassDataModelProvider
 		 */
 		String split_pattern = "(?<!^)(?=[A-Z][^A-Z])|(?<=[^A-Z])(?=[A-Z])";
 
-		String[] words = oldName.replaceAll(_PORTLET_SUFFIX_PATTERN, StringPool.EMPTY).split(split_pattern);
+		oldName = oldName.replaceAll(_PORTLET_SUFFIX_PATTERN, StringPool.EMPTY);
+
+		String[] words = oldName.split(split_pattern);
 
 		StringBuilder newName = new StringBuilder();
 
@@ -910,7 +917,7 @@ public class NewPortletClassDataModelProvider
 			newName.append(words[i]);
 		}
 
-		return newName.toString().toLowerCase();
+		return StringUtil.toLowerCase(newName);
 	}
 
 	protected IProject getProject() {
@@ -937,23 +944,6 @@ public class NewPortletClassDataModelProvider
 		}
 
 		return runtime;
-	}
-
-	protected IFile getWorkspaceFile(IPath file) {
-		IFile retval = null;
-
-		try {
-			IWorkspace workspace = ResourcesPlugin.getWorkspace();
-
-			retval = workspace.getRoot().getFile(file);
-		}
-		catch (Exception e) {
-
-			// best effort
-
-		}
-
-		return retval;
 	}
 
 	protected Properties categories;
@@ -990,23 +980,23 @@ public class NewPortletClassDataModelProvider
 		String[] words = oldName.split("\\s|-|_");
 		StringBuilder newName = new StringBuilder();
 
-		for (int i = 0; i < words.length; i++) {
-			if (!words[i].isEmpty()) {
-				if (words[i].length() > 1) {
-					String word = words[i].substring(0, 1).toUpperCase() + words[i].substring(1, words[i].length());
+		for (String word : words) {
+			if (!word.isEmpty()) {
+				if (word.length() > 1) {
+					String word1 = StringUtil.toUpperCase(word.substring(0, 1)) + word.substring(1, word.length());
 
-					newName.append(word);
+					newName.append(word1);
 
 					newName.append(StringPool.SPACE);
 				}
-				else if (words[i].length() == 1) {
-					newName.append(words[i].substring(0, 1).toUpperCase());
+				else if (word.length() == 1) {
+					newName.append(StringUtil.toUpperCase(word.substring(0, 1)));
 					newName.append(StringPool.SPACE);
 				}
 			}
 		}
 
-		return newName.toString().trim();
+		return StringUtil.trim(newName);
 	}
 
 	private IStatus _validateFolder(IFolder folder, String folderValue) {
@@ -1022,7 +1012,9 @@ public class NewPortletClassDataModelProvider
 
 		IFolder fold = folder.getFolder(folderValue);
 
-		String path = fold.getFullPath().toString();
+		IPath fullPath = fold.getFullPath();
+
+		String path = fullPath.toString();
 
 		IStatus result = workspace.validatePath(path, IResource.FOLDER);
 
@@ -1030,7 +1022,7 @@ public class NewPortletClassDataModelProvider
 			return LiferayCore.createErrorStatus(Msgs.folderValueInvalid);
 		}
 
-		if (folder.getFolder(new Path(folderValue)).exists()) {
+		if (FileUtil.exists(folder.getFolder(new Path(folderValue)))) {
 			List<IFile> viewJspFiles = new SearchFilesVisitor().searchFiles(folder, "view.jsp");
 
 			if (ListUtil.isNotEmpty(viewJspFiles)) {

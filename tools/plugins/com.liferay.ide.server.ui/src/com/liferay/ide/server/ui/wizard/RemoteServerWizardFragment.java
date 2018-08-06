@@ -60,9 +60,9 @@ public class RemoteServerWizardFragment extends WizardFragment {
 		wizard.setTitle(Msgs.remoteLiferayServer);
 		wizard.setDescription(Msgs.configureRemoteLiferayServerInstance);
 
-		LiferayServerUI liferayServerUi = LiferayServerUI.getDefault();
+		LiferayServerUI liferayServerUI = LiferayServerUI.getDefault();
 
-		Bundle bundle = liferayServerUi.getBundle();
+		Bundle bundle = liferayServerUI.getBundle();
 
 		wizard.setImageDescriptor(ImageDescriptor.createFromURL(bundle.getEntry("/icons/wizban/server_wiz.png")));
 

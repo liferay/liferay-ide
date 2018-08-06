@@ -96,7 +96,7 @@ public class JSFPortletFramework
 		ILibraryProvider noOpProvider = null;
 
 		for (ILibraryProvider provider : providers) {
-			if (provider.getId().equals("jsf-no-op-library-provider")) {
+			if ("jsf-no-op-library-provider".equals(provider.getId())) {
 				noOpProvider = provider;
 
 				break;
@@ -133,20 +133,22 @@ public class JSFPortletFramework
 
 				// TODO IDE-648
 
-				IPath location =
-					sdk.getLocation().append("tools/portlet_" + frameworkName + "_tmpl/docroot/WEB-INF/web.xml");
+				IPath sdkLocation = sdk.getLocation();
+
+				IPath location = sdkLocation.append("tools/portlet_" + frameworkName + "_tmpl/docroot/WEB-INF/web.xml");
 
 				File originalWebXmlFile = location.toFile();
 
 				if (originalWebXmlFile.exists()) {
-					final IWebProject webproject = LiferayCore.create(IWebProject.class, project);
+					IWebProject webproject = LiferayCore.create(IWebProject.class, project);
 
 					if (webproject != null) {
 						IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
 
 						try (InputStream newInputStream = Files.newInputStream(originalWebXmlFile.toPath())) {
-							defaultDocroot.getFile("WEB-INF/web.xml").setContents(
-								newInputStream, IResource.FORCE, null);
+							IFile webFile = defaultDocroot.getFile("WEB-INF/web.xml");
+
+							webFile.setContents(newInputStream, IResource.FORCE, null);
 						}
 					}
 				}
@@ -162,18 +164,20 @@ public class JSFPortletFramework
 			IFolder views = docroot.getFolder("views");
 
 			if (views.exists()) {
-				views.move(docroot.getFolder("WEB-INF/views").getFullPath(), true, monitor);
+				IFolder versFolder = docroot.getFolder("WEB-INF/views");
+
+				views.move(versFolder.getFullPath(), true, monitor);
 
 				IFile portletXml = docroot.getFile("WEB-INF/portlet.xml");
 
-				File portletXmlFile = portletXml.getLocation().toFile();
+				File portletXmlFile = FileUtil.getFile(portletXml);
 
 				String contents = FileUtil.readContents(portletXmlFile, true);
 
 				if (contents.contains("init-param")) {
 					contents = contents.replaceAll("/views/view.xhtml", "/WEB-INF/views/view.xhtml");
 
-					try(InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"))){
+					try (InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"))) {
 						portletXml.setContents(inputStream, IResource.FORCE, null);
 					}
 				}
@@ -202,7 +206,9 @@ public class JSFPortletFramework
 		Set<IProjectFacetVersion> facets = project.getProjectFacets();
 
 		for (IProjectFacetVersion facet : facets) {
-			String projectFacetId = facet.getProjectFacet().getId();
+			IProjectFacet projectFacet = facet.getProjectFacet();
+
+			String projectFacetId = projectFacet.getId();
 
 			if (projectFacetId.equals(IJSFCoreConstants.JSF_CORE_FACET_ID)) {
 				return facet;

@@ -89,7 +89,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		validationAction.assertEquals(StringPool.BLANK, wizardAction.newFragmentInfo.getHostOsgiBundle());
+		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newFragmentInfo.getHostOsgiBundle());
 
 		validationAction.assertEnabledTrue(wizardAction.newFragmentInfo.getBrowseOsgiBtn());
 
@@ -108,7 +108,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 	public void checkInitialState() {
 		wizardAction.openNewFragmentWizard();
 
-		validationAction.assertEquals(StringPool.BLANK, wizardAction.newProject.projectName());
+		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newProject.projectName());
 
 		validationAction.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, wizardAction.getValidationMsg(2));
 
@@ -116,13 +116,13 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		wizardAction.newProject.deselectUseDefaultLocation();
 
-		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
+		String workspacePath = envAction.getEclipseWorkspacePathOSString();
 
-		if (Platform.getOS().equals("win32")) {
+		if ("win32".equals(Platform.getOS())) {
 			workspacePath = workspacePath.replaceAll("\\\\", "/");
 		}
 
-		validationAction.assertEquals(workspacePath, wizardAction.newProject.location());
+		validationAction.assertTextEquals(workspacePath, wizardAction.newProject.location());
 
 		validationAction.assertEnabledFalse(wizardAction.getNextBtn());
 
@@ -145,7 +145,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 			workspacePath = workspacePath.replaceAll("\\\\", "/");
 		}
 
-		validationAction.assertEquals(workspacePath, wizardAction.newProject.location());
+		validationAction.assertTextEquals(workspacePath, wizardAction.newProject.location());
 
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(

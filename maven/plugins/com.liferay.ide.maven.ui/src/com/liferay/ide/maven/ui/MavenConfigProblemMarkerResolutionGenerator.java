@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.ui;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
 import com.liferay.ide.maven.core.MavenUtil;
 
@@ -28,6 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 
 /**
  * @author Kuo Zhang
@@ -38,17 +40,19 @@ public class MavenConfigProblemMarkerResolutionGenerator extends ConfigProblemMa
 	protected boolean correctMarker(IMarker marker) {
 		boolean retval = false;
 
-		IProject project = marker.getResource().getProject();
+		IProject project = MarkerUtil.getProject(marker);
 
 		if (FileUtil.notExists(project)) {
 			return false;
 		}
 
-		IMavenProjectFacade projectFacade =
-			MavenPlugin.getMavenProjectRegistry().getProject(marker.getResource().getProject());
+		IMavenProjectRegistry mavenProjectRegistry = MavenPlugin.getMavenProjectRegistry();
+
+		IMavenProjectFacade projectFacade = mavenProjectRegistry.getProject(project);
 
 		if (projectFacade != null) {
 			MavenProject mavenProject = null;
+
 			IProgressMonitor npm = new NullProgressMonitor();
 
 			try {

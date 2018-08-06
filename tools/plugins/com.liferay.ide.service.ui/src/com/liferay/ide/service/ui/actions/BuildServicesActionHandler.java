@@ -24,6 +24,7 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.SapphirePart;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 
 /**
@@ -34,7 +35,9 @@ public class BuildServicesActionHandler extends SapphireActionHandler {
 
 	@Override
 	protected Object run(Presentation context) {
-		Element modelElement = context.part().getModelElement();
+		SapphirePart sapphirePart = context.part();
+
+		Element modelElement = sapphirePart.getModelElement();
 
 		IFile file = modelElement.adapt(IFile.class);
 

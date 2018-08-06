@@ -29,7 +29,7 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
  */
 public interface NewLiferayProfileOp extends NewLiferayPluginProjectOp, HasLiferayRuntime {
 
-	ElementType TYPE = new ElementType(NewLiferayProfileOp.class);
+	public ElementType TYPE = new ElementType(NewLiferayProfileOp.class);
 
 	// we don't want to validated for missing project names
 

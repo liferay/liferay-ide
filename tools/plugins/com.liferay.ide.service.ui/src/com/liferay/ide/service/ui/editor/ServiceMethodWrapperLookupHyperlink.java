@@ -54,9 +54,12 @@ public class ServiceMethodWrapperLookupHyperlink extends ServiceMethodHyperlink 
 
 			Class<?> sourceViewClass = sourceViewer.getClass();
 
-			Field p = sourceViewClass.getSuperclass().getDeclaredField("fHierarchyPresenter");
+			Class<?> supperClass = sourceViewClass.getSuperclass();
+
+			Field p = supperClass.getDeclaredField("fHierarchyPresenter");
 
 			p.setAccessible(true);
+
 			InformationPresenter presenter = (InformationPresenter)p.get(sourceViewer);
 
 			Class<? extends InformationPresenter> presenterClass = presenter.getClass();
@@ -68,10 +71,13 @@ public class ServiceMethodWrapperLookupHyperlink extends ServiceMethodHyperlink 
 
 			m.setAccessible(true);
 			m.invoke(presenter, (IInformationControlCreator)null);
+
 			m = presenterClass.getDeclaredMethod("computeArea", IRegion.class);
 
 			m.setAccessible(true);
+
 			Rectangle bounds = (Rectangle)m.invoke(presenter, wordRegion());
+
 			m = presenterSuperclass.getDeclaredMethod("setInformation", Object.class, Rectangle.class);
 
 			m.setAccessible(true);

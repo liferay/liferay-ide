@@ -16,16 +16,17 @@ package com.liferay.ide.portlet.core.job;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.project.core.IProjectBuilder;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -49,7 +50,9 @@ public class BuildLanguageJob extends Job {
 	protected IStatus run(IProgressMonitor monitor) {
 		IStatus retval = null;
 
-		IWorkspaceDescription desc = ResourcesPlugin.getWorkspace().getDescription();
+		IWorkspace workspace = CoreUtil.getWorkspace();
+
+		IWorkspaceDescription desc = workspace.getDescription();
 
 		boolean saveAutoBuild = desc.isAutoBuilding();
 
@@ -66,20 +69,20 @@ public class BuildLanguageJob extends Job {
 		};
 
 		try {
-			ResourcesPlugin.getWorkspace().setDescription(desc);
+			workspace.setDescription(desc);
 
-			ResourcesPlugin.getWorkspace().run(workspaceRunner, monitor);
+			workspace.run(workspaceRunner, monitor);
 		}
 		catch (CoreException ce) {
 			retval = PortletCore.createErrorStatus(ce);
 		}
 		finally {
-			desc = ResourcesPlugin.getWorkspace().getDescription();
+			desc = workspace.getDescription();
 
 			desc.setAutoBuilding(saveAutoBuild);
 
 			try {
-				ResourcesPlugin.getWorkspace().setDescription(desc);
+				workspace.setDescription(desc);
 			}
 			catch (CoreException ce) {
 				retval = PortletCore.createErrorStatus(ce);

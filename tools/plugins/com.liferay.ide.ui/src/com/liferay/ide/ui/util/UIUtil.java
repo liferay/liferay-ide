@@ -161,6 +161,12 @@ public class UIUtil {
 		return null;
 	}
 
+	public static IWorkbenchWindow getActiveWorkbenchWindow() {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+
+		return workbench.getActiveWorkbenchWindow();
+	}
+
 	public static IWorkbenchPage getActivePage() {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 
@@ -451,6 +457,12 @@ public class UIUtil {
 				page.setPerspective(persp);
 			}
 		}
+	}
+
+	public static IWorkbenchWindow[] getWorkbenchWindows() {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+
+		return workbench.getWorkbenchWindows();
 	}
 
 }

@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import org.apache.maven.model.Plugin;
 
@@ -61,7 +62,8 @@ public class MavenGoalUtil {
 		}
 
 		if ((CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("1.0.145")) >= 0) &&
-			plugin.getArtifactId().equals(ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_SERVICE_BUILDER_KEY)) {
+			StringUtil.equals(
+				plugin.getArtifactId(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_SERVICE_BUILDER_KEY)) {
 
 			return "service-builder:build";
 		}
@@ -101,7 +103,7 @@ public class MavenGoalUtil {
 		}
 
 		if ((CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("1.0.7")) >= 0) &&
-			plugin.getArtifactId().equals(ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_WSDD_BUILDER_KEY)) {
+			StringUtil.equals(plugin.getArtifactId(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_WSDD_BUILDER_KEY)) {
 
 			return "wsdd-builder:build";
 		}

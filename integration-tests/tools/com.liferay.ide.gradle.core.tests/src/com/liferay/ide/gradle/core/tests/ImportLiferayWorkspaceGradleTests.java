@@ -30,7 +30,6 @@ import org.junit.Test;
 /**
  * @author Terry Jia
  */
-
 @Ignore("ignore and will fix later")
 public class ImportLiferayWorkspaceGradleTests extends ProjectOpBase<ImportLiferayWorkspaceOp> {
 

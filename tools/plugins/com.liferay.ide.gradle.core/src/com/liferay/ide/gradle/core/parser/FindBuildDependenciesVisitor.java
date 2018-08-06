@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.codehaus.groovy.ast.CodeVisitorSupport;
+import org.codehaus.groovy.ast.expr.Expression;
 import org.codehaus.groovy.ast.expr.MapEntryExpression;
 import org.codehaus.groovy.ast.expr.MapExpression;
 
@@ -38,10 +39,10 @@ public class FindBuildDependenciesVisitor extends CodeVisitorSupport {
 		Map<String, String> dependenceMap = new HashMap<>();
 
 		for (MapEntryExpression mapEntryExpression : mapEntryExpressions) {
-			String key = mapEntryExpression.getKeyExpression().getText();
-			String value = mapEntryExpression.getValueExpression().getText();
+			Expression key = mapEntryExpression.getKeyExpression();
+			Expression value = mapEntryExpression.getValueExpression();
 
-			dependenceMap.put(key, value);
+			dependenceMap.put(key.getText(), value.getText());
 		}
 
 		_dependencies.add(new GradleDependency(dependenceMap));

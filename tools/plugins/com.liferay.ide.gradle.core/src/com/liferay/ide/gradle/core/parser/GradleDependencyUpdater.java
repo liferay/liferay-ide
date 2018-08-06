@@ -41,16 +41,16 @@ import org.eclipse.core.resources.IFile;
  */
 public class GradleDependencyUpdater {
 
-	public GradleDependencyUpdater(IFile file) throws IOException, MultipleCompilationErrorsException {
-		this(FileUtils.readFileToString(FileUtil.getFile(file), "UTF-8"));
-
-		_file = FileUtil.getFile(file);
-	}
-
 	public GradleDependencyUpdater(File file) throws IOException, MultipleCompilationErrorsException {
 		this(FileUtils.readFileToString(file, "UTF-8"));
 
 		_file = file;
+	}
+
+	public GradleDependencyUpdater(IFile file) throws IOException, MultipleCompilationErrorsException {
+		this(FileUtils.readFileToString(FileUtil.getFile(file), "UTF-8"));
+
+		_file = FileUtil.getFile(file);
 	}
 
 	public GradleDependencyUpdater(String scriptContents) throws MultipleCompilationErrorsException {
@@ -59,16 +59,16 @@ public class GradleDependencyUpdater {
 		_nodes = builder.buildFromString(scriptContents);
 	}
 
-	public List<GradleDependency> getAllDependencies() {
-		FindDependenciesVisitor visitor = new FindDependenciesVisitor();
+	public List<GradleDependency> getAllBuildDependencies() {
+		FindBuildDependenciesVisitor visitor = new FindBuildDependenciesVisitor();
 
 		walkScript(visitor);
 
 		return visitor.getDependencies();
 	}
 
-	public List<GradleDependency> getAllBuildDependencies() {
-		FindBuildDependenciesVisitor visitor = new FindBuildDependenciesVisitor();
+	public List<GradleDependency> getAllDependencies() {
+		FindDependenciesVisitor visitor = new FindDependenciesVisitor();
 
 		walkScript(visitor);
 

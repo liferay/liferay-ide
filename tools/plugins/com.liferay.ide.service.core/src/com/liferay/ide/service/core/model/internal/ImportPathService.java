@@ -19,6 +19,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.Element;
@@ -37,7 +38,9 @@ public class ImportPathService extends RelativePathService {
 			IFile file = context(Element.class).adapt(IFile.class);
 
 			if (file != null) {
-				IPath baseLocation = file.getParent().getLocation();
+				IContainer parent = file.getParent();
+
+				IPath baseLocation = parent.getLocation();
 
 				IPath absoluteLocation = baseLocation.append(PathBridge.create(path));
 
@@ -56,7 +59,9 @@ public class ImportPathService extends RelativePathService {
 			IFile file = context(Element.class).adapt(IFile.class);
 
 			if (file != null) {
-				IPath baseLocation = file.getParent().getLocation();
+				IContainer parent = file.getParent();
+
+				IPath baseLocation = parent.getLocation();
 
 				if (baseLocation != null) {
 					return path.makeRelativeTo(PathBridge.create(baseLocation));

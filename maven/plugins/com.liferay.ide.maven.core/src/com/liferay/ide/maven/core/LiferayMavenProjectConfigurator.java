@@ -91,12 +91,15 @@ import org.osgi.framework.Version;
 public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator implements IJavaProjectConfigurator {
 
 	public static IPath getThemeTargetFolder(MavenProject mavenProject, IProject project) {
-		return MavenUtil.getM2eLiferayFolder(
-			mavenProject, project).append(ILiferayMavenConstants.THEME_RESOURCES_FOLDER);
+		IPath m2eLiferayFolder = MavenUtil.getM2eLiferayFolder(mavenProject, project);
+
+		return m2eLiferayFolder.append(ILiferayMavenConstants.THEME_RESOURCES_FOLDER);
 	}
 
 	public LiferayMavenProjectConfigurator() {
-		_mavenMarkerManager = MavenPluginActivator.getDefault().getMavenMarkerManager();
+		MavenPluginActivator mavenPluginActivator = MavenPluginActivator.getDefault();
+
+		_mavenMarkerManager = mavenPluginActivator.getMavenMarkerManager();
 	}
 
 	@Override
@@ -155,9 +158,11 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 		monitor.worked(25);
 
 		if (installProblem != null) {
+			SourceLocation sourceLocation = installProblem.getLocation();
+
 			this.markerManager.addMarker(
 				pomFile, ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_WARNING_ID,
-				installProblem.getMessage(), installProblem.getLocation().getLineNumber(), IMarker.SEVERITY_WARNING);
+				installProblem.getMessage(), sourceLocation.getLineNumber(), IMarker.SEVERITY_WARNING);
 		}
 		else {
 			String pluginType = MavenUtil.getLiferayMavenPluginType(mavenProject);
@@ -247,7 +252,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 					IFolder docFolder = webproject.getDefaultDocrootFolder();
 					IPath newPath = Path.fromOSString(customJSPFolder);
 
-					IPath pathValue = docFolder.getFullPath().append(newPath);
+					IPath fullPath = docFolder.getFullPath();
+
+					IPath pathValue = fullPath.append(newPath);
 
 					boolean disableCustomJspValidation = LiferayMavenCore.getPreferenceBoolean(
 						LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION);
@@ -453,7 +460,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 			for (IProjectFacetVersion fv : facetedProject.getProjectFacets()) {
 				IProjectFacet projectFacet = fv.getProjectFacet();
 
-				if (projectFacet.getId().contains("liferay.")) {
+				String id = projectFacet.getId();
+
+				if (id.contains("liferay.")) {
 					retval = fv;
 
 					break;
@@ -621,7 +630,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 	private IFolder _warSourceDirectory(IProject project, MavenProject mavenProject) {
 		IFolder retval = null;
 
-		Xpp3Dom warPluginConfiguration = (Xpp3Dom)mavenProject.getPlugin(_MAVEN_WAR_PLUGIN_KEY).getConfiguration();
+		Plugin plugin = mavenProject.getPlugin(_MAVEN_WAR_PLUGIN_KEY);
+
+		Xpp3Dom warPluginConfiguration = (Xpp3Dom)plugin.getConfiguration();
 
 		if (warPluginConfiguration != null) {
 			Xpp3Dom[] warSourceDirs = warPluginConfiguration.getChildren("warSourceDirectory");

@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -121,7 +122,9 @@ public class LiferayPortalMaven implements ILiferayPortal {
 					mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION);
 
 				if (liferayVersion == null) {
-					liferayVersion = mavenProject.getProperties().getProperty("liferay.version");
+					Properties properties = mavenProject.getProperties();
+
+					liferayVersion = properties.getProperty("liferay.version");
 
 					if (liferayVersion == null) {
 
@@ -131,8 +134,8 @@ public class LiferayPortalMaven implements ILiferayPortal {
 
 						if (deps != null) {
 							for (Dependency dep : deps) {
-								if (dep.getArtifactId().startsWith("portal-") &&
-									dep.getGroupId().startsWith("com.liferay")) {
+								if (StringUtil.startsWith(dep.getArtifactId(), "portal-") &&
+									StringUtil.startsWith(dep.getGroupId(), "com.liferay")) {
 
 									liferayVersion = dep.getVersion();
 

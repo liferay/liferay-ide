@@ -17,6 +17,8 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
@@ -31,6 +33,7 @@ import java.util.Properties;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -41,16 +44,16 @@ import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 
 import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.internal.MavenPluginActivator;
+import org.eclipse.m2e.core.internal.embedder.MavenImpl;
 import org.eclipse.sapphire.Value;
-import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 
 import org.json.JSONArray;
@@ -77,11 +80,7 @@ public class NewMavenJSFModuleProjectProvider
 
 		IPath projectLocation = createArchetypeProject(op, monitor);
 
-		IPath buildGradle = projectLocation.append("build.gradle");
-
-		if (FileUtil.exists(buildGradle)) {
-			buildGradle.toFile().delete();
-		}
+		FileUtil.delete(projectLocation.append("build.gradle"));
 
 		Value<String> projectNameValue = op.getProjectName();
 
@@ -131,7 +130,9 @@ public class NewMavenJSFModuleProjectProvider
 
 			HttpResponse response = httpClient.execute(httpGet);
 
-			int statusCode = response.getStatusLine().getStatusCode();
+			StatusLine statusLine = response.getStatusLine();
+
+			int statusCode = statusLine.getStatusCode();
 
 			if (statusCode == HttpStatus.SC_OK) {
 				HttpEntity entity = response.getEntity();
@@ -143,7 +144,7 @@ public class NewMavenJSFModuleProjectProvider
 				retVal.append(body);
 			}
 			else {
-				return response.getStatusLine().getReasonPhrase();
+				return statusLine.getReasonPhrase();
 			}
 		}
 		catch (Exception e) {
@@ -157,20 +158,12 @@ public class NewMavenJSFModuleProjectProvider
 	public IStatus validateProjectLocation(String projectName, IPath path) {
 		IStatus retval = Status.OK_STATUS;
 
-		Path currentProjectLocation = PathBridge.create(path);
-
-		boolean liferayWorkspace = false;
-
-		if (currentProjectLocation != null) {
-			liferayWorkspace = LiferayWorkspaceUtil.isValidWorkspaceLocation(currentProjectLocation.toOSString());
-		}
-
-		if (LiferayWorkspaceUtil.isValidWorkspaceLocation(currentProjectLocation.toOSString())) {
-			retval = LiferayMavenCore.createErrorStatus("Can't set WorkspaceProject root folder as project directory.");
-		}
+		boolean liferayWorkspace = LiferayWorkspaceUtil.isValidWorkspaceLocation(path);
 
 		if (liferayWorkspace) {
-			File workspaceDir = LiferayWorkspaceUtil.getWorkspaceDir(currentProjectLocation.toFile());
+			retval = LiferayMavenCore.createErrorStatus("Can't set WorkspaceProject root folder as project directory.");
+
+			File workspaceDir = LiferayWorkspaceUtil.getWorkspaceDir(path.toFile());
 
 			if (FileUtil.notExists(workspaceDir)) {
 				return LiferayCore.createErrorStatus("The project location of Liferay Workspace shoule be existed.");
@@ -180,17 +173,16 @@ public class NewMavenJSFModuleProjectProvider
 
 			if (folders != null) {
 				boolean appendWarFolder = false;
-				IPath projectLocation = PathBridge.create(currentProjectLocation);
 
 				for (String folder : folders) {
-					if (projectLocation.lastSegment().endsWith(folder)) {
+					if (StringUtil.endsWith(path.lastSegment(), folder)) {
 						appendWarFolder = true;
 
 						break;
 					}
 				}
 
-				if (appendWarFolder == false) {
+				if (!appendWarFolder) {
 					return LiferayMavenCore.createErrorStatus(
 						"The project location should be wars folder of Liferay workspace.");
 				}
@@ -209,13 +201,13 @@ public class NewMavenJSFModuleProjectProvider
 		IPath projectLocation = null;
 		String javaPackage = "com.example";
 
-		String projectName = op.getProjectName().content();
+		String projectName = SapphireUtil.getContent(op.getProjectName());
 
-		IPath location = PathBridge.create(op.getLocation().content());
+		IPath location = PathBridge.create(SapphireUtil.getContent(op.getLocation()));
 
 		// for location we should use the parent location
 
-		if (location.lastSegment().equals(projectName)) {
+		if (StringUtil.equals(location.lastSegment(), projectName)) {
 
 			// use parent dir since maven archetype will generate new dir under this
 			// location
@@ -223,11 +215,11 @@ public class NewMavenJSFModuleProjectProvider
 			location = location.removeLastSegments(1);
 		}
 
-		String groupId = op.getProjectName().content();
-		String artifactId = op.getProjectName().content();
+		String groupId = SapphireUtil.getContent(op.getProjectName());
+		String artifactId = SapphireUtil.getContent(op.getProjectName());
 		String version = "1.0.0";
 
-		String archetypeArtifactId = op.getArchetype().content();
+		String archetypeArtifactId = SapphireUtil.getContent(op.getArchetype());
 
 		Archetype archetype = new Archetype();
 
@@ -244,7 +236,7 @@ public class NewMavenJSFModuleProjectProvider
 
 		Properties properties = new Properties();
 
-		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+		IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
 
 		if (location == null) {
 			location = workspaceRoot.getLocation();
@@ -255,11 +247,18 @@ public class NewMavenJSFModuleProjectProvider
 
 			ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
 
-			request.setTransferListener(pluginActivator.getMaven().createTransferListener(monitor));
+			MavenImpl mavenImpl = pluginActivator.getMaven();
+
+			request.setTransferListener(mavenImpl.createTransferListener(monitor));
+
 			request.setArchetypeGroupId(artifact.getGroupId());
 			request.setArchetypeArtifactId(artifact.getArtifactId());
 			request.setArchetypeVersion(artifact.getVersion());
-			request.setArchetypeRepository(AetherUtil.newCentralRepository().getUrl());
+
+			RemoteRepository remoteRepository = AetherUtil.newCentralRepository();
+
+			request.setArchetypeRepository(remoteRepository.getUrl());
+
 			request.setGroupId(groupId);
 			request.setArtifactId(artifactId);
 			request.setVersion(version);
@@ -267,8 +266,8 @@ public class NewMavenJSFModuleProjectProvider
 
 			// the model does not have a package field
 
-			request.setLocalRepository(pluginActivator.getMaven().getLocalRepository());
-			request.setRemoteArtifactRepositories(pluginActivator.getMaven().getArtifactRepositories(true));
+			request.setLocalRepository(mavenImpl.getLocalRepository());
+			request.setRemoteArtifactRepositories(mavenImpl.getArtifactRepositories(true));
 			request.setProperties(properties);
 			request.setOutputDirectory(location.toPortableString());
 
@@ -341,7 +340,9 @@ public class NewMavenJSFModuleProjectProvider
 	private ArchetypeManager _getArchetyper() {
 		MavenPluginActivator plugin = MavenPluginActivator.getDefault();
 
-		return plugin.getArchetypeManager().getArchetyper();
+		org.eclipse.m2e.core.internal.archetype.ArchetypeManager archetypeManager = plugin.getArchetypeManager();
+
+		return archetypeManager.getArchetyper();
 	}
 
 	private Object _getJSONResponse(String response) {

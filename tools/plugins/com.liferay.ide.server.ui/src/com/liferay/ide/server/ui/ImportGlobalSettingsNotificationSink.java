@@ -102,8 +102,11 @@ public class ImportGlobalSettingsNotificationSink extends PopupNotificationSink 
 		List<AbstractNotification> toDisplay = new ArrayList<>(getNotifications());
 
 		Collections.sort(toDisplay);
+
 		_popup.setContents(toDisplay);
+
 		getNotifications().clear();
+
 		_popup.setBlockOnOpen(false);
 		_popup.setDelayClose(60 * 1000);
 		_popup.open();

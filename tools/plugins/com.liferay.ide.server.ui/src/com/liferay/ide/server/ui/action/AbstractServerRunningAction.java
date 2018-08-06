@@ -153,6 +153,7 @@ public abstract class AbstractServerRunningAction implements IObjectActionDelega
 		TaskWizard wizard = new TaskWizard(_wizardTitle, fragment, taskModel);
 
 		wizard.setForcePreviousAndNextButtons(true);
+
 		WizardDialog dialog = new WizardDialog(getActiveShell(), wizard);
 
 		return dialog.open();

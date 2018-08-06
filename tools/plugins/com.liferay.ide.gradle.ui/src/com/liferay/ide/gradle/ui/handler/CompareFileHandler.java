@@ -69,7 +69,7 @@ public class CompareFileHandler extends AbstractCompareFileHandler {
 			templateFile = new File(templateLocation.toOSString());
 
 			if (FileUtil.notExists(templateFile)) {
-				throw new FileNotFoundException("Template not found.");
+				throw new FileNotFoundException("Template not found");
 			}
 		}
 

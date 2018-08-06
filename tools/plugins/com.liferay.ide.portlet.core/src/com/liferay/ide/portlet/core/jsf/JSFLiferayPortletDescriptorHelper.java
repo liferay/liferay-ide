@@ -17,6 +17,7 @@ package com.liferay.ide.portlet.core.jsf;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.dd.LiferayPortletDescriptorHelper;
 import com.liferay.ide.project.core.descriptor.UpdateDescriptorVersionOperation;
@@ -28,6 +29,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
@@ -70,7 +72,9 @@ public class JSFLiferayPortletDescriptorHelper
 					IDOMModel domModel = null;
 
 					try {
-						domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForEdit(descriptorFile);
+						IModelManager modelManager = StructuredModelManager.getModelManager();
+
+						domModel = (IDOMModel)modelManager.getModelForEdit(descriptorFile);
 
 						IDOMDocument document = domModel.getDocument();
 
@@ -102,7 +106,7 @@ public class JSFLiferayPortletDescriptorHelper
 
 	@Override
 	protected boolean canAddNewPortlet(IDataModel model) {
-		return model.getID().contains("NewJSFPortlet");
+		return StringUtil.contains(model.getID(), "NewJSFPortlet");
 	}
 
 	@Override
@@ -159,7 +163,9 @@ public class JSFLiferayPortletDescriptorHelper
 
 			String nodeValue = prevNode.getNodeValue();
 
-			if ((prevNode != null) && (prevNode.getNodeType() == Node.TEXT_NODE) && (nodeValue.trim().length() == 0)) {
+			if ((prevNode != null) && (prevNode.getNodeType() == Node.TEXT_NODE) &&
+				CoreUtil.isNullOrEmpty(nodeValue.trim())) {
+
 				parentNode.removeChild(prevNode);
 			}
 
@@ -179,7 +185,9 @@ public class JSFLiferayPortletDescriptorHelper
 		if (portletNodes.getLength() > 1) {
 			Element lastPortletElement = (Element)portletNodes.item(portletNodes.getLength() - 1);
 
-			Node headerPortletClassElement = lastPortletElement.getElementsByTagName("header-portlet-css").item(0);
+			NodeList nodeList = lastPortletElement.getElementsByTagName("header-portlet-css");
+
+			Node headerPortletClassElement = nodeList.item(0);
 
 			NodeUtil.insertChildElement(
 				lastPortletElement, headerPortletClassElement, "requires-namespaced-parameters", "false");

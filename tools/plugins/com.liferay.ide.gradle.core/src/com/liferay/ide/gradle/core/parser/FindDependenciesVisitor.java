@@ -50,7 +50,9 @@ public class FindDependenciesVisitor extends CodeVisitorSupport {
 		List<Expression> expressions = ale.getExpressions();
 
 		if ((expressions.size() == 1) && (expressions.get(0) instanceof ConstantExpression)) {
-			String depStr = expressions.get(0).getText();
+			Expression expression = expressions.get(0);
+
+			String depStr = expression.getText();
 
 			String[] deps = depStr.split(":");
 
@@ -77,10 +79,11 @@ public class FindDependenciesVisitor extends CodeVisitorSupport {
 		Map<String, String> dependenceMap = new HashMap<>();
 
 		for (MapEntryExpression mapEntryExpression : mapEntryExpressions) {
-			String key = mapEntryExpression.getKeyExpression().getText();
-			String value = mapEntryExpression.getValueExpression().getText();
+			Expression key = mapEntryExpression.getKeyExpression();
 
-			dependenceMap.put(key, value);
+			Expression value = mapEntryExpression.getValueExpression();
+
+			dependenceMap.put(key.getText(), value.getText());
 		}
 
 		_dependencies.add(new GradleDependency(dependenceMap));
@@ -90,8 +93,8 @@ public class FindDependenciesVisitor extends CodeVisitorSupport {
 
 	@Override
 	public void visitMethodCallExpression(MethodCallExpression call) {
-		if (!call.getMethodAsString().equals("buildscript")) {
-			if (call.getMethodAsString().equals("dependencies")) {
+		if (!"buildscript".equals(call.getMethodAsString())) {
+			if ("dependencies".equals(call.getMethodAsString())) {
 				if (_dependenceLineNum == -1) {
 					_dependenceLineNum = call.getLastLineNumber();
 				}

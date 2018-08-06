@@ -35,7 +35,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -72,9 +71,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) throws CoreException {
 		String bundleUrlProperty = "\n\n" + LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
 
-		IPath gradlePropertiesLocation = project.getFile("gradle.properties").getLocation();
-
-		File gradlePropertiesFile = gradlePropertiesLocation.toFile();
+		File gradlePropertiesFile = FileUtil.getFile(project.getFile("gradle.properties"));
 
 		try {
 			Files.write(gradlePropertiesFile.toPath(), bundleUrlProperty.getBytes(), StandardOpenOption.APPEND);
@@ -107,7 +104,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 				if (!existDependencies.contains(gd)) {
 					updater.insertDependency(gd);
 
-					FileUtils.writeLines(_gradleBuildFile.getLocation().toFile(), updater.getGradleFileContents());
+					FileUtils.writeLines(FileUtil.getFile(_gradleBuildFile), updater.getGradleFileContents());
 
 					GradleUtil.refreshProject(project);
 				}

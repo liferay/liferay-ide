@@ -19,7 +19,6 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
-import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,9 +66,11 @@ public class ModuleCoreUtil {
 		sb.append("</project-modules>");
 		sb.append("\n");
 
-		String finalContent = sb.toString().replace("PROJECT_NAME", project.getName());
+		String s = sb.toString();
 
-		File compoment = new File(project.getLocation().toFile(), ".settings/org.eclipse.wst.common.component");
+		String finalContent = s.replace("PROJECT_NAME", project.getName());
+
+		File compoment = new File(FileUtil.getFile(project), ".settings/org.eclipse.wst.common.component");
 
 		if (FileUtil.notExists(compoment)) {
 			FileUtil.writeFile(compoment, finalContent.getBytes(), project.getName());
@@ -116,33 +117,33 @@ public class ModuleCoreUtil {
 		List<String> list = new ArrayList<>();
 
 		try {
-			IPath projectPath = project.getLocation().append(".project");
+			IPath location = project.getLocation();
 
-			File projectFile = projectPath.toFile().getCanonicalFile();
+			IPath projectPath = location.append(".project");
+
+			File projectFile = FileUtil.getCanonicalFile(projectPath);
 
 			project.accept(
 				new IResourceVisitor() {
 
 					@Override
 					public boolean visit(IResource resource) throws CoreException {
-						try {
-							IPath childProject = resource.getLocation().append(".project");
+						IPath location = resource.getLocation();
 
-							File childFile = childProject.toFile().getCanonicalFile();
+						IPath childProject = location.append(".project");
 
-							// don't check child project
+						File childFile = FileUtil.getCanonicalFile(childProject);
 
-							if (FileUtil.exists(childFile) && !projectFile.equals(childFile)) {
-								return false;
-							}
+						// don't check child project
 
-							String path = resource.getLocation().toPortableString();
-
-							if (path.contains("resources/META-INF/resources") && resource.getName().endsWith(".jsp")) {
-								list.add(path);
-							}
+						if (FileUtil.exists(childFile) && !projectFile.equals(childFile)) {
+							return false;
 						}
-						catch (IOException ioe) {
+
+						String path = FileUtil.getLocationPortableString(resource);
+
+						if (path.contains("resources/META-INF/resources") && FileUtil.nameEndsWith(resource, ".jsp")) {
+							list.add(path);
 						}
 
 						return true;
