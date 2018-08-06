@@ -39,10 +39,6 @@ public class Tree extends AbstractWidget {
 		super(bot, index);
 	}
 
-	public void contextMenu(String menu, String... items) {
-		contextMenu(false, menu, items);
-	}
-
 	public void contextMenu(boolean fuzzy, String menu, String... items) {
 		SWTBotTreeItem item = null;
 
@@ -54,9 +50,7 @@ public class Tree extends AbstractWidget {
 			for (int m = 0; m < items.length; m++) {
 				String itemLabel = items[m];
 
-				for (int i = 0; i < treeItems.length; i++) {
-					SWTBotTreeItem currentItem = treeItems[i];
-
+				for (SWTBotTreeItem currentItem : treeItems) {
 					currentItem.setFocus();
 
 					sleep();
@@ -107,7 +101,7 @@ public class Tree extends AbstractWidget {
 
 				try {
 					getWidget().setFocus();
-	
+
 					if (items.length > 1) {
 						item = getWidget().expandNode(items);
 					}
@@ -129,7 +123,6 @@ public class Tree extends AbstractWidget {
 				sb.append(treeItem.getText());
 				sb.append(" ");
 			}
-
 		}
 
 		Assert.assertNotNull(sb.toString(), item);
@@ -137,6 +130,10 @@ public class Tree extends AbstractWidget {
 		SWTBotMenu botMenu = item.contextMenu(menu);
 
 		botMenu.click();
+	}
+
+	public void contextMenu(String menu, String... items) {
+		contextMenu(false, menu, items);
 	}
 
 	public void doubleClick(String... items) {

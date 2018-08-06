@@ -60,9 +60,9 @@ public abstract class DeployServiceBuilderModuleGradleTomcat7xBase extends Serve
 		viewAction.project.closeAndDelete(project.getName() + "-service");
 	}
 
-	protected abstract String getVersion();
-
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
+
+	protected abstract String getVersion();
 
 }

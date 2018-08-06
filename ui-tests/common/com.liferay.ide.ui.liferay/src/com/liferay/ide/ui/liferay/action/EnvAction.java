@@ -32,7 +32,6 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -97,9 +96,13 @@ public class EnvAction extends UIAction {
 	}
 
 	public IPath getEclipseWorkspacePath() {
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
 
 		return root.getLocation();
+	}
+
+	public String getEclipseWorkspacePathOSString() {
+		return getEclipseWorkspacePath().toOSString();
 	}
 
 	public File getProjectsDir() {

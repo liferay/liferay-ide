@@ -237,7 +237,6 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
 
 		dialogAction.preferences.confirm();
-
 	}
 
 	@Rule

@@ -982,6 +982,10 @@ public class WizardAction extends UIAction {
 			return _newProjectWizard.getProjectName();
 		}
 
+		public void selectUseDefaultLocation() {
+			useDefaultLocation().select();
+		}
+
 		public CheckBox useDefaultLocation() {
 			return _newProjectWizard.getUseDefaultLocation();
 		}

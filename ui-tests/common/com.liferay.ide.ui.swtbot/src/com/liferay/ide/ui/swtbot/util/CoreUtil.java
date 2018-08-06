@@ -54,10 +54,10 @@ import org.w3c.dom.Node;
  */
 public class CoreUtil {
 
-	public static void addNaturesToProject(IProject proj, String[] natureIds, IProgressMonitor monitor)
+	public static void addNaturesToProject(IProject project, String[] natureIds, IProgressMonitor monitor)
 		throws CoreException {
 
-		IProjectDescription description = proj.getDescription();
+		IProjectDescription description = project.getDescription();
 
 		String[] prevNatures = description.getNatureIds();
 
@@ -70,7 +70,8 @@ public class CoreUtil {
 		}
 
 		description.setNatureIds(newNatures);
-		proj.setDescription(description, monitor);
+
+		project.setDescription(description, monitor);
 	}
 
 	public static int compareVersions(Version v1, Version v2) {
@@ -97,20 +98,6 @@ public class CoreUtil {
 		}
 
 		return v1.getQualifier().compareTo(v2.getQualifier());
-	}
-
-	public static boolean containsNullElement(Object[] array) {
-		if (isNullOrEmpty(array)) {
-			return true;
-		}
-
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == null) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public static void createEmptyFile(IFile newFile) throws CoreException {
@@ -141,33 +128,6 @@ public class CoreUtil {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 		return root.getProjects();
-	}
-
-	public static Object getNewObject(Object[] oldObjects, Object[] newObjects) {
-		if ((oldObjects != null) && (newObjects != null) && (oldObjects.length < newObjects.length)) {
-			for (int i = 0; i < newObjects.length; i++) {
-				boolean found = false;
-				Object object = newObjects[i];
-
-				for (int j = 0; j < oldObjects.length; j++) {
-					if (oldObjects[j] == object) {
-						found = true;
-
-						break;
-					}
-				}
-
-				if (!found) {
-					return object;
-				}
-			}
-		}
-
-		if ((oldObjects == null) && (newObjects != null) && (newObjects.length == 1)) {
-			return newObjects[0];
-		}
-
-		return null;
 	}
 
 	public static IProject getProject(String projectName) {

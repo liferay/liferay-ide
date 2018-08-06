@@ -202,8 +202,8 @@ public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 		dialogAction.confirm();
 
 		String[] files = {
-			"META-INF/resources/view.jsp", "META-INF/resources/error.jsp",
-			"META-INF/resources/init.jsp", "portlet.properties"
+			"META-INF/resources/view.jsp", "META-INF/resources/error.jsp", "META-INF/resources/init.jsp",
+			"portlet.properties"
 		};
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();

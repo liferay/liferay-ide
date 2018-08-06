@@ -25,7 +25,6 @@ public class ShellCondition implements ICondition {
 
 	public ShellCondition(String title, boolean equal) {
 		_title = title;
-
 		_equal = equal;
 	}
 

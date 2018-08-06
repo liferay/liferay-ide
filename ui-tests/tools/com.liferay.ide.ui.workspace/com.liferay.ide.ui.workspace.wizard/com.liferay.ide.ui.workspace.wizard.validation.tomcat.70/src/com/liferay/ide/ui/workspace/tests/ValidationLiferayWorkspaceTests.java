@@ -17,6 +17,8 @@ package com.liferay.ide.ui.workspace.tests;
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
+import com.liferay.ide.ui.swtbot.page.ComboBox;
+import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import java.io.File;
@@ -40,7 +42,10 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
 		String[] expectedBuildTypes = {GRADLE, MAVEN};
-		String[] buildTypes = wizardAction.newLiferayWorkspace.buildType().items();
+
+		ComboBox buildTypeComboBox = wizardAction.newLiferayWorkspace.buildType();
+
+		String[] buildTypes = buildTypeComboBox.items();
 
 		int expectedLength = expectedBuildTypes.length;
 		int length = buildTypes.length;
@@ -72,7 +77,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		wizardAction.newLiferayWorkspace.prepareGradle(projectName);
 
-		Assert.assertEquals(A_LIFERAY_WORKSPACE_PROJECT_ALREADY_EXISTS, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(A_LIFERAY_WORKSPACE_PROJECT_ALREADY_EXISTS, wizardAction.getValidationMsg(2));
 
 		wizardAction.cancel();
 
@@ -83,28 +88,33 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 	public void checkInitialState() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		Assert.assertEquals(PLEASE_ENTER_THE_WORKSPACE_NAME, wizardAction.getValidationMsg(2));
-		Assert.assertEquals(StringPool.BLANK, wizardAction.newLiferayWorkspace.projectName().getText());
+		validationAction.assertEquals(PLEASE_ENTER_THE_WORKSPACE_NAME, wizardAction.getValidationMsg(2));
 
-		Assert.assertTrue(wizardAction.newLiferayWorkspace.useDefaultLocation().isChecked());
-		Assert.assertEquals(false, wizardAction.newLiferayWorkspace.downloadLiferayBundle().isChecked());
+		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newLiferayWorkspace.projectName());
 
-		wizardAction.newLiferayWorkspace.useDefaultLocation().deselect();
+		validationAction.assertCheckedTrue(wizardAction.newLiferayWorkspace.useDefaultLocation());
 
-		String exceptLocation = envAction.getEclipseWorkspacePath().toOSString();
-		String actualLocation = wizardAction.newLiferayWorkspace.location().getText();
+		validationAction.assertCheckedFalse(wizardAction.newLiferayWorkspace.downloadLiferayBundle());
 
-		if (Platform.getOS().equals("win32")) {
+		wizardAction.newLiferayWorkspace.deselectUseDefaultLocation();
+
+		String exceptLocation = envAction.getEclipseWorkspacePathOSString();
+
+		Text location = wizardAction.newLiferayWorkspace.location();
+
+		String actualLocation = location.getText();
+
+		if ("win32".equals(Platform.getOS())) {
 			exceptLocation = exceptLocation.replaceAll("\\\\", "/");
 		}
 
 		Assert.assertEquals(exceptLocation, actualLocation);
 
-		wizardAction.newLiferayWorkspace.useDefaultLocation().select();
+		wizardAction.newLiferayWorkspace.selectUseDefaultLocation();
 
 		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
 
-		wizardAction.newLiferayWorkspace.downloadLiferayBundle().deselect();
+		wizardAction.newLiferayWorkspace.deselectDownloadLiferayBundle();
 
 		wizardAction.cancel();
 	}
@@ -123,11 +133,15 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 				envAction.getValidationMsgs(
 					new File(envAction.getValidationDir(), "new-liferay-workspace-wizard-location.csv"))) {
 
-			if (!msg.getOs().equals(Platform.getOS())) {
+			String os = msg.getOs();
+
+			if (!os.equals(Platform.getOS())) {
 				continue;
 			}
 
-			wizardAction.newLiferayWorkspace.location().setText(msg.getInput());
+			Text location = wizardAction.newLiferayWorkspace.location();
+
+			location.setText(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
@@ -143,11 +157,15 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 				envAction.getValidationMsgs(
 					new File(envAction.getValidationDir(), "new-liferay-workspace-wizard-project-name.csv"))) {
 
-			if (!msg.getOs().equals(Platform.getOS())) {
+			String os = msg.getOs();
+
+			if (!os.equals(Platform.getOS())) {
 				continue;
 			}
 
-			wizardAction.newLiferayWorkspace.projectName().setText(msg.getInput());
+			Text projectName = wizardAction.newLiferayWorkspace.projectName();
+
+			projectName.setText(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}

@@ -65,11 +65,15 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		String projectName2 = "test-component-on-multiple-maven2";
 
 		wizardAction.openNewLiferayModuleWizard();
+
 		wizardAction.newModule.prepareMaven(projectName1);
+
 		wizardAction.finish();
 
 		wizardAction.openNewLiferayModuleWizard();
+
 		wizardAction.newModule.prepareMaven(projectName2);
+
 		wizardAction.finish();
 
 		String className = "MyMultipleComponent";
@@ -77,14 +81,18 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		String template = PORTLET_UPCASE;
 
 		wizardAction.openNewLiferayComponentClassWizard();
+
 		wizardAction.newLiferayComponent.prepare(projectName1, template, className, packageName);
+
 		wizardAction.finish();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(projectName1, "src/main/java", packageName, className + ".java"));
 
 		wizardAction.openNewLiferayComponentClassWizard();
+
 		wizardAction.newLiferayComponent.prepare(projectName2, template, className, packageName);
+
 		wizardAction.finish();
 
 		Assert.assertTrue(
@@ -123,7 +131,9 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 	@Test
 	public void createComponentServiceWrapper() {
 		wizardAction.openNewLiferayModuleWizard();
+
 		wizardAction.newModule.prepareMaven(project.getName());
+
 		wizardAction.finish();
 
 		wizardAction.openNewLiferayComponentClassWizard();
@@ -151,7 +161,9 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 	@Test
 	public void createComponentWithPackage() {
 		wizardAction.openNewLiferayModuleWizard();
+
 		wizardAction.newModule.prepareMaven(project.getName());
+
 		wizardAction.finish();
 
 		wizardAction.openNewLiferayComponentClassWizard();
@@ -176,7 +188,9 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 	@Test
 	public void createComponentWithShortcuts() {
 		wizardAction.openNewLiferayModuleWizard();
+
 		wizardAction.newModule.prepareMaven(project.getName());
+
 		wizardAction.finish();
 
 		wizardAction.openNewBtnLiferayComponentClassWizard();
@@ -197,6 +211,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		wizardAction.openFileMenuLiferayComponentClassWizard();
 
 		wizardAction.newLiferayComponent.prepare(project.getName(), template, className, packageName);
+
 		wizardAction.finish();
 
 		Assert.assertTrue(
@@ -207,6 +222,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		viewAction.project.openComponentClassWizard(project.getName());
 
 		wizardAction.newLiferayComponent.prepare(project.getName(), template, className, packageName);
+
 		wizardAction.finish();
 
 		Assert.assertTrue(
@@ -219,7 +235,9 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 	@Test
 	public void createDefaultComponent() {
 		wizardAction.openNewLiferayModuleWizard();
+
 		wizardAction.newModule.prepareMaven(project.getName());
+
 		wizardAction.finish();
 
 		wizardAction.openNewLiferayComponentClassWizard();

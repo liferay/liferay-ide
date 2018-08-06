@@ -259,7 +259,7 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
-		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
 
 		dialogAction.cancel();
 
@@ -269,7 +269,7 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
-		Assert.assertTrue(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledTrue(dialogAction.getConfirmBtn());
 
 		dialogAction.cancel();
 

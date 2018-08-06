@@ -382,7 +382,8 @@ public abstract class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 	public void deployThemeContributor() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), THEME_CONTRIBUTOR, envAction.getTempDir().getPath(), getVersion());
+		wizardAction.newModule.prepareGradle(
+			project.getName(), THEME_CONTRIBUTOR, envAction.getTempDir().getPath(), getVersion());
 
 		wizardAction.finish();
 
@@ -457,9 +458,9 @@ public abstract class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	protected abstract String getVersion();
-
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
+
+	protected abstract String getVersion();
 
 }

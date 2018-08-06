@@ -19,6 +19,7 @@ import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 /**
  * @author Ying Xu
  */
@@ -30,13 +31,13 @@ public class ValidationFragmentFilesWithoutTomcatTests extends SwtbotBase {
 
 		validationAction.assertEquals(NO_SUITABLE_LIFERAY_FRAGMENT_PROJECT, wizardAction.getValidationMsg(1));
 
-		validationAction.assertEquals(StringPool.BLANK, wizardAction.newFragmentFiles.projectName());
+		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newFragmentFiles.projectName());
 
 		Assert.assertEquals("<None>", wizardAction.newFragmentFiles.runtimeName().getText());
 
 		validationAction.assertEnabledTrue(wizardAction.newFragmentFiles.newRuntimeBtn());
 
-		validationAction.assertEquals(StringPool.BLANK, wizardAction.newFragmentFiles.hostOsgiBundle());
+		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newFragmentFiles.hostOsgiBundle());
 
 		validationAction.assertEnabledFalse(wizardAction.newFragmentFiles.addOverrideFilesBtn());
 

@@ -32,7 +32,6 @@ public class EditorActiveCondition implements ICondition {
 
 	public EditorActiveCondition(String name, boolean active) {
 		_name = name;
-
 		_active = active;
 	}
 

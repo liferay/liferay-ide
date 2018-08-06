@@ -18,6 +18,7 @@ import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.swtbot.page.AbstractWidget;
 import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.ComboBox;
+import com.liferay.ide.ui.swtbot.page.Text;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
@@ -36,6 +37,10 @@ public class ValidationAction extends UIAction {
 		return _validationAction;
 	}
 
+	public void assertCheckedFalse(CheckBox checkBox) {
+		Assert.assertFalse(checkBox.isChecked());
+	}
+
 	public void assertCheckedTrue(CheckBox checkBox) {
 		Assert.assertTrue(checkBox.isChecked());
 	}
@@ -46,12 +51,6 @@ public class ValidationAction extends UIAction {
 
 	public void assertEnabledTrue(AbstractWidget widget) {
 		Assert.assertTrue(widget.isEnabled());
-	}
-
-	public void assertEquals(String expect, AbstractWidget widget) {
-		String actual = widget.getText();
-
-		Assert.assertEquals(expect, actual);
 	}
 
 	public void assertEquals(String expect, String actual) {
@@ -66,6 +65,10 @@ public class ValidationAction extends UIAction {
 		for (int i = 0; i < items.length; i++) {
 			Assert.assertEquals(expects[i], items[i]);
 		}
+	}
+
+	public void assertTextEquals(String expect, Text text) {
+		Assert.assertEquals(expect, text.getText());
 	}
 
 	private ValidationAction(SWTWorkbenchBot bot) {

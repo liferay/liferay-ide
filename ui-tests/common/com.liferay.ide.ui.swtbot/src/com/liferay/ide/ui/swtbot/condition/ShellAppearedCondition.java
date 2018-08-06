@@ -25,7 +25,6 @@ public class ShellAppearedCondition implements ICondition {
 
 	public ShellAppearedCondition(SWTBot bot, String title) {
 		_bot = bot;
-
 		_title = title;
 	}
 
