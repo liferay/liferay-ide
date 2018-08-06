@@ -964,7 +964,7 @@ public class FileUtil {
 
 	public static String toOSString(IPath path) {
 		if (path == null) {
-			return null;
+			return "";
 		}
 
 		return path.toOSString();
@@ -972,7 +972,7 @@ public class FileUtil {
 
 	public static String toPortableString(IPath path) {
 		if (path == null) {
-			return null;
+			return "";
 		}
 
 		return path.toPortableString();
