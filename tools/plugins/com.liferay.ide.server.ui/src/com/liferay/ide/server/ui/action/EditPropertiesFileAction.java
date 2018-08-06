@@ -102,6 +102,7 @@ public class EditPropertiesFileAction extends SelectionProviderAction {
 	public void selectionChanged(IStructuredSelection sel) {
 		if (sel.isEmpty()) {
 			setEnabled(false);
+
 			return;
 		}
 
@@ -121,6 +122,7 @@ public class EditPropertiesFileAction extends SelectionProviderAction {
 			}
 			else {
 				setEnabled(false);
+
 				return;
 			}
 		}

@@ -74,6 +74,7 @@ public abstract class AbstractPortalServerEditorSection extends ServerEditorSect
 		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL));
 
 		Composite composite = toolkit.createComposite(section);
+
 		GridLayout layout = new GridLayout();
 
 		layout.numColumns = 3;
@@ -83,6 +84,7 @@ public abstract class AbstractPortalServerEditorSection extends ServerEditorSect
 		layout.horizontalSpacing = 15;
 
 		composite.setLayout(layout);
+
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL));
 
 		IWorkbench workbench = PlatformUI.getWorkbench();

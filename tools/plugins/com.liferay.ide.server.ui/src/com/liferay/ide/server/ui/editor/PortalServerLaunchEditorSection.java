@@ -130,6 +130,7 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 		data = new GridData(SWT.BEGINNING, SWT.CENTER, true, false, 3, 1);
 
 		customLaunchSettings.setLayoutData(data);
+
 		customLaunchSettings.addSelectionListener(
 			new SelectionAdapter() {
 
@@ -162,6 +163,7 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 		data.widthHint = 300;
 
 		memoryArgs.setLayoutData(data);
+
 		memoryArgs.addModifyListener(
 			new ModifyListener() {
 
@@ -202,6 +204,7 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 		data.widthHint = 150;
 
 		externalProperties.setLayoutData(data);
+
 		externalProperties.addModifyListener(
 			new ModifyListener() {
 
@@ -233,6 +236,7 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 					FileDialog dialog = new FileDialog(externalPropertiesBrowse.getShell());
 
 					dialog.setFilterPath(externalPropertiesBrowse.getText());
+
 					String selectedFile = dialog.open();
 
 					if ((selectedFile != null) && !selectedFile.equals(externalPropertiesBrowse.getText())) {

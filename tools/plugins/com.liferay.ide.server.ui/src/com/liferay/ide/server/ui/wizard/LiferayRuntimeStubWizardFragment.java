@@ -43,9 +43,9 @@ public class LiferayRuntimeStubWizardFragment extends WizardFragment {
 		wizard.setTitle(Msgs.liferayRuntimeStub);
 		wizard.setDescription(Msgs.specifyDirectoryLocation);
 
-		LiferayServerUI liferayServerUi = LiferayServerUI.getDefault();
+		LiferayServerUI liferayServerUI = LiferayServerUI.getDefault();
 
-		Bundle bundle = liferayServerUi.getBundle();
+		Bundle bundle = liferayServerUI.getBundle();
 
 		wizard.setImageDescriptor(ImageDescriptor.createFromURL(bundle.getEntry("/icons/wizban/server_wiz.png")));
 

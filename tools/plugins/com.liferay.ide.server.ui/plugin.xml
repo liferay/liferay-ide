@@ -2,33 +2,40 @@
 <?eclipse version="3.4"?>
 <plugin>
 	<extension
-		 point="org.eclipse.ui.navigator.viewer">
+		point="org.eclipse.ui.navigator.viewer"
+	>
 		<viewerContentBinding
-			viewerId="org.eclipse.wst.server.ui.ServersView">
+			viewerId="org.eclipse.wst.server.ui.ServersView"
+		>
 			<includes>
 				<contentExtension
 					isRoot="false"
-				  pattern="com.liferay.ide.server.ui.serverview.plugins">
+					pattern="com.liferay.ide.server.ui.serverview.plugins"
+				>
 				</contentExtension>
 				<contentExtension
 					isRoot="false"
-				  pattern="com.liferay.ide.server.ui.serverview.osgibundles">
+					pattern="com.liferay.ide.server.ui.serverview.osgibundles"
+				>
 				</contentExtension>
 			</includes>
 		</viewerContentBinding>
 		<viewerContentBinding
-			viewerId="org.eclipse.wst.server.ui.ServersView">
+			viewerId="org.eclipse.wst.server.ui.ServersView"
+		>
 			<includes>
 				<contentExtension
 					isRoot="false"
-				  pattern="com.liferay.ide.server.ui.serverview.properties">
+					pattern="com.liferay.ide.server.ui.serverview.properties"
+				>
 				</contentExtension>
 			</includes>
 		</viewerContentBinding>
 	</extension>
 
 	<extension
-		 point="org.eclipse.ui.navigator.navigatorContent">
+		point="org.eclipse.ui.navigator.navigatorContent"
+	>
 		<navigatorContent
 			activeByDefault="true"
 			contentProvider="org.eclipse.wst.server.ui.internal.cnf.ServerContentProvider"
@@ -36,36 +43,44 @@
 			id="com.liferay.ide.server.ui.serverview.plugins"
 			labelProvider="com.liferay.ide.server.ui.PluginsCustomLabelProvider"
 			name="%navigator.content.name"
-			priority="highest">
+			priority="highest"
+		>
 			<triggerPoints>
 				<or>
 					<instanceof
-					 value="org.eclipse.wst.server.core.IServer">
+						value="org.eclipse.wst.server.core.IServer"
+					>
 					</instanceof>
 					<instanceof
-					 value="org.eclipse.wst.server.ui.internal.view.servers.ModuleServer">
+						value="org.eclipse.wst.server.ui.internal.view.servers.ModuleServer"
+					>
 					</instanceof>
 				</or>
 			</triggerPoints>
 			<possibleChildren>
 				<or>
 					<instanceof
-					 value="java.lang.Object">
+						value="java.lang.Object"
+					>
 					</instanceof>
 					<instanceof
-					 value="org.eclipse.wst.server.core.IServer">
+						value="org.eclipse.wst.server.core.IServer"
+					>
 					</instanceof>
 					<instanceof
-					 value="org.eclipse.wst.server.ui.internal.view.servers.ModuleServer">
+						value="org.eclipse.wst.server.ui.internal.view.servers.ModuleServer"
+					>
 					</instanceof>
 					<instanceof
-					 value="com.liferay.ide.server.ui.PluginsContent">
+						value="com.liferay.ide.server.ui.PluginsContent"
+					>
 					</instanceof>
 				</or>
 			</possibleChildren>
 			<override
 				policy="InvokeAlwaysRegardlessOfSuppressedExt"
-			   suppressedExtensionId="org.eclipse.wst.server.ui.ServersView.content.root">
+				suppressedExtensionId="org.eclipse.wst.server.ui.ServersView.content.root"
+			>
 			</override>
 		</navigatorContent>
 		<navigatorContent
@@ -76,92 +91,109 @@
 			labelProvider="com.liferay.ide.server.ui.navigator.PropertiesLabelProvider"
 			name="Liferay Portal Properties"
 			priority="higher"
-			providesSaveables="true">
+			providesSaveables="true"
+		>
 			<triggerPoints>
 				<or>
 					<instanceof
-					 value="org.eclipse.wst.server.core.IServer">
+						value="org.eclipse.wst.server.core.IServer"
+					>
 					</instanceof>
 				</or>
 			</triggerPoints>
 			<possibleChildren>
 				<or>
 					<instanceof
-					 value="java.lang.Object">
+						value="java.lang.Object"
+					>
 					</instanceof>
 					<instanceof
-					 value="com.liferay.ide.server.ui.navigator.PropertiesFile">
+						value="com.liferay.ide.server.ui.navigator.PropertiesFile"
+					>
 					</instanceof>
 				</or>
 			</possibleChildren>
 			<override
 				policy="InvokeAlwaysRegardlessOfSuppressedExt"
-			   suppressedExtensionId="org.eclipse.wst.server.ui.ServersView.content.root">
+				suppressedExtensionId="org.eclipse.wst.server.ui.ServersView.content.root"
+			>
 			</override>
 			<actionProvider
 				class="com.liferay.ide.server.ui.navigator.PropertiesActionProvider"
 				id="com.liferay.ide.server.ui.serverview.properties.actions"
-			   priority="highest">
+				priority="highest"
+			>
 				<enablement>
 					<or>
 						<instanceof
-						   value="com.liferay.ide.server.ui.navigator.PropertiesFile">
+							value="com.liferay.ide.server.ui.navigator.PropertiesFile"
+						>
 						</instanceof>
 					</or>
 				</enablement>
 			</actionProvider>
 		</navigatorContent>
 		<!--
-	  <navigatorContent
-			activeByDefault="true"
-			contentProvider="com.liferay.ide.server.ui.navigator.BundlesContentProvider"
-			icon="icons/e16/bundlefolder.png"
-			id="com.liferay.ide.server.ui.serverview.osgibundles"
-			labelProvider="com.liferay.ide.server.ui.navigator.BundlesDecorator"
-			name="OSGi Bundles"
-			priority="higher"
-			providesSaveables="true">
+	<navigatorContent
+		activeByDefault="true"
+		contentProvider="com.liferay.ide.server.ui.navigator.BundlesContentProvider"
+		icon="icons/e16/bundlefolder.png"
+		id="com.liferay.ide.server.ui.serverview.osgibundles"
+		labelProvider="com.liferay.ide.server.ui.navigator.BundlesDecorator"
+		name="OSGi Bundles"
+		priority="higher"
+		providesSaveables="true"
+	>
 		 <triggerPoints>
 			<or>
-			   <instanceof
-					 value="org.eclipse.wst.server.core.IServer">
+			<instanceof
+				value="org.eclipse.wst.server.core.IServer"
+			>
 			   </instanceof>
-			   <instanceof
-					 value="com.liferay.ide.server.ui.navigator.BundlesFolder">
+			<instanceof
+				value="com.liferay.ide.server.ui.navigator.BundlesFolder"
+			>
 			   </instanceof>
 			</or>
 		 </triggerPoints>
 		 <possibleChildren>
 			<or>
-			   <instanceof
-					 value="java.lang.Object">
+			<instanceof
+				value="java.lang.Object"
+			>
 			   </instanceof>
-			   <instanceof
-					 value="com.liferay.ide.server.ui.navigator.BundlesFolder">
+			<instanceof
+				value="com.liferay.ide.server.ui.navigator.BundlesFolder"
+			>
 			   </instanceof>
-			   <instanceof
-					 value="com.liferay.ide.server.core.portal.OsgiBundle">
+			<instanceof
+				value="com.liferay.ide.server.core.portal.OsgiBundle"
+			>
 			   </instanceof>
 			</or>
 		 </possibleChildren>
-		 <override
-			   policy="InvokeAlwaysRegardlessOfSuppressedExt"
-			   suppressedExtensionId="org.eclipse.wst.server.ui.ServersView.content.root">
+		<override
+			policy="InvokeAlwaysRegardlessOfSuppressedExt"
+			suppressedExtensionId="org.eclipse.wst.server.ui.ServersView.content.root"
+		>
 		 </override>
 	  </navigatorContent>
 	  -->
 	</extension>
 	<extension
-		 point="org.eclipse.ui.popupMenus">
+		point="org.eclipse.ui.popupMenus"
+	>
 		<objectContribution
 			adaptable="true"
 			id="com.liferay.ide.server.ui.popup.server"
-			objectClass="org.eclipse.wst.server.core.IServer">
+			objectClass="org.eclipse.wst.server.core.IServer"
+		>
 			<visibility>
 				<and>
 					<objectState
 						name="serverType"
-					value="com.liferay.*">
+						value="com.liferay.*"
+					>
 					</objectState>
 				</and>
 			</visibility>
@@ -170,7 +202,8 @@
 				enablesFor="1"
 				icon="icons/e16/test_web_services_16x16.png"
 				id="com.liferay.ide.server.ui.action.testWebServices.server"
-			   label="%test.services.action.label">
+				label="%test.services.action.label"
+			>
 			</action>
 			<action
 				class="com.liferay.ide.server.ui.action.OpenLiferayHomeFolderServerAction"
@@ -178,41 +211,47 @@
 				enablesFor="1"
 				icon="icons/liferay_logo_16.png"
 				id="com.liferay.ide.server.ui.action.openLiferayHomeFolderServerAction"
-			   label="%open.liferay.home.folder.action.label">
+				label="%open.liferay.home.folder.action.label"
+			>
 			</action>
 			<action
-				definitionId="com.liferay.ide.server.ui.handlers.openjsonwsapi"
 				class="com.liferay.ide.server.ui.action.OpenJSONWSAPIAction"
+				definitionId="com.liferay.ide.server.ui.handlers.openjsonwsapi"
 				enablesFor="1"
 				icon="icons/e16/test_web_services_16x16.png"
 				id="com.liferay.ide.server.ui.action.openJSONWSAPIAction"
-			   label="%test.json.services.action.label">
+				label="%test.json.services.action.label"
+			>
 			</action>
 			<action
-				definitionId="com.liferay.ide.server.ui.handlers.openportalhome"
 				class="com.liferay.ide.server.ui.action.OpenPortalHomeAction"
+				definitionId="com.liferay.ide.server.ui.handlers.openportalhome"
 				enablesFor="1"
 				icon="icons/e16/open_portal_16x16.png"
 				id="com.liferay.ide.server.ui.action.openPortalHomeAction"
-			   label="%open.portal.home.action.label">
+				label="%open.portal.home.action.label"
+			>
 			</action>
 			<action
 				class="com.liferay.ide.server.ui.action.CreatePortalSettingsFileAction"
 				enablesFor="1"
 				icon="icons/e16/properties.png"
 				id="com.liferay.ide.server.ui.action.createPortalSettingsFile"
-			   label="Create Portal Settings File">
+				label="Create Portal Settings File"
+			>
 			</action>
 		</objectContribution>
 		<objectContribution
 			adaptable="true"
 			id="com.liferay.ide.server.ui.popup.dbconnection"
-			objectClass="org.eclipse.wst.server.core.IServer">
+			objectClass="org.eclipse.wst.server.core.IServer"
+		>
 			<visibility>
 				<and>
 					<objectState
 						name="serverType"
-					  value="com.liferay.*">
+						value="com.liferay.*"
+					>
 					</objectState>
 				</and>
 			</visibility>
@@ -221,18 +260,21 @@
 				enablesFor="1"
 				icon="icons/e16/jdbc_16.gif"
 				id="com.liferay.ide.server.ui.action.createDBConnectAction"
-			   label="%create.database.connection.action.label">
+				label="%create.database.connection.action.label"
+			>
 			</action>
 		</objectContribution>
 		<objectContribution
 			adaptable="true"
 			id="com.liferay.ide.server.ui.popup.module"
-			objectClass="org.eclipse.wst.server.ui.IServerModule">
+			objectClass="org.eclipse.wst.server.ui.IServerModule"
+		>
 			<visibility>
 				<and>
 					<objectState
 						name="serverType"
-					value="com.liferay.*">
+						value="com.liferay.*"
+					>
 					</objectState>
 				</and>
 			</visibility>
@@ -241,35 +283,41 @@
 				enablesFor="1"
 				icon="icons/e16/test_web_services_16x16.png"
 				id="com.liferay.ide.server.ui.action.testWebServices.plugin"
-			   label="%test.services.action.label">
+				label="%test.services.action.label"
+			>
 			</action>
 			<action
-				definitionId="com.liferay.ide.server.ui.handlers.redeploy"
 				class="com.liferay.ide.server.ui.action.RedeployAction"
+				definitionId="com.liferay.ide.server.ui.handlers.redeploy"
 				enablesFor="1"
 				icon="icons/e16/redeploy_16x16.gif"
 				id="com.liferay.ide.server.ui.action.redeploy"
-			   label="%redeploy.action.label">
+				label="%redeploy.action.label"
+			>
 			</action>
 			<action
-				definitionId="com.liferay.ide.server.ui.handlers.opendeployedfolder"
 				class="com.liferay.ide.server.ui.action.OpenDeployedFolderAction"
+				definitionId="com.liferay.ide.server.ui.handlers.opendeployedfolder"
 				enablesFor="1"
 				icon="icons/e16/open_deployed_folder.gif"
 				id="com.liferay.ide.server.ui.action.opendeployed"
-			   label="Open Deployed Folder">
+				label="Open Deployed Folder"
+			>
 			</action>
 		</objectContribution>
 		<objectContribution
 			adaptable="true"
 			id="com.liferay.ide.server.ui.folder.popup.addServer"
-			objectClass="org.eclipse.core.resources.IFolder">
+			objectClass="org.eclipse.core.resources.IFolder"
+		>
 			<enablement>
 				<adapt type="org.eclipse.core.resources.IFolder">
 					<and>
-						<test forcePluginActivation="true"
-				  property="com.liferay.ide.server.ui.canCreateNewLiferayServer"
-				  value="true" />
+						<test
+							forcePluginActivation="true"
+							property="com.liferay.ide.server.ui.canCreateNewLiferayServer"
+							value="true"
+						/>
 					</and>
 				</adapt>
 			</enablement>
@@ -278,18 +326,21 @@
 				enablesFor="1"
 				icon="icons/e16/server_new.png"
 				id="com.liferay.ide.server.ui.action.createNewLiferayServerFromLocation"
-			   label="Create New Liferay Server from location">
+				label="Create New Liferay Server from location"
+			>
 			</action>
 		</objectContribution>
 		<objectContribution
 			adaptable="true"
 			id="com.liferay.ide.server.ui.popup.opengogoshell"
-			objectClass="org.eclipse.wst.server.core.IServer">
+			objectClass="org.eclipse.wst.server.core.IServer"
+		>
 			<visibility>
 				<and>
 					<objectState
 						name="serverType"
-					 value="com.liferay.ide.server.portal">
+						value="com.liferay.ide.server.portal"
+					>
 					</objectState>
 				</and>
 			</visibility>
@@ -298,132 +349,163 @@
 				enablesFor="1"
 				icon="icons/e16/osgi.png"
 				id="com.liferay.ide.server.ui.action.openGogoShell"
-			   label="Open Gogo Shell">
+				label="Open Gogo Shell"
+			>
 			</action>
 		</objectContribution>
 	</extension>
 	<extension
-		 point="org.eclipse.wst.server.ui.serverImages">
+		point="org.eclipse.wst.server.ui.serverImages"
+	>
 		<image
 			icon="icons/liferay_logo_16.png"
 			id="com.liferay.ide.server.remote.image"
-			typeIds="com.liferay.ide.eclipse.server.remote">
+			typeIds="com.liferay.ide.eclipse.server.remote"
+		>
 		</image>
 		<image
 			icon="icons/liferay_logo_16.png"
 			id="com.liferay.ide.server.runtime.stub.image"
-			typeIds="com.liferay.ide.eclipse.server.runtime.stub">
+			typeIds="com.liferay.ide.eclipse.server.runtime.stub"
+		>
 		</image>
 		<image
 			icon="icons/liferay_logo_16.png"
 			id="com.liferay.ide.server.portal.image"
-			typeIds="com.liferay.ide.server.portal">
+			typeIds="com.liferay.ide.server.portal"
+		>
 		</image>
 		<image
 			icon="icons/liferay_logo_16.png"
 			id="com.liferay.ide.server.portal.runtime.image"
-			typeIds="com.liferay.ide.server.portal.runtime">
+			typeIds="com.liferay.ide.server.portal.runtime"
+		>
 		</image>
 	</extension>
 	<extension
-		 point="org.eclipse.wst.server.ui.wizardFragments">
+		point="org.eclipse.wst.server.ui.wizardFragments"
+	>
 		<fragment
 			class="com.liferay.ide.server.ui.wizard.LiferayRuntimeStubWizardFragment"
 			id="com.liferay.ide.server.runtime.stub.fragment"
-			typeIds="com.liferay.ide.eclipse.server.runtime.stub">
+			typeIds="com.liferay.ide.eclipse.server.runtime.stub"
+		>
 		</fragment>
 		<fragment
 			class="com.liferay.ide.server.ui.wizard.RemoteServerWizardFragment"
 			id="com.liferay.ide.server.remote.fragment"
-			typeIds="com.liferay.ide.eclipse.server.remote">
+			typeIds="com.liferay.ide.eclipse.server.remote"
+		>
 		</fragment>
 		<fragment
 			class="com.liferay.ide.server.ui.portal.PortalRuntimeWizard"
 			id="com.liferay.ide.server.portal.runtime.fragment"
-			typeIds="com.liferay.ide.server.portal.runtime">
+			typeIds="com.liferay.ide.server.portal.runtime"
+		>
 		</fragment>
 		<fragment
 			class="com.liferay.ide.server.ui.portal.PortalServerWizard"
 			id="com.liferay.ide.server.portal.fragment"
-			typeIds="com.liferay.ide.server.portal">
+			typeIds="com.liferay.ide.server.portal"
+		>
 		</fragment>
 	</extension>
 	<extension
-		 point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+		point="org.eclipse.debug.ui.launchConfigurationTabGroups"
+	>
 		<launchConfigurationTabGroup
 			class="com.liferay.ide.server.ui.RemoteLaunchConfigTabGroup"
 			id="com.liferay.ide.server.remote.launchConfigurationTabGroup"
-			type="com.liferay.ide.server.remote.launchConfigurationType">
+			type="com.liferay.ide.server.remote.launchConfigurationType"
+		>
 		</launchConfigurationTabGroup>
 		<launchConfigurationTabGroup
 			class="com.liferay.ide.server.ui.portal.PortalServerLaunchTabGroup"
 			id="com.liferay.ide.server.portal.launch.tab"
-			type="com.liferay.ide.server.portal.launch">
+			type="com.liferay.ide.server.portal.launch"
+		>
 		</launchConfigurationTabGroup>
 	</extension>
 	<extension
-		 point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+		point="org.eclipse.debug.ui.launchConfigurationTypeImages"
+	>
 		<launchConfigurationTypeImage
 			configTypeID="com.liferay.ide.server.remote.launchConfigurationType"
 			icon="icons/liferay_logo_16.png"
-			id="com.liferay.ide.server.remote.launchConfigurationTypeImage">
+			id="com.liferay.ide.server.remote.launchConfigurationTypeImage"
+		>
 		</launchConfigurationTypeImage>
 		<launchConfigurationTypeImage
 			configTypeID="com.liferay.ide.server.portal.launch"
 			icon="icons/liferay_logo_16.png"
-			id="com.liferay.ide.server.portal.launch.image">
+			id="com.liferay.ide.server.portal.launch.image"
+		>
 		</launchConfigurationTypeImage>
 	</extension>
 	<extension
-		 point="org.eclipse.wst.common.project.facet.core.runtimes">
+		point="org.eclipse.wst.common.project.facet.core.runtimes"
+	>
 		<adapter>
 			<runtime-component
-			   id="com.liferay.ide.eclipse.server.runtime.stub.component">
+				id="com.liferay.ide.eclipse.server.runtime.stub.component"
+			>
 			</runtime-component>
 			<factory
-			   class="com.liferay.ide.server.ui.LiferayRuntimeStubFacetComponentLabelProvider">
+				class="com.liferay.ide.server.ui.LiferayRuntimeStubFacetComponentLabelProvider"
+			>
 			</factory>
 			<type
-			   class="org.eclipse.wst.common.project.facet.ui.IRuntimeComponentLabelProvider">
+				class="org.eclipse.wst.common.project.facet.ui.IRuntimeComponentLabelProvider"
+			>
 			</type>
 		</adapter>
 		<adapter>
 			<runtime-component
-			   id="com.liferay.ide.eclipse.server.runtime.stub.component">
+				id="com.liferay.ide.eclipse.server.runtime.stub.component"
+			>
 			</runtime-component>
 			<factory
-			   class="com.liferay.ide.server.ui.LiferayRuntimeStubDecorationsProvider">
+				class="com.liferay.ide.server.ui.LiferayRuntimeStubDecorationsProvider"
+			>
 			</factory>
 			<type
-			   class="org.eclipse.wst.common.project.facet.ui.IDecorationsProvider">
+				class="org.eclipse.wst.common.project.facet.ui.IDecorationsProvider"
+			>
 			</type>
 		</adapter>
 	</extension>
 	<extension
-		 point="org.eclipse.wst.common.project.facet.ui.images">
+		point="org.eclipse.wst.common.project.facet.ui.images"
+	>
 		<image
 			path="icons/liferay_logo_16.png"
-			runtime-component-type="com.liferay.ide.eclipse.server.runtime.stub.component">
+			runtime-component-type="com.liferay.ide.eclipse.server.runtime.stub.component"
+		>
 		</image>
 	</extension>
 	<extension
-		 point="org.eclipse.wst.server.ui.editorPageSections">
+		point="org.eclipse.wst.server.ui.editorPageSections"
+	>
 		<section
 			class="com.liferay.ide.server.ui.RemoteSettingsEditorSection"
 			id="com.liferay.ide.server.remote.remoteSettings"
 			insertionId="org.eclipse.wst.server.editor.overview.left"
 			order="0"
-			typeIds="com.liferay.ide.eclipse.server.remote">
+			typeIds="com.liferay.ide.eclipse.server.remote"
+		>
 		</section>
 	</extension>
 
 	<extension
-		 point="org.eclipse.wst.sse.ui.breakpoint">
+		point="org.eclipse.wst.sse.ui.breakpoint"
+	>
 		<breakpointContribution
-			id="com.liferay.ide.server.remote.jsp.breakpoint">
+			id="com.liferay.ide.server.remote.jsp.breakpoint"
+		>
 			<provider
 				contentTypes="org.eclipse.jst.jsp.core.jspsource"
-				  id="com.liferay.ide.server.remote.jsp.breakpoint">
+				id="com.liferay.ide.server.remote.jsp.breakpoint"
+			>
 				<class class="com.liferay.ide.server.ui.RemoteJSPBreakpointProvider">
 					<parameter name="org.eclipse.jst.jsp.core.jspsource" value="org.apache.jsp*" />
 				</class>
@@ -431,200 +513,240 @@
 		</breakpointContribution>
 	</extension>
 	<extension
-		 point="org.eclipse.core.expressions.propertyTesters">
+		point="org.eclipse.core.expressions.propertyTesters"
+	>
 		<propertyTester
 			class="com.liferay.ide.server.ui.ServerPropertyTester"
 			id="com.liferay.ide.server.core.isRemoteServer"
 			namespace="com.liferay.ide.server.core"
 			properties="isRemoteServer"
-			type="java.lang.Object">
+			type="java.lang.Object"
+		>
 		</propertyTester>
 		<propertyTester
 			class="com.liferay.ide.server.ui.CanCreateNewLiferayServerTester"
 			id="com.liferay.ide.server.ui.canCreateNewLiferayServer"
 			namespace="com.liferay.ide.server.ui"
 			properties="canCreateNewLiferayServer"
-			type="org.eclipse.core.resources.IFolder">
+			type="org.eclipse.core.resources.IFolder"
+		>
 		</propertyTester>
 	</extension>
 	<extension
-		 point="org.eclipse.wst.server.core.internalStartup">
+		point="org.eclipse.wst.server.core.internalStartup"
+	>
 		<startup
 			class="com.liferay.ide.server.ui.ServerStartup"
-			id="com.liferay.ide.server.ui.startup">
+			id="com.liferay.ide.server.ui.startup"
+		>
 		</startup>
 	</extension>
 	<extension
-		 point="org.eclipse.mylyn.commons.notifications.ui.notifications">
+		point="org.eclipse.mylyn.commons.notifications.ui.notifications"
+	>
 		<category
 			icon="icons/liferay_logo_16.png"
 			id="com.liferay.ide.server.ui.settings"
-			label="Liferay IDE">
+			label="Liferay IDE"
+		>
 		</category>
 		<event
 			categoryId="com.liferay.ide.server.ui.settings"
 			icon="icons/e16/properties.png"
 			id="com.liferay.ide.server.ui.importglobalsettings"
-			label="Import Global Settings">
+			label="Import Global Settings"
+		>
 			<defaultHandler
-			   sinkId="com.liferay.ide.server.ui.ImportGlobalSettingsPopup">
+				sinkId="com.liferay.ide.server.ui.ImportGlobalSettingsPopup"
+			>
 			</defaultHandler>
 		</event>
 		<sink
 			class="com.liferay.ide.server.ui.ImportGlobalSettingsNotificationSink"
 			id="com.liferay.ide.server.ui.ImportGlobalSettingsPopup"
-			label="Import Global Settings">
+			label="Import Global Settings"
+		>
 		</sink>
 	</extension>
 	<extension
-		 point="org.eclipse.wst.server.ui.serverImages">
+		point="org.eclipse.wst.server.ui.serverImages"
+	>
 		<image
 			icon="icons/e16/bundle.png"
 			id="com.liferay.ide.server.ui.bundleImage"
-			typeIds="liferay.bundle">
+			typeIds="liferay.bundle"
+		>
 		</image>
 	</extension>
 
 	<extension
-		 point="org.eclipse.ui.commands">
+		point="org.eclipse.ui.commands"
+	>
 		<command
 			categoryId="org.eclipse.wst.server.ui"
 			description="Run the redeploy command"
 			id="com.liferay.ide.server.ui.handlers.redeploy"
-			name="Redeploy">
+			name="Redeploy"
+		>
 		</command>
 		<command
 			categoryId="org.eclipse.wst.server.ui"
 			description="Open Liferay Home Folder"
 			id="com.liferay.ide.server.ui.handlers.openLiferayHomeFolder"
-			name="Open Liferay Home Folder">
+			name="Open Liferay Home Folder"
+		>
 		</command>
 		<command
 			categoryId="org.eclipse.wst.server.ui"
 			description="Run Open Deployed Folder command"
 			id="com.liferay.ide.server.ui.handlers.opendeployedfolder"
-			name="Open Deployed Folder">
+			name="Open Deployed Folder"
+		>
 		</command>
 		<command
 			categoryId="org.eclipse.wst.server.ui"
 			description="Run Open JSONWS API command"
 			id="com.liferay.ide.server.ui.handlers.openjsonwsapi"
-			name="Open JSONWS API">
+			name="Open JSONWS API"
+		>
 		</command>
 		<command
 			categoryId="org.eclipse.wst.server.ui"
 			description="Run Open Portal Home command"
 			id="com.liferay.ide.server.ui.handlers.openportalhome"
-			name="Open JSONWS API">
+			name="Open JSONWS API"
+		>
 		</command>
 	</extension>
 
 	<extension
-		 point="org.eclipse.ui.handlers">
+		point="org.eclipse.ui.handlers"
+	>
 		<handler
 			class="com.liferay.ide.server.ui.handlers.RedeployHandler"
-			commandId="com.liferay.ide.server.ui.handlers.redeploy">
+			commandId="com.liferay.ide.server.ui.handlers.redeploy"
+		>
 		</handler>
 		<handler
 			class="com.liferay.ide.server.ui.handlers.OpenLiferayHomeFolderHandler"
-			commandId="com.liferay.ide.server.ui.handlers.openLiferayHomeFolder">
+			commandId="com.liferay.ide.server.ui.handlers.openLiferayHomeFolder"
+		>
 		</handler>
 		<handler
 			class="com.liferay.ide.server.ui.handlers.OpenDeployedFolderHandler"
-			commandId="com.liferay.ide.server.ui.handlers.opendeployedfolder">
+			commandId="com.liferay.ide.server.ui.handlers.opendeployedfolder"
+		>
 		</handler>
 		<handler
 			class="com.liferay.ide.server.ui.handlers.OpenJSONWSAPIHandler"
-			commandId="com.liferay.ide.server.ui.handlers.openjsonwsapi">
+			commandId="com.liferay.ide.server.ui.handlers.openjsonwsapi"
+		>
 		</handler>
 		<handler
 			class="com.liferay.ide.server.ui.handlers.OpenPortalHomeHandler"
-			commandId="com.liferay.ide.server.ui.handlers.openportalhome">
+			commandId="com.liferay.ide.server.ui.handlers.openportalhome"
+		>
 		</handler>
 	</extension>
 
 	<extension
-		 point="org.eclipse.ui.bindings">
+		point="org.eclipse.ui.bindings"
+	>
 		<key
 			commandId="com.liferay.ide.server.ui.handlers.redeploy"
 			contextId="org.eclipse.ui.serverViewScope"
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-			sequence="M1+M2+R">
+			sequence="M1+M2+R"
+		>
 		</key>
 		<key
 			commandId="com.liferay.ide.server.ui.handlers.openLiferayHomeFolder"
 			contextId="org.eclipse.ui.serverViewScope"
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-			sequence="M1+M3+O">
+			sequence="M1+M3+O"
+		>
 		</key>
 		<key
 			commandId="com.liferay.ide.server.ui.handlers.opendeployedfolder"
 			contextId="org.eclipse.ui.serverViewScope"
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-			sequence="M1+M2+D">
+			sequence="M1+M2+D"
+		>
 		</key>
 		<key
 			commandId="com.liferay.ide.server.ui.handlers.openjsonwsapi"
 			contextId="org.eclipse.ui.serverViewScope"
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-			sequence="M1+M2+J">
+			sequence="M1+M2+J"
+		>
 		</key>
 		<key
 			commandId="com.liferay.ide.server.ui.handlers.openportalhome"
 			contextId="org.eclipse.ui.serverViewScope"
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-			sequence="M1+M2+P">
+			sequence="M1+M2+P"
+		>
 		</key>
 	</extension>
 
 	<extension
-		 point="org.eclipse.wst.server.core.moduleArtifactAdapters">
+		point="org.eclipse.wst.server.core.moduleArtifactAdapters"
+	>
 		<moduleArtifactAdapter
 			class="com.liferay.ide.server.ui.portal.BundleModuleArtifactAdapterDelegate"
 			id="com.liferay.ide.server.ui.bundleModuleArtifactAdapter"
-			priority="1">
+			priority="1"
+		>
 			<enablement>
 				<with variable="selection">
 					<adapt type="org.eclipse.core.resources.IProject">
-						<test forcePluginActivation="true"
-					property="com.liferay.ide.project.core.isBundleProject"
-					value="true" />
+						<test
+							forcePluginActivation="true"
+							property="com.liferay.ide.project.core.isBundleProject"
+							value="true"
+						/>
 					</adapt>
 				</with>
 			</enablement>
 		</moduleArtifactAdapter>
 	</extension>
 	<extension
-		 point="org.eclipse.wst.server.ui.editorPageSections">
+		point="org.eclipse.wst.server.ui.editorPageSections"
+	>
 		<section
 			class="com.liferay.ide.server.ui.editor.PortalServerLaunchEditorSection"
 			id="com.liferay.ide.server.editor.instance"
 			insertionId="org.eclipse.wst.server.editor.overview.left"
 			order="0"
-			typeIds="com.liferay.ide.server.portal">
+			typeIds="com.liferay.ide.server.portal"
+		>
 		</section>
 		<section
 			class="com.liferay.ide.server.ui.editor.PortalServerAccountEditorSection"
 			id="com.liferay.ide.server.editor.instance"
 			insertionId="org.eclipse.wst.server.editor.overview.left"
 			order="10"
-			typeIds="com.liferay.ide.server.portal">
+			typeIds="com.liferay.ide.server.portal"
+		>
 		</section>
 		<section
 			class="com.liferay.ide.server.ui.editor.PortalServerPortsEditorSection"
 			id="com.liferay.ide.server.editor.instance"
 			insertionId="org.eclipse.wst.server.editor.overview.right"
 			order="10"
-			typeIds="com.liferay.ide.server.portal">
+			typeIds="com.liferay.ide.server.portal"
+		>
 		</section>
 	</extension>
 	<!--
 <extension
-		 point="org.eclipse.jdt.ui.classpathContainerPage">
-	  <classpathContainerPage
-			class="com.liferay.ide.server.ui.PortletPluginClasspathConatinerPage"
-			id="com.liferay.ide.eclipse.server.portlet.library.container"
-			name="Liferay Portlet Plugin API">
+	point="org.eclipse.jdt.ui.classpathContainerPage"
+>
+	<classpathContainerPage
+		class="com.liferay.ide.server.ui.PortletPluginClasspathConatinerPage"
+		id="com.liferay.ide.eclipse.server.portlet.library.container"
+		name="Liferay Portlet Plugin API"
+	>
 	  </classpathContainerPage>
 </extension>
 -->
@@ -635,16 +757,19 @@
 			id="com.liferay.ide.server.ui.decorator"
 			label="Module Label"
 			lightweight="false"
-		state="true">
+			state="true"
+		>
 			<description>%moduleProjectDecoratorDescription</description>
 		</decorator>
 	</extension>
 	<extension
-		 point="org.eclipse.wst.server.ui.serverToolTip">
+		point="org.eclipse.wst.server.ui.serverToolTip"
+	>
 		<serverToolTip
 			class="com.liferay.ide.server.ui.view.BundleToolTip"
 			id="com.liferay.ide.server.ui.bundleToolTip"
-			serverTypes="com.liferay.ide.server.portal">
+			serverTypes="com.liferay.ide.server.portal"
+		>
 		</serverToolTip>
 	</extension>
 </plugin>
