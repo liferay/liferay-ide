@@ -14,6 +14,7 @@
 
 package com.liferay.ide.service.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.service.core.model.Entity;
 import com.liferay.ide.service.core.model.ServiceBuilder;
 
@@ -29,7 +30,7 @@ public class EntityRelationshipService extends ReferenceService<Entity> {
 		if ((entityName != null) && (serviceBuilder != null)) {
 			if (serviceBuilder != null) {
 				for (Entity entity : serviceBuilder.getEntities()) {
-					if (entityName.equals(entity.getName().content())) {
+					if (entityName.equals(SapphireUtil.getContent(entity.getName()))) {
 						return entity;
 					}
 				}

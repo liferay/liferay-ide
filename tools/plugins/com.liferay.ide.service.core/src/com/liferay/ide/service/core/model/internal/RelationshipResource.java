@@ -14,12 +14,14 @@
 
 package com.liferay.ide.service.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.service.core.model.Column;
 import com.liferay.ide.service.core.model.Entity;
 import com.liferay.ide.service.core.model.Relationship;
 import com.liferay.ide.service.core.model.ServiceBuilder;
 
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyBinding;
 import org.eclipse.sapphire.Resource;
@@ -99,7 +101,7 @@ public class RelationshipResource extends Resource {
 			Column primaryKeyColumn = null;
 
 			for (Column column : toEntity.getColumns()) {
-				if (column.isPrimary().content()) {
+				if (SapphireUtil.getContent(column.isPrimary())) {
 					primaryKeyColumn = column;
 
 					break;
@@ -107,9 +109,11 @@ public class RelationshipResource extends Resource {
 			}
 
 			if (primaryKeyColumn != null) {
-				Column column = fromEntity.getColumns().insert();
+				ElementList<Column> columns = fromEntity.getColumns();
 
-				column.setName(primaryKeyColumn.getName().content());
+				Column column = columns.insert();
+
+				column.setName(SapphireUtil.getContent(primaryKeyColumn.getName()));
 				column.setType("long");
 			}
 		}

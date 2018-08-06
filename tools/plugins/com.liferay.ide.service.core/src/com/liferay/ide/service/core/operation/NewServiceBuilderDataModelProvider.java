@@ -33,8 +33,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
@@ -85,7 +84,7 @@ public class NewServiceBuilderDataModelProvider
 			IFolder sourceFolder = getDefaultJavaSourceFolder();
 
 			if (FileUtil.exists(sourceFolder)) {
-				return sourceFolder.getFullPath().toOSString();
+				return FileUtil.getFullPathOSString(sourceFolder);
 			}
 		}
 		else if (INewJavaClassDataModelProperties.OPEN_IN_EDITOR.equals(propertyName)) {
@@ -232,10 +231,12 @@ public class NewServiceBuilderDataModelProvider
 
 		// Get the source folder whose path matches the source folder name value in the data model
 
-		for (int i = 0; i < sources.length; i++) {
-			if (sources[i].getPath().equals(new Path(folderFullPath))) {
+		for (IPackageFragmentRoot source : sources) {
+			IPath path = source.getPath();
+
+			if (path.equals(new Path(folderFullPath))) {
 				try {
-					return (IFolder)sources[i].getCorrespondingResource();
+					return (IFolder)source.getCorrespondingResource();
 				}
 				catch (Exception e) {
 					break;
@@ -265,10 +266,6 @@ public class NewServiceBuilderDataModelProvider
 		return null;
 	}
 
-	protected IWorkspaceRoot getWorkspaceRoot() {
-		return ResourcesPlugin.getWorkspace().getRoot();
-	}
-
 	@SuppressWarnings("rawtypes")
 	protected IStatus validateListItems(String propertyName) {
 		Object items = getProperty(propertyName);
@@ -285,7 +282,7 @@ public class NewServiceBuilderDataModelProvider
 	}
 
 	private IStatus _validateJavaPackage(String packName) {
-		if ((packName != null) && (packName.trim().length() > 0)) {
+		if ((packName != null) && CoreUtil.isNotNullOrEmpty(packName.trim())) {
 
 			// Use standard java conventions to validate the package name
 

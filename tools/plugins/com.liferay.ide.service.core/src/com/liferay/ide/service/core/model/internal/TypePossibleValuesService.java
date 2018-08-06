@@ -14,12 +14,12 @@
 
 package com.liferay.ide.service.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.service.core.model.ServiceBuilder6xx;
 
 import java.util.Set;
 
 import org.eclipse.sapphire.PossibleValuesService;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.Version;
 
 /**
@@ -29,13 +29,13 @@ public class TypePossibleValuesService extends PossibleValuesService {
 
 	@Override
 	protected void compute(Set<String> values) {
-		for (int i = 0; i < _DEFAULT_TYPES.length; i++) {
-			values.add(_DEFAULT_TYPES[i]);
+		for (String type : _DEFAULT_TYPES) {
+			values.add(type);
 		}
 
-		Value<Version> serviceBuilderVersion = context(ServiceBuilder6xx.class).getVersion();
+		Version version = SapphireUtil.getContent(context(ServiceBuilder6xx.class).getVersion());
 
-		if (serviceBuilderVersion.content(true).compareTo(new Version("6.2")) >= 0) {
+		if (version.compareTo(new Version("6.2")) >= 0) {
 			values.add("Blob");
 		}
 	}

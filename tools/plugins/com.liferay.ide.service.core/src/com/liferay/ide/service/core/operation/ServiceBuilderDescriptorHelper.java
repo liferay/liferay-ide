@@ -147,13 +147,15 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 	protected IStatus doAddDefaultColumns(IDOMDocument document, String entityName) {
 		Element entityElement = null;
 
-		NodeList nodes = document.getDocumentElement().getChildNodes();
+		Element element = document.getDocumentElement();
+
+		NodeList nodes = element.getChildNodes();
 
 		if ((nodes != null) && (nodes.getLength() > 0)) {
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Node node = nodes.item(i);
 
-				if (node.getNodeName().equals("entity") && (node instanceof Element)) {
+				if ("entity".equals(node.getNodeName()) && (node instanceof Element)) {
 					if (entityName.equals(((Element)node).getAttribute("name"))) {
 						entityElement = (Element)node;
 					}
@@ -315,7 +317,10 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 		Element orderElem = NodeUtil.appendChildElement(entityElement, "order");
 
 		orderElem.setAttribute("by", "asc");
-		NodeUtil.appendChildElement(orderElem, "order-column").setAttribute("name", "field1");
+
+		Element orderColumn = NodeUtil.appendChildElement(orderElem, "order-column");
+
+		orderColumn.setAttribute("name", "field1");
 
 		// <!-- Finder methods -->
 
@@ -325,7 +330,10 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 
 		finderElem.setAttribute("name", "Field2");
 		finderElem.setAttribute("return-type", "Collection");
-		NodeUtil.appendChildElement(finderElem, "finder-column").setAttribute("name", "field2");
+
+		Element finderColumn = NodeUtil.appendChildElement(finderElem, "finder-column");
+
+		finderColumn.setAttribute("name", "field2");
 
 		// Insert the <entity> element
 
@@ -408,7 +416,9 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 
 		List<String> entityNames = new ArrayList<>();
 
-		NodeList nodes = document.getDocumentElement().getChildNodes();
+		Element element = document.getDocumentElement();
+
+		NodeList nodes = element.getChildNodes();
 
 		if ((nodes != null) && (nodes.getLength() > 0)) {
 			Node node = null;
@@ -437,7 +447,13 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 		Matcher matcher = _pattern.matcher(val);
 
 		if (matcher.matches()) {
-			int num = Integer.parseInt(matcher.group(2));
+			int num = 0;
+
+			try {
+				num = Integer.parseInt(matcher.group(2));
+			}
+			catch (NumberFormatException nfe) {
+			}
 
 			return matcher.group(1) + (num + 1);
 		}
