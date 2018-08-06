@@ -14,6 +14,7 @@
 
 package com.liferay.ide.portlet.core.jsf;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 
 import org.eclipse.core.resources.IProject;
@@ -36,7 +37,7 @@ public class JSFPortletDescriptorHelper
 
 	@Override
 	public boolean canAddNewPortlet(IDataModel model) {
-		return model.getID().contains("NewJSFPortlet");
+		return StringUtil.contains(model.getID(), "NewJSFPortlet");
 	}
 
 	@Override

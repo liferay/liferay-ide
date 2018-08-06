@@ -188,7 +188,7 @@ public class LiferayDisplayDescriptorHelper
 		String modelCategory = model.getStringProperty(CATEGORY);
 
 		for (Element child : getChildElements(rootElement)) {
-			if (child.getNodeName().equals("category") && modelCategory.equals(child.getAttribute("name"))) {
+			if ("category".equals(child.getNodeName()) && modelCategory.equals(child.getAttribute("name"))) {
 				category = child;
 
 				break;
@@ -205,7 +205,7 @@ public class LiferayDisplayDescriptorHelper
 			// this category
 
 			for (Element child : getChildElements(category)) {
-				if (child.getNodeName().equals("portlet") && modelId.equals(child.getAttribute("id"))) {
+				if ("portlet".equals(child.getNodeName()) && modelId.equals(child.getAttribute("id"))) {
 					id = child;
 
 					break;
@@ -225,7 +225,9 @@ public class LiferayDisplayDescriptorHelper
 		}
 
 		if (id == null) {
-			NodeUtil.appendChildElement(category, "portlet").setAttribute("id", modelId);
+			Element element = NodeUtil.appendChildElement(category, "portlet");
+
+			element.setAttribute("id", modelId);
 		}
 
 		// format the new node added to the model;

@@ -15,11 +15,13 @@
 package com.liferay.ide.portlet.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 
 import java.util.Locale;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -70,22 +72,21 @@ public class PortletUtil {
 
 		for (IClasspathEntry iClasspathEntry : cpEntries) {
 			if (IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind()) {
-				IPath entryPath = wroot.getFolder(iClasspathEntry.getPath()).getLocation();
+				IFolder folder = wroot.getFolder(iClasspathEntry.getPath());
+
+				IPath entryPath = folder.getLocation();
 
 				entryPath = entryPath.append(rbIOFile);
 
 				resourceBundleFile = wroot.getFileForLocation(entryPath);
 
-				// System.out.println( "ResourceBundleValidationService.validate():" +
-				// resourceBundleFile );
-
-				if ((resourceBundleFile != null) && resourceBundleFile.exists()) {
+				if (FileUtil.exists(resourceBundleFile)) {
 					break;
 				}
 			}
 		}
 
-		String javaName = resourceBundleFile.getProjectRelativePath().toPortableString();
+		String javaName = FileUtil.toPortableString(resourceBundleFile.getProjectRelativePath());
 
 		if (javaName.indexOf('.') != -1) {
 

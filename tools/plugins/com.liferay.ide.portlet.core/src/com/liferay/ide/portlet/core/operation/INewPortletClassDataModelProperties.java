@@ -170,18 +170,19 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
 	public static final String VIEW_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.viewjsp";
 
-	public String[] initNames60 = {
+	public String[] INIT_NAME_60 = {
 		"view-jsp", "edit-jsp", "help-jsp", "about-jsp", "config-jsp", "edit-defaults-jsp", "edit-guest-jsp",
 		"preview-jsp", "print-jsp"
 	};
 
 	// portlet view modes
 
-	public String[] initNames61 = {
+	public String[] INIT_NAME_61 = {
 		"view-template", "edit-template", "help-template", "about-template", "config-template",
 		"edit-defaults-template", "edit-guest-template", "preview-template", "print-template"
 	};
-	public String[] initValues = {
+
+	public String[] INIT_VALUES = {
 		"/view.jsp", "/edit.jsp", "/help.jsp", "/about.jsp", "/config.jsp", "/edit-defaults.jsp", "/edit-guest.jsp",
 		"/preview.jsp", "/print.jsp"
 	};

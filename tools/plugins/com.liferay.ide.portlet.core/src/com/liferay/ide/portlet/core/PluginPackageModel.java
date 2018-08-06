@@ -46,8 +46,9 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 	public PluginPackageModel(IFile file, IDocument document, boolean reconciling) {
 		super(document, reconciling);
 
-		try(InputStream is = file.getContents()) {
+		try (InputStream is = file.getContents()) {
 			pluginPackageProperties = new PluginPropertiesConfiguration();
+
 			pluginPackageProperties.load(is);
 		}
 		catch (Exception e) {
@@ -258,7 +259,9 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 			boolean shouldKeep = true;
 
 			for (String removedValue : removedValues) {
-				if (dep.trim().equals(removedValue.trim())) {
+				dep = dep.trim();
+
+				if (dep.equals(removedValue.trim())) {
 					shouldKeep = false;
 
 					break;
@@ -396,7 +399,9 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 			buffer.append(val + ",");
 		}
 
-		String newValue = buffer.toString().substring(0, buffer.length() - 1);
+		String s = buffer.toString();
+
+		String newValue = s.substring(0, buffer.length() - 1);
 
 		pluginPackageProperties.setProperty(property, newValue);
 
@@ -408,12 +413,11 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 	public PropertiesConfiguration pluginPackageProperties;
 
 	protected void flushProperties() {
-		try(StringWriter output = new StringWriter();) {
-
+		try (StringWriter output = new StringWriter();) {
 			pluginPackageProperties.save(output);
 			getDocument().set(output.toString());
 		}
-		catch (ConfigurationException | IOException ce) {
+		catch (ConfigurationException | IOException e) {
 		}
 	}
 

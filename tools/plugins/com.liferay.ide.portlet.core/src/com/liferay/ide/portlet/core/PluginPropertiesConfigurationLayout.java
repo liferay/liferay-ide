@@ -40,7 +40,7 @@ import org.apache.commons.lang.StringUtils;
 @SuppressWarnings("rawtypes")
 public class PluginPropertiesConfigurationLayout extends PropertiesConfigurationLayout {
 
-	public static final String[] sortedKeys = {
+	public static final String[] SORTED_KEYS = {
 		"name", "module-group-id", "module-incremental-version", "tags", "short-description", "long-description",
 		"change-log", "page-url", "author", "licenses", "liferay-versions", "portal-dependency-jars", "deploy-excludes",
 		"portal-dependency-tlds", "speed-filters-enabled"
@@ -73,8 +73,7 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
 			char delimiter =
 				getConfiguration().isDelimiterParsingDisabled() ? 0 : getConfiguration().getListDelimiter();
 
-			try(PluginPropertiesWriter writer = new PluginPropertiesWriter(out, delimiter)){
-
+			try (PluginPropertiesWriter writer = new PluginPropertiesWriter(out, delimiter)) {
 				if (getHeaderComment() != null) {
 					writer.writeln(getCanonicalHeaderComment(true));
 					writer.writeln(null);
@@ -88,12 +87,12 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
 						int index1 = Integer.MAX_VALUE;
 						int index2 = Integer.MAX_VALUE;
 
-						for (int i = 0; i < sortedKeys.length; i++) {
-							if (sortedKeys[i].equals(o1)) {
+						for (int i = 0; i < SORTED_KEYS.length; i++) {
+							if (SORTED_KEYS[i].equals(o1)) {
 								index1 = i;
 							}
 
-							if (sortedKeys[i].equals(o2)) {
+							if (SORTED_KEYS[i].equals(o2)) {
 								index2 = i;
 							}
 						}
@@ -174,11 +173,14 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
 				}
 				else {
 					writeProperty(key, values);
+
 					return;
 				}
 			}
 			else if (wrappedProperty) {
-				String[] values = value.toString().split(",");
+				String s = value.toString();
+
+				String[] values = s.split(",");
 
 				StringBuffer buf = new StringBuffer();
 
@@ -255,7 +257,8 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
 					// be escaped
 
 					if (lastValue.endsWith(_ESCAPE)) {
-						buf.append(_ESCAPE).append(_ESCAPE);
+						buf.append(_ESCAPE);
+						buf.append(_ESCAPE);
 					}
 
 					buf.append(_delimiter);

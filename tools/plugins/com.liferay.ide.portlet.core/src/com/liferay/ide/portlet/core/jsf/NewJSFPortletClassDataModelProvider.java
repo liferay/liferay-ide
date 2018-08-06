@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.core.jsf;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.portlet.core.operation.NewPortletClassDataModelProvider;
@@ -157,10 +158,12 @@ public class NewJSFPortletClassDataModelProvider
 				return PortletCore.createErrorStatus(Msgs.jsfFolderValid);
 			}
 
-			IFolder viewFolder = CoreUtil.getDefaultDocrootFolder(getProject()).getFolder(jspsFolder);
+			IFolder docrootFolder = CoreUtil.getDefaultDocrootFolder(getProject());
+
+			IFolder viewFolder = docrootFolder.getFolder(jspsFolder);
 
 			if (viewFolder.exists()) {
-				if (viewFolder.getFile("view.xhtml").exists()) {
+				if (FileUtil.exists(viewFolder.getFile("view.xhtml"))) {
 					return PortletCore.createWarningStatus(Msgs.viewFileAlreadyExists);
 				}
 			}
