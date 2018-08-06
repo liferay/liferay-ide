@@ -18,8 +18,11 @@ import com.liferay.blade.api.AutoMigrateException;
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,7 +41,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
-
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -59,14 +62,16 @@ public class AutoCorrectAction extends ProblemAction {
 
 	@Override
 	public void run() {
-		final List<Problem> problems = MigrationUtil.getProblemsFromSelection(getSelection());
+		List<Problem> problems = MigrationUtil.getProblemsFromSelection(getSelection());
 
 		runWithAutoCorrect(problems);
 	}
 
-	public IStatus runWithAutoCorrect(final List<Problem> problems) {
-		final IResource file = MigrationUtil.getIResourceFromProblem(problems.get(0));
-		final BundleContext context = FrameworkUtil.getBundle(AutoCorrectAction.class).getBundleContext();
+	public IStatus runWithAutoCorrect(List<Problem> problems) {
+		IResource file = MigrationUtil.getIResourceFromProblem(problems.get(0));
+		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectAction.class);
+
+		BundleContext context = bundle.getBundleContext();
 
 		WorkspaceJob job = new WorkspaceJob("Auto correcting migration problem.") {
 
@@ -75,11 +80,11 @@ public class AutoCorrectAction extends ProblemAction {
 				IStatus retval = Status.OK_STATUS;
 
 				try {
-					final Problem problem = problems.get(0);
+					Problem problem = problems.get(0);
 
 					String autoCorrectKey = null;
 
-					final int filterKeyIndex = problem.autoCorrectContext.indexOf(":");
+					int filterKeyIndex = problem.autoCorrectContext.indexOf(":");
 
 					if (filterKeyIndex > -1) {
 						autoCorrectKey = problem.autoCorrectContext.substring(0, filterKeyIndex);
@@ -88,11 +93,11 @@ public class AutoCorrectAction extends ProblemAction {
 						autoCorrectKey = problem.autoCorrectContext;
 					}
 
-					final Collection<ServiceReference<AutoMigrator>> refs = context.getServiceReferences(
+					Collection<ServiceReference<AutoMigrator>> refs = context.getServiceReferences(
 						AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")");
 
 					for (ServiceReference<AutoMigrator> ref : refs) {
-						final AutoMigrator autoMigrator = context.getService(ref);
+						AutoMigrator autoMigrator = context.getService(ref);
 
 						int problemsCorrected = autoMigrator.correctProblems(
 							problem.file, Collections.singletonList(problem));
@@ -103,7 +108,7 @@ public class AutoCorrectAction extends ProblemAction {
 							if (resource != null) {
 								IMarker problemMarker = resource.findMarker(problem.markerId);
 
-								if ((problemMarker != null) && problemMarker.exists()) {
+								if (MarkerUtil.exists(problemMarker)) {
 									problemMarker.delete();
 								}
 							}
@@ -114,11 +119,14 @@ public class AutoCorrectAction extends ProblemAction {
 
 					MigrateProjectHandler migrateHandler = new MigrateProjectHandler();
 
-					Path path = new Path(problem.getFile().getPath());
+					File problemFile = problem.getFile();
+
+					Path path = new Path(problemFile.getPath());
+
 					String projectName = "";
 					IProject project = CoreUtil.getProject(problem.getFile());
 
-					if (project.exists() && (project != null)) {
+					if (FileUtil.exists(project)) {
 						projectName = project.getName();
 					}
 

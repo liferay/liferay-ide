@@ -20,6 +20,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
@@ -168,7 +169,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 				break;
 		}
 
-		IPath path = CoreUtil.getResourceLocation(docroot);
+		IPath path = FileUtil.getResourceLocation(docroot);
 
 		ILiferayProject liferayProject = LiferayCore.create(getProject());
 
