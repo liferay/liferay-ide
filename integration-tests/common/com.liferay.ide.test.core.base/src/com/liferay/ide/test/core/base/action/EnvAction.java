@@ -105,7 +105,11 @@ public class EnvAction {
 	public File getTempDir() {
 		IPath path = getBundlesPath().append("bundles");
 
-		return path.toFile();
+		File tempDir = path.toFile();
+
+		tempDir.mkdirs();
+
+		return tempDir;
 	}
 
 	public String getUsername() {
