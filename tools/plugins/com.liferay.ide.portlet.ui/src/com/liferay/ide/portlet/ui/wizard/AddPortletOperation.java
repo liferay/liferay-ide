@@ -197,7 +197,9 @@ public class AddPortletOperation
 
 		String initParamSuffix = null;
 
-		if (initNames61[0].equals(initParams.get(0).getName())) {
+		ParamValue paramValue = initParams.get(0);
+
+		if (INIT_NAME_61[0].equals(paramValue.getName())) {
 			initParamSuffix = "template";
 		}
 		else {
