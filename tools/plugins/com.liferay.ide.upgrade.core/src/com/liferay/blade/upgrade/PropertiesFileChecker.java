@@ -31,6 +31,7 @@ import java.util.Map;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class PropertiesFileChecker {
 
@@ -290,6 +291,8 @@ public class PropertiesFileChecker {
 			boolean skipLF = false;
 
 			while (true) {
+				_total++;
+
 				if (_inOff >= _inLimit) {
 					_inLimit = _reader.read(_inCharBuf);
 					_inOff = 0;
@@ -304,7 +307,6 @@ public class PropertiesFileChecker {
 				}
 
 				c = _inCharBuf[_inOff++];
-				_total++;
 
 				if (skipLF) {
 					skipLF = false;
