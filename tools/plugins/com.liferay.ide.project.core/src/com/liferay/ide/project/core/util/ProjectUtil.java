@@ -94,6 +94,7 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.common.project.facet.core.FacetedProjectFrameworkException;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IPreset;
@@ -626,7 +627,12 @@ public class ProjectUtil {
 			fpwc.setProjectLocation(null);
 		}
 
-		fpwc.commitChanges(monitor);
+		try {
+			fpwc.commitChanges(monitor);
+		}
+		catch (FacetedProjectFrameworkException e) {
+			ProjectCore.logError(e);
+		}
 
 		CoreUtil.getWorkspace().run(
 			new IWorkspaceRunnable() {
