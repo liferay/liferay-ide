@@ -46,6 +46,7 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.core,
  com.liferay.ide.project.core.descriptor,
  com.liferay.ide.project.core.facet,
+ com.liferay.ide.project.core.jobs,
  com.liferay.ide.project.core.jsf,
  com.liferay.ide.project.core.library,
  com.liferay.ide.project.core.model,
