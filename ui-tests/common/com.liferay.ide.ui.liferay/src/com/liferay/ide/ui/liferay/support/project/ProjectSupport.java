@@ -34,6 +34,12 @@ public class ProjectSupport extends SupportBase {
 		this.name = name;
 	}
 
+	public String getCapitalName() {
+		String firletter = getName().substring(0, 1);
+
+		return firletter.toUpperCase() + getName().substring(1);
+	}
+
 	public String getName() {
 		return name + timestamp;
 	}

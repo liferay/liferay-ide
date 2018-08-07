@@ -258,7 +258,6 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Ignore
 	@Test
 	public void createDefaultComponent() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -275,11 +274,9 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		String className = "TestComponentdefaultGradlePortlet";
-		String packageName = "content";
-
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(
+				project.getName(), "src/main/java", "content", project.getCapitalName() + "Portlet.java"));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
