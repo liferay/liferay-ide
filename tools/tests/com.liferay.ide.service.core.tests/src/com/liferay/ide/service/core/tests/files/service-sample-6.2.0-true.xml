@@ -4,11 +4,11 @@
 	<author>junit</author>
 	<namespace>SAMPLE</namespace>
 
-	<entity name="Foo" local-service="true" remote-service="true">
+	<entity local-service="true" name="Foo" remote-service="true">
 
 		<!-- PK fields -->
 
-		<column name="fooId" type="long" primary="true" />
+		<column name="fooId" primary="true" type="long" />
 
 		<!-- Group instance -->
 
