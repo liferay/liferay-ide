@@ -24,7 +24,6 @@ import org.junit.rules.RuleChain;
 
 /**
  * @author Ashley Yuan
- * @author Ying Xu
  */
 public class NewFragmentWizardMavenTomcat70Tests extends NewFragmentWizardMavenBase {
 

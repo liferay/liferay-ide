@@ -55,7 +55,6 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
- * @author Ying Xu
  * @author Ashley Yuan
  * @author Lily Li
  * @author Rui Wang
@@ -995,6 +994,14 @@ public class WizardAction extends UIAction {
 		
 		public void prepareLocation(String location) {
 			location().setText(location);
+		}
+
+		public void prepareLocation(String Text) {
+			location().setText(Text);
+		}
+
+		public void prepareProjectName(String Text) {
+			projectName().setText(Text);
 		}
 
 		public Text projectName() {

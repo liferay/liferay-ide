@@ -17,11 +17,11 @@ package com.liferay.ide.ui.fragment.wizard.base;
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 
-import org.junit.Assert;
 import org.junit.Rule;
 
 /**
  * @author Ashley Yuan
+ * @author Lily Li
  */
 public class NewFragmentWizardMavenBase extends SwtbotBase {
 
@@ -97,7 +97,7 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
-		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
 
 		dialogAction.cancel();
 
@@ -188,7 +188,7 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
 
 		dialogAction.cancel();
 

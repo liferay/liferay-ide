@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
- * @author Ying Xu
+ * @author Lily Li
  */
 public class DeployFragmentGradleTomcatDxpTests extends FragmentTomcat7xGradleDeployBase {
 

@@ -17,11 +17,10 @@ package com.liferay.ide.ui.fragment.tests;
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @author Ying Xu
+ * @author Lily Li
  */
 public class ValidationFragmentFilesWithoutTomcatTests extends SwtbotBase {
 
@@ -33,7 +32,9 @@ public class ValidationFragmentFilesWithoutTomcatTests extends SwtbotBase {
 
 		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newFragmentFiles.projectName());
 
-		Assert.assertEquals("<None>", wizardAction.newFragmentFiles.runtimeName().getText());
+		String[] runtime = {"<None>"};
+
+		validationAction.assertEquals(runtime, wizardAction.newFragmentFiles.runtimeName());
 
 		validationAction.assertEnabledTrue(wizardAction.newFragmentFiles.newRuntimeBtn());
 
