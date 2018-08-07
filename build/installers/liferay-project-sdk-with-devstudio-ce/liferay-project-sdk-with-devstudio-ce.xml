@@ -537,20 +537,20 @@
         </directoryParameter>
         <choiceParameterGroup>
             <name>clitools</name>
-            <description>Contains Cli Tools</description>
-            <explanation>If install Dev Studio without any cli tools, please choose "Dev Studio only", otherwise default.</explanation>
+            <description>Install Command Line Tools</description>
+            <explanation>Choose which installation option, whether to install both Developer Studio and Command Line Tools or just Developer Studio.</explanation>
             <value></value>
             <default>devstudiowithcli</default>
             <parameterList>
                 <labelParameter>
                     <name>devstudiowithcli</name>
-                    <description>Dev Studio with cli</description>
+                    <description>Developer Studio with Command Line Tools</description>
                     <explanation></explanation>
                     <image></image>
                 </labelParameter>
                 <labelParameter>
                     <name>devstudioonly</name>
-                    <description>Dev Studio only</description>
+                    <description>Developer Studio Only</description>
                     <explanation></explanation>
                     <image></image>
                 </labelParameter>
