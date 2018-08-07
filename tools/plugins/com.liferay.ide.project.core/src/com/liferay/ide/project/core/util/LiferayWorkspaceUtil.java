@@ -14,9 +14,12 @@
 
 package com.liferay.ide.project.core.util;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -222,6 +225,22 @@ public class LiferayWorkspaceUtil {
 		}
 
 		return retval;
+	}
+
+	public static IWorkspaceProjectBuilder getWorkspaceProjectBuilder(IProject project) throws CoreException {
+		final ILiferayProject liferayProject = LiferayCore.create(project);
+
+		if (liferayProject == null) {
+			throw new CoreException(ProjectCore.createErrorStatus("Can't find Liferay workspace project."));
+		}
+
+		final IWorkspaceProjectBuilder builder = liferayProject.adapt(IWorkspaceProjectBuilder.class);
+
+		if (builder == null) {
+			throw new CoreException(ProjectCore.createErrorStatus("Can't find Liferay Gradle project builder."));
+		}
+
+		return builder;
 	}
 
 	public static String getModulesDir(IProject project) {

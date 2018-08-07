@@ -26,6 +26,7 @@ import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.jobs.JobUtil;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
@@ -503,15 +504,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 								if ((provider != null) && (provider instanceof NewLiferayWorkspaceProjectProvider)) {
 									((NewLiferayWorkspaceProjectProvider<?>)provider).importProject(location, monitor);
 
-									IJobManager jobManager = Job.getJobManager();
-
-									Job[] jobs = jobManager.find(null);
-
-									for (Job job : jobs) {
-										if (job.getProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB) != null) {
-											job.join();
-										}
-									}
+									JobUtil.waitForLiferayProjectJob();
 
 									IProject[] projects = CoreUtil.getAllProjects();
 

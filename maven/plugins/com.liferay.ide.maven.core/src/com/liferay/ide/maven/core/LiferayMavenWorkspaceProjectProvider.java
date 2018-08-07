@@ -15,13 +15,11 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.workspace.BaseLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
@@ -39,13 +37,11 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -163,49 +159,6 @@ public class LiferayMavenWorkspaceProjectProvider
 		}
 
 		return Status.OK_STATUS;
-	}
-
-	@Override
-	public void initBundle(String bundleUrl, String serverName, String workspaceName) {
-		String jobName = "Initializing Liferay bundle";
-
-		Job job = new Job(jobName) {
-
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				IProject workspaceProject = ProjectUtil.getProject(workspaceName);
-
-				MavenProjectBuilder builder = new MavenProjectBuilder(workspaceProject);
-
-				monitor.beginTask(jobName, 100);
-
-				try {
-					builder.initBundle(workspaceProject, bundleUrl, monitor);
-
-					monitor.worked(95);
-
-					workspaceProject.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-
-					monitor.worked(5);
-
-					IStatus addPortalRuntime = LiferayWorkspaceUtil.addPortalRuntime(serverName);
-
-					if (addPortalRuntime != Status.OK_STATUS) {
-						return addPortalRuntime;
-					}
-				}
-				catch (CoreException ce) {
-					LiferayMavenCore.logError("Initialzing Liferay bundle failed", ce);
-				}
-
-				return Status.OK_STATUS;
-			}
-
-		};
-
-		job.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
-
-		job.schedule();
 	}
 
 	@Override
