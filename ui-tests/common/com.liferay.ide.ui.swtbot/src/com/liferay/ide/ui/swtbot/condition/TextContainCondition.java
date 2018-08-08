@@ -42,7 +42,7 @@ public class TextContainCondition implements ICondition {
 	}
 
 	public boolean test() throws Exception {
-		if (_text.getText().contains(_content) == _contain) {
+		if (_content.contains(_text.getText()) == _contain) {
 			return true;
 		}
 

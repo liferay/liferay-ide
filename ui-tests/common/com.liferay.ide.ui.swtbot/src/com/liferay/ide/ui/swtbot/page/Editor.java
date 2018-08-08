@@ -34,7 +34,9 @@ public class Editor extends AbstractPart {
 
 	public String getLabel() {
 		if (isLabelNull()) {
-			return ((SWTWorkbenchBot)bot).activeEditor().getTitle();
+			SWTBotEditor botActiveEditor = ((SWTWorkbenchBot)bot).activeEditor();
+
+			return botActiveEditor.getTitle();
 		}
 
 		return label;

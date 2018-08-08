@@ -184,7 +184,9 @@ public class Tree extends AbstractWidget {
 
 		SWTBotTreeItem parent = getWidget().expandNode(parents);
 
-		return parent.getNode(items[length - 1]).isVisible();
+		SWTBotTreeItem parentNode = parent.getNode(items[length - 1]);
+
+		return parentNode.isVisible();
 	}
 
 	public boolean isVisibleStartsBy(String... items) throws WidgetNotFoundException {
@@ -194,7 +196,9 @@ public class Tree extends AbstractWidget {
 			SWTBotTreeItem[] treeItems = getWidget().getAllItems();
 
 			for (SWTBotTreeItem item : treeItems) {
-				if (item.getText().startsWith(items[0]) && item.isVisible()) {
+				String itemText = item.getText();
+
+				if (itemText.startsWith(items[0]) && item.isVisible()) {
 					return true;
 				}
 			}
@@ -209,7 +213,9 @@ public class Tree extends AbstractWidget {
 		SWTBotTreeItem[] treeItems = parent.getItems();
 
 		for (SWTBotTreeItem item : treeItems) {
-			if (item.getText().startsWith(items[length - 1]) && item.isVisible()) {
+			String itemText = item.getText();
+
+			if (itemText.startsWith(items[length - 1]) && item.isVisible()) {
 				return true;
 			}
 		}
@@ -227,7 +233,9 @@ public class Tree extends AbstractWidget {
 		for (int i = 1; i < items.length; i++) {
 			item.expand();
 
-			item = item.getNode(items[i]).expand();
+			SWTBotTreeItem itemNode = item.getNode(items[i]);
+
+			item = itemNode.expand();
 		}
 
 		item.select();

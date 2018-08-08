@@ -16,6 +16,7 @@ package com.liferay.ide.ui.swtbot.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotToolbarDropDownButton;
 
 /**
  * @author Terry Jia
@@ -34,7 +35,9 @@ public class MenuItem extends AbstractWidget {
 
 	@Override
 	protected SWTBotMenu getWidget() {
-		return _dropDownBtn.getWidget().menuItem(label);
+		SWTBotToolbarDropDownButton dropDownWidget = _dropDownBtn.getWidget();
+
+		return dropDownWidget.menuItem(label);
 	}
 
 	private ToolbarDropDownButton _dropDownBtn;

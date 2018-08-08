@@ -41,7 +41,9 @@ public class Menu extends AbstractWidget {
 		SWTBotMenu menu = getWidget();
 
 		for (String menuItemLabel : menus) {
-			menu = menu.menu(menuItemLabel).click();
+			SWTBotMenu menuLabel = menu.menu(menuItemLabel);
+
+			menu = menuLabel.click();
 		}
 	}
 
