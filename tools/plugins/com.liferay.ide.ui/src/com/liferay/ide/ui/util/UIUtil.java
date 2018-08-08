@@ -167,6 +167,18 @@ public class UIUtil {
 		return workbench.getActiveWorkbenchWindow();
 	}
 
+	public static IPerspectiveDescriptor getActivePagePerspective() {
+		IWorkbenchPage activePage = getActivePage();
+
+		return activePage.getPerspective();
+	}
+
+	public static IPerspectiveRegistry getPerspectiveRegistry() {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+
+		return workbench.getPerspectiveRegistry();
+	}
+
 	public static IWorkbenchPage getActivePage() {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 
