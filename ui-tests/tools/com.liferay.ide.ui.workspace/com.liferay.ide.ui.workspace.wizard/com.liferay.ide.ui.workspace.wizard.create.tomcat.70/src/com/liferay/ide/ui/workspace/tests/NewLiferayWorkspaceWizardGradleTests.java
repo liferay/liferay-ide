@@ -74,7 +74,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorkspaceChangeLocation() {
-		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
+		String workspacePath = envAction.getEclipseWorkspacePathOSString();
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -84,7 +84,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		String newFolderName = "changeLocation";
 
-		wizardAction.newLiferayWorkspace.location().setText(workspacePath + "/" + newFolderName);
+		wizardAction.newLiferayWorkspace.prepareLocation(workspacePath + "/" + newFolderName);
 
 		wizardAction.finish();
 

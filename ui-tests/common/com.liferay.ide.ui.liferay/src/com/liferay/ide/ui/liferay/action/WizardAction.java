@@ -305,6 +305,14 @@ public class WizardAction extends UIAction {
 		public CheckBox downloadLiferayBundle() {
 			return _importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle();
 		}
+		
+		public void selectDownloadLiferayBundle() {
+			downloadLiferayBundle().select();
+		}
+		
+		public void deselectDownloadLiferayBundle() {
+			downloadLiferayBundle().deselect();
+		}
 
 		public void prepare(String location, boolean downloadLiferayBundle) {
 			workspaceLocation().setText(location);

@@ -25,6 +25,7 @@ import org.junit.Assert;
 
 /**
  * @author Terry Jia
+ * @author Ashely Yuan
  */
 public class ValidationAction extends UIAction {
 
@@ -40,6 +41,14 @@ public class ValidationAction extends UIAction {
 
 	private ValidationAction(SWTWorkbenchBot bot) {
 		super(bot);
+	}
+
+	public void assertActiveFalse(AbstractWidget widget) {
+		Assert.assertFalse(widget.isActive());
+	}
+
+	public void assertActiveTrue(AbstractWidget widget) {
+		Assert.assertTrue(widget.isActive());
 	}
 
 	public void assertCheckedFalse(CheckBox checkBox) {
@@ -71,7 +80,7 @@ public class ValidationAction extends UIAction {
 			Assert.assertEquals(expects[i], items[i]);
 		}
 	}
-
+	
 	public void assertLengthEquals(Object[] a1, Object[] a2) {
 		Assert.assertEquals(a1.length, a2.length);
 	}
