@@ -14,10 +14,14 @@
 
 package com.liferay.ide.studio.ui;
 
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 import com.liferay.ide.project.ui.workspace.ImportLiferayWorkspaceWizard;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
 import com.liferay.ide.ui.util.ProjectExplorerLayoutUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
 
@@ -38,10 +42,8 @@ import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveRegistry;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.intro.impl.IntroPlugin;
 import org.eclipse.ui.intro.IIntroSite;
 import org.eclipse.ui.intro.config.IIntroAction;
@@ -56,15 +58,18 @@ public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction {
 	public void run(IIntroSite site, Properties params) {
 		Location platformLocation = Platform.getInstallLocation();
 
-		File location = new File(platformLocation.getURL().getFile());
+		File location = FileUtil.getFile(platformLocation.getURL());
 
-		if (Platform.getOS().equals(Platform.OS_MACOSX)) {
-			location = location.getParentFile().getParentFile();
+		if (Platform.OS_MACOSX.equals(Platform.getOS())) {
+			location = location.getParentFile();
+			location = location.getParentFile();
 		}
 
 		IPath path = new Path(location.getAbsolutePath());
 
-		File workspaceDir = path.append("../liferay-workspace").toFile();
+		IPath workspacePath = path.append("../liferay-workspace");
+
+		File workspaceDir = workspacePath.toFile();
 
 		if (!workspaceDir.exists()) {
 			MessageDialog.openInformation(
@@ -80,13 +85,15 @@ public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction {
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
 				ImportLiferayWorkspaceWizard wizard = new ImportLiferayWorkspaceWizard();
 
-				ImportLiferayWorkspaceOp op = wizard.element().nearest(ImportLiferayWorkspaceOp.class);
+				ImportLiferayWorkspaceOp wizardElement = wizard.element();
+
+				ImportLiferayWorkspaceOp op = wizardElement.nearest(ImportLiferayWorkspaceOp.class);
 
 				op.setWorkspaceLocation(workspaceDir.getAbsolutePath());
 
 				op.setProvisionLiferayBundle(true);
 
-				if (op.validation().ok()) {
+				if (SapphireUtil.ok(op)) {
 					op.execute(ProgressMonitorBridge.create(monitor));
 
 					return Status.OK_STATUS;
@@ -108,31 +115,29 @@ public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction {
 	}
 
 	private void _openLiferayPerspective() {
-		IWorkbench workbench = PlatformUI.getWorkbench();
+		IPerspectiveDescriptor perspective = UIUtil.getActivePagePerspective();
 
-		IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-
-		IPerspectiveDescriptor perspective = activeWorkbenchWindow.getActivePage().getPerspective();
-
-		if (!perspective.getId().equals(LiferayWorkspacePerspectiveFactory.ID)) {
-			IPerspectiveRegistry reg = PlatformUI.getWorkbench().getPerspectiveRegistry();
-
-			IPerspectiveDescriptor finalPersp = reg.findPerspectiveWithId(LiferayWorkspacePerspectiveFactory.ID);
-
-			IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-
-			if (window == null) {
-				return;
-			}
-
-			IWorkbenchPage page = window.getActivePage();
-
-			if (page == null) {
-				return;
-			}
-
-			page.setPerspective(finalPersp);
+		if (StringUtil.equals(perspective.getId(), LiferayWorkspacePerspectiveFactory.ID)) {
+			return;
 		}
+
+		IPerspectiveRegistry reg = UIUtil.getPerspectiveRegistry();
+
+		IPerspectiveDescriptor finalPersp = reg.findPerspectiveWithId(LiferayWorkspacePerspectiveFactory.ID);
+
+		IWorkbenchWindow window = UIUtil.getActiveWorkbenchWindow();
+
+		if (window == null) {
+			return;
+		}
+
+		IWorkbenchPage page = window.getActivePage();
+
+		if (page == null) {
+			return;
+		}
+
+		page.setPerspective(finalPersp);
 	}
 
 }

@@ -16,6 +16,7 @@ package com.liferay.ide.studio.ui;
 
 import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.StringConverter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -79,7 +80,9 @@ public class StudioSplashHandler extends BasicSplashHandler {
 
 		// the following code will be removed for release time
 
-		if (PrefUtil.getInternalPreferenceStore().getBoolean("SHOW_BUILDID_ON_STARTUP")) {
+		IPreferenceStore preferenceStore = PrefUtil.getInternalPreferenceStore();
+
+		if (preferenceStore.getBoolean("SHOW_BUILDID_ON_STARTUP")) {
 			String buildId = System.getProperty("eclipse.buildId", "Unknown Build");
 			String buildIdRect = product.getProperty("buildIdRect");
 
@@ -105,9 +108,9 @@ public class StudioSplashHandler extends BasicSplashHandler {
 
 			FontData[] fontData = initialFont.getFontData();
 
-			for (int i = 0; i < fontData.length; i++) {
-				fontData[i].setHeight(14);
-				fontData[i].setStyle(SWT.BOLD);
+			for (FontData data : fontData) {
+				data.setHeight(14);
+				data.setStyle(SWT.BOLD);
 			}
 
 			_newFont = new Font(idLabel.getDisplay(), fontData);
