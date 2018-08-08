@@ -21,7 +21,6 @@ import com.liferay.ide.ui.swtbot.util.StringPool;
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -62,7 +61,7 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 	public void testBuild() {
 		viewAction.codeUpgrade.switchGear(8);
 
-		Assert.assertTrue(_codeUpgradeView.getBuildBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getBuildBtn());
 	}
 
 	@Ignore("unstable need more research")
@@ -70,7 +69,7 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 	public void testBuildServices() {
 		viewAction.codeUpgrade.switchGear(5);
 
-		Assert.assertTrue(_codeUpgradeView.getBuildServicesBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getBuildServicesBtn());
 	}
 
 	@Ignore("unstable need more research")
@@ -78,36 +77,36 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 	public void testCustomJsp() {
 		viewAction.codeUpgrade.switchGear(7);
 
-		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
+		String workspacePath = envAction.getEclipseWorkspacePathOSString();
 
-		if (Platform.getOS().equals("win32")) {
+		if ("win32".equals(Platform.getOS())) {
 			workspacePath = workspacePath.replaceAll("\\\\", "/");
 		}
 
-		Assert.assertEquals(workspacePath, _codeUpgradeView.getConvertedProjectLocation().getText());
+		validationAction.assertTextEquals(workspacePath, _codeUpgradeView.getConvertedProjectLocation());
 
-		Assert.assertTrue(_codeUpgradeView.getBrowseBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getBrowseBtn());
 
-		Assert.assertTrue(_codeUpgradeView.getSelectProjectsBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getSelectProjectsBtn());
 
-		Assert.assertTrue(_codeUpgradeView.getRefreshResultsBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getRefreshResultsBtn());
 
-		Assert.assertTrue(_codeUpgradeView.getClearResultsBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getClearResultsBtn());
 	}
 
 	@Test
 	public void testFindBreakingChanges() {
 		viewAction.codeUpgrade.switchGear(3);
 
-		Assert.assertTrue(_codeUpgradeView.getFindBreakingChangesBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getFindBreakingChangesBtn());
 
-		Assert.assertFalse(_codeUpgradeView.getAutomaticallyCorrectProblemsBtn().isEnabled());
+		validationAction.assertEnabledFalse(_codeUpgradeView.getAutomaticallyCorrectProblemsBtn());
 
-		Assert.assertTrue(_codeUpgradeView.getExpandAllBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getExpandAllBtn());
 
-		Assert.assertTrue(_codeUpgradeView.getCollapseAllBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getCollapseAllBtn());
 
-		Assert.assertTrue(_codeUpgradeView.getOpenIgnoredListBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getOpenIgnoredListBtn());
 	}
 
 	@Test
@@ -137,7 +136,7 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 	public void testLayoutTemplate() {
 		viewAction.codeUpgrade.switchGear(6);
 
-		Assert.assertTrue(_codeUpgradeView.getUpgradeBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getUpgradeBtn());
 	}
 
 	@Test
@@ -147,41 +146,41 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 
 		viewAction.codeUpgrade.switchGear(1);
 
-		Assert.assertEquals(StringPool.BLANK, _codeUpgradeView.getPluginsSdkOrMavenProjectRootLocation().getText());
+		validationAction.assertTextEquals(StringPool.BLANK, _codeUpgradeView.getPluginsSdkOrMavenProjectRootLocation());
 
-		Assert.assertTrue(_codeUpgradeView.getBrowseBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getBrowseBtn());
 
-		Assert.assertTrue(_codeUpgradeView.getDownloadLiferayBundleRecommended().isChecked());
+		validationAction.assertCheckedTrue(_codeUpgradeView.getDownloadLiferayBundleRecommended());
 
-		Assert.assertEquals(LIFERAY_7_X, _codeUpgradeView.getServerName().getText());
+		validationAction.assertTextEquals(LIFERAY_7_X, _codeUpgradeView.getServerName());
 
-		Assert.assertEquals(bundleUrl, _codeUpgradeView.getBundleUrl().getText());
+		validationAction.assertTextEquals(bundleUrl, _codeUpgradeView.getBundleUrl());
 
-		Assert.assertFalse(_codeUpgradeView.getImportProjectsBtn().isEnabled());
+		validationAction.assertEnabledFalse(_codeUpgradeView.getImportProjectsBtn());
 
 		viewAction.codeUpgrade.prepareMigrateLayout(UPGRADE_TO_LIFERAY_PLUGINS_SDK_7);
 
-		Assert.assertEquals(StringPool.BLANK, _codeUpgradeView.getLiferayServerName().getText());
+		validationAction.assertTextEquals(StringPool.BLANK, _codeUpgradeView.getLiferayServerName());
 
-		Assert.assertTrue(_codeUpgradeView.getAddServerBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getAddServerBtn());
 	}
 
 	@Test
 	public void testUpdateDescriptorFiles() {
 		viewAction.codeUpgrade.switchGear(4);
 
-		Assert.assertTrue(_codeUpgradeView.getUpgradeBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getUpgradeBtn());
 	}
 
 	@Test
 	public void testUpgradePomFiles() {
 		viewAction.codeUpgrade.switchGear(2);
 
-		Assert.assertTrue(_codeUpgradeView.getSelectAllBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getSelectAllBtn());
 
-		Assert.assertTrue(_codeUpgradeView.getDeselectAllBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getDeselectAllBtn());
 
-		Assert.assertTrue(_codeUpgradeView.getUpgradeSelectedBtn().isEnabled());
+		validationAction.assertEnabledTrue(_codeUpgradeView.getUpgradeSelectedBtn());
 	}
 
 	private static final CodeUpgradeView _codeUpgradeView = new CodeUpgradeView(bot);
