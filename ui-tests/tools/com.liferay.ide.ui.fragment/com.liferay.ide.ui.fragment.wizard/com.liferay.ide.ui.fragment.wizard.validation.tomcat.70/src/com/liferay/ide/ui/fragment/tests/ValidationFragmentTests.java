@@ -46,8 +46,8 @@ public class ValidationFragmentTests extends SwtbotBase {
 		wizardAction.openNewFragmentWizard();
 
 		String[] expectedBuildTypes = {GRADLE, MAVEN};
-
-		validationAction.assertEquals(expectedBuildTypes, wizardAction.newProject.getBuildTypes());
+	
+		validationAction.assertEquals(expectedBuildTypes, wizardAction.newProject.buildType());
 
 		wizardAction.cancel();
 	}

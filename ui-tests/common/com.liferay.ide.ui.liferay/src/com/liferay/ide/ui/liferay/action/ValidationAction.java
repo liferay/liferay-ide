@@ -18,7 +18,6 @@ import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.swtbot.page.AbstractWidget;
 import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.ComboBox;
-import com.liferay.ide.ui.swtbot.page.Text;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
@@ -29,12 +28,18 @@ import org.junit.Assert;
  */
 public class ValidationAction extends UIAction {
 
+	private static ValidationAction _validationAction;
+
 	public static ValidationAction getInstance(SWTWorkbenchBot bot) {
 		if (_validationAction == null) {
 			_validationAction = new ValidationAction(bot);
 		}
 
 		return _validationAction;
+	}
+
+	private ValidationAction(SWTWorkbenchBot bot) {
+		super(bot);
 	}
 
 	public void assertCheckedFalse(CheckBox checkBox) {
@@ -67,14 +72,12 @@ public class ValidationAction extends UIAction {
 		}
 	}
 
-	public void assertTextEquals(String expect, Text text) {
-		Assert.assertEquals(expect, text.getText());
+	public void assertLengthEquals(Object[] a1, Object[] a2) {
+		Assert.assertEquals(a1.length, a2.length);
 	}
 
-	private ValidationAction(SWTWorkbenchBot bot) {
-		super(bot);
+	public void assertTextEquals(String expect, AbstractWidget widget) {
+		Assert.assertEquals(expect, widget.getText());
 	}
-
-	private static ValidationAction _validationAction;
 
 }

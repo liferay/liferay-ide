@@ -96,7 +96,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
 		wizardAction.newLiferayComponent.prepareProjectName(secondProjectName);
 

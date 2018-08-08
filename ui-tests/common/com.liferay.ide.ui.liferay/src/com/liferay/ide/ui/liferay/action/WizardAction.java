@@ -644,6 +644,10 @@ public class WizardAction extends UIAction {
 
 			ide.sleep();
 		}
+		
+		public void preparePackage(String packageName) {
+			packageName().setText(packageName);
+		}
 
 		public void prepare(String projectName, String packageName) {
 			projectName().setSelection(projectName);
@@ -664,7 +668,7 @@ public class WizardAction extends UIAction {
 
 			ide.sleep();
 
-			componentClassName().setText(className);
+			prepareComponentClass(className);
 
 			ide.sleep();
 
@@ -677,6 +681,10 @@ public class WizardAction extends UIAction {
 			_newLiferayComponentWizard.getModelClassName().setText(modelClass);
 
 			ide.sleep();
+		}
+
+		public void prepareComponentClass(String componentClass) {
+			componentClassName().setText(componentClass);
 		}
 
 		public void prepareProjectName(String projectName) {
@@ -813,6 +821,10 @@ public class WizardAction extends UIAction {
 
 		public ToolbarButtonWithTooltip deleteBtn() {
 			return _newModuleInfoWizard.getDeleteBtn();
+		}
+		
+		public void clickDeleteBtn() {
+			deleteBtn().click();
 		}
 
 		public void openSelectServiceDialog() {
@@ -966,20 +978,31 @@ public class WizardAction extends UIAction {
 			return _newProjectWizard.getBuildTypes();
 		}
 
+		public String[] buildTypes() {
+			return buildType().items();
+		}
 		public void deselectUseDefaultLocation() {
 			useDefaultLocation().deselect();
-		}
-
-		public ComboBox getBuildTypes() {
-			return _newProjectWizard.getBuildTypes();
 		}
 
 		public Text location() {
 			return _newProjectWizard.getLocation();
 		}
+		
+		public String getLocation() {
+			return location().getText();
+		}
+		
+		public void prepareLocation(String location) {
+			location().setText(location);
+		}
 
 		public Text projectName() {
 			return _newProjectWizard.getProjectName();
+		}
+		
+		public void prepareProjectName(String projectName) {
+			projectName().setText(projectName);
 		}
 
 		public void selectUseDefaultLocation() {

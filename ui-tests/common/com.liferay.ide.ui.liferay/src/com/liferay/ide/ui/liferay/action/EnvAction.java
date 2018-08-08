@@ -121,6 +121,10 @@ public class EnvAction extends UIAction {
 		return path.toFile();
 	}
 
+	public String getTempDirPath() {
+		return getTempDir().getPath();
+	}
+
 	public String getUsername() {
 		String retval = StringPool.BLANK;
 
