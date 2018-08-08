@@ -24,12 +24,14 @@ import java.io.FilenameFilter;
 import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.ui.IStartup;
@@ -61,8 +63,9 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 		boolean retVal = false;
 
 		try {
-			File bundledPortalFile = new File(
-				FileLocator.toFileURL(new URL(IProductPreferences.BUNDLED_PORTAL_PATH_ZIP)).getFile());
+			URL url = FileLocator.toFileURL(new URL(IProductPreferences.BUNDLED_PORTAL_PATH_ZIP));
+
+			File bundledPortalFile = new File(url.getFile());
 
 			retVal = bundledPortalFile.exists();
 		}
@@ -89,11 +92,6 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 		return new Status(IStatus.INFO, PLUGIN_ID, msg);
 	}
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
 	public static StudioPlugin getDefault() {
 		return _plugin;
 	}
@@ -101,7 +99,9 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 	public static boolean isFirstLaunch() {
 		IScopeContext[] scopes = {ConfigurationScope.INSTANCE, InstanceScope.INSTANCE};
 
-		return !(Platform.getPreferencesService().getBoolean(PLUGIN_ID, FIRST_LAUNCH_COMPLETE, false, scopes));
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		return !(preferencesService.getBoolean(PLUGIN_ID, FIRST_LAUNCH_COMPLETE, false, scopes));
 	}
 
 	public static boolean isProductRunning() {
@@ -123,9 +123,9 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 	}
 
 	public static void logError(IStatus status) {
-		StudioPlugin plugin = getDefault();
+		ILog log = getDefault().getLog();
 
-		plugin.getLog().log(status);
+		log.log(status);
 	}
 
 	public static void logError(String msg, Exception ex) {
@@ -133,9 +133,9 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 	}
 
 	public static void logInfo(String msg) {
-		StudioPlugin plugin = getDefault();
+		ILog log = getDefault().getLog();
 
-		plugin.getLog().log(createInfoStatus(msg));
+		log.log(createInfoStatus(msg));
 	}
 
 	/**
@@ -149,18 +149,6 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 			return;
 		}
 
-		// try
-		// {
-		// if( isFirstLaunch() )
-		// {
-		// new InitLiferayWorkspaceHandler().execute( null );
-		// }
-		// }
-		// catch( ExecutionException e )
-		// {
-		// e.printStackTrace();
-		// }
-
 		_importSnippets();
 	}
 
@@ -168,22 +156,12 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 		return InstanceScope.INSTANCE.getNode(PLUGIN_ID);
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see AbstractUIPlugin#start(org.osgi.framework. BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
 		_plugin = this;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see AbstractUIPlugin#stop(org.osgi.framework. BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 		super.stop(context);
@@ -241,8 +219,9 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 
 		IScopeContext[] scopes = {InstanceScope.INSTANCE};
 
-		String importedSnippetFiles = Platform.getPreferencesService().getString(
-			PLUGIN_ID, IMPORTED_SNIPPET_FILES, null, scopes);
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		String importedSnippetFiles = preferencesService.getString(PLUGIN_ID, IMPORTED_SNIPPET_FILES, null, scopes);
 
 		if (!CoreUtil.isNullOrEmpty(importedSnippetFiles)) {
 			String[] fileNames = importedSnippetFiles.split(",");
@@ -266,8 +245,9 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 
 		IScopeContext[] scopes = {InstanceScope.INSTANCE};
 
-		String importedSnippetFiles = Platform.getPreferencesService().getString(
-			PLUGIN_ID, IMPORTED_SNIPPET_FILES, null, scopes);
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		String importedSnippetFiles = preferencesService.getString(PLUGIN_ID, IMPORTED_SNIPPET_FILES, null, scopes);
 
 		String newImportedSnippetFiles = importedSnippetFiles;
 

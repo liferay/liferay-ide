@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.FileLocator;
 
@@ -46,7 +47,9 @@ public class GroovyScriptingSupport {
 		GroovyClassLoader gcl = new GroovyClassLoader();
 
 		try {
-			return gcl.parseClass(scriptFile).newInstance();
+			Class<?> clazz = gcl.parseClass(scriptFile);
+
+			return clazz.newInstance();
 		}
 		catch (Exception e) {
 			ScriptingCore.logError("Could not create script file.", e);
@@ -58,9 +61,13 @@ public class GroovyScriptingSupport {
 	protected GroovyShell createGroovyShell(Map<String, Object> variableMap) {
 		GroovyShell groovyShell = new GroovyShell(new GroovyClassLoader());
 
-		if ((variableMap != null) && (variableMap.keySet() != null) && (variableMap.keySet().size() > 0)) {
-			for (Map.Entry<String, Object> map : variableMap.entrySet()) {
-				groovyShell.setVariable(map.getKey(), map.getValue());
+		if (variableMap != null) {
+			Set<String> set = variableMap.keySet();
+
+			if ((set != null) && !set.isEmpty()) {
+				for (Map.Entry<String, Object> map : variableMap.entrySet()) {
+					groovyShell.setVariable(map.getKey(), map.getValue());
+				}
 			}
 		}
 

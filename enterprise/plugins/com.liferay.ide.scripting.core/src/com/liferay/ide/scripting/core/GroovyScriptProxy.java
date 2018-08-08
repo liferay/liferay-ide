@@ -57,7 +57,7 @@ public abstract class GroovyScriptProxy implements InvocationHandler {
 		}
 
 		if (error != null) {
-			throw new RuntimeException("Error in workflow validation proxy.", error.getCause());
+			throw new RuntimeException("Error in workflow validation proxy", error.getCause());
 		}
 
 		return retval;
@@ -68,21 +68,26 @@ public abstract class GroovyScriptProxy implements InvocationHandler {
 			proxyClassLoader = createClassLoader();
 		}
 
-		ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
+		Thread thread = Thread.currentThread();
+
+		ClassLoader currentClassLoader = thread.getContextClassLoader();
 
 		if (currentClassLoader.equals(proxyClassLoader)) {
 			return;
 		}
 		else {
 			previousClassLoader = currentClassLoader;
-			Thread.currentThread().setContextClassLoader(proxyClassLoader);
+
+			thread.setContextClassLoader(proxyClassLoader);
 		}
 	}
 
 	protected URLClassLoader createClassLoader() throws CoreException {
 		List<URL> urls = new ArrayList<>();
 
-		urls.add(ScriptingCore.getGroovyScriptingSupport().getGroovyLibURL());
+		GroovyScriptingSupport groovyScriptingSupport = ScriptingCore.getGroovyScriptingSupport();
+
+		urls.add(groovyScriptingSupport.getGroovyLibURL());
 
 		for (URL url : getProxyClasspath()) {
 			urls.add(url);
@@ -97,20 +102,24 @@ public abstract class GroovyScriptProxy implements InvocationHandler {
 
 	protected Object getServiceObject() throws Exception {
 		if (serviceObject == null) {
-			serviceObject = ScriptingCore.getGroovyScriptingSupport().newInstanceFromFile(getGroovyFile());
+			GroovyScriptingSupport groovyScriptingSupport = ScriptingCore.getGroovyScriptingSupport();
+
+			serviceObject = groovyScriptingSupport.newInstanceFromFile(getGroovyFile());
 		}
 
 		return serviceObject;
 	}
 
 	protected void unconfigureClassloader() {
+		Thread thread = Thread.currentThread();
+
 		if (previousClassLoader != null) {
-			Thread.currentThread().setContextClassLoader(previousClassLoader);
+			thread.setContextClassLoader(previousClassLoader);
 		}
 		else {
 			Class<?> proxyClass = getClass();
 
-			Thread.currentThread().setContextClassLoader(proxyClass.getClassLoader());
+			thread.setContextClassLoader(proxyClass.getClassLoader());
 		}
 	}
 
