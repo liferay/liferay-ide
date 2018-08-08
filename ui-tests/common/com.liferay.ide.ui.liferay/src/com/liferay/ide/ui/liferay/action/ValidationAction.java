@@ -20,7 +20,7 @@ import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.ComboBox;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-
+import org.eclipse.swtbot.swt.finder.SWTBotAssert;
 import org.junit.Assert;
 
 /**
@@ -57,6 +57,10 @@ public class ValidationAction extends UIAction {
 
 	public void assertCheckedTrue(CheckBox checkBox) {
 		Assert.assertTrue(checkBox.isChecked());
+	}
+
+	public void assertContains(String expect, String stack) {
+		SWTBotAssert.assertContains(expect, stack);
 	}
 
 	public void assertEnabledFalse(AbstractWidget widget) {

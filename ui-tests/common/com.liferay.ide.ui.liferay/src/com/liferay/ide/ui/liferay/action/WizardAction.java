@@ -389,6 +389,10 @@ public class WizardAction extends UIAction {
 			return _installNewSoftwareWizard.contactAllUpdateSites();
 		}
 
+		public void deselectContactAllUpdateSites() {
+			contactAllUpdateSites().deselect();
+		}
+
 		public void selectAcceptTerms() {
 			acceptTerms().click();
 		}
