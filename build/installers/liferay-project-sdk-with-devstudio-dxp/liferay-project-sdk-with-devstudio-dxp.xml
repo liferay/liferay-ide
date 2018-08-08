@@ -225,6 +225,11 @@
                     <text>${platform_name}</text>
                     <value>linux</value>
                 </compareText>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${clitools}</value1>
+                    <value2>devstudiowithcli</value2>
+                </compareValues>
             </conditionRuleList>
             <elseActionList>
                 <if>
@@ -278,23 +283,34 @@
                 </unzip>
             </elseActionList>
         </if>
-        <setInstallerVariable>
-            <name>liferayBundlesPath</name>
-            <value>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}bundles</value>
-        </setInstallerVariable>
-        <createDirectory>
-            <path>${liferayBundlesPath}</path>
-            <progressText>Creating directory...</progressText>
-        </createDirectory>
-        <copyFile>
-            <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-tomcat-7.1.10-ga1-20180703090613030.zip</destination>
-            <origin>${installdir}${platform_path_separator}liferay-dxp-tomcat-7.1.10-ga1-20180703090613030.zip</origin>
-        </copyFile>
-        <copyFile>
-            <destination>${liferayBundlesPath}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.19-withdependencies.zip</destination>
-            <origin>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.19-withdependencies.zip</origin>
-        </copyFile>
-        <include file="../components/run-java-jpm.xml" />
+        <if>
+            <actionList>
+                <setInstallerVariable>
+                    <name>liferayBundlesPath</name>
+                    <value>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}bundles</value>
+                </setInstallerVariable>
+                <createDirectory>
+                    <path>${liferayBundlesPath}</path>
+                    <progressText>Creating directory...</progressText>
+                </createDirectory>
+                <copyFile>
+                    <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-tomcat-7.1.10-ga1-20180703090613030.zip</destination>
+                    <origin>${installdir}${platform_path_separator}liferay-dxp-tomcat-7.1.10-ga1-20180703090613030.zip</origin>
+                </copyFile>
+                <copyFile>
+                    <destination>${liferayBundlesPath}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.19-withdependencies.zip</destination>
+                    <origin>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.19-withdependencies.zip</origin>
+                </copyFile>
+                <include file="../components/run-java-jpm.xml" />
+            </actionList>
+            <conditionRuleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${clitools}</value1>
+                    <value2>devstudiowithcli</value2>
+                </compareValues>
+            </conditionRuleList>
+        </if>
         <if>
             <explanation>is linux</explanation>
             <actionList>
@@ -323,118 +339,145 @@
                             <text>${platform_name}</text>
                             <value>osx</value>
                         </compareText>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${clitools}</value1>
+                            <value2>devstudiowithcli</value2>
+                        </compareValues>
                     </conditionRuleList>
                     <elseActionList>
-                        <setInstallerVariable>
-                            <name>jpmSystemPath</name>
-                            <value>${user_home_directory}\.jpm\windows\bin</value>
-                        </setInstallerVariable>
+                        <if>
+                            <actionList>
+                                <setInstallerVariable>
+                                    <name>jpmSystemPath</name>
+                                    <value>${user_home_directory}\.jpm\windows\bin</value>
+                                </setInstallerVariable>
+                            </actionList>
+                            <conditionRuleList>
+                                <compareValues>
+                                    <logic>equals</logic>
+                                    <value1>${clitools}</value1>
+                                    <value2>devstudiowithcli</value2>
+                                </compareValues>
+                            </conditionRuleList>
+                        </if>
                     </elseActionList>
                 </if>
             </elseActionList>
         </if>
-        <addDirectoryToPath>
-            <insertAt>end</insertAt>
-            <path>${jpmSystemPath}</path>
-        </addDirectoryToPath>
-        <include file="../components/set-installer-variable-jpm.xml" />
-        <include file="../components/set-installer-variable-blade.xml" />
-        <include file="../components/set-installer-variable-gw.xml" />
-        <include file="../components/set-installer-variable-bnd.xml" />
-        <include file="../components/run-jpm-install-blade.xml" />
-        <include file="../components/run-jpm-install-gw.xml" />
-        <include file="../components/run-jpm-install-bnd.xml" />
-        <runProgram>
-            <program>chown</program>
-            <programArguments>-R ${env(SUDO_USER)} "${user_home_directory}/jpm"</programArguments>
-            <ruleList>
-                <isTrue>
-                    <value>${installer_is_root_install}</value>
-                </isTrue>
-                <compareText>
-                    <logic>does_not_contain</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>win</value>
-                </compareText>
-                <fileExists>
-                    <path>${user_home_directory}/jpm</path>
-                </fileExists>
-            </ruleList>
-        </runProgram>
-        <runProgram>
-            <program>chown</program>
-            <programArguments>-R ${env(SUDO_USER)} ${jpmSettingPath}</programArguments>
-            <ruleList>
-                <isTrue>
-                    <value>${installer_is_root_install}</value>
-                </isTrue>
-                <compareText>
-                    <logic>does_not_contain</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>win</value>
-                </compareText>
-                <fileExists>
-                    <path>${jpmSettingPath}</path>
-                </fileExists>
-            </ruleList>
-        </runProgram>
-        <setInstallerVariable>
-            <name>bladeCommandPath</name>
-            <value>${jpmSystemPath}${platform_path_separator}blade</value>
-        </setInstallerVariable>
-        <runProgram>
-            <program>chown</program>
-            <programArguments>-R ${env(SUDO_USER)} ${user_home_directory}/.gradle</programArguments>
-            <ruleList>
-                <isTrue>
-                    <value>${installer_is_root_install}</value>
-                </isTrue>
-                <compareText>
-                    <logic>does_not_contain</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>win</value>
-                </compareText>
-            </ruleList>
-        </runProgram>
-        <runProgram>
-            <program>${bladeCommandPath}</program>
-            <programArguments>--base "${lrws}" init</programArguments>
-        </runProgram>
-        <propertiesFileSet>
-            <file>${lrws}${platform_path_separator}gradle.properties</file>
-            <key>liferay.workspace.bundle.token.download</key>
-            <value>true</value>
-        </propertiesFileSet>
-        <propertiesFileSet>
-            <file>${lrws}${platform_path_separator}gradle.properties</file>
-            <key>liferay.workspace.bundle.url</key>
-            <value>https://api.liferay.com/downloads/portal/7.1.10/liferay-dxp-tomcat-7.1.10-ga1-20180703090613030.zip</value>
-        </propertiesFileSet>
-        <createDirectory>
-            <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
-            <ruleList>
-                <fileTest>
-                    <condition>exists</condition>
-                    <path>${activationKey}</path>
-                </fileTest>
-            </ruleList>
-        </createDirectory>
-        <copyFile>
-            <destination>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy${platform_path_separator}activation_key.xml</destination>
-            <origin>${activationKey}</origin>
-            <ruleList>
-                <fileTest>
-                    <condition>exists</condition>
-                    <path>${activationKey}</path>
-                </fileTest>
-            </ruleList>
-        </copyFile>
-        <createDirectory>
-            <path>${user_home_directory}${platform_path_separator}.gradle</path>
-        </createDirectory>
+        <if>
+            <actionList>
+                <addDirectoryToPath>
+                    <insertAt>end</insertAt>
+                    <path>${jpmSystemPath}</path>
+                </addDirectoryToPath>
+                <include file="../components/set-installer-variable-jpm.xml" />
+                <include file="../components/set-installer-variable-blade.xml" />
+                <include file="../components/set-installer-variable-gw.xml" />
+                <include file="../components/set-installer-variable-bnd.xml" />
+                <include file="../components/run-jpm-install-blade.xml" />
+                <include file="../components/run-jpm-install-gw.xml" />
+                <include file="../components/run-jpm-install-bnd.xml" />
+                <runProgram>
+                    <program>chown</program>
+                    <programArguments>-R ${env(SUDO_USER)} "${user_home_directory}/jpm"</programArguments>
+                    <ruleList>
+                        <isTrue>
+                            <value>${installer_is_root_install}</value>
+                        </isTrue>
+                        <compareText>
+                            <logic>does_not_contain</logic>
+                            <nocase>1</nocase>
+                            <text>${platform_name}</text>
+                            <value>win</value>
+                        </compareText>
+                        <fileExists>
+                            <path>${user_home_directory}/jpm</path>
+                        </fileExists>
+                    </ruleList>
+                </runProgram>
+                <runProgram>
+                    <program>chown</program>
+                    <programArguments>-R ${env(SUDO_USER)} ${jpmSettingPath}</programArguments>
+                    <ruleList>
+                        <isTrue>
+                            <value>${installer_is_root_install}</value>
+                        </isTrue>
+                        <compareText>
+                            <logic>does_not_contain</logic>
+                            <nocase>1</nocase>
+                            <text>${platform_name}</text>
+                            <value>win</value>
+                        </compareText>
+                        <fileExists>
+                            <path>${jpmSettingPath}</path>
+                        </fileExists>
+                    </ruleList>
+                </runProgram>
+                <setInstallerVariable>
+                    <name>bladeCommandPath</name>
+                    <value>${jpmSystemPath}${platform_path_separator}blade</value>
+                </setInstallerVariable>
+                <runProgram>
+                    <program>chown</program>
+                    <programArguments>-R ${env(SUDO_USER)} ${user_home_directory}/.gradle</programArguments>
+                    <ruleList>
+                        <isTrue>
+                            <value>${installer_is_root_install}</value>
+                        </isTrue>
+                        <compareText>
+                            <logic>does_not_contain</logic>
+                            <nocase>1</nocase>
+                            <text>${platform_name}</text>
+                            <value>win</value>
+                        </compareText>
+                    </ruleList>
+                </runProgram>
+                <runProgram>
+                    <program>${bladeCommandPath}</program>
+                    <programArguments>--base "${lrws}" init</programArguments>
+                </runProgram>
+                <propertiesFileSet>
+                    <file>${lrws}${platform_path_separator}gradle.properties</file>
+                    <key>liferay.workspace.bundle.token.download</key>
+                    <value>true</value>
+                </propertiesFileSet>
+                <propertiesFileSet>
+                    <file>${lrws}${platform_path_separator}gradle.properties</file>
+                    <key>liferay.workspace.bundle.url</key>
+                    <value>https://api.liferay.com/downloads/portal/7.1.10/liferay-dxp-tomcat-7.1.10-ga1-20180703090613030.zip</value>
+                </propertiesFileSet>
+                <createDirectory>
+                    <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
+                    <ruleList>
+                        <fileTest>
+                            <condition>exists</condition>
+                            <path>${activationKey}</path>
+                        </fileTest>
+                    </ruleList>
+                </createDirectory>
+                <copyFile>
+                    <destination>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy${platform_path_separator}activation_key.xml</destination>
+                    <origin>${activationKey}</origin>
+                    <ruleList>
+                        <fileTest>
+                            <condition>exists</condition>
+                            <path>${activationKey}</path>
+                        </fileTest>
+                    </ruleList>
+                </copyFile>
+                <createDirectory>
+                    <path>${user_home_directory}${platform_path_separator}.gradle</path>
+                </createDirectory>
+            </actionList>
+            <conditionRuleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${clitools}</value1>
+                    <value2>devstudiowithcli</value2>
+                </compareValues>
+            </conditionRuleList>
+        </if>
         <if>
             <actionList>
                 <propertiesFileSet>
@@ -653,6 +696,27 @@
             <mustExist>0</mustExist>
             <width>30</width>
         </directoryParameter>
+        <choiceParameterGroup>
+            <name>clitools</name>
+            <description>Install Command Line Tools</description>
+            <explanation>Choose which installation option, whether to install both Developer Studio and Command Line Tools or just Developer Studio.</explanation>
+            <value></value>
+            <default>devstudiowithcli</default>
+            <parameterList>
+                <labelParameter>
+                    <name>devstudiowithcli</name>
+                    <description>Developer Studio with Command Line Tools</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+                <labelParameter>
+                    <name>devstudioonly</name>
+                    <description>Developer Studio Only</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+            </parameterList>
+        </choiceParameterGroup>
         <parameterGroup>
             <name>dxpinfo</name>
             <title>Download Liferay DXP Bundle</title>
