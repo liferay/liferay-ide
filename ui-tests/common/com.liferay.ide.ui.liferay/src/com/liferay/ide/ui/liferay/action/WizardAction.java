@@ -292,7 +292,7 @@ public class WizardAction extends UIAction {
 
 	}
 
-	public class ImportLiferayWorkspaceWizardAction {
+	public class ImportLiferayWorkspaceWizardAction extends NewProjectWizardAction{
 
 		public CheckBox addProjectToWorkingSet() {
 			return _importLiferayWorkspaceProjectWizard.getAddProjectToWorkingSet();
@@ -300,10 +300,6 @@ public class WizardAction extends UIAction {
 
 		public ToolbarButtonWithTooltip browseLocationBtn() {
 			return _importLiferayWorkspaceProjectWizard.getBrowseLocationBtn();
-		}
-
-		public Text buildType() {
-			return _importLiferayWorkspaceProjectWizard.getBuildTypeText();
 		}
 
 		public CheckBox downloadLiferayBundle() {
@@ -334,10 +330,6 @@ public class WizardAction extends UIAction {
 
 		public void prepareBundleUrl(String bundleUrl) {
 			_importLiferayWorkspaceProjectWizard.getBundleUrl().setText(bundleUrl);
-		}
-
-		public void prepareLocation(String location) {
-			workspaceLocation().setText(location);
 		}
 
 		public void prepareServerName(String serverName) {
@@ -994,14 +986,6 @@ public class WizardAction extends UIAction {
 		
 		public void prepareLocation(String location) {
 			location().setText(location);
-		}
-
-		public void prepareLocation(String Text) {
-			location().setText(Text);
-		}
-
-		public void prepareProjectName(String Text) {
-			projectName().setText(Text);
 		}
 
 		public Text projectName() {

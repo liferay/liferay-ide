@@ -24,6 +24,8 @@ import org.junit.rules.RuleChain;
 
 /**
  * @author Rui Wang
+ * @author Lily Li
+ * @author Ashley Yuan
  */
 public class NewFragmentFilesWizardGradleTomcat70Tests extends NewFragmentFilesWizardGradleBase {
 
