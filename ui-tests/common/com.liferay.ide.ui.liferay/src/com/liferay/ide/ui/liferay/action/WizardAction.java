@@ -292,10 +292,18 @@ public class WizardAction extends UIAction {
 
 	}
 
-	public class ImportLiferayWorkspaceWizardAction extends NewProjectWizardAction{
+	public class ImportLiferayWorkspaceWizardAction {
 
 		public CheckBox addProjectToWorkingSet() {
 			return _importLiferayWorkspaceProjectWizard.getAddProjectToWorkingSet();
+		}
+
+		public void prepareLocation(String location) {
+			workspaceLocation().setText(location);
+		}
+		
+		public Text buildType() {
+			return _importLiferayWorkspaceProjectWizard.getBuildTypeText();
 		}
 
 		public ToolbarButtonWithTooltip browseLocationBtn() {
@@ -984,6 +992,7 @@ public class WizardAction extends UIAction {
 		public String[] buildTypes() {
 			return buildType().items();
 		}
+
 		public void deselectUseDefaultLocation() {
 			useDefaultLocation().deselect();
 		}

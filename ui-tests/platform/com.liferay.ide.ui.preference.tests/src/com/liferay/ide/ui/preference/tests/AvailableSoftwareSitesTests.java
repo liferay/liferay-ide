@@ -15,9 +15,7 @@
 package com.liferay.ide.ui.preference.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.swtbot.page.Table;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -31,9 +29,7 @@ public class AvailableSoftwareSitesTests extends SwtbotBase {
 
 		dialogAction.preferences.openAvailableSoftwareSites();
 
-		Table availableSites = dialogAction.availableSoftwareSites.getSites();
-
-		Assert.assertTrue(availableSites.containsItem(LIFERAY_IDE_STABLE_RELEASES));
+		validationAction.assertTableContains(dialogAction.availableSoftwareSites.getSites(), LIFERAY_IDE_STABLE_RELEASES);
 	}
 
 }
