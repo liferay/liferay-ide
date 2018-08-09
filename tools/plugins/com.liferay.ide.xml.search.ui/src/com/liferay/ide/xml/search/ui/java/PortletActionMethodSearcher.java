@@ -14,9 +14,11 @@
 
 package com.liferay.ide.xml.search.ui.java;
 
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.ui.viewsupport.JavaElementImageProvider;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.xml.search.editor.contentassist.IContentAssistProposalRecorder;
 import org.eclipse.wst.xml.search.editor.searchers.javamethod.XMLSearcherForJavaMethod;
 
@@ -35,9 +37,11 @@ public class PortletActionMethodSearcher extends XMLSearcherForJavaMethod {
 		IContentAssistProposalRecorder recorder, IMethod method, String methodNameToUse) {
 
 		try {
-			String displayText = methodNameToUse + " - " + method.getParent().getElementName();
-			org.eclipse.swt.graphics.Image image = this._javaElementImageProvider.getImageLabel(
-				method, method.getFlags() | 2);
+			IJavaElement element = method.getParent();
+
+			String displayText = methodNameToUse + " - " + element.getElementName();
+
+			Image image = _javaElementImageProvider.getImageLabel(method, method.getFlags() | 2);
 
 			recorder.recordProposal(image, 10, displayText, methodNameToUse, null);
 		}

@@ -31,7 +31,7 @@ public abstract class AbstractWebInfQuerySpecification implements IResourceProvi
 	/**
 	 * (non-Javadoc)
 	 * @see org.eclipse.wst.xml.search.core.queryspecifications.container.
-	 * IResourceProvider#getResource(java.lang.Object,
+	 * IResourceProvider#getResource(Object,
 	 * IResource)
 	 */
 	public IResource getResource(Object selectedNode, IResource resource) {

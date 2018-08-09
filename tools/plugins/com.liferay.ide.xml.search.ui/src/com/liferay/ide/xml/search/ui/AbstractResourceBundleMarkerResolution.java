@@ -15,6 +15,7 @@
 package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.util.ComponentUtil;
 import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 
@@ -61,12 +62,12 @@ public abstract class AbstractResourceBundleMarkerResolution extends CommonWorkb
 	public void run(IMarker[] markers, IProgressMonitor monitor) {
 		Set<IFile> files = new HashSet<>();
 
-		for (int i = 0; i < markers.length; i++) {
-			monitor.subTask(Util.getProperty(IMarker.MESSAGE, markers[i]));
+		for (IMarker marker : markers) {
+			monitor.subTask(Util.getProperty(IMarker.MESSAGE, marker));
 
-			resolve(markers[i]);
+			resolve(marker);
 
-			IResource resource = markers[i].getResource();
+			IResource resource = marker.getResource();
 
 			if (resource instanceof IFile && !files.contains(resource)) {
 				files.add((IFile)resource);
@@ -91,7 +92,7 @@ public abstract class AbstractResourceBundleMarkerResolution extends CommonWorkb
 			String word = words[i];
 
 			if (i == 0) {
-				word = word.replaceFirst(word.substring(0, 1), word.substring(0, 1).toUpperCase());
+				word = word.replaceFirst(word.substring(0, 1), StringUtil.toUpperCase(word.substring(0, 1)));
 			}
 
 			sb.append(word);
@@ -99,7 +100,7 @@ public abstract class AbstractResourceBundleMarkerResolution extends CommonWorkb
 			sb.append(" ");
 		}
 
-		return sb.toString().trim();
+		return StringUtil.trim(sb);
 	}
 
 	protected String getResourceKey(IMarker marker) {

@@ -15,6 +15,7 @@
 package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.project.core.ValidationPreferences;
@@ -55,7 +56,7 @@ public class JSPMarkerResolutionGenerator implements IMarkerResolutionGenerator2
 
 		if (hasResolutions(marker)) {
 			List<IMarkerResolution> resolutions = new ArrayList<>();
-			IProject project = marker.getResource().getProject();
+			IProject project = MarkerUtil.getProject(marker);
 
 			if (_isResourceBundleQuery(marker)) {
 				_collectResourceBundleResolutions(marker, resolutions, project);

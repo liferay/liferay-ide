@@ -40,17 +40,13 @@ public class XmlValidationMarkerResolutionGenerator implements IMarkerResolution
 		List<IMarkerResolution> retval = new ArrayList<>();
 
 		try {
-			String liferayPluginValidationType = marker.getAttribute(
-				XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE).toString();
+			Object attribute = marker.getAttribute(XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE);
 
-			if (liferayPluginValidationType == null) {
-				liferayPluginValidationType = marker.getAttribute(
-					XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE_OLD).toString();
+			if (attribute == null) {
+				attribute = marker.getAttribute(XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE_OLD);
 			}
 
-			if ((liferayPluginValidationType != null) &&
-				ValidationPreferences.containsKey(liferayPluginValidationType)) {
-
+			if ((attribute != null) && ValidationPreferences.containsKey(attribute.toString())) {
 				retval.add(new DecreaseProjectScopeXmlValidationLevel());
 				retval.add(new DecreaseInstanceScopeXmlValidationLevel());
 			}

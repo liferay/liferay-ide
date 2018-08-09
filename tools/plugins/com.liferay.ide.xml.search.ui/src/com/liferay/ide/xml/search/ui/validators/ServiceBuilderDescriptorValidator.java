@@ -30,6 +30,7 @@ import org.eclipse.wst.xml.search.core.util.DOMUtils;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
 
 import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
@@ -45,52 +46,53 @@ public class ServiceBuilderDescriptorValidator extends LiferayBaseValidator {
 
 		int severity = getServerity(ValidationType.SYNTAX_INVALID, file);
 
-		if (severity != ValidationMessage.IGNORE) {
-			String validationMsg = null;
+		if (severity == ValidationMessage.IGNORE) {
+			return true;
+		}
 
-			if (node.getNodeType() == Node.TEXT_NODE) {
-				Node parentNode = node.getParentNode();
+		String validationMsg = null;
 
-				if (parentNode.getNodeName().equals("namespace")) {
-					String nodeValue = DOMUtils.getNodeValue(node);
+		if (node.getNodeType() == Node.TEXT_NODE) {
+			Node parentNode = node.getParentNode();
 
-					if (!ValidatorUtil.isValidNamespace(nodeValue)) {
-						validationMsg = getMessageText(ValidationType.SYNTAX_INVALID, node);
+			String parentNodeName = parentNode.getNodeName();
+
+			if (parentNodeName.equals("namespace")) {
+				String nodeValue = DOMUtils.getNodeValue(node);
+
+				if (!ValidatorUtil.isValidNamespace(nodeValue)) {
+					validationMsg = getMessageText(ValidationType.SYNTAX_INVALID, node);
+				}
+			}
+		}
+		else if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
+			Element element = ((Attr)node).getOwnerElement();
+
+			if ("package-path".equals(node.getNodeName()) && "service-builder".equals(element.getNodeName())) {
+				String nodeValue = DOMUtils.getNodeValue(node);
+
+				if (nodeValue != null) {
+
+					// Use standard java conventions to validate the package
+					// name
+
+					IStatus javaStatus = JavaConventions.validatePackageName(
+						nodeValue, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
+
+					if ((javaStatus.getSeverity() == IStatus.ERROR) || (javaStatus.getSeverity() == IStatus.WARNING)) {
+						validationMsg = J2EECommonMessages.ERR_JAVA_PACAKGE_NAME_INVALID + javaStatus.getMessage();
 					}
 				}
 			}
-			else if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
-				if ("package-path".equals(node.getNodeName()) &&
-					"service-builder".equals(((Attr)node).getOwnerElement().getNodeName())) {
+		}
 
-					String nodeValue = DOMUtils.getNodeValue(node);
+		if (validationMsg != null) {
+			String liferayPluginValidationType = getLiferayPluginValidationType(ValidationType.SYNTAX_INVALID, file);
 
-					if (nodeValue != null) {
+			addMessage(
+				node, file, validator, reporter, batchMode, validationMsg, severity, liferayPluginValidationType);
 
-						// Use standard java conventions to validate the package
-						// name
-
-						IStatus javaStatus = JavaConventions.validatePackageName(
-							nodeValue, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
-
-						if ((javaStatus.getSeverity() == IStatus.ERROR) ||
-							(javaStatus.getSeverity() == IStatus.WARNING)) {
-
-							validationMsg = J2EECommonMessages.ERR_JAVA_PACAKGE_NAME_INVALID + javaStatus.getMessage();
-						}
-					}
-				}
-			}
-
-			if (validationMsg != null) {
-				String liferayPluginValidationType = getLiferayPluginValidationType(
-					ValidationType.SYNTAX_INVALID, file);
-
-				addMessage(
-					node, file, validator, reporter, batchMode, validationMsg, severity, liferayPluginValidationType);
-
-				return false;
-			}
+			return false;
 		}
 
 		return true;

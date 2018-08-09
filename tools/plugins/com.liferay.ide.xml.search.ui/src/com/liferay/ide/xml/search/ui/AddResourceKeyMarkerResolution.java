@@ -15,6 +15,7 @@
 package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -26,9 +27,12 @@ import java.util.Properties;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
+
+import org.osgi.framework.Bundle;
 
 /**
  * @author Terry Jia
@@ -44,16 +48,23 @@ public class AddResourceKeyMarkerResolution extends AbstractResourceBundleMarker
 	public Image getImage() {
 		LiferayXMLSearchUI plugin = LiferayXMLSearchUI.getDefault();
 
-		URL url = plugin.getBundle().getEntry("/icons/resource-bundle.png");
+		Bundle bundle = plugin.getBundle();
 
-		return ImageDescriptor.createFromURL(url).createImage();
+		URL url = bundle.getEntry("/icons/resource-bundle.png");
+
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
+
+		return imageDescriptor.createImage();
 	}
 
 	public String getLabel() {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("Add missing key to ");
-		sb.append(_resourceBundle.getProjectRelativePath().toString());
+
+		IPath path = _resourceBundle.getProjectRelativePath();
+
+		sb.append(path.toString());
 
 		return sb.toString();
 	}
@@ -65,7 +76,7 @@ public class AddResourceKeyMarkerResolution extends AbstractResourceBundleMarker
 			return;
 		}
 
-		try{
+		try {
 			String languageKey = getResourceKey(marker);
 
 			if (CoreUtil.isNullOrEmpty(languageKey)) {
@@ -74,7 +85,7 @@ public class AddResourceKeyMarkerResolution extends AbstractResourceBundleMarker
 
 			Properties properties = new Properties();
 
-			try(InputStream is = _resourceBundle.getContents()){
+			try (InputStream is = _resourceBundle.getContents()) {
 				properties.load(is);
 			}
 
@@ -98,17 +109,19 @@ public class AddResourceKeyMarkerResolution extends AbstractResourceBundleMarker
 
 			contentSb.append(resourcePropertyLine);
 
-			String string = contentSb.toString();
+			String string = StringUtil.trim(contentSb);
 
-			byte[] bytes = string.trim().getBytes("UTF-8");
+			byte[] bytes = string.getBytes("UTF-8");
 
 			int contentOffset = bytes.length;
 
-			int resourcePropertyLineOffset = resourcePropertyLine.getBytes().length;
-
-			try(ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes)){
-				_resourceBundle.setContents(inputStream, IResource.FORCE, new NullProgressMonitor());	
+			try (ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes)) {
+				_resourceBundle.setContents(inputStream, IResource.FORCE, new NullProgressMonitor());
 			}
+
+			byte[] lineBytes = resourcePropertyLine.getBytes();
+
+			int resourcePropertyLineOffset = lineBytes.length;
 
 			openEditor(_resourceBundle, contentOffset - resourcePropertyLineOffset, contentOffset - 1);
 		}

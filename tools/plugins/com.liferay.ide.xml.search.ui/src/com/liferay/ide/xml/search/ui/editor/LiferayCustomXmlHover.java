@@ -14,9 +14,11 @@
 
 package com.liferay.ide.xml.search.ui.editor;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IInformationControl;
@@ -36,7 +38,7 @@ import org.eclipse.wst.xml.search.editor.hover.XMLReferencesInfoHoverProcessor;
 /**
  * @author Kuo Zhang
  */
-@SuppressWarnings({"unchecked", "restriction"})
+@SuppressWarnings("restriction")
 public class LiferayCustomXmlHover extends XMLReferencesInfoHoverProcessor implements ITextHoverExtension2 {
 
 	public LiferayCustomXmlHover() {
@@ -88,7 +90,7 @@ public class LiferayCustomXmlHover extends XMLReferencesInfoHoverProcessor imple
 					Annotation annotation = it.next();
 
 					if (annotation instanceof MarkerAnnotation) {
-						Position pos = sourceViewer.getAnnotationModel().getPosition(annotation);
+						Position pos = model.getPosition(annotation);
 
 						if (pos.includes(offset)) {
 							compoundRegion.addRegion(
@@ -99,15 +101,16 @@ public class LiferayCustomXmlHover extends XMLReferencesInfoHoverProcessor imple
 					else if (annotation instanceof TemporaryAnnotation) {
 						TemporaryAnnotation temp = (TemporaryAnnotation)annotation;
 
-						if ((temp.getAttributes() != null) &&
-							(temp.getAttributes().get(LiferayBaseValidator.MARKER_QUERY_ID) != null)) {
+						Map attributes = temp.getAttributes();
 
-							Position pos = sourceViewer.getAnnotationModel().getPosition(annotation);
+						if ((attributes != null) && (attributes.get(LiferayBaseValidator.MARKER_QUERY_ID) != null)) {
+							Position pos = model.getPosition(annotation);
 
 							if (pos.includes(offset)) {
 								compoundRegion.addRegion(
 									new TemporaryRegion(
 										pos.getOffset(), pos.getLength(), (TemporaryAnnotation)annotation));
+
 								addInfoRegion = false;
 							}
 						}
@@ -131,7 +134,11 @@ public class LiferayCustomXmlHover extends XMLReferencesInfoHoverProcessor imple
 			}
 		}
 
-		return compoundRegion.getRegions().size() > 0 ? compoundRegion : null;
+		if (ListUtil.isNotEmpty(compoundRegion.getRegions())) {
+			return compoundRegion;
+		}
+
+		return null;
 	}
 
 }

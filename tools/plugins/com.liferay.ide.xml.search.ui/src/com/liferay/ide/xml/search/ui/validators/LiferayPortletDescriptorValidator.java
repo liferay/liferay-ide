@@ -42,33 +42,34 @@ public class LiferayPortletDescriptorValidator extends LiferayBaseValidator {
 
 		int severity = getServerity(ValidationType.SYNTAX_INVALID, file);
 
-		if (severity != ValidationMessage.IGNORE) {
-			Node parentNode = node.getParentNode();
+		if (severity == ValidationMessage.IGNORE) {
+			return true;
+		}
 
-			if (parentNode.getNodeName().equals("control-panel-entry-weight")) {
-				String validationMsg = null;
+		Node parentNode = node.getParentNode();
 
-				String nodeValue = DOMUtils.getNodeValue(node);
+		if ("control-panel-entry-weight".equals(parentNode.getNodeName())) {
+			String validationMsg = null;
 
-				if (nodeValue != null) {
-					try {
-						Double.parseDouble(nodeValue);
-					}
-					catch (NumberFormatException nfe) {
-						validationMsg = NLS.bind(MESSAGE_ENTRY_WEIGHT_SYNTAX_INVALID, nodeValue);
-					}
+			String nodeValue = DOMUtils.getNodeValue(node);
+
+			if (nodeValue != null) {
+				try {
+					Double.parseDouble(nodeValue);
 				}
-
-				if (validationMsg != null) {
-					String liferayPluginValidationType = getLiferayPluginValidationType(
-						ValidationType.SYNTAX_INVALID, file);
-
-					addMessage(
-						node, file, validator, reporter, batchMode, validationMsg, severity,
-						liferayPluginValidationType);
-
-					return false;
+				catch (NumberFormatException nfe) {
+					validationMsg = NLS.bind(MESSAGE_ENTRY_WEIGHT_SYNTAX_INVALID, nodeValue);
 				}
+			}
+
+			if (validationMsg != null) {
+				String liferayPluginValidationType = getLiferayPluginValidationType(
+					ValidationType.SYNTAX_INVALID, file);
+
+				addMessage(
+					node, file, validator, reporter, batchMode, validationMsg, severity, liferayPluginValidationType);
+
+				return false;
 			}
 		}
 

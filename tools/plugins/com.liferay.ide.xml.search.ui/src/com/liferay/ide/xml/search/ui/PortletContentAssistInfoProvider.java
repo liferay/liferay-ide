@@ -14,8 +14,10 @@
 
 package com.liferay.ide.xml.search.ui;
 
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.search.editor.contentassist.ElementContentAssistAdditionalProposalInfoProvider;
 
 import org.w3c.dom.Element;
@@ -33,7 +35,9 @@ public class PortletContentAssistInfoProvider extends ElementContentAssistAdditi
 	public Image getImage(Node node) {
 		LiferayXMLSearchUI plugin = LiferayXMLSearchUI.getDefault();
 
-		return plugin.getImageRegistry().get(LiferayXMLSearchUI.portletImg);
+		ImageRegistry imageRegistry = plugin.getImageRegistry();
+
+		return imageRegistry.get(LiferayXMLSearchUI.portletImg);
 	}
 
 	@Override
@@ -75,7 +79,10 @@ public class PortletContentAssistInfoProvider extends ElementContentAssistAdditi
 		}
 
 		buf.append("<br><b>File:</b> ");
-		buf.append(portletElt.getModel().getBaseLocation());
+
+		IDOMModel model = portletElt.getModel();
+
+		buf.append(model.getBaseLocation());
 
 		return buf.toString();
 	}

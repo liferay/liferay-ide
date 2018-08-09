@@ -21,9 +21,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.quickassist.IQuickAssistInvocationContext;
@@ -32,6 +34,7 @@ import org.eclipse.jface.text.quickassist.IQuickFixableAnnotation;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.ui.IMarkerHelpRegistry;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
@@ -52,8 +55,10 @@ public class JSPQuickAssistProcessor implements IQuickAssistProcessor {
 		if (annotation instanceof TemporaryAnnotation) {
 			TemporaryAnnotation temp = (TemporaryAnnotation)annotation;
 
-			if (temp.getAttributes() != null) {
-				if (temp.getAttributes().get(LiferayBaseValidator.MARKER_QUERY_ID) != null) {
+			Map attributes = temp.getAttributes();
+
+			if (attributes != null) {
+				if (attributes.get(LiferayBaseValidator.MARKER_QUERY_ID) != null) {
 					return true;
 				}
 			}
@@ -80,8 +85,11 @@ public class JSPQuickAssistProcessor implements IQuickAssistProcessor {
 
 			try {
 				IMarker marker = _createTempMarker(annotation);
-				int lineNum = sourceViewer.getDocument().getLineOfOffset(position.getOffset()) + 1;
-				int currentLineNum = sourceViewer.getDocument().getLineOfOffset(context.getOffset()) + 1;
+
+				IDocument document = sourceViewer.getDocument();
+
+				int lineNum = document.getLineOfOffset(position.getOffset()) + 1;
+				int currentLineNum = document.getLineOfOffset(context.getOffset()) + 1;
 
 				if ((marker != null) && (currentLineNum == lineNum)) {
 					if (marker.getAttribute(LiferayBaseValidator.MARKER_QUERY_ID, null) != null) {
@@ -119,8 +127,10 @@ public class JSPQuickAssistProcessor implements IQuickAssistProcessor {
 	private ICompletionProposal[] _createFromMarkerResolutions(IMarker marker) {
 		List<ICompletionProposal> retval = new ArrayList<>();
 
-		if (IDE.getMarkerHelpRegistry().hasResolutions(marker)) {
-			IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions(marker);
+		IMarkerHelpRegistry markerHelpRegistry = IDE.getMarkerHelpRegistry();
+
+		if (markerHelpRegistry.hasResolutions(marker)) {
+			IMarkerResolution[] resolutions = markerHelpRegistry.getResolutions(marker);
 
 			for (IMarkerResolution resolution : resolutions) {
 				if (resolution instanceof CommonWorkbenchMarkerResolution) {

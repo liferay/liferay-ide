@@ -4,47 +4,79 @@
 
 	<!--==================== Query specification of all descriptors ====================-->
 	<extension point="org.eclipse.wst.xml.search.core.querySpecifications">
-		<querySpecification id="liferay.liferayportletxml.querySpecification"
-							class="com.liferay.ide.xml.search.ui.descriptors.LiferayPortletQuerySpecification" />
-		<querySpecification id="liferay.portletxml.querySpecification"
-							class="com.liferay.ide.xml.search.ui.descriptors.PortletQuerySpecification" />
-		<querySpecification id="liferay.liferaydisplayxml.querySpecification"
-							class="com.liferay.ide.xml.search.ui.descriptors.LiferayDisplayQuerySpecification" />
-		<querySpecification id="liferay.servicexml.querySpecification"
-							class="com.liferay.ide.xml.search.ui.descriptors.ServiceBuilderQuerySpecification" />
-		<querySpecification id="liferay.liferayhookxml.querySpecification"
-							class="com.liferay.ide.xml.search.ui.descriptors.LiferayHookQuerySpecification" />
-		<querySpecification id="liferay.liferaylayouttplxml.querySpecification"
-							class="com.liferay.ide.xml.search.ui.descriptors.LiferayLayoutTplQuerySpecification" />
-		<querySpecification id="liferay.jsp.querySpecification"
-							class="com.liferay.ide.xml.search.ui.descriptors.LiferayJspQuerySpecification" />
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.descriptors.LiferayPortletQuerySpecification"
+			id="liferay.liferayportletxml.querySpecification"
+		/>
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.descriptors.PortletQuerySpecification"
+			id="liferay.portletxml.querySpecification"
+		/>
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.descriptors.LiferayDisplayQuerySpecification"
+			id="liferay.liferaydisplayxml.querySpecification"
+		/>
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.descriptors.ServiceBuilderQuerySpecification"
+			id="liferay.servicexml.querySpecification"
+		/>
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.descriptors.LiferayHookQuerySpecification"
+			id="liferay.liferayhookxml.querySpecification"
+		/>
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.descriptors.LiferayLayoutTplQuerySpecification"
+			id="liferay.liferaylayouttplxml.querySpecification"
+		/>
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.descriptors.LiferayJspQuerySpecification"
+			id="liferay.jsp.querySpecification"
+		/>
 	</extension>
 
 	<!--==================== Resource Query specification ====================-->
 
 	<extension point="org.eclipse.wst.xml.search.core.resourceQuerySpecifications">
-		<querySpecification id="liferay.webresources.css.querySpecification"
-							class="com.liferay.ide.xml.search.ui.resources.CSSResourcesQuerySpecification" />
-		<querySpecification id="liferay.webresources.js.querySpecification"
-							class="com.liferay.ide.xml.search.ui.resources.JSResourcesQuerySpecification" />
-		<querySpecification id="liferay.webresources.image.querySpecification"
-							class="com.liferay.ide.xml.search.ui.resources.ImageResourcesQuerySpecification" />
-		<querySpecification id="liferay.webresources.jsp.querySpecification"
-							class="com.liferay.ide.xml.search.ui.resources.JSPResourcesQuerySpecification" />
-		<querySpecification id="liferay.webresources.tpl.querySpecification"
-							class="com.liferay.ide.xml.search.ui.resources.TplResourcesQuerySpecification" />
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.resources.CSSResourcesQuerySpecification"
+			id="liferay.webresources.css.querySpecification"
+		/>
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.resources.JSResourcesQuerySpecification"
+			id="liferay.webresources.js.querySpecification"
+		/>
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.resources.ImageResourcesQuerySpecification"
+			id="liferay.webresources.image.querySpecification"
+		/>
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.resources.JSPResourcesQuerySpecification"
+			id="liferay.webresources.jsp.querySpecification"
+		/>
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.resources.TplResourcesQuerySpecification"
+			id="liferay.webresources.tpl.querySpecification"
+		/>
 		<!-- Query specification of element <resource-bundle> in portlet.xml -->
-		<querySpecification id="liferay.webresources.resourcebundle.querySpecification"
-							class="com.liferay.ide.xml.search.ui.resources.ResourceBundleQuerySpecification" />
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.resources.ResourceBundleQuerySpecification"
+			id="liferay.webresources.resourcebundle.querySpecification"
+		/>
 		<!-- Query specification of element <portal-properties> in liferay-portlet.xml -->
-		<querySpecification id="liferay.webresources.portalproperties.querySpecification"
-							class="com.liferay.ide.xml.search.ui.resources.PortalPropertiesQuerySpecification" />
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.resources.PortalPropertiesQuerySpecification"
+			id="liferay.webresources.portalproperties.querySpecification"
+		/>
 		<!-- Query specification of element <language-properties> in liferay-portlet.xml -->
-		<querySpecification id="liferay.webresources.languageproperties.querySpecification"
-							class="com.liferay.ide.xml.search.ui.resources.LanguagePropertiesQuerySpecification" />
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.resources.LanguagePropertiesQuerySpecification"
+			id="liferay.webresources.languageproperties.querySpecification"
+		/>
 		<!-- Query specification of element <custom-jsp-directory> in liferay-hook.xml -->
-		<querySpecification id="liferay.webresources.jspdir.querySpecification"
-							class="com.liferay.ide.xml.search.ui.resources.JSPDirectoryQuerySpecification" />
+		<querySpecification
+			class="com.liferay.ide.xml.search.ui.resources.JSPDirectoryQuerySpecification"
+			id="liferay.webresources.jspdir.querySpecification"
+		/>
 	</extension>
 
 	<extension
@@ -187,7 +219,7 @@
 		<references contentTypeIds="com.liferay.ide.portlet.core.liferayportletxml">
 
 			<!-- References of Java class -->
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/asset-renderer-factory/text() | /liferay-portlet-app/portlet/asset-renderer-factory[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -196,7 +228,7 @@
 				<toJava extends="com.liferay.portlet.asset.model.AssetRendererFactory" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/atom-collection-adapter/text() | /liferay-portlet-app/portlet/atom-collection-adapter[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -205,7 +237,7 @@
 				<toJava extends="com.liferay.portal.kernel.atom.AtomCollectionAdapter" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/configuration-action-class/text() | /liferay-portlet-app/portlet/configuration-action-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -214,7 +246,7 @@
 				<toJava extends="com.liferay.portal.kernel.portlet.ConfigurationAction" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/control-panel-entry-class/text() | /liferay-portlet-app/portlet/control-panel-entry-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -223,7 +255,7 @@
 				<toJava extends="com.liferay.portlet.ControlPanelEntry" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/custom-attributes-display/text() | /liferay-portlet-app/portlet/custom-attributes-display[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -232,7 +264,7 @@
 				<toJava extends="com.liferay.portlet.expando.model.CustomAttributesDisplay" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/ddm-display/text() | /liferay-portlet-app/portlet/ddm-display[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -241,7 +273,7 @@
 				<toJava extends="com.liferay.portlet.dynamicdatamapping.util.DDMDisplay" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/friendly-url-mapper-class/text() | /liferay-portlet-app/portlet/friendly-url-mapper-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -250,7 +282,7 @@
 				<toJava extends="com.liferay.portal.kernel.portlet.FriendlyURLMapper" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/indexer-class/text() | /liferay-portlet-app/portlet/indexer-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -259,7 +291,7 @@
 				<toJava extends="com.liferay.portal.kernel.search.Indexer" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/permission-propagator/text() | /liferay-portlet-app/portlet/permission-propagator[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -268,7 +300,7 @@
 				<toJava extends="com.liferay.portal.security.permission.PermissionPropagator" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/poller-processor-class/text() | /liferay-portlet-app/portlet/poller-processor-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -277,7 +309,7 @@
 				<toJava extends="com.liferay.portal.kernel.poller.PollerProcessor" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/pop-message-listener-class/text() | /liferay-portlet-app/portlet/pop-message-listener-class[not(text())] "
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -286,7 +318,7 @@
 				<toJava extends="com.liferay.portal.kernel.pop.MessageListener" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/portlet-data-handler-class/text() | /liferay-portlet-app/portlet/portlet-data-handler-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -295,7 +327,7 @@
 				<toJava extends="com.liferay.portal.kernel.lar.PortletDataHandler" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/portlet-layout-listener-class/text() | /liferay-portlet-app/portlet/portlet-layout-listener-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -304,7 +336,7 @@
 				<toJava extends="com.liferay.portal.kernel.portlet.PortletLayoutListener" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/scheduler-entry/scheduler-event-listener-class/text() | /liferay-portlet-app/portlet/scheduler-entry/scheduler-event-listener-class[not(text())] "
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -313,7 +345,7 @@
 				<toJava extends="com.liferay.portal.kernel.messaging.MessageListener" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/social-activity-interpreter-class/text() | /liferay-portlet-app/portlet/social-activity-interpreter-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -322,7 +354,7 @@
 				<toJava extends="com.liferay.portlet.social.model.SocialActivityInterpreter" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/social-request-interpreter-class/text() | /liferay-portlet-app/portlet/social-request-interpreter-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -331,7 +363,7 @@
 				<toJava extends="com.liferay.portlet.social.model.SocialRequestInterpreter" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/staged-model-data-handler-class/text() | /liferay-portlet-app/portlet/staged-model-data-handler-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -340,7 +372,7 @@
 				<toJava extends="com.liferay.portal.kernel.lar.StagedModelDataHandler" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/template-handler/text() | /liferay-portlet-app/portlet/template-handler[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -349,7 +381,7 @@
 				<toJava extends="com.liferay.portal.kernel.template.TemplateHandler" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/url-encoder-class/text() | /liferay-portlet-app/portlet/url-encoder-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -358,7 +390,7 @@
 				<toJava extends="com.liferay.portal.kernel.servlet.URLEncoder" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/user-notification-handler-class/text() | /liferay-portlet-app/portlet/user-notification-handler-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -367,7 +399,7 @@
 				<toJava extends="com.liferay.portal.kernel.notifications.UserNotificationHandler" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/webdav-storage-class/text() | /liferay-portlet-app/portlet/webdav-storage-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -376,7 +408,7 @@
 				<toJava extends="com.liferay.portal.kernel.webdav.WebDAVStorage" />
 			</reference>
 
-			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+			<reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
 				<from
 					path="/liferay-portlet-app/portlet/xml-rpc-method-class/text() | /liferay-portlet-app/portlet/xml-rpc-method-class[not(text())]"
 					querySpecificationId="liferay.liferayportletxml.querySpecification"
@@ -1472,7 +1504,7 @@
 
 	<!--========== Content Assist Info Provider ==========-->
 
-	<extension point="org.eclipse.wst.xml.search.editor.contentAssists" >
+	<extension point="org.eclipse.wst.xml.search.editor.contentAssists">
 		<additionalProposalInfoProvider
 			class="com.liferay.ide.xml.search.ui.PortletContentAssistInfoProvider"
 			id="contentAssist.portlet.info"

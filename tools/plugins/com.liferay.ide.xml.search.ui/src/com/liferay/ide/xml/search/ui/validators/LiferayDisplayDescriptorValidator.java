@@ -25,6 +25,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
 
 import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
@@ -42,21 +43,26 @@ public class LiferayDisplayDescriptorValidator extends LiferayBaseValidator {
 
 		int severity = getServerity(ValidationType.SYNTAX_INVALID, file);
 
-		if (severity != ValidationMessage.IGNORE) {
-			if ((node.getNodeType() == Node.ATTRIBUTE_NODE) &&
-				"name".equals(node.getNodeName()) && "category".equals(((Attr)node).getOwnerElement().getNodeName())) {
+		if (severity == ValidationMessage.IGNORE) {
+			return true;
+		}
 
-				if (node.getNodeValue().matches("\\s*")) {
-					String liferayPluginValidationType = getLiferayPluginValidationType(
-						ValidationType.SYNTAX_INVALID, file);
-					String validationMsg = MESSAGE_CATEGORY_NAME_CANNOT_BE_EMPTY;
+		Element element = ((Attr)node).getOwnerElement();
 
-					addMessage(
-						node, file, validator, reporter, batchMode, validationMsg, severity,
-						liferayPluginValidationType);
+		if ((node.getNodeType() == Node.ATTRIBUTE_NODE) &&
+			"name".equals(node.getNodeName()) && "category".equals(element.getNodeName())) {
 
-					return false;
-				}
+			String nodeValue = node.getNodeValue();
+
+			if (nodeValue.matches("\\s*")) {
+				String liferayPluginValidationType = getLiferayPluginValidationType(
+					ValidationType.SYNTAX_INVALID, file);
+				String validationMsg = MESSAGE_CATEGORY_NAME_CANNOT_BE_EMPTY;
+
+				addMessage(
+					node, file, validator, reporter, batchMode, validationMsg, severity, liferayPluginValidationType);
+
+				return false;
 			}
 		}
 

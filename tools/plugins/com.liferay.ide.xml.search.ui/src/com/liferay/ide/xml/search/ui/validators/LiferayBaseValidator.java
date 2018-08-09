@@ -34,12 +34,15 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
@@ -58,6 +61,7 @@ import org.eclipse.wst.xml.search.editor.references.IXMLReferenceTo;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceToJava;
 import org.eclipse.wst.xml.search.editor.references.validators.IXMLReferenceValidator;
 import org.eclipse.wst.xml.search.editor.references.validators.IXMLReferenceValidator2;
+import org.eclipse.wst.xml.search.editor.searchers.IXMLSearcher;
 import org.eclipse.wst.xml.search.editor.validation.IValidationResult;
 import org.eclipse.wst.xml.search.editor.validation.LocalizedMessage;
 import org.eclipse.wst.xml.search.editor.validation.ValidatorUtils;
@@ -95,10 +99,14 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
 
 		IPreferenceStore preferenceStore = plugin.getPreferenceStore();
 
-		String[] ignoreList = preferenceStore.getString(LiferayXMLSearchUI.PREF_KEY_IGNORE_PROJECTS_LIST).split(",");
+		String s = preferenceStore.getString(LiferayXMLSearchUI.PREF_KEY_IGNORE_PROJECTS_LIST);
+
+		String[] ignoreList = s.split(",");
 
 		for (String ignore : ignoreList) {
-			if (ignore.trim().equals(project.getName())) {
+			ignore = ignore.trim();
+
+			if (ignore.equals(project.getName())) {
 				return false;
 			}
 		}
@@ -207,6 +215,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
 				message.setTargetObject(file);
 				message.setAttribute(MARKER_QUERY_ID, querySpecificationId);
 				message.setAttribute(XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, liferayPluginValidationType);
+
 				reporter.addMessage(validator, message);
 			}
 		}
@@ -245,21 +254,27 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
 		switch (referenceTo.getType()) {
 			case XML:
 				validateReferenceToXML(referenceTo, node, file, validator, reporter, batchMode);
+
 				break;
 			case JAVA:
 				validateReferenceToJava(referenceTo, node, file, validator, reporter, batchMode);
+
 				break;
 			case JAVA_METHOD:
 				validateReferenceToJavaMethod(referenceTo, node, file, validator, reporter, batchMode);
+
 				break;
 			case RESOURCE:
 				validateReferenceToResource(referenceTo, node, file, validator, reporter, batchMode);
+
 				break;
 			case PROPERTY:
 				validateReferenceToProperty(referenceTo, node, file, validator, reporter, batchMode);
+
 				break;
 			case STATIC:
 				validateReferenceToStatic(referenceTo, node, file, validator, reporter, batchMode);
+
 				break;
 			default:
 				return;
@@ -294,7 +309,9 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
 							sb.append(", ");
 						}
 
-						String superTypeNames = sb.toString().replaceAll(", $", "");
+						String s = sb.toString();
+
+						String superTypeNames = s.replaceAll(", $", "");
 
 						return NLS.bind(MESSAGE_TYPE_HIERARCHY_INCORRECT, textContent, superTypeNames);
 					}
@@ -329,24 +346,28 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
 	 * element
 	 */
 	protected IFile getReferencedFile(IXMLReferenceTo referenceTo, Node node, IFile file) {
-		IXMLQuerySpecification querySpecification = XMLQuerySpecificationManager.getDefault().getQuerySpecification(
+		XMLQuerySpecificationManager querySpecificationManager = XMLQuerySpecificationManager.getDefault();
+
+		IXMLQuerySpecification querySpecification = querySpecificationManager.getQuerySpecification(
 			referenceTo.getQuerySpecificationId());
 
-		if (!querySpecification.isMultiResource()) {
-			IResource resource = querySpecification.getResource(node, file);
-
-			IXMLSearchRequestor requestor = querySpecification.getRequestor();
-
-			return new ReferencedFileVisitor().getReferencedFile(requestor, resource);
+		if (querySpecification.isMultiResource()) {
+			return null;
 		}
 
-		return null;
+		IResource resource = querySpecification.getResource(node, file);
+
+		IXMLSearchRequestor requestor = querySpecification.getRequestor();
+
+		return new ReferencedFileVisitor().getReferencedFile(requestor, resource);
 	}
 
 	protected IScopeContext[] getScopeContexts(IProject project) {
 		ProjectScope projectScope = new ProjectScope(project);
 
-		if (projectScope.getNode(PREFERENCE_NODE_QUALIFIER).getBoolean(ProjectCore.USE_PROJECT_SETTINGS, false)) {
+		IEclipsePreferences eclipsePreferences = projectScope.getNode(PREFERENCE_NODE_QUALIFIER);
+
+		if (eclipsePreferences.getBoolean(ProjectCore.USE_PROJECT_SETTINGS, false)) {
 			return new IScopeContext[] {projectScope, InstanceScope.INSTANCE, DefaultScope.INSTANCE};
 		}
 		else {
@@ -359,7 +380,9 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
 
 		// get severity from users' settings
 
-		return Platform.getPreferencesService().getInt(
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		return preferencesService.getInt(
 			PREFERENCE_NODE_QUALIFIER, liferayPluginValidationType, IMessage.NORMAL_SEVERITY,
 			getScopeContexts(file.getProject()));
 	}
@@ -417,8 +440,9 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
 
 		String nodeValue = DOMUtils.getNodeValue(node);
 
-		IValidationResult result = referenceTo.getSearcher().searchForValidation(
-			node, nodeValue, -1, -1, file, referenceTo);
+		IXMLSearcher searcher = referenceTo.getSearcher();
+
+		IValidationResult result = searcher.searchForValidation(node, nodeValue, -1, -1, file, referenceTo);
 
 		if (result != null) {
 			boolean addMessage = false;
@@ -549,7 +573,9 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
 						IStructuredModel model = null;
 
 						try {
-							model = StructuredModelManager.getModelManager().getModelForRead(file);
+							IModelManager modelManager = StructuredModelManager.getModelManager();
+
+							model = modelManager.getModelForRead(file);
 
 							if (_searchRequestor.accept(model)) {
 								_retval = file;

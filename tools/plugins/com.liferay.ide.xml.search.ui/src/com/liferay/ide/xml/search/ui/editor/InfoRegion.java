@@ -27,6 +27,7 @@ public class InfoRegion extends Region {
 
 	public InfoRegion(int offset, int length, String info) {
 		super(offset, length);
+
 		_info = info;
 	}
 

@@ -24,6 +24,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
@@ -36,15 +37,20 @@ public class TempMarker implements IMarker {
 
 	public TempMarker(TemporaryAnnotation temp) {
 		_annotation = temp;
+
 		_attributes = new HashMap<>();
+
 		_creationTime = System.currentTimeMillis();
 
-		for (Object key : _annotation.getAttributes().keySet()) {
-			_attributes.put(key.toString(), _annotation.getAttributes().get(key));
+		Map attribute = _annotation.getAttributes();
+
+		for (Object key : attribute.keySet()) {
+			_attributes.put(key.toString(), attribute.get(key));
 		}
 
-		_file = CoreUtil.getWorkspaceRoot().getFile(
-			Path.fromPortableString((String)_attributes.get(XMLSearchConstants.FULL_PATH)));
+		IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
+
+		_file = workspaceRoot.getFile(Path.fromPortableString((String)_attributes.get(XMLSearchConstants.FULL_PATH)));
 
 		_type = (String)_attributes.get(XMLSearchConstants.MARKER_TYPE);
 	}
@@ -66,12 +72,16 @@ public class TempMarker implements IMarker {
 
 	@Override
 	public Object getAttribute(String attributeName) throws CoreException {
-		return _annotation.getAttributes().get(attributeName);
+		Map attributes = _annotation.getAttributes();
+
+		return attributes.get(attributeName);
 	}
 
 	@Override
 	public boolean getAttribute(String attributeName, boolean defaultValue) {
-		Object value = _annotation.getAttributes().get(attributeName);
+		Map attributes = _annotation.getAttributes();
+
+		Object value = attributes.get(attributeName);
 
 		if (value instanceof Boolean) {
 			return Boolean.parseBoolean(value.toString());
@@ -82,10 +92,17 @@ public class TempMarker implements IMarker {
 
 	@Override
 	public int getAttribute(String attributeName, int defaultValue) {
-		Object value = _annotation.getAttributes().get(attributeName);
+		Map attributes = _annotation.getAttributes();
+
+		Object value = attributes.get(attributeName);
 
 		if (value instanceof Integer) {
-			return Integer.parseInt(value.toString());
+			try {
+				return Integer.parseInt(value.toString());
+			}
+			catch (NumberFormatException nfe) {
+				return -1;
+			}
 		}
 
 		return defaultValue;
@@ -93,7 +110,9 @@ public class TempMarker implements IMarker {
 
 	@Override
 	public String getAttribute(String attributeName, String defaultValue) {
-		Object value = _annotation.getAttributes().get(attributeName);
+		Map attributes = _annotation.getAttributes();
+
+		Object value = attributes.get(attributeName);
 
 		if (value != null) {
 			return value.toString();

@@ -14,6 +14,8 @@
 
 package com.liferay.ide.xml.search.ui.editor;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.ui.texteditor.MarkerAnnotation;
 
@@ -36,8 +38,12 @@ public class MarkerRegion implements IRegion {
 
 		MarkerRegion compared = (MarkerRegion)obj;
 
-		if ((_length == compared._length) && (_offset == compared._offset) && (_annotation.getText() != null) &&
-			(compared._annotation.getText() != null) && _annotation.getText().equals(compared._annotation.getText())) {
+		String annotationText = _annotation.getText();
+
+		MarkerAnnotation comparedAnnotatiopn = compared._annotation;
+
+		if ((_length == compared._length) && (_offset == compared._offset) &&
+			StringUtil.equals(annotationText, comparedAnnotatiopn.getText())) {
 
 			return true;
 		}

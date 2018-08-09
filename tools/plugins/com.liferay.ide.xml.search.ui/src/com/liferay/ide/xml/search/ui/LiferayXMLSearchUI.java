@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import java.net.URL;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -69,11 +70,6 @@ public class LiferayXMLSearchUI extends AbstractUIPlugin {
 		return new Status(IStatus.WARNING, PLUGIN_ID, msg);
 	}
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
 	public static LiferayXMLSearchUI getDefault() {
 		return _plugin;
 	}
@@ -83,20 +79,17 @@ public class LiferayXMLSearchUI extends AbstractUIPlugin {
 	}
 
 	public static void logError(String msg, Exception e) {
-		LiferayXMLSearchUI plugin = getDefault();
+		ILog log = getDefault().getLog();
 
-		plugin.getLog().log(createErrorStatus(msg, e));
+		log.log(createErrorStatus(msg, e));
 	}
 
 	public static void logError(Throwable t) {
-		LiferayXMLSearchUI plugin = getDefault();
+		ILog log = getDefault().getLog();
 
-		plugin.getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, t.getMessage(), t));
+		log.log(new Status(IStatus.ERROR, PLUGIN_ID, t.getMessage(), t));
 	}
 
-	/**
-	 * The constructor
-	 */
 	public LiferayXMLSearchUI() {
 	}
 
@@ -130,13 +123,9 @@ public class LiferayXMLSearchUI extends AbstractUIPlugin {
 		return _templateStore;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * @see AbstractUIPlugin#start(org.osgi.framework.
-	 * BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 
 		URL baseIconsURL = getBundle().getEntry("icons/");
@@ -146,11 +135,6 @@ public class LiferayXMLSearchUI extends AbstractUIPlugin {
 		getImageRegistry().put(portletImg, portletImage);
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * @see AbstractUIPlugin#stop(org.osgi.framework.
-	 * BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 		super.stop(context);
