@@ -27,6 +27,8 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.search.core.util.DOMUtils;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
 
+import org.w3c.dom.Node;
+
 /**
  * @author Kuo Zhang
  */
@@ -44,32 +46,35 @@ public class PortletDescriptorValidator extends LiferayBaseValidator {
 
 		int severity = getServerity(ValidationType.SYNTAX_INVALID, file);
 
-		if (severity != ValidationMessage.IGNORE) {
-			if ("resource-bundle".equals(node.getParentNode().getNodeName())) {
-				String validationMsg = null;
+		if (severity == ValidationMessage.IGNORE) {
+			return true;
+		}
 
-				String nodeValue = DOMUtils.getNodeValue(node);
+		Node parentNode = node.getParentNode();
 
-				if (nodeValue.endsWith(".properties")) {
-					validationMsg = NLS.bind(MESSAGE_RESOURCE_BUNDLE_END_PROPERTIES, nodeValue);
-				}
+		if ("resource-bundle".equals(parentNode.getNodeName())) {
+			String validationMsg = null;
 
-				if ((validationMsg == null) &&
-					(nodeValue.contains(IPath.SEPARATOR + "") || (CoreUtil.isWindows() && nodeValue.contains("\\")))) {
+			String nodeValue = DOMUtils.getNodeValue(node);
 
-					validationMsg = NLS.bind(MESSAGE_RESOURCE_BUNDLE_CONTAIN_PATH_SEPARATOR, nodeValue);
-				}
+			if (nodeValue.endsWith(".properties")) {
+				validationMsg = NLS.bind(MESSAGE_RESOURCE_BUNDLE_END_PROPERTIES, nodeValue);
+			}
 
-				if (validationMsg != null) {
-					String liferayPluginValidationType = getLiferayPluginValidationType(
-						ValidationType.SYNTAX_INVALID, file);
+			if ((validationMsg == null) &&
+				(nodeValue.contains(IPath.SEPARATOR + "") || (CoreUtil.isWindows() && nodeValue.contains("\\")))) {
 
-					addMessage(
-						node, file, validator, reporter, batchMode, validationMsg, severity,
-						liferayPluginValidationType);
+				validationMsg = NLS.bind(MESSAGE_RESOURCE_BUNDLE_CONTAIN_PATH_SEPARATOR, nodeValue);
+			}
 
-					return false;
-				}
+			if (validationMsg != null) {
+				String liferayPluginValidationType = getLiferayPluginValidationType(
+					ValidationType.SYNTAX_INVALID, file);
+
+				addMessage(
+					node, file, validator, reporter, batchMode, validationMsg, severity, liferayPluginValidationType);
+
+				return false;
 			}
 		}
 

@@ -14,6 +14,8 @@
 
 package com.liferay.ide.xml.search.ui.editor;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 
@@ -38,8 +40,11 @@ public class TemporaryRegion implements IRegion {
 
 		TemporaryRegion compared = (TemporaryRegion)obj;
 
-		if ((_length == compared._length) && (_offset == compared._offset) && (_annotation.getText() != null) &&
-			(compared._annotation.getText() != null) && _annotation.getText().equals(compared._annotation.getText())) {
+		String annotationText = _annotation.getText();
+		TemporaryAnnotation comparedAnnotation = compared._annotation;
+
+		if ((_length == compared._length) && (_offset == compared._offset) &&
+			StringUtil.equals(annotationText, comparedAnnotation.getText())) {
 
 			return true;
 		}

@@ -14,6 +14,8 @@
 
 package com.liferay.ide.xml.search.ui.editor;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.List;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.ui.texteditor.MarkerAnnotation;
+import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 
 /**
  * @author Kuo Zhang
@@ -89,9 +92,10 @@ public class CompoundRegion implements IRegion {
 	private boolean _compareRegions(MarkerRegion m, TemporaryRegion t) {
 		try {
 			MarkerAnnotation annotation = m.getAnnotation();
+			TemporaryAnnotation annotation2 = t.getAnnotation();
 
 			if ((m.getLength() == t.getLength()) && (m.getOffset() == t.getOffset()) &&
-				annotation.getText().equals(t.getAnnotation().getText())) {
+				StringUtil.equals(annotation.getText(), annotation2.getText())) {
 
 				return true;
 			}

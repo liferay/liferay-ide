@@ -40,7 +40,9 @@ public class LiferayCustomXmlViewerConfiguration extends XMLReferencesStructured
 		 */
 		SSEUIPlugin plugin = SSEUIPlugin.getDefault();
 
-		TextHoverManager.TextHoverDescriptor[] hoverDescs = plugin.getTextHoverManager().getTextHovers();
+		TextHoverManager hoverManager = plugin.getTextHoverManager();
+
+		TextHoverManager.TextHoverDescriptor[] hoverDescs = hoverManager.getTextHovers();
 
 		int i = 0;
 

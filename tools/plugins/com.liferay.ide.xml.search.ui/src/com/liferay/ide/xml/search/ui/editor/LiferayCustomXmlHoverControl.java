@@ -61,16 +61,19 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Caret;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IMarkerHelpRegistry;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolution2;
 import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.DefaultMarkerAnnotationAccess;
+import org.eclipse.ui.texteditor.MarkerAnnotation;
 
 /**
  * @author Kuo Zhang
@@ -83,6 +86,7 @@ public class LiferayCustomXmlHoverControl
 
 	public LiferayCustomXmlHoverControl(Shell shell) {
 		super(shell, EditorsUI.getTooltipAffordanceString());
+
 		_markerAccess = new DefaultMarkerAnnotationAccess();
 		create();
 	}
@@ -195,10 +199,15 @@ public class LiferayCustomXmlHoverControl
 				if (reg instanceof MarkerRegion) {
 					MarkerRegion markerReg = (MarkerRegion)reg;
 
-					_createAnnotationInformation(composite, markerReg.getAnnotation());
-					IMarker marker = markerReg.getAnnotation().getMarker();
+					MarkerAnnotation markerAnnotation = markerReg.getAnnotation();
 
-					IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions(marker);
+					_createAnnotationInformation(composite, markerAnnotation);
+
+					IMarker marker = markerAnnotation.getMarker();
+
+					IMarkerHelpRegistry markerHelpRegistry = IDE.getMarkerHelpRegistry();
+
+					IMarkerResolution[] resolutions = markerHelpRegistry.getResolutions(marker);
 
 					if (ListUtil.isNotEmpty(resolutions)) {
 						_createResolutionsControl(composite, marker, resolutions);
@@ -213,7 +222,9 @@ public class LiferayCustomXmlHoverControl
 					_createAnnotationInformation(composite, tempReg.getAnnotation());
 					IMarker marker = new TempMarker(tempReg.getAnnotation());
 
-					IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions(marker);
+					IMarkerHelpRegistry markerHelpRegistry = IDE.getMarkerHelpRegistry();
+
+					IMarkerResolution[] resolutions = markerHelpRegistry.getResolutions(marker);
 
 					if (ListUtil.isNotEmpty(resolutions)) {
 						_createResolutionsControl(composite, marker, resolutions);
@@ -448,10 +459,10 @@ public class LiferayCustomXmlHoverControl
 		String text;
 
 		if (resolutions.length == 1) {
-			text = _oneQuickFix;
+			text = _ONE_QUICK_FIX;
 		}
 		else {
-			text = NLS.bind(_multipleQuickFixes, String.valueOf(resolutions.length));
+			text = NLS.bind(_MULTIPLE_QUICK_FIXES, String.valueOf(resolutions.length));
 		}
 
 		quickFixLabel.setText(text);
@@ -504,6 +515,7 @@ public class LiferayCustomXmlHoverControl
 								break;
 
 							default:
+
 								break;
 						}
 					}
@@ -562,7 +574,11 @@ public class LiferayCustomXmlHoverControl
 			maxWidth -= trim.width;
 			maxHeight -= trim.height;
 
-			maxWidth -= styledText.getCaret().getSize().x;
+			Caret caret = styledText.getCaret();
+
+			Point point = caret.getSize();
+
+			maxWidth -= point.x;
 		}
 
 		if (isResizable()) {
@@ -576,6 +592,7 @@ public class LiferayCustomXmlHoverControl
 
 		if (content != null) {
 			styledText.setText(content);
+
 			TextPresentation.applyTextPresentation(presentation, styledText);
 		}
 		else {
@@ -583,8 +600,9 @@ public class LiferayCustomXmlHoverControl
 		}
 	}
 
-	private static final String _multipleQuickFixes = "{0} quick fixes available:";
-	private static final String _oneQuickFix = "1 quick fix available:";
+	private static final String _MULTIPLE_QUICK_FIXES = "{0} quick fixes available:";
+
+	private static final String _ONE_QUICK_FIX = "1 quick fix available:";
 
 	private Control _focusControl;
 	private final DefaultMarkerAnnotationAccess _markerAccess;

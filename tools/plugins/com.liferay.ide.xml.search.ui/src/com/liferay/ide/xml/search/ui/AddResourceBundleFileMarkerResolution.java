@@ -17,6 +17,8 @@ package com.liferay.ide.xml.search.ui;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.MarkerUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 
 import java.io.ByteArrayInputStream;
@@ -33,6 +35,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Terry Jia
  */
@@ -47,9 +51,13 @@ public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundl
 	public Image getImage() {
 		LiferayXMLSearchUI plugin = LiferayXMLSearchUI.getDefault();
 
-		URL url = plugin.getBundle().getEntry("/icons/resource-bundle-new.png");
+		Bundle bundle = plugin.getBundle();
 
-		return ImageDescriptor.createFromURL(url).createImage();
+		URL url = bundle.getEntry("/icons/resource-bundle-new.png");
+
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
+
+		return imageDescriptor.createImage();
 	}
 
 	@Override
@@ -59,7 +67,7 @@ public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundl
 
 	@Override
 	protected void resolve(IMarker marker) {
-		IProject project = marker.getResource().getProject();
+		IProject project = MarkerUtil.getProject(marker);
 
 		if ((getResourceKey(marker) == null) || (project == null)) {
 			return;
@@ -74,7 +82,9 @@ public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundl
 				return;
 			}
 
-			IFolder folder = liferayProject.getSourceFolder("resources").getFolder(_resourceBundlePackage);
+			IFolder resourcesFolder = liferayProject.getSourceFolder("resources");
+
+			IFolder folder = resourcesFolder.getFolder(_resourceBundlePackage);
 
 			if (!folder.exists()) {
 				CoreUtil.makeFolders(folder);
@@ -93,14 +103,17 @@ public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundl
 			String resourcePropertyLine = resourceKey + "=" + resourceValue + "\n";
 
 			int contentOffset = 0;
-			int resourcePropertyLineOffset = resourcePropertyLine.getBytes().length;
+
+			byte[] lineBytes = resourcePropertyLine.getBytes();
+
+			int resourcePropertyLineOffset = lineBytes.length;
 
 			if (!resourceBundle.exists()) {
 				IFolder parent = (IFolder)resourceBundle.getParent();
 
 				CoreUtil.prepareFolder(parent);
 
-				try(InputStream inputStream = new ByteArrayInputStream(resourcePropertyLine.getBytes("UTF-8"))){
+				try (InputStream inputStream = new ByteArrayInputStream(resourcePropertyLine.getBytes("UTF-8"))) {
 					resourceBundle.create(inputStream, IResource.FORCE, null);
 				}
 
@@ -114,13 +127,13 @@ public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundl
 				sb.append(contents);
 				sb.append(resourcePropertyLine);
 
-				String string = sb.toString();
+				String string = StringUtil.trim(sb);
 
-				byte[] bytes = string.trim().getBytes("UTF-8");
+				byte[] bytes = string.getBytes("UTF-8");
 
 				contentOffset = bytes.length;
 
-				try(InputStream inputStream = new ByteArrayInputStream(bytes)){
+				try (InputStream inputStream = new ByteArrayInputStream(bytes)) {
 					resourceBundle.setContents(inputStream, IResource.FORCE, new NullProgressMonitor());
 				}
 			}

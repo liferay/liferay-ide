@@ -47,6 +47,7 @@ public class ServiceXmlContentAssistProcessor extends XMLContentAssistProcessor 
 	@Override
 	protected void addTagInsertionProposals(ContentAssistRequest contentAssistRequest, int childPosition) {
 		super.addTagInsertionProposals(contentAssistRequest, childPosition);
+
 		_addTemplates(contentAssistRequest);
 	}
 

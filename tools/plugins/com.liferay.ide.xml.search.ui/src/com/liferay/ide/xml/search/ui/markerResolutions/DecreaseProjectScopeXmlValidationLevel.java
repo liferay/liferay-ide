@@ -14,6 +14,7 @@
 
 package com.liferay.ide.xml.search.ui.markerResolutions;
 
+import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.server.util.ComponentUtil;
 import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
@@ -28,6 +29,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMarkerResolution2;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Kuo Zhang
  */
@@ -38,21 +41,25 @@ public class DecreaseProjectScopeXmlValidationLevel implements IMarkerResolution
 
 	@Override
 	public String getDescription() {
-		return _message;
+		return _MESSAGE;
 	}
 
 	@Override
 	public Image getImage() {
 		LiferayXMLSearchUI plugin = LiferayXMLSearchUI.getDefault();
 
-		URL url = plugin.getBundle().getEntry("/icons/arrow_down.png");
+		Bundle bundle = plugin.getBundle();
 
-		return ImageDescriptor.createFromURL(url).createImage();
+		URL url = bundle.getEntry("/icons/arrow_down.png");
+
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
+
+		return imageDescriptor.createImage();
 	}
 
 	@Override
 	public String getLabel() {
-		return _message;
+		return _MESSAGE;
 	}
 
 	@Override
@@ -67,11 +74,11 @@ public class DecreaseProjectScopeXmlValidationLevel implements IMarkerResolution
 
 		if (liferayPluginValidationType != null) {
 			ValidationPreferences.setProjectScopeValidationLevel(
-				marker.getResource().getProject(), liferayPluginValidationType, -1);
+				MarkerUtil.getProject(marker), liferayPluginValidationType, -1);
 			ComponentUtil.validateFile((IFile)marker.getResource(), new NullProgressMonitor());
 		}
 	}
 
-	private static final String _message = "Disable this type of validation in current project";
+	private static final String _MESSAGE = "Disable this type of validation in current project";
 
 }

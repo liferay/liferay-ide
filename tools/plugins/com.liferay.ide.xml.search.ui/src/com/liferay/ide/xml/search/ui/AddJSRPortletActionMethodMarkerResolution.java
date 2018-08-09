@@ -22,11 +22,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.PartInitException;
 
@@ -37,6 +39,7 @@ public class AddJSRPortletActionMethodMarkerResolution extends CommonWorkbenchMa
 
 	public AddJSRPortletActionMethodMarkerResolution(IMarker marker, IType type) {
 		super(marker);
+
 		this.type = type;
 	}
 
@@ -54,7 +57,9 @@ public class AddJSRPortletActionMethodMarkerResolution extends CommonWorkbenchMa
 	public Image getImage() {
 		LiferayXMLSearchUI plugin = LiferayXMLSearchUI.getDefault();
 
-		return plugin.getImageRegistry().get(LiferayXMLSearchUI.portletImg);
+		ImageRegistry imageRegistry = plugin.getImageRegistry();
+
+		return imageRegistry.get(LiferayXMLSearchUI.portletImg);
 	}
 
 	@Override
@@ -79,14 +84,16 @@ public class AddJSRPortletActionMethodMarkerResolution extends CommonWorkbenchMa
 		try {
 			IProgressMonitor npm = new NullProgressMonitor();
 
-			IMethod newMethod = this.type.createMethod(
+			IMethod newMethod = type.createMethod(
 				MessageFormat.format(getCode(), getTextContent(marker)), null, true, npm);
 
+			ICompilationUnit compilationUnit = type.getCompilationUnit();
+
 			for (String importName : getImports()) {
-				type.getCompilationUnit().createImport(importName, null, npm);
+				compilationUnit.createImport(importName, null, npm);
 			}
 
-			type.getCompilationUnit().save(npm, false);
+			compilationUnit.save(npm, false);
 
 			try {
 				JavaUI.revealInEditor(JavaUI.openInEditor(newMethod), (IJavaElement)newMethod);

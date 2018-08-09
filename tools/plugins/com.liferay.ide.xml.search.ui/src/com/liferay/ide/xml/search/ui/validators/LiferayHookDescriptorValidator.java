@@ -14,6 +14,8 @@
 
 package com.liferay.ide.xml.search.ui.validators;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
 import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
 
@@ -38,10 +40,13 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings("restriction")
 public class LiferayHookDescriptorValidator extends LiferayBaseValidator {
 
-	public static final String messagePropertiesNotEndWithProperties = Msgs.propertiesNotEndWithProperties;
-	public static final String messageServiceImplTypeIncorrect = Msgs.serviceImplTypeIncorrect;
-	public static final String messageServiceTypeInvalid = Msgs.serviceTypeInvalid;
-	public static final String messageServiceTypeNotInterface = Msgs.serviceTypeNotInterface;
+	public static final String MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES = Msgs.propertiesNotEndWithProperties;
+
+	public static final String MESSAGE_SERVICE_IMPL_TYPE_INCORRECT = Msgs.serviceImplTypeIncorrect;
+
+	public static final String MESSAGE_SERVICE_TYPE_INVALID = Msgs.serviceTypeInvalid;
+
+	public static final String MESSAGE_SERVICE_TYPE_NOT_INTERFACE = Msgs.serviceTypeNotInterface;
 
 	@Override
 	protected void validateReferenceToJava(
@@ -49,7 +54,11 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator {
 		boolean batchMode) {
 
 		if (node.getNodeType() == Node.TEXT_NODE) {
-			if ("service-type".equals(node.getParentNode().getNodeName())) {
+			Node parentNode = node.getParentNode();
+
+			String parentNodeName = parentNode.getNodeName();
+
+			if ("service-type".equals(parentNodeName)) {
 				ValidationInfo valInfo = _validateServiceType(node, file);
 
 				if (valInfo != null) {
@@ -61,7 +70,7 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator {
 
 				return;
 			}
-			else if ("service-impl".equals(node.getParentNode().getNodeName())) {
+			else if ("service-impl".equals(parentNodeName)) {
 				ValidationInfo valInfo = _validateServiceImpl(node, file);
 
 				if (valInfo != null) {
@@ -94,12 +103,14 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator {
 
 				String nodeValue = DOMUtils.getNodeValue(node);
 
-				if ((nodeValue != null) && (nodeValue.length() > 0)) {
-					if ("portal-properties".equals(node.getParentNode().getNodeName()) ||
-						"language-properties".equals(node.getParentNode().getNodeName())) {
+				if (CoreUtil.isNotNullOrEmpty(nodeValue)) {
+					Node parentNode = node.getParentNode();
 
+					String parentNodeName = parentNode.getNodeName();
+
+					if ("portal-properties".equals(parentNodeName) || "language-properties".equals(parentNodeName)) {
 						if (!nodeValue.endsWith(".properties")) {
-							validationMsg = NLS.bind(messagePropertiesNotEndWithProperties, nodeValue);
+							validationMsg = NLS.bind(MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES, nodeValue);
 						}
 					}
 
@@ -137,13 +148,18 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator {
 
 		Node parentNode = node.getParentNode();
 
-		NodeList siblingNodes = parentNode.getParentNode().getChildNodes();
+		parentNode = parentNode.getParentNode();
+
+		NodeList siblingNodes = parentNode.getChildNodes();
 
 		IDOMNode serviceTypeNode = null;
 
 		for (int i = 0; i < siblingNodes.getLength(); i++) {
-			if ("service-type".equals(siblingNodes.item(i).getNodeName())) {
-				serviceTypeNode = (IDOMNode)siblingNodes.item(i);
+			Node siblingNode = siblingNodes.item(i);
+
+			if ("service-type".equals(siblingNode.getNodeName())) {
+				serviceTypeNode = (IDOMNode)siblingNode;
+
 				break;
 			}
 		}
@@ -155,7 +171,7 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator {
 
 				// validate type hierarchy
 
-				String serviceTypeContent = firstChild.getNodeValue().trim();
+				String serviceTypeContent = StringUtil.trim(firstChild.getNodeValue());
 
 				String superTypeName = serviceTypeContent + "Wrapper";
 
@@ -170,7 +186,7 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator {
 				}
 
 				if (!typeCorrect) {
-					msg = NLS.bind(messageServiceImplTypeIncorrect, serviceImplContent, superTypeName);
+					msg = NLS.bind(MESSAGE_SERVICE_IMPL_TYPE_INCORRECT, serviceImplContent, superTypeName);
 
 					return new ValidationInfo(msg, ValidationType.TYPE_HIERARCHY_INCORRECT);
 				}
@@ -202,7 +218,7 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator {
 			// validate if it is an interface
 
 			if (!type.isInterface()) {
-				msg = NLS.bind(messageServiceTypeNotInterface, serviceTypeContent);
+				msg = NLS.bind(MESSAGE_SERVICE_TYPE_NOT_INTERFACE, serviceTypeContent);
 
 				return new ValidationInfo(msg, ValidationType.TYPE_HIERARCHY_INCORRECT);
 			}
@@ -210,7 +226,7 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator {
 			// validate type hierarchy
 
 			if (!serviceTypeContent.matches("com.liferay.*Service")) {
-				msg = messageServiceTypeInvalid;
+				msg = MESSAGE_SERVICE_TYPE_INVALID;
 
 				return new ValidationInfo(msg, ValidationType.TYPE_HIERARCHY_INCORRECT);
 			}

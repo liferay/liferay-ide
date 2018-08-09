@@ -65,7 +65,9 @@ public class ResourceBundleURIResolver extends ResourceBaseURIResolver {
 		// remove suffix ".properties" and replace the "/" with "."
 		// element "resource-bundle" requires that format
 
-		return uri.substring(0, uri.lastIndexOf(".properties")).replaceAll("/", ".");
+		uri = uri.substring(0, uri.lastIndexOf(".properties"));
+
+		return uri.replaceAll("/", ".");
 	}
 
 	protected Set<String> getExtensions() {

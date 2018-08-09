@@ -62,7 +62,9 @@ public class PortletActionMethodRequestor extends AbstractJavaMethodRequestor {
 			IMemberValuePair pair = _findNamePair(annotation);
 
 			if (pair != null) {
-				retval = pair.getValue().toString();
+				Object value = pair.getValue();
+
+				retval = value.toString();
 			}
 		}
 		else {
@@ -81,6 +83,7 @@ public class PortletActionMethodRequestor extends AbstractJavaMethodRequestor {
 			for (IMemberValuePair pair : pairs) {
 				if ("name".equals(pair.getMemberName())) {
 					retval = pair;
+
 					break;
 				}
 			}

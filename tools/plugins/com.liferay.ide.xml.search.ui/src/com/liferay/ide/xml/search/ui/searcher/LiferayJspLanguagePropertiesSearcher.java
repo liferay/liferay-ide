@@ -26,6 +26,7 @@ import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceTo;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceToProperty;
@@ -50,14 +51,17 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
 			for (IFile languageFile : languageFiles) {
 				Properties properties = new Properties();
 
-				try(InputStream contents = languageFile.getContents();) {
-
+				try (InputStream contents = languageFile.getContents();) {
 					properties.load(contents);
 
 					Object key = properties.get(mathingString);
 
 					if (key != null) {
-						sb.append(NLS.bind(_hover, key, languageFile.getFullPath().toString())).append("<br/>");
+						IPath fullPath = languageFile.getFullPath();
+
+						sb.append(NLS.bind(_HOVER, key, fullPath.toString()));
+
+						sb.append("<br/>");
 					}
 					else {
 						continue;
@@ -75,7 +79,7 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
 					Object key = portalProperties.get(mathingString);
 
 					if (key != null) {
-						sb.append(NLS.bind(_hover, key, "Liferay Portal Language.properties"));
+						sb.append(NLS.bind(_HOVER, key, "Liferay Portal Language.properties"));
 					}
 				}
 			}
@@ -84,6 +88,6 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
 		return sb.toString();
 	}
 
-	private static final String _hover = "\"{0}\" in {1}";
+	private static final String _HOVER = "\"{0}\" in {1}";
 
 }

@@ -26,25 +26,14 @@ import org.eclipse.wst.xml.search.core.resource.IURIResolverProvider;
 public abstract class AbstractWebResourcesQuerySpecification
 	implements IResourceProvider, IResourceRequestorProvider, IURIResolverProvider {
 
-	/**
-	 * (non-Javadoc)
-	 * @see IResourceRequestorProvider# getRequestor()
-	 */
-	public IResourceRequestor getRequestor()
-	{
-
+	public IResourceRequestor getRequestor() {
 		return WebContentResourcesRequestor.INSTANCE;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * @see org.eclipse.wst.xml.search.core.queryspecifications.container.
-	 * IResourceProvider#getResource(java.lang.Object, IResource)
-	 */
-	public IResource getResource(Object selectedNode, IResource resource)
-	{
+	public IResource getResource(Object selectedNode, IResource resource) {
+		IResource parent = resource.getParent();
 
-		return resource.getParent().getParent();
+		return parent.getParent();
 	}
 
 }

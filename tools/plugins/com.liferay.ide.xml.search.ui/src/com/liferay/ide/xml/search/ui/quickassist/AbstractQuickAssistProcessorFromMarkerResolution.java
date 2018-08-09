@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.quickassist.IQuickAssistInvocationContext;
@@ -33,6 +34,7 @@ import org.eclipse.jface.text.quickassist.IQuickFixableAnnotation;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.ui.IMarkerHelpRegistry;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.ide.IDE;
 
@@ -59,8 +61,11 @@ public abstract class AbstractQuickAssistProcessorFromMarkerResolution implement
 
 			try {
 				IMarker marker = getMarkerFromAnnotation(annotation);
-				int lineNum = sourceViewer.getDocument().getLineOfOffset(position.getOffset()) + 1;
-				int currentLineNum = sourceViewer.getDocument().getLineOfOffset(context.getOffset()) + 1;
+
+				IDocument document = sourceViewer.getDocument();
+
+				int lineNum = document.getLineOfOffset(position.getOffset()) + 1;
+				int currentLineNum = document.getLineOfOffset(context.getOffset()) + 1;
 
 				if ((marker != null) && (currentLineNum == lineNum)) {
 					ICompletionProposal[] resolutions = createFromMarkerResolutions(marker);
@@ -91,8 +96,10 @@ public abstract class AbstractQuickAssistProcessorFromMarkerResolution implement
 	protected ICompletionProposal[] createFromMarkerResolutions(IMarker marker) {
 		List<ICompletionProposal> retval = new ArrayList<>();
 
-		if (IDE.getMarkerHelpRegistry().hasResolutions(marker)) {
-			IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions(marker);
+		IMarkerHelpRegistry markerHelpRegistry = IDE.getMarkerHelpRegistry();
+
+		if (markerHelpRegistry.hasResolutions(marker)) {
+			IMarkerResolution[] resolutions = markerHelpRegistry.getResolutions(marker);
 
 			for (IMarkerResolution resolution : resolutions) {
 				retval.add(new MarkerResolutionProposal(resolution, marker));

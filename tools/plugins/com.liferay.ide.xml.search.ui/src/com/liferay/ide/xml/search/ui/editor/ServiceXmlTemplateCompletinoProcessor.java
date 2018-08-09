@@ -28,6 +28,8 @@ import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.swt.graphics.Image;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Kuo Zhang
  */
@@ -50,9 +52,13 @@ public class ServiceXmlTemplateCompletinoProcessor extends TemplateCompletionPro
 	protected Image getImage(Template template) {
 		LiferayXMLSearchUI plugin = LiferayXMLSearchUI.getDefault();
 
-		URL url = plugin.getBundle().getEntry("/icons/service_template.gif");
+		Bundle bundle = plugin.getBundle();
 
-		return ImageDescriptor.createFromURL(url).createImage();
+		URL url = bundle.getEntry("/icons/service_template.gif");
+
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
+
+		return imageDescriptor.createImage();
 	}
 
 	protected ContextTypeRegistry getTemplateContextRegistry() {

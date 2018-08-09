@@ -71,7 +71,9 @@ public class HierarchyTypeClassNameExtractor extends AbstractClassNameExtractor 
 					search, new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant()}, scope, requestor,
 					new NullProgressMonitor());
 
-				retval = requestor.getResults().toArray(new String[0]);
+				List<String> results = requestor.getResults();
+
+				retval = results.toArray(new String[0]);
 			}
 		}
 		catch (Exception e) {

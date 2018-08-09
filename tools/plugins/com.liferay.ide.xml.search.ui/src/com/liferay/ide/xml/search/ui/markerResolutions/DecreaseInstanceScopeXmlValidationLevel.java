@@ -14,6 +14,7 @@
 
 package com.liferay.ide.xml.search.ui.markerResolutions;
 
+import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.server.util.ComponentUtil;
@@ -31,6 +32,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMarkerResolution2;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Kuo Zhang
  */
@@ -41,21 +44,25 @@ public class DecreaseInstanceScopeXmlValidationLevel implements IMarkerResolutio
 
 	@Override
 	public String getDescription() {
-		return _message;
+		return _MESSAGE;
 	}
 
 	@Override
 	public Image getImage() {
 		LiferayXMLSearchUI plugin = LiferayXMLSearchUI.getDefault();
 
-		URL url = plugin.getBundle().getEntry("/icons/arrow_down.png");
+		Bundle bundle = plugin.getBundle();
 
-		return ImageDescriptor.createFromURL(url).createImage();
+		URL url = bundle.getEntry("/icons/arrow_down.png");
+
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
+
+		return imageDescriptor.createImage();
 	}
 
 	@Override
 	public String getLabel() {
-		return _message;
+		return _MESSAGE;
 	}
 
 	@Override
@@ -64,7 +71,7 @@ public class DecreaseInstanceScopeXmlValidationLevel implements IMarkerResolutio
 		// if the project scope is used, set its validation level to "Ignore"
 		// first.
 
-		IEclipsePreferences node = new ProjectScope(marker.getResource().getProject()).getNode(ProjectCore.PLUGIN_ID);
+		IEclipsePreferences node = new ProjectScope(MarkerUtil.getProject(marker)).getNode(ProjectCore.PLUGIN_ID);
 
 		String liferayPluginValidationType = marker.getAttribute(
 			XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, null);
@@ -77,7 +84,7 @@ public class DecreaseInstanceScopeXmlValidationLevel implements IMarkerResolutio
 		if (liferayPluginValidationType != null) {
 			if (node.getBoolean(ProjectCore.USE_PROJECT_SETTINGS, false)) {
 				ValidationPreferences.setProjectScopeValidationLevel(
-					marker.getResource().getProject(), liferayPluginValidationType, -1);
+					MarkerUtil.getProject(marker), liferayPluginValidationType, -1);
 			}
 
 			ValidationPreferences.setInstanceScopeValidationLevel(liferayPluginValidationType, -1);
@@ -85,6 +92,6 @@ public class DecreaseInstanceScopeXmlValidationLevel implements IMarkerResolutio
 		}
 	}
 
-	private static final String _message = "Disable this type of validation in all projects";
+	private static final String _MESSAGE = "Disable this type of validation in all projects";
 
 }
