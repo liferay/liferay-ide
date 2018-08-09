@@ -308,9 +308,13 @@ public class DialogAction extends UIAction {
 	public class UpdateMavenProjectDialogAction {
 
 		public void selectAll() {
-			assertTitle(_getDialog(), _updateMavenProjectDialog);
+			// assertTitle(_getDialog(), _updateMavenProjectDialog);
 
-			_updateMavenProjectDialog.getSelectAllBtn().click();
+			try {
+				_updateMavenProjectDialog.getSelectAllBtn().click();
+			}
+			catch (Exception e) {
+			}
 		}
 
 		private final UpdateMavenProjectDialog _updateMavenProjectDialog = new UpdateMavenProjectDialog(bot);
