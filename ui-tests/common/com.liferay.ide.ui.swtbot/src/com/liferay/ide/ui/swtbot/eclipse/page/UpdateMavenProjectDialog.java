@@ -31,7 +31,7 @@ public class UpdateMavenProjectDialog extends Dialog {
 	public void clickSelectAllBtn() {
 		getSelectAllBtn().click();
 	}
-	
+
 	public Button getSelectAllBtn() {
 		return new Button(getShell().bot(), "Select All");
 	}

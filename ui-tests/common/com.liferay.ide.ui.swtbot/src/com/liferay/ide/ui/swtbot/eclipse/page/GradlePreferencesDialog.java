@@ -31,7 +31,7 @@ public class GradlePreferencesDialog extends Dialog {
 	public CheckBox getAutomaticSync() {
 		return new CheckBox(getShell().bot(), AUTOMATIC_PROJECT_SYNCHRONIZATION);
 	}
-	
+
 	public void selectAutoSync() {
 		getAutomaticSync().select();
 	}

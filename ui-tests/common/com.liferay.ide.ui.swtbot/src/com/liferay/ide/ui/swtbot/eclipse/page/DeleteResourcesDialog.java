@@ -32,4 +32,8 @@ public class DeleteResourcesDialog extends Dialog {
 		return new CheckBox(getShell().bot(), DELETE_FROM_DISK);
 	}
 
+	public void selectDeleteFromDisk() {
+		getDeleteFromDisk().select();
+	}
+
 }

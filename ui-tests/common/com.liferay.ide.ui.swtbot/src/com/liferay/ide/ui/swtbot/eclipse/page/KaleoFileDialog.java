@@ -14,9 +14,10 @@
 
 package com.liferay.ide.ui.swtbot.eclipse.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Tree;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Rui Wang
@@ -24,10 +25,11 @@ import com.liferay.ide.ui.swtbot.page.Tree;
 public class KaleoFileDialog extends Dialog {
 
 	public KaleoFileDialog(SWTBot bot) {
-		super(bot,WORKSPACE_FILE, CANCEL, OK);
+		super(bot, WORKSPACE_FILE, CANCEL, OK);
 	}
 
 	public Tree getKaleoFile() {
 		return new Tree(getShell().bot(), 0);
 	}
+
 }

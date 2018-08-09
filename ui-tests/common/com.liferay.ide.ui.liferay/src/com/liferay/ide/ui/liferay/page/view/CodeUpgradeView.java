@@ -145,6 +145,14 @@ public class CodeUpgradeView extends View {
 		return new Button(getPart().bot(), UPGRADE_SELECTED);
 	}
 
+	public void selectGear(int index) {
+		getGear().clickGear(index);
+	}
+
+	public void selectMigrateLayouts(String migrateLayout) {
+		getSelectMigrateLayouts().setSelection(migrateLayout);
+	}
+
 	public class Gear extends Canvas {
 
 		public Gear(SWTWorkbenchBot bot) {

@@ -89,9 +89,9 @@ public interface UI {
 
 	public final String AUTHOR = "Author";
 
-	public final String AUTOMATICALLY_CORRECT_PROBLEMS = "Automatically Correct Problems";
-
 	public final String AUTOMATIC_PROJECT_SYNCHRONIZATION = "Automatic Project Synchronization";
+
+	public final String AUTOMATICALLY_CORRECT_PROBLEMS = "Automatically Correct Problems";
 
 	public final String AVAILABLE_SOFTWARE_SITES = "Available Software Sites";
 
@@ -843,11 +843,11 @@ public interface UI {
 
 	public final String UPGRADE_WITH_DOT = "Upgrade...";
 
+	public final String UPLOAD_NEW_WORKFLOW = "Upload new workflow...";
+
 	public final String USE_DEFAULT_LOCATION = "Use default location";
 
 	public final String USE_DEFAULT_PORTLET_MVCPORTLET = "Use default portlet (MVCPortlet)";
-
-	public final String UPLOAD_NEW_WORKFLOW = "Upload new workflow...";
 
 	public final String USER_ID = "User-id:";
 
@@ -885,11 +885,11 @@ public interface UI {
 
 	public final String WORKSPACE = "Workspace:";
 
+	public final String WORKSPACE_FILE = "workspace file";
+
 	public final String WORKSPACE_LOCATION = "Workspace location:";
 
 	public final String WORKSPACE_NAME = "Workspace name:";
-
-	public final String WORKSPACE_FILE = "workspace file";
 
 	public final String YES = "Yes";
 

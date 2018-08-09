@@ -36,7 +36,7 @@ public class ServerRuntimeEnvironmentsPreferencesDialog extends Dialog {
 	public void clickRemoveBtn() {
 		getRemoveBtn().click();
 	}
-	
+
 	public void clickRuntime(int row) {
 		getRuntimes().click(row);
 	}
@@ -44,7 +44,7 @@ public class ServerRuntimeEnvironmentsPreferencesDialog extends Dialog {
 	public void clickRuntime(String runtime) {
 		getRuntimes().click(runtime);
 	}
-	
+
 	public Button getAddBtn() {
 		return new Button(getShell().bot(), ADD_WITH_DOT);
 	}
@@ -56,7 +56,7 @@ public class ServerRuntimeEnvironmentsPreferencesDialog extends Dialog {
 	public Button getRemoveBtn() {
 		return new Button(getShell().bot(), REMOVE);
 	}
-	
+
 	public Table getRuntimes() {
 		return new Table(getShell().bot(), SERVER_RUNTIEME_ENVIRONMENTS);
 	}
