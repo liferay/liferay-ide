@@ -28,6 +28,14 @@ public class MakeTaskAssignRoleTypeWizard extends Wizard {
 		super(bot);
 	}
 
+	public void clickAddRoleBtn() {
+		getAddRoleBtn().click();
+	}
+
+	public void clickDeleteRoleBtn() {
+		getDeleteRoleBtn().click();
+	}
+
 	public ToolbarButtonWithTooltip getAddRoleBtn() {
 		return new ToolbarButtonWithTooltip(getShell().bot(), ADD_ROLE);
 	}

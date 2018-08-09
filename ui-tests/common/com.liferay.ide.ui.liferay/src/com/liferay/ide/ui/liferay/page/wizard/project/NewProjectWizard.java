@@ -35,6 +35,10 @@ public class NewProjectWizard extends Wizard {
 		super(bot, index);
 	}
 
+	public void deselectUseDefaultLocation() {
+		getUseDefaultLocation().deselect();
+	}
+
 	public CheckBox getAddToWorkingSet() {
 		return new CheckBox(getShell().bot(), ADD_PROJECT_TO_WORKING_SET);
 	}
@@ -61,6 +65,26 @@ public class NewProjectWizard extends Wizard {
 
 	public ComboBox getWorkingSets() {
 		return new ComboBox(getShell().bot(), WORKING_SET);
+	}
+
+	public void selectUseDefaultLocation() {
+		getUseDefaultLocation().select();
+	}
+
+	public void setBuildType(String plugin) {
+		getBuildTypes().setSelection(plugin);
+	}
+
+	public void setLiferayVersion(String version) {
+		getLiferayVersion().setSelection(version);
+	}
+
+	public void setLocation(String location) {
+		getLocation().setText(location);
+	}
+
+	public void setProjectName(String name) {
+		getProjectName().setText(name);
 	}
 
 }

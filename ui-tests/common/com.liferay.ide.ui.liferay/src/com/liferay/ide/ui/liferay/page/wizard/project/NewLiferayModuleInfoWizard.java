@@ -30,6 +30,18 @@ public class NewLiferayModuleInfoWizard extends Wizard {
 		super(bot, 2);
 	}
 
+	public void clickAddPropertyKeyBtn() {
+		getAddPropertyKeyBtn().click();
+	}
+
+	public void clickBrowseBtn() {
+		getBrowseBtn().click();
+	}
+
+	public void clickDeleteBtn() {
+		getDeleteBtn().click();
+	}
+
 	public ToolbarButtonWithTooltip getAddPropertyKeyBtn() {
 		return new ToolbarButtonWithTooltip(getShell().bot(), ADD_PROPERTY_KEY);
 	}

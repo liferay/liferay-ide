@@ -54,11 +54,23 @@ public class Eclipse extends BasePageObject {
 	public Menu getFileMenu() {
 		return new Menu(_botShell.bot(), FILE);
 	}
+	
+	public void clickFileMenu(String menu, String subMenu) {
+		getFileMenu().clickMenu(menu,subMenu);
+	}
+
+	public void clickFileMenu(String menu) {
+		getFileMenu().clickMenu(menu);
+	}
 
 	public Menu getInstallMenu() {
 		String[] installLabel = {HELP, INSTALL_NEW_SOFTWARE};
 
 		return new Menu(_botShell.bot(), installLabel);
+	}
+	
+	public void clickInstallMenu() {
+		getInstallMenu().click();
 	}
 
 	public String getLabel() {

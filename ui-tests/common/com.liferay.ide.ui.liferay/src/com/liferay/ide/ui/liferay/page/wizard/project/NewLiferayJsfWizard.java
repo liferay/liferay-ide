@@ -20,6 +20,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ying Xu
+ * @author Ashley Yuan
  */
 public class NewLiferayJsfWizard extends NewProjectWizard {
 
@@ -29,6 +30,10 @@ public class NewLiferayJsfWizard extends NewProjectWizard {
 
 	public ComboBox getComponentSuite() {
 		return new ComboBox(getShell().bot(), COMPONENT_SUITE);
+	}
+
+	public void setComponentSuite(String componentSuite) {
+		getComponentSuite().setSelection(componentSuite);
 	}
 
 }

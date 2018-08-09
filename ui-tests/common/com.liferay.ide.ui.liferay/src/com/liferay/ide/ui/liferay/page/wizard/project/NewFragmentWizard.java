@@ -28,6 +28,10 @@ public class NewFragmentWizard extends NewProjectWizard {
 		super(bot, 2);
 	}
 
+	public void clickNewRuntimeBtn() {
+		getNewRuntimeBtn().click();
+	}
+
 	public ComboBox getLiferyRuntimes() {
 		return new ComboBox(getShell().bot(), LIFERAY_RUNTIME_NAME);
 	}

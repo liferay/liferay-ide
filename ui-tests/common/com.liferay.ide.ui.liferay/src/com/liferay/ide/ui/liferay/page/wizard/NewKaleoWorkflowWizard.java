@@ -28,6 +28,10 @@ public class NewKaleoWorkflowWizard extends Wizard {
 		super(bot);
 	}
 
+	public void clickBrowseBtn() {
+		getBrowseBtn().click();
+	}
+
 	public ToolbarButtonWithTooltip getBrowseBtn() {
 		return new ToolbarButtonWithTooltip(getShell().bot(), BROWSE);
 	}
