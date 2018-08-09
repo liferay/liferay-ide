@@ -21,6 +21,7 @@ import com.liferay.ide.ui.liferay.page.editor.ServerEditor;
 import com.liferay.ide.ui.liferay.page.editor.ServiceXmlEditor;
 import com.liferay.ide.ui.liferay.page.editor.WorkflowXmlEditor;
 import com.liferay.ide.ui.swtbot.page.Editor;
+import com.liferay.ide.ui.swtbot.page.Text;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
@@ -127,6 +128,12 @@ public class EditorAction extends UIAction {
 
 		public void setHttpPort(String httpPort) {
 			_serverEditor.getHttpPort().setText(httpPort);
+		}
+
+		public void setPassword(String Password) {
+			Text password = _serverEditor.getPassword();
+
+			password.setText(Password);
 		}
 
 		private final ServerEditor _serverEditor = new ServerEditor(bot);

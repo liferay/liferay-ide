@@ -42,6 +42,10 @@ public class ServerEditor extends Editor {
 		return new Text(getPart().bot(), "Http Port:");
 	}
 
+	public Text getPassword() {
+		return new Text(getPart().bot(), "Password:");
+	}
+
 	public CheckBox getUseDeveloperMode() {
 		return new CheckBox(getPart().bot(), "Use developer mode");
 	}

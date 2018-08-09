@@ -17,6 +17,7 @@ package com.liferay.ide.ui.liferay.action;
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.page.dialog.AddRepositoryDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.AddAndRemoveDialog;
+import com.liferay.ide.ui.swtbot.eclipse.page.KaleoFileDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.AvailableSoftwareSitesPreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.GradlePreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.PreferencesDialog;
@@ -127,6 +128,7 @@ public class DialogAction extends UIAction {
 		_textTableDialog.getItems();
 	}
 
+	public WorkspaceFileDialogAction workspaceFile = new WorkspaceFileDialogAction();
 	public AddAndRemoveDialogAction addAndRemove = new AddAndRemoveDialogAction();
 	public AddRepositoryDialogAction addRepository = new AddRepositoryDialogAction();
 	public AvailableSoftwareSitesDialogAction availableSoftwareSites = new AvailableSoftwareSitesDialogAction();
@@ -135,6 +137,20 @@ public class DialogAction extends UIAction {
 	public ServerRuntimeEnvironmentsDialogAction serverRuntimeEnvironments =
 		new ServerRuntimeEnvironmentsDialogAction();
 	public UpdateMavenProjectDialogAction updateMavenProject = new UpdateMavenProjectDialogAction();
+
+	public class WorkspaceFileDialogAction {
+
+		public void addFiles(String projectName,String fileName) {
+			ide.sleep();
+
+			Tree kaleoFile = _KaleoFileDialog.getKaleoFile();
+
+			kaleoFile.selectTreeItem(projectName,fileName);
+		}
+
+		private final KaleoFileDialog _KaleoFileDialog = new KaleoFileDialog(bot);
+
+	}
 
 	public class AddAndRemoveDialogAction {
 
