@@ -27,7 +27,10 @@ import com.liferay.ide.ui.swtbot.eclipse.page.TreeDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.UpdateMavenProjectDialog;
 import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.Dialog;
+import com.liferay.ide.ui.swtbot.page.Menu;
 import com.liferay.ide.ui.swtbot.page.Table;
+import com.liferay.ide.ui.swtbot.page.Text;
+import com.liferay.ide.ui.swtbot.page.Tree;
 import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -89,27 +92,35 @@ public class DialogAction extends UIAction {
 		_jobAction.waitForShellAppeared(ide.getLabel());
 
 		if (CoreUtil.isMac()) {
-			ide.getQuickAccess().setText("Preferences Preferences");
+			Text access = ide.getQuickAccess();
 
-			ide.getQuickAccess().setFocus();
+			access.setText("Preferences Preferences");
+
+			access.setFocus();
 
 			ide.sleep();
 
-			_keyboradAction.pressKeyEnter();
+			_keyboardAction.pressKeyEnter();
 		}
 		else {
-			ide.getPreferencesMenu().click();
+			Menu prefsMenu = ide.getPreferencesMenu();
+
+			prefsMenu.click();
 		}
 	}
 
 	public void prepareText(String text) {
-		_textDialog.getText().setText(text);
+		Text textArea = _textDialog.getText();
+
+		textArea.setText(text);
 
 		ide.sleep();
 	}
 
 	public void selectItems(String... items) {
-		_treeDialog.getItems().select(items);
+		Tree tree = _treeDialog.getItems();
+
+		tree.select(items);
 	}
 
 	public void selectTableItem(String item) {
@@ -132,11 +143,13 @@ public class DialogAction extends UIAction {
 
 			ide.sleep();
 
-			_addAndRemoveDialog.getAvailables().select(projectName);
+			Tree availableTree = _addAndRemoveDialog.getAvailables();
+
+			availableTree.select(projectName);
 
 			ide.sleep();
 
-			_addAndRemoveDialog.getAddBtn().click();
+			_addAndRemoveDialog.clickAddBtn();
 
 			ide.sleep();
 		}
@@ -148,9 +161,9 @@ public class DialogAction extends UIAction {
 	public class AddRepositoryDialogAction {
 
 		public void addLocation(String updatesiteUrl) {
-			_addRepositoryDialog.getLocation().setText(updatesiteUrl);
+			_addRepositoryDialog.setLocation(updatesiteUrl);
 
-			_addRepositoryDialog.addBtn().click();
+			_addRepositoryDialog.clickAddBtn();
 		}
 
 		private final AddRepositoryDialog _addRepositoryDialog = new AddRepositoryDialog(bot);
@@ -173,7 +186,7 @@ public class DialogAction extends UIAction {
 	public class GradleDialogAction {
 
 		public void checkAutomaticSync() {
-			_gradleDialog.getAutomaticSync().select();
+			_gradleDialog.selectAutoSync();
 		}
 
 		private final GradlePreferencesDialog _gradleDialog = new GradlePreferencesDialog(bot);
@@ -202,7 +215,7 @@ public class DialogAction extends UIAction {
 			SWTBotPreferences.TIMEOUT = 500;
 
 			try {
-				_openPreferenceType("Gradle");
+				_openPreferenceType(GRADLE);
 			}
 			catch (Exception e) {
 			}
@@ -227,11 +240,15 @@ public class DialogAction extends UIAction {
 		}
 
 		private void _openPreferenceType(String categroy) {
-			_preferencesDialog.getPreferencesTypes().selectTreeItem(categroy);
+			Tree preferencesTypes = _preferencesDialog.getPreferencesTypes();
+
+			preferencesTypes.selectTreeItem(categroy);
 		}
 
 		private void _openPreferenceType(String categroy, String type) {
-			_preferencesDialog.getPreferencesTypes().selectTreeItem(categroy, type);
+			Tree preferencesTypes = _preferencesDialog.getPreferencesTypes();
+
+			preferencesTypes.selectTreeItem(categroy, type);
 		}
 
 		private final PreferencesDialog _preferencesDialog = new PreferencesDialog(bot);
@@ -245,11 +262,11 @@ public class DialogAction extends UIAction {
 
 			ide.sleep(2000);
 
-			_serverRuntimeEnvironmentsDialog.getRuntimes().click(row);
+			_serverRuntimeEnvironmentsDialog.clickRuntime(row);
 
 			ide.sleep(2000);
 
-			_serverRuntimeEnvironmentsDialog.getRemoveBtn().click();
+			_serverRuntimeEnvironmentsDialog.clickRemoveBtn();
 
 			long origin = SWTBotPreferences.TIMEOUT;
 
@@ -269,11 +286,11 @@ public class DialogAction extends UIAction {
 
 			ide.sleep(2000);
 
-			_serverRuntimeEnvironmentsDialog.getRuntimes().click(runtimeName);
+			_serverRuntimeEnvironmentsDialog.clickRuntime(runtimeName);
 
 			ide.sleep(2000);
 
-			_serverRuntimeEnvironmentsDialog.getRemoveBtn().click();
+			_serverRuntimeEnvironmentsDialog.clickRemoveBtn();
 
 			long origin = SWTBotPreferences.TIMEOUT;
 
@@ -297,7 +314,7 @@ public class DialogAction extends UIAction {
 
 			ide.sleep(5000);
 
-			_serverRuntimeEnvironmentsDialog.getAddBtn().click();
+			_serverRuntimeEnvironmentsDialog.clickAddBtn();
 		}
 
 		private final ServerRuntimeEnvironmentsPreferencesDialog _serverRuntimeEnvironmentsDialog =
@@ -311,7 +328,7 @@ public class DialogAction extends UIAction {
 			// assertTitle(_getDialog(), _updateMavenProjectDialog);
 
 			try {
-				_updateMavenProjectDialog.getSelectAllBtn().click();
+				_updateMavenProjectDialog.clickSelectAllBtn();
 			}
 			catch (Exception e) {
 			}
@@ -332,7 +349,7 @@ public class DialogAction extends UIAction {
 	private static DialogAction _dialogAction;
 
 	private final JobAction _jobAction = JobAction.getInstance(bot);
-	private final KeyboardAction _keyboradAction = KeyboardAction.getInstance(bot);
+	private final KeyboardAction _keyboardAction = KeyboardAction.getInstance(bot);
 	private final TextDialog _textDialog = new TextDialog(bot);
 	private final TextTableDialog _textTableDialog = new TextTableDialog(bot);
 	private final TreeDialog _treeDialog = new TreeDialog(bot);

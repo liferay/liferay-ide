@@ -90,6 +90,8 @@ public interface UI {
 
 	public final String AUTOMATICALLY_CORRECT_PROBLEMS = "Automatically Correct Problems";
 
+	public final String AUTOMATIC_PROJECT_SYNCHRONIZATION = "Automatic Project Synchronization";
+
 	public final String AVAILABLE_SOFTWARE_SITES = "Available Software Sites";
 
 	public final String BACK_WITH_LEFT_BRACKET = "< Back";

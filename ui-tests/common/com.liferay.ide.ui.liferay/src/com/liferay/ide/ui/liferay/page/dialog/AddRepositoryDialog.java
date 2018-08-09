@@ -36,8 +36,16 @@ public class AddRepositoryDialog extends Dialog {
 		return _addBtn;
 	}
 
+	public void clickAddBtn() {
+		addBtn().click();
+	}
+
 	public Text getLocation() {
 		return _getLocation;
+	}
+
+	public void setLocation(String location) {
+		getLocation().setText(location);
 	}
 
 	private Button _addBtn;

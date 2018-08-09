@@ -28,6 +28,10 @@ public class UpdateMavenProjectDialog extends Dialog {
 		super(bot, "Update Maven Project");
 	}
 
+	public void clickSelectAllBtn() {
+		getSelectAllBtn().click();
+	}
+	
 	public Button getSelectAllBtn() {
 		return new Button(getShell().bot(), "Select All");
 	}

@@ -44,7 +44,9 @@ public class ZipUtil {
 	public static String getFirstZipEntryName(File zipFile) throws Exception {
 		ZipFile zip = new ZipFile(zipFile);
 
-		ZipEntry entry = zip.entries().nextElement();
+		Enumeration<? extends ZipEntry> zipEntry = zip.entries();
+
+		ZipEntry entry = zipEntry.nextElement();
 
 		String name = entry.getName();
 
@@ -57,12 +59,14 @@ public class ZipUtil {
 		String lcasename = name.toLowerCase();
 
 		for (Enumeration<? extends ZipEntry> itr = zip.entries(); itr.hasMoreElements();) {
-			ZipEntry zipentry = itr.nextElement();
+			ZipEntry zipEntry = itr.nextElement();
 
-			String entryName = zipentry.getName().toLowerCase();
+			String entryName = zipEntry.getName();
 
-			if (entryName.equals(lcasename)) {
-				return zipentry;
+			String lowerCaseName = entryName.toLowerCase();
+
+			if (lowerCaseName.equals(lcasename)) {
+				return zipEntry;
 			}
 		}
 
@@ -134,7 +138,9 @@ public class ZipUtil {
 					entryName = entry.getName();
 				}
 				else {
-					entryName = entry.getName().replaceFirst(entryToStart, StringPool.BLANK);
+					String fullEntryName = entry.getName();
+
+					entryName = fullEntryName.replaceFirst(entryToStart, StringPool.BLANK);
 				}
 
 				File f = new File(destdir, entryName);

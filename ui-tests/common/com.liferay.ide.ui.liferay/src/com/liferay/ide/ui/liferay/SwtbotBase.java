@@ -26,7 +26,9 @@ import com.liferay.ide.ui.liferay.page.LiferayIDE;
 import com.liferay.ide.ui.swtbot.Keys;
 import com.liferay.ide.ui.swtbot.Times;
 import com.liferay.ide.ui.swtbot.UI;
+import com.liferay.ide.ui.swtbot.page.Perspective;
 import com.liferay.ide.ui.swtbot.page.Shell;
+import com.liferay.ide.ui.swtbot.page.View;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
@@ -104,7 +106,9 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants, Times {
 
 			SWTBotPreferences.TIMEOUT = 1000;
 
-			ide.getWelcomeView().close();
+			View welcomeView = ide.getWelcomeView();
+
+			welcomeView.close();
 
 			SWTBotPreferences.TIMEOUT = origin;
 		}
@@ -112,7 +116,9 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants, Times {
 		}
 
 		if (!envAction.isEclipse()) {
-			ide.getLiferayWorkspacePerspective().activate();
+			Perspective liferayWsPerspective = ide.getLiferayWorkspacePerspective();
+
+			liferayWsPerspective.activate();
 		}
 
 		SWTBotPreferences.TIMEOUT = 30 * 1000;
@@ -140,7 +146,9 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants, Times {
 	public void closeFailsShell() {
 		Shell shell = new Shell(bot);
 
-		if (!shell.getLabel().equals(ide.getLabel())) {
+		String title = shell.getLabel();
+
+		if (!title.equals(ide.getLabel())) {
 			_closeShell();
 		}
 	}

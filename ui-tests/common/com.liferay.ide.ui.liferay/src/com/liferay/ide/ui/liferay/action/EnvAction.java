@@ -40,6 +40,8 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 import org.junit.Assert;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Terry Jia
  * @author Ashley Yuan
@@ -68,10 +70,14 @@ public class EnvAction extends UIAction {
 	public IPath getBundlesPath() {
 		if (_bundlesPath == null) {
 			if ((_bundlesDir == null) || _bundlesDir.equals("") || _bundlesDir.equals("null")) {
-				URL rootUrl = Platform.getBundle("com.liferay.ide.ui.liferay").getEntry("/");
+				Bundle bundle = Platform.getBundle("com.liferay.ide.ui.liferay");
+
+				URL rootUrl = bundle.getEntry("/");
 
 				try {
-					String filePath = FileLocator.toFileURL(rootUrl).getFile();
+					URL url = FileLocator.toFileURL(rootUrl);
+
+					String filePath = url.getFile();
 
 					if (filePath.contains("target/work/configuration")) {
 						int index = filePath.indexOf("/ui-tests/");
@@ -79,7 +85,9 @@ public class EnvAction extends UIAction {
 						_bundlesPath = new Path(filePath.substring(0, index) + "/tests-resources");
 					}
 					else {
-						_bundlesPath = new Path(filePath).removeLastSegments(3).append("tests-resources");
+						IPath path = new Path(filePath).removeLastSegments(3);
+
+						_bundlesPath = path.append("tests-resources");
 					}
 				}
 				catch (IOException ioe) {
@@ -208,7 +216,9 @@ public class EnvAction extends UIAction {
 
 		_eclipsePath = new Path(_eclipseDir);
 
-		return _eclipsePath.toFile().exists();
+		File file = _eclipsePath.toFile();
+
+		return file.exists();
 	}
 
 	public boolean localConnected() {

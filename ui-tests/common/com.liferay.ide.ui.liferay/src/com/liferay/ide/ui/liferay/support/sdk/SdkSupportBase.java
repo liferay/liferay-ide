@@ -43,7 +43,9 @@ public class SdkSupportBase extends SupportBase {
 		SdkInfo[] infos = envAction.getSdkInfos();
 
 		for (SdkInfo info : infos) {
-			if (info.getVersion().equals(version)) {
+			String infoVersion = info.getVersion();
+
+			if (infoVersion.equals(version)) {
 				_sdk = info;
 
 				break;
@@ -78,10 +80,12 @@ public class SdkSupportBase extends SupportBase {
 
 			Assert.assertTrue("Expect build." + username + ".properties exists but not", userBuildFile.exists());
 
-			String appServerParentDir = "app.server.parent.dir=" + _server.getFullServerDir().replace("\\", "/");
+			String fullServerDir = _server.getFullServerDir();
+
+			String appServerParentDir = "app.server.parent.dir=" + fullServerDir.replace("\\", "/");
 
 			String appServerTomcatDir =
-				"app.server.tomcat.dir=" + _server.getFullServerDir().replace("\\", "/") + "/" + _server.getServerDir();
+				"app.server.tomcat.dir=" + fullServerDir.replace("\\", "/") + "/" + _server.getServerDir();
 
 			FileWriter writer = new FileWriter(userBuildFile.getPath(), true);
 
@@ -99,7 +103,9 @@ public class SdkSupportBase extends SupportBase {
 		if (envAction.internal()) {
 			IPath bundlesPath = envAction.getBundlesPath();
 
-			IPath source = bundlesPath.append("internal").append("ivy-settings.xml");
+			IPath internalPath = bundlesPath.append("internal");
+
+			IPath source = internalPath.append("ivy-settings.xml");
 
 			File dest = new File(sdkDir, "ivy-settings.xml");
 

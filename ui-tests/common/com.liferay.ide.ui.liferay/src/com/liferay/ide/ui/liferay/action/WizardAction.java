@@ -298,28 +298,20 @@ public class WizardAction extends UIAction {
 			return _importLiferayWorkspaceProjectWizard.getAddProjectToWorkingSet();
 		}
 
-		public void prepareLocation(String location) {
-			workspaceLocation().setText(location);
-		}
-		
-		public Text buildType() {
-			return _importLiferayWorkspaceProjectWizard.getBuildTypeText();
-		}
-
 		public ToolbarButtonWithTooltip browseLocationBtn() {
 			return _importLiferayWorkspaceProjectWizard.getBrowseLocationBtn();
 		}
 
-		public CheckBox downloadLiferayBundle() {
-			return _importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle();
+		public Text buildType() {
+			return _importLiferayWorkspaceProjectWizard.getBuildTypeText();
 		}
-		
-		public void selectDownloadLiferayBundle() {
-			downloadLiferayBundle().select();
-		}
-		
+
 		public void deselectDownloadLiferayBundle() {
 			downloadLiferayBundle().deselect();
+		}
+
+		public CheckBox downloadLiferayBundle() {
+			return _importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle();
 		}
 
 		public void prepare(String location, boolean downloadLiferayBundle) {
@@ -348,8 +340,16 @@ public class WizardAction extends UIAction {
 			_importLiferayWorkspaceProjectWizard.getBundleUrl().setText(bundleUrl);
 		}
 
+		public void prepareLocation(String location) {
+			workspaceLocation().setText(location);
+		}
+
 		public void prepareServerName(String serverName) {
 			serverName().setText(serverName);
+		}
+
+		public void selectDownloadLiferayBundle() {
+			downloadLiferayBundle().select();
 		}
 
 		public Text serverName() {
@@ -655,10 +655,6 @@ public class WizardAction extends UIAction {
 
 			ide.sleep();
 		}
-		
-		public void preparePackage(String packageName) {
-			packageName().setText(packageName);
-		}
 
 		public void prepare(String projectName, String packageName) {
 			projectName().setSelection(projectName);
@@ -688,14 +684,18 @@ public class WizardAction extends UIAction {
 			ide.sleep();
 		}
 
+		public void prepareComponentClass(String componentClass) {
+			componentClassName().setText(componentClass);
+		}
+
 		public void prepareModelClass(String modelClass) {
 			_newLiferayComponentWizard.getModelClassName().setText(modelClass);
 
 			ide.sleep();
 		}
 
-		public void prepareComponentClass(String componentClass) {
-			componentClassName().setText(componentClass);
+		public void preparePackage(String packageName) {
+			packageName().setText(packageName);
 		}
 
 		public void prepareProjectName(String projectName) {
@@ -826,16 +826,16 @@ public class WizardAction extends UIAction {
 
 	public class NewModuleInfoWizardAction {
 
+		public void clickDeleteBtn() {
+			deleteBtn().click();
+		}
+
 		public Text componentClassName() {
 			return _newModuleInfoWizard.getComponentClassName();
 		}
 
 		public ToolbarButtonWithTooltip deleteBtn() {
 			return _newModuleInfoWizard.getDeleteBtn();
-		}
-		
-		public void clickDeleteBtn() {
-			deleteBtn().click();
 		}
 
 		public void openSelectServiceDialog() {
@@ -997,24 +997,24 @@ public class WizardAction extends UIAction {
 			useDefaultLocation().deselect();
 		}
 
-		public Text location() {
-			return _newProjectWizard.getLocation();
-		}
-		
 		public String getLocation() {
 			return location().getText();
 		}
-		
+
+		public Text location() {
+			return _newProjectWizard.getLocation();
+		}
+
 		public void prepareLocation(String location) {
 			location().setText(location);
 		}
 
-		public Text projectName() {
-			return _newProjectWizard.getProjectName();
-		}
-		
 		public void prepareProjectName(String projectName) {
 			projectName().setText(projectName);
+		}
+
+		public Text projectName() {
+			return _newProjectWizard.getProjectName();
 		}
 
 		public void selectUseDefaultLocation() {

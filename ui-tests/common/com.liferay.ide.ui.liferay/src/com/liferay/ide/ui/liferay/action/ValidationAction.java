@@ -22,6 +22,7 @@ import com.liferay.ide.ui.swtbot.page.Table;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.SWTBotAssert;
+
 import org.junit.Assert;
 
 /**
@@ -30,18 +31,12 @@ import org.junit.Assert;
  */
 public class ValidationAction extends UIAction {
 
-	private static ValidationAction _validationAction;
-
 	public static ValidationAction getInstance(SWTWorkbenchBot bot) {
 		if (_validationAction == null) {
 			_validationAction = new ValidationAction(bot);
 		}
 
 		return _validationAction;
-	}
-
-	private ValidationAction(SWTWorkbenchBot bot) {
-		super(bot);
 	}
 
 	public void assertActiveFalse(AbstractWidget widget) {
@@ -89,7 +84,7 @@ public class ValidationAction extends UIAction {
 	public void assertLengthEquals(Object[] a1, Object[] a2) {
 		Assert.assertEquals(a1.length, a2.length);
 	}
-	
+
 	public void assertTableContains(Table table, String expect) {
 		Assert.assertTrue(table.containsItem(expect));
 	}
@@ -97,5 +92,11 @@ public class ValidationAction extends UIAction {
 	public void assertTextEquals(String expect, AbstractWidget widget) {
 		Assert.assertEquals(expect, widget.getText());
 	}
+
+	private ValidationAction(SWTWorkbenchBot bot) {
+		super(bot);
+	}
+
+	private static ValidationAction _validationAction;
 
 }

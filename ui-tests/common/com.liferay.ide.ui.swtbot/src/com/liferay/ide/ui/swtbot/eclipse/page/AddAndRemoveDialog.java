@@ -37,6 +37,10 @@ public class AddAndRemoveDialog extends Dialog {
 	public Button getAddBtn() {
 		return new Button(getShell().bot(), ADD_WITH_BRACKET);
 	}
+	
+	public void clickAddBtn() {
+		getAddBtn().click();
+	}
 
 	public Tree getAvailables() {
 		return new Tree(getShell().bot(), 0);

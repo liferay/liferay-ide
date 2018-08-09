@@ -39,6 +39,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -155,7 +156,9 @@ public class FileUtil {
 
 		IPath path = new Path(f.getAbsolutePath());
 
-		IContainer[] wsContainers = wsroot.findContainersForLocationURI(path.toFile().toURI());
+		File pathFile = path.toFile();
+
+		IContainer[] wsContainers = wsroot.findContainersForLocationURI(pathFile.toURI());
 
 		if (wsContainers.length > 0) {
 			return wsContainers[0];
@@ -171,11 +174,15 @@ public class FileUtil {
 
 		IPath path = new Path(f.getAbsolutePath());
 
-		IFile[] wsFiles = wsroot.findFilesForLocationURI(path.toFile().toURI());
+		File pathFile = path.toFile();
+
+		IFile[] wsFiles = wsroot.findFilesForLocationURI(pathFile.toURI());
 
 		if (wsFiles.length > 0) {
 			for (IFile wsFile : wsFiles) {
-				String name = wsFile.getProject().getName();
+				IProject project = wsFile.getProject();
+
+				String name = project.getName();
 
 				if (name.equals(expectedProjectName)) {
 					return wsFile;
@@ -378,7 +385,9 @@ public class FileUtil {
 
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-		IPath fullPath = folder.getFolder(folderValue).getFullPath();
+		IFolder myFolder = folder.getFolder(folderValue);
+
+		IPath fullPath = myFolder.getFullPath();
 
 		IStatus result = workspace.validatePath(fullPath.toString(), IResource.FOLDER);
 
@@ -386,7 +395,9 @@ public class FileUtil {
 			return result.getMessage();
 		}
 
-		if (folder.getFolder(new Path(folderValue)).exists()) {
+		myFolder = folder.getFolder(new Path(folderValue));
+
+		if (myFolder.exists()) {
 			return Msgs.folderAlreadyExists;
 		}
 
