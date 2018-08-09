@@ -33,12 +33,12 @@ public class PomXmlEditor extends Editor {
 		super(bot, editorName);
 	}
 
-	public CTabItem getPomXml() {
-		return new CTabItem(getPart().bot(), POM_XML);
-	}
-
 	public void clickPomXml() {
 		getPomXml().click();
+	}
+
+	public CTabItem getPomXml() {
+		return new CTabItem(getPart().bot(), POM_XML);
 	}
 
 }

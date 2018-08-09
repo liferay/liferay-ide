@@ -98,7 +98,9 @@ public class EnvAction extends UIAction {
 			}
 		}
 
-		Assert.assertTrue(_bundlesPath.toFile().exists());
+		File bundleFile = _bundlesPath.toFile();
+
+		Assert.assertTrue(bundleFile.exists());
 
 		return _bundlesPath;
 	}

@@ -12,25 +12,25 @@
  * details.
  */
 
-package com.liferay.ide.ui.preference.tests;
+package com.liferay.ide.ui.liferay.support.server;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-
-import org.junit.Test;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
- * @author Joye Luo
+ * @author Terry Jia
  */
-public class AvailableSoftwareSitesTests extends SwtbotBase {
+public class PureTomcatDxp70Support extends ServerSupport {
 
-	@Test
-	public void checkLiferayIdeSite() {
-		dialogAction.openPreferencesDialog();
+	public static boolean isNot(ServerSupport server) {
+		if ((server == null) || !(server instanceof PureTomcatDxp70Support)) {
+			return true;
+		}
 
-		dialogAction.preferences.openAvailableSoftwareSites();
+		return false;
+	}
 
-		validationAction.assertTableContains(
-			dialogAction.availableSoftwareSites.getSites(), LIFERAY_IDE_STABLE_RELEASES);
+	public PureTomcatDxp70Support(SWTWorkbenchBot bot) {
+		super(bot, "tomcat", "7.0-sp7");
 	}
 
 }

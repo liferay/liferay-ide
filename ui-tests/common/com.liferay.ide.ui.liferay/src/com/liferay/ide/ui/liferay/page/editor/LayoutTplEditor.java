@@ -45,6 +45,14 @@ public class LayoutTplEditor extends Editor {
 		getDesignTab().click();
 	}
 
+	public void clickPreviewTab() {
+		getPreviewTab().click();
+	}
+
+	public void clickSourceTab() {
+		getSourceTab().click();
+	}
+
 	public CTabItem getDesignTab() {
 		return _design;
 	}
@@ -55,14 +63,6 @@ public class LayoutTplEditor extends Editor {
 
 	public CTabItem getSourceTab() {
 		return _source;
-	}
-
-	public void clickPreviewTab() {
-		getPreviewTab().click();
-	}
-
-	public void clickSourceTab() {
-		getSourceTab().click();
 	}
 
 	private CTabItem _design;

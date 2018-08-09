@@ -345,12 +345,12 @@ public class DialogAction extends UIAction {
 		public void addFiles(String projectName, String fileName) {
 			ide.sleep();
 
-			Tree kaleoFile = _KaleoFileDialog.getKaleoFile();
+			Tree kaleoFile = _kaleoFileDialog.getKaleoFile();
 
 			kaleoFile.selectTreeItem(projectName, fileName);
 		}
 
-		private final KaleoFileDialog _KaleoFileDialog = new KaleoFileDialog(bot);
+		private final KaleoFileDialog _kaleoFileDialog = new KaleoFileDialog(bot);
 
 	}
 

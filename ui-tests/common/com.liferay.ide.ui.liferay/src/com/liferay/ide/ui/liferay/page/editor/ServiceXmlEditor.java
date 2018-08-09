@@ -41,6 +41,14 @@ public class ServiceXmlEditor extends Editor {
 		_diagram = new CTabItem(bot, DIAGRAM);
 	}
 
+	public void clickOverviewTab() {
+		getOverviewTab().click();
+	}
+
+	public void clickSourceTab() {
+		getSourceTab().click();
+	}
+
 	public CTabItem getDiagramTab() {
 		return _diagram;
 	}
@@ -51,14 +59,6 @@ public class ServiceXmlEditor extends Editor {
 
 	public CTabItem getSourceTab() {
 		return _source;
-	}
-
-	public void clickOverviewTab() {
-		getOverviewTab().click();
-	}
-
-	public void clickSourceTab() {
-		getSourceTab().click();
 	}
 
 	private CTabItem _diagram;

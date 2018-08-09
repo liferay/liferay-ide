@@ -16,7 +16,7 @@ package com.liferay.ide.functional.kaleo.deploy.base;
 
 import com.liferay.ide.ui.liferay.ServerTestBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.liferay.support.server.PureTomcatDxpSupport;
+import com.liferay.ide.ui.liferay.support.server.PureTomcatDxp70Support;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.Assert;
@@ -29,7 +29,8 @@ import org.junit.rules.RuleChain;
  * @author Rui Wang
  */
 public class DeployKaleoGradleTomcat7xBase extends ServerTestBase {
-	public static PureTomcatDxpSupport tomcat = new PureTomcatDxpSupport(bot);
+
+	public static PureTomcatDxp70Support tomcat = new PureTomcatDxp70Support(bot);
 
 	@ClassRule
 	public static RuleChain chain = RuleUtil.getTomcat7xRuleChain(bot, tomcat);

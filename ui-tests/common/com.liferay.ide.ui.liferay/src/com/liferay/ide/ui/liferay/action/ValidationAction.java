@@ -20,6 +20,8 @@ import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.page.Table;
 
+import java.util.Arrays;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.SWTBotAssert;
 
@@ -82,7 +84,7 @@ public class ValidationAction extends UIAction {
 	}
 
 	public void assertLengthEquals(Object[] a1, Object[] a2) {
-		Assert.assertEquals(a1.length, a2.length);
+		Assert.assertEquals(Arrays.toString(a2), a1.length, a2.length);
 	}
 
 	public void assertTableContains(Table table, String expect) {

@@ -39,6 +39,10 @@ public class ServerEditor extends Editor {
 		getDefaultLaunchSettings().click();
 	}
 
+	public void clickUseDeveloperMode() {
+		getUseDeveloperMode().select();
+	}
+
 	public Radio getCustomLaunchSettings() {
 		return new Radio(getPart().bot(), "Custom Launch Settings");
 	}
@@ -65,10 +69,6 @@ public class ServerEditor extends Editor {
 
 	public void setPassword(String password) {
 		getPassword().setText(password);
-	}
-
-	public void clickUseDeveloperMode() {
-		getUseDeveloperMode().select();
 	}
 
 }

@@ -43,16 +43,16 @@ public class WorkflowXmlEditor extends Editor {
 		getDiagramTab().click();
 	}
 
+	public void clickSourceTab() {
+		getSourceTab().click();
+	}
+
 	public CTabItem getDiagramTab() {
 		return _diagram;
 	}
 
 	public CTabItem getSourceTab() {
 		return _source;
-	}
-
-	public void clickSourceTab() {
-		getSourceTab().click();
 	}
 
 	private CTabItem _diagram;

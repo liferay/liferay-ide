@@ -37,9 +37,13 @@ public class InstallNewSoftwareWizard extends Wizard {
 	public Button addBtn() {
 		return new Button(getShell().bot(), ADD_WITH_DOT);
 	}
-	
+
 	public void clickAddBtn() {
 		addBtn().click();
+	}
+
+	public void clickSelectAllBtn() {
+		selectAllBtn().click();
 	}
 
 	public CheckBox contactAllUpdateSites() {
@@ -49,10 +53,6 @@ public class InstallNewSoftwareWizard extends Wizard {
 
 	public Button selectAllBtn() {
 		return new Button(getShell().bot(), SELECT_ALL);
-	}
-	
-	public void clickSelectAllBtn() {
-		selectAllBtn().click();
 	}
 
 }
