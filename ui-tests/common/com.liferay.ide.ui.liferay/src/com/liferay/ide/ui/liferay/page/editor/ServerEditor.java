@@ -23,11 +23,20 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
+ * @author Rui Wang
  */
 public class ServerEditor extends Editor {
 
 	public ServerEditor(SWTWorkbenchBot bot) {
 		super(bot);
+	}
+
+	public void clickCustomLaunchSettings() {
+		getCustomLaunchSettings().click();
+	}
+
+	public void clickDefalutLaunchSettings() {
+		getDefaultLaunchSettings().click();
 	}
 
 	public Radio getCustomLaunchSettings() {
@@ -48,6 +57,18 @@ public class ServerEditor extends Editor {
 
 	public CheckBox getUseDeveloperMode() {
 		return new CheckBox(getPart().bot(), "Use developer mode");
+	}
+
+	public void setHttpPort(String port) {
+		getHttpPort().setText(port);
+	}
+
+	public void setPassword(String password) {
+		getPassword().setText(password);
+	}
+
+	public void clickUseDeveloperMode() {
+		getUseDeveloperMode().select();
 	}
 
 }

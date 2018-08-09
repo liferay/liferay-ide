@@ -21,6 +21,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
+ * @author Rui Wang
  */
 public class PomXmlEditor extends Editor {
 
@@ -34,6 +35,10 @@ public class PomXmlEditor extends Editor {
 
 	public CTabItem getPomXml() {
 		return new CTabItem(getPart().bot(), POM_XML);
+	}
+
+	public void clickPomXml() {
+		getPomXml().click();
 	}
 
 }
