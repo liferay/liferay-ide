@@ -42,11 +42,11 @@ public class Shell extends BasePageObject {
 
 	public String getLabel() {
 		if (isLabelNull()) {
-			SWTBotShell botActiveShell = bot.activeShell();
+			SWTBotShell activeShell = bot.activeShell();
 
-			assert botActiveShell != null;
+			assert activeShell != null;
 
-			return botActiveShell.getText();
+			return activeShell.getText();
 		}
 
 		return label;

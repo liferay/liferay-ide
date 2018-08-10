@@ -61,9 +61,9 @@ public class Table extends AbstractWidget {
 	}
 
 	public void setText(int index, String text) {
-		SWTBotText botText = bot.text(index);
+		SWTBotText content = bot.text(index);
 
-		botText.setText(text);
+		content.setText(text);
 	}
 
 	public int size() {

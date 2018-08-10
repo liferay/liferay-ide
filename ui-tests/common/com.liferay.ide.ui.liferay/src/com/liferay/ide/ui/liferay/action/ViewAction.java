@@ -316,10 +316,9 @@ public class ViewAction extends UIAction {
 		public void clickKaleoNameDialog(String serverLabel) {
 			ide.sleep(5000);
 
-			getServersTree().setFocus();
+			_getServers().setFocus();
 
-			getServersTree().selectTreeItem(
-				serverLabel, KALEO_WORKFLOWS, "New Workflow  [Version: 1, Draft Version: 1]");
+			_getServers().selectTreeItem(serverLabel, KALEO_WORKFLOWS, "New Workflow  [Version: 1, Draft Version: 1]");
 
 			ide.sleep();
 		}
@@ -327,25 +326,21 @@ public class ViewAction extends UIAction {
 		public void debug(String serverLabel) {
 			ide.sleep(5000);
 
-			getServersTree().select(serverLabel);
+			_getServers().select(serverLabel);
 
 			_serversView.clickDebugBtn();
 		}
 
-		public Tree getServersTree() {
-			return _serversView.getServers();
-		}
-
 		public void openAddAndRemoveDialog(String serverLabel) {
-			getServersTree().contextMenu(true, ADD_AND_REMOVE, serverLabel);
+			_getServers().contextMenu(true, ADD_AND_REMOVE, serverLabel);
 		}
 
 		public void openEditor(String serverLabel) {
-			getServersTree().doubleClick(serverLabel);
+			_getServers().doubleClick(serverLabel);
 		}
 
 		public void openLiferayPortalHome(String serverLabel) {
-			getServersTree().contextMenu(true, OPEN_LIFERAY_PORTAL_HOME, serverLabel);
+			_getServers().contextMenu(true, OPEN_LIFERAY_PORTAL_HOME, serverLabel);
 
 			_jobAction.waitForBrowserLoaded();
 		}
@@ -353,23 +348,23 @@ public class ViewAction extends UIAction {
 		public void openUpLoadNewWorkflowDialog(String serverLabel) {
 			ide.sleep(2000);
 
-			getServersTree().setFocus();
+			_getServers().setFocus();
 
-			getServersTree().selectTreeItem(serverLabel, KALEO_WORKFLOWS);
+			_getServers().selectTreeItem(serverLabel, KALEO_WORKFLOWS);
 
-			getServersTree().contextMenu(true, "Upload new workflow...", serverLabel, KALEO_WORKFLOWS);
+			_getServers().contextMenu(true, "Upload new workflow...", serverLabel, KALEO_WORKFLOWS);
 		}
 
 		public void removeModule(String serverLabel, String projectName) {
 			ide.sleep(2000);
 
-			getServersTree().contextMenu(true, "Remove", serverLabel, projectName);
+			_getServers().contextMenu(true, "Remove", serverLabel, projectName);
 		}
 
 		public void start(String serverLabel) {
 			ide.sleep(5000);
 
-			getServersTree().select(serverLabel);
+			_getServers().select(serverLabel);
 
 			_serversView.clickStartBtn();
 		}
@@ -377,71 +372,74 @@ public class ViewAction extends UIAction {
 		public void stop(String serverLabel) {
 			ide.sleep(2000);
 
-			getServersTree().contextMenu(true, STOP, serverLabel);
+			_getServers().contextMenu(true, STOP, serverLabel);
 		}
 
 		public boolean visibleKaleofolderTry(String serverLabel) {
 			try {
-				return getServersTree().isVisibleStartsBy(KALEO_WORKFLOWS);
+				return _getServers().isVisibleStartsBy(KALEO_WORKFLOWS);
 			}
 			catch (Exception e) {
-				getServersTree().setFocus();
+				_getServers().setFocus();
 
-				getServersTree().select(serverLabel);
+				_getServers().select(serverLabel);
 
-				getServersTree().expand(serverLabel);
+				_getServers().expand(serverLabel);
 
-				getServersTree().expand(KALEO_WORKFLOWS);
+				_getServers().expand(KALEO_WORKFLOWS);
 
-				getServersTree().selectTreeItem(
+				_getServers().selectTreeItem(
 					serverLabel, KALEO_WORKFLOWS, "New Workflow  [Version: 1, Draft Version: 1]");
 
-				return getServersTree().isVisibleStartsBy(KALEO_WORKFLOWS);
+				return _getServers().isVisibleStartsBy(KALEO_WORKFLOWS);
 			}
 		}
 
 		public boolean visibleKaleoNameTry(String serverLabel, String kaleoName) {
 			try {
-				return getServersTree().isVisibleStartsBy(serverLabel, KALEO_WORKFLOWS, kaleoName);
+				return _getServers().isVisibleStartsBy(serverLabel, KALEO_WORKFLOWS, kaleoName);
 			}
 			catch (Exception e) {
-				getServersTree().setFocus();
+				_getServers().setFocus();
 
-				getServersTree().select(serverLabel);
+				_getServers().select(serverLabel);
 
-				getServersTree().expand(serverLabel);
+				_getServers().expand(serverLabel);
 
-				getServersTree().expand(KALEO_WORKFLOWS);
+				_getServers().expand(KALEO_WORKFLOWS);
 
-				getServersTree().select(KALEO_WORKFLOWS);
+				_getServers().select(KALEO_WORKFLOWS);
 
-				getServersTree().expand("New Workflow  [Version: 1, Draft Version: 1]");
+				_getServers().expand("New Workflow  [Version: 1, Draft Version: 1]");
 
-				getServersTree().getTreeItem(
-					serverLabel, KALEO_WORKFLOWS, "New Workflow  [Version: 1, Draft Version: 1]");
+				_getServers().getTreeItem(serverLabel, KALEO_WORKFLOWS, "New Workflow  [Version: 1, Draft Version: 1]");
 
-				return getServersTree().isVisibleStartsBy(
+				return _getServers().isVisibleStartsBy(
 					serverLabel, KALEO_WORKFLOWS, "New Workflow  [Version: 1, Draft Version: 1]");
 			}
 		}
 
 		public boolean visibleModuleTry(String serverLabel, String projectName) {
 			try {
-				return getServersTree().isVisibleStartsBy(serverLabel, projectName);
+				return _getServers().isVisibleStartsBy(serverLabel, projectName);
 			}
 			catch (Exception e) {
-				getServersTree().setFocus();
+				_getServers().setFocus();
 
-				getServersTree().select(serverLabel);
+				_getServers().select(serverLabel);
 
-				getServersTree().expand(serverLabel);
+				_getServers().expand(serverLabel);
 
-				return getServersTree().isVisibleStartsBy(serverLabel, projectName);
+				return _getServers().isVisibleStartsBy(serverLabel, projectName);
 			}
 		}
 
 		public boolean visibleServer(String serverName) {
-			return getServersTree().isVisibleStartsBy(serverName);
+			return _getServers().isVisibleStartsBy(serverName);
+		}
+
+		private Tree _getServers() {
+			return _serversView.getServers();
 		}
 
 		private final ServersView _serversView = new ServersView(bot);

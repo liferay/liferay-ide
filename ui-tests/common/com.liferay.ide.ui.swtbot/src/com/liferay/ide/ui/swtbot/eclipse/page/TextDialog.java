@@ -36,4 +36,8 @@ public class TextDialog extends Dialog {
 		return new Text(getShell().bot());
 	}
 
+	public void setDialog(String viewName) {
+		getText().setText(viewName);
+	}
+
 }

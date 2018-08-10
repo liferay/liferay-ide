@@ -50,7 +50,9 @@ public class Canvas extends AbstractWidget {
 
 			org.eclipse.swt.widgets.Canvas canvas = botCanvas.widget;
 
-			if (canvasName.contains(canvas.toString())) {
+			String canvasString = canvas.toString();
+
+			if (canvasString.contains(canvasName)) {
 				return i;
 			}
 		}

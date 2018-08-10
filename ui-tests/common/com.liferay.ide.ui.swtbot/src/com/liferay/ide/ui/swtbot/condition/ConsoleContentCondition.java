@@ -52,7 +52,9 @@ public class ConsoleContentCondition implements ICondition {
 		IConsole[] consoles = manager.getConsoles();
 
 		for (IConsole console : consoles) {
-			if (_consoleName.contains(console.getName()) && console instanceof TextConsole) {
+			String consoleName = console.getName();
+
+			if (consoleName.contains(_consoleName) && console instanceof TextConsole) {
 				IDocument content = ((TextConsole)console).getDocument();
 
 				_lastContent = content.get();
