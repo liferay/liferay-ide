@@ -73,6 +73,7 @@ public class NewVaadinApplicationClassWizardPage
 		classText = new Text(parent, SWT.SINGLE | SWT.BORDER);
 
 		classText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		synchHelper.synchText(classText, INewJavaClassDataModelProperties.CLASS_NAME, null);
 
 		new Label(parent, SWT.LEFT);
@@ -95,6 +96,7 @@ public class NewVaadinApplicationClassWizardPage
 		vaadinPortletClassCombo = new Combo(parent, SWT.DROP_DOWN);
 
 		vaadinPortletClassCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		synchHelper.synchCombo(vaadinPortletClassCombo, VAADIN_PORTLET_CLASS, null);
 
 		if (fragment) {
@@ -167,11 +169,15 @@ public class NewVaadinApplicationClassWizardPage
 	}
 
 	protected void setShellImage() {
-		Bundle bundle = VaadinUI.getDefault().getBundle();
+		VaadinUI vaadinUI = VaadinUI.getDefault();
+
+		Bundle bundle = vaadinUI.getBundle();
 
 		URL url = bundle.getEntry("/icons/e16/vaadinportlet.png");
 
-		Image shellImage = ImageDescriptor.createFromURL(url).createImage();
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
+
+		Image shellImage = imageDescriptor.createImage();
 
 		getShell().setImage(shellImage);
 	}
