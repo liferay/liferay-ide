@@ -327,6 +327,7 @@ public class DialogAction extends UIAction {
 	public class UpdateMavenProjectDialogAction {
 
 		public void selectAll() {
+
 			// assertTitle(_getDialog(), _updateMavenProjectDialog);
 
 			try {
