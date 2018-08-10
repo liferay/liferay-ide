@@ -97,7 +97,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		validationAction.assertEnabledFalse(wizardAction.newFragmentInfo.getAddOverrideFilesBtn());
 
-		validationAction.assertEnabledFalse(wizardAction.newFragmentInfo.getDeleteBtn());
+		validationAction.assertEnabledFalse(wizardAction.newFragmentInfo.deleteBtn());
 
 		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
