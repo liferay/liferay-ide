@@ -19,7 +19,6 @@ import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
-import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,7 +26,6 @@ import org.junit.rules.RuleChain;
 
 /**
  * @author Ashley Yuan
- * @author Ying Xu
  */
 public class ValidationFragmentFilesTests extends SwtbotBase {
 
@@ -111,7 +109,7 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
-		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
 
 		dialogAction.cancel();
 

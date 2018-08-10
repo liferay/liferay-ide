@@ -23,7 +23,6 @@ import java.io.File;
 
 import org.eclipse.core.runtime.Platform;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,7 +30,6 @@ import org.junit.Test;
 /**
  * @author Ashley Yuan
  * @author Lily Li
- * @author Ying Xu
  */
 public class ValidationComponentTests extends SwtbotBase {
 
@@ -51,7 +49,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		dialogAction.prepareText("*packagename");
 
-		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
 
 		dialogAction.prepareText(project.getName());
 
@@ -61,7 +59,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		dialogAction.selectTableItem(project.getName() + ".portlet");
 
-		Assert.assertTrue(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledTrue(dialogAction.getConfirmBtn());
 
 		dialogAction.cancel();
 
@@ -86,13 +84,15 @@ public class ValidationComponentTests extends SwtbotBase {
 				envAction.getValidationMsgs(
 					new File(envAction.getValidationDir(), "new-component-wizard-class-name.csv"))) {
 
-			if (!msg.getOs().equals(Platform.getOS())) {
+			String env = msg.getOs();
+
+			if (!env.equals(Platform.getOS())) {
 				continue;
 			}
 
-			wizardAction.newLiferayComponent.componentClassName().setText(msg.getInput());
+			wizardAction.newLiferayComponent.prepareComponentClass(msg.getInput());
 
-			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
+			validationAction.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
 
 		wizardAction.cancel();
@@ -119,7 +119,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		Assert.assertArrayEquals(templates, wizardAction.newLiferayComponent.componentClassTemplate().items());
+		validationAction.assertEquals(templates, wizardAction.newLiferayComponent.componentClassTemplate());
 
 		wizardAction.cancel();
 
@@ -130,27 +130,33 @@ public class ValidationComponentTests extends SwtbotBase {
 	public void checkExistingComponentClass() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName());
+		String projectName = project.getName();
+
+		wizardAction.newModule.prepareGradle(projectName);
 
 		wizardAction.finish();
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		String packageName = project.getName() + ".portlet";
-		String className = project.getName().substring(0, 1).toUpperCase() + project.getName().substring(1);
+		String packageName = projectName + ".portlet";
+
+		String firstLetter = projectName.substring(0, 1);
+
+		String className = firstLetter.toUpperCase() + projectName.substring(1);
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		wizardAction.newLiferayComponent.packageName().setText(packageName);
+		wizardAction.newLiferayComponent.preparePackage(packageName);
 
-		Assert.assertEquals(
+		validationAction.assertEquals(
 			packageName + "." + className + "Portlet" + ALREADY_EXISTS, wizardAction.getValidationMsg(2));
 
-		wizardAction.newLiferayComponent.componentClassName().setText(project.getName() + "portlet");
+		wizardAction.newLiferayComponent.prepareComponentClass(project.getName() + "portlet");
 
 		// wait for IDE-4059 fixed
-		// Assert.assertEquals(packageName + "." + className + "Portlet" + ALREADY_EXISTS,
-		// wizardAction.getValidationMsg(2));
+		// validationAction.assertEquals(packageName + "." + className + "Portlet" + ALREADY_EXISTS,
+
+		//wizardAction.getValidationMsg(2));
 
 		wizardAction.cancel();
 
@@ -169,13 +175,13 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		Assert.assertEquals(CREATE_A_NEW_LIEFRAY_COMPONENT_CLASS, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(CREATE_A_NEW_LIEFRAY_COMPONENT_CLASS, wizardAction.getValidationMsg(2));
 
-		Assert.assertEquals(project.getName(), wizardAction.newLiferayComponent.projectName().getText());
+		validationAction.assertTextEquals(project.getName(), wizardAction.newLiferayComponent.projectName());
 
-		Assert.assertTrue(wizardAction.newLiferayComponent.browsePackageBtn().isEnabled());
+		validationAction.assertEnabledTrue(wizardAction.newLiferayComponent.browsePackageBtn());
 
-		Assert.assertTrue(wizardAction.getFinishBtn().isEnabled());
+		validationAction.assertEnabledTrue(wizardAction.getFinishBtn());
 
 		wizardAction.cancel();
 
@@ -186,17 +192,17 @@ public class ValidationComponentTests extends SwtbotBase {
 	public void checkInitialState() {
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		Assert.assertEquals(NO_SUITABLE_LIFERAY_MODULE_PROJECT, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(NO_SUITABLE_LIFERAY_MODULE_PROJECT, wizardAction.getValidationMsg(2));
 
-		Assert.assertEquals(StringPool.BLANK, wizardAction.newLiferayComponent.projectName().getText());
+		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newLiferayComponent.projectName());
 
-		Assert.assertEquals(StringPool.BLANK, wizardAction.newLiferayComponent.packageName().getText());
+		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newLiferayComponent.packageName());
 
-		Assert.assertEquals(StringPool.BLANK, wizardAction.newLiferayComponent.componentClassName().getText());
+		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newLiferayComponent.componentClassName());
 
-		Assert.assertEquals(PORTLET_UPCASE, wizardAction.newLiferayComponent.componentClassTemplate().getText());
+		validationAction.assertTextEquals(PORTLET_UPCASE, wizardAction.newLiferayComponent.componentClassTemplate());
 
-		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
 		wizardAction.cancel();
 	}
@@ -217,21 +223,22 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.newLiferayComponent.prepare(template);
 
-		Assert.assertEquals(MODEL_CLASS_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(3));
+		validationAction.assertEquals(MODEL_CLASS_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(3));
 
-		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
 		wizardAction.newLiferayComponent.prepareModelClass("modelClass");
 
-		Assert.assertEquals("\"modelClass\"" + IS_NOT_AMONG_POSSIBLE_VALUES, wizardAction.getValidationMsg(3));
+		validationAction.assertEquals(
+			"\"modelClass\"" + IS_NOT_AMONG_POSSIBLE_VALUES, wizardAction.getValidationMsg(3));
 
-		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
 		wizardAction.newLiferayComponent.openSelectModelClassAndServiceDialog();
 
 		dialogAction.prepareText("*modelClass");
 
-		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
 
 		dialogAction.prepareText("*blogs");
 
@@ -239,7 +246,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		dialogAction.selectTableItem("com.liferay.blogs.kernel.model.BlogsStatsUser");
 
-		Assert.assertTrue(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledTrue(dialogAction.getConfirmBtn());
 
 		dialogAction.cancel();
 
@@ -264,13 +271,15 @@ public class ValidationComponentTests extends SwtbotBase {
 				envAction.getValidationMsgs(
 					new File(envAction.getValidationDir(), "new-component-wizard-package-name.csv"))) {
 
-			if (!msg.getOs().equals(Platform.getOS())) {
+			String env = msg.getOs();
+
+			if (!env.equals(Platform.getOS())) {
 				continue;
 			}
 
-			wizardAction.newLiferayComponent.packageName().setText(msg.getInput());
+			wizardAction.newLiferayComponent.preparePackage(msg.getInput());
 
-			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
+			validationAction.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
 
 		wizardAction.cancel();
@@ -306,14 +315,14 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		Assert.assertArrayEquals(projectNames, wizardAction.newLiferayComponent.projectName().items());
+		validationAction.assertEquals(projectNames, wizardAction.newLiferayComponent.projectName());
 
 		wizardAction.newLiferayComponent.prepare(projectName2, packageName);
 
-		Assert.assertEquals(
+		validationAction.assertEquals(
 			"portlet.test.portlet.PortletTestPortlet" + ALREADY_EXISTS, wizardAction.getValidationMsg(2));
 
-		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
 		wizardAction.cancel();
 
@@ -339,21 +348,21 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.newLiferayComponent.prepare(template);
 
-		Assert.assertEquals(SERVICE_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(3));
+		validationAction.assertEquals(SERVICE_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(3));
 
-		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
 		wizardAction.newLiferayComponent.prepareServiceName("serviceName");
 
-		Assert.assertEquals(CREATE_A_NEW_LIEFRAY_COMPONENT_CLASS, wizardAction.getValidationMsg(3));
+		validationAction.assertEquals(CREATE_A_NEW_LIEFRAY_COMPONENT_CLASS, wizardAction.getValidationMsg(3));
 
-		Assert.assertTrue(wizardAction.getFinishBtn().isEnabled());
+		validationAction.assertEnabledTrue(wizardAction.getFinishBtn());
 
 		wizardAction.newLiferayComponent.openSelectModelClassAndServiceDialog();
 
 		dialogAction.prepareText("*serviceName");
 
-		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
 
 		dialogAction.prepareText("*microblogs");
 
@@ -361,7 +370,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		dialogAction.selectTableItem("com.liferay.microblogs.service.MicroblogsEntryServiceWrapper");
 
-		Assert.assertTrue(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledTrue(dialogAction.getConfirmBtn());
 
 		dialogAction.cancel();
 

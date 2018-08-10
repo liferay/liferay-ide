@@ -23,9 +23,9 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
- * @author Vicky Wang
- * @author Sunny Shi
  * @author Rui Wang
+ * @author Lily Li
+ * @author Ashley Yuan
  */
 public class NewFragmentFilesWizardGradleTomcat70Tests extends NewFragmentFilesWizardGradleBase {
 

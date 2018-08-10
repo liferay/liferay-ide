@@ -17,6 +17,7 @@ package com.liferay.ide.ui.swtbot.condition;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
@@ -54,7 +55,9 @@ public class NoRunningJobsCondition extends JobCondition {
 	}
 
 	protected List<Job> checkRunningJobs() {
-		Job[] jobs = Job.getJobManager().find(family);
+		IJobManager jobManager = Job.getJobManager();
+
+		Job[] jobs = jobManager.find(family);
 
 		List<Job> runningJobs = new ArrayList<>();
 

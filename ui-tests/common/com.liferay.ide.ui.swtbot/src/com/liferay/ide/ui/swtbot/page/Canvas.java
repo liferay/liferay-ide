@@ -46,9 +46,13 @@ public class Canvas extends AbstractWidget {
 
 	private int _findIndex(String canvasName) {
 		for (int i = 0; i < 100; i++) {
-			org.eclipse.swt.widgets.Canvas canvas = bot.canvas(i).widget;
+			SWTBotCanvas botCanvas = bot.canvas(i);
 
-			if (canvas.toString().contains(canvasName)) {
+			org.eclipse.swt.widgets.Canvas canvas = botCanvas.widget;
+
+			String canvasString = canvas.toString();
+
+			if (canvasString.contains(canvasName)) {
 				return i;
 			}
 		}

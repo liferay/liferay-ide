@@ -30,6 +30,10 @@ public class ImportLiferayWorkspaceWizard extends Wizard {
 		super(bot, 2);
 	}
 
+	public void deselectDownloadLiferayBundle() {
+		getDownloadLiferayBundle().deselect();
+	}
+
 	public CheckBox getAddProjectToWorkingSet() {
 		return new CheckBox(getShell().bot(), ADD_PROJECT_TO_WORKING_SET);
 	}
@@ -46,7 +50,7 @@ public class ImportLiferayWorkspaceWizard extends Wizard {
 		return new Text(getShell().bot(), BUNDLE_URL);
 	}
 
-	public CheckBox getDownloadLiferaybundle() {
+	public CheckBox getDownloadLiferayBundle() {
 		return new CheckBox(getShell().bot(), DOWNLOAD_LIFERAY_BUNDLE);
 	}
 
@@ -56,6 +60,14 @@ public class ImportLiferayWorkspaceWizard extends Wizard {
 
 	public Text getWorkspaceLocation() {
 		return new Text(getShell().bot(), WORKSPACE_LOCATION);
+	}
+
+	public void selectDownloadLiferayBundle() {
+		getDownloadLiferayBundle().select();
+	}
+
+	public void setBundleUrl(String url) {
+		getBundleUrl().setText(url);
 	}
 
 }

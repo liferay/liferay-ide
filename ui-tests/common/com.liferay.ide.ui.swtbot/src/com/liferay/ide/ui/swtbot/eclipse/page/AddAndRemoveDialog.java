@@ -30,6 +30,10 @@ public class AddAndRemoveDialog extends Dialog {
 		super(bot, ADD_AND_REMOVE, CANCEL, FINISH);
 	}
 
+	public void clickAddBtn() {
+		getAddBtn().click();
+	}
+
 	public Button getAddAllBtn() {
 		return new Button(getShell().bot(), ADD_ALL);
 	}

@@ -31,4 +31,8 @@ public class NewLiferayPluginWizard extends NewProjectWizard {
 		return new ComboBox(getShell().bot(), PLUGIN_TYPE);
 	}
 
+	public void setPluginType(String type) {
+		getPluginTypes().setSelection(type);
+	}
+
 }

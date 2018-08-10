@@ -31,6 +31,18 @@ public class NewFragmentInfoWizard extends Wizard {
 		super(bot, 1);
 	}
 
+	public void clickAddOverrideFilesBtn() {
+		getAddOverrideFilesBtn().click();
+	}
+
+	public void clickDeleteBtn() {
+		getDeleteBtn().click();
+	}
+
+	public void clickGetFiles(String file) {
+		getFiles().click(file);
+	}
+
 	public ToolbarButtonWithTooltip getAddOverrideFilePathBtn() {
 		return new ToolbarButtonWithTooltip(getShell().bot(), ADD_FILE_PATH);
 	}

@@ -17,6 +17,7 @@ package com.liferay.ide.ui.swtbot.page;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTableItem;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 
 /**
  * @author Li Lu
@@ -60,7 +61,9 @@ public class Table extends AbstractWidget {
 	}
 
 	public void setText(int index, String text) {
-		bot.text(index).setText(text);
+		SWTBotText content = bot.text(index);
+
+		content.setText(text);
 	}
 
 	public int size() {

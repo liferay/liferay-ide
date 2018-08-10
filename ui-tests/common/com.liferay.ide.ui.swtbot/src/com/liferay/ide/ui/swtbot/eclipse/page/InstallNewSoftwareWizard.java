@@ -38,6 +38,14 @@ public class InstallNewSoftwareWizard extends Wizard {
 		return new Button(getShell().bot(), ADD_WITH_DOT);
 	}
 
+	public void clickAddBtn() {
+		addBtn().click();
+	}
+
+	public void clickSelectAllBtn() {
+		selectAllBtn().click();
+	}
+
 	public CheckBox contactAllUpdateSites() {
 		return new CheckBox(
 			getShell().bot(), CONTACT_ALL_UPDATE_SITES_DURING_SITES_DURING_INSTALL_TO_FIND_REQUIRED_SOFTWARE);

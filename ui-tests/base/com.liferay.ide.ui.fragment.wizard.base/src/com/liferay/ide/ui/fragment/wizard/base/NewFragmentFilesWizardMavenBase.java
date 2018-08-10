@@ -21,10 +21,9 @@ import org.junit.Assert;
 import org.junit.Rule;
 
 /**
- * @author Vicky Wang
- * @author Sunny Shi
  * @author Rui Wang
- * @author Ying Xu
+ * @author Lily Li
+ * @author Ashley Yuan
  */
 public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 

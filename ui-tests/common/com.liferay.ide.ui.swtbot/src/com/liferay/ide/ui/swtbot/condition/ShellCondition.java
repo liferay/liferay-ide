@@ -44,7 +44,7 @@ public class ShellCondition implements ICondition {
 	public boolean test() throws Exception {
 		SWTBotShell shell = _bot.activeShell();
 
-		if (shell.getText().equals(_title) == _equal) {
+		if (_title.equals(shell.getText()) == _equal) {
 			return true;
 		}
 

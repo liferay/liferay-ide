@@ -83,7 +83,9 @@ public class ImportLiferayWorkspaceProjectSupport extends ImportProjectSupport {
 		if (envAction.internal()) {
 			IPath bundlesPath = envAction.getBundlesPath();
 
-			IPath source = bundlesPath.append("internal").append("ivy-settings.xml");
+			IPath internelPath = bundlesPath.append("internal");
+
+			IPath source = internelPath.append("ivy-settings.xml");
 
 			File dest = new File(sdkDir, "ivy-settings.xml");
 

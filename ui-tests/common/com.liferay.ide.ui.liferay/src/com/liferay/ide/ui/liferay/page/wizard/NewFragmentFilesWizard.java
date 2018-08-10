@@ -33,6 +33,10 @@ public class NewFragmentFilesWizard extends Wizard {
 		super(bot, 2);
 	}
 
+	public void clickFile(String file) {
+		getFiles().click(file);
+	}
+
 	public ToolbarButtonWithTooltip getAddOverrideFilesBtn() {
 		return new ToolbarButtonWithTooltip(getShell().bot(), ADD_FILES_FROM_OSGI_TO_OVERRIDE);
 	}

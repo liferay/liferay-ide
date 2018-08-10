@@ -28,6 +28,30 @@ public class ChooseAssignmentTypeWizard extends Wizard {
 		super(bot);
 	}
 
+	public void clickAssignCreator() {
+		getAssignCreator().click();
+	}
+
+	public void clickAssignResourceActions() {
+		getAssignResourceActions().click();
+	}
+
+	public void clickAssignRoleById() {
+		getAssignRoleById().click();
+	}
+
+	public void clickAssignRoleType() {
+		getAssignRoleType().click();
+	}
+
+	public void clickAssignScriptedAssignment() {
+		getAssignScriptedAssignment().click();
+	}
+
+	public void clickAssignUser() {
+		getAssignUser().click();
+	}
+
 	public Radio getAssignCreator() {
 		return new Radio(getShell().bot(), 0);
 	}

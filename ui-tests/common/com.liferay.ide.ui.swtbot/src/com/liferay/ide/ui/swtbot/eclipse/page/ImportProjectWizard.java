@@ -37,4 +37,8 @@ public class ImportProjectWizard extends Wizard {
 		return new Tree(getShell().bot());
 	}
 
+	public void selectType(String category, String type) {
+		getTypes().selectTreeItem(category, type);
+	}
+
 }

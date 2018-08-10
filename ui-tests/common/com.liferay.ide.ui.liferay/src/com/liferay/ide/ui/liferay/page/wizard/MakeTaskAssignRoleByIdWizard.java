@@ -32,4 +32,8 @@ public class MakeTaskAssignRoleByIdWizard extends Wizard {
 		return new Text(getShell().bot(), ROLE_ID);
 	}
 
+	public void setRoleId(String roleId) {
+		getRoleId().setText(roleId);
+	}
+
 }

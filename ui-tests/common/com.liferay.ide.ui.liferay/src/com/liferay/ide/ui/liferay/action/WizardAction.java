@@ -15,6 +15,8 @@
 package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
+import com.liferay.ide.ui.liferay.page.button.CreateLifeayProjectToolbarDropDownButton;
+import com.liferay.ide.ui.liferay.page.button.NewToolbarDropDownButton;
 import com.liferay.ide.ui.liferay.page.wizard.ChooseAssignmentTypeWizard;
 import com.liferay.ide.ui.liferay.page.wizard.LiferayProjectFromExistSourceWizard;
 import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignActionWizard;
@@ -46,8 +48,10 @@ import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.page.MenuItem;
 import com.liferay.ide.ui.swtbot.page.Radio;
+import com.liferay.ide.ui.swtbot.page.Table;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
+import com.liferay.ide.ui.swtbot.page.Tree;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
@@ -55,7 +59,6 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
- * @author Ying Xu
  * @author Ashley Yuan
  * @author Lily Li
  * @author Rui Wang
@@ -121,21 +124,21 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openFileMenuFragmentFilesWizard() {
-		ide.getFileMenu().clickMenu(NEW, LIFERAY_MODULE_FRAGMENT_FILES);
+		ide.clickFileMenu(NEW, LIFERAY_MODULE_FRAGMENT_FILES);
 	}
 
 	public void openFileMenuLiferayComponentClassWizard() {
-		ide.getFileMenu().clickMenu(NEW, LIFERAY_COMPONENT_CLASS);
+		ide.clickFileMenu(NEW, LIFERAY_COMPONENT_CLASS);
 	}
 
 	public void openInstallNewSoftwareWizard() {
-		ide.getInstallMenu().click();
+		ide.clickInstallMenu();
 	}
 
 	public void openNewBtnFragmentFilesWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = ide.getNewBtn().getLiferayMoudleFragmentFiles();
+		MenuItem menu = _newToolbarDropDownBtn().getLiferayMoudleFragmentFiles();
 
 		menu.click();
 	}
@@ -143,7 +146,7 @@ public class WizardAction extends UIAction {
 	public void openNewBtnLiferayComponentClassWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = ide.getNewBtn().getLiferayComponentClass();
+		MenuItem menu = _newToolbarDropDownBtn().getLiferayComponentClass();
 
 		menu.click();
 	}
@@ -151,7 +154,7 @@ public class WizardAction extends UIAction {
 	public void openNewFragmentWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayModuleFragment();
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayModuleFragment();
 
 		menu.click();
 	}
@@ -159,7 +162,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayComponentClassWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayComponentClass();
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayComponentClass();
 
 		menu.click();
 	}
@@ -167,7 +170,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayJsfProjectWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayJSFProject();
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayJSFProject();
 
 		menu.click();
 	}
@@ -175,7 +178,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayKaleoWorkflowWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayKaleoWorkflow();
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayKaleoWorkflow();
 
 		menu.click();
 	}
@@ -183,7 +186,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayLayoutTemplate() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayLayoutTemplate();
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayLayoutTemplate();
 
 		menu.click();
 	}
@@ -191,7 +194,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayModuleWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayModule();
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayModule();
 
 		menu.click();
 	}
@@ -199,7 +202,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayPluginProjectsFromExistingSourceWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayPluginProjectFromExistingSource();
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayPluginProjectFromExistingSource();
 
 		menu.click();
 	}
@@ -207,7 +210,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayPluginProjectWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayPlugin();
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayPlugin();
 
 		menu.click();
 	}
@@ -215,7 +218,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayPortletWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayPortlet();
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayPortlet();
 
 		menu.click();
 	}
@@ -223,7 +226,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayServerWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayServer();
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayServer();
 
 		menu.click();
 	}
@@ -231,7 +234,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayWorkspaceWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject();
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayWorkspaceProject();
 
 		menu.click();
 	}
@@ -266,27 +269,27 @@ public class WizardAction extends UIAction {
 	public class ChooseAssignmentTypeWizardAction {
 
 		public void selectAssignCreator() {
-			_chooseAssignmentTypeWizard.getAssignCreator().click();
+			_chooseAssignmentTypeWizard.clickAssignCreator();
 		}
 
 		public void selectAssignResourceActions() {
-			_chooseAssignmentTypeWizard.getAssignResourceActions().click();
+			_chooseAssignmentTypeWizard.clickAssignResourceActions();
 		}
 
 		public void selectAssignRoleById() {
-			_chooseAssignmentTypeWizard.getAssignRoleById().click();
+			_chooseAssignmentTypeWizard.clickAssignRoleById();
 		}
 
 		public void selectAssignRoleType() {
-			_chooseAssignmentTypeWizard.getAssignRoleType().click();
+			_chooseAssignmentTypeWizard.clickAssignRoleType();
 		}
 
 		public void selectAssignScriptedAssignment() {
-			_chooseAssignmentTypeWizard.getAssignScriptedAssignment().click();
+			_chooseAssignmentTypeWizard.clickAssignScriptedAssignment();
 		}
 
 		public void selectAssignUser() {
-			_chooseAssignmentTypeWizard.getAssignUser().click();
+			_chooseAssignmentTypeWizard.clickAssignUser();
 		}
 
 		private final ChooseAssignmentTypeWizard _chooseAssignmentTypeWizard = new ChooseAssignmentTypeWizard(bot);
@@ -307,15 +310,19 @@ public class WizardAction extends UIAction {
 			return _importLiferayWorkspaceProjectWizard.getBuildTypeText();
 		}
 
+		public void deselectDownloadLiferayBundle() {
+			downloadLiferayBundle().deselect();
+		}
+
 		public CheckBox downloadLiferayBundle() {
-			return _importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle();
+			return _importLiferayWorkspaceProjectWizard.getDownloadLiferayBundle();
 		}
 
 		public void prepare(String location, boolean downloadLiferayBundle) {
 			workspaceLocation().setText(location);
 
 			if (downloadLiferayBundle) {
-				_importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle().select();
+				_importLiferayWorkspaceProjectWizard.selectDownloadLiferayBundle();
 			}
 		}
 
@@ -326,7 +333,7 @@ public class WizardAction extends UIAction {
 				return;
 			}
 
-			_importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle().select();
+			_importLiferayWorkspaceProjectWizard.selectDownloadLiferayBundle();
 
 			if (!serverName.equals(StringPool.EMPTY)) {
 				serverName().setText(serverName);
@@ -334,7 +341,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void prepareBundleUrl(String bundleUrl) {
-			_importLiferayWorkspaceProjectWizard.getBundleUrl().setText(bundleUrl);
+			_importLiferayWorkspaceProjectWizard.setBundleUrl(bundleUrl);
 		}
 
 		public void prepareLocation(String location) {
@@ -343,6 +350,10 @@ public class WizardAction extends UIAction {
 
 		public void prepareServerName(String serverName) {
 			serverName().setText(serverName);
+		}
+
+		public void selectDownloadLiferayBundle() {
+			downloadLiferayBundle().select();
 		}
 
 		public Text serverName() {
@@ -361,7 +372,7 @@ public class WizardAction extends UIAction {
 	public class ImportProjectWizardAction {
 
 		public void openImportLiferayWorkspaceWizard() {
-			ide.getFileMenu().clickMenu(IMPORT);
+			ide.clickFileMenu(IMPORT);
 
 			_prepare(LIFERAY, LIFERAY_WORKSPACE_PROJECT);
 
@@ -369,7 +380,7 @@ public class WizardAction extends UIAction {
 		}
 
 		private void _prepare(String category, String type) {
-			_importProjectWizard.getTypes().selectTreeItem(category, type);
+			_importProjectWizard.selectType(category, type);
 		}
 
 		private final ImportProjectWizard _importProjectWizard = new ImportProjectWizard(bot);
@@ -383,11 +394,15 @@ public class WizardAction extends UIAction {
 		}
 
 		public void addRepository() {
-			_installNewSoftwareWizard.addBtn().click();
+			_installNewSoftwareWizard.clickAddBtn();
 		}
 
 		public CheckBox contactAllUpdateSites() {
 			return _installNewSoftwareWizard.contactAllUpdateSites();
+		}
+
+		public void deselectContactAllUpdateSites() {
+			contactAllUpdateSites().deselect();
 		}
 
 		public void selectAcceptTerms() {
@@ -395,7 +410,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void selectAll() {
-			_installNewSoftwareWizard.selectAllBtn().click();
+			_installNewSoftwareWizard.clickSelectAllBtn();
 		}
 
 		private final InstallNewSoftwareWizard _installNewSoftwareWizard = new InstallNewSoftwareWizard(bot);
@@ -405,8 +420,8 @@ public class WizardAction extends UIAction {
 	public class MakeTaskAssignActionWizardAction {
 
 		public void addResourceAction(String resourceAction) {
-			_makeTaskAssignActionWizard.getAddResourceActionBtn().click();
-			_makeTaskAssignActionWizard.getResourceAction().setText(resourceAction);
+			_makeTaskAssignActionWizard.clickAddResourceActionBtn();
+			_makeTaskAssignActionWizard.setResourceAction(resourceAction);
 		}
 
 		private final MakeTaskAssignActionWizard _makeTaskAssignActionWizard = new MakeTaskAssignActionWizard(bot);
@@ -416,7 +431,7 @@ public class WizardAction extends UIAction {
 	public class MakeTaskAssignRoleByIdWizardAction {
 
 		public void prepareRoleId(String roleId) {
-			_makeTaskAssignRoleByIdWizard.getRoleId().setText(roleId);
+			_makeTaskAssignRoleByIdWizard.setRoleId(roleId);
 		}
 
 		private final MakeTaskAssignRoleByIdWizard _makeTaskAssignRoleByIdWizard = new MakeTaskAssignRoleByIdWizard(
@@ -427,11 +442,11 @@ public class WizardAction extends UIAction {
 	public class MakeTaskAssignRoleTypeWizardAction {
 
 		public void addRole() {
-			_makeTaskAssignRoleTypeWizard.getAddRoleBtn().click();
+			_makeTaskAssignRoleTypeWizard.clickAddRoleBtn();
 		}
 
 		public void deleteRole() {
-			_makeTaskAssignRoleTypeWizard.getDeleteRoleBtn().click();
+			_makeTaskAssignRoleTypeWizard.clickDeleteRoleBtn();
 		}
 
 		private final MakeTaskAssignRoleTypeWizard _makeTaskAssignRoleTypeWizard = new MakeTaskAssignRoleTypeWizard(
@@ -442,7 +457,7 @@ public class WizardAction extends UIAction {
 	public class MakeTaskAssignScriptWizardAction {
 
 		public void prepareScriptLanguage(String scriptLanguage) {
-			_makeTaskAssignScriptWizard.getScriptLanguage().setSelection(scriptLanguage);
+			_makeTaskAssignScriptWizard.setScriptLanguage(scriptLanguage);
 		}
 
 		private final MakeTaskAssignScriptWizard _makeTaskAssignScriptWizard = new MakeTaskAssignScriptWizard(bot);
@@ -452,15 +467,15 @@ public class WizardAction extends UIAction {
 	public class MakeTaskAssignUserWizardAction {
 
 		public void prepareEmailAddress(String emailAddress) {
-			_makeTaskAssignUserWizard.getEmailAddress().setText(emailAddress);
+			_makeTaskAssignUserWizard.setEmailAddress(emailAddress);
 		}
 
 		public void prepareSreenName(String screenName) {
-			_makeTaskAssignUserWizard.getScreenName().setText(screenName);
+			_makeTaskAssignUserWizard.setScreenName(screenName);
 		}
 
 		public void prepareUserId(String userId) {
-			_makeTaskAssignUserWizard.getUserId().setText(userId);
+			_makeTaskAssignUserWizard.setUserId(userId);
 		}
 
 		private final MakeTaskAssignUserWizard _makeTaskAssignUserWizard = new MakeTaskAssignUserWizard(bot);
@@ -498,7 +513,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void selectFile(String file) {
-			_newFragmentFilesWizard.getFiles().click(file);
+			_newFragmentFilesWizard.clickFile(file);
 		}
 
 		private final NewFragmentFilesWizard _newFragmentFilesWizard = new NewFragmentFilesWizard(bot);
@@ -520,7 +535,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void deleteFile() {
-			_newFragmentInfoWizard.getDeleteBtn().click();
+			_newFragmentInfoWizard.clickDeleteBtn();
 		}
 
 		public ToolbarButtonWithTooltip getAddOverrideFilesBtn() {
@@ -529,10 +544,6 @@ public class WizardAction extends UIAction {
 
 		public ToolbarButtonWithTooltip getBrowseOsgiBtn() {
 			return _newFragmentInfoWizard.getBrowseOsgiBtn();
-		}
-
-		public ToolbarButtonWithTooltip getDeleteBtn() {
-			return _newFragmentInfoWizard.getDeleteBtn();
 		}
 
 		public Text getHostOsgiBundle() {
@@ -544,7 +555,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void openAddOverrideFilesDialog() {
-			_newFragmentInfoWizard.getAddOverrideFilesBtn().click();
+			_newFragmentInfoWizard.clickAddOverrideFilesBtn();
 		}
 
 		public void openBrowseOsgiBundleDialog() {
@@ -552,7 +563,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void selectFile(String file) {
-			_newFragmentInfoWizard.getFiles().click(file);
+			_newFragmentInfoWizard.clickGetFiles(file);
 		}
 
 		private final NewFragmentInfoWizard _newFragmentInfoWizard = new NewFragmentInfoWizard(bot);
@@ -562,7 +573,7 @@ public class WizardAction extends UIAction {
 	public class NewFragmentWizardAction extends NewProjectWizardAction {
 
 		public void openNewRuntimeWizard() {
-			_newFragmentWizard.getNewRuntimeBtn().click();
+			_newFragmentWizard.clickNewRuntimeBtn();
 		}
 
 		public void prepare(String projectName) {
@@ -586,17 +597,17 @@ public class WizardAction extends UIAction {
 		}
 
 		private void _prepare(String projectName) {
-			_newFragmentWizard.getProjectName().setText(projectName);
+			_newFragmentWizard.setProjectName(projectName);
 		}
 
 		private void _prepare(String projectName, String location, String buildType) {
-			_newFragmentWizard.getProjectName().setText(projectName);
+			_newFragmentWizard.setProjectName(projectName);
 
 			if (!location.equals(StringPool.BLANK)) {
-				_newFragmentWizard.getLocation().setText(location);
+				_newFragmentWizard.setLocation(location);
 			}
 
-			_newFragmentWizard.getBuildTypes().setSelection(buildType);
+			_newFragmentWizard.setBuildType(buildType);
 		}
 
 		private final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
@@ -606,7 +617,7 @@ public class WizardAction extends UIAction {
 	public class NewKaleoWorkflowWizardAction {
 
 		public void openSelectProjectDialog() {
-			_newKaleoWorkflowWizard.getBrowseBtn().click();
+			_newKaleoWorkflowWizard.clickBrowseBtn();
 		}
 
 		private final NewKaleoWorkflowWizard _newKaleoWorkflowWizard = new NewKaleoWorkflowWizard(bot);
@@ -628,11 +639,11 @@ public class WizardAction extends UIAction {
 		}
 
 		public void openSelectModelClassAndServiceDialog() {
-			_newLiferayComponentWizard.getBrowseBtn().click();
+			_newLiferayComponentWizard.clickBrowseBtn();
 		}
 
 		public void openSelectPackageNameDialog() {
-			_newLiferayComponentWizard.getPackageBrowseBtn().click();
+			_newLiferayComponentWizard.clickPackageBrowseBtn();
 		}
 
 		public Text packageName() {
@@ -660,11 +671,11 @@ public class WizardAction extends UIAction {
 
 			ide.sleep();
 
-			_newLiferayComponentWizard.getComponentClassTemplates().setSelection(template);
+			_newLiferayComponentWizard.setComponentClassTemplates(template);
 
 			ide.sleep();
 
-			componentClassName().setText(className);
+			prepareComponentClass(className);
 
 			ide.sleep();
 
@@ -673,10 +684,18 @@ public class WizardAction extends UIAction {
 			ide.sleep();
 		}
 
+		public void prepareComponentClass(String componentClass) {
+			componentClassName().setText(componentClass);
+		}
+
 		public void prepareModelClass(String modelClass) {
-			_newLiferayComponentWizard.getModelClassName().setText(modelClass);
+			_newLiferayComponentWizard.setModelClassName(modelClass);
 
 			ide.sleep();
+		}
+
+		public void preparePackage(String packageName) {
+			packageName().setText(packageName);
 		}
 
 		public void prepareProjectName(String projectName) {
@@ -686,7 +705,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void prepareServiceName(String serviceName) {
-			_newLiferayComponentWizard.getServiceName().setText(serviceName);
+			_newLiferayComponentWizard.setServiceName(serviceName);
 
 			ide.sleep();
 		}
@@ -710,9 +729,9 @@ public class WizardAction extends UIAction {
 		}
 
 		private void _prepare(String projectName, String buildType, String componentSuite) {
-			_newJsfProjectWizard.getProjectName().setText(projectName);
-			_newJsfProjectWizard.getBuildTypes().setSelection(buildType);
-			_newJsfProjectWizard.getComponentSuite().setSelection(componentSuite);
+			_newJsfProjectWizard.setProjectName(projectName);
+			_newJsfProjectWizard.setBuildType(buildType);
+			_newJsfProjectWizard.setComponentSuite(componentSuite);
 		}
 
 		private final NewLiferayJsfWizard _newJsfProjectWizard = new NewLiferayJsfWizard(bot);
@@ -761,16 +780,16 @@ public class WizardAction extends UIAction {
 		}
 
 		public void setBundleUrl(String bundleUrl) {
-			_newLiferayWorkspaceWizard.getBundleUrl().setText(bundleUrl);
+			_newLiferayWorkspaceWizard.setBundleUrl(bundleUrl);
 		}
 
 		public void setServerName(String serverName) {
-			_newLiferayWorkspaceWizard.getServerName().setText(serverName);
+			_newLiferayWorkspaceWizard.setServerName(serverName);
 		}
 
 		private void _prepare(String projectName, String buildType) {
-			_newLiferayWorkspaceWizard.getProjectName().setText(projectName);
-			_newLiferayWorkspaceWizard.getBuildTypes().setSelection(buildType);
+			_newLiferayWorkspaceWizard.setProjectName(projectName);
+			_newLiferayWorkspaceWizard.setBuildType(buildType);
 		}
 
 		private void _prepare(
@@ -782,10 +801,10 @@ public class WizardAction extends UIAction {
 			if (downloadLiferayBundle) {
 				downloadLiferayBundle().select();
 
-				_newLiferayWorkspaceWizard.getServerName().setText(serverName);
+				_newLiferayWorkspaceWizard.setServerName(serverName);
 
 				if (!useDefaultBundleUrl) {
-					_newLiferayWorkspaceWizard.getBundleUrl().setText(bundleUrl);
+					_newLiferayWorkspaceWizard.setBundleUrl(bundleUrl);
 				}
 			}
 			else {
@@ -794,10 +813,10 @@ public class WizardAction extends UIAction {
 		}
 
 		private void _prepare(String projectName, String buildType, String version) {
-			_newLiferayWorkspaceWizard.getProjectName().setText(projectName);
+			_newLiferayWorkspaceWizard.setProjectName(projectName);
 			ide.sleep(800);
-			_newLiferayWorkspaceWizard.getBuildTypes().setSelection(buildType);
-			_newLiferayWorkspaceWizard.getLiferayVersion().setSelection(version);
+			_newLiferayWorkspaceWizard.setBuildType(buildType);
+			_newLiferayWorkspaceWizard.setLiferayVersion(version);
 			ide.sleep(800);
 		}
 
@@ -806,6 +825,10 @@ public class WizardAction extends UIAction {
 	}
 
 	public class NewModuleInfoWizardAction {
+
+		public void clickDeleteBtn() {
+			_newModuleInfoWizard.clickDeleteBtn();
+		}
 
 		public Text componentClassName() {
 			return _newModuleInfoWizard.getComponentClassName();
@@ -816,7 +839,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void openSelectServiceDialog() {
-			_newModuleInfoWizard.getBrowseBtn().click();
+			_newModuleInfoWizard.clickBrowseBtn();
 		}
 
 		public Text packageName() {
@@ -833,11 +856,14 @@ public class WizardAction extends UIAction {
 		}
 
 		public void prepareProperties(String propertiesName, String propertiesValue) {
-			_newModuleInfoWizard.getAddPropertyKeyBtn().click();
-			_newModuleInfoWizard.getProperties().setText(2, propertiesName);
-			_newModuleInfoWizard.getProperties().doubleClick(0, 1);
-			_newModuleInfoWizard.getProperties().setText(2, propertiesValue);
-			_newModuleInfoWizard.getProperties().setFocus();
+			_newModuleInfoWizard.clickAddPropertyKeyBtn();
+
+			Table propertyTable = _newModuleInfoWizard.getProperties();
+
+			propertyTable.setText(2, propertiesName);
+			propertyTable.doubleClick(0, 1);
+			propertyTable.setText(2, propertiesValue);
+			propertyTable.setFocus();
 		}
 
 		private final NewLiferayModuleInfoWizard _newModuleInfoWizard = new NewLiferayModuleInfoWizard(bot);
@@ -847,12 +873,12 @@ public class WizardAction extends UIAction {
 	public class NewModuleWizardAction extends NewProjectWizardAction {
 
 		public void prepare(String projectName) {
-			_newModuleWizard.getProjectName().setText(projectName);
+			_newModuleWizard.setProjectName(projectName);
 		}
 
 		public void prepare(String projectName, String buildType) {
-			_newModuleWizard.getProjectName().setText(projectName);
-			_newModuleWizard.getBuildTypes().setSelection(buildType);
+			_newModuleWizard.setProjectName(projectName);
+			_newModuleWizard.setBuildType(buildType);
 		}
 
 		public void prepare(
@@ -861,11 +887,11 @@ public class WizardAction extends UIAction {
 			_prepare(projectName, buildType, template);
 
 			if (useDefaultLocation) {
-				_newModuleWizard.getUseDefaultLocation().deselect();
-				_newModuleWizard.getLocation().setText(location);
+				_newModuleWizard.deselectUseDefaultLocation();
+				_newModuleWizard.setLocation(location);
 			}
 			else {
-				_newModuleWizard.getUseDefaultLocation().select();
+				_newModuleWizard.selectUseDefaultLocation();
 			}
 		}
 
@@ -883,8 +909,8 @@ public class WizardAction extends UIAction {
 
 		public void prepareGradle(String projectName, String template, String location, String version) {
 			_prepare(projectName, GRADLE, template, version);
-			_newModuleWizard.getUseDefaultLocation().deselect();
-			_newModuleWizard.getLocation().setText(location);
+			_newModuleWizard.deselectUseDefaultLocation();
+			_newModuleWizard.setLocation(location);
 		}
 
 		public void prepareMaven(String projectName) {
@@ -900,16 +926,16 @@ public class WizardAction extends UIAction {
 		}
 
 		private void _prepare(String projectName, String buildType, String template) {
-			_newModuleWizard.getProjectName().setText(projectName);
-			_newModuleWizard.getBuildTypes().setSelection(buildType);
+			_newModuleWizard.setProjectName(projectName);
+			_newModuleWizard.setBuildType(buildType);
 			projectTemplateName().setSelection(template);
 		}
 
 		private void _prepare(String projectName, String buildType, String template, String version) {
-			_newModuleWizard.getProjectName().setText(projectName);
-			_newModuleWizard.getBuildTypes().setSelection(buildType);
+			_newModuleWizard.setProjectName(projectName);
+			_newModuleWizard.setBuildType(buildType);
 			projectTemplateName().setSelection(template);
-			_newModuleWizard.getLiferayVersion().setSelection(version);
+			_newModuleWizard.setLiferayVersion(version);
 		}
 
 		private final NewLiferayModuleWizard _newModuleWizard = new NewLiferayModuleWizard(bot);
@@ -943,17 +969,17 @@ public class WizardAction extends UIAction {
 		}
 
 		private void _prepare(String projectName, String buildType) {
-			_newPluginProjectWizard.getProjectName().setText(projectName);
+			_newPluginProjectWizard.setProjectName(projectName);
 
-			_newPluginProjectWizard.getBuildTypes().setSelection(buildType);
+			_newPluginProjectWizard.setBuildType(buildType);
 		}
 
 		private void _prepare(String projectName, String pluginType, String buildType) {
-			_newPluginProjectWizard.getProjectName().setText(projectName);
+			_newPluginProjectWizard.setProjectName(projectName);
 
-			_newPluginProjectWizard.getPluginTypes().setSelection(pluginType);
+			_newPluginProjectWizard.setPluginType(pluginType);
 
-			_newPluginProjectWizard.getBuildTypes().setSelection(buildType);
+			_newPluginProjectWizard.setBuildType(buildType);
 		}
 
 		private final NewLiferayPluginWizard _newPluginProjectWizard = new NewLiferayPluginWizard(bot);
@@ -966,16 +992,28 @@ public class WizardAction extends UIAction {
 			return _newProjectWizard.getBuildTypes();
 		}
 
+		public String[] buildTypes() {
+			return buildType().items();
+		}
+
 		public void deselectUseDefaultLocation() {
 			useDefaultLocation().deselect();
 		}
 
-		public ComboBox getBuildTypes() {
-			return _newProjectWizard.getBuildTypes();
+		public String getLocation() {
+			return location().getText();
 		}
 
 		public Text location() {
 			return _newProjectWizard.getLocation();
+		}
+
+		public void prepareLocation(String location) {
+			location().setText(location);
+		}
+
+		public void prepareProjectName(String projectName) {
+			projectName().setText(projectName);
 		}
 
 		public Text projectName() {
@@ -997,12 +1035,18 @@ public class WizardAction extends UIAction {
 	public class NewRuntime7WizardAction {
 
 		public void prepare(String location) {
-			_newLiferay7RuntimeWizard.getLocation().setText(location);
+			Text serverLocation = _newLiferay7RuntimeWizard.getLocation();
+
+			serverLocation.setText(location);
 		}
 
 		public void prepare(String name, String location) {
-			_newLiferay7RuntimeWizard.getName().setText(name);
-			_newLiferay7RuntimeWizard.getLocation().setText(location);
+			Text serverName = _newLiferay7RuntimeWizard.getName();
+
+			Text serverLocation = _newLiferay7RuntimeWizard.getLocation();
+
+			serverName.setText(name);
+			serverLocation.setText(location);
 		}
 
 		private final NewRuntime7Wizard _newLiferay7RuntimeWizard = new NewRuntime7Wizard(bot);
@@ -1012,8 +1056,12 @@ public class WizardAction extends UIAction {
 	public class NewRuntime62WizardAction {
 
 		public void prepare(String name, String location) {
-			_newLiferay62RuntimeWizard.getName().setText(name);
-			_newLiferay62RuntimeWizard.getLocation().setText(location);
+			Text serverName = _newLiferay62RuntimeWizard.getName();
+
+			Text serverLocation = _newLiferay62RuntimeWizard.getLocation();
+
+			serverName.setText(name);
+			serverLocation.setText(location);
 		}
 
 		private final NewRuntime62Wizard _newLiferay62RuntimeWizard = new NewRuntime62Wizard(bot);
@@ -1033,7 +1081,9 @@ public class WizardAction extends UIAction {
 		private void _prepare(String category, String type) {
 			ide.sleep(3000);
 
-			_newRuntimeWizard.getServerTypes().selectTreeItem(category, type);
+			Tree serverTree = _newRuntimeWizard.getServerTypes();
+
+			serverTree.selectTreeItem(category, type);
 		}
 
 		private final NewRuntimeWizard _newRuntimeWizard = new NewRuntimeWizard(bot);
@@ -1045,21 +1095,29 @@ public class WizardAction extends UIAction {
 		public void prepare(String serverName) {
 			ide.sleep(500);
 
-			_newServerWizard.getServerName().setText(serverName);
+			Text name = _newServerWizard.getServerName();
+
+			name.setText(serverName);
 
 			ide.sleep(500);
 
-			_newServerWizard.getServerTypes().selectTreeItem(LIFERAY_INC, LIFERAY_7_X);
+			Tree serverTree = _newServerWizard.getServerTypes();
+
+			serverTree.selectTreeItem(LIFERAY_INC, LIFERAY_7_X);
 		}
 
 		public void prepare62(String serverName) {
 			ide.sleep(500);
 
-			_newServerWizard.getServerName().setText(serverName);
+			Text name = _newServerWizard.getServerName();
+
+			name.setText(serverName);
 
 			ide.sleep(500);
 
-			_newServerWizard.getServerTypes().selectTreeItem(LIFERAY_INC, LIFERAY_V_62_SERVER_TOMCAT_7);
+			Tree serverTree = _newServerWizard.getServerTypes();
+
+			serverTree.selectTreeItem(LIFERAY_INC, LIFERAY_V_62_SERVER_TOMCAT_7);
 		}
 
 		private final NewServerWizard _newServerWizard = new NewServerWizard(bot);
@@ -1100,10 +1158,12 @@ public class WizardAction extends UIAction {
 	public class SetSdkLocationWizardAction {
 
 		public void prepare(String location) {
-			_setSdkLocationWizard.getSdkLocation().setText(location);
+			Text sdkLocation = _setSDKLocationWizard.getSdkLocation();
+
+			sdkLocation.setText(location);
 		}
 
-		private final SetSDKLocationWizard _setSdkLocationWizard = new SetSDKLocationWizard(bot);
+		private final SetSDKLocationWizard _setSDKLocationWizard = new SetSDKLocationWizard(bot);
 
 	}
 
@@ -1111,8 +1171,16 @@ public class WizardAction extends UIAction {
 		super(bot);
 	}
 
+	private CreateLifeayProjectToolbarDropDownButton _createLiferayProjectToolbar() {
+		return ide.getCreateLiferayProjectToolbar();
+	}
+
 	private Wizard _getWizard() {
 		return new Wizard(bot);
+	}
+
+	private NewToolbarDropDownButton _newToolbarDropDownBtn() {
+		return ide.getNewBtn();
 	}
 
 	private static WizardAction _wizardAction;

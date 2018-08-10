@@ -47,5 +47,6 @@
 		<module>com.liferay.ide.ui.jsf.deploy.base</module>
 		<module>com.liferay.ide.ui.service.builder.deploy.base</module>
 		<module>com.liferay.ide.ui.hook.deploy.base</module>
+		<module>com.liferay.ide.functional.kaleo.deploy.base</module>
 	</modules>
 </project>

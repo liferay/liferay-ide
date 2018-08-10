@@ -383,7 +383,7 @@ public abstract class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(
-			project.getName(), THEME_CONTRIBUTOR, envAction.getTempDir().getPath(), getVersion());
+			project.getName(), THEME_CONTRIBUTOR, envAction.getTempDirPath(), getVersion());
 
 		wizardAction.finish();
 

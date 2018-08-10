@@ -59,6 +59,6 @@
 		<module>com.liferay.ide.ui.server</module>
 		<module>com.liferay.ide.ui.workspace</module>
 		<module>com.liferay.ide.ui.service.builder</module>
-		<module>com.liferay.ide.ui.kaleo</module>
+		<module>com.liferay.ide.functional.kaleo</module>
 	</modules>
 </project>

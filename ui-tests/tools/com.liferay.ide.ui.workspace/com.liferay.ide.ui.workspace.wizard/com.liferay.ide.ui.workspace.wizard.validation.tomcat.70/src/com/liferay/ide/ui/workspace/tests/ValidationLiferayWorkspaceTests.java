@@ -47,13 +47,10 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		String[] buildTypes = buildTypeComboBox.items();
 
-		int expectedLength = expectedBuildTypes.length;
-		int length = buildTypes.length;
-
-		Assert.assertEquals(expectedLength, length);
+		validationAction.assertLengthEquals(expectedBuildTypes, buildTypes);
 
 		for (int i = 0; i < buildTypes.length; i++) {
-			Assert.assertTrue(buildTypes[i].equals(expectedBuildTypes[i]));
+			validationAction.assertEquals(expectedBuildTypes[i], buildTypes[i]);
 		}
 
 		wizardAction.cancel();
@@ -143,7 +140,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 			location.setText(msg.getInput());
 
-			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
+			validationAction.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
 
 		wizardAction.cancel();
@@ -163,11 +160,9 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 				continue;
 			}
 
-			Text projectName = wizardAction.newLiferayWorkspace.projectName();
+			wizardAction.newLiferayWorkspace.prepareProjectName(msg.getInput());
 
-			projectName.setText(msg.getInput());
-
-			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
+			validationAction.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
 
 		wizardAction.cancel();
@@ -191,19 +186,19 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		wizardAction.newLiferayWorkspace.setBundleUrl(bundleHttpsErrorUrl);
 
-		Assert.assertEquals(invalidMessage, wizardAction.getValidationMsg(4));
+		validationAction.assertEquals(invalidMessage, wizardAction.getValidationMsg(4));
 
 		String bundleHttpErrorUrl = "http://";
 
 		wizardAction.newLiferayWorkspace.setBundleUrl(bundleHttpErrorUrl);
 
-		Assert.assertEquals(invalidMessage, wizardAction.getValidationMsg(4));
+		validationAction.assertEquals(invalidMessage, wizardAction.getValidationMsg(4));
 
 		String bundleFtpErrorUrl = "ftp://";
 
 		wizardAction.newLiferayWorkspace.setBundleUrl(bundleFtpErrorUrl);
 
-		Assert.assertEquals(invalidMessage, wizardAction.getValidationMsg(4));
+		validationAction.assertEquals(invalidMessage, wizardAction.getValidationMsg(4));
 
 		wizardAction.cancel();
 	}

@@ -38,7 +38,7 @@ public class ShellAppearedCondition implements ICondition {
 	public boolean test() throws Exception {
 		SWTBotShell shell = _bot.activeShell();
 
-		if (shell.getText().equals(_title)) {
+		if (_title.equals(shell.getText())) {
 			return true;
 		}
 

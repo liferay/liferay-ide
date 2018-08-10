@@ -28,7 +28,9 @@ public class CTabItem extends AbstractWidget {
 	}
 
 	public void click() {
-		Display.getDefault().syncExec(
+		Display displayDefault = Display.getDefault();
+
+		displayDefault.syncExec(
 			new Runnable() {
 
 				public void run() {

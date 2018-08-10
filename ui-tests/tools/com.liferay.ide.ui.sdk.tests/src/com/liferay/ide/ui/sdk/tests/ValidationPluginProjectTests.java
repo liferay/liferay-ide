@@ -31,17 +31,17 @@ public class ValidationPluginProjectTests extends SwtbotBase {
 
 		Assert.assertEquals(PLEASE_SELECT_AT_LEAST_ONE_PROJECT_TO_IMPORT, wizardAction.getValidationMsg(2));
 
-		Assert.assertTrue(wizardAction.projectFromExistSource.sdkDirectory().isEnabled());
-		Assert.assertTrue(wizardAction.projectFromExistSource.browseSdkDirectoryBtn().isEnabled());
-		Assert.assertTrue(wizardAction.projectFromExistSource.sdkVersion().isEnabled());
+		validationAction.assertEnabledTrue(wizardAction.projectFromExistSource.sdkDirectory());
+		validationAction.assertEnabledTrue(wizardAction.projectFromExistSource.browseSdkDirectoryBtn());
+		validationAction.assertEnabledTrue(wizardAction.projectFromExistSource.sdkVersion());
 
-		Assert.assertTrue(wizardAction.projectFromExistSource.sdkDirectory().isActive());
-		Assert.assertFalse(wizardAction.projectFromExistSource.browseSdkDirectoryBtn().isActive());
-		Assert.assertFalse(wizardAction.projectFromExistSource.sdkVersion().isActive());
+		validationAction.assertActiveTrue(wizardAction.projectFromExistSource.sdkDirectory());
+		validationAction.assertActiveFalse(wizardAction.projectFromExistSource.browseSdkDirectoryBtn());
+		validationAction.assertActiveFalse(wizardAction.projectFromExistSource.sdkVersion());
 
-		Assert.assertTrue(wizardAction.projectFromExistSource.selectAllBtn().isEnabled());
-		Assert.assertTrue(wizardAction.projectFromExistSource.deselectAllBtn().isEnabled());
-		Assert.assertTrue(wizardAction.projectFromExistSource.refreshBtn().isEnabled());
+		validationAction.assertEnabledTrue(wizardAction.projectFromExistSource.selectAllBtn());
+		validationAction.assertEnabledTrue(wizardAction.projectFromExistSource.deselectAllBtn());
+		validationAction.assertEnabledTrue(wizardAction.projectFromExistSource.refreshBtn());
 
 		wizardAction.cancel();
 	}

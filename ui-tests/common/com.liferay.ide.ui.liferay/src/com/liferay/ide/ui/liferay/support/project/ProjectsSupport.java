@@ -33,9 +33,14 @@ public class ProjectsSupport extends ExternalResource {
 		for (int i = 0; i < _timestamps.length; i++) {
 			_timestamps[i] = String.valueOf(System.currentTimeMillis()) + i;
 
-			Long timestamp = Long.parseLong(_timestamps[i].substring(6));
+			try {
+				Long timestamp = Long.parseLong(_timestamps[i].substring(6));
 
-			_timestamps[i] = String.valueOf(timestamp);
+				_timestamps[i] = String.valueOf(timestamp);
+			}
+			catch (NumberFormatException nfe) {
+				nfe.printStackTrace();
+			}
 		}
 	}
 

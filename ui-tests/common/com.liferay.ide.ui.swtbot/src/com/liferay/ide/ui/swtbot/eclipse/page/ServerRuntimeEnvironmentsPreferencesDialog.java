@@ -29,6 +29,22 @@ public class ServerRuntimeEnvironmentsPreferencesDialog extends Dialog {
 		super(bot, PREFERENCES);
 	}
 
+	public void clickAddBtn() {
+		getAddBtn().click();
+	}
+
+	public void clickRemoveBtn() {
+		getRemoveBtn().click();
+	}
+
+	public void clickRuntime(int row) {
+		getRuntimes().click(row);
+	}
+
+	public void clickRuntime(String runtime) {
+		getRuntimes().click(runtime);
+	}
+
 	public Button getAddBtn() {
 		return new Button(getShell().bot(), ADD_WITH_DOT);
 	}

@@ -21,9 +21,9 @@ import org.junit.Assert;
 import org.junit.Rule;
 
 /**
- * @author Vicky Wang
- * @author Sunny Shi
  * @author Rui Wang
+ * @author Lily Li
+ * @author Ashley Yuan
  */
 public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 

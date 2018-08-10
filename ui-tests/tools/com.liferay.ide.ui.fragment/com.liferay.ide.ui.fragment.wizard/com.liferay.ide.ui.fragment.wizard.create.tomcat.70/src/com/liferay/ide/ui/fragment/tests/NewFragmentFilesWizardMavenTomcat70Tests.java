@@ -23,10 +23,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
- * @author Vicky Wang
- * @author Sunny Shi
  * @author Lily Li
- * @author Ying Xu
  */
 public class NewFragmentFilesWizardMavenTomcat70Tests extends NewFragmentFilesWizardMavenBase {
 

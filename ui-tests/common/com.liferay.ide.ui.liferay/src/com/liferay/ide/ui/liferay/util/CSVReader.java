@@ -28,7 +28,9 @@ public class CSVReader {
 			return null;
 		}
 
-		String[][] results = new String[lines.length][lines[0].split(",").length];
+		String[] s = lines[0].split(",");
+
+		String[][] results = new String[lines.length][s.length];
 
 		for (int i = 0; i < lines.length; i++) {
 			String line = lines[i];

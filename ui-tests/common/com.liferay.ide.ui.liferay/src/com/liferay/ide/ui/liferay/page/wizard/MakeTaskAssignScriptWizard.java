@@ -32,4 +32,8 @@ public class MakeTaskAssignScriptWizard extends Wizard {
 		return new ComboBox(getShell().bot(), SCRIPT_LANGUAGE);
 	}
 
+	public void setScriptLanguage(String scriptLanguage) {
+		getScriptLanguage().setSelection(scriptLanguage);
+	}
+
 }

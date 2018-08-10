@@ -21,6 +21,7 @@ import com.liferay.ide.ui.swtbot.eclipse.page.ErrorLogView;
 import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ProjectExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServersView;
+import com.liferay.ide.ui.swtbot.page.Perspective;
 import com.liferay.ide.ui.swtbot.page.Tree;
 
 import java.util.Arrays;
@@ -31,6 +32,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 /**
  * @author Terry Jia
  * @author Ying Xu
+ * @author Rui Wang
  */
 public class ViewAction extends UIAction {
 
@@ -51,11 +53,15 @@ public class ViewAction extends UIAction {
 	}
 
 	public void switchKaleoDesignerPerspective() {
-		ide.getKaleoDesignerPerspective().activate();
+		Perspective kaleoDesignerPerspective = ide.getKaleoDesignerPerspective();
+
+		kaleoDesignerPerspective.activate();
 	}
 
 	public void switchLiferayPerspective() {
-		ide.getLiferayPerspective().activate();
+		Perspective liferayPerspective = ide.getLiferayPerspective();
+
+		liferayPerspective.activate();
 	}
 
 	public CodeUpgradeViewAction codeUpgrade = new CodeUpgradeViewAction();
@@ -67,7 +73,7 @@ public class ViewAction extends UIAction {
 		// Just for right now
 
 		public void prepareMigrateLayout(String migrateLayout) {
-			_codeUpgradeView.getSelectMigrateLayouts().setSelection(migrateLayout);
+			_codeUpgradeView.selectMigrateLayouts(migrateLayout);
 		}
 
 		public void restartUpgrade() {
@@ -79,7 +85,7 @@ public class ViewAction extends UIAction {
 		}
 
 		public void switchGear(int index) {
-			_codeUpgradeView.getGear().clickGear(index);
+			_codeUpgradeView.selectGear(index);
 		}
 
 		private final CodeUpgradeView _codeUpgradeView = new CodeUpgradeView(bot);
@@ -89,7 +95,9 @@ public class ViewAction extends UIAction {
 	public class ErrorLogViewAction {
 
 		public void checkErrorLog() {
-			System.out.println(_errorLogView.getLogs().size());
+			Tree errorLog = _errorLogView.getLogs();
+
+			System.out.println(errorLog.size());
 		}
 
 		private final ErrorLogView _errorLogView = new ErrorLogView(bot);
@@ -153,7 +161,7 @@ public class ViewAction extends UIAction {
 
 			String label = _deleteResourcesDialog.getLabel();
 
-			_deleteResourcesDialog.getDeleteFromDisk().select();
+			_deleteResourcesDialog.selectDeleteFromDisk();
 
 			_deleteResourcesDialog.confirm();
 
@@ -305,38 +313,58 @@ public class ViewAction extends UIAction {
 
 	public class ServersViewAction {
 
+		public void clickKaleoNameDialog(String serverLabel) {
+			ide.sleep(5000);
+
+			_getServers().setFocus();
+
+			_getServers().selectTreeItem(serverLabel, KALEO_WORKFLOWS, "New Workflow  [Version: 1, Draft Version: 1]");
+
+			ide.sleep();
+		}
+
 		public void debug(String serverLabel) {
 			ide.sleep(5000);
 
-			_serversView.getServers().select(serverLabel);
+			_getServers().select(serverLabel);
 
 			_serversView.clickDebugBtn();
 		}
 
 		public void openAddAndRemoveDialog(String serverLabel) {
-			_serversView.getServers().contextMenu(true, ADD_AND_REMOVE, serverLabel);
+			_getServers().contextMenu(true, ADD_AND_REMOVE, serverLabel);
 		}
 
 		public void openEditor(String serverLabel) {
-			_serversView.getServers().doubleClick(serverLabel);
+			_getServers().doubleClick(serverLabel);
 		}
 
 		public void openLiferayPortalHome(String serverLabel) {
-			_serversView.getServers().contextMenu(true, OPEN_LIFERAY_PORTAL_HOME, serverLabel);
+			_getServers().contextMenu(true, OPEN_LIFERAY_PORTAL_HOME, serverLabel);
 
 			_jobAction.waitForBrowserLoaded();
+		}
+
+		public void openUpLoadNewWorkflowDialog(String serverLabel) {
+			ide.sleep(2000);
+
+			_getServers().setFocus();
+
+			_getServers().selectTreeItem(serverLabel, KALEO_WORKFLOWS);
+
+			_getServers().contextMenu(true, "Upload new workflow...", serverLabel, KALEO_WORKFLOWS);
 		}
 
 		public void removeModule(String serverLabel, String projectName) {
 			ide.sleep(2000);
 
-			_serversView.getServers().contextMenu(true, "Remove", serverLabel, projectName);
+			_getServers().contextMenu(true, "Remove", serverLabel, projectName);
 		}
 
 		public void start(String serverLabel) {
 			ide.sleep(5000);
 
-			_serversView.getServers().select(serverLabel);
+			_getServers().select(serverLabel);
 
 			_serversView.clickStartBtn();
 		}
@@ -344,26 +372,74 @@ public class ViewAction extends UIAction {
 		public void stop(String serverLabel) {
 			ide.sleep(2000);
 
-			_serversView.getServers().contextMenu(true, STOP, serverLabel);
+			_getServers().contextMenu(true, STOP, serverLabel);
+		}
+
+		public boolean visibleKaleofolderTry(String serverLabel) {
+			try {
+				return _getServers().isVisibleStartsBy(KALEO_WORKFLOWS);
+			}
+			catch (Exception e) {
+				_getServers().setFocus();
+
+				_getServers().select(serverLabel);
+
+				_getServers().expand(serverLabel);
+
+				_getServers().expand(KALEO_WORKFLOWS);
+
+				_getServers().selectTreeItem(
+					serverLabel, KALEO_WORKFLOWS, "New Workflow  [Version: 1, Draft Version: 1]");
+
+				return _getServers().isVisibleStartsBy(KALEO_WORKFLOWS);
+			}
+		}
+
+		public boolean visibleKaleoNameTry(String serverLabel, String kaleoName) {
+			try {
+				return _getServers().isVisibleStartsBy(serverLabel, KALEO_WORKFLOWS, kaleoName);
+			}
+			catch (Exception e) {
+				_getServers().setFocus();
+
+				_getServers().select(serverLabel);
+
+				_getServers().expand(serverLabel);
+
+				_getServers().expand(KALEO_WORKFLOWS);
+
+				_getServers().select(KALEO_WORKFLOWS);
+
+				_getServers().expand("New Workflow  [Version: 1, Draft Version: 1]");
+
+				_getServers().getTreeItem(serverLabel, KALEO_WORKFLOWS, "New Workflow  [Version: 1, Draft Version: 1]");
+
+				return _getServers().isVisibleStartsBy(
+					serverLabel, KALEO_WORKFLOWS, "New Workflow  [Version: 1, Draft Version: 1]");
+			}
 		}
 
 		public boolean visibleModuleTry(String serverLabel, String projectName) {
 			try {
-				return _serversView.getServers().isVisibleStartsBy(serverLabel, projectName);
+				return _getServers().isVisibleStartsBy(serverLabel, projectName);
 			}
 			catch (Exception e) {
-				_serversView.getServers().setFocus();
+				_getServers().setFocus();
 
-				_serversView.getServers().select(serverLabel);
+				_getServers().select(serverLabel);
 
-				_serversView.getServers().expand(serverLabel);
+				_getServers().expand(serverLabel);
 
-				return _serversView.getServers().isVisibleStartsBy(serverLabel, projectName);
+				return _getServers().isVisibleStartsBy(serverLabel, projectName);
 			}
 		}
 
 		public boolean visibleServer(String serverName) {
-			return _serversView.getServers().isVisibleStartsBy(serverName);
+			return _getServers().isVisibleStartsBy(serverName);
+		}
+
+		private Tree _getServers() {
+			return _serversView.getServers();
 		}
 
 		private final ServersView _serversView = new ServersView(bot);

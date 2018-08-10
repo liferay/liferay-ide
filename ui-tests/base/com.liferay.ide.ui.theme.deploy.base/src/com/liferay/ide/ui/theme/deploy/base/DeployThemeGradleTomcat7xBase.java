@@ -28,7 +28,7 @@ public abstract class DeployThemeGradleTomcat7xBase extends ServerTestBase {
 	public void deployTheme() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), THEME, envAction.getTempDir().getPath(), getVersion());
+		wizardAction.newModule.prepareGradle(project.getName(), THEME, envAction.getTempDirPath(), getVersion());
 
 		wizardAction.finish();
 

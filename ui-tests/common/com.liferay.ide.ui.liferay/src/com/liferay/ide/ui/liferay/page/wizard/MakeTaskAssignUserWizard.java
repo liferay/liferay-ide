@@ -40,4 +40,16 @@ public class MakeTaskAssignUserWizard extends Wizard {
 		return new Text(getShell().bot(), USER_ID);
 	}
 
+	public void setEmailAddress(String email) {
+		getEmailAddress().setText(email);
+	}
+
+	public void setScreenName(String screenName) {
+		getScreenName().setText(screenName);
+	}
+
+	public void setUserId(String userId) {
+		getUserId().setText(userId);
+	}
+
 }

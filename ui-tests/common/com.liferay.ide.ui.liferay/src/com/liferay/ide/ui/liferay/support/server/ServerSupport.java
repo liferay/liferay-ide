@@ -39,7 +39,11 @@ public class ServerSupport extends SupportBase {
 		BundleInfo[] infos = envAction.getBundleInfos();
 
 		for (BundleInfo info : infos) {
-			if (info.getType().equals(type) && info.getVersion().equals(version)) {
+			String infoVersion = info.getVersion();
+
+			String infoType = info.getType();
+
+			if (infoType.equals(type) && infoVersion.equals(version)) {
 				_bundle = info;
 
 				break;
@@ -49,9 +53,11 @@ public class ServerSupport extends SupportBase {
 		Assert.assertNotNull(
 			"Unable to get bundle info from bundles.csv by using " + type + " and " + version, _bundle);
 
+		File bundle = envAction.getBundleFile(_bundle.getBundleZip());
+
 		Assert.assertTrue(
 			"Bundle zip " + _bundle.getBundleZip() + " doesn't exist in " + envAction.getBundlesPath(),
-			envAction.getBundleFile(_bundle.getBundleZip()).exists());
+			bundle.exists());
 	}
 
 	@Override
@@ -118,7 +124,9 @@ public class ServerSupport extends SupportBase {
 	private void _preparePortalExtFile(File serverDir) {
 		String filename = "portal-ext.properties";
 
-		IPath sourcePortalExtPath = envAction.getBundlesPath().append(filename);
+		IPath bundlePath = envAction.getBundlesPath();
+
+		IPath sourcePortalExtPath = bundlePath.append(filename);
 
 		File source = sourcePortalExtPath.toFile();
 
@@ -135,7 +143,9 @@ public class ServerSupport extends SupportBase {
 	private void _preparePortalSetupWizardFile(File serverDir) {
 		String filename = "portal-setup-wizard.properties";
 
-		IPath sourcePortalSetupWizardPath = envAction.getBundlesPath().append(filename);
+		IPath bundlePath = envAction.getBundlesPath();
+
+		IPath sourcePortalSetupWizardPath = bundlePath.append(filename);
 
 		File source = sourcePortalSetupWizardPath.toFile();
 

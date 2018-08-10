@@ -16,6 +16,7 @@ package com.liferay.ide.ui.swtbot.condition;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
 
 /**
  * @author Terry Jia
@@ -37,7 +38,9 @@ public class BrowserLoadedCondition implements ICondition {
 
 	@Override
 	public boolean test() throws Exception {
-		return _bot.browser().isPageLoaded();
+		SWTBotBrowser botBrower = _bot.browser();
+
+		return botBrower.isPageLoaded();
 	}
 
 	private final SWTBot _bot;

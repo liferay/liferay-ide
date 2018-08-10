@@ -32,7 +32,7 @@ import org.junit.rules.RuleChain;
 
 /**
  * @author Ashley Yuan
- * @author Ying Xu
+ * @author Lily Li
  */
 public class ValidationFragmentTests extends SwtbotBase {
 
@@ -47,7 +47,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		String[] expectedBuildTypes = {GRADLE, MAVEN};
 
-		validationAction.assertEquals(expectedBuildTypes, wizardAction.newProject.getBuildTypes());
+		validationAction.assertEquals(expectedBuildTypes, wizardAction.newProject.buildType());
 
 		wizardAction.cancel();
 	}
@@ -97,7 +97,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		validationAction.assertEnabledFalse(wizardAction.newFragmentInfo.getAddOverrideFilesBtn());
 
-		validationAction.assertEnabledFalse(wizardAction.newFragmentInfo.getDeleteBtn());
+		validationAction.assertEnabledFalse(wizardAction.newFragmentInfo.deleteBtn());
 
 		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
@@ -139,9 +139,9 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		wizardAction.newFragment.deselectUseDefaultLocation();
 
-		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
+		String workspacePath = envAction.getEclipseWorkspacePathOSString();
 
-		if (Platform.getOS().equals("win32")) {
+		if ("win32".equals(Platform.getOS())) {
 			workspacePath = workspacePath.replaceAll("\\\\", "/");
 		}
 
@@ -151,11 +151,13 @@ public class ValidationFragmentTests extends SwtbotBase {
 				envAction.getValidationMsgs(
 					new File(envAction.getValidationDir(), "new-fragment-wizard-project-location.csv"))) {
 
-			if (!msg.getOs().equals(Platform.getOS())) {
+			String os = msg.getOs();
+
+			if (!os.equals(Platform.getOS())) {
 				continue;
 			}
 
-			wizardAction.newFragment.location().setText(msg.getInput());
+			wizardAction.newFragment.prepareLocation(msg.getInput());
 
 			validationAction.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
@@ -230,11 +232,13 @@ public class ValidationFragmentTests extends SwtbotBase {
 				envAction.getValidationMsgs(
 					new File(envAction.getValidationDir(), "new-fragment-wizard-project-name.csv"))) {
 
-			if (!msg.getOs().equals(Platform.getOS())) {
+			String os = msg.getOs();
+
+			if (!os.equals(Platform.getOS())) {
 				continue;
 			}
 
-			wizardAction.newFragment.projectName().setText(msg.getInput());
+			wizardAction.newFragment.prepareProjectName(msg.getInput());
 
 			validationAction.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}

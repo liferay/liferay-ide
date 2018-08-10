@@ -30,6 +30,14 @@ public class NewLiferayComponentWizard extends Wizard {
 		super(bot, 4);
 	}
 
+	public void clickBrowseBtn() {
+		getBrowseBtn().click();
+	}
+
+	public void clickPackageBrowseBtn() {
+		getPackageBrowseBtn().click();
+	}
+
 	public ToolbarButtonWithTooltip getBrowseBtn() {
 		return new ToolbarButtonWithTooltip(getShell().bot(), BROWSE, 1);
 	}
@@ -60,6 +68,18 @@ public class NewLiferayComponentWizard extends Wizard {
 
 	public Text getServiceName() {
 		return new Text(getShell().bot(), SERVICE_NAME);
+	}
+
+	public void setComponentClassTemplates(String template) {
+		getComponentClassTemplates().setSelection(template);
+	}
+
+	public void setModelClassName(String className) {
+		getModelClassName().setText(className);
+	}
+
+	public void setServiceName(String serviceName) {
+		getServiceName().setText(serviceName);
 	}
 
 }

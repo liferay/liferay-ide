@@ -37,7 +37,9 @@ public class Label extends AbstractWidget {
 			return getWidget().isVisible();
 		}
 		catch (Exception e) {
-			if (e.getMessage().contains(label)) {
+			String message = e.getMessage();
+
+			if (message.contains(label)) {
 				return false;
 			}
 			else {

@@ -42,7 +42,9 @@ public class StyledTextContainCondition implements ICondition {
 	}
 
 	public boolean test() throws Exception {
-		if (_styledText.getText().contains(_content) == _contain) {
+		String text = _styledText.getText();
+
+		if (text.contains(_content) == _contain) {
 			return true;
 		}
 

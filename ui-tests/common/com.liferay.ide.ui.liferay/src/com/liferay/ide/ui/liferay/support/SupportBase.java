@@ -22,6 +22,8 @@ import com.liferay.ide.ui.liferay.action.JobAction;
 import com.liferay.ide.ui.liferay.action.ViewAction;
 import com.liferay.ide.ui.liferay.action.WizardAction;
 import com.liferay.ide.ui.liferay.page.LiferayIDE;
+import com.liferay.ide.ui.swtbot.page.Perspective;
+import com.liferay.ide.ui.swtbot.page.View;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
@@ -59,14 +61,18 @@ public class SupportBase extends ExternalResource {
 
 			SWTBotPreferences.TIMEOUT = 1000;
 
-			ide.getWelcomeView().close();
+			View welcomeView = ide.getWelcomeView();
+
+			welcomeView.close();
 
 			SWTBotPreferences.TIMEOUT = origin;
 		}
 		catch (Exception e) {
 		}
 
-		ide.getLiferayWorkspacePerspective().activate();
+		Perspective liferayWsPerspective = ide.getLiferayWorkspacePerspective();
+
+		liferayWsPerspective.activate();
 
 		SWTBotPreferences.TIMEOUT = 30 * 1000;
 
@@ -77,7 +83,12 @@ public class SupportBase extends ExternalResource {
 
 		String tt = String.valueOf(System.currentTimeMillis());
 
-		timestamp = Long.parseLong(tt.substring(6));
+		try {
+			timestamp = Long.parseLong(tt.substring(6));
+		}
+		catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
+		}
 	}
 
 	public BrowserAction browserAction;

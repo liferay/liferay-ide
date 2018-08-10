@@ -62,7 +62,9 @@ public class Wizard extends CancelableShell {
 
 		SWTBotText text = bot.text(validationMsgIndex);
 
-		return text.getText().trim();
+		String s = text.getText();
+
+		return s.trim();
 	}
 
 	public void next() {

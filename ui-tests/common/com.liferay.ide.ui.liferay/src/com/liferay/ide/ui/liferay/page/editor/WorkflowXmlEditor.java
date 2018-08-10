@@ -21,6 +21,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Haoyi Sun
+ * @author Rui Wang
  */
 public class WorkflowXmlEditor extends Editor {
 
@@ -36,6 +37,14 @@ public class WorkflowXmlEditor extends Editor {
 
 		_diagram = new CTabItem(bot, DIAGRAM);
 		_source = new CTabItem(bot, SOURCE);
+	}
+
+	public void clickDiagramTab() {
+		getDiagramTab().click();
+	}
+
+	public void clickSourceTab() {
+		getSourceTab().click();
 	}
 
 	public CTabItem getDiagramTab() {

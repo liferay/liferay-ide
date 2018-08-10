@@ -23,7 +23,6 @@ import java.io.File;
 
 import org.eclipse.core.runtime.Platform;
 
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -45,8 +44,9 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		Assert.assertEquals(A_LIFERAY_WORKSPACE_PROJECT_ALREADY_EXISTS, wizardAction.getValidationMsg(2));
-		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+		validationAction.assertEquals(A_LIFERAY_WORKSPACE_PROJECT_ALREADY_EXISTS, wizardAction.getValidationMsg(2));
+
+		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
 		wizardAction.cancel();
 
@@ -57,17 +57,17 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 	public void checkInitialState() {
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		Assert.assertEquals(PLEASE_SELECT_THE_WORKSPACE_LOCATION, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(PLEASE_SELECT_THE_WORKSPACE_LOCATION, wizardAction.getValidationMsg(2));
 
-		Assert.assertEquals(StringPool.BLANK, wizardAction.importLiferayWorkspace.workspaceLocation().getText());
-		Assert.assertTrue(wizardAction.importLiferayWorkspace.browseLocationBtn().isEnabled());
-		Assert.assertEquals(StringPool.BLANK, wizardAction.importLiferayWorkspace.buildType().getText());
-		Assert.assertFalse(wizardAction.importLiferayWorkspace.addProjectToWorkingSet().isChecked());
+		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.importLiferayWorkspace.workspaceLocation());
+		validationAction.assertEnabledTrue(wizardAction.importLiferayWorkspace.browseLocationBtn());
+		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.importLiferayWorkspace.buildType());
+		validationAction.assertCheckedFalse(wizardAction.importLiferayWorkspace.addProjectToWorkingSet());
 
-		Assert.assertTrue(wizardAction.getBackBtn().isEnabled());
-		Assert.assertFalse(wizardAction.getNextBtn().isEnabled());
-		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
-		Assert.assertTrue(wizardAction.getCancelBtn().isEnabled());
+		validationAction.assertEnabledTrue(wizardAction.getBackBtn());
+		validationAction.assertEnabledFalse(wizardAction.getNextBtn());
+		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
+		validationAction.assertEnabledTrue(wizardAction.getCancelBtn());
 
 		wizardAction.cancel();
 	}
@@ -80,14 +80,14 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 
 		wizardAction.importLiferayWorkspace.prepareLocation(project.getPath());
 
-		Assert.assertTrue(wizardAction.importLiferayWorkspace.workspaceLocation().isActive());
-		Assert.assertFalse(wizardAction.importLiferayWorkspace.serverName().isActive());
+		validationAction.assertActiveFalse(wizardAction.importLiferayWorkspace.serverName());
+		validationAction.assertActiveTrue(wizardAction.importLiferayWorkspace.workspaceLocation());
 
-		Assert.assertEquals(SELECT_LOCATION_OF_LIFERAY_WORKSPACE_PARENT_DIRECTORY, wizardAction.getValidationMsg(3));
+		validationAction.assertEquals(
+			SELECT_LOCATION_OF_LIFERAY_WORKSPACE_PARENT_DIRECTORY, wizardAction.getValidationMsg(3));
+		validationAction.assertTextEquals("gradle-liferay-workspace", wizardAction.importLiferayWorkspace.buildType());
 
-		Assert.assertEquals("gradle-liferay-workspace", wizardAction.importLiferayWorkspace.buildType().getText());
-
-		Assert.assertTrue(wizardAction.getFinishBtn().isEnabled());
+		validationAction.assertEnabledTrue(wizardAction.getFinishBtn());
 
 		wizardAction.cancel();
 	}
@@ -98,17 +98,20 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 
 		wizardAction.importLiferayWorkspace.prepareLocation(project.getPath());
 
-		Assert.assertEquals(SELECT_LOCATION_OF_LIFERAY_WORKSPACE_PARENT_DIRECTORY, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(
+			SELECT_LOCATION_OF_LIFERAY_WORKSPACE_PARENT_DIRECTORY, wizardAction.getValidationMsg(2));
 
-		Assert.assertEquals("gradle-liferay-workspace", wizardAction.importLiferayWorkspace.buildType().getText());
+		validationAction.assertTextEquals("gradle-liferay-workspace", wizardAction.importLiferayWorkspace.buildType());
 
-		Assert.assertFalse(wizardAction.importLiferayWorkspace.downloadLiferayBundle().isChecked());
+		validationAction.assertCheckedFalse(wizardAction.importLiferayWorkspace.downloadLiferayBundle());
 
-		Assert.assertTrue(wizardAction.getFinishBtn().isEnabled());
+		validationAction.assertEnabledTrue(wizardAction.getFinishBtn());
 
-		wizardAction.importLiferayWorkspace.downloadLiferayBundle().select();
-		Assert.assertTrue(wizardAction.getFinishBtn().isEnabled());
-		wizardAction.importLiferayWorkspace.downloadLiferayBundle().deselect();
+		wizardAction.importLiferayWorkspace.selectDownloadLiferayBundle();
+
+		validationAction.assertEnabledTrue(wizardAction.getFinishBtn());
+
+		wizardAction.importLiferayWorkspace.deselectDownloadLiferayBundle();
 
 		wizardAction.cancel();
 	}
@@ -121,13 +124,15 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 				envAction.getValidationMsgs(
 					new File(envAction.getValidationDir(), "import-liferay-workspace-wizard-location.csv"))) {
 
-			if (!msg.getOs().equals(Platform.getOS())) {
+			String env = msg.getOs();
+
+			if (!env.equals(Platform.getOS())) {
 				continue;
 			}
 
 			wizardAction.importLiferayWorkspace.prepareLocation(msg.getInput());
 
-			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
+			validationAction.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
 
 		wizardAction.cancel();

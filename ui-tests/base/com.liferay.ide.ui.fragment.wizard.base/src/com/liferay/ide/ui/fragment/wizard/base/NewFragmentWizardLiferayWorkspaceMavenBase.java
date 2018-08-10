@@ -24,6 +24,7 @@ import org.junit.Rule;
 
 /**
  * @author Ashley Yuan
+ * @author Lily Li
  */
 public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 
@@ -117,7 +118,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
-		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
 
 		dialogAction.cancel();
 
@@ -238,7 +239,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
-		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
 
 		dialogAction.cancel();
 

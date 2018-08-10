@@ -16,6 +16,7 @@ package com.liferay.ide.ui.swtbot.condition;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 /**
@@ -48,9 +49,13 @@ public class RefreshForSubnodeCondition implements ICondition {
 		}
 
 		if (!found) {
-			_parent.contextMenu(_refreshText).click();
+			SWTBotMenu parentContextMenu = _parent.contextMenu(_refreshText);
 
-			_parent = _parent.select().expand();
+			SWTBotTreeItem parentSelect = _parent.select();
+
+			parentContextMenu.click();
+
+			_parent = parentSelect.expand();
 		}
 
 		return found;

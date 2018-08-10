@@ -29,6 +29,10 @@ public class MakeTaskAssignActionWizard extends Wizard {
 		super(bot);
 	}
 
+	public void clickAddResourceActionBtn() {
+		getAddResourceActionBtn().click();
+	}
+
 	public ToolbarButtonWithTooltip getAddResourceActionBtn() {
 		return new ToolbarButtonWithTooltip(getShell().bot(), ADD_RESOURCE_ACTION);
 	}
@@ -39,6 +43,10 @@ public class MakeTaskAssignActionWizard extends Wizard {
 
 	public Text getResourceAction() {
 		return new Text(getShell().bot(), 0);
+	}
+
+	public void setResourceAction(String resourceAction) {
+		getResourceAction().setText(resourceAction);
 	}
 
 }

@@ -26,6 +26,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
+ * @author Rui Wang
  */
 public class EditorAction extends UIAction {
 
@@ -62,13 +63,13 @@ public class EditorAction extends UIAction {
 	public class KaleoWorkflowEditorAction {
 
 		public void switchTabDiagram() {
-			_workflowXmlEditor.getDiagramTab().click();
+			_workflowXmlEditor.clickDiagramTab();
 
 			ide.sleep(2000);
 		}
 
 		public void switchTabSource() {
-			_workflowXmlEditor.getSourceTab().click();
+			_workflowXmlEditor.clickSourceTab();
 
 			ide.sleep(2000);
 		}
@@ -80,19 +81,19 @@ public class EditorAction extends UIAction {
 	public class LayoutTplEditorAction {
 
 		public void switchTabDesign() {
-			_layoutTplEditor.getDesignTab().click();
+			_layoutTplEditor.clickDesignTab();
 
 			ide.sleep(2000);
 		}
 
 		public void switchTabPreview() {
-			_layoutTplEditor.getPreviewTab().click();
+			_layoutTplEditor.clickPreviewTab();
 
 			ide.sleep(2000);
 		}
 
 		public void switchTabSource() {
-			_layoutTplEditor.getSourceTab().click();
+			_layoutTplEditor.clickSourceTab();
 
 			ide.sleep(2000);
 		}
@@ -104,7 +105,7 @@ public class EditorAction extends UIAction {
 	public class PomXmlEditorAction {
 
 		public void switchTabPomXml() {
-			_pomXmlEditor.getPomXml().click();
+			_pomXmlEditor.clickPomXml();
 		}
 
 		private final PomXmlEditor _pomXmlEditor = new PomXmlEditor(bot);
@@ -114,19 +115,23 @@ public class EditorAction extends UIAction {
 	public class ServerEditorAction {
 
 		public void selectCustomLaunchSettings() {
-			_serverEditor.getCustomLaunchSettings().click();
+			_serverEditor.clickCustomLaunchSettings();
 		}
 
 		public void selectDefaultLaunchSettings() {
-			_serverEditor.getDefaultLaunchSettings().click();
+			_serverEditor.clickDefalutLaunchSettings();
 		}
 
 		public void selectUseDeveloperMode() {
-			_serverEditor.getUseDeveloperMode().select();
+			_serverEditor.clickUseDeveloperMode();
 		}
 
-		public void setHttpPort(String httpPort) {
-			_serverEditor.getHttpPort().setText(httpPort);
+		public void setHttpPort(String port) {
+			_serverEditor.setHttpPort(port);
+		}
+
+		public void setPassword(String password) {
+			_serverEditor.setPassword(password);
 		}
 
 		private final ServerEditor _serverEditor = new ServerEditor(bot);
@@ -142,13 +147,13 @@ public class EditorAction extends UIAction {
 		}
 
 		public void switchTabOverview() {
-			_serviceXmlEditor.getOverviewTab().click();
+			_serviceXmlEditor.clickOverviewTab();
 
 			ide.sleep(2000);
 		}
 
 		public void switchTabSource() {
-			_serviceXmlEditor.getSourceTab().click();
+			_serviceXmlEditor.clickSourceTab();
 
 			ide.sleep(2000);
 		}

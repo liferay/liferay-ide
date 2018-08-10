@@ -21,6 +21,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Haoyi Sun
+ * @author Rui Wang
  */
 public class LayoutTplEditor extends Editor {
 
@@ -38,6 +39,18 @@ public class LayoutTplEditor extends Editor {
 		_preview = new CTabItem(bot, PREVIEW);
 		_design = new CTabItem(bot, DESIGN);
 		_source = new CTabItem(bot, SOURCE);
+	}
+
+	public void clickDesignTab() {
+		getDesignTab().click();
+	}
+
+	public void clickPreviewTab() {
+		getPreviewTab().click();
+	}
+
+	public void clickSourceTab() {
+		getSourceTab().click();
 	}
 
 	public CTabItem getDesignTab() {

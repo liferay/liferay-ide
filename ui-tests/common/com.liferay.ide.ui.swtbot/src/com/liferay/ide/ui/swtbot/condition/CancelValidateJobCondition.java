@@ -14,6 +14,7 @@
 
 package com.liferay.ide.ui.swtbot.condition;
 
+import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
@@ -34,17 +35,19 @@ public class CancelValidateJobCondition extends WaitForSingleJob {
 
 	@Override
 	public boolean test() {
-		Job[] jobs = Job.getJobManager().find(family);
+		IJobManager jobManager = Job.getJobManager();
+
+		Job[] jobs = jobManager.find(family);
 
 		for (Job job : jobs) {
-			if (job.getName().equals(getJobName())) {
+			if (getJobName().equals(job.getName())) {
 				job.cancel();
 
 				break;
 			}
 		}
 
-		jobs = Job.getJobManager().find(family);
+		jobs = jobManager.find(family);
 
 		for (Job job : jobs) {
 			if (getJobName().equals(job.getName())) {

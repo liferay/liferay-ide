@@ -97,7 +97,9 @@ public class CoreUtil {
 			return result;
 		}
 
-		return v1.getQualifier().compareTo(v2.getQualifier());
+		String v1Qualifier = v1.getQualifier();
+
+		return v1Qualifier.compareTo(v2.getQualifier());
 	}
 
 	public static void createEmptyFile(IFile newFile) throws CoreException {
@@ -125,7 +127,9 @@ public class CoreUtil {
 	}
 
 	public static IProject[] getAllProjects() {
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IWorkspace resourcesPluginWorkspace = ResourcesPlugin.getWorkspace();
+
+		IWorkspaceRoot root = resourcesPluginWorkspace.getRoot();
 
 		return root.getProjects();
 	}
@@ -153,7 +157,9 @@ public class CoreUtil {
 	}
 
 	public static IWorkspaceRoot getWorkspaceRoot() {
-		return ResourcesPlugin.getWorkspace().getRoot();
+		IWorkspace resourcesPluginWorkspace = ResourcesPlugin.getWorkspace();
+
+		return resourcesPluginWorkspace.getRoot();
 	}
 
 	public static boolean isEqual(Object object1, Object object2) {
@@ -189,7 +195,7 @@ public class CoreUtil {
 	}
 
 	public static boolean isNullOrEmpty(String val) {
-		if ((val == null) || val.equals(StringPool.EMPTY) || val.trim().equals(StringPool.EMPTY)) {
+		if ((val == null) || val.equals(StringPool.EMPTY) || StringPool.EMPTY.equals(val.trim())) {
 			return true;
 		}
 

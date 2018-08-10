@@ -21,6 +21,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Joye Luo
+ * @author Rui Wang
  */
 public class ServiceXmlEditor extends Editor {
 
@@ -38,6 +39,14 @@ public class ServiceXmlEditor extends Editor {
 		_source = new CTabItem(bot, SOURCE);
 		_overview = new CTabItem(bot, OVERVIEW);
 		_diagram = new CTabItem(bot, DIAGRAM);
+	}
+
+	public void clickOverviewTab() {
+		getOverviewTab().click();
+	}
+
+	public void clickSourceTab() {
+		getSourceTab().click();
 	}
 
 	public CTabItem getDiagramTab() {

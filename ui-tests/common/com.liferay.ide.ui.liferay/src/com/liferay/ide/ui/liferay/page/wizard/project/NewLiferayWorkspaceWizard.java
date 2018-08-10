@@ -41,4 +41,12 @@ public class NewLiferayWorkspaceWizard extends NewProjectWizard {
 		return new Text(getShell().bot(), SERVER_NAME);
 	}
 
+	public void setBundleUrl(String url) {
+		getBundleUrl().setText(url);
+	}
+
+	public void setServerName(String serverName) {
+		getServerName().setText(serverName);
+	}
+
 }
