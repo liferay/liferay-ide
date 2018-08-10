@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
 import com.liferay.ide.server.tomcat.core.job.CleanAppServerJob;
 import com.liferay.ide.server.util.ServerUtil;
@@ -47,6 +48,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.TaskModel;
 import org.eclipse.wst.server.ui.internal.ServerUIPlugin;
@@ -87,6 +89,7 @@ public class CleanAppServerAction extends AbstractObjectAction {
 
 			if (!status.isOK()) {
 				MessageDialog.openError(null, Msgs.cleanAppServer, status.getChildren()[0].getMessage());
+
 				return;
 			}
 
@@ -101,6 +104,7 @@ public class CleanAppServerAction extends AbstractObjectAction {
 			}
 			else {
 				MessageDialog.openError(null, Msgs.cleanAppServer, status.getMessage());
+
 				return;
 			}
 		}
@@ -141,7 +145,10 @@ public class CleanAppServerAction extends AbstractObjectAction {
 
 	protected int showWizard(IRuntimeWorkingCopy runtimeWorkingCopy) {
 		String title = Msgs.wizEditRuntimeWizardTitle;
-		WizardFragment fragment2 = ServerUIPlugin.getWizardFragment(runtimeWorkingCopy.getRuntimeType().getId());
+
+		IRuntimeType runtimeType = runtimeWorkingCopy.getRuntimeType();
+
+		WizardFragment fragment2 = ServerUIPlugin.getWizardFragment(runtimeType.getId());
 
 		if (fragment2 == null) {
 			return Window.CANCEL;
@@ -154,7 +161,10 @@ public class CleanAppServerAction extends AbstractObjectAction {
 		WizardFragment fragment = new WizardFragment() {
 
 			protected void createChildFragments(List<WizardFragment> list) {
-				list.add((WizardFragment)fragment2.getChildFragments().get(0));
+				List fragments = fragment2.getChildFragments();
+
+				list.add((WizardFragment)fragments.get(0));
+
 				list.add(WizardTaskUtil.SaveRuntimeFragment);
 			}
 
@@ -163,6 +173,7 @@ public class CleanAppServerAction extends AbstractObjectAction {
 		TaskWizard wizard = new TaskWizard(title, fragment, taskModel);
 
 		wizard.setForcePreviousAndNextButtons(true);
+
 		WizardDialog dialog = new WizardDialog(getDisplay().getActiveShell(), wizard);
 
 		return dialog.open();
@@ -208,9 +219,13 @@ public class CleanAppServerAction extends AbstractObjectAction {
 				return result = LiferayTomcatPlugin.createErrorStatus(Msgs.bundleZipLocationNotValid);
 			}
 
-			IPath appServerDir = ServerUtil.getPortalBundle(project).getAppServerDir();
+			PortalBundle portalBundle = ServerUtil.getPortalBundle(project);
 
-			String bundleDir = appServerDir.removeLastSegments(1).lastSegment();
+			IPath appServerDir = portalBundle.getAppServerDir();
+
+			appServerDir = appServerDir.removeLastSegments(1);
+
+			String bundleDir = appServerDir.lastSegment();
 
 			if (!bundleDir.equals(rootEntryName)) {
 				return result = LiferayTomcatPlugin.createErrorStatus(

@@ -690,6 +690,16 @@ public class FileUtil {
 		return name.endsWith(suffix);
 	}
 
+	public static boolean nameEquals(File file, String s) {
+		if ((file == null) || (s == null)) {
+			return false;
+		}
+
+		String fileName = file.getName();
+
+		return fileName.equals(s);
+	}
+
 	public static boolean notExists(File file) {
 		if ((file == null) || !file.exists()) {
 			return true;

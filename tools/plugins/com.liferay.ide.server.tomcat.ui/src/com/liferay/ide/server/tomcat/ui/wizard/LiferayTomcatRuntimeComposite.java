@@ -20,6 +20,8 @@ import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.ui.util.SWTUtil;
 
+import java.io.File;
+
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IPath;
@@ -31,6 +33,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jst.server.core.IJavaRuntime;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatRuntime;
@@ -82,10 +85,10 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 			return;
 		}
 
-		if (e.getSource().equals(dirField)) {
+		if (dirField.equals(e.getSource())) {
 			getRuntime().setLocation(new Path(dirField.getText()));
 		}
-		else if (e.getSource().equals(nameField)) {
+		else if (nameField.equals(e.getSource())) {
 			getRuntime().setName(nameField.getText());
 		}
 
@@ -93,7 +96,7 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 
 		IStatus status = getRuntime().validate(null);
 
-		if (!status.isOK() && e.getSource().equals(dirField)) {
+		if (!status.isOK() && dirField.equals(e.getSource())) {
 
 			// check to see if we need to modify from a liferay folder down to embedded tomcat
 
@@ -118,31 +121,34 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 
 		enableJREControls(true);
 
-		if (getTomcatRuntime().getVMInstall() != null) {
+		IVMInstall vmInstaller = getTomcatRuntime().getVMInstall();
 
-			// check to see if selected VM is in same path as new server location
-
-			IVMInstall vmInstaller = getTomcatRuntime().getVMInstall();
-
-			IPath vmLoc = new Path(vmInstaller.getInstallLocation().getPath());
-
-			IPath runtimeLoc = getRuntime().getLocation();
-
-			if ((runtimeLoc != null) && !runtimeLoc.isPrefixOf(vmLoc)) {
-
-				// we have a jre that is outside the runtime location, need to look for new bundled JRE
-
-				LiferayTomcatRuntime runtime = (LiferayTomcatRuntime)getTomcatRuntime();
-
-				IVMInstall newVM = runtime.findPortalBundledJRE(true);
-
-				if (newVM != null) {
-					runtime.setVMInstall(newVM);
-				}
-			}
-
-			updateJREs();
+		if (vmInstaller == null) {
+			return;
 		}
+
+		// check to see if selected VM is in same path as new server location
+
+		File file = vmInstaller.getInstallLocation();
+
+		IPath vmLoc = new Path(file.getPath());
+
+		IPath runtimeLoc = getRuntime().getLocation();
+
+		if ((runtimeLoc != null) && !runtimeLoc.isPrefixOf(vmLoc)) {
+
+			// we have a jre that is outside the runtime location, need to look for new bundled JRE
+
+			LiferayTomcatRuntime runtime = (LiferayTomcatRuntime)getTomcatRuntime();
+
+			IVMInstall newVM = runtime.findPortalBundledJRE(true);
+
+			if (newVM != null) {
+				runtime.setVMInstall(newVM);
+			}
+		}
+
+		updateJREs();
 	}
 
 	protected Button createButton(String text, int style) {
@@ -183,7 +189,9 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 
 		dirField.addModifyListener(this);
 
-		SWTUtil.createButton(this, Msgs.browse).addSelectionListener(
+		Button browseBuntton = SWTUtil.createButton(this, Msgs.browse);
+
+		browseBuntton.addSelectionListener(
 			new SelectionAdapter() {
 
 				public void widgetSelected(SelectionEvent e) {
@@ -264,7 +272,9 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 					if (wizard instanceof IWizardPage) {
 						IWizard parentWizard = ((IWizardPage)wizard).getWizard();
 
-						parentWizard.getContainer().showPage(((IWizardPage)wizard).getNextPage());
+						IWizardContainer container = parentWizard.getContainer();
+
+						container.showPage(((IWizardPage)wizard).getNextPage());
 					}
 				}
 

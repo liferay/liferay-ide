@@ -36,7 +36,9 @@ public class LiferayTomcatRuntimeFragment extends TomcatRuntimeWizardFragment {
 	public Composite createComposite(Composite parent, IWizardHandle wizard) {
 		comp = new LiferayTomcatRuntimeComposite(parent, wizard);
 
-		Bundle liferayTomcatUIBundle = LiferayTomcatUIPlugin.getDefault().getBundle();
+		LiferayTomcatUIPlugin plugin = LiferayTomcatUIPlugin.getDefault();
+
+		Bundle liferayTomcatUIBundle = plugin.getBundle();
 
 		wizard.setImageDescriptor(
 			ImageDescriptor.createFromURL(liferayTomcatUIBundle.getEntry("/icons/wizban/server_wiz.png")));
