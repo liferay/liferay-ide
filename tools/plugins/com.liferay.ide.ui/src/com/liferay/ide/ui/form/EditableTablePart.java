@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 /**
@@ -107,8 +108,11 @@ public class EditableTablePart extends TablePart {
 			RenameDialog dialog = new RenameDialog(getControl().getShell(), oldName);
 
 			dialog.create();
-			dialog.getShell().setText(Msgs.renameTitle);
-			dialog.getShell().setSize(300, 150);
+
+			Shell shell = dialog.getShell();
+
+			shell.setText(Msgs.renameTitle);
+			shell.setSize(300, 150);
 
 			if (dialog.open() == Window.OK) {
 				entryModified(obj, dialog.getNewName());

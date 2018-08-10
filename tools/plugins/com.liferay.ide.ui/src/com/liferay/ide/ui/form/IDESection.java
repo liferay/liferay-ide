@@ -88,9 +88,9 @@ public abstract class IDESection extends SectionPart implements IModelChangedLis
 		markDirty();
 
 		if (getContextId() != null) {
-			IDEFormPage page = getPage();
+			IDEFormEditor formEditor = getPage().getFormEditor();
 
-			page.getFormEditor().fireSaveNeeded(getContextId(), false);
+			formEditor.fireSaveNeeded(getContextId(), false);
 		}
 	}
 
@@ -110,9 +110,9 @@ public abstract class IDESection extends SectionPart implements IModelChangedLis
 
 		// getAggregateModel() can (though never should) return null
 
-		IDEFormPage page = getPage();
+		IDEFormEditor formEditor = getPage().getFormEditor();
 
-		IBaseModel model = page.getFormEditor().getModel();
+		IBaseModel model = formEditor.getModel();
 
 		if (model == null) {
 			return false;
@@ -130,7 +130,9 @@ public abstract class IDESection extends SectionPart implements IModelChangedLis
 	protected abstract void createClient(Section section, FormToolkit toolkit);
 
 	protected IProject getProject() {
-		return _fPage.getFormEditor().getCommonProject();
+		IDEFormEditor formEditor = _fPage.getFormEditor();
+
+		return formEditor.getCommonProject();
 	}
 
 	private IDEFormPage _fPage;

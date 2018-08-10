@@ -14,6 +14,7 @@
 
 package com.liferay.ide.ui.workspace;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.ui.dialog.ChooseWorkspaceWithPreferenceDialog;
 
 import java.io.File;
@@ -57,8 +58,10 @@ public class LaunchWorkspaceHandler extends AbstractHandler {
 		if (workspaceLocation == null) {
 			ChooseWorkspaceData chooseWorkspaceData = new ChooseWorkspaceData(installLocation.getURL());
 
+			Display display = Display.getDefault();
+
 			ChooseWorkspaceDialog chooseWorkspaceDialog = new ChooseWorkspaceWithPreferenceDialog(
-				Display.getDefault().getActiveShell(), chooseWorkspaceData, true, true);
+				display.getActiveShell(), chooseWorkspaceData, true, true);
 
 			if (chooseWorkspaceDialog.open() == IDialogConstants.OK_ID) {
 				workspaceLocation = chooseWorkspaceData.getSelection();
@@ -70,14 +73,16 @@ public class LaunchWorkspaceHandler extends AbstractHandler {
 
 		List<String> commands = new ArrayList<>();
 
-		File launchDir = new File(installLocation.getURL().getFile());
+		File launchDir = FileUtil.getFile(installLocation.getURL());
 
 		File launcher;
 
 		if (launchDir.exists()) {
 			switch (Platform.getOS()) {
 				case Platform.OS_MACOSX:
-					launcher = launchDir.getParentFile().getParentFile();
+					File parentFile = launchDir.getParentFile();
+
+					launcher = parentFile.getParentFile();
 
 					break;
 				default:
@@ -123,7 +128,7 @@ public class LaunchWorkspaceHandler extends AbstractHandler {
 			}
 		}
 		else {
-			throw new ExecutionException("Unable to find Eclipse launcher.");
+			throw new ExecutionException("Unable to find Eclipse launcher");
 		}
 
 		if (launchDir.isDirectory()) {
@@ -139,7 +144,7 @@ public class LaunchWorkspaceHandler extends AbstractHandler {
 				processBuilder.start();
 			}
 			catch (IOException ioe) {
-				throw new ExecutionException("Unable to start Eclipse process.", ioe);
+				throw new ExecutionException("Unable to start Eclipse process", ioe);
 			}
 		}
 

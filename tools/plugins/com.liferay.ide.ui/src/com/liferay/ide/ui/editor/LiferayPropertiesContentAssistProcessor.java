@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.editor;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 /**
  * @author Gregory Amerson
  */
+@SuppressWarnings("restriction")
 public class LiferayPropertiesContentAssistProcessor implements IContentAssistProcessor {
 
 	public LiferayPropertiesContentAssistProcessor(PropKey[] propKeys, String contentType) {
@@ -72,7 +74,7 @@ public class LiferayPropertiesContentAssistProcessor implements IContentAssistPr
 
 			if (_propKeys != null) {
 				for (PropKey key : _propKeys) {
-					if ((partialKey != null) && key.getKey().startsWith(partialKey)) {
+					if (StringUtil.startsWith(key.getKey(), partialKey)) {
 						proposals.add(
 							new PropertyCompletionProposal(key.getKey(), key.getComment(), offset, rewindOffset));
 					}
@@ -137,7 +139,7 @@ public class LiferayPropertiesContentAssistProcessor implements IContentAssistPr
 
 				}
 
-				retval = document.get(rewindOffset, offset - rewindOffset).trim();
+				retval = StringUtil.trim(document.get(rewindOffset, offset - rewindOffset));
 			}
 			catch (Exception e) {
 			}
@@ -146,7 +148,6 @@ public class LiferayPropertiesContentAssistProcessor implements IContentAssistPr
 		return retval;
 	}
 
-	@SuppressWarnings("restriction")
 	private IDocumentPartitioner _getPartitioner(IDocument document) {
 		IDocumentPartitioner retval = null;
 

@@ -32,6 +32,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -43,8 +44,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
 /**
@@ -227,16 +227,16 @@ public class SWTUtil {
 			link.addSelectionListener(
 				new SelectionAdapter() {
 
-					public void widgetSelected(SelectionEvent e) {
+					public void widgetSelected(SelectionEvent event) {
 						try {
-							IWorkbench workbench = PlatformUI.getWorkbench();
+							IWorkbenchBrowserSupport browserSupport = UIUtil.getBrowserSupport();
 
-							IWorkbenchBrowserSupport browserSupport = workbench.getBrowserSupport();
+							IWebBrowser webBrowser = browserSupport.getExternalBrowser();
 
-							browserSupport.getExternalBrowser().openURL(new URL(url));
+							webBrowser.openURL(new URL(url));
 						}
-						catch (Exception e1) {
-							LiferayUIPlugin.logError("Could not open external browser.", e1);
+						catch (Exception e) {
+							LiferayUIPlugin.logError("Could not open external browser.", e);
 						}
 					}
 
@@ -494,15 +494,16 @@ public class SWTUtil {
 	}
 
 	public static boolean showPreferencePage(String id, Shell shell) {
-		IWorkbench workbench = PlatformUI.getWorkbench();
+		PreferenceManager manager = UIUtil.getPreferenceManager();
 
-		PreferenceManager manager = workbench.getPreferenceManager();
+		IPreferenceNode javaBasePreferencePage = manager.find("org.eclipse.jdt.ui.preferences.JavaBasePreferencePage");
 
-		IPreferenceNode node = manager.find("org.eclipse.jdt.ui.preferences.JavaBasePreferencePage").findSubNode(id);
+		IPreferenceNode node = javaBasePreferencePage.findSubNode(id);
 
 		PreferenceManager manager2 = new PreferenceManager();
 
 		manager2.addToRoot(node);
+
 		PreferenceDialog dialog = new PreferenceDialog(shell, manager2);
 
 		dialog.create();
@@ -520,7 +521,9 @@ public class SWTUtil {
 	protected static int getButtonWidthHint(Button button) {
 		int widthHint = Dialog.convertHorizontalDLUsToPixels(_fontMetrics, IDialogConstants.BUTTON_WIDTH);
 
-		return Math.max(widthHint, button.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).x);
+		Point point = button.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+
+		return Math.max(widthHint, point.x);
 	}
 
 	protected static void initializeDialogUnits(Control testControl) {
@@ -530,7 +533,9 @@ public class SWTUtil {
 		GC gc = new GC(testControl);
 
 		gc.setFont(JFaceResources.getDialogFont());
+
 		_fontMetrics = gc.getFontMetrics();
+
 		gc.dispose();
 	}
 

@@ -42,7 +42,9 @@ import org.osgi.service.prefs.BackingStoreException;
 public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	public LiferayUIPreferencePage() {
-		setImageDescriptor(LiferayUIPlugin.getDefault().getImageDescriptor(LiferayUIPlugin.IMG_LIFERAY_ICON_SMALL));
+		LiferayUIPlugin plugin = LiferayUIPlugin.getDefault();
+
+		setImageDescriptor(plugin.getImageDescriptor(LiferayUIPlugin.IMG_LIFERAY_ICON_SMALL));
 	}
 
 	public LiferayUIPreferencePage(String title) {
@@ -61,7 +63,9 @@ public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenc
 	protected Control createContents(Composite parent) {
 		Composite pageParent = new Composite(parent, SWT.NONE);
 
-		pageParent.setLayout(GridLayoutFactory.swtDefaults().create());
+		GridLayoutFactory gridLayoutFactory = GridLayoutFactory.swtDefaults();
+
+		pageParent.setLayout(gridLayoutFactory.create());
 
 		Group group = new Group(pageParent, SWT.NONE);
 

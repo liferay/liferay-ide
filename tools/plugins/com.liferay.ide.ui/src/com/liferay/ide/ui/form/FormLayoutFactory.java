@@ -449,7 +449,9 @@ public class FormLayoutFactory {
 	 * @param color
 	 */
 	public static void visualizeLayoutArea(Composite container, int color) {
-		container.setBackground(Display.getCurrent().getSystemColor(color));
+		Display display = Display.getCurrent();
+
+		container.setBackground(display.getSystemColor(color));
 	}
 
 	private FormLayoutFactory() {

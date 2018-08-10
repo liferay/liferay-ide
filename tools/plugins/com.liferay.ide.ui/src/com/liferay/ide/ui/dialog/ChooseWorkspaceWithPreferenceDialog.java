@@ -15,6 +15,8 @@
 package com.liferay.ide.ui.dialog;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
 
@@ -45,7 +47,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.internal.ide.ChooseWorkspaceData;
@@ -72,9 +73,7 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog {
 	protected Control createDialogArea(Composite parent) {
 		Control top = super.createDialogArea(parent);
 
-		IWorkbench workbench = PlatformUI.getWorkbench();
-
-		workbench.getHelpSystem().setHelp(parent, IIDEHelpContextIds.SWITCH_WORKSPACE_ACTION);
+		UIUtil.setHelp(parent, IIDEHelpContextIds.SWITCH_WORKSPACE_ACTION);
 
 		_createButtons((Composite)top);
 		applyDialogFont(parent);
@@ -110,6 +109,7 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog {
 			ErrorDialog.openError(
 				getShell(), IDEWorkbenchMessages.ChooseWorkspaceWithSettingsDialog_TransferFailedMessage,
 				IDEWorkbenchMessages.ChooseWorkspaceWithSettingsDialog_SaveSettingsFailed, result);
+
 			return;
 		}
 
@@ -123,7 +123,9 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog {
 
 		IDEWorkbenchPlugin idePlugin = IDEWorkbenchPlugin.getDefault();
 
-		String[] enabledSettings = _getEnabledSettings(idePlugin.getDialogSettings().getSection(_WORKBENCH_SETTINGS));
+		IDialogSettings dialogSettings = idePlugin.getDialogSettings();
+
+		String[] enabledSettings = _getEnabledSettings(dialogSettings.getSection(_WORKBENCH_SETTINGS));
 
 		Composite panel = new Composite(parent, SWT.NONE);
 
@@ -141,27 +143,24 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog {
 		group.setLayout(layout);
 		group.setFont(parent.getFont());
 
-		for (int i = 0; i < settings.length; i++) {
-			IConfigurationElement settingsTransfer = settings[i];
-
+		for (IConfigurationElement settingsTransfer : settings) {
 			Button button = new Button(group, SWT.CHECK);
 
-			button.setText(settings[i].getAttribute(_ATT_NAME));
+			button.setText(settingsTransfer.getAttribute(_ATT_NAME));
 
-			String helpId = settings[i].getAttribute(_ATT_HELP_CONTEXT);
+			String helpId = settingsTransfer.getAttribute(_ATT_HELP_CONTEXT);
 
 			if (helpId != null) {
-				IWorkbench workbench = PlatformUI.getWorkbench();
-
-				workbench.getHelpSystem().setHelp(button, helpId);
+				UIUtil.setHelp(button, helpId);
 			}
 
 			if (ListUtil.isNotEmpty(enabledSettings)) {
-				String id = settings[i].getAttribute(_ATT_ID);
+				String id = settingsTransfer.getAttribute(_ATT_ID);
 
-				for (int j = 0; j < enabledSettings.length; j++) {
-					if ((enabledSettings[j] != null) && enabledSettings[j].equals(id)) {
+				for (String setting : enabledSettings) {
+					if (StringUtil.equals(setting, id)) {
 						button.setSelection(true);
+
 						_selectedSettings.add(settingsTransfer);
 
 						break;
@@ -210,7 +209,9 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog {
 	private IPath _getNewWorkbenchStateLocation(IPath newWorkspaceRoot) {
 		IPath currentWorkspaceRoot = Platform.getLocation();
 
-		IPath dataLocation = WorkbenchPlugin.getDefault().getDataLocation();
+		WorkbenchPlugin workbenchPlugin = WorkbenchPlugin.getDefault();
+
+		IPath dataLocation = workbenchPlugin.getDataLocation();
 
 		if (dataLocation == null) {
 			return null;
@@ -232,7 +233,9 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog {
 	private void _patchWorkingSets(IConfigurationElement element, IPath path) {
 		String name = element.getAttribute(_ATT_NAME);
 
-		if (name.trim().equals("Working Sets")) {
+		name = name.trim();
+
+		if (name.equals("Working Sets")) {
 			IPath dataLocation = _getNewWorkbenchStateLocation(path);
 
 			if (dataLocation == null) {
@@ -253,10 +256,12 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog {
 	private void _saveSettings(String[] selectionIDs) {
 		IDEWorkbenchPlugin idePlugin = IDEWorkbenchPlugin.getDefault();
 
-		IDialogSettings settings = idePlugin.getDialogSettings().getSection(_WORKBENCH_SETTINGS);
+		IDialogSettings dialogSettings = idePlugin.getDialogSettings();
+
+		IDialogSettings settings = dialogSettings.getSection(_WORKBENCH_SETTINGS);
 
 		if (settings == null) {
-			settings = idePlugin.getDialogSettings().addNewSection(_WORKBENCH_SETTINGS);
+			settings = dialogSettings.addNewSection(_WORKBENCH_SETTINGS);
 		}
 
 		settings.put(_ENABLED_TRANSFERS, selectionIDs);

@@ -16,6 +16,7 @@ package com.liferay.ide.ui.form;
 
 import com.liferay.ide.core.model.IBaseModel;
 import com.liferay.ide.core.model.IWorkspaceModel;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.LiferayUIPlugin;
 import com.liferay.ide.ui.editor.IDEFormEditorContributor;
 import com.liferay.ide.ui.editor.IInputContextListener;
@@ -45,8 +46,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -54,8 +57,8 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.ide.IDE;
@@ -104,15 +107,13 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 	public void contextAdded(InputContext context) {
 		if (_fError) {
 			removePage(0);
+
 			addPages();
 		}
 		else {
 			editorContextAdded(context);
 		}
 	}
-
-	// private ISortableContentOutlinePage fFormOutline;
-	// private PDEMultiPageContentOutline fContentOutline;
 
 	public void contributeToToolbar(IToolBarManager manager) {
 	}
@@ -122,17 +123,20 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 
 		if (_fEditorSelectionChangedListener != null) {
 			_fEditorSelectionChangedListener.uninstall(getSite().getSelectionProvider());
+
 			_fEditorSelectionChangedListener = null;
 		}
 
 		if (_clipboard != null) {
 			_clipboard.dispose();
+
 			_clipboard = null;
 		}
 
 		super.dispose();
 
 		fInputContextManager.dispose();
+
 		fInputContextManager = null;
 	}
 
@@ -143,7 +147,9 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 		// values to the model
 
 		if ((formPage != null) && (formPage instanceof IDEFormPage)) {
-			formPage.getManagedForm().commit(true);
+			IManagedForm form = formPage.getManagedForm();
+
+			form.commit(true);
 		}
 
 		// If the editor has source pages, revert them
@@ -157,7 +163,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 		// Reloading the model fires a world changed event to all form pages
 		// causing them to update their values
 
-		if (reverted == false) {
+		if (!reverted) {
 			reverted = _revertFormPage();
 		}
 
@@ -204,7 +210,9 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 
 			// Get the new editor input
 
-			IEditorInput input = contextManager.findContext(contextID).getInput();
+			InputContext context = contextManager.findContext(contextID);
+
+			IEditorInput input = context.getInput();
 
 			// Store the new editor input
 
@@ -225,8 +233,6 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 
 		}
 		catch (Exception e) {
-			String title = "Save As Problem";
-
 			String message = "Save not completed.";
 
 			if (e.getMessage() != null) {
@@ -319,11 +325,11 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 	}
 
 	public IFormPage[] getPages() {
-		ArrayList formPages = new ArrayList();
+		ArrayList<IFormPage> formPages = new ArrayList<>();
 
 		for (Object page : pages) {
 			if (page instanceof IFormPage) {
-				formPages.add(page);
+				formPages.add((IFormPage)page);
 			}
 		}
 
@@ -331,9 +337,9 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 	}
 
 	public ISelection getSelection() {
-		IWorkbenchPartSite site = getSite();
+		ISelectionProvider selectionProvider = getSite().getSelectionProvider();
 
-		return site.getSelectionProvider().getSelection();
+		return selectionProvider.getSelection();
 	}
 
 	public String getTitle() {
@@ -347,7 +353,9 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 			return super.getTitle();
 		}
 
-		return context.getInput().getName();
+		IEditorInput input = context.getInput();
+
+		return input.getName();
 	}
 
 	public String getTitleProperty() {
@@ -368,7 +376,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 
 		IFormPage page = getActivePageInstance();
 
-		if (!context.getId().equals(page.getId())) {
+		if (!StringUtil.equals(context.getId(), page.getId())) {
 			page = setActivePage(context.getId());
 		}
 
@@ -393,30 +401,14 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 		return _fLastDirtyState;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
-	 */
 	public boolean isSaveAsAllowed() {
 		return false;
-	}
-
-	public void openToSourcePage(Object object, int offset, int length) {
-		InputContext context = null;
-
-		if (object instanceof InputContext) {
-			context = (InputContext)object;
-		}
-		else {
-			context = getInputContext(object);
-		}
 	}
 
 	public void performGlobalAction(String id) {
 
 		// preserve selection
 
-		ISelection selection = getSelection();
 		boolean handled = ((IDEFormPage)getActivePageInstance()).performGlobalAction(id);
 
 		if (!handled) {
@@ -425,16 +417,19 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 			if (page instanceof IDEFormPage) {
 				if (id.equals(ActionFactory.UNDO.getId())) {
 					fInputContextManager.undo();
+
 					return;
 				}
 
 				if (id.equals(ActionFactory.REDO.getId())) {
 					fInputContextManager.redo();
+
 					return;
 				}
 
 				if (id.equals(ActionFactory.CUT.getId()) || id.equals(ActionFactory.COPY.getId())) {
 					_copyToClipboard();
+
 					return;
 				}
 			}
@@ -459,9 +454,9 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 	}
 
 	public void setSelection(ISelection selection) {
-		IWorkbenchPartSite site = getSite();
+		ISelectionProvider selectionProvider = getSite().getSelectionProvider();
 
-		site.getSelectionProvider().setSelection(selection);
+		selectionProvider.setSelection(selection);
 
 		getContributor().updateSelectableActions(selection);
 	}
@@ -576,8 +571,10 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 			}
 
 		};
+
 		manager.setRemoveAllWhenShown(true);
 		manager.addMenuListener(listener);
+
 		_fContextMenu = manager.createContextMenu(getContainer());
 
 		getContainer().setMenu(_fContextMenu);
@@ -625,13 +622,10 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 		return monitor;
 	}
 
-	/**
-	 * @return
-	 */
 	protected IStatusLineManager getStatusLineManager() {
-		IEditorSite editorSite = getEditorSite();
+		IActionBars actionBars = getEditorSite().getActionBars();
 
-		return editorSite.getActionBars().getStatusLineManager();
+		return actionBars.getStatusLineManager();
 	}
 
 	/**
@@ -662,35 +656,9 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 		return super.isDirty();
 	}
 
-	/**
-	 * @param selection
-	 */
 	private void _copyToClipboard() {
 	}
 
-	private String _getFirstInvalidContextId() {
-		InputContext[] invalidContexts = fInputContextManager.getInvalidContexts();
-
-		if (invalidContexts.length == 0) {
-			return null;
-		}
-
-		// If primary context is among the invalid ones, return that.
-
-		for (int i = 0; i < invalidContexts.length; i++) {
-			if (invalidContexts[i].isPrimary()) {
-				return invalidContexts[i].getId();
-			}
-		}
-
-		// Return the first one
-
-		return invalidContexts[0].getId();
-	}
-
-	/**
-	 * @return
-	 */
 	private boolean _revertFormPage() {
 		boolean reverted = false;
 		IBaseModel model = getModel();
@@ -706,9 +674,6 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 		return reverted;
 	}
 
-	/**
-	 * @return
-	 */
 	private boolean _revertSourcePages() {
 		boolean reverted = false;
 
@@ -733,15 +698,16 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 		InputContext context = fInputContextManager.getContext(input);
 
 		if (!context.validateEdit()) {
-			IWorkbenchPartSite site = getSite();
+			Shell shell = getSite().getShell();
 
-			Shell shell = site.getShell();
+			Display display = shell.getDisplay();
 
-			shell.getDisplay().asyncExec(
+			display.asyncExec(
 				new Runnable() {
 
 					public void run() {
 						doRevert(context.getInput());
+
 						context.setValidated(false);
 					}
 

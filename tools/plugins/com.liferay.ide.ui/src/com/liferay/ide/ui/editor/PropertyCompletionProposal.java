@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.editor;
 
 import com.liferay.ide.ui.LiferayUIPlugin;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.AbstractReusableInformationControlCreator;
@@ -31,8 +32,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Gregory Amerson
@@ -73,9 +72,9 @@ public class PropertyCompletionProposal
 	}
 
 	public Image getImage() {
-		IWorkbench workbench = PlatformUI.getWorkbench();
+		ISharedImages sharedImages = UIUtil.getSharedImages();
 
-		return workbench.getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
+		return sharedImages.getImage(ISharedImages.IMG_OBJ_ELEMENT);
 	}
 
 	public IInformationControlCreator getInformationControlCreator() {

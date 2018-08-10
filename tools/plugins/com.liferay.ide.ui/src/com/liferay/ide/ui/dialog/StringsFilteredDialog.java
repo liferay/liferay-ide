@@ -97,7 +97,13 @@ public class StringsFilteredDialog extends FilteredElementTreeSelectionDialog {
 				return true;
 			}
 
-			if ((element != null) && element.toString().matches(fixedPattern)) {
+			if (element == null) {
+				return false;
+			}
+
+			String s = element.toString();
+
+			if (s.matches(fixedPattern)) {
 				return true;
 			}
 

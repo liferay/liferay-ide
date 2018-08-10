@@ -80,6 +80,14 @@ public class StringUtil {
 		return false;
 	}
 
+	public static int length(String s) {
+		if (s == null) {
+			return 0;
+		}
+
+		return s.length();
+	}
+
 	public static String merge(String[] array, String delimiter) {
 		if (array == null) {
 			return null;

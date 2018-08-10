@@ -67,7 +67,9 @@ public abstract class ToolBarButtonContribution extends ControlContribution {
 
 		GridDataFactory gdFactory = GridDataFactory.fillDefaults();
 
-		GridDataFactory hint = gdFactory.align(SWT.BEGINNING, SWT.CENTER).hint(SWT.DEFAULT, heigtHint);
+		GridDataFactory align = gdFactory.align(SWT.BEGINNING, SWT.CENTER);
+
+		GridDataFactory hint = align.hint(SWT.DEFAULT, heigtHint);
 
 		hint.applyTo(button);
 

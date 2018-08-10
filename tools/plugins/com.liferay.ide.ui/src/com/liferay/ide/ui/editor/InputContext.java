@@ -20,8 +20,10 @@ import com.liferay.ide.core.model.IEditingModel;
 import com.liferay.ide.core.model.IModelChangeProvider;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.IModelChangedListener;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.LiferayUIPlugin;
 import com.liferay.ide.ui.form.IDEFormEditor;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -31,7 +33,6 @@ import org.eclipse.core.filebuffers.IDocumentSetupParticipant;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -51,13 +52,14 @@ import org.eclipse.text.edits.MoveSourceEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.editors.text.ForwardingDocumentProvider;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.progress.IProgressService;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.IElementStateListener;
 
@@ -74,7 +76,9 @@ public abstract class InputContext {
 			try {
 				String string = doc.get(doc.getLineOffset(i), doc.getLineLength(i));
 
-				if (string.trim().length() > 0) {
+				string = string.trim();
+
+				if (string.length() > 0) {
 					break;
 				}
 
@@ -92,7 +96,9 @@ public abstract class InputContext {
 
 		String string = doc.get(doc.getLineOffset(line), doc.getLineLength(line));
 
-		if (string.trim().length() > 0) {
+		string = string.trim();
+
+		if (string.length() > 0) {
 			return true;
 		}
 
@@ -151,9 +157,9 @@ public abstract class InputContext {
 
 		// Get the editor shell
 
-		IDEFormEditor editor = getEditor();
+		IWorkbenchPartSite workbenchPartSite = getEditor().getSite();
 
-		Shell shell = editor.getSite().getShell();
+		Shell shell = workbenchPartSite.getShell();
 
 		// Create the save as dialog
 
@@ -347,11 +353,17 @@ public abstract class InputContext {
 				IFile file = ((IFileEditorInput)_fEditorInput).getFile();
 
 				if (file.isReadOnly()) {
-					Shell shell = _fEditor.getEditorSite().getShell();
+					IEditorSite editorSite = _fEditor.getEditorSite();
 
-					IStatus validateStatus = LiferayUIPlugin.getWorkspace().validateEdit(new IFile[] {file}, shell);
+					Shell shell = editorSite.getShell();
 
-					_fValidated = true; // to prevent loops
+					IWorkspace workspace = LiferayUIPlugin.getWorkspace();
+
+					IStatus validateStatus = workspace.validateEdit(new IFile[] {file}, shell);
+
+					// to prevent loops
+
+					_fValidated = true;
 
 					if (validateStatus.getSeverity() != IStatus.OK) {
 						ErrorDialog.openError(shell, _fEditor.getTitle(), null, validateStatus);
@@ -447,6 +459,7 @@ public abstract class InputContext {
 		for (TextEdit child : children) {
 			if (covers(child, edit)) {
 				insert(child, edit);
+
 				return;
 			}
 		}
@@ -527,9 +540,10 @@ public abstract class InputContext {
 
 	protected IDocumentProvider createDocumentProvider(IEditorInput input) {
 		if (input instanceof IFileEditorInput) {
+			LiferayUIPlugin plugin = LiferayUIPlugin.getDefault();
+
 			return new ForwardingDocumentProvider(
-				getPartitionName(), getDocumentSetupParticipant(),
-				LiferayUIPlugin.getDefault().getTextFileDocumentProvider());
+				getPartitionName(), getDocumentSetupParticipant(), plugin.getTextFileDocumentProvider());
 		}
 
 		return null;
@@ -548,8 +562,8 @@ public abstract class InputContext {
 					insert(edit, new InsertEdit(doc.getLength(), TextUtilities.getDefaultLineDelimiter(doc)));
 				}
 
-				for (int i = 0; i < fEditOperations.size(); i++) {
-					insert(edit, (TextEdit)fEditOperations.get(i));
+				for (TextEdit textEdit : fEditOperations) {
+					insert(edit, textEdit);
 				}
 
 				if (_fModel instanceof IEditingModel) {
@@ -596,7 +610,7 @@ public abstract class InputContext {
 		return true;
 	}
 
-	protected ArrayList fEditOperations = new ArrayList();
+	protected ArrayList<TextEdit> fEditOperations = new ArrayList<>();
 
 	/**
 	 * @param newInput
@@ -654,14 +668,13 @@ public abstract class InputContext {
 
 		if (path == null) {
 			monitor.setCanceled(true);
-			throw new Exception("Location not set.");
+
+			throw new Exception("Location not set");
 		}
 
 		// Resolve the new file location
 
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-
-		IFile newFile = workspace.getRoot().getFile(path);
+		IFile newFile = CoreUtil.getIFileFromWorkspaceRoot(path);
 
 		// Create the new editor input
 
@@ -674,13 +687,14 @@ public abstract class InputContext {
 		// Flush any unsaved changes
 
 		flushModel(_fDocumentProvider.getDocument(_fEditorInput));
+
 		try {
 
 			// Execute the workspace modification in a separate thread
 
-			IWorkbench workbench = PlatformUI.getWorkbench();
+			IProgressService progressService = UIUtil.getProgressService();
 
-			workbench.getProgressService().busyCursorWhile(_createWorkspaceModifyOperation(newInput));
+			progressService.busyCursorWhile(_createWorkspaceModifyOperation(newInput));
 
 			monitor.setCanceled(false);
 
@@ -690,10 +704,12 @@ public abstract class InputContext {
 		}
 		catch (InterruptedException ie) {
 			monitor.setCanceled(true);
+
 			throw ie;
 		}
 		catch (InvocationTargetException ite) {
 			monitor.setCanceled(true);
+
 			throw ite;
 		}
 		finally {

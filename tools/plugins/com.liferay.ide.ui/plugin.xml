@@ -23,7 +23,7 @@
 		point="org.eclipse.ui.popupMenus"
 	>
 		<objectContribution adaptable="true" id="com.liferay.ide.ui.popupmenu" objectClass="org.eclipse.core.resources.IProject">
-			<menu id="liferayPopupMenuCategory"  label="%liferay.popup.menu.label">
+			<menu id="liferayPopupMenuCategory" label="%liferay.popup.menu.label">
 				<separator name="slot1" />
 			</menu>
 		</objectContribution>
@@ -278,13 +278,17 @@
 			name="Liferay IDE Error Reporter"
 		>
 
-			<link rel="provider"
-			title="Liferay IDE"
-			href="https://www.liferay.com" />
+			<link
+				href="https://www.liferay.com"
+				rel="provider"
+				title="Liferay IDE"
+			/>
 
-			<link rel="discovery"
-			title="Discovery URL"
-			href="https://aer.ctrlflow.com/liferay/community/discovery" />
+			<link
+				href="https://aer.ctrlflow.com/liferay/community/discovery"
+				rel="discovery"
+				title="Discovery URL"
+			/>
 		</server>
 	</extension>
 </plugin>

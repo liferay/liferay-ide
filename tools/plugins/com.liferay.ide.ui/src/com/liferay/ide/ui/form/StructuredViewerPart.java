@@ -68,7 +68,9 @@ public abstract class StructuredViewerPart extends SharedPartWithButtons {
 
 	private void _applyMinimumSize() {
 		if (_fMinSize != null) {
-			GridData gd = (GridData)_fViewer.getControl().getLayoutData();
+			Control control = _fViewer.getControl();
+
+			GridData gd = (GridData)control.getLayoutData();
 
 			gd.widthHint = _fMinSize.x;
 			gd.heightHint = _fMinSize.y;
