@@ -211,6 +211,8 @@ public class GradleUtil {
 
 		synchronizeJob.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
 
+		synchronizeJob.setProgressGroup(monitor, IProgressMonitor.UNKNOWN);
+
 		synchronizeJob.schedule();
 
 		return Status.OK_STATUS;

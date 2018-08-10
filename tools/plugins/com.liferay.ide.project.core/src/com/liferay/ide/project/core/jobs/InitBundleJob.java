@@ -33,8 +33,8 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
  */
 public class InitBundleJob extends Job {
 
-	public InitBundleJob(String jobName, IProject project, String serverName, String bundleUrl) {
-		super(jobName);
+	public InitBundleJob(IProject project, String serverName, String bundleUrl) {
+		super("Initializing Liferay bundle");
 
 		_project = project;
 		_bundleUrl = bundleUrl;

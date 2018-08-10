@@ -26,6 +26,7 @@ import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.jobs.InitBundleJob;
 import com.liferay.ide.project.core.jobs.JobUtil;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
@@ -52,8 +53,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import java.lang.reflect.InvocationTargetException;
-
 import java.net.URL;
 
 import java.nio.file.Files;
@@ -70,7 +69,6 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -78,15 +76,17 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.Property;
@@ -116,9 +116,6 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.progress.IProgressService;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
@@ -438,7 +435,14 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 			});
 	}
 
-	protected void importProject() throws CoreException {
+	protected void importProject(IProgressMonitor monitor, IProgressMonitor groupMonitor) throws Exception {
+		UIUtil.async(
+			() -> {
+				_customProcessBar = new CustomProcessBar(_pageParent, "Please wait for all work to be completed");
+
+				_pageParent.layout();
+			});
+
 		String layout = SapphireUtil.getContent(dataModel.getLayout());
 
 		IPath location = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
@@ -451,163 +455,135 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 			return;
 		}
 
-		try {
-			IWorkbench workbench = PlatformUI.getWorkbench();
+		_backup();
 
-			IProgressService progressService = workbench.getProgressService();
+		_clearExistingProjects(location, groupMonitor);
 
-			progressService.run(
-				true, true,
-				new IRunnableWithProgress() {
+		_deleteEclipseConfigFiles(location.toFile());
 
-					@Override
-					public void run(IProgressMonitor monitor) throws InterruptedException, InvocationTargetException {
-						try {
-							String newPath = "";
+		groupMonitor.worked(20);
 
-							_backup(monitor);
+		String locationString = location.toPortableString();
 
-							_clearExistingProjects(location, monitor);
+		if (LiferayWorkspaceUtil.isValidWorkspaceLocation(locationString)) {
+			ILiferayProjectProvider provider = null;
 
-							_deleteEclipseConfigFiles(location.toFile());
+			ILiferayProjectProvider[] providers = LiferayCore.getProviders("workspace");
 
-							String locationString = location.toPortableString();
+			if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(locationString)) {
+				for (ILiferayProjectProvider projectProvider : providers) {
+					String name = projectProvider.getShortName();
 
-							if (LiferayWorkspaceUtil.isValidWorkspaceLocation(locationString)) {
-								ILiferayProjectProvider provider = null;
+					if (name.contains("gradle")) {
+						provider = projectProvider;
 
-								ILiferayProjectProvider[] providers = LiferayCore.getProviders("workspace");
-
-								if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(locationString)) {
-									for (ILiferayProjectProvider projectProvider : providers) {
-										String name = projectProvider.getShortName();
-
-										if (name.contains("gradle")) {
-											provider = projectProvider;
-
-											break;
-										}
-									}
-								}
-								else {
-									for (ILiferayProjectProvider projectProvider : providers) {
-										String name = projectProvider.getShortName();
-
-										if (name.contains("maven")) {
-											provider = projectProvider;
-
-											break;
-										}
-									}
-								}
-
-								if ((provider != null) && (provider instanceof NewLiferayWorkspaceProjectProvider)) {
-									((NewLiferayWorkspaceProjectProvider<?>)provider).importProject(location, monitor);
-
-									JobUtil.waitForLiferayProjectJob();
-
-									IProject[] projects = CoreUtil.getAllProjects();
-
-									for (IProject project : projects) {
-										_checkProjectType(project);
-									}
-
-									dataModel.setConvertLiferayWorkspace(true);
-								}
-							}
-							else if (_isMavenProject(location.toPortableString())) {
-								ILiferayProjectImporter importer = LiferayCore.getImporter("maven");
-
-								List<IProject> projects = importer.importProjects(locationString, monitor);
-
-								for (IProject project : projects) {
-									_checkProjectType(project);
-								}
-							}
-							else {
-								if (layout.equals("Upgrade to Liferay Workspace")) {
-									_createLiferayWorkspace(location, monitor);
-
-									_removeIvyPrivateSetting(location.append("plugins-sdk"));
-
-									newPath = _renameProjectFolder(location);
-
-									IPath sdkLocation = new Path(newPath).append("plugins-sdk");
-
-									_deleteSDKLegacyProjects(sdkLocation);
-
-									ILiferayProjectImporter importer = LiferayCore.getImporter("gradle");
-
-									importer.importProjects(newPath, monitor);
-
-									IJobManager jobManager = Job.getJobManager();
-
-									jobManager.join("org.eclipse.buildship.core.jobs", null);
-
-									if (SapphireUtil.getContent(dataModel.getDownloadBundle())) {
-										_createInitBundle(monitor);
-									}
-
-									_importSDKProject(sdkLocation, monitor);
-
-									dataModel.setConvertLiferayWorkspace(true);
-								}
-								else {
-									_deleteEclipseConfigFiles(location.toFile());
-									_copyNewSDK(location, monitor);
-
-									_removeIvyPrivateSetting(location);
-
-									_deleteSDKLegacyProjects(location);
-
-									String serverName = SapphireUtil.getContent(dataModel.getLiferay70ServerName());
-
-									IServer server = ServerUtil.getServer(serverName);
-
-									newPath = _renameProjectFolder(location);
-
-									SDK sdk = SDKUtil.createSDKFromLocation(new Path(newPath));
-
-									ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(server);
-
-									sdk.addOrUpdateServerProperties(liferayRuntime.getLiferayHome());
-
-									SDKUtil.openAsProject(sdk, monitor);
-
-									_importSDKProject(sdk.getLocation(), monitor);
-								}
-							}
-
-							dataModel.setImportFinished(true);
-						}
-						catch (Exception e) {
-							ProjectUI.logError(e);
-
-							throw new InvocationTargetException(e, e.getMessage());
-						}
+						break;
 					}
+				}
+			}
+			else {
+				for (ILiferayProjectProvider projectProvider : providers) {
+					String name = projectProvider.getShortName();
 
-				});
-		}
-		catch (Exception e) {
-			ProjectUI.logError(e);
+					if (name.contains("maven")) {
+						provider = projectProvider;
 
-			throw new CoreException(StatusBridge.create(Status.createErrorStatus(e.getMessage(), e)));
+						break;
+					}
+				}
+			}
+
+			if ((provider != null) && (provider instanceof NewLiferayWorkspaceProjectProvider)) {
+				((NewLiferayWorkspaceProjectProvider<?>)provider).importProject(location, groupMonitor);
+
+				JobUtil.waitForLiferayProjectJob();
+
+				IProject[] projects = CoreUtil.getAllProjects();
+
+				for (IProject project : projects) {
+					_checkProjectType(project);
+				}
+
+				dataModel.setConvertLiferayWorkspace(true);
+			}
 		}
+		else if (_isMavenProject(location.toPortableString())) {
+			ILiferayProjectImporter importer = LiferayCore.getImporter("maven");
+
+			List<IProject> projects = importer.importProjects(locationString, groupMonitor);
+
+			for (IProject project : projects) {
+				_checkProjectType(project);
+			}
+		}
+		else {
+			String newPath = "";
+
+			if (layout.equals("Upgrade to Liferay Workspace")) {
+				_createLiferayWorkspace(location, groupMonitor);
+
+				_isCanceled(monitor);
+
+				_removeIvyPrivateSetting(location.append("plugins-sdk"));
+
+				newPath = _renameProjectFolder(location);
+
+				IPath sdkLocation = new Path(newPath).append("plugins-sdk");
+
+				_deleteSDKLegacyProjects(sdkLocation);
+
+				ILiferayProjectImporter importer = LiferayCore.getImporter("gradle");
+
+				importer.importProjects(newPath, groupMonitor);
+
+				IJobManager jobManager = Job.getJobManager();
+
+				jobManager.join("org.eclipse.buildship.core.jobs", null);
+
+				if (SapphireUtil.getContent(dataModel.getDownloadBundle())) {
+					_createInitBundle(monitor, groupMonitor);
+				}
+
+				_importSDKProject(sdkLocation, monitor);
+			}
+			else {
+				_deleteEclipseConfigFiles(location.toFile());
+
+				_copyNewSDK(location, groupMonitor);
+
+				_removeIvyPrivateSetting(location);
+
+				_deleteSDKLegacyProjects(location);
+
+				String serverName = SapphireUtil.getContent(dataModel.getLiferay70ServerName());
+
+				IServer server = ServerUtil.getServer(serverName);
+
+				newPath = _renameProjectFolder(location);
+
+				SDK sdk = SDKUtil.createSDKFromLocation(new Path(newPath));
+
+				ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(server);
+
+				sdk.addOrUpdateServerProperties(liferayRuntime.getLiferayHome());
+
+				SDKUtil.openAsProject(sdk, groupMonitor);
+
+				_importSDKProject(sdk.getLocation(), groupMonitor);
+			}
+		}
+
+		dataModel.setImportFinished(true);
 	}
 
-	private void _backup(IProgressMonitor monitor) {
+	private void _backup() {
 		Boolean backup = SapphireUtil.getContent(dataModel.getBackupSdk());
 
 		if (!backup) {
 			return;
 		}
 
-		SubMonitor progress = SubMonitor.convert(monitor, 100);
-
 		try {
-			progress.setTaskName("Backup origial project folder into Eclipse workspace...");
-
 			org.eclipse.sapphire.modeling.Path originalPath = SapphireUtil.getContent(dataModel.getSdkLocation());
 
 			if (originalPath != null) {
@@ -615,20 +591,13 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 				FileUtil.mkdirs(backupLocation.toFile());
 
-				progress.worked(30);
-
 				IPath backupPath = backupLocation.append("backup.zip");
 
 				ZipUtil.zip(originalPath.toFile(), backupPath.toFile());
-
-				progress.setWorkRemaining(70);
 			}
 		}
 		catch (Exception e) {
 			ProjectUI.logError("Error to backup original project folder.", e);
-		}
-		finally {
-			progress.done();
 		}
 	}
 
@@ -900,159 +869,176 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					try {
-						Boolean importFinished = SapphireUtil.getContent(dataModel.getImportFinished());
+					Boolean importFinished = SapphireUtil.getContent(dataModel.getImportFinished());
 
-						if (_isPageValidate() && !importFinished) {
-							_saveSettings();
+					if (_isPageValidate() && !importFinished) {
+						_saveSettings();
 
-							_importButton.setEnabled(false);
+						_importButton.setEnabled(false);
 
-							importProject();
+						IJobManager jobManager = Job.getJobManager();
 
-							UpgradeView.resetPages();
+						IProgressMonitor groupMonitor = jobManager.createProgressGroup();
 
-							PageNavigateEvent event = new PageNavigateEvent();
+						Job importJob = new Job("Importing projects") {
 
-							if (UpgradeView.getPageNumber() < 3) {
-								Boolean showAllPages = MessageDialog.openQuestion(
-									UIUtil.getActiveShell(), "Show All Pages",
-									"There is no project need to be upgraded.\n Show all the following steps?");
+							@Override
+							protected IStatus run(IProgressMonitor monitor) {
+								try {
+									groupMonitor.beginTask("Processing work", 100);
 
-								if (showAllPages) {
-									UpgradeView.showAllPages();
+									importProject(monitor, groupMonitor);
+
+									groupMonitor.done();
+
+									return org.eclipse.core.runtime.Status.OK_STATUS;
 								}
-								else {
-									event.setTargetPage(1);
+								catch (OperationCanceledException oce) {
+									return org.eclipse.core.runtime.Status.CANCEL_STATUS;
+								}
+								catch (Exception ce) {
+									groupMonitor.done();
+
+									ProjectUI.logError(ce);
+
+									PageValidateEvent pe = new PageValidateEvent();
+
+									pe.setMessage(ce.getMessage());
+									pe.setType(PageValidateEvent.error);
+
+									triggerValidationEvent(pe);
+
+									return ProjectUI.createErrorStatus(ce.getMessage(), ce);
 								}
 							}
-							else {
-								event.setTargetPage(2);
-							}
 
-							for (PageNavigatorListener listener : naviListeners) {
-								listener.onPageNavigate(event);
-							}
+						};
 
-							setNextPage(true);
+						importJob.addJobChangeListener(
+							new JobChangeAdapter() {
 
-							_importButton.setEnabled(true);
+								@Override
+								public void done(IJobChangeEvent changeEvent) {
+									UIUtil.async(
+										() -> {
+											if (_customProcessBar != null) {
+												_customProcessBar.dispose();
+											}
 
-							setSelectedAction(getSelectedAction("PageFinishAction"));
-						}
-					}
-					catch (CoreException ce) {
-						ProjectUI.logError(ce);
+											if (changeEvent.getResult() ==
+													org.eclipse.core.runtime.Status.CANCEL_STATUS) {
 
-						PageValidateEvent pe = new PageValidateEvent();
+												return;
+											}
 
-						pe.setMessage(ce.getMessage());
-						pe.setType(PageValidateEvent.error);
+											UpgradeView.resetPages();
 
-						triggerValidationEvent(pe);
+											PageNavigateEvent event = new PageNavigateEvent();
+
+											if (UpgradeView.getPageNumber() < 3) {
+												Boolean showAllPages = MessageDialog.openQuestion(
+													UIUtil.getActiveShell(), "Show All Pages",
+													"There is no project need to be upgraded.\n Show all the " +
+														"following steps?");
+
+												if (showAllPages) {
+													UpgradeView.showAllPages();
+												}
+												else {
+													event.setTargetPage(1);
+												}
+											}
+											else {
+												event.setTargetPage(2);
+											}
+
+											for (PageNavigatorListener listener : naviListeners) {
+												listener.onPageNavigate(event);
+											}
+
+											setNextPage(true);
+
+											_importButton.setEnabled(true);
+
+											setSelectedAction(getSelectedAction("PageFinishAction"));
+										});
+								}
+
+							});
+
+						importJob.setProgressGroup(groupMonitor, IProgressMonitor.UNKNOWN);
+
+						importJob.schedule();
 					}
 				}
 
 			});
 	}
 
-	private void _createInitBundle(IProgressMonitor monitor) throws CoreException {
-		SubMonitor progress = SubMonitor.convert(monitor, 100);
+	private void _createInitBundle(IProgressMonitor monitor, IProgressMonitor groupMonitor)
+		throws CoreException, InterruptedException {
 
-		try {
-			progress.beginTask("Execute Liferay Worksapce Bundle Init Command...", 100);
+		_isCanceled(monitor);
 
-			String layout = SapphireUtil.getContent(dataModel.getLayout());
+		IPath sdkLocation = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
 
-			if (layout.equals(_layoutNames[0])) {
-				IPath sdkLocation = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
+		IProject project = CoreUtil.getProject(sdkLocation.lastSegment());
 
-				IProject project = CoreUtil.getProject(sdkLocation.lastSegment());
+		String serverName = SapphireUtil.getContent(dataModel.getBundleName());
 
-				String bundleUrl = SapphireUtil.getContent(dataModel.getBundleUrl());
+		String bundleUrl = SapphireUtil.getContent(dataModel.getBundleUrl());
 
-				String bundleName = SapphireUtil.getContent(dataModel.getBundleName());
+		InitBundleJob job = new InitBundleJob(project, serverName, bundleUrl);
 
-				IWorkspaceProjectBuilder projectBuilder = _getWorkspaceProjectBuilder(project);
+		job.setProgressGroup(groupMonitor, IProgressMonitor.UNKNOWN);
 
-				progress.worked(30);
+		job.schedule();
 
-				if ((bundleUrl != null) && (projectBuilder != null)) {
-					projectBuilder.initBundle(project, bundleUrl, monitor);
-				}
+		job.join();
 
-				IPath bundleLocationDir = sdkLocation.append("bundles");
+		groupMonitor.worked(50);
 
-				if (FileUtil.exists(bundleLocationDir)) {
-					progress.worked(60);
-
-					final IPath runtimeLocation = sdkLocation.append(
-						LiferayWorkspaceUtil.getHomeDir(sdkLocation.toOSString()));
-
-					ServerUtil.addPortalRuntimeAndServer(bundleName, runtimeLocation, monitor);
-
-					IServer bundleServer = ServerCore.findServer(SapphireUtil.getContent(dataModel.getBundleName()));
-
-					if (bundleServer != null) {
-						IPath newIpath = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
-
-						SDK sdk = SDKUtil.createSDKFromLocation(newIpath.append("plugins-sdk"));
-
-						IRuntime runtime = bundleServer.getRuntime();
-
-						IPath bundleLocation = runtime.getLocation();
-
-						sdk.addOrUpdateServerProperties(bundleLocation);
-					}
-
-					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-				}
-			}
-
-			progress.worked(100);
-		}
-		catch (Exception e) {
-			ProjectUI.logError(e);
-
-			throw new CoreException(
-				StatusBridge.create(
-					Status.createErrorStatus("Failed to execute Liferay Workspace Bundle Init Command...", e)));
-		}
-		finally {
-			progress.done();
-		}
+		_isCanceled(monitor);
 	}
 
-	private void _createLiferayWorkspace(IPath targetSDKLocation, IProgressMonitor monitor) throws CoreException {
-		SubMonitor progress = SubMonitor.convert(monitor, 100);
+	private void _createLiferayWorkspace(IPath targetSDKLocation, IProgressMonitor groupMonitor)
+		throws InterruptedException {
 
-		try {
-			progress.beginTask("Initializing Liferay Workspace...", 100);
+		Job job = new Job("Initializing Liferay Workspace...") {
 
-			StringBuilder sb = new StringBuilder();
+			@Override
+			protected IStatus run(IProgressMonitor progress) {
+				try {
+					StringBuilder sb = new StringBuilder();
 
-			sb.append("--base ");
+					sb.append("--base ");
 
-			File targetSdkFile = targetSDKLocation.toFile();
+					File targetSdkFile = targetSDKLocation.toFile();
 
-			sb.append("\"" + targetSdkFile.getAbsolutePath() + "\" ");
+					sb.append("\"" + targetSdkFile.getAbsolutePath() + "\" ");
 
-			sb.append("init -u");
+					sb.append("init -u");
 
-			progress.worked(30);
-			BladeCLI.execute(sb.toString());
-			progress.worked(100);
-		}
-		catch (BladeCLIException bclie) {
-			ProjectUI.logError(bclie);
+					progress.worked(30);
+					BladeCLI.execute(sb.toString());
+					progress.worked(100);
+				}
+				catch (BladeCLIException bclie) {
+					ProjectUI.logError(bclie);
 
-			throw new CoreException(
-				StatusBridge.create(
-					Status.createErrorStatus("Faild execute Liferay Workspace Init Command...", bclie)));
-		}
-		finally {
-			progress.done();
-		}
+					return ProjectUI.createErrorStatus("Faild execute Liferay Workspace Init Command...", bclie);
+				}
+
+				return org.eclipse.core.runtime.Status.OK_STATUS;
+			}
+
+		};
+
+		job.setProgressGroup(groupMonitor, IProgressMonitor.UNKNOWN);
+
+		job.schedule();
+
+		job.join();
 	}
 
 	private void _createMigrateLayoutElement() {
@@ -1340,6 +1326,12 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		return false;
 	}
 
+	private void _isCanceled(IProgressMonitor monitor) {
+		if (monitor.isCanceled()) {
+			throw new OperationCanceledException("Code upgrade was canceled");
+		}
+	}
+
 	private boolean _isMavenProject(String path) {
 		IStatus buildType = ImportLiferayModuleProjectOpMethods.getBuildType(path);
 
@@ -1549,7 +1541,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 							Status bundleNameValidation = _bundleNameValidation.compute();
 
 							if (downloadBundle && !bundleNameValidation.ok()) {
-								message = bundleUrlValidation.message();
+								message = bundleNameValidation.message();
 
 								layoutValidation = false;
 							}
@@ -1601,6 +1593,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		dataModel.getBundleUrl().service(BundleUrlValidationService.class);
 	private Control _createHorizontalSpacer;
 	private Control _createSeparator;
+	private CustomProcessBar _customProcessBar;
 	private Text _dirField;
 	private Label _dirLabel;
 	private Button _downloadBundleCheckbox;
@@ -1609,7 +1602,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	private Label _layoutLabel;
 	private String[] _layoutNames = {"Upgrade to Liferay Workspace", "Upgrade to Liferay Plugins SDK 7"};
 	private Composite _pageParent;
-
 	private ProjectLocationValidationService _sdkValidation =
 		dataModel.getSdkLocation().service(ProjectLocationValidationService.class);
 	private Button _serverButton;
@@ -1644,6 +1636,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 				}
 
 				_startCheckThread();
+
 				return;
 			}
 

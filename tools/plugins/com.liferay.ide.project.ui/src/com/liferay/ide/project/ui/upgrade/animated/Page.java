@@ -36,6 +36,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Text;
 
 import org.osgi.framework.Bundle;
@@ -267,6 +268,37 @@ public abstract class Page extends Composite implements PageActionListener, Sele
 	protected final List<PageValidationListener> pageValidationListeners = Collections.synchronizedList(
 		new ArrayList<PageValidationListener>());
 	protected ProjectUI projectUI = ProjectUI.getDefault();
+
+	protected class CustomProcessBar extends Composite {
+
+		public CustomProcessBar(Composite composite, String text) {
+			super(composite, SWT.NONE);
+
+			_parentComposite = composite;
+
+			_label = new Label(composite, SWT.NONE);
+			_label.setText(text);
+
+			GridDataFactory.generate(_label, 2, 1);
+
+			_progressBar = new ProgressBar(_parentComposite, SWT.INDETERMINATE);
+
+			GridDataFactory.generate(_progressBar, 2, 1);
+		}
+
+		@Override
+		public void dispose() {
+			super.dispose();
+
+			_progressBar.dispose();
+			_label.dispose();
+		}
+
+		private Label _label;
+		private Composite _parentComposite;
+		private ProgressBar _progressBar;
+
+	}
 
 	private int _index;
 	private PageAction _pageFinishAction = new PageFinishAction();
