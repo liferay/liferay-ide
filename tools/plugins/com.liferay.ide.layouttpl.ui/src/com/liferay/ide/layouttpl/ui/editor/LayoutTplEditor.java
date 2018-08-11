@@ -43,8 +43,10 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelStateListener;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
@@ -203,7 +205,9 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 	protected Reference<EditorPageDef> getDefinition(String pageDefinitionId) {
 		if ("preview".equals(pageDefinitionId)) {
 			if (_definition == null) {
-				_definition = DefinitionLoader.sdef(LayoutTplEditor.class).page("preview");
+				DefinitionLoader definitionLoader = DefinitionLoader.sdef(LayoutTplEditor.class);
+
+				_definition = definitionLoader.page("preview");
 			}
 
 			return _definition;
@@ -219,7 +223,9 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 
 				IDocument doc = documentProvider.getDocument(getEditorInput());
 
-				_sourceModel = (IDOMModel)StructuredModelManager.getModelManager().getExistingModelForEdit(doc);
+				IModelManager modelManager = StructuredModelManager.getModelManager();
+
+				_sourceModel = (IDOMModel)modelManager.getExistingModelForEdit(doc);
 
 				_sourceModel.addModelStateListener(
 					new IModelStateListener() {
@@ -259,6 +265,7 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 			Method getLastActivePage = SapphireEditor.class.getDeclaredMethod("getLastActivePage");
 
 			getLastActivePage.setAccessible(true);
+
 			lastActivePage[0] = (Integer)getLastActivePage.invoke(this);
 		}
 		catch (Exception e) {
@@ -336,7 +343,11 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 			String templateSource = LayoutTplUtil.getTemplateSource(modelElement);
 
 			_sourceModel.aboutToChangeModel();
-			_sourceModel.getStructuredDocument().setText(this, templateSource);
+
+			IStructuredDocument structuredDocument = _sourceModel.getStructuredDocument();
+
+			structuredDocument.setText(this, templateSource);
+
 			_sourceModel.changedModel();
 		}
 

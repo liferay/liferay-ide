@@ -15,6 +15,7 @@
 package com.liferay.ide.layouttpl.ui.actions;
 
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
+import com.liferay.ide.layouttpl.core.model.PortletLayoutElement;
 import com.liferay.ide.layouttpl.ui.util.LayoutTemplatesFactory;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -24,6 +25,7 @@ import java.util.List;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
@@ -112,8 +114,11 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 
 			LayoutTplElement element = modelElement.nearest(LayoutTplElement.class);
 
-			if ((element.getPortletLayouts().size() == 0) || _canOverride()) {
-				element.getPortletLayouts().clear();
+			ElementList<PortletLayoutElement> layouts = element.getPortletLayouts();
+
+			if (layouts.isEmpty() || _canOverride()) {
+				layouts.clear();
+
 				LayoutTemplatesFactory.add_Layout_1_2_1(element);
 			}
 
@@ -151,8 +156,11 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 
 			LayoutTplElement element = modelElement.nearest(LayoutTplElement.class);
 
-			if ((element.getPortletLayouts().size() == 0) || _canOverride()) {
-				element.getPortletLayouts().clear();
+			ElementList<PortletLayoutElement> layouts = element.getPortletLayouts();
+
+			if (layouts.isEmpty() || _canOverride()) {
+				layouts.clear();
+
 				LayoutTemplatesFactory.add_Layout_1_2_I(element);
 			}
 
@@ -190,8 +198,11 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 
 			LayoutTplElement element = modelElement.nearest(LayoutTplElement.class);
 
-			if ((element.getPortletLayouts().size() == 0) || _canOverride()) {
-				element.getPortletLayouts().clear();
+			ElementList<PortletLayoutElement> layouts = element.getPortletLayouts();
+
+			if (layouts.isEmpty() || _canOverride()) {
+				layouts.clear();
+
 				LayoutTemplatesFactory.add_Layout_1_2_II(element);
 			}
 
@@ -229,8 +240,11 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 
 			LayoutTplElement element = modelElement.nearest(LayoutTplElement.class);
 
-			if ((element.getPortletLayouts().size() == 0) || _canOverride()) {
-				element.getPortletLayouts().clear();
+			ElementList<PortletLayoutElement> layouts = element.getPortletLayouts();
+
+			if (layouts.isEmpty() || _canOverride()) {
+				layouts.clear();
+
 				LayoutTemplatesFactory.add_Layout_2_2(element);
 			}
 

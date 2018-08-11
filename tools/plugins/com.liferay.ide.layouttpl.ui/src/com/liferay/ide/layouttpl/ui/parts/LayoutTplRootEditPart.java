@@ -75,6 +75,7 @@ public class LayoutTplRootEditPart extends SimpleRootEditPart implements LayerCo
 		Layer layer = new Layer();
 
 		layer.setLayoutManager(new StackLayout());
+
 		layeredPane.add(layer, PRIMARY_LAYER);
 
 		Layer handleLayer = new Layer() {
