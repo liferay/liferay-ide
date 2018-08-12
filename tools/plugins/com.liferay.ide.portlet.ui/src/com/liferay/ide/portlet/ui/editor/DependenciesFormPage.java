@@ -18,6 +18,7 @@ import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.ui.form.FormLayoutFactory;
 import com.liferay.ide.ui.form.IDEFormPage;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -43,10 +44,13 @@ public class DependenciesFormPage extends IDEFormPage {
 
 		ScrolledForm form = managedForm.getForm();
 
-		form.setImage(
-			PortletUIPlugin.imageDescriptorFromPlugin(
-				PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png").createImage());
+		ImageDescriptor descriptor = PortletUIPlugin.imageDescriptorFromPlugin(
+			PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png");
+
+		form.setImage(descriptor.createImage());
+
 		form.setText(Msgs.dependencies);
+
 		Composite body = form.getBody();
 
 		body.setLayout(FormLayoutFactory.createFormGridLayout(true, 2));

@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.ui.navigator.actions;
 
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -36,7 +37,7 @@ public class NewPortletActionProvider extends CommonActionProvider {
 	 */
 	@Override
 	public void fillActionBars(IActionBars actionBars) {
-		if (this._newPortletAction.isEnabled()) {
+		if (_newPortletAction.isEnabled()) {
 			actionBars.setGlobalActionHandler(IWorkbenchActionConstants.NEW_GROUP, _newPortletAction);
 		}
 	}
@@ -51,11 +52,17 @@ public class NewPortletActionProvider extends CommonActionProvider {
 	public void fillContextMenu(IMenuManager menuManager) {
 		ActionContext context = getContext();
 
-		if ((context == null) || context.getSelection().isEmpty()) {
+		if (context == null) {
 			return;
 		}
 
-		if (this._newPortletAction.isEnabled()) {
+		ISelection selection = context.getSelection();
+
+		if (selection.isEmpty()) {
+			return;
+		}
+
+		if (_newPortletAction.isEnabled()) {
 			menuManager.insertAfter(ICommonMenuConstants.GROUP_NEW, _newPortletAction);
 		}
 	}

@@ -57,6 +57,7 @@ public class NewPortletOptionsWizardPage
 
 		createJspsButton.setText("Create JSP &files");
 		createJspsButton.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
+
 		synchHelper.synchCheckbox(createJspsButton, INewPortletClassDataModelProperties.CREATE_JSPS, null);
 
 		jspLabel = SWTUtil.createLabel(parent, Msgs.jspFolderLabel, 1);
@@ -91,31 +92,37 @@ public class NewPortletOptionsWizardPage
 		aboutButton = new Button(group, SWT.CHECK);
 
 		aboutButton.setText("A&bout");
+
 		synchHelper.synchCheckbox(aboutButton, INewPortletClassDataModelProperties.ABOUT_MODE, null);
 
 		configButton = new Button(group, SWT.CHECK);
 
 		configButton.setText("Co&nfig");
+
 		synchHelper.synchCheckbox(configButton, INewPortletClassDataModelProperties.CONFIG_MODE, null);
 
 		editDefaultsButton = new Button(group, SWT.CHECK);
 
 		editDefaultsButton.setText("E&dit Defaults");
+
 		synchHelper.synchCheckbox(editDefaultsButton, INewPortletClassDataModelProperties.EDITDEFAULTS_MODE, null);
 
 		editGuestButton = new Button(group, SWT.CHECK);
 
 		editGuestButton.setText("Ed&it Guest");
+
 		synchHelper.synchCheckbox(editGuestButton, INewPortletClassDataModelProperties.EDITGUEST_MODE, null);
 
 		previewButton = new Button(group, SWT.CHECK);
 
 		previewButton.setText("Pre&view");
+
 		synchHelper.synchCheckbox(previewButton, INewPortletClassDataModelProperties.PREVIEW_MODE, null);
 
 		printButton = new Button(group, SWT.CHECK);
 
 		printButton.setText("P&rint");
+
 		synchHelper.synchCheckbox(printButton, INewPortletClassDataModelProperties.PRINT_MODE, null);
 	}
 
@@ -156,7 +163,9 @@ public class NewPortletOptionsWizardPage
 
 		};
 
-		this.synchHelper.getDataModel().addListener(listener);
+		IDataModel dataModel = synchHelper.getDataModel();
+
+		dataModel.addListener(listener);
 	}
 
 	protected void createPortletModesGroup(Composite composite) {
@@ -177,16 +186,19 @@ public class NewPortletOptionsWizardPage
 		viewButton = new Button(group, SWT.CHECK);
 
 		viewButton.setText("Vie&w");
+
 		synchHelper.synchCheckbox(viewButton, INewPortletClassDataModelProperties.VIEW_MODE, null);
 
 		editButton = new Button(group, SWT.CHECK);
 
 		editButton.setText("Edi&t");
+
 		synchHelper.synchCheckbox(editButton, INewPortletClassDataModelProperties.EDIT_MODE, null);
 
 		helpButton = new Button(group, SWT.CHECK);
 
 		helpButton.setText("Hel&p");
+
 		synchHelper.synchCheckbox(helpButton, INewPortletClassDataModelProperties.HELP_MODE, null);
 	}
 
@@ -195,6 +207,7 @@ public class NewPortletOptionsWizardPage
 
 		createResourceBundleFileButton.setText(Msgs.createResourceBundleFile);
 		createResourceBundleFileButton.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
+
 		synchHelper.synchCheckbox(
 			createResourceBundleFileButton, INewPortletClassDataModelProperties.CREATE_RESOURCE_BUNDLE_FILE, null);
 

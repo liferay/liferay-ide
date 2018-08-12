@@ -59,6 +59,7 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
 
 		Element element = getModelElement();
 		Property property = property();
+
 		listener = new FilteredListener<PropertyEvent>() {
 
 			@Override
@@ -68,7 +69,9 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
 
 		};
 
-		element.attach(listener, property.definition().name());
+		PropertyDef propertyDef = property.definition();
+
+		element.attach(listener, propertyDef.name());
 
 		Listener listen = new Listener() {
 

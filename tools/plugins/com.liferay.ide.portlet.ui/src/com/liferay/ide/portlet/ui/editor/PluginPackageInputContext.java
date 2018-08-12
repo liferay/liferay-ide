@@ -55,7 +55,9 @@ public class PluginPackageInputContext extends InputContext {
 
 	@Override
 	protected IDocumentProvider createDocumentProvider(IEditorInput input) {
-		return JavaPlugin.getDefault().getPropertiesFileDocumentProvider();
+		JavaPlugin plugin = JavaPlugin.getDefault();
+
+		return plugin.getPropertiesFileDocumentProvider();
 
 		// return super.createDocumentProvider(input);
 

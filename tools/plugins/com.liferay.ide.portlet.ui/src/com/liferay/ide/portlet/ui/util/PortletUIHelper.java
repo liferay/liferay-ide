@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
@@ -57,9 +58,9 @@ public class PortletUIHelper {
 		try {
 			IPackageFragmentRoot[] roots = project.getAllPackageFragmentRoots();
 
-			for (int i = 0; i < roots.length; i++) {
-				if (!isJRELibrary(roots[i])) {
-					result.add(roots[i]);
+			for (IPackageFragmentRoot root : roots) {
+				if (!isJRELibrary(root)) {
+					result.add(root);
 				}
 			}
 		}
@@ -105,7 +106,9 @@ public class PortletUIHelper {
 	 */
 	public static boolean isJRELibrary(IPackageFragmentRoot root) {
 		try {
-			IPath path = root.getRawClasspathEntry().getPath();
+			IClasspathEntry classpathEntry = root.getRawClasspathEntry();
+
+			IPath path = classpathEntry.getPath();
 
 			if (path.equals(new Path(JavaRuntime.JRE_CONTAINER)) ||
 				path.equals(new Path(JavaRuntime.JRELIB_VARIABLE))) {

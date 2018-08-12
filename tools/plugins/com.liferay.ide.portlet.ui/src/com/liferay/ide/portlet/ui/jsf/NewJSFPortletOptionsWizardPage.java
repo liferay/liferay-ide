@@ -96,7 +96,9 @@ public class NewJSFPortletOptionsWizardPage
 
 		};
 
-		this.synchHelper.getDataModel().addListener(listener);
+		IDataModel dataModel = synchHelper.getDataModel();
+
+		dataModel.addListener(listener);
 
 		return top;
 	}

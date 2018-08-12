@@ -9,7 +9,7 @@ ${:import(com.liferay.portal.util.PortalUtil,javax.servlet.http.HttpServletReque
 ${cursor}
 	</template>
 
-	<template autoinsert="true" context="java-members" deleted="false" description="Portlet IPC Event Handler built with JSR-286 annotation" enabled="true" id="portlet.eventhandler" name="eventhandler-jsr" >
+	<template autoinsert="true" context="java-members" deleted="false" description="Portlet IPC Event Handler built with JSR-286 annotation" enabled="true" id="portlet.eventhandler" name="eventhandler-jsr">
 @ProcessEvent(qname = "{http://${eventNamespace}}${eventName}")
 public void ${handleEvent}(EventRequest ${eventRequest}, EventResponse ${eventResponse}) {
 	Event event = ${eventRequest}.getEvent();
@@ -30,7 +30,7 @@ if (${themeDisplay}.getPermissionChecker()
 }
 	</template>
 
-	<template autoinsert="true" context="java-members" deleted="false" description="renamable action handler for portlets" enabled="true" id="portlet.processaction" name="processaction" >
+	<template autoinsert="true" context="java-members" deleted="false" description="renamable action handler for portlets" enabled="true" id="portlet.processaction" name="processaction">
 public void ${doSomething}(ActionRequest ${actionRequest}, ActionResponse ${actionResponse}) {
 	${cursor}
 }

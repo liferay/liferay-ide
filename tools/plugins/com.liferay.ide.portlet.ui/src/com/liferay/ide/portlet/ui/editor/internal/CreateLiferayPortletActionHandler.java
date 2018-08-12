@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.SapphirePart;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 
 /**
@@ -39,8 +40,10 @@ public class CreateLiferayPortletActionHandler extends SapphireActionHandler {
 	protected Object run(Presentation context) {
 		IProject currentProject = null;
 
-		if (context.part().parent() instanceof PortletXmlEditor) {
-			PortletXmlEditor portletXmlEditor = (PortletXmlEditor)context.part().parent();
+		SapphirePart part = context.part();
+
+		if (part.parent() instanceof PortletXmlEditor) {
+			PortletXmlEditor portletXmlEditor = (PortletXmlEditor)part.parent();
 
 			currentProject = portletXmlEditor.getProject();
 		}

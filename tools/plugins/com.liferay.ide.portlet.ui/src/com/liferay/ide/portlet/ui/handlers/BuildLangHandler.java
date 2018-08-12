@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.ui.handlers;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.job.BuildLanguageJob;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
@@ -35,6 +36,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.ui.packageview.PackageFragmentRootContainer;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -43,9 +45,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.ide.IDE;
 
@@ -72,10 +73,14 @@ public class BuildLangHandler extends AbstractHandler {
 				project = ((IResource)selected).getProject();
 			}
 			else if (selected instanceof IJavaElement) {
-				project = ((IJavaElement)selected).getJavaProject().getProject();
+				IJavaProject javaProject = ((IJavaElement)selected).getJavaProject();
+
+				project = javaProject.getProject();
 			}
 			else if (selected instanceof PackageFragmentRootContainer) {
-				project = ((PackageFragmentRootContainer)selected).getJavaProject().getProject();
+				IJavaProject javaProject = ((PackageFragmentRootContainer)selected).getJavaProject();
+
+				project = javaProject.getProject();
 			}
 		}
 
@@ -102,7 +107,7 @@ public class BuildLangHandler extends AbstractHandler {
 				}
 			}
 
-			if ((langFile != null) && langFile.exists()) {
+			if (FileUtil.exists(langFile)) {
 				try {
 					boolean shouldContinue = checkLanguageFileEncoding(langFile);
 
@@ -138,11 +143,13 @@ public class BuildLangHandler extends AbstractHandler {
 		if (!"UTF-8".equals(charset)) {
 			String dialogMessage = NLS.bind(Msgs.languageFileCharacterSet, charset);
 
-			Display display = UIUtil.getActiveShell().getDisplay();
+			Shell shell = UIUtil.getActiveShell();
+
+			Display display = shell.getDisplay();
 
 			MessageDialog dialog = new MessageDialog(
-				UIUtil.getActiveShell(), Msgs.incompatibleCharacterSet, display.getSystemImage(SWT.ICON_WARNING),
-				dialogMessage, MessageDialog.WARNING, new String[] {Msgs.yes, Msgs.no, Msgs.cancel}, 0);
+				shell, Msgs.incompatibleCharacterSet, display.getSystemImage(SWT.ICON_WARNING), dialogMessage,
+				MessageDialog.WARNING, new String[] {Msgs.yes, Msgs.no, Msgs.cancel}, 0);
 
 			int retval = dialog.open();
 
@@ -151,10 +158,8 @@ public class BuildLangHandler extends AbstractHandler {
 
 				String question = NLS.bind(Msgs.forcedEditFile, langFile.getName());
 
-				if (MessageDialog.openQuestion(UIUtil.getActiveShell(), Msgs.previewFile, question)) {
-					IWorkbench workbench = PlatformUI.getWorkbench();
-
-					IDE.openEditor(workbench.getActiveWorkbenchWindow().getActivePage(), langFile);
+				if (MessageDialog.openQuestion(shell, Msgs.previewFile, question)) {
+					IDE.openEditor(UIUtil.getActivePage(), langFile);
 				}
 
 				return false;

@@ -20,6 +20,7 @@ import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import java.util.Arrays;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
@@ -32,6 +33,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.ui.Presentation;
@@ -62,7 +64,9 @@ public class HierarchyBrowseActionHandler extends BrowseActionHandler {
 			String javaType = _getClassReferenceType(property);
 
 			if (javaType != null) {
-				scope = SearchEngine.createHierarchyScope(JavaCore.create(project).findType(javaType));
+				IJavaProject javaProject = JavaCore.create(project);
+
+				scope = SearchEngine.createHierarchyScope(javaProject.findType(javaType));
 			}
 			else {
 				MessageDialog.openInformation(
@@ -75,7 +79,9 @@ public class HierarchyBrowseActionHandler extends BrowseActionHandler {
 				((SwtPresentation)context).shell(), null, scope, IJavaElementSearchConstants.CONSIDER_CLASSES, false,
 				StringPool.DOUBLE_ASTERISK, extension);
 
-			String title = property.definition().getLabel(true, CapitalizationType.TITLE_STYLE, false);
+			PropertyDef propertyDef = property.definition();
+
+			String title = propertyDef.getLabel(true, CapitalizationType.TITLE_STYLE, false);
 
 			dlg.setTitle(Msgs.select + title);
 
@@ -104,9 +110,13 @@ public class HierarchyBrowseActionHandler extends BrowseActionHandler {
 	}
 
 	private String _getClassReferenceType(Property property) {
-		JavaTypeConstraint typeConstraint = property.definition().getAnnotation(JavaTypeConstraint.class);
+		PropertyDef propertyDef = property.definition();
 
-		String retval = Arrays.toString(typeConstraint.type()).replaceAll("[\\[\\]\\s,]", "");
+		JavaTypeConstraint typeConstraint = propertyDef.getAnnotation(JavaTypeConstraint.class);
+
+		String retval = Arrays.toString(typeConstraint.type());
+
+		retval = retval.replaceAll("[\\[\\]\\s,]", "");
 
 		return retval;
 	}

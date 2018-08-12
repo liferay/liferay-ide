@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
@@ -22,6 +23,7 @@ import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.ui.dialog.FilteredTypesSelectionDialogEx;
 import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.net.URL;
 
@@ -32,11 +34,13 @@ import java.util.List;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
@@ -75,9 +79,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchContentProvider;
@@ -85,6 +88,8 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+
+import org.osgi.framework.Bundle;
 
 /**
  * @author Gregory Amerson
@@ -123,6 +128,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		classText = new Text(parent, SWT.SINGLE | SWT.BORDER);
 
 		classText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		synchHelper.synchText(classText, INewJavaClassDataModelProperties.CLASS_NAME, null);
 
 		new Label(parent, SWT.LEFT);
@@ -143,6 +149,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		folderText = new Text(composite, SWT.SINGLE | SWT.BORDER);
 
 		folderText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		synchHelper.synchText(folderText, INewJavaClassDataModelProperties.SOURCE_FOLDER, null);
 
 		IPackageFragmentRoot root = getSelectedPackageFragmentRoot();
@@ -152,15 +159,19 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		if ((projectName != null) && (projectName.length() > 0)) {
 			IProject targetProject = ProjectUtilities.getProject(projectName);
 
-			if ((root == null) || !root.getJavaProject().equals(JavaCore.create(targetProject))) {
+			IJavaProject javaProject = JavaCore.create(targetProject);
+
+			if ((root == null) || !javaProject.equals(root.getJavaProject())) {
 				IFolder folder = getDefaultJavaSourceFolder(targetProject);
 
 				if (folder != null) {
-					folderText.setText(folder.getFullPath().toPortableString());
+					folderText.setText(FileUtil.getFullPathPortableString(folder));
 				}
 			}
 			else {
-				folderText.setText(root.getPath().toString());
+				IPath path = root.getPath();
+
+				folderText.setText(path.toString());
 			}
 		}
 
@@ -233,6 +244,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		packageText = new Text(parent, SWT.SINGLE | SWT.BORDER);
 
 		packageText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		synchHelper.synchText(packageText, INewJavaClassDataModelProperties.JAVA_PACKAGE, null);
 
 		IPackageFragment packageFragment = getSelectedPackageFragment();
@@ -240,13 +252,17 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		String targetProject = model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
 
 		if ((packageFragment != null) && packageFragment.exists()) {
-			String elementName = packageFragment.getJavaProject().getElementName();
+			IJavaProject javaProject = packageFragment.getJavaProject();
+
+			String elementName = javaProject.getElementName();
 
 			if (elementName.equals(targetProject)) {
 				IPackageFragmentRoot root = getPackageFragmentRoot(packageFragment);
 
 				if (root != null) {
-					folderText.setText(root.getPath().toString());
+					IPath path = root.getPath();
+
+					folderText.setText(path.toString());
 				}
 
 				model.setProperty(INewJavaClassDataModelProperties.JAVA_PACKAGE, packageFragment.getElementName());
@@ -355,6 +371,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		superCombo = new Combo(parent, SWT.DROP_DOWN);
 
 		superCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		synchHelper.synchCombo(superCombo, INewJavaClassDataModelProperties.SUPERCLASS, null);
 
 		if (fragment) {
@@ -422,8 +439,8 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 				if (element instanceof IProject) {
 					IProject project = (IProject)element;
 
-					return project.getName().equals(
-						model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME));
+					return FileUtil.nameEquals(
+						project, model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME));
 				}
 				else if (element instanceof IFolder) {
 					IFolder folder = (IFolder)element;
@@ -435,11 +452,13 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 					IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers(project);
 
-					for (int i = 0; i < sourceFolders.length; i++) {
-						if ((sourceFolders[i].getResource() != null) && sourceFolders[i].getResource().equals(folder)) {
+					for (IPackageFragmentRoot sourceFolder : sourceFolders) {
+						IResource resource = sourceFolder.getResource();
+
+						if ((resource != null) && resource.equals(folder)) {
 							return true;
 						}
-						else if (ProjectUtil.isParent(folder, sourceFolders[i].getResource())) {
+						else if (ProjectUtil.isParent(folder, resource)) {
 							return true;
 						}
 					}
@@ -476,13 +495,15 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	 * @return
 	 */
 	protected IPackageFragment getSelectedPackageFragment() {
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchWindow window = UIUtil.getActiveWorkbenchWindow();
 
 		if (window == null) {
 			return null;
 		}
 
-		ISelection selection = window.getSelectionService().getSelection();
+		ISelectionService selectionService = window.getSelectionService();
+
+		ISelection selection = selectionService.getSelection();
 
 		if (selection == null) {
 			return null;
@@ -510,13 +531,15 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	}
 
 	protected IPackageFragmentRoot getSelectedPackageFragmentRoot() {
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchWindow window = UIUtil.getActiveWorkbenchWindow();
 
 		if (window == null) {
 			return null;
 		}
 
-		ISelection selection = window.getSelectionService().getSelection();
+		ISelectionService selectionService = window.getSelectionService();
+
+		ISelection selection = selectionService.getSelection();
 
 		if (selection == null) {
 			return null;
@@ -537,13 +560,15 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	}
 
 	protected IProject getSelectedProject() {
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchWindow window = UIUtil.getActiveWorkbenchWindow();
 
 		if (window == null) {
 			return null;
 		}
 
-		ISelection selection = window.getSelectionService().getSelection();
+		ISelectionService selectionService = window.getSelectionService();
+
+		ISelection selection = selectionService.getSelection();
 
 		if (selection == null) {
 			return null;
@@ -556,7 +581,9 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		IJavaElement element = getInitialJavaElement(selection);
 
 		if ((element != null) && (element.getJavaProject() != null)) {
-			return element.getJavaProject().getProject();
+			IJavaProject javaProject = element.getJavaProject();
+
+			return javaProject.getProject();
 		}
 
 		IStructuredSelection stucturedSelection = (IStructuredSelection)selection;
@@ -580,6 +607,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		else {
 			validationPropertyNames.add(CREATE_NEW_PORTLET_CLASS);
 			validationPropertyNames.add(USE_DEFAULT_PORTLET_CLASS);
+
 			Collections.addAll(validationPropertyNames, super.getValidationPropertyNames());
 		}
 
@@ -604,7 +632,9 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		IJavaSearchScope scope = null;
 
 		try {
-			IType type = packRoot.getJavaProject().findType(baseClass);
+			IJavaProject javaProject = packRoot.getJavaProject();
+
+			IType type = javaProject.findType(baseClass);
 
 			if (type == null) {
 				return;
@@ -614,6 +644,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		}
 		catch (JavaModelException jme) {
 			PortletUIPlugin.logError(jme);
+
 			return;
 		}
 
@@ -680,10 +711,8 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 		ITreeContentProvider contentProvider = new WorkbenchContentProvider();
 
-		IWorkbench workbench = PlatformUI.getWorkbench();
-
 		ILabelProvider labelProvider = new DecoratingLabelProvider(
-			new WorkbenchLabelProvider(), workbench.getDecoratorManager().getLabelDecorator());
+			new WorkbenchLabelProvider(), UIUtil.getLabelDecorator());
 
 		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(), labelProvider, contentProvider);
 
@@ -694,13 +723,13 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 		String projectName = model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
 
-		if ((projectName == null) || (projectName.length() == 0)) {
+		if (CoreUtil.isNullOrEmpty(projectName)) {
 			return;
 		}
 
 		IProject project = ProjectUtilities.getProject(projectName);
 
-		dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
+		dialog.setInput(CoreUtil.getWorkspaceRoot());
 
 		if (project != null) {
 			dialog.setInitialSelection(project);
@@ -713,7 +742,9 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 				if (element instanceof IContainer) {
 					IContainer container = (IContainer)element;
 
-					folderText.setText(container.getFullPath().toString());
+					IPath fullPath = container.getFullPath();
+
+					folderText.setText(fullPath.toString());
 
 					// dealWithSelectedContainerResource(container);
 
@@ -758,7 +789,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 				String projectNameFromModel = model.getStringProperty(
 					IArtifactEditOperationDataModelProperties.COMPONENT_NAME);
 
-				if ((projectNameFromModel != null) && (projectNameFromModel.length() > 0)) {
+				if (CoreUtil.isNotNullOrEmpty(projectNameFromModel)) {
 					selectedProject = CoreUtil.getProject(projectNameFromModel);
 				}
 			}
@@ -791,9 +822,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 			projectName = names[0];
 		}
 
-		if (((projectNameCombo.getText() == null) || (projectNameCombo.getText().length() == 0)) &&
-			(projectName != null)) {
-
+		if (CoreUtil.isNullOrEmpty(projectNameCombo.getText()) && (projectName != null)) {
 			projectNameCombo.setText(projectName);
 
 			validateProjectRequirements(CoreUtil.getProject(projectName));
@@ -822,9 +851,13 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	protected void setShellImage() {
 		PortletUIPlugin plugin = PortletUIPlugin.getDefault();
 
-		URL url = plugin.getBundle().getEntry("/icons/e16/portlet.png");
+		Bundle bundle = plugin.getBundle();
 
-		Image shellImage = ImageDescriptor.createFromURL(url).createImage();
+		URL url = bundle.getEntry("/icons/e16/portlet.png");
+
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
+
+		Image shellImage = imageDescriptor.createImage();
 
 		getShell().setImage(shellImage);
 	}

@@ -16,6 +16,7 @@ package com.liferay.ide.portlet.ui.wizard;
 
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.portlet.core.operation.NewPortletClassDataModelProvider;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
@@ -23,6 +24,7 @@ import com.liferay.ide.portlet.ui.template.PortletTemplateContextTypeIds;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.project.ui.wizard.IPluginWizardFragment;
 import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -32,8 +34,6 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
@@ -45,6 +45,7 @@ import org.eclipse.jdt.internal.ui.fix.ImportsCleanUp;
 import org.eclipse.jdt.ui.cleanup.CleanUpOptions;
 import org.eclipse.jdt.ui.cleanup.ICleanUp;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.templates.ContextTypeRegistry;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -54,7 +55,6 @@ import org.eclipse.jst.servlet.ui.internal.wizard.NewWebArtifactWizard;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
@@ -104,8 +104,10 @@ public class NewPortletWizard
 		Object selected = selection.getFirstElement();
 
 		if (selected instanceof IProject) {
+			IProject project = ((IProject)selected).getProject();
+
 			getDataModel().setStringProperty(
-				IArtifactEditOperationDataModelProperties.COMPONENT_NAME, ((IProject)selected).getProject().getName());
+				IArtifactEditOperationDataModelProperties.COMPONENT_NAME, project.getName());
 		}
 
 		super.init(workbench, selection);
@@ -155,12 +157,13 @@ public class NewPortletWizard
 
 	@Override
 	protected IDataModelProvider getDefaultProvider() {
-		TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
-
 		PortletUIPlugin plugin = PortletUIPlugin.getDefault();
 
-		TemplateContextType contextType =
-			plugin.getTemplateContextRegistry().getContextType(PortletTemplateContextTypeIds.NEW);
+		TemplateStore templateStore = plugin.getTemplateStore();
+
+		ContextTypeRegistry contextTypeRegistry = plugin.getTemplateContextRegistry();
+
+		TemplateContextType contextType = contextTypeRegistry.getContextType(PortletTemplateContextTypeIds.NEW);
 
 		return new NewPortletClassDataModelProvider(fragment, initialProject) {
 
@@ -178,9 +181,7 @@ public class NewPortletWizard
 
 	@Override
 	protected void openJavaClass() {
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-
-		IProject project = workspace.getRoot().getProject(getDataModel().getStringProperty(PROJECT_NAME));
+		IProject project = CoreUtil.getProject(getDataModel().getStringProperty(PROJECT_NAME));
 
 		if (getDataModel().getBooleanProperty(USE_DEFAULT_PORTLET_CLASS)) {
 			try {
@@ -196,9 +197,7 @@ public class NewPortletWizard
 					IFile viewFile = defaultDocroot.getFile(new Path(jspsFolder + "/view.jsp"));
 
 					if (viewFile.exists()) {
-						IWorkbench workbench = PlatformUI.getWorkbench();
-
-						IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
+						IWorkbenchPage page = UIUtil.getActivePage();
 
 						IDE.openEditor(page, viewFile, true);
 
@@ -216,6 +215,7 @@ public class NewPortletWizard
 			Map<String, String> settings = new Hashtable<>();
 
 			settings.put(CleanUpConstants.ORGANIZE_IMPORTS, CleanUpOptions.TRUE);
+
 			ImportsCleanUp importsCleanUp = new ImportsCleanUp(settings);
 
 			ICleanUp[] cleanUps = {importsCleanUp};

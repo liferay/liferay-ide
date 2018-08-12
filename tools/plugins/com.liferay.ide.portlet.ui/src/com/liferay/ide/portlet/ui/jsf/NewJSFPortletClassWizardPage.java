@@ -72,6 +72,7 @@ public class NewJSFPortletClassWizardPage
 		jsfPortletClassText = new Text(parent, SWT.BORDER);
 
 		jsfPortletClassText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		synchHelper.synchText(jsfPortletClassText, JSF_PORTLET_CLASS, null);
 
 		if (fragment) {

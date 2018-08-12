@@ -14,6 +14,7 @@
 
 package com.liferay.ide.portlet.ui.jsf;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.portlet.core.jsf.INewJSFPortletClassDataModelProperties;
 import com.liferay.ide.portlet.core.jsf.JSFPortletUtil;
@@ -27,8 +28,7 @@ import java.io.InputStream;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
@@ -58,9 +58,9 @@ public class AddJSFPortletOperation extends AddPortletOperation implements INewJ
 
 		String sourceFolderValue = getDataModel().getStringProperty(SOURCE_FOLDER);
 
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
 
-		IFolder sourceFolder = workspace.getRoot().getFolder(new Path(sourceFolderValue));
+		IFolder sourceFolder = workspaceRoot.getFolder(new Path(sourceFolderValue));
 
 		IFile i18nPropertiesFile = sourceFolder.getFile("i18n.properties");
 
@@ -68,7 +68,7 @@ public class AddJSFPortletOperation extends AddPortletOperation implements INewJ
 			getDataModel().getStringProperty(PORTLET_NAME) + "-hello-world=Hello " +
 				getDataModel().getStringProperty(DISPLAY_NAME);
 
-		try (InputStream inputStream = i18nPropertiesFile.getContents()){
+		try (InputStream inputStream = i18nPropertiesFile.getContents()) {
 			if (i18nPropertiesFile.exists()) {
 				String propsContents = FileUtil.readContents(inputStream);
 
@@ -78,7 +78,7 @@ public class AddJSFPortletOperation extends AddPortletOperation implements INewJ
 					new ByteArrayInputStream(newContents.getBytes("UTF-8")), IResource.FORCE, null);
 			}
 			else {
-				try(InputStream input = new ByteArrayInputStream(outputToAppend.getBytes("UTF-8"))){
+				try (InputStream input = new ByteArrayInputStream(outputToAppend.getBytes("UTF-8"))) {
 					i18nPropertiesFile.create(input, true, null);
 				}
 			}

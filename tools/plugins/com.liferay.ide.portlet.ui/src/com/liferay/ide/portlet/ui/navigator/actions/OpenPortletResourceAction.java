@@ -14,12 +14,17 @@
 
 package com.liferay.ide.portlet.ui.navigator.actions;
 
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.portlet.core.model.Portlet;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.portlet.ui.navigator.PortletNode;
 import com.liferay.ide.portlet.ui.navigator.PortletResourcesRootNode;
 import com.liferay.ide.portlet.ui.navigator.PortletsNode;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.ui.util.UIUtil;
+
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -44,9 +49,8 @@ import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorRegistry;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
@@ -66,7 +70,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 		if (isEnabled()) {
 			IFile file = initEditorPart();
 
-			if ((file != null) && file.exists()) {
+			if (FileUtil.exists(file)) {
 				editorPart = openEditor(file);
 
 				if ((editorPart != null) && selectedNode instanceof PortletNode) {
@@ -82,7 +86,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 	 * @return
 	 */
 	protected IEditorDescriptor findEditor(IFile file) {
-		IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
+		IEditorRegistry registry = UIUtil.getEditorRegistry();
 		IContentType contentType = IDE.getContentType(file);
 
 		IEditorDescriptor editorDescriptor = registry.getDefaultEditor(file.getName(), contentType);
@@ -107,7 +111,9 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 		else if (selectedNode instanceof PortletNode) {
 			PortletNode portletNode = (PortletNode)selectedNode;
 
-			PortletResourcesRootNode rootNode = portletNode.getParent().getParent();
+			PortletsNode parent = portletNode.getParent();
+
+			PortletResourcesRootNode rootNode = parent.getParent();
 
 			file = ProjectUtil.getPortletXmlFile(rootNode.getProject());
 		}
@@ -115,14 +121,12 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 		// Check to see if the editor part is already open
 
 		if ((editorPart == null) && (file != null)) {
-			IWorkbench workbench = PlatformUI.getWorkbench();
-
-			IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
+			IWorkbenchPage page = UIUtil.getActivePage();
 
 			IEditorReference[] editorReferences = page.getEditorReferences();
 
 			for (IEditorReference iEditorReference : editorReferences) {
-				if (file.getName().equals(iEditorReference.getName())) {
+				if (FileUtil.nameEquals(file, iEditorReference.getName())) {
 					editorPart = iEditorReference.getEditor(false);
 				}
 			}
@@ -136,9 +140,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 		IEditorPart editorPart = null;
 
 		if (editorDescriptor != null) {
-			IWorkbench workbench = PlatformUI.getWorkbench();
-
-			IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
+			IWorkbenchPage page = UIUtil.getActivePage();
 
 			try {
 				editorPart = page.findEditor(new FileEditorInput(file));
@@ -148,7 +150,9 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 				}
 			}
 			catch (Exception e) {
-				MessageDialog.openError(page.getWorkbenchWindow().getShell(), Msgs.errorOpeningFile, e.getMessage());
+				IWorkbenchWindow workbenchWindow = page.getWorkbenchWindow();
+
+				MessageDialog.openError(workbenchWindow.getShell(), Msgs.errorOpeningFile, e.getMessage());
 			}
 		}
 
@@ -164,7 +168,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 		if (modelElement instanceof Portlet) {
 			Portlet portlet = (Portlet)modelElement;
 
-			JavaTypeName portletClassFile = portlet.getPortletClass().content();
+			JavaTypeName portletClassFile = SapphireUtil.getContent(portlet.getPortletClass());
 
 			Runnable run = new Runnable() {
 
@@ -187,9 +191,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 								IEditorPart editorPart = null;
 
 								if (editorDescriptor != null) {
-									IWorkbench workbench = PlatformUI.getWorkbench();
-
-									IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
+									IWorkbenchPage page = UIUtil.getActivePage();
 
 									try {
 										editorPart = page.findEditor(new FileEditorInput(javaFile));
@@ -200,9 +202,10 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 										}
 									}
 									catch (Exception e) {
+										IWorkbenchWindow workbenchWindow = page.getWorkbenchWindow();
+
 										MessageDialog.openError(
-											page.getWorkbenchWindow().getShell(), Msgs.errorOpeningFile,
-											e.getMessage());
+											workbenchWindow.getShell(), Msgs.errorOpeningFile, e.getMessage());
 									}
 								}
 							}
@@ -215,7 +218,9 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 
 			};
 
-			Display.getDefault().asyncExec(run);
+			Display display = Display.getDefault();
+
+			display.asyncExec(run);
 		}
 	}
 
@@ -242,7 +247,9 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 					if (rootNode != null) {
 						MasterDetailsContentNodeList nodes = rootNode.nodes();
 
-						MasterDetailsContentNodePart portletAppNode = nodes.visible().get(0);
+						List<MasterDetailsContentNodePart> parts = nodes.visible();
+
+						MasterDetailsContentNodePart portletAppNode = parts.get(0);
 
 						MasterDetailsContentNodePart portletsNode = portletAppNode.findNode(_PORTLETS_NODE_LABEL);
 
@@ -252,14 +259,17 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 							if (selectedModelElement instanceof Portlet) {
 								Portlet selectedPortlet = (Portlet)selectedModelElement;
 
-								for (MasterDetailsContentNodePart childNode : portletsNode.nodes().visible()) {
-									String selectedPortletName = selectedPortlet.getPortletName().content();
+								MasterDetailsContentNodeList list = portletsNode.nodes();
+
+								for (MasterDetailsContentNodePart childNode : list.visible()) {
+									String selectedPortletName = SapphireUtil.getContent(
+										selectedPortlet.getPortletName());
 
 									if (childNode.getModelElement() instanceof Portlet) {
 										Portlet mpContentNodePortlet = (Portlet)childNode.getModelElement();
 
-										String mpContentNodePortletName =
-											mpContentNodePortlet.getPortletName().content();
+										String mpContentNodePortletName = SapphireUtil.getContent(
+											mpContentNodePortlet.getPortletName());
 
 										if (selectedPortletName.equals(mpContentNodePortletName)) {
 											childNode.select();

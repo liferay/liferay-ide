@@ -14,17 +14,17 @@
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
-import static com.liferay.ide.core.model.internal.GenericResourceBundlePathService.RB_FILE_EXTENSION;
-
+import com.liferay.ide.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.portlet.core.util.PortletUtil;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.sapphire.Element;
@@ -37,7 +37,6 @@ import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 /**
@@ -59,28 +58,31 @@ public class ResourceBundleJumpActionHandler extends JumpActionHandler {
 
 		ValueProperty property = (ValueProperty)property().definition();
 
-		String text = element.property(property).text(true);
+		Value<Object> value = element.property(property);
+
+		String text = value.text();
 
 		boolean enabled = super.computeEnablementState();
 
 		if (enabled && (text != null)) {
-			IWorkspace workspace = ResourcesPlugin.getWorkspace();
-
-			IWorkspaceRoot wroot = workspace.getRoot();
+			IWorkspaceRoot wroot = CoreUtil.getWorkspaceRoot();
 
 			IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries(project);
-			String ioFileName = PortletUtil.convertJavaToIoFileName(text, RB_FILE_EXTENSION);
+			String ioFileName = PortletUtil.convertJavaToIoFileName(
+				text, GenericResourceBundlePathService.RB_FILE_EXTENSION);
 
 			if (cpEntries != null) {
 				for (IClasspathEntry iClasspathEntry : cpEntries) {
 					if (IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind()) {
-						IPath entryPath = wroot.getFolder(iClasspathEntry.getPath()).getLocation();
+						IFolder folder = wroot.getFolder(iClasspathEntry.getPath());
+
+						IPath entryPath = folder.getLocation();
 
 						entryPath = entryPath.append(ioFileName);
 
 						IFile resourceBundleFile = wroot.getFileForLocation(entryPath);
 
-						if ((resourceBundleFile != null) && resourceBundleFile.exists()) {
+						if (FileUtil.exists(resourceBundleFile)) {
 							return true;
 						}
 					}
@@ -102,7 +104,7 @@ public class ResourceBundleJumpActionHandler extends JumpActionHandler {
 	protected Object run(Presentation context) {
 		Element element = getModelElement();
 
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchWindow window = UIUtil.getActiveWorkbenchWindow();
 
 		ValueProperty property = (ValueProperty)property().definition();
 
@@ -112,22 +114,23 @@ public class ResourceBundleJumpActionHandler extends JumpActionHandler {
 
 		String text = value.text(false);
 
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-
-		IWorkspaceRoot wroot = workspace.getRoot();
+		IWorkspaceRoot wroot = CoreUtil.getWorkspaceRoot();
 
 		IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries(project);
-		String ioFileName = PortletUtil.convertJavaToIoFileName(text, RB_FILE_EXTENSION);
+		String ioFileName = PortletUtil.convertJavaToIoFileName(
+			text, GenericResourceBundlePathService.RB_FILE_EXTENSION);
 
 		for (IClasspathEntry iClasspathEntry : cpEntries) {
 			if (IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind()) {
-				IPath entryPath = wroot.getFolder(iClasspathEntry.getPath()).getLocation();
+				IFolder folder = wroot.getFolder(iClasspathEntry.getPath());
+
+				IPath entryPath = folder.getLocation();
 
 				entryPath = entryPath.append(ioFileName);
 
 				IFile resourceBundleFile = wroot.getFileForLocation(entryPath);
 
-				if ((resourceBundleFile != null) && resourceBundleFile.exists()) {
+				if (FileUtil.exists(resourceBundleFile)) {
 					if (window != null) {
 						IWorkbenchPage page = window.getActivePage();
 						IEditorDescriptor editorDescriptor = null;

@@ -20,6 +20,7 @@ import com.liferay.ide.ui.form.FormLayoutFactory;
 import com.liferay.ide.ui.form.IDEFormPage;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -53,9 +54,11 @@ public class PluginPackageFormPage extends IDEFormPage {
 		toolkit.decorateFormHeading(form.getForm());
 
 		form.setText(Msgs.liferayPluginPackageProperties);
-		form.setImage(
-			PortletUIPlugin.imageDescriptorFromPlugin(
-				PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png").createImage());
+
+		ImageDescriptor descriptor = PortletUIPlugin.imageDescriptorFromPlugin(
+			PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png");
+
+		form.setImage(descriptor.createImage());
 
 		toolkit = managedForm.getToolkit();
 
