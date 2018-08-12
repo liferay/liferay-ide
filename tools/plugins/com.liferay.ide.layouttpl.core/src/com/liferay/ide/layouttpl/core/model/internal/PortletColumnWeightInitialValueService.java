@@ -14,6 +14,7 @@
 
 package com.liferay.ide.layouttpl.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
 import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
 import com.liferay.ide.layouttpl.core.model.PortletLayoutElement;
@@ -41,21 +42,17 @@ public class PortletColumnWeightInitialValueService extends InitialValueService 
 
 		for (PortletColumnElement col : portletColumns) {
 			if (col != column) {
-				Value<Integer> colWeight = col.getWeight();
-
-				Integer colWeightContent = colWeight.content();
+				Integer colWeightContent = SapphireUtil.getContent(col.getWeight());
 
 				weightSum += colWeightContent.intValue();
 			}
 		}
 
-		Value<Integer> columnFullWeight = column.getFullWeight();
-
-		Integer fullWeightContent = columnFullWeight.content();
+		Integer fullWeightContent = SapphireUtil.getContent(column.getFullWeight());
 
 		int fullWeight = fullWeightContent.intValue();
 
-		int initialWeight = layoutTpl.getBootstrapStyle().content() ? 3 : 25;
+		int initialWeight = SapphireUtil.getContent(layoutTpl.getBootstrapStyle()) ? 3 : 25;
 
 		if ((weightSum >= 0) && (weightSum < fullWeight)) {
 			initialWeight = fullWeight - weightSum;

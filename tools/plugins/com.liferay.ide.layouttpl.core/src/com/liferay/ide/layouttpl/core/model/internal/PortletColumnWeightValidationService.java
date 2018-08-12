@@ -14,6 +14,7 @@
 
 package com.liferay.ide.layouttpl.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
 import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
 
@@ -31,12 +32,12 @@ public class PortletColumnWeightValidationService extends ValidationService {
 
 		PortletColumnElement portletColumn = context(PortletColumnElement.class);
 
-		int weight = portletColumn.getWeight().content();
+		int weight = SapphireUtil.getContent(portletColumn.getWeight());
 
 		LayoutTplElement layoutTpl = portletColumn.nearest(LayoutTplElement.class);
 
 		if (layoutTpl != null) {
-			if (layoutTpl.getBootstrapStyle().content()) {
+			if (SapphireUtil.getContent(layoutTpl.getBootstrapStyle())) {
 				if ((weight <= 0) || (weight > 12)) {
 					retval = Status.createErrorStatus("The weight value is invalid, should be in (0, 12]");
 				}

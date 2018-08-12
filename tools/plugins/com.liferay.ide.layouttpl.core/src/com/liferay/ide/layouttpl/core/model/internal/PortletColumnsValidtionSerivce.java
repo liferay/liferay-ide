@@ -14,6 +14,7 @@
 
 package com.liferay.ide.layouttpl.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
 import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
 import com.liferay.ide.layouttpl.core.model.PortletLayoutElement;
@@ -55,7 +56,7 @@ public class PortletColumnsValidtionSerivce extends ValidationService {
 		LayoutTplElement layoutTpl = portletLayout.nearest(LayoutTplElement.class);
 
 		int actualWeightSum = 0;
-		int exceptedweightSum = layoutTpl.getBootstrapStyle().content() ? 12 : 100;
+		int exceptedweightSum = SapphireUtil.getContent(layoutTpl.getBootstrapStyle()) ? 12 : 100;
 
 		for (PortletColumnElement col : portletLayout.getPortletColumns()) {
 
@@ -64,7 +65,8 @@ public class PortletColumnsValidtionSerivce extends ValidationService {
 			 * way to do this which makes more sense
 			 */
 			if (!_columnsAttachedListener.contains(col)) {
-				col.getWeight().attach(_listener);
+				SapphireUtil.attachListener(col.getWeight(), _listener);
+
 				_columnsAttachedListener.add(col);
 			}
 
