@@ -62,6 +62,14 @@ public class StringUtil {
 		return s1.equals(s2);
 	}
 
+	public static byte[] getBytes(String s) {
+		if (s == null) {
+			return new byte[0];
+		}
+
+		return s.getBytes();
+	}
+
 	public static boolean isQuoted(String string) {
 		if ((string == null) || (string.length() < 2)) {
 			return false;
@@ -148,7 +156,7 @@ public class StringUtil {
 
 	public static String toLowerCase(String s) {
 		if (s == null) {
-			return null;
+			return "";
 		}
 
 		return s.toLowerCase();
@@ -156,7 +164,7 @@ public class StringUtil {
 
 	public static String toLowerCase(StringBuilder sb) {
 		if (sb == null) {
-			return null;
+			return "";
 		}
 
 		String string = sb.toString();
@@ -166,7 +174,7 @@ public class StringUtil {
 
 	public static String toUpperCase(String s) {
 		if (s == null) {
-			return null;
+			return "";
 		}
 
 		return s.toUpperCase();
@@ -174,7 +182,7 @@ public class StringUtil {
 
 	public static String trim(String string) {
 		if (string == null) {
-			return null;
+			return "";
 		}
 
 		return string.trim();
@@ -182,7 +190,7 @@ public class StringUtil {
 
 	public static String trim(StringBuffer sb) {
 		if (sb == null) {
-			return null;
+			return "";
 		}
 
 		String string = sb.toString();
@@ -192,7 +200,7 @@ public class StringUtil {
 
 	public static String trim(StringBuilder sb) {
 		if (sb == null) {
-			return null;
+			return "";
 		}
 
 		String string = sb.toString();

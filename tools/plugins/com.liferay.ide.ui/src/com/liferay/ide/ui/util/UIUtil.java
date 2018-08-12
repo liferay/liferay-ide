@@ -42,12 +42,14 @@ import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IDecoratorManager;
+import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.ISharedImages;
@@ -214,6 +216,20 @@ public class UIUtil {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 
 		return workbench.getDecoratorManager();
+	}
+
+	public static IEditorRegistry getEditorRegistry() {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+
+		return workbench.getEditorRegistry();
+	}
+
+	public static ILabelDecorator getLabelDecorator() {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+
+		IDecoratorManager decoratorManager = workbench.getDecoratorManager();
+
+		return decoratorManager.getLabelDecorator();
 	}
 
 	public static IPerspectiveRegistry getPerspectiveRegistry() {
