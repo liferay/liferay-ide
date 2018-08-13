@@ -36,9 +36,7 @@ public interface NewLiferayWorkspaceProjectProvider<T extends ExecutableElement>
 	public default void initBundle(String bundleUrl, String serverName, String workspaceName) {
 		IProject project = CoreUtil.getProject(workspaceName);
 
-		String jobName = "Initializing Liferay bundle";
-
-		InitBundleJob job = new InitBundleJob(jobName, project, serverName, bundleUrl);
+		InitBundleJob job = new InitBundleJob(project, serverName, bundleUrl);
 
 		job.schedule();
 	}
