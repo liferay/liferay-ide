@@ -19,6 +19,7 @@ import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.JSPFile;
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.SearchResult;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
@@ -34,12 +35,13 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -109,7 +111,9 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 			IDOMModel domModel = null;
 
 			try {
-				domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForEdit(jspFile);
+				IModelManager modelManager = StructuredModelManager.getModelManager();
+
+				domModel = (IDOMModel)modelManager.getModelForEdit(jspFile);
 
 				List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
@@ -160,7 +164,9 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 							continue;
 						}
 
-						Element newNode = element.getOwnerDocument().createElement(newTagName);
+						Document document = element.getOwnerDocument();
+
+						Element newNode = document.createElement(newTagName);
 
 						if (nodeValue != null) {
 							newNode.setNodeValue(nodeValue);
@@ -178,7 +184,9 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 							newNode.appendChild(childNode.cloneNode(true));
 						}
 
-						element.getParentNode().replaceChild(newNode, element);
+						Node parentNode = element.getParentNode();
+
+						parentNode.replaceChild(newNode, element);
 
 						corrected++;
 					}
@@ -197,14 +205,14 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 				}
 			}
 
-			IPath location = jspFile.getLocation();
+			File jsp = FileUtil.getFile(jspFile);
 
-			if ((corrected > 0) && !location.toFile().equals(file)) {
+			if ((corrected > 0) && !jsp.equals(file)) {
 				try (InputStream jspFileContent = jspFile.getContents()) {
 					Files.copy(jspFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 				}
 				catch (Exception e) {
-					throw new AutoMigrateException("Error writing corrected file.", e);
+					throw new AutoMigrateException("Error writing corrected file", e);
 				}
 			}
 		}

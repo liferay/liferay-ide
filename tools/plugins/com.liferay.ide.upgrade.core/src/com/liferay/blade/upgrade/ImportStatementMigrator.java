@@ -96,11 +96,17 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 				for (String importData : importsToRewrite) {
 					String[] importMap = importData.split(",");
 
-					int lineNumber = Integer.parseInt(importMap[0]);
-					String importName = importMap[1];
+					try {
+						int lineNumber = Integer.parseInt(importMap[0]);
 
-					editedLines[lineNumber - 1] = editedLines[lineNumber - 1].replaceAll(
-						importName, _importFixes.get(importName));
+						String importName = importMap[1];
+
+						editedLines[lineNumber - 1] = editedLines[lineNumber - 1].replaceAll(
+							importName, _importFixes.get(importName));
+					}
+					catch (NumberFormatException nfe) {
+						nfe.printStackTrace();
+					}
 				}
 
 				StringBuilder sb = new StringBuilder();

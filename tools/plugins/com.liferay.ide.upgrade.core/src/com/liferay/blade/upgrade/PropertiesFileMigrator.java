@@ -17,7 +17,6 @@ package com.liferay.blade.upgrade;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.MarkdownParser;
 
 import java.io.File;
 

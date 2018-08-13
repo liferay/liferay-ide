@@ -15,14 +15,15 @@
 package com.liferay.blade.eclipse.provider;
 
 import com.liferay.blade.api.MigrationConstants;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 
 /**
@@ -35,9 +36,9 @@ public class BaseCUCache {
 
 		// first try to find this file in the current workspace
 
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
 
-		IFile[] files = workspace.getRoot().findFilesForLocationURI(file.toURI());
+		IFile[] files = workspaceRoot.findFilesForLocationURI(file.toURI());
 
 		// if there are multiple files in this workspace use the shortest path
 
@@ -45,17 +46,19 @@ public class BaseCUCache {
 			retval = files[0];
 		}
 		else if (ListUtil.isNotEmpty(files)) {
-			for (IFile ifile : files) {
+			for (IFile iFile : files) {
 				if (retval == null) {
-					retval = ifile;
+					retval = iFile;
 				}
 				else {
 
 					// prefer the path that is shortest (to avoid a nested
 					// version)
 
-					if (ifile.getFullPath().segmentCount() < retval.getFullPath().segmentCount()) {
-						retval = ifile;
+					if (FileUtil.getSegmentCount(iFile.getFullPath()) <
+							FileUtil.getSegmentCount(retval.getFullPath())) {
+
+						retval = iFile;
 					}
 				}
 			}

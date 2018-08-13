@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {"file.extension=jspf"}, service = {JavaFile.class, JSPFile.class})
+@Component(property = "file.extension=jspf", service = {JavaFile.class, JSPFile.class})
 public class JSPFFileWTP extends JSPFileWTP {
 
 	public JSPFFileWTP() {

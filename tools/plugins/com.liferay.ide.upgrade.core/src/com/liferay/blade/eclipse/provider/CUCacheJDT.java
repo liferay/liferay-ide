@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {"type=java"}, service = CUCache.class)
+@Component(property = "type=java", service = CUCache.class)
 public class CUCacheJDT extends BaseCUCache implements CUCache<CompilationUnit> {
 
 	@Override
@@ -45,7 +45,9 @@ public class CUCacheJDT extends BaseCUCache implements CUCache<CompilationUnit> 
 			Long lastModified = _fileModifiedTimeMap.get(file);
 
 			if ((lastModified != null) && lastModified.equals(file.lastModified())) {
-				retval = _cuMap.get(file).get();
+				WeakReference<CompilationUnit> reference = _cuMap.get(file);
+
+				retval = reference.get();
 			}
 
 			if (retval == null) {

@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -71,11 +72,6 @@ public class ProjectMigrationService implements Migration {
 	}
 
 	@Override
-	public List<Problem> findProblems(File projectDir, ProgressMonitor monitor) {
-		return findProblems(projectDir, Collections.emptyList(), monitor);
-	}
-
-	@Override
 	public List<Problem> findProblems(File projectDir, List<String> versions, ProgressMonitor monitor) {
 		monitor.beginTask("Searching for migration problems in " + projectDir, -1);
 
@@ -98,8 +94,8 @@ public class ProjectMigrationService implements Migration {
 	}
 
 	@Override
-	public List<Problem> findProblems(Set<File> files, ProgressMonitor monitor) {
-		return findProblems(files, Collections.emptyList(), monitor);
+	public List<Problem> findProblems(File projectDir, ProgressMonitor monitor) {
+		return findProblems(projectDir, Collections.emptyList(), monitor);
 	}
 
 	@Override
@@ -131,6 +127,11 @@ public class ProjectMigrationService implements Migration {
 	}
 
 	@Override
+	public List<Problem> findProblems(Set<File> files, ProgressMonitor monitor) {
+		return findProblems(files, Collections.emptyList(), monitor);
+	}
+
+	@Override
 	public void reportProblems(List<Problem> problems, int detail, String format, Object... args) {
 		Reporter reporter = null;
 
@@ -139,7 +140,9 @@ public class ProjectMigrationService implements Migration {
 				Reporter.class, "(format=" + format + ")");
 
 			if (ListUtil.isNotEmpty(references)) {
-				reporter = _context.getService(references.iterator().next());
+				Iterator<ServiceReference<Reporter>> iterator = references.iterator();
+
+				reporter = _context.getService(iterator.next());
 			}
 			else {
 				ServiceReference<Reporter> sr = _context.getServiceReference(Reporter.class);
@@ -158,8 +161,12 @@ public class ProjectMigrationService implements Migration {
 				if (args[0] instanceof File) {
 					File outputFile = (File)args[0];
 
-					outputFile.getParentFile().mkdirs();
+					File parentFile = outputFile.getParentFile();
+
+					parentFile.mkdirs();
+
 					outputFile.createNewFile();
+
 					fos = Files.newOutputStream(outputFile.toPath());
 				}
 				else if (args[0] instanceof OutputStream) {
@@ -192,10 +199,14 @@ public class ProjectMigrationService implements Migration {
 		}
 	}
 
-	protected FileVisitResult analyzeFile(File file, List<Problem> problems, List<String> versions, ProgressMonitor monitor) {
+	protected FileVisitResult analyzeFile(
+		File file, List<Problem> problems, List<String> versions, ProgressMonitor monitor) {
+
 		Path path = file.toPath();
 
-		String fileName = path.getFileName().toString();
+		Path pathFileName = path.getFileName();
+
+		String fileName = pathFileName.toString();
 
 		String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
 
@@ -204,7 +215,9 @@ public class ProjectMigrationService implements Migration {
 		ServiceReference<FileMigrator>[] fileMigrators = _fileMigratorTracker.getServiceReferences();
 
 		if (ListUtil.isNotEmpty(fileMigrators)) {
-			Stream<ServiceReference<FileMigrator>> serviceStream = Arrays.asList(fileMigrators).stream();
+			List<ServiceReference<FileMigrator>> list = Arrays.asList(fileMigrators);
+
+			Stream<ServiceReference<FileMigrator>> serviceStream = list.stream();
 
 			List<ServiceReference<FileMigrator>> fileMigratorList = serviceStream.filter(
 				predicate -> {
@@ -213,17 +226,21 @@ public class ProjectMigrationService implements Migration {
 					List<String> extensionList = Arrays.asList(fileExtensionString.split(","));
 
 					return extensionList.contains(extension);
-				}).filter(
-					predicate -> {
-						if (ListUtil.isNotEmpty(versions)) {
-							String version = (String)predicate.getProperty("version");
+				}
+			).filter(
+				predicate -> {
+					if (ListUtil.isNotEmpty(versions)) {
+						String version = (String)predicate.getProperty("version");
 
-							return versions.contains(version);
-						}
-						else {
-							return true;
-						}
-				}).collect(Collectors.toList());
+						return versions.contains(version);
+					}
+					else {
+						return true;
+					}
+				}
+			).collect(
+				Collectors.toList()
+			);
 
 			if (ListUtil.isNotEmpty(fileMigratorList)) {
 				try {

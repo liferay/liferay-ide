@@ -21,6 +21,7 @@ import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.SearchResult;
 import com.liferay.blade.api.XMLFile;
 import com.liferay.blade.upgrade.XMLFileMigrator;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 import java.io.InputStream;
@@ -34,14 +35,15 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
 import org.osgi.service.component.annotations.Component;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Text;
 
 /**
@@ -68,7 +70,9 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 
 		if (xmlFile != null) {
 			try {
-				xmlModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForEdit(xmlFile);
+				IModelManager modelManager = StructuredModelManager.getModelManager();
+
+				xmlModel = (IDOMModel)modelManager.getModelForEdit(xmlFile);
 
 				List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
@@ -89,7 +93,9 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 
 					_removeChildren(element);
 
-					Text textContent = element.getOwnerDocument().createTextNode(
+					Document document = element.getOwnerDocument();
+
+					Text textContent = document.createTextNode(
 						"com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet");
 
 					element.appendChild(textContent);
@@ -111,14 +117,14 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 			}
 		}
 
-		IPath location = xmlFile.getLocation();
+		File xml = FileUtil.getFile(xmlFile);
 
-		if ((corrected > 0) && !location.toFile().equals(file)) {
+		if ((corrected > 0) && !xml.equals(file)) {
 			try (InputStream xmlFileContent = xmlFile.getContents()) {
 				Files.copy(xmlFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			}
 			catch (Exception e) {
-				throw new AutoMigrateException("Error writing corrected file.", e);
+				throw new AutoMigrateException("Error writing corrected file", e);
 			}
 		}
 

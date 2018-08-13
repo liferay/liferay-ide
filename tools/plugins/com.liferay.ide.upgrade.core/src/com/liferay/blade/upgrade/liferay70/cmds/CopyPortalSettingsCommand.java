@@ -22,6 +22,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 import java.util.Map;
@@ -63,8 +64,10 @@ public class CopyPortalSettingsCommand implements Command {
 
 		for (File propertiesFile : propertiesFiles) {
 			try {
+				Path destPortalDirPath = destPortalDir.toPath();
+
 				Files.copy(
-					propertiesFile.toPath(), destPortalDir.toPath().resolve(propertiesFile.getName()),
+					propertiesFile.toPath(), destPortalDirPath.resolve(propertiesFile.getName()),
 					StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
 			}
 			catch (IOException ioe) {

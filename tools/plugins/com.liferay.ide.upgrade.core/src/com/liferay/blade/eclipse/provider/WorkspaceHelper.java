@@ -14,18 +14,20 @@
 
 package com.liferay.blade.eclipse.provider;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
 import java.nio.file.Files;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -39,11 +41,13 @@ import org.eclipse.jdt.core.JavaCore;
 public class WorkspaceHelper {
 
 	public IFile createIFile(String projectName, File file) throws CoreException, IOException {
-		IJavaProject project = _getJavaProject(projectName);
+		IJavaProject javaProject = _getJavaProject(projectName);
 
 		IProgressMonitor npm = new NullProgressMonitor();
 
-		IFile projectFile = project.getProject().getFile("/temp/" + file.getName());
+		IProject project = javaProject.getProject();
+
+		IFile projectFile = project.getFile("/temp/" + file.getName());
 
 		if (projectFile.exists()) {
 			try {
@@ -52,12 +56,16 @@ public class WorkspaceHelper {
 			catch (CoreException ce) {
 				IPath projectFileLocation = projectFile.getLocation();
 
-				projectFileLocation.toFile().delete();
+				File tmpFile = projectFileLocation.toFile();
+
+				tmpFile.delete();
 			}
 		}
 
-		if (!projectFile.getParent().exists() && projectFile.getParent() instanceof IFolder) {
-			IFolder parentFolder = (IFolder)projectFile.getParent();
+		IContainer parent = projectFile.getParent();
+
+		if (!parent.exists() && parent instanceof IFolder) {
+			IFolder parentFolder = (IFolder)parent;
 
 			parentFolder.create(true, true, npm);
 		}
@@ -87,24 +95,27 @@ public class WorkspaceHelper {
 		}
 
 		description.setNatureIds(newNatures);
+
 		proj.setDescription(description, monitor);
 	}
 
 	private IJavaProject _getJavaProject(String projectName) throws CoreException {
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-
-		IProject javaProject = workspace.getRoot().getProject(projectName);
+		IProject javaProject = CoreUtil.getProject(projectName);
 
 		IProgressMonitor monitor = new NullProgressMonitor();
 
 		if (!javaProject.exists()) {
-			IProjectDescription description = workspace.newProjectDescription(projectName);
+			IWorkspace workspace = CoreUtil.getWorkspace();
+
+			IProjectDescription description = workspace .newProjectDescription(projectName);
+
 			javaProject.create(monitor);
 			javaProject.open(monitor);
 			javaProject.setDescription(description, monitor);
 		}
 
 		javaProject.open(monitor);
+
 		_addNaturesToProject(javaProject, new String[] {JavaCore.NATURE_ID}, monitor);
 
 		return JavaCore.create(javaProject);

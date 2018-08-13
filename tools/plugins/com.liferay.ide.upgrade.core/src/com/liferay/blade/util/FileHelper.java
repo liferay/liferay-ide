@@ -14,6 +14,8 @@
 
 package com.liferay.blade.util;
 
+import com.liferay.ide.core.util.FileUtil;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -47,7 +49,7 @@ public class FileHelper {
 				File file = path.toFile();
 
 				if (file.isFile()) {
-					if (file.getName().endsWith(ext)) {
+					if (FileUtil.nameEndsWith(file, ext)) {
 						files.add(file);
 					}
 				}

@@ -38,6 +38,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -46,8 +47,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = {
 	"file.extensions=properties", "problem.title=liferay-versions key in Liferay Plugin Packages Properties",
 	"problem.summary=In order to deploy this project to 7.0 the liferay-versions property must be set to 7.0.0+",
-	"problem.tickets=", "problem.section=", "auto.correct=property", "implName=LiferayVersionsProperties",
-	"version=7.0"
+	"problem.tickets=", "problem.section=", "auto.correct=property", "implName=LiferayVersionsProperties", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class LiferayVersionsProperties extends PropertiesFileMigrator implements AutoMigrator {
@@ -56,13 +56,15 @@ public class LiferayVersionsProperties extends PropertiesFileMigrator implements
 	public List<Problem> analyze(File file) {
 		List<Problem> problems = new ArrayList<>();
 
-		if (file.getName().equals("liferay-plugin-package.properties")) {
+		if ("liferay-plugin-package.properties".equals(file.getName())) {
 			PropertiesFileChecker propertiesFileChecker = new PropertiesFileChecker(file);
 
 			List<KeyInfo> keys = propertiesFileChecker.getInfos("liferay-versions");
 
 			if (ListUtil.isNotEmpty(keys)) {
-				String versions = keys.get(0).value;
+				KeyInfo key = keys.get(0);
+
+				String versions = key.value;
 
 				if (!versions.matches(".*7\\.[0-9]\\.[0-9].*")) {
 					List<SearchResult> results = propertiesFileChecker.findProperties("liferay-versions");
@@ -93,8 +95,9 @@ public class LiferayVersionsProperties extends PropertiesFileMigrator implements
 		try {
 			String contents = new String(Files.readAllBytes(file.toPath()));
 
-			JavaFile javaFile = context.getBundleContext().getService(
-				context.getBundleContext().getServiceReference(JavaFile.class));
+			BundleContext bundleContext = context.getBundleContext();
+
+			JavaFile javaFile = bundleContext.getService(bundleContext.getServiceReference(JavaFile.class));
 
 			IFile propertiesFile = javaFile.getIFile(file);
 

@@ -22,6 +22,8 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
@@ -45,7 +47,9 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 		IDOMModel domModel = null;
 
 		try {
-			domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(xmlFile);
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			domModel = (IDOMModel)modelManager.getModelForRead(xmlFile);
 
 			IDOMDocument document = domModel.getDocument();
 
@@ -57,11 +61,15 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 
 					String textContent = element.getTextContent();
 
-					if ((textContent != null) && value.trim().equals(textContent.trim())) {
+					value = value.trim();
+
+					if ((textContent != null) && value.equals(textContent.trim())) {
+						IStructuredDocument structuredDocument = document.getStructuredDocument();
+
 						int startOffset = element.getStartOffset();
 						int endOffset = element.getEndOffset();
-						int startLine = document.getStructuredDocument().getLineOfOffset(startOffset) + 1;
-						int endLine = document.getStructuredDocument().getLineOfOffset(endOffset) + 1;
+						int startLine = structuredDocument.getLineOfOffset(startOffset) + 1;
+						int endLine = structuredDocument.getLineOfOffset(endOffset) + 1;
 
 						SearchResult result = new SearchResult(
 							file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);

@@ -28,8 +28,8 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=properties", "problem.title=Changed Default Value for Browser Cache Properties",
 	"problem.summary=The default values for the portal properties 'browser.cache.disabled' and " +
 		"'browser.cache.signed.in.disabled' were changed to true.", "problem.tickets=LPS-74452",
-	"problem.section=#changed-default-value-for-browser-cache-properties",
-	"implName=ChangedBrowserCacheProperties", "version=7.1"
+	"problem.section=#changed-default-value-for-browser-cache-properties", "implName=ChangedBrowserCacheProperties",
+	"version=7.1"
 },
 	service = FileMigrator.class)
 public class ChangedBrowserCacheProperties extends PropertiesFileMigrator {

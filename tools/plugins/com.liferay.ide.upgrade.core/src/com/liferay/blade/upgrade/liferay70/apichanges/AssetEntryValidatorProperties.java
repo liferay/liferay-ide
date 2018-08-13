@@ -27,7 +27,8 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = {
 	"file.extensions=properties", "problem.title=Asset Entry Validator Property",
 	"problem.summary=Removed the asset.entry.validator Property", "problem.tickets=LPS-64370",
-	"problem.section=#removed-the-asset-entry-validator-property", "implName=AssetEntryValidatorProperties", "version=7.0"
+	"problem.section=#removed-the-asset-entry-validator-property", "implName=AssetEntryValidatorProperties",
+	"version=7.0"
 },
 	service = FileMigrator.class)
 public class AssetEntryValidatorProperties extends PropertiesFileMigrator {
