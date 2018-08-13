@@ -16,27 +16,27 @@ package com.liferay.ide.portlet.ui.jsf;
 
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.jsf.INewJSFPortletClassDataModelProperties;
 import com.liferay.ide.portlet.core.jsf.NewJSFPortletClassDataModelProvider;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.portlet.ui.wizard.NewLiferayPortletWizardPage;
 import com.liferay.ide.portlet.ui.wizard.NewPortletWizard;
 import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.templates.ContextTypeRegistry;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
@@ -96,12 +96,13 @@ public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPort
 
 		// for now, no need for own template store and context type
 
-		TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
-
 		PortletUIPlugin plugin = PortletUIPlugin.getDefault();
 
-		TemplateContextType contextType =
-			plugin.getTemplateContextRegistry().getContextType(JSFPortletTemplateContextTypeIds.NEW);
+		TemplateStore templateStore = plugin.getTemplateStore();
+
+		ContextTypeRegistry registry = plugin.getTemplateContextRegistry();
+
+		TemplateContextType contextType = registry.getContextType(JSFPortletTemplateContextTypeIds.NEW);
 
 		return new NewJSFPortletClassDataModelProvider(fragment) {
 
@@ -115,7 +116,9 @@ public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPort
 
 	@Override
 	protected ImageDescriptor getImage() {
-		Bundle bundle = PortletUIPlugin.getDefault().getBundle();
+		PortletUIPlugin plugin = PortletUIPlugin.getDefault();
+
+		Bundle bundle = plugin.getBundle();
 
 		return ImageDescriptor.createFromURL(bundle.getEntry("/icons/wizban/liferay_faces_75x66.png"));
 	}
@@ -130,9 +133,7 @@ public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPort
 				String jspsFolder = getDataModel().getStringProperty(CREATE_JSPS_FOLDER);
 				String projectName = getDataModel().getStringProperty(PROJECT_NAME);
 
-				IWorkspace workspace = ResourcesPlugin.getWorkspace();
-
-				IProject project = workspace.getRoot().getProject(projectName);
+				IProject project = CoreUtil.getProject(projectName);
 
 				// IDE-110 IDE-648
 
@@ -145,9 +146,7 @@ public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPort
 					IFile viewFile = defaultDocroot.getFile(path);
 
 					if (viewFile.exists()) {
-						IWorkbench workbench = PlatformUI.getWorkbench();
-
-						IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
+						IWorkbenchPage page = UIUtil.getActivePage();
 
 						IDE.openEditor(page, viewFile, true);
 

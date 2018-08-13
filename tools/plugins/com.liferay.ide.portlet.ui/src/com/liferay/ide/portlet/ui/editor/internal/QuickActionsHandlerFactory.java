@@ -26,14 +26,17 @@ import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.modeling.CapitalizationType;
+import org.eclipse.sapphire.ui.ISapphirePart;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireActionHandlerFactory;
 import org.eclipse.sapphire.ui.SapphireEditor;
+import org.eclipse.sapphire.ui.SapphirePart;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 import org.eclipse.sapphire.ui.def.ActionHandlerFactoryDef;
 import org.eclipse.sapphire.ui.forms.MasterDetailsContentNodePart;
+import org.eclipse.sapphire.ui.forms.MasterDetailsContentOutline;
 import org.eclipse.sapphire.ui.forms.MasterDetailsEditorPagePart;
 
 /**
@@ -123,9 +126,13 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 		public void init(SapphireAction action, ActionHandlerDef def) {
 			super.init(action, def);
 
-			Element rootModel = action.getPart().getModelElement();
+			ISapphirePart part = action.getPart();
 
-			PropertyDef property = rootModel.type().property(_strProperty);
+			Element rootModel = part.getModelElement();
+
+			ElementType type = rootModel.type();
+
+			PropertyDef property = type.property(_strProperty);
 
 			String labelText = property.getLabel(false, CapitalizationType.FIRST_WORD_ONLY, true);
 
@@ -147,9 +154,13 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 		 */
 		@Override
 		protected Object run(Presentation context) {
-			Element rootModel = context.part().getModelElement();
+			SapphirePart part = context.part();
 
-			PropertyDef property = rootModel.type().property(_strProperty);
+			Element rootModel = part.getModelElement();
+
+			ElementType type = rootModel.type();
+
+			PropertyDef property = type.property(_strProperty);
 
 			Object obj = rootModel.property(property);
 
@@ -168,7 +179,9 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 
 			MasterDetailsEditorPagePart page = getPart().nearest(MasterDetailsEditorPagePart.class);
 
-			MasterDetailsContentNodePart root = page.outline().getRoot();
+			MasterDetailsContentOutline outline = page.outline();
+
+			MasterDetailsContentNodePart root = outline.getRoot();
 
 			MasterDetailsContentNodePart node = root.findNode(mElement);
 

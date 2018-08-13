@@ -21,9 +21,12 @@ import com.liferay.ide.layouttpl.ui.parts.PortletRowLayoutEditPart;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.sapphire.ElementList;
 
 /**
  * @author Gregory Amerson
@@ -61,7 +64,9 @@ public class LayoutTplUIUtil {
 			return -1;
 		}
 
-		return currentParent.getPortletColumns().indexOf(column);
+		ElementList<PortletColumnElement> list = currentParent.getPortletColumns();
+
+		return list.indexOf(column);
 	}
 
 	public static int getRowIndex(PortletLayoutEditPart layoutEditPart) {
@@ -71,7 +76,9 @@ public class LayoutTplUIUtil {
 
 		PortletRowLayoutEditPart rowLayoutPart = (PortletRowLayoutEditPart)layoutEditPart.getParent();
 
-		Object[] rows = rowLayoutPart.getChildren().toArray();
+		List children = rowLayoutPart.getChildren();
+
+		Object[] rows = children.toArray();
 
 		for (int i = 0; i < rows.length; i++) {
 			if (layoutEditPart.equals(rows[i])) {

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.portlet.ui.wizard;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
@@ -252,7 +253,7 @@ public class NewLiferayPortletWizardPage
 
 		cssClassWrapper = SWTUtil.createText(group, 1);
 
-		this.synchHelper.synchText(cssClassWrapper, CSS_CLASS_WRAPPER, null);
+		synchHelper.synchText(cssClassWrapper, CSS_CLASS_WRAPPER, null);
 
 		SWTUtil.createLabel(group, StringPool.EMPTY, 1);
 
@@ -268,7 +269,9 @@ public class NewLiferayPortletWizardPage
 
 		};
 
-		this.synchHelper.getDataModel().addListener(listener);
+		IDataModel dataModel = synchHelper.getDataModel();
+
+		dataModel.addListener(listener);
 	}
 
 	@Override
@@ -307,8 +310,8 @@ public class NewLiferayPortletWizardPage
 		return new ISelectionStatusValidator() {
 
 			public IStatus validate(Object[] selection) {
-				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) &&
-					 !(selection[0] instanceof IProject) && !(selection[0] instanceof IFolder)) {
+				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) && !(selection[0] instanceof IProject) &&
+					!(selection[0] instanceof IFolder)) {
 
 					return Status.OK_STATUS;
 				}
@@ -326,8 +329,8 @@ public class NewLiferayPortletWizardPage
 				if (element instanceof IProject) {
 					IProject project = (IProject)element;
 
-					return project.getName().equals(
-						model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME));
+					return FileUtil.nameEquals(
+						project, model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME));
 				}
 				else if (element instanceof IFolder) {
 					return true;

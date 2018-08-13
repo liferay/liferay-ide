@@ -359,11 +359,12 @@ public class LiferayTomcatUtil {
 	public static Context loadContextFile(File contextFile) {
 		Context context = null;
 
-		if ((contextFile != null) && FileUtil.exists(contextFile)) {
+		if (FileUtil.exists(contextFile)) {
 			try (InputStream fis = Files.newInputStream(contextFile.toPath())) {
 				Factory factory = new Factory();
 
 				factory.setPackageName("org.eclipse.jst.server.tomcat.core.internal.xml.server40");
+
 				context = (Context)factory.loadDocument(fis);
 
 				if (context != null) {

@@ -219,6 +219,7 @@ public class LiferayTomcatServer
 			}
 			catch (CoreException ce) {
 				configuration = null;
+
 				throw ce;
 			}
 		}
@@ -270,6 +271,7 @@ public class LiferayTomcatServer
 	public void importRuntimeConfiguration(IRuntime runtime, IProgressMonitor monitor) throws CoreException {
 		if (runtime == null) {
 			configuration = null;
+
 			return;
 		}
 
@@ -298,6 +300,7 @@ public class LiferayTomcatServer
 			}
 			catch (CoreException ce) {
 				configuration = null;
+
 				throw ce;
 			}
 		}

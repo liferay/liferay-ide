@@ -17,6 +17,7 @@ package com.liferay.ide.portlet.ui.editor;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.IModelChangedListener;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
 import com.liferay.ide.portlet.core.PluginPackageModel;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
@@ -39,7 +40,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -60,7 +63,9 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		getSection().clientVerticalSpacing = FormLayoutFactory.SECTION_HEADER_VERTICAL_SPACING;
 		getSection().setData("part", this);
 
-		createClient(getSection(), page.getEditor().getToolkit());
+		FormEditor editor = page.getEditor();
+
+		createClient(getSection(), editor.getToolkit());
 	}
 
 	@Override
@@ -210,7 +215,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		FormEntryAdapter adapter = new FormEntryAdapter(this, actionBars) {
 
 			public void textValueChanged(FormEntry entry) {
-				getModel().setAuthor(entry.getValue().trim());
+				getModel().setAuthor(StringUtil.trim(entry.getValue()));
 			}
 
 		};
@@ -226,7 +231,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		FormEntryAdapter adapter = new FormEntryAdapter(this, actionBars) {
 
 			public void textValueChanged(FormEntry entry) {
-				getModel().setChangeLog(entry.getValue().trim());
+				getModel().setChangeLog(StringUtil.trim(entry.getValue()));
 			}
 
 		};
@@ -254,7 +259,9 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 
 		FormEditor formEditor = page.getEditor();
 
-		IActionBars actionBars = formEditor.getEditorSite().getActionBars();
+		IEditorSite editorSite = formEditor.getEditorSite();
+
+		IActionBars actionBars = editorSite.getActionBars();
 
 		createNameEntry(client, toolkit, actionBars);
 		createModuleGroupIdEntry(client, toolkit, actionBars);
@@ -282,7 +289,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		FormEntryAdapter adapter = new FormEntryAdapter(this, actionBars) {
 
 			public void textValueChanged(FormEntry entry) {
-				getModel().setLicenses(entry.getValue().trim());
+				getModel().setLicenses(StringUtil.trim(entry.getValue()));
 			}
 
 		};
@@ -298,7 +305,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		FormEntryAdapter adapter = new FormEntryAdapter(this, actionBars) {
 
 			public void textValueChanged(FormEntry entry) {
-				getModel().setLiferayVersions(entry.getValue().trim());
+				getModel().setLiferayVersions(StringUtil.trim(entry.getValue()));
 			}
 
 		};
@@ -323,14 +330,17 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		FormEntryAdapter adapter = new FormEntryAdapter(this, actionBars) {
 
 			public void textValueChanged(FormEntry entry) {
-				getModel().setLongDescription(entry.getValue().trim());
+				getModel().setLongDescription(StringUtil.trim(entry.getValue()));
 			}
 
 		};
 
 		longDescriptionEntry.setFormEntryListener(adapter);
 
-		longDescriptionEntry.getText().setLayoutData(gd);
+		Text text = longDescriptionEntry.getText();
+
+		text.setLayoutData(gd);
+
 		longDescriptionEntry.setEditable(isEditable());
 	}
 
@@ -340,7 +350,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		FormEntryAdapter adapter = new FormEntryAdapter(this, actionBars) {
 
 			public void textValueChanged(FormEntry entry) {
-				getModel().setModuleGroupId(entry.getValue().trim());
+				getModel().setModuleGroupId(StringUtil.trim(entry.getValue()));
 			}
 
 		};
@@ -357,7 +367,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		FormEntryAdapter adapter = new FormEntryAdapter(this, actionBars) {
 
 			public void textValueChanged(FormEntry entry) {
-				getModel().setModuleIncrementalVersion(entry.getValue().trim());
+				getModel().setModuleIncrementalVersion(StringUtil.trim(entry.getValue()));
 			}
 
 		};
@@ -373,7 +383,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		FormEntryAdapter adapter = new FormEntryAdapter(this, actionBars) {
 
 			public void textValueChanged(FormEntry entry) {
-				getModel().setName(entry.getValue().trim());
+				getModel().setName(StringUtil.trim(entry.getValue()));
 			}
 
 		};
@@ -389,7 +399,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		FormEntryAdapter adapter = new FormEntryAdapter(this, actionBars) {
 
 			public void textValueChanged(FormEntry entry) {
-				getModel().setPageUrl(entry.getValue().trim());
+				getModel().setPageUrl(StringUtil.trim(entry.getValue()));
 			}
 
 		};
@@ -412,14 +422,17 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		FormEntryAdapter adapter = new FormEntryAdapter(this, actionBars) {
 
 			public void textValueChanged(FormEntry entry) {
-				getModel().setShortDescription(entry.getValue().trim());
+				getModel().setShortDescription(StringUtil.trim(entry.getValue()));
 			}
 
 		};
 
 		shortDescriptionEntry.setFormEntryListener(adapter);
 
-		shortDescriptionEntry.getText().setLayoutData(gd);
+		Text text = shortDescriptionEntry.getText();
+
+		text.setLayoutData(gd);
+
 		shortDescriptionEntry.setEditable(isEditable());
 	}
 
@@ -454,7 +467,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		FormEntryAdapter adapter = new FormEntryAdapter(this, actionBars) {
 
 			public void textValueChanged(FormEntry entry) {
-				getModel().setTags(entry.getValue().trim());
+				getModel().setTags(StringUtil.trim(entry.getValue()));
 			}
 
 		};
@@ -506,7 +519,9 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		gd.horizontalSpan = 2;
 		gd.widthHint = 50;
 
-		entry.getText().setLayoutData(gd);
+		Text text = entry.getText();
+
+		text.setLayoutData(gd);
 
 		entry.setEditable(isEditable());
 	}

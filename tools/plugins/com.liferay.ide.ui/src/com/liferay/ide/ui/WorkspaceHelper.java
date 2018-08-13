@@ -16,6 +16,7 @@ package com.liferay.ide.ui;
 
 import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
@@ -35,8 +36,7 @@ import org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.IWorkbenchWindow;
 
 /**
  * @author Gregory Amerson
@@ -120,7 +120,7 @@ public class WorkspaceHelper implements WorkspaceHelperMBean {
 
 			String name = description.getName();
 
-			IProject project = workspace.getRoot().getProject(name);
+			IProject project = CoreUtil.getProject(name);
 
 			if (project.exists()) {
 				retval = "Project with name " + name + " already exists";
@@ -143,9 +143,9 @@ public class WorkspaceHelper implements WorkspaceHelperMBean {
 
 							}
 
-							IWorkbench workbench = PlatformUI.getWorkbench();
+							IWorkbenchWindow workbenchWindow = UIUtil.getActiveWorkbenchWindow();
 
-							Shell shell = workbench.getActiveWorkbenchWindow().getShell();
+							Shell shell = workbenchWindow.getShell();
 
 							shell.forceActive();
 							shell.forceFocus();

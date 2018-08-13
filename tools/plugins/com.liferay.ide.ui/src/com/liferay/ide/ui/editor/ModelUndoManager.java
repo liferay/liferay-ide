@@ -92,6 +92,7 @@ public abstract class ModelUndoManager implements IModelUndoManager, IModelChang
 
 		if (event.getChangeType() == IModelChangedEvent.WORLD_CHANGED) {
 			_initialize();
+
 			return;
 		}
 
@@ -154,6 +155,7 @@ public abstract class ModelUndoManager implements IModelUndoManager, IModelChang
 
 	private void _addOperation(IModelChangedEvent operation) {
 		_operations.add(operation);
+
 		int size = _operations.size();
 
 		if (size > _undoLevelLimit) {

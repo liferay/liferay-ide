@@ -241,7 +241,11 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 		}
 
 		if (port != null) {
-			retval = Integer.parseInt(port);
+			try {
+				retval = Integer.parseInt(port);
+			}
+			catch (NumberFormatException nfe) {
+			}
 		}
 
 		return retval;

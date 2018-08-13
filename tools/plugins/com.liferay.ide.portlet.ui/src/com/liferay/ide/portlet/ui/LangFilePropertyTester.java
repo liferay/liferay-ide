@@ -28,7 +28,9 @@ public class LangFilePropertyTester extends PropertyTester {
 		if (receiver instanceof IFile) {
 			IFile file = (IFile)receiver;
 
-			if (file.exists() && file.getName().matches("Language.*\\.properties")) {
+			String fileName = file.getName();
+
+			if (file.exists() && fileName.matches("Language.*\\.properties")) {
 				return ProjectUtil.isLiferayFacetedProject(file.getProject());
 			}
 		}

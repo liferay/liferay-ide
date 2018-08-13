@@ -14,6 +14,7 @@
 
 package com.liferay.ide.ui.wizard;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.LiferayUIPlugin;
 
 import java.util.ArrayList;
@@ -94,7 +95,8 @@ public class RenameDialog extends SelectionStatusDialog {
 	}
 
 	public void initialize() {
-		_oldNames = new ArrayList();
+		_oldNames = new ArrayList<>();
+
 		setStatusLineAboveButtons(true);
 	}
 
@@ -181,12 +183,9 @@ public class RenameDialog extends SelectionStatusDialog {
 		return container;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.Dialog#okPressed()
-	 */
 	protected void okPressed() {
-		_newName = _text.getText().trim();
+		_newName = StringUtil.trim(_text.getText());
+
 		super.okPressed();
 	}
 
@@ -202,13 +201,14 @@ public class RenameDialog extends SelectionStatusDialog {
 				updateStatus(_status);
 
 				okButton.setEnabled(false);
+
 				return;
 			}
 		}
 
-		for (int i = 0; i < _oldNames.size(); i++) {
-			if ((_caseSensitive && text.equals(_oldNames.get(i))) ||
-				(!_caseSensitive && text.equalsIgnoreCase(_oldNames.get(i).toString()))) {
+		for (Object oldName : _oldNames) {
+			if ((_caseSensitive && text.equals(oldName)) ||
+				(!_caseSensitive && text.equalsIgnoreCase(oldName.toString()))) {
 
 				_status = new Status(
 					IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, IStatus.ERROR, Msgs.nameAlreadyExists, null);
@@ -231,7 +231,7 @@ public class RenameDialog extends SelectionStatusDialog {
 	private IInputValidator _fValidator;
 	private String _newName;
 	private String _oldName;
-	private ArrayList _oldNames;
+	private ArrayList<String> _oldNames;
 	private IStatus _status;
 	private Text _text;
 

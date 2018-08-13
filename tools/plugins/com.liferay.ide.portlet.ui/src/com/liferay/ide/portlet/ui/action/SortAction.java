@@ -50,7 +50,9 @@ public class SortAction extends Action {
 
 		// Set the image
 
-		Bundle bundle = PortletUIPlugin.getDefault().getBundle();
+		PortletUIPlugin plugin = PortletUIPlugin.getDefault();
+
+		Bundle bundle = plugin.getBundle();
 
 		setImageDescriptor(ImageDescriptor.createFromURL(bundle.getEntry("/icons/e16/alphab_sort_co.gif")));
 

@@ -16,6 +16,7 @@ package com.liferay.ide.portlet.ui.editor.internal;
 
 import com.liferay.ide.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.portlet.core.model.Portlet;
 import com.liferay.ide.portlet.core.model.PortletInfo;
 import com.liferay.ide.portlet.core.model.SupportedLocales;
@@ -42,6 +43,7 @@ import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
+import org.eclipse.sapphire.ui.SapphirePart;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -110,8 +112,10 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 		if (enabled) {
 			Portlet portlet = (Portlet)getModelElement();
 
-			if ((portlet.getResourceBundle() != null) && !portlet.getResourceBundle().empty()) {
-				Status status = portlet.getResourceBundle().validation();
+			Value<Path> resourceBundle = portlet.getResourceBundle();
+
+			if ((resourceBundle != null) && !resourceBundle.empty()) {
+				Status status = resourceBundle.validation();
 
 				if (status.severity() == Severity.ERROR) {
 					enabled = false;
@@ -126,7 +130,9 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 					 * means "No resource bundle defined", in this case the button should be
 					 * enabled.
 					 */
-					if (sl.validation().severity() == Severity.ERROR) {
+					Status status = sl.validation();
+
+					if (status.severity() == Severity.ERROR) {
 						enabled = false;
 
 						break;
@@ -147,7 +153,9 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 	 */
 	@Override
 	protected Object run(Presentation context) {
-		ITextEditor editor = context.part().adapt(ITextEditor.class);
+		SapphirePart part = context.part();
+
+		ITextEditor editor = part.adapt(ITextEditor.class);
 
 		editor.doSave(new NullProgressMonitor());
 
@@ -197,7 +205,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 
 		for (SupportedLocales iSupportedLocale : supportedLocales) {
 			if (iSupportedLocale != null) {
-				String locale = PortletUtil.localeString(iSupportedLocale.getSupportedLocale().text());
+				String locale = PortletUtil.localeString(SapphireUtil.getText(iSupportedLocale.getSupportedLocale()));
 
 				String localizedIOFileName = PortletUtil.convertJavaToIoFileName(
 					text, GenericResourceBundlePathService.RB_FILE_EXTENSION, locale);
@@ -219,7 +227,9 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 		for (SupportedLocales sl : p.getSupportedLocales()) {
 			Value<String> locale = sl.getSupportedLocale();
 
-			locale.service(LocaleBundleValidationService.class).forceRefresh();
+			LocaleBundleValidationService service = locale.service(LocaleBundleValidationService.class);
+
+			service.forceRefresh();
 		}
 
 		return null;

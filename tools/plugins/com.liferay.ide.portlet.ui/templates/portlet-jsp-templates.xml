@@ -1,56 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates>
 
-	<template name="actionURL" description="A portlet:actionURL tag with its most commonly used attributes"
-	id="com.liferay.ide.portlet.ui.templates.actionURL" context="jsp_all" enabled="true" autoinsert="true"
-	>&lt;portlet:actionURL name="${action}" var="${action}URL" /&gt;</template>
+	<template
+		name="actionURL" description="A portlet:actionURL tag with its most commonly used attributes"
+		id="com.liferay.ide.portlet.ui.templates.actionURL" context="jsp_all" enabled="true" autoinsert="true"
+	>&lt;portlet:actionURL name="${action}" var="${action}URL" /&gt;</template
+>
 
-	<template name="actionURLForm" description="A portlet:actionURL tag and a aui:form"
-	id="com.liferay.ide.portlet.ui.templates.actionURLForm" context="jsp_all" enabled="true" autoinsert="true"
-	>%Templates.portlet.actionurlform.content</template>
+	<template
+		name="actionURLForm" description="A portlet:actionURL tag and a aui:form"
+		id="com.liferay.ide.portlet.ui.templates.actionURLForm" context="jsp_all" enabled="true" autoinsert="true"
+	>%Templates.portlet.actionurlform.content</template
+>
 
-	<template name="common-taglibs" description="The most commonly used liferay taglibs"
-	id="com.liferay.ide.portlet.ui.templates.common-taglibs" context="jsp_all" enabled="true" autoinsert="true"
-	>%Templates.portlet.commontaglibs.content</template>
+	<template
+		name="common-taglibs" description="The most commonly used liferay taglibs"
+		id="com.liferay.ide.portlet.ui.templates.common-taglibs" context="jsp_all" enabled="true" autoinsert="true"
+	>%Templates.portlet.commontaglibs.content</template
+>
 
-	<template name="currentURL" description="Create a jsp variable for currentURL"
-	id="com.liferay.ide.portlet.ui.templates.currentURL" context="jsp_all" enabled="true" autoinsert="true"
-	>%Templates.portlet.currenturl.content</template>
+	<template
+		name="currentURL" description="Create a jsp variable for currentURL"
+		id="com.liferay.ide.portlet.ui.templates.currentURL" context="jsp_all" enabled="true" autoinsert="true"
+	>%Templates.portlet.currenturl.content</template
+>
 
-	<template name="%Templates.portlet.aboutjsp.name" description="%Templates.portlet.aboutjsp.desc"
-			id="com.liferay.ide.templates.portlet.aboutjsp" context="portlet_jsp_new"
-			enabled="true">%Templates.portlet.aboutjsp.content</template>
+	<template
+		name="%Templates.portlet.aboutjsp.name" description="%Templates.portlet.aboutjsp.desc"
+		id="com.liferay.ide.templates.portlet.aboutjsp" context="portlet_jsp_new"
+			enabled="true">%Templates.portlet.aboutjsp.content</template
+>
 
-	<template name="%Templates.portlet.configjsp.name" description="%Templates.portlet.configjsp.desc"
-			id="com.liferay.ide.templates.portlet.configjsp" context="portlet_jsp_new"
-			enabled="true">%Templates.portlet.configjsp.content</template>
+	<template
+		name="%Templates.portlet.configjsp.name" description="%Templates.portlet.configjsp.desc"
+		id="com.liferay.ide.templates.portlet.configjsp" context="portlet_jsp_new"
+			enabled="true">%Templates.portlet.configjsp.content</template
+>
 
-	<template name="%Templates.portlet.editjsp.name" description="%Templates.portlet.editjsp.desc"
-			id="com.liferay.ide.templates.portlet.editjsp" context="portlet_jsp_new"
-			enabled="true">%Templates.portlet.editjsp.content</template>
+	<template
+		name="%Templates.portlet.editjsp.name" description="%Templates.portlet.editjsp.desc"
+		id="com.liferay.ide.templates.portlet.editjsp" context="portlet_jsp_new"
+			enabled="true">%Templates.portlet.editjsp.content</template
+>
 
-	<template name="%Templates.portlet.editdefaultsjsp.name" description="%Templates.portlet.editdefaultsjsp.desc"
-			id="com.liferay.ide.templates.portlet.editdefaultsjsp" context="portlet_jsp_new"
-			enabled="true">%Templates.portlet.editdefaultsjsp.content</template>
+	<template
+		name="%Templates.portlet.editdefaultsjsp.name" description="%Templates.portlet.editdefaultsjsp.desc"
+		id="com.liferay.ide.templates.portlet.editdefaultsjsp" context="portlet_jsp_new"
+			enabled="true">%Templates.portlet.editdefaultsjsp.content</template
+>
 
-	<template name="%Templates.portlet.editguestjsp.name" description="%Templates.portlet.editguestjsp.desc"
-			id="com.liferay.ide.templates.portlet.editguestjsp" context="portlet_jsp_new"
-			enabled="true">%Templates.portlet.editguestjsp.content</template>
+	<template
+		name="%Templates.portlet.editguestjsp.name" description="%Templates.portlet.editguestjsp.desc"
+		id="com.liferay.ide.templates.portlet.editguestjsp" context="portlet_jsp_new"
+			enabled="true">%Templates.portlet.editguestjsp.content</template
+>
 
-	<template name="%Templates.portlet.helpjsp.name" description="%Templates.portlet.helpjsp.desc"
-			id="com.liferay.ide.templates.portlet.helpjsp" context="portlet_jsp_new"
-			enabled="true">%Templates.portlet.helpjsp.content</template>
+	<template
+		name="%Templates.portlet.helpjsp.name" description="%Templates.portlet.helpjsp.desc"
+		id="com.liferay.ide.templates.portlet.helpjsp" context="portlet_jsp_new"
+			enabled="true">%Templates.portlet.helpjsp.content</template
+>
 
-	<template name="%Templates.portlet.previewjsp.name" description="%Templates.portlet.previewjsp.desc"
-			id="com.liferay.ide.templates.portlet.previewjsp" context="portlet_jsp_new"
-			enabled="true">%Templates.portlet.previewjsp.content</template>
+	<template
+		name="%Templates.portlet.previewjsp.name" description="%Templates.portlet.previewjsp.desc"
+		id="com.liferay.ide.templates.portlet.previewjsp" context="portlet_jsp_new"
+			enabled="true">%Templates.portlet.previewjsp.content</template
+>
 
-	<template name="%Templates.portlet.printjsp.name" description="%Templates.portlet.printjsp.desc"
-			id="com.liferay.ide.templates.portlet.printjsp" context="portlet_jsp_new"
-			enabled="true">%Templates.portlet.printjsp.content</template>
+	<template
+		name="%Templates.portlet.printjsp.name" description="%Templates.portlet.printjsp.desc"
+		id="com.liferay.ide.templates.portlet.printjsp" context="portlet_jsp_new"
+			enabled="true">%Templates.portlet.printjsp.content</template
+>
 
-	<template name="%Templates.portlet.viewjsp.name" description="%Templates.portlet.viewjsp.desc"
-			id="com.liferay.ide.templates.portlet.viewjsp" context="portlet_jsp_new"
-			enabled="true">%Templates.portlet.viewjsp.content</template>
+	<template
+		name="%Templates.portlet.viewjsp.name" description="%Templates.portlet.viewjsp.desc"
+		id="com.liferay.ide.templates.portlet.viewjsp" context="portlet_jsp_new"
+			enabled="true">%Templates.portlet.viewjsp.content</template
+>
 
 </templates>

@@ -17,6 +17,7 @@ package com.liferay.ide.portlet.vaadin.core.dd;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.dd.LiferayPortletDescriptorHelper;
 import com.liferay.ide.portlet.vaadin.core.operation.INewVaadinPortletClassDataModelProperties;
 import com.liferay.ide.server.util.ServerUtil;
@@ -52,7 +53,7 @@ public class VaadinLiferayPortletDescriptorHelper
 
 	@Override
 	public boolean canAddNewPortlet(IDataModel model) {
-		return model.getID().contains("NewVaadinPortlet");
+		return StringUtil.contains(model.getID(), "NewVaadinPortlet");
 	}
 
 	@Override
@@ -111,8 +112,15 @@ public class VaadinLiferayPortletDescriptorHelper
 
 			Node rnpNode = NodeUtil.appendChildElement(lastPortletElement, "requires-namespaced-parameters", "false");
 			Node ajaxNode = NodeUtil.appendChildElement(lastPortletElement, "ajaxable", "false");
-			Node hpcNode = lastPortletElement.getElementsByTagName("header-portlet-css").item(0);
-			Node fpjNode = lastPortletElement.getElementsByTagName("footer-portlet-javascript").item(0);
+
+			NodeList headerPortletCssNodeList = lastPortletElement.getElementsByTagName("header-portlet-css");
+
+			Node hpcNode = headerPortletCssNodeList.item(0);
+
+			NodeList footerPortletJavascriptNodeList = lastPortletElement.getElementsByTagName(
+				"footer-portlet-javascript");
+
+			Node fpjNode = footerPortletJavascriptNodeList.item(0);
 
 			lastPortletElement.replaceChild(rnpNode, hpcNode);
 			lastPortletElement.replaceChild(ajaxNode, fpjNode);

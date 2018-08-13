@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.ui.internal.ide.ChooseWorkspaceData;
 import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
@@ -46,7 +47,9 @@ public class LaunchWorkspaceMenu extends ExtensionContributionFactory {
 			if (workspaceHistoryItem instanceof CommandContributionItem) {
 				CommandContributionItem commandItem = (CommandContributionItem)workspaceHistoryItem;
 
-				if ("Other...".equals(commandItem.getData().label)) {
+				CommandContributionItemParameter parameter = commandItem.getData();
+
+				if ("Other...".equals(parameter.label)) {
 					menu.add(new Separator());
 				}
 			}
@@ -60,7 +63,9 @@ public class LaunchWorkspaceMenu extends ExtensionContributionFactory {
 	private IContributionItem[] _buildWorkspaceHistory(IServiceLocator serviceLocator) {
 		List<IContributionItem> retval = new ArrayList<>();
 
-		ChooseWorkspaceData chooseWorkspaceData = new ChooseWorkspaceData(Platform.getInstanceLocation().getURL());
+		Location location = Platform.getInstanceLocation();
+
+		ChooseWorkspaceData chooseWorkspaceData = new ChooseWorkspaceData(location.getURL());
 
 		if (chooseWorkspaceData.readPersistedData()) {
 			String currentWorkspace = chooseWorkspaceData.getInitialDefault();

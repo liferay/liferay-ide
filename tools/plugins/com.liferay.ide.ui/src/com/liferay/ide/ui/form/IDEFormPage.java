@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.form;
 
 import com.liferay.ide.core.model.IBaseModel;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -204,9 +205,9 @@ public abstract class IDEFormPage extends FormPage {
 	}
 
 	public Section createUISection(Composite parent, String text, String description, int style) {
-		IManagedForm managedForm = getManagedForm();
+		FormToolkit formToolkit = getManagedForm().getToolkit();
 
-		Section section = managedForm.getToolkit().createSection(parent, style);
+		Section section = formToolkit.createSection(parent, style);
 
 		section.clientVerticalSpacing = FormLayoutFactory.SECTION_HEADER_VERTICAL_SPACING;
 		section.setLayout(FormLayoutFactory.createClearGridLayout(false, 1));
@@ -221,9 +222,9 @@ public abstract class IDEFormPage extends FormPage {
 	}
 
 	public Composite createUISectionContainer(Composite parent, int columns) {
-		IManagedForm managedForm = getManagedForm();
+		FormToolkit formToolkit = getManagedForm().getToolkit();
 
-		Composite container = managedForm.getToolkit().createComposite(parent);
+		Composite container = formToolkit.createComposite(parent);
 
 		container.setLayout(FormLayoutFactory.createSectionClientGridLayout(false, columns));
 
@@ -314,7 +315,7 @@ public abstract class IDEFormPage extends FormPage {
 			if (lastControl instanceof Text) {
 				Text text = (Text)lastControl;
 
-				text.setSelection(0, text.getText().length());
+				text.setSelection(0, StringUtil.length(text.getText()));
 			}
 		}
 		else {
@@ -390,15 +391,17 @@ public abstract class IDEFormPage extends FormPage {
 
 		IFormPart[] parts = managedForm.getParts();
 
-		for (int i = 0; i < parts.length; i++) {
-			if (parts[i] instanceof IAdaptable) {
-				IAdaptable adapter = (IAdaptable)parts[i];
+		for (IFormPart part : parts) {
+			if (part instanceof IAdaptable) {
+				IAdaptable adapter = (IAdaptable)part;
 
 				IAction[] actions = (IAction[])adapter.getAdapter(IAction[].class);
 
 				if (actions != null) {
-					for (int j = 0; j < actions.length; j++) {
-						form.getToolBarManager().add(actions[j]);
+					for (IAction action : actions) {
+						IToolBarManager toolBarManager = form.getToolBarManager();
+
+						toolBarManager.add(action);
 					}
 				}
 			}
@@ -572,8 +575,8 @@ public abstract class IDEFormPage extends FormPage {
 
 			Control[] children = comp.getChildren();
 
-			for (int i = 0; i < children.length; i++) {
-				_resetMenu(menu, children[i]);
+			for (Control control : children) {
+				_resetMenu(menu, control);
 			}
 		}
 

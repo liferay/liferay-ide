@@ -17,6 +17,7 @@ package com.liferay.ide.portlet.ui.editor;
 import com.liferay.ide.core.model.IBaseModel;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.IModelChangedListener;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
@@ -27,6 +28,7 @@ import com.liferay.ide.ui.form.IDEFormEditor;
 import com.liferay.ide.ui.form.IDEFormPage;
 import com.liferay.ide.ui.form.TablePart;
 import com.liferay.ide.ui.form.TableSection;
+import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.ui.wizard.ExternalFileSelectionDialog;
 
 import java.io.File;
@@ -55,14 +57,13 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -80,7 +81,9 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		section.setText(Msgs.portalDependencyTlds);
 		section.setDescription(Msgs.specifyTLDs);
 
-		Composite composite = section.getTextClient().getParent();
+		Control textClient = section.getTextClient();
+
+		Composite composite = textClient.getParent();
 
 		composite.layout(true);
 
@@ -110,7 +113,9 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		section.setLayout(FormLayoutFactory.createClearGridLayout(false, 1));
 		section.setLayoutData(gd);
 		section.setText(Msgs.portalDependencyTlds);
+
 		_createSectionToolbar(section);
+
 		initialize();
 	}
 
@@ -167,7 +172,9 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		_fViewer.setInput(model);
 
 		_updateButtons();
+
 		model.addModelChangedListener(this);
+
 		_fAddAction.setEnabled(model.isEditable());
 
 		_fRemoveAction.setEnabled(model.isEditable());
@@ -176,12 +183,14 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	public void modelChanged(IModelChangedEvent event) {
 		if (event.getChangeType() == IModelChangedEvent.WORLD_CHANGED) {
 			markStale();
+
 			return;
 		}
 
 		if (event.getChangedProperty() == IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS) {
 			refresh();
 			_updateButtons();
+
 			return;
 		}
 	}
@@ -222,12 +231,15 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	public void refresh() {
 		_fTlds = null;
 		_fViewer.refresh();
+
 		super.refresh();
 	}
 
 	public void setFocus() {
 		if (_fViewer != null) {
-			_fViewer.getTable().setFocus();
+			Table table = _fViewer.getTable();
+
+			table.setFocus();
 		}
 	}
 
@@ -260,9 +272,9 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	public class PortalTldsLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
-			IWorkbench workbench = PlatformUI.getWorkbench();
+			ISharedImages sharedImages = UIUtil.getSharedImages();
 
-			return workbench.getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
+			return sharedImages.getImage(ISharedImages.IMG_OBJ_FILE);
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
@@ -319,7 +331,9 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 
 		if (portalDir != null) {
 			for (String portalTld : portalTlds) {
-				File tldFile = new File(portalDir.append("WEB-INF/tld").toFile(), portalTld.trim());
+				File tldFolder = FileUtil.getFile(portalDir.append("WEB-INF/tld"));
+
+				File tldFile = new File(tldFolder, portalTld.trim());
 
 				if (tldFile.isFile() && tldFile.exists()) {
 					_fTlds.add(tldFile);
@@ -361,11 +375,11 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	private void _createSectionToolbar(Section section) {
 		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
 
-		ToolBar toolbar = toolBarManager.createControl(section);
+		ToolBar toolBar = toolBarManager.createControl(section);
 
 		Cursor handCursor = new Cursor(Display.getCurrent(), SWT.CURSOR_HAND);
 
-		toolbar.setCursor(handCursor);
+		toolBar.setCursor(handCursor);
 
 		// Cursor needs to be explicitly disposed
 
@@ -379,7 +393,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 
 		};
 
-		toolbar.addDisposeListener(listener);
+		toolBar.addDisposeListener(listener);
 
 		// Add sort action to the tool bar
 		// fSortAction = new SortAction(fViewer, "Sort alphabetically", null, null, this);
@@ -387,7 +401,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 
 		toolBarManager.update(true);
 
-		section.setTextClient(toolbar);
+		section.setTextClient(toolBar);
 	}
 
 	private void _handleAdd() {
@@ -413,8 +427,8 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 				Object[] selectedFiles = dialog.getResult();
 
 				try {
-					for (int i = 0; i < selectedFiles.length; i++) {
-						File tld = (File)selectedFiles[i];
+					for (Object o : selectedFiles) {
+						File tld = (File)o;
 
 						if (tld.exists()) {
 							model.addPortalDependencyTld(tld.getName());
@@ -464,7 +478,9 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	private void _handleUp() {
 		TableViewer viewer = getTablePart().getTableViewer();
 
-		int index = viewer.getTable().getSelectionIndex();
+		Table table = viewer.getTable();
+
+		int index = table.getSelectionIndex();
 
 		if (index < 1) {
 			return;
@@ -494,7 +510,9 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	private void _updateButtons() {
 		TablePart tablePart = getTablePart();
 
-		Table table = tablePart.getTableViewer().getTable();
+		TableViewer tableViewer = tablePart.getTableViewer();
+
+		Table table = tableViewer.getTable();
 
 		TableItem[] selection = table.getSelection();
 

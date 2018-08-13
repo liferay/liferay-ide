@@ -162,7 +162,9 @@ public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implement
 
 			});
 
-		synchHelper.getDataModel().addListener(
+		IDataModel dataModel = synchHelper.getDataModel();
+
+		dataModel.addListener(
 			new IDataModelListener() {
 
 				public void propertyChanged(DataModelEvent event) {

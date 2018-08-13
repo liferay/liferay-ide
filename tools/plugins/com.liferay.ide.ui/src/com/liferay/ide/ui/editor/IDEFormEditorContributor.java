@@ -34,6 +34,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
@@ -124,6 +125,7 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 		fEditor = (IDEFormEditor)targetEditor;
 
 		fEditor.updateUndo(getGlobalAction(ActionFactory.UNDO.getId()), getGlobalAction(ActionFactory.REDO.getId()));
+
 		setActivePage(fEditor.getActiveEditor());
 		updateSelectableActions(fEditor.getSelection());
 	}
@@ -164,7 +166,9 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 
 			IWorkbenchWindow workbenchWindow = page.getWorkbenchWindow();
 
-			_fSharedImages = workbenchWindow.getWorkbench().getSharedImages();
+			IWorkbench workbench = workbenchWindow.getWorkbench();
+
+			_fSharedImages = workbench.getSharedImages();
 		}
 
 		return _fSharedImages;
@@ -205,6 +209,7 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 		fRevertAction = new RevertAction();
 
 		fRevertAction.setText(Msgs.revert);
+
 		_addGlobalAction(ActionFactory.REVERT.getId(), fRevertAction);
 	}
 
@@ -313,6 +318,7 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 
 		public void run() {
 			fEditor.performGlobalAction(_id);
+
 			updateSelectableActions(fEditor.getSelection());
 		}
 
@@ -365,7 +371,9 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 
 		public void run() {
 			if (fEditor != null) {
-				LiferayUIPlugin.getActivePage().saveEditor(fEditor, false);
+				IWorkbenchPage workbenchPage = LiferayUIPlugin.getActivePage();
+
+				workbenchPage.saveEditor(fEditor, false);
 			}
 		}
 

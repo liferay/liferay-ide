@@ -30,12 +30,15 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.navigator.CommonNavigator;
+import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.navigator.ICommonFilterDescriptor;
+import org.eclipse.ui.navigator.INavigatorActivationService;
 import org.eclipse.ui.navigator.INavigatorContentService;
 import org.eclipse.ui.navigator.INavigatorFilterService;
 
@@ -56,8 +59,9 @@ public class ProjectExplorerLayoutUtil {
 
 			IHandler hanlder = command.getHandler();
 
-			IViewPart projectExplorer = workbench.getWorkbenchWindows()[0].getActivePage().findView(
-				IPageLayout.ID_PROJECT_EXPLORER);
+			IWorkbenchPage page = UIUtil.getActivePage();
+
+			IViewPart projectExplorer = page.findView(IPageLayout.ID_PROJECT_EXPLORER);
 
 			if ((hanlder != null) && (projectExplorer != null)) {
 				Map<String, String> map = new HashMap<>();
@@ -96,7 +100,9 @@ public class ProjectExplorerLayoutUtil {
 
 			INavigatorContentService navigatorContentService = navigator.getNavigatorContentService();
 
-			boolean previousNest = navigatorContentService.getActivationService().isNavigatorExtensionActive(
+			INavigatorActivationService activationService = navigatorContentService.getActivationService();
+
+			boolean previousNest = activationService.isNavigatorExtensionActive(
 				nestedProjectsContentProviderExtensionId);
 
 			String newNestParam = event.getParameter(_nestParameter);
@@ -107,7 +113,10 @@ public class ProjectExplorerLayoutUtil {
 			}
 
 			if (newNest != previousNest) {
-				ISelection initialSelection = navigator.getCommonViewer().getSelection();
+				CommonViewer commonViewer = navigator.getCommonViewer();
+
+				ISelection initialSelection = commonViewer.getSelection();
+
 				INavigatorFilterService filterService = navigatorContentService.getFilterService();
 				Set<String> filters = new HashSet<>();
 
@@ -118,22 +127,24 @@ public class ProjectExplorerLayoutUtil {
 				}
 
 				if (newNest) {
-					navigatorContentService.getActivationService().activateExtensions(
+					activationService.activateExtensions(
 						new String[] {nestedProjectsContentProviderExtensionId}, false);
 					filters.add(hideTopLevelProjectIfNested);
 					filters.add(hideFolderWhenProjectIsShownAsNested);
 				}
 				else {
-					navigatorContentService.getActivationService().deactivateExtensions(
+					activationService.deactivateExtensions(
 						new String[] {nestedProjectsContentProviderExtensionId}, false);
 					filters.remove(hideTopLevelProjectIfNested);
 					filters.remove(hideFolderWhenProjectIsShownAsNested);
 				}
 
 				filterService.activateFilterIdsAndUpdateViewer(filters.toArray(new String[filters.size()]));
-				navigatorContentService.getActivationService().persistExtensionActivations();
-				navigator.getCommonViewer().refresh();
-				navigator.getCommonViewer().setSelection(initialSelection);
+
+				activationService.persistExtensionActivations();
+
+				commonViewer.refresh();
+				commonViewer.setSelection(initialSelection);
 			}
 
 			HandlerUtil.updateRadioState(event.getCommand(), Boolean.toString(newNest));

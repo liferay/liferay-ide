@@ -17,6 +17,7 @@ package com.liferay.ide.portlet.ui.editor;
 import com.liferay.ide.core.model.IBaseModel;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.IModelChangedListener;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
@@ -28,6 +29,7 @@ import com.liferay.ide.ui.form.IDEFormEditor;
 import com.liferay.ide.ui.form.IDEFormPage;
 import com.liferay.ide.ui.form.TablePart;
 import com.liferay.ide.ui.form.TableSection;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -62,7 +64,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -82,7 +83,9 @@ public class RequiredDeploymentContextsSection
 
 		Control textClient = getSection().getTextClient();
 
-		textClient.getParent().layout(true);
+		Composite composite = textClient.getParent();
+
+		composite.layout(true);
 
 		getTablePart().setEditable(true);
 	}
@@ -110,7 +113,9 @@ public class RequiredDeploymentContextsSection
 		section.setLayout(FormLayoutFactory.createClearGridLayout(false, 1));
 		section.setLayoutData(gd);
 		section.setText(Msgs.serviceDependencies);
+
 		_createSectionToolbar(section);
+
 		initialize();
 	}
 
@@ -165,8 +170,11 @@ public class RequiredDeploymentContextsSection
 		}
 
 		_fViewer.setInput(model);
+
 		_updateButtons();
+
 		model.addModelChangedListener(this);
+
 		_fAddAction.setEnabled(model.isEditable());
 		_fRemoveAction.setEnabled(model.isEditable());
 	}
@@ -174,6 +182,7 @@ public class RequiredDeploymentContextsSection
 	public void modelChanged(IModelChangedEvent event) {
 		if (event.getChangeType() == IModelChangedEvent.WORLD_CHANGED) {
 			markStale();
+
 			return;
 		}
 
@@ -184,6 +193,7 @@ public class RequiredDeploymentContextsSection
 
 			refresh();
 			_updateButtons();
+
 			return;
 		}
 	}
@@ -199,6 +209,7 @@ public class RequiredDeploymentContextsSection
 	public void refresh() {
 		_contexts = null;
 		_fViewer.refresh();
+
 		super.refresh();
 	}
 
@@ -206,7 +217,9 @@ public class RequiredDeploymentContextsSection
 
 	public void setFocus() {
 		if (_fViewer != null) {
-			_fViewer.getTable().setFocus();
+			Table table = _fViewer.getTable();
+
+			table.setFocus();
 		}
 	}
 
@@ -226,8 +239,13 @@ public class RequiredDeploymentContextsSection
 
 		Table table = viewer.getTable();
 
-		String dep1 = (String)table.getItem(index1).getData();
-		String dep2 = (String)table.getItem(index2).getData();
+		TableItem item1 = table.getItem(index1);
+
+		String dep1 = (String)item1.getData();
+
+		TableItem item2 = table.getItem(index2);
+
+		String dep2 = (String)item2.getData();
 
 		PluginPackageModel model = (PluginPackageModel)getPage().getModel();
 
@@ -249,7 +267,7 @@ public class RequiredDeploymentContextsSection
 	public class ContextsLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
-			ISharedImages images = PlatformUI.getWorkbench().getSharedImages();
+			ISharedImages images = UIUtil.getSharedImages();
 
 			return images.getImage(SharedImages.IMG_OBJ_PROJECT);
 		}
@@ -338,11 +356,11 @@ public class RequiredDeploymentContextsSection
 	private void _createSectionToolbar(Section section) {
 		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
 
-		ToolBar toolbar = toolBarManager.createControl(section);
+		ToolBar toolBar = toolBarManager.createControl(section);
 
 		Cursor handCursor = new Cursor(Display.getCurrent(), SWT.CURSOR_HAND);
 
-		toolbar.setCursor(handCursor);
+		toolBar.setCursor(handCursor);
 
 		// Cursor needs to be explicitly disposed
 
@@ -356,7 +374,7 @@ public class RequiredDeploymentContextsSection
 
 		};
 
-		toolbar.addDisposeListener(listener);
+		toolBar.addDisposeListener(listener);
 
 		// Add sort action to the tool bar
 		// fSortAction = new SortAction(fViewer, "Sort alphabetically", null, null, this);
@@ -364,7 +382,7 @@ public class RequiredDeploymentContextsSection
 
 		toolBarManager.update(true);
 
-		section.setTextClient(toolbar);
+		section.setTextClient(toolBar);
 	}
 
 	private void _handleAdd() {
@@ -380,7 +398,7 @@ public class RequiredDeploymentContextsSection
 					IProject project = ((IJavaProject)element).getProject();
 
 					for (String existingDep : existingServiceDeps) {
-						if (project.getName().equals(existingDep)) {
+						if (FileUtil.nameEquals(project, existingDep)) {
 							return false;
 						}
 					}
@@ -408,11 +426,13 @@ public class RequiredDeploymentContextsSection
 			Object[] selectedProjects = dialog.getResult();
 
 			try {
-				for (int i = 0; i < selectedProjects.length; i++) {
-					IJavaProject project = (IJavaProject)selectedProjects[i];
+				for (Object o : selectedProjects) {
+					IJavaProject javaProject = (IJavaProject)o;
 
-					if (project.exists()) {
-						model.addRequiredDeploymentContext(project.getProject().getName());
+					if (javaProject.exists()) {
+						IProject project = javaProject.getProject();
+
+						model.addRequiredDeploymentContext(project.getName());
 					}
 				}
 			}
@@ -443,7 +463,9 @@ public class RequiredDeploymentContextsSection
 		String[] removedServiceDeps = new String[ssel.size()];
 
 		for (Iterator iter = ssel.iterator(); iter.hasNext(); i++) {
-			removedServiceDeps[i] = iter.next().toString();
+			Object o = iter.next();
+
+			removedServiceDeps[i] = o.toString();
 		}
 
 		model.removeRequiredDeploymentContexts(removedServiceDeps);
@@ -453,7 +475,9 @@ public class RequiredDeploymentContextsSection
 	private void _handleUp() {
 		TableViewer viewer = getTablePart().getTableViewer();
 
-		int index = viewer.getTable().getSelectionIndex();
+		Table table = viewer.getTable();
+
+		int index = table.getSelectionIndex();
 
 		if (index < 1) {
 			return;
@@ -483,7 +507,9 @@ public class RequiredDeploymentContextsSection
 	private void _updateButtons() {
 		TableViewer viewer = getTablePart().getTableViewer();
 
-		TableItem[] selection = viewer.getTable().getSelection();
+		Table table = viewer.getTable();
+
+		TableItem[] selection = table.getSelection();
 
 		boolean hasSelection = false;
 
@@ -508,7 +534,9 @@ public class RequiredDeploymentContextsSection
 		// return;
 		// }
 
-		Table table = tablePart.getTableViewer().getTable();
+		TableViewer tableViewer = tablePart.getTableViewer();
+
+		Table table = tableViewer.getTable();
 
 		TableItem[] selection = table.getSelection();
 

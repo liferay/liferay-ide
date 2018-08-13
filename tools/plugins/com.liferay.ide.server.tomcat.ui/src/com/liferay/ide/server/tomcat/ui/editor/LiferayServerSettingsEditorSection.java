@@ -17,6 +17,7 @@ package com.liferay.ide.server.tomcat.ui.editor;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatConstants;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServer;
@@ -29,14 +30,13 @@ import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.ui.cmd.SetPasswordCommand;
 import com.liferay.ide.server.ui.cmd.SetUsernameCommand;
 import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.io.File;
 
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -59,7 +59,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
@@ -67,9 +67,10 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.help.IWorkbenchHelpSystem;
+import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IPublishListener;
 import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.util.PublishAdapter;
 import org.eclipse.wst.server.ui.editor.ServerEditorSection;
@@ -109,13 +110,13 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 		layout.marginWidth = 10;
 		layout.verticalSpacing = 5;
 		layout.horizontalSpacing = 15;
+
 		composite.setLayout(layout);
 
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL));
-		IWorkbenchHelpSystem whs = PlatformUI.getWorkbench().getHelpSystem();
 
-		whs.setHelp(composite, ContextIds.SERVER_EDITOR);
-		whs.setHelp(section, ContextIds.SERVER_EDITOR);
+		UIUtil.setHelp(composite, ContextIds.SERVER_EDITOR);
+		UIUtil.setHelp(section, ContextIds.SERVER_EDITOR);
 
 		toolkit.paintBordersFor(composite);
 		section.setClient(composite);
@@ -168,7 +169,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					}
 
 					updating = true;
-					execute(new SetMemoryArgsCommand(tomcatServer, memoryArgs.getText().trim()));
+					execute(new SetMemoryArgsCommand(tomcatServer, StringUtil.trim(memoryArgs.getText())));
 					updating = false;
 					validate();
 				}
@@ -199,7 +200,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					}
 
 					updating = true;
-					execute(new SetUserTimezoneCommand(tomcatServer, userTimezone.getText().trim()));
+					execute(new SetUserTimezoneCommand(tomcatServer, StringUtil.trim(userTimezone.getText())));
 					updating = false;
 					validate();
 				}
@@ -231,7 +232,8 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					}
 
 					updating = true;
-					execute(new SetExternalPropertiesCommand(tomcatServer, externalProperties.getText().trim()));
+					execute(
+						new SetExternalPropertiesCommand(tomcatServer, StringUtil.trim(externalProperties.getText())));
 					updating = false;
 					validate();
 				}
@@ -241,6 +243,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 		externalPropertiesBrowse = toolkit.createButton(composite, Msgs.editorBrowse, SWT.PUSH);
 
 		externalPropertiesBrowse.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+
 		externalPropertiesBrowse.addSelectionListener(
 			new SelectionAdapter() {
 
@@ -248,6 +251,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					FileDialog dialog = new FileDialog(externalPropertiesBrowse.getShell());
 
 					dialog.setFilterPath(externalPropertiesBrowse.getText());
+
 					String selectedFile = dialog.open();
 
 					if ((selectedFile != null) && !selectedFile.equals(externalPropertiesBrowse.getText())) {
@@ -337,7 +341,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					}
 
 					updating = true;
-					execute(new SetUsernameCommand(tomcatServer, username.getText().trim()));
+					execute(new SetUsernameCommand(tomcatServer, StringUtil.trim(username.getText())));
 					updating = false;
 				}
 
@@ -364,7 +368,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					}
 
 					updating = true;
-					execute(new SetPasswordCommand(tomcatServer, password.getText().trim()));
+					execute(new SetPasswordCommand(tomcatServer, StringUtil.trim(password.getText())));
 					updating = false;
 				}
 
@@ -414,8 +418,10 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 		if (server != null) {
 			server.removePropertyChangeListener(listener);
 
-			if (server.getOriginal() != null) {
-				server.getOriginal().removePublishListener(publishListener);
+			IServer originalServer = server.getOriginal();
+
+			if (originalServer != null) {
+				originalServer.removePublishListener(publishListener);
 			}
 		}
 	}
@@ -529,9 +535,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 		// Cache workspace and default deploy paths
 
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-
-		workspacePath = root.getLocation();
+		workspacePath = CoreUtil.getWorkspaceRootLocation();
 
 		defaultDeployPath = new Path(ILiferayTomcatConstants.DEFAULT_DEPLOYDIR);
 
@@ -588,7 +592,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					validate();
 				}
 				else if (ILiferayTomcatServer.PROPERTY_USE_DEFAULT_PORTAL_SERVER_SETTINGS.equals(
-							event.getPropertyName())) {
+							 event.getPropertyName())) {
 
 					boolean s = (Boolean)event.getNewValue();
 
@@ -609,7 +613,9 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 			public void publishFinished(IServer server2, IStatus status) {
 				boolean flag = false;
 
-				if (status.isOK() && (server2.getModules().length == 0)) {
+				IModule[] modules = server2.getModules();
+
+				if (status.isOK() && (modules.length == 0)) {
 					flag = true;
 				}
 
@@ -620,13 +626,17 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 		};
 
-		server.getOriginal().addPublishListener(publishListener);
+		IServer originalServer = server.getOriginal();
+
+		originalServer.addPublishListener(publishListener);
 	}
 
 	protected Label createLabel(FormToolkit toolkit, Composite parent, String text) {
 		Label label = toolkit.createLabel(parent, text);
 
-		label.setForeground(toolkit.getColors().getColor(IFormColors.TITLE));
+		FormColors colors = toolkit.getColors();
+
+		label.setForeground(colors.getColor(IFormColors.TITLE));
 
 		return label;
 	}
@@ -642,7 +652,9 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 		// If not Tomcat 3.2, update description to mention catalina.base
 
-		String runtimeId = runtime.getRuntimeType().getId();
+		IRuntimeType runtimeType = runtime.getRuntimeType();
+
+		String runtimeId = runtimeType.getId();
 
 		if ((runtime != null) && (runtimeId.indexOf("32") < 0)) {
 			section.setDescription(Msgs.configureLiferayPortalServerSettings);
@@ -661,13 +673,14 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 			// If server has not been published, or server is published with no modules, allow editing
 
-			File confFile = basePath.append("conf").toFile();
+			File confFile = FileUtil.getFile(basePath.append("conf"));
 
 			IServer original = server.getOriginal();
 
+			IModule[] modules = original.getModules();
+
 			if (((basePath != null) && FileUtil.notExists(confFile)) ||
-				((original.getServerPublishState() == IServer.PUBLISH_STATE_NONE) &&
-				 (original.getModules().length == 0))) {
+				((original.getServerPublishState() == IServer.PUBLISH_STATE_NONE) && (modules.length == 0))) {
 
 				allowRestrictedEditing = true;
 			}
@@ -762,6 +775,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 				if ((dir.length() == 0) || workspacePath.equals(path)) {
 					setErrorMessage(Msgs.errorServerDirIsRoot);
+
 					return;
 				}
 
@@ -774,6 +788,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 					if (_METADATADIR.equals(path.segment(cnt))) {
 						setErrorMessage(NLS.bind(Msgs.errorServerDirUnderRoot, _METADATADIR));
+
 						return;
 					}
 				}
@@ -781,6 +796,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					String binding = NLS.bind(Msgs.serverEditorServerDirInstall, StringPool.EMPTY);
 
 					setErrorMessage(NLS.bind(Msgs.errorServerDirCustomNotInstall, binding.trim()));
+
 					return;
 				}
 			}
@@ -804,6 +820,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 			if ((dir == null) || (dir.length() == 0)) {
 				setErrorMessage(Msgs.errorDeployDirNotSpecified);
+
 				return;
 			}
 

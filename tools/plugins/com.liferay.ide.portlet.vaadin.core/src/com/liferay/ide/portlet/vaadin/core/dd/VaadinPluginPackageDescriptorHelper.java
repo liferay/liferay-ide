@@ -18,6 +18,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
 import com.liferay.ide.portlet.core.PluginPropertiesConfiguration;
 import com.liferay.ide.portlet.core.PortletCore;
@@ -61,14 +62,16 @@ public class VaadinPluginPackageDescriptorHelper extends PluginPackagesDescripto
 				IStatus warning = PortletCore.createWarningStatus(
 					"No " + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE + " file in the project.");
 
-				ILog log = PortletCore.getDefault().getLog();
+				PortletCore portletCore = PortletCore.getDefault();
+
+				ILog log = portletCore.getLog();
 
 				log.log(warning);
 
 				return Status.OK_STATUS;
 			}
 
-			File osfile = new File(pluginPackageFile.getLocation().toOSString());
+			File osfile = FileUtil.getFile(pluginPackageFile);
 
 			PluginPropertiesConfiguration pluginPackageProperties = new PluginPropertiesConfiguration();
 
@@ -95,7 +98,7 @@ public class VaadinPluginPackageDescriptorHelper extends PluginPackagesDescripto
 
 			pluginPackageProperties.setProperty(propertyName, newPortalDeps);
 
-			try(FileWriter output = new FileWriter(osfile)) {
+			try (FileWriter output = new FileWriter(osfile)) {
 				pluginPackageProperties.save(output);
 			}
 
@@ -138,7 +141,7 @@ public class VaadinPluginPackageDescriptorHelper extends PluginPackagesDescripto
 	}
 
 	private boolean _canAddNewPortlet(IDataModel dataModel) {
-		return dataModel.getID().contains("NewVaadinPortlet");
+		return StringUtil.contains(dataModel.getID(), "NewVaadinPortlet");
 	}
 
 }

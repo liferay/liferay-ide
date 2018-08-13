@@ -14,14 +14,16 @@
 
 package com.liferay.ide.ui;
 
+import com.liferay.ide.ui.util.UIUtil;
+
 import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveFactory;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.views.IViewDescriptor;
+import org.eclipse.ui.views.IViewRegistry;
 
 /**
  * @author Lovett Li
@@ -95,9 +97,9 @@ public abstract class AbstractPerspectiveFactory implements IPerspectiveFactory 
 	public static final String ID_WST_SNIPPETS_VIEW = "org.eclipse.wst.common.snippets.internal.ui.SnippetsView";
 
 	public void addViewIfExist(IPageLayout page, IFolderLayout bottomRight, String viewId) {
-		IWorkbench workbench = PlatformUI.getWorkbench();
+		IViewRegistry viewRegistry = UIUtil.getViewRegistry();
 
-		IViewDescriptor dbView = workbench.getViewRegistry().find(viewId);
+		IViewDescriptor dbView = viewRegistry.find(viewId);
 
 		if (dbView != null) {
 			bottomRight.addView(viewId);
@@ -130,24 +132,22 @@ public abstract class AbstractPerspectiveFactory implements IPerspectiveFactory 
 		layout.addPerspectiveShortcut("org.eclipse.debug.ui.DebugPerspective");
 		layout.addShowViewShortcut(ANT_VIEW_ID);
 
-		IWorkbench workbench = PlatformUI.getWorkbench();
+		IPerspectiveRegistry perspectiveRegistry = UIUtil.getPerspectiveRegistry();
 
-		IPerspectiveDescriptor desc = workbench.getPerspectiveRegistry().findPerspectiveWithId(
+		IPerspectiveDescriptor desc = perspectiveRegistry.findPerspectiveWithId(
 			"org.eclipse.team.cvs.ui.cvsPerspective");
 
 		if (desc != null) {
 			layout.addPerspectiveShortcut("org.eclipse.team.cvs.ui.cvsPerspective");
 		}
 
-		desc = workbench.getPerspectiveRegistry().findPerspectiveWithId(
-			"org.tigris.subversion.subclipse.ui.svnPerspective");
+		desc = perspectiveRegistry.findPerspectiveWithId("org.tigris.subversion.subclipse.ui.svnPerspective");
 
 		if (desc != null) {
 			layout.addPerspectiveShortcut("org.tigris.subversion.subclipse.ui.svnPerspective");
 		}
 
-		desc = workbench.getPerspectiveRegistry().findPerspectiveWithId(
-			"org.eclipse.team.svn.ui.repository.RepositoryPerspective");
+		desc = perspectiveRegistry.findPerspectiveWithId("org.eclipse.team.svn.ui.repository.RepositoryPerspective");
 
 		if (desc != null) {
 			layout.addPerspectiveShortcut("org.eclipse.team.svn.ui.repository.RepositoryPerspective");

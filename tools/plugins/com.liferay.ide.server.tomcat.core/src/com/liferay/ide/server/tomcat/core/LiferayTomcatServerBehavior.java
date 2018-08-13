@@ -205,6 +205,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
 				Document contextDoc = builder.newDocument();
 
 				contextDoc.appendChild(contextDoc.importNode(context.getElementNode(), true));
+
 				XMLUtil.save(contextFile.getAbsolutePath(), contextDoc);
 			}
 		}

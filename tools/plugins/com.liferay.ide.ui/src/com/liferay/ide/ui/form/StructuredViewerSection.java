@@ -18,10 +18,12 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 /**
@@ -43,7 +45,9 @@ public abstract class StructuredViewerSection extends IDESection {
 
 		fViewerPart.setMinimumSize(50, 50);
 
-		FormToolkit toolkit = formPage.getManagedForm().getToolkit();
+		IManagedForm form = formPage.getManagedForm();
+
+		FormToolkit toolkit = form.getToolkit();
 
 		createClient(getSection(), toolkit);
 
@@ -74,7 +78,9 @@ public abstract class StructuredViewerSection extends IDESection {
 	}
 
 	public void setFocus() {
-		fViewerPart.getControl().setFocus();
+		Control control = fViewerPart.getControl();
+
+		control.setFocus();
 	}
 
 	protected void buttonSelected(int index) {
@@ -203,7 +209,9 @@ public abstract class StructuredViewerSection extends IDESection {
 	}
 
 	protected ISelection getViewerSelection() {
-		return fViewerPart.getViewer().getSelection();
+		StructuredViewer viewer = fViewerPart.getViewer();
+
+		return viewer.getSelection();
 	}
 
 	/**

@@ -18,6 +18,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.portlet.core.operation.NewEntryClassOperation;
@@ -42,6 +43,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -160,18 +162,20 @@ public class AddPortletOperation
 		List<IFolder> sourceFolders = CoreUtil.getSourceFolders(JavaCore.create(getTargetProject()));
 
 		if (ListUtil.isNotEmpty(sourceFolders)) {
-			IFile projectFile = sourceFolders.get(0).getFile(filePath);
+			IFolder sourceFolder = sourceFolders.get(0);
+
+			IFile projectFile = sourceFolder.getFile(filePath);
 
 			if (!projectFile.exists()) {
 				IFolder parent = (IFolder)projectFile.getParent();
 
 				CoreUtil.prepareFolder(parent);
 
-				try(InputStream input = new ByteArrayInputStream(new byte[0])){
+				try (InputStream input = new ByteArrayInputStream(new byte[0])) {
 					projectFile.create(input, IResource.FORCE, null);
 				}
-				catch (IOException e) {
-					throw new CoreException(PortletUIPlugin.createErrorStatus(e));
+				catch (IOException ioe) {
+					throw new CoreException(PortletUIPlugin.createErrorStatus(ioe));
 				}
 			}
 		}
@@ -269,7 +273,7 @@ public class AddPortletOperation
 		List<ParamValue> initParams = (List<ParamValue>)getDataModel().getProperty(INIT_PARAMS);
 
 		for (ParamValue paramValue : initParams) {
-			if (paramValue.getName().equals(initParamName)) {
+			if (StringUtil.equals(paramValue.getName(), initParamName)) {
 				viewJspFile = getProjectFile(paramValue.getValue());
 
 				break;
@@ -277,7 +281,7 @@ public class AddPortletOperation
 		}
 
 		if (viewJspFile != null) {
-			try (InputStream input = new ByteArrayInputStream(templateString.getBytes("UTF-8"))){
+			try (InputStream input = new ByteArrayInputStream(templateString.getBytes("UTF-8"))) {
 				if (viewJspFile.exists()) {
 					viewJspFile.setContents(input, IResource.FORCE, null);
 				}
@@ -308,7 +312,9 @@ public class AddPortletOperation
 			if (!status.isOK()) {
 				PortletCore plugin = PortletCore.getDefault();
 
-				plugin.getLog().log(status);
+				ILog log = plugin.getLog();
+
+				log.log(status);
 
 				return status;
 			}

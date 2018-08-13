@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.List;
@@ -44,12 +45,16 @@ public class HasLangFilePropertyTester extends PropertyTester {
 						IResource[] members = src.members();
 
 						for (IResource member : members) {
-							if ((member.getType() == IResource.FOLDER) && member.getName().equals("content")) {
+							if ((member.getType() == IResource.FOLDER) &&
+								StringUtil.equals(member.getName(), "content")) {
+
 								IResource[] content = ((IFolder)member).members();
 
 								for (IResource res : content) {
+									String fileName = res.getName();
+
 									if ((res.getType() == IResource.FILE) &&
-										res.getName().matches("Language.*\\.properties")) {
+										fileName.matches("Language.*\\.properties")) {
 
 										return true;
 									}

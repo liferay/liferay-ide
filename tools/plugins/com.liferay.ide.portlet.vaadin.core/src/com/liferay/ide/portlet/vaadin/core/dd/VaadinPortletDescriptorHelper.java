@@ -14,6 +14,7 @@
 
 package com.liferay.ide.portlet.vaadin.core.dd;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.portlet.vaadin.core.operation.INewVaadinPortletClassDataModelProperties;
 
@@ -41,7 +42,7 @@ public class VaadinPortletDescriptorHelper
 
 	@Override
 	public boolean canAddNewPortlet(IDataModel model) {
-		return model.getID().contains("NewVaadinPortlet");
+		return StringUtil.contains(model.getID(), "NewVaadinPortlet");
 	}
 
 	@Override

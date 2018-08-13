@@ -18,6 +18,8 @@ import com.liferay.ide.core.templates.ITemplateContext;
 import com.liferay.ide.core.templates.ITemplateOperation;
 import com.liferay.ide.core.templates.TemplatesCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
 
@@ -58,8 +60,8 @@ public class LayoutTplUtil {
 
 		List<Element> divChildren = getChildElementsByTagName(parentElement, childElementTag);
 
-		for (int i = 0; i < divChildren.size(); i++) {
-			IDOMElement childDivElement = (IDOMElement)divChildren.get(i);
+		for (Element child : divChildren) {
+			IDOMElement childDivElement = (IDOMElement)child;
 
 			if (hasClassName(childDivElement, className)) {
 				childElements.add(childDivElement);
@@ -92,7 +94,7 @@ public class LayoutTplUtil {
 			if ((childNode.getNodeType() == 1) && (childElementTag != null)) {
 				Element element = (Element)childNode;
 
-				if (element.getTagName().equals(childElementTag)) {
+				if (StringUtil.equals(element.getTagName(), childElementTag)) {
 					childElements.add(element);
 				}
 			}
@@ -105,7 +107,7 @@ public class LayoutTplUtil {
 		String retval = defaultValue;
 		String currentRoleValue = mainContentElement.getAttribute("role");
 
-		if (!CoreUtil.isNullOrEmpty(currentRoleValue)) {
+		if (CoreUtil.isNotNullOrEmpty(currentRoleValue)) {
 			retval = currentRoleValue;
 		}
 
@@ -118,7 +120,7 @@ public class LayoutTplUtil {
 		try {
 			ITemplateOperation templateOperation = null;
 
-			if (layouttpl.getBootstrapStyle().content()) {
+			if (SapphireUtil.getContent(layouttpl.getBootstrapStyle())) {
 				templateOperation = TemplatesCore.getTemplateOperation(
 					"com.liferay.ide.layouttpl.core.layoutTemplate.bootstrap");
 			}
@@ -159,7 +161,7 @@ public class LayoutTplUtil {
 		if (matcher.matches()) {
 			String weightString = matcher.group(2);
 
-			if (!CoreUtil.isNullOrEmpty(weightString)) {
+			if (CoreUtil.isNotNullOrEmpty(weightString)) {
 				try {
 					weightValue = Integer.parseInt(weightString);
 				}
@@ -169,12 +171,12 @@ public class LayoutTplUtil {
 			}
 		}
 		else {
-			matcher = Pattern.compile(".*col-(xs|sm|md|lg)-(\\d+).*").matcher(classAttr);
+			matcher = _pattern.matcher(classAttr);
 
 			if (matcher.matches()) {
 				String weightString = matcher.group(2);
 
-				if (!CoreUtil.isNullOrEmpty(weightString)) {
+				if (CoreUtil.isNotNullOrEmpty(weightString)) {
 					try {
 						weightValue = Integer.parseInt(weightString);
 					}
@@ -206,7 +208,7 @@ public class LayoutTplUtil {
 		try {
 			ITemplateOperation op = null;
 
-			if (diagramElement.getBootstrapStyle().content()) {
+			if (SapphireUtil.getContent(diagramElement.getBootstrapStyle())) {
 				op = TemplatesCore.getTemplateOperation("com.liferay.ide.layouttpl.core.layoutTemplate.bootstrap");
 			}
 			else {
@@ -231,5 +233,6 @@ public class LayoutTplUtil {
 	}
 
 	private static final Pattern _classAttributePattern = Pattern.compile("(.*span)(\\d+)");
+	private static final Pattern _pattern = Pattern.compile(".*col-(xs|sm|md|lg)-(\\d+).*");
 
 }

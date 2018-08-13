@@ -16,8 +16,11 @@ package com.liferay.ide.portlet.ui.editor.internal;
 
 import com.liferay.ide.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.util.PortletUtil;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
 
@@ -34,9 +37,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -60,8 +61,7 @@ import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
  */
 public abstract class AbstractResourceBundleActionHandler extends PropertyEditorActionHandler {
 
-	public IWorkspace workspace = ResourcesPlugin.getWorkspace();
-	public IWorkspaceRoot wroot = workspace.getRoot();
+	public IWorkspaceRoot wroot = CoreUtil.getWorkspaceRoot();
 
 	/**
 	 * (non-Javadoc)
@@ -77,7 +77,7 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 			Element element = getModelElement();
 			Property property = property();
 			IProject project = element.adapt(IProject.class);
-			String rbFile = element.property((ValueProperty)property.definition()).text();
+			String rbFile = SapphireUtil.getText(element.property((ValueProperty)property.definition()));
 
 			if (rbFile != null) {
 				String ioFileName = PortletUtil.convertJavaToIoFileName(
@@ -101,62 +101,68 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 	protected void createFiles(
 		Presentation context, IProject project, String packageName, List<IFile> rbFiles, StringBuilder rbFileBuffer) {
 
-		if (ListUtil.isNotEmpty(rbFiles)) {
-			int workUnit = rbFiles.size() + 2;
+		if (ListUtil.isEmpty(rbFiles)) {
+			return;
+		}
 
-			IRunnableWithProgress rbCreationProc = new IRunnableWithProgress() {
+		int workUnit = rbFiles.size() + 2;
 
-				public void run(IProgressMonitor monitor) throws InterruptedException, InvocationTargetException {
-					monitor.beginTask(StringPool.EMPTY, workUnit);
-					try {
-						IJavaProject javaProject = JavaCore.create(project);
+		IRunnableWithProgress rbCreationProc = new IRunnableWithProgress() {
 
-						IPackageFragmentRoot pkgSrc = PortletUtil.getSourceFolder(javaProject);
+			public void run(IProgressMonitor monitor) throws InterruptedException, InvocationTargetException {
+				monitor.beginTask(StringPool.EMPTY, workUnit);
 
-						IPackageFragment rbPackageFragment = pkgSrc.getPackageFragment(packageName);
+				try {
+					IJavaProject javaProject = JavaCore.create(project);
 
-						if ((rbPackageFragment != null) && !rbPackageFragment.exists()) {
-							pkgSrc.createPackageFragment(packageName, true, monitor);
+					IPackageFragmentRoot pkgSrc = PortletUtil.getSourceFolder(javaProject);
+
+					IPackageFragment rbPackageFragment = pkgSrc.getPackageFragment(packageName);
+
+					if ((rbPackageFragment != null) && !rbPackageFragment.exists()) {
+						pkgSrc.createPackageFragment(packageName, true, monitor);
+					}
+
+					monitor.worked(1);
+					ListIterator<IFile> rbFilesIterator = rbFiles.listIterator();
+
+					while (rbFilesIterator.hasNext()) {
+						IFile rbFile = rbFilesIterator.next();
+
+						try (InputStream inputStream =
+								new ByteArrayInputStream(StringUtil.getBytes(rbFileBuffer.toString()))) {
+
+							rbFile.create(inputStream, true, monitor);
+						}
+						catch (IOException ioe) {
+							throw new CoreException(PortletUIPlugin.createErrorStatus(ioe));
 						}
 
 						monitor.worked(1);
-						ListIterator<IFile> rbFilesIterator = rbFiles.listIterator();
-
-						while (rbFilesIterator.hasNext()) {
-							IFile rbFile = rbFilesIterator.next();
-
-							try(InputStream inputStream = new ByteArrayInputStream(rbFileBuffer.toString().getBytes())){
-								rbFile.create(inputStream, true, monitor);
-							}
-							catch (IOException e) {
-								throw new CoreException(PortletUIPlugin.createErrorStatus(e));
-							}
-
-							monitor.worked(1);
-						}
-
-						project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 					}
-					catch (CoreException ce) {
-						PortletUIPlugin.logError(ce);
-					}
-					finally {
-						monitor.done();
-					}
+
+					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 				}
+				catch (CoreException ce) {
+					PortletUIPlugin.logError(ce);
+				}
+				finally {
+					monitor.done();
+				}
+			}
 
-			};
+		};
 
-			try {
-				(new ProgressMonitorDialog(((SwtPresentation)context).shell())).run(false, false, rbCreationProc);
-				rbFiles.clear();
-			}
-			catch (InvocationTargetException ite) {
-				PortletUIPlugin.logError(ite);
-			}
-			catch (InterruptedException ie) {
-				PortletUIPlugin.logError(ie);
-			}
+		try {
+			(new ProgressMonitorDialog(((SwtPresentation)context).shell())).run(false, false, rbCreationProc);
+
+			rbFiles.clear();
+		}
+		catch (InvocationTargetException ite) {
+			PortletUIPlugin.logError(ite);
+		}
+		catch (InterruptedException ie) {
+			PortletUIPlugin.logError(ie);
 		}
 	}
 
@@ -170,13 +176,15 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 
 		for (IClasspathEntry iClasspathEntry : cpEntries) {
 			if (IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind()) {
-				IPath entryPath = wroot.getFolder(iClasspathEntry.getPath()).getLocation();
+				IFolder folder = wroot.getFolder(iClasspathEntry.getPath());
+
+				IPath entryPath = folder.getLocation();
 
 				entryPath = entryPath.append(ioFileName);
 
 				IFile resourceBundleFile = wroot.getFileForLocation(entryPath);
 
-				if ((resourceBundleFile != null) && resourceBundleFile.exists()) {
+				if (FileUtil.exists(resourceBundleFile)) {
 					return true;
 				}
 				else {

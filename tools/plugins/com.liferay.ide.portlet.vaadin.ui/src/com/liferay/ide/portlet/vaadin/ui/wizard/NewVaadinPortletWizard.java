@@ -87,9 +87,11 @@ public class NewVaadinPortletWizard extends NewPortletWizard {
 
 		// for now, no need for own template store and context type
 
-		TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
+		PortletUIPlugin plugin = PortletUIPlugin.getDefault();
 
-		ContextTypeRegistry contextTypeRegistry = PortletUIPlugin.getDefault().getTemplateContextRegistry();
+		TemplateStore templateStore = plugin.getTemplateStore();
+
+		ContextTypeRegistry contextTypeRegistry = plugin.getTemplateContextRegistry();
 
 		TemplateContextType contextType = contextTypeRegistry.getContextType(PortletTemplateContextTypeIds.NEW);
 
@@ -105,7 +107,9 @@ public class NewVaadinPortletWizard extends NewPortletWizard {
 
 	@Override
 	protected ImageDescriptor getImage() {
-		Bundle bundle = VaadinUI.getDefault().getBundle();
+		VaadinUI vaadinUI = VaadinUI.getDefault();
+
+		Bundle bundle = vaadinUI.getBundle();
 
 		return ImageDescriptor.createFromURL(bundle.getEntry("/icons/wizban/vaadin_wiz.png"));
 	}

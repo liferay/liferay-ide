@@ -34,6 +34,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
@@ -45,6 +46,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -69,7 +71,10 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 		super.dispose();
 
 		if (_fileChangeListener != null) {
-			ResourcesPlugin.getWorkspace().removeResourceChangeListener(_fileChangeListener);
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+			workspace.removeResourceChangeListener(_fileChangeListener);
+
 			_fileChangeListener = null;
 		}
 	}
@@ -145,7 +150,9 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 
 		IDocumentProvider provider = editor.getDocumentProvider();
 
-		provider.getDocument(getEditorInput()).set(doc.get());
+		IDocument document = provider.getDocument(getEditorInput());
+
+		document.set(doc.get());
 	}
 
 	public void monitoredFileAdded(IFile monitoredFile) {
@@ -197,7 +204,9 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 
 		};
 
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(_fileChangeListener, IResourceChangeEvent.POST_CHANGE);
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		workspace.addResourceChangeListener(_fileChangeListener, IResourceChangeEvent.POST_CHANGE);
 	}
 
 	@Override
@@ -245,7 +254,9 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 			IResourceDelta localDelta = delta.findMember(getFile().getFullPath());
 
 			if (localDelta != null) {
-				Display display = PlatformUI.getWorkbench().getDisplay();
+				IWorkbench workbench = PlatformUI.getWorkbench();
+
+				Display display = workbench.getDisplay();
 
 				Runnable run = new Runnable() {
 
@@ -269,11 +280,13 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 		super.pageChange(newPageIndex);
 
 		if ((lastPageIndex == 1) && (newPageIndex != 1)) {
-			IDocument doc = editor.getDocumentProvider().getDocument(getEditorInput());
+			IDocumentProvider provider = editor.getDocumentProvider();
+
+			IDocument doc = provider.getDocument(getEditorInput());
 
 			String props = doc.get();
 
-			try (InputStream inputStream = new ByteArrayInputStream(props.getBytes())){
+			try (InputStream inputStream = new ByteArrayInputStream(props.getBytes())) {
 				ignoreModelChanges = true;
 
 				if (getLastDirtyState()) {
@@ -282,8 +295,8 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 
 				ignoreModelChanges = false;
 			}
-			catch (CoreException | IOException ce) {
-				PortletUIPlugin.logError(ce);
+			catch (CoreException | IOException e) {
+				PortletUIPlugin.logError(e);
 			}
 		}
 

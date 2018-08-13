@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
@@ -299,7 +300,9 @@ public class FormEntry {
 			if (labelText != null) {
 				_fLabel = toolkit.createLabel(parent, labelText);
 
-				_fLabel.setForeground(toolkit.getColors().getColor(IFormColors.TITLE));
+				FormColors colors = toolkit.getColors();
+
+				_fLabel.setForeground(colors.getColor(IFormColors.TITLE));
 			}
 		}
 

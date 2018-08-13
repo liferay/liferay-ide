@@ -17,6 +17,7 @@ package com.liferay.ide.server.tomcat.ui.wizard;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.ui.LiferayServerUI;
@@ -25,6 +26,7 @@ import com.liferay.ide.ui.util.SWTUtil;
 import java.io.File;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 
 import java.util.Enumeration;
@@ -66,7 +68,9 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 	public static Text createJavadocField(Composite parent) {
 		Text javadocField = createTextField(parent, Msgs.liferayJavadocURL);
 
-		SWTUtil.createButton(parent, Msgs.browseZip).addSelectionListener(
+		Button zipButton = SWTUtil.createButton(parent, Msgs.browseZip);
+
+		zipButton.addSelectionListener(
 			new SelectionAdapter() {
 
 				public void widgetSelected(SelectionEvent e) {
@@ -93,7 +97,9 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 		SWTUtil.createLabel(parent, StringPool.EMPTY, 1);
 
-		SWTUtil.createButton(parent, Msgs.browseDirectory).addSelectionListener(
+		Button directorybutton = SWTUtil.createButton(parent, Msgs.browseDirectory);
+
+		directorybutton.addSelectionListener(
 			new SelectionAdapter() {
 
 				public void widgetSelected(SelectionEvent e) {
@@ -125,7 +131,9 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 	public static Text createSourceField(Composite parent) {
 		Text sourceField = createTextField(parent, Msgs.liferaysourceLocation);
 
-		SWTUtil.createButton(parent, Msgs.browseZip).addSelectionListener(
+		Button zipButton = SWTUtil.createButton(parent, Msgs.browseZip);
+
+		zipButton.addSelectionListener(
 			new SelectionAdapter() {
 
 				public void widgetSelected(SelectionEvent e) {
@@ -144,7 +152,9 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 		SWTUtil.createLabel(parent, StringPool.EMPTY, 1);
 
-		SWTUtil.createButton(parent, Msgs.browseDirectory).addSelectionListener(
+		Button directorybutton = SWTUtil.createButton(parent, Msgs.browseDirectory);
+
+		directorybutton.addSelectionListener(
 			new SelectionAdapter() {
 
 				public void widgetSelected(SelectionEvent e) {
@@ -182,9 +192,10 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 	public void modifyText(ModifyEvent e) {
 		if (ignoreModifyEvent) {
 			ignoreModifyEvent = false;
+
 			return;
 		}
-		else if (e.getSource().equals(_javadocField)) {
+		else if (_javadocField.equals(e.getSource())) {
 			String newJavadocURL = null;
 
 			// if a file directory see if we need to correct
@@ -194,14 +205,18 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 			try {
 				URL javadocURL = new URL(javadocValue);
 
-				if ((javadocURL.getProtocol() != null) && javadocURL.getProtocol().startsWith("http")) {
+				String protocal = javadocURL.getProtocol();
+
+				if (StringUtil.startsWith(protocal, "http")) {
 					newJavadocURL = javadocValue;
 				}
 
 				if (newJavadocURL == null) {
 					File javadocFile = new File(javadocValue);
 
-					URL javadocFileUrl = javadocFile.toURI().toURL();
+					URI uri = javadocFile.toURI();
+
+					URL javadocFileUrl = uri.toURL();
 
 					if (javadocFile.isFile()) {
 						newJavadocURL = javadocFileUrl.toExternalForm();
@@ -219,7 +234,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 			getLiferayTomcatRuntime().setJavadocURL(newJavadocURL);
 		}
-		else if (e.getSource().equals(_sourceField)) {
+		else if (_sourceField.equals(e.getSource())) {
 			getLiferayTomcatRuntime().setSourceLocation(new Path(_sourceField.getText()));
 		}
 
@@ -282,13 +297,13 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 			if (ListUtil.isNotEmpty(files)) {
 				for (File nestedFile : files) {
-					if (nestedFile.getName().equals("javadocs")) {
+					if (FileUtil.nameEquals(nestedFile, "javadocs")) {
 						javadocDirectory = nestedFile;
 					}
 				}
 
 				for (File nestedFile : files) {
-					if (nestedFile.getName().equals("javadocs-all")) {
+					if (FileUtil.nameEquals(nestedFile, "javadocs-all")) {
 						javadocDirectory = nestedFile;
 					}
 				}
@@ -297,7 +312,9 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 				if (FileUtil.exists(liferayDir)) {
 					try {
-						URL javadocDirectoryUrl = javadocDirectory.toURI().toURL();
+						URI uri = javadocDirectory.toURI();
+
+						URL javadocDirectoryUrl = uri.toURL();
 
 						retval = javadocDirectoryUrl.toExternalForm();
 					}
@@ -350,7 +367,9 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 				entry = zipEntries.nextElement();
 			}
 
-			URL javadocFileUrl = javadocFile.toURI().toURL();
+			URI uri = javadocFile.toURI();
+
+			URL javadocFileUrl = uri.toURL();
 
 			if (javadocEntry != null) {
 				retval = "jar:" + javadocFileUrl.toExternalForm() + "!/" + javadocEntry.getName();

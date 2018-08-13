@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.ui.editor;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,7 @@ import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.search.core.util.DOMUtils;
 
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
@@ -68,7 +70,9 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector {
 				currentNode.getStartOffset(), currentNode.getEndOffset() - currentNode.getStartOffset());
 
 			if (_isActionURL(currentNode)) {
-				Node name = currentNode.getAttributes().getNamedItem("name");
+				NamedNodeMap attributes = currentNode.getAttributes();
+
+				Node name = attributes.getNamedItem("name");
 
 				if (name != null) {
 					long modStamp = ((IDocumentExtension4)document).getModificationStamp();
@@ -120,8 +124,8 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector {
 	private static boolean _isActionMethod(IMethod method) {
 		String[] paramTypes = method.getParameterTypes();
 
-		if ((paramTypes.length == 2) && paramTypes[0].toLowerCase().contains("request") &&
-			paramTypes[1].toLowerCase().contains("response")) {
+		if ((paramTypes.length == 2) && StringUtil.contains(paramTypes[0].toLowerCase(), "request") &&
+			StringUtil.contains(paramTypes[1].toLowerCase(), "response")) {
 
 			return true;
 		}
@@ -173,7 +177,8 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector {
 
 	private boolean _isActionURL(Node currentNode) {
 		if ((currentNode != null) && (currentNode.getNodeName() != null) &&
-			(currentNode.getNodeType() == Node.ELEMENT_NODE) && currentNode.getNodeName().endsWith("actionURL")) {
+			(currentNode.getNodeType() == Node.ELEMENT_NODE) &&
+			StringUtil.endsWith(currentNode.getNodeName(), "actionURL")) {
 
 			return true;
 		}

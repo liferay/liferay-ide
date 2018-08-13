@@ -50,14 +50,17 @@ public class PortletColumnsListener extends FilteredListener<PropertyContentEven
 			for (int i = 0; i < size; i++) {
 				PortletColumnElement column = columns.get(i);
 
-				if (column.getPortletLayouts().size() == 0) {
+				ElementList<PortletLayoutElement> layouts = column.getPortletLayouts();
+
+				if (layouts.isEmpty()) {
 					column.setNumId(String.valueOf(numId++));
 				}
-				else if (column.getPortletLayouts().size() > 0) {
+				else {
 
 					// when new child is added, the parent column will have no numId
 
 					column.setNumId("N/A");
+
 					numId = updateColumns(column, numId++);
 				}
 

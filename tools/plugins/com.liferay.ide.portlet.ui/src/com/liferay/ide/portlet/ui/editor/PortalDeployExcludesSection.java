@@ -18,6 +18,7 @@ import com.liferay.ide.core.model.IBaseModel;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.IModelChangedListener;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
@@ -117,7 +118,9 @@ public class PortalDeployExcludesSection
 		section.setLayout(FormLayoutFactory.createClearGridLayout(false, 1));
 		section.setLayoutData(gd);
 		section.setText(Msgs.portalDeployExcludeJars);
+
 		_createSectionToolbar(section);
+
 		initialize();
 	}
 
@@ -172,8 +175,11 @@ public class PortalDeployExcludesSection
 		}
 
 		_fViewer.setInput(model);
+
 		_updateButtons();
+
 		model.addModelChangedListener(this);
+
 		_fAddAction.setEnabled(model.isEditable());
 		_fRemoveAction.setEnabled(model.isEditable());
 	}
@@ -181,12 +187,14 @@ public class PortalDeployExcludesSection
 	public void modelChanged(IModelChangedEvent event) {
 		if (event.getChangeType() == IModelChangedEvent.WORLD_CHANGED) {
 			markStale();
+
 			return;
 		}
 
 		if (event.getChangedProperty() == IPluginPackageModel.PROPERTY_DEPLOY_EXCLUDE) {
 			refresh();
 			_updateButtons();
+
 			return;
 		}
 
@@ -195,6 +203,7 @@ public class PortalDeployExcludesSection
 				if (event.getChangedProperty() == IPluginBase.P_IMPORT_ORDER) {
 					refresh();
 					updateButtons();
+
 					return;
 				}
 
@@ -308,7 +317,9 @@ public class PortalDeployExcludesSection
 
 	public void setFocus() {
 		if (_fViewer != null) {
-			_fViewer.getTable().setFocus();
+			Table table = _fViewer.getTable();
+
+			table.setFocus();
 		}
 	}
 
@@ -356,7 +367,9 @@ public class PortalDeployExcludesSection
 	public class PortalJarsLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
-			return JavaUI.getSharedImages().getImage(ISharedImages.IMG_OBJS_JAR);
+			ISharedImages sharedImages = JavaUI.getSharedImages();
+
+			return sharedImages.getImage(ISharedImages.IMG_OBJS_JAR);
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
@@ -440,7 +453,9 @@ public class PortalDeployExcludesSection
 			type = StringPool.EMPTY;
 		}
 
-		IPath excludeJarPath = sdkLocation.append(type).append(docroot.getFullPath());
+		IPath path = sdkLocation.append(type);
+
+		IPath excludeJarPath = path.append(docroot.getFullPath());
 
 		if (excludeJarPath != null) {
 			for (String excludeJar : excludeJars) {
@@ -448,7 +463,7 @@ public class PortalDeployExcludesSection
 					excludeJar = excludeJar.substring(excludeJar.lastIndexOf("/"));
 				}
 
-				File jarFile = new File(excludeJarPath.append("WEB-INF/lib").toFile(), excludeJar.trim());
+				File jarFile = new File(FileUtil.getFile(excludeJarPath.append("WEB-INF/lib")), excludeJar.trim());
 
 				if (jarFile.isFile() && jarFile.exists()) {
 					_fJars.add(jarFile);
@@ -490,11 +505,11 @@ public class PortalDeployExcludesSection
 	private void _createSectionToolbar(Section section) {
 		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
 
-		ToolBar toolbar = toolBarManager.createControl(section);
+		ToolBar toolBar = toolBarManager.createControl(section);
 
 		Cursor handCursor = new Cursor(Display.getCurrent(), SWT.CURSOR_HAND);
 
-		toolbar.setCursor(handCursor);
+		toolBar.setCursor(handCursor);
 
 		// Cursor needs to be explicitly disposed
 
@@ -508,7 +523,7 @@ public class PortalDeployExcludesSection
 
 		};
 
-		toolbar.addDisposeListener(listener);
+		toolBar.addDisposeListener(listener);
 
 		// Add sort action to the tool bar
 		// fSortAction = new SortAction(fViewer, "Sort alphabetically", null, null, this);
@@ -516,7 +531,7 @@ public class PortalDeployExcludesSection
 
 		toolBarManager.update(true);
 
-		section.setTextClient(toolbar);
+		section.setTextClient(toolBar);
 	}
 
 	private void _handleAdd() {
@@ -547,7 +562,9 @@ public class PortalDeployExcludesSection
 			type = StringPool.EMPTY;
 		}
 
-		IPath serviceJarPath = sdkLocation.append(type).append(docroot.getFullPath());
+		IPath path = sdkLocation.append(type);
+
+		IPath serviceJarPath = path.append(docroot.getFullPath());
 
 		if (serviceJarPath != null) {
 			Shell shell = getPage().getShell();
@@ -564,8 +581,8 @@ public class PortalDeployExcludesSection
 				Object[] selectedFiles = dialog.getResult();
 
 				try {
-					for (int i = 0; i < selectedFiles.length; i++) {
-						File jar = (File)selectedFiles[i];
+					for (Object o : selectedFiles) {
+						File jar = (File)o;
 
 						if (jar.exists()) {
 							model.addPortalDeployExcludeJar(jar.getName());
@@ -610,13 +627,16 @@ public class PortalDeployExcludesSection
 		}
 
 		model.removePortalDeployExcludeJar(removedFiles);
+
 		_updateButtons();
 	}
 
 	private void _handleUp() {
 		TableViewer viewer = getTablePart().getTableViewer();
 
-		int index = viewer.getTable().getSelectionIndex();
+		Table table = viewer.getTable();
+
+		int index = table.getSelectionIndex();
 
 		if (index < 1) {
 			return;

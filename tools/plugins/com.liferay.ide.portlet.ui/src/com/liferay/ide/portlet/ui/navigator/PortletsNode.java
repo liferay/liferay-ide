@@ -14,19 +14,23 @@
 
 package com.liferay.ide.portlet.ui.navigator;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.portlet.core.model.Portlet;
 import com.liferay.ide.portlet.core.model.PortletApp;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelStateListener;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 
@@ -63,7 +67,9 @@ public class PortletsNode {
 		PortletApp model = _getPortletAppModelElement();
 
 		if (model != null) {
-			if (model.getPortlets().size() > 0) {
+			ElementList<Portlet> portlets = model.getPortlets();
+
+			if (!portlets.isEmpty()) {
 				return true;
 			}
 
@@ -77,10 +83,11 @@ public class PortletsNode {
 		if (_modelElement == null) {
 			IFile portletXmlFile = ProjectUtil.getPortletXmlFile(this._parent.getProject());
 
-			if ((portletXmlFile != null) && portletXmlFile.exists()) {
-				try (InputStream inputStream = portletXmlFile.getContents()){
-					IStructuredModel portletXmlModel =
-						StructuredModelManager.getModelManager().getModelForRead(portletXmlFile);
+			if (FileUtil.exists(portletXmlFile)) {
+				try (InputStream inputStream = portletXmlFile.getContents()) {
+					IModelManager modelManager = StructuredModelManager.getModelManager();
+
+					IStructuredModel portletXmlModel = modelManager.getModelForRead(portletXmlFile);
 
 					IModelStateListener listener = new IModelStateListener() {
 
@@ -125,8 +132,7 @@ public class PortletsNode {
 
 					portletXmlModel.addModelStateListener(listener);
 
-					_modelElement = PortletApp.TYPE.instantiate(
-						new RootXmlResource(new XmlResourceStore(inputStream)));
+					_modelElement = PortletApp.TYPE.instantiate(new RootXmlResource(new XmlResourceStore(inputStream)));
 				}
 				catch (Exception e) {
 					PortletUIPlugin.logError(e);

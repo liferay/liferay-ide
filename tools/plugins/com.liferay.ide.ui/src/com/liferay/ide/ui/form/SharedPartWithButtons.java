@@ -110,6 +110,7 @@ public abstract class SharedPartWithButtons extends SharedPart {
 
 			fButtonContainer.setLayout(createButtonsLayout());
 			_fButtons = new Button[_fButtonLabels.length];
+
 			SelectionHandler listener = new SelectionHandler();
 
 			for (int i = 0; i < _fButtonLabels.length; i++) {
@@ -119,6 +120,7 @@ public abstract class SharedPartWithButtons extends SharedPart {
 					Button button = createButton(fButtonContainer, label, i, toolkit);
 
 					button.addSelectionListener(listener);
+
 					_fButtons[i] = button;
 				}
 				else {
@@ -142,8 +144,8 @@ public abstract class SharedPartWithButtons extends SharedPart {
 	}
 
 	protected void updateEnabledState() {
-		for (int i = 0; i < _fButtons.length; i++) {
-			_fButtons[i].setEnabled(isEnabled());
+		for (Button button : _fButtons) {
+			button.setEnabled(isEnabled());
 		}
 	}
 

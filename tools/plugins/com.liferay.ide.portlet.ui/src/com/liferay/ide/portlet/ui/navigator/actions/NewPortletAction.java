@@ -14,6 +14,7 @@
 
 package com.liferay.ide.portlet.ui.navigator.actions;
 
+import com.liferay.ide.portlet.ui.navigator.PortletResourcesRootNode;
 import com.liferay.ide.portlet.ui.navigator.PortletsNode;
 import com.liferay.ide.portlet.ui.wizard.NewPortletWizard;
 
@@ -47,11 +48,15 @@ public class NewPortletAction extends BaseSelectionListenerAction {
 			if (selectedNode instanceof PortletsNode) {
 				PortletsNode portletsNode = (PortletsNode)selectedNode;
 
-				IProject currentProject = portletsNode.getParent().getProject();
+				PortletResourcesRootNode parent = portletsNode.getParent();
+
+				IProject currentProject = parent.getProject();
 
 				NewPortletWizard newPortletWizard = new NewPortletWizard(currentProject);
 
-				WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), newPortletWizard);
+				Display display = Display.getDefault();
+
+				WizardDialog wizardDialog = new WizardDialog(display.getActiveShell(), newPortletWizard);
 
 				wizardDialog.create();
 				wizardDialog.open();

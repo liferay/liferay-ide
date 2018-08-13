@@ -19,11 +19,15 @@ import com.liferay.ide.portlet.core.model.PortletApp;
 import com.liferay.ide.portlet.ui.editor.PortletXmlEditor;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.Resource;
 import org.eclipse.sapphire.modeling.ResourceStoreException;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.SapphirePart;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.MasterDetailsContentNodePart;
+import org.eclipse.sapphire.ui.forms.MasterDetailsContentOutline;
 import org.eclipse.sapphire.ui.forms.MasterDetailsEditorPagePart;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
@@ -43,14 +47,21 @@ public class CreatePortletActionHandler extends SapphireActionHandler {
 	 */
 	@Override
 	protected Object run(Presentation context) {
-		PortletApp rootModel = (PortletApp)context.part().getModelElement();
+		SapphirePart sapphirePart = context.part();
 
-		Portlet portlet = rootModel.getPortlets().insert();
+		PortletApp rootModel = (PortletApp)sapphirePart.getModelElement();
+
+		ElementList<Portlet> portlets = rootModel.getPortlets();
+
+		Portlet portlet = portlets.insert();
 
 		// Open the dialog to capture the mandatory properties
 
-		SapphireDialog dialog = new SapphireDialog(
-			((SwtPresentation)context).shell(), portlet, DefinitionLoader.sdef(PortletXmlEditor.class).dialog());
+		DefinitionLoader loader = DefinitionLoader.sdef(PortletXmlEditor.class);
+
+		SapphireDialog dialog = new SapphireDialog(((SwtPresentation)context).shell(), portlet, loader.dialog());
+
+		Resource resource = rootModel.resource();
 
 		if ((dialog != null) && (Dialog.OK == dialog.open())) {
 
@@ -58,7 +69,9 @@ public class CreatePortletActionHandler extends SapphireActionHandler {
 
 			MasterDetailsEditorPagePart page = getPart().nearest(MasterDetailsEditorPagePart.class);
 
-			MasterDetailsContentNodePart root = page.outline().getRoot();
+			MasterDetailsContentOutline outline = page.outline();
+
+			MasterDetailsContentNodePart root = outline.getRoot();
 
 			MasterDetailsContentNodePart node = root.findNode(portlet);
 
@@ -67,7 +80,7 @@ public class CreatePortletActionHandler extends SapphireActionHandler {
 			}
 
 			try {
-				rootModel.resource().save();
+				resource.save();
 			}
 			catch (ResourceStoreException rse) {
 
@@ -78,10 +91,12 @@ public class CreatePortletActionHandler extends SapphireActionHandler {
 			return portlet;
 		}
 		else {
-			rootModel.getPortlets().remove(portlet);
+			portlets.remove(portlet);
+
 			portlet = null;
+
 			try {
-				rootModel.resource().save();
+				resource.save();
 			}
 			catch (ResourceStoreException rse) {
 

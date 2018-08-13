@@ -49,6 +49,14 @@ public class SapphireUtil {
 		return null;
 	}
 
+	public static <T> String getText(Value<T> valueProperty) {
+		if (valueProperty != null) {
+			return valueProperty.text();
+		}
+
+		return "";
+	}
+
 	public static boolean ok(Element element) {
 		if (element == null) {
 			return false;

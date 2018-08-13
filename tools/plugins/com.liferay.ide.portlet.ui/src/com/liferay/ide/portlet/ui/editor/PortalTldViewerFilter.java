@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.ui.editor;
 
 import com.liferay.ide.core.util.FileListing;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -87,12 +88,12 @@ public class PortalTldViewerFilter extends ViewerFilter {
 			}
 			else {
 				for (String existingJar : existingTlds) {
-					if (filePath.lastSegment().equals(existingJar.trim())) {
+					if (StringUtil.equals(filePath.lastSegment(), existingJar.trim())) {
 						return false;
 					}
 				}
 
-				if (filePath.getFileExtension().contains("tld")) {
+				if (StringUtil.contains(filePath.getFileExtension(), "tld")) {
 					return true;
 				}
 			}
@@ -108,7 +109,7 @@ public class PortalTldViewerFilter extends ViewerFilter {
 			for (File file : files) {
 				IPath filePath = new Path(file.getPath());
 
-				if ((filePath.getFileExtension() != null) && filePath.getFileExtension().contains(ext)) {
+				if (StringUtil.contains(filePath.getFileExtension(), ext)) {
 					return true;
 				}
 			}

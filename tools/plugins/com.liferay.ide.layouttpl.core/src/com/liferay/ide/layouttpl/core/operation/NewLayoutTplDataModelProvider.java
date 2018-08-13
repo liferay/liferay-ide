@@ -49,8 +49,10 @@ public class NewLayoutTplDataModelProvider
 		else if (LAYOUT_TEMPLATE_ID.equals(propertyName)) {
 			String name = getStringProperty(LAYOUT_TEMPLATE_NAME);
 
-			if (!CoreUtil.isNullOrEmpty(name)) {
-				return name.replaceAll("[^a-zA-Z0-9]+", StringPool.EMPTY).toLowerCase();
+			if (CoreUtil.isNotNullOrEmpty(name)) {
+				name = name.replaceAll("[^a-zA-Z0-9]+", StringPool.EMPTY);
+
+				return name.toLowerCase();
 			}
 		}
 		else if (LAYOUT_TEMPLATE_FILE.equals(propertyName)) {
@@ -108,8 +110,8 @@ public class NewLayoutTplDataModelProvider
 	public boolean propertySet(String propertyName, Object propertyValue) {
 		boolean layoutOption = false;
 
-		for (int i = 0; i < LAYOUT_PROPERTIES.length; i++) {
-			if (LAYOUT_PROPERTIES[i].equals(propertyName)) {
+		for (String p : LAYOUT_PROPERTIES) {
+			if (p.equals(propertyName)) {
 				layoutOption = true;
 
 				break;
@@ -119,8 +121,8 @@ public class NewLayoutTplDataModelProvider
 		if (layoutOption && !ignoreLayoutOptionPropertySet) {
 			ignoreLayoutOptionPropertySet = true;
 
-			for (int i = 0; i < LAYOUT_PROPERTIES.length; i++) {
-				setBooleanProperty(LAYOUT_PROPERTIES[i], false);
+			for (String p : LAYOUT_PROPERTIES) {
+				setBooleanProperty(p, false);
 			}
 
 			setProperty(propertyName, propertyValue);

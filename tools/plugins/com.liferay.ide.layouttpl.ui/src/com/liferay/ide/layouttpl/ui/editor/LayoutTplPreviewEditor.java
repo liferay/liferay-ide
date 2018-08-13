@@ -97,6 +97,7 @@ public class LayoutTplPreviewEditor extends GraphicalEditor {
 
 		if (viewer != null) {
 			viewer.setContents(layoutTpl);
+
 			_refreshViewer(viewer);
 		}
 	}
@@ -120,6 +121,7 @@ public class LayoutTplPreviewEditor extends GraphicalEditor {
 		GraphicalViewer viewer = new GraphicalViewerImpl();
 
 		viewer.createControl(parent);
+
 		setGraphicalViewer(viewer);
 
 		configureGraphicalViewer();
@@ -131,6 +133,7 @@ public class LayoutTplPreviewEditor extends GraphicalEditor {
 		GraphicalViewer viewer = getGraphicalViewer();
 
 		viewer.setContents(getModelElement());
+
 		_refreshViewer(viewer);
 	}
 

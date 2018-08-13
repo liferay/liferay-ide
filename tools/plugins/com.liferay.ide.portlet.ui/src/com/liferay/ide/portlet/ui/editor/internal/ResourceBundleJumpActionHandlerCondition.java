@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.ui.editor.internal;
 
 import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.services.RelativePathService;
@@ -30,8 +31,9 @@ public class ResourceBundleJumpActionHandlerCondition extends PropertyEditorCond
 	protected boolean evaluate(PropertyEditorPart part) {
 		Property property = part.property();
 
-		if (property.definition() instanceof ValueProperty &&
-			Path.class.isAssignableFrom(property.definition().getTypeClass()) &&
+		PropertyDef propertyDef = property.definition();
+
+		if (propertyDef instanceof ValueProperty && Path.class.isAssignableFrom(propertyDef.getTypeClass()) &&
 			(property.service(RelativePathService.class) != null)) {
 
 			return true;

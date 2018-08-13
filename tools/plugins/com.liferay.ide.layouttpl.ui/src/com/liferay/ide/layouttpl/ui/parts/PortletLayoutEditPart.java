@@ -169,7 +169,9 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 
 					IFigure columnFigure = portletColumnPart.getFigure();
 
-					columnFigure.setSize(rowData.widthHint, columnFigure.getSize().height);
+					Dimension columnFigureSize = columnFigure.getSize();
+
+					columnFigure.setSize(rowData.widthHint, columnFigureSize.height);
 
 					/*
 					 * this.setLayoutConstraint( portletColumnPart,

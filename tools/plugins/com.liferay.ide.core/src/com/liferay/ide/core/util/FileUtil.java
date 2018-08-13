@@ -413,7 +413,7 @@ public class FileUtil {
 
 	public static String getFullPathPortableString(IFolder folder) {
 		if (folder == null) {
-			return null;
+			return "";
 		}
 
 		return toPortableString(folder.getFullPath());
@@ -688,6 +688,56 @@ public class FileUtil {
 		String name = resource.getName();
 
 		return name.endsWith(suffix);
+	}
+
+	public static boolean nameEquals(File file, String s) {
+		if ((file == null) || (s == null)) {
+			return false;
+		}
+
+		String fileName = file.getName();
+
+		return fileName.equals(s);
+	}
+
+	public static boolean nameEquals(IFile file, String s) {
+		if ((file == null) || (s == null)) {
+			return false;
+		}
+
+		String fileName = file.getName();
+
+		return fileName.equals(s);
+	}
+
+	public static boolean nameEquals(IFolder folder, String s) {
+		if ((folder == null) || (s == null)) {
+			return false;
+		}
+
+		String folderName = folder.getName();
+
+		return folderName.equals(s);
+	}
+
+	public static boolean nameEquals(IProject project, Object o) {
+		if ((project == null) || (o == null)) {
+			return false;
+		}
+
+		String projectName = project.getName();
+
+		return projectName.equals(o.toString());
+	}
+
+	public static boolean nameEquals(IProject project, String s) {
+		if ((project == null) || (s == null)) {
+			return false;
+		}
+
+		String projectName = project.getName();
+
+		return projectName.equals(s);
 	}
 
 	public static boolean notExists(File file) {

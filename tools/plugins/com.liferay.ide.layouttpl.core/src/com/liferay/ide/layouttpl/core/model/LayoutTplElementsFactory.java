@@ -17,12 +17,14 @@ package com.liferay.ide.layouttpl.core.model;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.wst.sse.core.StructuredModelManager;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
@@ -43,8 +45,8 @@ public class LayoutTplElementsFactory {
 
 		String existingClassName = domElement.getAttribute("class");
 
-		if (!CoreUtil.isNullOrEmpty(existingClassName) &&
-			!existingClassName.equals(portletColumn.getClassName().content()) &&
+		if (CoreUtil.isNotNullOrEmpty(existingClassName) &&
+			!existingClassName.equals(SapphireUtil.getContent(portletColumn.getClassName())) &&
 			existingClassName.contains("portlet-column")) {
 
 			portletColumn.setClassName(existingClassName);
@@ -57,7 +59,9 @@ public class LayoutTplElementsFactory {
 
 		if (ListUtil.isNotEmpty(portletLayoutDOMElements)) {
 			for (IDOMElement portletLayoutDOMElement : portletLayoutDOMElements) {
-				PortletLayoutElement portletLayout = portletColumn.getPortletLayouts().insert();
+				ElementList<PortletLayoutElement> layouts = portletColumn.getPortletLayouts();
+
+				PortletLayoutElement portletLayout = layouts.insert();
 
 				initPortletLayoutFromElement(portletLayout, portletLayoutDOMElement);
 			}
@@ -71,8 +75,8 @@ public class LayoutTplElementsFactory {
 
 		String existingClassName = domElement.getAttribute("class");
 
-		if (!CoreUtil.isNullOrEmpty(existingClassName) &&
-			existingClassName.contains(portletLayout.getClassName().content())) {
+		if (CoreUtil.isNotNullOrEmpty(existingClassName) &&
+			existingClassName.contains(SapphireUtil.getContent(portletLayout.getClassName()))) {
 
 			portletLayout.setClassName(existingClassName);
 		}
@@ -81,7 +85,9 @@ public class LayoutTplElementsFactory {
 			domElement, "div", "portlet-column");
 
 		for (IDOMElement portletColumnElement : portletColumnDOMElements) {
-			PortletColumnElement portletColumn = portletLayout.getPortletColumns().insert();
+			ElementList<PortletColumnElement> columns = portletLayout.getPortletColumns();
+
+			PortletColumnElement portletColumn = columns.insert();
 
 			initPortletColumnFromElement(portletColumn, portletColumnElement);
 		}
@@ -96,7 +102,9 @@ public class LayoutTplElementsFactory {
 		IDOMModel domModel = null;
 
 		try {
-			domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(file);
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			domModel = (IDOMModel)modelManager.getModelForRead(file);
 
 			layoutTpl = newLayoutTplFromModel(domModel, bootstrapStyle, is62);
 		}
@@ -117,28 +125,28 @@ public class LayoutTplElementsFactory {
 			return null;
 		}
 
-		LayoutTplElement layoutTpl = null;
+		IDOMElement mainContentElement = LayoutTplUtil.findMainContentElement(model.getDocument());
 
-		IDOMDocument rootDocument = model.getDocument();
+		if (mainContentElement == null) {
+			return null;
+		}
 
-		IDOMElement mainContentElement = LayoutTplUtil.findMainContentElement(rootDocument);
+		LayoutTplElement layoutTpl = LayoutTplElement.TYPE.instantiate();
 
-		if (mainContentElement != null) {
-			layoutTpl = LayoutTplElement.TYPE.instantiate();
+		layoutTpl.setBootstrapStyle(bootstrapStyle);
+		layoutTpl.setClassName(mainContentElement.getAttribute("class"));
+		layoutTpl.setIs62(is62);
 
-			layoutTpl.setBootstrapStyle(bootstrapStyle);
-			layoutTpl.setClassName(mainContentElement.getAttribute("class"));
-			layoutTpl.setIs62(is62);
+		IDOMElement[] portletLayoutElements = LayoutTplUtil.findChildElementsByClassName(
+			mainContentElement, "div", "portlet-layout");
 
-			IDOMElement[] portletLayoutElements = LayoutTplUtil.findChildElementsByClassName(
-				mainContentElement, "div", "portlet-layout");
+		if (ListUtil.isNotEmpty(portletLayoutElements)) {
+			for (IDOMElement portletLayoutElement : portletLayoutElements) {
+				ElementList<PortletLayoutElement> layouts = layoutTpl.getPortletLayouts();
 
-			if (ListUtil.isNotEmpty(portletLayoutElements)) {
-				for (IDOMElement portletLayoutElement : portletLayoutElements) {
-					PortletLayoutElement portletLayout = layoutTpl.getPortletLayouts().insert();
+				PortletLayoutElement portletLayout = layouts.insert();
 
-					initPortletLayoutFromElement(portletLayout, portletLayoutElement);
-				}
+				initPortletLayoutFromElement(portletLayout, portletLayoutElement);
 			}
 		}
 

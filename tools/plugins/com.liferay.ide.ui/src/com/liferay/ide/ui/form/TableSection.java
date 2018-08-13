@@ -24,6 +24,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
@@ -60,7 +63,9 @@ public abstract class TableSection extends StructuredViewerSection {
 			TableSection.this.buttonSelected(index);
 
 			if (fHandleDefaultButton) {
-				button.getShell().setDefaultButton(null);
+				Shell shell = button.getShell();
+
+				shell.setDefaultButton(null);
 			}
 		}
 
@@ -87,16 +92,22 @@ public abstract class TableSection extends StructuredViewerSection {
 
 				comp.setLayout(createButtonsLayout());
 				comp.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_END | GridData.FILL_BOTH));
+
 				_fCount = toolkit.createLabel(comp, "");
 
-				_fCount.setForeground(toolkit.getColors().getColor(IFormColors.TITLE));
+				FormColors colors = toolkit.getColors();
+
+				_fCount.setForeground(colors.getColor(IFormColors.TITLE));
+
 				_fCount.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 				EditableTablePart tablePart = getTablePart();
 
 				TableViewer tableViewer = tablePart.getTableViewer();
 
-				tableViewer.getTable().addPaintListener(
+				Table table = tableViewer.getTable();
+
+				table.addPaintListener(
 					new PaintListener() {
 
 						public void paintControl(PaintEvent e) {
@@ -111,7 +122,7 @@ public abstract class TableSection extends StructuredViewerSection {
 			if ((_fCount != null) && !_fCount.isDisposed()) {
 				TableViewer tableViewer = getTableViewer();
 
-				_fCount.setText(NLS.bind(Msgs.totalLabel, Integer.toString(tableViewer.getTable().getItemCount())));
+				_fCount.setText(NLS.bind(Msgs.totalLabel, String.valueOf(tableViewer.getTable().getItemCount())));
 			}
 		}
 

@@ -18,6 +18,7 @@ import com.liferay.ide.core.properties.PropertiesFileLookup;
 import com.liferay.ide.core.properties.PropertiesFileLookup.KeyInfo;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.InputStream;
 
@@ -32,6 +33,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.search.core.util.DOMUtils;
 
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
@@ -56,9 +58,8 @@ public class NodeUtils {
 						IFile[] props = PropertiesUtil.visitPropertiesFiles(src, ".*");
 
 						for (IFile prop : props) {
-							try (InputStream inputStream = prop.getContents()){
-								KeyInfo info = new PropertiesFileLookup(
-										inputStream, key, loadValues).getKeyInfo(key);
+							try (InputStream inputStream = prop.getContents()) {
+								KeyInfo info = new PropertiesFileLookup(inputStream, key, loadValues).getKeyInfo(key);
 
 								if ((info != null) && (info.offset >= 0)) {
 									keys.add(new MessageKey(prop, key, info.offset, info.length, info.value));
@@ -84,20 +85,22 @@ public class NodeUtils {
 
 		if ((currentNode != null) && (currentNode.getNodeName() != null) &&
 			(currentNode.getNodeType() == Node.ELEMENT_NODE) &&
-			(currentNode.getNodeName().endsWith("message") || currentNode.getNodeName().endsWith("error") ||
-			 _isAuiLabel(currentNode))) {
+			(StringUtil.endsWith(currentNode.getNodeName(), "message") ||
+			 StringUtil.endsWith(currentNode.getNodeName(), "error") || _isAuiLabel(currentNode))) {
 
 			messageNode = true;
 		}
 
 		if (messageNode) {
-			Node key = currentNode.getAttributes().getNamedItem("key");
+			NamedNodeMap map = currentNode.getAttributes();
+
+			Node key = map.getNamedItem("key");
 
 			if ((key != null) && !CoreUtil.isNullOrEmpty(key.getNodeValue())) {
 				retval = key;
 			}
 			else {
-				Node label = currentNode.getAttributes().getNamedItem("label");
+				Node label = map.getNamedItem("label");
 
 				if ((label != null) && !CoreUtil.isNullOrEmpty(label.getNodeValue())) {
 					retval = label;
@@ -109,9 +112,9 @@ public class NodeUtils {
 	}
 
 	private static boolean _isAuiLabel(IDOMNode currentNode) {
-		if (currentNode.getNodeName().startsWith("aui:") &&
-			(currentNode.getAttributes().getNamedItem("label") != null)) {
+		NamedNodeMap map = currentNode.getAttributes();
 
+		if (StringUtil.startsWith(currentNode.getNodeName(), "aui:") && (map.getNamedItem("label") != null)) {
 			return true;
 		}
 

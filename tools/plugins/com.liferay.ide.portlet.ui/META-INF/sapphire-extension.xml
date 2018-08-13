@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension xmlns="http://www.eclipse.org/sapphire/xmlns/extension"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<extension
+	xmlns="http://www.eclipse.org/sapphire/xmlns/extension"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
 	<action-handler>
 		<action>Sapphire.Jump</action>
 		<label>Open</label>
