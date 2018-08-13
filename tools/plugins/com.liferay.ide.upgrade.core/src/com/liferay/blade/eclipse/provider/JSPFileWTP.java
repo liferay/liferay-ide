@@ -25,27 +25,31 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
 
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
 /**
  * @author Gregory Amerson
  */
-@Component(property = {"file.extension=jsp"}, service = {JavaFile.class, JSPFile.class})
+@Component(property = "file.extension=jsp", service = {JavaFile.class, JSPFile.class})
 @SuppressWarnings({"rawtypes", "restriction"})
 public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 
@@ -95,7 +99,9 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 			IDOMNode domNode = (IDOMNode)nodeList.item(i);
 
 			for (String attrName : attrNames) {
-				IDOMNode attrNode = (IDOMNode)domNode.getAttributes().getNamedItem(attrName);
+				NamedNodeMap atrributes = domNode.getAttributes();
+
+				IDOMNode attrNode = (IDOMNode)atrributes.getNamedItem(attrName);
 
 				if (attrNode != null) {
 					int startOffset = attrNode.getStartOffset();
@@ -132,7 +138,9 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 			IDOMNode domNode = (IDOMNode)nodeList.item(i);
 
 			for (int j = 0; j < attrNames.length; j++) {
-				IDOMNode attrNode = (IDOMNode)domNode.getAttributes().getNamedItem(attrNames[j]);
+				NamedNodeMap atrributes = domNode.getAttributes();
+
+				IDOMNode attrNode = (IDOMNode)atrributes.getNamedItem(attrNames[j]);
 
 				if (attrNode != null) {
 					if ((attrValues != null) && !attrValues[j].equals(attrNode.getNodeValue())) {
@@ -160,11 +168,15 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 	@Override
 	public void setFile(File file) {
 		try {
-			BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();
+			Bundle bundle = FrameworkUtil.getBundle(getClass());
+
+			BundleContext context = bundle.getBundleContext();
 
 			Collection<ServiceReference<CUCache>> sr = context.getServiceReferences(CUCache.class, "(type=jsp)");
 
-			ServiceReference<CUCache> ref = sr.iterator().next();
+			Iterator<ServiceReference<CUCache>> iterator = sr.iterator();
+
+			ServiceReference<CUCache> ref = iterator.next();
 
 			@SuppressWarnings("unchecked")
 			CUCache<JSPTranslationPrime> cache = context.getService(ref);
@@ -188,7 +200,9 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 			int jspStartOffset = _translation.getJspOffset(startOffset);
 			int jspEndOffset = _translation.getJspOffset(endOffset);
 
-			jspModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(_translation.getJspFile());
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			jspModel = (IDOMModel)modelManager.getModelForRead(_translation.getJspFile());
 
 			IDOMDocument domDocument = jspModel.getDocument();
 
@@ -214,21 +228,26 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 
 	@Override
 	protected char[] getJavaSource() {
-		return _translation.getJavaText().toCharArray();
+		String text = _translation.getJavaText();
+
+		return text.toCharArray();
 	}
 
 	private int _getJspLine(int offset) {
 		IFile jspFile = _translation.getJspFile();
 
 		IDOMModel jspModel = null;
-		IDOMDocument domDocument = null;
 
 		try {
-			jspModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(jspFile);
+			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			domDocument = jspModel.getDocument();
+			jspModel = (IDOMModel)modelManager.getModelForRead(jspFile);
 
-			return domDocument.getStructuredDocument().getLineOfOffset(offset) + 1;
+			IDOMDocument domDocument = jspModel.getDocument();
+
+			IStructuredDocument structuredDocument = domDocument.getStructuredDocument();
+
+			return structuredDocument.getLineOfOffset(offset) + 1;
 		}
 		catch (CoreException | IOException e) {
 			e.printStackTrace();
@@ -246,12 +265,13 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 		IFile jspFile = _translation.getJspFile();
 
 		IDOMModel jspModel = null;
-		IDOMDocument domDocument = null;
 
 		try {
-			jspModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(jspFile);
+			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			domDocument = jspModel.getDocument();
+			jspModel = (IDOMModel)modelManager.getModelForRead(jspFile);
+
+			IDOMDocument domDocument = jspModel.getDocument();
 
 			return domDocument.getElementsByTagName(tagName);
 		}

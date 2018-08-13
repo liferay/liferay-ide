@@ -23,6 +23,7 @@ import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
 import com.liferay.blade.util.FileHelper;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -45,10 +47,12 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -58,7 +62,7 @@ import org.osgi.service.component.annotations.Component;
  * Parses a java file and provides some methods for finding search results
  * @author Gregory Amerson
  */
-@Component(property = {"file.extension=java"}, service = JavaFile.class)
+@Component(property = "file.extension=java", service = JavaFile.class)
 @SuppressWarnings("rawtypes")
 public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
@@ -80,7 +84,9 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 				public boolean visit(CatchClause node) {
 					SingleVariableDeclaration exception = node.getException();
 
-					String exceptionTypeName = exception.getType().toString();
+					Type type = exception.getType();
+
+					String exceptionTypeName = type.toString();
 
 					boolean retVal = false;
 
@@ -117,20 +123,21 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 				@Override
 				public boolean visit(TypeDeclaration node) {
-					ITypeBinding[] superInterfaces = null;
+					ITypeBinding typeBinding = node.resolveBinding();
 
-					if (node.resolveBinding() != null) {
-						superInterfaces = node.resolveBinding().getInterfaces();
+					if (typeBinding != null) {
+						ITypeBinding[] superInterfaces = typeBinding.getInterfaces();
 
 						if (ListUtil.isNotEmpty(superInterfaces)) {
 							String searchContext = superInterfaces[0].getName();
 
+							SimpleName nodeName = node.getName();
+
 							if (searchContext.equals(interfaceName)) {
-								int startLine = _ast.getLineNumber(node.getName().getStartPosition());
-								int startOffset = node.getName().getStartPosition();
-								int endLine = _ast.getLineNumber(
-									node.getName().getStartPosition() + node.getName().getLength());
-								int endOffset = node.getName().getStartPosition() + node.getName().getLength();
+								int startLine = _ast.getLineNumber(nodeName.getStartPosition());
+								int startOffset = nodeName.getStartPosition();
+								int endLine = _ast.getLineNumber(nodeName.getStartPosition() + nodeName.getLength());
+								int endOffset = nodeName.getStartPosition() + nodeName.getLength();
 
 								searchResults.add(
 									createSearchResult(
@@ -156,14 +163,15 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 				@Override
 				public boolean visit(ImportDeclaration node) {
-					String searchContext = node.getName().toString();
+					Name nodeName = node.getName();
+
+					String searchContext = nodeName.toString();
 
 					if (importName.equals(searchContext)) {
-						int startLine = _ast.getLineNumber(node.getName().getStartPosition());
-						int startOffset = node.getName().getStartPosition();
-						int endLine = _ast.getLineNumber(
-							node.getName().getStartPosition() + node.getName().getLength());
-						int endOffset = node.getName().getStartPosition() + node.getName().getLength();
+						int startLine = _ast.getLineNumber(nodeName.getStartPosition());
+						int startOffset = nodeName.getStartPosition();
+						int endLine = _ast.getLineNumber(nodeName.getStartPosition() + nodeName.getLength());
+						int endOffset = nodeName.getStartPosition() + nodeName.getLength();
 
 						searchResults.add(
 							createSearchResult(searchContext, startOffset, endOffset, startLine, endLine, true));
@@ -202,9 +210,9 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 							importsList.remove(importName);
 
 							for (String anotherImport : importsList) {
-								if (name.toString().contains(anotherImport) &&
-									(anotherImport.length() > importName.length())) {
+								String s = name.toString();
 
+								if (s.contains(anotherImport) && (anotherImport.length() > importName.length())) {
 									greedyImport = anotherImport;
 								}
 							}
@@ -243,7 +251,9 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 						Type type = node.getReturnType2();
 
 						if (type != null) {
-							String returnTypeName = type.resolveBinding().getName();
+							ITypeBinding typeBinding = type.resolveBinding();
+
+							String returnTypeName = typeBinding.getName();
 
 							if (!returnTypeName.equals(returnType)) {
 								sameReturnType = false;
@@ -254,14 +264,23 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 						}
 					}
 
-					String methodName = node.getName().toString();
+					SimpleName nodeName = node.getName();
+
+					String methodName = nodeName.toString();
+
 					List<?> parmsList = node.parameters();
 
 					if (name.equals(methodName) && (params.length == parmsList.size())) {
 						for (int i = 0; i < params.length; i++) {
 							Object x = parmsList.get(i);
 
-							if (!params[i].trim().equals(x.toString().substring(0, params[i].trim().length()))) {
+							String s = x.toString();
+
+							String param = params[i];
+
+							param = param.trim();
+
+							if (!param.equals(s.substring(0, param.length()))) {
 								sameParmSize = false;
 
 								break;
@@ -273,8 +292,8 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 					}
 
 					if (sameParmSize && sameReturnType) {
-						int startLine = _ast.getLineNumber(node.getName().getStartPosition());
-						int startOffset = node.getName().getStartPosition();
+						int startLine = _ast.getLineNumber(nodeName.getStartPosition());
+						int startOffset = nodeName.getStartPosition();
 
 						node.accept(
 							new ASTVisitor() {
@@ -331,14 +350,19 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 				@Override
 				public boolean visit(MethodInvocation node) {
-					String methodNameValue = node.getName().toString();
+					SimpleName nodeName = node.getName();
+
+					String methodNameValue = nodeName.toString();
+
 					Expression expression = node.getExpression();
 
 					ITypeBinding type = null;
 
 					if (expression != null) {
 						try {
-							type = _typeCache.get(expression).orElse(null);
+							Optional<ITypeBinding> optional = _typeCache.get(expression);
+
+							type = optional.orElse(null);
 						}
 						catch (ExecutionException ee) {
 						}
@@ -352,13 +376,13 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 						// not strictly check the type and will check equals later
 
 						((typeHint != null && type != null &&
-							type.getName().endsWith(typeHint)) ||
+							StringUtil.endsWith(type.getName(), typeHint)) ||
 
 							// with no typeHint then expressions can be used to
 							// match Static invocation
 
 							(typeHint == null && expression != null &&
-								expression.toString().equals(expressionValue)))) {
+								StringUtil.equals(expression.toString(), expressionValue)))) {
 
 						boolean argumentsMatch = false;
 
@@ -465,10 +489,12 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 							// endsWith but not equals
 
-							if ((typeHint != null) && (type != null) && type.getName().endsWith(typeHint) &&
-								!type.getName().equals(typeHint)) {
+							if ((typeHint != null) && (type != null)) {
+								String typeName = type.getName();
 
-								fullMatch = false;
+								if (typeName.endsWith(typeHint) && !typeName.equals(typeHint)) {
+									fullMatch = false;
+								}
 							}
 
 							searchResults.add(
@@ -493,14 +519,15 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 				@Override
 				public boolean visit(PackageDeclaration node) {
-					String searchContext = node.getName().toString();
+					Name nodeName = node.getName();
+
+					String searchContext = nodeName.toString();
 
 					if (packageName.equals(searchContext)) {
-						int startLine = _ast.getLineNumber(node.getName().getStartPosition());
-						int startOffset = node.getName().getStartPosition();
-						int endLine = _ast.getLineNumber(
-							node.getName().getStartPosition() + node.getName().getLength());
-						int endOffset = node.getName().getStartPosition() + node.getName().getLength();
+						int startLine = _ast.getLineNumber(nodeName.getStartPosition());
+						int startOffset = nodeName.getStartPosition();
+						int endLine = _ast.getLineNumber(nodeName.getStartPosition() + nodeName.getLength());
+						int endOffset = nodeName.getStartPosition() + nodeName.getLength();
 
 						searchResults.add(
 							createSearchResult(searchContext, startOffset, endOffset, startLine, endLine, true));
@@ -590,20 +617,21 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 				@Override
 				public boolean visit(TypeDeclaration node) {
-					ITypeBinding superClass = null;
+					ITypeBinding typeBinding = node.resolveBinding();
 
-					if (node.resolveBinding() != null) {
-						superClass = node.resolveBinding().getSuperclass();
+					if (typeBinding != null) {
+						ITypeBinding superClass = typeBinding.getSuperclass();
 
 						if (superClass != null) {
 							String searchContext = superClass.getName();
 
 							if (searchContext.equals(superClassName)) {
-								int startLine = _ast.getLineNumber(node.getName().getStartPosition());
-								int startOffset = node.getName().getStartPosition();
-								int endLine = _ast.getLineNumber(
-									node.getName().getStartPosition() + node.getName().getLength());
-								int endOffset = node.getName().getStartPosition() + node.getName().getLength();
+								SimpleName nodeName = node.getName();
+
+								int startLine = _ast.getLineNumber(nodeName.getStartPosition());
+								int startOffset = nodeName.getStartPosition();
+								int endLine = _ast.getLineNumber(nodeName.getStartPosition() + nodeName.getLength());
+								int endOffset = nodeName.getStartPosition() + nodeName.getLength();
 
 								searchResults.add(
 									createSearchResult(
@@ -625,11 +653,15 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 		_file = file;
 
 		try {
-			BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();
+			Bundle bundle = FrameworkUtil.getBundle(getClass());
+
+			BundleContext context = bundle.getBundleContext();
 
 			Collection<ServiceReference<CUCache>> sr = context.getServiceReferences(CUCache.class, "(type=java)");
 
-			ServiceReference<CUCache> ref = sr.iterator().next();
+			Iterator<ServiceReference<CUCache>> iterator = sr.iterator();
+
+			ServiceReference<CUCache> ref = iterator.next();
 
 			@SuppressWarnings("unchecked")
 			CUCache<CompilationUnit> cache = context.getService(ref);
@@ -653,7 +685,9 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 	protected char[] getJavaSource() {
 		try {
-			return _fileHelper.readFile(_file).toCharArray();
+			String s = _fileHelper.readFile(_file);
+
+			return s.toCharArray();
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -677,10 +711,8 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 		else if (expectType.endsWith("Object[]") && paramType.endsWith("[]")) {
 			match = true;
 		}
-		else if ((expectType.equals("Object") ||
-			expectType.equals("java.lang.Object")) &&
-			!(paramType.equals("Object[]") ||
-				paramType.equals("java.lang.Object[]"))) {
+		else if ((expectType.equals("Object") || expectType.equals("java.lang.Object")) &&
+				 !(paramType.equals("Object[]") || paramType.equals("java.lang.Object[]"))) {
 
 			match = true;
 		}

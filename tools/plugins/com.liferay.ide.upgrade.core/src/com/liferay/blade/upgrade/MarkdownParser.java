@@ -15,6 +15,8 @@
 package com.liferay.blade.upgrade;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
+import com.liferay.knowledge.base.markdown.converter.MarkdownConverter;
 import com.liferay.knowledge.base.markdown.converter.factory.MarkdownConverterFactoryUtil;
 
 import java.util.ArrayList;
@@ -59,7 +61,9 @@ public class MarkdownParser {
 			try {
 				String markdown = CoreUtil.readStreamToString(MarkdownParser.class.getResourceAsStream(fileName));
 
-				String html = MarkdownConverterFactoryUtil.create().convert(markdown);
+				MarkdownConverter markdownConverter = MarkdownConverterFactoryUtil.create();
+
+				String html = markdownConverter.convert(markdown);
 
 				Map<String, String> sections = _parseHtml(html);
 
@@ -94,7 +98,7 @@ public class MarkdownParser {
 			for (int i = index; i < siblings.size(); i++) {
 				Node sibling = siblings.get(i);
 
-				if (sibling.toString().startsWith("<hr")) {
+				if (StringUtil.startsWith(sibling.toString(), "<hr")) {
 					break;
 				}
 				else {

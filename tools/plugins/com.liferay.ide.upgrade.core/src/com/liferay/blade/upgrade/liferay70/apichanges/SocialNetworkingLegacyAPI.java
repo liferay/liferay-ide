@@ -45,8 +45,7 @@ public class SocialNetworkingLegacyAPI extends JavaFileMigrator {
 
 	private static final String[] _SERVICE_API_PREFIXES = {
 		"com.liferay.socialnetworking.service.MeetupsEntry", "com.liferay.socialnetworking.service.MeetupsRegistration",
-		"com.liferay.socialnetworking.service.WallEntry",
-
+		"com.liferay.socialnetworking.service.WallEntry"
 	};
 
 }

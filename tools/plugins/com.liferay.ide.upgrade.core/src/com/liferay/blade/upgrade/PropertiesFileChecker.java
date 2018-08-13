@@ -144,7 +144,7 @@ public class PropertiesFileChecker {
 
 								break;
 							default:
-								throw new IllegalArgumentException("Malformed \\uxxxx encoding.");
+								throw new IllegalArgumentException("Malformed \\uxxxx encoding");
 						}
 					}
 

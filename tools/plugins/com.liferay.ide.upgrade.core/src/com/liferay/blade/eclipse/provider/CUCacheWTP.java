@@ -31,6 +31,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jst.jsp.core.internal.java.JSPTranslator;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -40,7 +41,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {"type=jsp"}, service = CUCache.class)
+@Component(property = "type=jsp", service = CUCache.class)
 @SuppressWarnings("restriction")
 public class CUCacheWTP extends BaseCUCache implements CUCache<JSPTranslationPrime> {
 
@@ -53,7 +54,9 @@ public class CUCacheWTP extends BaseCUCache implements CUCache<JSPTranslationPri
 				Long lastModified = _fileModifiedTimeMap.get(file);
 
 				if ((lastModified != null) && lastModified.equals(file.lastModified())) {
-					retval = _jspTranslationMap.get(file).get();
+					WeakReference<JSPTranslationPrime> reference = _jspTranslationMap.get(file);
+
+					retval = reference.get();
 				}
 
 				if (retval == null) {
@@ -91,7 +94,9 @@ public class CUCacheWTP extends BaseCUCache implements CUCache<JSPTranslationPri
 
 			IFile jspFile = getIFile(file);
 
-			jspModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(jspFile);
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			jspModel = (IDOMModel)modelManager.getModelForRead(jspFile);
 
 			IDOMDocument domDocument = jspModel.getDocument();
 

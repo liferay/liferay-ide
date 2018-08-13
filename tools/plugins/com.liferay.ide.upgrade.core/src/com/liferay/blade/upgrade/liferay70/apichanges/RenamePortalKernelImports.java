@@ -28,9 +28,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -115,7 +117,9 @@ public class RenamePortalKernelImports extends ImportStatementMigrator {
 	public List<SearchResult> searchFile(File file, JavaFile javaFile) {
 		List<SearchResult> searchResults = new ArrayList<>();
 
-		List<SearchResult> importResult = javaFile.findImports(_imports.keySet().toArray(new String[0]));
+		Set<String> importSet = _imports.keySet();
+
+		List<SearchResult> importResult = javaFile.findImports(importSet.toArray(new String[0]));
 
 		if (ListUtil.isNotEmpty(importResult)) {
 			for (SearchResult result : importResult) {
@@ -125,7 +129,9 @@ public class RenamePortalKernelImports extends ImportStatementMigrator {
 				boolean skip = false;
 
 				if (result.searchContext != null) {
-					for (String fixed : _imports.values().toArray(new String[0])) {
+					Collection<String> importValues = _imports.values();
+
+					for (String fixed : importValues.toArray(new String[0])) {
 						if (result.searchContext.contains(fixed)) {
 							skip = true;
 

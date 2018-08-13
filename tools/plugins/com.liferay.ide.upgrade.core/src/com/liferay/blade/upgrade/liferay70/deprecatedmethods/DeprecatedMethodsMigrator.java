@@ -55,9 +55,9 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 
 			Class<? extends DeprecatedMethodsMigrator> class1 = DeprecatedMethodsMigrator.class;
 
-			for (int i = 0; i < jsonFilePaths.length; i++) {
+			for (String path : jsonFilePaths) {
 				try {
-					String jsonContent = CoreUtil.readStreamToString(class1.getResourceAsStream(jsonFilePaths[i]));
+					String jsonContent = CoreUtil.readStreamToString(class1.getResourceAsStream(path));
 
 					deprecatedMethodsList.add(new JSONArray(jsonContent));
 				}
@@ -86,7 +86,7 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 					for (SearchResult searchResult : searchResults) {
 						int makerType = Problem.MARKER_ERROR;
 
-						if (_tempMethod.getString("deprecatedVersion").equals("7.0")) {
+						if ("7.0".equals(_tempMethod.getString("deprecatedVersion"))) {
 							makerType = Problem.MARKER_WARNING;
 						}
 

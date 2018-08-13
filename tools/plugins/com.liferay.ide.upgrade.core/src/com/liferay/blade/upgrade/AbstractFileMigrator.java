@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Dictionary;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.Path;
@@ -104,7 +105,9 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 				type, "(file.extension=" + fileExtension + ")");
 
 			if (ListUtil.isNotEmpty(refs)) {
-				T service = context.getService(refs.iterator().next());
+				Iterator<ServiceReference<T>> iterator = refs.iterator();
+
+				T service = context.getService(iterator.next());
 
 				T fileCheckerFile = type.cast(service);
 
@@ -133,7 +136,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 	protected String problemTickets;
 	protected String problemTitle;
 	protected String sectionKey;
-	protected String version;
 	protected final Class<T> type;
+	protected String version;
 
 }
