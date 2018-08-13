@@ -16,7 +16,6 @@ package com.liferay.ide.functional.kaleo.tests;
 
 import com.liferay.ide.functional.kaleo.deploy.base.DeployKaleoGradleTomcat7xBase;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -25,7 +24,6 @@ import org.junit.Test;
  */
 public class DeployKaleoTomcatDxpTests extends DeployKaleoGradleTomcat7xBase {
 
-	@Ignore("ignore as ticket IDE-4172")
 	@Test
 	public void deployKaleoWorkflows() {
 		super.deployKaleoWorkflowAssignCreatorOnProject();
