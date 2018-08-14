@@ -105,7 +105,7 @@ public class GradleModuleFragmentProjectProvider
 		boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
 		boolean inWorkspacePath = false;
 
-		final IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+		IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
 		if (hasGradleWorkspace && (liferayWorkspaceProject != null) && !useDefaultLocation) {
 			IPath workspaceLocation = liferayWorkspaceProject.getLocation();
@@ -142,10 +142,8 @@ public class GradleModuleFragmentProjectProvider
 	public IStatus validateProjectLocation(String projectName, IPath path) {
 		IStatus retval = Status.OK_STATUS;
 
-		if (path != null) {
-			if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path.toOSString())) {
-				retval = GradleCore.createErrorStatus(" Can't set WorkspaceProject root folder as project directory. ");
-			}
+		if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path)) {
+			retval = GradleCore.createErrorStatus(" Can not set WorkspaceProject root folder as project directory.");
 		}
 
 		return retval;
