@@ -52,8 +52,9 @@ public class LayoutTplEditPartFactory implements EditPartFactory {
 
 		Class<?> modelElementClass = modelElement.getClass();
 
-		throw new RuntimeException(
-			"Can't create part for model element: " + ((modelElement != null) ? modelElementClass.getName() : "null"));
+		String message = (modelElement != null) ? modelElementClass.getName() : "null";
+
+		throw new RuntimeException("Can not create part for model element: " + message);
 	}
 
 }

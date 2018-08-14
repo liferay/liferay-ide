@@ -163,7 +163,7 @@ public class NewLayoutTplDataModelProvider
 			String idText = getStringProperty(propertyName);
 
 			if (CoreUtil.isNullOrEmpty(idText)) {
-				return LayoutTplCore.createErrorStatus("Id can't be empty.");
+				return LayoutTplCore.createErrorStatus("Id can not be empty.");
 			}
 		}
 		else if (LAYOUT_TEMPLATE_FILE.equals(propertyName)) {
