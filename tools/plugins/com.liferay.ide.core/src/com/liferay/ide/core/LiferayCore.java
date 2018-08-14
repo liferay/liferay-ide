@@ -39,6 +39,8 @@ public class LiferayCore extends Plugin {
 
 	public static final IPath GLOBAL_USER_DIR = GLOBAL_SETTINGS_PATH.append("bundles");
 
+	public static final String LIFERAY_JOB_FAMILY = "com.liferay.ide.jobs";
+
 	public static final String PLUGIN_ID = "com.liferay.ide.core";
 
 	public static <T> T create(Class<T> type, Object adaptable) {
