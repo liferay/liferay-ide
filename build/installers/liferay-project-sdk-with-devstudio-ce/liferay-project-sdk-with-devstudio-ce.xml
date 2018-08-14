@@ -68,10 +68,17 @@
         <include file="../components/autodetect-java.xml" />
     </preInstallationActionList>
     <postInstallationActionList>
-        <createDirectory>
-            <path>${user_home_directory}${platform_path_separator}.liferay</path>
-            <progressText>Creating directory...</progressText>
-        </createDirectory>
+        <if>
+            <actionList>
+                <createDirectory>
+                    <path>${user_home_directory}${platform_path_separator}.liferay</path>
+                    <progressText>Creating directory...</progressText>
+                </createDirectory>
+            </actionList>
+            <conditionRuleList>
+                <isFalse value="${clitools}"/>
+            </conditionRuleList>
+        </if>
         <if>
             <explanation>is linux</explanation>
             <actionList>
