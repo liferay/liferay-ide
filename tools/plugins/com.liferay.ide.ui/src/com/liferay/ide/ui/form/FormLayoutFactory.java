@@ -31,25 +31,25 @@ public class FormLayoutFactory {
 	// The form toolkit paints flat borders on a given widget when native
 	// borders are not painted by SWT. See FormToolkit#paintBordersFor()
 
-	public static final int DEFAULT_CLEAR_MARGIN = 2;
+	// public static final int DEFAULT_CLEAR_MARGIN = 2;
 
 	public static final int CLEAR_HORIZONTAL_SPACING = 0;
 
-	public static final int CLEAR_MARGIN_BOTTOM = DEFAULT_CLEAR_MARGIN;
+	public static final int CLEAR_MARGIN_BOTTOM = 2;
 
 	public static final int CLEAR_MARGIN_HEIGHT = 0;
 
-	public static final int CLEAR_MARGIN_LEFT = DEFAULT_CLEAR_MARGIN;
+	public static final int CLEAR_MARGIN_LEFT = 2;
 
 	// Required to allow space for field decorations
 
-	public static final int CLEAR_MARGIN_RIGHT = DEFAULT_CLEAR_MARGIN;
+	public static final int CLEAR_MARGIN_RIGHT = 2;
 
 	// UI Forms Standards
 
 	// FORM BODY
 
-	public static final int CLEAR_MARGIN_TOP = DEFAULT_CLEAR_MARGIN;
+	public static final int CLEAR_MARGIN_TOP = 2;
 
 	public static final int CLEAR_MARGIN_WIDTH = 0;
 

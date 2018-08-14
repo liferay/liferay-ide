@@ -175,7 +175,7 @@ public class GradleProjectProvider
 			}
 		}
 		catch (Exception e) {
-			retval = GradleCore.createErrorStatus("Can't create module project: " + e.getMessage(), e);
+			retval = GradleCore.createErrorStatus("Can not create module project: " + e.getMessage(), e);
 		}
 
 		return retval;
@@ -214,10 +214,8 @@ public class GradleProjectProvider
 	public IStatus validateProjectLocation(String projectName, IPath path) {
 		IStatus retval = Status.OK_STATUS;
 
-		if (path != null) {
-			if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path.toOSString())) {
-				retval = GradleCore.createErrorStatus(" Can't set WorkspaceProject root folder as project directory. ");
-			}
+		if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path)) {
+			retval = GradleCore.createErrorStatus(" Can not set WorkspaceProject root folder as project directory.");
 		}
 
 		return retval;

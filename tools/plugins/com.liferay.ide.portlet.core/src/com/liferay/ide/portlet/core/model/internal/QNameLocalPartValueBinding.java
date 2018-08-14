@@ -19,6 +19,7 @@ import com.liferay.ide.portlet.core.util.PortletAppModelConstants;
 import com.liferay.ide.portlet.core.util.PortletUtil;
 
 import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
@@ -30,42 +31,30 @@ import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
  */
 public class QNameLocalPartValueBinding extends XmlValueBindingImpl {
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.xml.XmlValuePropertyBinding#getXmlNode()
-	 */
 	@Override
 	public XmlNode getXmlNode() {
 		XmlElement element = xml(false);
 
 		if (element != null) {
-			return element.getChildNode(this.path, false);
+			return element.getChildNode(_path, false);
 		}
 
 		return null;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.PropertyBinding#init(org.eclipse.sapphire.
-	 *      modeling.Element, org.eclipse.sapphire.modeling.Property,
-	 *      java.lang.String[])
-	 */
 	@Override
 	public void init(Property property) {
 		super.init(property);
 
-		this.params = property.definition().getAnnotation(CustomXmlValueBinding.class).params();
-		this.path = new XmlPath(params[0], resource().getXmlNamespaceResolver());
+		PropertyDef propertyDef = property.definition();
+
+		CustomXmlValueBinding customXmlValueBinding = propertyDef.getAnnotation(CustomXmlValueBinding.class);
+
+		_params = customXmlValueBinding.params();
+
+		_path = new XmlPath(_params[0], resource().getXmlNamespaceResolver());
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#read()
-	 */
 	@Override
 	public String read() {
 		String value = null;
@@ -76,33 +65,24 @@ public class QNameLocalPartValueBinding extends XmlValueBindingImpl {
 
 		XmlElement qNameElement = null;
 
-		if (parent.getLocalName().equals(params[0])) {
+		if (_params[0].equals(parent.getLocalName())) {
 			qNameElement = parent;
 		}
 		else {
-			qNameElement = parent.getChildElement(params[0], false);
+			qNameElement = parent.getChildElement(_params[0], false);
 		}
-
-		// System.out.println( "Reading VALUE for Element ___________________ " +
-		// qNameElement );
 
 		if (qNameElement != null) {
 			value = qNameElement.getText();
 
 			if (value != null) {
-				value = value.trim();
-				value = PortletUtil.stripPrefix(value);
+				value = PortletUtil.stripPrefix(value.trim());
 			}
 		}
 
 		return value;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#write(java.lang.String)
-	 */
 	@Override
 	public void write(String value) {
 		String val = value;
@@ -112,37 +92,27 @@ public class QNameLocalPartValueBinding extends XmlValueBindingImpl {
 		 * In some cases the parent node and the child nodes will be same, we need to
 		 * ensure that we dont create them accidentally again
 		 */
-		// System.out.println( "QNameLocalPartValueBinding.write() - Parent local name:"
-		// + parent.getLocalName() );
-
 		XmlElement qNameElement = null;
 
-		if (parent.getLocalName().equals(params[0])) {
+		if (_params[0].equals(parent.getLocalName())) {
 			qNameElement = parent;
 		}
 		else {
-			qNameElement = parent.getChildElement(params[0], true);
+			qNameElement = parent.getChildElement(_params[0], true);
 		}
-
-		// System.out.println( "TextNodeValueBinding.write() - Parent " + xml( true
-		// ).getParent() );
 
 		if (qNameElement != null) {
 			val = val != null ? value.trim() : StringPool.EMPTY;
 
-			if (params.length == 2 && "localpart".equals(params[1])) {// update only local part
+			// update only local part
 
-				// System.out.println( "VALUE
-				// ___________________ " + val );
-
+			if ((_params.length == 2) && "localpart".equals(_params[1])) {
 				String existingText = qNameElement.getText();
 
 				if ((existingText != null) && (existingText.indexOf(":") != -1)) {
-					String updatedLocalPart = existingText.substring(0, (existingText.indexOf(":") + 1));
-					updatedLocalPart = updatedLocalPart + val;
+					String updatedLocalPart = existingText.substring(0, existingText.indexOf(":") + 1);
 
-					// System.out.println( "Updated value ___________________ " + updatedLocalPart
-					// );
+					updatedLocalPart = updatedLocalPart + val;
 
 					qNameElement.setText(updatedLocalPart);
 				}
@@ -156,7 +126,7 @@ public class QNameLocalPartValueBinding extends XmlValueBindingImpl {
 		}
 	}
 
-	private String[] params;
-	private XmlPath path;
+	private String[] _params;
+	private XmlPath _path;
 
 }

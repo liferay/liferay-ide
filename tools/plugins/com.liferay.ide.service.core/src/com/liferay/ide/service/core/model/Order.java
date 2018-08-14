@@ -34,20 +34,20 @@ public interface Order extends Element {
 
 	public ElementType TYPE = new ElementType(Order.class);
 
-	// *** By ***
-
 	public Value<String> getBy();
+
+	// *** By ***
 
 	public ElementList<OrderColumn> getOrderColumns();
 
 	public void setBy(String value);
 
-	// *** Order Columns ***
-
 	@Label(standard = "by")
 	@PossibleValues(invalidValueMessage = "{0} is not valid.", values = {"asc", "desc"})
 	@XmlBinding(path = "@by")
 	public ValueProperty PROP_BY = new ValueProperty(TYPE, "By");
+
+	// *** Order Columns ***
 
 	@Label(standard = "order columns")
 	@Length(min = 1)

@@ -51,7 +51,7 @@ public class WorkbenchPreferencesTransfer extends WorkbenchSettingsTransfer {
 
 		if (!destDir.exists()) {
 			if (!destDir.mkdirs()) {
-				return new Status(IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "can't create dirs");
+				return new Status(IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "can not create dirs");
 			}
 		}
 
@@ -60,7 +60,7 @@ public class WorkbenchPreferencesTransfer extends WorkbenchSettingsTransfer {
 
 			if (destSetting.exists()) {
 				if (!destSetting.delete()) {
-					return new Status(IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "can't delete settings file");
+					return new Status(IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "can not delete settings file");
 				}
 			}
 

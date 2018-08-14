@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -43,6 +45,7 @@ import org.eclipse.jdt.internal.ui.wizards.dialogfields.ListDialogField;
 import org.eclipse.jdt.internal.ui.wizards.dialogfields.StringButtonDialogField;
 import org.eclipse.jdt.ui.wizards.NewTypeWizardPage;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jst.jsf.common.util.JDTBeanIntrospector;
@@ -67,14 +70,16 @@ public class AbstractModelWizardPage extends NewTypeWizardPage {
 
 	public static Object[] getTypeProperties(IType type) {
 		if (type == null) {
-			return null;
+			return new Object[0];
 		}
 
 		JDTBeanIntrospector beanIntrospector = new JDTBeanIntrospector(type);
 
 		Map<String, JDTBeanProperty> properties = beanIntrospector.getProperties();
 
-		return properties.keySet().toArray();
+		Set<String> key = properties.keySet();
+
+		return key.toArray();
 	}
 
 	public AbstractModelWizardPage(String pageName, IEditorPart editor) {
@@ -133,7 +138,9 @@ public class AbstractModelWizardPage extends NewTypeWizardPage {
 		LayoutUtil.setWidthHint(propertyListField.getLabelControl(null), convertWidthInCharsToPixels(40));
 		LayoutUtil.setHorizontalGrabbing(propertyListField.getListControl(null));
 
-		propertyListField.getTableViewer().setComparator(new ViewerComparator());
+		TableViewer tableViewer = propertyListField.getTableViewer();
+
+		tableViewer.setComparator(new ViewerComparator());
 
 		varNameLabel = new Label(topComposite, SWT.LEFT);
 
@@ -162,7 +169,9 @@ public class AbstractModelWizardPage extends NewTypeWizardPage {
 			IEditorInput editorInput = editorPart.getEditorInput();
 
 			if (editorInput instanceof IFileEditorInput) {
-				IProject project = ((IFileEditorInput)editorInput).getFile().getProject();
+				IFile file = ((IFileEditorInput)editorInput).getFile();
+
+				IProject project = file.getProject();
 
 				return JavaCore.create(project);
 			}
@@ -188,7 +197,9 @@ public class AbstractModelWizardPage extends NewTypeWizardPage {
 	}
 
 	public String[] getPropertyColumns() {
-		return (String[])propertyListField.getCheckedElements().toArray(new String[0]);
+		List list = propertyListField.getCheckedElements();
+
+		return (String[])list.toArray(new String[0]);
 	}
 
 	public String getTypeName() {
@@ -247,12 +258,14 @@ public class AbstractModelWizardPage extends NewTypeWizardPage {
 		}
 
 		try {
+			IJavaProject javaProject = type.getJavaProject();
+
 			if (type.isInterface()) {
 				String[] superInterfaces = type.getSuperInterfaceNames();
 
 				if (ListUtil.isNotEmpty(superInterfaces)) {
 					for (String superInterface : superInterfaces) {
-						IType superInterfaceType = type.getJavaProject().findType(superInterface);
+						IType superInterfaceType = javaProject.findType(superInterface);
 
 						Object[] superInterfaceProps = getTypeProperties(superInterfaceType);
 
@@ -263,7 +276,7 @@ public class AbstractModelWizardPage extends NewTypeWizardPage {
 				}
 			}
 			else {
-				IType superType = type.getJavaProject().findType(type.getSuperclassName());
+				IType superType = javaProject.findType(type.getSuperclassName());
 
 				Object[] superTypeProps = getTypeProperties(superType);
 

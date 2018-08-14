@@ -35,6 +35,12 @@ public interface IndexerClass extends Element {
 
 	public ElementType TYPE = new ElementType(IndexerClass.class);
 
+	public ReferenceValue<JavaTypeName, JavaType> getValue();
+
+	public void setValue(JavaTypeName value);
+
+	public void setValue(String value);
+
 	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.search.Indexer")
 	@Label(standard = "Indexer Class")
 	@MustExist
@@ -43,9 +49,4 @@ public interface IndexerClass extends Element {
 	@XmlBinding(path = "")
 	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
 
-	public ReferenceValue<JavaTypeName, JavaType> getValue();
-
-	public void setValue(JavaTypeName value);
-
-	public void setValue(String value);
 }

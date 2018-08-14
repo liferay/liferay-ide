@@ -33,6 +33,14 @@ public class SapphireUtil {
 		valueProperty.attach(listener);
 	}
 
+	public static void detachListener(Value<?> valueProperty, Listener listener) {
+		if ((valueProperty == null) || (listener == null)) {
+			return;
+		}
+
+		valueProperty.detach(listener);
+	}
+
 	public static <T> T getContent(Value<T> valueProperty) {
 		if (valueProperty != null) {
 			return valueProperty.content();
@@ -52,6 +60,14 @@ public class SapphireUtil {
 	public static <T> String getText(Value<T> valueProperty) {
 		if (valueProperty != null) {
 			return valueProperty.text();
+		}
+
+		return "";
+	}
+
+	public static <T> String getText(Value<T> valueProperty, boolean useDefaultValue) {
+		if (valueProperty != null) {
+			return valueProperty.text(useDefaultValue);
 		}
 
 		return "";

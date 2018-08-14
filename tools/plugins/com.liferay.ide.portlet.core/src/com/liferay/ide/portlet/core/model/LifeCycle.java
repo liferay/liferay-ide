@@ -29,17 +29,15 @@ public interface LifeCycle extends Element {
 
 	public ElementType TYPE = new ElementType(LifeCycle.class);
 
-	// *** LifeCycle ***
-
-	@Type(base = LifeCycleType.class)
-	@Label(standard = "lifecycle name")
-	@XmlBinding(path = "")
-	public ValueProperty PROP_LIFE_CYCLE = new ValueProperty(TYPE, "LifeCycle");
-
 	public Value<LifeCycleType> getLifeCycle();
+
+	public void setLifeCycle(LifeCycleType value);
 
 	public void setLifeCycle(String value);
 
-	public void setLifeCycle(LifeCycleType value);
+	@Label(standard = "lifecycle name")
+	@Type(base = LifeCycleType.class)
+	@XmlBinding(path = "")
+	public ValueProperty PROP_LIFE_CYCLE = new ValueProperty(TYPE, "LifeCycle");
 
 }

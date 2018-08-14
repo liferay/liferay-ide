@@ -25,14 +25,18 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  */
 public class LiferayPortletRootElementController extends VersionedDTDRootElementController {
 
-	static final String xmlBindingPath = LiferayPortletXml.class.getAnnotation(XmlBinding.class).path();
-	static final String publicIdTemplate = "-//Liferay//DTD Portlet Application {0}//EN";
-	static final String systemIdTemplate = "http://www.liferay.com/dtd/liferay-portlet-app_{0}.dtd";
-	static final Pattern publicIdPattern = Pattern.compile("^-//Liferay//DTD Portlet Application (.*)//EN$");
-	static final Pattern systemIdPattern = Pattern.compile("^http://www.liferay.com/dtd/liferay-portlet-app_(.*).dtd$");
+	public static final String PUBLIC_ID_TEMPLATE = "-//Liferay//DTD Portlet Application {0}//EN";
+
+	public static final String SYSTEM_ID_TEMPLATE = "http://www.liferay.com/dtd/liferay-portlet-app_{0}.dtd";
+
+	public static final String XML_BINDING_PATH = LiferayPortletXml.class.getAnnotation(XmlBinding.class).path();
+
+	public static final Pattern publicIdPattern = Pattern.compile("^-//Liferay//DTD Portlet Application (.*)//EN$");
+	public static final Pattern systemIdPattern = Pattern.compile(
+		"^http://www.liferay.com/dtd/liferay-portlet-app_(.*).dtd$");
 
 	public LiferayPortletRootElementController() {
-		super(xmlBindingPath, publicIdTemplate, systemIdTemplate, publicIdPattern, systemIdPattern);
+		super(XML_BINDING_PATH, PUBLIC_ID_TEMPLATE, SYSTEM_ID_TEMPLATE, publicIdPattern, systemIdPattern);
 	}
 
 }

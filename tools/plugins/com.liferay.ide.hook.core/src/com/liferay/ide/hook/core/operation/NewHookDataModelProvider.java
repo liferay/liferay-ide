@@ -297,7 +297,7 @@ public class NewHookDataModelProvider
 							String[] comp2 = jspArrays[j];
 
 							if (comp1[0].equals(comp2[0])) {
-								return HookCore.createWarnStatus("Shouldn't add same jsp file.");
+								return HookCore.createWarnStatus("Should not add same jsp file.");
 							}
 						}
 					}

@@ -35,7 +35,11 @@ public interface AtomCollectionAdapter extends Element {
 
 	public ElementType TYPE = new ElementType(AtomCollectionAdapter.class);
 
-	// Atom Collection Adapter
+	public ReferenceValue<JavaTypeName, JavaType> getValue();
+
+	public void setValue(String value);
+
+	public void seValue(JavaTypeName value);
 
 	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.atom.AtomCollectionAdapter")
 	@Label(standard = "Atom Collection Adatper")
@@ -45,9 +49,4 @@ public interface AtomCollectionAdapter extends Element {
 	@XmlBinding(path = "")
 	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
 
-	public ReferenceValue<JavaTypeName, JavaType> getValue();
-
-	public void seValue(JavaTypeName value);
-
-	public void setValue(String value);
 }

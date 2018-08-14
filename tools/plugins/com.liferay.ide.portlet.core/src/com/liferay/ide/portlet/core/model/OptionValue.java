@@ -28,14 +28,12 @@ public interface OptionValue extends Element {
 
 	public ElementType TYPE = new ElementType(OptionValue.class);
 
-	// *** RuntimeOptionValue ***
+	public Value<String> getOptionValue();
+
+	public void setOptionValue(String value);
 
 	@Label(standard = "Option Value")
 	@XmlBinding(path = "")
 	public ValueProperty PROP_OPTION_VALUE = new ValueProperty(TYPE, "OptionValue");
-
-	public Value<String> getOptionValue();
-
-	public void setOptionValue(String value);
 
 }

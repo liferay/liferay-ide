@@ -32,20 +32,18 @@ public interface UserDataConstraint extends Element, Identifiable, Describeable 
 
 	public ElementType TYPE = new ElementType(UserDataConstraint.class);
 
-	/**
-	 * Transport Gurantee
-	 */
-	@Type(base = TransportGuarantee.class)
-	@Label(standard = "Transport Guarantee")
-	@Unique
-	@Required
-	@XmlBinding(path = "transport-guarantee")
-	@InitialValue(text = "NONE")
-	public ValueProperty PROP_TRANSPORT_GUARANTEE = new ValueProperty(TYPE, "TransportGuarantee");
-
 	public Value<TransportGuarantee> getTransportGuarantee();
+
+	public void setTransportGuarantee(String version);
 
 	public void setTransportGuarantee(TransportGuarantee version);
 
-	public void setTransportGuarantee(String version);
+	@InitialValue(text = "NONE")
+	@Label(standard = "Transport Guarantee")
+	@Required
+	@Type(base = TransportGuarantee.class)
+	@Unique
+	@XmlBinding(path = "transport-guarantee")
+	public ValueProperty PROP_TRANSPORT_GUARANTEE = new ValueProperty(TYPE, "TransportGuarantee");
+
 }

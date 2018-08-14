@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.snippets.util;
 
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,10 +27,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.common.snippets.internal.SnippetDefinitions;
 import org.eclipse.wst.common.snippets.internal.model.SnippetManager;
 import org.eclipse.wst.common.snippets.internal.palette.ModelFactoryForUser;
+import org.eclipse.wst.common.snippets.internal.palette.SnippetPaletteRoot;
 
 /**
  * @author Gregory Amerson
@@ -38,7 +39,7 @@ import org.eclipse.wst.common.snippets.internal.palette.ModelFactoryForUser;
 public class SnippetsUtil {
 
 	public static IViewPart findSnippetsView() {
-		for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
+		for (IWorkbenchWindow window : UIUtil.getWorkbenchWindows()) {
 			for (IWorkbenchPage page : window.getPages()) {
 				IViewPart snippetsView = page.findView(LiferayPerspectiveFactory.ID_WST_SNIPPETS_VIEW);
 
@@ -59,25 +60,35 @@ public class SnippetsUtil {
 
 		// InputStream stream = Files.newInputStream(snippetFile.toPath());
 
-		SnippetDefinitions definitions = ModelFactoryForUser.getInstance().load(snippetFile.getAbsolutePath());
+		ModelFactoryForUser factory = ModelFactoryForUser.getInstance();
+
+		SnippetDefinitions definitions = factory.load(snippetFile.getAbsolutePath());
 
 		List importCategories = definitions.getCategories();
 
 		SnippetManager manager = SnippetManager.getInstance();
 
-		List currentCategories = manager.getDefinitions().getCategories();
+		SnippetDefinitions snippetDefinitions = manager.getDefinitions();
 
-		Display.getDefault().asyncExec(
+		List currentCategories = snippetDefinitions.getCategories();
+
+		Display display = Display.getDefault();
+
+		display.asyncExec(
 			new Runnable() {
 
 				public void run() {
 					for (int i = 0; i < importCategories.size(); i++) {
 						boolean found = false;
 
-						for (int j = 0; j < currentCategories.size(); j++) {
-							if (((PaletteEntry)currentCategories.get(j)).getId().compareToIgnoreCase(
-									((PaletteEntry)importCategories.get(i)).getId()) == 0) {
+						PaletteEntry importCategory = (PaletteEntry)importCategories.get(i);
 
+						for (int j = 0; j < currentCategories.size(); j++) {
+							PaletteEntry currentCategory = (PaletteEntry)currentCategories.get(j);
+
+							String currentCategoryId = currentCategory.getId();
+
+							if (currentCategoryId.compareToIgnoreCase(importCategory.getId()) == 0) {
 								found = true;
 
 								break;
@@ -87,7 +98,9 @@ public class SnippetsUtil {
 						if (!found) {
 							SnippetManager manager = SnippetManager.getInstance();
 
-							manager.getPaletteRoot().add((PaletteEntry)importCategories.get(i));
+							SnippetPaletteRoot snippetPaletteRoot = manager.getPaletteRoot();
+
+							snippetPaletteRoot.add((PaletteEntry)importCategories.get(i));
 						}
 					}
 				}

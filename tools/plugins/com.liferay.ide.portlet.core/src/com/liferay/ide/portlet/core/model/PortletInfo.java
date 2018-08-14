@@ -30,34 +30,28 @@ public interface PortletInfo extends Element, Identifiable {
 
 	public ElementType TYPE = new ElementType(PortletInfo.class);
 
-	// *** Title ***
+	public Value<String> getKeywords();
 
-	@Label(standard = "Title")
-	@XmlBinding(path = "title")
-	public ValueProperty PROP_TITLE = new ValueProperty(TYPE, "Title");
+	public Value<String> getShortTitle();
 
 	public Value<String> getTitle();
 
-	public void setTitle(String value);
-
-	// *** ShortTitle ***
-
-	@Label(standard = "Short Title")
-	@XmlBinding(path = "short-title")
-	public ValueProperty PROP_SHORT_TITLE = new ValueProperty(TYPE, "ShortTitle");
-
-	public 	Value<String> getShortTitle();
+	public void setKeywords(String value);
 
 	public void setShortTitle(String value);
 
-	// *** Keywords ***
+	public void setTitle(String value);
 
 	@Label(standard = "Keywords")
 	@XmlBinding(path = "keywords")
 	public ValueProperty PROP_KEYWORDS = new ValueProperty(TYPE, "Keywords");
 
-	public Value<String> getKeywords();
+	@Label(standard = "Short Title")
+	@XmlBinding(path = "short-title")
+	public ValueProperty PROP_SHORT_TITLE = new ValueProperty(TYPE, "ShortTitle");
 
-	public void setKeywords(String value);
+	@Label(standard = "Title")
+	@XmlBinding(path = "title")
+	public ValueProperty PROP_TITLE = new ValueProperty(TYPE, "Title");
 
 }

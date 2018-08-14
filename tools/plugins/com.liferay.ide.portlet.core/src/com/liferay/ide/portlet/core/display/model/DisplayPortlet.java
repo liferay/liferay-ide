@@ -34,16 +34,14 @@ public interface DisplayPortlet extends Element {
 
 	public ElementType TYPE = new ElementType(DisplayPortlet.class);
 
-	// *** Id ***
-
-	@Label(standard = "Id")
-	@XmlBinding(path = "@id")
-	@Required
-	@Service(impl = PortletNamePossibleValueService.class)
-	public ValueProperty PROP_ID = new ValueProperty(TYPE, "Id");
-
 	public Value<String> getId();
 
 	public void setId(String id);
+
+	@Label(standard = "Id")
+	@Required
+	@Service(impl = PortletNamePossibleValueService.class)
+	@XmlBinding(path = "@id")
+	public ValueProperty PROP_ID = new ValueProperty(TYPE, "Id");
 
 }

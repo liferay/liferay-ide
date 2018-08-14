@@ -30,9 +30,9 @@ public interface TxRequired extends Element {
 
 	public ElementType TYPE = new ElementType(TxRequired.class);
 
-	// *** TxRequired ***
-
 	public Value<String> getTxRequired();
+
+	// *** TxRequired ***
 
 	public void setTxRequired(String value);
 

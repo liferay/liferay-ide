@@ -28,15 +28,13 @@ public interface PropertySimpleTrigger extends ISimpleTrigger {
 
 	public ElementType TYPE = new ElementType(PropertySimpleTrigger.class);
 
-	// *** Property Key ***
+	public Value<String> getPropertyKey();
+
+	public void setPropertyKey(String value);
 
 	@Label(standard = "Property Key")
 	@Required
 	@XmlBinding(path = "")
 	public ValueProperty PROP_PROPERTY_KEY = new ValueProperty(TYPE, "PropertyKey");
-
-	public Value<String> getPropertyKey();
-
-	public void setPropertyKey(String value);
 
 }

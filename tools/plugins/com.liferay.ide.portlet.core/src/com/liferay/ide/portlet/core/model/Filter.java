@@ -44,55 +44,46 @@ public interface Filter extends Describeable, Displayable {
 
 	public ElementType TYPE = new ElementType(Filter.class);
 
-	// *** Name ***
+	public ReferenceValue<JavaTypeName, JavaType> getImplementation();
+
+	public ElementList<Param> getInitParams();
+
+	public ElementList<LifeCycle> getLifeCycle();
+
+	public Value<String> getName();
+
+	public void setImplementation(JavaTypeName value);
+
+	public void setImplementation(String value);
+
+	public void setName(String value);
+
+	@JavaTypeConstraint(behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE, kind = JavaTypeKind.CLASS, type = {
+		"javax.portlet.filter.ResourceFilter", "javax.portlet.filter.RenderFilter", "javax.portlet.filter.ActionFilter",
+		"javax.portlet.filter.EventFilter"
+	})
+	@Label(full = "Filter implementation class", standard = "implementation class")
+	@MustExist
+	@Reference(target = JavaType.class)
+	@Required
+	@Type(base = JavaTypeName.class)
+	@XmlBinding(path = "filter-class")
+	public ValueProperty PROP_IMPLEMENTATION = new ValueProperty(TYPE, "Implementation");
+
+	@Label(standard = "initialization parameters")
+	@Type(base = Param.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "init-param", type = Param.class))
+	public ListProperty PROP_INIT_PARAMS = new ListProperty(TYPE, "InitParams");
+
+	@Label(standard = "lifecycle")
+	@Length(min = 1)
+	@Type(base = LifeCycle.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "lifecycle", type = LifeCycle.class))
+	public ListProperty PROP_LIFE_CYCLE = new ListProperty(TYPE, "LifeCycle");
 
 	@Label(standard = "name")
 	@Required
 	@XmlBinding(path = "filter-name")
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
-
-	public Value<String> getName();
-
-	public void setName(String value);
-
-	// *** Implementation ***
-
-	@Type(base = JavaTypeName.class)
-	@Reference(target = JavaType.class)
-	@Label(standard = "implementation class", full = "Filter implementation class")
-	@Required
-	@MustExist
-	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = {
-		"javax.portlet.filter.ResourceFilter", "javax.portlet.filter.RenderFilter", "javax.portlet.filter.ActionFilter",
-		"javax.portlet.filter.EventFilter"
-
-	}, behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE)
-	@XmlBinding(path = "filter-class")
-	public ValueProperty PROP_IMPLEMENTATION = new ValueProperty(TYPE, "Implementation");
-
-	public ReferenceValue<JavaTypeName, JavaType> getImplementation();
-
-	public void setImplementation(String value);
-
-	public 	void setImplementation(JavaTypeName value);
-
-	// *** LifeCycle ***
-
-	@Type(base = LifeCycle.class)
-	@Label(standard = "lifecycle")
-	@Length(min = 1)
-	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "lifecycle", type = LifeCycle.class))
-	public ListProperty PROP_LIFE_CYCLE = new ListProperty(TYPE, "LifeCycle");
-
-	public ElementList<LifeCycle> getLifeCycle();
-
-	// *** InitParams ***
-
-	@Type(base = Param.class)
-	@Label(standard = "initialization parameters")
-	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "init-param", type = Param.class))
-	public ListProperty PROP_INIT_PARAMS = new ListProperty(TYPE, "InitParams");
-
-	public ElementList<Param> getInitParams();
 
 }

@@ -31,15 +31,13 @@ public interface SupportedPublicRenderParameter extends Element {
 
 	public ElementType TYPE = new ElementType(SupportedPublicRenderParameter.class);
 
-	// *** RenderParameter ***
-
-	@Label(standard = "Render Parameter")
-	@XmlBinding(path = "")
-	@Service(impl = PublicRenderParameterValuesService.class)
-	public ValueProperty PROP_RENDER_PARAMETER = new ValueProperty(TYPE, "RenderParameter");
-
 	public Value<String> getRenderParameter();
 
 	public void setRenderParameter(String value);
+
+	@Label(standard = "Render Parameter")
+	@Service(impl = PublicRenderParameterValuesService.class)
+	@XmlBinding(path = "")
+	public ValueProperty PROP_RENDER_PARAMETER = new ValueProperty(TYPE, "RenderParameter");
 
 }

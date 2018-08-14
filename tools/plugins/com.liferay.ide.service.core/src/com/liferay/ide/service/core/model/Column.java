@@ -40,33 +40,33 @@ public interface Column extends Element {
 
 	public ElementType TYPE = new ElementType(Column.class);
 
-	// *** Name ***
-
 	public Value<Boolean> getAccessor();
+
+	// *** Name ***
 
 	public Value<String> getDbName();
 
 	public Value<String> getEntity();
 
-	// *** Db Name ***
-
 	public Value<String> getIdParam();
+
+	// *** Db Name ***
 
 	public Value<String> getIdType();
 
 	public Value<String> getMappingKey();
 
-	// *** Type ***
-
 	public Value<String> getMappingTable();
+
+	// *** Type ***
 
 	public Value<String> getName();
 
 	public Value<String> getType();
 
-	// *** Primary ***
-
 	public Value<Boolean> isConvertNull();
+
+	// *** Primary ***
 
 	public Value<Boolean> isFilterPrimary();
 
@@ -74,9 +74,9 @@ public interface Column extends Element {
 
 	public Value<Boolean> isLazy();
 
-	// *** Filter Primary ***
-
 	public Value<Boolean> isLocalized();
+
+	// *** Filter Primary ***
 
 	public Value<Boolean> isPrimary();
 
@@ -84,49 +84,49 @@ public interface Column extends Element {
 
 	public void setAccessor(String value);
 
-	// *** Entity ***
-
 	public void setConvertNull(Boolean value);
+
+	// *** Entity ***
 
 	public void setConvertNull(String value);
 
 	public void setDbName(String value);
 
-	// *** Mapping Key ***
-
 	public void setEntity(String value);
+
+	// *** Mapping Key ***
 
 	public void setFilterPrimary(Boolean value);
 
 	public void setFilterPrimary(String value);
 
-	// *** Mapping Table ***
-
 	public void setIdParam(String value);
+
+	// *** Mapping Table ***
 
 	public void setIdType(String value);
 
 	public void setJsonEnabled(Boolean value);
 
-	// ** Id Type ***
-
 	public void setJsonEnabled(String value);
+
+	// ** Id Type ***
 
 	public void setLazy(Boolean value);
 
 	public void setLazy(String value);
 
-	// *** Id Param ***
-
 	public void setLocalized(Boolean value);
+
+	// *** Id Param ***
 
 	public void setLocalized(String value);
 
 	public void setMappingKey(String value);
 
-	// *** Convert Null ***
-
 	public void setMappingTable(String value);
+
+	// *** Convert Null ***
 
 	public void setName(String value);
 
@@ -156,11 +156,11 @@ public interface Column extends Element {
 	@XmlBinding(path = "@db-name")
 	public ValueProperty PROP_DB_NAME = new ValueProperty(TYPE, "DbName");
 
-	// *** Localized ***
-
 	@Label(standard = "&entity")
 	@XmlBinding(path = "@entity")
 	public ValueProperty PROP_ENTITY = new ValueProperty(TYPE, "Entity");
+
+	// *** Localized ***
 
 	@DefaultValue(text = "false")
 	@Label(standard = "&filter primary")
@@ -179,13 +179,13 @@ public interface Column extends Element {
 	@XmlBinding(path = "@id-type")
 	public ValueProperty PROP_ID_TYPE = new ValueProperty(TYPE, "IdType");
 
-	// *** Json Enabled
-
 	@DefaultValue(text = "true")
 	@Label(standard = "&JSON enabled")
 	@Type(base = Boolean.class)
 	@XmlBinding(path = "@json-enabled")
 	public ValueProperty PROP_JSON_ENABLED = new ValueProperty(TYPE, "JsonEnabled");
+
+	// *** Json Enabled
 
 	@DefaultValue(text = "true")
 	@Label(standard = "&lazy")
@@ -203,11 +203,11 @@ public interface Column extends Element {
 	@XmlBinding(path = "@mapping-key")
 	public ValueProperty PROP_MAPPING_KEY = new ValueProperty(TYPE, "MappingKey");
 
-	// *** Accessor ***
-
 	@Label(standard = "&mapping table")
 	@XmlBinding(path = "@mapping-table")
 	public ValueProperty PROP_MAPPING_TABLE = new ValueProperty(TYPE, "MappingTable");
+
+	// *** Accessor ***
 
 	@Label(standard = "&name")
 	@Required

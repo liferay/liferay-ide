@@ -28,14 +28,12 @@ public interface Identifiable extends Element {
 
 	public ElementType TYPE = new ElementType(Identifiable.class);
 
-	// *** Id ***
+	public Value<String> getId();
+
+	public void setId(String id);
 
 	@Label(standard = "Id")
 	@XmlBinding(path = "@id")
-	public 	ValueProperty PROP_ID = new ValueProperty(TYPE, "Id");
-
-	public 	Value<String> getId();
-
-	public 	void setId(String id);
+	public ValueProperty PROP_ID = new ValueProperty(TYPE, "Id");
 
 }

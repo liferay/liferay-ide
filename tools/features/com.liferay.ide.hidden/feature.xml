@@ -2,8 +2,9 @@
 <feature
 	id="com.liferay.ide.hidden"
 	label="Liferay IDE Hidden"
+	provider-name="Liferay, Inc."
 	version="3.2.0.qualifier"
-	  provider-name="Liferay, Inc.">
+>
 
 	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
 	  Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platform.
@@ -32,147 +33,169 @@
 
 	<includes
 		id="bndtools.main.feature"
-		 version="0.0.0" />
+		version="0.0.0"
+	/>
 
 	<includes
 		id="bndtools.m2e.feature"
-		 version="0.0.0" />
+		version="0.0.0"
+	/>
 
 	<includes
 		id="org.eclipse.buildship"
-		 version="0.0.0" />
+		version="0.0.0"
+	/>
 
 	<plugin
+		download-size="0"
 		id="com.google.guava"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="com.google.gson"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="com.gradleware.tooling.client"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="com.gradleware.tooling.model"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="com.gradleware.tooling.utils"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="minimal-json"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="minimatch.java"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="org.apache.commons.codec"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="org.apache.commons.collections"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="org.apache.commons.io"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="org.apache.commons.lang"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="org.apache.commons.logging"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="org.eclipse.jst.jsp.search.editor"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="org.eclipse.wst.html.search.editor"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="org.gradle.toolingapi"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="org.json"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 	<plugin
-		id="org.objectweb.asm"
 		download-size="0"
+		id="org.objectweb.asm"
 		install-size="0"
+		unpack="false"
 		version="5.2.0.v20170126-0011"
-		 unpack="false" />
+	/>
 
 	<plugin
+		download-size="0"
 		id="org.objectweb.asm"
-		download-size="0"
 		install-size="0"
+		unpack="false"
 		version="6.0.0.v20180116-1719"
-		 unpack="false" />
+	/>
 
 	<plugin
-		id="javax.websocket-api"
 		download-size="0"
+		id="javax.websocket-api"
 		install-size="0"
+		unpack="false"
 		version="0.0.0"
-		 unpack="false" />
+	/>
 
 </feature>

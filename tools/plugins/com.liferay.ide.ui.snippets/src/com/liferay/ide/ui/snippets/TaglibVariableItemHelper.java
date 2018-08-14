@@ -60,6 +60,7 @@ public class TaglibVariableItemHelper {
 			try {
 				if (clearModality) {
 					host.setEnabled(false);
+
 					dialog.addDisposeListener(
 						new DisposeListener() {
 

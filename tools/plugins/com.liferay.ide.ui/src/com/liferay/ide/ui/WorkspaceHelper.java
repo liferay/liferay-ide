@@ -51,7 +51,7 @@ public class WorkspaceHelper implements WorkspaceHelperMBean {
 		File dir = new File(path);
 
 		if (!dir.exists() || !dir.isDirectory()) {
-			retval = "Directory doesn't exist or isn't a directory.";
+			retval = "Directory does not exist or is not a directory.";
 		}
 
 		File dotProject = new File(dir, ".project");

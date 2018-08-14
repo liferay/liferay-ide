@@ -54,8 +54,6 @@ public interface ServiceWrapper extends Element {
 
 	public void setServiceType(String value);
 
-	// *** ServiceImpl ***
-
 	@JavaTypeConstraint(kind = JavaTypeKind.CLASS)
 	@Label(standard = "Service Impl")
 	@MustExist
@@ -65,8 +63,6 @@ public interface ServiceWrapper extends Element {
 	@Type(base = JavaTypeName.class)
 	@XmlBinding(path = "service-impl")
 	public ValueProperty PROP_SERVICE_IMPL = new ValueProperty(TYPE, "ServiceImpl");
-
-	// *** ServiceType ***
 
 	@JavaTypeConstraint(kind = JavaTypeKind.INTERFACE)
 	@Label(standard = "Service Type")

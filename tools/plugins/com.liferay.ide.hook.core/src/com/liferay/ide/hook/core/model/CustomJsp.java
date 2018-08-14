@@ -38,10 +38,6 @@ public interface CustomJsp extends Element {
 
 	public void setValue(String value);
 
-	// *** Value ***
-
-	// @Service( impl = CustomJspValidationService.class ) } )
-
 	@Label(standard = "Liferay Portal JSP")
 	@Service(impl = CustomJspPossibleValuesService.class)
 	@Unique

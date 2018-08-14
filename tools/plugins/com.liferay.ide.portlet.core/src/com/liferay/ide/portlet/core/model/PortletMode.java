@@ -30,17 +30,14 @@ public interface PortletMode extends Element {
 
 	public ElementType TYPE = new ElementType(PortletMode.class);
 
-	/**
-	 * mode
-	 */
-	@Label(standard = "Mode", full = "Portlet Mode")
+	public Value<String> getPortletMode();
+
+	public void setPortletMode(String mode);
+
+	@Label(full = "Portlet Mode", standard = "Mode")
 	@Required
 	@Unique
 	@XmlBinding(path = "")
 	public ValueProperty PROP_PORTLET_MODE = new ValueProperty(TYPE, "PortletMode");
-
-	public void setPortletMode(String mode);
-
-	public Value<String> getPortletMode();
 
 }

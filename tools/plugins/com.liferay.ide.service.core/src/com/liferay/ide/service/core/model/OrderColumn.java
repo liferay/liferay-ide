@@ -33,17 +33,17 @@ public interface OrderColumn extends Element {
 
 	public ElementType TYPE = new ElementType(OrderColumn.class);
 
-	// *** Name ***
-
 	public Value<String> getName();
+
+	// *** Name ***
 
 	public Value<String> getOrderBy();
 
 	public Value<Boolean> isCaseSensitive();
 
-	// *** CaseSensitive ***
-
 	public void setCaseSensitive(Boolean value);
+
+	// *** CaseSensitive ***
 
 	public void setCaseSensitive(String value);
 
@@ -51,12 +51,12 @@ public interface OrderColumn extends Element {
 
 	public void setOrderBy(String value);
 
-	// *** Order By ***
-
 	@Label(standard = "&case sensitive")
 	@Type(base = Boolean.class)
 	@XmlBinding(path = "@case-sensitive")
 	public ValueProperty PROP_CASE_SENSITIVE = new ValueProperty(TYPE, "CaseSensitive");
+
+	// *** Order By ***
 
 	@Label(standard = "&name")
 	@Required

@@ -26,4 +26,5 @@ public enum LifeCycleType {
 	EVENT_PHASE, @Label(standard = "render")
 	RENDER_PHASE, @Label(standard = "resource")
 	RESOURCE_PHASE
+
 }

@@ -26,15 +26,18 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  */
 public class DisplayRootElementController extends VersionedDTDRootElementController {
 
-	public	static final Pattern publicIdPattern = Pattern.compile("^-//Liferay//DTD Display (.*)//EN$");
-	public static final String publicIdTemplate = "-//Liferay//DTD Display {0}//EN";
+	public static final String PUBLIC_ID_TEMPALTE = "-//Liferay//DTD Display {0}//EN";
+
+	public static final String SYSTEM_ID_TEMPLATE = "http://www.liferay.com/dtd/liferay-display_{0}.dtd";
+
+	public static final String XML_BINDING_PATH = Display6xx.class.getAnnotation(XmlBinding.class).path();
+
+	public static final Pattern publicIdPattern = Pattern.compile("^-//Liferay//DTD Display (.*)//EN$");
 	public static final Pattern systemIdPattern = Pattern.compile(
 		"^http://www.liferay.com/dtd/liferay-display_(.*).dtd$");
-	public static final String systemIdTemplate = "http://www.liferay.com/dtd/liferay-display_{0}.dtd";
-	public static final String xmlBindingPath = Display6xx.class.getAnnotation(XmlBinding.class).path();
 
 	public DisplayRootElementController() {
-		super(xmlBindingPath, publicIdTemplate, systemIdTemplate, publicIdPattern, systemIdPattern);
+		super(XML_BINDING_PATH, PUBLIC_ID_TEMPALTE, SYSTEM_ID_TEMPLATE, publicIdPattern, systemIdPattern);
 	}
 
 }

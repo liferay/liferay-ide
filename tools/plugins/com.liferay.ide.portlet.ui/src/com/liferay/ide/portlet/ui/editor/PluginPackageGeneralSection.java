@@ -487,11 +487,11 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		String groupId = getModel().getModuleGroupId();
 
 		if (groupId.equals("")) {
-			return new Status(IStatus.ERROR, PortletUIPlugin.PLUGIN_ID, "Module Group Id can't be empty");
+			return new Status(IStatus.ERROR, PortletUIPlugin.PLUGIN_ID, "Module Group Id can not be empty");
 		}
 
 		if (groupId.startsWith("/")) {
-			return new Status(IStatus.ERROR, PortletUIPlugin.PLUGIN_ID, "Module Group Id can't start with '/'");
+			return new Status(IStatus.ERROR, PortletUIPlugin.PLUGIN_ID, "Module Group Id can not start with '/'");
 		}
 
 		return new Status(IStatus.OK, PortletUIPlugin.PLUGIN_ID, "");

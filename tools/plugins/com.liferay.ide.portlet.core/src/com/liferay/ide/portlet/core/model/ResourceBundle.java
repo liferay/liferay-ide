@@ -40,21 +40,19 @@ public interface ResourceBundle extends Element {
 
 	public ElementType TYPE = new ElementType(ResourceBundle.class);
 
-	// *** ResourceBundle ***
+	public Value<Path> getResourceBundle();
 
-	@Type(base = Path.class)
+	public void setResourceBundle(Path value);
+
+	public void setResourceBundle(String value);
+
+	@FileExtensions(expr = "properties")
 	@Services(value = {
 		@Service(impl = GenericResourceBundlePathService.class), @Service(impl = ResourceBundleValidationService.class)
 	})
-	@FileExtensions(expr = "properties")
+	@Type(base = Path.class)
 	@ValidFileSystemResourceType(FileSystemResourceType.FILE)
 	@XmlBinding(path = "resource-bundle")
-	public 	ValueProperty PROP_RESOURCE_BUNDLE = new ValueProperty(TYPE, "ResourceBundle");
-
-	public 	Value<Path> getResourceBundle();
-
-	public 	void setResourceBundle(String value);
-
-	public 	void setResourceBundle(Path value);
+	public ValueProperty PROP_RESOURCE_BUNDLE = new ValueProperty(TYPE, "ResourceBundle");
 
 }

@@ -33,17 +33,17 @@ public interface FinderColumn extends Element {
 
 	public ElementType TYPE = new ElementType(FinderColumn.class);
 
-	// *** Name ***
-
 	public Value<String> getArrayableOperator();
+
+	// *** Name ***
 
 	public Value<String> getComparator();
 
 	public Value<String> getName();
 
-	// *** CaseSensitive ***
-
 	public Value<Boolean> isCaseSensitive();
+
+	// *** CaseSensitive ***
 
 	public void setArrayableOperator(String value);
 
@@ -51,9 +51,9 @@ public interface FinderColumn extends Element {
 
 	public void setCaseSensitive(String value);
 
-	// ** Comparator ***
-
 	public void setComparator(String value);
+
+	// ** Comparator ***
 
 	public void setName(String value);
 
@@ -62,12 +62,12 @@ public interface FinderColumn extends Element {
 	@XmlBinding(path = "@arrayable-operator")
 	public ValueProperty PROP_ARRAYABLE_OPERATOR = new ValueProperty(TYPE, "ArrayableOperator");
 
-	// ** Arrayable Operator ***
-
 	@Label(standard = "&case sensitive")
 	@Type(base = Boolean.class)
 	@XmlBinding(path = "@case-sensitive")
 	public ValueProperty PROP_CASE_SENSITIVE = new ValueProperty(TYPE, "CaseSensitive");
+
+	// ** Arrayable Operator ***
 
 	@Label(standard = "comparator")
 	@PossibleValues(

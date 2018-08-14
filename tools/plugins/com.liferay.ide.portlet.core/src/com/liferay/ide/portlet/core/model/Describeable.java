@@ -28,15 +28,12 @@ public interface Describeable extends Element {
 
 	public ElementType TYPE = new ElementType(Describeable.class);
 
-	/**
-	 * Description Element
-	 */
-	@Label(standard = "Description")
-	@XmlBinding(path = "description")
-	public ValueProperty PROP_DESCRIPTION = new ValueProperty(TYPE, "Description");
-
 	public Value<String> getDescription();
 
 	public void setDescription(String description);
+
+	@Label(standard = "Description")
+	@XmlBinding(path = "description")
+	public ValueProperty PROP_DESCRIPTION = new ValueProperty(TYPE, "Description");
 
 }

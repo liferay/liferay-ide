@@ -33,27 +33,24 @@ public interface AliasQName extends Element {
 
 	public ElementType TYPE = new ElementType(AliasQName.class);
 
-	// *** NamespaceURI ***
-
-	@Label(standard = "Namespace URI")
-	@XmlBinding(path = "alias")
-	@Required
-	@CustomXmlValueBinding(impl = QNamespaceValueBinding.class, params = {"alias"})
-	public ValueProperty PROP_NAMESPACE_URI = new ValueProperty(TYPE, "NamespaceURI");
+	public Value<String> getLocalPart();
 
 	public Value<String> getNamespaceURI();
 
+	public void setLocalPart(String value);
+
 	public void setNamespaceURI(String value);
 
-	// *** LocalPart ***
-
+	@CustomXmlValueBinding(impl = QNameLocalPartValueBinding.class, params = "alias")
 	@Label(standard = "Local Part")
-	@XmlBinding(path = "alias")
 	@Required
-	@CustomXmlValueBinding(impl = QNameLocalPartValueBinding.class, params = {"alias"})
+	@XmlBinding(path = "alias")
 	public ValueProperty PROP_LOCAL_PART = new ValueProperty(TYPE, "LocalPart");
 
-	public Value<String> getLocalPart();
+	@CustomXmlValueBinding(impl = QNamespaceValueBinding.class, params = "alias")
+	@Label(standard = "Namespace URI")
+	@Required
+	@XmlBinding(path = "alias")
+	public ValueProperty PROP_NAMESPACE_URI = new ValueProperty(TYPE, "NamespaceURI");
 
-	public void setLocalPart(String value);
 }

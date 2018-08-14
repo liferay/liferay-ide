@@ -28,15 +28,12 @@ public interface Displayable extends Element {
 
 	public ElementType TYPE = new ElementType(Displayable.class);
 
-	/**
-	 * Display name Element
-	 */
-	@Label(standard = "Display name")
-	@XmlBinding(path = "display-name")
-	public ValueProperty PROP_DISPLAY_NAME = new ValueProperty(TYPE, "DisplayName");
-
 	public Value<String> getDisplayName();
 
 	public void setDisplayName(String displayName);
+
+	@Label(standard = "Display name")
+	@XmlBinding(path = "display-name")
+	public ValueProperty PROP_DISPLAY_NAME = new ValueProperty(TYPE, "DisplayName");
 
 }

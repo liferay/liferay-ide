@@ -64,7 +64,7 @@ public class Java8requiredSink extends PopupNotificationSink {
 
 				ScalingHyperlink hyperlink = new ScalingHyperlink(composite, SWT.NONE);
 
-				hyperlink.setText("Got it, please don't show this alert again.");
+				hyperlink.setText("Got it, please do not show this alert again.");
 
 				hyperlink.setForeground(new Color(null, 12, 81, 172));
 

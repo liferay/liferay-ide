@@ -38,20 +38,17 @@ public interface SupportedLocales extends Element {
 
 	public ElementType TYPE = new ElementType(SupportedLocales.class);
 
-	// *** SupportedLocale ***
-
-	@Label(standard = "Locale")
-	@Unique
-	@XmlBinding(path = "")
-	@Services(value = {
-		@Service(impl = LocalePossibleValueService.class), @Service(impl = LocaleBundleValidationService.class)
-
-	})
-	@CustomXmlValueBinding(impl = LocaleTextNodeValueBinding.class)
-	public ValueProperty PROP_SUPPORTED_LOCALE = new ValueProperty(TYPE, "SupportedLocale");
-
 	public Value<String> getSupportedLocale();
 
-	public 	void setSupportedLocale(String value);
+	public void setSupportedLocale(String value);
+
+	@CustomXmlValueBinding(impl = LocaleTextNodeValueBinding.class)
+	@Label(standard = "Locale")
+	@Services(value = {
+		@Service(impl = LocalePossibleValueService.class), @Service(impl = LocaleBundleValidationService.class)
+	})
+	@Unique
+	@XmlBinding(path = "")
+	public ValueProperty PROP_SUPPORTED_LOCALE = new ValueProperty(TYPE, "SupportedLocale");
 
 }

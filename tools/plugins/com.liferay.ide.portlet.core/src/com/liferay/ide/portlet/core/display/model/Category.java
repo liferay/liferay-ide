@@ -36,7 +36,18 @@ public interface Category extends Element {
 
 	public ElementType TYPE = new ElementType(Category.class);
 
-	// *** Name ***
+	public ElementList<Category> getCategories();
+
+	public Value<String> getName();
+
+	public ElementList<DisplayPortlet> getPortlets();
+
+	public void setName(String name);
+
+	@Label(standard = "Categories")
+	@Type(base = Category.class)
+	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "category", type = Category.class)})
+	public ListProperty PROP_CATEGORIES = new ListProperty(TYPE, "Categories");
 
 	@Label(standard = "Name")
 	@Required
@@ -44,26 +55,9 @@ public interface Category extends Element {
 	@XmlBinding(path = "@name")
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-	public Value<String> getName();
-
-	public void setName(String name);
-
-	// *** Categories ***
-
-	@Type(base = Category.class)
-	@Label(standard = "Categories")
-	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "category", type = Category.class)})
-	public ListProperty PROP_CATEGORIES = new ListProperty(TYPE, "Categories");
-
-	public ElementList<Category> getCategories();
-
-	// *** Portlets ***
-
-	@Type(base = DisplayPortlet.class)
 	@Label(standard = "Portlets")
+	@Type(base = DisplayPortlet.class)
 	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "portlet", type = DisplayPortlet.class)})
 	public ListProperty PROP_PORTLETS = new ListProperty(TYPE, "Portlets");
-
-	public ElementList<DisplayPortlet> getPortlets();
 
 }

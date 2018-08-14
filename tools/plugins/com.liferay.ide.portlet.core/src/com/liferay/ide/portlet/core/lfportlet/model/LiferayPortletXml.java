@@ -36,28 +36,24 @@ public interface LiferayPortletXml extends Element {
 
 	public ElementType TYPE = new ElementType(LiferayPortletXml.class);
 
-	// *** Liferay Portlet *** /
+	public ElementList<CustomUserAttribute> getCustomUserAttributes();
+
+	public ElementList<LiferayPortlet> getPortlets();
+
+	public ElementList<SecurityRoleRef> getRoleMappers();
+
+	@Type(base = CustomUserAttribute.class)
+	@XmlListBinding(
+		mappings = @XmlListBinding.Mapping(element = "custom-user-attribute", type = CustomUserAttribute.class)
+	)
+	public ListProperty PROP_CUSTOM_USER_ATTRIBUTES = new ListProperty(TYPE, "CustomUserAttributes");
 
 	@Type(base = LiferayPortlet.class)
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "portlet", type = LiferayPortlet.class))
 	public ListProperty PROP_PORTLETS = new ListProperty(TYPE, "Portlets");
 
-	public ElementList<LiferayPortlet> getPortlets();
-
-	// *** Role Mapper ***
-
 	@Type(base = SecurityRoleRef.class)
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "role-mapper", type = SecurityRoleRef.class))
 	public ListProperty PROP_ROLE_MAPPERS = new ListProperty(TYPE, "RoleMappers");
-
-	public ElementList<SecurityRoleRef> getRoleMappers();
-
-	// *** Customer User Attribute ***
-
-	@Type(base = CustomUserAttribute.class)
-	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "custom-user-attribute", type = CustomUserAttribute.class))
-	public ListProperty PROP_CUSTOM_USER_ATTRIBUTES = new ListProperty(TYPE, "CustomUserAttributes");
-
-	public ElementList<CustomUserAttribute> getCustomUserAttributes();
 
 }

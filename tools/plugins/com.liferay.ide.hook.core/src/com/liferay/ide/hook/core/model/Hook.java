@@ -69,23 +69,17 @@ public interface Hook extends Element {
 
 	public void setCustomJspGlobal(String value);
 
-	// *** CustomJspDir ***
-
 	@Label(standard = "Custom JSP Dir")
 	@Listeners(CustomJspDirListener.class)
 	@Type(base = CustomJspDir.class)
 	@XmlBinding(path = "custom-jsp-dir")
 	public ElementProperty PROP_CUSTOM_JSP_DIR = new ElementProperty(TYPE, "CustomJspDir");
 
-	// *** CustomJspGlobal ***
-
 	@DefaultValue(text = "true")
 	@Label(standard = "Custom JSP Global")
 	@Type(base = Boolean.class)
 	@XmlBinding(path = "custom-jsp-global")
 	public ValueProperty PROP_CUSTOM_JSP_GLOBAL = new ValueProperty(TYPE, "CustomJspGlobal");
-
-	// *** CustomJsps ***
 
 	@CustomXmlListBinding(impl = CustomJspsBindingImpl.class)
 	@FixedOrderList
@@ -94,8 +88,6 @@ public interface Hook extends Element {
 	@Type(base = CustomJsp.class)
 	public ListProperty PROP_CUSTOM_JSPS = new ListProperty(TYPE, "CustomJsps");
 
-	// *** IndexerPostProcessors ***
-
 	@Label(standard = "Index Post Processors")
 	@Type(base = IndexerPostProcessor.class)
 	@XmlListBinding(
@@ -103,28 +95,20 @@ public interface Hook extends Element {
 	)
 	public ListProperty PROP_INDEXER_POST_PROCESSORS = new ListProperty(TYPE, "IndexerPostProcessors");
 
-	// *** LanguageProperties ***
-
 	@Label(standard = "Language Properties")
 	@Type(base = LanguageProperty.class)
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "language-properties", type = LanguageProperty.class))
 	public ListProperty PROP_LANGUAGE_PROPERTIES = new ListProperty(TYPE, "LanguageProperties");
-
-	// *** PortalPropertiesFile ***
 
 	@Listeners(PortalPropertiesFileListener.class)
 	@Type(base = PortalPropertiesFile.class)
 	@XmlBinding(path = "portal-properties")
 	public ElementProperty PROP_PORTAL_PROPERTIES_FILE = new ElementProperty(TYPE, "PortalPropertiesFile");
 
-	// *** Services ***
-
 	@Label(standard = "Service Wrappers")
 	@Type(base = ServiceWrapper.class)
 	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "service", type = ServiceWrapper.class)})
 	public ListProperty PROP_SERVICES = new ListProperty(TYPE, "Services");
-
-	// *** ServletFilterMappings ***
 
 	@Label(standard = "Servlet Filter Mappings")
 	@Type(base = ServletFilterMapping.class)
@@ -133,14 +117,10 @@ public interface Hook extends Element {
 	)
 	public ListProperty PROP_SERVLET_FILTER_MAPPINGS = new ListProperty(TYPE, "ServletFilterMappings");
 
-	// *** ServletFilters ***
-
 	@Label(standard = "Servlet filters")
 	@Type(base = ServletFilter.class)
 	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "servlet-filter", type = ServletFilter.class)})
 	public ListProperty PROP_SERVLET_FILTERS = new ListProperty(TYPE, "ServletFilters");
-
-	// *** StrutsActions ***
 
 	@Label(standard = "Struts Actions")
 	@Type(base = StrutsAction.class)

@@ -56,8 +56,6 @@ public interface StrutsAction extends Element {
 
 	public void setStrutsActionPath(String value);
 
-	// ** StrutsActionImpl
-
 	@JavaTypeConstraint(
 		behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE, kind = JavaTypeKind.CLASS,
 		type = {"com.liferay.portal.kernel.struts.StrutsAction", "com.liferay.portal.kernel.struts.StrutsPortletAction"}
@@ -69,8 +67,6 @@ public interface StrutsAction extends Element {
 	@Type(base = JavaTypeName.class)
 	@XmlBinding(path = "struts-action-impl")
 	public ValueProperty PROP_STRUTS_ACTION_IMPL = new ValueProperty(TYPE, "StrutsActionImpl");
-
-	// *** StrutsActionPath ***
 
 	@Label(standard = "Struts Action Path")
 	@Required

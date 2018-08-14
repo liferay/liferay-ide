@@ -34,12 +34,13 @@ public interface WindowState extends Element {
 
 	public ElementType TYPE = new ElementType(WindowState.class);
 
-	@Label(standard = "state", full = "Window States")
+	public Value<String> getWindowState();
+
+	public void setWindowState(String state);
+
+	@Label(full = "Window States", standard = "state")
 	@Unique
 	@XmlBinding(path = "")
 	public ValueProperty PROP_WINDOW_STATE = new ValueProperty(TYPE, "WindowState");
 
-	public Value<String> getWindowState();
-
-	public void setWindowState(String state);
 }

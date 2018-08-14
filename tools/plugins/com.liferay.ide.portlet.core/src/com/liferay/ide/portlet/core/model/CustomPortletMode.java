@@ -32,32 +32,26 @@ public interface CustomPortletMode extends Element, Describeable, Identifiable {
 
 	public ElementType TYPE = new ElementType(CustomPortletMode.class);
 
-	// *** PortletMode ***
-
-	@Required
-	@Unique
-	@Label(standard = "Portlet Mode")
-	@XmlBinding(path = "portlet-mode")
-	public ValueProperty PROP_PORTLET_MODE = new ValueProperty(TYPE, "PortletMode");
+	public Value<Boolean> getPortalManaged();
 
 	public Value<String> getPortletMode();
 
-	public void setPortletMode(String value);
-
-	// void setPortletMode( IPortletMode value );
-
-	/**
-	 * Portlet Managed
-	 */
-	@Type(base = Boolean.class)
-	@Label(standard = "Portal managed")
-	@DefaultValue(text = "true")
-	@XmlBinding(path = "portal-managed")
-	public ValueProperty PROP_PORTAL_MANAGED = new ValueProperty(TYPE, "PortalManaged");
-
-	public Value<Boolean> getPortalManaged();
+	public void setPortalManaged(Boolean value);
 
 	public void setPortalManaged(String value);
 
-	public void setPortalManaged(Boolean value);
+	public void setPortletMode(String value);
+
+	@DefaultValue(text = "true")
+	@Label(standard = "Portal managed")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "portal-managed")
+	public ValueProperty PROP_PORTAL_MANAGED = new ValueProperty(TYPE, "PortalManaged");
+
+	@Label(standard = "Portlet Mode")
+	@Required
+	@Unique
+	@XmlBinding(path = "portlet-mode")
+	public ValueProperty PROP_PORTLET_MODE = new ValueProperty(TYPE, "PortletMode");
+
 }

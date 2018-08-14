@@ -26,13 +26,6 @@ import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
  */
 public class LocaleTextNodeValueBinding extends XmlValueBindingImpl {
 
-	Locale[] AVAILABLE_LOCALES = Locale.getAvailableLocales();
-
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#read()
-	 */
 	@Override
 	public String read() {
 		String value = null;
@@ -42,16 +35,13 @@ public class LocaleTextNodeValueBinding extends XmlValueBindingImpl {
 		if (element != null) {
 			value = xml(true).getText();
 
-			// System.out.println( "Locale Reading VALUE ___________________ " + value );
-
 			if (!value.isEmpty()) {
 				value = value.trim();
 
-				for (int i = 0; i < AVAILABLE_LOCALES.length; i++) {
-					Locale locale = AVAILABLE_LOCALES[i];
-
+				for (Locale locale : _availableLocales) {
 					if (value.equals(locale.toString())) {
 						value = PortletUtil.buildLocaleDisplayString(locale.getDisplayName(), locale);
+
 						break;
 					}
 				}
@@ -61,26 +51,17 @@ public class LocaleTextNodeValueBinding extends XmlValueBindingImpl {
 		return value;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#write(java.lang.String)
-	 */
 	@Override
 	public void write(String value) {
 		String val = value;
-
-		// System.out.println( "Locale : VALUE ___________________ " + val );
 
 		if (val != null) {
 			val = PortletUtil.localeString(value.trim());
 
 			xml(true).setText(val);
 		}
-
-		// System.out.println( "LocaleTextNodeValueBinding.write() - Parent " + xml(
-		// true ).getParent() );
-
 	}
+
+	private Locale[] _availableLocales = Locale.getAvailableLocales();
 
 }

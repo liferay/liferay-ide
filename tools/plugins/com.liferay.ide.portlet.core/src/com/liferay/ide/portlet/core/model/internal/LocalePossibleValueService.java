@@ -26,18 +26,12 @@ import org.eclipse.sapphire.PossibleValuesService;
  */
 public class LocalePossibleValueService extends PossibleValuesService {
 
-	static final Locale[] locales = Locale.getAvailableLocales();
-
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.
-	 *      util.SortedSet)
-	 */
 	@Override
 	protected void compute(Set<String> values) {
-		for (Locale locale : locales) {
-			if (!locale.toString().isEmpty()) {
+		for (Locale locale : Locale.getAvailableLocales()) {
+			String s = locale.toString();
+
+			if (!s.isEmpty()) {
 				values.add(PortletUtil.buildLocaleDisplayString(locale.getDisplayName(), locale));
 			}
 		}

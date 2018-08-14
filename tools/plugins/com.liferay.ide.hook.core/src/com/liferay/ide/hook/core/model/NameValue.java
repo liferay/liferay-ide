@@ -38,15 +38,11 @@ public interface NameValue extends Element {
 
 	public void setValue(String value);
 
-	// *** Name ***
-
 	@Label(standard = "Name")
 	@Required
 	@Unique
 	@XmlBinding(path = "param-name")
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
-
-	// *** Value ***
 
 	@Label(standard = "Value")
 	@XmlBinding(path = "param-value")

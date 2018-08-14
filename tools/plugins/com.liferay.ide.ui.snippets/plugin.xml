@@ -161,7 +161,7 @@ Company Id:
 				</content>
 			</item>
 			<!--
-	  <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" description="Alloy Taglib" id="com.liferay.ide.ui.snippets.item.taglib-import.alloy" label="Alloy Taglib Import" smallicon="icons/snippets/tag-generic.gif">
+	<item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" description="Alloy Taglib" id="com.liferay.ide.ui.snippets.item.taglib-import.alloy" label="Alloy Taglib Import" smallicon="icons/snippets/tag-generic.gif">
 		<content>
 		  &lt;%@ taglib uri=&quot;http://alloy.liferay.com/tld/alloy&quot; prefix=&quot;alloy&quot; %&gt;
 		</content>

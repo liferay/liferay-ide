@@ -25,7 +25,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Resource;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
@@ -40,15 +42,11 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings("restriction")
 public class PortletNamePossibleValueService extends PossibleValuesService {
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.
-	 *      util.SortedSet)
-	 */
 	@Override
 	protected void compute(Set<String> values) {
-		IFile displayXmlFile = context(Element.class).resource().adapt(IFile.class);
+		Resource resource = context(Element.class).resource();
+
+		IFile displayXmlFile = resource.adapt(IFile.class);
 
 		IFolder resourceFolder = (IFolder)displayXmlFile.getParent();
 
@@ -57,11 +55,13 @@ public class PortletNamePossibleValueService extends PossibleValuesService {
 		IDOMModel portletModel = null;
 
 		try {
-			portletModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(portletXml);
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			portletModel = (IDOMModel)modelManager.getModelForRead(portletXml);
 
 			IDOMDocument portletDocument = portletModel.getDocument();
 
-			NodeList elements = portletDocument.getElementsByTagName(PORTLET_NAME_ELEMENT);
+			NodeList elements = portletDocument.getElementsByTagName(_PORTLET_NAME_ELEMENT);
 
 			List<String> portletNameList = new LinkedList<>();
 
@@ -75,7 +75,7 @@ public class PortletNamePossibleValueService extends PossibleValuesService {
 				}
 			}
 
-			this.localPortletNames = portletNameList.toArray(new String[0]);
+			_localPortletNames = portletNameList.toArray(new String[0]);
 		}
 		catch (Exception e) {
 			LiferayCore.logError(e);
@@ -86,13 +86,13 @@ public class PortletNamePossibleValueService extends PossibleValuesService {
 			}
 		}
 
-		if (this.localPortletNames != null) {
-			Collections.addAll(values, this.localPortletNames);
+		if (_localPortletNames != null) {
+			Collections.addAll(values, _localPortletNames);
 		}
 	}
 
-	private static final String PORTLET_NAME_ELEMENT = "portlet-name";
+	private static final String _PORTLET_NAME_ELEMENT = "portlet-name";
 
-	private String[] localPortletNames;
+	private String[] _localPortletNames;
 
 }

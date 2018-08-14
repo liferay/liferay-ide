@@ -37,9 +37,9 @@ public interface ServiceBuilder6xx extends ServiceBuilder {
 
 	public ElementType TYPE = new ElementType(ServiceBuilder6xx.class);
 
-	// *** Version ***
-
 	public Value<Version> getVersion();
+
+	// *** Version ***
 
 	public void setVersion(String value);
 

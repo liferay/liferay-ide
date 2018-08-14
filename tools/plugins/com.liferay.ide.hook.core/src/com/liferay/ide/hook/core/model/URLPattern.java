@@ -34,8 +34,6 @@ public interface URLPattern extends Element {
 
 	public void setURLPattern(String value);
 
-	// *** Value ***
-
 	@Label(standard = "url pattern")
 	@XmlBinding(path = "")
 	public ValueProperty PROP_URL_PATTERN = new ValueProperty(new ElementType(URLPattern.class), "URLPattern");

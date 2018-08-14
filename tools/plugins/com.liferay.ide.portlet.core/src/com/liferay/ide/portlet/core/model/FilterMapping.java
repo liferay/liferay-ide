@@ -34,28 +34,24 @@ public interface FilterMapping extends Element {
 
 	public ElementType TYPE = new ElementType(FilterMapping.class);
 
-	// *** Filter ***
-
-	@Label(standard = "filter")
-	@Required
-	@PossibleValues(property = "/Filters/Name")
-	@XmlBinding(path = "filter-name")
-	public ValueProperty PROP_FILTER = new ValueProperty(TYPE, "Filter");
-
 	public Value<String> getFilter();
-
-	public void setFilter(String value);
-
-	// *** Portlet ***
-
-	@Label(standard = "portlet")
-	@Required
-	@PossibleValues(property = "/Portlets/PortletName")
-	@XmlValueBinding(path = "portlet-name", removeNodeOnSetIfNull = false)
-	public 	ValueProperty PROP_PORTLET = new ValueProperty(TYPE, "Portlet");
 
 	public Value<String> getPortlet();
 
+	public void setFilter(String value);
+
 	public void setPortlet(String value);
+
+	@Label(standard = "filter")
+	@PossibleValues(property = "/Filters/Name")
+	@Required
+	@XmlBinding(path = "filter-name")
+	public ValueProperty PROP_FILTER = new ValueProperty(TYPE, "Filter");
+
+	@Label(standard = "portlet")
+	@PossibleValues(property = "/Portlets/PortletName")
+	@Required
+	@XmlValueBinding(path = "portlet-name", removeNodeOnSetIfNull = false)
+	public ValueProperty PROP_PORTLET = new ValueProperty(TYPE, "Portlet");
 
 }

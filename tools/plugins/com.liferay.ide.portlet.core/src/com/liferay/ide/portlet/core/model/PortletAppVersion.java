@@ -24,7 +24,7 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 public enum PortletAppVersion {
 
 	@Label(standard = "2.0")
-	@EnumSerialization(primary = "2.0")
-	V_2_0,
+		@EnumSerialization(primary = "2.0")
+	V_2_0
 
 }

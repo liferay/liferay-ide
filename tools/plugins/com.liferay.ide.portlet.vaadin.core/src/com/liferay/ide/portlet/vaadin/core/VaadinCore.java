@@ -14,23 +14,25 @@
 
 package com.liferay.ide.portlet.vaadin.core;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plugin life cycle
- * 
+ *
  * @author Greg Amerson
  */
 public class VaadinCore extends Plugin {
 
 	// The plugin ID
+
 	public static final String PLUGIN_ID = "com.liferay.ide.portlet.vaadin.core";
 
 	// The shared instance
-	private static VaadinCore _plugin;
 
 	public static IStatus createErrorStatus(Exception e) {
 		return new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e);
@@ -46,7 +48,7 @@ public class VaadinCore extends Plugin {
 
 	/**
 	 * Returns the shared instance
-	 * 
+	 *
 	 * @return the shared instance
 	 */
 	public static VaadinCore getDefault() {
@@ -54,34 +56,28 @@ public class VaadinCore extends Plugin {
 	}
 
 	public static void logError(Exception e) {
-		getDefault().getLog().log(createErrorStatus(e));
+		ILog log = getDefault().getLog();
+
+		log.log(createErrorStatus(e));
 	}
 
 	/**
 	 * The constructor
 	 */
-	public VaadinCore() {}
+	public VaadinCore() {
+	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.
-	 * BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 		super.stop(context);
 	}
+
+	private static VaadinCore _plugin;
 
 }

@@ -175,7 +175,7 @@ public class SDKUtil {
 				if (retval != null) {
 					throw new CoreException(
 						SDKCorePlugin.createErrorStatus(
-							new IllegalStateException("Workspace can't have more than one SDK project open")));
+							new IllegalStateException("Workspace can not have more than one SDK project open")));
 				}
 
 				retval = project;

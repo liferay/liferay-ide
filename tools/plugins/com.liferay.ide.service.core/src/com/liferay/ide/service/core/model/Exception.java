@@ -30,9 +30,9 @@ public interface Exception extends Element {
 
 	public ElementType TYPE = new ElementType(Exception.class);
 
-	// *** Exception ***
-
 	public Value<String> getException();
+
+	// *** Exception ***
 
 	public void setException(String value);
 

@@ -16,6 +16,9 @@ package com.liferay.ide.portlet.core.lfportlet.model.internal;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.util.List;
 import java.util.Set;
@@ -30,6 +33,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 
 /**
@@ -46,46 +51,49 @@ public class LiferayScriptPossibleValuesService extends PossibleValuesService {
 	protected void compute(Set<String> values) {
 		Element modeElement = context(Element.class);
 
-		List<FileExtensions> exts = modeElement.parent().definition().getAnnotations(FileExtensions.class);
+		Property property = modeElement.parent();
 
-		if ((exts != null) && (exts.size() > 0)) {
-			this.type = exts.get(0).expr();
-			IProject project = modeElement.adapt(IProject.class);
+		PropertyDef propertyDef = property.definition();
 
-			if (project != null) {
-				IFolder webappRoot = CoreUtil.getDefaultDocrootFolder(project);
+		List<FileExtensions> exts = propertyDef.getAnnotations(FileExtensions.class);
 
-				if (webappRoot != null) {
-					IPath location = webappRoot.getLocation();
+		if (ListUtil.isEmpty(exts)) {
+			return;
+		}
 
-					if (location != null) {
-						if (location.toFile().exists()) {
-							values.addAll(new PropertiesVisitor().visitScriptFiles(webappRoot, type, values));
-						}
-					}
-				}
+		FileExtensions extensions = exts.get(0);
+
+		_type = extensions.expr();
+
+		IProject project = modeElement.adapt(IProject.class);
+
+		if (project != null) {
+			IFolder webappRoot = CoreUtil.getDefaultDocrootFolder(project);
+
+			if (FileUtil.exists(webappRoot)) {
+				values.addAll(new PropertiesVisitor().visitScriptFiles(webappRoot, _type, values));
 			}
 		}
 	}
 
-	private String type;
+	private String _type;
 
 	private static class PropertiesVisitor implements IResourceProxyVisitor {
 
-		IResource entryResource = null;
-		String type = null;
-		Set<String> values = null;
-
 		public boolean visit(IResourceProxy resourceProxy) {
-			if (resourceProxy.getType() == IResource.FILE && resourceProxy.getName().endsWith(type)) {
+			if ((resourceProxy.getType() == IResource.FILE) && StringUtil.endsWith(resourceProxy.getName(), _type)) {
 				IResource resource = resourceProxy.requestResource();
 
 				if (resource.exists()) {
-					String relativePath = resource.getLocation().makeRelativeTo(entryResource.getLocation()).toString();
+					IPath location = resource.getLocation();
+
+					IPath path = location.makeRelativeTo(_entryResource.getLocation());
+
+					String relativePath = path.toString();
 
 					try {
 						if (!relativePath.startsWith("/")) {
-							values.add("/" + relativePath);
+							_values.add("/" + relativePath);
 						}
 					}
 					catch (Exception e) {
@@ -98,9 +106,10 @@ public class LiferayScriptPossibleValuesService extends PossibleValuesService {
 		}
 
 		public Set<String> visitScriptFiles(IResource container, String type, Set<String> values) {
-			this.entryResource = container;
-			this.type = type;
-			this.values = values;
+			_entryResource = container;
+			_type = type;
+			_values = values;
+
 			try {
 				container.accept(this, IContainer.EXCLUDE_DERIVED);
 			}
@@ -110,6 +119,10 @@ public class LiferayScriptPossibleValuesService extends PossibleValuesService {
 
 			return values;
 		}
+
+		private IResource _entryResource = null;
+		private String _type = null;
+		private Set<String> _values = null;
 
 	}
 

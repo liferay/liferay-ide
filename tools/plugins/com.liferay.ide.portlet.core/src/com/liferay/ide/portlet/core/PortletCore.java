@@ -88,14 +88,14 @@ public class PortletCore extends Plugin {
 	}
 
 	public static void logError(Exception ex) {
-		ILog iLog=getDefault().getLog();
-		
+		ILog iLog = getDefault().getLog();
+
 		iLog.log(createErrorStatus(ex));
 	}
 
 	public static void logError(String msg, Exception e) {
-		ILog iLog=getDefault().getLog();
-		
+		ILog iLog = getDefault().getLog();
+
 		iLog.log(createErrorStatus(msg, e));
 	}
 
@@ -105,22 +105,12 @@ public class PortletCore extends Plugin {
 	public PortletCore() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(BundleContext )
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
 		_plugin = this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(BundleContext )
-	 */
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 
