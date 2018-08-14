@@ -42,33 +42,33 @@ public interface Entity extends Element {
 
 	public ElementType TYPE = new ElementType(Entity.class);
 
-	// *** Name ***
-
 	public ElementList<Column> getColumns();
+
+	// *** Name ***
 
 	public Value<String> getDataSource();
 
 	public Value<Boolean> getDeprecated();
 
-	// *** Human Name ***
-
 	public ElementList<Finder> getFinders();
+
+	// *** Human Name ***
 
 	public Value<String> getHumanName();
 
 	public Value<String> getName();
 
-	// *** Table ***
-
 	public ElementHandle<Order> getOrder();
+
+	// *** Table ***
 
 	public Value<String> getPersistenceClass();
 
 	public ElementList<Reference> getReferences();
 
-	// *** UUID ***
-
 	public Value<String> getSessionFactory();
+
+	// *** UUID ***
 
 	public Value<String> getTable();
 
@@ -76,9 +76,9 @@ public interface Entity extends Element {
 
 	public Value<String> getTxManager();
 
-	// *** UUID Accessor ***
-
 	public ElementList<TxRequired> getTxRequireds();
+
+	// *** UUID Accessor ***
 
 	public Value<Boolean> getUuid();
 
@@ -86,9 +86,9 @@ public interface Entity extends Element {
 
 	public Value<Boolean> isCacheEnabled();
 
-	// *** LocalService ***
-
 	public Value<Boolean> isJsonEnabled();
+
+	// *** LocalService ***
 
 	public Value<Boolean> isLocalService();
 
@@ -96,9 +96,9 @@ public interface Entity extends Element {
 
 	public void setCacheEnabled(Boolean value);
 
-	// *** RemoteService ***
-
 	public void setCacheEnabled(String value);
+
+	// *** RemoteService ***
 
 	public void setDataSource(String value);
 
@@ -106,41 +106,41 @@ public interface Entity extends Element {
 
 	public void setDeprecated(String value);
 
-	// *** Persistence Class ***
-
 	public void setHumanName(String value);
+
+	// *** Persistence Class ***
 
 	public void setJsonEnabled(Boolean value);
 
 	public void setJsonEnabled(String value);
 
-	// *** Data Source ***
-
 	public void setLocalService(Boolean value);
+
+	// *** Data Source ***
 
 	public void setLocalService(String value);
 
 	public void setName(String value);
 
-	// *** Session Factory ***
-
 	public void setPersistenceClass(String value);
+
+	// *** Session Factory ***
 
 	public void setRemoteService(Boolean value);
 
 	public void setRemoteService(String value);
 
-	// *** Tx manager ***
-
 	public void setSessionFactory(String value);
+
+	// *** Tx manager ***
 
 	public void setTable(String value);
 
 	public void setTrashEnabled(Boolean value);
 
-	// *** Cache Enabled ***
-
 	public void setTrashEnabled(String value);
+
+	// *** Cache Enabled ***
 
 	public void setTxManager(String value);
 
@@ -148,9 +148,9 @@ public interface Entity extends Element {
 
 	public void setUuid(String value);
 
-	// *** Json Enabled ***
-
 	public void setUuidAccessor(Boolean value);
+
+	// *** Json Enabled ***
 
 	public void setUuidAccessor(String value);
 
@@ -165,11 +165,11 @@ public interface Entity extends Element {
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "column", type = Column.class))
 	public ListProperty PROP_COLUMNS = new ListProperty(TYPE, "Columns");
 
-	// *** Trash Enabled ***
-
 	@Label(standard = "&data source")
 	@XmlBinding(path = "@data-source")
 	public ValueProperty PROP_DATA_SOURCE = new ValueProperty(TYPE, "DataSource");
+
+	// *** Trash Enabled ***
 
 	@DefaultValue(text = "false")
 	@Label(standard = "&deprecated")
@@ -187,13 +187,13 @@ public interface Entity extends Element {
 	@XmlBinding(path = "@human-name")
 	public ValueProperty PROP_HUMAN_NAME = new ValueProperty(TYPE, "HumanName");
 
-	// *** Deprecated ***
-
 	@DefaultValue(text = "true")
 	@Label(standard = "&JSON enabled")
 	@Type(base = Boolean.class)
 	@XmlBinding(path = "@json-enabled")
 	public ValueProperty PROP_JSON_ENABLED = new ValueProperty(TYPE, "JsonEnabled");
+
+	// *** Deprecated ***
 
 	@DefaultValue(text = "false")
 	@Label(standard = "&local service")
@@ -212,11 +212,11 @@ public interface Entity extends Element {
 	@XmlElementBinding(mappings = @XmlElementBinding.Mapping(element = "order", type = Order.class))
 	public ElementProperty PROP_ORDER = new ElementProperty(TYPE, "Order");
 
-	// *** Columns ***
-
 	@Label(standard = "&persistence class")
 	@XmlBinding(path = "@persistence-class")
 	public ValueProperty PROP_PERSISTENCE_CLASS = new ValueProperty(TYPE, "PersistenceClass");
+
+	// *** Columns ***
 
 	@Label(standard = "references")
 	@Type(base = Reference.class)
@@ -233,11 +233,11 @@ public interface Entity extends Element {
 	@XmlBinding(path = "@session-factory")
 	public ValueProperty PROP_SESSION_FACTORY = new ValueProperty(TYPE, "SessionFactory");
 
-	// IOrder getOrder();
-
 	@Label(standard = "&table")
 	@XmlBinding(path = "@table")
 	public ValueProperty PROP_TABLE = new ValueProperty(TYPE, "Table");
+
+	// IOrder getOrder();
 
 	@DefaultValue(text = "false")
 	@Label(standard = "&Trash Enabled")
@@ -246,24 +246,24 @@ public interface Entity extends Element {
 	@XmlBinding(path = "@trash-enabled")
 	public ValueProperty PROP_TRASH_ENABLED = new ValueProperty(TYPE, "TrashEnabled");
 
-	// *** References ***
-
 	@Label(standard = "tx &manager")
 	@XmlBinding(path = "@tx-manager")
 	public ValueProperty PROP_TX_MANAGER = new ValueProperty(TYPE, "TxManager");
+
+	// *** References ***
 
 	@Label(standard = "tx requireds")
 	@Type(base = TxRequired.class)
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "tx-required", type = TxRequired.class))
 	public ListProperty PROP_TX_REQUIREDS = new ListProperty(TYPE, "TxRequireds");
 
-	// *** TxRequireds ***
-
 	@DefaultValue(text = "false")
 	@Label(standard = "&uuid")
 	@Type(base = Boolean.class)
 	@XmlBinding(path = "@uuid")
 	public ValueProperty PROP_UUID = new ValueProperty(TYPE, "Uuid");
+
+	// *** TxRequireds ***
 
 	@DefaultValue(text = "false")
 	@Documentation(

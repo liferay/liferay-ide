@@ -37,25 +37,25 @@ public interface Finder extends Element {
 
 	public ElementType TYPE = new ElementType(Finder.class);
 
-	// *** Name ***
-
 	public ElementList<FinderColumn> getFinderColumns();
+
+	// *** Name ***
 
 	public Value<String> getName();
 
 	public Value<String> getReturnType();
 
-	// *** Return Type ***
-
 	public Value<String> getWhere();
+
+	// *** Return Type ***
 
 	public Value<Boolean> isDbIndex();
 
 	public Value<Boolean> isUnique();
 
-	// *** Unique ***
-
 	public void setDbIndex(Boolean value);
+
+	// *** Unique ***
 
 	public void setDbIndex(String value);
 
@@ -63,21 +63,21 @@ public interface Finder extends Element {
 
 	public void setReturnType(String value);
 
-	// *** Where ***
-
 	public void setUnique(Boolean value);
+
+	// *** Where ***
 
 	public void setUnique(String value);
 
 	public void setWhere(String value);
-
-	// *** DB Index ***
 
 	@DefaultValue(text = "true")
 	@Label(standard = "&db index")
 	@Type(base = Boolean.class)
 	@XmlBinding(path = "@db-index")
 	public ValueProperty PROP_DB_INDEX = new ValueProperty(TYPE, "DbIndex");
+
+	// *** DB Index ***
 
 	@Label(standard = "finder columns")
 	@Length(min = 1)
@@ -95,13 +95,13 @@ public interface Finder extends Element {
 	@XmlBinding(path = "@return-type")
 	public ValueProperty PROP_RETURN_TYPE = new ValueProperty(TYPE, "ReturnType");
 
-	// *** Finder Columns ***
-
 	@DefaultValue(text = "false")
 	@Label(standard = "&unique")
 	@Type(base = Boolean.class)
 	@XmlBinding(path = "@unique")
 	public ValueProperty PROP_UNIQUE = new ValueProperty(TYPE, "Unique");
+
+	// *** Finder Columns ***
 
 	@Label(standard = "&where")
 	@XmlBinding(path = "@where")

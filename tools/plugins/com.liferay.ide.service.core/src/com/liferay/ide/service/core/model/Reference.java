@@ -30,17 +30,17 @@ public interface Reference extends Element {
 
 	public ElementType TYPE = new ElementType(Reference.class);
 
-	// *** Package-path ***
-
 	public Value<String> getEntity();
+
+	// *** Package-path ***
 
 	public Value<String> getPackagePath();
 
 	public void setEntity(String value);
 
-	// *** Entity ***
-
 	public void setPackagePath(String value);
+
+	// *** Entity ***
 
 	@Label(standard = "&entity")
 	@XmlBinding(path = "@entity")

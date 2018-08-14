@@ -44,17 +44,17 @@ public interface ServiceBuilder extends Element {
 
 	public ElementType TYPE = new ElementType(ServiceBuilder.class);
 
-	// *** Package-path ***
-
 	public Value<String> getAuthor();
+
+	// *** Package-path ***
 
 	public ElementList<Entity> getEntities();
 
 	public ElementList<Exception> getExceptions();
 
-	// *** Auto-Namespace-Tables ***
-
 	public Value<String> getNamespace();
+
+	// *** Auto-Namespace-Tables ***
 
 	public Value<String> getPackagePath();
 
@@ -62,31 +62,31 @@ public interface ServiceBuilder extends Element {
 
 	public ElementList<ServiceBuilderImport> getServiceBuilderImports();
 
-	// *** Author ***
-
 	public Value<Boolean> getShowRelationshipLabels();
+
+	// *** Author ***
 
 	public Value<Boolean> isAutoNamespaceTables();
 
 	public void setAuthor(String value);
 
-	// *** namespace ***
-
 	public void setAutoNamespaceTables(Boolean value);
+
+	// *** namespace ***
 
 	public void setAutoNamespaceTables(String value);
 
 	public void setNamespace(String value);
 
-	// *** Entities ***
-
 	public void setPackagePath(String value);
+
+	// *** Entities ***
 
 	public void setShowRelationshipLabels(Boolean value);
 
-	// *** Exceptions ***
-
 	public void setShowRelationshipLabels(String value);
+
+	// *** Exceptions ***
 
 	@Label(standard = "&Author")
 	@XmlBinding(path = "author")
