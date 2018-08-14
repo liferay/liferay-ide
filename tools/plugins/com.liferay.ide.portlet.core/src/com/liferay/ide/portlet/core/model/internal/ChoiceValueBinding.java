@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.core.model.internal;
 
 import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
@@ -30,13 +31,13 @@ public class ChoiceValueBinding extends XmlValueBindingImpl {
 	public XmlNode getXmlNode() {
 		XmlElement parent = xml();
 
-		XmlElement element = parent.getChildElement(params[1], false);
+		XmlElement element = parent.getChildElement(_params[1], false);
 
 		if (element != null) {
 			return element;
 		}
 
-		element = parent.getChildElement(params[1], false);
+		element = parent.getChildElement(_params[1], false);
 
 		if (element != null) {
 			return element;
@@ -45,83 +46,60 @@ public class ChoiceValueBinding extends XmlValueBindingImpl {
 		return null;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.BindingImpl#init(org.eclipse.sapphire.modeling.
-	 *      IModelElement, org.eclipse.sapphire.modeling.ModelProperty,
-	 *      java.lang.String[])
-	 */
 	@Override
 	public void init(Property property) {
 		super.init(property);
 
-		this.params = property.definition().getAnnotation(CustomXmlValueBinding.class).params();
-		this.path = new XmlPath(params[0], resource().getXmlNamespaceResolver());
+		PropertyDef propertyDef = property.definition();
+
+		CustomXmlValueBinding customXmlValueBinding = propertyDef.getAnnotation(CustomXmlValueBinding.class);
+
+		_params = customXmlValueBinding.params();
+
+		_path = new XmlPath(_params[0], resource().getXmlNamespaceResolver());
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.ValueBindingImpl#read()
-	 */
 	@Override
 	public String read() {
 		XmlElement parent = xml(false);
 
-		// System.out.println( "ChoiceValueBinding.read() - \n" + parent );
+		if (parent == null) {
+			return "";
+		}
 
-		String value = null;
+		String value = "";
 
-		if (parent != null) {
+		XmlElement param1Element = parent.getChildElement(_params[1], false);
+		XmlElement param2Element = parent.getChildElement(_params[2], false);
 
-			// System.out.println( "ChoiceValueBinding.read()" + params[0] );
-
-			XmlElement param1Element = parent.getChildElement(params[1], false);
-			XmlElement param2Element = parent.getChildElement(params[2], false);
-
-			if ((param1Element != null) && params[0].equals(params[1])) {
-
-				// System.out.println( "ChoiceValueBinding.read() - \n" + eventNameElement );
-
-				value = param1Element.getText();
-			}
-			else if ((param2Element != null) && params[0].equals(params[2])) {
-
-				// System.out.println( "ChoiceValueBinding.read() - \n" + eventQNameElement );
-
-				value = param2Element.getText();
-			}
+		if ((param1Element != null) && _params[0].equals(_params[1])) {
+			value = param1Element.getText();
+		}
+		else if ((param2Element != null) && _params[0].equals(_params[2])) {
+			value = param2Element.getText();
 		}
 
 		return value;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.ValueBindingImpl#write(java.lang.String)
-	 */
 	@Override
 	public void write(String value) {
 		XmlElement parent = xml(true);
 
-		// System.out.println( "EventDefinitionValueBinding.write()" + parent );
+		XmlElement param1Element = parent.getChildElement(_params[1], false);
+		XmlElement param2Element = parent.getChildElement(_params[2], false);
 
-		XmlElement param1Element = parent.getChildElement(params[1], false);
-		XmlElement param2Element = parent.getChildElement(params[2], false);
-
-		if ((param1Element != null) && params[0].equals(params[1])) {
-			parent.removeChildNode(params[2]);
+		if ((param1Element != null) && _params[0].equals(_params[1])) {
+			parent.removeChildNode(_params[2]);
 		}
-		else if ((param2Element != null) && params[0].equals(params[2])) {
-			parent.removeChildNode(params[1]);
+		else if ((param2Element != null) && _params[0].equals(_params[2])) {
+			parent.removeChildNode(_params[1]);
 		}
 
-		parent.setChildNodeText(this.path, value, true);
+		parent.setChildNodeText(_path, value, true);
 	}
 
-	private String[] params;
-	private XmlPath path;
+	private String[] _params;
+	private XmlPath _path;
 
 }

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.portlet.core.lfportlet.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -35,14 +36,15 @@ public class LiferayPortletNameValidationService extends ValidationService {
 		Element modelElement = context(Element.class);
 
 		if (!modelElement.disposed()) {
-			liferayPortletName = (String)modelElement.property(context(ValueProperty.class)).content();
+			_liferayPortletName = SapphireUtil.getContent(modelElement.property(context(ValueProperty.class)));
+
 			IProject project = modelElement.adapt(IProject.class);
 
 			String[] portletNames = new PortletDescriptorHelper(project).getAllPortletNames();
 
 			if (portletNames != null) {
 				for (String portletName : portletNames) {
-					if (portletName.equals(liferayPortletName)) {
+					if (portletName.equals(_liferayPortletName)) {
 						return Status.createOkStatus();
 					}
 				}
@@ -51,11 +53,11 @@ public class LiferayPortletNameValidationService extends ValidationService {
 
 		return Status.createErrorStatus(
 			Resources.bind(StringEscapeUtils.unescapeJava(Resources.portletNameInvalid), new Object[] {
-				liferayPortletName
+				_liferayPortletName
 			}));
 	}
 
-	private String liferayPortletName;
+	private String _liferayPortletName;
 
 	private static final class Resources extends NLS {
 

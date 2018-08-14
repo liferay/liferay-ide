@@ -40,22 +40,20 @@ public interface Listener extends Element, Describeable, Displayable {
 
 	public ElementType TYPE = new ElementType(Listener.class);
 
-	// *** Implementation ***
-
-	@Type(base = JavaTypeName.class)
-	@Reference(target = JavaType.class)
-	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "javax.portlet.PortletURLGenerationListener")
-	@Label(standard = "Implementation", full = "Listener implementation class")
-	@Required
-	@MustExist
-	@XmlBinding(path = "listener-class")
-	@Documentation(content = "The listener implementation class.")
-	public 	ValueProperty PROP_IMPLEMENTATION = new ValueProperty(TYPE, "Implementation");
-
 	public ReferenceValue<JavaTypeName, JavaType> getImplementation();
+
+	public void setImplementation(JavaTypeName value);
 
 	public void setImplementation(String value);
 
-	public 	void setImplementation(JavaTypeName value);
+	@Documentation(content = "The listener implementation class.")
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "javax.portlet.PortletURLGenerationListener")
+	@Label(full = "Listener implementation class", standard = "Implementation")
+	@MustExist
+	@Reference(target = JavaType.class)
+	@Required
+	@Type(base = JavaTypeName.class)
+	@XmlBinding(path = "listener-class")
+	public ValueProperty PROP_IMPLEMENTATION = new ValueProperty(TYPE, "Implementation");
 
 }

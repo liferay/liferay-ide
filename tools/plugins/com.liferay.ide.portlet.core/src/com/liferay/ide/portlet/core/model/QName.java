@@ -34,28 +34,24 @@ public interface QName extends Element {
 
 	public ElementType TYPE = new ElementType(QName.class);
 
-	// *** NamespaceURI ***
-
-	@Label(standard = "Namespace URI")
-	@XmlBinding(path = "qname")
-	@Service(impl = NameOrQnameValidationService.class)
-	@CustomXmlValueBinding(impl = QNamespaceValueBinding.class, params = {"qname"})
-	public ValueProperty PROP_NAMESPACE_URI = new ValueProperty(TYPE, "NamespaceURI");
+	public Value<String> getLocalPart();
 
 	public Value<String> getNamespaceURI();
 
+	public void setLocalPart(String value);
+
 	public void setNamespaceURI(String value);
 
-	// *** LocalPart ***
-
-	@Label(standard = "Local Part")
-	@XmlBinding(path = "qname")
-	@Service(impl = NameOrQnameValidationService.class)
 	@CustomXmlValueBinding(impl = QNameLocalPartValueBinding.class, params = {"qname", "localpart"})
-	public 	ValueProperty PROP_LOCAL_PART = new ValueProperty(TYPE, "LocalPart");
+	@Label(standard = "Local Part")
+	@Service(impl = NameOrQnameValidationService.class)
+	@XmlBinding(path = "qname")
+	public ValueProperty PROP_LOCAL_PART = new ValueProperty(TYPE, "LocalPart");
 
-	public 	Value<String> getLocalPart();
-
-	public 	void setLocalPart(String value);
+	@CustomXmlValueBinding(impl = QNamespaceValueBinding.class, params = "qname")
+	@Label(standard = "Namespace URI")
+	@Service(impl = NameOrQnameValidationService.class)
+	@XmlBinding(path = "qname")
+	public ValueProperty PROP_NAMESPACE_URI = new ValueProperty(TYPE, "NamespaceURI");
 
 }

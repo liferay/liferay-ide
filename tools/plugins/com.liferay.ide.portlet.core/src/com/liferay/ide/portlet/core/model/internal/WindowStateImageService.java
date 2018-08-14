@@ -14,6 +14,7 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.portlet.core.model.CustomWindowState;
 import com.liferay.ide.portlet.core.model.WindowState;
 
@@ -33,7 +34,7 @@ public class WindowStateImageService extends ImageService {
 	public void dispose() {
 		super.dispose();
 
-		context(Element.class).detach(this.listener, WindowState.PROP_WINDOW_STATE.name());
+		context(Element.class).detach(_listener, WindowState.PROP_WINDOW_STATE.name());
 	}
 
 	@Override
@@ -45,23 +46,23 @@ public class WindowStateImageService extends ImageService {
 		if (element instanceof CustomWindowState) {
 			CustomWindowState customWindowState = (CustomWindowState)element;
 
-			strWindowState = String.valueOf(customWindowState.getWindowState().content());
+			strWindowState = SapphireUtil.getContent(customWindowState.getWindowState());
 		}
 		else if (element instanceof WindowState) {
 			WindowState windowState = (WindowState)element;
 
-			strWindowState = windowState.getWindowState().content();
+			strWindowState = SapphireUtil.getContent(windowState.getWindowState());
 		}
 
 		if ("MAXIMIZED".equalsIgnoreCase(strWindowState)) {
-			imageData = IMG_MAXIMIZED;
+			imageData = _IMG_MAXIMIZED;
 		}
 		else if ("MINIMIZED".equalsIgnoreCase(strWindowState)) {
-			imageData = IMG_MINIMIZED;
+			imageData = _IMG_MINIMIZED;
 		}
 
 		if (imageData == null) {
-			imageData = IMG_DEFAULT;
+			imageData = _IMG_DEFAULT;
 		}
 
 		return imageData;
@@ -69,7 +70,7 @@ public class WindowStateImageService extends ImageService {
 
 	@Override
 	protected void initImageService() {
-		this.listener = new FilteredListener<PropertyEvent>() {
+		_listener = new FilteredListener<PropertyEvent>() {
 
 			@Override
 			public void handleTypedEvent(final PropertyEvent event) {
@@ -78,18 +79,18 @@ public class WindowStateImageService extends ImageService {
 
 		};
 
-		context(Element.class).attach(this.listener, WindowState.PROP_WINDOW_STATE.name());
+		context(Element.class).attach(_listener, WindowState.PROP_WINDOW_STATE.name());
 	}
 
-	private static final ImageData IMG_DEFAULT = ImageData.readFromClassLoader(
+	private static final ImageData _IMG_DEFAULT = ImageData.readFromClassLoader(
 		WindowStateImageService.class, "images/window_states.png").required();
 
-	private static final ImageData IMG_MAXIMIZED = ImageData.readFromClassLoader(
+	private static final ImageData _IMG_MAXIMIZED = ImageData.readFromClassLoader(
 		WindowStateImageService.class, "images/maximize.png").required();
 
-	private static final ImageData IMG_MINIMIZED = ImageData.readFromClassLoader(
+	private static final ImageData _IMG_MINIMIZED = ImageData.readFromClassLoader(
 		WindowStateImageService.class, "images/minimize.png").required();
 
-	private Listener listener;
+	private Listener _listener;
 
 }

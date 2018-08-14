@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.core.lfportlet.model.internal;
 
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.portlet.core.lfportlet.model.PortletStyleElement;
 
 import org.eclipse.core.resources.IContainer;
@@ -39,7 +40,7 @@ public class PortletStyleValidationService extends ValidationService {
 		Element modelElement = context(Element.class);
 
 		if (!modelElement.disposed() && modelElement instanceof PortletStyleElement) {
-			Path path = (Path)modelElement.property(context(ValueProperty.class)).content();
+			Path path = SapphireUtil.getContent(modelElement.property(context(ValueProperty.class)));
 
 			if (path != null) {
 				String name = path.lastSegment();
@@ -75,7 +76,7 @@ public class PortletStyleValidationService extends ValidationService {
 		}
 
 		public boolean visit(IResourceProxy resourceProxy) {
-			if ((resourceProxy.getType() == IResource.FILE) && resourceProxy.getName().equals(searchFileName)) {
+			if ((resourceProxy.getType() == IResource.FILE) && searchFileName.equals(resourceProxy.getName())) {
 				IResource resource = resourceProxy.requestResource();
 
 				if (resource.exists()) {

@@ -36,30 +36,26 @@ public interface EventDefinitionRef extends Element, Identifiable, Describeable 
 
 	public ElementType TYPE = new ElementType(EventDefinitionRef.class);
 
-	// *** Qname ***
-
-	@Label(standard = "Qname")
-	@XmlBinding(path = "qname")
-	@Unique
-	@Service(impl = QNamesPossibleValuesService.class, params = {@Service.Param(name = "0", value = "Q_NAME")})
-	@CustomXmlValueBinding(impl = QNameTextNodeValueBinding.class, params = {"qname"})
-	public 	ValueProperty PROP_Q_NAME = new ValueProperty(TYPE, "Qname");
+	public Value<String> getName();
 
 	public Value<String> getQname();
 
+	public void setName(String value);
+
 	public void setQname(String value);
 
-	// *** Name ***
-
-	@Label(standard = "Name")
-	@XmlBinding(path = "name")
-	@Unique
 	@Enablement(expr = "${Qname == 'Q_NAME'}")
+	@Label(standard = "Name")
 	@PossibleValues(property = "/EventDefinitions/Name")
+	@Unique
+	@XmlBinding(path = "name")
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-	public Value<String> getName();
-
-	public void setName(String value);
+	@CustomXmlValueBinding(impl = QNameTextNodeValueBinding.class, params = "qname")
+	@Label(standard = "Qname")
+	@Service(impl = QNamesPossibleValuesService.class, params = {@Service.Param(name = "0", value = "Q_NAME")})
+	@Unique
+	@XmlBinding(path = "qname")
+	public ValueProperty PROP_Q_NAME = new ValueProperty(TYPE, "Qname");
 
 }

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.portlet.core.model.EventDefinition;
 import com.liferay.ide.portlet.core.model.EventDefinitionRef;
 import com.liferay.ide.portlet.core.model.PortletApp;
@@ -33,57 +34,46 @@ import org.eclipse.sapphire.PossibleValuesService;
  */
 public class QNamesPossibleValuesService extends PossibleValuesService {
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.
-	 *      util.SortedSet)
-	 */
 	@Override
 	protected void compute(Set<String> values) {
-		Element Element = context(Element.class);
-
-		// values.add( param( "0" ) );
+		Element element = context(Element.class);
 
 		PortletApp portletApp = context(Element.class).nearest(PortletApp.class);
 
-		if (Element instanceof EventDefinitionRef) {
+		if (element instanceof EventDefinitionRef) {
 			ElementList<EventDefinition> eventDefs = portletApp.getEventDefinitions();
 
 			for (EventDefinition eventDefinition : eventDefs) {
-				if ((eventDefinition.getNamespaceURI().content() != null) &&
-					(eventDefinition.getLocalPart().content() != null)) {
+				String nsURI = SapphireUtil.getContent(eventDefinition.getNamespaceURI());
+				String localPart = SapphireUtil.getContent(eventDefinition.getLocalPart());
 
-					values.add(
-						getQName(
-							eventDefinition.getNamespaceURI().content(false),
-							eventDefinition.getLocalPart().content()));
+				if ((nsURI != null) && (localPart != null)) {
+					String qname = _getQName(
+						SapphireUtil.getContent(eventDefinition.getNamespaceURI(), false),
+						SapphireUtil.getContent(eventDefinition.getLocalPart()));
+
+					values.add(qname);
 				}
 			}
 		}
-		else if (Element instanceof SupportedPublicRenderParameter) {
+		else if (element instanceof SupportedPublicRenderParameter) {
 			ElementList<PublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
 
 			for (PublicRenderParameter publicRenderParam : publicRenderParameters) {
-				if ((publicRenderParam.getNamespaceURI().content() != null) &&
-					(publicRenderParam.getLocalPart().content() != null)) {
+				if ((SapphireUtil.getContent(publicRenderParam.getNamespaceURI()) != null) &&
+					(SapphireUtil.getContent(publicRenderParam.getLocalPart()) != null)) {
 
-					values
-						.add(
-							getQName(
-								publicRenderParam.getNamespaceURI().content(false),
-								publicRenderParam.getLocalPart().content()));
+					String qname = _getQName(
+						SapphireUtil.getContent(publicRenderParam.getNamespaceURI(), false),
+						SapphireUtil.getContent(publicRenderParam.getLocalPart()));
+
+					values.add(qname);
 				}
 			}
 		}
 	}
 
-	/**
-	 * @param nsURI
-	 * @param localPart
-	 * @return
-	 */
-	private String getQName(String nsURI, String localPart) {
+	private String _getQName(String nsURI, String localPart) {
 		QName qName = null;
 
 		qName = new QName(nsURI, localPart);

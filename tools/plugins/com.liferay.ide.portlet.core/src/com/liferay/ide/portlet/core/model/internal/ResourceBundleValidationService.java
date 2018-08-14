@@ -14,6 +14,7 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.portlet.core.model.ResourceBundle;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -35,21 +36,23 @@ public class ResourceBundleValidationService extends ValidationService {
 		Element modelElement = context(Element.class);
 
 		if (!modelElement.disposed() && modelElement instanceof ResourceBundle) {
-			String bundle = modelElement.property(context(ValueProperty.class)).text(false);
+			String bundle = SapphireUtil.getText(modelElement.property(context(ValueProperty.class)), false);
 
 			if ((bundle != null) && (bundle.indexOf("/") != -1)) {
-				String correctBundle = bundle.replace("/", ".").replaceAll("\\.properties$", "");
+				bundle = bundle.replace("/", ".");
+
+				String correctBundle = bundle.replaceAll("\\.properties$", "");
+
+				Object[] objects = {"'" + bundle + "'", "'" + correctBundle + "'"};
 
 				return Status.createErrorStatus(
-					Resources.bind(StringEscapeUtils.unescapeJava(Resources.invalidResourceBundleWithSlash), new Object[] {
-						"'" + bundle + "'", "'" + correctBundle + "'"
-					}));
+					Resources.bind(StringEscapeUtils.unescapeJava(Resources.invalidResourceBundleWithSlash), objects));
 			}
 			else if ((bundle != null) && (bundle.startsWith(".") || bundle.contains(".."))) {
+				Object[] objects = {"'" + bundle + "'"};
+
 				return Status.createErrorStatus(
-					Resources.bind(StringEscapeUtils.unescapeJava(Resources.invalidResourceBundleFileName), new Object[] {
-						"'" + bundle + "'"
-					}));
+					Resources.bind(StringEscapeUtils.unescapeJava(Resources.invalidResourceBundleFileName), objects));
 			}
 		}
 
@@ -57,7 +60,7 @@ public class ResourceBundleValidationService extends ValidationService {
 	}
 
 	protected void initValidationService() {
-		this.listener = new FilteredListener<PropertyContentEvent>() {
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
 			protected void handleTypedEvent(PropertyContentEvent event) {
 				if (!context(ResourceBundle.class).disposed()) {
@@ -67,10 +70,10 @@ public class ResourceBundleValidationService extends ValidationService {
 
 		};
 
-		context(ResourceBundle.class).attach(this.listener);
+		context(ResourceBundle.class).attach(_listener);
 	}
 
-	private FilteredListener<PropertyContentEvent> listener;
+	private FilteredListener<PropertyContentEvent> _listener;
 
 	private static class Resources extends NLS {
 

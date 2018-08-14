@@ -42,37 +42,32 @@ public interface Supports extends Element {
 
 	public ElementType TYPE = new ElementType(Supports.class);
 
-	// *** MimeType ***
+	public Value<String> getMimeType();
 
-	@Label(standard = "Mime Type")
+	public ElementList<PortletMode> getPortletModes();
+
+	public ElementList<WindowState> getWindowStates();
+
+	public void setMimeType(String value);
+
 	@InitialValue(text = "text/html")
+	@Label(standard = "Mime Type")
 	@Required
 	@XmlBinding(path = "mime-type")
 	public ValueProperty PROP_MIME_TYPE = new ValueProperty(TYPE, "MimeType");
 
-	public Value<String> getMimeType();
-
-	public void setMimeType(String value);
-
-	// *** PortletModes ***
-
-	@Type(base = PortletMode.class)
+	@Collation(ignoreCaseDifferences = "true")
 	@Label(standard = "Portlet Modes")
 	@Service(impl = PortletModePossibleValueService.class)
-	@Collation(ignoreCaseDifferences = "true")
+	@Type(base = PortletMode.class)
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "portlet-mode", type = PortletMode.class))
 	public ListProperty PROP_PORTLET_MODES = new ListProperty(TYPE, "PortletModes");
 
-	public ElementList<PortletMode> getPortletModes();
-
-	// *** Window States ***
-
-	@Type(base = WindowState.class)
-	@Label(standard = "Window States")
-	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "window-state", type = WindowState.class))
-	@Service(impl = WindowStatesPossibleValueService.class)
 	@Collation(ignoreCaseDifferences = "true")
-	public 	ListProperty PROP_WINDOW_STATES = new ListProperty(TYPE, "WindowStates");
+	@Label(standard = "Window States")
+	@Service(impl = WindowStatesPossibleValueService.class)
+	@Type(base = WindowState.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "window-state", type = WindowState.class))
+	public ListProperty PROP_WINDOW_STATES = new ListProperty(TYPE, "WindowStates");
 
-	public ElementList<WindowState> getWindowStates();
 }

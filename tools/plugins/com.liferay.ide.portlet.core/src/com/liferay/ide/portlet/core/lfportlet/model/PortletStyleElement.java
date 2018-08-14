@@ -35,18 +35,19 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 public interface PortletStyleElement extends Element {
 
 	public ElementType TYPE = new ElementType(PortletStyleElement.class);
+
+	public Value<Path> getValue();
+
+	public void setValue(Path value);
+
+	public void setValue(String value);
+
 	@Services(value = {
 		@Service(impl = LiferayScriptPossibleValuesService.class), @Service(impl = PortletStyleValidationService.class)
-
 	})
 	@Type(base = Path.class)
 	@ValidFileSystemResourceType(FileSystemResourceType.FILE)
 	@XmlBinding(path = "")
 	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
 
-	public Value<Path> getValue();
-
-	public 	void setValue(Path value);
-
-	public 	void setValue(String value);
 }

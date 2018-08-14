@@ -31,19 +31,16 @@ public interface CronTriggerValueTrigger extends ICronTrigger {
 
 	public ElementType TYPE = new ElementType(CronTriggerValueTrigger.class);
 
-	// *** Cron Trigger Value ***
+	public Value<String> getCronTriggerValue();
+
+	public void setCronTriggerValue(String value);
 
 	@Label(standard = "Cron Trigger Value")
 	@Required
 	@Service(impl = NumberValueValidationService.class, params = {
 		@Service.Param(name = "min", value = "1"), @Service.Param(name = "max", value = "")
-
 	})
 	@XmlBinding(path = "")
 	public ValueProperty PROP_CRON_TRIGGER_VALUE = new ValueProperty(TYPE, "CronTriggerValue");
-
-	public Value<String> getCronTriggerValue();
-
-	public void setCronTriggerValue(String value);
 
 }

@@ -28,14 +28,12 @@ public interface CutomUserAttributeName extends Element {
 
 	public ElementType TYPE = new ElementType(CutomUserAttributeName.class);
 
-	// *** CustomAttributeName ***
+	public Value<String> getValue();
+
+	public void setValue(String value);
 
 	@Label(standard = "Custom Attribute Name")
 	@XmlBinding(path = "")
 	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
-
-	public Value<String> getValue();
-
-	public void setValue(String value);
 
 }

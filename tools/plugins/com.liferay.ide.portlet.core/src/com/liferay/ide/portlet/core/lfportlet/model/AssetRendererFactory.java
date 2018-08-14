@@ -35,7 +35,11 @@ public interface AssetRendererFactory extends Element {
 
 	public ElementType TYPE = new ElementType(AssetRendererFactory.class);
 
-	// Value
+	public ReferenceValue<JavaTypeName, JavaType> getValue();
+
+	public void setValue(JavaTypeName value);
+
+	public void setValue(String value);
 
 	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "com.liferay.portlet.asset.model.AssetRendererFactory")
 	@Label(standard = "Asset Renderer Factory")
@@ -44,11 +48,5 @@ public interface AssetRendererFactory extends Element {
 	@Type(base = JavaTypeName.class)
 	@XmlBinding(path = "")
 	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
-
-	public ReferenceValue<JavaTypeName, JavaType> getValue();
-
-	public void setValue(JavaTypeName value);
-
-	public void setValue(String value);
 
 }

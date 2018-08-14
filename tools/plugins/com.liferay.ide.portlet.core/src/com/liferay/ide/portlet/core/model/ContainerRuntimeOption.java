@@ -31,13 +31,11 @@ public interface ContainerRuntimeOption extends Element, Nameable {
 
 	public ElementType TYPE = new ElementType(ContainerRuntimeOption.class);
 
-	// *** Values ***
-
-	@Type(base = OptionValue.class)
-	@Label(standard = "Options")
-	@XmlListBinding(mappings = {@XmlListBinding.Mapping(type = OptionValue.class, element = "value")})
-	public 	ListProperty PROP_OPTIONS = new ListProperty(TYPE, "Options");
-
 	public ElementList<OptionValue> getOptions();
+
+	@Label(standard = "Options")
+	@Type(base = OptionValue.class)
+	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "value", type = OptionValue.class)})
+	public ListProperty PROP_OPTIONS = new ListProperty(TYPE, "Options");
 
 }

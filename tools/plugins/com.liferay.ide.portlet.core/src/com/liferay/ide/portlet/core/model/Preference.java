@@ -29,20 +29,18 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  */
 public interface Preference extends Element, Identifiable, NameValue {
 
-	public 	ElementType TYPE = new ElementType(Preference.class);
-
-	// *** ReadOnly ***
-
-	@Type(base = Boolean.class)
-	@Label(standard = "Read Only")
-	@DefaultValue(text = "false")
-	@XmlBinding(path = "read-only")
-	public ValueProperty PROP_READ_ONLY = new ValueProperty(TYPE, "ReadOnly");
+	public ElementType TYPE = new ElementType(Preference.class);
 
 	public Value<Boolean> getReadOnly();
 
+	public void setReadOnly(Boolean value);
+
 	public void setReadOnly(String value);
 
-	public void setReadOnly(Boolean value);
+	@DefaultValue(text = "false")
+	@Label(standard = "Read Only")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "read-only")
+	public ValueProperty PROP_READ_ONLY = new ValueProperty(TYPE, "ReadOnly");
 
 }

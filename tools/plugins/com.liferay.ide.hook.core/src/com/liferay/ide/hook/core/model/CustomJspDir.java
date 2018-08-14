@@ -45,8 +45,6 @@ public interface CustomJspDir extends Element {
 
 	public void setValue(String value);
 
-	// *** Value ***
-
 	@InitialValue(text = "/META-INF/custom_jsps")
 	@Label(standard = "Custom JSP Dir")
 	@Listeners(CustomJspDirListener.class)

@@ -39,28 +39,24 @@ public interface EventDefinition extends QName, Identifiable, Describeable {
 
 	public ElementType TYPE = new ElementType(EventDefinition.class);
 
-	// *** Aliases ***
-
-	@Type(base = AliasQName.class)
-	@Label(standard = "Aliases")
-	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "alias", type = AliasQName.class)})
-	public ListProperty PROP_ALIASES = new ListProperty(TYPE, "Aliases");
-
 	public ElementList<AliasQName> getAliases();
-
-	// *** Event Value Type ***
-
-	@Type(base = JavaTypeName.class)
-	@Reference(target = JavaType.class)
-	@JavaTypeConstraint(kind = {JavaTypeKind.CLASS, JavaTypeKind.INTERFACE}, type = {"java.io.Serializable"})
-	@Label(standard = "Value Type")
-	@XmlBinding(path = "value-type")
-	public ValueProperty PROP_EVENT_VALUE_TYPE = new ValueProperty(TYPE, "EventValueType");
 
 	public ReferenceValue<JavaTypeName, JavaType> getEventValueType();
 
+	public void setEventValueType(JavaTypeName eventValueType);
+
 	public void setEventValueType(String eventValueType);
 
-	public void setEventValueType(JavaTypeName eventValueType);
+	@Label(standard = "Aliases")
+	@Type(base = AliasQName.class)
+	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "alias", type = AliasQName.class)})
+	public ListProperty PROP_ALIASES = new ListProperty(TYPE, "Aliases");
+
+	@JavaTypeConstraint(kind = {JavaTypeKind.CLASS, JavaTypeKind.INTERFACE}, type = "java.io.Serializable")
+	@Label(standard = "Value Type")
+	@Reference(target = JavaType.class)
+	@Type(base = JavaTypeName.class)
+	@XmlBinding(path = "value-type")
+	public ValueProperty PROP_EVENT_VALUE_TYPE = new ValueProperty(TYPE, "EventValueType");
 
 }

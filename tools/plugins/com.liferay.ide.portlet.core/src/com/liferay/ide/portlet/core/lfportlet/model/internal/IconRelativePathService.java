@@ -17,6 +17,7 @@ package com.liferay.ide.portlet.core.lfportlet.model.internal;
 import com.liferay.ide.core.util.CoreUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
@@ -31,31 +32,27 @@ import org.eclipse.sapphire.services.RelativePathService;
  */
 public class IconRelativePathService extends RelativePathService {
 
-	List<Path> computeRoots(IProject project) {
+	@Override
+	public List<Path> roots() {
+		IProject project = context(Element.class).adapt(IProject.class);
+
+		if (project == null) {
+			return Collections.emptyList();
+		}
+
 		List<Path> roots = new ArrayList<>();
 
-		if (project != null) {
-			IFolder webappRoot = CoreUtil.getDefaultDocrootFolder(project);
+		IFolder webappRoot = CoreUtil.getDefaultDocrootFolder(project);
 
-			if (webappRoot != null) {
-				IPath location = webappRoot.getLocation();
+		if (webappRoot != null) {
+			IPath location = webappRoot.getLocation();
 
-				if (location != null) {
-					roots.add(new Path(location.toPortableString()));
-				}
+			if (location != null) {
+				roots.add(new Path(location.toPortableString()));
 			}
 		}
 
 		return roots;
-	}
-
-	@Override
-	public List<Path> roots() {
-		return computeRoots(project());
-	}
-
-	protected IProject project() {
-		return context(Element.class).adapt(IProject.class);
 	}
 
 }

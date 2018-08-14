@@ -61,21 +61,15 @@ public interface ServletFilterMapping extends Element {
 
 	public void setServletFilterName(String value);
 
-	// *** Servlet Filter Name ***
-
 	@CustomXmlValueBinding(impl = BeforeAfterFilterNameBinding.class)
 	@Label(standard = "Portal Filter Name")
 	@Service(impl = PortalFilterNamesPossibleValuesService.class)
 	public ValueProperty PROP_BEFORE_AFTER_FILTER_NAME = new ValueProperty(TYPE, "BeforeAfterFilterName");
 
-	// *** BeforeAfterFilterName ***
-
 	@CustomXmlValueBinding(impl = BeforeAfterFilterTypeBinding.class)
 	@DefaultValue(text = "before-filter")
 	@Type(base = BeforeAfterFilterType.class)
 	public ValueProperty PROP_BEFORE_AFTER_FILTER_TYPE = new ValueProperty(TYPE, "BeforeAfterFilterType");
-
-	// *** Dispatchers ***
 
 	@Label(standard = "Dispatchers")
 	@Type(base = Dispatcher.class)
@@ -86,8 +80,6 @@ public interface ServletFilterMapping extends Element {
 	@PossibleValues(property = "/ServletFilters/ServletFilterName")
 	@XmlBinding(path = "servlet-filter-name")
 	public ValueProperty PROP_SERVLET_FILTER_NAME = new ValueProperty(TYPE, "ServletFilterName");
-
-	// *** URLPattern ***
 
 	@Label(standard = "url patterns")
 	@Length(min = 1)

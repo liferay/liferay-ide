@@ -30,27 +30,22 @@ public interface NameValue extends Element {
 
 	public ElementType TYPE = new ElementType(NameValue.class);
 
-	/**
-	 * Name Element
-	 */
+	public Value<String> getName();
+
+	public Value<String> getValue();
+
+	public void setName(String name);
+
+	public void setValue(String value);
+
 	@Label(standard = "Name")
 	@Required
 	@Unique
 	@XmlBinding(path = "name")
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-	public Value<String> getName();
-
-	public void setName(String name);
-
-	/**
-	 * Value Element
-	 */
 	@Label(standard = "Value")
 	@XmlBinding(path = "value")
-	public 	ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
+	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
 
-	Value<String> getValue();
-
-	void setValue(String value);
 }

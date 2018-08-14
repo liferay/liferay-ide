@@ -44,8 +44,6 @@ public interface PortalPropertiesFile extends Element {
 
 	public void setValue(String value);
 
-	// *** Value ***
-
 	@FileExtensions(expr = "properties")
 	@InitialValue(text = "portal.properties")
 	@Label(standard = "Portal Properties File")

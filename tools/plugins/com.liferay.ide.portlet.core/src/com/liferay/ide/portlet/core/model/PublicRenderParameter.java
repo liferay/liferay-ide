@@ -36,25 +36,21 @@ public interface PublicRenderParameter extends QName, Identifiable {
 
 	public ElementType TYPE = new ElementType(PublicRenderParameter.class);
 
-	// *** Identifier ***
+	public ElementList<AliasQName> getAliases();
+
+	public Value<String> getIdentifier();
+
+	public void setIdentifier(String value);
+
+	@Label(standard = "Aliases")
+	@Type(base = AliasQName.class)
+	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "alias", type = AliasQName.class)})
+	public ListProperty PROP_ALIASES = new ListProperty(TYPE, "Aliases");
 
 	@Label(standard = "Identifier")
 	@Required
 	@Unique
 	@XmlBinding(path = "identifier")
 	public ValueProperty PROP_IDENTIFIER = new ValueProperty(TYPE, "Identifier");
-
-	public Value<String> getIdentifier();
-
-	public void setIdentifier(String value);
-
-	// *** Aliases ***
-
-	@Type(base = AliasQName.class)
-	@Label(standard = "Aliases")
-	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "alias", type = AliasQName.class)})
-	public ListProperty PROP_ALIASES = new ListProperty(TYPE, "Aliases");
-
-	public ElementList<AliasQName> getAliases();
 
 }

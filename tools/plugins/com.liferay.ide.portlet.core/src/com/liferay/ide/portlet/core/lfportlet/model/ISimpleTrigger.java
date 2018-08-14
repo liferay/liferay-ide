@@ -30,17 +30,15 @@ public interface ISimpleTrigger extends ITrigger {
 
 	public ElementType TYPE = new ElementType(ISimpleTrigger.class);
 
-	// *** Time Unit ***
-
-	@DefaultValue(text = "second")
-	@Label(standard = "Time Unit")
-	@Required
-	@PossibleValues(values = {"day", "hour", "minute", "second", "week"})
-	@XmlBinding(path = "time-unit")
-	public ValueProperty PROP_TIME_UNIT = new ValueProperty(TYPE, "TimeUnit");
-
 	public Value<String> getTimeUnit();
 
 	public void setTimeUnit(String value);
+
+	@DefaultValue(text = "second")
+	@Label(standard = "Time Unit")
+	@PossibleValues(values = {"day", "hour", "minute", "second", "week"})
+	@Required
+	@XmlBinding(path = "time-unit")
+	public ValueProperty PROP_TIME_UNIT = new ValueProperty(TYPE, "TimeUnit");
 
 }

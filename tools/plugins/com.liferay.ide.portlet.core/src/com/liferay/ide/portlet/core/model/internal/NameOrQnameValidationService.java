@@ -14,10 +14,13 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.portlet.core.model.QName;
 
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -34,7 +37,9 @@ public class NameOrQnameValidationService extends ValidationService {
 	public Status compute() {
 		Element element = context(Element.class);
 
-		String elementLabel = element.type().getLabel(false, CapitalizationType.FIRST_WORD_ONLY, false);
+		ElementType type = element.type();
+
+		String elementLabel = type.getLabel(false, CapitalizationType.FIRST_WORD_ONLY, false);
 
 		QName iqName = null;
 		String name = null;
@@ -44,27 +49,23 @@ public class NameOrQnameValidationService extends ValidationService {
 		if (element instanceof QName) {
 			iqName = (QName)element;
 
-			nsURI = iqName.getNamespaceURI().text(false);
-			localPart = iqName.getLocalPart().text(false);
+			nsURI = SapphireUtil.getText(iqName.getNamespaceURI(), false);
+			localPart = SapphireUtil.getText(iqName.getLocalPart(), false);
 		}
 
-		if (isEmptyOrNull(name) && isEmptyOrNull(nsURI) && isEmptyOrNull(localPart)) {
+		if (CoreUtil.isNullOrEmpty(name) && CoreUtil.isNullOrEmpty(nsURI) && CoreUtil.isNullOrEmpty(localPart)) {
 			return Status.createErrorStatus(Resources.bind(Resources.message, elementLabel));
 		}
-		else if (isEmptyOrNull(name) && (isEmptyOrNull(nsURI) || isEmptyOrNull(localPart))) {
+		else if (CoreUtil.isNullOrEmpty(name) && (CoreUtil.isNullOrEmpty(nsURI) || CoreUtil.isNullOrEmpty(localPart))) {
 			return Status.createErrorStatus(Resources.bind(Resources.invalidQname, elementLabel));
 		}
 
 		return Status.createOkStatus();
 	}
 
-	/**
-	 * @param text
-	 * @return
-	 */
 	@Override
 	protected void initValidationService() {
-		this.listener = new FilteredListener<PropertyContentEvent>() {
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
 			protected void handleTypedEvent(PropertyContentEvent event) {
 				refresh();
@@ -72,28 +73,15 @@ public class NameOrQnameValidationService extends ValidationService {
 
 		};
 
-		op().getLocalPart().attach(this.listener);
-		op().getNamespaceURI().attach(this.listener);
+		SapphireUtil.attachListener(_op().getLocalPart(), _listener);
+		SapphireUtil.attachListener(_op().getNamespaceURI(), _listener);
 	}
 
-	private boolean isEmptyOrNull(String text) {
-		if (text == null || text.trim().length() == 0) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private QName op() {
+	private QName _op() {
 		return context(QName.class);
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.PropertyValidationService#validate()
-	 */
-	private Listener listener;
+	private Listener _listener;
 
 	private static final class Resources extends NLS {
 

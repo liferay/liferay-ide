@@ -30,27 +30,23 @@ public interface SecurityRoleRef extends Element, Identifiable, Describeable {
 
 	public ElementType TYPE = new ElementType(SecurityRoleRef.class);
 
-	// *** RoleName ***
+	public Value<String> getRoleLink();
+
+	public Value<String> getRoleName();
+
+	public void setRoleLink(String value);
+
+	public void setRoleName(String value);
+
+	@Label(standard = "Role Link")
+	@Unique
+	@XmlBinding(path = "role-link")
+	public ValueProperty PROP_ROLE_LINK = new ValueProperty(TYPE, "RoleLink");
 
 	@Label(standard = "Role Name")
 	@Required
 	@Unique
 	@XmlBinding(path = "role-name")
-	public 	ValueProperty PROP_ROLE_NAME = new ValueProperty(TYPE, "RoleName");
-
-	public Value<String> getRoleName();
-
-	public void setRoleName(String value);
-
-	// *** RoleLink ***
-
-	@Label(standard = "Role Link")
-	@Unique
-	@XmlBinding(path = "role-link")
-	public 	ValueProperty PROP_ROLE_LINK = new ValueProperty(TYPE, "RoleLink");
-
-	public 	Value<String> getRoleLink();
-
-	public void setRoleLink(String value);
+	public ValueProperty PROP_ROLE_NAME = new ValueProperty(TYPE, "RoleName");
 
 }

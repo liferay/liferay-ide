@@ -33,16 +33,14 @@ public interface CustomWindowState extends Describeable, Identifiable {
 
 	public ElementType TYPE = new ElementType(CustomWindowState.class);
 
-	// *** WindowState ***
-
-	@Label(standard = "Window State")
-	@Unique
-	@XmlBinding(path = "window-state")
-	@Required
-	public ValueProperty PROP_WINDOW_STATE = new ValueProperty(TYPE, "WindowState");
-
 	public Value<String> getWindowState();
 
 	public void setWindowState(String value);
+
+	@Label(standard = "Window State")
+	@Required
+	@Unique
+	@XmlBinding(path = "window-state")
+	public ValueProperty PROP_WINDOW_STATE = new ValueProperty(TYPE, "WindowState");
 
 }

@@ -40,8 +40,6 @@ public interface LanguageProperty extends Element {
 
 	public void setValue(String value);
 
-	// *** Value ***
-
 	@FileExtensions(expr = "properties")
 	@Label(standard = "Language Properties")
 	@Service(impl = GenericResourceBundlePathService.class)

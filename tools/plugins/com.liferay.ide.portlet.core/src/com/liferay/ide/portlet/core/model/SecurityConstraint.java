@@ -36,26 +36,25 @@ public interface SecurityConstraint extends Element, Identifiable, Displayable {
 
 	public ElementType TYPE = new ElementType(SecurityConstraint.class);
 
-	// *** Portlet Name ***
-
-	@Type(base = PortletName.class)
-	@Label(standard = "Portlet name")
-	@Required
-	@Length(min = 1)
-	@Unique
-	@XmlListBinding(path = "portlet-collection", mappings = @XmlListBinding.Mapping(element = "portlet-name", type = PortletName.class))
-	public ListProperty PROP_PORTLET_NAMES = new ListProperty(TYPE, "PortletNames");
-
-	public 	ElementList<PortletName> getPortletNames();
-
-	// *** UserDataConstraint ***
-
-	@Type(base = UserDataConstraint.class)
-	@Label(standard = "User Data Constraint")
-	@Required
-	@XmlBinding(path = "user-data-constraint")
-	public ImpliedElementProperty PROP_USER_DATA_CONSTRAINT = new ImpliedElementProperty(TYPE, "UserDataConstraint");
+	public ElementList<PortletName> getPortletNames();
 
 	public UserDataConstraint getUserDataConstraint();
+
+	@Label(standard = "Portlet name")
+	@Length(min = 1)
+	@Required
+	@Type(base = PortletName.class)
+	@Unique
+	@XmlListBinding(
+		mappings = @XmlListBinding.Mapping(element = "portlet-name", type = PortletName.class),
+		path = "portlet-collection"
+	)
+	public ListProperty PROP_PORTLET_NAMES = new ListProperty(TYPE, "PortletNames");
+
+	@Label(standard = "User Data Constraint")
+	@Required
+	@Type(base = UserDataConstraint.class)
+	@XmlBinding(path = "user-data-constraint")
+	public ImpliedElementProperty PROP_USER_DATA_CONSTRAINT = new ImpliedElementProperty(TYPE, "UserDataConstraint");
 
 }

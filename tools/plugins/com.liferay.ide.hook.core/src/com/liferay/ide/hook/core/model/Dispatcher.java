@@ -35,8 +35,6 @@ public interface Dispatcher extends Element {
 
 	public void setDispatcher(String name);
 
-	// *** Dispatcher ***
-
 	@Collation(ignoreCaseDifferences = "true")
 	@Label(standard = "Dispatcher")
 	@PossibleValues(values = {"FORWARD", "REQUEST", "INCLUDE", "ERROR"})

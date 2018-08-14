@@ -23,16 +23,14 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 @Label(standard = "Transport Gurantee")
 public enum TransportGuarantee {
 
-	@Label(standard = "NONE")
-	@EnumSerialization(primary = "NONE")
-	NONE,
-
-	@Label(standard = "INTEGRAL")
-	@EnumSerialization(primary = "INTEGRAL")
-	INTEGRAL,
-
 	@Label(standard = "CONFIDENTIAL")
-	@EnumSerialization(primary = "CONFIDENTIAL")
-	CONFIDENTIAL
+		@EnumSerialization(primary = "CONFIDENTIAL")
+	CONFIDENTIAL,
+	@Label(standard = "INTEGRAL")
+		@EnumSerialization(primary = "INTEGRAL")
+	INTEGRAL,
+	@Label(standard = "NONE")
+		@EnumSerialization(primary = "NONE")
+	NONE
 
 }

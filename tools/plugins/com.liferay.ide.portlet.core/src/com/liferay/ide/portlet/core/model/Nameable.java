@@ -30,17 +30,14 @@ public interface Nameable extends Element {
 
 	public ElementType TYPE = new ElementType(Nameable.class);
 
-	/**
-	 * Name Element
-	 */
+	public Value<String> getName();
+
+	public void setName(String name);
+
 	@Label(standard = "Name")
 	@Required
 	@Unique
 	@XmlBinding(path = "name")
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
-
-	public Value<String> getName();
-
-	public 	void setName(String name);
 
 }

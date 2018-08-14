@@ -29,15 +29,13 @@ public interface PortletName extends Element {
 
 	public ElementType TYPE = new ElementType(PortletName.class);
 
-	// *** Name ***
+	public Value<String> getName();
+
+	public void setName(String value);
 
 	@Label(standard = "Name")
-	@XmlBinding(path = "")
 	@PossibleValues(property = "/Portlets/PortletName")
+	@XmlBinding(path = "")
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
-
-	public 	Value<String> getName();
-
-	public 	void setName(String value);
 
 }

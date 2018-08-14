@@ -40,29 +40,25 @@ public interface PortletPreference extends Element, Identifiable {
 
 	public ElementType TYPE = new ElementType(PortletPreference.class);
 
-	// *** PortletPreferences ***
-
-	@Type(base = Preference.class)
-	@Label(standard = "Preferences")
-	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "preference", type = Preference.class))
-	public ListProperty PROP_PORTLET_PREFERENCES = new ListProperty(TYPE, "PortletPreferences");
-
 	public ElementList<Preference> getPortletPreferences();
-
-	// *** PreferernceValidator ***
-
-	@Type(base = JavaTypeName.class)
-	@Reference(target = JavaType.class)
-	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = {"javax.portlet.PreferencesValidator"})
-	@Label(standard = "Preference Validator")
-	@Unique
-	@XmlBinding(path = "preferences-validator")
-	public ValueProperty PROP_PREFERERNCE_VALIDATOR = new ValueProperty(TYPE, "PreferernceValidator");
 
 	public ReferenceValue<JavaTypeName, JavaType> getPreferernceValidator();
 
-	public 	void setPreferernceValidator(String portletClass);
-
 	public void setPreferernceValidator(JavaTypeName portletClass);
+
+	public void setPreferernceValidator(String portletClass);
+
+	@Label(standard = "Preferences")
+	@Type(base = Preference.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "preference", type = Preference.class))
+	public ListProperty PROP_PORTLET_PREFERENCES = new ListProperty(TYPE, "PortletPreferences");
+
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "javax.portlet.PreferencesValidator")
+	@Label(standard = "Preference Validator")
+	@Reference(target = JavaType.class)
+	@Type(base = JavaTypeName.class)
+	@Unique
+	@XmlBinding(path = "preferences-validator")
+	public ValueProperty PROP_PREFERERNCE_VALIDATOR = new ValueProperty(TYPE, "PreferernceValidator");
 
 }

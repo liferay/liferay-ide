@@ -41,44 +41,37 @@ public interface SchedulerEntry extends Element {
 
 	public ElementType TYPE = new ElementType(SchedulerEntry.class);
 
-	// *** SchedulerDescription ***
-
-	@Label(standard = "SchedulerDescription")
-	@Required
-	@XmlBinding(path = "scheduler-description")
-	public ValueProperty PROP_SCHEDULER_DESCRIPTION = new ValueProperty(TYPE, "SchedulerDescription");
+	public ElementHandle<ITrigger> getPortletTrigger();
 
 	public Value<String> getSchedulerDescription();
 
-	void SetSchedulerDescription(String value);
-
-	// *** Scheduler Event Listener Class ***
-
-	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = {"com.liferay.portal.kernel.messaging.MessageListener"})
-	@Label(standard = "SchedulerEventListenerClass")
-	@Reference(target = JavaType.class)
-	@Required
-	@Type(base = JavaTypeName.class)
-	@XmlBinding(path = "scheduler-event-listener-class")
-	public ValueProperty PROP_SCHEDULER_EVENT_LISTENER_CLASS = new ValueProperty(TYPE, "SchedulerEventListenerClass");
-
 	public ReferenceValue<JavaTypeName, JavaType> getSchedulerEventListenerClass();
 
-	void setSchedulerEventListenerClass(JavaTypeName value);
+	public void setSchedulerDescription(String value);
 
-	void setSchedulerEventListenerClass(String value);
+	public void setSchedulerEventListenerClass(JavaTypeName value);
 
-	// *** Trigger ***
+	public void setSchedulerEventListenerClass(String value);
 
 	@Required
 	@Type(base = ITrigger.class, possible = {CronTrigger.class, SimpleTrigger.class})
 	@XmlElementBinding(mappings = {
 		@XmlElementBinding.Mapping(element = "cron", type = CronTrigger.class),
 		@XmlElementBinding.Mapping(element = "simple", type = SimpleTrigger.class)
-
 	}, path = "trigger")
 	public ElementProperty PROP_PORTLET_TRIGGER = new ElementProperty(TYPE, "PortletTrigger");
 
-	public 	ElementHandle<ITrigger> getPortletTrigger();
+	@Label(standard = "SchedulerDescription")
+	@Required
+	@XmlBinding(path = "scheduler-description")
+	public ValueProperty PROP_SCHEDULER_DESCRIPTION = new ValueProperty(TYPE, "SchedulerDescription");
+
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.messaging.MessageListener")
+	@Label(standard = "SchedulerEventListenerClass")
+	@Reference(target = JavaType.class)
+	@Required
+	@Type(base = JavaTypeName.class)
+	@XmlBinding(path = "scheduler-event-listener-class")
+	public ValueProperty PROP_SCHEDULER_EVENT_LISTENER_CLASS = new ValueProperty(TYPE, "SchedulerEventListenerClass");
 
 }

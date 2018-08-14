@@ -22,11 +22,14 @@ import java.io.IOException;
 import javax.xml.transform.TransformerException;
 
 import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
+
+import org.w3c.dom.Element;
 
 /**
  * @author Kamesh Sampath
@@ -37,7 +40,7 @@ public class QNameValueBinding extends XmlValueBindingImpl {
 	public XmlNode getXmlNode() {
 		XmlElement parent = xml();
 
-		XmlElement element = parent.getChildElement(params[0], false);
+		XmlElement element = parent.getChildElement(_params[0], false);
 
 		if (element != null) {
 			return element;
@@ -46,33 +49,26 @@ public class QNameValueBinding extends XmlValueBindingImpl {
 		return null;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.PropertyBinding#init(org.eclipse.sapphire.
-	 *      modeling.Element, org.eclipse.sapphire.modeling.Property,
-	 *      java.lang.String[])
-	 */
 	@Override
 	public void init(Property property) {
 		super.init(property);
 
-		this.params = property.definition().getAnnotation(CustomXmlValueBinding.class).params();
-		this.path = new XmlPath(params[0], resource().getXmlNamespaceResolver());
+		PropertyDef propertyDef = property.definition();
+
+		CustomXmlValueBinding customXmlValueBinding = propertyDef.getAnnotation(CustomXmlValueBinding.class);
+
+		_params = customXmlValueBinding.params();
+
+		_path = new XmlPath(_params[0], resource().getXmlNamespaceResolver());
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#read()
-	 */
 	@Override
 	public String read() {
 		XmlElement parent = xml(false);
 		String value = null;
 
 		if (parent != null) {
-			XmlElement qNameElement = parent.getChildElement(params[0], false);
+			XmlElement qNameElement = parent.getChildElement(_params[0], false);
 
 			value = qNameElement.getText();
 		}
@@ -80,25 +76,22 @@ public class QNameValueBinding extends XmlValueBindingImpl {
 		return value;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#write(java.lang.String)
-	 */
 	@Override
 	public void write(String value) {
 		XmlElement parent = xml(true);
 
 		// System.out.println( "EventDefinitionValueBinding.write()" + parent );
 
-		XmlElement qNameElement = parent.getChildElement(params[0], true);
+		XmlElement qNameElement = parent.getChildElement(_params[0], true);
 
-		qNameElement.setChildNodeText(this.path, value, true);
+		qNameElement.setChildNodeText(_path, value, true);
 
 		// Only for debugging purposes
 
 		try {
-			PortletModelUtil.printDocument(parent.getDomNode().getOwnerDocument(), System.out);
+			Element element = parent.getDomNode();
+
+			PortletModelUtil.printDocument(element.getOwnerDocument(), System.out);
 		}
 		catch (IOException ioe) {
 			PortletCore.logError(ioe);
@@ -108,7 +101,7 @@ public class QNameValueBinding extends XmlValueBindingImpl {
 		}
 	}
 
-	private String[] params;
-	private XmlPath path;
+	private String[] _params;
+	private XmlPath _path;
 
 }

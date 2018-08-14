@@ -28,15 +28,13 @@ public interface PropertyCronTrigger extends ICronTrigger {
 
 	public ElementType TYPE = new ElementType(PropertyCronTrigger.class);
 
-	// *** Property Key ***
+	public Value<String> getPropertyKey();
+
+	public void setPropertyKey(String value);
 
 	@Label(standard = "Property Key")
 	@Required
 	@XmlBinding(path = "")
 	public ValueProperty PROP_PROPERTY_KEY = new ValueProperty(TYPE, "PropertyKey");
-
-	public Value<String> getPropertyKey();
-
-	public void setPropertyKey(String value);
 
 }

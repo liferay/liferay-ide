@@ -54,14 +54,10 @@ public interface ServletFilter extends Element {
 
 	public void setServletFilterName(String value);
 
-	// *** InitParams ***
-
 	@Label(standard = "Init Params")
 	@Type(base = Param.class)
 	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "init-param", type = Param.class)})
 	public ListProperty PROP_INIT_PARAMS = new ListProperty(TYPE, "InitParams");
-
-	// ** ServletFilterImpl
 
 	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "javax.servlet.Filter")
 	@Label(standard = "Servlet Filter Implementation")
@@ -71,8 +67,6 @@ public interface ServletFilter extends Element {
 	@Type(base = JavaTypeName.class)
 	@XmlBinding(path = "servlet-filter-impl")
 	public ValueProperty PROP_SERVLET_FILTER_IMPL = new ValueProperty(TYPE, "ServletFilterImpl");
-
-	// *** Servlet Filter Name ***
 
 	@Label(standard = "Servlet Filter Name")
 	@Required

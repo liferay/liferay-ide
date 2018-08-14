@@ -30,13 +30,11 @@ public interface Display extends Element {
 
 	public ElementType TYPE = new ElementType(Display.class);
 
-	// *** Categories ***
+	public ElementList<Category> getCategories();
 
-	@Type(base = Category.class)
 	@Label(standard = "Categories")
+	@Type(base = Category.class)
 	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "category", type = Category.class)})
 	public ListProperty PROP_CATEGORIES = new ListProperty(TYPE, "Categories");
-
-	public ElementList<Category> getCategories();
 
 }

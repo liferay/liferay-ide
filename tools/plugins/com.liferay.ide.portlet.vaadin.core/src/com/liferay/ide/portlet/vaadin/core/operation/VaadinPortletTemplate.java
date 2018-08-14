@@ -27,28 +27,37 @@ public class VaadinPortletTemplate implements INewVaadinPortletClassDataModelPro
   protected final String TEXT_2 = ";";
   protected final String TEXT_3 = NL;
   protected final String TEXT_4 = NL + "import ";
-  protected final String TEXT_5 = NL + "public ";
-  protected final String TEXT_6 = "abstract ";
-  protected final String TEXT_7 = "final ";
-  protected final String TEXT_8 = "class ";
-  protected final String TEXT_9 = " extends ";
-  protected final String TEXT_10 = " implements ";
-  protected final String TEXT_11 = ", ";
-  protected final String TEXT_12 = " {";
-  protected final String TEXT_13 = NL + NL + "    /**" + NL + "     * Default constructor. " + NL + "     */" + NL + "    public ";
-  protected final String TEXT_14 = "() {" + NL + "    }";
-  protected final String TEXT_15 = NL + "       " + NL + "    /**" + NL + "     * @see ";
-  protected final String TEXT_16 = "#";
-  protected final String TEXT_17 = "(";
-  protected final String TEXT_18 = ")" + NL + "     */" + NL + "    public ";
-  protected final String TEXT_19 = ") {" + NL + "        super(";
-  protected final String TEXT_20 = ");" + NL + "    }";
-  protected final String TEXT_21 = NL + NL + "\t/**" + NL + "     * @see ";
-  protected final String TEXT_22 = " ";
-  protected final String TEXT_23 = ") {" + NL + "        // TODO Auto-generated method stub";
-  protected final String TEXT_24 = NL + "\t\t\treturn ";
-  protected final String TEXT_25 = NL + "    }";
-  protected final String TEXT_26 = NL + NL + "    public void init() {" + NL + "        Window window = new Window(\"Vaadin Portlet Application\");" + NL + "        setMainWindow(window);" + NL + "        window.addComponent(new Label(\"Hello Vaadin user!\"));" + NL + "    }" + NL + "" + NL + "}";
+  protected final String TEXT_5 = ";";
+  protected final String TEXT_6 = NL;
+  protected final String TEXT_7 = NL + "public ";
+  protected final String TEXT_8 = "abstract ";
+  protected final String TEXT_9 = "final ";
+  protected final String TEXT_10 = "class ";
+  protected final String TEXT_11 = " extends ";
+  protected final String TEXT_12 = " implements ";
+  protected final String TEXT_13 = ", ";
+  protected final String TEXT_14 = " {";
+  protected final String TEXT_15 = NL + NL + "    /**" + NL + "     * Default constructor. " + NL + "     */" + NL + "    public ";
+  protected final String TEXT_16 = "() {" + NL + "    }";
+  protected final String TEXT_17 = NL + "       " + NL + "    /**" + NL + "     * @see ";
+  protected final String TEXT_18 = "#";
+  protected final String TEXT_19 = "(";
+  protected final String TEXT_20 = ")" + NL + "     */" + NL + "    public ";
+  protected final String TEXT_21 = "(";
+  protected final String TEXT_22 = ") {" + NL + "        super(";
+  protected final String TEXT_23 = ");" + NL + "    }";
+  protected final String TEXT_24 = NL + NL + "\t/**" + NL + "     * @see ";
+  protected final String TEXT_25 = "#";
+  protected final String TEXT_26 = "(";
+  protected final String TEXT_27 = ")" + NL + "     */" + NL + "    public ";
+  protected final String TEXT_28 = " ";
+  protected final String TEXT_29 = "(";
+  protected final String TEXT_30 = ") {" + NL + "        // TODO Auto-generated method stub";
+  protected final String TEXT_31 = NL + "\t\t\treturn ";
+  protected final String TEXT_32 = ";";
+  protected final String TEXT_33 = NL + "    }";
+  protected final String TEXT_34 = NL + NL + "    public void init() {" + NL + "        Window window = new Window(\"Vaadin Portlet Application\");" + NL + "        setMainWindow(window);" + NL + "        window.addComponent(new Label(\"Hello Vaadin user!\"));" + NL + "    }" + NL + "" + NL + "}";
+  protected final String TEXT_35 = NL;
 
    public String generate(Object argument)
   {
@@ -73,37 +82,37 @@ public class VaadinPortletTemplate implements INewVaadinPortletClassDataModelPro
 
     stringBuffer.append(TEXT_4);
     stringBuffer.append( anImport );
-    stringBuffer.append(TEXT_2);
+    stringBuffer.append(TEXT_5);
      
 	}
 
-    stringBuffer.append(TEXT_3);
+    stringBuffer.append(TEXT_6);
     
 	if (model.isPublic()) { 
 
-    stringBuffer.append(TEXT_5);
+    stringBuffer.append(TEXT_7);
      
 	} 
 
 	if (model.isAbstract()) { 
 
-    stringBuffer.append(TEXT_6);
+    stringBuffer.append(TEXT_8);
     
 	}
 
 	if (model.isFinal()) {
 
-    stringBuffer.append(TEXT_7);
+    stringBuffer.append(TEXT_9);
     
 	}
 
-    stringBuffer.append(TEXT_8);
+    stringBuffer.append(TEXT_10);
     stringBuffer.append( model.getClassName() );
     
 	String superClass = model.getSuperclassName();
  	if (superClass != null && superClass.length() > 0) {
 
-    stringBuffer.append(TEXT_9);
+    stringBuffer.append(TEXT_11);
     stringBuffer.append( superClass );
     
 	}
@@ -111,7 +120,7 @@ public class VaadinPortletTemplate implements INewVaadinPortletClassDataModelPro
 	List<String> interfaces = model.getInterfaces(); 
  	if ( interfaces.size() > 0) { 
 
-    stringBuffer.append(TEXT_10);
+    stringBuffer.append(TEXT_12);
     
 	}
 	
@@ -119,7 +128,7 @@ public class VaadinPortletTemplate implements INewVaadinPortletClassDataModelPro
    		String INTERFACE = (String) interfaces.get(i);
    		if (i > 0) {
 
-    stringBuffer.append(TEXT_11);
+    stringBuffer.append(TEXT_13);
     
 		}
 
@@ -127,13 +136,13 @@ public class VaadinPortletTemplate implements INewVaadinPortletClassDataModelPro
     
 	}
 
-    stringBuffer.append(TEXT_12);
+    stringBuffer.append(TEXT_14);
      
 	if (!model.hasEmptySuperclassConstructor()) { 
 
-    stringBuffer.append(TEXT_13);
+    stringBuffer.append(TEXT_15);
     stringBuffer.append( model.getClassName() );
-    stringBuffer.append(TEXT_14);
+    stringBuffer.append(TEXT_16);
      
 	} 
 
@@ -142,19 +151,19 @@ public class VaadinPortletTemplate implements INewVaadinPortletClassDataModelPro
 		for (Constructor constructor : constructors) {
 			if (constructor.isPublic() || constructor.isProtected()) { 
 
-    stringBuffer.append(TEXT_15);
-    stringBuffer.append( model.getSuperclassName() );
-    stringBuffer.append(TEXT_16);
-    stringBuffer.append( model.getSuperclassName() );
     stringBuffer.append(TEXT_17);
-    stringBuffer.append( constructor.getParamsForJavadoc() );
+    stringBuffer.append( model.getSuperclassName() );
     stringBuffer.append(TEXT_18);
-    stringBuffer.append( model.getClassName() );
-    stringBuffer.append(TEXT_17);
-    stringBuffer.append( constructor.getParamsForDeclaration() );
+    stringBuffer.append( model.getSuperclassName() );
     stringBuffer.append(TEXT_19);
-    stringBuffer.append( constructor.getParamsForCall() );
+    stringBuffer.append( constructor.getParamsForJavadoc() );
     stringBuffer.append(TEXT_20);
+    stringBuffer.append( model.getClassName() );
+    stringBuffer.append(TEXT_21);
+    stringBuffer.append( constructor.getParamsForDeclaration() );
+    stringBuffer.append(TEXT_22);
+    stringBuffer.append( constructor.getParamsForCall() );
+    stringBuffer.append(TEXT_23);
     
 			} 
 		} 
@@ -164,36 +173,36 @@ public class VaadinPortletTemplate implements INewVaadinPortletClassDataModelPro
 	if (model.shouldImplementAbstractMethods()) {
 		for (Method method : model.getUnimplementedMethods()) { 
 
-    stringBuffer.append(TEXT_21);
+    stringBuffer.append(TEXT_24);
     stringBuffer.append( method.getContainingJavaClass() );
-    stringBuffer.append(TEXT_16);
+    stringBuffer.append(TEXT_25);
     stringBuffer.append( method.getName() );
-    stringBuffer.append(TEXT_17);
+    stringBuffer.append(TEXT_26);
     stringBuffer.append( method.getParamsForJavadoc() );
-    stringBuffer.append(TEXT_18);
+    stringBuffer.append(TEXT_27);
     stringBuffer.append( method.getReturnType() );
-    stringBuffer.append(TEXT_22);
+    stringBuffer.append(TEXT_28);
     stringBuffer.append( method.getName() );
-    stringBuffer.append(TEXT_17);
+    stringBuffer.append(TEXT_29);
     stringBuffer.append( method.getParamsForDeclaration() );
-    stringBuffer.append(TEXT_23);
+    stringBuffer.append(TEXT_30);
      
 			String defaultReturnValue = method.getDefaultReturnValue();
 			if (defaultReturnValue != null) { 
 
-    stringBuffer.append(TEXT_24);
+    stringBuffer.append(TEXT_31);
     stringBuffer.append( defaultReturnValue );
-    stringBuffer.append(TEXT_2);
+    stringBuffer.append(TEXT_32);
     
 			} 
 
-    stringBuffer.append(TEXT_25);
+    stringBuffer.append(TEXT_33);
      
 		}
 	} 
 
-    stringBuffer.append(TEXT_26);
-    stringBuffer.append(TEXT_3);
+    stringBuffer.append(TEXT_34);
+    stringBuffer.append(TEXT_35);
     return stringBuffer.toString();
   }
 }

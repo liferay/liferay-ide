@@ -14,6 +14,7 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.portlet.core.model.CustomPortletMode;
 import com.liferay.ide.portlet.core.model.PortletApp;
 
@@ -29,18 +30,12 @@ public class PortletModePossibleValueService extends PossibleValuesService {
 
 	// provided by Portlet Specification and Liferay
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.
-	 *      util.SortedSet)
-	 */
 	@Override
 	protected void compute(Set<String> values) {
 		PortletApp portletApp = context(PortletApp.class);
 
-		for (int i = 0; i < DEFAULT_MODES.length; i++) {
-			values.add(DEFAULT_MODES[i]);
+		for (String mode : _DEFAULT_MODES) {
+			values.add(mode);
 		}
 
 		// Add the ones defined in portlet.xml
@@ -48,7 +43,7 @@ public class PortletModePossibleValueService extends PossibleValuesService {
 		List<CustomPortletMode> customPortletModes = portletApp.getCustomPortletModes();
 
 		for (CustomPortletMode iCustomPortletMode : customPortletModes) {
-			String customPortletMode = iCustomPortletMode.getPortletMode().text(false);
+			String customPortletMode = SapphireUtil.getText(iCustomPortletMode.getPortletMode(), false);
 
 			if (customPortletMode != null) {
 				values.add(customPortletMode);
@@ -56,7 +51,7 @@ public class PortletModePossibleValueService extends PossibleValuesService {
 		}
 	}
 
-	private static final String[] DEFAULT_MODES =
+	private static final String[] _DEFAULT_MODES =
 		{"view", "edit", "help", "about", "config", "edit_defaults", "edit_guest", "preview", "print"};
 
 }

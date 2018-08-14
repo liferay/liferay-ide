@@ -18,6 +18,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.project.core.descriptor.AddNewPortletOperation;
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
@@ -93,6 +94,20 @@ public class LiferayPortletDescriptorHelper
 
 	@Override
 	protected void addDescriptorOperations() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE liferay-portlet-app PUBLIC \"-//Liferay//");
+		sb.append("DTD Portlet Application {0}//EN\" \"http://www.liferay.com/dtd/liferay-portlet-app_{1}.dtd");
+		sb.append("\">\n\n<liferay-portlet-app>\n\u0009<role-mapper>\n\u0009\u0009<role-name>administrator</role-");
+		sb.append("name>\n\u0009\u0009<role-link>Administrator</role-link>\n\u0009</role-mapper>\n\u0009<role-");
+		sb.append("mapper>\n\u0009\u0009<role-name>guest</role-name>\n\u0009\u0009<role-link>Guest</role-link>\n");
+		sb.append("\u0009</role-mapper>\n\u0009<role-mapper>\n\u0009\u0009<role-name>power-user</role-name>\n");
+		sb.append("\u0009\u0009<role-link>Power User</role-link>\n\u0009</role-mapper>\n\u0009<role-mapper>\n");
+		sb.append("\u0009\u0009<role-name>user</role-name>\n\u0009\u0009<role-link>User</role-link>\n\u0009</");
+		sb.append("role-mapper>\n</liferay-portlet-app>");
+
+		String descriptorTemplate = sb.toString();
+
 		AddNewPortletOperation apOperation = new AddNewPortletOperation() {
 
 			@Override
@@ -106,7 +121,7 @@ public class LiferayPortletDescriptorHelper
 						DOMModelEditOperation domModelOperation = new DOMModelEditOperation(descriptorFile) {
 
 							protected void createDefaultFile() {
-								createDefaultDescriptor(_DESCRIPTOR_TEMPLATE, getDescriptorVersion());
+								createDefaultDescriptor(descriptorTemplate, getDescriptorVersion());
 							}
 
 							protected IStatus doExecute(IDOMDocument document) {
@@ -150,7 +165,7 @@ public class LiferayPortletDescriptorHelper
 	}
 
 	protected boolean canAddNewPortlet(IDataModel model) {
-		return model.getID().contains("NewPortlet");
+		return StringUtil.contains(model.getID(), "NewPortlet");
 	}
 
 	protected IStatus doAddNewPortlet(IDOMDocument document, IDataModel model) {
@@ -168,7 +183,9 @@ public class LiferayPortletDescriptorHelper
 		NodeUtil.appendChildElement(newPortletElement, "icon", model.getStringProperty(ICON_FILE));
 
 		if (model.getBooleanProperty(ADD_TO_CONTROL_PANEL)) {
-			String entryCategory = model.getStringProperty(ENTRY_CATEGORY).replaceAll("^category\\.", StringPool.EMPTY);
+			String entryCategory = model.getStringProperty(ENTRY_CATEGORY);
+
+			entryCategory = entryCategory.replaceAll("^category\\.", StringPool.EMPTY);
 
 			NodeUtil.appendChildElement(newPortletElement, "control-panel-entry-category", entryCategory);
 
@@ -205,7 +222,7 @@ public class LiferayPortletDescriptorHelper
 		Element firstRoleMapper = null;
 
 		for (Element child : getChildElements(rootElement)) {
-			if (child.getNodeName().equals("role-mapper")) {
+			if ("role-mapper".equals(child.getNodeName())) {
 				firstRoleMapper = child;
 
 				break;
@@ -249,16 +266,5 @@ public class LiferayPortletDescriptorHelper
 
 		return status;
 	}
-
-	private static final String _DESCRIPTOR_TEMPLATE =
-		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE liferay-portlet-app PUBLIC \"-//Liferay//" +
-			"DTD Portlet Application {0}//EN\" \"http://www.liferay.com/dtd/liferay-portlet-app_{1}.dtd" +
-				"\">\n\n<liferay-portlet-app>\n\u0009<role-mapper>\n\u0009\u0009<role-name>administrator</role-" +
-					"name>\n\u0009\u0009<role-link>Administrator</role-link>\n\u0009</role-mapper>\n\u0009<role-" +
-						"mapper>\n\u0009\u0009<role-name>guest</role-name>\n\u0009\u0009<role-link>Guest</role-link>\n" +
-							"\u0009</role-mapper>\n\u0009<role-mapper>\n\u0009\u0009<role-name>power-user</role-name>\n" +
-								"\u0009\u0009<role-link>Power User</role-link>\n\u0009</role-mapper>\n\u0009<role-mapper>\n" +
-									"\u0009\u0009<role-name>user</role-name>\n\u0009\u0009<role-link>User</role-link>\n\u0009</" +
-										"role-mapper>\n</liferay-portlet-app>";
 
 }

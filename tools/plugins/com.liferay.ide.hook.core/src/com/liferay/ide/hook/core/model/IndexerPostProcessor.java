@@ -50,8 +50,6 @@ public interface IndexerPostProcessor extends Element {
 
 	public void setIndexerClassName(String value);
 
-	// *** Implementation Class ***
-
 	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.search.IndexerPostProcessor")
 	@Label(standard = "Indexer Post Processor Impl")
 	@MustExist
@@ -60,8 +58,6 @@ public interface IndexerPostProcessor extends Element {
 	@Type(base = JavaTypeName.class)
 	@XmlBinding(path = "indexer-post-processor-impl")
 	public ValueProperty PROP_INDEXER_CLASS_IMPL = new ValueProperty(TYPE, "IndexerClassImpl");
-
-	// *** IndexerClassName ***
 
 	@JavaTypeConstraint(kind = JavaTypeKind.INTERFACE, type = "com.liferay.portal.model.BaseModel")
 	@Label(standard = "Indexer Class Name")

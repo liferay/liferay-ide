@@ -14,6 +14,7 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.portlet.core.model.CustomPortletMode;
 import com.liferay.ide.portlet.core.model.PortletMode;
 
@@ -34,7 +35,7 @@ public class PortletModeImageService extends ImageService {
 	public void dispose() {
 		super.dispose();
 
-		context(Element.class).detach(this.listener, PortletMode.PROP_PORTLET_MODE.name());
+		context(Element.class).detach(_listener, PortletMode.PROP_PORTLET_MODE.name());
 	}
 
 	@Override
@@ -44,30 +45,30 @@ public class PortletModeImageService extends ImageService {
 		ImageData imageData = null;
 
 		if (element instanceof CustomPortletMode) {
-			CustomPortletMode iCustomPortletMode = (CustomPortletMode)element;
+			CustomPortletMode mode = (CustomPortletMode)element;
 
-			portletMode = String.valueOf(iCustomPortletMode.getPortletMode().content());
+			portletMode = SapphireUtil.getContent(mode.getPortletMode());
 		}
 		else if (element instanceof PortletMode) {
-			PortletMode iPortletMode = (PortletMode)element;
+			PortletMode mode = (PortletMode)element;
 
-			portletMode = iPortletMode.getPortletMode().content();
+			portletMode = SapphireUtil.getContent(mode.getPortletMode());
 		}
 
 		if (portletMode != null) {
 			if ("VIEW".equalsIgnoreCase(portletMode)) {
-				imageData = IMG_VIEW;
+				imageData = _IMG_VIEW;
 			}
 			else if ("EDIT".equalsIgnoreCase(portletMode)) {
-				imageData = IMG_EDIT;
+				imageData = _IMG_EDIT;
 			}
 			else if ("HELP".equalsIgnoreCase(portletMode)) {
-				imageData = IMG_HELP;
+				imageData = _IMG_HELP;
 			}
 		}
 
 		if (imageData == null) {
-			imageData = IMG_DEFAULT;
+			imageData = _IMG_DEFAULT;
 		}
 
 		return imageData;
@@ -75,30 +76,30 @@ public class PortletModeImageService extends ImageService {
 
 	@Override
 	protected void initImageService() {
-		this.listener = new FilteredListener<PropertyContentEvent>() {
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
 			@Override
-			protected void handleTypedEvent(final PropertyContentEvent event) {
+			protected void handleTypedEvent(PropertyContentEvent event) {
 				refresh();
 			}
 
 		};
 
-		context(Element.class).attach(this.listener, PortletMode.PROP_PORTLET_MODE.name());
+		context(Element.class).attach(_listener, PortletMode.PROP_PORTLET_MODE.name());
 	}
 
-	private static final ImageData IMG_DEFAULT = ImageData.readFromClassLoader(
+	private static final ImageData _IMG_DEFAULT = ImageData.readFromClassLoader(
 		PortletModeImageService.class, "images/portlet.png").required();
 
-	private static final ImageData IMG_EDIT = ImageData.readFromClassLoader(
+	private static final ImageData _IMG_EDIT = ImageData.readFromClassLoader(
 		PortletModeImageService.class, "images/edit.png").required();
 
-	private static final ImageData IMG_HELP = ImageData.readFromClassLoader(
+	private static final ImageData _IMG_HELP = ImageData.readFromClassLoader(
 		PortletModeImageService.class, "images/help.png").required();
 
-	private static final ImageData IMG_VIEW = ImageData.readFromClassLoader(
+	private static final ImageData _IMG_VIEW = ImageData.readFromClassLoader(
 		PortletModeImageService.class, "images/view.png").required();
 
-	private Listener listener;
+	private Listener _listener;
 
 }
