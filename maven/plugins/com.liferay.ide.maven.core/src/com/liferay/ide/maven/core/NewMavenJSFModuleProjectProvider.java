@@ -161,7 +161,8 @@ public class NewMavenJSFModuleProjectProvider
 		boolean liferayWorkspace = LiferayWorkspaceUtil.isValidWorkspaceLocation(path);
 
 		if (liferayWorkspace) {
-			retval = LiferayMavenCore.createErrorStatus("Can't set WorkspaceProject root folder as project directory.");
+			retval = LiferayMavenCore.createErrorStatus(
+				"Can not set WorkspaceProject root folder as project directory.");
 
 			File workspaceDir = LiferayWorkspaceUtil.getWorkspaceDir(path.toFile());
 
@@ -188,7 +189,7 @@ public class NewMavenJSFModuleProjectProvider
 				}
 			}
 			else {
-				return LiferayMavenCore.createErrorStatus("The Liferay Workspace wasn't defined wars folder path.");
+				return LiferayMavenCore.createErrorStatus("The Liferay Workspace was not defined wars folder path.");
 			}
 		}
 
@@ -282,7 +283,7 @@ public class NewMavenJSFModuleProjectProvider
 			projectLocation = location.append(artifactId);
 
 			if (FileUtil.notExists(projectLocation)) {
-				throw new CoreException(LiferayCore.createErrorStatus("Can't create gradle JSF project. "));
+				throw new CoreException(LiferayCore.createErrorStatus("Can not create gradle JSF project. "));
 			}
 		}
 		catch (Exception e) {

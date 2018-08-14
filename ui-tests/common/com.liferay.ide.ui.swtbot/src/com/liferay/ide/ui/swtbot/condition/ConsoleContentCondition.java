@@ -36,7 +36,7 @@ public class ConsoleContentCondition implements ICondition {
 
 	@Override
 	public String getFailureMessage() {
-		return "Console doesn't contain " + _content + ". The last content is " + _lastContent;
+		return "Console does not contain " + _content + ". The last content is " + _lastContent;
 	}
 
 	@Override

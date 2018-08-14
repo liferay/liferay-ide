@@ -147,7 +147,7 @@ public class LiferayMavenModuleProjectProvider
 		catch (Exception e) {
 			ProjectCore.logError(e);
 
-			retval = ProjectCore.createErrorStatus("can't create module project.", e);
+			retval = ProjectCore.createErrorStatus("can not create module project.", e);
 		}
 
 		return retval;

@@ -85,7 +85,7 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 					protected IStatus run(IProgressMonitor monitor) {
 						try {
 							if (plugin == null) {
-								return ProjectUI.createErrorStatus("Can't find any plugins for " + getMavenGoals());
+								return ProjectUI.createErrorStatus("Can not find any plugins for " + getMavenGoals());
 							}
 
 							monitor.beginTask(getMavenGoals(), 100);

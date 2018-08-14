@@ -64,7 +64,7 @@ public interface Messages {
 	public static final String CREATE_NEW_PROJECT_AS_LIFERAY_PLUGIN =
 		"Create a new project configured as a Liferay plugin";
 
-	public static final String DIRECTORY_DOESNT_EXIST = "Directory doesn't exist.";
+	public static final String DIRECTORY_DOESNT_EXIST = "Directory does not exist.";
 
 	public static final String ENTER_A_NAME_AND_CHOOSE_A_TEMPLATE_FOR_A_NEW_LIFERAY_MODULE =
 		"Enter a name and choose a template to use for a new Liferay module.";
@@ -80,7 +80,7 @@ public interface Messages {
 
 	public static final String HOST_OSGI_BUNDLE_MUST_BE_SPECIFIED = "Host OSGi Bundle must be specified";
 
-	public static final String ID_CANNT_BE_EMPTY = "Id can't be empty.";
+	public static final String ID_CANNT_BE_EMPTY = "Id can not be empty.";
 
 	public static final String IMPORT_AN_EXISTING_LIFERAY_WORKSPACE_PROJECT = "Import an existing Liferay Workspace";
 

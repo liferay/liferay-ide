@@ -56,7 +56,7 @@ public class ServerSupport extends SupportBase {
 		File bundle = envAction.getBundleFile(_bundle.getBundleZip());
 
 		Assert.assertTrue(
-			"Bundle zip " + _bundle.getBundleZip() + " doesn't exist in " + envAction.getBundlesPath(),
+			"Bundle zip " + _bundle.getBundleZip() + " does not exist in " + envAction.getBundlesPath(),
 			bundle.exists());
 	}
 

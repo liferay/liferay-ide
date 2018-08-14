@@ -363,7 +363,7 @@ public class NewMavenPluginProjectProvider
 
 					if (projectName.equals(name)) {
 						retval = LiferayMavenCore.createErrorStatus(
-							"The project name \"" + projectName + "\" can't be the same as the parent.");
+							"The project name \"" + projectName + "\" can not be the same as the parent.");
 					}
 					else {
 						IPath newProjectPath = path.append(projectName);
