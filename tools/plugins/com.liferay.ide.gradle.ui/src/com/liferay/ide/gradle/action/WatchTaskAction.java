@@ -21,6 +21,7 @@ import com.liferay.ide.gradle.ui.GradleUI;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.gogo.GogoTelnetClient;
+import com.liferay.ide.server.core.portal.PortalServerBehavior;
 import com.liferay.ide.ui.action.AbstractObjectAction;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -38,12 +39,14 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobManager;
@@ -54,6 +57,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IDecoratorManager;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Terry Jia
@@ -64,15 +68,19 @@ public class WatchTaskAction extends AbstractObjectAction {
 	@Override
 	public void run(IAction action) {
 		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection)fSelection).toArray();
+			Object[] elements = ((IStructuredSelection)fSelection).toArray();
 
-			Object elem = elems[0];
-
-			if (!(elem instanceof IProject)) {
+			if (ListUtil.isEmpty(elements)) {
 				return;
 			}
 
-			IProject project = (IProject)elem;
+			Object element = elements[0];
+
+			if (!(element instanceof IProject)) {
+				return;
+			}
+
+			IProject project = (IProject)element;
 
 			String jobName = project.getName() + " - watch";
 
@@ -98,6 +106,16 @@ public class WatchTaskAction extends AbstractObjectAction {
 							project, new String[] {"watch"}, new String[] {"--continuous"}, monitor);
 
 						_refreshDecorator();
+
+						Stream.of(
+							ServerCore.getServers()
+						).map(
+							server -> (PortalServerBehavior)server.loadAdapter(PortalServerBehavior.class, monitor)
+						).filter(
+							serverBehavior -> serverBehavior != null
+						).forEach(
+							serverBehavior -> serverBehavior.removeWatchProject(project)
+						);
 					}
 					catch (Exception e) {
 						return ProjectUI.createErrorStatus("Error running Gradle watch task for project " + project, e);
@@ -144,6 +162,20 @@ public class WatchTaskAction extends AbstractObjectAction {
 					@Override
 					public void running(IJobChangeEvent event) {
 						_refreshDecorator();
+					}
+
+					@Override
+					public void scheduled(IJobChangeEvent event) {
+						Stream.of(
+							ServerCore.getServers()
+						).map(
+							server -> (PortalServerBehavior)server.loadAdapter(
+								PortalServerBehavior.class, new NullProgressMonitor())
+						).filter(
+							serverBehavior -> serverBehavior != null
+						).forEach(
+							serverBehavior -> serverBehavior.addWatchProject(project)
+						);
 					}
 
 				});
@@ -206,14 +238,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 		IDecoratorManager decoratorManager = workbench.getDecoratorManager();
 
-		UIUtil.async(
-			new Runnable() {
-
-				public void run() {
-					decoratorManager.update("com.liferay.ide.gradle.ui.watchDecorator");
-				}
-
-			});
+		UIUtil.async(() -> decoratorManager.update("com.liferay.ide.gradle.ui.watchDecorator"));
 	}
 
 }

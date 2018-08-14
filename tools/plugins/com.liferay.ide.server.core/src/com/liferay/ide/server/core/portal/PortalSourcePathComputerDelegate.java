@@ -16,10 +16,12 @@ package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
@@ -35,12 +37,12 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.sourcelookup.containers.JavaSourcePathComputer;
-import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerUtil;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 
@@ -53,6 +55,33 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 		List<ISourceContainer> sourceContainers = new ArrayList<>();
 
 		IServer server = ServerUtil.getServer(configuration);
+
+		PortalServerBehavior behavior = (PortalServerBehavior)server.loadAdapter(PortalServerBehavior.class, monitor);
+
+		Set<IProject> watchProjects = behavior.getWatchProjects();
+
+		Stream<IProject> stream = watchProjects.stream();
+
+		stream.map(
+			project ->  JavaCore.create(project)
+		).filter(
+			javaProject -> javaProject != null
+		).forEach(
+			javaProject -> _addSourceContainers(configuration, monitor, sourceContainers, javaProject.getProject())
+		);
+
+		Stream.of(
+			CoreUtil.getAllProjects()
+		).map(
+			project -> LiferayCore.create(IWorkspaceProject.class, project)
+		).filter(
+			workspaceProject -> workspaceProject != null
+		).flatMap(
+			workspaceProject -> workspaceProject.getChildProjects().stream()
+		).forEach(
+			liferayProject -> _addSourceContainers(
+				configuration, monitor, sourceContainers, liferayProject.getProject())
+		);
 
 		IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, server);
 
@@ -70,9 +99,9 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 			}
 		}
 
-		Stream<IModule> moduleStream = Stream.of(server.getModules());
-
-		moduleStream.map(
+		Stream.of(
+			server.getModules()
+		).map(
 			module -> LiferayCore.create(module.getProject())
 		).filter(
 			liferayProject -> liferayProject != null
@@ -110,11 +139,13 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 
 			ISourceContainer[] computedSourceContainers = super.computeSourceContainers(sourceLookupConfig, monitor);
 
-			Stream<ISourceContainer> stream = Stream.of(computedSourceContainers);
-
-			stream.filter(
-				computedSourceContainer -> !sourceContainers.contains(
-					computedSourceContainer)).forEach(sourceContainers::add);
+			Stream.of(
+				computedSourceContainers
+			).filter(
+				computedSourceContainer -> !sourceContainers.contains(computedSourceContainer)
+			).forEach(
+				sourceContainers::add
+			);
 		}
 		catch (CoreException ce) {
 			LiferayServerCore.logError("Unable to add source container for project " + projectName, ce);

@@ -15,18 +15,25 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.BaseLiferayProject;
+import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayPortal;
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.core.JavaCore;
 
 /**
  * @author Simon Jiang
@@ -40,8 +47,6 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 	@Override
 	public <T> T adapt(Class<T> adapterType) {
 		if (ILiferayPortal.class.equals(adapterType)) {
-
-			// check for bundles/ directory
 
 			IFolder bundlesFolder = getProject().getFolder("bundles");
 
@@ -72,4 +77,43 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 		return Collections.emptyList();
 	}
 
+	@Override
+	public List<ILiferayProject> getChildProjects() {
+
+		IProject workspaceProject = getProject();
+
+		if ( workspaceProject == null) {
+			return null;
+		}
+
+		IPath workspaceLocation = workspaceProject.getLocation();
+		IProject[] allProjects = CoreUtil.getAllProjects();
+
+		List<ILiferayProject> liferayProjects = Stream.of(
+			allProjects
+		).filter(
+			project -> !project.equals(workspaceProject)
+		).map(
+			project -> LiferayCore.create(IBundleProject.class, project)
+		).filter(
+			bundleProject -> bundleProject != null
+		).filter(
+			bundleProject -> {
+				IProject project = bundleProject.getProject();
+
+				if (workspaceLocation.isPrefixOf(project.getRawLocation()) && (JavaCore.create(project) != null) &&
+						project.isAccessible()) {
+					return true;
+				}
+
+				return false;
+			}
+		).map(
+			project -> LiferayCore.create(project)
+		).collect(
+			Collectors.toList()
+		);
+
+		return liferayProjects;
+	}
 }

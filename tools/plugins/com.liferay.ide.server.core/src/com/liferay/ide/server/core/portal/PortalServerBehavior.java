@@ -35,7 +35,9 @@ import java.nio.file.Files;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 
@@ -55,6 +57,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.debug.core.sourcelookup.AbstractSourceLookupDirector;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
@@ -73,12 +76,13 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
  * @author Terry Jia
  */
 @SuppressWarnings({"restriction", "rawtypes"})
-public class PortalServerBehavior
-	extends ServerBehaviourDelegate implements ILiferayServerBehavior, IJavaLaunchConfigurationConstants {
+public class PortalServerBehavior extends ServerBehaviourDelegate
+	implements ILiferayServerBehavior, IJavaLaunchConfigurationConstants {
 
 	public static final String ATTR_STOP = "stop-server";
 
 	public PortalServerBehavior() {
+		_watchProjects = new LinkedHashSet<IProject>();
 	}
 
 	public void addProcessListener(IProcess newProcess) {
@@ -108,6 +112,19 @@ public class PortalServerBehavior
 		debugPlugin.addDebugEventListener(_processListener);
 	}
 
+	public void addWatchProject(IProject project) {
+		if (IServer.STATE_STARTED == getServer().getServerState()) {
+			_watchProjects.add(project);
+
+			try {
+				_refreshSourceLookup();
+			}
+			catch (CoreException ce) {
+				LiferayServerCore.logError("Could not reinitialize source lookup director", ce);
+			}
+		}
+	}
+
 	@Override
 	public boolean canRestartModule(IModule[] modules) {
 		for (IModule module : modules) {
@@ -130,6 +147,7 @@ public class PortalServerBehavior
 	public void cleanup() {
 		if (_ping != null) {
 			_ping.stop();
+
 			_ping = null;
 		}
 
@@ -142,6 +160,8 @@ public class PortalServerBehavior
 		}
 
 		setServerState(IServer.STATE_STOPPED);
+
+		_watchProjects.clear();
 	}
 
 	public GogoBundleDeployer createBundleDeployer() throws Exception {
@@ -161,6 +181,10 @@ public class PortalServerBehavior
 
 	public IAdaptable getInfo() {
 		return _info;
+	}
+
+	public Set<IProject> getWatchProjects() {
+		return _watchProjects;
 	}
 
 	public void launchServer(ILaunch launch, String mode, IProgressMonitor monitor) throws CoreException {
@@ -236,6 +260,19 @@ public class PortalServerBehavior
 		modules.add(module);
 
 		publish(IServer.PUBLISH_FULL, modules, null, info);
+	}
+
+	public void removeWatchProject(IProject project) {
+		if (IServer.STATE_STARTED == getServer().getServerState()) {
+			_watchProjects.remove(project);
+
+			try {
+				_refreshSourceLookup();
+			}
+			catch (CoreException ce) {
+				LiferayServerCore.logError("Could not reinitialize source lookup director", ce);
+			}
+		}
 	}
 
 	public void setModulePublishState2(IModule[] module, int state) {
@@ -378,6 +415,7 @@ public class PortalServerBehavior
 	public void stop(boolean force) {
 		if (force) {
 			terminate();
+
 			return;
 		}
 
@@ -390,6 +428,7 @@ public class PortalServerBehavior
 		}
 		else if (state == IServer.STATE_STARTING) {
 			terminate();
+
 			return;
 		}
 
@@ -824,6 +863,26 @@ public class PortalServerBehavior
 		oldCpEntries.add(cpEntry);
 	}
 
+	private void _refreshSourceLookup() throws CoreException {
+		ILaunch launch = getServer().getLaunch();
+		ILaunchConfiguration launchConfiguration = getServer().getLaunchConfiguration(false, new NullProgressMonitor());
+
+		if (launchConfiguration != null) {
+			AbstractSourceLookupDirector abstractSourceLookupDirector =
+				(AbstractSourceLookupDirector)launch.getSourceLocator();
+
+			String memento = launchConfiguration.getAttribute(
+				ILaunchConfiguration.ATTR_SOURCE_LOCATOR_MEMENTO, (String)null);
+
+			if (memento != null) {
+				abstractSourceLookupDirector.initializeFromMemento(memento);
+			}
+			else {
+				abstractSourceLookupDirector.initializeDefaults(launchConfiguration);
+			}
+		}
+	}
+
 	private void _replaceJREConatiner(List<IRuntimeClasspathEntry> oldCp, IRuntimeClasspathEntry newJRECp) {
 		int size = oldCp.size();
 
@@ -836,6 +895,7 @@ public class PortalServerBehavior
 
 			if (entry2PathSeg2.isPrefixOf(newJRECp.getPath())) {
 				oldCp.set(i, newJRECp);
+
 				return;
 			}
 		}
@@ -899,5 +959,6 @@ public class PortalServerBehavior
 	private IAdaptable _info;
 	private transient PingThread _ping = null;
 	private transient IDebugEventSetListener _processListener;
+	private Set<IProject> _watchProjects;
 
 }
