@@ -21,6 +21,7 @@ import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.wst.common.snippets.core.ISnippetItem;
 import org.eclipse.wst.common.snippets.internal.ui.EntrySerializer;
@@ -49,7 +50,9 @@ public abstract class AbstractSnippetInsertion extends DefaultSnippetInsertion {
 			return;
 		}
 
-		boolean simpleText = TextTransfer.getInstance().isSupportedType(event.dataType);
+		TextTransfer textTransfer = TextTransfer.getInstance();
+
+		boolean simpleText = textTransfer.isSupportedType(event.dataType);
 
 		if (simpleText) {
 
@@ -57,7 +60,9 @@ public abstract class AbstractSnippetInsertion extends DefaultSnippetInsertion {
 
 			SnippetsUIPlugin plugin = SnippetsUIPlugin.getDefault();
 
-			IWorkbenchWindow window = plugin.getWorkbench().getActiveWorkbenchWindow();
+			IWorkbench workbench = plugin.getWorkbench();
+
+			IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
 
 			Shell shell = null;
 
@@ -93,7 +98,9 @@ public abstract class AbstractSnippetInsertion extends DefaultSnippetInsertion {
 			 * itself as the data. The drop action must use this to prompt the
 			 * user for the correct insertion data
 			 */
-			event.data = EntrySerializer.getInstance().toXML(item);
+			EntrySerializer serializer = EntrySerializer.getInstance();
+
+			event.data = serializer.toXML(item);
 		}
 
 		if (Platform.OS_LINUX.equals(Platform.getOS())) {

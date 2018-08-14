@@ -17,6 +17,7 @@ package com.liferay.ide.ui.snippets;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,6 +28,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IStorageEditorInput;
@@ -58,8 +61,13 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 			replaceUIText(composite, Msgs.variableUppercase, Msgs.attributeUppercase);
 		}
 
-		fTableViewer.getTable().getColumns()[0].setText(Msgs.attributeName);
-		fTableViewer.getTable().redraw();
+		Table table = fTableViewer.getTable();
+
+		TableColumn column = table.getColumns()[0];
+
+		column.setText(Msgs.attributeName);
+
+		table.redraw();
 
 		return control;
 	}
@@ -76,7 +84,7 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 			Matcher m1 = _p1.matcher(text);
 
 			while (m1.matches()) {
-				text = m1.replaceFirst(m1.group(1) + m1.group(2).toUpperCase() + m1.group(3));
+				text = m1.replaceFirst(m1.group(1) + StringUtil.toUpperCase(m1.group(2)) + m1.group(3));
 
 				m1 = _p1.matcher(text);
 			}
@@ -85,6 +93,7 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 			text = text.replaceAll("</([a-zA-Z]+):", "</@$1\\.");
 
 			setPreparedText(text);
+
 			return;
 		}
 
@@ -104,15 +113,19 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 			if (child instanceof Label) {
 				Label label = (Label)child;
 
-				if (label.getText() != null) {
-					label.setText(label.getText().replaceAll(search, replace));
+				String labelContent = label.getText();
+
+				if (labelContent != null) {
+					label.setText(labelContent.replaceAll(search, replace));
 				}
 			}
 			else if (child instanceof Text) {
 				Text text = (Text)child;
 
-				if (text.getText() != null) {
-					text.setText(text.getText().replaceAll(search, replace));
+				String textContent = text.getText();
+
+				if (textContent != null) {
+					text.setText(textContent.replaceAll(search, replace));
 				}
 			}
 			else if (child instanceof Composite) {
@@ -129,7 +142,7 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 
 			IStorage storage = input.getStorage();
 
-			if (storage.getName().endsWith(".ftl")) {
+			if (StringUtil.endsWith(storage.getName(), ".ftl")) {
 				return true;
 			}
 		}
@@ -149,13 +162,13 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 		String text = fItem.getContentString();
 		ISnippetVariable[] variables = fItem.getVariables();
 
-		for (int i = 0; i < variables.length; i++) {
-			String value = (String)fTableViewer.getColumnData()[1].get(((SnippetVariable)variables[i]).getId());
+		for (ISnippetVariable variable : variables) {
+			String value = (String)fTableViewer.getColumnData()[1].get(((SnippetVariable)variable).getId());
 
 			if (!CoreUtil.isNullOrEmpty(value)) {
-				value = StringPool.SPACE + variables[i].getName() + "=\"" + value + StringPool.DOUBLE_QUOTE;
+				value = StringPool.SPACE + variable.getName() + "=\"" + value + StringPool.DOUBLE_QUOTE;
 
-				text = StringUtils.replace(text, "${" + variables[i].getName() + "}", value);
+				text = StringUtils.replace(text, "${" + variable.getName() + "}", value);
 			}
 		}
 

@@ -69,6 +69,7 @@ public abstract class ModelSnippetInsertion extends AbstractSnippetInsertion {
 		WizardDialog dialog = new WizardDialog(host, wizard);
 
 		dialog.setBlockOnOpen(true);
+
 		int retval = dialog.open();
 
 		if (retval == Window.OK) {
