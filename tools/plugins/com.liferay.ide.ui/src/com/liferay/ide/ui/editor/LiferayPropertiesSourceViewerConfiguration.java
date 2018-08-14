@@ -30,6 +30,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.net.URI;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -92,12 +94,11 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 
 			PropKey[] keys = null;
 
-			if ((appServerPortalDir != null) && appServerPortalDir.toFile().exists()) {
+			if (FileUtil.exists(appServerPortalDir)) {
 				IPath portalImplPath = appServerPortalDir.append("WEB-INF/lib/portal-impl.jar");
 
 				if (FileUtil.exists(portalImplPath)) {
-					try(JarFile jar = new JarFile(portalImplPath.toFile())) {
-
+					try (JarFile jar = new JarFile(portalImplPath.toFile())) {
 						ZipEntry lang = jar.getEntry(propertiesEntry);
 
 						keys = _parseKeys(jar.getInputStream(lang));
@@ -171,10 +172,10 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 	private IPath _getAppServerPortalDir(IEditorInput input) {
 		IPath retval = null;
 
-		IFile ifile = input.getAdapter(IFile.class);
+		IFile iFile = input.getAdapter(IFile.class);
 
-		if (ifile != null) {
-			ILiferayProject project = LiferayCore.create(ifile.getProject());
+		if (iFile != null) {
+			ILiferayProject project = LiferayCore.create(iFile.getProject());
 
 			if (project != null) {
 				ILiferayPortal portal = project.adapt(ILiferayPortal.class);
@@ -190,12 +191,16 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 			if ((file == null) && input instanceof FileStoreEditorInput) {
 				FileStoreEditorInput fInput = (FileStoreEditorInput)input;
 
-				file = new File(fInput.getURI().getPath());
+				URI uri = fInput.getURI();
+
+				file = new File(uri.getPath());
 			}
 
-			if ((file != null) && file.exists()) {
+			if (FileUtil.exists(file)) {
 				try {
-					IPath propsParentPath = new Path(file.getParentFile().getCanonicalPath());
+					File parent = file.getParentFile();
+
+					IPath propsParentPath = new Path(parent.getCanonicalPath());
 
 					for (IRuntime runtime : ServerCore.getRuntimes()) {
 						if (propsParentPath.equals(runtime.getLocation()) ||
@@ -221,7 +226,7 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 	private String _getPropertiesEntry(IEditorInput input) {
 		String retval = null;
 
-		if (input.getName().equals("system-ext.properties")) {
+		if ("system-ext.properties".equals(input.getName())) {
 			retval = "system.properties";
 		}
 		else {
@@ -234,8 +239,7 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 	private boolean _isHookProject(IProject project) {
 		IWebProject webProject = LiferayCore.create(IWebProject.class, project);
 
-		if ((webProject != null) &&
-				(webProject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE) != null)) {
+		if ((webProject != null) && (webProject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE) != null)) {
 			return true;
 		}
 
@@ -247,7 +251,7 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 
 		PortalPropertiesConfiguration config = new PortalPropertiesConfiguration();
 
-		try{
+		try {
 			config.load(inputStream);
 		}
 		finally {
@@ -258,7 +262,9 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 		PropertiesConfigurationLayout layout = config.getLayout();
 
 		while (keys.hasNext()) {
-			String key = keys.next().toString();
+			Object o = keys.next();
+
+			String key = o.toString();
 
 			String comment = layout.getComment(key);
 
@@ -273,7 +279,9 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 
 				@Override
 				public int compare(PropKey o1, PropKey o2) {
-					return o1.getKey().compareTo(o2.getKey());
+					String o1key = o1.getKey();
+
+					return o1key.compareTo(o2.getKey());
 				}
 
 			});
