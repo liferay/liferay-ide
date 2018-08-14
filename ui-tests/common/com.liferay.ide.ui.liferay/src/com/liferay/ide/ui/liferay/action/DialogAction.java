@@ -165,7 +165,14 @@ public class DialogAction extends UIAction {
 		public void addLocation(String updatesiteUrl) {
 			_addRepositoryDialog.setLocation(updatesiteUrl);
 
-			_addRepositoryDialog.clickAddBtn();
+			String eclipseZipName = System.getProperty("eclipse.zip.name");
+
+			if (eclipseZipName.contains("oxygen")) {
+				_addRepositoryDialog.clickConfirmBtn();
+			}
+			else {
+				_addRepositoryDialog.clickAddBtn();
+			}
 		}
 
 		private final AddRepositoryDialog _addRepositoryDialog = new AddRepositoryDialog(bot);
