@@ -87,7 +87,7 @@ public class GogoBundleDeployer {
 
 					IStatus status;
 
-					if (getBundleState(bsn) == Bundle.ACTIVE) {
+					if (_getBundleState(bsn) == Bundle.ACTIVE) {
 						status = LiferayServerCore.createWarningStatus(startStatus);
 					}
 					else {
@@ -118,7 +118,7 @@ public class GogoBundleDeployer {
 				if (startStatus != null) {
 					IStatus status;
 
-					if (getBundleState(bsn) == Bundle.ACTIVE) {
+					if (_getBundleState(bsn) == Bundle.ACTIVE) {
 						status = LiferayServerCore.createWarningStatus(startStatus);
 					}
 					else {
@@ -148,24 +148,6 @@ public class GogoBundleDeployer {
 		for (BundleDTO bundle : bundles) {
 			if (bundle.symbolicName.equals(bsn)) {
 				return bundle.id;
-			}
-		}
-
-		return -1;
-	}
-
-	public int getBundleState(String bsn) throws IOException {
-		String result = run("lb -s " + bsn, true);
-
-		if ("No matching bundles found".equals(result)) {
-			return -1;
-		}
-
-		BundleDTO[] bundles = _parseBundleInfos(result);
-
-		for (BundleDTO bundle : bundles) {
-			if (bundle.symbolicName.equals(bsn)) {
-				return bundle.state;
 			}
 		}
 
@@ -303,6 +285,24 @@ public class GogoBundleDeployer {
 
 	public String update(long id, String url) throws IOException {
 		return run("update " + id + " " + url, true);
+	}
+
+	private int _getBundleState(String bsn) throws IOException {
+		String result = run("lb -s " + bsn, true);
+
+		if ("No matching bundles found".equals(result)) {
+			return -1;
+		}
+
+		BundleDTO[] bundlesDTOs = _parseBundleInfos(result);
+
+		for (BundleDTO bundleDTO : bundlesDTOs) {
+			if (bundleDTO.symbolicName.equals(bsn)) {
+				return bundleDTO.state;
+			}
+		}
+
+		return -1;
 	}
 
 	private static int _getState(String state) {
