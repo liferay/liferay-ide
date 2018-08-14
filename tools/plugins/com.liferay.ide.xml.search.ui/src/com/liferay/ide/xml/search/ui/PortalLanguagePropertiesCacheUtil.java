@@ -16,6 +16,7 @@ package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
@@ -23,8 +24,9 @@ import com.liferay.ide.server.core.portal.PortalBundle;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
-import java.util.WeakHashMap;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
@@ -78,8 +80,8 @@ public class PortalLanguagePropertiesCacheUtil {
 			retval = _languagePortalMap.get(appServerPortalDir);
 
 			if (retval == null) {
-				if ((appServerPortalDir != null) && appServerPortalDir.toFile().exists()) {
-					jar = new JarFile(appServerPortalDir.append("WEB-INF/lib/portal-impl.jar").toFile());
+				if (FileUtil.exists(appServerPortalDir)) {
+					jar = new JarFile(FileUtil.getFile(appServerPortalDir.append("WEB-INF/lib/portal-impl.jar")));
 
 					ZipEntry lang = jar.getEntry("content/Language.properties");
 
@@ -116,6 +118,6 @@ public class PortalLanguagePropertiesCacheUtil {
 		return retval;
 	}
 
-	private static final WeakHashMap<IPath, Properties> _languagePortalMap = new WeakHashMap<>();
+	private static final Map<IPath, Properties> _languagePortalMap = new HashMap<>();
 
 }
