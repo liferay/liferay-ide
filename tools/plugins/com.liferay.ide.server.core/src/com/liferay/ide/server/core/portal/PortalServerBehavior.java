@@ -76,14 +76,13 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
  * @author Terry Jia
  */
 @SuppressWarnings({"restriction", "rawtypes"})
-public class PortalServerBehavior
-	extends ServerBehaviourDelegate
+public class PortalServerBehavior extends ServerBehaviourDelegate
 	implements ILiferayServerBehavior, IJavaLaunchConfigurationConstants {
 
 	public static final String ATTR_STOP = "stop-server";
 
 	public PortalServerBehavior() {
-		_watchedProjects = new LinkedHashSet<IProject>();
+		_watchProjects = new LinkedHashSet<IProject>();
 	}
 
 	public void addProcessListener(IProcess newProcess) {
@@ -114,14 +113,15 @@ public class PortalServerBehavior
 	}
 
 	public void addWatchProject(IProject project) {
-		try {
-			if (IServer.STATE_STARTED == getServer().getServerState()) {
-				_watchedProjects.add(project);
+		if (IServer.STATE_STARTED == getServer().getServerState()) {
+			_watchProjects.add(project);
+
+			try {
 				_refreshSourceLookup();
 			}
-		}
-		catch (CoreException ce) {
-			LiferayServerCore.logError("Could not reinitialize source lookup director", ce);
+			catch (CoreException ce) {
+				LiferayServerCore.logError("Could not reinitialize source lookup director", ce);
+			}
 		}
 	}
 
@@ -161,7 +161,7 @@ public class PortalServerBehavior
 
 		setServerState(IServer.STATE_STOPPED);
 
-		_watchedProjects.clear();
+		_watchProjects.clear();
 	}
 
 	public GogoBundleDeployer createBundleDeployer() throws Exception {
@@ -183,8 +183,8 @@ public class PortalServerBehavior
 		return _info;
 	}
 
-	public Set<IProject> getWatchProject() {
-		return _watchedProjects;
+	public Set<IProject> getWatchProjects() {
+		return _watchProjects;
 	}
 
 	public void launchServer(ILaunch launch, String mode, IProgressMonitor monitor) throws CoreException {
@@ -263,14 +263,15 @@ public class PortalServerBehavior
 	}
 
 	public void removeWatchProject(IProject project) {
-		try {
-			if (IServer.STATE_STARTED == getServer().getServerState()) {
-				_watchedProjects.remove(project);
+		if (IServer.STATE_STARTED == getServer().getServerState()) {
+			_watchProjects.remove(project);
+
+			try {
 				_refreshSourceLookup();
 			}
-		}
-		catch (CoreException ce) {
-			LiferayServerCore.logError("Could not reinitialize source lookup director", ce);
+			catch (CoreException ce) {
+				LiferayServerCore.logError("Could not reinitialize source lookup director", ce);
+			}
 		}
 	}
 
@@ -867,16 +868,17 @@ public class PortalServerBehavior
 		ILaunchConfiguration launchConfiguration = getServer().getLaunchConfiguration(false, new NullProgressMonitor());
 
 		if (launchConfiguration != null) {
-			AbstractSourceLookupDirector sourceLocator = (AbstractSourceLookupDirector)launch.getSourceLocator();
+			AbstractSourceLookupDirector abstractSourceLookupDirector =
+				(AbstractSourceLookupDirector)launch.getSourceLocator();
 
 			String memento = launchConfiguration.getAttribute(
 				ILaunchConfiguration.ATTR_SOURCE_LOCATOR_MEMENTO, (String)null);
 
 			if (memento != null) {
-				sourceLocator.initializeFromMemento(memento);
+				abstractSourceLookupDirector.initializeFromMemento(memento);
 			}
 			else {
-				sourceLocator.initializeDefaults(launchConfiguration);
+				abstractSourceLookupDirector.initializeDefaults(launchConfiguration);
 			}
 		}
 	}
@@ -957,6 +959,6 @@ public class PortalServerBehavior
 	private IAdaptable _info;
 	private transient PingThread _ping = null;
 	private transient IDebugEventSetListener _processListener;
-	private Set<IProject> _watchedProjects;
+	private Set<IProject> _watchProjects;
 
 }

@@ -48,8 +48,6 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 	public <T> T adapt(Class<T> adapterType) {
 		if (ILiferayPortal.class.equals(adapterType)) {
 
-			// check for bundles/ directory
-
 			IFolder bundlesFolder = getProject().getFolder("bundles");
 
 			if (FileUtil.exists(bundlesFolder)) {
@@ -88,24 +86,26 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 			return null;
 		}
 
-		IPath worksapceLocation = workspaceProject.getLocation();
+		IPath workspaceLocation = workspaceProject.getLocation();
 		IProject[] allProjects = CoreUtil.getAllProjects();
 
 		List<ILiferayProject> liferayProjects = Stream.of(
 			allProjects
 		).filter(
-			project -> {
-				if ( !project.equals(workspaceProject)) {
-					IBundleProject liferayProject = LiferayCore.create(IBundleProject.class,project);
- 
-					if ( (liferayProject != null) && worksapceLocation.isPrefixOf(project.getLocation()) &&
-							(JavaCore.create(project) != null) &&  project.isAccessible() ) {
-						return true;
-					}
-					else {
-						return false;
-					}
+			project -> !project.equals(workspaceProject)
+		).map(
+			project -> LiferayCore.create(IBundleProject.class, project)
+		).filter(
+			bundleProject -> bundleProject != null
+		).filter(
+			bundleProject -> {
+				IProject project = bundleProject.getProject();
+
+				if (workspaceLocation.isPrefixOf(project.getRawLocation()) && (JavaCore.create(project) != null) &&
+						project.isAccessible()) {
+					return true;
 				}
+
 				return false;
 			}
 		).map(

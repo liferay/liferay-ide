@@ -14,7 +14,6 @@
 
 package com.liferay.ide.server.core.portal;
 
-import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -59,11 +58,11 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 
 		PortalServerBehavior behavior = (PortalServerBehavior)server.loadAdapter(PortalServerBehavior.class, monitor);
 
-		Set<IProject> watchProjects = behavior.getWatchProject();
+		Set<IProject> watchProjects = behavior.getWatchProjects();
 
-		Stream<IProject> watchStreamProjects = watchProjects.stream();
+		Stream<IProject> stream = watchProjects.stream();
 
-		watchStreamProjects.map(
+		stream.map(
 			project ->  JavaCore.create(project)
 		).filter(
 			javaProject -> javaProject != null
@@ -71,25 +70,17 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 			javaProject -> _addSourceContainers(configuration, monitor, sourceContainers, javaProject.getProject())
 		);
 
-		IProject[] allProjects = CoreUtil.getAllProjects();
-
 		Stream.of(
-			allProjects
-		).filter(
-			project -> LiferayCore.create(IWorkspaceProject.class, project) != null
+			CoreUtil.getAllProjects()
 		).map(
 			project -> LiferayCore.create(IWorkspaceProject.class, project)
+		).filter(
+			workspaceProject -> workspaceProject != null
+		).flatMap(
+			workspaceProject -> workspaceProject.getChildProjects().stream()
 		).forEach(
-			workspaceProjct -> {
-				List<ILiferayProject> childProjects = workspaceProjct.getChildProjects();
-
-				Stream<ILiferayProject> streamProjects  = childProjects.stream();
-
-				streamProjects.forEach(
-					liferayProject ->
-						_addSourceContainers(configuration, monitor, sourceContainers, liferayProject.getProject())
-				);
-			}
+			liferayProject -> _addSourceContainers(
+				configuration, monitor, sourceContainers, liferayProject.getProject())
 		);
 
 		IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, server);

@@ -68,19 +68,19 @@ public class WatchTaskAction extends AbstractObjectAction {
 	@Override
 	public void run(IAction action) {
 		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection)fSelection).toArray();
+			Object[] elements = ((IStructuredSelection)fSelection).toArray();
 
-			if (ListUtil.isEmpty(elems)) {
+			if (ListUtil.isEmpty(elements)) {
 				return;
 			}
 
-			Object elem = elems[0];
+			Object element = elements[0];
 
-			if (!(elem instanceof IProject)) {
+			if (!(element instanceof IProject)) {
 				return;
 			}
 
-			IProject project = (IProject)elem;
+			IProject project = (IProject)element;
 
 			String jobName = project.getName() + " - watch";
 
@@ -110,8 +110,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 						Stream.of(
 							ServerCore.getServers()
 						).map(
-							server -> (PortalServerBehavior)server.loadAdapter(
-								PortalServerBehavior.class, new NullProgressMonitor())
+							server -> (PortalServerBehavior)server.loadAdapter(PortalServerBehavior.class, monitor)
 						).filter(
 							serverBehavior -> serverBehavior != null
 						).forEach(
@@ -165,6 +164,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 						_refreshDecorator();
 					}
 
+					@Override
 					public void scheduled(IJobChangeEvent event) {
 						Stream.of(
 							ServerCore.getServers()
@@ -238,14 +238,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 		IDecoratorManager decoratorManager = workbench.getDecoratorManager();
 
-		UIUtil.async(
-			new Runnable() {
-
-				public void run() {
-					decoratorManager.update("com.liferay.ide.gradle.ui.watchDecorator");
-				}
-
-			});
+		UIUtil.async(() -> decoratorManager.update("com.liferay.ide.gradle.ui.watchDecorator"));
 	}
 
 }
