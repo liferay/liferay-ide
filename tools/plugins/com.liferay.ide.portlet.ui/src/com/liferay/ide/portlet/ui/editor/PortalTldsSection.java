@@ -195,29 +195,6 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		}
 	}
 
-	/**
-	public void modelsChanged(PluginModelDelta delta) {
-		fImports = null;
-		final Control control = fImportViewer.getControl();
-
-		if (!control.isDisposed()) {
-		Runable run = new Runnable() {
-
-				public void run() {
-					if (!control.isDisposed()) {
-						fImportViewer.refresh();
-					}
-				}
-
-		};
-
-		control.getDisplay().asyncExec(run);
-		}
-	}
-
-	 */
-	private Action _fAddAction;
-
 	public void propertyChange(PropertyChangeEvent event) {
 
 		// if (fSortAction.equals(event.getSource()) && IAction.RESULT.equals(event.getProperty())) {
@@ -226,14 +203,14 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 
 	}
 
-	// private Action fSortAction;
-
 	public void refresh() {
 		_fTlds = null;
 		_fViewer.refresh();
 
 		super.refresh();
 	}
+
+	// private Action fSortAction;
 
 	public void setFocus() {
 		if (_fViewer != null) {
@@ -568,6 +545,29 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	private static final int _REMOVE_INDEX = 1;
 
 	private static final int _UP_INDEX = 2;
+
+	/**
+	public void modelsChanged(PluginModelDelta delta) {
+		fImports = null;
+		final Control control = fImportViewer.getControl();
+
+		if (!control.isDisposed()) {
+		Runable run = new Runnable() {
+
+				public void run() {
+					if (!control.isDisposed()) {
+						fImportViewer.refresh();
+					}
+				}
+
+		};
+
+		control.getDisplay().asyncExec(run);
+		}
+	}
+
+	 */
+	private Action _fAddAction;
 
 	private Action _fRemoveAction;
 	private Vector<File> _fTlds;
