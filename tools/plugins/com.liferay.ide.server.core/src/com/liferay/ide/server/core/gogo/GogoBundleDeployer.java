@@ -16,6 +16,7 @@ package com.liferay.ide.server.core.gogo;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.BundleDTOWithStatus;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -26,6 +27,7 @@ import java.net.URI;
 import java.net.URL;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IStatus;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.dto.BundleDTO;
@@ -83,7 +85,16 @@ public class GogoBundleDeployer {
 
 					retval.id = bundleId;
 
-					retval = new BundleDTOWithStatus(retval, startStatus);
+					IStatus status;
+
+					if (_getBundleState(bsn) == Bundle.ACTIVE) {
+						status = LiferayServerCore.createWarningStatus(startStatus);
+					}
+					else {
+						status = LiferayServerCore.createErrorStatus("Problem with deploying bundle: " + startStatus);
+					}
+
+					retval = new BundleDTOWithStatus(retval, status);
 				}
 			}
 
@@ -105,7 +116,16 @@ public class GogoBundleDeployer {
 				String startStatus = start(retval.id);
 
 				if (startStatus != null) {
-					retval = new BundleDTOWithStatus(retval, startStatus);
+					IStatus status;
+
+					if (_getBundleState(bsn) == Bundle.ACTIVE) {
+						status = LiferayServerCore.createWarningStatus(startStatus);
+					}
+					else {
+						status = LiferayServerCore.createErrorStatus("Problem with deploying bundle: " + startStatus);
+					}
+
+					retval = new BundleDTOWithStatus(retval, status);
 				}
 			}
 			else {
@@ -265,6 +285,24 @@ public class GogoBundleDeployer {
 
 	public String update(long id, String url) throws IOException {
 		return run("update " + id + " " + url, true);
+	}
+
+	private int _getBundleState(String bsn) throws IOException {
+		String result = run("lb -s " + bsn, true);
+
+		if ("No matching bundles found".equals(result)) {
+			return -1;
+		}
+
+		BundleDTO[] bundlesDTOs = _parseBundleInfos(result);
+
+		for (BundleDTO bundleDTO : bundlesDTOs) {
+			if (bundleDTO.symbolicName.equals(bsn)) {
+				return bundleDTO.state;
+			}
+		}
+
+		return -1;
 	}
 
 	private static int _getState(String state) {

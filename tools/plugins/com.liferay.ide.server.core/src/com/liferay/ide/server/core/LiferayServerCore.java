@@ -32,9 +32,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import java.lang.reflect.Method;
+
 import java.net.URL;
+
 import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -67,6 +71,7 @@ import org.eclipse.wst.server.core.internal.Base;
 import org.eclipse.wst.server.core.internal.IMemento;
 import org.eclipse.wst.server.core.internal.XMLMemento;
 import org.eclipse.wst.server.core.model.RuntimeDelegate;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.prefs.BackingStoreException;
@@ -79,6 +84,9 @@ import org.osgi.service.prefs.BackingStoreException;
 public class LiferayServerCore extends Plugin {
 
 	public static final String BUNDLE_OUTPUT_ERROR_MARKER_TYPE = "com.liferay.ide.server.core.BundleOutputErrorMarker";
+
+	public static final String BUNDLE_OUTPUT_WARNING_MARKER_TYPE =
+		"com.liferay.ide.server.core.BundleOutputWarningMarker";
 
 	public static final String PLUGIN_ID = "com.liferay.ide.server.core";
 
@@ -171,6 +179,7 @@ public class LiferayServerCore extends Plugin {
 
 						pluginDeployer.setFacetId(element.getAttribute("facetId"));
 						pluginDeployer.setRuntimeTypeId(element.getAttribute("runtimeTypeId"));
+
 						deployers.add(pluginDeployer);
 					}
 				}
@@ -202,6 +211,7 @@ public class LiferayServerCore extends Plugin {
 						AbstractPortalBundleFactory portalBundleFactory = (AbstractPortalBundleFactory)o;
 
 						portalBundleFactory.setBundleFactoryType(element.getAttribute("type"));
+
 						bundleFactories.add(portalBundleFactory);
 					}
 				}
@@ -323,6 +333,7 @@ public class LiferayServerCore extends Plugin {
 						AbstractRuntimeDelegateValidator validator = (AbstractRuntimeDelegateValidator)o;
 
 						validator.setRuntimeTypeId(runtimeTypeId);
+
 						validators.add(validator);
 					}
 				}
