@@ -440,6 +440,14 @@ public class LiferayWorkspaceUtil {
 		return false;
 	}
 
+	public static boolean isValidGradleWorkspaceLocation(IPath location) {
+		if (FileUtil.notExists(location)) {
+			return false;
+		}
+
+		return isValidGradleWorkspaceLocation(location.toOSString());
+	}
+
 	public static boolean isValidGradleWorkspaceLocation(String location) {
 		File workspaceDir = new File(location);
 
