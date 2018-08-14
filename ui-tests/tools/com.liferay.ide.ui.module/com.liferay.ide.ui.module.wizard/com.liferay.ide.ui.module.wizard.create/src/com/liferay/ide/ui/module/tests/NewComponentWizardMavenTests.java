@@ -231,24 +231,28 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Ignore("ignore as it may fails but happen unstable, need more research for it")
 	@Test
 	public void createDefaultComponent() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName());
+		wizardAction.newModule.prepareMaven(project.getName(), FORM_FIELD);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		wizardAction.finish();
 
-		String className = "TestComponentDefaultMavenPortlet";
-		String packageName = "test.componentDefault.maven.portlet";
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		String packageName = project.getName() + ".form.field";
 
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(
+				project.getName(), "src/main/java", packageName,
+				project.getCapitalName() + "Portlet.java [Component]"));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
