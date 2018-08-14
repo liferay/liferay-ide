@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(property = {
 	"file.extensions=properties",
-	"problem.title=Convert Process Classes don't support convert.processes Portal Property",
+	"problem.title=Convert Process Classes do not support convert.processes Portal Property",
 	"problem.summary=The implementation class com.liferay.portal.convert.ConvertProcess was renamed com.liferay.port" +
 		"al. convert.BaseConvertProcess. An interface named com.liferay.portal.convert.ConvertProcess was created fo" +
 			"r it. The convert.processes key was removed from portal.properties. Consequentially, ConvertProcess imp" +

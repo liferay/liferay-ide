@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.blade.upgrade.liferay70.apichanges.ConvertProcessProperties">
    <property name="file.extensions" value="properties"/>
-   <property name="problem.title" value="Convert Process Classes don&apos;t support convert.processes Portal Property"/>
+   <property name="problem.title" value="Convert Process Classes do not support convert.processes Portal Property"/>
    <property name="problem.summary" value="The implementation class com.liferay.portal.convert.ConvertProcess was renamed com.liferay.portal. convert.BaseConvertProcess. An interface named com.liferay.portal.convert.ConvertProcess was created for it. The convert.processes key was removed from portal.properties. Consequentially, ConvertProcess implementations must register as OSGi components."/>
    <property name="problem.tickets" value="LPS-50604"/>
    <property name="problem.section" value="#convert-process-classes-are-no-longer-specified-via-the-convert-processes-p"/>
