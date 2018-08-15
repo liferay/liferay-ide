@@ -157,11 +157,11 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public void setSdkLocation(String sdkLocation);
 
-	public String DEFAULT_BUNDLE_URL_70 =
-			"https://releases-cdn.liferay.com/portal/7.0.6-ga7/liferay-ce-portal-tomcat-7.0-ga7-20180507111753223.zip";
+	public String BUNDLE_URL_70 =
+		"https://releases-cdn.liferay.com/portal/7.0.6-ga7/liferay-ce-portal-tomcat-7.0-ga7-20180507111753223.zip";
 
-	public String DEFAULT_BUNDLE_URL_71 =
-			"https://releases-cdn.liferay.com/portal/7.1.0-ga1/liferay-ce-portal-tomcat-7.1.0-ga1-20180703012531655.zip";
+	public String BUNDLE_URL_71 =
+		"https://releases-cdn.liferay.com/portal/7.1.0-ga1/liferay-ce-portal-tomcat-7.1.0-ga1-20180703012531655.zip";
 
 	@Service(impl = BackupLocationValidationService.class)
 	@Type(base = Path.class)
@@ -179,7 +179,7 @@ public interface LiferayUpgradeDataModel extends Element {
 	public ValueProperty PROP_BUNDLE_NAME = new ValueProperty(TYPE, "BundleName");
 
 	// *** DownloadBundle ***
-	@DefaultValue(text = DEFAULT_BUNDLE_URL_71)
+	@DefaultValue(text = BUNDLE_URL_71)
 	@Service(impl = BundleUrlValidationService.class)
 	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, "BundleUrl");
 
