@@ -23,6 +23,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.IOUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
@@ -423,6 +424,14 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 					_checkProjectType(project);
 				}
 
+				IJobManager jobManager = Job.getJobManager();
+
+				jobManager.join("org.eclipse.buildship.core.jobs", null);
+
+				if (SapphireUtil.getContent(dataModel.getDownloadBundle())) {
+					_createInitBundle(monitor, groupMonitor);
+				}
+
 				dataModel.setConvertLiferayWorkspace(true);
 			}
 		}
@@ -637,46 +646,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				}
 
 			});
-	}
-
-	private void _copyNewSDK(IPath targetSDKLocation, IProgressMonitor monitor) throws CoreException {
-		SubMonitor progress = SubMonitor.convert(monitor, 100);
-
-		try {
-			progress.beginTask("Copy new SDK to override target SDK.", 100);
-
-			Bundle projectCoreBundle = Platform.getBundle("com.liferay.ide.project.ui");
-
-			final URL sdkZipUrl = projectCoreBundle.getEntry("resources/sdk70ga2.zip");
-
-			URL fileURL = FileLocator.toFileURL(sdkZipUrl);
-
-			final File sdkZipFile = new File(fileURL.getFile());
-
-			ProjectCore projectCore = ProjectCore.getDefault();
-
-			final IPath stateLocation = projectCore.getStateLocation();
-
-			File stateDir = stateLocation.toFile();
-
-			progress.worked(30);
-
-			ZipUtil.unzip(sdkZipFile, stateDir);
-
-			progress.worked(60);
-
-			IOUtil.copyDirToDir(new File(stateDir, "com.liferay.portal.plugins.sdk-7.0"), targetSDKLocation.toFile());
-
-			progress.worked(100);
-		}
-		catch (Exception e) {
-			ProjectUI.logError(e);
-
-			throw new CoreException(StatusBridge.create(Status.createErrorStatus("Failed copy new SDK..", e)));
-		}
-		finally {
-			progress.done();
-		}
 	}
 
 	private void _createBundleControl() {
@@ -932,9 +901,9 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 		_isCanceled(monitor);
 
-		IPath sdkLocation = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
+		IPath location = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
 
-		IProject project = CoreUtil.getProject(sdkLocation.lastSegment());
+		IProject project = CoreUtil.getProject(location.lastSegment());
 
 		String serverName = SapphireUtil.getContent(dataModel.getBundleName());
 
@@ -1252,28 +1221,27 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 			String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
 
 			for (int i = 0; i < upgradeVersionsValues.length; i++) {
-				if (upgradeVersion != null) {
-					if (upgradeVersion.equals(upgradeVersionsValues[i])) {
-						final int index = i;
-						final String[] bundleUrls = initBundleUrls;
-						UIUtil.async(
-							new Runnable() {
+				if (StringUtil.equals(upgradeVersion, upgradeVersionsValues[i])) {
+					int index = i;
+					String[] bundleUrls = initBundleUrls;
 
-								@Override
-								public void run() {
-									_upgradeVersionComb.select(index);
+					UIUtil.async(
+						new Runnable() {
 
-									if ((_bundleUrlField != null) && !_bundleUrlField.isDisposed()) {
-										_bundleUrlField.setText(bundleUrls[index]);
-									}
+							@Override
+							public void run() {
+								_upgradeVersionComb.select(index);
+
+								if ((_bundleUrlField != null) && !_bundleUrlField.isDisposed()) {
+									_bundleUrlField.setText(bundleUrls[index]);
 								}
+							}
 
-							});
+						});
 
-						dataModel.setBundleUrl(initBundleUrls[i]);
+					dataModel.setBundleUrl(initBundleUrls[i]);
 
-						break;
-					}
+					break;
 				}
 			}
 		}
@@ -1451,9 +1419,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 						layoutValidation = false;
 					}
-					else if (downloadBundle && (bundUrl != null) && (bundUrl.length() > 0) &&
-							 !bundleUrlValidation.ok()) {
-
+					else if (downloadBundle && CoreUtil.isNotNullOrEmpty(bundUrl) && !bundleUrlValidation.ok()) {
 						message = bundleUrlValidation.message();
 
 						layoutValidation = false;
@@ -1561,7 +1527,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 			}
 			else if (LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toPortableString())) {
 				dataModel.setIsLiferayWorkspace(true);
-				dataModel.setDownloadBundle(false);
 				dataModel.setUpgradeVersion(_upgradeVersionItemValuesWorkspace[0]);
 
 				_disposeBundleCheckboxElement();
@@ -1570,7 +1535,8 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				_disposeImportElement();
 
 				_createUpgradeVersionElement();
-				_createImportElement();
+				_createBundleControl();
+
 				_pageParent.layout();
 			}
 			else if (_isMavenProject(path.toPortableString()) &&
