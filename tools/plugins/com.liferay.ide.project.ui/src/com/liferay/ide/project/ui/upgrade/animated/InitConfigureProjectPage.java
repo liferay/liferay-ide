@@ -708,10 +708,10 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 					String input = ((Text)e.getSource()).getText();
 					String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
 
-					String defaultBundleUrl = _defaultBundleUrl70;
+					String defaultBundleUrl = LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL_70;
 
 					if (upgradeVersion.contains("7.1")) {
-						defaultBundleUrl = _defaultBundleUrl71;
+						defaultBundleUrl = LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL_71;
 					}
 
 					if (input.equals(defaultBundleUrl)) {
@@ -726,10 +726,10 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 					String input = ((Text)e.getSource()).getText();
 					String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
 
-					String defaultBundleUrl = _defaultBundleUrl70;
+					String defaultBundleUrl = LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL_70;
 
 					if (upgradeVersion.contains("7.1")) {
-						defaultBundleUrl = _defaultBundleUrl71;
+						defaultBundleUrl = LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL_71;
 					}
 
 					if (CoreUtil.isNullOrEmpty(input)) {
@@ -1450,9 +1450,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 			});
 	}
 
-	private static String _defaultBundleUrl70 = LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL_70;
-	private static String _defaultBundleUrl71 = LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL_71;
-
 	private Text _bundleNameField;
 	private Label _bundleNameLabel;
 	private BundleNameValidationService _bundleNameValidation =
@@ -1468,11 +1465,13 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 	private Label _dirLabel;
 	private Button _downloadBundleCheckbox;
 	private Button _importButton;
-	private String[] _initBundleUrlValues = {_defaultBundleUrl70, _defaultBundleUrl71};
+	private String[] _initBundleUrlValues = {
+		LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL_70, LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL_71
+	};
 	private Composite _pageParent;
 	private ProjectLocationValidationService _sdkValidation =
 		dataModel.getSdkLocation().service(ProjectLocationValidationService.class);
-	private String[] _upgradeVersionBundleUrlValuesWorkspace = {_defaultBundleUrl71};
+	private String[] _upgradeVersionBundleUrlValuesWorkspace = {LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL_71};
 	private Combo _upgradeVersionComb;
 	private String[] _upgradeVersionItemNames = {"7.0", "7.1"};
 	private String[] _upgradeVersionItemNamesWorkspace = {"7.1"};
