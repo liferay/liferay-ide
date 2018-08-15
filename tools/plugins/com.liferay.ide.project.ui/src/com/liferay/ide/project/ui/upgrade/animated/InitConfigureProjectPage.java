@@ -127,7 +127,7 @@ import org.osgi.framework.Bundle;
  * @author Simon Jiang
  * @author Terry Jia
  */
-@SuppressWarnings({"unused", "restriction", "deprecation"})
+@SuppressWarnings({"unused", "restriction"})
 public class InitConfigureProjectPage extends Page implements SelectionChangedListener {
 
 	public InitConfigureProjectPage(final Composite parent, int style, LiferayUpgradeDataModel dataModel) {
@@ -367,7 +367,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 		IPath location = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
 
-		if (_isAlreadyImported(location)) {
+		if (UpgradeUtil.isAlreadyImported(location)) {
 			Stream.of(CoreUtil.getAllProjects()).forEach(this::_checkProjectType);
 
 			dataModel.setImportFinished(true);
@@ -375,11 +375,9 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 			return;
 		}
 
-		_backup();
+		UpgradeUtil.clearExistingProjects(location, groupMonitor);
 
-		_clearExistingProjects(location, groupMonitor);
-
-		_deleteEclipseConfigFiles(location.toFile());
+		UpgradeUtil.deleteEclipseConfigFiles(location.toFile());
 
 		groupMonitor.worked(20);
 
@@ -435,7 +433,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				dataModel.setConvertLiferayWorkspace(true);
 			}
 		}
-		else if (_isMavenProject(location.toPortableString())) {
+		else if (UpgradeUtil.isMavenProject(location)) {
 			ILiferayProjectImporter importer = LiferayCore.getImporter("maven");
 
 			List<IProject> projects = importer.importProjects(locationString, groupMonitor);
@@ -447,17 +445,17 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		else {
 			String newPath = "";
 
-			_createLiferayWorkspace(location, groupMonitor);
+			UpgradeUtil.createLiferayWorkspace(location, groupMonitor);
 
 			_isCanceled(monitor);
 
-			_removeIvyPrivateSetting(location.append("plugins-sdk"));
+			UpgradeUtil.removeIvyPrivateSetting(location.append("plugins-sdk"));
 
-			newPath = _renameProjectFolder(location);
+			newPath = location.toString();
 
 			IPath sdkLocation = new Path(newPath).append("plugins-sdk");
 
-			_deleteSDKLegacyProjects(sdkLocation);
+			UpgradeUtil.deleteSDKLegacyProjects(sdkLocation);
 
 			ILiferayProjectImporter importer = LiferayCore.getImporter("gradle");
 
@@ -475,31 +473,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		}
 
 		dataModel.setImportFinished(true);
-	}
-
-	private void _backup() {
-		Boolean backup = SapphireUtil.getContent(dataModel.getBackupSdk());
-
-		if (!backup) {
-			return;
-		}
-
-		try {
-			org.eclipse.sapphire.modeling.Path originalPath = SapphireUtil.getContent(dataModel.getSdkLocation());
-
-			if (originalPath != null) {
-				IPath backupLocation = PathBridge.create(SapphireUtil.getContent(dataModel.getBackupLocation()));
-
-				FileUtil.mkdirs(backupLocation.toFile());
-
-				IPath backupPath = backupLocation.append("backup.zip");
-
-				ZipUtil.zip(originalPath.toFile(), backupPath.toFile());
-			}
-		}
-		catch (Exception e) {
-			ProjectUI.logError("Error to backup original project folder.", e);
-		}
 	}
 
 	private void _checkProjectType(IProject project) {
@@ -544,60 +517,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		if (ProjectUtil.isWebProject(project)) {
 			dataModel.setHasWeb(true);
 		}
-	}
-
-	private void _clearExistingProjects(IPath location, IProgressMonitor monitor) throws CoreException {
-		IProject sdkProject = SDKUtil.getWorkspaceSDKProject();
-
-		if ((sdkProject != null) && location.equals(sdkProject.getLocation())) {
-			IProject[] projects = ProjectUtil.getAllPluginsSDKProjects();
-
-			for (IProject project : projects) {
-				project.delete(false, true, monitor);
-			}
-
-			sdkProject.delete(false, true, monitor);
-		}
-
-		IProject[] projects = CoreUtil.getAllProjects();
-
-		for (IProject project : projects) {
-			String projectPortableLocation = FileUtil.getLocationPortableString(project);
-
-			if (projectPortableLocation.startsWith(location.toPortableString())) {
-				project.delete(false, true, monitor);
-			}
-		}
-	}
-
-	private boolean _configureProjectValidationExclude(IProject project, boolean disableValidation) {
-		boolean retval = false;
-
-		if (project == null) {
-			return retval;
-		}
-
-		try {
-			ValManager valManager = ValManager.getDefault();
-
-			Validator[] vals = valManager.getValidators(project, true);
-
-			ValidatorMutable[] validators = new ValidatorMutable[vals.length];
-
-			for (int i = 0; i < vals.length; i++) {
-				validators[i] = new ValidatorMutable(vals[i]);
-			}
-
-			ProjectPreferences pp = new ProjectPreferences(project, true, disableValidation, null);
-
-			ValPrefManagerProject vpm = new ValPrefManagerProject(project);
-
-			vpm.savePreferences(pp, validators);
-		}
-		catch (Exception e) {
-		}
-
-		return retval;
 	}
 
 	private void _configureUpgradeVersionComb(
@@ -799,7 +718,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				public void widgetSelected(SelectionEvent e) {
 					Boolean importFinished = SapphireUtil.getContent(dataModel.getImportFinished());
 
-					if (_isPageValidate() && !importFinished) {
+					if (_validationResult && !importFinished) {
 						_saveSettings();
 
 						_importButton.setEnabled(false);
@@ -929,45 +848,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		_isCanceled(monitor);
 	}
 
-	private void _createLiferayWorkspace(IPath targetSDKLocation, IProgressMonitor groupMonitor)
-		throws InterruptedException {
-
-		Job job = new Job("Initializing Liferay Workspace...") {
-
-			@Override
-			protected IStatus run(IProgressMonitor progress) {
-				try {
-					StringBuilder sb = new StringBuilder();
-
-					sb.append("--base ");
-
-					File targetSdkFile = targetSDKLocation.toFile();
-
-					sb.append("\"" + targetSdkFile.getAbsolutePath() + "\" ");
-
-					sb.append("init -u");
-
-					progress.worked(30);
-					BladeCLI.execute(sb.toString());
-					progress.worked(100);
-				}
-				catch (BladeCLIException bclie) {
-					ProjectUI.logError(bclie);
-
-					return ProjectUI.createErrorStatus("Faild execute Liferay Workspace Init Command...", bclie);
-				}
-
-				return org.eclipse.core.runtime.Status.OK_STATUS;
-			}
-
-		};
-
-		job.setProgressGroup(groupMonitor, IProgressMonitor.UNKNOWN);
-
-		job.schedule();
-
-		job.join();
-	}
 
 	private void _createUpgradeVersionElement() {
 		_upgradeVersionLabel = createLabel(_pageParent, "Upgrade to Liferay Version ");
@@ -986,51 +866,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		else {
 			_configureUpgradeVersionComb(
 				_upgradeVersionItemNames, _upgradeVersionItemValues, upgradeVersion, _initBundleUrlValues);
-		}
-	}
-
-	private void _deleteEclipseConfigFiles(File project) {
-		for (File file : project.listFiles()) {
-			if (".classpath".contentEquals(file.getName()) || ".settings".contentEquals(file.getName()) ||
-				".project".contentEquals(file.getName())) {
-
-				if (file.isDirectory()) {
-					FileUtil.deleteDir(file, true);
-				}
-
-				file.delete();
-			}
-		}
-	}
-
-	private void _deleteSDKLegacyProjects(IPath sdkLocation) {
-		String[] needDeletedPaths = {"shared/portal-http-service", "webs/resources-importer-web"};
-
-		for (String path : needDeletedPaths) {
-			IPath sdkPath = sdkLocation.append(path);
-
-			File file = sdkPath.toFile();
-
-			if (file.exists()) {
-				FileUtil.deleteDir(file, true);
-			}
-		}
-	}
-
-	private void _deleteServiceBuilderJarFile(IProject project, IProgressMonitor monitor) {
-		try {
-			IFolder docrootFolder = CoreUtil.getDefaultDocrootFolder(project);
-
-			if (docrootFolder != null) {
-				IFile serviceJarFile = docrootFolder.getFile("WEB-INF/lib/" + project.getName() + "-service.jar");
-
-				if (serviceJarFile.exists()) {
-					serviceJarFile.delete(true, monitor);
-				}
-			}
-		}
-		catch (CoreException ce) {
-			ProjectUI.logError(ce);
 		}
 	}
 
@@ -1080,7 +915,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 			for (File project : liferayProjectDirs) {
 				try {
-					_deleteEclipseConfigFiles(project);
+					UpgradeUtil.deleteEclipseConfigFiles(project);
 
 					IProject importProject = ProjectImportUtil.importProject(
 						new Path(project.getPath()), monitor, null);
@@ -1088,14 +923,14 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 					if ((importProject != null) && importProject.isAccessible() && importProject.isOpen()) {
 						_checkProjectType(importProject);
 
-						_deleteServiceBuilderJarFile(importProject, monitor);
+						UpgradeUtil.deleteServiceBuilderJarFile(importProject, monitor);
 					}
 
 					if (ProjectUtil.isExtProject(importProject) || ProjectUtil.isThemeProject(importProject)) {
 						importProject.delete(false, true, monitor);
 					}
 
-					_configureProjectValidationExclude(importProject, true);
+					UpgradeUtil.configureProjectValidationExclude(importProject, true);
 				}
 				catch (CoreException ce) {
 				}
@@ -1103,7 +938,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 			for (File project : eclipseProjectFiles) {
 				try {
-					_deleteEclipseConfigFiles(project.getParentFile());
+					UpgradeUtil.deleteEclipseConfigFiles(project.getParentFile());
 
 					IProject importProject = ProjectImportUtil.importProject(
 						new Path(project.getParent()), monitor, null);
@@ -1111,14 +946,14 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 					if ((importProject != null) && importProject.isAccessible() && importProject.isOpen()) {
 						_checkProjectType(importProject);
 
-						_deleteServiceBuilderJarFile(importProject, monitor);
+						UpgradeUtil.deleteServiceBuilderJarFile(importProject, monitor);
 					}
 
 					if (ProjectUtil.isExtProject(importProject) || ProjectUtil.isThemeProject(importProject)) {
 						importProject.delete(false, true, monitor);
 					}
 
-					_configureProjectValidationExclude(importProject, true);
+					UpgradeUtil.configureProjectValidationExclude(importProject, true);
 				}
 				catch (CoreException ce) {
 				}
@@ -1126,38 +961,10 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		}
 	}
 
-	private boolean _isAlreadyImported(IPath path) {
-		IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
-
-		IContainer[] containers = workspaceRoot.findContainersForLocationURI(FileUtil.toURI(path));
-
-		long projectCount = Stream.of(
-			containers
-		).filter(
-			container -> container instanceof IProject
-		).count();
-
-		if (projectCount > 0) {
-			return true;
-		}
-
-		return false;
-	}
-
 	private void _isCanceled(IProgressMonitor monitor) {
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException("Code upgrade was canceled");
 		}
-	}
-
-	private boolean _isMavenProject(String path) {
-		IStatus buildType = ImportLiferayModuleProjectOpMethods.getBuildType(path);
-
-		return "maven".equals(buildType.getMessage());
-	}
-
-	private boolean _isPageValidate() {
-		return _validationResult;
 	}
 
 	private void _refreshUpgradeVersion() {
@@ -1203,100 +1010,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				}
 			}
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void _removeIvyPrivateSetting(IPath sdkLocation) throws CoreException {
-		IPath ivySettingPath = sdkLocation.append("ivy-settings.xml");
-
-		File ivySettingFile = ivySettingPath.toFile();
-
-		SAXBuilder builder = new SAXBuilder(false);
-
-		builder.setValidation(false);
-		builder.setFeature("http://xml.org/sax/features/validation", false);
-		builder.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
-		builder.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-
-		if (FileUtil.notExists(ivySettingFile)) {
-			return;
-		}
-
-		try (InputStream ivyInput = Files.newInputStream(ivySettingFile.toPath())) {
-			Document doc = builder.build(ivyInput);
-
-			Element itemRem = null;
-			Element elementRoot = doc.getRootElement();
-
-			List<Element> resolversElements = elementRoot.getChildren("resolvers");
-
-			for (Iterator<Element> resolversIterator = resolversElements.iterator(); resolversIterator.hasNext();) {
-				Element resolversElement = resolversIterator.next();
-
-				List<Element> chainElements = resolversElement.getChildren("chain");
-
-				for (Iterator<Element> chainIterator = chainElements.iterator(); chainIterator.hasNext();) {
-					Element chainElement = chainIterator.next();
-
-					List<Element> resolverElements = chainElement.getChildren("resolver");
-
-					Iterator<Element> resolverIterator = resolverElements.iterator();
-
-					while (resolverIterator.hasNext()) {
-						Element resolverItem = resolverIterator.next();
-
-						String resolverRefItem = resolverItem.getAttributeValue("ref");
-
-						if (resolverRefItem.equals("liferay-private")) {
-							resolverIterator.remove();
-
-							itemRem = resolverItem;
-						}
-					}
-				}
-
-				elementRoot.removeContent(itemRem);
-
-				List<Element> ibiblioElements = resolversElement.getChildren("ibiblio");
-
-				for (Iterator<Element> ibiblioIterator = ibiblioElements.iterator(); ibiblioIterator.hasNext();) {
-					Element ibiblioElement = ibiblioIterator.next();
-
-					String liferayPrivateName = ibiblioElement.getAttributeValue("name");
-
-					if (liferayPrivateName.equals("liferay-private")) {
-						ibiblioIterator.remove();
-						itemRem = ibiblioElement;
-					}
-				}
-
-				elementRoot.removeContent(itemRem);
-			}
-
-			XMLOutputter out = new XMLOutputter();
-
-			try (OutputStream fos = Files.newOutputStream(ivySettingFile.toPath())) {
-				out.output(doc, fos);
-			}
-			catch (Exception e) {
-				ProjectUI.logError(e);
-
-				throw new CoreException(
-					StatusBridge.create(Status.createErrorStatus("Failed to save change for ivy-settings.xml.", e)));
-			}
-		}
-		catch (CoreException | IOException | JDOMException e) {
-			ProjectUI.logError(e);
-
-			throw new CoreException(
-				StatusBridge.create(
-					Status.createErrorStatus(
-						"Failed to remove Liferay private url configuration of ivy-settings.xml.", e)));
-		}
-	}
-
-	private String _renameProjectFolder(IPath targetSDKLocation) throws CoreException {
-		return targetSDKLocation.toString();
 	}
 
 	private void _saveSettings() {
@@ -1457,7 +1170,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				return;
 			}
 
-			if (_isAlreadyImported(PathBridge.create(path))) {
+			if (UpgradeUtil.isAlreadyImported(PathBridge.create(path))) {
 				if (LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toPortableString())) {
 					dataModel.setUpgradeVersion("7.1");
 					dataModel.setIsLiferayWorkspace(true);
@@ -1489,7 +1202,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 				_pageParent.layout();
 			}
-			else if (_isMavenProject(path.toPortableString()) &&
+			else if (UpgradeUtil.isMavenProject(path) &&
 					 !LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toPortableString())) {
 
 				dataModel.setIsLiferayWorkspace(false);

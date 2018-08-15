@@ -81,11 +81,11 @@ public class UpgradeSettingsUtil {
 		String liferay70ServerName = getProperty("Liferay70ServerName");
 		String liferay62ServerLocation = getProperty("Liferay62ServerLocation");
 
-		if (!CoreUtil.isNullOrEmpty(liferay62ServerLocation)) {
+		if (CoreUtil.isNotNullOrEmpty(liferay62ServerLocation)) {
 			dataModel.setLiferay62ServerLocation(liferay62ServerLocation);
 		}
 
-		if (!CoreUtil.isNullOrEmpty(liferay70ServerName)) {
+		if (CoreUtil.isNotNullOrEmpty(liferay70ServerName)) {
 			dataModel.setLiferay70ServerName(liferay70ServerName);
 		}
 
