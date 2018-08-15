@@ -969,18 +969,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		job.join();
 	}
 
-	private void _createServerControl() {
-		_disposeImportElement();
-
-		_disposeBundleCheckboxElement();
-
-		_disposeBundleElement();
-
-		_createImportElement();
-
-		_pageParent.layout();
-	}
-
 	private void _createUpgradeVersionElement() {
 		_upgradeVersionLabel = createLabel(_pageParent, "Upgrade to Liferay Version ");
 
@@ -1080,36 +1068,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 			_upgradeVersionLabel.dispose();
 			_upgradeVersionComb.dispose();
 		}
-	}
-
-	private void _getLiferayBundle(IPath targetSDKLocation) throws BladeCLIException {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("--base ");
-
-		File sdkLocation = targetSDKLocation.toFile();
-
-		sb.append("\"" + sdkLocation.getAbsolutePath() + "\" ");
-
-		sb.append("init");
-
-		BladeCLI.execute(sb.toString());
-	}
-
-	private IWorkspaceProjectBuilder _getWorkspaceProjectBuilder(IProject project) throws CoreException {
-		final ILiferayProject liferayProject = LiferayCore.create(project);
-
-		if (liferayProject == null) {
-			throw new CoreException(ProjectUI.createErrorStatus("Can not find Liferay workspace project."));
-		}
-
-		final IWorkspaceProjectBuilder builder = liferayProject.adapt(IWorkspaceProjectBuilder.class);
-
-		if (builder == null) {
-			throw new CoreException(ProjectUI.createErrorStatus("Can not find Liferay Gradle project builder."));
-		}
-
-		return builder;
 	}
 
 	private void _importSDKProject(IPath targetSDKLocation, IProgressMonitor monitor) {
@@ -1315,7 +1273,17 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				elementRoot.removeContent(itemRem);
 			}
 
-			_saveXML(ivySettingFile, doc);
+			XMLOutputter out = new XMLOutputter();
+
+			try (OutputStream fos = Files.newOutputStream(ivySettingFile.toPath())) {
+				out.output(doc, fos);
+			}
+			catch (Exception e) {
+				ProjectUI.logError(e);
+
+				throw new CoreException(
+					StatusBridge.create(Status.createErrorStatus("Failed to save change for ivy-settings.xml.", e)));
+			}
 		}
 		catch (CoreException | IOException | JDOMException e) {
 			ProjectUI.logError(e);
@@ -1342,20 +1310,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 		if ((_bundleNameField != null) && !_bundleNameField.isDisposed()) {
 			dataModel.setLiferay70ServerName(_bundleNameField.getText());
-		}
-	}
-
-	private void _saveXML(File templateFile, Document doc) throws CoreException {
-		XMLOutputter out = new XMLOutputter();
-
-		try (OutputStream fos = Files.newOutputStream(templateFile.toPath());) {
-			out.output(doc, fos);
-		}
-		catch (Exception e) {
-			ProjectUI.logError(e);
-
-			throw new CoreException(
-				StatusBridge.create(Status.createErrorStatus("Failed to save change for ivy-settings.xml.", e)));
 		}
 	}
 
