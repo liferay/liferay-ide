@@ -29,7 +29,7 @@ public class ShellAppearedCondition implements ICondition {
 	}
 
 	public String getFailureMessage() {
-		return "Shell \"" + _title + "\" doesn't appeared";
+		return "Shell \"" + _title + "\" does not appeared";
 	}
 
 	public void init(SWTBot bot) {

@@ -74,7 +74,8 @@ public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction {
 		if (!workspaceDir.exists()) {
 			MessageDialog.openInformation(
 				site.getShell(), "Liferay",
-				"Can't import liferay workspace.\nDirectory \"" + workspaceDir.getAbsolutePath() + "\" doesn't exist.");
+				"Can not import liferay workspace.\nDirectory \"" + workspaceDir.getAbsolutePath() +
+					"\" does not exist.");
 
 			return;
 		}

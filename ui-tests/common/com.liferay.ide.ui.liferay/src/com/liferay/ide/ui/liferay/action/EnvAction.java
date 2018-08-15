@@ -204,7 +204,7 @@ public class EnvAction extends UIAction {
 			catch (Exception e) {
 			}
 			finally {
-				Assert.assertTrue("The argument \"internal\" is true but can't reach the internal server", reachable);
+				Assert.assertTrue("The argument \"internal\" is true but can not reach the internal server", reachable);
 			}
 		}
 

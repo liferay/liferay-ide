@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <templates>
-<template autoinsert="true" context="java" deleted="false" description="if not null" enabled="true" name="ifnn">if ( ${object} != null )
+	<template autoinsert="true" context="java" deleted="false" description="if not null" enabled="true" name="ifnn">if ( ${object} != null )
 {
 	${cursor}
 }</template>
-<template autoinsert="true" context="java" deleted="false" description="IProject -&gt; LiferayProject" enabled="true" name="lrproject">final ILiferayProject ${lrproject} = LiferayCore.create( ${project:var('org.eclipse.core.resources.IProject')} );
+	<template autoinsert="true" context="java" deleted="false" description="IProject -&gt; LiferayProject" enabled="true" name="lrproject">final ILiferayProject ${lrproject} = LiferayCore.create( ${project:var('org.eclipse.core.resources.IProject')} );
 ${:import(com.liferay.ide.core.ILiferayProject,com.liferay.ide.core.LiferayCore)}</template>
-<template autoinsert="true" context="java" deleted="false" description="get ILiferayPortal" enabled="true" name="portal">final ILiferayPortal ${portal} = ${liferayProject:var('com.liferay.ide.core.ILiferayProject')}.adapt( ILiferayPortal.class );
+	<template autoinsert="true" context="java" deleted="false" description="get ILiferayPortal" enabled="true" name="portal">final ILiferayPortal ${portal} = ${liferayProject:var('com.liferay.ide.core.ILiferayProject')}.adapt( ILiferayPortal.class );
 ${:import(com.liferay.ide.core.ILiferayPortal)}</template>
 </templates>

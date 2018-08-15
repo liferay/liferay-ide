@@ -1,64 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.liferay</groupId>
-    <artifactId>liferay-ide</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+	<groupId>com.liferay</groupId>
+	<artifactId>liferay-ide</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-    <name>Liferay IDE</name>
-    <url>http://www.liferay.com/community/liferay-projects/liferay-ide/overview</url>
-    <description>The Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development.</description>
+	<name>Liferay IDE</name>
+	<url>http://www.liferay.com/community/liferay-projects/liferay-ide/overview</url>
+	<description>The Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development.</description>
 
-    <developers>
-        <developer>
-            <name>Gregory Amerson</name>
-            <id>gregory.amerson</id>
-            <email>gregory.amerson@liferay.com</email>
-        </developer>
-        <developer>
-            <name>Kuo Zhang</name>
-            <id>kuo.zhang</id>
-            <email>kuo.zhang@liferay.com</email>
-        </developer>
-        <developer>
-            <name>Simon Jiang</name>
-            <id>simon.jiang</id>
-            <email>simon.jiang@liferay.com</email>
-        </developer>
-        <developer>
-            <name>Terry Jia</name>
-            <email>terry.jia@liferay.com</email>
-        </developer>
-        <developer>
-            <name>Kamesh Sampath</name>
-            <email>kamesh.sampath@liferay.com</email>
-        </developer>
-    </developers>
+	<developers>
+		<developer>
+			<name>Gregory Amerson</name>
+			<id>gregory.amerson</id>
+			<email>gregory.amerson@liferay.com</email>
+		</developer>
+		<developer>
+			<name>Kuo Zhang</name>
+			<id>kuo.zhang</id>
+			<email>kuo.zhang@liferay.com</email>
+		</developer>
+		<developer>
+			<name>Simon Jiang</name>
+			<id>simon.jiang</id>
+			<email>simon.jiang@liferay.com</email>
+		</developer>
+		<developer>
+			<name>Terry Jia</name>
+			<email>terry.jia@liferay.com</email>
+		</developer>
+		<developer>
+			<name>Kamesh Sampath</name>
+			<email>kamesh.sampath@liferay.com</email>
+		</developer>
+	</developers>
 
-    <licenses>
-        <license>
-            <name>GNU Lesser General Public License</name>
-            <url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License</name>
+			<url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
+		</license>
+	</licenses>
 
-    <scm>
-        <connection>scm:git:git@github.com:liferay/liferay-ide.git</connection>
-        <url>https://github.com/liferay/liferay-ide</url>
-    </scm>
+	<scm>
+		<connection>scm:git:git@github.com:liferay/liferay-ide.git</connection>
+		<url>https://github.com/liferay/liferay-ide</url>
+	</scm>
 
-    <issueManagement>
-        <system>jira</system>
-        <url>https://issues.liferay.com/</url>
-    </issueManagement>
+	<issueManagement>
+		<system>jira</system>
+		<url>https://issues.liferay.com/</url>
+	</issueManagement>
 
-    <modules>
-        <module>build/parent</module>
-        <module>build</module>
-    </modules>
+	<modules>
+		<module>build/parent</module>
+		<module>build</module>
+	</modules>
 
 </project>
