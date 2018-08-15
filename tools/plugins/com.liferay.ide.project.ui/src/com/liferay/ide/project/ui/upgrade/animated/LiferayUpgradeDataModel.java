@@ -35,7 +35,7 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public Value<Boolean> getBackupSdk();
 
-	public Value<String> getUpgradeVersion();
+	public Value<String> getUpgradeVersions();
 
 	public Value<String> getBundleName();
 
@@ -85,7 +85,7 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public void setBackupSdk(String backupSdk);
 
-	public void setUpgradeVersion(String value);
+	public void setUpgradeVersions(String value);
 
 	public void setBundleName(String bundleName);
 

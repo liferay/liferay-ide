@@ -65,7 +65,7 @@ public class RunMigrationToolAction extends OpenJavaProjectSelectionDialogAction
 
 				breakingChangeParameters.put("CombineExistedProblem", getCombineExistedProjects());
 
-				String versions = SapphireUtil.getContent(dataModel.getUpgradeVersion());
+				String versions = SapphireUtil.getContent(dataModel.getUpgradeVersions());
 
 				String[] versionArray = versions.split(",");
 

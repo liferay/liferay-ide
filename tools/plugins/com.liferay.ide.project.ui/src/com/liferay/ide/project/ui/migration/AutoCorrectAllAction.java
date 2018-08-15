@@ -70,17 +70,14 @@ public class AutoCorrectAllAction extends Action {
 		_problemsContainerList = problemsContainerList;
 	}
 
+	@Override
 	public void run() {
-		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectAction.class);
-
-		BundleContext context = bundle.getBundleContext();
-
-		FindBreakingChangesPage page = UpgradeView.getPage(
+		FindBreakingChangesPage findBreakingChangesPage = UpgradeView.getPage(
 			Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
-		LiferayUpgradeDataModel dataModel = page.getDataModel();
+		LiferayUpgradeDataModel liferayUpgradeDataModel = findBreakingChangesPage.getDataModel();
 
-		WorkspaceJob job = new WorkspaceJob("Auto correcting all of migration problem.") {
+		WorkspaceJob job = new WorkspaceJob("Auto correcting all breaking changes.") {
 
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) {
@@ -125,6 +122,10 @@ public class AutoCorrectAllAction extends Action {
 										else {
 											autoCorrectKey = problem.autoCorrectContext;
 										}
+
+										Bundle bundle = FrameworkUtil.getBundle(AutoCorrectAction.class);
+
+										BundleContext context = bundle.getBundleContext();
 
 										final Collection<ServiceReference<AutoMigrator>> refs =
 											context.getServiceReferences(
@@ -185,7 +186,7 @@ public class AutoCorrectAllAction extends Action {
 									IViewSite viewSite = view.getViewSite();
 
 									new RunMigrationToolAction(
-										"Run Migration Tool", viewSite.getShell(), projectSelection, dataModel).run();
+										"Run Migration Tool", viewSite.getShell(), projectSelection, liferayUpgradeDataModel).run();
 								}
 								catch (IOException ioe) {
 									ProjectUI.logError(ioe);

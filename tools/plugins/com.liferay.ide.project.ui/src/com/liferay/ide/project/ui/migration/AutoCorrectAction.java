@@ -77,25 +77,21 @@ public class AutoCorrectAction extends ProblemAction {
 	}
 
 	public IStatus runWithAutoCorrect(List<Problem> problems) {
-		IResource file = MigrationUtil.getIResourceFromProblem(problems.get(0));
-		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectAction.class);
 
-		BundleContext context = bundle.getBundleContext();
-
-		FindBreakingChangesPage page = UpgradeView.getPage(
+		FindBreakingChangesPage findBreakingChangesPage = UpgradeView.getPage(
 			Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
-		LiferayUpgradeDataModel dataModel = page.getDataModel();
+		LiferayUpgradeDataModel liferayUpgradeDataModel = findBreakingChangesPage.getDataModel();
 
-		String versions = SapphireUtil.getContent(dataModel.getUpgradeVersion());
+		String upgradeVersions = SapphireUtil.getContent(liferayUpgradeDataModel.getUpgradeVersions());
 
-		String[] versionArray = versions.split(",");
+		String[] versions = upgradeVersions.split(",");
 
-		if (ListUtil.isNotEmpty(versionArray)) {
-			_upgradeVersions = Arrays.asList(versionArray);
+		if (ListUtil.isNotEmpty(versions)) {
+			_upgradeVersions = Arrays.asList(versions);
 		}
 
-		WorkspaceJob job = new WorkspaceJob("Auto correcting migration problem.") {
+		WorkspaceJob job = new WorkspaceJob("Auto correcting breaking changes.") {
 
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) {
@@ -114,6 +110,11 @@ public class AutoCorrectAction extends ProblemAction {
 					else {
 						autoCorrectKey = problem.autoCorrectContext;
 					}
+
+					Bundle bundle = FrameworkUtil.getBundle(AutoCorrectAction.class);
+					BundleContext context = bundle.getBundleContext();
+
+					IResource file = MigrationUtil.getIResourceFromProblem(problems.get(0));
 
 					Collection<ServiceReference<AutoMigrator>> refs = context.getServiceReferences(
 						AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")");

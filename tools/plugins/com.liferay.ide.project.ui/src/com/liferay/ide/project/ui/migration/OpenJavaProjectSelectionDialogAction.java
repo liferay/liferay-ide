@@ -48,7 +48,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -69,10 +68,12 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 		setImageDescriptor(pluginImageRegistry.getDescriptor(ProjectUI.MIGRATION_TASKS_IMAGE_ID));
 	}
 
-	public OpenJavaProjectSelectionDialogAction(String text, Shell shell, LiferayUpgradeDataModel dataModel) {
+	public OpenJavaProjectSelectionDialogAction(
+		String text, Shell shell, LiferayUpgradeDataModel liferayUpgradeDataModel) {
+
 		this(text, shell);
 
-		this.dataModel = dataModel;
+		dataModel = liferayUpgradeDataModel;
 	}
 
 	protected Boolean getCombineExistedProjects() {
@@ -118,13 +119,12 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 		return null;
 	}
 
-	protected Label createLabel;
 	protected LiferayUpgradeDataModel dataModel;
 
 	private void _createUpgradeVersionControl(Composite composite) {
 		Group upgradeVersionGroup = SWTUtil.createGroup(composite, "Upgrade to Liferay Version", 2, 2);
 
-		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
+		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersions());
 
 		boolean selectedValue = "7.0".equals(upgradeVersion);;
 
@@ -137,7 +137,7 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					dataModel.setUpgradeVersion("7.0");
+					dataModel.setUpgradeVersions("7.0");
 				}
 
 			});
@@ -149,13 +149,13 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					dataModel.setUpgradeVersion("7.0,7.1");
+					dataModel.setUpgradeVersions("7.0,7.1");
 				}
 
 			});
 
 		if (liferayWorkspace) {
-			dataModel.setUpgradeVersion("7.1");
+			dataModel.setUpgradeVersions("7.1");
 
 			upgradeVersion70Button.setEnabled(false);
 			upgradeVersion71Button.setEnabled(true);
@@ -166,7 +166,7 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						dataModel.setUpgradeVersion("7.1");
+						dataModel.setUpgradeVersions("7.1");
 					}
 
 				});
@@ -218,7 +218,7 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 
 			_combineExistedProblemCheckbox.addSelectionListener(listener);
 
-			if (dataModel.getUpgradeVersion() != null) {
+			if (dataModel.getUpgradeVersions() != null) {
 				_createUpgradeVersionControl(composite);
 			}
 

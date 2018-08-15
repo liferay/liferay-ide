@@ -101,10 +101,10 @@ public class MigrateProjectHandler extends AbstractHandler {
 		EvaluationContext applicationContext = (EvaluationContext)event.getApplicationContext();
 
 		_combineExistedProblem = (Boolean)applicationContext.getVariable("CombineExistedProblem");
-		String[] upgradeVersionArrays = (String[])applicationContext.getVariable("UpgradeVersions");
+		String[] upgradeVersions = (String[])applicationContext.getVariable("UpgradeVersions");
 
-		if (ListUtil.isNotEmpty(upgradeVersionArrays)) {
-			_upgradeVersions = Arrays.asList(upgradeVersionArrays);
+		if (ListUtil.isNotEmpty(upgradeVersions)) {
+			_upgradeVersions = Arrays.asList(upgradeVersions);
 		}
 
 		if (selection instanceof IStructuredSelection) {
