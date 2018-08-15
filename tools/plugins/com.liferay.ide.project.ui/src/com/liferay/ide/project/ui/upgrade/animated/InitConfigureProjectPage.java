@@ -1395,7 +1395,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 					Status validation = backupLocationValue.validation();
 
-					Status sdkValidation = _sdkValidation.compute();
+					Status sdkValidation = _locationValidation.compute();
 
 					if (!sdkValidation.ok()) {
 						message = sdkValidation.message();
@@ -1469,12 +1469,11 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		LiferayUpgradeDataModel.BUNDLE_URL_70, LiferayUpgradeDataModel.BUNDLE_URL_71
 	};
 	private Composite _pageParent;
-	private ProjectLocationValidationService _sdkValidation =
+	private ProjectLocationValidationService _locationValidation =
 		dataModel.getSdkLocation().service(ProjectLocationValidationService.class);
 	private Combo _upgradeVersionComb;
 	private String[] _upgradeVersionItemNames = {"7.0", "7.1"};
 	private String[] _upgradeVersionItemValues = {"7.0", "7.0,7.1"};
-	private String[] _upgradeVersionItemValuesWorkspace = {"7.1"};
 	private Label _upgradeVersionLabel;
 	private boolean _validationResult;
 
@@ -1496,7 +1495,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 			org.eclipse.sapphire.modeling.Path path = SapphireUtil.getContent(dataModel.getSdkLocation());
 
-			Status compute = _sdkValidation.compute();
+			Status compute = _locationValidation.compute();
 
 			if ((path == null) || !compute.ok()) {
 				_startCheckThread();
