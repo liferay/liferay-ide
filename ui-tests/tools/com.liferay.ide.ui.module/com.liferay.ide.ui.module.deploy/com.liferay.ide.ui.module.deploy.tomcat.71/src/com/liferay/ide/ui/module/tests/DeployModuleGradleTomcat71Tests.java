@@ -56,6 +56,7 @@ public class DeployModuleGradleTomcat71Tests extends DeployModuleGradleTomcat7xB
 		super.deployControlMenuEntry();
 	}
 
+	@Ignore("ignore as IDE-4188")
 	@Test
 	public void deployFormField() {
 		super.deployFormField();
