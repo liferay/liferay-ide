@@ -71,7 +71,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
@@ -256,7 +255,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
 					IViewSite viewSite = view.getViewSite();
 
-					new RunMigrationToolAction("Run Migration Tool", viewSite.getShell()).run();
+					new RunMigrationToolAction("Run Migration Tool", viewSite.getShell(), dataModel).run();
 				}
 
 			});
@@ -510,11 +509,9 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 	}
 
 	private void _createColumns(final TableViewer problemsViewer) {
-		final String[] titles = {"Resolved", "Line", "Problem"};
+		final String[] titles = {"Resolved", "Line", "Version", "Problem"};
 
 		TableViewerColumn col0 = _createTableViewerColumn(titles[0], problemsViewer);
-
-		col0.getColumn().pack();
 
 		col0.setEditingSupport(
 			new EditingSupport(problemsViewer) {
@@ -570,8 +567,6 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
 		TableViewerColumn col1 = _createTableViewerColumn(titles[1], problemsViewer);
 
-		col1.getColumn().pack();
-
 		col1.setLabelProvider(
 			new ColumnLabelProvider() {
 
@@ -586,9 +581,25 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
 		TableViewerColumn col2 = _createTableViewerColumn(titles[2], problemsViewer);
 
-		col2.getColumn().pack();
-
 		col2.setLabelProvider(
+			new ColumnLabelProvider() {
+
+				@Override
+				public String getText(Object element) {
+					Problem p = (Problem)element;
+
+					if (p.version == null) {
+						return "7.0";
+					}
+
+					return p.version;
+				}
+
+			});
+
+		TableViewerColumn col3 = _createTableViewerColumn(titles[3], problemsViewer);
+
+		col3.setLabelProvider(
 			new ColumnLabelProvider() {
 
 				@Override
@@ -598,15 +609,6 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 					return StringUtil.trim(p.title);
 				}
 
-				@Override
-				public void update(ViewerCell cell) {
-					super.update(cell);
-
-					Table table = problemsViewer.getTable();
-
-					table.getColumn(2).pack();
-				}
-
 			});
 
 		TableColumnLayout tableLayout = new TableColumnLayout();
@@ -614,10 +616,12 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 		TableColumn column0 = col0.getColumn();
 		TableColumn column1 = col1.getColumn();
 		TableColumn column2 = col2.getColumn();
+		TableColumn column3 = col3.getColumn();
 
-		tableLayout.setColumnData(column0, new ColumnWeightData(50, column0.getWidth()));
-		tableLayout.setColumnData(column1, new ColumnWeightData(50, column1.getWidth()));
-		tableLayout.setColumnData(column2, new ColumnWeightData(100, column2.getWidth()));
+		tableLayout.setColumnData(column0, new ColumnWeightData(35, column0.getWidth()));
+		tableLayout.setColumnData(column1, new ColumnWeightData(30, column1.getWidth()));
+		tableLayout.setColumnData(column2, new ColumnWeightData(30, column2.getWidth()));
+		tableLayout.setColumnData(column3, new ColumnWeightData(100, column3.getWidth()));
 
 		Table table = problemsViewer.getTable();
 
@@ -631,10 +635,13 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
 		final TableColumn column = viewerColumn.getColumn();
 
+		Table table = viewer.getTable();
+
 		column.setText(title);
 		column.setResizable(true);
 		column.setMoveable(true);
-		column.addSelectionListener(_getSelectionAdapter(column, viewer.getTable().indexOf(column)));
+		column.addSelectionListener(_getSelectionAdapter(column, table.indexOf(column)));
+		column.pack();
 
 		return viewerColumn;
 	}

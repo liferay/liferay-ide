@@ -14,8 +14,10 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.FindBreakingChangesPage;
+import com.liferay.ide.project.ui.upgrade.animated.LiferayUpgradeDataModel;
 import com.liferay.ide.project.ui.upgrade.animated.Page;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
 import com.liferay.ide.ui.util.UIUtil;
@@ -38,14 +40,14 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class RunMigrationToolAction extends OpenJavaProjectSelectionDialogAction {
 
-	public RunMigrationToolAction(String text, Shell shell) {
-		super(text, shell);
-	}
-
-	public RunMigrationToolAction(String text, Shell shell, ISelection selection) {
-		super(text, shell);
+	public RunMigrationToolAction(String text, Shell shell, ISelection selection, LiferayUpgradeDataModel dataModel) {
+		super(text, shell, dataModel);
 
 		_selection = selection;
+	}
+
+	public RunMigrationToolAction(String text, Shell shell, LiferayUpgradeDataModel dataModel) {
+		super(text, shell, dataModel);
 	}
 
 	@Override
@@ -62,6 +64,12 @@ public class RunMigrationToolAction extends OpenJavaProjectSelectionDialogAction
 				Map<String, Object> breakingChangeParameters = new HashMap<>();
 
 				breakingChangeParameters.put("CombineExistedProblem", getCombineExistedProjects());
+
+				String versions = SapphireUtil.getContent(dataModel.getUpgradeVersion());
+
+				String[] versionArray = versions.split(",");
+
+				breakingChangeParameters.put("UpgradeVersions", versionArray);
 
 				UIUtil.executeCommand(
 					"com.liferay.ide.project.ui.migrateProject", _selection, breakingChangeParameters);

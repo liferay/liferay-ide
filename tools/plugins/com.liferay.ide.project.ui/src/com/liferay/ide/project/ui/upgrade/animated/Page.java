@@ -130,6 +130,10 @@ public abstract class Page extends Composite implements PageActionListener, Sele
 		return actions;
 	}
 
+	public LiferayUpgradeDataModel getDataModel() {
+		return dataModel;
+	}
+
 	public int getGridLayoutCount() {
 		return 1;
 	}
