@@ -914,6 +914,12 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				eclipseProjectFiles, liferayProjectDirs, targetSDKLocation.toFile(), null, true, monitor)) {
 
 			for (File project : liferayProjectDirs) {
+				File parentDir = project.getParentFile();
+
+				if (FileUtil.nameEquals(parentDir, "themes") || FileUtil.nameEquals(parentDir, "ext")) {
+					continue;
+				}
+
 				try {
 					UpgradeUtil.deleteEclipseConfigFiles(project);
 
@@ -924,10 +930,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 						_checkProjectType(importProject);
 
 						UpgradeUtil.deleteServiceBuilderJarFile(importProject, monitor);
-					}
-
-					if (ProjectUtil.isExtProject(importProject) || ProjectUtil.isThemeProject(importProject)) {
-						importProject.delete(false, true, monitor);
 					}
 
 					UpgradeUtil.configureProjectValidationExclude(importProject, true);
