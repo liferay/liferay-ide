@@ -27,6 +27,9 @@ import com.liferay.ide.project.core.upgrade.ProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.upgrade.animated.FindBreakingChangesPage;
+import com.liferay.ide.project.ui.upgrade.animated.LiferayUpgradeDataModel;
+import com.liferay.ide.project.ui.upgrade.animated.Page;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -67,12 +70,14 @@ public class AutoCorrectAllAction extends Action {
 		_problemsContainerList = problemsContainerList;
 	}
 
+	@Override
 	public void run() {
-		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectAction.class);
+		FindBreakingChangesPage findBreakingChangesPage = UpgradeView.getPage(
+			Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
-		BundleContext context = bundle.getBundleContext();
+		LiferayUpgradeDataModel liferayUpgradeDataModel = findBreakingChangesPage.getDataModel();
 
-		WorkspaceJob job = new WorkspaceJob("Auto correcting all of migration problem.") {
+		WorkspaceJob job = new WorkspaceJob("Auto correcting all breaking changes.") {
 
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) {
@@ -117,6 +122,10 @@ public class AutoCorrectAllAction extends Action {
 										else {
 											autoCorrectKey = problem.autoCorrectContext;
 										}
+
+										Bundle bundle = FrameworkUtil.getBundle(AutoCorrectAction.class);
+
+										BundleContext context = bundle.getBundleContext();
 
 										final Collection<ServiceReference<AutoMigrator>> refs =
 											context.getServiceReferences(
@@ -177,7 +186,7 @@ public class AutoCorrectAllAction extends Action {
 									IViewSite viewSite = view.getViewSite();
 
 									new RunMigrationToolAction(
-										"Run Migration Tool", viewSite.getShell(), projectSelection).run();
+										"Run Migration Tool", viewSite.getShell(), projectSelection, liferayUpgradeDataModel).run();
 								}
 								catch (IOException ioe) {
 									ProjectUI.logError(ioe);

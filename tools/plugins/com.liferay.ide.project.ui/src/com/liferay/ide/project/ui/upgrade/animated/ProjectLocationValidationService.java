@@ -53,7 +53,7 @@ public class ProjectLocationValidationService extends ValidationService {
 
 		if ((location == null) || location.isEmpty()) {
 			return StatusBridge.create(
-				ProjectCore.createErrorStatus("Liferay Plugins SDK or Maven location is empty."));
+				ProjectCore.createErrorStatus("Liferay Plugins SDK, Maven or Liferay Workspace location is empty."));
 		}
 
 		if (LiferayWorkspaceUtil.isValidWorkspaceLocation(location.toPortableString())) {
@@ -78,7 +78,7 @@ public class ProjectLocationValidationService extends ValidationService {
 			}
 		}
 		else if (!buildType.getMessage().equals("maven")) {
-			return StatusBridge.create(ProjectCore.createErrorStatus("Plugins SDK or Maven location is not valid."));
+			return StatusBridge.create(ProjectCore.createErrorStatus("Plugins SDK, Maven or Liferay Workspace location is not valid."));
 		}
 
 		return retval;

@@ -15,11 +15,13 @@
 package com.liferay.ide.project.ui.migration;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.upgrade.BreakingChangeSelectedProject;
 import com.liferay.ide.project.core.upgrade.BreakingChangeSimpleProject;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
+import com.liferay.ide.project.ui.upgrade.animated.LiferayUpgradeDataModel;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import java.io.IOException;
@@ -45,6 +47,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -63,6 +66,14 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 		ImageRegistry pluginImageRegistry = ProjectUI.getPluginImageRegistry();
 
 		setImageDescriptor(pluginImageRegistry.getDescriptor(ProjectUI.MIGRATION_TASKS_IMAGE_ID));
+	}
+
+	public OpenJavaProjectSelectionDialogAction(
+		String text, Shell shell, LiferayUpgradeDataModel liferayUpgradeDataModel) {
+
+		this(text, shell);
+
+		dataModel = liferayUpgradeDataModel;
 	}
 
 	protected Boolean getCombineExistedProjects() {
@@ -108,6 +119,60 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 		return null;
 	}
 
+	protected LiferayUpgradeDataModel dataModel;
+
+	private void _createUpgradeVersionControl(Composite composite) {
+		Group upgradeVersionGroup = SWTUtil.createGroup(composite, "Upgrade to Liferay Version", 2, 2);
+
+		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersions());
+
+		boolean selectedValue = "7.0".equals(upgradeVersion);;
+
+		boolean liferayWorkspace = SapphireUtil.getContent(dataModel.getIsLiferayWorkspace());
+
+		Button upgradeVersion70Button = SWTUtil.createRadioButton(upgradeVersionGroup, "7.0", null, selectedValue, 1);
+
+		upgradeVersion70Button.addSelectionListener(
+			new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					dataModel.setUpgradeVersions("7.0");
+				}
+
+			});
+
+		Button upgradeVersion71Button = SWTUtil.createRadioButton(upgradeVersionGroup, "7.1", null, !selectedValue, 1);
+
+		upgradeVersion71Button.addSelectionListener(
+			new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					dataModel.setUpgradeVersions("7.0,7.1");
+				}
+
+			});
+
+		if (liferayWorkspace) {
+			dataModel.setUpgradeVersions("7.1");
+
+			upgradeVersion70Button.setEnabled(false);
+			upgradeVersion71Button.setEnabled(true);
+			upgradeVersion71Button.setSelection(true);
+
+			upgradeVersion71Button.addSelectionListener(
+				new SelectionAdapter() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						dataModel.setUpgradeVersions("7.1");
+					}
+
+				});
+		}
+	}
+
 	private Boolean _combineProject = true;
 	private Shell _shell;
 
@@ -128,15 +193,15 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 			Composite buttonComposite = new Composite(composite, SWT.NONE);
 			GridLayout layout = new GridLayout();
 
-			layout.numColumns = 1;
+			layout.makeColumnsEqualWidth = true;
 			layout.marginWidth = 0;
 			layout.horizontalSpacing = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_SPACING);
 			buttonComposite.setLayout(layout);
 
-			buttonComposite.setLayoutData(new GridData(SWT.BEGINNING, SWT.TOP, true, false));
-			//Button selectButton = createButton(buttonComposite, IDialogConstants.SELECT_ALL_ID, "Combine", false);
+			buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
 			_combineExistedProblemCheckbox = SWTUtil.createCheckButton(
-				buttonComposite, "Combine existed problems list.", null, true, 1);
+				buttonComposite, "Combine existed problems list.", null, true, layout.numColumns);
 
 			SelectionListener listener = new SelectionAdapter() {
 
@@ -153,6 +218,10 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 
 			_combineExistedProblemCheckbox.addSelectionListener(listener);
 
+			if (dataModel.getUpgradeVersions() != null) {
+				_createUpgradeVersionControl(composite);
+			}
+
 			super.addSelectionButtons(composite);
 		}
 
@@ -165,11 +234,16 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 
 		@Override
 		protected void initialize() {
-			if ((_selectedProject == null) || (_combineProject == false)) {
+			if ((_selectedProject == null) || !_combineProject) {
 				return;
 			}
 
 			_initializeSelectedProject(_selectedProject, _combineProject);
+		}
+
+		@Override
+		protected boolean isResizable() {
+			return false;
 		}
 
 		@Override
