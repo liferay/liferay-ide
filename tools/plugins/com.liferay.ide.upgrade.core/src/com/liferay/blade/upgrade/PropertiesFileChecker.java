@@ -15,6 +15,7 @@
 package com.liferay.blade.upgrade;
 
 import com.liferay.blade.api.SearchResult;
+import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,8 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-
-import org.eclipse.core.runtime.Platform;
 
 /**
  * @author Gregory Amerson
@@ -315,24 +314,22 @@ public class PropertiesFileChecker {
 				if (skipLF) {
 					skipLF = false;
 
-					if (Platform.WS_WIN32.equals(Platform.getOS())) {
-						if (c == '\n') {
-							if (crStack.size() > 0) {
-								Character crPrefix = crStack.pop();
+					if (CoreUtil.isWindows() && (c == '\n')) {
+						if (crStack.size() > 0) {
+							Character crPrefix = crStack.pop();
 
-								if (crPrefix == '\r') {
-									emptylines++;
-								}
+							if (crPrefix == '\r') {
+								emptylines++;
 							}
+						}
 
-							continue;
-						}
+						continue;
 					}
-					else {
-						if (c == '\n') {
-							emptylines++;
-							continue;
-						}
+
+					if (c == '\n') {
+						emptylines++;
+
+						continue;
 					}
 				}
 
@@ -341,17 +338,16 @@ public class PropertiesFileChecker {
 						continue;
 					}
 
-					if (Platform.WS_WIN32.equals(Platform.getOS())) {
-						if (!appendedLineBegin && (c == '\r')) {
-							crStack.push(c);
-							continue;
-						}
+					if (CoreUtil.isWindows() && !appendedLineBegin && (c == '\r')) {
+						crStack.push(c);
+
+						continue;
 					}
-					else {
-						if (!appendedLineBegin && ((c == '\r') || (c == '\n'))) {
-							emptylines++;
-							continue;
-						}
+
+					if (!appendedLineBegin && ((c == '\r') || (c == '\n'))) {
+						emptylines++;
+
+						continue;
 					}
 
 					skipWhiteSpace = false;
