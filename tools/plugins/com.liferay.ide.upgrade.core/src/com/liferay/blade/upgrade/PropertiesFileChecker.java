@@ -28,6 +28,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
+
+import org.eclipse.core.runtime.Platform;
 
 /**
  * @author Gregory Amerson
@@ -289,6 +292,7 @@ public class PropertiesFileChecker {
 			boolean appendedLineBegin = false;
 			boolean precedingBackslash = false;
 			boolean skipLF = false;
+			Stack<Character> crStack = new Stack<>();
 
 			while (true) {
 				_total++;
@@ -311,9 +315,24 @@ public class PropertiesFileChecker {
 				if (skipLF) {
 					skipLF = false;
 
-					if (c == '\n') {
-						emptylines++;
-						continue;
+					if (Platform.WS_WIN32.equals(Platform.getOS())) {
+						if (c == '\n') {
+							if (crStack.size() > 0) {
+								Character crPrefix = crStack.pop();
+
+								if (crPrefix == '\r') {
+									emptylines++;
+								}
+							}
+
+							continue;
+						}
+					}
+					else {
+						if (c == '\n') {
+							emptylines++;
+							continue;
+						}
 					}
 				}
 
@@ -322,9 +341,17 @@ public class PropertiesFileChecker {
 						continue;
 					}
 
-					if (!appendedLineBegin && ((c == '\r') || (c == '\n'))) {
-						emptylines++;
-						continue;
+					if (Platform.WS_WIN32.equals(Platform.getOS())) {
+						if (!appendedLineBegin && (c == '\r')) {
+							crStack.push(c);
+							continue;
+						}
+					}
+					else {
+						if (!appendedLineBegin && ((c == '\r') || (c == '\n'))) {
+							emptylines++;
+							continue;
+						}
 					}
 
 					skipWhiteSpace = false;
