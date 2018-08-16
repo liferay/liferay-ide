@@ -172,7 +172,7 @@ public interface LiferayUpgradeDataModel extends Element {
 	public ValueProperty PROP_BACKUP_SDK = new ValueProperty(TYPE, "BackupSdk");
 
 	@DefaultValue(text = "7.0,7.1")
-	public ValueProperty PROP_UPGRADE_VERSION = new ValueProperty(TYPE, "UpgradeVersion");
+	public ValueProperty PROP_UPGRADE_VERSIONS = new ValueProperty(TYPE, "UpgradeVersions");
 
 	@DefaultValue(text = "Liferay 7.x")
 	@Service(impl = BundleNameValidationService.class)
