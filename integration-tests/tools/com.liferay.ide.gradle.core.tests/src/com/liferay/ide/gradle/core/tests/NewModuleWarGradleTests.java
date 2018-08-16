@@ -22,6 +22,7 @@ import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import org.eclipse.core.resources.IProject;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -56,6 +57,7 @@ public class NewModuleWarGradleTests extends NewModuleGradleBase {
 		deleteProject(project.getName());
 	}
 
+	@Ignore("ignore as IDE-4188")
 	@Test
 	public void createTheme() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
