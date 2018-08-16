@@ -15,6 +15,7 @@
 package com.liferay.blade.upgrade;
 
 import com.liferay.blade.api.SearchResult;
+import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * @author Gregory Amerson
@@ -289,6 +291,7 @@ public class PropertiesFileChecker {
 			boolean appendedLineBegin = false;
 			boolean precedingBackslash = false;
 			boolean skipLF = false;
+			Stack<Character> crStack = new Stack<>();
 
 			while (true) {
 				_total++;
@@ -311,8 +314,21 @@ public class PropertiesFileChecker {
 				if (skipLF) {
 					skipLF = false;
 
+					if (CoreUtil.isWindows() && (c == '\n')) {
+						if (crStack.size() > 0) {
+							Character crPrefix = crStack.pop();
+
+							if (crPrefix == '\r') {
+								emptylines++;
+							}
+						}
+
+						continue;
+					}
+
 					if (c == '\n') {
 						emptylines++;
+
 						continue;
 					}
 				}
@@ -322,8 +338,15 @@ public class PropertiesFileChecker {
 						continue;
 					}
 
+					if (CoreUtil.isWindows() && !appendedLineBegin && (c == '\r')) {
+						crStack.push(c);
+
+						continue;
+					}
+
 					if (!appendedLineBegin && ((c == '\r') || (c == '\n'))) {
 						emptylines++;
+
 						continue;
 					}
 
