@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
@@ -49,6 +50,7 @@ import org.jdom.output.XMLOutputter;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
@@ -328,6 +330,27 @@ public class UpgradeUtil {
 		IStatus buildType = ImportLiferayModuleProjectOpMethods.getBuildType(path.toOSString());
 
 		return "maven".equals(buildType.getMessage());
+	}
+
+
+	public static List<IProject> getAvailableProject(IProject[] projects) {
+		List<IProject> projectList = new ArrayList<>();
+
+		for (IProject project : projects) {
+			IPath location = project.getLocation();
+
+			location = location.removeLastSegments(1);
+
+			String parent = location.lastSegment();
+
+			if (StringUtil.equals(parent, "hooks") || StringUtil.equals(parent, "layouttpl") ||
+				StringUtil.equals(parent, "webs") || StringUtil.equals(parent, "portlets")) {
+
+				projectList.add(project);
+			}
+		}
+
+		return projectList;
 	}
 
 }

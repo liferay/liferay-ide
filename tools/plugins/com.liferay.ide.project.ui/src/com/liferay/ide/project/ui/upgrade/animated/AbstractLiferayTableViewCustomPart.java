@@ -19,8 +19,6 @@ import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.ValidationUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
@@ -408,24 +406,6 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 		return templateLocation;
 	}
 
-	private List<IProject> _getAvaiableProject(IProject[] projectArrys) {
-		List<IProject> projectList = new ArrayList<>();
-
-		for (IProject project : projectArrys) {
-			if (CoreUtil.isLiferayProject(project)) {
-				if (!LiferayWorkspaceUtil.isValidWorkspace(project)) {
-					if (ProjectUtil.isHookProject(project) || ProjectUtil.isLayoutTplProject(project) ||
-						ProjectUtil.isWebProject(project) || ProjectUtil.isPortletProject(project)) {
-
-						projectList.add(project);
-					}
-				}
-			}
-		}
-
-		return projectList;
-	}
-
 	private List<LiferayUpgradeElement> _getInitItemsList(List<IProject> projects, IProgressMonitor monitor) {
 		final List<LiferayUpgradeElement> tableViewElementList = new ArrayList<>();
 
@@ -496,7 +476,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 	private void _handleFindEvent() {
 		IProject[] projectArrys = CoreUtil.getAllProjects();
 
-		List<IProject> projectList = _getAvaiableProject(projectArrys);
+		List<IProject> projectList = UpgradeUtil.getAvailableProject(projectArrys);
 
 		try {
 			final WorkspaceJob workspaceJob = new WorkspaceJob("Find needed upgrade files......") {
