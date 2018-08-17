@@ -79,8 +79,8 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 		).flatMap(
 			workspaceProject -> workspaceProject.getChildProjects().stream()
 		).forEach(
-			liferayProject -> _addSourceContainers(
-				configuration, monitor, sourceContainers, liferayProject.getProject())
+			childProject -> _addSourceContainers(
+				configuration, monitor, sourceContainers, childProject)
 		);
 
 		IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, server);
@@ -91,7 +91,7 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 			try {
 				IJavaProject javaProject = JavaCore.create(project);
 
-				if (javaProject != null) {
+				if ((javaProject != null) && javaProject.isOpen()) {
 					_addSourceContainers(configuration, monitor, sourceContainers, workspaceProject.getProject());
 				}
 			}
