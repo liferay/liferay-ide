@@ -480,6 +480,12 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 			return;
 		}
 
+		IPath location = project.getLocation();
+
+		location = location.removeLastSegments(1);
+
+		String parent = location.lastSegment();
+
 		if (ProjectUtil.isGradleProject(project)) {
 			dataModel.setHasGradleProject(true);
 		}
@@ -488,11 +494,11 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 			dataModel.setHasMavenProject(true);
 		}
 
-		if (ProjectUtil.isPortletProject(project)) {
+		if (StringUtil.equals(parent, "portlets")) {
 			dataModel.setHasPortlet(true);
 		}
 
-		if (ProjectUtil.isHookProject(project)) {
+		if (StringUtil.equals(parent, "hooks")) {
 			dataModel.setHasHook(true);
 		}
 
@@ -502,19 +508,19 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 			dataModel.setHasServiceBuilder(true);
 		}
 
-		if (ProjectUtil.isLayoutTplProject(project)) {
+		if (StringUtil.equals(parent, "layouttpl")) {
 			dataModel.setHasLayout(true);
 		}
 
-		if (ProjectUtil.isThemeProject(project)) {
+		if (StringUtil.equals(parent, "themes")) {
 			dataModel.setHasTheme(true);
 		}
 
-		if (ProjectUtil.isExtProject(project)) {
+		if (StringUtil.equals(parent, "ext")) {
 			dataModel.setHasExt(true);
 		}
 
-		if (ProjectUtil.isWebProject(project)) {
+		if (StringUtil.equals(parent, "web")) {
 			dataModel.setHasWeb(true);
 		}
 	}
