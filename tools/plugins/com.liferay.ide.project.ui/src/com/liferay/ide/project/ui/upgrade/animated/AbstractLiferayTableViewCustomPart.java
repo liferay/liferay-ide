@@ -476,7 +476,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 	private void _handleFindEvent() {
 		IProject[] projectArrys = CoreUtil.getAllProjects();
 
-		List<IProject> projectList = UpgradeUtil.getAvaiableProject(projectArrys);
+		List<IProject> projectList = UpgradeUtil.getAvailableProject(projectArrys);
 
 		try {
 			final WorkspaceJob workspaceJob = new WorkspaceJob("Find needed upgrade files......") {

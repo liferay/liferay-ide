@@ -333,7 +333,7 @@ public class UpgradeUtil {
 	}
 
 
-	public static List<IProject> getAvaiableProject(IProject[] projects) {
+	public static List<IProject> getAvailableProject(IProject[] projects) {
 		List<IProject> projectList = new ArrayList<>();
 
 		for (IProject project : projects) {
