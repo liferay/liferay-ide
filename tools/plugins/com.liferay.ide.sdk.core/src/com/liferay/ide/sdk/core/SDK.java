@@ -86,7 +86,7 @@ public class SDK {
 		this.location = location;
 	}
 
-	public void addOrUpdateServerProperties(Map<String, String> bunderPropertiesMap) throws IOException {
+	public void addOrUpdateServerProperties(Map<String, String> appServerPropertiesMap) throws IOException {
 		Project project = _getSDKAntProject();
 
 		String[] buildFileNames = {
@@ -121,16 +121,18 @@ public class SDK {
 			OutputStream out = Files.newOutputStream(buildFile.toPath())) {
 
 			p.load(in);
-			p.put("app.server.parent.dir", bunderPropertiesMap.get("app.server.parent.dir"));
+			p.put("app.server.parent.dir", appServerPropertiesMap.get("app.server.parent.dir"));
 
-			String bundleType = bunderPropertiesMap.get("app.server.type");
+			String bundleType = appServerPropertiesMap.get("app.server.type");
 
 			p.put("app.server.type", bundleType);
 
-			p.put("app.server." + bundleType + ".dir", bunderPropertiesMap.get("app.server.dir"));
-			p.put("app.server." + bundleType + ".deploy.dir", bunderPropertiesMap.get("app.server.deploy.dir"));
-			p.put("app.server." + bundleType + ".lib.global.dir", bunderPropertiesMap.get("app.server.lib.global.dir"));
-			p.put("app.server." + bundleType + ".portal.dir", bunderPropertiesMap.get("app.server.portal.dir"));
+			p.put("app.server." + bundleType + ".dir", appServerPropertiesMap.get("app.server.dir"));
+			p.put("app.server." + bundleType + ".deploy.dir", appServerPropertiesMap.get("app.server.deploy.dir"));
+			p.put(
+				"app.server." + bundleType + ".lib.global.dir",
+				appServerPropertiesMap.get("app.server.lib.global.dir"));
+			p.put("app.server." + bundleType + ".portal.dir", appServerPropertiesMap.get("app.server.portal.dir"));
 
 			p.store(out, "");
 		}

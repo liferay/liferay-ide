@@ -29,9 +29,7 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.file.Files;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -119,16 +117,22 @@ public class LiferayWorkspaceUtil {
 					SDK sdk = SDKUtil.createSDKFromLocation(pluginsSDK.getLocation());
 
 					if ( sdk != null) {
-						Map<String,String> bunderPropertiesMap = new HashMap<String,String>();
+						Map<String,String> appServerPropertiesMap = new HashMap<String,String>();
 
-						bunderPropertiesMap.put("app.server.parent.dir", FileUtil.toOSString(bundle.getLiferayHome()));
-						bunderPropertiesMap.put("app.server.type", bundle.getType());
-						bunderPropertiesMap.put("app.server.deploy.dir", FileUtil.toOSString(bundle.getAppServerDeployDir()));
-						bunderPropertiesMap.put("app.server.lib.global.dir", FileUtil.toOSString(bundle.getAppServerLibGlobalDir()));
-						bunderPropertiesMap.put("app.server.dir", FileUtil.toOSString(bundle.getAppServerDir()));
-						bunderPropertiesMap.put("app.server.portal.dir", FileUtil.toOSString(bundle.getAppServerPortalDir()));
+						appServerPropertiesMap.put(
+							"app.server.parent.dir", FileUtil.toOSString(bundle.getLiferayHome()));
+						appServerPropertiesMap.put(
+							"app.server.type", bundle.getType());
+						appServerPropertiesMap.put(
+							"app.server.deploy.dir", FileUtil.toOSString(bundle.getAppServerDeployDir()));
+						appServerPropertiesMap.put(
+							"app.server.lib.global.dir", FileUtil.toOSString(bundle.getAppServerLibGlobalDir()));
+						appServerPropertiesMap.put(
+							"app.server.dir", FileUtil.toOSString(bundle.getAppServerDir()));
+						appServerPropertiesMap.put(
+							"app.server.portal.dir", FileUtil.toOSString(bundle.getAppServerPortalDir()));
 
-						sdk.addOrUpdateServerProperties(bunderPropertiesMap);
+						sdk.addOrUpdateServerProperties(appServerPropertiesMap);
 
 						pluginsSDK.refreshLocal(IResource.DEPTH_INFINITE, null);
 
