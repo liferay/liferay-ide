@@ -29,9 +29,9 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.file.Files;
-
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -47,6 +47,7 @@ import org.eclipse.core.runtime.Status;
 /**
  * @author Andy Wu
  * @author Charles Wu
+ * @author Simon Jiang
  */
 public class LiferayWorkspaceUtil {
 
@@ -115,10 +116,28 @@ public class LiferayWorkspaceUtil {
 				if (FileUtil.exists(pluginsSDK)) {
 					SDK sdk = SDKUtil.createSDKFromLocation(pluginsSDK.getLocation());
 
-					sdk.addOrUpdateServerProperties(
-						ServerUtil.getLiferayRuntime(ServerUtil.getServer(serverName)).getLiferayHome());
+					if ( sdk != null) {
+						Map<String,String> appServerPropertiesMap = new HashMap<String,String>();
 
-					pluginsSDK.refreshLocal(IResource.DEPTH_INFINITE, null);
+						appServerPropertiesMap.put(
+							"app.server.parent.dir", FileUtil.toOSString(bundle.getLiferayHome()));
+						appServerPropertiesMap.put(
+							"app.server.type", bundle.getType());
+						appServerPropertiesMap.put(
+							"app.server.deploy.dir", FileUtil.toOSString(bundle.getAppServerDeployDir()));
+						appServerPropertiesMap.put(
+							"app.server.lib.global.dir", FileUtil.toOSString(bundle.getAppServerLibGlobalDir()));
+						appServerPropertiesMap.put(
+							"app.server.dir", FileUtil.toOSString(bundle.getAppServerDir()));
+						appServerPropertiesMap.put(
+							"app.server.portal.dir", FileUtil.toOSString(bundle.getAppServerPortalDir()));
+
+						sdk.addOrUpdateServerProperties(appServerPropertiesMap);
+
+						pluginsSDK.refreshLocal(IResource.DEPTH_INFINITE, null);
+
+						sdk.validate(true);
+					}
 				}
 			}
 		}

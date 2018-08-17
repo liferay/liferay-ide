@@ -86,7 +86,7 @@ public class SDK {
 		this.location = location;
 	}
 
-	public void addOrUpdateServerProperties(IPath newServerPath) throws IOException {
+	public void addOrUpdateServerProperties(Map<String, String> appServerPropertiesMap) throws IOException {
 		Project project = _getSDKAntProject();
 
 		String[] buildFileNames = {
@@ -121,13 +121,18 @@ public class SDK {
 			OutputStream out = Files.newOutputStream(buildFile.toPath())) {
 
 			p.load(in);
+			p.put("app.server.parent.dir", appServerPropertiesMap.get("app.server.parent.dir"));
 
-			if (p.containsKey("app.server.parent.dir")) {
-				p.put("app.server.parent.dir", newServerPath.toPortableString());
-			}
-			else {
-				p.put("app.server.parent.dir", newServerPath.toPortableString());
-			}
+			String bundleType = appServerPropertiesMap.get("app.server.type");
+
+			p.put("app.server.type", bundleType);
+
+			p.put("app.server." + bundleType + ".dir", appServerPropertiesMap.get("app.server.dir"));
+			p.put("app.server." + bundleType + ".deploy.dir", appServerPropertiesMap.get("app.server.deploy.dir"));
+			p.put(
+				"app.server." + bundleType + ".lib.global.dir",
+				appServerPropertiesMap.get("app.server.lib.global.dir"));
+			p.put("app.server." + bundleType + ".portal.dir", appServerPropertiesMap.get("app.server.portal.dir"));
 
 			p.store(out, "");
 		}
@@ -601,6 +606,10 @@ public class SDK {
 
 		try {
 			if ((sdkProperties == null) || reload) {
+				if (sdkProperties != null) {
+					sdkProperties.clear();
+				}
+
 				_loadPropertiesFile(project, "build." + project.getProperty("user.name") + ".properties");
 				_loadPropertiesFile(project, "build." + project.getProperty("env.COMPUTERNAME") + ".properties");
 				_loadPropertiesFile(project, "build." + project.getProperty("env.HOST") + ".properties");
