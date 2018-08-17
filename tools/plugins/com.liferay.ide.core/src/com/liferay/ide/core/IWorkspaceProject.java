@@ -16,6 +16,7 @@ package com.liferay.ide.core;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 
 /**
@@ -24,7 +25,7 @@ import org.eclipse.core.runtime.IPath;
  */
 public interface IWorkspaceProject extends ILiferayProject {
 
-	public List<IBundleProject> getChildProjects();
+	public List<IProject> getChildProjects();
 
 	public List<IPath> getTargetPlatformArtifacts();
 

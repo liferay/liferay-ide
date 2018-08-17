@@ -15,8 +15,8 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.BaseLiferayProject;
-import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayPortal;
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -78,8 +78,7 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 	}
 
 	@Override
-	public List<IBundleProject> getChildProjects() {
-
+	public List<IProject> getChildProjects() {
 		IProject workspaceProject = getProject();
 
 		if ( workspaceProject == null) {
@@ -89,17 +88,17 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 		IPath workspaceLocation = workspaceProject.getLocation();
 		IProject[] allProjects = CoreUtil.getAllProjects();
 
-		List<IBundleProject> liferayProjects = Stream.of(
+		List<IProject> childProjects= Stream.of(
 			allProjects
 		).filter(
 			project -> !project.equals(workspaceProject)
 		).map(
-			project -> LiferayCore.create(IBundleProject.class, project)
+			project -> LiferayCore.create(ILiferayProject.class, project)
 		).filter(
-			bundleProject -> bundleProject != null
+			liferayProject -> liferayProject != null
 		).filter(
-			bundleProject -> {
-				IProject project = bundleProject.getProject();
+			liferayProject -> {
+				IProject project = liferayProject.getProject();
 
 				IJavaProject javaProject = JavaCore.create(project);
 
@@ -110,10 +109,12 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 
 				return false;
 			}
+		).map(
+			ILiferayProject::getProject
 		).collect(
 			Collectors.toList()
 		);
 
-		return liferayProjects;
+		return childProjects;
 	}
 }
