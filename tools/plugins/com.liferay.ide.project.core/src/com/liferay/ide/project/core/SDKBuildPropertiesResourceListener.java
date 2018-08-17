@@ -220,9 +220,19 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
 				}
 
 				if (canAdd) {
-					MarkerUtil.setMarker(
-						deltaFile, IMarker.PROBLEM, IMarker.SEVERITY_ERROR, status.getMessage(),
-						deltaFile.getFullPath().toPortableString(), _MARKER_ID_SDK_PROPERTIES_INVALID);
+					if (deltaFile.exists()) {
+						MarkerUtil.setMarker(
+							deltaFile, IMarker.PROBLEM, IMarker.SEVERITY_ERROR, status.getMessage(),
+							deltaFile.getFullPath().toPortableString(), _MARKER_ID_SDK_PROPERTIES_INVALID
+						);
+					}
+					else {
+						MarkerUtil.setMarker(
+							deltaProject, IMarker.PROBLEM, IMarker.SEVERITY_ERROR,
+							"sdk properties file missing, please configure it to SDK project",
+							deltaProject.getFullPath().toPortableString(), _MARKER_ID_SDK_PROPERTIES_MISSING
+						);
+					}
 				}
 			}
 		}
@@ -266,6 +276,8 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
 	private static final String _ID_WORKSPACE_SDK_INVALID = "workspace-sdk-invalid";
 
 	private static final String _MARKER_ID_SDK_PROPERTIES_INVALID = "sdk-properties-invalid";
+
+	private static final String _MARKER_ID_SDK_PROPERTIES_MISSING = "sdk-properties-missing";
 
 	private static final Pattern _PATTERN_BUILD_PROPERTIES = Pattern.compile("build.[\\w|\\W.]*properties");
 
