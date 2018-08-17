@@ -62,7 +62,7 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 
 	public void createSpecialDescriptor(Composite parent, int style) {
 		final StringBuilder descriptorBuilder = new StringBuilder(
-			"This step upgrades descriptor XML DTD versions from 6.2 to 7.0 and ");
+			"This step upgrades descriptor XML DTD versions from 6.2 to 7.0 or 7.1 and ");
 
 		descriptorBuilder.append("deletes the wap-template-path \ntag from liferay-layout-template.xml files.\n");
 		descriptorBuilder.append(
@@ -101,13 +101,13 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 			if (docType != null) {
 				final String publicId = docType.getPublicId();
 
-				final String newPublicId = _getNewDoctTypeSetting(publicId, "7.0.0", _PUBLICID_REGREX);
+				final String newPublicId = _getNewDoctTypeSetting(publicId, getUpgradeVersion(), _PUBLICID_REGREX);
 
 				docType.setPublicId(newPublicId);
 
 				final String systemId = docType.getSystemId();
 
-				final String newSystemId = _getNewDoctTypeSetting(systemId, "7_0_0", _SYSTEMID_REGREX);
+				final String newSystemId = _getNewDoctTypeSetting(systemId, getUpgradeVersion().replaceAll("\\.", "_"), _SYSTEMID_REGREX);
 
 				docType.setSystemId(newSystemId);
 			}
@@ -143,13 +143,13 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 			if (docType != null) {
 				final String publicId = docType.getPublicId();
 
-				final String newPublicId = _getNewDoctTypeSetting(publicId, "7.0.0", _PUBLICID_REGREX);
+				final String newPublicId = _getNewDoctTypeSetting(publicId, getUpgradeVersion(), _PUBLICID_REGREX);
 
 				docType.setPublicId(newPublicId);
 
 				final String systemId = docType.getSystemId();
 
-				final String newSystemId = _getNewDoctTypeSetting(systemId, "7_0_0", _SYSTEMID_REGREX);
+				final String newSystemId = _getNewDoctTypeSetting(systemId, getUpgradeVersion().replaceAll("\\.", "_"), _SYSTEMID_REGREX);
 
 				docType.setSystemId(newSystemId);
 			}
@@ -206,7 +206,7 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 	}
 
 	@Override
-	protected boolean isNeedUpgrade(IFile srcFile) {
+	protected boolean isUpgradeNeeded(IFile srcFile) {
 		IDOMModel domModel = null;
 
 		try {
@@ -226,8 +226,8 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 
 				String oldSystemIdVersion = _getOldVersion(systemId, _SYSTEMID_REGREX);
 
-				if (((publicId != null) && !oldPublicIdVersion.equals("7.0.0")) ||
-					((systemId != null) && !oldSystemIdVersion.equals("7_0_0"))) {
+				if (((publicId != null) && !oldPublicIdVersion.equals(getUpgradeVersion().replaceAll("\\.", "_"))) ||
+					((systemId != null) && !oldSystemIdVersion.equals(getUpgradeVersion().replaceAll("\\.", "_")))) {
 
 					return true;
 				}

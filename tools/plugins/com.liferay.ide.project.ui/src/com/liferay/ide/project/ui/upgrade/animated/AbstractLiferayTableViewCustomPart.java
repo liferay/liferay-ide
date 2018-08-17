@@ -15,7 +15,9 @@
 package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -300,7 +302,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 		return projects;
 	}
 
-	protected abstract boolean isNeedUpgrade(IFile srcFile);
+	protected abstract boolean isUpgradeNeeded(IFile srcFile);
 
 	protected Status retval = Status.createOkStatus();
 	protected TableViewer tableViewer;
@@ -355,6 +357,17 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 
 		private final ImageRegistry _imageRegistry;
 
+	}
+
+	protected String getUpgradeVersion() {
+		String upgradeVersions = SapphireUtil.getContent(dataModel.getUpgradeVersions());
+
+		if (StringUtil.contains(upgradeVersions, "7.1")) {
+			return "7.1.0";
+		}
+		else {
+			return "7.0.0";
+		}
 	}
 
 	protected class TableViewContentProvider implements IStructuredContentProvider {
@@ -441,7 +454,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 			for (IFile upgradeFile : upgradeFiles) {
 				IPath filePath = upgradeFile.getLocation();
 
-				if (!ValidationUtil.isProjectTargetDirFile(filePath.toFile()) && isNeedUpgrade(upgradeFile)) {
+				if (!ValidationUtil.isProjectTargetDirFile(filePath.toFile()) && isUpgradeNeeded(upgradeFile)) {
 					LiferayUpgradeElement tableViewElement = new LiferayUpgradeElement(upgradeFile, project);
 
 					tableViewElementList.add(tableViewElement);
