@@ -17,7 +17,6 @@ package com.liferay.ide.project.core;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayPortal;
-import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -33,6 +32,7 @@ import java.util.stream.Stream;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
 /**
@@ -78,7 +78,7 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 	}
 
 	@Override
-	public List<ILiferayProject> getChildProjects() {
+	public List<IBundleProject> getChildProjects() {
 
 		IProject workspaceProject = getProject();
 
@@ -89,7 +89,7 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 		IPath workspaceLocation = workspaceProject.getLocation();
 		IProject[] allProjects = CoreUtil.getAllProjects();
 
-		List<ILiferayProject> liferayProjects = Stream.of(
+		List<IBundleProject> liferayProjects = Stream.of(
 			allProjects
 		).filter(
 			project -> !project.equals(workspaceProject)
@@ -101,15 +101,15 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 			bundleProject -> {
 				IProject project = bundleProject.getProject();
 
-				if (workspaceLocation.isPrefixOf(project.getRawLocation()) && (JavaCore.create(project) != null) &&
-						project.isAccessible()) {
+				IJavaProject javaProject = JavaCore.create(project);
+
+				if (workspaceLocation.isPrefixOf(project.getRawLocation()) && ( javaProject!= null) &&
+						javaProject.isOpen()) {
 					return true;
 				}
 
 				return false;
 			}
-		).map(
-			project -> LiferayCore.create(project)
 		).collect(
 			Collectors.toList()
 		);
