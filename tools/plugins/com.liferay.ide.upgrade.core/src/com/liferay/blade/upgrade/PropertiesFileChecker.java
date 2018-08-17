@@ -314,22 +314,25 @@ public class PropertiesFileChecker {
 				if (skipLF) {
 					skipLF = false;
 
-					if (CoreUtil.isWindows() && (c == '\n')) {
-						if (crStack.size() > 0) {
-							Character crPrefix = crStack.pop();
+					if (CoreUtil.isWindows()) {
+						if (c == '\n') {
+							if (crStack.size() > 0) {
+								Character crPrefix = crStack.pop();
 
-							if (crPrefix == '\r') {
-								emptylines++;
+								if (crPrefix == '\r') {
+									emptylines++;
+								}
 							}
+
+							continue;
 						}
-
-						continue;
 					}
+					else {
+						if (c == '\n') {
+							emptylines++;
 
-					if (c == '\n') {
-						emptylines++;
-
-						continue;
+							continue;
+						}
 					}
 				}
 
@@ -338,16 +341,17 @@ public class PropertiesFileChecker {
 						continue;
 					}
 
-					if (CoreUtil.isWindows() && !appendedLineBegin && (c == '\r')) {
-						crStack.push(c);
-
-						continue;
+					if (CoreUtil.isWindows()) {
+						if (!appendedLineBegin && (c == '\r')) {
+							crStack.push(c);
+							continue;
+						}
 					}
-
-					if (!appendedLineBegin && ((c == '\r') || (c == '\n'))) {
-						emptylines++;
-
-						continue;
+					else {
+						if (!appendedLineBegin && ((c == '\r') || (c == '\n'))) {
+							emptylines++;
+							continue;
+						}
 					}
 
 					skipWhiteSpace = false;
