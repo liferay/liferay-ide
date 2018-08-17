@@ -179,7 +179,7 @@ public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart {
 	}
 
 	@Override
-	protected boolean isNeedUpgrade(IFile srcFile) {
+	protected boolean isUpgradeNeeded(IFile srcFile) {
 		final String content = FileUtil.readContents(srcFile.getLocation().toFile());
 
 		if ((content != null) && !content.equals("")) {

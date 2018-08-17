@@ -206,7 +206,7 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 	}
 
 	@Override
-	protected boolean isNeedUpgrade(IFile srcFile) {
+	protected boolean isUpgradeNeeded(IFile srcFile) {
 		IDOMModel domModel = null;
 
 		try {

@@ -302,7 +302,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 		return projects;
 	}
 
-	protected abstract boolean isNeedUpgrade(IFile srcFile);
+	protected abstract boolean isUpgradeNeeded(IFile srcFile);
 
 	protected Status retval = Status.createOkStatus();
 	protected TableViewer tableViewer;
@@ -360,9 +360,9 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 	}
 
 	protected String getUpgradeVersion() {
-		String upgradleVersions = SapphireUtil.getContent(dataModel.getUpgradeVersions());
+		String upgradeVersions = SapphireUtil.getContent(dataModel.getUpgradeVersions());
 
-		if (StringUtil.contains(upgradleVersions, "7.1")) {
+		if (StringUtil.contains(upgradeVersions, "7.1")) {
 			return "7.1.0";
 		}
 		else {
@@ -454,7 +454,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 			for (IFile upgradeFile : upgradeFiles) {
 				IPath filePath = upgradeFile.getLocation();
 
-				if (!ValidationUtil.isProjectTargetDirFile(filePath.toFile()) && isNeedUpgrade(upgradeFile)) {
+				if (!ValidationUtil.isProjectTargetDirFile(filePath.toFile()) && isUpgradeNeeded(upgradeFile)) {
 					LiferayUpgradeElement tableViewElement = new LiferayUpgradeElement(upgradeFile, project);
 
 					tableViewElementList.add(tableViewElement);
