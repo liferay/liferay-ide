@@ -15,7 +15,9 @@
 package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -355,6 +357,17 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 
 		private final ImageRegistry _imageRegistry;
 
+	}
+
+	protected String getUpgradeVersion() {
+		String upgradleVersions = SapphireUtil.getContent(dataModel.getUpgradeVersions());
+
+		if (StringUtil.contains(upgradleVersions, "7.1")) {
+			return "7.1.0";
+		}
+		else {
+			return "7.0.0";
+		}
 	}
 
 	protected class TableViewContentProvider implements IStructuredContentProvider {
