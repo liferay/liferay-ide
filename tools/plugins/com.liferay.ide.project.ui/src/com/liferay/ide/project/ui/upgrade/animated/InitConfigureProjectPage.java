@@ -703,6 +703,8 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				}
 
 			});
+
+		dataModel.setDownloadBundle(_downloadBundleCheckbox.getSelection());
 	}
 
 	private void _createImportElement() {
