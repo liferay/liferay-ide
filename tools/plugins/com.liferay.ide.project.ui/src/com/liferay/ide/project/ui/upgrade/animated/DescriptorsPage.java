@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -164,6 +165,14 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 
 	@Override
 	protected IFile[] getAvaiableUpgradeFiles(IProject project) {
+		if (FileUtil.notExists(project)) {
+			return new IFile[0];
+		}
+
+		if (!project.isOpen()) {
+			return new IFile[0];
+		}
+
 		List<IFile> files = new ArrayList<>();
 
 		for (String[] descriptors : _DESCRIPTORS_AND_IMAGES) {
@@ -226,7 +235,7 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 
 				String oldSystemIdVersion = _getOldVersion(systemId, _SYSTEMID_REGREX);
 
-				if (((publicId != null) && !oldPublicIdVersion.equals(getUpgradeVersion().replaceAll("\\.", "_"))) ||
+				if (((publicId != null) && !oldPublicIdVersion.equals(getUpgradeVersion())) ||
 					((systemId != null) && !oldSystemIdVersion.equals(getUpgradeVersion().replaceAll("\\.", "_")))) {
 
 					return true;
