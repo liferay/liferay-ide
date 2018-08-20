@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.ui.tests.fragment.deploy</groupId>
 		<artifactId>fragment-deploy-tests</artifactId>
-		<version>3.2.0-SNAPSHOT</version>
+		<version>3.3.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.ui.fragment.deploy.tomcat.70.tests</artifactId>
