@@ -17,6 +17,7 @@ package com.liferay.ide.server.core.portal;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.util.ArrayList;
@@ -121,6 +122,14 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 	private void _addSourceContainers(
 		ILaunchConfiguration configuration, IProgressMonitor monitor, List<ISourceContainer> sourceContainers,
 		IProject project) {
+
+		if (FileUtil.notExists(project)) {
+			return;
+		}
+
+		if (!project.isOpen()) {
+			return;
+		}
 
 		String projectName = project.getName();
 
