@@ -37,14 +37,17 @@ public class WelcomePage extends Page {
 		final StringBuilder desriptors = new StringBuilder(
 			"The Liferay Code Upgrade Tool helps you upgrade Liferay 6.2 plugin ");
 
-		desriptors.append("projects into Liferay 7.0 projects.\n\n");
+		desriptors.append("projects into Liferay 7.0 and 7.1 projects. ");
+		desriptors.append("Or upgrade Liferay Workspace 7.0 to Liferay Workspace 7.1.\n\n");
 		desriptors.append("The key functions are described below:\n");
 		desriptors.append(
-			"       1. Convert Liferay Plugins SDK 6.2 to Liferay Workspace\n");
-		desriptors.append("       2. Update Descriptor files from 6.2 to 7.0\n");
-		desriptors.append("       3. Find Breaking Changes in the API stages that need to be migrated to Liferay 7\n");
-		desriptors.append("       4. Update Layout Template files from 6.2 to 7.0 format\n");
-		desriptors.append("       5. Automatically Convert Custom JSP Hooks to OSGi modules\n\n");
+			"       1. Convert Liferay Plugins SDK 6.2 to Liferay Workspace 7.0 or 7.1\n");
+		desriptors.append(
+			"       2. Convert Liferay Workspace 7.0 to Liferay Workspace 7.1\n");
+		desriptors.append("       3. Update Descriptor files from 6.2 to 7.0 or 7.1, or from 7.0 to 7.1\n");
+		desriptors.append("       4. Find Breaking Changes in the API stages that need to be migrated to Liferay 7\n");
+		desriptors.append("       5. Update Layout Template files from 6.2 to 7.0 format\n");
+		desriptors.append("       6. Automatically Convert Custom JSP Hooks to OSGi modules\n\n");
 		desriptors.append("Note:\n");
 		desriptors.append("       It is highly recommended that you back-up copies of your original plugin ");
 		desriptors.append("files before continuing.\n");
