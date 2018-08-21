@@ -230,7 +230,6 @@
                     <text>${platform_name}</text>
                     <value>linux</value>
                 </compareText>
-                <isFalse value="${clitools}"/>
             </conditionRuleList>
             <elseActionList>
                 <if>
