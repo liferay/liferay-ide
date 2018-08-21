@@ -133,7 +133,7 @@ public class UpgradeUtil {
 		return retval;
 	}
 
-	public static void createLiferayWorkspace(IPath targetSDKLocation, IProgressMonitor groupMonitor)
+	public static void createLiferayWorkspace(IPath targetSDKLocation, String version, IProgressMonitor groupMonitor)
 		throws InterruptedException {
 
 		Job job = new Job("Initializing Liferay Workspace...") {
@@ -148,8 +148,9 @@ public class UpgradeUtil {
 					File targetSdkFile = targetSDKLocation.toFile();
 
 					sb.append("\"" + targetSdkFile.getAbsolutePath() + "\" ");
-
 					sb.append("init -u");
+					sb.append(" -v ");
+					sb.append(version);
 
 					progress.worked(30);
 					BladeCLI.execute(sb.toString());

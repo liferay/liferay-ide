@@ -443,7 +443,13 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		else {
 			String newPath = "";
 
-			UpgradeUtil.createLiferayWorkspace(location, groupMonitor);
+			String version = SapphireUtil.getContent(dataModel.getUpgradeVersions());
+
+			if (version.contains("7.1")) {
+				version = "7.1";
+			}
+
+			UpgradeUtil.createLiferayWorkspace(location, version, groupMonitor);
 
 			_isCanceled(monitor);
 
