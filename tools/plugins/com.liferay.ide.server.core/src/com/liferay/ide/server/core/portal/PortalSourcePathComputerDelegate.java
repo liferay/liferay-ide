@@ -131,6 +131,12 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 			return;
 		}
 
+		IJavaProject javaProject = JavaCore.create(project);
+
+		if (javaProject == null || !javaProject.isOpen()) {
+			return;
+		}
+
 		String projectName = project.getName();
 
 		try {
