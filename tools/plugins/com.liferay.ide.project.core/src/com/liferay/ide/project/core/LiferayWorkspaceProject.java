@@ -32,11 +32,11 @@ import java.util.stream.Stream;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
 /**
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public class LiferayWorkspaceProject extends BaseLiferayProject implements IWorkspaceProject {
 
@@ -69,7 +69,7 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 
 	@Override
 	public IFolder[] getSourceFolders() {
-		return null;
+		return new IFolder[0];
 	}
 
 	@Override
@@ -79,38 +79,30 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 
 	@Override
 	public List<IProject> getChildProjects() {
-		IProject workspaceProject = getProject();
-
-		if ( workspaceProject == null) {
-			return null;
+		if (FileUtil.notExists(getProject())) {
+			return Collections.emptyList();
 		}
 
-		IPath workspaceLocation = workspaceProject.getLocation();
-		IProject[] allProjects = CoreUtil.getAllProjects();
+		if (!getProject().isOpen()) {
+			return Collections.emptyList();
+		}
 
-		List<IProject> childProjects= Stream.of(
-			allProjects
+		List<IProject> childProjects = Stream.of(
+			CoreUtil.getAllProjects()
 		).filter(
-			project -> !project.equals(workspaceProject)
-		).map(
-			project -> LiferayCore.create(ILiferayProject.class, project)
+			project -> FileUtil.exists(project)
 		).filter(
-			liferayProject -> liferayProject != null
+			project -> project.isOpen()
 		).filter(
-			liferayProject -> {
-				IProject project = liferayProject.getProject();
-
-				IJavaProject javaProject = JavaCore.create(project);
-
-				if (workspaceLocation.isPrefixOf(project.getRawLocation()) && ( javaProject!= null) &&
-						javaProject.isOpen()) {
-					return true;
-				}
-
-				return false;
-			}
-		).map(
-			ILiferayProject::getProject
+			project -> !project.equals(getProject())
+		).filter(
+			project -> LiferayCore.create(ILiferayProject.class, project) != null
+		).filter(
+			project -> JavaCore.create(project) != null
+		).filter(
+			project -> JavaCore.create(project).isOpen()
+		).filter(
+			project -> getProject().getLocation().isPrefixOf(project.getLocation())
 		).collect(
 			Collectors.toList()
 		);
