@@ -33,9 +33,6 @@
                             <origin>../shared/download/liferay-ce-portal-tomcat-7.1.0-ga1-20180703012531655.zip</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../shared/download/com.liferay.portal.plugins.sdk-1.0.19-withdependencies.zip</origin>
-                        </distributionFile>
-                        <distributionFile>
                             <origin>../shared/download/biz.aQute.bnd.jar</origin>
                         </distributionFile>
                     </distributionFileList>
@@ -160,10 +157,6 @@
                 <copyFile>
                     <destination>${liferayBundlesPath}${platform_path_separator}liferay-ce-portal-tomcat-7.1.0-ga1-20180703012531655.zip</destination>
                     <origin>${installdir}${platform_path_separator}liferay-ce-portal-tomcat-7.1.0-ga1-20180703012531655.zip</origin>
-                </copyFile>
-                <copyFile>
-                    <destination>${liferayBundlesPath}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.19-withdependencies.zip</destination>
-                    <origin>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.19-withdependencies.zip</origin>
                 </copyFile>
                 <include file="../components/run-java-jpm.xml" />
             </actionList>
@@ -433,9 +426,6 @@
         </runProgram>
         <deleteFile>
             <path>${installdir}${platform_path_separator}liferay-ce-portal-tomcat-7.1.0-ga1-20180703012531655.zip</path>
-        </deleteFile>
-        <deleteFile>
-            <path>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.19-withdependencies.zip</path>
         </deleteFile>
         <deleteFile>
             <path>${installdir}${platform_path_separator}blade.jar</path>
