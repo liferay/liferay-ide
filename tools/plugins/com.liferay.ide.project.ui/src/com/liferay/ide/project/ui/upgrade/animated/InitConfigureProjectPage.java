@@ -137,7 +137,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		SapphireUtil.attachListener(dataModel.getBundleName(), new LiferayUpgradeValidationListener());
 		SapphireUtil.attachListener(dataModel.getBundleUrl(), new LiferayUpgradeValidationListener());
 		SapphireUtil.attachListener(dataModel.getBackupLocation(), new LiferayUpgradeValidationListener());
-		SapphireUtil.attachListener(dataModel.getUpgradeVersions(), new LiferayUpgradeValidationListener());
+		SapphireUtil.attachListener(dataModel.getUpgradeVersion(), new LiferayUpgradeValidationListener());
 
 		ScrolledComposite scrolledComposite = new ScrolledComposite(this, SWT.V_SCROLL);
 		GridData scrolledData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -173,7 +173,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 						_disposeUpgradeVersionElement();
 
 						dataModel.setIsLiferayWorkspace(false);
-						dataModel.setUpgradeVersions(_upgradeVersionItemValues[1]);
+						dataModel.setUpgradeVersion("7.1");
 
 						_createUpgradeVersionElement();
 
@@ -362,8 +362,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 				_pageParent.layout();
 			});
-
-		String layout = SapphireUtil.getContent(dataModel.getLayout());
 
 		IPath location = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
 
@@ -563,7 +561,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 					for (int i = 0; i < upgradeVersionItemNames.length; i++) {
 						if (upgradeVersion.equals(upgradeVersionItemNames[i])) {
-							dataModel.setUpgradeVersions(upgradeVersionItemValues[i]);
+							dataModel.setUpgradeVersion(upgradeVersionItemValues[i]);
 
 							if ((_bundleUrlField != null) && !_bundleUrlField.isDisposed()) {
 								dataModel.setBundleUrl(initBundleUrls[i]);
@@ -638,7 +636,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				@Override
 				public void focusGained(FocusEvent e) {
 					String input = ((Text)e.getSource()).getText();
-					String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersions());
+					String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
 
 					String bundleUrl = LiferayUpgradeDataModel.BUNDLE_URL_70;
 
@@ -656,7 +654,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				@Override
 				public void focusLost(FocusEvent e) {
 					String input = ((Text)e.getSource()).getText();
-					String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersions());
+					String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
 
 					String defaultBundleUrl = LiferayUpgradeDataModel.BUNDLE_URL_70;
 
@@ -878,7 +876,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 		_upgradeVersionComb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersions());
+		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
 
 		boolean isLiferayWorkspace = SapphireUtil.getContent(dataModel.getIsLiferayWorkspace());
 
@@ -1007,7 +1005,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 			_upgradeVersionComb.setItems(upgradeVersdionItemNames);
 
-			String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersions());
+			String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
 
 			for (int i = 0; i < upgradeVersionsValues.length; i++) {
 				if (StringUtil.equals(upgradeVersion, upgradeVersionsValues[i])) {
@@ -1164,7 +1162,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		dataModel.getSdkLocation().service(ProjectLocationValidationService.class);
 	private Combo _upgradeVersionComb;
 	private String[] _upgradeVersionItemNames = {"7.0", "7.1"};
-	private String[] _upgradeVersionItemValues = {"7.0", "7.0,7.1"};
+	private String[] _upgradeVersionItemValues = {"7.0", "7.1"};
 	private Label _upgradeVersionLabel;
 	private boolean _validationResult;
 
@@ -1194,18 +1192,21 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				return;
 			}
 
-			if (UpgradeUtil.isAlreadyImported(PathBridge.create(path))) {
-				if (LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toPortableString())) {
-					dataModel.setUpgradeVersions("7.1");
-					dataModel.setIsLiferayWorkspace(true);
+			if (UpgradeUtil.isAlreadyImported(PathBridge.create(path)) && LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toPortableString())) {
+				String bundleUrl = LiferayWorkspaceUtil.getGradleProperty(path.toPortableString(), "liferay.workspace.bundle.url", "7.0");
+
+				if (bundleUrl.contains("7.1")) {
+					dataModel.setUpgradeVersion("7.1");
 				}
 				else {
-					dataModel.setIsLiferayWorkspace(false);
-					dataModel.setUpgradeVersions(_upgradeVersionItemValues[1]);
+					dataModel.setUpgradeVersion("7.0");
 				}
+
+				dataModel.setIsLiferayWorkspace(true);
 
 				dataModel.setDownloadBundle(false);
 
+				_disposeUpgradeVersionElement();
 				_disposeBundleCheckboxElement();
 				_disposeBundleElement();
 
@@ -1214,7 +1215,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 			}
 			else if (LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toPortableString())) {
 				dataModel.setIsLiferayWorkspace(true);
-				dataModel.setUpgradeVersions("7.1");
+				dataModel.setUpgradeVersion("7.1");
 
 				_disposeBundleCheckboxElement();
 				_disposeBundleElement();
@@ -1231,7 +1232,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 				dataModel.setIsLiferayWorkspace(false);
 				dataModel.setDownloadBundle(false);
-				dataModel.setUpgradeVersions(_upgradeVersionItemValues[1]);
+				dataModel.setUpgradeVersion("7.1");
 
 				_disposeBundleCheckboxElement();
 				_disposeBundleElement();
@@ -1244,7 +1245,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 			}
 			else {
 				dataModel.setIsLiferayWorkspace(false);
-				dataModel.setUpgradeVersions(_upgradeVersionItemValues[1]);
+				dataModel.setUpgradeVersion("7.1");
 
 				_disposeUpgradeVersionElement();
 

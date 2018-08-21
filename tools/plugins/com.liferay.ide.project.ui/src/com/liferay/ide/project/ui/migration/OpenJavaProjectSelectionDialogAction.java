@@ -124,7 +124,7 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 	private void _createUpgradeVersionControl(Composite composite) {
 		Group upgradeVersionGroup = SWTUtil.createGroup(composite, "Upgrade to Liferay Version", 2, 2);
 
-		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersions());
+		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
 
 		boolean selectedValue = "7.0".equals(upgradeVersion);;
 
@@ -137,7 +137,7 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					dataModel.setUpgradeVersions("7.0");
+					dataModel.setUpgradeVersion("7.0");
 				}
 
 			});
@@ -149,27 +149,17 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					dataModel.setUpgradeVersions("7.0,7.1");
+					dataModel.setUpgradeVersion("7.1");
 				}
 
 			});
 
 		if (liferayWorkspace) {
-			dataModel.setUpgradeVersions("7.1");
+			dataModel.setUpgradeVersion("7.1");
 
-			upgradeVersion70Button.setEnabled(false);
+			upgradeVersion70Button.setEnabled(true);
 			upgradeVersion71Button.setEnabled(true);
 			upgradeVersion71Button.setSelection(true);
-
-			upgradeVersion71Button.addSelectionListener(
-				new SelectionAdapter() {
-
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						dataModel.setUpgradeVersions("7.1");
-					}
-
-				});
 		}
 	}
 
@@ -218,7 +208,7 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 
 			_combineExistedProblemCheckbox.addSelectionListener(listener);
 
-			if (dataModel.getUpgradeVersions() != null) {
+			if (dataModel.getUpgradeVersion() != null) {
 				_createUpgradeVersionControl(composite);
 			}
 

@@ -358,9 +358,9 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 	}
 
 	protected String getUpgradeVersion() {
-		String upgradeVersions = SapphireUtil.getContent(dataModel.getUpgradeVersions());
+		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
 
-		if (StringUtil.contains(upgradeVersions, "7.1")) {
+		if (StringUtil.contains(upgradeVersion, "7.1")) {
 			return "7.1.0";
 		}
 		else {
