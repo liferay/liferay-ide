@@ -21,14 +21,12 @@ import com.liferay.ide.project.core.AbstractProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
-import java.io.File;
 import java.io.IOException;
-
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 
 import java.util.List;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 
 import org.eclipse.core.resources.IFile;
@@ -70,15 +68,15 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 
 	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) {
 		if (bundleUrl != null) {
-			String bundleUrlProperty = "\n\n" + LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
-
-			File gradlePropertiesFile = FileUtil.getFile(project.getFile("gradle.properties"));
-
 			try {
-				Files.write(gradlePropertiesFile.toPath(), bundleUrlProperty.getBytes(), StandardOpenOption.APPEND);
+				PropertiesConfiguration config = new PropertiesConfiguration(
+					FileUtil.getFile(project.getFile("gradle.properties")));
+
+				config.setProperty(LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL, bundleUrl);
+				config.save();
 			}
-			catch (IOException ioe) {
-				GradleCore.logError("Error append bundle url property", ioe);
+			catch (ConfigurationException ce) {
+				GradleCore.logError(ce);
 			}
 		}
 

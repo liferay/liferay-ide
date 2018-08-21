@@ -35,7 +35,7 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public Value<Boolean> getBackupSdk();
 
-	public Value<String> getUpgradeVersions();
+	public Value<String> getUpgradeVersion();
 
 	public Value<String> getBundleName();
 
@@ -85,7 +85,7 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public void setBackupSdk(String backupSdk);
 
-	public void setUpgradeVersions(String value);
+	public void setUpgradeVersion(String upgradeVersion);
 
 	public void setBundleName(String bundleName);
 
@@ -171,8 +171,8 @@ public interface LiferayUpgradeDataModel extends Element {
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_BACKUP_SDK = new ValueProperty(TYPE, "BackupSdk");
 
-	@DefaultValue(text = "7.0,7.1")
-	public ValueProperty PROP_UPGRADE_VERSIONS = new ValueProperty(TYPE, "UpgradeVersions");
+	@DefaultValue(text = "7.0")
+	public ValueProperty PROP_UPGRADE_VERSION = new ValueProperty(TYPE, "UpgradeVersion");
 
 	@DefaultValue(text = "Liferay 7.x")
 	@Service(impl = BundleNameValidationService.class)

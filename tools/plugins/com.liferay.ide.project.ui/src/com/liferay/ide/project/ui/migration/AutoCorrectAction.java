@@ -19,7 +19,6 @@ import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -31,7 +30,6 @@ import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
 import java.io.File;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -83,13 +81,9 @@ public class AutoCorrectAction extends ProblemAction {
 
 		LiferayUpgradeDataModel liferayUpgradeDataModel = findBreakingChangesPage.getDataModel();
 
-		String upgradeVersions = SapphireUtil.getContent(liferayUpgradeDataModel.getUpgradeVersions());
+		String upgradeVersion = SapphireUtil.getContent(liferayUpgradeDataModel.getUpgradeVersion());
 
-		String[] versions = upgradeVersions.split(",");
-
-		if (ListUtil.isNotEmpty(versions)) {
-			_upgradeVersions = Arrays.asList(versions);
-		}
+		_upgradeVersion = upgradeVersion;
 
 		WorkspaceJob job = new WorkspaceJob("Auto correcting breaking changes.") {
 
@@ -159,7 +153,7 @@ public class AutoCorrectAction extends ProblemAction {
 
 					if (!projectName.equals("")) {
 						migrateHandler.findMigrationProblems(
-							new Path[] {path}, new String[] {projectName}, _upgradeVersions);
+							new Path[] {path}, new String[] {projectName}, _upgradeVersion);
 					}
 				}
 				catch (AutoMigrateException | CoreException | InvalidSyntaxException e) {
@@ -274,7 +268,7 @@ public class AutoCorrectAction extends ProblemAction {
 		return null;
 	}
 
-	private List<String> _upgradeVersions;
+	private String _upgradeVersion;
 	private ISelectionProvider _provider;
 
 }

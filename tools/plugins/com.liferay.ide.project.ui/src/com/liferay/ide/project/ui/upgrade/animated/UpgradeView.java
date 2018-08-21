@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.upgrade.BreakingChangeSelectedProject;
 import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
@@ -112,6 +113,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 
 		boolean hasMavenProject = _dataModel.getHasMavenProject().content();
 		boolean hasGradleProject = _dataModel.getHasGradleProject().content();
+		boolean isLiferayWorkspace = SapphireUtil.getContent(_dataModel.getIsLiferayWorkspace());
 		boolean hasPortlet = _dataModel.getHasPortlet().content();
 		boolean hasServiceBuilder = _dataModel.getHasServiceBuilder().content();
 		boolean hasHook = _dataModel.getHasHook().content();
@@ -129,20 +131,22 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 			addPage(Page.findbreackingchangesPageId);
 		}
 
-		if (hasPortlet || hasHook || hasServiceBuilder || hasLayout) {
-			addPage(Page.descriptorsPageId);
-		}
+		if (!isLiferayWorkspace) {
+			if (hasPortlet || hasHook || hasServiceBuilder || hasLayout) {
+				addPage(Page.descriptorsPageId);
+			}
 
-		if (hasServiceBuilder) {
-			addPage(Page.buildservicePageId);
-		}
+			if (hasServiceBuilder) {
+				addPage(Page.buildservicePageId);
+			}
 
-		if (hasLayout) {
-			addPage(Page.layouttemplatePageId);
-		}
+			if (hasLayout) {
+				addPage(Page.layouttemplatePageId);
+			}
 
-		if (hasHook) {
-			addPage(Page.customjspPageId);
+			if (hasHook) {
+				addPage(Page.customjspPageId);
+			}
 		}
 
 		/*
