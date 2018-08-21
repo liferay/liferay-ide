@@ -75,17 +75,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>download-plugin-sdk</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>${plugin-sdk-download-base}/${plugin-sdk-version}/${plugin-sdk-zip-name}</url>
-                            <outputDirectory>../shared/download/</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>download-blade</id>
                         <phase>package</phase>
                         <goals>
