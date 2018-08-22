@@ -16,7 +16,6 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.AutoMigrateException;
 import com.liferay.blade.api.AutoMigrator;
-import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.SearchResult;
@@ -39,18 +38,16 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=liferay-versions key in Liferay Plugin Packages Properties",
-	"problem.summary=In order to deploy this project to 7.0 the liferay-versions property must be set to 7.0.0+",
-	"problem.tickets=", "problem.section=", "auto.correct=property", "implName=LiferayVersionsProperties", "version=7.0"
-},
-	service = {AutoMigrator.class, FileMigrator.class})
-public class LiferayVersionsProperties extends PropertiesFileMigrator implements AutoMigrator {
+public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrator implements AutoMigrator {
+
+	public BaseLiferayVersionsProperties(String oldVersionPattern, String newVersion) {
+		_oldVersionPattern = oldVersionPattern;
+		_newVersion = newVersion;
+	}
 
 	@Override
 	public List<Problem> analyze(File file) {
@@ -66,7 +63,7 @@ public class LiferayVersionsProperties extends PropertiesFileMigrator implements
 
 				String versions = key.value;
 
-				if (!versions.matches(".*7\\.[0-9]\\.[0-9].*")) {
+				if (!versions.matches(_oldVersionPattern)) {
 					List<SearchResult> results = propertiesFileChecker.findProperties("liferay-versions");
 
 					if (results != null) {
@@ -110,7 +107,7 @@ public class LiferayVersionsProperties extends PropertiesFileMigrator implements
 					if ((propertyData != null) && propertyData.startsWith(_PREFIX)) {
 						String propertyValue = propertyData.substring(_PREFIX.length());
 
-						contents = contents.replaceAll(propertyValue + ".*", propertyValue + "=7.0.0+");
+						contents = contents.replaceAll(propertyValue + ".*", propertyValue + "=" + _newVersion);
 
 						problemsFixed++;
 					}
@@ -134,5 +131,8 @@ public class LiferayVersionsProperties extends PropertiesFileMigrator implements
 	}
 
 	private static final String _PREFIX = "property:";
+
+	private String _newVersion;
+	private String _oldVersionPattern;
 
 }
