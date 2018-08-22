@@ -173,7 +173,12 @@ public class GogoBundleDeployer {
 
 		for (String line : lines) {
 			if (line.startsWith("Bundle ID")) {
-				bundle.id = Long.parseLong(line.split(":")[1].trim());
+				try {
+					bundle.id = Long.parseLong(line.split(":")[1].trim());
+				}
+				catch (NumberFormatException nfe) {
+					bundle.id = -1;
+				}
 
 				break;
 			}
@@ -287,24 +292,6 @@ public class GogoBundleDeployer {
 		return run("update " + id + " " + url, true);
 	}
 
-	private int _getBundleState(String bsn) throws IOException {
-		String result = run("lb -s " + bsn, true);
-
-		if ("No matching bundles found".equals(result)) {
-			return -1;
-		}
-
-		BundleDTO[] bundlesDTOs = _parseBundleInfos(result);
-
-		for (BundleDTO bundleDTO : bundlesDTOs) {
-			if (bundleDTO.symbolicName.equals(bsn)) {
-				return bundleDTO.state;
-			}
-		}
-
-		return -1;
-	}
-
 	private static int _getState(String state) {
 		if ("Active".equals(state)) {
 			return Bundle.ACTIVE;
@@ -360,7 +347,13 @@ public class GogoBundleDeployer {
 			String symbolicName = infos[3].substring(0, infos[3].indexOf("("));
 			String version = infos[3].substring(infos[3].indexOf("(") + 1, infos[3].indexOf(")"));
 
-			bundle.id = Long.parseLong(infos[0]);
+			try {
+				bundle.id = Long.parseLong(infos[0]);
+			}
+			catch (NumberFormatException nfe) {
+				bundle.id = -1;
+			}
+
 			bundle.state = _getState(infos[1]);
 
 			bundle.symbolicName = symbolicName.trim();
@@ -385,6 +378,24 @@ public class GogoBundleDeployer {
 		}
 
 		return newLines;
+	}
+
+	private int _getBundleState(String bsn) throws IOException {
+		String result = run("lb -s " + bsn, true);
+
+		if ("No matching bundles found".equals(result)) {
+			return -1;
+		}
+
+		BundleDTO[] bundlesDTOs = _parseBundleInfos(result);
+
+		for (BundleDTO bundleDTO : bundlesDTOs) {
+			if (bundleDTO.symbolicName.equals(bsn)) {
+				return bundleDTO.state;
+			}
+		}
+
+		return -1;
 	}
 
 	private String _host;

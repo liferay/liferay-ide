@@ -19,7 +19,9 @@ import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
+
 import java.lang.reflect.Method;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -56,8 +58,6 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 	public static final String ID = "com.liferay.ide.server.portal.launch";
 
 	public PortalServerLaunchConfigDelegate() {
-		super();
-
 		Method allowAdvancedSourcelookupMethod = _getSuperClassMethod("allowAdvancedSourcelookup", new Class<?>[0]);
 
 		if (allowAdvancedSourcelookupMethod != null) {
@@ -162,6 +162,7 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 					String vmArgumentResult = (String)getVMArgumentsMethod.invoke(this, new Object[] {config, mode});
 
 					Collections.addAll(vmArguments, DebugPlugin.parseArguments(vmArgumentResult));
+
 					Collections.addAll(vmArguments, execArgs.getVMArgumentsArray());
 
 					runConfig.setVMArguments(vmArguments.toArray(new String[vmArguments.size()]));

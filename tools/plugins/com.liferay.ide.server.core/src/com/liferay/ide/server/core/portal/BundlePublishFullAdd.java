@@ -134,8 +134,12 @@ public class BundlePublishFullAdd extends BundlePublishOperation {
 		IPath statePath = modulesPath.append("state");
 
 		if (FileUtil.exists(autoDeployPath)) {
-			try (InputStream inputStream = Files.newInputStream(output.toFile().toPath())) {
-				FileUtil.writeFileFromStream(autoDeployPath.append(output.lastSegment()).toFile(), inputStream);
+			File outputFile = output.toFile();
+
+			try (InputStream inputStream = Files.newInputStream(outputFile.toPath())) {
+				IPath path = autoDeployPath.append(output.lastSegment());
+
+				FileUtil.writeFileFromStream(path.toFile(), inputStream);
 
 				retval = Status.OK_STATUS;
 			}
