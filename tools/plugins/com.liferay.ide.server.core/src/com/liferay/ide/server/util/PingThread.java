@@ -77,6 +77,7 @@ public class PingThread {
 	 */
 	protected void ping() {
 		int count = 0;
+
 		try {
 			Thread.sleep(_PING_DELAY);
 		}

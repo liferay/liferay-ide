@@ -113,6 +113,7 @@ public class CustomPropertiesConfigLayout extends PropertiesConfigurationLayout 
 				}
 				else {
 					writeProperty(key, values);
+
 					return;
 				}
 			}

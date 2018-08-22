@@ -129,6 +129,7 @@ public class RemoteServerBehavior
 		super.dispose();
 
 		remoteServerUpdateJob.cancel();
+
 		remoteServerUpdateJob = null;
 	}
 
@@ -553,6 +554,7 @@ public class RemoteServerBehavior
 
 		if (publisher == null) {
 			setModuleStatus(module, null);
+
 			throw new CoreException(LiferayServerCore.error(Msgs.publishingModuleProject));
 		}
 
@@ -614,6 +616,7 @@ public class RemoteServerBehavior
 
 		if (publisher == null) {
 			setModuleStatus(module, null);
+
 			throw new CoreException(LiferayServerCore.error(Msgs.publishingModuleProject));
 		}
 
@@ -647,6 +650,7 @@ public class RemoteServerBehavior
 		catch (Exception ex) {
 			setModuleStatus(module, null);
 			setModuleState(module, IServer.STATE_UNKNOWN);
+
 			throw new CoreException(LiferayServerCore.createErrorStatus(ex));
 		}
 		finally {
@@ -660,6 +664,7 @@ public class RemoteServerBehavior
 		if (error != null) {
 			setModuleStatus(module, null);
 			setModuleState(module, IServer.STATE_UNKNOWN);
+
 			throw new CoreException(LiferayServerCore.error(error.toString()));
 		}
 

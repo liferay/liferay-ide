@@ -261,8 +261,8 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public void modifyModules(IModule[] add, IModule[] remove, IProgressMonitor monitor) throws CoreException {
 		List<String> moduleIds = (List<String>)getAttribute(getModuleListAttr(), (List<String>)null);
 
