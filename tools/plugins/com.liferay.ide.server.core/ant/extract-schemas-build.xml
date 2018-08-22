@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="extract-schemas-build" basedir="." default="run">
+<project basedir="." default="run" name="extract-schemas-build">
 
 	<path id="lib.classpath">
 		<fileset dir="${basedir}" includes="*.jar" />
@@ -27,7 +27,7 @@
 	<!-- =================================
 		  target: run
 		 ================================= -->
-	<target name="run" >
+	<target name="run">
 		<if>
 			<not>
 				<isset property="portal.src" />

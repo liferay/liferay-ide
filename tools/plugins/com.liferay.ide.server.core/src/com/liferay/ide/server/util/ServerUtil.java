@@ -238,6 +238,7 @@ public class ServerUtil {
 
 				try (InputStream input = jar.getInputStream(jar.getEntry("content/Language.properties"))) {
 					props.load(input);
+
 					Enumeration<?> names = props.propertyNames();
 
 					while (names.hasMoreElements()) {

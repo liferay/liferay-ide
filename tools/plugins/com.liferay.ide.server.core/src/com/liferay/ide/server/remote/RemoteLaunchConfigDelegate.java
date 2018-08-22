@@ -57,6 +57,7 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
 			// server has been deleted
 
 			launch.terminate();
+
 			return;
 		}
 

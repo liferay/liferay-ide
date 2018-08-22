@@ -75,8 +75,8 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory {
 
 		File[] layeredRoots = LayeredModulePathFactory.resolveLayeredModulePath(moduleRoots);
 
-		for (int i = 0; i < layeredRoots.length; i++) {
-			IPath[] manifests = _getFilesForModule(layeredRoots[i], moduleId, slot, _manifestFilter());
+		for (File root : layeredRoots) {
+			IPath[] manifests = _getFilesForModule(root, moduleId, slot, _manifestFilter());
 
 			if (ListUtil.isNotEmpty(manifests)) {
 				String value = JavaUtil.getManifestProperty(manifests[0].toFile(), property);
@@ -95,8 +95,8 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory {
 	private static IPath[] _getFiles(File modulesFolder, IPath moduleRelativePath, FileFilter filter) {
 		File[] layeredPaths = LayeredModulePathFactory.resolveLayeredModulePath(modulesFolder);
 
-		for (int i = 0; i < layeredPaths.length; i++) {
-			IPath lay = new Path(layeredPaths[i].getAbsolutePath());
+		for (File layeredPathFile : layeredPaths) {
+			IPath lay = new Path(layeredPathFile.getAbsolutePath());
 
 			IPath relativeLayPath = lay.append(moduleRelativePath);
 
@@ -122,9 +122,9 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory {
 		ArrayList<IPath> list = new ArrayList<>();
 		File[] children = layeredPath.listFiles();
 
-		for (int i = 0; i < children.length; i++) {
-			if (filter.accept(children[i])) {
-				list.add(new Path(children[i].getAbsolutePath()));
+		for (File child : children) {
+			if (filter.accept(child)) {
+				list.add(new Path(child.getAbsolutePath()));
 			}
 		}
 

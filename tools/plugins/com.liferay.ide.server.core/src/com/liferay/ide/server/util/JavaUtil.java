@@ -97,11 +97,11 @@ public class JavaUtil {
 		if (f.exists()) {
 			File[] children = f.listFiles();
 
-			for (int i = 0; i < children.length; i++) {
-				String childrenName = children[i].getName();
+			for (File child : children) {
+				String childrenName = child.getName();
 
 				if (childrenName.endsWith(EXT_JAR)) {
-					return getJarProperty(children[i], property);
+					return getJarProperty(child, property);
 				}
 			}
 		}

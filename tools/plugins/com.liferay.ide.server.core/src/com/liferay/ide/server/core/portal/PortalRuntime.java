@@ -353,6 +353,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 
 				if (path != null) {
 					_portalBundle = factory.create(path);
+
 					return;
 				}
 			}

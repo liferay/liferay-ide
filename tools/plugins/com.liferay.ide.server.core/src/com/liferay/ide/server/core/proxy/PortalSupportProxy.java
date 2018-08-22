@@ -57,7 +57,7 @@ public abstract class PortalSupportProxy implements InvocationHandler {
 		}
 
 		if (error != null) {
-			throw new RuntimeException("Error in workflow validation proxy.", error.getCause());
+			throw new RuntimeException("Error in workflow validation proxy", error.getCause());
 		}
 
 		return retval;

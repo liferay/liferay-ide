@@ -76,13 +76,13 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
  * @author Terry Jia
  */
 @SuppressWarnings({"restriction", "rawtypes"})
-public class PortalServerBehavior extends ServerBehaviourDelegate
-	implements ILiferayServerBehavior, IJavaLaunchConfigurationConstants {
+public class PortalServerBehavior
+	extends ServerBehaviourDelegate implements ILiferayServerBehavior, IJavaLaunchConfigurationConstants {
 
 	public static final String ATTR_STOP = "stop-server";
 
 	public PortalServerBehavior() {
-		_watchProjects = new LinkedHashSet<IProject>();
+		_watchProjects = new LinkedHashSet<>();
 	}
 
 	public void addProcessListener(IProcess newProcess) {
@@ -217,7 +217,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 			_ping = new PingThread(getServer(), url, -1, this);
 		}
 		catch (Exception e) {
-			LiferayServerCore.logError("Can't ping for portal startup.");
+			LiferayServerCore.logError("Can not ping for portal startup.");
 		}
 	}
 
@@ -733,15 +733,15 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 			// remove excluded arguments
 
 			if (ListUtil.isNotEmpty(excludeArgs)) {
-				for (int i = 0; i < excludeArgs.length; i++) {
-					int ind = excludeArgs[i].indexOf(" ");
-					int ind2 = excludeArgs[i].indexOf("=");
+				for (String excludeArg : excludeArgs) {
+					int ind = excludeArg.indexOf(" ");
+					int ind2 = excludeArg.indexOf("=");
 
 					if ((ind >= 0) && ((ind2 == -1) || (ind < ind2))) {
 
 						// -a bc style
 
-						int index = retval.indexOf(excludeArgs[i].substring(0, ind + 1));
+						int index = retval.indexOf(excludeArg.substring(0, ind + 1));
 
 						if ((index == 0) || ((index > 0) && Character.isWhitespace(retval.charAt(index - 1)))) {
 
@@ -765,7 +765,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
 						// a =b style
 
-						int index = retval.indexOf(excludeArgs[i].substring(0, ind2 + 1));
+						int index = retval.indexOf(excludeArg.substring(0, ind2 + 1));
 
 						if ((index == 0) || ((index > 0) && Character.isWhitespace(retval.charAt(index - 1)))) {
 
@@ -789,7 +789,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
 						// abc style
 
-						int index = retval.indexOf(excludeArgs[i]);
+						int index = retval.indexOf(excludeArg);
 
 						if ((index == 0) || ((index > 0) && Character.isWhitespace(retval.charAt(index - 1)))) {
 

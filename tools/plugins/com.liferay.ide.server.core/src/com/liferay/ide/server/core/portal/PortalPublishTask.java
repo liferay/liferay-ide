@@ -142,8 +142,8 @@ public class PortalPublishTask extends PublishTaskDelegate {
 		return tasks.toArray(new PublishOperation[0]);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
+	@SuppressWarnings("rawtypes")
 	public PublishOperation[] getTasks(IServer server, List modules) {
 		return super.getTasks(server, modules);
 	}
