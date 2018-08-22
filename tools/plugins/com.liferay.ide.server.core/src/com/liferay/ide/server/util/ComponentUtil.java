@@ -233,12 +233,12 @@ public class ComponentUtil {
 		try {
 			roots = jProject.getPackageFragmentRoots();
 
-			for (int i = 0; i < roots.length; i++) {
-				if (roots[i].getKind() != IPackageFragmentRoot.K_SOURCE) {
+			for (IPackageFragmentRoot root : roots) {
+				if (root.getKind() != IPackageFragmentRoot.K_SOURCE) {
 					continue;
 				}
 
-				IResource resource = roots[i].getResource();
+				IResource resource = root.getResource();
 
 				if (null != resource) {
 					IVirtualResource[] vResources = ComponentCore.createResources(resource);
@@ -248,8 +248,8 @@ public class ComponentUtil {
 						IVirtualComponent vResourceComponent = vResources[j].getComponent();
 
 						if (vResourceComponent.equals(vc)) {
-							if (!list.contains(roots[i])) {
-								list.add(roots[i]);
+							if (!list.contains(root)) {
+								list.add(root);
 							}
 
 							found = true;
