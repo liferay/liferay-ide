@@ -40,9 +40,6 @@ import org.eclipse.wst.server.core.ServerUtil;
  */
 public class RemoteSourcePathComputerDelegate implements ISourcePathComputerDelegate {
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public ISourceContainer[] computeSourceContainers(ILaunchConfiguration configuration, IProgressMonitor monitor)
 		throws CoreException {
 
@@ -52,8 +49,8 @@ public class RemoteSourcePathComputerDelegate implements ISourcePathComputerDele
 
 		IModule[] modules = server.getModules();
 
-		for (int i = 0; i < modules.length; i++) {
-			ModuleTraverser.traverse(modules[i], visitor, monitor);
+		for (IModule module : modules) {
+			ModuleTraverser.traverse(module, visitor, monitor);
 		}
 
 		return visitor.getSourceContainers();
@@ -65,18 +62,12 @@ public class RemoteSourcePathComputerDelegate implements ISourcePathComputerDele
 			this.configuration = configuration;
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
 		public void endVisitEarComponent(IVirtualComponent component) throws CoreException {
 
 			// do nothing
 
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
 		public void endVisitWebComponent(IVirtualComponent component) throws CoreException {
 
 			// do nothing
@@ -94,45 +85,30 @@ public class RemoteSourcePathComputerDelegate implements ISourcePathComputerDele
 			return JavaRuntime.getSourceContainers(resolved);
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
 		public void visitArchiveComponent(IPath runtimePath, IPath workspacePath) {
 
 			// do nothing
 
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
 		public void visitClasspathEntry(IPath rtFolder, IClasspathEntry entry) {
 
 			// do nothing
 
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
 		public void visitDependentComponent(IPath runtimePath, IPath workspacePath) {
 
 			// do nothing
 
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
 		public void visitDependentContentResource(IPath runtimePath, IPath workspacePath) {
 
 			// do nothing
 
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
 		public void visitDependentJavaProject(IJavaProject javaProject) {
 
 			/*
@@ -148,18 +124,12 @@ public class RemoteSourcePathComputerDelegate implements ISourcePathComputerDele
 			runtimeClasspath.add(JavaRuntime.newDefaultProjectClasspathEntry(javaProject));
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
 		public void visitEarResource(IPath runtimePath, IPath workspacePath) {
 
 			// do nothing
 
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
 		public void visitWebComponent(IVirtualComponent component) throws CoreException {
 			IProject project = component.getProject();
 
@@ -170,9 +140,6 @@ public class RemoteSourcePathComputerDelegate implements ISourcePathComputerDele
 			}
 		}
 
-		/**
-		 * {@inheritDoc}
-		 */
 		public void visitWebResource(IPath runtimePath, IPath workspacePath) {
 
 			// do nothing
@@ -180,10 +147,6 @@ public class RemoteSourcePathComputerDelegate implements ISourcePathComputerDele
 		}
 
 		public ILaunchConfiguration configuration;
-
-		/**
-		 * List<IRuntimeClasspathEntry> of unresolved IRuntimeClasspathEntries
-		 */
 		public List<IRuntimeClasspathEntry> runtimeClasspath = new ArrayList<>();
 
 	}

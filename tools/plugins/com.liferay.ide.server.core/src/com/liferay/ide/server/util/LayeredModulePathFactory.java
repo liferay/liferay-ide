@@ -262,7 +262,9 @@ public class LayeredModulePathFactory {
 			_configured = true;
 			_layersPath = _DEFAULT_LAYERS_PATH;
 			_addOnsPath = _DEFAULT_ADD_ONS_PATH;
+
 			boolean excludeBase = false;
+
 			String layersProp = (String)properties.get("layers");
 
 			if ((layersProp == null) || (layersProp = layersProp.trim()).length() == 0) {
