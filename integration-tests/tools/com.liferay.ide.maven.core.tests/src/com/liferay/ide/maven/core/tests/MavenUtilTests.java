@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core.tests;
 
 import com.liferay.ide.maven.core.MavenUtil;
+import com.liferay.ide.test.core.base.BaseTests;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,7 +23,7 @@ import org.junit.Test;
 /**
  * @author Gregory Amerson
  */
-public class MavenUtilTests {
+public class MavenUtilTests extends BaseTests {
 
 	@Test
 	public void testMavenStyleMilestones() throws Exception {

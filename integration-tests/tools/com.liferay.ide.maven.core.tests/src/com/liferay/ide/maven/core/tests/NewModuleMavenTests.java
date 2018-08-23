@@ -14,28 +14,24 @@
 
 package com.liferay.ide.maven.core.tests;
 
+import com.liferay.ide.maven.core.tests.base.NewModuleMavenBase;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
-import com.liferay.ide.test.core.base.support.ProjectSupport;
-import com.liferay.ide.test.project.core.base.NewModuleOpBase;
 
-import org.eclipse.m2e.tests.common.JobHelpers;
-
-import org.junit.Rule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Gregory Amerson
  * @author Terry Jia
  */
-@SuppressWarnings("restriction")
-public class NewModuleMavenTests extends NewModuleOpBase<NewLiferayModuleProjectOp> {
+public class NewModuleMavenTests extends NewModuleMavenBase {
 
 	@Test
 	public void createActivator() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
 		op.setProjectName(project.getName());
-		op.setProjectProvider("maven-module");
+		op.setProjectProvider(provider());
 		op.setProjectTemplateName("activator");
 
 		createOrImportAndBuild(op, project.getName());
@@ -43,28 +39,231 @@ public class NewModuleMavenTests extends NewModuleOpBase<NewLiferayModuleProject
 		deleteProject(project.getName());
 	}
 
-	@Rule
-	public ProjectSupport project = new ProjectSupport();
+	@Test
+	public void createApi() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-	@Override
-	protected String provider() {
-		return "maven-module";
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("api");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createContentTargetingReport() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("content-targeting-report");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createContentTargetingRule() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("content-targeting-rule");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createContentTargetingTrackingAction() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("content-targeting-tracking-action");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createControlMenuEntry() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("control-menu-entry");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createFormField() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("form-field");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createMvcPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("mvc-portlet");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createPanelApp() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("panel-app");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("portlet");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createPortletConfigurationIcon() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("portlet-configuration-icon");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createPortletProvider() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("portlet-provider");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createPortletToolbarContributor() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("portlet-toolbar-contributor");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createRest() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("rest");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createSimulationPanelEntry() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("simulation-panel-entry");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Ignore("ignore as endless building")
+	@Test
+	public void createSoyPortlet() {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("soy-portlet");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createTemplateContextContributor() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("template-context-contributor");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
+	}
+
+	@Test
+	public void createThemeContributor() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName(project.getName());
+		op.setProjectProvider(provider());
+		op.setProjectTemplateName("theme-contributor");
+
+		createOrImportAndBuild(op, project.getName());
+
+		deleteProject(project.getName());
 	}
 
 	@Override
 	protected String shape() {
 		return "jar";
-	}
-
-	protected void verifyProjectFiles(String projectName) {
-		super.verifyProjectFiles(projectName);
-
-		assertProjectFileNotExists(projectName, "build.gradle");
-		assertProjectFileExists(projectName, "pom.xml");
-	}
-
-	protected void waitForBuildAndValidation() {
-		JobHelpers.waitForJobsToComplete();
 	}
 
 }
