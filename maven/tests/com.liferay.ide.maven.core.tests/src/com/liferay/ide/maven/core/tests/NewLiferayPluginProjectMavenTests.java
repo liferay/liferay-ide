@@ -221,7 +221,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase {
 
 		String projectName = op.getProjectName().content();
 
-		String expected = "The project name \"" + projectName + "\" can't be the same as the parent.";
+		String expected = "The project name \"" + projectName + "\" can not be the same as the parent.";
 
 		Assert.assertEquals(expected, vs.validation().message());
 
