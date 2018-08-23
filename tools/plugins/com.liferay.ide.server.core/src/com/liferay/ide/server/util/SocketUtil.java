@@ -54,7 +54,7 @@ public class SocketUtil {
 			in = socket.getInputStream();
 			status = Status.OK_STATUS;
 		}
-		catch (Exception e) {
+		catch (IOException | NumberFormatException e) {
 			status = LiferayServerCore.error(Msgs.notConnect);
 
 			// e.printStackTrace();
@@ -134,7 +134,7 @@ public class SocketUtil {
 
 			return true;
 		}
-		catch (IOException ioe) {
+		catch (IOException | NumberFormatException e) {
 		}
 		finally {
 			if (serverSocket != null) {
