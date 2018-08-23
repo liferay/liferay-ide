@@ -226,6 +226,7 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 		if (FileUtil.exists(configInfoFile)) {
 			try (InputStream fileInput = Files.newInputStream(configInfoFile.toPath())) {
 				properties.load(fileInput);
+
 				String configInfo = (String)properties.get(portalDirKey);
 
 				if (!CoreUtil.isNullOrEmpty(configInfo)) {
