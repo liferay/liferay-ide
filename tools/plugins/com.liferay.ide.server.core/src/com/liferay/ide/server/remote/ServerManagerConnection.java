@@ -197,7 +197,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 			status = (JSONObject)jsonResponse;
 		}
 		else {
-			throw new APIException(_getIsAliveAPI(), "Unable to connect to server manager.");
+			throw new APIException(_getIsAliveAPI(), "Unable to connect to server manager");
 		}
 
 		if (_isSuccess(status)) {

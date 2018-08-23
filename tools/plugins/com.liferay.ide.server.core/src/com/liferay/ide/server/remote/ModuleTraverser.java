@@ -201,11 +201,11 @@ public class ModuleTraverser {
 
 		sourcePath = projectPath.append(sourcePath);
 
-		IClasspathEntry[] cp = project.getRawClasspath();
+		IClasspathEntry[] entries = project.getRawClasspath();
 
-		for (int i = 0; i < cp.length; i++) {
-			if (sourcePath.equals(cp[i].getPath())) {
-				return JavaCore.getResolvedClasspathEntry(cp[i]);
+		for (IClasspathEntry entry : entries) {
+			if (sourcePath.equals(entry.getPath())) {
+				return JavaCore.getResolvedClasspathEntry(entry);
 			}
 		}
 
@@ -250,8 +250,8 @@ public class ModuleTraverser {
 
 		// store in a map from path to entry
 
-		for (int j = 0; j < entries.length; j++) {
-			pathToResolvedEntry.put(entries[j].getPath(), entries[j]);
+		for (IClasspathEntry entry : entries) {
+			pathToResolvedEntry.put(entry.getPath(), entry);
 		}
 
 		Map<IClasspathEntry, IClasspathAttribute> referencedEntries = new LinkedHashMap<>();
@@ -284,7 +284,7 @@ public class ModuleTraverser {
 			 */
 			String resolvedAttribName = resolvedAttrib.getName();
 
-			if ((resolvedAttrib == null) || resolvedAttrib.equals(CLASSPATH_COMPONENT_DEPENDENCY)) {
+			if ((resolvedAttrib == null) || resolvedAttribName.equals(CLASSPATH_COMPONENT_DEPENDENCY)) {
 
 				// filter out resolved entry if it doesn't pass the validation rules
 
@@ -376,11 +376,11 @@ public class ModuleTraverser {
 
 			String remainingPath = remainingPathuri.toString();
 
-			String[] classpathvars = JavaCore.getClasspathVariableNames();
+			String[] classpathVariableNames = JavaCore.getClasspathVariableNames();
 			boolean found = false;
 
-			for (int i = 0; i < classpathvars.length; i++) {
-				if (classpathVar.equals(classpathvars[i])) {
+			for (String name : classpathVariableNames) {
+				if (classpathVar.equals(name)) {
 					found = true;
 
 					break;
