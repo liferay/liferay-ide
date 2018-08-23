@@ -46,7 +46,6 @@ import org.osgi.framework.Bundle;
  * @author Joye Luo
  * @author Terry Jia
  */
-@SuppressWarnings("restriction")
 public class ImportMavenLiferayWorkspaceOpTests {
 
 	@Before

@@ -16,7 +16,6 @@ package com.liferay.ide.maven.core.tests;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.project.core.workspace.BaseLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
 import java.io.File;
@@ -41,7 +40,6 @@ import org.junit.Test;
  * @author Andy Wu
  * @author Joye Luo
  */
-@SuppressWarnings("restriction")
 public class NewMavenLiferayWorkspaceOpTests {
 
 	@Before
