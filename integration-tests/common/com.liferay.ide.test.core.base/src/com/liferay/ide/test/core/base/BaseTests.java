@@ -274,9 +274,7 @@ public class BaseTests {
 		deleteProject(ips.getName());
 	}
 
-	protected final void deleteProject(String projectName) {
-		IProject project = project(projectName);
-
+	protected final void deleteProject(IProject project) {
 		assertProjectExists(project);
 
 		try {
@@ -290,6 +288,12 @@ public class BaseTests {
 
 			ce.printStackTrace();
 		}
+	}
+
+	protected final void deleteProject(String projectName) {
+		IProject project = project(projectName);
+
+		deleteProject(project);
 	}
 
 	protected String getProjectFileContents(String projectName, String fileName) {

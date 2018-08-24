@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.maven.core.tests;
+package com.liferay.ide.maven.core.tests.legacy;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.test.project.core.base.ProjectOpBase;

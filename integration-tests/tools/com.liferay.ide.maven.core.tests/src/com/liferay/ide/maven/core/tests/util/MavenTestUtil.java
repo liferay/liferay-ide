@@ -54,17 +54,17 @@ public class MavenTestUtil {
 		FileHelpers.copyDir(src, dst);
 	}
 
-	protected IProject importProject(String pomLocation) throws CoreException, IOException {
+	public static IProject importProject(String pomLocation) throws CoreException, IOException {
 		return importProject(pomLocation, new ResolverConfiguration());
 	}
 
-	protected IProject importProject(String pomLocation, ResolverConfiguration configuration)
+	public static IProject importProject(String pomLocation, ResolverConfiguration configuration)
 		throws CoreException, IOException {
 
 		return importProject(pomLocation, configuration, null);
 	}
 
-	protected IProject importProject(
+	public static IProject importProject(
 			String pomLocation, ResolverConfiguration configuration, IProjectCreationListener listener)
 		throws CoreException, IOException {
 
@@ -76,7 +76,7 @@ public class MavenTestUtil {
 			parentFile.getCanonicalPath(), new String[] {pomFile.getName()}, configuration, false, listener)[0];
 	}
 
-	protected IProject[] importProjects(
+	public static IProject[] importProjects(
 			String basedir, String[] pomNames, ResolverConfiguration configuration, boolean skipSanityCheck,
 			IProjectCreationListener listener)
 		throws CoreException, IOException {
@@ -155,7 +155,7 @@ public class MavenTestUtil {
 		return projects;
 	}
 
-	private void _setBasedirRename(MavenProjectInfo projectInfo) throws IOException {
+	private static void _setBasedirRename(MavenProjectInfo projectInfo) throws IOException {
 		File workspaceRoot = CoreUtil.getWorkspaceRootFile();
 
 		File pomFile = projectInfo.getPomFile();
