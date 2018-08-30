@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -254,7 +255,9 @@ public class WorkingSetGroup {
 		if (selectWorkingSets(_workingSets)) {
 			addToWorkingSetButton.setSelection(true);
 			workingsetLabel.setEnabled(true);
+
 			_workingsetComboViewer.getCombo().setEnabled(true);
+
 			newWorkingSetButton.setEnabled(true);
 		}
 
@@ -265,7 +268,9 @@ public class WorkingSetGroup {
 					boolean addToWorkingingSet = addToWorkingSetButton.getSelection();
 
 					workingsetLabel.setEnabled(addToWorkingingSet);
+
 					_workingsetComboViewer.getCombo().setEnabled(addToWorkingingSet);
+
 					newWorkingSetButton.setEnabled(addToWorkingingSet);
 
 					if (addToWorkingingSet) {
@@ -291,7 +296,7 @@ public class WorkingSetGroup {
 	private Set<IWorkingSet> _getWorkingSets() {
 		Set<IWorkingSet> workingSets = new HashSet<>();
 
-		IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
+		IWorkingSetManager workingSetManager = UIUtil.getWorkingSetManager();
 
 		for (IWorkingSet workingSet : workingSetManager.getWorkingSets()) {
 			if (!workingSet.isEmpty()) {

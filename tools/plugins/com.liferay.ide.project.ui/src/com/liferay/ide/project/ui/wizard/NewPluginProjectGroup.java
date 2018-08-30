@@ -278,7 +278,8 @@ public class NewPluginProjectGroup extends NewProjectGroup implements IPluginPro
 
 		public void modifyText(ModifyEvent e) {
 			if (!(_localModel.getBooleanProperty(LIFERAY_USE_SDK_LOCATION) ||
-				_localNestedModel.getBooleanProperty(USE_DEFAULT_LOCATION)) && !_propertySet) {
+				  _localNestedModel.getBooleanProperty(USE_DEFAULT_LOCATION)) &&
+				!_propertySet) {
 
 				try {
 					_typing = true;

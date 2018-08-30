@@ -59,6 +59,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.IWorkingSetManager;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
@@ -280,6 +281,12 @@ public class UIUtil {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 
 		return workbench.getWorkbenchWindows();
+	}
+
+	public static IWorkingSetManager getWorkingSetManager() {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+
+		return workbench.getWorkingSetManager();
 	}
 
 	public static void postInfo(String title, String msg) {

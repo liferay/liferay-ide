@@ -42,6 +42,7 @@ public class ValidProjectChecker {
 
 	public ValidProjectChecker(String wizardId) {
 		this.wizardId = wizardId;
+
 		init();
 	}
 
