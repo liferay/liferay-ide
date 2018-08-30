@@ -105,7 +105,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 
 				projectValidationStatus = fop.getProjectName().validation();
 
-				Assert.assertEquals("Can not find bnd.bnd file in the project", projectValidationStatus.message());
+				Assert.assertEquals("Can not find bnd.bnd file in the project.", projectValidationStatus.message());
 			}
 		}
 	}
