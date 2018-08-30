@@ -20,6 +20,7 @@ import java.util.Set;
 
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
@@ -39,9 +40,9 @@ public class ProjectTemplateNameValidationService extends ValidationService {
 
 		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
 
-		ProjectTemplateNamePossibleValuesService pvs =
-			op.property(NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME).service(
-				ProjectTemplateNamePossibleValuesService.class);
+		Value<Object> value = op.property(NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME);
+
+		ProjectTemplateNamePossibleValuesService pvs = value.service(ProjectTemplateNamePossibleValuesService.class);
 
 		Set<String> templateNames = pvs.values();
 

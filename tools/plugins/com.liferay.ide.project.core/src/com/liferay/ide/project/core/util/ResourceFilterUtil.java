@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.util;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.resources.FileInfoMatcherDescription;
@@ -49,7 +50,9 @@ public class ResourceFilterUtil {
 			for (IResourceFilterDescription resourceFilterDescription : resourceFilterDescriptions) {
 				FileInfoMatcherDescription description = resourceFilterDescription.getFileInfoMatcherDescription();
 
-				String argument = description.getArguments().toString();
+				Object object = description.getArguments();
+
+				String argument = object.toString();
 
 				String projectName = argument.substring(argument.indexOf(pre) + pre.length(), argument.length());
 
@@ -79,9 +82,11 @@ public class ResourceFilterUtil {
 			IResourceFilterDescription[] resourceFilterDescriptions = parentFolder.getFilters();
 
 			for (IResourceFilterDescription resourceFilterDescription : resourceFilterDescriptions) {
-				Object argument = resourceFilterDescription.getFileInfoMatcherDescription().getArguments();
+				FileInfoMatcherDescription description = resourceFilterDescription.getFileInfoMatcherDescription();
 
-				if (argument.toString().contains(filteredSubFolderName)) {
+				Object argument = description.getArguments();
+
+				if (StringUtil.contains(argument.toString(), filteredSubFolderName)) {
 
 					// need to make deleting in a job to avoid Resource Lock Exception
 

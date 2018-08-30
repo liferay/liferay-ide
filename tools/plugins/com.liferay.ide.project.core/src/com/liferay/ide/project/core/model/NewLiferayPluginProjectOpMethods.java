@@ -20,6 +20,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
@@ -34,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -45,6 +47,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -66,9 +69,10 @@ public class NewLiferayPluginProjectOpMethods {
 	public static boolean canUseCustomLocation(NewLiferayPluginProjectOp op) {
 		boolean retval = false;
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> projectProvider = op.getProjectProvider().content(true);
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> projectProvider = SapphireUtil.getContent(
+			op.getProjectProvider());
 
-		if (projectProvider.getShortName().equals("maven")) {
+		if ("maven".equals(projectProvider.getShortName())) {
 			retval = true;
 		}
 
@@ -83,12 +87,12 @@ public class NewLiferayPluginProjectOpMethods {
 		Status retval = null;
 
 		try {
-			NewLiferayProjectProvider<NewLiferayPluginProjectOp> projectProvider =
-				op.getProjectProvider().content(true);
+			NewLiferayProjectProvider<NewLiferayPluginProjectOp> projectProvider = SapphireUtil.getContent(
+				op.getProjectProvider());
 
 			// IDE-1306 If the user types too quickly all the model changes may not have propagated
 
-			Path projectLocation = op.getLocation().content();
+			Path projectLocation = SapphireUtil.getContent(op.getLocation());
 
 			updateLocation(op, projectLocation);
 
@@ -116,12 +120,12 @@ public class NewLiferayPluginProjectOpMethods {
 	}
 
 	public static String getFrameworkName(NewLiferayPluginProjectOp op) {
-		IPortletFramework portletFramework = op.getPortletFramework().content();
+		IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
 
 		String frameworkName = portletFramework.getShortName();
 
 		if (portletFramework.isRequiresAdvanced()) {
-			IPortletFramework framework = op.getPortletFrameworkAdvanced().content();
+			IPortletFramework framework = SapphireUtil.getContent(op.getPortletFrameworkAdvanced());
 
 			frameworkName = framework.getShortName();
 		}
@@ -134,7 +138,8 @@ public class NewLiferayPluginProjectOpMethods {
 
 		File parentProjectDir = path.toFile();
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content(true);
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
+			op.getProjectProvider());
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
@@ -154,7 +159,8 @@ public class NewLiferayPluginProjectOpMethods {
 
 		File parentProjectDir = path.toFile();
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content(true);
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
+			op.getProjectProvider());
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
@@ -204,13 +210,14 @@ public class NewLiferayPluginProjectOpMethods {
 	}
 
 	public static Set<String> getPossibleProfileIds(NewLiferayPluginProjectOp op, boolean includeNewProfiles) {
-		String activeProfilesValue = op.getActiveProfilesValue().content();
+		String activeProfilesValue = SapphireUtil.getContent(op.getActiveProfilesValue());
 
-		Path currentLocation = op.getLocation().content();
+		Path currentLocation = SapphireUtil.getContent(op.getLocation());
 
 		File param = currentLocation != null ? currentLocation.toFile() : null;
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content(true);
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
+			op.getProjectProvider());
 
 		List<String> systemProfileIds = provider.getData("profileIds", String.class, param);
 
@@ -244,7 +251,7 @@ public class NewLiferayPluginProjectOpMethods {
 
 		if (includeNewProfiles) {
 			for (NewLiferayProfile newLiferayProfile : newLiferayProfiles) {
-				String newId = newLiferayProfile.getId().content();
+				String newId = SapphireUtil.getContent(newLiferayProfile.getId());
 
 				if (!CoreUtil.isNullOrEmpty(newId) && !possibleProfileIds.contains(newId) &&
 					!newId.contains(StringPool.SPACE)) {
@@ -258,14 +265,15 @@ public class NewLiferayPluginProjectOpMethods {
 	}
 
 	public static String getProjectNameWithSuffix(NewLiferayPluginProjectOp op) {
-		String projectName = op.getProjectName().content();
+		String projectName = SapphireUtil.getContent(op.getProjectName());
 
 		String suffix = null;
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content(true);
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
+			op.getProjectProvider());
 
 		if ((projectName != null) && "ant".equals(provider.getShortName())) {
-			suffix = getPluginTypeSuffix(op.getPluginType().content(true));
+			suffix = getPluginTypeSuffix(SapphireUtil.getContent(op.getPluginType()));
 
 			if (suffix != null) {
 
@@ -283,9 +291,10 @@ public class NewLiferayPluginProjectOpMethods {
 	public static boolean supportsTypePlugin(NewLiferayPluginProjectOp op, String type) {
 		boolean retval = false;
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content(true);
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
+			op.getProjectProvider());
 
-		if (provider.getShortName().equals("maven") && (type.equals("web") || type.equals("theme"))) {
+		if ("maven".equals(provider.getShortName()) && (type.equals("web") || type.equals("theme"))) {
 			return true;
 		}
 		else {
@@ -298,7 +307,7 @@ public class NewLiferayPluginProjectOpMethods {
 			}
 
 			if (sdk == null) {
-				Path sdkLocation = op.getSdkLocation().content();
+				Path sdkLocation = SapphireUtil.getContent(op.getSdkLocation());
 
 				if (sdkLocation != null) {
 					sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkLocation));
@@ -322,9 +331,11 @@ public class NewLiferayPluginProjectOpMethods {
 			}
 
 			if (greaterThan700 && "ext".equals(type)) {
-				IPath extFolder = sdk.getLocation().append("ext");
+				IPath sdkLocation = sdk.getLocation();
 
-				File buildXml = extFolder.append("build.xml").toFile();
+				IPath extFolder = sdkLocation.append("ext");
+
+				File buildXml = FileUtil.getFile(extFolder.append("build.xml"));
 
 				if (FileUtil.exists(extFolder) && FileUtil.exists(buildXml)) {
 					return true;
@@ -343,8 +354,10 @@ public class NewLiferayPluginProjectOpMethods {
 
 		if (ListUtil.isNotEmpty(profiles)) {
 			for (Profile profile : profiles) {
-				if (!profile.getId().empty()) {
-					sb.append(profile.getId().content());
+				Value<String> value = profile.getId();
+
+				if (!value.empty()) {
+					sb.append(SapphireUtil.getContent(value));
 					sb.append(',');
 				}
 			}
@@ -352,19 +365,22 @@ public class NewLiferayPluginProjectOpMethods {
 
 		// remove trailing ','
 
-		op.setActiveProfilesValue(sb.toString().replaceAll("(.*),$", "$1"));
+		String s = sb.toString();
+
+		op.setActiveProfilesValue(s.replaceAll("(.*),$", "$1"));
 	}
 
 	public static void updateLocation(NewLiferayPluginProjectOp op) {
-		String currentProjectName = op.getProjectName().content();
+		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
 
 		if (currentProjectName == null) {
 			return;
 		}
 
-		boolean useDefaultLocation = op.getUseDefaultLocation().content(true);
+		boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content(true);
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
+			op.getProjectProvider());
 
 		String providerShortName = provider.getShortName();
 
@@ -390,7 +406,7 @@ public class NewLiferayPluginProjectOpMethods {
 
 				if (sdk == null) {
 					if (op.getSdkLocation() != null) {
-						Path sdkPath = op.getSdkLocation().content();
+						Path sdkPath = SapphireUtil.getContent(op.getSdkLocation());
 
 						if (sdkPath != null) {
 							IPath sdkLocation = PathBridge.create(sdkPath);
@@ -403,7 +419,7 @@ public class NewLiferayPluginProjectOpMethods {
 				if (sdk != null) {
 					Path sdkLocation = PathBridge.create(sdk.getLocation());
 
-					switch (op.getPluginType().content(true)) {
+					switch (SapphireUtil.getContent(op.getPluginType())) {
 						case portlet:
 						case servicebuilder:
 							newLocationBase = sdkLocation.append("portlets");
@@ -436,7 +452,7 @@ public class NewLiferayPluginProjectOpMethods {
 				}
 			}
 			else {
-				newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRoot().getLocation());
+				newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRootLocation());
 			}
 
 			if (newLocationBase != null) {
@@ -460,13 +476,13 @@ public class NewLiferayPluginProjectOpMethods {
 	private static IStatus _removeSampleCodeAndFiles(NewLiferayPluginProjectOp op) {
 		IStatus status = org.eclipse.core.runtime.Status.OK_STATUS;
 
-		boolean includeSampleCode = op.getIncludeSampleCode().content();
+		boolean includeSampleCode = SapphireUtil.getContent(op.getIncludeSampleCode());
 
 		if (includeSampleCode) {
 			return status;
 		}
 
-		IProject project = CoreUtil.getLiferayProject(op.getFinalProjectName().content());
+		IProject project = CoreUtil.getLiferayProject(SapphireUtil.getContent(op.getFinalProjectName()));
 
 		if (FileUtil.exists(project)) {
 			ProjectCore.operate(project, RemoveSampleElementsOperation.class);
@@ -489,7 +505,9 @@ public class NewLiferayPluginProjectOpMethods {
 					if (FileUtil.exists(file)) {
 						file.delete(true, new NullProgressMonitor());
 
-						if (file.getParent().members().length == 0) {
+						IContainer parent = file.getParent();
+
+						if (ListUtil.isEmpty(parent.members())) {
 							CoreUtil.deleteResource(file.getParent());
 						}
 					}
@@ -507,12 +525,15 @@ public class NewLiferayPluginProjectOpMethods {
 		try {
 			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
 
-			prefs.put(ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text());
-			prefs.putBoolean(ProjectCore.PREF_INCLUDE_SAMPLE_CODE, op.getIncludeSampleCode().content());
-			prefs.putBoolean(ProjectCore.PREF_CREATE_NEW_PORLET, op.getCreateNewPortlet().content());
+			prefs.put(
+				ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_BUILD_TYPE_OPTION,
+				SapphireUtil.getText(op.getProjectProvider()));
+			prefs.putBoolean(ProjectCore.PREF_INCLUDE_SAMPLE_CODE, SapphireUtil.getContent(op.getIncludeSampleCode()));
+			prefs.putBoolean(ProjectCore.PREF_CREATE_NEW_PORLET, SapphireUtil.getContent(op.getCreateNewPortlet()));
 
-			if ("maven".equalsIgnoreCase(op.getProjectProvider().text())) {
-				prefs.put(ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_MAVEN_GROUPID, op.getGroupId().content());
+			if ("maven".equalsIgnoreCase(SapphireUtil.getText(op.getProjectProvider()))) {
+				prefs.put(
+					ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_MAVEN_GROUPID, SapphireUtil.getContent(op.getGroupId()));
 			}
 
 			prefs.flush();

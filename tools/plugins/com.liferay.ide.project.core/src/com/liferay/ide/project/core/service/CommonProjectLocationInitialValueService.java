@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.service;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 
 import org.eclipse.sapphire.InitialValueService;
 
@@ -25,7 +26,7 @@ public class CommonProjectLocationInitialValueService extends InitialValueServic
 
 	@Override
 	protected String compute() {
-		return CoreUtil.getWorkspaceRootLocation().toPortableString();
+		return FileUtil.toPortableString(CoreUtil.getWorkspaceRootLocation());
 	}
 
 }

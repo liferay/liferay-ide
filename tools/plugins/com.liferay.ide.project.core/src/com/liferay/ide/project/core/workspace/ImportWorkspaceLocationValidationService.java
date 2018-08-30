@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 
@@ -62,7 +63,7 @@ public class ImportWorkspaceLocationValidationService extends ValidationService 
 
 			String projectName = currentProjectLocation.lastSegment();
 
-			if (CoreUtil.getProject(projectName).exists()) {
+			if (FileUtil.exists(CoreUtil.getProject(projectName))) {
 				return Status.createErrorStatus("A project with that name already exists.");
 			}
 		}

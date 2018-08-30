@@ -131,7 +131,9 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 		// IDE-417 set a project preference for disabling JSP fragment validation
 
 		try {
-			Bundle bundle = JSPCorePlugin.getDefault().getBundle();
+			JSPCorePlugin jspCorePlugin = JSPCorePlugin.getDefault();
+
+			Bundle bundle = jspCorePlugin.getBundle();
 
 			IEclipsePreferences node = new ProjectScope(this.project).getNode(bundle.getSymbolicName());
 

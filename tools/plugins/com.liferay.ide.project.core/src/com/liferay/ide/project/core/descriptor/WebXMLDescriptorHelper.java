@@ -18,6 +18,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.resources.IFile;
@@ -89,7 +90,9 @@ public class WebXMLDescriptorHelper extends LiferayDescriptorHelper {
 			}
 
 			if (jspConfig != null) {
-				jspConfig.getTagLibs().add(tagLibRefType);
+				EList eList = jspConfig.getTagLibs();
+
+				eList.add(tagLibRefType);
 			}
 			else {
 				EList tagLibs = webApp.getTagLibs();
@@ -137,7 +140,9 @@ public class WebXMLDescriptorHelper extends LiferayDescriptorHelper {
 					for (int i = 0; i < welcomeFileLists.getLength(); i++) {
 						Node welcomeFileList = welcomeFileLists.item(i);
 
-						welcomeFileList.getParentNode().removeChild(welcomeFileList);
+						Node parentNode = welcomeFileList.getParentNode();
+
+						parentNode.removeChild(welcomeFileList);
 					}
 				}
 				catch (Exception e) {
@@ -251,11 +256,11 @@ public class WebXMLDescriptorHelper extends LiferayDescriptorHelper {
 		for (int i = 0; i < taglibs.getLength(); i++) {
 			Node taglib = taglibs.item(i);
 
-			String taglibUri = NodeUtil.getChildElementContent(taglib, "taglib-uri").trim();
-			String taglibLocation = NodeUtil.getChildElementContent(taglib, "taglib-location").trim();
+			String taglibUri = StringUtil.trim(NodeUtil.getChildElementContent(taglib, "taglib-uri"));
+			String taglibLocation = StringUtil.trim(NodeUtil.getChildElementContent(taglib, "taglib-location"));
 
-			boolean taglibUriEquals = taglibUri.equals(tagLibRefType.getTaglibURI().trim());
-			boolean taglibLocationEquals = taglibLocation.equals(tagLibRefType.getTaglibLocation().trim());
+			boolean taglibUriEquals = taglibUri.equals(StringUtil.trim(tagLibRefType.getTaglibURI()));
+			boolean taglibLocationEquals = taglibLocation.equals(StringUtil.trim(tagLibRefType.getTaglibLocation()));
 
 			if (taglibUriEquals && taglibLocationEquals) {
 				return true;

@@ -51,18 +51,18 @@ public class NewLiferayComponentMVCPortletOperation extends AbstractLiferayCompo
 
 			IFile languageProperties = contentFolder.getFile(new Path("Language.properties"));
 
-			File languagePropertiesFile = languageProperties.getLocation().toFile();
+			File languagePropertiesFile = FileUtil.getFile(languageProperties);
 
 			if (FileUtil.exists(languagePropertiesFile)) {
 				String originContent = FileUtil.readContents(languagePropertiesFile, true);
 
 				Class<?> clazz = getClass();
 
-				URL sampleFileURL = clazz.getClassLoader().getResource(
-					TEMPLATE_DIR + "/mvcportlet/mvc-language.properties");
+				ClassLoader classLoader = clazz.getClassLoader();
 
-				String addContent = FileUtil.readContents(
-					new File(FileLocator.toFileURL(sampleFileURL).getFile()), true);
+				URL sampleFileURL = classLoader.getResource(TEMPLATE_DIR + "/mvcportlet/mvc-language.properties");
+
+				String addContent = FileUtil.readContents(FileUtil.getFile(FileLocator.toFileURL(sampleFileURL)), true);
 
 				String totalContent = originContent + System.getProperty("line.separator") + addContent;
 

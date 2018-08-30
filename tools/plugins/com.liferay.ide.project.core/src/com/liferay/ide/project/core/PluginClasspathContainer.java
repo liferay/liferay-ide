@@ -40,6 +40,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IAccessRule;
@@ -52,6 +53,7 @@ import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorations;
 import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorationsManager;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
  * @author Gregory Amerson
@@ -217,16 +219,22 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 				type = "ext";
 			}
 
-			IPath contextPath = sdkLocation.append(type).append(context);
+			IPath p = sdkLocation.append(type);
+
+			IPath contextPath = p.append(context);
 
 			String libFolder = ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/lib";
 
-			IPath serviceJarPath = contextPath.append(libFolder).append(context + "-service.jar");
+			contextPath = contextPath.append(libFolder);
 
-			if (serviceJarPath.toFile().exists()) {
-				IPath servicePath = serviceJarPath.removeLastSegments(2).append("service");
+			IPath serviceJarPath = contextPath.append(context + "-service.jar");
 
-				entry = createClasspathEntry(serviceJarPath, servicePath.toFile().exists() ? servicePath : null);
+			if (FileUtil.exists(serviceJarPath)) {
+				serviceJarPath = serviceJarPath.removeLastSegments(2);
+
+				IPath servicePath = serviceJarPath.append("service");
+
+				entry = createClasspathEntry(serviceJarPath, FileUtil.exists(servicePath) ? servicePath : null);
 			}
 		}
 
@@ -257,7 +265,9 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 				IPath path = suggestedPath.removeFirstSegments(suggestedPath.segmentCount() - matchLength);
 
-				IPath pathToMatch = path.setDevice(null).makeAbsolute();
+				IPath p = path.setDevice(null);
+
+				IPath pathToMatch = p.makeAbsolute();
 
 				if (jarPath.equals(pathToMatch)) {
 					return suggestedEntry;
@@ -281,7 +291,9 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 			}
 		}
 		else {
-			retval = CoreUtil.getWorkspaceRoot().getFile(pluginPackageFilePath);
+			IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
+
+			retval = root.getFile(pluginPackageFilePath);
 
 			if (!retval.exists()) {
 				pluginPackageFilePath = null;
@@ -322,7 +334,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	protected String getPropertyValue(String key, IFile propertiesFile) {
 		String retval = null;
 
-		try (InputStream inputStream = getPluginPackageFile().getContents()){
+		try (InputStream inputStream = getPluginPackageFile().getContents()) {
 			Properties props = new Properties();
 
 			props.load(inputStream);
@@ -362,7 +374,9 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 			return null;
 		}
 
-		IContainer resource = component.getRootFolder().getUnderlyingFolder();
+		IVirtualFolder folder = component.getRootFolder();
+
+		IContainer resource = folder.getUnderlyingFolder();
 
 		if (!(resource instanceof IFolder)) {
 			return null;
@@ -377,17 +391,21 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		 * IDE-226 the file may be missing because we are in an ext plugin which has a different layout
 		 * check for ext-web in the path to the docroot
 		 */
-		String webrootFullPath = webroot.getFullPath().toPortableString();
+		String webrootFullPath = FileUtil.getFullPathPortableString(webroot);
 
 		if (!pluginPackageFile.exists() && webrootFullPath.endsWith("WEB-INF/ext-web/docroot")) {
 
 			// look for packages file in first docroot
 
-			IPath path = webroot.getFullPath().removeFirstSegments(1);
+			IPath fullPath = webroot.getFullPath();
+
+			IPath path = fullPath.removeFirstSegments(1);
 
 			IPath parentDocroot = path.removeLastSegments(3);
 
-			IFolder parentWebroot = javaProject.getProject().getFolder(parentDocroot);
+			IProject project = javaProject.getProject();
+
+			IFolder parentWebroot = project.getFolder(parentDocroot);
 
 			if (parentWebroot.exists()) {
 				pluginPackageFile = parentWebroot.getFile(

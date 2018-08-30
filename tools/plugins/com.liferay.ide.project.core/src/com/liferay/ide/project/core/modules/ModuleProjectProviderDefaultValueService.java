@@ -20,6 +20,7 @@ import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
@@ -31,22 +32,22 @@ public class ModuleProjectProviderDefaultValueService extends DefaultValueServic
 
 	@Override
 	protected String compute() {
-		String retval = "gradle-module";
-
 		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
-		String defaultProjectBuildType = Platform.getPreferencesService().getString(
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		String defaultProjectBuildType = preferencesService.getString(
 			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION, null, prefContexts);
 
 		if (defaultProjectBuildType != null) {
 			ILiferayProjectProvider provider = LiferayCore.getProvider(defaultProjectBuildType);
 
 			if (provider != null) {
-				retval = defaultProjectBuildType;
+				return defaultProjectBuildType;
 			}
 		}
 
-		return retval;
+		return "gradle-module";
 	}
 
 }

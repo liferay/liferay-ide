@@ -15,7 +15,9 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
@@ -30,6 +32,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -80,7 +83,10 @@ public class SDKPluginFacetUtil {
 
 		JavaFacetInstallConfig javaConfig = (JavaFacetInstallConfig)config;
 
-		IDataModel dm = (IDataModel)Platform.getAdapterManager().getAdapter(config, IDataModel.class);
+		IAdapterManager adapterManager = Platform.getAdapterManager();
+
+		IDataModel dm = (IDataModel)adapterManager.getAdapter(config, IDataModel.class);
+
 		String presetId = preset.getId();
 
 		if (presetId.contains("portlet")) {
@@ -115,7 +121,7 @@ public class SDKPluginFacetUtil {
 
 			IPath existingSrcFolder = projectPath.append(IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
 
-			if (existingSrcFolder.toFile().exists()) {
+			if (FileUtil.exists(existingSrcFolder)) {
 				javaConfig.setSourceFolder(new Path(IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER));
 				javaConfig.setDefaultOutputFolder(
 					new Path(IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER));
@@ -178,7 +184,7 @@ public class SDKPluginFacetUtil {
 			boolean hasRequiredFacet = false;
 
 			for (IProjectFacetVersion currentFacetVersion : currentProjectFacetVersions) {
-				if (currentFacetVersion.getProjectFacet().equals(requiredFacet)) {
+				if (requiredFacet.equals(currentFacetVersion.getProjectFacet())) {
 					boolean supports = runtime.supports(currentFacetVersion);
 					boolean requiredVersion = _isRequiredVersion(currentFacetVersion);
 
@@ -244,7 +250,7 @@ public class SDKPluginFacetUtil {
 			boolean hasRequiredFacet = false;
 
 			for (IProjectFacetVersion currentFacetVersion : currentProjectFacetVersions) {
-				if (currentFacetVersion.getProjectFacet().equals(requiredFacet)) {
+				if (requiredFacet.equals(currentFacetVersion.getProjectFacet())) {
 
 					// TODO how to check the bundle support status?
 
@@ -294,7 +300,9 @@ public class SDKPluginFacetUtil {
 		if (action != null) {
 			IDataModel dm = (IDataModel)action.getConfig();
 
-			if (preset.getId().contains("portlet")) {
+			String presetId = preset.getId();
+
+			if (presetId.contains("portlet")) {
 				dm.setStringProperty(
 					IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
 					IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER);
@@ -304,7 +312,7 @@ public class SDKPluginFacetUtil {
 
 				_addDefaultWebXml(fpjwc, dm);
 			}
-			else if (preset.getId().contains("hook")) {
+			else if (presetId.contains("hook")) {
 				dm.setStringProperty(
 					IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
 					IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER);
@@ -314,7 +322,7 @@ public class SDKPluginFacetUtil {
 
 				_addDefaultWebXml(fpjwc, dm);
 			}
-			else if (preset.getId().contains("ext")) {
+			else if (presetId.contains("ext")) {
 				dm.setStringProperty(
 					IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
 					IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER);
@@ -325,7 +333,7 @@ public class SDKPluginFacetUtil {
 
 				_addDefaultWebXml(fpjwc, dm);
 			}
-			else if (preset.getId().contains("layouttpl")) {
+			else if (presetId.contains("layouttpl")) {
 				dm.setStringProperty(
 					IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
 					IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER);
@@ -336,16 +344,18 @@ public class SDKPluginFacetUtil {
 
 				ProjectUtil.setGenerateDD(dm, false);
 			}
-			else if (preset.getId().contains("theme")) {
+			else if (presetId.contains("theme")) {
 				dm.setStringProperty(
 					IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
 					IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER);
+
 				ProjectUtil.setGenerateDD(dm, false);
 			}
-			else if (preset.getId().contains("web")) {
+			else if (presetId.contains("web")) {
 				dm.setStringProperty(
 					IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
 					IPluginFacetConstants.WEB_PLUGIN_SDK_CONFIG_FOLDER);
+
 				dm.setStringProperty(
 					IWebFacetInstallDataModelProperties.SOURCE_FOLDER,
 					IPluginFacetConstants.WEB_PLUGIN_SDK_SOURCE_FOLDER);
@@ -408,16 +418,18 @@ public class SDKPluginFacetUtil {
 		// check for existing web.xml file, if not there, add a default one IDE-110
 		// IDE-648
 
-		IPath webinfPath = fpjwc.getProjectLocation().append(ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF");
-
 		IPath projectLocation = fpjwc.getProjectLocation();
 
-		if (ProjectUtil.isExtProject(fpjwc.getProject()) || projectLocation.lastSegment().endsWith("-ext")) {
-			fpjwc.getProjectLocation().append(IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER);
+		if (ProjectUtil.isExtProject(fpjwc.getProject()) ||
+			StringUtil.endsWith(projectLocation.lastSegment(), "-ext")) {
+
+			projectLocation.append(IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER);
 		}
 
-		if (webinfPath.toFile().exists()) {
-			File webXml = webinfPath.append("web.xml").toFile();
+		IPath webinfPath = projectLocation.append(ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF");
+
+		if (FileUtil.exists(webinfPath)) {
+			File webXml = FileUtil.getFile(webinfPath.append("web.xml"));
 
 			if (!webXml.exists()) {
 				ProjectUtil.setGenerateDD(dm, false);
@@ -444,7 +456,7 @@ public class SDKPluginFacetUtil {
 		Set<IProjectFacetVersion> facets = preset.getProjectFacets();
 
 		for (IProjectFacetVersion facet : facets) {
-			if (facet.getProjectFacet().equals(requiredFacet)) {
+			if (requiredFacet.equals(facet.getProjectFacet())) {
 				return facet;
 			}
 		}

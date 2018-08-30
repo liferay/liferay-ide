@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -37,7 +38,7 @@ public class NewLiferayProfileIdDefaultValueService extends DefaultValueService 
 	protected String compute() {
 		NewLiferayProfile profile = _newLiferayProfile();
 
-		String defaultRuntimeName = profile.getRuntimeName().content();
+		String defaultRuntimeName = SapphireUtil.getContent(profile.getRuntimeName());
 
 		/*
 		 * First try to use this as a runtimeName, but need to check it against existing possible values.
@@ -81,7 +82,7 @@ public class NewLiferayProfileIdDefaultValueService extends DefaultValueService 
 
 		NewLiferayProfile profile = _newLiferayProfile();
 
-		profile.getRuntimeName().attach(listener);
+		SapphireUtil.attachListener(profile.getRuntimeName(), listener);
 	}
 
 	private NewLiferayProfile _newLiferayProfile() {
@@ -92,17 +93,21 @@ public class NewLiferayProfileIdDefaultValueService extends DefaultValueService 
 
 		// look for an existing ([0-9])
 
-		Matcher matcher = _DUP.matcher(val);
+		Matcher matcher = _dup.matcher(val);
 
 		if (matcher.matches()) {
-			int num = Integer.parseInt(matcher.group(2));
+			try {
+				int num = Integer.parseInt(matcher.group(2));
 
-			return matcher.group(1) + "(" + (num + 1) + ")";
+				return matcher.group(1) + "(" + (num + 1) + ")";
+			}
+			catch (NumberFormatException nfe) {
+			}
 		}
 
 		return val + "(1)";
 	}
 
-	private static final Pattern _DUP = Pattern.compile("(.*)\\(([0-9]+)\\)$");
+	private static final Pattern _dup = Pattern.compile("(.*)\\(([0-9]+)\\)$");
 
 }

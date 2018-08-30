@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -135,7 +136,7 @@ public class ValidationPreferences {
 		StringBuilder retval = new StringBuilder();
 
 		if (!CoreUtil.isNullOrEmpty(descriptorFileName)) {
-			String fileName = descriptorFileName.replace(".", "-").toLowerCase();
+			String fileName = StringUtil.toLowerCase(descriptorFileName.replace(".", "-"));
 
 			retval.append(fileName);
 
@@ -143,7 +144,7 @@ public class ValidationPreferences {
 		}
 
 		if (type != null) {
-			String t = type.toString().toLowerCase();
+			String t = StringUtil.toLowerCase(type.toString());
 
 			retval.append(t.replace("_", "-"));
 		}
@@ -195,7 +196,7 @@ public class ValidationPreferences {
 	public enum ValidationType {
 
 		METHOD_NOT_FOUND, PROPERTY_NOT_FOUND, REFERENCE_NOT_FOUND, RESOURCE_NOT_FOUND, STATIC_VALUE_UNDEFINED,
-		SYNTAX_INVALID, TYPE_NOT_FOUND, TYPE_HIERARCHY_INCORRECT
+		SYNTAX_INVALID, TYPE_HIERARCHY_INCORRECT, TYPE_NOT_FOUND
 
 	}
 

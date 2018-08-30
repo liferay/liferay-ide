@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class HostOSGiBundlePossibleValuesService extends PossibleValuesService {
 			NewModuleFragmentOp op = _op();
 
 			if (!op.disposed()) {
-				String runtimeName = op.getLiferayRuntimeName().content();
+				String runtimeName = SapphireUtil.getContent(op.getLiferayRuntimeName());
 
 				IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
@@ -74,7 +75,7 @@ public class HostOSGiBundlePossibleValuesService extends PossibleValuesService {
 
 		NewModuleFragmentOp op = _op();
 
-		op.property(NewModuleFragmentOp.PROP_LIFERAY_RUNTIME_NAME).attach(_listener);
+		SapphireUtil.attachListener(op.property(NewModuleFragmentOp.PROP_LIFERAY_RUNTIME_NAME), _listener);
 	}
 
 	private NewModuleFragmentOp _op() {

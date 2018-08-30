@@ -32,14 +32,17 @@ import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
+import java.util.jar.Manifest;
 
 import org.apache.commons.lang.StringUtils;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 
 /**
@@ -65,7 +68,9 @@ public class ServiceWrapperCommand {
 		ServiceContainer result;
 
 		if (_serviceWrapperName == null) {
-			result = new ServiceContainer(Arrays.asList(dynamicServiceWrappers.keySet().toArray(new String[0])));
+			Set<String> keys = dynamicServiceWrappers.keySet();
+
+			result = new ServiceContainer(Arrays.asList(keys.toArray(new String[0])));
 		}
 		else {
 			String[] wrapperBundle = dynamicServiceWrappers.get(_serviceWrapperName);
@@ -77,7 +82,9 @@ public class ServiceWrapperCommand {
 	}
 
 	private Map<String, String[]> _getDynamicServiceWrapper() throws IOException {
-		PortalRuntime portalRuntime = (PortalRuntime)_server.getRuntime().loadAdapter(PortalRuntime.class, null);
+		IRuntime runtime = _server.getRuntime();
+
+		PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(PortalRuntime.class, null);
 
 		IPath bundleLibPath = portalRuntime.getAppServerLibGlobalDir();
 		IPath bundleServerPath = portalRuntime.getAppServerDir();
@@ -92,67 +99,68 @@ public class ServiceWrapperCommand {
 			libFiles = FileListing.getFileListing(new File(bundleLibPath.toOSString()));
 
 			for (File lib : libFiles) {
-				if (FileUtil.exists(lib) && lib.getName().endsWith("portal-kernel.jar")) {
+				if (FileUtil.exists(lib) && FileUtil.nameEndsWith(lib, "portal-kernel.jar")) {
 					portalkernelJar = lib;
 
 					break;
 				}
 			}
 
-			libFiles = FileListing.getFileListing(new File(bundleServerPath.append("../osgi").toOSString()));
+			libFiles = FileListing.getFileListing(new File(FileUtil.toOSString(bundleServerPath.append("../osgi"))));
 
 			libFiles.add(portalkernelJar);
 
-			if (ListUtil.isNotEmpty(libFiles)) {
-				for (File lib : libFiles) {
-					if (lib.getName().endsWith(".lpkg")) {
-						try (JarFile jar = new JarFile(lib)) {
-							Enumeration<JarEntry> enu = jar.entries();
+			if (ListUtil.isEmpty(libFiles)) {
+				return map;
+			}
 
-							while (enu.hasMoreElements()) {
-								try {
-									JarEntry entry = enu.nextElement();
+			for (File lib : libFiles) {
+				if (FileUtil.nameEndsWith(lib, ".lpkg")) {
+					try (JarFile jar = new JarFile(lib)) {
+						Enumeration<JarEntry> enu = jar.entries();
 
-									String name = entry.getName();
-
-									if (name.contains(".api-")) {
-										JarEntry jarentry = jar.getJarEntry(name);
-
-										try(InputStream inputStream = jar.getInputStream(jarentry);
-												JarInputStream jarInputStream = new JarInputStream(inputStream)){
-											JarEntry nextJarEntry;
-
-											while ((nextJarEntry = jarInputStream.getNextJarEntry()) != null) {
-												String entryName = nextJarEntry.getName();
-
-												_getServiceWrapperList(map, entryName, jarInputStream);
-											}
-										}
-									}
-								}
-								catch (Exception e) {
-								}
-							}
-						}
-					}
-					else if (lib.getName().endsWith("api.jar") || lib.getName().equals("portal-kernel.jar")) {
-
-						try (JarFile jar = new JarFile(lib);
-								InputStream inputStream = Files.newInputStream(lib.toPath());
-								JarInputStream jarinput = new JarInputStream(inputStream)) {
-
-							Enumeration<JarEntry> enu = jar.entries();
-
-							while (enu.hasMoreElements()) {
+						while (enu.hasMoreElements()) {
+							try {
 								JarEntry entry = enu.nextElement();
 
 								String name = entry.getName();
 
-								_getServiceWrapperList(map, name, jarinput);
+								if (name.contains(".api-")) {
+									JarEntry jarEntry = jar.getJarEntry(name);
+
+									try (InputStream inputStream = jar.getInputStream(jarEntry);
+										JarInputStream jarInputStream = new JarInputStream(inputStream)) {
+
+										JarEntry nextJarEntry;
+
+										while ((nextJarEntry = jarInputStream.getNextJarEntry()) != null) {
+											String entryName = nextJarEntry.getName();
+
+											_getServiceWrapperList(map, entryName, jarInputStream);
+										}
+									}
+								}
+							}
+							catch (Exception e) {
 							}
 						}
-						catch (IOException ioe) {
+					}
+				}
+				else if (FileUtil.nameEndsWith(lib, "api.jar") || "portal-kernel.jar".equals(lib.getName())) {
+					try (JarFile jar = new JarFile(lib);
+						JarInputStream jarinput = new JarInputStream(Files.newInputStream(lib.toPath()))) {
+
+						Enumeration<JarEntry> enu = jar.entries();
+
+						while (enu.hasMoreElements()) {
+							JarEntry entry = enu.nextElement();
+
+							String name = entry.getName();
+
+							_getServiceWrapperList(map, name, jarinput);
 						}
+					}
+					catch (IOException ioe) {
 					}
 				}
 			}
@@ -178,11 +186,14 @@ public class ServiceWrapperCommand {
 
 	private void _getServiceWrapperList(Map<String, String[]> wrapperMap, String name, JarInputStream jarInputStream) {
 		if (name.endsWith("ServiceWrapper.class") && !name.contains("$")) {
-			name = name.replaceAll("\\\\", ".").replaceAll("/", ".");
+			name = name.replaceAll("\\\\", ".");
+			name = name.replaceAll("/", ".");
 
 			name = name.substring(0, name.lastIndexOf("."));
 
-			Attributes mainAttributes = jarInputStream.getManifest().getMainAttributes();
+			Manifest manifest = jarInputStream.getManifest();
+
+			Attributes mainAttributes = manifest.getMainAttributes();
 
 			String bundleName = mainAttributes.getValue("Bundle-SymbolicName");
 			String version = mainAttributes.getValue("Bundle-Version");

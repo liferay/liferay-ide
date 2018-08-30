@@ -40,7 +40,6 @@ import org.eclipse.wst.server.core.ServerCore;
 public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant {
 
 	public LiferayWorkspaceProjectDeleteParticipant() {
-		super();
 	}
 
 	@Override
@@ -64,9 +63,9 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 			return change;
 		}
 
-		Stream<IServer> serversStream = Stream.of(ServerCore.getServers());
-
-		serversStream.filter(
+		Stream.of(
+			ServerCore.getServers()
+		).filter(
 			server -> server != null
 		).filter(
 			server -> {

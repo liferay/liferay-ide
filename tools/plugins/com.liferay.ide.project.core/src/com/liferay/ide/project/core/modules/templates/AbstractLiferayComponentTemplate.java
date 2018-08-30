@@ -18,11 +18,17 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.IComponentTemplate;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.PropertyKey;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -30,7 +36,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-
 import java.io.Writer;
 
 import java.net.URL;
@@ -62,11 +67,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.java.JavaPackageName;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
-
 /**
  * @author Simon Jiang
  */
@@ -89,16 +89,19 @@ public abstract class AbstractLiferayComponentTemplate
 		try {
 			Class<?> clazz = getClass();
 
-			URL sampleFileURL = clazz.getClassLoader().getResource(TEMPLATE_DIR + "/" + srcFileName);
+			ClassLoader classLoader = clazz.getClassLoader();
 
-			File file = new File(FileLocator.toFileURL(sampleFileURL).getFile());
+			URL sampleFileURL = classLoader.getResource(TEMPLATE_DIR + "/" + srcFileName);
+
+			File file = FileUtil.getFile(FileLocator.toFileURL(sampleFileURL));
 
 			String sampleContent = FileUtil.readContents(file, true);
 
 			if (newFile.getParent() instanceof IFolder) {
 				CoreUtil.prepareFolder((IFolder)newFile.getParent());
 			}
-			try(InputStream input = new ByteArrayInputStream(sampleContent.getBytes())){
+
+			try (InputStream input = new ByteArrayInputStream(sampleContent.getBytes())) {
 				newFile.create(input, true, null);
 			}
 		}
@@ -113,9 +116,11 @@ public abstract class AbstractLiferayComponentTemplate
 		try {
 			Class<?> clazz = getClass();
 
-			URL sampleFileURL = clazz.getClassLoader().getResource(TEMPLATE_DIR + "/" + srcFileName);
+			ClassLoader classLoader = clazz.getClassLoader();
 
-			File file = new File(FileLocator.toFileURL(sampleFileURL).getFile());
+			URL sampleFileURL = classLoader.getResource(TEMPLATE_DIR + "/" + srcFileName);
+
+			File file = FileUtil.getFile(FileLocator.toFileURL(sampleFileURL));
 
 			String sampleContent = FileUtil.readContents(file, true);
 
@@ -124,7 +129,8 @@ public abstract class AbstractLiferayComponentTemplate
 			if (newFile.getParent() instanceof IFolder) {
 				CoreUtil.prepareFolder((IFolder)newFile.getParent());
 			}
-			try(InputStream input = new ByteArrayInputStream(newCoentent.getBytes())){
+
+			try (InputStream input = new ByteArrayInputStream(newCoentent.getBytes())) {
 				newFile.create(input, true, null);
 			}
 		}
@@ -192,11 +198,12 @@ public abstract class AbstractLiferayComponentTemplate
 		if (newFile.getParent() instanceof IFolder) {
 			CoreUtil.prepareFolder((IFolder)newFile.getParent());
 		}
-		try(InputStream inputStream = new ByteArrayInputStream(input)){
+
+		try (InputStream inputStream = new ByteArrayInputStream(input)) {
 			newFile.create(inputStream, true, null);
 		}
-		catch( IOException e) {
-			throw new CoreException(ProjectCore.createErrorStatus(e));
+		catch (IOException ioe) {
+			throw new CoreException(ProjectCore.createErrorStatus(ioe));
 		}
 	}
 
@@ -254,7 +261,9 @@ public abstract class AbstractLiferayComponentTemplate
 
 		IClasspathAttribute[] attributes = {JavaCore.newClasspathAttribute("FROM_GRADLE_MODEL", "true")};
 
-		IPath path = project.getFullPath().append("src/main/resources");
+		IPath fullPath = project.getFullPath();
+
+		IPath path = fullPath.append("src/main/resources");
 
 		IClasspathEntry resourcesEntry = JavaCore.newSourceEntry(path, new IPath[0], new IPath[0], null, attributes);
 
@@ -305,10 +314,10 @@ public abstract class AbstractLiferayComponentTemplate
 	}
 
 	protected void doSourceCodeOperation(IFile srcFile) throws CoreException {
-		File file = srcFile.getLocation().toFile();
+		File file = FileUtil.getFile(srcFile);
 
 		try (OutputStream fos = Files.newOutputStream(file.toPath());
-				Writer out = new OutputStreamWriter(fos)) {
+			Writer out = new OutputStreamWriter(fos)) {
 
 			Template temp = cfg.getTemplate(getTemplateFile());
 
@@ -426,9 +435,11 @@ public abstract class AbstractLiferayComponentTemplate
 		try {
 			Class<?> clazz = getClass();
 
-			URL templateURL = clazz.getClassLoader().getResource(TEMPLATE_DIR);
+			ClassLoader classLoader = clazz.getClassLoader();
 
-			cfg.setDirectoryForTemplateLoading(new File(FileLocator.toFileURL(templateURL).getFile()));
+			URL templateURL = classLoader.getResource(TEMPLATE_DIR);
+
+			cfg.setDirectoryForTemplateLoading(FileUtil.getFile(FileLocator.toFileURL(templateURL)));
 
 			cfg.setDefaultEncoding("UTF-8");
 			cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
@@ -439,16 +450,17 @@ public abstract class AbstractLiferayComponentTemplate
 	}
 
 	protected void initializeOperation(NewLiferayComponentOp op) {
-		projectName = op.getProjectName().content(true);
-		packageName = op.getPackageName().content(true);
-		componentClassName = op.getComponentClassName().content(true);
+		projectName = SapphireUtil.getContent(op.getProjectName());
+		packageName = SapphireUtil.getContent(op.getPackageName());
+		componentClassName = SapphireUtil.getContent(op.getComponentClassName());
 
-		IComponentTemplate<NewLiferayComponentOp> componentTemplate = op.getComponentClassTemplateName().content(true);
+		IComponentTemplate<NewLiferayComponentOp> componentTemplate = SapphireUtil.getContent(
+			op.getComponentClassTemplateName());
 
 		templateName = componentTemplate.getShortName();
 
-		serviceName = op.getServiceName().content(true);
-		modelClass = op.getModelClass().content(true);
+		serviceName = SapphireUtil.getContent(op.getServiceName());
+		modelClass = SapphireUtil.getContent(op.getModelClass());
 
 		componentNameWithoutTemplateName = componentClassName.replace(templateName, "");
 
@@ -465,9 +477,9 @@ public abstract class AbstractLiferayComponentTemplate
 
 			StringBuilder sb = new StringBuilder();
 
-			sb.append(propertyKey.getName().content(true));
+			sb.append(SapphireUtil.getContent(propertyKey.getName()));
 			sb.append("=");
-			sb.append(propertyKey.getValue().content(true));
+			sb.append(SapphireUtil.getContent(propertyKey.getValue()));
 
 			if (i != (propertyKeys.size() - 1)) {
 				sb.append(",");
@@ -491,12 +503,14 @@ public abstract class AbstractLiferayComponentTemplate
 				IPackageFragment pack = createJavaPackage(javaProject, packageName.toString());
 
 				if (pack == null) {
-					throw new CoreException(ProjectCore.createErrorStatus("Can't create package folder"));
+					throw new CoreException(ProjectCore.createErrorStatus("Can not create package folder"));
 				}
 
 				String fileName = className + ".java";
 
-				IPath packageFullPath = new Path(packageName.toString().replace('.', IPath.SEPARATOR));
+				String s = packageName.toString();
+
+				IPath packageFullPath = new Path(s.replace('.', IPath.SEPARATOR));
 
 				if (FileUtil.notExists(packageFullPath)) {
 					CoreUtil.prepareFolder(sourceFolder.getFolder(packageFullPath));

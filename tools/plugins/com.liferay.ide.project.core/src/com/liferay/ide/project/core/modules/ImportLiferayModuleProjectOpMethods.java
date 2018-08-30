@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.CoreException;
@@ -38,11 +39,11 @@ public class ImportLiferayModuleProjectOpMethods {
 
 		monitor.beginTask("Importing Module project...", 100);
 
-		Path path = op.getLocation().content();
+		Path path = SapphireUtil.getContent(op.getLocation());
 
 		String location = path.toOSString();
 
-		ILiferayProjectImporter importer = LiferayCore.getImporter(op.getBuildType().content());
+		ILiferayProjectImporter importer = LiferayCore.getImporter(SapphireUtil.getContent(op.getBuildType()));
 
 		Status retval = Status.createOkStatus();
 

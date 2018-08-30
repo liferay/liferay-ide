@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
@@ -58,7 +59,7 @@ public class LiferayVersionDefaultValueService extends DefaultValueService {
 							return Status.OK_STATUS;
 						}
 
-						String runtimeName = newLiferayProfile.getRuntimeName().content();
+						String runtimeName = SapphireUtil.getContent(newLiferayProfile.getRuntimeName());
 
 						ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(runtimeName);
 
@@ -130,7 +131,8 @@ public class LiferayVersionDefaultValueService extends DefaultValueService {
 
 		NewLiferayProfile profile = context(NewLiferayProfile.class);
 
-		profile.property(NewLiferayProfile.PROP_RUNTIME_NAME).attach(
+		SapphireUtil.attachListener(
+			profile.property(NewLiferayProfile.PROP_RUNTIME_NAME),
 			new FilteredListener<PropertyContentEvent>() {
 
 				@Override

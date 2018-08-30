@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -27,7 +28,7 @@ public class UseDefaultLocationListener extends ProjectNameListener {
 	protected void handleTypedEvent(PropertyContentEvent event) {
 		NewLiferayPluginProjectOp op = op(event);
 
-		if (op.getUseDefaultLocation().content(true)) {
+		if (SapphireUtil.getContent(op.getUseDefaultLocation())) {
 			super.handleTypedEvent(event);
 		}
 		else {

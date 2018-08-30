@@ -15,11 +15,13 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
@@ -37,16 +39,16 @@ public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService
 	protected String compute() {
 		NewLiferayModuleProjectOp op = _op();
 
-		String groupId = null;
+		String groupId = "";
 
-		Path location = op.getLocation().content();
+		Path location = SapphireUtil.getContent(op.getLocation());
 
 		if (location != null) {
 			String parentProjectLocation = location.toOSString();
 
 			IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
 
-			String projectName = op.getProjectName().content();
+			String projectName = SapphireUtil.getContent(op.getProjectName());
 
 			groupId = NewLiferayModuleProjectOpMethods.getMavenParentPomGroupId(op, projectName, parentProjectOsPath);
 		}
@@ -55,7 +57,7 @@ public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService
 			groupId = _getDefaultMavenGroupId();
 
 			if (CoreUtil.isNullOrEmpty(groupId)) {
-				groupId = op.getPackageName().content();
+				groupId = SapphireUtil.getContent(op.getPackageName());
 			}
 		}
 
@@ -77,16 +79,18 @@ public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService
 
 		NewLiferayModuleProjectOp op = _op();
 
-		op.getLocation().attach(listener);
-		op.getProjectName().attach(listener);
-		op.getPackageName().attach(listener);
+		SapphireUtil.attachListener(op.getLocation(), listener);
+		SapphireUtil.attachListener(op.getProjectName(), listener);
+		SapphireUtil.attachListener(op.getPackageName(), listener);
 	}
 
 	private String _getDefaultMavenGroupId() {
-		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
+		IScopeContext[] contexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
-		String defaultMavenGroupId = Platform.getPreferencesService().getString(
-			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_PROJECT_MAVEN_GROUPID, null, prefContexts);
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		String defaultMavenGroupId = preferencesService.getString(
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_PROJECT_MAVEN_GROUPID, null, contexts);
 
 		return defaultMavenGroupId;
 	}

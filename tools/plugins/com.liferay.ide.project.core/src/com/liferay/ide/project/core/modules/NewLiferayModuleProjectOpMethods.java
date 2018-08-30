@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.modules;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -45,7 +46,9 @@ import org.eclipse.jdt.core.dom.ArrayInitializer;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MemberValuePair;
+import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
@@ -92,7 +95,9 @@ public class NewLiferayModuleProjectOpMethods {
 
 					@Override
 					public boolean visit(NormalAnnotation node) {
-						String qualifiedName = node.getTypeName().getFullyQualifiedName();
+						Name name = node.getTypeName();
+
+						String qualifiedName = name.getFullyQualifiedName();
 
 						if (qualifiedName.equals("Component")) {
 							ASTRewrite rewrite = ASTRewrite.create(cu.getAST());
@@ -107,7 +112,9 @@ public class NewLiferayModuleProjectOpMethods {
 								if (astNode instanceof MemberValuePair) {
 									MemberValuePair pairNode = (MemberValuePair)astNode;
 
-									String fullQualifiedName = pairNode.getName().getFullyQualifiedName();
+									SimpleName simpleName = pairNode.getName();
+
+									String fullQualifiedName = simpleName.getFullyQualifiedName();
 
 									if (fullQualifiedName.equals("property")) {
 										Expression express = pairNode.getValue();
@@ -143,7 +150,7 @@ public class NewLiferayModuleProjectOpMethods {
 								}
 							}
 
-							if (hasProperty == false) {
+							if (!hasProperty) {
 								ListRewrite clrw = rewrite.getListRewrite(node, NormalAnnotation.VALUES_PROPERTY);
 
 								ASTNode lastNode = values.get(values.size() - 1);
@@ -174,7 +181,9 @@ public class NewLiferayModuleProjectOpMethods {
 
 								edits.apply(document);
 
-								fos.write(document.get().getBytes());
+								String content = document.get();
+
+								fos.write(content.getBytes());
 
 								fos.flush();
 							}
@@ -232,15 +241,15 @@ public class NewLiferayModuleProjectOpMethods {
 		Status retval = Status.createOkStatus();
 
 		try {
-			NewLiferayProjectProvider<BaseModuleOp> projectProvider = op.getProjectProvider().content(true);
+			NewLiferayProjectProvider<BaseModuleOp> projectProvider = SapphireUtil.getContent(op.getProjectProvider());
 
 			IStatus status = projectProvider.createNewProject(op, monitor);
 
 			retval = StatusBridge.create(status);
 
-			String projectName = op.getProjectName().content();
+			String projectName = SapphireUtil.getContent(op.getProjectName());
 
-			IPath location = PathBridge.create(op.getLocation().content());
+			IPath location = PathBridge.create(SapphireUtil.getContent(op.getLocation()));
 
 			IPath projectLocation = location;
 
@@ -262,11 +271,12 @@ public class NewLiferayModuleProjectOpMethods {
 
 					for (PropertyKey propertyKey : propertyKeys) {
 						properties.add(
-							propertyKey.getName().content(true) + "=" + propertyKey.getValue().content(true));
+							SapphireUtil.getContent(propertyKey.getName()) + "=" +
+								SapphireUtil.getContent(propertyKey.getValue()));
 					}
 
 					if (addProperties(finalClassFile, properties)) {
-						IProject project = CoreUtil.getProject(op.getProjectName().content());
+						IProject project = CoreUtil.getProject(SapphireUtil.getContent(op.getProjectName()));
 
 						project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 					}
@@ -293,7 +303,7 @@ public class NewLiferayModuleProjectOpMethods {
 
 		File parentProjectDir = path.toFile();
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content();
+		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
@@ -309,11 +319,9 @@ public class NewLiferayModuleProjectOpMethods {
 	}
 
 	public static String getMavenParentPomVersion(NewLiferayModuleProjectOp op, String projectName, IPath path) {
-		String retval = null;
-
 		File parentProjectDir = path.toFile();
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content();
+		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
@@ -321,11 +329,11 @@ public class NewLiferayModuleProjectOpMethods {
 			List<String> versions = provider.getData("parentVersion", String.class, parentProjectDir);
 
 			if (ListUtil.isNotEmpty(versions)) {
-				retval = versions.get(0);
+				return versions.get(0);
 			}
 		}
 
-		return retval;
+		return "";
 	}
 
 	private static void _getClassFile(File packageRoot, List<IPath> classFiles) {
@@ -353,9 +361,7 @@ public class NewLiferayModuleProjectOpMethods {
 	}
 
 	private static List<IPath> _getClassFilePath(IPath projecLocation) {
-		IPath packageNamePath = projecLocation.append("src/main/java");
-
-		File packageRoot = packageNamePath.toFile();
+		File packageRoot = FileUtil.getFile(projecLocation.append("src/main/java"));
 
 		List<IPath> classFiles = new ArrayList<>();
 
@@ -368,8 +374,10 @@ public class NewLiferayModuleProjectOpMethods {
 		try {
 			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
 
-			prefs.put(ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, op.getLiferayVersion().text());
-			prefs.put(ProjectCore.PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text());
+			prefs.put(ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, SapphireUtil.getText(op.getLiferayVersion()));
+			prefs.put(
+				ProjectCore.PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION,
+				SapphireUtil.getText(op.getProjectProvider()));
 
 			prefs.flush();
 		}
@@ -391,7 +399,9 @@ public class NewLiferayModuleProjectOpMethods {
 
 		@Override
 		public boolean visit(NormalAnnotation node) {
-			String qualifiedName = node.getTypeName().getFullyQualifiedName();
+			Name name = node.getTypeName();
+
+			String qualifiedName = name.getFullyQualifiedName();
 
 			if (qualifiedName.equals("Component")) {
 				_hasComponentAnnotation = true;

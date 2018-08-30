@@ -98,18 +98,19 @@ public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferay
 
 			IFile languageProperties = contentFolder.getFile(new Path("Language.properties"));
 
-			File languagePropertiesFile = languageProperties.getLocation().toFile();
+			File languagePropertiesFile = FileUtil.getFile(languageProperties);
 
 			if (FileUtil.exists(languagePropertiesFile)) {
 				String originContent = FileUtil.readContents(languagePropertiesFile, true);
 
 				Class<?> clazz = getClass();
 
-				URL sampleFileURL = clazz.getClassLoader().getResource(
+				ClassLoader classLoader = clazz.getClassLoader();
+
+				URL sampleFileURL = classLoader.getResource(
 					TEMPLATE_DIR + "/pollerprocessor/poller-language.properties");
 
-				String addContent = FileUtil.readContents(
-					new File(FileLocator.toFileURL(sampleFileURL).getFile()), true);
+				String addContent = FileUtil.readContents(FileUtil.getFile(FileLocator.toFileURL(sampleFileURL)), true);
 
 				String totalContent = originContent + System.getProperty("line.separator") + addContent;
 
@@ -265,10 +266,10 @@ public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferay
 	}
 
 	private void _sourceCodeOperation(IFile srcFile, String type) throws CoreException {
-		File file = srcFile.getLocation().toFile();
+		File file = FileUtil.getFile(srcFile);
 
 		try (OutputStream fos = Files.newOutputStream(file.toPath());
-				Writer out = new OutputStreamWriter(fos)) {
+			Writer out = new OutputStreamWriter(fos)) {
 
 			Template temp = cfg.getTemplate(getTemplateFile());
 

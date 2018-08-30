@@ -20,6 +20,7 @@ import com.liferay.ide.project.core.model.Profile;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
@@ -29,7 +30,9 @@ public class ProfileIdListener extends FilteredListener<PropertyContentEvent> {
 
 	@Override
 	protected void handleTypedEvent(PropertyContentEvent event) {
-		NewLiferayPluginProjectOp op = event.property().nearest(NewLiferayPluginProjectOp.class);
+		Property property = event.property();
+
+		NewLiferayPluginProjectOp op = property.nearest(NewLiferayPluginProjectOp.class);
 
 		ElementList<Profile> selectedProfiles = op.getSelectedProfiles();
 

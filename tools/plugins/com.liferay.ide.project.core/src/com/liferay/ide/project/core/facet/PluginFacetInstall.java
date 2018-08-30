@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
@@ -38,10 +39,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -63,6 +63,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IDelegate;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 
@@ -95,21 +96,19 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 		 *  that is in the workspace and will fail to find the file.
 		 */
 		try {
-			IFile f = project.getProject().getFile(_PATH_IN_PROJECT);
+			IProject p = project.getProject();
 
-			File file = f.getLocation().toFile();
+			File file = FileUtil.getFile(p.getFile(_PATH_IN_PROJECT));
 
-			IWorkspace ws = ResourcesPlugin.getWorkspace();
+			IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
 
-			IWorkspaceRoot wsroot = ws.getRoot();
-
-			IPath path = new Path(file.getAbsolutePath());
-
-			IFile[] wsFiles = wsroot.findFilesForLocationURI(path.toFile().toURI());
+			IFile[] wsFiles = root.findFilesForLocationURI(file.toURI());
 
 			if (ListUtil.isNotEmpty(wsFiles)) {
 				for (IFile wsFile : wsFiles) {
-					IContainer container = wsFile.getParent().getParent();
+					IContainer parent = wsFile.getParent();
+
+					IContainer container = parent.getParent();
 
 					container.refreshLocal(IResource.DEPTH_INFINITE, null);
 				}
@@ -130,7 +129,9 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 
 			IJavaProject javaProject = JavaCore.create(project);
 
-			IPath outputLocation = project.getFolder(getDefaultOutputLocation()).getFullPath();
+			IFolder folder = project.getFolder(getDefaultOutputLocation());
+
+			IPath outputLocation = folder.getFullPath();
 
 			javaProject.setOutputLocation(outputLocation, monitor);
 		}
@@ -151,7 +152,9 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 		}
 
 		try {
-			IPath outputLocation = JavaCore.create(project).getOutputLocation();
+			IJavaProject javaProject = JavaCore.create(project);
+
+			IPath outputLocation = javaProject.getOutputLocation();
 
 			vProject.setMetaProperty(IModuleConstants.PROJ_REL_JAVA_OUTPUT_PATH, outputLocation.toPortableString());
 		}
@@ -186,8 +189,8 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 				return;
 			}
 			else if (projectEntry instanceof IFile) {
-				try(InputStream inputStream = Files.newInputStream(newFile.toPath())){
-					((IFile)projectEntry).setContents(inputStream, IResource.FORCE, null);	
+				try (InputStream inputStream = Files.newInputStream(newFile.toPath())) {
+					((IFile)projectEntry).setContents(inputStream, IResource.FORCE, null);
 				}
 			}
 		}
@@ -197,15 +200,17 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 			newProjectFolder.create(true, true, null);
 		}
 		else if (projectEntry instanceof IFile) {
-			try(InputStream inputStream = Files.newInputStream(newFile.toPath())){
-				((IFile)projectEntry).create(inputStream, IResource.FORCE, null);	
+			try (InputStream inputStream = Files.newInputStream(newFile.toPath())) {
+				((IFile)projectEntry).create(inputStream, IResource.FORCE, null);
 			}
 		}
 	}
 
 	protected boolean deletePath(IPath path) {
 		if (FileUtil.exists(path)) {
-			return path.toFile().delete();
+			File file = path.toFile();
+
+			return file.delete();
 		}
 
 		return false;
@@ -230,15 +235,17 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 		IFacetedProjectWorkingCopy fp = getFacetedProject();
 
 		for (IProjectFacetVersion pfv : fp.getProjectFacets()) {
-			String id = pfv.getProjectFacet().getId();
+			IProjectFacet projectFacet = pfv.getProjectFacet();
 
-			if (id.equals(facetId)) {
+			if (StringUtil.equals(projectFacet.getId(), facetId)) {
 				Action action = fp.getProjectFacetAction(pfv.getProjectFacet());
 
 				if (action != null) {
 					Object config = action.getConfig();
 
-					return (IDataModel)Platform.getAdapterManager().getAdapter(config, IDataModel.class);
+					IAdapterManager adapterManager = Platform.getAdapterManager();
+
+					return (IDataModel)adapterManager.getAdapter(config, IDataModel.class);
 				}
 			}
 		}
@@ -252,9 +259,9 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 
 	protected String getRuntimeLocation() {
 		try {
-			IPath path = ServerUtil.getRuntime(project).getLocation();
+			org.eclipse.wst.server.core.IRuntime runtime = ServerUtil.getRuntime(project);
 
-			return path.toOSString();
+			return FileUtil.toOSString(runtime.getLocation());
 		}
 		catch (CoreException ce) {
 			ce.printStackTrace();
@@ -270,17 +277,16 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 			sdkName = masterModel.getStringProperty(IPluginProjectDataModelProperties.LIFERAY_SDK_NAME);
 		}
 		catch (Exception ex) {
+			sdkName = model.getStringProperty(IPluginProjectDataModelProperties.LIFERAY_SDK_NAME);
 		}
 
 		if (sdkName == null) {
-			try {
-				sdkName = model.getStringProperty(IPluginProjectDataModelProperties.LIFERAY_SDK_NAME);
-			}
-			catch (Exception ex) {
-			}
+			return null;
 		}
 
-		return SDKManager.getInstance().getSDK(sdkName);
+		SDKManager sdkManager = SDKManager.getInstance();
+
+		return sdkManager.getSDK(sdkName);
 	}
 
 	protected IFolder getWebRootFolder() {
@@ -302,19 +308,25 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 			String configFolder = webFacetDataModel.getStringProperty(
 				IJ2EEModuleFacetInstallDataModelProperties.CONFIG_FOLDER);
 
-			webrootFullPath = project.getFullPath().append(configFolder);
+			IPath fullPath = project.getFullPath();
+
+			webrootFullPath = fullPath.append(configFolder);
 		}
 		else {
 			IVirtualComponent component = ComponentCore.createComponent(project);
 
 			if (component != null) {
-				IContainer container = component.getRootFolder().getUnderlyingFolder();
+				IVirtualFolder rootFolder = component.getRootFolder();
+
+				IContainer container = rootFolder.getUnderlyingFolder();
 
 				webrootFullPath = container.getFullPath();
 			}
 		}
 
-		return CoreUtil.getWorkspaceRoot().getFolder(webrootFullPath);
+		IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
+
+		return workspaceRoot.getFolder(webrootFullPath);
 	}
 
 	protected void installPluginLibraryDelegate() throws CoreException {
@@ -356,7 +368,9 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 
 			IPath oldOutputLocation = jProject.getOutputLocation();
 
-			IFolder oldOutputFolder = CoreUtil.getWorkspaceRoot().getFolder(oldOutputLocation);
+			IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
+
+			IFolder oldOutputFolder = workspaceRoot.getFolder(oldOutputLocation);
 
 			jProject.setOutputLocation(folder.getFullPath(), null);
 
@@ -366,7 +380,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 
 					oldOutputFolder.delete(true, null);
 
-					if ((outputParent.members().length == 0) && outputParent.getName().equals("build")) {
+					if (ListUtil.isEmpty(outputParent.members()) && "build".equals(outputParent.getName())) {
 						outputParent.delete(true, null);
 					}
 				}
@@ -389,7 +403,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 		}
 
 		for (String name : ISDKConstants.PORTLET_PLUGIN_ZIP_IGNORE_FILES) {
-			if (file.getName().equals(name)) {
+			if (name.equals(file.getName())) {
 				return false;
 			}
 		}

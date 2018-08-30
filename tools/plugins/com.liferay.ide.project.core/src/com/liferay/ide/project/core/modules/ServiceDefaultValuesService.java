@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
 
@@ -32,7 +33,7 @@ public class ServiceDefaultValuesService extends DefaultValueService {
 	protected String compute() {
 		NewLiferayModuleProjectOp op = _op();
 
-		String template = op.getProjectTemplateName().content(true);
+		String template = SapphireUtil.getContent(op.getProjectTemplateName());
 
 		String retVal = "";
 

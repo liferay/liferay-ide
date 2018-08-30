@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
@@ -74,7 +75,7 @@ public class SDKProjectConvertDataModelProvider
 				rawLocation = new Path(absoluteUri.getPath());
 			}
 
-			return rawLocation.removeLastSegments(2).toOSString();
+			return FileUtil.toOSString(rawLocation.removeLastSegments(2));
 		}
 		else if (SDK_VERSION.equals(propertyName)) {
 

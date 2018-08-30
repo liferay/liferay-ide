@@ -14,10 +14,13 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
+
+import java.util.List;
 
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
@@ -32,8 +35,8 @@ public class ArchetypeDefaultValueService extends DefaultValueService {
 	public void dispose() {
 		NewLiferayPluginProjectOp op = _op();
 
-		op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK).detach(_listener);
-		op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK_ADVANCED).detach(_listener);
+		SapphireUtil.detachListener(op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK), _listener);
+		SapphireUtil.detachListener(op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK_ADVANCED), _listener);
 
 		super.dispose();
 	}
@@ -42,15 +45,15 @@ public class ArchetypeDefaultValueService extends DefaultValueService {
 	protected String compute() {
 		NewLiferayPluginProjectOp op = _op();
 
-		PluginType pluginType = op.getPluginType().content();
+		PluginType pluginType = SapphireUtil.getContent(op.getPluginType());
 
 		String frameworkType = null;
 
 		if (pluginType.equals(PluginType.portlet)) {
-			IPortletFramework portletFramework = op.getPortletFramework().content();
+			IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
 
 			if (portletFramework.isRequiresAdvanced()) {
-				IPortletFramework framework = op.getPortletFrameworkAdvanced().content();
+				IPortletFramework framework = SapphireUtil.getContent(op.getPortletFrameworkAdvanced());
 
 				frameworkType = framework.getShortName();
 			}
@@ -64,9 +67,12 @@ public class ArchetypeDefaultValueService extends DefaultValueService {
 
 		frameworkType = frameworkType.replaceAll("_", "-");
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content();
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
+			op.getProjectProvider());
 
-		return provider.getData("archetypeGAV", String.class, frameworkType).get(0);
+		List<String> data = provider.getData("archetypeGAV", String.class, frameworkType);
+
+		return data.get(0);
 	}
 
 	@Override
@@ -82,8 +88,8 @@ public class ArchetypeDefaultValueService extends DefaultValueService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK).attach(_listener);
-		op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK_ADVANCED).attach(_listener);
+		SapphireUtil.attachListener(op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK), _listener);
+		SapphireUtil.attachListener(op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK_ADVANCED), _listener);
 	}
 
 	private NewLiferayPluginProjectOp _op() {

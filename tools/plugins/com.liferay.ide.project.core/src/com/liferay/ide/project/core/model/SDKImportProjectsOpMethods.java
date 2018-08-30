@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.core.util.MultiStatusBuilder;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 
@@ -43,7 +44,7 @@ public class SDKImportProjectsOpMethods {
 
 		Status retval = Status.createOkStatus();
 
-		Path projectLocation = op.getSdkLocation().content();
+		Path projectLocation = SapphireUtil.getContent(op.getSdkLocation());
 
 		if ((projectLocation == null) || projectLocation.isEmpty()) {
 			return Status.createErrorStatus("Project cannot be empty");
@@ -59,7 +60,8 @@ public class SDKImportProjectsOpMethods {
 				for (NamedItem projectNamedItem : projectItems) {
 					try {
 						if (projectNamedItem instanceof ProjectNamedItem) {
-							String projectPath = ((ProjectNamedItem)projectNamedItem).getLocation().content();
+							String projectPath = SapphireUtil.getContent(
+								((ProjectNamedItem)projectNamedItem).getLocation());
 
 							String projectLocation = new Path(projectPath).toPortableString();
 

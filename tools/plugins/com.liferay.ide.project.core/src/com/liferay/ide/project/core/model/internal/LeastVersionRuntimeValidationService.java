@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -41,7 +42,9 @@ public class LeastVersionRuntimeValidationService extends ValidationService {
 
 		Value<?> value = (Value<?>)property;
 
-		String runtimeName = value.content().toString();
+		Object o = SapphireUtil.getContent(value);
+
+		String runtimeName = o.toString();
 
 		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 

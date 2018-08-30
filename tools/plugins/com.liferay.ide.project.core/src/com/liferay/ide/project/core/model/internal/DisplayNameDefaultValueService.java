@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -31,7 +32,7 @@ public class DisplayNameDefaultValueService extends DefaultValueService {
 		NewLiferayPluginProjectOp op = _op();
 
 		if ((op != null) && !op.disposed()) {
-			op.property(NewLiferayPluginProjectOp.PROP_PROJECT_NAME).detach(_listener);
+			SapphireUtil.detachListener(op.property(NewLiferayPluginProjectOp.PROP_PROJECT_NAME), _listener);
 		}
 
 		super.dispose();
@@ -41,7 +42,7 @@ public class DisplayNameDefaultValueService extends DefaultValueService {
 	protected String compute() {
 		NewLiferayPluginProjectOp op = _op();
 
-		return ProjectUtil.convertToDisplayName(op.getProjectName().content());
+		return ProjectUtil.convertToDisplayName(SapphireUtil.getContent(op.getProjectName()));
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public class DisplayNameDefaultValueService extends DefaultValueService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		op.property(NewLiferayPluginProjectOp.PROP_PROJECT_NAME).attach(_listener);
+		SapphireUtil.attachListener(op.property(NewLiferayPluginProjectOp.PROP_PROJECT_NAME), _listener);
 	}
 
 	private NewLiferayPluginProjectOp _op() {

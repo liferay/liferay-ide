@@ -101,13 +101,13 @@ public class NewLiferayComponentPortletActionCommandOperation extends AbstractLi
 
 			IFolder metaFolder = resourceFolder.getFolder("META-INF/resources");
 
-			IFile initFtl = metaFolder.getFile(new Path(componentClassName.toLowerCase().toLowerCase() + "/init.ftl"));
+			IFile initFtl = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/init.ftl"));
 
 			if (FileUtil.notExists(initFtl)) {
 				createSampleFile(initFtl, "portletinactioncommand/portletactioncommand-init.ftl");
 			}
 
-			IFile viewFtl = metaFolder.getFile(new Path(componentClassName.toLowerCase().toLowerCase() + "/view.ftl"));
+			IFile viewFtl = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/view.ftl"));
 
 			if (FileUtil.notExists(viewFtl)) {
 				createSampleFile(viewFtl, "portletinactioncommand/portletactionconmmand-view.ftl");
@@ -186,7 +186,10 @@ public class NewLiferayComponentPortletActionCommandOperation extends AbstractLi
 
 	private List<String> _getPortletActionCommandProperties() {
 		List<String> properties = new ArrayList<>();
-		String properPackageName = packageName.toString().replace(".", "_");
+
+		String s = packageName.toString();
+
+		String properPackageName = s.replace(".", "_");
 
 		properties.add("javax.portlet.name=" + properPackageName + "_" + componentNameWithoutTemplateName + "Portlet");
 
@@ -261,10 +264,10 @@ public class NewLiferayComponentPortletActionCommandOperation extends AbstractLi
 	}
 
 	private void _sourceCodeOperation(IFile srcFile, String type) throws CoreException {
-		File file = srcFile.getLocation().toFile();
+		File file = FileUtil.getFile(srcFile);
 
 		try (OutputStream fos = Files.newOutputStream(file.toPath());
-				Writer out = new OutputStreamWriter(fos)) {
+			Writer out = new OutputStreamWriter(fos)) {
 
 			Template temp = cfg.getTemplate(getTemplateFile());
 

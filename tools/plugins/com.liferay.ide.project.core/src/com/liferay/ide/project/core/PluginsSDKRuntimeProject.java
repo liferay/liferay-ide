@@ -18,6 +18,7 @@ import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -40,6 +41,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -91,7 +93,7 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
 	}
 
 	@Override
-	public IPath getLibraryPath(String filename) {
+	public IPath getLibraryPath(String fileName) {
 		IPath[] libs = getUserLibs();
 
 		if (ListUtil.isEmpty(libs)) {
@@ -99,7 +101,7 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
 		}
 
 		for (IPath lib : libs) {
-			if (lib.lastSegment().startsWith(filename)) {
+			if (StringUtil.startsWith(lib.lastSegment(), fileName)) {
 				return lib;
 			}
 		}
@@ -133,8 +135,7 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
 		if ("theme.type".equals(key) || "theme.parent".equals(key)) {
 			IFile buildXmlFile = getProject().getFile("build.xml");
 
-			try(InputStream inputStream = buildXmlFile.getContents()) {
-
+			try (InputStream inputStream = buildXmlFile.getContents()) {
 				Document buildXmlDoc = FileUtil.readXML(inputStream, null, null);
 
 				NodeList properties = buildXmlDoc.getElementsByTagName("property");
@@ -142,17 +143,19 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
 				for (int i = 0; i < properties.getLength(); i++) {
 					Node item = properties.item(i);
 
-					Node name = item.getAttributes().getNamedItem("name");
+					NamedNodeMap namedNodeMap = item.getAttributes();
+
+					Node name = namedNodeMap.getNamedItem("name");
 
 					if ((name != null) && key.equals(name.getNodeValue())) {
-						Node value = item.getAttributes().getNamedItem("value");
+						Node value = namedNodeMap.getNamedItem("value");
 
 						return value.getNodeValue();
 					}
 				}
 			}
-			catch (CoreException | IOException ce) {
-				ProjectCore.logError("Unable to get property " + key, ce);
+			catch (CoreException | IOException e) {
+				ProjectCore.logError("Unable to get property " + key, e);
 			}
 		}
 
@@ -172,12 +175,14 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
 
 		IPath sdkLocation = path.removeLastSegments(2);
 
-		retval = SDKManager.getInstance().getSDK(sdkLocation);
+		SDKManager sdkManager = SDKManager.getInstance();
+
+		retval = sdkManager.getSDK(sdkLocation);
 
 		if (retval == null) {
 			retval = SDKUtil.createSDKFromLocation(sdkLocation);
 
-			SDKManager.getInstance().addSDK(retval);
+			sdkManager.addSDK(retval);
 		}
 
 		return retval;

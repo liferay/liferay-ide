@@ -622,6 +622,12 @@ public class CoreUtil {
 		}
 	}
 
+	public static IStatus validateName(String segment, int typeMask) {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		return workspace.validateName(segment, typeMask);
+	}
+
 	public static void writeStreamFromString(String contents, OutputStream outputStream) throws IOException {
 		if (contents == null) {
 			return;

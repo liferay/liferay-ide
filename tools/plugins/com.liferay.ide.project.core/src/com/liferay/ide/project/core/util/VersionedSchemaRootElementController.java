@@ -64,7 +64,9 @@ public class VersionedSchemaRootElementController extends StandardRootElementCon
 				if (documentElement != null) {
 					uri = documentElement.getNamespaceURI();
 
-					if ((uri != null) && _namespacePattern.matcher(uri).matches()) {
+					Matcher m = _namespacePattern.matcher(uri);
+
+					if ((uri != null) && m.matches()) {
 						namespace = uri;
 
 						String schema = documentElement.getAttribute("xsi:schemaLocation");
@@ -106,7 +108,9 @@ public class VersionedSchemaRootElementController extends StandardRootElementCon
 	private Document _getDocument() {
 		Resource resource = resource().root();
 
-		return resource.adapt(RootXmlResource.class).getDomDocument();
+		RootXmlResource rootXmlResource = resource.adapt(RootXmlResource.class);
+
+		return rootXmlResource.getDomDocument();
 	}
 
 	private final String _defaultVersion;

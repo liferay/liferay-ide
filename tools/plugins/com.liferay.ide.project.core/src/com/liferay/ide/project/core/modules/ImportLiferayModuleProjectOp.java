@@ -37,8 +37,6 @@ public interface ImportLiferayModuleProjectOp extends ExecutableElement {
 
 	public ElementType TYPE = new ElementType(ImportLiferayModuleProjectOp.class);
 
-	// *** Location ***
-
 	@DelegateImplementation(ImportLiferayModuleProjectOpMethods.class)
 	@Override
 	public Status execute(ProgressMonitor monitor);
@@ -49,8 +47,6 @@ public interface ImportLiferayModuleProjectOp extends ExecutableElement {
 
 	public void setBuildType(String value);
 
-	// *** Build Type ***
-
 	public void setLocation(Path value);
 
 	public void setLocation(String value);
@@ -58,8 +54,6 @@ public interface ImportLiferayModuleProjectOp extends ExecutableElement {
 	@Derived
 	@Service(impl = ImportModuleProjectBuildTypeDerivedValueService.class)
 	public ValueProperty PROP_BUILD_TYPE = new ValueProperty(TYPE, "BuildType");
-
-	// *** Method: execute ***
 
 	@AbsolutePath
 	@Required

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.sapphire.modeling.Status;
@@ -31,7 +32,7 @@ public class LiferayRuntimeNameValidationService extends ValidationService {
 
 		final NewModuleFragmentOp op = context(NewModuleFragmentOp.class);
 
-		final String runtimeName = op.getLiferayRuntimeName().content(true);
+		final String runtimeName = SapphireUtil.getContent(op.getLiferayRuntimeName());
 
 		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 

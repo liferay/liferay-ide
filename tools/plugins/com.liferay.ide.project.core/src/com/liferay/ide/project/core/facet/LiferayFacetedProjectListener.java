@@ -50,7 +50,9 @@ public class LiferayFacetedProjectListener implements IFacetedProjectListener {
 
 		IProjectFacetActionEvent actionEvent = (IProjectFacetActionEvent)event;
 
-		if (!JSDT_FACET.equals(actionEvent.getProjectFacet().getId())) {
+		IProjectFacet projectFacet = actionEvent.getProjectFacet();
+
+		if (!JSDT_FACET.equals(projectFacet.getId())) {
 			return;
 		}
 
@@ -91,11 +93,13 @@ public class LiferayFacetedProjectListener implements IFacetedProjectListener {
 
 					actions.add(uninstallJsdt);
 
-					actionEvent.getProject().modify(actions, monitor);
+					IFacetedProject facetedProject = actionEvent.getProject();
+
+					facetedProject.modify(actions, monitor);
 
 					// try to remove unneeded jsdt files
 
-					IProject project = actionEvent.getProject().getProject();
+					IProject project = facetedProject.getProject();
 
 					IFile jsdtscope = project.getFile(".settings/.jsdtscope");
 

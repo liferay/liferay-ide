@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
@@ -32,7 +33,7 @@ public class ServiceNameValidataionService extends ValidationService {
 		NewLiferayModuleProjectOp op = _op();
 
 		if (_listener != null) {
-			op.getProjectTemplateName().detach(_listener);
+			SapphireUtil.detachListener(op.getProjectTemplateName(), _listener);
 
 			_listener = null;
 		}
@@ -46,10 +47,10 @@ public class ServiceNameValidataionService extends ValidationService {
 
 		NewLiferayModuleProjectOp op = _op();
 
-		String projectTemplate = op.getProjectTemplateName().content();
+		String projectTemplate = SapphireUtil.getContent(op.getProjectTemplateName());
 
 		if ("service".equals(projectTemplate) || "service-wrapper".equals(projectTemplate)) {
-			String serviceName = op.getServiceName().content(true);
+			String serviceName = SapphireUtil.getContent(op.getServiceName());
 
 			if (CoreUtil.isNullOrEmpty(serviceName)) {
 				retVal = Status.createErrorStatus("The service name must be specified.");
@@ -72,7 +73,7 @@ public class ServiceNameValidataionService extends ValidationService {
 
 		NewLiferayModuleProjectOp op = _op();
 
-		op.getProjectTemplateName().attach(_listener);
+		SapphireUtil.attachListener(op.getProjectTemplateName(), _listener);
 	}
 
 	private NewLiferayModuleProjectOp _op() {

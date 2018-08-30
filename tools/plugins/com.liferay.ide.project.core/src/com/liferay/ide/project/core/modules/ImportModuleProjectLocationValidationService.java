@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 
@@ -31,9 +32,7 @@ public class ImportModuleProjectLocationValidationService extends ValidationServ
 
 	@Override
 	protected Status compute() {
-		ImportLiferayModuleProjectOp op = _op();
-
-		Path path = op.getLocation().content();
+		Path path = SapphireUtil.getContent(_op().getLocation());
 
 		if ((path == null) || path.isEmpty()) {
 			return Status.createOkStatus();
@@ -49,7 +48,7 @@ public class ImportModuleProjectLocationValidationService extends ValidationServ
 
 		if (LiferayWorkspaceUtil.isValidWorkspaceLocation(location)) {
 			return Status.createErrorStatus(
-				"Can't import Liferay Workspace, please use Import Liferay Workspace Project wizard.");
+				"Can not import Liferay Workspace, please use Import Liferay Workspace Project wizard.");
 		}
 
 		retval = StatusBridge.create(ImportLiferayModuleProjectOpMethods.getBuildType(location));
@@ -61,7 +60,7 @@ public class ImportModuleProjectLocationValidationService extends ValidationServ
 		String projectName = path.lastSegment();
 
 		if (FileUtil.exists(CoreUtil.getProject(projectName))) {
-			return Status.createErrorStatus("A project with that name already exists.");
+			return Status.createErrorStatus("A project with that name already exists");
 		}
 
 		return retval;

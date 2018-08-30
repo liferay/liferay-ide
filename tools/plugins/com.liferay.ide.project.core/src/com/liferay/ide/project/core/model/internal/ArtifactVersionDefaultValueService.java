@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 
@@ -35,14 +36,14 @@ public class ArtifactVersionDefaultValueService extends DefaultValueService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		Path location = op.getLocation().content();
+		Path location = SapphireUtil.getContent(op.getLocation());
 
 		if (location != null) {
 			String parentProjectLocation = location.toOSString();
 
 			IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
 
-			String projectName = op.getProjectName().content();
+			String projectName = SapphireUtil.getContent(op.getProjectName());
 
 			data = NewLiferayPluginProjectOpMethods.getMavenParentPomVersion(op, projectName, parentProjectOsPath);
 		}
@@ -68,8 +69,8 @@ public class ArtifactVersionDefaultValueService extends DefaultValueService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		op.getLocation().attach(listener);
-		op.getProjectName().attach(listener);
+		SapphireUtil.attachListener(op.getLocation(), listener);
+		SapphireUtil.attachListener(op.getProjectName(), listener);
 	}
 
 	private NewLiferayPluginProjectOp _op() {

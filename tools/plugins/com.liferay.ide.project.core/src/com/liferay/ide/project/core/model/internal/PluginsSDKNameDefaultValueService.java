@@ -31,7 +31,9 @@ public class PluginsSDKNameDefaultValueService extends DefaultValueService imple
 
 	@Override
 	public void dispose() {
-		SDKManager.getInstance().removeSDKListener(this);
+		SDKManager sdkManager = SDKManager.getInstance();
+
+		sdkManager.removeSDKListener(this);
 
 		super.dispose();
 	}
@@ -52,7 +54,9 @@ public class PluginsSDKNameDefaultValueService extends DefaultValueService imple
 	protected String compute() {
 		String value = null;
 
-		SDK defaultSDK = SDKManager.getInstance().getDefaultSDK();
+		SDKManager sdkManager = SDKManager.getInstance();
+
+		SDK defaultSDK = sdkManager.getDefaultSDK();
 
 		if (defaultSDK != null) {
 			value = defaultSDK.getName();
@@ -68,7 +72,9 @@ public class PluginsSDKNameDefaultValueService extends DefaultValueService imple
 	protected void initDefaultValueService() {
 		super.initDefaultValueService();
 
-		SDKManager.getInstance().addSDKListener(this);
+		SDKManager sdkManager = SDKManager.getInstance();
+
+		sdkManager.addSDKListener(this);
 	}
 
 	protected static final String NONE = "<None>";

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.upgrade;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
 import com.liferay.ide.project.core.UpgradeProjectHandlerReader;
 import com.liferay.ide.project.core.model.NamedItem;
@@ -44,16 +45,16 @@ public class UpgradeLiferayProjectsOpMethods {
 
 		ElementList<NamedItem> projectItems = op.getSelectedProjects();
 		ElementList<NamedItem> upgradeActions = op.getSelectedActions();
-		String runtimeName = op.getRuntimeName().content();
+		String runtimeName = SapphireUtil.getContent(op.getRuntimeName());
 		List<String> projectItemNames = new ArrayList<>();
 		List<String> projectActionItems = new ArrayList<>();
 
 		for (NamedItem projectItem : projectItems) {
-			projectItemNames.add(projectItem.getName().content());
+			projectItemNames.add(SapphireUtil.getContent(projectItem.getName()));
 		}
 
 		for (NamedItem upgradeAction : upgradeActions) {
-			projectActionItems.add(upgradeAction.getName().content());
+			projectActionItems.add(SapphireUtil.getContent(upgradeAction.getName()));
 		}
 
 		Status[] upgradeStatuses = _performUpgrade(projectItemNames, projectActionItems, runtimeName, monitor);

@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
+import com.liferay.ide.core.util.SapphireUtil;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
@@ -31,8 +33,8 @@ public class ModuleFragmentProjectArtifactVersionDefaultValueService extends Def
 		NewModuleFragmentOp op = _op();
 
 		if ((_listener != null) && (op != null) && !op.disposed()) {
-			op.getProjectName().detach(_listener);
-			op.getProjectName().detach(_listener);
+			SapphireUtil.detachListener(op.getProjectName(), _listener);
+			SapphireUtil.detachListener(op.getProjectName(), _listener);
 
 			_listener = null;
 		}
@@ -46,14 +48,14 @@ public class ModuleFragmentProjectArtifactVersionDefaultValueService extends Def
 
 		NewModuleFragmentOp op = _op();
 
-		Path location = op.getLocation().content();
+		Path location = SapphireUtil.getContent(op.getLocation());
 
 		if (location != null) {
 			String parentProjectLocation = location.toOSString();
 
 			IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
 
-			String projectName = op.getProjectName().content();
+			String projectName = SapphireUtil.getContent(op.getProjectName());
 
 			data = NewModuleFragmentOpMethods.getMavenParentPomVersion(op, projectName, parentProjectOsPath);
 		}
@@ -80,8 +82,8 @@ public class ModuleFragmentProjectArtifactVersionDefaultValueService extends Def
 
 		NewModuleFragmentOp op = _op();
 
-		op.getLocation().attach(_listener);
-		op.getProjectName().attach(_listener);
+		SapphireUtil.attachListener(op.getLocation(), _listener);
+		SapphireUtil.attachListener(op.getProjectName(), _listener);
 	}
 
 	private NewModuleFragmentOp _op() {

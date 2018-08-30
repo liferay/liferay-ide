@@ -20,6 +20,7 @@ import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
@@ -35,7 +36,9 @@ public class JSFModuleProjectProviderDefaultValueService extends DefaultValueSer
 
 		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
-		String buildType = Platform.getPreferencesService().getString(
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		String buildType = preferencesService.getString(
 			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_JSF_MODULE_PROJECT_BUILD_TYPE_OPTION, null, prefContexts);
 
 		if (buildType == null) {

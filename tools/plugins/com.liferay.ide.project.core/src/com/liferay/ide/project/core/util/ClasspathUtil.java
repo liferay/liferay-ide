@@ -34,7 +34,9 @@ public class ClasspathUtil {
 		boolean retVal = false;
 
 		for (IClasspathEntry entry : entries) {
-			String segment = entry.getPath().segment(0);
+			IPath path = entry.getPath();
+
+			String segment = path.segment(0);
 
 			if ((entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) && segment.equals(SDKClasspathContainer.ID)) {
 				retVal = true;
@@ -47,7 +49,9 @@ public class ClasspathUtil {
 	}
 
 	public static boolean isPluginContainerEntry(IClasspathEntry e) {
-		String segment = e.getPath().segment(0);
+		IPath path = e.getPath();
+
+		String segment = path.segment(0);
 
 		if ((e != null) && (e.getEntryKind() == IClasspathEntry.CPE_CONTAINER) &&
 			segment.equals(SDKClasspathContainer.ID)) {
@@ -66,7 +70,9 @@ public class ClasspathUtil {
 
 		for (IClasspathEntry entry : entries) {
 			if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
-				String segment = entry.getPath().segment(0);
+				IPath path = entry.getPath();
+
+				String segment = path.segment(0);
 
 				if (segment.equals(SDKClasspathContainer.ID)) {
 					containerPath = entry.getPath();

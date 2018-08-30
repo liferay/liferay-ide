@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -39,7 +40,7 @@ public class ParentSDKProjectImportOpMethods {
 
 		Status retval = Status.createOkStatus();
 
-		Path sdkLocation = op.getSdkLocation().content();
+		Path sdkLocation = SapphireUtil.getContent(op.getSdkLocation());
 
 		if ((sdkLocation == null) || sdkLocation.isEmpty()) {
 			return Status.createErrorStatus("SDK folder cannot be empty");

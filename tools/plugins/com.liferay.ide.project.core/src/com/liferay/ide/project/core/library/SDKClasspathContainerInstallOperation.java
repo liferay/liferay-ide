@@ -55,7 +55,7 @@ public class SDKClasspathContainerInstallOperation extends LibraryProviderOperat
 		IClasspathEntry[] entries = javaProject.getRawClasspath();
 
 		for (IClasspathEntry entry : entries) {
-			if (entry.getPath().equals(containerPath)) {
+			if (containerPath.equals(entry.getPath())) {
 				return;
 			}
 		}

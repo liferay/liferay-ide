@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import org.eclipse.sapphire.DefaultValueService;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
@@ -57,7 +58,9 @@ public class LiferayServerNameDefaultValueService extends DefaultValueService im
 
 		if (ListUtil.isNotEmpty(servers)) {
 			for (IServer server : servers) {
-				if (LiferayServerCore.newPortalBundle(server.getRuntime().getLocation()) != null) {
+				IRuntime runtime = server.getRuntime();
+
+				if (LiferayServerCore.newPortalBundle(runtime.getLocation()) != null) {
 					value = server.getName();
 
 					break;

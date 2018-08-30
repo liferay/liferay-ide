@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -33,9 +34,10 @@ public class ActiveProfilesValidationService extends ValidationService {
 	protected Status compute() {
 		NewLiferayPluginProjectOp op = _op();
 
-		String activeProfileId = op.getActiveProfilesValue().content();
+		String activeProfileId = SapphireUtil.getContent(op.getActiveProfilesValue());
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content(true);
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
+			op.getProjectProvider());
 
 		if ("maven".equals(provider.getShortName()) && (activeProfileId != null) &&
 			activeProfileId.contains(StringPool.SPACE)) {
@@ -57,9 +59,10 @@ public class ActiveProfilesValidationService extends ValidationService {
 			}
 
 		};
+
 		NewLiferayPluginProjectOp op = _op();
 
-		op.getProjectProvider().attach(_listener);
+		SapphireUtil.attachListener(op.getProjectProvider(), _listener);
 	}
 
 	private NewLiferayPluginProjectOp _op() {

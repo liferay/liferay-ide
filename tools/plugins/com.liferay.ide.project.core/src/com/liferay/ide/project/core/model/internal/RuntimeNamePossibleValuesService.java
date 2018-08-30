@@ -19,12 +19,14 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Set;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
+import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.ServerCore;
 
 /**
@@ -67,13 +69,17 @@ public class RuntimeNamePossibleValuesService extends PossibleValuesService impl
 		}
 
 		for (IRuntime runtime : runtimes) {
-			String runtimeId = runtime.getRuntimeType().getId();
+			IRuntimeType runtimeType = runtime.getRuntimeType();
 
-			if (!runtimeId.equals("com.liferay.ide.server.portal.runtime") && 
-					ServerUtil.isLiferayRuntime(runtime)) {
+			if (!"com.liferay.ide.server.portal.runtime".equals(runtimeType.getId()) &&
+				ServerUtil.isLiferayRuntime(runtime)) {
 
-				if (runtime.validate(new NullProgressMonitor()).isOK()){
-					values.add(runtime.getName());	
+				IStatus status = runtime.validate(new NullProgressMonitor());
+
+				if (status.isOK()) {
+					String runtimeName = runtime.getName();
+
+					values.add(runtimeName);
 				}
 			}
 		}

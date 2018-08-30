@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.SapphireUtil;
+
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -29,7 +31,7 @@ public class PackageNameDefaultValueService extends DefaultValueService {
 		NewLiferayModuleProjectOp op = _op();
 
 		if (op != null) {
-			op.property(NewLiferayModuleProjectOp.PROP_PROJECT_NAME).detach(_listener);
+			SapphireUtil.detachListener(op.property(NewLiferayModuleProjectOp.PROP_PROJECT_NAME), _listener);
 		}
 
 		super.dispose();
@@ -41,7 +43,7 @@ public class PackageNameDefaultValueService extends DefaultValueService {
 
 		NewLiferayModuleProjectOp op = _op();
 
-		String projectName = op.getProjectName().content(true);
+		String projectName = SapphireUtil.getContent(op.getProjectName());
 
 		if (projectName != null) {
 			String packageName = projectName.replace('-', '.');
@@ -67,7 +69,7 @@ public class PackageNameDefaultValueService extends DefaultValueService {
 
 		NewLiferayModuleProjectOp op = _op();
 
-		op.property(NewLiferayModuleProjectOp.PROP_PROJECT_NAME).attach(_listener);
+		SapphireUtil.attachListener(op.property(NewLiferayModuleProjectOp.PROP_PROJECT_NAME), _listener);
 	}
 
 	private NewLiferayModuleProjectOp _op() {

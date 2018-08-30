@@ -54,7 +54,7 @@ public class InitBundleJob extends Job {
 
 			});
 	}
-	
+
 	@Override
 	public boolean belongsTo(Object family) {
 		return family.equals(LiferayCore.LIFERAY_JOB_FAMILY);

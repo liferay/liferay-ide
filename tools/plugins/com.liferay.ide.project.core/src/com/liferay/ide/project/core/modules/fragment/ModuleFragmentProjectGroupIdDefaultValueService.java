@@ -15,11 +15,13 @@
 package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
@@ -38,8 +40,8 @@ public class ModuleFragmentProjectGroupIdDefaultValueService extends DefaultValu
 		NewModuleFragmentOp op = _op();
 
 		if ((_listener != null) && (op != null) && !op.disposed()) {
-			op.getProjectName().detach(_listener);
-			op.getProjectName().attach(_listener);
+			SapphireUtil.detachListener(op.getProjectName(), _listener);
+			SapphireUtil.detachListener(op.getProjectName(), _listener);
 
 			_listener = null;
 		}
@@ -53,14 +55,14 @@ public class ModuleFragmentProjectGroupIdDefaultValueService extends DefaultValu
 
 		NewModuleFragmentOp op = _op();
 
-		Path location = op.getLocation().content();
+		Path location = SapphireUtil.getContent(op.getLocation());
 
 		if (location != null) {
 			String parentProjectLocation = location.toOSString();
 
 			IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
 
-			String projectName = op.getProjectName().content();
+			String projectName = SapphireUtil.getContent(op.getProjectName());
 
 			groupId = NewModuleFragmentOpMethods.getMavenParentPomGroupId(op, projectName, parentProjectOsPath);
 		}
@@ -69,7 +71,7 @@ public class ModuleFragmentProjectGroupIdDefaultValueService extends DefaultValu
 			groupId = _getDefaultMavenGroupId();
 
 			if (CoreUtil.isNullOrEmpty(groupId)) {
-				groupId = op.getProjectName().content();
+				groupId = SapphireUtil.getContent(op.getProjectName());
 			}
 		}
 
@@ -91,14 +93,16 @@ public class ModuleFragmentProjectGroupIdDefaultValueService extends DefaultValu
 
 		NewModuleFragmentOp op = _op();
 
-		op.getLocation().attach(_listener);
-		op.getProjectName().attach(_listener);
+		SapphireUtil.attachListener(op.getLocation(), _listener);
+		SapphireUtil.attachListener(op.getProjectName(), _listener);
 	}
 
 	private String _getDefaultMavenGroupId() {
 		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
-		String defaultMavenGroupId = Platform.getPreferencesService().getString(
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		String defaultMavenGroupId = preferencesService.getString(
 			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_PROJECT_MAVEN_GROUPID, null, prefContexts);
 
 		return defaultMavenGroupId;

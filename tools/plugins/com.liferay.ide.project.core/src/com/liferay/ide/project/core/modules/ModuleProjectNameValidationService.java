@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.ProjectName;
@@ -52,10 +53,10 @@ public class ModuleProjectNameValidationService extends ValidationService {
 
 		BaseModuleOp op = op();
 
-		String currentProjectName = op.getProjectName().content();
+		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
 
 		if (!CoreUtil.empty(currentProjectName)) {
-			IStatus nameStatus = CoreUtil.getWorkspace().validateName(currentProjectName, IResource.PROJECT);
+			IStatus nameStatus = CoreUtil.validateName(currentProjectName, IResource.PROJECT);
 
 			if (!nameStatus.isOK()) {
 				return StatusBridge.create(nameStatus);
@@ -69,7 +70,7 @@ public class ModuleProjectNameValidationService extends ValidationService {
 				return Status.createErrorStatus("The project name is invalid.");
 			}
 
-			Path currentProjectLocation = op.getLocation().content();
+			Path currentProjectLocation = SapphireUtil.getContent(op.getLocation());
 
 			// double check to make sure this project wont overlap with existing dir
 
@@ -78,7 +79,7 @@ public class ModuleProjectNameValidationService extends ValidationService {
 
 				IPath osPath = org.eclipse.core.runtime.Path.fromOSString(currentPath);
 
-				NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content();
+				NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
 
 				IStatus projectStatus = provider.validateProjectLocation(currentProjectName, osPath);
 
@@ -86,7 +87,7 @@ public class ModuleProjectNameValidationService extends ValidationService {
 					return StatusBridge.create(projectStatus);
 				}
 
-				File projectFodler = osPath.append(currentProjectName).toFile();
+				File projectFodler = FileUtil.getFile(osPath.append(currentProjectName));
 
 				if (FileUtil.hasChildren(projectFodler)) {
 					return StatusBridge.create(ProjectCore.createErrorStatus("Target project folder is not empty."));
@@ -105,10 +106,10 @@ public class ModuleProjectNameValidationService extends ValidationService {
 
 			@Override
 			protected void handleTypedEvent(PropertyContentEvent event) {
-				PropertyDef def = event.property().definition();
+				PropertyDef def = SapphireUtil.getPropertyDef(event);
 
 				if (!def.equals(BaseModuleOp.PROP_FINAL_PROJECT_NAME) && !def.equals(BaseModuleOp.PROP_PROJECT_NAMES) &&
-					!def.name().equals("ProjectName") && !def.equals(ProjectName.PROP_PROJECT_NAME)) {
+					!"ProjectName".equals(def.name()) && !def.equals(ProjectName.PROP_PROJECT_NAME)) {
 
 					refresh();
 				}

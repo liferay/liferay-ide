@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -50,18 +51,20 @@ public class LiferayProjectImportOperation
 			return ProjectCore.createErrorStatus("Project record to import is null.");
 		}
 
-		File projectDir = projectRecord.getProjectLocation().toFile();
+		File projectDir = FileUtil.getFile(projectRecord.getProjectLocation());
 
 		SDK sdk = SDKUtil.getSDKFromProjectDir(projectDir);
 
-		if ((sdk != null) && !SDKManager.getInstance().containsSDK(sdk)) {
-			SDKManager.getInstance().addSDK(sdk);
+		SDKManager sdkManager = SDKManager.getInstance();
+
+		if ((sdk != null) && !sdkManager.containsSDK(sdk)) {
+			sdkManager.addSDK(sdk);
 		}
 
 		IRuntime runtime = (IRuntime)model.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
 
 		try {
-			ProjectImportUtil.importProject(projectRecord, runtime, sdk.getLocation().toOSString(), monitor);
+			ProjectImportUtil.importProject(projectRecord, runtime, FileUtil.toOSString(sdk.getLocation()), monitor);
 		}
 		catch (CoreException ce) {
 			return ProjectCore.createErrorStatus(ce);

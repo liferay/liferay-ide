@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
@@ -38,6 +39,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.document.DocumentTypeImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
@@ -63,7 +65,9 @@ public class UpgradeMetadataHandler extends AbstractUpgradeProjectHandler {
 			IFile[] metaFiles = _getUpgradeDTDFiles(project);
 
 			for (IFile file : metaFiles) {
-				IStructuredModel editModel = StructuredModelManager.getModelManager().getModelForEdit(file);
+				IModelManager modelManager = StructuredModelManager.getModelManager();
+
+				IStructuredModel editModel = modelManager.getModelForEdit(file);
 
 				try {
 					if ((editModel != null) && (editModel instanceof IDOMModel)) {
@@ -149,15 +153,17 @@ public class UpgradeMetadataHandler extends AbstractUpgradeProjectHandler {
 	}
 
 	private void _updateProperties(IFile file, String propertyName, String propertiesValue) throws Exception {
-		File osfile = new File(file.getLocation().toOSString());
+		File osfile = FileUtil.getFile(file);
+
 		PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
 
 		pluginPackageProperties.load(osfile);
 		pluginPackageProperties.setProperty(propertyName, propertiesValue);
 
-		try(FileWriter output = new FileWriter(osfile)) {
+		try (FileWriter output = new FileWriter(osfile)) {
 			pluginPackageProperties.save(output);
 		}
+
 		file.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
 	}
 

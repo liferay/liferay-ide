@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
@@ -121,7 +122,9 @@ public abstract class LiferayDescriptorHelper {
 	}
 
 	public void setContentType(String type) {
-		contentType = ContentTypeManager.getInstance().getContentType(type);
+		ContentTypeManager contentTypeManager = ContentTypeManager.getInstance();
+
+		contentType = contentTypeManager.getContentType(type);
 	}
 
 	public void setDescriptorPath(String path) {
@@ -141,7 +144,7 @@ public abstract class LiferayDescriptorHelper {
 		public void createDefaultDescriptor(String templateString, String version) {
 			String content = MessageFormat.format(templateString, version, version.replace('.', '_'));
 
-			try(InputStream input = new ByteArrayInputStream(content.getBytes("UTF-8"))) {
+			try (InputStream input = new ByteArrayInputStream(content.getBytes("UTF-8"))) {
 				file.create(input, IResource.FORCE, null);
 			}
 			catch (Exception e) {
@@ -160,7 +163,9 @@ public abstract class LiferayDescriptorHelper {
 			IDOMModel domModel = null;
 
 			try {
-				domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForEdit(file);
+				IModelManager modelManager = StructuredModelManager.getModelManager();
+
+				domModel = (IDOMModel)modelManager.getModelForEdit(file);
 
 				domModel.aboutToChangeModel();
 
@@ -195,7 +200,7 @@ public abstract class LiferayDescriptorHelper {
 		int major = version.getMajor();
 		int minor = version.getMinor();
 
-		return Integer.toString(major) + "." + Integer.toString(minor) + ".0";
+		return String.valueOf(major) + "." + String.valueOf(minor) + ".0";
 	}
 
 	protected void addDescriptorOperation(IDescriptorOperation operation) {
@@ -261,7 +266,9 @@ public abstract class LiferayDescriptorHelper {
 				for (int i = 0; i < elements.getLength(); i++) {
 					Node element = elements.item(i);
 
-					element.getParentNode().removeChild(element);
+					Node parentNode = element.getParentNode();
+
+					parentNode.removeChild(element);
 				}
 			}
 		}
@@ -302,13 +309,15 @@ public abstract class LiferayDescriptorHelper {
 			IStatus retval = null;
 
 			if (FileUtil.notExists(file)) {
-				return LiferayCore.createErrorStatus(file.getName() + " doesn't exist");
+				return LiferayCore.createErrorStatus(file.getName() + " does not exist");
 			}
 
 			IDOMModel domModel = null;
 
 			try {
-				domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(file);
+				IModelManager modelManager = StructuredModelManager.getModelManager();
+
+				domModel = (IDOMModel)modelManager.getModelForRead(file);
 
 				IDOMDocument document = domModel.getDocument();
 

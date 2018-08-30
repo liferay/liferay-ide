@@ -71,14 +71,14 @@ public class ImportLiferayModuleProjectOpTest {
 
 		importOp.setLocation(projectLocation);
 
-		Assert.assertEquals("A project with that name already exists.", importOp.validation().message());
+		Assert.assertEquals("A project with that name already exists", importOp.validation().message());
 
 		projectLocation = _unzipFile("gradle-liferay-workspace");
 
 		importOp.setLocation(projectLocation);
 
 		Assert.assertEquals(
-			"Can't import Liferay Workspace, please use Import Liferay Workspace Project wizard.",
+			"Can not import Liferay Workspace, please use Import Liferay Workspace Project wizard.",
 			importOp.validation().message());
 	}
 
@@ -104,14 +104,14 @@ public class ImportLiferayModuleProjectOpTest {
 
 		importOp.setLocation(projectLocation);
 
-		Assert.assertEquals("A project with that name already exists.", importOp.validation().message());
+		Assert.assertEquals("A project with that name already exists", importOp.validation().message());
 
 		projectLocation = _unzipFile("maven-liferay-workspace");
 
 		importOp.setLocation(projectLocation);
 
 		Assert.assertEquals(
-			"Can't import Liferay Workspace, please use Import Liferay Workspace Project wizard.",
+			"Can not import Liferay Workspace, please use Import Liferay Workspace Project wizard.",
 			importOp.validation().message());
 	}
 

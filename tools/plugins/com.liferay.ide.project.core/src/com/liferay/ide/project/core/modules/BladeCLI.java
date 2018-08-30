@@ -42,6 +42,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import org.osgi.framework.Bundle;
@@ -68,7 +69,7 @@ public class BladeCLI {
 		IPath bladeCLIPath = getBladeCLIPath();
 
 		if (FileUtil.notExists(bladeCLIPath)) {
-			throw new BladeCLIException("Could not get blade cli jar.");
+			throw new BladeCLIException("Could not get blade cli jar");
 		}
 
 		Project project = new Project();
@@ -83,20 +84,25 @@ public class BladeCLI {
 		DefaultLogger logger = new DefaultLogger();
 
 		project.addBuildListener(logger);
+
 		List<String> lines = new ArrayList<>();
+
 		int returnCode = 0;
 
-		try(StringBufferOutputStream out = new StringBufferOutputStream();
-				PrintStream printStream = new PrintStream(out)){
+		try (StringBufferOutputStream out = new StringBufferOutputStream();
+			PrintStream printStream = new PrintStream(out)) {
+
 			logger.setOutputPrintStream(printStream);
 
 			logger.setMessageOutputLevel(Project.MSG_INFO);
 
 			returnCode = javaTask.executeJava();
 
-			try(Scanner scanner = new Scanner(out.toString())){
+			try (Scanner scanner = new Scanner(out.toString())) {
 				while (scanner.hasNextLine()) {
-					lines.add(scanner.nextLine().replaceAll(".*\\[null\\] ", ""));
+					String line = scanner.nextLine();
+
+					lines.add(line.replaceAll(".*\\[null\\] ", ""));
 				}
 			}
 
@@ -117,9 +123,11 @@ public class BladeCLI {
 				throw new BladeCLIException(errors.toString());
 			}
 
-		} catch (IOException e) {
-			throw new BladeCLIException(e.getMessage(),e);
 		}
+		catch (IOException ioe) {
+			throw new BladeCLIException(ioe.getMessage(), ioe);
+		}
+
 		return lines.toArray(new String[0]);
 	}
 
@@ -189,7 +197,9 @@ public class BladeCLI {
 		String[] executeResult = execute("create -l");
 
 		for (String name : executeResult) {
-			if (name.trim().indexOf(" ") != -1) {
+			name = name.trim();
+
+			if (name.indexOf(" ") != -1) {
 
 				// for latest blade which print template descriptor
 
@@ -207,20 +217,26 @@ public class BladeCLI {
 	}
 
 	public static synchronized void restoreOriginal() {
-		_bladeJarInstancePath.toFile().delete();
+		File file = _bladeJarInstancePath.toFile();
+
+		file.delete();
 	}
 
 	private static IPath _getBladeJarFromBundle() throws IOException {
-		Bundle bundle = ProjectCore.getDefault().getBundle();
+		ProjectCore projectCore = ProjectCore.getDefault();
 
-		File bladeJarBundleFile = new File(
-			FileLocator.toFileURL(bundle.getEntry("lib/" + BLADE_JAR_FILE_NAME)).getFile());
+		Bundle bundle = projectCore.getBundle();
+
+		File bladeJarBundleFile = FileUtil.getFile(
+			FileLocator.toFileURL(bundle.getEntry("lib/" + BLADE_JAR_FILE_NAME)));
 
 		return new Path(bladeJarBundleFile.getCanonicalPath());
 	}
 
 	private static String _getRepoURL() {
-		String repoURL = Platform.getPreferencesService().get(BLADE_CLI_REPO_URL, null, new Preferences[] {
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		String repoURL = preferencesService.get(BLADE_CLI_REPO_URL, null, new Preferences[] {
 			_instancePrefs, _defaultPrefs
 		});
 

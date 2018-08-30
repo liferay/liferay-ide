@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -52,7 +53,9 @@ public class ImportLiferayWorkspaceServerNameService extends DefaultValueService
 
 		String serverName = path.lastSegment() + " server";
 
-		PortalBundle bundle = LiferayServerCore.newPortalBundle(PathBridge.create(path).append("bundles"));
+		IPath p = PathBridge.create(path);
+
+		PortalBundle bundle = LiferayServerCore.newPortalBundle(p.append("bundles"));
 
 		if (bundle != null) {
 			serverName = bundle.getServerReleaseInfo();

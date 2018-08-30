@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
@@ -48,7 +49,10 @@ import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.AbstractValidator;
 import org.eclipse.wst.validation.ValidationEvent;
@@ -89,18 +93,20 @@ public abstract class BaseValidator extends AbstractValidator {
 		IDOMDocument liferayDescriptorXmlDocument = null;
 
 		try {
-			liferayDescriptorXmlModel = StructuredModelManager.getModelManager().getModelForRead(liferayDescriptorXml);
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			liferayDescriptorXmlModel = modelManager.getModelForRead(liferayDescriptorXml);
 
 			if ((liferayDescriptorXmlModel != null) && liferayDescriptorXmlModel instanceof IDOMModel &&
 				(map != null)) {
 
 				liferayDescriptorXmlDocument = ((IDOMModel)liferayDescriptorXmlModel).getDocument();
 
-				for (String elementName : map.keySet()) {
+				for (Entry<String, String> entry : map.entrySet()) {
 					checkClassElements(
-						liferayDescriptorXmlDocument, javaProject, elementName, preferenceNodeQualifier,
+						liferayDescriptorXmlDocument, javaProject, entry.getKey(), preferenceNodeQualifier,
 						preferenceScopes, classExistPreferenceKey, classHierarchyPreferenceKey, problems,
-						map.get(elementName));
+						entry.getValue());
 				}
 			}
 		}
@@ -162,7 +168,7 @@ public abstract class BaseValidator extends AbstractValidator {
 					}
 				}
 
-				if (typeFound == false) {
+				if (!typeFound) {
 					String msg = MessageFormat.format(MESSAGE_CLASS_INCORRECT_HIERARCHY, className, superTypeNames);
 
 					if (superTypeNames.contains(StringPool.COMMA)) {
@@ -274,13 +280,18 @@ public abstract class BaseValidator extends AbstractValidator {
 		try {
 			Class<?> clazz = getClass();
 
-			resource = clazz.getClassLoader().getResourceAsStream(liferayDescriptorClassElementsProperties);
+			ClassLoader classLoader = clazz.getClassLoader();
+
+			resource = classLoader.getResourceAsStream(liferayDescriptorClassElementsProperties);
 
 			p.load(resource);
 
 			for (Object key : p.keySet()) {
 				String elementName = key.toString();
-				String typeNames = p.get(key).toString();
+
+				Object o = p.get(key);
+
+				String typeNames = o.toString();
 
 				map.put(elementName, typeNames);
 			}
@@ -350,7 +361,9 @@ public abstract class BaseValidator extends AbstractValidator {
 		if ((domNode.getStartStructuredDocumentRegion() != null) &&
 			(domNode.getEndStructuredDocumentRegion() != null)) {
 
-			start = domNode.getStartStructuredDocumentRegion().getEndOffset();
+			IStructuredDocumentRegion startDocumentRegion = domNode.getStartStructuredDocumentRegion();
+
+			start = startDocumentRegion.getEndOffset();
 		}
 
 		int end = domNode.getEndOffset();
@@ -358,10 +371,14 @@ public abstract class BaseValidator extends AbstractValidator {
 		if ((domNode.getStartStructuredDocumentRegion() != null) &&
 			(domNode.getEndStructuredDocumentRegion() != null)) {
 
-			end = domNode.getEndStructuredDocumentRegion().getStartOffset();
+			IStructuredDocumentRegion endDocumentRegion = domNode.getEndStructuredDocumentRegion();
+
+			end = endDocumentRegion.getStartOffset();
 		}
 
-		int line = domNode.getStructuredDocument().getLineOfOffset(start);
+		IStructuredDocument structuredDocument = domNode.getStructuredDocument();
+
+		int line = structuredDocument.getLineOfOffset(start);
 
 		markerValues.put(IMarker.CHAR_START, Integer.valueOf(start));
 		markerValues.put(IMarker.CHAR_END, Integer.valueOf(end));

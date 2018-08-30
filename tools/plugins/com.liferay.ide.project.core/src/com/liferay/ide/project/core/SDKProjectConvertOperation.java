@@ -25,7 +25,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
@@ -58,9 +57,9 @@ public class SDKProjectConvertOperation
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 		Object[] selectedProjects = (Object[])getDataModel().getProperty(SELECTED_PROJECTS);
 
-		for (int i = 0; i < selectedProjects.length; i++) {
-			if (selectedProjects[i] instanceof ProjectRecord) {
-				IStatus status = convertProject((ProjectRecord)selectedProjects[i], monitor);
+		for (Object project : selectedProjects) {
+			if (project instanceof ProjectRecord) {
+				IStatus status = convertProject((ProjectRecord)project, monitor);
 
 				if (!status.isOK()) {
 					return status;
@@ -76,9 +75,9 @@ public class SDKProjectConvertOperation
 	protected IProject convertExistingProject(ProjectRecord record, IProgressMonitor monitor) throws CoreException {
 		String projectName = record.getProjectName();
 
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IWorkspace workspace = CoreUtil.getWorkspace();
 
-		IProject project = workspace.getRoot().getProject(projectName);
+		IProject project = CoreUtil.getProject(projectName);
 
 		if (record.description == null) {
 
@@ -90,7 +89,9 @@ public class SDKProjectConvertOperation
 
 			// If it is under the root use the default location
 
-			if (Platform.getLocation().isPrefixOf(locationPath)) {
+			IPath location = Platform.getLocation();
+
+			if (location.isPrefixOf(locationPath)) {
 				record.description.setLocation(null);
 			}
 			else {
@@ -146,7 +147,9 @@ public class SDKProjectConvertOperation
 
 		IPath sdkLocationPath = new Path(sdkLocation);
 
-		SDK sdk = SDKManager.getInstance().getSDK(sdkLocationPath);
+		SDKManager sdkManager = SDKManager.getInstance();
+
+		SDK sdk = sdkManager.getSDK(sdkLocationPath);
 
 		String sdkName = null;
 
@@ -156,7 +159,7 @@ public class SDKProjectConvertOperation
 		else {
 			sdk = SDKUtil.createSDKFromLocation(sdkLocationPath);
 
-			SDKManager.getInstance().addSDK(sdk);
+			sdkManager.addSDK(sdk);
 
 			sdkName = sdk.getName();
 		}

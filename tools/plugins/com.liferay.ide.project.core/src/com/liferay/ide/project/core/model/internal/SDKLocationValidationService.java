@@ -18,6 +18,7 @@ import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethod
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
@@ -47,10 +48,10 @@ public class SDKLocationValidationService extends ValidationService {
 	public void dispose() {
 		NewLiferayPluginProjectOp op = _op();
 
-		op.property(NewLiferayPluginProjectOp.PROP_PROJECT_NAME).detach(_listener);
-		op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK).detach(_listener);
-		op.property(NewLiferayPluginProjectOp.PROP_PLUGIN_TYPE).detach(_listener);
-		op.property(NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER).detach(_listener);
+		SapphireUtil.detachListener(op.property(NewLiferayPluginProjectOp.PROP_PROJECT_NAME), _listener);
+		SapphireUtil.detachListener(op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK), _listener);
+		SapphireUtil.detachListener(op.property(NewLiferayPluginProjectOp.PROP_PLUGIN_TYPE), _listener);
+		SapphireUtil.detachListener(op.property(NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER), _listener);
 
 		super.dispose();
 	}
@@ -59,9 +60,10 @@ public class SDKLocationValidationService extends ValidationService {
 	protected Status compute() {
 		NewLiferayPluginProjectOp op = _op();
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content();
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
+			op.getProjectProvider());
 
-		if (!provider.getShortName().equals("ant")) {
+		if (!"ant".equals(provider.getShortName())) {
 			return Status.createOkStatus();
 		}
 
@@ -71,7 +73,7 @@ public class SDKLocationValidationService extends ValidationService {
 			return StatusBridge.create(ProjectCore.createErrorStatus("This workspace has more than one SDK."));
 		}
 
-		Path sdkLocation = op.getSdkLocation().content(true);
+		Path sdkLocation = SapphireUtil.getContent(op.getSdkLocation());
 
 		if ((sdkLocation == null) || sdkLocation.isEmpty()) {
 			return StatusBridge.create(ProjectCore.createErrorStatus("This sdk location is empty."));
@@ -90,9 +92,9 @@ public class SDKLocationValidationService extends ValidationService {
 			return StatusBridge.create(ProjectCore.createErrorStatus("This sdk location is not correct."));
 		}
 
-		Path projectLocation = op.getLocation().content();
+		Path projectLocation = SapphireUtil.getContent(op.getLocation());
 
-		String projectName = op.getProjectName().content();
+		String projectName = SapphireUtil.getContent(op.getProjectName());
 
 		IPath projectPath = PathBridge.create(projectLocation);
 
@@ -102,7 +104,7 @@ public class SDKLocationValidationService extends ValidationService {
 					"Project(" + projectName + ") is existed in sdk folder, please set new project name."));
 		}
 
-		PluginType pluginType = op.getPluginType().content();
+		PluginType pluginType = SapphireUtil.getContent(op.getPluginType());
 
 		if (pluginType.equals(PluginType.web) && !supportsTypePlugin(op, "web")) {
 			StringBuilder sb = new StringBuilder();
@@ -123,7 +125,7 @@ public class SDKLocationValidationService extends ValidationService {
 			return Status.createErrorStatus(sb.toString());
 		}
 		else if (pluginType.equals(PluginType.portlet)) {
-			IPortletFramework portletFramework = op.getPortletFramework().content();
+			IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
 
 			Version requiredVersion = new Version(portletFramework.getRequiredSDKVersion());
 
@@ -167,10 +169,10 @@ public class SDKLocationValidationService extends ValidationService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		op.property(NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER).attach(_listener);
-		op.property(NewLiferayPluginProjectOp.PROP_PROJECT_NAME).attach(_listener);
-		op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK).attach(_listener);
-		op.property(NewLiferayPluginProjectOp.PROP_PLUGIN_TYPE).attach(_listener);
+		SapphireUtil.attachListener(op.property(NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER), _listener);
+		SapphireUtil.attachListener(op.property(NewLiferayPluginProjectOp.PROP_PROJECT_NAME), _listener);
+		SapphireUtil.attachListener(op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK), _listener);
+		SapphireUtil.attachListener(op.property(NewLiferayPluginProjectOp.PROP_PLUGIN_TYPE), _listener);
 	}
 
 	private NewLiferayPluginProjectOp _op() {

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.jsf;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
@@ -40,7 +41,7 @@ public class NewLiferayJSFModuleProjectOpMethods {
 		Status retval = null;
 
 		try {
-			NewLiferayProjectProvider<BaseModuleOp> projectProvider = op.getProjectProvider().content();
+			NewLiferayProjectProvider<BaseModuleOp> projectProvider = SapphireUtil.getContent(op.getProjectProvider());
 
 			IStatus status = projectProvider.createNewProject(op, monitor);
 
@@ -65,7 +66,9 @@ public class NewLiferayJSFModuleProjectOpMethods {
 		try {
 			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
 
-			prefs.put(ProjectCore.PREF_DEFAULT_JSF_MODULE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text());
+			prefs.put(
+				ProjectCore.PREF_DEFAULT_JSF_MODULE_PROJECT_BUILD_TYPE_OPTION,
+				SapphireUtil.getText(op.getProjectProvider()));
 
 			prefs.flush();
 		}

@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.sdk.core.SDK;
@@ -38,7 +39,7 @@ public class PortletFrameworkValidationService extends ValidationService {
 	public void dispose() {
 		NewLiferayPluginProjectOp op = _op();
 
-		op.property(NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER).detach(_listener);
+		SapphireUtil.detachListener(op.property(NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER), _listener);
 
 		super.dispose();
 	}
@@ -49,8 +50,8 @@ public class PortletFrameworkValidationService extends ValidationService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		ILiferayProjectProvider projectProvider = op.getProjectProvider().content();
-		IPortletFramework portletFramework = op.getPortletFramework().content();
+		ILiferayProjectProvider projectProvider = SapphireUtil.getContent(op.getProjectProvider());
+		IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
 
 		if (!portletFramework.supports(projectProvider)) {
 			return Status.createErrorStatus(
@@ -93,7 +94,7 @@ public class PortletFrameworkValidationService extends ValidationService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		op.property(NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER).attach(_listener);
+		SapphireUtil.attachListener(op.property(NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER), _listener);
 	}
 
 	private NewLiferayPluginProjectOp _op() {

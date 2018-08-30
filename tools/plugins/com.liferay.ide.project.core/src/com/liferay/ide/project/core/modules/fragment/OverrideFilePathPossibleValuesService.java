@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -48,11 +49,13 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
 		int count = 0;
 
+		Object o = value.content();
+
 		for (OverrideFilePath currentFile : currentFiles) {
-			String content = currentFile.getValue().content();
+			String content = SapphireUtil.getContent(currentFile.getValue());
 
 			if (content != null) {
-				String v = value.content().toString();
+				String v = o.toString();
 
 				if (v.equals(content)) {
 					count++;
@@ -61,8 +64,7 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 		}
 
 		if ((count >= 0) &&
-			(_possibleValues.contains(value.content().toString()) ||
-			 _possibleValues.contains("resource-actions/default.xml"))) {
+			(_possibleValues.contains(o.toString()) || _possibleValues.contains("resource-actions/default.xml"))) {
 
 			return Status.createOkStatus();
 		}
@@ -75,7 +77,7 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 	protected void compute(Set<String> values) {
 		NewModuleFragmentOp op = _op();
 
-		String hostOSGiBundle = op.getHostOsgiBundle().content();
+		String hostOSGiBundle = SapphireUtil.getContent(op.getHostOsgiBundle());
 
 		if (hostOSGiBundle == null) {
 			return;
@@ -86,7 +88,7 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
 			_possibleValues = new HashSet<>();
 
-			String runtimeName = op.getLiferayRuntimeName().content();
+			String runtimeName = SapphireUtil.getContent(op.getLiferayRuntimeName());
 
 			IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
@@ -94,9 +96,11 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 				hostOSGiBundle = hostOSGiBundle + ".jar";
 			}
 
-			IPath tempLocation = ProjectCore.getDefault().getStateLocation();
+			ProjectCore projectCore = ProjectCore.getDefault();
 
-			File module = tempLocation.append(hostOSGiBundle).toFile();
+			IPath tempLocation = projectCore.getStateLocation();
+
+			File module = FileUtil.getFile(tempLocation.append(hostOSGiBundle));
 
 			if (FileUtil.notExists(module)) {
 				module = ServerUtil.getModuleFileFrom70Server(runtime, hostOSGiBundle, tempLocation);
@@ -133,7 +137,7 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
 			if (currentFiles != null) {
 				for (OverrideFilePath cj : currentFiles) {
-					String value = cj.getValue().content();
+					String value = SapphireUtil.getContent(cj.getValue());
 
 					if (value != null) {
 						possibleValuesSet.remove(value);
@@ -141,7 +145,7 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 				}
 			}
 
-			String projectName = op.getProjectName().content();
+			String projectName = SapphireUtil.getContent(op.getProjectName());
 
 			if (projectName != null) {
 				IProject project = CoreUtil.getProject(projectName);

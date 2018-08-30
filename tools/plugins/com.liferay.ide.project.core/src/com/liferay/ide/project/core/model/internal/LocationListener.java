@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 
@@ -33,7 +34,7 @@ public class LocationListener extends FilteredListener<ValuePropertyContentEvent
 	protected void handleTypedEvent(ValuePropertyContentEvent event) {
 		NewLiferayPluginProjectOp op = op(event);
 
-		boolean useDefaultLocation = op.getUseDefaultLocation().content(true);
+		boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
 
 		if (useDefaultLocation) {
 			return;
@@ -49,7 +50,7 @@ public class LocationListener extends FilteredListener<ValuePropertyContentEvent
 	}
 
 	protected NewLiferayPluginProjectOp op(PropertyContentEvent event) {
-		Element element = event.property().element();
+		Element element = SapphireUtil.getElement(event);
 
 		return element.nearest(NewLiferayPluginProjectOp.class);
 	}

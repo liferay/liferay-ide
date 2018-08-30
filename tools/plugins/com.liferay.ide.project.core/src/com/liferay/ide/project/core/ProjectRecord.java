@@ -14,12 +14,16 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 
 import java.io.File;
 
+import java.net.URI;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -71,7 +75,9 @@ public class ProjectRecord {
 			return projectName;
 		}
 
-		String projectLocation = project.getLocationURI().getPath();
+		URI uri = project.getLocationURI();
+
+		String projectLocation = uri.getPath();
 
 		String path = StringPool.EMPTY;
 
@@ -132,9 +138,9 @@ public class ProjectRecord {
 			return false;
 		}
 
-		File file = path.removeLastSegments(2).toFile();
+		File file = FileUtil.getFile(path.removeLastSegments(2));
 
-		return file.equals(Platform.getLocation().toFile());
+		return file.equals(FileUtil.getFile(Platform.getLocation()));
 	}
 
 	private void _setProjectName() {
@@ -146,6 +152,8 @@ public class ProjectRecord {
 
 			// If we don't have the project name try again
 
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
 			if (projectSystemFile != null) {
 				IPath path = new Path(projectSystemFile.getPath());
 
@@ -154,10 +162,10 @@ public class ProjectRecord {
 				if (_isDefaultLocation(path)) {
 					projectName = path.segment(path.segmentCount() - 2);
 
-					description = ResourcesPlugin.getWorkspace().newProjectDescription(projectName);
+					description = workspace.newProjectDescription(projectName);
 				}
 				else {
-					description = ResourcesPlugin.getWorkspace().loadProjectDescription(path);
+					description = workspace.loadProjectDescription(path);
 
 					projectName = description.getName();
 				}
@@ -167,7 +175,7 @@ public class ProjectRecord {
 
 				projectName = path.lastSegment();
 
-				description = ResourcesPlugin.getWorkspace().newProjectDescription(projectName);
+				description = workspace.newProjectDescription(projectName);
 			}
 			else if (project != null) {
 				projectName = project.getName();

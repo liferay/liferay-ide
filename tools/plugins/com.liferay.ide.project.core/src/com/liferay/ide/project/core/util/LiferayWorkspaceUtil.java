@@ -29,10 +29,13 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.nio.file.Files;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
@@ -93,7 +96,7 @@ public class LiferayWorkspaceUtil {
 
 		try {
 			if (project == null) {
-				return ProjectCore.createErrorStatus("Can't get a valid Liferay Workspace project.");
+				return ProjectCore.createErrorStatus("Can not get a valid Liferay Workspace project.");
 			}
 
 			IPath bundlesLocation = getHomeLocation(project);
@@ -102,7 +105,7 @@ public class LiferayWorkspaceUtil {
 				PortalBundle bundle = LiferayServerCore.newPortalBundle(bundlesLocation);
 
 				if (bundle == null) {
-					return ProjectCore.createErrorStatus("Bundle can't be found in:" + bundlesLocation);
+					return ProjectCore.createErrorStatus("Bundle can not be found in:" + bundlesLocation);
 				}
 
 				if (serverName == null) {
@@ -111,26 +114,25 @@ public class LiferayWorkspaceUtil {
 
 				ServerUtil.addPortalRuntimeAndServer(serverName, bundlesLocation, new NullProgressMonitor());
 
-				IProject pluginsSDK = CoreUtil.getProject(getPluginsSDKDir(project.getLocation().toPortableString()));
+				IProject pluginsSDK = CoreUtil.getProject(
+					getPluginsSDKDir(FileUtil.toPortableString(project.getLocation())));
 
 				if (FileUtil.exists(pluginsSDK)) {
 					SDK sdk = SDKUtil.createSDKFromLocation(pluginsSDK.getLocation());
 
-					if ( sdk != null) {
-						Map<String,String> appServerPropertiesMap = new HashMap<String,String>();
+					if (sdk != null) {
+						Map<String, String> appServerPropertiesMap = new HashMap<>();
 
 						appServerPropertiesMap.put(
-							"app.server.parent.dir", FileUtil.toOSString(bundle.getLiferayHome()));
-						appServerPropertiesMap.put(
-							"app.server.type", bundle.getType());
-						appServerPropertiesMap.put(
 							"app.server.deploy.dir", FileUtil.toOSString(bundle.getAppServerDeployDir()));
+						appServerPropertiesMap.put("app.server.dir", FileUtil.toOSString(bundle.getAppServerDir()));
 						appServerPropertiesMap.put(
 							"app.server.lib.global.dir", FileUtil.toOSString(bundle.getAppServerLibGlobalDir()));
 						appServerPropertiesMap.put(
-							"app.server.dir", FileUtil.toOSString(bundle.getAppServerDir()));
+							"app.server.parent.dir", FileUtil.toOSString(bundle.getLiferayHome()));
 						appServerPropertiesMap.put(
 							"app.server.portal.dir", FileUtil.toOSString(bundle.getAppServerPortalDir()));
+						appServerPropertiesMap.put("app.server.type", bundle.getType());
 
 						sdk.addOrUpdateServerProperties(appServerPropertiesMap);
 
@@ -213,7 +215,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static IPath getHomeLocation(IProject project) {
-		return getHomeLocation(project.getLocation().toOSString());
+		return getHomeLocation(FileUtil.toOSString(project.getLocation()));
 	}
 
 	public static IPath getHomeLocation(String location) {
@@ -246,28 +248,12 @@ public class LiferayWorkspaceUtil {
 		return retval;
 	}
 
-	public static IWorkspaceProjectBuilder getWorkspaceProjectBuilder(IProject project) throws CoreException {
-		final ILiferayProject liferayProject = LiferayCore.create(project);
-
-		if (liferayProject == null) {
-			throw new CoreException(ProjectCore.createErrorStatus("Can't find Liferay workspace project."));
-		}
-
-		final IWorkspaceProjectBuilder builder = liferayProject.adapt(IWorkspaceProjectBuilder.class);
-
-		if (builder == null) {
-			throw new CoreException(ProjectCore.createErrorStatus("Can't find Liferay Gradle project builder."));
-		}
-
-		return builder;
-	}
-
 	public static String getModulesDir(IProject project) {
 		return getModulesDirArray(project)[0];
 	}
 
 	public static String[] getModulesDirArray(IProject project) {
-		String[] retval = null;
+		String[] retval = new String[0];
 
 		if (project != null) {
 			IPath projectLocation = project.getLocation();
@@ -346,6 +332,34 @@ public class LiferayWorkspaceUtil {
 			if (isValidWorkspace(project)) {
 				return project;
 			}
+		}
+
+		return null;
+	}
+
+	public static IWorkspaceProjectBuilder getWorkspaceProjectBuilder(IProject project) throws CoreException {
+		final ILiferayProject liferayProject = LiferayCore.create(project);
+
+		if (liferayProject == null) {
+			throw new CoreException(ProjectCore.createErrorStatus("Can not find Liferay workspace project."));
+		}
+
+		final IWorkspaceProjectBuilder builder = liferayProject.adapt(IWorkspaceProjectBuilder.class);
+
+		if (builder == null) {
+			throw new CoreException(ProjectCore.createErrorStatus("Can not find Liferay Gradle project builder."));
+		}
+
+		return builder;
+	}
+
+	public static File getWorkspaceProjectFile() {
+		IProject workspaceProject = getWorkspaceProject();
+
+		if (workspaceProject != null) {
+			IPath location = workspaceProject.getLocation();
+
+			return location.toFile();
 		}
 
 		return null;
@@ -441,10 +455,6 @@ public class LiferayWorkspaceUtil {
 		return false;
 	}
 
-	public static boolean inLiferayWorkspace(IProject project) {
-		return inLiferayWorkspace(project.getLocation());
-	}
-
 	public static boolean inLiferayWorkspace(IPath location) {
 		if (FileUtil.notExists(location) || FileUtil.notExists(getWorkspaceProject())) {
 			return false;
@@ -457,6 +467,10 @@ public class LiferayWorkspaceUtil {
 		}
 
 		return false;
+	}
+
+	public static boolean inLiferayWorkspace(IProject project) {
+		return inLiferayWorkspace(project.getLocation());
 	}
 
 	public static boolean isValidGradleWorkspaceLocation(IPath location) {
@@ -482,8 +496,12 @@ public class LiferayWorkspaceUtil {
 
 		String settingsContent = FileUtil.readContents(settingsGradle, true);
 
-		if ((settingsContent != null) && _workspacePluginPattern.matcher(settingsContent).matches()) {
-			return true;
+		if (settingsContent != null) {
+			Matcher matcher = _workspacePluginPattern.matcher(settingsContent);
+
+			if (matcher.matches()) {
+				return true;
+			}
 		}
 
 		return false;
@@ -506,9 +524,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static boolean isValidWorkspace(IProject project) {
-		if ((project != null) && (project.getLocation() != null) &&
-			isValidWorkspaceLocation(project.getLocation().toOSString())) {
-
+		if ((project != null) && (project.getLocation() != null) && isValidWorkspaceLocation(project.getLocation())) {
 			return true;
 		}
 
@@ -537,7 +553,7 @@ public class LiferayWorkspaceUtil {
 
 	private static boolean _isValidGradleWorkspace(IProject project) {
 		if ((project != null) && (project.getLocation() != null) &&
-			isValidGradleWorkspaceLocation(project.getLocation().toOSString())) {
+			isValidGradleWorkspaceLocation(FileUtil.toOSString(project.getLocation()))) {
 
 			return true;
 		}
@@ -547,7 +563,7 @@ public class LiferayWorkspaceUtil {
 
 	private static boolean _isValidMavenWorkspace(IProject project) {
 		if ((project != null) && (project.getLocation() != null) &&
-			isValidMavenWorkspaceLocation(project.getLocation().toOSString())) {
+			isValidMavenWorkspaceLocation(FileUtil.toOSString(project.getLocation()))) {
 
 			return true;
 		}

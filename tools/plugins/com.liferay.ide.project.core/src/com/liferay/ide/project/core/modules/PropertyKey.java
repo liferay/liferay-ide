@@ -28,15 +28,13 @@ public interface PropertyKey extends Element {
 
 	public ElementType TYPE = new ElementType(PropertyKey.class);
 
-	// *** Name ***
-
 	public Value<String> getName();
+
+	// *** Name ***
 
 	public Value<String> getValue();
 
 	public void setName(String value);
-
-	// *** Value ***
 
 	public void setValue(String value);
 

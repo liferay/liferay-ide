@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
 import java.io.File;
@@ -53,9 +54,9 @@ public abstract class AbstractProjectLocationValidationService<T extends Executa
 
 		Status retval = Status.createOkStatus();
 
-		String currentProjectName = op.getProjectName().content();
-		Path currentProjectLocation = op.getLocation().content();
-		Boolean userDefaultLocation = op.getUseDefaultLocation().content();
+		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
+		Path currentProjectLocation = SapphireUtil.getContent(op.getLocation());
+		Boolean userDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
 
 		/*
 		 * Location won't be validated if the UseDefaultLocation has an error.
@@ -88,7 +89,9 @@ public abstract class AbstractProjectLocationValidationService<T extends Executa
 		else {
 			IPath osPath = org.eclipse.core.runtime.Path.fromOSString(currentPath);
 
-			if (!osPath.toFile().isAbsolute()) {
+			File file = osPath.toFile();
+
+			if (!file.isAbsolute()) {
 				retval = Status.createErrorStatus("\"" + currentPath + "\" is not an absolute path.");
 			}
 			else {
@@ -101,7 +104,7 @@ public abstract class AbstractProjectLocationValidationService<T extends Executa
 					}
 				}
 
-				NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content();
+				NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
 
 				IStatus locationStatus = provider.validateProjectLocation(currentProjectName, osPath);
 
@@ -127,8 +130,8 @@ public abstract class AbstractProjectLocationValidationService<T extends Executa
 
 		BaseModuleOp op = op();
 
-		op.getProjectName().attach(_listener);
-		op.getProjectProvider().attach(_listener);
+		SapphireUtil.attachListener(op.getProjectName(), _listener);
+		SapphireUtil.attachListener(op.getProjectProvider(), _listener);
 	}
 
 	protected abstract BaseModuleOp op();

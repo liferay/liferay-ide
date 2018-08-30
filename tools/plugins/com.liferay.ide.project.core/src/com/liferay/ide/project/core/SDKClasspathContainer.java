@@ -99,11 +99,10 @@ public class SDKClasspathContainer extends PluginClasspathContainer implements I
 
 	@Override
 	protected String[] getPortalJars() {
-		return _commonJars;
+		return new String[] {
+			"commons-logging.jar", "log4j.jar", "util-bridges.jar", "util-java.jar", "util-taglib.jar"
+		};
 	}
-
-	private static final String[] _commonJars =
-		{"commons-logging.jar", "log4j.jar", "util-bridges.jar", "util-java.jar", "util-taglib.jar"};
 
 	private final IPath _bundleDir;
 	private final IPath[] _bundleLibDependencyPaths;

@@ -18,6 +18,7 @@ import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.DefaultValueService;
 
 /**
@@ -30,8 +31,12 @@ public class HasWorkspaceSdkDefaultValueService extends DefaultValueService {
 		try {
 			SDK sdk = SDKUtil.getWorkspaceSDK();
 
-			if ((sdk != null) && sdk.validate().isOK()) {
-				return "true";
+			if (sdk != null) {
+				IStatus status = sdk.validate();
+
+				if (status.isOK()) {
+					return "true";
+				}
 			}
 		}
 		catch (CoreException ce) {

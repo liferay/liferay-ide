@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.SDKProjectsImportOp;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 
@@ -33,7 +34,7 @@ public class SDKImportLocationValidationService extends ValidationService {
 
 		SDKProjectsImportOp op = _op();
 
-		Path currentProjectLocation = op.getSdkLocation().content(true);
+		Path currentProjectLocation = SapphireUtil.getContent(op.getSdkLocation());
 
 		if ((currentProjectLocation != null) && !currentProjectLocation.isEmpty()) {
 			String currentPath = currentProjectLocation.toOSString();

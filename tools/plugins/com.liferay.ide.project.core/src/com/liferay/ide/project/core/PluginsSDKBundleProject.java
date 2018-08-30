@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -40,6 +41,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -102,12 +104,12 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 	}
 
 	@Override
-	public IPath getLibraryPath(String filename) {
+	public IPath getLibraryPath(String fileName) {
 		IPath[] libs = getUserLibs();
 
 		if (ListUtil.isNotEmpty(libs)) {
 			for (IPath lib : libs) {
-				if (lib.lastSegment().startsWith(filename)) {
+				if (StringUtil.startsWith(lib.lastSegment(), fileName)) {
 					return lib;
 				}
 			}
@@ -130,7 +132,9 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 
 		IStatus warStatus = sdk.war(getProject(), null, true, new String[] {"-Duser.timezone=GMT"}, monitor);
 
-		IPath distPath = sdk.getLocation().append("dist");
+		IPath sdkLocation = sdk.getLocation();
+
+		IPath distPath = sdkLocation.append("dist");
 
 		File[] distFiles = _getSDKOutputFiles(distPath);
 
@@ -158,7 +162,9 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 			return retval;
 		}
 
-		IPath distPath = sdk.getLocation().append("dist");
+		IPath sdkLocation = sdk.getLocation();
+
+		IPath distPath = sdkLocation.append("dist");
 
 		File[] distFiles = _getSDKOutputFiles(distPath);
 
@@ -180,8 +186,7 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 		if (("theme.type".equals(key) || "theme.parent".equals(key)) && ProjectUtil.isThemeProject(getProject())) {
 			IFile buildXml = getProject().getFile("build.xml");
 
-			try(InputStream inputStream = buildXml.getContents()) {
-
+			try (InputStream inputStream = buildXml.getContents()) {
 				Document buildXmlDoc = FileUtil.readXML(inputStream, null, null);
 
 				NodeList properties = buildXmlDoc.getElementsByTagName("property");
@@ -189,10 +194,12 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 				for (int i = 0; i < properties.getLength(); i++) {
 					Node item = properties.item(i);
 
-					Node name = item.getAttributes().getNamedItem("name");
+					NamedNodeMap namedNodeMap = item.getAttributes();
+
+					Node name = namedNodeMap.getNamedItem("name");
 
 					if ((name != null) && key.equals(name.getNodeValue())) {
-						Node value = item.getAttributes().getNamedItem("value");
+						Node value = namedNodeMap.getNamedItem("value");
 
 						retval = value.getNodeValue();
 
@@ -200,8 +207,8 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 					}
 				}
 			}
-			catch (CoreException | IOException ce) {
-				ProjectCore.logError("Unable to get property " + key, ce);
+			catch (CoreException | IOException e) {
+				ProjectCore.logError("Unable to get property " + key, e);
 			}
 		}
 
@@ -213,16 +220,18 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 
 		// try to determine SDK based on project location
 
+		SDKManager sdkManager = SDKManager.getInstance();
+
 		IPath rawLocation = getProject().getRawLocation();
 
 		IPath sdkLocation = rawLocation.removeLastSegments(2);
 
-		retval = SDKManager.getInstance().getSDK(sdkLocation);
+		retval = sdkManager.getSDK(sdkLocation);
 
 		if (retval == null) {
 			retval = SDKUtil.createSDKFromLocation(sdkLocation);
 
-			SDKManager.getInstance().addSDK(retval);
+			sdkManager.addSDK(retval);
 		}
 
 		return retval;
@@ -252,7 +261,9 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 		}
 
 		try {
-			distFiles = distPath.toFile().listFiles(
+			File file = distPath.toFile();
+
+			distFiles = file.listFiles(
 				new FilenameFilter() {
 
 					@Override

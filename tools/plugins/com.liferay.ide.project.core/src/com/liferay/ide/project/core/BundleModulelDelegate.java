@@ -44,7 +44,9 @@ public class BundleModulelDelegate extends ProjectModule {
 		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, getProject());
 
 		for (IModuleResource moduleResource : members) {
-			IPath path = moduleResource.getModuleRelativePath().append(moduleResource.getName());
+			IPath relativePath = moduleResource.getModuleRelativePath();
+
+			IPath path = relativePath.append(moduleResource.getName());
 
 			if (bundleProject.filterResource(path)) {
 				continue;
