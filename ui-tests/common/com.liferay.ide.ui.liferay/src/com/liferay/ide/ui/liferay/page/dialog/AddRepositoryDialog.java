@@ -29,6 +29,7 @@ public class AddRepositoryDialog extends Dialog {
 		super(bot);
 
 		_addBtn = new Button(bot, ADD);
+		_confirmBtn = new Button(bot, OK);
 		_getLocation = new Text(bot, LOCATION_WITH_COLON);
 	}
 
@@ -40,6 +41,14 @@ public class AddRepositoryDialog extends Dialog {
 		addBtn().click();
 	}
 
+	public void clickConfirmBtn() {
+		confirmBtn().click();
+	}
+
+	public Button confirmBtn() {
+		return _confirmBtn;
+	}
+
 	public Text getLocation() {
 		return _getLocation;
 	}
@@ -49,6 +58,7 @@ public class AddRepositoryDialog extends Dialog {
 	}
 
 	private Button _addBtn;
+	private Button _confirmBtn;
 	private Text _getLocation;
 
 }
