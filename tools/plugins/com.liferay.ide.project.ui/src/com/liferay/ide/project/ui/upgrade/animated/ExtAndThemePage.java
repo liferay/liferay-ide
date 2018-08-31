@@ -37,7 +37,7 @@ public class ExtAndThemePage extends Page {
 			"Theme and Ext projects are not supported to upgrade in this tool currently.\n");
 
 		descriptorBuilder.append("For Theme Projects, you can upgrade them manually.\n");
-		descriptorBuilder.append("For Ext Projects, we don't provide support for them in Liferay 7.0.\n");
+		descriptorBuilder.append("For Ext Projects, we do not provide support for them in Liferay 7.0.\n");
 		descriptorBuilder.append("If you have ext projects, you can change them into modules.\n");
 		descriptorBuilder.append("For more details, please see <a>Liferay Blade Samples</a>.\n");
 

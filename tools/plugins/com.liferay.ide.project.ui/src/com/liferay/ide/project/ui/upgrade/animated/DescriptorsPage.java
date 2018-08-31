@@ -41,6 +41,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.xml.core.internal.document.DocumentTypeImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
@@ -92,9 +93,12 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 		IDOMModel domModel = null;
 
 		try {
-			domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForEdit(srcFile);
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			domModel = (IDOMModel)modelManager.getModelForEdit(srcFile);
 
 			domModel.aboutToChangeModel();
+
 			IDOMDocument document = domModel.getDocument();
 
 			DocumentTypeImpl docType = (DocumentTypeImpl)document.getDoctype();
@@ -108,7 +112,8 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 
 				final String systemId = docType.getSystemId();
 
-				final String newSystemId = _getNewDoctTypeSetting(systemId, getUpgradeVersion().replaceAll("\\.", "_"), _SYSTEMID_REGREX);
+				final String newSystemId = _getNewDoctTypeSetting(
+					systemId, getUpgradeVersion().replaceAll("\\.", "_"), _SYSTEMID_REGREX);
 
 				docType.setSystemId(newSystemId);
 			}
@@ -134,9 +139,12 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 		IDOMModel domModel = null;
 
 		try {
-			domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForEdit(srcFile);
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			domModel = (IDOMModel)modelManager.getModelForEdit(srcFile);
 
 			domModel.aboutToChangeModel();
+
 			IDOMDocument document = domModel.getDocument();
 
 			DocumentTypeImpl docType = (DocumentTypeImpl)document.getDoctype();
@@ -150,7 +158,8 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 
 				final String systemId = docType.getSystemId();
 
-				final String newSystemId = _getNewDoctTypeSetting(systemId, getUpgradeVersion().replaceAll("\\.", "_"), _SYSTEMID_REGREX);
+				final String newSystemId = _getNewDoctTypeSetting(
+					systemId, getUpgradeVersion().replaceAll("\\.", "_"), _SYSTEMID_REGREX);
 
 				docType.setSystemId(newSystemId);
 			}
@@ -219,9 +228,12 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 		IDOMModel domModel = null;
 
 		try {
-			domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(srcFile);
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			domModel = (IDOMModel)modelManager.getModelForRead(srcFile);
 
 			domModel.aboutToChangeModel();
+
 			IDOMDocument document = domModel.getDocument();
 
 			DocumentType docType = document.getDoctype();
@@ -286,7 +298,7 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 	}
 
 	private void _removeLayoutWapNode(IFile srcFile, IDOMDocument document) {
-		if (srcFile.getName().equals("liferay-layout-templates.xml")) {
+		if (FileUtil.nameEquals(srcFile, "liferay-layout-templates.xml")) {
 			NodeList nodeList = document.getElementsByTagName("wap-template-path");
 
 			for (int i = 0; i < nodeList.getLength(); i++) {

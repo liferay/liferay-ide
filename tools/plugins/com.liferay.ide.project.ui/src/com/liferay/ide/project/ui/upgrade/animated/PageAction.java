@@ -69,7 +69,9 @@ public abstract class PageAction {
 		URL url = null;
 
 		try {
-			Bundle bundle = ProjectUI.getDefault().getBundle();
+			ProjectUI projectUI = ProjectUI.getDefault();
+
+			Bundle bundle = projectUI.getBundle();
 
 			url = bundle.getEntry("images/" + name);
 		}

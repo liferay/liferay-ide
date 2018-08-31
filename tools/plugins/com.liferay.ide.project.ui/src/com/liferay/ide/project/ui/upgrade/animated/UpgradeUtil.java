@@ -14,11 +14,23 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.project.core.modules.BladeCLI;
+import com.liferay.ide.project.core.modules.BladeCLIException;
+import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.sdk.core.SDKUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,21 +54,12 @@ import org.eclipse.wst.validation.internal.ValManager;
 import org.eclipse.wst.validation.internal.ValPrefManagerProject;
 import org.eclipse.wst.validation.internal.ValidatorMutable;
 import org.eclipse.wst.validation.internal.model.ProjectPreferences;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
-
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.StringUtil;
-import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.modules.BladeCLIException;
-import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.sdk.core.SDKUtil;
 
 /**
  * @author Terry Jia
@@ -84,20 +87,6 @@ public class UpgradeUtil {
 
 			if (projectPortableLocation.startsWith(location.toPortableString())) {
 				project.delete(false, true, monitor);
-			}
-		}
-	}
-
-	public static void deleteEclipseConfigFiles(File project) {
-		for (File file : project.listFiles()) {
-			if (".classpath".contentEquals(file.getName()) || ".settings".contentEquals(file.getName()) ||
-				".project".contentEquals(file.getName())) {
-
-				if (file.isDirectory()) {
-					FileUtil.deleteDir(file, true);
-				}
-
-				file.delete();
 			}
 		}
 	}
@@ -148,6 +137,7 @@ public class UpgradeUtil {
 					File targetSdkFile = targetSDKLocation.toFile();
 
 					sb.append("\"" + targetSdkFile.getAbsolutePath() + "\" ");
+
 					sb.append("init -u");
 					sb.append(" -v ");
 					sb.append(version);
@@ -172,6 +162,20 @@ public class UpgradeUtil {
 		job.schedule();
 
 		job.join();
+	}
+
+	public static void deleteEclipseConfigFiles(File project) {
+		for (File file : project.listFiles()) {
+			if (".classpath".contentEquals(file.getName()) || ".settings".contentEquals(file.getName()) ||
+				".project".contentEquals(file.getName())) {
+
+				if (file.isDirectory()) {
+					FileUtil.deleteDir(file, true);
+				}
+
+				file.delete();
+			}
+		}
 	}
 
 	public static void deleteSDKLegacyProjects(IPath sdkLocation) {
@@ -205,6 +209,26 @@ public class UpgradeUtil {
 		}
 	}
 
+	public static List<IProject> getAvailableProject(IProject[] projects) {
+		List<IProject> projectList = new ArrayList<>();
+
+		for (IProject project : projects) {
+			IPath location = project.getLocation();
+
+			location = location.removeLastSegments(1);
+
+			String parent = location.lastSegment();
+
+			if (StringUtil.equals(parent, "hooks") || StringUtil.equals(parent, "layouttpl") ||
+				StringUtil.equals(parent, "webs") || StringUtil.equals(parent, "portlets")) {
+
+				projectList.add(project);
+			}
+		}
+
+		return projectList;
+	}
+
 	public static boolean isAlreadyImported(IPath path) {
 		IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
 
@@ -221,6 +245,26 @@ public class UpgradeUtil {
 		}
 
 		return false;
+	}
+
+	public static boolean isMavenProject(IPath path) {
+		if (FileUtil.notExists(path)) {
+			return false;
+		}
+
+		IStatus buildType = ImportLiferayModuleProjectOpMethods.getBuildType(path.toOSString());
+
+		return "maven".equals(buildType.getMessage());
+	}
+
+	public static boolean isMavenProject(Path path) {
+		if (FileUtil.notExists(path)) {
+			return false;
+		}
+
+		IStatus buildType = ImportLiferayModuleProjectOpMethods.getBuildType(path.toOSString());
+
+		return "maven".equals(buildType.getMessage());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -311,47 +355,6 @@ public class UpgradeUtil {
 					Status.createErrorStatus(
 						"Failed to remove Liferay private url configuration of ivy-settings.xml.", e)));
 		}
-	}
-
-	public static boolean isMavenProject(Path path) {
-		if (FileUtil.notExists(path)) {
-			return false;
-		}
-
-		IStatus buildType = ImportLiferayModuleProjectOpMethods.getBuildType(path.toOSString());
-
-		return "maven".equals(buildType.getMessage());
-	}
-
-	public static boolean isMavenProject(IPath path) {
-		if (FileUtil.notExists(path)) {
-			return false;
-		}
-
-		IStatus buildType = ImportLiferayModuleProjectOpMethods.getBuildType(path.toOSString());
-
-		return "maven".equals(buildType.getMessage());
-	}
-
-
-	public static List<IProject> getAvailableProject(IProject[] projects) {
-		List<IProject> projectList = new ArrayList<>();
-
-		for (IProject project : projects) {
-			IPath location = project.getLocation();
-
-			location = location.removeLastSegments(1);
-
-			String parent = location.lastSegment();
-
-			if (StringUtil.equals(parent, "hooks") || StringUtil.equals(parent, "layouttpl") ||
-				StringUtil.equals(parent, "webs") || StringUtil.equals(parent, "portlets")) {
-
-				projectList.add(project);
-			}
-		}
-
-		return projectList;
 	}
 
 }

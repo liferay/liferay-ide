@@ -19,6 +19,7 @@ import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PortletPluginFacetInstallDataModelProvider;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -28,7 +29,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPage;
@@ -49,7 +49,9 @@ public class PortletPluginFacetInstallPage
 			DataModelFactory.createDataModel(new PortletPluginFacetInstallDataModelProvider()),
 			"portlet.plugin.facet.install.page");
 
-		Bundle bundle = ProjectUI.getDefault().getBundle();
+		ProjectUI projectUI = ProjectUI.getDefault();
+
+		Bundle bundle = projectUI.getBundle();
 
 		setImageDescriptor(ImageDescriptor.createFromURL(bundle.getEntry("/icons/wizban/plugin_project.png")));
 
@@ -82,7 +84,7 @@ public class PortletPluginFacetInstallPage
 
 		Label label = SWTUtil.createLabel(topComposite, StringPool.EMPTY, 1);
 
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		ISharedImages sharedImages = UIUtil.getSharedImages();
 
 		label.setImage(sharedImages.getImage(ISharedImages.IMG_OBJS_INFO_TSK));
 

@@ -26,6 +26,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -48,7 +49,6 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import org.osgi.framework.Bundle;
@@ -69,7 +69,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 		Page targetPage = null;
 
 		for (Page page : _staticPageList) {
-			if (page.getPageId().equals(pageid)) {
+			if (pageid.equals(page.getPageId())) {
 				targetPage = page;
 
 				break;
@@ -93,7 +93,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 	@SuppressWarnings("unchecked")
 	public static <T> T getPage(String pageId, Class<T> clazz) {
 		for (Page page : _pages) {
-			if (page.getPageId().equals(pageId)) {
+			if (pageId.equals(page.getPageId())) {
 				return (T)page;
 			}
 		}
@@ -111,13 +111,13 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 		addPage(Page.welcomePageId);
 		addPage(Page.initConfigureProjectPageId);
 
-		boolean hasMavenProject = _dataModel.getHasMavenProject().content();
-		boolean hasGradleProject = _dataModel.getHasGradleProject().content();
-		boolean isLiferayWorkspace = SapphireUtil.getContent(_dataModel.getIsLiferayWorkspace());
-		boolean hasPortlet = _dataModel.getHasPortlet().content();
-		boolean hasServiceBuilder = _dataModel.getHasServiceBuilder().content();
-		boolean hasHook = _dataModel.getHasHook().content();
-		boolean hasLayout = _dataModel.getHasLayout().content();
+		boolean hasMavenProject = SapphireUtil.getContent(_dataModel.getHasMavenProject());
+		boolean hasGradleProject = SapphireUtil.getContent(_dataModel.getHasGradleProject());
+		boolean liferayWorkspace = SapphireUtil.getContent(_dataModel.getIsLiferayWorkspace());
+		boolean hasPortlet = SapphireUtil.getContent(_dataModel.getHasPortlet());
+		boolean hasServiceBuilder = SapphireUtil.getContent(_dataModel.getHasServiceBuilder());
+		boolean hasHook = SapphireUtil.getContent(_dataModel.getHasHook());
+		boolean hasLayout = SapphireUtil.getContent(_dataModel.getHasLayout());
 		/*
 		 * boolean hasTheme = dataModel.getHasTheme().content(); boolean hasExt =
 		 * dataModel.getHasExt().content(); boolean hasWorkspace =
@@ -131,7 +131,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 			addPage(Page.findbreackingchangesPageId);
 		}
 
-		if (!isLiferayWorkspace) {
+		if (!liferayWorkspace) {
 			if (hasPortlet || hasHook || hasServiceBuilder || hasLayout) {
 				addPage(Page.descriptorsPageId);
 			}
@@ -183,7 +183,9 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 		_dataModel.setConvertLiferayWorkspace(false);
 
 		_currentPageList.clear();
+
 		_currentPageList.addAll(_staticPageList);
+
 		_pages = _currentPageList.toArray(new Page[0]);
 	}
 
@@ -368,7 +370,9 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 		navigator.addPageActionListener(gear);
 		navigator.setBackground(parent.getBackground());
 
-		_staticPageList.stream().forEach(navigator::addPageActionListener);
+		Stream<Page> stream = _staticPageList.stream();
+
+		stream.forEach(navigator::addPageActionListener);
 
 		gear.addSelectionChangedListener(navigator);
 
@@ -523,7 +527,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 				ProjectUI.logError(ioe);
 			}
 
-			IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			IWorkbenchWindow activeWorkbenchWindow = UIUtil.getActiveWorkbenchWindow();
 
 			IWorkbenchPage page = activeWorkbenchWindow.getActivePage();
 

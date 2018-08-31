@@ -85,7 +85,7 @@ public class GearControl
 
 		Page page = UpgradeView.getPage(_selection);
 
-		if (page.getPageId().equals(pageId)) {
+		if (pageId.equals(page.getPageId())) {
 			_needRedraw = true;
 		}
 	}
@@ -269,7 +269,9 @@ public class GearControl
 		if ((_hover >= 0) && (_hover < _tooltipPoints.length)) {
 			Point point = _tooltipPoints[_hover];
 
-			String title = UpgradeView.getPage(_hover).getTitle();
+			Page page = UpgradeView.getPage(_hover);
+
+			String title = page.getTitle();
 
 			gc.setFont(_tooltipFont);
 			gc.setForeground(_darkGray);
@@ -333,6 +335,7 @@ public class GearControl
 		}
 
 		path.close();
+
 		gc.fillPath(path);
 		gc.drawPath(path);
 
@@ -358,7 +361,10 @@ public class GearControl
 		}
 
 		if (badgeImage != null) {
-			gc.drawImage(badgeImage, (int)(x - badgeImage.getBounds().width / 2), (int)(y - outerR - 12));
+			Rectangle rectangle = badgeImage.getBounds();
+
+			gc.drawImage(badgeImage, (int)(x - rectangle.width / 2), (int)(y - outerR - 12));
+
 			gc.setAlpha(255);
 		}
 
@@ -434,7 +440,7 @@ public class GearControl
 		gc.drawOval(ovalX, ovalY, ovalR, ovalR);
 
 		if (i < _gearMaxNumber) {
-			String number = Integer.toString(i + 1);
+			String number = String.valueOf(i + 1);
 
 			gc.setForeground(selected == 1 ? _gearForeground[1] : _gray);
 			gc.setFont(_numberFont);
@@ -456,7 +462,7 @@ public class GearControl
 			String message = event.getMessage();
 
 			if ((message != null) && !message.equals("ok")) {
-				if (event.getType().equals(PageValidateEvent.error)) {
+				if (PageValidateEvent.error.equals(event.getType())) {
 					drawImage(gc, _errorImage, 30, 130);
 				}
 				else {

@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui.wizard;
 
+import com.liferay.ide.ui.util.UIUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkingSet;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Gregory Amerson
@@ -56,7 +57,7 @@ public class WorkingSetCustomPart extends FormComponentPart {
 	protected void init() {
 		super.init();
 
-		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchWindow activeWorkbenchWindow = UIUtil.getActiveWorkbenchWindow();
 
 		ISelectionService service = (ISelectionService)activeWorkbenchWindow.getSelectionService();
 

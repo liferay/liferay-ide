@@ -14,16 +14,6 @@
 
 package com.liferay.ide.project.ui.wizard;
 
-import static org.eclipse.sapphire.ui.forms.PropertyEditorPart.DATA_BINDING;
-import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.gd;
-import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.gdhfill;
-import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.gdhindent;
-import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.gdhspan;
-import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.gdvalign;
-import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.gdvindent;
-import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.glayout;
-import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.glspacing;
-
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.CapitalizationType;
@@ -31,12 +21,14 @@ import org.eclipse.sapphire.ui.SapphirePart.LabelChangedEvent;
 import org.eclipse.sapphire.ui.assist.internal.PropertyEditorAssistDecorator;
 import org.eclipse.sapphire.ui.forms.FormComponentPart;
 import org.eclipse.sapphire.ui.forms.PropertyEditorPart;
+import org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil;
 import org.eclipse.sapphire.ui.forms.swt.RadioButtonsGroup;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 import org.eclipse.sapphire.ui.forms.swt.ValuePropertyEditorPresentation;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -77,18 +69,22 @@ public final class PossibleValuesRadioPropertyEditorPresentation<T> extends Valu
 
 			});
 
-		composite.setLayout(glspacing(glayout(2, 0, 0), 2, 5));
+		composite.setLayout(GridLayoutUtil.glspacing(GridLayoutUtil.glayout(2, 0, 0), 2, 5));
 
 		decorator = createDecorator(composite);
 
 		decorator.addEditorControl(composite);
 
+		Label decoratorControl = decorator.control();
+
 		if (showLabel) {
-			decorator.control().setLayoutData(gdvalign(gd(), SWT.CENTER));
+			GridData gd = GridLayoutUtil.gd();
+
+			decoratorControl.setLayoutData(GridLayoutUtil.gdvalign(gd, SWT.CENTER));
 
 			final Label label = new Label(composite, SWT.WRAP);
 
-			label.setLayoutData(gd());
+			label.setLayoutData(gd);
 
 			final Runnable updateLabelOp = new Runnable() {
 
@@ -126,21 +122,23 @@ public final class PossibleValuesRadioPropertyEditorPresentation<T> extends Valu
 			decorator.addEditorControl(label);
 		}
 		else {
-			decorator.control().setLayoutData(gdvindent(gdvalign(gd(), SWT.TOP), 4));
+			decoratorControl.setLayoutData(
+				GridLayoutUtil.gdvindent(GridLayoutUtil.gdvalign(GridLayoutUtil.gd(), SWT.TOP), 4));
 		}
 
 		_control = new RadioButtonsGroup(composite, true);
 
 		if (showLabel) {
-			_control.setLayoutData(gdhindent(gdhspan(gdhfill(), 2), leftMargin + 20));
+			_control.setLayoutData(
+				GridLayoutUtil.gdhindent(GridLayoutUtil.gdhspan(GridLayoutUtil.gdhfill(), 2), leftMargin + 20));
 		}
 		else {
-			_control.setLayoutData(gdhfill());
+			_control.setLayoutData(GridLayoutUtil.gdhfill());
 		}
 
 		binding = new PossibleValuesRadioButtonsGroupBinding<>(this, (RadioButtonsGroup)_control);
 
-		_control.setData(DATA_BINDING, binding);
+		_control.setData(PropertyEditorPart.DATA_BINDING, binding);
 
 		decorator.addEditorControl(_control, true);
 

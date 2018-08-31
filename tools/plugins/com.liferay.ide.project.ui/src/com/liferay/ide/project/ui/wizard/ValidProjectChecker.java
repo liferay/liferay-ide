@@ -19,19 +19,22 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.action.NewPluginProjectDropDownAction;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
 /**
@@ -54,14 +57,18 @@ public class ValidProjectChecker {
 
 		for (IProject project : projects) {
 			if (ProjectUtil.isLiferayFacetedProject(project)) {
-				Set<IProjectFacetVersion> facets = ProjectUtil.getFacetedProject(project).getProjectFacets();
+				IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
+
+				Set<IProjectFacetVersion> facets = facetedProject.getProjectFacets();
 
 				if ((validProjectTypes != null) && (facets != null)) {
 					String[] validTypes = validProjectTypes.split(StringPool.COMMA);
 
 					for (String validProjectType : validTypes) {
 						for (IProjectFacetVersion facet : facets) {
-							String id = facet.getProjectFacet().getId();
+							IProjectFacet projectFacet = facet.getProjectFacet();
+
+							String id = projectFacet.getId();
 
 							if (jsfPortlet && id.equals("jst.jsf")) {
 								hasJsfFacet = true;
@@ -81,14 +88,14 @@ public class ValidProjectChecker {
 		}
 
 		if (!hasValidProjectTypes) {
-			final Shell activeShell = Display.getDefault().getActiveShell();
+			Shell activeShell = UIUtil.getActiveShell();
 
 			Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
 				activeShell, NLS.bind(Msgs.newElement, wizardName),
 				NLS.bind(Msgs.noSuitableLiferayProjects, wizardName));
 
 			if (openNewLiferayProjectWizard) {
-				final Action defaultAction = NewPluginProjectDropDownAction.getPluginProjectAction();
+				Action defaultAction = NewPluginProjectDropDownAction.getPluginProjectAction();
 
 				if (defaultAction != null) {
 					defaultAction.run();
@@ -108,23 +115,19 @@ public class ValidProjectChecker {
 	}
 
 	protected void init() {
-		if ((wizardId != null) && wizardId.equals("com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet")) {
+		if ("com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet".equals(wizardId)) {
 			setJsfPortlet(true);
 		}
 
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(
-			PlatformUI.PLUGIN_ID, _TAG_NEW_WIZARDS);
+		IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
+
+		IExtensionPoint extensionPoint = extensionRegistry.getExtensionPoint(PlatformUI.PLUGIN_ID, _TAG_NEW_WIZARDS);
 
 		if (extensionPoint != null) {
 			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
 			for (IConfigurationElement element : elements) {
-				if (element.getName().equals(_TAG_WIZARD) && element.getAttribute(_ATT_ID).equals(wizardId)) {
-
-					// getValidProjectTypesFromConfig( element )!=null &&
-					// isLiferayArtifactWizard(element,
-					// "liferay_artifact")
-
+				if (_TAG_WIZARD.equals(element.getName()) && wizardId.equals(element.getAttribute(_ATT_ID))) {
 					setValidProjectTypes(_getValidProjectTypesFromConfig(element));
 					wizardName = element.getAttribute(_ATT_NAME);
 

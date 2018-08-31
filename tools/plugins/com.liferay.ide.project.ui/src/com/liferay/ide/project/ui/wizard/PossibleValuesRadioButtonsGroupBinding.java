@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.wizard;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import org.eclipse.sapphire.modeling.util.MiscUtil;
 import org.eclipse.sapphire.services.ValueImageService;
 import org.eclipse.sapphire.services.ValueLabelService;
 import org.eclipse.sapphire.ui.forms.PropertyEditorDef;
+import org.eclipse.sapphire.ui.forms.PropertyEditorPart;
 import org.eclipse.sapphire.ui.forms.swt.AbstractBinding;
 import org.eclipse.sapphire.ui.forms.swt.PropertyEditorPresentation;
 import org.eclipse.sapphire.ui.forms.swt.RadioButtonsGroup;
@@ -80,7 +82,7 @@ public final class PossibleValuesRadioButtonsGroupBinding<T> extends AbstractBin
 			final T newValue = value.content(true);
 
 			for (int i = 0, n = _possibleValues.size(); i < n; i++) {
-				if (_possibleValues.get(i).equals(newValue.toString())) {
+				if (StringUtil.equals(_possibleValues.get(i), newValue.toString())) {
 					newSelection = i;
 
 					break;
@@ -109,22 +111,25 @@ public final class PossibleValuesRadioButtonsGroupBinding<T> extends AbstractBin
 	protected void initialize(PropertyEditorPresentation propertyEditorPresentation, Control control) {
 		super.initialize(propertyEditorPresentation, control);
 
-		final PossibleValuesService possibleValuesService =
-			propertyEditorPresentation.property().service(PossibleValuesService.class);
+		Property property = propertyEditorPresentation.property();
+
+		PossibleValuesService possibleValuesService = property.service(PossibleValuesService.class);
 
 		_possibleValues = new ArrayList<>(possibleValuesService.values());
 
 		_buttonsGroup = (RadioButtonsGroup)control;
 
-		final Property property = propertyEditorPresentation.property();
+		PropertyEditorPart editorPart = propertyEditorPresentation.part();
 
-		String auxTextProviderName =
-			propertyEditorPresentation.part().getRenderingHint("possible.values.aux.text.provider", (String)null);
+		String auxTextProviderName = editorPart.getRenderingHint("possible.values.aux.text.provider", (String)null);
+
 		PossibleValuesAuxTextProvider auxTextProvider = null;
 
 		if (auxTextProviderName != null) {
 			try {
-				Bundle bundle = ProjectUI.getDefault().getBundle();
+				ProjectUI projectUI = ProjectUI.getDefault();
+
+				Bundle bundle = projectUI.getBundle();
 
 				Class<PossibleValuesAuxTextProvider> providerClass =
 					(Class<PossibleValuesAuxTextProvider>)bundle.loadClass(auxTextProviderName);
@@ -136,12 +141,11 @@ public final class PossibleValuesRadioButtonsGroupBinding<T> extends AbstractBin
 		}
 
 		for (String possibleValue : _possibleValues) {
-			final ValueLabelService labelService = property.service(ValueLabelService.class);
+			ValueLabelService labelService = property.service(ValueLabelService.class);
 
-			final String possibleValueText = labelService.provide(possibleValue);
+			String possibleValueText = labelService.provide(possibleValue);
 
-			String auxText = propertyEditorPresentation.part().getRenderingHint(
-				PropertyEditorDef.HINT_AUX_TEXT + "." + possibleValue, null);
+			String auxText = editorPart.getRenderingHint(PropertyEditorDef.HINT_AUX_TEXT + "." + possibleValue, null);
 
 			if ((auxText == null) && (auxTextProvider != null)) {
 				auxText = auxTextProvider.getAuxText(element(), property.definition(), possibleValue);
@@ -155,7 +159,7 @@ public final class PossibleValuesRadioButtonsGroupBinding<T> extends AbstractBin
 
 			Image image = resources.image(imageData);
 
-			final Button button = this._buttonsGroup.addRadioButton(possibleValueText, auxText, image);
+			Button button = _buttonsGroup.addRadioButton(possibleValueText, auxText, image);
 
 			button.setData(possibleValue);
 		}

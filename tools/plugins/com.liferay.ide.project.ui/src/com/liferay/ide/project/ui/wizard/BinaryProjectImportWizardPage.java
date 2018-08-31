@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.BinaryProjectRecord;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
@@ -26,6 +27,7 @@ import java.io.File;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -272,7 +274,9 @@ public class BinaryProjectImportWizardPage
 		if (wsProjects == null) {
 			IWorkspace pluginWorkspace = IDEWorkbenchPlugin.getPluginWorkspace();
 
-			wsProjects = pluginWorkspace.getRoot().getProjects();
+			IWorkspaceRoot root = pluginWorkspace.getRoot();
+
+			wsProjects = root.getProjects();
 		}
 
 		return wsProjects;
@@ -310,8 +314,8 @@ public class BinaryProjectImportWizardPage
 
 		IProject[] workspaceProjects = getProjectsInWorkspace();
 
-		for (int i = 0; i < workspaceProjects.length; i++) {
-			if (projectName.equals(workspaceProjects[i].getName())) {
+		for (IProject project : workspaceProjects) {
+			if (FileUtil.nameEquals(project, projectName)) {
 				return true;
 			}
 		}

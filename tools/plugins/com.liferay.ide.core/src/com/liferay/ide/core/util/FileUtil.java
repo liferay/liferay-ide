@@ -1050,6 +1050,14 @@ public class FileUtil {
 		return path.toPortableString();
 	}
 
+	public static String toPortableString(org.eclipse.sapphire.modeling.Path path) {
+		if (path == null) {
+			return "";
+		}
+
+		return path.toPortableString();
+	}
+
 	public static URI toURI(File file) {
 		if (file == null) {
 			return null;

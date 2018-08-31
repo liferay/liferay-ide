@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.wizard;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.model.NamedItem;
 import com.liferay.ide.project.core.model.PluginType;
@@ -147,7 +148,7 @@ public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomP
 						NamedItem projectItem = iterator.next();
 
 						for (CheckboxElement checkboxElement : checkboxElements) {
-							if (checkboxElement.name.equals(projectItem.getName().content())) {
+							if (checkboxElement.name.equals(SapphireUtil.getContent(projectItem.getName()))) {
 								checkBoxViewer.setChecked(checkboxElement, true);
 
 								break;
@@ -169,7 +170,7 @@ public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomP
 
 	@Override
 	protected void handleCheckStateChangedEvent(CheckStateChangedEvent event) {
-		if (event.getSource().equals(checkBoxViewer)) {
+		if (checkBoxViewer.equals(event.getSource())) {
 			final Object element = event.getElement();
 
 			if (element instanceof CheckboxElement) {

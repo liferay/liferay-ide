@@ -25,6 +25,7 @@ import com.liferay.ide.ui.util.UIUtil;
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -232,17 +233,19 @@ public class UpgradePomPage extends Page {
 	}
 
 	private List<UpgradePomElement> _getSelectedElements() {
-		final Object[] selectedElements = _fTableViewer.getCheckedElements();
+		Object[] selectedElements = _fTableViewer.getCheckedElements();
+
+		if (selectedElements == null) {
+			return Collections.emptyList();
+		}
 
 		List<UpgradePomElement> upgradePomElements = new ArrayList<>();
 
-		if (selectedElements != null) {
-			for (Object element : selectedElements) {
-				if (element instanceof UpgradePomElement) {
-					UpgradePomElement ele = (UpgradePomElement)element;
+		for (Object element : selectedElements) {
+			if (element instanceof UpgradePomElement) {
+				UpgradePomElement ele = (UpgradePomElement)element;
 
-					upgradePomElements.add(ele);
-				}
+				upgradePomElements.add(ele);
 			}
 		}
 
@@ -251,7 +254,9 @@ public class UpgradePomPage extends Page {
 
 	private ILiferayLegacyProjectUpdater _getUpdater() {
 		if (_updater == null) {
-			_updater = ProjectCore.getDefault().getLiferayLegacyProjectUpdater();
+			ProjectCore projectCore = ProjectCore.getDefault();
+
+			_updater = projectCore.getLiferayLegacyProjectUpdater();
 		}
 
 		return _updater;
@@ -263,7 +268,9 @@ public class UpgradePomPage extends Page {
 		IProject project = element.project;
 
 		if (project.exists()) {
-			IPath tmpDirPath = projectUI.getStateLocation().append("tmp");
+			IPath stataLocation = projectUI.getStateLocation();
+
+			IPath tmpDirPath = stataLocation.append("tmp");
 
 			File tmpDir = tmpDirPath.toFile();
 
@@ -281,7 +288,7 @@ public class UpgradePomPage extends Page {
 			lifeayDescriptorUpgradeCompre.openCompareEditor();
 		}
 		else {
-			MessageDialog.openInformation(getShell(), "Confirm", "project " + project.getName() + " doesn't exist");
+			MessageDialog.openInformation(getShell(), "Confirm", "project " + project.getName() + " does not exist");
 		}
 	}
 
@@ -353,31 +360,37 @@ public class UpgradePomPage extends Page {
 
 		@Override
 		public Color getForeground(Object element) {
+			Display display = Display.getCurrent();
+
 			if (element instanceof UpgradePomElement) {
 				UpgradePomElement ele = (UpgradePomElement)element;
 
 				if (ele.finished) {
-					return Display.getCurrent().getSystemColor(SWT.COLOR_BLUE);
+					return display.getSystemColor(SWT.COLOR_BLUE);
 				}
 			}
 
-			return Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
+			return display.getSystemColor(SWT.COLOR_BLACK);
 		}
 
 		@Override
 		public Image getImage(Object element) {
-			return ProjectUI.getDefault().getImage("pom_file.gif");
+			ProjectUI projectUI = ProjectUI.getDefault();
+
+			return projectUI.getImage("pom_file.gif");
 		}
 
 		@Override
 		public StyledString getStyledText(Object element) {
-			UpgradePomElement upgadePomelement = (UpgradePomElement)element;
+			UpgradePomElement upgradePomElement = (UpgradePomElement)element;
 
-			String projectName = upgadePomelement.project.getName();
+			String projectName = upgradePomElement.project.getName();
 
-			StringBuilder text = new StringBuilder("pom.xml").append(" (");
+			StringBuilder text = new StringBuilder("pom.xml");
 
-			text.append(projectName).append(")");
+			text.append(" (");
+			text.append(projectName);
+			text.append(")");
 
 			StyledString retVal = new StyledString();
 
@@ -388,7 +401,9 @@ public class UpgradePomPage extends Page {
 			Color frontColor = null;
 
 			if (!colorReg.hasValueFor(upgradePomFrontColor)) {
-				frontColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLUE);
+				Display display = Display.getCurrent();
+
+				frontColor = display.getSystemColor(SWT.COLOR_BLUE);
 
 				colorReg.put(upgradePomFrontColor, frontColor.getRGB());
 			}
@@ -396,7 +411,7 @@ public class UpgradePomPage extends Page {
 				frontColor = colorReg.get(upgradePomFrontColor);
 			}
 
-			if (upgadePomelement.finished) {
+			if (upgradePomElement.finished) {
 				text.append("( Finished )");
 
 				retVal.append(text.toString(), StyledString.createColorRegistryStyler(upgradePomFrontColor, null));

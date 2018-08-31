@@ -42,7 +42,9 @@ public class UpgradeSettingsUtil {
 	}
 
 	public static void init(LiferayUpgradeDataModel dataModel) {
-		final IPath stateLocation = ProjectCore.getDefault().getStateLocation();
+		ProjectCore projectCore = ProjectCore.getDefault();
+
+		IPath stateLocation = projectCore.getStateLocation();
 
 		File stateDir = stateLocation.toFile();
 

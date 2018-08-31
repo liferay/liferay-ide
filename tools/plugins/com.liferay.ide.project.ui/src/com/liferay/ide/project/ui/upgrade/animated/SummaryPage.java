@@ -33,6 +33,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Table;
 
@@ -53,7 +54,10 @@ public class SummaryPage extends Page implements SelectionChangedListener {
 
 		_tableViewer.setContentProvider(new TableViewContentProvider());
 		_tableViewer.setLabelProvider(new TableViewLabelProvider());
-		_tableViewer.getControl().setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+
+		Control control = _tableViewer.getControl();
+
+		control.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 
 		_tableViewer.addSelectionChangedListener(
 			new ISelectionChangedListener() {
@@ -131,7 +135,9 @@ public class SummaryPage extends Page implements SelectionChangedListener {
 	}
 
 	private void _createImages() {
-		_imageQuestion = ImageDescriptor.createFromURL(bundle.getEntry("/images/question.png")).createImage();
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(bundle.getEntry("/images/question.png"));
+
+		_imageQuestion = imageDescriptor.createImage();
 	}
 
 	private void _setInput() {
@@ -146,18 +152,19 @@ public class SummaryPage extends Page implements SelectionChangedListener {
 
 			int pageIndex = i;
 
-			PageAction pageAction = page.getSelectedAction();
-			Image statusImage;
-
 			if (pageTitle.equals("Ext and Theme Project")) {
 				continue;
 			}
+
+			PageAction pageAction = page.getSelectedAction();
+
+			Image statusImage = null;
 
 			if (pageAction == null) {
 				statusImage = _imageQuestion;
 			}
 			else {
-				statusImage = page.getSelectedAction().getBageImage();
+				statusImage = pageAction.getBageImage();
 			}
 
 			TableViewElement tableViewElement = new TableViewElement(pageTitle, statusImage, pageIndex);

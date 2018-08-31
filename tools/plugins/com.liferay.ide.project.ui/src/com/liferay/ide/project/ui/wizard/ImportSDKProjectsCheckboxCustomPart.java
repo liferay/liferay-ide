@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui.wizard;
 
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.model.ProjectNamedItem;
 import com.liferay.ide.project.core.model.SDKProjectsImportOp;
@@ -39,7 +41,7 @@ import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.platform.PathBridge;
+import org.eclipse.swt.widgets.Table;
 
 /**
  * @author Simon Jiang
@@ -65,29 +67,26 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 	@Override
 	protected List<ProjectCheckboxElement> getInitItemsList() {
 		List<ProjectCheckboxElement> checkboxElementList = new ArrayList<>();
-		Value<Path> sdkLocationPath = _op().getSdkLocation();
 
-		Path sdkLocation = sdkLocationPath.content();
+		Path sdkLocation = SapphireUtil.getContent(_op().getSdkLocation());
 
-		if ((sdkLocation == null) || !sdkLocation.toFile().exists()) {
+		if (FileUtil.notExists(sdkLocation)) {
 			return checkboxElementList;
 		}
 
-		final ProjectRecord[] projectRecords = _updateProjectsList(PathBridge.create(sdkLocation).toPortableString());
+		ProjectRecord[] projectRecords = _updateProjectsList(sdkLocation.toPortableString());
 
 		if (projectRecords == null) {
 			return checkboxElementList;
 		}
 
-		String context = null;
-
 		for (ProjectRecord projectRecord : projectRecords) {
-			final String projectLocation = projectRecord.getProjectLocation().toPortableString();
+			String projectLocation = FileUtil.toPortableString(projectRecord.getProjectLocation());
 
-			context = projectRecord.getProjectName() + " (" + projectLocation + ")";
+			String context = projectRecord.getProjectName() + " (" + projectLocation + ")";
 
 			ProjectCheckboxElement checkboxElement = new ProjectCheckboxElement(
-				projectRecord.getProjectName(), context, projectRecord.getProjectLocation().toPortableString());
+				projectRecord.getProjectName(), context, projectLocation);
 
 			if (!projectRecord.hasConflicts()) {
 				checkboxElementList.add(checkboxElement);
@@ -115,7 +114,7 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 
 			@Override
 			protected void handleTypedEvent(final PropertyContentEvent event) {
-				PropertyDef eventDef = event.property().definition();
+				PropertyDef eventDef = SapphireUtil.getPropertyDef(event);
 
 				if (eventDef.equals(SDKProjectsImportOp.PROP_SDK_LOCATION)) {
 					Value<Path> sdkLocationPath = _op().getSdkLocation();
@@ -126,7 +125,7 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 						IStatus status = ProjectImportUtil.validateSDKPath(sdkLocation.toPortableString());
 
 						if (status.isOK()) {
-							if (sdkLocation.toFile().exists()) {
+							if (FileUtil.exists(sdkLocation)) {
 								checkAndUpdateCheckboxElement();
 							}
 						}
@@ -157,8 +156,13 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 			IStatus status = ProjectImportUtil.validateSDKPath(sdkLocation.toPortableString());
 
 			if (status.isOK()) {
-				final int projectsCount = checkBoxViewer.getTable().getItemCount();
-				final int selectedProjectsCount = checkBoxViewer.getCheckedElements().length;
+				Table table = checkBoxViewer.getTable();
+
+				int projectsCount = table.getItemCount();
+
+				Object[] elements = checkBoxViewer.getCheckedElements();
+
+				int selectedProjectsCount = elements.length;
 
 				if (projectsCount == 0) {
 					retval = Status.createErrorStatus("No available projects can be imported.");
@@ -184,14 +188,14 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 	private Object[] _getProjectRecords() {
 		List projectRecords = new ArrayList();
 
-		for (int i = 0; i < selectedProjects.length; i++) {
-			ProjectRecord projectRecord = (ProjectRecord)selectedProjects[i];
+		for (Object project : selectedProjects) {
+			ProjectRecord projectRecord = (ProjectRecord)project;
 
 			if (_isProjectInWorkspace(projectRecord.getProjectName())) {
 				projectRecord.setHasConflicts(true);
 			}
 
-			projectRecords.add(selectedProjects[i]);
+			projectRecords.add(project);
 		}
 
 		return projectRecords.toArray(new ProjectRecord[projectRecords.size()]);
@@ -210,10 +214,8 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 			return false;
 		}
 
-		IProject[] workspaceProjects = _getProjectsInWorkspace();
-
-		for (int i = 0; i < workspaceProjects.length; i++) {
-			if (projectName.equals(workspaceProjects[i].getName())) {
+		for (IProject project : _getProjectsInWorkspace()) {
+			if (FileUtil.nameEquals(project, projectName)) {
 				return true;
 			}
 		}

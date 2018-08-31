@@ -281,6 +281,7 @@ public abstract class Page extends Composite implements PageActionListener, Sele
 			_parentComposite = composite;
 
 			_label = new Label(composite, SWT.NONE);
+
 			_label.setText(text);
 
 			GridDataFactory.generate(_label, 2, 1);

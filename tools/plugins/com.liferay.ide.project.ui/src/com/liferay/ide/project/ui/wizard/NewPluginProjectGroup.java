@@ -111,7 +111,9 @@ public class NewPluginProjectGroup extends NewProjectGroup implements IPluginPro
 
 		synchHelper.synchText(displayNameField, DISPLAY_NAME, new Control[] {displayLabel});
 
-		nestedSynchHelper.getDataModel().addListener(
+		IDataModel dataModel = nestedSynchHelper.getDataModel();
+
+		dataModel.addListener(
 			new IDataModelListener() {
 
 				public void propertyChanged(DataModelEvent event) {
