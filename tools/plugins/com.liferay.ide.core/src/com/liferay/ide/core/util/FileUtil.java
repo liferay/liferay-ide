@@ -302,6 +302,18 @@ public class FileUtil {
 		return false;
 	}
 
+	public static boolean exists(org.eclipse.sapphire.modeling.Path path) {
+		if (path != null) {
+			File file = path.toFile();
+
+			if (file.exists()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public static File getCanonicalFile(IPath location) {
 		if (location == null) {
 			return null;
