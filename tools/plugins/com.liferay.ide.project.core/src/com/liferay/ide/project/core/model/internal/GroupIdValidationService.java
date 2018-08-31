@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
@@ -37,10 +38,11 @@ public class GroupIdValidationService extends ValidationService {
 	protected Status compute() {
 		NewLiferayPluginProjectOp op = _op();
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content(true);
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
+			op.getProjectProvider());
 
 		if ("maven".equals(provider.getShortName())) {
-			String groupId = op.getGroupId().content(true);
+			String groupId = SapphireUtil.getContent(op.getGroupId());
 
 			IStatus javaStatus = JavaConventions.validatePackageName(
 				groupId, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
@@ -65,7 +67,7 @@ public class GroupIdValidationService extends ValidationService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		op.getProjectProvider().attach(_listener);
+		SapphireUtil.attachListener(op.getProjectProvider(), _listener);
 	}
 
 	private NewLiferayPluginProjectOp _op() {

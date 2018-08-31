@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.SapphireUtil;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.FilteredListener;
@@ -30,7 +32,7 @@ public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValu
 		ImportLiferayModuleProjectOp op = _op();
 
 		if (op != null) {
-			op.property(ImportLiferayModuleProjectOp.PROP_LOCATION).detach(_listener);
+			SapphireUtil.detachListener(op.property(ImportLiferayModuleProjectOp.PROP_LOCATION), _listener);
 		}
 
 		super.dispose();
@@ -38,7 +40,7 @@ public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValu
 
 	@Override
 	protected String compute() {
-		String retVal = null;
+		String retVal = "";
 
 		ImportLiferayModuleProjectOp op = _op();
 
@@ -46,7 +48,7 @@ public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValu
 			return retVal;
 		}
 
-		Path path = op.getLocation().content();
+		Path path = SapphireUtil.getContent(op.getLocation());
 
 		if ((path != null) && !path.isEmpty()) {
 			String location = path.toOSString();
@@ -82,7 +84,7 @@ public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValu
 
 		ImportLiferayModuleProjectOp op = _op();
 
-		op.property(ImportLiferayModuleProjectOp.PROP_LOCATION).attach(_listener);
+		SapphireUtil.attachListener(op.property(ImportLiferayModuleProjectOp.PROP_LOCATION), _listener);
 	}
 
 	private ImportLiferayModuleProjectOp _op() {

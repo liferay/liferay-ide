@@ -439,6 +439,7 @@ public class BinaryProjectsImportWizardPage
 			cell.setImage(getImage());
 			cell.setText(styledString.getString());
 			cell.setStyleRanges(styledString.getStyleRanges());
+
 			super.update(cell);
 		}
 

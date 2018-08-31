@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules.templates.portletfilter;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
@@ -201,10 +202,10 @@ public class NewLiferayComponentPortletFilterOperation extends AbstractLiferayCo
 	}
 
 	private void _sourceCodeOperation(IFile srcFile, String type) throws CoreException {
-		File file = srcFile.getLocation().toFile();
+		File file = FileUtil.getFile(srcFile);
 
 		try (OutputStream fos = Files.newOutputStream(file.toPath());
-				Writer out = new OutputStreamWriter(fos)) {
+			Writer out = new OutputStreamWriter(fos)) {
 
 			Template temp = cfg.getTemplate(getTemplateFile());
 

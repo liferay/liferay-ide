@@ -346,7 +346,7 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         Status projectValidationStatus = cop.getProjectName().validation();
 
-        assertEquals( "No suitable Liferay module project.", projectValidationStatus.message() );
+        assertEquals( "No suitable Liferay module project", projectValidationStatus.message() );
 
         NewLiferayModuleProjectOp pop = NewLiferayModuleProjectOp.TYPE.instantiate();
 
@@ -371,6 +371,6 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         projectValidationStatus = cop.getProjectName().validation();
 
-        assertEquals( "Can't find bnd.bnd file in the project.", projectValidationStatus.message() );
+        assertEquals( "Can not find bnd.bnd file in the project", projectValidationStatus.message() );
     }
 }

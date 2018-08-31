@@ -41,6 +41,7 @@ import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvi
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
@@ -101,17 +102,15 @@ public class ExtPluginFacetInstall extends PluginFacetInstall {
 			// first lets add all new source folders
 
 			for (int i = 0; i < IPluginFacetConstants.EXT_PLUGIN_SDK_SOURCE_FOLDERS.length; i++) {
-				IPath sourcePath = this.project.getFolder(
-					IPluginFacetConstants.EXT_PLUGIN_SDK_SOURCE_FOLDERS[i]).getFullPath();
+				IFolder source = this.project.getFolder(IPluginFacetConstants.EXT_PLUGIN_SDK_SOURCE_FOLDERS[i]);
 
-				IPath outputPath = this.project.getFolder(
-					IPluginFacetConstants.EXT_PLUGIN_SDK_OUTPUT_FOLDERS[i]).getFullPath();
+				IFolder output = this.project.getFolder(IPluginFacetConstants.EXT_PLUGIN_SDK_OUTPUT_FOLDERS[i]);
 
 				IClasspathAttribute[] attributes =
 					{JavaCore.newClasspathAttribute("owner.project.facets", "liferay.ext")};
 
 				IClasspathEntry sourceEntry = JavaCore.newSourceEntry(
-					sourcePath, new IPath[0], new IPath[0], outputPath, attributes);
+					source.getFullPath(), new IPath[0], new IPath[0], output.getFullPath(), attributes);
 
 				newRawClasspath.add(sourceEntry);
 			}
@@ -124,9 +123,10 @@ public class ExtPluginFacetInstall extends PluginFacetInstall {
 				}
 			}
 
+			IFolder outputFolder = this.project.getFolder(IPluginFacetConstants.EXT_PLUGIN_DEFAULT_OUTPUT_FOLDER);
+
 			javaProject.setRawClasspath(
-				newRawClasspath.toArray(new IClasspathEntry[0]),
-				this.project.getFolder(IPluginFacetConstants.EXT_PLUGIN_DEFAULT_OUTPUT_FOLDER).getFullPath(), null);
+				newRawClasspath.toArray(new IClasspathEntry[0]), outputFolder.getFullPath(), null);
 
 			ProjectUtil.fixExtProjectSrcFolderLinks(this.project);
 		}
@@ -154,7 +154,9 @@ public class ExtPluginFacetInstall extends PluginFacetInstall {
 		}
 
 		try {
-			IDOMModel domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForEdit(tilesDefExtFile);
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			IDOMModel domModel = (IDOMModel)modelManager.getModelForEdit(tilesDefExtFile);
 
 			domModel.aboutToChangeModel();
 

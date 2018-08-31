@@ -18,6 +18,7 @@ import com.liferay.blade.api.Problem;
 
 import java.io.File;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,10 +40,13 @@ public class FileProblemsUtil {
 
 			fileProblem.addProblem(problem);
 			fileProblem.setFile(problem.getFile());
+
 			fileProblemsMap.put(problem.getFile(), fileProblem);
 		}
 
-		return fileProblemsMap.values().toArray(new FileProblems[0]);
+		Collection<FileProblems> values = fileProblemsMap.values();
+
+		return values.toArray(new FileProblems[0]);
 	}
 
 }

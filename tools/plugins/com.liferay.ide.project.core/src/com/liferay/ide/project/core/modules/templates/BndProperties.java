@@ -140,8 +140,9 @@ public class BndProperties extends Properties {
 
 		// The spec says that the file must be encoded using ISO-8859-1.
 
-		try(InputStreamReader inputReader = new InputStreamReader(inStream, "ISO-8859-1");
-				BufferedReader reader = new BufferedReader(inputReader)){
+		try (InputStreamReader inputReader = new InputStreamReader(inStream, "ISO-8859-1");
+			BufferedReader reader = new BufferedReader(inputReader)) {
+
 			String buffer;
 
 			while ((buffer = reader.readLine()) != null) {
@@ -384,10 +385,13 @@ public class BndProperties extends Properties {
 
 	@Override
 	public void store(OutputStream out, String header) throws IOException {
-		try(PrintWriter writer = new PrintWriter(new OutputStreamWriter(out));){
+		try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(out));) {
 			if (header != null) {
 				writer.println("#" + header);
-				writer.println("#" + Calendar.getInstance().getTime());
+
+				Calendar calendar = Calendar.getInstance();
+
+				writer.println("#" + calendar.getTime());
 			}
 
 			// Reuse the same buffer.
@@ -463,7 +467,8 @@ public class BndProperties extends Properties {
 					break;
 				case '!':
 				case '#':
-					buffer.append('\\').append(c);
+					buffer.append('\\');
+					buffer.append(c);
 
 					break;
 				default:

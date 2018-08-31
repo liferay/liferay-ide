@@ -17,6 +17,8 @@ package com.liferay.ide.project.core.modules.fragment;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.util.ServerUtil;
@@ -46,21 +48,23 @@ public class NewModuleFragmentFilesOpMethods {
 
 		monitor.beginTask("Copy files (this process may take several minutes)", 100);
 
-		String projectName = op.getProjectName().content();
+		String projectName = SapphireUtil.getContent(op.getProjectName());
 
 		IProject project = CoreUtil.getProject(projectName);
 
 		Status retval = null;
 
 		try {
-			String hostBundleName = op.getHostOsgiBundle().content();
+			String hostBundleName = SapphireUtil.getContent(op.getHostOsgiBundle());
 
-			IPath projectCoreLocation = ProjectCore.getDefault().getStateLocation();
+			ProjectCore projectCore = ProjectCore.getDefault();
+
+			IPath projectCoreLocation = projectCore.getStateLocation();
 
 			IPath tempJarDir = LiferayCore.GLOBAL_USER_DIR.append(hostBundleName);
 
 			if (FileUtil.notExists(tempJarDir)) {
-				IRuntime runtime = ServerUtil.getRuntime(op.getLiferayRuntimeName().content());
+				IRuntime runtime = ServerUtil.getRuntime(SapphireUtil.getContent(op.getLiferayRuntimeName()));
 
 				String hostOsgiJar = hostBundleName + ".jar";
 
@@ -79,19 +83,21 @@ public class NewModuleFragmentFilesOpMethods {
 			ElementList<OverrideFilePath> files = op.getOverrideFiles();
 
 			for (OverrideFilePath file : files) {
-				File fragmentFile = tempJarDir.append(file.getValue().content()).toFile();
+				File fragmentFile = FileUtil.getFile(tempJarDir.append(SapphireUtil.getContent(file.getValue())));
 
 				if (FileUtil.exists(fragmentFile)) {
 					File folder = null;
 
-					if (fragmentFile.getName().equals("portlet.properties")) {
-						IPath path = project.getLocation().append("src/main/java");
+					if (FileUtil.nameEquals(fragmentFile, "portlet.properties")) {
+						IPath projectLocation = project.getLocation();
+
+						IPath path = projectLocation.append("src/main/java");
 
 						folder = path.toFile();
 
 						FileUtil.copyFileToDir(fragmentFile, "portlet-ext.properties", folder);
 					}
-					else if (fragmentFile.getName().contains("default.xml")) {
+					else if (StringUtil.contains(fragmentFile.getName(), "default.xml")) {
 						String parent = fragmentFile.getPath();
 
 						parent = parent.replaceAll("\\\\", "/");
@@ -100,7 +106,9 @@ public class NewModuleFragmentFilesOpMethods {
 
 						parent = parent.substring(parent.indexOf(metaInfResources) + metaInfResources.length());
 
-						IPath resources = project.getLocation().append("src/main/resources/resource-actions");
+						IPath projectLocation = project.getLocation();
+
+						IPath resources = projectLocation.append("src/main/resources/resource-actions");
 
 						folder = resources.toFile();
 
@@ -110,7 +118,7 @@ public class NewModuleFragmentFilesOpMethods {
 
 						try {
 							File ext = new File(
-								project.getLocation().append("src/main/resources") + "/portlet-ext.properties");
+								projectLocation.append("src/main/resources") + "/portlet-ext.properties");
 
 							ext.createNewFile();
 
@@ -125,22 +133,27 @@ public class NewModuleFragmentFilesOpMethods {
 						}
 					}
 					else {
-						String parent = fragmentFile.getParentFile().getPath();
+						File parent = fragmentFile.getParentFile();
 
-						parent = parent.replaceAll("\\\\", "/");
+						String parentPath = parent.getPath();
+
+						parentPath = parentPath.replaceAll("\\\\", "/");
 
 						String metaInfResources = "META-INF/resources";
 
-						parent = parent.substring(parent.indexOf(metaInfResources) + metaInfResources.length());
+						parentPath = parentPath.substring(
+							parentPath.indexOf(metaInfResources) + metaInfResources.length());
 
-						IPath resources = project.getLocation().append("src/main/resources/META-INF/resources");
+						IPath location = project.getLocation();
+
+						IPath resources = location.append("src/main/resources/META-INF/resources");
 
 						folder = resources.toFile();
 
 						folder.mkdirs();
 
-						if (!parent.equals("resources") && !parent.equals("")) {
-							folder = resources.append(parent).toFile();
+						if (!parentPath.equals("resources") && !parentPath.equals("")) {
+							folder = FileUtil.getFile(resources.append(parentPath));
 
 							folder.mkdirs();
 						}

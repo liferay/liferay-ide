@@ -17,11 +17,13 @@ package com.liferay.ide.project.core;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Collections;
@@ -66,10 +68,12 @@ public class SDKProjectsImportDataModelProvider
 		if (SDK_LOCATION.equals(propertyName)) {
 			String sdkName = getStringProperty(LIFERAY_SDK_NAME);
 
-			SDK sdk = SDKManager.getInstance().getSDK(sdkName);
+			SDKManager sdkManager = SDKManager.getInstance();
+
+			SDK sdk = sdkManager.getSDK(sdkName);
 
 			if (sdk != null) {
-				return sdk.getLocation().toOSString();
+				return FileUtil.toOSString(sdk.getLocation());
 			}
 		}
 		else if (SDK_VERSION.equals(propertyName)) {
@@ -109,7 +113,9 @@ public class SDKProjectsImportDataModelProvider
 	@Override
 	public DataModelPropertyDescriptor[] getValidPropertyDescriptors(String propertyName) {
 		if (LIFERAY_SDK_NAME.equals(propertyName)) {
-			SDK[] validSDKs = SDKManager.getInstance().getSDKs();
+			SDKManager sdkManager = SDKManager.getInstance();
+
+			SDK[] validSDKs = sdkManager.getSDKs();
 
 			String[] values = null;
 
@@ -264,7 +270,9 @@ public class SDKProjectsImportDataModelProvider
 		try {
 			Version liferaySdkVersion = new Version(sdkVersion);
 
-			String runtimeVersion = ServerUtil.getLiferayRuntime((BridgedRuntime)runtime).getPortalVersion();
+			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime((BridgedRuntime)runtime);
+
+			String runtimeVersion = liferayRuntime.getPortalVersion();
 
 			Version liferayRuntimeVersion = new Version(runtimeVersion);
 

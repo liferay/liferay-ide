@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.JavaConventions;
@@ -32,7 +33,7 @@ public class PackageNameValidationService extends ValidationService {
 	protected Status compute() {
 		NewLiferayModuleProjectOp op = _op();
 
-		String packageName = op.getPackageName().content(true);
+		String packageName = SapphireUtil.getContent(op.getPackageName());
 
 		Status retval = Status.createOkStatus();
 

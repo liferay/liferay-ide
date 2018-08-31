@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.core.util.SapphireUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class TargetLiferayVersionListener extends FilteredListener<PropertyConte
 
 		NewLiferayWorkspaceOp op = newLiferayWorkspaceOp.adapt(NewLiferayWorkspaceOp.class);
 
-		String bundleUrl = op.getBundleUrl().content();
+		String bundleUrl = SapphireUtil.getContent(op.getBundleUrl());
 
 		List<String> bundleVersionList = new ArrayList<>();
 

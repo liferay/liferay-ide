@@ -15,12 +15,14 @@
 package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.wst.server.core.IRuntime;
 
@@ -34,10 +36,12 @@ public class OSGiBundleListener extends FilteredListener<PropertyContentEvent> {
 	protected void handleTypedEvent(PropertyContentEvent event) {
 		NewModuleFragmentOp op = op(event);
 
-		IPath temp = ProjectCore.getDefault().getStateLocation();
+		ProjectCore projectCore = ProjectCore.getDefault();
 
-		String runtimeName = op.getLiferayRuntimeName().content();
-		String hostOsgiBundle = op.getHostOsgiBundle().content();
+		IPath temp = projectCore.getStateLocation();
+
+		String runtimeName = SapphireUtil.getContent(op.getLiferayRuntimeName());
+		String hostOsgiBundle = SapphireUtil.getContent(op.getHostOsgiBundle());
 
 		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
@@ -45,11 +49,13 @@ public class OSGiBundleListener extends FilteredListener<PropertyContentEvent> {
 			ServerUtil.getModuleFileFrom70Server(runtime, hostOsgiBundle, temp);
 		}
 
-		op.getOverrideFiles().clear();
+		SapphireUtil.clear(op.getOverrideFiles());
 	}
 
 	protected NewModuleFragmentOp op(PropertyContentEvent event) {
-		Element element = event.property().element();
+		Property property = event.property();
+
+		Element element = property.element();
 
 		return element.nearest(NewModuleFragmentOp.class);
 	}

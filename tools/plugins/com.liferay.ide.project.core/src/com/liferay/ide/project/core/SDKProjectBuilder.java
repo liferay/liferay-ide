@@ -24,9 +24,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -114,7 +116,9 @@ public class SDKProjectBuilder extends AbstractProjectBuilder {
 		IClasspathEntry[] webappEntries = container.getClasspathEntries();
 
 		for (IClasspathEntry entry2 : webappEntries) {
-			String segment = entry2.getPath().lastSegment();
+			IPath path = entry2.getPath();
+
+			String segment = path.lastSegment();
 
 			if (segment.equals(getProject().getName() + "-service.jar")) {
 				IFolder folder = getProject().getFolder(ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/service");
@@ -162,7 +166,9 @@ public class SDKProjectBuilder extends AbstractProjectBuilder {
 			retval = ProjectCore.createErrorStatus(e);
 		}
 
-		ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		workspace.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
 
 		updateClasspath(getProject());
 

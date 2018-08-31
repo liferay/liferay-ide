@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,10 +50,12 @@ public class ValidationUtil {
 		File targetDir = null;
 
 		if (targetFolder.exists()) {
-			targetDir = targetFolder.getLocation().toFile();
+			targetDir = FileUtil.getFile(targetFolder.getLocation());
 
 			try {
-				inTargetDir = file.getCanonicalPath().startsWith(targetDir.getCanonicalPath());
+				String path = file.getCanonicalPath();
+
+				inTargetDir = path.startsWith(targetDir.getCanonicalPath());
 			}
 			catch (IOException ioe) {
 			}

@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.SapphireUtil;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
@@ -28,27 +30,27 @@ public class ModuleProjectArtifactVersionDefaultValueService extends DefaultValu
 
 	@Override
 	protected String compute() {
-		String data = null;
-
 		NewLiferayModuleProjectOp op = _op();
 
-		Path location = op.getLocation().content();
+		Path location = SapphireUtil.getContent(op.getLocation());
 
-		if (location != null) {
-			String parentProjectLocation = location.toOSString();
-
-			IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
-
-			String projectName = op.getProjectName().content();
-
-			data = NewLiferayModuleProjectOpMethods.getMavenParentPomVersion(op, projectName, parentProjectOsPath);
+		if (location == null) {
+			return "1.0.0-SNAPSHOT";
 		}
 
-		if (data == null) {
-			data = "1.0.0-SNAPSHOT";
+		String parentProjectLocation = location.toOSString();
+
+		IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
+
+		String projectName = SapphireUtil.getContent(op.getProjectName());
+
+		String data = NewLiferayModuleProjectOpMethods.getMavenParentPomVersion(op, projectName, parentProjectOsPath);
+
+		if (!"".equals(data)) {
+			return data;
 		}
 
-		return data;
+		return "1.0.0-SNAPSHOT";
 	}
 
 	@Override
@@ -66,8 +68,8 @@ public class ModuleProjectArtifactVersionDefaultValueService extends DefaultValu
 
 		NewLiferayModuleProjectOp op = _op();
 
-		op.getLocation().attach(listener);
-		op.getProjectName().attach(listener);
+		SapphireUtil.attachListener(op.getLocation(), listener);
+		SapphireUtil.attachListener(op.getProjectName(), listener);
 	}
 
 	private NewLiferayModuleProjectOp _op() {

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.SDKProjectsImportOp;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.sdk.core.SDK;
@@ -23,7 +24,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 
@@ -37,7 +37,7 @@ public class SDKImportVersionDerivedValueService extends DerivedValueService {
 		SDKProjectsImportOp op = _op();
 
 		if (op != null) {
-			op.property(SDKProjectsImportOp.PROP_SDK_LOCATION).detach(_listener);
+			SapphireUtil.detachListener(op.property(SDKProjectsImportOp.PROP_SDK_LOCATION), _listener);
 		}
 
 		super.dispose();
@@ -45,25 +45,21 @@ public class SDKImportVersionDerivedValueService extends DerivedValueService {
 
 	@Override
 	protected String compute() {
-		String retVal = null;
-
 		SDKProjectsImportOp op = _op();
 
-		Value<Path> sdkLocation = op.getSdkLocation();
+		Path sdkLocation = SapphireUtil.getContent(op.getSdkLocation());
 
-		if ((sdkLocation != null) && (sdkLocation.content() != null) && !sdkLocation.content().isEmpty()) {
-			Path sdkPath = sdkLocation.content();
-
-			IStatus status = ProjectImportUtil.validateSDKPath(sdkLocation.content().toPortableString());
+		if ((sdkLocation != null) && !sdkLocation.isEmpty()) {
+			IStatus status = ProjectImportUtil.validateSDKPath(sdkLocation.toPortableString());
 
 			if (status.isOK()) {
-				SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkPath));
+				SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkLocation));
 
-				retVal = sdk.getVersion();
+				return sdk.getVersion();
 			}
 		}
 
-		return retVal;
+		return "";
 	}
 
 	@Override
@@ -81,7 +77,7 @@ public class SDKImportVersionDerivedValueService extends DerivedValueService {
 
 		SDKProjectsImportOp op = _op();
 
-		op.property(SDKProjectsImportOp.PROP_SDK_LOCATION).attach(_listener);
+		SapphireUtil.attachListener(op.property(SDKProjectsImportOp.PROP_SDK_LOCATION), _listener);
 	}
 
 	private SDKProjectsImportOp _op() {

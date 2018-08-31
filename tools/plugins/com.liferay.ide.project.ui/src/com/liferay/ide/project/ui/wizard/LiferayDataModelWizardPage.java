@@ -83,8 +83,8 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 		return new ISelectionStatusValidator() {
 
 			public IStatus validate(Object[] selection) {
-				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) &&
-					 !(selection[0] instanceof IProject) && !(selection[0] instanceof IFolder)) {
+				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) && !(selection[0] instanceof IProject) &&
+					!(selection[0] instanceof IFolder)) {
 
 					return Status.OK_STATUS;
 				}

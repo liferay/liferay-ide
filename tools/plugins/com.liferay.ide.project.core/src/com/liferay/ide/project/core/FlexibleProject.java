@@ -151,11 +151,13 @@ public abstract class FlexibleProject extends BaseLiferayProject implements IWeb
 		for (IContainer container : webappRoot.getUnderlyingFolders()) {
 			boolean docrootResource = false;
 
-			if (FileUtil.exists(container) && container.getFullPath().isPrefixOf(path)) {
+			IPath fullPath = container.getFullPath();
+
+			if (FileUtil.exists(container) && fullPath.isPrefixOf(path)) {
 				docrootResource = true;
 			}
 
-			if (docrootResource == true) {
+			if (docrootResource) {
 				return true;
 			}
 		}

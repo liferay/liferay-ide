@@ -15,9 +15,11 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.platform.PathBridge;
 
@@ -30,13 +32,15 @@ public class WorkspaceUseDefaultLocationListener extends FilteredListener<Proper
 	protected void handleTypedEvent(PropertyContentEvent event) {
 		NewLiferayWorkspaceOp op = op(event);
 
-		if (op.getUseDefaultLocation().content(true)) {
-			op.setLocation(PathBridge.create(CoreUtil.getWorkspaceRoot().getLocation()));
+		if (SapphireUtil.getContent(op.getUseDefaultLocation())) {
+			op.setLocation(PathBridge.create(CoreUtil.getWorkspaceRootLocation()));
 		}
 	}
 
 	protected NewLiferayWorkspaceOp op(PropertyContentEvent event) {
-		Element element = event.property().element();
+		Property property = event.property();
+
+		Element element = property.element();
 
 		return element.nearest(NewLiferayWorkspaceOp.class);
 	}

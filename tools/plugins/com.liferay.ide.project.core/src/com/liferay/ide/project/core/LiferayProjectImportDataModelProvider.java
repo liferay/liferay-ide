@@ -136,13 +136,13 @@ public class LiferayProjectImportDataModelProvider
 			if (record != null) {
 				String projectName = record.getProjectName();
 
-				IProject existingProject = CoreUtil.getWorkspaceRoot().getProject(projectName);
+				IProject existingProject = CoreUtil.getProject(projectName);
 
 				if (FileUtil.exists(existingProject)) {
 					return ProjectCore.createErrorStatus(Msgs.projectNameExists);
 				}
 
-				File projectDir = record.getProjectLocation().toFile();
+				File projectDir = FileUtil.getFile(record.getProjectLocation());
 
 				// go up to the SDK level
 

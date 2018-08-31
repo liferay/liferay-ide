@@ -18,6 +18,7 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -80,9 +81,9 @@ public class PluginsSDKProjectProvider
 	public IStatus createNewProject(NewLiferayPluginProjectOp op, IProgressMonitor monitor) throws CoreException {
 		ElementList<ProjectName> projectNames = op.getProjectNames();
 
-		PluginType pluginType = op.getPluginType().content(true);
+		PluginType pluginType = SapphireUtil.getContent(op.getPluginType());
 
-		String originalProjectName = op.getProjectName().content();
+		String originalProjectName = SapphireUtil.getContent(op.getProjectName());
 
 		String pluginTypeSuffix = NewLiferayPluginProjectOpMethods.getPluginTypeSuffix(pluginType);
 
@@ -95,7 +96,7 @@ public class PluginsSDKProjectProvider
 
 		String projectName = fixedProjectName;
 
-		String displayName = op.getDisplayName().content(true);
+		String displayName = SapphireUtil.getContent(op.getDisplayName());
 
 		boolean separateJRE = true;
 
@@ -121,11 +122,13 @@ public class PluginsSDKProjectProvider
 
 		IPath path = null;
 
+		IPath sdkLocation = sdk.getLocation();
+
 		switch (pluginType) {
 			case servicebuilder:
 				op.setPortletFramework("mvc");
 			case portlet:
-				path = sdk.getLocation().append(ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER);
+				path = sdkLocation.append(ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER);
 
 				String frameworkName = NewLiferayPluginProjectOpMethods.getFrameworkName(op);
 
@@ -144,7 +147,7 @@ public class PluginsSDKProjectProvider
 				break;
 
 			case hook:
-				path = sdk.getLocation().append(ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER);
+				path = sdkLocation.append(ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER);
 
 				workingDir = path.toOSString();
 
@@ -159,7 +162,7 @@ public class PluginsSDKProjectProvider
 				break;
 
 			case ext:
-				path = sdk.getLocation().append(ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER);
+				path = sdkLocation.append(ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER);
 
 				workingDir = path.toOSString();
 
@@ -174,7 +177,7 @@ public class PluginsSDKProjectProvider
 				break;
 
 			case layouttpl:
-				path = sdk.getLocation().append(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER);
+				path = sdkLocation.append(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER);
 
 				workingDir = path.toOSString();
 
@@ -188,20 +191,22 @@ public class PluginsSDKProjectProvider
 
 				IProject layoutProject = ProjectUtil.getProject(projectName);
 
-				if (!LiferayDescriptorHelper.getDescriptorVersion(layoutProject).equals("6.2.0")) {
+				if (!"6.2.0".equals(LiferayDescriptorHelper.getDescriptorVersion(layoutProject))) {
 					IPath projectPath = newSDKProjectPath.append(projectName + pluginTypeSuffix);
 
-					IPath fileWap = projectPath.append("docroot").append("blank_columns.wap.tpl");
+					IPath fileWap = FileUtil.pathAppend(projectPath, "docroot", "blank_columns.wap.tpl");
 
 					if (FileUtil.exists(fileWap)) {
-						fileWap.toFile().delete();
+						File file = fileWap.toFile();
+
+						file.delete();
 					}
 				}
 
 				break;
 
 			case theme:
-				path = sdk.getLocation().append(ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER);
+				path = sdkLocation.append(ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER);
 
 				workingDir = path.toOSString();
 
@@ -216,7 +221,7 @@ public class PluginsSDKProjectProvider
 				break;
 
 			case web:
-				path = sdk.getLocation().append(ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER);
+				path = sdkLocation.append(ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER);
 
 				workingDir = path.toOSString();
 
@@ -233,7 +238,7 @@ public class PluginsSDKProjectProvider
 
 		NewLiferayPluginProjectOpMethods.updateLocation(op);
 
-		Path projectLocation = op.getLocation().content();
+		Path projectLocation = SapphireUtil.getContent(op.getLocation());
 
 		if (!hasGradleTools) {
 			File projectDir = projectLocation.toFile();
@@ -269,11 +274,13 @@ public class PluginsSDKProjectProvider
 
 		op.setFinalProjectName(newProject.getName());
 
-		projectNames.insert().setName(op.getFinalProjectName().content());
+		ProjectName name = projectNames.insert();
+
+		name.setName(SapphireUtil.getContent(op.getFinalProjectName()));
 
 		_projectCreated(newProject);
 
-		switch (op.getPluginType().content()) {
+		switch (SapphireUtil.getContent(op.getPluginType())) {
 			case portlet:
 
 				_portletProjectCreated(op, newProject, monitor);
@@ -353,7 +360,7 @@ public class PluginsSDKProjectProvider
 	public IStatus validateProjectLocation(String name, IPath path) {
 		IStatus retval = Status.OK_STATUS;
 
-		File file = path.append(".project").toFile();
+		File file = FileUtil.getFile(path.append(".project"));
 
 		if (file.exists()) {
 			retval = ProjectCore.createErrorStatus(
@@ -387,8 +394,8 @@ public class PluginsSDKProjectProvider
 				}
 			}
 
-			if (sdkValid == false) {
-				Path sdkLocation = op.getSdkLocation().content(true);
+			if (!sdkValid) {
+				Path sdkLocation = SapphireUtil.getContent(op.getSdkLocation());
 
 				if (sdkLocation != null) {
 					sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkLocation));
@@ -417,9 +424,9 @@ public class PluginsSDKProjectProvider
 	private void _portletProjectCreated(NewLiferayPluginProjectOp op, IProject newProject, IProgressMonitor monitor)
 		throws CoreException {
 
-		IPortletFramework portletFramework = op.getPortletFramework().content();
+		IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
 
-		String portletName = op.getPortletName().content(false);
+		String portletName = SapphireUtil.getContent(op.getPortletName(), false);
 
 		String frameworkName = NewLiferayPluginProjectOpMethods.getFrameworkName(op);
 
@@ -439,7 +446,7 @@ public class PluginsSDKProjectProvider
 
 				contents = contents.replace("${sdk.dir}/ivy.xml", "../../ivy.xml");
 
-				try(InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"))){
+				try (InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"))) {
 					ivyFile.setContents(inputStream, IResource.FORCE, new NullProgressMonitor());
 				}
 			}

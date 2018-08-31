@@ -39,7 +39,7 @@ public class LiferayRuntimeNamePossibleValuesService
 
 	@Override
 	public Status problem(Value<?> value) {
-		if (value.content().equals("<None>")) {
+		if ("<None>".equals(value.content())) {
 			return Status.createOkStatus();
 		}
 

@@ -15,12 +15,15 @@
 package com.liferay.ide.project.core.upgrade.service;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.upgrade.CodeUpgradeOp;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
 import java.io.File;
+
+import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -40,7 +43,7 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService {
 	protected String compute() {
 		CodeUpgradeOp op = _op();
 
-		final Path path = op.getSdkLocation().content();
+		final Path path = SapphireUtil.getContent(op.getSdkLocation());
 
 		SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(path));
 
@@ -48,8 +51,9 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService {
 
 		try {
 			if (sdk != null) {
-				liferay62ServerLocation =
-					(String)(sdk.getBuildProperties(true).get(ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR));
+				Map<String, Object> buildProperties = sdk.getBuildProperties(true);
+
+				liferay62ServerLocation = (String)(buildProperties.get(ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR));
 
 				_checkProjects(op, sdk);
 			}
@@ -89,7 +93,9 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService {
 				if (file.isDirectory()) {
 					op.setHasPortlet("true");
 
-					File serviceXml = new Path(file.getPath()).append("docroot/WEB-INF/service.xml").toFile();
+					Path path = new Path(file.getPath()).append("docroot/WEB-INF/service.xml");
+
+					File serviceXml = path.toFile();
 
 					if (FileUtil.exists(serviceXml)) {
 						op.setHasServiceBuilder("true");
@@ -105,7 +111,9 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService {
 				if (file.isDirectory()) {
 					op.setHasHook("true");
 
-					File serviceXml = new Path(file.getPath()).append("docroot/WEB-INF/service.xml").toFile();
+					Path path = new Path(file.getPath()).append("docroot/WEB-INF/service.xml");
+
+					File serviceXml = path.toFile();
 
 					if (FileUtil.exists(serviceXml)) {
 						op.setHasServiceBuilder("true");
@@ -164,12 +172,14 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService {
 	}
 
 	private File[] _getFiles(SDK sdk, String projectType) {
-		IPath folderPath = sdk.getLocation().append(sdk.getPluginFolder(projectType));
+		IPath location = sdk.getLocation();
+
+		IPath folderPath = location.append(sdk.getPluginFolder(projectType));
 
 		File folder = folderPath.toFile();
 
 		if (FileUtil.notExists(folder)) {
-			return null;
+			return new File[0];
 		}
 
 		return folder.listFiles();

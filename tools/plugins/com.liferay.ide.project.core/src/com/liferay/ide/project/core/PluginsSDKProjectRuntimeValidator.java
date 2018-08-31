@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -66,7 +67,9 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
 
 			if (JavaProject.hasJavaNature(project)) {
 				for (IClasspathEntry entry : javaProject.getRawClasspath()) {
-					String segment = entry.getPath().segment(0);
+					IPath path = entry.getPath();
+
+					String segment = path.segment(0);
 
 					if ((entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) &&
 						segment.equals(SDKClasspathContainer.ID)) {
@@ -108,7 +111,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
 
 			for (IMarker marker : markers) {
 				for (String id : _getMarkerSourceIds()) {
-					if (marker.getAttribute(IMarker.SOURCE_ID).equals(id)) {
+					if (id.equals(marker.getAttribute(IMarker.SOURCE_ID))) {
 						marker.delete();
 
 						break;

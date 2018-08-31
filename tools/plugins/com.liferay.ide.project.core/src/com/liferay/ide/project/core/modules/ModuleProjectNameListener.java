@@ -17,6 +17,8 @@ package com.liferay.ide.project.core.modules;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
@@ -36,13 +38,13 @@ import org.eclipse.sapphire.platform.PathBridge;
 public class ModuleProjectNameListener extends FilteredListener<PropertyContentEvent> {
 
 	public static void updateLocation(NewLiferayModuleProjectOp op) {
-		String currentProjectName = op.getProjectName().content(true);
+		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
 
-		if ((currentProjectName == null) || CoreUtil.isNullOrEmpty(currentProjectName.trim())) {
+		if (CoreUtil.isNullOrEmpty(currentProjectName)) {
 			return;
 		}
 
-		boolean useDefaultLocation = op.getUseDefaultLocation().content(true);
+		boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
 
 		if (useDefaultLocation) {
 			Path newLocationBase = null;
@@ -67,12 +69,12 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
 				boolean gradleModule = false;
 				boolean mavenModule = false;
 
-				ILiferayProjectProvider provider = op.getProjectProvider().content();
+				ILiferayProjectProvider provider = SapphireUtil.getContent(op.getProjectProvider());
 
 				if (provider != null) {
 					String shortName = provider.getShortName();
 
-					if (!CoreUtil.empty(shortName) && shortName.startsWith("gradle")) {
+					if (StringUtil.startsWith(shortName, "gradle")) {
 						gradleModule = true;
 					}
 					else {
@@ -85,7 +87,7 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
 				if (op instanceof NewLiferayModuleProjectOp) {
 					NewLiferayModuleProjectOp moduleProjectOp = (NewLiferayModuleProjectOp)op;
 
-					String projectTemplateName = moduleProjectOp.getProjectTemplateName().content();
+					String projectTemplateName = SapphireUtil.getContent(moduleProjectOp.getProjectTemplateName());
 
 					for (String projectType : _WAR_TYPE_PROJECT) {
 						if (projectType.equals(projectTemplateName)) {
@@ -98,27 +100,26 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
 					IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
 					if (FileUtil.exists(liferayWorkspaceProject)) {
+						IPath workspaceLocation = liferayWorkspaceProject.getLocation();
+
 						if (themeProject) {
 							String[] warsNames = LiferayWorkspaceUtil.getWarsDirs(liferayWorkspaceProject);
 
 							// use the first configured wars fodle name
 
-							newLocationBase = PathBridge.create(
-								liferayWorkspaceProject.getLocation().append(warsNames[0]));
+							newLocationBase = PathBridge.create(workspaceLocation.append(warsNames[0]));
 						}
 						else {
 							String folder = LiferayWorkspaceUtil.getModulesDir(liferayWorkspaceProject);
 
 							if (folder != null) {
-								IPath appendPath = liferayWorkspaceProject.getLocation().append(folder);
-
-								newLocationBase = PathBridge.create(appendPath);
+								newLocationBase = PathBridge.create(workspaceLocation.append(folder));
 							}
 						}
 					}
 				}
 				else {
-					newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRoot().getLocation());
+					newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRootLocation());
 				}
 			}
 
@@ -134,7 +135,7 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
 	}
 
 	protected NewLiferayModuleProjectOp op(PropertyContentEvent event) {
-		Element element = event.property().element();
+		Element element = SapphireUtil.getElement(event);
 
 		return element.nearest(NewLiferayModuleProjectOp.class);
 	}

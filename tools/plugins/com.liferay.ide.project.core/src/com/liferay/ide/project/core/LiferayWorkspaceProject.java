@@ -47,7 +47,6 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 	@Override
 	public <T> T adapt(Class<T> adapterType) {
 		if (ILiferayPortal.class.equals(adapterType)) {
-
 			IFolder bundlesFolder = getProject().getFolder("bundles");
 
 			if (FileUtil.exists(bundlesFolder)) {
@@ -60,6 +59,41 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 		}
 
 		return super.adapt(adapterType);
+	}
+
+	@Override
+	public List<IProject> getChildProjects() {
+		if (FileUtil.notExists(getProject())) {
+			return Collections.emptyList();
+		}
+
+		if (!getProject().isOpen()) {
+			return Collections.emptyList();
+		}
+
+		IPath location = getProject().getLocation();
+
+		List<IProject> childProjects = Stream.of(
+			CoreUtil.getAllProjects()
+		).filter(
+			project -> FileUtil.exists(project)
+		).filter(
+			project -> project.isOpen()
+		).filter(
+			project -> !project.equals(getProject())
+		).filter(
+			project -> LiferayCore.create(ILiferayProject.class, project) != null
+		).filter(
+			project -> JavaCore.create(project) != null
+		).filter(
+			project -> JavaCore.create(project).isOpen()
+		).filter(
+			project -> location.isPrefixOf(project.getLocation())
+		).collect(
+			Collectors.toList()
+		);
+
+		return childProjects;
 	}
 
 	@Override
@@ -77,36 +111,4 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 		return Collections.emptyList();
 	}
 
-	@Override
-	public List<IProject> getChildProjects() {
-		if (FileUtil.notExists(getProject())) {
-			return Collections.emptyList();
-		}
-
-		if (!getProject().isOpen()) {
-			return Collections.emptyList();
-		}
-
-		List<IProject> childProjects = Stream.of(
-			CoreUtil.getAllProjects()
-		).filter(
-			project -> FileUtil.exists(project)
-		).filter(
-			project -> project.isOpen()
-		).filter(
-			project -> !project.equals(getProject())
-		).filter(
-			project -> LiferayCore.create(ILiferayProject.class, project) != null
-		).filter(
-			project -> JavaCore.create(project) != null
-		).filter(
-			project -> JavaCore.create(project).isOpen()
-		).filter(
-			project -> getProject().getLocation().isPrefixOf(project.getLocation())
-		).collect(
-			Collectors.toList()
-		);
-
-		return childProjects;
-	}
 }

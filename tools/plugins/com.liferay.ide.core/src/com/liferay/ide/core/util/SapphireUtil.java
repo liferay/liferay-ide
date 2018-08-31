@@ -15,7 +15,11 @@
 package com.liferay.ide.core.util;
 
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.Listener;
+import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 
@@ -25,49 +29,65 @@ import org.eclipse.sapphire.modeling.Status;
  */
 public class SapphireUtil {
 
-	public static void attachListener(Value<?> valueProperty, Listener listener) {
-		if ((valueProperty == null) || (listener == null)) {
+	public static void attachListener(Value<?> value, Listener listener) {
+		if ((value == null) || (listener == null)) {
 			return;
 		}
 
-		valueProperty.attach(listener);
+		value.attach(listener);
 	}
 
-	public static void detachListener(Value<?> valueProperty, Listener listener) {
-		if ((valueProperty == null) || (listener == null)) {
+	public static void clear(ElementList<?> list) {
+		list.clear();
+	}
+
+	public static void detachListener(Value<?> value, Listener listener) {
+		if ((value == null) || (listener == null)) {
 			return;
 		}
 
-		valueProperty.detach(listener);
+		value.detach(listener);
 	}
 
-	public static <T> T getContent(Value<T> valueProperty) {
-		if (valueProperty != null) {
-			return valueProperty.content();
+	public static <T> T getContent(Value<T> value) {
+		if (value != null) {
+			return value.content();
 		}
 
 		return null;
 	}
 
-	public static <T> T getContent(Value<T> valueProperty, boolean useDefaultValue) {
-		if (valueProperty != null) {
-			return valueProperty.content(useDefaultValue);
+	public static <T> T getContent(Value<T> value, boolean useDefaultValue) {
+		if (value != null) {
+			return value.content(useDefaultValue);
 		}
 
 		return null;
 	}
 
-	public static <T> String getText(Value<T> valueProperty) {
-		if (valueProperty != null) {
-			return valueProperty.text();
+	public static Element getElement(PropertyContentEvent event) {
+		Property property = event.property();
+
+		return property.element();
+	}
+
+	public static PropertyDef getPropertyDef(PropertyContentEvent event) {
+		Property property = event.property();
+
+		return property.definition();
+	}
+
+	public static <T> String getText(Value<T> value) {
+		if (value != null) {
+			return value.text();
 		}
 
 		return "";
 	}
 
-	public static <T> String getText(Value<T> valueProperty, boolean useDefaultValue) {
-		if (valueProperty != null) {
-			return valueProperty.text(useDefaultValue);
+	public static <T> String getText(Value<T> value, boolean useDefaultValue) {
+		if (value != null) {
+			return value.text(useDefaultValue);
 		}
 
 		return "";
@@ -81,6 +101,10 @@ public class SapphireUtil {
 		Status status = element.validation();
 
 		return status.ok();
+	}
+
+	public static void refresh(Value<?> value) {
+		value.refresh();
 	}
 
 }

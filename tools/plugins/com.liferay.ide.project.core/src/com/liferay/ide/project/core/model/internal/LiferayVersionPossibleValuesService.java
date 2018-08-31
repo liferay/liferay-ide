@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
@@ -56,7 +57,7 @@ public class LiferayVersionPossibleValuesService extends PossibleValuesService {
 					NewLiferayPluginProjectOp op = _op();
 
 					if (!op.disposed()) {
-						ILiferayProjectProvider projectProvider = op.getProjectProvider().content();
+						ILiferayProjectProvider projectProvider = SapphireUtil.getContent(op.getProjectProvider());
 
 						try {
 							_versions = projectProvider.getData("liferayVersions", String.class, _groupId, _artifactId);

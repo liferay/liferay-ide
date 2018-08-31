@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ITargetPlatformConstant;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ServiceContainer;
@@ -29,11 +30,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 
 import org.osgi.framework.Bundle;
 
@@ -43,7 +46,9 @@ import org.osgi.framework.Bundle;
 public class TargetPlatformUtil {
 
 	public static List<String> getAllTargetPlatfromVersions() throws IOException {
-		Bundle bundle = ProjectCore.getDefault().getBundle();
+		ProjectCore projectCore = ProjectCore.getDefault();
+
+		Bundle bundle = projectCore.getBundle();
 
 		URL url = FileLocator.toFileURL(bundle.getEntry("OSGI-INF/target-platform"));
 
@@ -56,7 +61,9 @@ public class TargetPlatformUtil {
 
 			if (tpVersionFolder != null) {
 				for (File tp : tpVersionFolder) {
-					String tpVersion = tp.getName().split("-", 2)[1].toUpperCase();
+					String name = tp.getName();
+
+					String tpVersion = StringUtil.toUpperCase(name.split("-", 2)[1]);
 
 					tpVersionList.add(tpVersion);
 				}
@@ -92,7 +99,9 @@ public class TargetPlatformUtil {
 
 	@SuppressWarnings("unchecked")
 	public static ServiceContainer getThirdPartyBundleList(String serviceName) throws Exception {
-		Bundle bundle = ProjectCore.getDefault().getBundle();
+		ProjectCore projectCore = ProjectCore.getDefault();
+
+		Bundle bundle = projectCore.getBundle();
 
 		URL url = FileLocator.toFileURL(bundle.getEntry("OSGI-INF/liferay-thirdparty-bundles.json"));
 
@@ -112,7 +121,9 @@ public class TargetPlatformUtil {
 	}
 
 	private static File _checkCurrentTargetPlatform(String type) throws IOException {
-		String currentVersion = Platform.getPreferencesService().getString(
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		String currentVersion = preferencesService.getString(
 			ProjectCore.PLUGIN_ID, ITargetPlatformConstant.CURRENT_TARGETFORM_VERSION,
 			ITargetPlatformConstant.DEFAULT_TARGETFORM_VERSION, null);
 
@@ -144,13 +155,17 @@ public class TargetPlatformUtil {
 
 		Map<String, String[]> map = mapper.readValue(tpFile, Map.class);
 
-		String[] services = map.keySet().toArray(new String[0]);
+		Set<String> set = map.keySet();
+
+		String[] services = set.toArray(new String[0]);
 
 		return new ServiceContainer(Arrays.asList(services));
 	}
 
 	private static File _useSpecificTargetPlatform(String currentVersion, String type) throws IOException {
-		Bundle bundle = ProjectCore.getDefault().getBundle();
+		ProjectCore projectCore = ProjectCore.getDefault();
+
+		Bundle bundle = projectCore.getBundle();
 
 		URL url = FileLocator.toFileURL(bundle.getEntry("OSGI-INF/target-platform/liferay-" + currentVersion));
 

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 
@@ -56,7 +57,7 @@ public class ModuleFragmentProjectGroupIdValidationService extends ValidationSer
 	protected Status compute() {
 		NewModuleFragmentOp op = _op();
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content(true);
+		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
 
 		if ("maven-module-fragment".equals(provider.getShortName())) {
 			Value<String> groupIdValue = _op().getGroupId();

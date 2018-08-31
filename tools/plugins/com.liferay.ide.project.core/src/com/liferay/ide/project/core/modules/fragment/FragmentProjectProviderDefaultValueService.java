@@ -20,6 +20,7 @@ import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
@@ -33,14 +34,16 @@ public class FragmentProjectProviderDefaultValueService extends DefaultValueServ
 	protected String compute() {
 		String retval = "gradle-module-fragment";
 
-		final IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
+		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
-		final String defaultProjectBuildType = Platform.getPreferencesService().getString(
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		String defaultProjectBuildType = preferencesService.getString(
 			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_FRAGMENT_PROJECT_BUILD_TYPE_OPTION, null,
 			prefContexts);
 
 		if (defaultProjectBuildType != null) {
-			final ILiferayProjectProvider provider = LiferayCore.getProvider(defaultProjectBuildType);
+			ILiferayProjectProvider provider = LiferayCore.getProvider(defaultProjectBuildType);
 
 			if (provider != null) {
 				retval = defaultProjectBuildType;

@@ -16,10 +16,12 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 
 import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -66,7 +68,9 @@ public class JavaPackageNameDefaultValueService extends DefaultValueService {
 							boolean inSourceFolder = false;
 
 							for (IFolder srcFolder : srcFolders) {
-								if (srcFolder.getFullPath().isPrefixOf(fragment.getPath())) {
+								IPath fullPath = srcFolder.getFullPath();
+
+								if (fullPath.isPrefixOf(fragment.getPath())) {
 									inSourceFolder = true;
 
 									break;
@@ -106,7 +110,7 @@ public class JavaPackageNameDefaultValueService extends DefaultValueService {
 
 		NewLiferayComponentOp op = _op();
 
-		op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).attach(listener);
+		SapphireUtil.attachListener(op.property(NewLiferayComponentOp.PROP_PROJECT_NAME), listener);
 	}
 
 	private NewLiferayComponentOp _op() {

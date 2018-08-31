@@ -258,8 +258,10 @@ public class ProjectImportUtil {
 
 		monitor.beginTask(Msgs.creatingSDKWorkspaceProjects, projects.length);
 
+		SDKManager sdkManager = SDKManager.getInstance();
+
 		if (ListUtil.isNotEmpty(projects)) {
-			SDK sdk = SDKManager.getInstance().getSDK(new Path(sdkLocation));
+			SDK sdk = sdkManager.getSDK(new Path(sdkLocation));
 
 			// need to add the SDK to workspace if not already available.
 
@@ -267,17 +269,18 @@ public class ProjectImportUtil {
 				sdk = SDKUtil.createSDKFromLocation(new Path(sdkLocation));
 			}
 
-			if ((sdk != null) && sdk.isValid() && !(SDKManager.getInstance().containsSDK(sdk))) {
-				SDKManager.getInstance().addSDK(sdk);
+			if ((sdk != null) && sdk.isValid() && !sdkManager.containsSDK(sdk)) {
+				sdkManager.addSDK(sdk);
 			}
 		}
 
-		for (int i = 0; i < projects.length; i++) {
-			if (projects[i] instanceof ProjectRecord) {
-				IProject project = importProject((ProjectRecord)projects[i], runtime, sdkLocation, monitor);
+		for (Object object : projects) {
+			if (object instanceof ProjectRecord) {
+				IProject project = importProject((ProjectRecord)object, runtime, sdkLocation, monitor);
 
 				if (project != null) {
 					createdProjects.add(project);
+
 					monitor.worked(createdProjects.size());
 				}
 			}
@@ -295,17 +298,17 @@ public class ProjectImportUtil {
 	public static IProject importProject(IPath projectdir, IProgressMonitor monitor, NewLiferayPluginProjectOp op)
 		throws CoreException {
 
-		IProject project = null;
-
 		ProjectRecord projectRecord = ProjectUtil.getProjectRecordForDir(projectdir.toPortableString());
 
-		File projectDir = projectRecord.getProjectLocation().toFile();
+		IPath projectLoaction = projectRecord.getProjectLocation();
 
-		SDK sdk = SDKUtil.getSDKFromProjectDir(projectDir);
+		SDK sdk = SDKUtil.getSDKFromProjectDir(projectLoaction.toFile());
 
 		if (sdk == null) {
 			return null;
 		}
+
+		IProject project = null;
 
 		if (projectRecord.projectSystemFile != null) {
 			try {
@@ -324,7 +327,9 @@ public class ProjectImportUtil {
 			}
 		}
 
-		File parent = projectdir.removeLastSegments(1).toFile();
+		projectdir = projectdir.removeLastSegments(1);
+
+		File parent = projectdir.toFile();
 
 		String parentName = parent.getName();
 
@@ -464,12 +469,14 @@ public class ProjectImportUtil {
 
 		IPath osPath = Path.fromOSString(currentPath);
 
-		if (!osPath.toFile().isAbsolute()) {
+		File file = osPath.toFile();
+
+		if (!file.isAbsolute()) {
 			return ProjectCore.createErrorStatus("\"" + currentPath + "\" is not an absolute path.");
 		}
 
 		if (FileUtil.notExists(osPath)) {
-			return ProjectCore.createErrorStatus("Directory doesn't exist.");
+			return ProjectCore.createErrorStatus("Directory does not exist.");
 		}
 
 		return Status.OK_STATUS;
@@ -493,12 +500,14 @@ public class ProjectImportUtil {
 		try {
 			IProject workspaceSdkProject = SDKUtil.getWorkspaceSDKProject();
 
-			if ((workspaceSdkProject != null) && !workspaceSdkProject.getLocation().equals(sdk.getLocation())) {
+			IPath sdkLocation = sdk.getLocation();
+
+			if ((workspaceSdkProject != null) && !sdkLocation.equals(workspaceSdkProject.getLocation())) {
 				return ProjectCore.createErrorStatus("This project has different sdk than current workspace sdk");
 			}
 		}
 		catch (CoreException ce) {
-			return ProjectCore.createErrorStatus("Can't find sdk in workspace");
+			return ProjectCore.createErrorStatus("Can not find sdk in workspace");
 		}
 
 		return sdk.validate(true);
@@ -519,13 +528,15 @@ public class ProjectImportUtil {
 
 		String projectName = record.getProjectName();
 
-		IProject existingProject = CoreUtil.getWorkspaceRoot().getProject(projectName);
+		IProject existingProject = CoreUtil.getProject(projectName);
 
 		if (FileUtil.exists(existingProject)) {
 			return ProjectCore.createErrorStatus("Project name already exists.");
 		}
 
-		File projectDir = record.getProjectLocation().toFile();
+		IPath projectLocation = record.getProjectLocation();
+
+		File projectDir = projectLocation.toFile();
 
 		SDK sdk = SDKUtil.getSDKFromProjectDir(projectDir);
 
@@ -536,12 +547,14 @@ public class ProjectImportUtil {
 		try {
 			IProject workspaceSdkProject = SDKUtil.getWorkspaceSDKProject();
 
-			if ((workspaceSdkProject != null) && !workspaceSdkProject.getLocation().equals(sdk.getLocation())) {
+			IPath sdkLocation = sdk.getLocation();
+
+			if ((workspaceSdkProject != null) && !sdkLocation.equals(workspaceSdkProject.getLocation())) {
 				return ProjectCore.createErrorStatus("This project has different sdk than current workspace sdk");
 			}
 		}
 		catch (CoreException ce) {
-			return ProjectCore.createErrorStatus("Can't find sdk in workspace");
+			return ProjectCore.createErrorStatus("Can not find sdk in workspace");
 		}
 
 		return sdk.validate(true);

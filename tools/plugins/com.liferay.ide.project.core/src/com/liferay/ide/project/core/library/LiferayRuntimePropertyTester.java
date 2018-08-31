@@ -18,6 +18,7 @@ import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.jst.common.project.facet.core.libprov.EnablementExpressionContext;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectBase;
 import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.internal.facets.FacetUtil;
 
 /**
@@ -36,7 +37,9 @@ public class LiferayRuntimePropertyTester extends PropertyTester {
 
 			IRuntime serverRuntime = FacetUtil.getRuntime(projectBase.getPrimaryRuntime());
 
-			String runtimeId = serverRuntime.getRuntimeType().getId();
+			IRuntimeType runtimeType = serverRuntime.getRuntimeType();
+
+			String runtimeId = runtimeType.getId();
 
 			if (runtimeId.startsWith("com.liferay.")) {
 				retval = true;

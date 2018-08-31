@@ -14,9 +14,10 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.core.util.SapphireUtil;
+
 import java.io.File;
 
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
@@ -40,31 +41,29 @@ public class WorkspaceLocationValidationService extends ValidationService {
 		 * display the error of project name when project name and location are both
 		 * null.
 		 */
-		Value<Path> locationValue = _op().getLocation();
+		boolean useDefaultLocation = SapphireUtil.getContent(_op().getUseDefaultLocation());
 
-		Path currentProjectLocation = locationValue.content(true);
+		if (useDefaultLocation) {
+			return retval;
+		}
 
-		Value<Boolean> useDefaultLocationValue = _op().getUseDefaultLocation();
+		Path currentProjectLocation = SapphireUtil.getContent(_op().getLocation());
 
-		boolean useDefaultLocation = useDefaultLocationValue.content(true);
+		if (currentProjectLocation != null) {
+			String currentPath = currentProjectLocation.toOSString();
 
-		if (!useDefaultLocation) {
-			if (currentProjectLocation != null) {
-				String currentPath = currentProjectLocation.toOSString();
+			File osPathFile = new File(currentProjectLocation.toOSString());
 
-				File osPathFile = Path.fromOSString(currentPath).toFile();
-
-				if (!osPathFile.isAbsolute()) {
-					return Status.createErrorStatus("\"" + currentPath + "\" is not an absolute path.");
-				}
-
-				if (!_canCreate(osPathFile)) {
-					return Status.createErrorStatus("Cannot create project content at \"" + currentPath + "\".");
-				}
+			if (!osPathFile.isAbsolute()) {
+				return Status.createErrorStatus("\"" + currentPath + "\" is not an absolute path.");
 			}
-			else {
-				return Status.createErrorStatus("Location must be specified.");
+
+			if (!_canCreate(osPathFile)) {
+				return Status.createErrorStatus("Cannot create project content at \"" + currentPath + "\".");
 			}
+		}
+		else {
+			return Status.createErrorStatus("Location must be specified.");
 		}
 
 		return retval;

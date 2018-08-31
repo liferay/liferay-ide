@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.upgrade.service;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.upgrade.CodeUpgradeOp;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -29,7 +30,7 @@ public class LiferayServerNameValidationService extends ValidationService {
 	protected Status compute() {
 		CodeUpgradeOp op = context(CodeUpgradeOp.class);
 
-		String serverName = op.getLiferayServerName().content(true);
+		String serverName = SapphireUtil.getContent(op.getLiferayServerName());
 
 		if (ServerUtil.getServer(serverName) != null) {
 			return Status.createOkStatus();

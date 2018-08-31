@@ -58,13 +58,9 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 	public final String LIFERAY_71_BUNDLE_URL =
 		"https://releases-cdn.liferay.com/portal/7.1.0-b3/liferay-ce-portal-tomcat-7.1-b3-20180611140920623.zip";
 
-	// BundleUrl
-
 	@DefaultValue(text = LIFERAY_70_BUNDLE_URL)
 	@Service(impl = BundleUrlValidationService.class)
 	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, "bundleUrl");
-
-	// ProjectProvider
 
 	@Label(standard = "build type")
 	@Service(impl = WorkspaceProjectProviderDefaultValueService.class)
@@ -72,14 +68,10 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 	@Type(base = ILiferayProjectProvider.class)
 	public ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty(TYPE, "ProjectProvider");
 
-	// ProvisionLiferayBundle
-
 	@DefaultValue(text = "false")
 	@Label(standard = "Download Liferay bundle")
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_PROVISION_LIFERAY_BUNDLE = new ValueProperty(TYPE, "provisionLiferayBundle");
-
-	// ServerName
 
 	@Service(impl = ServerNameValidationService.class)
 	public ValueProperty PROP_SERVER_NAME = new ValueProperty(TYPE, "serverName");

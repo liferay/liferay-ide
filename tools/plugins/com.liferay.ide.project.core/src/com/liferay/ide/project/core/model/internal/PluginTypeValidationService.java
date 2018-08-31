@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.model.internal;
 
 import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods.supportsTypePlugin;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.sdk.core.SDK;
@@ -47,14 +48,14 @@ public class PluginTypeValidationService extends ValidationService {
 			SDK sdk = SDKUtil.getWorkspaceSDK();
 
 			if (sdk == null) {
-				Path sdkLocation = op.getSdkLocation().content();
+				Path sdkLocation = SapphireUtil.getContent(op.getSdkLocation());
 
 				if (sdkLocation != null) {
 					sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkLocation));
 				}
 			}
 
-			PluginType pluginType = op.getPluginType().content();
+			PluginType pluginType = SapphireUtil.getContent(op.getPluginType());
 
 			if (sdk != null) {
 				if (pluginType.equals(PluginType.web) && !supportsTypePlugin(op, "web")) {
@@ -110,7 +111,7 @@ public class PluginTypeValidationService extends ValidationService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		op.getProjectProvider().attach(listener);
+		SapphireUtil.attachListener(op.getProjectProvider(), listener);
 	}
 
 	private NewLiferayPluginProjectOp _op() {

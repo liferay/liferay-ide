@@ -25,8 +25,11 @@
 	varImpl="greetURL"
 />
 
-<@aui["form"] action="${greetURL}" method="post" name="fm">
-
+<@aui["form"]
+	action="${greetURL}"
+	method="post"
+	name="fm"
+>
 	<@aui["input"]
 		name="name"
 		type="text"

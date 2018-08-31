@@ -188,7 +188,9 @@ public final class PossibleValuesRadioButtonsGroupBinding<T> extends AbstractBin
 		if (!this._buttonsGroup.isDisposed()) {
 			if (_badValueButton != null) {
 				_badValueButton.dispose();
+
 				_badValueButton = null;
+
 				presentation().layout();
 			}
 		}

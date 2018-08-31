@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -44,7 +45,7 @@ public class ImportLiferayWorkspaceWizard extends BaseProjectWizard<ImportLifera
 		final IWizardPage[] wizardPages = super.getPages();
 
 		if (!_firstErrorMessageRemoved && (wizardPages != null)) {
-			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
+			SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
 
 			try {
 				if (LiferayWorkspaceUtil.hasWorkspace()) {
@@ -72,11 +73,11 @@ public class ImportLiferayWorkspaceWizard extends BaseProjectWizard<ImportLifera
 	protected void performPostFinish() {
 		super.performPostFinish();
 
-		final ImportLiferayWorkspaceOp op = element().nearest(ImportLiferayWorkspaceOp.class);
+		ImportLiferayWorkspaceOp op = element().nearest(ImportLiferayWorkspaceOp.class);
 
-		Path projectPath = op.getWorkspaceLocation().content();
+		Path projectPath = SapphireUtil.getContent(op.getWorkspaceLocation());
 
-		final IProject newProject = CoreUtil.getProject(projectPath.lastSegment());
+		IProject newProject = CoreUtil.getProject(projectPath.lastSegment());
 
 		try {
 			addToWorkingSets(newProject);

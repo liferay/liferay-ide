@@ -37,13 +37,11 @@ public class HookClasspathContainer extends PluginClasspathContainer {
 
 	@Override
 	protected String[] getPortalJars() {
-		return portalJars;
+		return new String[] {
+			"commons-logging.jar", "log4j.jar", "util-bridges.jar", "util-java.jar", "util-taglib.jar", "struts.jar",
+			"struts-el.jar"
+		};
 	}
-
-	protected static final String[] portalJars = {
-		"commons-logging.jar", "log4j.jar", "util-bridges.jar", "util-java.jar", "util-taglib.jar", "struts.jar",
-		"struts-el.jar"
-	};
 
 	private static class Msgs extends NLS {
 

@@ -20,6 +20,7 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.ClasspathContainerInitializer;
@@ -106,7 +107,9 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
 			IClasspathAttribute[] attrs = entry.getExtraAttributes();
 
 			if ((srcpath != null) || ListUtil.isNotEmpty(attrs)) {
-				String eid = entry.getPath().toString();
+				IPath path = entry.getPath();
+
+				String eid = path.toString();
 
 				ClasspathDecorations dec = new ClasspathDecorations();
 
@@ -139,12 +142,12 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
 			sourceLocation = ((SDKClasspathContainer)containerSuggestion).getSourceLocation();
 			bundleDependencyJarPaths = ((SDKClasspathContainer)containerSuggestion).getBundleLibDependencyPath();
 
-			if ((bundle != null) && bundle.getAppServerPortalDir().equals(portalDir)) {
+			if ((bundle != null) && portalDir.equals(bundle.getAppServerPortalDir())) {
 				containerChanged = false;
 			}
 		}
 
-		if (containerChanged == true) {
+		if (containerChanged) {
 			if (bundle == null) {
 				return;
 			}
@@ -171,8 +174,10 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
 
 	protected static final ClasspathDecorationsManager cpDecorations = SDKClasspathContainer.getDecorationsManager();
 
-	private IPath[] _getSDKDependencies(IJavaProject project) {
-		IPath path = project.getProject().getLocation();
+	private IPath[] _getSDKDependencies(IJavaProject javaProject) {
+		IProject project = javaProject.getProject();
+
+		IPath path = project.getLocation();
 
 		SDK sdk = SDKUtil.getSDKFromProjectDir(path.toFile());
 

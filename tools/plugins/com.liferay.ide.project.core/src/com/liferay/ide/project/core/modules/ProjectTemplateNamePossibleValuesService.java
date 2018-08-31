@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.modeling.Status;
 
 /**
  * @author Simon Jiang
@@ -31,8 +32,8 @@ public class ProjectTemplateNamePossibleValuesService extends PossibleValuesServ
 	}
 
 	@Override
-	public org.eclipse.sapphire.modeling.Status problem(Value<?> value) {
-		return org.eclipse.sapphire.modeling.Status.createOkStatus();
+	public Status problem(Value<?> value) {
+		return Status.createOkStatus();
 	}
 
 	@Override

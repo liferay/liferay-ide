@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -34,8 +35,8 @@ public class UseDefaultLocationValidationService extends ValidationService {
 		NewLiferayPluginProjectOp op = _op();
 
 		if ((op != null) && !op.disposed()) {
-			op.getProjectProvider().detach(_listener);
-			op.getProjectName().detach(_listener);
+			SapphireUtil.detachListener(op.getProjectProvider(), _listener);
+			SapphireUtil.detachListener(op.getProjectName(), _listener);
 		}
 	}
 
@@ -45,10 +46,12 @@ public class UseDefaultLocationValidationService extends ValidationService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content();
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
+			op.getProjectProvider());
 
-		if ((op.getProjectName().content() != null) && "ant".equals(provider.getShortName()) &&
-			!op.getUseDefaultLocation().content() && !NewLiferayPluginProjectOpMethods.canUseCustomLocation(op)) {
+		if ((SapphireUtil.getContent(op.getProjectName()) != null) && "ant".equals(provider.getShortName()) &&
+			!SapphireUtil.getContent(op.getUseDefaultLocation()) &&
+			!NewLiferayPluginProjectOpMethods.canUseCustomLocation(op)) {
 
 			retval = Status.createErrorStatus("The specified SDK version is not allowed to use custom location.");
 		}
@@ -71,8 +74,8 @@ public class UseDefaultLocationValidationService extends ValidationService {
 
 		final NewLiferayPluginProjectOp op = _op();
 
-		op.getProjectProvider().attach(_listener);
-		op.getProjectName().attach(_listener);
+		SapphireUtil.attachListener(op.getProjectProvider(), _listener);
+		SapphireUtil.attachListener(op.getProjectName(), _listener);
 	}
 
 	private NewLiferayPluginProjectOp _op() {

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 import com.liferay.ide.server.core.portal.PortalServerBehavior;
@@ -66,12 +67,12 @@ public class ServiceCommand {
 		}
 
 		if (_serviceName == null) {
-			String[] services = _getServices(bundleDeployer);
+			String[] services = _getServices();
 
 			result = new ServiceContainer(Arrays.asList(services));
 		}
 		else {
-			String[] serviceBundle = _getServiceBundle(_serviceName, bundleDeployer);
+			String[] serviceBundle = _getServiceBundle();
 
 			result = new ServiceContainer(serviceBundle[0], serviceBundle[1], serviceBundle[2]);
 		}
@@ -79,7 +80,7 @@ public class ServiceCommand {
 		return result;
 	}
 
-	private String[] _getServiceBundle(String serviceName, GogoBundleDeployer bundleDeployer) throws Exception {
+	private String[] _getServiceBundle() throws Exception {
 		String[] serviceBundleInfo;
 		String bundleGroup = "";
 		String bundleName;
@@ -139,7 +140,7 @@ public class ServiceCommand {
 		return result;
 	}
 
-	private String[] _getServices(GogoBundleDeployer bundleDeployer) throws Exception {
+	private String[] _getServices() throws Exception {
 		return _parseService("");
 	}
 
@@ -150,7 +151,7 @@ public class ServiceCommand {
 
 		String str = serviceName.substring(0, serviceName.indexOf("["));
 
-		str = str.replaceAll("\"Registered by bundle:\"", "").trim();
+		str = StringUtil.trim(str.replaceAll("\"Registered by bundle:\"", ""));
 
 		String[] result = str.split("_");
 
@@ -184,7 +185,9 @@ public class ServiceCommand {
 		List<String> listservice = new ArrayList<>();
 
 		for (String bs : ls) {
-			if (bs.split(",").length > 1) {
+			String[] s = bs.split(",");
+
+			if (s.length > 1) {
 				for (String bbs : bs.split(",")) {
 					listservice.add(bbs.trim());
 				}

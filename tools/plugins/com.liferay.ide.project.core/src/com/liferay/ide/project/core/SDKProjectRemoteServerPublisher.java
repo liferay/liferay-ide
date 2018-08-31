@@ -16,6 +16,7 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
@@ -56,9 +57,11 @@ public class SDKProjectRemoteServerPublisher extends AbstractRemoteServerPublish
 	public IPath publishModuleFull(IProgressMonitor monitor) throws CoreException {
 		IPath deployPath = LiferayServerCore.getTempLocation("direct-deploy", StringPool.EMPTY);
 
-		File warFile = deployPath.append(getProject().getName() + ".war").toFile();
+		File warFile = FileUtil.getFile(deployPath.append(getProject().getName() + ".war"));
 
-		warFile.getParentFile().mkdirs();
+		File parent = warFile.getParentFile();
+
+		parent.mkdirs();
 
 		Map<String, String> properties = new HashMap<>();
 
@@ -105,26 +108,25 @@ public class SDKProjectRemoteServerPublisher extends AbstractRemoteServerPublish
 				IResource propsRes = webproject.findDocrootResource(pluginPropertiesPath);
 
 				if (propsRes instanceof IFile && propsRes.exists()) {
-
-					try(InputStream is = ((IFile)propsRes).getContents()) {
-
+					try (InputStream is = ((IFile)propsRes).getContents()) {
 						PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
 
 						pluginPackageProperties.load(is);
 
 						pluginVersion = pluginPackageProperties.getString("module-incremental-version");
-
 					}
 					catch (Exception e) {
 						LiferayCore.logError("error reading module-incremtnal-version. ", e);
 					}
 				}
 
-				IPath distPath = _sdk.getLocation().append("dist");
+				IPath sdkLocation = _sdk.getLocation();
+
+				IPath distPath = sdkLocation.append("dist");
 
 				String fullName = getProject().getName() + "-" + fileTimeStamp + "." + pluginVersion + ".0.war";
 
-				warFile = distPath.append(fullName).toFile();
+				warFile = FileUtil.getFile(distPath.append(fullName));
 
 				if (!warFile.exists()) {
 					throw new CoreException(directDeployStatus);

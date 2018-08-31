@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
 
@@ -37,7 +38,7 @@ public class ServicePossibleValuesService extends PossibleValuesService {
 		NewLiferayModuleProjectOp op = _op();
 
 		if (_listener != null) {
-			op.property(NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME).detach(_listener);
+			SapphireUtil.detachListener(op.property(NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME), _listener);
 
 			_listener = null;
 		}
@@ -54,7 +55,7 @@ public class ServicePossibleValuesService extends PossibleValuesService {
 	protected void compute(Set<String> values) {
 		NewLiferayModuleProjectOp op = _op();
 
-		String template = op.getProjectTemplateName().content(true);
+		String template = SapphireUtil.getContent(op.getProjectTemplateName());
 
 		if (template.equals("service-wrapper")) {
 			try {
@@ -90,7 +91,7 @@ public class ServicePossibleValuesService extends PossibleValuesService {
 
 		NewLiferayModuleProjectOp op = _op();
 
-		op.property(NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME).attach(_listener);
+		SapphireUtil.attachListener(op.property(NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME), _listener);
 	}
 
 	private NewLiferayModuleProjectOp _op() {

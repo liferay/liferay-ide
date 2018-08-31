@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
 import org.eclipse.core.runtime.IStatus;
@@ -36,10 +37,10 @@ public class ModuleProjectGroupIdValidationService extends ValidationService {
 	protected Status compute() {
 		NewLiferayModuleProjectOp op = _op();
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content(true);
+		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
 
 		if ("maven-module".equals(provider.getShortName())) {
-			String groupId = op.getGroupId().content(true);
+			String groupId = SapphireUtil.getContent(op.getGroupId());
 
 			IStatus javaStatus = JavaConventions.validatePackageName(
 				groupId, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
@@ -67,9 +68,9 @@ public class ModuleProjectGroupIdValidationService extends ValidationService {
 
 		NewLiferayModuleProjectOp op = _op();
 
-		op.getProjectProvider().attach(_listener);
-		op.getPackageName().attach(_listener);
-		op.getLocation().attach(_listener);
+		SapphireUtil.attachListener(op.getProjectProvider(), _listener);
+		SapphireUtil.attachListener(op.getPackageName(), _listener);
+		SapphireUtil.attachListener(op.getLocation(), _listener);
 	}
 
 	private NewLiferayModuleProjectOp _op() {

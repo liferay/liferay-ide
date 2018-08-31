@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class JavaPackageNameValidationService extends ValidationService {
 
 		NewLiferayComponentOp op = _op();
 
-		String projectName = op.getProjectName().text(true); 
+		String projectName = SapphireUtil.getText(op.getProjectName());
 
 		if (projectName != null) {
 			IJavaProject javaproject = JavaCore.create(CoreUtil.getProject(projectName));
@@ -61,7 +62,7 @@ public class JavaPackageNameValidationService extends ValidationService {
 			}
 		}
 
-		JavaPackageName packageName = op.getPackageName().content(true);
+		JavaPackageName packageName = SapphireUtil.getContent(op.getPackageName());
 
 		if (packageName != null) {
 			IStatus status = JavaConventions.validatePackageName(

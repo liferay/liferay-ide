@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ValidationUtil;
 
@@ -66,15 +67,13 @@ public class WorkspaceNameValidationService extends ValidationService {
 			return StatusBridge.create(ce.getStatus());
 		}
 
-		NewLiferayWorkspaceOp op = _op();
-
-		String currentWorkspaceName = op.getWorkspaceName().content();
+		String currentWorkspaceName = SapphireUtil.getContent(_op().getWorkspaceName());
 
 		if (CoreUtil.isNullOrEmpty(currentWorkspaceName)) {
 			return Status.createErrorStatus("Liferay Workspace project name could not be empty.");
 		}
 
-		IStatus nameStatus = CoreUtil.getWorkspace().validateName(currentWorkspaceName, IResource.PROJECT);
+		IStatus nameStatus = CoreUtil.validateName(currentWorkspaceName, IResource.PROJECT);
 
 		if (!nameStatus.isOK()) {
 			return StatusBridge.create(nameStatus);
@@ -88,7 +87,7 @@ public class WorkspaceNameValidationService extends ValidationService {
 			return Status.createErrorStatus("A project with that name(ignore case) already exists.");
 		}
 
-		if (_isExistingFolder(op, currentWorkspaceName)) {
+		if (_isExistingFolder(currentWorkspaceName)) {
 			return Status.createErrorStatus("Target project folder is not empty.");
 		}
 
@@ -108,16 +107,16 @@ public class WorkspaceNameValidationService extends ValidationService {
 
 		};
 
-		Value<Path> location = _op().getLocation();
-
-		location.attach(_listener);
+		SapphireUtil.attachListener(_op().getLocation(), _listener);
 	}
 
-	private boolean _isExistingFolder(NewLiferayWorkspaceOp op, String projectName) {
-		Path location = op.getLocation().content();
+	private boolean _isExistingFolder(String projectName) {
+		Path location = SapphireUtil.getContent(_op().getLocation());
 
 		if (location != null) {
-			File targetDir = location.append(projectName).toFile();
+			Path path = location.append(projectName);
+
+			File targetDir = path.toFile();
 
 			if (FileUtil.hasChildren(targetDir)) {
 				return true;

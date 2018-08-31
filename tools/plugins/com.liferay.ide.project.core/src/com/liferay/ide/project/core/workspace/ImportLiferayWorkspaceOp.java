@@ -57,30 +57,20 @@ public interface ImportLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
 	public void setWorkspaceLocation(String value);
 
-	// BuildType
-
 	@Derived
 	@Service(impl = ImportWorkspaceBuildTypeDerivedValueService.class)
 	public ValueProperty PROP_BUILD_TYPE = new ValueProperty(TYPE, "BuildType");
 
-	// BundleUrl
-
 	@Service(impl = BundleUrlDefaultValueService.class)
 	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_BUNDLE_URL);
-
-	// HasBundlesDir
 
 	@Derived
 	@Service(impl = HasBundlesDirDerivedValueService.class)
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_HAS_BUNDLES_DIR = new ValueProperty(TYPE, "hasBundlesDir");
 
-	// ServerName
-
 	@Service(impl = ImportLiferayWorkspaceServerNameService.class)
 	public ValueProperty PROP_SERVER_NAME = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME);
-
-	// WorkspaceLocation
 
 	@AbsolutePath
 	@Label(standard = "workspace location")

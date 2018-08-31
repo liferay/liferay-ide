@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.sdk.core.SDK;
@@ -46,7 +47,7 @@ public class LocationValidationService extends ValidationService {
 		NewLiferayPluginProjectOp op = _op();
 
 		if ((_listener != null) && (op != null) && !op.disposed()) {
-			op.getProjectName().detach(_listener);
+			SapphireUtil.detachListener(op.getProjectName(), _listener);
 
 			_listener = null;
 		}
@@ -58,9 +59,10 @@ public class LocationValidationService extends ValidationService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content();
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
+			op.getProjectProvider());
 
-		if (provider.getShortName().equals("ant")) {
+		if ("ant".equals(provider.getShortName())) {
 			SDK sdk = null;
 
 			try {
@@ -79,8 +81,8 @@ public class LocationValidationService extends ValidationService {
 			}
 		}
 
-		Path currentProjectLocation = op.getLocation().content(true);
-		String currentProjectName = op.getProjectName().content();
+		Path currentProjectLocation = SapphireUtil.getContent(op.getLocation());
+		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
 
 		/*
 		 * Location won't be validated if the UseDefaultLocation has an error.
@@ -89,7 +91,10 @@ public class LocationValidationService extends ValidationService {
 		 */
 		Value<Boolean> useDefalutLocationValue = op.getUseDefaultLocation();
 
-		Status status = useDefalutLocationValue.service(UseDefaultLocationValidationService.class).validation();
+		UseDefaultLocationValidationService service = useDefalutLocationValue.service(
+			UseDefaultLocationValidationService.class);
+
+		Status status = service.validation();
 
 		if (!useDefalutLocationValue.content(true) && status.ok() && (currentProjectName != null)) {
 			/*
@@ -110,11 +115,13 @@ public class LocationValidationService extends ValidationService {
 
 			IPath osPath = org.eclipse.core.runtime.Path.fromOSString(currentPath);
 
-			if (!osPath.toFile().isAbsolute()) {
+			File osFile = osPath.toFile();
+
+			if (!osFile.isAbsolute()) {
 				return Status.createErrorStatus("\"" + currentPath + "\" is not an absolute path.");
 			}
 
-			if (FileUtil.notExists(osPath) && !_canCreate(osPath.toFile())) {
+			if (FileUtil.notExists(osPath) && !_canCreate(osFile)) {
 				retval = Status.createErrorStatus("Cannot create project content at \"" + currentPath + "\"");
 			}
 
@@ -141,8 +148,8 @@ public class LocationValidationService extends ValidationService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		op.getProjectName().attach(_listener);
-		op.getProjectProvider().attach(_listener);
+		SapphireUtil.attachListener(op.getProjectName(), _listener);
+		SapphireUtil.attachListener(op.getProjectProvider(), _listener);
 	}
 
 	private boolean _canCreate(File file) {

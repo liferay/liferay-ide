@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.resources.IProject;
@@ -41,9 +42,10 @@ public class NewLiferayComponentValidationService extends ValidationService {
 		NewLiferayComponentOp op = _op();
 
 		if (_listener != null) {
-			op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).detach(_listener);
-			op.property(NewLiferayComponentOp.PROP_PACKAGE_NAME).detach(_listener);
-			op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME).detach(_listener);
+			SapphireUtil.detachListener(op.property(NewLiferayComponentOp.PROP_PROJECT_NAME), _listener);
+			SapphireUtil.detachListener(op.property(NewLiferayComponentOp.PROP_PACKAGE_NAME), _listener);
+			SapphireUtil.detachListener(
+				op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME), _listener);
 
 			_listener = null;
 		}
@@ -57,7 +59,7 @@ public class NewLiferayComponentValidationService extends ValidationService {
 
 		NewLiferayComponentOp op = _op();
 
-		String className = op.getComponentClassName().content(true);
+		String className = SapphireUtil.getContent(op.getComponentClassName());
 
 		if (!CoreUtil.isNullOrEmpty(className)) {
 			IStatus status = JavaConventions.validateJavaTypeName(
@@ -74,14 +76,14 @@ public class NewLiferayComponentValidationService extends ValidationService {
 			}
 		}
 
-		String projectName = op.getProjectName().content(true);
+		String projectName = SapphireUtil.getContent(op.getProjectName());
 
 		if (projectName != null) {
 			IProject project = CoreUtil.getProject(projectName);
 
 			if (project != null) {
 				try {
-					JavaPackageName pack = op.getPackageName().content(true);
+					JavaPackageName pack = SapphireUtil.getContent(op.getPackageName());
 
 					if (pack != null) {
 						String packageName = pack.toString();
@@ -119,9 +121,9 @@ public class NewLiferayComponentValidationService extends ValidationService {
 
 		NewLiferayComponentOp op = _op();
 
-		op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).attach(_listener);
-		op.property(NewLiferayComponentOp.PROP_PACKAGE_NAME).attach(_listener);
-		op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME).attach(_listener);
+		SapphireUtil.attachListener(op.property(NewLiferayComponentOp.PROP_PROJECT_NAME), _listener);
+		SapphireUtil.attachListener(op.property(NewLiferayComponentOp.PROP_PACKAGE_NAME), _listener);
+		SapphireUtil.attachListener(op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME), _listener);
 	}
 
 	private NewLiferayComponentOp _op() {

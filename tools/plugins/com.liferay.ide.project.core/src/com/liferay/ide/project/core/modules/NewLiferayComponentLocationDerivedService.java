@@ -15,12 +15,13 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.sapphire.Value;
 
 /**
  * @author Simon Jiang
@@ -32,7 +33,7 @@ public class NewLiferayComponentLocationDerivedService extends DerivedValueServi
 		NewLiferayComponentOp op = _op();
 
 		if (op != null) {
-			op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).detach(_listener);
+			SapphireUtil.detachListener(op.property(NewLiferayComponentOp.PROP_PROJECT_NAME), _listener);
 		}
 
 		super.dispose();
@@ -40,23 +41,17 @@ public class NewLiferayComponentLocationDerivedService extends DerivedValueServi
 
 	@Override
 	protected String compute() {
-		String retVal = null;
-
-		Value<String> projectName = _op().getProjectName();
+		String projectName = SapphireUtil.getContent(_op().getProjectName());
 
 		if (projectName != null) {
-			String iProjectName = projectName.content(true);
+			IProject project = CoreUtil.getProject(projectName);
 
-			if (iProjectName != null) {
-				IProject project = CoreUtil.getProject(iProjectName);
-
-				if (project != null) {
-					return project.getLocation().toOSString();
-				}
+			if (project != null) {
+				return FileUtil.getLocationOSString(project);
 			}
 		}
 
-		return retVal;
+		return "";
 	}
 
 	@Override
@@ -74,7 +69,7 @@ public class NewLiferayComponentLocationDerivedService extends DerivedValueServi
 
 		NewLiferayComponentOp op = _op();
 
-		op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).attach(_listener);
+		SapphireUtil.attachListener(op.property(NewLiferayComponentOp.PROP_PROJECT_NAME), _listener);
 	}
 
 	private NewLiferayComponentOp _op() {

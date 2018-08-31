@@ -18,6 +18,7 @@ import com.liferay.ide.sdk.core.SDKUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DefaultValueService;
 
 /**
@@ -33,7 +34,9 @@ public class SdkLocationDefaultValueService extends DefaultValueService {
 			IProject sdk = SDKUtil.getWorkspaceSDKProject();
 
 			if (sdk != null) {
-				retVal = sdk.getLocation().toString();
+				IPath location = sdk.getLocation();
+
+				retVal = location.toString();
 			}
 		}
 		catch (CoreException ce) {

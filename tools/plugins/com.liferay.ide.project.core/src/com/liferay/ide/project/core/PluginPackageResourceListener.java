@@ -21,12 +21,14 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.ValidationUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.server.util.ComponentUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.io.File;
 import java.io.InputStream;
 
 import java.nio.file.Files;
@@ -46,7 +48,6 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -72,9 +73,11 @@ import org.eclipse.wst.common.componentcore.internal.operation.AddReferenceDataM
 import org.eclipse.wst.common.componentcore.internal.operation.RemoveReferenceDataModelProvider;
 import org.eclipse.wst.common.componentcore.internal.resources.VirtualArchiveComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.componentcore.resources.IVirtualReference;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -99,7 +102,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 			for (IProjectFacetVersion facet : facetedProject.getProjectFacets()) {
 				IProjectFacet projectFacet = facet.getProjectFacet();
 
-				if (projectFacet.getId().startsWith("liferay.")) {
+				if (StringUtil.startsWith(projectFacet.getId(), "liferay.")) {
 					return true;
 				}
 			}
@@ -116,7 +119,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 		}
 
 		try {
-			event.getDelta().accept(this);
+			IResourceDelta delta = event.getDelta();
+
+			delta.accept(this);
 		}
 		catch (Throwable e) {
 			e.printStackTrace();
@@ -124,7 +129,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 	}
 
 	public boolean visit(IResourceDelta delta) throws CoreException {
-		switch (delta.getResource().getType()) {
+		IResource resource = delta.getResource();
+
+		switch (resource.getType()) {
 			case IResource.ROOT:
 			case IResource.PROJECT:
 			case IResource.FOLDER:
@@ -141,7 +148,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 					public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
 						IResource resource = delta.getResource();
 
-						if (!ValidationUtil.isProjectTargetDirFile(resource.getLocation().toFile())) {
+						IPath location = resource.getLocation();
+
+						if (!ValidationUtil.isProjectTargetDirFile(location.toFile())) {
 							processPropertiesFile((IFile)resource);
 						}
 
@@ -190,8 +199,10 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
 		String type = VirtualArchiveComponent.LIBARCHIVETYPE + IPath.SEPARATOR;
 
+		IPath relativePath = serviceJarPath.makeRelative();
+
 		IVirtualComponent archive = ComponentCore.createArchiveComponent(
-			rootComponent.getProject(), type + serviceJarPath.makeRelative().toString());
+			rootComponent.getProject(), type + relativePath.toString());
 
 		IVirtualReference ref = ComponentCore.createReference(
 			rootComponent, archive, new Path(J2EEConstants.WEB_INF_LIB).makeAbsolute());
@@ -216,7 +227,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 			return;
 		}
 
-		IFolder webroot = (IFolder)component.getRootFolder().getUnderlyingFolder();
+		IVirtualFolder virtualFolder = component.getRootFolder();
+
+		IFolder webroot = (IFolder)virtualFolder.getUnderlyingFolder();
 
 		IFolder tldFolder = webroot.getFolder("WEB-INF/tld");
 
@@ -231,7 +244,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 				if (!tldFile.exists()) {
 					IPath realPortalTld = portalDir.append("WEB-INF/tld/" + portalTld);
 
-					if (realPortalTld.toFile().exists()) {
+					if (FileUtil.exists(realPortalTld)) {
 						tldFilesToCopy.add(realPortalTld);
 					}
 				}
@@ -251,8 +264,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 				for (IPath tldFileToCopy : tldFilesToCopy) {
 					IFile newTldFile = tldFolder.getFile(tldFileToCopy.lastSegment());
 
-					try(InputStream inputStream = 
-							Files.newInputStream(tldFileToCopy.toFile().toPath())) {
+					File file = tldFileToCopy.toFile();
+
+					try (InputStream inputStream = Files.newInputStream(file.toPath())) {
 						newTldFile.create(inputStream, true, null);
 					}
 					catch (Exception e) {
@@ -281,7 +295,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
 		for (IClasspathEntry entry : entries) {
 			if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
-				String segment = entry.getPath().segment(0);
+				IPath path = entry.getPath();
+
+				String segment = path.segment(0);
 
 				if (segment.equals(PluginClasspathContainerInitializer.ID) ||
 					segment.equals(SDKClasspathContainer.ID)) {
@@ -307,8 +323,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
 		Properties props = new Properties();
 
-		try(InputStream contents = pluginPackagePropertiesFile.getContents();) {
-
+		try (InputStream contents = pluginPackagePropertiesFile.getContents();) {
 			props.load(contents);
 
 			// processPortalDependencyTlds(props, pluginPackagePropertiesFile.getProject());
@@ -421,7 +436,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 		}
 
 		try {
-			dm.getDefaultOperation().execute(new NullProgressMonitor(), null);
+			IDataModelOperation dataModelOperation = dm.getDefaultOperation();
+
+			dataModelOperation.execute(new NullProgressMonitor(), null);
 		}
 		catch (ExecutionException ee) {
 			ProjectCore.logError(ee);
@@ -452,7 +469,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 		IPath fullPath = delta.getFullPath();
 
 		if ((fullPath.lastSegment() == null) ||
-			!fullPath.lastSegment().equals(ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE)) {
+			!ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE.equals(fullPath.lastSegment())) {
 
 			return false;
 		}
@@ -520,11 +537,15 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 		IClasspathEntry[] webappEntries = container.getClasspathEntries();
 
 		for (IClasspathEntry entry : webappEntries) {
-			String archiveName = entry.getPath().lastSegment();
+			IPath path = entry.getPath();
+
+			String archiveName = path.lastSegment();
 
 			for (IVirtualReference ref : addRefs) {
-				if (ref.getArchiveName().equals(archiveName)) {
-					IFile referencedFile = (IFile)ref.getReferencedComponent().getAdapter(IFile.class);
+				if (archiveName.equals(ref.getArchiveName())) {
+					IVirtualComponent component = ref.getReferencedComponent();
+
+					IFile referencedFile = (IFile)component.getAdapter(IFile.class);
 
 					IProject referencedFileProject = referencedFile.getProject();
 
@@ -545,7 +566,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 	}
 
 	private IFile _getWorkspaceFile(IPath path) {
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
 
 		IFile file = root.getFile(path);
 

@@ -18,6 +18,7 @@ import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
@@ -38,7 +39,9 @@ public class IncludeSampleCodeDefaultValueService extends DefaultValueService {
 
 		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
-		_includeSampleCode = Platform.getPreferencesService().getBoolean(
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		_includeSampleCode = preferencesService.getBoolean(
 			ProjectCore.PLUGIN_ID, ProjectCore.PREF_INCLUDE_SAMPLE_CODE, true, prefContexts);
 	}
 

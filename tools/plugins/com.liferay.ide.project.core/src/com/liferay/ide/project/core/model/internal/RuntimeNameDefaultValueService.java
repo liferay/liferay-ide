@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.sapphire.DefaultValueService;
+import org.eclipse.sapphire.Value;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
@@ -60,8 +61,9 @@ public class RuntimeNameDefaultValueService extends DefaultValueService implemen
 
 		HasLiferayRuntime op = context(HasLiferayRuntime.class);
 
-		RuntimeNamePossibleValuesService service = op.property(
-			HasLiferayRuntime.PROP_RUNTIME_NAME).service(RuntimeNamePossibleValuesService.class);
+		Value<Object> valueObject = op.property(HasLiferayRuntime.PROP_RUNTIME_NAME);
+
+		RuntimeNamePossibleValuesService service = valueObject.service(RuntimeNamePossibleValuesService.class);
 
 		Set<String> values = new HashSet<>();
 

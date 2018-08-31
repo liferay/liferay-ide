@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.core.util.SapphireUtil;
+
 import org.apache.commons.validator.routines.UrlValidator;
 
 import org.eclipse.sapphire.modeling.Status;
@@ -31,7 +33,7 @@ public class BundleUrlValidationService extends ValidationService {
 
 		BaseLiferayWorkspaceOp op = _op();
 
-		String bundleUrl = op.getBundleUrl().content();
+		String bundleUrl = SapphireUtil.getContent(op.getBundleUrl());
 
 		UrlValidator urlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS | UrlValidator.ALLOW_ALL_SCHEMES);
 

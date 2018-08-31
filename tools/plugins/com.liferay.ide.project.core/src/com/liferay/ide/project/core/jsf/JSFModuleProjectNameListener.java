@@ -16,6 +16,8 @@ package com.liferay.ide.project.core.jsf;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
@@ -23,6 +25,7 @@ import java.io.File;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -33,7 +36,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 public class JSFModuleProjectNameListener extends FilteredListener<PropertyContentEvent> {
 
 	public static void updateLocation(NewLiferayJSFModuleProjectOp op) {
-		String currentProjectName = op.getProjectName().content(true);
+		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
 
 		Path newLocationBase = null;
 
@@ -41,13 +44,13 @@ public class JSFModuleProjectNameListener extends FilteredListener<PropertyConte
 			return;
 		}
 
-		boolean useDefaultLocation = op.getUseDefaultLocation().content(true);
+		boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
 
 		if (useDefaultLocation) {
-			newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRoot().getLocation());
+			newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRootLocation());
 		}
 		else {
-			Path currentProjectLocation = op.getLocation().content(true);
+			Path currentProjectLocation = SapphireUtil.getContent(op.getLocation());
 
 			boolean hasLiferayWorkspace = false;
 
@@ -72,14 +75,14 @@ public class JSFModuleProjectNameListener extends FilteredListener<PropertyConte
 					IPath projectLocation = PathBridge.create(currentProjectLocation);
 
 					for (String folder : folders) {
-						if (projectLocation.lastSegment().endsWith(folder)) {
+						if (StringUtil.endsWith(projectLocation.lastSegment(), folder)) {
 							appendWarFolder = true;
 
 							break;
 						}
 					}
 
-					if (appendWarFolder == true) {
+					if (appendWarFolder) {
 						newLocationBase = PathBridge.create(projectLocation);
 					}
 					else {
@@ -87,7 +90,7 @@ public class JSFModuleProjectNameListener extends FilteredListener<PropertyConte
 					}
 				}
 				else {
-					newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRoot().getLocation());
+					newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRootLocation());
 				}
 			}
 		}
@@ -103,7 +106,9 @@ public class JSFModuleProjectNameListener extends FilteredListener<PropertyConte
 	}
 
 	protected NewLiferayJSFModuleProjectOp op(PropertyContentEvent event) {
-		Element element = event.property().element();
+		Property property = event.property();
+
+		Element element = property.element();
 
 		return element.nearest(NewLiferayJSFModuleProjectOp.class);
 	}

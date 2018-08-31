@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.ParentSDKProjectImportOp;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -21,7 +22,6 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 
@@ -35,7 +35,7 @@ public class SDKImportDerivedValueService extends DerivedValueService {
 		ParentSDKProjectImportOp op = _op();
 
 		if (op != null) {
-			op.property(ParentSDKProjectImportOp.PROP_SDK_LOCATION).detach(_listener);
+			SapphireUtil.detachListener(op.property(ParentSDKProjectImportOp.PROP_SDK_LOCATION), _listener);
 		}
 
 		super.dispose();
@@ -43,23 +43,19 @@ public class SDKImportDerivedValueService extends DerivedValueService {
 
 	@Override
 	protected String compute() {
-		String retVal = null;
-
 		ParentSDKProjectImportOp op = _op();
 
-		Value<Path> path = op.getSdkLocation();
+		Path sdkPath = SapphireUtil.getContent(op.getSdkLocation());
 
-		if ((path != null) && (path.content() != null) && !path.content().isEmpty()) {
-			Path sdkPath = path.content();
-
+		if ((sdkPath != null) && !sdkPath.isEmpty()) {
 			SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkPath));
 
 			if (sdk != null) {
-				retVal = sdk.getVersion();
+				return sdk.getVersion();
 			}
 		}
 
-		return retVal;
+		return "";
 	}
 
 	@Override
@@ -77,7 +73,7 @@ public class SDKImportDerivedValueService extends DerivedValueService {
 
 		ParentSDKProjectImportOp op = _op();
 
-		op.property(ParentSDKProjectImportOp.PROP_SDK_LOCATION).attach(_listener);
+		SapphireUtil.attachListener(op.property(ParentSDKProjectImportOp.PROP_SDK_LOCATION), _listener);
 	}
 
 	private ParentSDKProjectImportOp _op() {

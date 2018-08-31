@@ -115,7 +115,9 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 			IClasspathAttribute[] attrs = entry.getExtraAttributes();
 
 			if ((srcpath != null) || ListUtil.isNotEmpty(attrs)) {
-				String eid = entry.getPath().toString();
+				IPath path = entry.getPath();
+
+				String eid = path.toString();
 
 				ClasspathDecorations dec = new ClasspathDecorations();
 

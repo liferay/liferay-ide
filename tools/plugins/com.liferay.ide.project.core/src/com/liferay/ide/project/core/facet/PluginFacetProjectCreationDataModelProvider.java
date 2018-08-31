@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.facet;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.ProjectCore;
@@ -47,7 +48,9 @@ public class PluginFacetProjectCreationDataModelProvider
 	@Override
 	public Object getDefaultProperty(String propertyName) {
 		if (LIFERAY_SDK_NAME.equals(propertyName)) {
-			SDK sdk = SDKManager.getInstance().getDefaultSDK();
+			SDKManager sdkManager = SDKManager.getInstance();
+
+			SDK sdk = sdkManager.getDefaultSDK();
 
 			if (sdk != null) {
 				return sdk.getName();
@@ -205,22 +208,22 @@ public class PluginFacetProjectCreationDataModelProvider
 		}
 
 		if (getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
-			return sdkLoc.append(ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER).toOSString();
+			return FileUtil.toOSString(sdkLoc.append(ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER));
 		}
 		else if (getBooleanProperty(PLUGIN_TYPE_HOOK)) {
-			return sdkLoc.append(ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER).toOSString();
+			return FileUtil.toOSString(sdkLoc.append(ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER));
 		}
 		else if (getBooleanProperty(PLUGIN_TYPE_EXT)) {
-			return sdkLoc.append(ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER).toOSString();
+			return FileUtil.toOSString(sdkLoc.append(ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER));
 		}
 		else if (getBooleanProperty(PLUGIN_TYPE_THEME)) {
-			return sdkLoc.append(ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER).toOSString();
+			return FileUtil.toOSString(sdkLoc.append(ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER));
 		}
 		else if (getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
-			return sdkLoc.append(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER).toOSString();
+			return FileUtil.toOSString(sdkLoc.append(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER));
 		}
 		else if (getBooleanProperty(PLUGIN_TYPE_WEB)) {
-			return sdkLoc.append(ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER).toOSString();
+			return FileUtil.toOSString(sdkLoc.append(ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER));
 		}
 
 		return null;
@@ -262,7 +265,9 @@ public class PluginFacetProjectCreationDataModelProvider
 	}
 
 	protected IPath getSDKLocation() {
-		SDK sdk = SDKManager.getInstance().getSDK((String)getProperty(LIFERAY_SDK_NAME));
+		SDKManager manager = SDKManager.getInstance();
+
+		SDK sdk = manager.getSDK((String)getProperty(LIFERAY_SDK_NAME));
 
 		if (sdk != null) {
 			return sdk.getLocation();
@@ -281,7 +286,7 @@ public class PluginFacetProjectCreationDataModelProvider
 		Set<IProjectFacetVersion> facets = facetedProject.getProjectFacets();
 
 		for (IProjectFacetVersion fv : facets) {
-			if (!fv.getProjectFacet().equals(facet)) {
+			if (!facet.equals(fv.getProjectFacet())) {
 				newFacetSet.add(fv);
 			}
 		}

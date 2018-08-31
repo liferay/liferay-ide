@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.sdk.core.SDK;
@@ -33,7 +34,7 @@ public class SDKLocationListener extends FilteredListener<PropertyContentEvent> 
 	public static void updateLocation(NewLiferayPluginProjectOp op) {
 		Path newLocationBase = null;
 
-		Path sdkLocation = op.getSdkLocation().content(true);
+		Path sdkLocation = SapphireUtil.getContent(op.getSdkLocation());
 
 		if (sdkLocation == null) {
 			return;
@@ -47,7 +48,7 @@ public class SDKLocationListener extends FilteredListener<PropertyContentEvent> 
 			return;
 		}
 
-		switch (op.getPluginType().content(true)) {
+		switch (SapphireUtil.getContent(op.getPluginType())) {
 			case portlet:
 			case servicebuilder:
 				newLocationBase = sdkLocation.append("portlets");
@@ -86,7 +87,7 @@ public class SDKLocationListener extends FilteredListener<PropertyContentEvent> 
 	}
 
 	private NewLiferayPluginProjectOp _op(PropertyContentEvent event) {
-		Element element = event.property().element();
+		Element element = SapphireUtil.getElement(event);
 
 		return element.nearest(NewLiferayPluginProjectOp.class);
 	}

@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -22,6 +23,7 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
@@ -41,14 +43,14 @@ public class GroupIdDefaultValueService extends DefaultValueService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		Path location = op.getLocation().content();
+		Path location = SapphireUtil.getContent(op.getLocation());
 
 		if (location != null) {
 			String parentProjectLocation = location.toOSString();
 
 			IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
 
-			String projectName = op.getProjectName().content();
+			String projectName = SapphireUtil.getContent(op.getProjectName());
 
 			groupId = NewLiferayPluginProjectOpMethods.getMavenParentPomGroupId(op, projectName, parentProjectOsPath);
 		}
@@ -79,14 +81,16 @@ public class GroupIdDefaultValueService extends DefaultValueService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		op.getLocation().attach(listener);
-		op.getProjectName().attach(listener);
+		SapphireUtil.attachListener(op.getLocation(), listener);
+		SapphireUtil.attachListener(op.getProjectName(), listener);
 	}
 
 	private String _getDefaultMavenGroupId() {
 		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
-		String defaultMavenGroupId = Platform.getPreferencesService().getString(
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		String defaultMavenGroupId = preferencesService.getString(
 			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_MAVEN_GROUPID, null, prefContexts);
 
 		return defaultMavenGroupId;

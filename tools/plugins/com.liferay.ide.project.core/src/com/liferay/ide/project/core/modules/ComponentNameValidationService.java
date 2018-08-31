@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.JavaConventions;
@@ -32,11 +33,11 @@ public class ComponentNameValidationService extends ValidationService {
 	protected Status compute() {
 		NewLiferayModuleProjectOp op = _op();
 
-		String className = op.getComponentName().content(true);
+		String className = SapphireUtil.getContent(op.getComponentName());
 
 		Status retval = Status.createOkStatus();
 
-		if (!CoreUtil.isNullOrEmpty(className)) {
+		if (CoreUtil.isNotNullOrEmpty(className)) {
 			IStatus status = JavaConventions.validateJavaTypeName(
 				className, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
 

@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.SapphireUtil;
+
 import org.apache.commons.lang.WordUtils;
 
 import org.eclipse.sapphire.DefaultValueService;
@@ -30,9 +32,10 @@ public class NewLiferayComponentDefaultValueService extends DefaultValueService 
 		NewLiferayComponentOp op = _op();
 
 		if (op != null) {
-			op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME).detach(_listener);
+			SapphireUtil.detachListener(
+				op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME), _listener);
 
-			op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).detach(_listener);
+			SapphireUtil.detachListener(op.property(NewLiferayComponentOp.PROP_PROJECT_NAME), _listener);
 		}
 
 		super.dispose();
@@ -40,17 +43,16 @@ public class NewLiferayComponentDefaultValueService extends DefaultValueService 
 
 	@Override
 	protected String compute() {
-		String retVal = "";
-
 		NewLiferayComponentOp op = _op();
 
-		String projectName = op.getProjectName().content(true);
+		String projectName = SapphireUtil.getContent(op.getProjectName());
 
 		if (projectName == null) {
-			return retVal;
+			return "";
 		}
 
-		IComponentTemplate<NewLiferayComponentOp> componentTemplate = op.getComponentClassTemplateName().content(true);
+		IComponentTemplate<NewLiferayComponentOp> componentTemplate = SapphireUtil.getContent(
+			op.getComponentClassTemplateName());
 
 		if (componentTemplate != null) {
 			String projectTemplate = componentTemplate.getShortName();
@@ -70,7 +72,7 @@ public class NewLiferayComponentDefaultValueService extends DefaultValueService 
 			return componentNameBuffer.toString();
 		}
 
-		return null;
+		return "";
 	}
 
 	@Override
@@ -88,8 +90,8 @@ public class NewLiferayComponentDefaultValueService extends DefaultValueService 
 
 		NewLiferayComponentOp op = _op();
 
-		op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).attach(_listener);
-		op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME).attach(_listener);
+		SapphireUtil.attachListener(op.property(NewLiferayComponentOp.PROP_PROJECT_NAME), _listener);
+		SapphireUtil.attachListener(op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME), _listener);
 	}
 
 	private NewLiferayComponentOp _op() {

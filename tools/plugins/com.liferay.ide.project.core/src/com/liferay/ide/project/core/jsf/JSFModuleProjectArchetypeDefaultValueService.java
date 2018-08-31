@@ -14,8 +14,11 @@
 
 package com.liferay.ide.project.core.jsf;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
+
+import java.util.List;
 
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
@@ -30,7 +33,7 @@ public class JSFModuleProjectArchetypeDefaultValueService extends DefaultValueSe
 	public void dispose() {
 		NewLiferayJSFModuleProjectOp op = _op();
 
-		op.property(NewLiferayJSFModuleProjectOp.PROP_TEMPLATE_NAME).detach(_listener);
+		SapphireUtil.detachListener(op.property(NewLiferayJSFModuleProjectOp.PROP_TEMPLATE_NAME), _listener);
 
 		super.dispose();
 	}
@@ -39,11 +42,13 @@ public class JSFModuleProjectArchetypeDefaultValueService extends DefaultValueSe
 	protected String compute() {
 		NewLiferayJSFModuleProjectOp op = _op();
 
-		String templateName = op.getTemplateName().content();
+		String templateName = SapphireUtil.getContent(op.getTemplateName());
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content();
+		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
 
-		return provider.getData("archetypeGAV", String.class, templateName).get(0);
+		List<String> data = provider.getData("archetypeGAV", String.class, templateName);
+
+		return data.get(0);
 	}
 
 	@Override
@@ -59,7 +64,7 @@ public class JSFModuleProjectArchetypeDefaultValueService extends DefaultValueSe
 
 		NewLiferayJSFModuleProjectOp op = _op();
 
-		op.property(NewLiferayJSFModuleProjectOp.PROP_TEMPLATE_NAME).attach(_listener);
+		SapphireUtil.attachListener(op.property(NewLiferayJSFModuleProjectOp.PROP_TEMPLATE_NAME), _listener);
 	}
 
 	private NewLiferayJSFModuleProjectOp _op() {

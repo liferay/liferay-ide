@@ -22,6 +22,7 @@ import java.util.Set;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
@@ -38,7 +39,7 @@ public class LiferayServerNamePossibleValuesService extends PossibleValuesServic
 
 	@Override
 	public Status problem(Value<?> value) {
-		if (value.content().equals("<None>")) {
+		if ("<None>".equals(value.content())) {
 			return Status.createOkStatus();
 		}
 
@@ -66,7 +67,9 @@ public class LiferayServerNamePossibleValuesService extends PossibleValuesServic
 
 		if (ListUtil.isNotEmpty(servers)) {
 			for (IServer server : servers) {
-				if (LiferayServerCore.newPortalBundle(server.getRuntime().getLocation()) != null) {
+				IRuntime runtime = server.getRuntime();
+
+				if (LiferayServerCore.newPortalBundle(runtime.getLocation()) != null) {
 					values.add(server.getName());
 				}
 			}

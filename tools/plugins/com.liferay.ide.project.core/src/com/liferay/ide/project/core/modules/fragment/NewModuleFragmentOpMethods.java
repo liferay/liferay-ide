@@ -17,6 +17,8 @@ package com.liferay.ide.project.core.modules.fragment;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
@@ -49,14 +51,14 @@ import org.eclipse.wst.server.core.IRuntime;
 public class NewModuleFragmentOpMethods {
 
 	public static void copyOverrideFiles(NewModuleFragmentOp op) {
-		String projectName = op.getProjectName().content();
+		String projectName = SapphireUtil.getContent(op.getProjectName());
 
-		IPath location = PathBridge.create(op.getLocation().content());
+		IPath location = PathBridge.create(SapphireUtil.getContent(op.getLocation()));
 
 		ElementList<OverrideFilePath> files = op.getOverrideFiles();
 
 		for (OverrideFilePath file : files) {
-			File fragmentFile = new File(_hostBundleDir, file.getValue().content());
+			File fragmentFile = new File(_hostBundleDir, SapphireUtil.getContent(file.getValue()));
 
 			if (FileUtil.notExists(fragmentFile)) {
 				continue;
@@ -64,15 +66,19 @@ public class NewModuleFragmentOpMethods {
 
 			File folder = null;
 
-			if (fragmentFile.getName().equals("portlet.properties")) {
-				IPath path = location.append(projectName).append("src/main/java");
+			if (FileUtil.nameEquals(fragmentFile, "portlet.properties")) {
+				IPath path = location.append(projectName);
+
+				path = path.append("src/main/java");
 
 				folder = path.toFile();
 
 				FileUtil.copyFileToDir(fragmentFile, "portlet-ext.properties", folder);
 			}
-			else if (fragmentFile.getName().contains("default.xml")) {
-				String parent = fragmentFile.getParentFile().getPath();
+			else if (StringUtil.contains(fragmentFile.getName(), "default.xml")) {
+				File parentFile = fragmentFile.getParentFile();
+
+				String parent = parentFile.getPath();
 
 				parent = parent.replaceAll("\\\\", "/");
 
@@ -80,14 +86,16 @@ public class NewModuleFragmentOpMethods {
 
 				parent = parent.substring(parent.indexOf(metaInfResources) + metaInfResources.length());
 
-				IPath resources = location.append(projectName).append("src/main/resources/resource-actions");
+				IPath resources = location.append(projectName);
+
+				resources = resources.append("src/main/resources/resource-actions");
 
 				folder = resources.toFile();
 
 				folder.mkdirs();
 
 				if (!parent.equals("resource-actions") && !parent.equals("")) {
-					folder = resources.append(parent).toFile();
+					folder = FileUtil.getFile(resources.append(parent));
 
 					folder.mkdirs();
 				}
@@ -95,8 +103,9 @@ public class NewModuleFragmentOpMethods {
 				FileUtil.copyFileToDir(fragmentFile, "default-ext.xml", folder);
 
 				try {
-					File ext =
-						new File(location.append(projectName).append("src/main/resources") + "/portlet-ext.properties");
+					IPath p = location.append(projectName);
+
+					File ext = new File(p.append("src/main/resources") + "/portlet-ext.properties");
 
 					ext.createNewFile();
 
@@ -105,25 +114,30 @@ public class NewModuleFragmentOpMethods {
 
 					FileUtil.writeFile(ext, extFileContent, null);
 				}
-				catch (Exception e) {}
+				catch (Exception e) {
+				}
 			}
 			else {
-				String parent = fragmentFile.getParentFile().getPath();
+				File parent = fragmentFile.getParentFile();
 
-				parent = parent.replaceAll("\\\\", "/");
+				String parentPath = parent.getPath();
+
+				parentPath = parentPath.replaceAll("\\\\", "/");
 
 				String metaInfResources = "META-INF/resources";
 
-				parent = parent.substring(parent.indexOf(metaInfResources) + metaInfResources.length());
+				parentPath = parentPath.substring(parentPath.indexOf(metaInfResources) + metaInfResources.length());
 
-				IPath resources = location.append(projectName).append("src/main/resources/META-INF/resources");
+				IPath resources = location.append(projectName);
+
+				resources = resources.append("src/main/resources/META-INF/resources");
 
 				folder = resources.toFile();
 
 				folder.mkdirs();
 
-				if (!parent.equals("resources") && !parent.equals("")) {
-					folder = resources.append(parent).toFile();
+				if (!parentPath.equals("resources") && !parentPath.equals("")) {
+					folder = FileUtil.getFile(resources.append(parentPath));
 
 					folder.mkdirs();
 				}
@@ -141,7 +155,7 @@ public class NewModuleFragmentOpMethods {
 		Status retval = null;
 
 		try {
-			NewLiferayProjectProvider<BaseModuleOp> projectProvider = op.getProjectProvider().content(true);
+			NewLiferayProjectProvider<BaseModuleOp> projectProvider = SapphireUtil.getContent(op.getProjectProvider());
 
 			IStatus status = projectProvider.createNewProject(op, monitor);
 
@@ -163,28 +177,30 @@ public class NewModuleFragmentOpMethods {
 	}
 
 	public static String[] getBsnAndVersion(NewModuleFragmentOp op) throws CoreException {
-		String hostBundleName = op.getHostOsgiBundle().content();
+		String hostBundleName = SapphireUtil.getContent(op.getHostOsgiBundle());
 
-		IPath tempLocation = ProjectCore.getDefault().getStateLocation();
+		ProjectCore projectCore = ProjectCore.getDefault();
 
-		File hostBundleJar = tempLocation.append(hostBundleName).toFile();
+		IPath tempLocation = projectCore.getStateLocation();
+
+		File hostBundleJar = FileUtil.getFile(tempLocation.append(hostBundleName));
 
 		if (FileUtil.notExists(hostBundleJar)) {
-			IRuntime runtime = ServerUtil.getRuntime(op.getLiferayRuntimeName().content());
+			IRuntime runtime = ServerUtil.getRuntime(SapphireUtil.getContent(op.getLiferayRuntimeName()));
 
 			hostBundleJar = ServerUtil.getModuleFileFrom70Server(runtime, hostBundleName, tempLocation);
 		}
 
-		String[] bsnAndVersion =
-			FileUtil.readMainFestProsFromJar(hostBundleJar, "Bundle-SymbolicName", "Bundle-Version");
+		String[] bsnAndVersion = FileUtil.readMainFestProsFromJar(
+			hostBundleJar, "Bundle-SymbolicName", "Bundle-Version");
 
 		try {
-			_hostBundleDir = LiferayCore.GLOBAL_USER_DIR.append(bsnAndVersion[0] + "-" + bsnAndVersion[1]).toFile();
+			_hostBundleDir = FileUtil.getFile(
+				LiferayCore.GLOBAL_USER_DIR.append(bsnAndVersion[0] + "-" + bsnAndVersion[1]));
 		}
 		catch (NullPointerException npe) {
 			throw new CoreException(
-				ProjectCore.createErrorStatus("'" + hostBundleName + "' is not a valid osgi bundle")
-			);
+				ProjectCore.createErrorStatus("'" + hostBundleName + "' is not a valid osgi bundle", npe));
 		}
 
 		if (FileUtil.notExists(_hostBundleDir)) {
@@ -204,7 +220,7 @@ public class NewModuleFragmentOpMethods {
 
 		File parentProjectDir = path.toFile();
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content();
+		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
@@ -224,7 +240,7 @@ public class NewModuleFragmentOpMethods {
 
 		File parentProjectDir = path.toFile();
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content();
+		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
@@ -244,7 +260,8 @@ public class NewModuleFragmentOpMethods {
 			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
 
 			prefs.put(
-				ProjectCore.PREF_DEFAULT_MODULE_FRAGMENT_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text());
+				ProjectCore.PREF_DEFAULT_MODULE_FRAGMENT_PROJECT_BUILD_TYPE_OPTION,
+				SapphireUtil.getText(op.getProjectProvider()));
 
 			prefs.flush();
 		}
@@ -256,4 +273,5 @@ public class NewModuleFragmentOpMethods {
 	}
 
 	private static File _hostBundleDir = null;
+
 }

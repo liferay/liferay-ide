@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,7 +52,7 @@ public class SearchFilesVisitor implements IResourceProxyVisitor {
 	}
 
 	public boolean visit(IResourceProxy resourceProxy) {
-		if ((resourceProxy.getType() == IResource.FILE) && resourceProxy.getName().equals(searchFileName)) {
+		if ((resourceProxy.getType() == IResource.FILE) && StringUtil.equals(resourceProxy.getName(), searchFileName)) {
 			IResource resource = resourceProxy.requestResource();
 
 			if (resource.exists()) {

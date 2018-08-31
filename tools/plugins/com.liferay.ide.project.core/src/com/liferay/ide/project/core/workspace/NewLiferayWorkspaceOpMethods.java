@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -39,7 +40,8 @@ public class NewLiferayWorkspaceOpMethods {
 		Status retval = Status.createOkStatus();
 
 		try {
-			NewLiferayProjectProvider<NewLiferayWorkspaceOp> provider = op.getProjectProvider().content(true);
+			NewLiferayProjectProvider<NewLiferayWorkspaceOp> provider = SapphireUtil.getContent(
+				op.getProjectProvider());
 
 			IStatus status = provider.createNewProject(op, monitor);
 
@@ -68,8 +70,10 @@ public class NewLiferayWorkspaceOpMethods {
 		try {
 			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
 
-			prefs.put(ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, op.getLiferayVersion().text());
-			prefs.put(ProjectCore.PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text());
+			prefs.put(ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, SapphireUtil.getText(op.getLiferayVersion()));
+			prefs.put(
+				ProjectCore.PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION,
+				SapphireUtil.getText(op.getProjectProvider()));
 
 			prefs.flush();
 		}

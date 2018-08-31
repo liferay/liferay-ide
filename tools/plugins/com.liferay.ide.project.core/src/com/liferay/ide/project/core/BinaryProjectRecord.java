@@ -14,12 +14,7 @@
 
 package com.liferay.ide.project.core;
 
-import static com.liferay.ide.sdk.core.ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
-import static com.liferay.ide.sdk.core.ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
-import static com.liferay.ide.sdk.core.ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
-import static com.liferay.ide.sdk.core.ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
-import static com.liferay.ide.sdk.core.ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
-import static com.liferay.ide.sdk.core.ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX;
+import com.liferay.ide.sdk.core.ISDKConstants;
 
 import java.io.File;
 
@@ -53,22 +48,22 @@ public class BinaryProjectRecord {
 
 	public String getLiferayPluginName() {
 		if (hook) {
-			return getDisplayName() + HOOK_PLUGIN_PROJECT_SUFFIX;
+			return getDisplayName() + ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
 		}
 		else if (layoutTpl) {
-			return getDisplayName() + LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
+			return getDisplayName() + ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
 		}
 		else if (portlet) {
-			return getDisplayName() + PORTLET_PLUGIN_PROJECT_SUFFIX;
+			return getDisplayName() + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
 		}
 		else if (theme) {
-			return getDisplayName() + THEME_PLUGIN_PROJECT_SUFFIX;
+			return getDisplayName() + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
 		}
 		else if (ext) {
-			return getDisplayName() + EXT_PLUGIN_PROJECT_SUFFIX;
+			return getDisplayName() + ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
 		}
 		else if (web) {
-			return getDisplayName() + WEB_PLUGIN_PROJECT_SUFFIX;
+			return getDisplayName() + ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX;
 		}
 
 		return null;
@@ -153,33 +148,33 @@ public class BinaryProjectRecord {
 
 		int index = -1;
 
-		if (_binaryName.contains(HOOK_PLUGIN_PROJECT_SUFFIX)) {
-			index = _binaryName.indexOf(HOOK_PLUGIN_PROJECT_SUFFIX);
+		if (_binaryName.contains(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
+			index = _binaryName.indexOf(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX);
 
 			hook = index != -1 ? true : false;
 		}
-		else if (_binaryName.contains(THEME_PLUGIN_PROJECT_SUFFIX)) {
-			index = _binaryName.indexOf(THEME_PLUGIN_PROJECT_SUFFIX);
+		else if (_binaryName.contains(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
+			index = _binaryName.indexOf(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX);
 
 			theme = index != -1 ? true : false;
 		}
-		else if (_binaryName.contains(PORTLET_PLUGIN_PROJECT_SUFFIX)) {
-			index = _binaryName.indexOf(PORTLET_PLUGIN_PROJECT_SUFFIX);
+		else if (_binaryName.contains(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
+			index = _binaryName.indexOf(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX);
 
 			portlet = index != -1 ? true : false;
 		}
-		else if (_binaryName.contains(LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
-			index = _binaryName.indexOf(LAYOUTTPL_PLUGIN_PROJECT_SUFFIX);
+		else if (_binaryName.contains(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
+			index = _binaryName.indexOf(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX);
 
 			layoutTpl = index != -1 ? true : false;
 		}
-		else if (_binaryName.contains(EXT_PLUGIN_PROJECT_SUFFIX)) {
-			index = _binaryName.indexOf(EXT_PLUGIN_PROJECT_SUFFIX);
+		else if (_binaryName.contains(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
+			index = _binaryName.indexOf(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX);
 
 			ext = index != -1 ? true : false;
 		}
-		else if (_binaryName.contains(WEB_PLUGIN_PROJECT_SUFFIX)) {
-			index = _binaryName.indexOf(WEB_PLUGIN_PROJECT_SUFFIX);
+		else if (_binaryName.contains(ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX)) {
+			index = _binaryName.indexOf(ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX);
 
 			web = index != -1 ? true : false;
 		}

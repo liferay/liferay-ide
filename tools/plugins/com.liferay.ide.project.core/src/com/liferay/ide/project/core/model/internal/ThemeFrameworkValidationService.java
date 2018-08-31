@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import org.eclipse.sapphire.modeling.Status;
@@ -28,11 +29,9 @@ public class ThemeFrameworkValidationService extends ValidationService {
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
-		NewLiferayPluginProjectOp op = _op();
+		String themeFramework = SapphireUtil.getContent(_op().getThemeFramework());
 
-		String currentThemeFramework = op.getThemeFramework().content();
-
-		if (currentThemeFramework.equals("JSP")) {
+		if (themeFramework.equals("JSP")) {
 			retval = Status.createWarningStatus("For advanced theme developers only.");
 		}
 

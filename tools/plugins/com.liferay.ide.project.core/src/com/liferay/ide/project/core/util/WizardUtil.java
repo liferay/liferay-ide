@@ -58,7 +58,7 @@ public class WizardUtil {
 		context.put("namespace", namespace);
 		context.put("author", author);
 
-		try{
+		try {
 			StringBuffer sb = new StringBuffer();
 
 			templateOp.setOutputBuffer(sb);
@@ -67,8 +67,10 @@ public class WizardUtil {
 
 			CoreUtil.prepareFolder((IFolder)serviceBuilderFile.getParent());
 
-			try(InputStream inputStream = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"))){
-				serviceBuilderFile.create(inputStream, IResource.FORCE, null);	
+			String s = sb.toString();
+
+			try (InputStream inputStream = new ByteArrayInputStream(s.getBytes("UTF-8"))) {
+				serviceBuilderFile.create(inputStream, IResource.FORCE, null);
 			}
 
 			FormatProcessorXML processor = new FormatProcessorXML();

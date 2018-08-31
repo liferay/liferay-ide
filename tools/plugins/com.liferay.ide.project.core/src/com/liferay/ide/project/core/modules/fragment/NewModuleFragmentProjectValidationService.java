@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -31,7 +32,7 @@ public class NewModuleFragmentProjectValidationService extends ValidationService
 	protected Status compute() {
 		NewModuleFragmentFilesOp op = context(NewModuleFragmentFilesOp.class);
 
-		String projectName = op.getProjectName().content(true);
+		String projectName = SapphireUtil.getContent(op.getProjectName());
 
 		if (projectName == null) {
 			return Status.createErrorStatus("No suitable Liferay fragment project.");
@@ -42,7 +43,7 @@ public class NewModuleFragmentProjectValidationService extends ValidationService
 		IFile bndFile = project.getFile("bnd.bnd");
 
 		if (FileUtil.notExists(bndFile)) {
-			return Status.createErrorStatus("Can't find bnd.bnd file in the project.");
+			return Status.createErrorStatus("Can not find bnd.bnd file in the project.");
 		}
 
 		return Status.createOkStatus();

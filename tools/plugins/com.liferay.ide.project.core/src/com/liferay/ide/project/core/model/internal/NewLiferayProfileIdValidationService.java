@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -36,7 +37,7 @@ public class NewLiferayProfileIdValidationService extends ValidationService {
 
 		NewLiferayProfile newLiferayProfile = _profile();
 
-		String profileId = newLiferayProfile.getId().content(true);
+		String profileId = SapphireUtil.getContent(newLiferayProfile.getId());
 
 		if ((profileId == null) || profileId.isEmpty()) {
 			retval = Status.createErrorStatus("Profile id can not be empty.");

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 
 import org.eclipse.sapphire.ValueProperty;
@@ -31,7 +32,7 @@ public class ProviderValueServiceConditon extends ServiceCondition {
 
 		ValueProperty property = BaseModuleOp.PROP_PROJECT_PROVIDER;
 
-		if ((prop != null) && prop.name().equals(property.name())) {
+		if ((prop != null) && StringUtil.equals(prop.name(), property.name())) {
 			return true;
 		}
 

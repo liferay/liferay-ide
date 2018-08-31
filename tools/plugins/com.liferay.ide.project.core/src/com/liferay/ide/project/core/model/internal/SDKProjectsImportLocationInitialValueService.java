@@ -14,10 +14,12 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.InitialValueService;
 
 /**
@@ -27,19 +29,21 @@ public class SDKProjectsImportLocationInitialValueService extends InitialValueSe
 
 	@Override
 	protected String compute() {
-		String value = "";
-
 		try {
 			SDK sdk = SDKUtil.getWorkspaceSDK();
 
-			if ((sdk != null) && sdk.validate().isOK()) {
-				return sdk.getLocation().toOSString();
+			if (sdk != null) {
+				IStatus status = sdk.validate();
+
+				if (status.isOK()) {
+					return FileUtil.toOSString(sdk.getLocation());
+				}
 			}
 		}
 		catch (CoreException ce) {
 		}
 
-		return value;
+		return "";
 	}
 
 }

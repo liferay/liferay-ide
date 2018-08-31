@@ -153,6 +153,7 @@ public class StringArrayTableWizardSection extends Composite {
 			}
 
 			table.setHeaderVisible(true);
+
 			addControlListener(
 				new ControlAdapter() {
 
@@ -249,6 +250,7 @@ public class StringArrayTableWizardSection extends Composite {
 		}
 
 		valueList.add(stringArray);
+
 		setInput(valueList);
 	}
 
@@ -295,6 +297,7 @@ public class StringArrayTableWizardSection extends Composite {
 		List valueList = (List)viewer.getInput();
 
 		valueList.remove(selectedStringArray);
+
 		setInput(valueList);
 	}
 
@@ -302,6 +305,7 @@ public class StringArrayTableWizardSection extends Composite {
 		List valueList = (List)viewer.getInput();
 
 		valueList.removeAll(selectedStringArrays);
+
 		setInput(valueList);
 	}
 
@@ -323,6 +327,7 @@ public class StringArrayTableWizardSection extends Composite {
 		List newInput = new ArrayList();
 
 		newInput.addAll(input);
+
 		model.setProperty(propertyName, newInput);
 	}
 
@@ -538,6 +543,7 @@ public class StringArrayTableWizardSection extends Composite {
 		AddStringArrayDialog dialog = new AddStringArrayDialog(getShell(), dialogTitle, fieldLabels);
 
 		dialog.open();
+
 		String[] stringArray = dialog.getStringArray();
 
 		addStringArray(stringArray);
@@ -563,6 +569,7 @@ public class StringArrayTableWizardSection extends Composite {
 		EditStringArrayDialog dialog = new EditStringArrayDialog(getShell(), dialogTitle, fieldLabels, valuesForText);
 
 		dialog.open();
+
 		String[] stringArray = dialog.getStringArray();
 
 		editStringArray(valuesForText, stringArray);

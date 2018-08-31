@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 
@@ -39,7 +40,7 @@ public class ProjectNameListener extends FilteredListener<PropertyContentEvent> 
 	}
 
 	protected NewLiferayPluginProjectOp op(PropertyContentEvent event) {
-		Element element = event.property().element();
+		Element element = SapphireUtil.getElement(event);
 
 		return element.nearest(NewLiferayPluginProjectOp.class);
 	}

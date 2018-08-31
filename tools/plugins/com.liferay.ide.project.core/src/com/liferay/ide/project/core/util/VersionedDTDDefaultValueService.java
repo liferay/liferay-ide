@@ -25,6 +25,7 @@ import org.eclipse.sapphire.Resource;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
 
 /**
  * @author Gregory Amerson
@@ -47,7 +48,9 @@ public class VersionedDTDDefaultValueService extends DefaultValueService {
 			Document document = xmlResource.getDomDocument();
 
 			if ((document != null) && (document.getDoctype() != null)) {
-				String systemId = document.getDoctype().getSystemId();
+				DocumentType documentType = document.getDoctype();
+
+				String systemId = documentType.getSystemId();
 
 				Matcher matcher = _systemIdPattern.matcher(systemId);
 

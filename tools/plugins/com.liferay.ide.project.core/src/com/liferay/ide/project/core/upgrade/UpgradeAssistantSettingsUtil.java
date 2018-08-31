@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.upgrade;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
@@ -34,7 +35,7 @@ public class UpgradeAssistantSettingsUtil {
 		ObjectMapper mapper = new ObjectMapper();
 
 		try {
-			return mapper.readValue(_storageLocation.append(clazz.getSimpleName() + ".json").toFile(), clazz);
+			return mapper.readValue(FileUtil.getFile(_storageLocation.append(clazz.getSimpleName() + ".json")), clazz);
 		}
 		catch (FileNotFoundException fnfe) {
 		}
@@ -45,7 +46,7 @@ public class UpgradeAssistantSettingsUtil {
 	public static <T> void setObjectToStore(Class<T> clazz, T object) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 
-		File storageFile = _storageLocation.append(clazz.getSimpleName() + ".json").toFile();
+		File storageFile = FileUtil.getFile(_storageLocation.append(clazz.getSimpleName() + ".json"));
 
 		mapper.writeValue(storageFile, object);
 	}

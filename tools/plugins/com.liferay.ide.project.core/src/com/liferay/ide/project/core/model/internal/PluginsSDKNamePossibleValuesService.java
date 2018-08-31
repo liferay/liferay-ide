@@ -35,7 +35,9 @@ public class PluginsSDKNamePossibleValuesService extends PossibleValuesService i
 
 	@Override
 	public void dispose() {
-		SDKManager.getInstance().removeSDKListener(this);
+		SDKManager sdkManager = SDKManager.getInstance();
+
+		sdkManager.removeSDKListener(this);
 
 		super.dispose();
 	}
@@ -68,7 +70,9 @@ public class PluginsSDKNamePossibleValuesService extends PossibleValuesService i
 
 	@Override
 	protected void compute(Set<String> values) {
-		SDK[] validSDKs = SDKManager.getInstance().getSDKs();
+		SDKManager sdkManager = SDKManager.getInstance();
+
+		SDK[] validSDKs = sdkManager.getSDKs();
 
 		if (ListUtil.isNotEmpty(validSDKs)) {
 			for (SDK validSDK : validSDKs) {
@@ -81,7 +85,9 @@ public class PluginsSDKNamePossibleValuesService extends PossibleValuesService i
 	protected void initPossibleValuesService() {
 		super.initPossibleValuesService();
 
-		SDKManager.getInstance().addSDKListener(this);
+		SDKManager sdkManager = SDKManager.getInstance();
+
+		sdkManager.addSDKListener(this);
 	}
 
 	private void _refreshSafe() {

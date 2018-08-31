@@ -23,7 +23,9 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.project.core.PluginsSDKBundleProject;
@@ -53,6 +55,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.WordUtils;
@@ -63,8 +66,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -127,14 +130,14 @@ public class ProjectUtil {
 		}
 
 		for (File child : children) {
-			if (child.isFile() && child.getName().equals(IProjectDescription.DESCRIPTION_FILE_NAME)) {
+			if (child.isFile() && IProjectDescription.DESCRIPTION_FILE_NAME.equals(child.getName())) {
 				IWorkspace workspace = CoreUtil.getWorkspace();
 				IProjectDescription projectDescription;
 
 				try {
 					projectDescription = workspace.loadProjectDescription(new Path(child.getAbsolutePath()));
 
-					IProject project = workspace.getRoot().getProject(projectDescription.getName());
+					IProject project = CoreUtil.getProject(projectDescription.getName());
 
 					if (FileUtil.exists(project)) {
 						result.add(project);
@@ -183,9 +186,7 @@ public class ProjectUtil {
 
 		String dotProject = IProjectDescription.DESCRIPTION_FILE_NAME;
 
-		for (int i = 0; i < contents.length; i++) {
-			File file = contents[i];
-
+		for (File file : contents) {
 			if (isLiferaySDKProjectDir(file)) {
 
 				// recurse to see if it has project file
@@ -193,7 +194,7 @@ public class ProjectUtil {
 				int currentSize = eclipseProjectFiles.size();
 
 				collectSDKProjectsFromDirectory(
-					eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, false, monitor);
+					eclipseProjectFiles, liferayProjectDirs, file, directoriesVisited, false, monitor);
 
 				int newSize = eclipseProjectFiles.size();
 
@@ -201,7 +202,7 @@ public class ProjectUtil {
 					liferayProjectDirs.add(file);
 				}
 			}
-			else if (file.isFile() && file.getName().equals(dotProject)) {
+			else if (file.isFile() && dotProject.equals(file.getName())) {
 				if (!eclipseProjectFiles.contains(file) && isLiferaySDKProjectDir(file.getParentFile())) {
 					eclipseProjectFiles.add(file);
 
@@ -214,11 +215,11 @@ public class ProjectUtil {
 
 		// no project description found, so recurse into sub-directories
 
-		for (int i = 0; i < contents.length; i++) {
-			if (contents[i].isDirectory()) {
-				if (!contents[i].getName().equals(METADATA_FOLDER)) {
+		for (File file : contents) {
+			if (file.isDirectory()) {
+				if (!METADATA_FOLDER.equals(file.getName())) {
 					try {
-						String canonicalPath = contents[i].getCanonicalPath();
+						String canonicalPath = file.getCanonicalPath();
 
 						if (!directoriesVisited.add(canonicalPath)) {
 
@@ -233,9 +234,9 @@ public class ProjectUtil {
 
 					// dont recurse directories that we have already determined are Liferay projects
 
-					if (!liferayProjectDirs.contains(contents[i]) && recurse) {
+					if (!liferayProjectDirs.contains(file) && recurse) {
 						collectSDKProjectsFromDirectory(
-							eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, recurse, monitor);
+							eclipseProjectFiles, liferayProjectDirs, file, directoriesVisited, recurse, monitor);
 					}
 				}
 			}
@@ -251,7 +252,9 @@ public class ProjectUtil {
 
 		String displayName = removePluginSuffix(name);
 
-		displayName = displayName.replaceAll("-", " ").replaceAll("_", " "); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		displayName = displayName.replaceAll("-", " ");
+
+		displayName = displayName.replaceAll("_", " ");
 
 		displayName = WordUtils.capitalize(displayName);
 
@@ -285,11 +288,11 @@ public class ProjectUtil {
 			return emptyFile;
 		}
 
-		try(InputStream inputStream = new ByteArrayInputStream(StringPool.EMPTY.getBytes())){
+		try (InputStream inputStream = new ByteArrayInputStream(StringPool.EMPTY.getBytes())) {
 			emptyFile.create(inputStream, true, null);
 		}
-		catch (IOException e) {
-			throw new CoreException(ProjectCore.createErrorStatus(e));
+		catch (IOException ioe) {
+			throw new CoreException(ProjectCore.createErrorStatus(ioe));
 		}
 
 		return emptyFile;
@@ -300,9 +303,9 @@ public class ProjectUtil {
 
 		String projectName = record.getProjectName();
 
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IWorkspace workspace = CoreUtil.getWorkspace();
 
-		IProject project = workspace.getRoot().getProject(projectName);
+		IProject project = CoreUtil.getProject(projectName);
 
 		if (record.description == null) {
 
@@ -313,7 +316,9 @@ public class ProjectUtil {
 
 			// If it is under the root use the default location
 
-			if (Platform.getLocation().isPrefixOf(locationPath)) {
+			IPath platformLocation = Platform.getLocation();
+
+			if (platformLocation.isPrefixOf(locationPath)) {
 				record.description.setLocation(null);
 			}
 			else {
@@ -331,7 +336,7 @@ public class ProjectUtil {
 		// need to check to see if we an ext project with source folders with incorrect
 		// parent attributes
 
-		if (project.getName().endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
+		if (StringUtil.endsWith(project.getName(), ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
 			_fixExtProjectClasspathEntries(project);
 		}
 
@@ -347,7 +352,7 @@ public class ProjectUtil {
 
 		IJavaProject javaProject = JavaCore.create(fProject.getProject());
 
-		CoreUtil.getWorkspace().run(
+		workspace.run(
 			new IWorkspaceRunnable() {
 
 				@Override
@@ -357,7 +362,9 @@ public class ProjectUtil {
 					IPath containerPath = null;
 
 					for (IClasspathEntry entry : javaProject.getRawClasspath()) {
-						String segment = entry.getPath().segment(0);
+						IPath path = entry.getPath();
+
+						String segment = path.segment(0);
 
 						if ((entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) &&
 							segment.equals(SDKClasspathContainer.ID)) {
@@ -401,7 +408,7 @@ public class ProjectUtil {
 						IClasspathEntry[] entries = javaProject.getRawClasspath();
 
 						for (IClasspathEntry entry : entries) {
-							if (entry.getPath().equals(cpePath)) {
+							if (cpePath.equals(entry.getPath())) {
 								return;
 							}
 						}
@@ -434,9 +441,9 @@ public class ProjectUtil {
 
 		String projectName = record.getProjectName();
 
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IWorkspace workspace = CoreUtil.getWorkspace();
 
-		IProject project = workspace.getRoot().getProject(projectName);
+		IProject project = CoreUtil.getProject(projectName);
 
 		if (record.description == null) {
 
@@ -448,7 +455,9 @@ public class ProjectUtil {
 
 			// If it is under the root use the default location
 
-			if (Platform.getLocation().isPrefixOf(locationPath)) {
+			IPath platformLocation = Platform.getLocation();
+
+			if (platformLocation.isPrefixOf(locationPath)) {
 				record.description.setLocation(null);
 			}
 			else {
@@ -467,7 +476,7 @@ public class ProjectUtil {
 
 		// need to check to see if we an ext project with source folders with incorrect parent attributes
 
-		if (project.getName().endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
+		if (StringUtil.endsWith(project.getName(), ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
 			_fixExtProjectClasspathEntries(project);
 		}
 
@@ -483,13 +492,15 @@ public class ProjectUtil {
 
 		IJavaProject javaProject = JavaCore.create(fProject.getProject());
 
-		CoreUtil.getWorkspace().run(
+		workspace.run(
 			new IWorkspaceRunnable() {
 
 				@Override
 				public void run(IProgressMonitor monitor) throws CoreException {
 					for (IClasspathEntry entry : javaProject.getRawClasspath()) {
-						String segment = entry.getPath().segment(0);
+						IPath path = entry.getPath();
+
+						String segment = path.segment(0);
 
 						if ((entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) &&
 							segment.equals(PluginClasspathContainerInitializer.ID)) {
@@ -536,45 +547,48 @@ public class ProjectUtil {
 
 		setGenerateDD(newProjectDataModel, false);
 
-		IPath webXmlPath =
-			projectRecord.getProjectLocation().append(ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/web.xml");
+		IPath projectLocation = projectRecord.getProjectLocation();
+
+		IPath webXmlPath = projectLocation.append(ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/web.xml");
 
 		File webXmlFile = webXmlPath.toFile();
 
-		if (projectRecord.getProjectName().endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
+		if (StringUtil.endsWith(projectRecord.getProjectName(), ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_PORTLET, true);
 
 			if (FileUtil.notExists(webXmlFile)) {
 				createDefaultWebXml(webXmlFile, projectRecord.getProjectName());
 			}
 		}
-		else if (projectRecord.getProjectName().endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
+		else if (StringUtil.endsWith(projectRecord.getProjectName(), ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_HOOK, true);
 
 			if (FileUtil.notExists(webXmlFile)) {
 				createDefaultWebXml(webXmlFile, projectRecord.getProjectName());
 			}
 		}
-		else if (projectRecord.getProjectName().endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
+		else if (StringUtil.endsWith(projectRecord.getProjectName(), ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
 			Path path = new Path(ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-web/docroot/WEB-INF/web.xml");
 
-			webXmlPath = webXmlPath.removeLastSegments(3).append(path);
+			webXmlPath = webXmlPath.removeLastSegments(3);
+
+			webXmlPath = webXmlPath.append(path);
 
 			webXmlFile = webXmlPath.toFile();
 
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true);
 
 			if (FileUtil.notExists(webXmlFile)) {
-				createDefaultWebXml(webXmlPath.toFile(), projectRecord.getProjectName());
+				createDefaultWebXml(webXmlFile, projectRecord.getProjectName());
 			}
 		}
-		else if (projectRecord.getProjectName().endsWith(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
+		else if (StringUtil.endsWith(projectRecord.getProjectName(), ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_LAYOUTTPL, true);
 		}
-		else if (projectRecord.getProjectName().endsWith(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
+		else if (StringUtil.endsWith(projectRecord.getProjectName(), ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME, true);
 		}
-		else if (projectRecord.getProjectName().endsWith(ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX)) {
+		else if (StringUtil.endsWith(projectRecord.getProjectName(), ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_WEB, true);
 		}
 
@@ -582,8 +596,6 @@ public class ProjectUtil {
 			IFacetProjectCreationDataModelProperties.FACETED_PROJECT_WORKING_COPY);
 
 		fpwc.setProjectName(projectRecord.getProjectName());
-
-		IPath projectLocation = projectRecord.getProjectLocation();
 
 		String projectDirName = projectLocation.lastSegment();
 
@@ -594,16 +606,17 @@ public class ProjectUtil {
 		String pluginType = null;
 
 		if (op != null) {
-			PluginType type = op.getPluginType().content();
+			PluginType type = SapphireUtil.getContent(op.getPluginType());
 
 			pluginType = type.name();
 
-			if (PluginType.theme.name().equals(pluginType)) {
+			if (pluginType.equals(PluginType.theme.name())) {
 				newProjectDataModel.setProperty(
-					IPluginProjectDataModelProperties.THEME_PARENT, op.getThemeParent().content(true));
+					IPluginProjectDataModelProperties.THEME_PARENT, SapphireUtil.getContent(op.getThemeParent()));
 
 				newProjectDataModel.setProperty(
-					IPluginProjectDataModelProperties.THEME_TEMPLATE_FRAMEWORK, op.getThemeFramework().content(true));
+					IPluginProjectDataModelProperties.THEME_TEMPLATE_FRAMEWORK,
+					SapphireUtil.getContent(op.getThemeFramework()));
 			}
 		}
 		else {
@@ -613,28 +626,30 @@ public class ProjectUtil {
 		SDKPluginFacetUtil.configureProjectAsSDKProject(
 			fpwc, pluginType, sdkLocation.toPortableString(), projectRecord);
 
-		if ((op != null) && PluginType.portlet.name().equals(pluginType)) {
-			IPortletFramework portletFramework = op.getPortletFramework().content(true);
+		if ((op != null) && pluginType.equals(PluginType.portlet.name())) {
+			IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
 
 			portletFramework.configureNewProject(newProjectDataModel, fpwc);
 		}
 
 		// if project is located in natural workspace location then don't need to set a project location
 
-		IPath rootLocation = CoreUtil.getWorkspaceRoot().getLocation();
+		IPath rootLocation = CoreUtil.getWorkspaceRootLocation();
 
-		if (rootLocation.append(projectDirName).equals(projectLocation)) {
+		if (projectLocation.equals(rootLocation.append(projectDirName))) {
 			fpwc.setProjectLocation(null);
 		}
 
 		try {
 			fpwc.commitChanges(monitor);
 		}
-		catch (FacetedProjectFrameworkException e) {
-			ProjectCore.logError(e);
+		catch (FacetedProjectFrameworkException fpfe) {
+			ProjectCore.logError(fpfe);
 		}
 
-		CoreUtil.getWorkspace().run(
+		IWorkspace workspace = CoreUtil.getWorkspace();
+
+		workspace.run(
 			new IWorkspaceRunnable() {
 
 				@Override
@@ -666,7 +681,7 @@ public class ProjectUtil {
 			IPluginProjectDataModelProperties.NESTED_PROJECT_DM);
 
 		if (op != null) {
-			if (op.getUseDefaultLocation().content(true)) {
+			if (SapphireUtil.getContent(op.getUseDefaultLocation())) {
 
 				// using Eclipse workspace location
 
@@ -681,12 +696,12 @@ public class ProjectUtil {
 			else {
 				nestedModel.setBooleanProperty(IPluginProjectDataModelProperties.USE_DEFAULT_LOCATION, false);
 
-				org.eclipse.sapphire.modeling.Path path = op.getLocation().content(true);
+				org.eclipse.sapphire.modeling.Path path = SapphireUtil.getContent(op.getLocation());
 
 				nestedModel.setStringProperty(
 					IPluginProjectDataModelProperties.USER_DEFINED_LOCATION, path.toOSString());
 
-				if (!op.getUseDefaultLocation().content(true)) {
+				if (!SapphireUtil.getContent(op.getUseDefaultLocation())) {
 					newProjectDataModel.setBooleanProperty(
 						IPluginProjectDataModelProperties.LIFERAY_USE_CUSTOM_LOCATION, true);
 				}
@@ -695,33 +710,40 @@ public class ProjectUtil {
 
 		setGenerateDD(newProjectDataModel, false);
 
-		IPath webXmlPath =
-			projectRecord.getProjectLocation().append(ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/web.xml");
+		IPath location = projectRecord.getProjectLocation();
+
+		IPath webXmlPath = location.append(ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/web.xml");
 
 		String projectName = projectRecord.getProjectName();
+
+		File webXmlFile = webXmlPath.toFile();
 
 		if (projectName.endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_PORTLET, true);
 
-			if (!(webXmlPath.toFile().exists())) {
-				createDefaultWebXml(webXmlPath.toFile(), projectRecord.getProjectName());
+			if (!webXmlFile.exists()) {
+				createDefaultWebXml(webXmlFile, projectRecord.getProjectName());
 			}
 		}
 		else if (projectName.endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_HOOK, true);
 
-			if (!(webXmlPath.toFile().exists())) {
-				createDefaultWebXml(webXmlPath.toFile(), projectName);
+			if (!webXmlFile.exists()) {
+				createDefaultWebXml(webXmlFile, projectName);
 			}
 		}
 		else if (projectName.endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
 			Path webPath = new Path(ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-web/docroot/WEB-INF/web.xml");
 
-			webXmlPath = webXmlPath.removeLastSegments(3).append(webPath);
+			webXmlPath = webXmlPath.removeLastSegments(3);
+
+			webXmlPath = webXmlPath.append(webPath);
+
+			webXmlFile = webXmlPath.toFile();
 
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true);
 
-			if (!(webXmlPath.toFile().exists())) {
+			if (!webXmlFile.exists()) {
 				createDefaultWebXml(webXmlPath.toFile(), projectName);
 			}
 		}
@@ -751,16 +773,17 @@ public class ProjectUtil {
 		String pluginType = null;
 
 		if (op != null) {
-			PluginType type = op.getPluginType().content();
+			PluginType type = SapphireUtil.getContent(op.getPluginType());
 
 			pluginType = type.name();
 
-			if (PluginType.theme.name().equals(pluginType)) {
+			if (pluginType.equals(PluginType.theme.name())) {
 				newProjectDataModel.setProperty(
-					IPluginProjectDataModelProperties.THEME_PARENT, op.getThemeParent().content(true));
+					IPluginProjectDataModelProperties.THEME_PARENT, SapphireUtil.getContent(op.getThemeParent()));
 
 				newProjectDataModel.setProperty(
-					IPluginProjectDataModelProperties.THEME_TEMPLATE_FRAMEWORK, op.getThemeFramework().content(true));
+					IPluginProjectDataModelProperties.THEME_TEMPLATE_FRAMEWORK,
+					SapphireUtil.getContent(op.getThemeFramework()));
 			}
 		}
 		else {
@@ -772,16 +795,16 @@ public class ProjectUtil {
 		String portlet = PluginType.portlet.name();
 
 		if ((op != null) && portlet.equals(pluginType)) {
-			IPortletFramework portletFramework = op.getPortletFramework().content(true);
+			IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
 
 			portletFramework.configureNewProject(newProjectDataModel, fpwc);
 		}
 
 		// if project is located in natural workspace location then don't need to set a project location
 
-		IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+		IPath workspaceLocation = CoreUtil.getWorkspaceRootLocation();
 
-		if (workspaceLocation.append(projectDirName).equals(projectLocation)) {
+		if (projectLocation.equals(workspaceLocation.append(projectDirName))) {
 			fpwc.setProjectLocation(null);
 		}
 
@@ -807,7 +830,9 @@ public class ProjectUtil {
 			return;
 		}
 
-		IVirtualFolder jsrc = c.getRootFolder().getFolder("/WEB-INF/classes");
+		IVirtualFolder rootFolder = c.getRootFolder();
+
+		IVirtualFolder jsrc = rootFolder.getFolder("/WEB-INF/classes");
 
 		if (jsrc == null) {
 			return;
@@ -817,18 +842,24 @@ public class ProjectUtil {
 
 		for (IClasspathEntry cpe : cp) {
 			if (cpe.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
-				IPath path = cpe.getPath().removeFirstSegments(1);
+				IPath path = cpe.getPath();
+
+				path = path.removeFirstSegments(1);
 
 				if (path.segmentCount() > 0) {
 					try {
-						IFolder srcFolder = CoreUtil.getWorkspaceRoot().getFolder(cpe.getPath());
+						IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
+
+						IFolder srcFolder = workspaceRoot.getFolder(cpe.getPath());
 
 						IVirtualResource[] virtualResource = ComponentCore.createResources(srcFolder);
 
 						// create link for source folder only when it is not mapped
 
 						if (virtualResource.length == 0) {
-							jsrc.createLink(cpe.getPath().removeFirstSegments(1), 0, null);
+							IPath p = cpe.getPath();
+
+							jsrc.createLink(p.removeFirstSegments(1), 0, null);
 						}
 					}
 					catch (Exception e) {
@@ -842,7 +873,7 @@ public class ProjectUtil {
 	public static IProject[] getAllPluginsSDKProjects() {
 		List<IProject> sdkProjects = new ArrayList<>();
 
-		IProject[] projects = CoreUtil.getWorkspaceRoot().getProjects();
+		IProject[] projects = CoreUtil.getAllProjects();
 
 		for (IProject project : projects) {
 			if (isLiferayFacetedProject(project)) {
@@ -861,7 +892,9 @@ public class ProjectUtil {
 		IFile bndFile = project.getFile("bnd.bnd");
 
 		if (bndFile.exists()) {
-			Properties prop = PropertiesUtil.loadProperties(bndFile.getLocation().toFile());
+			File file = FileUtil.getFile(bndFile);
+
+			Properties prop = PropertiesUtil.loadProperties(file);
 
 			retVal = prop.getProperty(Constants.BUNDLE_SYMBOLICNAME);
 		}
@@ -944,7 +977,7 @@ public class ProjectUtil {
 
 		IFile portletXml = defaultDocrootFolder.getFile(new Path("WEB-INF/portlet.xml"));
 
-		if ((portletXml != null) && portletXml.exists()) {
+		if (FileUtil.exists(portletXml)) {
 			return portletXml;
 		}
 
@@ -962,7 +995,7 @@ public class ProjectUtil {
 	}
 
 	public static IProject getProject(String projectName) {
-		return CoreUtil.getWorkspaceRoot().getProject(projectName);
+		return CoreUtil.getProject(projectName);
 	}
 
 	public static ProjectRecord getProjectRecordForDir(String dir) {
@@ -1132,7 +1165,9 @@ public class ProjectUtil {
 				SDK sdk = sdkProject.getSDK();
 
 				if (sdk != null) {
-					IPath location = sdkProject.getProject().getLocation();
+					IProject p = sdkProject.getProject();
+
+					IPath location = p.getLocation();
 
 					String projectType = getLiferayPluginType(location.toPortableString());
 
@@ -1170,7 +1205,7 @@ public class ProjectUtil {
 	}
 
 	public static boolean isDynamicWebFacet(IProjectFacet facet) {
-		if ((facet != null) && facet.getId().equals(IModuleConstants.JST_WEB_MODULE)) {
+		if ((facet != null) && IModuleConstants.JST_WEB_MODULE.equals(facet.getId())) {
 			return true;
 		}
 
@@ -1211,8 +1246,9 @@ public class ProjectUtil {
 
 		if (bndfile.exists()) {
 			try (InputStream inputStream = bndfile.getContents();
-					InputStreamReader inputReader = new InputStreamReader(inputStream);
-					BufferedReader reader = new BufferedReader(inputReader)) {
+				InputStreamReader inputReader = new InputStreamReader(inputStream);
+				BufferedReader reader = new BufferedReader(inputReader)) {
+
 				String fragName;
 
 				while ((fragName = reader.readLine()) != null) {
@@ -1226,14 +1262,28 @@ public class ProjectUtil {
 		return false;
 	}
 
+	public static boolean isGradleProject(IProject project) {
+		boolean retval = false;
+
+		try {
+			retval = FileUtil.exists(project) && project.hasNature("org.eclipse.buildship.core.gradleprojectnature");
+		}
+		catch (Exception e) {
+		}
+
+		return retval;
+	}
+
 	public static boolean isHookProject(IProject project) {
 		return hasFacet(project, IPluginFacetConstants.LIFERAY_HOOK_PROJECT_FACET);
 	}
 
 	public static boolean isJavaFacet(IProjectFacet facet) {
-		if ((facet != null) &&
-			(facet.getId().equals(JavaFacet.ID) || facet.getId().equals(IModuleConstants.JST_JAVA))) {
+		if (facet == null) {
+			return false;
+		}
 
+		if (JavaFacet.ID.equals(facet.getId()) || IModuleConstants.JST_JAVA.equals(facet.getId())) {
 			return true;
 		}
 
@@ -1241,7 +1291,11 @@ public class ProjectUtil {
 	}
 
 	public static boolean isJavaFacet(IProjectFacetVersion facetVersion) {
-		if ((facetVersion != null) && isJavaFacet(facetVersion.getProjectFacet())) {
+		if (facetVersion == null) {
+			return false;
+		}
+
+		if (isJavaFacet(facetVersion.getProjectFacet())) {
 			return true;
 		}
 
@@ -1253,7 +1307,7 @@ public class ProjectUtil {
 	}
 
 	public static boolean isLiferayFacet(IProjectFacet projectFacet) {
-		if ((projectFacet != null) && projectFacet.getId().startsWith("liferay.")) {
+		if ((projectFacet != null) && StringUtil.startsWith(projectFacet.getId(), "liferay.")) {
 			return true;
 		}
 
@@ -1323,13 +1377,13 @@ public class ProjectUtil {
 			boolean hasDocroot = false;
 
 			for (File content : contents) {
-				if (content.getName().equals("build.xml")) {
+				if ("build.xml".equals(content.getName())) {
 					hasBuildXml = true;
 
 					continue;
 				}
 
-				if (content.getName().equals(ISDKConstants.DEFAULT_DOCROOT_FOLDER)) {
+				if (ISDKConstants.DEFAULT_DOCROOT_FOLDER.equals(content.getName())) {
 					hasDocroot = true;
 
 					continue;
@@ -1344,25 +1398,16 @@ public class ProjectUtil {
 		return false;
 	}
 
-	public static boolean isGradleProject(IProject project) {
-		boolean retval = false;
-
-		try {
-			retval = FileUtil.exists(project) && project.hasNature("org.eclipse.buildship.core.gradleprojectnature");
-		}
-		catch (Exception e) {
-		}
-
-		return retval;
-	}
-
 	public static boolean isMavenProject(IProject project) {
+		if (project == null) {
+			return false;
+		}
+
 		boolean retval = false;
 
 		try {
-			if (project != null) {
-				retval = project.hasNature("org.eclipse.m2e.core.maven2Nature") && project.getFile("pom.xml").exists();
-			}
+			retval =
+				project.hasNature("org.eclipse.m2e.core.maven2Nature") && FileUtil.exists(project.getFile("pom.xml"));
 		}
 		catch (Exception e) {
 		}
@@ -1375,13 +1420,13 @@ public class ProjectUtil {
 			return false;
 		}
 
-		if ((resource.getParent() != null) && resource.getParent().equals(folder)) {
+		if ((resource.getParent() != null) && folder.equals(resource.getParent())) {
 			return true;
 		}
 		else {
 			boolean retval = isParent(folder, resource.getParent());
 
-			if (retval == true) {
+			if (retval) {
 				return true;
 			}
 		}
@@ -1419,10 +1464,10 @@ public class ProjectUtil {
 
 	public static boolean isWorkspaceWars(IProject project) {
 		try {
-			if (LiferayWorkspaceUtil.hasWorkspace() && project.getFolder("src").exists()) {
+			if (LiferayWorkspaceUtil.hasWorkspace() && FileUtil.exists(project.getFolder("src"))) {
 				IProject wsProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-				File wsRootDir = wsProject.getLocation().toFile();
+				File wsRootDir = LiferayWorkspaceUtil.getWorkspaceProjectFile();
 
 				String[] warsNames = LiferayWorkspaceUtil.getWarsDirs(wsProject);
 
@@ -1432,7 +1477,9 @@ public class ProjectUtil {
 					warsDirs[i] = new File(wsRootDir, warsNames[i]);
 				}
 
-				File projectDir = project.getLocation().toFile();
+				IPath location = project.getLocation();
+
+				File projectDir = location.toFile();
 
 				File parentDir = projectDir.getParentFile();
 
@@ -1501,7 +1548,7 @@ public class ProjectUtil {
 		for (DataModelPropertyDescriptor desc : validDescriptors) {
 			Object runtime = desc.getPropertyValue();
 
-			if (runtime instanceof BridgedRuntime && ServerUtil.isLiferayRuntime((BridgedRuntime)runtime)) {
+			if ((runtime instanceof BridgedRuntime) && ServerUtil.isLiferayRuntime((BridgedRuntime)runtime)) {
 				dataModel.setProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME, runtime);
 
 				break;
@@ -1537,7 +1584,9 @@ public class ProjectUtil {
 		try (InputStream ins = buildGradleFile.getContents()) {
 			String content = FileUtil.readContents(ins);
 
-			if ((content != null) && _themeBuilderPlugin.matcher(content).matches()) {
+			Matcher matcher = _themeBuilderPlugin.matcher(content);
+
+			if ((content != null) && matcher.matches()) {
 				return true;
 			}
 
@@ -1558,7 +1607,9 @@ public class ProjectUtil {
 		try (InputStream ins = buildGradleFile.getContents()) {
 			String content = FileUtil.readContents(ins);
 
-			if ((content != null) && _warPlugin.matcher(content).matches()) {
+			Matcher matcher = _warPlugin.matcher(content);
+
+			if ((content != null) && matcher.matches()) {
 				return true;
 			}
 
@@ -1623,7 +1674,9 @@ public class ProjectUtil {
 				javaProject.setRawClasspath(newEntries.toArray(new IClasspathEntry[0]), monitor);
 
 				try {
-					javaProject.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					IProject p = javaProject.getProject();
+
+					p.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 				}
 				catch (Exception e) {
 					ProjectCore.logError(e);
@@ -1641,7 +1694,9 @@ public class ProjectUtil {
 		boolean retval = false;
 
 		if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
-			for (String path : entry.getPath().segments()) {
+			IPath p = entry.getPath();
+
+			for (String path : p.segments()) {
 				if (path.equals(PluginClasspathContainerInitializer.ID) ||
 					path.equals("com.liferay.studio.server.tomcat.runtimeClasspathProvider") ||
 					path.equals("com.liferay.ide.eclipse.server.tomcat.runtimeClasspathProvider")) {
