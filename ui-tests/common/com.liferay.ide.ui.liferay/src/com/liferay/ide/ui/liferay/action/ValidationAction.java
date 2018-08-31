@@ -61,6 +61,10 @@ public class ValidationAction extends UIAction {
 		SWTBotAssert.assertContains(expect, stack);
 	}
 
+	public void assertDoesNotContains(String expect, String stack) {
+		SWTBotAssert.assertDoesNotContain(expect, stack);
+	}
+
 	public void assertEnabledFalse(AbstractWidget widget) {
 		Assert.assertFalse(widget.isEnabled());
 	}
