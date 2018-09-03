@@ -15,8 +15,10 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -34,6 +36,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
@@ -86,14 +89,14 @@ public class SDKProjectsImportWizardPage
 	public Object[] getProjectRecords() {
 		List projectRecords = new ArrayList();
 
-		for (int i = 0; i < selectedProjects.length; i++) {
-			ProjectRecord projectRecord = (ProjectRecord)selectedProjects[i];
+		for (Object project : selectedProjects) {
+			ProjectRecord projectRecord = (ProjectRecord)project;
 
 			if (isProjectInWorkspace(projectRecord.getProjectName())) {
 				projectRecord.setHasConflicts(true);
 			}
 
-			projectRecords.add(selectedProjects[i]);
+			projectRecords.add(project);
 		}
 
 		return (ProjectRecord[])projectRecords.toArray(new ProjectRecord[projectRecords.size()]);
@@ -142,12 +145,6 @@ public class SDKProjectsImportWizardPage
 				true, true,
 				new IRunnableWithProgress() {
 
-					/*
-					 * (non-Javadoc)
-					 *
-					 * @see IRunnableWithProgress#run(org
-					 * .eclipse.core.runtime.IProgressMonitor)
-					 */
 					public void run(IProgressMonitor monitor) {
 						monitor.beginTask(Msgs.searchingMessage, 100);
 
@@ -204,19 +201,14 @@ public class SDKProjectsImportWizardPage
 
 		boolean displayWarning = false;
 
-		for (int i = 0; i < projects.length; i++) {
-			ProjectRecord projectRecord = (ProjectRecord)projects[i];
+		for (Object project : projects) {
+			ProjectRecord projectRecord = (ProjectRecord)project;
 
 			if (projectRecord.hasConflicts()) {
 				displayWarning = true;
 
-				projectsList.setGrayed(projects[i], true);
+				projectsList.setGrayed(project, true);
 			}
-
-			// else {
-			// projectsList.setChecked(projects[i], true);
-			// }
-
 		}
 
 		if (displayWarning) {
@@ -270,11 +262,13 @@ public class SDKProjectsImportWizardPage
 
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
 
-		gridData.widthHint = new PixelConverter(projectsList.getControl()).convertWidthInCharsToPixels(25);
+		Control control = projectsList.getControl();
 
-		gridData.heightHint = new PixelConverter(projectsList.getControl()).convertHeightInCharsToPixels(10);
+		gridData.widthHint = new PixelConverter(control).convertWidthInCharsToPixels(25);
 
-		projectsList.getControl().setLayoutData(gridData);
+		gridData.heightHint = new PixelConverter(control).convertHeightInCharsToPixels(10);
+
+		control.setLayoutData(gridData);
 
 		projectsList.setContentProvider(
 			new ITreeContentProvider() {
@@ -518,19 +512,23 @@ public class SDKProjectsImportWizardPage
 		String sdkName = getDataModel().getStringProperty(LIFERAY_SDK_NAME);
 
 		if (sdkName != null) {
-			SDK initialSdk = SDKManager.getInstance().getSDK(sdkName);
+			SDKManager sdkManager = SDKManager.getInstance();
+
+			SDK initialSdk = sdkManager.getSDK(sdkName);
 
 			if (initialSdk != null) {
-				updateProjectsList(initialSdk.getLocation().toOSString());
+				updateProjectsList(FileUtil.toOSString(initialSdk.getLocation()));
 			}
 		}
 	}
 
 	protected IProject[] getProjectsInWorkspace() {
 		if (wsProjects == null) {
-			IWorkspaceRoot workspace = IDEWorkbenchPlugin.getPluginWorkspace().getRoot();
+			IWorkspace workspace = IDEWorkbenchPlugin.getPluginWorkspace();
 
-			wsProjects = workspace.getProjects();
+			IWorkspaceRoot root = workspace.getRoot();
+
+			wsProjects = root.getProjects();
 		}
 
 		return wsProjects;
@@ -590,7 +588,7 @@ public class SDKProjectsImportWizardPage
 		// force a project refresh
 
 		lastModified = -1;
-		updateProjectsList(sdkLocation.getText().trim());
+		updateProjectsList(StringUtil.trim(sdkLocation.getText()));
 
 		projectsList.setCheckedElements(new Object[0]);
 
@@ -598,8 +596,8 @@ public class SDKProjectsImportWizardPage
 	}
 
 	protected void handleSelectAll(SelectionEvent e) {
-		for (int i = 0; i < selectedProjects.length; i++) {
-			ProjectRecord projectRecord = (ProjectRecord)selectedProjects[i];
+		for (Object o : selectedProjects) {
+			ProjectRecord projectRecord = (ProjectRecord)o;
 
 			if (projectRecord.hasConflicts()) {
 				projectsList.setChecked(projectRecord, false);
@@ -612,10 +610,6 @@ public class SDKProjectsImportWizardPage
 		getDataModel().setProperty(SELECTED_PROJECTS, projectsList.getCheckedElements());
 
 		validatePage(true);
-
-		// setPageComplete(projectsList.getCheckedElements().length >
-		// 0);
-
 	}
 
 	protected boolean isProjectInWorkspace(String projectName) {
@@ -625,8 +619,8 @@ public class SDKProjectsImportWizardPage
 
 		IProject[] workspaceProjects = getProjectsInWorkspace();
 
-		for (int i = 0; i < workspaceProjects.length; i++) {
-			if (projectName.equals(workspaceProjects[i].getName())) {
+		for (IProject project : workspaceProjects) {
+			if (FileUtil.nameEquals(project, projectName)) {
 				return true;
 			}
 		}

@@ -18,6 +18,7 @@ import com.liferay.ide.project.ui.WorkingSets;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkingSet;
@@ -48,23 +49,6 @@ public class SelectionUtil {
 		}
 
 		return null;
-
-		// IResource resource = getType(element, IResource.class);
-		// if(resource != null) {
-		// return getWorkingSet(resource);
-		// }
-
-		// IPackageFragmentRoot fragment = getType(element, IPackageFragmentRoot.class);
-		// if(fragment != null) {
-		// IJavaProject javaProject = fragment.getJavaProject();
-		// if(javaProject != null) {
-		// IResource resource = getType(javaProject, IResource.class);
-		// if(resource != null) {
-		// return getWorkingSet(resource.getProject());
-		// }
-		// }
-		// }
-
 	}
 
 	/**
@@ -89,7 +73,9 @@ public class SelectionUtil {
 			}
 		}
 
-		return (T)Platform.getAdapterManager().getAdapter(element, type);
+		IAdapterManager adapterManager = Platform.getAdapterManager();
+
+		return (T)adapterManager.getAdapter(element, type);
 	}
 
 }

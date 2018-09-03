@@ -14,7 +14,9 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -88,15 +90,18 @@ public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart {
 	}
 
 	@Override
-	protected void createTempFile(final IFile srcFile, final File templateFile, final String projectName) {
+	protected void createTempFile(IFile srcFile, File templateFile, String projectName) {
 		try {
-			String content = _upgradeLayouttplContent(FileUtil.readContents(srcFile.getLocation().toFile(), true));
+			File file = FileUtil.getFile(srcFile);
+
+			String content = _upgradeLayouttplContent(FileUtil.readContents(file, true));
 
 			if (templateFile.exists()) {
 				templateFile.delete();
 			}
 
 			templateFile.createNewFile();
+
 			FileUtil.writeFile(templateFile, content, projectName);
 		}
 		catch (Exception e) {
@@ -107,9 +112,11 @@ public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart {
 	@Override
 	protected void doUpgrade(IFile srcFile, IProject project) {
 		try {
-			String content = _upgradeLayouttplContent(FileUtil.readContents(srcFile.getLocation().toFile(), true));
+			File file = FileUtil.getFile(srcFile);
 
-			FileUtils.writeStringToFile(srcFile.getLocation().toFile(), content, "UTF-8");
+			String content = _upgradeLayouttplContent(FileUtil.readContents(file, true));
+
+			FileUtils.writeStringToFile(file, content, "UTF-8");
 		}
 		catch (Exception e) {
 			ProjectUI.logError(e);
@@ -149,12 +156,16 @@ public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart {
 	protected List<IProject> getSelectedProjects() {
 		List<IProject> projects = new ArrayList<>();
 
-		final JavaProjectSelectionDialog dialog = new JavaProjectSelectionDialog(
-			Display.getCurrent().getActiveShell(), new LayoutProjectViewerFilter());
+		Display display = Display.getCurrent();
+
+		JavaProjectSelectionDialog dialog = new JavaProjectSelectionDialog(
+			display.getActiveShell(), new LayoutProjectViewerFilter());
 
 		URL imageUrl = bundle.getEntry("/icons/e16/layout.png");
 
-		Image layouttplImage = ImageDescriptor.createFromURL(imageUrl).createImage();
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(imageUrl);
+
+		Image layouttplImage = imageDescriptor.createImage();
 
 		dialog.setImage(layouttplImage);
 
@@ -180,9 +191,9 @@ public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart {
 
 	@Override
 	protected boolean isUpgradeNeeded(IFile srcFile) {
-		final String content = FileUtil.readContents(srcFile.getLocation().toFile());
+		String content = FileUtil.readContents(FileUtil.getFile(srcFile));
 
-		if ((content != null) && !content.equals("")) {
+		if (CoreUtil.isNotNullOrEmpty(content)) {
 			if (content.contains("row-fluid") || content.contains("span")) {
 				return true;
 			}
@@ -212,7 +223,7 @@ public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart {
 			if (element instanceof IJavaProject) {
 				IProject project = ((IJavaProject)element).getProject();
 
-				if (project.getName().equals("External Plug-in Libraries")) {
+				if (FileUtil.nameEquals(project, "External Plug-in Libraries")) {
 					return false;
 				}
 
@@ -232,7 +243,9 @@ public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart {
 
 		@Override
 		public boolean visit(IResourceProxy resourceProxy) {
-			if ((resourceProxy.getType() == IResource.FILE) && resourceProxy.getName().endsWith(searchFileName)) {
+			if ((resourceProxy.getType() == IResource.FILE) &&
+				StringUtil.endsWith(resourceProxy.getName(), searchFileName)) {
+
 				IResource resource = resourceProxy.requestResource();
 
 				if (resource.exists()) {

@@ -17,8 +17,10 @@ package com.liferay.ide.project.ui.wizard;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.ui.LiferayUIPlugin;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,16 +29,16 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaModel;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
@@ -56,9 +58,10 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IDecoratorManager;
+import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchContentProvider;
@@ -102,8 +105,8 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 				if (element instanceof IProject) {
 					IProject project = (IProject)element;
 
-					return project.getName().equals(
-						model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME));
+					return FileUtil.nameEquals(
+						project, model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME));
 				}
 				else if (element instanceof IFolder) {
 					return true;
@@ -137,23 +140,25 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 					}
 
 					if (jelem == null) {
-						jelem = JavaCore.create(resource); // java project
+						jelem = JavaCore.create(resource);
 					}
 				}
 			}
 		}
 
 		if (jelem == null) {
-			IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			IWorkbenchWindow window = UIUtil.getActiveWorkbenchWindow();
 
 			if (window == null) {
 				return null;
 			}
 
-			IWorkbenchPart part = window.getActivePage().getActivePart();
+			IWorkbenchPage workbenchPage = window.getActivePage();
+
+			IWorkbenchPart part = workbenchPage.getActivePart();
 
 			if (part instanceof ContentOutline) {
-				part = window.getActivePage().getActiveEditor();
+				part = workbenchPage.getActiveEditor();
 			}
 
 			if (part instanceof IViewPartInputProvider) {
@@ -167,7 +172,9 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 
 		if ((jelem == null) || (jelem.getElementType() == IJavaElement.JAVA_MODEL)) {
 			try {
-				IJavaProject[] projects = JavaCore.create(getWorkspaceRoot()).getJavaProjects();
+				IJavaModel javaModel = JavaCore.create(CoreUtil.getWorkspaceRoot());
+
+				IJavaProject[] projects = javaModel.getJavaProjects();
 
 				if (projects.length == 1) {
 					jelem = projects[0];
@@ -194,7 +201,9 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 			return (IJavaElement)((IAdaptable)obj).getAdapter(IJavaElement.class);
 		}
 
-		return (IJavaElement)Platform.getAdapterManager().getAdapter(obj, IJavaElement.class);
+		IAdapterManager adapterManager = Platform.getAdapterManager();
+
+		return (IJavaElement)adapterManager.getAdapter(obj, IJavaElement.class);
 	}
 
 	protected IResource getResource(Object obj) {
@@ -210,17 +219,21 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 			return (IResource)((IAdaptable)obj).getAdapter(IResource.class);
 		}
 
-		return (IResource)Platform.getAdapterManager().getAdapter(obj, IResource.class);
+		IAdapterManager adapterManager = Platform.getAdapterManager();
+
+		return (IResource)adapterManager.getAdapter(obj, IResource.class);
 	}
 
 	protected IProject getSelectedProject() {
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchWindow window = UIUtil.getActiveWorkbenchWindow();
 
 		if (window == null) {
 			return null;
 		}
 
-		ISelection selection = window.getSelectionService().getSelection();
+		ISelectionService selectionService = window.getSelectionService();
+
+		ISelection selection = selectionService.getSelection();
 
 		if (selection == null) {
 			return null;
@@ -233,7 +246,9 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 		IJavaElement element = getInitialJavaElement(selection);
 
 		if ((element != null) && (element.getJavaProject() != null)) {
-			return element.getJavaProject().getProject();
+			IJavaProject javaProject = element.getJavaProject();
+
+			return javaProject.getProject();
 		}
 
 		IStructuredSelection stucturedSelection = (IStructuredSelection)selection;
@@ -245,10 +260,6 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 		return null;
 	}
 
-	protected IWorkspaceRoot getWorkspaceRoot() {
-		return ResourcesPlugin.getWorkspace().getRoot();
-	}
-
 	protected void handleFileBrowseButton(final Text text, String title, String message) {
 		ISelectionStatusValidator validator = getContainerDialogSelectionValidator();
 
@@ -256,7 +267,7 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 
 		ITreeContentProvider contentProvider = new WorkbenchContentProvider();
 
-		IDecoratorManager decoratorManager = PlatformUI.getWorkbench().getDecoratorManager();
+		IDecoratorManager decoratorManager = UIUtil.getDecoratorManager();
 
 		ILabelProvider labelProvider = new DecoratingLabelProvider(
 			new WorkbenchLabelProvider(), decoratorManager.getLabelDecorator());
@@ -288,7 +299,9 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 						if (element instanceof IFile) {
 							IFile file = (IFile)element;
 
-							final IPath relativePath = file.getFullPath().makeRelativeTo(defaultDocroot.getFullPath());
+							IPath fullPath = file.getFullPath();
+
+							final IPath relativePath = fullPath.makeRelativeTo(defaultDocroot.getFullPath());
 
 							text.setText("/" + relativePath.toPortableString());
 
@@ -366,7 +379,9 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 
 		}
 
-		if (((projectCombo.getText() == null) || (projectCombo.getText().length() == 0)) && (names[0] != null)) {
+		String text = projectCombo.getText();
+
+		if (CoreUtil.isNullOrEmpty(text) && (names[0] != null)) {
 			projectCombo.setText(names[0]);
 
 			validateProjectRequirements(CoreUtil.getProject(names[0]));

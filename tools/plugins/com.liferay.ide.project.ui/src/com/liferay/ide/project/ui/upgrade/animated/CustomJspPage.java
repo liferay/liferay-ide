@@ -15,7 +15,9 @@
 package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
 import com.liferay.ide.server.util.ServerUtil;
@@ -1018,8 +1020,8 @@ public class CustomJspPage extends Page {
 
 					triggerValidationEvent(pe);
 				}
-				else if (property.name().equals("ConvertLiferayWorkspace")) {
-					if (dataModel.getConvertLiferayWorkspace().content(true)) {
+				else if ("ConvertLiferayWorkspace".equals(property.name())) {
+					if (SapphireUtil.getContent(dataModel.getConvertLiferayWorkspace())) {
 						_updateDefaultLocation();
 					}
 				}
@@ -1152,7 +1154,7 @@ public class CustomJspPage extends Page {
 			if (file.isDirectory()) {
 				text.append(_getFileName(file));
 
-				if (file.getName().endsWith("resources")) {
+				if (FileUtil.nameEndsWith(file, "resources")) {
 					cell.setImage(_imageProject);
 				}
 				else {
@@ -1201,11 +1203,17 @@ public class CustomJspPage extends Page {
 			String name = file.getName();
 
 			if (name.equals("resources")) {
-				File parentFile = file.getParentFile().getParentFile();
+				File parentFile = file.getParentFile();
 
-				File parentParentFile = parentFile.getParentFile().getParentFile();
+				parentFile = parentFile.getParentFile();
 
-				return parentParentFile.getParentFile().getName();
+				parentFile = parentFile.getParentFile();
+
+				parentFile = parentFile.getParentFile();
+
+				parentFile = parentFile.getParentFile();
+
+				return parentFile.getName();
 			}
 			else {
 				if (name.isEmpty()) {

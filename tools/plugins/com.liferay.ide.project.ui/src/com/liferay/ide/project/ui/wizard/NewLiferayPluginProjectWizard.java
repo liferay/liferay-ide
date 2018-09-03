@@ -15,6 +15,8 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -40,6 +42,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -56,6 +59,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonViewer;
@@ -73,7 +77,7 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
 public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayPluginProjectOp> {
 
 	public static void checkAndConfigureIvy(final IProject project) {
-		if ((project != null) && project.getFile(ISDKConstants.IVY_XML_FILE).exists()) {
+		if ((project != null) && FileUtil.exists(project.getFile(ISDKConstants.IVY_XML_FILE))) {
 			new WorkspaceJob("Configuring project with Ivy dependencies") {
 
 				@Override
@@ -138,7 +142,7 @@ public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayP
 		ElementList<ProjectName> projectNames = op.getProjectNames();
 
 		for (ProjectName projectName : projectNames) {
-			final IProject newProject = CoreUtil.getProject(projectName.getName().content());
+			IProject newProject = CoreUtil.getProject(SapphireUtil.getContent(projectName.getName()));
 
 			if (newProject != null) {
 				projects.add(newProject);
@@ -164,10 +168,10 @@ public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayP
 
 		// check if a new portlet wizard is needed, available for portlet projects.
 
-		final boolean createNewPortlet = op.getCreateNewPortlet().content();
+		boolean createNewPortlet = SapphireUtil.getContent(op.getCreateNewPortlet());
 
-		if (createNewPortlet && PluginType.portlet.equals(op.getPluginType().content())) {
-			final IPortletFramework portletFramework = op.getPortletFramework().content();
+		if (createNewPortlet && PluginType.portlet.equals(SapphireUtil.getContent(op.getPluginType()))) {
+			final IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
 			String wizardId = null;
 
 			if ("mvc".equals(portletFramework.getShortName())) {
@@ -207,8 +211,7 @@ public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayP
 							try {
 								final INewWizard wizard = (INewWizard)CoreUtility.createExtension(element, "class");
 
-								IWorkbenchWindow activeWorkbenchWindow =
-									PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+								IWorkbenchWindow activeWorkbenchWindow = UIUtil.getActiveWorkbenchWindow();
 
 								final Shell shell = activeWorkbenchWindow.getShell();
 
@@ -231,7 +234,9 @@ public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayP
 	}
 
 	private void _showInAntView(final IProject project) {
-		Display.getDefault().asyncExec(
+		Display display = Display.getDefault();
+
+		display.asyncExec(
 			new Runnable() {
 
 				@Override
@@ -245,13 +250,15 @@ public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayP
 						IFile buildXmlFile = project.getFile("build.xml");
 
 						if (buildXmlFile.exists()) {
-							String buildFileName = buildXmlFile.getFullPath().toString();
+							IPath fullPath = buildXmlFile.getFullPath();
 
-							final AntProjectNode antProject = new AntProjectNodeProxy(buildFileName);
+							AntProjectNode antProject = new AntProjectNodeProxy(fullPath.toString());
 
-							IViewPart antView =
-								PlatformUI.getWorkbench().getWorkbenchWindows()[0].
-									getActivePage().findView("org.eclipse.ant.ui.views.AntView");
+							IWorkbenchWindow workbenchWindow = UIUtil.getWorkbenchWindows()[0];
+
+							IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
+
+							IViewPart antView = workbenchPage.findView("org.eclipse.ant.ui.views.AntView");
 
 							if (antView instanceof AntView) {
 								((AntView)antView).addProject(antProject);
@@ -263,10 +270,12 @@ public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayP
 				private void _refreshProjectExplorer() {
 					IViewPart view = null;
 
+					IWorkbenchWindow workbenchWindow = UIUtil.getWorkbenchWindows()[0];
+
+					IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
+
 					try {
-						view =
-							PlatformUI.getWorkbench().getWorkbenchWindows()[0].
-								getActivePage().findView(IPageLayout.ID_PROJECT_EXPLORER);
+						view = workbenchPage.findView(IPageLayout.ID_PROJECT_EXPLORER);
 					}
 					catch (Exception e) {
 

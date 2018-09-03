@@ -49,6 +49,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -146,10 +147,10 @@ public class StringArrayTableWizardSection extends Composite {
 		}
 
 		if (columnTitles.length > 1) {
-			for (int i = 0; i < columnTitles.length; i++) {
+			for (String columnTitle : columnTitles) {
 				TableColumn tableColumn = new TableColumn(table, SWT.NONE);
 
-				tableColumn.setText(columnTitles[i]);
+				tableColumn.setText(columnTitle);
 			}
 
 			table.setHeaderVisible(true);
@@ -163,8 +164,13 @@ public class StringArrayTableWizardSection extends Composite {
 						TableColumn[] columns = table.getColumns();
 
 						Point buttonArea = buttonCompo.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-						Rectangle area = table.getParent().getClientArea();
-						Point preferredSize = viewer.getTable().computeSize(SWT.DEFAULT, SWT.DEFAULT);
+
+						Composite composite = table.getParent();
+
+						Rectangle area = composite.getClientArea();
+
+						Point preferredSize = table.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+
 						int width = area.width - 2 * table.getBorderWidth() - buttonArea.x - columns.length * 2;
 
 						if (preferredSize.y > (area.height + table.getHeaderHeight())) {
@@ -172,7 +178,9 @@ public class StringArrayTableWizardSection extends Composite {
 							// Subtract the scrollbar width from the total column width
 							// if a vertical scrollbar will be required
 
-							Point vBarSize = table.getVerticalBar().getSize();
+							ScrollBar scrollBar = table.getVerticalBar();
+
+							Point vBarSize = scrollBar.getSize();
 
 							width -= vBarSize.x;
 						}
@@ -390,8 +398,8 @@ public class StringArrayTableWizardSection extends Composite {
 		protected Control createContents(Composite parent) {
 			Composite composite = (Composite)super.createContents(parent);
 
-			for (int i = 0; i < texts.length; i++) {
-				texts[i].addModifyListener(this);
+			for (Text text : texts) {
+				text.addModifyListener(this);
 			}
 
 			_updateOKButton();

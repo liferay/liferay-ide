@@ -300,6 +300,17 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 		return projects;
 	}
 
+	protected String getUpgradeVersion() {
+		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
+
+		if (StringUtil.contains(upgradeVersion, "7.1")) {
+			return "7.1.0";
+		}
+		else {
+			return "7.0.0";
+		}
+	}
+
 	protected abstract boolean isUpgradeNeeded(IFile srcFile);
 
 	protected Status retval = Status.createOkStatus();
@@ -355,17 +366,6 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 
 		private final ImageRegistry _imageRegistry;
 
-	}
-
-	protected String getUpgradeVersion() {
-		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
-
-		if (StringUtil.contains(upgradeVersion, "7.1")) {
-			return "7.1.0";
-		}
-		else {
-			return "7.0.0";
-		}
 	}
 
 	protected class TableViewContentProvider implements IStructuredContentProvider {

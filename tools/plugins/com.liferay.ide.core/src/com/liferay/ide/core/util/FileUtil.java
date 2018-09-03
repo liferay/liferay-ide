@@ -302,6 +302,18 @@ public class FileUtil {
 		return false;
 	}
 
+	public static boolean exists(org.eclipse.sapphire.modeling.Path path) {
+		if (path != null) {
+			File file = path.toFile();
+
+			if (file.exists()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public static File getCanonicalFile(IPath location) {
 		if (location == null) {
 			return null;
@@ -1031,6 +1043,14 @@ public class FileUtil {
 	}
 
 	public static String toPortableString(IPath path) {
+		if (path == null) {
+			return "";
+		}
+
+		return path.toPortableString();
+	}
+
+	public static String toPortableString(org.eclipse.sapphire.modeling.Path path) {
 		if (path == null) {
 			return "";
 		}

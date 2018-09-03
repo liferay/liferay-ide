@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
@@ -21,7 +23,6 @@ import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -47,9 +48,7 @@ public class ProjectLocationValidationService extends ValidationService {
 			return StatusBridge.create(ProjectCore.createErrorStatus("This workspace has more than one SDK."));
 		}
 
-		Value<Path> sdkLocation = _op().getSdkLocation();
-
-		Path location = sdkLocation.content(true);
+		Path location = SapphireUtil.getContent(_op().getSdkLocation());
 
 		if ((location == null) || location.isEmpty()) {
 			return StatusBridge.create(
@@ -61,7 +60,8 @@ public class ProjectLocationValidationService extends ValidationService {
 		}
 
 		IStatus buildType = ImportLiferayModuleProjectOpMethods.getBuildType(
-			location.removeFileExtension().toPortableString());
+			FileUtil.toPortableString(location.removeFileExtension()));
+
 		SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(location));
 
 		if (sdk != null) {
@@ -73,12 +73,13 @@ public class ProjectLocationValidationService extends ValidationService {
 				int result = sdkVersion.compareTo(new Version("6.1.0"));
 
 				if (result < 0) {
-					return StatusBridge.create(ProjectCore.createErrorStatus("This tool doesn't support 6.0.x."));
+					return StatusBridge.create(ProjectCore.createErrorStatus("This tool does not support 6.0.x."));
 				}
 			}
 		}
-		else if (!buildType.getMessage().equals("maven")) {
-			return StatusBridge.create(ProjectCore.createErrorStatus("Plugins SDK, Maven or Liferay Workspace location is not valid."));
+		else if (!"maven".equals(buildType.getMessage())) {
+			return StatusBridge.create(
+				ProjectCore.createErrorStatus("Plugins SDK, Maven or Liferay Workspace location is not valid."));
 		}
 
 		return retval;

@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
@@ -212,7 +213,9 @@ public class SDKProjectConvertWizardPage
 				directoriesVisited.add(directory.getCanonicalPath());
 			}
 			catch (IOException ioe) {
-				StatusManager.getManager().handle(StatusUtil.newStatus(IStatus.ERROR, ioe.getLocalizedMessage(), ioe));
+				StatusManager statusManager = StatusManager.getManager();
+
+				statusManager.handle(StatusUtil.newStatus(IStatus.ERROR, ioe.getLocalizedMessage(), ioe));
 			}
 		}
 
@@ -220,27 +223,25 @@ public class SDKProjectConvertWizardPage
 
 		final String dotProject = IProjectDescription.DESCRIPTION_FILE_NAME;
 
-		for (int i = 0; i < contents.length; i++) {
-			File file = contents[i];
-
-			if (_isLiferaySDKProjectDir(file)) {
+		for (File content : contents) {
+			if (_isLiferaySDKProjectDir(content)) {
 
 				// recurse to see if it has project file
 
 				int currentSize = eclipseProjectFiles.size();
 
 				collectProjectsFromDirectory(
-					eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, false, monitor);
+					eclipseProjectFiles, liferayProjectDirs, content, directoriesVisited, false, monitor);
 
 				int newSize = eclipseProjectFiles.size();
 
 				if (newSize == currentSize) {
-					liferayProjectDirs.add(file);
+					liferayProjectDirs.add(content);
 				}
 			}
-			else if (file.isFile() && file.getName().equals(dotProject)) {
-				if (!eclipseProjectFiles.contains(file)) {
-					eclipseProjectFiles.add(file);
+			else if (content.isFile() && dotProject.equals(content.getName())) {
+				if (!eclipseProjectFiles.contains(content)) {
+					eclipseProjectFiles.add(content);
 				}
 
 				// don't search sub-directories since we can't have nested
@@ -252,11 +253,11 @@ public class SDKProjectConvertWizardPage
 
 		// no project description found, so recurse into sub-directories
 
-		for (int i = 0; i < contents.length; i++) {
-			if (contents[i].isDirectory()) {
-				if (!contents[i].getName().equals(METADATA_FOLDER)) {
+		for (File content : contents) {
+			if (content.isDirectory()) {
+				if (!METADATA_FOLDER.equals(content.getName())) {
 					try {
-						String canonicalPath = contents[i].getCanonicalPath();
+						String canonicalPath = content.getCanonicalPath();
 
 						if (!directoriesVisited.add(canonicalPath)) {
 
@@ -266,16 +267,17 @@ public class SDKProjectConvertWizardPage
 						}
 					}
 					catch (IOException ioe) {
-						StatusManager.getManager().handle(
-							StatusUtil.newStatus(IStatus.ERROR, ioe.getLocalizedMessage(), ioe));
+						StatusManager statusManager = StatusManager.getManager();
+
+						statusManager.handle(StatusUtil.newStatus(IStatus.ERROR, ioe.getLocalizedMessage(), ioe));
 					}
 
 					// dont recurse directories that we have already determined
 					// are Liferay projects
 
-					if (!liferayProjectDirs.contains(contents[i]) && recurse) {
+					if (!liferayProjectDirs.contains(content) && recurse) {
 						collectProjectsFromDirectory(
-							eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, recurse, monitor);
+							eclipseProjectFiles, liferayProjectDirs, content, directoriesVisited, recurse, monitor);
 					}
 				}
 			}
@@ -290,27 +292,16 @@ public class SDKProjectConvertWizardPage
 		title.setText(Msgs.importProjectLabel);
 		title.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1));
 
-		// Composite listComposite = new Composite(workArea, SWT.NONE);
-		// GridLayout layout = new GridLayout();
-		// layout.numColumns = 2;
-		// layout.marginWidth = 0;
-		// layout.makeColumnsEqualWidth = false;
-		// listComposite.setLayout(layout);
-
-		// GridData gd = new GridData(GridData.GRAB_HORIZONTAL
-		// | GridData.GRAB_VERTICAL | GridData.FILL_BOTH);
-		// gd.grabExcessHorizontalSpace = true;
-		// gd.horizontalSpan = 3;
-		// listComposite.setLayoutData(gd);
-
 		projectsList = new CheckboxTreeViewer(workArea, SWT.BORDER);
 
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
 
-		gridData.widthHint = new PixelConverter(projectsList.getControl()).convertWidthInCharsToPixels(25);
-		gridData.heightHint = new PixelConverter(projectsList.getControl()).convertHeightInCharsToPixels(10);
+		Control control = projectsList.getControl();
 
-		projectsList.getControl().setLayoutData(gridData);
+		gridData.widthHint = new PixelConverter(control).convertWidthInCharsToPixels(25);
+		gridData.heightHint = new PixelConverter(control).convertHeightInCharsToPixels(10);
+
+		control.setLayoutData(gridData);
 
 		projectsList.setContentProvider(
 			new ITreeContentProvider() {
@@ -490,17 +481,6 @@ public class SDKProjectConvertWizardPage
 		return false;
 	}
 
-	// private IProject[] getProjectsInWorkspace() {
-	// if (wsProjects == null) {
-	// wsProjects =
-	// IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getProjects();
-	// }
-
-	//
-
-	// return wsProjects;
-	// }
-
 	protected long lastModified;
 	protected String lastPath;
 	protected CheckboxTreeViewer projectsList;
@@ -545,15 +525,15 @@ public class SDKProjectConvertWizardPage
 			boolean hasDocroot = false;
 
 			for (File content : contents) {
-				if (content.getName().equals("build.xml") ||
-					file.getName().endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
+				if ("build.xml".equals(content.getName()) ||
+					FileUtil.nameEndsWith(file, ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
 
 					hasBuildXml = true;
 
 					continue;
 				}
 
-				if (content.getName().equals(ISDKConstants.DEFAULT_DOCROOT_FOLDER)) {
+				if (ISDKConstants.DEFAULT_DOCROOT_FOLDER.equals(content.getName())) {
 					hasDocroot = true;
 
 					continue;

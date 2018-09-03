@@ -14,24 +14,17 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.IOUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringUtil;
-import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.jobs.InitBundleJob;
 import com.liferay.ide.project.core.jobs.JobUtil;
-import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.modules.BladeCLIException;
-import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -41,40 +34,25 @@ import com.liferay.ide.project.ui.IvyUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
 import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import java.net.URL;
-
-import java.nio.file.Files;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
@@ -109,25 +87,12 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.wst.validation.Validator;
-import org.eclipse.wst.validation.internal.ValManager;
-import org.eclipse.wst.validation.internal.ValPrefManagerProject;
-import org.eclipse.wst.validation.internal.ValidatorMutable;
-import org.eclipse.wst.validation.internal.model.ProjectPreferences;
-
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
-
-import org.osgi.framework.Bundle;
 
 /**
  * @author Simon Jiang
  * @author Terry Jia
  */
-@SuppressWarnings({"unused", "restriction"})
+@SuppressWarnings("unused")
 public class InitConfigureProjectPage extends Page implements SelectionChangedListener {
 
 	public InitConfigureProjectPage(final Composite parent, int style, LiferayUpgradeDataModel dataModel) {
@@ -705,17 +670,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		dataModel.setDownloadBundle(_downloadBundleCheckbox.getSelection());
 	}
 
-	private void _disableUIControl(boolean state) {
-
-		Control[] controlElements = _pageParent.getChildren();
-
-		Stream.of(
-			controlElements
-		).forEach(
-			control -> control.setEnabled(state)
-		);
-	}
-
 	private void _createImportElement() {
 		_createHorizontalSpacer = createHorizontalSpacer(_pageParent, 3);
 		_createSeparator = createSeparator(_pageParent, 3);
@@ -744,8 +698,8 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 							protected IStatus run(IProgressMonitor monitor) {
 								try {
 									groupMonitor.beginTask("Processing work", 100);
-									importProject(monitor, groupMonitor);
 
+									importProject(monitor, groupMonitor);
 
 									groupMonitor.done();
 
@@ -753,6 +707,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 								}
 								catch (OperationCanceledException oce) {
 									_disableUIControl(true);
+
 									return org.eclipse.core.runtime.Status.CANCEL_STATUS;
 								}
 								catch (Exception ce) {
@@ -788,7 +743,9 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 											if (changeEvent.getResult() ==
 													org.eclipse.core.runtime.Status.CANCEL_STATUS) {
+
 												_disableUIControl(true);
+
 												return;
 											}
 
@@ -862,7 +819,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		_isCanceled(monitor);
 	}
 
-
 	private void _createUpgradeVersionElement() {
 		_upgradeVersionLabel = createLabel(_pageParent, "Upgrade to Liferay Version ");
 
@@ -872,9 +828,9 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
 
-		boolean isLiferayWorkspace = SapphireUtil.getContent(dataModel.getIsLiferayWorkspace());
+		boolean liferayWorkspace = SapphireUtil.getContent(dataModel.getIsLiferayWorkspace());
 
-		if (isLiferayWorkspace) {
+		if (liferayWorkspace) {
 			_configureUpgradeVersionComb(
 				new String[] {"7.1"}, new String[] {"7.1"}, upgradeVersion,
 				new String[] {LiferayUpgradeDataModel.BUNDLE_URL_71});
@@ -884,6 +840,16 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				new String[] {"7.0", "7.1"}, new String[] {"7.0", "7.1"}, upgradeVersion,
 				new String[] {LiferayUpgradeDataModel.BUNDLE_URL_70, LiferayUpgradeDataModel.BUNDLE_URL_71});
 		}
+	}
+
+	private void _disableUIControl(boolean state) {
+		Control[] controlElements = _pageParent.getChildren();
+
+		Stream.of(
+			controlElements
+		).forEach(
+			control -> control.setEnabled(state)
+		);
 	}
 
 	private void _disposeBundleCheckboxElement() {
@@ -990,9 +956,9 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		if ((_upgradeVersionLabel != null) && (_upgradeVersionComb != null) && !_upgradeVersionComb.isDisposed()) {
 			Boolean liferayWorkspace = SapphireUtil.getContent(dataModel.getIsLiferayWorkspace());
 
-			String[] upgradeVersdionItemNames = new String[] {"7.0", "7.1"};
-			String[] upgradeVersionsValues = new String[] {"7.0", "7.1"};
-			String[] initBundleUrls = new String[] {LiferayUpgradeDataModel.BUNDLE_URL_70, LiferayUpgradeDataModel.BUNDLE_URL_71};;
+			String[] upgradeVersdionItemNames = {"7.0", "7.1"};
+			String[] upgradeVersionsValues = {"7.0", "7.1"};
+			String[] initBundleUrls = {LiferayUpgradeDataModel.BUNDLE_URL_70, LiferayUpgradeDataModel.BUNDLE_URL_71};
 
 			if (liferayWorkspace) {
 				upgradeVersdionItemNames = new String[] {"7.1"};
@@ -1151,9 +1117,9 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 	private Label _dirLabel;
 	private Button _downloadBundleCheckbox;
 	private Button _importButton;
-	private Composite _pageParent;
 	private ProjectLocationValidationService _locationValidation =
 		dataModel.getSdkLocation().service(ProjectLocationValidationService.class);
+	private Composite _pageParent;
 	private Combo _upgradeVersionComb;
 	private Label _upgradeVersionLabel;
 	private boolean _validationResult;
@@ -1184,8 +1150,11 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				return;
 			}
 
-			if (UpgradeUtil.isAlreadyImported(PathBridge.create(path)) && LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toPortableString())) {
-				String bundleUrl = LiferayWorkspaceUtil.getGradleProperty(path.toPortableString(), "liferay.workspace.bundle.url", "7.0");
+			if (UpgradeUtil.isAlreadyImported(PathBridge.create(path)) &&
+				LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toPortableString())) {
+
+				String bundleUrl = LiferayWorkspaceUtil.getGradleProperty(
+					path.toPortableString(), "liferay.workspace.bundle.url", "7.0");
 
 				if (bundleUrl.contains("7.1")) {
 					dataModel.setUpgradeVersion("7.1");

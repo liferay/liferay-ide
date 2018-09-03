@@ -30,6 +30,7 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -51,7 +52,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.IWorkingSetManager;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.IWorkingSetSelectionDialog;
 
 /**
@@ -67,7 +67,9 @@ public class WorkingSetGroup {
 	}
 
 	public void dispose() {
-		_workingsetComboViewer.getLabelProvider().dispose();
+		IBaseLabelProvider labelProvider = _workingsetComboViewer.getLabelProvider();
+
+		labelProvider.dispose();
 	}
 
 	public boolean selectWorkingSets(List<IWorkingSet> workingSets) {
@@ -238,7 +240,7 @@ public class WorkingSetGroup {
 			new SelectionAdapter() {
 
 				public void widgetSelected(final SelectionEvent e) {
-					IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
+					IWorkingSetManager workingSetManager = UIUtil.getWorkingSetManager();
 
 					IWorkingSetSelectionDialog dialog = workingSetManager.createWorkingSetSelectionDialog(
 						_shell, true, _workingSetIds.toArray(new String[0]));
@@ -256,7 +258,9 @@ public class WorkingSetGroup {
 			addToWorkingSetButton.setSelection(true);
 			workingsetLabel.setEnabled(true);
 
-			_workingsetComboViewer.getCombo().setEnabled(true);
+			Combo combo = _workingsetComboViewer.getCombo();
+
+			combo.setEnabled(true);
 
 			newWorkingSetButton.setEnabled(true);
 		}
@@ -269,7 +273,9 @@ public class WorkingSetGroup {
 
 					workingsetLabel.setEnabled(addToWorkingingSet);
 
-					_workingsetComboViewer.getCombo().setEnabled(addToWorkingingSet);
+					Combo combo = _workingsetComboViewer.getCombo();
+
+					combo.setEnabled(addToWorkingingSet);
 
 					newWorkingSetButton.setEnabled(addToWorkingingSet);
 

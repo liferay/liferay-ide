@@ -29,13 +29,11 @@ import org.eclipse.sapphire.modeling.annotations.Service;
  */
 public interface LiferayUpgradeDataModel extends Element {
 
-	public Value<Path> getBackupLocation();
-
 	public ElementType TYPE = new ElementType(LiferayUpgradeDataModel.class);
 
-	public Value<Boolean> getBackupSdk();
+	public Value<Path> getBackupLocation();
 
-	public Value<String> getUpgradeVersion();
+	public Value<Boolean> getBackupSdk();
 
 	public Value<String> getBundleName();
 
@@ -77,6 +75,8 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public Value<Path> getSdkLocation();
 
+	public Value<String> getUpgradeVersion();
+
 	public void setBackupLocation(Path backupLocation);
 
 	public void setBackupLocation(String backupLocation);
@@ -84,8 +84,6 @@ public interface LiferayUpgradeDataModel extends Element {
 	public void setBackupSdk(Boolean backupSdk);
 
 	public void setBackupSdk(String backupSdk);
-
-	public void setUpgradeVersion(String upgradeVersion);
 
 	public void setBundleName(String bundleName);
 
@@ -143,9 +141,9 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public void setImportFinished(String importFinished);
 
-	public void setIsLiferayWorkspace(Boolean isLifeayWorkspace);
+	public void setIsLiferayWorkspace(Boolean lifeayWorkspace);
 
-	public void setIsLiferayWorkspace(String isLifeayWorkspace);
+	public void setIsLiferayWorkspace(String lifeayWorkspace);
 
 	public void setLayout(String layout);
 
@@ -156,6 +154,8 @@ public interface LiferayUpgradeDataModel extends Element {
 	public void setSdkLocation(Path sdkLocation);
 
 	public void setSdkLocation(String sdkLocation);
+
+	public void setUpgradeVersion(String upgradeVersion);
 
 	public String BUNDLE_URL_70 =
 		"https://releases-cdn.liferay.com/portal/7.0.6-ga7/liferay-ce-portal-tomcat-7.0-ga7-20180507111753223.zip";
@@ -171,14 +171,10 @@ public interface LiferayUpgradeDataModel extends Element {
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_BACKUP_SDK = new ValueProperty(TYPE, "BackupSdk");
 
-	@DefaultValue(text = "7.0")
-	public ValueProperty PROP_UPGRADE_VERSION = new ValueProperty(TYPE, "UpgradeVersion");
-
 	@DefaultValue(text = "Liferay 7.x")
 	@Service(impl = BundleNameValidationService.class)
 	public ValueProperty PROP_BUNDLE_NAME = new ValueProperty(TYPE, "BundleName");
 
-	// *** DownloadBundle ***
 	@DefaultValue(text = BUNDLE_URL_71)
 	@Service(impl = BundleUrlValidationService.class)
 	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, "BundleUrl");
@@ -186,6 +182,8 @@ public interface LiferayUpgradeDataModel extends Element {
 	@DefaultValue(text = "false")
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_CONVERT_LIFERAY_WORKSPACE = new ValueProperty(TYPE, "ConvertLiferayWorkspace");
+
+	// *** DownloadBundle ***
 
 	@Service(impl = ConvertedProjectLocationValidationService.class)
 	@Type(base = Path.class)
@@ -248,5 +246,8 @@ public interface LiferayUpgradeDataModel extends Element {
 	@Service(impl = ProjectLocationValidationService.class)
 	@Type(base = Path.class)
 	public ValueProperty PROP_SDK_LOCATION = new ValueProperty(TYPE, "SdkLocation");
+
+	@DefaultValue(text = "7.0")
+	public ValueProperty PROP_UPGRADE_VERSION = new ValueProperty(TYPE, "UpgradeVersion");
 
 }

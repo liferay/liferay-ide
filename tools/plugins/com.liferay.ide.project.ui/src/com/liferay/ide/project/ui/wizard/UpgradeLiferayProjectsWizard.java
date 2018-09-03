@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
@@ -63,9 +64,11 @@ public class UpgradeLiferayProjectsWizard extends SapphireWizard<UpgradeLiferayP
 		final UpgradeLiferayProjectsOp projectUpgradeOp = UpgradeLiferayProjectsOp.TYPE.instantiate();
 
 		for (IProject project : projects) {
-			NamedItem selectedProjects = projectUpgradeOp.getSelectedProjects().insert();
+			ElementList<NamedItem> selectedProjects = projectUpgradeOp.getSelectedProjects();
 
-			selectedProjects.setName(project.getName());
+			NamedItem selectedProject = selectedProjects.insert();
+
+			selectedProject.setName(project.getName());
 		}
 
 		return projectUpgradeOp;

@@ -77,8 +77,8 @@ public class BinaryProjectsImportWizardPage
 	public Object[] getProjectRecords() {
 		List<BinaryProjectRecord> binaryProjectRecords = new ArrayList<>();
 
-		for (int i = 0; i < selectedProjects.length; i++) {
-			BinaryProjectRecord binaryProjectRecord = (BinaryProjectRecord)selectedProjects[i];
+		for (Object project : selectedProjects) {
+			BinaryProjectRecord binaryProjectRecord = (BinaryProjectRecord)project;
 
 			if (isProjectInWorkspace(binaryProjectRecord.getLiferayPluginName())) {
 				binaryProjectRecord.setConflicts(true);
@@ -362,8 +362,8 @@ public class BinaryProjectsImportWizardPage
 
 	@Override
 	protected void handleSelectAll(SelectionEvent e) {
-		for (int i = 0; i < selectedProjects.length; i++) {
-			BinaryProjectRecord binaryProject = (BinaryProjectRecord)selectedProjects[i];
+		for (Object project : selectedProjects) {
+			BinaryProjectRecord binaryProject = (BinaryProjectRecord)project;
 
 			if (binaryProject.isConflicts()) {
 				projectsList.setChecked(binaryProject, false);
@@ -376,10 +376,6 @@ public class BinaryProjectsImportWizardPage
 		getDataModel().setProperty(SELECTED_PROJECTS, projectsList.getCheckedElements());
 
 		validatePage(true);
-
-		// setPageComplete(projectsList.getCheckedElements().length >
-		// 0);
-
 	}
 
 	protected Text binariesLocation;
@@ -392,7 +388,9 @@ public class BinaryProjectsImportWizardPage
 		}
 
 		public Image getImage() {
-			ImageRegistry imageRegistry = ProjectUI.getDefault().getImageRegistry();
+			ProjectUI projectUI = ProjectUI.getDefault();
+
+			ImageRegistry imageRegistry = projectUI.getImageRegistry();
 
 			Image image = imageRegistry.get(ProjectUI.WAR_IMAGE_ID);
 

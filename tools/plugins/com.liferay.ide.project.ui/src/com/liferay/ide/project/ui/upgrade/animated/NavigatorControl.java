@@ -126,7 +126,9 @@ public class NavigatorControl extends AbstractCanvas implements SelectionChanged
 		_nextImages[0] = loadImage("next.png");
 		_nextImages[1] = loadImage("next_hover.png");
 
-		_buttonR = _nextImages[0].getBounds().height / 2;
+		Rectangle rectangle = _nextImages[0].getBounds();
+
+		_buttonR = rectangle.height / 2;
 
 		_answerY = 5 + _buttonR;
 
@@ -190,15 +192,18 @@ public class NavigatorControl extends AbstractCanvas implements SelectionChanged
 			if (page != null) {
 				if (page.showBackPage() && (_backBox != null) && _backBox.contains(x, y)) {
 					_hover = _BUTTON_BACK;
+
 					return;
 				}
 
 				if (page.showNextPage() && (_nextBox != null) && _nextBox.contains(x, y)) {
 					_hover = _BUTTON_NEXT;
+
 					return;
 				}
 
 				_hover = actionOnMouseMove(x, y);
+
 				return;
 			}
 		}
