@@ -226,7 +226,6 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Ignore
 	@Test
 	public void createComponentWithPackage() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -239,8 +238,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		String className = "TestComponentWithPackagesGradlePortlet";
-		String packageName = "test.component.with.packages.gradle.constants";
+		String packageName = project.getName() + ".constants";
 
 		wizardAction.newLiferayComponent.openSelectPackageNameDialog();
 
@@ -253,7 +251,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(
+				project.getName(), "src/main/java", packageName, project.getCapitalName() + "Portlet.java"));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
