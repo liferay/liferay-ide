@@ -16,10 +16,12 @@ package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.IgnoredProblemsContainer;
 import com.liferay.ide.project.core.upgrade.MigrationProblems;
 import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
+import com.liferay.ide.project.core.upgrade.ProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.FindBreakingChangesPage;
@@ -72,10 +74,11 @@ public class IgnoreAlwaysAction extends SelectionProviderAction implements IActi
 					MigrationContentProvider contentProvider =
 						(MigrationContentProvider)treeViewer.getContentProvider();
 
-					final MigrationProblemsContainer mpContainer =
-						(MigrationProblemsContainer)contentProvider.getProblems().get(0);
+					List<ProblemsContainer> problemsContainers = contentProvider.getProblems();
 
-					final MigrationProblems[] projectProblem = mpContainer.getProblemsArray();
+					MigrationProblemsContainer mpContainer = (MigrationProblemsContainer)problemsContainers.get(0);
+
+					MigrationProblems[] projectProblem = mpContainer.getProblemsArray();
 
 					for (MigrationProblems pProblem : projectProblem) {
 						FileProblems[] fProblems = pProblem.getProblems();
@@ -88,7 +91,7 @@ public class IgnoreAlwaysAction extends SelectionProviderAction implements IActi
 							while (iterator.hasNext()) {
 								Problem p = iterator.next();
 
-								if (p.getTicket().equals(problem.getTicket())) {
+								if (StringUtil.equals(p.getTicket(), problem.getTicket())) {
 									new IgnoreAction().run(p, _provider);
 								}
 							}

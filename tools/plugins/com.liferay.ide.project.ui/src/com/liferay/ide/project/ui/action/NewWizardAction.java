@@ -16,11 +16,12 @@ package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.LiferayUIPlugin;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IContributor;
 import org.eclipse.jdt.internal.ui.util.CoreUtility;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.layout.PixelConverter;
@@ -147,7 +148,9 @@ public class NewWizardAction extends Action implements Comparable {
 
 	protected Shell getShell() {
 		if (fShell == null) {
-			return ProjectUI.getActiveWindow().getShell();
+			IWorkbenchWindow activeWindow = UIUtil.getActiveWorkbenchWindow();
+
+			return activeWindow.getShell();
 		}
 
 		return fShell;
@@ -160,14 +163,10 @@ public class NewWizardAction extends Action implements Comparable {
 	protected String projectType = null;
 
 	private IStructuredSelection _evaluateCurrentSelection() {
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		ISelection selection = UIUtil.getSelection();
 
-		if (window != null) {
-			ISelection selection = window.getSelectionService().getSelection();
-
-			if (selection instanceof IStructuredSelection) {
-				return (IStructuredSelection)selection;
-			}
+		if (selection instanceof IStructuredSelection) {
+			return (IStructuredSelection)selection;
 		}
 
 		return StructuredSelection.EMPTY;
@@ -187,7 +186,9 @@ public class NewWizardAction extends Action implements Comparable {
 		String iconName = config.getAttribute(ATT_ICON);
 
 		if (iconName != null) {
-			return LiferayUIPlugin.imageDescriptorFromPlugin(config.getContributor().getName(), iconName);
+			IContributor contributor = config.getContributor();
+
+			return LiferayUIPlugin.imageDescriptorFromPlugin(contributor.getName(), iconName);
 		}
 
 		return null;
@@ -202,7 +203,12 @@ public class NewWizardAction extends Action implements Comparable {
 
 				for (IConfigurationElement paramElement : paramElements) {
 					if (ATT_MENUINDEX.equals(paramElement.getAttribute(TAG_NAME))) {
-						return Integer.parseInt(paramElement.getAttribute(TAG_VALUE));
+						try {
+							return Integer.parseInt(paramElement.getAttribute(TAG_VALUE));
+						}
+						catch (NumberFormatException nfe) {
+							return Integer.MAX_VALUE;
+						}
 					}
 				}
 			}

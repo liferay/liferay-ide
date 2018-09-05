@@ -127,19 +127,24 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
 
 				@Override
 				public void run() {
-					final Object selection = problemsViewer.getStructuredSelection().getFirstElement();
+					IStructuredSelection structuredSelection = problemsViewer.getStructuredSelection();
+
+					Object element = structuredSelection.getFirstElement();
+
 					List<Problem> problems = null;
 
-					if (selection instanceof IFile) {
-						IFile file = (IFile)selection;
+					if (element instanceof IFile) {
+						IFile file = (IFile)element;
 
 						problems = MigrationUtil.getProblemsFromResource(file);
 					}
-					else if (selection instanceof Problem) {
-						ISelection se = page.getTreeViewer().getSelection();
+					else if (element instanceof Problem) {
+						TreeViewer viewer = page.getTreeViewer();
 
-						if (se instanceof TreeSelection) {
-							problems = MigrationUtil.getCurrentProblemsFromTreeNode((TreeSelection)se);
+						ISelection selection = viewer.getSelection();
+
+						if (selection instanceof TreeSelection) {
+							problems = MigrationUtil.getCurrentProblemsFromTreeNode((TreeSelection)selection);
 						}
 					}
 

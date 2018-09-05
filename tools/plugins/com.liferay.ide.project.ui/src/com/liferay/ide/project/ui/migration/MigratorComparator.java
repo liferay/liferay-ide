@@ -48,8 +48,10 @@ public class MigratorComparator extends ViewerComparator {
 				break;
 
 			case 2:
-				if (t1.getTitle().compareTo(t2.getTitle()) != 0) {
-					flag = t1.getTitle().compareTo(t2.getTitle()) > 0 ? 1 : -1;
+				String title1 = t1.getTitle();
+
+				if (title1.compareTo(t2.getTitle()) != 0) {
+					flag = title1.compareTo(t2.getTitle()) > 0 ? 1 : -1;
 				}
 
 				break;

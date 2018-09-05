@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.net.URL;
 
@@ -22,8 +23,6 @@ import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
 /**
  * @author Kuo Zhang
@@ -39,10 +38,8 @@ public class LinkToPluginDocAction extends SapphireActionHandler {
 
 	@Override
 	protected Object run(Presentation context) {
-		final IWorkbenchBrowserSupport support = PlatformUI.getWorkbench().getBrowserSupport();
-
 		try {
-			support.getExternalBrowser().openURL(new URL(_url));
+			UIUtil.openURL(new URL(_url));
 		}
 		catch (Exception ex) {
 			ProjectUI.logError("Could not open external browser.", ex);

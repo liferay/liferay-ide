@@ -33,6 +33,8 @@ import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import java.net.URI;
+
 import java.security.MessageDigest;
 
 import java.util.ArrayList;
@@ -49,6 +51,8 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -204,6 +208,12 @@ public class CoreUtil {
 		return isNullOrEmpty(val);
 	}
 
+	public static IFile[] findFilesForLocationURI(URI uri) {
+		IWorkspaceRoot root = getWorkspaceRoot();
+
+		return root.findFilesForLocationURI(uri);
+	}
+
 	public static IProject[] getAllProjects() {
 		return getWorkspaceRoot().getProjects();
 	}
@@ -266,6 +276,12 @@ public class CoreUtil {
 		}
 
 		return null;
+	}
+
+	public static IExtensionPoint getExtensionPoint(String namespace, String extensionPointName) {
+		IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
+
+		return extensionRegistry.getExtensionPoint(namespace, extensionPointName);
 	}
 
 	public static IFile getIFileFromWorkspaceRoot(IPath path) {

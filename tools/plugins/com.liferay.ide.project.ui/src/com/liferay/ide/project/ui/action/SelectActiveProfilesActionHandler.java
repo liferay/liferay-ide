@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.Profile;
@@ -44,16 +45,16 @@ public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandl
 
 			final NewLiferayPluginProjectOp op = getModelElement().nearest(NewLiferayPluginProjectOp.class);
 
-			final String previousActiveProfilesValue = op.getActiveProfilesValue().content();
+			final String previousActiveProfilesValue = SapphireUtil.getContent(op.getActiveProfilesValue());
 
 			// we need to rebuild the 'selected' list from what is specified in the
 			// 'activeProfiles' property
 
-			op.getSelectedProfiles().clear();
+			SapphireUtil.clear(op.getSelectedProfiles());
 
-			final String activeProfiles = op.getActiveProfilesValue().content();
+			String activeProfiles = SapphireUtil.getContent(op.getActiveProfilesValue());
 
-			if (!CoreUtil.isNullOrEmpty(activeProfiles)) {
+			if (CoreUtil.isNotNullOrEmpty(activeProfiles)) {
 				final String[] profileIds = activeProfiles.split(",");
 
 				if (ListUtil.isNotEmpty(profileIds)) {
@@ -62,7 +63,7 @@ public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandl
 							boolean foundExistingProfile = false;
 
 							for (Profile profile : op.getSelectedProfiles()) {
-								if (profileId.equals(profile.getId().content())) {
+								if (profileId.equals(SapphireUtil.getContent(profile.getId()))) {
 									foundExistingProfile = true;
 
 									break;
@@ -70,7 +71,9 @@ public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandl
 							}
 
 							if (!foundExistingProfile) {
-								Profile newlySelectedProfile = op.getSelectedProfiles().insert();
+								ElementList<Profile> profiles = op.getSelectedProfiles();
+
+								Profile newlySelectedProfile = profiles.insert();
 
 								newlySelectedProfile.setId(profileId);
 							}
@@ -79,12 +82,14 @@ public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandl
 				}
 			}
 
+			DefinitionLoader loader = DefinitionLoader.sdef(NewLiferayPluginProjectWizard.class);
+
 			final CustomSapphireDialog dialog = new CustomSapphireDialog(
-				swt.shell(), op,
-				DefinitionLoader.sdef(NewLiferayPluginProjectWizard.class).dialog("SelectActiveProfiles"));
+				swt.shell(), op, loader.dialog("SelectActiveProfiles"));
 
 			dialog.setBlockOnOpen(true);
-			final int result = dialog.open();
+
+			int result = dialog.open();
 
 			if (result == SapphireDialog.CANCEL) {
 

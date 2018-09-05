@@ -17,13 +17,14 @@ package com.liferay.ide.project.ui.migration;
 import com.liferay.blade.api.MigrationConstants;
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.IgnoredProblemsContainer;
 import com.liferay.ide.project.core.upgrade.MigrationProblems;
 import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
-import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -106,6 +107,7 @@ public class MigrationUtil {
 			// remove duplicate problem
 
 			HashSet<Problem> hashSet = new HashSet<>(notIgnoreProblems);
+
 			notIgnoreProblems.clear();
 			notIgnoreProblems.addAll(hashSet);
 
@@ -127,7 +129,7 @@ public class MigrationUtil {
 	public static IResource getIResourceFromFile(File f) {
 		IResource retval = null;
 
-		final IFile[] files = CoreUtil.getWorkspaceRoot().findFilesForLocationURI(f.toURI());
+		final IFile[] files = CoreUtil.findFilesForLocationURI(f.toURI());
 
 		for (IFile file : files) {
 			if (file.exists()) {
@@ -143,7 +145,10 @@ public class MigrationUtil {
 
 					// if not lets pick the one that is shortest path
 
-					if (file.getFullPath().segmentCount() < retval.getFullPath().segmentCount()) {
+					IPath fileFullPath = file.getFullPath();
+					IPath retvalFullPath = retval.getFullPath();
+
+					if (fileFullPath.segmentCount() < retvalFullPath.segmentCount()) {
 						retval = file;
 					}
 				}
@@ -313,9 +318,9 @@ public class MigrationUtil {
 	}
 
 	public static IResource getResourceFromMigrationProblems(final MigrationProblems problems) {
-		final String projectName = problems.getSuffix();
+		String projectName = problems.getSuffix();
 
-		final IProject project = CoreUtil.getWorkspaceRoot().getProject(projectName);
+		IProject project = CoreUtil.getProject(projectName);
 
 		if (project.exists()) {
 			return project;
@@ -338,10 +343,12 @@ public class MigrationUtil {
 		final long markerId = marker.getId();
 		final int markerType = marker.getAttribute(IMarker.SEVERITY, 2);
 
-		final File file = new File(marker.getResource().getLocationURI());
+		final File file = FileUtil.getFile(marker.getResource());
+
+		UUID uuid = UUID.randomUUID();
 
 		return new Problem(
-			UUID.randomUUID().toString(), title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html,
+			uuid.toString(), title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html,
 			autoCorrectContext, status, markerId, markerType);
 	}
 
@@ -350,7 +357,7 @@ public class MigrationUtil {
 			final IResource resource = getIResourceFromFileProblems(problem);
 
 			if (resource instanceof IFile) {
-				IDE.openEditor(ProjectUI.getActiveWindow().getActivePage(), (IFile)resource);
+				IDE.openEditor(UIUtil.getActivePage(), (IFile)resource);
 			}
 		}
 		catch (PartInitException pie) {
@@ -365,11 +372,10 @@ public class MigrationUtil {
 				final IMarker marker = getMarker(problem);
 
 				if (marker != null) {
-					IDE.openEditor(ProjectUI.getActiveWindow().getActivePage(), marker, OpenStrategy.activateOnOpen());
+					IDE.openEditor(UIUtil.getActivePage(), marker, OpenStrategy.activateOnOpen());
 				}
 				else {
-					final IEditorPart editor = IDE.openEditor(
-						ProjectUI.getActiveWindow().getActivePage(), (IFile)resource);
+					IEditorPart editor = IDE.openEditor(UIUtil.getActivePage(), (IFile)resource);
 
 					if (editor instanceof ITextEditor) {
 						final ITextEditor textEditor = (ITextEditor)editor;
@@ -421,12 +427,15 @@ public class MigrationUtil {
 
 			for (MigrationProblems mp : container.getProblemsArray()) {
 				for (FileProblems fileProblem : mp.getProblems()) {
-					if (fileProblem.getFile().equals(file)) {
-						for (int i = 0; i < fileProblem.getProblems().size(); i++) {
-							Problem p = fileProblem.getProblems().get(i);
+					if (file.equals(fileProblem.getFile())) {
+						List<Problem> problems = fileProblem.getProblems();
+
+						for (int i = 0; i < problems.size(); i++) {
+							Problem p = problems.get(i);
 
 							if (p.equals(problem)) {
-								fileProblem.getProblems().set(i, problem);
+								problems.set(i, problem);
+
 								found = true;
 
 								break;
@@ -459,7 +468,7 @@ public class MigrationUtil {
 			List<MigrationProblems> problems = new ArrayList<>(Arrays.asList(container.getProblemsArray()));
 
 			for (MigrationProblems mp : problems) {
-				if (mp.getSuffix().equals(projectName)) {
+				if (projectName.equals(mp.getSuffix())) {
 					problems.remove(mp);
 					removed = true;
 

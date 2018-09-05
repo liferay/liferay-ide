@@ -15,12 +15,15 @@
 package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.project.ui.wizard.NewLiferayPluginProjectWizard;
 
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ui.Presentation;
+import org.eclipse.sapphire.ui.SapphirePart;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.PropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
@@ -36,16 +39,16 @@ public class NewLiferayProfileActionHandler extends PropertyEditorActionHandler 
 
 		// should append to current list
 
-		final String activeProfilesValue = op.getActiveProfilesValue().content();
+		String activeProfilesValue = SapphireUtil.getContent(op.getActiveProfilesValue());
 
-		final StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
 
-		if (!CoreUtil.isNullOrEmpty(activeProfilesValue)) {
+		if (CoreUtil.isNotNullOrEmpty(activeProfilesValue)) {
 			sb.append(activeProfilesValue);
 			sb.append(',');
 		}
 
-		sb.append(newLiferayProfile.getId().content());
+		sb.append(SapphireUtil.getContent(newLiferayProfile.getId()));
 
 		op.setActiveProfilesValue(sb.toString());
 	}
@@ -53,24 +56,28 @@ public class NewLiferayProfileActionHandler extends PropertyEditorActionHandler 
 	@Override
 	protected Object run(Presentation context) {
 		if (context instanceof SwtPresentation) {
-			final SwtPresentation swt = (SwtPresentation)context;
+			SwtPresentation swt = (SwtPresentation)context;
 
-			final NewLiferayPluginProjectOp op = _op(context);
+			NewLiferayPluginProjectOp op = _op(context);
 
-			final NewLiferayProfile newLiferayProfile = op.getNewLiferayProfiles().insert();
+			ElementList<NewLiferayProfile> profiles = op.getNewLiferayProfiles();
 
-			final SapphireDialog dialog = new SapphireDialog(
-				swt.shell(), newLiferayProfile,
-				DefinitionLoader.sdef(NewLiferayPluginProjectWizard.class).dialog("NewLiferayProfile"));
+			NewLiferayProfile newLiferayProfile = profiles.insert();
+
+			DefinitionLoader loader = DefinitionLoader.sdef(NewLiferayPluginProjectWizard.class);
+
+			SapphireDialog dialog = new SapphireDialog(
+				swt.shell(), newLiferayProfile, loader.dialog("NewLiferayProfile"));
 
 			dialog.setBlockOnOpen(true);
-			final int result = dialog.open();
+
+			int result = dialog.open();
 
 			if (result == SapphireDialog.OK) {
 				addToActiveProfiles(op, newLiferayProfile);
 			}
 			else {
-				op.getNewLiferayProfiles().remove(newLiferayProfile);
+				profiles.remove(newLiferayProfile);
 			}
 		}
 
@@ -78,7 +85,9 @@ public class NewLiferayProfileActionHandler extends PropertyEditorActionHandler 
 	}
 
 	private NewLiferayPluginProjectOp _op(Presentation context) {
-		Element localModelElement = context.part().getLocalModelElement();
+		SapphirePart sapphirePart = context.part();
+
+		Element localModelElement = sapphirePart.getLocalModelElement();
 
 		return localModelElement.nearest(NewLiferayPluginProjectOp.class);
 	}

@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.ui.text.java.ContentAssistInvocationContext;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposalComputer;
 import org.eclipse.jdt.ui.text.java.JavaContentAssistInvocationContext;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -72,7 +73,9 @@ public class ComponentPropertiesCompletionProposalComputer implements IJavaCompl
 						break;
 					}
 
-					source = document.get(prefixStartPos, invocationOffset - prefixStartPos).trim();
+					source = document.get(prefixStartPos, invocationOffset - prefixStartPos);
+
+					source = source.trim();
 
 					if ((quotPos + lineRegion.getOffset()) > wholeLineEndPos) {
 						replaceEndPos = wholeLineEndPos;
@@ -88,7 +91,9 @@ public class ComponentPropertiesCompletionProposalComputer implements IJavaCompl
 			String candidate = source.replace("\"", "");
 
 			if ((candidate != null) && hasQuot) {
-				int replaceStartPos = invocationOffset - candidate.trim().length();
+				candidate = candidate.trim();
+
+				int replaceStartPos = invocationOffset - candidate.length();
 
 				for (int i = 0; i < LiferayComponentProperties.CODE_ASSISTANT_RESOURCE.length - 1; i++) {
 					final String[] propertyAssist = LiferayComponentProperties.CODE_ASSISTANT_RESOURCE[i];
@@ -101,7 +106,10 @@ public class ComponentPropertiesCompletionProposalComputer implements IJavaCompl
 						continue;
 					}
 
-					Image propertiesImage = ProjectUI.getPluginImageRegistry().get(ProjectUI.PROPERTIES_IMAGE_ID);
+					ImageRegistry imageRegistry = ProjectUI.getPluginImageRegistry();
+
+					Image propertiesImage = imageRegistry.get(ProjectUI.PROPERTIES_IMAGE_ID);
+
 					final String replaceString = propertyKey + "=";
 
 					propsoalList.add(

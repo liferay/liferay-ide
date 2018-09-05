@@ -45,7 +45,7 @@ public class LiferayProjectMarkerResolutionGenerator implements IMarkerResolutio
 			}
 		}
 		catch (CoreException ce) {
-			ProjectUI.logError("Marker cannot be found.", ce);
+			ProjectUI.logError("Marker can not be found.", ce);
 		}
 
 		return new IMarkerResolution[] {resolution};
@@ -53,10 +53,10 @@ public class LiferayProjectMarkerResolutionGenerator implements IMarkerResolutio
 
 	public boolean hasResolutions(IMarker marker) {
 		try {
-			return marker.getType().equals(ProjectCore.LIFERAY_PROJECT_MARKER_TYPE);
+			return ProjectCore.LIFERAY_PROJECT_MARKER_TYPE.equals(marker.getType());
 		}
 		catch (CoreException ce) {
-			ProjectUI.logError("The marker doesn't exist.", ce);
+			ProjectUI.logError("The marker does not exist.", ce);
 		}
 
 		return false;

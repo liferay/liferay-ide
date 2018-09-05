@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui.dialog;
 
+import com.liferay.ide.ui.util.UIUtil;
+
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.DialogDef;
@@ -44,15 +46,17 @@ public class PluginTypeDescriptionDialog extends SapphireDialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 
-		Display.getDefault().addFilter(
+		Display display = Display.getDefault();
+
+		display.addFilter(
 			SWT.MouseUp,
 			new Listener() {
 
 				@Override
 				public void handleEvent(Event event) {
-					Display.getDefault().removeFilter(SWT.MouseUp, this);
+					display.removeFilter(SWT.MouseUp, this);
 
-					Display.getDefault().asyncExec(
+					UIUtil.async(
 						new Runnable() {
 
 							@Override

@@ -58,7 +58,9 @@ public class PrimaryRuntimeNotSetResolution implements IMarkerResolution {
 			/*
 			 * Let users set a Liferay server runtime when there is no available one.
 			 */
-			if (ServerUtil.getAvailableLiferayRuntimes().size() == 0) {
+			Set<org.eclipse.wst.server.core.IRuntime> runtimes = ServerUtil.getAvailableLiferayRuntimes();
+
+			if (runtimes.isEmpty()) {
 				boolean openNewRuntimeWizard = MessageDialog.openQuestion(null, null, Msgs.noLiferayRuntimeAvailable);
 
 				if (openNewRuntimeWizard) {
@@ -72,7 +74,7 @@ public class PrimaryRuntimeNotSetResolution implements IMarkerResolution {
 			 * If the previous judgment block is executed, the size of available targeted
 			 * runtimes will increase to 1.
 			 */
-			if (ServerUtil.getAvailableLiferayRuntimes().size() == 1) {
+			if (runtimes.size() == 1) {
 				final Set<IRuntime> availableFacetRuntimes = _convertToFacetRuntimes(
 					ServerUtil.getAvailableLiferayRuntimes());
 
@@ -96,11 +98,14 @@ public class PrimaryRuntimeNotSetResolution implements IMarkerResolution {
 			 * Open the "Targeted Runtimes" property page and let users set a runtime as the
 			 * primary one when there are multiple Liferay runtimes available.
 			 */
-			if (ServerUtil.getAvailableLiferayRuntimes().size() > 1) {
+			if (runtimes.size() > 1) {
 				boolean openRuntimesProperty = MessageDialog.openQuestion(null, null, Msgs.multipleAvailableRuntimes);
 
 				if (openRuntimesProperty) {
-					PropertyDialog.createDialogOn(null, TARGETED_RUNTIMES_PROPERTY_PAGE_ID, proj).open();
+					PropertyDialog dialog = PropertyDialog.createDialogOn(
+						null, TARGETED_RUNTIMES_PROPERTY_PAGE_ID, proj);
+
+					dialog.open();
 				}
 			}
 		}

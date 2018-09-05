@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.ui.packageview.PackageFragmentRootContainer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -60,10 +61,14 @@ public abstract class SDKCommandHandler extends AbstractHandler {
 				project = ((IResource)selected).getProject();
 			}
 			else if (selected instanceof IJavaElement) {
-				project = ((IJavaElement)selected).getJavaProject().getProject();
+				IJavaProject javaProject = ((IJavaElement)selected).getJavaProject();
+
+				project = javaProject.getProject();
 			}
 			else if (selected instanceof PackageFragmentRootContainer) {
-				project = ((PackageFragmentRootContainer)selected).getJavaProject().getProject();
+				IJavaProject javaProject = ((PackageFragmentRootContainer)selected).getJavaProject();
+
+				project = javaProject.getProject();
 			}
 		}
 

@@ -43,7 +43,6 @@ public class ComponentPropertyCompletionProposal extends JavaCompletionProposal 
 
 		_replacementStart = replacementStart;
 		_replacementEnd = replacementEnd;
-
 		_addtionalString = addtionalString;
 		_source = source;
 	}

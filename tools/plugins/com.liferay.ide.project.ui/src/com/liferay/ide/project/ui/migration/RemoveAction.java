@@ -26,6 +26,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.actions.SelectionProviderAction;
 
@@ -43,9 +44,11 @@ public class RemoveAction extends SelectionProviderAction implements IAction {
 		final FindBreakingChangesPage page = UpgradeView.getPage(
 			Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
-		final TreeViewer treeViewer = page.getTreeViewer();
+		TreeViewer treeViewer = page.getTreeViewer();
 
-		Object selection = treeViewer.getStructuredSelection().getFirstElement();
+		ITreeSelection treeSelection = treeViewer.getStructuredSelection();
+
+		Object selection = treeSelection.getFirstElement();
 
 		if (selection instanceof MigrationProblems) {
 			MigrationProblems migrationProblem = (MigrationProblems)selection;
