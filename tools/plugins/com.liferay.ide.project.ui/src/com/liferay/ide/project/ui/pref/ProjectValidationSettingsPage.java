@@ -134,16 +134,6 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
 		description.setFont(pageContent.getFont());
 		description.setLayoutData(gd);
 
-		// ExpandableComposite twistie;
-
-		// int columns = 3;
-		// twistie = createTwistie( body, "Liferay Plugin SDK", columns );
-		// Composite inner = createInnerComposite( parent, twistie, columns );
-
-		// inner = createInnerComposite( parent, twistie, columns );
-		// createCombo( inner, "Liferay Plugin SDK is not valid",
-		// ValidationPreferences.SDK_NOT_VALID );
-
 		return parent;
 	}
 
@@ -151,7 +141,9 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
 	}
 
 	protected IDialogSettings getDialogSettings() {
-		return ProjectUI.getDefault().getDialogSettings();
+		ProjectUI projectUI = ProjectUI.getDefault();
+
+		return projectUI.getDialogSettings();
 	}
 
 	@Override
@@ -175,7 +167,9 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
 	}
 
 	protected String getQualifier() {
-		Bundle bundle = ProjectUI.getDefault().getBundle();
+		ProjectUI projectUI = ProjectUI.getDefault();
+
+		Bundle bundle = projectUI.getBundle();
 
 		return bundle.getSymbolicName();
 	}

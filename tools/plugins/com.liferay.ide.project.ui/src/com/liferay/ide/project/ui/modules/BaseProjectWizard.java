@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
-import org.eclipse.sapphire.ui.forms.FormComponentPart;
+import org.eclipse.sapphire.ui.forms.ContainerPart.Children;
 import org.eclipse.sapphire.ui.forms.WizardDef;
 import org.eclipse.sapphire.ui.forms.WizardPagePart;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
@@ -44,7 +45,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.IWorkingSetManager;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.eclipse.wst.web.internal.DelegateConfigurationElement;
@@ -87,7 +87,9 @@ public class BaseProjectWizard<T extends Element> extends SapphireWizard<T> impl
 			if (element instanceof IResource) {
 				IResource resource = (IResource)element;
 
-				final IPath location = resource.getProject().getLocation();
+				IProject project = resource.getProject();
+
+				IPath location = project.getLocation();
 
 				if (location != null) {
 					((BaseModuleOp)element()).setInitialSelectionPath(PathBridge.create(location));
@@ -102,14 +104,16 @@ public class BaseProjectWizard<T extends Element> extends SapphireWizard<T> impl
 
 			WizardPagePart wizardPagePart = wizardPages.get(0);
 
-			for (final FormComponentPart formPart : wizardPagePart.children().all()) {
-				if (formPart instanceof WorkingSetCustomPart) {
-					final WorkingSetCustomPart workingSetPart = (WorkingSetCustomPart)formPart;
+			Children children = wizardPagePart.children();
 
-					final IWorkingSet[] workingSets = workingSetPart.getWorkingSets();
+			for (final Object formPart : children.all()) {
+				if (formPart instanceof WorkingSetCustomPart) {
+					WorkingSetCustomPart workingSetPart = (WorkingSetCustomPart)formPart;
+
+					IWorkingSet[] workingSets = workingSetPart.getWorkingSets();
 
 					if (ListUtil.isNotEmpty(workingSets)) {
-						IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
+						IWorkingSetManager workingSetManager = UIUtil.getWorkingSetManager();
 
 						workingSetManager.addToWorkingSets(newProject, workingSets);
 					}
@@ -119,13 +123,11 @@ public class BaseProjectWizard<T extends Element> extends SapphireWizard<T> impl
 	}
 
 	protected void openLiferayPerspective(IProject newProject) {
-		final IWorkbench workbench = PlatformUI.getWorkbench();
-
-		IWorkbenchPage activePage = workbench.getActiveWorkbenchWindow().getActivePage();
+		IWorkbenchPage activePage = UIUtil.getActivePage();
 
 		IPerspectiveDescriptor perspective = activePage.getPerspective();
 
-		if (perspective.getId().equals(LiferayWorkspacePerspectiveFactory.ID)) {
+		if (LiferayWorkspacePerspectiveFactory.ID.equals(perspective.getId())) {
 			return;
 		}
 
@@ -148,7 +150,7 @@ public class BaseProjectWizard<T extends Element> extends SapphireWizard<T> impl
 
 		// select and reveal
 
-		BasicNewResourceWizard.selectAndReveal(newProject, workbench.getActiveWorkbenchWindow());
+		BasicNewResourceWizard.selectAndReveal(newProject, UIUtil.getActiveWorkbenchWindow());
 	}
 
 	private boolean _firstErrorMessageRemoved = false;

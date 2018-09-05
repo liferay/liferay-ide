@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.modules.fragment.action;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
@@ -34,6 +35,7 @@ import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
+import org.eclipse.sapphire.ui.SapphirePart;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 import org.eclipse.sapphire.ui.forms.PropertyEditorActionHandler;
 import org.eclipse.wst.server.core.IRuntime;
@@ -63,6 +65,7 @@ public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler {
 		};
 
 		element.attach(listener, NewModuleFragmentOp.PROP_HOST_OSGI_BUNDLE.name());
+
 		attach(
 			new Listener() {
 
@@ -82,7 +85,7 @@ public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler {
 
 		NewModuleFragmentOp op = getModelElement().nearest(NewModuleFragmentOp.class);
 
-		String hostOsgiBundle = op.getHostOsgiBundle().content();
+		String hostOsgiBundle = SapphireUtil.getContent(op.getHostOsgiBundle());
 
 		if (hostOsgiBundle != null) {
 			enabled = true;
@@ -93,31 +96,35 @@ public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler {
 
 	@Override
 	protected Object run(Presentation context) {
-		Element modelElement = context.part().getModelElement();
+		SapphirePart part = context.part();
+
+		Element modelElement = part.getModelElement();
 
 		final NewModuleFragmentOp op = modelElement.nearest(NewModuleFragmentOp.class);
 
 		final ElementList<OverrideFilePath> currentFiles = op.getOverrideFiles();
 
-		final String projectName = op.getProjectName().content();
+		final String projectName = SapphireUtil.getContent(op.getProjectName());
 
 		final OSGiBundleFileSelectionDialog dialog = new OSGiBundleFileSelectionDialog(null, currentFiles, projectName);
 
-		final String runtimeName = op.getLiferayRuntimeName().content();
+		final String runtimeName = SapphireUtil.getContent(op.getLiferayRuntimeName());
 
 		final IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
-		final IPath tempLocation = ProjectCore.getDefault().getStateLocation();
+		ProjectCore projectCore = ProjectCore.getDefault();
+
+		final IPath tempLocation = projectCore.getStateLocation();
 
 		dialog.setTitle("Add files from OSGi bundle to override");
 
-		String currentOSGiBundle = op.getHostOsgiBundle().content();
+		String currentOSGiBundle = SapphireUtil.getContent(op.getHostOsgiBundle());
 
 		if (!currentOSGiBundle.endsWith("jar")) {
 			currentOSGiBundle = currentOSGiBundle + ".jar";
 		}
 
-		File module = tempLocation.append(currentOSGiBundle).toFile();
+		File module = FileUtil.getFile(tempLocation.append(currentOSGiBundle));
 
 		if (FileUtil.notExists(module)) {
 			module = ServerUtil.getModuleFileFrom70Server(runtime, currentOSGiBundle, tempLocation);
@@ -130,10 +137,12 @@ public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler {
 		if (dialog.open() == Window.OK) {
 			Object[] selected = dialog.getResult();
 
-			for (int i = 0; i < selected.length; i++) {
-				OverrideFilePath file = op.getOverrideFiles().insert();
+			for (Object o : selected) {
+				ElementList<OverrideFilePath> list = op.getOverrideFiles();
 
-				file.setValue(selected[i].toString());
+				OverrideFilePath file = list.insert();
+
+				file.setValue(o.toString());
 			}
 		}
 

@@ -34,16 +34,13 @@ public class AddJSPValidationAction extends AbstractObjectAction {
 		if (fSelection instanceof IStructuredSelection) {
 			Object[] elems = ((IStructuredSelection)fSelection).toArray();
 
-			IProject project = null;
-
 			Object elem = elems[0];
 
 			if (elem instanceof IProject) {
-				project = (IProject)elem;
+				IProject project = (IProject)elem;
 
 				try {
-					ModuleCoreUtil.addFacetsIfNeeded(
-						FileUtil.getFile(project.getLocation()), new NullProgressMonitor());
+					ModuleCoreUtil.addFacetsIfNeeded(FileUtil.getFile(project), new NullProgressMonitor());
 				}
 				catch (CoreException ce) {
 				}

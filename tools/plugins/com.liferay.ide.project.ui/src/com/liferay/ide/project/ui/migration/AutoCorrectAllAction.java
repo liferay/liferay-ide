@@ -186,7 +186,8 @@ public class AutoCorrectAllAction extends Action {
 									IViewSite viewSite = view.getViewSite();
 
 									new RunMigrationToolAction(
-										"Run Migration Tool", viewSite.getShell(), projectSelection, liferayUpgradeDataModel).run();
+										"Run Migration Tool", viewSite.getShell(), projectSelection,
+										liferayUpgradeDataModel).run();
 								}
 								catch (IOException ioe) {
 									ProjectUI.logError(ioe);

@@ -75,7 +75,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.Property;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValuePropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
@@ -95,12 +94,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeType;
@@ -201,8 +199,8 @@ public class CustomJspPage extends Page {
 		buttonGridData.widthHint = 130;
 		buttonGridData.heightHint = 35;
 
-		dataModel.getConvertedProjectLocation().attach(new CustomJspFieldListener());
-		dataModel.getConvertLiferayWorkspace().attach(new CustomJspFieldListener());
+		SapphireUtil.attachListener(dataModel.getConvertedProjectLocation(), new CustomJspFieldListener());
+		SapphireUtil.attachListener(dataModel.getConvertLiferayWorkspace(), new CustomJspFieldListener());
 
 		Button selectButton = new Button(buttonContainer, SWT.PUSH);
 
@@ -306,11 +304,10 @@ public class CustomJspPage extends Page {
 	}
 
 	public void createSpecialDescriptor(Composite parent, int style) {
-		final String descriptor =
+		String descriptor =
 			"This step will help you to convert projects with custom JSP hooks to modules or fragments.";
-		String url = "";
 
-		Link link = SWTUtil.createHyperLink(this, style, descriptor, 1, url);
+		Link link = SWTUtil.createHyperLink(this, style, descriptor, 1, "");
 
 		link.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false, 2, 1));
 	}
@@ -337,12 +334,14 @@ public class CustomJspPage extends Page {
 	}
 
 	private Image _createImage(String symbolicName) {
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		ISharedImages sharedImages = UIUtil.getSharedImages();
 
 		Image image = sharedImages.getImage(symbolicName);
 
 		if (image.isDisposed()) {
-			image = sharedImages.getImageDescriptor(symbolicName).createImage();
+			ImageDescriptor imageDescriptor = sharedImages.getImageDescriptor(symbolicName);
+
+			image = imageDescriptor.createImage();
 		}
 
 		return image;
@@ -379,7 +378,9 @@ public class CustomJspPage extends Page {
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 
-		_leftTreeViewer.getTree().setLayoutData(gd);
+		Tree tree = _leftTreeViewer.getTree();
+
+		tree.setLayoutData(gd);
 
 		_leftTreeViewer.setContentProvider(new ViewContentProvider());
 		_leftTreeViewer.setLabelProvider(new LeftViewLabelProvider());
@@ -406,8 +407,7 @@ public class CustomJspPage extends Page {
 					}
 					else {
 						MessageDialog.openInformation(
-							Display.getDefault().getActiveShell(), "File not found",
-							"There is no such file in liferay 62");
+							UIUtil.getActiveShell(), "File not found", "There is no such file in liferay 62");
 					}
 				}
 
@@ -456,7 +456,9 @@ public class CustomJspPage extends Page {
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 
-		_rightTreeViewer.getTree().setLayoutData(gd);
+		Tree tree = _rightTreeViewer.getTree();
+
+		tree.setLayoutData(gd);
 
 		_rightTreeViewer.setContentProvider(new ViewContentProvider());
 		_rightTreeViewer.setLabelProvider(new RightViewLabelProvider());
@@ -479,14 +481,13 @@ public class CustomJspPage extends Page {
 					if (_is70FileFound(file)) {
 						String[] paths = _get70FilePaths(file);
 
-						compare(
-							paths[0], paths[1], "6.2 original JSP",
-							"New 7.x JSP in " + CoreUtil.getProject(file).getName());
+						IProject project = CoreUtil.getProject(file);
+
+						compare(paths[0], paths[1], "6.2 original JSP", "New 7.x JSP in " + project.getName());
 					}
 					else {
 						MessageDialog.openInformation(
-							Display.getDefault().getActiveShell(), "file not found",
-							"There is no such file in liferay 7");
+							UIUtil.getActiveShell(), "file not found", "There is no such file in liferay 7");
 					}
 				}
 
@@ -515,7 +516,7 @@ public class CustomJspPage extends Page {
 
 		IProject project = CoreUtil.getProject(file);
 
-		String projectPath = project.getLocation().toOSString();
+		String projectPath = FileUtil.getLocationOSString(project);
 
 		String customJsp = CustomJspConverter.getCustomJspPath(projectPath);
 
@@ -525,7 +526,7 @@ public class CustomJspPage extends Page {
 			folder = project.getFolder("src/main/webapp/" + customJsp);
 		}
 
-		File folderFile = folder.getLocation().toFile();
+		File folderFile = FileUtil.getFile(folder);
 
 		java.nio.file.Path customJspPath = folderFile.toPath();
 
@@ -547,9 +548,11 @@ public class CustomJspPage extends Page {
 	}
 
 	private String[] _get70FilePaths(File file) {
-		IFolder resourceFolder = CoreUtil.getProject(file).getFolder(_staticPath);
+		IProject project = CoreUtil.getProject(file);
 
-		File newFile = resourceFolder.getLocation().toFile();
+		IFolder resourceFolder = project.getFolder(_staticPath);
+
+		File newFile = FileUtil.getFile(resourceFolder);
 
 		java.nio.file.Path resourcePath = newFile.toPath();
 
@@ -561,8 +564,8 @@ public class CustomJspPage extends Page {
 		IFile original70File = resourceFolder.getFile(relativePath.toString());
 
 		if (original62File.exists() && original70File.exists()) {
-			paths[0] = original62File.getLocation().toPortableString();
-			paths[1] = original70File.getLocation().toPortableString();
+			paths[0] = FileUtil.getLocationPortableString(original62File);
+			paths[1] = FileUtil.getLocationPortableString(original70File);
 		}
 
 		return paths;
@@ -572,10 +575,10 @@ public class CustomJspPage extends Page {
 		Set<IRuntime> liferayRuntimes = ServerUtil.getAvailableLiferayRuntimes();
 
 		for (IRuntime liferayRuntime : liferayRuntimes) {
-			File customJspFile = liferayRuntime.getLocation().toFile();
+			File customJspFile = FileUtil.getFile(liferayRuntime.getLocation());
 			IRuntimeType runtimeType = liferayRuntime.getRuntimeType();
 
-			if (runtimeType.getId().equals("com.liferay.ide.server.portal.runtime") && customJspFile.exists()) {
+			if ("com.liferay.ide.server.portal.runtime".equals(runtimeType.getId()) && customJspFile.exists()) {
 				return liferayRuntime;
 			}
 		}
@@ -588,7 +591,7 @@ public class CustomJspPage extends Page {
 		IProject[] projects = CoreUtil.getAllProjects();
 
 		for (IProject project : projects) {
-			String projectLocation = project.getLocation().toPortableString();
+			String projectLocation = FileUtil.getLocationOSString(project);
 
 			String customJsp = CustomJspConverter.getCustomJspPath(projectLocation);
 
@@ -640,7 +643,7 @@ public class CustomJspPage extends Page {
 	}
 
 	private String _getLiferay62ServerLocation() {
-		String liferay62ServerLocation = dataModel.getLiferay62ServerLocation().content(true);
+		String liferay62ServerLocation = SapphireUtil.getContent(dataModel.getLiferay62ServerLocation());
 
 		if (liferay62ServerLocation == null) {
 			Set<IRuntime> liferayRuntimes = ServerUtil.getAvailableLiferayRuntimes();
@@ -648,10 +651,14 @@ public class CustomJspPage extends Page {
 			for (IRuntime liferayRuntime : liferayRuntimes) {
 				IRuntimeType runtimeType = liferayRuntime.getRuntimeType();
 
-				if (runtimeType.getId().startsWith("com.liferay.ide.server.62.")) {
+				String runtimeId = runtimeType.getId();
+
+				if (runtimeId.startsWith("com.liferay.ide.server.62.")) {
 					IPath runtimeLocation = liferayRuntime.getLocation();
 
-					liferay62ServerLocation = runtimeLocation.removeLastSegments(1).toString();
+					runtimeLocation = runtimeLocation.removeLastSegments(1);
+
+					liferay62ServerLocation = runtimeLocation.toString();
 
 					return liferay62ServerLocation;
 				}
@@ -703,7 +710,7 @@ public class CustomJspPage extends Page {
 	}
 
 	private IRuntime _getLiferay70Runtime() {
-		String serverName = dataModel.getLiferay70ServerName().content();
+		String serverName = SapphireUtil.getContent(dataModel.getLiferay70ServerName());
 
 		IServer server = ServerUtil.getServer(serverName);
 
@@ -788,7 +795,9 @@ public class CustomJspPage extends Page {
 
 		URL imageUrl = bundle.getEntry("/icons/e16/hook.png");
 
-		Image hookImage = ImageDescriptor.createFromURL(imageUrl).createImage();
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(imageUrl);
+
+		Image hookImage = imageDescriptor.createImage();
 
 		dialog.setImage(hookImage);
 
@@ -823,7 +832,7 @@ public class CustomJspPage extends Page {
 		for (int i = 0; i < size; i++) {
 			IProject hookProject = hookProjects.get(i);
 
-			sourcePaths[i] = hookProject.getLocation().toOSString();
+			sourcePaths[i] = FileUtil.getLocationOSString(hookProject);
 			projectNames[i] = hookProject.getName();
 		}
 
@@ -832,8 +841,7 @@ public class CustomJspPage extends Page {
 		IRuntime liferay70Runtime = _getLiferay70Runtime();
 
 		if (liferay70Runtime == null) {
-			MessageDialog.openError(
-				Display.getDefault().getActiveShell(), "Convert Error", "Couldn't find Liferay 7.x Runtime.");
+			MessageDialog.openError(UIUtil.getActiveShell(), "Convert Error", "Could not find Liferay 7.x Runtime.");
 
 			return;
 		}
@@ -841,8 +849,7 @@ public class CustomJspPage extends Page {
 		String liferay62ServerLocation = _getLiferay62ServerLocation();
 
 		if (liferay62ServerLocation == null) {
-			MessageDialog.openError(
-				Display.getDefault().getActiveShell(), "Convert Error", "Couldn't find Liferay 6.2 Runtime.");
+			MessageDialog.openError(UIUtil.getActiveShell(), "Convert Error", "Could not find Liferay 6.2 Runtime.");
 
 			return;
 		}
@@ -851,9 +858,9 @@ public class CustomJspPage extends Page {
 		converter.setLiferay62ServerLocation(liferay62ServerLocation);
 		converter.setUi(this);
 
-		Value<Path> convertedProjectLocation = dataModel.getConvertedProjectLocation();
+		Path convertedProjectLocation = SapphireUtil.getContent(dataModel.getConvertedProjectLocation());
 
-		String targetPath = convertedProjectLocation.content().toPortableString();
+		String targetPath = convertedProjectLocation.toPortableString();
 
 		boolean liferayWorkapce = false;
 
@@ -865,7 +872,7 @@ public class CustomJspPage extends Page {
 	}
 
 	private void _updateDefaultLocation() {
-		IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+		IPath workspaceLocation = CoreUtil.getWorkspaceRootLocation();
 
 		_defaultLocation = workspaceLocation.toPortableString();
 
@@ -877,7 +884,9 @@ public class CustomJspPage extends Page {
 
 				String modulesDir = LiferayWorkspaceUtil.getModulesDir(ws);
 
-				IPath locationPath = ws.getLocation().append(modulesDir);
+				IPath location = ws.getLocation();
+
+				IPath locationPath = location.append(modulesDir);
 
 				_defaultLocation = locationPath.toPortableString();
 			}
@@ -1004,7 +1013,7 @@ public class CustomJspPage extends Page {
 
 				Status validationStatus = Status.createOkStatus();
 
-				if (property.name().equals("ConvertedProjectLocation")) {
+				if ("ConvertedProjectLocation".equals(property.name())) {
 					validationStatus = _convertedProjectLocationValidation.compute();
 
 					String message = "ok";
@@ -1129,7 +1138,9 @@ public class CustomJspPage extends Page {
 			File html = new File(file, "html");
 
 			if (html.exists() && html.isDirectory()) {
-				return CoreUtil.getProject(html).getName();
+				IProject project = CoreUtil.getProject(html);
+
+				return project.getName();
 			}
 			else {
 				if (name.isEmpty()) {

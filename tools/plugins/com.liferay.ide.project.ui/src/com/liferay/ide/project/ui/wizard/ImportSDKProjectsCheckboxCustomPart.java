@@ -125,7 +125,7 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 						IStatus status = ProjectImportUtil.validateSDKPath(sdkLocation.toPortableString());
 
 						if (status.isOK()) {
-							if (FileUtil.exists(sdkLocation)) {
+							if (SapphireUtil.exists(sdkLocation)) {
 								checkAndUpdateCheckboxElement();
 							}
 						}

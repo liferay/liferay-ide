@@ -53,6 +53,7 @@ import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -66,9 +67,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 import org.eclipse.wst.server.core.IRuntime;
 
@@ -92,7 +92,9 @@ public class CustomJspConverter {
 	public static String sourcePrefix = "source";
 
 	public static void clearConvertResults() {
-		IPath path = ProjectUI.getPluginStateLocation().append(_resultFileName);
+		IPath location = ProjectUI.getPluginStateLocation();
+
+		IPath path = location.append(_resultFileName);
 
 		File resultFile = path.toFile();
 
@@ -104,12 +106,14 @@ public class CustomJspConverter {
 	public static String[] getConvertResult(String filter) {
 		List<String> results = new ArrayList<>();
 
-		IPath path = ProjectUI.getPluginStateLocation().append(_resultFileName);
+		IPath location = ProjectUI.getPluginStateLocation();
+
+		IPath path = location.append(_resultFileName);
 
 		File resultFile = path.toFile();
 
 		if (!resultFile.exists()) {
-			return null;
+			return new String[0];
 		}
 
 		Properties resultProp = PropertiesUtil.loadProperties(resultFile);
@@ -147,7 +151,9 @@ public class CustomJspConverter {
 		String customJspPath = null;
 
 		try (InputStream input = Files.newInputStream(hookFile.toPath())) {
-			DocumentBuilder domBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+
+			DocumentBuilder domBuilder = documentBuilderFactory.newDocumentBuilder();
 
 			domBuilder.setEntityResolver(
 				new EntityResolver() {
@@ -173,15 +179,17 @@ public class CustomJspConverter {
 			for (int i = 0; i < nodeList.getLength(); i++) {
 				Node node = nodeList.item(i);
 
-				if ((node.getNodeType() == Node.ELEMENT_NODE) && node.getNodeName().equals("custom-jsp-dir")) {
-					customJspPath = node.getFirstChild().getNodeValue();
+				if ((node.getNodeType() == Node.ELEMENT_NODE) && "custom-jsp-dir".equals(node.getNodeName())) {
+					Node child = node.getFirstChild();
+
+					customJspPath = child.getNodeValue();
 				}
 			}
 		}
 		catch (Exception e) {
 		}
 
-		if ((customJspPath == null) || (customJspPath.trim().length() == 0)) {
+		if (CoreUtil.isNullOrEmpty(customJspPath)) {
 			return null;
 		}
 
@@ -212,8 +220,8 @@ public class CustomJspConverter {
 
 			String customJspPath = getCustomJspPath(sourcePath);
 
-			if ((customJspPath == null) || (customJspPath.trim().length() <= 0)) {
-				throw new Exception("convert failed, can't find custom jsp folder");
+			if (CoreUtil.isNullOrEmpty(customJspPath)) {
+				throw new Exception("convert failed, can not find custom jsp folder");
 			}
 
 			_convertToCoreJspHook(sourcePath, customJspPath, targetPath, liferayWorkspace);
@@ -246,9 +254,9 @@ public class CustomJspConverter {
 
 							importOp.setLocation(path);
 
-							if (importOp.validation().severity() !=
-									org.eclipse.sapphire.modeling.Status.Severity.ERROR) {
+							org.eclipse.sapphire.modeling.Status status = importOp.validation();
 
+							if (status.severity() != Severity.ERROR) {
 								ImportLiferayModuleProjectOpMethods.execute(
 									importOp, ProgressMonitorBridge.create(monitor));
 							}
@@ -267,9 +275,9 @@ public class CustomJspConverter {
 		};
 
 		try {
-			IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
+			IProgressService progressService = UIUtil.getProgressService();
 
-			progressService.showInDialog(Display.getDefault().getActiveShell(), job);
+			progressService.showInDialog(UIUtil.getActiveShell(), job);
 
 			job.schedule();
 		}
@@ -324,11 +332,15 @@ public class CustomJspConverter {
 
 			File location = new File(targetPath);
 
-			Bundle bundle = ProjectUI.getDefault().getBundle();
+			ProjectUI projectUI = ProjectUI.getDefault();
 
-			final URL projectZipUrl = bundle.getEntry("resources/codeupgrade.corejsphook.zip");
+			Bundle bundle = projectUI.getBundle();
 
-			final File projectZipFile = new File(FileLocator.toFileURL(projectZipUrl).getFile());
+			URL projectZipUrl = bundle.getEntry("resources/codeupgrade.corejsphook.zip");
+
+			projectZipUrl = FileLocator.toFileURL(projectZipUrl);
+
+			File projectZipFile = FileUtil.getFile(projectZipUrl);
 
 			ZipUtil.unzip(projectZipFile, location);
 
@@ -342,12 +354,6 @@ public class CustomJspConverter {
 			for (File dir : dirs) {
 				if (dir != null) {
 
-					// File dest = new File( jspDir, dir.getName() );
-
-					// dest.mkdirs();
-
-					// IOUtil.copyDirToDir( dir, dest );
-
 					// copy 70 original jsp file to converted project ignore folder
 
 					List<String> fileRelativizePaths = _getAllRelativizeFilePaths(dir);
@@ -355,10 +361,12 @@ public class CustomJspConverter {
 					for (String fileRelativizePath : fileRelativizePaths) {
 						File original62File = new File(_get62HtmlDir() + dir.getName() + "/" + fileRelativizePath);
 
-						IPath appServerPortalDir = liferayRuntime.getAppServerPortalDir().removeLastSegments(1);
+						IPath path = liferayRuntime.getAppServerPortalDir();
 
-						File original70File = appServerPortalDir.append(
-							"ROOT/html/" + dir.getName() + "/" + fileRelativizePath).toFile();
+						IPath appServerPortalDir = path.removeLastSegments(1);
+
+						File original70File = FileUtil.getFile(
+							appServerPortalDir.append("ROOT/html/" + dir.getName() + "/" + fileRelativizePath));
 
 						if (original62File.exists() && original70File.exists()) {
 							File target62File = new File(
@@ -396,9 +404,9 @@ public class CustomJspConverter {
 
 			projectFolder.renameTo(newFolder);
 
-			_resultProp.setProperty(
-				resultPrefix + "." + sourceProjectName + "/portalCore",
-				newFolder.getAbsolutePath().replace("\\\\", "/"));
+			String s = newFolder.getAbsolutePath();
+
+			_resultProp.setProperty(resultPrefix + "." + sourceProjectName + "/portalCore", s.replace("\\\\", "/"));
 		}
 	}
 
@@ -414,7 +422,7 @@ public class CustomJspConverter {
 
 			File sourceFile = new File(sourcePath);
 
-			if ((fragmentPath != null) && !fragmentPath.trim().isEmpty()) {
+			if (CoreUtil.isNotNullOrEmpty(fragmentPath)) {
 				_resultProp.setProperty(
 					resultPrefix + "." + sourceFile.getName() + "/portlet/" + portlet.getName(), fragmentPath);
 			}
@@ -424,15 +432,17 @@ public class CustomJspConverter {
 	private void _copy62JspFile(String portlet, String jsp, File targetJspDir, String mappedJsp) throws Exception {
 		String htmlDir = _get62HtmlDir();
 
-		if (htmlDir != null) {
-			File jsp62 = new File(htmlDir + "portlet/" + portlet + "/" + jsp);
-
-			File targetFile = new File(targetJspDir + "/.ignore/", mappedJsp + ".62");
-
-			_makeParentDir(targetFile);
-
-			FileUtil.copyFile(jsp62, targetFile);
+		if (htmlDir == null) {
+			return;
 		}
+
+		File jsp62 = new File(htmlDir + "portlet/" + portlet + "/" + jsp);
+
+		File targetFile = new File(targetJspDir + "/.ignore/", mappedJsp + ".62");
+
+		_makeParentDir(targetFile);
+
+		FileUtil.copyFile(jsp62, targetFile);
 	}
 
 	/**
@@ -456,26 +466,12 @@ public class CustomJspConverter {
 
 	// convert common, portal, taglib folders to 7.x CustomJspBag
 
-	/**
-	 * private void copyCustomJspFile( String sourceJsp, String jsp, File
-	 * targetJspDir, boolean isIgnore, String mappedJsp ) throws Exception { File
-	 * srcJsp = new File( sourceJsp, jsp );
-	 *
-	 * File targetJsp = null;
-	 *
-	 * if( isIgnore ) { targetJsp = new File( targetJspDir + "/.ignore/", mappedJsp
-	 * ); } else { targetJsp = new File( targetJspDir, mappedJsp ); }
-	 *
-	 * makeParentDir( targetJsp );
-	 *
-	 * FileUtil.copyFile( srcJsp, targetJsp ); }
-	 */
 	private String _createEmptyJspHookProject(String portlet, String originProjectName, String targetPath)
 		throws Exception {
 
 		String projectName = originProjectName + "-" + portlet + "-fragment";
 
-		if (ProjectUtil.getProject(projectName).exists()) {
+		if (FileUtil.exists(ProjectUtil.getProject(projectName))) {
 			UIUtil.sync(
 				new Runnable() {
 
@@ -533,8 +529,6 @@ public class CustomJspConverter {
 			return null;
 		}
 
-		// String sourceJsp = sourcePortletDir + "/" + portlet;
-
 		File targetJspDir = new File(targetPath + "/" + projectName + "/src/main/resources/META-INF/resources/");
 
 		List<String> jspList = _getAllFilesFromSourcePortletDir(portlet);
@@ -543,8 +537,6 @@ public class CustomJspConverter {
 
 		for (String jsp : jspList) {
 			String mappedJsp = _jspPathConvert(portlet, jsp);
-
-			// copyCustomJspFile( sourceJsp, jsp, targetJspDir, false, mappedJsp );
 
 			if ((moduleJsps != null) && moduleJsps.contains(mappedJsp)) {
 				_copy62JspFile(portlet, jsp, targetJspDir, mappedJsp);
@@ -606,7 +598,7 @@ public class CustomJspConverter {
 			String entryName = entry.getName();
 
 			if (entryName.startsWith("META-INF/resources/") && !entry.isDirectory()) {
-				result.add(entry.getName().substring(19));
+				result.add(entryName.substring(19));
 			}
 		}
 
@@ -658,7 +650,9 @@ public class CustomJspConverter {
 			return null;
 		}
 
-		IPath stateLocation = ProjectCore.getDefault().getStateLocation();
+		ProjectCore projectCore = ProjectCore.getDefault();
+
+		IPath stateLocation = projectCore.getStateLocation();
 
 		final IPath temp = stateLocation.append("moduleCache");
 
@@ -676,7 +670,9 @@ public class CustomJspConverter {
 
 		JarFile jarFile = new JarFile(moduleFile);
 
-		Attributes mainAttributes = jarFile.getManifest().getMainAttributes();
+		Manifest manifest = jarFile.getManifest();
+
+		Attributes mainAttributes = manifest.getMainAttributes();
 
 		String version = mainAttributes.getValue("Bundle-Version");
 
@@ -751,12 +747,14 @@ public class CustomJspConverter {
 		File parent = target.getParentFile();
 
 		if (!parent.exists() && !parent.mkdirs()) {
-			throw new Exception("can't create dir " + parent);
+			throw new Exception("can not create dir " + parent);
 		}
 	}
 
 	private void _saveResultProperties() {
-		IPath projectUITempLocation = ProjectUI.getDefault().getStateLocation();
+		ProjectUI projectUI = ProjectUI.getDefault();
+
+		IPath projectUITempLocation = projectUI.getStateLocation();
 
 		IPath path = projectUITempLocation.append(_resultFileName);
 
@@ -931,7 +929,9 @@ public class CustomJspConverter {
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 			Path relativize = _source.relativize(file);
 
-			String relativizePath = relativize.toString().replaceAll("\\\\", "/");
+			String s = relativize.toString();
+
+			String relativizePath = s.replaceAll("\\\\", "/");
 
 			_filePaths.add(relativizePath);
 

@@ -14,6 +14,8 @@
 
 package com.liferay.ide.core.util;
 
+import java.io.File;
+
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.Listener;
@@ -21,6 +23,7 @@ import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 
 /**
@@ -47,6 +50,18 @@ public class SapphireUtil {
 		}
 
 		value.detach(listener);
+	}
+
+	public static boolean exists(Path path) {
+		if (path != null) {
+			File file = path.toFile();
+
+			if (file.exists()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public static <T> T getContent(Value<T> value) {

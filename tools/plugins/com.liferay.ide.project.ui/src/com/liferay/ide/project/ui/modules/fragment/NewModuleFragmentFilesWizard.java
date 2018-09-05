@@ -52,10 +52,14 @@ public class NewModuleFragmentFilesWizard
 				_initialProject = ((IJavaProject)element).getProject();
 			}
 			else if (element instanceof IPackageFragment) {
-				_initialProject = ((IJavaElement)element).getResource().getProject();
+				IResource resource = ((IPackageFragment)element).getResource();
+
+				_initialProject = resource.getProject();
 			}
 			else if (element instanceof IJavaElement) {
-				_initialProject = ((IJavaElement)element).getResource().getProject();
+				IResource resource = ((IJavaElement)element).getResource();
+
+				_initialProject = resource.getProject();
 			}
 
 			if (_initialProject != null) {

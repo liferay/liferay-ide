@@ -14,9 +14,11 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.ui.migration.OpenJavaProjectSelectionDialogAction;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -28,7 +30,6 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
@@ -47,9 +48,9 @@ public class CompileAction extends OpenJavaProjectSelectionDialogAction {
 
 		IConsole[] existing = conMan.getConsoles();
 
-		for (int i = 0; i < existing.length; i++) {
-			if ((existing[i].getName()).contains(name)) {
-				return existing[i];
+		for (IConsole console : existing) {
+			if (StringUtil.contains(console.getName(), name)) {
+				return console;
 			}
 		}
 
@@ -70,7 +71,7 @@ public class CompileAction extends OpenJavaProjectSelectionDialogAction {
 			try {
 				SDK sdk = SDKUtil.getWorkspaceSDK();
 
-				IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
+				IProgressService progressService = UIUtil.getProgressService();
 
 				progressService.busyCursorWhile(
 					new IRunnableWithProgress() {
@@ -86,7 +87,7 @@ public class CompileAction extends OpenJavaProjectSelectionDialogAction {
 
 									IDocument document = ((ProcessConsole)getConsole(p.getName())).getDocument();
 
-									if (document.get().contains("BUILD FAILED")) {
+									if (StringUtil.contains(document.get(), "BUILD FAILED")) {
 										return;
 									}
 								}

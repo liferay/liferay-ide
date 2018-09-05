@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.quickfix;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ServiceContainer;
@@ -41,6 +42,7 @@ import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jdt.ui.text.java.IProblemLocation;
 import org.eclipse.jdt.ui.text.java.IQuickFixProcessor;
 import org.eclipse.jdt.ui.text.java.correction.CUCorrectionProposal;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 
@@ -69,12 +71,12 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 				boolean existed = false;
 
 				for (IJavaCompletionProposal existedProposal : resultingCollections) {
-					if (existedProposal.getDisplayString().equals(newProposal.getDisplayString())) {
+					if (StringUtil.equals(existedProposal.getDisplayString(), newProposal.getDisplayString())) {
 						existed = true;
 					}
 				}
 
-				if (existed == false) {
+				if (!existed) {
 					resultingCollections.add(newProposal);
 				}
 			}
@@ -104,7 +106,9 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 			@Override
 			public void apply(IDocument document) {
 				try {
-					IJavaProject javaProject = context.getCompilationUnit().getJavaProject();
+					ICompilationUnit compilationUnit = context.getCompilationUnit();
+
+					IJavaProject javaProject = compilationUnit.getJavaProject();
 
 					IProject project = javaProject.getProject();
 
@@ -122,6 +126,7 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 						List<String[]> dependencyList = new ArrayList<>();
 
 						dependencyList.add(dependency);
+
 						builder.updateProjectDependency(project, dependencyList);
 					}
 				}
@@ -137,7 +142,9 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 
 			@Override
 			public Image getImage() {
-				return ProjectUI.getPluginImageRegistry().get(ProjectUI.MODULE_DEPENDENCY_IAMGE_ID);
+				ImageRegistry imageRegistry = ProjectUI.getPluginImageRegistry();
+
+				return imageRegistry.get(ProjectUI.MODULE_DEPENDENCY_IAMGE_ID);
 			}
 
 		};
@@ -182,13 +189,18 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 			return proposals;
 		}
 
-		String importName = importDeclaration.getName().toString();
-		List<String> servicesList;
+		Name name = importDeclaration.getName();
+
+		String importName = name.toString();
 
 		try {
-			List<String> serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
+			ServiceContainer serviceWrapperContainer = TargetPlatformUtil.getServiceWrapperList();
 
-			servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+			List<String> serviceWrapperList = serviceWrapperContainer.getServiceList();
+
+			ServiceContainer serviceContainer = TargetPlatformUtil.getServicesList();
+
+			List<String> servicesList = serviceContainer.getServiceList();
 
 			if (serviceWrapperList.contains(importName)) {
 				ServiceContainer bundle = TargetPlatformUtil.getServiceWrapperBundle(importName);
@@ -231,7 +243,9 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 		List<IJavaCompletionProposal> proposals = new ArrayList<>();
 
 		try {
-			List<String> serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
+			ServiceContainer servericeWrapperContainer = TargetPlatformUtil.getServiceWrapperList();
+
+			List<String> serviceWrapperList = servericeWrapperContainer.getServiceList();
 
 			for (String wrapper : serviceWrapperList) {
 				if (wrapper.endsWith(fullyQualifiedName)) {
@@ -242,7 +256,9 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 			}
 
 			if (!depWrapperCanFixed) {
-				List<String> servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+				ServiceContainer servericeContainer = TargetPlatformUtil.getServicesList();
+
+				List<String> servicesList = servericeContainer.getServiceList();
 
 				for (String service : servicesList) {
 					if (service.endsWith(fullyQualifiedName)) {

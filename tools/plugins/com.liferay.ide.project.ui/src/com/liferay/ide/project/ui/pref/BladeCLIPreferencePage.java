@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.pref;
 
 import aQute.bnd.osgi.Domain;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
@@ -171,7 +172,9 @@ public class BladeCLIPreferencePage extends FieldEditorPreferencePage implements
 
 					File updateJar = BladeCLI.fetchBladeJarFromRepo(false);
 
-					String newVersion = Domain.domain(updateJar).getBundleVersion();
+					Domain domain = Domain.domain(updateJar);
+
+					String newVersion = domain.getBundleVersion();
 
 					final boolean newAvailable = new Version(newVersion).compareTo(new Version(currentVersion)) > 0;
 
@@ -182,6 +185,7 @@ public class BladeCLIPreferencePage extends FieldEditorPreferencePage implements
 							public void run() {
 								if (!latestBladeVersionText.isDisposed() && !updateBladeButton.isDisposed()) {
 									latestBladeVersionText.setText(newVersion);
+
 									updateBladeButton.setEnabled(newAvailable);
 								}
 							}
@@ -200,7 +204,13 @@ public class BladeCLIPreferencePage extends FieldEditorPreferencePage implements
 	}
 
 	private String _getCurrentBladeVersion() throws BladeCLIException, IOException {
-		return new Version(Domain.domain(BladeCLI.getBladeCLIPath().toFile()).getBundleVersion()).toString();
+		File file = FileUtil.getFile(BladeCLI.getBladeCLIPath());
+
+		Domain domain = Domain.domain(file);
+
+		Version version = new Version(domain.getBundleVersion());
+
+		return version.toString();
 	}
 
 	private final ScopedPreferenceStore _prefStore;

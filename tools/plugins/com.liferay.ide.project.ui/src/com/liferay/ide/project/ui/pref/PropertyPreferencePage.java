@@ -22,12 +22,15 @@ import java.util.Map;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.ControlEnableState;
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -43,6 +46,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
+import org.eclipse.ui.IDecoratorManager;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.dialogs.ListDialog;
@@ -95,8 +99,9 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 			_enableProjectSettings.setText(SSEUIMessages.EnableProjectSettings);
 			_enableProjectSettings.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
 
-			boolean enabledForProject = createPreferenceScopes()[0].getNode(
-				getPreferenceNodeQualifier()).getBoolean(getProjectSettingsKey(), false);
+			IEclipsePreferences eclipsePreferences = createPreferenceScopes()[0].getNode(getPreferenceNodeQualifier());
+
+			boolean enabledForProject = eclipsePreferences.getBoolean(getProjectSettingsKey(), false);
 
 			_enableProjectSettings.setSelection(enabledForProject);
 		}
@@ -163,6 +168,7 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 			};
 
 			selectionAdapter.widgetSelected(null);
+
 			_enableProjectSettings.addSelectionListener(selectionAdapter);
 		}
 
@@ -174,16 +180,19 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 	@Override
 	public boolean performOk() {
 		boolean ok = super.performOk();
+
 		IScopeContext[] preferenceScopes = createPreferenceScopes();
 
 		if (getProject() != null) {
 			if (isElementSettingsEnabled()) {
-				preferenceScopes[0].getNode(
-					getPreferenceNodeQualifier()).putBoolean(getProjectSettingsKey(),
-					_enableProjectSettings.getSelection());
+				IEclipsePreferences eclipsePreferences = preferenceScopes[0].getNode(getPreferenceNodeQualifier());
+
+				eclipsePreferences.putBoolean(getProjectSettingsKey(), _enableProjectSettings.getSelection());
 			}
 			else {
-				preferenceScopes[0].getNode(getPreferenceNodeQualifier()).remove(getProjectSettingsKey());
+				IEclipsePreferences eclipsePreferences = preferenceScopes[0].getNode(getPreferenceNodeQualifier());
+
+				eclipsePreferences.remove(getProjectSettingsKey());
 			}
 		}
 
@@ -206,6 +215,7 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 		if (enable) {
 			if (_enablements != null) {
 				_enablements.restore();
+
 				_enablements = null;
 			}
 		}
@@ -258,6 +268,7 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 	protected void performDefaults() {
 		if ((getProject() != null) && (_enableProjectSettings != null)) {
 			_enableProjectSettings.setSelection(false);
+
 			enablePreferenceContent(false);
 		}
 
@@ -285,7 +296,9 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 				}
 
 				public Object[] getElements(Object inputElement) {
-					return ((IWorkspace)inputElement).getRoot().getProjects();
+					IWorkspaceRoot workspaceRoot = ((IWorkspace)inputElement).getRoot();
+
+					return workspaceRoot.getProjects();
 				}
 
 				public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
@@ -293,11 +306,14 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 
 			});
 
-		IWorkbench workbench = SSEUIPlugin.getDefault().getWorkbench();
+		SSEUIPlugin sseuiPlugin = SSEUIPlugin.getDefault();
+
+		IWorkbench workbench = sseuiPlugin.getWorkbench();
+
+		IDecoratorManager decoratorManager = workbench.getDecoratorManager();
 
 		dialog.setLabelProvider(
-			new DecoratingLabelProvider(
-				new WorkbenchLabelProvider(), workbench.getDecoratorManager().getLabelDecorator()));
+			new DecoratingLabelProvider(new WorkbenchLabelProvider(), decoratorManager.getLabelDecorator()));
 
 		dialog.setInput(ResourcesPlugin.getWorkspace());
 		dialog.setTitle(SSEUIMessages.PropertyPreferencePage_01);
@@ -307,11 +323,15 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 
 			if (ListUtil.isNotEmpty(result)) {
 				IProject project = (IProject)dialog.getResult()[0];
+
 				Map data = new HashMap();
 
 				data.put(_disableLink, Boolean.TRUE);
-				PreferencesUtil.createPropertyDialogOn(
-					getShell(), project, getPropertyPageID(), new String[] {getPropertyPageID()}, data).open();
+
+				PreferenceDialog preferenceDialog = PreferencesUtil.createPropertyDialogOn(
+					getShell(), project, getPropertyPageID(), new String[] {getPropertyPageID()}, data);
+
+				preferenceDialog.open();
 			}
 		}
 	}
@@ -320,8 +340,11 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 		Map data = new HashMap();
 
 		data.put(_disableLink, Boolean.TRUE);
-		PreferencesUtil.createPreferenceDialogOn(
-			getShell(), getPreferencePageID(), new String[] {getPreferencePageID()}, data).open();
+
+		PreferenceDialog preferenceDialog = PreferencesUtil.createPreferenceDialogOn(
+			getShell(), getPreferencePageID(), new String[] {getPreferencePageID()}, data);
+
+		preferenceDialog.open();
 	}
 
 	private void _updateLinkEnablement() {

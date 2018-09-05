@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.pref;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,6 +34,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
@@ -126,6 +128,7 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 
 		inner.setFont(parent.getFont());
 		inner.setLayout(new GridLayout(columns, false));
+
 		twistie.setClient(inner);
 
 		return inner;
@@ -168,7 +171,11 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 
 		excomposite.setText(label);
 		excomposite.setExpanded(false);
-		excomposite.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT));
+
+		FontRegistry faceResources = JFaceResources.getFontRegistry();
+
+		excomposite.setFont(faceResources.getBold(JFaceResources.DIALOG_FONT));
+
 		excomposite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false, nColumns, 1));
 		excomposite.addExpansionListener(
 			new ExpansionAdapter() {
@@ -179,7 +186,9 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 				}
 
 			});
+
 		_fExpandables.add(excomposite);
+
 		_makeScrollableCompositeAware(excomposite);
 
 		return excomposite;
@@ -275,6 +284,7 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 			(severity == ValidationMessage.IGNORE)) {
 
 			data.setSeverity(severity);
+
 			data.originalSeverity = severity;
 		}
 
@@ -336,14 +346,8 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 		}
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.wst.sse.ui.internal.preferences.ui.AbstractSettingsPage#
-	 *      storeValues()
-	 */
 	protected void storeValues() {
-		if ((_fCombos == null) || (_fCombos.size() == 0)) {
+		if (ListUtil.isEmpty(_fCombos)) {
 			return;
 		}
 
@@ -355,13 +359,17 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 			ComboData data = (ComboData)((Combo)it.next()).getData();
 
 			if (data.getKey() != null) {
-				contexts[0].getNode(getPreferenceNodeQualifier()).putInt(data.getKey(), data.getSeverity());
+				IEclipsePreferences eclipsePreferences = contexts[0].getNode(getPreferenceNodeQualifier());
+
+				eclipsePreferences.putInt(data.getKey(), data.getSeverity());
 			}
 		}
 
-		for (int i = 0; i < contexts.length; i++) {
+		for (IScopeContext context : contexts) {
 			try {
-				contexts[i].getNode(getPreferenceNodeQualifier()).flush();
+				IEclipsePreferences eclipsePreferences = context.getNode(getPreferenceNodeQualifier());
+
+				eclipsePreferences.flush();
 			}
 			catch (BackingStoreException bse) {
 			}
@@ -391,10 +399,12 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 				getShell(), SWT.APPLICATION_MODAL | SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_INFORMATION | SWT.RIGHT);
 
 			mb.setText(Msgs.validation);
+
 			/* Choose which message to use based on if its project or workspace settings */
 			String msg = (getProject() == null) ? Msgs.workspaceValidation : Msgs.projectLevelValidation;
 
 			mb.setMessage(msg);
+
 			switch (mb.open()) {
 				case SWT.CANCEL:
 					return false;

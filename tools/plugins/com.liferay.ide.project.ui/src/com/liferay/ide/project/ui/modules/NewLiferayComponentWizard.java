@@ -17,8 +17,10 @@ package com.liferay.ide.project.ui.modules;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -32,13 +34,10 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWizard;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 /**
@@ -65,15 +64,22 @@ public class NewLiferayComponentWizard
 			}
 			else if (element instanceof IPackageFragment) {
 				_initialPackage = (IPackageFragment)element;
-				_initialProject = ((IJavaElement)element).getResource().getProject();
+
+				IResource resource = ((IJavaElement)element).getResource();
+
+				_initialProject = resource.getProject();
 			}
 			else if (element instanceof IPackageFragmentRoot) {
 				_initialPackageRoot = (IPackageFragmentRoot)element;
 
-				_initialProject = _initialPackageRoot.getJavaProject().getProject();
+				IJavaProject javaProject = _initialPackageRoot.getJavaProject();
+
+				_initialProject = javaProject.getProject();
 			}
 			else if (element instanceof IJavaElement) {
-				_initialProject = ((IJavaElement)element).getResource().getProject();
+				IResource resource = ((IJavaElement)element).getResource();
+
+				_initialProject = resource.getProject();
 			}
 
 			if (_initialProject != null) {
@@ -96,7 +102,7 @@ public class NewLiferayComponentWizard
 	public void performPostFinish() {
 		final NewLiferayComponentOp op = element().nearest(NewLiferayComponentOp.class);
 
-		IProject currentProject = CoreUtil.getProject(op.getProjectName().content());
+		IProject currentProject = CoreUtil.getProject(SapphireUtil.getContent(op.getProjectName()));
 
 		if (currentProject == null) {
 			return;
@@ -109,8 +115,8 @@ public class NewLiferayComponentWizard
 		}
 
 		try {
-			String componentClass = op.getComponentClassName().content();
-			String packageName = op.getPackageName().text();
+			String componentClass = SapphireUtil.getContent(op.getComponentClassName());
+			String packageName = SapphireUtil.getText(op.getPackageName());
 
 			final IType type = javaProject.findType(packageName, componentClass);
 
@@ -121,15 +127,12 @@ public class NewLiferayComponentWizard
 			final IFile classFile = (IFile)type.getResource();
 
 			if (classFile != null) {
-				Display.getCurrent().asyncExec(
+				UIUtil.async(
 					new Runnable() {
 
 						public void run() {
 							try {
-								IWorkbenchWindow activeWorkbenchWindow =
-									PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-
-								IWorkbenchPage page = activeWorkbenchWindow.getActivePage();
+								IWorkbenchPage page = UIUtil.getActivePage();
 
 								IDE.openEditor(page, classFile, true);
 							}

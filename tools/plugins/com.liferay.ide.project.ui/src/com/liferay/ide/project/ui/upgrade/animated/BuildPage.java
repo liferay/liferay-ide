@@ -54,15 +54,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
 
 /**
@@ -114,13 +114,13 @@ public class BuildPage extends Page {
 
 								boolean buildFlag = _getBuildStatus(monitor, project);
 
-								for (int i = 0; i < _tableViewElements.length; i++) {
-									if (_tableViewElements[i].projectName == projectName) {
+								for (TableViewElement tableViewElement : _tableViewElements) {
+									if (tableViewElement.projectName == projectName) {
 										if (buildFlag) {
-											_tableViewElements[i].buildStatus = "Build Successful";
+											tableViewElement.buildStatus = "Build Successful";
 										}
 										else {
-											_tableViewElements[i].buildStatus = "Build Failed";
+											tableViewElement.buildStatus = "Build Failed";
 										}
 									}
 								}
@@ -150,8 +150,11 @@ public class BuildPage extends Page {
 
 		TableViewerColumn colFirstName = new TableViewerColumn(_tableViewer, SWT.NONE);
 
-		colFirstName.getColumn().setWidth(400);
-		colFirstName.getColumn().setText("projectName");
+		TableColumn tableColumn = colFirstName.getColumn();
+
+		tableColumn.setWidth(400);
+		tableColumn.setText("projectName");
+
 		colFirstName.setLabelProvider(
 			new ColumnLabelProvider() {
 
@@ -171,8 +174,12 @@ public class BuildPage extends Page {
 
 		TableViewerColumn colSecondName = new TableViewerColumn(_tableViewer, SWT.NONE);
 
-		colSecondName.getColumn().setWidth(200);
-		colSecondName.getColumn().setText("Build Status");
+		TableColumn tableColumn2 = colSecondName.getColumn();
+
+		tableColumn2.setWidth(200);
+
+		tableColumn2.setText("Build Status");
+
 		colSecondName.setLabelProvider(
 			new ColumnLabelProvider() {
 
@@ -228,9 +235,7 @@ public class BuildPage extends Page {
 
 		descriptorBuilder.append("You can rebuild the project by double-clicking it.");
 
-		String url = "";
-
-		Link link = SWTUtil.createHyperLink(this, style, descriptorBuilder.toString(), 1, url);
+		Link link = SWTUtil.createHyperLink(this, style, descriptorBuilder.toString(), 1, "");
 
 		link.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false, 2, 1));
 	}
@@ -344,19 +349,25 @@ public class BuildPage extends Page {
 	}
 
 	private void _createImages() {
-		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		ISharedImages sharedImages = UIUtil.getSharedImages();
 
 		_imageProject = sharedImages.getImage(SharedImages.IMG_OBJ_PROJECT);
 
 		if (_imageProject.isDisposed()) {
-			_imageProject = sharedImages.getImageDescriptor(SharedImages.IMG_OBJ_PROJECT) .createImage();
+			ImageDescriptor imageDescriptor = sharedImages.getImageDescriptor(SharedImages.IMG_OBJ_PROJECT);
+
+			_imageProject = imageDescriptor.createImage();
 		}
 
 		URL greenTickUrl = bundle.getEntry("/images/yes_badge.png");
 
-		_imageSuccess = ImageDescriptor.createFromURL(greenTickUrl).createImage();
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(greenTickUrl);
 
-		_imageSuccess.getImageData().scaledTo(16, 16);
+		_imageSuccess = imageDescriptor.createImage();
+
+		ImageData imageData = _imageSuccess.getImageData();
+
+		imageData.scaledTo(16, 16);
 
 		_imageFail = JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_ERROR);
 	}
@@ -383,7 +394,7 @@ public class BuildPage extends Page {
 	private List<IProject> _getSelectedProjects() {
 		List<IProject> projects = new ArrayList<>();
 
-		final JavaProjectSelectionDialog dialog = new JavaProjectSelectionDialog(Display.getCurrent().getActiveShell());
+		JavaProjectSelectionDialog dialog = new JavaProjectSelectionDialog(UIUtil.getActiveShell());
 
 		if (dialog.open() == Window.OK) {
 			Object[] selectedProjects = dialog.getResult();

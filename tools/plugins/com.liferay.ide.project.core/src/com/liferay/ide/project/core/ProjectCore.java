@@ -355,7 +355,7 @@ public class ProjectCore extends Plugin {
 							IFolder bundlesFolder = project.getFolder(LiferayWorkspaceUtil.getHomeDir(projectLocation));
 
 							if (FileUtil.exists(bundlesFolder)) {
-								File file = FileUtil.getFile(bundlesFolder.getLocation());
+								File file = FileUtil.getFile(bundlesFolder);
 
 								File portalBundle = file.getCanonicalFile();
 
@@ -391,7 +391,7 @@ public class ProjectCore extends Plugin {
 												return true;
 											}
 
-											File file = FileUtil.getFile(deletedRes.getLocation());
+											File file = FileUtil.getFile(deletedRes);
 
 											File portalBundle = file.getCanonicalFile();
 
