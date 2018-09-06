@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.functional.tests.kaleo.editor</groupId>
 		<artifactId>kaleo-editor-tests</artifactId>
-		<version>3.3.0-SNAPSHOT</version>
+		<version>3.3.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.functional.kaleo.editor.operation.tests</artifactId>

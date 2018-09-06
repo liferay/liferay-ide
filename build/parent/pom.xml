@@ -21,13 +21,13 @@
 
     <groupId>com.liferay.ide</groupId>
     <artifactId>parent</artifactId>
-    <version>3.3.0-SNAPSHOT</version>
+    <version>3.3.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Liferay IDE Parent</name>
 
     <properties>
-        <tycho-packaging-format>yyyyMMddHHmm'-ga1'</tycho-packaging-format>
+        <tycho-packaging-format>yyyyMMddHHmm'-ga2'</tycho-packaging-format>
         <tycho-version>1.0.0</tycho-version>
         <tycho-extras-version>1.0.0</tycho-extras-version>
         <eclipse-site>http://download.eclipse.org/releases/oxygen/201803211000/</eclipse-site>
