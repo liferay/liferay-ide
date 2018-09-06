@@ -92,7 +92,7 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 
 			IStatus status = portalRuntime.validate();
 
-			if (!status.isOK()) {
+			if (status.getSeverity() == IStatus.ERROR) {
 				throw new CoreException(status);
 			}
 
