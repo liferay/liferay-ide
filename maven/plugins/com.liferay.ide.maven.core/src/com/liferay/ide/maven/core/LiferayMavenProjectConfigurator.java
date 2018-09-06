@@ -539,9 +539,11 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 				try {
 					SourceLocation location = SourceLocationHelper.findLocation(
 						liferayMavenPlugin, SourceLocationHelper.CONFIGURATION);
+
+					Throwable cause = e.getCause();
+
 					String problemMsg = NLS.bind(
-						Msgs.facetInstallError, pluginType,
-						e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+						Msgs.facetInstallError, pluginType, cause != null ? cause.getMessage() : e.getMessage());
 
 					retval = new MavenProblemInfo(location, e);
 

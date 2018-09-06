@@ -17,10 +17,6 @@ package com.liferay.ide.project.ui.pref;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.ui.ProjectUI;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.layout.PixelConverter;
 import org.eclipse.osgi.util.NLS;
@@ -53,14 +49,6 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
 	public static final String SETTINGS_SECTION_NAME = "PortletValidationSeverities";
 
 	public static final String VALIDATION_ID = "com.liferay.ide.portlet.ui.validation";
-
-	public static final Map<Integer, Integer> errormap = new HashMap<>();
-
-	static {
-		errormap.put(IMarker.SEVERITY_ERROR, 0);
-		errormap.put(IMarker.SEVERITY_WARNING, 1);
-		errormap.put(IMarker.SEVERITY_INFO, 2);
-	}
 
 	@Override
 	public void dispose() {

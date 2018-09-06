@@ -331,7 +331,11 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		IPath location = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
 
 		if (UpgradeUtil.isAlreadyImported(location)) {
-			Stream.of(CoreUtil.getAllProjects()).forEach(this::_checkProjectType);
+			Stream.of(
+				CoreUtil.getAllProjects()
+			).forEach(
+				this::_checkProjectType
+			);
 
 			dataModel.setImportFinished(true);
 

@@ -644,6 +644,7 @@ public class SDKProjectsImportWizardPage
 	protected IProject[] wsProjects;
 
 	protected final class ProjectLabelProvider extends LabelProvider implements IColorProvider {
+
 		public Color getBackground(Object element) {
 			return null;
 		}

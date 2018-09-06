@@ -35,7 +35,8 @@ public interface CronTrigger extends ICronTrigger {
 	@XmlElementBinding(mappings = {
 		@XmlElementBinding.Mapping(element = "property-key", type = PropertyCronTrigger.class),
 		@XmlElementBinding.Mapping(element = "cron-trigger-value", type = CronTriggerValueTrigger.class)
-	}, path = "")
+	},
+		path = "")
 	public ElementProperty PROP_CRON_TRIGGER = new ElementProperty(TYPE, "CronTrigger");
 
 }

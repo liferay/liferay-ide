@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
  * @author Gregory Amerson
  */
 public final class PortletFrameworkPropertyEditorPresentationFactory extends PropertyEditorPresentationFactory {
+
 	@Override
 	public PropertyEditorPresentation create(PropertyEditorPart part, SwtPresentation parent, Composite composite) {
 		return new PossibleValuesRadioPropertyEditorPresentation<>(part, parent, composite);

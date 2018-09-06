@@ -521,7 +521,13 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 
 								tableViewer.setInput(_tableViewElements);
 
-								Stream.of(tableViewer.getTable().getColumns()).forEach(obj -> obj.pack());
+								Table table = tableViewer.getTable();
+
+								Stream.of(
+									table.getColumns()
+								).forEach(
+									obj -> obj.pack()
+								);
 
 								if (_tableViewElements.length < 1) {
 									message = "No file needs to be upgraded";
@@ -622,7 +628,13 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 
 											tableViewer.setInput(_tableViewElements);
 
-											Stream.of(tableViewer.getTable().getColumns()).forEach(obj -> obj.pack());
+											Table table = tableViewer.getTable();
+
+											Stream.of(
+												table.getColumns()
+											).forEach(
+												obj -> obj.pack()
+											);
 
 											tableViewer.refresh();
 										}

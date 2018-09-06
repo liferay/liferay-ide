@@ -58,7 +58,8 @@ public interface SchedulerEntry extends Element {
 	@XmlElementBinding(mappings = {
 		@XmlElementBinding.Mapping(element = "cron", type = CronTrigger.class),
 		@XmlElementBinding.Mapping(element = "simple", type = SimpleTrigger.class)
-	}, path = "trigger")
+	},
+		path = "trigger")
 	public ElementProperty PROP_PORTLET_TRIGGER = new ElementProperty(TYPE, "PortletTrigger");
 
 	@Label(standard = "SchedulerDescription")

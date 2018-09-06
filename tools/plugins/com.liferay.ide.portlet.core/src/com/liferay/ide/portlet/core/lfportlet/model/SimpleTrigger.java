@@ -45,7 +45,8 @@ public interface SimpleTrigger extends ISimpleTrigger {
 	@XmlElementBinding(mappings = {
 		@XmlElementBinding.Mapping(element = "property-key", type = PropertySimpleTrigger.class),
 		@XmlElementBinding.Mapping(element = "simple-trigger-value", type = SimpleTriggerValueTrigger.class)
-	}, path = "")
+	},
+		path = "")
 	public ElementProperty PROP_SIMPLE_TRIGGER = new ElementProperty(TYPE, "SimpleTrigger");
 
 	@DefaultValue(text = "second")

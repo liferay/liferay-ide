@@ -71,13 +71,11 @@ public class SDK {
 
 	public static final List<String> appServerPropertiesKeys = Collections.unmodifiableList(
 		Arrays.asList(
-			new String[] {
-				"app.server.type", "app.server.dir", "app.server.deploy.dir", "app.server.lib.global.dir",
-				"app.server.parent.dir", "app.server.portal.dir"
-			}));
+			"app.server.type", "app.server.dir", "app.server.deploy.dir", "app.server.lib.global.dir",
+			"app.server.parent.dir", "app.server.portal.dir"));
 	public static final Map<String, Map<String, Object>> buildPropertiesCache = new HashMap<>();
 	public static final List<String> supportedServerTypes = Collections.unmodifiableList(
-		Arrays.asList(new String[] {"tomcat", "jboss", "glassfish", "jetty", "wildfly"}));
+		Arrays.asList("tomcat", "jboss", "glassfish", "jetty", "wildfly"));
 
 	public SDK() {
 	}

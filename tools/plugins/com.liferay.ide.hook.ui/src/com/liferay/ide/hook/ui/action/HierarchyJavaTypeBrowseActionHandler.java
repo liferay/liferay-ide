@@ -46,6 +46,7 @@ import org.eclipse.ui.dialogs.SelectionDialog;
  * @author Gregory Amerson
  */
 public final class HierarchyJavaTypeBrowseActionHandler extends BrowseActionHandler {
+
 	public static final String ID = "Hierarchy.Browse.Java.Type";
 
 	@Override

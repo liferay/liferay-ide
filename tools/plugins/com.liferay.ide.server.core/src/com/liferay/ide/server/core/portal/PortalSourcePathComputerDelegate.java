@@ -78,7 +78,11 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 		).filter(
 			workspaceProject -> workspaceProject != null
 		).flatMap(
-			workspaceProject -> workspaceProject.getChildProjects().stream()
+			workspaceProject -> {
+				List<IProject> childProjects = workspaceProject.getChildProjects();
+
+				return childProjects.stream();
+			}
 		).forEach(
 			childProject -> _addSourceContainers(configuration, monitor, sourceContainers, childProject)
 		);

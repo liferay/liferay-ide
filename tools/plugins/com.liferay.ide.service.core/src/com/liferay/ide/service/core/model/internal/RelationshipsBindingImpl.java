@@ -105,7 +105,7 @@ public class RelationshipsBindingImpl extends LayeredListPropertyBinding {
 	private Column _findPrimaryKey(Entity entity) {
 		if (entity != null) {
 			for (Column column : entity.getColumns()) {
-				if (column.isPrimary().content()) {
+				if (SapphireUtil.getContent(column.isPrimary())) {
 					return column;
 				}
 			}
@@ -130,15 +130,16 @@ public class RelationshipsBindingImpl extends LayeredListPropertyBinding {
 
 		for (Entity entity : _serviceBuilder().getEntities()) {
 			for (Column column : entity.getColumns()) {
-				if (!column.isPrimary().content()) {
-					String columnName = column.getName().content();
+				if (SapphireUtil.getContent(column.isPrimary())) {
+					continue;
+				}
 
-					String entityName = primaryKeys.get(columnName);
+				String columnName = SapphireUtil.getContent(column.getName());
 
-					if (entityName != null) {
-						_relationships.add(
-							new RelationshipObject(SapphireUtil.getContent(entity.getName()), entityName));
-					}
+				String entityName = primaryKeys.get(columnName);
+
+				if (entityName != null) {
+					_relationships.add(new RelationshipObject(SapphireUtil.getContent(entity.getName()), entityName));
 				}
 			}
 		}
