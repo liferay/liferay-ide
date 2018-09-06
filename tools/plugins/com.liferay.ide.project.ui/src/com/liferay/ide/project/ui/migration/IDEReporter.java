@@ -24,6 +24,8 @@ import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.OutputStream;
 
+import org.eclipse.jface.viewers.TreeViewer;
+
 /**
  * @author Gregory Amerson
  * @author Lovett Li
@@ -46,7 +48,9 @@ public class IDEReporter implements Reporter {
 						Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
 					if (page != null) {
-						page.getTreeViewer().setInput(CoreUtil.getWorkspaceRoot());
+						TreeViewer treeViewer = page.getTreeViewer();
+
+						treeViewer.setInput(CoreUtil.getWorkspaceRoot());
 
 						page.setButtonState(true);
 					}

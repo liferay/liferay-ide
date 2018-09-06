@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.handlers;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
@@ -43,7 +44,9 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -69,9 +72,13 @@ public abstract class AbstractCompareFileHandler extends AbstractHandler {
 			}
 		}
 		else if (selection instanceof TextSelection) {
-			IEditorPart editor = window.getActivePage().getActiveEditor();
+			IWorkbenchPage activePage = window.getActivePage();
 
-			currentFile = editor.getEditorInput().getAdapter(IFile.class);
+			IEditorPart editor = activePage.getActiveEditor();
+
+			IEditorInput editorInput = editor.getEditorInput();
+
+			currentFile = editorInput.getAdapter(IFile.class);
 		}
 
 		retval = _openCompareEditor(currentFile);
@@ -90,11 +97,11 @@ public abstract class AbstractCompareFileHandler extends AbstractHandler {
 			File tempFile = getTemplateFile(currentFile);
 
 			if (tempFile == null) {
-				return ProjectCore.createErrorStatus("Can't find the original file.");
+				return ProjectCore.createErrorStatus("Can not find the original file.");
 			}
 
 			left = new CompareItem(tempFile);
-			right = new CompareItem(currentFile.getLocation().toFile());
+			right = new CompareItem(FileUtil.getFile(currentFile));
 
 			_openInCompare(left, right);
 		}
@@ -109,7 +116,10 @@ public abstract class AbstractCompareFileHandler extends AbstractHandler {
 		final CompareConfiguration configuration = new CompareConfiguration();
 
 		configuration.setLeftLabel("Template");
-		configuration.setRightLabel(((CompareItem)right).getFile().getAbsolutePath());
+
+		File file = ((CompareItem)right).getFile();
+
+		configuration.setRightLabel(file.getAbsolutePath());
 
 		CompareUI.openCompareEditor(
 			new CompareEditorInput(configuration) {

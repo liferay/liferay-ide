@@ -18,6 +18,8 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.model.LiferayPluginSDKOp;
@@ -46,6 +48,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.forms.DialogDef;
@@ -56,6 +59,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -175,19 +179,19 @@ public class LiferayProjectPropertyPage
 	protected void createInfoGroup(final Composite parent) {
 		new Label(parent, SWT.LEFT).setText(Msgs.liferayPluginTypeLabel);
 
-		final Text pluginTypeLabel = new Text(parent, SWT.READ_ONLY | SWT.BORDER);
+		Text pluginTypeLabel = new Text(parent, SWT.READ_ONLY | SWT.BORDER);
 
 		pluginTypeLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
 
-		final IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(getFacetedProject());
+		IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(getFacetedProject());
 
 		if (liferayFacet != null) {
 			pluginTypeLabel.setText(liferayFacet.getLabel());
 		}
 
-		final IProject proj = getProject();
+		IProject proj = getProject();
 
-		if ((proj != null) && ProjectUtil.isLiferayFacetedProject(proj)) {
+		if (ProjectUtil.isLiferayFacetedProject(proj)) {
 			try {
 				if (!ProjectUtil.isMavenProject(proj)) {
 					final SDK projectSdk = SDKUtil.getSDK(getProject());
@@ -205,8 +209,10 @@ public class LiferayProjectPropertyPage
 
 						final Hyperlink link = new Hyperlink(parent, SWT.NULL);
 
+						Display display = parent.getDisplay();
+
 						link.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1));
-						link.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_BLUE));
+						link.setForeground(display.getSystemColor(SWT.COLOR_BLUE));
 						link.setUnderlined(true);
 						link.setText(Msgs.changeliferaySdk);
 						link.addHyperlinkListener(
@@ -215,21 +221,25 @@ public class LiferayProjectPropertyPage
 								public void linkActivated(HyperlinkEvent e) {
 									String dialogId = new String(
 										"com.liferay.ide.project.ui.dialog.SelectPluginsSDKDialog");
-									final LiferayPluginSDKOp op =
-										(LiferayPluginSDKOp)(LiferayPluginSDKOp.TYPE.instantiate().initialize());
-									DefinitionLoader sdefLoader = DefinitionLoader.context(getClass()).sdef(dialogId);
 
-									final Reference<DialogDef> dialogRef = sdefLoader.dialog("ConfigureLiferaySDK");
+									Element instantiate = LiferayPluginSDKOp.TYPE.instantiate();
 
-									final SapphireDialog dialog = new SapphireDialog(
-										UIUtil.getActiveShell(), op, dialogRef);
+									LiferayPluginSDKOp op = instantiate.initialize();
+
+									DefinitionLoader loader = DefinitionLoader.context(getClass());
+
+									DefinitionLoader sdefLoader = loader.sdef(dialogId);
+
+									Reference<DialogDef> dialogRef = sdefLoader.dialog("ConfigureLiferaySDK");
+
+									SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), op, dialogRef);
 
 									dialog.setBlockOnOpen(true);
 
-									final int result = dialog.open();
+									int result = dialog.open();
 
 									if (result != SapphireDialog.CANCEL) {
-										_sdkLabel.setText(op.getPluginsSDKName().content());
+										_sdkLabel.setText(SapphireUtil.getContent(op.getPluginsSDKName()));
 									}
 								}
 
@@ -249,7 +259,9 @@ public class LiferayProjectPropertyPage
 							ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(getProject());
 
 							if (liferayRuntime != null) {
-								currentRuntimeName = liferayRuntime.getRuntime().getName();
+								IRuntime runtime = liferayRuntime.getRuntime();
+
+								currentRuntimeName = runtime.getName();
 							}
 						}
 						catch (Exception e) {
@@ -266,7 +278,7 @@ public class LiferayProjectPropertyPage
 
 								runtimeNames.add(runtime.getName());
 
-								if (runtime.getName().equals(currentRuntimeName)) {
+								if (StringUtil.equals(currentRuntimeName, runtime.getName())) {
 									selectionIndex = runtimeNames.size() - 1;
 								}
 							}

@@ -18,8 +18,8 @@ import java.io.File;
 
 import java.lang.ref.WeakReference;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
@@ -30,7 +30,6 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
  * @author Terry Jia
  * @author Simon Jiang
  */
-@SuppressWarnings("deprecation")
 public class CUCache {
 
 	public static CompilationUnit getCU(File file, char[] javaSource) {
@@ -38,7 +37,7 @@ public class CUCache {
 			WeakReference<CompilationUnit> astRef = _map.get(file);
 
 			if ((astRef == null) || (astRef.get() == null)) {
-				final CompilationUnit newAst = createCompilationUnit(file.getName(), javaSource);
+				final CompilationUnit newAst = _createCompilationUnit(file.getName(), javaSource);
 
 				_map.put(file, new WeakReference<CompilationUnit>(newAst));
 
@@ -56,7 +55,7 @@ public class CUCache {
 		}
 	}
 
-	private static CompilationUnit createCompilationUnit(String unitName, char[] javaSource) {
+	private static CompilationUnit _createCompilationUnit(String unitName, char[] javaSource) {
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 
 		Map<String, String> options = JavaCore.getOptions();
@@ -85,6 +84,6 @@ public class CUCache {
 		return (CompilationUnit)parser.createAST(null);
 	}
 
-	private static final Map<File, WeakReference<CompilationUnit>> _map = new WeakHashMap<>();
+	private static final Map<File, WeakReference<CompilationUnit>> _map = new HashMap<>();
 
 }

@@ -21,6 +21,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -79,9 +80,11 @@ public class IvyUtil {
 		SDK sdk = SDKUtil.getSDK(project);
 		final SettingsSetup settingsSetup = new SettingsSetup();
 
-		IPath ivyFilePath = sdk.getLocation().append(ISDKConstants.IVY_SETTINGS_XML_FILE);
+		IPath sdkLocation = sdk.getLocation();
 
-		if (ivyFilePath.toFile().exists()) {
+		IPath ivyFilePath = sdkLocation.append(ISDKConstants.IVY_SETTINGS_XML_FILE);
+
+		if (FileUtil.exists(ivyFilePath)) {
 			StringBuilder builder = new StringBuilder();
 
 			builder.append("${");
@@ -90,6 +93,7 @@ public class IvyUtil {
 			builder.append(projectName);
 			builder.append("}/");
 			builder.append(ISDKConstants.IVY_SETTINGS_XML_FILE);
+
 			settingsSetup.setIvySettingsPath(builder.toString());
 		}
 
@@ -170,10 +174,12 @@ public class IvyUtil {
 					IStatus status = ivycp.launchResolve(false, monitor);
 
 					if (status.isOK()) {
-						final IWebProject webproject = LiferayCore.create(IWebProject.class, project);
+						IWebProject webproject = LiferayCore.create(IWebProject.class, project);
 
 						if (webproject != null) {
-							final IFolder webinfFolder = webproject.getDefaultDocrootFolder().getFolder("WEB-INF");
+							IFolder docrootFolder = webproject.getDefaultDocrootFolder();
+
+							IFolder webinfFolder = docrootFolder.getFolder("WEB-INF");
 
 							if (webinfFolder != null) {
 								ComponentUtil.validateFolder(webinfFolder, monitor);

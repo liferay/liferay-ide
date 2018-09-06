@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui;
 import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -25,11 +26,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.ui.progress.IProgressService;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -41,8 +38,6 @@ import org.osgi.framework.BundleContext;
  * @author Lovett Li
  */
 public class ProjectUI extends AbstractUIPlugin {
-
-	// Shared images
 
 	public static final String CHECKED_IMAGE_ID = "checked.image";
 
@@ -58,11 +53,7 @@ public class ProjectUI extends AbstractUIPlugin {
 
 	public static final String UNCHECKED_IMAGE_ID = "unchecked.image";
 
-	// The shared instance
-
 	public static final String WAR_IMAGE_ID = "war.image";
-
-	// The plugin ID
 
 	public static IStatus createErrorStatus(String msg) {
 		return createErrorStatus(msg, null);
@@ -76,15 +67,6 @@ public class ProjectUI extends AbstractUIPlugin {
 		return new Status(IStatus.INFO, PLUGIN_ID, msg, null);
 	}
 
-	public static IWorkbenchWindow getActiveWindow() {
-		return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-	}
-
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
 	public static ProjectUI getDefault() {
 		return _plugin;
 	}
@@ -97,100 +79,37 @@ public class ProjectUI extends AbstractUIPlugin {
 		return _plugin.getImageRegistry();
 	}
 
-	public static ISharedImages getPluginSharedImages() {
-		return PlatformUI.getWorkbench().getSharedImages();
-	}
-
 	public static IPath getPluginStateLocation() {
 		return _plugin.getStateLocation();
 	}
 
-	public static IProgressService getProgressService() {
-		return PlatformUI.getWorkbench().getProgressService();
-	}
-
 	public static void logError(Exception e) {
-		_plugin.getLog().log(createErrorStatus(e.getMessage(), e));
+		ILog log = _plugin.getLog();
+
+		log.log(createErrorStatus(e.getMessage(), e));
 	}
 
 	public static void logError(String msg, Exception e) {
-		_plugin.getLog().log(createErrorStatus(msg, e));
+		ILog log = _plugin.getLog();
+
+		log.log(createErrorStatus(msg, e));
 	}
 
 	public static void logInfo(String msg) {
-		_plugin.getLog().log(createInfoStatus(msg));
+		ILog log = _plugin.getLog();
+
+		log.log(createInfoStatus(msg));
 	}
 
-	// private static IConfigurationElement[] pluginWizardFragmentElements;
-
-	// public static IPluginWizardFragment getPluginWizardFragment(String
-	// pluginFacetId) {
-	// if (CoreUtil.isNullOrEmpty(pluginFacetId)) {
-	// return null;
-	// }
-
-	//
-
-	// IConfigurationElement[] fragmentElements =
-	// getPluginWizardFragmentsElements();
-
-	//
-
-	// for (IConfigurationElement fragmentElement : fragmentElements) {
-	// if (pluginFacetId.equals(fragmentElement.getAttribute("facetId"))) {
-	// try {
-	// Object o = fragmentElement.createExecutableExtension("class");
-
-	//
-
-	// if (o instanceof IPluginWizardFragment) {
-	// IPluginWizardFragment fragment = (IPluginWizardFragment) o;
-	// fragment.setFragment(true);
-	// return fragment;
-	// }
-	// }
-	// catch (CoreException e) {
-	// ProjectUIPlugin.logError("Could not load plugin wizard fragment for " +
-	// pluginFacetId, e);
-	// }
-	// }
-	// }
-
-	//
-
-	// return null;
-	// }
-
-	// public static IConfigurationElement[] getPluginWizardFragmentsElements() {
-	// if (pluginWizardFragmentElements == null) {
-	// pluginWizardFragmentElements =
-	// Platform.getExtensionRegistry().getConfigurationElementsFor(IPluginWizardFragment.ID);
-	// }
-
-	//
-
-	// return pluginWizardFragmentElements;
-	// }
-
-	/**
-	 * The constructor
-	 */
 	public ProjectUI() {
 	}
 
 	public Image getImage(String imageName) {
-		Image image = ImageDescriptor.createFromURL(getBundle().getEntry("icons/e16/" + imageName)).createImage();
+		ImageDescriptor descriptor = ImageDescriptor.createFromURL(getBundle().getEntry("icons/e16/" + imageName));
 
-		return image;
+		return descriptor.createImage();
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * AbstractUIPlugin#start(BundleContext
-	 * )
-	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -198,13 +117,6 @@ public class ProjectUI extends AbstractUIPlugin {
 		_plugin = this;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * AbstractUIPlugin#stop(BundleContext
-	 * )
-	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;

@@ -14,14 +14,14 @@
 
 package com.liferay.ide.project.ui;
 
+import com.liferay.ide.ui.util.UIUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.ui.IWorkingSet;
-import org.eclipse.ui.IWorkingSetManager;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Gregory Amerson
@@ -35,9 +35,7 @@ public class WorkingSets {
 	 * @since 1.5
 	 */
 	public static IWorkingSet getAssignedWorkingSet(IResource element) {
-		IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
-
-		for (IWorkingSet workingSet : workingSetManager.getWorkingSets()) {
+		for (IWorkingSet workingSet : UIUtil.getWorkingSets()) {
 			for (IAdaptable adaptable : workingSet.getElements()) {
 				if (adaptable.getAdapter(IResource.class) == element) {
 					return workingSet;
@@ -57,9 +55,8 @@ public class WorkingSets {
 	 */
 	public static List<IWorkingSet> getAssignedWorkingSets(IResource element) {
 		List<IWorkingSet> list = new ArrayList<>();
-		IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
 
-		for (IWorkingSet workingSet : workingSetManager.getWorkingSets()) {
+		for (IWorkingSet workingSet : UIUtil.getWorkingSets()) {
 			for (IAdaptable adaptable : workingSet.getElements()) {
 				if (adaptable.getAdapter(IResource.class) == element) {
 					list.add(workingSet);
@@ -72,9 +69,8 @@ public class WorkingSets {
 
 	public static String[] getWorkingSets() {
 		List<String> workingSets = new ArrayList<>();
-		IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
 
-		for (IWorkingSet workingSet : workingSetManager.getWorkingSets()) {
+		for (IWorkingSet workingSet : UIUtil.getWorkingSets()) {
 			if (workingSet.isVisible()) {
 				workingSets.add(workingSet.getName());
 			}

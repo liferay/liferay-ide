@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.action;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ import java.util.Arrays;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -53,14 +53,13 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 	public NewWizardAction[] getActionFromDescriptors(String typeAttribute) {
 		ArrayList<NewWizardAction> containers = new ArrayList<>();
 
-		IExtensionPoint extensionPoint =
-			Platform.getExtensionRegistry().getExtensionPoint(PlatformUI.PLUGIN_ID, PL_NEW);
+		IExtensionPoint extensionPoint = CoreUtil.getExtensionPoint(PlatformUI.PLUGIN_ID, PL_NEW);
 
 		if (extensionPoint != null) {
 			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
 			for (IConfigurationElement element : elements) {
-				if (element.getName().equals(TAG_WIZARD) && _isLiferayArtifactWizard(element, typeAttribute)) {
+				if (TAG_WIZARD.equals(element.getName()) && _isLiferayArtifactWizard(element, typeAttribute)) {
 					containers.add(new NewWizardAction(element));
 				}
 			}
@@ -78,7 +77,7 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 
 		if (ListUtil.isNotEmpty(actions)) {
 			for (Action action : actions) {
-				if ((action instanceof NewWizardAction) && action.getId().equals(DEFAULT_WIZARD_ID)) {
+				if ((action instanceof NewWizardAction) && DEFAULT_WIZARD_ID.equals(action.getId())) {
 					return action;
 				}
 			}
@@ -168,7 +167,7 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 					String tagName = paramElement.getAttribute(TAG_NAME);
 
 					if ((tagName != null) && tagName.equals(typeAttribute)) {
-						return Boolean.valueOf(paramElement.getAttribute(TAG_VALUE)).booleanValue();
+						return Boolean.valueOf(paramElement.getAttribute(TAG_VALUE));
 					}
 				}
 			}
@@ -176,11 +175,9 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 
 		// old way, deprecated
 
-		if (Boolean.valueOf(element.getAttribute(getTypeAttribute())).booleanValue()) {
-			return true;
-		}
+		Boolean b = Boolean.valueOf(element.getAttribute(getTypeAttribute()));
 
-		return false;
+		return b;
 	}
 
 }

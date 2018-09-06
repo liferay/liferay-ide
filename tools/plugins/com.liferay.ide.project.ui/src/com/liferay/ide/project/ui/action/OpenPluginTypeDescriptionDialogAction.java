@@ -31,13 +31,14 @@ public class OpenPluginTypeDescriptionDialogAction extends SapphireActionHandler
 	@Override
 	protected Object run(Presentation context) {
 		if (context instanceof SwtPresentation) {
-			final SwtPresentation swt = (SwtPresentation)context;
+			SwtPresentation swt = (SwtPresentation)context;
 
-			final NewLiferayPluginProjectOp op = getModelElement().nearest(NewLiferayPluginProjectOp.class);
+			NewLiferayPluginProjectOp op = getModelElement().nearest(NewLiferayPluginProjectOp.class);
+
+			DefinitionLoader loader = DefinitionLoader.sdef(NewLiferayPluginProjectWizard.class);
 
 			final PluginTypeDescriptionDialog dialog = new PluginTypeDescriptionDialog(
-				swt.shell(), op,
-				DefinitionLoader.sdef(NewLiferayPluginProjectWizard.class).dialog("PluginTypeDescription"));
+				swt.shell(), op, loader.dialog("PluginTypeDescription"));
 
 			dialog.setBlockOnOpen(false);
 

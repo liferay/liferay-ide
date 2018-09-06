@@ -52,6 +52,7 @@ import org.eclipse.ui.IDecoratorManager;
 import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveRegistry;
+import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.IViewPart;
@@ -59,9 +60,11 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.IWorkingSetManager;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -265,6 +268,14 @@ public class UIUtil {
 		return workbench.getProgressService();
 	}
 
+	public static ISelection getSelection() {
+		IWorkbenchWindow window = getActiveWorkbenchWindow();
+
+		ISelectionService service = window.getSelectionService();
+
+		return service.getSelection();
+	}
+
 	public static ISharedImages getSharedImages() {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 
@@ -287,6 +298,20 @@ public class UIUtil {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 
 		return workbench.getWorkingSetManager();
+	}
+
+	public static IWorkingSet[] getWorkingSets() {
+		IWorkingSetManager workingSetManager = getWorkingSetManager();
+
+		return workingSetManager.getWorkingSets();
+	}
+
+	public static void openURL(URL url) throws PartInitException {
+		IWorkbenchBrowserSupport browserSuppoert = getBrowserSupport();
+
+		IWebBrowser browser = browserSuppoert.getExternalBrowser();
+
+		browser.openURL(url);
 	}
 
 	public static void postInfo(String title, String msg) {

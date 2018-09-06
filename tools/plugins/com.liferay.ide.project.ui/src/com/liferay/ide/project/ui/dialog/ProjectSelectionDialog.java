@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.dialog;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.LiferayUIPlugin;
@@ -22,7 +23,6 @@ import java.util.EventObject;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaModel;
@@ -50,6 +50,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.dialogs.SelectionStatusDialog;
 
 /**
@@ -91,9 +92,11 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 		layout.numColumns = 0;
 		layout.marginWidth = 0;
 		layout.horizontalSpacing = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_SPACING);
+
 		buttonComposite.setLayout(layout);
 
 		buttonComposite.setLayoutData(new GridData(SWT.END, SWT.TOP, true, false));
+
 		Button selectButton = createButton(buttonComposite, IDialogConstants.SELECT_ALL_ID, "Select All", false);
 
 		SelectionListener listener = new SelectionAdapter() {
@@ -166,16 +169,22 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 
 		data.heightHint = _SIZING_SELECTION_WIDGET_HEIGHT;
 		data.widthHint = _SIZING_SELECTION_WIDGET_WIDTH;
-		fTableViewer.getTable().setLayoutData(data);
+
+		Table table = fTableViewer.getTable();
+
+		table.setLayoutData(data);
 
 		fTableViewer.setLabelProvider(new JavaElementLabelProvider());
 		fTableViewer.setContentProvider(getContentProvider());
 		fTableViewer.setComparator(new JavaElementComparator());
-		fTableViewer.getControl().setFont(font);
+
+		Control control = fTableViewer.getControl();
+
+		control.setFont(font);
 
 		updateFilter(true);
 
-		IJavaModel input = JavaCore.create(ResourcesPlugin.getWorkspace().getRoot());
+		IJavaModel input = JavaCore.create(CoreUtil.getWorkspaceRoot());
 
 		fTableViewer.setInput(input);
 
@@ -276,15 +285,15 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 
 		public Object[] getChildren(Object element) {
 			if (element instanceof IJavaModel) {
-				final IJavaModel model = (IJavaModel)element;
-				final Set<IJavaProject> set = new HashSet<>();
+				IJavaModel model = (IJavaModel)element;
+				Set<IJavaProject> set = new HashSet<>();
 
 				try {
-					final IJavaProject[] projects = model.getJavaProjects();
+					IJavaProject[] projects = model.getJavaProjects();
 
-					for (int i = 0; i < projects.length; i++) {
-						if (checkProject(projects[i])) {
-							set.add(projects[i]);
+					for (IJavaProject javaProject : projects) {
+						if (checkProject(javaProject)) {
+							set.add(javaProject);
 						}
 					}
 				}

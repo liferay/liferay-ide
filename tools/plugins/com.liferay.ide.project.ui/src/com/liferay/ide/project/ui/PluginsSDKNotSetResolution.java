@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.LiferayPluginSDKOp;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.ui.util.UIUtil;
@@ -21,6 +22,7 @@ import com.liferay.ide.ui.util.UIUtil;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.forms.DialogDef;
@@ -38,22 +40,26 @@ public class PluginsSDKNotSetResolution implements IMarkerResolution {
 
 	public void run(IMarker marker) {
 		if (marker.getResource() instanceof IProject) {
-			final IProject proj = (IProject)marker.getResource();
+			IProject proj = (IProject)marker.getResource();
 
-			final LiferayPluginSDKOp op = (LiferayPluginSDKOp)(LiferayPluginSDKOp.TYPE.instantiate().initialize());
+			Element element = LiferayPluginSDKOp.TYPE.instantiate();
+
+			LiferayPluginSDKOp op = element.initialize();
 
 			DefinitionLoader loader = DefinitionLoader.context(getClass());
 
-			final Reference<DialogDef> dialogRef = loader.sdef(
-				"com.liferay.ide.project.ui.dialog.SelectPluginsSDKDialog").dialog("ConfigureLiferaySDK");
+			DefinitionLoader sdef = loader.sdef("com.liferay.ide.project.ui.dialog.SelectPluginsSDKDialog");
 
-			final SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), op, dialogRef);
+			Reference<DialogDef> dialogRef = sdef.dialog("ConfigureLiferaySDK");
+
+			SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), op, dialogRef);
 
 			dialog.setBlockOnOpen(true);
-			final int result = dialog.open();
+
+			int result = dialog.open();
 
 			if (result != SapphireDialog.CANCEL) {
-				String sdkName = op.getPluginsSDKName().content();
+				String sdkName = SapphireUtil.getContent(op.getPluginsSDKName());
 
 				SDKUtil.saveSDKNameSetting(proj, sdkName);
 			}

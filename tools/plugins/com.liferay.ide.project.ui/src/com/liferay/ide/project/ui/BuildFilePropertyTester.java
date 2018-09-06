@@ -26,7 +26,7 @@ public class BuildFilePropertyTester extends PropertyTester {
 		if (receiver instanceof IFile) {
 			IFile file = (IFile)receiver;
 
-			if (file.exists() && file.getName().equals("build.xml")) {
+			if (file.exists() && "build.xml".equals(file.getName())) {
 				return true;
 			}
 		}

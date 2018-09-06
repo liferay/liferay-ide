@@ -34,7 +34,7 @@ public class ServiceFilePropertyTester extends PropertyTester {
 				if (description != null) {
 					IContentType contentType = description.getContentType();
 
-					if (contentType.getId().equals("com.liferay.ide.portlet.core.servicebuildercontent")) {
+					if ("com.liferay.ide.portlet.core.servicebuildercontent".equals(contentType.getId())) {
 						return true;
 					}
 				}

@@ -17,9 +17,11 @@ package com.liferay.ide.project.ui.handlers;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
@@ -39,20 +41,23 @@ public class CompareFileHandler extends AbstractCompareFileHandler {
 		final ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
 		if (portal != null) {
-			final IPath themesPath = portal.getAppServerPortalDir().append("html/themes/" + themeParent);
+			IPath portalDir = portal.getAppServerPortalDir();
+
+			final IPath themesPath = portalDir.append("html/themes/" + themeParent);
 
 			String name = currentFile.getName();
-			String parent = currentFile.getParent().getName();
 
-			IPath diffs = themesPath.append("_diffs");
+			IContainer parent = currentFile.getParent();
 
-			IPath tempFilePath = diffs.append(parent).append(name);
+			String parentName = parent.getName();
 
-			if (!tempFilePath.toFile().exists()) {
-				tempFilePath = themesPath.append(parent).append(name);
+			IPath tempFilePath = FileUtil.pathAppend(themesPath, "_diffs", parentName, name);
+
+			if (FileUtil.notExists(tempFilePath)) {
+				tempFilePath = FileUtil.pathAppend(themesPath, parentName, name);
 			}
 
-			if (tempFilePath.toFile().exists()) {
+			if (FileUtil.exists(tempFilePath)) {
 				return tempFilePath.toFile();
 			}
 		}

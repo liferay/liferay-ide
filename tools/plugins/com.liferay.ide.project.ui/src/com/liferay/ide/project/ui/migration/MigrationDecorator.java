@@ -79,8 +79,8 @@ public class MigrationDecorator extends BaseLabelProvider implements ILightweigh
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("[");
-
-			sb.append(problems.size()).append(" total");
+			sb.append(problems.size());
+			sb.append(" total");
 
 			if (ListUtil.isNotEmpty(resolvedProblems)) {
 				sb.append(", ");

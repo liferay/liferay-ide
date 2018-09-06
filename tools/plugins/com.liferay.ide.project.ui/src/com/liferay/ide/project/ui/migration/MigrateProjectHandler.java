@@ -378,7 +378,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 		};
 
 		try {
-			IProgressService progressService = ProjectUI.getProgressService();
+			IProgressService progressService = UIUtil.getProgressService();
 
 			Display defaultDisplay = Display.getDefault();
 

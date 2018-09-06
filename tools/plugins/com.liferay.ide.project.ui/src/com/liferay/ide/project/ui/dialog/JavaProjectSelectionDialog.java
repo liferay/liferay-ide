@@ -51,7 +51,7 @@ public class JavaProjectSelectionDialog extends ProjectSelectionDialog {
 			if (element instanceof IJavaProject) {
 				IProject project = ((IJavaProject)element).getProject();
 
-				if (project.getName().equals("External Plug-in Libraries")) {
+				if ("External Plug-in Libraries".equals(project.getName())) {
 					return false;
 				}
 

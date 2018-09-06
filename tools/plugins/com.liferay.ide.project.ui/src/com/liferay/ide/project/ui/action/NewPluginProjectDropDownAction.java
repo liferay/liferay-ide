@@ -22,7 +22,6 @@ import java.util.Arrays;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -50,14 +49,13 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 	public static NewWizardAction[] getNewProjectActions() {
 		ArrayList<NewWizardAction> containers = new ArrayList<>();
 
-		IExtensionPoint extensionPoint =
-			Platform.getExtensionRegistry().getExtensionPoint(PlatformUI.PLUGIN_ID, PL_NEW);
+		IExtensionPoint extensionPoint = CoreUtil.getExtensionPoint(PlatformUI.PLUGIN_ID, PL_NEW);
 
 		if (extensionPoint != null) {
 			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
 			for (IConfigurationElement element : elements) {
-				if (element.getName().equals(TAG_WIZARD) && _isProjectWizard(element, getTypeAttribute())) {
+				if (TAG_WIZARD.equals(element.getName()) && _isProjectWizard(element, getTypeAttribute())) {
 					containers.add(new NewWizardAction(element));
 				}
 			}
@@ -79,7 +77,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 
 		if (ListUtil.isNotEmpty(actions)) {
 			for (Action action : actions) {
-				if (action instanceof NewWizardAction && action.getId().equals(wizardId)) {
+				if (action instanceof NewWizardAction && wizardId.equals(action.getId())) {
 					return action;
 				}
 			}
@@ -99,14 +97,13 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 	public NewWizardAction[] getActionFromDescriptors(String typeAttribute) {
 		ArrayList<NewWizardAction> containers = new ArrayList<>();
 
-		IExtensionPoint extensionPoint =
-			Platform.getExtensionRegistry().getExtensionPoint(PlatformUI.PLUGIN_ID, PL_NEW);
+		IExtensionPoint extensionPoint = CoreUtil.getExtensionPoint(PlatformUI.PLUGIN_ID, PL_NEW);
 
 		if (extensionPoint != null) {
 			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
 			for (IConfigurationElement element : elements) {
-				if (element.getName().equals(TAG_WIZARD) && _isLiferayArtifactWizard(element, typeAttribute)) {
+				if (TAG_WIZARD.equals(element.getName()) && _isLiferayArtifactWizard(element, typeAttribute)) {
 					containers.add(new NewWizardAction(element));
 				}
 			}
@@ -122,14 +119,13 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 	public NewWizardAction[] getExtraProjectActions() {
 		ArrayList<NewWizardAction> containers = new ArrayList<>();
 
-		IExtensionPoint extensionPoint =
-			Platform.getExtensionRegistry().getExtensionPoint(PlatformUI.PLUGIN_ID, PL_NEW);
+		IExtensionPoint extensionPoint = CoreUtil.getExtensionPoint(PlatformUI.PLUGIN_ID, PL_NEW);
 
 		if (extensionPoint != null) {
 			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
 			for (IConfigurationElement element : elements) {
-				if (element.getName().equals(TAG_WIZARD) && _isProjectWizard(element, getExtraTypeAttribute())) {
+				if (TAG_WIZARD.equals(element.getName()) && _isProjectWizard(element, getExtraTypeAttribute())) {
 					containers.add(new NewWizardAction(element));
 				}
 			}
@@ -148,30 +144,11 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 
 			NewWizardAction[] actions = getNewProjectActions();
 
-			// Separator separator = null;
-
-			//
-
-			// for (NewWizardAction action : actions) {
-			// action.setShell(fWizardShell);
-
-			//
-
-			// ActionContributionItem item = new ActionContributionItem(action);
-			// item.fill(fMenu, -1);
-
-			//
-
-			// if (separator == null) {
-			// separator = new Separator();
-			// separator.fill(fMenu, -1);
-			// }
-			// }
-
 			// only do the first project action (not the 5 separate ones)
 
 			for (NewWizardAction action : actions) {
 				action.setShell(fWizardShell);
+
 				ActionContributionItem projectItem = new ActionContributionItem(action);
 
 				projectItem.fill(fMenu, -1);
@@ -180,6 +157,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 			NewWizardAction importAction = new ImportLiferayProjectsWizardAction();
 
 			importAction.setShell(fWizardShell);
+
 			ActionContributionItem item = new ActionContributionItem(importAction);
 
 			item.fill(fMenu, -1);
@@ -297,7 +275,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 
 				for (IConfigurationElement paramElement : paramElements) {
 					if (typeAttribute.equals(paramElement.getAttribute(TAG_NAME))) {
-						return Boolean.valueOf(paramElement.getAttribute(TAG_VALUE)).booleanValue();
+						return Boolean.valueOf(paramElement.getAttribute(TAG_VALUE));
 					}
 				}
 			}
@@ -305,11 +283,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 
 		// old way, deprecated
 
-		if (Boolean.valueOf(element.getAttribute(getTypeAttribute())).booleanValue()) {
-			return true;
-		}
-
-		return false;
+		return Boolean.valueOf(element.getAttribute(getTypeAttribute()));
 	}
 
 	private boolean _isLiferayArtifactWizard(IConfigurationElement element, String typeAttribute) {
@@ -322,8 +296,8 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 				for (IConfigurationElement paramElement : paramElements) {
 					String tagName = paramElement.getAttribute(TAG_NAME);
 
-					if ((tagName != null) && tagName.equals(typeAttribute)) {
-						return Boolean.valueOf(paramElement.getAttribute(TAG_VALUE)).booleanValue();
+					if (typeAttribute.equals(tagName)) {
+						return Boolean.valueOf(paramElement.getAttribute(TAG_VALUE));
 					}
 				}
 			}
@@ -331,11 +305,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 
 		// old way, deprecated
 
-		if (Boolean.valueOf(element.getAttribute(getTypeAttribute())).booleanValue()) {
-			return true;
-		}
-
-		return false;
+		return Boolean.valueOf(element.getAttribute(getTypeAttribute()));
 	}
 
 }
