@@ -1,4 +1,4 @@
 <runProgram>
     <program>${jpmFilePath}</program>
-    <programArguments>install -fl "${gwFilePath}"</programArguments>
+    <programArguments>install -fl --jvmlocation "${java_executable}" "${gwFilePath}"</programArguments>
 </runProgram>

@@ -1,4 +1,4 @@
 <runProgram>
     <program>${jpmFilePath}</program>
-    <programArguments>install -fl "${bladeFilePath}"</programArguments>
+    <programArguments>install -fl --jvmlocation "${java_executable}" "${bladeFilePath}"</programArguments>
 </runProgram>
