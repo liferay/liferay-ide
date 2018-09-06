@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.modules.fragment.action;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
 
 import java.io.File;
@@ -95,7 +96,7 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog {
 			}
 
 			for (OverrideFilePath file : _files) {
-				String currentFile = file.getValue().content();
+				String currentFile = SapphireUtil.getContent(file.getValue());
 
 				possibleValues.remove(currentFile);
 			}
@@ -114,11 +115,13 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog {
 				while (it.hasNext()) {
 					String v = it.next();
 
-					if (resourceFolder.getFile(v).exists()) {
+					if (FileUtil.exists(resourceFolder.getFile(v))) {
 						it.remove();
 					}
 
-					if (javaFolder.getFile("portlet-ext.properties").exists() && v.equals("portlet.properties")) {
+					if (FileUtil.exists(javaFolder.getFile("portlet-ext.properties")) &&
+						v.equals("portlet.properties")) {
+
 						it.remove();
 					}
 

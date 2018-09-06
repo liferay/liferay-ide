@@ -146,9 +146,9 @@ public class GearControl
 
 		FontData[] fontData = initialFont.getFontData();
 
-		for (int i = 0; i < fontData.length; i++) {
-			fontData[i].setHeight(16);
-			fontData[i].setStyle(SWT.BOLD);
+		for (FontData data : fontData) {
+			data.setHeight(16);
+			data.setStyle(SWT.BOLD);
 		}
 
 		baseFont = new Font(_display, fontData);

@@ -302,18 +302,6 @@ public class FileUtil {
 		return false;
 	}
 
-	public static boolean exists(org.eclipse.sapphire.modeling.Path path) {
-		if (path != null) {
-			File file = path.toFile();
-
-			if (file.exists()) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	public static File getCanonicalFile(IPath location) {
 		if (location == null) {
 			return null;
@@ -353,6 +341,16 @@ public class FileUtil {
 		return location.toFile();
 	}
 
+	public static File getFile(IFolder folder) {
+		if (folder != null) {
+			IPath location = folder.getLocation();
+
+			return location.toFile();
+		}
+
+		return null;
+	}
+
 	public static File getFile(IPath path) {
 		if (path == null) {
 			return null;
@@ -369,6 +367,16 @@ public class FileUtil {
 		IPath location = project.getLocation();
 
 		return location.toFile();
+	}
+
+	public static File getFile(IResource resource) {
+		if (resource != null) {
+			IPath location = resource.getLocation();
+
+			return location.toFile();
+		}
+
+		return null;
 	}
 
 	public static File getFile(URL url) {
@@ -461,6 +469,16 @@ public class FileUtil {
 		}
 
 		return resource.getLocation();
+	}
+
+	public static String getLocationOSString(IFile file) {
+		if (file != null) {
+			IPath location = file.getLocation();
+
+			return location.toOSString();
+		}
+
+		return null;
 	}
 
 	public static String getLocationOSString(IProject project) {

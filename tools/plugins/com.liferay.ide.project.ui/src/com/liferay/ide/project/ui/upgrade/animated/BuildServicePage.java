@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.upgrade.animated;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
@@ -47,7 +48,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Link;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.progress.IProgressService;
 
@@ -80,7 +80,9 @@ public class BuildServicePage extends Page {
 
 					URL imageUrl = bundle.getEntry("/icons/e16/service.png");
 
-					Image serviceXmlImage = ImageDescriptor.createFromURL(imageUrl).createImage();
+					ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(imageUrl);
+
+					Image serviceXmlImage = imageDescriptor.createImage();
 
 					dialog.setImage(serviceXmlImage);
 
@@ -104,7 +106,7 @@ public class BuildServicePage extends Page {
 					}
 
 					try {
-						IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
+						IProgressService progressService = UIUtil.getProgressService();
 
 						progressService.busyCursorWhile(
 							new IRunnableWithProgress() {
@@ -127,7 +129,7 @@ public class BuildServicePage extends Page {
 											if (console != null) {
 												IDocument document = ((ProcessConsole)console).getDocument();
 
-												if (document.get().contains("BUILD FAILED")) {
+												if (StringUtil.contains(document.get(), "BUILD FAILED")) {
 													return;
 												}
 											}

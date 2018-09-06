@@ -135,8 +135,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 				_setButtonState(false);
 				final IPath location = project.getLocation();
 
-				findMigrationProblems(
-					new IPath[] {location}, new String[] {project.getName()}, _upgradeVersion);
+				findMigrationProblems(new IPath[] {location}, new String[] {project.getName()}, _upgradeVersion);
 			}
 			else if (projects != null) {
 				final List<IPath> locations = new ArrayList<>();
@@ -162,9 +161,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 		findMigrationProblems(locations, new String[] {""}, version);
 	}
 
-	public void findMigrationProblems(
-		final IPath[] locations, final String[] projectName, final String version) {
-
+	public void findMigrationProblems(final IPath[] locations, final String[] projectName, final String version) {
 		Job job = new WorkspaceJob("Finding migration problems...") {
 
 			@Override
@@ -219,7 +216,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 
 					MigrationProblemsContainer container = null;
 
-					if (_combineExistedProblem == true) {
+					if (_combineExistedProblem) {
 						container = UpgradeAssistantSettingsUtil.getObjectFromStore(MigrationProblemsContainer.class);
 					}
 
@@ -681,7 +678,6 @@ public class MigrateProjectHandler extends AbstractHandler {
 		return true;
 	}
 
-	private String _upgradeVersion;
 	private Boolean _combineExistedProblem = true;
 	private String[] _ignoreSuperClasses = {
 		"com.liferay.portal.service.BaseLocalServiceImpl", "com.liferay.portal.model.CacheModel",
@@ -696,5 +692,6 @@ public class MigrateProjectHandler extends AbstractHandler {
 		"com.liferay.portal.kernel.dao.orm.BaseActionableDynamicQuery",
 		"com.liferay.portal.service.persistence.BasePersistence"
 	};
+	private String _upgradeVersion;
 
 }

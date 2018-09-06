@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import java.io.File;
+
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
@@ -37,7 +39,9 @@ public class BackupLocationValidationService extends ValidationService {
 				return Status.createErrorStatus("\"" + location.toPortableString() + "\" is not an absolute path.");
 			}
 
-			if (location.toFile().isFile()) {
+			File file = location.toFile();
+
+			if (file.isFile()) {
 				return Status.createErrorStatus("\"" + location.toPortableString() + "\" is not a folder.");
 			}
 		}

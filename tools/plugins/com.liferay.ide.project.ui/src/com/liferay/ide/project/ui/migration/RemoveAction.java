@@ -40,10 +40,6 @@ public class RemoveAction extends SelectionProviderAction implements IAction {
 
 	@Override
 	public void run() {
-
-		// final MigrationView mv = (MigrationView) UIUtil.showView( MigrationView.ID );
-		// final CommonViewer commonViewer = mv.getCommonViewer();
-
 		final FindBreakingChangesPage page = UpgradeView.getPage(
 			Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
@@ -55,6 +51,7 @@ public class RemoveAction extends SelectionProviderAction implements IAction {
 			MigrationProblems migrationProblem = (MigrationProblems)selection;
 
 			MigrationUtil.removeMigrationProblems(migrationProblem);
+
 			IResource project = MigrationUtil.getResourceFromMigrationProblems(migrationProblem);
 
 			if (project != null) {

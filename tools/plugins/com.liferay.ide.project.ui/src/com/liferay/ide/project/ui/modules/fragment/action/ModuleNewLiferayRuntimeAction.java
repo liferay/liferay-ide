@@ -14,12 +14,14 @@
 
 package com.liferay.ide.project.ui.modules.fragment.action;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.SapphirePart;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 import org.eclipse.wst.server.ui.ServerUIUtil;
 
@@ -30,7 +32,9 @@ public class ModuleNewLiferayRuntimeAction extends SapphireActionHandler {
 
 	@Override
 	protected Object run(Presentation context) {
-		Element element = context.part().getModelElement();
+		SapphirePart part = context.part();
+
+		Element element = part.getModelElement();
 
 		NewModuleFragmentOp op = element.nearest(NewModuleFragmentOp.class);
 
@@ -38,7 +42,7 @@ public class ModuleNewLiferayRuntimeAction extends SapphireActionHandler {
 			((SwtPresentation)context).shell(), "liferay.bundle", null, "com.liferay.");
 
 		if (oK) {
-			op.property(NewModuleFragmentOp.PROP_LIFERAY_RUNTIME_NAME).refresh();
+			SapphireUtil.refresh(op.property(NewModuleFragmentOp.PROP_LIFERAY_RUNTIME_NAME));
 		}
 
 		return Status.createOkStatus();

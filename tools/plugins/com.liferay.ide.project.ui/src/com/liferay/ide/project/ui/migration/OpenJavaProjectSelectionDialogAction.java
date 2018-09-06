@@ -126,7 +126,7 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 
 		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
 
-		boolean selectedValue = "7.0".equals(upgradeVersion);;
+		boolean selectedValue = "7.0".equals(upgradeVersion);
 
 		boolean liferayWorkspace = SapphireUtil.getContent(dataModel.getIsLiferayWorkspace());
 

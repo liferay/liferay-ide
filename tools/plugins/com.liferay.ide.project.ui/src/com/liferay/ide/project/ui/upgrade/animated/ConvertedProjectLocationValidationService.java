@@ -14,10 +14,11 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.core.util.SapphireUtil;
+
 import java.io.File;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
@@ -31,12 +32,10 @@ public class ConvertedProjectLocationValidationService extends ValidationService
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
-		Value<Path> convertedProjectLocation = _op().getConvertedProjectLocation();
-
-		final Path currentProjectLocation = convertedProjectLocation.content(true);
+		Path currentProjectLocation = SapphireUtil.getContent(_op().getConvertedProjectLocation());
 
 		if (currentProjectLocation != null) {
-			final String currentPath = currentProjectLocation.toPortableString();
+			String currentPath = currentProjectLocation.toPortableString();
 
 			if (!org.eclipse.core.runtime.Path.EMPTY.isValidPath(currentPath)) {
 				retval = Status.createErrorStatus("\"" + currentPath + "\" is not a valid path.");
@@ -44,12 +43,14 @@ public class ConvertedProjectLocationValidationService extends ValidationService
 			else {
 				IPath osPath = org.eclipse.core.runtime.Path.fromOSString(currentPath);
 
-				if (!osPath.toFile().isAbsolute()) {
+				File file = osPath.toFile();
+
+				if (!file.isAbsolute()) {
 					retval = Status.createErrorStatus("\"" + currentPath + "\" is not an absolute path.");
 				}
 				else {
-					if (!osPath.toFile().exists()) {
-						if (!_canCreate(osPath.toFile())) {
+					if (!file.exists()) {
+						if (!_canCreate(file)) {
 							retval = Status.createErrorStatus(
 								"Cannot create project content at \"" + currentPath + "\"");
 						}

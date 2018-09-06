@@ -21,11 +21,8 @@ import com.liferay.ide.ui.util.UIUtil;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Terry Jia
@@ -35,22 +32,14 @@ public class CodeUpgradeHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IWorkbench workbench = PlatformUI.getWorkbench();
+		UIUtil.switchToLiferayPerspective(LiferayWorkspacePerspectiveFactory.ID, false);
 
-		IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+		IWorkbenchPage activePage = UIUtil.getActivePage();
 
-		if (window != null) {
-			UIUtil.switchToLiferayPerspective(LiferayWorkspacePerspectiveFactory.ID, false);
-
-			workbench = PlatformUI.getWorkbench();
-
-			IWorkbenchPage activePage = workbench.getActiveWorkbenchWindow().getActivePage();
-
-			try {
-				activePage.showView(UpgradeView.ID);
-			}
-			catch (PartInitException pie) {
-			}
+		try {
+			activePage.showView(UpgradeView.ID);
+		}
+		catch (PartInitException pie) {
 		}
 
 		return null;

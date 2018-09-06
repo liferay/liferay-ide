@@ -75,7 +75,6 @@ public class AutoCorrectAction extends ProblemAction {
 	}
 
 	public IStatus runWithAutoCorrect(List<Problem> problems) {
-
 		FindBreakingChangesPage findBreakingChangesPage = UpgradeView.getPage(
 			Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
@@ -106,6 +105,7 @@ public class AutoCorrectAction extends ProblemAction {
 					}
 
 					Bundle bundle = FrameworkUtil.getBundle(AutoCorrectAction.class);
+
 					BundleContext context = bundle.getBundleContext();
 
 					IResource file = MigrationUtil.getIResourceFromProblem(problems.get(0));
@@ -268,7 +268,7 @@ public class AutoCorrectAction extends ProblemAction {
 		return null;
 	}
 
-	private String _upgradeVersion;
 	private ISelectionProvider _provider;
+	private String _upgradeVersion;
 
 }

@@ -24,6 +24,7 @@ import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.IOException;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.jface.preference.PreferencePage;
@@ -86,19 +87,23 @@ public class MigrationProblemPreferencePage extends PreferencePage implements IW
 
 		data.horizontalAlignment = GridData.FILL;
 		data.horizontalSpan = 2;
+
 		label.setLayoutData(data);
 
 		_ignoredProblemTable = new TableViewer(pageComponent, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+
 		data = new GridData(GridData.FILL_HORIZONTAL);
 
 		_createColumns(_ignoredProblemTable);
 
-		final Table table = _ignoredProblemTable.getTable();
+		Table table = _ignoredProblemTable.getTable();
 
 		table.setHeaderVisible(true);
 
 		data.heightHint = 200;
-		_ignoredProblemTable.getTable().setLayoutData(data);
+
+		table.setLayoutData(data);
+
 		_ignoredProblemTable.setContentProvider(ArrayContentProvider.getInstance());
 
 		Composite groupComponent = new Composite(pageComponent, SWT.NULL);
@@ -136,7 +141,9 @@ public class MigrationProblemPreferencePage extends PreferencePage implements IW
 
 							Map<String, Problem> problemMap = _mpContainer.getProblemMap();
 
-							_ignoredProblemTable.setInput(problemMap.values().toArray(new Problem[0]));
+							Collection<Problem> problems = problemMap.values();
+
+							_ignoredProblemTable.setInput(problems.toArray(new Problem[0]));
 						}
 						catch (Exception e) {
 							ProjectUI.logError(e);
@@ -183,6 +190,7 @@ public class MigrationProblemPreferencePage extends PreferencePage implements IW
 
 		data.verticalAlignment = GridData.FILL;
 		data.horizontalAlignment = GridData.FILL;
+
 		groupComponent.setLayoutData(data);
 
 		_fillIgnoredProblemTable();
@@ -260,7 +268,9 @@ public class MigrationProblemPreferencePage extends PreferencePage implements IW
 
 					Table table = problemsViewer.getTable();
 
-					table.getColumn(1).pack();
+					TableColumn column = table.getColumn(1);
+
+					column.pack();
 				}
 
 			});
@@ -287,7 +297,9 @@ public class MigrationProblemPreferencePage extends PreferencePage implements IW
 			if (mpContainer != null) {
 				Map<String, Problem> problemMap = mpContainer.getProblemMap();
 
-				Problem[] problems = problemMap.values().toArray(new Problem[0]);
+				Collection<Problem> p = problemMap.values();
+
+				Problem[] problems = p.toArray(new Problem[0]);
 
 				_ignoredProblemTable.setInput(problems);
 			}

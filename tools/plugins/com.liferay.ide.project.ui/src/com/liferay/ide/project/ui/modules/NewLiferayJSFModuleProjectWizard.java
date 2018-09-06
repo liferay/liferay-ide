@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
 import com.liferay.ide.project.ui.ProjectUI;
 
@@ -36,7 +37,7 @@ public class NewLiferayJSFModuleProjectWizard extends BaseProjectWizard<NewLifer
 
 		NewLiferayJSFModuleProjectOp op = element().nearest(NewLiferayJSFModuleProjectOp.class);
 
-		IProject project = CoreUtil.getProject(op.getProjectName().content());
+		IProject project = CoreUtil.getProject(SapphireUtil.getContent(op.getProjectName()));
 
 		try {
 			addToWorkingSets(project);

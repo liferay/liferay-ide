@@ -232,7 +232,7 @@ public class PropertiesUtil {
 			for (IType type : srcJavaTypes) {
 				IResource resource = type.getResource();
 
-				File file = FileUtil.getFile(resource.getLocation());
+				File file = FileUtil.getFile(resource);
 
 				String content = FileUtil.readContents(file);
 

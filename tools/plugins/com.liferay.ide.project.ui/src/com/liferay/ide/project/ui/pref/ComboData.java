@@ -64,6 +64,7 @@ public class ComboData {
 		for (int i = 0; _fSeverities != null && i < _fSeverities.length; i++) {
 			if (_fSeverities[i] == severity) {
 				_fIndex = i;
+
 				return;
 			}
 		}

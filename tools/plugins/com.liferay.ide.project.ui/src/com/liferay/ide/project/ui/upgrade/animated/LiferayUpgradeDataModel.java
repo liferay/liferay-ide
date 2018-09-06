@@ -183,11 +183,11 @@ public interface LiferayUpgradeDataModel extends Element {
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_CONVERT_LIFERAY_WORKSPACE = new ValueProperty(TYPE, "ConvertLiferayWorkspace");
 
-	// *** DownloadBundle ***
-
 	@Service(impl = ConvertedProjectLocationValidationService.class)
 	@Type(base = Path.class)
 	public ValueProperty PROP_CONVERTED_PROJECT_LOCATION = new ValueProperty(TYPE, "ConvertedProjectLocation");
+
+	// *** DownloadBundle ***
 
 	@DefaultValue(text = "true")
 	@Type(base = Boolean.class)

@@ -223,9 +223,9 @@ public abstract class AbstractCanvas extends Canvas {
 			int fontSize = 40;
 
 			while (fontSize > 0) {
-				for (int i = 0; i < fontData.length; i++) {
-					fontData[i].setHeight(fontSize);
-					fontData[i].setStyle(SWT.BOLD);
+				for (FontData data : fontData) {
+					data.setHeight(fontSize);
+					data.setStyle(SWT.BOLD);
 				}
 
 				Font font = new Font(display, fontData);
@@ -338,9 +338,9 @@ public abstract class AbstractCanvas extends Canvas {
 
 		FontData[] fontData = initialFont.getFontData();
 
-		for (int i = 0; i < fontData.length; i++) {
-			fontData[i].setHeight(16);
-			fontData[i].setStyle(SWT.BOLD);
+		for (FontData data : fontData) {
+			data.setHeight(16);
+			data.setStyle(SWT.BOLD);
 		}
 
 		baseFont = new Font(display, fontData);
@@ -350,16 +350,18 @@ public abstract class AbstractCanvas extends Canvas {
 		URL url = null;
 
 		try {
-			Bundle bundle = ProjectUI.getDefault().getBundle();
+			ProjectUI projectUI = ProjectUI.getDefault();
+
+			Bundle bundle = projectUI.getBundle();
 
 			url = bundle.getEntry("images/" + name);
 		}
 		catch (Exception e) {
 		}
 
-		ImageDescriptor imagedesc = ImageDescriptor.createFromURL(url);
+		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
 
-		Image image = imagedesc.createImage();
+		Image image = imageDescriptor.createImage();
 
 		_resources.add(image);
 

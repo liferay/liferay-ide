@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui.pref;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ITargetPlatformConstant;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
@@ -102,29 +104,30 @@ public class TargetPlatformSettingsPage extends PreferencePage implements IWorkb
 
 	private void _initvaules() {
 		IPreferenceStore store = _getPreStore();
-		String version;
+		String version = ITargetPlatformConstant.DEFAULT_TARGETFORM_VERSION;
 
 		if (store != null) {
 			String targetVersion = store.getString(ITargetPlatformConstant.CURRENT_TARGETFORM_VERSION);
 
-			version = targetVersion.replace("[", "").replace("]", "");
+			version = targetVersion.replace("[", "");
 
-			if ((version == null) || version.equals("")) {
+			version = version.replace("]", "");
+
+			if (CoreUtil.isNullOrEmpty(version)) {
 				version = ITargetPlatformConstant.DEFAULT_TARGETFORM_VERSION;
 			}
 		}
-		else {
-			version = ITargetPlatformConstant.DEFAULT_TARGETFORM_VERSION;
-		}
 
-		final ISelection selection = new StructuredSelection(version);
+		ISelection selection = new StructuredSelection(version);
 
 		_targetPlatFormVersion.setSelection(selection);
 	}
 
 	private void _storeValues() {
 		_preferenceStore.setValue(
-			ITargetPlatformConstant.CURRENT_TARGETFORM_VERSION, _targetPlatFormVersion.getSelection().toString());
+			ITargetPlatformConstant.CURRENT_TARGETFORM_VERSION,
+			StringUtil.toString(_targetPlatFormVersion.getSelection()));
+
 		try {
 			_preferenceStore.save();
 		}

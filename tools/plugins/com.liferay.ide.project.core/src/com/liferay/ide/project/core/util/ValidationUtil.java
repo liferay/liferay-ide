@@ -50,7 +50,7 @@ public class ValidationUtil {
 		File targetDir = null;
 
 		if (targetFolder.exists()) {
-			targetDir = FileUtil.getFile(targetFolder.getLocation());
+			targetDir = FileUtil.getFile(targetFolder);
 
 			try {
 				String path = file.getCanonicalPath();

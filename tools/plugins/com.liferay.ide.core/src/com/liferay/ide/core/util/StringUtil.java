@@ -172,6 +172,14 @@ public class StringUtil {
 		return string.toLowerCase();
 	}
 
+	public static String toString(Object o) {
+		if (o != null) {
+			return o.toString();
+		}
+
+		return "";
+	}
+
 	public static String toUpperCase(String s) {
 		if (s == null) {
 			return "";

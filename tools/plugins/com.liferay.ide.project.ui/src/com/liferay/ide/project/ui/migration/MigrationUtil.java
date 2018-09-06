@@ -470,6 +470,7 @@ public class MigrationUtil {
 			try {
 				if (ListUtil.isNotEmpty(problems)) {
 					container.setProblemsArray(problems.toArray(new MigrationProblems[0]));
+
 					UpgradeAssistantSettingsUtil.setObjectToStore(MigrationProblemsContainer.class, container);
 				}
 				else {

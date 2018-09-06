@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.modules.BaseProjectWizard;
@@ -43,7 +44,7 @@ public class NewModuleFragmentWizard extends BaseProjectWizard<NewModuleFragment
 
 		final NewModuleFragmentOp op = element().nearest(NewModuleFragmentOp.class);
 
-		final IProject project = CoreUtil.getProject(op.getProjectName().content());
+		final IProject project = CoreUtil.getProject(SapphireUtil.getContent(op.getProjectName()));
 
 		try {
 			addToWorkingSets(project);
