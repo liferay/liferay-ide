@@ -18,10 +18,6 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.project.ui.ProjectUI;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.layout.PixelConverter;
 import org.eclipse.osgi.util.NLS;
@@ -297,14 +293,6 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
 	protected static final String[] ERRORS = {Msgs.error, Msgs.warning, Msgs.ignore};
 
 	protected static final String SETTINGS_SECTION_NAME = "PluginValidationSeverities";
-
-	protected static final Map<Integer, Integer> errorMap = new HashMap<>();
-
-	static {
-		errorMap.put(IMarker.SEVERITY_ERROR, 0);
-		errorMap.put(IMarker.SEVERITY_WARNING, 1);
-		errorMap.put(IMarker.SEVERITY_INFO, 2);
-	}
 
 	protected PixelConverter pixelConverter;
 

@@ -490,9 +490,12 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
 		if ((action instanceof PageFinishAction) && (event.getTargetPageIndex() == getIndex())) {
 			Stream.of(
-				CoreUtil.getAllProjects()).forEach(project -> {
-				MarkerUtil.clearMarkers(project, MigrationConstants.MARKER_TYPE, null);
-			});
+				CoreUtil.getAllProjects()
+			).forEach(
+				project -> {
+					MarkerUtil.clearMarkers(project, MigrationConstants.MARKER_TYPE, null);
+				}
+			);
 		}
 	}
 

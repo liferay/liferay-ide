@@ -122,7 +122,9 @@ public abstract class TableSection extends StructuredViewerSection {
 			if ((_fCount != null) && !_fCount.isDisposed()) {
 				TableViewer tableViewer = getTableViewer();
 
-				_fCount.setText(NLS.bind(Msgs.totalLabel, String.valueOf(tableViewer.getTable().getItemCount())));
+				Table table = tableViewer.getTable();
+
+				_fCount.setText(NLS.bind(Msgs.totalLabel, String.valueOf(table.getItemCount())));
 			}
 		}
 

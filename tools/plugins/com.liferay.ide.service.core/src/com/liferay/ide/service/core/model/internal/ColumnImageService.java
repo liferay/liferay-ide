@@ -14,6 +14,7 @@
 
 package com.liferay.ide.service.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.service.core.model.Column;
 
 import org.eclipse.sapphire.DisposeEvent;
@@ -32,14 +33,12 @@ public class ColumnImageService extends ImageService {
 
 	@Override
 	public ImageData compute() {
-		ImageData imageData = null;
+		ImageData imageData = _IMG_COLUMN;
+
 		Column column = context(Column.class);
 
-		if (column.isPrimary().content()) {
+		if (SapphireUtil.getContent(column.isPrimary())) {
 			imageData = _IMG_COLUMN_PRIMARY;
-		}
-		else {
-			imageData = _IMG_COLUMN;
 		}
 
 		return imageData;

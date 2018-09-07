@@ -69,7 +69,7 @@ public class CreateNewLiferayServerAction implements IObjectActionDelegate {
 
 				Stream<IRuntime> runtimeStream = runtimes.stream();
 
-				while (runtimeStream.anyMatch(r -> r.getName().equals(serverName[0]))) {
+				while (runtimeStream.anyMatch(r -> serverName[0].equals(r.getName()))) {
 					serverName[0] = serverName[0] + "Extra";
 				}
 
@@ -77,7 +77,7 @@ public class CreateNewLiferayServerAction implements IObjectActionDelegate {
 
 				Stream<IServer> serverStream = servers.stream();
 
-				while (serverStream.anyMatch(s -> s.getName().equals(serverName[0]))) {
+				while (serverStream.anyMatch(s -> serverName[0].equals(s.getName()))) {
 					serverName[0] = serverName[0] + "Extra";
 				}
 

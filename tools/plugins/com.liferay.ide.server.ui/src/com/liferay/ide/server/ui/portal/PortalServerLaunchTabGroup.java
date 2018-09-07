@@ -35,10 +35,12 @@ public class PortalServerLaunchTabGroup extends AbstractLaunchConfigurationTabGr
 	}
 
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
+		ServerLaunchConfigurationTab serverLaunchConfigurationTab = new ServerLaunchConfigurationTab(
+			new String[] {PortalServer.ID});
+
 		ILaunchConfigurationTab[] tabs = {
-			new ServerLaunchConfigurationTab(
-				new String[] {PortalServer.ID}), new JavaArgumentsTab(), new JavaClasspathTab(),
-			new SourceLookupTab(), new EnvironmentTab(), new CommonTab()
+			serverLaunchConfigurationTab, new JavaArgumentsTab(), new JavaClasspathTab(), new SourceLookupTab(),
+			new EnvironmentTab(), new CommonTab()
 		};
 
 		for (ILaunchConfigurationTab tab : tabs) {

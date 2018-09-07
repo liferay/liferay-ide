@@ -86,7 +86,9 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 		).filter(
 			project -> JavaCore.create(project) != null
 		).filter(
-			project -> JavaCore.create(project).isOpen()
+			project -> JavaCore.create(
+				project
+			).isOpen()
 		).filter(
 			project -> location.isPrefixOf(project.getLocation())
 		).collect(

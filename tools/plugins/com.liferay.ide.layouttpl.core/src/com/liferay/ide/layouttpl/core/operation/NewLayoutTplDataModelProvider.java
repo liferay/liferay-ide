@@ -71,7 +71,7 @@ public class NewLayoutTplDataModelProvider
 				 LAYOUT_IMAGE_1_2_II_COLUMN.equals(propertyName) ||
 				 LAYOUT_IMAGE_2_2_COLUMN.equals(
 					 propertyName
-						 ) ||
+				 ) ||
 				 LAYOUT_IMAGE_2_I_COLUMN.equals(propertyName) || LAYOUT_IMAGE_2_II_COLUMN.equals(propertyName) ||
 				 LAYOUT_IMAGE_2_III_COLUMN.equals(propertyName) || LAYOUT_IMAGE_3_COLUMN.equals(propertyName)) {
 

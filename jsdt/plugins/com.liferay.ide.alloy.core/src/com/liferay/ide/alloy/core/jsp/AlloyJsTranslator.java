@@ -82,7 +82,7 @@ public class AlloyJsTranslator extends JsTranslator {
 								NodeHelper.isInArray(JsDataTypes.JSVALIDDATATYPES, nh.getAttributeValue("language")) ||
 								((nh.getAttributeValue("type") == null) &&
 								 (nh.getAttributeValue("language"
-									 ) == null) &&
+							 ) == null) &&
 								 isGlobalJs())) {
 
 								if (nh.containsAttribute(new String[] {"src"})) {

@@ -144,7 +144,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public static Map getLiferaySettings() {
-		Map options = new DefaultCodeFormatterOptions(LiferayDefaultCodeFormatterSettings.settings).getMap();
+		Map options = new DefaultCodeFormatterOptions(LiferayDefaultCodeFormatterSettings.getSettings()).getMap();
 
 		ProfileVersioner.setLatestCompliance(options);
 
