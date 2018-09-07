@@ -14,7 +14,6 @@
 
 package com.liferay.ide.service.core.operation;
 
-import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.NodeUtil;
@@ -45,6 +44,10 @@ import org.w3c.dom.NodeList;
 public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 
 	public ServiceBuilderDescriptorHelper() {
+	}
+
+	public ServiceBuilderDescriptorHelper(IFile serviceXMLFile) {
+		_serviceXMLFile = serviceXMLFile;
 	}
 
 	public ServiceBuilderDescriptorHelper(IProject project) {
@@ -107,7 +110,7 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 	}
 
 	public IFile getDescriptorFile() {
-		return super.getDescriptorFile(_DESCRIPTOR_FILE);
+		return _serviceXMLFile;
 	}
 
 	public IStatus removeAllEntities() {
@@ -461,10 +464,9 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 		return val + "1";
 	}
 
-	private static final String _DESCRIPTOR_FILE = ILiferayConstants.SERVICE_XML_FILE;
-
 	private static final String _NEW_LINE = System.getProperty("line.separator");
 
 	private Pattern _pattern = Pattern.compile("(Sample)([0-9]+)$");
+	private IFile _serviceXMLFile;
 
 }
