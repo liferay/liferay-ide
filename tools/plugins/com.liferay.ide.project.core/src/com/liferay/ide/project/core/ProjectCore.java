@@ -387,7 +387,9 @@ public class ProjectCore extends Plugin {
 
 											IPath bundlesPath = LiferayWorkspaceUtil.getHomeLocation(project);
 
-											if (!bundlesPath.equals(delta.getFullPath())) {
+											IPath deltaFullPath = delta.getFullPath();
+
+											if (!deltaFullPath.equals(bundlesPath)) {
 												return true;
 											}
 
