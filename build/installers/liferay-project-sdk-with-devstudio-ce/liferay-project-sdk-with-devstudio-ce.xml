@@ -73,7 +73,7 @@
                 </createDirectory>
             </actionList>
             <conditionRuleList>
-                <isFalse value="${clitools}"/>
+                <isTrue value="${clitools}"/>
             </conditionRuleList>
         </if>
         <if>
@@ -161,7 +161,7 @@
                 <include file="../components/run-java-jpm.xml" />
             </actionList>
             <conditionRuleList>
-                <isFalse value="${clitools}"/>
+                <isTrue value="${clitools}"/>
             </conditionRuleList>
         </if>
         <if>
@@ -177,7 +177,7 @@
                     <text>${platform_name}</text>
                     <value>linux</value>
                 </compareText>
-                <isFalse value="${clitools}"/>
+                <isTrue value="${clitools}"/>
             </conditionRuleList>
             <elseActionList>
                 <if>
@@ -193,7 +193,7 @@
                             <text>${platform_name}</text>
                             <value>osx</value>
                         </compareText>
-                        <isFalse value="${clitools}"/>
+                        <isTrue value="${clitools}"/>
                     </conditionRuleList>
                     <elseActionList>
                         <if>
@@ -204,7 +204,7 @@
                                 </setInstallerVariable>
                             </actionList>
                             <conditionRuleList>
-                                <isFalse value="${clitools}"/>
+                                <isTrue value="${clitools}"/>
                             </conditionRuleList>
                         </if>
                     </elseActionList>
@@ -293,7 +293,7 @@
                 </createDirectory>
             </actionList>
             <conditionRuleList>
-                <isFalse value="${clitools}"/>
+                <isTrue value="${clitools}"/>
             </conditionRuleList>
         </if>
         <if>
@@ -464,7 +464,7 @@
             <value></value>
             <default>${platform_install_prefix}/${product_shortname}</default>
             <allowEmptyValue>0</allowEmptyValue>
-            <cliOptionName>prefix</cliOptionName>
+            <cliOptionName>installDir</cliOptionName>
             <mustBeWritable>1</mustBeWritable>
             <mustExist>0</mustExist>
             <width>30</width>
@@ -514,10 +514,10 @@
         </directoryParameter>
         <booleanParameter>
           <name>clitools</name>
-          <description>Developer Studio Only</description>
-          <explanation>Whether to install both Developer Studio and Command Line Tools or just Developer Studio.</explanation>
+          <description>Install Command Line Tools</description>
+          <explanation>Install Command Line Tools such as blade and bnd.</explanation>
           <displayStyle>checkbox-left</displayStyle>
-          <default>0</default>
+          <default>1</default>
         </booleanParameter>
         <choiceParameterGroup>
             <name>proxy</name>
@@ -565,7 +565,7 @@
                 </choiceParameter>
             </parameterList>
             <ruleList>
-                <isFalse value="${clitools}"/>
+                <isTrue value="${clitools}"/>
             </ruleList>
         </choiceParameterGroup>
         <parameterGroup>

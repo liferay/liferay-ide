@@ -517,7 +517,7 @@
             <default>${system_temp_directory}${platform_path_separator}${product_shortname}</default>
             <allowEmptyValue>0</allowEmptyValue>
             <ask>0</ask>
-            <cliOptionName>prefix</cliOptionName>
+            <cliOptionName>installDir</cliOptionName>
             <mustBeWritable>1</mustBeWritable>
             <mustExist>0</mustExist>
             <width>30</width>
