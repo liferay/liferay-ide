@@ -676,7 +676,7 @@
         <booleanParameter>
           <name>clitools</name>
           <description>Install Command Line Tools</description>
-          <explanation>Install Blade Command Line tools by default.</explanation>
+          <explanation>Install Command Line Tools such as blade and bnd.</explanation>
           <displayStyle>checkbox-left</displayStyle>
           <default>1</default>
         </booleanParameter>
