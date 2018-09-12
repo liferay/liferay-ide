@@ -38,7 +38,7 @@ public class AddDefaultEntityAction extends SapphireActionHandler {
 
 		IFile serviceXML = localModelElement.adapt(IFile.class);
 
-		new ServiceBuilderDescriptorHelper(serviceXML.getProject()).addDefaultEntity();
+		new ServiceBuilderDescriptorHelper(serviceXML).addDefaultEntity();
 
 		return null;
 	}
