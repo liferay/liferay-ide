@@ -174,7 +174,6 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Ignore
 	@Test
 	public void createComponentShortcuts() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -195,7 +194,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				project.getName(), "src/main/java", "content", "ShortcutComponentGradleMVCPortlet.java"));
+				project.getName(), "src/main/java", "content", project.getCapitalName() + "MVCPortlet.java"));
 
 		editorAction.close();
 
@@ -209,7 +208,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				project.getName(), "src/main/java", "content", "ShortcutComponentGradleRestService.java"));
+				project.getName(), "src/main/java", "content", project.getCapitalName() + "RestService.java"));
 
 		editorAction.close();
 
@@ -221,7 +220,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				project.getName(), "src/main/java", "content", "ShortcutComponentGradlePortlet.java"));
+				project.getName(), "src/main/java", "content", project.getCapitalName() + "Portlet.java"));
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
