@@ -32,6 +32,7 @@ import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
@@ -92,6 +93,7 @@ public interface BaseModuleOp extends ExecutableElement {
 
 	@Label(standard = "project name")
 	@Required
+	@Service(impl = DumbStateValidationService.class)
 	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, "ProjectName");
 
 	@Type(base = ProjectName.class)
