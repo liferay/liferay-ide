@@ -694,7 +694,7 @@
                     <explanation></explanation>
                     <value></value>
                     <default></default>
-                    <allowEmptyValue>0</allowEmptyValue>
+                    <allowEmptyValue>1</allowEmptyValue>
                     <width>30</width>
                 </stringParameter>
                 <passwordParameter>
@@ -704,7 +704,7 @@
                     <explanation></explanation>
                     <value></value>
                     <default></default>
-                    <allowEmptyValue>0</allowEmptyValue>
+                    <allowEmptyValue>1</allowEmptyValue>
                     <askForConfirmation>0</askForConfirmation>
                     <descriptionRetype></descriptionRetype>
                     <width>20</width>
