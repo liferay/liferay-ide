@@ -12,24 +12,17 @@
  * details.
  */
 
-package com.liferay.ide.core;
+package com.liferay.ide.gradle.ui.action;
 
-import java.util.List;
-import java.util.Set;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.viewers.ISelectionProvider;
 
 /**
- * @author Gregory Amerson
- * @author Simon Jiang
+ * @author Terry Jia
  */
-public interface IWorkspaceProject extends ILiferayProject {
+public class WatchWorkspaceModulesAction extends BaseWorkspaceAction {
 
-	public List<IProject> getChildProjects();
-
-	public List<IPath> getTargetPlatformArtifacts();
-
-	public void watch(Set<IProject> childProjects);
+	public WatchWorkspaceModulesAction(ISelectionProvider provider) {
+		super(provider, "Start to watch", "watch");
+	}
 
 }

@@ -14,6 +14,12 @@
 
 package com.liferay.ide.gradle.ui;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.ui.util.UIUtil;
+
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
@@ -71,6 +77,18 @@ public class GradleUI extends Plugin {
 		super.start(context);
 
 		_plugin = this;
+
+		IWorkspace workspace = CoreUtil.getWorkspace();
+
+		workspace.addResourceChangeListener(
+			new IResourceChangeListener() {
+
+				public void resourceChanged(IResourceChangeEvent event) {
+					UIUtil.refreshCommonView("org.eclipse.wst.server.ui.ServersView");
+				}
+
+			},
+			IResourceChangeEvent.PRE_DELETE);
 	}
 
 	/**
