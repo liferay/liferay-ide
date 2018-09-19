@@ -54,6 +54,75 @@
 	<profiles>
 
 		<profile>
+			<id>install-on-linux</id>
+			<modules>
+				<module>install</module>
+			</modules>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>target-platform-configuration</artifactId>
+							<version>${tycho-version}</version>
+							<configuration>
+								<resolver>p2</resolver>
+								<environments>
+									<environment>
+										<os>linux</os>
+										<ws>gtk</ws>
+										<arch>x86_64</arch>
+									</environment>
+								</environments>
+							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>tycho-surefire-plugin</artifactId>
+							<version>${tycho-version}</version>
+							<configuration>
+								<testRuntime>p2Installed</testRuntime>
+								<work>${eclipse.dir}/temp/eclipse</work>
+								<profileName>epp.package.jee</profileName>
+								<useUIHarness>true</useUIHarness>
+								<useUIThread>false</useUIThread>
+								<includes>
+									<include>**/*Test*.class</include>
+								</includes>
+								<systemProperties>
+									<eclipse.zip.name>${eclipse.zip.name}</eclipse.zip.name>
+									<liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
+									<eclipse.dir>${eclipse.dir}</eclipse.dir>
+									<liferay.ide.repo>${liferay.ide.repo}</liferay.ide.repo>
+								</systemProperties>
+							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-antrun-plugin</artifactId>
+							<version>1.6</version>
+							<configuration>
+								<target>
+									<mkdir dir="${eclipse.dir}/temp" />
+									<gunzip dest="${eclipse.dir}/temp" src="${eclipse.dir}/${eclipse.zip.name}" />
+									<untar dest="${eclipse.dir}/temp">
+										<fileset dir="${eclipse.dir}/temp">
+											<filename name="**/*.tar" />
+										</fileset>
+									</untar>
+									<delete file="${eclipse.dir}/temp/eclipse/p2/org.eclipse.equinox.p2.engine/profileRegistry/epp.package.jee.profile/.data/.settings/org.eclipse.equinox.p2.metadata.repository.prefs" />
+								</target>
+							</configuration>
+							<goals>
+								<goal>run</goal>
+							</goals>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+
+		<profile>
 			<id>install-on-win</id>
 			<modules>
 				<module>install</module>
@@ -96,6 +165,20 @@
 									<liferay.ide.repo>${liferay.ide.repo}</liferay.ide.repo>
 								</systemProperties>
 							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-antrun-plugin</artifactId>
+							<version>1.6</version>
+							<configuration>
+								<target>
+									<unzip dest="${eclipse.dir}/temp" src="${eclipse.dir}/${eclipse.zip.name}" />
+									<delete file="${eclipse.dir}/temp/eclipse/p2/org.eclipse.equinox.p2.engine/profileRegistry/epp.package.jee.profile/.data/.settings/org.eclipse.equinox.p2.metadata.repository.prefs" />
+								</target>
+							</configuration>
+							<goals>
+								<goal>run</goal>
+							</goals>
 						</plugin>
 					</plugins>
 				</pluginManagement>

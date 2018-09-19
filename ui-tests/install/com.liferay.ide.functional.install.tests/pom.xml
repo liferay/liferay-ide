@@ -30,12 +30,6 @@
 					<execution>
 						<id>prepare</id>
 						<phase>test</phase>
-						<configuration>
-							<target>
-								<unzip dest="${eclipse.dir}/temp" src="${eclipse.dir}/${eclipse.zip.name}" />
-								<delete file="${eclipse.dir}/eclipse/p2/org.eclipse.equinox.p2.engine/profileRegistry/epp.package.jee.profile/.data/.settings/org.eclipse.equinox.p2.metadata.repository.prefs" />
-							</target>
-						</configuration>
 						<goals>
 							<goal>run</goal>
 						</goals>
