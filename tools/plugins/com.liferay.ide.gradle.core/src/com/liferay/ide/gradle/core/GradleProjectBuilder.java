@@ -15,11 +15,11 @@
 package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.IOException;
 
@@ -72,7 +72,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 				PropertiesConfiguration config = new PropertiesConfiguration(
 					FileUtil.getFile(project.getFile("gradle.properties")));
 
-				config.setProperty(LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL, bundleUrl);
+				config.setProperty(WorkspaceConstants.DEFAULT_BUNDLE_URL_PROPERTY, bundleUrl);
 				config.save();
 			}
 			catch (ConfigurationException ce) {

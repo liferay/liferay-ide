@@ -19,6 +19,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.sdk.core.SDK;
@@ -53,35 +54,6 @@ import org.eclipse.core.runtime.Status;
  * @author Simon Jiang
  */
 public class LiferayWorkspaceUtil {
-
-	public static final String LIFERAY_WORKSPACE_BUNDLE_TOKEN_DOWNLOAD = "liferay.workspace.bundle.token.download";
-
-	public static final String LIFERAY_WORKSPACE_BUNDLE_TOKEN_EMAIL_ADDRESS =
-		"liferay.workspace.bundle.token.email.address";
-
-	public static final String LIFERAY_WORKSPACE_BUNDLE_TOKEN_FORCE = "liferay.workspace.bundle.token.force";
-
-	public static final String LIFERAY_WORKSPACE_BUNDLE_TOKEN_PASSWORD = "liferay.workspace.bundle.token.password";
-
-	public static final String LIFERAY_WORKSPACE_BUNDLE_URL = "liferay.workspace.bundle.url";
-
-	public static final String LIFERAY_WORKSPACE_DEFAULT_REPOSITORY_ENABLED =
-		"liferay.workspace.default.repository.enabled";
-
-	public static final String LIFERAY_WORKSPACE_ENVIRONMENT = "liferay.workspace.environment";
-
-	public static final String LIFERAY_WORKSPACE_HOME_DIR = "liferay.workspace.home.dir";
-
-	public static final String LIFERAY_WORKSPACE_MODULES_DEFAULT_REPOSITORY_ENABLED =
-		"liferay.workspace.modules.default.repository.enabled";
-
-	public static final String LIFERAY_WORKSPACE_MODULES_DIR = "liferay.workspace.modules.dir";
-
-	public static final String LIFERAY_WORKSPACE_PLUGINS_SDK_DIR = "liferay.workspace.plugins.sdk.dir";
-
-	public static final String LIFERAY_WORKSPACE_THEMES_DIR = "liferay.workspace.themes.dir";
-
-	public static final String LIFERAY_WORKSPACE_WARS_DIR = "liferay.workspace.wars.dir";
 
 	public static String hasLiferayWorkspaceMsg =
 		"A Liferay Workspace project already exists in this Eclipse instance.";
@@ -205,7 +177,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static String getHomeDir(String location) {
-		String result = getGradleProperty(location, LIFERAY_WORKSPACE_HOME_DIR, "bundles");
+		String result = getGradleProperty(location, WorkspaceConstants.DEFAULT_HOME_DIR_PROPERTY, "bundles");
 
 		if (CoreUtil.empty(result)) {
 			return "bundles";
@@ -240,7 +212,7 @@ public class LiferayWorkspaceUtil {
 		String[] retval = null;
 
 		if (workspaceLocation != null) {
-			String val = getGradleProperty(workspaceLocation, LIFERAY_WORKSPACE_WARS_DIR, "wars");
+			String val = getGradleProperty(workspaceLocation, WorkspaceConstants.DEFAULT_WARS_DIR_PROPERTY, "wars");
 
 			retval = val.split(",");
 		}
@@ -260,7 +232,7 @@ public class LiferayWorkspaceUtil {
 
 			if (projectLocation != null) {
 				String val = getGradleProperty(
-					projectLocation.toPortableString(), LIFERAY_WORKSPACE_MODULES_DIR, "modules");
+					projectLocation.toPortableString(), WorkspaceConstants.DEFAULT_MODULES_DIR_PROPERTY, "modules");
 
 				if (CoreUtil.empty(val)) {
 					val = "modules";
@@ -274,7 +246,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static String getPluginsSDKDir(String location) {
-		String result = getGradleProperty(location, LIFERAY_WORKSPACE_PLUGINS_SDK_DIR, "plugins-sdk");
+		String result = getGradleProperty(location, WorkspaceConstants.DEFAULT_PLUGINS_SDK_DIR_PROPERTY, "plugins-sdk");
 
 		if (CoreUtil.empty(result)) {
 			return "bundles";
@@ -290,7 +262,8 @@ public class LiferayWorkspaceUtil {
 			IPath projectLocation = project.getLocation();
 
 			if (projectLocation != null) {
-				retval = getGradleProperty(projectLocation.toPortableString(), LIFERAY_WORKSPACE_THEMES_DIR, "themes");
+				retval = getGradleProperty(
+					projectLocation.toPortableString(), WorkspaceConstants.DEFAULT_THEMES_DIR_PROPERTY, "themes");
 			}
 		}
 
@@ -308,7 +281,8 @@ public class LiferayWorkspaceUtil {
 			IPath projectLocation = project.getLocation();
 
 			if (projectLocation != null) {
-				String val = getGradleProperty(projectLocation.toPortableString(), LIFERAY_WORKSPACE_WARS_DIR, "wars");
+				String val = getGradleProperty(
+					projectLocation.toPortableString(), WorkspaceConstants.DEFAULT_WARS_DIR_PROPERTY, "wars");
 
 				if (CoreUtil.empty(val)) {
 					val = "wars";

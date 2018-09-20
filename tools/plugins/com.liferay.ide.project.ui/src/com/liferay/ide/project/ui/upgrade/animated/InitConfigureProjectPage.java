@@ -22,6 +22,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.jobs.InitBundleJob;
 import com.liferay.ide.project.core.jobs.JobUtil;
@@ -601,10 +602,10 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 					String input = ((Text)e.getSource()).getText();
 					String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
 
-					String bundleUrl = LiferayUpgradeDataModel.BUNDLE_URL_70;
+					String bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_0;
 
 					if (upgradeVersion.contains("7.1")) {
-						bundleUrl = LiferayUpgradeDataModel.BUNDLE_URL_71;
+						bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_1;
 					}
 
 					if (input.equals(bundleUrl)) {
@@ -619,10 +620,10 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 					String input = ((Text)e.getSource()).getText();
 					String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
 
-					String defaultBundleUrl = LiferayUpgradeDataModel.BUNDLE_URL_70;
+					String defaultBundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_0;
 
 					if (upgradeVersion.contains("7.1")) {
-						defaultBundleUrl = LiferayUpgradeDataModel.BUNDLE_URL_71;
+						defaultBundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_1;
 					}
 
 					if (CoreUtil.isNullOrEmpty(input)) {
@@ -837,12 +838,12 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		if (liferayWorkspace) {
 			_configureUpgradeVersionComb(
 				new String[] {"7.1"}, new String[] {"7.1"}, upgradeVersion,
-				new String[] {LiferayUpgradeDataModel.BUNDLE_URL_71});
+				new String[] {WorkspaceConstants.BUNDLE_URL_CE_7_1});
 		}
 		else {
 			_configureUpgradeVersionComb(
 				new String[] {"7.0", "7.1"}, new String[] {"7.0", "7.1"}, upgradeVersion,
-				new String[] {LiferayUpgradeDataModel.BUNDLE_URL_70, LiferayUpgradeDataModel.BUNDLE_URL_71});
+				new String[] {WorkspaceConstants.BUNDLE_URL_CE_7_0, WorkspaceConstants.BUNDLE_URL_CE_7_1});
 		}
 	}
 
@@ -962,12 +963,12 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 			String[] upgradeVersdionItemNames = {"7.0", "7.1"};
 			String[] upgradeVersionsValues = {"7.0", "7.1"};
-			String[] initBundleUrls = {LiferayUpgradeDataModel.BUNDLE_URL_70, LiferayUpgradeDataModel.BUNDLE_URL_71};
+			String[] initBundleUrls = {WorkspaceConstants.BUNDLE_URL_CE_7_0, WorkspaceConstants.BUNDLE_URL_CE_7_1};
 
 			if (liferayWorkspace) {
 				upgradeVersdionItemNames = new String[] {"7.1"};
 				upgradeVersionsValues = new String[] {"7.1"};
-				initBundleUrls = new String[] {LiferayUpgradeDataModel.BUNDLE_URL_71};
+				initBundleUrls = new String[] {WorkspaceConstants.BUNDLE_URL_CE_7_1};
 			}
 
 			_upgradeVersionComb.setItems(upgradeVersdionItemNames);

@@ -16,11 +16,11 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.workspace.BaseLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 
@@ -140,10 +140,9 @@ public class LiferayMavenWorkspaceProjectProvider
 			}
 		}
 		catch (Exception e) {
-			return BaseLiferayWorkspaceOp.LIFERAY_70_BUNDLE_URL;
 		}
 
-		return BaseLiferayWorkspaceOp.LIFERAY_70_BUNDLE_URL;
+		return WorkspaceConstants.BUNDLE_URL_CE_7_0;
 	}
 
 	@Override

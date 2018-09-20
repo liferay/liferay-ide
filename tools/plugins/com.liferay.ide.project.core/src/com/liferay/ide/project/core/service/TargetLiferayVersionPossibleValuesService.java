@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.core.service;
 
+import com.liferay.ide.core.util.WorkspaceConstants;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +29,7 @@ public class TargetLiferayVersionPossibleValuesService extends PossibleValuesSer
 
 	@Override
 	protected void compute(Set<String> values) {
-		List<String> possibleValues = Arrays.asList("7.0", "7.1");
+		List<String> possibleValues = Arrays.asList(WorkspaceConstants.LIFERAY_VERSIONS);
 
 		values.addAll(possibleValues);
 	}
