@@ -1,1 +1,1 @@
-Liferay IntelliJ Idea Plugin has been moved into https://github.com/gamerson/liferay-intellij-plugin
+Liferay IntelliJ Idea Plugin has been moved into https://github.com/liferay/liferay-intellij-plugin
