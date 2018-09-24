@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.core.util.WorkspaceConstants;
+
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Type;
@@ -157,12 +159,6 @@ public interface LiferayUpgradeDataModel extends Element {
 
 	public void setUpgradeVersion(String upgradeVersion);
 
-	public String BUNDLE_URL_70 =
-		"https://releases-cdn.liferay.com/portal/7.0.6-ga7/liferay-ce-portal-tomcat-7.0-ga7-20180507111753223.zip";
-
-	public String BUNDLE_URL_71 =
-		"https://releases-cdn.liferay.com/portal/7.1.0-ga1/liferay-ce-portal-tomcat-7.1.0-ga1-20180703012531655.zip";
-
 	@Service(impl = BackupLocationValidationService.class)
 	@Type(base = Path.class)
 	public ValueProperty PROP_BACKUP_LOCATION = new ValueProperty(TYPE, "BackupLocation");
@@ -175,7 +171,7 @@ public interface LiferayUpgradeDataModel extends Element {
 	@Service(impl = BundleNameValidationService.class)
 	public ValueProperty PROP_BUNDLE_NAME = new ValueProperty(TYPE, "BundleName");
 
-	@DefaultValue(text = BUNDLE_URL_71)
+	@DefaultValue(text = WorkspaceConstants.BUNDLE_URL_CE_7_1)
 	@Service(impl = BundleUrlValidationService.class)
 	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, "BundleUrl");
 

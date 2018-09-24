@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
@@ -78,11 +79,11 @@ public class LiferayWorkspaceUtilTests
         File propertiesFile = new File(workspaceLocation+"/gradle.properties");
 
         Properties prop = PropertiesUtil.loadProperties( propertiesFile);
-        prop.setProperty( LiferayWorkspaceUtil.LIFERAY_WORKSPACE_HOME_DIR, "bundles1" );
-        prop.setProperty( LiferayWorkspaceUtil.LIFERAY_WORKSPACE_MODULES_DIR, "tests,modules" );
-        prop.setProperty( LiferayWorkspaceUtil.LIFERAY_WORKSPACE_PLUGINS_SDK_DIR, "plugins-sdk1" );
-        prop.setProperty( LiferayWorkspaceUtil.LIFERAY_WORKSPACE_THEMES_DIR, "themes1" );
-        prop.setProperty( LiferayWorkspaceUtil.LIFERAY_WORKSPACE_WARS_DIR, "test1,wars1," );
+        prop.setProperty( WorkspaceConstants.DEFAULT_HOME_DIR_PROPERTY, "bundles1" );
+        prop.setProperty( WorkspaceConstants.DEFAULT_MODULES_DIR_PROPERTY, "tests,modules" );
+        prop.setProperty( WorkspaceConstants.DEFAULT_PLUGINS_SDK_DIR_PROPERTY, "plugins-sdk1" );
+        prop.setProperty( WorkspaceConstants.DEFAULT_THEMES_DIR_PROPERTY, "themes1" );
+        prop.setProperty( WorkspaceConstants.DEFAULT_WARS_DIR_PROPERTY, "test1,wars1," );
         PropertiesUtil.saveProperties( prop, propertiesFile );
 
         workspaceProject.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );

@@ -24,6 +24,7 @@ import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.tests.ProjectCoreBase;
@@ -121,7 +122,7 @@ public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
 
         File propertiesFile = new File( wsFile, "gradle.properties" );
         Properties prop = PropertiesUtil.loadProperties( propertiesFile );
-        prop.setProperty( LiferayWorkspaceUtil.LIFERAY_WORKSPACE_WARS_DIR, "wars,wars2" );
+        prop.setProperty( WorkspaceConstants.DEFAULT_WARS_DIR, "wars,wars2" );
         PropertiesUtil.saveProperties( prop, propertiesFile );
 
         NewLiferayModuleProjectOp moduleProjectOp = NewLiferayModuleProjectOp.TYPE.instantiate();

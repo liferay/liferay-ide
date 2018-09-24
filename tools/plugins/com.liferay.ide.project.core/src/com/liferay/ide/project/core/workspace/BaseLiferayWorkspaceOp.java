@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.util.WorkspaceConstants;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
@@ -52,13 +53,7 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 
 	public void setServerName(String value);
 
-	public final String LIFERAY_70_BUNDLE_URL =
-		"https://releases-cdn.liferay.com/portal/7.0.6-ga7/liferay-ce-portal-tomcat-7.0-ga7-20180507111753223.zip";
-
-	public final String LIFERAY_71_BUNDLE_URL =
-		"https://releases-cdn.liferay.com/portal/7.1.0-b3/liferay-ce-portal-tomcat-7.1-b3-20180611140920623.zip";
-
-	@DefaultValue(text = LIFERAY_70_BUNDLE_URL)
+	@DefaultValue(text = WorkspaceConstants.BUNDLE_URL_CE_7_0)
 	@Service(impl = BundleUrlValidationService.class)
 	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, "bundleUrl");
 

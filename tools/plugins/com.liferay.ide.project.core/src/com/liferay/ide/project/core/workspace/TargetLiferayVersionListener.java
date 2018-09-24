@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.WorkspaceConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,17 +42,17 @@ public class TargetLiferayVersionListener extends FilteredListener<PropertyConte
 
 		String bundleUrl = SapphireUtil.getContent(op.getBundleUrl());
 
-		List<String> bundleVersionList = new ArrayList<>();
+		List<String> bundleUrls = new ArrayList<>();
 
-		bundleVersionList.add(BaseLiferayWorkspaceOp.LIFERAY_71_BUNDLE_URL);
-		bundleVersionList.add(BaseLiferayWorkspaceOp.LIFERAY_70_BUNDLE_URL);
+		bundleUrls.add(WorkspaceConstants.BUNDLE_URL_CE_7_1);
+		bundleUrls.add(WorkspaceConstants.BUNDLE_URL_CE_7_0);
 
-		if (bundleVersionList.contains(bundleUrl)) {
+		if (bundleUrls.contains(bundleUrl)) {
 			if (bundleVersion.equals("7.1")) {
-				op.setBundleUrl(BaseLiferayWorkspaceOp.LIFERAY_71_BUNDLE_URL);
+				op.setBundleUrl(WorkspaceConstants.BUNDLE_URL_CE_7_1);
 			}
 			else {
-				op.setBundleUrl(BaseLiferayWorkspaceOp.LIFERAY_70_BUNDLE_URL);
+				op.setBundleUrl(WorkspaceConstants.BUNDLE_URL_CE_7_0);
 			}
 		}
 	}

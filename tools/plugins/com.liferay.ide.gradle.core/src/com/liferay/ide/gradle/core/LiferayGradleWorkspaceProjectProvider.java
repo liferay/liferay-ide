@@ -19,11 +19,11 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.workspace.BaseLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 import com.liferay.ide.server.util.ServerUtil;
@@ -114,8 +114,7 @@ public class LiferayGradleWorkspaceProjectProvider
 	@Override
 	public String getInitBundleUrl(String workspaceLocation) {
 		return LiferayWorkspaceUtil.getGradleProperty(
-			workspaceLocation, LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL,
-			BaseLiferayWorkspaceOp.LIFERAY_70_BUNDLE_URL);
+			workspaceLocation, WorkspaceConstants.DEFAULT_BUNDLE_URL_PROPERTY, WorkspaceConstants.BUNDLE_URL_CE_7_0);
 	}
 
 	@Override
