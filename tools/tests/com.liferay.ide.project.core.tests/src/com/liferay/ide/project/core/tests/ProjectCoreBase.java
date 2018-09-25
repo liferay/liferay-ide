@@ -374,7 +374,7 @@ public class ProjectCoreBase extends ServerCoreBase
 
     protected IPath getLiferayPluginsSDKZip()
     {
-        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2-ce-ga6-20160112152609836.zip" );
+        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2-ce-ga6-20171101150212422.zip" );
     }
 
     protected String getLiferayPluginsSdkZipFolder()

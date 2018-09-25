@@ -51,7 +51,7 @@
                 <version>1.3.0</version>
                 <executions>
                     <execution>
-                        <id>download-plugins-sdk</id>
+                        <id>download-plugins-sdk-1.0.16</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>wget</goal>
@@ -61,6 +61,20 @@
                             <outputDirectory>${liferay.bundles.dir}</outputDirectory>
                             <outputFileName>com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</outputFileName>
                             <md5>74498e30292fcde3f007a159ba283ed2</md5>
+                            <checkSignature>true</checkSignature>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-plugins-sdk-6.2.5-ga6</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>https://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.2.5%20GA6/liferay-plugins-sdk-6.2-ce-ga6-20171101150212422.zip</url>
+                            <outputDirectory>${liferay.bundles.dir}</outputDirectory>
+                            <outputFileName>liferay-plugins-sdk-6.2-ce-ga6-20171101150212422.zip</outputFileName>
+                            <md5>f021052bd71d72043c830a1fbe2b2c36</md5>
                             <checkSignature>true</checkSignature>
                         </configuration>
                     </execution>
