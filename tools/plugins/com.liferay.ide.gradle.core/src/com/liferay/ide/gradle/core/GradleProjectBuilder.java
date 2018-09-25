@@ -72,7 +72,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 				PropertiesConfiguration config = new PropertiesConfiguration(
 					FileUtil.getFile(project.getFile("gradle.properties")));
 
-				config.setProperty(WorkspaceConstants.DEFAULT_BUNDLE_URL_PROPERTY, bundleUrl);
+				config.setProperty(WorkspaceConstants.BUNDLE_URL_PROPERTY, bundleUrl);
 				config.save();
 			}
 			catch (ConfigurationException ce) {

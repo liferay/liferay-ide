@@ -79,11 +79,11 @@ public class LiferayWorkspaceUtilTests
         File propertiesFile = new File(workspaceLocation+"/gradle.properties");
 
         Properties prop = PropertiesUtil.loadProperties( propertiesFile);
-        prop.setProperty( WorkspaceConstants.DEFAULT_HOME_DIR_PROPERTY, "bundles1" );
-        prop.setProperty( WorkspaceConstants.DEFAULT_MODULES_DIR_PROPERTY, "tests,modules" );
-        prop.setProperty( WorkspaceConstants.DEFAULT_PLUGINS_SDK_DIR_PROPERTY, "plugins-sdk1" );
-        prop.setProperty( WorkspaceConstants.DEFAULT_THEMES_DIR_PROPERTY, "themes1" );
-        prop.setProperty( WorkspaceConstants.DEFAULT_WARS_DIR_PROPERTY, "test1,wars1," );
+        prop.setProperty( WorkspaceConstants.HOME_DIR_PROPERTY, "bundles1" );
+        prop.setProperty( WorkspaceConstants.MODULES_DIR_PROPERTY, "tests,modules" );
+        prop.setProperty( WorkspaceConstants.PLUGINS_SDK_DIR_PROPERTY, "plugins-sdk1" );
+        prop.setProperty( WorkspaceConstants.THEMES_DIR_PROPERTY, "themes1" );
+        prop.setProperty( WorkspaceConstants.WARS_DIR_PROPERTY, "test1,wars1," );
         PropertiesUtil.saveProperties( prop, propertiesFile );
 
         workspaceProject.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );

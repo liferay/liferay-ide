@@ -177,7 +177,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static String getHomeDir(String location) {
-		String result = getGradleProperty(location, WorkspaceConstants.DEFAULT_HOME_DIR_PROPERTY, "bundles");
+		String result = getGradleProperty(location, WorkspaceConstants.HOME_DIR_PROPERTY, "bundles");
 
 		if (CoreUtil.empty(result)) {
 			return "bundles";
@@ -212,7 +212,7 @@ public class LiferayWorkspaceUtil {
 		String[] retval = null;
 
 		if (workspaceLocation != null) {
-			String val = getGradleProperty(workspaceLocation, WorkspaceConstants.DEFAULT_WARS_DIR_PROPERTY, "wars");
+			String val = getGradleProperty(workspaceLocation, WorkspaceConstants.WARS_DIR_PROPERTY, "wars");
 
 			retval = val.split(",");
 		}
@@ -232,7 +232,7 @@ public class LiferayWorkspaceUtil {
 
 			if (projectLocation != null) {
 				String val = getGradleProperty(
-					projectLocation.toPortableString(), WorkspaceConstants.DEFAULT_MODULES_DIR_PROPERTY, "modules");
+					projectLocation.toPortableString(), WorkspaceConstants.MODULES_DIR_PROPERTY, "modules");
 
 				if (CoreUtil.empty(val)) {
 					val = "modules";
@@ -246,7 +246,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static String getPluginsSDKDir(String location) {
-		String result = getGradleProperty(location, WorkspaceConstants.DEFAULT_PLUGINS_SDK_DIR_PROPERTY, "plugins-sdk");
+		String result = getGradleProperty(location, WorkspaceConstants.PLUGINS_SDK_DIR_PROPERTY, "plugins-sdk");
 
 		if (CoreUtil.empty(result)) {
 			return "bundles";
@@ -263,7 +263,7 @@ public class LiferayWorkspaceUtil {
 
 			if (projectLocation != null) {
 				retval = getGradleProperty(
-					projectLocation.toPortableString(), WorkspaceConstants.DEFAULT_THEMES_DIR_PROPERTY, "themes");
+					projectLocation.toPortableString(), WorkspaceConstants.THEMES_DIR_PROPERTY, "themes");
 			}
 		}
 
@@ -282,7 +282,7 @@ public class LiferayWorkspaceUtil {
 
 			if (projectLocation != null) {
 				String val = getGradleProperty(
-					projectLocation.toPortableString(), WorkspaceConstants.DEFAULT_WARS_DIR_PROPERTY, "wars");
+					projectLocation.toPortableString(), WorkspaceConstants.WARS_DIR_PROPERTY, "wars");
 
 				if (CoreUtil.empty(val)) {
 					val = "wars";
