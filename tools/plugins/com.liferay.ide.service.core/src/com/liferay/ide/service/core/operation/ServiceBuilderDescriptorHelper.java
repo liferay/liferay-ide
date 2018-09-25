@@ -14,6 +14,7 @@
 
 package com.liferay.ide.service.core.operation;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.NodeUtil;
@@ -109,8 +110,19 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 		return editOperation.execute();
 	}
 
+	@Override
 	public IFile getDescriptorFile() {
-		return _serviceXMLFile;
+		if ((_serviceXMLFile != null) && _serviceXMLFile.exists()) {
+			return _serviceXMLFile;
+		}
+
+		IFile serviceXmlFile = super.getDescriptorFile(ILiferayConstants.SERVICE_XML_FILE);
+
+		if ((serviceXmlFile != null) && serviceXmlFile.exists()) {
+			return serviceXmlFile;
+		}
+
+		return null;
 	}
 
 	public IStatus removeAllEntities() {
