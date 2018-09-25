@@ -16,13 +16,10 @@ package com.liferay.ide.service.core.job;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.service.core.ServiceCore;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -76,18 +73,8 @@ public class BuildServiceJob extends Job {
 
 		monitor.beginTask(Msgs.buildingLiferayServices, 100);
 
-		IWorkspaceRunnable workspaceRunner = new IWorkspaceRunnable() {
-
-			public void run(IProgressMonitor monitor) throws CoreException {
-				runBuild(monitor);
-			}
-
-		};
-
 		try {
-			IWorkspace workspace = CoreUtil.getWorkspace();
-
-			workspace.run(workspaceRunner, monitor);
+			runBuild(monitor);
 		}
 		catch (CoreException ce) {
 			retval = ServiceCore.createErrorStatus(ce);
