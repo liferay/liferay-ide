@@ -114,7 +114,7 @@ public class LiferayGradleWorkspaceProjectProvider
 	@Override
 	public String getInitBundleUrl(String workspaceLocation) {
 		return LiferayWorkspaceUtil.getGradleProperty(
-			workspaceLocation, WorkspaceConstants.DEFAULT_BUNDLE_URL_PROPERTY, WorkspaceConstants.BUNDLE_URL_CE_7_0);
+			workspaceLocation, WorkspaceConstants.BUNDLE_URL_PROPERTY, WorkspaceConstants.BUNDLE_URL_CE_7_0);
 	}
 
 	@Override
