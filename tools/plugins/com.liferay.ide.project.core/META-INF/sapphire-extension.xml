@@ -82,7 +82,12 @@
 		<context>Sapphire</context>
 		<description>ConversionService implementation for String to ILiferyProjectProvider conversions.</description>
 	</service>
-
+	<service>
+		<id>Sapphire.ConversionService.StringToOSGiVersion</id>
+		<implementation>com.liferay.ide.project.core.model.internal.StringToOSGiVersionConversionService</implementation>
+		<context>Sapphire</context>
+		<description>ConversionService implementation for String to OSGi Version conversions.</description>
+	</service>
 	<service>
 		<id>Sapphire.ValueLabelService.ComponentTemplate</id>
 		<context>Sapphire.Property.MetaModel</context>

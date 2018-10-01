@@ -12,31 +12,24 @@
  * details.
  */
 
-package com.liferay.ide.core;
+package com.liferay.ide.project.core.modules.ext;
 
-import java.util.List;
-import java.util.Set;
+import com.liferay.ide.core.util.SapphireUtil;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
- * @author Gregory Amerson
- * @author Simon Jiang
+ * @author Charles Wu
  */
-public interface IWorkspaceProject extends ILiferayProject {
+public class ModuleExtProjectUseDefaultLocationListener extends ModuleExtProjectNameListener {
 
-	public Set<IProject> getChildProjects();
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		final NewModuleExtOp op = op(event);
 
-	public String getLiferayHome();
-
-	public List<Artifact> getTargetPlatformArtifacts();
-
-	public String getTargetPlatformVersion();
-
-	public boolean isWatchable();
-
-	public void watch(Set<IProject> childProjects);
-
-	public Set<IProject> watching();
+		if (SapphireUtil.getContent(op.getUseDefaultLocation())) {
+			super.handleTypedEvent(event);
+		}
+	}
 
 }
