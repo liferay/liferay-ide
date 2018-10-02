@@ -33,13 +33,26 @@ import org.eclipse.ui.actions.SelectionProviderAction;
  */
 public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 
+	public WatchWorkspaceModulesAction(ISelectionProvider provider) {
+		this(provider, "Start watching project", "start");
+	}
+
+	public WatchWorkspaceModulesAction(ISelectionProvider provider, String text, String action) {
+		super(provider, text);
+
+		_action = action;
+	}
+
 	@Override
 	public void run() {
 		Iterator<?> iterator = getStructuredSelection().iterator();
 
 		IProject project = LiferayWorkspaceUtil.getWorkspaceProject();
+
 		IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
+
 		Set<IProject> watching = workspaceProject.watching();
+
 		Set<IProject> projectsToWatch = new HashSet<>(watching);
 
 		while (iterator.hasNext()) {
@@ -62,16 +75,6 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 		IDecoratorManager decoratorManager = UIUtil.getDecoratorManager();
 
 		UIUtil.async(() -> decoratorManager.update("com.liferay.ide.gradle.ui.workspaceLabelProvider"));
-	}
-
-	public WatchWorkspaceModulesAction(ISelectionProvider provider) {
-		this(provider, "Start watching project", "start");
-	}
-
-	public WatchWorkspaceModulesAction(ISelectionProvider provider, String text, String action) {
-		super(provider, text);
-
-		_action = action;
 	}
 
 	private String _action;

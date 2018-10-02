@@ -23,6 +23,7 @@ import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import com.liferay.ide.server.core.ILiferayServer;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -132,7 +133,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					String[] args = new String[] {"--continuous", "--continue"};
+					String[] args = {"--continuous", "--continue"};
 
 					GradleUtil.runGradleTask(getProject(), tasks.toArray(new String[0]), args, monitor);
 				}
@@ -153,6 +154,11 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 		_watchingProjects.addAll(childProjects);
 
 		job.schedule();
+	}
+
+	@Override
+	public Set<IProject> watching() {
+		return Collections.unmodifiableSet(_watchingProjects);
 	}
 
 	private String _convertToModuleTaskPath(IPath moduleLocation) {
@@ -177,9 +183,6 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 		return watchTask;
 	}
 
-	@Override
-	public Set<IProject> watching() {
-		return Collections.unmodifiableSet(_watchingProjects);
-	}
 	private static final Set<IProject> _watchingProjects = new HashSet<>();
+
 }
