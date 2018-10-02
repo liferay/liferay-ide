@@ -19,10 +19,10 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 /**
  * @author Terry Jia
  */
-public class StopWorkspaceModulesAction extends BaseWorkspaceAction {
+public class StopWorkspaceModulesAction extends WatchWorkspaceModulesAction {
 
 	public StopWorkspaceModulesAction(ISelectionProvider provider) {
-		super(provider, "Stop to watch", "stop");
+		super(provider, "Stop watching project", "stop");
 	}
 
 }
