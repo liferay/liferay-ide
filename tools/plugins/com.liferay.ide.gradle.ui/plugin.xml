@@ -318,7 +318,7 @@
 		</decorator>
 		<decorator
 			adaptable="true"
-			class="com.liferay.ide.gradle.ui.navigator.workspace.WorkspaceLabelProvider"
+			class="com.liferay.ide.gradle.ui.navigator.workspace.LiferayWorkspaceServerLabelProvider"
 			id="com.liferay.ide.gradle.ui.workspaceLabelProvider"
 			label="workspace label provider"
 			lightweight="true"
@@ -335,10 +335,10 @@
 	>
 		<navigatorContent
 			activeByDefault="true"
-			contentProvider="com.liferay.ide.gradle.ui.navigator.workspace.WorkspaceContentProvider"
+			contentProvider="com.liferay.ide.gradle.ui.navigator.workspace.LiferayWorkspaceServerContentProvider"
 			icon="icons/liferay_logo_16.png"
 			id="com.liferay.ide.gradle.ui.serverview.workspace"
-			labelProvider="com.liferay.ide.gradle.ui.navigator.workspace.WorkspaceLabelProvider"
+			labelProvider="com.liferay.ide.gradle.ui.navigator.workspace.LiferayWorkspaceServerLabelProvider"
 			name="Liferay Workspace"
 			priority="higher"
 			providesSaveables="true"
@@ -369,7 +369,7 @@
 			>
 			</override>
 			<actionProvider
-				class="com.liferay.ide.gradle.ui.navigator.workspace.WorkspaceActionProvider"
+				class="com.liferay.ide.gradle.ui.navigator.workspace.LiferayWorkspaceServerActionProvider"
 				id="com.liferay.ide.gradle.ui.serverview.workspace.actions"
 				priority="highest"
 			>

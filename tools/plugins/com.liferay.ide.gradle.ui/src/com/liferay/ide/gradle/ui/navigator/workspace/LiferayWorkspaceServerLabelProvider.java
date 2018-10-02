@@ -31,7 +31,7 @@ import org.eclipse.ui.ide.IDE;
 /**
  * @author Terry Jia
  */
-public class WorkspaceLabelProvider extends LabelProvider implements ILightweightLabelDecorator {
+public class LiferayWorkspaceServerLabelProvider extends LabelProvider implements ILightweightLabelDecorator {
 
 	@Override
 	public void decorate(Object element, IDecoration decoration) {
@@ -40,6 +40,7 @@ public class WorkspaceLabelProvider extends LabelProvider implements ILightweigh
 		}
 
 		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
 		IWorkspaceProject iWorkspaceProject = LiferayCore.create(IWorkspaceProject.class, workspaceProject);
 
 		IProject project = (IProject)element;

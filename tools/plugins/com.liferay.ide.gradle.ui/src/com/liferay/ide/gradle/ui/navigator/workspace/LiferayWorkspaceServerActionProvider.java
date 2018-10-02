@@ -31,7 +31,7 @@ import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 /**
  * @author Terry Jia
  */
-public class WorkspaceActionProvider extends CommonActionProvider {
+public class LiferayWorkspaceServerActionProvider extends CommonActionProvider {
 
 	public static final String NEW_MENU_ID = "org.eclipse.wst.server.ui.internal.cnf.newMenuId";
 
@@ -39,9 +39,10 @@ public class WorkspaceActionProvider extends CommonActionProvider {
 
 	public static final String TOP_SECTION_START_SEPARATOR = "org.eclipse.wst.server.ui.internal.cnf.topSectionStart";
 
-	public WorkspaceActionProvider() {
+	public LiferayWorkspaceServerActionProvider() {
 	}
 
+	@Override
 	public void fillContextMenu(IMenuManager menu) {
 		menu.removeAll();
 
@@ -54,6 +55,7 @@ public class WorkspaceActionProvider extends CommonActionProvider {
 		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS + "-end"));
 	}
 
+	@Override
 	public void init(ICommonActionExtensionSite site) {
 		super.init(site);
 

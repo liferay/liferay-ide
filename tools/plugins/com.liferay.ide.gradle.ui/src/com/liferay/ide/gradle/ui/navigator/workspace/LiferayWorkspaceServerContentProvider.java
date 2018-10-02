@@ -34,7 +34,7 @@ import org.eclipse.core.runtime.IPath;
  * @author Terry Jia
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class WorkspaceContentProvider extends AbstractNavigatorContentProvider {
+public class LiferayWorkspaceServerContentProvider extends AbstractNavigatorContentProvider {
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
