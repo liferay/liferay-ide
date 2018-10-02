@@ -14,17 +14,10 @@
 
 package com.liferay.ide.gradle.ui;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.ui.util.UIUtil;
-
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
@@ -73,22 +66,11 @@ public class GradleUI extends Plugin {
 	 *
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
 		_plugin = this;
-
-		IWorkspace workspace = CoreUtil.getWorkspace();
-
-		workspace.addResourceChangeListener(
-			new IResourceChangeListener() {
-
-				public void resourceChanged(IResourceChangeEvent event) {
-					UIUtil.refreshCommonView("org.eclipse.wst.server.ui.ServersView");
-				}
-
-			},
-			IResourceChangeEvent.PRE_DELETE);
 	}
 
 	/**
@@ -96,6 +78,7 @@ public class GradleUI extends Plugin {
 	 *
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 
