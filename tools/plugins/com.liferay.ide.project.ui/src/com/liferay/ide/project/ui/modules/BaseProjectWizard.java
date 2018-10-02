@@ -153,6 +153,13 @@ public class BaseProjectWizard<T extends Element> extends SapphireWizard<T> impl
 		BasicNewResourceWizard.selectAndReveal(newProject, UIUtil.getActiveWorkbenchWindow());
 	}
 
+	@Override
+	protected void performPostFinish() {
+		super.performPostFinish();
+
+		UIUtil.refreshCommonView("org.eclipse.wst.server.ui.ServersView");
+	}
+
 	private boolean _firstErrorMessageRemoved = false;
 
 }

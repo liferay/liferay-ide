@@ -316,5 +316,88 @@
 				<objectState name="nature" value="org.eclipse.buildship.core.gradleprojectnature" />
 			</enablement>
 		</decorator>
+		<decorator
+			adaptable="true"
+			class="com.liferay.ide.gradle.ui.navigator.workspace.LiferayWorkspaceServerLabelProvider"
+			id="com.liferay.ide.gradle.ui.workspaceLabelProvider"
+			label="workspace label provider"
+			lightweight="true"
+			state="true"
+		>
+			<description>workspace label provider</description>
+			<enablement>
+				<objectState name="nature" value="org.eclipse.buildship.core.gradleprojectnature" />
+			</enablement>
+		</decorator>
+	</extension>
+	<extension
+		point="org.eclipse.ui.navigator.navigatorContent"
+	>
+		<navigatorContent
+			activeByDefault="true"
+			contentProvider="com.liferay.ide.gradle.ui.navigator.workspace.LiferayWorkspaceServerContentProvider"
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.gradle.ui.serverview.workspace"
+			labelProvider="com.liferay.ide.gradle.ui.navigator.workspace.LiferayWorkspaceServerLabelProvider"
+			name="Liferay Workspace"
+			priority="higher"
+			providesSaveables="true"
+		>
+			<triggerPoints>
+				<or>
+					<instanceof
+						value="org.eclipse.wst.server.core.IServer"
+					>
+					</instanceof>
+				</or>
+			</triggerPoints>
+			<possibleChildren>
+				<or>
+					<instanceof
+						value="java.lang.Object"
+					>
+					</instanceof>
+					<instanceof
+						value="org.eclipse.core.resources.IProject"
+					>
+					</instanceof>
+				</or>
+			</possibleChildren>
+			<override
+				policy="InvokeAlwaysRegardlessOfSuppressedExt"
+				suppressedExtensionId="org.eclipse.wst.server.ui.ServersView.content.root"
+			>
+			</override>
+			<actionProvider
+				class="com.liferay.ide.gradle.ui.navigator.workspace.LiferayWorkspaceServerActionProvider"
+				id="com.liferay.ide.gradle.ui.serverview.workspace.actions"
+				priority="highest"
+			>
+				<enablement>
+					<or>
+						<instanceof
+							value="org.eclipse.core.resources.IProject"
+						>
+						</instanceof>
+					</or>
+				</enablement>
+			</actionProvider>
+		</navigatorContent>
+	</extension>
+	<extension
+		point="org.eclipse.ui.navigator.viewer"
+	>
+
+		<viewerContentBinding
+			viewerId="org.eclipse.wst.server.ui.ServersView"
+		>
+			<includes>
+				<contentExtension
+					isRoot="false"
+					pattern="com.liferay.ide.gradle.ui.serverview.workspace"
+				>
+				</contentExtension>
+			</includes>
+		</viewerContentBinding>
 	</extension>
 </plugin>

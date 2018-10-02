@@ -26,6 +26,7 @@ import com.liferay.ide.server.core.portal.PortalBundle;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,7 +39,7 @@ import org.eclipse.jdt.core.JavaCore;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class LiferayWorkspaceProject extends BaseLiferayProject implements IWorkspaceProject {
+public abstract class LiferayWorkspaceProject extends BaseLiferayProject implements IWorkspaceProject {
 
 	public LiferayWorkspaceProject(IProject project) {
 		super(project);
@@ -111,6 +112,15 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 	@Override
 	public List<IPath> getTargetPlatformArtifacts() {
 		return Collections.emptyList();
+	}
+
+	@Override
+	public void watch(Set<IProject> childProjects) {
+	}
+
+	@Override
+	public Set<IProject> watching() {
+		return Collections.emptySet();
 	}
 
 }

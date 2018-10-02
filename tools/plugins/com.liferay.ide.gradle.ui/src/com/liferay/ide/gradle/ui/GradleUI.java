@@ -67,6 +67,7 @@ public class GradleUI extends Plugin {
 	 *
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
@@ -78,6 +79,7 @@ public class GradleUI extends Plugin {
 	 *
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 
