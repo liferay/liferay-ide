@@ -23,10 +23,12 @@ import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import com.liferay.ide.server.core.ILiferayServer;
 
 import java.io.File;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
@@ -83,23 +85,26 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 	public void watch(Set<IProject> childProjects) {
 		boolean hasRoot = childProjects.contains(getProject());
 
-		String[] tasks = {"watch"};
+		final List<String> tasks = new ArrayList<>();
 
-		if (!hasRoot) {
+		if (hasRoot) {
+			tasks.add("watch");
+		}
+		else {
 			Stream<IProject> stream = childProjects.stream();
 
-			tasks = stream.map(
-				project -> _parseWatchTask(project.getLocation())
-			).collect(
-				Collectors.toList()
-			).toArray(
-				new String[0]
+			stream.map(
+				IProject::getLocation
+			).map(
+				location -> _convertToModuleTaskPath(location)
+			).forEach(
+				tasks::add
 			);
 		}
 
 		String projectName = getProject().getName();
 
-		String jobName = projectName + " - watch";
+		String jobName = projectName + ":watch";
 
 		IJobManager jobManager = Job.getJobManager();
 
@@ -117,8 +122,6 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 			}
 		}
 
-		final String[] finalTasks = tasks;
-
 		Job job = new Job(jobName) {
 
 			@Override
@@ -129,8 +132,9 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					GradleUtil.runGradleTask(
-						getProject(), finalTasks, new String[] {"--continuous", "--continue"}, monitor);
+					String[] args = new String[] {"--continuous", "--continue"};
+
+					GradleUtil.runGradleTask(getProject(), tasks.toArray(new String[0]), args, monitor);
 				}
 				catch (Exception e) {
 					return GradleCore.createErrorStatus(
@@ -144,20 +148,26 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 		job.setProperty(ILiferayServer.LIFERAY_SERVER_JOB, this);
 		job.setSystem(true);
+
+		_watchingProjects.clear();
+		_watchingProjects.addAll(childProjects);
+
 		job.schedule();
 	}
 
-	private String _parseWatchTask(IPath location) {
-		IPath workspaceLocation = getProject().getLocation();
+	private String _convertToModuleTaskPath(IPath moduleLocation) {
+		IProject project = getProject();
+
+		IPath workspaceLocation = project.getLocation();
 
 		String watchTask = ":watch";
 
-		for (int i = location.segmentCount() - 1; i >= 0; i--) {
-			String segment = location.segment(i);
+		for (int i = moduleLocation.segmentCount() - 1; i >= 0; i--) {
+			String segment = moduleLocation.segment(i);
 
 			watchTask = ":" + segment + watchTask;
 
-			IPath currentLocation = location.removeLastSegments(location.segmentCount() - i);
+			IPath currentLocation = moduleLocation.removeLastSegments(moduleLocation.segmentCount() - i);
 
 			if (workspaceLocation.equals(currentLocation)) {
 				break;
@@ -167,4 +177,9 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 		return watchTask;
 	}
 
+	@Override
+	public Set<IProject> watching() {
+		return Collections.unmodifiableSet(_watchingProjects);
+	}
+	private static final Set<IProject> _watchingProjects = new HashSet<>();
 }

@@ -16,11 +16,12 @@ package com.liferay.ide.gradle.ui.action;
 
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.gradle.core.WatchingProjects;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -32,41 +33,35 @@ import org.eclipse.ui.actions.SelectionProviderAction;
  */
 public class BaseWorkspaceAction extends SelectionProviderAction {
 
+	@Override
 	public void run() {
 		Iterator<?> iterator = getStructuredSelection().iterator();
 
-		WatchingProjects watchingProjects = WatchingProjects.getInstance();
-
-		boolean changed = false;
+		IProject project = LiferayWorkspaceUtil.getWorkspaceProject();
+		IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
+		Set<IProject> watching = workspaceProject.watching();
+		Set<IProject> projectsToWatch = new HashSet<>(watching);
 
 		while (iterator.hasNext()) {
 			Object obj = iterator.next();
 
 			if (obj instanceof IProject) {
-				IProject project = (IProject)obj;
+				IProject selectedProject = (IProject)obj;
 
 				if ("watch".equals(_action)) {
-					watchingProjects.addProject(project);
+					projectsToWatch.add(selectedProject);
 				}
 				else if ("stop".equals(_action)) {
-					watchingProjects.removeProject(project);
+					projectsToWatch.remove(selectedProject);
 				}
-
-				changed = true;
 			}
 		}
 
-		if (changed) {
-			IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+		workspaceProject.watch(projectsToWatch);
 
-			IWorkspaceProject project = LiferayCore.create(IWorkspaceProject.class, workspaceProject);
+		IDecoratorManager decoratorManager = UIUtil.getDecoratorManager();
 
-			project.watch(watchingProjects.getProjects());
-
-			IDecoratorManager decoratorManager = UIUtil.getDecoratorManager();
-
-			UIUtil.async(() -> decoratorManager.update("com.liferay.ide.gradle.ui.workspaceLabelProvider"));
-		}
+		UIUtil.async(() -> decoratorManager.update("com.liferay.ide.gradle.ui.workspaceLabelProvider"));
 	}
 
 	protected BaseWorkspaceAction(ISelectionProvider provider, String text, String action) {

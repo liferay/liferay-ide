@@ -32,4 +32,6 @@ public interface IWorkspaceProject extends ILiferayProject {
 
 	public void watch(Set<IProject> childProjects);
 
+	public Set<IProject> watching();
+
 }

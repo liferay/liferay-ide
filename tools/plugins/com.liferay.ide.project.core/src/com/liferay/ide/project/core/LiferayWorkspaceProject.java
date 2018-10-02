@@ -39,7 +39,7 @@ import org.eclipse.jdt.core.JavaCore;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class LiferayWorkspaceProject extends BaseLiferayProject implements IWorkspaceProject {
+public abstract class LiferayWorkspaceProject extends BaseLiferayProject implements IWorkspaceProject {
 
 	public LiferayWorkspaceProject(IProject project) {
 		super(project);
@@ -116,6 +116,11 @@ public class LiferayWorkspaceProject extends BaseLiferayProject implements IWork
 
 	@Override
 	public void watch(Set<IProject> childProjects) {
+	}
+
+	@Override
+	public Set<IProject> watching() {
+		return Collections.emptySet();
 	}
 
 }

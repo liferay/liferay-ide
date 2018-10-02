@@ -14,8 +14,10 @@
 
 package com.liferay.ide.gradle.ui.navigator.workspace;
 
+import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.gradle.core.WatchingProjects;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -37,12 +39,13 @@ public class WorkspaceLabelProvider extends LabelProvider implements ILightweigh
 			return;
 		}
 
-		WatchingProjects watchingProject = WatchingProjects.getInstance();
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+		IWorkspaceProject iWorkspaceProject = LiferayCore.create(IWorkspaceProject.class, workspaceProject);
 
 		IProject project = (IProject)element;
 
-		if (ListUtil.contains(watchingProject.getProjects(), project)) {
-			decoration.addSuffix(" [Watching]");
+		if (ListUtil.contains(iWorkspaceProject.watching(), project)) {
+			decoration.addSuffix(" [watching]");
 		}
 		else {
 			decoration.addSuffix("");
