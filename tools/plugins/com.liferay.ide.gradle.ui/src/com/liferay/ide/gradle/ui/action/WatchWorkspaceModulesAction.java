@@ -34,7 +34,7 @@ import org.eclipse.ui.actions.SelectionProviderAction;
 public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 
 	public WatchWorkspaceModulesAction(ISelectionProvider provider) {
-		this(provider, "Start watching project", "start");
+		this(provider, "Start watching project", "watch");
 	}
 
 	public WatchWorkspaceModulesAction(ISelectionProvider provider, String text, String action) {

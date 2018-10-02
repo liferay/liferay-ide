@@ -153,7 +153,9 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 		_watchingProjects.clear();
 		_watchingProjects.addAll(childProjects);
 
-		job.schedule();
+		if (!childProjects.isEmpty()) {
+			job.schedule();
+		}
 	}
 
 	@Override
