@@ -19,6 +19,8 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
@@ -29,6 +31,9 @@ import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Optional;
+
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -82,6 +87,19 @@ public class LiferayGradleWorkspaceProjectProvider
 		}
 		catch (BladeCLIException bclie) {
 			return ProjectCore.createErrorStatus(bclie);
+		}
+
+		try {
+			PropertiesConfiguration config = new PropertiesConfiguration(
+				FileUtil.getFile(workspaceLocation.append("gradle.properties")));
+
+			config.setProperty(
+				WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, SapphireUtil.getContent(op.getTargetPlatform()));
+
+			config.save();
+		}
+		catch (ConfigurationException ce) {
+			GradleCore.logError(ce);
 		}
 
 		IPath wsLocation = location.append(workspaceName);

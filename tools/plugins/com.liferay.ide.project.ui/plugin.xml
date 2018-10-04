@@ -1210,6 +1210,7 @@
 			name="Blade"
 		>
 		</page>
+		<!--
 		<page
 			category="com.liferay.ide.ui.preferences.liferay"
 			class="com.liferay.ide.project.ui.pref.TargetPlatformSettingsPage"
@@ -1217,6 +1218,7 @@
 			name="Target Platform"
 		>
 		</page>
+		-->
 		<page
 			category="com.liferay.ide.ui.preferences.liferay"
 			class="com.liferay.ide.project.ui.pref.MigrationProblemPreferencePage"
