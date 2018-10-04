@@ -78,7 +78,7 @@ public class JobAction extends UIAction {
 	}
 
 	public void waitForNoRunningProjectBuildingJobs() {
-		ide.waitUntil(new NoRunningProjectBuildingJobs(), 5 * 60 * 1000);
+		ide.waitUntil(new NoRunningProjectBuildingJobs(), 20 * 60 * 1000);
 	}
 
 	public void waitForServerStarted(String serverName) {

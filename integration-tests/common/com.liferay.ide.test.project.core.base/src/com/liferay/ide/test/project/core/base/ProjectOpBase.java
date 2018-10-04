@@ -46,13 +46,21 @@ public abstract class ProjectOpBase<T extends ExecutableElement> extends Project
 	}
 
 	protected IProject createOrImportAndBuild(T op, String projectName) {
-		return createOrImportAndBuild(op, projectName, true);
+		return createOrImportAndBuild(op, projectName, null, true);
 	}
 
-	protected IProject createOrImportAndBuild(T op, String projectName, boolean verifyProject) {
+	protected IProject createOrImportAndBuild(
+		T op, String projectName, String expectedWarningMessage, boolean verifyProject) {
+
 		Status status = op.validation();
 
-		Assert.assertTrue(status.message(), status.ok());
+		if (expectedWarningMessage == null) {
+			Assert.assertTrue(status.message(), status.ok());
+		}
+		else {
+			Assert.assertFalse(status.message(), status.ok());
+			Assert.assertEquals(expectedWarningMessage, status.message());
+		}
 
 		IProject project = createOrImport(op, projectName);
 

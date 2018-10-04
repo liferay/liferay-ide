@@ -18,6 +18,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.test.core.base.support.FileSupport;
 import com.liferay.ide.test.core.base.support.ImportProjectSupport;
 import com.liferay.ide.test.core.base.util.FileUtil;
@@ -45,6 +46,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.Value;
+import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IServer;
 
 import org.junit.Assert;
 
@@ -163,6 +166,12 @@ public class BaseTests {
 		Assert.assertTrue(LiferayNature.hasNature(project));
 	}
 
+	protected void assertLiferayServerExists(String serverName) {
+		IServer server = ServerUtil.getServer(serverName);
+
+		Assert.assertTrue(ServerUtil.isLiferayRuntime(server));
+	}
+
 	protected void assertNotLiferayProject(String projectName) {
 		IProject project = project(projectName);
 
@@ -233,6 +242,22 @@ public class BaseTests {
 		assertFileNotExists(project.getFile(filePath));
 	}
 
+	protected void assertProjectFolderExists(String projectName, String folderPath) {
+		IProject project = project(projectName);
+
+		assertProjectExists(project);
+
+		try {
+			project.refreshLocal(0, npm);
+		}
+		catch (CoreException ce) {
+		}
+
+		IFolder folder = project.getFolder(folderPath);
+
+		Assert.assertTrue("Expected folder " + folder.getLocation() + " exists", FileUtil.exists(folder.getLocation()));
+	}
+
 	protected void assertPropertyValue(String projectName, String filePath, String key, String expectedValue) {
 		IProject project = project(projectName);
 
@@ -256,6 +281,12 @@ public class BaseTests {
 		catch (Exception e) {
 			failTest(e);
 		}
+	}
+
+	protected void assertRuntimeExists(String serverName) {
+		IRuntime runtime = ServerUtil.getRuntime(serverName);
+
+		Assert.assertNotNull(runtime);
 	}
 
 	protected void assertSourceFolders(String projectName, String expectedSourceFolderName) {
@@ -294,6 +325,26 @@ public class BaseTests {
 		IProject project = project(projectName);
 
 		deleteProject(project);
+	}
+
+	protected void deleteRuntime(String runtimeName) {
+		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
+
+		try {
+			runtime.delete();
+		}
+		catch (CoreException ce) {
+		}
+	}
+
+	protected void deleteServer(String serverName) {
+		IServer server = ServerUtil.getServer(serverName);
+
+		try {
+			server.delete();
+		}
+		catch (CoreException ce) {
+		}
 	}
 
 	protected String getProjectFileContents(String projectName, String fileName) {
