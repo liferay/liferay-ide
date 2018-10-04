@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -21,6 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 
 /**
@@ -44,15 +46,25 @@ public class NewLiferayComponentOpMethods {
 
 		Status retval = Status.createOkStatus();
 
+		Throwable errorStack = null;
+
 		try {
 			createNewComponent(op, monitor);
 		}
 		catch (Exception e) {
-			String msg = "Error creating Liferay component.";
+			errorStack = e;
+		}
 
-			ProjectCore.logError(msg, e);
+		if ((retval.severity() == Severity.ERROR) && (retval.exception() != null)) {
+			errorStack = retval.exception();
+		}
 
-			return Status.createErrorStatus(msg + " Please see Eclipse error log for more details.", e);
+		if (errorStack != null) {
+			String readableStack = CoreUtil.getStackTrace(errorStack);
+
+			ProjectCore.logError(readableStack);
+
+			return Status.createErrorStatus(readableStack + "\t Please see Eclipse error log for more details.");
 		}
 
 		return retval;

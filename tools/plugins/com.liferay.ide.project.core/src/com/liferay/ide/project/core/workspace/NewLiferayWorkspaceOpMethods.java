@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
@@ -24,6 +25,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 
@@ -39,6 +41,8 @@ public class NewLiferayWorkspaceOpMethods {
 
 		Status retval = Status.createOkStatus();
 
+		Throwable errorStack = null;
+
 		try {
 			NewLiferayProjectProvider<NewLiferayWorkspaceOp> provider = SapphireUtil.getContent(
 				op.getProjectProvider());
@@ -47,20 +51,23 @@ public class NewLiferayWorkspaceOpMethods {
 
 			retval = StatusBridge.create(status);
 
-			if (!retval.ok()) {
-				return retval;
+			if (retval.ok()) {
+				_updateBuildAndVersionPrefs(op);
+			}
+			else if ((retval.severity() == Severity.ERROR) && (retval.exception() != null)) {
+				errorStack = retval.exception();
 			}
 		}
 		catch (Exception e) {
-			String msg = "Error creating Liferay Workspace project.";
-
-			ProjectCore.logError(msg, e);
-
-			return Status.createErrorStatus(msg, e);
+			errorStack = e;
 		}
 
-		if (retval.ok()) {
-			_updateBuildAndVersionPrefs(op);
+		if (errorStack != null) {
+			String readableStack = CoreUtil.getStackTrace(errorStack);
+
+			ProjectCore.logError(readableStack);
+
+			return Status.createErrorStatus(readableStack + "\t Please see Eclipse error log for more details.");
 		}
 
 		return retval;

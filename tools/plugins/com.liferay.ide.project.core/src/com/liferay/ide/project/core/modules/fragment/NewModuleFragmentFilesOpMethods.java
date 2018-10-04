@@ -168,11 +168,11 @@ public class NewModuleFragmentFilesOpMethods {
 			retval = Status.createOkStatus();
 		}
 		catch (Exception e) {
-			String msg = "Error copy files.";
+			String readableStack = CoreUtil.getStackTrace(e);
 
-			ProjectCore.logError(msg, e);
+			ProjectCore.logError(readableStack);
 
-			return Status.createErrorStatus(msg + " Please see Eclipse error log for more details.", e);
+			return Status.createErrorStatus(readableStack + " Error copy files.", e);
 		}
 
 		return retval;
