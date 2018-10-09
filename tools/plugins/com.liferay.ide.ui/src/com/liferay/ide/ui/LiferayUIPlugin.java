@@ -30,10 +30,8 @@ import java.lang.management.ManagementFactory;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -54,21 +52,13 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IPreferencesService;
-import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.p2.operations.ProvisioningSession;
 import org.eclipse.equinox.p2.operations.RepositoryTracker;
 import org.eclipse.equinox.p2.ui.ProvisioningUI;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.formatter.DefaultCodeFormatterOptions;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
-import org.eclipse.jdt.internal.ui.preferences.PreferencesAccess;
-import org.eclipse.jdt.internal.ui.preferences.formatter.FormatterProfileStore;
-import org.eclipse.jdt.internal.ui.preferences.formatter.ProfileManager.CustomProfile;
-import org.eclipse.jdt.internal.ui.preferences.formatter.ProfileManager.Profile;
 import org.eclipse.jdt.internal.ui.preferences.formatter.ProfileVersioner;
-import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.text.templates.ContextTypeRegistry;
@@ -173,12 +163,6 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 
 	@Override
 	public void earlyStartup() {
-		if (_isFirstStartup()) {
-			_installLiferayFormatterProfile();
-
-			_firstStartupComplete();
-		}
-
 		_registerMBeans();
 
 		_lookupLiferay7SDKDir();
@@ -373,70 +357,6 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 		}
 		catch (BackingStoreException bse) {
 		}
-	}
-
-	private void _firstStartupComplete() {
-		_getPreferences().putBoolean(FIRST_STARTUP_COMPLETE, true);
-	}
-
-	private IEclipsePreferences _getPreferences() {
-		return new InstanceScope().getNode(PLUGIN_ID);
-	}
-
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void _installLiferayFormatterProfile() {
-		PreferencesAccess access = PreferencesAccess.getOriginalPreferences();
-		ProfileVersioner profileVersioner = new ProfileVersioner();
-		IScopeContext instanceScope = access.getInstanceScope();
-
-		try {
-			FormatterProfileStore store = new FormatterProfileStore(profileVersioner);
-
-			List profiles = store.readProfiles(instanceScope);
-
-			if (profiles == null) {
-				profiles = new ArrayList();
-			}
-
-			// add liferay profile
-
-			Profile eclipseProfile = new CustomProfile(
-				"Liferay [plug-in]", getLiferaySettings(), profileVersioner.getCurrentVersion(),
-				profileVersioner.getProfileKind());
-
-			profiles.add(eclipseProfile);
-
-			store.writeProfiles(profiles, instanceScope);
-
-			// ProfileManager manager = new FormatterProfileManager(profiles,
-			// instanceScope, access, profileVersioner);
-			// manager.setSelected(eclipseProfile);
-			// manager.commitChanges(instanceScope);
-
-			IEclipsePreferences preferences = instanceScope.getNode(JavaUI.ID_PLUGIN);
-
-			preferences.flush();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		finally {
-			try {
-				IEclipsePreferences preferences = instanceScope.getNode(JavaCore.PLUGIN_ID);
-
-				preferences.flush();
-			}
-			catch (BackingStoreException bse) {
-			}
-		}
-	}
-
-	private boolean _isFirstStartup() {
-		IScopeContext[] scopes = {new InstanceScope()};
-
-		IPreferencesService preferencesService = Platform.getPreferencesService();
-
-		return !(preferencesService.getBoolean(PLUGIN_ID, FIRST_STARTUP_COMPLETE, false, scopes));
 	}
 
 	private void _lookupLiferay7SDKDir() {
