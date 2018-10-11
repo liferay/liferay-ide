@@ -1004,6 +1004,14 @@ public class WizardAction extends UIAction {
 			return location().getText();
 		}
 
+		public ComboBox liferayVersion() {
+			return _newProjectWizard.getLiferayVersions();
+		}
+
+		public String[] liferayVersions() {
+			return liferayVersion().items();
+		}
+
 		public Text location() {
 			return _newProjectWizard.getLocation();
 		}
