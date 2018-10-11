@@ -20,7 +20,6 @@ import com.liferay.ide.ui.liferay.util.RuleUtil;
 import com.liferay.ide.ui.theme.deploy.base.DeployThemeGradleTomcat7xBase;
 
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -40,7 +39,6 @@ public class DeployThemeGradleTomcatDxpTests extends DeployThemeGradleTomcat7xBa
 		return server;
 	}
 
-	@Ignore("ignore as IDE-4188")
 	@Test
 	public void deployTheme() {
 		super.deployTheme();
