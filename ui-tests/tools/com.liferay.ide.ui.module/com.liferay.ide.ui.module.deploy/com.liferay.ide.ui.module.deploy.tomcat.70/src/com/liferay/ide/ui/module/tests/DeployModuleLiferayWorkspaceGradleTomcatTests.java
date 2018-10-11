@@ -29,7 +29,7 @@ import org.junit.rules.RuleChain;
 /**
  * @author Terry Jia
  */
-@Ignore("ignore for more research")
+@Ignore("ignore to wait IDE-4306")
 public class DeployModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);

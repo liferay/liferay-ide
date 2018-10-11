@@ -18,6 +18,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -1193,6 +1194,17 @@ public class ProjectUtil {
 				}
 			}
 			else {
+				IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+				IWorkspaceProject iWorkspaceProject = LiferayCore.create(IWorkspaceProject.class, workspaceProject);
+
+				// use watch way instead of old deployment
+
+				if ((iWorkspaceProject != null) && iWorkspaceProject.isWatchable() &&
+					LiferayWorkspaceUtil.inLiferayWorkspace(project)) {
+
+					return false;
+				}
 
 				// not sdk project
 
