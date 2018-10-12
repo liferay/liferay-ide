@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
@@ -50,9 +50,11 @@ public class DumbStateValidationService extends ValidationService {
 
 			Job[] jobs = jobManager.find("org.eclipse.buildship.core.jobs");
 
-			if (ListUtil.isNotEmpty(jobs)) {
-				return Status.createWarningStatus(
-					"Project won't be resolved completely until all Gradle background jobs finish.");
+			for (Job job : jobs) {
+				if (job.getRule() == CoreUtil.getWorkspaceRoot()) {
+					return Status.createWarningStatus(
+						"Project won't be resolved completely until all Gradle background jobs finish.");
+				}
 			}
 		}
 
