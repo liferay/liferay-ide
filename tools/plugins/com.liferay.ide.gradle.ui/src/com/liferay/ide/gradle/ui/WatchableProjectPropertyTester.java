@@ -32,13 +32,13 @@ public class WatchableProjectPropertyTester extends PropertyTester {
 		if (receiver instanceof IProject) {
 			project = (IProject)receiver;
 
-			IFile buildFile = project.getFile("build.gradle");
-
 			if (LiferayWorkspaceUtil.inLiferayWorkspace(project) || LiferayWorkspaceUtil.isValidWorkspace(project)) {
-				IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
-
-				buildFile = workspaceProject.getFile("settings.gradle");
+				return false;
 			}
+
+			// keep it for standalone projects
+
+			IFile buildFile = project.getFile("build.gradle");
 
 			return GradleUtil.isWatchableProject(buildFile);
 		}
