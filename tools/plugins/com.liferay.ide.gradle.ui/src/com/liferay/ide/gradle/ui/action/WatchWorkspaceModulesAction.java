@@ -57,16 +57,16 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 
 		ISelection selection = selectionProvider.getSelection();
 
-		if (getText().equals("Start watching project") && selection instanceof TreeSelection) {
+		if ("watch".equals(_action) && (selection instanceof TreeSelection)) {
 			TreePath treePath = ((TreeSelection)selection).getPaths()[0];
 
 			IServer server = (IServer)treePath.getFirstSegment();
 
 			if (server.getServerState() == IServer.STATE_STOPPED) {
 				MessageDialog dialog = new MessageDialog(
-					UIUtil.getActiveShell(), "Watching projects need a started server.", null,
-					"Do you  want to start the selected server?", MessageDialog.QUESTION_WITH_CANCEL,
-					new String[] {"Start with debugging mode", "Starting with running mode", "No"}, 0);
+					UIUtil.getActiveShell(), "Watch Task.", null,
+					"In order to watch this project, the server must be started. Do you want to start the server?",
+					MessageDialog.QUESTION_WITH_CANCEL, new String[] {"debug", "start", "No"}, 0);
 
 				int result = dialog.open();
 
