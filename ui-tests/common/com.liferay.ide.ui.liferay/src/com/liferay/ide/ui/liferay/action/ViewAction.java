@@ -181,7 +181,17 @@ public class ViewAction extends UIAction {
 
 			_getProjects().setFocus();
 
-			_getProjects().doubleClick(files);
+			try {
+				_getProjects().doubleClick(files);
+			}
+			catch (Exception e) {
+			}
+
+			try {
+				_getProjects().contextMenu("Open", files);
+			}
+			catch (Exception e) {
+			}
 		}
 
 		public void openFragmentFilesWizard() {
