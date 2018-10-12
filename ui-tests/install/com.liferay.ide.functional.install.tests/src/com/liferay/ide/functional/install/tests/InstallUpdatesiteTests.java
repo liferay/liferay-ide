@@ -43,6 +43,8 @@ public class InstallUpdatesiteTests extends SwtbotBase {
 
 		validationAction.assertEquals(CHECK_THE_ITEMS_THAT_YOU_WISH_TO_INSTALL, wizardAction.getValidationMsg(1));
 
+		ide.sleepLinux(1000);
+
 		wizardAction.installNewSoftware.selectAll();
 
 		wizardAction.installNewSoftware.deselectContactAllUpdateSites();
@@ -50,6 +52,8 @@ public class InstallUpdatesiteTests extends SwtbotBase {
 		wizardAction.next();
 
 		ide.sleep(2500);
+
+		ide.sleepLinux(2500);
 
 		validationAction.assertEquals(
 			YOUR_ORIGINAL_REQUEST_HAS_BEEN_MODIFIED_SEE_THE_DETAILS, wizardAction.getValidationMsg(1));
