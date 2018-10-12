@@ -37,8 +37,10 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 
 /**
  * @author Andy Wu
@@ -146,6 +148,16 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 			}
 
 		};
+
+		job.addJobChangeListener(
+			new JobChangeAdapter() {
+
+				@Override
+				public void done(IJobChangeEvent event) {
+					_watchingProjects.clear();
+				}
+
+			});
 
 		job.setProperty(ILiferayServer.LIFERAY_SERVER_JOB, this);
 		job.setSystem(true);
