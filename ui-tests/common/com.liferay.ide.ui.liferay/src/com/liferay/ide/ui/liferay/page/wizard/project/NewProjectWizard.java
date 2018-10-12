@@ -47,7 +47,7 @@ public class NewProjectWizard extends Wizard {
 		return new ComboBox(getShell().bot(), BUILD_TYPE);
 	}
 
-	public ComboBox getLiferayVersion() {
+	public ComboBox getLiferayVersions() {
 		return new ComboBox(getShell().bot(), LIFERAY_VERSION);
 	}
 
@@ -76,7 +76,7 @@ public class NewProjectWizard extends Wizard {
 	}
 
 	public void setLiferayVersion(String version) {
-		getLiferayVersion().setSelection(version);
+		getLiferayVersions().setSelection(version);
 	}
 
 	public void setLocation(String location) {

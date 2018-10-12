@@ -117,6 +117,25 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 	}
 
 	@Test
+	public void checkLiferayVersion() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		String[] expectedLiferayVersions = {"7.0", "7.1"};
+
+		ComboBox liferayVersionComboBox = wizardAction.newLiferayWorkspace.liferayVersion();
+
+		String[] liferayVersions = liferayVersionComboBox.items();
+
+		validationAction.assertLengthEquals(expectedLiferayVersions, liferayVersions);
+
+		for (int i = 0; i < liferayVersions.length; i++) {
+			validationAction.assertEquals(expectedLiferayVersions[i], liferayVersions[i]);
+		}
+
+		wizardAction.cancel();
+	}
+
+	@Test
 	public void checkLocation() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
