@@ -48,11 +48,13 @@ public class RemoveWorkspaceModulesAction extends SelectionProviderAction {
 
 				IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 
-				try {
-					deployer.uninstall(bundleProject);
-				}
-				catch (Exception e) {
-					GradleCore.logError(e);
+				if (bundleProject != null) {
+					try {
+						deployer.uninstall(bundleProject);
+					}
+					catch (Exception e) {
+						GradleCore.logError(e);
+					}
 				}
 			}
 		}
