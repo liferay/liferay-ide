@@ -53,10 +53,6 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(project.getName());
 
-		// TODO need to check with Charles
-
-		// dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay Community Edition Portal 7.0.4 GA5");
-
 		dialogAction.deleteRuntimFromPreferences(project.getName());
 	}
 
