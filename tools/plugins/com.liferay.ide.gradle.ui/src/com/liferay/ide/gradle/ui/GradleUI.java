@@ -18,6 +18,8 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.console.ConsolePlugin;
+import org.eclipse.ui.console.IConsoleManager;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -72,6 +74,12 @@ public class GradleUI extends Plugin {
 		super.start(context);
 
 		_plugin = this;
+
+		ConsolePlugin plugin = ConsolePlugin.getDefault();
+
+		IConsoleManager consoleManager = plugin.getConsoleManager();
+
+		consoleManager.addConsoleListener(new GradleConsoleListener(consoleManager));
 	}
 
 	/**
