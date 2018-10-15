@@ -200,7 +200,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 			@Override
 			public boolean belongsTo(Object family) {
-				return jobName.equals(family);
+				return family.equals(GradleCore.LIFERAY_WATCH_DEPLOY_TASK);
 			}
 
 			@Override

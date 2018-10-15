@@ -17,6 +17,7 @@ package com.liferay.ide.core.util;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * @author Terry Jia
@@ -37,6 +38,24 @@ public class ListUtil {
 		}
 
 		return set.contains(o);
+	}
+
+	public static boolean contains(Set<?> set, Set<?> objSet) {
+		if ((set == null) || (objSet == null)) {
+			return false;
+		}
+
+		Stream<?> objStream = objSet.stream();
+
+		return !objStream.anyMatch(o -> !set.contains(o));
+	}
+
+	public static boolean hasMultipleValues(Collection<?> collection) {
+		if (isNotEmpty(collection) && (collection.size() > 1)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public static boolean isEmpty(Collection<?> collection) {

@@ -143,4 +143,5 @@ public class GradleCore extends Plugin {
 
 	private final GradleProjectCreatedListener _gradleProjectCreatedListener;
 
+	public static final String LIFERAY_WATCH_DEPLOY_TASK = "Liferay Watch Task";
 }
