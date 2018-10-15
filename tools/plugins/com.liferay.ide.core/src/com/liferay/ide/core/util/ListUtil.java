@@ -39,6 +39,14 @@ public class ListUtil {
 		return set.contains(o);
 	}
 
+	public static boolean hasMultipleValues(Collection<?> collection) {
+		if (isNotEmpty(collection) && (collection.size() > 1)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public static boolean isEmpty(Collection<?> collection) {
 		if ((collection == null) || collection.isEmpty()) {
 			return true;
