@@ -368,6 +368,8 @@ public class ViewAction extends UIAction {
 		public void removeModule(String serverLabel, String projectName) {
 			ide.sleep(2000);
 
+			_getServers().setFocus();
+
 			_getServers().contextMenu(true, "Remove", serverLabel, projectName);
 		}
 
