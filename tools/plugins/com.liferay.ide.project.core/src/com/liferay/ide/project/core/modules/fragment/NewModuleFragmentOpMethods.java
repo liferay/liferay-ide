@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireUtil;
@@ -39,6 +40,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
@@ -154,6 +156,8 @@ public class NewModuleFragmentOpMethods {
 
 		Status retval = null;
 
+		Throwable errorStack = null;
+
 		try {
 			NewLiferayProjectProvider<BaseModuleOp> projectProvider = SapphireUtil.getContent(op.getProjectProvider());
 
@@ -164,13 +168,20 @@ public class NewModuleFragmentOpMethods {
 			if (retval.ok()) {
 				_updateBuildPrefs(op);
 			}
+			else if ((retval.severity() == Severity.ERROR) && (retval.exception() != null)) {
+				errorStack = retval.exception();
+			}
 		}
 		catch (Exception e) {
-			String msg = "Error creating Liferay module fragment project.";
+			errorStack = e;
+		}
 
-			ProjectCore.logError(msg, e);
+		if (errorStack != null) {
+			String readableStack = CoreUtil.getStackTrace(errorStack);
 
-			return Status.createErrorStatus(msg + " Please see Eclipse error log for more details.", e);
+			ProjectCore.logError(readableStack);
+
+			return Status.createErrorStatus(readableStack + "\t Please see Eclipse error log for more details.");
 		}
 
 		return retval;
