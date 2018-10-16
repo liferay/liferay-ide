@@ -14,19 +14,32 @@
 
 package com.liferay.ide.gradle.ui;
 
+import com.liferay.ide.ui.util.UIUtil;
+
+import org.eclipse.buildship.core.CorePlugin;
+import org.eclipse.buildship.core.event.Event;
+import org.eclipse.buildship.core.event.EventListener;
+import org.eclipse.buildship.core.event.ListenerRegistry;
+import org.eclipse.buildship.core.workspace.ProjectCreatedEvent;
+import org.eclipse.buildship.core.workspace.ProjectDeletedEvent;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsoleManager;
+import org.eclipse.ui.navigator.CommonNavigator;
+import org.eclipse.ui.navigator.CommonViewer;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
+@SuppressWarnings("restriction")
 public class GradleUI extends Plugin {
 
 	// The plug-in ID
@@ -80,6 +93,37 @@ public class GradleUI extends Plugin {
 		IConsoleManager consoleManager = plugin.getConsoleManager();
 
 		consoleManager.addConsoleListener(new RemoveOldWatchConsoleListener(consoleManager));
+
+		_projectListener = new EventListener() {
+
+			@Override
+			public void onEvent(Event event) {
+				if (event instanceof ProjectCreatedEvent || event instanceof ProjectDeletedEvent) {
+					UIUtil.async(
+						new Runnable() {
+
+							@Override
+							public void run() {
+								IViewPart view = UIUtil.findView("org.eclipse.wst.server.ui.ServersView");
+
+								if ((view != null) && (view instanceof CommonNavigator)) {
+									CommonNavigator nav = (CommonNavigator)view;
+
+									CommonViewer commonViewer = nav.getCommonViewer();
+
+									commonViewer.refresh();
+								}
+							}
+
+						});
+				}
+			}
+
+		};
+
+		_listenerRegistry = CorePlugin.listenerRegistry();
+
+		_listenerRegistry.addEventListener(_projectListener);
 	}
 
 	/**
@@ -91,9 +135,14 @@ public class GradleUI extends Plugin {
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 
+		_listenerRegistry.removeEventListener(_projectListener);
+
 		super.stop(context);
 	}
 
 	private static GradleUI _plugin;
+
+	private ListenerRegistry _listenerRegistry;
+	private EventListener _projectListener;
 
 }
