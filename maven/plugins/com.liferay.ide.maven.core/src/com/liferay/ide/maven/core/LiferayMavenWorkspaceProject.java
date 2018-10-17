@@ -40,4 +40,9 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject {
 		return super.adapt(adapterType);
 	}
 
+	@Override
+	public boolean isWatchable() {
+		return false;
+	}
+
 }

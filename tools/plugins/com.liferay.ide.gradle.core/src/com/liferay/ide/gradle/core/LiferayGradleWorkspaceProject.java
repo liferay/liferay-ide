@@ -33,6 +33,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -85,6 +86,15 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 		}
 
 		return retVal;
+	}
+
+	@Override
+	public boolean isWatchable() {
+		IProject project = getProject();
+
+		IFile settingsGradleFile = project.getFile("settings.gradle");
+
+		return GradleUtil.isWatchableProject(settingsGradleFile);
 	}
 
 	@Override

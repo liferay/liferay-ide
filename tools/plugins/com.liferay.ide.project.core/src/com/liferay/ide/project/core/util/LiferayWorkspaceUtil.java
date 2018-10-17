@@ -481,6 +481,14 @@ public class LiferayWorkspaceUtil {
 		return false;
 	}
 
+	public static boolean isValidGradleWorkspaceProject(IProject project) {
+		if (project == null) {
+			return false;
+		}
+
+		return isValidGradleWorkspaceLocation(project.getLocation());
+	}
+
 	public static boolean isValidMavenWorkspaceLocation(String location) {
 		File workspaceDir = new File(location);
 
