@@ -30,25 +30,24 @@ public class RemoveOldWatchConsoleListener implements IConsoleListener {
 	}
 
 	@Override
-	public void consolesAdded(IConsole[] addConsoles) {
-		IConsole[] allConsoles = _consoleManager.getConsoles();
+	public void consolesAdded(IConsole[] consoles) {
+		//only one watch task will be launched in the same time
+		IConsole addedConsole = consoles[0];
 
-		IConsole[] consoles = Stream.of(
-			allConsoles
+		IConsole[] consolesToRemove = Stream.of(
+			_consoleManager.getConsoles()
 		).filter(
 			console -> {
 				//filter out the out of date consoles
 				String consoleName = console.getName();
 
-				//only one watch task will be launched in the same time
-
-				return !consoleName.equals(addConsoles[0].getName());
+				return !consoleName.equals(addedConsole.getName());
 			}
 		).filter(
 			console -> {
-				Class<? extends IConsole> clazz = console.getClass();
+				Class<? extends IConsole> consoleClass = console.getClass();
 
-				if ("GradleConsole".equals(clazz.getSimpleName())) {
+				if ("GradleConsole".equals(consoleClass.getSimpleName())) {
 					String consoleName = console.getName();
 
 					if (consoleName.contains("watch")) {
@@ -62,7 +61,7 @@ public class RemoveOldWatchConsoleListener implements IConsoleListener {
 			IConsole[]::new
 		);
 
-		_consoleManager.removeConsoles(consoles);
+		_consoleManager.removeConsoles(consolesToRemove);
 	}
 
 	@Override
