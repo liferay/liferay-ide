@@ -33,7 +33,6 @@ import java.util.stream.Stream;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.core.JavaCore;
 
 /**
  * @author Simon Jiang
@@ -84,12 +83,6 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 			project -> !project.equals(getProject())
 		).filter(
 			project -> LiferayCore.create(ILiferayProject.class, project) != null
-		).filter(
-			project -> JavaCore.create(project) != null
-		).filter(
-			project -> JavaCore.create(
-				project
-			).isOpen()
 		).filter(
 			project -> location.isPrefixOf(project.getLocation())
 		).collect(
