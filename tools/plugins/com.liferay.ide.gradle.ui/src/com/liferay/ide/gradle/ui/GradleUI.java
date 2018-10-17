@@ -104,12 +104,12 @@ public class GradleUI extends Plugin {
 
 							@Override
 							public void run() {
-								IViewPart view = UIUtil.findView("org.eclipse.wst.server.ui.ServersView");
+								IViewPart viewPart = UIUtil.findView("org.eclipse.wst.server.ui.ServersView");
 
-								if ((view != null) && (view instanceof CommonNavigator)) {
-									CommonNavigator nav = (CommonNavigator)view;
+								if ((viewPart != null) && (viewPart instanceof CommonNavigator)) {
+									CommonNavigator commandNavigator = (CommonNavigator)viewPart;
 
-									CommonViewer commonViewer = nav.getCommonViewer();
+									CommonViewer commonViewer = commandNavigator.getCommonViewer();
 
 									commonViewer.refresh();
 								}
