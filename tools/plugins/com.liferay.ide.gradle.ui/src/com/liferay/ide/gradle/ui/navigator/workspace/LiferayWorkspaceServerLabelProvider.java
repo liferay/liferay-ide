@@ -45,11 +45,13 @@ public class LiferayWorkspaceServerLabelProvider extends LabelProvider implement
 
 		IProject project = (IProject)element;
 
-		if (ListUtil.contains(iWorkspaceProject.watching(), project)) {
-			decoration.addSuffix(" [watching]");
-		}
-		else {
-			decoration.addSuffix("");
+		if (iWorkspaceProject != null) {
+			if (ListUtil.contains(iWorkspaceProject.watching(), project)) {
+				decoration.addSuffix(" [watching]");
+			}
+			else {
+				decoration.addSuffix("");
+			}
 		}
 	}
 
