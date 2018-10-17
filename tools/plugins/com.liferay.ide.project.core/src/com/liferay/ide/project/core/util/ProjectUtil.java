@@ -1196,11 +1196,12 @@ public class ProjectUtil {
 			else {
 				IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-				IWorkspaceProject iWorkspaceProject = LiferayCore.create(IWorkspaceProject.class, workspaceProject);
+				IWorkspaceProject liferayWorkspaceProject = LiferayCore.create(
+					IWorkspaceProject.class, workspaceProject);
 
 				// use watch way instead of old deployment
 
-				if ((iWorkspaceProject != null) && iWorkspaceProject.isWatchable() &&
+				if ((liferayWorkspaceProject != null) && liferayWorkspaceProject.isWatchable() &&
 					LiferayWorkspaceUtil.inLiferayWorkspace(project)) {
 
 					return false;
