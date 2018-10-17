@@ -121,9 +121,9 @@ public class GradleUI extends Plugin {
 
 		};
 
-		_listenerRegistry = CorePlugin.listenerRegistry();
+		ListenerRegistry listenerRegistry = CorePlugin.listenerRegistry();
 
-		_listenerRegistry.addEventListener(_projectListener);
+		listenerRegistry.addEventListener(_projectListener);
 	}
 
 	/**
@@ -135,14 +135,15 @@ public class GradleUI extends Plugin {
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 
-		_listenerRegistry.removeEventListener(_projectListener);
+		ListenerRegistry listenerRegistry = CorePlugin.listenerRegistry();
+
+		listenerRegistry.removeEventListener(_projectListener);
 
 		super.stop(context);
 	}
 
 	private static GradleUI _plugin;
 
-	private ListenerRegistry _listenerRegistry;
 	private EventListener _projectListener;
 
 }
