@@ -79,7 +79,7 @@ public class GradleUI extends Plugin {
 
 		IConsoleManager consoleManager = plugin.getConsoleManager();
 
-		consoleManager.addConsoleListener(new GradleConsoleListener(consoleManager));
+		consoleManager.addConsoleListener(new RemoveOldWatchConsoleListener(consoleManager));
 	}
 
 	/**

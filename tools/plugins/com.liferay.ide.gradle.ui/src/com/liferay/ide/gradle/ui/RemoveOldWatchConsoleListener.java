@@ -23,9 +23,9 @@ import org.eclipse.ui.console.IConsoleManager;
 /**
  * @author Charles Wu
  */
-public class GradleConsoleListener implements IConsoleListener {
+public class RemoveOldWatchConsoleListener implements IConsoleListener {
 
-	public GradleConsoleListener(IConsoleManager consoleManager) {
+	public RemoveOldWatchConsoleListener(IConsoleManager consoleManager) {
 		_consoleManager = consoleManager;
 	}
 
