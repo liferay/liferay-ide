@@ -41,6 +41,7 @@ import java.security.MessageDigest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -295,12 +296,14 @@ public class CoreUtil {
 	public static List<IProject> getJavaProjects(List<IProject> projects) {
 		Stream<IProject> stream = projects.stream();
 
-		return stream.filter(
-			project -> JavaCore.create(project) != null
+		return stream.map(
+			JavaCore::create
 		).filter(
-			project -> JavaCore.create(
-				project
-			).isOpen()
+			Objects::nonNull
+		).filter(
+			IJavaProject::isOpen
+		).map(
+			IJavaProject::getProject
 		).collect(
 			Collectors.toList()
 		);
