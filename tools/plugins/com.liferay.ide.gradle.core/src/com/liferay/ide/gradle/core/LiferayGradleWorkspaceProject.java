@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -104,18 +105,22 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 		Set<IProject> jarProjects = new HashSet<>();
 		Set<IProject> warProjects = new HashSet<>();
 
-		for (IProject project : childProjects) {
-			IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
+		Stream<IProject> stream = childProjects.stream();
 
-			if (bundleProject != null) {
+		stream.map(
+			project -> LiferayCore.create(IBundleProject.class, project)
+		).filter(
+			Objects::nonNull
+		).forEach(
+			bundleProject -> {
 				if ("jar".equals(bundleProject.getBundleShape())) {
-					jarProjects.add(project);
+					jarProjects.add(bundleProject.getProject());
 				}
 				else if ("war".equals(bundleProject.getBundleShape())) {
-					warProjects.add(project);
+					warProjects.add(bundleProject.getProject());
 				}
 			}
-		}
+		);
 
 		if (childProjects.contains(getProject())) {
 			Set<IProject> roots = new HashSet<>();
