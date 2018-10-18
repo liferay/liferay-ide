@@ -17,7 +17,7 @@ package com.liferay.ide.gradle.ui.action;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.gradle.core.GradleCore;
+import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 import com.liferay.ide.ui.util.UIUtil;
@@ -85,7 +85,7 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 					}
 				}
 				catch (CoreException ce) {
-					GradleCore.logError(ce);
+					LiferayGradleCore.logError(ce);
 				}
 			}
 		}

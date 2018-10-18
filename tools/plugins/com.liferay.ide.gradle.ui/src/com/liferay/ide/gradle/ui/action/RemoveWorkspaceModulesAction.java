@@ -16,7 +16,7 @@ package com.liferay.ide.gradle.ui.action;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.gradle.core.GradleCore;
+import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 
 import java.util.Iterator;
@@ -53,7 +53,7 @@ public class RemoveWorkspaceModulesAction extends SelectionProviderAction {
 						deployer.uninstall(bundleProject);
 					}
 					catch (Exception e) {
-						GradleCore.logError(e);
+						LiferayGradleCore.logError(e);
 					}
 				}
 			}

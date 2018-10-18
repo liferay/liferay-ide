@@ -76,7 +76,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 				config.save();
 			}
 			catch (ConfigurationException ce) {
-				GradleCore.logError(ce);
+				LiferayGradleCore.logError(ce);
 			}
 		}
 
@@ -86,7 +86,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 		}
 		catch (CoreException ce) {
-			GradleCore.logError(ce);
+			LiferayGradleCore.logError(ce);
 		}
 
 		return Status.OK_STATUS;
@@ -116,7 +116,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 			}
 		}
 		catch (IOException ioe) {
-			return GradleCore.createErrorStatus("Error updating gradle project dependency", ioe);
+			return LiferayGradleCore.createErrorStatus("Error updating gradle project dependency", ioe);
 		}
 
 		return Status.OK_STATUS;
@@ -124,7 +124,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 
 	private IStatus _runGradleTask(String task, IProgressMonitor monitor) {
 		if (FileUtil.notExists(_gradleBuildFile)) {
-			return GradleCore.createErrorStatus("No build.gradle file");
+			return LiferayGradleCore.createErrorStatus("No build.gradle file");
 		}
 
 		IStatus status = Status.OK_STATUS;
@@ -141,7 +141,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 			monitor.worked(10);
 		}
 		catch (Exception e) {
-			status = GradleCore.createErrorStatus("Error running Gradle goal " + task, e);
+			status = LiferayGradleCore.createErrorStatus("Error running Gradle goal " + task, e);
 		}
 
 		return status;

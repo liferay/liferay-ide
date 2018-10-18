@@ -15,7 +15,7 @@
 package com.liferay.ide.gradle.ui;
 
 import com.liferay.ide.core.util.StringUtil;
-import com.liferay.ide.gradle.core.GradleCore;
+import com.liferay.ide.gradle.core.LiferayGradleCore;
 
 import java.util.stream.Stream;
 
@@ -37,7 +37,7 @@ public class RemoveOldWatchConsoleListener implements IConsoleListener {
 		//only one watch task will be launched in the same time
 		String addedConsoleName = consoles[0].getName();
 
-		if (!addedConsoleName.startsWith(GradleCore.LIFERAY_WATCH)) {
+		if (!addedConsoleName.startsWith(LiferayGradleCore.LIFERAY_WATCH)) {
 			return;
 		}
 
@@ -55,7 +55,7 @@ public class RemoveOldWatchConsoleListener implements IConsoleListener {
 				Class<? extends IConsole> consoleClass = console.getClass();
 
 				if ("GradleConsole".equals(consoleClass.getSimpleName()) &&
-					StringUtil.startsWith(console.getName(), GradleCore.LIFERAY_WATCH)) {
+					StringUtil.startsWith(console.getName(), LiferayGradleCore.LIFERAY_WATCH)) {
 
 					return true;
 				}

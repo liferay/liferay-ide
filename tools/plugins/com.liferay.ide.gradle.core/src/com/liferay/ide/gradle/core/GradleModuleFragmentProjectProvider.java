@@ -37,6 +37,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Terry Jia
  * @author Lovett Li
+ * @author Simon Jiang
  */
 public class GradleModuleFragmentProjectProvider
 	extends AbstractLiferayProjectProvider implements NewLiferayProjectProvider<NewModuleFragmentOp> {
@@ -92,14 +93,12 @@ public class GradleModuleFragmentProjectProvider
 			BladeCLI.execute(sb.toString());
 		}
 		catch (Exception e) {
-			return GradleCore.createErrorStatus("Could not create module fragment project.", e);
+			return LiferayGradleCore.createErrorStatus("Could not create module fragment project.", e);
 		}
 
 		NewModuleFragmentOpMethods.copyOverrideFiles(op);
 
-		IPath projecLocation = location.append(projectName);
-
-		CoreUtil.openProject(projectName, projecLocation, monitor);
+		IPath projectLocation = location.append(projectName);
 
 		boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
 		boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
@@ -116,7 +115,7 @@ public class GradleModuleFragmentProjectProvider
 				if (liferayWorkspaceProjectModulesDir != null) {
 					IPath modulesPath = workspaceLocation.append(liferayWorkspaceProjectModulesDir);
 
-					if (modulesPath.isPrefixOf(projecLocation)) {
+					if (modulesPath.isPrefixOf(projectLocation)) {
 						inWorkspacePath = true;
 					}
 				}
@@ -127,7 +126,8 @@ public class GradleModuleFragmentProjectProvider
 			GradleUtil.refreshProject(liferayWorkspaceProject);
 		}
 		else {
-			GradleUtil.sychronizeProject(projecLocation, monitor);
+			CoreUtil.openProject(projectName, projectLocation, monitor);
+			GradleUtil.sychronizeProject(projectLocation, monitor);
 		}
 
 		return retval;
@@ -143,7 +143,8 @@ public class GradleModuleFragmentProjectProvider
 		IStatus retval = Status.OK_STATUS;
 
 		if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path)) {
-			retval = GradleCore.createErrorStatus(" Can not set WorkspaceProject root folder as project directory.");
+			retval = LiferayGradleCore.createErrorStatus(
+				" Can not set WorkspaceProject root folder as project directory.");
 		}
 
 		return retval;

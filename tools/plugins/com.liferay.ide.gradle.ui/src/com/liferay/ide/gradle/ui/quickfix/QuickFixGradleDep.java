@@ -16,8 +16,8 @@ package com.liferay.ide.gradle.ui.quickfix;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.GradleUtil;
+import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.gradle.ui.GradleUI;
@@ -135,7 +135,7 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 						}
 					}
 					catch (Exception e) {
-						GradleCore.logError("Gradle dependence got error", e);
+						LiferayGradleCore.logError("Gradle dependence got error", e);
 					}
 				}
 
@@ -214,7 +214,7 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 			}
 		}
 		catch (Exception e) {
-			GradleCore.logError("Gradle dependence got error", e);
+			LiferayGradleCore.logError("Gradle dependence got error", e);
 		}
 	}
 
@@ -277,7 +277,7 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 			}
 		}
 		catch (Exception e) {
-			GradleCore.logError("Gradle dependence got error", e);
+			LiferayGradleCore.logError("Gradle dependence got error", e);
 		}
 	}
 

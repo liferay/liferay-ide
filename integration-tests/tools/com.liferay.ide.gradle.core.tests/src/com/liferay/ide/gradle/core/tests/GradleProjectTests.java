@@ -18,7 +18,7 @@ import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.gradle.core.GradleCore;
+import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.core.LiferayGradleProject;
 import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
@@ -156,13 +156,13 @@ public class GradleProjectTests extends ProjectBase {
 
 		assertProjectExists(ips);
 
-		CustomModel customModel = GradleCore.getToolingModel(CustomModel.class, gradleProject.getProject());
+		CustomModel customModel = LiferayGradleCore.getToolingModel(CustomModel.class, gradleProject.getProject());
 
 		Assert.assertNotNull(customModel);
 
 		Assert.assertFalse(customModel.hasPlugin("not.a.plugin"));
 
-		Assert.assertTrue(customModel.hasPlugin("org.dm.gradle.plugins.bundle.BundlePlugin"));
+		Assert.assertTrue(customModel.hasPlugin("aQute.bnd.gradle.BndWorkspacePlugin"));
 
 		deleteProject(ips);
 	}

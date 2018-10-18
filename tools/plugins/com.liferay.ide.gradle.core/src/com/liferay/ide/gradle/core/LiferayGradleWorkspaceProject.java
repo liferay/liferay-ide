@@ -23,7 +23,6 @@ import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import com.liferay.ide.server.core.ILiferayServer;
-import com.liferay.ide.server.core.portal.PortalServerBehavior;
 
 import java.io.File;
 
@@ -39,15 +38,10 @@ import java.util.stream.Stream;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
-import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Andy Wu
@@ -178,7 +172,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 		String projectName = getProject().getName();
 
-		String jobName = projectName + ":" + GradleCore.LIFERAY_WATCH;
+		String jobName = projectName + ":" + LiferayGradleCore.LIFERAY_WATCH;
 
 		IJobManager jobManager = Job.getJobManager();
 
@@ -196,40 +190,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 			}
 		}
 
-		Job job = new Job(jobName) {
-
-			@Override
-			public boolean belongsTo(Object family) {
-				return jobName.equals(family);
-			}
-
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					Stream.of(
-						ServerCore.getServers()
-					).map(
-						server -> (PortalServerBehavior)server.loadAdapter(
-							PortalServerBehavior.class, new NullProgressMonitor())
-					).filter(
-						serverBehavior -> serverBehavior != null
-					).forEach(
-						serverBehavior -> serverBehavior.refreshSourceLookup()
-					);
-
-					String[] args = {"--continuous", "--continue"};
-
-					GradleUtil.runGradleTask(
-						getProject(), tasks.toArray(new String[0]), args, GradleCore.LIFERAY_WATCH, false, monitor);
-				}
-				catch (Exception e) {
-					return GradleCore.createErrorStatus("Error running watch task for project " + getProject(), e);
-				}
-
-				return Status.OK_STATUS;
-			}
-
-		};
+		Job job = new WatchJob(getProject(), tasks);
 
 		job.addJobChangeListener(
 			new JobChangeAdapter() {

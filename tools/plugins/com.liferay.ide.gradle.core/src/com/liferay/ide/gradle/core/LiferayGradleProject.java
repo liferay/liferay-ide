@@ -34,8 +34,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import org.eclipse.buildship.core.GradleBuild;
+import org.eclipse.buildship.core.GradleCore;
+import org.eclipse.buildship.core.GradleWorkspace;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -49,10 +53,6 @@ import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-
-import org.gradle.tooling.BuildLauncher;
-import org.gradle.tooling.GradleConnector;
-import org.gradle.tooling.ProjectConnection;
 
 /**
  * @author Gregory Amerson
@@ -102,42 +102,44 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 	}
 
 	@Override
-	public IPath getOutputBundle(boolean cleanBuild, IProgressMonitor monitor) throws CoreException {
-		ProjectConnection connection = null;
-
+	public IPath getOutputBundle(boolean cleanBuild, final IProgressMonitor monitor) throws CoreException {
 		try {
-			GradleConnector connector = GradleConnector.newConnector();
+			GradleWorkspace gradleWorkspace = GradleCore.getWorkspace();
 
-			connector = connector.forProjectDirectory(FileUtil.getFile(getProject()));
+			Optional<GradleBuild> build = gradleWorkspace.getBuild(getProject());
 
-			connection = connector.connect();
-
-			BuildLauncher launcher = connection.newBuild();
-
-			BlockingResultHandler<Object> handler = new BlockingResultHandler<>(Object.class);
+			GradleBuild gradleBuild = build.get();
 
 			if (cleanBuild) {
-				launcher = launcher.forTasks("clean", "assemble");
+				gradleBuild.withConnection(
+					connection -> {
+						connection.newBuild(
+						).forTasks(
+							"clean", "assemble"
+						).run();
 
-				launcher.run(handler);
+						return null;
+					},
+					monitor);
 			}
 			else {
-				launcher = launcher.forTasks("assemble");
+				gradleBuild.withConnection(
+					connection -> {
+						connection.newBuild(
+						).forTasks(
+							"assemble"
+						).run();
 
-				launcher.run(handler);
+						return null;
+					},
+
+					monitor);
 			}
-
-			handler.getResult();
 		}
 		catch (Exception e) {
-			GradleCore.logError("Project " + getProject().getName() + " build output error", e);
+			LiferayGradleCore.logError("Project " + getProject().getName() + " build output error", e);
 
 			return null;
-		}
-		finally {
-			if (connection != null) {
-				connection.close();
-			}
 		}
 
 		IPath outputBundlePath = getOutputBundlePath();
@@ -179,7 +181,11 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
 				IPath retval = null;
 
-				CustomModel model = GradleCore.getToolingModel(CustomModel.class, gradleProject);
+				CustomModel model = LiferayGradleCore.getToolingModel(CustomModel.class, gradleProject);
+
+				if (model == null) {
+					return retval;
+				}
 
 				Set<File> outputFiles = model.getOutputFiles();
 
@@ -354,7 +360,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 			}
 		}
 		catch (CoreException ce) {
-			GradleCore.logError(ce);
+			LiferayGradleCore.logError(ce);
 		}
 
 		return null;

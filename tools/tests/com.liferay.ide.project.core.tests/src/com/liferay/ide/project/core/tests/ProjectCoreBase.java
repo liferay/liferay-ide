@@ -25,6 +25,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
+import com.liferay.ide.project.core.jobs.JobUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.project.core.model.PluginType;
@@ -127,6 +128,8 @@ public class ProjectCoreBase extends ServerCoreBase
             Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
             Job.getJobManager().join(ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor());
             Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
+            Job.getJobManager().join("org.eclipse.buildship.core.jobs", new NullProgressMonitor());
+            JobUtil.waitForLiferayProjectJob();
             Thread.sleep(200);
             Job.getJobManager().beginRule(root = ResourcesPlugin.getWorkspace().getRoot(), null);
         }

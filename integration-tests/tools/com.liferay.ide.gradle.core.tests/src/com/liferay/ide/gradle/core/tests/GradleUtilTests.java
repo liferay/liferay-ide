@@ -18,7 +18,7 @@ import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.test.core.base.support.ImportProjectSupport;
 import com.liferay.ide.test.project.core.base.ProjectBase;
 
-import org.eclipse.buildship.core.CorePlugin;
+import org.eclipse.buildship.core.internal.CorePlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;

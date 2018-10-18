@@ -15,7 +15,7 @@
 package com.liferay.ide.gradle.ui.handler;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.gradle.core.GradleCore;
+import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.project.ui.handlers.AbstractCompareFileHandler;
 
 import java.io.BufferedReader;
@@ -62,7 +62,7 @@ public class CompareFileHandler extends AbstractCompareFileHandler {
 
 			String hookFolder = currentLocation.substring(currentLocation.lastIndexOf("META-INF"));
 
-			IPath stateLocation = GradleCore.getDefaultStateLocation();
+			IPath stateLocation = LiferayGradleCore.getDefaultStateLocation();
 
 			IPath templateLocation = FileUtil.pathAppend(stateLocation, fragment, hookFolder);
 
