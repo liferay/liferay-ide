@@ -101,8 +101,6 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 	@Override
 	public void watch(Set<IProject> childProjects) {
-		boolean hasRoot = childProjects.contains(getProject());
-
 		Set<IProject> jarProjects = new HashSet<>();
 		Set<IProject> warProjects = new HashSet<>();
 
@@ -119,7 +117,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 			}
 		}
 
-		if (hasRoot) {
+		if (childProjects.contains(getProject())) {
 			Set<IProject> roots = new HashSet<>();
 
 			roots.add(getProject());
