@@ -60,6 +60,7 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 	@Label(standard = "build type")
 	@Service(impl = WorkspaceProjectProviderDefaultValueService.class)
 	@Service(impl = WorkspaceProjectProviderPossibleValuesService.class)
+	@Service(impl = WorkspaceProjectProviderValidationService.class)
 	@Type(base = ILiferayProjectProvider.class)
 	public ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty(TYPE, "ProjectProvider");
 

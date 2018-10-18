@@ -17,6 +17,8 @@ package com.liferay.ide.project.core.workspace;
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
 import com.liferay.ide.project.core.service.TargetLiferayVersionDefaultValueService;
 import com.liferay.ide.project.core.service.TargetLiferayVersionPossibleValuesService;
+import com.liferay.ide.project.core.service.TargetPlatformDefaultValueService;
+import com.liferay.ide.project.core.service.TargetPlatformPossibleValuesService;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Type;
@@ -51,6 +53,8 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
 	public Value<Path> getLocation();
 
+	public Value<String> getTargetPlatform();
+
 	public Value<Boolean> getUseDefaultLocation();
 
 	public Value<String> getWorkspaceName();
@@ -60,6 +64,8 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	public void setLocation(Path value);
 
 	public void setLocation(String value);
+
+	public void setTargetPlatform(String value);
 
 	public void setUseDefaultLocation(Boolean value);
 
@@ -85,6 +91,11 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
 	@Service(impl = NewLiferayWorkspaceServerNameService.class)
 	public ValueProperty PROP_SERVER_NAME = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME);
+
+	@Label(standard = "target platform")
+	@Service(impl = TargetPlatformDefaultValueService.class)
+	@Service(impl = TargetPlatformPossibleValuesService.class)
+	public ValueProperty PROP_TARGET_PLATFORM = new ValueProperty(TYPE, "TargetPlatform");
 
 	@DefaultValue(text = "true")
 	@Label(standard = "use default location")

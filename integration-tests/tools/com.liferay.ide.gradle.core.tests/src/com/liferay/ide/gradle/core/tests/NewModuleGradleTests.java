@@ -219,7 +219,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setPackageName("com.liferay.test");
 		op.setServiceName("com.liferay.portal.kernel.json.JSONFactoryUtil");
 
-		createOrImportAndBuild(op, project.getName(), false);
+		createOrImportAndBuild(op, project.getName(), null, false);
 
 		deleteProject(project.getName());
 	}
@@ -267,7 +267,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		op.setServiceName("com.liferay.portal.kernel.service.UserLocalServiceWrapper");
 		op.setComponentName("MyServiceWrapper");
 
-		createOrImportAndBuild(op, project.getName(), false);
+		createOrImportAndBuild(op, project.getName(), null, false);
 
 		deleteProject(project.getName());
 	}

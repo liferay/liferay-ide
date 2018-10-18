@@ -45,6 +45,8 @@ public class LiferayWorkspaceGradleSupport extends LiferayWorkspaceSupport {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(getName()));
 	}
 

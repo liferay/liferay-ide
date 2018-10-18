@@ -55,6 +55,13 @@ public class TargetLiferayVersionListener extends FilteredListener<PropertyConte
 				op.setBundleUrl(WorkspaceConstants.BUNDLE_URL_CE_7_0);
 			}
 		}
+
+		if (bundleVersion.equals("7.1")) {
+			op.setTargetPlatform(WorkspaceConstants.TARGET_PLATFORM_VERSIONS_7_1[0]);
+		}
+		else {
+			op.setTargetPlatform(WorkspaceConstants.TARGET_PLATFORM_VERSIONS_7_0[0]);
+		}
 	}
 
 }
