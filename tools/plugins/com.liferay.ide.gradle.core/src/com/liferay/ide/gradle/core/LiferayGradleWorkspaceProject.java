@@ -123,7 +123,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 		);
 
 		if (childProjects.contains(getProject())) {
-			_excute(true, Collections.singleton(getProject()), "watch");
+			_executeTask(true, Collections.singleton(getProject()), "watch");
 
 			stream = getChildProjects().stream();
 
@@ -140,10 +140,10 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 			);
 		}
 		else {
-			_excute(false, jarProjects, "watch");
+			_executeTask(false, jarProjects, "watch");
 		}
 
-		_excute(false, warProjects, "deploy");
+		_executeTask(false, warProjects, "deploy");
 	}
 
 	@Override
@@ -173,7 +173,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 		return taskPath;
 	}
 
-	private void _excute(boolean root, Set<IProject> childProjects, String taskName) {
+	private void _executeTask(boolean root, Set<IProject> childProjects, String taskName) {
 		final List<String> tasks = new ArrayList<>();
 
 		if (root) {
