@@ -138,13 +138,12 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 			).forEach(
 				warProjects::add
 			);
-
-			_excute(false, warProjects, "deploy");
 		}
 		else {
 			_excute(false, jarProjects, "watch");
-			_excute(false, warProjects, "deploy");
 		}
+
+		_excute(false, warProjects, "deploy");
 	}
 
 	@Override
