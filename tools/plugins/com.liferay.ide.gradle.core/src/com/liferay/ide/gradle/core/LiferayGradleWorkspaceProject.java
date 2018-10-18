@@ -154,23 +154,23 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 	private String _convertToModuleTaskPath(IPath moduleLocation, String taskName) {
 		IProject project = getProject();
 
-		IPath workspaceLocation = project.getLocation();
+		IPath projectLocation = project.getLocation();
 
-		String watchTask = ":" + taskName;
+		String taskPath = ":" + taskName;
 
 		for (int i = moduleLocation.segmentCount() - 1; i >= 0; i--) {
 			String segment = moduleLocation.segment(i);
 
-			watchTask = ":" + segment + watchTask;
+			taskPath = ":" + segment + taskPath;
 
 			IPath currentLocation = moduleLocation.removeLastSegments(moduleLocation.segmentCount() - i);
 
-			if (workspaceLocation.equals(currentLocation)) {
+			if (projectLocation.equals(currentLocation)) {
 				break;
 			}
 		}
 
-		return watchTask;
+		return taskPath;
 	}
 
 	private void _excute(boolean root, Set<IProject> childProjects, String taskName) {
