@@ -236,7 +236,8 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 					String[] args = {"--continuous", "--continue"};
 
-					GradleUtil.runGradleTask(getProject(), tasks.toArray(new String[0]), args, monitor);
+					GradleUtil.runGradleTask(
+						getProject(), tasks.toArray(new String[0]), args, "liferay-watch", monitor);
 				}
 				catch (Exception e) {
 					return GradleCore.createErrorStatus(

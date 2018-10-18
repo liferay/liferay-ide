@@ -38,6 +38,7 @@ import org.eclipse.buildship.core.configuration.GradleProjectNature;
 import org.eclipse.buildship.core.configuration.WorkspaceConfiguration;
 import org.eclipse.buildship.core.launch.GradleLaunchConfigurationManager;
 import org.eclipse.buildship.core.launch.GradleRunConfigurationAttributes;
+import org.eclipse.buildship.core.launch.GradleRunConfigurationDelegate;
 import org.eclipse.buildship.core.projectimport.ProjectImportConfiguration;
 import org.eclipse.buildship.core.util.binding.Validator;
 import org.eclipse.buildship.core.util.binding.Validators;
@@ -56,7 +57,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 
@@ -194,6 +197,33 @@ public class GradleUtil {
 		launchConfigurationWC.doSave();
 
 		launchConfigurationWC.launch(ILaunchManager.RUN_MODE, monitor);
+	}
+
+	public static void runGradleTask(
+			IProject project, String[] tasks, String[] arguments, String launchName, IProgressMonitor monitor)
+		throws CoreException {
+
+		GradleRunConfigurationAttributes runAttributes = _getRunConfigurationAttributes(
+			project, Arrays.asList(tasks), Arrays.asList(arguments));
+
+		DebugPlugin plugin = DebugPlugin.getDefault();
+
+		ILaunchManager launchManager = plugin.getLaunchManager();
+
+		ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(
+			GradleRunConfigurationDelegate.ID);
+
+		ILaunchConfigurationWorkingCopy launchConfiguration = launchConfigurationType.newInstance(null, launchName);
+
+		launchConfiguration.setAttribute("org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", Boolean.TRUE);
+		launchConfiguration.setAttribute("org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", Boolean.TRUE);
+		launchConfiguration.setAttribute("org.eclipse.debug.ui.ATTR_PRIVATE", Boolean.TRUE);
+
+		runAttributes.apply(launchConfiguration);
+
+		//run without persist configuration
+
+		launchConfiguration.launch(ILaunchManager.RUN_MODE, monitor);
 	}
 
 	public static IStatus sychronizeProject(IPath dir, IProgressMonitor monitor) {
