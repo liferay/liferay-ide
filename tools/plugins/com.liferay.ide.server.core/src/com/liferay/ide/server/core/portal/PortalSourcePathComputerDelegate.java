@@ -21,6 +21,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -77,12 +78,10 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 			project -> LiferayCore.create(IWorkspaceProject.class, project)
 		).filter(
 			workspaceProject -> workspaceProject != null
+		).map(
+			workspaceProject -> CoreUtil.getJavaProjects(workspaceProject.getChildProjects())
 		).flatMap(
-			workspaceProject -> {
-				List<IProject> childProjects = workspaceProject.getChildProjects();
-
-				return childProjects.stream();
-			}
+			Collection::stream
 		).forEach(
 			childProject -> _addSourceContainers(configuration, monitor, sourceContainers, childProject)
 		);

@@ -41,7 +41,10 @@ import java.security.MessageDigest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -288,6 +291,22 @@ public class CoreUtil {
 
 	public static IFile getIFileFromWorkspaceRoot(IPath path) {
 		return getWorkspaceRoot().getFile(path);
+	}
+
+	public static List<IProject> getJavaProjects(List<IProject> projects) {
+		Stream<IProject> stream = projects.stream();
+
+		return stream.map(
+			JavaCore::create
+		).filter(
+			Objects::nonNull
+		).filter(
+			IJavaProject::isOpen
+		).map(
+			IJavaProject::getProject
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	public static IProject getLiferayProject(IResource resource) {
