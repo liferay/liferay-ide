@@ -123,11 +123,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 		);
 
 		if (childProjects.contains(getProject())) {
-			Set<IProject> roots = new HashSet<>();
-
-			roots.add(getProject());
-
-			_excute(true, roots, "watch");
+			_excute(true, Collections.singleton(getProject()), "watch");
 
 			for (IProject project : getChildProjects()) {
 				IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
