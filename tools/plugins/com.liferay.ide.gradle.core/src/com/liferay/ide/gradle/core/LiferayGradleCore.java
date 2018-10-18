@@ -19,8 +19,8 @@ import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 
-import org.eclipse.buildship.core.CorePlugin;
-import org.eclipse.buildship.core.event.ListenerRegistry;
+import org.eclipse.buildship.core.internal.CorePlugin;
+import org.eclipse.buildship.core.internal.event.ListenerRegistry;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
@@ -38,7 +38,9 @@ import org.osgi.framework.BundleContext;
  * @author Andy Wu
  */
 @SuppressWarnings("restriction")
-public class GradleCore extends Plugin {
+public class LiferayGradleCore extends Plugin {
+
+	public static final String LIFERAY_WATCH_DEPLOY_TASK = "Liferay Watch Task";
 
 	public static final String PLUGIN_ID = "com.liferay.ide.gradle.core";
 
@@ -67,7 +69,7 @@ public class GradleCore extends Plugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static GradleCore getDefault() {
+	public static LiferayGradleCore getDefault() {
 		return _plugin;
 	}
 
@@ -113,7 +115,7 @@ public class GradleCore extends Plugin {
 	/**
 	 * The constructor
 	 */
-	public GradleCore() {
+	public LiferayGradleCore() {
 		_gradleProjectCreatedListener = new GradleProjectCreatedListener();
 	}
 
@@ -139,7 +141,7 @@ public class GradleCore extends Plugin {
 		super.stop(context);
 	}
 
-	private static GradleCore _plugin;
+	private static LiferayGradleCore _plugin;
 
 	private final GradleProjectCreatedListener _gradleProjectCreatedListener;
 

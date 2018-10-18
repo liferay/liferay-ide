@@ -130,7 +130,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 			handler.getResult();
 		}
 		catch (Exception e) {
-			GradleCore.logError("Project " + getProject().getName() + " build output error", e);
+			LiferayGradleCore.logError("Project " + getProject().getName() + " build output error", e);
 
 			return null;
 		}
@@ -179,7 +179,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
 				IPath retval = null;
 
-				CustomModel model = GradleCore.getToolingModel(CustomModel.class, gradleProject);
+				CustomModel model = LiferayGradleCore.getToolingModel(CustomModel.class, gradleProject);
 
 				Set<File> outputFiles = model.getOutputFiles();
 
@@ -354,7 +354,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 			}
 		}
 		catch (CoreException ce) {
-			GradleCore.logError(ce);
+			LiferayGradleCore.logError(ce);
 		}
 
 		return null;

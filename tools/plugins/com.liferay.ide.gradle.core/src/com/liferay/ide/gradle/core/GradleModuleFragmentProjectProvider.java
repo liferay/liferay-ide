@@ -37,6 +37,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Terry Jia
  * @author Lovett Li
+ * @author Simon Jiang
  */
 public class GradleModuleFragmentProjectProvider
 	extends AbstractLiferayProjectProvider implements NewLiferayProjectProvider<NewModuleFragmentOp> {
@@ -92,7 +93,7 @@ public class GradleModuleFragmentProjectProvider
 			BladeCLI.execute(sb.toString());
 		}
 		catch (Exception e) {
-			return GradleCore.createErrorStatus("Could not create module fragment project.", e);
+			return LiferayGradleCore.createErrorStatus("Could not create module fragment project.", e);
 		}
 
 		NewModuleFragmentOpMethods.copyOverrideFiles(op);
@@ -124,6 +125,7 @@ public class GradleModuleFragmentProjectProvider
 		}
 
 		if ((hasGradleWorkspace && useDefaultLocation) || inWorkspacePath) {
+			GradleUtil.sychronizeProject(projecLocation, monitor);
 			GradleUtil.refreshProject(liferayWorkspaceProject);
 		}
 		else {
@@ -143,7 +145,8 @@ public class GradleModuleFragmentProjectProvider
 		IStatus retval = Status.OK_STATUS;
 
 		if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path)) {
-			retval = GradleCore.createErrorStatus(" Can not set WorkspaceProject root folder as project directory.");
+			retval = LiferayGradleCore.createErrorStatus(
+				" Can not set WorkspaceProject root folder as project directory.");
 		}
 
 		return retval;

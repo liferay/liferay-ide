@@ -88,7 +88,7 @@ public class GradleTooling {
 			retval = builder.get();
 		}
 		catch (Exception e) {
-			GradleCore.logError("get gradle custom model error", e);
+			LiferayGradleCore.logError("get gradle custom model error", e);
 		}
 		finally {
 			if (connection != null) {
@@ -111,14 +111,14 @@ public class GradleTooling {
 				!StringUtil.equals(file.getName(), fullFileName)) {
 
 				if (!file.delete()) {
-					GradleCore.logError("Error: delete file " + file.getAbsolutePath() + " fail");
+					LiferayGradleCore.logError("Error: delete file " + file.getAbsolutePath() + " fail");
 				}
 			}
 		}
 
 		String embeddedJarVersion = null;
 
-		GradleCore gradleCore = GradleCore.getDefault();
+		LiferayGradleCore gradleCore = LiferayGradleCore.getDefault();
 
 		Bundle bundle = gradleCore.getBundle();
 
@@ -163,7 +163,7 @@ public class GradleTooling {
 
 			if (shouldDelete) {
 				if (!jarFile.delete()) {
-					GradleCore.logError("Error: delete file " + jarFile.getAbsolutePath() + " fail");
+					LiferayGradleCore.logError("Error: delete file " + jarFile.getAbsolutePath() + " fail");
 				}
 			}
 		}

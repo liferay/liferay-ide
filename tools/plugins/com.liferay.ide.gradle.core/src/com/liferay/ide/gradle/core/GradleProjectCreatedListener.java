@@ -25,10 +25,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-import org.eclipse.buildship.core.configuration.GradleProjectNature;
-import org.eclipse.buildship.core.configuration.GradleProjectNatureConfiguredEvent;
-import org.eclipse.buildship.core.event.Event;
-import org.eclipse.buildship.core.event.EventListener;
+import org.eclipse.buildship.core.internal.configuration.GradleProjectNature;
+import org.eclipse.buildship.core.internal.configuration.GradleProjectNatureConfiguredEvent;
+import org.eclipse.buildship.core.internal.event.Event;
+import org.eclipse.buildship.core.internal.event.EventListener;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -53,7 +53,7 @@ public class GradleProjectCreatedListener implements EventListener {
 				_configureIfLiferayProject(project);
 			}
 			catch (CoreException ce) {
-				GradleCore.logError("config project " + project.getName() + "error", ce);
+				LiferayGradleCore.logError("config project " + project.getName() + "error", ce);
 			}
 		}
 	}
@@ -92,7 +92,7 @@ public class GradleProjectCreatedListener implements EventListener {
 						}
 					}
 					catch (IOException ioe) {
-						GradleCore.logError("read gulpfile.js file fail", ioe);
+						LiferayGradleCore.logError("read gulpfile.js file fail", ioe);
 					}
 				}
 			}
@@ -106,10 +106,11 @@ public class GradleProjectCreatedListener implements EventListener {
 					return;
 				}
 
-				final CustomModel customModel = GradleCore.getToolingModel(CustomModel.class, project);
+				final CustomModel customModel = LiferayGradleCore.getToolingModel(CustomModel.class, project);
 
 				if (customModel == null) {
-					throw new CoreException(GradleCore.createErrorStatus("Unable to get read gradle configuration"));
+					throw new CoreException(
+						LiferayGradleCore.createErrorStatus("Unable to get read gradle configuration"));
 				}
 
 				if (customModel.isLiferayModule() || customModel.hasPlugin("org.gradle.api.plugins.WarPlugin") ||
@@ -119,7 +120,7 @@ public class GradleProjectCreatedListener implements EventListener {
 				}
 			}
 			catch (Exception e) {
-				GradleCore.logError("Unable to get tooling model", e);
+				LiferayGradleCore.logError("Unable to get tooling model", e);
 			}
 		}
 	}

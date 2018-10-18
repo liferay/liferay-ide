@@ -14,7 +14,7 @@
 
 package com.liferay.ide.gradle.ui;
 
-import com.liferay.ide.gradle.core.GradleCore;
+import com.liferay.ide.gradle.core.LiferayGradleCore;
 
 import java.util.stream.Stream;
 
@@ -52,7 +52,7 @@ public class RemoveOldWatchConsoleListener implements IConsoleListener {
 				if ("GradleConsole".equals(consoleClass.getSimpleName())) {
 					String consoleName = console.getName();
 
-					if (consoleName.startsWith(GradleCore.WATCH_LAUNCH_CONFIGURATION_NAME)) {
+					if (consoleName.startsWith(LiferayGradleCore.WATCH_LAUNCH_CONFIGURATION_NAME)) {
 						return true;
 					}
 				}

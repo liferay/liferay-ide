@@ -66,13 +66,13 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter 
 							_refreshProject = gradleWorkspaceFile.getProject();
 
 							retval = new Status(
-								IStatus.WARNING, GradleCore.PLUGIN_ID,
+								IStatus.WARNING, LiferayGradleCore.PLUGIN_ID,
 								"Project is inside \"" + _refreshProject.getName() +
 									"\" project. we will just refresh to import");
 						}
 						else {
 							retval = new Status(
-								IStatus.ERROR, GradleCore.PLUGIN_ID,
+								IStatus.ERROR, LiferayGradleCore.PLUGIN_ID,
 								"Location is not the root location of a multi-module project.");
 						}
 

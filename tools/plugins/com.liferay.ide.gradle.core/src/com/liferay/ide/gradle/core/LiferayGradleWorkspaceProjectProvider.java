@@ -50,6 +50,7 @@ import org.eclipse.wst.server.core.IServer;
  * @author Andy Wu
  * @author Terry Jia
  * @author Charles Wu
+ * @author Simon Jiang
  */
 public class LiferayGradleWorkspaceProjectProvider
 	extends AbstractLiferayProjectProvider implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> {
@@ -99,7 +100,7 @@ public class LiferayGradleWorkspaceProjectProvider
 			config.save();
 		}
 		catch (ConfigurationException ce) {
-			GradleCore.logError(ce);
+			LiferayGradleCore.logError(ce);
 		}
 
 		IPath wsLocation = location.append(workspaceName);

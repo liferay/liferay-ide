@@ -17,7 +17,6 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
@@ -32,7 +31,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.buildship.core.configuration.GradleProjectNature;
+import org.eclipse.buildship.core.internal.configuration.GradleProjectNature;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -166,16 +165,15 @@ public class GradleProjectProvider
 			}
 
 			if ((hasGradleWorkspace && useDefaultLocation) || inWorkspacePath) {
+				GradleUtil.sychronizeProject(projectLocation, monitor);
 				GradleUtil.refreshProject(liferayWorkspaceProject);
 			}
 			else {
-				CoreUtil.openProject(projectName, projectLocation, monitor);
-
 				GradleUtil.sychronizeProject(projectLocation, monitor);
 			}
 		}
 		catch (Exception e) {
-			retval = GradleCore.createErrorStatus("Can not create module project: " + e.getMessage(), e);
+			retval = LiferayGradleCore.createErrorStatus("Can not create module project: " + e.getMessage(), e);
 		}
 
 		return retval;
@@ -215,7 +213,8 @@ public class GradleProjectProvider
 		IStatus retval = Status.OK_STATUS;
 
 		if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path)) {
-			retval = GradleCore.createErrorStatus(" Can not set WorkspaceProject root folder as project directory.");
+			retval = LiferayGradleCore.createErrorStatus(
+				" Can not set WorkspaceProject root folder as project directory.");
 		}
 
 		return retval;
