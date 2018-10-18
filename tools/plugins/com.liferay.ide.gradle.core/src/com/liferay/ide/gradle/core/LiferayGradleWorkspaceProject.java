@@ -125,13 +125,19 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 		if (childProjects.contains(getProject())) {
 			_excute(true, Collections.singleton(getProject()), "watch");
 
-			for (IProject project : getChildProjects()) {
-				IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
+			stream = getChildProjects().stream();
 
-				if ((bundleProject != null) && "war".equals(bundleProject.getBundleShape())) {
-					warProjects.add(project);
-				}
-			}
+			stream.map(
+				project -> LiferayCore.create(IBundleProject.class, project)
+			).filter(
+				Objects::nonNull
+			).filter(
+				bundleProject -> "war".equals(bundleProject.getBundleShape())
+			).map(
+				IBundleProject::getProject
+			).forEach(
+				warProjects::add
+			);
 
 			_excute(false, warProjects, "deploy");
 		}
