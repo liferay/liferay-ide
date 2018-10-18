@@ -14,6 +14,8 @@
 
 package com.liferay.ide.gradle.ui.navigator.workspace;
 
+import com.liferay.ide.gradle.ui.action.RefreshWorkspaceModulesAction;
+import com.liferay.ide.gradle.ui.action.RemoveWorkspaceModulesAction;
 import com.liferay.ide.gradle.ui.action.StopWorkspaceModulesAction;
 import com.liferay.ide.gradle.ui.action.WatchWorkspaceModulesAction;
 
@@ -49,6 +51,8 @@ public class LiferayWorkspaceServerActionProvider extends CommonActionProvider {
 		menu.add(_invisibleSeparator(TOP_SECTION_START_SEPARATOR));
 		menu.add(_watchAction);
 		menu.add(_stopAction);
+		menu.add(_refreshAction);
+		menu.add(_removeAction);
 		menu.add(_invisibleSeparator(TOP_SECTION_END_SEPARATOR));
 		menu.add(new Separator());
 		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -83,8 +87,12 @@ public class LiferayWorkspaceServerActionProvider extends CommonActionProvider {
 	private void _makeActions(ISelectionProvider provider) {
 		_watchAction = new WatchWorkspaceModulesAction(provider);
 		_stopAction = new StopWorkspaceModulesAction(provider);
+		_refreshAction = new RefreshWorkspaceModulesAction(provider);
+		_removeAction = new RemoveWorkspaceModulesAction(provider);
 	}
 
+	private RefreshWorkspaceModulesAction _refreshAction;
+	private RemoveWorkspaceModulesAction _removeAction;
 	private StopWorkspaceModulesAction _stopAction;
 	private WatchWorkspaceModulesAction _watchAction;
 
