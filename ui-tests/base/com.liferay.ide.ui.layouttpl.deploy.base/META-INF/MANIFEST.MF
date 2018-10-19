@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE UI Layouttpl Deploy Base
 Bundle-SymbolicName: com.liferay.ide.ui.layouttpl.deploy.base
-Bundle-Version: 3.3.1.qualifier
+Bundle-Version: 3.4.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.ui.swtbot,
  com.liferay.ide.ui.liferay,

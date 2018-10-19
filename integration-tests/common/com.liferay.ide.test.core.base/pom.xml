@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.integration.tests</groupId>
 		<artifactId>common-tests</artifactId>
-		<version>3.3.1-SNAPSHOT</version>
+		<version>3.4.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.test.core.base</artifactId>

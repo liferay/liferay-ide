@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Functional Kaleo Deploy Tomcat DXP Tests
 Bundle-SymbolicName: com.liferay.ide.functional.kaleo.deploy.tomcat.dxp.tests
-Bundle-Version: 3.3.1.qualifier
+Bundle-Version: 3.4.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.junit,
  org.eclipse.ui.console,
