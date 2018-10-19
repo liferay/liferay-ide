@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE UI SDK Tests
 Bundle-SymbolicName: com.liferay.ide.ui.sdk.tests
-Bundle-Version: 3.3.1.qualifier
+Bundle-Version: 3.4.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.ui.swtbot,
  com.liferay.ide.ui.liferay,
