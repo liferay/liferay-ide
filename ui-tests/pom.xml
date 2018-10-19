@@ -32,8 +32,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<eclipse-site>http://download.eclipse.org/releases/oxygen/201712201001/</eclipse-site>
-		<tycho-packaging-format>'m1'</tycho-packaging-format>
+		<eclipse-site>http://download.eclipse.org/releases/oxygen/201803211000/</eclipse-site>
 		<tycho-version>1.0.0</tycho-version>
 		<liferay-ide-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide-repository/target/repository/</liferay-ide-site>
 	</properties>
