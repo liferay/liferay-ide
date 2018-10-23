@@ -38,6 +38,7 @@ import org.eclipse.buildship.core.configuration.GradleProjectNature;
 import org.eclipse.buildship.core.configuration.WorkspaceConfiguration;
 import org.eclipse.buildship.core.launch.GradleLaunchConfigurationManager;
 import org.eclipse.buildship.core.launch.GradleRunConfigurationAttributes;
+import org.eclipse.buildship.core.launch.GradleRunConfigurationDelegate;
 import org.eclipse.buildship.core.projectimport.ProjectImportConfiguration;
 import org.eclipse.buildship.core.util.binding.Validator;
 import org.eclipse.buildship.core.util.binding.Validators;
@@ -56,7 +57,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 
@@ -170,29 +173,46 @@ public class GradleUtil {
 	}
 
 	public static void runGradleTask(IProject project, String task, IProgressMonitor monitor) throws CoreException {
-		runGradleTask(project, new String[] {task}, monitor);
+		runGradleTask(project, new String[] {task}, new String[0], null, true, monitor);
 	}
 
-	public static void runGradleTask(IProject project, String[] tasks, IProgressMonitor monitor) throws CoreException {
-		runGradleTask(project, tasks, new String[0], monitor);
-	}
-
-	public static void runGradleTask(IProject project, String[] tasks, String[] arguments, IProgressMonitor monitor)
+	public static void runGradleTask(
+			IProject project, String[] tasks, String[] arguments, String launchName, boolean saveConfig,
+			IProgressMonitor monitor)
 		throws CoreException {
 
-		GradleLaunchConfigurationManager launchConfigManager = CorePlugin.gradleLaunchConfigurationManager();
+		GradleRunConfigurationAttributes runAttributes = _getRunConfigurationAttributes(
+			project, Arrays.asList(tasks), Arrays.asList(arguments));
 
-		ILaunchConfiguration launchConfiguration = launchConfigManager.getOrCreateRunConfiguration(
-			_getRunConfigurationAttributes(project, Arrays.asList(tasks), Arrays.asList(arguments)));
+		final ILaunchConfigurationWorkingCopy launchConfigurationWC;
 
-		final ILaunchConfigurationWorkingCopy launchConfigurationWC = launchConfiguration.getWorkingCopy();
+		if (launchName == null) {
+			GradleLaunchConfigurationManager launchConfigManager = CorePlugin.gradleLaunchConfigurationManager();
+
+			ILaunchConfiguration launchConfiguration = launchConfigManager.getOrCreateRunConfiguration(runAttributes);
+
+			launchConfigurationWC = launchConfiguration.getWorkingCopy();
+		}
+		else {
+			DebugPlugin debugPlugin = DebugPlugin.getDefault();
+
+			ILaunchManager launchManager = debugPlugin.getLaunchManager();
+
+			ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(
+				GradleRunConfigurationDelegate.ID);
+
+			launchConfigurationWC = launchConfigurationType.newInstance(null, launchName);
+
+			runAttributes.apply(launchConfigurationWC);
+
+			if (saveConfig) {
+				launchConfigurationWC.doSave();
+			}
+		}
 
 		launchConfigurationWC.setAttribute("org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", Boolean.TRUE);
 		launchConfigurationWC.setAttribute("org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", Boolean.TRUE);
 		launchConfigurationWC.setAttribute("org.eclipse.debug.ui.ATTR_PRIVATE", Boolean.TRUE);
-
-		launchConfigurationWC.doSave();
-
 		launchConfigurationWC.launch(ILaunchManager.RUN_MODE, monitor);
 	}
 

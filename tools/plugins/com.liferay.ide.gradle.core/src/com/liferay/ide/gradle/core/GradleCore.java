@@ -42,6 +42,8 @@ public class GradleCore extends Plugin {
 
 	public static final String PLUGIN_ID = "com.liferay.ide.gradle.core";
 
+	public static final String WATCH_LAUNCH_CONFIGURATION_NAME = "liferay-watch";
+
 	public static final File customModelCache = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
 
 	public static IStatus createErrorStatus(Exception ex) {
@@ -115,6 +117,7 @@ public class GradleCore extends Plugin {
 		_gradleProjectCreatedListener = new GradleProjectCreatedListener();
 	}
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
@@ -125,6 +128,7 @@ public class GradleCore extends Plugin {
 		listenerRegistry.addEventListener(_gradleProjectCreatedListener);
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		ListenerRegistry listenerRegistry = CorePlugin.listenerRegistry();
 
