@@ -18,17 +18,18 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.adapter.NoopLiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IServer;
 
 /**
  * @author Terry Jia
@@ -64,12 +65,20 @@ public class LiferayWorkspaceServerContentProvider extends AbstractNavigatorCont
 	}
 
 	public void getPipelinedChildren(Object parent, Set currentChildren) {
-		IProject project = LiferayWorkspaceUtil.getWorkspaceProject();
+		if (parent instanceof IServer) {
+			IServer server = (IServer)parent;
 
-		if (project != null) {
-			IFile settingsFile = project.getFile("settings.gradle");
+			IRuntime runtime = server.getRuntime();
 
-			if (GradleUtil.isWatchableProject(settingsFile)) {
+			PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(PortalRuntime.class, null);
+
+			IPath liferayHome = portalRuntime.getLiferayHome();
+
+			IProject project = LiferayWorkspaceUtil.getWorkspaceProject();
+
+			IPath projectLocation = project.getLocation();
+
+			if ((project != null) && projectLocation.isPrefixOf(liferayHome)) {
 				currentChildren.add(project);
 			}
 		}

@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -293,7 +294,7 @@ public class CoreUtil {
 		return getWorkspaceRoot().getFile(path);
 	}
 
-	public static List<IProject> getJavaProjects(List<IProject> projects) {
+	public static Set<IProject> getJavaProjects(Set<IProject> projects) {
 		Stream<IProject> stream = projects.stream();
 
 		return stream.map(
@@ -305,7 +306,7 @@ public class CoreUtil {
 		).map(
 			IJavaProject::getProject
 		).collect(
-			Collectors.toList()
+			Collectors.toSet()
 		);
 	}
 
