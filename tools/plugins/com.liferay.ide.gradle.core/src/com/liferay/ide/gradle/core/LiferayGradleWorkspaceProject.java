@@ -55,8 +55,6 @@ import org.eclipse.wst.server.core.ServerCore;
  */
 public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
-	public static final String WATCH_LAUNCH_CONFIGURATION_NAME = "liferay-watch";
-
 	public LiferayGradleWorkspaceProject(IProject project) {
 		super(project);
 	}
@@ -239,7 +237,8 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 					String[] args = {"--continuous", "--continue"};
 
 					GradleUtil.runGradleTask(
-						getProject(), tasks.toArray(new String[0]), args, WATCH_LAUNCH_CONFIGURATION_NAME, monitor);
+						getProject(), tasks.toArray(new String[0]), args, LiferayCore.WATCH_LAUNCH_CONFIGURATION_NAME,
+						false, monitor);
 				}
 				catch (Exception e) {
 					return GradleCore.createErrorStatus(

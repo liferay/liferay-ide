@@ -14,6 +14,7 @@
 
 package com.liferay.ide.gradle.action;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
@@ -103,7 +104,8 @@ public class WatchTaskAction extends AbstractObjectAction {
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
 						GradleUtil.runGradleTask(
-							project, new String[] {"watch"}, new String[] {"--continuous"}, monitor);
+							project, new String[] {"watch"}, new String[] {"--continuous"},
+							LiferayCore.WATCH_LAUNCH_CONFIGURATION_NAME, false, monitor);
 
 						_refreshDecorator();
 

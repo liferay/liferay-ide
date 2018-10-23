@@ -177,53 +177,47 @@ public class GradleUtil {
 	}
 
 	public static void runGradleTask(IProject project, String[] tasks, IProgressMonitor monitor) throws CoreException {
-		runGradleTask(project, tasks, new String[0], monitor);
-	}
-
-	public static void runGradleTask(IProject project, String[] tasks, String[] arguments, IProgressMonitor monitor)
-		throws CoreException {
-
-		GradleLaunchConfigurationManager launchConfigManager = CorePlugin.gradleLaunchConfigurationManager();
-
-		ILaunchConfiguration launchConfiguration = launchConfigManager.getOrCreateRunConfiguration(
-			_getRunConfigurationAttributes(project, Arrays.asList(tasks), Arrays.asList(arguments)));
-
-		final ILaunchConfigurationWorkingCopy launchConfigurationWC = launchConfiguration.getWorkingCopy();
-
-		launchConfigurationWC.setAttribute("org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", Boolean.TRUE);
-		launchConfigurationWC.setAttribute("org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", Boolean.TRUE);
-		launchConfigurationWC.setAttribute("org.eclipse.debug.ui.ATTR_PRIVATE", Boolean.TRUE);
-
-		launchConfigurationWC.doSave();
-
-		launchConfigurationWC.launch(ILaunchManager.RUN_MODE, monitor);
+		runGradleTask(project, tasks, new String[0], null, true, monitor);
 	}
 
 	public static void runGradleTask(
-			IProject project, String[] tasks, String[] arguments, String launchName, IProgressMonitor monitor)
+			IProject project, String[] tasks, String[] arguments, String launchName, boolean saveConfig,
+			IProgressMonitor monitor)
 		throws CoreException {
 
 		GradleRunConfigurationAttributes runAttributes = _getRunConfigurationAttributes(
 			project, Arrays.asList(tasks), Arrays.asList(arguments));
 
-		DebugPlugin plugin = DebugPlugin.getDefault();
+		final ILaunchConfigurationWorkingCopy launchConfigurationWC;
 
-		ILaunchManager launchManager = plugin.getLaunchManager();
+		if (launchName == null) {
+			GradleLaunchConfigurationManager launchConfigManager = CorePlugin.gradleLaunchConfigurationManager();
 
-		ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(
-			GradleRunConfigurationDelegate.ID);
+			ILaunchConfiguration launchConfiguration = launchConfigManager.getOrCreateRunConfiguration(runAttributes);
 
-		ILaunchConfigurationWorkingCopy launchConfiguration = launchConfigurationType.newInstance(null, launchName);
+			launchConfigurationWC = launchConfiguration.getWorkingCopy();
+		}
+		else {
+			DebugPlugin plugin = DebugPlugin.getDefault();
 
-		launchConfiguration.setAttribute("org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", Boolean.TRUE);
-		launchConfiguration.setAttribute("org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", Boolean.TRUE);
-		launchConfiguration.setAttribute("org.eclipse.debug.ui.ATTR_PRIVATE", Boolean.TRUE);
+			ILaunchManager launchManager = plugin.getLaunchManager();
 
-		runAttributes.apply(launchConfiguration);
+			ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(
+				GradleRunConfigurationDelegate.ID);
 
-		//run without persist configuration
+			launchConfigurationWC = launchConfigurationType.newInstance(null, launchName);
 
-		launchConfiguration.launch(ILaunchManager.RUN_MODE, monitor);
+			runAttributes.apply(launchConfigurationWC);
+
+			if (saveConfig) {
+				launchConfigurationWC.doSave();
+			}
+		}
+
+		launchConfigurationWC.setAttribute("org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", Boolean.TRUE);
+		launchConfigurationWC.setAttribute("org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", Boolean.TRUE);
+		launchConfigurationWC.setAttribute("org.eclipse.debug.ui.ATTR_PRIVATE", Boolean.TRUE);
+		launchConfigurationWC.launch(ILaunchManager.RUN_MODE, monitor);
 	}
 
 	public static IStatus sychronizeProject(IPath dir, IProgressMonitor monitor) {
