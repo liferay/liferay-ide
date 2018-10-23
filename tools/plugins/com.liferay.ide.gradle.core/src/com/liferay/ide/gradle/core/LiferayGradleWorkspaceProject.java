@@ -237,7 +237,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 					String[] args = {"--continuous", "--continue"};
 
 					GradleUtil.runGradleTask(
-						getProject(), tasks.toArray(new String[0]), args, LiferayCore.WATCH_LAUNCH_CONFIGURATION_NAME,
+						getProject(), tasks.toArray(new String[0]), args, GradleCore.WATCH_LAUNCH_CONFIGURATION_NAME,
 						false, monitor);
 				}
 				catch (Exception e) {

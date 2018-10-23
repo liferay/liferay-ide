@@ -194,9 +194,9 @@ public class GradleUtil {
 			launchConfigurationWC = launchConfiguration.getWorkingCopy();
 		}
 		else {
-			DebugPlugin plugin = DebugPlugin.getDefault();
+			DebugPlugin debugPlugin = DebugPlugin.getDefault();
 
-			ILaunchManager launchManager = plugin.getLaunchManager();
+			ILaunchManager launchManager = debugPlugin.getLaunchManager();
 
 			ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(
 				GradleRunConfigurationDelegate.ID);
