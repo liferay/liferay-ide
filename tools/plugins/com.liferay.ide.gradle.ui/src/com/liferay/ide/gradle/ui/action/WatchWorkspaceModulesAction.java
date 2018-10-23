@@ -108,7 +108,14 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 					projectsToWatch.add(selectedProject);
 				}
 				else if ("stop".equals(_action)) {
-					projectsToWatch.remove(selectedProject);
+					if (selectedProject.equals(LiferayWorkspaceUtil.getWorkspaceProject())) {
+						projectsToWatch.clear();
+
+						break;
+					}
+					else {
+						projectsToWatch.remove(selectedProject);
+					}
 				}
 			}
 		}

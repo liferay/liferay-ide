@@ -52,6 +52,7 @@ import org.eclipse.wst.server.core.ServerCore;
 /**
  * @author Andy Wu
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
@@ -102,48 +103,30 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 	@Override
 	public void watch(Set<IProject> childProjects) {
-		Set<IProject> jarProjects = new HashSet<>();
-		Set<IProject> warProjects = new HashSet<>();
-
-		Stream<IProject> stream = childProjects.stream();
-
-		stream.map(
-			project -> LiferayCore.create(IBundleProject.class, project)
-		).filter(
-			Objects::nonNull
-		).forEach(
-			bundleProject -> {
-				if ("jar".equals(bundleProject.getBundleShape())) {
-					jarProjects.add(bundleProject.getProject());
-				}
-				else if ("war".equals(bundleProject.getBundleShape())) {
-					warProjects.add(bundleProject.getProject());
-				}
-			}
-		);
+		boolean runOnRoot = false;
+		Set<IProject> runOnProjects = childProjects;
 
 		if (childProjects.contains(getProject())) {
-			_executeTask(true, Collections.singleton(getProject()), "watch");
+			Stream<IProject> stream = getChildProjects().stream();
 
-			stream = getChildProjects().stream();
-
-			stream.map(
+			long warCount = stream.map(
 				project -> LiferayCore.create(IBundleProject.class, project)
 			).filter(
 				Objects::nonNull
 			).filter(
 				bundleProject -> "war".equals(bundleProject.getBundleShape())
-			).map(
-				IBundleProject::getProject
-			).forEach(
-				warProjects::add
-			);
-		}
-		else {
-			_executeTask(false, jarProjects, "watch");
+			).count();
+
+			if (warCount == 0) {
+				runOnRoot = true;
+				runOnProjects = Collections.singleton(getProject());
+			}
+			else {
+				runOnProjects = getChildProjects();
+			}
 		}
 
-		_executeTask(false, warProjects, "deploy");
+		_executeTask(runOnRoot, runOnProjects);
 	}
 
 	@Override
@@ -173,29 +156,29 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 		return taskPath;
 	}
 
-	private void _executeTask(boolean root, Set<IProject> childProjects, String taskName) {
+	private void _executeTask(boolean runOnRoot, Set<IProject> childProjects) {
 		final List<String> tasks = new ArrayList<>();
 
-		if (root) {
-			tasks.add(taskName);
+		if (runOnRoot) {
+			tasks.add("watch");
 		}
 		else {
-			Stream<IProject> stream = childProjects.stream();
+			for (IProject project : childProjects) {
+				String taskName = "watch";
 
-			stream.map(
-				IProject::getLocation
-			).filter(
-				location -> location != null
-			).map(
-				location -> _convertToModuleTaskPath(location, taskName)
-			).forEach(
-				tasks::add
-			);
+				IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
+
+				if (!isWatchable() || ((bundleProject != null) && "war".equals(bundleProject.getBundleShape()))) {
+					taskName = "deploy";
+				}
+
+				tasks.add(_convertToModuleTaskPath(project.getLocation(), taskName));
+			}
 		}
 
 		String projectName = getProject().getName();
 
-		String jobName = projectName + ":" + taskName;
+		String jobName = projectName + ":watch";
 
 		IJobManager jobManager = Job.getJobManager();
 
@@ -241,8 +224,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 						false, monitor);
 				}
 				catch (Exception e) {
-					return GradleCore.createErrorStatus(
-						"Error running Gradle " + taskName + " task for project " + getProject(), e);
+					return GradleCore.createErrorStatus("Error running watch task for project " + getProject(), e);
 				}
 
 				return Status.OK_STATUS;
@@ -255,7 +237,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 				@Override
 				public void done(IJobChangeEvent event) {
-					_watchingProjects.removeAll(childProjects);
+					_watchingProjects.clear();
 				}
 
 			});
@@ -263,7 +245,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 		job.setProperty(ILiferayServer.LIFERAY_SERVER_JOB, this);
 		job.setSystem(true);
 
-		_watchingProjects.removeAll(childProjects);
+		_watchingProjects.clear();
 		_watchingProjects.addAll(childProjects);
 
 		if (ListUtil.isNotEmpty(childProjects)) {

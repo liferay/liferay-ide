@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.IPath;
  */
 public interface IWorkspaceProject extends ILiferayProject {
 
-	public List<IProject> getChildProjects();
+	public Set<IProject> getChildProjects();
 
 	public List<IPath> getTargetPlatformArtifacts();
 
