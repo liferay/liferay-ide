@@ -19,6 +19,7 @@ import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.adapter.NoopLiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
@@ -81,9 +82,12 @@ public class LiferayWorkspaceServerContentProvider extends AbstractNavigatorCont
 			if (LiferayWorkspaceUtil.isValidGradleWorkspaceProject(project)) {
 				IPath projectLocation = project.getLocation();
 
-				if (projectLocation.isPrefixOf(liferayHome)) {
-					currentChildren.add(project);
-				}
+			IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
+
+			if ((project != null) && projectLocation.isPrefixOf(liferayHome) &&
+				ListUtil.isNotEmpty(workspaceProject.getChildProjects())) {
+
+				currentChildren.add(project);
 			}
 		}
 	}

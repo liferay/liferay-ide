@@ -178,7 +178,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 		String projectName = getProject().getName();
 
-		String jobName = projectName + ":watch";
+		String jobName = projectName + ":" + GradleCore.LIFERAY_WATCH;
 
 		IJobManager jobManager = Job.getJobManager();
 
@@ -200,7 +200,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 			@Override
 			public boolean belongsTo(Object family) {
-				return family.equals(GradleCore.LIFERAY_WATCH_DEPLOY_TASK);
+				return jobName.equals(family);
 			}
 
 			@Override
@@ -220,8 +220,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 					String[] args = {"--continuous", "--continue"};
 
 					GradleUtil.runGradleTask(
-						getProject(), tasks.toArray(new String[0]), args, GradleCore.WATCH_LAUNCH_CONFIGURATION_NAME,
-						false, monitor);
+						getProject(), tasks.toArray(new String[0]), args, GradleCore.LIFERAY_WATCH, false, monitor);
 				}
 				catch (Exception e) {
 					return GradleCore.createErrorStatus("Error running watch task for project " + getProject(), e);

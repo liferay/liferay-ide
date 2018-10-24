@@ -17,7 +17,6 @@ package com.liferay.ide.core.util;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 /**
  * @author Terry Jia
@@ -45,17 +44,7 @@ public class ListUtil {
 			return false;
 		}
 
-		Stream<?> objStream = objSet.stream();
-
-		return !objStream.anyMatch(o -> !set.contains(o));
-	}
-
-	public static boolean hasMultipleValues(Collection<?> collection) {
-		if (isNotEmpty(collection) && (collection.size() > 1)) {
-			return true;
-		}
-
-		return false;
+		return set.containsAll(objSet);
 	}
 
 	public static boolean isEmpty(Collection<?> collection) {
@@ -84,6 +73,14 @@ public class ListUtil {
 
 	public static boolean isEmpty(Set<?> set) {
 		if ((set == null) || set.isEmpty()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean isMultiple(Collection<?> collection) {
+		if (isNotEmpty(collection) && (collection.size() > 1)) {
 			return true;
 		}
 

@@ -210,19 +210,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static IWorkspaceProject getLiferayWorkspaceProject() {
-		IProject[] projects = CoreUtil.getAllProjects();
-
-		for (IProject project : projects) {
-			if (isValidWorkspace(project)) {
-				return LiferayCore.create(IWorkspaceProject.class, project);
-			}
-		}
-
-		return null;
-	}
-
-	public static IWorkspaceProject getLiferayWorkspaceProject(Object object) {
-		return LiferayCore.create(IWorkspaceProject.class, object);
+		return LiferayCore.create(IWorkspaceProject.class, getWorkspaceProject());
 	}
 
 	public static String[] getLiferayWorkspaceProjectWarsDirs(String workspaceLocation) {

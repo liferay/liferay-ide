@@ -14,9 +14,7 @@
 
 package com.liferay.ide.gradle.ui.navigator.workspace;
 
-import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IWorkspaceProject;
-import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.ui.action.RefreshWorkspaceModulesAction;
@@ -25,9 +23,7 @@ import com.liferay.ide.gradle.ui.action.StopWorkspaceModulesAction;
 import com.liferay.ide.gradle.ui.action.WatchWorkspaceModulesAction;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.jobs.IJobManager;
@@ -36,8 +32,8 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.CommonViewer;
@@ -100,106 +96,65 @@ public class LiferayWorkspaceServerActionProvider extends CommonActionProvider {
 			return;
 		}
 
-		_watchAction = new WatchWorkspaceModulesAction(provider);
-		_stopAction = new StopWorkspaceModulesAction(provider);
+		StructuredSelection treeSelection = (StructuredSelection)selection;
 
-		if (selection instanceof TreeSelection) {
-			TreeSelection treeSelection = (TreeSelection)selection;
+		boolean watchEnabled = false;
+		boolean stopEnabled = false;
 
-			List<?> selectedProjects = treeSelection.toList();
+		if (ListUtil.isMultiple(treeSelection.toList())) {
+			watchEnabled = true;
+			stopEnabled = true;
+		}
+		else {
+			IProject selectedProject = (IProject)treeSelection.getFirstElement();
 
-			if (ListUtil.hasMultipleValues(selectedProjects)) {
-				_watchAction.setEnabled(true);
-				_stopAction.setEnabled(true);
+			if (LiferayWorkspaceUtil.isValidGradleWorkspaceProject(selectedProject)) {
+				IJobManager jobManager = Job.getJobManager();
 
-				menu.add(_watchAction);
-				menu.add(_stopAction);
+				String jobName = selectedProject.getName() + ":" + GradleCore.LIFERAY_WATCH;
 
-				return;
+				Job[] jobs = jobManager.find(jobName);
+
+				if (ListUtil.isNotEmpty(jobs)) {
+					stopEnabled = true;
+				}
+				else {
+					watchEnabled = true;
+				}
 			}
-
-			Object selectedProject = treeSelection.getFirstElement();
-
-			IJobManager jobManager = Job.getJobManager();
-
-			Job[] watchjobs = jobManager.find(GradleCore.LIFERAY_WATCH_DEPLOY_TASK);
-
-			IWorkspaceProject workspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject(selectedProject);
-
-			if (workspaceProject != null) {
-				Set<IProject> childProjects = workspaceProject.getChildProjects();
-
-				if (ListUtil.isEmpty(childProjects)) {
-					return;
-				}
-
-				Stream<IProject> childProjectsStream = childProjects.stream();
-
-				IBundleProject[] bundleProjectArray = childProjectsStream.map(
-					project -> LiferayCore.create(IBundleProject.class, project)
-				).filter(
-					bundleProject -> bundleProject != null
-				).toArray(
-					IBundleProject[]::new
-				);
-
-				if (ListUtil.isEmpty(bundleProjectArray)) {
-					return;
-				}
+			else {
+				IWorkspaceProject workspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
 				Set<IProject> watchingProjects = workspaceProject.watching();
 
-				if (ListUtil.isNotEmpty(watchjobs) && ListUtil.contains(watchingProjects, childProjects)) {
-					_watchAction.setEnabled(false);
-					_stopAction.setEnabled(true);
-				}
-				else {
-					_watchAction.setEnabled(true);
-					_stopAction.setEnabled(false);
-				}
-
-				menu.add(_watchAction);
-				menu.add(_stopAction);
-			}
-			else {
-				IWorkspaceProject currentWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
-
-				Set<IProject> watchingProjects = currentWorkspaceProject.watching();
-
-				if (ListUtil.notContains(watchingProjects, currentWorkspaceProject.getProject())) {
+				if (!watchingProjects.contains(workspaceProject.getProject())) {
 					if (ListUtil.isEmpty(watchingProjects)) {
-						_watchAction.setEnabled(true);
-						_stopAction.setEnabled(false);
+						watchEnabled = true;
+					}
+
+					if (ListUtil.contains(watchingProjects, selectedProject)) {
+						stopEnabled = true;
 					}
 					else {
-						if (ListUtil.notContains(watchingProjects, selectedProject)) {
-							_watchAction.setEnabled(true);
-							_stopAction.setEnabled(false);
-						}
-						else {
-							_watchAction.setEnabled(false);
-							_stopAction.setEnabled(true);
-						}
-					}
-
-					menu.add(_watchAction);
-					menu.add(_stopAction);
-				}
-				else {
-					if (ListUtil.contains(watchingProjects, selectedProject)) {
-						_watchAction.setEnabled(false);
-						_stopAction.setEnabled(true);
-
-						menu.add(_watchAction);
-						menu.add(_stopAction);
+						watchEnabled = true;
 					}
 				}
 			}
 		}
 
+		_watchAction = new WatchWorkspaceModulesAction(provider);
+
+		_watchAction.setEnabled(watchEnabled);
+
+		_stopAction = new StopWorkspaceModulesAction(provider);
+
+		_stopAction.setEnabled(stopEnabled);
+
 		_refreshAction = new RefreshWorkspaceModulesAction(provider);
 		_removeAction = new RemoveWorkspaceModulesAction(provider);
 
+		menu.add(_watchAction);
+		menu.add(_stopAction);
 		menu.add(_refreshAction);
 		menu.add(_removeAction);
 	}
