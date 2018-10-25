@@ -20,6 +20,7 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -91,11 +92,18 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 
 	@Override
 	protected boolean initialize(Object element) {
-		if (!(element instanceof IProject)) {
+		if (!(element instanceof IProject) && !(element instanceof IFolder)) {
 			return false;
 		}
 
-		_workspaceProject = (IProject)element;
+		if (element instanceof IFolder) {
+			IFolder bundlesFolder = (IFolder)element;
+
+			_workspaceProject = bundlesFolder.getProject();
+		}
+		else if (element instanceof IProject) {
+			_workspaceProject = (IProject)element;
+		}
 
 		return true;
 	}
