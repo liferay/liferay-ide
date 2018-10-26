@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -206,6 +207,10 @@ public class LiferayWorkspaceUtil {
 		}
 
 		return null;
+	}
+
+	public static IWorkspaceProject getLiferayWorkspaceProject() {
+		return LiferayCore.create(IWorkspaceProject.class, getWorkspaceProject());
 	}
 
 	public static String[] getLiferayWorkspaceProjectWarsDirs(String workspaceLocation) {

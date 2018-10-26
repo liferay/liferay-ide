@@ -40,9 +40,9 @@ import org.osgi.framework.BundleContext;
 @SuppressWarnings("restriction")
 public class GradleCore extends Plugin {
 
-	public static final String PLUGIN_ID = "com.liferay.ide.gradle.core";
+	public static final String LIFERAY_WATCH = "liferay-watch";
 
-	public static final String WATCH_LAUNCH_CONFIGURATION_NAME = "liferay-watch";
+	public static final String PLUGIN_ID = "com.liferay.ide.gradle.core";
 
 	public static final File customModelCache = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
 

@@ -39,6 +39,14 @@ public class ListUtil {
 		return set.contains(o);
 	}
 
+	public static boolean contains(Set<?> set, Set<?> objSet) {
+		if ((set == null) || (objSet == null)) {
+			return false;
+		}
+
+		return set.containsAll(objSet);
+	}
+
 	public static boolean isEmpty(Collection<?> collection) {
 		if ((collection == null) || collection.isEmpty()) {
 			return true;
@@ -65,6 +73,14 @@ public class ListUtil {
 
 	public static boolean isEmpty(Set<?> set) {
 		if ((set == null) || set.isEmpty()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean isMultiple(Collection<?> collection) {
+		if (isNotEmpty(collection) && (collection.size() > 1)) {
 			return true;
 		}
 

@@ -104,8 +104,8 @@ public class WatchTaskAction extends AbstractObjectAction {
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
 						GradleUtil.runGradleTask(
-							project, new String[] {"watch"}, new String[] {"--continuous"},
-							GradleCore.WATCH_LAUNCH_CONFIGURATION_NAME, false, monitor);
+							project, new String[] {"watch"}, new String[] {"--continuous"}, GradleCore.LIFERAY_WATCH,
+							false, monitor);
 
 						_refreshDecorator();
 
