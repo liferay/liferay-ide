@@ -82,12 +82,13 @@ public class LiferayWorkspaceServerContentProvider extends AbstractNavigatorCont
 			if (LiferayWorkspaceUtil.isValidGradleWorkspaceProject(project)) {
 				IPath projectLocation = project.getLocation();
 
-			IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
+				IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
 
-			if ((project != null) && projectLocation.isPrefixOf(liferayHome) &&
-				ListUtil.isNotEmpty(workspaceProject.getChildProjects())) {
+				if ((project != null) && projectLocation.isPrefixOf(liferayHome) &&
+					ListUtil.isNotEmpty(workspaceProject.getChildProjects())) {
 
-				currentChildren.add(project);
+					currentChildren.add(project);
+				}
 			}
 		}
 	}
