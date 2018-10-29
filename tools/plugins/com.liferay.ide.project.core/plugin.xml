@@ -859,6 +859,18 @@
 		</liferayComponentTemplate>
 	</extension>
 	<extension
+		point="org.eclipse.core.expressions.propertyTesters"
+	>
+		<propertyTester
+			class="com.liferay.ide.project.core.LiferayWorkspaceProjectHomeDirTester"
+			id="com.liferay.ide.project.core.LiferayWorkspaceProjectHomeDir"
+			namespace="com.liferay.ide.project.core"
+			properties="isLiferayWorkspaceProjectHomeDir"
+			type="org.eclipse.core.resources.IFolder"
+		>
+		</propertyTester>
+	</extension>
+	<extension
 		point="org.eclipse.ltk.core.refactoring.deleteParticipants"
 	>
 		<deleteParticipant
@@ -867,14 +879,24 @@
 			name="liferayWorkspaceProjectDeleteParticipant"
 		>
 			<enablement>
-				<adapt
-					type="org.eclipse.core.resources.IProject"
-				>
-					<test
-						property="com.liferay.ide.project.core.isLiferayWorkspaceProject"
+				<or>
+					<adapt
+						type="org.eclipse.core.resources.IProject"
 					>
-					</test>
-				</adapt>
+						<test
+							property="com.liferay.ide.project.core.isLiferayWorkspaceProject"
+						>
+						</test>
+					</adapt>
+					<adapt
+						type="org.eclipse.core.resources.IFolder"
+					>
+						<test
+							property="com.liferay.ide.project.core.isLiferayWorkspaceProjectHomeDir"
+						>
+						</test>
+					</adapt>
+				</or>
 			</enablement>
 		</deleteParticipant>
 	</extension>
