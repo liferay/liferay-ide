@@ -32,13 +32,13 @@ public class LiferayWorkspaceProjectBundlesFolderTester extends PropertyTester {
 	@Override
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
 		if (receiver instanceof IFolder) {
-			IFolder bundlesFolder = (IFolder)receiver;
+			IFolder folder = (IFolder)receiver;
 
-			IProject project = bundlesFolder.getProject();
+			IProject project = folder.getProject();
 
-			IWorkspaceProject liferayWorkspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
+			IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
 
-			if (liferayWorkspaceProject == null) {
+			if (workspaceProject == null) {
 				return false;
 			}
 
@@ -46,11 +46,9 @@ public class LiferayWorkspaceProjectBundlesFolderTester extends PropertyTester {
 
 			String homeDir = LiferayWorkspaceUtil.getHomeDir(projectLocation.toOSString());
 
-			if (CoreUtil.isNotNullOrEmpty(homeDir) && homeDir.equals(bundlesFolder.getName())) {
+			if (CoreUtil.isNotNullOrEmpty(homeDir) && homeDir.equals(folder.getName())) {
 				return true;
 			}
-
-			return false;
 		}
 
 		return false;
