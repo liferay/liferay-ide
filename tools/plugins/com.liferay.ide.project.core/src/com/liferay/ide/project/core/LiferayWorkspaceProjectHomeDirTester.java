@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.IPath;
 /**
  * @author Simon Jiang
  */
-public class LiferayWorkspaceProjectBundlesFolderTester extends PropertyTester {
+public class LiferayWorkspaceProjectHomeDirTester extends PropertyTester {
 
 	@Override
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
