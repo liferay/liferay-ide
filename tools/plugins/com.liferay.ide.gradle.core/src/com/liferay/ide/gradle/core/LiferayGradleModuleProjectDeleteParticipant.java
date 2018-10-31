@@ -82,6 +82,7 @@ public class LiferayGradleModuleProjectDeleteParticipant extends DeleteParticipa
 			return new RefactoringStatus();
 		}
 
+		@Override
 		public abstract Change perform(IProgressMonitor monitor) throws CoreException;
 
 		protected IProject deleteProject;
@@ -124,7 +125,7 @@ public class LiferayGradleModuleProjectDeleteParticipant extends DeleteParticipa
 
 		@Override
 		public String getName() {
-			return "Preproccess for removing module project from watch list '" + deleteProject.getName() + "'";
+			return "Preparing to remove module project from watch task '" + deleteProject.getName() + "'";
 		}
 
 		@Override
@@ -138,9 +139,9 @@ public class LiferayGradleModuleProjectDeleteParticipant extends DeleteParticipa
 			IProject workspaceProject = liferayWorkspaceProject.getProject();
 
 			if (!_projectsToWatch.contains(workspaceProject)) {
-				Stream<IProject> watchStream = _projectsToWatch.stream();
+				Stream<IProject> stream = _projectsToWatch.stream();
 
-				_projectsToWatch = watchStream.filter(
+				_projectsToWatch = stream.filter(
 					project -> !project.equals(deleteProject)
 				).collect(
 					Collectors.toSet()
@@ -179,9 +180,9 @@ public class LiferayGradleModuleProjectDeleteParticipant extends DeleteParticipa
 			return false;
 		}
 
-		DeleteArguments arguments = getArguments();
+		DeleteArguments deleteArguments = getArguments();
 
-		if (!arguments.getDeleteProjectContents()) {
+		if (!deleteArguments.getDeleteProjectContents()) {
 			return false;
 		}
 
