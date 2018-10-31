@@ -19,7 +19,7 @@
 					<maxLineLength>120</maxLineLength>
 					<baseDir>${baseDir}</baseDir>
 					<autoFix>${autoFix}</autoFix>
-					<processorThreadCount>1</processorThreadCount>
+					<processorThreadCount>5</processorThreadCount>
 				</configuration>
 			</plugin>
 		</plugins>
