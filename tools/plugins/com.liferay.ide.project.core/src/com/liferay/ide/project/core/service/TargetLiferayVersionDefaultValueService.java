@@ -14,7 +14,10 @@
 
 package com.liferay.ide.project.core.service;
 
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
+
+import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
@@ -25,25 +28,30 @@ import org.eclipse.sapphire.DefaultValueService;
 
 /**
  * @author Joye Luo
+ * @author Terry Jia
  */
 public class TargetLiferayVersionDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected String compute() {
-		String retval = "7.0";
+		Set<String> liferayTargetPlatformVersions = WorkspaceConstants.liferayTargetPlatformVersions.keySet();
 
-		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
+		String[] versions = liferayTargetPlatformVersions.toArray(new String[0]);
 
-		IPreferencesService prefService = Platform.getPreferencesService();
+		String defaultValue = versions[versions.length - 1];
 
-		String defaultLiferayVersion = prefService.getString(
-			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, null, prefContexts);
+		IScopeContext[] scopeContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
+
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		String defaultLiferayVersion = preferencesService.getString(
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, null, scopeContexts);
 
 		if (defaultLiferayVersion != null) {
-			retval = defaultLiferayVersion;
+			defaultValue = defaultLiferayVersion;
 		}
 
-		return retval;
+		return defaultValue;
 	}
 
 }

@@ -31,20 +31,22 @@ public class TargetPlatformDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected String compute() {
-		String retval = WorkspaceConstants.TARGET_PLATFORM_VERSIONS_7_0[0];
+		String[] liferayTargetPlatformVersions = WorkspaceConstants.liferayTargetPlatformVersions.get("7.1");
 
-		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
+		String defaultValue = liferayTargetPlatformVersions[0];
 
-		IPreferencesService prefService = Platform.getPreferencesService();
+		IScopeContext[] scopeContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
-		String defaultLiferayVersion = prefService.getString(
-			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, null, prefContexts);
+		IPreferencesService preferencesService = Platform.getPreferencesService();
 
-		if ("7.1".equals(defaultLiferayVersion)) {
-			retval = WorkspaceConstants.TARGET_PLATFORM_VERSIONS_7_1[0];
+		String defaultLiferayVersion = preferencesService.getString(
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, null, scopeContexts);
+
+		if (defaultLiferayVersion != null) {
+			defaultValue = WorkspaceConstants.liferayTargetPlatformVersions.get(defaultLiferayVersion)[0];
 		}
 
-		return retval;
+		return defaultValue;
 	}
 
 }
