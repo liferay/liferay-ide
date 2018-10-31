@@ -129,7 +129,9 @@ public class AutoCorrectAllAction extends Action {
 
 										final Collection<ServiceReference<AutoMigrator>> refs =
 											context.getServiceReferences(
-												AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")");
+												AutoMigrator.class,
+												"(&(auto.correct=" + autoCorrectKey + ")(version=" +
+													problem.getVersion() + "))");
 
 										for (ServiceReference<AutoMigrator> ref : refs) {
 											final AutoMigrator autoMigrator = context.getService(ref);
