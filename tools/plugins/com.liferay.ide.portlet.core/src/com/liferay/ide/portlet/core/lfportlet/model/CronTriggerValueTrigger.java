@@ -37,9 +37,10 @@ public interface CronTriggerValueTrigger extends ICronTrigger {
 
 	@Label(standard = "Cron Trigger Value")
 	@Required
-	@Service(impl = NumberValueValidationService.class, params = {
-		@Service.Param(name = "min", value = "1"), @Service.Param(name = "max", value = "")
-	})
+	@Service(
+		impl = NumberValueValidationService.class,
+		params = {@Service.Param(name = "min", value = "1"), @Service.Param(name = "max", value = "")}
+	)
 	@XmlBinding(path = "")
 	public ValueProperty PROP_CRON_TRIGGER_VALUE = new ValueProperty(TYPE, "CronTriggerValue");
 

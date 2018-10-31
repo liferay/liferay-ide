@@ -331,7 +331,7 @@ public class NewMavenPluginProjectProvider
 	public IStatus validateProjectLocation(String projectName, IPath path) {
 		IStatus retval = Status.OK_STATUS;
 
-		/*
+		/**
 		 * if the path is a folder and it has a pom.xml that is a package type of 'pom'
 		 * then this is a valid location if projectName is null or empty , don't need to check
 		 * just return

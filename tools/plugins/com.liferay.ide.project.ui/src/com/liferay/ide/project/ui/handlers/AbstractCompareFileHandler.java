@@ -62,6 +62,7 @@ public abstract class AbstractCompareFileHandler extends AbstractHandler {
 		final ISelection selection = HandlerUtil.getActiveMenuSelection(event);
 
 		IStatus retval = Status.OK_STATUS;
+
 		IFile currentFile = null;
 
 		if (selection instanceof ITreeSelection) {

@@ -52,9 +52,8 @@ public class LiferayPortletNameValidationService extends ValidationService {
 		}
 
 		return Status.createErrorStatus(
-			Resources.bind(StringEscapeUtils.unescapeJava(Resources.portletNameInvalid), new Object[] {
-				_liferayPortletName
-			}));
+			Resources.bind(
+				StringEscapeUtils.unescapeJava(Resources.portletNameInvalid), new Object[] {_liferayPortletName}));
 	}
 
 	private String _liferayPortletName;

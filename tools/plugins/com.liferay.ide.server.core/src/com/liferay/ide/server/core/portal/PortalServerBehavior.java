@@ -201,6 +201,7 @@ public class PortalServerBehavior
 
 		try {
 			String url = "http://" + getServer().getHost();
+
 			PortalBundle portalBundle = _getPortalRuntime().getPortalBundle();
 
 			int port = Integer.parseInt(portalBundle.getHttpPort());
@@ -604,6 +605,7 @@ public class PortalServerBehavior
 
 	private String[] _getRuntimeStartVMArguments() {
 		boolean launchSetting = _getPortalServer().getLaunchSettings();
+
 		IPath liferayHome = _getPortalRuntime().getLiferayHome();
 
 		IPath portalExtPath = liferayHome.append("portal-ext.properties");

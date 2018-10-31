@@ -249,7 +249,7 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
 			StringBuffer buf = new StringBuffer(lastValue);
 
 			while (it.hasNext()) {
-				/*
+				/**
 				 * if the last value ended with an escape character, it has to be escaped
 				 * itself; otherwise the list delimiter will be escaped
 				 */

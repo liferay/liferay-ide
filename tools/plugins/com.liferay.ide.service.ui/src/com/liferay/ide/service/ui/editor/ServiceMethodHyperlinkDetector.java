@@ -208,7 +208,7 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 
 				String baseServiceName = methodClassName.substring(0, methodClassName.length() - 4);
 
-				/*
+				/**
 				 * as per liferay standard real implementation will be in impl package and Impl suffix
 				 * e.g. com.example.service.FooUtil.getBar() --> com.example.service.impl.FooImpl.getBar()
 				 */
@@ -261,7 +261,7 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 
 				String baseServiceName = methodClassName.substring(0, methodClassName.length() - 4);
 
-				/*
+				/**
 				 * as per liferay standard wrapper type will be in service package with Wrapper suffix
 				 * e.g com.example.service.FooUtil.getBar() --> com.example.service.FooWrapper.getBar()
 				 */

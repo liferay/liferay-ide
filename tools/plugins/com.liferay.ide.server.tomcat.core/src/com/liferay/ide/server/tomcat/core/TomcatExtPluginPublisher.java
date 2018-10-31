@@ -83,7 +83,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 				addExtModule(delegate, moduleTree[0], monitor);
 			}
 			else if (deltaKind == ServerBehaviourDelegate.REMOVED) {
-				/*
+				/**
 				 * nothing to do right now
 				 * removeExtModule(delegate, moduleTree[0], monitor);
 				 */

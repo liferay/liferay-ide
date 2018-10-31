@@ -41,6 +41,7 @@ public class UpgradeRuntimeHandler extends AbstractUpgradeProjectHandler {
 
 		try {
 			int worked = 0;
+
 			IProgressMonitor submon = CoreUtil.newSubmonitor(monitor, 25);
 
 			submon.subTask("Update project runtime");

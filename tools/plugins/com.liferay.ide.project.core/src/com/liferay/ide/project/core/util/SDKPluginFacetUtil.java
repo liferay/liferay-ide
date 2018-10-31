@@ -165,10 +165,8 @@ public class SDKPluginFacetUtil {
 
 		fpjwc.setPrimaryRuntime(runtime);
 
-		// fpjwc.setSelectedPreset(
-		// FacetedProjectFramework.DEFAULT_CONFIGURATION_PRESET_ID );
-
 		IFacetedProjectTemplate template = getLiferayTemplateForProject(pluginType);
+
 		IPreset preset = getLiferayPresetForProject(pluginType);
 
 		if (preset == null) {
@@ -229,6 +227,7 @@ public class SDKPluginFacetUtil {
 		throws CoreException {
 
 		IFacetedProjectTemplate template = getLiferayTemplateForProject(pluginType);
+
 		IPreset preset = getLiferayPresetForProject(pluginType);
 
 		if (preset == null) {

@@ -79,7 +79,7 @@ public class LiferayPublishOperation extends PublishOperation {
 			_helper = new PublishHelper(temp.toFile());
 		}
 		else {
-			/*
+			/**
 			 * We are doomed without a base directory. However, allow the catastrophe
 			 * to occur elsewhere and hope for a useful error message.
 			 */
@@ -333,7 +333,7 @@ public class LiferayPublishOperation extends PublishOperation {
 		TomcatServer tomcatServer = server.getTomcatServer();
 		LiferayTomcatServer liferayTomcatServer = server.getLiferayTomcatServer();
 
-		/*
+		/**
 		 * Remove if requested or if previously published and are now serving
 		 * without publishing
 		 */

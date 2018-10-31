@@ -66,7 +66,7 @@ public class TaglibVariableItemHelper {
 
 							public void widgetDisposed(DisposeEvent arg0) {
 
-								/*
+								/**
 								 * The parent shell must be reenabled when the
 								 * dialog disposes, otherwise it won't automatically
 								 * receive focus.

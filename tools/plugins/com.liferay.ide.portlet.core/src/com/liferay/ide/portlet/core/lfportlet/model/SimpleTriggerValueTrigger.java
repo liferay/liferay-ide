@@ -37,9 +37,10 @@ public interface SimpleTriggerValueTrigger extends ISimpleTrigger {
 
 	@Label(standard = "Simple Trigger Value")
 	@Required
-	@Service(impl = NumberValueValidationService.class, params = {
-		@Service.Param(name = "min", value = "1"), @Service.Param(name = "max", value = "")
-	})
+	@Service(
+		impl = NumberValueValidationService.class,
+		params = {@Service.Param(name = "min", value = "1"), @Service.Param(name = "max", value = "")}
+	)
 	@XmlBinding(path = "")
 	public ValueProperty PROP_SIMPLE_TRIGGER_VALUE = new ValueProperty(TYPE, "SimpleTriggerValue");
 

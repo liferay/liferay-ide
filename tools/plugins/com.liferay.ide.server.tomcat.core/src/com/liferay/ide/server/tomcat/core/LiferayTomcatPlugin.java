@@ -124,7 +124,7 @@ public class LiferayTomcatPlugin extends Plugin {
 
 		_plugin = this;
 
-		/*
+		/**
 		 * portalSourcePartListener = new PortalSourcePartListener();
 		 * PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 		 *

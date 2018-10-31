@@ -87,6 +87,7 @@ public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomP
 		public StyledString getStyledText(Object element) {
 			if (element instanceof ProjectCheckboxElement) {
 				final String srcLableString = ((ProjectCheckboxElement)element).context;
+
 				final String projectName = ((ProjectCheckboxElement)element).name;
 
 				final StyledString styled = new StyledString(projectName);

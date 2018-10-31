@@ -45,6 +45,7 @@ public class SocketUtil {
 
 		try {
 			InetSocketAddress address = new InetSocketAddress(host, Integer.valueOf(port));
+
 			InetSocketAddress local = new InetSocketAddress(0);
 
 			socket.bind(local);

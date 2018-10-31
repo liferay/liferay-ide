@@ -81,6 +81,7 @@ public class UpgradeSettingsUtil {
 
 	public static void retrieveProperties(LiferayUpgradeDataModel dataModel) {
 		String liferay70ServerName = getProperty("Liferay70ServerName");
+
 		String liferay62ServerLocation = getProperty("Liferay62ServerLocation");
 
 		if (CoreUtil.isNotNullOrEmpty(liferay62ServerLocation)) {

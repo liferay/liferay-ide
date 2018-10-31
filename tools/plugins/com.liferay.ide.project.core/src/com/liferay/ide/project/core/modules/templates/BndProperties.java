@@ -166,7 +166,7 @@ public class BndProperties extends Properties {
 					continue;
 				}
 
-				/*
+				/**
 				 *  The characters up to the next Whitespace, ':', or '=' describe the key.
 				 *  But look for escape sequences. Try to short-circuit when there is no escape char.
 				 */
@@ -186,7 +186,7 @@ public class BndProperties extends Properties {
 					if (needsEscape && (c == '\\')) {
 						if (pos == line.length()) {
 
-							/*
+							/**
 							 * The line continues on the next line.
 							 * If there is no next line, just treat it as a key with an empty value.
 							 */
@@ -310,7 +310,7 @@ public class BndProperties extends Properties {
 
 							formatedElement.append(line);
 
-							/*
+							/**
 							 *  We might have seen a backslash at the end of the file.
 							 *  The JDK ignores the backslash in this case, so we follow for compatibility.
 							 */

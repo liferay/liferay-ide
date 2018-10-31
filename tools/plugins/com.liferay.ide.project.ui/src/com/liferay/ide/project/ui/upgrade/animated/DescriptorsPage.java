@@ -266,6 +266,7 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart {
 
 	private String _getNewDoctTypeSetting(String doctypeSetting, String newValue, String regrex) {
 		String newDoctTypeSetting = null;
+
 		Pattern p = Pattern.compile(regrex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
 		Matcher m = p.matcher(doctypeSetting);

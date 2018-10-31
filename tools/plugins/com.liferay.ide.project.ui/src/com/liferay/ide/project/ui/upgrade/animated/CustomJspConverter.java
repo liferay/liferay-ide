@@ -86,6 +86,7 @@ import org.xml.sax.SAXException;
 /**
  * @author Andy Wu
  */
+@SuppressWarnings("serial")
 public class CustomJspConverter {
 
 	public static String resultPrefix = "result";
@@ -767,131 +768,98 @@ public class CustomJspConverter {
 		PropertiesUtil.saveProperties(_resultProp, resultFile);
 	}
 
-	private static List<String> _jspPathMap;
-	private static Map<String, String> _portlet2ModuleMap;
+	private static List<String> _jspPathMap = new ArrayList<String>() {
+		{
+			add("bookmarks");
+			add("blogs");
+			add("blogs_admin");
+			add("blogs_aggregator");
+			add("document_library");
+			add("image_gallery_display");
+			add("message_boards");
+			add("message_boards_admin");
+			add("wiki");
+			add("wiki_display");
+		}
+	};
+	private static Map<String, String> _portlet2ModuleMap = new HashMap<String, String>() {
+		{
+			put("activities", "com.liferay.social.activities.web");
+			put("announcements", "com.liferay.announcements.web");
+			put("asset_browser", "com.liferay.asset.browser.web");
+			put("asset_categories_navigation", "com.liferay.asset.categories.navigation.web");
+			put("asset_category_admin", "com.liferay.asset.categories.admin.web");
+			put("asset_publisher", "com.liferay.asset.publisher.web");
+			put("asset_tag_admin", "com.liferay.asset.tags.admin.web");
+			put("asset_tags_navigation", "com.liferay.asset.tags.navigation.web");
+			put("blogs", "com.liferay.blogs.web");
+			put("blogs_admin", "com.liferay.blogs.web");
+			put("blogs_aggregator", "com.liferay.blogs.web");
+			put("bookmarks", "com.liferay.bookmarks.web");
+			put("breadcrumb", "com.liferay.site.navigation.breadcrumb.web");
+			put("document_library", "com.liferay.document.library.web");
+			put("document_library_display", "com.liferay.document.library.web");
+			put("dynamic_data_list_display", "com.liferay.dynamic.data.lists.web");
+			put("dynamic_data_lists", "com.liferay.dynamic.data.lists.web");
+			put("dynamic_data_mapping", "com.liferay.dynamic.data.mapping.web");
+			put("expando", "com.liferay.expando.web");
+			put("group_statistics", "com.liferay.social.group.statistics.web");
+			put("hello_velocity", "com.liferay.hello.velocity.web");
+			put("iframe", "com.liferay.iframe.web");
+			put("image_gallery_display", "com.liferay.document.library.web");
+			put("journal", "com.liferay.journal.web");
+			put("journal_content", "com.liferay.journal.content.web");
+			put("journal_content_search", "com.liferay.journal.content.search.web");
+			put("language", "com.liferay.site.navigation.language.web");
+			put("layout_prototypes", "com.liferay.layout.prototype.web");
+			put("layout_set_prototypes", "com.liferay.layout.set.prototype.web");
+			put("layouts_admin", "com.liferay.layout.admin.web");
+			put("login", "com.liferay.login.web");
+			put("message_boards", "com.liferay.message.boards.web");
+			put("message_boards_admin", "com.liferay.message.boards.web");
+			put("mobile_device_rules", "com.liferay.mobile.device.rules.web");
+			put("monitoring", "com.liferay.monitoring.web");
+			put("my_account", "com.liferay.my.account.web");
+			put("my_sites", "com.liferay.site.my.sites.web");
+			put("navigation", "com.liferay.site.navigation.menu.web");
+			put("nested_portlets", "com.liferay.nested.portlets.web");
+			put("page_comments", "com.liferay.comment.page.comments.web");
+			put("page_flags", "com.liferay.flags.web");
+			put("page_ratings", "com.liferay.ratings.page.ratings.web");
+			put("password_policies_admin", "com.liferay.password.policies.admin.web");
+			put("plugins_admin", "com.liferay.plugins.admin.web");
+			put("polls", "com.liferay.polls.web");
+			put("polls_display", "com.liferay.polls.web");
+			put("portal_settings", "com.liferay.portal.settings.web");
+			put("portlet_configuration", "com.liferay.portlet.configuration.web");
+			put("portlet_css", "com.liferay.portlet.configuration.css.web");
+			put("quick_note", "com.liferay.quick.note.web");
+			put("recent_bloggers", "com.liferay.blogs.recent.bloggers.web");
+			put("requests", "com.liferay.social.requests.web");
+			put("roles_admin", "com.liferay.roles.admin.web");
+			put("rss", "com.liferay.rss.web");
+			put("search", "com.liferay.portal.search.web");
+			put("site_browser", "com.liferay.site.browser.web");
+			put("site_map", "com.liferay.site.navigation.site.map.web");
+			put("sites_admin", "com.liferay.site.admin.web");
+			put("sites_directory", "com.liferay.site.navigation.directory.web");
+			put("social_activity", "com.liferay.social.activity.web");
+			put("staging_bar", "com.liferay.staging.bar.web");
+			put("trash", "com.liferay.trash.web");
+			put("user_groups_admin", "com.liferay.user.groups.admin.web");
+			put("user_statistics", "com.liferay.social.user.statistics.web");
+			put("users_admin", "com.liferay.users.admin.web");
+			put("web_proxy", "com.liferay.web.proxy.web");
+			put("wiki", "com.liferay.wiki.web");
+			put("wiki_display", "com.liferay.wiki.web");
+			put("workflow_definition_links", "com.liferay.portal.workflow.definition.link.web");
+			put("workflow_definitions", "com.liferay.portal.workflow.definition.web");
+			put("workflow_instances", "com.liferay.portal.workflow.instance.web");
+			put("workflow_tasks", "com.liferay.portal.workflow.task.web");
+			put("xsl_content", "com.liferay.xsl.content.web");
+		}
+	};
 	private static String _resultFileName = "convertJspHookResult.properties";
-
-	static {
-		_portlet2ModuleMap = new HashMap<>();
-
-		_portlet2ModuleMap.put("activities", "com.liferay.social.activities.web");
-
-		// mapper.put( "amazon_rankings", "com.liferay.amazon.rankings.web");
-
-		_portlet2ModuleMap.put("announcements", "com.liferay.announcements.web");
-		_portlet2ModuleMap.put("asset_browser", "com.liferay.asset.browser.web");
-		_portlet2ModuleMap.put("asset_categories_navigation", "com.liferay.asset.categories.navigation.web");
-		_portlet2ModuleMap.put("asset_category_admin", "com.liferay.asset.categories.admin.web");
-		_portlet2ModuleMap.put("asset_publisher", "com.liferay.asset.publisher.web");
-		_portlet2ModuleMap.put("asset_tag_admin", "com.liferay.asset.tags.admin.web");
-		_portlet2ModuleMap.put("asset_tags_navigation", "com.liferay.asset.tags.navigation.web");
-		_portlet2ModuleMap.put("blogs", "com.liferay.blogs.web");
-		_portlet2ModuleMap.put("blogs_admin", "com.liferay.blogs.web");
-		_portlet2ModuleMap.put("blogs_aggregator", "com.liferay.blogs.web");
-		_portlet2ModuleMap.put("bookmarks", "com.liferay.bookmarks.web");
-		_portlet2ModuleMap.put("breadcrumb", "com.liferay.site.navigation.breadcrumb.web");
-
-		// mapper.put( "currency_converter", "com.liferay.currency.converter.web");
-		// mapper.put( "dictionary", "com.liferay.dictionary.web");
-
-		_portlet2ModuleMap.put("document_library", "com.liferay.document.library.web");
-		_portlet2ModuleMap.put("document_library_display", "com.liferay.document.library.web");
-		_portlet2ModuleMap.put("dynamic_data_list_display", "com.liferay.dynamic.data.lists.web");
-		_portlet2ModuleMap.put("dynamic_data_lists", "com.liferay.dynamic.data.lists.web");
-		_portlet2ModuleMap.put("dynamic_data_mapping", "com.liferay.dynamic.data.mapping.web");
-		_portlet2ModuleMap.put("expando", "com.liferay.expando.web");
-		_portlet2ModuleMap.put("group_statistics", "com.liferay.social.group.statistics.web");
-		_portlet2ModuleMap.put("hello_velocity", "com.liferay.hello.velocity.web");
-		_portlet2ModuleMap.put("iframe", "com.liferay.iframe.web");
-		_portlet2ModuleMap.put("image_gallery_display", "com.liferay.document.library.web");
-
-		// mapper.put( "invitation", "com.liferay.invitation.web");
-
-		_portlet2ModuleMap.put("journal", "com.liferay.journal.web");
-		_portlet2ModuleMap.put("journal_content", "com.liferay.journal.content.web");
-		_portlet2ModuleMap.put("journal_content_search", "com.liferay.journal.content.search.web");
-		_portlet2ModuleMap.put("language", "com.liferay.site.navigation.language.web");
-		_portlet2ModuleMap.put("layout_prototypes", "com.liferay.layout.prototype.web");
-		_portlet2ModuleMap.put("layout_set_prototypes", "com.liferay.layout.set.prototype.web");
-		_portlet2ModuleMap.put("layouts_admin", "com.liferay.layout.admin.web");
-
-		// mapper.put( "loan_calculator", "com.liferay.loan.calculator.web");
-
-		_portlet2ModuleMap.put("login", "com.liferay.login.web");
-		_portlet2ModuleMap.put("message_boards", "com.liferay.message.boards.web");
-		_portlet2ModuleMap.put("message_boards_admin", "com.liferay.message.boards.web");
-		_portlet2ModuleMap.put("mobile_device_rules", "com.liferay.mobile.device.rules.web");
-		_portlet2ModuleMap.put("monitoring", "com.liferay.monitoring.web");
-		_portlet2ModuleMap.put("my_account", "com.liferay.my.account.web");
-		_portlet2ModuleMap.put("my_sites", "com.liferay.site.my.sites.web");
-		_portlet2ModuleMap.put("navigation", "com.liferay.site.navigation.menu.web");
-		_portlet2ModuleMap.put("nested_portlets", "com.liferay.nested.portlets.web");
-
-		// mapper.put( "network", "com.liferay.network.utilities.web");
-
-		_portlet2ModuleMap.put("page_comments", "com.liferay.comment.page.comments.web");
-		_portlet2ModuleMap.put("page_flags", "com.liferay.flags.web");
-		_portlet2ModuleMap.put("page_ratings", "com.liferay.ratings.page.ratings.web");
-
-		// mapper.put( "password_generator", "com.liferay.password.generator.web");
-
-		_portlet2ModuleMap.put("password_policies_admin", "com.liferay.password.policies.admin.web");
-		_portlet2ModuleMap.put("plugins_admin", "com.liferay.plugins.admin.web");
-		_portlet2ModuleMap.put("polls", "com.liferay.polls.web");
-		_portlet2ModuleMap.put("polls_display", "com.liferay.polls.web");
-		_portlet2ModuleMap.put("portal_settings", "com.liferay.portal.settings.web");
-		_portlet2ModuleMap.put("portlet_configuration", "com.liferay.portlet.configuration.web");
-		_portlet2ModuleMap.put("portlet_css", "com.liferay.portlet.configuration.css.web");
-		_portlet2ModuleMap.put("quick_note", "com.liferay.quick.note.web");
-		_portlet2ModuleMap.put("recent_bloggers", "com.liferay.blogs.recent.bloggers.web");
-		_portlet2ModuleMap.put("requests", "com.liferay.social.requests.web");
-		_portlet2ModuleMap.put("roles_admin", "com.liferay.roles.admin.web");
-		_portlet2ModuleMap.put("rss", "com.liferay.rss.web");
-		_portlet2ModuleMap.put("search", "com.liferay.portal.search.web");
-
-		// mapper.put( "shopping", "com.liferay.shopping.web");
-
-		_portlet2ModuleMap.put("site_browser", "com.liferay.site.browser.web");
-		_portlet2ModuleMap.put("site_map", "com.liferay.site.navigation.site.map.web");
-		_portlet2ModuleMap.put("sites_admin", "com.liferay.site.admin.web");
-		_portlet2ModuleMap.put("sites_directory", "com.liferay.site.navigation.directory.web");
-		_portlet2ModuleMap.put("social_activity", "com.liferay.social.activity.web");
-		_portlet2ModuleMap.put("staging_bar", "com.liferay.staging.bar.web");
-
-		// mapper.put( "translator", "com.liferay.translator.web");
-
-		_portlet2ModuleMap.put("trash", "com.liferay.trash.web");
-
-		// mapper.put( "unit_converter", "com.liferay.unit.converter.web");
-
-		_portlet2ModuleMap.put("user_groups_admin", "com.liferay.user.groups.admin.web");
-		_portlet2ModuleMap.put("user_statistics", "com.liferay.social.user.statistics.web");
-		_portlet2ModuleMap.put("users_admin", "com.liferay.users.admin.web");
-		_portlet2ModuleMap.put("web_proxy", "com.liferay.web.proxy.web");
-		_portlet2ModuleMap.put("wiki", "com.liferay.wiki.web");
-		_portlet2ModuleMap.put("wiki_display", "com.liferay.wiki.web");
-		_portlet2ModuleMap.put("workflow_definition_links", "com.liferay.portal.workflow.definition.link.web");
-		_portlet2ModuleMap.put("workflow_definitions", "com.liferay.portal.workflow.definition.web");
-		_portlet2ModuleMap.put("workflow_instances", "com.liferay.portal.workflow.instance.web");
-		_portlet2ModuleMap.put("workflow_tasks", "com.liferay.portal.workflow.task.web");
-		_portlet2ModuleMap.put("xsl_content", "com.liferay.xsl.content.web");
-
-		_jspPathMap = new ArrayList<>();
-
-		_jspPathMap.add("bookmarks");
-		_jspPathMap.add("blogs");
-		_jspPathMap.add("blogs_admin");
-		_jspPathMap.add("blogs_aggregator");
-		_jspPathMap.add("document_library");
-		_jspPathMap.add("image_gallery_display");
-		_jspPathMap.add("message_boards");
-		_jspPathMap.add("message_boards_admin");
-		_jspPathMap.add("wiki");
-		_jspPathMap.add("wiki_display");
-
-		// jspPathMap.add("document_library_display");
-
-	}
 
 	// some jsps in some portlets were moved to subfolder in corresponding jar so
 	// the path need to be converted

@@ -47,6 +47,7 @@ public class CustomJspsEnablementService extends EnablementService {
 
 		if (customJspDir != null) {
 			IProject project = _hook().adapt(IProject.class);
+
 			Value<Path> customJspDirValue = customJspDir.getValue();
 
 			Path customJspDirPath = customJspDirValue.content(true);

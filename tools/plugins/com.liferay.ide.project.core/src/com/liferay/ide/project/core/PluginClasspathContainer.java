@@ -387,7 +387,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		IFile pluginPackageFile = webroot.getFile(
 			"WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
 
-		/*
+		/**
 		 * IDE-226 the file may be missing because we are in an ext plugin which has a different layout
 		 * check for ext-web in the path to the docroot
 		 */

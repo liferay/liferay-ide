@@ -87,6 +87,7 @@ public class UpgradeLiferayProjectsOpMethods {
 		List<Status> retval = new ArrayList<>();
 
 		int worked = 0;
+
 		int workUnit = projectItems.size();
 		int actionUnit = projectActions.size();
 		int totalWork = 100;

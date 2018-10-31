@@ -308,6 +308,7 @@ public class GearControl
 			}
 
 			double r1 = radian + radian3;
+
 			double r3 = radian + radian2;
 
 			double r2 = r3 - radian3;

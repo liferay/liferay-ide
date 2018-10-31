@@ -365,7 +365,9 @@ public class BuildHelper {
 		monitor = ProgressUtil.getMonitorFor(monitor);
 
 		List<IStatus> status = new ArrayList<>(2);
+
 		File toDir = path.toFile();
+
 		int fromSize = resources.length;
 
 		String[] fromFileNames = new String[fromSize];
@@ -535,6 +537,7 @@ public class BuildHelper {
 				// check if this is a new or newer file
 
 				boolean copy = true;
+
 				IFile mf = (IFile)current;
 
 				long mod = -1;

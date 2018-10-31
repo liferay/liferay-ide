@@ -98,6 +98,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
+
 		EvaluationContext applicationContext = (EvaluationContext)event.getApplicationContext();
 
 		_combineExistedProblem = (Boolean)applicationContext.getVariable("CombineExistedProblem");

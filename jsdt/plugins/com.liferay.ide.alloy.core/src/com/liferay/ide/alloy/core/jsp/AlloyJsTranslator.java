@@ -51,16 +51,7 @@ public class AlloyJsTranslator extends JsTranslator {
 		super(doc, baseLocation, listen);
 	}
 
-	private static final String _EVENT_HANDLER_POST = "})();";
-
-	private static final int _EVENT_HANDLER_POST_LENGTH = _EVENT_HANDLER_POST.length();
-
-	private static final String _EVENT_HANDLER_PRE = "(function(){";
-
-	private static final int _EVENT_HANDLER_PRE_LENGTH = _EVENT_HANDLER_PRE.length();
-
 	public void translate() {
-
 		synchronized (finished) {
 			if (getCurrentNode() != null) {
 				NodeHelper nh = new NodeHelper(getCurrentNode());
@@ -72,7 +63,7 @@ public class AlloyJsTranslator extends JsTranslator {
 						if ((!nh.isEndTag() || nh.isSelfClosingTag()) &&
 							(nh.nameEquals("script") || nh.nameEquals("aui:script"))) {
 
-							/*
+							/**
 							 * Handles the following cases: <script type="javascriptype"> <script
 							 * language="javascriptype> <script src='' type=javascriptype> <script src=''
 							 * language=javascripttype <script src=''> global js type. <script> (global js
@@ -131,7 +122,9 @@ public class AlloyJsTranslator extends JsTranslator {
 	public void translateInlineJSNode(IStructuredDocumentRegion container) {
 		/* start a function header.. will amend later */
 		ITextRegionList t = container.getRegions();
+
 		ITextRegion r;
+
 		Iterator<?> regionIterator = t.iterator();
 
 		while (regionIterator.hasNext() && !isCanceled()) {
@@ -142,7 +135,7 @@ public class AlloyJsTranslator extends JsTranslator {
 				r.getTextEnd();
 
 				String tagAttrname = container.getText(r);
-				/*
+				/**
 				 * Attribute values aren't case sensative, also make sure next region is attrib
 				 * value
 				 */
@@ -225,5 +218,13 @@ public class AlloyJsTranslator extends JsTranslator {
 			}
 		}
 	}
+
+	private static final String _EVENT_HANDLER_POST = "})();";
+
+	private static final int _EVENT_HANDLER_POST_LENGTH = _EVENT_HANDLER_POST.length();
+
+	private static final String _EVENT_HANDLER_PRE = "(function(){";
+
+	private static final int _EVENT_HANDLER_PRE_LENGTH = _EVENT_HANDLER_PRE.length();
 
 }

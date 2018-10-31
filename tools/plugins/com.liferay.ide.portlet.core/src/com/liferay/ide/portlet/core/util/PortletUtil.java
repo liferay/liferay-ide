@@ -64,6 +64,7 @@ public class PortletUtil {
 	public static String convertIOToJavaFileName(IProject project, String value) {
 		String rbIOFile = value.substring(value.lastIndexOf("/") + 1);
 		IFile resourceBundleFile = null;
+
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
 		IWorkspaceRoot wroot = workspace.getRoot();

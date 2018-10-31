@@ -1065,6 +1065,7 @@ public class ProjectUtil {
 
 		String projName = fpwc.getProjectName();
 		IPath location = fpwc.getProjectLocation();
+
 		String directoryName = StringPool.EMPTY;
 
 		if (location != null) {

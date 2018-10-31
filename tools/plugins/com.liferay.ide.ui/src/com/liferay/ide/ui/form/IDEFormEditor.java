@@ -498,7 +498,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 			}
 		}
 
-		/*
+		/**
 		 * @see
 		 * ISelectionChangedListener#selectionChanged(
 		 * SelectionChangedEvent)
@@ -533,6 +533,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 
 	protected void contextMenuAboutToShow(IMenuManager manager) {
 		IDEFormEditorContributor contributor = getContributor();
+
 		IFormPage page = getActivePageInstance();
 
 		if (page instanceof IDEFormPage) {
@@ -682,6 +683,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 
 	private void _storeDefaultPage() {
 		IEditorInput input = getEditorInput();
+
 		String pageId = _fLastActivePageId;
 
 		if (pageId == null) {

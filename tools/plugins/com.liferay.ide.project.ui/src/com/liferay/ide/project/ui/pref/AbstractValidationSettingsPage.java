@@ -71,6 +71,35 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 		_fValidation = ValidationFramework.getDefault();
 	}
 
+	@Override
+	public boolean performOk() {
+		if (super.performOk() && shouldRevalidateOnSettingsChange()) {
+			MessageBox mb = new MessageBox(
+				getShell(), SWT.APPLICATION_MODAL | SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_INFORMATION | SWT.RIGHT);
+
+			mb.setText(Msgs.validation);
+
+			/* Choose which message to use based on if its project or workspace settings */
+			String msg = (getProject() == null) ? Msgs.workspaceValidation : Msgs.projectLevelValidation;
+
+			mb.setMessage(msg);
+
+			switch (mb.open()) {
+				case SWT.CANCEL:
+					return false;
+				case SWT.YES:
+					ValidateJob job = new ValidateJob(Msgs.validationJob);
+
+					job.schedule();
+				case SWT.NO:
+				default:
+					return true;
+			}
+		}
+
+		return true;
+	}
+
 	/**
 	 * Creates a Combo widget in the composite <code>parent</code>. The data in the
 	 * Combo is associated with <code>key</code>. The Combo data is generated based
@@ -392,33 +421,17 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 	private SelectionListener _fSelectionListener;
 	private ValidationFramework _fValidation;
 
-	@Override
-	public boolean performOk() {
-		if (super.performOk() && shouldRevalidateOnSettingsChange()) {
-			MessageBox mb = new MessageBox(
-				getShell(), SWT.APPLICATION_MODAL | SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_INFORMATION | SWT.RIGHT);
+	private static class Msgs extends NLS {
 
-			mb.setText(Msgs.validation);
+		public static String projectLevelValidation;
+		public static String validation;
+		public static String validationJob;
+		public static String workspaceValidation;
 
-			/* Choose which message to use based on if its project or workspace settings */
-			String msg = (getProject() == null) ? Msgs.workspaceValidation : Msgs.projectLevelValidation;
-
-			mb.setMessage(msg);
-
-			switch (mb.open()) {
-				case SWT.CANCEL:
-					return false;
-				case SWT.YES:
-					ValidateJob job = new ValidateJob(Msgs.validationJob);
-
-					job.schedule();
-				case SWT.NO:
-				default:
-					return true;
-			}
+		static {
+			initializeMessages(AbstractValidationSettingsPage.class.getName(), Msgs.class);
 		}
 
-		return true;
 	}
 
 	/**
@@ -432,27 +445,31 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
-
 			IStatus status = Status.OK_STATUS;
 
 			try {
 				IProject[] projects = null;
-				/* Changed preferences for a single project, only validate it */
+
+				// Changed preferences for a single project, only validate it
+
 				if (getProject() != null) {
 					projects = new IProject[] {getProject()};
 				}
 				else {
-					/* Get all of the projects in the workspace */
+
+					// Get all of the projects in the workspace
+
 					projects = CoreUtil.getAllProjects();
 					IEclipsePreferences prefs = null;
 					List projectList = new ArrayList();
 
-					/* Filter out projects that use project-specific settings or have been closed */
-					for (int i = 0; i < projects.length; i++) {
-						prefs = new ProjectScope(projects[i]).getNode(getPreferenceNodeQualifier());
+					// Filter out projects that use project-specific settings or have been closed
 
-						if (projects[i].isAccessible() && !prefs.getBoolean(getProjectSettingsKey(), false)) {
-							projectList.add(projects[i]);
+					for (IProject project : projects) {
+						prefs = new ProjectScope(project).getNode(getPreferenceNodeQualifier());
+
+						if (project.isAccessible() && !prefs.getBoolean(getProjectSettingsKey(), false)) {
+							projectList.add(project);
 						}
 					}
 
@@ -470,15 +487,4 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 
 	}
 
-	private static class Msgs extends NLS {
-
-		public static String validationJob;
-		public static String projectLevelValidation;
-		public static String validation;
-		public static String workspaceValidation;
-
-		static {
-			initializeMessages(AbstractValidationSettingsPage.class.getName(), Msgs.class);
-		}
-	}
 }

@@ -169,7 +169,7 @@ public class CustomPropertiesConfigLayout extends PropertiesConfigurationLayout 
 
 				while (it.hasNext()) {
 
-					/*
+					/**
 					 * if the last value ended with an escape character, it has
 					 * to be escaped itself; otherwise the list delimiter will
 					 * be escaped

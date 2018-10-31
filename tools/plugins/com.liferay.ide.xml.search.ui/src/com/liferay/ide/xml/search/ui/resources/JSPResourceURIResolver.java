@@ -20,6 +20,7 @@ import java.util.Set;
 /**
  * @author Kuo Zhang
  */
+@SuppressWarnings("serial")
 public class JSPResourceURIResolver extends AbstractWebResourceURIResolver {
 
 	public static final JSPResourceURIResolver INSTANCE = new JSPResourceURIResolver();
@@ -33,12 +34,10 @@ public class JSPResourceURIResolver extends AbstractWebResourceURIResolver {
 		return _extensions;
 	}
 
-	private static final Set<String> _extensions;
-
-	static {
-		_extensions = new HashSet<>();
-
-		_extensions.add("jsp");
-	}
+	private static final Set<String> _extensions = new HashSet<String>() {
+		{
+			add("jsp");
+		}
+	};
 
 }

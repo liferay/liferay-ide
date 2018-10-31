@@ -32,6 +32,7 @@ public class BeforeAfterFilterNameBinding extends XmlValueBindingImpl {
 		XmlElement filterElement = null;
 
 		XmlElement xmlElement = xml();
+
 		BeforeAfterFilterType filterType = _getFilterType();
 
 		String filterTypeText = filterType.getText();
@@ -48,6 +49,7 @@ public class BeforeAfterFilterNameBinding extends XmlValueBindingImpl {
 	@Override
 	public void write(String value) {
 		XmlElement xmlElement = xml();
+
 		BeforeAfterFilterType filterType = _getFilterType();
 
 		String filterTypeText = filterType.getText();

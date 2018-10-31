@@ -84,6 +84,7 @@ public class StudioSplashHandler extends BasicSplashHandler {
 
 		if (preferenceStore.getBoolean("SHOW_BUILDID_ON_STARTUP")) {
 			String buildId = System.getProperty("eclipse.buildId", "Unknown Build");
+
 			String buildIdRect = product.getProperty("buildIdRect");
 
 			Rectangle buildIdRectangle = StringConverter.asRectangle(buildIdRect, new Rectangle(322, 190, 100, 40));

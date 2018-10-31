@@ -20,6 +20,7 @@ import java.util.Set;
 /**
  * @author Kuo Zhang
  */
+@SuppressWarnings("serial")
 public class TplResourceURIResolver extends AbstractWebResourceURIResolver {
 
 	public static final TplResourceURIResolver INSTANCE = new TplResourceURIResolver();
@@ -33,12 +34,10 @@ public class TplResourceURIResolver extends AbstractWebResourceURIResolver {
 		return _extensions;
 	}
 
-	private static final Set<String> _extensions;
-
-	static {
-		_extensions = new HashSet<>();
-
-		_extensions.add("tpl");
-	}
+	private static final Set<String> _extensions = new HashSet<String>() {
+		{
+			add("tpl");
+		}
+	};
 
 }

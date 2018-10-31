@@ -122,6 +122,7 @@ public final class ZipUtil {
 
 				if (!foundStartEntry) {
 					foundStartEntry = entryToStart.equals(name);
+
 					continue;
 				}
 

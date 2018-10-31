@@ -154,7 +154,7 @@ public class BinaryProjectsImportWizardPage
 				true, true,
 				new IRunnableWithProgress() {
 
-					/*
+					/**
 					 * (non-Javadoc)
 					 *
 					 * @see IRunnableWithProgress#run(org .eclipse.core.runtime.IProgressMonitor)
@@ -397,7 +397,7 @@ public class BinaryProjectsImportWizardPage
 			return image;
 		}
 
-		/*
+		/**
 		 * (non-Javadoc)
 		 *
 		 * @see StyledCellLabelProvider#update(org.eclipse.jface. viewers.ViewerCell)

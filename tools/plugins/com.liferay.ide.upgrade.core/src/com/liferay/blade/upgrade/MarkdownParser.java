@@ -93,6 +93,7 @@ public class MarkdownParser {
 			List<Node> siblings = a.siblingNodes();
 
 			StringBuilder sb = new StringBuilder();
+
 			List<Node> interesting = new ArrayList<>();
 
 			for (int i = index; i < siblings.size(); i++) {

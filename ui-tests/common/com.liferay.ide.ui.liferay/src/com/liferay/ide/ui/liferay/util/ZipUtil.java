@@ -119,6 +119,7 @@ public class ZipUtil {
 
 				if (!foundStartEntry) {
 					foundStartEntry = entryToStart.equals(FileUtil.removeDirPrefix(entry.getName()));
+
 					continue;
 				}
 

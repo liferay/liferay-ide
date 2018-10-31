@@ -66,6 +66,8 @@ public interface Messages {
 
 	public static final String DIRECTORY_DOESNT_EXIST = "Directory does not exist.";
 
+	public static final String DO_NOT_USE_QUALIDIED_CLASS_NAME = "Do not use qualified class name.";
+
 	public static final String ENTER_A_NAME_AND_CHOOSE_A_TEMPLATE_FOR_A_NEW_LIFERAY_MODULE =
 		"Enter a name and choose a template to use for a new Liferay module.";
 
@@ -85,6 +87,10 @@ public interface Messages {
 	public static final String IMPORT_AN_EXISTING_LIFERAY_WORKSPACE_PROJECT = "Import an existing Liferay Workspace";
 
 	public static final String IMPORT_EXISTING_LIFERAY_MODULE_PROJECTS = "Import existing liferay module project(s)";
+
+	public static final String INVALID_CLASS_NAME = "Invalid class name";
+
+	public static final String INVALID_JAVA_CLASS_NAME = "Invalid Java class name: The type name ";
 
 	public static final String INVALID_JAVA_PACKAGE_NAME = "Invalid Java package name: ";
 
@@ -110,6 +116,9 @@ public interface Messages {
 
 	public static final String IS_NOT_VALID_BECAUSE_PROJECT_ALREDAY_EXISTS =
 		" is not valid because a project already exists at that location.";
+
+	public static final String JSF_PORTLET_CLASS_MUST_BE_A_VALID_PORTLET_CLASS =
+		"JSF portlet class must be a valid portlet class.";
 
 	public static final String JSP_FOLDER_CANOT_BE_EMPTY = "JSP folder cannot be empty.";
 
@@ -225,6 +234,8 @@ public interface Messages {
 
 	public static final String THE_BUNDLE_URL_SHOULD_BE_A_VALID_URL = "The bundle URL should be a vaild URL.";
 
+	public static final String THE_CLASS_NAME_CANNOT_BE_EMPTY = "The class name cannot be empty.";
+
 	public static final String THE_NAME_IS_INVALID_FOR_A_PROJECT = "The name is invalid for a project.";
 
 	public static final String THE_NAMESPACE_ELEMENT_MUST_BE_A_VALID_KEYWORD =
@@ -276,16 +287,5 @@ public interface Messages {
 
 	public static final String YOUR_ORIGINAL_REQUEST_HAS_BEEN_MODIFIED_SEE_THE_DETAILS =
 		"Your original request has been modified.  See the details.";
-
-	public static final String INVALID_JAVA_CLASS_NAME = "Invalid Java class name: The type name ";
-
-	public static final String JSF_PORTLET_CLASS_MUST_BE_A_VALID_PORTLET_CLASS =
-		"JSF portlet class must be a valid portlet class.";
-
-	public static final String THE_CLASS_NAME_CANNOT_BE_EMPTY = "The class name cannot be empty.";
-
-	public static final String INVALID_CLASS_NAME = "Invalid class name";
-
-	public static final String DO_NOT_USE_QUALIDIED_CLASS_NAME = "Do not use qualified class name.";
 
 }

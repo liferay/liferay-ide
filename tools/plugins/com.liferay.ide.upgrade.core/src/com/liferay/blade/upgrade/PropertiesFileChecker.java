@@ -247,6 +247,7 @@ public class PropertiesFileChecker {
 				}
 
 				String key = _loadConvert(lr._lineBuf, 0, keyLen, convtBuf);
+
 				KeyInfo info = new KeyInfo(limit[1] - limit[0] - 1, keyLen, lineNumber);
 
 				info.value = _loadConvert(lr._lineBuf, valueStart, limit[0] - valueStart, convtBuf);
@@ -344,12 +345,14 @@ public class PropertiesFileChecker {
 					if (CoreUtil.isWindows()) {
 						if (!appendedLineBegin && (c == '\r')) {
 							crStack.push(c);
+
 							continue;
 						}
 					}
 					else {
 						if (!appendedLineBegin && ((c == '\r') || (c == '\n'))) {
 							emptylines++;
+
 							continue;
 						}
 					}
@@ -364,6 +367,7 @@ public class PropertiesFileChecker {
 					if ((c == '#') || (c == '!')) {
 						commentLine = true;
 						emptylines++;
+
 						continue;
 					}
 				}
@@ -403,6 +407,7 @@ public class PropertiesFileChecker {
 						newLine = true;
 						skipWhiteSpace = true;
 						len = 0;
+
 						continue;
 					}
 

@@ -26,6 +26,7 @@ import java.util.Set;
  * </pre>
  * @author Gregory Amerson
  */
+@SuppressWarnings("serial")
 public class ImageResourcesURIResolver extends AbstractWebResourceURIResolver {
 
 	public static final ImageResourcesURIResolver INSTANCE = new ImageResourcesURIResolver();
@@ -39,16 +40,14 @@ public class ImageResourcesURIResolver extends AbstractWebResourceURIResolver {
 		return _extensions;
 	}
 
-	private static final Set<String> _extensions;
-
-	static {
-		_extensions = new HashSet<>();
-
-		_extensions.add("bmp");
-		_extensions.add("gif");
-		_extensions.add("jpeg");
-		_extensions.add("jpg");
-		_extensions.add("png");
-	}
+	private static final Set<String> _extensions = new HashSet<String>() {
+		{
+			add("bmp");
+			add("gif");
+			add("jpeg");
+			add("jpg");
+			add("png");
+		}
+	};
 
 }

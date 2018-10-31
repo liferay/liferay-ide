@@ -111,7 +111,7 @@ public class RemoteSourcePathComputerDelegate implements ISourcePathComputerDele
 
 		public void visitDependentJavaProject(IJavaProject javaProject) {
 
-			/*
+			/**
 			 * Ensure dependent projects are listed directly in the classpath
 			 * list.
 			 * This is needed because JavaRuntime.getSourceContainers() won't

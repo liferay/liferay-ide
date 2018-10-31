@@ -26,6 +26,7 @@ import java.util.Set;
  * </pre>
  * @author Gregory Amerson
  */
+@SuppressWarnings("serial")
 public class JSResourceURIResolver extends AbstractWebResourceURIResolver {
 
 	public static final JSResourceURIResolver INSTANCE = new JSResourceURIResolver();
@@ -39,12 +40,10 @@ public class JSResourceURIResolver extends AbstractWebResourceURIResolver {
 		return _extensions;
 	}
 
-	private static final Set<String> _extensions;
-
-	static {
-		_extensions = new HashSet<>();
-
-		_extensions.add("js");
-	}
+	private static final Set<String> _extensions = new HashSet<String>() {
+		{
+			add("js");
+		}
+	};
 
 }

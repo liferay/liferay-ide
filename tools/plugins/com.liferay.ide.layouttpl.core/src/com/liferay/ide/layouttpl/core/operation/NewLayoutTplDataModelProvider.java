@@ -229,6 +229,7 @@ public class NewLayoutTplDataModelProvider
 
 	private boolean _checkoutDocrootFileNameCorrect(String filename, String type) {
 		int firstindex = filename.indexOf("/");
+
 		int lastindex = filename.lastIndexOf("." + type);
 
 		String filetype = filename.substring(lastindex + 1);

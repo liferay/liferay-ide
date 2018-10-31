@@ -150,6 +150,7 @@ public class RelationshipsBindingImpl extends LayeredListPropertyBinding {
 		String toName = relObject.getToName();
 
 		Entity fromEntity = EntityRelationshipService.findEntity(fromName, _serviceBuilder());
+
 		Entity toEntity = EntityRelationshipService.findEntity(toName, _serviceBuilder());
 
 		Column primaryKeyColumn = _findPrimaryKey(toEntity);

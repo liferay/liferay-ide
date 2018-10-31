@@ -84,7 +84,7 @@ public class LocationValidationService extends ValidationService {
 		Path currentProjectLocation = SapphireUtil.getContent(op.getLocation());
 		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
 
-		/*
+		/**
 		 * Location won't be validated if the UseDefaultLocation has an error.
 		 * Get the validation of the property might not work as excepted,
 		 * let's use call the validation service manually.
@@ -97,7 +97,7 @@ public class LocationValidationService extends ValidationService {
 		Status status = service.validation();
 
 		if (!useDefalutLocationValue.content(true) && status.ok() && (currentProjectName != null)) {
-			/*
+			/**
 			 * IDE-1150, instead of using annotation "@Required",use this service to
 			 * validate the custom project location must be specified, let the wizard
 			 * display the error of project name when project name and location are both

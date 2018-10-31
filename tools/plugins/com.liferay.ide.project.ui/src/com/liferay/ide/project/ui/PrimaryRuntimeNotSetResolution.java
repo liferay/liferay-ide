@@ -55,7 +55,7 @@ public class PrimaryRuntimeNotSetResolution implements IMarkerResolution {
 
 			final IFacetedProject fproj = ProjectUtil.getFacetedProject(proj);
 
-			/*
+			/**
 			 * Let users set a Liferay server runtime when there is no available one.
 			 */
 			Set<org.eclipse.wst.server.core.IRuntime> runtimes = ServerUtil.getAvailableLiferayRuntimes();
@@ -68,7 +68,7 @@ public class PrimaryRuntimeNotSetResolution implements IMarkerResolution {
 				}
 			}
 
-			/*
+			/**
 			 * Let users confirm when there is only one available Liferay runtime.
 			 *
 			 * If the previous judgment block is executed, the size of available targeted
@@ -94,7 +94,7 @@ public class PrimaryRuntimeNotSetResolution implements IMarkerResolution {
 				}
 			}
 
-			/*
+			/**
 			 * Open the "Targeted Runtimes" property page and let users set a runtime as the
 			 * primary one when there are multiple Liferay runtimes available.
 			 */

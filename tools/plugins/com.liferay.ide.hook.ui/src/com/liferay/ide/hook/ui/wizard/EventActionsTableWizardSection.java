@@ -319,7 +319,7 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 				return;
 			}
 
-			/*
+			/**
 			 * This includes all entries on the classpath.
 			 * This behavior is identical to the Super Class Browse Button on the Create new Java Class Wizard.
 			 */

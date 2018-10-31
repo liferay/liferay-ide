@@ -118,7 +118,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 		boolean hasServiceBuilder = SapphireUtil.getContent(_dataModel.getHasServiceBuilder());
 		boolean hasHook = SapphireUtil.getContent(_dataModel.getHasHook());
 		boolean hasLayout = SapphireUtil.getContent(_dataModel.getHasLayout());
-		/*
+		/**
 		 * boolean hasTheme = dataModel.getHasTheme().content(); boolean hasExt =
 		 * dataModel.getHasExt().content(); boolean hasWorkspace =
 		 * dataModel.getConvertLiferayWorkspace().content();
@@ -149,7 +149,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 			}
 		}
 
-		/*
+		/**
 		 * if( hasExt || hasTheme || hasWorkspace ) { addPage( Page.EXTANDTHEME_PAGE_ID
 		 * ); }
 		 */

@@ -56,6 +56,7 @@ public abstract class ToolBarButtonContribution extends ControlContribution {
 		composite.setLayout(layout);
 
 		Control button = createButton(composite);
+
 		int heigtHint = SWT.DEFAULT;
 
 		if (Platform.WS_WIN32.equals(SWT.getPlatform())) {

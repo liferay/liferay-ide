@@ -58,10 +58,13 @@ public interface Filter extends Describeable, Displayable {
 
 	public void setName(String value);
 
-	@JavaTypeConstraint(behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE, kind = JavaTypeKind.CLASS, type = {
-		"javax.portlet.filter.ResourceFilter", "javax.portlet.filter.RenderFilter", "javax.portlet.filter.ActionFilter",
-		"javax.portlet.filter.EventFilter"
-	})
+	@JavaTypeConstraint(
+		behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE, kind = JavaTypeKind.CLASS,
+		type = {
+			"javax.portlet.filter.ResourceFilter", "javax.portlet.filter.RenderFilter",
+			"javax.portlet.filter.ActionFilter", "javax.portlet.filter.EventFilter"
+		}
+	)
 	@Label(full = "Filter implementation class", standard = "implementation class")
 	@MustExist
 	@Reference(target = JavaType.class)

@@ -72,6 +72,7 @@ public class JSPQuickAssistProcessor implements IQuickAssistProcessor {
 		ICompletionProposal[] retval = null;
 
 		List<ICompletionProposal> proposals = new ArrayList<>();
+
 		ISourceViewer sourceViewer = context.getSourceViewer();
 
 		IAnnotationModel annotationModel = sourceViewer.getAnnotationModel();

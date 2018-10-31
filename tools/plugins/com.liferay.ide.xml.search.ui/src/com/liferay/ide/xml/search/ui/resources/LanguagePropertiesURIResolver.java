@@ -23,6 +23,7 @@ import org.eclipse.wst.xml.search.core.resource.ResourceBaseURIResolver;
 /**
  * @author Kuo Zhang
  */
+@SuppressWarnings("serial")
 public class LanguagePropertiesURIResolver extends ResourceBaseURIResolver {
 
 	public static final LanguagePropertiesURIResolver INSTANCE = new LanguagePropertiesURIResolver();
@@ -65,12 +66,10 @@ public class LanguagePropertiesURIResolver extends ResourceBaseURIResolver {
 		return _extensions;
 	}
 
-	private static final Set<String> _extensions;
-
-	static {
-		_extensions = new HashSet<>();
-
-		_extensions.add("properties");
-	}
+	private static final Set<String> _extensions = new HashSet<String>() {
+		{
+			add("properties");
+		}
+	};
 
 }

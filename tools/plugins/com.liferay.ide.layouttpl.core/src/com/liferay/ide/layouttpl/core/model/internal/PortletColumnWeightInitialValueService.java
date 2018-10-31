@@ -59,7 +59,7 @@ public class PortletColumnWeightInitialValueService extends InitialValueService 
 		}
 		else if (weightSum == fullWeight) {
 
-			/*
+			/**
 			 * the index of last valid column is portletColumns.size() - 2, because
 			 * portletColumns().size() -1 is the new inserted column
 			 */

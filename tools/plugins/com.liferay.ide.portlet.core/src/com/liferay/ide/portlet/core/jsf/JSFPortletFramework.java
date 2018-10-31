@@ -119,7 +119,7 @@ public class JSFPortletFramework
 	public IStatus postProjectCreated(
 		IProject project, String frameworkName, String portletName, IProgressMonitor monitor) {
 
-		/*
+		/**
 		 * we need to copy the original web.xml from the project template
 		 * because of bugs in the JSF facet installer will overwrite our web.xml
 		 * that comes with in the template

@@ -48,6 +48,7 @@ public class PortalResourcesProvider implements IWebResourcesFileSystemProvider 
 	@Override
 	public File[] getResources(IWebResourcesContext context) {
 		File[] retval = null;
+
 		IFile htmlFile = context.getHtmlFile();
 
 		ILiferayProject project = LiferayCore.create(htmlFile.getProject());

@@ -113,6 +113,7 @@ public class ModuleTraverser {
 		}
 
 		String typeId = moduleType.getId();
+
 		IVirtualComponent component = ComponentCore.createComponent(module.getProject());
 
 		if (component == null) {
@@ -278,7 +279,7 @@ public class ModuleTraverser {
 			IClasspathAttribute resolvedAttrib = _checkForComponentDependencyAttribute(
 				resolvedEntry, _DEPENDECYATTRIBUTETYPE_DEPENDENCY_OR_NONDEPENDENCY);
 
-			/*
+			/**
 			 * attribute for the resolved entry must either be unspecified or it must be the
 			 * dependency attribute for it to be included
 			 */
@@ -357,6 +358,7 @@ public class ModuleTraverser {
 	 */
 	private static IPath _getResolvedPathForArchiveComponent(URI uri) {
 		String resourceType = uri.segment(1);
+
 		URI contenturi = ModuleURIUtil.trimToRelativePath(uri, 2);
 
 		String contentName = contenturi.toString();
@@ -372,6 +374,7 @@ public class ModuleTraverser {
 			// module:/classpath/var/<CLASSPATHVAR>/foo.jar
 
 			String classpathVar = contenturi.segment(0);
+
 			URI remainingPathuri = ModuleURIUtil.trimToRelativePath(contenturi, 1);
 
 			String remainingPath = remainingPathuri.toString();
@@ -458,6 +461,7 @@ public class ModuleTraverser {
 			ComponentResource childComp = (ComponentResource)itorRes.next();
 
 			IPath rtPath = childComp.getRuntimePath();
+
 			IPath srcPath = childComp.getSourcePath();
 
 			IClasspathEntry cpe = _getClasspathEntry(project, srcPath);
@@ -544,7 +548,7 @@ public class ModuleTraverser {
 
 		// Currently the JST Server portion of WTP may not depend on the JST Enterprise portion of WTP
 
-		/*
+		/**
 		 * EARArtifactEdit earEdit = EARArtifactEdit
 		 * .getEARArtifactEditForRead(component); if (earEdit != null) {
 		 * IVirtualReference[] j2eeComponents =

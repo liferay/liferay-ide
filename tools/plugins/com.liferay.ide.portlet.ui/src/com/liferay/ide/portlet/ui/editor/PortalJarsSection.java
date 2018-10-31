@@ -582,6 +582,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		{
 			initializeMessages(PortalJarsSection.class.getName(), Msgs.class);
 		}
+
 	}
 
 }

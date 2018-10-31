@@ -214,10 +214,13 @@ public interface LiferayPortlet extends Element {
 	public ValueProperty PROP_CONFIGURATION_ACTION_CLASS = new ValueProperty(TYPE, "ConfigurationActionClass");
 
 	@Label(standard = "Control Panel Entry Category")
-	@PossibleValues(invalidValueSeverity = Severity.OK, values = {
-		"apps", "configurations", "sites", "users", "site_administration.configuration", "site_administration.content",
-		"site_administration.pages", "site_administration.users"
-	})
+	@PossibleValues(
+		invalidValueSeverity = Severity.OK,
+		values = {
+			"apps", "configurations", "sites", "users", "site_administration.configuration",
+			"site_administration.content", "site_administration.pages", "site_administration.users"
+		}
+	)
 	@XmlBinding(path = "control-panel-entry-category")
 	public ValueProperty PROP_CONTROL_PANEL_ENTRY_CATEGORY = new ValueProperty(TYPE, "ControlPanelEntryCategory");
 

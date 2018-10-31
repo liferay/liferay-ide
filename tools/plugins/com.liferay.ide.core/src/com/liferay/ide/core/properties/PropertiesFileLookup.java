@@ -186,6 +186,7 @@ public class PropertiesFileLookup {
 						newLine = true;
 						skipWhiteSpace = true;
 						len = 0;
+
 						continue;
 					}
 

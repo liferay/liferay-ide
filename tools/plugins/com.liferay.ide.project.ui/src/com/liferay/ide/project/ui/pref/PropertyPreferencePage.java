@@ -115,7 +115,7 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 
 		_projectSettingsLink.setLayoutData(new GridData(SWT.END, SWT.BEGINNING, true, false));
 
-		/*
+		/**
 		 * "element" should be a project, if null, link to per-project properties
 		 */
 		if (getProject() != null) {

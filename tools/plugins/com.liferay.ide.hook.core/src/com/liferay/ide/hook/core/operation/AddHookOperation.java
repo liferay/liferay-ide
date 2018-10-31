@@ -197,6 +197,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		}
 
 		List<String[]> customJsps = (List<String[]>)dm.getProperty(CUSTOM_JSPS_ITEMS);
+
 		ILiferayProject liferayProject = LiferayCore.create(getTargetProject());
 
 		ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);

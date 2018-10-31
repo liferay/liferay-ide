@@ -145,7 +145,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 			addImage(propModelElementType.image());
 		}
 
-		/*
+		/**
 		 * (non-Javadoc)
 		 *
 		 * @see

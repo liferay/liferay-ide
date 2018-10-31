@@ -195,6 +195,7 @@ public class ComponentUtil {
 	public static void validateFolder(IFolder folder, IProgressMonitor monitor) {
 		try {
 			Map<IProject, Set<IResource>> projects = new HashMap<>();
+
 			Set<IResource> resources = new HashSet<>();
 
 			folder.accept(

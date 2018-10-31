@@ -590,6 +590,7 @@ public class RequiredDeploymentContextsSection
 		{
 			initializeMessages(RequiredDeploymentContextsSection.class.getName(), Msgs.class);
 		}
+
 	}
 
 }

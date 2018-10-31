@@ -126,9 +126,11 @@ public class BundlePublishFullAdd extends BundlePublishOperation {
 
 	private IStatus _autoDeploy(IPath output) throws CoreException {
 		IStatus retval = null;
+
 		PortalBundle portalBundle = portalRuntime.getPortalBundle();
 
 		IPath autoDeployPath = portalBundle.getAutoDeployPath();
+
 		IPath modulesPath = portalBundle.getModulesPath();
 
 		IPath statePath = modulesPath.append("state");
@@ -157,6 +159,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation {
 
 	private String _getBundleUrl(File bundleFile, String bsn) throws MalformedURLException {
 		String bundleUrl = null;
+
 		Path bundlePath = bundleFile.toPath();
 
 		String bp = bundlePath.toString();

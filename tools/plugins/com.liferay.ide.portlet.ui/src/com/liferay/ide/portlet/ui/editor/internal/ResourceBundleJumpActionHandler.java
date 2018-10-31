@@ -42,14 +42,9 @@ import org.eclipse.ui.ide.IDE;
 /**
  * @author Kamesh Sampath
  */
+@SuppressWarnings("deprecation")
 public class ResourceBundleJumpActionHandler extends JumpActionHandler {
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#
-	 * computeEnablementState()
-	 */
 	@Override
 	protected boolean computeEnablementState() {
 		Element element = getModelElement();
@@ -93,13 +88,6 @@ public class ResourceBundleJumpActionHandler extends JumpActionHandler {
 		return false;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.
-	 * SapphireRenderingContext)
-	 */
 	@Override
 	protected Object run(Presentation context) {
 		Element element = getModelElement();
@@ -133,6 +121,7 @@ public class ResourceBundleJumpActionHandler extends JumpActionHandler {
 				if (FileUtil.exists(resourceBundleFile)) {
 					if (window != null) {
 						IWorkbenchPage page = window.getActivePage();
+
 						IEditorDescriptor editorDescriptor = null;
 
 						try {

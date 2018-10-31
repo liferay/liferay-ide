@@ -245,6 +245,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 				@Override
 				public boolean visit(MethodDeclaration node) {
 					boolean sameParmSize = true;
+
 					boolean sameReturnType = true;
 
 					if (returnType != null) {

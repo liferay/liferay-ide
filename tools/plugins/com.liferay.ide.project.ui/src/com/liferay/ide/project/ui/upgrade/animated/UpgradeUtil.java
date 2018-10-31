@@ -288,6 +288,7 @@ public class UpgradeUtil {
 			Document doc = builder.build(ivyInput);
 
 			Element itemRem = null;
+
 			Element elementRoot = doc.getRootElement();
 
 			List<Element> resolversElements = elementRoot.getChildren("resolvers");

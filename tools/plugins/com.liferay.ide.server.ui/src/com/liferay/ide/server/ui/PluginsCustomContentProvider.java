@@ -128,6 +128,7 @@ public class PluginsCustomContentProvider extends AbstractNavigatorContentProvid
 	public boolean hasChildren(Object element, boolean currentHasChildren) {
 		if (element instanceof ModuleServer) {
 			INavigatorContentService service = getConfig().getService();
+
 			INavigatorContentExtension extension = getConfig().getExtension();
 
 			INavigatorContentDescriptor descriptor = extension.getDescriptor();

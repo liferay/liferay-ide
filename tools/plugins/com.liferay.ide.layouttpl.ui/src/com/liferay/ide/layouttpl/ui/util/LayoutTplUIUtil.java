@@ -37,7 +37,7 @@ public class LayoutTplUIUtil {
 	public static int adjustWeight(int newWeight) {
 		int retval = -1;
 
-		/*
+		/**
 		 * make sure that new weight is valid
 		 *
 		 * use 35 instead of 34 because the 33 and 66 situations should be

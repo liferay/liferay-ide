@@ -76,7 +76,8 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
 						retval = runWithMarker(problem, marker);
 
 						if (provider instanceof Viewer) {
-							final Viewer viewer = (Viewer)provider;
+							Viewer viewer = (Viewer)provider;
+
 							FindBreakingChangesPage page = UpgradeView.getPage(
 								Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
