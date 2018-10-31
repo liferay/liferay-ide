@@ -31,7 +31,9 @@ public class TargetPlatformDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected String compute() {
-		String retval = WorkspaceConstants.TARGET_PLATFORM_VERSIONS_7_0[0];
+		String[] latestTargetPlatformVersions = WorkspaceConstants.liferayVersionsToTargetPlatformVersions.get("7.1");
+
+		String retval = latestTargetPlatformVersions[0];
 
 		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
@@ -40,8 +42,8 @@ public class TargetPlatformDefaultValueService extends DefaultValueService {
 		String defaultLiferayVersion = prefService.getString(
 			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, null, prefContexts);
 
-		if ("7.1".equals(defaultLiferayVersion)) {
-			retval = WorkspaceConstants.TARGET_PLATFORM_VERSIONS_7_1[0];
+		if (defaultLiferayVersion != null) {
+			retval = WorkspaceConstants.liferayVersionsToTargetPlatformVersions.get(defaultLiferayVersion)[0];
 		}
 
 		return retval;

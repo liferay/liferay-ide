@@ -27,6 +27,7 @@ import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
  * @author Haoyi Sun
+ * @author Terry Jia
  */
 public class TargetLiferayVersionListener extends FilteredListener<PropertyContentEvent> {
 
@@ -34,7 +35,7 @@ public class TargetLiferayVersionListener extends FilteredListener<PropertyConte
 	protected void handleTypedEvent(PropertyContentEvent event) {
 		Property property = event.property();
 
-		String bundleVersion = property.toString();
+		String liferayVersion = property.toString();
 
 		Element newLiferayWorkspaceOp = property.element();
 
@@ -48,7 +49,7 @@ public class TargetLiferayVersionListener extends FilteredListener<PropertyConte
 		bundleUrls.add(WorkspaceConstants.BUNDLE_URL_CE_7_0);
 
 		if (bundleUrls.contains(bundleUrl)) {
-			if (bundleVersion.equals("7.1")) {
+			if (liferayVersion.equals("7.1")) {
 				op.setBundleUrl(WorkspaceConstants.BUNDLE_URL_CE_7_1);
 			}
 			else {
@@ -56,12 +57,7 @@ public class TargetLiferayVersionListener extends FilteredListener<PropertyConte
 			}
 		}
 
-		if (bundleVersion.equals("7.1")) {
-			op.setTargetPlatform(WorkspaceConstants.TARGET_PLATFORM_VERSIONS_7_1[0]);
-		}
-		else {
-			op.setTargetPlatform(WorkspaceConstants.TARGET_PLATFORM_VERSIONS_7_0[0]);
-		}
+		op.setTargetPlatform(WorkspaceConstants.liferayVersionsToTargetPlatformVersions.get(liferayVersion)[0]);
 	}
 
 }

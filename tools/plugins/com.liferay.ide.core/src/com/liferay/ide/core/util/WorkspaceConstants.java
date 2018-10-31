@@ -14,9 +14,13 @@
 
 package com.liferay.ide.core.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Terry Jia
  */
+@SuppressWarnings("serial")
 public class WorkspaceConstants {
 
 	public static final String BUNDLE_ARTIFACT_NAME_PROPERTY = "liferay.workspace.bundle.artifact.name";
@@ -47,20 +51,22 @@ public class WorkspaceConstants {
 
 	public static final String HOME_DIR_PROPERTY = "liferay.workspace.home.dir";
 
-	public static final String[] LIFERAY_VERSIONS = {"7.0", "7.1"};
-
 	public static final String MODULES_DIR_PROPERTY = "liferay.workspace.modules.dir";
 
 	public static final String PLUGINS_SDK_DIR_PROPERTY = "liferay.workspace.plugins.sdk.dir";
 
 	public static final String TARGET_PLATFORM_VERSION_PROPERTY = "liferay.workspace.target.platform.version";
 
-	public static final String[] TARGET_PLATFORM_VERSIONS_7_0 = {"7.0.6"};
-
-	public static final String[] TARGET_PLATFORM_VERSIONS_7_1 = {"7.1.0"};
-
 	public static final String THEMES_DIR_PROPERTY = "liferay.workspace.themes.dir";
 
 	public static final String WARS_DIR_PROPERTY = "liferay.workspace.wars.dir";
+
+	public static final Map<String, String[]> liferayVersionsToTargetPlatformVersions =
+		new HashMap<String, String[]>() {
+			{
+				put("7.1", new String[] {"7.1.0"});
+				put("7.0", new String[] {"7.0.6"});
+			}
+		};
 
 }

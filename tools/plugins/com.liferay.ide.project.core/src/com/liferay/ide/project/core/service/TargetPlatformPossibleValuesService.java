@@ -32,8 +32,9 @@ public class TargetPlatformPossibleValuesService extends PossibleValuesService {
 	protected void compute(Set<String> values) {
 		List<String> possibleValues = new ArrayList<>();
 
-		Collections.addAll(possibleValues, WorkspaceConstants.TARGET_PLATFORM_VERSIONS_7_0);
-		Collections.addAll(possibleValues, WorkspaceConstants.TARGET_PLATFORM_VERSIONS_7_1);
+		for (String[] targetPlatformVersions : WorkspaceConstants.liferayVersionsToTargetPlatformVersions.values()) {
+			Collections.addAll(possibleValues, targetPlatformVersions);
+		}
 
 		values.addAll(possibleValues);
 	}

@@ -14,7 +14,10 @@
 
 package com.liferay.ide.project.core.service;
 
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
+
+import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
@@ -25,12 +28,17 @@ import org.eclipse.sapphire.DefaultValueService;
 
 /**
  * @author Joye Luo
+ * @author Terry Jia
  */
 public class TargetLiferayVersionDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected String compute() {
-		String retval = "7.0";
+		Set<String> liferayVersionSet = WorkspaceConstants.liferayVersionsToTargetPlatformVersions.keySet();
+
+		String[] liferayVersions = liferayVersionSet.toArray(new String[0]);
+
+		String retval = liferayVersions[liferayVersions.length - 1];
 
 		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
