@@ -88,7 +88,7 @@ public class QNameLocalPartValueBinding extends XmlValueBindingImpl {
 		String val = value;
 		XmlElement parent = xml(true);
 
-		/*
+		/**
 		 * In some cases the parent node and the child nodes will be same, we need to
 		 * ensure that we dont create them accidentally again
 		 */

@@ -26,6 +26,7 @@ import java.util.Set;
  * </pre>
  * @author Gregory Amerson
  */
+@SuppressWarnings("serial")
 public class CSSResourceURIResolver extends AbstractWebResourceURIResolver {
 
 	public static final CSSResourceURIResolver INSTANCE = new CSSResourceURIResolver();
@@ -39,12 +40,10 @@ public class CSSResourceURIResolver extends AbstractWebResourceURIResolver {
 		return _extensions;
 	}
 
-	private static final Set<String> _extensions;
-
-	static {
-		_extensions = new HashSet<>();
-
-		_extensions.add("css");
-	}
+	private static final Set<String> _extensions = new HashSet<String>() {
+		{
+			add("css");
+		}
+	};
 
 }

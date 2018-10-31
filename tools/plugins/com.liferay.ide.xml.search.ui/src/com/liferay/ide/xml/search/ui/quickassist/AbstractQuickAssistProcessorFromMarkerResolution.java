@@ -48,6 +48,7 @@ public abstract class AbstractQuickAssistProcessorFromMarkerResolution implement
 		ICompletionProposal[] retval = null;
 
 		List<ICompletionProposal> proposals = new ArrayList<>();
+
 		ISourceViewer sourceViewer = context.getSourceViewer();
 
 		IAnnotationModel annotationModel = sourceViewer.getAnnotationModel();

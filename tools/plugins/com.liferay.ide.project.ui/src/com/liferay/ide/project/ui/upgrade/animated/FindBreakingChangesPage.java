@@ -231,6 +231,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 			});
 
 		Composite buttonContainer = new Composite(findBreakingchangesContainer, SWT.NONE);
+
 		GridLayout buttonContainerLayout = new GridLayout(1, false);
 
 		buttonContainerLayout.marginHeight = 0;

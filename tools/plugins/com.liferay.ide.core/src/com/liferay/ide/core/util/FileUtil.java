@@ -903,7 +903,7 @@ public class FileUtil {
 
 			// int bytesTotal = 0;
 
-			/*
+			/**
 			 * Keep reading from the file while there is any content when the end of the stream has been reached,
 			 * -1 is returned
 			 */
@@ -1216,7 +1216,7 @@ public class FileUtil {
 
 			int bytesRead = 0;
 
-			/*
+			/**
 			 * Keep reading from the file while there is any content when the end of the stream has been reached, -1 is returned
 			 */
 			while ((bytesRead = bin.read(buffer)) != -1) {

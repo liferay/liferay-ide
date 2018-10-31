@@ -255,7 +255,8 @@ public class BuildPage extends Page {
 
 				@Override
 				public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-					final List<TableViewElement> tableViewElementList = new ArrayList<>();
+					List<TableViewElement> tableViewElementList = new ArrayList<>();
+
 					int count = selectProjects.length;
 
 					if (count <= 0) {

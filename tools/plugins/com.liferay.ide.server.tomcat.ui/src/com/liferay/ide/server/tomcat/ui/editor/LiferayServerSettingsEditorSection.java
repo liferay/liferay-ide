@@ -592,7 +592,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					validate();
 				}
 				else if (ILiferayTomcatServer.PROPERTY_USE_DEFAULT_PORTAL_SERVER_SETTINGS.equals(
-							 event.getPropertyName())) {
+							event.getPropertyName())) {
 
 					boolean s = (Boolean)event.getNewValue();
 
@@ -713,7 +713,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 	protected void updateDefaultDeployLink() {
 
-		/*
+		/**
 		 * boolean newState = defaultDeployPath.equals(new
 		 *  Path(tomcatServer.getDeployDirectory()));
 		 *  if (newState != defaultDeployDirIsSet) {
@@ -728,7 +728,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 	protected void updateServerDirButtons() {
 		if (tomcatServer.getInstanceDirectory() == null) {
 
-			/*
+			/**
 			 * IPath path = tomcatServer.getRuntimeBaseDirectory();
 			 *  if (path != null && path.equals(installDirPath)) {
 			 * serverDirInstall.setSelection(true);
@@ -742,7 +742,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 			 */
 		}
 		else {
-			/*
+			/**
 			 * serverDirCustom.setSelection(true);
 			 * serverDirMetadata.setSelection(false);
 			 * serverDirInstall.setSelection(false);
@@ -752,7 +752,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 	protected void updateServerDirFields() {
 
-		/*
+		/**
 		 * updateServerDir();
 		 * boolean customServerDir = true;//serverDirCustom.getSelection();
 		 * serverDir.setEnabled(allowRestrictedEditing && customServerDir);

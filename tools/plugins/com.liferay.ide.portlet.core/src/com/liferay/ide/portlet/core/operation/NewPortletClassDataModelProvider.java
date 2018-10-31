@@ -894,7 +894,7 @@ public class NewPortletClassDataModelProvider
 	}
 
 	protected String getPortletNameFromClassName(String oldName) {
-		/*
+		/**
 		 * Explaination for following regex first part, the rule is
 		 * "before this place there is not a line start" then, two options - 1. after
 		 * this place is: uppercase followed by lowercase. eg: NewJSF_Portlet or 2.

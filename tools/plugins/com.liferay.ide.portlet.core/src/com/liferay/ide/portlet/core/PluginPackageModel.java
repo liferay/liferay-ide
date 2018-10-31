@@ -385,6 +385,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 		Collections.addAll(list, deps);
 
 		int index1 = list.indexOf(dep1);
+
 		int index2 = list.indexOf(dep2);
 
 		list.set(index2, dep1);

@@ -195,26 +195,32 @@ public class ProjectNameValidationService extends ValidationService {
 			case servicebuilder:
 			case portlet:
 				pluginTypeValue = ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
+
 				break;
 
 			case hook:
 				pluginTypeValue = ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
+
 				break;
 
 			case ext:
 				pluginTypeValue = ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
+
 				break;
 
 			case layouttpl:
 				pluginTypeValue = ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
+
 				break;
 
 			case theme:
 				pluginTypeValue = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
+
 				break;
 
 			case web:
 				pluginTypeValue = ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX;
+
 				break;
 
 			default:
@@ -249,7 +255,7 @@ public class ProjectNameValidationService extends ValidationService {
 
 	private boolean _isValidMavenProjectName(String currentProjectName) {
 
-		/*
+		/**
 		 *  IDE-1349, use the same logic as maven uses to validate artifactId to validate maven project name.
 		 *  See org.apache.maven.model.validation.DefaultModelValidator.validateId();
 		 */

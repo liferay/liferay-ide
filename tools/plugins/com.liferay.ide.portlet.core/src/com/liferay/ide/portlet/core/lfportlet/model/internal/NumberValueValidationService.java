@@ -50,26 +50,23 @@ public class NumberValueValidationService extends ValidationService {
 		}
 		catch (NumberFormatException nfe) {
 			return Status.createErrorStatus(
-				Resources.bind(StringEscapeUtils.unescapeJava(Resources.nonIntegerInvalid), new Object[] {
-					triggerValue, ""
-				}));
+				Resources.bind(
+					StringEscapeUtils.unescapeJava(Resources.nonIntegerInvalid), new Object[] {triggerValue, ""}));
 		}
 
 		if (CoreUtil.isNotNullOrEmpty(_min)) {
 			if (_value < Integer.valueOf(_min)) {
 				return Status.createErrorStatus(
-					Resources.bind(StringEscapeUtils.unescapeJava(Resources.minNumberValueInvalid), new Object[] {
-						_value, _min
-					}));
+					Resources.bind(
+						StringEscapeUtils.unescapeJava(Resources.minNumberValueInvalid), new Object[] {_value, _min}));
 			}
 		}
 
 		if (CoreUtil.isNotNullOrEmpty(_max)) {
 			if (_value > Integer.valueOf(_max)) {
 				return Status.createErrorStatus(
-					Resources.bind(StringEscapeUtils.unescapeJava(Resources.maxNumberValueInvalid), new Object[] {
-						_value, _max
-					}));
+					Resources.bind(
+						StringEscapeUtils.unescapeJava(Resources.maxNumberValueInvalid), new Object[] {_value, _max}));
 			}
 		}
 

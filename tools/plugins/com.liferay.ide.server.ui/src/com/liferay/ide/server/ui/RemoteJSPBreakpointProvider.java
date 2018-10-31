@@ -100,7 +100,7 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 				}
 			}
 			else if (input instanceof IStorageEditorInput) {
-				/*
+				/**
 				 * For non-resources, use the workspace root and a coordinated
 				 * attribute that is used to
 				 * prevent unwanted (breakpoint) markers from being loaded
@@ -195,7 +195,7 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 						}
 					}
 					catch (CoreException ce) {
-						/*
+						/**
 						 * should not be possible given the accessible and file
 						 * type check above
 						 */

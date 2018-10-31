@@ -77,6 +77,7 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 			Element element = getModelElement();
 			Property property = property();
 			IProject project = element.adapt(IProject.class);
+
 			String rbFile = SapphireUtil.getText(element.property((ValueProperty)property.definition()));
 
 			if (rbFile != null) {

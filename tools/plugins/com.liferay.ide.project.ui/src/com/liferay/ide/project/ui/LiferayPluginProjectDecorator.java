@@ -36,52 +36,6 @@ import org.eclipse.wst.common.project.facet.core.FacetedProjectFramework;
  */
 public class LiferayPluginProjectDecorator extends LabelProvider implements ILightweightLabelDecorator {
 
-	/**
-	 * This gets a .gif from the icons folder.
-	 */
-	private static ImageDescriptor _getImageDescriptor(String key) {
-		ImageDescriptor imageDescriptor = null;
-
-		if (key != null) {
-			String gif = "/" + key + ".png";
-
-			IPath path = new Path(_ICON_DIR).append(gif);
-
-			URL gifImageURL = FileLocator.find(Platform.getBundle(ProjectUI.PLUGIN_ID), path, null);
-
-			if (gifImageURL != null) {
-				imageDescriptor = ImageDescriptor.createFromURL(gifImageURL);
-			}
-		}
-
-		return imageDescriptor;
-	}
-
-	private static final String _EXT_FACET = "liferay.ext";
-
-	private static final String _HOOK_FACET = "liferay.hook";
-
-	private static final String _ICON_DIR = "icons/ovr";
-
-	private static final String _LAYOUTTPL_FACET = "liferay.layouttpl";
-
-	/* The constants are duplicated here to avoid plugin loading. */
-	private static final String _PORTLET_FACET = "liferay.portlet";
-
-	private static final String _THEME_FACET = "liferay.theme";
-
-	private static final String _WEB_FACET = "liferay.web";
-
-	private static ImageDescriptor _liferay;
-
-	private static ImageDescriptor _getLiferay() {
-		if (_liferay == null) {
-			_liferay = _getImageDescriptor("liferay_decoration");
-		}
-
-		return _liferay;
-	}
-
 	public void decorate(Object element, IDecoration decoration) {
 		if (element instanceof IProject) {
 			IProject project = (IProject)element;
@@ -122,6 +76,35 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
 		}
 	}
 
+	/**
+	 * This gets a .gif from the icons folder.
+	 */
+	private static ImageDescriptor _getImageDescriptor(String key) {
+		ImageDescriptor imageDescriptor = null;
+
+		if (key != null) {
+			String gif = "/" + key + ".png";
+
+			IPath path = new Path(_ICON_DIR).append(gif);
+
+			URL gifImageURL = FileLocator.find(Platform.getBundle(ProjectUI.PLUGIN_ID), path, null);
+
+			if (gifImageURL != null) {
+				imageDescriptor = ImageDescriptor.createFromURL(gifImageURL);
+			}
+		}
+
+		return imageDescriptor;
+	}
+
+	private static ImageDescriptor _getLiferay() {
+		if (_liferay == null) {
+			_liferay = _getImageDescriptor("liferay_decoration");
+		}
+
+		return _liferay;
+	}
+
 	private boolean _hasFacet(IProject project, String facet) {
 		try {
 			return FacetedProjectFramework.hasProjectFacet(project, facet);
@@ -132,5 +115,22 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
 			return false;
 		}
 	}
+
+	private static final String _EXT_FACET = "liferay.ext";
+
+	/* The constants are duplicated here to avoid plugin loading. */
+	private static final String _HOOK_FACET = "liferay.hook";
+
+	private static final String _ICON_DIR = "icons/ovr";
+
+	private static final String _LAYOUTTPL_FACET = "liferay.layouttpl";
+
+	private static final String _PORTLET_FACET = "liferay.portlet";
+
+	private static final String _THEME_FACET = "liferay.theme";
+
+	private static final String _WEB_FACET = "liferay.web";
+
+	private static ImageDescriptor _liferay;
 
 }

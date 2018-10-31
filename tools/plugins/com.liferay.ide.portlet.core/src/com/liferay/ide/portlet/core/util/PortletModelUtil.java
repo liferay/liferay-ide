@@ -45,7 +45,9 @@ public class PortletModelUtil {
 	 */
 	public static String defineNS(XmlElement element, QName currValueAsQName) {
 		String qualifiedNodeValue = null;
+
 		String namespaceURI = currValueAsQName.getNamespaceURI();
+
 		String defaultPrefix = PortletAppModelConstants.DEFAULT_QNAME_PREFIX;
 		Element domNode = element.getDomNode();
 		boolean nsDefined = false;

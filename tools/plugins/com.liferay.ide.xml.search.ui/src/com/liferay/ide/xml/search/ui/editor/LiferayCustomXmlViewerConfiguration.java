@@ -34,7 +34,7 @@ public class LiferayCustomXmlViewerConfiguration extends XMLReferencesStructured
 	public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType, int stateMask) {
 		ITextHover textHover = null;
 
-		/*
+		/**
 		 * Returns a default problem, annotation, and best match hover depending
 		 * on stateMask
 		 */

@@ -64,6 +64,7 @@ public abstract class Page extends Composite implements PageActionListener, Sele
 
 	public static Control createHorizontalSpacer(Composite comp, int hSpan) {
 		Label l = new Label(comp, SWT.NONE);
+
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 
 		gd.horizontalSpan = hSpan;

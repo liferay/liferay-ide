@@ -31,7 +31,7 @@ public class WorkspaceLocationValidationService extends ValidationService {
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
-		/*
+		/**
 		 * Location won't be validated if the UseDefaultLocation has an error. Get the
 		 * validation of the property might not work as excepted, let's use call the
 		 * validation service manually.

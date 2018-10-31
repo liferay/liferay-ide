@@ -95,7 +95,7 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
 
 		customElement.appendChild(layoutTemplateElement);
 
-		/*
+		/**
 		 * now that we have the new <layout-template> element added to custom element,
 		 * add the child nodes to layout
 		 */

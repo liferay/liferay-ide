@@ -191,6 +191,8 @@ public interface UI {
 
 	public final String CSS = "CSS:";
 
+	public final String CSS_CLASS_WRAPPER = "CSS class wrapper:";
+
 	public final String CUSTOM_JSP_FOLDER = "Custom JSP folder:";
 
 	public final String CUSTOM_JSPS = "Custom JSPs";
@@ -892,7 +894,5 @@ public interface UI {
 	public final String WORKSPACE_NAME = "Workspace name:";
 
 	public final String YES = "Yes";
-
-	public final String CSS_CLASS_WRAPPER = "CSS class wrapper:";
 
 }

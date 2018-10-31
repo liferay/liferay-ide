@@ -316,6 +316,7 @@ public class NewHookDataModelProvider
 			}
 
 			IPath portalPropertiesPath = Path.fromPortableString(portalPropertiesFile);
+
 			IProject targetProject = getTargetProject();
 
 			List<IFolder> sources = CoreUtil.getSourceFolders(JavaCore.create(targetProject));
@@ -369,6 +370,7 @@ public class NewHookDataModelProvider
 			}
 
 			IPath contentPath = Path.fromPortableString(contentFolder);
+
 			IProject targetProject = getTargetProject();
 
 			List<IFolder> sources = CoreUtil.getSourceFolders(JavaCore.create(targetProject));

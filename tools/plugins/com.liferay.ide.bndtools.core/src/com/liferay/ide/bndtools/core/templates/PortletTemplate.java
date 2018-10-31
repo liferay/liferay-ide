@@ -72,6 +72,7 @@ public class PortletTemplate extends AbstractProjectTemplate {
 
 	public void modifyInitialBndProject(IBndProject project, String projectName, ProjectPaths projectPaths) {
 		String src = projectPaths.getSrc();
+
 		String safePackageName = safePackageName(projectName);
 
 		String lowerCase = safePackageName.toLowerCase();

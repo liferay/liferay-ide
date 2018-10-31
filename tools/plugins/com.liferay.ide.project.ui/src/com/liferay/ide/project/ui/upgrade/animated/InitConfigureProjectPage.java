@@ -243,20 +243,6 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 			fillLayoutComposite.getShell(), PopupDialog.INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false,
 			null, null) {
 
-			private static final int _CURSOR_SIZE = 15;
-
-			@Override
-			protected Point getInitialLocation(Point initialSize) {
-				Display display = getShell().getDisplay();
-
-				Point location = display.getCursorLocation();
-
-				location.x += _CURSOR_SIZE;
-				location.y += _CURSOR_SIZE;
-
-				return location;
-			}
-
 			@Override
 			protected Control createDialogArea(Composite parent) {
 				Label label = new Label(parent, SWT.WRAP);
@@ -273,6 +259,20 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 				return label;
 			}
+
+			@Override
+			protected Point getInitialLocation(Point initialSize) {
+				Display display = getShell().getDisplay();
+
+				Point location = display.getCursorLocation();
+
+				location.x += _CURSOR_SIZE;
+				location.y += _CURSOR_SIZE;
+
+				return location;
+			}
+
+			private static final int _CURSOR_SIZE = 15;
 
 		};
 

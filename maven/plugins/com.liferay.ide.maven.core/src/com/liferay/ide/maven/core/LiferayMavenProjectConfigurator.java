@@ -129,6 +129,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 		monitor.worked(25);
 
 		MavenProject mavenProject = request.getMavenProject();
+
 		List<MavenProblemInfo> errors = _findLiferayMavenPluginProblems(request, monitor);
 
 		if (ListUtil.isNotEmpty(errors)) {
@@ -324,8 +325,8 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 	private MavenProblemInfo _checkValidConfigDir(Plugin liferayMavenPlugin, Xpp3Dom config, String configParam) {
 		MavenProblemInfo retval = null;
+
 		String message = null;
-		String value = null;
 
 		if (configParam != null) {
 			if (config == null) {
@@ -338,7 +339,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 					message = NLS.bind(Msgs.missingConfigValue, configParam);
 				}
 				else {
-					value = dirNode.getValue();
+					String value = dirNode.getValue();
 
 					if (CoreUtil.isNullOrEmpty(value)) {
 						message = NLS.bind(Msgs.emptyConfigValue, configParam);
@@ -366,7 +367,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 	private MavenProblemInfo _checkValidVersion(Plugin plugin, Xpp3Dom config, String versionNodeName) {
 		MavenProblemInfo retval = null;
+
 		Version liferayVersion = null;
+
 		String version = null;
 
 		if (config != null) {
@@ -475,7 +478,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 	private Action _getNewLiferayFacetInstallAction(String pluginType) {
 		Action retval = null;
+
 		IProjectFacetVersion newFacet = null;
+
 		IDataModelProvider dataModel = null;
 
 		if (ILiferayMavenConstants.PORTLET_PLUGIN_TYPE.equals(pluginType)) {
@@ -647,7 +652,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 		}
 
 		if (retval == null) {
-			/*
+			/**
 			 * if no explicit warSourceDirectory set we assume the default warSource
 			 * directory ${basedir}/src/main/webapp refer to
 			 * http://maven.apache.org/plugins/maven-war-plugin/war-mojo.html for more

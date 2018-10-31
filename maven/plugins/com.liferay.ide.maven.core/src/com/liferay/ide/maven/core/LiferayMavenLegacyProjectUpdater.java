@@ -455,6 +455,7 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 		_addChildNode(configuration, document, "packagingExcludes", "**/*.scss");
 
 		Element webResources = document.createElement("webResources");
+
 		Element resource = document.createElement("resource");
 
 		_addChildNode(resource, document, "directory", "${com.liferay.portal.tools.theme.builder.outputDir}");

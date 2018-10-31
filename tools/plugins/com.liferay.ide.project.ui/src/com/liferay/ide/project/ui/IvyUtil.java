@@ -63,6 +63,7 @@ public class IvyUtil {
 
 	public static IvyClasspathContainer addIvyLibrary(IProject project, IProgressMonitor monitor) {
 		final String projectName = project.getName();
+
 		final IJavaProject javaProject = JavaCore.create(project);
 
 		final IvyClasspathContainerConfiguration conf = new IvyClasspathContainerConfiguration(

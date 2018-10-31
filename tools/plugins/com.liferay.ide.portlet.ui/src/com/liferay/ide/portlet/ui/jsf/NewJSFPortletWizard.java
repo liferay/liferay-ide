@@ -131,6 +131,7 @@ public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPort
 		if (getDataModel().getBooleanProperty(CREATE_JSPS)) {
 			try {
 				String jspsFolder = getDataModel().getStringProperty(CREATE_JSPS_FOLDER);
+
 				String projectName = getDataModel().getStringProperty(PROJECT_NAME);
 
 				IProject project = CoreUtil.getProject(projectName);

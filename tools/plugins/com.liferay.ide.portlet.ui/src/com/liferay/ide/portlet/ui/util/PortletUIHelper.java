@@ -38,19 +38,10 @@ import org.eclipse.swt.widgets.Text;
  */
 public class PortletUIHelper {
 
-	/**
-	 * @param text
-	 * @param project
-	 * @param searchScope
-	 */
 	public static void addTypeFieldAssistToText(
 		PropertyEditorPart propertyEditor, Text text, IProject project, int searchScope) {
 	}
 
-	/**
-	 * @param project
-	 * @return
-	 */
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public static IPackageFragmentRoot[] getNonJRERoots(IJavaProject project) {
 		ArrayList result = new ArrayList();
@@ -70,40 +61,22 @@ public class PortletUIHelper {
 		return (IPackageFragmentRoot[])result.toArray(new IPackageFragmentRoot[result.size()]);
 	}
 
-	/**
-	 * @return
-	 */
 	public static IProject getProject(ISapphirePart sapphirePart) {
-		IProject project = null;
 		SapphireEditor sapphireEditor = sapphirePart.nearest(SapphireEditor.class);
 
 		IFile editorFile = sapphireEditor.getFile();
 
-		project = editorFile.getProject();
-
-		return project;
+		return editorFile.getProject();
 	}
 
-	/**
-	 * @param project
-	 * @return
-	 */
 	public static IJavaSearchScope getSearchScope(IJavaProject project) {
 		return SearchEngine.createJavaSearchScope(getNonJRERoots(project));
 	}
 
-	/**
-	 * @param project
-	 * @return
-	 */
 	public static IJavaSearchScope getSearchScope(IProject project) {
 		return getSearchScope(JavaCore.create(project));
 	}
 
-	/**
-	 * @param root
-	 * @return
-	 */
 	public static boolean isJRELibrary(IPackageFragmentRoot root) {
 		try {
 			IClasspathEntry classpathEntry = root.getRawClasspathEntry();

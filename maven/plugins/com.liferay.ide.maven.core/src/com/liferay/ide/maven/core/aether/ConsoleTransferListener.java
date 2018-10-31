@@ -100,6 +100,7 @@ public class ConsoleTransferListener extends AbstractTransferListener {
 			String len = contentLength >= 1024 ? toKB(contentLength) + " KB" : contentLength + " B";
 
 			String throughput = "";
+
 			long duration = System.currentTimeMillis() - resource.getTransferStartTime();
 
 			if (duration > 0) {

@@ -60,7 +60,7 @@ public class PortletColumnsValidtionSerivce extends ValidationService {
 
 		for (PortletColumnElement col : portletLayout.getPortletColumns()) {
 
-			/*
+			/**
 			 * attach listener for the newly added PortletColumn there should be a better
 			 * way to do this which makes more sense
 			 */

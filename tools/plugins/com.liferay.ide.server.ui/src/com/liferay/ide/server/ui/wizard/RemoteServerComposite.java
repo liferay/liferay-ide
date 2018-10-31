@@ -24,6 +24,7 @@ import com.liferay.ide.server.remote.RemoteUtil;
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.ui.LiferayUIPlugin;
 import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -54,8 +55,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
@@ -228,9 +227,8 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 					try {
 						String url = MessageFormat.format(
 							installUrl, "http://" + textHostname.getText() + ":" + textHTTP.getText());
-						IWorkbench workbench = PlatformUI.getWorkbench();
 
-						IWorkbenchBrowserSupport browserSupport = workbench.getBrowserSupport();
+						IWorkbenchBrowserSupport browserSupport = UIUtil.getBrowserSupport();
 
 						IWebBrowser externalBrowser = browserSupport.getExternalBrowser();
 

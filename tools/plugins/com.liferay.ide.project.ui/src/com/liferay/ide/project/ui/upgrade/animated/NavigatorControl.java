@@ -242,6 +242,7 @@ public class NavigatorControl extends AbstractCanvas implements SelectionChanged
 		Page page = _getSelectedPage();
 
 		PageAction oldSelection = page.getSelectedAction();
+
 		PageAction[] pageActions = page.getActions();
 
 		PageAction targetAction = pageActions[i];

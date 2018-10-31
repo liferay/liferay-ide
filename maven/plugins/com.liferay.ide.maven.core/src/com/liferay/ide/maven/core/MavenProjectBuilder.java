@@ -288,6 +288,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 						try (FileWriter fileWriter = new FileWriter(pomFile)) {
 							Xpp3Dom origin = (Xpp3Dom)plugin.getConfiguration();
 							Xpp3Dom newConfiguration = new Xpp3Dom("configuration");
+
 							Xpp3Dom url = new Xpp3Dom("url");
 
 							url.setValue(bundleUrl);

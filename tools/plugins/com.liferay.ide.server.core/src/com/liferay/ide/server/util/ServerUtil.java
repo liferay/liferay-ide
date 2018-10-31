@@ -885,7 +885,7 @@ public class ServerUtil {
 		properties.put(appServerDeployDirKey, deployDir.toOSString());
 		properties.put(appServerLibGlobalDirKey, libGlobalDir.toOSString());
 
-		/*
+		/**
 		 * IDE-1268 need to always specify app.server.parent.dir, even though it
 		 * is only useful in 6.1.2/6.2.0 or greater
 		 */

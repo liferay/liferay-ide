@@ -506,7 +506,7 @@ public class RemoteServerBehavior
 		}
 		else if ((kind == IServer.PUBLISH_FULL) && (deltaKind == NO_CHANGE)) {
 
-			/*
+			/**
 			 * first check to see if this module is even in the list of
 			 * applications, if it is then we don't need to
 			 * actually update it
@@ -524,7 +524,7 @@ public class RemoteServerBehavior
 			modulePublishState = IServer.PUBLISH_STATE_UNKNOWN;
 		}
 
-		/*
+		/**
 		 * by default, assume the module has published successfully.
 		 * this will update the publish state and delta correctly
 		 */
@@ -728,7 +728,7 @@ public class RemoteServerBehavior
 			return IServer.PUBLISH_STATE_UNKNOWN;
 		}
 
-		/*
+		/**
 		 * First look to see if this module (ear plugin) is actually installed
 		 * on liferay, and if it is then uninstall it
 		 */

@@ -117,7 +117,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 			setupDefaultOutputLocation();
 		}
 
-		/*
+		/**
 		 * IDE-815 Now with contributed portlet_2_0 uri we no longer need to copy TLD to
 		 * user's project
 		 */

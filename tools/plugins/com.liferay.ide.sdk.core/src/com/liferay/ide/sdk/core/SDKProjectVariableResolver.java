@@ -28,6 +28,7 @@ public class SDKProjectVariableResolver implements IDynamicVariableResolver {
 
 	public String resolveValue(IDynamicVariable variable, String argument) throws CoreException {
 		String retval = null;
+
 		SDK sdk = null;
 
 		if (CoreUtil.isNullOrEmpty(argument)) {

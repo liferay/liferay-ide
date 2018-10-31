@@ -41,7 +41,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
@@ -58,8 +57,6 @@ public class BladeCLI {
 	public static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
 
 	public static final String BLADE_JAR_FILE_NAME = "blade.jar";
-
-	public static final File settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
 
 	public static synchronized void addToLocalInstance(File latestBladeJar) {
 		FileUtil.copyFile(latestBladeJar, _bladeJarInstancePath.toFile());
@@ -137,7 +134,15 @@ public class BladeCLI {
 		}
 
 		if (_bladeJarCacheFile == null) {
-			File bladeFile = new File(_repoCache.getAbsolutePath(), BLADE_JAR_FILE_NAME);
+			File settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
+
+			settingsDir.mkdirs();
+
+			File repoCache = new File(settingsDir, "repoCache");
+
+			repoCache.mkdirs();
+
+			File bladeFile = new File(repoCache.getAbsolutePath(), BLADE_JAR_FILE_NAME);
 
 			String urlStr = _getRepoURL() + "/" + BLADE_JAR_FILE_NAME;
 
@@ -236,9 +241,11 @@ public class BladeCLI {
 	private static String _getRepoURL() {
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 
-		String repoURL = preferencesService.get(BLADE_CLI_REPO_URL, null, new Preferences[] {
-			_instancePrefs, _defaultPrefs
-		});
+		Preferences[] preferences = {
+			InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID), DefaultScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID)
+		};
+
+		String repoURL = preferencesService.get(BLADE_CLI_REPO_URL, null, preferences);
 
 		if (!repoURL.endsWith("/")) {
 			repoURL = repoURL + "/";
@@ -262,14 +269,9 @@ public class BladeCLI {
 	private static File _bladeJarCacheFile = null;
 	private static final IPath _bladeJarInstanceArea = ProjectCore.getDefault().getStateLocation().append("blade-jar");
 	private static final IPath _bladeJarInstancePath = _bladeJarInstanceArea.append(BLADE_JAR_FILE_NAME);
-	private static final IEclipsePreferences _defaultPrefs = DefaultScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
-	private static final IEclipsePreferences _instancePrefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
-	private static final File _repoCache = new File(settingsDir, "repoCache");
 
 	static {
-		settingsDir.mkdirs();
-		_repoCache.mkdirs();
-		_bladeJarInstanceArea.toFile().mkdirs();
+		FileUtil.getFile(_bladeJarInstanceArea).mkdirs();
 	}
 
 }

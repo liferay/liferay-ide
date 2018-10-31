@@ -60,7 +60,9 @@ public class PortalPublishTask extends PublishTaskDelegate {
 			for (int i = 0; i < size; i++) {
 				IModule[] module = (IModule[])modules.get(i);
 				Integer deltaKind = (Integer)kindList.get(i);
+
 				boolean needClean = false;
+
 				IModuleResourceDelta[] deltas = ((Server)server).getPublishedResourceDelta(module);
 
 				for (IModuleResourceDelta delta : deltas) {

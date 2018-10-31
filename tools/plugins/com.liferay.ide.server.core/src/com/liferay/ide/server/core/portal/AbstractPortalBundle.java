@@ -274,6 +274,7 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 
 	private IPath _getConfigInfoPath(String configType) {
 		IPath configInfoPath = null;
+
 		LiferayServerCore serverCore = LiferayServerCore.getDefault();
 
 		IPath stateLocation = serverCore.getStateLocation();
@@ -343,6 +344,7 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 
 			if (configInfo != null) {
 				String portalDirKey = CoreUtil.createStringDigest(portalDir.toPortableString());
+
 				Properties properties = new Properties();
 
 				try (InputStream fileInput = Files.newInputStream(versionInfoFile.toPath())) {

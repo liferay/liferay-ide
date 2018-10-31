@@ -55,13 +55,6 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public class CreatePortletResourceBundleActionHandler extends AbstractResourceBundleActionHandler {
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#init(org.eclipse.
-	 * sapphire.ui.SapphireAction, ActionHandlerDef)
-	 */
 	@Override
 	public void init(SapphireAction action, ActionHandlerDef def) {
 		super.init(action, def);
@@ -99,12 +92,6 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 		attach(listen);
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#
-	 * computeEnablementState()
-	 */
 	@Override
 	protected boolean computeEnablementState() {
 		boolean enabled = super.computeEnablementState();
@@ -124,7 +111,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 
 			if (ListUtil.isNotEmpty(portlet.getSupportedLocales())) {
 				for (SupportedLocales sl : portlet.getSupportedLocales()) {
-					/*
+					/**
 					 * By now, the error means the locale is not unique or not among possible values
 					 * or empty, that makes the button "Create Locale Bundles" disabled. The warning
 					 * means "No resource bundle defined", in this case the button should be
@@ -144,13 +131,6 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 		return enabled;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.
-	 * SapphireRenderingContext)
-	 */
 	@Override
 	protected Object run(Presentation context) {
 		SapphirePart part = context.part();
@@ -160,9 +140,11 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 		editor.doSave(new NullProgressMonitor());
 
 		List<IFile> missingRBFiles = new ArrayList<>();
+
 		Portlet portlet = (Portlet)getModelElement();
 
 		IProject project = portlet.adapt(IProject.class);
+
 		Value<Path> resourceBundle = portlet.getResourceBundle();
 
 		String text = resourceBundle.text();

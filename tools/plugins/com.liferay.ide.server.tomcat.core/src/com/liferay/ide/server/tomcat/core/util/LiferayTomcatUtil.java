@@ -166,7 +166,7 @@ public class LiferayTomcatUtil {
 	}
 
 	public static void displayToggleMessage(String msg, String key) {
-		/*
+		/**
 		 * UIUtil.postInfoWithToggle(
 		 * Msgs.liferayTomcatServer, msg, Msgs.notShowMessage, false,
 		 * LiferayTomcatPlugin.getPreferenceStore(), key );
@@ -227,6 +227,7 @@ public class LiferayTomcatUtil {
 
 	public static String getConfigInfoFromCache(String configType, IPath portalDir) {
 		IPath configInfoPath = null;
+
 		LiferayTomcatPlugin tomcatPlugin = LiferayTomcatPlugin.getDefault();
 
 		IPath tomcatPluginLocation = tomcatPlugin.getStateLocation();
@@ -454,6 +455,7 @@ public class LiferayTomcatUtil {
 
 			if (configInfo != null) {
 				String portalDirKey = CoreUtil.createStringDigest(portalDir.toPortableString());
+
 				Properties properties = new Properties();
 
 				try (InputStream fileInput = Files.newInputStream(versionInfoFile.toPath())) {

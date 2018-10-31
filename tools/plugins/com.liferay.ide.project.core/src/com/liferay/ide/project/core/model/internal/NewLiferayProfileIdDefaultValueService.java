@@ -40,7 +40,7 @@ public class NewLiferayProfileIdDefaultValueService extends DefaultValueService 
 
 		String defaultRuntimeName = SapphireUtil.getContent(profile.getRuntimeName());
 
-		/*
+		/**
 		 * First try to use this as a runtimeName, but need to check it against existing possible values.
 		 * If no existing profiles with this name exist, use it, if not, append a (1)
 		 */

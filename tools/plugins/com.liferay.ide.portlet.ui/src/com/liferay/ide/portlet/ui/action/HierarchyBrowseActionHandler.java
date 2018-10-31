@@ -53,7 +53,9 @@ public class HierarchyBrowseActionHandler extends BrowseActionHandler {
 	@Override
 	public String browse(Presentation context) {
 		Element element = getModelElement();
+
 		Property property = property();
+
 		IProject project = element.adapt(IProject.class);
 
 		try {

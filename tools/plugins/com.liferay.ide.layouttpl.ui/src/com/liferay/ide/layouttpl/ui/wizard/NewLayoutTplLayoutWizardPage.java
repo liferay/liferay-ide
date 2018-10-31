@@ -91,7 +91,7 @@ public class NewLayoutTplLayoutWizardPage extends DataModelWizardPage implements
 	protected void createSelectLayoutGroup(Composite parent) {
 		SWTUtil.createLabel(parent, Msgs.selectInitialLayout, 1);
 
-		/*
+		/**
 		 * Composite group = SWTUtil.createTopComposite(parent, 4);
 		 * group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 		 * 1));

@@ -153,6 +153,7 @@ public class LiferayTomcatServer
 			}
 
 			String url = "http://" + getServer().getHost();
+
 			ServerPort mainPort = config.getMainPort();
 
 			int port = mainPort.getPort();
@@ -309,7 +310,7 @@ public class LiferayTomcatServer
 	@Override
 	public void modifyModules(IModule[] add, IModule[] remove, IProgressMonitor monitor) throws CoreException {
 
-		/*
+		/**
 		 * check if we are adding ext plugin then we need to turn off auto publishing if we are removing ext plugin
 		 * then we can re-enable publishing if it was previously set
 		 */

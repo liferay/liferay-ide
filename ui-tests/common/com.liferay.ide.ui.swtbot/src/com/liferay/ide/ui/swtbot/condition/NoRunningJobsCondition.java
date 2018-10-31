@@ -63,6 +63,7 @@ public class NoRunningJobsCondition extends JobCondition {
 
 		for (Job job : jobs) {
 			boolean found = false;
+
 			String name = job.getName();
 
 			if (name.equals("Refreshing server adapter list")) {

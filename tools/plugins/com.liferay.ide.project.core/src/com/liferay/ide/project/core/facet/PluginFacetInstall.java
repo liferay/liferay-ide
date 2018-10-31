@@ -90,7 +90,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 			this.monitor = monitor;
 		}
 
-		/*
+		/**
 		 *  IDE-195 If the user has the plugins sdk in the workspace,
 		 *  trying to write to the P/foo-portlet/.settings/ will find the file first in the the plugins-sdk
 		 *  that is in the workspace and will fail to find the file.

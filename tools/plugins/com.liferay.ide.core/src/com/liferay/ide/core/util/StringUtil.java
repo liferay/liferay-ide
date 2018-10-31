@@ -76,7 +76,9 @@ public class StringUtil {
 		}
 
 		int lastIndex = string.length() - 1;
+
 		char firstChar = string.charAt(0);
+
 		char lastChar = string.charAt(lastIndex);
 
 		if (((firstChar == StringPool.SINGLE_QUOTE_CHAR) && (lastChar == StringPool.SINGLE_QUOTE_CHAR)) ||

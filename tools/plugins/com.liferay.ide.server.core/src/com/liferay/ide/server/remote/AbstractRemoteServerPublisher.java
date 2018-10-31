@@ -178,6 +178,7 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
 
 		for (IModuleResourceDelta delta : deltas) {
 			int deltaKind = delta.getKind();
+
 			IModuleResource deltaModuleResource = delta.getModuleResource();
 
 			IResource deltaResource = (IResource)deltaModuleResource.getAdapter(IResource.class);
