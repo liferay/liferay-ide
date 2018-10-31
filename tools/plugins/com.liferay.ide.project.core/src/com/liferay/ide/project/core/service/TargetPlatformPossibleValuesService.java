@@ -32,8 +32,8 @@ public class TargetPlatformPossibleValuesService extends PossibleValuesService {
 	protected void compute(Set<String> values) {
 		List<String> possibleValues = new ArrayList<>();
 
-		for (String[] targetPlatformVersions : WorkspaceConstants.liferayVersionsToTargetPlatformVersions.values()) {
-			Collections.addAll(possibleValues, targetPlatformVersions);
+		for (String[] liferayTargetPlatformVersions : WorkspaceConstants.liferayTargetPlatformVersions.values()) {
+			Collections.addAll(possibleValues, liferayTargetPlatformVersions);
 		}
 
 		values.addAll(possibleValues);

@@ -61,12 +61,11 @@ public class WorkspaceConstants {
 
 	public static final String WARS_DIR_PROPERTY = "liferay.workspace.wars.dir";
 
-	public static final Map<String, String[]> liferayVersionsToTargetPlatformVersions =
-		new HashMap<String, String[]>() {
-			{
-				put("7.1", new String[] {"7.1.0"});
-				put("7.0", new String[] {"7.0.6"});
-			}
-		};
+	public static final Map<String, String[]> liferayTargetPlatformVersions = new HashMap<String, String[]>() {
+		{
+			put("7.1", new String[] {"7.1.0"});
+			put("7.0", new String[] {"7.0.6"});
+		}
+	};
 
 }
