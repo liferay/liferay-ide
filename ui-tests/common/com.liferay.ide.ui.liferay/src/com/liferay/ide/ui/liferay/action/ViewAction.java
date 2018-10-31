@@ -130,7 +130,7 @@ public class ViewAction extends UIAction {
 			ide.sleep();
 
 			try {
-				_getProjects().contextMenu("Close Project", items);
+				_getProjects().contextMenu(true, "Close Project", items);
 
 				_jobAction.waitForCloseProject();
 			}
@@ -143,7 +143,7 @@ public class ViewAction extends UIAction {
 		 * But the resource will be deleted from disk if we call this method on Package or File.
 		 */
 		public void delete(String... items) {
-			_getProjects().contextMenu(DELETE, items);
+			_getProjects().contextMenu(true, DELETE, items);
 
 			ide.sleep();
 
@@ -155,7 +155,7 @@ public class ViewAction extends UIAction {
 		}
 
 		public void deleteProjectFromDisk(String... items) {
-			_getProjects().contextMenu(DELETE, items);
+			_getProjects().contextMenu(true, DELETE, items);
 
 			ide.sleep();
 
