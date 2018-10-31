@@ -181,6 +181,10 @@ public class GradleUtil {
 			IProgressMonitor monitor)
 		throws CoreException {
 
+		if ((project == null) || (project.getLocation() == null)) {
+			return;
+		}
+
 		GradleRunConfigurationAttributes runAttributes = _getRunConfigurationAttributes(
 			project, Arrays.asList(tasks), Arrays.asList(arguments));
 

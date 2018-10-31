@@ -40,4 +40,17 @@
 		>
 		</liferayProjectImporter>
 	</extension>
+
+	<extension point="org.eclipse.ltk.core.refactoring.deleteParticipants">
+		<deleteParticipant
+			class="com.liferay.ide.gradle.core.LiferayGradleModuleProjectDeleteParticipant"
+			id="com.liferay.ide.gradle.core.LiferayGradleModuleProjectDeleteParticipant"
+			name="liferayGradleModuleProjectDeleteParticipant"
+		>
+			<enablement>
+				<instanceof value="org.eclipse.core.resources.IProject">
+				</instanceof>
+			</enablement>
+		</deleteParticipant>
+	</extension>
 </plugin>
