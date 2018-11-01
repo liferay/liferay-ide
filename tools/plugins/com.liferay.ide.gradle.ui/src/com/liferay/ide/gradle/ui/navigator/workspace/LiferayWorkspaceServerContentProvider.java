@@ -75,7 +75,7 @@ public class LiferayWorkspaceServerContentProvider extends AbstractNavigatorCont
 
 			PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(PortalRuntime.class, null);
 
-			if (portalRuntime == null) {
+			if ((portalRuntime == null) || (portalRuntime.getLiferayHome() == null)) {
 				return;
 			}
 
