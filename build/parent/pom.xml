@@ -49,8 +49,8 @@
         <sapphire-site>http://download.eclipse.org/sapphire/9.1.1/repository/</sapphire-site>
         <maven-deps-plugin-site>http://ianbrandt.github.io/m2e-maven-dependency-plugin/0.0.4/</maven-deps-plugin-site>
         <gmaven.runtime>1.8</gmaven.runtime>
-        <blade-latest-download-url>https://jenkins-ide.wedeploy.io/job/liferay-blade-cli/72/artifact/cli/build/libs/blade.jar</blade-latest-download-url>
-        <blade-latest-md5>f971e9435db0025cddaea44d355ded0d</blade-latest-md5>
+        <blade-latest-download-url>https://repository.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/blade/com.liferay.blade.cli/3.3.0-SNAPSHOT/com.liferay.blade.cli-3.3.0-20181101.120833-5.jar</blade-latest-download-url>
+        <blade-latest-md5>81455e544e14208d5b7638faccfc48c5</blade-latest-md5>
         <sign-apps>false</sign-apps>
     </properties>
 
