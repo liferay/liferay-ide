@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -48,6 +49,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Andy Wu
@@ -140,6 +143,41 @@ public class LiferayWorkspaceUtil {
 
 		if (FileUtil.isDir(settings)) {
 			FileUtil.deleteDir(settings, true);
+		}
+	}
+
+	public static void deleteWorkspaceServerAndRuntime(IProject project) {
+		IWorkspaceProject liferayWorkpsaceProject = LiferayCore.create(IWorkspaceProject.class, project);
+
+		if (liferayWorkpsaceProject != null) {
+			IPath bundlesLocation = getHomeLocation(project);
+
+			Stream.of(
+				ServerCore.getServers()
+			).filter(
+				server -> server != null
+			).filter(
+				server -> {
+					IRuntime runtime = server.getRuntime();
+
+					return bundlesLocation.equals(runtime.getLocation());
+				}
+			).forEach(
+				server -> {
+					try {
+						IRuntime runtime = server.getRuntime();
+
+						server.delete();
+
+						if (runtime != null) {
+							runtime.delete();
+						}
+					}
+					catch (Exception e) {
+						ProjectCore.logError("Failed to delete server and runtime", e);
+					}
+				}
+			);
 		}
 	}
 

@@ -42,6 +42,12 @@ public abstract class AbstractObjectAction implements IObjectActionDelegate {
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 	}
 
+	protected void afterAction() {
+	}
+
+	protected void beforeAction() {
+	}
+
 	protected ISelection fSelection;
 
 }

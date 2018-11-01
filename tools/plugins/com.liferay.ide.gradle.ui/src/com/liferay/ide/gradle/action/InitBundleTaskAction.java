@@ -33,8 +33,13 @@ public class InitBundleTaskAction extends GradleTaskAction {
 		action.setEnabled(LiferayWorkspaceUtil.isValidWorkspace(project));
 	}
 
-	protected void afterTask() {
+	protected void afterAction() {
 		LiferayWorkspaceUtil.addPortalRuntime();
+	}
+
+	@Override
+	protected void beforeAction() {
+		LiferayWorkspaceUtil.deleteWorkspaceServerAndRuntime(project);
 	}
 
 	@Override
