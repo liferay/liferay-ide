@@ -220,6 +220,19 @@ public class ViewAction extends UIAction {
 			}
 		}
 
+		// module project
+
+		public void runBuildService(String... projectNames) {
+			try {
+				_getProjects().contextMenu(BUILD_SERVICE, projectNames);
+			}
+			catch (Exception e) {
+				ide.sleep(2000);
+
+				_getProjects().contextMenu(BUILD_SERVICE, projectNames);
+			}
+		}
+
 		public void runBuildServices(String... projectNames) {
 			try {
 				_getProjects().contextMenu(BUILD_SERVICES, projectNames);

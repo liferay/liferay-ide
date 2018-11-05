@@ -14,8 +14,12 @@
 
 package com.liferay.ide.gradle.core.tests;
 
+import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.gradle.core.tests.base.NewModuleGradleBase;
+import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
+
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -238,6 +242,12 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		assertProjectExists(project.getName());
 
 		assertBundleProject(project.getName() + "-api");
+
+		IBundleProject bundleProject = assertBundleProject(project.getName() + "-service");
+
+		IProjectBuilder projectBuilder = bundleProject.adapt(IProjectBuilder.class);
+
+		projectBuilder.buildService(new NullProgressMonitor());
 
 		verifyProject(project.getName() + "-api");
 
