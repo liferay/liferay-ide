@@ -59,4 +59,9 @@ public class Tomcat70DeployTests extends Tomcat7xDeployBase {
 		super.deployWar();
 	}
 
+	@Override
+	protected String getVersion() {
+		return "7.0";
+	}
+
 }
