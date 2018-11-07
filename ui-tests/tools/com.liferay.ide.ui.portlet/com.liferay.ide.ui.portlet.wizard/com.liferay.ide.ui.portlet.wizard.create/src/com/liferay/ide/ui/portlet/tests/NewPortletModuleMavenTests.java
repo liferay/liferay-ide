@@ -37,6 +37,8 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -49,6 +51,8 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 		wizardAction.newModule.prepareMaven(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
@@ -175,6 +179,8 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
 		viewAction.project.closeAndDelete(project.getName());
@@ -201,6 +207,8 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 		wizardAction.newModule.prepareMaven(project.getName(), SPRING_MVC_PORTLET);
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
