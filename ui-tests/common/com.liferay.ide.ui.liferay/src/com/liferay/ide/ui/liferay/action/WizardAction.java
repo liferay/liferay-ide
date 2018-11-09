@@ -996,6 +996,10 @@ public class WizardAction extends UIAction {
 			return buildType().items();
 		}
 
+		public String defaultVersions() {
+			return liferayVersion().getText();
+		}
+
 		public void deselectUseDefaultLocation() {
 			useDefaultLocation().deselect();
 		}
