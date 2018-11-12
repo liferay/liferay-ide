@@ -301,7 +301,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		String projectName = project.getName();
 
-		wizardAction.newLiferayWorkspace.prepareMaven(projectName);
+		wizardAction.newLiferayWorkspace.prepareMaven(projectName, "7.0");
 
 		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
 
@@ -398,6 +398,28 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
+
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
+
+		dialogAction.preferences.confirm();
+
+		String[] bundles = {project.getName(), "bundles"};
+
+		viewAction.project.delete(bundles);
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.runMavenInitBundle(project.getName());
+
+		jobAction.waitForNoRunningJobs();
+		jobAction.waitForConsoleContent(project.getName() + " [Maven Build]", "BUILD SUCCESS", M1);
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "bundles"));
+		Assert.assertTrue(viewAction.servers.visibleServer(LIFERAY_PORTAL_BUNDLE));
+
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
 		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
@@ -412,7 +434,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_PORTAL_BUNDLE);
 
 		dialogAction.preferences.confirm();
 	}

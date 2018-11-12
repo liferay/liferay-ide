@@ -246,7 +246,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.0");
 
 		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
 
@@ -258,13 +258,30 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
+
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
+
+		dialogAction.preferences.confirm();
+
+		viewAction.project.runGradleInitBundle(project.getName());
+
+		jobAction.waitForNoRunningJobs();
+		jobAction.waitForConsoleContent(project.getName() + " - initBundle", "BUILD SUCCESSFUL", M1);
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "bundles"));
+
+		Assert.assertTrue(viewAction.servers.visibleServer(LIFERAY_PORTAL_BUNDLE));
+
 		viewAction.project.closeAndDelete(project.getName());
 
 		dialogAction.openPreferencesDialog();
 
 		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_PORTAL_BUNDLE);
 
 		dialogAction.preferences.confirm();
 	}
