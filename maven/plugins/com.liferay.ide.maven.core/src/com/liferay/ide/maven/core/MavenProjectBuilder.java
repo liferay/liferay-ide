@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.core.util.MultiStatusBuilder;
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 
@@ -31,12 +32,10 @@ import java.nio.file.Files;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
-import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
@@ -278,27 +277,10 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 				Model model = mavenReader.read(reader);
 
 				if (model != null) {
-					Build build = model.getBuild();
+					model.addProperty(WorkspaceConstants.BUNDLE_URL_PROPERTY, bundleUrl);
 
-					Map<String, Plugin> map = build.getPluginsAsMap();
-
-					Plugin plugin = map.get("com.liferay:com.liferay.portal.tools.bundle.support");
-
-					if (plugin != null) {
-						try (FileWriter fileWriter = new FileWriter(pomFile)) {
-							Xpp3Dom origin = (Xpp3Dom)plugin.getConfiguration();
-							Xpp3Dom newConfiguration = new Xpp3Dom("configuration");
-
-							Xpp3Dom url = new Xpp3Dom("url");
-
-							url.setValue(bundleUrl);
-
-							newConfiguration.addChild(url);
-
-							plugin.setConfiguration(Xpp3Dom.mergeXpp3Dom(newConfiguration, origin));
-
-							mavenWriter.write(fileWriter, model);
-						}
+					try (FileWriter fileWriter = new FileWriter(pomFile)) {
+						mavenWriter.write(fileWriter, model);
 					}
 				}
 			}

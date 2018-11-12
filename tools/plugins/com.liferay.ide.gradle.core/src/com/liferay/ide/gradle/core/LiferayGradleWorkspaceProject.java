@@ -19,12 +19,11 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import com.liferay.ide.server.core.ILiferayServer;
-
-import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,24 +65,9 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 	}
 
 	@Override
-	public String getProperty(String key, String defaultValue) {
-		if (getProject() == null) {
-			return null;
-		}
-
-		IPath projectLocation = getProject().getLocation();
-
-		File gradleProperties = new File(projectLocation.toFile(), "gradle.properties");
-
-		String retVal = null;
-
-		if (FileUtil.exists(gradleProperties)) {
-			Properties properties = PropertiesUtil.loadProperties(gradleProperties);
-
-			retVal = properties.getProperty(key, defaultValue);
-		}
-
-		return retVal;
+	public String getHomeLocation() {
+		return workspaceProperties.getProperty(
+			WorkspaceConstants.HOME_DIR_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
 	}
 
 	@Override
@@ -126,6 +110,19 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 	@Override
 	public Set<IProject> watching() {
 		return Collections.unmodifiableSet(_watchingProjects);
+	}
+
+	@Override
+	protected Properties loadExtraProperties() {
+		IPath projectLocation = getProject().getLocation();
+
+		IPath gradlePropertiesPath = projectLocation.append("gradle.properties");
+
+		if (FileUtil.exists(gradlePropertiesPath)) {
+			return PropertiesUtil.loadProperties(gradlePropertiesPath.toFile());
+		}
+
+		return null;
 	}
 
 	private String _convertToModuleTaskPath(IPath moduleLocation, String taskName) {
