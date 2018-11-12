@@ -47,9 +47,13 @@ public class WorkspaceConstants {
 
 	public static final String DEFAULT_WARS_DIR = "wars";
 
+	public static final String DEFAULT_WORKSPACE_VERSION = "7.1";
+
 	public static final String EXT_DIR_PROPERTY = "liferay.workspace.ext.dir";
 
 	public static final String HOME_DIR_PROPERTY = "liferay.workspace.home.dir";
+
+	public static final String MAVEN_HOME_DIR_PROPERTY = "liferayHome";
 
 	public static final String MODULES_DIR_PROPERTY = "liferay.workspace.modules.dir";
 
@@ -60,6 +64,14 @@ public class WorkspaceConstants {
 	public static final String THEMES_DIR_PROPERTY = "liferay.workspace.themes.dir";
 
 	public static final String WARS_DIR_PROPERTY = "liferay.workspace.wars.dir";
+
+	public static final String WORKSPACE_BLADESETTING_FILE_FOLDER = ".blade";
+
+	public static final String WORKSPACE_BLADESETTING_FILE_NAME = "settings.properties";
+
+	public static final String WORKSPACE_PROFILE_KEY = "profile.name";
+
+	public static final String WORKSPACE_VERSION_KEY = "liferay.version.default";
 
 	public static final Map<String, String[]> liferayTargetPlatformVersions = new HashMap<String, String[]>() {
 		{
