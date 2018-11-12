@@ -34,11 +34,19 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 	public void createLiferayWorkspace() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.0");
 
 		wizardAction.finish();
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		String targetPlateformVersionMessage = "liferay.workspace.target.platform.version = 7.0.6";
+
+		viewAction.project.openFile(project.getName(), "gradle.properties");
+
+		validationAction.assertContains(targetPlateformVersionMessage, editorAction.getContent());
+
+		editorAction.close();
 
 		String[] moduleNames = {project.getName(), "modules"};
 
@@ -68,6 +76,14 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		wizardAction.finish();
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		String targetPlateformVersionMessage = "liferay.workspace.target.platform.version = 7.1.0";
+
+		viewAction.project.openFile(project.getName(), "gradle.properties");
+
+		validationAction.assertContains(targetPlateformVersionMessage, editorAction.getContent());
+
+		editorAction.close();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}

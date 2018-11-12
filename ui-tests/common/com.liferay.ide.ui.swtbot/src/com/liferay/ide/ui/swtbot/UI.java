@@ -805,6 +805,8 @@ public interface UI {
 
 	public final String SUPERCLASS = "Superclass:";
 
+	public final String TARGET_PLATFORM = "Target platform:";
+
 	public final String TEMPLATE_CONTEXT_CONCONTRIBUTOR = "template-context-contributor";
 
 	public final String TEMPLATE_FILE = "Template file:";

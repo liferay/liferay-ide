@@ -140,6 +140,9 @@ public interface Messages {
 
 	public static final String LOCATION_MUST_BE_SPECIFIED = "Location must be specified.";
 
+	public static final String MAVEN_LIFERAY_WORKSPACE_WOULD_NOT_SUPPORT_TARGET_PLATFORM =
+		"Maven Liferay Workspace would not support Target Platform.";
+
 	public static final String MODEL_CLASS_MUST_BE_SPECIFIED = "Model Class must be specified";
 
 	public static final String MUST_SPECIFY_A_PORTLET_SUPERCLASS = "Must specify a portlet superclass.";

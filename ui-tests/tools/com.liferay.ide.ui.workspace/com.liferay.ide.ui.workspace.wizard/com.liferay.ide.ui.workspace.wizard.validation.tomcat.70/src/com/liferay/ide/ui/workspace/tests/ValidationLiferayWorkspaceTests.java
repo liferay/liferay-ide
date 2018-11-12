@@ -192,6 +192,51 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 	}
 
 	@Test
+	public void checkTargetPlatform() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		String[] expectedTargetPlatform = {"7.0.6", "7.1.0"};
+
+		ComboBox targetPlatformComboBox = wizardAction.newLiferayWorkspace.getTargetPlatform();
+
+		String[] targetPlatform = targetPlatformComboBox.items();
+
+		validationAction.assertLengthEquals(expectedTargetPlatform, targetPlatform);
+
+		for (int i = 0; i < targetPlatform.length; i++) {
+			validationAction.assertEquals(expectedTargetPlatform[i], targetPlatform[i]);
+		}
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.0");
+
+		validationAction.assertEquals(expectedTargetPlatform[0], targetPlatformComboBox.getText());
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.1");
+
+		validationAction.assertEquals(expectedTargetPlatform[1], targetPlatformComboBox.getText());
+
+		wizardAction.cancel();
+	}
+
+	@Test
+	public void checkTargetPlatformMassageForMaven() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareMaven(project.getName());
+
+		validationAction.assertEquals(
+			MAVEN_LIFERAY_WORKSPACE_WOULD_NOT_SUPPORT_TARGET_PLATFORM, wizardAction.getValidationMsg(2));
+
+		validationAction.assertEnabledTrue(wizardAction.getFinishBtn());
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
+
+		validationAction.assertEquals(CREATE_A_NEW_LIFERAY_WORKSPACE, wizardAction.getValidationMsg(2));
+
+		wizardAction.cancel();
+	}
+
+	@Test
 	public void createLiferayWorkspaceWithInvalidBundleUrl() {
 		String invalidMessage = "The bundle URL may not be a vaild URL.";
 

@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.liferay.page.wizard.project;
 
 import com.liferay.ide.ui.swtbot.page.CheckBox;
+import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.page.Text;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
@@ -39,6 +40,10 @@ public class NewLiferayWorkspaceWizard extends NewProjectWizard {
 
 	public Text getServerName() {
 		return new Text(getShell().bot(), SERVER_NAME);
+	}
+
+	public ComboBox getTargetPlatform() {
+		return new ComboBox(getShell().bot(), TARGET_PLATFORM);
 	}
 
 	public void setBundleUrl(String url) {

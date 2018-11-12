@@ -752,6 +752,10 @@ public class WizardAction extends UIAction {
 			return _newLiferayWorkspaceWizard.getBundleUrl();
 		}
 
+		public ComboBox getTargetPlatform() {
+			return _newLiferayWorkspaceWizard.getTargetPlatform();
+		}
+
 		public void prepareGradle(String projectName) {
 			_prepare(projectName, GRADLE);
 		}
