@@ -33,6 +33,10 @@ public abstract class DeployServiceBuilderModuleGradleTomcat7xBase extends Serve
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
+		viewAction.project.runBuildService(project.getName());
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName("-api"));

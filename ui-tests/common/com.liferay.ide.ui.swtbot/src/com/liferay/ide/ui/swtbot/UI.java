@@ -105,6 +105,8 @@ public interface UI {
 
 	public final String BUILD_LANG = "build-lang";
 
+	public final String BUILD_SERVICE = "build-service";
+
 	public final String BUILD_SERVICES = "Build Services";
 
 	public final String BUILD_TYPE = "Build type:";

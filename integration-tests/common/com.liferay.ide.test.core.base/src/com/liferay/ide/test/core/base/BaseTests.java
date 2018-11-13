@@ -77,13 +77,16 @@ public class BaseTests {
 		return workspace().getRoot();
 	}
 
-	protected void assertBundleProject(String projectName) {
+	protected IBundleProject assertBundleProject(String projectName) {
 		IProject project = project(projectName);
 
 		assertProjectExists(project);
 
-		Assert.assertNotNull(
-			"Expected project " + project + " is IBundleProject", LiferayCore.create(IBundleProject.class, project));
+		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
+
+		Assert.assertNotNull("Expected project " + project + " is IBundleProject", bundleProject);
+
+		return bundleProject;
 	}
 
 	protected void assertComponentValue(Value<?> component, String expectedValue) {
