@@ -23,7 +23,7 @@ import org.junit.Rule;
 /**
  * @author Terry Jia
  */
-public class Tomcat7xDeployBase extends ServerTestBase {
+public abstract class Tomcat7xDeployBase extends ServerTestBase {
 
 	public void deployFragment() {
 		wizardAction.openNewFragmentWizard();
@@ -68,7 +68,7 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 	public void deployModule() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepare(project.getName());
+		wizardAction.newModule.prepareGradle(project.getName(), MVC_PORTLET, getVersion());
 
 		wizardAction.finish();
 
@@ -120,7 +120,7 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 	public void deployWar() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET, getVersion());
 
 		wizardAction.finish();
 
@@ -148,5 +148,7 @@ public class Tomcat7xDeployBase extends ServerTestBase {
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
+
+	protected abstract String getVersion();
 
 }

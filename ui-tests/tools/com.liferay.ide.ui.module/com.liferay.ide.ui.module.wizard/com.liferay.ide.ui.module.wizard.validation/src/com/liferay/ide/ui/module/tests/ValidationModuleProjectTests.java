@@ -15,7 +15,9 @@
 package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
+import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import java.io.File;
@@ -23,6 +25,7 @@ import java.io.File;
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -30,6 +33,44 @@ import org.junit.Test;
  * @author Rui Wang
  */
 public class ValidationModuleProjectTests extends SwtbotBase {
+
+	@Test
+	public void checkDefaultVersionInLiferayWorkspace70() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.0");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		validationAction.assertEquals("7.0", wizardAction.newModule.defaultVersions());
+
+		wizardAction.cancel();
+
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
+	public void checkDefaultVersionInLiferayWorkspace71() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.1");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		validationAction.assertEquals("7.1", wizardAction.newModule.defaultVersions());
+
+		wizardAction.cancel();
+
+		viewAction.project.closeAndDelete(project.getName());
+	}
 
 	@Test
 	public void checkInitialState() {
@@ -44,6 +85,25 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
 		validationAction.assertEnabledTrue(wizardAction.getCancelBtn());
+
+		wizardAction.cancel();
+	}
+
+	@Test
+	public void checkLiferayVersion() {
+		wizardAction.openNewLiferayModuleWizard();
+
+		String[] expectedLiferayVersions = {"7.0", "7.1"};
+
+		ComboBox liferayVersionComboBox = wizardAction.newLiferayWorkspace.liferayVersion();
+
+		String[] liferayVersions = liferayVersionComboBox.items();
+
+		validationAction.assertLengthEquals(expectedLiferayVersions, liferayVersions);
+
+		for (int i = 0; i < liferayVersions.length; i++) {
+			validationAction.assertEquals(expectedLiferayVersions[i], liferayVersions[i]);
+		}
 
 		wizardAction.cancel();
 	}
@@ -227,5 +287,8 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 		wizardAction.cancel();
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }
