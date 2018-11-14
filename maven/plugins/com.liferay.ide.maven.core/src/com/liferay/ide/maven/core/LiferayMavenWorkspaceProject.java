@@ -52,9 +52,8 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject {
 	}
 
 	@Override
-	public String getHomeLocation() {
-		return workspaceProperties.getProperty(
-			WorkspaceConstants.MAVEN_HOME_DIR_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
+	public String getHomeDirName() {
+		return getProperty(WorkspaceConstants.MAVEN_HOME_DIR_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
 	}
 
 	@Override
@@ -82,7 +81,7 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject {
 			}
 		}
 
-		return null;
+		return new Properties();
 	}
 
 }

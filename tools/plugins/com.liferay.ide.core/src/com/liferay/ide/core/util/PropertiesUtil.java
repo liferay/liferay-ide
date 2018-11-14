@@ -534,17 +534,26 @@ public class PropertiesUtil {
 		return false;
 	}
 
-	public static Properties loadProperties(File f) {
-		Properties p = new Properties();
+	public static Properties loadProperties(File file) {
+		Properties properties = new Properties();
 
-		try (InputStream stream = Files.newInputStream(f.toPath())) {
-			p.load(stream);
+		if (FileUtil.exists(file)) {
+			try (InputStream stream = Files.newInputStream(file.toPath())) {
+				properties.load(stream);
+			}
+			catch (IOException ioe) {
+			}
+		}
 
-			return p;
+		return properties;
+	}
+
+	public static Properties loadProperties(IPath path) {
+		if (FileUtil.notExists(path)) {
+			return new Properties();
 		}
-		catch (IOException ioe) {
-			return null;
-		}
+
+		return loadProperties(path.toFile());
 	}
 
 	public static void saveProperties(Properties props, File resultFile) {
