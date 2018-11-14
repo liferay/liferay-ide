@@ -23,11 +23,8 @@ import com.liferay.ide.core.adapter.NoopLiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
-import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
-
-import java.io.File;
 
 import java.util.Collections;
 import java.util.List;
@@ -48,8 +45,6 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 
 	public LiferayWorkspaceProject(IProject project) {
 		super(project);
-
-		_loadProperties();
 	}
 
 	@Override
@@ -103,13 +98,20 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 	}
 
 	@Override
-	public String getProfile() {
-		return workspaceProperties.getProperty(WorkspaceConstants.WORKSPACE_PROFILE_KEY);
-	}
-
-	@Override
 	public String getProperty(String key, String defaultValue) {
-		return workspaceProperties.getProperty(key, defaultValue);
+		Properties properties = new Properties();
+
+		IPath projectLocation = getProject().getLocation();
+
+		IPath bladeDir = projectLocation.append(".blade");
+
+		IPath bladeSettingsPath = bladeDir.append("settings.properties");
+
+		properties.putAll(PropertiesUtil.loadProperties(bladeSettingsPath));
+
+		properties.putAll(loadExtraProperties());
+
+		return properties.getProperty(key, defaultValue);
 	}
 
 	@Override
@@ -123,12 +125,6 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 	}
 
 	@Override
-	public String getVersion() {
-		return workspaceProperties.getProperty(
-			WorkspaceConstants.WORKSPACE_VERSION_KEY, WorkspaceConstants.DEFAULT_WORKSPACE_VERSION);
-	}
-
-	@Override
 	public void watch(Set<IProject> childProjects) {
 	}
 
@@ -138,29 +134,5 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 	}
 
 	protected abstract Properties loadExtraProperties();
-
-	protected Properties workspaceProperties = new Properties();
-
-	private Properties _loadProperties() {
-		IPath projectLocation = getProject().getLocation();
-
-		IPath bladeDirFolder = projectLocation.append(WorkspaceConstants.WORKSPACE_BLADESETTING_FILE_FOLDER);
-
-		IPath bladeSettingPath = bladeDirFolder.append(WorkspaceConstants.WORKSPACE_BLADESETTING_FILE_NAME);
-
-		File bladeSetting = FileUtil.getFile(bladeSettingPath);
-
-		if (FileUtil.exists(bladeSetting)) {
-			workspaceProperties = PropertiesUtil.loadProperties(bladeSetting);
-
-			Properties extraProperties = loadExtraProperties();
-
-			if (extraProperties != null) {
-				workspaceProperties.putAll(loadExtraProperties());
-			}
-		}
-
-		return workspaceProperties;
-	}
 
 }

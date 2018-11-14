@@ -59,10 +59,6 @@ import org.eclipse.wst.server.core.ServerCore;
  */
 public class LiferayWorkspaceUtil {
 
-	public static final String DEFAULT_BUNDLE_HOME_NAME_KEY = "liferayHome";
-
-	public static final String DEFAULT_BUNDLE_HOME_NAME_VALUE = "bundles";
-
 	public static String hasLiferayWorkspaceMsg =
 		"A Liferay Workspace project already exists in this Eclipse instance.";
 	public static String multiWorkspaceErrorMsg = "More than one Liferay workspace build in current Eclipse workspace.";
@@ -81,7 +77,7 @@ public class LiferayWorkspaceUtil {
 
 			IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
 
-			String bundlesDir = workspaceProject.getHomeLocation();
+			String bundlesDir = workspaceProject.getHomeDirName();
 
 			IPath projectLocation = project.getLocation();
 

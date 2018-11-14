@@ -16,7 +16,6 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.WorkspaceConstants;
@@ -65,9 +64,8 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 	}
 
 	@Override
-	public String getHomeLocation() {
-		return workspaceProperties.getProperty(
-			WorkspaceConstants.HOME_DIR_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
+	public String getHomeDirName() {
+		return getProperty(WorkspaceConstants.HOME_DIR_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
 	}
 
 	@Override
@@ -116,13 +114,9 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 	protected Properties loadExtraProperties() {
 		IPath projectLocation = getProject().getLocation();
 
-		IPath gradlePropertiesPath = projectLocation.append("gradle.properties");
+		IPath propertiesPath = projectLocation.append("gradle.properties");
 
-		if (FileUtil.exists(gradlePropertiesPath)) {
-			return PropertiesUtil.loadProperties(gradlePropertiesPath.toFile());
-		}
-
-		return null;
+		return PropertiesUtil.loadProperties(propertiesPath);
 	}
 
 	private String _convertToModuleTaskPath(IPath moduleLocation, String taskName) {
