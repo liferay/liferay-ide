@@ -1,0 +1,10 @@
+.,'.' is an invalid name on this platform.,linux
+/,/ is an invalid character in resource name '/'.,linux
+$,The project name is invalid.,linux
+,Project name must be specified,linux
+a,Enter a name and choose a template to use for a new Liferay JSF project.,linux
+.,'.' is an invalid name on this platform.,win32
+/,/ is an invalid character in resource name '/'.,win32
+$,The project name is invalid.,win32
+,Project name must be specified,win32
+a,Enter a name and choose a template to use for a new Liferay JSF project.,win32

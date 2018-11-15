@@ -23,19 +23,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.ui.tests.jsf</groupId>
-		<artifactId>jsf-tests</artifactId>
+		<groupId>com.liferay.ide.ui.tests.jsf.wizard</groupId>
+		<artifactId>jsf-wizard-tests</artifactId>
 		<version>3.4.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.ui.tests.jsf.wizard</groupId>
-	<artifactId>jsf-wizard-tests</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>com.liferay.ide.ui.jsf.wizard.validation.tests</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
 
-	<name>Liferay IDE UI Jsf Wizard</name>
-
-	<modules>
-		<module>com.liferay.ide.ui.jsf.wizard.create</module>
-		<module>com.liferay.ide.ui.jsf.wizard.validation</module>
-	</modules>
+	<name>Liferay IDE UI Jsf Wizard Validation Tests</name>
 </project>
