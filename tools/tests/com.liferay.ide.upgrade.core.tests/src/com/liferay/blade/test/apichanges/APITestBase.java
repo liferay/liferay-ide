@@ -39,7 +39,7 @@ public abstract class APITestBase {
 
 	@Before
 	public void beforeTest() throws Exception {
-		Filter filter = context.createFilter("(implName=" + getImplClassName() + ")");
+		Filter filter = getFilter();
 
 		ServiceTracker<FileMigrator, FileMigrator> fileMigratorTracker = new ServiceTracker<>(context, filter, null);
 
@@ -54,6 +54,10 @@ public abstract class APITestBase {
 
 	public int getExpectedNumber() {
 		return 1;
+	}
+
+	protected Filter getFilter() throws Exception {
+		return context.createFilter("(implName=" + getImplClassName() + ")");
 	}
 
 	public abstract String getImplClassName();

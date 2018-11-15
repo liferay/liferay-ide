@@ -12,18 +12,27 @@
  * details.
  */
 
-package com.liferay.blade.api;
+package com.liferay.blade.test.apichanges;
 
-import java.util.Collection;
-import java.util.regex.Pattern;
+import java.io.File;
 
 /**
- * @author Gregory Amerson
+ * @author Seiphon Wang
  */
-public interface XMLFile extends SourceFile {
+public class DescriptorsTest extends APIVersionSupportTestBase {
 
-	public SearchResult findDocumentTypeDeclaration(String name, Pattern idPattern);
+	@Override
+	public String getImplClassName() {
+		return "LiferayDescriptorVersion";
+	}
 
-	public Collection<SearchResult> findElement(String elementName, String elementValue);
+	@Override
+	public File getTestFile() {
+		return new File("projects/legacy-apis-ant-portlet/docroot/WEB-INF/liferay-portlet.xml");
+	}
 
+	@Override
+	public String getVersion() {
+		return "7.0";
+	}
 }
