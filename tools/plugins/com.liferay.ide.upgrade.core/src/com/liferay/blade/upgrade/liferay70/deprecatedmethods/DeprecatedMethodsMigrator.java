@@ -30,6 +30,7 @@ import java.util.List;
 import org.eclipse.core.runtime.Path;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import org.osgi.service.component.annotations.Component;
@@ -63,6 +64,8 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 				}
 				catch (IOException ioe) {
 				}
+				catch (JSONException e) {
+				}
 			}
 
 			_deprecatedMethods = deprecatedMethodsList.toArray(new JSONArray[0]);
@@ -78,25 +81,29 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 
 		for (JSONArray deprecatedMethodsArray : _deprecatedMethods) {
 			for (int j = 0; j < deprecatedMethodsArray.length(); j++) {
-				_tempMethod = deprecatedMethodsArray.getJSONObject(j);
+				try {
+					_tempMethod = deprecatedMethodsArray.getJSONObject(j);
 
-				List<SearchResult> searchResults = searchFile(file, createFileChecker(type, file, fileExtension));
+					List<SearchResult> searchResults = searchFile(file, createFileChecker(type, file, fileExtension));
 
-				if (searchResults != null) {
-					for (SearchResult searchResult : searchResults) {
-						int makerType = Problem.MARKER_ERROR;
+					if (searchResults != null) {
+						for (SearchResult searchResult : searchResults) {
+							int makerType = Problem.MARKER_ERROR;
 
-						if ("7.0".equals(_tempMethod.getString("deprecatedVersion"))) {
-							makerType = Problem.MARKER_WARNING;
+							if ("7.0".equals(_tempMethod.getString("deprecatedVersion"))) {
+								makerType = Problem.MARKER_WARNING;
+							}
+
+							problems.add(
+								new Problem(
+									_tempMethod.getString("javadoc"), _tempMethod.getString("javadoc"), fileExtension, "",
+									"7.0", file, searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
+									_tempMethod.getString("javadoc"), searchResult.autoCorrectContext,
+									Problem.STATUS_NOT_RESOLVED, Problem.DEFAULT_MARKER_ID, makerType));
 						}
-
-						problems.add(
-							new Problem(
-								_tempMethod.getString("javadoc"), _tempMethod.getString("javadoc"), fileExtension, "",
-								"7.0", file, searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
-								_tempMethod.getString("javadoc"), searchResult.autoCorrectContext,
-								Problem.STATUS_NOT_RESOLVED, Problem.DEFAULT_MARKER_ID, makerType));
 					}
+				}
+				catch (JSONException e) {
 				}
 			}
 		}
@@ -110,23 +117,27 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 
 		String[] parameters = null;
 
-		JSONArray parameterJSONArray = _tempMethod.getJSONArray("parameters");
+		try {
+			JSONArray parameterJSONArray = _tempMethod.getJSONArray("parameters");
 
-		if (parameterJSONArray != null) {
-			parameters = new String[parameterJSONArray.length()];
+			if (parameterJSONArray != null) {
+				parameters = new String[parameterJSONArray.length()];
 
-			for (int i = 0; i < parameterJSONArray.length(); i++) {
-				parameters[i] = parameterJSONArray.getString(i);
+				for (int i = 0; i < parameterJSONArray.length(); i++) {
+					parameters[i] = parameterJSONArray.getString(i);
+				}
 			}
+
+			searchResults.addAll(
+				fileChecker.findMethodInvocations(
+					_tempMethod.getString("className"), null, _tempMethod.getString("methodName"), parameters));
+
+			searchResults.addAll(
+				fileChecker.findMethodInvocations(
+					null, _tempMethod.getString("className"), _tempMethod.getString("methodName"), parameters));
 		}
-
-		searchResults.addAll(
-			fileChecker.findMethodInvocations(
-				_tempMethod.getString("className"), null, _tempMethod.getString("methodName"), parameters));
-
-		searchResults.addAll(
-			fileChecker.findMethodInvocations(
-				null, _tempMethod.getString("className"), _tempMethod.getString("methodName"), parameters));
+		catch (JSONException e) {
+		}
 
 		return searchResults;
 	}
