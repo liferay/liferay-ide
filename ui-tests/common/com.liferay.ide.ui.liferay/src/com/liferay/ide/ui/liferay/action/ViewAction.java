@@ -130,6 +130,8 @@ public class ViewAction extends UIAction {
 			ide.sleep();
 
 			try {
+				_getProjects().setFocus();
+
 				_getProjects().contextMenu(true, "Close Project", items);
 
 				_jobAction.waitForCloseProject();
