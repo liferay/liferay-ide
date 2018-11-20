@@ -190,6 +190,9 @@ public interface Messages {
 
 	public static final String PROJECT_NAME_MUST_BE_SPECIFIED = "Project name must be specified";
 
+	public static final String PROJECT_WONT_BE_RESOLVED_COMPLETELY_UNTIL_ALL_GRADLE_BACKGROUND_JOBS_FINISH =
+		"Project won't be resolved completely until all Gradle background jobs finish.";
+
 	public static final String RESOURCE_BUNDLE_FILE_END_WITH_PROPERTIES =
 		"Resource bundle file path should end with .properties";
 

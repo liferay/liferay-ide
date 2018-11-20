@@ -718,7 +718,11 @@ public class WizardAction extends UIAction {
 
 	}
 
-	public class NewLiferayJsfWizardAction {
+	public class NewLiferayJsfWizardAction extends NewProjectWizardAction {
+
+		public void prepareGradle(String projectName) {
+			_prepare(projectName, GRADLE);
+		}
 
 		public void prepareGradle(String projectName, String componentSuite) {
 			_prepare(projectName, GRADLE, componentSuite);
@@ -726,6 +730,15 @@ public class WizardAction extends UIAction {
 
 		public void prepareMaven(String projectName, String componentSuite) {
 			_prepare(projectName, MAVEN, componentSuite);
+		}
+
+		public ComboBox projectComponentSuite() {
+			return _newJsfProjectWizard.getComponentSuite();
+		}
+
+		private void _prepare(String projectName, String buildType) {
+			_newJsfProjectWizard.setProjectName(projectName);
+			_newJsfProjectWizard.setBuildType(buildType);
 		}
 
 		private void _prepare(String projectName, String buildType, String componentSuite) {
