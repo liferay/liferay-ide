@@ -113,6 +113,8 @@ public class MigrationContentProvider implements ITreeContentProvider {
 					MigrationProblemsContainer.class);
 
 				if (container != null) {
+					MigrationUtil.removeProblemsInBuildForlder(container);
+
 					_problems.add(container);
 				}
 			}
