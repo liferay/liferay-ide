@@ -120,6 +120,24 @@ public class StringUtil {
 		return sb.toString();
 	}
 
+	public static boolean notContainsAll(String s1, String... stringArray) {
+		if (s1 == null) {
+			return false;
+		}
+
+		boolean contains = false;
+
+		for (String s : stringArray) {
+			if (s1.contains(s)) {
+				contains = true;
+
+				break;
+			}
+		}
+
+		return !contains;
+	}
+
 	public static String replace(String content, String source, String target) {
 		if (content == null) {
 			return null;

@@ -19,6 +19,7 @@ import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.IgnoredProblemsContainer;
 import com.liferay.ide.project.core.upgrade.MigrationProblems;
@@ -428,9 +429,9 @@ public class MigrationUtil {
 				fileProblems
 			).filter(
 				fileProblem -> {
-					String filePath = fileProblem.file.toString();
+					String filePath = fileProblem.file.getPath();
 
-					return !filePath.contains("/build/");
+					return StringUtil.notContainsAll(filePath, "/build/", "/bin/", "/out/", "/target/");
 				}
 			).collect(
 				Collectors.toList()
