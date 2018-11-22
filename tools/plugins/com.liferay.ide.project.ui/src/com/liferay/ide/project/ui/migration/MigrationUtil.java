@@ -424,9 +424,9 @@ public class MigrationUtil {
 		for (MigrationProblems migrationProblems : projectProblems) {
 			FileProblems[] fileProblems = migrationProblems.getProblems();
 
-			Stream<FileProblems> fileProblemsStream = Arrays.stream(fileProblems);
-
-			List<FileProblems> fileProblemsList = fileProblemsStream.filter(
+			List<FileProblems> fileProblemsList = Stream.of(
+				fileProblems
+			).filter(
 				fileProblem -> {
 					String filePath = fileProblem.file.toString();
 
