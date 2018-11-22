@@ -1,5 +1,5 @@
 #!/bin/sh
 
-mvn source-formatter:format -D baseDir="../../"
+../../mvnw source-formatter:format -D baseDir="../../"
 
 exit 0

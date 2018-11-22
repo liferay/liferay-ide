@@ -56,9 +56,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.p2.operations.ProvisioningSession;
 import org.eclipse.equinox.p2.operations.RepositoryTracker;
 import org.eclipse.equinox.p2.ui.ProvisioningUI;
-import org.eclipse.jdt.internal.formatter.DefaultCodeFormatterOptions;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
-import org.eclipse.jdt.internal.ui.preferences.formatter.ProfileVersioner;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.text.templates.ContextTypeRegistry;
@@ -130,15 +128,6 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 	 */
 	public static LiferayUIPlugin getDefault() {
 		return _plugin;
-	}
-
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public static Map getLiferaySettings() {
-		Map options = new DefaultCodeFormatterOptions(LiferayDefaultCodeFormatterSettings.getSettings()).getMap();
-
-		ProfileVersioner.setLatestCompliance(options);
-
-		return options;
 	}
 
 	public static IWorkspace getWorkspace() {
