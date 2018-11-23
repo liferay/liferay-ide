@@ -714,6 +714,10 @@ public class WizardAction extends UIAction {
 			return _newLiferayComponentWizard.getProjectNames();
 		}
 
+		public ComboBox projectNames() {
+			return _newLiferayComponentWizard.getProjectNames();
+		}
+
 		private final NewLiferayComponentWizard _newLiferayComponentWizard = new NewLiferayComponentWizard(bot);
 
 	}
