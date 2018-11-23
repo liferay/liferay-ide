@@ -101,7 +101,7 @@ public class ImportLiferayWorkspaceOpMethods {
 					protected IStatus run(IProgressMonitor monitor) {
 						LiferayWorkspaceUtil.addPortalRuntime(serverName);
 
-						return StatusBridge.create(Status.createOkStatus());
+						return org.eclipse.core.runtime.Status.OK_STATUS;
 					}
 
 				};
