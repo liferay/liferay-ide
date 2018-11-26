@@ -16,6 +16,7 @@ package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.project.ProjectsSupport;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.util.StringPool;
@@ -24,7 +25,6 @@ import java.io.File;
 
 import org.eclipse.core.runtime.Platform;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -109,6 +109,45 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 	}
 
 	@Test
+	public void checkLocationWithWorkspace() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(projects.getName(0));
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		String exceptLocation = envAction.getEclipseWorkspacePathOSString();
+
+		String workspaceModuleFolderLocation = exceptLocation + "/" + projects.getName(0) + "/modules";
+		String workspaceWarFolderLocation = exceptLocation + "/" + projects.getName(0) + "/wars";
+
+		if ("win32".equals(Platform.getOS())) {
+			workspaceModuleFolderLocation = workspaceModuleFolderLocation.replaceAll("\\\\", "/");
+			workspaceWarFolderLocation = workspaceWarFolderLocation.replaceAll("\\\\", "/");
+		}
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projects.getName(1), MVC_PORTLET);
+
+		ide.sleep();
+
+		validationAction.assertEquals(workspaceModuleFolderLocation, wizardAction.newModule.getLocation());
+
+		wizardAction.newModule.prepareGradle(projects.getName(1), WAR_MVC_PORTLET);
+
+		ide.sleep();
+
+		validationAction.assertEquals(workspaceWarFolderLocation, wizardAction.newModule.getLocation());
+
+		wizardAction.cancel();
+
+		viewAction.project.closeAndDelete(projects.getName(0));
+	}
+
+	@Test
 	public void validateBuildType() {
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -149,7 +188,6 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
-	@Ignore
 	@Test
 	public void validateLoaction() {
 		String projectName = "test-location";
@@ -290,5 +328,8 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
+
+	@Rule
+	public ProjectsSupport projects = new ProjectsSupport(bot);
 
 }
