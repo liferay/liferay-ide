@@ -42,6 +42,18 @@ public abstract class LiferayWorkspaceSupport extends SupportBase {
 		return "workspace" + timestamp;
 	}
 
+	public String getServerName() {
+		return "Liferay Community Edition Portal 7.1.0 CE GA1";
+	}
+
+	public String getStartedLabel() {
+		return "Liferay Community Edition Portal 7.1.0 CE GA1  [Started]";
+	}
+
+	public String getStoppedLabel() {
+		return "Liferay Community Edition Portal 7.1.0 CE GA1  [Stopped]";
+	}
+
 	public abstract String getThemesDirName();
 
 	public String[] getWarFiles(String... files) {
@@ -49,6 +61,8 @@ public abstract class LiferayWorkspaceSupport extends SupportBase {
 	}
 
 	public abstract String getWarsDirName();
+
+	public abstract void initBundle();
 
 	private String[] _getFiles(String dirName, String... files) {
 		String[] fileNames = new String[files.length + 2];

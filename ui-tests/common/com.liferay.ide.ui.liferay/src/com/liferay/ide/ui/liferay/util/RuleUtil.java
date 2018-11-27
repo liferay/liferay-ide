@@ -16,10 +16,13 @@ package com.liferay.ide.ui.liferay.util;
 
 import com.liferay.ide.ui.liferay.support.sdk.Sdk62Support;
 import com.liferay.ide.ui.liferay.support.sdk.SdkSupport;
+import com.liferay.ide.ui.liferay.support.server.LiferaryWorkspaceRunningTomcat7xSupport;
+import com.liferay.ide.ui.liferay.support.server.LiferaryWorkspaceTomcat7xSupport;
 import com.liferay.ide.ui.liferay.support.server.ServerRunningSupport;
 import com.liferay.ide.ui.liferay.support.server.ServerSupport;
 import com.liferay.ide.ui.liferay.support.server.Tomcat62Support;
 import com.liferay.ide.ui.liferay.support.server.Tomcat7xSupport;
+import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceSupport;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
@@ -45,6 +48,17 @@ public class RuleUtil {
 
 	public static RuleChain getTomcat7xRuleChain(SWTWorkbenchBot bot, ServerSupport server) {
 		return getRuleChain(server, new Tomcat7xSupport(bot, server));
+	}
+
+	public static RuleChain getTomcat7xRunningLiferayWokrspaceRuleChain(
+		SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace) {
+
+		LiferaryWorkspaceTomcat7xSupport server = new LiferaryWorkspaceTomcat7xSupport(bot, workspace);
+
+		LiferaryWorkspaceRunningTomcat7xSupport runningServer = new LiferaryWorkspaceRunningTomcat7xSupport(
+			bot, workspace);
+
+		return getRuleChain(workspace, server, runningServer);
 	}
 
 	public static RuleChain getTomcat7xRunningRuleChain(SWTWorkbenchBot bot, ServerSupport server) {

@@ -62,4 +62,11 @@ public class LiferayWorkspaceGradleSupport extends LiferayWorkspaceSupport {
 		return "wars";
 	}
 
+	@Override
+	public void initBundle() {
+		viewAction.project.runGradleInitBundle(getName());
+
+		jobAction.waitForNoRunningJobs();
+	}
+
 }

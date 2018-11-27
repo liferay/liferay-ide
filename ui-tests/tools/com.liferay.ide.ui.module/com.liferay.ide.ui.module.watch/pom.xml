@@ -23,20 +23,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.ui.tests</groupId>
-		<artifactId>tools-tests</artifactId>
+		<groupId>com.liferay.ide.ui.tests.module</groupId>
+		<artifactId>module-tests</artifactId>
 		<version>3.4.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.ui.tests.module</groupId>
-	<artifactId>module-tests</artifactId>
+	<groupId>com.liferay.ide.ui.tests.module.watch</groupId>
+	<artifactId>module-watch-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE UI Module</name>
+	<name>Liferay IDE UI Module Watch</name>
 
 	<modules>
-		<module>com.liferay.ide.ui.module.deploy</module>
-		<module>com.liferay.ide.ui.module.wizard</module>
-		<module>com.liferay.ide.ui.module.watch</module>
+		<module>com.liferay.ide.ui.module.watch.tomcat.70</module>
 	</modules>
 </project>
