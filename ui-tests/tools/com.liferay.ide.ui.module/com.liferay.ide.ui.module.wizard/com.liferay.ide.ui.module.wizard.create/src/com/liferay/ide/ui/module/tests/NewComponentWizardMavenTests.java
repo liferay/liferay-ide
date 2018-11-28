@@ -37,7 +37,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -68,7 +68,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -76,7 +76,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		String className = "MyMultipleComponent";
 		String packageName = "com.liferay.ide.test";
@@ -92,7 +92,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 			viewAction.project.visibleFileTry(
 				projects.getName(0), "src/main/java", packageName, className + ".java [Component]"));
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.closeAndDelete(projects.getName(0));
 
@@ -117,7 +117,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -143,7 +143,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -174,7 +174,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -204,7 +204,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewBtnLiferayComponentClassWizard();
 
@@ -222,7 +222,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		viewAction.project.delete(project.getName(), "src/main/java", packageName);
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openFileMenuLiferayComponentClassWizard();
 
@@ -236,7 +236,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		viewAction.project.delete(project.getName(), "src/main/java", packageName);
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openComponentClassWizard(project.getName());
 
@@ -259,13 +259,13 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		String packageName = project.getName() + ".form.field";
 

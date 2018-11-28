@@ -37,7 +37,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -72,7 +72,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -80,13 +80,13 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
@@ -102,7 +102,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
@@ -131,7 +131,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
@@ -148,7 +148,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -166,7 +166,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
@@ -182,7 +182,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openFileMenuLiferayComponentClassWizard();
 
@@ -190,7 +190,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
@@ -204,7 +204,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
@@ -216,7 +216,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
@@ -233,7 +233,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -247,7 +247,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
@@ -264,13 +264,13 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(

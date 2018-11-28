@@ -41,7 +41,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -58,7 +58,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -75,7 +75,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -92,7 +92,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -109,7 +109,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -126,7 +126,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -143,7 +143,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -160,7 +160,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -177,7 +177,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -194,7 +194,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -211,7 +211,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -228,7 +228,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -245,7 +245,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -262,7 +262,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -279,7 +279,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -296,7 +296,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -313,7 +313,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -330,7 +330,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
@@ -347,7 +347,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
