@@ -15,7 +15,6 @@
 package com.liferay.ide.ui.liferay.support.server;
 
 import com.liferay.ide.ui.liferay.support.SupportBase;
-import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceSupport;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
@@ -26,7 +25,7 @@ import org.junit.Assert;
  */
 public class LiferaryWorkspaceRunningTomcat7xSupport extends SupportBase {
 
-	public LiferaryWorkspaceRunningTomcat7xSupport(SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace) {
+	public LiferaryWorkspaceRunningTomcat7xSupport(SWTWorkbenchBot bot, LiferaryWorkspaceTomcat7xSupport workspace) {
 		super(bot);
 
 		_workspace = workspace;
@@ -52,6 +51,6 @@ public class LiferaryWorkspaceRunningTomcat7xSupport extends SupportBase {
 		jobAction.waitForServerStarted(_workspace.getServerName());
 	}
 
-	private LiferayWorkspaceSupport _workspace;
+	private LiferaryWorkspaceTomcat7xSupport _workspace;
 
 }

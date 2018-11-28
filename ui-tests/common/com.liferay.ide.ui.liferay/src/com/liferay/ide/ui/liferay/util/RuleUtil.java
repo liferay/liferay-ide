@@ -51,12 +51,10 @@ public class RuleUtil {
 	}
 
 	public static RuleChain getTomcat7xRunningLiferayWokrspaceRuleChain(
-		SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace) {
-
-		LiferaryWorkspaceTomcat7xSupport server = new LiferaryWorkspaceTomcat7xSupport(bot, workspace);
+		SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace, LiferaryWorkspaceTomcat7xSupport server) {
 
 		LiferaryWorkspaceRunningTomcat7xSupport runningServer = new LiferaryWorkspaceRunningTomcat7xSupport(
-			bot, workspace);
+			bot, server);
 
 		return getRuleChain(workspace, server, runningServer);
 	}

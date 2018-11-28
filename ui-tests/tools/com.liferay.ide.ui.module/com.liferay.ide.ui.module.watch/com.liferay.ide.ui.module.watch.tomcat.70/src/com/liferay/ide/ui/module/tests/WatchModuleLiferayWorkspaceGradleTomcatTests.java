@@ -16,6 +16,7 @@ package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.server.LiferaryWorkspaceTomcat7xSupport;
 import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceGradleSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
@@ -30,9 +31,10 @@ import org.junit.rules.RuleChain;
 public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 	public static LiferayWorkspaceGradleSupport workspace = new LiferayWorkspaceGradleSupport(bot);
+	public static LiferaryWorkspaceTomcat7xSupport server = new LiferaryWorkspaceTomcat7xSupport(bot, workspace);
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getTomcat7xRunningLiferayWokrspaceRuleChain(bot, workspace);
+	public static RuleChain chain = RuleUtil.getTomcat7xRunningLiferayWokrspaceRuleChain(bot, workspace, server);
 
 	@Test
 	public void watchPortlet() {
@@ -44,13 +46,13 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		viewAction.servers.startWatchingProject(workspace.getStartedLabel(), workspace.getName(), project.getName());
+		viewAction.servers.startWatchingProject(server.getStartedLabel(), workspace.getName(), project.getName());
 
 		jobAction.waitForConsoleContent(
-			workspace.getServerName() + " [Liferay 7.x]", "STARTED " + project.getName() + "_", M1);
+			server.getServerName() + " [Liferay 7.x]", "STARTED " + project.getName() + "_", M1);
 
 		viewAction.servers.stopWatchingProject(
-			workspace.getStartedLabel(), workspace.getName(), project.getName() + " [watching]");
+			server.getStartedLabel(), workspace.getName(), project.getName() + " [watching]");
 
 		jobAction.waitForNoRunningJobs();
 

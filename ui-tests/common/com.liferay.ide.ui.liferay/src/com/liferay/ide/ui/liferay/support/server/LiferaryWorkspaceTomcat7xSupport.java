@@ -32,7 +32,7 @@ public class LiferaryWorkspaceTomcat7xSupport extends SupportBase {
 
 	@Override
 	public void after() {
-		dialogAction.deleteRuntimFromPreferences(_workspace.getServerName());
+		dialogAction.deleteRuntimFromPreferences(getServerName());
 	}
 
 	@Override
@@ -40,6 +40,18 @@ public class LiferaryWorkspaceTomcat7xSupport extends SupportBase {
 		super.before();
 
 		_workspace.initBundle();
+	}
+
+	public String getServerName() {
+		return "Liferay Community Edition Portal 7.1.0 CE GA1";
+	}
+
+	public String getStartedLabel() {
+		return "Liferay Community Edition Portal 7.1.0 CE GA1  [Started]";
+	}
+
+	public String getStoppedLabel() {
+		return "Liferay Community Edition Portal 7.1.0 CE GA1  [Stopped]";
 	}
 
 	private LiferayWorkspaceSupport _workspace;
