@@ -51,9 +51,7 @@ public class InstallUpdatesiteTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		ide.sleep(2500);
-
-		ide.sleepLinux(2500);
+		jobAction.waitForInstallDetailsDailogLoaded();
 
 		validationAction.assertEquals(
 			YOUR_ORIGINAL_REQUEST_HAS_BEEN_MODIFIED_SEE_THE_DETAILS, wizardAction.getValidationMsg(1));
