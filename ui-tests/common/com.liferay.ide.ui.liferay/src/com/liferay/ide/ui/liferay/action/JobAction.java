@@ -20,6 +20,7 @@ import com.liferay.ide.ui.swtbot.condition.CancelIvyJobCondition;
 import com.liferay.ide.ui.swtbot.condition.CancelValidateJobCondition;
 import com.liferay.ide.ui.swtbot.condition.CloseProjectJobCondition;
 import com.liferay.ide.ui.swtbot.condition.ConsoleContentCondition;
+import com.liferay.ide.ui.swtbot.condition.InstallDetailsDailogLoadedCondition;
 import com.liferay.ide.ui.swtbot.condition.IvyJobsCondition;
 import com.liferay.ide.ui.swtbot.condition.NoRunningJobsCondition;
 import com.liferay.ide.ui.swtbot.condition.NoRunningProjectBuildingJobs;
@@ -67,6 +68,10 @@ public class JobAction extends UIAction {
 		ide.sleep(2000);
 
 		ide.waitUntil(new ConsoleContentCondition(consoleName, content), timeout);
+	}
+
+	public void waitForInstallDetailsDailogLoaded() {
+		ide.waitUntil(new InstallDetailsDailogLoadedCondition(bot), 30 * 1000);
 	}
 
 	public void waitForIvy() {
