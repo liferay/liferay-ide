@@ -143,9 +143,11 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
 		viewAction.project.refreshGradleProject(project.getName());
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		String[] projectNames = {project.getName(), newModulesFolderName, projectName};
 

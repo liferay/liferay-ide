@@ -163,6 +163,8 @@ public interface Messages {
 
 	public static final String NOT_A_JAVA_SOURCE_FOLDER = "Not a Java source folder.";
 
+	public static final String PACKAGE_NAME_MUST_BE_SPECIFIED = "Package name must be specified";
+
 	public static final String PACKAGE_PATH_CANNOT_BE_EMPTY = "Package path cannot be empty.";
 
 	public static final String PLEASE_ENTER_A_PROJECT_NAME = "Please enter a project name.";

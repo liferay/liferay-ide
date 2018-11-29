@@ -23,6 +23,7 @@ import java.io.File;
 
 import org.eclipse.core.runtime.Platform;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -123,6 +124,58 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
+	public void checkComponentForServiceBuilder() {
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_BUILDER);
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		String[] projectNames = {project.getName() + "-api", project.getName() + "-service"};
+
+		String[] apiNames = {project.getName(), project.getName() + "-api"};
+
+		String[] serviceNames = {project.getName(), project.getName() + "-service"};
+
+		wizardAction.openNewLiferayComponentClassWizard();
+
+		validationAction.assertEquals(PACKAGE_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(2));
+
+		validationAction.assertEquals(projectNames, wizardAction.newLiferayComponent.projectNames());
+
+		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newLiferayComponent.packageName());
+
+		wizardAction.newLiferayComponent.openSelectPackageNameDialog();
+
+		dialogAction.confirm();
+
+		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
+
+		wizardAction.cancel();
+
+		viewAction.project.runBuildService(project.getName());
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayComponentClassWizard();
+
+		wizardAction.newLiferayComponent.prepareProjectName(project.getName() + "-api");
+
+		wizardAction.finish();
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				project.getName(), project.getName() + "-api", "src/main/java",
+				project.getName() + ".service.persistence", project.getCapitalName() + "ApiPortlet.java"));
+
+		viewAction.project.closeAndDelete(apiNames);
+		viewAction.project.closeAndDelete(serviceNames);
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
