@@ -50,6 +50,8 @@ public abstract class LiferayWorkspaceSupport extends SupportBase {
 
 	public abstract String getWarsDirName();
 
+	public abstract void initBundle();
+
 	private String[] _getFiles(String dirName, String... files) {
 		String[] fileNames = new String[files.length + 2];
 

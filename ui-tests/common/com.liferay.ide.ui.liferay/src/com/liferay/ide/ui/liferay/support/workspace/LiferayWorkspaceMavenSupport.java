@@ -85,4 +85,11 @@ public class LiferayWorkspaceMavenSupport extends LiferayWorkspaceSupport {
 		return getName() + "-wars (in wars)";
 	}
 
+	@Override
+	public void initBundle() {
+		viewAction.project.runMavenInitBundle(getName());
+
+		jobAction.waitForNoRunningJobs();
+	}
+
 }

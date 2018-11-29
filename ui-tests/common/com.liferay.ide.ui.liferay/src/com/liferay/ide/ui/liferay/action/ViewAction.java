@@ -396,10 +396,28 @@ public class ViewAction extends UIAction {
 			_serversView.clickStartBtn();
 		}
 
+		public void startWatchingProject(String serverName, String workspaceName) {
+			_getServers().selectTreeItem(serverName, workspaceName);
+
+			_getServers().contextMenu(true, "Start watching project", serverName, workspaceName);
+		}
+
+		public void startWatchingProject(String serverName, String workspaceName, String... modules) {
+			_getServers().selectTreeItem(serverName, workspaceName, modules[0]);
+
+			_getServers().contextMenu(true, "Start watching project", serverName, workspaceName, modules[0]);
+		}
+
 		public void stop(String serverLabel) {
 			ide.sleep(2000);
 
 			_getServers().contextMenu(true, STOP, serverLabel);
+		}
+
+		public void stopWatchingProject(String serverName, String workspaceName, String... modules) {
+			_getServers().selectTreeItem(serverName, workspaceName, modules[0]);
+
+			_getServers().contextMenu(true, "Stop watching project", serverName, workspaceName, modules[0]);
 		}
 
 		public boolean visibleKaleofolderTry(String serverLabel) {
