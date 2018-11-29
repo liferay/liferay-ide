@@ -38,7 +38,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 
@@ -75,7 +75,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
@@ -104,7 +104,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
@@ -312,13 +312,13 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "bundles"));
 
 		viewAction.project.runMavenInitBundle(projectName);
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(viewAction.servers.visibleServer(LIFERAY_PORTAL_BUNDLE));
 
@@ -396,7 +396,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		dialogAction.openPreferencesDialog();
 

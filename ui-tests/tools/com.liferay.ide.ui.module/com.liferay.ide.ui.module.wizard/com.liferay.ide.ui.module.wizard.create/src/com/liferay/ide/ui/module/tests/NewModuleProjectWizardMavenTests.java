@@ -36,7 +36,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -59,7 +59,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -82,7 +82,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -105,7 +105,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -128,7 +128,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -151,7 +151,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -174,7 +174,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -197,7 +197,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -220,7 +220,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -243,7 +243,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -266,7 +266,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -289,7 +289,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -321,7 +321,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -353,7 +353,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -376,7 +376,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -399,7 +399,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -422,7 +422,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -445,7 +445,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
@@ -468,7 +468,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openUpdateMavenProjectDialog(project.getName());
 
