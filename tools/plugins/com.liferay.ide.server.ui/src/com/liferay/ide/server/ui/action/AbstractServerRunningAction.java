@@ -89,9 +89,9 @@ public abstract class AbstractServerRunningAction implements IObjectActionDelega
 				else if (obj instanceof IServerModule) {
 					selectedModule = (IServerModule)obj;
 
-					IServer server = selectedModule.getServer();
+					selectedServer = selectedModule.getServer();
 
-					action.setEnabled((server.getServerState() & getRequiredServerState()) > 0);
+					action.setEnabled((selectedServer.getServerState() & getRequiredServerState()) > 0);
 				}
 			}
 		}

@@ -81,6 +81,8 @@ public class RedeployAction extends AbstractServerRunningAction {
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
+		super.selectionChanged(action, selection);
+
 		boolean validServerState = true;
 
 		if (!selection.isEmpty()) {
