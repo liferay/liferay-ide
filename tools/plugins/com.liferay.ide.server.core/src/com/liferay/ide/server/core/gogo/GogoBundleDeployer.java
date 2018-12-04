@@ -163,7 +163,7 @@ public class GogoBundleDeployer {
 	}
 
 	public BundleDTO install(String url) throws IOException {
-		String result = run("install " + url, true);
+		String result = run("install '" + url + "'", true);
 
 		String[] lines = _split(result, "\r\n");
 
@@ -289,7 +289,7 @@ public class GogoBundleDeployer {
 	}
 
 	public String update(long id, String url) throws IOException {
-		return run("update " + id + " " + url, true);
+		return run("update " + id + " '" + url + "'", true);
 	}
 
 	private static int _getState(String state) {
