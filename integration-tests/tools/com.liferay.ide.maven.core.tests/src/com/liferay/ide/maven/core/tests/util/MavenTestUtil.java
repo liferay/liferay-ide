@@ -14,6 +14,8 @@
 
 package com.liferay.ide.maven.core.tests.util;
 
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.File;
@@ -40,6 +42,7 @@ import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.m2e.tests.common.FileHelpers;
+import org.eclipse.m2e.tests.common.JobHelpers;
 import org.eclipse.m2e.tests.common.WorkspaceHelpers;
 
 import org.junit.Assert;
@@ -153,6 +156,23 @@ public class MavenTestUtil {
 		}
 
 		return projects;
+	}
+
+	public static void waitForJobsToComplete() throws CoreException, InterruptedException {
+		JobHelpers.waitForJobs(
+			job -> {
+				Object property = job.getProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB);
+
+				if ((property != null) || job.belongsTo(LiferayCore.LIFERAY_JOB_FAMILY)) {
+					return true;
+				}
+
+				return false;
+			},
+
+			30 * 60 * 1000);
+
+		JobHelpers.waitForJobsToComplete();
 	}
 
 	private static void _setBasedirRename(MavenProjectInfo projectInfo) throws IOException {
