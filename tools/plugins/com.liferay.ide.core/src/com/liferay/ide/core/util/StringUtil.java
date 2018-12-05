@@ -14,6 +14,8 @@
 
 package com.liferay.ide.core.util;
 
+import java.util.stream.Stream;
+
 /**
  * @author Kuo Zhang
  * @author Terry Jia
@@ -26,6 +28,18 @@ public class StringUtil {
 		}
 
 		return s1.contains(s2);
+	}
+
+	public static boolean containsAny(String object, String... anyArray) {
+		if (object == null) {
+			return false;
+		}
+
+		return Stream.of(
+			anyArray
+		).anyMatch(
+			anyString -> object.contains(anyString)
+		);
 	}
 
 	public static boolean endsWith(Object o, String s2) {
@@ -118,24 +132,6 @@ public class StringUtil {
 		}
 
 		return sb.toString();
-	}
-
-	public static boolean notContainsAll(String s1, String... stringArray) {
-		if (s1 == null) {
-			return false;
-		}
-
-		boolean contains = false;
-
-		for (String s : stringArray) {
-			if (s1.contains(s)) {
-				contains = true;
-
-				break;
-			}
-		}
-
-		return !contains;
 	}
 
 	public static String replace(String content, String source, String target) {
