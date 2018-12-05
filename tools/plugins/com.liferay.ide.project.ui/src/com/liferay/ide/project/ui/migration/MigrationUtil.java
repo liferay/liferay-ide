@@ -420,18 +420,26 @@ public class MigrationUtil {
 	}
 
 	public static void removeProblemsInBuildForlder(MigrationProblemsContainer container) {
-		MigrationProblems[] projectProblems = container.getProblemsArray();
+		MigrationProblems[] migrationProblemsArray = container.getProblemsArray();
 
-		for (MigrationProblems migrationProblems : projectProblems) {
+		for (MigrationProblems migrationProblems : migrationProblemsArray) {
 			FileProblems[] fileProblems = migrationProblems.getProblems();
 
 			List<FileProblems> fileProblemsList = Stream.of(
 				fileProblems
 			).filter(
 				fileProblem -> {
-					String filePath = fileProblem.file.getPath();
+					IResource resource = getIResourceFromFileProblems(fileProblem);
 
-					return StringUtil.notContainsAll(filePath, "/build/", "/bin/", "/out/", "/target/");
+					IProject project = resource .getProject();
+
+					IPath resourceFullPath = resource.getFullPath();
+
+					IPath projectRelativePath = resourceFullPath.makeRelativeTo(project.getFullPath());
+
+					String firstSegment = projectRelativePath.segment(0);
+
+					return !StringUtil.containsAny(firstSegment, "build", "bin", "out", "target");
 				}
 			).collect(
 				Collectors.toList()
