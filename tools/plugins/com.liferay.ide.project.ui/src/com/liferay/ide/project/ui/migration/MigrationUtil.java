@@ -19,6 +19,7 @@ import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.IgnoredProblemsContainer;
 import com.liferay.ide.project.core.upgrade.MigrationProblems;
@@ -35,6 +36,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -414,6 +417,36 @@ public class MigrationUtil {
 		MigrationProblemsContainer container = getMigrationProblemsContainer();
 
 		return _removeProblemFromMigrationContainer(resource.getName(), container);
+	}
+
+	public static void removeProblemsInBuildFolder(MigrationProblemsContainer container) {
+		MigrationProblems[] migrationProblemsArray = container.getProblemsArray();
+
+		for (MigrationProblems migrationProblems : migrationProblemsArray) {
+			FileProblems[] fileProblems = migrationProblems.getProblems();
+
+			List<FileProblems> fileProblemsList = Stream.of(
+				fileProblems
+			).filter(
+				fileProblem -> {
+					IResource resource = getIResourceFromFileProblems(fileProblem);
+
+					IProject project = resource .getProject();
+
+					IPath resourceFullPath = resource.getFullPath();
+
+					IPath projectRelativePath = resourceFullPath.makeRelativeTo(project.getFullPath());
+
+					String firstSegment = projectRelativePath.segment(0);
+
+					return !StringUtil.containsAny(firstSegment, "build", "bin", "out", "target");
+				}
+			).collect(
+				Collectors.toList()
+			);
+
+			migrationProblems.setProblems(fileProblemsList.toArray(new FileProblems[0]));
+		}
 	}
 
 	public static void updateMigrationProblemToStore(Problem problem) {

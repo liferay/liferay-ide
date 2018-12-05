@@ -460,6 +460,8 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 			if (container != null) {
 				problems = new ArrayList<>();
 
+				MigrationUtil.removeProblemsInBuildFolder(container);
+
 				problems.add(container);
 			}
 		}
