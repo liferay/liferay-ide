@@ -419,7 +419,7 @@ public class MigrationUtil {
 		return _removeProblemFromMigrationContainer(resource.getName(), container);
 	}
 
-	public static void removeProblemsInBuildForlder(MigrationProblemsContainer container) {
+	public static void removeProblemsInBuildFolder(MigrationProblemsContainer container) {
 		MigrationProblems[] migrationProblemsArray = container.getProblemsArray();
 
 		for (MigrationProblems migrationProblems : migrationProblemsArray) {
