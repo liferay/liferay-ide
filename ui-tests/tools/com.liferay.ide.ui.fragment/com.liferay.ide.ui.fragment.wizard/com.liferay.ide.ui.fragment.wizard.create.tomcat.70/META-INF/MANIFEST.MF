@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE UI Fragment Wizard Create Tomcat 70 Tests
 Bundle-SymbolicName: com.liferay.ide.ui.fragment.wizard.create.tomcat.70.tests
-Bundle-Version: 3.4.0.qualifier
+Bundle-Version: 3.5.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.ui.swtbot,
  com.liferay.ide.ui.liferay,
