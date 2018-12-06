@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.liferay.ide.build</groupId>
         <artifactId>installers</artifactId>
-        <version>3.4.0-SNAPSHOT</version>
+        <version>3.5.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>liferay.project.sdk.with.devstudio.dxp.installer</artifactId>
@@ -31,7 +31,7 @@
     <name>Liferay Project SDK with DevStudio DXP Installer</name>
 
     <properties>
-        <studio-installer-version>2018.9.14</studio-installer-version>
+        <studio-installer-version>2018.12.11</studio-installer-version>
     </properties>
 
     <build>
