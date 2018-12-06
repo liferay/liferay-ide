@@ -1,7 +1,7 @@
 <project>
     <shortName>LiferayProjectSDKwithDevStudioCommunityEdition</shortName>
     <fullName>Liferay Project SDK with DevStudio - Community Edition</fullName>
-    <version>2018.11.4</version>
+    <version>2018.12.11</version>
     <logoImage>../shared/images/studio_logo.png</logoImage>
     <componentList>
         <component>
