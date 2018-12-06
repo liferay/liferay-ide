@@ -70,6 +70,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.Name;
+import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -656,13 +657,13 @@ public class MigrateProjectHandler extends AbstractHandler {
 			List types = ast.types();
 
 			if (ListUtil.isNotEmpty(types)) {
-				Name superClass = ((TypeDeclaration)types.get(0)).getSuperclass();
+				Type superClass = ((TypeDeclaration)types.get(0)).getSuperclassType();
 
 				if (superClass != null) {
 					return !_checkClassIgnore(ast, superClass.toString());
 				}
 
-				List<ASTNode> interfaces = ((TypeDeclaration)types.get(0)).superInterfaces();
+				List<ASTNode> interfaces = ((TypeDeclaration)types.get(0)).superInterfaceTypes();
 
 				if (interfaces != null) {
 					for (ASTNode n : interfaces) {
