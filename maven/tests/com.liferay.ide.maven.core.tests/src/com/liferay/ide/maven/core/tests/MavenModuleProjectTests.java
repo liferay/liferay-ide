@@ -527,7 +527,9 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
 		assertTrue(service != null && service.exists());
 
-		IProjectBuilder builder = LiferayCore.create(IProjectBuilder.class, service);
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, service);
+
+		IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);
 
 		builder.buildService(monitor);
 

@@ -19,7 +19,10 @@ import com.liferay.ide.core.workspace.ProjectChangeListener;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.ILog;
@@ -48,27 +51,45 @@ public class LiferayCore extends Plugin {
 
 	public static final String PLUGIN_ID = "com.liferay.ide.core";
 
-	public static <T> T create(Class<T> type, Object adaptable) {
+	public static synchronized <T extends ILiferayProject> T create(Class<T> type, Object adaptable) {
 		if (type == null) {
 			return null;
 		}
 
 		T retval = null;
 
-		ILiferayProject lrproject = create(adaptable);
+		Map<ProjectCacheKey<?>, ILiferayProject> projectCache = _plugin._projectCache;
 
-		if ((lrproject != null) && type.isAssignableFrom(lrproject.getClass())) {
-			retval = type.cast(lrproject);
+		ProjectCacheKey<T> key = new ProjectCacheKey<>(type, adaptable);
+
+		ILiferayProject liferayProject = projectCache.get(key);
+
+		if (liferayProject != null) {
+			ILiferayProjectCacheEntry liferayProjectCacheEntry = liferayProject.adapt(ILiferayProjectCacheEntry.class);
+
+			if ((liferayProjectCacheEntry == null) || liferayProjectCacheEntry.isStale()) {
+				projectCache.remove(key);
+
+				liferayProject = null;
+			}
 		}
 
-		if ((retval == null) && (lrproject != null)) {
-			retval = lrproject.adapt(type);
+		if (liferayProject == null) {
+			liferayProject = create(adaptable);
+		}
+
+		if ((liferayProject != null) && type.isAssignableFrom(liferayProject.getClass())) {
+			ILiferayProjectCacheEntry liferayProjectCacheEntry = liferayProject.adapt(ILiferayProjectCacheEntry.class);
+
+			if (liferayProjectCacheEntry != null) {
+				projectCache.put(key, liferayProject);
+			}
+
+			retval = type.cast(liferayProject);
 		}
 
 		return retval;
 	}
-
-	// The shared instance
 
 	public static ILiferayProject create(Object adaptable) {
 		if (adaptable == null) {
@@ -99,15 +120,17 @@ public class LiferayCore extends Plugin {
 		return project;
 	}
 
-	// The plugin ID
-
 	public static IStatus createErrorStatus(Exception e) {
 		return createErrorStatus(PLUGIN_ID, e);
 	}
 
+	// The shared instance
+
 	public static IStatus createErrorStatus(String msg) {
 		return createErrorStatus(PLUGIN_ID, msg);
 	}
+
+	// The plugin ID
 
 	public static IStatus createErrorStatus(String pluginId, String msg) {
 		return new Status(IStatus.ERROR, pluginId, msg);
@@ -306,5 +329,47 @@ public class LiferayCore extends Plugin {
 	private ServiceRegistration<?> _listenerRegistryService;
 	private ServiceTracker<ListenerRegistry, ListenerRegistry> _listenerRegistryServiceTracker;
 	private ProjectChangeListener _projectChangeListener;
+
+	private final Map<ProjectCacheKey<?>, ILiferayProject> _projectCache = new HashMap<>();
+
+	private static class ProjectCacheKey<T extends ILiferayProject> {
+
+		public ProjectCacheKey(Class<T> type, Object adaptable) {
+			_type = type;
+			_adaptable = adaptable;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+
+			if (obj == null) {
+				return false;
+			}
+
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+
+			ProjectCacheKey<?> other = (ProjectCacheKey<?>)obj;
+
+			if (Objects.equals(_adaptable, other._adaptable) && Objects.equals(_type, other._type)) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(_adaptable, _type);
+		}
+
+		private Object _adaptable;
+		private Class<T> _type;
+
+	}
 
 }

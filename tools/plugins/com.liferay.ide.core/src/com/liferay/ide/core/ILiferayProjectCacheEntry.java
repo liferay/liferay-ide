@@ -14,15 +14,11 @@
 
 package com.liferay.ide.core;
 
-import java.util.List;
-
-import org.eclipse.core.resources.IFile;
-
 /**
- * @author Andy Wu
+ * @author Gregory Amerson
  */
-public interface IResourceBundleProject extends ILiferayProject {
+public interface ILiferayProjectCacheEntry {
 
-	public List<IFile> getDefaultLanguageProperties();
+	public boolean isStale();
 
 }
