@@ -48,13 +48,13 @@ public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
 		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
-		dialogAction.selectItems("META-INF/resources/add_button.jsp");
+		dialogAction.selectItems("META-INF/resources/init.jsp");
 
 		dialogAction.confirm();
 
 		wizardAction.finish();
 
-		String[] jspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "add_button.jsp"};
+		String[] jspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "init.jsp"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspFile));
 
