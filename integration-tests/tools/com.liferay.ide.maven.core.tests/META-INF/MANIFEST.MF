@@ -5,11 +5,11 @@ Bundle-SymbolicName: com.liferay.ide.maven.core.tests
 Bundle-Version: 3.5.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.maven.core,
- org.eclipse.m2e.tests.common;bundle-version="[1.7,2.0)",
+ org.eclipse.m2e.tests.common;bundle-version="[1.9,2.0)",
  com.liferay.ide.project.core,
  com.liferay.ide.test.project.core.base,
  com.liferay.ide.test.core.base,
- org.eclipse.m2e.maven.runtime;bundle-version="[1.7,2.0)",
+ org.eclipse.m2e.maven.runtime;bundle-version="[1.9,2.0)",
  com.liferay.ide.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

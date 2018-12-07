@@ -9,13 +9,13 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.core.tests,
  com.liferay.ide.maven.core,
  org.eclipse.jem.util,
- org.eclipse.m2e.tests.common;bundle-version="[1.7,2.0)",
+ org.eclipse.m2e.tests.common;bundle-version="[1.9,2.0)",
  com.liferay.ide.project.core,
  com.liferay.ide.project.core.tests,
  com.liferay.ide.server.core.tests,
  org.apache.commons.lang,
  org.eclipse.sapphire.modeling;bundle-version="[9,10)",
- org.eclipse.m2e.maven.runtime;bundle-version="[1.7,2.0)"
+ org.eclipse.m2e.maven.runtime;bundle-version="[1.9,2.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.maven.core.tests
