@@ -373,8 +373,6 @@ public class ViewAction extends UIAction {
 		public void openUpLoadNewWorkflowDialog(String serverLabel) {
 			ide.sleep(2000);
 
-			_getServers().setFocus();
-
 			_getServers().selectTreeItem(serverLabel, KALEO_WORKFLOWS);
 
 			_getServers().contextMenu(true, "Upload new workflow...", serverLabel, KALEO_WORKFLOWS);
@@ -418,26 +416,6 @@ public class ViewAction extends UIAction {
 			_getServers().selectTreeItem(serverName, workspaceName, modules[0]);
 
 			_getServers().contextMenu(true, "Stop watching project", serverName, workspaceName, modules[0]);
-		}
-
-		public boolean visibleKaleofolderTry(String serverLabel) {
-			try {
-				return _getServers().isVisibleStartsBy(KALEO_WORKFLOWS);
-			}
-			catch (Exception e) {
-				_getServers().setFocus();
-
-				_getServers().select(serverLabel);
-
-				_getServers().expand(serverLabel);
-
-				_getServers().expand(KALEO_WORKFLOWS);
-
-				_getServers().selectTreeItem(
-					serverLabel, KALEO_WORKFLOWS, "New Workflow  [Version: 1, Draft Version: 1]");
-
-				return _getServers().isVisibleStartsBy(KALEO_WORKFLOWS);
-			}
 		}
 
 		public boolean visibleKaleoNameTry(String serverLabel, String kaleoName) {
