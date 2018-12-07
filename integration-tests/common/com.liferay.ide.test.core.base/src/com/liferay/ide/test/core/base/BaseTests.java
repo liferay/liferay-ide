@@ -175,6 +175,12 @@ public class BaseTests {
 		Assert.assertTrue(ServerUtil.isLiferayRuntime(server));
 	}
 
+	protected void assertLiferayServerNotExists(String serverName) {
+		IServer server = ServerUtil.getServer(serverName);
+
+		Assert.assertNull(server);
+	}
+
 	protected void assertNotLiferayProject(String projectName) {
 		IProject project = project(projectName);
 
