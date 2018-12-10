@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Upgrade Task Hook
+Bundle-SymbolicName: com.liferay.ide.upgrade.task.hook;singleton:=true
+Bundle-Version: 3.4.0.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: com.liferay.ide.upgrade.plan.api,
+ com.liferay.ide.upgrade.plan.base,
+ org.eclipse.core.runtime,
+ org.eclipse.osgi.services
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Service-Component: OSGI-INF/com.liferay.ide.upgrade.task.hook.steps.ConvertHookStrutsActionsStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.hook.steps.ConvertHookCustomLanguagePortletStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.hook.steps.ConvertHookServiceWrappersStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.hook.steps.ConvertHookServletFilterStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.hook.steps.ConvertHookCustomLanguageCoreStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.hook.steps.ConvertHookModelListenersStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.hook.steps.ConvertHookEventActionsStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.hook.MigrateHookPluginsTask.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.hook.steps.ConvertHookCustomJspCoreStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.hook.steps.ConvertHookCustomJspAppStep.xml

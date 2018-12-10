@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.task.maven.steps.UpgradeMavenArtifactDependenciesStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<properties entry="OSGI-INF/UpgradeMavenArtifactDependenciesStep.properties" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.api.UpgradeTaskStep" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.task.maven.steps.UpgradeMavenArtifactDependenciesStep" />
+</scr:component>

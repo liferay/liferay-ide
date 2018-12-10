@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.task.hook.MigrateHookPluginsTask" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<properties entry="OSGI-INF/MigrateHookPluginsTask.properties" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.api.UpgradeTask" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.task.hook.MigrateHookPluginsTask" />
+</scr:component>
