@@ -16,20 +16,37 @@ package com.liferay.ide.core.util;
 
 import com.liferay.ide.core.LiferayCore;
 
+import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 /**
  * @author Gregory Amerson
  */
 public class MarkerUtil {
+
+	public static void clearMarkers(File file, String makerType) {
+		IPath location = Path.fromOSString(file.getAbsolutePath());
+
+		IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
+
+		IFile projectFile = root.getFileForLocation(location);
+
+		if (FileUtil.exists(projectFile)) {
+			clearMarkers(projectFile, makerType, null);
+		}
+	}
 
 	public static void clearMarkers(IResource resource, String makerType, String sourceId) {
 		if (!resource.isAccessible()) {

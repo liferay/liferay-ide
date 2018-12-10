@@ -63,7 +63,20 @@
 		<module>com.liferay.ide.ui.notifications</module>
 		<module>com.liferay.ide.ui.snippets</module>
 		<module>com.liferay.ide.upgrade.core</module>
-		<module>com.liferay.ide.upgrade.ui</module>
+		<module>com.liferay.ide.upgrade.plan.api</module>
+		<module>com.liferay.ide.upgrade.plan.base</module>
+		<module>com.liferay.ide.upgrade.plan.ui</module>
+		<module>com.liferay.ide.upgrade.task.dependencies</module>
+		<module>com.liferay.ide.upgrade.task.hook</module>
+		<module>com.liferay.ide.upgrade.task.maven</module>
+		<module>com.liferay.ide.upgrade.task.servicebuilder</module>
+		<module>com.liferay.ide.upgrade.task.ext</module>
+		<module>com.liferay.ide.upgrade.task.layouttpl</module>
+		<module>com.liferay.ide.upgrade.task.workspace</module>
+		<module>com.liferay.ide.upgrade.task.theme</module>
+		<module>com.liferay.ide.upgrade.task.sdk</module>
+		<module>com.liferay.ide.upgrade.task.problem.core</module>
+		<module>com.liferay.ide.upgrade.task.problem.ui</module>
 		<module>com.liferay.ide.xml.search.ui</module>
 	</modules>
 </project>

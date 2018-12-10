@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Upgrade Task Problem UI
 Bundle-Activator: com.liferay.ide.upgrade.task.problem.ui.UpgradeProblemUI
 Bundle-SymbolicName: com.liferay.ide.upgrade.task.problem.ui;singleton:=true
-Bundle-Version: 3.4.0.qualifier
+Bundle-Version: 3.5.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.upgrade.plan.api,
  com.liferay.ide.upgrade.plan.base,
