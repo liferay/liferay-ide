@@ -545,16 +545,6 @@ public interface UI {
 
 	public final String NPM_ANGULAR_PORTLET = "npm-angular-portlet";
 
-	public final String NPM_BILLBOARDJS_PORLET = "npm-billboardjs-portlet";
-
-	public final String NPM_ISOMORPHIC_PORTLET = "npm-isomorphic-portlet";
-
-	public final String NPM_JQUERY_PORTLET = "npm-jquery-portlet";
-
-	public final String NPM_METALJS_PORTLET = "npm-metaljs-portlet";
-
-	public final String NPM_PORTLET = "npm-portlet";
-
 	public final String NPM_REACT_PORTLET = "npm-react-portlet";
 
 	public final String NPM_VUEJS_PORTLET = "npm-vuejs-portlet";
