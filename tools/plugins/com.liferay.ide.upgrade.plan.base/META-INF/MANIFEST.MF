@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Upgrade Plan Base
+Bundle-SymbolicName: com.liferay.ide.upgrade.plan.base;singleton:=true
+Bundle-Version: 3.4.0.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: com.liferay.ide.project.core,
+ com.liferay.ide.ui,
+ com.liferay.ide.upgrade.plan.api,
+ org.eclipse.core.runtime,
+ org.eclipse.jdt.ui,
+ org.eclipse.jface,
+ org.eclipse.osgi.services,
+ org.eclipse.ui.workbench
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.upgrade.plan.base,
+ com.liferay.ide.upgrade.plan.base.dialog
