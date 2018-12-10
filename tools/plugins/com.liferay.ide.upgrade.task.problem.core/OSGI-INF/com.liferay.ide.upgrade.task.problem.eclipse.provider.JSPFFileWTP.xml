@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.task.problem.eclipse.provider.JSPFFileWTP" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extension" value="jspf" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.task.problem.api.JavaFile" />
+		<provide interface="com.liferay.ide.upgrade.task.problem.api.JSPFile" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.task.problem.eclipse.provider.JSPFFileWTP" />
+</scr:component>

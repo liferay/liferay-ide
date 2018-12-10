@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.task.problem.upgrade.liferay70.apichanges.DLFileEntryTypeDDMStructureInvocation" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="java,jsp,jspf" />
+	<property name="problem.title" value="DLFileEntryTypeLocalServiceUtil Api Changes" />
+	<property name="problem.section" value="#removed-the-dlfileentrytypesddmstructures-mapping-table" />
+	<property name="problem.summary" value="Removed the DLFileEntryTypes_DDMStructures Mapping Table" />
+	<property name="problem.tickets" value="LPS-56660" />
+	<property name="implName" value="DLFileEntryTypeDDMStructureInvocation" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.task.problem.api.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.task.problem.upgrade.liferay70.apichanges.DLFileEntryTypeDDMStructureInvocation" />
+</scr:component>

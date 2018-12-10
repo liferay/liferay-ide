@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.task.problem.upgrade.liferay70.apichanges.PortletIconTags" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="jsp,jspf" />
+	<property name="problem.title" value="Removed the Tags that Start with portlet:icon-" />
+	<property name="problem.section" value="#removed-the-tags-that-start-with-portleticon-" />
+	<property name="problem.summary" value="Removed the Tags that Start with portlet:icon-" />
+	<property name="problem.tickets" value="LPS-54620" />
+	<property name="implName" value="PortletIconTags" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.task.problem.api.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.task.problem.upgrade.liferay70.apichanges.PortletIconTags" />
+</scr:component>

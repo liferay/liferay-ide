@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.task.problem.upgrade.liferay70.apichanges.DeprecatedLiferaySecurityEncryptTag" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="jsp,jspf" />
+	<property name="problem.title" value="Deprecated the liferay-security:encrypt Tag with No Direct Replacement" />
+	<property name="problem.section" value="#deprecated-the-liferay-securityencrypt-tag-with-no-direct-replacement" />
+	<property name="problem.summary" value="Deprecated the liferay-security:encrypt Tag with No Direct Replacement" />
+	<property name="problem.tickets" value="LPS-63106" />
+	<property name="implName" value="DeprecatedLiferaySecurityEncryptTag" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.task.problem.api.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.task.problem.upgrade.liferay70.apichanges.DeprecatedLiferaySecurityEncryptTag" />
+</scr:component>

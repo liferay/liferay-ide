@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.task.problem.upgrade.liferay70.apichanges.DLGetEntriesInvocation" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="java,jsp,jspf" />
+	<property name="problem.summary" value="The getEntries method was no longer used, and contained hardcoded references to classes that will be moved into OSGi bundles." />
+	<property name="problem.tickets" value="LPS-56247" />
+	<property name="problem.title" value="Removed Method getEntries from DL, DLImpl, and DLUtil Classes" />
+	<property name="problem.section" value="#removed-method-getentries-from-dl-dlimpl-and-dlutil-classes" />
+	<property name="implName" value="DLGetEntriesInvocation" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.task.problem.api.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.task.problem.upgrade.liferay70.apichanges.DLGetEntriesInvocation" />
+</scr:component>

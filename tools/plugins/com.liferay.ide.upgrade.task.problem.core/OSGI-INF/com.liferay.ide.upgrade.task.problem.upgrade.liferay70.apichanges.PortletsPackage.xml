@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.task.problem.upgrade.liferay70.apichanges.PortletsPackage" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="java,jsp,jspf" />
+	<property name="problem.title" value="Changed Java Package Names for Portlets Extracted as Modules" />
+	<property name="problem.summary" value="The Java package names changed for portlets that were extracted as OSGi modules in 7.0." />
+	<property name="problem.tickets" value="LPS-56383" />
+	<property name="problem.section" value="#changed-java-package-names-for-portlets-extracted-as-modules" />
+	<property name="implName" value="PortletsPackage" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.task.problem.api.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.task.problem.upgrade.liferay70.apichanges.PortletsPackage" />
+</scr:component>

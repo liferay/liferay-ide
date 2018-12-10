@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.task.problem.upgrade.liferay70.apichanges.BreadcrumbProperties" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="properties" />
+	<property name="problem.title" value="Breadcrumb Portlet&apos;s Display Styles Changes" />
+	<property name="problem.summary" value="Replaced the Breadcrumb Portlet&apos;s Display Styles with ADTs" />
+	<property name="problem.tickets" value="LPS-53577" />
+	<property name="problem.section" value="#replaced-the-breadcrumb-portlets-display-styles-with-adts" />
+	<property name="implName" value="BreadcrumbProperties" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.task.problem.api.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.task.problem.upgrade.liferay70.apichanges.BreadcrumbProperties" />
+</scr:component>

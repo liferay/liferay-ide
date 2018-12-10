@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.task.problem.upgrade.liferay71.apichanges.MovedUsersFileUploadsPortletProperties" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="properties" />
+	<property name="problem.title" value="Moved Users File Uploads Portlet Properties to OSGi Configuration" />
+	<property name="problem.summary" value="Moved Users File Uploads Portlet Properties" />
+	<property name="problem.tickets" value="LPS-69211" />
+	<property name="problem.section" value="#moved-users-file-uploads-portlet-properties" />
+	<property name="implName" value="MovedUsersFileUploadsPortletProperties" />
+	<property name="version" value="7.1" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.task.problem.api.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.task.problem.upgrade.liferay71.apichanges.MovedUsersFileUploadsPortletProperties" />
+</scr:component>
