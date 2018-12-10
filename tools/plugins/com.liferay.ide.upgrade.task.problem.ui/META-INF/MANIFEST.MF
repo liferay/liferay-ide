@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Upgrade Task Problem UI
+Bundle-Activator: com.liferay.ide.upgrade.task.problem.ui.UpgradeProblemUI
+Bundle-SymbolicName: com.liferay.ide.upgrade.task.problem.ui;singleton:=true
+Bundle-Version: 3.4.0.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: com.liferay.ide.upgrade.plan.api,
+ com.liferay.ide.upgrade.plan.base,
+ org.eclipse.core.runtime,
+ org.eclipse.osgi.services,
+ org.eclipse.ui.workbench,
+ org.eclipse.jface,
+ org.eclipse.ui.navigator,
+ com.liferay.ide.ui,
+ com.liferay.ide.upgrade.task.problem.core,
+ org.eclipse.jdt.core,
+ org.codehaus.jackson.core,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.workbench.texteditor,
+ org.codehaus.jackson.mapper
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Service-Component: OSGI-INF/com.liferay.ide.upgrade.task.problem.ui.FindUpgradeProblemsTask.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.problem.ui.steps.AutoCorrectUpgradeProblemsStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.problem.ui.steps.FindUpgradeProblemsStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.problem.ui.steps.RemovePreviousResultStep.xml
