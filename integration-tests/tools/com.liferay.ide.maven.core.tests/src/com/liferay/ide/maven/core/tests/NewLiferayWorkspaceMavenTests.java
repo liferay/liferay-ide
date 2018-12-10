@@ -128,8 +128,8 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
 		String default71BundleUrl =
-			"https://releases-cdn.liferay.com/portal/7.1.0-ga1/liferay-ce-portal-tomcat-7.1.0-ga1-" +
-				"20180703012531655.zip";
+			"https://releases-cdn.liferay.com/portal/7.1.1-ga2/liferay-ce-portal-tomcat-7.1.1-ga2-" +
+				"20181112144637000.tar.gz";
 
 		IWorkspaceRoot wsRoot = CoreUtil.getWorkspaceRoot();
 
