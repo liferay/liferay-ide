@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition>
+    <import>
+        <package>org.eclipse.sapphire.ui.renderers.swt</package>
+        <package>com.liferay.ide.project.ui.action</package>
+        <package>com.liferay.ide.project.ui.wizard</package>
+        <package>org.eclipse.sapphire.ui.forms.swt</package>
+    </import>
+    <dialog>
+        <id>NewUpgradePlan</id>
+        <label>New Liferay Upgrade Plan</label>
+        <content>
+            <property-editor>Location</property-editor>
+            <property-editor>
+                <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                <property>TargetVersion</property>
+            </property-editor>
+         </content>
+    </dialog>
+</definition>

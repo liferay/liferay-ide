@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+		point="org.eclipse.ui.views"
+	>
+		<category
+			id="com.liferay.ide.upgrade.plan.ui.liferayUpgrade"
+			name="Liferay Upgrade"
+		>
+		</category>
+		<view
+			allowMultiple="false"
+			category="com.liferay.ide.upgrade.plan.ui.liferayUpgrade"
+			class="com.liferay.ide.upgrade.plan.ui.view.plan.UpgradePlanView"
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.upgrade.plan.ui.upgradePlanView"
+			name="Liferay Upgrade Plan"
+			restorable="true"
+		>
+		</view>
+		<view
+			allowMultiple="false"
+			category="com.liferay.ide.upgrade.plan.ui.liferayUpgrade"
+			class="com.liferay.ide.upgrade.plan.ui.view.info.UpgradeInfoView"
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.upgrade.plan.ui.upgradeInfoView"
+			name="Liferay Upgrade Information"
+			restorable="true"
+		>
+		</view>
+	</extension>
+	<extension
+		point="org.eclipse.ui.perspectives"
+	>
+		<perspective
+			class="com.liferay.ide.upgrade.plan.ui.perspective.UpgradeToolPerspectiveFactory"
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.eclipse.ui.perspective.upgradeToolPerspective"
+			name="Liferay Upgrade"
+		>
+		</perspective>
+	</extension>
+</plugin>
