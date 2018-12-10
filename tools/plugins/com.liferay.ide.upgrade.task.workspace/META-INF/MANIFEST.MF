@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Upgrade Task Workspace
+Bundle-SymbolicName: com.liferay.ide.upgrade.task.workspace;singleton:=true
+Bundle-Version: 3.4.0.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: com.liferay.ide.project.core,
+ com.liferay.ide.upgrade.plan.api,
+ com.liferay.ide.upgrade.plan.base,
+ org.eclipse.jface,
+ org.eclipse.core.runtime,
+ org.eclipse.osgi.services
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Service-Component: OSGI-INF/com.liferay.ide.upgrade.task.workspace.steps.UpgradeWorkspacePluginStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.workspace.ConfigureWorkspaceTask.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.workspace.steps.ConfigureTargetPlatformStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.task.workspace.steps.InitBundleStep.xml
