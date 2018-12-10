@@ -275,6 +275,8 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		editorAction.close();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.deleteProjectFromDisk(
 			projects.getName(0), projects.getName(0) + "-wars (in wars)", projects.getName(1));
 

@@ -62,6 +62,8 @@ public class LiferayWorkspaceMavenSupport extends LiferayWorkspaceSupport {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		viewAction.project.openUpdateMavenProjectDialog(getName());
 
 		dialogAction.updateMavenProject.selectAll();
