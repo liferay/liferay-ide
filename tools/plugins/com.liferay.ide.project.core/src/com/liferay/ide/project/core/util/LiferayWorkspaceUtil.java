@@ -47,10 +47,14 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerCore;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Andy Wu
@@ -77,7 +81,7 @@ public class LiferayWorkspaceUtil {
 
 			IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
 
-			String bundlesDir = workspaceProject.getHomeDirName();
+			String bundlesDir = workspaceProject.getLiferayHome();
 
 			IPath projectLocation = project.getLocation();
 
@@ -225,33 +229,47 @@ public class LiferayWorkspaceUtil {
 		return retVal;
 	}
 
-	public static String getHomeDir(String location) {
-		String result = getGradleProperty(location, WorkspaceConstants.HOME_DIR_PROPERTY, "bundles");
+	public static String getHomeDir(IProject project) {
+		if (project != null) {
+			IPath projectLocation = project.getLocation();
 
-		if (CoreUtil.empty(result)) {
-			return "bundles";
+			return getHomeDir(projectLocation.toOSString());
+		}
+
+		return null;
+	}
+
+	public static String getHomeDir(String location) {
+		String result = null;
+
+		if (CoreUtil.isNullOrEmpty(location)) {
+			return result;
+		}
+
+		if (isValidGradleWorkspaceLocation(location)) {
+			result = getGradleProperty(
+				location, WorkspaceConstants.HOME_DIR_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
+		}
+		else if (isValidMavenWorkspaceLocation(location)) {
+			result = getMavenProperty(
+				location, WorkspaceConstants.LIFERAY_HOME_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
 		}
 
 		return result;
 	}
 
 	public static IPath getHomeLocation(IProject project) {
-		return getHomeLocation(FileUtil.toOSString(project.getLocation()));
-	}
+		if (project != null) {
+			IPath projectLocation = project.getLocation();
 
-	public static IPath getHomeLocation(String location) {
-		String homeNameOrPath = getHomeDir(location);
+			String homeDir = getHomeDir(projectLocation.toOSString());
 
-		IPath homePath = new Path(location).append(homeNameOrPath);
-
-		if (FileUtil.exists(homePath)) {
-			return homePath;
-		}
-
-		homePath = new Path(homeNameOrPath);
-
-		if (FileUtil.exists(homePath)) {
-			return homePath;
+			if (CoreUtil.isNullOrEmpty(homeDir)) {
+				projectLocation.append(homeDir);
+			}
+			else {
+				return null;
+			}
 		}
 
 		return null;
@@ -271,6 +289,40 @@ public class LiferayWorkspaceUtil {
 		}
 
 		return retval;
+	}
+
+	public static String getMavenProperty(String location, String propertyName, String defaultValue) {
+		File pomFile = new File(location, "pom.xml");
+
+		if (FileUtil.exists(pomFile)) {
+			try {
+				Document doc = FileUtil.readXMLFile(pomFile);
+
+				NodeList propertyNodeList = doc.getElementsByTagName("properties");
+
+				for (int i = 0; i < propertyNodeList.getLength(); i++) {
+					Node propertyNode = propertyNodeList.item(i);
+
+					if (propertyNode.getNodeType() == Node.ELEMENT_NODE) {
+						Element propertyElement = (Element)propertyNode;
+
+						NodeList propertyTagValueNodes = propertyElement.getElementsByTagName(propertyName);
+
+						int nodeLength = propertyTagValueNodes.getLength();
+
+						if (nodeLength > 0) {
+							Node node = propertyTagValueNodes.item(0);
+
+							return node.getTextContent();
+						}
+					}
+				}
+			}
+			catch (Exception e) {
+			}
+		}
+
+		return defaultValue;
 	}
 
 	public static String getModulesDir(IProject project) {

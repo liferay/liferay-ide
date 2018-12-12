@@ -28,7 +28,7 @@ public interface IWorkspaceProject extends ILiferayProject {
 
 	public Set<IProject> getChildProjects();
 
-	public String getHomeDirName();
+	public String getLiferayHome();
 
 	public List<IPath> getTargetPlatformArtifacts();
 

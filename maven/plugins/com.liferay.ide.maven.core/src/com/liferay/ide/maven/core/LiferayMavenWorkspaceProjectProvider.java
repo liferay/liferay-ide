@@ -24,18 +24,6 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 
-import java.io.File;
-import java.io.FileReader;
-
-import java.util.Map;
-
-import org.apache.maven.model.Build;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.Plugin;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-
-import org.codehaus.plexus.util.xml.Xpp3Dom;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -108,41 +96,8 @@ public class LiferayMavenWorkspaceProjectProvider
 
 	@Override
 	public String getInitBundleUrl(String workspaceLocation) {
-		File pomFile = new File(workspaceLocation, "pom.xml");
-
-		MavenXpp3Reader mavenReader = new MavenXpp3Reader();
-
-		try (FileReader reader = new FileReader(pomFile)) {
-			Model model = mavenReader.read(reader);
-
-			if (model != null) {
-				Build build = model.getBuild();
-
-				Map<String, Plugin> plugins = build.getPluginsAsMap();
-
-				Plugin plugin = plugins.get("com.liferay:com.liferay.portal.tools.bundle.support");
-
-				if (plugin != null) {
-					Xpp3Dom config = (Xpp3Dom)plugin.getConfiguration();
-
-					if (config != null) {
-						Xpp3Dom url = config.getChild("url");
-
-						if (url != null) {
-							String urlValue = url.getValue();
-
-							if (!urlValue.isEmpty()) {
-								return urlValue;
-							}
-						}
-					}
-				}
-			}
-		}
-		catch (Exception e) {
-		}
-
-		return WorkspaceConstants.BUNDLE_URL_CE_7_0;
+		return LiferayWorkspaceUtil.getMavenProperty(
+			workspaceLocation, WorkspaceConstants.BUNDLE_URL_PROPERTY, WorkspaceConstants.BUNDLE_URL_CE_7_0);
 	}
 
 	@Override

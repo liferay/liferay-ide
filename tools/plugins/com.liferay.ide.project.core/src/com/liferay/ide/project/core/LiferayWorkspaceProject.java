@@ -45,6 +45,8 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 
 	public LiferayWorkspaceProject(IProject project) {
 		super(project);
+
+		_initializeWorkspaceProperties(project);
 	}
 
 	@Override
@@ -99,18 +101,6 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 
 	@Override
 	public String getProperty(String key, String defaultValue) {
-		Properties properties = new Properties();
-
-		IPath projectLocation = getProject().getLocation();
-
-		IPath bladeDir = projectLocation.append(".blade");
-
-		IPath bladeSettingsPath = bladeDir.append("settings.properties");
-
-		properties.putAll(PropertiesUtil.loadProperties(bladeSettingsPath));
-
-		properties.putAll(loadExtraProperties());
-
 		return properties.getProperty(key, defaultValue);
 	}
 
@@ -133,6 +123,23 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 		return Collections.emptySet();
 	}
 
-	protected abstract Properties loadExtraProperties();
+	protected Properties properties = new Properties();
+
+	private void _initializeWorkspaceProperties(IProject project) {
+		try {
+			if (project.exists()) {
+				IPath projectLocation = project.getLocation();
+
+				IPath bladeDir = projectLocation.append(".blade");
+
+				IPath bladeSettingsPath = bladeDir.append("settings.properties");
+
+				properties.putAll(PropertiesUtil.loadProperties(bladeSettingsPath));
+			}
+		}
+		catch (Exception e) {
+			ProjectCore.logError(e);
+		}
+	}
 
 }

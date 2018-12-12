@@ -15,14 +15,11 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.jobs.JobUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
@@ -106,16 +103,7 @@ public class ImportLiferayWorkspaceOpMethods {
 
 				};
 
-				addPortalRuntimeJob.addJobChangeListener(
-					new JobChangeAdapter() {
-
-						@Override
-						public void aboutToRun(IJobChangeEvent event) {
-							JobUtil.waitForLiferayProjectJob();
-						}
-
-					});
-
+				addPortalRuntimeJob.join();
 				addPortalRuntimeJob.schedule();
 			}
 		}

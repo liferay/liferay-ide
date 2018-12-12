@@ -23,8 +23,6 @@ import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import java.io.File;
 import java.io.FileReader;
 
-import java.util.Properties;
-
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 
@@ -38,6 +36,8 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject {
 
 	public LiferayMavenWorkspaceProject(IProject project) {
 		super(project);
+
+		_initializeMavenWorkspaceProperties(project);
 	}
 
 	@Override
@@ -52,8 +52,8 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject {
 	}
 
 	@Override
-	public String getHomeDirName() {
-		return getProperty(WorkspaceConstants.MAVEN_HOME_DIR_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
+	public String getLiferayHome() {
+		return getProperty(WorkspaceConstants.LIFERAY_HOME_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
 	}
 
 	@Override
@@ -61,27 +61,26 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject {
 		return false;
 	}
 
-	@Override
-	protected Properties loadExtraProperties() {
-		IPath projectLocation = getProject().getLocation();
+	private void _initializeMavenWorkspaceProperties(IProject project) {
+		if (project.exists()) {
+			IPath projectLocation = project.getLocation();
 
-		File pomFile = new File(projectLocation.toFile(), "pom.xml");
+			File pomFile = new File(projectLocation.toFile(), "pom.xml");
 
-		if (FileUtil.exists(pomFile)) {
-			MavenXpp3Reader mavenReader = new MavenXpp3Reader();
+			if (FileUtil.exists(pomFile)) {
+				MavenXpp3Reader mavenReader = new MavenXpp3Reader();
 
-			try (FileReader reader = new FileReader(pomFile)) {
-				Model model = mavenReader.read(reader);
+				try (FileReader reader = new FileReader(pomFile)) {
+					Model model = mavenReader.read(reader);
 
-				if (model != null) {
-					return model.getProperties();
+					if (model != null) {
+						properties.putAll(model.getProperties());
+					}
+				}
+				catch (Exception e) {
 				}
 			}
-			catch (Exception e) {
-			}
 		}
-
-		return new Properties();
 	}
 
 }
