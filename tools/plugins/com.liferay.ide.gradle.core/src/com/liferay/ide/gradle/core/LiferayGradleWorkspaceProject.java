@@ -30,7 +30,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -56,6 +55,8 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 	public LiferayGradleWorkspaceProject(IProject project) {
 		super(project);
+
+		_initializeGradleWorkspaceProperties(project);
 	}
 
 	@Override
@@ -70,7 +71,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 	}
 
 	@Override
-	public String getHomeDirName() {
+	public String getLiferayHome() {
 		return getProperty(WorkspaceConstants.HOME_DIR_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
 	}
 
@@ -114,15 +115,6 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 	@Override
 	public Set<IProject> watching() {
 		return Collections.unmodifiableSet(_watchingProjects);
-	}
-
-	@Override
-	protected Properties loadExtraProperties() {
-		IPath projectLocation = getProject().getLocation();
-
-		IPath propertiesPath = projectLocation.append("gradle.properties");
-
-		return PropertiesUtil.loadProperties(propertiesPath);
 	}
 
 	private String _convertToModuleTaskPath(IPath moduleLocation, String taskName) {
@@ -240,6 +232,16 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 		if (ListUtil.isNotEmpty(childProjects)) {
 			job.schedule();
+		}
+	}
+
+	private void _initializeGradleWorkspaceProperties(IProject project) {
+		if (project.exists()) {
+			IPath projectLocation = project.getLocation();
+
+			IPath gradleProperties = projectLocation.append("gradle.properties");
+
+			properties.putAll(PropertiesUtil.loadProperties(gradleProperties));
 		}
 	}
 

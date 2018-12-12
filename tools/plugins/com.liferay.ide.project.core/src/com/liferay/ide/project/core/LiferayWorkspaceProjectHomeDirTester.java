@@ -22,7 +22,6 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Simon Jiang
@@ -42,9 +41,7 @@ public class LiferayWorkspaceProjectHomeDirTester extends PropertyTester {
 				return false;
 			}
 
-			IPath projectLocation = project.getLocation();
-
-			String homeDir = LiferayWorkspaceUtil.getHomeDir(projectLocation.toOSString());
+			String homeDir = LiferayWorkspaceUtil.getHomeDir(project);
 
 			if (CoreUtil.isNotNullOrEmpty(homeDir) && homeDir.equals(folder.getName())) {
 				return true;
