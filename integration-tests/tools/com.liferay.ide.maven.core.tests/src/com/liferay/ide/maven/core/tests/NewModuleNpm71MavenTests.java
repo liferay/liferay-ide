@@ -76,7 +76,7 @@ public class NewModuleNpm71MavenTests extends NewModuleMavenBase {
 
 		assertProjectFileContains(
 			projectName, "src/main/resources/META-INF/resources/view.jsp",
-			"<aui:script require=\"<%= bootstrapRequire %>\">");
+			"<aui:script require=\"<%= mainRequire %>\">");
 	}
 
 }
