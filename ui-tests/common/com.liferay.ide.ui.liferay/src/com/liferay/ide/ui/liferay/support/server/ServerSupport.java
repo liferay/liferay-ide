@@ -70,14 +70,26 @@ public class ServerSupport extends SupportBase {
 
 		serverDir.mkdirs();
 
-		try {
+		String fileName = zipFile.toString();
 
-			// TODO Need to do research why for 7.1 a1 zip file couldn't find the root folder /liferay-ce-portal-7.1-a1
-			// ZipUtil.unzip(zipFile, _bundle.getBundleDir(), serverDir, new NullProgressMonitor());
+		if (fileName.endsWith("zip")) {
+			try {
 
-			ZipUtil.unzip(zipFile, serverDir, new NullProgressMonitor());
+				// TODO Need to do research why for 7.1 a1 zip file
+				// Couldn't find the root folder /liferay-ce-portal-7.1-a1
+				// ZipUtil.unzip(zipFile, _bundle.getBundleDir(), serverDir, new NullProgressMonitor());
+
+				ZipUtil.unzip(zipFile, serverDir, new NullProgressMonitor());
+			}
+			catch (IOException ioe) {
+			}
 		}
-		catch (IOException ioe) {
+		else {
+			try {
+				ZipUtil.unTarGz(zipFile, serverDir);
+			}
+			catch (IOException ioe) {
+			}
 		}
 
 		File finalDir = new File(serverDir, _bundle.getBundleDir());
