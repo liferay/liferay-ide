@@ -39,76 +39,6 @@ public class NewModuleNpm71MavenTests extends NewModuleMavenBase {
 	}
 
 	@Test
-	public void createNpmBillboardjsPortlet71() {
-		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-		op.setProjectName(project.getName());
-		op.setProjectProvider(provider());
-		op.setProjectTemplateName("npm-billboardjs-portlet");
-		op.setLiferayVersion("7.1");
-
-		createOrImportAndBuild(op, project.getName());
-
-		deleteProject(project.getName());
-	}
-
-	@Test
-	public void createNpmIsomorphicPortlet71() {
-		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-		op.setProjectName(project.getName());
-		op.setProjectProvider(provider());
-		op.setProjectTemplateName("npm-isomorphic-portlet");
-		op.setLiferayVersion("7.1");
-
-		createOrImportAndBuild(op, project.getName());
-
-		deleteProject(project.getName());
-	}
-
-	@Test
-	public void createNpmJqueryPortlet71() {
-		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-		op.setProjectName(project.getName());
-		op.setProjectProvider(provider());
-		op.setProjectTemplateName("npm-jquery-portlet");
-		op.setLiferayVersion("7.1");
-
-		createOrImportAndBuild(op, project.getName());
-
-		deleteProject(project.getName());
-	}
-
-	@Test
-	public void createNpmMetaljsPortlet71() {
-		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-		op.setProjectName(project.getName());
-		op.setProjectProvider(provider());
-		op.setProjectTemplateName("npm-metaljs-portlet");
-		op.setLiferayVersion("7.1");
-
-		createOrImportAndBuild(op, project.getName());
-
-		deleteProject(project.getName());
-	}
-
-	@Test
-	public void createNpmPortlet71() {
-		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-		op.setProjectName(project.getName());
-		op.setProjectProvider(provider());
-		op.setProjectTemplateName("npm-portlet");
-		op.setLiferayVersion("7.1");
-
-		createOrImportAndBuild(op, project.getName());
-
-		deleteProject(project.getName());
-	}
-
-	@Test
 	public void createNpmReactPortlet71() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
@@ -146,7 +76,7 @@ public class NewModuleNpm71MavenTests extends NewModuleMavenBase {
 
 		assertProjectFileContains(
 			projectName, "src/main/resources/META-INF/resources/view.jsp",
-			"<aui:script require=\"<%= bootstrapRequire %>\">");
+			"<aui:script require=\"<%= mainRequire %>\">");
 	}
 
 }
