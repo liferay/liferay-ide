@@ -35,6 +35,6 @@
 	<name>Liferay IDE UI Module Watch</name>
 
 	<modules>
-		<module>com.liferay.ide.ui.module.watch.tomcat.70</module>
+		<module>com.liferay.ide.ui.module.watch.tomcat.71</module>
 	</modules>
 </project>

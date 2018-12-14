@@ -28,8 +28,8 @@
 		<version>3.5.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.liferay.ide.ui.module.watch.tomcat.70.tests</artifactId>
+	<artifactId>com.liferay.ide.ui.module.watch.tomcat.71.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 
-	<name>Liferay IDE UI Module Watch Tomcat 70 Tests</name>
+	<name>Liferay IDE UI Module Watch Tomcat 71 Tests</name>
 </project>
