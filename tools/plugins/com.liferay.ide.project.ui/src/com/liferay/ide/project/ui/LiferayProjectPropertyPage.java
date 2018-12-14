@@ -244,6 +244,8 @@ public class LiferayProjectPropertyPage
 								}
 
 							});
+
+						return;
 					}
 
 					if (CoreUtil.compareVersions(new Version(projectSdk.getVersion()), ILiferayConstants.V700) < 0) {
