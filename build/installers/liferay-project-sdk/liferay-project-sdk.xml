@@ -543,7 +543,7 @@
                     <width>30</width>
                 </directoryParameter>
                 <labelParameter>
-                    <name>skiplsws</name>
+                    <name>skiplrws</name>
                     <title>skipLrws</title>
                     <description>Don't initialize Liferay Workspace directory</description>
                     <explanation></explanation>
