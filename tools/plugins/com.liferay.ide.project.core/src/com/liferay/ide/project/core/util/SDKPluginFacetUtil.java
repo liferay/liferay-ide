@@ -87,6 +87,10 @@ public class SDKPluginFacetUtil {
 
 		IDataModel dm = (IDataModel)adapterManager.getAdapter(config, IDataModel.class);
 
+		if (dm == null) {
+			return;
+		}
+
 		String presetId = preset.getId();
 
 		if (presetId.contains("portlet")) {
