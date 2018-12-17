@@ -28,7 +28,7 @@
 
     <properties>
         <tycho-packaging-format>yyyyMMddHHmm</tycho-packaging-format>
-        <tycho-version>1.0.0</tycho-version>
+        <tycho-version>1.3.0</tycho-version>
         <tycho-extras-version>1.0.0</tycho-extras-version>
         <eclipse-site>http://download.eclipse.org/releases/photon/201806271001/</eclipse-site>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/</orbit-site>
@@ -162,6 +162,11 @@
 
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-p2-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
                 <artifactId>tycho-versions-plugin</artifactId>
             </plugin>
         </plugins>
@@ -196,6 +201,15 @@
                     </configuration>
                 </plugin>
 
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-p2-plugin</artifactId>
+                    <version>${tycho-version}</version>
+                    <configuration>
+                        <generateDownloadStatsProperty>true</generateDownloadStatsProperty>
+                    </configuration>
+                </plugin>
+                
                 <plugin>
                     <groupId>org.eclipse.tycho</groupId>
                     <artifactId>target-platform-configuration</artifactId>
