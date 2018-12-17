@@ -43,16 +43,18 @@ public class LiferaryWorkspaceTomcat7xSupport extends SupportBase {
 	}
 
 	public String getServerName() {
-		return "Liferay Community Edition Portal 7.1.0 CE GA1";
+		return serverName;
 	}
 
 	public String getStartedLabel() {
-		return "Liferay Community Edition Portal 7.1.0 CE GA1  [Started]";
+		return getServerName() + "  [Started]";
 	}
 
 	public String getStoppedLabel() {
-		return "Liferay Community Edition Portal 7.1.0 CE GA1  [Stopped]";
+		return getServerName() + "  [Stopped]";
 	}
+
+	public String serverName = "Liferay Community Edition Portal 7.1.0 CE GA2";
 
 	private LiferayWorkspaceSupport _workspace;
 

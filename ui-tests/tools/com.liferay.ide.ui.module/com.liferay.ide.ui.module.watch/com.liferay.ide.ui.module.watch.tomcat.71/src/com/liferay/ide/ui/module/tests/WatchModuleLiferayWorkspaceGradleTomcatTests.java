@@ -20,6 +20,7 @@ import com.liferay.ide.ui.liferay.support.server.LiferaryWorkspaceTomcat7xSuppor
 import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceGradleSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
+import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -56,7 +57,9 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		viewAction.project.closeAndDelete(workspace.getModuleFiles(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(workspace.getModuleFiles(project.getName()));
+
+		Assert.assertFalse(viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName()));
 	}
 
 	@Rule
