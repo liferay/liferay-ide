@@ -85,11 +85,15 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
 					MSG_PRIMARY_RUNTIME_NOT_SET, LOCATION_TARGETED_RUNTIMES, ID_PRIMARY_RUNTIME_NOT_SET);
 			}
 			else {
-				if (!ServerUtil.isLiferayRuntime((BridgedRuntime)fproj.getPrimaryRuntime())) {
-					_setMarker(
-						project, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
-						MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, LOCATION_TARGETED_RUNTIMES,
-						ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME);
+				if (fproj.getPrimaryRuntime() instanceof BridgedRuntime) {
+					BridgedRuntime bridgedRuntime = (BridgedRuntime)fproj.getPrimaryRuntime();
+
+					if (!ServerUtil.isLiferayRuntime(bridgedRuntime)) {
+						_setMarker(
+							project, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
+							MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, LOCATION_TARGETED_RUNTIMES,
+							ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME);
+					}
 				}
 			}
 		}
