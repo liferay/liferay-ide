@@ -48,14 +48,13 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
-		dialogAction.selectItems("META-INF/resources/add_button.jsp");
+		dialogAction.selectItems("META-INF/resources/init.jsp");
 
 		dialogAction.confirm();
 
 		wizardAction.finish();
 
-		String[] buttonjspFile =
-			{project.getName(), "src", "main", "resources", "META-INF", "resources", "add_button.jsp"};
+		String[] buttonjspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "init.jsp"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(buttonjspFile));
 
