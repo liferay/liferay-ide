@@ -39,8 +39,13 @@ public class InitBundleGoalAction extends MavenGoalAction {
 	}
 
 	@Override
-	protected void afterGoal() {
+	protected void afterAction() {
 		LiferayWorkspaceUtil.addPortalRuntime();
+	}
+
+	@Override
+	protected void beforeAction() {
+		LiferayWorkspaceUtil.deleteWorkspaceServerAndRuntime(project);
 	}
 
 	@Override

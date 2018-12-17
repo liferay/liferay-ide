@@ -33,7 +33,7 @@ import org.eclipse.jdt.core.JavaCore;
  */
 public class BuildServiceTaskAction extends GradleTaskAction {
 
-	protected void afterTask() {
+	protected void afterAction() {
 		boolean refresh = false;
 
 		IProject[] projects = CoreUtil.getClasspathProjects(project);

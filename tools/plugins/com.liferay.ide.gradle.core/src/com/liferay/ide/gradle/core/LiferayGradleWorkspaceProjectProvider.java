@@ -64,13 +64,9 @@ public class LiferayGradleWorkspaceProjectProvider
 
 		IPath location = PathBridge.create(locationPath.content());
 
-		Value<String> workspaceNameValue = op.getWorkspaceName();
-
-		String workspaceName = workspaceNameValue.toString();
+		String workspaceName = SapphireUtil.getContent(op.getWorkspaceName());
 
 		IPath workspaceLocation = location.append(workspaceName);
-
-		Value<String> version = op.getLiferayVersion();
 
 		StringBuilder sb = new StringBuilder();
 
@@ -80,7 +76,7 @@ public class LiferayGradleWorkspaceProjectProvider
 		sb.append("\" ");
 		sb.append("init ");
 		sb.append("-v ");
-		sb.append(version.content());
+		sb.append(SapphireUtil.getContent(op.getLiferayVersion()));
 
 		try {
 			BladeCLI.execute(sb.toString());
@@ -110,18 +106,12 @@ public class LiferayGradleWorkspaceProjectProvider
 			return importProjectStatus;
 		}
 
-		Value<Boolean> provisionLiferayBundleValue = op.getProvisionLiferayBundle();
-
-		boolean initBundle = provisionLiferayBundleValue.content();
+		boolean initBundle = SapphireUtil.getContent(op.getProvisionLiferayBundle());
 
 		if (initBundle) {
-			Value<String> bundleUrlValue = op.getBundleUrl();
+			String bundleUrl = SapphireUtil.getContent(op.getBundleUrl());
 
-			String bundleUrl = bundleUrlValue.content(false);
-
-			Value<String> serverNameValue = op.getServerName();
-
-			String serverName = serverNameValue.content(true);
+			String serverName = SapphireUtil.getContent(op.getServerName());
 
 			initBundle(bundleUrl, serverName, workspaceName);
 		}

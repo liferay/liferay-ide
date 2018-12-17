@@ -51,6 +51,8 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 				return;
 			}
 
+			beforeAction();
+
 			Job job = new Job(project.getName() + " - " + getGradleTask()) {
 
 				@Override
@@ -80,7 +82,7 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 
 					@Override
 					public void done(IJobChangeEvent event) {
-						afterTask();
+						afterAction();
 					}
 
 				});
@@ -113,9 +115,6 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 				}
 			}
 		}
-	}
-
-	protected void afterTask() {
 	}
 
 	protected abstract String getGradleTask();
