@@ -64,7 +64,9 @@ public class PortletActionMethodRequestor extends AbstractJavaMethodRequestor {
 			if (pair != null) {
 				Object value = pair.getValue();
 
-				retval = value.toString();
+				if (value != null) {
+					retval = value.toString();
+				}
 			}
 		}
 		else {
