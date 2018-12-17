@@ -30,6 +30,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
@@ -55,7 +56,9 @@ public class LiferayPortalValueLoader {
 		String loadClassName = "com.liferay.portal.deploy.hot.HookHotDeployListener";
 		String fieldName = "SUPPORTED_PROPERTIES";
 
-		return (String[])_getFieldValuesFromClass(loadClassName, fieldName);
+		Object[] objectArray = _getFieldValuesFromClass(loadClassName, fieldName);
+
+		return Arrays.copyOf(objectArray, objectArray.length, String[].class);
 	}
 
 	public String loadServerInfoFromClass() {
