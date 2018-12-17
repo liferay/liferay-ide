@@ -146,7 +146,7 @@ public class LiferayRuntimeStubComposite extends Composite {
 					for (IRuntime runtime : ServerCore.getRuntimes()) {
 						IRuntimeType rType = runtime.getRuntimeType();
 
-						if (rType.equals(runtimeType)) {
+						if ((rType != null) && rType.equals(runtimeType)) {
 							IPath runtimeLocation = runtime.getLocation();
 
 							textInstallDir.setText(runtimeLocation.toOSString());
