@@ -543,7 +543,7 @@
                     <width>30</width>
                 </directoryParameter>
                 <labelParameter>
-                    <name>skiplsws</name>
+                    <name>skiplrws</name>
                     <title>skipLrws</title>
                     <description>Don't initialize Liferay Workspace directory</description>
                     <explanation></explanation>
@@ -580,7 +580,7 @@
             <description></description>
             <explanation>When initializing a new Liferay Workspace, Liferay Customers can use Liferay DXP Bundle. Community members should choose Liferay Portal Community Edition.</explanation>
             <value></value>
-            <default></default>
+            <default>ce</default>
             <parameterList>
                 <labelParameter>
                     <name>dxp</name>
@@ -611,7 +611,7 @@
             <description></description>
             <explanation>Specify initialized liferay bundle version.</explanation>
             <value></value>
-            <default></default>
+            <default>7_1</default>
             <parameterList>
                 <labelParameter>
                     <name>7_0</name>
