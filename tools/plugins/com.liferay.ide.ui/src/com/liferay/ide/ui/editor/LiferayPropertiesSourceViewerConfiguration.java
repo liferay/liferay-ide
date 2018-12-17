@@ -21,6 +21,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.properties.PortalPropertiesConfiguration;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.LiferayUIPlugin;
@@ -139,7 +140,7 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 			_propKeys = keys;
 		}
 
-		if ((_propKeys != null) && (_assitant == null)) {
+		if (ListUtil.isNotEmpty(_propKeys) && (_assitant == null)) {
 			ContentAssistant ca = new ContentAssistant() {
 
 				@Override
