@@ -1,4 +1,4 @@
 <runProgram>
     <program>${java_executable}</program>
-    <programArguments>-jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" -u init --jvmlocation "${java_executable}"</programArguments>
+    <programArguments>-jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" -u -b "${userHome}" -h "${jpmSettingPath}" -B "${jpmSystemPath}" init --jvmlocation "${java_executable}"</programArguments>
 </runProgram>
