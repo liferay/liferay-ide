@@ -41,9 +41,13 @@ public class DumbStateValidationService extends ValidationService {
 	protected Status compute() {
 		BaseModuleOp op = _op();
 
-		NewLiferayProjectProvider<BaseModuleOp> content = SapphireUtil.getContent(op.getProjectProvider());
+		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
 
-		String providerShortName = content.getShortName();
+		if (provider == null) {
+			return Status.createOkStatus();
+		}
+
+		String providerShortName = provider.getShortName();
 
 		if (providerShortName.contains("gradle")) {
 			IJobManager jobManager = Job.getJobManager();
