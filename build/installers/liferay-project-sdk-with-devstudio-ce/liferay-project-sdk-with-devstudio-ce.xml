@@ -68,7 +68,7 @@
         <if>
             <actionList>
                 <createDirectory>
-                    <path>${user_home_directory}${platform_path_separator}.liferay</path>
+                    <path>${userHome}${platform_path_separator}.liferay</path>
                     <progressText>Creating directory...</progressText>
                 </createDirectory>
             </actionList>
@@ -145,10 +145,55 @@
             </elseActionList>
         </if>
         <if>
+            <explanation>is linux</explanation>
+            <actionList>
+                <setInstallerVariable name="jpmSystemPath" value="${userHome}/jpm/bin"/>
+                <setInstallerVariable name="jpmSettingPath" value="${userHome}/.jpm"/>
+            </actionList>
+            <conditionRuleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <nocase>1</nocase>
+                    <text>${platform_name}</text>
+                    <value>linux</value>
+                </compareText>
+                <isTrue value="${clitools}"/>
+            </conditionRuleList>
+            <elseActionList>
+                <if>
+                    <explanation>is mac</explanation>
+                    <actionList>
+                        <setInstallerVariable name="jpmSystemPath" value="${userHome}/Library/PackageManager/bin"/>
+                        <setInstallerVariable name="jpmSettingPath" value="${userHome}/.jpm"/>
+                    </actionList>
+                    <conditionRuleList>
+                        <compareText>
+                            <logic>contains</logic>
+                            <nocase>1</nocase>
+                            <text>${platform_name}</text>
+                            <value>osx</value>
+                        </compareText>
+                        <isTrue value="${clitools}"/>
+                    </conditionRuleList>
+                    <elseActionList>
+                        <if>
+                            <actionList>
+                                <setInstallerVariable name="jpmSystemPath" value="${userHome}\.jpm\windows\bin"/>
+                                <setInstallerVariable name="jpmSettingPath" value="${userHome}\.jpm\windows"/>
+                            </actionList>
+                            <conditionRuleList>
+                                <isTrue value="${clitools}"/>
+                            </conditionRuleList>
+                        </if>
+                    </elseActionList>
+                </if>
+            </elseActionList>
+        </if>
+        <if>
             <actionList>
                 <setInstallerVariable>
                     <name>liferayBundlesPath</name>
-                    <value>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}bundles</value>
+                    <value>${userHome}${platform_path_separator}.liferay${platform_path_separator}bundles</value>
                 </setInstallerVariable>
                 <createDirectory>
                     <path>${liferayBundlesPath}</path>
@@ -165,53 +210,6 @@
             </conditionRuleList>
         </if>
         <if>
-            <explanation>is linux</explanation>
-            <actionList>
-                <setInstallerVariable name="jpmSystemPath" value="${user_home_directory}/jpm/bin"/>
-                <setInstallerVariable name="jpmSettingPath" value="${user_home_directory}/.jpm"/>
-            </actionList>
-            <conditionRuleList>
-                <compareText>
-                    <logic>contains</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>linux</value>
-                </compareText>
-                <isTrue value="${clitools}"/>
-            </conditionRuleList>
-            <elseActionList>
-                <if>
-                    <explanation>is mac</explanation>
-                    <actionList>
-                        <setInstallerVariable name="jpmSystemPath" value="${user_home_directory}/Library/PackageManager/bin"/>
-                        <setInstallerVariable name="jpmSettingPath" value="${user_home_directory}/.jpm"/>
-                    </actionList>
-                    <conditionRuleList>
-                        <compareText>
-                            <logic>contains</logic>
-                            <nocase>1</nocase>
-                            <text>${platform_name}</text>
-                            <value>osx</value>
-                        </compareText>
-                        <isTrue value="${clitools}"/>
-                    </conditionRuleList>
-                    <elseActionList>
-                        <if>
-                            <actionList>
-                                <setInstallerVariable>
-                                    <name>jpmSystemPath</name>
-                                    <value>${user_home_directory}\.jpm\windows\bin</value>
-                                </setInstallerVariable>
-                            </actionList>
-                            <conditionRuleList>
-                                <isTrue value="${clitools}"/>
-                            </conditionRuleList>
-                        </if>
-                    </elseActionList>
-                </if>
-            </elseActionList>
-        </if>
-        <if>
             <actionList>
                 <addDirectoryToPath>
                     <insertAt>end</insertAt>
@@ -226,7 +224,7 @@
                 <include file="../components/run-jpm-install-bnd.xml" />
                 <runProgram>
                     <program>chown</program>
-                    <programArguments>-R ${env(SUDO_USER)} "${user_home_directory}/jpm"</programArguments>
+                    <programArguments>-R ${env(SUDO_USER)} "${userHome}/jpm"</programArguments>
                     <ruleList>
                         <isTrue>
                             <value>${installer_is_root_install}</value>
@@ -238,7 +236,7 @@
                             <value>win</value>
                         </compareText>
                         <fileExists>
-                            <path>${user_home_directory}/jpm</path>
+                            <path>${userHome}/jpm</path>
                         </fileExists>
                     </ruleList>
                 </runProgram>
@@ -266,7 +264,7 @@
                 </setInstallerVariable>
                 <runProgram>
                     <program>chown</program>
-                    <programArguments>-R ${env(SUDO_USER)} ${user_home_directory}/.gradle</programArguments>
+                    <programArguments>-R ${env(SUDO_USER)} ${userHome}/.gradle</programArguments>
                     <ruleList>
                         <isTrue>
                             <value>${installer_is_root_install}</value>
@@ -289,7 +287,7 @@
                     <value>https://releases-cdn.liferay.com/portal/7.1.0-ga1/liferay-ce-portal-tomcat-7.1.0-ga1-20180703012531655.zip</value>
                 </propertiesFileSet>
                 <createDirectory>
-                    <path>${user_home_directory}${platform_path_separator}.gradle</path>
+                    <path>${userHome}${platform_path_separator}.gradle</path>
                 </createDirectory>
             </actionList>
             <conditionRuleList>
@@ -299,22 +297,22 @@
         <if>
             <actionList>
                 <propertiesFileSet>
-                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
                     <key>systemProp.http.proxyHost</key>
                     <value>${httpproxyhost}</value>
                 </propertiesFileSet>
                 <propertiesFileSet>
-                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
                     <key>systemProp.http.proxyPort</key>
                     <value>${httpproxyport}</value>
                 </propertiesFileSet>
                 <propertiesFileSet>
-                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
                     <key>systemProp.http.proxyUser</key>
                     <value>${httpproxyusername}</value>
                 </propertiesFileSet>
                 <propertiesFileSet>
-                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
                     <key>systemProp.http.proxyPassword</key>
                     <value>${httpproxypassword}</value>
                 </propertiesFileSet>
@@ -339,22 +337,22 @@
         <if>
             <actionList>
                 <propertiesFileSet>
-                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
                     <key>systemProp.https.proxyHost</key>
                     <value>${httpsproxyhost}</value>
                 </propertiesFileSet>
                 <propertiesFileSet>
-                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
                     <key>systemProp.https.proxyPort</key>
                     <value>${httpsproxyport}</value>
                 </propertiesFileSet>
                 <propertiesFileSet>
-                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
                     <key>systemProp.https.proxyUser</key>
                     <value>${httpsproxyusername}</value>
                 </propertiesFileSet>
                 <propertiesFileSet>
-                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
                     <key>systemProp.https.proxyPassword</key>
                     <value>${httpsproxypassword}</value>
                 </propertiesFileSet>
@@ -379,12 +377,12 @@
         <if>
             <actionList>
                 <propertiesFileSet>
-                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
                     <key>systemProp.socks.proxyHost</key>
                     <value>${socksproxyhost}</value>
                 </propertiesFileSet>
                 <propertiesFileSet>
-                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                    <file>${userHome}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
                     <key>systemProp.socks.proxyPort</key>
                     <value>${socksproxyport}</value>
                 </propertiesFileSet>
@@ -456,6 +454,7 @@
     <showFileUnpackingProgress>0</showFileUnpackingProgress>
     <startMenuGroupName></startMenuGroupName>
     <vendor>Liferay, Inc</vendor>
+    <width>600</width>
     <parameterList>
         <directoryParameter>
             <name>installdir</name>
@@ -471,7 +470,7 @@
             <preShowPageActionList>
                 <setInstallerVariable>
                     <name>installdir</name>
-                    <value>${user_home_directory}/${product_shortname}</value>
+                    <value>${userHome}/${product_shortname}</value>
                     <ruleList>
                         <compareText>
                             <logic>contains</logic>
@@ -512,13 +511,27 @@
             <mustExist>0</mustExist>
             <width>30</width>
         </directoryParameter>
-        <booleanParameter>
-          <name>clitools</name>
-          <description>Install Command Line Tools</description>
-          <explanation>Install Command Line Tools such as blade and bnd.</explanation>
-          <displayStyle>checkbox-left</displayStyle>
-          <default>1</default>
-        </booleanParameter>
+        <booleanParameterGroup>
+            <name>clitools</name>
+            <description>Install Command Line Tools</description>
+            <explanation>Install Command Line Tools such as blade and bnd.</explanation>
+            <default>1</default>
+            <parameterList>
+                <directoryParameter>
+                    <name>userHome</name>
+                    <description>Default User Home Directory:</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default>${user_home_directory}</default>
+                    <allowEmptyValue>0</allowEmptyValue>
+                    <cliOptionName>userHome</cliOptionName>
+                    <cliOptionText>Default User Home</cliOptionText>
+                    <mustBeWritable>1</mustBeWritable>
+                    <mustExist>1</mustExist>
+                    <width>30</width>
+                </directoryParameter>
+            </parameterList>
+        </booleanParameterGroup>
         <choiceParameterGroup>
             <name>proxy</name>
             <description>Proxy Configuration</description>
