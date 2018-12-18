@@ -101,8 +101,10 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 
 						String importName = importMap[1];
 
-						editedLines[lineNumber - 1] = editedLines[lineNumber - 1].replaceAll(
-							importName, _importFixes.get(importName));
+						if ((lineNumber > 0) && (lineNumber < editedLines.length)) {
+							editedLines[lineNumber - 1] = editedLines[lineNumber - 1].replaceAll(
+								importName, _importFixes.get(importName));
+						}
 					}
 					catch (NumberFormatException nfe) {
 						nfe.printStackTrace();
