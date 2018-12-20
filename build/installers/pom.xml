@@ -35,17 +35,17 @@
     <properties>
         <install-builder-executable>${install-builder-home}/bin/builder</install-builder-executable>
         <bundle-support-download-base>https://repository-cdn.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.portal.tools.bundle.support</bundle-support-download-base>
-        <bundle-support-name>com.liferay.portal.tools.bundle.support-3.2.6.jar</bundle-support-name>
-        <bundle-support-version>3.2.6</bundle-support-version>
-        <bundle-support-md5>7ccb789bba4cdc67598db8cc97a1c45f</bundle-support-md5>
+        <bundle-support-name>com.liferay.portal.tools.bundle.support-3.2.7.jar</bundle-support-name>
+        <bundle-support-version>3.2.7</bundle-support-version>
+        <bundle-support-md5>4dc4d11b402df552adf59ed5f007e47b</bundle-support-md5>
         <gw-latest-download-url>https://github.com/david-truong/gw/releases/download/v1.0.1/gw.jar</gw-latest-download-url>
         <gw-latest-md5>488ddaed413c0f7ea67df049175380eb</gw-latest-md5>
         <portal-download-base>https://files-cdn.liferay.com/private/ee/portal</portal-download-base>
         <portal-version>7.1.10</portal-version>
         <portal-zip-name>liferay-dxp-tomcat-7.1.10-ga1-20180703090613030.zip</portal-zip-name>
         <portal-ce-download-base>https://releases-cdn.liferay.com/portal</portal-ce-download-base>
-        <portal-ce-version>7.1.0-ga1</portal-ce-version>
-        <portal-ce-zip-name>liferay-ce-portal-tomcat-7.1.0-ga1-20180703012531655.zip</portal-ce-zip-name>
+        <portal-ce-version>7.1.1-ga2</portal-ce-version>
+        <portal-ce-zip-name>liferay-ce-portal-tomcat-7.1.1-ga2-20181112144637000.tar.gz</portal-ce-zip-name>
         <jpmcli-latest-download-url>https://oss.sonatype.org/content/repositories/snapshots/biz/aQute/bnd/biz.aQute.jpm.run/4.0.0-SNAPSHOT/biz.aQute.jpm.run-4.0.0-20180905.093243-11.jar</jpmcli-latest-download-url>
         <jpmcli-latest-md5>c23d4c900794ad20aca0321f70d6edb5</jpmcli-latest-md5>
         <bnd-latest-download-url>https://repository-cdn.liferay.com/nexus/content/groups/public/biz/aQute/bnd/biz.aQute.bnd/3.5.0/biz.aQute.bnd-3.5.0.jar</bnd-latest-download-url>
