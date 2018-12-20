@@ -29,6 +29,10 @@ public class WorkspaceProjectProviderValidationService extends ValidationService
 		NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> projectProvider = SapphireUtil.getContent(
 			_op().getProjectProvider());
 
+		if (projectProvider == null) {
+			return Status.createErrorStatus("Create workspace project failure, project provider can not be null.");
+		}
+
 		if ("maven-liferay-workspace".equals(projectProvider.getShortName())) {
 			return Status.createWarningStatus("Maven Liferay Workspace would not support Target Platform.");
 		}
