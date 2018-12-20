@@ -361,7 +361,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 			if (archiveName.endsWith("-service.jar")) {
 				IFile file = _getWorkspaceFile(path);
 
-				if (file.exists() && ProjectUtil.isLiferayFacetedProject(file.getProject())) {
+				if (FileUtil.exists(file) && ProjectUtil.isLiferayFacetedProject(file.getProject())) {
 					for (IVirtualReference ref : rootComponent.getReferences()) {
 						if (archiveName.equals(ref.getArchiveName())) {
 							removeRefs.add(ref);
