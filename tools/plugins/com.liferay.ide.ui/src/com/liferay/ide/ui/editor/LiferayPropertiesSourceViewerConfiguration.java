@@ -203,15 +203,17 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 
 					IPath propsParentPath = new Path(parent.getCanonicalPath());
 
-					for (IRuntime runtime : ServerCore.getRuntimes()) {
-						if (propsParentPath.equals(runtime.getLocation()) ||
-							propsParentPath.isPrefixOf(runtime.getLocation())) {
+					if (propsParentPath != null) {
+						for (IRuntime runtime : ServerCore.getRuntimes()) {
+							if (propsParentPath.equals(runtime.getLocation()) ||
+								propsParentPath.isPrefixOf(runtime.getLocation())) {
 
-							ILiferayRuntime lr = ServerUtil.getLiferayRuntime(runtime);
+								ILiferayRuntime lr = ServerUtil.getLiferayRuntime(runtime);
 
-							retval = lr.getAppServerPortalDir();
+								retval = lr.getAppServerPortalDir();
 
-							break;
+								break;
+							}
 						}
 					}
 				}
