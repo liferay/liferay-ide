@@ -192,6 +192,12 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 
 				@Override
 				public void serverChanged(ServerEvent event) {
+					if (!config.exists()) {
+						LiferayServerCore.logError("Launch configuration " + config.getName() + " does not exist.");
+
+						return;
+					}
+
 					if ((event.getKind() & ServerEvent.MODULE_CHANGE) > 0) {
 						AbstractSourceLookupDirector sourceLocator =
 							(AbstractSourceLookupDirector)launch.getSourceLocator();
