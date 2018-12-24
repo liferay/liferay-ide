@@ -50,14 +50,8 @@ public class MinimumRequiredPortalVersion extends PropertyTester {
 				return false;
 			}
 
-			String portalVersion = portal.getVersion();
-
-			if (portalVersion == null) {
-				return false;
-			}
-
-			Version version = new Version(portalVersion);
-			Version minimumRequiredPortalVersion = new Version((String)args[0]);
+			Version version = Version.parseVersion(portal.getVersion());
+			Version minimumRequiredPortalVersion = Version.parseVersion((String)args[0]);
 
 			if (CoreUtil.compareVersions(version, minimumRequiredPortalVersion) >= 0) {
 				return true;

@@ -155,7 +155,7 @@ public class IvyUtil {
 		// check for 6.1.2 and greater but not 6.1.10 which is older EE release
 		// and match 6.2.0 and greater
 
-		final Version version = new Version(sdk.getVersion());
+		final Version version = Version.parseVersion(sdk.getVersion());
 
 		if (((CoreUtil.compareVersions(version, ILiferayConstants.V611) >= 0) &&
 			 (CoreUtil.compareVersions(version, ILiferayConstants.V6110) < 0)) ||

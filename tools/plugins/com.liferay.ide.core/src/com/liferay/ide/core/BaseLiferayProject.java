@@ -80,12 +80,12 @@ public abstract class BaseLiferayProject implements ILiferayProject {
 
 			IJavaProject javaProject = JavaCore.create(project);
 
-			if (FileUtil.notExists(javaProject)) {
-				return null;
-			}
-
 			if (!javaProject.isOpen()) {
 				javaProject.open(new NullProgressMonitor());
+			}
+
+			if (FileUtil.notExists(javaProject)) {
+				return null;
 			}
 
 			List<IFolder> folders = CoreUtil.getSourceFolders(javaProject);

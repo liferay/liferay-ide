@@ -318,7 +318,7 @@ public class NewLiferayPluginProjectOpMethods {
 				return true;
 			}
 
-			Version version = new Version(sdk.getVersion());
+			Version version = Version.parseVersion(sdk.getVersion());
 
 			boolean greaterThan700 = false;
 

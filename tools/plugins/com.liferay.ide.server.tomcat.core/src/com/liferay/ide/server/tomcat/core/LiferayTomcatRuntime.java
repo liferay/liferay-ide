@@ -335,9 +335,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 			return status;
 		}
 
-		String version = getPortalVersion();
-
-		Version portalVersion = Version.parseVersion(version);
+		Version portalVersion = Version.parseVersion(getPortalVersion());
 
 		if ((portalVersion != null) && (CoreUtil.compareVersions(portalVersion, getLeastSupportedVersion()) < 0)) {
 			status = LiferayTomcatPlugin.createErrorStatus(

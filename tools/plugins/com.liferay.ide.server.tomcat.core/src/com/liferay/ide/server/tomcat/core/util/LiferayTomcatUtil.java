@@ -96,7 +96,7 @@ public class LiferayTomcatUtil {
 
 		ILiferayRuntime runtime = ServerUtil.getLiferayRuntime(currentServer);
 
-		Version portalVersion = new Version(getVersion(runtime));
+		Version portalVersion = Version.parseVersion(getVersion(runtime));
 
 		if (CoreUtil.compareVersions(portalVersion, LiferayTomcatRuntime70.leastSupportedVersion) < 0) {
 			runtimeVMArgs.add("-Djava.security.auth.login.config=\"" + configPath.toOSString() + "/conf/jaas.config\"");

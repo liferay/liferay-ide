@@ -277,7 +277,7 @@ public class ServerUtil {
 		String retval = null;
 
 		try {
-			Version version = new Version(runtime.getPortalVersion());
+			Version version = Version.parseVersion(runtime.getPortalVersion());
 			String type = runtime.getAppServerType();
 
 			if ((CoreUtil.compareVersions(version, ILiferayConstants.V6130) >= 0) ||
@@ -345,7 +345,8 @@ public class ServerUtil {
 
 		String categoryMy = categories.getProperty(myKey);
 
-		if ((portalVersion == null) || (CoreUtil.compareVersions(new Version(portalVersion), ILiferayConstants.V620) <
+		if ((portalVersion == null) ||
+			(CoreUtil.compareVersions(Version.parseVersion(portalVersion), ILiferayConstants.V620) <
 				0)) {
 
 			String portalKey = "category.portal";
@@ -837,7 +838,7 @@ public class ServerUtil {
 	}
 
 	public static Version getRuntimeVersion(IProject project) {
-		Version retval = null;
+		Version retval = Version.emptyVersion;
 
 		if (project != null) {
 			ILiferayProject liferayProject = LiferayCore.create(project);
@@ -846,11 +847,7 @@ public class ServerUtil {
 				ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
 				if (portal != null) {
-					String version = portal.getVersion();
-
-					if (version != null) {
-						retval = new Version(version);
-					}
+					retval = Version.parseVersion(portal.getVersion());
 				}
 			}
 		}

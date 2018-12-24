@@ -36,7 +36,7 @@ public class DeployGoalAction extends MavenGoalAction {
 
 		String goals = "package ";
 
-		if ((CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("2.0.2")) >= 0) &&
+		if ((CoreUtil.compareVersions(Version.parseVersion(plugin.getVersion()), new Version("2.0.2")) >= 0) &&
 			getPluginKey().equals(plugin.getArtifactId())) {
 
 			goals = goals + "bundle-support:deploy";

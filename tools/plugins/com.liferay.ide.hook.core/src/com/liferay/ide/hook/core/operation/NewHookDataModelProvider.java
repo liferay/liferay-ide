@@ -243,7 +243,7 @@ public class NewHookDataModelProvider
 			SDK sdk = SDKUtil.getWorkspaceSDK();
 
 			if (sdk != null) {
-				Version version = new Version(sdk.getVersion());
+				Version version = Version.parseVersion(sdk.getVersion());
 				Version sdk70 = ILiferayConstants.V700;
 
 				if (CoreUtil.compareVersions(version, sdk70) >= 0) {

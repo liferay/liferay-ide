@@ -116,7 +116,7 @@ public class GradleUtil {
 
 				try {
 					if ((dependencyVersion != null) && !dependencyVersion.equals("")) {
-						version = new Version(dependencyVersion);
+						version = Version.parseVersion(dependencyVersion);
 					}
 
 					if ("com.liferay".equals(group) && "com.liferay.gradle.plugins".equals(name) &&

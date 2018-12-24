@@ -233,7 +233,8 @@ public class SDKUtil {
 		try {
 			String version = readSDKVersion(location);
 
-			retval = CoreUtil.compareVersions(new Version(version), ISDKConstants.LEAST_SUPPORTED_SDK_VERSION) >= 0;
+			retval = CoreUtil.compareVersions(
+				Version.parseVersion(version), ISDKConstants.LEAST_SUPPORTED_SDK_VERSION) >= 0;
 		}
 		catch (Exception e) {
 
@@ -285,7 +286,7 @@ public class SDKUtil {
 		Version sdkVersionValue = null;
 
 		try {
-			sdkVersionValue = new Version(sdkVersion);
+			sdkVersionValue = Version.parseVersion(sdkVersion);
 		}
 		catch (Exception ex) {
 

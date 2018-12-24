@@ -162,7 +162,7 @@ public class LiferayProjectImportDataModelProvider
 			IStatus locationStatus = validate(PROJECT_LOCATION);
 
 			if (locationStatus.isOK()) {
-				Version version = new Version(getStringProperty(SDK_VERSION));
+				Version version = Version.parseVersion(getStringProperty(SDK_VERSION));
 
 				if (CoreUtil.compareVersions(version, SDKManager.getLeastValidVersion()) >= 0) {
 					return Status.OK_STATUS;

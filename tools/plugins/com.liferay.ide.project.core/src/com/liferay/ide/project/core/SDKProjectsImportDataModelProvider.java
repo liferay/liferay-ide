@@ -211,7 +211,7 @@ public class SDKProjectsImportDataModelProvider
 						if (project instanceof BinaryProjectRecord) {
 							BinaryProjectRecord binaryProject = (BinaryProjectRecord)project;
 
-							Version sdkVersion = new Version(getStringProperty(SDK_VERSION));
+							Version sdkVersion = Version.parseVersion(getStringProperty(SDK_VERSION));
 
 							if (binaryProject.isWeb() &&
 								(CoreUtil.compareVersions(sdkVersion, ILiferayConstants.V700) < 0)) {

@@ -54,7 +54,11 @@ public class LeastVersionRuntimeValidationService extends ValidationService {
 
 		ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(runtime);
 
-		Version runtimeVersion = new Version(liferayRuntime.getPortalVersion());
+		if (liferayRuntime == null) {
+			return Status.createErrorStatus("Liferay runtime should not be null.");
+		}
+
+		Version runtimeVersion = Version.parseVersion(liferayRuntime.getPortalVersion());
 
 		if (CoreUtil.compareVersions(runtimeVersion, ILiferayConstants.V620) < 0) {
 			return Status.createErrorStatus("Liferay runtime must be greater than 6.2.0.");

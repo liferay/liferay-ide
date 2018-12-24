@@ -34,7 +34,7 @@ public class CleanServiceBuilderDBGoalAction extends MavenGoalAction {
 			return "clean-serivce-builder-db";
 		}
 
-		if (CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("1.0.1")) >= 0) {
+		if (CoreUtil.compareVersions(Version.parseVersion(plugin.getVersion()), new Version("1.0.1")) >= 0) {
 			return "db-support:clean-service-builder";
 		}
 		else {

@@ -127,9 +127,9 @@ public class SDKLocationValidationService extends ValidationService {
 		else if (pluginType.equals(PluginType.portlet)) {
 			IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
 
-			Version requiredVersion = new Version(portletFramework.getRequiredSDKVersion());
+			Version requiredVersion = Version.parseVersion(portletFramework.getRequiredSDKVersion());
 
-			Version sdkVersion = new Version(sdk.getVersion());
+			Version sdkVersion = Version.parseVersion(sdk.getVersion());
 
 			if (CoreUtil.compareVersions(requiredVersion, sdkVersion) > 0) {
 				StringBuilder sb = new StringBuilder();

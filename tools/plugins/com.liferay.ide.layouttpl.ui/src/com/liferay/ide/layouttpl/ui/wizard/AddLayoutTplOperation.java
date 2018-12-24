@@ -212,7 +212,7 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 	private boolean _is62() {
 		IProject project = getTargetProject();
 
-		Version version = new Version(LiferayDescriptorHelper.getDescriptorVersion(project));
+		Version version = Version.parseVersion(LiferayDescriptorHelper.getDescriptorVersion(project));
 
 		if (CoreUtil.compareVersions(version, ILiferayConstants.V620) == 0) {
 			return true;
@@ -227,7 +227,7 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 		ILiferayPortal portal = lrproject.adapt(ILiferayPortal.class);
 
 		if (portal != null) {
-			Version version = new Version(portal.getVersion());
+			Version version = Version.parseVersion(portal.getVersion());
 
 			if (CoreUtil.compareVersions(version, ILiferayConstants.V620) >= 0) {
 				return true;

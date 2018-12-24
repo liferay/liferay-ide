@@ -365,7 +365,7 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 	private boolean _is62() {
 		IProject project = getFile().getProject();
 
-		Version version = new Version(LiferayDescriptorHelper.getDescriptorVersion(project));
+		Version version = Version.parseVersion(LiferayDescriptorHelper.getDescriptorVersion(project));
 
 		if (CoreUtil.compareVersions(version, ILiferayConstants.V620) == 0) {
 			return true;
@@ -382,7 +382,11 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 
 			ILiferayPortal portal = lrproject.adapt(ILiferayPortal.class);
 
-			Version version = new Version(portal.getVersion());
+			if (portal == null) {
+				return false;
+			}
+
+			Version version = Version.parseVersion(portal.getVersion());
 
 			if (CoreUtil.compareVersions(version, ILiferayConstants.V620) < 0) {
 				retval = false;
