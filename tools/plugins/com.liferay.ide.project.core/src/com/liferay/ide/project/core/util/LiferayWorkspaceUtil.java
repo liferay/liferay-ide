@@ -149,9 +149,9 @@ public class LiferayWorkspaceUtil {
 	public static void deleteWorkspaceServerAndRuntime(IProject project) {
 		IWorkspaceProject liferayWorkpsaceProject = LiferayCore.create(IWorkspaceProject.class, project);
 
-		if (liferayWorkpsaceProject != null) {
-			IPath bundlesLocation = getHomeLocation(project);
+		IPath bundlesLocation = getHomeLocation(project);
 
+		if ((liferayWorkpsaceProject != null) && (bundlesLocation != null)) {
 			Stream.of(
 				ServerCore.getServers()
 			).filter(
