@@ -14,10 +14,12 @@
 
 package com.liferay.ide.gradle.ui.action;
 
+import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.HashSet;
@@ -98,6 +100,8 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 
 		Set<IProject> projectsToWatch = new HashSet<>(watching);
 
+		GogoBundleDeployer gogoBundleDeployer = new GogoBundleDeployer();
+
 		while (iterator.hasNext()) {
 			Object obj = iterator.next();
 
@@ -115,6 +119,17 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 					}
 					else {
 						projectsToWatch.remove(selectedProject);
+					}
+
+					IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, selectedProject);
+
+					if (bundleProject != null) {
+						try {
+							gogoBundleDeployer.uninstall(bundleProject);
+						}
+						catch (Exception e) {
+							GradleCore.logError(e);
+						}
 					}
 				}
 			}
