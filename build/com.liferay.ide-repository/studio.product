@@ -99,6 +99,21 @@ to distribution rights of the Software.
       <feature id="org.eclipse.datatools.modelbase.feature" installMode="root"/>
       <feature id="org.eclipse.datatools.sqldevtools.feature" installMode="root"/>
       <feature id="org.eclipse.datatools.sqltools.doc.user" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.apache.derby.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.hsqldb.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.ibm.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.jdbc.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.jdt.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.msft.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.mysql.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.oda.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.oda.designer.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.oracle.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.postgresql.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.sap.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.sybase.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.ingres.feature" installMode="root"/>
+      <feature id="org.eclipse.datatools.enablement.sqlite.feature" installMode="root"/>
 
       <feature id="org.eclipse.buildship" installMode="root"/>
 
