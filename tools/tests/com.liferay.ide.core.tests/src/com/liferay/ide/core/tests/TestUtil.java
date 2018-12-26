@@ -27,6 +27,8 @@ import java.io.StringWriter;
 
 import java.nio.file.Files;
 
+import junit.framework.TestCase;
+
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -35,8 +37,6 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.validation.internal.operations.ValidatorManager;
-
-import junit.framework.TestCase;
 
 /**
  * @author Gregory Amerson
@@ -119,10 +119,11 @@ public class TestUtil {
 	}
 
 	private static void _copyFile(File src, File dst) throws IOException {
-		try(InputStream inputStream = Files.newInputStream(src.toPath());
-				BufferedInputStream in = new BufferedInputStream(inputStream);
-				OutputStream outputStream = Files.newOutputStream(dst.toPath());
-				BufferedOutputStream out = new BufferedOutputStream(outputStream)){
+		try (InputStream inputStream = Files.newInputStream(src.toPath());
+			BufferedInputStream in = new BufferedInputStream(inputStream);
+			OutputStream outputStream = Files.newOutputStream(dst.toPath());
+			BufferedOutputStream out = new BufferedOutputStream(outputStream)) {
+
 			byte[] buf = new byte[10240];
 
 			int len;

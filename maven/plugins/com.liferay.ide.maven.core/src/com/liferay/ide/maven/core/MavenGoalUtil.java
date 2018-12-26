@@ -61,7 +61,7 @@ public class MavenGoalUtil {
 			return "build-service";
 		}
 
-		if ((CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("1.0.145")) >= 0) &&
+		if ((CoreUtil.compareVersions(Version.parseVersion(plugin.getVersion()), new Version("1.0.145")) >= 0) &&
 			StringUtil.equals(
 				plugin.getArtifactId(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_SERVICE_BUILDER_KEY)) {
 
@@ -102,7 +102,7 @@ public class MavenGoalUtil {
 			return "build-wsdd";
 		}
 
-		if ((CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("1.0.7")) >= 0) &&
+		if ((CoreUtil.compareVersions(Version.parseVersion(plugin.getVersion()), new Version("1.0.7")) >= 0) &&
 			StringUtil.equals(plugin.getArtifactId(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_WSDD_BUILDER_KEY)) {
 
 			return "wsdd-builder:build";
@@ -142,7 +142,7 @@ public class MavenGoalUtil {
 			return "init-bundle";
 		}
 
-		if (CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("2.0.2")) >= 0) {
+		if (CoreUtil.compareVersions(Version.parseVersion(plugin.getVersion()), new Version("2.0.2")) >= 0) {
 			return "bundle-support:init";
 		}
 

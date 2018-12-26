@@ -477,7 +477,9 @@ public class SDKPluginFacetUtil {
 
 		if (JavaFacet.FACET.equals(facetVersion.getProjectFacet())) {
 			try {
-				if (CoreUtil.compareVersions(new Version(facetVersion.getVersionString()), new Version(1, 6, 0)) < 0) {
+				if (CoreUtil.compareVersions(
+						Version.parseVersion(facetVersion.getVersionString()), new Version(1, 6, 0)) < 0) {
+
 					return false;
 				}
 			}

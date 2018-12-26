@@ -59,7 +59,7 @@ public class MavenProjectAdapter implements ILiferayProjectAdapter {
 						matchedVersion = matcher.group(1) + "." + matcher.group(2) + ".0";
 					}
 
-					Version portalVersion = new Version(matchedVersion != null ? matchedVersion : version);
+					Version portalVersion = Version.parseVersion(matchedVersion != null ? matchedVersion : version);
 
 					if (CoreUtil.compareVersions(portalVersion, ILiferayConstants.V620) < 0) {
 						MavenUIProjectBuilder builder = new MavenUIProjectBuilder((FacetedMavenProject)liferayProject);

@@ -1172,7 +1172,7 @@ public class ProjectUtil {
 
 					String projectType = getLiferayPluginType(location.toPortableString());
 
-					Version version = new Version(sdk.getVersion());
+					Version version = Version.parseVersion(sdk.getVersion());
 					Version sdk70 = ILiferayConstants.V700;
 
 					if ((CoreUtil.compareVersions(version, sdk70) >= 0) &&

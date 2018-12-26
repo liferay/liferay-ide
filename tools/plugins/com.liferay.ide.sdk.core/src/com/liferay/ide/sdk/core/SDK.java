@@ -680,7 +680,7 @@ public class SDK {
 		try {
 			IPath sdkLibPath = getLocation().append("dependencies");
 
-			int compareVersions = CoreUtil.compareVersions(new Version(getVersion()), ILiferayConstants.V700);
+			int compareVersions = CoreUtil.compareVersions(Version.parseVersion(getVersion()), ILiferayConstants.V700);
 
 			if (FileUtil.exists(sdkLibPath) && (compareVersions >= 0)) {
 				List<File> libFiles = FileListing.getFileListing(new File(sdkLibPath.toOSString()));

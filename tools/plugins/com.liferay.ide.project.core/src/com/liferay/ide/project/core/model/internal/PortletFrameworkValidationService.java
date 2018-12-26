@@ -63,8 +63,8 @@ public class PortletFrameworkValidationService extends ValidationService {
 				SDK sdk = SDKUtil.getWorkspaceSDK();
 
 				if (sdk != null) {
-					Version requiredVersion = new Version(portletFramework.getRequiredSDKVersion());
-					Version sdkVersion = new Version(sdk.getVersion());
+					Version requiredVersion = Version.parseVersion(portletFramework.getRequiredSDKVersion());
+					Version sdkVersion = Version.parseVersion(sdk.getVersion());
 
 					if (CoreUtil.compareVersions(requiredVersion, sdkVersion) > 0) {
 						retval = Status.createErrorStatus(

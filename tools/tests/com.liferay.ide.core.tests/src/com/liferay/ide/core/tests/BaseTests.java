@@ -71,13 +71,29 @@ public class BaseTests {
 		return workspace().getRoot();
 	}
 
+	protected void assertFileExists(File file) {
+		Assert.assertTrue(FileUtil.exists(file));
+	}
+
+	protected void assertFileExists(IFile file) {
+		Assert.assertTrue(FileUtil.exists(file));
+	}
+
+	protected void assertFileExists(IPath path) {
+		Assert.assertTrue(FileUtil.exists(path));
+	}
+
+	protected void assertProjectExists(IProject project) {
+		Assert.assertTrue(FileUtil.exists(project));
+	}
+
 	protected final IFile createFile(IProject project, String path) throws Exception {
 		return createFile(project, path, new byte[0]);
 	}
 
 	protected final IFile createFile(IProject project, String path, byte[] content) throws Exception {
-		try(InputStream inputSream = new ByteArrayInputStream(content)){
-			return createFile(project, path, inputSream);	
+		try (InputStream inputSream = new ByteArrayInputStream(content)) {
+			return createFile(project, path, inputSream);
 		}
 	}
 
@@ -172,22 +188,6 @@ public class BaseTests {
 
 	protected String stripCarriageReturns(String value) {
 		return value.replaceAll("\r", "");
-	}
-
-	protected void assertFileExists(File file) {
-		Assert.assertTrue(FileUtil.exists(file));
-	}
-
-	protected void assertFileExists(IFile file) {
-		Assert.assertTrue(FileUtil.exists(file));
-	}
-
-	protected void assertFileExists(IPath path) {
-		Assert.assertTrue(FileUtil.exists(path));
-	}
-
-	protected void assertProjectExists(IProject project) {
-		Assert.assertTrue(FileUtil.exists(project));
 	}
 
 }

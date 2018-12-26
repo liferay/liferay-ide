@@ -248,7 +248,9 @@ public class LiferayProjectPropertyPage
 						return;
 					}
 
-					if (CoreUtil.compareVersions(new Version(projectSdk.getVersion()), ILiferayConstants.V700) < 0) {
+					if (CoreUtil.compareVersions(
+							Version.parseVersion(projectSdk.getVersion()), ILiferayConstants.V700) < 0) {
+
 						new Label(parent, SWT.LEFT).setText(Msgs.liferayRuntimeLabel);
 
 						_runtimeCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);

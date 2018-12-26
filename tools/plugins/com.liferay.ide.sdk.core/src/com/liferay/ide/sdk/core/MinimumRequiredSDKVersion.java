@@ -41,8 +41,8 @@ public class MinimumRequiredSDKVersion extends PropertyTester {
 			SDK sdk = SDKUtil.getSDK(project);
 
 			if ((sdk != null) && (args[0] != null)) {
-				Version version = new Version(sdk.getVersion());
-				Version minimumRequiredSDKVersion = new Version((String)args[0]);
+				Version version = Version.parseVersion(sdk.getVersion());
+				Version minimumRequiredSDKVersion = Version.parseVersion((String)args[0]);
 
 				if (CoreUtil.compareVersions(version, minimumRequiredSDKVersion) >= 0) {
 					return true;
