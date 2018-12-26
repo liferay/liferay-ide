@@ -19,12 +19,15 @@ import com.liferay.blade.api.XMLFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocumentType;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
@@ -38,6 +41,55 @@ import org.w3c.dom.NodeList;
 @Component(property = "file.extension=xml")
 @SuppressWarnings("restriction")
 public class SSEXMLFile extends WorkspaceFile implements XMLFile {
+
+	@Override
+	public SearchResult findDocumentTypeDeclaration(String name, Pattern idPattern) {
+		SearchResult result = null;
+
+		IFile xmlFile = getIFile(file);
+		IDOMModel domModel = null;
+
+		try {
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			domModel = (IDOMModel)modelManager.getModelForRead(xmlFile);
+
+			IDOMDocument document = domModel.getDocument();
+
+			IDOMDocumentType docType = (IDOMDocumentType)document.getDoctype();
+
+			if (docType != null) {
+				String docTypeName = docType.getName();
+
+				String docTypePublicId = docType.getPublicId();
+
+				Matcher m = idPattern.matcher(docTypePublicId);
+
+				if (docTypeName.equals(name) && !m.matches()) {
+					IStructuredDocument structuredDocument = document.getStructuredDocument();
+
+					int startOffset = docType.getStartOffset();
+					int endOffset = docType.getEndOffset();
+					int startLine = structuredDocument.getLineOfOffset(startOffset) + 1;
+					int endLine = structuredDocument.getLineOfOffset(endOffset) + 1;
+
+					result = new SearchResult(
+						file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
+
+					result.autoCorrectContext = "descriptor:dtd-version";
+				}
+			}
+		}
+		catch (Exception e) {
+		}
+		finally {
+			if (domModel != null) {
+				domModel.releaseFromRead();
+			}
+		}
+
+		return result;
+	}
 
 	@Override
 	public List<SearchResult> findElement(String tagName, String value) {

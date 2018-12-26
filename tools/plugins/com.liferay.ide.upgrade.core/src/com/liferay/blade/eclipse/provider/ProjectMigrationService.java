@@ -284,7 +284,7 @@ public class ProjectMigrationService implements Migration {
 					migratorStream.map(
 						_context::getService
 					).parallel(
-					).forEach(
+					).forEachOrdered(
 						fm -> {
 							List<Problem> fileProlbems = fm.analyze(file);
 

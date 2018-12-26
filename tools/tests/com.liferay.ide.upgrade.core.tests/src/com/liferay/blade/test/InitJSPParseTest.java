@@ -19,7 +19,7 @@ import com.liferay.blade.api.Problem;
 import com.liferay.blade.util.NullProgressMonitor;
 
 import java.io.File;
-
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
@@ -41,9 +41,11 @@ public class InitJSPParseTest {
 
 		Migration m = _context.getService(sr);
 
-		List<Problem> problems = m.findProblems(new File("jsptests/jukebox-portlet/"), new NullProgressMonitor());
+		List<String> versions = Arrays.asList(new String[] {"7.0", "7.1"});
 
-		Assert.assertEquals("", 329, problems.size());
+		List<Problem> problems = m.findProblems(new File("jsptests/jukebox-portlet/"), versions, new NullProgressMonitor());
+
+		Assert.assertEquals("", 332, problems.size());
 
 		boolean found = false;
 

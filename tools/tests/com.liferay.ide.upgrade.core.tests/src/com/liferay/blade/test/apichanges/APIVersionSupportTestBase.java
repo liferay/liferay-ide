@@ -12,18 +12,20 @@
  * details.
  */
 
-package com.liferay.blade.api;
+package com.liferay.blade.test.apichanges;
 
-import java.util.Collection;
-import java.util.regex.Pattern;
+import org.osgi.framework.Filter;
 
 /**
- * @author Gregory Amerson
+ * @author Seiphon Wang
  */
-public interface XMLFile extends SourceFile {
+public abstract class APIVersionSupportTestBase extends APITestBase {
 
-	public SearchResult findDocumentTypeDeclaration(String name, Pattern idPattern);
+	@Override
+	protected Filter getFilter() throws Exception {
+		return context.createFilter("(&(implName=" + getImplClassName() + ")(version=" + getVersion() + "))");
+	}
 
-	public Collection<SearchResult> findElement(String elementName, String elementValue);
+	public abstract String getVersion();
 
 }

@@ -145,6 +145,8 @@ Service-Component: OSGI-INF/com.liferay.blade.eclipse.provider.CUCacheWTP.xml,
  OSGI-INF/com.liferay.blade.upgrade.liferay71.apichanges.DecoupledImplementingBaseURLClasses.xml,
  OSGI-INF/com.liferay.blade.upgrade.liferay71.apichanges.RemovedJavaScriptMinificationProperties.xml,
  OSGI-INF/com.liferay.blade.upgrade.liferay71.apichanges.LiferayVersionsProperties71.xml,
- OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.LiferayVersionsProperties70.xml
+ OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.LiferayVersionsProperties70.xml,
+ OSGI-INF/com.liferay.blade.upgrade.liferay70.descriptors.LiferayDescriptorVersion70.xml,
+ OSGI-INF/com.liferay.blade.upgrade.liferay71.descriptors.LiferayDescriptorVersion71.xml
 Bundle-ClassPath: .,
  libs/com.liferay.markdown.parser.jar
