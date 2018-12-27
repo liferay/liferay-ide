@@ -61,7 +61,7 @@
 		unpack="false"
 		version="0.0.0"
 	/>
-
+<!--
 	<plugin
 		download-size="0"
 		id="com.gradleware.tooling.client"
@@ -85,7 +85,7 @@
 		unpack="false"
 		version="0.0.0"
 	/>
-
+-->
 	<plugin
 		download-size="0"
 		id="minimal-json"
@@ -173,13 +173,12 @@
 		unpack="false"
 		version="0.0.0"
 	/>
-
 	<plugin
 		download-size="0"
 		id="org.objectweb.asm"
 		install-size="0"
 		unpack="false"
-		version="5.2.0.v20170126-0011"
+		version="0.0.0"
 	/>
 
 	<plugin
@@ -187,9 +186,8 @@
 		id="org.objectweb.asm"
 		install-size="0"
 		unpack="false"
-		version="6.0.0.v20180116-1719"
+		version="0.0.0"
 	/>
-
 	<plugin
 		download-size="0"
 		id="javax.websocket-api"
