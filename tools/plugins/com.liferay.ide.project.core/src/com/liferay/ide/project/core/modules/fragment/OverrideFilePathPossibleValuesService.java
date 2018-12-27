@@ -63,7 +63,7 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 			}
 		}
 
-		if ((count >= 0) &&
+		if ((count >= 0) && (_possibleValues != null) &&
 			(_possibleValues.contains(o.toString()) || _possibleValues.contains("resource-actions/default.xml"))) {
 
 			return Status.createOkStatus();
