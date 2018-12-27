@@ -1,7 +1,7 @@
 <project>
     <shortName>LiferayProjectSDKwithDevStudioDXP</shortName>
     <fullName>Liferay Project SDK with DevStudio - DXP</fullName>
-    <version>2018.12.11</version>
+    <version>${timestamp}</version>
     <logoImage>../shared/images/studio_logo.png</logoImage>
     <componentList>
         <component>
@@ -61,6 +61,9 @@
         <include file="../components/devstudio-osxcomponent.xml" />
         <include file="../components/devstudio-wincomponent.xml" />
     </componentList>
+    <preBuildActionList>
+        <include file="../components/create-timestamp.xml" />
+    </preBuildActionList>
     <preInstallationActionList>
         <include file="../components/autodetect-java.xml" />
     </preInstallationActionList>

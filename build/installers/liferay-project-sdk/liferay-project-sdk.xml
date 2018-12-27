@@ -1,7 +1,7 @@
 <project>
     <shortName>LiferayProjectSDK</shortName>
     <fullName>Liferay Project SDK</fullName>
-    <version>2018.12.11</version>
+    <version>${timestamp}</version>
     <logoImage>../shared/images/liferay_logo_large.png</logoImage>
     <componentList>
         <component>
@@ -55,6 +55,9 @@
             </folderList>
         </component>
     </componentList>
+    <preBuildActionList>
+        <include file="../components/create-timestamp.xml" />
+    </preBuildActionList>
     <preInstallationActionList>
         <include file="../components/autodetect-java.xml" />
     </preInstallationActionList>
