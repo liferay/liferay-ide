@@ -301,13 +301,6 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 		findBreakingChangesPage.setTitle("Find Breaking Changes");
 		findBreakingChangesPage.addPageNavigateListener(gear);
 
-		Page descriptorsPage = new DescriptorsPage(_pagesSwitchControler, SWT.NONE, _dataModel);
-
-		descriptorsPage.setIndex(pageIndex++);
-		descriptorsPage.setTitle("Update Descriptor Files");
-		descriptorsPage.addPageNavigateListener(gear);
-		descriptorsPage.addPageValidationListener(gear);
-
 		Page buildServicePage = new BuildServicePage(_pagesSwitchControler, SWT.NONE, _dataModel);
 
 		buildServicePage.setIndex(pageIndex++);
@@ -352,7 +345,6 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 		_staticPageList.add(initConfigureProjectPage);
 		_staticPageList.add(upgradePomPage);
 		_staticPageList.add(findBreakingChangesPage);
-		_staticPageList.add(descriptorsPage);
 		_staticPageList.add(buildServicePage);
 		_staticPageList.add(layoutTemplatePage);
 		_staticPageList.add(customJspPage);
@@ -378,7 +370,6 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 
 		gear.addSelectionChangedListener(this);
 		gear.addSelectionChangedListener(initConfigureProjectPage);
-		gear.addSelectionChangedListener(descriptorsPage);
 		gear.addSelectionChangedListener(upgradePomPage);
 		gear.addSelectionChangedListener(layoutTemplatePage);
 		gear.addSelectionChangedListener(summaryPage);
