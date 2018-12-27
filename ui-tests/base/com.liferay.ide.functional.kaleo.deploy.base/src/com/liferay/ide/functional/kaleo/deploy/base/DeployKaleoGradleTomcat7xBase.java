@@ -38,7 +38,7 @@ public class DeployKaleoGradleTomcat7xBase extends ServerTestBase {
 	public void deployKaleoWorkflowAssignCreatorOnProject() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepare(project.getName());
+		wizardAction.newModule.prepareGradle(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -66,7 +66,7 @@ public class DeployKaleoGradleTomcat7xBase extends ServerTestBase {
 
 		jobAction.waitForServerStarted(tomcat.getServerName());
 
-		viewAction.servers.visibleKaleofolderTry(KALEO_WORKFLOWS);
+		jobAction.waitForNoRunningJobs();
 
 		viewAction.servers.openUpLoadNewWorkflowDialog(tomcat.getStartedLabel());
 
