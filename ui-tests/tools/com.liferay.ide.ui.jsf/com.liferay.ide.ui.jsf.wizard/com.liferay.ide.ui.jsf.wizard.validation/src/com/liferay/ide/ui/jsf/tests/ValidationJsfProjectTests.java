@@ -24,6 +24,7 @@ import java.io.File;
 
 import org.eclipse.core.runtime.Platform;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -127,6 +128,7 @@ public class ValidationJsfProjectTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projects.getName(0));
 	}
 
+	@Ignore("ignore for moving to integration in IDE-4451")
 	@Test
 	public void checkWaitGradleBackgroundJobMessage() {
 		wizardAction.openNewLiferayJsfProjectWizard();

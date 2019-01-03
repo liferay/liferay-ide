@@ -271,7 +271,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		viewAction.project.runGradleInitBundle(project.getName());
 
 		jobAction.waitForNoRunningJobs();
-		jobAction.waitForConsoleContent(project.getName() + " - initBundle", "BUILD SUCCESSFUL", M1);
+		jobAction.waitForConsoleContent("[Gradle Operations]", "BUILD SUCCESSFUL", M1);
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "bundles"));
 
