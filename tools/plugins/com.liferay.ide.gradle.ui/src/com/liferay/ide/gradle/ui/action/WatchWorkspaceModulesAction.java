@@ -128,7 +128,7 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 							gogoBundleDeployer.uninstall(bundleProject);
 						}
 						catch (Exception e) {
-							GradleCore.logError(e);
+							LiferayGradleCore.logError(e);
 						}
 					}
 				}

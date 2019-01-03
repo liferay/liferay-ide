@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.jst.jsp.core,
  org.eclipse.wst.xml.core,
  org.eclipse.osgi.services,
- com.liferay.ide.core;bundle-version="3.1.2",
+ com.liferay.ide.core,
  org.json,
  com.google.guava
 Service-Component: OSGI-INF/com.liferay.blade.eclipse.provider.CUCacheWTP.xml,

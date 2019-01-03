@@ -18,8 +18,6 @@ import com.liferay.ide.core.LiferayCore;
 
 import java.io.File;
 
-import org.eclipse.buildship.core.internal.CorePlugin;
-import org.eclipse.buildship.core.internal.event.ListenerRegistry;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
@@ -37,7 +35,6 @@ import org.osgi.framework.BundleContext;
  * @author Andy Wu
  * @author Simon Jiang
  */
-@SuppressWarnings("restriction")
 public class LiferayGradleCore extends Plugin {
 
 	public static final String LIFERAY_WATCH = "liferay-watch";
@@ -106,37 +103,20 @@ public class LiferayGradleCore extends Plugin {
 		log.log(createErrorStatus(msg, e));
 	}
 
-	/**
-	 * The constructor
-	 */
-	public LiferayGradleCore() {
-		_gradleProjectListener = new GradleProjectListener();
-	}
-
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
 		_plugin = this;
-
-		ListenerRegistry listenerRegistry = CorePlugin.listenerRegistry();
-
-		listenerRegistry.addEventListener(_gradleProjectListener);
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		ListenerRegistry listenerRegistry = CorePlugin.listenerRegistry();
-
-		listenerRegistry.removeEventListener(_gradleProjectListener);
-
 		_plugin = null;
 
 		super.stop(context);
 	}
 
 	private static LiferayGradleCore _plugin;
-
-	private final GradleProjectListener _gradleProjectListener;
 
 }
