@@ -37,6 +37,8 @@ import org.osgi.framework.BundleContext;
  */
 public class LiferayGradleCore extends Plugin {
 
+	public static final String FAMILY_BUILDSHIP_CORE_JOBS = "org.eclipse.buildship.core.jobs";
+
 	public static final String LIFERAY_WATCH = "liferay-watch";
 
 	public static final String PLUGIN_ID = "com.liferay.ide.gradle.core";

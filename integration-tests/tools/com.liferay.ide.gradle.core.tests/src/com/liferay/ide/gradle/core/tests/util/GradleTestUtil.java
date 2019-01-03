@@ -16,6 +16,7 @@ package com.liferay.ide.gradle.core.tests.util;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
+import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.core.LiferayGradleProject;
 import com.liferay.ide.project.core.jobs.JobUtil;
 import com.liferay.ide.test.core.base.support.ImportProjectSupport;
@@ -23,7 +24,6 @@ import com.liferay.ide.test.core.base.support.ImportProjectSupport;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import org.eclipse.buildship.core.internal.CorePlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -41,7 +41,6 @@ import org.junit.Assert;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings("restriction")
 public class GradleTestUtil {
 
 	public static void failTest(Exception e) {
@@ -82,7 +81,7 @@ public class GradleTestUtil {
 			manager.join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
 			manager.join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
 			manager.join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
-			manager.join(CorePlugin.GRADLE_JOB_FAMILY, new NullProgressMonitor());
+			manager.join(LiferayGradleCore.FAMILY_BUILDSHIP_CORE_JOBS, new NullProgressMonitor());
 			JobUtil.waitForLiferayProjectJob();
 
 			Thread.sleep(200);
