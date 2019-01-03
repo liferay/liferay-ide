@@ -32,7 +32,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<eclipse-site>http://download.eclipse.org/releases/photon/201806271001/</eclipse-site>
+		<eclipse-site>https://download.eclipse.org/releases/2018-12/201812191000/</eclipse-site>
 		<tycho-version>1.0.0</tycho-version>
 		<liferay-ide-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide-repository/target/repository/</liferay-ide-site>
 	</properties>
