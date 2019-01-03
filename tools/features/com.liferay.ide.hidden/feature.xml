@@ -61,7 +61,7 @@
 		unpack="false"
 		version="0.0.0"
 	/>
-<!--
+	<!--
 	<plugin
 		download-size="0"
 		id="com.gradleware.tooling.client"
@@ -178,7 +178,7 @@
 		id="org.objectweb.asm"
 		install-size="0"
 		unpack="false"
-		version="0.0.0"
+		version="5.2.0.v20170126-0011"
 	/>
 
 	<plugin
@@ -186,7 +186,7 @@
 		id="org.objectweb.asm"
 		install-size="0"
 		unpack="false"
-		version="0.0.0"
+		version="6.0.0.v20180414-0329"
 	/>
 	<plugin
 		download-size="0"
