@@ -207,6 +207,8 @@ public interface UI {
 
 	public final String DELETE = "Delete";
 
+	public final String DELETE_ALL_EVENTS = "Delete All Events";
+
 	public final String DELETE_FROM_DISK = "Delete project contents on disk (cannot be undone)";
 
 	public final String DELETE_LOG = "Delete Log";
