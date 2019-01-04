@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<suppressions>
+	<source-check>
+		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/Event\.java" />
+		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/EventListener\.java" />
+		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/ListenerRegistry\.java" />
+		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/BaseProjectChangedEvent\.java" />
+		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectChangeListener\.java" />
+		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectClosedEvent\.java" />
+		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectCreatedEvent\.java" />
+		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectDeletedEvent\.java" />
+		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectMovedEvent\.java" />
+		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectOpenedEvent\.java" />
+	</source-check>
+</suppressions>

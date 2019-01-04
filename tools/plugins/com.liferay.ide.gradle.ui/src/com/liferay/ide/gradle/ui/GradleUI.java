@@ -14,14 +14,14 @@
 
 package com.liferay.ide.gradle.ui;
 
+import com.liferay.ide.core.Event;
+import com.liferay.ide.core.EventListener;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.ListenerRegistry;
+import com.liferay.ide.core.workspace.ProjectCreatedEvent;
+import com.liferay.ide.core.workspace.ProjectDeletedEvent;
 import com.liferay.ide.ui.util.UIUtil;
 
-import org.eclipse.buildship.core.internal.CorePlugin;
-import org.eclipse.buildship.core.internal.event.Event;
-import org.eclipse.buildship.core.internal.event.EventListener;
-import org.eclipse.buildship.core.internal.event.ListenerRegistry;
-import org.eclipse.buildship.core.internal.workspace.ProjectCreatedEvent;
-import org.eclipse.buildship.core.internal.workspace.ProjectDeletedEvent;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
@@ -39,7 +39,6 @@ import org.osgi.framework.BundleContext;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-@SuppressWarnings("restriction")
 public class GradleUI extends Plugin {
 
 	// The plug-in ID
@@ -121,7 +120,7 @@ public class GradleUI extends Plugin {
 
 		};
 
-		ListenerRegistry listenerRegistry = CorePlugin.listenerRegistry();
+		ListenerRegistry listenerRegistry = LiferayCore.listenerRegistry();
 
 		listenerRegistry.addEventListener(_projectListener);
 	}
@@ -135,7 +134,7 @@ public class GradleUI extends Plugin {
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 
-		ListenerRegistry listenerRegistry = CorePlugin.listenerRegistry();
+		ListenerRegistry listenerRegistry = LiferayCore.listenerRegistry();
 
 		listenerRegistry.removeEventListener(_projectListener);
 

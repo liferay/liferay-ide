@@ -15,6 +15,7 @@
 package com.liferay.ide.core;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.workspace.ProjectChangeListener;
 
 import java.util.List;
 
@@ -217,6 +218,10 @@ public class LiferayCore extends Plugin {
 		return proxyService;
 	}
 
+	public static ListenerRegistry listenerRegistry() {
+		return getDefault()._listenerRegistryServiceTracker.getService();
+	}
+
 	public static void logError(IStatus status) {
 		ILog log = getDefault().getLog();
 
@@ -257,18 +262,37 @@ public class LiferayCore extends Plugin {
 		super.start(context);
 
 		_plugin = this;
+
+		_listenerRegistryServiceTracker = _createServiceTracker(context, ListenerRegistry.class);
+
+		_projectChangeListener = ProjectChangeListener.createAndRegister();
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 
+		_listenerRegistryServiceTracker.close();
+
+		_projectChangeListener.close();
+
 		super.stop(context);
+	}
+
+	private <T> ServiceTracker<T, T> _createServiceTracker(BundleContext context, Class<T> clazz) {
+		ServiceTracker<T, T> serviceTracker = new ServiceTracker<>(context, clazz.getName(), null);
+
+		serviceTracker.open();
+
+		return serviceTracker;
 	}
 
 	private static final LiferayProjectAdapterReader _adapterReader = new LiferayProjectAdapterReader();
 	private static LiferayProjectImporterReader _importerReader;
 	private static LiferayCore _plugin;
 	private static LiferayProjectProviderReader _providerReader;
+
+	private ServiceTracker<ListenerRegistry, ListenerRegistry> _listenerRegistryServiceTracker;
+	private ProjectChangeListener _projectChangeListener;
 
 }
