@@ -53,4 +53,14 @@
 			</enablement>
 		</deleteParticipant>
 	</extension>
+	<extension
+		point="org.eclipse.buildship.core.projectconfigurators"
+	>
+		<configurator
+			class="com.liferay.ide.gradle.core.LiferayProjectConfigurator"
+			id="com.liferay.ide.gradle.core.project.configurator"
+			runsAfter="org.eclipse.buildship.configurators.base"
+		>
+		</configurator>
+	</extension>
 </plugin>

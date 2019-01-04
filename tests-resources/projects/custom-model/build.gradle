@@ -1,21 +1,21 @@
 buildscript {
-    repositories {
-        mavenCentral()
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
     }
-
-    dependencies {
-        classpath 'org.dm.gradle:gradle-bundle-plugin:0.6.2'
-    }
+  }
+  dependencies {
+    classpath "biz.aQute.bnd:biz.aQute.bnd.gradle:4.1.0"
+  }
 }
 
-apply plugin: 'java'
-apply plugin: 'org.dm.bundle'
+apply plugin: "java"
+apply plugin: "biz.aQute.bnd.workspace"
 
 repositories {
 	mavenCentral()
 }
 
-sourceCompatibility = 1.7
 version = '1.0'
 
 dependencies {

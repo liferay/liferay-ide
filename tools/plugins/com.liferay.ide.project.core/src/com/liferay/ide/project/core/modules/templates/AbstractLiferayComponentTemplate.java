@@ -297,7 +297,7 @@ public abstract class AbstractLiferayComponentTemplate
 			bndProperty.store(out, null);
 		}
 		catch (Exception e) {
-			ProjectCore.logError(e);
+			throw new CoreException(ProjectCore.createErrorStatus(e));
 		}
 	}
 

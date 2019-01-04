@@ -15,12 +15,9 @@
 package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 
-import org.eclipse.buildship.core.CorePlugin;
-import org.eclipse.buildship.core.event.ListenerRegistry;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
@@ -36,9 +33,11 @@ import org.osgi.framework.BundleContext;
  * @author Gregory Amerson
  * @author Terry Jia
  * @author Andy Wu
+ * @author Simon Jiang
  */
-@SuppressWarnings("restriction")
-public class GradleCore extends Plugin {
+public class LiferayGradleCore extends Plugin {
+
+	public static final String FAMILY_BUILDSHIP_CORE_JOBS = "org.eclipse.buildship.core.jobs";
 
 	public static final String LIFERAY_WATCH = "liferay-watch";
 
@@ -67,7 +66,7 @@ public class GradleCore extends Plugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static GradleCore getDefault() {
+	public static LiferayGradleCore getDefault() {
 		return _plugin;
 	}
 
@@ -75,21 +74,17 @@ public class GradleCore extends Plugin {
 		return _plugin.getStateLocation();
 	}
 
-	public static <T> T getToolingModel(Class<T> modelClass, File projectDir) {
+	public static <T> T getToolingModel(Class<T> modelClass, IProject gradleProject) {
 		T retval = null;
 
 		try {
-			retval = GradleTooling.getModel(modelClass, customModelCache, projectDir);
+			retval = GradleTooling.getModel(modelClass, customModelCache, gradleProject);
 		}
 		catch (Exception e) {
 			logError("Error getting tooling model", e);
 		}
 
 		return retval;
-	}
-
-	public static <T> T getToolingModel(Class<T> modelClass, IProject gradleProject) {
-		return getToolingModel(modelClass, FileUtil.getFile(gradleProject));
 	}
 
 	public static void logError(Exception ex) {
@@ -110,37 +105,20 @@ public class GradleCore extends Plugin {
 		log.log(createErrorStatus(msg, e));
 	}
 
-	/**
-	 * The constructor
-	 */
-	public GradleCore() {
-		_gradleProjectCreatedListener = new GradleProjectCreatedListener();
-	}
-
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
 		_plugin = this;
-
-		ListenerRegistry listenerRegistry = CorePlugin.listenerRegistry();
-
-		listenerRegistry.addEventListener(_gradleProjectCreatedListener);
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		ListenerRegistry listenerRegistry = CorePlugin.listenerRegistry();
-
-		listenerRegistry.removeEventListener(_gradleProjectCreatedListener);
-
 		_plugin = null;
 
 		super.stop(context);
 	}
 
-	private static GradleCore _plugin;
-
-	private final GradleProjectCreatedListener _gradleProjectCreatedListener;
+	private static LiferayGradleCore _plugin;
 
 }

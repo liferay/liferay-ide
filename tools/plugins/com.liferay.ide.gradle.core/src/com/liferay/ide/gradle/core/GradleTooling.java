@@ -23,15 +23,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.util.Optional;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import org.eclipse.buildship.core.GradleBuild;
+import org.eclipse.buildship.core.GradleCore;
+import org.eclipse.buildship.core.GradleWorkspace;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.FileLocator;
-
-import org.gradle.tooling.GradleConnector;
-import org.gradle.tooling.ModelBuilder;
-import org.gradle.tooling.ProjectConnection;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
@@ -43,20 +45,10 @@ import org.osgi.framework.Version;
  */
 public class GradleTooling {
 
-	public static <T> T getModel(Class<T> modelClass, File cacheDir, File projectDir) throws Exception {
+	public static <T> T getModel(Class<T> modelClass, File cacheDir, IProject project) throws Exception {
 		T retval = null;
 
-		GradleConnector connector = GradleConnector.newConnector();
-
-		connector = connector.forProjectDirectory(projectDir);
-
-		ProjectConnection connection = null;
-
 		try {
-			connection = connector.connect();
-
-			ModelBuilder<T> modelBuilder = (ModelBuilder<T>)connection.model(modelClass);
-
 			File depsDir = new File(cacheDir, "deps");
 
 			depsDir.mkdirs();
@@ -83,17 +75,24 @@ public class GradleTooling {
 				FileUtil.writeFileFromStream(scriptFile, inputStream);
 			}
 
-			ModelBuilder<T> builder = modelBuilder.withArguments("--init-script", scriptFile.getAbsolutePath());
+			GradleWorkspace gradleWorkspace = GradleCore.getWorkspace();
 
-			retval = builder.get();
+			Optional<GradleBuild> buildOptional = gradleWorkspace.getBuild(project);
+
+			GradleBuild gradleBuild = buildOptional.get();
+
+			retval = gradleBuild.withConnection(
+				connection -> {
+					return connection.model(
+						modelClass
+					).withArguments(
+						"--init-script", scriptFile.getAbsolutePath()
+					).get();
+				},
+				new NullProgressMonitor());
 		}
 		catch (Exception e) {
-			GradleCore.logError("get gradle custom model error", e);
-		}
-		finally {
-			if (connection != null) {
-				connection.close();
-			}
+			LiferayGradleCore.logError("get gradle custom model error", e);
 		}
 
 		return retval;
@@ -111,14 +110,14 @@ public class GradleTooling {
 				!StringUtil.equals(file.getName(), fullFileName)) {
 
 				if (!file.delete()) {
-					GradleCore.logError("Error: delete file " + file.getAbsolutePath() + " fail");
+					LiferayGradleCore.logError("Error: delete file " + file.getAbsolutePath() + " fail");
 				}
 			}
 		}
 
 		String embeddedJarVersion = null;
 
-		GradleCore gradleCore = GradleCore.getDefault();
+		LiferayGradleCore gradleCore = LiferayGradleCore.getDefault();
 
 		Bundle bundle = gradleCore.getBundle();
 
@@ -163,7 +162,7 @@ public class GradleTooling {
 
 			if (shouldDelete) {
 				if (!jarFile.delete()) {
-					GradleCore.logError("Error: delete file " + jarFile.getAbsolutePath() + " fail");
+					LiferayGradleCore.logError("Error: delete file " + jarFile.getAbsolutePath() + " fail");
 				}
 			}
 		}

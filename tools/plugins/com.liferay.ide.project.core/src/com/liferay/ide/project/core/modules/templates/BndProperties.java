@@ -71,7 +71,8 @@ public class BndProperties extends Properties {
 
 				String[] newOriginalValues = newOriginalValue.split(",");
 
-				BndPropertiesValue inputValue = new BndPropertiesValue();
+				BndPropertiesValue inputValue = new BndPropertiesValue(
+					bdValue.getFormatedValue(), bdValue.getOriginalValue());
 
 				for (String newValue : newOriginalValues) {
 					if (originalValue.contains(newValue)) {

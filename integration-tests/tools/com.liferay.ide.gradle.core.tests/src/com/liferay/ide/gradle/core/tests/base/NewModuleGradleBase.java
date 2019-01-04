@@ -14,10 +14,10 @@
 
 package com.liferay.ide.gradle.core.tests.base;
 
+import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.test.project.core.base.NewModuleOpBase;
 
-import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.IJobManager;
@@ -25,12 +25,11 @@ import org.eclipse.core.runtime.jobs.IJobManager;
 /**
  * @author Terry Jia
  */
-@SuppressWarnings("restriction")
 public abstract class NewModuleGradleBase extends NewModuleOpBase<NewLiferayModuleProjectOp> {
 
 	@Override
 	protected void needJobsToBuild(IJobManager manager) throws InterruptedException, OperationCanceledException {
-		manager.join(CorePlugin.GRADLE_JOB_FAMILY, new NullProgressMonitor());
+		manager.join(LiferayGradleCore.FAMILY_BUILDSHIP_CORE_JOBS, new NullProgressMonitor());
 	}
 
 	@Override

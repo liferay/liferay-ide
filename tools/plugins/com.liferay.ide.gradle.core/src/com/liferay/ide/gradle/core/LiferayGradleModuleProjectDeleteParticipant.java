@@ -151,7 +151,7 @@ public class LiferayGradleModuleProjectDeleteParticipant extends DeleteParticipa
 				_projectsToWatch.remove(deleteProject);
 			}
 
-			String jobName = workspaceProject.getName() + ":" + GradleCore.LIFERAY_WATCH;
+			String jobName = workspaceProject.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH;
 
 			IJobManager jobManager = Job.getJobManager();
 
@@ -216,7 +216,7 @@ public class LiferayGradleModuleProjectDeleteParticipant extends DeleteParticipa
 			}
 		}
 		catch (Exception e) {
-			GradleCore.logError("Failed to initialize module project deleteParticipant", e);
+			LiferayGradleCore.logError("Failed to initialize module project deleteParticipant", e);
 		}
 
 		return false;

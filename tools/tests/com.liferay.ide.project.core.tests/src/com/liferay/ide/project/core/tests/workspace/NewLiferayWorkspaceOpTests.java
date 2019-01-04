@@ -100,7 +100,7 @@ public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
 
         assertTrue( message.equals( "A project with that name(ignore case) already exists." ) );
 
-        String projectName = "test-liferay-workspace";
+        String projectName = "test-liferay-workspace-new";
 
         IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
 

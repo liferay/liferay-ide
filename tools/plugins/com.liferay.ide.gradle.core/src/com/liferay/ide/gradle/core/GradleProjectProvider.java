@@ -32,7 +32,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.buildship.core.configuration.GradleProjectNature;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -48,7 +47,6 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Andy Wu
  * @author Simon Jiang
  */
-@SuppressWarnings("restriction")
 public class GradleProjectProvider
 	extends AbstractLiferayProjectProvider implements NewLiferayProjectProvider<NewLiferayModuleProjectOp> {
 
@@ -175,7 +173,7 @@ public class GradleProjectProvider
 			}
 		}
 		catch (Exception e) {
-			retval = GradleCore.createErrorStatus("Can not create module project: " + e.getMessage(), e);
+			retval = LiferayGradleCore.createErrorStatus("Can not create module project: " + e.getMessage(), e);
 		}
 
 		return retval;
@@ -190,7 +188,7 @@ public class GradleProjectProvider
 
 			try {
 				if (!LiferayWorkspaceUtil.isValidWorkspace(project) && LiferayNature.hasNature(project) &&
-					GradleProjectNature.isPresentOn(project)) {
+					project.hasNature("org.eclipse.buildship.core.gradleprojectnature")) {
 
 					if (ProjectUtil.isFacetedGradleBundleProject(project)) {
 						return new FacetedGradleBundleProject(project);
@@ -215,7 +213,8 @@ public class GradleProjectProvider
 		IStatus retval = Status.OK_STATUS;
 
 		if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path)) {
-			retval = GradleCore.createErrorStatus(" Can not set WorkspaceProject root folder as project directory.");
+			retval = LiferayGradleCore.createErrorStatus(
+				" Can not set WorkspaceProject root folder as project directory.");
 		}
 
 		return retval;

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Gradle Core
 Bundle-SymbolicName: com.liferay.ide.gradle.core;singleton:=true
 Bundle-Version: 3.5.0.qualifier
-Bundle-Activator: com.liferay.ide.gradle.core.GradleCore
+Bundle-Activator: com.liferay.ide.gradle.core.LiferayGradleCore
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
@@ -16,8 +16,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.buildship.core;bundle-version="[3.0.0,4.0.0)",
  com.liferay.ide.project.core,
  org.apache.commons.io,
- org.gradle.toolingapi;bundle-version="4.3.0",
- com.google.guava;bundle-version="[15.0.0,16.0.0)",
+ org.gradle.toolingapi;bundle-version="5.0.0",
+ com.google.guava,
  org.eclipse.jdt.launching,
  org.eclipse.ltk.core.refactoring,
  org.eclipse.core.expressions
