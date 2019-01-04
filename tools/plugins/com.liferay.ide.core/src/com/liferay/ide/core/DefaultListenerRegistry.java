@@ -11,8 +11,8 @@
 
 package com.liferay.ide.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -35,7 +35,7 @@ public final class DefaultListenerRegistry implements ListenerRegistry {
 	public void dispatch(Event event) {
 		Collection<EventListener> listeners;
 		synchronized (_lock) {
-			listeners = Collections.unmodifiableCollection(_listeners);
+			listeners = new ArrayList<>(_listeners);
 		}
 
 		for (EventListener listener : listeners) {

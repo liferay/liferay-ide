@@ -18,8 +18,8 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.ProjectChangeListener;
 
 import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -64,26 +64,18 @@ public class LiferayCore extends Plugin {
 
 		ILiferayProject liferayProject = projectCache.get(key);
 
-		if (liferayProject != null) {
-			ILiferayProjectCacheEntry liferayProjectCacheEntry = liferayProject.adapt(ILiferayProjectCacheEntry.class);
-
-			if ((liferayProjectCacheEntry == null) || liferayProjectCacheEntry.isStale()) {
-				projectCache.remove(key);
+		if ((liferayProject != null) && liferayProject.isStale()) {
+			projectCache.remove(key);
 
 				liferayProject = null;
 			}
-		}
 
 		if (liferayProject == null) {
 			liferayProject = create(adaptable);
 		}
 
-		if ((liferayProject != null) && type.isAssignableFrom(liferayProject.getClass())) {
-			ILiferayProjectCacheEntry liferayProjectCacheEntry = liferayProject.adapt(ILiferayProjectCacheEntry.class);
-
-			if (liferayProjectCacheEntry != null) {
-				projectCache.put(key, liferayProject);
-			}
+		if (liferayProject != null) {
+			projectCache.put(key, liferayProject);
 
 			retval = type.cast(liferayProject);
 		}
@@ -328,9 +320,8 @@ public class LiferayCore extends Plugin {
 
 	private ServiceRegistration<?> _listenerRegistryService;
 	private ServiceTracker<ListenerRegistry, ListenerRegistry> _listenerRegistryServiceTracker;
-	private ProjectChangeListener _projectChangeListener;
-
 	private final Map<ProjectCacheKey<?>, ILiferayProject> _projectCache = new HashMap<>();
+	private ProjectChangeListener _projectChangeListener;
 
 	private static class ProjectCacheKey<T extends ILiferayProject> {
 

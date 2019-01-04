@@ -12,13 +12,28 @@
  * details.
  */
 
-package com.liferay.ide.core;
+package com.liferay.ide.core.workspace;
+
+import java.util.Set;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 
 /**
- * @author Gregory Amerson
+ * @author Charles Wu
  */
-public interface ILiferayProjectCacheEntry {
+public class ProjectChangedEvent extends BaseProjectChangedEvent {
 
-	public boolean isStale();
+	public ProjectChangedEvent(IProject project, Set<IPath> affectedFiles) {
+		super(project);
+
+		_affectedFiles = affectedFiles;
+	}
+
+	public Set<IPath> getAffectedFiles() {
+		return _affectedFiles;
+	}
+
+	private final Set<IPath> _affectedFiles;
 
 }

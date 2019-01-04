@@ -99,6 +99,10 @@ public abstract class BaseLiferayProject implements ILiferayProject {
 		return null;
 	}
 
+	public boolean isStale() {
+		return false;
+	}
+
 	protected boolean filterResource(IPath resourcePath, String[] ignorePaths) {
 		if ((resourcePath == null) || (resourcePath.segmentCount() < 1)) {
 			return false;

@@ -32,4 +32,6 @@ public interface ILiferayProject {
 
 	public IFolder[] getSourceFolders();
 
+	public boolean isStale();
+
 }
