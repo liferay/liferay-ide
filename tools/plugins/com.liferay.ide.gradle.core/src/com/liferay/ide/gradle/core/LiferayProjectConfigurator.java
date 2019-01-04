@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import org.eclipse.buildship.core.InitializationContext;
+import org.eclipse.buildship.core.ProjectConfigurator;
 import org.eclipse.buildship.core.ProjectContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -36,7 +37,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 /**
  * @author Simon Jiang
  */
-public class ProjectConfigurator implements org.eclipse.buildship.core.ProjectConfigurator {
+public class LiferayProjectConfigurator implements ProjectConfigurator {
 
 	@Override
 	public void configure(ProjectContext context, IProgressMonitor monitor) {
