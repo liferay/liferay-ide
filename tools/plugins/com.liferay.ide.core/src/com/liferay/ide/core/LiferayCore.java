@@ -17,6 +17,8 @@ package com.liferay.ide.core;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.ProjectChangeListener;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.eclipse.core.net.proxy.IProxyService;
@@ -29,6 +31,8 @@ import org.eclipse.core.runtime.Status;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -263,14 +267,21 @@ public class LiferayCore extends Plugin {
 
 		_plugin = this;
 
-		_listenerRegistryServiceTracker = _createServiceTracker(context, ListenerRegistry.class);
+		Dictionary<String, Object> preferences = new Hashtable<>();
 
+		preferences.put(Constants.SERVICE_RANKING, 1);
+
+		_listenerRegistryServiceTracker = _createServiceTracker(context, ListenerRegistry.class);
+		_listenerRegistryService = context.registerService(
+			ListenerRegistry.class.getName(), new DefaultListenerRegistry(), preferences);
 		_projectChangeListener = ProjectChangeListener.createAndRegister();
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
+
+		_listenerRegistryService.unregister();
 
 		_listenerRegistryServiceTracker.close();
 
@@ -292,6 +303,7 @@ public class LiferayCore extends Plugin {
 	private static LiferayCore _plugin;
 	private static LiferayProjectProviderReader _providerReader;
 
+	private ServiceRegistration<?> _listenerRegistryService;
 	private ServiceTracker<ListenerRegistry, ListenerRegistry> _listenerRegistryServiceTracker;
 	private ProjectChangeListener _projectChangeListener;
 
