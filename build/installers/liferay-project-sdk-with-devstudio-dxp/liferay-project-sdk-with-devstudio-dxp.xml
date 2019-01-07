@@ -199,7 +199,7 @@
                 <runProgram>
                     <customErrorMessage>Could not create DXP download token. Make sure you type correct email address and password and are connected to the internet.</customErrorMessage>
                     <program>${java_executable}</program>
-                    <programArguments>-jar${proxyHostArg}${proxyPortArg}${proxyUsernameArg}${proxyPasswordArg} "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email "${email}" --password-file "${installdir}${platform_path_separator}pwd"</programArguments>
+                    <programArguments>-jar${proxyHostArg}${proxyPortArg}${proxyUsernameArg}${proxyPasswordArg} "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email "${email}" --password-file "${installdir}${platform_path_separator}pwd" --token-file "${userHome}${platform_path_separator}.liferay${platform_path_separator}token"</programArguments>
                     <onErrorActionList>
                         <deleteFile>
                             <path>${installdir}</path>
@@ -688,6 +688,7 @@
                     <value></value>
                     <default>${user_home_directory}</default>
                     <allowEmptyValue>0</allowEmptyValue>
+                    <ask>0</ask>
                     <cliOptionName>userHome</cliOptionName>
                     <cliOptionText>Default User Home</cliOptionText>
                     <mustBeWritable>1</mustBeWritable>
