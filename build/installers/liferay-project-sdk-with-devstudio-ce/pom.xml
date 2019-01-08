@@ -31,7 +31,7 @@
     <name>Liferay Project SDK with DevStudio Community Edition Installer</name>
 
     <properties>
-        <studio-installer-version>2018.12.11</studio-installer-version>
+        <studio-installer-version>${maven.build.timestamp}</studio-installer-version>
     </properties>
 
     <build>
@@ -163,6 +163,8 @@
                                 <argument>build</argument>
                                 <argument>./liferay-project-sdk-with-devstudio-ce.xml</argument>
                                 <argument>linux-x64</argument>
+                                <argument>--setvars</argument>
+                                <argument>project.version=${studio-installer-version}</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -178,6 +180,8 @@
                                 <argument>build</argument>
                                 <argument>./liferay-project-sdk-with-devstudio-ce.xml</argument>
                                 <argument>windows</argument>
+                                <argument>--setvars</argument>
+                                <argument>project.version=${studio-installer-version}</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -193,6 +197,8 @@
                                 <argument>build</argument>
                                 <argument>./liferay-project-sdk-with-devstudio-ce.xml</argument>
                                 <argument>osx</argument>
+                                <argument>--setvars</argument>
+                                <argument>project.version=${studio-installer-version}</argument>
                             </arguments>
                         </configuration>
                     </execution>
