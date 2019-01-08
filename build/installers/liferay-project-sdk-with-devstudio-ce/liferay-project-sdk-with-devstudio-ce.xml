@@ -527,6 +527,7 @@
                     <value></value>
                     <default>${user_home_directory}</default>
                     <allowEmptyValue>0</allowEmptyValue>
+                    <ask>0</ask>
                     <cliOptionName>userHome</cliOptionName>
                     <cliOptionText>Default User Home</cliOptionText>
                     <mustBeWritable>1</mustBeWritable>
