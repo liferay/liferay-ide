@@ -72,7 +72,11 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 			server -> {
 				IRuntime runtime = server.getRuntime();
 
-				return bundlesLocation.equals(runtime.getLocation());
+				if (runtime != null) {
+					return bundlesLocation.equals(runtime.getLocation());
+				}
+
+				return true;
 			}
 		).forEach(
 			server -> {
