@@ -16,22 +16,19 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import com.liferay.ide.server.core.ILiferayServer;
-
-import java.io.File;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -52,6 +49,8 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 	public LiferayGradleWorkspaceProject(IProject project) {
 		super(project);
+
+		_initializeGradleWorkspaceProperties(project);
 	}
 
 	@Override
@@ -66,24 +65,8 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 	}
 
 	@Override
-	public String getProperty(String key, String defaultValue) {
-		if (getProject() == null) {
-			return null;
-		}
-
-		IPath projectLocation = getProject().getLocation();
-
-		File gradleProperties = new File(projectLocation.toFile(), "gradle.properties");
-
-		String retVal = null;
-
-		if (FileUtil.exists(gradleProperties)) {
-			Properties properties = PropertiesUtil.loadProperties(gradleProperties);
-
-			retVal = properties.getProperty(key, defaultValue);
-		}
-
-		return retVal;
+	public String getLiferayHome() {
+		return getProperty(WorkspaceConstants.HOME_DIR_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
 	}
 
 	@Override
@@ -210,6 +193,16 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 		if (ListUtil.isNotEmpty(childProjects)) {
 			job.schedule();
+		}
+	}
+
+	private void _initializeGradleWorkspaceProperties(IProject project) {
+		if (project.exists()) {
+			IPath projectLocation = project.getLocation();
+
+			IPath gradleProperties = projectLocation.append("gradle.properties");
+
+			properties.putAll(PropertiesUtil.loadProperties(gradleProperties));
 		}
 	}
 

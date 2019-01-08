@@ -51,6 +51,8 @@ public class WorkspaceConstants {
 
 	public static final String HOME_DIR_PROPERTY = "liferay.workspace.home.dir";
 
+	public static final String LIFERAY_HOME_PROPERTY = "liferayHome";
+
 	public static final String MODULES_DIR_PROPERTY = "liferay.workspace.modules.dir";
 
 	public static final String PLUGINS_SDK_DIR_PROPERTY = "liferay.workspace.plugins.sdk.dir";

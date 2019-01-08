@@ -14,11 +14,20 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
 
+import java.io.File;
+import java.io.FileReader;
+
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Simon Jiang
@@ -27,6 +36,8 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject {
 
 	public LiferayMavenWorkspaceProject(IProject project) {
 		super(project);
+
+		_initializeMavenWorkspaceProperties(project);
 	}
 
 	@Override
@@ -41,8 +52,35 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject {
 	}
 
 	@Override
+	public String getLiferayHome() {
+		return getProperty(WorkspaceConstants.LIFERAY_HOME_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
+	}
+
+	@Override
 	public boolean isWatchable() {
 		return false;
+	}
+
+	private void _initializeMavenWorkspaceProperties(IProject project) {
+		if (project.exists()) {
+			IPath projectLocation = project.getLocation();
+
+			File pomFile = new File(projectLocation.toFile(), "pom.xml");
+
+			if (FileUtil.exists(pomFile)) {
+				MavenXpp3Reader mavenReader = new MavenXpp3Reader();
+
+				try (FileReader reader = new FileReader(pomFile)) {
+					Model model = mavenReader.read(reader);
+
+					if (model != null) {
+						properties.putAll(model.getProperties());
+					}
+				}
+				catch (Exception e) {
+				}
+			}
+		}
 	}
 
 }

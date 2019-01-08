@@ -14,10 +14,12 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
@@ -29,6 +31,7 @@ import org.eclipse.sapphire.platform.StatusBridge;
 /**
  * @author Andy Wu
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class ImportLiferayWorkspaceOpMethods {
 
@@ -85,7 +88,23 @@ public class ImportLiferayWorkspaceOpMethods {
 			}
 
 			if (!initBundle && hasBundlesDir) {
-				LiferayWorkspaceUtil.addPortalRuntime(serverName);
+				Job addPortalRuntimeJob = new Job("Add Liferay Portal Runtime Job") {
+
+					@Override
+					public boolean belongsTo(Object family) {
+						return family.equals(LiferayCore.LIFERAY_JOB_FAMILY);
+					}
+
+					protected IStatus run(IProgressMonitor monitor) {
+						LiferayWorkspaceUtil.addPortalRuntime(serverName);
+
+						return org.eclipse.core.runtime.Status.OK_STATUS;
+					}
+
+				};
+
+				addPortalRuntimeJob.join();
+				addPortalRuntimeJob.schedule();
 			}
 		}
 		catch (Exception e) {

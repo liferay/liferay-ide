@@ -22,11 +22,13 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.adapter.NoopLiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,6 +45,8 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 
 	public LiferayWorkspaceProject(IProject project) {
 		super(project);
+
+		_initializeWorkspaceProperties(project);
 	}
 
 	@Override
@@ -97,7 +101,7 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 
 	@Override
 	public String getProperty(String key, String defaultValue) {
-		return null;
+		return properties.getProperty(key, defaultValue);
 	}
 
 	@Override
@@ -117,6 +121,25 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 	@Override
 	public Set<IProject> watching() {
 		return Collections.emptySet();
+	}
+
+	protected Properties properties = new Properties();
+
+	private void _initializeWorkspaceProperties(IProject project) {
+		try {
+			if (project.exists()) {
+				IPath projectLocation = project.getLocation();
+
+				IPath bladeDir = projectLocation.append(".blade");
+
+				IPath bladeSettingsPath = bladeDir.append("settings.properties");
+
+				properties.putAll(PropertiesUtil.loadProperties(bladeSettingsPath));
+			}
+		}
+		catch (Exception e) {
+			ProjectCore.logError(e);
+		}
 	}
 
 }
