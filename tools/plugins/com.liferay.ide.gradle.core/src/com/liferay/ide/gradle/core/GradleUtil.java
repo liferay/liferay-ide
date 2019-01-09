@@ -76,13 +76,7 @@ public class GradleUtil {
 			project = (IProject)resource;
 		}
 
-		GradleWorkspace workspace = GradleCore.getWorkspace();
-
-		if (workspace.getBuild(project) != null) {
-			return true;
-		}
-
-		return false;
+		return project.hasNature("org.eclipse.buildship.core.gradleprojectnature");
 	}
 
 	public static boolean isWatchableProject(IFile buildFile) {

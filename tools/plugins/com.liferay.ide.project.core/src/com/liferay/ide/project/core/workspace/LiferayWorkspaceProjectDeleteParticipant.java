@@ -14,9 +14,11 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.util.stream.Stream;
 
@@ -54,15 +56,21 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 	public Change createChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		CompositeChange change = new CompositeChange(getName());
 
-		if (FileUtil.notExists(_workspaceProject)) {
-			return change;
+		IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, _workspaceProject);
+
+		if (workspaceProject == null) {
+			return null;
 		}
 
-		IPath bundlesLocation = LiferayWorkspaceUtil.getHomeLocation(_workspaceProject);
+		IPath projectLocation = _workspaceProject.getLocation();
 
-		if (FileUtil.notExists(bundlesLocation)) {
-			return change;
+		String homeDir = workspaceProject.getLiferayHome();
+
+		if (FileUtil.notExists(projectLocation) || CoreUtil.isNullOrEmpty(homeDir)) {
+			return null;
 		}
+
+		IPath bundleLocation = projectLocation.append(homeDir);
 
 		Stream.of(
 			ServerCore.getServers()
@@ -73,7 +81,7 @@ public class LiferayWorkspaceProjectDeleteParticipant extends DeleteParticipant 
 				IRuntime runtime = server.getRuntime();
 
 				if (runtime != null) {
-					return bundlesLocation.equals(runtime.getLocation());
+					return bundleLocation.equals(runtime.getLocation());
 				}
 
 				return true;
