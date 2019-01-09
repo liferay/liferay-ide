@@ -18,14 +18,16 @@ import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
-import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.gradle.ui.GradleUI;
 import com.liferay.ide.ui.action.AbstractObjectAction;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
@@ -60,16 +62,14 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 					try {
 						monitor.beginTask(getGradleTask(), 100);
 
+						monitor.worked(20);
+
 						GradleUtil.runGradleTask(project, getGradleTask(), monitor);
 
 						monitor.worked(80);
-
-						project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-
-						monitor.worked(20);
 					}
 					catch (Exception e) {
-						return ProjectUI.createErrorStatus("Error running Gradle goal " + getGradleTask(), e);
+						return GradleUI.createErrorStatus("Error running Gradle goal " + getGradleTask(), e);
 					}
 
 					return Status.OK_STATUS;
@@ -82,7 +82,14 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 
 					@Override
 					public void done(IJobChangeEvent event) {
-						afterAction();
+						try {
+							project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+
+							afterAction();
+						}
+						catch (CoreException ce) {
+							GradleUI.logError(ce);
+						}
 					}
 
 				});

@@ -12,15 +12,18 @@
  * details.
  */
 
-package com.liferay.ide.gradle.ui.navigator.workspace;
+package com.liferay.ide.gradle.ui;
 
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.jobs.IJobManager;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -31,7 +34,7 @@ import org.eclipse.ui.ide.IDE;
 /**
  * @author Terry Jia
  */
-public class LiferayWorkspaceServerLabelProvider extends LabelProvider implements ILightweightLabelDecorator {
+public class LiferayWatchLabelProvider extends LabelProvider implements ILightweightLabelDecorator {
 
 	@Override
 	public void decorate(Object element, IDecoration decoration) {
@@ -47,6 +50,20 @@ public class LiferayWorkspaceServerLabelProvider extends LabelProvider implement
 
 		if (iWorkspaceProject != null) {
 			if (ListUtil.contains(iWorkspaceProject.watching(), project)) {
+				decoration.addSuffix(" [watching]");
+			}
+			else {
+				decoration.addSuffix("");
+			}
+		}
+		else {
+			String jobName = project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH;
+
+			IJobManager jobManager = Job.getJobManager();
+
+			Job[] jobs = jobManager.find(jobName);
+
+			if (ListUtil.isNotEmpty(jobs)) {
 				decoration.addSuffix(" [watching]");
 			}
 			else {

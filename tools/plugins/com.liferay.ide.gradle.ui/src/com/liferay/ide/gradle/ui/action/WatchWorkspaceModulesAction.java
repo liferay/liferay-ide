@@ -153,7 +153,7 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 
 		IDecoratorManager decoratorManager = UIUtil.getDecoratorManager();
 
-		UIUtil.async(() -> decoratorManager.update("com.liferay.ide.gradle.ui.workspaceLabelProvider"));
+		UIUtil.async(() -> decoratorManager.update(LiferayGradleCore.LIFERAY_WATCH_LABEL_PROVIDER));
 	}
 
 	private String _action;

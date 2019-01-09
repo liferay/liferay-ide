@@ -16,6 +16,7 @@ package com.liferay.ide.gradle.action;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.core.WatchJob;
 import com.liferay.ide.gradle.ui.GradleUI;
 import com.liferay.ide.server.core.ILiferayServer;
@@ -79,7 +80,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 			IProject project = (IProject)element;
 
-			String jobName = project.getName() + " - watch";
+			String jobName = project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH;
 
 			IJobManager jobManager = Job.getJobManager();
 
@@ -122,6 +123,8 @@ public class WatchTaskAction extends AbstractObjectAction {
 						catch (IOException ioe) {
 							GradleUI.logError("Could not uninstall bundles installed by watch task", ioe);
 						}
+
+						_refreshDecorator();
 					}
 
 					@Override
@@ -146,7 +149,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 				});
 
 			job.setProperty(ILiferayServer.LIFERAY_SERVER_JOB, this);
-			job.setSystem(true);
+			job.setSystem(false);
 			job.schedule();
 		}
 	}
@@ -203,7 +206,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 		IDecoratorManager decoratorManager = workbench.getDecoratorManager();
 
-		UIUtil.async(() -> decoratorManager.update("com.liferay.ide.gradle.ui.watchDecorator"));
+		UIUtil.async(() -> decoratorManager.update(LiferayGradleCore.LIFERAY_WATCH_LABEL_PROVIDER));
 	}
 
 }

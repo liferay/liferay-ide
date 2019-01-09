@@ -45,6 +45,18 @@ public class GradleUI extends Plugin {
 
 	public static final String PLUGIN_ID = "com.liferay.ide.gradle.ui";
 
+	public static IStatus createErrorStatus(String msg) {
+		return createErrorStatus(msg, null);
+	}
+
+	public static IStatus createErrorStatus(String msg, Exception e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
+	}
+
+	public static IStatus createInfoStatus(String msg) {
+		return new Status(IStatus.INFO, PLUGIN_ID, msg, null);
+	}
+
 	// The shared instance
 
 	/**
