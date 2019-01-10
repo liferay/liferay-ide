@@ -303,16 +303,15 @@
 		</key>
 	</extension>
 	<extension point="org.eclipse.ui.decorators">
-
 		<decorator
 			adaptable="true"
-			class="com.liferay.ide.gradle.ui.LiferayWatchLabelProvider"
-			id="com.liferay.ide.gradle.ui.liferayWatchLabelProvider"
-			label="workspace label provider"
+			class="com.liferay.ide.gradle.ui.LiferayWatchDecorator"
+			id="com.liferay.ide.gradle.ui.liferayWatchDecorator"
+			label="liferay watch decorator"
 			lightweight="true"
 			state="true"
 		>
-			<description>Liferay Watch Label Provider</description>
+			<description>liferay watch decorator</description>
 			<enablement>
 				<objectState name="nature" value="org.eclipse.buildship.core.gradleprojectnature" />
 			</enablement>
@@ -326,7 +325,7 @@
 			contentProvider="com.liferay.ide.gradle.ui.navigator.workspace.LiferayWorkspaceServerContentProvider"
 			icon="icons/liferay_logo_16.png"
 			id="com.liferay.ide.gradle.ui.serverview.workspace"
-			labelProvider="com.liferay.ide.gradle.ui.LiferayWatchLabelProvider"
+			labelProvider="com.liferay.ide.gradle.ui.navigator.workspace.LiferayWorkspaceServerLabelProvider"
 			name="Liferay Workspace"
 			priority="higher"
 			providesSaveables="true"

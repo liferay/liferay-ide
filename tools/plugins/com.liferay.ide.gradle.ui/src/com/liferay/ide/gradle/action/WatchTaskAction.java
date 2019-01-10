@@ -81,7 +81,9 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 			IProject project = (IProject)element;
 
-			String jobName = project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH;
+			String jobName =
+				project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" +
+					LiferayGradleCore.LIFERAY_STANDARDALONE_WATCH_JOB_SUFFIX;
 
 			IJobManager jobManager = Job.getJobManager();
 
@@ -91,7 +93,8 @@ public class WatchTaskAction extends AbstractObjectAction {
 				return;
 			}
 
-			Job job = new WatchJob(project, Arrays.asList("watch"));
+			Job job = new WatchJob(
+				project, Arrays.asList("watch"), LiferayGradleCore.LIFERAY_STANDARDALONE_WATCH_JOB_SUFFIX);
 
 			job.addJobChangeListener(
 				new JobChangeAdapter() {
@@ -217,7 +220,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 		IDecoratorManager decoratorManager = workbench.getDecoratorManager();
 
-		UIUtil.async(() -> decoratorManager.update(LiferayGradleCore.LIFERAY_WATCH_LABEL_PROVIDER));
+		UIUtil.async(() -> decoratorManager.update(LiferayGradleCore.LIFERAY_WATCH_DECORATOR));
 	}
 
 }

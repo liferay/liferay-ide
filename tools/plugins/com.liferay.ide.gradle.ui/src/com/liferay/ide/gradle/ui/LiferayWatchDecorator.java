@@ -19,7 +19,6 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.jobs.IJobManager;
@@ -27,14 +26,12 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.ide.IDE;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
-public class LiferayWatchLabelProvider extends LabelProvider implements ILightweightLabelDecorator {
+public class LiferayWatchDecorator extends LabelProvider implements ILightweightLabelDecorator {
 
 	@Override
 	public void decorate(Object element, IDecoration decoration) {
@@ -56,42 +53,21 @@ public class LiferayWatchLabelProvider extends LabelProvider implements ILightwe
 				decoration.addSuffix("");
 			}
 		}
+
+		String jobName =
+			project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" +
+				LiferayGradleCore.LIFERAY_STANDARDALONE_WATCH_JOB_SUFFIX;
+
+		IJobManager jobManager = Job.getJobManager();
+
+		Job[] jobs = jobManager.find(jobName);
+
+		if (ListUtil.isNotEmpty(jobs)) {
+			decoration.addSuffix(" [watching]");
+		}
 		else {
-			String jobName = project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH;
-
-			IJobManager jobManager = Job.getJobManager();
-
-			Job[] jobs = jobManager.find(jobName);
-
-			if (ListUtil.isNotEmpty(jobs)) {
-				decoration.addSuffix(" [watching]");
-			}
-			else {
-				decoration.addSuffix("");
-			}
+			decoration.addSuffix("");
 		}
-	}
-
-	@Override
-	public Image getImage(Object element) {
-		if (element instanceof IProject) {
-			ISharedImages sharedImage = UIUtil.getSharedImages();
-
-			return sharedImage.getImage(IDE.SharedImages.IMG_OBJ_PROJECT);
-		}
-
-		return null;
-	}
-
-	@Override
-	public String getText(Object element) {
-		if (element instanceof IProject) {
-			IProject project = (IProject)element;
-
-			return project.getName();
-		}
-
-		return null;
 	}
 
 }

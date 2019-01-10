@@ -155,7 +155,9 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 
 		String projectName = getProject().getName();
 
-		String jobName = projectName + ":" + LiferayGradleCore.LIFERAY_WATCH;
+		String jobName =
+			projectName + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" +
+				LiferayGradleCore.LIFERAY_WORKSPACE_WATCH_JOB_SUFFIX;
 
 		IJobManager jobManager = Job.getJobManager();
 
@@ -173,7 +175,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 			}
 		}
 
-		Job job = new WatchJob(getProject(), tasks);
+		Job job = new WatchJob(getProject(), tasks, LiferayGradleCore.LIFERAY_WORKSPACE_WATCH_JOB_SUFFIX);
 
 		job.addJobChangeListener(
 			new JobChangeAdapter() {
