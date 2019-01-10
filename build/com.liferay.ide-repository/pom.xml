@@ -39,7 +39,7 @@
                 <version>${tycho-version}</version>
                 <configuration>
                     <includeAllDependencies>false</includeAllDependencies>
-                    <finalName>liferay-ide-${unqualifiedVersion}.${buildQualifier}-updatesite</finalName>
+                    <finalName>liferay-ide-updatesite-${unqualifiedVersion}.${maven.build.timestamp}</finalName>
                     <extraArtifactRepositoryProperties>
                         <p2.statsURI>https://usage-devtools.wedeploy.io/stats/p2/</p2.statsURI>
                     </extraArtifactRepositoryProperties>
