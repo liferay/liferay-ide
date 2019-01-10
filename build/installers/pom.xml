@@ -50,7 +50,6 @@
         <jpmcli-latest-md5>c23d4c900794ad20aca0321f70d6edb5</jpmcli-latest-md5>
         <bnd-latest-download-url>https://repository-cdn.liferay.com/nexus/content/groups/public/biz/aQute/bnd/biz.aQute.bnd/3.5.0/biz.aQute.bnd-3.5.0.jar</bnd-latest-download-url>
         <bnd-latest-md5>19983bd645ec65d162355bd4dac910fa</bnd-latest-md5>
-        <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
     </properties>
 
     <modules>

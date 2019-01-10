@@ -52,6 +52,7 @@
         <blade-latest-download-url>https://repository-cdn.liferay.com/nexus/content/repositories/liferay-public-releases/com/liferay/blade/com.liferay.blade.cli/3.4.1/com.liferay.blade.cli-3.4.1.jar</blade-latest-download-url>
         <blade-latest-md5>a5f31d46f2e82b8960347ee0d023c195</blade-latest-md5>
         <sign-apps>false</sign-apps>
+        <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
     </properties>
 
     <repositories>
