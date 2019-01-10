@@ -43,6 +43,7 @@ import java.util.Properties;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -115,6 +116,16 @@ public class WatchTaskAction extends AbstractObjectAction {
 									String cmd = "uninstall " + bsn;
 
 									client.send(cmd);
+
+									IFolder folder = FileUtil.getFolder(project, "build");
+
+									if (folder != null) {
+										File file = FileUtil.getFile(folder.getFile("installedBundleId"));
+
+										if (FileUtil.exists(file)) {
+											FileUtil.delete(file);
+										}
+									}
 								}
 								catch (IOException ioe) {
 								}
