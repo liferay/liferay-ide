@@ -39,14 +39,13 @@ public class LiferayWatchDecorator extends LabelProvider implements ILightweight
 			return;
 		}
 
-		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
-
-		IWorkspaceProject iWorkspaceProject = LiferayCore.create(IWorkspaceProject.class, workspaceProject);
+		IWorkspaceProject workspaceProject = LiferayCore.create(
+			IWorkspaceProject.class, LiferayWorkspaceUtil.getWorkspaceProject());
 
 		IProject project = (IProject)element;
 
-		if (iWorkspaceProject != null) {
-			if (ListUtil.contains(iWorkspaceProject.watching(), project)) {
+		if (workspaceProject != null) {
+			if (ListUtil.contains(workspaceProject.watching(), project)) {
 				decoration.addSuffix(" [watching]");
 			}
 			else {
@@ -56,7 +55,7 @@ public class LiferayWatchDecorator extends LabelProvider implements ILightweight
 
 		String jobName =
 			project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" +
-				LiferayGradleCore.LIFERAY_STANDALONE_WATCH_JOB_SUFFIX;
+				LiferayGradleUI.LIFERAY_STANDALONE_WATCH_JOB_SUFFIX;
 
 		IJobManager jobManager = Job.getJobManager();
 

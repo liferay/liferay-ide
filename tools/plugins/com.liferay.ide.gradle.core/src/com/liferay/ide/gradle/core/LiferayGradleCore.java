@@ -39,11 +39,7 @@ public class LiferayGradleCore extends Plugin {
 
 	public static final String FAMILY_BUILDSHIP_CORE_JOBS = "org.eclipse.buildship.core.jobs";
 
-	public static final String LIFERAY_STANDALONE_WATCH_JOB_SUFFIX = "standalone";
-
 	public static final String LIFERAY_WATCH = "liferay-watch";
-
-	public static final String LIFERAY_WATCH_DECORATOR_ID = "com.liferay.ide.gradle.ui.liferayWatchDecorator";
 
 	public static final String LIFERAY_WORKSPACE_WATCH_JOB_SUFFIX = "workspace";
 

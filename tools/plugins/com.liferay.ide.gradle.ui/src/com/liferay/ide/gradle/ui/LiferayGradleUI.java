@@ -43,6 +43,10 @@ public class LiferayGradleUI extends Plugin {
 
 	// The plug-in ID
 
+	public static final String LIFERAY_STANDALONE_WATCH_JOB_SUFFIX = "standalone";
+
+	public static final String LIFERAY_WATCH_DECORATOR_ID = "com.liferay.ide.gradle.ui.liferayWatchDecorator";
+
 	public static final String PLUGIN_ID = "com.liferay.ide.gradle.ui";
 
 	public static IStatus createErrorStatus(String msg) {
