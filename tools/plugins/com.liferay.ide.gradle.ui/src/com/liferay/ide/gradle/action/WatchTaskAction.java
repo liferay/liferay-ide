@@ -18,7 +18,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.core.WatchJob;
-import com.liferay.ide.gradle.ui.GradleUI;
+import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.gogo.GogoTelnetClient;
 import com.liferay.ide.server.core.portal.PortalServerBehavior;
@@ -135,7 +135,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 							}
 						}
 						catch (IOException ioe) {
-							GradleUI.logError("Could not uninstall bundles installed by watch task", ioe);
+							LiferayGradleUI.logError("Could not uninstall bundles installed by watch task", ioe);
 						}
 
 						_refreshDecorator();

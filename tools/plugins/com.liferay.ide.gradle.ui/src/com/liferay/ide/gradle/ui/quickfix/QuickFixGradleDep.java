@@ -20,7 +20,7 @@ import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
-import com.liferay.ide.gradle.ui.GradleUI;
+import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.project.core.modules.ServiceContainer;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
 import com.liferay.ide.ui.util.UIUtil;
@@ -149,14 +149,14 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 					Display display = UIUtil.getActiveShellDisplay();
 
 					try {
-						Bundle bundle = GradleUI.getDefaultBundle();
+						Bundle bundle = LiferayGradleUI.getDefaultBundle();
 
 						URL url = FileLocator.toFileURL(bundle.getEntry("icons/e16/liferay_logo_16.png"));
 
 						return new Image(display, url.getFile());
 					}
 					catch (IOException ioe) {
-						GradleUI.logError(ioe);
+						LiferayGradleUI.logError(ioe);
 					}
 
 					return null;
