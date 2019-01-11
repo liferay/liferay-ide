@@ -39,7 +39,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
@@ -131,7 +130,28 @@ public class GradleUtil {
 	}
 
 	public static void refreshProject(IProject project) {
-		sychronizeProject(project.getLocation(), new NullProgressMonitor());
+		GradleWorkspace workspace = GradleCore.getWorkspace();
+
+		Optional<GradleBuild> buildOpt = workspace.getBuild(project);
+
+		Job synchronizeJob = new Job("Liferay refresh gradle project job") {
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				if (buildOpt.isPresent()) {
+					GradleBuild gradleBuild = buildOpt.get();
+
+					gradleBuild.synchronize(monitor);
+				}
+
+				return Status.OK_STATUS;
+			}
+
+		};
+
+		synchronizeJob.setProperty(ILiferayProjectProvider.LIFERAY_PROJECT_JOB, new Object());
+
+		synchronizeJob.schedule();
 	}
 
 	public static void runGradleTask(IProject project, String task, IProgressMonitor monitor) throws CoreException {
@@ -196,7 +216,7 @@ public class GradleUtil {
 
 		GradleBuild gradleBuild = workspace.createBuild(configuration);
 
-		Job synchronizeJob = new Job("Liferay sychronized project job") {
+		Job synchronizeJob = new Job("Liferay sychronized gradle project job") {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
