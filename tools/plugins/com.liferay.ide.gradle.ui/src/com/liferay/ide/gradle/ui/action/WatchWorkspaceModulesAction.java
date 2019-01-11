@@ -18,7 +18,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.gradle.core.LiferayGradleCore;
+import com.liferay.ide.gradle.core.LiferayGradleWorkspaceProject;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
@@ -90,7 +90,7 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 					}
 				}
 				catch (CoreException ce) {
-					LiferayGradleCore.logError(ce);
+					LiferayGradleUI.logError(ce);
 				}
 			}
 		}
@@ -105,8 +105,6 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 
 		Set<IProject> projectsToWatch = new HashSet<>(watching);
 
-		GogoBundleDeployer gogoBundleDeployer = new GogoBundleDeployer();
-
 		while (iterator.hasNext()) {
 			Object obj = iterator.next();
 
@@ -118,33 +116,22 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 				}
 				else if ("stop".equals(_action)) {
 					if (selectedProject.equals(LiferayWorkspaceUtil.getWorkspaceProject())) {
+						LiferayGradleWorkspaceProject liferayGradleWorkspaceProject = new LiferayGradleWorkspaceProject(
+							selectedProject);
+
+						Set<IProject> childProjects = liferayGradleWorkspaceProject.getChildProjects();
+
+						for (IProject childProject : childProjects) {
+							_undeployModuleFromServer(childProject);
+						}
+
 						projectsToWatch.clear();
 
 						break;
 					}
 					else {
 						projectsToWatch.remove(selectedProject);
-					}
-
-					IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, selectedProject);
-
-					if (bundleProject != null) {
-						try {
-							gogoBundleDeployer.uninstall(bundleProject);
-
-							IFolder folder = FileUtil.getFolder(selectedProject, "build");
-
-							if (folder != null) {
-								File file = FileUtil.getFile(folder.getFile("installedBundleId"));
-
-								if (FileUtil.exists(file)) {
-									FileUtil.delete(file);
-								}
-							}
-						}
-						catch (Exception e) {
-							LiferayGradleCore.logError(e);
-						}
+						_undeployModuleFromServer(selectedProject);
 					}
 				}
 			}
@@ -155,6 +142,31 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 		IDecoratorManager decoratorManager = UIUtil.getDecoratorManager();
 
 		UIUtil.async(() -> decoratorManager.update(LiferayGradleUI.LIFERAY_WATCH_DECORATOR_ID));
+	}
+
+	private void _undeployModuleFromServer(IProject selectedProject) {
+		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, selectedProject);
+
+		if (bundleProject == null) {
+			return;
+		}
+
+		try {
+			GogoBundleDeployer gogoBundleDeployer = new GogoBundleDeployer();
+
+			gogoBundleDeployer.uninstall(bundleProject);
+
+			IFolder folder = FileUtil.getFolder(bundleProject.getProject(), "build");
+
+			if (folder != null) {
+				File installedBundleIdFile = FileUtil.getFile(folder.getFile("installedBundleId"));
+
+				FileUtil.delete(installedBundleIdFile);
+			}
+		}
+		catch (Exception e) {
+			LiferayGradleUI.logError(e);
+		}
 	}
 
 	private String _action;
