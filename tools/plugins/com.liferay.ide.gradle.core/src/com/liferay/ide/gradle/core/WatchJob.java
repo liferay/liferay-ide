@@ -35,8 +35,8 @@ import org.gradle.tooling.GradleConnector;
  */
 public class WatchJob extends Job {
 
-	public WatchJob(IProject project, List<String> tasks) {
-		super(project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH);
+	public WatchJob(IProject project, List<String> tasks, String jobNameSuffix) {
+		super(project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" + jobNameSuffix);
 
 		_project = project;
 		_tasks = tasks;

@@ -19,6 +19,7 @@ import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
+import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 import com.liferay.ide.ui.util.UIUtil;
@@ -153,7 +154,7 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 
 		IDecoratorManager decoratorManager = UIUtil.getDecoratorManager();
 
-		UIUtil.async(() -> decoratorManager.update(LiferayGradleCore.LIFERAY_WATCH_LABEL_PROVIDER));
+		UIUtil.async(() -> decoratorManager.update(LiferayGradleUI.LIFERAY_WATCH_DECORATOR_ID));
 	}
 
 	private String _action;

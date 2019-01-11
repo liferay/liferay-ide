@@ -18,7 +18,7 @@ import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
-import com.liferay.ide.gradle.ui.GradleUI;
+import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.ui.action.AbstractObjectAction;
 
 import org.eclipse.core.resources.IFile;
@@ -69,7 +69,7 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 						monitor.worked(80);
 					}
 					catch (Exception e) {
-						return GradleUI.createErrorStatus("Error running Gradle goal " + getGradleTask(), e);
+						return LiferayGradleUI.createErrorStatus("Error running Gradle goal " + getGradleTask(), e);
 					}
 
 					return Status.OK_STATUS;
@@ -88,7 +88,7 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 							afterAction();
 						}
 						catch (CoreException ce) {
-							GradleUI.logError(ce);
+							LiferayGradleUI.logError(ce);
 						}
 					}
 

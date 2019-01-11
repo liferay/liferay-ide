@@ -39,9 +39,13 @@ import org.osgi.framework.BundleContext;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class GradleUI extends Plugin {
+public class LiferayGradleUI extends Plugin {
 
 	// The plug-in ID
+
+	public static final String LIFERAY_STANDALONE_WATCH_JOB_SUFFIX = "standalone";
+
+	public static final String LIFERAY_WATCH_DECORATOR_ID = "com.liferay.ide.gradle.ui.liferayWatchDecorator";
 
 	public static final String PLUGIN_ID = "com.liferay.ide.gradle.ui";
 
@@ -64,7 +68,7 @@ public class GradleUI extends Plugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static GradleUI getDefault() {
+	public static LiferayGradleUI getDefault() {
 		return _plugin;
 	}
 
@@ -85,7 +89,7 @@ public class GradleUI extends Plugin {
 	/**
 	 * The constructor
 	 */
-	public GradleUI() {
+	public LiferayGradleUI() {
 	}
 
 	/**
@@ -153,7 +157,7 @@ public class GradleUI extends Plugin {
 		super.stop(context);
 	}
 
-	private static GradleUI _plugin;
+	private static LiferayGradleUI _plugin;
 
 	private EventListener _projectListener;
 
