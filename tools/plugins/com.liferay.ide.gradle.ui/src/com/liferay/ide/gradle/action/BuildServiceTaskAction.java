@@ -56,9 +56,6 @@ public class BuildServiceTaskAction extends GradleTaskAction {
 		List<IFolder> folders = CoreUtil.getSourceFolders(JavaCore.create(project));
 
 		if (ListUtil.isEmpty(folders) || refresh) {
-
-			// refresh this project will also transmit to refresh -api project
-
 			GradleUtil.refreshProject(project);
 		}
 		else {
