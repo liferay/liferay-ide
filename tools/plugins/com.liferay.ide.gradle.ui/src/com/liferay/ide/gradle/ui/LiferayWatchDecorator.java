@@ -56,7 +56,7 @@ public class LiferayWatchDecorator extends LabelProvider implements ILightweight
 
 		String jobName =
 			project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" +
-				LiferayGradleCore.LIFERAY_STANDARDALONE_WATCH_JOB_SUFFIX;
+				LiferayGradleCore.LIFERAY_STANDALONE_WATCH_JOB_SUFFIX;
 
 		IJobManager jobManager = Job.getJobManager();
 
