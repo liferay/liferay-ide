@@ -35,17 +35,22 @@ import org.gradle.tooling.GradleConnector;
  */
 public class WatchJob extends Job {
 
-	public WatchJob(IProject project, List<String> tasks, String jobNameSuffix) {
-		super(project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" + jobNameSuffix);
+	public WatchJob(IProject project, List<String> tasks, String jobFamily) {
+		super(project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH);
 
 		_project = project;
 		_tasks = tasks;
+		_jobFamily = jobFamily;
 		_cancelToken = GradleConnector.newCancellationTokenSource();
 	}
 
 	@Override
 	public boolean belongsTo(Object family) {
-		return getName().equals(family);
+		if (family == null) {
+			return false;
+		}
+
+		return family.equals(getName() + ":" + _jobFamily);
 	}
 
 	@Override
@@ -83,6 +88,7 @@ public class WatchJob extends Job {
 	}
 
 	private CancellationTokenSource _cancelToken;
+	private String _jobFamily;
 	private IProject _project;
 	private List<String> _tasks;
 

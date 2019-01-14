@@ -111,11 +111,9 @@ public class LiferayWorkspaceServerActionProvider extends CommonActionProvider {
 			if (LiferayWorkspaceUtil.isValidGradleWorkspaceProject(selectedProject)) {
 				IJobManager jobManager = Job.getJobManager();
 
-				String jobName =
+				Job[] jobs = jobManager.find(
 					selectedProject.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" +
-						LiferayGradleCore.LIFERAY_WORKSPACE_WATCH_JOB_SUFFIX;
-
-				Job[] jobs = jobManager.find(jobName);
+						LiferayGradleCore.LIFERAY_WORKSPACE_WATCH_JOB_FAMILY);
 
 				if (ListUtil.isNotEmpty(jobs)) {
 					stopEnabled = true;

@@ -53,13 +53,11 @@ public class LiferayWatchDecorator extends LabelProvider implements ILightweight
 			}
 		}
 
-		String jobName =
-			project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" +
-				LiferayGradleUI.LIFERAY_STANDALONE_WATCH_JOB_SUFFIX;
-
 		IJobManager jobManager = Job.getJobManager();
 
-		Job[] jobs = jobManager.find(jobName);
+		Job[] jobs = jobManager.find(
+			project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" +
+				LiferayGradleUI.LIFERAY_STANDALONE_WATCH_JOB_FAMILY);
 
 		if (ListUtil.isNotEmpty(jobs)) {
 			decoration.addSuffix(" [watching]");

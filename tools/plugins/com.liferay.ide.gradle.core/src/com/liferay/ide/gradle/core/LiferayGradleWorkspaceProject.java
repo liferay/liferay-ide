@@ -153,15 +153,11 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 			}
 		}
 
-		String projectName = getProject().getName();
-
-		String jobName =
-			projectName + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" +
-				LiferayGradleCore.LIFERAY_WORKSPACE_WATCH_JOB_SUFFIX;
-
 		IJobManager jobManager = Job.getJobManager();
 
-		Job[] jobs = jobManager.find(jobName);
+		Job[] jobs = jobManager.find(
+			getProject().getName() + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" +
+				LiferayGradleCore.LIFERAY_WORKSPACE_WATCH_JOB_FAMILY);
 
 		if (ListUtil.isNotEmpty(jobs)) {
 			Job job = jobs[0];
@@ -175,7 +171,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 			}
 		}
 
-		Job job = new WatchJob(getProject(), tasks, LiferayGradleCore.LIFERAY_WORKSPACE_WATCH_JOB_SUFFIX);
+		Job job = new WatchJob(getProject(), tasks, LiferayGradleCore.LIFERAY_WORKSPACE_WATCH_JOB_FAMILY);
 
 		job.addJobChangeListener(
 			new JobChangeAdapter() {
