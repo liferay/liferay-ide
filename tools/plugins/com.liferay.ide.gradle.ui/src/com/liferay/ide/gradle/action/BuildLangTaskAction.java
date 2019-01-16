@@ -20,7 +20,7 @@ package com.liferay.ide.gradle.action;
 public class BuildLangTaskAction extends GradleTaskAction {
 
 	@Override
-	protected String getGradleTask() {
+	protected String getGradleTaskName() {
 		return "buildLang";
 	}
 
