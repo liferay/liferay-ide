@@ -144,36 +144,34 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 			return Collections.emptyList();
 		}
 
-		List<GradleTask> tasks = new ArrayList<>();
+		List<GradleTask> gradleTasks = new ArrayList<>();
 
-		_fetchModelTasks(gradleProject, getGradleTaskName(), tasks);
+		_fetchModelTasks(gradleProject, getGradleTaskName(), gradleTasks);
 
-		Stream<GradleTask> taskStream = tasks.stream();
+		Stream<GradleTask> gradleTaskStream = gradleTasks.stream();
 
-		List<String> taskString = taskStream.map(
+		return gradleTaskStream.map(
 			task -> task.getPath()
 		).collect(
 			Collectors.toList()
 		);
-
-		return taskString;
 	}
 
 	protected IFile gradleBuildFile = null;
 	protected IProject project = null;
 
-	private void _fetchModelTasks(GradleProject projectModel, String taskName, List<GradleTask> tasks) {
+	private void _fetchModelTasks(GradleProject gradleProject, String taskName, List<GradleTask> tasks) {
 		boolean parentHasTask = false;
 
-		if (projectModel == null) {
+		if (gradleProject == null) {
 			return;
 		}
 
-		DomainObjectSet<? extends GradleTask> gradleTasks = projectModel.getTasks();
+		DomainObjectSet<? extends GradleTask> gradleTasks = gradleProject.getTasks();
 
-		for (GradleTask task : gradleTasks) {
-			if (taskName.equals(task.getName())) {
-				tasks.add(task);
+		for (GradleTask gradleTask : gradleTasks) {
+			if (taskName.equals(gradleTask.getName())) {
+				tasks.add(gradleTask);
 				parentHasTask = true;
 
 				break;
@@ -184,9 +182,9 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 			return;
 		}
 		else {
-			DomainObjectSet<? extends GradleProject> childrenProjects = projectModel.getChildren();
+			DomainObjectSet<? extends GradleProject> childGradleProjects = gradleProject.getChildren();
 
-			for (GradleProject childGradleProject : childrenProjects) {
+			for (GradleProject childGradleProject : childGradleProjects) {
 				 _fetchModelTasks(childGradleProject, taskName, tasks);
 			}
 		}
@@ -199,7 +197,7 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 			return null;
 		}
 
-		GradleProject workspaceGradleModel = GradleUtil.getWorkspaceGradleModel(project);
+		GradleProject workspaceGradleModel = GradleUtil.getWorkspaceGradleProject(project);
 
 		if (workspaceGradleModel == null) {
 			return null;

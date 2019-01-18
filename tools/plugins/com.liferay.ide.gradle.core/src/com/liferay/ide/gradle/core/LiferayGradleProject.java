@@ -112,7 +112,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
 			GradleBuild gradleBuild = build.get();
 
-			GradleProject workspaceGradleModel = GradleUtil.getWorkspaceGradleModel(getProject());
+			GradleProject workspaceGradleModel = GradleUtil.getWorkspaceGradleProject(getProject());
 
 			GradleProject projectModel = GradleUtil.getNestedGradleModel(workspaceGradleModel, getProject().getName());
 

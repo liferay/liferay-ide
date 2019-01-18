@@ -59,33 +59,33 @@ import org.osgi.framework.Version;
 public class GradleUtil {
 
 	public static GradleProject getNestedGradleModel(GradleProject gradleProject, String projectName) {
-		GradleProject retVal = null;
+		if (gradleProject == null) {
+			return null;
+		}
+
+		GradleProject nestedGradleProject = null;
 
 		try {
-			if (gradleProject == null) {
-				return retVal;
-			}
-
 			String gradleProjectName = gradleProject.getName();
 
 			if (gradleProjectName.equals(projectName)) {
 				return gradleProject;
 			}
 
-			DomainObjectSet<? extends GradleProject> childrenGradleProjects = gradleProject.getChildren();
+			DomainObjectSet<? extends GradleProject> childGradleProjects = gradleProject.getChildren();
 
-			if (!childrenGradleProjects.isEmpty()) {
-				for (GradleProject childProject : childrenGradleProjects) {
-					String childProjectName = childProject.getName();
+			if (!childGradleProjects.isEmpty()) {
+				for (GradleProject childGradleProject : childGradleProjects) {
+					String childProjectName = childGradleProject.getName();
 
 					if (childProjectName.equals(projectName)) {
-						return childProject;
+						return childGradleProject;
 					}
 
-					retVal = getNestedGradleModel(childProject, projectName);
+					nestedGradleProject = getNestedGradleModel(childGradleProject, projectName);
 
-					if (retVal != null) {
-						return retVal;
+					if (nestedGradleProject != null) {
+						return nestedGradleProject;
 					}
 				}
 			}
@@ -94,16 +94,16 @@ public class GradleUtil {
 			LiferayGradleCore.logError("Fetch gradle model error ", e);
 		}
 
-		return retVal;
+		return nestedGradleProject;
 	}
 
-	public static GradleProject getWorkspaceGradleModel(IProject project) {
+	public static GradleProject getWorkspaceGradleProject(IProject project) {
 		try {
 			GradleWorkspace gradleWorkspace = GradleCore.getWorkspace();
 
-			Optional<GradleBuild> buildOptional = gradleWorkspace.getBuild(project);
+			Optional<GradleBuild> optionalGradleBuild = gradleWorkspace.getBuild(project);
 
-			GradleBuild gradleBuild = buildOptional.get();
+			GradleBuild gradleBuild = optionalGradleBuild.get();
 
 			return gradleBuild.withConnection(
 				connection -> {
