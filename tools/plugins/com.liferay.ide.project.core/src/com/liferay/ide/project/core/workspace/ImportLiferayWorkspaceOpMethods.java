@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.jobs.JobUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -88,6 +89,8 @@ public class ImportLiferayWorkspaceOpMethods {
 			}
 
 			if (!initBundle && hasBundlesDir) {
+				JobUtil.waitForLiferayProjectJob();
+
 				Job addPortalRuntimeJob = new Job("Add Liferay Portal Runtime Job") {
 
 					@Override
