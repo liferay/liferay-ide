@@ -54,6 +54,8 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
+import org.gradle.tooling.model.GradleProject;
+
 /**
  * @author Gregory Amerson
  * @author Terry Jia
@@ -110,12 +112,22 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
 			GradleBuild gradleBuild = build.get();
 
+			GradleProject workspaceGradleModel = GradleUtil.getWorkspaceGradleProject(getProject());
+
+			GradleProject projectModel = GradleUtil.getNestedGradleModel(workspaceGradleModel, getProject().getName());
+
+			if (projectModel == null) {
+				return null;
+			}
+
+			final String projectPath = projectModel.getPath();
+
 			if (cleanBuild) {
 				gradleBuild.withConnection(
 					connection -> {
 						connection.newBuild(
 						).forTasks(
-							"clean", "assemble"
+							new String[] {projectPath + ":clean", projectPath + ":assemble"}
 						).run();
 
 						return null;
@@ -127,7 +139,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 					connection -> {
 						connection.newBuild(
 						).forTasks(
-							"assemble"
+							new String[] {projectPath + ":assemble"}
 						).run();
 
 						return null;

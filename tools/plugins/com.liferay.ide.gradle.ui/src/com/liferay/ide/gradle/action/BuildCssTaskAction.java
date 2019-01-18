@@ -20,7 +20,7 @@ package com.liferay.ide.gradle.action;
 public class BuildCssTaskAction extends GradleTaskAction {
 
 	@Override
-	protected String getGradleTask() {
+	protected String getGradleTaskName() {
 		return "buildCSS";
 	}
 

@@ -15,11 +15,16 @@
 package com.liferay.ide.gradle.action;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.ui.action.AbstractObjectAction;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -36,6 +41,10 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
+import org.gradle.tooling.model.DomainObjectSet;
+import org.gradle.tooling.model.GradleProject;
+import org.gradle.tooling.model.GradleTask;
+
 /**
  * @author Lovett Li
  * @author Terry Jia
@@ -49,27 +58,29 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 
 	public void run(IAction action) {
 		if (fSelection instanceof IStructuredSelection) {
-			if (FileUtil.notExists(gradleBuildFile)) {
+			final List<String> gradleTasks = getGradleTasks();
+
+			if (ListUtil.isEmpty(gradleTasks)) {
 				return;
 			}
 
 			beforeAction();
 
-			Job job = new Job(project.getName() + " - " + getGradleTask()) {
+			Job job = new Job(project.getName() + " - " + getGradleTaskName()) {
 
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
-						monitor.beginTask(getGradleTask(), 100);
+						monitor.beginTask(getGradleTaskName(), 100);
 
 						monitor.worked(20);
 
-						GradleUtil.runGradleTask(project, getGradleTask(), monitor);
+						GradleUtil.runGradleTask(project, gradleTasks.toArray(new String[gradleTasks.size()]), monitor);
 
 						monitor.worked(80);
 					}
 					catch (Exception e) {
-						return LiferayGradleUI.createErrorStatus("Error running Gradle goal " + getGradleTask(), e);
+						return LiferayGradleUI.createErrorStatus("Error running Gradle goal " + getGradleTaskName(), e);
 					}
 
 					return Status.OK_STATUS;
@@ -124,9 +135,75 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 		}
 	}
 
-	protected abstract String getGradleTask();
+	protected abstract String getGradleTaskName();
+
+	protected List<String> getGradleTasks() {
+		GradleProject gradleProject = _getGradleProjectModel();
+
+		if (gradleProject == null) {
+			return Collections.emptyList();
+		}
+
+		List<GradleTask> gradleTasks = new ArrayList<>();
+
+		_fetchModelTasks(gradleProject, getGradleTaskName(), gradleTasks);
+
+		Stream<GradleTask> gradleTaskStream = gradleTasks.stream();
+
+		return gradleTaskStream.map(
+			task -> task.getPath()
+		).collect(
+			Collectors.toList()
+		);
+	}
 
 	protected IFile gradleBuildFile = null;
 	protected IProject project = null;
+
+	private void _fetchModelTasks(GradleProject gradleProject, String taskName, List<GradleTask> tasks) {
+		boolean parentHasTask = false;
+
+		if (gradleProject == null) {
+			return;
+		}
+
+		DomainObjectSet<? extends GradleTask> gradleTasks = gradleProject.getTasks();
+
+		for (GradleTask gradleTask : gradleTasks) {
+			if (taskName.equals(gradleTask.getName())) {
+				tasks.add(gradleTask);
+				parentHasTask = true;
+
+				break;
+			}
+		}
+
+		if (parentHasTask) {
+			return;
+		}
+		else {
+			DomainObjectSet<? extends GradleProject> childGradleProjects = gradleProject.getChildren();
+
+			for (GradleProject childGradleProject : childGradleProjects) {
+				 _fetchModelTasks(childGradleProject, taskName, tasks);
+			}
+		}
+
+		return;
+	}
+
+	private GradleProject _getGradleProjectModel() {
+		if (project == null) {
+			return null;
+		}
+
+		GradleProject workspaceGradleModel = GradleUtil.getWorkspaceGradleProject(project);
+
+		if (workspaceGradleModel == null) {
+			return null;
+		}
+
+		return GradleUtil.getNestedGradleModel(workspaceGradleModel, project.getName());
+	}
 
 }

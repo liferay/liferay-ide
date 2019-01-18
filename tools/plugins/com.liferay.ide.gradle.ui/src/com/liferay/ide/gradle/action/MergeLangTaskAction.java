@@ -20,7 +20,7 @@ package com.liferay.ide.gradle.action;
 public class MergeLangTaskAction extends GradleTaskAction {
 
 	@Override
-	protected String getGradleTask() {
+	protected String getGradleTaskName() {
 		return "mergeLang";
 	}
 

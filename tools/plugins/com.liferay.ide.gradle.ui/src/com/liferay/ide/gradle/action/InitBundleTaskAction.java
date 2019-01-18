@@ -43,7 +43,7 @@ public class InitBundleTaskAction extends GradleTaskAction {
 	}
 
 	@Override
-	protected String getGradleTask() {
+	protected String getGradleTaskName() {
 		return "initBundle";
 	}
 

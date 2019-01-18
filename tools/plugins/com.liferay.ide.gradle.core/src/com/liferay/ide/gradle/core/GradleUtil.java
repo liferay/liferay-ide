@@ -39,11 +39,14 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import org.gradle.tooling.CancellationTokenSource;
 import org.gradle.tooling.GradleConnector;
+import org.gradle.tooling.model.DomainObjectSet;
+import org.gradle.tooling.model.GradleProject;
 
 import org.osgi.framework.Version;
 
@@ -54,6 +57,67 @@ import org.osgi.framework.Version;
  * @author Simon Jiang
  */
 public class GradleUtil {
+
+	public static GradleProject getNestedGradleModel(GradleProject gradleProject, String projectName) {
+		if (gradleProject == null) {
+			return null;
+		}
+
+		GradleProject nestedGradleProject = null;
+
+		try {
+			String gradleProjectName = gradleProject.getName();
+
+			if (gradleProjectName.equals(projectName)) {
+				return gradleProject;
+			}
+
+			DomainObjectSet<? extends GradleProject> childGradleProjects = gradleProject.getChildren();
+
+			if (!childGradleProjects.isEmpty()) {
+				for (GradleProject childGradleProject : childGradleProjects) {
+					String childProjectName = childGradleProject.getName();
+
+					if (childProjectName.equals(projectName)) {
+						return childGradleProject;
+					}
+
+					nestedGradleProject = getNestedGradleModel(childGradleProject, projectName);
+
+					if (nestedGradleProject != null) {
+						return nestedGradleProject;
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			LiferayGradleCore.logError("Fetch gradle model error ", e);
+		}
+
+		return nestedGradleProject;
+	}
+
+	public static GradleProject getWorkspaceGradleProject(IProject project) {
+		try {
+			GradleWorkspace gradleWorkspace = GradleCore.getWorkspace();
+
+			Optional<GradleBuild> optionalGradleBuild = gradleWorkspace.getBuild(project);
+
+			GradleBuild gradleBuild = optionalGradleBuild.get();
+
+			return gradleBuild.withConnection(
+				connection -> {
+					return connection.model(
+						GradleProject.class
+					).get();
+				},
+				new NullProgressMonitor());
+		}
+		catch (Exception e) {
+		}
+
+		return null;
+	}
 
 	public static boolean isBuildFile(IFile buildFile) {
 		if (FileUtil.exists(buildFile) && "build.gradle".equals(buildFile.getName()) &&
@@ -158,6 +222,12 @@ public class GradleUtil {
 		CancellationTokenSource cancellationTokenSource = GradleConnector.newCancellationTokenSource();
 
 		runGradleTask(project, new String[] {task}, new String[0], cancellationTokenSource, monitor);
+	}
+
+	public static void runGradleTask(IProject project, String[] tasks, IProgressMonitor monitor) throws CoreException {
+		CancellationTokenSource cancellationTokenSource = GradleConnector.newCancellationTokenSource();
+
+		runGradleTask(project, tasks, new String[0], cancellationTokenSource, monitor);
 	}
 
 	public static void runGradleTask(
