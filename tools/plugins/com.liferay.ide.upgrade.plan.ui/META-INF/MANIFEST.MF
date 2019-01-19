@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-Activator: com.liferay.ide.upgrade.plan.ui.UpgradePlanUIPlugin
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .,
+ lib/flexmark-0.34.48.jar,
+ lib/flexmark-util-0.34.48.jar
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Upgrade Plan UI
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-SymbolicName: com.liferay.ide.upgrade.plan.ui;singleton:=true
+Bundle-Vendor: Liferay, Inc.
+Bundle-Version: 3.5.0.qualifier
+Require-Bundle: com.liferay.ide.ui,
+ com.liferay.ide.upgrade.plan.core,
+ org.eclipse.core.expressions,
+ org.eclipse.jface,
+ org.eclipse.sapphire.modeling,
+ org.eclipse.sapphire.ui,
+ org.eclipse.osgi,
+ org.eclipse.ui,
+ org.eclipse.ui.forms,
+ org.eclipse.ui.navigator,
+ org.eclipse.ui.navigator.resources,
+ org.eclipse.ui.workbench

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.plan.tasks.core.internal.database.CopyDatabaseToBackupTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="id" value="copy_database_to_backup" />
+	<property name="requirement" value="required" />
+	<property name="service.ranking" value="100" />
+	<property name="taskId" value="prepare_database" />
+	<property name="title" value="Copy Database to Backup" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.plan.tasks.core.internal.database.CopyDatabaseToBackupTaskStep" />
+</scr:component>

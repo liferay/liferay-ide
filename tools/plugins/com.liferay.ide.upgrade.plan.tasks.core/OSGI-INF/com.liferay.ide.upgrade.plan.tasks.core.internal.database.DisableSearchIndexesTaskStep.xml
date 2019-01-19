@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.plan.tasks.core.internal.database.DisableSearchIndexesTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="id" value="disable_search_indexes" />
+	<property name="requirement" value="recommended" />
+	<property name="service.ranking" value="400" />
+	<property name="taskId" value="prepare_database" />
+	<property name="title" value="Disable Search Indexes" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.plan.tasks.core.internal.database.DisableSearchIndexesTaskStep" />
+</scr:component>
