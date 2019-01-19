@@ -32,6 +32,8 @@ import org.eclipse.sapphire.modeling.annotations.Required;
  */
 public interface NewUpgradePlanOp extends ExecutableElement {
 
+	public ElementType TYPE = new ElementType(NewUpgradePlanOp.class);
+
 	@DelegateImplementation(NewUpgradePlanOpMethods.class)
 	@Override
 	public Status execute(ProgressMonitor monitor);
@@ -56,7 +58,5 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	@PossibleValues(values = {"7.0", "7.1"})
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
-
-	public ElementType TYPE = new ElementType(NewUpgradePlanOp.class);
 
 }
