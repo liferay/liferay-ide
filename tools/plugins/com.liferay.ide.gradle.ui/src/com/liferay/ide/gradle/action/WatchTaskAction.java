@@ -84,20 +84,18 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 			IProject project = (IProject)element;
 
-			String jobName =
-				project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" +
-					LiferayGradleUI.LIFERAY_STANDALONE_WATCH_JOB_SUFFIX;
-
 			IJobManager jobManager = Job.getJobManager();
 
-			Job[] jobs = jobManager.find(jobName);
+			Job[] jobs = jobManager.find(
+				project.getName() + ":" + LiferayGradleCore.LIFERAY_WATCH + ":" +
+					LiferayGradleUI.LIFERAY_STANDALONE_WATCH_JOB_FAMILY);
 
 			if (ListUtil.isNotEmpty(jobs)) {
 				return;
 			}
 
 			Job job = new WatchJob(
-				project, Arrays.asList("watch"), LiferayGradleUI.LIFERAY_STANDALONE_WATCH_JOB_SUFFIX);
+				project, Arrays.asList("watch"), LiferayGradleUI.LIFERAY_STANDALONE_WATCH_JOB_FAMILY);
 
 			job.addJobChangeListener(
 				new JobChangeAdapter() {

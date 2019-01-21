@@ -41,7 +41,7 @@ public class LiferayGradleCore extends Plugin {
 
 	public static final String LIFERAY_WATCH = "liferay-watch";
 
-	public static final String LIFERAY_WORKSPACE_WATCH_JOB_SUFFIX = "workspace";
+	public static final String LIFERAY_WORKSPACE_WATCH_JOB_FAMILY = "workspace";
 
 	public static final String PLUGIN_ID = "com.liferay.ide.gradle.core";
 
