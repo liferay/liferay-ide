@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
@@ -62,6 +63,26 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 		}
 
 		return super.adapt(adapterType);
+	}
+
+	@Override
+	public Set<IProject> getChildProjects() {
+		Set<IProject> childProjects = super.getChildProjects();
+
+		Stream<IProject> childProjectsStream = childProjects.stream();
+
+		return childProjectsStream.filter(
+			childProject -> {
+				try {
+					return GradleUtil.isGradleProject(childProject);
+				}
+				catch (Exception e) {
+					return false;
+				}
+			}
+		).collect(
+			Collectors.toSet()
+		);
 	}
 
 	@Override
