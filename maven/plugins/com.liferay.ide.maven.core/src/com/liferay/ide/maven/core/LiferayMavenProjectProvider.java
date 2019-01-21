@@ -238,7 +238,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 	}
 
 	@Override
-	public ILiferayProject provide(Object adaptable) {
+	public ILiferayProject provide(Class<?> type, Object adaptable) {
 		if (adaptable instanceof IProject) {
 			IProject project = (IProject)adaptable;
 
@@ -250,17 +250,19 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 					if ((hasLiferayNature ||
 						 MavenUtil.hasDependency(project, "com.liferay.portal", "com.liferay.portal.kernel") ||
 						 MavenUtil.hasDependency(project, "com.liferay.faces", "com.liferay.faces.bridge.ext")) &&
-						hasLiferayFacet) {
+						hasLiferayFacet && ((type == null) || type.isAssignableFrom(FacetedMavenBundleProject.class))) {
 
 						return new FacetedMavenBundleProject(project);
 					}
-					else if (hasLiferayFacet) {
+					else if (hasLiferayFacet && ((type == null) || type.isAssignableFrom(FacetedMavenProject.class))) {
 						return new FacetedMavenProject(project);
 					}
-					else if (hasLiferayNature) {
+					else if (hasLiferayNature &&
+							 ((type == null) || type.isAssignableFrom(MavenBundlePluginProject.class))) {
+
 						return new MavenBundlePluginProject(project);
 					}
-					else {
+					else if ((type == null) || type.isAssignableFrom(LiferayMavenProject.class)) {
 
 						// return dummy maven project that can't lookup docroot resources
 

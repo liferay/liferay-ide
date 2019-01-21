@@ -33,7 +33,12 @@ public interface ILiferayProjectProvider {
 
 	public String getShortName();
 
-	public ILiferayProject provide(Object adaptable);
+	/**
+	 * @param type the Class type need to be provided
+	 * @param adaptable a object to transform
+	 * @return the desired {@link ILiferayProject} from the object
+	 */
+	public ILiferayProject provide(Class<?> type, Object adaptable);
 
 	public boolean provides(Class<?> type);
 

@@ -308,9 +308,9 @@ public class PluginsSDKProjectProvider
 	}
 
 	@Override
-	public ILiferayProject provide(Object type) {
-		if (type instanceof IProject) {
-			IProject project = (IProject)type;
+	public ILiferayProject provide(Class<?> type, Object adaptable) {
+		if (adaptable instanceof IProject) {
+			IProject project = (IProject)adaptable;
 
 			if (!SDKUtil.isSDKProject(project)) {
 				return null;
@@ -324,14 +324,18 @@ public class PluginsSDKProjectProvider
 				if (hasNewSdk) {
 					PortalBundle portalBundle = ServerUtil.getPortalBundle(project);
 
-					if (portalBundle != null) {
+					if ((portalBundle != null) &&
+						((type == null) || type.isAssignableFrom(PluginsSDKBundleProject.class))) {
+
 						return new PluginsSDKBundleProject(project, portalBundle);
 					}
 				}
 				else {
 					ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(project);
 
-					if (liferayRuntime != null) {
+					if ((liferayRuntime != null) &&
+						((type == null) || type.isAssignableFrom(PluginsSDKRuntimeProject.class))) {
+
 						return new PluginsSDKRuntimeProject(project, liferayRuntime);
 					}
 				}
@@ -339,13 +343,15 @@ public class PluginsSDKProjectProvider
 			catch (CoreException ce) {
 			}
 		}
-		else if (type instanceof IRuntime) {
+		else if (adaptable instanceof IRuntime) {
 			try {
-				IRuntime runtime = (IRuntime)type;
+				IRuntime runtime = (IRuntime)adaptable;
 
 				ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(runtime);
 
-				if (liferayRuntime != null) {
+				if ((liferayRuntime != null) &&
+					((type == null) || type.isAssignableFrom(PluginsSDKRuntimeProject.class))) {
+
 					return new PluginsSDKRuntimeProject(null, liferayRuntime);
 				}
 			}

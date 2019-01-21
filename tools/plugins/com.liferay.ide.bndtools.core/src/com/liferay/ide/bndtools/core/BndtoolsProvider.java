@@ -34,7 +34,11 @@ public class BndtoolsProvider extends AbstractLiferayProjectProvider implements 
 	}
 
 	@Override
-	public ILiferayProject provide(Object adaptable) {
+	public ILiferayProject provide(Class<?> type, Object adaptable) {
+		if ((type != null) && !type.isAssignableFrom(BndtoolsProject.class)) {
+			return null;
+		}
+
 		ILiferayProject retval = null;
 
 		if (adaptable instanceof IProject) {

@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.core.net.proxy.IProxyService;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -65,16 +66,28 @@ public class LiferayCore extends Plugin {
 		ILiferayProject liferayProject = projectCache.get(key);
 
 		if ((liferayProject != null) && liferayProject.isStale()) {
-			projectCache.remove(key);
-
-				liferayProject = null;
+			if (liferayProject instanceof EventListener) {
+				listenerRegistry().removeEventListener((EventListener)liferayProject);
 			}
 
+			projectCache.remove(key);
+
+			liferayProject = null;
+		}
+
+		if ((liferayProject == null) && adaptable instanceof IProject) {
+			liferayProject = _getFromCache(type, (IProject)adaptable);
+		}
+
 		if (liferayProject == null) {
-			liferayProject = create(adaptable);
+			liferayProject = _createInternal(type, adaptable);
 		}
 
 		if (liferayProject != null) {
+			if (liferayProject instanceof EventListener) {
+				listenerRegistry().addEventListener((EventListener)liferayProject);
+			}
+
 			projectCache.put(key, liferayProject);
 
 			retval = type.cast(liferayProject);
@@ -84,45 +97,16 @@ public class LiferayCore extends Plugin {
 	}
 
 	public static ILiferayProject create(Object adaptable) {
-		if (adaptable == null) {
-			return null;
-		}
-
-		ILiferayProjectProvider[] providers = getProviders(adaptable.getClass());
-
-		if (ListUtil.isEmpty(providers)) {
-			return null;
-		}
-
-		ILiferayProjectProvider currentProvider = null;
-		ILiferayProject project = null;
-
-		for (ILiferayProjectProvider provider : providers) {
-			if ((currentProvider == null) || (provider.getPriority() > currentProvider.getPriority())) {
-				ILiferayProject lrp = provider.provide(adaptable);
-
-				if (lrp != null) {
-					currentProvider = provider;
-
-					project = lrp;
-				}
-			}
-		}
-
-		return project;
+		return _createInternal(null, adaptable);
 	}
 
 	public static IStatus createErrorStatus(Exception e) {
 		return createErrorStatus(PLUGIN_ID, e);
 	}
 
-	// The shared instance
-
 	public static IStatus createErrorStatus(String msg) {
 		return createErrorStatus(PLUGIN_ID, msg);
 	}
-
-	// The plugin ID
 
 	public static IStatus createErrorStatus(String pluginId, String msg) {
 		return new Status(IStatus.ERROR, pluginId, msg);
@@ -305,6 +289,49 @@ public class LiferayCore extends Plugin {
 		super.stop(context);
 	}
 
+	private static ILiferayProject _createInternal(Class<?> type, Object adaptable) {
+		if (adaptable == null) {
+			return null;
+		}
+
+		ILiferayProjectProvider[] providers = getProviders(adaptable.getClass());
+
+		if (ListUtil.isEmpty(providers)) {
+			return null;
+		}
+
+		ILiferayProjectProvider currentProvider = null;
+		ILiferayProject project = null;
+
+		for (ILiferayProjectProvider provider : providers) {
+			if ((currentProvider == null) || (provider.getPriority() > currentProvider.getPriority())) {
+				ILiferayProject lrp = provider.provide(type, adaptable);
+
+				if (lrp != null) {
+					currentProvider = provider;
+
+					project = lrp;
+				}
+			}
+		}
+
+		return project;
+	}
+
+	private static ILiferayProject _getFromCache(Class<?> type, IProject adaptable) {
+		ILiferayProject liferayProject = null;
+
+		for (ILiferayProject project : _plugin._projectCache.values()) {
+			if (type.isInstance(project) && adaptable.equals(project.getProject()) && !project.isStale()) {
+				liferayProject = project;
+
+				break;
+			}
+		}
+
+		return liferayProject;
+	}
+
 	private <T> ServiceTracker<T, T> _createServiceTracker(BundleContext context, Class<T> clazz) {
 		ServiceTracker<T, T> serviceTracker = new ServiceTracker<>(context, clazz.getName(), null);
 
@@ -356,6 +383,11 @@ public class LiferayCore extends Plugin {
 		@Override
 		public int hashCode() {
 			return Objects.hash(_adaptable, _type);
+		}
+
+		@Override
+		public String toString() {
+			return "ProjectCacheKey [adaptable=" + _adaptable + ", type=" + _type + "]";
 		}
 
 		private Object _adaptable;

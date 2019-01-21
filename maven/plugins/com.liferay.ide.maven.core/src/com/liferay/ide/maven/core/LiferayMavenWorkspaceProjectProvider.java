@@ -116,7 +116,11 @@ public class LiferayMavenWorkspaceProjectProvider
 	}
 
 	@Override
-	public synchronized ILiferayProject provide(Object adaptable) {
+	public ILiferayProject provide(Class<?> type, Object adaptable) {
+		if ((type != null) && !type.isAssignableFrom(LiferayMavenWorkspaceProject.class)) {
+			return null;
+		}
+
 		if (adaptable instanceof IProject) {
 			final IProject project = (IProject)adaptable;
 
