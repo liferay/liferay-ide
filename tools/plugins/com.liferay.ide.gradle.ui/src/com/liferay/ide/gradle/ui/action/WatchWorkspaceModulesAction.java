@@ -18,6 +18,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleWorkspaceProject;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
@@ -30,7 +31,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -42,6 +42,8 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IDecoratorManager;
 import org.eclipse.ui.actions.SelectionProviderAction;
 import org.eclipse.wst.server.core.IServer;
+
+import org.gradle.tooling.model.GradleProject;
 
 /**
  * @author Terry Jia
@@ -156,10 +158,10 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 
 			gogoBundleDeployer.uninstall(bundleProject);
 
-			IFolder folder = FileUtil.getFolder(bundleProject.getProject(), "build");
+			GradleProject gradleProject = GradleUtil.getGradleProjectModel(selectedProject);
 
-			if (folder != null) {
-				File installedBundleIdFile = FileUtil.getFile(folder.getFile("installedBundleId"));
+			if (gradleProject != null) {
+				File installedBundleIdFile = new File(gradleProject.getBuildDirectory(), "installedBundleId");
 
 				FileUtil.delete(installedBundleIdFile);
 			}

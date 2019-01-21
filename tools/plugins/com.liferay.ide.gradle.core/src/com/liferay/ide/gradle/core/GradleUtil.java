@@ -58,6 +58,20 @@ import org.osgi.framework.Version;
  */
 public class GradleUtil {
 
+	public static GradleProject getGradleProjectModel(IProject project) {
+		if (project == null) {
+			return null;
+		}
+
+		GradleProject workspaceGradleModel = getWorkspaceGradleProject(project);
+
+		if (workspaceGradleModel == null) {
+			return null;
+		}
+
+		return getNestedGradleModel(workspaceGradleModel, project.getName());
+	}
+
 	public static GradleProject getNestedGradleModel(GradleProject gradleProject, String projectName) {
 		if (gradleProject == null) {
 			return null;

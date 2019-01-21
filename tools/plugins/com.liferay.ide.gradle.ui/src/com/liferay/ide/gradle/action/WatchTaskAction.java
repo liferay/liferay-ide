@@ -16,6 +16,7 @@ package com.liferay.ide.gradle.action;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.core.WatchJob;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
@@ -43,7 +44,6 @@ import java.util.Properties;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -57,6 +57,9 @@ import org.eclipse.ui.IDecoratorManager;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.server.core.ServerCore;
+
+import org.gradle.tooling.model.DomainObjectSet;
+import org.gradle.tooling.model.GradleProject;
 
 /**
  * @author Terry Jia
@@ -120,14 +123,10 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 									client.send(cmd);
 
-									IFolder folder = FileUtil.getFolder(project, "build");
+									GradleProject gradleProject = GradleUtil.getGradleProjectModel(project);
 
-									if (folder != null) {
-										File file = FileUtil.getFile(folder.getFile("installedBundleId"));
-
-										if (FileUtil.exists(file)) {
-											FileUtil.delete(file);
-										}
+									if (gradleProject != null) {
+										_deleteInstallBundleIdFromModelBuildDirectory(gradleProject);
 									}
 								}
 								catch (IOException ioe) {
@@ -166,6 +165,33 @@ public class WatchTaskAction extends AbstractObjectAction {
 			job.setSystem(false);
 			job.schedule();
 		}
+	}
+
+	private void _deleteInstallBundleIdFromModelBuildDirectory(GradleProject gradleProject) {
+		if (gradleProject == null) {
+			return;
+		}
+
+		File buildDirectory = gradleProject.getBuildDirectory();
+
+		if (FileUtil.exists(buildDirectory)) {
+			File installedBundleIdFile = new File(buildDirectory, "installedBundleId");
+
+			FileUtil.delete(installedBundleIdFile);
+		}
+
+		DomainObjectSet<? extends GradleProject> childrenGradleProjects = gradleProject.getChildren();
+
+		if (ListUtil.isEmpty(childrenGradleProjects)) {
+			return;
+		}
+		else {
+			for (GradleProject childGradleProject : childrenGradleProjects) {
+				_deleteInstallBundleIdFromModelBuildDirectory(childGradleProject);
+			}
+		}
+
+		return;
 	}
 
 	private List<Path> _getBndPaths(IProject project) {
