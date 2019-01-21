@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+		point="org.eclipse.ui.perspectives"
+	>
+		<perspective
+			class="com.liferay.ide.upgrade.plan.ui.internal.UpgradePlannerPerspectiveFactory"
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.upgrade.planner.perspective"
+			name="Liferay Upgrade Planner"
+		>
+		</perspective>
+	</extension>
+	<extension
+		point="org.eclipse.ui.views"
+	>
+		<category
+			id="com.liferay.ide.upgrade.planner.view.category"
+			name="Liferay Upgrade Planner"
+		>
+		</category>
+		<view
+			allowMultiple="false"
+			category="com.liferay.ide.upgrade.planner.view.category"
+			class="com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanView"
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.upgrade.plan.view"
+			name="Liferay Upgrade Plan"
+			restorable="true"
+		>
+		</view>
+		<view
+			allowMultiple="false"
+			category="com.liferay.ide.upgrade.planner.view.category"
+			class="com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanInfoView"
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.upgrade.plan.info.view"
+			name="Liferay Upgrade Plan Info"
+			restorable="true"
+		>
+		</view>
+	</extension>
+	<extension
+		point="org.eclipse.ui.menus"
+	>
+		<menuContribution
+			allPopups="false"
+			locationURI="toolbar:com.liferay.ide.upgrade.plan.view"
+		>
+			<command
+				commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
+				icon="icons/liferay_logo_16.png"
+				style="push"
+			>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands"
+	>
+		<command
+			id="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
+			name="New Upgrade Plan"
+		>
+		</command>
+	</extension>
+	<extension
+		point="org.eclipse.ui.handlers"
+	>
+		<handler
+			class="com.liferay.ide.upgrade.plan.ui.internal.NewUpgradePlanHandler"
+			commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
+		>
+		</handler>
+	</extension>
+</plugin>
