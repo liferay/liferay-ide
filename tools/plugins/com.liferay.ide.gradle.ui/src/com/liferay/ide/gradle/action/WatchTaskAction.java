@@ -123,10 +123,10 @@ public class WatchTaskAction extends AbstractObjectAction {
 
 									client.send(cmd);
 
-									GradleProject gradleProject = GradleUtil.getGradleProjectModel(project);
+									GradleProject gradleProject = GradleUtil.getGradleProject(project);
 
 									if (gradleProject != null) {
-										_deleteInstallBundleIdFromModelBuildDirectory(gradleProject);
+										_deleteInstallBundleIdFromBuildDirectory(gradleProject);
 									}
 								}
 								catch (IOException ioe) {
@@ -167,7 +167,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 		}
 	}
 
-	private void _deleteInstallBundleIdFromModelBuildDirectory(GradleProject gradleProject) {
+	private void _deleteInstallBundleIdFromBuildDirectory(GradleProject gradleProject) {
 		if (gradleProject == null) {
 			return;
 		}
@@ -187,7 +187,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 		}
 		else {
 			for (GradleProject childGradleProject : childrenGradleProjects) {
-				_deleteInstallBundleIdFromModelBuildDirectory(childGradleProject);
+				_deleteInstallBundleIdFromBuildDirectory(childGradleProject);
 			}
 		}
 

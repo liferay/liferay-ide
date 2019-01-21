@@ -58,7 +58,7 @@ import org.osgi.framework.Version;
  */
 public class GradleUtil {
 
-	public static GradleProject getGradleProjectModel(IProject project) {
+	public static GradleProject getGradleProject(IProject project) {
 		if (project == null) {
 			return null;
 		}

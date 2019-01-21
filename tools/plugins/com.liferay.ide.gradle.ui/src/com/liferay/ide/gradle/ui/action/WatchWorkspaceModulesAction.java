@@ -158,7 +158,7 @@ public class WatchWorkspaceModulesAction extends SelectionProviderAction {
 
 			gogoBundleDeployer.uninstall(bundleProject);
 
-			GradleProject gradleProject = GradleUtil.getGradleProjectModel(selectedProject);
+			GradleProject gradleProject = GradleUtil.getGradleProject(selectedProject);
 
 			if (gradleProject != null) {
 				File installedBundleIdFile = new File(gradleProject.getBuildDirectory(), "installedBundleId");
