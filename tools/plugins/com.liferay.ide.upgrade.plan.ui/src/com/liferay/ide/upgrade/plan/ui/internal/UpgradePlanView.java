@@ -90,21 +90,19 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
 
-		if (memento != null) {
-			Optional.of(
-				memento
-			).map(
-				m -> m.getString("upgradePlanName")
-			).filter(
-				Objects::nonNull
-			).ifPresent(
-				upgradePlanName -> {
-					UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
-	
-					upgradePlanner.startUpgradePlan(upgradePlanName);
-				}
-			);
-		}
+		Optional.ofNullable(
+			memento
+		).map(
+			m -> m.getString("upgradePlanName")
+		).filter(
+			Objects::nonNull
+		).ifPresent(
+			upgradePlanName -> {
+				UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
+
+				upgradePlanner.startUpgradePlan(upgradePlanName);
+			}
+		);
 	}
 
 	@Override
