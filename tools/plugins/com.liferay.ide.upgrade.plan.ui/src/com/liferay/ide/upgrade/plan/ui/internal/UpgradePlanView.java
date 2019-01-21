@@ -90,7 +90,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
 
-		Optional.of(
+		Optional.ofNullable(
 			memento
 		).map(
 			m -> m.getString("upgradePlanName")
