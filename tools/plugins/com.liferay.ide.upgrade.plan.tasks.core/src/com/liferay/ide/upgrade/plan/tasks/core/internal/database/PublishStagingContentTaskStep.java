@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"id=publish_staging_content", "requirement=recommended", "service.ranking=300", "taskId=prepare_database",
+		"id=publish_staging_content", "requirement=recommended", "order=300", "taskId=prepare_database",
 		"title=Publish Staging Remote Content"
 	},
 	service = UpgradeTaskStep.class

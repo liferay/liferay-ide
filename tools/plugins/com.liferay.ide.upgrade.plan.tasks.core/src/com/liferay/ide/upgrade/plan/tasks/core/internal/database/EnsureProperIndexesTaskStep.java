@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"id=ensure_proper_indexes", "requirement=recommended", "service.ranking=200", "taskId=prepare_database",
+		"id=ensure_proper_indexes", "requirement=recommended", "order=200", "taskId=prepare_database",
 		"title=Ensure Proper Indexes"
 	},
 	service = UpgradeTaskStep.class

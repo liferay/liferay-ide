@@ -22,6 +22,6 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {"id=code", "service.ranking=300", "title=Code Upgrade"}, service = UpgradeTaskCategory.class)
+@Component(property = {"id=code", "order=300", "title=Code Upgrade"}, service = UpgradeTaskCategory.class)
 public class CodeUpgradeTaskCategory extends BaseUpgradeTaskCategory {
 }
