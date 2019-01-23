@@ -2,7 +2,7 @@
 <scr:component name="com.liferay.ide.upgrade.plan.tasks.core.internal.config.ScanPortalExtPropertiesTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
 	<property name="id" value="scan_portal_ext_properties" />
 	<property name="requirement" value="required" />
-	<property name="service.ranking" value="100" />
+	<property name="order" value="100" />
 	<property name="taskId" value="analyze_portal_ext_properties" />
 	<property name="title" value="Scan Portal Ext Properties" />
 	<service>

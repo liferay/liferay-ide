@@ -28,8 +28,8 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"id=migrate_property_keys", "requirement=required", "service.ranking=200",
-		"taskId=analyze_portal_ext_properties", "title=Migrate Property Keys"
+		"id=migrate_property_keys", "requirement=required", "order=200", "taskId=analyze_portal_ext_properties",
+		"title=Migrate Property Keys"
 	},
 	service = UpgradeTaskStep.class
 )

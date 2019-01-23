@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"id=copy_database_to_backup", "requirement=required", "service.ranking=100", "taskId=prepare_database",
+		"id=copy_database_to_backup", "requirement=required", "order=100", "taskId=prepare_database",
 		"title=Copy Database to Backup"
 	},
 	service = UpgradeTaskStep.class

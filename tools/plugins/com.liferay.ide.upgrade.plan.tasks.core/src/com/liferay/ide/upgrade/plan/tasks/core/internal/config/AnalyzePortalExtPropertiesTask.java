@@ -24,8 +24,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"categoryId=config", "id=analyze_portal_ext_properties", "service.ranking=100",
-		"title=Analyze Portal Ext Properties"
+		"categoryId=config", "id=analyze_portal_ext_properties", "order=100", "title=Analyze Portal Ext Properties"
 	},
 	service = UpgradeTask.class
 )

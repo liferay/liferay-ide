@@ -28,8 +28,8 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"id=scan_portal_ext_properties", "requirement=required", "service.ranking=100",
-		"taskId=analyze_portal_ext_properties", "title=Scan Portal Ext Properties"
+		"id=scan_portal_ext_properties", "requirement=required", "order=100", "taskId=analyze_portal_ext_properties",
+		"title=Scan Portal Ext Properties"
 	},
 	service = UpgradeTaskStep.class
 )

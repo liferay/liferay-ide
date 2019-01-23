@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"id=disable_search_indexes", "requirement=recommended", "service.ranking=400", "taskId=prepare_database",
+		"id=disable_search_indexes", "requirement=recommended", "order=400", "taskId=prepare_database",
 		"title=Disable Search Indexes"
 	},
 	service = UpgradeTaskStep.class

@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"id=set_permissions_algorithm", "requirement=required", "service.ranking=500", "taskId=prepare_database",
+		"id=set_permissions_algorithm", "requirement=required", "order=500", "taskId=prepare_database",
 		"title=Update Permissions Algorithm"
 	},
 	service = UpgradeTaskStep.class

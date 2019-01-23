@@ -18,10 +18,11 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Dictionary;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,29 +47,25 @@ public class StandardUpgradePlan implements UpgradePlan {
 		List<UpgradeTask> upgradeTasks = null;
 
 		try {
-			Collection<ServiceReference<UpgradeTaskCategory>> upgradeTaskCategories =
-				bundleContext.getServiceReferences(UpgradeTaskCategory.class, null);
+			List<UpgradeTaskCategory> orderedUpgradeTaskCategories = _orderedServices(
+				bundleContext, bundleContext.getServiceReferences(UpgradeTaskCategory.class, null));
 
-			Stream<ServiceReference<UpgradeTaskCategory>> stream = upgradeTaskCategories.stream();
+			Stream<UpgradeTaskCategory> stream = orderedUpgradeTaskCategories.stream();
 
-			upgradeTasks = stream.map(
-				bundleContext::getService
-			).map(
+			upgradeTasks = stream.flatMap(
 				upgradeTaskCategory -> {
 					try {
-						return bundleContext.getServiceReferences(
-							UpgradeTask.class, "(categoryId=" + upgradeTaskCategory.getId() + ")");
+						List<UpgradeTask> orderedUpgradeTasks = _orderedServices(
+							bundleContext,
+							bundleContext.getServiceReferences(
+								UpgradeTask.class, "(categoryId=" + upgradeTaskCategory.getId() + ")"));
+
+						return orderedUpgradeTasks.stream();
 					}
 					catch (InvalidSyntaxException ise) {
 						return null;
 					}
 				}
-			).filter(
-				Objects::nonNull
-			).flatMap(
-				Collection::stream
-			).map(
-				bundleContext::getService
 			).collect(
 				Collectors.toList()
 			);
@@ -88,6 +85,48 @@ public class StandardUpgradePlan implements UpgradePlan {
 	@Override
 	public List<UpgradeTask> getTasks() {
 		return Collections.unmodifiableList(_upgradeTasks);
+	}
+
+	private <T> List<T> _orderedServices(
+		BundleContext bundleContext, Collection<ServiceReference<T>> serviceReferenceCollection) {
+
+		List<ServiceReference<T>> serviceReferenceList = new ArrayList<>(serviceReferenceCollection);
+
+		Collections.sort(
+			serviceReferenceList,
+			(srLeft, srRight) -> {
+				try {
+					Dictionary<String, Object> srLeftProperties = srLeft.getProperties();
+
+					Object srLeftOrder = srLeftProperties.get("order");
+
+					try {
+						int srLeftInt = Integer.parseInt(srLeftOrder.toString());
+
+						Dictionary<String, Object> srRightProperties = srRight.getProperties();
+
+						Object srRightOrder = srRightProperties.get("order");
+
+						int srRightInt = Integer.parseInt(srRightOrder.toString());
+
+						return Integer.compare(srLeftInt, srRightInt);
+					}
+					catch (NumberFormatException nfe) {
+					}
+				}
+				catch (Throwable t) {
+				}
+
+				return -1;
+			});
+
+		Stream<ServiceReference<T>> stream = serviceReferenceList.stream();
+
+		return stream.map(
+			bundleContext::getService
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	private final String _name;

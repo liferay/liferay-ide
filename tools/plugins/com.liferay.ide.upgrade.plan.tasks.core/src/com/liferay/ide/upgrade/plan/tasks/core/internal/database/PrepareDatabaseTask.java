@@ -23,9 +23,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Gregory Amerson
  */
 @Component(
-	property = {
-		"categoryId=database", "id=prepare_database", "service.ranking=100", "title=Prepare Database for Upgrade"
-	},
+	property = {"categoryId=database", "id=prepare_database", "order=100", "title=Prepare Database for Upgrade"},
 	service = UpgradeTask.class
 )
 public class PrepareDatabaseTask extends BaseUpgradeTask {
