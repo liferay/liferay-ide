@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.core.net.proxy.IProxyService;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -75,8 +74,14 @@ public class LiferayCore extends Plugin {
 			liferayProject = null;
 		}
 
-		if ((liferayProject == null) && adaptable instanceof IProject) {
-			liferayProject = _getFromCache(type, (IProject)adaptable);
+		if (liferayProject == null) {
+			for (ILiferayProject project : projectCache.values()) {
+				if (type.isInstance(project) && adaptable.equals(project.getProject()) && !project.isStale()) {
+					liferayProject = project;
+
+					break;
+				}
+			}
 		}
 
 		if (liferayProject == null) {
@@ -316,20 +321,6 @@ public class LiferayCore extends Plugin {
 		}
 
 		return project;
-	}
-
-	private static ILiferayProject _getFromCache(Class<?> type, IProject adaptable) {
-		ILiferayProject liferayProject = null;
-
-		for (ILiferayProject project : _plugin._projectCache.values()) {
-			if (type.isInstance(project) && adaptable.equals(project.getProject()) && !project.isStale()) {
-				liferayProject = project;
-
-				break;
-			}
-		}
-
-		return liferayProject;
 	}
 
 	private <T> ServiceTracker<T, T> _createServiceTracker(BundleContext context, Class<T> clazz) {
