@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.launching.IVMInstall;
 
 /**
  * @author Simon Jiang
@@ -39,7 +40,7 @@ public class PortalWildFlyBundle extends PortalJBossBundle {
 	}
 
 	@Override
-	public String[] getRuntimeStartVMArgs() {
+	public String[] getRuntimeStartVMArgs(IVMInstall vmInstall) {
 		List<String> args = new ArrayList<>();
 
 		args.add("-Dorg.jboss.resolver.warning=true");

@@ -17,6 +17,7 @@ package com.liferay.ide.server.core.portal;
 import com.liferay.ide.core.ILiferayPortal;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.launching.IVMInstall;
 
 /**
  * @author Gregory Amerson
@@ -53,11 +54,11 @@ public interface PortalBundle extends ILiferayPortal {
 
 	public String[] getRuntimeStartProgArgs();
 
-	public String[] getRuntimeStartVMArgs();
+	public String[] getRuntimeStartVMArgs(IVMInstall vmInstall);
 
 	public String[] getRuntimeStopProgArgs();
 
-	public String[] getRuntimeStopVMArgs();
+	public String[] getRuntimeStopVMArgs(IVMInstall vmInstall);
 
 	public String getServerReleaseInfo();
 

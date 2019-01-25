@@ -302,6 +302,20 @@ public class FileUtil {
 		return false;
 	}
 
+	public static File findFirstExist(String... paths) {
+		for (String path : paths) {
+			if (CoreUtil.isNotNullOrEmpty(path)) {
+				File file = new File(toSystemDependentName(path));
+
+				if (file.exists()) {
+					return file;
+				}
+			}
+		}
+
+		return null;
+	}
+
 	public static File getCanonicalFile(IPath location) {
 		if (location == null) {
 			return null;
@@ -1074,6 +1088,16 @@ public class FileUtil {
 		}
 
 		return path.toPortableString();
+	}
+
+	public static String toSystemDependentName(String fileName) {
+		return toSystemDependentName(fileName, File.separatorChar);
+	}
+
+	public static String toSystemDependentName(String fileName, final char separatorChar) {
+		String replaceSingleSlach = fileName.replace('/', separatorChar);
+
+		return replaceSingleSlach.replace('\\', separatorChar);
 	}
 
 	public static URI toURI(File file) {
