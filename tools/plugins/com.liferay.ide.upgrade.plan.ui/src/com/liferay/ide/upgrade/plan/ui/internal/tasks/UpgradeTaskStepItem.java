@@ -15,24 +15,36 @@
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.plan.core.FolderSelectionTaskStep;
+import com.liferay.ide.upgrade.plan.core.ProjectSelectionTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepRequirement;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.UpgradePlanUIPlugin;
+import com.liferay.ide.upgrade.plan.ui.dialogs.ProjectSelectionDialog;
+
+import java.io.File;
 
 import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -40,6 +52,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.ExpansionEvent;
@@ -164,7 +177,7 @@ public class UpgradeTaskStepItem implements Disposable, ISelectionProvider, IExp
 
 				@Override
 				public void linkActivated(HyperlinkEvent e) {
-					_upgradeTaskStep.execute(new NullProgressMonitor());
+					_execute();
 				}
 
 			});
@@ -393,6 +406,57 @@ public class UpgradeTaskStepItem implements Disposable, ISelectionProvider, IExp
 		imageHyperlink.setToolTipText(linkText);
 
 		return imageHyperlink;
+	}
+
+	private IStatus _execute() {
+		if (_upgradeTaskStep instanceof ProjectSelectionTaskStep) {
+			ProjectSelectionTaskStep projectUpgradeTaskStep = (ProjectSelectionTaskStep)_upgradeTaskStep;
+
+			ViewerFilter viewerFilter = new ViewerFilter() {
+
+				@Override
+				public boolean select(Viewer viewer, Object parentElement, Object element) {
+					return projectUpgradeTaskStep.selectFilter(parentElement, element);
+				}
+
+			};
+
+			boolean selectAllDefault = projectUpgradeTaskStep.selectAllDefault();
+
+			ProjectSelectionDialog dialog = new ProjectSelectionDialog(
+				UIUtil.getActiveShell(), viewerFilter, selectAllDefault);
+
+			if (dialog.open() == Window.OK) {
+				Object[] projects = dialog.getResult();
+
+				return projectUpgradeTaskStep.execute((IProject)projects[0], new NullProgressMonitor());
+			}
+			else {
+				return Status.CANCEL_STATUS;
+			}
+		}
+		else if (_upgradeTaskStep instanceof FolderSelectionTaskStep) {
+			FolderSelectionTaskStep folderSelectionTaskStep = (FolderSelectionTaskStep)_upgradeTaskStep;
+
+			DirectoryDialog dialog = new DirectoryDialog(UIUtil.getActiveShell());
+
+			String result = dialog.open();
+
+			if (result == null) {
+				return Status.CANCEL_STATUS;
+			}
+
+			File folder = new File(result);
+
+			if (FileUtil.exists(folder)) {
+				folderSelectionTaskStep.execute(folder, new NullProgressMonitor());
+			}
+
+			return Status.OK_STATUS;
+		}
+		else {
+			return _upgradeTaskStep.execute(new NullProgressMonitor());
+		}
 	}
 
 	private Image _getCompleteImage() {
