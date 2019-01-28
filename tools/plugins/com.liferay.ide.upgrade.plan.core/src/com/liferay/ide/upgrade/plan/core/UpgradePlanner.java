@@ -21,6 +21,8 @@ public interface UpgradePlanner {
 
 	public void addListener(UpgradeListener upgradeListener);
 
+	public void dispatch(UpgradeEvent upgradeEvent);
+
 	public void removeListener(UpgradeListener upgradeListener);
 
 	public UpgradePlan startUpgradePlan(String name);

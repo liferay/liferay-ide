@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component activate="activate" name="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.eclipse.provider.ProjectMigrationService" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.tasks.core.problem.api.Migration" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.eclipse.provider.ProjectMigrationService" />
+</scr:component>

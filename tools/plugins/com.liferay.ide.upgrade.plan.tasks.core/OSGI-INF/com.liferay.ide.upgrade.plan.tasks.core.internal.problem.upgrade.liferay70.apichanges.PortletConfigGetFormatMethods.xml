@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay70.apichanges.PortletConfigGetFormatMethods" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="java,jsp,jspf" />
+	<property name="problem.summary" value="Removed get and format Methods that Used PortletConfig Parameters" />
+	<property name="problem.tickets" value="LPS-44342" />
+	<property name="problem.title" value="PortletConfig get/format methods" />
+	<property name="problem.section" value="#removed-get-and-format-methods-that-used-portletconfig-parameters" />
+	<property name="implName" value="PortletConfigGetFormatMethods" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.tasks.core.problem.api.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay70.apichanges.PortletConfigGetFormatMethods" />
+</scr:component>

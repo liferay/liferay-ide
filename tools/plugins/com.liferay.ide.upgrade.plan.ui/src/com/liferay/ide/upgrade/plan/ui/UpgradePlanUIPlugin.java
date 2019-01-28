@@ -14,6 +14,11 @@
 
 package com.liferay.ide.upgrade.plan.ui;
 
+import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.plan.core.FileProblems;
+import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.upgrade.plan.ui.util.MigrationUtil;
+
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
@@ -22,7 +27,14 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.navigator.CommonNavigator;
+import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import org.osgi.framework.Bundle;
@@ -87,11 +99,55 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		super.start(context);
 
 		_plugin = this;
+
+		IViewPart projectExplorer = UIUtil.findView("org.eclipse.ui.navigator.ProjectExplorer");
+
+		if (projectExplorer != null) {
+			CommonNavigator navigator = (CommonNavigator)projectExplorer;
+
+			CommonViewer commonViewer = navigator.getCommonViewer();
+
+			_doubleClickListener = new IDoubleClickListener() {
+
+				@Override
+				public void doubleClick(DoubleClickEvent event) {
+					ISelection selection = event.getSelection();
+
+					if (selection instanceof TreeSelection) {
+						TreeSelection treeSelection = (TreeSelection)selection;
+
+						Object element = treeSelection.getFirstElement();
+
+						if (element instanceof Problem) {
+							MigrationUtil.openEditor((Problem)element);
+						}
+						else if (element instanceof FileProblems) {
+							MigrationUtil.openEditor((FileProblems)element);
+						}
+					}
+				}
+
+			};
+
+			commonViewer.addDoubleClickListener(_doubleClickListener);
+		}
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
+
+		IViewPart projectExplorer = UIUtil.findView("org.eclipse.ui.navigator.ProjectExplorer");
+
+		if (projectExplorer != null) {
+			CommonNavigator navigator = (CommonNavigator)projectExplorer;
+
+			CommonViewer commonViewer = navigator.getCommonViewer();
+
+			commonViewer.removeDoubleClickListener(_doubleClickListener);
+
+			_doubleClickListener = null;
+		}
 
 		super.stop(context);
 	}
@@ -150,5 +206,7 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 	private static final IPath _ICONS_PATH = new Path("icons/");
 
 	private static UpgradePlanUIPlugin _plugin;
+
+	private IDoubleClickListener _doubleClickListener;
 
 }

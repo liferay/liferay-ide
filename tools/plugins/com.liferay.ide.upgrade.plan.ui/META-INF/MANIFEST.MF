@@ -23,4 +23,6 @@ Require-Bundle: com.liferay.ide.project.core,
  org.eclipse.ui.forms,
  org.eclipse.ui.navigator,
  org.eclipse.ui.navigator.resources,
- org.eclipse.ui.workbench
+ org.eclipse.ui.workbench,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.workbench.texteditor

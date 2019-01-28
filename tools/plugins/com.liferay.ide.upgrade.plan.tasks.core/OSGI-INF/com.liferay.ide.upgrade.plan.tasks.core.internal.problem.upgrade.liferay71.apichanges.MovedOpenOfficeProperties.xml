@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay71.apichanges.MovedOpenOfficeProperties" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="properties" />
+	<property name="problem.title" value="Moved OpenOffice Properties to OSGi Configuration" />
+	<property name="problem.summary" value="The OpenOffice properties have been moved from Server Administration" />
+	<property name="problem.tickets" value="LPS-71382" />
+	<property name="problem.section" value="#moved-openOffice-properties" />
+	<property name="implName" value="MovedOpenOfficeProperties" />
+	<property name="version" value="7.1" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.tasks.core.problem.api.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay71.apichanges.MovedOpenOfficeProperties" />
+</scr:component>

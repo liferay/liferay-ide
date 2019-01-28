@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay70.apichanges.ConfigurationActionRenderMethod" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="java" />
+	<property name="problem.summary" value="Removed render Method from ConfigurationAction API" />
+	<property name="problem.tickets" value="LPS-56300" />
+	<property name="problem.title" value="ConfigurationAction render method" />
+	<property name="problem.section" value="#removed-render-method-from-configurationaction-api" />
+	<property name="implName" value="ConfigurationActionRenderMethod" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.tasks.core.problem.api.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay70.apichanges.ConfigurationActionRenderMethod" />
+</scr:component>

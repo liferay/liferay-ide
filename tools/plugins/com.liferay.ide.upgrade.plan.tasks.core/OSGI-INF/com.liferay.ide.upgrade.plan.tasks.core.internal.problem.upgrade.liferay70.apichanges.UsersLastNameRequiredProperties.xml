@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay70.apichanges.UsersLastNameRequiredProperties" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="properties" />
+	<property name="problem.title" value="Removed USERS_LAST_NAME_REQUIRED from portal.properties" />
+	<property name="problem.summary" value="The USERS_LAST_NAME_REQUIRED property has been removed from portal.properties and the corresponding UI. Required names are now handled on a per-language basis via the language.properties files. It has also been removed as an option from the Portal Settings section of the Control Panel." />
+	<property name="problem.tickets" value="LPS-54956" />
+	<property name="problem.section" value="#removed-userslastnamerequired-from-portal-properties-in-favor-of-language-p" />
+	<property name="implName" value="UsersLastNameRequiredProperties" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.tasks.core.problem.api.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay70.apichanges.UsersLastNameRequiredProperties" />
+</scr:component>

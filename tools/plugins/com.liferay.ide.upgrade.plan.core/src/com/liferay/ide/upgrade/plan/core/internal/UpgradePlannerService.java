@@ -55,6 +55,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 		}
 	}
 
+	@Override
 	public void dispatch(UpgradeEvent upgradeEvent) {
 		Collection<UpgradeListener> upgradeListeners;
 

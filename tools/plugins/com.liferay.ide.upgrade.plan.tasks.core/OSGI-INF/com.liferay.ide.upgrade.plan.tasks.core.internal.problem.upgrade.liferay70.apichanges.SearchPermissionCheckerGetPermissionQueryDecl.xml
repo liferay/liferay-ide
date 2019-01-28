@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay70.apichanges.SearchPermissionCheckerGetPermissionQueryDecl" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="java,jsp,jspf" />
+	<property name="problem.summary" value="Replaced Method getPermissionQuery with getPermissionFilter in SearchPermissionChecker" />
+	<property name="problem.tickets" value="LPS-56064" />
+	<property name="problem.title" value="Replaced Method getPermissionQuery" />
+	<property name="problem.section" value="#replaced-method-getpermissionquery-with-getpermissionfilter-in-searchpermis" />
+	<property name="implName" value="SearchPermissionCheckerGetPermissionQueryDecl" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.tasks.core.problem.api.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay70.apichanges.SearchPermissionCheckerGetPermissionQueryDecl" />
+</scr:component>

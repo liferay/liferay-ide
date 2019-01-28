@@ -74,4 +74,60 @@
 		>
 		</handler>
 	</extension>
+	<extension
+		point="org.eclipse.ui.navigator.navigatorContent"
+	>
+		<navigatorContent
+			activeByDefault="true"
+			contentProvider="com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeProblemsContentProvider"
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.ui.navigator.content.liferayUpgrade"
+			labelProvider="com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeProblemsLabelProvider"
+			name="Liferay Upgrade"
+			priority="highest"
+		>
+			<triggerPoints>
+				<or>
+					<instanceof
+						value="java.lang.Object"
+					>
+					</instanceof>
+				</or>
+			</triggerPoints>
+			<possibleChildren>
+				<or>
+					<instanceof
+						value="org.eclipse.core.resources.IProject"
+					>
+					</instanceof>
+					<instanceof
+						value="com.liferay.ide.upgrade.plan.core.ProjectProblems"
+					>
+					</instanceof>
+					<instanceof
+						value="com.liferay.ide.upgrade.plan.core.FileProblems"
+					>
+					</instanceof>
+					<instanceof
+						value="com.liferay.ide.upgrade.plan.core.Problem"
+					>
+					</instanceof>
+				</or>
+			</possibleChildren>
+		</navigatorContent>
+	</extension>
+	<extension
+		point="org.eclipse.ui.navigator.viewer"
+	>
+		<viewerContentBinding
+			viewerId="org.eclipse.ui.navigator.ProjectExplorer"
+		>
+			<includes>
+				<contentExtension
+					pattern="com.liferay.ide.ui.navigator.content.*"
+				>
+				</contentExtension>
+			</includes>
+		</viewerContentBinding>
+	</extension>
 </plugin>

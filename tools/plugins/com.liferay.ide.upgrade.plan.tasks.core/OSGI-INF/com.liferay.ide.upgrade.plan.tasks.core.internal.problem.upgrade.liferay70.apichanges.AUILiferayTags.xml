@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay70.apichanges.AUILiferayTags" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="jsp,jspf" />
+	<property name="problem.title" value="Renamed URI Attribute Used to Generate AUI Tag Library" />
+	<property name="problem.section" value="#renamed-uri-attribute-used-to-generate-aui-tag-library" />
+	<property name="problem.summary" value="We should use the new AUI URI declaration:http://liferay.com/tld/aui" />
+	<property name="problem.tickets" value="LPS-57809" />
+	<property name="auto.correct" value="jsptag" />
+	<property name="implName" value="AUILiferayTags" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.tasks.core.problem.api.AutoMigrator" />
+		<provide interface="com.liferay.ide.upgrade.plan.tasks.core.problem.api.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay70.apichanges.AUILiferayTags" />
+</scr:component>

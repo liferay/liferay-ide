@@ -14,8 +14,12 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
+import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
+import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepDoneEvent;
 import com.liferay.ide.upgrade.plan.ui.UpgradePlanUIPlugin;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskStepsViewer;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTasksViewer;
@@ -140,6 +144,18 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
 		upgradePlanner.addListener(_upgradeTasksViewer);
+
+		upgradePlanner.addListener(
+			new UpgradeListener() {
+
+				@Override
+				public void onUpgradeEvent(UpgradeEvent upgradeEvent) {
+					if (upgradeEvent instanceof UpgradeTaskStepDoneEvent) {
+						UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
+					}
+				}
+
+			});
 
 		_upgradeTaskStepsViewer = new UpgradeTaskStepsViewer(parentComposite, _upgradeTasksViewer);
 

@@ -14,10 +14,16 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import java.util.Dictionary;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Gregory Amerson
@@ -33,6 +39,39 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 		_requirement = _getProperty(properties, "requirement");
 		_title = _getProperty(properties, "title");
 		_url = _getProperty(properties, "url");
+
+		Bundle bundle = FrameworkUtil.getBundle(BaseUpgradeTaskStep.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_upgradePlannerServiceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+
+		_upgradePlannerServiceTracker.open();
+	}
+
+	public String doDetail() {
+		String detail = "";
+
+		if (CoreUtil.isNotNullOrEmpty(_url)) {
+			detail = _url;
+		}
+		else {
+			StringBuffer sb = new StringBuffer();
+
+			sb.append(_title);
+
+			sb.append("<br />");
+
+			sb.append(_description);
+
+			detail = sb.toString();
+		}
+
+		return detail;
+	}
+
+	public String doLabel() {
+		return _title;
 	}
 
 	@Override
@@ -55,6 +94,12 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 		return _title;
 	}
 
+	public UpgradePlanner getUpgradePlanner() {
+		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
+
+		return upgradePlanner;
+	}
+
 	@Override
 	public String getUrl() {
 		return _url;
@@ -74,6 +119,8 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 
 		return null;
 	}
+
+	private static ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
 
 	private String _description;
 	private String _id;

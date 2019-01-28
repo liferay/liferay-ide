@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.FolderSelectionTaskStep;
 import com.liferay.ide.upgrade.plan.core.ProjectSelectionTaskStep;
+import com.liferay.ide.upgrade.plan.core.ProjectsSelectionTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepRequirement;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
@@ -31,6 +32,7 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
@@ -410,18 +412,18 @@ public class UpgradeTaskStepItem implements Disposable, ISelectionProvider, IExp
 
 	private IStatus _execute() {
 		if (_upgradeTaskStep instanceof ProjectSelectionTaskStep) {
-			ProjectSelectionTaskStep projectUpgradeTaskStep = (ProjectSelectionTaskStep)_upgradeTaskStep;
+			ProjectSelectionTaskStep projectSelectionTaskStep = (ProjectSelectionTaskStep)_upgradeTaskStep;
 
 			ViewerFilter viewerFilter = new ViewerFilter() {
 
 				@Override
 				public boolean select(Viewer viewer, Object parentElement, Object element) {
-					return projectUpgradeTaskStep.selectFilter(parentElement, element);
+					return projectSelectionTaskStep.selectFilter(parentElement, element);
 				}
 
 			};
 
-			boolean selectAllDefault = projectUpgradeTaskStep.selectAllDefault();
+			boolean selectAllDefault = projectSelectionTaskStep.selectAllDefault();
 
 			ProjectSelectionDialog dialog = new ProjectSelectionDialog(
 				UIUtil.getActiveShell(), viewerFilter, selectAllDefault);
@@ -429,14 +431,47 @@ public class UpgradeTaskStepItem implements Disposable, ISelectionProvider, IExp
 			if (dialog.open() == Window.OK) {
 				Object[] projects = dialog.getResult();
 
-				return projectUpgradeTaskStep.execute((IProject)projects[0], new NullProgressMonitor());
+				return projectSelectionTaskStep.execute((IProject)projects[0], new NullProgressMonitor());
+			}
+			else {
+				return Status.CANCEL_STATUS;
+			}
+		}
+
+		if (_upgradeTaskStep instanceof ProjectsSelectionTaskStep) {
+			ProjectsSelectionTaskStep projectsSelectionTaskStep = (ProjectsSelectionTaskStep)_upgradeTaskStep;
+
+			ViewerFilter viewerFilter = new ViewerFilter() {
+
+				@Override
+				public boolean select(Viewer viewer, Object parentElement, Object element) {
+					return projectsSelectionTaskStep.selectFilter(parentElement, element);
+				}
+
+			};
+
+			boolean selectAllDefault = projectsSelectionTaskStep.selectAllDefault();
+
+			ProjectSelectionDialog dialog = new ProjectSelectionDialog(
+				UIUtil.getActiveShell(), viewerFilter, selectAllDefault);
+
+			if (dialog.open() == Window.OK) {
+				Object[] result = dialog.getResult();
+
+				IProject[] projects = Stream.of(
+					result
+				).toArray(
+					IProject[]::new
+				);
+
+				return projectsSelectionTaskStep.execute(projects, new NullProgressMonitor());
 			}
 			else {
 				return Status.CANCEL_STATUS;
 			}
 		}
 		else if (_upgradeTaskStep instanceof FolderSelectionTaskStep) {
-			FolderSelectionTaskStep folderSelectionTaskStep = (FolderSelectionTaskStep)_upgradeTaskStep;
+			FolderSelectionTaskStep fileUpgradeTaskStep = (FolderSelectionTaskStep)_upgradeTaskStep;
 
 			DirectoryDialog dialog = new DirectoryDialog(UIUtil.getActiveShell());
 
@@ -449,7 +484,7 @@ public class UpgradeTaskStepItem implements Disposable, ISelectionProvider, IExp
 			File folder = new File(result);
 
 			if (FileUtil.exists(folder)) {
-				folderSelectionTaskStep.execute(folder, new NullProgressMonitor());
+				fileUpgradeTaskStep.execute(folder, new NullProgressMonitor());
 			}
 
 			return Status.OK_STATUS;

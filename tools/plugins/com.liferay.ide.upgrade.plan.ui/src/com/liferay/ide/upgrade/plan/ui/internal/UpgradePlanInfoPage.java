@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.plan.core.Summary;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import com.vladsch.flexmark.ast.Node;
@@ -144,30 +145,20 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 
 			Object firstElement = structuredSelection.getFirstElement();
 
-			if (firstElement instanceof UpgradeTaskStep) {
-				UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)firstElement;
+			if (firstElement instanceof Summary) {
+				Summary summary = (Summary)firstElement;
 
-				String url = upgradeTaskStep.getUrl();
+				String detail = summary.doDetail();
 
-				if (CoreUtil.isNotNullOrEmpty(url)) {
-					ReadMarkdownJob job = new ReadMarkdownJob(url);
+				if (detail != null) {
+					if (detail.endsWith("markdown") || detail.endsWith("md")) {
+						ReadMarkdownJob job = new ReadMarkdownJob(detail);
 
-					job.schedule();
-				}
-				else {
-					StringBuffer sb = new StringBuffer();
-
-					String title = upgradeTaskStep.getTitle();
-
-					sb.append(title);
-
-					sb.append("<br />");
-
-					String description = upgradeTaskStep.getDescription();
-
-					sb.append(description);
-
-					_browser.setText(sb.toString());
+						job.schedule();
+					}
+					else {
+						_browser.setText(detail);
+					}
 				}
 			}
 			else {
