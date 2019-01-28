@@ -77,12 +77,21 @@ public class JavaUtil {
 		if (FileUtil.exists(vmLocation)) {
 			String absolutePath = vmLocation.getAbsolutePath();
 
-			File signatureJar = FileUtil.findFirstExist(
+			String[] paths = {
 				absolutePath + "/jre/lib/rt.jar", absolutePath + "/lib/rt.jar", absolutePath + "/lib/jrt-fs.jar",
-				absolutePath + "/jre/lib/vm.jar");
+				absolutePath + "/jre/lib/vm.jar"
+			};
 
-			if (signatureJar != null) {
-				return getJarProperty(signatureJar, Attributes.Name.SPECIFICATION_VERSION.toString());
+			for (String path : paths) {
+				path = path.replace('/', File.separatorChar);
+
+				path = path.replace('\\', File.separatorChar);
+
+				File file = new File(path);
+
+				if (file.exists()) {
+					return getJarProperty(file, Attributes.Name.SPECIFICATION_VERSION.toString());
+				}
 			}
 		}
 
