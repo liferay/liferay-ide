@@ -324,18 +324,14 @@ public class PluginsSDKProjectProvider
 				if (hasNewSdk) {
 					PortalBundle portalBundle = ServerUtil.getPortalBundle(project);
 
-					if ((portalBundle != null) &&
-						((type == null) || type.isAssignableFrom(PluginsSDKBundleProject.class))) {
-
+					if ((portalBundle != null) && type.isAssignableFrom(PluginsSDKBundleProject.class)) {
 						return new PluginsSDKBundleProject(project, portalBundle);
 					}
 				}
 				else {
 					ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(project);
 
-					if ((liferayRuntime != null) &&
-						((type == null) || type.isAssignableFrom(PluginsSDKRuntimeProject.class))) {
-
+					if ((liferayRuntime != null) && type.isAssignableFrom(PluginsSDKRuntimeProject.class)) {
 						return new PluginsSDKRuntimeProject(project, liferayRuntime);
 					}
 				}
@@ -349,9 +345,7 @@ public class PluginsSDKProjectProvider
 
 				ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(runtime);
 
-				if ((liferayRuntime != null) &&
-					((type == null) || type.isAssignableFrom(PluginsSDKRuntimeProject.class))) {
-
+				if ((liferayRuntime != null) && type.isAssignableFrom(PluginsSDKRuntimeProject.class)) {
 					return new PluginsSDKRuntimeProject(null, liferayRuntime);
 				}
 			}

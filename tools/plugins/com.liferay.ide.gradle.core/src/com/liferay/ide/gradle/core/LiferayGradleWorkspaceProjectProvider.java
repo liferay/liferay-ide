@@ -140,7 +140,7 @@ public class LiferayGradleWorkspaceProjectProvider
 
 	@Override
 	public synchronized ILiferayProject provide(Class<?> type, Object adaptable) {
-		if ((type != null) && !type.isAssignableFrom(LiferayGradleWorkspaceProject.class)) {
+		if (!type.isAssignableFrom(LiferayGradleWorkspaceProject.class)) {
 			return null;
 		}
 

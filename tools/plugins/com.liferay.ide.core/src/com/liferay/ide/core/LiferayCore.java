@@ -53,7 +53,11 @@ public class LiferayCore extends Plugin {
 
 	public static synchronized <T extends ILiferayProject> T create(Class<T> type, Object adaptable) {
 		if (type == null) {
-			return null;
+			throw new IllegalArgumentException("type can not be null");
+		}
+
+		if (adaptable == null) {
+			throw new IllegalArgumentException("adaptable can not be null");
 		}
 
 		T retval = null;
@@ -291,10 +295,6 @@ public class LiferayCore extends Plugin {
 	}
 
 	private static ILiferayProject _createInternal(Class<?> type, Object adaptable) {
-		if (adaptable == null) {
-			return null;
-		}
-
 		ILiferayProjectProvider[] providers = getProviders(adaptable.getClass());
 
 		if (ListUtil.isEmpty(providers)) {

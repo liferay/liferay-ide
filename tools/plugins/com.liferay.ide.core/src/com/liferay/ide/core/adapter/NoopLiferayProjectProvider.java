@@ -30,7 +30,7 @@ public class NoopLiferayProjectProvider extends AbstractLiferayProjectProvider {
 
 	@Override
 	public ILiferayProject provide(Class<?> type, Object adaptable) {
-		if ((type != null) && !type.isAssignableFrom(NoopLiferayProject.class)) {
+		if (!type.isAssignableFrom(NoopLiferayProject.class)) {
 			return null;
 		}
 

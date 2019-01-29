@@ -254,15 +254,13 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 						return new FacetedMavenBundleProject(project);
 					}
-					else if (hasLiferayFacet && ((type == null) || type.isAssignableFrom(FacetedMavenProject.class))) {
+					else if (hasLiferayFacet && type.isAssignableFrom(FacetedMavenProject.class)) {
 						return new FacetedMavenProject(project);
 					}
-					else if (hasLiferayNature &&
-							 ((type == null) || type.isAssignableFrom(MavenBundlePluginProject.class))) {
-
+					else if (hasLiferayNature && type.isAssignableFrom(MavenBundlePluginProject.class)) {
 						return new MavenBundlePluginProject(project);
 					}
-					else if ((type == null) || type.isAssignableFrom(LiferayMavenProject.class)) {
+					else if (type.isAssignableFrom(LiferayMavenProject.class)) {
 
 						// return dummy maven project that can't lookup docroot resources
 

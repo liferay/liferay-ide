@@ -191,11 +191,11 @@ public class GradleProjectProvider
 					project.hasNature("org.eclipse.buildship.core.gradleprojectnature")) {
 
 					if (ProjectUtil.isFacetedGradleBundleProject(project) &&
-						((type == null) || type.isAssignableFrom(FacetedGradleBundleProject.class))) {
+						type.isAssignableFrom(FacetedGradleBundleProject.class)) {
 
 						return new FacetedGradleBundleProject(project);
 					}
-					else if ((type == null) || type.isAssignableFrom(LiferayGradleProject.class)) {
+					else if (type.isAssignableFrom(LiferayGradleProject.class)) {
 						return new LiferayGradleProject(project);
 					}
 				}

@@ -117,7 +117,7 @@ public class LiferayMavenWorkspaceProjectProvider
 
 	@Override
 	public ILiferayProject provide(Class<?> type, Object adaptable) {
-		if ((type != null) && !type.isAssignableFrom(LiferayMavenWorkspaceProject.class)) {
+		if (!type.isAssignableFrom(LiferayMavenWorkspaceProject.class)) {
 			return null;
 		}
 
