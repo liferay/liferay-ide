@@ -71,9 +71,9 @@ public class LiferayCore extends Plugin {
 				ListenerRegistry listenerRegistry = listenerRegistry();
 
 				listenerRegistry.addEventListener((EventListener)liferayProject);
-			}
 
-			_putProjectCache(type, adaptable, liferayProject);
+				_putProjectCache(type, adaptable, liferayProject);
+			}
 
 			retval = type.cast(liferayProject);
 		}
