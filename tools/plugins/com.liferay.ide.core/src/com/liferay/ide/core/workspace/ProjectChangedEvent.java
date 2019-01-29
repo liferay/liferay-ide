@@ -12,26 +12,28 @@
  * details.
  */
 
-package com.liferay.ide.core;
+package com.liferay.ide.core.workspace;
 
-import org.eclipse.core.resources.IFolder;
+import java.util.Set;
+
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 
 /**
- * @author Gregory Amerson
+ * @author Charles Wu
  */
-public interface ILiferayProject {
+public class ProjectChangedEvent extends BaseProjectChangedEvent {
 
-	public <T> T adapt(Class<T> adapterType);
+	public ProjectChangedEvent(IProject project, Set<IPath> affectedFiles) {
+		super(project);
 
-	public IProject getProject();
+		_affectedFiles = affectedFiles;
+	}
 
-	public String getProperty(String key, String defaultValue);
+	public Set<IPath> getAffectedFiles() {
+		return _affectedFiles;
+	}
 
-	public IFolder getSourceFolder(String classification);
-
-	public IFolder[] getSourceFolders();
-
-	public boolean isStale();
+	private final Set<IPath> _affectedFiles;
 
 }

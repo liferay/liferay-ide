@@ -14,11 +14,14 @@
 
 package com.liferay.ide.gradle.core;
 
+import com.liferay.ide.core.Event;
+import com.liferay.ide.core.EventListener;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.WorkspaceConstants;
+import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
@@ -46,10 +49,17 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
+public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject implements EventListener {
 
 	public LiferayGradleWorkspaceProject(IProject project) {
 		super(project);
+
+		IPath projectPath = project.getFullPath();
+
+		_importantResources = new IPath[] {
+			projectPath.append("gradle.properties"), projectPath.append("build.gradle"),
+			projectPath.append("settings.gradle")
+		};
 
 		_initializeGradleWorkspaceProperties(project);
 	}
@@ -91,12 +101,36 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 	}
 
 	@Override
+	public boolean isStale() {
+		return _stale;
+	}
+
+	@Override
 	public boolean isWatchable() {
 		IProject project = getProject();
 
 		IFile settingsGradleFile = project.getFile("settings.gradle");
 
 		return GradleUtil.isWatchableProject(settingsGradleFile);
+	}
+
+	@Override
+	public void onEvent(Event event) {
+		if (!isStale() && event instanceof ProjectChangedEvent) {
+			ProjectChangedEvent changeEvent = (ProjectChangedEvent)event;
+
+			if (getProject().equals(changeEvent.getProject())) {
+				Set<IPath> affectedFiles = changeEvent.getAffectedFiles();
+
+				for (IPath importantFile : _importantResources) {
+					if (affectedFiles.contains(importantFile)) {
+						_stale = true;
+
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -226,5 +260,8 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject {
 	}
 
 	private static final Set<IProject> _watchingProjects = new HashSet<>();
+
+	private IPath[] _importantResources;
+	private volatile boolean _stale = false;
 
 }

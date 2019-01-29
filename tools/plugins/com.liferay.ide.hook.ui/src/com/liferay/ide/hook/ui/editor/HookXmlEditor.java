@@ -89,7 +89,7 @@ public class HookXmlEditor extends SapphireEditorForXml {
 
 			ElementList<CustomJsp> customJsps = hook.getCustomJsps();
 
-			ILiferayProject liferayProject = LiferayCore.create(getProject());
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, getProject());
 
 			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 

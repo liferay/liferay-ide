@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core.tests.legacy;
 
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.maven.core.FacetedMavenProject;
 
@@ -44,7 +45,7 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 
 		assertNotNull(facade);
 
-		assertTrue(LiferayCore.create(project) instanceof FacetedMavenProject);
+		assertTrue(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
 	}
 
 	@Test
@@ -61,7 +62,7 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 
 		waitForJobsToComplete();
 
-		assertTrue(LiferayCore.create(project) instanceof FacetedMavenProject);
+		assertTrue(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
 	}
 
 	@Test
@@ -76,7 +77,7 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 
 		assertNotNull(facade);
 
-		assertFalse(LiferayCore.create(project) instanceof FacetedMavenProject);
+		assertFalse(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
 	}
 
 	@Test
@@ -93,7 +94,7 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 
 		waitForJobsToComplete();
 
-		assertTrue(LiferayCore.create(project) instanceof FacetedMavenProject);
+		assertTrue(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
 	}
 
 }

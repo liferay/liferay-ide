@@ -114,7 +114,8 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
 		assertFalse(_checkDependency(existedDependencies, mavenDependency));
 
-		ILiferayProject liferayMavenDependencyProject = LiferayCore.create(mavenDependencyTestProject);
+		ILiferayProject liferayMavenDependencyProject =
+			LiferayCore.create(ILiferayProject.class, mavenDependencyTestProject);
 
 		IProjectBuilder projectBuilder = liferayMavenDependencyProject.adapt(IProjectBuilder.class);
 
@@ -527,7 +528,9 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
 		assertTrue(service != null && service.exists());
 
-		IProjectBuilder builder = LiferayCore.create(IProjectBuilder.class, service);
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, service);
+
+		IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);
 
 		builder.buildService(monitor);
 

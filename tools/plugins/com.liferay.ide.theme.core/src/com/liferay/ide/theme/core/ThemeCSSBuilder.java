@@ -174,7 +174,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 
 		IPath path = FileUtil.getResourceLocation(docroot);
 
-		ILiferayProject liferayProject = LiferayCore.create(getProject());
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, getProject());
 
 		String themeParent = liferayProject.getProperty("theme.parent", "_styled");
 

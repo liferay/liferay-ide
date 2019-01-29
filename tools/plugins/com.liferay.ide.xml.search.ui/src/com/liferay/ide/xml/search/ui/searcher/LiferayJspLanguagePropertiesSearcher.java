@@ -14,6 +14,7 @@
 
 package com.liferay.ide.xml.search.ui.searcher;
 
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
@@ -73,7 +74,7 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
 
 			if (CoreUtil.isNullOrEmpty(sb.toString())) {
 				Properties portalProperties = PortalLanguagePropertiesCacheUtil.getPortalLanguageProperties(
-					LiferayCore.create(project));
+					LiferayCore.create(ILiferayProject.class, project));
 
 				if (portalProperties != null) {
 					Object key = portalProperties.get(mathingString);

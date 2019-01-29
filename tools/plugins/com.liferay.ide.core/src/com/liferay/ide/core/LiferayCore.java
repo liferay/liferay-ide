@@ -18,8 +18,11 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.ProjectChangeListener;
 
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.ILog;
@@ -48,58 +51,35 @@ public class LiferayCore extends Plugin {
 
 	public static final String PLUGIN_ID = "com.liferay.ide.core";
 
-	public static <T> T create(Class<T> type, Object adaptable) {
+	public static synchronized <T extends ILiferayProject> T create(Class<T> type, Object adaptable) {
 		if (type == null) {
-			return null;
+			throw new IllegalArgumentException("type can not be null");
+		}
+
+		if (adaptable == null) {
+			throw new IllegalArgumentException("adaptable can not be null");
 		}
 
 		T retval = null;
 
-		ILiferayProject lrproject = create(adaptable);
+		ILiferayProject liferayProject = _checkProjectCache(type, adaptable);
 
-		if ((lrproject != null) && type.isAssignableFrom(lrproject.getClass())) {
-			retval = type.cast(lrproject);
-		}
+		if (liferayProject == null) {
+			liferayProject = _createInternal(type, adaptable);
 
-		if ((retval == null) && (lrproject != null)) {
-			retval = lrproject.adapt(type);
+			if (liferayProject instanceof EventListener) {
+				ListenerRegistry listenerRegistry = listenerRegistry();
+
+				listenerRegistry.addEventListener((EventListener)liferayProject);
+
+				_putProjectCache(type, adaptable, liferayProject);
+			}
+
+			retval = type.cast(liferayProject);
 		}
 
 		return retval;
 	}
-
-	// The shared instance
-
-	public static ILiferayProject create(Object adaptable) {
-		if (adaptable == null) {
-			return null;
-		}
-
-		ILiferayProjectProvider[] providers = getProviders(adaptable.getClass());
-
-		if (ListUtil.isEmpty(providers)) {
-			return null;
-		}
-
-		ILiferayProjectProvider currentProvider = null;
-		ILiferayProject project = null;
-
-		for (ILiferayProjectProvider provider : providers) {
-			if ((currentProvider == null) || (provider.getPriority() > currentProvider.getPriority())) {
-				ILiferayProject lrp = provider.provide(adaptable);
-
-				if (lrp != null) {
-					currentProvider = provider;
-
-					project = lrp;
-				}
-			}
-		}
-
-		return project;
-	}
-
-	// The plugin ID
 
 	public static IStatus createErrorStatus(Exception e) {
 		return createErrorStatus(PLUGIN_ID, e);
@@ -290,6 +270,73 @@ public class LiferayCore extends Plugin {
 		super.stop(context);
 	}
 
+	private static <T extends ILiferayProject> T _checkProjectCache(Class<T> type, Object adaptable) {
+		Map<ProjectCacheKey<?>, ILiferayProject> projectCache = _plugin._projectCache;
+
+		ProjectCacheKey<T> projectCacheKey = new ProjectCacheKey<>(type, adaptable);
+
+		ILiferayProject liferayProject = projectCache.get(projectCacheKey);
+
+		if (liferayProject == null) {
+			for (ILiferayProject cachedLiferayProject : projectCache.values()) {
+				if (type.isInstance(cachedLiferayProject) && adaptable.equals(cachedLiferayProject.getProject())) {
+					liferayProject = type.cast(cachedLiferayProject);
+
+					break;
+				}
+			}
+		}
+
+		if ((liferayProject != null) && liferayProject.isStale()) {
+			if (liferayProject instanceof EventListener) {
+				ListenerRegistry listenerRegistry = listenerRegistry();
+
+				listenerRegistry.removeEventListener((EventListener)liferayProject);
+			}
+
+			projectCache.remove(projectCacheKey);
+
+			liferayProject = null;
+		}
+
+		return type.cast(liferayProject);
+	}
+
+	private static ILiferayProject _createInternal(Class<?> type, Object adaptable) {
+		ILiferayProjectProvider[] liferayProjectProviders = getProviders(adaptable.getClass());
+
+		if (ListUtil.isEmpty(liferayProjectProviders)) {
+			return null;
+		}
+
+		ILiferayProjectProvider currentLiferayProjectProvider = null;
+		ILiferayProject liferayProject = null;
+
+		for (ILiferayProjectProvider liferayProjectProvider : liferayProjectProviders) {
+			if ((currentLiferayProjectProvider == null) ||
+				(liferayProjectProvider.getPriority() > currentLiferayProjectProvider.getPriority())) {
+
+				ILiferayProject providedLiferayProject = liferayProjectProvider.provide(type, adaptable);
+
+				if (providedLiferayProject != null) {
+					currentLiferayProjectProvider = liferayProjectProvider;
+
+					liferayProject = providedLiferayProject;
+				}
+			}
+		}
+
+		return liferayProject;
+	}
+
+	private static <T extends ILiferayProject> void _putProjectCache(
+		Class<T> type, Object adaptable, ILiferayProject liferayProject) {
+
+		Map<ProjectCacheKey<?>, ILiferayProject> projectCache = _plugin._projectCache;
+
+		projectCache.put(new ProjectCacheKey<>(type, adaptable), liferayProject);
+	}
+
 	private <T> ServiceTracker<T, T> _createServiceTracker(BundleContext context, Class<T> clazz) {
 		ServiceTracker<T, T> serviceTracker = new ServiceTracker<>(context, clazz.getName(), null);
 
@@ -305,6 +352,52 @@ public class LiferayCore extends Plugin {
 
 	private ServiceRegistration<?> _listenerRegistryService;
 	private ServiceTracker<ListenerRegistry, ListenerRegistry> _listenerRegistryServiceTracker;
+	private final Map<ProjectCacheKey<?>, ILiferayProject> _projectCache = new HashMap<>();
 	private ProjectChangeListener _projectChangeListener;
+
+	private static class ProjectCacheKey<T extends ILiferayProject> {
+
+		public ProjectCacheKey(Class<T> type, Object adaptable) {
+			_type = type;
+			_adaptable = adaptable;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+
+			if (obj == null) {
+				return false;
+			}
+
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+
+			ProjectCacheKey<?> other = (ProjectCacheKey<?>)obj;
+
+			if (Objects.equals(_adaptable, other._adaptable) && Objects.equals(_type, other._type)) {
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(_adaptable, _type);
+		}
+
+		@Override
+		public String toString() {
+			return "ProjectCacheKey [adaptable=" + _adaptable + ", type=" + _type + "]";
+		}
+
+		private Object _adaptable;
+		private Class<T> _type;
+
+	}
 
 }

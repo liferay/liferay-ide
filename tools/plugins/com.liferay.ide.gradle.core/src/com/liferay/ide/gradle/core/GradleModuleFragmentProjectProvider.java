@@ -134,7 +134,7 @@ public class GradleModuleFragmentProjectProvider
 	}
 
 	@Override
-	public synchronized ILiferayProject provide(Object adaptable) {
+	public synchronized ILiferayProject provide(Class<?> type, Object adaptable) {
 		return null;
 	}
 

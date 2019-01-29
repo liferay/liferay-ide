@@ -64,10 +64,10 @@ public abstract class LiferayDescriptorHelper {
 		String retval = defaultValue;
 
 		try {
-			ILiferayProject lProject = LiferayCore.create(project);
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
-			if (lProject != null) {
-				ILiferayPortal portal = lProject.adapt(ILiferayPortal.class);
+			if (liferayProject != null) {
+				ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
 				if (portal != null) {
 					String versionStr = portal.getVersion();

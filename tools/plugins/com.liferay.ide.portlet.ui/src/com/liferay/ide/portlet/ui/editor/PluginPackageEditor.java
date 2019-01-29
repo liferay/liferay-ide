@@ -114,7 +114,7 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 		try {
 			IFile file = getEditorInput().getFile();
 
-			ILiferayProject liferayProject = LiferayCore.create(file.getProject());
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, file.getProject());
 
 			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 

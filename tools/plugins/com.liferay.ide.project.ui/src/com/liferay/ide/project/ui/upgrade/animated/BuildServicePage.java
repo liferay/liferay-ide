@@ -116,7 +116,8 @@ public class BuildServicePage extends Page {
 										for (IProject project : liferayServiceProjects) {
 											_deleteLegacyFiles(project, monitor);
 
-											final ILiferayProject liferayProject = LiferayCore.create(project);
+											final ILiferayProject liferayProject = LiferayCore.create(
+												ILiferayProject.class, project);
 
 											if (liferayProject != null) {
 												IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);

@@ -21,7 +21,7 @@ import org.eclipse.core.resources.IFile;
 /**
  * @author Andy Wu
  */
-public interface IResourceBundleProject {
+public interface IResourceBundleProject extends ILiferayProject {
 
 	public List<IFile> getDefaultLanguageProperties();
 

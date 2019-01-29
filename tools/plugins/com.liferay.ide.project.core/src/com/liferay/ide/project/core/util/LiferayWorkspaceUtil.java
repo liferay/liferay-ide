@@ -417,7 +417,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static IWorkspaceProjectBuilder getWorkspaceProjectBuilder(IProject project) throws CoreException {
-		final ILiferayProject liferayProject = LiferayCore.create(project);
+		final ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 		if (liferayProject == null) {
 			throw new CoreException(ProjectCore.createErrorStatus("Can not find Liferay workspace project."));

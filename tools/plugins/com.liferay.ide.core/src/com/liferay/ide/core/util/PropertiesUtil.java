@@ -275,9 +275,9 @@ public class PropertiesUtil {
 				resourceBundle = new Path(resourceBundle.replace(".", IPath.SEPARATOR + "")).toString();
 			}
 
-			ILiferayProject lrproject = LiferayCore.create(project);
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
-			IFolder[] srcFolders = lrproject.getSourceFolders();
+			IFolder[] srcFolders = liferayProject.getSourceFolders();
 
 			for (IFolder srcFolder : srcFolders) {
 				IPath path = srcFolder.getFullPath();
@@ -310,9 +310,9 @@ public class PropertiesUtil {
 			return Collections.emptyList();
 		}
 
-		ILiferayProject lrproject = LiferayCore.create(proj);
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, proj);
 
-		IFolder[] srcFolders = lrproject.getSourceFolders();
+		IFolder[] srcFolders = liferayProject.getSourceFolders();
 
 		ResourceNodeInfo resourceNodeInfo = _getResourceNodeInfo(portletXml);
 
@@ -360,9 +360,9 @@ public class PropertiesUtil {
 			return new IFile[0];
 		}
 
-		ILiferayProject lrproject = LiferayCore.create(project);
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
-		IFolder[] srcFolders = lrproject.getSourceFolders();
+		IFolder[] srcFolders = liferayProject.getSourceFolders();
 
 		if (ListUtil.isEmpty(srcFolders)) {
 			return new IFile[0];
@@ -403,9 +403,9 @@ public class PropertiesUtil {
 			return new IFile[0];
 		}
 
-		ILiferayProject lrproject = LiferayCore.create(project);
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
-		IFolder[] srcFolders = lrproject.getSourceFolders();
+		IFolder[] srcFolders = liferayProject.getSourceFolders();
 
 		if (ListUtil.isEmpty(srcFolders)) {
 			return new IFile[0];

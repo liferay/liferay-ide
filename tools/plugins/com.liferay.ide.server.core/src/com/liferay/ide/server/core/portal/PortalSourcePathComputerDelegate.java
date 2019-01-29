@@ -14,6 +14,7 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -23,6 +24,7 @@ import com.liferay.ide.server.core.LiferayServerCore;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -39,6 +41,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.sourcelookup.containers.JavaSourcePathComputer;
+import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerUtil;
 
@@ -105,9 +108,13 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 		Stream.of(
 			server.getModules()
 		).map(
-			module -> LiferayCore.create(module.getProject())
+			IModule::getProject
 		).filter(
-			liferayProject -> liferayProject != null
+			Objects::nonNull
+		).map(
+			project -> LiferayCore.create(ILiferayProject.class, project)
+		).filter(
+			Objects::nonNull
 		).forEach(
 			liferayProject -> _addSourceContainers(
 				configuration, monitor, sourceContainers, liferayProject.getProject())

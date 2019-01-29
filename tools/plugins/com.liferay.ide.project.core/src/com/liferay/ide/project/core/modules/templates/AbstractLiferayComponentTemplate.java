@@ -149,7 +149,7 @@ public abstract class AbstractLiferayComponentTemplate
 				return;
 			}
 
-			liferayProject = LiferayCore.create(project);
+			liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 			if (liferayProject == null) {
 				return;

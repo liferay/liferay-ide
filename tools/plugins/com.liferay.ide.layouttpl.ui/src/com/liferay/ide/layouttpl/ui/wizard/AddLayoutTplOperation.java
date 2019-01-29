@@ -222,9 +222,9 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 	}
 
 	private boolean _isBootstrapStyle() {
-		ILiferayProject lrproject = LiferayCore.create(getTargetProject());
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, getTargetProject());
 
-		ILiferayPortal portal = lrproject.adapt(ILiferayPortal.class);
+		ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
 		if (portal != null) {
 			Version version = Version.parseVersion(portal.getVersion());

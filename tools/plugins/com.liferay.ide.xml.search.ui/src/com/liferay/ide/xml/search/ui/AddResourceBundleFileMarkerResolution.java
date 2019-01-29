@@ -76,7 +76,7 @@ public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundl
 		try {
 			_checkResourceBundleElement(project);
 
-			ILiferayProject liferayProject = LiferayCore.create(project);
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 			if (liferayProject == null) {
 				return;

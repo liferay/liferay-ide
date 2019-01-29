@@ -180,7 +180,7 @@ public class GradleProjectProvider
 	}
 
 	@Override
-	public synchronized ILiferayProject provide(Object adaptable) {
+	public synchronized ILiferayProject provide(Class<?> type, Object adaptable) {
 		ILiferayProject retval = null;
 
 		if (adaptable instanceof IProject) {
@@ -190,10 +190,12 @@ public class GradleProjectProvider
 				if (!LiferayWorkspaceUtil.isValidWorkspace(project) && LiferayNature.hasNature(project) &&
 					project.hasNature("org.eclipse.buildship.core.gradleprojectnature")) {
 
-					if (ProjectUtil.isFacetedGradleBundleProject(project)) {
+					if (ProjectUtil.isFacetedGradleBundleProject(project) &&
+						type.isAssignableFrom(FacetedGradleBundleProject.class)) {
+
 						return new FacetedGradleBundleProject(project);
 					}
-					else {
+					else if (type.isAssignableFrom(LiferayGradleProject.class)) {
 						return new LiferayGradleProject(project);
 					}
 				}

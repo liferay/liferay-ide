@@ -163,13 +163,13 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 
 					ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper(project);
 
-					ILiferayProject lProject = LiferayCore.create(project);
+					ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
-					String type = lProject.getProperty("theme.type", "vm");
+					String type = liferayProject.getProperty("theme.type", "vm");
 
 					String version = "6.2.0";
 
-					ILiferayPortal portal = lProject.adapt(ILiferayPortal.class);
+					ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
 					if (portal != null) {
 						version = portal.getVersion();

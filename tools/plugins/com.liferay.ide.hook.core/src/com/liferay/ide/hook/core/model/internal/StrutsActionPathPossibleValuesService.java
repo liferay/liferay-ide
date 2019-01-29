@@ -70,7 +70,7 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
 	protected void initPossibleValuesService() {
 		super.initPossibleValuesService();
 
-		ILiferayProject liferayProject = LiferayCore.create(project());
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project());
 
 		if (liferayProject != null) {
 			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);

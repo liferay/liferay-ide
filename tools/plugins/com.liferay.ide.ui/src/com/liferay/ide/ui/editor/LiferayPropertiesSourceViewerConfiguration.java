@@ -116,7 +116,8 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 			Object adapter = input.getAdapter(IFile.class);
 
 			if (adapter instanceof IFile && _isHookProject(((IFile)adapter).getProject())) {
-				ILiferayProject liferayProject = LiferayCore.create(((IFile)adapter).getProject());
+				ILiferayProject liferayProject = LiferayCore.create(
+					ILiferayProject.class, ((IFile)adapter).getProject());
 
 				ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
@@ -176,10 +177,10 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 		IFile iFile = input.getAdapter(IFile.class);
 
 		if (iFile != null) {
-			ILiferayProject project = LiferayCore.create(iFile.getProject());
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, iFile.getProject());
 
-			if (project != null) {
-				ILiferayPortal portal = project.adapt(ILiferayPortal.class);
+			if (liferayProject != null) {
+				ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
 				if (portal != null) {
 					retval = portal.getAppServerPortalDir();

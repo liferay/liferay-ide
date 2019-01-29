@@ -20,21 +20,24 @@ import bndtools.central.Central;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.ILiferayProjectProvider;
 
 import org.eclipse.core.resources.IProject;
 
 /**
  * @author Gregory Amerson
  */
-public class BndtoolsProvider extends AbstractLiferayProjectProvider implements ILiferayProjectProvider {
+public class BndtoolsProvider extends AbstractLiferayProjectProvider {
 
 	public BndtoolsProvider() {
 		super(new Class<?>[] {IProject.class});
 	}
 
 	@Override
-	public ILiferayProject provide(Object adaptable) {
+	public ILiferayProject provide(Class<?> type, Object adaptable) {
+		if (type.isAssignableFrom(BndtoolsProject.class)) {
+			return null;
+		}
+
 		ILiferayProject retval = null;
 
 		if (adaptable instanceof IProject) {

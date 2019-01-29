@@ -71,7 +71,7 @@ public class LiferayHookModelTests extends ProjectCoreBase
 
         assertNotNull( hook );
 
-        final ILiferayProject liferayProject = LiferayCore.create( hookProject );
+        final ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, hookProject );
         final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
 
         final IPath strutsConfigPath = portal.getAppServerPortalDir().append( "WEB-INF/struts-config.xml" );

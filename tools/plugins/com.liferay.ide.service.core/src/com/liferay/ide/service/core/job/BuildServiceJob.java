@@ -46,7 +46,7 @@ public class BuildServiceJob extends Job {
 	}
 
 	protected IProjectBuilder getProjectBuilder() throws CoreException {
-		ILiferayProject liferayProject = LiferayCore.create(getProject());
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, getProject());
 
 		if (liferayProject == null) {
 			throw new CoreException(

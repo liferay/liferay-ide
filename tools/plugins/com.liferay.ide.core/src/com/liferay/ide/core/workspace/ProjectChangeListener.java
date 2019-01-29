@@ -11,6 +11,10 @@ package com.liferay.ide.core.workspace;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.ListenerRegistry;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -66,6 +70,26 @@ public final class ProjectChangeListener implements IResourceChangeListener {
 	private ProjectChangeListener() {
 	}
 
+	private void _collectAffectedFilePaths(Set<IPath> paths, IProject project, IResourceDelta[] resourceDeltas) {
+		for (IResourceDelta resourceDelta : resourceDeltas) {
+			IResource resource = resourceDelta.getResource();
+
+			if (resource instanceof IFile && project.contains(resource)) {
+				paths.add(resource.getFullPath());
+			}
+
+			_collectAffectedFilePaths(paths, project, resourceDelta.getAffectedChildren());
+		}
+	}
+
+	private Set<IPath> _collectProjectAffectedFiles(IProject project, IResourceDelta[] resourceDeltas) {
+		Set<IPath> result = new HashSet<>();
+
+		_collectAffectedFilePaths(result, project, resourceDeltas);
+
+		return result;
+	}
+
 	private boolean _doVisitDelta(IResourceDelta delta) throws Exception {
 		IResource resource = delta.getResource();
 
@@ -90,6 +114,11 @@ public final class ProjectChangeListener implements IResourceChangeListener {
 				else if (fromPath != null) {
 					listenerRegistry.dispatch(new ProjectMovedEvent(project, fromPath.lastSegment()));
 				}
+			}
+			else if (delta.getKind() == IResourceDelta.CHANGED) {
+				Set<IPath> affectedFiles = _collectProjectAffectedFiles(project, delta.getAffectedChildren());
+
+				listenerRegistry.dispatch(new ProjectChangedEvent(project, affectedFiles));
 			}
 			else if (delta.getFlags() == IResourceDelta.OPEN) {
 				if (project.isOpen()) {

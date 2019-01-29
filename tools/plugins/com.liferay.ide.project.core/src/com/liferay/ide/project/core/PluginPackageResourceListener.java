@@ -476,15 +476,19 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
 		IProject project = CoreUtil.getLiferayProject(delta.getResource());
 
-		IWebProject lrproject = LiferayCore.create(IWebProject.class, project);
+		if (project == null) {
+			return false;
+		}
 
-		if (lrproject == null) {
+		IWebProject liferayProject = LiferayCore.create(IWebProject.class, project);
+
+		if (liferayProject == null) {
 			return false;
 		}
 
 		Path path = new Path("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
 
-		IResource propertiesFile = lrproject.findDocrootResource(path);
+		IResource propertiesFile = liferayProject.findDocrootResource(path);
 
 		if (FileUtil.notExists(propertiesFile)) {
 			return false;
@@ -545,7 +549,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 				if (archiveName.equals(ref.getArchiveName())) {
 					IVirtualComponent component = ref.getReferencedComponent();
 
-					IFile referencedFile = (IFile)component.getAdapter(IFile.class);
+					IFile referencedFile = component.getAdapter(IFile.class);
 
 					IProject referencedFileProject = referencedFile.getProject();
 

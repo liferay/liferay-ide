@@ -70,7 +70,7 @@ public abstract class SDKCommandAction extends AbstractObjectAction {
 					protected IStatus run(IProgressMonitor monitor) {
 						try {
 							SDK sdk = SDKUtil.getSDK(p);
-							ILiferayProject liferayProject = LiferayCore.create(p);
+							ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, p);
 
 							if (liferayProject != null) {
 								sdk.runCommand(p, buildFile, getSDKCommand(), null, monitor);
