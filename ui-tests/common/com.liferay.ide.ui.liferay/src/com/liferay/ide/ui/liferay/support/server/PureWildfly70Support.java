@@ -12,26 +12,25 @@
  * details.
  */
 
-package com.liferay.ide.ui.server.tests;
+package com.liferay.ide.ui.liferay.support.server;
 
-import com.liferay.ide.ui.server.deploy.base.Wildfly7xDeployBase;
-
-import org.junit.Test;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
- * @author Terry Jia
  * @author Rui Wang
  */
-public class WildflyDeployTests extends Wildfly7xDeployBase {
+public class PureWildfly70Support extends ServerSupport {
 
-	@Test
-	public void deployModule() {
-		super.deployModule();
+	public static boolean isNot(ServerSupport server) {
+		if ((server == null) || !(server instanceof PureWildfly70Support)) {
+			return true;
+		}
+
+		return false;
 	}
 
-	@Test
-	public void deployWar() {
-		super.deployWar();
+	public PureWildfly70Support(SWTWorkbenchBot bot) {
+		super(bot, "wildfly", "7.0-ga7");
 	}
 
 }
