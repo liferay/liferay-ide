@@ -14,6 +14,7 @@
 
 package com.liferay.ide.xml.search.ui.validators;
 
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringUtil;
@@ -238,7 +239,7 @@ public class LiferayJspValidator extends LiferayBaseValidator {
 			}
 
 			Properties properties = PortalLanguagePropertiesCacheUtil.getPortalLanguageProperties(
-				LiferayCore.create(file.getProject()));
+				LiferayCore.create(ILiferayProject.class, file.getProject()));
 
 			if (properties != null) {
 				try {

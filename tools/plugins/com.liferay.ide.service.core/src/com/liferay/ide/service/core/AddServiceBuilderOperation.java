@@ -56,7 +56,7 @@ public class AddServiceBuilderOperation
 		String descriptorVersion = null;
 
 		try {
-			ILiferayProject liferayProject = LiferayCore.create(serviceBuilderFile.getProject());
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, serviceBuilderFile.getProject());
 
 			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 

@@ -41,7 +41,7 @@ public class PortalFilterNamesPossibleValuesService extends PossibleValuesServic
 
 			if (hookFile != null) {
 				try {
-					ILiferayProject liferayProject = LiferayCore.create(hookFile.getProject());
+					ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, hookFile.getProject());
 
 					if (liferayProject != null) {
 						ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);

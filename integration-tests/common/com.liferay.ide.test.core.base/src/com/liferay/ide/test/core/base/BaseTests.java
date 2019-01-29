@@ -303,7 +303,7 @@ public class BaseTests {
 
 		assertProjectExists(project);
 
-		ILiferayProject liferayProject = LiferayCore.create(project);
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 		IFolder[] srcFolders = liferayProject.getSourceFolders();
 

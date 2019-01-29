@@ -34,7 +34,7 @@ public class CompareFileHandler extends AbstractCompareFileHandler {
 	protected File getTemplateFile(IFile currentFile) throws Exception {
 		final IProject project = currentFile.getProject();
 
-		final ILiferayProject liferayProject = LiferayCore.create(project);
+		final ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 		final String themeParent = liferayProject.getProperty("theme.parent", "_styled");
 

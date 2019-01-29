@@ -209,7 +209,7 @@ public class NewPortletClassDataModelProvider
 		else if (INIT_PARAMETER_NAME.equals(propertyName)) {
 			String initParameterName = "template";
 
-			ILiferayProject liferayProject = LiferayCore.create(getProject());
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, getProject());
 
 			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
@@ -285,11 +285,11 @@ public class NewPortletClassDataModelProvider
 				return descriptor;
 			}
 
-			ILiferayProject liferayProject = LiferayCore.create(getProject());
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, getProject());
 
 			if (liferayProject == null) {
 				try {
-					liferayProject = LiferayCore.create(getRuntime());
+					liferayProject = LiferayCore.create(ILiferayProject.class, getRuntime());
 				}
 				catch (CoreException ce) {
 					PortletCore.logError(ce);
@@ -792,11 +792,11 @@ public class NewPortletClassDataModelProvider
 
 	protected Properties getCategories() {
 		if (categories == null) {
-			ILiferayProject liferayProject = LiferayCore.create(getProject());
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, getProject());
 
 			if (liferayProject == null) {
 				try {
-					liferayProject = LiferayCore.create(getRuntime());
+					liferayProject = LiferayCore.create(ILiferayProject.class, getRuntime());
 				}
 				catch (CoreException ce) {
 					PortletCore.logError(ce);
@@ -835,11 +835,11 @@ public class NewPortletClassDataModelProvider
 		// removed if not null return directly, because it won't update when switch
 		// projects of different portal versions
 
-		ILiferayProject liferayProject = LiferayCore.create(getProject());
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, getProject());
 
 		if (liferayProject == null) {
 			try {
-				liferayProject = LiferayCore.create(getRuntime());
+				liferayProject = LiferayCore.create(ILiferayProject.class, getRuntime());
 			}
 			catch (CoreException ce) {
 				PortletCore.logError(ce);
@@ -868,7 +868,7 @@ public class NewPortletClassDataModelProvider
 			ParamValue[] paramVals = null;
 
 			try {
-				ILiferayProject liferayProject = LiferayCore.create(getProject());
+				ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, getProject());
 
 				ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 

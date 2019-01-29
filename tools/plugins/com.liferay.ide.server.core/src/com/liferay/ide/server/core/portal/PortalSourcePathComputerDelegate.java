@@ -14,6 +14,7 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -105,7 +106,7 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 		Stream.of(
 			server.getModules()
 		).map(
-			module -> LiferayCore.create(module.getProject())
+			module -> LiferayCore.create(ILiferayProject.class, module.getProject())
 		).filter(
 			liferayProject -> liferayProject != null
 		).forEach(

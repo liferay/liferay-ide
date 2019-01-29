@@ -94,7 +94,7 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
 		IProject project = CoreUtil.getProject(getDataModel().getStringProperty(PROJECT_NAME));
 
-		ILiferayProject liferayProject = LiferayCore.create(project);
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 		if (liferayProject != null) {
 			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);

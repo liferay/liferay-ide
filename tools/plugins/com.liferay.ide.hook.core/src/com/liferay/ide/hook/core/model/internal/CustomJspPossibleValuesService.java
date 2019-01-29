@@ -51,7 +51,7 @@ public class CustomJspPossibleValuesService extends PossibleValuesService {
 		if (_possibleValues == null) {
 			IProject project = project();
 
-			ILiferayProject liferayProject = LiferayCore.create(project);
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 			if (liferayProject != null) {
 				ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);

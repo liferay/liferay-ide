@@ -504,7 +504,7 @@ public class CoreUtil {
 			return false;
 		}
 
-		ILiferayProject lrproject = LiferayCore.create(project);
+		ILiferayProject lrproject = LiferayCore.create(ILiferayProject.class, project);
 
 		if ((lrproject != null) && !(lrproject instanceof NoopLiferayProject)) {
 			return true;

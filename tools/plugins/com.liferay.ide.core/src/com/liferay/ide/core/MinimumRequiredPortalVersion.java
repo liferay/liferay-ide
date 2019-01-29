@@ -38,7 +38,7 @@ public class MinimumRequiredPortalVersion extends PropertyTester {
 		}
 
 		try {
-			ILiferayProject lProject = LiferayCore.create(project);
+			ILiferayProject lProject = LiferayCore.create(ILiferayProject.class, project);
 
 			if ((lProject == null) || (args[0] == null)) {
 				return false;

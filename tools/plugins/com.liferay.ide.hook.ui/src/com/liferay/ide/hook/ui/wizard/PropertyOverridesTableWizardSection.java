@@ -130,7 +130,7 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
 		protected void handleSelectPropertyButton(Text text) {
 			String[] hookProperties = {};
 
-			final ILiferayProject liferayProject = LiferayCore.create(project);
+			final ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 			if (liferayProject != null) {
 				final ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);

@@ -97,7 +97,7 @@ public class BuildLanguageJob extends Job {
 	}
 
 	protected void runBuildLang(IProgressMonitor monitor) throws CoreException {
-		ILiferayProject liferayProject = LiferayCore.create(_getProject());
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, _getProject());
 
 		if (liferayProject == null) {
 			throw new CoreException(

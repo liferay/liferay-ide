@@ -709,7 +709,7 @@ public class ServerUtil {
 	public static IPath getPortalDir(IProject project) {
 		IPath retval = null;
 
-		ILiferayProject liferayProject = LiferayCore.create(project);
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 		if (liferayProject != null) {
 			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
@@ -841,7 +841,7 @@ public class ServerUtil {
 		Version retval = Version.emptyVersion;
 
 		if (project != null) {
-			ILiferayProject liferayProject = LiferayCore.create(project);
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 			if (liferayProject != null) {
 				ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);

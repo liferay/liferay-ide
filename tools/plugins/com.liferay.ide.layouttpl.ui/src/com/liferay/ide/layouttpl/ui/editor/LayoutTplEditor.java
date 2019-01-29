@@ -378,9 +378,11 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 		boolean retval = true;
 
 		try {
-			ILiferayProject lrproject = LiferayCore.create(getFile().getProject());
+			IFile file = getFile();
 
-			ILiferayPortal portal = lrproject.adapt(ILiferayPortal.class);
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, file.getProject());
+
+			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
 			if (portal == null) {
 				return false;

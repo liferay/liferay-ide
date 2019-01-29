@@ -101,10 +101,6 @@ public class LiferayCore extends Plugin {
 		return retval;
 	}
 
-	public static ILiferayProject create(Object adaptable) {
-		return _createInternal(null, adaptable);
-	}
-
 	public static IStatus createErrorStatus(Exception e) {
 		return createErrorStatus(PLUGIN_ID, e);
 	}

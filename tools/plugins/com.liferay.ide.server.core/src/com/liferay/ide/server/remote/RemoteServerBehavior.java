@@ -548,7 +548,7 @@ public class RemoteServerBehavior
 
 		monitor.subTask("Creating partial " + moduleProject.getName() + " update archive...");
 
-		ILiferayProject liferayProject = LiferayCore.create(moduleProject);
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, moduleProject);
 
 		IRemoteServerPublisher publisher = liferayProject.adapt(IRemoteServerPublisher.class);
 
@@ -610,7 +610,7 @@ public class RemoteServerBehavior
 
 		submon.subTask("Deploying " + moduleProject.getName() + "  to Liferay...");
 
-		ILiferayProject liferayProject = LiferayCore.create(moduleProject);
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, moduleProject);
 
 		IRemoteServerPublisher publisher = liferayProject.adapt(IRemoteServerPublisher.class);
 
@@ -781,7 +781,7 @@ public class RemoteServerBehavior
 				else {
 					IModuleResource resource = delta.getModuleResource();
 
-					IFile resourceFile = (IFile)resource.getAdapter(IFile.class);
+					IFile resourceFile = resource.getAdapter(IFile.class);
 
 					if (resourceFile != null) {
 						IWebProject lrproject = LiferayCore.create(IWebProject.class, resourceFile.getProject());

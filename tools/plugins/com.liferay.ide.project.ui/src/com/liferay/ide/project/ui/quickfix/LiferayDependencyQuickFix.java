@@ -112,7 +112,7 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 
 					IProject project = javaProject.getProject();
 
-					ILiferayProject liferayProject = LiferayCore.create(project);
+					ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 					IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);
 

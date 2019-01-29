@@ -56,11 +56,11 @@ public class VersionsTests extends ProjectBase {
 
 		Assert.assertNotNull(facade);
 
-		ILiferayProject lrproject = LiferayCore.create(project);
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
-		Assert.assertNotNull(lrproject);
+		Assert.assertNotNull(liferayProject);
 
-		ILiferayPortal portal = lrproject.adapt(ILiferayPortal.class);
+		ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
 		Assert.assertNotNull(portal);
 
@@ -87,11 +87,11 @@ public class VersionsTests extends ProjectBase {
 
 		Assert.assertNotNull(facade);
 
-		final ILiferayProject lrproject = LiferayCore.create(project);
+		final ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
-		Assert.assertNotNull(lrproject);
+		Assert.assertNotNull(liferayProject);
 
-		final ILiferayPortal portal = lrproject.adapt(ILiferayPortal.class);
+		final ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
 		Assert.assertNotNull(portal);
 

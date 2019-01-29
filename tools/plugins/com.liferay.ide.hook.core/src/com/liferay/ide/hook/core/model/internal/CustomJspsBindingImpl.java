@@ -44,7 +44,7 @@ public class CustomJspsBindingImpl extends HookListBindingImpl {
 	public void init(Property property) {
 		super.init(property);
 
-		ILiferayProject liferayProject = LiferayCore.create(project());
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project());
 
 		if (liferayProject != null) {
 			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);

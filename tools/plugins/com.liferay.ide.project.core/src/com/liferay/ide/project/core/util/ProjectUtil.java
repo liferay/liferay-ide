@@ -1157,7 +1157,7 @@ public class ProjectUtil {
 	}
 
 	public static boolean is7xServerDeployableProject(IProject project) {
-		ILiferayProject liferayProject = LiferayCore.create(project);
+		ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 		if (liferayProject instanceof IBundleProject) {
 			if (liferayProject instanceof PluginsSDKBundleProject) {

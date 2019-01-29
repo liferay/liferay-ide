@@ -92,9 +92,9 @@ public class EmailAddressValidationService extends ValidationService {
 
 			IProject project = opProject.target();
 
-			ILiferayProject liferayProj = LiferayCore.create(project);
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
-			ILiferayPortal portal = liferayProj.adapt(ILiferayPortal.class);
+			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
 			if (portal != null) {
 				schemaVersion = new Version(portal.getVersion());
