@@ -30,6 +30,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.IVMInstall2;
 import org.eclipse.jdt.launching.IVMInstallType;
 
 /**
@@ -72,6 +73,12 @@ public class JavaUtil {
 	}
 
 	public static String getJDKVersion(IVMInstall vmInstall) {
+		if (vmInstall instanceof IVMInstall2) {
+			IVMInstall2 vmInstall2 = (IVMInstall2)vmInstall;
+
+			return vmInstall2.getJavaVersion();
+		}
+
 		File vmLocation = vmInstall.getInstallLocation();
 
 		if (FileUtil.exists(vmLocation)) {
@@ -140,12 +147,15 @@ public class JavaUtil {
 
 	public static boolean isVMRequireVersion(String javaVersion, int requireVersion) {
 		Integer version = null;
+
 		int index = javaVersion.indexOf('.');
 
 		if (index > 0) {
 			try {
 				int major = Integer.parseInt(javaVersion.substring(0, index)) * 100;
+
 				index++;
+
 				int index2 = javaVersion.indexOf('.', index);
 
 				if (index2 > 0) {
