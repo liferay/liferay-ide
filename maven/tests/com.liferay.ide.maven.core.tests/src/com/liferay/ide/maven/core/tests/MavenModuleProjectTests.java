@@ -114,7 +114,8 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
 		assertFalse(_checkDependency(existedDependencies, mavenDependency));
 
-		ILiferayProject liferayMavenDependencyProject = LiferayCore.create(mavenDependencyTestProject);
+		ILiferayProject liferayMavenDependencyProject =
+			LiferayCore.create(ILiferayProject.class, mavenDependencyTestProject);
 
 		IProjectBuilder projectBuilder = liferayMavenDependencyProject.adapt(IProjectBuilder.class);
 
