@@ -62,42 +62,18 @@ public class LiferayCore extends Plugin {
 
 		T retval = null;
 
-		Map<ProjectCacheKey<?>, ILiferayProject> projectCache = _plugin._projectCache;
-
-		ProjectCacheKey<T> key = new ProjectCacheKey<>(type, adaptable);
-
-		ILiferayProject liferayProject = projectCache.get(key);
-
-		if ((liferayProject != null) && liferayProject.isStale()) {
-			if (liferayProject instanceof EventListener) {
-				listenerRegistry().removeEventListener((EventListener)liferayProject);
-			}
-
-			projectCache.remove(key);
-
-			liferayProject = null;
-		}
-
-		if (liferayProject == null) {
-			for (ILiferayProject project : projectCache.values()) {
-				if (type.isInstance(project) && adaptable.equals(project.getProject()) && !project.isStale()) {
-					liferayProject = project;
-
-					break;
-				}
-			}
-		}
+		ILiferayProject liferayProject = _checkProjectCache(type, adaptable);
 
 		if (liferayProject == null) {
 			liferayProject = _createInternal(type, adaptable);
-		}
 
-		if (liferayProject != null) {
 			if (liferayProject instanceof EventListener) {
-				listenerRegistry().addEventListener((EventListener)liferayProject);
+				ListenerRegistry listenerRegistry = listenerRegistry();
+
+				listenerRegistry.addEventListener((EventListener)liferayProject);
 			}
 
-			projectCache.put(key, liferayProject);
+			_putProjectCache(type, adaptable, liferayProject);
 
 			retval = type.cast(liferayProject);
 		}
@@ -294,29 +270,71 @@ public class LiferayCore extends Plugin {
 		super.stop(context);
 	}
 
-	private static ILiferayProject _createInternal(Class<?> type, Object adaptable) {
-		ILiferayProjectProvider[] providers = getProviders(adaptable.getClass());
+	private static <T extends ILiferayProject> T _checkProjectCache(Class<T> type, Object adaptable) {
+		Map<ProjectCacheKey<?>, ILiferayProject> projectCache = _plugin._projectCache;
 
-		if (ListUtil.isEmpty(providers)) {
-			return null;
-		}
+		ProjectCacheKey<T> projectCacheKey = new ProjectCacheKey<>(type, adaptable);
 
-		ILiferayProjectProvider currentProvider = null;
-		ILiferayProject project = null;
+		ILiferayProject liferayProject = projectCache.get(projectCacheKey);
 
-		for (ILiferayProjectProvider provider : providers) {
-			if ((currentProvider == null) || (provider.getPriority() > currentProvider.getPriority())) {
-				ILiferayProject lrp = provider.provide(type, adaptable);
+		if (liferayProject == null) {
+			for (ILiferayProject cachedLiferayProject : projectCache.values()) {
+				if (type.isInstance(cachedLiferayProject) && adaptable.equals(cachedLiferayProject.getProject())) {
+					liferayProject = type.cast(cachedLiferayProject);
 
-				if (lrp != null) {
-					currentProvider = provider;
-
-					project = lrp;
+					break;
 				}
 			}
 		}
 
-		return project;
+		if ((liferayProject != null) && liferayProject.isStale()) {
+			if (liferayProject instanceof EventListener) {
+				ListenerRegistry listenerRegistry = listenerRegistry();
+
+				listenerRegistry.removeEventListener((EventListener)liferayProject);
+			}
+
+			projectCache.remove(projectCacheKey);
+
+			liferayProject = null;
+		}
+
+		return type.cast(liferayProject);
+	}
+
+	private static ILiferayProject _createInternal(Class<?> type, Object adaptable) {
+		ILiferayProjectProvider[] liferayProjectProviders = getProviders(adaptable.getClass());
+
+		if (ListUtil.isEmpty(liferayProjectProviders)) {
+			return null;
+		}
+
+		ILiferayProjectProvider currentLiferayProjectProvider = null;
+		ILiferayProject liferayProject = null;
+
+		for (ILiferayProjectProvider liferayProjectProvider : liferayProjectProviders) {
+			if ((currentLiferayProjectProvider == null) ||
+				(liferayProjectProvider.getPriority() > currentLiferayProjectProvider.getPriority())) {
+
+				ILiferayProject providedLiferayProject = liferayProjectProvider.provide(type, adaptable);
+
+				if (providedLiferayProject != null) {
+					currentLiferayProjectProvider = liferayProjectProvider;
+
+					liferayProject = providedLiferayProject;
+				}
+			}
+		}
+
+		return liferayProject;
+	}
+
+	private static <T extends ILiferayProject> void _putProjectCache(
+		Class<T> type, Object adaptable, ILiferayProject liferayProject) {
+
+		Map<ProjectCacheKey<?>, ILiferayProject> projectCache = _plugin._projectCache;
+
+		projectCache.put(new ProjectCacheKey<>(type, adaptable), liferayProject);
 	}
 
 	private <T> ServiceTracker<T, T> _createServiceTracker(BundleContext context, Class<T> clazz) {
