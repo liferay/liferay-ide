@@ -387,4 +387,14 @@
 			</includes>
 		</viewerContentBinding>
 	</extension>
+	<extension
+		point="org.eclipse.jdt.ui.quickFixProcessors"
+	>
+		<quickFixProcessor
+			class="com.liferay.ide.gradle.ui.quickfix.LiferayGradleDependencyQuickFix"
+			id="com.liferay.ide.gradle.ui.quickfix.liferayGradleDependencyQuickFix"
+			name="LiferayGradleDependencyQuickFix"
+		>
+		</quickFixProcessor>
+	</extension>
 </plugin>

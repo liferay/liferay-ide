@@ -26,6 +26,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.jdt.ui,
  org.eclipse.ltk.core.refactoring,
+ org.eclipse.jdt.core.manipulation,
  org.eclipse.ui.workbench,
  org.eclipse.jdt.launching,
  org.eclipse.ui.console

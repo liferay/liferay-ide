@@ -31,7 +31,6 @@ import org.apache.commons.io.FileUtils;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.GroovyCodeVisitor;
 import org.codehaus.groovy.ast.builder.AstBuilder;
-import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 
 import org.eclipse.core.resources.IFile;
 
@@ -41,19 +40,19 @@ import org.eclipse.core.resources.IFile;
  */
 public class GradleDependencyUpdater {
 
-	public GradleDependencyUpdater(File file) throws IOException, MultipleCompilationErrorsException {
+	public GradleDependencyUpdater(File file) throws IOException {
 		this(FileUtils.readFileToString(file, "UTF-8"));
 
 		_file = file;
 	}
 
-	public GradleDependencyUpdater(IFile file) throws IOException, MultipleCompilationErrorsException {
+	public GradleDependencyUpdater(IFile file) throws IOException {
 		this(FileUtils.readFileToString(FileUtil.getFile(file), "UTF-8"));
 
 		_file = FileUtil.getFile(file);
 	}
 
-	public GradleDependencyUpdater(String scriptContents) throws MultipleCompilationErrorsException {
+	public GradleDependencyUpdater(String scriptContents) {
 		AstBuilder builder = new AstBuilder();
 
 		_nodes = builder.buildFromString(scriptContents);
@@ -136,6 +135,11 @@ public class GradleDependencyUpdater {
 		}
 
 		return visitor;
+	}
+
+	public void updateDependency(String dependency) throws IOException {
+		insertDependency(dependency);
+		FileUtils.writeLines(_file, _gradleFileContents);
 	}
 
 	public void walkScript(GroovyCodeVisitor visitor) {

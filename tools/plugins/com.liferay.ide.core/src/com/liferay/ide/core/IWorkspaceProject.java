@@ -32,6 +32,8 @@ public interface IWorkspaceProject extends ILiferayProject {
 
 	public List<IPath> getTargetPlatformArtifacts();
 
+	public String getTargetPlatformVersion();
+
 	public boolean isWatchable();
 
 	public void watch(Set<IProject> childProjects);

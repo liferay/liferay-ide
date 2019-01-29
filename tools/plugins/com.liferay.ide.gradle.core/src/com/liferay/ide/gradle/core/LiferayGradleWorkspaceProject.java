@@ -25,6 +25,7 @@ import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.ILiferayServer;
 
 import java.util.ArrayList;
@@ -99,6 +100,16 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 	@Override
 	public String getLiferayHome() {
 		return getProperty(WorkspaceConstants.HOME_DIR_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
+	}
+
+	@Override
+	public String getTargetPlatformVersion() {
+		IProject project = getProject();
+
+		IPath location = project.getLocation();
+
+		return LiferayWorkspaceUtil.getGradleProperty(
+			location.toString(), WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, null);
 	}
 
 	@Override

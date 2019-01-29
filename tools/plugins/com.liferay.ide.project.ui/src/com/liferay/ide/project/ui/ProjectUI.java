@@ -43,9 +43,9 @@ public class ProjectUI extends AbstractUIPlugin {
 
 	public static final String LAST_SDK_IMPORT_LOCATION_PREF = "last.sdk.import.location";
 
-	public static final String MIGRATION_TASKS_IMAGE_ID = "migration.tasks.image";
+	public static final String LIFERAY_LOGO_IMAGE_ID = "liferay.logo.image";
 
-	public static final String MODULE_DEPENDENCY_IAMGE_ID = "module.dependency.image";
+	public static final String MIGRATION_TASKS_IMAGE_ID = "migration.tasks.image";
 
 	public static final String PLUGIN_ID = "com.liferay.ide.project.ui";
 
@@ -160,9 +160,9 @@ public class ProjectUI extends AbstractUIPlugin {
 
 		registry.put(PROPERTIES_IMAGE_ID, ImageDescriptor.createFromURL(propertiesPicUrl));
 
-		URL dependencyPicUrl = FileLocator.find(bundle, new Path("icons/e16/new_module_dependency.png"), null);
+		URL liferayLogoPicUrl = FileLocator.find(bundle, new Path("icons/e16/liferay.png"), null);
 
-		registry.put(MODULE_DEPENDENCY_IAMGE_ID, ImageDescriptor.createFromURL(dependencyPicUrl));
+		registry.put(LIFERAY_LOGO_IMAGE_ID, ImageDescriptor.createFromURL(liferayLogoPicUrl));
 	}
 
 	private static ProjectUI _plugin;

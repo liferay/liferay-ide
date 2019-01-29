@@ -1993,14 +1993,4 @@
 		>
 		</include>
 	</extension>
-	<extension
-		point="org.eclipse.jdt.ui.quickFixProcessors"
-	>
-		<quickFixProcessor
-			class="com.liferay.ide.project.ui.quickfix.LiferayDependencyQuickFix"
-			id="com.liferay.ide.project.ui.quickfix.liferayQuickFix"
-			name="LiferayModuleDependencyQuickFix"
-		>
-		</quickFixProcessor>
-	</extension>
 </plugin>

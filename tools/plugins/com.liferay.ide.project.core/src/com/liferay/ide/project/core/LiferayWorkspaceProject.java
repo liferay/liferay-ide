@@ -115,6 +115,11 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 	}
 
 	@Override
+	public String getTargetPlatformVersion() {
+		return null;
+	}
+
+	@Override
 	public void watch(Set<IProject> childProjects) {
 	}
 
