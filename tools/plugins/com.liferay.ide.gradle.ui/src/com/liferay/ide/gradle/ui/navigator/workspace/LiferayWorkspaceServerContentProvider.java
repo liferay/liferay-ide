@@ -20,6 +20,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.adapter.NoopLiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
@@ -48,6 +49,15 @@ public class LiferayWorkspaceServerContentProvider extends AbstractNavigatorCont
 			List<IProject> projects = new ArrayList<>();
 
 			for (IProject project : CoreUtil.getAllProjects()) {
+				try {
+					if (!GradleUtil.isGradleProject(project)) {
+						continue;
+					}
+				}
+				catch (Exception e) {
+					continue;
+				}
+
 				ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 				if (!(liferayProject instanceof NoopLiferayProject)) {
