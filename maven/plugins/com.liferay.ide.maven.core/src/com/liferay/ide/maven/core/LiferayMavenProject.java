@@ -21,7 +21,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
-import com.liferay.ide.core.workspace.EventUtil;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -200,8 +199,12 @@ public abstract class LiferayMavenProject extends BaseLiferayProject implements 
 
 	@Override
 	public void onEvent(Event event) {
-		if (!isStale() && event instanceof ProjectChangedEvent) {
-			if (EventUtil.hasResourcesAffected((ProjectChangedEvent)event, getProject(), _importantResources)) {
+		if (isStale()) {
+			return;
+		}
+
+		if (event instanceof ProjectChangedEvent) {
+			if (hasResourcesAffected((ProjectChangedEvent)event, getProject(), _importantResources)) {
 				_stale = true;
 			}
 		}

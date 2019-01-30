@@ -21,7 +21,6 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.WorkspaceConstants;
-import com.liferay.ide.core.workspace.EventUtil;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
@@ -117,8 +116,12 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 	@Override
 	public void onEvent(Event event) {
-		if (!isStale() && event instanceof ProjectChangedEvent) {
-			if (EventUtil.hasResourcesAffected((ProjectChangedEvent)event, getProject(), _importantResources)) {
+		if (isStale()) {
+			return;
+		}
+
+		if (event instanceof ProjectChangedEvent) {
+			if (hasResourcesAffected((ProjectChangedEvent)event, getProject(), _importantResources)) {
 				_stale = true;
 			}
 		}
