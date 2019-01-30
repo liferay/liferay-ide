@@ -66,7 +66,9 @@ public class LiferayCore extends Plugin {
 
 		if (liferayProject == null) {
 			liferayProject = _createInternal(type, adaptable);
+		}
 
+		if (liferayProject != null) {
 			if (liferayProject instanceof EventListener) {
 				ListenerRegistry listenerRegistry = listenerRegistry();
 
@@ -270,22 +272,14 @@ public class LiferayCore extends Plugin {
 		super.stop(context);
 	}
 
-	private static <T extends ILiferayProject> T _checkProjectCache(Class<T> type, Object adaptable) {
+	private static <T extends ILiferayProject> ILiferayProject _checkProjectCache(Class<T> type, Object adaptable) {
 		Map<ProjectCacheKey<?>, ILiferayProject> projectCache = _plugin._projectCache;
 
 		ProjectCacheKey<T> projectCacheKey = new ProjectCacheKey<>(type, adaptable);
 
 		ILiferayProject liferayProject = projectCache.get(projectCacheKey);
 
-		if (liferayProject == null) {
-			for (ILiferayProject cachedLiferayProject : projectCache.values()) {
-				if (type.isInstance(cachedLiferayProject) && adaptable.equals(cachedLiferayProject.getProject())) {
-					liferayProject = type.cast(cachedLiferayProject);
-
-					break;
-				}
-			}
-		}
+		//Stale project should be removed in the first time
 
 		if ((liferayProject != null) && liferayProject.isStale()) {
 			if (liferayProject instanceof EventListener) {
@@ -299,7 +293,21 @@ public class LiferayCore extends Plugin {
 			liferayProject = null;
 		}
 
-		return type.cast(liferayProject);
+		//Handle the situation that the adaptable object could have muti-type
+
+		if (liferayProject == null) {
+			for (ILiferayProject cachedLiferayProject : projectCache.values()) {
+				if (type.isInstance(cachedLiferayProject) && adaptable.equals(cachedLiferayProject.getProject()) &&
+					!cachedLiferayProject.isStale()) {
+
+					liferayProject = cachedLiferayProject;
+
+					break;
+				}
+			}
+		}
+
+		return liferayProject;
 	}
 
 	private static ILiferayProject _createInternal(Class<?> type, Object adaptable) {
