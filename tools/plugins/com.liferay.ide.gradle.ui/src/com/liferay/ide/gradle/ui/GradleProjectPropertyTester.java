@@ -17,7 +17,6 @@ package com.liferay.ide.gradle.ui;
 import com.liferay.ide.gradle.core.GradleUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
-import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Lovett Li
@@ -25,13 +24,7 @@ import org.eclipse.core.runtime.CoreException;
 public class GradleProjectPropertyTester extends PropertyTester {
 
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		try {
-			return GradleUtil.isGradleProject(receiver);
-		}
-		catch (CoreException ce) {
-		}
-
-		return false;
+		return GradleUtil.isGradleProject(receiver);
 	}
 
 }
