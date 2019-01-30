@@ -20,13 +20,14 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.adapter.NoopLiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
@@ -45,23 +46,33 @@ public class LiferayWorkspaceServerContentProvider extends AbstractNavigatorCont
 		if (parentElement instanceof IProject) {
 			IProject parentProject = (IProject)parentElement;
 
-			List<IProject> projects = new ArrayList<>();
+			return Stream.of(
+				CoreUtil.getAllProjects()
+			).filter(
+				GradleUtil::isGradleProject
+			).map(
+				project -> LiferayCore.create(ILiferayProject.class, project)
+			).filter(
+				liferayProject -> !(liferayProject instanceof NoopLiferayProject)
+			).filter(
+				liferayProject -> {
+					IProject project = liferayProject.getProject();
 
-			for (IProject project : CoreUtil.getAllProjects()) {
-				ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
-
-				if (!(liferayProject instanceof NoopLiferayProject)) {
 					IPath fullPath = project.getLocation();
 
 					IPath parentLocation = parentProject.getLocation();
 
 					if (parentLocation.isPrefixOf(fullPath) && !project.equals(parentProject)) {
-						projects.add(project);
+						return true;
 					}
-				}
-			}
 
-			return projects.toArray();
+					return false;
+				}
+			).map(
+				ILiferayProject::getProject
+			).collect(
+				Collectors.toList()
+			).toArray();
 		}
 
 		return null;

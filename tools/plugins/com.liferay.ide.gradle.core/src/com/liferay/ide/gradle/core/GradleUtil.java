@@ -143,7 +143,7 @@ public class GradleUtil {
 		return false;
 	}
 
-	public static boolean isGradleProject(Object resource) throws CoreException {
+	public static boolean isGradleProject(Object resource) {
 		IProject project = null;
 
 		if (resource instanceof IFile) {
@@ -153,7 +153,15 @@ public class GradleUtil {
 			project = (IProject)resource;
 		}
 
-		return project.hasNature("org.eclipse.buildship.core.gradleprojectnature");
+		if (project != null) {
+			try {
+				return project.hasNature("org.eclipse.buildship.core.gradleprojectnature");
+			}
+			catch (CoreException ce) {
+			}
+		}
+
+		return false;
 	}
 
 	public static boolean isWatchableProject(IFile buildFile) {
