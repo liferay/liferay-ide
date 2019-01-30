@@ -17,17 +17,7 @@ package com.liferay.ide.upgrade.plan.core;
 /**
  * @author Terry Jia
  */
-public class MigrationProblemsContainer implements InfoProvider {
-
-	@Override
-	public String getDetail() {
-		return null;
-	}
-
-	@Override
-	public String getLabel() {
-		return "Liferay Upgrade";
-	}
+public class MigrationProblemsContainer {
 
 	public ProjectProblems[] getProblemsArray() {
 		return _projectProblemsArray;

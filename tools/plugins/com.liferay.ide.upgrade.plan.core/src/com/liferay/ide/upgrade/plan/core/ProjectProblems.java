@@ -17,32 +17,10 @@ package com.liferay.ide.upgrade.plan.core;
 /**
  * @author Terry Jia
  */
-public class ProjectProblems implements InfoProvider {
-
-	@Override
-	public String getDetail() {
-		StringBuffer sb = new StringBuffer();
-
-		sb.append(_projectName);
-		sb.append("<br />");
-		sb.append("It has " + _fileProblems.length + " file(s) need to be solved.");
-		sb.append("<br />");
-
-		for (FileProblems problem : _fileProblems) {
-			sb.append(problem.getFile());
-			sb.append("<br />");
-		}
-
-		return sb.toString();
-	}
+public class ProjectProblems {
 
 	public FileProblems[] getFileProblems() {
 		return _fileProblems;
-	}
-
-	@Override
-	public String getLabel() {
-		return _projectName;
 	}
 
 	public String getProjectName() {

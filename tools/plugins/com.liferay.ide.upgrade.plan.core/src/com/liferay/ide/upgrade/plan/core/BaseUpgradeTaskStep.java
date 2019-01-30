@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import com.liferay.ide.core.util.CoreUtil;
-
 import java.util.Dictionary;
 
 import org.osgi.framework.BundleContext;
@@ -50,34 +48,9 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 		return _description;
 	}
 
-	public String getDetail() {
-		String detail = "";
-
-		if (CoreUtil.isNotNullOrEmpty(_url)) {
-			detail = _url;
-		}
-		else {
-			StringBuffer sb = new StringBuffer();
-
-			sb.append(_title);
-
-			sb.append("<br />");
-
-			sb.append(_description);
-
-			detail = sb.toString();
-		}
-
-		return detail;
-	}
-
 	@Override
 	public String getId() {
 		return _id;
-	}
-
-	public String getLabel() {
-		return _title;
 	}
 
 	@Override

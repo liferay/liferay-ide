@@ -21,7 +21,7 @@ import java.util.Arrays;
 /**
  * @author Terry Jia
  */
-public class FileProblems implements InfoProvider {
+public class FileProblems {
 
 	public void addProblem(Problem problem) {
 		Problem[] problems = Arrays.copyOf(_problems, _problems.length + 1);
@@ -31,33 +31,8 @@ public class FileProblems implements InfoProvider {
 		_problems = problems;
 	}
 
-	@Override
-	public String getDetail() {
-		StringBuffer sb = new StringBuffer();
-
-		sb.append(_file);
-		sb.append("<br />");
-		sb.append("It has " + _problems.length + " issue(s) need to be solved.");
-		sb.append("<br />");
-
-		for (Problem problem : _problems) {
-			sb.append(problem.title);
-			sb.append("<br />");
-		}
-
-		return sb.toString();
-	}
-
 	public File getFile() {
 		return _file;
-	}
-
-	@Override
-	public String getLabel() {
-		String fileName = _file.getName();
-		String path = _file.getParent();
-
-		return fileName + " [" + path + "]";
 	}
 
 	public Problem[] getProblems() {
