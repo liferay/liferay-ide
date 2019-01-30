@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 import org.eclipse.core.net.proxy.IProxyService;
@@ -282,27 +283,22 @@ public class LiferayCore extends Plugin {
 		//Stale project should be removed in the first time
 
 		if ((liferayProject != null) && liferayProject.isStale()) {
-			if (liferayProject instanceof EventListener) {
-				ListenerRegistry listenerRegistry = listenerRegistry();
-
-				listenerRegistry.removeEventListener((EventListener)liferayProject);
-			}
-
-			projectCache.remove(projectCacheKey);
-
 			liferayProject = null;
 		}
 
 		//Handle the situation that the adaptable object could have muti-type
 
 		if (liferayProject == null) {
-			for (ILiferayProject cachedLiferayProject : projectCache.values()) {
-				if (type.isInstance(cachedLiferayProject) && adaptable.equals(cachedLiferayProject.getProject()) &&
-					!cachedLiferayProject.isStale()) {
+			for (Entry<ProjectCacheKey<?>, ILiferayProject> entry : projectCache.entrySet()) {
+				ILiferayProject cachedLiferayProject = entry.getValue();
 
-					liferayProject = cachedLiferayProject;
-
-					break;
+				if (type.isInstance(cachedLiferayProject) && adaptable.equals(cachedLiferayProject.getProject())) {
+					if (cachedLiferayProject.isStale()) {
+						_removeFromCache(entry);
+					}
+					else {
+						liferayProject = cachedLiferayProject;
+					}
 				}
 			}
 		}
@@ -343,6 +339,20 @@ public class LiferayCore extends Plugin {
 		Map<ProjectCacheKey<?>, ILiferayProject> projectCache = _plugin._projectCache;
 
 		projectCache.put(new ProjectCacheKey<>(type, adaptable), liferayProject);
+	}
+
+	private static void _removeFromCache(Entry<ProjectCacheKey<?>, ILiferayProject> entry) {
+		Map<ProjectCacheKey<?>, ILiferayProject> projectCache = _plugin._projectCache;
+
+		ILiferayProject liferayProject = entry.getValue();
+
+		if (liferayProject instanceof EventListener) {
+			ListenerRegistry listenerRegistry = listenerRegistry();
+
+			listenerRegistry.removeEventListener((EventListener)liferayProject);
+		}
+
+		projectCache.remove(entry.getKey());
 	}
 
 	private <T> ServiceTracker<T, T> _createServiceTracker(BundleContext context, Class<T> clazz) {
