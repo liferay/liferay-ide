@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.IStatus;
  * @author Terry Jia
  * @author Gregory Amerson
  */
-public interface UpgradeTaskStep extends Summary {
+public interface UpgradeTaskStep extends InfoProvider {
 
 	public IStatus execute(IProgressMonitor progressMonitor);
 

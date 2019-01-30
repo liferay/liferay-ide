@@ -45,7 +45,12 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 		_upgradePlannerServiceTracker.open();
 	}
 
-	public String doDetail() {
+	@Override
+	public String getDescription() {
+		return _description;
+	}
+
+	public String getDetail() {
 		String detail = "";
 
 		if (CoreUtil.isNotNullOrEmpty(_url)) {
@@ -66,18 +71,13 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 		return detail;
 	}
 
-	public String doLabel() {
-		return _title;
-	}
-
-	@Override
-	public String getDescription() {
-		return _description;
-	}
-
 	@Override
 	public String getId() {
 		return _id;
+	}
+
+	public String getLabel() {
+		return _title;
 	}
 
 	@Override

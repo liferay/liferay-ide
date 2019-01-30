@@ -17,15 +17,15 @@ package com.liferay.ide.upgrade.plan.core;
 /**
  * @author Terry Jia
  */
-public class MigrationProblemsContainer implements Summary {
+public class MigrationProblemsContainer implements InfoProvider {
 
 	@Override
-	public String doDetail() {
+	public String getDetail() {
 		return null;
 	}
 
 	@Override
-	public String doLabel() {
+	public String getLabel() {
 		return "Liferay Upgrade";
 	}
 

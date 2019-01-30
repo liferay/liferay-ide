@@ -21,7 +21,7 @@ import java.util.UUID;
 /**
  * @author Gregory Amerson
  */
-public class Problem implements Summary {
+public class Problem implements InfoProvider {
 
 	public static final long DEFAULT_MARKER_ID = -1;
 
@@ -68,26 +68,6 @@ public class Problem implements Summary {
 		this.status = status;
 		this.markerId = markerId;
 		this.markerType = markerType;
-	}
-
-	@Override
-	public String doDetail() {
-		return html;
-	}
-
-	@Override
-	public String doLabel() {
-		StringBuffer sb = new StringBuffer();
-
-		sb.append("[");
-		sb.append(version);
-		sb.append("]");
-		sb.append("[");
-		sb.append(lineNumber);
-		sb.append("]");
-		sb.append(title);
-
-		return sb.toString();
 	}
 
 	@Override
@@ -208,12 +188,32 @@ public class Problem implements Summary {
 		return autoCorrectContext;
 	}
 
+	@Override
+	public String getDetail() {
+		return html;
+	}
+
 	public int getEndOffset() {
 		return endOffset;
 	}
 
 	public File getFile() {
 		return file;
+	}
+
+	@Override
+	public String getLabel() {
+		StringBuffer sb = new StringBuffer();
+
+		sb.append("[");
+		sb.append(version);
+		sb.append("]");
+		sb.append("[");
+		sb.append(lineNumber);
+		sb.append("]");
+		sb.append(title);
+
+		return sb.toString();
 	}
 
 	public int getLineNumber() {

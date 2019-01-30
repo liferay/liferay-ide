@@ -16,11 +16,12 @@ package com.liferay.ide.upgrade.plan.core;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
-public interface Summary {
+public interface InfoProvider {
 
-	public String doDetail();
+	public String getDetail();
 
-	public String doLabel();
+	public String getLabel();
 
 }

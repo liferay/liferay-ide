@@ -16,10 +16,10 @@ package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
 import com.liferay.ide.upgrade.plan.core.FileProblems;
+import com.liferay.ide.upgrade.plan.core.InfoProvider;
 import com.liferay.ide.upgrade.plan.core.MigrationProblemsContainer;
 import com.liferay.ide.upgrade.plan.core.Problem;
 import com.liferay.ide.upgrade.plan.core.ProjectProblems;
-import com.liferay.ide.upgrade.plan.core.Summary;
 import com.liferay.ide.upgrade.plan.ui.UpgradePlanUIPlugin;
 
 import org.eclipse.jface.resource.ImageRegistry;
@@ -51,10 +51,10 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		if (element instanceof Summary) {
-			Summary summary = (Summary)element;
+		if (element instanceof InfoProvider) {
+			InfoProvider summary = (InfoProvider)element;
 
-			return summary.doLabel();
+			return summary.getLabel();
 		}
 
 		return null;

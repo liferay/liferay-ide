@@ -16,7 +16,7 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.plan.core.Summary;
+import com.liferay.ide.upgrade.plan.core.InfoProvider;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import com.vladsch.flexmark.ast.Node;
@@ -145,10 +145,10 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 
 			Object firstElement = structuredSelection.getFirstElement();
 
-			if (firstElement instanceof Summary) {
-				Summary summary = (Summary)firstElement;
+			if (firstElement instanceof InfoProvider) {
+				InfoProvider summary = (InfoProvider)firstElement;
 
-				String detail = summary.doDetail();
+				String detail = summary.getDetail();
 
 				if (detail != null) {
 					if (detail.endsWith("markdown") || detail.endsWith("md")) {

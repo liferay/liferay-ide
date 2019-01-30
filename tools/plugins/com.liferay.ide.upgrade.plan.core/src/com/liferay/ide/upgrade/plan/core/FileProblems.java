@@ -21,7 +21,7 @@ import java.util.Arrays;
 /**
  * @author Terry Jia
  */
-public class FileProblems implements Summary {
+public class FileProblems implements InfoProvider {
 
 	public void addProblem(Problem problem) {
 		Problem[] problems = Arrays.copyOf(_problems, _problems.length + 1);
@@ -32,7 +32,7 @@ public class FileProblems implements Summary {
 	}
 
 	@Override
-	public String doDetail() {
+	public String getDetail() {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append(_file);
@@ -48,16 +48,16 @@ public class FileProblems implements Summary {
 		return sb.toString();
 	}
 
+	public File getFile() {
+		return _file;
+	}
+
 	@Override
-	public String doLabel() {
+	public String getLabel() {
 		String fileName = _file.getName();
 		String path = _file.getParent();
 
 		return fileName + " [" + path + "]";
-	}
-
-	public File getFile() {
-		return _file;
 	}
 
 	public Problem[] getProblems() {

@@ -17,10 +17,10 @@ package com.liferay.ide.upgrade.plan.core;
 /**
  * @author Terry Jia
  */
-public class ProjectProblems implements Summary {
+public class ProjectProblems implements InfoProvider {
 
 	@Override
-	public String doDetail() {
+	public String getDetail() {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append(_projectName);
@@ -36,13 +36,13 @@ public class ProjectProblems implements Summary {
 		return sb.toString();
 	}
 
-	@Override
-	public String doLabel() {
-		return _projectName;
-	}
-
 	public FileProblems[] getFileProblems() {
 		return _fileProblems;
+	}
+
+	@Override
+	public String getLabel() {
+		return _projectName;
 	}
 
 	public String getProjectName() {
