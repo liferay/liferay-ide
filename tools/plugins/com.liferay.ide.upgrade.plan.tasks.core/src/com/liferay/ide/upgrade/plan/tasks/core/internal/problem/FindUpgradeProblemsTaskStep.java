@@ -25,11 +25,9 @@ import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepDoneEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
-import com.liferay.ide.upgrade.plan.core.util.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.Migration;
 
 import java.io.File;
-import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -110,14 +108,6 @@ public class FindUpgradeProblemsTaskStep extends JavaProjectsSelectionTaskStep i
 							MigrationProblemsContainer container = new MigrationProblemsContainer();
 
 							container.setProblemsArray(probjectProblemsList.toArray(new ProjectProblems[0]));
-
-							try {
-								UpgradeAssistantSettingsUtil.setObjectToStore(
-									MigrationProblemsContainer.class, container);
-							}
-							catch (IOException ioe) {
-								ioe.printStackTrace();
-							}
 						}
 					}
 				);

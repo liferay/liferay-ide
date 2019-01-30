@@ -18,9 +18,6 @@ import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
 import com.liferay.ide.upgrade.plan.core.FileProblems;
 import com.liferay.ide.upgrade.plan.core.MigrationProblemsContainer;
 import com.liferay.ide.upgrade.plan.core.ProjectProblems;
-import com.liferay.ide.upgrade.plan.core.util.UpgradeAssistantSettingsUtil;
-
-import java.io.IOException;
 
 /**
  * @author Terry Jia
@@ -48,18 +45,6 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 	}
 
 	public Object[] getElements(Object inputElement) {
-		try {
-			MigrationProblemsContainer container = UpgradeAssistantSettingsUtil.getObjectFromStore(
-				MigrationProblemsContainer.class);
-
-			if (container != null) {
-				return new Object[] {container};
-			}
-		}
-		catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-
 		return null;
 	}
 
