@@ -14,14 +14,19 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.Event;
+import com.liferay.ide.core.EventListener;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.WorkspaceConstants;
+import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
 
 import java.io.File;
 import java.io.FileReader;
+
+import java.util.Optional;
 
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -32,10 +37,14 @@ import org.eclipse.core.runtime.IPath;
 /**
  * @author Simon Jiang
  */
-public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject {
+public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implements EventListener {
 
 	public LiferayMavenWorkspaceProject(IProject project) {
 		super(project);
+
+		IPath projectPath = project.getFullPath();
+
+		_importantResources = new IPath[] {projectPath.append("pom.xml")};
 
 		_initializeMavenWorkspaceProperties(project);
 	}
@@ -57,8 +66,30 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject {
 	}
 
 	@Override
+	public boolean isStale() {
+		return _stale;
+	}
+
+	@Override
 	public boolean isWatchable() {
 		return false;
+	}
+
+	@Override
+	public void onEvent(Event event) {
+		Optional.of(
+			event
+		).filter(
+			e -> !isStale()
+		).filter(
+			ProjectChangedEvent.class::isInstance
+		).map(
+			ProjectChangedEvent.class::cast
+		).filter(
+			projectChangedEvent -> hasResourcesAffected(projectChangedEvent, getProject(), _importantResources)
+		).ifPresent(
+			e -> _stale = true
+		);
 	}
 
 	private void _initializeMavenWorkspaceProperties(IProject project) {
@@ -82,5 +113,8 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject {
 			}
 		}
 	}
+
+	private IPath[] _importantResources;
+	private volatile boolean _stale = false;
 
 }

@@ -11,13 +11,37 @@
 
 package com.liferay.ide.core;
 
+import com.liferay.ide.core.workspace.ProjectChangedEvent;
+
+import java.util.Set;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+
 /**
  * Listens to {@link Event} instances dispatched via {@link ListenerRegistry}.
  *
  * @author Etienne Studer
  * @author Donát Csikós
+ * @author Charles Wu
  */
 public interface EventListener {
+
+	public default boolean hasResourcesAffected(
+		ProjectChangedEvent projectChangedEvent, IProject project, IPath[] resources) {
+
+		if (project.equals(projectChangedEvent.getProject())) {
+			Set<IPath> affectedFiles = projectChangedEvent.getAffectedFiles();
+
+			for (IPath resource : resources) {
+				if (affectedFiles.contains(resource)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 
 	/**
 	 * Invoked when an event has been dispatched through the listener registry with which this

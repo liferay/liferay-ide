@@ -15,16 +15,20 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.BaseLiferayProject;
+import com.liferay.ide.core.Event;
+import com.liferay.ide.core.EventListener;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
@@ -46,10 +50,14 @@ import org.eclipse.m2e.jdt.MavenJdtPlugin;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public abstract class LiferayMavenProject extends BaseLiferayProject implements IMavenProject {
+public abstract class LiferayMavenProject extends BaseLiferayProject implements IMavenProject, EventListener {
 
 	public LiferayMavenProject(IProject project) {
 		super(project);
+
+		IPath projectPath = project.getFullPath();
+
+		_importantResources = new IPath[] {projectPath.append("pom.xml")};
 	}
 
 	@Override
@@ -184,5 +192,30 @@ public abstract class LiferayMavenProject extends BaseLiferayProject implements 
 
 		return libs.toArray(new IPath[0]);
 	}
+
+	@Override
+	public boolean isStale() {
+		return _stale;
+	}
+
+	@Override
+	public void onEvent(Event event) {
+		Optional.of(
+			event
+		).filter(
+			e -> !isStale()
+		).filter(
+			ProjectChangedEvent.class::isInstance
+		).map(
+			ProjectChangedEvent.class::cast
+		).filter(
+			projectChangedEvent -> hasResourcesAffected(projectChangedEvent, getProject(), _importantResources)
+		).ifPresent(
+			e -> _stale = true
+		);
+	}
+
+	private IPath[] _importantResources;
+	private volatile boolean _stale = false;
 
 }

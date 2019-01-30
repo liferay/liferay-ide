@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -116,21 +117,19 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 	@Override
 	public void onEvent(Event event) {
-		if (!isStale() && event instanceof ProjectChangedEvent) {
-			ProjectChangedEvent changeEvent = (ProjectChangedEvent)event;
-
-			if (getProject().equals(changeEvent.getProject())) {
-				Set<IPath> affectedFiles = changeEvent.getAffectedFiles();
-
-				for (IPath importantFile : _importantResources) {
-					if (affectedFiles.contains(importantFile)) {
-						_stale = true;
-
-						break;
-					}
-				}
-			}
-		}
+		Optional.of(
+			event
+		).filter(
+			e -> !isStale()
+		).filter(
+			ProjectChangedEvent.class::isInstance
+		).map(
+			ProjectChangedEvent.class::cast
+		).filter(
+			projectChangedEvent -> hasResourcesAffected(projectChangedEvent, getProject(), _importantResources)
+		).ifPresent(
+			e -> _stale = true
+		);
 	}
 
 	@Override

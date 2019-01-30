@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 import org.eclipse.core.net.proxy.IProxyService;
@@ -66,7 +67,9 @@ public class LiferayCore extends Plugin {
 
 		if (liferayProject == null) {
 			liferayProject = _createInternal(type, adaptable);
+		}
 
+		if (liferayProject != null) {
 			if (liferayProject instanceof EventListener) {
 				ListenerRegistry listenerRegistry = listenerRegistry();
 
@@ -270,36 +273,37 @@ public class LiferayCore extends Plugin {
 		super.stop(context);
 	}
 
-	private static <T extends ILiferayProject> T _checkProjectCache(Class<T> type, Object adaptable) {
+	private static <T extends ILiferayProject> ILiferayProject _checkProjectCache(Class<T> type, Object adaptable) {
 		Map<ProjectCacheKey<?>, ILiferayProject> projectCache = _plugin._projectCache;
 
 		ProjectCacheKey<T> projectCacheKey = new ProjectCacheKey<>(type, adaptable);
 
 		ILiferayProject liferayProject = projectCache.get(projectCacheKey);
 
-		if (liferayProject == null) {
-			for (ILiferayProject cachedLiferayProject : projectCache.values()) {
-				if (type.isInstance(cachedLiferayProject) && adaptable.equals(cachedLiferayProject.getProject())) {
-					liferayProject = type.cast(cachedLiferayProject);
+		//Stale project should be removed in the first time
 
-					break;
+		if ((liferayProject != null) && liferayProject.isStale()) {
+			liferayProject = null;
+		}
+
+		//Handle the situation that the adaptable object could have muti-type
+
+		if (liferayProject == null) {
+			for (Entry<ProjectCacheKey<?>, ILiferayProject> entry : projectCache.entrySet()) {
+				ILiferayProject cachedLiferayProject = entry.getValue();
+
+				if (type.isInstance(cachedLiferayProject) && adaptable.equals(cachedLiferayProject.getProject())) {
+					if (cachedLiferayProject.isStale()) {
+						_removeFromCache(entry);
+					}
+					else {
+						liferayProject = cachedLiferayProject;
+					}
 				}
 			}
 		}
 
-		if ((liferayProject != null) && liferayProject.isStale()) {
-			if (liferayProject instanceof EventListener) {
-				ListenerRegistry listenerRegistry = listenerRegistry();
-
-				listenerRegistry.removeEventListener((EventListener)liferayProject);
-			}
-
-			projectCache.remove(projectCacheKey);
-
-			liferayProject = null;
-		}
-
-		return type.cast(liferayProject);
+		return liferayProject;
 	}
 
 	private static ILiferayProject _createInternal(Class<?> type, Object adaptable) {
@@ -335,6 +339,20 @@ public class LiferayCore extends Plugin {
 		Map<ProjectCacheKey<?>, ILiferayProject> projectCache = _plugin._projectCache;
 
 		projectCache.put(new ProjectCacheKey<>(type, adaptable), liferayProject);
+	}
+
+	private static void _removeFromCache(Entry<ProjectCacheKey<?>, ILiferayProject> entry) {
+		Map<ProjectCacheKey<?>, ILiferayProject> projectCache = _plugin._projectCache;
+
+		ILiferayProject liferayProject = entry.getValue();
+
+		if (liferayProject instanceof EventListener) {
+			ListenerRegistry listenerRegistry = listenerRegistry();
+
+			listenerRegistry.removeEventListener((EventListener)liferayProject);
+		}
+
+		projectCache.remove(entry.getKey());
 	}
 
 	private <T> ServiceTracker<T, T> _createServiceTracker(BundleContext context, Class<T> clazz) {
