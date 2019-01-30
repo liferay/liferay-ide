@@ -28,13 +28,13 @@ import org.eclipse.core.runtime.IPath;
 public interface EventListener {
 
 	public default <T> boolean hasResourcesAffected(
-		ProjectChangedEvent event, IProject project, T[] importantResources) {
+		ProjectChangedEvent projectChangedEvent, IProject project, T[] resources) {
 
-		if (project.equals(event.getProject())) {
-			Set<IPath> affectedFiles = event.getAffectedFiles();
+		if (project.equals(projectChangedEvent.getProject())) {
+			Set<IPath> affectedFiles = projectChangedEvent.getAffectedFiles();
 
-			for (T importantFile : importantResources) {
-				if (affectedFiles.contains(importantFile)) {
+			for (T resource : resources) {
+				if (affectedFiles.contains(resource)) {
 					return true;
 				}
 			}
