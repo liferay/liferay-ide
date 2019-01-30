@@ -14,7 +14,6 @@ Require-Bundle: com.google.guava,
  org.eclipse.equinox.common,
  org.eclipse.jst.jsp.core,
  org.eclipse.osgi.services,
- org.sf.feeling.decompiler,
  org.json,
  org.eclipse.osgi,
  org.codehaus.jackson.mapper
