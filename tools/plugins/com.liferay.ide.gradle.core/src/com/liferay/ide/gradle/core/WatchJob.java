@@ -76,7 +76,7 @@ public class WatchJob extends Job {
 				serverBehavior -> serverBehavior.refreshSourceLookup()
 			);
 
-			String[] args = {"--continuous", "--continue"};
+			String[] args = {"--continuous", "--continue", "--rerun-tasks"};
 
 			GradleUtil.runGradleTask(_project, _tasks.toArray(new String[0]), args, _cancelToken, monitor);
 		}
