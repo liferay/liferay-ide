@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.JavaUtil;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -35,12 +36,13 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IVMInstall;
-import org.eclipse.jdt.launching.IVMInstall2;
 import org.eclipse.jdt.launching.IVMInstallType;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.model.RuntimeDelegate;
+
+import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
@@ -274,12 +276,12 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 		if (portalBundleVersion.startsWith("7")) {
 			IVMInstall vmInstall = getVMInstall();
 
-			if (vmInstall instanceof IVMInstall2) {
-				String javaVersion = ((IVMInstall2)vmInstall).getJavaVersion();
+			Version jdkVersion = Version.parseVersion(JavaUtil.getJDKVersion(vmInstall));
 
-				if ((javaVersion != null) && !_isVMRequireVersion(javaVersion, 108)) {
-					return new Status(IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorJRE80, null);
-				}
+			Version jdk8Version = Version.parseVersion("1.8");
+
+			if (jdkVersion.compareTo(jdk8Version) < 0) {
+				return new Status(IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorJRE80, null);
 			}
 		}
 
@@ -358,38 +360,6 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 				}
 			}
 		}
-	}
-
-	private boolean _isVMRequireVersion(String javaVersion, int requireVersion) {
-		Integer version = null;
-		int index = javaVersion.indexOf('.');
-
-		if (index > 0) {
-			try {
-				int major = Integer.parseInt(javaVersion.substring(0, index)) * 100;
-				index++;
-				int index2 = javaVersion.indexOf('.', index);
-
-				if (index2 > 0) {
-					int minor = Integer.parseInt(javaVersion.substring(index, index2));
-
-					version = Integer.valueOf(major + minor);
-				}
-			}
-			catch (NumberFormatException nfe) {
-
-				// Ignore
-
-			}
-		}
-
-		// If we have a version, and it isn't equal to the required version, fail the check
-
-		if ((version != null) && (version.intValue() != requireVersion)) {
-			return false;
-		}
-
-		return true;
 	}
 
 	private PortalBundle _portalBundle;

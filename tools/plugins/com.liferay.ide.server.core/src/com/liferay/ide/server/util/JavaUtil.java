@@ -15,6 +15,7 @@
 package com.liferay.ide.server.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -28,6 +29,8 @@ import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.IVMInstall2;
 import org.eclipse.jdt.launching.IVMInstallType;
 
 /**
@@ -63,6 +66,39 @@ public class JavaUtil {
 			}
 			catch (IOException ioe) {
 				return null;
+			}
+		}
+
+		return null;
+	}
+
+	public static String getJDKVersion(IVMInstall vmInstall) {
+		if (vmInstall instanceof IVMInstall2) {
+			IVMInstall2 vmInstall2 = (IVMInstall2)vmInstall;
+
+			return vmInstall2.getJavaVersion();
+		}
+
+		File vmLocation = vmInstall.getInstallLocation();
+
+		if (FileUtil.exists(vmLocation)) {
+			String absolutePath = vmLocation.getAbsolutePath();
+
+			String[] paths = {
+				absolutePath + "/jre/lib/rt.jar", absolutePath + "/lib/rt.jar", absolutePath + "/lib/jrt-fs.jar",
+				absolutePath + "/jre/lib/vm.jar"
+			};
+
+			for (String path : paths) {
+				path = path.replace('/', File.separatorChar);
+
+				path = path.replace('\\', File.separatorChar);
+
+				File file = new File(path);
+
+				if (file.exists()) {
+					return getJarProperty(file, Attributes.Name.SPECIFICATION_VERSION.toString());
+				}
 			}
 		}
 
@@ -107,6 +143,38 @@ public class JavaUtil {
 		}
 
 		return null;
+	}
+
+	public static boolean isVMRequireVersion(String javaVersion, int requireVersion) {
+		Integer version = null;
+
+		int index = javaVersion.indexOf('.');
+
+		if (index > 0) {
+			try {
+				int major = Integer.parseInt(javaVersion.substring(0, index)) * 100;
+
+				index++;
+
+				int index2 = javaVersion.indexOf('.', index);
+
+				if (index2 > 0) {
+					int minor = Integer.parseInt(javaVersion.substring(index, index2));
+
+					version = Integer.valueOf(major + minor);
+				}
+			}
+			catch (NumberFormatException nfe) {
+			}
+		}
+
+		// If we have a version, and it isn't equal to the required version, fail the check
+
+		if ((version != null) && (version.intValue() != requireVersion)) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public static boolean scanFolderJarsForManifestProp(

@@ -36,6 +36,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.launching.IVMInstall;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -165,7 +166,7 @@ public class PortalJBossBundle extends AbstractPortalBundle {
 	}
 
 	@Override
-	public String[] getRuntimeStartVMArgs() {
+	public String[] getRuntimeStartVMArgs(IVMInstall vmInstall) {
 		List<String> args = new ArrayList<>();
 
 		args.add("-Dcom.sun.management.jmxremote");
@@ -211,7 +212,7 @@ public class PortalJBossBundle extends AbstractPortalBundle {
 	}
 
 	@Override
-	public String[] getRuntimeStopVMArgs() {
+	public String[] getRuntimeStopVMArgs(IVMInstall vmInstall) {
 		List<String> args = new ArrayList<>();
 
 		args.add("-Djboss.home.dir=\"" + bundlePath + "\"");

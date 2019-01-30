@@ -667,7 +667,7 @@ public class PortalServerBehavior
 
 		PortalBundle portalBundle = _getPortalRuntime().getPortalBundle();
 
-		Collections.addAll(retval, portalBundle.getRuntimeStartVMArgs());
+		Collections.addAll(retval, portalBundle.getRuntimeStartVMArgs(_getPortalRuntime().getVMInstall()));
 
 		return retval.toArray(new String[0]);
 	}
@@ -689,7 +689,7 @@ public class PortalServerBehavior
 
 		PortalBundle portalBundle = _getPortalRuntime().getPortalBundle();
 
-		Collections.addAll(retval, portalBundle.getRuntimeStopVMArgs());
+		Collections.addAll(retval, portalBundle.getRuntimeStopVMArgs(_getPortalRuntime().getVMInstall()));
 
 		return retval.toArray(new String[0]);
 	}
