@@ -28,6 +28,7 @@ import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
@@ -199,15 +200,19 @@ public abstract class LiferayMavenProject extends BaseLiferayProject implements 
 
 	@Override
 	public void onEvent(Event event) {
-		if (isStale()) {
-			return;
-		}
-
-		if (event instanceof ProjectChangedEvent) {
-			if (hasResourcesAffected((ProjectChangedEvent)event, getProject(), _importantResources)) {
-				_stale = true;
-			}
-		}
+		Optional.of(
+			event
+		).filter(
+			e -> !isStale()
+		).filter(
+			ProjectChangedEvent.class::isInstance
+		).map(
+			ProjectChangedEvent.class::cast
+		).filter(
+			projectChangedEvent -> hasResourcesAffected(projectChangedEvent, getProject(), _importantResources)
+		).ifPresent(
+			e -> _stale = true
+		);
 	}
 
 	private IPath[] _importantResources;

@@ -26,6 +26,8 @@ import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import java.io.File;
 import java.io.FileReader;
 
+import java.util.Optional;
+
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 
@@ -75,15 +77,19 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implem
 
 	@Override
 	public void onEvent(Event event) {
-		if (isStale()) {
-			return;
-		}
-
-		if (event instanceof ProjectChangedEvent) {
-			if (hasResourcesAffected((ProjectChangedEvent)event, getProject(), _importantResources)) {
-				_stale = true;
-			}
-		}
+		Optional.of(
+			event
+		).filter(
+			e -> !isStale()
+		).filter(
+			ProjectChangedEvent.class::isInstance
+		).map(
+			ProjectChangedEvent.class::cast
+		).filter(
+			projectChangedEvent -> hasResourcesAffected(projectChangedEvent, getProject(), _importantResources)
+		).ifPresent(
+			e -> _stale = true
+		);
 	}
 
 	private void _initializeMavenWorkspaceProperties(IProject project) {
