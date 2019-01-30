@@ -22,6 +22,7 @@ import com.liferay.ide.upgrade.plan.core.Problem;
 import com.liferay.ide.upgrade.plan.core.ProjectProblems;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepDoneEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
@@ -48,6 +49,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Terry Jia
@@ -112,7 +114,7 @@ public class FindUpgradeProblemsTaskStep extends JavaProjectsSelectionTaskStep i
 					}
 				);
 
-				getUpgradePlanner().dispatch(new UpgradeTaskStepDoneEvent());
+				_upgradePlanner.dispatch(new UpgradeTaskStepDoneEvent());
 
 				return Status.OK_STATUS;
 			}
@@ -156,5 +158,8 @@ public class FindUpgradeProblemsTaskStep extends JavaProjectsSelectionTaskStep i
 
 		return values.toArray(new FileProblems[0]);
 	}
+
+	@Reference
+	private UpgradePlanner _upgradePlanner;
 
 }

@@ -35,8 +35,6 @@ public interface UpgradeTaskStep {
 
 	public String getTitle();
 
-	public UpgradePlanner getUpgradePlanner();
-
 	public String getUrl();
 
 }

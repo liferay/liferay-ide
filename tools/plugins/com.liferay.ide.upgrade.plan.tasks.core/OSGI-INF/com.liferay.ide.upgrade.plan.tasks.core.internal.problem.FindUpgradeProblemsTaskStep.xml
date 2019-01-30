@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.FindUpgradeProblemsTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+<scr:component name="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.FindUpgradeProblemsTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
 	<property name="id" value="find_upgrade_problems" />
 	<property name="requirement" value="recommended" />
 	<property name="order" value="200" />
@@ -8,5 +8,6 @@
 	<service>
 		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep" />
 	</service>
+	<reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner" />
 	<implementation class="com.liferay.ide.upgrade.plan.tasks.core.internal.problem.FindUpgradeProblemsTaskStep" />
 </scr:component>

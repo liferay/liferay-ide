@@ -16,10 +16,8 @@ package com.liferay.ide.upgrade.plan.core;
 
 import java.util.Dictionary;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Gregory Amerson
@@ -35,12 +33,6 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 		_requirement = _getProperty(properties, "requirement");
 		_title = _getProperty(properties, "title");
 		_url = _getProperty(properties, "url");
-
-		BundleContext bundleContext = componentContext.getBundleContext();
-
-		_upgradePlannerServiceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
-
-		_upgradePlannerServiceTracker.open();
 	}
 
 	@Override
@@ -63,12 +55,6 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 		return _title;
 	}
 
-	public UpgradePlanner getUpgradePlanner() {
-		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
-
-		return upgradePlanner;
-	}
-
 	@Override
 	public String getUrl() {
 		return _url;
@@ -88,8 +74,6 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 
 		return null;
 	}
-
-	private static ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
 
 	private String _description;
 	private String _id;
