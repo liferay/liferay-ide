@@ -16,20 +16,36 @@ package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
 import com.liferay.ide.upgrade.plan.core.FileProblems;
-import com.liferay.ide.upgrade.plan.core.InfoProvider;
 import com.liferay.ide.upgrade.plan.core.MigrationProblemsContainer;
 import com.liferay.ide.upgrade.plan.core.Problem;
 import com.liferay.ide.upgrade.plan.core.ProjectProblems;
+import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
+
+	public UpgradeProblemsLabelProvider() {
+		Bundle bundle = FrameworkUtil.getBundle(UpgradeProblemsLabelProvider.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_upgradeInfoProviderServiceTracker = new ServiceTracker<>(bundleContext, UpgradeInfoProvider.class, null);
+
+		_upgradeInfoProviderServiceTracker.open();
+	}
 
 	@Override
 	public Image getImage(Object element) {
@@ -51,13 +67,9 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		if (element instanceof InfoProvider) {
-			InfoProvider summary = (InfoProvider)element;
+		UpgradeInfoProvider upgradeInfoProvider = _upgradeInfoProviderServiceTracker.getService();
 
-			return summary.getLabel();
-		}
-
-		return null;
+		return upgradeInfoProvider.getLabel(element);
 	}
 
 	@Override
@@ -76,5 +88,7 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 			UpgradePlanUIPlugin.imageDescriptorFromPlugin(
 				UpgradePlanUIPlugin.PLUGIN_ID, ISharedImages.IMG_OBJS_ERROR_TSK));
 	}
+
+	private ServiceTracker<UpgradeInfoProvider, UpgradeInfoProvider> _upgradeInfoProviderServiceTracker;
 
 }

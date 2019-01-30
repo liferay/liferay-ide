@@ -16,8 +16,8 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.plan.core.InfoProvider;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 
 import com.vladsch.flexmark.ast.Node;
 import com.vladsch.flexmark.html.HtmlRenderer;
@@ -56,6 +56,12 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.promise.Promise;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Terry Jia
  * @author Gregory Amerson
@@ -64,6 +70,14 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 
 	public UpgradePlanInfoPage(IWorkbenchPart workbenchPart) {
 		_workbenchPart = workbenchPart;
+
+		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanInfoPage.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_upgradeInfoProviderServiceTracker = new ServiceTracker<>(bundleContext, UpgradeInfoProvider.class, null);
+
+		_upgradeInfoProviderServiceTracker.open();
 	}
 
 	@Override
@@ -145,25 +159,28 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 
 			Object firstElement = structuredSelection.getFirstElement();
 
-			if (firstElement instanceof InfoProvider) {
-				InfoProvider summary = (InfoProvider)firstElement;
+			UpgradeInfoProvider upgradeInfoProvider = _upgradeInfoProviderServiceTracker.getService();
 
-				String detail = summary.getDetail();
+			Promise<String> detail = upgradeInfoProvider.getDetail(firstElement);
 
-				if (detail != null) {
-					if (detail.endsWith("markdown") || detail.endsWith("md")) {
-						ReadMarkdownJob job = new ReadMarkdownJob(detail);
+			detail.onResolve(
+				() -> {
+					UIUtil.async(
+						() -> {
+							try {
+								if (detail.getFailure() != null) {
+									_browser.setText("about:blank");
+								}
+								else {
+									_browser.setText(detail.getValue());
+								}
 
-						job.schedule();
-					}
-					else {
-						_browser.setText(detail);
-					}
-				}
-			}
-			else {
-				_browser.setUrl("about:blank");
-			}
+								_composite.redraw();
+							}
+							catch (Exception e) {
+							}
+						});
+				});
 
 			_composite.redraw();
 		}
@@ -182,6 +199,7 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 
 	private Browser _browser;
 	private Composite _composite;
+	private final ServiceTracker<UpgradeInfoProvider, UpgradeInfoProvider> _upgradeInfoProviderServiceTracker;
 	private IWorkbenchPart _workbenchPart;
 
 	private class ReadMarkdownJob extends Job {
