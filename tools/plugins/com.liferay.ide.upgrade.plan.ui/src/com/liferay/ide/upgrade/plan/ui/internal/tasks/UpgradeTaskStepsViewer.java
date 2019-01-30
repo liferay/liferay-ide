@@ -17,7 +17,7 @@ package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
-import com.liferay.ide.upgrade.plan.ui.UpgradePlanUIPlugin;
+import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 
 import java.util.ArrayList;
 import java.util.List;

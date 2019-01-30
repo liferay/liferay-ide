@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bundle-Activator: com.liferay.ide.upgrade.plan.ui.UpgradePlanUIPlugin
+Bundle-Activator: com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/flexmark-0.34.48.jar,

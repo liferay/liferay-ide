@@ -23,8 +23,8 @@ import com.liferay.ide.upgrade.plan.core.ProjectsSelectionTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepRequirement;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
-import com.liferay.ide.upgrade.plan.ui.UpgradePlanUIPlugin;
 import com.liferay.ide.upgrade.plan.ui.dialogs.ProjectSelectionDialog;
+import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 
 import java.io.File;
 

@@ -20,7 +20,7 @@ import com.liferay.ide.upgrade.plan.core.InfoProvider;
 import com.liferay.ide.upgrade.plan.core.MigrationProblemsContainer;
 import com.liferay.ide.upgrade.plan.core.Problem;
 import com.liferay.ide.upgrade.plan.core.ProjectProblems;
-import com.liferay.ide.upgrade.plan.ui.UpgradePlanUIPlugin;
+import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;

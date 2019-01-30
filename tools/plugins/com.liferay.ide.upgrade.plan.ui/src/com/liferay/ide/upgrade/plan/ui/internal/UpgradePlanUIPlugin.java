@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.ui;
+package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.FileProblems;

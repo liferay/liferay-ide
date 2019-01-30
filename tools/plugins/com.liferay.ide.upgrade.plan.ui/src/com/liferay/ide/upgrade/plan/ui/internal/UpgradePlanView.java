@@ -20,7 +20,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepDoneEvent;
-import com.liferay.ide.upgrade.plan.ui.UpgradePlanUIPlugin;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskStepsViewer;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTasksViewer;
 
