@@ -18,9 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 
 import java.util.Dictionary;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.util.tracker.ServiceTracker;
@@ -40,9 +38,7 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 		_title = _getProperty(properties, "title");
 		_url = _getProperty(properties, "url");
 
-		Bundle bundle = FrameworkUtil.getBundle(BaseUpgradeTaskStep.class);
-
-		BundleContext bundleContext = bundle.getBundleContext();
+		BundleContext bundleContext = componentContext.getBundleContext();
 
 		_upgradePlannerServiceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
 
