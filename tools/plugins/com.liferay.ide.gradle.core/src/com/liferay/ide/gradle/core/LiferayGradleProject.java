@@ -18,6 +18,8 @@ import aQute.bnd.osgi.Jar;
 
 import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.BaseLiferayProject;
+import com.liferay.ide.core.Event;
+import com.liferay.ide.core.EventListener;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IResourceBundleProject;
 import com.liferay.ide.core.util.CoreUtil;
@@ -25,6 +27,8 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.workspace.EventUtil;
+import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -61,10 +65,15 @@ import org.gradle.tooling.model.GradleProject;
  * @author Terry Jia
  * @author Andy Wu
  */
-public class LiferayGradleProject extends BaseLiferayProject implements IBundleProject, IResourceBundleProject {
+public class LiferayGradleProject
+	extends BaseLiferayProject implements IBundleProject, IResourceBundleProject, EventListener {
 
 	public LiferayGradleProject(IProject project) {
 		super(project);
+
+		IPath projectPath = project.getFullPath();
+
+		_importantResources = new IPath[] {projectPath.append("build.gradle")};
 	}
 
 	@Override
@@ -334,6 +343,20 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 		return false;
 	}
 
+	@Override
+	public boolean isStale() {
+		return _stale;
+	}
+
+	@Override
+	public void onEvent(Event event) {
+		if (!isStale() && event instanceof ProjectChangedEvent) {
+			if (EventUtil.hasResourcesAffected((ProjectChangedEvent)event, getProject(), _importantResources)) {
+				_stale = true;
+			}
+		}
+	}
+
 	private IFolder _createResorcesFolder(IProject project) {
 		try {
 			IJavaProject javaProject = JavaCore.create(project);
@@ -379,5 +402,8 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 	}
 
 	private static final String[] _IGNORE_PATHS = {".gradle", "build", "dist", "liferay-theme.json"};
+
+	private IPath[] _importantResources;
+	private volatile boolean _stale = false;
 
 }
