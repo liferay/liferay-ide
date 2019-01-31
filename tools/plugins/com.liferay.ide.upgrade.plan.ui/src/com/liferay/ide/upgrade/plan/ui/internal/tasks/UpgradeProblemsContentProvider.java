@@ -14,10 +14,10 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
+import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
-import com.liferay.ide.upgrade.plan.core.FileProblems;
-import com.liferay.ide.upgrade.plan.core.MigrationProblemsContainer;
-import com.liferay.ide.upgrade.plan.core.ProjectProblems;
+import com.liferay.ide.upgrade.plan.ui.internal.FileProblemsContainer;
+import com.liferay.ide.upgrade.plan.ui.internal.ProjectProblemsContainer;
 
 /**
  * @author Terry Jia
@@ -26,19 +26,19 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 
 	public Object[] getChildren(Object element) {
 		if (element instanceof MigrationProblemsContainer) {
-			MigrationProblemsContainer container = (MigrationProblemsContainer)element;
+			MigrationProblemsContainer migrationProblemsContainer = (MigrationProblemsContainer)element;
 
-			return container.getProblemsArray();
+			return migrationProblemsContainer.getProblemsArray();
 		}
-		else if (element instanceof ProjectProblems) {
-			ProjectProblems projectMigrationProblems = (ProjectProblems)element;
+		else if (element instanceof ProjectProblemsContainer) {
+			ProjectProblemsContainer projectProblemsContainer = (ProjectProblemsContainer)element;
 
-			return projectMigrationProblems.getFileProblems();
+			return projectProblemsContainer.getFileProblemsContainers();
 		}
-		else if (element instanceof FileProblems) {
-			FileProblems fileProblems = (FileProblems)element;
+		else if (element instanceof FileProblemsContainer) {
+			FileProblemsContainer fileProblemsContainer = (FileProblemsContainer)element;
 
-			return fileProblems.getProblems();
+			return fileProblemsContainer.getProblems();
 		}
 
 		return null;
@@ -52,10 +52,10 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 		if (element instanceof MigrationProblemsContainer) {
 			return true;
 		}
-		else if (element instanceof ProjectProblems) {
+		else if (element instanceof ProjectProblemsContainer) {
 			return true;
 		}
-		else if (element instanceof FileProblems) {
+		else if (element instanceof FileProblemsContainer) {
 			return true;
 		}
 

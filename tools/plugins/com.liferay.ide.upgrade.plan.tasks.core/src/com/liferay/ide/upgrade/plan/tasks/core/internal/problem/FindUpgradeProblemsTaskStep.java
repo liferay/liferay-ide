@@ -70,9 +70,7 @@ public class FindUpgradeProblemsTaskStep extends JavaProjectsSelectionTaskStep i
 
 		Bundle bundle = FrameworkUtil.getBundle(getClass());
 
-		BundleContext context = bundle.getBundleContext();
-
-		List<ProjectProblems> probjectProblemsList = new ArrayList<>();
+		BundleContext bundleContext = bundle.getBundleContext();
 
 		List<String> versions = new ArrayList<>();
 
@@ -91,9 +89,10 @@ public class FindUpgradeProblemsTaskStep extends JavaProjectsSelectionTaskStep i
 
 						File searchFile = location.toFile();
 
-						ServiceReference<Migration> serviceReference = context.getServiceReference(Migration.class);
+						ServiceReference<Migration> serviceReference = bundleContext.getServiceReference(
+							Migration.class);
 
-						Migration migration = context.getService(serviceReference);
+						Migration migration = bundleContext.getService(serviceReference);
 
 						List<Problem> problems = migration.findProblems(searchFile, versions, monitor);
 

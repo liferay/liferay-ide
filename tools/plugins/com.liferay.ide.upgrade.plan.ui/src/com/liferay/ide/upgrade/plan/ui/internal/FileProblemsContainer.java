@@ -12,7 +12,9 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.plan.ui.internal;
+
+import com.liferay.ide.upgrade.plan.core.Problem;
 
 import java.io.File;
 
@@ -20,8 +22,9 @@ import java.util.Arrays;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amreson
  */
-public class FileProblems {
+public class FileProblemsContainer {
 
 	public void addProblem(Problem problem) {
 		Problem[] problems = Arrays.copyOf(_problems, _problems.length + 1);

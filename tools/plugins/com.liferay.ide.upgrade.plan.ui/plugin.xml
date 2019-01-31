@@ -101,15 +101,15 @@
 					>
 					</instanceof>
 					<instanceof
-						value="com.liferay.ide.upgrade.plan.core.ProjectProblems"
-					>
-					</instanceof>
-					<instanceof
-						value="com.liferay.ide.upgrade.plan.core.FileProblems"
-					>
-					</instanceof>
-					<instanceof
 						value="com.liferay.ide.upgrade.plan.core.Problem"
+					>
+					</instanceof>
+					<instanceof
+						value="com.liferay.ide.upgrade.plan.ui.internal.FileProblemsContainer"
+					>
+					</instanceof>
+					<instanceof
+						value="com.liferay.ide.upgrade.plan.ui.internal.ProjectProblemsContainer"
 					>
 					</instanceof>
 				</or>

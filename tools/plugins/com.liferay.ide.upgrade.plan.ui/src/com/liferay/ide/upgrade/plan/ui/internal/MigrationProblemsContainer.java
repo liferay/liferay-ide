@@ -12,30 +12,22 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.plan.ui.internal;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
-public class ProjectProblems {
+public class MigrationProblemsContainer {
 
-	public FileProblems[] getFileProblems() {
-		return _fileProblems;
+	public ProjectProblemsContainer[] getProjectProblemsConatiners() {
+		return _projectProblemsConatiners;
 	}
 
-	public String getProjectName() {
-		return _projectName;
+	public void setProjectProblemsConatiners(ProjectProblemsContainer[] projectProblemsConatiners) {
+		_projectProblemsConatiners = projectProblemsConatiners;
 	}
 
-	public void setFileProblems(FileProblems[] fileProblems) {
-		_fileProblems = fileProblems;
-	}
-
-	public void setProjectName(String projectName) {
-		_projectName = projectName;
-	}
-
-	private FileProblems[] _fileProblems;
-	private String _projectName;
+	private ProjectProblemsContainer[] _projectProblemsConatiners;
 
 }

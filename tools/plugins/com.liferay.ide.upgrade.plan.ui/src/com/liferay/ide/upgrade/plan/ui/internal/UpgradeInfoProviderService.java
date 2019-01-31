@@ -15,10 +15,7 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.upgrade.plan.core.FileProblems;
-import com.liferay.ide.upgrade.plan.core.MigrationProblemsContainer;
 import com.liferay.ide.upgrade.plan.core.Problem;
-import com.liferay.ide.upgrade.plan.core.ProjectProblems;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 
@@ -45,11 +42,11 @@ public class UpgradeInfoProviderService implements UpgradeInfoProvider {
 	public Promise<String> getDetail(Object element) {
 		Deferred<String> deferred = _promiseFactory.deferred();
 
-		if (element instanceof FileProblems) {
-			_doFileProblemsDetail((FileProblems)element, deferred);
+		if (element instanceof FileProblemsContainer) {
+			_doFileProblemsContainerDetail((FileProblemsContainer)element, deferred);
 		}
-		else if (element instanceof ProjectProblems) {
-			_doProjectProblemsDetail((ProjectProblems)element, deferred);
+		else if (element instanceof ProjectProblemsContainer) {
+			_doProjectProblemsContainerDetail((ProjectProblemsContainer)element, deferred);
 		}
 		else if (element instanceof UpgradeTaskStep) {
 			_doUpgradeTaskStepDetail((UpgradeTaskStep)element, deferred);
@@ -63,16 +60,16 @@ public class UpgradeInfoProviderService implements UpgradeInfoProvider {
 
 	@Override
 	public String getLabel(Object element) {
-		if (element instanceof FileProblems) {
-			FileProblems fileProblems = (FileProblems)element;
+		if (element instanceof FileProblemsContainer) {
+			FileProblemsContainer fileProblemsContainer = (FileProblemsContainer)element;
 
-			return _doFileProblemsLabel(fileProblems);
+			return _doFileProblemsContainerLabel(fileProblemsContainer);
 		}
 		else if (element instanceof MigrationProblemsContainer) {
 			return "Liferay Upgrade";
 		}
-		else if (element instanceof ProjectProblems) {
-			return _doProjectProblemsLabel((ProjectProblems)element);
+		else if (element instanceof ProjectProblemsContainer) {
+			return _doProjectProblemsContainerLabel((ProjectProblemsContainer)element);
 		}
 		else if (element instanceof Problem) {
 			return _doProblemLabel((Problem)element);
@@ -84,12 +81,14 @@ public class UpgradeInfoProviderService implements UpgradeInfoProvider {
 		return null;
 	}
 
-	private void _doFileProblemsDetail(FileProblems fileProblems, Deferred<String> deferred) {
+	private void _doFileProblemsContainerDetail(
+		FileProblemsContainer fileProblemsContainer, Deferred<String> deferred) {
+
 		StringBuffer sb = new StringBuffer();
 
-		File file = fileProblems.getFile();
+		File file = fileProblemsContainer.getFile();
 
-		Problem[] problems = fileProblems.getProblems();
+		Problem[] problems = fileProblemsContainer.getProblems();
 
 		sb.append(file);
 		sb.append("<br />");
@@ -104,8 +103,8 @@ public class UpgradeInfoProviderService implements UpgradeInfoProvider {
 		deferred.resolve(sb.toString());
 	}
 
-	private String _doFileProblemsLabel(FileProblems fileProblems) {
-		File file = fileProblems.getFile();
+	private String _doFileProblemsContainerLabel(FileProblemsContainer fileProblemsContainer) {
+		File file = fileProblemsContainer.getFile();
 
 		String fileName = file.getName();
 		String path = file.getParent();
@@ -126,25 +125,27 @@ public class UpgradeInfoProviderService implements UpgradeInfoProvider {
 		return sb.toString();
 	}
 
-	private void _doProjectProblemsDetail(ProjectProblems projectProblems, Deferred<String> deferred) {
+	private void _doProjectProblemsContainerDetail(
+		ProjectProblemsContainer projectProblemsContainer, Deferred<String> deferred) {
+
 		StringBuffer sb = new StringBuffer();
 
-		FileProblems[] fileProblems = projectProblems.getFileProblems();
+		FileProblemsContainer[] fileProblemsContainers = projectProblemsContainer.getFileProblemsContainers();
 
-		sb.append(projectProblems.getProjectName());
+		sb.append(projectProblemsContainer.getProjectName());
 		sb.append("<br />");
-		sb.append("It has " + fileProblems.length + " file(s) need to be solved.");
+		sb.append("It has " + fileProblemsContainers.length + " file(s) need to be solved.");
 		sb.append("<br />");
 
-		for (FileProblems fileProblem : fileProblems) {
-			sb.append(fileProblem.getFile());
+		for (FileProblemsContainer fileProblemsContainer : fileProblemsContainers) {
+			sb.append(fileProblemsContainer.getFile());
 			sb.append("<br />");
 		}
 
 		deferred.resolve(sb.toString());
 	}
 
-	private String _doProjectProblemsLabel(ProjectProblems projectProblems) {
+	private String _doProjectProblemsContainerLabel(ProjectProblemsContainer projectProblems) {
 		return projectProblems.getProjectName();
 	}
 

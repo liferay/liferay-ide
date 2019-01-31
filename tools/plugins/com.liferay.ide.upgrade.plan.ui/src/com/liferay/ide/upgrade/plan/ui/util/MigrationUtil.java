@@ -18,9 +18,9 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.plan.core.FileProblems;
 import com.liferay.ide.upgrade.plan.core.MigrationConstants;
 import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.upgrade.plan.ui.internal.FileProblemsContainer;
 
 import java.io.File;
 
@@ -136,7 +136,7 @@ public class MigrationUtil {
 		}
 	}
 
-	public static void openEditor(FileProblems problem) {
+	public static void openEditor(FileProblemsContainer problem) {
 		try {
 			IResource resource = _getIResourceFromFile(problem.getFile());
 

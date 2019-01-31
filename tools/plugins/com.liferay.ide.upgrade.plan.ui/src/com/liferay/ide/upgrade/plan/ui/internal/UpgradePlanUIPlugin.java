@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.plan.core.FileProblems;
 import com.liferay.ide.upgrade.plan.core.Problem;
 import com.liferay.ide.upgrade.plan.ui.util.MigrationUtil;
 
@@ -121,8 +120,8 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 						if (element instanceof Problem) {
 							MigrationUtil.openEditor((Problem)element);
 						}
-						else if (element instanceof FileProblems) {
-							MigrationUtil.openEditor((FileProblems)element);
+						else if (element instanceof FileProblemsContainer) {
+							MigrationUtil.openEditor((FileProblemsContainer)element);
 						}
 					}
 				}

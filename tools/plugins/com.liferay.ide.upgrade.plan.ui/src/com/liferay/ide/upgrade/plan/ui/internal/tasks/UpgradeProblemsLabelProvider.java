@@ -14,12 +14,12 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
+import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
-import com.liferay.ide.upgrade.plan.core.FileProblems;
-import com.liferay.ide.upgrade.plan.core.MigrationProblemsContainer;
 import com.liferay.ide.upgrade.plan.core.Problem;
-import com.liferay.ide.upgrade.plan.core.ProjectProblems;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
+import com.liferay.ide.upgrade.plan.ui.internal.FileProblemsContainer;
+import com.liferay.ide.upgrade.plan.ui.internal.ProjectProblemsContainer;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 
 import org.eclipse.jface.resource.ImageRegistry;
@@ -49,13 +49,13 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
-		if (element instanceof ProjectProblems) {
+		if (element instanceof ProjectProblemsContainer) {
 			return getImageRegistry().get("ProjectMigrationProblems");
 		}
 		else if (element instanceof MigrationProblemsContainer) {
 			return getImageRegistry().get("MigrationProblemsContainer");
 		}
-		else if (element instanceof FileProblems) {
+		else if (element instanceof FileProblemsContainer) {
 			return getImageRegistry().get("FileProblems");
 		}
 		else if (element instanceof Problem) {
