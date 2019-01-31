@@ -14,12 +14,16 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.server.util.JavaUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.launching.IVMInstall;
+
+import org.osgi.framework.Version;
 
 /**
  * @author Simon Jiang
@@ -54,12 +58,18 @@ public class PortalWildFlyBundle extends PortalJBossBundle {
 		args.add("-server");
 		args.add("-Djava.util.logging.manager=org.jboss.logmanager.LogManager");
 
-		args.add(
-			"-Xbootclasspath/p:\"" + bundlePath +
-				"/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-2.0.3.Final.jar\"");
-		args.add(
-			"-Xbootclasspath/p:\"" + bundlePath +
-				"/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager-1.1.2.Final.jar\"");
+		Version jdkVersion = Version.parseVersion(JavaUtil.getJDKVersion(vmInstall));
+		Version jdk8Version = Version.parseVersion("1.8");
+
+		if (jdkVersion.compareTo(jdk8Version) <= 0) {
+			args.add(
+				"-Xbootclasspath/p:\"" + bundlePath +
+					"/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager- + " + "2.0.3.Final.jar\"");
+			args.add(
+				"-Xbootclasspath/p:\"" + bundlePath +
+					"/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager- + " +
+						"1.1.2.Final.jar\"");
+		}
 
 		args.add("-Dorg.jboss.boot.log.file=\"" + bundlePath.append("/standalone/log/boot.log") + "\"");
 		args.add("-Dlogging.configuration=file:\"" + bundlePath + "/standalone/configuration/logging.properties\"");

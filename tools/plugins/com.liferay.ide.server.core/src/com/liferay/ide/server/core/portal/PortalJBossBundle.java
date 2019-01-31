@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.JavaUtil;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -37,6 +38,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.launching.IVMInstall;
+
+import org.osgi.framework.Version;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -182,12 +185,20 @@ public class PortalJBossBundle extends AbstractPortalBundle {
 		args.add("-Dfile.encoding=UTF8");
 		args.add("-server");
 		args.add("-Djava.util.logging.manager=org.jboss.logmanager.LogManager");
-		args.add(
-			"-Xbootclasspath/p:\"" + bundlePath + "/modules/org/jboss/logmanager/main/jboss-logmanager-1.2.2.GA.jar\"");
-		args.add(
-			"-Xbootclasspath/p:\"" + bundlePath +
-				"/modules/org/jboss/logmanager/log4j/main/jboss-logmanager-log4j-1.0.0.GA.jar\"");
-		args.add("-Xbootclasspath/p:\"" + bundlePath + "/modules/org/apache/log4j/main/log4j-1.2.16.jar\"");
+
+		Version jdkVersion = Version.parseVersion(JavaUtil.getJDKVersion(vmInstall));
+		Version jdk8Version = Version.parseVersion("1.8");
+
+		if (jdkVersion.compareTo(jdk8Version) <= 0) {
+			args.add(
+				"-Xbootclasspath/p:\"" + bundlePath +
+					"/modules/org/jboss/logmanager/main/jboss-logmanager-1.2.2.GA.jar\"");
+			args.add(
+				"-Xbootclasspath/p:\"" + bundlePath +
+					"/modules/org/jboss/logmanager/log4j/main/jboss-logmanager-log4j-1.0.0.GA.jar\"");
+			args.add("-Xbootclasspath/p:\"" + bundlePath + "/modules/org/apache/log4j/main/log4j-1.2.16.jar\"");
+		}
+
 		args.add("-Djboss.modules.system.pkgs=org.jboss.logmanager");
 		args.add("-Dorg.jboss.boot.log.file=\"" + bundlePath.append("/standalone/log/boot.log") + "\"");
 		args.add("-Dlogging.configuration=file:\"" + bundlePath + "/standalone/configuration/logging.properties\"");
