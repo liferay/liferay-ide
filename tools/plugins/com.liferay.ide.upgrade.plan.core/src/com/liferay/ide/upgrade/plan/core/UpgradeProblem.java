@@ -21,11 +21,27 @@ import java.util.UUID;
 /**
  * @author Gregory Amerson
  */
-public class Problem {
+public class UpgradeProblem {
 
 	public static final long DEFAULT_MARKER_ID = -1;
 
+	public static String MARKER_ATTRIBUTE_AUTOCORRECTCONTEXT = "upgradeProblem.autoCorrectContext";
+
+	public static String MARKER_ATTRIBUTE_RESOLVED = "upgradeProblem.resolved";
+
+	public static String MARKER_ATTRIBUTE_SECTION = "upgradeProblem.section";
+
+	public static String MARKER_ATTRIBUTE_SUMMARY = "upgradeProblem.summary";
+
+	public static String MARKER_ATTRIBUTE_TICKET = "upgradeProblem.ticket";
+
+	public static String MARKER_ATTRIBUTE_TIMESTAMP = "upgradeProblem.timestamp";
+
+	public static String MARKER_ATTRIBUTE_TYPE = "upgradeProblem.type";
+
 	public static final int MARKER_ERROR = 2;
+
+	public static final String MARKER_TYPE = "com.liferay.ide.upgrade.plan.core.UpgradeProblemMarker";
 
 	public static final int MARKER_WARNING = 1;
 
@@ -35,10 +51,10 @@ public class Problem {
 
 	public static final int STATUS_RESOLVED = 1;
 
-	public Problem() {
+	public UpgradeProblem() {
 	}
 
-	public Problem(
+	public UpgradeProblem(
 		String title, String summary, String type, String ticket, String version, File file, int lineNumber,
 		int startOffset, int endOffset, String html, String autoCorrectContext, int status, long markerId,
 		int markerType) {
@@ -48,7 +64,7 @@ public class Problem {
 			endOffset, html, autoCorrectContext, status, markerId, markerType);
 	}
 
-	public Problem(
+	public UpgradeProblem(
 		String uuid, String title, String summary, String type, String ticket, String version, File file,
 		int lineNumber, int startOffset, int endOffset, String html, String autoCorrectContext, int status,
 		long markerId, int markerType) {
@@ -84,7 +100,7 @@ public class Problem {
 			return false;
 		}
 
-		Problem other = (Problem)obj;
+		UpgradeProblem other = (UpgradeProblem)obj;
 
 		if (uuid.equals(other.uuid)) {
 			return true;
