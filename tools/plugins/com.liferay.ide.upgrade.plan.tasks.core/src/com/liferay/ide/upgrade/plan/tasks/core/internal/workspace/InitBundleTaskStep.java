@@ -18,7 +18,7 @@ import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.jobs.InitBundleJob;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
-import com.liferay.ide.upgrade.plan.core.WorkspaceTaskStep;
+import com.liferay.ide.upgrade.plan.tasks.core.WorkspaceTaskStep;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;

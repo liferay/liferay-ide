@@ -17,7 +17,7 @@ package com.liferay.ide.upgrade.plan.tasks.core.internal.sdk;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
-import com.liferay.ide.upgrade.plan.core.WorkspaceTaskStep;
+import com.liferay.ide.upgrade.plan.tasks.core.WorkspaceTaskStep;
 
 import java.io.File;
 

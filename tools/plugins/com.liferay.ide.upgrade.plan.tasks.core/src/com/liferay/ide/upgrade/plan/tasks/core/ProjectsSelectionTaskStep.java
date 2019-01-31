@@ -12,7 +12,9 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.plan.tasks.core;
+
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -21,14 +23,14 @@ import org.eclipse.core.runtime.IStatus;
 /**
  * @author Terry Jia
  */
-public abstract class ProjectSelectionTaskStep extends BaseUpgradeTaskStep {
+public abstract class ProjectsSelectionTaskStep extends BaseUpgradeTaskStep {
 
 	@Override
 	public IStatus execute(IProgressMonitor progressMonitor) {
 		return null;
 	}
 
-	public abstract IStatus execute(IProject project, IProgressMonitor progressMonitor);
+	public abstract IStatus execute(IProject[] project, IProgressMonitor progressMonitor);
 
 	public boolean selectAllDefault() {
 		return false;

@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.tasks.core;
 
-import com.liferay.ide.upgrade.plan.core.ProjectsSelectionTaskStep;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
