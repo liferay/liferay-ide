@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ libs/com.liferay.markdown.parser.jar
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Upgrade Plan Tasks Core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
@@ -8,15 +9,21 @@ Bundle-SymbolicName: com.liferay.ide.upgrade.plan.tasks.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 3.5.0.qualifier
 Require-Bundle: com.google.guava,
+ com.liferay.ide.core,
  com.liferay.ide.project.core,
+ com.liferay.ide.sdk.core,
+ com.liferay.ide.server.core,
  com.liferay.ide.upgrade.plan.core,
  org.eclipse.core.resources,
+ org.eclipse.core.runtime,
  org.eclipse.equinox.common,
+ org.eclipse.jdt.core,
  org.eclipse.jst.jsp.core,
- org.eclipse.osgi.services,
- org.json,
  org.eclipse.osgi,
- org.codehaus.jackson.mapper
+ org.eclipse.osgi.services,
+ org.eclipse.wst.sse.core,
+ org.eclipse.wst.xml.core,
+ org.json
 Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.database.EnsureProperIndexesTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.database.PublishStagingContentTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.database.SetPermissionsAlgorithm.xml,
@@ -167,7 +174,5 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.dat
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.problem.FindUpgradeProblemsTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.problem.AutoCorrectUpgradeProblemsTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.problem.RemovePreviousResultTaskStep.xml
-Bundle-ClassPath: .,
- libs/com.liferay.markdown.parser.jar
 Export-Package: com.liferay.ide.upgrade.plan.tasks.core.problem.api,
  com.liferay.ide.upgrade.plan.tasks.core.problem.util
