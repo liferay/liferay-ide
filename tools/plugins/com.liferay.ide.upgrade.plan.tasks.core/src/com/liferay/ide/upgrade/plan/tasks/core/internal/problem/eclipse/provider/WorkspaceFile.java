@@ -17,7 +17,7 @@ package com.liferay.ide.upgrade.plan.tasks.core.internal.problem.eclipse.provide
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.core.MigrationConstants;
+import com.liferay.ide.upgrade.plan.tasks.core.UpgradeTaskConstants;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.SourceFile;
 
 import java.io.File;
@@ -68,7 +68,7 @@ public class WorkspaceFile implements SourceFile {
 
 		if (retval == null) {
 			try {
-				retval = _helper.createIFile(MigrationConstants.HELPER_PROJECT_NAME, file);
+				retval = _helper.createIFile(UpgradeTaskConstants.HELPER_PROJECT_NAME, file);
 			}
 			catch (CoreException | IOException e) {
 				e.printStackTrace();

@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.FileMigrator;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.SearchResult;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.SourceFile;
@@ -62,8 +62,8 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 	}
 
 	@Override
-	public List<Problem> analyze(File file) {
-		List<Problem> problems = new ArrayList<>();
+	public List<UpgradeProblem> analyze(File file) {
+		List<UpgradeProblem> problems = new ArrayList<>();
 
 		String fileExtension = new Path(file.getAbsolutePath()).getFileExtension();
 
@@ -88,11 +88,11 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 			for (SearchResult searchResult : searchResults) {
 				if (searchResult != null) {
 					problems.add(
-						new Problem(
+						new UpgradeProblem(
 							problemTitle, problemSummary, fileExtension, problemTickets, version, file,
 							searchResult.startLine, searchResult.startOffset, searchResult.endOffset, sectionHtml,
-							searchResult.autoCorrectContext, Problem.STATUS_NOT_RESOLVED, Problem.DEFAULT_MARKER_ID,
-							Problem.MARKER_ERROR));
+							searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
+							UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));
 				}
 			}
 		}

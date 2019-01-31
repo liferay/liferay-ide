@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
-import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
 
@@ -26,8 +26,8 @@ import java.util.Arrays;
  */
 public class FileProblemsContainer {
 
-	public void addProblem(Problem problem) {
-		Problem[] problems = Arrays.copyOf(_problems, _problems.length + 1);
+	public void addProblem(UpgradeProblem problem) {
+		UpgradeProblem[] problems = Arrays.copyOf(_problems, _problems.length + 1);
 
 		problems[problems.length - 1] = problem;
 
@@ -38,7 +38,7 @@ public class FileProblemsContainer {
 		return _file;
 	}
 
-	public Problem[] getProblems() {
+	public UpgradeProblem[] getProblems() {
 		return _problems;
 	}
 
@@ -46,11 +46,11 @@ public class FileProblemsContainer {
 		_file = file;
 	}
 
-	public void setProblems(Problem[] problems) {
+	public void setProblems(UpgradeProblem[] problems) {
 		_problems = problems;
 	}
 
 	private File _file;
-	private Problem[] _problems = new Problem[0];
+	private UpgradeProblem[] _problems = new UpgradeProblem[0];
 
 }

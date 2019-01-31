@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.AutoMigrateException;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.AutoMigrator;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.CUCache;
@@ -58,12 +58,12 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 	}
 
 	@Override
-	public int correctProblems(File file, List<Problem> problems) throws AutoMigrateException {
+	public int correctProblems(File file, List<UpgradeProblem> problems) throws AutoMigrateException {
 		int problemsFixed = 0;
 
 		List<String> importsToRewrite = new ArrayList<>();
 
-		for (Problem problem : problems) {
+		for (UpgradeProblem problem : problems) {
 			boolean problemFound = false;
 
 			if (problem.autoCorrectContext instanceof String) {

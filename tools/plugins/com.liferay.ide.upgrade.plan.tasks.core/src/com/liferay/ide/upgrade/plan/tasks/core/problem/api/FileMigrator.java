@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.tasks.core.problem.api;
 
-import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
 
@@ -25,6 +25,6 @@ import java.util.List;
  */
 public interface FileMigrator {
 
-	public List<Problem> analyze(File file);
+	public List<UpgradeProblem> analyze(File file);
 
 }

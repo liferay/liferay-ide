@@ -16,7 +16,7 @@ package com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.AutoMigrateException;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.AutoMigrator;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.JSPFile;
@@ -69,12 +69,12 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 	}
 
 	@Override
-	public int correctProblems(File file, List<Problem> problems) throws AutoMigrateException {
+	public int correctProblems(File file, List<UpgradeProblem> problems) throws AutoMigrateException {
 		int corrected = 0;
 
 		List<Integer> autoCorrectTagOffsets = new ArrayList<>();
 
-		Stream<Problem> stream = problems.stream();
+		Stream<UpgradeProblem> stream = problems.stream();
 
 		Class<? extends JSPTagMigrator> class1 = getClass();
 
@@ -86,7 +86,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 			p -> p.getStartOffset()
 		).sorted();
 
-		for (Problem problem : problems) {
+		for (UpgradeProblem problem : problems) {
 			if ((problem.autoCorrectContext != null) &&
 				problem.autoCorrectContext.equals("jsptag:" + class1.getName())) {
 

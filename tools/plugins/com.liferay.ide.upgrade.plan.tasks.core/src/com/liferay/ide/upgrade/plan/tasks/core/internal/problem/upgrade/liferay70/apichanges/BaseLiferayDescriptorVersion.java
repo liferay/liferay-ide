@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay70.apichanges;
 
-import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.XMLFileMigrator;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.AutoMigrateException;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.AutoMigrator;
@@ -47,7 +47,7 @@ public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator imple
 	}
 
 	@Override
-	public int correctProblems(File file, List<Problem> problems) throws AutoMigrateException {
+	public int correctProblems(File file, List<UpgradeProblem> problems) throws AutoMigrateException {
 		int problemsCorrected = 0;
 
 		try {

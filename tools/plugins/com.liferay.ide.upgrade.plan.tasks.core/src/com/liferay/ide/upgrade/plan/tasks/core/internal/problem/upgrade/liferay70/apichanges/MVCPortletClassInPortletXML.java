@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay70.apichanges;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.XMLFileMigrator;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.AutoMigrateException;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.AutoMigrator;
@@ -63,7 +63,7 @@ import org.w3c.dom.Text;
 public class MVCPortletClassInPortletXML extends XMLFileMigrator implements AutoMigrator {
 
 	@Override
-	public int correctProblems(File file, List<Problem> problems) throws AutoMigrateException {
+	public int correctProblems(File file, List<UpgradeProblem> problems) throws AutoMigrateException {
 		int corrected = 0;
 		IFile xmlFile = getXmlFile(file);
 		IDOMModel xmlModel = null;
@@ -76,7 +76,7 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 
 				List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
-				for (Problem problem : problems) {
+				for (UpgradeProblem problem : problems) {
 					if (_KEY.equals(problem.autoCorrectContext)) {
 						IndexedRegion region = xmlModel.getIndexedRegion(problem.startOffset);
 

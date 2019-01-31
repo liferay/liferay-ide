@@ -17,11 +17,11 @@ package com.liferay.ide.upgrade.plan.tasks.core.internal.problem;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.FileProblems;
 import com.liferay.ide.upgrade.plan.core.MigrationProblemsContainer;
-import com.liferay.ide.upgrade.plan.core.Problem;
 import com.liferay.ide.upgrade.plan.core.ProjectProblems;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepDoneEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
@@ -94,7 +94,7 @@ public class FindUpgradeProblemsTaskStep extends JavaProjectsSelectionTaskStep i
 
 						Migration migration = bundleContext.getService(serviceReference);
 
-						List<Problem> problems = migration.findProblems(searchFile, versions, monitor);
+						List<UpgradeProblem> problems = migration.findProblems(searchFile, versions, monitor);
 
 						if (ListUtil.isNotEmpty(problems)) {
 							FileProblems[] fileProblems = _getFileProblems(problems);
@@ -137,10 +137,10 @@ public class FindUpgradeProblemsTaskStep extends JavaProjectsSelectionTaskStep i
 
 	}
 
-	private FileProblems[] _getFileProblems(List<Problem> problems) {
+	private FileProblems[] _getFileProblems(List<UpgradeProblem> problems) {
 		Map<File, FileProblems> fileProblemsMap = new HashMap<>();
 
-		for (Problem problem : problems) {
+		for (UpgradeProblem problem : problems) {
 			FileProblems fileProblem = fileProblemsMap.get(problem.getFile());
 
 			if (fileProblem == null) {

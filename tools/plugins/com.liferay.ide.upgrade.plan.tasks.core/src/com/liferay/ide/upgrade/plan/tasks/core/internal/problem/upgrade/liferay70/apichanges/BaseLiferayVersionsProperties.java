@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.liferay70.apichanges;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.PropertiesFileChecker;
 import com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.PropertiesFileChecker.KeyInfo;
 import com.liferay.ide.upgrade.plan.tasks.core.internal.problem.upgrade.PropertiesFileMigrator;
@@ -50,8 +50,8 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 	}
 
 	@Override
-	public List<Problem> analyze(File file) {
-		List<Problem> problems = new ArrayList<>();
+	public List<UpgradeProblem> analyze(File file) {
+		List<UpgradeProblem> problems = new ArrayList<>();
 
 		if ("liferay-plugin-package.properties".equals(file.getName())) {
 			PropertiesFileChecker propertiesFileChecker = new PropertiesFileChecker(file);
@@ -73,11 +73,11 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 							searchResult.autoCorrectContext = _PREFIX + "liferay-versions";
 
 							problems.add(
-								new Problem(
+								new UpgradeProblem(
 									problemTitle, problemSummary, problemType, problemTickets, version, file,
 									searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
-									sectionHtml, searchResult.autoCorrectContext, Problem.STATUS_NOT_RESOLVED,
-									Problem.DEFAULT_MARKER_ID, Problem.MARKER_ERROR));
+									sectionHtml, searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
+									UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));
 						}
 					}
 				}
@@ -88,7 +88,7 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 	}
 
 	@Override
-	public int correctProblems(File file, List<Problem> problems) throws AutoMigrateException {
+	public int correctProblems(File file, List<UpgradeProblem> problems) throws AutoMigrateException {
 		try {
 			String contents = new String(Files.readAllBytes(file.toPath()));
 
@@ -100,7 +100,7 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 
 			int problemsFixed = 0;
 
-			for (Problem problem : problems) {
+			for (UpgradeProblem problem : problems) {
 				if (problem.autoCorrectContext instanceof String) {
 					String propertyData = problem.autoCorrectContext;
 

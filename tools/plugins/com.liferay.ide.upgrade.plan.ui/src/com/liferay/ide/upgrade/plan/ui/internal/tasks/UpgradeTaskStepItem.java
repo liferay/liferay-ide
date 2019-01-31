@@ -21,7 +21,6 @@ import com.liferay.ide.upgrade.plan.core.ProjectSelectionTaskStep;
 import com.liferay.ide.upgrade.plan.core.ProjectsSelectionTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepRequirement;
-import com.liferay.ide.upgrade.plan.tasks.core.FolderSelectionTaskStep;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.dialogs.ProjectSelectionDialog;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;

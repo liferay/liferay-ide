@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.tasks.core.problem.api;
 
-import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
 
@@ -29,13 +29,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface Migration {
 
-	public List<Problem> findProblems(File projectDir, IProgressMonitor monitor);
+	public List<UpgradeProblem> findProblems(File projectDir, IProgressMonitor monitor);
 
-	public List<Problem> findProblems(File projectDir, List<String> versions, IProgressMonitor monitor);
+	public List<UpgradeProblem> findProblems(File projectDir, List<String> versions, IProgressMonitor monitor);
 
-	public List<Problem> findProblems(Set<File> files, IProgressMonitor monitor);
+	public List<UpgradeProblem> findProblems(Set<File> files, IProgressMonitor monitor);
 
-	public List<Problem> findProblems(Set<File> files, List<String> versions, IProgressMonitor monitor);
+	public List<UpgradeProblem> findProblems(Set<File> files, List<String> versions, IProgressMonitor monitor);
 
 	public int DETAIL_LONG = 1 << 2;
 
