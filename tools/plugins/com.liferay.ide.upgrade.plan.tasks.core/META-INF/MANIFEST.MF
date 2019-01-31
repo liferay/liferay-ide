@@ -174,5 +174,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.dat
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.problem.FindUpgradeProblemsTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.problem.AutoCorrectUpgradeProblemsTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.problem.RemovePreviousResultTaskStep.xml
-Export-Package: com.liferay.ide.upgrade.plan.tasks.core.problem.api,
+Export-Package: com.liferay.ide.upgrade.plan.tasks.core,
+ com.liferay.ide.upgrade.plan.tasks.core.problem.api,
  com.liferay.ide.upgrade.plan.tasks.core.problem.util

@@ -16,7 +16,6 @@ package com.liferay.ide.upgrade.plan.tasks.core.internal.problem;
 
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.FileProblems;
-import com.liferay.ide.upgrade.plan.core.JavaProjectsSelectionTaskStep;
 import com.liferay.ide.upgrade.plan.core.MigrationProblemsContainer;
 import com.liferay.ide.upgrade.plan.core.Problem;
 import com.liferay.ide.upgrade.plan.core.ProjectProblems;
@@ -26,6 +25,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepDoneEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
+import com.liferay.ide.upgrade.plan.tasks.core.JavaProjectsSelectionTaskStep;
 import com.liferay.ide.upgrade.plan.tasks.core.problem.api.Migration;
 
 import java.io.File;

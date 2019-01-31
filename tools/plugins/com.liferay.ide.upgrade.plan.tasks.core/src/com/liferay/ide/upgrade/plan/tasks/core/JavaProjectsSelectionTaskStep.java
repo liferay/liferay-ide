@@ -12,23 +12,32 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.plan.tasks.core;
 
-import java.io.File;
+import com.liferay.ide.upgrade.plan.core.ProjectsSelectionTaskStep;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Terry Jia
  */
-public abstract class FolderSelectionTaskStep extends BaseUpgradeTaskStep {
+public abstract class JavaProjectsSelectionTaskStep extends ProjectsSelectionTaskStep {
 
-	public abstract IStatus execute(File folder, IProgressMonitor progressMonitor);
+	public boolean selectAllDefault() {
+		return true;
+	}
 
-	@Override
-	public IStatus execute(IProgressMonitor progressMonitor) {
-		return null;
+	public boolean selectFilter(Object parentElement, Object element) {
+		IProject project = (IProject)element;
+
+		try {
+			return project.hasNature("org.eclipse.jdt.core.javanature");
+		}
+		catch (CoreException ce) {
+		}
+
+		return false;
 	}
 
 }
