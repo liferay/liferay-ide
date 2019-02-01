@@ -25,11 +25,6 @@ import org.eclipse.core.runtime.IStatus;
  */
 public abstract class ProjectsSelectionTaskStep extends BaseUpgradeTaskStep {
 
-	@Override
-	public IStatus execute(IProgressMonitor progressMonitor) {
-		return null;
-	}
-
 	public abstract IStatus execute(IProject[] project, IProgressMonitor progressMonitor);
 
 	public boolean selectAllDefault() {

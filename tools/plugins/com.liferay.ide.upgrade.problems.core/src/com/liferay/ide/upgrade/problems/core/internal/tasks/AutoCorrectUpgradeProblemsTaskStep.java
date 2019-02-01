@@ -16,10 +16,6 @@ package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -28,21 +24,10 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"id=auto_correct_problems", "requirement=recommended", "order=200", "taskId=find_upgrade_problems",
-		"title=Auto Correct Upgrade Problems"
+		"id=auto_correct_problems", "imagePath=icons/code.png", "requirement=recommended", "order=200",
+		"taskId=find_upgrade_problems", "title=Auto Correct Upgrade Problems"
 	},
 	service = UpgradeTaskStep.class
 )
 public class AutoCorrectUpgradeProblemsTaskStep extends BaseUpgradeTaskStep {
-
-	@Override
-	public IStatus execute(IProgressMonitor progressMonitor) {
-		return null;
-	}
-
-	@Override
-	public UpgradeTaskStepStatus getStatus() {
-		return UpgradeTaskStepStatus.INCOMPLETE;
-	}
-
 }

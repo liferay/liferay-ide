@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
+import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
@@ -22,12 +23,13 @@ import com.liferay.ide.upgrade.plan.ui.internal.NewUpgradePlanDialog;
 
 import java.util.Optional;
 
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -39,17 +41,17 @@ import org.eclipse.swt.widgets.Control;
 public class UpgradeTasksViewer implements UpgradeListener, IDoubleClickListener {
 
 	public UpgradeTasksViewer(Composite parentComposite) {
-		_tableViewer = new TableViewer(parentComposite);
+		_treeViewer = new TreeViewer(parentComposite);
 
-		_tableViewer.setContentProvider(new UpgradeTasksContentProvider());
-		_tableViewer.setLabelProvider(new UpgradeTasksLabelProvider());
-		_tableViewer.addDoubleClickListener(this);
+		_treeViewer.setContentProvider(new UpgradeTasksContentProvider());
+		_treeViewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new UpgradeTasksLabelProvider()));
+		_treeViewer.addDoubleClickListener(this);
 
-		_tableViewer.setInput(UpgradeTasksContentProvider.NO_UPGRADE_PLAN_ACTIVE);
+		_treeViewer.setInput(UpgradeTasksContentProvider.NO_UPGRADE_PLAN_ACTIVE);
 	}
 
 	public void addPostSelectionChangedListener(ISelectionChangedListener selectionChangedListener) {
-		_tableViewer.addPostSelectionChangedListener(selectionChangedListener);
+		_treeViewer.addPostSelectionChangedListener(selectionChangedListener);
 	}
 
 	@Override
@@ -78,12 +80,12 @@ public class UpgradeTasksViewer implements UpgradeListener, IDoubleClickListener
 	}
 
 	public Object getInput() {
-		return _tableViewer.getInput();
+		return _treeViewer.getInput();
 	}
 
 	public ISelection getSelection() {
-		if (_tableViewer != null) {
-			return _tableViewer.getSelection();
+		if (_treeViewer != null) {
+			return _treeViewer.getSelection();
 		}
 
 		return null;
@@ -96,10 +98,10 @@ public class UpgradeTasksViewer implements UpgradeListener, IDoubleClickListener
 
 			UpgradePlan upgradePlan = upgradePlanStartedEvent.getUpgradePlan();
 
-			_tableViewer.setInput(upgradePlan);
+			UIUtil.async(() -> _treeViewer.setInput(upgradePlan));
 		}
 	}
 
-	private TableViewer _tableViewer;
+	private TreeViewer _treeViewer;
 
 }

@@ -16,10 +16,6 @@ package com.liferay.ide.upgrade.plan.tasks.core.internal.database;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -34,15 +30,4 @@ import org.osgi.service.component.annotations.Component;
 	service = UpgradeTaskStep.class
 )
 public class CopyDatabaseToBackupTaskStep extends BaseUpgradeTaskStep {
-
-	@Override
-	public IStatus execute(IProgressMonitor progressMonitor) {
-		return null;
-	}
-
-	@Override
-	public UpgradeTaskStepStatus getStatus() {
-		return UpgradeTaskStepStatus.INCOMPLETE;
-	}
-
 }

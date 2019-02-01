@@ -14,8 +14,17 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Dictionary;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
@@ -30,9 +39,17 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 
 		_description = _getProperty(properties, "description");
 		_id = _getProperty(properties, "id");
+		_imagePath = _getProperty(properties, "imagePath");
 		_requirement = _getProperty(properties, "requirement");
 		_title = _getProperty(properties, "title");
 		_url = _getProperty(properties, "url");
+
+		_lookupCommands(componentContext);
+	}
+
+	@Override
+	public List<UpgradeTaskStepCommand> getCommands() {
+		return Collections.unmodifiableList(_upgradeTaskStepCommands);
 	}
 
 	@Override
@@ -46,8 +63,18 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 	}
 
 	@Override
+	public String getImagePath() {
+		return _imagePath;
+	}
+
+	@Override
 	public UpgradeTaskStepRequirement getRequirement() {
 		return UpgradeTaskStepRequirement.valueOf(UpgradeTaskStepRequirement.class, _requirement.toUpperCase());
+	}
+
+	@Override
+	public UpgradeTaskStepStatus getStatus() {
+		return _upgradeTaskStepStatus;
 	}
 
 	@Override
@@ -75,10 +102,34 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 		return null;
 	}
 
+	private void _lookupCommands(ComponentContext componentContext) {
+		BundleContext bundleContext = componentContext.getBundleContext();
+
+		try {
+			Collection<ServiceReference<UpgradeTaskStepCommand>> upgradeTaskStepCommandServiceReferences =
+				bundleContext.getServiceReferences(UpgradeTaskStepCommand.class, "(stepId=" + _id + ")");
+
+			Stream<ServiceReference<UpgradeTaskStepCommand>> stream = upgradeTaskStepCommandServiceReferences.stream();
+
+			_upgradeTaskStepCommands = stream.map(
+				bundleContext::getService
+			).filter(
+				Objects::nonNull
+			).collect(
+				Collectors.toList()
+			);
+		}
+		catch (InvalidSyntaxException ise) {
+		}
+	}
+
 	private String _description;
 	private String _id;
+	private String _imagePath;
 	private String _requirement;
 	private String _title;
+	private List<UpgradeTaskStepCommand> _upgradeTaskStepCommands;
+	private UpgradeTaskStepStatus _upgradeTaskStepStatus = UpgradeTaskStepStatus.INCOMPLETE;
 	private String _url;
 
 }

@@ -16,19 +16,48 @@ package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import java.util.List;
 
-import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
-public class UpgradeTasksContentProvider implements IStructuredContentProvider {
+public class UpgradeTasksContentProvider implements ITreeContentProvider {
 
-	public static final Object NO_TASKS = new Object();
+	public static final Object NO_TASKS = new Object() {
 
-	public static final Object NO_UPGRADE_PLAN_ACTIVE = new Object();
+		@Override
+		public String toString() {
+			return "NO_TASKS";
+		}
+
+	};
+
+	public static final Object NO_UPGRADE_PLAN_ACTIVE = new Object() {
+
+		@Override
+		public String toString() {
+			return "NO_UPGRADE_PLAN_ACTIVE";
+		}
+
+	};
+
+	@Override
+	public Object[] getChildren(Object parentElement) {
+		if (parentElement instanceof UpgradeTask) {
+			UpgradeTask upgradeTask = (UpgradeTask)parentElement;
+
+			List<UpgradeTaskStep> upgradeTaskSteps = upgradeTask.getSteps();
+
+			return upgradeTaskSteps.toArray(new UpgradeTaskStep[0]);
+		}
+
+		return null;
+	}
 
 	@Override
 	public Object[] getElements(Object element) {
@@ -42,9 +71,29 @@ public class UpgradeTasksContentProvider implements IStructuredContentProvider {
 
 			return upgradeTasks.toArray(new UpgradeTask[0]);
 		}
-		else {
+
+		return null;
+	}
+
+	@Override
+	public Object getParent(Object element) {
+		if (NO_TASKS.equals(element)) {
 			return null;
 		}
+
+		return null;
+	}
+
+	@Override
+	public boolean hasChildren(Object element) {
+		if (NO_TASKS.equals(element)) {
+			return false;
+		}
+		else if (element instanceof UpgradeTask) {
+			return true;
+		}
+
+		return false;
 	}
 
 }
