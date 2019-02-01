@@ -14,11 +14,11 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.upgrade.problems.core.AutoMigrator;
+import org.osgi.service.component.annotations.Component;
+
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
-
-import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=We should use the new AUI URI declaration:http://liferay.com/tld/aui", "problem.tickets=LPS-57809",
 	"auto.correct=jsptag", "implName=AUILiferayTags", "version=7.0"
 },
-	service = {AutoMigrator.class, FileMigrator.class})
+	service = {AutoFileMigrator.class, FileMigrator.class})
 public class AUILiferayTags extends JSPTagMigrator {
 
 	public AUILiferayTags() {

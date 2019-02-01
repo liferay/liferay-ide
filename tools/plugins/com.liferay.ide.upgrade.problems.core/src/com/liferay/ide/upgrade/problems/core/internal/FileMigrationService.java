@@ -15,9 +15,9 @@
 package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+import com.liferay.ide.upgrade.problems.core.FileMigration;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.Migration;
+import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +54,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Simon Jiang
  */
 @Component
-public class ProjectMigrationService implements Migration {
+public class FileMigrationService implements FileMigration {
 
 	@Activate
 	public void activate(BundleContext context) {
@@ -66,15 +66,15 @@ public class ProjectMigrationService implements Migration {
 	}
 
 	@Override
-	public List<UpgradeProblem> findProblems(File projectDir, IProgressMonitor monitor) {
+	public List<FileUpgradeProblem> findProblems(File projectDir, IProgressMonitor monitor) {
 		return findProblems(projectDir, Collections.emptyList(), monitor);
 	}
 
 	@Override
-	public List<UpgradeProblem> findProblems(File projectDir, List<String> versions, IProgressMonitor monitor) {
+	public List<FileUpgradeProblem> findProblems(File projectDir, List<String> versions, IProgressMonitor monitor) {
 		monitor.beginTask("Searching for migration problems in " + projectDir, -1);
 
-		List<UpgradeProblem> problems = Collections.synchronizedList(new ArrayList<UpgradeProblem>());
+		List<FileUpgradeProblem> problems = Collections.synchronizedList(new ArrayList<FileUpgradeProblem>());
 
 		monitor.beginTask("Analyzing files", -1);
 
@@ -91,13 +91,13 @@ public class ProjectMigrationService implements Migration {
 	}
 
 	@Override
-	public List<UpgradeProblem> findProblems(Set<File> files, IProgressMonitor monitor) {
+	public List<FileUpgradeProblem> findProblems(Set<File> files, IProgressMonitor monitor) {
 		return findProblems(files, Collections.emptyList(), monitor);
 	}
 
 	@Override
-	public List<UpgradeProblem> findProblems(Set<File> files, List<String> versions, IProgressMonitor monitor) {
-		List<UpgradeProblem> problems = Collections.synchronizedList(new ArrayList<UpgradeProblem>());
+	public List<FileUpgradeProblem> findProblems(Set<File> files, List<String> versions, IProgressMonitor monitor) {
+		List<FileUpgradeProblem> problems = Collections.synchronizedList(new ArrayList<FileUpgradeProblem>());
 
 		monitor.beginTask("Analyzing files", -1);
 
@@ -122,7 +122,7 @@ public class ProjectMigrationService implements Migration {
 	}
 
 	protected FileVisitResult analyzeFile(
-		File file, List<UpgradeProblem> problems, List<String> versions, IProgressMonitor monitor) {
+		File file, List<FileUpgradeProblem> problems, List<String> versions, IProgressMonitor monitor) {
 
 		Path path = file.toPath();
 
@@ -211,7 +211,7 @@ public class ProjectMigrationService implements Migration {
 					).parallel(
 					).forEach(
 						fm -> {
-							List<UpgradeProblem> fileProlbems = fm.analyze(file);
+							List<FileUpgradeProblem> fileProlbems = fm.analyze(file);
 
 							if (ListUtil.isNotEmpty(fileProlbems)) {
 								problems.addAll(fileProlbems);
@@ -283,7 +283,7 @@ public class ProjectMigrationService implements Migration {
 	}
 
 	private void _walkFiles(
-		File startDir, List<UpgradeProblem> problems, List<String> versions, IProgressMonitor monitor) {
+		File startDir, List<FileUpgradeProblem> problems, List<String> versions, IProgressMonitor monitor) {
 
 		SubMonitor progressMonitor = SubMonitor.convert(monitor, _total);
 

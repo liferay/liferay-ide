@@ -12,14 +12,13 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.ui.util;
+package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.plan.ui.internal.FileProblemsContainer;
+import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 
 import java.io.File;
 
@@ -45,10 +44,10 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public class MigrationUtil {
 
-	public static void addMarkers(List<UpgradeProblem> problems) {
+	public static void addMarkers(List<FileUpgradeProblem> problems) {
 		IWorkspaceRoot ws = CoreUtil.getWorkspaceRoot();
 
-		for (UpgradeProblem problem : problems) {
+		for (FileUpgradeProblem problem : problems) {
 			IResource workspaceResource = null;
 
 			File problemFile = problem.file;
@@ -123,7 +122,7 @@ public class MigrationUtil {
 
 			if (FileUtil.exists(workspaceResource)) {
 				try {
-					IMarker marker = workspaceResource.createMarker(UpgradeProblem.MARKER_TYPE);
+					IMarker marker = workspaceResource.createMarker(FileUpgradeProblem.MARKER_TYPE);
 
 					problem.setMarkerId(marker.getId());
 
@@ -147,7 +146,7 @@ public class MigrationUtil {
 		}
 	}
 
-	public static void openEditor(UpgradeProblem problem) {
+	public static void openEditor(FileUpgradeProblem problem) {
 		try {
 			IResource resource = _getIResourceFromFile(problem.file);
 
@@ -178,7 +177,7 @@ public class MigrationUtil {
 		}
 	}
 
-	public static void problemToMarker(UpgradeProblem problem, IMarker marker) throws CoreException {
+	public static void problemToMarker(FileUpgradeProblem problem, IMarker marker) throws CoreException {
 		marker.setAttribute(IMarker.MESSAGE, problem.title);
 		marker.setAttribute("migrationProblem.summary", problem.summary);
 		marker.setAttribute("migrationProblem.ticket", problem.ticket);

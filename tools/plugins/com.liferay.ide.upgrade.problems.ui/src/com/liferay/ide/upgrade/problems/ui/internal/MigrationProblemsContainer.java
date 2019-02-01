@@ -12,29 +12,22 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.ui.internal.tasks;
-
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.ui.navigator.CommonActionProvider;
-import org.eclipse.ui.navigator.ICommonActionExtensionSite;
+package com.liferay.ide.upgrade.problems.ui.internal;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
-public class UpgradeProblemsActionProvider extends CommonActionProvider {
+public class MigrationProblemsContainer {
 
-	@Override
-	public void fillContextMenu(IMenuManager menuManager) {
-
-		// TODO
-
+	public ProjectProblemsContainer[] getProjectProblemsConatiners() {
+		return _projectProblemsConatiners;
 	}
 
-	@Override
-	public void init(ICommonActionExtensionSite aSite) {
-
-		// TODO
-
+	public void setProjectProblemsConatiners(ProjectProblemsContainer[] projectProblemsConatiners) {
+		_projectProblemsConatiners = projectProblemsConatiners;
 	}
+
+	private ProjectProblemsContainer[] _projectProblemsConatiners;
 
 }

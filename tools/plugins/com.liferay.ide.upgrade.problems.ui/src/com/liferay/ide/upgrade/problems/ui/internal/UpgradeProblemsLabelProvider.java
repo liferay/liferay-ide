@@ -12,15 +12,11 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.ui.internal.tasks;
+package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
-import com.liferay.ide.upgrade.plan.ui.internal.FileProblemsContainer;
-import com.liferay.ide.upgrade.plan.ui.internal.ProjectProblemsContainer;
-import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
+import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
@@ -58,7 +54,7 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 		else if (element instanceof FileProblemsContainer) {
 			return getImageRegistry().get("FileProblems");
 		}
-		else if (element instanceof UpgradeProblem) {
+		else if (element instanceof FileUpgradeProblem) {
 			return getImageRegistry().get("Problem");
 		}
 
@@ -76,17 +72,20 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 	protected void initalizeImageRegistry(ImageRegistry imageRegistry) {
 		imageRegistry.put(
 			"MigrationProblemsContainer",
-			UpgradePlanUIPlugin.imageDescriptorFromPlugin(UpgradePlanUIPlugin.PLUGIN_ID, "icons/liferay_logo_16.png"));
+			UpgradeProblemsUIPlugin.imageDescriptorFromPlugin(
+				UpgradeProblemsUIPlugin.PLUGIN_ID, "icons/liferay_logo_16.png"));
 		imageRegistry.put(
 			"ProjectMigrationProblems",
-			UpgradePlanUIPlugin.imageDescriptorFromPlugin(UpgradePlanUIPlugin.PLUGIN_ID, ISharedImages.IMG_OBJ_FOLDER));
+			UpgradeProblemsUIPlugin.imageDescriptorFromPlugin(
+				UpgradeProblemsUIPlugin.PLUGIN_ID, ISharedImages.IMG_OBJ_FOLDER));
 		imageRegistry.put(
 			"FileProblems",
-			UpgradePlanUIPlugin.imageDescriptorFromPlugin(UpgradePlanUIPlugin.PLUGIN_ID, ISharedImages.IMG_OBJ_FILE));
+			UpgradeProblemsUIPlugin.imageDescriptorFromPlugin(
+				UpgradeProblemsUIPlugin.PLUGIN_ID, ISharedImages.IMG_OBJ_FILE));
 		imageRegistry.put(
 			"Problem",
-			UpgradePlanUIPlugin.imageDescriptorFromPlugin(
-				UpgradePlanUIPlugin.PLUGIN_ID, ISharedImages.IMG_OBJS_ERROR_TSK));
+			UpgradeProblemsUIPlugin.imageDescriptorFromPlugin(
+				UpgradeProblemsUIPlugin.PLUGIN_ID, ISharedImages.IMG_OBJS_ERROR_TSK));
 	}
 
 	private ServiceTracker<UpgradeInfoProvider, UpgradeInfoProvider> _upgradeInfoProviderServiceTracker;

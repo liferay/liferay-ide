@@ -14,14 +14,14 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.upgrade.problems.core.AutoMigrator;
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.ImportStatementMigrator;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
+
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.ImportStatementMigrator;
 
 /**
  * @author Gregory Amerson
@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.section=#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar",
 	"auto.correct=import", "implName=MVCPortletActionCommandImports", "version=7.0"
 },
-	service = {AutoMigrator.class, FileMigrator.class})
+	service = {AutoFileMigrator.class, FileMigrator.class})
 public class MVCPortletActionCommandImports extends ImportStatementMigrator {
 
 	public MVCPortletActionCommandImports() {

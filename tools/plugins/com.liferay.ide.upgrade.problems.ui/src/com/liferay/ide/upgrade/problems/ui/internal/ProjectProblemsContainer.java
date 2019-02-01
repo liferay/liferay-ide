@@ -12,19 +12,31 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core;
-
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-
-import java.io.File;
-
-import java.util.List;
+package com.liferay.ide.upgrade.problems.ui.internal;
 
 /**
+ * @author Terry Jia
  * @author Gregory Amerson
  */
-public interface AutoMigrator {
+public class ProjectProblemsContainer {
 
-	public int correctProblems(File file, List<UpgradeProblem> problems) throws AutoMigrateException;
+	public FileProblemsContainer[] getFileProblemsContainers() {
+		return _fileProblemsContainers;
+	}
+
+	public String getProjectName() {
+		return _projectName;
+	}
+
+	public void setFileProblemsContainers(FileProblemsContainer[] fileProblemsContainers) {
+		_fileProblemsContainers = fileProblemsContainers;
+	}
+
+	public void setProjectName(String projectName) {
+		_projectName = projectName;
+	}
+
+	private FileProblemsContainer[] _fileProblemsContainers;
+	private String _projectName;
 
 }

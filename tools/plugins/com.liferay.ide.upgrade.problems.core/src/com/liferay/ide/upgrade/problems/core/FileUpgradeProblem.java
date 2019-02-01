@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.problems.core;
 
 import java.io.File;
 
@@ -21,27 +21,27 @@ import java.util.UUID;
 /**
  * @author Gregory Amerson
  */
-public class UpgradeProblem {
+public class FileUpgradeProblem {
 
 	public static final long DEFAULT_MARKER_ID = -1;
 
-	public static String MARKER_ATTRIBUTE_AUTOCORRECTCONTEXT = "upgradeProblem.autoCorrectContext";
+	public static String MARKER_ATTRIBUTE_AUTOCORRECTCONTEXT = "fileUpgradeProblem.autoCorrectContext";
 
-	public static String MARKER_ATTRIBUTE_RESOLVED = "upgradeProblem.resolved";
+	public static String MARKER_ATTRIBUTE_RESOLVED = "fileUpgradeProblem.resolved";
 
-	public static String MARKER_ATTRIBUTE_SECTION = "upgradeProblem.section";
+	public static String MARKER_ATTRIBUTE_SECTION = "fileUpgradeProblem.section";
 
-	public static String MARKER_ATTRIBUTE_SUMMARY = "upgradeProblem.summary";
+	public static String MARKER_ATTRIBUTE_SUMMARY = "fileUpgradeProblem.summary";
 
-	public static String MARKER_ATTRIBUTE_TICKET = "upgradeProblem.ticket";
+	public static String MARKER_ATTRIBUTE_TICKET = "fileUpgradeProblem.ticket";
 
-	public static String MARKER_ATTRIBUTE_TIMESTAMP = "upgradeProblem.timestamp";
+	public static String MARKER_ATTRIBUTE_TIMESTAMP = "fileUpgradeProblem.timestamp";
 
-	public static String MARKER_ATTRIBUTE_TYPE = "upgradeProblem.type";
+	public static String MARKER_ATTRIBUTE_TYPE = "fileUpgradeProblem.type";
 
 	public static final int MARKER_ERROR = 2;
 
-	public static final String MARKER_TYPE = "com.liferay.ide.upgrade.plan.core.UpgradeProblemMarker";
+	public static final String MARKER_TYPE = "com.liferay.ide.upgrade.plan.core.FileUpgradeProblemMarker";
 
 	public static final int MARKER_WARNING = 1;
 
@@ -51,10 +51,10 @@ public class UpgradeProblem {
 
 	public static final int STATUS_RESOLVED = 1;
 
-	public UpgradeProblem() {
+	public FileUpgradeProblem() {
 	}
 
-	public UpgradeProblem(
+	public FileUpgradeProblem(
 		String title, String summary, String type, String ticket, String version, File file, int lineNumber,
 		int startOffset, int endOffset, String html, String autoCorrectContext, int status, long markerId,
 		int markerType) {
@@ -64,7 +64,7 @@ public class UpgradeProblem {
 			endOffset, html, autoCorrectContext, status, markerId, markerType);
 	}
 
-	public UpgradeProblem(
+	public FileUpgradeProblem(
 		String uuid, String title, String summary, String type, String ticket, String version, File file,
 		int lineNumber, int startOffset, int endOffset, String html, String autoCorrectContext, int status,
 		long markerId, int markerType) {
@@ -100,7 +100,7 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		UpgradeProblem other = (UpgradeProblem)obj;
+		FileUpgradeProblem other = (FileUpgradeProblem)obj;
 
 		if (uuid.equals(other.uuid)) {
 			return true;

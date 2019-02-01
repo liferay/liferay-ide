@@ -16,10 +16,10 @@ package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
-import com.liferay.ide.upgrade.problems.core.AutoMigrateException;
-import com.liferay.ide.upgrade.problems.core.AutoMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.JSPFile;
 
 import java.io.File;
@@ -51,7 +51,7 @@ import org.w3c.dom.NodeList;
  * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
-public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> implements AutoMigrator {
+public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> implements AutoFileMigrator {
 
 	public JSPTagMigrator(
 		String[] attrNames, String[] newAttrNames, String[] attrValues, String[] newAttrValues, String[] tagNames,
@@ -69,12 +69,12 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 	}
 
 	@Override
-	public int correctProblems(File file, List<UpgradeProblem> problems) throws AutoMigrateException {
+	public int correctProblems(File file, List<FileUpgradeProblem> problems) throws AutoFileMigrateException {
 		int corrected = 0;
 
 		List<Integer> autoCorrectTagOffsets = new ArrayList<>();
 
-		Stream<UpgradeProblem> stream = problems.stream();
+		Stream<FileUpgradeProblem> stream = problems.stream();
 
 		Class<? extends JSPTagMigrator> class1 = getClass();
 
@@ -86,7 +86,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 			p -> p.getStartOffset()
 		).sorted();
 
-		for (UpgradeProblem problem : problems) {
+		for (FileUpgradeProblem problem : problems) {
 			if ((problem.autoCorrectContext != null) &&
 				problem.autoCorrectContext.equals("jsptag:" + class1.getName())) {
 
@@ -197,7 +197,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 				}
 			}
 			catch (Exception e) {
-				throw new AutoMigrateException("Unable to auto-correct", e);
+				throw new AutoFileMigrateException("Unable to auto-correct", e);
 			}
 			finally {
 				if (domModel != null) {
@@ -212,7 +212,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 					Files.copy(jspFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 				}
 				catch (Exception e) {
-					throw new AutoMigrateException("Error writing corrected file", e);
+					throw new AutoFileMigrateException("Error writing corrected file", e);
 				}
 			}
 		}

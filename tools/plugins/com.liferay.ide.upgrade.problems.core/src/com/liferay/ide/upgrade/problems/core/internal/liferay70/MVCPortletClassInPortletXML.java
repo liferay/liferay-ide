@@ -14,21 +14,10 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
-import com.liferay.ide.upgrade.problems.core.AutoMigrateException;
-import com.liferay.ide.upgrade.problems.core.AutoMigrator;
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.XMLFile;
-import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
-
 import java.io.File;
 import java.io.InputStream;
-
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,11 +29,18 @@ import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-
 import org.osgi.service.component.annotations.Component;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Text;
+
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.problems.core.XMLFile;
+import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 
 /**
  * @author Gregory Amerson
@@ -58,12 +54,12 @@ import org.w3c.dom.Text;
 	"problem.section=#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar",
 	"implName=MVCPortletClassInPortletXML", "auto.correct=portlet-xml-portlet-class", "version=7.0"
 },
-	service = {AutoMigrator.class, FileMigrator.class})
+	service = {AutoFileMigrator.class, FileMigrator.class})
 @SuppressWarnings("restriction")
-public class MVCPortletClassInPortletXML extends XMLFileMigrator implements AutoMigrator {
+public class MVCPortletClassInPortletXML extends XMLFileMigrator implements AutoFileMigrator {
 
 	@Override
-	public int correctProblems(File file, List<UpgradeProblem> problems) throws AutoMigrateException {
+	public int correctProblems(File file, List<FileUpgradeProblem> problems) throws AutoFileMigrateException {
 		int corrected = 0;
 		IFile xmlFile = getXmlFile(file);
 		IDOMModel xmlModel = null;
@@ -76,7 +72,7 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 
 				List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
-				for (UpgradeProblem problem : problems) {
+				for (FileUpgradeProblem problem : problems) {
 					if (_KEY.equals(problem.autoCorrectContext)) {
 						IndexedRegion region = xmlModel.getIndexedRegion(problem.startOffset);
 
@@ -124,7 +120,7 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 				Files.copy(xmlFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			}
 			catch (Exception e) {
-				throw new AutoMigrateException("Error writing corrected file", e);
+				throw new AutoFileMigrateException("Error writing corrected file", e);
 			}
 		}
 

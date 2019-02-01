@@ -12,12 +12,9 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.ui.internal.tasks;
+package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
-import com.liferay.ide.upgrade.plan.ui.internal.FileProblemsContainer;
-import com.liferay.ide.upgrade.plan.ui.internal.ProjectProblemsContainer;
 
 /**
  * @author Terry Jia
@@ -28,7 +25,7 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 		if (element instanceof MigrationProblemsContainer) {
 			MigrationProblemsContainer migrationProblemsContainer = (MigrationProblemsContainer)element;
 
-			return migrationProblemsContainer.getProblemsArray();
+			return migrationProblemsContainer.getProjectProblemsConatiners();
 		}
 		else if (element instanceof ProjectProblemsContainer) {
 			ProjectProblemsContainer projectProblemsContainer = (ProjectProblemsContainer)element;

@@ -14,15 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
-import com.liferay.ide.upgrade.problems.core.AutoMigrateException;
-import com.liferay.ide.upgrade.problems.core.AutoMigrator;
-import com.liferay.ide.upgrade.problems.core.XMLFile;
-import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
-
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -35,11 +27,18 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocumentType;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
+import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.problems.core.XMLFile;
+import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
+
 /**
  * @author Seiphon Wang
  */
 @SuppressWarnings("restriction")
-public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator implements AutoMigrator {
+public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator implements AutoFileMigrator {
 
 	public BaseLiferayDescriptorVersion(Pattern publicIDPattern, String version) {
 		_idPattern = publicIDPattern;
@@ -47,7 +46,7 @@ public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator imple
 	}
 
 	@Override
-	public int correctProblems(File file, List<UpgradeProblem> problems) throws AutoMigrateException {
+	public int correctProblems(File file, List<FileUpgradeProblem> problems) throws AutoFileMigrateException {
 		int problemsCorrected = 0;
 
 		try {

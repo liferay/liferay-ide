@@ -17,12 +17,12 @@ package com.liferay.ide.upgrade.problems.core.internal.tasks;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepDoneEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
 import com.liferay.ide.upgrade.plan.tasks.core.JavaProjectsSelectionTaskStep;
-import com.liferay.ide.upgrade.problems.core.Migration;
+import com.liferay.ide.upgrade.problems.core.FileMigration;
+import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 
 import java.io.File;
 
@@ -82,12 +82,12 @@ public class FindUpgradeProblemsTaskStep extends JavaProjectsSelectionTaskStep i
 
 						File searchFile = location.toFile();
 
-						ServiceReference<Migration> serviceReference = bundleContext.getServiceReference(
-							Migration.class);
+						ServiceReference<FileMigration> serviceReference = bundleContext.getServiceReference(
+							FileMigration.class);
 
-						Migration migration = bundleContext.getService(serviceReference);
+						FileMigration migration = bundleContext.getService(serviceReference);
 
-						List<UpgradeProblem> problems = migration.findProblems(searchFile, versions, monitor);
+						List<FileUpgradeProblem> problems = migration.findProblems(searchFile, versions, monitor);
 
 						System.out.println(problems.size());
 

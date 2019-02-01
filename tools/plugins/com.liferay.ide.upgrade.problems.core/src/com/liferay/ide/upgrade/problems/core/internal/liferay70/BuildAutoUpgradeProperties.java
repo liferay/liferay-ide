@@ -14,12 +14,12 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
-
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
+
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 
 /**
  * @author Joye Luo

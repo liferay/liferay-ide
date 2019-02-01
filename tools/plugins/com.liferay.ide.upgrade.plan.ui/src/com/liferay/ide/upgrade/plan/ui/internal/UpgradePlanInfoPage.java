@@ -27,6 +27,8 @@ import com.vladsch.flexmark.util.options.MutableDataSet;
 
 import java.io.IOException;
 
+import java.util.stream.Stream;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -159,30 +161,35 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 
 			Object firstElement = structuredSelection.getFirstElement();
 
-			UpgradeInfoProvider upgradeInfoProvider = _upgradeInfoProviderServiceTracker.getService();
+			Stream.of(
+				_upgradeInfoProviderServiceTracker.getServices(new UpgradeInfoProvider[0])
+			).filter(
+				upgradeInfoProvider -> upgradeInfoProvider.provides(firstElement)
+			).findFirst(
+			).ifPresent(
+				upgradeInfoProvider -> {
+					Promise<String> detail = upgradeInfoProvider.getDetail(firstElement);
 
-			Promise<String> detail = upgradeInfoProvider.getDetail(firstElement);
-
-			detail.onResolve(
-				() -> {
-					UIUtil.async(
+					detail.onResolve(
 						() -> {
-							try {
-								if (detail.getFailure() != null) {
-									_browser.setText("about:blank");
-								}
-								else {
-									_browser.setText(detail.getValue());
-								}
+							UIUtil.async(
+								() -> {
+									try {
+										if (detail.getFailure() != null) {
+											_browser.setText("about:blank");
+										}
+										else {
+											_browser.setText(detail.getValue());
+										}
 
-								_composite.redraw();
-							}
-							catch (Exception e) {
-							}
+										_composite.redraw();
+									}
+									catch (Exception e) {
+									}
+								});
 						});
-				});
-
-			_composite.redraw();
+				}
+			);
 		}
 	}
 

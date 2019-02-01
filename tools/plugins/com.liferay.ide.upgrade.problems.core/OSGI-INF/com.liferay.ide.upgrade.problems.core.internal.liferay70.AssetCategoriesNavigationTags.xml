@@ -9,7 +9,7 @@
 	<property name="implName" value="AssetCategoriesNavigationTags" />
 	<property name="version" value="7.0" />
 	<service>
-		<provide interface="com.liferay.ide.upgrade.problems.core.AutoMigrator" />
+		<provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator" />
 		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
 	</service>
 	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.AssetCategoriesNavigationTags" />

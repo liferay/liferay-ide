@@ -14,19 +14,11 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
-import com.liferay.ide.upgrade.problems.core.AutoMigrator;
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.JavaFile;
-import com.liferay.ide.upgrade.problems.core.internal.ImportStatementMigrator;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -35,6 +27,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
+
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.JavaFile;
+import com.liferay.ide.upgrade.problems.core.internal.ImportStatementMigrator;
 
 /**
  * @author Gregory Amerson
@@ -47,7 +46,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.section=#renamed-packages-to-fix-the-split-packages-problem", "auto.correct=import",
 	"implName=RenamePortalKernelImports", "version=7.0"
 },
-	service = {AutoMigrator.class, FileMigrator.class})
+	service = {AutoFileMigrator.class, FileMigrator.class})
 public class RenamePortalKernelImports extends ImportStatementMigrator {
 
 	public static String[] getFixedImports(String[][] packageChangeMap) {

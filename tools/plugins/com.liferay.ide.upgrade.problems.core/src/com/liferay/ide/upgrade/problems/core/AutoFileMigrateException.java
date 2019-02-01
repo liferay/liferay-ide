@@ -17,14 +17,14 @@ package com.liferay.ide.upgrade.problems.core;
 /**
  * @author Gregory Amerson
  */
-public class AutoMigrateException extends Exception {
+public class AutoFileMigrateException extends Exception {
 
-	public AutoMigrateException(String msg) {
-		super(msg);
+	public AutoFileMigrateException(String message) {
+		super(message);
 	}
 
-	public AutoMigrateException(String msg, Exception e) {
-		super(msg, e);
+	public AutoFileMigrateException(String message, Exception exception) {
+		super(message, exception);
 	}
 
 	private static final long serialVersionUID = 3776203562079756845L;

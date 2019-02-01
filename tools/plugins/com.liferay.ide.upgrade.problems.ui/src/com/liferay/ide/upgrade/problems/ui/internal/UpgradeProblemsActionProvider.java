@@ -12,31 +12,29 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.ui.internal;
+package com.liferay.ide.upgrade.problems.ui.internal;
+
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.ui.navigator.CommonActionProvider;
+import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 
 /**
  * @author Terry Jia
- * @author Gregory Amerson
  */
-public class ProjectProblemsContainer {
+public class UpgradeProblemsActionProvider extends CommonActionProvider {
 
-	public FileProblemsContainer[] getFileProblemsContainers() {
-		return _fileProblemsContainers;
+	@Override
+	public void fillContextMenu(IMenuManager menuManager) {
+
+		// TODO
+
 	}
 
-	public String getProjectName() {
-		return _projectName;
-	}
+	@Override
+	public void init(ICommonActionExtensionSite aSite) {
 
-	public void setFileProblemsContainers(FileProblemsContainer[] fileProblemsContainers) {
-		_fileProblemsContainers = fileProblemsContainers;
-	}
+		// TODO
 
-	public void setProjectName(String projectName) {
-		_projectName = projectName;
 	}
-
-	private FileProblemsContainer[] _fileProblemsContainers;
-	private String _projectName;
 
 }

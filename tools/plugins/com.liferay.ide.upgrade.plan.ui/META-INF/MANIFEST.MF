@@ -27,4 +27,5 @@ Require-Bundle: com.liferay.ide.project.core,
  org.eclipse.ui.workbench,
  org.eclipse.ui.ide,
  org.eclipse.ui.workbench.texteditor
-Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.ui.internal.UpgradeInfoProviderService.xml
+Export-Package: com.liferay.ide.upgrade.plan.ui
+Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanInfoProviderService.xml

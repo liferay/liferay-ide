@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.files;
 
-import com.liferay.ide.upgrade.problems.core.AutoMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.liferay70.BaseLiferayDescriptorVersion;
 
@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.section=#descriptor-XML-DTD-version", "auto.correct=descriptor", "implName=LiferayDescriptorVersion",
 	"version=7.1"
 },
-	service = {AutoMigrator.class, FileMigrator.class})
+	service = {AutoFileMigrator.class, FileMigrator.class})
 public class LiferayDescriptorVersion71 extends BaseLiferayDescriptorVersion {
 
 	public LiferayDescriptorVersion71() {

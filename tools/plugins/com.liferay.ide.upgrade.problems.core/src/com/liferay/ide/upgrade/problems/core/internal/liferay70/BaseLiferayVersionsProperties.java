@@ -14,35 +14,32 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
-import com.liferay.ide.upgrade.problems.core.AutoMigrateException;
-import com.liferay.ide.upgrade.problems.core.AutoMigrator;
-import com.liferay.ide.upgrade.problems.core.JavaFile;
-import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker;
-import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker.KeyInfo;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.file.Files;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-
 import org.osgi.framework.BundleContext;
+
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.problems.core.JavaFile;
+import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker;
+import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker.KeyInfo;
+import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 
 /**
  * @author Gregory Amerson
  */
-public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrator implements AutoMigrator {
+public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrator implements AutoFileMigrator {
 
 	public BaseLiferayVersionsProperties(String oldVersionPattern, String newVersion) {
 		_oldVersionPattern = oldVersionPattern;
@@ -50,8 +47,8 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 	}
 
 	@Override
-	public List<UpgradeProblem> analyze(File file) {
-		List<UpgradeProblem> problems = new ArrayList<>();
+	public List<FileUpgradeProblem> analyze(File file) {
+		List<FileUpgradeProblem> problems = new ArrayList<>();
 
 		if ("liferay-plugin-package.properties".equals(file.getName())) {
 			PropertiesFileChecker propertiesFileChecker = new PropertiesFileChecker(file);
@@ -73,11 +70,11 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 							searchResult.autoCorrectContext = _PREFIX + "liferay-versions";
 
 							problems.add(
-								new UpgradeProblem(
+								new FileUpgradeProblem(
 									problemTitle, problemSummary, problemType, problemTickets, version, file,
 									searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
-									sectionHtml, searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
-									UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));
+									sectionHtml, searchResult.autoCorrectContext, FileUpgradeProblem.STATUS_NOT_RESOLVED,
+									FileUpgradeProblem.DEFAULT_MARKER_ID, FileUpgradeProblem.MARKER_ERROR));
 						}
 					}
 				}
@@ -88,7 +85,7 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 	}
 
 	@Override
-	public int correctProblems(File file, List<UpgradeProblem> problems) throws AutoMigrateException {
+	public int correctProblems(File file, List<FileUpgradeProblem> problems) throws AutoFileMigrateException {
 		try {
 			String contents = new String(Files.readAllBytes(file.toPath()));
 
@@ -100,7 +97,7 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 
 			int problemsFixed = 0;
 
-			for (UpgradeProblem problem : problems) {
+			for (FileUpgradeProblem problem : problems) {
 				if (problem.autoCorrectContext instanceof String) {
 					String propertyData = problem.autoCorrectContext;
 

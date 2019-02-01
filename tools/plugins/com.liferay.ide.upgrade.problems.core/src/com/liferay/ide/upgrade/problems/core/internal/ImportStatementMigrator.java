@@ -15,11 +15,11 @@
 package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
-import com.liferay.ide.upgrade.problems.core.AutoMigrateException;
-import com.liferay.ide.upgrade.problems.core.AutoMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.CUCache;
+import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 
 import java.io.BufferedReader;
@@ -45,7 +45,7 @@ import org.osgi.framework.ServiceReference;
  * @author Gregory Amerson
  */
 @SuppressWarnings("rawtypes")
-public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaFile> implements AutoMigrator {
+public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaFile> implements AutoFileMigrator {
 
 	public static String getPrefix() {
 		return _PREFIX;
@@ -58,12 +58,12 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 	}
 
 	@Override
-	public int correctProblems(File file, List<UpgradeProblem> problems) throws AutoMigrateException {
+	public int correctProblems(File file, List<FileUpgradeProblem> problems) throws AutoFileMigrateException {
 		int problemsFixed = 0;
 
 		List<String> importsToRewrite = new ArrayList<>();
 
-		for (UpgradeProblem problem : problems) {
+		for (FileUpgradeProblem problem : problems) {
 			boolean problemFound = false;
 
 			if (problem.autoCorrectContext instanceof String) {
@@ -127,7 +127,7 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 				return problemsFixed;
 			}
 			catch (IOException ioe) {
-				throw new AutoMigrateException("Unable to auto-correct", ioe);
+				throw new AutoFileMigrateException("Unable to auto-correct", ioe);
 			}
 		}
 

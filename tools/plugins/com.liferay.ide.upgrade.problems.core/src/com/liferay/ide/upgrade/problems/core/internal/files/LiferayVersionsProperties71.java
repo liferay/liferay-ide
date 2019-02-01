@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.files;
 
-import com.liferay.ide.upgrade.problems.core.AutoMigrator;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.liferay70.BaseLiferayVersionsProperties;
 
@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=In order to deploy this project to 7.1 the liferay-versions property must be set to 7.1.0+",
 	"problem.tickets=", "problem.section=", "auto.correct=property", "implName=LiferayVersionsProperties", "version=7.1"
 },
-	service = {AutoMigrator.class, FileMigrator.class})
+	service = {AutoFileMigrator.class, FileMigrator.class})
 public class LiferayVersionsProperties71 extends BaseLiferayVersionsProperties {
 
 	public LiferayVersionsProperties71() {

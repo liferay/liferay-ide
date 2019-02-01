@@ -14,31 +14,15 @@
 
 package com.liferay.ide.upgrade.problems.core;
 
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-
 import java.io.File;
 
 import java.util.List;
-import java.util.Set;
-
-import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * @author Gregory Amerson
- * @author Terry Jia
  */
-public interface Migration {
+public interface AutoFileMigrator {
 
-	public List<UpgradeProblem> findProblems(File projectDir, IProgressMonitor monitor);
-
-	public List<UpgradeProblem> findProblems(File projectDir, List<String> versions, IProgressMonitor monitor);
-
-	public List<UpgradeProblem> findProblems(Set<File> files, IProgressMonitor monitor);
-
-	public List<UpgradeProblem> findProblems(Set<File> files, List<String> versions, IProgressMonitor monitor);
-
-	public int DETAIL_LONG = 1 << 2;
-
-	public int DETAIL_SHORT = 1 << 1;
+	public int correctProblems(File file, List<FileUpgradeProblem> problems) throws AutoFileMigrateException;
 
 }

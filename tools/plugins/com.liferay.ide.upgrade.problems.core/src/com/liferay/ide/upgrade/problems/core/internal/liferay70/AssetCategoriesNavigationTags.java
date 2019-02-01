@@ -14,11 +14,11 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.upgrade.problems.core.AutoMigrator;
+import org.osgi.service.component.annotations.Component;
+
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
-
-import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
 		"categories-navigation",
 	"problem.tickets=LPS-60753", "auto.correct=jsptag", "implName=AssetCategoriesNavigationTags", "version=7.0"
 },
-	service = {AutoMigrator.class, FileMigrator.class})
+	service = {AutoFileMigrator.class, FileMigrator.class})
 public class AssetCategoriesNavigationTags extends JSPTagMigrator {
 
 	public AssetCategoriesNavigationTags() {

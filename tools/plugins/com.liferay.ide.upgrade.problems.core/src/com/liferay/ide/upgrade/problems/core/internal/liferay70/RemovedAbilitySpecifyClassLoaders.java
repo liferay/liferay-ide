@@ -14,18 +14,17 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
-
-import java.io.File;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson

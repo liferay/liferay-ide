@@ -26,4 +26,6 @@ public interface UpgradeInfoProvider {
 
 	public String getLabel(Object element);
 
+	public boolean provides(Object element);
+
 }

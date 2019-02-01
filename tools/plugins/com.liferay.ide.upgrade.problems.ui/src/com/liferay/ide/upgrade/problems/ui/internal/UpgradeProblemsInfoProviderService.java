@@ -12,12 +12,10 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.ui.internal;
+package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
+import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 
 import java.io.File;
 
@@ -32,9 +30,9 @@ import org.osgi.util.promise.PromiseFactory;
  * @author Gregory Amerson
  */
 @Component
-public class UpgradeInfoProviderService implements UpgradeInfoProvider {
+public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 
-	public UpgradeInfoProviderService() {
+	public UpgradeProblemsInfoProviderService() {
 		_promiseFactory = new PromiseFactory(null);
 	}
 
@@ -47,9 +45,6 @@ public class UpgradeInfoProviderService implements UpgradeInfoProvider {
 		}
 		else if (element instanceof ProjectProblemsContainer) {
 			_doProjectProblemsContainerDetail((ProjectProblemsContainer)element, deferred);
-		}
-		else if (element instanceof UpgradeTaskStep) {
-			_doUpgradeTaskStepDetail((UpgradeTaskStep)element, deferred);
 		}
 		else {
 			deferred.fail(new NoSuchElementException());
@@ -71,14 +66,22 @@ public class UpgradeInfoProviderService implements UpgradeInfoProvider {
 		else if (element instanceof ProjectProblemsContainer) {
 			return _doProjectProblemsContainerLabel((ProjectProblemsContainer)element);
 		}
-		else if (element instanceof UpgradeProblem) {
-			return _doProblemLabel((UpgradeProblem)element);
-		}
-		else if (element instanceof UpgradeTaskStep) {
-			return _doUpgradeTaskStepLabel((UpgradeTaskStep)element);
+		else if (element instanceof FileUpgradeProblem) {
+			return _doProblemLabel((FileUpgradeProblem)element);
 		}
 
 		return null;
+	}
+
+	@Override
+	public boolean provides(Object element) {
+		if ((element instanceof ProjectProblemsContainer) || (element instanceof FileProblemsContainer) ||
+			(element instanceof MigrationProblemsContainer)) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	private void _doFileProblemsContainerDetail(
@@ -88,14 +91,14 @@ public class UpgradeInfoProviderService implements UpgradeInfoProvider {
 
 		File file = fileProblemsContainer.getFile();
 
-		UpgradeProblem[] problems = fileProblemsContainer.getProblems();
+		FileUpgradeProblem[] problems = fileProblemsContainer.getProblems();
 
 		sb.append(file);
 		sb.append("<br />");
 		sb.append("It has " + problems.length + " issue(s) need to be solved.");
 		sb.append("<br />");
 
-		for (UpgradeProblem problem : problems) {
+		for (FileUpgradeProblem problem : problems) {
 			sb.append(problem.title);
 			sb.append("<br />");
 		}
@@ -112,7 +115,7 @@ public class UpgradeInfoProviderService implements UpgradeInfoProvider {
 		return fileName + " [" + path + "]";
 	}
 
-	private String _doProblemLabel(UpgradeProblem problem) {
+	private String _doProblemLabel(FileUpgradeProblem problem) {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("[");
@@ -147,33 +150,6 @@ public class UpgradeInfoProviderService implements UpgradeInfoProvider {
 
 	private String _doProjectProblemsContainerLabel(ProjectProblemsContainer projectProblems) {
 		return projectProblems.getProjectName();
-	}
-
-	private void _doUpgradeTaskStepDetail(UpgradeTaskStep upgradeTaskStep, Deferred<String> deferred) {
-		final String detail;
-
-		String url = upgradeTaskStep.getUrl();
-
-		if (CoreUtil.isNotNullOrEmpty(url)) {
-			detail = url;
-		}
-		else {
-			StringBuffer sb = new StringBuffer();
-
-			sb.append(upgradeTaskStep.getTitle());
-
-			sb.append("<br />");
-
-			sb.append(upgradeTaskStep.getDescription());
-
-			detail = sb.toString();
-		}
-
-		deferred.resolve(detail);
-	}
-
-	private String _doUpgradeTaskStepLabel(UpgradeTaskStep upgradeTaskStep) {
-		return upgradeTaskStep.getTitle();
 	}
 
 	private final PromiseFactory _promiseFactory;

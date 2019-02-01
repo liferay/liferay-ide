@@ -26,9 +26,9 @@ import org.json.JSONObject;
 import org.osgi.service.component.annotations.Component;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
@@ -73,8 +73,8 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 	}
 
 	@Override
-	public List<UpgradeProblem> analyze(File file) {
-		List<UpgradeProblem> problems = new ArrayList<>();
+	public List<FileUpgradeProblem> analyze(File file) {
+		List<FileUpgradeProblem> problems = new ArrayList<>();
 		String fileExtension = new Path(file.getAbsolutePath()).getFileExtension();
 
 		for (JSONArray deprecatedMethodsArray : _deprecatedMethods) {
@@ -86,18 +86,18 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 
 					if (searchResults != null) {
 						for (SearchResult searchResult : searchResults) {
-							int makerType = UpgradeProblem.MARKER_ERROR;
+							int makerType = FileUpgradeProblem.MARKER_ERROR;
 
 							if ("7.0".equals(_tempMethod.getString("deprecatedVersion"))) {
-								makerType = UpgradeProblem.MARKER_WARNING;
+								makerType = FileUpgradeProblem.MARKER_WARNING;
 							}
 
 							problems.add(
-								new UpgradeProblem(
+								new FileUpgradeProblem(
 									_tempMethod.getString("javadoc"), _tempMethod.getString("javadoc"), fileExtension, "",
 									"7.0", file, searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
 									_tempMethod.getString("javadoc"), searchResult.autoCorrectContext,
-									UpgradeProblem.STATUS_NOT_RESOLVED, UpgradeProblem.DEFAULT_MARKER_ID, makerType));
+									FileUpgradeProblem.STATUS_NOT_RESOLVED, FileUpgradeProblem.DEFAULT_MARKER_ID, makerType));
 						}
 					}
 				}
