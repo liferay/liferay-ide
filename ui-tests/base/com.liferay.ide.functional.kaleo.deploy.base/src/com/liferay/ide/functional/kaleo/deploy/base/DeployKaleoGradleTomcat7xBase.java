@@ -68,6 +68,8 @@ public class DeployKaleoGradleTomcat7xBase extends ServerTestBase {
 
 		jobAction.waitForNoRunningJobs();
 
+		ide.sleep();
+
 		viewAction.servers.openUpLoadNewWorkflowDialog(tomcat.getStartedLabel());
 
 		dialogAction.workspaceFile.addFiles(project.getName(), "new-workflow-definition.xml");

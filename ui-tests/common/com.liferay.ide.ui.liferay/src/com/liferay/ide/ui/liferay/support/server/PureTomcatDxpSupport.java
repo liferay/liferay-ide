@@ -30,7 +30,7 @@ public class PureTomcatDxpSupport extends ServerSupport {
 	}
 
 	public PureTomcatDxpSupport(SWTWorkbenchBot bot) {
-		super(bot, "tomcat", "7.1-ga1");
+		super(bot, "tomcat", "7.1-sp1");
 	}
 
 }
