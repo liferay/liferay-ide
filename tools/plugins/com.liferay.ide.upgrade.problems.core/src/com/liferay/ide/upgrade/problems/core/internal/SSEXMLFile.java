@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.XMLFile;
 
 import java.util.ArrayList;
@@ -43,8 +43,8 @@ import org.w3c.dom.NodeList;
 public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 
 	@Override
-	public SearchResult findDocumentTypeDeclaration(String name, Pattern idPattern) {
-		SearchResult result = null;
+	public FileSearchResult findDocumentTypeDeclaration(String name, Pattern idPattern) {
+		FileSearchResult result = null;
 
 		IFile xmlFile = getIFile(file);
 		IDOMModel domModel = null;
@@ -73,7 +73,7 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 					int startLine = structuredDocument.getLineOfOffset(startOffset) + 1;
 					int endLine = structuredDocument.getLineOfOffset(endOffset) + 1;
 
-					result = new SearchResult(
+					result = new FileSearchResult(
 						file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
 
 					result.autoCorrectContext = "descriptor:dtd-version";
@@ -92,8 +92,8 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 	}
 
 	@Override
-	public List<SearchResult> findElement(String tagName, String value) {
-		List<SearchResult> results = new ArrayList<>();
+	public List<FileSearchResult> findElement(String tagName, String value) {
+		List<FileSearchResult> results = new ArrayList<>();
 
 		IFile xmlFile = getIFile(file);
 		IDOMModel domModel = null;
@@ -123,7 +123,7 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 						int startLine = structuredDocument.getLineOfOffset(startOffset) + 1;
 						int endLine = structuredDocument.getLineOfOffset(endOffset) + 1;
 
-						SearchResult result = new SearchResult(
+						FileSearchResult result = new FileSearchResult(
 							file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
 
 						results.add(result);

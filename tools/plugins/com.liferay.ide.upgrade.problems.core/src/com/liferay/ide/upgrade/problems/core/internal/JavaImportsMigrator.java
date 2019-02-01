@@ -15,10 +15,10 @@
 package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.CUCache;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 
@@ -45,13 +45,13 @@ import org.osgi.framework.ServiceReference;
  * @author Gregory Amerson
  */
 @SuppressWarnings("rawtypes")
-public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaFile> implements AutoFileMigrator {
+public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile> implements AutoFileMigrator {
 
 	public static String getPrefix() {
 		return _PREFIX;
 	}
 
-	public ImportStatementMigrator(Map<String, String> importFixes) {
+	public JavaImportsMigrator(Map<String, String> importFixes) {
 		super(JavaFile.class);
 
 		_importFixes = importFixes;
@@ -135,11 +135,11 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 	}
 
 	@Override
-	public List<SearchResult> searchFile(File file, JavaFile javaFile) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	public List<FileSearchResult> searchFile(File file, JavaFile javaFile) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		for (String importName : _importFixes.keySet()) {
-			SearchResult importResult = javaFile.findImport(importName);
+			FileSearchResult importResult = javaFile.findImport(importName);
 
 			if (importResult != null) {
 				importResult.autoCorrectContext = _PREFIX + importName;

@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
-
 import java.util.List;
 
 /**
@@ -23,23 +21,23 @@ import java.util.List;
  */
 public interface JavaFile extends SourceFile {
 
-	public List<SearchResult> findCatchExceptions(String[] exceptions);
+	public List<FileSearchResult> findCatchExceptions(String[] exceptions);
 
-	public List<SearchResult> findImplementsInterface(String interfaceName);
+	public List<FileSearchResult> findImplementsInterface(String interfaceName);
 
-	public SearchResult findImport(String importName);
+	public FileSearchResult findImport(String importName);
 
-	public List<SearchResult> findImports(String[] imports);
+	public List<FileSearchResult> findImports(String[] imports);
 
-	public List<SearchResult> findMethodDeclaration(String name, String[] params, String returnType);
+	public List<FileSearchResult> findMethodDeclaration(String name, String[] params, String returnType);
 
-	public List<SearchResult> findMethodInvocations(
+	public List<FileSearchResult> findMethodInvocations(
 		String typeHint, String expressionValue, String methodName, String[] methodParamTypes);
 
-	public SearchResult findPackage(String packageName);
+	public FileSearchResult findPackage(String packageName);
 
-	public List<SearchResult> findServiceAPIs(String[] serviceApiPrefixes);
+	public List<FileSearchResult> findServiceAPIs(String[] serviceApiPrefixes);
 
-	public List<SearchResult> findSuperClass(String superClassName);
+	public List<FileSearchResult> findSuperClass(String superClassName);
 
 }

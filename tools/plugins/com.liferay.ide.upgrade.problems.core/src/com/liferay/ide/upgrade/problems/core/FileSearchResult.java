@@ -12,16 +12,16 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.tasks.core;
+package com.liferay.ide.upgrade.problems.core;
 
 import java.io.File;
 
 /**
  * @author Gregory Amerson
  */
-public class SearchResult {
+public class FileSearchResult {
 
-	public SearchResult(File file, int startOffset, int endOffset, int startLine, int endLine, boolean fullMatch) {
+	public FileSearchResult(File file, int startOffset, int endOffset, int startLine, int endLine, boolean fullMatch) {
 		this.file = file;
 		searchContext = null;
 		this.fullMatch = fullMatch;
@@ -31,7 +31,7 @@ public class SearchResult {
 		this.endLine = endLine;
 	}
 
-	public SearchResult(
+	public FileSearchResult(
 		File file, String searchContext, int startOffset, int endOffset, int startLine, int endLine,
 		boolean fullMatch) {
 
@@ -58,7 +58,7 @@ public class SearchResult {
 			return false;
 		}
 
-		SearchResult other = (SearchResult)obj;
+		FileSearchResult other = (FileSearchResult)obj;
 
 		if (autoCorrectContext == null) {
 			if (other.autoCorrectContext != null) {

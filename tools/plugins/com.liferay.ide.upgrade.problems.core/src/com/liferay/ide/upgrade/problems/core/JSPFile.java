@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
-
 import java.util.List;
 
 /**
@@ -23,10 +21,10 @@ import java.util.List;
  */
 public interface JSPFile extends JavaFile {
 
-	public List<SearchResult> findJSPTags(String tagName);
+	public List<FileSearchResult> findJSPTags(String tagName);
 
-	public List<SearchResult> findJSPTags(String tagName, String[] attrNames);
+	public List<FileSearchResult> findJSPTags(String tagName, String[] attrNames);
 
-	public List<SearchResult> findJSPTags(String tagName, String[] attrNames, String[] attrValues);
+	public List<FileSearchResult> findJSPTags(String tagName, String[] attrNames, String[] attrValues);
 
 }

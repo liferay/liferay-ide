@@ -20,8 +20,8 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
@@ -39,14 +39,14 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 public class WebContentArticlesStrucAndTempl extends JavaFileMigrator {
 
 	@Override
-	protected List<SearchResult> searchFile(File file, JavaFile javaFileChecker) {
+	protected List<FileSearchResult> searchFile(File file, JavaFile javaFileChecker) {
 
 		// Journal API to create web content without a structure
 		// or template are affected
 
-		List<SearchResult> searchResults = new ArrayList<>();
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		List<SearchResult> journalArticleUtil = javaFileChecker.findMethodInvocations(
+		List<FileSearchResult> journalArticleUtil = javaFileChecker.findMethodInvocations(
 			null, "JournalArticleLocalServiceUtil", "addArticle", null);
 
 		searchResults.addAll(journalArticleUtil);

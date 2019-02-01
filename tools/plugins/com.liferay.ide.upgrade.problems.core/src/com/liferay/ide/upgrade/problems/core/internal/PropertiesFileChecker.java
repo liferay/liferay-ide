@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,14 +48,14 @@ public class PropertiesFileChecker {
 		}
 	}
 
-	public List<SearchResult> findProperties(String key) {
-		List<SearchResult> retval = new ArrayList<>();
+	public List<FileSearchResult> findProperties(String key) {
+		List<FileSearchResult> retval = new ArrayList<>();
 		List<KeyInfo> infos = _keyInfos.get(key);
 
 		if (infos != null) {
 			for (KeyInfo info : infos) {
 				retval.add(
-					new SearchResult(
+					new FileSearchResult(
 						_file, info.offset, info.offset + info.length, info.lineNumber, info.lineNumber, true));
 			}
 		}

@@ -43,7 +43,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(property = "type=jsp", service = CUCache.class)
 @SuppressWarnings("restriction")
-public class CUCacheWTP extends BaseCUCache implements CUCache<JSPTranslationPrime> {
+public class CUCacheWTP implements CUCache<JSPTranslationPrime> {
 
 	@Override
 	public JSPTranslationPrime getCU(File file, Supplier<char[]> javavSource) {
@@ -92,7 +92,9 @@ public class CUCacheWTP extends BaseCUCache implements CUCache<JSPTranslationPri
 			// try to find the file in the current workspace, if it can't find
 			// it then fall back to copy
 
-			IFile jspFile = getIFile(file);
+			WorkspaceFile workspaceFile = new WorkspaceFile();
+
+			IFile jspFile = workspaceFile.getIFile(file);
 
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 

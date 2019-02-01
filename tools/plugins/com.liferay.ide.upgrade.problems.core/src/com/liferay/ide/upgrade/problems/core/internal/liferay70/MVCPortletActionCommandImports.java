@@ -21,7 +21,7 @@ import org.osgi.service.component.annotations.Component;
 
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.ImportStatementMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
 
 /**
  * @author Gregory Amerson
@@ -36,7 +36,7 @@ import com.liferay.ide.upgrade.problems.core.internal.ImportStatementMigrator;
 	"auto.correct=import", "implName=MVCPortletActionCommandImports", "version=7.0"
 },
 	service = {AutoFileMigrator.class, FileMigrator.class})
-public class MVCPortletActionCommandImports extends ImportStatementMigrator {
+public class MVCPortletActionCommandImports extends JavaImportsMigrator {
 
 	public MVCPortletActionCommandImports() {
 		super(_importFixes);

@@ -29,11 +29,11 @@ import java.util.Set;
 import org.osgi.service.component.annotations.Component;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
-import com.liferay.ide.upgrade.problems.core.internal.ImportStatementMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
 
 /**
  * @author Gregory Amerson
@@ -47,7 +47,7 @@ import com.liferay.ide.upgrade.problems.core.internal.ImportStatementMigrator;
 	"implName=RenamePortalKernelImports", "version=7.0"
 },
 	service = {AutoFileMigrator.class, FileMigrator.class})
-public class RenamePortalKernelImports extends ImportStatementMigrator {
+public class RenamePortalKernelImports extends JavaImportsMigrator {
 
 	public static String[] getFixedImports(String[][] packageChangeMap) {
 		String[] newImports = new String[packageChangeMap.length];
@@ -113,15 +113,15 @@ public class RenamePortalKernelImports extends ImportStatementMigrator {
 	}
 
 	@Override
-	public List<SearchResult> searchFile(File file, JavaFile javaFile) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	public List<FileSearchResult> searchFile(File file, JavaFile javaFile) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		Set<String> importSet = _imports.keySet();
 
-		List<SearchResult> importResult = javaFile.findImports(importSet.toArray(new String[0]));
+		List<FileSearchResult> importResult = javaFile.findImports(importSet.toArray(new String[0]));
 
 		if (ListUtil.isNotEmpty(importResult)) {
-			for (SearchResult result : importResult) {
+			for (FileSearchResult result : importResult) {
 
 				// make sure that our import is not in list of fixed imports
 
@@ -164,7 +164,7 @@ public class RenamePortalKernelImports extends ImportStatementMigrator {
 		return imports;
 	}
 
-	private String _getImportNameFromResult(SearchResult result) {
+	private String _getImportNameFromResult(FileSearchResult result) {
 		String searchContext = result.searchContext;
 
 		if (searchContext != null) {
@@ -176,10 +176,10 @@ public class RenamePortalKernelImports extends ImportStatementMigrator {
 		return "";
 	}
 
-	private List<SearchResult> _removeDuplicate(List<SearchResult> searchResults) {
-		List<SearchResult> newList = new ArrayList<>();
+	private List<FileSearchResult> _removeDuplicate(List<FileSearchResult> searchResults) {
+		List<FileSearchResult> newList = new ArrayList<>();
 
-		for (SearchResult searchResult : searchResults) {
+		for (FileSearchResult searchResult : searchResults) {
 			if (!newList.contains(searchResult)) {
 				newList.add(searchResult);
 			}

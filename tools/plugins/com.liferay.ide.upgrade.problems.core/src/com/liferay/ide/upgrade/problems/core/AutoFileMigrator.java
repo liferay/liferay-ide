@@ -23,6 +23,6 @@ import java.util.List;
  */
 public interface AutoFileMigrator {
 
-	public int correctProblems(File file, List<FileUpgradeProblem> problems) throws AutoFileMigrateException;
+	public int correctProblems(File file, List<FileUpgradeProblem> fileUpgradeProblems) throws AutoFileMigrateException;
 
 }

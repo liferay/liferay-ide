@@ -85,11 +85,12 @@ public class FindUpgradeProblemsTaskStep extends JavaProjectsSelectionTaskStep i
 						ServiceReference<FileMigration> serviceReference = bundleContext.getServiceReference(
 							FileMigration.class);
 
-						FileMigration migration = bundleContext.getService(serviceReference);
+						FileMigration fileMigration = bundleContext.getService(serviceReference);
 
-						List<FileUpgradeProblem> problems = migration.findProblems(searchFile, versions, monitor);
+						List<FileUpgradeProblem> fileUpgradeProblems = fileMigration.findProblems(
+							searchFile, versions, monitor);
 
-						System.out.println(problems.size());
+						System.out.println(fileUpgradeProblems.size());
 
 //						if (ListUtil.isNotEmpty(problems)) {
 //							FileProblems[] fileProblems = _getFileProblems(problems);

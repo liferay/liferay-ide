@@ -14,8 +14,8 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 
 import java.io.File;
@@ -55,7 +55,7 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 		PropertiesFileChecker propertiesFileChecker = new PropertiesFileChecker(file);
 
 		for (String key : properties) {
-			List<SearchResult> results = propertiesFileChecker.findProperties(key);
+			List<FileSearchResult> results = propertiesFileChecker.findProperties(key);
 
 			if (results != null) {
 				String fileName = "BREAKING_CHANGES.markdown";
@@ -69,7 +69,7 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 
 				String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);
 
-				for (SearchResult searchResult : results) {
+				for (FileSearchResult searchResult : results) {
 					problems.add(
 						new FileUpgradeProblem(
 							problemTitle, problemSummary, problemType, problemTickets, version, file,

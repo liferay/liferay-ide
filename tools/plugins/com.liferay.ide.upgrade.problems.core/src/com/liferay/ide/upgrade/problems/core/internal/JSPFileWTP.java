@@ -15,8 +15,8 @@
 package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.CUCache;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JSPFile;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 
@@ -61,12 +61,12 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 	}
 
 	@Override
-	public List<SearchResult> findJSPTags(String tagName) {
+	public List<FileSearchResult> findJSPTags(String tagName) {
 		if ((tagName == null) || tagName.isEmpty()) {
 			throw new IllegalArgumentException("tagName can not be null or empty");
 		}
 
-		List<SearchResult> searchResults = new ArrayList<>();
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		NodeList nodeList = _getTagNodes(tagName);
 
@@ -86,12 +86,12 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 	}
 
 	@Override
-	public List<SearchResult> findJSPTags(String tagName, String[] attrNames) {
+	public List<FileSearchResult> findJSPTags(String tagName, String[] attrNames) {
 		if ((tagName == null) || tagName.isEmpty() || ListUtil.isEmpty(attrNames)) {
 			throw new IllegalArgumentException("tagName can not be null or empty");
 		}
 
-		List<SearchResult> searchResults = new ArrayList<>();
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		NodeList nodeList = _getTagNodes(tagName);
 
@@ -121,7 +121,7 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 	}
 
 	@Override
-	public List<SearchResult> findJSPTags(String tagName, String[] attrNames, String[] attrValues) {
+	public List<FileSearchResult> findJSPTags(String tagName, String[] attrNames, String[] attrValues) {
 		if ((tagName == null) || tagName.isEmpty() || ListUtil.isEmpty(attrNames) || ListUtil.isEmpty(attrValues)) {
 			throw new IllegalArgumentException("tagName can not be null or empty");
 		}
@@ -130,7 +130,7 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 			throw new IllegalArgumentException("If attrValues is specified it must match the attrNames array in lengh");
 		}
 
-		List<SearchResult> searchResults = new ArrayList<>();
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		NodeList nodeList = _getTagNodes(tagName);
 
@@ -154,7 +154,7 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 
 					int jspEndLine = _getJspLine(endOffset);
 
-					SearchResult searchResult = super.createSearchResult(
+					FileSearchResult searchResult = super.createSearchResult(
 						null, startOffset, endOffset, jspStartLine, jspEndLine, true);
 
 					searchResults.add(searchResult);
@@ -191,7 +191,7 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 	}
 
 	@Override
-	protected SearchResult createSearchResult(
+	protected FileSearchResult createSearchResult(
 		String searchContext, int startOffset, int endOffset, int startLine, int endLine, boolean fullMatch) {
 
 		IDOMModel jspModel = null;

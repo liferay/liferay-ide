@@ -26,8 +26,8 @@ import org.json.JSONObject;
 import org.osgi.service.component.annotations.Component;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
@@ -82,10 +82,10 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 				try {
 					_tempMethod = deprecatedMethodsArray.getJSONObject(j);
 
-					List<SearchResult> searchResults = searchFile(file, createFileChecker(type, file, fileExtension));
+					List<FileSearchResult> searchResults = searchFile(file, createFileChecker(type, file, fileExtension));
 
 					if (searchResults != null) {
-						for (SearchResult searchResult : searchResults) {
+						for (FileSearchResult searchResult : searchResults) {
 							int makerType = FileUpgradeProblem.MARKER_ERROR;
 
 							if ("7.0".equals(_tempMethod.getString("deprecatedVersion"))) {
@@ -110,8 +110,8 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 	}
 
 	@Override
-	protected List<SearchResult> searchFile(File file, JavaFile fileChecker) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	protected List<FileSearchResult> searchFile(File file, JavaFile fileChecker) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		String[] parameters = null;
 

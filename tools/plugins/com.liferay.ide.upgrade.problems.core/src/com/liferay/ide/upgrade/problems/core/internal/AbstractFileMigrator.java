@@ -15,8 +15,8 @@
 package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.SourceFile;
 
@@ -67,7 +67,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 
 		String fileExtension = new Path(file.getAbsolutePath()).getFileExtension();
 
-		List<SearchResult> searchResults = searchFile(file, createFileChecker(type, file, fileExtension));
+		List<FileSearchResult> searchResults = searchFile(file, createFileChecker(type, file, fileExtension));
 
 		if (ListUtil.isNotEmpty(searchResults)) {
 			String fileName = "BREAKING_CHANGES.markdown";
@@ -85,7 +85,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 				sectionHtml = problemSummary;
 			}
 
-			for (SearchResult searchResult : searchResults) {
+			for (FileSearchResult searchResult : searchResults) {
 				if (searchResult != null) {
 					problems.add(
 						new FileUpgradeProblem(
@@ -129,7 +129,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 		return null;
 	}
 
-	protected abstract List<SearchResult> searchFile(File file, T fileChecker);
+	protected abstract List<FileSearchResult> searchFile(File file, T fileChecker);
 
 	protected BundleContext context;
 	protected List<String> fileExtentions;

@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
-
 import java.util.Collection;
 import java.util.regex.Pattern;
 
@@ -24,8 +22,8 @@ import java.util.regex.Pattern;
  */
 public interface XMLFile extends SourceFile {
 
-	public SearchResult findDocumentTypeDeclaration(String name, Pattern idPattern);
+	public FileSearchResult findDocumentTypeDeclaration(String name, Pattern idPattern);
 
-	public Collection<SearchResult> findElement(String elementName, String elementValue);
+	public Collection<FileSearchResult> findElement(String elementName, String elementValue);
 
 }

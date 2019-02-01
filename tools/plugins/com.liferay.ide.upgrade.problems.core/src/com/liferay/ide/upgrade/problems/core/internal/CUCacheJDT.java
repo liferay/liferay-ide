@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Gregory Amerson
  */
 @Component(property = "type=java", service = CUCache.class)
-public class CUCacheJDT extends BaseCUCache implements CUCache<CompilationUnit> {
+public class CUCacheJDT implements CUCache<CompilationUnit> {
 
 	@Override
 	public CompilationUnit getCU(File file, Supplier<char[]> javaSource) {

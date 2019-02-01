@@ -20,8 +20,8 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
@@ -39,10 +39,10 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 public class UserImporterExporter extends JavaFileMigrator {
 
 	@Override
-	protected List<SearchResult> searchFile(File file, JavaFile javaFileChecker) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	protected List<FileSearchResult> searchFile(File file, JavaFile javaFileChecker) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		SearchResult searchResult = javaFileChecker.findImport(
+		FileSearchResult searchResult = javaFileChecker.findImport(
 			"com.liferay.portal.kernel.security.exportimport.UserImporter");
 
 		if (searchResult != null) {

@@ -20,8 +20,8 @@ import com.google.common.cache.LoadingCache;
 
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.CUCache;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 
 import java.io.File;
@@ -73,8 +73,8 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	}
 
 	@Override
-	public List<SearchResult> findCatchExceptions(String[] exceptions) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	public List<FileSearchResult> findCatchExceptions(String[] exceptions) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		_ast.accept(
 			new ASTVisitor() {
@@ -114,8 +114,8 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	}
 
 	@Override
-	public List<SearchResult> findImplementsInterface(String interfaceName) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	public List<FileSearchResult> findImplementsInterface(String interfaceName) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		_ast.accept(
 			new ASTVisitor() {
@@ -154,8 +154,8 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	}
 
 	@Override
-	public SearchResult findImport(String importName) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	public FileSearchResult findImport(String importName) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		_ast.accept(
 			new ASTVisitor() {
@@ -189,8 +189,8 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	}
 
 	@Override
-	public List<SearchResult> findImports(String[] imports) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	public List<FileSearchResult> findImports(String[] imports) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		_ast.accept(
 			new ASTVisitor() {
@@ -235,8 +235,8 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	}
 
 	@Override
-	public List<SearchResult> findMethodDeclaration(String name, String[] params, String returnType) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	public List<FileSearchResult> findMethodDeclaration(String name, String[] params, String returnType) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		_ast.accept(
 			new ASTVisitor() {
@@ -340,10 +340,10 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<SearchResult> findMethodInvocations(
+	public List<FileSearchResult> findMethodInvocations(
 		String typeHint, String expressionValue, String methodName, String[] methodParamTypes) {
 
-		List<SearchResult> searchResults = new ArrayList<>();
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		_ast.accept(
 			new ASTVisitor() {
@@ -511,8 +511,8 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	}
 
 	@Override
-	public SearchResult findPackage(String packageName) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	public FileSearchResult findPackage(String packageName) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		_ast.accept(
 			new ASTVisitor() {
@@ -545,8 +545,8 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 		return null;
 	}
 
-	public List<SearchResult> findQualifiedName(String exception) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	public List<FileSearchResult> findQualifiedName(String exception) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		// _ast.accept(new ASTVisitor() {
 
@@ -584,14 +584,14 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	}
 
 	@Override
-	public List<SearchResult> findServiceAPIs(String[] serviceFQNPrefixes) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	public List<FileSearchResult> findServiceAPIs(String[] serviceFQNPrefixes) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		for (String prefix : serviceFQNPrefixes) {
 			for (String suffix : _SERVICE_API_SUFFIXES) {
 				String serviceFQN = prefix + suffix;
 
-				SearchResult importResult = findImport(serviceFQN);
+				FileSearchResult importResult = findImport(serviceFQN);
 
 				if (importResult != null) {
 					searchResults.add(importResult);
@@ -609,8 +609,8 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 	}
 
 	@Override
-	public List<SearchResult> findSuperClass(String superClassName) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	public List<FileSearchResult> findSuperClass(String superClassName) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		_ast.accept(
 			new ASTVisitor() {
@@ -673,10 +673,10 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 		}
 	}
 
-	protected SearchResult createSearchResult(
+	protected FileSearchResult createSearchResult(
 		String searchContext, int startOffset, int endOffset, int startLine, int endLine, boolean fullMatch) {
 
-		return new SearchResult(_file, searchContext, startOffset, endOffset, startLine, endLine, fullMatch);
+		return new FileSearchResult(_file, searchContext, startOffset, endOffset, startLine, endLine, fullMatch);
 	}
 
 	protected File getFile() {

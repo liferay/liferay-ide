@@ -20,8 +20,8 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
@@ -39,14 +39,14 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 public class AssetRendererAndWorkflowHandlerRenderInvocation extends JavaFileMigrator {
 
 	@Override
-	protected List<SearchResult> searchFile(File file, JavaFile javaFileChecker) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	protected List<FileSearchResult> searchFile(File file, JavaFile javaFileChecker) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 		String[] assetRendererArgTypes = {"RenderRequest", "RenderResponse", "String"};
 		String[] workflowHandlerArgTypes = {"long", "RenderRequest", "RenderResponse", "String"};
 
 		// render method declarations
 
-		List<SearchResult> declarations = javaFileChecker.findMethodDeclaration("render", assetRendererArgTypes, null);
+		List<FileSearchResult> declarations = javaFileChecker.findMethodDeclaration("render", assetRendererArgTypes, null);
 
 		searchResults.addAll(declarations);
 
@@ -56,7 +56,7 @@ public class AssetRendererAndWorkflowHandlerRenderInvocation extends JavaFileMig
 
 		// render method invocations
 
-		List<SearchResult> invocations = javaFileChecker.findMethodInvocations(
+		List<FileSearchResult> invocations = javaFileChecker.findMethodInvocations(
 			"AssetRenderer", null, "render", assetRendererArgTypes);
 
 		searchResults.addAll(invocations);

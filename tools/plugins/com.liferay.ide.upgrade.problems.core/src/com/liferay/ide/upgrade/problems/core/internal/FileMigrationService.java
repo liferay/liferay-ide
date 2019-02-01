@@ -66,33 +66,24 @@ public class FileMigrationService implements FileMigration {
 	}
 
 	@Override
-	public List<FileUpgradeProblem> findProblems(File projectDir, IProgressMonitor monitor) {
-		return findProblems(projectDir, Collections.emptyList(), monitor);
-	}
+	public List<FileUpgradeProblem> findProblems(File dir, List<String> versions, IProgressMonitor monitor) {
+		monitor.beginTask("Searching for migration problems in " + dir, -1);
 
-	@Override
-	public List<FileUpgradeProblem> findProblems(File projectDir, List<String> versions, IProgressMonitor monitor) {
-		monitor.beginTask("Searching for migration problems in " + projectDir, -1);
-
-		List<FileUpgradeProblem> problems = Collections.synchronizedList(new ArrayList<FileUpgradeProblem>());
+		List<FileUpgradeProblem> fileUpgradeProblems = Collections.synchronizedList(
+			new ArrayList<FileUpgradeProblem>());
 
 		monitor.beginTask("Analyzing files", -1);
 
-		_countTotal(projectDir);
+		_countTotal(dir);
 
-		_walkFiles(projectDir, problems, versions, monitor);
+		_walkFiles(dir, fileUpgradeProblems, versions, monitor);
 
 		monitor.done();
 
 		_count = 0;
 		_total = 0;
 
-		return problems;
-	}
-
-	@Override
-	public List<FileUpgradeProblem> findProblems(Set<File> files, IProgressMonitor monitor) {
-		return findProblems(files, Collections.emptyList(), monitor);
+		return fileUpgradeProblems;
 	}
 
 	@Override

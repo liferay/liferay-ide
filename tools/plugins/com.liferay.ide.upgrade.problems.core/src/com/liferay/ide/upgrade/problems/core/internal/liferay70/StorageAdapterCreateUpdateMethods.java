@@ -20,8 +20,8 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
@@ -39,10 +39,10 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 public class StorageAdapterCreateUpdateMethods extends JavaFileMigrator {
 
 	@Override
-	protected List<SearchResult> searchFile(File file, JavaFile javaFileChecker) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	protected List<FileSearchResult> searchFile(File file, JavaFile javaFileChecker) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		List<SearchResult> invocations = javaFileChecker.findMethodInvocations(
+		List<FileSearchResult> invocations = javaFileChecker.findMethodInvocations(
 			null, "StorageEngineUtil", "create", new String[] {"long", "long", "Fields", "ServiceContext"});
 
 		searchResults.addAll(invocations);

@@ -35,12 +35,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsTask.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.AutoCorrectUpgradeProblemsTaskStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.sdk.RemoveLegacyProjectsTaskStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.sdk.ConfigureBuildPropertiesTaskStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.sdk.MigratePluginsSDKTask.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.files.LiferayDescriptorVersion71.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.files.LiferayDescriptorVersion70.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.files.LiferayVersionsProperties71.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.DecoupledImplementingBaseURLClasses.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.MovedOrganizationTypeProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.RemovedDescriptionHtmlEscaping.xml,
@@ -108,7 +102,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.AUIButtonItemTags.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.IndexerGetFacetQuery.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.DDMTemplateUpdateTemplateInvocation.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.ContactNameExceptionImport.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.FlagsEntryServiceAddEntryInvocation.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedLiferaySecurityEncryptTag.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.RemovedAbilitySpecifyClassLoaders.xml,
@@ -160,5 +153,9 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.AssetPublisherProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.SocialNetworkingLegacyAPI.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedMethodsMigrator.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.FileMigrationService.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.FileMigrationService.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.ContactNameExceptionsImport.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LiferayVersionsProperties71.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LiferayDescriptorVersion70.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LiferayDescriptorVersion71.xml
 Export-Package: com.liferay.ide.upgrade.problems.core

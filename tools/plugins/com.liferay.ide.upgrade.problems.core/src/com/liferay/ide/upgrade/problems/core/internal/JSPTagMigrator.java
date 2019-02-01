@@ -16,9 +16,9 @@ package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.JSPFile;
 
@@ -227,8 +227,8 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 	}
 
 	@Override
-	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	protected List<FileSearchResult> searchFile(File file, JSPFile jspFileChecker) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		for (String tagName : _tagNames) {
 			if (ListUtil.isNotEmpty(_tagNames) && ListUtil.isEmpty(_attrNames) && ListUtil.isEmpty(_attrValues)) {
@@ -249,7 +249,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 		if (ListUtil.isNotEmpty(_newAttrNames) || ListUtil.isNotEmpty(_newAttrValues) ||
 			ListUtil.isNotEmpty(_newTagNames)) {
 
-			for (SearchResult searchResult : searchResults) {
+			for (FileSearchResult searchResult : searchResults) {
 				searchResult.autoCorrectContext = "jsptag:" + _class.getName();
 			}
 		}

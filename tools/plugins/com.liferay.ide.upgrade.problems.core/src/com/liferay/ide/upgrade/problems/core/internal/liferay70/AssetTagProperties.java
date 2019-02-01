@@ -20,8 +20,8 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
@@ -40,13 +40,13 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 public class AssetTagProperties extends JavaFileMigrator {
 
 	@Override
-	protected List<SearchResult> searchFile(File file, JavaFile javaFileChecker) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	protected List<FileSearchResult> searchFile(File file, JavaFile javaFileChecker) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		// all imports from AssetTagPropertyLocalServiceUtil and
 		// AssetTagPropertyServiceUtil
 
-		SearchResult searchResult = javaFileChecker.findImport(
+		FileSearchResult searchResult = javaFileChecker.findImport(
 			"com.liferay.portlet.asset.service.AssetTagPropertyLocalServiceUtil");
 
 		if (searchResult != null) {
@@ -61,14 +61,14 @@ public class AssetTagProperties extends JavaFileMigrator {
 
 		// all calls on AssetTagPropertyLocalServiceUtil
 
-		List<SearchResult> localInvocations = javaFileChecker.findMethodInvocations(
+		List<FileSearchResult> localInvocations = javaFileChecker.findMethodInvocations(
 			null, "AssetTagPropertyLocalServiceUtil", "*", null);
 
 		searchResults.addAll(localInvocations);
 
 		// all calls on AssetTagPropertyServiceUtil
 
-		List<SearchResult> serviceInvocations = javaFileChecker.findMethodInvocations(
+		List<FileSearchResult> serviceInvocations = javaFileChecker.findMethodInvocations(
 			null, "AssetTagPropertyServiceUtil", "*", null);
 
 		searchResults.addAll(serviceInvocations);
@@ -76,7 +76,7 @@ public class AssetTagProperties extends JavaFileMigrator {
 		// all calls on methods with String[] tagProperties parameter
 		// AssetTagLocalServiceUtil java.lang.String[] tagProperties
 
-		List<SearchResult> tagServiceLocalUtilInvocations = javaFileChecker.findMethodInvocations(
+		List<FileSearchResult> tagServiceLocalUtilInvocations = javaFileChecker.findMethodInvocations(
 			null, "AssetTagLocalServiceUtil", "addTag", new String[] {"long", "String", "String[]", "ServiceContext"});
 
 		searchResults.addAll(tagServiceLocalUtilInvocations);
@@ -99,7 +99,7 @@ public class AssetTagProperties extends JavaFileMigrator {
 
 		// AssetTagServiceUtil java.lang.String[] tagProperties
 
-		List<SearchResult> tagServiceUtilInvocations = javaFileChecker.findMethodInvocations(
+		List<FileSearchResult> tagServiceUtilInvocations = javaFileChecker.findMethodInvocations(
 			null, "AssetTagServiceUtil", "addTag", new String[] {"String", "String[]", "ServiceContext"});
 
 		searchResults.addAll(tagServiceUtilInvocations);

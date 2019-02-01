@@ -21,24 +21,26 @@ import org.osgi.service.component.annotations.Component;
 
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.ImportStatementMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
 
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.title=Moved the Contact Name Exception Classes to Inner Classes of ContactNameException",
-	"problem.summary=The use of classes ContactFirstNameException, ContactFullNameException, and " +
-		"ContactLastNameException has been moved to inner classes in a new class called ContactNameException.",
-	"problem.tickets=LPS-55364",
-	"problem.section=#moved-the-contact-name-exception-classes-to-inner-classes-of-contactnameexc",
-	"auto.correct=import", "implName=ContactNameExceptionImport", "version=7.0"
-},
-	service = {AutoFileMigrator.class, FileMigrator.class})
-public class ContactNameExceptionImport extends ImportStatementMigrator {
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.title=Moved the Contact Name Exception Classes to Inner Classes of ContactNameException",
+		"problem.summary=The use of classes ContactFirstNameException, ContactFullNameException, and " +
+			"ContactLastNameException has been moved to inner classes in a new class called ContactNameException.",
+		"problem.tickets=LPS-55364",
+		"problem.section=#moved-the-contact-name-exception-classes-to-inner-classes-of-contactnameexc",
+		"auto.correct=import", "implName=ContactNameExceptionImport", "version=7.0"
+	},
+	service = {AutoFileMigrator.class, FileMigrator.class}
+)
+public class ContactNameExceptionsImport extends JavaImportsMigrator {
 
-	public ContactNameExceptionImport() {
+	public ContactNameExceptionsImport() {
 		super(_importFixes);
 	}
 

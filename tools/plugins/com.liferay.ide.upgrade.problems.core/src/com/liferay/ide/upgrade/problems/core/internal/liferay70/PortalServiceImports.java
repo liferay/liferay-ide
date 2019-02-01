@@ -21,7 +21,7 @@ import org.osgi.service.component.annotations.Component;
 
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.ImportStatementMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
 
 /**
  * @author Gregory Amerson
@@ -34,7 +34,7 @@ import com.liferay.ide.upgrade.problems.core.internal.ImportStatementMigrator;
 	"implName=PortalServiceImports", "version=7.0"
 },
 	service = {AutoFileMigrator.class, FileMigrator.class})
-public class PortalServiceImports extends ImportStatementMigrator {
+public class PortalServiceImports extends JavaImportsMigrator {
 
 	public PortalServiceImports() {
 		super(_importFixes);

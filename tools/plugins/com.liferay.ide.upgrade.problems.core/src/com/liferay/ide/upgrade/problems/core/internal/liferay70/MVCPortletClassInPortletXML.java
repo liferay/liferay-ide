@@ -34,10 +34,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Text;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.XMLFile;
 import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
@@ -128,17 +128,17 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 	}
 
 	@Override
-	protected List<SearchResult> searchFile(File file, XMLFile xmlFileChecker) {
+	protected List<FileSearchResult> searchFile(File file, XMLFile xmlFileChecker) {
 		if (!"portlet.xml".equals(file.getName())) {
 			return Collections.emptyList();
 		}
 
-		List<SearchResult> results = new ArrayList<>();
+		List<FileSearchResult> results = new ArrayList<>();
 
-		Collection<SearchResult> tags = xmlFileChecker.findElement(
+		Collection<FileSearchResult> tags = xmlFileChecker.findElement(
 			"portlet-class", "com.liferay.util.bridges.mvc.MVCPortlet");
 
-		for (SearchResult tagResult : tags) {
+		for (FileSearchResult tagResult : tags) {
 			tagResult.autoCorrectContext = _KEY;
 		}
 

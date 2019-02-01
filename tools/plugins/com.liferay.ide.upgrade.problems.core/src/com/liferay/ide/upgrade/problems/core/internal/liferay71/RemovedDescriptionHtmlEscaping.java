@@ -14,8 +14,8 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay71;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
@@ -39,10 +39,10 @@ import org.osgi.service.component.annotations.Component;
 public class RemovedDescriptionHtmlEscaping extends JavaFileMigrator {
 
 	@Override
-	protected List<SearchResult> searchFile(File file, JavaFile fileChecker) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	protected List<FileSearchResult> searchFile(File file, JavaFile fileChecker) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
-		List<SearchResult> methodInvocations = fileChecker.findMethodInvocations(
+		List<FileSearchResult> methodInvocations = fileChecker.findMethodInvocations(
 			"PortletDisplay", null, "setDescription", new String[] {"String"});
 
 		searchResults.addAll(methodInvocations);

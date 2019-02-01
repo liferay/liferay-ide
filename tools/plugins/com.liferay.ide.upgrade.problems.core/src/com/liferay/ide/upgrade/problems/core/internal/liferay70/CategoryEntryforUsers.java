@@ -21,8 +21,8 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.XMLFile;
 import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 
@@ -40,12 +40,12 @@ import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 public class CategoryEntryforUsers extends XMLFileMigrator {
 
 	@Override
-	protected List<SearchResult> searchFile(File file, XMLFile xmlFileChecker) {
+	protected List<FileSearchResult> searchFile(File file, XMLFile xmlFileChecker) {
 		if (!"liferay-portlet.xml".equals(file.getName())) {
 			return Collections.emptyList();
 		}
 
-		List<SearchResult> results = new ArrayList<>();
+		List<FileSearchResult> results = new ArrayList<>();
 
 		results.addAll(xmlFileChecker.findElement("control-panel-entry-category", "site_administration.users"));
 

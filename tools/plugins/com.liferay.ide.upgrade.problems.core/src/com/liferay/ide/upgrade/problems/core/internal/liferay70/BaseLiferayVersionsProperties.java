@@ -27,9 +27,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.osgi.framework.BundleContext;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker;
@@ -61,12 +61,12 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 				String versions = key.value;
 
 				if (!versions.matches(_oldVersionPattern)) {
-					List<SearchResult> results = propertiesFileChecker.findProperties("liferay-versions");
+					List<FileSearchResult> results = propertiesFileChecker.findProperties("liferay-versions");
 
 					if (results != null) {
 						String sectionHtml = problemSummary;
 
-						for (SearchResult searchResult : results) {
+						for (FileSearchResult searchResult : results) {
 							searchResult.autoCorrectContext = _PREFIX + "liferay-versions";
 
 							problems.add(

@@ -27,11 +27,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface FileMigration {
 
-	public List<FileUpgradeProblem> findProblems(File projectDir, IProgressMonitor monitor);
-
-	public List<FileUpgradeProblem> findProblems(File projectDir, List<String> versions, IProgressMonitor monitor);
-
-	public List<FileUpgradeProblem> findProblems(Set<File> files, IProgressMonitor monitor);
+	public List<FileUpgradeProblem> findProblems(File dir, List<String> versions, IProgressMonitor monitor);
 
 	public List<FileUpgradeProblem> findProblems(Set<File> files, List<String> versions, IProgressMonitor monitor);
 

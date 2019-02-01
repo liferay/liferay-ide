@@ -14,8 +14,8 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay71;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
@@ -37,7 +37,7 @@ import org.osgi.service.component.annotations.Component;
 public class ChangedLastPublishDateOption extends JavaFileMigrator {
 
 	@Override
-	protected List<SearchResult> searchFile(File file, JavaFile fileChecker) {
+	protected List<FileSearchResult> searchFile(File file, JavaFile fileChecker) {
 		return fileChecker.findMethodDeclaration(
 			"doPrepareManifestSummary", new String[] {"PortletDataContext", "PortletPreferences "}, null);
 	}

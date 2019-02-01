@@ -20,8 +20,8 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.plan.tasks.core.SearchResult;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
@@ -43,12 +43,12 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 public class WebContentTypeRemoved extends JavaFileMigrator {
 
 	@Override
-	protected List<SearchResult> searchFile(File file, JavaFile javaFileChecker) {
-		List<SearchResult> searchResults = new ArrayList<>();
+	protected List<FileSearchResult> searchFile(File file, JavaFile javaFileChecker) {
+		List<FileSearchResult> searchResults = new ArrayList<>();
 
 		// check JournalArticle.getType() and JournalFeed.getType()
 
-		List<SearchResult> getTypes = javaFileChecker.findMethodInvocations("JournalArticle", null, "getType", null);
+		List<FileSearchResult> getTypes = javaFileChecker.findMethodInvocations("JournalArticle", null, "getType", null);
 
 		searchResults.addAll(getTypes);
 
@@ -58,19 +58,19 @@ public class WebContentTypeRemoved extends JavaFileMigrator {
 
 		// callers of ArticleTypeException's methods
 
-		SearchResult exceptionImports = javaFileChecker.findImport("com.liferay.portlet.journal.ArticleTypeException");
+		FileSearchResult exceptionImports = javaFileChecker.findImport("com.liferay.portlet.journal.ArticleTypeException");
 
 		if (exceptionImports != null) {
 			searchResults.add(exceptionImports);
 		}
 
-		List<SearchResult> catchExceptions = javaFileChecker.findCatchExceptions(new String[] {"ArticleTypeException"});
+		List<FileSearchResult> catchExceptions = javaFileChecker.findCatchExceptions(new String[] {"ArticleTypeException"});
 
 		searchResults.addAll(catchExceptions);
 
 		// JournalArticleLocalServiceUtil
 
-		List<SearchResult> journalArticleLocalServiceUtil = javaFileChecker.findMethodInvocations(
+		List<FileSearchResult> journalArticleLocalServiceUtil = javaFileChecker.findMethodInvocations(
 			null, "JournalArticleLocalServiceUtil", "addArticle",
 			new String[] {
 				"long", "long", "long", "long", "long", "String", "boolean", "double",
@@ -161,7 +161,7 @@ public class WebContentTypeRemoved extends JavaFileMigrator {
 
 		// JournalArticleServiceUtil
 
-		List<SearchResult> journalArticleServiceUtil = javaFileChecker.findMethodInvocations(
+		List<FileSearchResult> journalArticleServiceUtil = javaFileChecker.findMethodInvocations(
 			null, "JournalArticleServiceUtil", "addArticle",
 			new String[] {
 				"long", "long", "long", "long", "String", "boolean", "java.util.Map<java.util.Locale,java.lang.String>",
@@ -254,7 +254,7 @@ public class WebContentTypeRemoved extends JavaFileMigrator {
 
 		// JournalFeedLocalServiceUtil
 
-		List<SearchResult> journalFeedLocalServiceUtil = javaFileChecker.findMethodInvocations(
+		List<FileSearchResult> journalFeedLocalServiceUtil = javaFileChecker.findMethodInvocations(
 			null, "JournalFeedLocalServiceUtil", "addFeed",
 			new String[] {
 				"long", "long", "String", "boolean", "String", "String", "String", "String", "String", "String", "int",
@@ -274,7 +274,7 @@ public class WebContentTypeRemoved extends JavaFileMigrator {
 
 		// JournalFeedServiceUtil
 
-		List<SearchResult> journalFeedServiceUtil = javaFileChecker.findMethodInvocations(
+		List<FileSearchResult> journalFeedServiceUtil = javaFileChecker.findMethodInvocations(
 			null, "JournalFeedServiceUtil", "addFeed",
 			new String[] {
 				"long", "String", "boolean", "String", "String", "String", "String", "String", "String", "int",
