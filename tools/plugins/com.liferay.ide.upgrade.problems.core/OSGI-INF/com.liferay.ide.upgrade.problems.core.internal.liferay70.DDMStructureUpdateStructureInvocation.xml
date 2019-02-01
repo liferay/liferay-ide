@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.DDMStructureUpdateStructureInvocation" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="java,jsp,jspf" />
+	<property name="problem.summary" value="Added userId Parameter to Update Operations of DDMStructureLocalService and DDMTemplateLocalService" />
+	<property name="problem.tickets" value="LPS-50939" />
+	<property name="problem.title" value="DDMStructureLocalService add new param userId" />
+	<property name="problem.section" value="#added-userid-parameter-to-update-operations-of-ddmstructurelocalservice-and" />
+	<property name="implName" value="DDMStructureUpdateStructureInvocation" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.DDMStructureUpdateStructureInvocation" />
+</scr:component>

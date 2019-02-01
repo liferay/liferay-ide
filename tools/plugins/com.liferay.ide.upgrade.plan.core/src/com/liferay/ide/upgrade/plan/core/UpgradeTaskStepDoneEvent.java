@@ -16,6 +16,18 @@ package com.liferay.ide.upgrade.plan.core;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 public class UpgradeTaskStepDoneEvent implements UpgradeEvent {
+
+	public UpgradeTaskStepDoneEvent(UpgradeTaskStep upgradeTaskStep) {
+		_ugradeTaskStep = upgradeTaskStep;
+	}
+
+	public UpgradeTaskStep getUgradeTaskStep() {
+		return _ugradeTaskStep;
+	}
+
+	private UpgradeTaskStep _ugradeTaskStep;
+
 }

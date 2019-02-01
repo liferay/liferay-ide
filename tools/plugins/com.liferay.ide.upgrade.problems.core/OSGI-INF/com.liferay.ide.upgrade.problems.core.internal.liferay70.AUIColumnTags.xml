@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.AUIColumnTags" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="jsp,jspf" />
+	<property name="problem.title" value="The aui:column taglib has been removed and replaced with aui:col taglib" />
+	<property name="problem.section" value="#removed-the-auicolumn-tag-and-replaced-with-auicol" />
+	<property name="problem.summary" value="The aui:column taglib has been removed and replaced with aui:col taglib" />
+	<property name="problem.tickets" value="LPS-62208" />
+	<property name="auto.correct" value="jsptag" />
+	<property name="implName" value="AUIColumnTags" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.problems.core.AutoMigrator" />
+		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.AUIColumnTags" />
+</scr:component>

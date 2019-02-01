@@ -101,7 +101,7 @@
 					>
 					</instanceof>
 					<instanceof
-						value="com.liferay.ide.upgrade.plan.core.Problem"
+						value="com.liferay.ide.upgrade.plan.core.UpgradeProblem"
 					>
 					</instanceof>
 					<instanceof

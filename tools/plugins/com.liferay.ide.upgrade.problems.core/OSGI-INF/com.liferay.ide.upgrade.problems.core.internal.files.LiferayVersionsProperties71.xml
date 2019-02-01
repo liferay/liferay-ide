@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.files.LiferayVersionsProperties71" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="properties" />
+	<property name="problem.title" value="liferay-versions key in Liferay Plugin Packages Properties" />
+	<property name="problem.summary" value="In order to deploy this project to 7.1 the liferay-versions property must be set to 7.1.0+" />
+	<property name="problem.tickets" value="" />
+	<property name="problem.section" value="" />
+	<property name="auto.correct" value="property" />
+	<property name="implName" value="LiferayVersionsProperties" />
+	<property name="version" value="7.1" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.problems.core.AutoMigrator" />
+		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.problems.core.internal.files.LiferayVersionsProperties71" />
+</scr:component>

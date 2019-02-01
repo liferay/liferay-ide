@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsTask" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="categoryId" value="code" />
+	<property name="id" value="find_upgrade_problems" />
+	<property name="order" value="500" />
+	<property name="title" value="Find Upgrade Problems" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTask" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsTask" />
+</scr:component>

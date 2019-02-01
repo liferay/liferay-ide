@@ -15,9 +15,8 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepDoneEvent;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskStepsViewer;
@@ -145,20 +144,29 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 		upgradePlanner.addListener(_upgradeTasksViewer);
 
 		upgradePlanner.addListener(
-			new UpgradeListener() {
+			upgradeEvent -> {
+				if (upgradeEvent instanceof UpgradePlanStartedEvent) {
+					UpgradePlanStartedEvent upgradePlanStartedEvent = (UpgradePlanStartedEvent)upgradeEvent;
 
-				@Override
-				public void onUpgradeEvent(UpgradeEvent upgradeEvent) {
-					if (upgradeEvent instanceof UpgradeTaskStepDoneEvent) {
-						UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
-					}
+					UpgradePlan upgradePlan = upgradePlanStartedEvent.getUpgradePlan();
+
+					setContentDescription("Active upgrade plan: " + upgradePlan.getName());
 				}
+			});
 
+		upgradePlanner.addListener(
+			upgradeEvent -> {
+				if (upgradeEvent instanceof UpgradeTaskStepDoneEvent) {
+					UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
+				}
 			});
 
 		_upgradeTaskStepsViewer = new UpgradeTaskStepsViewer(parentComposite, _upgradeTasksViewer);
 
 		_upgradeTaskStepsViewer.addSelectionChangedListener(this::_fireSelectionChanged);
+
+		setContentDescription(
+			"No active upgrade plan. Use view menu 'New Upgrade Plan' action to start a new upgrade.");
 	}
 
 	private void _fireSelectionChanged(SelectionChangedEvent selectionChangedEvent) {

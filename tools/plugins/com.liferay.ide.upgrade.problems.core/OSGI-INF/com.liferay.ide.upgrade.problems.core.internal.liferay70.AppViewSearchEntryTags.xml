@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.AppViewSearchEntryTags" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="jsp,jspf" />
+	<property name="problem.title" value="Removed mbMessages and fileEntryTuples Attributes from app-view-search-entry Tag" />
+	<property name="problem.section" value="#removed-mbmessages-and-fileentrytuples-attributes-from-app-view-search-entr" />
+	<property name="problem.summary" value="Removed mbMessages and fileEntryTuples Attributes from app-view-search-entry Tag" />
+	<property name="problem.tickets" value="LPS-55886" />
+	<property name="implName" value="AppViewSearchEntryTags" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.AppViewSearchEntryTags" />
+</scr:component>
