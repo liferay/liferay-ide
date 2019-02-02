@@ -17,10 +17,5 @@ package com.liferay.ide.upgrade.plan.core;
 /**
  * @author Gregory Amerson
  */
-public interface UpgradeTaskCategory {
-
-	public String getId();
-
-	public String getTitle();
-
+public interface UpgradeTaskCategory extends UpgradePlanElement {
 }

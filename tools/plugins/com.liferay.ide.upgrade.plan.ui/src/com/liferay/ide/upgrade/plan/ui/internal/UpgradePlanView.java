@@ -19,8 +19,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepDoneEvent;
+import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradePlanViewer;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskStepsViewer;
-import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTasksViewer;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -78,6 +78,10 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	public void dispose() {
 		super.dispose();
 
+		if (_upgradePlanViewer != null) {
+			_upgradePlanViewer.dispose();
+		}
+
 		if (_upgradeTaskStepsViewer != null) {
 			_upgradeTaskStepsViewer.dispose();
 		}
@@ -116,7 +120,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	public void saveState(IMemento memento) {
 		super.saveState(memento);
 
-		Object upgradeTaskViewerInput = _upgradeTasksViewer.getInput();
+		Object upgradeTaskViewerInput = _upgradePlanViewer.getInput();
 
 		if (upgradeTaskViewerInput instanceof UpgradePlan) {
 			UpgradePlan upgradePlan = (UpgradePlan)upgradeTaskViewerInput;
@@ -137,11 +141,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	private void _createPartControl(Composite parentComposite) {
 		parentComposite.setLayout(new FillLayout());
 
-		_upgradeTasksViewer = new UpgradeTasksViewer(parentComposite);
+		_upgradePlanViewer = new UpgradePlanViewer(parentComposite);
 
 		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
-
-		upgradePlanner.addListener(_upgradeTasksViewer);
 
 		upgradePlanner.addListener(
 			upgradeEvent -> {
@@ -161,7 +163,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 				}
 			});
 
-		_upgradeTaskStepsViewer = new UpgradeTaskStepsViewer(parentComposite, _upgradeTasksViewer);
+		_upgradeTaskStepsViewer = new UpgradeTaskStepsViewer(parentComposite, _upgradePlanViewer);
 
 		_upgradeTaskStepsViewer.addSelectionChangedListener(this::_fireSelectionChanged);
 
@@ -181,10 +183,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			});
 	}
 
-	private static ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
-
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
+	private ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
+	private UpgradePlanViewer _upgradePlanViewer;
 	private UpgradeTaskStepsViewer _upgradeTaskStepsViewer;
-	private UpgradeTasksViewer _upgradeTasksViewer;
 
 }

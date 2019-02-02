@@ -40,6 +40,7 @@ public abstract class BaseUpgradeTask implements UpgradeTask {
 		_categoryId = _getProperty(properties, "categoryId");
 		_description = _getProperty(properties, "description");
 		_id = _getProperty(properties, "id");
+		_imagePath = _getProperty(properties, "imagePath");
 		_title = _getProperty(properties, "title");
 
 		_lookupTasks(componentContext);
@@ -58,6 +59,11 @@ public abstract class BaseUpgradeTask implements UpgradeTask {
 	@Override
 	public String getId() {
 		return _id;
+	}
+
+	@Override
+	public String getImagePath() {
+		return _imagePath;
 	}
 
 	@Override
@@ -104,6 +110,7 @@ public abstract class BaseUpgradeTask implements UpgradeTask {
 	private String _categoryId;
 	private String _description;
 	private String _id;
+	private String _imagePath;
 	private String _title;
 	private List<UpgradeTaskStep> _upgradeTaskSteps;
 

@@ -26,7 +26,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
  * @author Terry Jia
  * @author Gregory Amerson
  */
-public class UpgradeTasksContentProvider implements ITreeContentProvider {
+public class UpgradePlanContentProvider implements ITreeContentProvider {
 
 	public static final Object NO_TASKS = new Object() {
 

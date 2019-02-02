@@ -14,20 +14,17 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import java.util.List;
-
 /**
- * @author Terry Jia
  * @author Gregory Amerson
  */
-public interface UpgradeTaskStep extends UpgradePlanElement {
+public interface UpgradePlanElement {
 
-	public List<UpgradeTaskStepCommand> getCommands();
+	public String getDescription();
 
-	public UpgradeTaskStepRequirement getRequirement();
+	public String getId();
 
-	public UpgradeTaskStepStatus getStatus();
+	public String getImagePath();
 
-	public String getUrl();
+	public String getTitle();
 
 }

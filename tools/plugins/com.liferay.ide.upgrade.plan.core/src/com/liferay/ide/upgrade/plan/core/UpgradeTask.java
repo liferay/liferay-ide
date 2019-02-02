@@ -20,16 +20,10 @@ import java.util.List;
  * @author Terry Jia
  * @author Gregory Amerson
  */
-public interface UpgradeTask {
+public interface UpgradeTask extends UpgradePlanElement {
 
 	public String getCategoryId();
 
-	public String getDescription();
-
-	public String getId();
-
 	public List<UpgradeTaskStep> getSteps();
-
-	public String getTitle();
 
 }

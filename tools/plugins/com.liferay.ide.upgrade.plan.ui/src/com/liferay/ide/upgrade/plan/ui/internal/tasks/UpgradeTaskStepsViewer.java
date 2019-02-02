@@ -39,7 +39,7 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
  */
 public class UpgradeTaskStepsViewer implements ISelectionProvider {
 
-	public UpgradeTaskStepsViewer(Composite compositeParent, UpgradeTasksViewer upgradeTasksViewer) {
+	public UpgradeTaskStepsViewer(Composite compositeParent, UpgradePlanViewer upgradePlanViewer) {
 		_formToolkit = new FormToolkit(compositeParent.getDisplay());
 
 		_scrolledForm = _formToolkit.createScrolledForm(compositeParent);
@@ -54,9 +54,9 @@ public class UpgradeTaskStepsViewer implements ISelectionProvider {
 		_disposables.add(() -> _formToolkit.dispose());
 		_disposables.add(() -> _scrolledForm.dispose());
 
-		_updateFromSelection(upgradeTasksViewer.getSelection());
+		_updateFromSelection(upgradePlanViewer.getSelection());
 
-		upgradeTasksViewer.addPostSelectionChangedListener(
+		upgradePlanViewer.addPostSelectionChangedListener(
 			selectionChangedEvent -> {
 				ISelection selection = selectionChangedEvent.getSelection();
 

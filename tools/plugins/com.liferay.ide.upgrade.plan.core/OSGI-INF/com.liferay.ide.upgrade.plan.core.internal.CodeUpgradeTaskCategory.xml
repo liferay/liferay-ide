@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component name="com.liferay.ide.upgrade.plan.core.internal.CodeUpgradeTaskCategory" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
 	<property name="id" value="code" />
+	<property name="imagePath" value="icons/category_code.png" />
 	<property name="order" value="300" />
 	<property name="title" value="Code Upgrade" />
 	<service>

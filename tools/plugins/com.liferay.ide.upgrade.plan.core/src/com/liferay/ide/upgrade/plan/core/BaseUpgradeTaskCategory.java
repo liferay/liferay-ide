@@ -29,12 +29,23 @@ public class BaseUpgradeTaskCategory implements UpgradeTaskCategory {
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
 		_id = _getProperty(properties, "id");
+		_imagePath = _getProperty(properties, "imagePath");
 		_title = _getProperty(properties, "title");
+	}
+
+	@Override
+	public String getDescription() {
+		return getTitle();
 	}
 
 	@Override
 	public String getId() {
 		return _id;
+	}
+
+	@Override
+	public String getImagePath() {
+		return _imagePath;
 	}
 
 	@Override
@@ -53,6 +64,7 @@ public class BaseUpgradeTaskCategory implements UpgradeTaskCategory {
 	}
 
 	private String _id;
+	private String _imagePath;
 	private String _title;
 
 }
