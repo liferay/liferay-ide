@@ -37,19 +37,20 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 	public void activate(ComponentContext componentContext) {
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
-		_description = _getProperty(properties, "description");
-		_id = _getProperty(properties, "id");
-		_imagePath = _getProperty(properties, "imagePath");
-		_requirement = _getProperty(properties, "requirement");
-		_title = _getProperty(properties, "title");
-		_url = _getProperty(properties, "url");
+		_description = getProperty(properties, "description");
+		_id = getProperty(properties, "id");
+		_imagePath = getProperty(properties, "imagePath");
+		_requirement = getProperty(properties, "requirement");
+		_taskId = getProperty(properties, "taskId");
+		_title = getProperty(properties, "title");
+		_url = getProperty(properties, "url");
 
-		_lookupCommands(componentContext);
+		_lookupActions(componentContext);
 	}
 
 	@Override
-	public List<UpgradeTaskStepCommand> getCommands() {
-		return Collections.unmodifiableList(_upgradeTaskStepCommands);
+	public List<UpgradeTaskStepAction> getActions() {
+		return Collections.unmodifiableList(_upgradeTaskStepActions);
 	}
 
 	@Override
@@ -78,6 +79,11 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 	}
 
 	@Override
+	public String getTaskId() {
+		return _taskId;
+	}
+
+	@Override
 	public String getTitle() {
 		return _title;
 	}
@@ -92,26 +98,16 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 		return getId();
 	}
 
-	private String _getProperty(Dictionary<String, Object> properties, String key) {
-		Object value = properties.get(key);
-
-		if (value instanceof String) {
-			return (String)value;
-		}
-
-		return null;
-	}
-
-	private void _lookupCommands(ComponentContext componentContext) {
+	private void _lookupActions(ComponentContext componentContext) {
 		BundleContext bundleContext = componentContext.getBundleContext();
 
 		try {
-			Collection<ServiceReference<UpgradeTaskStepCommand>> upgradeTaskStepCommandServiceReferences =
-				bundleContext.getServiceReferences(UpgradeTaskStepCommand.class, "(stepId=" + _id + ")");
+			Collection<ServiceReference<UpgradeTaskStepAction>> upgradeTaskStepActionServiceReferences =
+				bundleContext.getServiceReferences(UpgradeTaskStepAction.class, "(stepId=" + _id + ")");
 
-			Stream<ServiceReference<UpgradeTaskStepCommand>> stream = upgradeTaskStepCommandServiceReferences.stream();
+			Stream<ServiceReference<UpgradeTaskStepAction>> stream = upgradeTaskStepActionServiceReferences.stream();
 
-			_upgradeTaskStepCommands = stream.map(
+			_upgradeTaskStepActions = stream.map(
 				bundleContext::getService
 			).filter(
 				Objects::nonNull
@@ -127,8 +123,9 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 	private String _id;
 	private String _imagePath;
 	private String _requirement;
+	private String _taskId;
 	private String _title;
-	private List<UpgradeTaskStepCommand> _upgradeTaskStepCommands;
+	private List<UpgradeTaskStepAction> _upgradeTaskStepActions;
 	private UpgradeTaskStepStatus _upgradeTaskStepStatus = UpgradeTaskStepStatus.INCOMPLETE;
 	private String _url;
 

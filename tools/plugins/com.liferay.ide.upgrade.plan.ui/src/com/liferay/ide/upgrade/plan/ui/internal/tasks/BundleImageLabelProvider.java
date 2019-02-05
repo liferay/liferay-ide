@@ -14,6 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
+import com.liferay.ide.upgrade.plan.core.Pair;
+
 import java.net.URL;
 
 import java.util.Collection;
@@ -29,7 +31,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 
 /**
  * @author Terry Jia
@@ -37,7 +38,7 @@ import org.osgi.framework.FrameworkUtil;
  */
 public class BundleImageLabelProvider extends LabelProvider {
 
-	public BundleImageLabelProvider(Function<Object, String> imagePathMapper) {
+	public BundleImageLabelProvider(Function<Object, Pair<Bundle, String>> imagePathMapper) {
 		_images = new HashMap<>();
 
 		_imagePathMapper = imagePathMapper;
@@ -57,8 +58,6 @@ public class BundleImageLabelProvider extends LabelProvider {
 	@Override
 	public Image getImage(Object element) {
 		if (element != null) {
-			Bundle bundle = FrameworkUtil.getBundle(element.getClass());
-
 			return Optional.ofNullable(
 				element
 			).map(
@@ -66,7 +65,11 @@ public class BundleImageLabelProvider extends LabelProvider {
 			).filter(
 				Objects::nonNull
 			).map(
-				bundle::getEntry
+				pair -> {
+					Bundle bundle = pair.first();
+
+					return bundle.getEntry(pair.second());
+				}
 			).filter(
 				Objects::nonNull
 			).map(
@@ -87,7 +90,7 @@ public class BundleImageLabelProvider extends LabelProvider {
 		});
 	}
 
-	private final Function<Object, String> _imagePathMapper;
+	private final Function<Object, Pair<Bundle, String>> _imagePathMapper;
 	private final Map<URL, Image> _images;
 
 }

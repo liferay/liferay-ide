@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"id=auto_correct_problems", "imagePath=icons/code.png", "requirement=recommended", "order=200",
+		"id=auto_correct_problems", "imagePath=icons/auto_correct_problems.png", "requirement=recommended", "order=200",
 		"taskId=find_upgrade_problems", "title=Auto Correct Upgrade Problems"
 	},
 	service = UpgradeTaskStep.class

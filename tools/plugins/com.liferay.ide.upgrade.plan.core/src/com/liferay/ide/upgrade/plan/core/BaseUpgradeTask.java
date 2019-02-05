@@ -37,11 +37,11 @@ public abstract class BaseUpgradeTask implements UpgradeTask {
 	public void activate(ComponentContext componentContext) {
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
-		_categoryId = _getProperty(properties, "categoryId");
-		_description = _getProperty(properties, "description");
-		_id = _getProperty(properties, "id");
-		_imagePath = _getProperty(properties, "imagePath");
-		_title = _getProperty(properties, "title");
+		_categoryId = getProperty(properties, "categoryId");
+		_description = getProperty(properties, "description");
+		_id = getProperty(properties, "id");
+		_imagePath = getProperty(properties, "imagePath");
+		_title = getProperty(properties, "title");
 
 		_lookupTasks(componentContext);
 	}
@@ -74,16 +74,6 @@ public abstract class BaseUpgradeTask implements UpgradeTask {
 	@Override
 	public String getTitle() {
 		return _title;
-	}
-
-	private String _getProperty(Dictionary<String, Object> properties, String key) {
-		Object value = properties.get(key);
-
-		if (value instanceof String) {
-			return (String)value;
-		}
-
-		return null;
 	}
 
 	private void _lookupTasks(ComponentContext componentContext) {

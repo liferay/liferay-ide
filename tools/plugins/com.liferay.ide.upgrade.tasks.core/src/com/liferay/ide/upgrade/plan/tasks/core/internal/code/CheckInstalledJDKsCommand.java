@@ -12,10 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.plan.tasks.core.internal.code;
+
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-public class UpgradeTaskStepCommand {
+@Component(
+	property = {"id=check_installed_jdks", "order=100", "stepId=ensure_compatible_jdk", "title=Check Installed JDKs"},
+	service = UpgradeTaskStep.class
+)
+public class CheckInstalledJDKsCommand extends BaseUpgradeTaskStep {
 }

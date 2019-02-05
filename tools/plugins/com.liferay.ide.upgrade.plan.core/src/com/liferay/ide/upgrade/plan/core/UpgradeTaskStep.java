@@ -22,11 +22,13 @@ import java.util.List;
  */
 public interface UpgradeTaskStep extends UpgradePlanElement {
 
-	public List<UpgradeTaskStepCommand> getCommands();
+	public List<UpgradeTaskStepAction> getActions();
 
 	public UpgradeTaskStepRequirement getRequirement();
 
 	public UpgradeTaskStepStatus getStatus();
+
+	public String getTaskId();
 
 	public String getUrl();
 

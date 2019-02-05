@@ -14,14 +14,9 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepRequirement;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
-
-import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +53,11 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
  * @author Terry Jia
  * @author Gregory Amerson
  */
-public class UpgradeTaskStepItem implements Disposable, ISelectionProvider, IExpansionListener {
+public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider, IExpansionListener {
 
-	public UpgradeTaskStepItem(ScrolledForm scrolledForm, UpgradeTaskStep upgradeTaskStep) {
+	public UpgradeTaskStepActionItem(ScrolledForm scrolledForm, UpgradeTaskStepAction upgradeTaskStepCommand) {
 		_scrolledForm = scrolledForm;
-		_upgradeTaskStep = upgradeTaskStep;
+		_upgradeTaskStepAction = upgradeTaskStepCommand;
 
 		Display display = _scrolledForm.getDisplay();
 
@@ -77,21 +72,13 @@ public class UpgradeTaskStepItem implements Disposable, ISelectionProvider, IExp
 		_mainItemComposite = _formToolkit.createExpandableComposite(
 			parentComposite, ExpandableComposite.COMPACT | ExpandableComposite.TWISTIE);
 
-		_mainItemComposite.setData("upgradeTaskStep", _upgradeTaskStep);
+		_mainItemComposite.setData("upgradeTaskStepCommand", _upgradeTaskStepAction);
 
 		_mainItemComposite.addExpansionListener(this);
 
-		String title = _upgradeTaskStep.getTitle();
+		String name = _upgradeTaskStepAction.getName();
 
-		UpgradeTaskStepRequirement upgradeStepRequirement = _upgradeTaskStep.getRequirement();
-
-		if (upgradeStepRequirement != null) {
-			String requirement = upgradeStepRequirement.toString();
-
-			title = title + " (" + requirement.toLowerCase() + ")";
-		}
-
-		_mainItemComposite.setText(title);
+		_mainItemComposite.setText(name);
 
 		_disposables.add(() -> _mainItemComposite.dispose());
 
@@ -120,13 +107,13 @@ public class UpgradeTaskStepItem implements Disposable, ISelectionProvider, IExp
 
 		_disposables.add(() -> bodyComposite.dispose());
 
-		String description = _upgradeTaskStep.getDescription();
+		String description = _upgradeTaskStepAction.getDescription();
 
 		Label label = _formToolkit.createLabel(bodyComposite, description);
 
 		_disposables.add(() -> label.dispose());
 
-		if (_upgradeTaskStep == null) {
+		if (_upgradeTaskStepAction == null) {
 			return;
 		}
 
@@ -172,30 +159,6 @@ public class UpgradeTaskStepItem implements Disposable, ISelectionProvider, IExp
 
 		_disposables.add(() -> performImageHyperlink.dispose());
 
-		String url = _upgradeTaskStep.getUrl();
-
-		if (CoreUtil.isNotNullOrEmpty(url)) {
-			ImageHyperlink openDocumentImageHyperlink = _createImageHyperlink(
-				_buttonComposite, taskStartImage, this, "Open document");
-
-			openDocumentImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-			openDocumentImageHyperlink.addHyperlinkListener(
-				new HyperlinkAdapter() {
-
-					@Override
-					public void linkActivated(HyperlinkEvent e) {
-						try {
-							UIUtil.openURL(new URL(url));
-						}
-						catch (Exception ex) {
-							UpgradePlanUIPlugin.logError("Could not open external browser.", ex);
-						}
-					}
-
-				});
-		}
-
 		_boldFont = _mainItemComposite.getFont();
 
 		FontData[] fontDatas = _boldFont.getFontData();
@@ -226,7 +189,7 @@ public class UpgradeTaskStepItem implements Disposable, ISelectionProvider, IExp
 
 	@Override
 	public void expansionStateChanged(ExpansionEvent expansionEvent) {
-		ISelection selection = new StructuredSelection(_upgradeTaskStep);
+		ISelection selection = new StructuredSelection(_upgradeTaskStepAction);
 
 		SelectionChangedEvent selectionChangedEvent = new SelectionChangedEvent(this, selection);
 
@@ -507,6 +470,6 @@ public class UpgradeTaskStepItem implements Disposable, ISelectionProvider, IExp
 	private ScrolledForm _scrolledForm;
 	private boolean _skipped;
 	private Composite _titleComposite;
-	private final UpgradeTaskStep _upgradeTaskStep;
+	private final UpgradeTaskStepAction _upgradeTaskStepAction;
 
 }

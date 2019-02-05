@@ -12,31 +12,22 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.plan.tasks.core.internal.code;
 
-import java.util.Dictionary;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-public interface UpgradePlanElement {
-
-	public String getDescription();
-
-	public String getId();
-
-	public String getImagePath();
-
-	public String getTitle();
-
-	default String getProperty(Dictionary<String, Object> properties, String key) {
-		Object value = properties.get(key);
-
-		if (value instanceof String) {
-			return (String)value;
-		}
-
-		return null;
-	}
-
+@Component(
+	property = {
+		"id=install_nodejs", "requirement=recommended", "order=300", "taskId=setup_development_environment",
+		"title=Install NodeJS"
+	},
+	service = UpgradeTaskStep.class
+)
+public class InstallNodejsTaskStep extends BaseUpgradeTaskStep {
 }

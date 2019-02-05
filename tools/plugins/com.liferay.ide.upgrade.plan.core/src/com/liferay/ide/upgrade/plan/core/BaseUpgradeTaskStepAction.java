@@ -22,20 +22,14 @@ import org.osgi.service.component.annotations.Activate;
 /**
  * @author Gregory Amerson
  */
-public class BaseUpgradeTaskCategory implements UpgradeTaskCategory {
+public abstract class BaseUpgradeTaskStepAction implements UpgradeTaskStepAction {
 
 	@Activate
 	public void activate(ComponentContext componentContext) {
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
 		_id = getProperty(properties, "id");
-		_imagePath = getProperty(properties, "imagePath");
-		_title = getProperty(properties, "title");
-	}
-
-	@Override
-	public String getDescription() {
-		return getTitle();
+		_stepId = getProperty(properties, "stepId");
 	}
 
 	@Override
@@ -44,17 +38,16 @@ public class BaseUpgradeTaskCategory implements UpgradeTaskCategory {
 	}
 
 	@Override
-	public String getImagePath() {
-		return _imagePath;
+	public String getStepId() {
+		return _stepId;
 	}
 
 	@Override
-	public String getTitle() {
-		return _title;
+	public String toString() {
+		return getId();
 	}
 
 	private String _id;
-	private String _imagePath;
-	private String _title;
+	private String _stepId;
 
 }

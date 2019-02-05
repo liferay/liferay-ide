@@ -14,29 +14,11 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import java.util.Dictionary;
-
 /**
  * @author Gregory Amerson
  */
-public interface UpgradePlanElement {
+public interface UpgradeTaskStepAction extends UpgradePlanElement {
 
-	public String getDescription();
-
-	public String getId();
-
-	public String getImagePath();
-
-	public String getTitle();
-
-	default String getProperty(Dictionary<String, Object> properties, String key) {
-		Object value = properties.get(key);
-
-		if (value instanceof String) {
-			return (String)value;
-		}
-
-		return null;
-	}
+	public String getStepId();
 
 }

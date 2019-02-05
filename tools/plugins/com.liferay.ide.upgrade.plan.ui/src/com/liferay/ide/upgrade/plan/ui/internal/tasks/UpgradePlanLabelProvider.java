@@ -14,14 +14,20 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
+import com.liferay.ide.upgrade.plan.core.Pair;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.ui.internal.ServiceReferenceLookup;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 /**
  * @author Terry Jia
@@ -31,10 +37,47 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 
 	public UpgradePlanLabelProvider() {
 		super(element -> {
+			Bundle bundle = null;
+
+			String imagePath = null;
+
 			if (element instanceof UpgradePlanElement) {
 				UpgradePlanElement upgradePlanElement = (UpgradePlanElement)element;
 
-				return upgradePlanElement.getImagePath();
+				imagePath = upgradePlanElement.getImagePath();
+
+				if (imagePath != null) {
+					bundle = FrameworkUtil.getBundle(element.getClass());
+				}
+			}
+
+			if (imagePath == null && element instanceof UpgradeTask) {
+				UpgradeTask upgradeTask = (UpgradeTask)element;
+
+				UpgradeTaskCategory upgradeTaskCategory = ServiceReferenceLookup.getSingleService(
+					UpgradeTaskCategory.class, "(id=" + upgradeTask.getCategoryId() + ")");
+
+				imagePath = upgradeTaskCategory.getImagePath();
+
+				bundle = FrameworkUtil.getBundle(upgradeTaskCategory.getClass());
+			}
+
+			if (imagePath == null && element instanceof UpgradeTaskStep) {
+				UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)element;
+
+				UpgradeTask upgradeTask = ServiceReferenceLookup.getSingleService(
+					UpgradeTask.class, "(id=" + upgradeTaskStep.getId() + ")");
+
+				UpgradeTaskCategory upgradeTaskCategory = ServiceReferenceLookup.getSingleService(
+					UpgradeTaskCategory.class, "(id=" + upgradeTask.getCategoryId() + ")");
+
+				imagePath = upgradeTaskCategory.getImagePath();
+
+				bundle = FrameworkUtil.getBundle(upgradeTaskCategory.getClass());
+			}
+
+			if (bundle != null && imagePath != null) {
+				return new Pair<>(bundle, imagePath);
 			}
 
 			return null;

@@ -39,5 +39,10 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.dat
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.workspace.UpgradeWorkspacePluginTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.sdk.ConfigureBuildPropertiesTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.sdk.MigratePluginsSDKTask.xml,
- OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.sdk.RemoveLegacyProjectsTaskStep.xml
+ OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.sdk.RemoveLegacyProjectsTaskStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.code.SetupDevelopmentEnvironmentTask.xml,
+ OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.code.InstallBladeTaskStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.code.InstallNodejsTaskStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.code.EnsureCompatibleJDKTaskStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.code.CheckInstalledJDKsCommand.xml
 Export-Package: com.liferay.ide.upgrade.plan.tasks.core
