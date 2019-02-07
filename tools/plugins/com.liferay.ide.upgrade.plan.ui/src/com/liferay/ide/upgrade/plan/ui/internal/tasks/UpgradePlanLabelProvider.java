@@ -19,7 +19,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.ui.internal.ServiceReferenceLookup;
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
@@ -54,7 +54,7 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 			if (imagePath == null && element instanceof UpgradeTask) {
 				UpgradeTask upgradeTask = (UpgradeTask)element;
 
-				UpgradeTaskCategory upgradeTaskCategory = ServiceReferenceLookup.getSingleService(
+				UpgradeTaskCategory upgradeTaskCategory = ServicesLookup.getSingleService(
 					UpgradeTaskCategory.class, "(id=" + upgradeTask.getCategoryId() + ")");
 
 				imagePath = upgradeTaskCategory.getImagePath();
@@ -65,10 +65,10 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 			if (imagePath == null && element instanceof UpgradeTaskStep) {
 				UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)element;
 
-				UpgradeTask upgradeTask = ServiceReferenceLookup.getSingleService(
-					UpgradeTask.class, "(id=" + upgradeTaskStep.getId() + ")");
+				UpgradeTask upgradeTask = ServicesLookup.getSingleService(
+					UpgradeTask.class, "(id=" + upgradeTaskStep.getTaskId() + ")");
 
-				UpgradeTaskCategory upgradeTaskCategory = ServiceReferenceLookup.getSingleService(
+				UpgradeTaskCategory upgradeTaskCategory = ServicesLookup.getSingleService(
 					UpgradeTaskCategory.class, "(id=" + upgradeTask.getCategoryId() + ")");
 
 				imagePath = upgradeTaskCategory.getImagePath();

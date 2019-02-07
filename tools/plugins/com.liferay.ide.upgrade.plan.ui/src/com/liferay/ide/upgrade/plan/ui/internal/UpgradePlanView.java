@@ -152,7 +152,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 					UpgradePlan upgradePlan = upgradePlanStartedEvent.getUpgradePlan();
 
-					setContentDescription("Active upgrade plan: " + upgradePlan.getName());
+					UIUtil.async(() -> setContentDescription("Active upgrade plan: " + upgradePlan.getName()));
 				}
 			});
 

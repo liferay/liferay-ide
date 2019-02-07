@@ -21,31 +21,31 @@ import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
@@ -55,51 +55,34 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
  */
 public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider, IExpansionListener {
 
-	public UpgradeTaskStepActionItem(ScrolledForm scrolledForm, UpgradeTaskStepAction upgradeTaskStepCommand) {
+	public UpgradeTaskStepActionItem(
+		FormToolkit formToolkit, ScrolledForm scrolledForm, UpgradeTaskStepAction upgradeTaskStepAction) {
+
+		_formToolkit = formToolkit;
 		_scrolledForm = scrolledForm;
-		_upgradeTaskStepAction = upgradeTaskStepCommand;
+		_upgradeTaskStepAction = upgradeTaskStepAction;
 
-		Display display = _scrolledForm.getDisplay();
+		Section section = _formToolkit.createSection(_scrolledForm.getBody(), Section.TITLE_BAR | Section.TWISTIE);
 
-		Composite parentComposite = _scrolledForm.getBody();
+		GridLayoutFactory gridLayoutFactory = GridLayoutFactory.fillDefaults();
 
-		_formToolkit = new FormToolkit(display);
+		section.setLayout(gridLayoutFactory.create());
 
-		_checkDoneLabel = _formToolkit.createLabel(parentComposite, " ");
+		GridDataFactory gridDataFactory = GridDataFactory.fillDefaults();
 
-		_disposables.add(() -> _checkDoneLabel.dispose());
+		gridDataFactory.grab(true, true);
 
-		_mainItemComposite = _formToolkit.createExpandableComposite(
-			parentComposite, ExpandableComposite.COMPACT | ExpandableComposite.TWISTIE);
+		section.setLayoutData(gridDataFactory.create());
 
-		_mainItemComposite.setData("upgradeTaskStepCommand", _upgradeTaskStepAction);
+		section.setText(upgradeTaskStepAction.getTitle());
 
-		_mainItemComposite.addExpansionListener(this);
+		section.addExpansionListener(this);
 
-		String name = _upgradeTaskStepAction.getName();
+		Composite bodyComposite = _formToolkit.createComposite(section);
 
-		_mainItemComposite.setText(name);
+		section.setClient(bodyComposite);
 
-		_disposables.add(() -> _mainItemComposite.dispose());
-
-		_titleComposite = _formToolkit.createComposite(_mainItemComposite);
-
-		GridLayout gridLayout = new GridLayout(1, false);
-
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-
-		_titleComposite.setLayout(gridLayout);
-		_titleComposite.setLayoutData(gridData);
-
-		gridLayout.marginHeight = 0;
-		gridLayout.marginWidth = 0;
-		gridLayout.verticalSpacing = 0;
-
-		_disposables.add(() -> _titleComposite.dispose());
-
-		Composite bodyComposite = _formToolkit.createComposite(_mainItemComposite);
-
-		_mainItemComposite.setClient(bodyComposite);
+		_disposables.add(() -> section.dispose());
 
 		bodyComposite.setLayout(new TableWrapLayout());
 
@@ -107,9 +90,7 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 
 		_disposables.add(() -> bodyComposite.dispose());
 
-		String description = _upgradeTaskStepAction.getDescription();
-
-		Label label = _formToolkit.createLabel(bodyComposite, description);
+		Label label = _formToolkit.createLabel(bodyComposite, _upgradeTaskStepAction.getDescription());
 
 		_disposables.add(() -> label.dispose());
 
@@ -133,7 +114,7 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 
 		Label fillLabel = _formToolkit.createLabel(_buttonComposite, null);
 
-		gridData = new GridData();
+		GridData gridData = new GridData();
 
 		gridData.widthHint = 16;
 
@@ -141,9 +122,11 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 
 		_disposables.add(() -> fillLabel.dispose());
 
-		Image taskStartImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.COMPOSITE_TASK_START_IMAGE);
+		Image taskStepActionPerformImage = UpgradePlanUIPlugin.getImage(
+			UpgradePlanUIPlugin.TASK_STEP_ACTION_PERFORM_IMAGE);
 
-		ImageHyperlink performImageHyperlink = _createImageHyperlink(_buttonComposite, taskStartImage, this, "Perform");
+		ImageHyperlink performImageHyperlink = _createImageHyperlink(
+			_buttonComposite, taskStepActionPerformImage, this, "Perform");
 
 		performImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
@@ -152,24 +135,19 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 
 				@Override
 				public void linkActivated(HyperlinkEvent e) {
-					_execute();
+					new Job(_upgradeTaskStepAction.getTitle()) {
+
+						@Override
+						protected IStatus run(IProgressMonitor monitor) {
+							return _perform();
+						}
+
+					}.schedule();
 				}
 
 			});
 
 		_disposables.add(() -> performImageHyperlink.dispose());
-
-		_boldFont = _mainItemComposite.getFont();
-
-		FontData[] fontDatas = _boldFont.getFontData();
-
-		for (FontData fontData : fontDatas) {
-			fontData.setStyle(fontData.getStyle() ^ SWT.BOLD);
-		}
-
-		_regularFont = new Font(display, fontDatas);
-
-		setBold(false);
 	}
 
 	@Override
@@ -197,6 +175,8 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 			selectionChangedListener -> {
 				selectionChangedListener.selectionChanged(selectionChangedEvent);
 			});
+
+		_scrolledForm.reflow(true);
 	}
 
 	@Override
@@ -208,144 +188,13 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 		return null;
 	}
 
-	public void initialized() {
-		_initialized = true;
-	}
-
-	public boolean isBold() {
-		return _bold;
-	}
-
-	public boolean isCompleted() {
-		return _completed;
-	}
-
-	public boolean isExpanded() {
-		return _mainItemComposite.isExpanded();
-	}
-
-	public boolean isSkipped() {
-		return _skipped;
-	}
-
-	public void redraw() {
-		_scrolledForm.redraw();
-	}
-
 	@Override
 	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
 		_listeners.remove(listener);
 	}
 
-	public void setAsCurrentActiveItem() {
-		setButtonsVisible(true);
-		setBold(true);
-		setExpanded();
-		setFocus();
-	}
-
-	public void setBold(boolean value) {
-		if (value) {
-			_mainItemComposite.setFont(_boldFont);
-
-			if (_initialized) {
-				_mainItemComposite.layout();
-			}
-		}
-		else {
-			_mainItemComposite.setFont(_regularFont);
-
-			if (_initialized) {
-				_mainItemComposite.layout();
-			}
-		}
-
-		_bold = value;
-	}
-
-	public void setButtonsVisible(boolean visible) {
-		if ((_buttonExpanded != visible) && (_buttonComposite != null)) {
-			_buttonComposite.setVisible(visible);
-		}
-
-		if (visible && _initialized) {
-			FormToolkit.ensureVisible(_mainItemComposite);
-		}
-
-		_buttonExpanded = visible;
-	}
-
-	public void setCollapsed() {
-		if (_mainItemComposite.isExpanded()) {
-			_mainItemComposite.setExpanded(false);
-
-			if (_initialized) {
-				_scrolledForm.reflow(true);
-
-				FormToolkit.ensureVisible(_mainItemComposite);
-			}
-		}
-	}
-
-	public void setComplete() {
-		_completed = true;
-		_checkDoneLabel.setImage(_getCompleteImage());
-
-		if (_initialized) {
-			Composite parent = _checkDoneLabel.getParent();
-
-			parent.layout();
-		}
-	}
-
-	public void setExpanded() {
-		if (!_mainItemComposite.isExpanded()) {
-			_mainItemComposite.setExpanded(true);
-
-			if (_initialized) {
-				_scrolledForm.reflow(true);
-
-				FormToolkit.ensureVisible(_mainItemComposite);
-			}
-		}
-	}
-
-	public void setIncomplete() {
-		_checkDoneLabel.setImage(null);
-		_completed = false;
-	}
-
 	@Override
 	public void setSelection(ISelection selection) {
-	}
-
-	public void setSkipped() {
-		_skipped = true;
-		_checkDoneLabel.setImage(_getSkipImage());
-
-		if (_initialized) {
-			Composite parent = _checkDoneLabel.getParent();
-
-			parent.layout();
-		}
-	}
-
-	protected void setCompletionMessageCollapsed() {
-		if ((_completionComposite != null) && _completionMessageExpanded) {
-			_completionComposite.dispose();
-
-			_completionComposite = null;
-
-			_scrolledForm.reflow(true);
-		}
-
-		_completionMessageExpanded = false;
-	}
-
-	protected void setFocus() {
-		_mainItemComposite.setFocus();
-
-		FormToolkit.ensureVisible(_mainItemComposite);
 	}
 
 	private ImageHyperlink _createImageHyperlink(Composite parentComposite, Image image, Object data, String linkText) {
@@ -359,117 +208,15 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 		return imageHyperlink;
 	}
 
-	private IStatus _execute() {
-		return Status.OK_STATUS;
-//		if (_upgradeTaskStep instanceof ProjectSelectionTaskStep) {
-//			ProjectSelectionTaskStep projectSelectionTaskStep = (ProjectSelectionTaskStep)_upgradeTaskStep;
-//
-//			ViewerFilter viewerFilter = new ViewerFilter() {
-//
-//				@Override
-//				public boolean select(Viewer viewer, Object parentElement, Object element) {
-//					return projectSelectionTaskStep.selectFilter(parentElement, element);
-//				}
-//
-//			};
-//
-//			boolean selectAllDefault = projectSelectionTaskStep.selectAllDefault();
-//
-//			ProjectSelectionDialog dialog = new ProjectSelectionDialog(
-//				UIUtil.getActiveShell(), viewerFilter, selectAllDefault);
-//
-//			if (dialog.open() == Window.OK) {
-//				Object[] projects = dialog.getResult();
-//
-//				return projectSelectionTaskStep.execute((IProject)projects[0], new NullProgressMonitor());
-//			}
-//			else {
-//				return Status.CANCEL_STATUS;
-//			}
-//		}
-//
-//		if (_upgradeTaskStep instanceof ProjectsSelectionTaskStep) {
-//			ProjectsSelectionTaskStep projectsSelectionTaskStep = (ProjectsSelectionTaskStep)_upgradeTaskStep;
-//
-//			ViewerFilter viewerFilter = new ViewerFilter() {
-//
-//				@Override
-//				public boolean select(Viewer viewer, Object parentElement, Object element) {
-//					return projectsSelectionTaskStep.selectFilter(parentElement, element);
-//				}
-//
-//			};
-//
-//			boolean selectAllDefault = projectsSelectionTaskStep.selectAllDefault();
-//
-//			ProjectSelectionDialog dialog = new ProjectSelectionDialog(
-//				UIUtil.getActiveShell(), viewerFilter, selectAllDefault);
-//
-//			if (dialog.open() == Window.OK) {
-//				Object[] result = dialog.getResult();
-//
-//				IProject[] projects = Stream.of(
-//					result
-//				).toArray(
-//					IProject[]::new
-//				);
-//
-//				return projectsSelectionTaskStep.execute(projects, new NullProgressMonitor());
-//			}
-//			else {
-//				return Status.CANCEL_STATUS;
-//			}
-//		}
-//		else if (_upgradeTaskStep instanceof FolderSelectionTaskStep) {
-//			FolderSelectionTaskStep fileUpgradeTaskStep = (FolderSelectionTaskStep)_upgradeTaskStep;
-//
-//			DirectoryDialog dialog = new DirectoryDialog(UIUtil.getActiveShell());
-
-//
-//			String result = dialog.open();
-//
-//			if (result == null) {
-//				return Status.CANCEL_STATUS;
-//			}
-//
-//			File folder = new File(result);
-//
-//			if (FileUtil.exists(folder)) {
-//				fileUpgradeTaskStep.execute(folder, new NullProgressMonitor());
-//			}
-//
-//			return Status.OK_STATUS;
-//		}
-//		else {
-//			return _upgradeTaskStep.execute(new NullProgressMonitor());
-//		}
+	private IStatus _perform() {
+		return _upgradeTaskStepAction.perform();
 	}
 
-	private Image _getCompleteImage() {
-		return UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.ITEM_COMPLETE_IMAGE);
-	}
-
-	private Image _getSkipImage() {
-		return UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.ITEM_SKIP_IMAGE);
-	}
-
-	private boolean _bold = true;
-	private Font _boldFont;
 	private Composite _buttonComposite;
-	private boolean _buttonExpanded = true;
-	private Label _checkDoneLabel;
-	private boolean _completed;
-	private Composite _completionComposite;
-	private boolean _completionMessageExpanded = false;
 	private List<Disposable> _disposables = new ArrayList<>();
 	private FormToolkit _formToolkit;
-	private boolean _initialized;
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
-	private ExpandableComposite _mainItemComposite;
-	private Font _regularFont;
 	private ScrolledForm _scrolledForm;
-	private boolean _skipped;
-	private Composite _titleComposite;
 	private final UpgradeTaskStepAction _upgradeTaskStepAction;
 
 }

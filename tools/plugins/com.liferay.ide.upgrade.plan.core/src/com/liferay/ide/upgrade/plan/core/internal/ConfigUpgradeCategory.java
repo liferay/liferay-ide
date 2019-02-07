@@ -23,8 +23,8 @@ import org.osgi.service.component.annotations.Component;
  * @author Gregory Amerson
  */
 @Component(
-	property = {"id=code", "imagePath=icons/category_code.png", "order=300", "title=Code Upgrade"},
+	property = {"id=config", "imagePath=icons/category_config.png", "order=200", "title=Configuration Upgrade"},
 	service = UpgradeTaskCategory.class
 )
-public class CodeUpgradeTaskCategory extends BaseUpgradeTaskCategory {
+public class ConfigUpgradeCategory extends BaseUpgradeTaskCategory {
 }

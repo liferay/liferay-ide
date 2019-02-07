@@ -14,13 +14,12 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -31,19 +30,17 @@ import org.osgi.service.component.annotations.Activate;
 /**
  * @author Gregory Amerson
  */
-public abstract class BaseUpgradeTask implements UpgradeTask {
+public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements UpgradeTask {
 
 	@Activate
 	public void activate(ComponentContext componentContext) {
+		super.activate(componentContext);
+
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
 		_categoryId = getProperty(properties, "categoryId");
-		_description = getProperty(properties, "description");
-		_id = getProperty(properties, "id");
-		_imagePath = getProperty(properties, "imagePath");
-		_title = getProperty(properties, "title");
 
-		_lookupTasks(componentContext);
+		_lookupTaskSteps(componentContext);
 	}
 
 	@Override
@@ -52,56 +49,24 @@ public abstract class BaseUpgradeTask implements UpgradeTask {
 	}
 
 	@Override
-	public String getDescription() {
-		return _description;
-	}
-
-	@Override
-	public String getId() {
-		return _id;
-	}
-
-	@Override
-	public String getImagePath() {
-		return _imagePath;
-	}
-
-	@Override
 	public List<UpgradeTaskStep> getSteps() {
 		return Collections.unmodifiableList(_upgradeTaskSteps);
 	}
 
-	@Override
-	public String getTitle() {
-		return _title;
-	}
-
-	private void _lookupTasks(ComponentContext componentContext) {
+	private void _lookupTaskSteps(ComponentContext componentContext) {
 		BundleContext bundleContext = componentContext.getBundleContext();
 
 		try {
 			Collection<ServiceReference<UpgradeTaskStep>> upgradeTaskStepServiceReferences =
-				bundleContext.getServiceReferences(UpgradeTaskStep.class, "(taskId=" + _id + ")");
+				bundleContext.getServiceReferences(UpgradeTaskStep.class, "(taskId=" + getId() + ")");
 
-			Stream<ServiceReference<UpgradeTaskStep>> stream = upgradeTaskStepServiceReferences.stream();
-
-			_upgradeTaskSteps = stream.map(
-				bundleContext::getService
-			).filter(
-				Objects::nonNull
-			).collect(
-				Collectors.toList()
-			);
+			_upgradeTaskSteps = ServicesLookup.getOrderedServices(bundleContext, upgradeTaskStepServiceReferences);
 		}
 		catch (InvalidSyntaxException ise) {
 		}
 	}
 
 	private String _categoryId;
-	private String _description;
-	private String _id;
-	private String _imagePath;
-	private String _title;
 	private List<UpgradeTaskStep> _upgradeTaskSteps;
 
 }

@@ -19,6 +19,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -80,6 +82,14 @@ public class UpgradePlannerService implements UpgradePlanner {
 		synchronized (this) {
 			_upgradeListeners.remove(upgradeListener);
 		}
+	}
+
+	@Override
+	public void restartStep(UpgradeTaskStep upgradeTaskStep) {
+	}
+
+	@Override
+	public void restartTask(UpgradeTask upgradeTask) {
 	}
 
 	@Override

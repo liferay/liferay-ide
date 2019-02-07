@@ -12,32 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.plan.core.internal;
 
-import java.util.Dictionary;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskCategory;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 
-import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement implements UpgradeTaskStepAction {
-
-	@Activate
-	public void activate(ComponentContext componentContext) {
-		super.activate(componentContext);
-
-		Dictionary<String, Object> properties = componentContext.getProperties();
-
-		_stepId = getProperty(properties, "stepId");
-	}
-
-	@Override
-	public String getStepId() {
-		return _stepId;
-	}
-
-	private String _stepId;
-
+@Component(
+	property = {"id=database", "imagePath=icons/category_database.png", "order=100", "title=Database Upgrade"},
+	service = UpgradeTaskCategory.class
+)
+public class DatabaseUpgradeCategory extends BaseUpgradeTaskCategory {
 }

@@ -13,8 +13,9 @@ Require-Bundle: com.liferay.ide.project.core,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .
 Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.ConfigUpgradeTaskCategory.xml,
- OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.CodeUpgradeTaskCategory.xml,
- OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.DatabaseUpgradeTaskCategory.xml,
- OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.UpgradePlannerService.xml
-Export-Package: com.liferay.ide.upgrade.plan.core
+Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.UpgradePlannerService.xml,
+ OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.CodeUpgradeCategory.xml,
+ OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.ConfigUpgradeCategory.xml,
+ OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.DatabaseUpgradeCategory.xml
+Export-Package: com.liferay.ide.upgrade.plan.core,
+ com.liferay.ide.upgrade.plan.core.util

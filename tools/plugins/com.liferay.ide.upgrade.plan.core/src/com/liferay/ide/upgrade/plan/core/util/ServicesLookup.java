@@ -12,10 +12,16 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.ui.internal;
+package com.liferay.ide.upgrade.plan.core.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Dictionary;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -26,10 +32,52 @@ import org.osgi.framework.ServiceReference;
 /**
  * @author Gregory Amerson
  */
-public class ServiceReferenceLookup {
+public class ServicesLookup {
+
+	public static <T> List<T> getOrderedServices(
+		BundleContext bundleContext, Collection<ServiceReference<T>> serviceReferenceCollection) {
+
+		List<ServiceReference<T>> serviceReferenceList = new ArrayList<>(serviceReferenceCollection);
+
+		Collections.sort(
+			serviceReferenceList,
+			(srLeft, srRight) -> {
+				try {
+					Dictionary<String, Object> srLeftProperties = srLeft.getProperties();
+
+					Object srLeftOrder = srLeftProperties.get("order");
+
+					try {
+						int srLeftInt = Integer.parseInt(srLeftOrder.toString());
+
+						Dictionary<String, Object> srRightProperties = srRight.getProperties();
+
+						Object srRightOrder = srRightProperties.get("order");
+
+						int srRightInt = Integer.parseInt(srRightOrder.toString());
+
+						return Integer.compare(srLeftInt, srRightInt);
+					}
+					catch (NumberFormatException nfe) {
+					}
+				}
+				catch (Throwable t) {
+				}
+
+				return -1;
+			});
+
+		Stream<ServiceReference<T>> stream = serviceReferenceList.stream();
+
+		return stream.map(
+			bundleContext::getService
+		).collect(
+			Collectors.toList()
+		);
+	}
 
 	public static <T> T getSingleService(Class<T> serviceClass, String filter) {
-		Bundle bundle = FrameworkUtil.getBundle(ServiceReferenceLookup.class);
+		Bundle bundle = FrameworkUtil.getBundle(ServicesLookup.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
 

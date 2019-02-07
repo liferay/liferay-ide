@@ -29,5 +29,5 @@ import org.osgi.service.component.annotations.Component;
 	},
 	service = UpgradeTaskStep.class
 )
-public class AutoCorrectUpgradeProblemsTaskStep extends BaseUpgradeTaskStep {
+public class AutoCorrectUpgradeProblemsStep extends BaseUpgradeTaskStep {
 }

@@ -14,47 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import java.util.Dictionary;
-
-import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
-
 /**
  * @author Gregory Amerson
  */
-public class BaseUpgradeTaskCategory implements UpgradeTaskCategory {
-
-	@Activate
-	public void activate(ComponentContext componentContext) {
-		Dictionary<String, Object> properties = componentContext.getProperties();
-
-		_id = getProperty(properties, "id");
-		_imagePath = getProperty(properties, "imagePath");
-		_title = getProperty(properties, "title");
-	}
-
-	@Override
-	public String getDescription() {
-		return getTitle();
-	}
-
-	@Override
-	public String getId() {
-		return _id;
-	}
-
-	@Override
-	public String getImagePath() {
-		return _imagePath;
-	}
-
-	@Override
-	public String getTitle() {
-		return _title;
-	}
-
-	private String _id;
-	private String _imagePath;
-	private String _title;
-
+public class BaseUpgradeTaskCategory extends BaseUpgradePlanElement implements UpgradeTaskCategory {
 }

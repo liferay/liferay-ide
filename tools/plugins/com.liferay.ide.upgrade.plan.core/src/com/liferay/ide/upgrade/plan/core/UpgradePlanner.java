@@ -25,6 +25,10 @@ public interface UpgradePlanner {
 
 	public void removeListener(UpgradeListener upgradeListener);
 
+	public void restartStep(UpgradeTaskStep _upgradeTaskStep);
+
+	public void restartTask(UpgradeTask _upgradeTask);
+
 	public UpgradePlan startUpgradePlan(String name);
 
 }

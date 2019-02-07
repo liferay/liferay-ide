@@ -34,7 +34,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.RemovePreviousResultTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsTask.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsTaskStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.AutoCorrectUpgradeProblemsTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.DecoupledImplementingBaseURLClasses.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.MovedOrganizationTypeProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.RemovedDescriptionHtmlEscaping.xml,
@@ -157,5 +156,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.ContactNameExceptionsImport.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LiferayVersionsProperties71.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LiferayDescriptorVersion70.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LiferayDescriptorVersion71.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LiferayDescriptorVersion71.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.AutoCorrectUpgradeProblemsStep.xml
 Export-Package: com.liferay.ide.upgrade.problems.core

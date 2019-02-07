@@ -40,8 +40,6 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 
 	public static final String CATEGORY_DATABASE_IMAGE = "CATEGORY_DATABASE";
 
-	public static final String COMPOSITE_TASK_START_IMAGE = "COMPOSITE_TASK_START";
-
 	public static final String ITEM_COMPLETE_IMAGE = "ITEM_COMPLETE";
 
 	public static final String ITEM_SKIP_IMAGE = "ITEM_SKIP";
@@ -49,6 +47,10 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 	public static final String NO_TASKS_IMAGE = "NO_TASKS";
 
 	public static final String PLUGIN_ID = "com.liferay.ide.upgrade.plan.ui";
+
+	public static final String TASK_STEP_ACTION_PERFORM_IMAGE = "TASK_STEP_ACTION_PERFORM_IMAGE";
+
+	public static final String TASK_STEP_RESTART_IMAGE = "TASK_STEP_RESTART_IMAGE";
 
 	public static IStatus createErrorStatus(String msg) {
 		return createErrorStatus(msg, null);
@@ -116,7 +118,15 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
-		imageRegistry.put(COMPOSITE_TASK_START_IMAGE, imageDescriptor);
+		imageRegistry.put(TASK_STEP_ACTION_PERFORM_IMAGE, imageDescriptor);
+
+		path = _ICONS_PATH.append("task_step_restart.gif");
+
+		imageDescriptor = _createImageDescriptor(bundle, path);
+
+		imageRegistry.put(TASK_STEP_RESTART_IMAGE, imageDescriptor);
+
+		path = _ICONS_PATH.append("information.gif");
 
 		path = _ICONS_PATH.append("information.gif");
 

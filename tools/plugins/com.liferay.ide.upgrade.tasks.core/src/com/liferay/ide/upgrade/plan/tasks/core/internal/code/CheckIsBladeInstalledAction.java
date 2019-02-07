@@ -12,10 +12,12 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core.internal;
+package com.liferay.ide.upgrade.plan.tasks.core.internal.code;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskCategory;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+
+import org.eclipse.core.runtime.IStatus;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -23,8 +25,14 @@ import org.osgi.service.component.annotations.Component;
  * @author Gregory Amerson
  */
 @Component(
-	property = {"id=config", "imagePath=icons/category_config.png", "order=200", "title=Configuration Upgrade"},
-	service = UpgradeTaskCategory.class
+	property = {"id=check_is_blade_installed", "order=100", "stepId=install_blade", "title=Check is Blade installed"},
+	service = UpgradeTaskStepAction.class
 )
-public class ConfigUpgradeTaskCategory extends BaseUpgradeTaskCategory {
+public class CheckIsBladeInstalledAction extends BaseUpgradeTaskStepAction {
+
+	@Override
+	public IStatus perform() {
+		return null;
+	}
+
 }

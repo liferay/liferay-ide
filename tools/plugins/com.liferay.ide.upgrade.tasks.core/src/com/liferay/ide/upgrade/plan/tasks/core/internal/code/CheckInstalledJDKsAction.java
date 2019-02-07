@@ -14,8 +14,11 @@
 
 package com.liferay.ide.upgrade.plan.tasks.core.internal.code;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.tasks.core.internal.UpgradeTasksCorePlugin;
+
+import org.eclipse.core.runtime.IStatus;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -24,7 +27,13 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {"id=check_installed_jdks", "order=100", "stepId=ensure_compatible_jdk", "title=Check Installed JDKs"},
-	service = UpgradeTaskStep.class
+	service = UpgradeTaskStepAction.class
 )
-public class CheckInstalledJDKsCommand extends BaseUpgradeTaskStep {
+public class CheckInstalledJDKsAction extends BaseUpgradeTaskStepAction {
+
+	@Override
+	public IStatus perform() {
+		return UpgradeTasksCorePlugin.createErrorStatus("no compatible jdk found");
+	}
+
 }

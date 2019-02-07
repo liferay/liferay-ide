@@ -14,11 +14,15 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import org.eclipse.core.runtime.IStatus;
+
 /**
  * @author Gregory Amerson
  */
 public interface UpgradeTaskStepAction extends UpgradePlanElement {
 
 	public String getStepId();
+
+	public IStatus perform();
 
 }

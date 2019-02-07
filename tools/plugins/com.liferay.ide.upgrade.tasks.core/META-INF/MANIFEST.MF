@@ -44,5 +44,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.dat
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.code.InstallBladeTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.code.InstallNodejsTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.code.EnsureCompatibleJDKTaskStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.code.CheckInstalledJDKsCommand.xml
+ OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.code.CheckIsBladeInstalledAction.xml,
+ OSGI-INF/com.liferay.ide.upgrade.plan.tasks.core.internal.code.CheckInstalledJDKsAction.xml
 Export-Package: com.liferay.ide.upgrade.plan.tasks.core

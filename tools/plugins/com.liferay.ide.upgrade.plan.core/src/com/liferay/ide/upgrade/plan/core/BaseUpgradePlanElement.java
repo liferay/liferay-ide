@@ -22,22 +22,50 @@ import org.osgi.service.component.annotations.Activate;
 /**
  * @author Gregory Amerson
  */
-public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement implements UpgradeTaskStepAction {
+public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 
 	@Activate
 	public void activate(ComponentContext componentContext) {
-		super.activate(componentContext);
-
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
-		_stepId = getProperty(properties, "stepId");
+		_description = getProperty(properties, "description");
+		_id = getProperty(properties, "id");
+		_imagePath = getProperty(properties, "imagePath");
+		_title = getProperty(properties, "title");
 	}
 
 	@Override
-	public String getStepId() {
-		return _stepId;
+	public String getDescription() {
+		if (_description == null) {
+			return getTitle();
+		}
+
+		return _description;
 	}
 
-	private String _stepId;
+	@Override
+	public String getId() {
+		return _id;
+	}
+
+	@Override
+	public String getImagePath() {
+		return _imagePath;
+	}
+
+	@Override
+	public String getTitle() {
+		return _title;
+	}
+
+	@Override
+	public String toString() {
+		return getId();
+	}
+
+	private String _description;
+	private String _id;
+	private String _imagePath;
+	private String _title;
 
 }
