@@ -56,8 +56,8 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		return createErrorStatus(msg, null);
 	}
 
-	public static IStatus createErrorStatus(String msg, Exception e) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
+	public static IStatus createErrorStatus(String msg, Throwable throwable) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg, throwable);
 	}
 
 	public static Image getImage(String key) {

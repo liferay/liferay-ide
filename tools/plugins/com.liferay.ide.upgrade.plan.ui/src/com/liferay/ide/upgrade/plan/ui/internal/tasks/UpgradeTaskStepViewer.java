@@ -151,6 +151,8 @@ public class UpgradeTaskStepViewer implements ISelectionProvider {
 		UpgradeTaskStepIntroItem upgradeTaskStepIntroItem = new UpgradeTaskStepIntroItem(
 			_formToolkit, _scrolledForm, upgradeTaskStep);
 
+		upgradeTaskStepIntroItem.addSelectionChangedListener(this::_fireSelectionChanged);
+
 		_disposables.add(upgradeTaskStepIntroItem);
 		_upgradeTaskStepActionItems.add(upgradeTaskStepIntroItem);
 

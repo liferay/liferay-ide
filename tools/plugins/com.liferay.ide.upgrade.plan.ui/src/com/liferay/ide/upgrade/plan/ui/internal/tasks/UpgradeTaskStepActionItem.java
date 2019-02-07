@@ -64,6 +64,8 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 
 		Section section = _formToolkit.createSection(_scrolledForm.getBody(), Section.TITLE_BAR | Section.TWISTIE);
 
+		section.addExpansionListener(this);
+
 		GridLayoutFactory gridLayoutFactory = GridLayoutFactory.fillDefaults();
 
 		section.setLayout(gridLayoutFactory.create());

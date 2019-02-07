@@ -18,7 +18,27 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.parser.Parser.Builder;
+import com.vladsch.flexmark.util.ast.Document;
+import com.vladsch.flexmark.util.options.MutableDataSet;
+
+import java.io.IOException;
+
 import java.util.NoSuchElementException;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.util.promise.Deferred;
@@ -40,7 +60,31 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		Deferred<String> deferred = _promiseFactory.deferred();
 
 		if (element instanceof UpgradeTaskStep) {
-			_doUpgradeTaskStepDetail((UpgradeTaskStep)element, deferred);
+			UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)element;
+
+			new Job(upgradeTaskStep.getTitle() + " detail...") {
+
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					_doUpgradeTaskStepDetail(upgradeTaskStep, deferred);
+
+					Promise<String> promise = deferred.getPromise();
+
+					try {
+						Throwable failure = promise.getFailure();
+
+						if (failure != null) {
+							return UpgradePlanUIPlugin.createErrorStatus(
+								"Error retrieving " + upgradeTaskStep.getTitle() + " detail.", failure);
+						}
+					}
+					catch (InterruptedException ie) {
+					}
+
+					return Status.OK_STATUS;
+				}
+
+			}.schedule();
 		}
 		else {
 			deferred.fail(new NoSuchElementException());
@@ -64,12 +108,22 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 	}
 
 	private void _doUpgradeTaskStepDetail(UpgradeTaskStep upgradeTaskStep, Deferred<String> deferred) {
-		final String detail;
+		String detail = null;
 
 		String url = upgradeTaskStep.getUrl();
 
 		if (CoreUtil.isNotNullOrEmpty(url)) {
-			detail = url;
+			if (url.endsWith(".markdown")) {
+				try {
+					detail = _downloadAndRenderMarkdown(url);
+				}
+				catch (Throwable t) {
+					deferred.fail(t);
+				}
+			}
+			else if (url.startsWith("https://")) {
+				detail = url;
+			}
 		}
 		else {
 			StringBuffer sb = new StringBuffer();
@@ -88,6 +142,32 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 	private String _doUpgradeTaskStepLabel(UpgradeTaskStep upgradeTaskStep) {
 		return upgradeTaskStep.getTitle();
+	}
+
+	private String _downloadAndRenderMarkdown(String url) throws IOException {
+		HttpClient httpClient = new DefaultHttpClient();
+
+		HttpGet get = new HttpGet(url);
+
+		HttpResponse response = httpClient.execute(get);
+
+		HttpEntity entity = response.getEntity();
+
+		String content = EntityUtils.toString(entity);
+
+		MutableDataSet options = new MutableDataSet();
+
+		Builder parserBuilder = Parser.builder(options);
+
+		Parser parser = parserBuilder.build();
+
+		HtmlRenderer.Builder rendererBuilder = HtmlRenderer.builder(options);
+
+		HtmlRenderer renderer = rendererBuilder.build();
+
+		Document document = parser.parse(content);
+
+		return renderer.render(document);
 	}
 
 	private final PromiseFactory _promiseFactory;
