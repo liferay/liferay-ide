@@ -24,6 +24,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -102,7 +103,7 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 
 		_buttonComposite = _formToolkit.createComposite(bodyComposite);
 
-		GridLayout buttonGridLayout = new GridLayout(4, false);
+		GridLayout buttonGridLayout = new GridLayout(2, false);
 
 		buttonGridLayout.marginHeight = 2;
 		buttonGridLayout.marginWidth = 2;
@@ -114,6 +115,33 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 
 		_disposables.add(() -> _buttonComposite.dispose());
 
+		Image taskStepActionPerformImage = UpgradePlanUIPlugin.getImage(
+			UpgradePlanUIPlugin.TASK_STEP_ACTION_PERFORM_IMAGE);
+
+		ImageHyperlink performImageHyperlink = _createImageHyperlink(
+			_buttonComposite, taskStepActionPerformImage, this, "Click to perform");
+
+		performImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+
+		performImageHyperlink.addHyperlinkListener(
+			new HyperlinkAdapter() {
+
+				@Override
+				public void linkActivated(HyperlinkEvent e) {
+					new Job("Performing " + _upgradeTaskStepAction.getTitle() + "...") {
+
+						@Override
+						protected IStatus run(IProgressMonitor monitor) {
+							return _perform();
+						}
+
+					}.schedule();
+				}
+
+			});
+
+		_disposables.add(() -> performImageHyperlink.dispose());
+
 		Label fillLabel = _formToolkit.createLabel(_buttonComposite, null);
 
 		GridData gridData = new GridData();
@@ -124,24 +152,26 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 
 		_disposables.add(() -> fillLabel.dispose());
 
-		Image taskStepActionPerformImage = UpgradePlanUIPlugin.getImage(
-			UpgradePlanUIPlugin.TASK_STEP_ACTION_PERFORM_IMAGE);
+		Image taskStepActionCompleteImage = UpgradePlanUIPlugin.getImage(
+			UpgradePlanUIPlugin.TASK_STEP_ACTION_COMPLETE_IMAGE);
 
-		ImageHyperlink performImageHyperlink = _createImageHyperlink(
-			_buttonComposite, taskStepActionPerformImage, this, "Perform");
+		ImageHyperlink completeImageHyperlink = _createImageHyperlink(
+			_buttonComposite, taskStepActionCompleteImage, this, "Click when complete");
 
-		performImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		completeImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-		performImageHyperlink.addHyperlinkListener(
+		completeImageHyperlink.addHyperlinkListener(
 			new HyperlinkAdapter() {
 
 				@Override
 				public void linkActivated(HyperlinkEvent e) {
-					new Job(_upgradeTaskStepAction.getTitle()) {
+					new Job("Completing " + _upgradeTaskStepAction.getTitle() + "...") {
 
 						@Override
 						protected IStatus run(IProgressMonitor monitor) {
-							return _perform();
+							_complete();
+
+							return Status.OK_STATUS;
 						}
 
 					}.schedule();
@@ -197,6 +227,9 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 
 	@Override
 	public void setSelection(ISelection selection) {
+	}
+
+	private void _complete() {
 	}
 
 	private ImageHyperlink _createImageHyperlink(Composite parentComposite, Image image, Object data, String linkText) {

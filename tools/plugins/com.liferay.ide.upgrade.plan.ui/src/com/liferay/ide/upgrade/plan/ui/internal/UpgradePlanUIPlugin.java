@@ -40,13 +40,13 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 
 	public static final String CATEGORY_DATABASE_IMAGE = "CATEGORY_DATABASE";
 
-	public static final String ITEM_COMPLETE_IMAGE = "ITEM_COMPLETE";
-
 	public static final String ITEM_SKIP_IMAGE = "ITEM_SKIP";
 
 	public static final String NO_TASKS_IMAGE = "NO_TASKS";
 
 	public static final String PLUGIN_ID = "com.liferay.ide.upgrade.plan.ui";
+
+	public static final String TASK_STEP_ACTION_COMPLETE_IMAGE = "TASK_STEP_ACTION_COMPLETE_IMAGE";
 
 	public static final String TASK_STEP_ACTION_PERFORM_IMAGE = "TASK_STEP_ACTION_PERFORM_IMAGE";
 
@@ -102,15 +102,9 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 	protected void initializeImageRegistry(ImageRegistry imageRegistry) {
 		Bundle bundle = _plugin.getBundle();
 
-		IPath path = _ICONS_PATH.append("complete_status.gif");
+		IPath path = _ICONS_PATH.append("skip_status.gif");
 
 		ImageDescriptor imageDescriptor = _createImageDescriptor(bundle, path);
-
-		imageRegistry.put(ITEM_COMPLETE_IMAGE, imageDescriptor);
-
-		path = _ICONS_PATH.append("skip_status.gif");
-
-		imageDescriptor = _createImageDescriptor(bundle, path);
 
 		imageRegistry.put(ITEM_SKIP_IMAGE, imageDescriptor);
 
@@ -120,13 +114,17 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 
 		imageRegistry.put(TASK_STEP_ACTION_PERFORM_IMAGE, imageDescriptor);
 
+		path = _ICONS_PATH.append("complete_task.gif");
+
+		imageDescriptor = _createImageDescriptor(bundle, path);
+
+		imageRegistry.put(TASK_STEP_ACTION_COMPLETE_IMAGE, imageDescriptor);
+
 		path = _ICONS_PATH.append("task_step_restart.gif");
 
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
 		imageRegistry.put(TASK_STEP_RESTART_IMAGE, imageDescriptor);
-
-		path = _ICONS_PATH.append("information.gif");
 
 		path = _ICONS_PATH.append("information.gif");
 

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
@@ -31,6 +32,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
@@ -101,6 +103,14 @@ public class UpgradeTaskStepViewer implements ISelectionProvider {
 	public void setSelection(ISelection selection) {
 	}
 
+	private void _clearScrolledForm() {
+		Composite bodyComposite = _scrolledForm.getBody();
+
+		for (Control control : bodyComposite.getChildren()) {
+			control.dispose();
+		}
+	}
+
 	private void _fireSelectionChanged(SelectionChangedEvent selectionChangedEvent) {
 		_listeners.forEach(
 			selectionChangedListener -> {
@@ -113,14 +123,14 @@ public class UpgradeTaskStepViewer implements ISelectionProvider {
 			});
 	}
 
-	private UpgradeTaskStep _getSelectedUpgradeTaskStep(ISelection selection) {
+	private UpgradePlanElement _getSelectedUpgradePlanElement(ISelection selection) {
 		if (selection instanceof StructuredSelection) {
 			StructuredSelection structuredSelection = (StructuredSelection)selection;
 
 			Object object = structuredSelection.getFirstElement();
 
-			if (object instanceof UpgradeTaskStep) {
-				return (UpgradeTaskStep)object;
+			if (object instanceof UpgradePlanElement) {
+				return (UpgradePlanElement)object;
 			}
 		}
 
@@ -128,40 +138,35 @@ public class UpgradeTaskStepViewer implements ISelectionProvider {
 	}
 
 	private void _updateFromSelection(ISelection selection) {
-		UpgradeTaskStep upgradeTaskStep = _getSelectedUpgradeTaskStep(selection);
+		_clearScrolledForm();
 
-		if (upgradeTaskStep != null) {
+		UpgradePlanElement upgradePlanElement = _getSelectedUpgradePlanElement(selection);
+
+		if (upgradePlanElement instanceof UpgradeTaskStep) {
+			UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)upgradePlanElement;
+
 			_scrolledForm.setText(upgradeTaskStep.getTitle());
 
 			_updateTaskStepItems(upgradeTaskStep);
-
-			_scrolledForm.reflow(true);
 		}
+		else if (upgradePlanElement != null) {
+			_scrolledForm.setText(upgradePlanElement.getTitle());
+
+			_formToolkit.createLabel(_scrolledForm.getBody(), upgradePlanElement.getDescription());
+		}
+
+		_scrolledForm.reflow(true);
 	}
 
 	private void _updateTaskStepItems(UpgradeTaskStep upgradeTaskStep) {
-		for (Disposable upgradeTaskStepItem : _upgradeTaskStepActionItems) {
-			upgradeTaskStepItem.dispose();
-
-			_disposables.remove(upgradeTaskStepItem);
-		}
-
-		_upgradeTaskStepActionItems.clear();
-
 		UpgradeTaskStepIntroItem upgradeTaskStepIntroItem = new UpgradeTaskStepIntroItem(
 			_formToolkit, _scrolledForm, upgradeTaskStep);
 
 		upgradeTaskStepIntroItem.addSelectionChangedListener(this::_fireSelectionChanged);
 
-		_disposables.add(upgradeTaskStepIntroItem);
-		_upgradeTaskStepActionItems.add(upgradeTaskStepIntroItem);
-
 		for (UpgradeTaskStepAction upgradeTaskStepAction : upgradeTaskStep.getActions()) {
 			UpgradeTaskStepActionItem upgradeTaskStepActionItem = new UpgradeTaskStepActionItem(
 				_formToolkit, _scrolledForm, upgradeTaskStepAction);
-
-			_disposables.add(upgradeTaskStepActionItem);
-			_upgradeTaskStepActionItems.add(upgradeTaskStepActionItem);
 
 			upgradeTaskStepActionItem.addSelectionChangedListener(this::_fireSelectionChanged);
 		}
@@ -171,6 +176,5 @@ public class UpgradeTaskStepViewer implements ISelectionProvider {
 	private FormToolkit _formToolkit;
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private ScrolledForm _scrolledForm;
-	private List<Disposable> _upgradeTaskStepActionItems = new ArrayList<>();
 
 }

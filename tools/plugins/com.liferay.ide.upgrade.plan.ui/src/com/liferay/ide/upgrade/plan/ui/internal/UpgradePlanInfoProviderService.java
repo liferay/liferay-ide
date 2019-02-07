@@ -15,13 +15,14 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 
+import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.Parser.Builder;
-import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.options.MutableDataSet;
 
 import java.io.IOException;
@@ -59,14 +60,14 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 	public Promise<String> getDetail(Object element) {
 		Deferred<String> deferred = _promiseFactory.deferred();
 
-		if (element instanceof UpgradeTaskStep) {
-			UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)element;
+		if (element instanceof UpgradePlanElement) {
+			UpgradePlanElement upgradePlanElement = (UpgradePlanElement)element;
 
-			new Job(upgradeTaskStep.getTitle() + " detail...") {
+			new Job(upgradePlanElement.getTitle() + " detail...") {
 
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					_doUpgradeTaskStepDetail(upgradeTaskStep, deferred);
+					_doUpgradePlanElementDetail(upgradePlanElement, deferred);
 
 					Promise<String> promise = deferred.getPromise();
 
@@ -75,7 +76,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 						if (failure != null) {
 							return UpgradePlanUIPlugin.createErrorStatus(
-								"Error retrieving " + upgradeTaskStep.getTitle() + " detail.", failure);
+								"Error retrieving " + upgradePlanElement.getTitle() + " detail.", failure);
 						}
 					}
 					catch (InterruptedException ie) {
@@ -104,7 +105,16 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 	@Override
 	public boolean provides(Object element) {
-		return element instanceof UpgradeTaskStep;
+		return element instanceof UpgradePlanElement;
+	}
+
+	private void _doUpgradePlanElementDetail(UpgradePlanElement upgradePlanElement, Deferred<String> deferred) {
+		if (upgradePlanElement instanceof UpgradeTaskStep) {
+			_doUpgradeTaskStepDetail((UpgradeTaskStep)upgradePlanElement, deferred);
+		}
+		else {
+			deferred.resolve(upgradePlanElement.getDescription());
+		}
 	}
 
 	private void _doUpgradeTaskStepDetail(UpgradeTaskStep upgradeTaskStep, Deferred<String> deferred) {

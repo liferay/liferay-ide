@@ -143,6 +143,8 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 		_upgradePlanViewer = new UpgradePlanViewer(parentComposite);
 
+		_upgradePlanViewer.addPostSelectionChangedListener(this::_fireSelectionChanged);
+
 		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
 		upgradePlanner.addListener(
