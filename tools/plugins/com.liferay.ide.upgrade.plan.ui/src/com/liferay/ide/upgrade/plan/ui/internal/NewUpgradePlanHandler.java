@@ -18,6 +18,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.expressions.IEvaluationContext;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 
 /**
@@ -34,9 +35,11 @@ public class NewUpgradePlanHandler extends AbstractHandler {
 		if (variable instanceof Shell) {
 			Shell shell = (Shell)variable;
 
-			NewUpgradePlanDialog newUpgradePlanDialog = new NewUpgradePlanDialog(shell);
+			NewUpgradePlanWizard newUpgradePlanWizard = new NewUpgradePlanWizard();
 
-			return newUpgradePlanDialog.open();
+			WizardDialog wizardDialog = new WizardDialog(shell, newUpgradePlanWizard);
+
+			wizardDialog.open();
 		}
 
 		return null;

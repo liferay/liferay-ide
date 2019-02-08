@@ -105,7 +105,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			upgradePlanName -> {
 				UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
-				upgradePlanner.startUpgradePlan(upgradePlanName);
+				UpgradePlan upgradePlan = upgradePlanner.loadUpgradePlan(upgradePlanName);
+
+				upgradePlanner.startUpgradePlan(upgradePlan);
 			}
 		);
 	}

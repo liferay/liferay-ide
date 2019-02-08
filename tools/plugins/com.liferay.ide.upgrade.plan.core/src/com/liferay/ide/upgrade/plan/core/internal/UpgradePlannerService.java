@@ -22,6 +22,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -78,6 +80,29 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	@Override
+	public UpgradePlan getCurrentUpgradePlan() {
+		return _currentUpgradePlan;
+	}
+
+	@Override
+	public UpgradePlan loadUpgradePlan(String name) {
+		return null;
+	}
+
+	@Override
+	public UpgradePlan newUpgradePlan(String name, String currentVersion, String targetVersion,
+			Path sourceCodeLocation) {
+
+		UpgradePlan upgradePlan = new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation);
+
+		UpgradeEvent upgradeEvent = new UpgradePlanStartedEvent(upgradePlan);
+
+		dispatch(upgradeEvent);
+
+		return upgradePlan;
+	}
+
+	@Override
 	public void removeListener(UpgradeListener upgradeListener) {
 		synchronized (this) {
 			_upgradeListeners.remove(upgradeListener);
@@ -93,16 +118,15 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	@Override
-	public UpgradePlan startUpgradePlan(String name) {
-		UpgradePlan upgradePlan = new StandardUpgradePlan(name);
-
-		UpgradeEvent upgradeEvent = new UpgradePlanStartedEvent(upgradePlan);
-
-		dispatch(upgradeEvent);
-
-		return upgradePlan;
+	public void saveUpgradePlan(UpgradePlan upgradePlan) {
 	}
 
+	@Override
+	public void startUpgradePlan(UpgradePlan upgradePlan) {
+		_currentUpgradePlan = upgradePlan;
+	}
+
+	private UpgradePlan _currentUpgradePlan;
 	private final List<UpgradeEvent> _upgradeEvents = new ArrayList<>();
 	private final Set<UpgradeListener> _upgradeListeners = new LinkedHashSet<>();
 

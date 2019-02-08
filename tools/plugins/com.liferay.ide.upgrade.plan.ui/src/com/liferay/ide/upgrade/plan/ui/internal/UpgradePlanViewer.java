@@ -31,6 +31,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -95,9 +96,9 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 
 				Control control = viewer.getControl();
 
-				NewUpgradePlanDialog newUpgradePlanDialog = new NewUpgradePlanDialog(control.getShell());
+				WizardDialog wizardDialog = new WizardDialog(control.getShell(), new NewUpgradePlanWizard());
 
-				newUpgradePlanDialog.open();
+				wizardDialog.open();
 			}
 		);
 	}

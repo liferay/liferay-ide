@@ -19,12 +19,19 @@ import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
 import org.eclipse.sapphire.PossibleValues;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
+import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
+import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
  * @author Terry Jia
@@ -40,22 +47,34 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public Value<String> getCurrentVersion();
 
+	public Value<Path> getLocation();
+
 	public Value<String> getName();
 
 	public Value<String> getTargetVersion();
 
 	public void setCurrentVersion(String currentVersion);
 
+	public void setLocation(Path value);
+
 	public void setName(String name);
 
 	public void setTargetVersion(String targetVersion);
 
+	@DefaultValue(text = "6.2")
 	@PossibleValues(values = {"6.2", "7.0"})
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
+
+	@AbsolutePath
+	@Label(standard = "source code location")
+	@Type(base = Path.class)
+	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
+	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
 	@Required
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
+	@DefaultValue(text = "7.1")
 	@PossibleValues(values = {"7.0", "7.1"})
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
 

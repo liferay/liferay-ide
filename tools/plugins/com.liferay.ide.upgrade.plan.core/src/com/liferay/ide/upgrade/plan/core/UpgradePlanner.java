@@ -14,6 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import java.nio.file.Path;
+
 /**
  * @author Gregory Amerson
  */
@@ -23,12 +25,21 @@ public interface UpgradePlanner {
 
 	public void dispatch(UpgradeEvent upgradeEvent);
 
+	public UpgradePlan getCurrentUpgradePlan();
+
+	public UpgradePlan loadUpgradePlan(String name);
+
+	public UpgradePlan newUpgradePlan(
+		String name, String currentVersion, String targetVersion, Path sourceCodeLocation);
+
 	public void removeListener(UpgradeListener upgradeListener);
 
 	public void restartStep(UpgradeTaskStep _upgradeTaskStep);
 
 	public void restartTask(UpgradeTask _upgradeTask);
 
-	public UpgradePlan startUpgradePlan(String name);
+	public void saveUpgradePlan(UpgradePlan upgradePlan);
+
+	public void startUpgradePlan(UpgradePlan upgraderPlan);
 
 }

@@ -17,20 +17,15 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
 
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
-public class NewUpgradePlanDialog extends SapphireDialog {
+public class NewUpgradePlanWizard extends SapphireWizard<NewUpgradePlanOp> {
 
-	public NewUpgradePlanDialog(Shell shell) {
-		super(shell, _op(), DefinitionLoader.sdef(NewUpgradePlanDialog.class).dialog());
-	}
-
-	private static NewUpgradePlanOp _op() {
-		return NewUpgradePlanOp.TYPE.instantiate();
+	public NewUpgradePlanWizard() {
+		super(NewUpgradePlanOp.TYPE, DefinitionLoader.sdef(NewUpgradePlanWizard.class).wizard());
 	}
 
 }

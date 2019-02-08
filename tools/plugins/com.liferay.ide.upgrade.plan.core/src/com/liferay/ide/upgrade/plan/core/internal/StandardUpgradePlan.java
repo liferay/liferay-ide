@@ -19,6 +19,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
+import java.nio.file.Path;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,44 +36,21 @@ import org.osgi.framework.InvalidSyntaxException;
  */
 public class StandardUpgradePlan implements UpgradePlan {
 
-	public StandardUpgradePlan(String name) {
+	public StandardUpgradePlan(String name, String currentVersion, String targetVersion, Path currentProjectLocation) {
 		_name = name;
+		_currentVersion = currentVersion;
+		_targetVersion = targetVersion;
+		_currentProjectLocation = currentProjectLocation;
+	}
 
-		Bundle bundle = FrameworkUtil.getBundle(StandardUpgradePlan.class);
+	@Override
+	public Path getCurrentProjectLocation() {
+		return _currentProjectLocation;
+	}
 
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		List<UpgradeTask> upgradeTasks = null;
-
-		try {
-			List<UpgradeTaskCategory> orderedUpgradeTaskCategories = ServicesLookup.getOrderedServices(
-				bundleContext, bundleContext.getServiceReferences(UpgradeTaskCategory.class, null));
-
-			Stream<UpgradeTaskCategory> stream = orderedUpgradeTaskCategories.stream();
-
-			upgradeTasks = stream.flatMap(
-				upgradeTaskCategory -> {
-					try {
-						List<UpgradeTask> orderedUpgradeTasks = ServicesLookup.getOrderedServices(
-							bundleContext,
-							bundleContext.getServiceReferences(
-								UpgradeTask.class, "(categoryId=" + upgradeTaskCategory.getId() + ")"));
-
-						return orderedUpgradeTasks.stream();
-					}
-					catch (InvalidSyntaxException ise) {
-						return null;
-					}
-				}
-			).collect(
-				Collectors.toList()
-			);
-		}
-		catch (InvalidSyntaxException ise) {
-			upgradeTasks = Collections.emptyList();
-		}
-
-		_upgradeTasks = upgradeTasks;
+	@Override
+	public String getCurrentVersion() {
+		return _currentVersion;
 	}
 
 	@Override
@@ -80,11 +59,65 @@ public class StandardUpgradePlan implements UpgradePlan {
 	}
 
 	@Override
+	public Path getTargetProjectLocation() {
+		return _targetProjectLocation;
+	}
+
+	@Override
+	public String getTargetVersion() {
+		return _targetVersion;
+	}
+
+	@Override
 	public List<UpgradeTask> getTasks() {
+		if (_upgradeTasks == null) {
+			Bundle bundle = FrameworkUtil.getBundle(StandardUpgradePlan.class);
+
+			BundleContext bundleContext = bundle.getBundleContext();
+
+			List<UpgradeTask> upgradeTasks = null;
+
+			try {
+				List<UpgradeTaskCategory> orderedUpgradeTaskCategories = ServicesLookup.getOrderedServices(
+					bundleContext, bundleContext.getServiceReferences(UpgradeTaskCategory.class, null));
+
+				Stream<UpgradeTaskCategory> stream = orderedUpgradeTaskCategories.stream();
+
+				upgradeTasks = stream.flatMap(
+					upgradeTaskCategory -> {
+						try {
+							List<UpgradeTask> orderedUpgradeTasks = ServicesLookup.getOrderedServices(
+								bundleContext,
+								bundleContext.getServiceReferences(
+									UpgradeTask.class, "(categoryId=" + upgradeTaskCategory.getId() + ")"));
+
+							return orderedUpgradeTasks.stream();
+						}
+						catch (InvalidSyntaxException ise) {
+							return null;
+						}
+					}
+				).filter(
+					upgradeTask -> upgradeTask.appliesTo(this)
+				).collect(
+					Collectors.toList()
+				);
+			}
+			catch (InvalidSyntaxException ise) {
+				upgradeTasks = Collections.emptyList();
+			}
+
+			_upgradeTasks = upgradeTasks;
+		}
+
 		return Collections.unmodifiableList(_upgradeTasks);
 	}
 
+	private final Path _currentProjectLocation;
+	private final String _currentVersion;
 	private final String _name;
-	private final List<UpgradeTask> _upgradeTasks;
+	private Path _targetProjectLocation;
+	private final String _targetVersion;
+	private List<UpgradeTask> _upgradeTasks;
 
 }

@@ -12,27 +12,25 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core.internal.sdk;
+
+import com.liferay.ide.upgrade.tasks.core.ProjectImporter;
 
 import java.nio.file.Path;
 
-import java.util.List;
+import org.eclipse.core.runtime.IStatus;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-public interface UpgradePlan {
+@Component(property = "type=plugins_sdk", service = ProjectImporter.class)
+public class PluginsSDKProjectImporter implements ProjectImporter {
 
-	public Path getCurrentProjectLocation();
-
-	public String getCurrentVersion();
-
-	public String getName();
-
-	public Path getTargetProjectLocation();
-
-	public String getTargetVersion();
-
-	public List<UpgradeTask> getTasks();
+	@Override
+	public IStatus importProjects(Path rootProjectPath) {
+		return null;
+	}
 
 }

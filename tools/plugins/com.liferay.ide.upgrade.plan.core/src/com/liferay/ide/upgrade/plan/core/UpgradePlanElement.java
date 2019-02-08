@@ -29,6 +29,10 @@ public interface UpgradePlanElement {
 
 	public String getTitle();
 
+	default boolean appliesTo(UpgradePlan upgradePlan) {
+		return true;
+	}
+
 	default String getProperty(Dictionary<String, Object> properties, String key) {
 		Object value = properties.get(key);
 

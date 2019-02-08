@@ -20,6 +20,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -77,8 +79,18 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 			Collection<ServiceReference<UpgradeTaskStepAction>> upgradeTaskStepActionServiceReferences =
 				bundleContext.getServiceReferences(UpgradeTaskStepAction.class, "(stepId=" + getId() + ")");
 
-			_upgradeTaskStepActions = ServicesLookup.getOrderedServices(
+			List<UpgradeTaskStepAction> upgradeTaskStepActions = ServicesLookup.getOrderedServices(
 				bundleContext, upgradeTaskStepActionServiceReferences);
+
+			Stream<UpgradeTaskStepAction> stream = upgradeTaskStepActions.stream();
+
+			UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+
+			_upgradeTaskStepActions = stream.filter(
+				upgradeTaskStepAction -> upgradeTaskStepAction.appliesTo(upgradePlanner.getCurrentUpgradePlan())
+			).collect(
+				Collectors.toList()
+			);
 		}
 		catch (InvalidSyntaxException ise) {
 		}
