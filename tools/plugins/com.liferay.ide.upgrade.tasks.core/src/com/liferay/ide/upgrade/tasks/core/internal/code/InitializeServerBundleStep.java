@@ -12,24 +12,22 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core.internal.code;
+
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-public enum UpgradeTaskStepRequirement {
-
-	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
-
-	@Override
-	public String toString() {
-		return _text;
-	}
-
-	private UpgradeTaskStepRequirement(String text) {
-		_text = text;
-	}
-
-	private final String _text;
-
+@Component(
+	property = {
+		"id=initialize_server_bundle", "requirement=recommended", "order=400", "taskId=setup_liferay_projects",
+		"title=Initialize Server Bundle"
+	},
+	service = UpgradeTaskStep.class
+)
+public class InitializeServerBundleStep extends BaseUpgradeTaskStep {
 }

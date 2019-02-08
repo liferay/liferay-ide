@@ -12,24 +12,13 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core;
 
 /**
  * @author Gregory Amerson
  */
-public enum UpgradeTaskStepRequirement {
+public interface UpgradeTaskConstants {
 
-	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
-
-	@Override
-	public String toString() {
-		return _text;
-	}
-
-	private UpgradeTaskStepRequirement(String text) {
-		_text = text;
-	}
-
-	private final String _text;
+	public String HELPER_PROJECT_NAME = "__upgrade_helper__";
 
 }

@@ -12,24 +12,23 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core.internal.database;
+
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-public enum UpgradeTaskStepRequirement {
-
-	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
-
-	@Override
-	public String toString() {
-		return _text;
-	}
-
-	private UpgradeTaskStepRequirement(String text) {
-		_text = text;
-	}
-
-	private final String _text;
-
+@Component(
+	property = {
+		"id=copy_database_to_backup", "requirement=required", "order=100", "taskId=prepare_database",
+		"title=Copy Database to Backup",
+		"url=https://dev.liferay.com/discover/deployment/-/knowledge_base/7-1/backing-up-a-liferay-installation"
+	},
+	service = UpgradeTaskStep.class
+)
+public class CopyDatabaseToBackupTaskStep extends BaseUpgradeTaskStep {
 }

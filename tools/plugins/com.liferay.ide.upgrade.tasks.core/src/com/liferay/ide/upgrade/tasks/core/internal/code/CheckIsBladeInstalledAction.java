@@ -12,24 +12,28 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core.internal.code;
+
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-public enum UpgradeTaskStepRequirement {
-
-	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
+@Component(
+	property = {"id=check_is_blade_installed", "order=100", "stepId=install_blade", "title=Check is Blade installed"},
+	service = UpgradeTaskStepAction.class
+)
+public class CheckIsBladeInstalledAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public String toString() {
-		return _text;
+	public IStatus perform() {
+		return Status.OK_STATUS;
 	}
-
-	private UpgradeTaskStepRequirement(String text) {
-		_text = text;
-	}
-
-	private final String _text;
 
 }

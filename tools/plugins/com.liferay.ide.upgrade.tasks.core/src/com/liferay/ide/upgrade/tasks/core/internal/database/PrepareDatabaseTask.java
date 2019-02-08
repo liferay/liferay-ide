@@ -12,24 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core.internal.database;
+
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
+import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-public enum UpgradeTaskStepRequirement {
-
-	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
-
-	@Override
-	public String toString() {
-		return _text;
-	}
-
-	private UpgradeTaskStepRequirement(String text) {
-		_text = text;
-	}
-
-	private final String _text;
-
+@Component(
+	property = {"categoryId=database", "id=prepare_database", "order=100", "title=Prepare Database for Upgrade"},
+	service = UpgradeTask.class
+)
+public class PrepareDatabaseTask extends BaseUpgradeTask {
 }

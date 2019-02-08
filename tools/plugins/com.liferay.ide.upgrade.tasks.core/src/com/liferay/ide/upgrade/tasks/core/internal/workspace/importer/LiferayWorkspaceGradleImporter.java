@@ -12,24 +12,22 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core.internal.workspace.importer;
+
+import org.eclipse.core.runtime.IPath;
 
 /**
- * @author Gregory Amerson
+ * @author Terry Jia
  */
-public enum UpgradeTaskStepRequirement {
+public class LiferayWorkspaceGradleImporter extends LiferayWorkspaceImporter {
 
-	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
+	public LiferayWorkspaceGradleImporter(IPath location) {
+		super(location);
+	}
 
 	@Override
-	public String toString() {
-		return _text;
+	public String getBuildType() {
+		return "gradle";
 	}
-
-	private UpgradeTaskStepRequirement(String text) {
-		_text = text;
-	}
-
-	private final String _text;
 
 }

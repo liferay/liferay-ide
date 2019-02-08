@@ -111,7 +111,7 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 
 			UpgradeTaskStepRequirement upgradeTaskStepRequirement = upgradeTaskStep.getRequirement();
 
-			styledString.append(upgradeTaskStepRequirement.toString(), StyledString.DECORATIONS_STYLER);
+			styledString.append(" [" + upgradeTaskStepRequirement.toString() + "]", StyledString.DECORATIONS_STYLER);
 
 			return styledString;
 		}

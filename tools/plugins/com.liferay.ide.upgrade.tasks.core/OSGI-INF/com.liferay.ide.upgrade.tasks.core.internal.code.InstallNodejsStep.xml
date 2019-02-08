@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.code.InstallNodejsStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="id" value="install_nodejs" />
+	<property name="requirement" value="recommended" />
+	<property name="order" value="300" />
+	<property name="taskId" value="setup_development_tools" />
+	<property name="title" value="Install NodeJS" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.tasks.core.internal.code.InstallNodejsStep" />
+</scr:component>

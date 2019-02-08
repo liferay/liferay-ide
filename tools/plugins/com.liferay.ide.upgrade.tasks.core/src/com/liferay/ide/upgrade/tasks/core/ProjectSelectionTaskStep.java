@@ -12,24 +12,27 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core;
+
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 /**
- * @author Gregory Amerson
+ * @author Terry Jia
  */
-public enum UpgradeTaskStepRequirement {
+public abstract class ProjectSelectionTaskStep extends BaseUpgradeTaskStep {
 
-	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
+	public abstract IStatus execute(IProject project, IProgressMonitor progressMonitor);
 
-	@Override
-	public String toString() {
-		return _text;
+	public boolean selectAllDefault() {
+		return false;
 	}
 
-	private UpgradeTaskStepRequirement(String text) {
-		_text = text;
+	public boolean selectFilter(Object parentElement, Object element) {
+		return true;
 	}
-
-	private final String _text;
 
 }

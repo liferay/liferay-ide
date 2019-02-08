@@ -17,8 +17,8 @@ package com.liferay.ide.upgrade.problems.core.internal;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.tasks.core.UpgradeTaskConstants;
 import com.liferay.ide.upgrade.problems.core.SourceFile;
+import com.liferay.ide.upgrade.tasks.core.UpgradeTaskConstants;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

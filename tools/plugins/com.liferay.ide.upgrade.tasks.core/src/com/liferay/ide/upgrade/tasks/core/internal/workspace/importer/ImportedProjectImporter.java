@@ -12,24 +12,29 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core.internal.workspace.importer;
+
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
- * @author Gregory Amerson
+ * @author Terry Jia
  */
-public enum UpgradeTaskStepRequirement {
+public class ImportedProjectImporter extends Importer {
 
-	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
+	public ImportedProjectImporter(IPath location) {
+		super(location);
+	}
 
 	@Override
-	public String toString() {
-		return _text;
+	public void doBefore(IProgressMonitor monitor) {
 	}
 
-	private UpgradeTaskStepRequirement(String text) {
-		_text = text;
-	}
+	@Override
+	public void doImport(IProgressMonitor monitor) {
 
-	private final String _text;
+		// TODO import imported projects
+
+	}
 
 }

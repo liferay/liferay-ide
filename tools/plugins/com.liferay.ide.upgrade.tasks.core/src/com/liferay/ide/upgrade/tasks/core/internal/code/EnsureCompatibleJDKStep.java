@@ -12,24 +12,22 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core.internal.code;
+
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-public enum UpgradeTaskStepRequirement {
-
-	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
-
-	@Override
-	public String toString() {
-		return _text;
-	}
-
-	private UpgradeTaskStepRequirement(String text) {
-		_text = text;
-	}
-
-	private final String _text;
-
+@Component(
+	property = {
+		"id=ensure_compatible_jdk", "requirement=required", "order=100", "taskId=setup_development_tools",
+		"title=Ensure Compatible JDK"
+	},
+	service = UpgradeTaskStep.class
+)
+public class EnsureCompatibleJDKStep extends BaseUpgradeTaskStep {
 }

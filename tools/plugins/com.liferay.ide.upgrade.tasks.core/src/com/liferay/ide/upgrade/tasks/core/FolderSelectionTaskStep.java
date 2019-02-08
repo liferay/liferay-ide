@@ -12,24 +12,20 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core;
+
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+
+import java.io.File;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 /**
- * @author Gregory Amerson
+ * @author Terry Jia
  */
-public enum UpgradeTaskStepRequirement {
+public abstract class FolderSelectionTaskStep extends BaseUpgradeTaskStep {
 
-	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
-
-	@Override
-	public String toString() {
-		return _text;
-	}
-
-	private UpgradeTaskStepRequirement(String text) {
-		_text = text;
-	}
-
-	private final String _text;
+	public abstract IStatus execute(File folder, IProgressMonitor progressMonitor);
 
 }

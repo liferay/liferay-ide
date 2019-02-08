@@ -12,24 +12,17 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core;
+
+import java.nio.file.Path;
+
+import org.eclipse.core.runtime.IStatus;
 
 /**
  * @author Gregory Amerson
  */
-public enum UpgradeTaskStepRequirement {
+public interface ProjectImporter {
 
-	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
-
-	@Override
-	public String toString() {
-		return _text;
-	}
-
-	private UpgradeTaskStepRequirement(String text) {
-		_text = text;
-	}
-
-	private final String _text;
+	IStatus importProjects(Path rootProjectPath);
 
 }

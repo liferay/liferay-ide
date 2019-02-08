@@ -12,24 +12,30 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core;
+
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.LiferayWorkspaceProject;
+
+import org.eclipse.core.resources.IProject;
 
 /**
- * @author Gregory Amerson
+ * @author Terry Jia
  */
-public enum UpgradeTaskStepRequirement {
+public abstract class WorkspaceTaskStep extends ProjectSelectionTaskStep {
 
-	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
-
-	@Override
-	public String toString() {
-		return _text;
+	public boolean selectAllDefault() {
+		return true;
 	}
 
-	private UpgradeTaskStepRequirement(String text) {
-		_text = text;
-	}
+	public boolean selectFilter(Object parentElement, Object element) {
+		IProject project = (IProject)element;
 
-	private final String _text;
+		if (LiferayCore.create(LiferayWorkspaceProject.class, project) != null) {
+			return true;
+		}
+
+		return false;
+	}
 
 }

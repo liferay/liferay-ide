@@ -12,24 +12,30 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 
 /**
- * @author Gregory Amerson
+ * @author Terry Jia
  */
-public enum UpgradeTaskStepRequirement {
+public abstract class JavaProjectsSelectionTaskStep extends ProjectsSelectionTaskStep {
 
-	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
-
-	@Override
-	public String toString() {
-		return _text;
+	public boolean selectAllDefault() {
+		return true;
 	}
 
-	private UpgradeTaskStepRequirement(String text) {
-		_text = text;
-	}
+	public boolean selectFilter(Object parentElement, Object element) {
+		IProject project = (IProject)element;
 
-	private final String _text;
+		try {
+			return project.hasNature("org.eclipse.jdt.core.javanature");
+		}
+		catch (CoreException ce) {
+		}
+
+		return false;
+	}
 
 }
