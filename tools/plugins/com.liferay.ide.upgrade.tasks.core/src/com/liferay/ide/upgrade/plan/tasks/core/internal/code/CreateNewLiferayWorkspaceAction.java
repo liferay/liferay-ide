@@ -14,8 +14,11 @@
 
 package com.liferay.ide.upgrade.plan.tasks.core.internal.code;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -23,10 +26,14 @@ import org.osgi.service.component.annotations.Component;
  * @author Gregory Amerson
  */
 @Component(
-	property = {
-		"categoryId=code", "id=setup_development_environment", "order=100", "title=Setup Development Environment"
-	},
-	service = UpgradeTask.class
+	property = {"id=create_new_liferay_workspace", "order=100", "stepId=setup_liferay_workspace", "title=Create New Liferay Workspace"},
+	service = UpgradeTaskStepAction.class
 )
-public class SetupDevelopmentEnvironmentTask extends BaseUpgradeTask {
+public class CreateNewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction {
+
+	@Override
+	public IStatus perform() {
+		return Status.OK_STATUS;
+	}
+
 }

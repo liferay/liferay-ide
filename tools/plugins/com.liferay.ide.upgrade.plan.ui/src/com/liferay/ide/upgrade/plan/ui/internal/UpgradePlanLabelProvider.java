@@ -19,6 +19,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepRequirement;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
@@ -106,7 +107,13 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 		else if (element instanceof UpgradeTaskStep) {
 			UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)element;
 
-			return new StyledString(upgradeTaskStep.getTitle());
+			StyledString styledString = new StyledString(upgradeTaskStep.getTitle());
+
+			UpgradeTaskStepRequirement upgradeTaskStepRequirement = upgradeTaskStep.getRequirement();
+
+			styledString.append(upgradeTaskStepRequirement.toString(), StyledString.DECORATIONS_STYLER);
+
+			return styledString;
 		}
 
 		return null;

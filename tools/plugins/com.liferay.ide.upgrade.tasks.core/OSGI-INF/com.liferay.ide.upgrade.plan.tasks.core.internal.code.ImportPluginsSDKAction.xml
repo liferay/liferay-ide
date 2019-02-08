@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.plan.tasks.core.internal.code.ImportPluginsSDKAction" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="id" value="import_plugins_sdk" />
+	<property name="order" value="100" />
+	<property name="stepId" value="import_existing_projects" />
+	<property name="title" value="Import Plugins SDK" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.plan.tasks.core.internal.code.ImportPluginsSDKAction" />
+</scr:component>

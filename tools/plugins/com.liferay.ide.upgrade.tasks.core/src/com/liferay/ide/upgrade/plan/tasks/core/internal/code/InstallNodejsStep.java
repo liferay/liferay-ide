@@ -24,10 +24,10 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"id=ensure_compatible_jdk", "requirement=required", "order=100", "taskId=setup_development_environment",
-		"title=Ensure Compatible JDK"
+		"id=install_nodejs", "requirement=recommended", "order=300", "taskId=setup_development_tools",
+		"title=Install NodeJS"
 	},
 	service = UpgradeTaskStep.class
 )
-public class EnsureCompatibleJDKTaskStep extends BaseUpgradeTaskStep {
+public class InstallNodejsStep extends BaseUpgradeTaskStep {
 }

@@ -24,10 +24,10 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"id=install_nodejs", "requirement=recommended", "order=300", "taskId=setup_development_environment",
-		"title=Install NodeJS"
+		"id=import_existing_projects", "requirement=required", "order=100", "taskId=setup_liferay_projects",
+		"title=Import Existing Projects"
 	},
 	service = UpgradeTaskStep.class
 )
-public class InstallNodejsTaskStep extends BaseUpgradeTaskStep {
+public class ImportExistingProjectsStep extends BaseUpgradeTaskStep {
 }

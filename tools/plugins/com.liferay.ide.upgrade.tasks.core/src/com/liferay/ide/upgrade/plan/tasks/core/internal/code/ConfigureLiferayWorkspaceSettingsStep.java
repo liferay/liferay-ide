@@ -24,10 +24,10 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = {
-		"description=This is some description text for blade cli", "id=install_blade", "requirement=recommended",
-		"order=200", "taskId=setup_development_environment", "title=Install Blade CLI"
+		"id=configure_liferay_workspace_settings", "requirement=required", "order=300", "taskId=setup_liferay_projects",
+		"title=Configure Liferay Workspace Settings"
 	},
 	service = UpgradeTaskStep.class
 )
-public class InstallBladeTaskStep extends BaseUpgradeTaskStep {
+public class ConfigureLiferayWorkspaceSettingsStep extends BaseUpgradeTaskStep {
 }
