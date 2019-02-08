@@ -30,7 +30,6 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -54,7 +53,7 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
  * @author Terry Jia
  * @author Gregory Amerson
  */
-public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider, IExpansionListener {
+public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTaskItem {
 
 	public UpgradeTaskStepActionItem(
 		FormToolkit formToolkit, ScrolledForm scrolledForm, UpgradeTaskStepAction upgradeTaskStepAction) {
@@ -118,8 +117,8 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 		Image taskStepActionPerformImage = UpgradePlanUIPlugin.getImage(
 			UpgradePlanUIPlugin.TASK_STEP_ACTION_PERFORM_IMAGE);
 
-		ImageHyperlink performImageHyperlink = _createImageHyperlink(
-			_buttonComposite, taskStepActionPerformImage, this, "Click to perform");
+		ImageHyperlink performImageHyperlink = createImageHyperlink(
+			_formToolkit, _buttonComposite, taskStepActionPerformImage, this, "Click to perform");
 
 		performImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
@@ -155,8 +154,8 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 		Image taskStepActionCompleteImage = UpgradePlanUIPlugin.getImage(
 			UpgradePlanUIPlugin.TASK_STEP_ACTION_COMPLETE_IMAGE);
 
-		ImageHyperlink completeImageHyperlink = _createImageHyperlink(
-			_buttonComposite, taskStepActionCompleteImage, this, "Click when complete");
+		ImageHyperlink completeImageHyperlink = createImageHyperlink(
+			_formToolkit, _buttonComposite, taskStepActionCompleteImage, this, "Click when complete");
 
 		completeImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
@@ -230,17 +229,6 @@ public class UpgradeTaskStepActionItem implements Disposable, ISelectionProvider
 	}
 
 	private void _complete() {
-	}
-
-	private ImageHyperlink _createImageHyperlink(Composite parentComposite, Image image, Object data, String linkText) {
-		ImageHyperlink imageHyperlink = _formToolkit.createImageHyperlink(parentComposite, SWT.NULL);
-
-		imageHyperlink.setData(data);
-		imageHyperlink.setImage(image);
-		imageHyperlink.setText(linkText);
-		imageHyperlink.setToolTipText(linkText);
-
-		return imageHyperlink;
 	}
 
 	private IStatus _perform() {

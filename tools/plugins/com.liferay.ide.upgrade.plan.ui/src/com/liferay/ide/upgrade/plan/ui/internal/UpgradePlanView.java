@@ -19,8 +19,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepDoneEvent;
-import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradePlanViewer;
-import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskStepViewer;
+import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskViewer;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -82,14 +81,14 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			_upgradePlanViewer.dispose();
 		}
 
-		if (_upgradeTaskStepViewer != null) {
-			_upgradeTaskStepViewer.dispose();
+		if (_upgradeTaskViewer != null) {
+			_upgradeTaskViewer.dispose();
 		}
 	}
 
 	@Override
 	public ISelection getSelection() {
-		return _upgradeTaskStepViewer.getSelection();
+		return _upgradeTaskViewer.getSelection();
 	}
 
 	@Override
@@ -135,7 +134,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 	@Override
 	public void setSelection(ISelection selection) {
-		_upgradeTaskStepViewer.setSelection(selection);
+		_upgradeTaskViewer.setSelection(selection);
 	}
 
 	private void _createPartControl(Composite parentComposite) {
@@ -165,9 +164,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 				}
 			});
 
-		_upgradeTaskStepViewer = new UpgradeTaskStepViewer(parentComposite, _upgradePlanViewer);
+		_upgradeTaskViewer = new UpgradeTaskViewer(parentComposite, _upgradePlanViewer);
 
-		_upgradeTaskStepViewer.addSelectionChangedListener(this::_fireSelectionChanged);
+		_upgradeTaskViewer.addSelectionChangedListener(this::_fireSelectionChanged);
 
 		setContentDescription(
 			"No active upgrade plan. Use view menu 'New Upgrade Plan' action to start a new upgrade.");
@@ -188,6 +187,6 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
 	private UpgradePlanViewer _upgradePlanViewer;
-	private UpgradeTaskStepViewer _upgradeTaskStepViewer;
+	private UpgradeTaskViewer _upgradeTaskViewer;
 
 }

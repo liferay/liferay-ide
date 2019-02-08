@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.ui.internal.tasks;
+package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
@@ -20,8 +20,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.ui.internal.NewUpgradePlanDialog;
-import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanView;
 
 import java.util.Optional;
 

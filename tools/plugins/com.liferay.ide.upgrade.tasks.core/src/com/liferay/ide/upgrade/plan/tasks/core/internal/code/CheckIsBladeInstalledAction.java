@@ -18,6 +18,7 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -32,7 +33,7 @@ public class CheckIsBladeInstalledAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform() {
-		return null;
+		return Status.OK_STATUS;
 	}
 
 }

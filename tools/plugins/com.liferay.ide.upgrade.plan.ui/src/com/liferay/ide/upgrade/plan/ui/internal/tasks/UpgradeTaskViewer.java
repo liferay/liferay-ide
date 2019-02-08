@@ -19,6 +19,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
+import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanViewer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +41,9 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
  * @author Terry Jia
  * @author Gregory Amerson
  */
-public class UpgradeTaskStepViewer implements ISelectionProvider {
+public class UpgradeTaskViewer implements ISelectionProvider {
 
-	public UpgradeTaskStepViewer(Composite parentComposite, UpgradePlanViewer upgradePlanViewer) {
+	public UpgradeTaskViewer(Composite parentComposite, UpgradePlanViewer upgradePlanViewer) {
 		_formToolkit = new FormToolkit(parentComposite.getDisplay());
 
 		_scrolledForm = _formToolkit.createScrolledForm(parentComposite);

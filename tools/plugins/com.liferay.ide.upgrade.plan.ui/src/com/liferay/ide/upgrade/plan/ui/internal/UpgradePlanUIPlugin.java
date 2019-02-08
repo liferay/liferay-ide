@@ -46,6 +46,8 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = "com.liferay.ide.upgrade.plan.ui";
 
+	public static final String TASK_RESTART_IMAGE = "TASK_RESTART_IMAGE";
+
 	public static final String TASK_STEP_ACTION_COMPLETE_IMAGE = "TASK_STEP_ACTION_COMPLETE_IMAGE";
 
 	public static final String TASK_STEP_ACTION_PERFORM_IMAGE = "TASK_STEP_ACTION_PERFORM_IMAGE";
@@ -119,6 +121,12 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
 		imageRegistry.put(TASK_STEP_ACTION_COMPLETE_IMAGE, imageDescriptor);
+
+		path = _ICONS_PATH.append("task_restart.gif");
+
+		imageDescriptor = _createImageDescriptor(bundle, path);
+
+		imageRegistry.put(TASK_RESTART_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("task_step_restart.gif");
 

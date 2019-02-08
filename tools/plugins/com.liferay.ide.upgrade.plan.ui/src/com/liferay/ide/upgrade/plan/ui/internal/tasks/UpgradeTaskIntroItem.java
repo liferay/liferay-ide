@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
@@ -32,7 +32,6 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -40,10 +39,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
-import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
@@ -52,23 +49,16 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
 /**
- * @author Terry Jia
  * @author Gregory Amerson
  */
-public class UpgradeTaskStepIntroItem implements IExpansionListener, UpgradeTaskItem {
+public class UpgradeTaskIntroItem implements UpgradeTaskItem {
 
-	public UpgradeTaskStepIntroItem(
-		FormToolkit formToolkit, ScrolledForm scrolledForm, UpgradeTaskStep upgradeTaskStep) {
-
+	public UpgradeTaskIntroItem(FormToolkit formToolkit, ScrolledForm scrolledForm, UpgradeTask upgradeTask) {
 		_formToolkit = formToolkit;
 		_scrolledForm = scrolledForm;
-		_upgradeTaskStep = upgradeTaskStep;
+		_upgradeTask = upgradeTask;
 
-		Section section = _formToolkit.createSection(_scrolledForm.getBody(), Section.TWISTIE | Section.TITLE_BAR);
-
-		section.addExpansionListener(this);
-
-		section.setExpanded(true);
+		Section section = _formToolkit.createSection(_scrolledForm.getBody(), Section.TITLE_BAR);
 
 		GridLayoutFactory gridLayoutFactory = GridLayoutFactory.fillDefaults();
 
@@ -96,7 +86,7 @@ public class UpgradeTaskStepIntroItem implements IExpansionListener, UpgradeTask
 
 		_disposables.add(() -> bodyComposite.dispose());
 
-		Label label = _formToolkit.createLabel(bodyComposite, _upgradeTaskStep.getDescription());
+		Label label = _formToolkit.createLabel(bodyComposite, _upgradeTask.getDescription());
 
 		_disposables.add(() -> label.dispose());
 
@@ -124,25 +114,25 @@ public class UpgradeTaskStepIntroItem implements IExpansionListener, UpgradeTask
 
 		_disposables.add(() -> fillLabel.dispose());
 
-		Image taskStepRestartImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_RESTART_IMAGE);
+		Image taskRestartImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_RESTART_IMAGE);
 
-		ImageHyperlink taskStepRestartImageHyperlink = createImageHyperlink(
-			_formToolkit, _buttonComposite, taskStepRestartImage, this, "Click to restart");
+		ImageHyperlink taskRestartImageHyperlink = createImageHyperlink(
+			_formToolkit, _buttonComposite, taskRestartImage, this, "Click to restart");
 
-		taskStepRestartImageHyperlink.setEnabled(false);
+		taskRestartImageHyperlink.setEnabled(false);
 
-		taskStepRestartImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		taskRestartImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-		taskStepRestartImageHyperlink.addHyperlinkListener(
+		taskRestartImageHyperlink.addHyperlinkListener(
 			new HyperlinkAdapter() {
 
 				@Override
 				public void linkActivated(HyperlinkEvent e) {
-					new Job(_upgradeTaskStep.getTitle() + " restarting.") {
+					new Job(_upgradeTask.getTitle() + " restarting.") {
 
 						@Override
 						protected IStatus run(IProgressMonitor monitor) {
-							return _restartStep();
+							return _restartTask();
 						}
 
 					}.schedule();
@@ -150,7 +140,7 @@ public class UpgradeTaskStepIntroItem implements IExpansionListener, UpgradeTask
 
 			});
 
-		_disposables.add(() -> taskStepRestartImageHyperlink.dispose());
+		_disposables.add(() -> taskRestartImageHyperlink.dispose());
 	}
 
 	@Override
@@ -169,26 +159,8 @@ public class UpgradeTaskStepIntroItem implements IExpansionListener, UpgradeTask
 	}
 
 	@Override
-	public void expansionStateChanged(ExpansionEvent expansionEvent) {
-		ISelection selection = new StructuredSelection(_upgradeTaskStep);
-
-		SelectionChangedEvent selectionChangedEvent = new SelectionChangedEvent(this, selection);
-
-		_listeners.forEach(
-			selectionChangedListener -> {
-				selectionChangedListener.selectionChanged(selectionChangedEvent);
-			});
-
-		_scrolledForm.reflow(true);
-	}
-
-	@Override
-	public void expansionStateChanging(ExpansionEvent expansionEvent) {
-	}
-
-	@Override
 	public ISelection getSelection() {
-		return null;
+		return new StructuredSelection(_upgradeTask);
 	}
 
 	@Override
@@ -200,10 +172,10 @@ public class UpgradeTaskStepIntroItem implements IExpansionListener, UpgradeTask
 	public void setSelection(ISelection selection) {
 	}
 
-	private IStatus _restartStep() {
+	private IStatus _restartTask() {
 		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 
-		upgradePlanner.restartStep(_upgradeTaskStep);
+		upgradePlanner.restartTask(_upgradeTask);
 
 		return Status.OK_STATUS;
 	}
@@ -213,6 +185,6 @@ public class UpgradeTaskStepIntroItem implements IExpansionListener, UpgradeTask
 	private FormToolkit _formToolkit;
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private ScrolledForm _scrolledForm;
-	private final UpgradeTaskStep _upgradeTaskStep;
+	private final UpgradeTask _upgradeTask;
 
 }

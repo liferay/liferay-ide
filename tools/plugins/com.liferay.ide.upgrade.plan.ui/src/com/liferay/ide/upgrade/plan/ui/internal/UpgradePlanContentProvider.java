@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.ui.internal.tasks;
+package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
