@@ -114,6 +114,11 @@ public class GradleDependency {
 		_version = version;
 	}
 
+	@Override
+	public String toString() {
+		return "Gradle Dependency " + _group + ":" + _name + ":" + _version;
+	}
+
 	private String _group;
 	private String _name;
 	private String _version;
