@@ -22,6 +22,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepRequirement;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
+import java.util.function.Function;
+
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
@@ -36,52 +38,7 @@ import org.osgi.framework.FrameworkUtil;
 public class UpgradePlanLabelProvider extends BundleImageLabelProvider implements IStyledLabelProvider {
 
 	public UpgradePlanLabelProvider() {
-		super(element -> {
-			Bundle bundle = null;
-
-			String imagePath = null;
-
-			if (element instanceof UpgradePlanElement) {
-				UpgradePlanElement upgradePlanElement = (UpgradePlanElement)element;
-
-				imagePath = upgradePlanElement.getImagePath();
-
-				if (imagePath != null) {
-					bundle = FrameworkUtil.getBundle(element.getClass());
-				}
-			}
-
-			if (imagePath == null && element instanceof UpgradeTask) {
-				UpgradeTask upgradeTask = (UpgradeTask)element;
-
-				UpgradeTaskCategory upgradeTaskCategory = ServicesLookup.getSingleService(
-					UpgradeTaskCategory.class, "(id=" + upgradeTask.getCategoryId() + ")");
-
-				imagePath = upgradeTaskCategory.getImagePath();
-
-				bundle = FrameworkUtil.getBundle(upgradeTaskCategory.getClass());
-			}
-
-			if (imagePath == null && element instanceof UpgradeTaskStep) {
-				UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)element;
-
-				UpgradeTask upgradeTask = ServicesLookup.getSingleService(
-					UpgradeTask.class, "(id=" + upgradeTaskStep.getTaskId() + ")");
-
-				UpgradeTaskCategory upgradeTaskCategory = ServicesLookup.getSingleService(
-					UpgradeTaskCategory.class, "(id=" + upgradeTask.getCategoryId() + ")");
-
-				imagePath = upgradeTaskCategory.getImagePath();
-
-				bundle = FrameworkUtil.getBundle(upgradeTaskCategory.getClass());
-			}
-
-			if (bundle != null && imagePath != null) {
-				return new Pair<>(bundle, imagePath);
-			}
-
-			return null;
-		});
+		super(_imagePathMapper());
 	}
 
 	@Override
@@ -117,6 +74,55 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 		}
 
 		return null;
+	}
+
+	private static Function<Object, Pair<Bundle, String>> _imagePathMapper() {
+		return element -> {
+			Bundle bundle = null;
+
+			String imagePath = null;
+
+			if (element instanceof UpgradePlanElement) {
+				UpgradePlanElement upgradePlanElement = (UpgradePlanElement)element;
+
+				imagePath = upgradePlanElement.getImagePath();
+
+				if (imagePath != null) {
+					bundle = FrameworkUtil.getBundle(element.getClass());
+				}
+			}
+
+			if ((imagePath == null) && (element instanceof UpgradeTask)) {
+				UpgradeTask upgradeTask = (UpgradeTask)element;
+
+				UpgradeTaskCategory upgradeTaskCategory = ServicesLookup.getSingleService(
+					UpgradeTaskCategory.class, "(id=" + upgradeTask.getCategoryId() + ")");
+
+				imagePath = upgradeTaskCategory.getImagePath();
+
+				bundle = FrameworkUtil.getBundle(upgradeTaskCategory.getClass());
+			}
+
+			if ((imagePath == null) && (element instanceof UpgradeTaskStep)) {
+				UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)element;
+
+				UpgradeTask upgradeTask = ServicesLookup.getSingleService(
+					UpgradeTask.class, "(id=" + upgradeTaskStep.getTaskId() + ")");
+
+				UpgradeTaskCategory upgradeTaskCategory = ServicesLookup.getSingleService(
+					UpgradeTaskCategory.class, "(id=" + upgradeTask.getCategoryId() + ")");
+
+				imagePath = upgradeTaskCategory.getImagePath();
+
+				bundle = FrameworkUtil.getBundle(upgradeTaskCategory.getClass());
+			}
+
+			if ((bundle != null) && (imagePath != null)) {
+				return new Pair<>(bundle, imagePath);
+			}
+
+			return null;
+		};
 	}
 
 }

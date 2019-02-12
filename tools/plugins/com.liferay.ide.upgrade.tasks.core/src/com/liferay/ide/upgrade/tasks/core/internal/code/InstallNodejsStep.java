@@ -18,16 +18,17 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"id=install_nodejs", "requirement=recommended", "order=300", "taskId=setup_development_tools",
+		"id=install_nodejs", "requirement=recommended", "order=3", "taskId=install_prerequisites",
 		"title=Install NodeJS"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class InstallNodejsStep extends BaseUpgradeTaskStep {
 }

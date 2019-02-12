@@ -18,13 +18,14 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskCategory;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
-	property = {"id=code", "imagePath=icons/category_code.png", "order=300", "title=Code Upgrade"},
-	service = UpgradeTaskCategory.class
+	property = {"id=code", "imagePath=icons/category_code.png", "order=3", "title=Code Upgrade"},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskCategory.class
 )
 public class CodeUpgradeCategory extends BaseUpgradeTaskCategory {
 }

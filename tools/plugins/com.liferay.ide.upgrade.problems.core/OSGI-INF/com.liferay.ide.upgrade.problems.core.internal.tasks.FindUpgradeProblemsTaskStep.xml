@@ -2,10 +2,10 @@
 <scr:component name="com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
 	<property name="id" value="find_upgrade_problems" />
 	<property name="requirement" value="recommended" />
-	<property name="order" value="200" />
+	<property name="order" value="2" />
 	<property name="taskId" value="find_upgrade_problems" />
 	<property name="title" value="Find Upgrade Problems" />
-	<service>
+	<service scope="prototype">
 		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep" />
 	</service>
 	<reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner" />

@@ -18,16 +18,17 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"id=migrate_property_keys", "requirement=required", "order=200", "taskId=analyze_portal_ext_properties",
+		"id=migrate_property_keys", "requirement=required", "order=2", "taskId=analyze_portal_ext_properties",
 		"title=Migrate Property Keys"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class MigratePropertyKeysTaskStep extends BaseUpgradeTaskStep {
 }

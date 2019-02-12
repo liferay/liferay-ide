@@ -18,16 +18,17 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"id=disable_search_indexes", "requirement=recommended", "order=400", "taskId=prepare_database",
+		"id=disable_search_indexes", "requirement=recommended", "order=4", "taskId=prepare_database",
 		"title=Disable Search Indexes"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class DisableSearchIndexesTaskStep extends BaseUpgradeTaskStep {
 }

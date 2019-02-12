@@ -34,12 +34,12 @@ public interface UpgradePlanner {
 
 	public void removeListener(UpgradeListener upgradeListener);
 
-	public void restartStep(UpgradeTaskStep _upgradeTaskStep);
+	public void restartStep(UpgradeTaskStep upgradeTaskStep);
 
-	public void restartTask(UpgradeTask _upgradeTask);
+	public void restartTask(UpgradeTask upgradeTask);
 
 	public void saveUpgradePlan(UpgradePlan upgradePlan);
 
-	public void startUpgradePlan(UpgradePlan upgraderPlan);
+	public void startUpgradePlan(UpgradePlan upgradePlan);
 
 }

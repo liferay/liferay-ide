@@ -21,13 +21,17 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
-	property = {"id=upgrade_workspace_plugin_version", "order=200", "stepId=setup_liferay_workspace", "title=Upgrade Workspace Plugin Version"},
-	service = UpgradeTaskStepAction.class
+	property = {
+		"id=upgrade_workspace_plugin_version", "order=2", "stepId=setup_liferay_workspace",
+		"title=Upgrade Workspace Plugin Version"
+	},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class UpgradeWorkspacePluginVersionAction extends BaseUpgradeTaskStepAction {
 

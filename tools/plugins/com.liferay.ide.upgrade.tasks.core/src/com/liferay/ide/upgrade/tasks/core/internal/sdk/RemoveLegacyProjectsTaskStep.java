@@ -15,9 +15,9 @@
 package com.liferay.ide.upgrade.tasks.core.internal.sdk;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
-import com.liferay.ide.upgrade.tasks.core.WorkspaceTaskStep;
 
 import java.io.File;
 
@@ -28,20 +28,20 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
  */
 @Component(
 	property = {
-		"id=remove_legacy_projects", "requirement=recommended", "order=100", "taskId=migrate_plugins_sdk",
+		"id=remove_legacy_projects", "requirement=recommended", "order=1", "taskId=migrate_plugins_sdk",
 		"title=Remove Legacy Projects"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class RemoveLegacyProjectsTaskStep extends WorkspaceTaskStep {
+public class RemoveLegacyProjectsTaskStep extends BaseUpgradeTaskStep {
 
-	@Override
 	public IStatus execute(IProject project, IProgressMonitor progressMonitor) {
 		IPath projectLocation = project.getLocation();
 

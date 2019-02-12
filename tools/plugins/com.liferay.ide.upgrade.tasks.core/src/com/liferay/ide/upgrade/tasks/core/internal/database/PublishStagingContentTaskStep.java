@@ -18,16 +18,17 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"id=publish_staging_content", "requirement=recommended", "order=300", "taskId=prepare_database",
+		"id=publish_staging_content", "requirement=recommended", "order=3", "taskId=prepare_database",
 		"title=Publish Staging Remote Content"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class PublishStagingContentTaskStep extends BaseUpgradeTaskStep {
 }

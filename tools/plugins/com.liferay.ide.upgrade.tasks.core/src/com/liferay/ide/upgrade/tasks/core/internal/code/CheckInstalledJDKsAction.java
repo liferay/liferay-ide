@@ -21,13 +21,14 @@ import com.liferay.ide.upgrade.tasks.core.internal.UpgradeTasksCorePlugin;
 import org.eclipse.core.runtime.IStatus;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
-	property = {"id=check_installed_jdks", "order=100", "stepId=ensure_compatible_jdk", "title=Check Installed JDKs"},
-	service = UpgradeTaskStepAction.class
+	property = {"id=check_installed_jdks", "order=1", "stepId=ensure_compatible_jdk", "title=Check Installed JDKs"},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class CheckInstalledJDKsAction extends BaseUpgradeTaskStepAction {
 

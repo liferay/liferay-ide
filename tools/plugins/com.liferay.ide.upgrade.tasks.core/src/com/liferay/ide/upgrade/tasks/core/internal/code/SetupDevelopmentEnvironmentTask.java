@@ -12,24 +12,22 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.workspace.importer;
+package com.liferay.ide.upgrade.tasks.core.internal.code;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
+import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
-public abstract class Importer {
-
-	public Importer(IPath location) {
-		this.location = location;
-	}
-
-	public abstract void doBefore(IProgressMonitor monitor);
-
-	public abstract void doImport(IProgressMonitor monitor);
-
-	protected IPath location;
-
+@Component(
+	property = {
+		"categoryId=code", "id=setup_development_environment", "order=2", "title=Setup Development Environment"
+	},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
+)
+public class SetupDevelopmentEnvironmentTask extends BaseUpgradeTask {
 }

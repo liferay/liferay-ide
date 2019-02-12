@@ -25,19 +25,19 @@ public class FileUpgradeProblem {
 
 	public static final long DEFAULT_MARKER_ID = -1;
 
-	public static String MARKER_ATTRIBUTE_AUTOCORRECTCONTEXT = "fileUpgradeProblem.autoCorrectContext";
+	public static final String MARKER_ATTRIBUTE_AUTOCORRECTCONTEXT = "fileUpgradeProblem.autoCorrectContext";
 
-	public static String MARKER_ATTRIBUTE_RESOLVED = "fileUpgradeProblem.resolved";
+	public static final String MARKER_ATTRIBUTE_RESOLVED = "fileUpgradeProblem.resolved";
 
-	public static String MARKER_ATTRIBUTE_SECTION = "fileUpgradeProblem.section";
+	public static final String MARKER_ATTRIBUTE_SECTION = "fileUpgradeProblem.section";
 
-	public static String MARKER_ATTRIBUTE_SUMMARY = "fileUpgradeProblem.summary";
+	public static final String MARKER_ATTRIBUTE_SUMMARY = "fileUpgradeProblem.summary";
 
-	public static String MARKER_ATTRIBUTE_TICKET = "fileUpgradeProblem.ticket";
+	public static final String MARKER_ATTRIBUTE_TICKET = "fileUpgradeProblem.ticket";
 
-	public static String MARKER_ATTRIBUTE_TIMESTAMP = "fileUpgradeProblem.timestamp";
+	public static final String MARKER_ATTRIBUTE_TIMESTAMP = "fileUpgradeProblem.timestamp";
 
-	public static String MARKER_ATTRIBUTE_TYPE = "fileUpgradeProblem.type";
+	public static final String MARKER_ATTRIBUTE_TYPE = "fileUpgradeProblem.type";
 
 	public static final int MARKER_ERROR = 2;
 

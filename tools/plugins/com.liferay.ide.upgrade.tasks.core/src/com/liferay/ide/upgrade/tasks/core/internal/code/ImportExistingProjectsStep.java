@@ -14,20 +14,47 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.code;
 
+import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
+import java.nio.file.Path;
+
+import org.eclipse.core.runtime.IPath;
+
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"id=import_existing_projects", "requirement=required", "order=100", "taskId=setup_liferay_projects",
+		"id=import_existing_projects", "requirement=required", "order=1", "taskId=setup_development_environment",
 		"title=Import Existing Projects"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class ImportExistingProjectsStep extends BaseUpgradeTaskStep {
+
+	@Override
+	public boolean appliesTo(UpgradePlan upgradePlan) {
+		Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
+
+		if (currentProjectLocation == null) {
+			return super.appliesTo(upgradePlan);
+		}
+
+		currentProjectLocation = currentProjectLocation.toAbsolutePath();
+
+		IPath path = new org.eclipse.core.runtime.Path(currentProjectLocation.toString());
+
+		if (SDKUtil.isValidSDKLocation(path)) {
+			return false;
+		}
+
+		return super.appliesTo(upgradePlan);
+	}
+
 }

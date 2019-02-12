@@ -12,22 +12,20 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.workspace.importer;
+package com.liferay.ide.upgrade.tasks.core.internal.code;
 
-import org.eclipse.core.runtime.IPath;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
+import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
-public class LiferayWorkspaceGradleImporter extends LiferayWorkspaceImporter {
-
-	public LiferayWorkspaceGradleImporter(IPath location) {
-		super(location);
-	}
-
-	@Override
-	public String getBuildType() {
-		return "gradle";
-	}
-
+@Component(
+	property = {"categoryId=code", "id=install_prerequisites", "order=1", "title=Install Prerequisites"},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
+)
+public class InstallPrerequisitesTask extends BaseUpgradeTask {
 }

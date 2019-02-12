@@ -18,15 +18,16 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"categoryId=config", "id=analyze_portal_ext_properties", "order=100", "title=Analyze Portal Ext Properties"
+		"categoryId=config", "id=analyze_portal_ext_properties", "order=1", "title=Analyze Portal Ext Properties"
 	},
-	service = UpgradeTask.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )
 public class AnalyzePortalExtPropertiesTask extends BaseUpgradeTask {
 }

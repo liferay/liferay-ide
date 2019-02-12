@@ -18,13 +18,14 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
-	property = {"categoryId=database", "id=prepare_database", "order=100", "title=Prepare Database for Upgrade"},
-	service = UpgradeTask.class
+	property = {"categoryId=database", "id=prepare_database", "order=1", "title=Prepare Database for Upgrade"},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )
 public class PrepareDatabaseTask extends BaseUpgradeTask {
 }

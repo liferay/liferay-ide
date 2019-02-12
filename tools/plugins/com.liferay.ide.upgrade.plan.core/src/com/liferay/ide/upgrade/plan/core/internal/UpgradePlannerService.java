@@ -86,20 +86,14 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 	@Override
 	public UpgradePlan loadUpgradePlan(String name) {
-		return null;
+		return new StandardUpgradePlan(name, null, null, null);
 	}
 
 	@Override
-	public UpgradePlan newUpgradePlan(String name, String currentVersion, String targetVersion,
-			Path sourceCodeLocation) {
+	public UpgradePlan newUpgradePlan(
+		String name, String currentVersion, String targetVersion, Path sourceCodeLocation) {
 
-		UpgradePlan upgradePlan = new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation);
-
-		UpgradeEvent upgradeEvent = new UpgradePlanStartedEvent(upgradePlan);
-
-		dispatch(upgradeEvent);
-
-		return upgradePlan;
+		return new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation);
 	}
 
 	@Override
@@ -124,6 +118,10 @@ public class UpgradePlannerService implements UpgradePlanner {
 	@Override
 	public void startUpgradePlan(UpgradePlan upgradePlan) {
 		_currentUpgradePlan = upgradePlan;
+
+		UpgradeEvent upgradeEvent = new UpgradePlanStartedEvent(upgradePlan);
+
+		dispatch(upgradeEvent);
 	}
 
 	private UpgradePlan _currentUpgradePlan;

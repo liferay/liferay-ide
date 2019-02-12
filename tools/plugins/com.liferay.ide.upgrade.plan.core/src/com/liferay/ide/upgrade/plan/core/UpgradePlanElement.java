@@ -21,19 +21,17 @@ import java.util.Dictionary;
  */
 public interface UpgradePlanElement {
 
+	public default boolean appliesTo(UpgradePlan upgradePlan) {
+		return true;
+	}
+
 	public String getDescription();
 
 	public String getId();
 
 	public String getImagePath();
 
-	public String getTitle();
-
-	default boolean appliesTo(UpgradePlan upgradePlan) {
-		return true;
-	}
-
-	default String getProperty(Dictionary<String, Object> properties, String key) {
+	public default String getProperty(Dictionary<String, Object> properties, String key) {
 		Object value = properties.get(key);
 
 		if (value instanceof String) {
@@ -42,5 +40,7 @@ public interface UpgradePlanElement {
 
 		return null;
 	}
+
+	public String getTitle();
 
 }

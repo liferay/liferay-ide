@@ -14,17 +14,21 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.code;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
-	property = {"categoryId=code", "id=setup_development_tools", "order=100", "title=Setup Development Tools"},
-	service = UpgradeTask.class
+	property = {
+		"id=create_liferay_workspace", "requirement=required", "order=1", "taskId=setup_development_environment",
+		"title=Create Liferay Workspace"
+	},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class SetupDevelopmentToolsTask extends BaseUpgradeTask {
+public class CreateLiferayWorkspaceStep extends BaseUpgradeTaskStep {
 }

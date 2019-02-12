@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.database.PrepareDatabaseTask" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.database.PrepareDatabaseTask" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
 	<property name="categoryId" value="database" />
 	<property name="id" value="prepare_database" />
-	<property name="order" value="100" />
+	<property name="order" value="1" />
 	<property name="title" value="Prepare Database for Upgrade" />
-	<service>
+	<service scope="prototype">
 		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTask" />
 	</service>
 	<implementation class="com.liferay.ide.upgrade.tasks.core.internal.database.PrepareDatabaseTask" />

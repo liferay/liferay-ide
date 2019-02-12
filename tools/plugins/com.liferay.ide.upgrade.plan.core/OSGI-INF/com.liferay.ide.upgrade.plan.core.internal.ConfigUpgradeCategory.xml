@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.plan.core.internal.ConfigUpgradeCategory" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+<scr:component name="com.liferay.ide.upgrade.plan.core.internal.ConfigUpgradeCategory" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
 	<property name="id" value="config" />
 	<property name="imagePath" value="icons/category_config.png" />
-	<property name="order" value="200" />
+	<property name="order" value="2" />
 	<property name="title" value="Configuration Upgrade" />
-	<service>
+	<service scope="prototype">
 		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory" />
 	</service>
 	<implementation class="com.liferay.ide.upgrade.plan.core.internal.ConfigUpgradeCategory" />

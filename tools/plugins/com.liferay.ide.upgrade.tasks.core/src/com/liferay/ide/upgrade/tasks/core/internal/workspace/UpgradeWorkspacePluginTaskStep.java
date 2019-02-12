@@ -18,16 +18,17 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
  */
 @Component(
 	property = {
-		"id=upgrade_workspace_plugin", "requirement=optional", "order=400", "taskId=migrate_workspace",
+		"id=upgrade_workspace_plugin", "requirement=optional", "order=4", "taskId=migrate_workspace",
 		"title=Upgrade Workspace Plugin"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class UpgradeWorkspacePluginTaskStep extends BaseUpgradeTaskStep {
 }

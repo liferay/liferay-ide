@@ -18,16 +18,17 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
  */
 @Component(
 	property = {
-		"id=auto_correct_problems", "imagePath=icons/auto_correct_problems.png", "requirement=recommended", "order=200",
+		"id=auto_correct_problems", "imagePath=icons/auto_correct_problems.png", "requirement=recommended", "order=2",
 		"taskId=find_upgrade_problems", "title=Auto Correct Upgrade Problems"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class AutoCorrectUpgradeProblemsStep extends BaseUpgradeTaskStep {
 }

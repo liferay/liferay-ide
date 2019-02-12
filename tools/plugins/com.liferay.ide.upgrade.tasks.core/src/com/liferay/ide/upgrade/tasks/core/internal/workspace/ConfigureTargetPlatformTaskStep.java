@@ -18,16 +18,17 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
  */
 @Component(
 	property = {
-		"id=configure_target_platform", "requirement=optional", "order=300", "taskId=migrate_workspace",
+		"id=configure_target_platform", "requirement=optional", "order=3", "taskId=migrate_workspace",
 		"title=Configure Target Platform"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class ConfigureTargetPlatformTaskStep extends BaseUpgradeTaskStep {
 }

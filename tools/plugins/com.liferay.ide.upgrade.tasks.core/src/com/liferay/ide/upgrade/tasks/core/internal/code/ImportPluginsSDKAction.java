@@ -26,13 +26,14 @@ import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
-	property = {"id=import_plugins_sdk", "order=100", "stepId=import_existing_projects", "title=Import Plugins SDK"},
-	service = UpgradeTaskStepAction.class
+	property = {"id=import_plugins_sdk", "order=1", "stepId=import_existing_projects", "title=Import Plugins SDK"},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class ImportPluginsSDKAction extends BaseUpgradeTaskStepAction {
 

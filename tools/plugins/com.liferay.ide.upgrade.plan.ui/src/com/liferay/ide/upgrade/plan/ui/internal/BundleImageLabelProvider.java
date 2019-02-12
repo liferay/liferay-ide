@@ -83,11 +83,13 @@ public class BundleImageLabelProvider extends LabelProvider {
 	}
 
 	private Image _getImage(URL url) {
-		return _images.computeIfAbsent(url, u -> {
-			ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
+		return _images.computeIfAbsent(
+			url,
+			u -> {
+				ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(url);
 
-			return imageDescriptor.createImage();
-		});
+				return imageDescriptor.createImage();
+			});
 	}
 
 	private final Function<Object, Pair<Bundle, String>> _imagePathMapper;

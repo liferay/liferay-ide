@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.problems.core.internal.tasks.RemovePreviousResultTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.tasks.RemovePreviousResultTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
 	<property name="id" value="remove_previous_result" />
 	<property name="requirement" value="recommended" />
-	<property name="order" value="200" />
+	<property name="order" value="2" />
 	<property name="taskId" value="find_upgrade_problems" />
 	<property name="title" value="Remove Previous Result" />
-	<service>
+	<service scope="prototype">
 		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep" />
 	</service>
 	<implementation class="com.liferay.ide.upgrade.problems.core.internal.tasks.RemovePreviousResultTaskStep" />

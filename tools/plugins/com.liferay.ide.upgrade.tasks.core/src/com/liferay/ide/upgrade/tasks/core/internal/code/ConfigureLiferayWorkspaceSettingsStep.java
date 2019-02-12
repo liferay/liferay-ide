@@ -18,16 +18,17 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"id=configure_liferay_workspace_settings", "requirement=required", "order=300", "taskId=setup_liferay_projects",
-		"title=Configure Liferay Workspace Settings"
+		"id=configure_liferay_workspace_settings", "requirement=required", "order=3",
+		"taskId=setup_development_environment", "title=Configure Liferay Workspace Settings"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class ConfigureLiferayWorkspaceSettingsStep extends BaseUpgradeTaskStep {
 }

@@ -18,16 +18,17 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"id=ensure_compatible_jdk", "requirement=required", "order=100", "taskId=setup_development_tools",
+		"id=ensure_compatible_jdk", "requirement=required", "order=1", "taskId=install_prerequisites",
 		"title=Ensure Compatible JDK"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class EnsureCompatibleJDKStep extends BaseUpgradeTaskStep {
 }

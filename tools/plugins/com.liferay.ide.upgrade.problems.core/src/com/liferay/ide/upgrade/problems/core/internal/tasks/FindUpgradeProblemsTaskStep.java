@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
@@ -22,7 +23,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepDoneEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
 import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
-import com.liferay.ide.upgrade.tasks.core.JavaProjectsSelectionTaskStep;
 
 import java.io.File;
 
@@ -43,20 +43,20 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
  */
 @Component(
 	property = {
-		"id=find_upgrade_problems", "requirement=recommended", "order=200", "taskId=find_upgrade_problems",
+		"id=find_upgrade_problems", "requirement=recommended", "order=2", "taskId=find_upgrade_problems",
 		"title=Find Upgrade Problems"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class FindUpgradeProblemsTaskStep extends JavaProjectsSelectionTaskStep implements UpgradeListener {
+public class FindUpgradeProblemsTaskStep extends BaseUpgradeTaskStep implements UpgradeListener {
 
-	@Override
 	public IStatus execute(IProject[] projects, IProgressMonitor progressMonitor) {
 
 		// TODO need to run finding upgrade changes by Upgrade Plan
@@ -91,23 +91,6 @@ public class FindUpgradeProblemsTaskStep extends JavaProjectsSelectionTaskStep i
 							searchFile, versions, monitor);
 
 						System.out.println(fileUpgradeProblems.size());
-
-//						if (ListUtil.isNotEmpty(problems)) {
-//							FileProblems[] fileProblems = _getFileProblems(problems);
-//
-//							ProjectProblems projectProblems = new ProjectProblems();
-
-//
-//							projectProblems.setProjectName(project.getName());
-//							projectProblems.setFileProblems(fileProblems);
-//
-//							probjectProblemsList.add(projectProblems);
-//
-//							MigrationProblemsContainer container = new MigrationProblemsContainer();
-
-//
-//							container.setProblemsArray(probjectProblemsList.toArray(new ProjectProblems[0]));
-//						}
 					}
 				);
 
@@ -130,31 +113,7 @@ public class FindUpgradeProblemsTaskStep extends JavaProjectsSelectionTaskStep i
 
 	@Override
 	public void onUpgradeEvent(UpgradeEvent upgradeEvent) {
-
-		// TODO Auto-generated method stub
-
 	}
-
-//	private FileProblems[] _getFileProblems(List<UpgradeProblem> problems) {
-//		Map<File, FileProblems> fileProblemsMap = new HashMap<>();
-//
-//		for (UpgradeProblem problem : problems) {
-//			FileProblems fileProblem = fileProblemsMap.get(problem.getFile());
-//
-//			if (fileProblem == null) {
-//				fileProblem = new FileProblems();
-//			}
-//
-//			fileProblem.addProblem(problem);
-//			fileProblem.setFile(problem.getFile());
-//
-//			fileProblemsMap.put(problem.getFile(), fileProblem);
-//		}
-//
-//		Collection<FileProblems> values = fileProblemsMap.values();
-//
-//		return values.toArray(new FileProblems[0]);
-//	}
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;

@@ -20,9 +20,9 @@ import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
-import com.liferay.ide.upgrade.tasks.core.WorkspaceTaskStep;
 
 import java.io.IOException;
 
@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
@@ -47,11 +48,10 @@ import org.osgi.service.component.annotations.Component;
 		"id=configure_build_properties", "requirement=required", "order=0", "taskId=migrate_plugins_sdk",
 		"title=Configure Build Properties"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class ConfigureBuildPropertiesTaskStep extends WorkspaceTaskStep {
+public class ConfigureBuildPropertiesTaskStep extends BaseUpgradeTaskStep {
 
-	@Override
 	public IStatus execute(IProject project, IProgressMonitor progressMonitor) {
 		IPath projectLocation = project.getLocation();
 

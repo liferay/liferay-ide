@@ -18,13 +18,14 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
  */
 @Component(
-	property = {"categoryId=code", "id=find_upgrade_problems", "order=500", "title=Find Upgrade Problems"},
-	service = UpgradeTask.class
+	property = {"categoryId=code", "id=find_upgrade_problems", "order=5", "title=Find Upgrade Problems"},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )
 public class FindUpgradeProblemsTask extends BaseUpgradeTask {
 }

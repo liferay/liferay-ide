@@ -18,16 +18,17 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"id=ensure_proper_indexes", "requirement=recommended", "order=200", "taskId=prepare_database",
+		"id=ensure_proper_indexes", "requirement=recommended", "order=2", "taskId=prepare_database",
 		"title=Ensure Proper Indexes"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class EnsureProperIndexesTaskStep extends BaseUpgradeTaskStep {
 }

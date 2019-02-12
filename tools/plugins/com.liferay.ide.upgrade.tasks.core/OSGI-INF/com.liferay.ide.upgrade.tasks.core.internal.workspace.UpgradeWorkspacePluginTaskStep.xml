@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.workspace.UpgradeWorkspacePluginTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.workspace.UpgradeWorkspacePluginTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
 	<property name="id" value="upgrade_workspace_plugin" />
 	<property name="requirement" value="optional" />
-	<property name="order" value="400" />
+	<property name="order" value="4" />
 	<property name="taskId" value="migrate_workspace" />
 	<property name="title" value="Upgrade Workspace Plugin" />
-	<service>
+	<service scope="prototype">
 		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep" />
 	</service>
 	<implementation class="com.liferay.ide.upgrade.tasks.core.internal.workspace.UpgradeWorkspacePluginTaskStep" />

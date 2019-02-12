@@ -113,6 +113,11 @@ public class StandardUpgradePlan implements UpgradePlan {
 		return Collections.unmodifiableList(_upgradeTasks);
 	}
 
+	@Override
+	public void setTargetProjectLocation(Path path) {
+		_targetProjectLocation = path;
+	}
+
 	private final Path _currentProjectLocation;
 	private final String _currentVersion;
 	private final String _name;

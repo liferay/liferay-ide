@@ -23,6 +23,6 @@ import org.eclipse.core.runtime.IStatus;
  */
 public interface ProjectImporter {
 
-	IStatus importProjects(Path rootProjectPath);
+	public IStatus importProjects(Path rootProjectPath);
 
 }

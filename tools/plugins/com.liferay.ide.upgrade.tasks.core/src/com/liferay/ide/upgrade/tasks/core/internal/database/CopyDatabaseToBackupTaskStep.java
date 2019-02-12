@@ -18,17 +18,18 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"id=copy_database_to_backup", "requirement=required", "order=100", "taskId=prepare_database",
+		"id=copy_database_to_backup", "requirement=required", "order=1", "taskId=prepare_database",
 		"title=Copy Database to Backup",
 		"url=https://dev.liferay.com/discover/deployment/-/knowledge_base/7-1/backing-up-a-liferay-installation"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class CopyDatabaseToBackupTaskStep extends BaseUpgradeTaskStep {
 }

@@ -18,16 +18,17 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"id=set_permissions_algorithm", "requirement=required", "order=500", "taskId=prepare_database",
+		"id=set_permissions_algorithm", "requirement=required", "order=5", "taskId=prepare_database",
 		"title=Update Permissions Algorithm"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class SetPermissionsAlgorithm extends BaseUpgradeTaskStep {
 }

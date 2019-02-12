@@ -16,9 +16,9 @@ package com.liferay.ide.upgrade.tasks.core.internal.workspace;
 
 import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.jobs.InitBundleJob;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
-import com.liferay.ide.upgrade.tasks.core.WorkspaceTaskStep;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,19 +26,19 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
  */
 @Component(
 	property = {
-		"id=init_bundle", "requirement=recommended", "order=200", "taskId=migrate_workspace", "title=Init Bundle"
+		"id=init_bundle", "requirement=recommended", "order=2", "taskId=migrate_workspace", "title=Init Bundle"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class InitBundleTaskStep extends WorkspaceTaskStep {
+public class InitBundleTaskStep extends BaseUpgradeTaskStep {
 
-	@Override
 	public IStatus execute(IProject project, IProgressMonitor progressMonitor) {
 		InitBundleJob job = new InitBundleJob(project, project.getName(), WorkspaceConstants.BUNDLE_URL_CE_7_1);
 

@@ -18,13 +18,14 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
  */
 @Component(
-	property = {"categoryId=code", "id=migrate_workspace", "order=300", "title=Migrate Liferay Workspace"},
-	service = UpgradeTask.class
+	property = {"categoryId=code", "id=migrate_workspace", "order=3", "title=Migrate Liferay Workspace"},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )
 public class MigrateWorkspaceTask extends BaseUpgradeTask {
 }

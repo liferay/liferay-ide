@@ -75,8 +75,8 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 
 	@Override
 	public boolean provides(Object element) {
-		if ((element instanceof ProjectProblemsContainer) || (element instanceof FileProblemsContainer) ||
-			(element instanceof MigrationProblemsContainer)) {
+		if (element instanceof FileProblemsContainer || element instanceof MigrationProblemsContainer ||
+			element instanceof ProjectProblemsContainer) {
 
 			return true;
 		}

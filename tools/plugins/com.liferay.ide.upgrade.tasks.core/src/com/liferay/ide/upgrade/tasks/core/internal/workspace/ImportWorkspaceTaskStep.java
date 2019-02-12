@@ -14,26 +14,16 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.workspace;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
 import com.liferay.ide.upgrade.tasks.core.FolderSelectionTaskStep;
-import com.liferay.ide.upgrade.tasks.core.internal.workspace.importer.ImportedProjectImporter;
-import com.liferay.ide.upgrade.tasks.core.internal.workspace.importer.Importer;
-import com.liferay.ide.upgrade.tasks.core.internal.workspace.importer.LiferayWorkspaceGradleImporter;
-import com.liferay.ide.upgrade.tasks.core.internal.workspace.importer.LiferayWorkspaceGradleWithSDKImporter;
+import com.liferay.ide.upgrade.tasks.core.ProjectImporter;
 
 import java.io.File;
 import java.io.IOException;
 
-import java.util.stream.Stream;
+import java.nio.file.Paths;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -42,16 +32,18 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
  */
 @Component(
 	property = {
-		"id=import_liferay_workspace", "requirement=required", "order=100", "taskId=migrate_workspace",
+		"id=import_liferay_workspace", "requirement=required", "order=1", "taskId=migrate_workspace",
 		"title=Import Liferay Workspace"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class ImportWorkspaceTaskStep extends FolderSelectionTaskStep {
 
@@ -64,24 +56,7 @@ public class ImportWorkspaceTaskStep extends FolderSelectionTaskStep {
 				try {
 					IPath location = new Path(folder.getCanonicalPath());
 
-					Importer importer = null;
-
-					if (_isAlreadyImported(location)) {
-						importer = new ImportedProjectImporter(location);
-					}
-					else if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(location)) {
-						importer = new LiferayWorkspaceGradleImporter(location);
-					}
-					else if (SDKUtil.isValidSDKLocation(location)) {
-						importer = new LiferayWorkspaceGradleWithSDKImporter(location);
-					}
-					else {
-						return Status.CANCEL_STATUS;
-					}
-
-					importer.doBefore(monitor);
-
-					importer.doImport(monitor);
+					_projectImporter.importProjects(Paths.get(location.toOSString()));
 				}
 				catch (IOException ioe) {
 				}
@@ -101,22 +76,7 @@ public class ImportWorkspaceTaskStep extends FolderSelectionTaskStep {
 		return UpgradeTaskStepStatus.INCOMPLETE;
 	}
 
-	private boolean _isAlreadyImported(IPath path) {
-		IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
-
-		IContainer[] containers = workspaceRoot.findContainersForLocationURI(FileUtil.toURI(path));
-
-		long projectCount = Stream.of(
-			containers
-		).filter(
-			container -> container instanceof IProject
-		).count();
-
-		if (projectCount > 0) {
-			return true;
-		}
-
-		return false;
-	}
+	@Reference
+	private ProjectImporter _projectImporter;
 
 }

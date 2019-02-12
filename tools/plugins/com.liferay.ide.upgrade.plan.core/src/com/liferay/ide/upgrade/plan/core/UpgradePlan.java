@@ -35,4 +35,6 @@ public interface UpgradePlan {
 
 	public List<UpgradeTask> getTasks();
 
+	public void setTargetProjectLocation(Path path);
+
 }

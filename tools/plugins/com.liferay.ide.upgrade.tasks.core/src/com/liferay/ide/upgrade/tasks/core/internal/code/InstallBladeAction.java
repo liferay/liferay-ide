@@ -21,13 +21,14 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
  */
 @Component(
-	property = {"id=install_blade", "order=200", "stepId=install_blade", "title=Install blade"},
-	service = UpgradeTaskStepAction.class
+	property = {"id=install_blade", "order=2", "stepId=install_blade", "title=Install blade"},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class InstallBladeAction extends BaseUpgradeTaskStepAction {
 

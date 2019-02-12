@@ -21,13 +21,13 @@ package com.liferay.ide.upgrade.plan.core;
 public class UpgradeTaskStepDoneEvent implements UpgradeEvent {
 
 	public UpgradeTaskStepDoneEvent(UpgradeTaskStep upgradeTaskStep) {
-		_ugradeTaskStep = upgradeTaskStep;
+		_upgradeTaskStep = upgradeTaskStep;
 	}
 
 	public UpgradeTaskStep getUgradeTaskStep() {
-		return _ugradeTaskStep;
+		return _upgradeTaskStep;
 	}
 
-	private UpgradeTaskStep _ugradeTaskStep;
+	private UpgradeTaskStep _upgradeTaskStep;
 
 }

@@ -27,6 +27,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -48,15 +49,15 @@ public class ServicesLookup {
 					Object srLeftOrder = srLeftProperties.get("order");
 
 					try {
-						int srLeftInt = Integer.parseInt(srLeftOrder.toString());
+						double srLeftDouble = Double.parseDouble(srLeftOrder.toString());
 
 						Dictionary<String, Object> srRightProperties = srRight.getProperties();
 
 						Object srRightOrder = srRightProperties.get("order");
 
-						int srRightInt = Integer.parseInt(srRightOrder.toString());
+						double srRightDouble = Double.parseDouble(srRightOrder.toString());
 
-						return Integer.compare(srLeftInt, srRightInt);
+						return Double.compare(srLeftDouble, srRightDouble);
 					}
 					catch (NumberFormatException nfe) {
 					}
@@ -70,7 +71,9 @@ public class ServicesLookup {
 		Stream<ServiceReference<T>> stream = serviceReferenceList.stream();
 
 		return stream.map(
-			bundleContext::getService
+			bundleContext::getServiceObjects
+		).map(
+			ServiceObjects::getService
 		).collect(
 			Collectors.toList()
 		);
@@ -85,7 +88,7 @@ public class ServicesLookup {
 			Collection<ServiceReference<T>> serviceReferences = bundleContext.getServiceReferences(
 				serviceClass, filter);
 
-			if (serviceReferences.size() > 0) {
+			if (!serviceReferences.isEmpty()) {
 				Iterator<ServiceReference<T>> iterator = serviceReferences.iterator();
 
 				ServiceReference<T> serviceReference = iterator.next();

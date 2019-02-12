@@ -19,16 +19,17 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
  */
 @Component(
 	property = {
-		"id=remove_previous_result", "requirement=recommended", "order=200", "taskId=find_upgrade_problems",
+		"id=remove_previous_result", "requirement=recommended", "order=2", "taskId=find_upgrade_problems",
 		"title=Remove Previous Result"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class RemovePreviousResultTaskStep extends BaseUpgradeTaskStep {
 

@@ -18,6 +18,7 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
@@ -25,9 +26,9 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	property = {
 		"description=This is some description text for blade cli", "id=install_blade", "requirement=recommended",
-		"order=200", "taskId=setup_development_tools", "title=Install Blade CLI"
+		"order=2", "taskId=install_prerequisites", "title=Install Blade CLI"
 	},
-	service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class InstallBladeStep extends BaseUpgradeTaskStep {
 }

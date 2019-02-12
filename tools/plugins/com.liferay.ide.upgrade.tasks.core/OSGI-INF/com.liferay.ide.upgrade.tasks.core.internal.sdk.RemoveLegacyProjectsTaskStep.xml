@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.sdk.RemoveLegacyProjectsTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.sdk.RemoveLegacyProjectsTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
 	<property name="id" value="remove_legacy_projects" />
 	<property name="requirement" value="recommended" />
-	<property name="order" value="100" />
+	<property name="order" value="1" />
 	<property name="taskId" value="migrate_plugins_sdk" />
 	<property name="title" value="Remove Legacy Projects" />
-	<service>
+	<service scope="prototype">
 		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep" />
 	</service>
 	<implementation class="com.liferay.ide.upgrade.tasks.core.internal.sdk.RemoveLegacyProjectsTaskStep" />
