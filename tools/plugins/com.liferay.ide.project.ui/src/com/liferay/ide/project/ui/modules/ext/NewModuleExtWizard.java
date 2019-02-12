@@ -36,9 +36,9 @@ public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> {
 	protected void performPostFinish() {
 		super.performPostFinish();
 
-		final NewModuleExtOp op = element().nearest(NewModuleExtOp.class);
+		final NewModuleExtOp newModuleExtOp = element().nearest(NewModuleExtOp.class);
 
-		final IProject project = CoreUtil.getProject(SapphireUtil.getContent(op.getProjectName()));
+		final IProject project = CoreUtil.getProject(SapphireUtil.getContent(newModuleExtOp.getProjectName()));
 
 		try {
 			addToWorkingSets(project);

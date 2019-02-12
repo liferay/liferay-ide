@@ -115,34 +115,35 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 	@Override
 	public List<Artifact> getTargetPlatformArtifacts() {
 		if ((getTargetPlatformVersion() != null) && _targetPlatformArtifacts.isEmpty()) {
-			GradleConnector connector = GradleConnector.newConnector();
+			GradleConnector gradleConnector = GradleConnector.newConnector();
 
-			connector.forProjectDirectory(FileUtil.getFile(getProject()));
+			gradleConnector.forProjectDirectory(FileUtil.getFile(getProject()));
 
-			ProjectConnection connection = connector.connect();
+			ProjectConnection projectConnection = gradleConnector.connect();
 
 			try {
-				EclipseProject project = connection.getModel(EclipseProject.class);
+				EclipseProject eclipseProject = projectConnection.getModel(EclipseProject.class);
 
-				DomainObjectSet<? extends EclipseExternalDependency> dependencies = project.getClasspath();
+				DomainObjectSet<? extends EclipseExternalDependency> eclipseExternalDependencies =
+					eclipseProject.getClasspath();
 
-				_targetPlatformArtifacts = new ArrayList<>(dependencies.size());
+				_targetPlatformArtifacts = new ArrayList<>(eclipseExternalDependencies.size());
 
-				for (EclipseExternalDependency dependency : dependencies) {
-					GradleModuleVersion moduleVersion = dependency.getGradleModuleVersion();
+				for (EclipseExternalDependency eclipseExternalDependency : eclipseExternalDependencies) {
+					GradleModuleVersion gradleModuleVersion = eclipseExternalDependency.getGradleModuleVersion();
 
-					if (moduleVersion != null) {
+					if (gradleModuleVersion != null) {
 						_targetPlatformArtifacts.add(
 							new Artifact(
-								moduleVersion.getGroup(), moduleVersion.getName(), moduleVersion.getVersion(),
-								dependency.getSource()));
+								gradleModuleVersion.getGroup(), gradleModuleVersion.getName(),
+								gradleModuleVersion.getVersion(), eclipseExternalDependency.getSource()));
 					}
 				}
 			}
 			catch (GradleConnectionException gce) {
 			}
 			finally {
-				connection.close();
+				projectConnection.close();
 			}
 		}
 

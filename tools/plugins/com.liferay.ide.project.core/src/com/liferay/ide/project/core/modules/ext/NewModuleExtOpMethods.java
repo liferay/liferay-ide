@@ -33,19 +33,20 @@ import org.eclipse.sapphire.platform.StatusBridge;
  */
 public class NewModuleExtOpMethods {
 
-	public static final Status execute(NewModuleExtOp op, ProgressMonitor pm) {
-		IProgressMonitor monitor = ProgressMonitorBridge.create(pm);
+	public static final Status execute(NewModuleExtOp newModuleExtOp, ProgressMonitor pm) {
+		IProgressMonitor progressMonitor = ProgressMonitorBridge.create(pm);
 
-		monitor.beginTask("Creating Liferay module ext project template files", 100);
+		progressMonitor.beginTask("Creating Liferay module ext project template files", 100);
 
 		Status retval = null;
 
 		Throwable errorStack = null;
 
 		try {
-			NewLiferayProjectProvider<BaseModuleOp> projectProvider = SapphireUtil.getContent(op.getProjectProvider());
+			NewLiferayProjectProvider<BaseModuleOp> newLiferayProjectProvider = SapphireUtil.getContent(
+				newModuleExtOp.getProjectProvider());
 
-			IStatus status = projectProvider.createNewProject(op, monitor);
+			IStatus status = newLiferayProjectProvider.createNewProject(newModuleExtOp, progressMonitor);
 
 			retval = StatusBridge.create(status);
 

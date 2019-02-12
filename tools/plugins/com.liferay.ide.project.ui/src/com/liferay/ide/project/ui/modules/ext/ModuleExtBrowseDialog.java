@@ -58,10 +58,10 @@ public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog {
 
 		_property = property;
 
-		ValueProperty definition = _property.definition();
+		ValueProperty definitionValueProperty = _property.definition();
 
 		setHelpAvailable(false);
-		setTitle(definition.getLabel(false, CapitalizationType.TITLE_STYLE, false));
+		setTitle(definitionValueProperty.getLabel(false, CapitalizationType.TITLE_STYLE, false));
 	}
 
 	@Override
@@ -81,21 +81,23 @@ public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite contents = (Composite)super.createDialogArea(parent);
+		Composite composite = (Composite)super.createDialogArea(parent);
 
-		_customLabel = _createCustomMessage(contents);
+		_customLabel = _createCustomMessage(composite);
 
-		createMessageArea(contents).setLayoutData(new GridData(0, 0));
+		Label label = createMessageArea(composite);
 
-		_filterText = createFilterText(contents);
-		_createRefreshButtonArea(contents);
-		createFilteredList(contents);
+		label.setLayoutData(new GridData(0, 0));
+
+		_filterText = createFilterText(composite);
+		_createRefreshButtonArea(composite);
+		createFilteredList(composite);
 
 		setSelection(getInitialElementSelections().toArray());
 
-		_refreshAction(contents);
+		_refreshAction(composite);
 
-		return contents;
+		return composite;
 	}
 
 	private Label _createCustomMessage(Composite composite) {
@@ -107,24 +109,25 @@ public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog {
 		return label;
 	}
 
-	private Button _createRefreshButtonArea(Composite composite) {
-		Composite container = new Composite(composite, SWT.NONE);
-		GridData data = new GridData();
+	private Button _createRefreshButtonArea(Composite parentComposite) {
+		Composite composite = new Composite(parentComposite, SWT.NONE);
+		GridData gridData = new GridData();
 
-		data.horizontalAlignment = GridData.FILL;
-		data.verticalAlignment = GridData.BEGINNING;
-		container.setLayoutData(data);
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.verticalAlignment = GridData.BEGINNING;
+		composite.setLayoutData(gridData);
 
-		container.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(5, false));
 
-		_filterText.setParent(container);
+		_filterText.setParent(composite);
 		_filterText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 4, 1));
 
-		Button refreshButon = new Button(container, SWT.PUSH);
+		Button refreshButon = new Button(composite, SWT.PUSH);
 
 		refreshButon.setText("Refresh");
 		refreshButon.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		refreshButon.addSelectionListener(SelectionListener.widgetSelectedAdapter(event -> _refreshAction(composite)));
+		refreshButon.addSelectionListener(
+			SelectionListener.widgetSelectedAdapter(event -> _refreshAction(parentComposite)));
 
 		return refreshButon;
 	}
@@ -146,9 +149,9 @@ public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog {
 	}
 
 	private void _refreshAction(Composite composite) {
-		NewModuleExtOp op = _property.nearest(NewModuleExtOp.class);
+		NewModuleExtOp newModuleExtOp = _property.nearest(NewModuleExtOp.class);
 
-		if (SapphireUtil.getContent(op.getTargetPlatformVersion()) == null) {
+		if (SapphireUtil.getContent(newModuleExtOp.getTargetPlatformVersion()) == null) {
 			_customLabel.setText("No Target Plarform configuration detected in gradle.properties");
 
 			return;

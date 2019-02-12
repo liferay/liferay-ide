@@ -36,22 +36,22 @@ public final class ModuleExtArtifactsBrowseActionHandler extends BrowseActionHan
 	}
 
 	@Override
-	protected String browse(final Presentation context) {
+	protected String browse(final Presentation presentation) {
 		Value<?> property = property();
 
-		NewModuleExtOp op = property.nearest(NewModuleExtOp.class);
+		NewModuleExtOp newModuleExtOp = property.nearest(NewModuleExtOp.class);
 
-		final ModuleExtBrowseDialog dialog = new ModuleExtBrowseDialog(
-			((FormComponentPresentation)context).shell(), property);
+		final ModuleExtBrowseDialog moduleExtBrowseDialog = new ModuleExtBrowseDialog(
+			((FormComponentPresentation)presentation).shell(), property);
 
-		dialog.open();
+		moduleExtBrowseDialog.open();
 
-		final Object[] result = dialog.getResult();
+		final Object[] result = moduleExtBrowseDialog.getResult();
 
 		if ((result != null) && (result.length == 1)) {
 			Artifact artifact = (Artifact)result[0];
 
-			op.setOriginalModuleVersion(new Version(artifact.getVersion()));
+			newModuleExtOp.setOriginalModuleVersion(new Version(artifact.getVersion()));
 
 			return artifact.getArtifact();
 		}
