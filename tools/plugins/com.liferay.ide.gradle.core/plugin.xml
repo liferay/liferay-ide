@@ -13,6 +13,14 @@
 		>
 		</liferayProjectProvider>
 		<liferayProjectProvider
+			class="com.liferay.ide.gradle.core.GradleModuleExtProjectProvider"
+			displayName="Gradle"
+			id="com.liferay.ide.gradle.core.gradleModuleExtProjectProvider"
+			projectType="modules-ext"
+			shortName="gradle-module-ext"
+		>
+		</liferayProjectProvider>
+		<liferayProjectProvider
 			class="com.liferay.ide.gradle.core.GradleModuleFragmentProjectProvider"
 			displayName="Gradle"
 			id="com.liferay.ide.gradle.core.gradleModuleFragmentProjectProvider"

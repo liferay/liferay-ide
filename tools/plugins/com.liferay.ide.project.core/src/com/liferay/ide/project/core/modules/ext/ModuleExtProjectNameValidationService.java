@@ -12,31 +12,25 @@
  * details.
  */
 
-package com.liferay.ide.core;
+package com.liferay.ide.project.core.modules.ext;
 
-import java.util.List;
-import java.util.Set;
+import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.sapphire.modeling.Status;
 
 /**
- * @author Gregory Amerson
- * @author Simon Jiang
+ * @author Charles Wu
  */
-public interface IWorkspaceProject extends ILiferayProject {
+public class ModuleExtProjectNameValidationService extends ModuleProjectNameValidationService {
 
-	public Set<IProject> getChildProjects();
+	@Override
+	protected Status compute() {
+		if (LiferayWorkspaceUtil.getGradleWorkspaceProject() == null) {
+			return Status.createErrorStatus("We recommend Liferay Gradle workspace to develop module ext project!");
+		}
 
-	public String getLiferayHome();
-
-	public List<Artifact> getTargetPlatformArtifacts();
-
-	public String getTargetPlatformVersion();
-
-	public boolean isWatchable();
-
-	public void watch(Set<IProject> childProjects);
-
-	public Set<IProject> watching();
+		return super.compute();
+	}
 
 }

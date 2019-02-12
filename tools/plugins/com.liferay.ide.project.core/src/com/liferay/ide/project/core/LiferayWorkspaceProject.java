@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
@@ -110,7 +111,7 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 	}
 
 	@Override
-	public List<IPath> getTargetPlatformArtifacts() {
+	public List<Artifact> getTargetPlatformArtifacts() {
 		return Collections.emptyList();
 	}
 

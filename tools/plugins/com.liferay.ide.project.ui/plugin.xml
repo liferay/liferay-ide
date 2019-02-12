@@ -46,6 +46,30 @@
 			>
 			</selection>
 		</wizard>
+
+		<wizard
+			category="com.liferay.ide.newWizards"
+			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
+			icon="icons/n16/bundle_new.png"
+			id="com.liferay.ide.project.ui.newModuleExtWizard"
+			name="Liferay Module Ext Project"
+			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
+			project="true"
+		>
+			<class class="com.liferay.ide.project.ui.modules.ext.NewModuleExtWizard">
+				<parameter name="liferay_project" value="true" />
+				<parameter name="menuIndex" value="1" />
+			</class>
+
+			<description>
+			%new.project.wizard.description
+			</description>
+			<selection
+				class="org.eclipse.core.resources.IResource"
+			>
+			</selection>
+		</wizard>
+
 		<wizard
 			category="com.liferay.ide.newWizards"
 			icon="icons/e16/bundle.png"
@@ -1723,6 +1747,30 @@
 						</and>
 					</or></enablement>
 			</commonWizard>
+
+			<commonWizard
+				type="new"
+				wizardId="com.liferay.ide.project.ui.newModuleExtWizard"
+			>
+				<enablement>
+					<or>
+						<instanceof
+							value="org.eclipse.core.resources.IResource"
+						>
+						</instanceof>
+						<and>
+							<instanceof
+								value="java.util.Collection"
+							>
+							</instanceof>
+							<count
+								value="0"
+							>
+							</count>
+						</and>
+					</or></enablement>
+			</commonWizard>
+
 			<commonWizard
 				type="new"
 				wizardId="com.liferay.ide.project.ui.newJsfModuleProjectWizard"

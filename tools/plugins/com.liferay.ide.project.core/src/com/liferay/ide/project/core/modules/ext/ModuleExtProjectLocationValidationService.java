@@ -12,31 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.core;
+package com.liferay.ide.project.core.modules.ext;
 
-import java.util.List;
-import java.util.Set;
-
-import org.eclipse.core.resources.IProject;
+import com.liferay.ide.project.core.modules.AbstractProjectLocationValidationService;
 
 /**
- * @author Gregory Amerson
- * @author Simon Jiang
+ * @author Charles Wu
  */
-public interface IWorkspaceProject extends ILiferayProject {
+public class ModuleExtProjectLocationValidationService
+	extends AbstractProjectLocationValidationService<NewModuleExtOp> {
 
-	public Set<IProject> getChildProjects();
-
-	public String getLiferayHome();
-
-	public List<Artifact> getTargetPlatformArtifacts();
-
-	public String getTargetPlatformVersion();
-
-	public boolean isWatchable();
-
-	public void watch(Set<IProject> childProjects);
-
-	public Set<IProject> watching();
+	@Override
+	protected NewModuleExtOp op() {
+		return context(NewModuleExtOp.class);
+	}
 
 }
