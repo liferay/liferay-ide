@@ -63,10 +63,10 @@ import org.eclipse.jdt.ui.text.java.IQuickFixProcessor;
 public class LiferayGradleDependencyQuickFix implements IQuickFixProcessor {
 
 	@Override
-	public IJavaCompletionProposal[] getCorrections(IInvocationContext context, IProblemLocation[] locations)
+	public IJavaCompletionProposal[] getCorrections(IInvocationContext context, IProblemLocation[] problemLocations)
 		throws CoreException {
 
-		if (ListUtil.isEmpty(locations) ||
+		if (ListUtil.isEmpty(problemLocations) ||
 			!(LiferayWorkspaceUtil.getLiferayWorkspaceProject() instanceof LiferayGradleWorkspaceProject)) {
 
 			return new IJavaCompletionProposal[0];
@@ -74,7 +74,7 @@ public class LiferayGradleDependencyQuickFix implements IQuickFixProcessor {
 
 		List<IJavaCompletionProposal> resultingCollections = new ArrayList<>();
 
-		for (IProblemLocation problemLocation : locations) {
+		for (IProblemLocation problemLocation : problemLocations) {
 			try {
 				Set<IJavaCompletionProposal> newProposals = _process(context, problemLocation);
 
@@ -91,7 +91,7 @@ public class LiferayGradleDependencyQuickFix implements IQuickFixProcessor {
 	}
 
 	@Override
-	public boolean hasCorrections(ICompilationUnit unit, int problemId) {
+	public boolean hasCorrections(ICompilationUnit compilationUit, int problemId) {
 		switch (problemId) {
 			case IProblem.ImportNotFound:
 			case IProblem.UndefinedType:
@@ -104,9 +104,9 @@ public class LiferayGradleDependencyQuickFix implements IQuickFixProcessor {
 		}
 	}
 
-	private GradleDependency _parseGradleDependency(IClasspathEntry entry) {
+	private GradleDependency _parseGradleDependency(IClasspathEntry classpathEntry) {
 		try {
-			IPath path = entry.getPath();
+			IPath path = classpathEntry.getPath();
 
 			String[] items = path.segments();
 
@@ -119,24 +119,24 @@ public class LiferayGradleDependencyQuickFix implements IQuickFixProcessor {
 		}
 	}
 
-	private Set<IJavaCompletionProposal> _process(IInvocationContext context, IProblemLocation problem)
+	private Set<IJavaCompletionProposal> _process(IInvocationContext context, IProblemLocation problemLocation)
 		throws JavaModelException {
 
-		int id = problem.getProblemId();
+		int id = problemLocation.getProblemId();
 
 		if (id == 0) {
 			return Collections.emptySet();
 		}
 
-		ASTNode selectedNode = problem.getCoveringNode(context.getASTRoot());
+		ASTNode selectedASTNode = problemLocation.getCoveringNode(context.getASTRoot());
 
-		if (selectedNode == null) {
+		if (selectedASTNode == null) {
 			return Collections.emptySet();
 		}
 
 		if (id == IProblem.ImportNotFound) {
 			ImportDeclaration importDeclaration = (ImportDeclaration)ASTNodes.getParent(
-				selectedNode, ASTNode.IMPORT_DECLARATION);
+				selectedASTNode, ASTNode.IMPORT_DECLARATION);
 
 			if (importDeclaration == null) {
 				return Collections.emptySet();
@@ -151,8 +151,8 @@ public class LiferayGradleDependencyQuickFix implements IQuickFixProcessor {
 			return _processProposals(name, context);
 		}
 		else {
-			if (selectedNode instanceof Name) {
-				Name node = (Name)selectedNode;
+			if (selectedASTNode instanceof Name) {
+				Name node = (Name)selectedASTNode;
 
 				return _processProposals(node.getFullyQualifiedName(), context);
 			}
@@ -194,43 +194,45 @@ public class LiferayGradleDependencyQuickFix implements IQuickFixProcessor {
 			typeName = null;
 		}
 
-		IJavaSearchScope scope = SearchEngine.createWorkspaceScope();
+		IJavaSearchScope javaSearchScope = SearchEngine.createWorkspaceScope();
 
-		ArrayList<TypeNameMatch> result = new ArrayList<>();
+		ArrayList<TypeNameMatch> typeNameMatches = new ArrayList<>();
 
-		TypeNameMatchCollector requestor = new TypeNameMatchCollector(result);
+		TypeNameMatchCollector typeNameMatchCollector = new TypeNameMatchCollector(typeNameMatches);
 
 		int matchMode = SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE;
 
-		new SearchEngine().searchAllTypeNames(
-			packageName, matchMode, typeName, matchMode, IJavaSearchConstants.TYPE, scope, requestor,
-			IJavaSearchConstants.WAIT_UNTIL_READY_TO_SEARCH, null);
+		SearchEngine searchEngine = new SearchEngine();
 
-		if (result.isEmpty()) {
+		searchEngine.searchAllTypeNames(
+			packageName, matchMode, typeName, matchMode, IJavaSearchConstants.TYPE, javaSearchScope,
+			typeNameMatchCollector, IJavaSearchConstants.WAIT_UNTIL_READY_TO_SEARCH, null);
+
+		if (typeNameMatches.isEmpty()) {
 			return Collections.emptySet();
 		}
 
-		Set<IJavaCompletionProposal> proposals = new HashSet<>();
+		Set<IJavaCompletionProposal> javaCompletionProposals = new HashSet<>();
 
-		for (TypeNameMatch item : result) {
-			IType type = item.getType();
+		for (TypeNameMatch typeNameMatch : typeNameMatches) {
+			IType type = typeNameMatch.getType();
 
 			if (type != null) {
 				IPackageFragmentRoot packageFragmentroot = (IPackageFragmentRoot)type.getAncestor(
 					IJavaElement.PACKAGE_FRAGMENT_ROOT);
 
-				IClasspathEntry entry = packageFragmentroot.getRawClasspathEntry();
+				IClasspathEntry classpathEntry = packageFragmentroot.getRawClasspathEntry();
 
-				if (entry == null) {
+				if (classpathEntry == null) {
 					continue;
 				}
 
-				int entryKind = entry.getEntryKind();
+				int entryKind = classpathEntry.getEntryKind();
 
-				GradleDependency dependency = null;
+				GradleDependency gradleDependency = null;
 
 				if (entryKind == IClasspathEntry.CPE_CONTAINER) {
-					IPath entryPath = entry.getPath();
+					IPath entryPath = classpathEntry.getPath();
 
 					if (_projectSpecificContainer(entryPath)) {
 						continue;
@@ -240,29 +242,30 @@ public class LiferayGradleDependencyQuickFix implements IQuickFixProcessor {
 						entryPath, packageFragmentroot.getJavaProject());
 
 					if (classpathContainer != null) {
-						entry = JavaModelUtil.findEntryInContainer(classpathContainer, packageFragmentroot.getPath());
+						classpathEntry = JavaModelUtil.findEntryInContainer(
+							classpathContainer, packageFragmentroot.getPath());
 
-						if (entry != null) {
-							dependency = _parseGradleDependency(entry);
+						if (classpathEntry != null) {
+							gradleDependency = _parseGradleDependency(classpathEntry);
 						}
 					}
 				}
 				else if (entryKind == IClasspathEntry.CPE_LIBRARY) {
-					dependency = _parseGradleDependency(entry);
+					gradleDependency = _parseGradleDependency(classpathEntry);
 				}
 
-				if (dependency != null) {
+				if (gradleDependency != null) {
 					String displayName =
-						"Add Dependency '" + dependency.getGroup() + ":" + dependency.getName() + ":" +
-							dependency.getVersion() + "' to Gradle";
+						"Add Dependency '" + gradleDependency.getGroup() + ":" + gradleDependency.getName() + ":" +
+							gradleDependency.getVersion() + "' to Gradle";
 
-					proposals.add(
-						new DependencyCorrectionProposal(displayName, compilationUnit, dependency, gradleFile));
+					javaCompletionProposals.add(
+						new DependencyCorrectionProposal(displayName, compilationUnit, gradleDependency, gradleFile));
 				}
 			}
 		}
 
-		return proposals;
+		return javaCompletionProposals;
 	}
 
 	private boolean _projectSpecificContainer(IPath containerPath) {

@@ -36,36 +36,36 @@ import org.eclipse.jface.text.IDocument;
 public class DependencyCorrectionProposal extends CUCorrectionProposal {
 
 	public DependencyCorrectionProposal(
-		String name, ICompilationUnit compiletionUnit, GradleDependency dependency, IFile file) {
+		String name, ICompilationUnit compiletionUnit, GradleDependency gradleDependency, IFile file) {
 
 		super(name, compiletionUnit, 30, ProjectUI.getPluginImageRegistry().get(ProjectUI.LIFERAY_LOGO_IMAGE_ID));
 
-		_dependency = dependency;
+		_gradleDependency = gradleDependency;
 		_gradleFile = file;
 	}
 
 	@Override
 	public void apply(IDocument document) {
 		try {
-			GradleDependencyUpdater updater = new GradleDependencyUpdater(_gradleFile);
+			GradleDependencyUpdater gradleDependencyUpdater = new GradleDependencyUpdater(_gradleFile);
 
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("compileOnly '");
-			sb.append(_dependency.getGroup());
+			sb.append(_gradleDependency.getGroup());
 			sb.append(":");
-			sb.append(_dependency.getName());
+			sb.append(_gradleDependency.getName());
 
 			IWorkspaceProject workspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
 			if (workspaceProject.getTargetPlatformVersion() == null) {
 				sb.append(":");
-				sb.append(_dependency.getVersion());
+				sb.append(_gradleDependency.getVersion());
 			}
 
 			sb.append("'");
 
-			updater.updateDependency(sb.toString());
+			gradleDependencyUpdater.updateDependency(sb.toString());
 
 			GradleUtil.refreshProject(_gradleFile.getProject());
 		}
@@ -86,13 +86,13 @@ public class DependencyCorrectionProposal extends CUCorrectionProposal {
 			return false;
 		}
 
-		DependencyCorrectionProposal other = (DependencyCorrectionProposal)obj;
+		DependencyCorrectionProposal otherDependencyCorrectionProposal = (DependencyCorrectionProposal)obj;
 
-		if ((_dependency == null) || (other._dependency == null)) {
+		if ((_gradleDependency == null) || (otherDependencyCorrectionProposal._gradleDependency == null)) {
 			return false;
 		}
 
-		if (!_dependency.equals(other._dependency)) {
+		if (!_gradleDependency.equals(otherDependencyCorrectionProposal._gradleDependency)) {
 			return false;
 		}
 
@@ -108,12 +108,12 @@ public class DependencyCorrectionProposal extends CUCorrectionProposal {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((_dependency == null) ? 0 : _dependency.hashCode());
+		result = prime * result + ((_gradleDependency == null) ? 0 : _gradleDependency.hashCode());
 
 		return result;
 	}
 
-	private final GradleDependency _dependency;
+	private final GradleDependency _gradleDependency;
 	private final IFile _gradleFile;
 
 }
