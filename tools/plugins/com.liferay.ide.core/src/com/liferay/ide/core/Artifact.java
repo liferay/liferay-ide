@@ -16,16 +16,51 @@ package com.liferay.ide.core;
 
 import java.io.File;
 
+import java.util.Map;
+import java.util.Objects;
+
 /**
  * @author Charles Wu
  */
 public class Artifact {
+
+	public Artifact(Map<String, String> dep) {
+		_group = dep.get("group");
+		_artifact = dep.get("name");
+		_version = dep.get("version");
+		_sourceFile = null;
+	}
+
+	public Artifact(String group, String artifact, String version) {
+		this(group, artifact, version, null);
+	}
 
 	public Artifact(String group, String artifact, String version, File sourceFile) {
 		_group = group;
 		_artifact = artifact;
 		_version = version;
 		_sourceFile = sourceFile;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+
+		if ((o == null) || (getClass() != o.getClass())) {
+			return false;
+		}
+
+		Artifact artifact = (Artifact)o;
+
+		if (Objects.equals(_artifact, artifact._artifact) && Objects.equals(_group, artifact._group) &&
+			Objects.equals(_version, artifact._version)) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	public String getArtifact() {
@@ -42,6 +77,11 @@ public class Artifact {
 
 	public String getVersion() {
 		return _version;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(_artifact, _group, _version);
 	}
 
 	@Override

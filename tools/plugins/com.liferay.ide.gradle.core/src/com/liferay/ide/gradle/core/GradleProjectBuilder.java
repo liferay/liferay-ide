@@ -14,6 +14,10 @@
 
 package com.liferay.ide.gradle.core;
 
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.MultimapBuilder;
+
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.gradle.core.parser.GradleDependency;
@@ -24,6 +28,9 @@ import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import java.io.IOException;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -36,6 +43,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 
 /**
  * @author Terry Jia
@@ -64,6 +73,48 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 		// TODO Waiting for IDE-2850
 
 		return null;
+	}
+
+	@Override
+	public ListMultimap<String, Artifact> getDependencies() {
+		ListMultimap<String, Artifact> multiMap = MultimapBuilder.hashKeys(
+		).arrayListValues(
+		).build();
+
+		if (FileUtil.notExists(_gradleBuildFile)) {
+			return multiMap;
+		}
+
+		try {
+			GradleDependencyUpdater dependencyUpdater = new GradleDependencyUpdater(_gradleBuildFile);
+
+			ListMultimap<String, Artifact> dependencies = dependencyUpdater.getAllDependenciesWithConfiguration();
+
+			IJavaProject javaProject = JavaCore.create(getProject());
+
+			Stream.of(
+				javaProject.getResolvedClasspath(true)
+			).map(
+				GradleUtil::parseGradleDependency
+			).filter(
+				Objects::nonNull
+			).forEach(
+				artifactWithSourcePath -> {
+					for (Map.Entry<String, Artifact> entry : dependencies.entries()) {
+						Artifact artifactEntry = entry.getValue();
+
+						if (Objects.equals(artifactEntry.getArtifact(), artifactWithSourcePath.getArtifact())) {
+							multiMap.put(entry.getKey(), artifactWithSourcePath);
+						}
+					}
+				}
+			);
+		}
+		catch (Exception e) {
+			LiferayGradleCore.logError(e);
+		}
+
+		return multiMap;
 	}
 
 	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) {

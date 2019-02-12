@@ -38,6 +38,7 @@ Require-Bundle: org.eclipse.wst.common.project.facet.core;visibility:=reexport,
  org.apache.felix.gogo.runtime,
  org.apache.ant,
  biz.aQute.bndlib;bundle-version="[4,5)",
+ com.google.guava;bundle-version="[16.0.0,27.0.0]",
  com.liferay.ide.upgrade.core,
  org.eclipse.ltk.ui.refactoring,
  org.eclipse.ltk.core.refactoring

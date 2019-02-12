@@ -14,6 +14,9 @@
 
 package com.liferay.ide.gradle.core.parser;
 
+import com.google.common.collect.ListMultimap;
+
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 
@@ -68,6 +71,14 @@ public class GradleDependencyUpdater {
 
 	public List<GradleDependency> getAllDependencies() {
 		FindDependenciesVisitor visitor = new FindDependenciesVisitor();
+
+		walkScript(visitor);
+
+		return visitor.getDependencies();
+	}
+
+	public ListMultimap<String, Artifact> getAllDependenciesWithConfiguration() {
+		DependenciesClosureVisitor visitor = new DependenciesClosureVisitor();
 
 		walkScript(visitor);
 
