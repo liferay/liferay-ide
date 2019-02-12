@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.EmailSignatureProperties" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="properties" />
+	<property name="problem.title" value="Email Signature Properties" />
+	<property name="problem.summary" value="Merged Configured Email Signature Field into the Body of Email Messages from Message Boards and Wiki" />
+	<property name="problem.tickets" value="LPS-44599" />
+	<property name="problem.section" value="#merged-configured-email-signature-field-into-the-body-of-email-messages-fro" />
+	<property name="implName" value="EmailSignatureProperties" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.EmailSignatureProperties" />
+</scr:component>

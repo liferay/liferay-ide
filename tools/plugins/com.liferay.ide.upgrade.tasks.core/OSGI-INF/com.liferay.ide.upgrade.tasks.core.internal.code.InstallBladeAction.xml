@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.code.InstallBladeAction" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+	<property name="id" value="install_blade" />
+	<property name="order" value="2" />
+	<property name="stepId" value="install_blade" />
+	<property name="title" value="Install blade" />
+	<service scope="prototype">
+		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.tasks.core.internal.code.InstallBladeAction" />
+</scr:component>

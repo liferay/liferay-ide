@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.BaseAssetRendererGetIconPathDecl" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="java,jsp,jspf" />
+	<property name="problem.summary" value="Changed the BaseAssetRenderer APIs getIconPath Method ThemeDisplay Parameters" />
+	<property name="problem.tickets" value="no ticket number" />
+	<property name="problem.title" value="BaseAssetRenderer API Changes" />
+	<property name="problem.section" value="#changed-the-baseassetrenderer-apis-geticonpath-method-themedisplay-parameters" />
+	<property name="implName" value="BaseAssetRendererGetIconPathDecl" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.BaseAssetRendererGetIconPathDecl" />
+</scr:component>

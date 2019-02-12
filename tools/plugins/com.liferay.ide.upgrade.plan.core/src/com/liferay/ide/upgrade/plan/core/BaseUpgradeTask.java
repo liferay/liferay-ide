@@ -14,11 +14,12 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,18 +32,17 @@ import org.osgi.service.component.annotations.Activate;
 /**
  * @author Gregory Amerson
  */
-public abstract class BaseUpgradeTask implements UpgradeTask {
+public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements UpgradeTask {
 
 	@Activate
 	public void activate(ComponentContext componentContext) {
+		super.activate(componentContext);
+
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
-		_categoryId = _getProperty(properties, "categoryId");
-		_description = _getProperty(properties, "description");
-		_id = _getProperty(properties, "id");
-		_title = _getProperty(properties, "title");
+		_categoryId = getProperty(properties, "categoryId");
 
-		_lookupTasks(componentContext);
+		_lookupTaskSteps(componentContext);
 	}
 
 	@Override
@@ -51,48 +51,26 @@ public abstract class BaseUpgradeTask implements UpgradeTask {
 	}
 
 	@Override
-	public String getDescription() {
-		return _description;
-	}
-
-	@Override
-	public String getId() {
-		return _id;
-	}
-
-	@Override
 	public List<UpgradeTaskStep> getSteps() {
 		return Collections.unmodifiableList(_upgradeTaskSteps);
 	}
 
-	@Override
-	public String getTitle() {
-		return _title;
-	}
-
-	private String _getProperty(Dictionary<String, Object> properties, String key) {
-		Object value = properties.get(key);
-
-		if (value instanceof String) {
-			return (String)value;
-		}
-
-		return null;
-	}
-
-	private void _lookupTasks(ComponentContext componentContext) {
+	private void _lookupTaskSteps(ComponentContext componentContext) {
 		BundleContext bundleContext = componentContext.getBundleContext();
 
 		try {
 			Collection<ServiceReference<UpgradeTaskStep>> upgradeTaskStepServiceReferences =
-				bundleContext.getServiceReferences(UpgradeTaskStep.class, "(taskId=" + _id + ")");
+				bundleContext.getServiceReferences(UpgradeTaskStep.class, "(taskId=" + getId() + ")");
 
-			Stream<ServiceReference<UpgradeTaskStep>> stream = upgradeTaskStepServiceReferences.stream();
+			List<UpgradeTaskStep> upgradeTaskSteps = ServicesLookup.getOrderedServices(
+				bundleContext, upgradeTaskStepServiceReferences);
 
-			_upgradeTaskSteps = stream.map(
-				bundleContext::getService
-			).filter(
-				Objects::nonNull
+			UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+
+			Stream<UpgradeTaskStep> stream = upgradeTaskSteps.stream();
+
+			_upgradeTaskSteps = stream.filter(
+				upgradeTaskStep -> upgradeTaskStep.appliesTo(upgradePlanner.getCurrentUpgradePlan())
 			).collect(
 				Collectors.toList()
 			);
@@ -102,9 +80,6 @@ public abstract class BaseUpgradeTask implements UpgradeTask {
 	}
 
 	private String _categoryId;
-	private String _description;
-	private String _id;
-	private String _title;
 	private List<UpgradeTaskStep> _upgradeTaskSteps;
 
 }

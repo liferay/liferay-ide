@@ -14,6 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import java.nio.file.Path;
+
 import java.util.List;
 
 /**
@@ -21,8 +23,18 @@ import java.util.List;
  */
 public interface UpgradePlan {
 
+	public Path getCurrentProjectLocation();
+
+	public String getCurrentVersion();
+
 	public String getName();
 
+	public Path getTargetProjectLocation();
+
+	public String getTargetVersion();
+
 	public List<UpgradeTask> getTasks();
+
+	public void setTargetProjectLocation(Path path);
 
 }

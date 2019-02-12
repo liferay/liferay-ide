@@ -19,6 +19,17 @@ package com.liferay.ide.upgrade.plan.core;
  */
 public enum UpgradeTaskStepRequirement {
 
-	OPTIONAL, RECOMMENDED, REQUIRED
+	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
+
+	@Override
+	public String toString() {
+		return _text;
+	}
+
+	private UpgradeTaskStepRequirement(String text) {
+		_text = text;
+	}
+
+	private final String _text;
 
 }

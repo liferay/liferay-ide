@@ -36,7 +36,11 @@ import org.eclipse.ui.IWorkbench;
 public class NewLiferayWorkspaceWizard extends BaseProjectWizard<NewLiferayWorkspaceOp> {
 
 	public NewLiferayWorkspaceWizard() {
-		super(_createDefaultOp(), DefinitionLoader.sdef(NewLiferayWorkspaceWizard.class).wizard());
+		this(_createDefaultOp());
+	}
+
+	public NewLiferayWorkspaceWizard(NewLiferayWorkspaceOp newLiferayWorkspaceOp) {
+		super(newLiferayWorkspaceOp, DefinitionLoader.sdef(NewLiferayWorkspaceWizard.class).wizard());
 	}
 
 	@Override

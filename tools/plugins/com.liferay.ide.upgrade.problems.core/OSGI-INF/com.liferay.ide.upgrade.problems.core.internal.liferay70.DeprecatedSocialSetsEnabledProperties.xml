@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedSocialSetsEnabledProperties" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="properties" />
+	<property name="problem.title" value="Social Activity Properties Deprecated" />
+	<property name="problem.summary" value="Deprecated the social.activity.sets.enabled Property" />
+	<property name="problem.tickets" value="LPS-63635" />
+	<property name="problem.section" value="#deprecated-the-social-activity-sets-enabled-Property" />
+	<property name="implName" value="DeprecatedSocialSetsEnabledProperties" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedSocialSetsEnabledProperties" />
+</scr:component>

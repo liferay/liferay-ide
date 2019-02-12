@@ -14,35 +14,42 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import java.util.Dictionary;
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Dictionary;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
 /**
  * @author Gregory Amerson
  */
-public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
+public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement implements UpgradeTaskStep {
 
 	@Activate
 	public void activate(ComponentContext componentContext) {
+		super.activate(componentContext);
+
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
-		_description = _getProperty(properties, "description");
-		_id = _getProperty(properties, "id");
-		_requirement = _getProperty(properties, "requirement");
-		_title = _getProperty(properties, "title");
-		_url = _getProperty(properties, "url");
+		_requirement = getProperty(properties, "requirement");
+		_taskId = getProperty(properties, "taskId");
+		_url = getProperty(properties, "url");
+
+		_lookupActions(componentContext);
 	}
 
 	@Override
-	public String getDescription() {
-		return _description;
-	}
-
-	@Override
-	public String getId() {
-		return _id;
+	public List<UpgradeTaskStepAction> getActions() {
+		return Collections.unmodifiableList(_upgradeTaskStepActions);
 	}
 
 	@Override
@@ -51,8 +58,13 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 	}
 
 	@Override
-	public String getTitle() {
-		return _title;
+	public UpgradeTaskStepStatus getStatus() {
+		return _upgradeTaskStepStatus;
+	}
+
+	@Override
+	public String getTaskId() {
+		return _taskId;
 	}
 
 	@Override
@@ -60,25 +72,34 @@ public abstract class BaseUpgradeTaskStep implements UpgradeTaskStep {
 		return _url;
 	}
 
-	@Override
-	public String toString() {
-		return getId();
-	}
+	private void _lookupActions(ComponentContext componentContext) {
+		BundleContext bundleContext = componentContext.getBundleContext();
 
-	private String _getProperty(Dictionary<String, Object> properties, String key) {
-		Object value = properties.get(key);
+		try {
+			Collection<ServiceReference<UpgradeTaskStepAction>> upgradeTaskStepActionServiceReferences =
+				bundleContext.getServiceReferences(UpgradeTaskStepAction.class, "(stepId=" + getId() + ")");
 
-		if (value instanceof String) {
-			return (String)value;
+			List<UpgradeTaskStepAction> upgradeTaskStepActions = ServicesLookup.getOrderedServices(
+				bundleContext, upgradeTaskStepActionServiceReferences);
+
+			Stream<UpgradeTaskStepAction> stream = upgradeTaskStepActions.stream();
+
+			UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+
+			_upgradeTaskStepActions = stream.filter(
+				upgradeTaskStepAction -> upgradeTaskStepAction.appliesTo(upgradePlanner.getCurrentUpgradePlan())
+			).collect(
+				Collectors.toList()
+			);
 		}
-
-		return null;
+		catch (InvalidSyntaxException ise) {
+		}
 	}
 
-	private String _description;
-	private String _id;
 	private String _requirement;
-	private String _title;
+	private String _taskId;
+	private List<UpgradeTaskStepAction> _upgradeTaskStepActions;
+	private UpgradeTaskStepStatus _upgradeTaskStepStatus = UpgradeTaskStepStatus.INCOMPLETE;
 	private String _url;
 
 }

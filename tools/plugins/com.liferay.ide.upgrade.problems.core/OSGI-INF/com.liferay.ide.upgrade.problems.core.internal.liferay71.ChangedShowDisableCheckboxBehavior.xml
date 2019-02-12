@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay71.ChangedShowDisableCheckboxBehavior" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="jsp,jspf" />
+	<property name="problem.title" value="Changed Behavior of liferay-ui:input-date Taglib&apos;s showDisableCheckbox Argument" />
+	<property name="problem.summary" value="Changed Tag Input Date Argument ShowDisableCheckBox" />
+	<property name="problem.tickets" value="LPS-78475" />
+	<property name="problem.section" value="#changed-tag-input-date-argument-showdisablecheckbox" />
+	<property name="implName" value="ChangedShowDisableCheckboxBehavior" />
+	<property name="version" value="7.1" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay71.ChangedShowDisableCheckboxBehavior" />
+</scr:component>

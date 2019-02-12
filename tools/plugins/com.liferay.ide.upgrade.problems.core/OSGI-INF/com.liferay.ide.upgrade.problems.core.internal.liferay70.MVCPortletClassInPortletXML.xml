@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.MVCPortletClassInPortletXML" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="xml" />
+	<property name="problem.summary" value="The classes from package com.liferay.util.bridges.mvc in util-bridges.jar were moved to a new package com.liferay.portal.kernel.portlet.bridges.mvc in portal-service.jar." />
+	<property name="problem.tickets" value="LPS-50156" />
+	<property name="problem.title" value="Moved MVCPortlet, ActionCommand and ActionCommandCache from util-bridges.jar to portal-service.jar" />
+	<property name="problem.section" value="#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar" />
+	<property name="implName" value="MVCPortletClassInPortletXML" />
+	<property name="auto.correct" value="portlet-xml-portlet-class" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator" />
+		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.MVCPortletClassInPortletXML" />
+</scr:component>

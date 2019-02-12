@@ -2,16 +2,20 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Upgrade Plan Core
 Bundle-SymbolicName: com.liferay.ide.upgrade.plan.core;singleton:=true
+Bundle-Activator: com.liferay.ide.upgrade.plan.core.internal.UpgradePlanCorePlugin
 Bundle-Version: 3.5.0.qualifier
 Bundle-Vendor: Liferay, Inc.
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.sapphire.modeling,
- org.eclipse.osgi.services
+Require-Bundle: com.liferay.ide.project.core,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.osgi.services,
+ org.eclipse.sapphire.modeling
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .
 Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.ConfigUpgradeTaskCategory.xml,
- OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.CodeUpgradeTaskCategory.xml,
- OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.DatabaseUpgradeTaskCategory.xml,
- OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.UpgradePlannerService.xml
-Export-Package: com.liferay.ide.upgrade.plan.core
+Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.UpgradePlannerService.xml,
+ OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.CodeUpgradeCategory.xml,
+ OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.ConfigUpgradeCategory.xml,
+ OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.DatabaseUpgradeCategory.xml
+Export-Package: com.liferay.ide.upgrade.plan.core,
+ com.liferay.ide.upgrade.plan.core.util

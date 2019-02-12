@@ -18,7 +18,10 @@ import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
+import java.nio.file.Paths;
+
 import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 
@@ -46,11 +49,24 @@ public class NewUpgradePlanOpMethods {
 
 		String name = upgradePlanName.content();
 
-		UpgradePlan upgradePlan = upgradePlanner.startUpgradePlan(name);
+		Value<String> currentVersion = newUpgradePlanOp.getCurrentVersion();
+
+		Value<String> targetVersion = newUpgradePlanOp.getTargetVersion();
+
+		Value<Path> location = newUpgradePlanOp.getLocation();
+
+		Path path = location.content();
+
+		java.nio.file.Path sourceCodeLocation = Paths.get(path.toOSString());
+
+		UpgradePlan upgradePlan = upgradePlanner.newUpgradePlan(
+			name, currentVersion.content(), targetVersion.content(), sourceCodeLocation);
 
 		if (upgradePlan == null) {
 			return Status.createErrorStatus("Could not create upgrade plan named: " + name);
 		}
+
+		upgradePlanner.startUpgradePlan(upgradePlan);
 
 		return Status.createOkStatus();
 	}

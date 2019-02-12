@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.workspace.ConfigureTargetPlatformTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+	<property name="id" value="configure_target_platform" />
+	<property name="requirement" value="optional" />
+	<property name="order" value="3" />
+	<property name="taskId" value="migrate_workspace" />
+	<property name="title" value="Configure Target Platform" />
+	<service scope="prototype">
+		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.tasks.core.internal.workspace.ConfigureTargetPlatformTaskStep" />
+</scr:component>

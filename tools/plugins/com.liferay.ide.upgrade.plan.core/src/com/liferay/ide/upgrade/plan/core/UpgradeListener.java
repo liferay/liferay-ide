@@ -17,6 +17,7 @@ package com.liferay.ide.upgrade.plan.core;
 /**
  * @author Gregory Amerson
  */
+@FunctionalInterface
 public interface UpgradeListener {
 
 	public void onUpgradeEvent(UpgradeEvent upgradeEvent);

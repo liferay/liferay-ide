@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.SSEXMLFile" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extension" value="xml" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.plan.tasks.core.XMLFile" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.problems.core.internal.SSEXMLFile" />
+</scr:component>

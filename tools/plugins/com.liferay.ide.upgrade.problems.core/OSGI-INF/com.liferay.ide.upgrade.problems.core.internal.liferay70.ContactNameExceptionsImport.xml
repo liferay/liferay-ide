@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.ContactNameExceptionsImport" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="java,jsp,jspf" />
+	<property name="problem.title" value="Moved the Contact Name Exception Classes to Inner Classes of ContactNameException" />
+	<property name="problem.summary" value="The use of classes ContactFirstNameException, ContactFullNameException, and ContactLastNameException has been moved to inner classes in a new class called ContactNameException." />
+	<property name="problem.tickets" value="LPS-55364" />
+	<property name="problem.section" value="#moved-the-contact-name-exception-classes-to-inner-classes-of-contactnameexc" />
+	<property name="auto.correct" value="import" />
+	<property name="implName" value="ContactNameExceptionImport" />
+	<property name="version" value="7.0" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator" />
+		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.ContactNameExceptionsImport" />
+</scr:component>

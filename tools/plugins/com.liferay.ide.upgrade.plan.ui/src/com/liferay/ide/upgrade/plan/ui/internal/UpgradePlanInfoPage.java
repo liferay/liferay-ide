@@ -14,29 +14,11 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 
-import com.vladsch.flexmark.ast.Node;
-import com.vladsch.flexmark.html.HtmlRenderer;
-import com.vladsch.flexmark.parser.Parser;
-import com.vladsch.flexmark.parser.Parser.Builder;
-import com.vladsch.flexmark.util.options.MutableDataSet;
+import java.util.stream.Stream;
 
-import java.io.IOException;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -50,10 +32,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
-import org.eclipse.ui.forms.events.ExpansionEvent;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.promise.Promise;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Terry Jia
@@ -63,6 +49,14 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 
 	public UpgradePlanInfoPage(IWorkbenchPart workbenchPart) {
 		_workbenchPart = workbenchPart;
+
+		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanInfoPage.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_upgradeInfoProviderServiceTracker = new ServiceTracker<>(bundleContext, UpgradeInfoProvider.class, null);
+
+		_upgradeInfoProviderServiceTracker.open();
 	}
 
 	@Override
@@ -74,45 +68,6 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 		_browser = new Browser(_composite, SWT.BORDER);
 
 		_browser.setLayoutData(new GridData(GridData.FILL_BOTH));
-	}
-
-	public void expansionStateChanged(ExpansionEvent event) {
-		if ((_browser == null) || _browser.isDisposed()) {
-			return;
-		}
-
-		Object source = event.getSource();
-
-		if (source instanceof ExpandableComposite) {
-			ExpandableComposite expandableComposite = (ExpandableComposite)source;
-
-			UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)expandableComposite.getData("upgradeTaskStep");
-
-			String url = upgradeTaskStep.getUrl();
-
-			if (CoreUtil.isNotNullOrEmpty(url)) {
-				ReadMarkdownJob job = new ReadMarkdownJob(url);
-
-				job.schedule();
-			}
-			else {
-				StringBuffer sb = new StringBuffer();
-
-				String title = upgradeTaskStep.getTitle();
-
-				sb.append(title);
-
-				sb.append("<br />");
-
-				String description = upgradeTaskStep.getDescription();
-
-				sb.append(description);
-
-				_browser.setText(sb.toString());
-
-				getControl().redraw();
-			}
-		}
 	}
 
 	@Override
@@ -144,37 +99,42 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 
 			Object firstElement = structuredSelection.getFirstElement();
 
-			if (firstElement instanceof UpgradeTaskStep) {
-				UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)firstElement;
+			Stream.of(
+				_upgradeInfoProviderServiceTracker.getServices(new UpgradeInfoProvider[0])
+			).filter(
+				upgradeInfoProvider -> upgradeInfoProvider.provides(firstElement)
+			).findFirst(
+			).ifPresent(
+				upgradeInfoProvider -> {
+					Promise<String> detail = upgradeInfoProvider.getDetail(firstElement);
 
-				String url = upgradeTaskStep.getUrl();
+					detail.onResolve(
+						() -> {
+							UIUtil.async(
+								() -> {
+									try {
+										if (detail.getFailure() != null) {
+											_browser.setText("about:blank");
+										}
+										else {
+											String detailValue = detail.getValue();
 
-				if (CoreUtil.isNotNullOrEmpty(url)) {
-					ReadMarkdownJob job = new ReadMarkdownJob(url);
+											if (detailValue.startsWith("https://")) {
+												_browser.setUrl(detailValue);
+											}
+											else {
+												_browser.setText(detail.getValue(), true);
+											}
+										}
 
-					job.schedule();
+										_composite.redraw();
+									}
+									catch (Exception e) {
+									}
+								});
+						});
 				}
-				else {
-					StringBuffer sb = new StringBuffer();
-
-					String title = upgradeTaskStep.getTitle();
-
-					sb.append(title);
-
-					sb.append("<br />");
-
-					String description = upgradeTaskStep.getDescription();
-
-					sb.append(description);
-
-					_browser.setText(sb.toString());
-				}
-			}
-			else {
-				_browser.setUrl("about:blank");
-			}
-
-			_composite.redraw();
+			);
 		}
 	}
 
@@ -191,64 +151,7 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 
 	private Browser _browser;
 	private Composite _composite;
+	private final ServiceTracker<UpgradeInfoProvider, UpgradeInfoProvider> _upgradeInfoProviderServiceTracker;
 	private IWorkbenchPart _workbenchPart;
-
-	private class ReadMarkdownJob extends Job {
-
-		public ReadMarkdownJob(String url) {
-			super("fetching markdown");
-
-			_url = url;
-		}
-
-		@Override
-		protected IStatus run(IProgressMonitor monitor) {
-			HttpClient httpClient = new DefaultHttpClient();
-
-			HttpGet get = new HttpGet(_url);
-
-			try {
-				HttpResponse response = httpClient.execute(get);
-
-				HttpEntity entity = response.getEntity();
-
-				String content = EntityUtils.toString(entity);
-
-				MutableDataSet options = new MutableDataSet();
-
-				Builder parserBuilder = Parser.builder(options);
-
-				Parser parser = parserBuilder.build();
-
-				HtmlRenderer.Builder rendererBuilder = HtmlRenderer.builder(options);
-
-				HtmlRenderer renderer = rendererBuilder.build();
-
-				Node document = parser.parse(content);
-
-				String md = renderer.render(document);
-
-				UIUtil.sync(
-					() -> {
-						_browser.setText(md);
-
-						_composite.redraw();
-					});
-			}
-			catch (IOException ioe) {
-				UIUtil.sync(
-					() -> {
-						_browser.setText("Unable to fetch markdown");
-
-						_composite.redraw();
-					});
-			}
-
-			return Status.OK_STATUS;
-		}
-
-		private final String _url;
-
-	}
 
 }

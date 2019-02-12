@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay71.RemovedDescriptionHtmlEscaping" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<property name="file.extensions" value="java,jsp,jspf" />
+	<property name="problem.title" value="Removed description html escaping in PortletDisplay" />
+	<property name="problem.summary" value="Removed Description Html Escaping" />
+	<property name="problem.tickets" value="LPS-83185" />
+	<property name="problem.section" value="#removed-description-html-escaping-in-portletdisplay" />
+	<property name="implName" value="RemovedDescriptionHtmlEscaping" />
+	<property name="version" value="7.1" />
+	<service>
+		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay71.RemovedDescriptionHtmlEscaping" />
+</scr:component>

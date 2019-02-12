@@ -19,6 +19,10 @@ import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+
+import java.nio.file.Path;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,6 +59,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 		}
 	}
 
+	@Override
 	public void dispatch(UpgradeEvent upgradeEvent) {
 		Collection<UpgradeListener> upgradeListeners;
 
@@ -75,6 +80,23 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	@Override
+	public UpgradePlan getCurrentUpgradePlan() {
+		return _currentUpgradePlan;
+	}
+
+	@Override
+	public UpgradePlan loadUpgradePlan(String name) {
+		return new StandardUpgradePlan(name, null, null, null);
+	}
+
+	@Override
+	public UpgradePlan newUpgradePlan(
+		String name, String currentVersion, String targetVersion, Path sourceCodeLocation) {
+
+		return new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation);
+	}
+
+	@Override
 	public void removeListener(UpgradeListener upgradeListener) {
 		synchronized (this) {
 			_upgradeListeners.remove(upgradeListener);
@@ -82,16 +104,27 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	@Override
-	public UpgradePlan startUpgradePlan(String name) {
-		UpgradePlan upgradePlan = new StandardUpgradePlan(name);
+	public void restartStep(UpgradeTaskStep upgradeTaskStep) {
+	}
+
+	@Override
+	public void restartTask(UpgradeTask upgradeTask) {
+	}
+
+	@Override
+	public void saveUpgradePlan(UpgradePlan upgradePlan) {
+	}
+
+	@Override
+	public void startUpgradePlan(UpgradePlan upgradePlan) {
+		_currentUpgradePlan = upgradePlan;
 
 		UpgradeEvent upgradeEvent = new UpgradePlanStartedEvent(upgradePlan);
 
 		dispatch(upgradeEvent);
-
-		return upgradePlan;
 	}
 
+	private UpgradePlan _currentUpgradePlan;
 	private final List<UpgradeEvent> _upgradeEvents = new ArrayList<>();
 	private final Set<UpgradeListener> _upgradeListeners = new LinkedHashSet<>();
 

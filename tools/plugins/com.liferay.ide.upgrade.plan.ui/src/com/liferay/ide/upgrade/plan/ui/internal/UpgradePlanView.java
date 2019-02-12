@@ -14,11 +14,12 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
+import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.ui.UpgradePlanUIPlugin;
-import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskStepsViewer;
-import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTasksViewer;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepDoneEvent;
+import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskViewer;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -76,14 +77,18 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	public void dispose() {
 		super.dispose();
 
-		if (_upgradeTaskStepsViewer != null) {
-			_upgradeTaskStepsViewer.dispose();
+		if (_upgradePlanViewer != null) {
+			_upgradePlanViewer.dispose();
+		}
+
+		if (_upgradeTaskViewer != null) {
+			_upgradeTaskViewer.dispose();
 		}
 	}
 
 	@Override
 	public ISelection getSelection() {
-		return _upgradeTaskStepsViewer.getSelection();
+		return _upgradeTaskViewer.getSelection();
 	}
 
 	@Override
@@ -100,7 +105,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			upgradePlanName -> {
 				UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
-				upgradePlanner.startUpgradePlan(upgradePlanName);
+				UpgradePlan upgradePlan = upgradePlanner.loadUpgradePlan(upgradePlanName);
+
+				upgradePlanner.startUpgradePlan(upgradePlan);
 			}
 		);
 	}
@@ -114,7 +121,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	public void saveState(IMemento memento) {
 		super.saveState(memento);
 
-		Object upgradeTaskViewerInput = _upgradeTasksViewer.getInput();
+		Object upgradeTaskViewerInput = _upgradePlanViewer.getInput();
 
 		if (upgradeTaskViewerInput instanceof UpgradePlan) {
 			UpgradePlan upgradePlan = (UpgradePlan)upgradeTaskViewerInput;
@@ -129,21 +136,42 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 	@Override
 	public void setSelection(ISelection selection) {
-		_upgradeTaskStepsViewer.setSelection(selection);
+		_upgradeTaskViewer.setSelection(selection);
 	}
 
 	private void _createPartControl(Composite parentComposite) {
 		parentComposite.setLayout(new FillLayout());
 
-		_upgradeTasksViewer = new UpgradeTasksViewer(parentComposite);
+		_upgradePlanViewer = new UpgradePlanViewer(parentComposite);
+
+		_upgradePlanViewer.addPostSelectionChangedListener(this::_fireSelectionChanged);
 
 		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
-		upgradePlanner.addListener(_upgradeTasksViewer);
+		upgradePlanner.addListener(
+			upgradeEvent -> {
+				if (upgradeEvent instanceof UpgradePlanStartedEvent) {
+					UpgradePlanStartedEvent upgradePlanStartedEvent = (UpgradePlanStartedEvent)upgradeEvent;
 
-		_upgradeTaskStepsViewer = new UpgradeTaskStepsViewer(parentComposite, _upgradeTasksViewer);
+					UpgradePlan upgradePlan = upgradePlanStartedEvent.getUpgradePlan();
 
-		_upgradeTaskStepsViewer.addSelectionChangedListener(this::_fireSelectionChanged);
+					UIUtil.async(() -> setContentDescription("Active upgrade plan: " + upgradePlan.getName()));
+				}
+			});
+
+		upgradePlanner.addListener(
+			upgradeEvent -> {
+				if (upgradeEvent instanceof UpgradeTaskStepDoneEvent) {
+					UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
+				}
+			});
+
+		_upgradeTaskViewer = new UpgradeTaskViewer(parentComposite, _upgradePlanViewer);
+
+		_upgradeTaskViewer.addSelectionChangedListener(this::_fireSelectionChanged);
+
+		setContentDescription(
+			"No active upgrade plan. Use view menu 'New Upgrade Plan' action to start a new upgrade.");
 	}
 
 	private void _fireSelectionChanged(SelectionChangedEvent selectionChangedEvent) {
@@ -158,10 +186,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			});
 	}
 
-	private static ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
-
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
-	private UpgradeTaskStepsViewer _upgradeTaskStepsViewer;
-	private UpgradeTasksViewer _upgradeTasksViewer;
+	private ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
+	private UpgradePlanViewer _upgradePlanViewer;
+	private UpgradeTaskViewer _upgradeTaskViewer;
 
 }
