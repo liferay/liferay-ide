@@ -17,7 +17,7 @@ package com.liferay.ide.upgrade.tasks.core.internal.code;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.tasks.core.ProjectImporter;
-import com.liferay.ide.upgrade.tasks.core.ProjectSelection;
+import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 
 import java.nio.file.Path;
 
@@ -42,6 +42,10 @@ public class ImportPluginsSDKAction extends BaseUpgradeTaskStepAction {
 		Path rootProjectPath = _projectSelection.selectFolder(
 			"Please select the root folder of you Liferay Plugins SDK", this::_pluginsSdkPathValidator);
 
+		if (rootProjectPath == null) {
+			return Status.CANCEL_STATUS;
+		}
+
 		return _projectImporter.importProjects(rootProjectPath);
 	}
 
@@ -56,6 +60,6 @@ public class ImportPluginsSDKAction extends BaseUpgradeTaskStepAction {
 	private ProjectImporter _projectImporter;
 
 	@Reference
-	private ProjectSelection _projectSelection;
+	private ResourceSelection _projectSelection;
 
 }
