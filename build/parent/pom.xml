@@ -32,7 +32,7 @@
         <tycho-extras-version>1.0.0</tycho-extras-version>
         <eclipse-site>https://download.eclipse.org/releases/2018-12/201812191000/</eclipse-site>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/</orbit-site>
-        <tm-site>http://download.eclipse.org/tm/terminal/updates/4.4milestones/20180611/</tm-site>
+        <tm-site>https://download.eclipse.org/tm/updates/4.5.0/repository/</tm-site>
         <liferay-ide-swtbot-testing-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
         <osgi-bundles-site>https://repos-ide.wedeploy.io/liferay-ide-osgi-deps/</osgi-bundles-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
