@@ -73,8 +73,9 @@ public class CUCacheJDT implements CUCache<CompilationUnit> {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private CompilationUnit _createCompilationUnit(String unitName, char[] javaSource) {
-		ASTParser parser = ASTParser.newParser(AST.JLS11);
+		ASTParser parser = ASTParser.newParser(AST.JLS8);
 
 		Map<String, String> options = JavaCore.getOptions();
 
