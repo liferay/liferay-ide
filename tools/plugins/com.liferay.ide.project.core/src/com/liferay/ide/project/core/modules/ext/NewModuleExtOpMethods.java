@@ -20,11 +20,29 @@ import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 
+import java.io.File;
+import java.io.IOException;
+
+import java.net.URI;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Status.Severity;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 
@@ -53,6 +71,9 @@ public class NewModuleExtOpMethods {
 			if ((retval.severity() == Severity.ERROR) && (retval.exception() != null)) {
 				errorStack = retval.exception();
 			}
+			else {
+				copyFiles(newModuleExtOp);
+			}
 		}
 		catch (Exception e) {
 			errorStack = e;
@@ -67,6 +88,71 @@ public class NewModuleExtOpMethods {
 		}
 
 		return retval;
+	}
+
+	protected static void copyFiles(NewModuleExtOp moduleExtOp) {
+		Job copyFilesJob = new Job("Copying files") {
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				IPath projectFolder = PathBridge.create(SapphireUtil.getContent(moduleExtOp.getLocation()));
+
+				IPath projecLocation = projectFolder.append(SapphireUtil.getContent(moduleExtOp.getProjectName()));
+
+				ElementList<OverrideSourceEntry> overrideFiles = moduleExtOp.getOverrideFiles();
+
+				List<String> relativePaths = new ArrayList<>(overrideFiles.size());
+
+				overrideFiles.forEach(
+					entry -> {
+						relativePaths.add(SapphireUtil.getContent(entry.getValue()));
+					});
+
+				URI sourceJar = SapphireUtil.getContent(moduleExtOp.getSourceFileUri());
+
+				if ((sourceJar == null) || relativePaths.isEmpty()) {
+					return org.eclipse.core.runtime.Status.OK_STATUS;
+				}
+
+				Path sourceFolder = Paths.get(projecLocation.toString(), "src/main/java/");
+				Path resourcesFolder = Paths.get(projecLocation.toString(), "src/main/resources/");
+
+				try {
+					ZipUtil.unzip(
+						new File(sourceJar), sourceFolder.toFile(),
+						path -> {
+
+							// choose the folder which the file should go
+
+							if (relativePaths.contains(path)) {
+								if (path.startsWith("com/")) {
+									return Pair.create(true, sourceFolder.toFile());
+								}
+								else {
+									return Pair.create(true, resourcesFolder.toFile());
+								}
+							}
+							else {
+								return Pair.create(false, null);
+							}
+						});
+
+					String projectName = SapphireUtil.getContent(moduleExtOp.getProjectName());
+
+					IProject project = CoreUtil.getProject(projectName);
+
+					project.refreshLocal(IResource.DEPTH_INFINITE, null);
+				}
+				catch (CoreException | IOException e) {
+					ProjectCore.logError(e);
+				}
+
+				return org.eclipse.core.runtime.Status.OK_STATUS;
+			}
+
+		};
+
+		copyFilesJob.schedule();
 	}
 
 	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};

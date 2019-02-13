@@ -17,6 +17,8 @@ package com.liferay.ide.project.ui.modules.ext;
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
 
+import java.io.File;
+
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.forms.BrowseActionHandler;
@@ -52,6 +54,10 @@ public final class ModuleExtArtifactsBrowseActionHandler extends BrowseActionHan
 			Artifact artifact = (Artifact)result[0];
 
 			newModuleExtOp.setOriginalModuleVersion(new Version(artifact.getVersion()));
+
+			File sourceFile = artifact.getSourceFile();
+
+			newModuleExtOp.setSourceFileUri(sourceFile.toURI());
 
 			return artifact.getArtifact();
 		}

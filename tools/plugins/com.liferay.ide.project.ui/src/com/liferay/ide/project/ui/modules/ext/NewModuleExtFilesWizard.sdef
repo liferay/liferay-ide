@@ -16,56 +16,10 @@
  *******************************************************************************/
  -->
 <definition>
-	<import>
-		<package>org.eclipse.sapphire.ui.forms.swt</package>
-		<package>org.eclipse.sapphire.ui.renderers.swt</package>
-		<package>com.liferay.ide.project.ui.modules.ext</package>
-	</import>
-	<wizard>
-		<id>NewModuleExtWizard</id>
-		<element-type>com.liferay.ide.project.core.modules.ext.NewModuleExtOp</element-type>
-		<label>New Liferay Module Ext Project</label>
-		<page>
-			<id>ModuleExtWizardPage</id>
-			<label>Liferay Module Ext Project</label>
-			<content>
-				<property-editor>ProjectName</property-editor>
-				<spacer/>
-				<property-editor>
-					<property>UseDefaultLocation</property>
-				</property-editor>
-				<property-editor>
-					<property>Location</property>
-				</property-editor>
-				<spacer/>
-				<property-editor>
-					<property>OriginalModuleName</property>
-					<action-handler>
-						<action>Sapphire.Browse</action>
-						<impl>com.liferay.ide.project.ui.modules.ext.ModuleExtArtifactsBrowseActionHandler</impl>
-					</action-handler>
-				</property-editor>
-				<property-editor>
-					<property>OriginalModuleVersion</property>
-				</property-editor>
-				<spacer/>
-				<custom>
-					<class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
-				</custom>
-			</content>
-			<description>Create a new project configured as a Liferay Module Ext Project</description>
-			<scale-vertically>true</scale-vertically>
-			<margin-right>10</margin-right>
-			<scroll-vertically>true</scroll-vertically>
-			<margin-left>0</margin-left>
-			<margin-bottom>0</margin-bottom>
-			<margin-top>0</margin-top>
-			<margin-horizontal>0</margin-horizontal>
-			<margin-vertical>0</margin-vertical>
-			<margin>0</margin>
-			<image>NewModuleExtWizard.png</image>
-		</page>
-		<description>Create a new project configured as a Liferay Module Ext Project</description>
+    <wizard>
+        <id>NewModuleExtFilesWizard</id>
+        <element-type>com.liferay.ide.project.core.modules.ext.NewModuleExtFilesOp</element-type>
+        <label>New Liferay Module Ext Files</label>
 		<page>
 			<id>ModuleExtOverrideFiles</id>
 			<label>Module Ext Override Files</label>
@@ -104,7 +58,9 @@
 			<margin-horizontal>0</margin-horizontal>
 			<margin-vertical>0</margin-vertical>
 			<margin>0</margin>
+			<height>450</height>
 			<image>NewModuleExtWizard.png</image>
 		</page>
-	</wizard>
+        <description>Add JSP files to a exsicting fragment project</description>
+    </wizard>
 </definition>

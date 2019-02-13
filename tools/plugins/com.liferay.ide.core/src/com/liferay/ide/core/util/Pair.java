@@ -12,12 +12,16 @@
  * details.
  */
 
-package com.liferay.blade.util;
+package com.liferay.ide.core.util;
 
 /**
  * @author Alberto Chaparro
  */
 public class Pair<F, S> {
+
+	public static <F, S> Pair<F, S> create(F first, S second) {
+		return new Pair<>(first, second);
+	}
 
 	public Pair(F l, S r) {
 		_first = l;
