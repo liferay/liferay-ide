@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.ReplacedReservedUserEmailAddressException" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
-	<property name="file.extensions" value="java" />
-	<property name="problem.title" value="Replaced the ReservedUserEmailAddressException with UserEmailAddressException" />
-	<property name="problem.section" value="#replaced-the-reserveduseremailaddressexception-with-useremailaddressexcepti" />
-	<property name="problem.summary" value="Replaced the ReservedUserEmailAddressException with UserEmailAddressException Inner Classes in User Services" />
-	<property name="problem.tickets" value="LPS-53279" />
-	<property name="implName" value="ReplacedReservedUserEmailAddressException" />
-	<property name="version" value="7.0" />
-	<service>
-		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
-	</service>
-	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.ReplacedReservedUserEmailAddressException" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.ReplacedReservedUserEmailAddressException">
+   <property name="file.extensions" value="java"/>
+   <property name="problem.title" value="Replaced the ReservedUserEmailAddressException with UserEmailAddressException"/>
+   <property name="problem.section" value="#replaced-the-reserveduseremailaddressexception-with-useremailaddressexcepti"/>
+   <property name="problem.summary" value="Replaced the ReservedUserEmailAddressException with UserEmailAddressException Inner Classes in User Services"/>
+   <property name="problem.tickets" value="LPS-53279"/>
+   <property name="implName" value="ReplacedReservedUserEmailAddressException"/>
+   <property name="version" value="7.0"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.ReplacedReservedUserEmailAddressException"/>
 </scr:component>

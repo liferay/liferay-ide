@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.config.AnalyzePortalExtPropertiesTask" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
-	<property name="categoryId" value="config" />
-	<property name="id" value="analyze_portal_ext_properties" />
-	<property name="order" value="1" />
-	<property name="title" value="Analyze Portal Ext Properties" />
-	<service scope="prototype">
-		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTask" />
-	</service>
-	<implementation class="com.liferay.ide.upgrade.tasks.core.internal.config.AnalyzePortalExtPropertiesTask" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.config.AnalyzePortalExtPropertiesTask">
+   <property name="categoryId" value="config"/>
+   <property name="id" value="analyze_portal_ext_properties"/>
+   <property name="order" value="1"/>
+   <property name="title" value="Analyze Portal Ext Properties"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTask"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.tasks.core.internal.config.AnalyzePortalExtPropertiesTask"/>
 </scr:component>

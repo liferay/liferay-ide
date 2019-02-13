@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.plan.core.internal.DatabaseUpgradeCategory" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
-	<property name="id" value="database" />
-	<property name="imagePath" value="icons/category_database.png" />
-	<property name="order" value="1" />
-	<property name="title" value="Database Upgrade" />
-	<service scope="prototype">
-		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory" />
-	</service>
-	<implementation class="com.liferay.ide.upgrade.plan.core.internal.DatabaseUpgradeCategory" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.plan.core.internal.DatabaseUpgradeCategory">
+   <property name="id" value="database"/>
+   <property name="imagePath" value="icons/category_database.png"/>
+   <property name="order" value="1"/>
+   <property name="title" value="Database Upgrade"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.plan.core.internal.DatabaseUpgradeCategory"/>
 </scr:component>

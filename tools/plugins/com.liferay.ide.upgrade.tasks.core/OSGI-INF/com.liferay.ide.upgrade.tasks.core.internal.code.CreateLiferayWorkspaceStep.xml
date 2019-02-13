@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.code.CreateLiferayWorkspaceStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
-	<property name="id" value="create_liferay_workspace" />
-	<property name="requirement" value="required" />
-	<property name="order" value="1" />
-	<property name="taskId" value="setup_development_environment" />
-	<property name="title" value="Create Liferay Workspace" />
-	<service scope="prototype">
-		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep" />
-	</service>
-	<implementation class="com.liferay.ide.upgrade.tasks.core.internal.code.CreateLiferayWorkspaceStep" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.code.CreateLiferayWorkspaceStep">
+   <property name="id" value="create_liferay_workspace"/>
+   <property name="requirement" value="required"/>
+   <property name="order" value="1"/>
+   <property name="taskId" value="setup_development_environment"/>
+   <property name="title" value="Create Liferay Workspace"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.tasks.core.internal.code.CreateLiferayWorkspaceStep"/>
 </scr:component>

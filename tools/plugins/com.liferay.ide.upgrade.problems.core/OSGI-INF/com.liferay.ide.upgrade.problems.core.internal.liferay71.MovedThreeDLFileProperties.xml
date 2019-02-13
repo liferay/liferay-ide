@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay71.MovedThreeDLFileProperties" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
-	<property name="file.extensions" value="properties" />
-	<property name="problem.title" value="Moved Three DL File Properties to OSGi Configuration" />
-	<property name="problem.summary" value="Two DL File properties have been moved from Server Administration" />
-	<property name="problem.tickets" value="LPS-69208" />
-	<property name="problem.section" value="#moved-three-dl-file-properties" />
-	<property name="implName" value="MovedThreeDLFileProperties" />
-	<property name="version" value="7.1" />
-	<service>
-		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
-	</service>
-	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay71.MovedThreeDLFileProperties" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay71.MovedThreeDLFileProperties">
+   <property name="file.extensions" value="properties"/>
+   <property name="problem.title" value="Moved Three DL File Properties to OSGi Configuration"/>
+   <property name="problem.summary" value="Two DL File properties have been moved from Server Administration"/>
+   <property name="problem.tickets" value="LPS-69208"/>
+   <property name="problem.section" value="#moved-three-dl-file-properties"/>
+   <property name="implName" value="MovedThreeDLFileProperties"/>
+   <property name="version" value="7.1"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay71.MovedThreeDLFileProperties"/>
 </scr:component>

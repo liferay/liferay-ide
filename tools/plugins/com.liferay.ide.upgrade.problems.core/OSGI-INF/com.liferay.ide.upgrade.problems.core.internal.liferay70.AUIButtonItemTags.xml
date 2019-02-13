@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.AUIButtonItemTags" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
-	<property name="file.extensions" value="jsp,jspf" />
-	<property name="problem.title" value="Removed the aui:button-item Tag and Replaced with aui:button" />
-	<property name="problem.section" value="#removed-the-auibutton-item-tag-and-replaced-with-auibutton" />
-	<property name="problem.summary" value="Removed the aui:button-item Tag and Replaced with aui:button" />
-	<property name="problem.tickets" value="LPS-62922" />
-	<property name="auto.correct" value="jsptag" />
-	<property name="implName" value="AUIButtonItemTags" />
-	<property name="version" value="7.0" />
-	<service>
-		<provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator" />
-		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
-	</service>
-	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.AUIButtonItemTags" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.AUIButtonItemTags">
+   <property name="file.extensions" value="jsp,jspf"/>
+   <property name="problem.title" value="Removed the aui:button-item Tag and Replaced with aui:button"/>
+   <property name="problem.section" value="#removed-the-auibutton-item-tag-and-replaced-with-auibutton"/>
+   <property name="problem.summary" value="Removed the aui:button-item Tag and Replaced with aui:button"/>
+   <property name="problem.tickets" value="LPS-62922"/>
+   <property name="auto.correct" value="jsptag"/>
+   <property name="implName" value="AUIButtonItemTags"/>
+   <property name="version" value="7.0"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.AUIButtonItemTags"/>
 </scr:component>

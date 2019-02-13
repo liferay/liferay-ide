@@ -74,7 +74,7 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 		GridDataFactory gridDataFactory = GridDataFactory.fillDefaults();
 
-		gridDataFactory.grab(true, true);
+		gridDataFactory.grab(true, false);
 
 		section.setLayoutData(gridDataFactory.create());
 

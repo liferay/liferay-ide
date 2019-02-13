@@ -10,9 +10,12 @@ Bundle-Version: 3.5.0.qualifier
 Require-Bundle: com.liferay.ide.project.ui,
  com.liferay.ide.ui,
  com.liferay.ide.upgrade.plan.core,
+ com.liferay.ide.upgrade.tasks.core,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
+ org.eclipse.jdt.ui,
  org.eclipse.osgi,
  org.eclipse.osgi.services,
  org.eclipse.sapphire.ui
-Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.NewLiferayWorkspaceAction.xml
+Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.NewLiferayWorkspaceAction.xml,
+ OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.ResourceSelectionImpl.xml

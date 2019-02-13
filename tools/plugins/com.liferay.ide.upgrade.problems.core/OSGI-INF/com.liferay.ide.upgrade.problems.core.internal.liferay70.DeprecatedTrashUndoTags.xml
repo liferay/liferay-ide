@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedTrashUndoTags" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
-	<property name="file.extensions" value="jsp,jspf" />
-	<property name="problem.title" value="Removed the liferay-ui:trash-undo Tag and Replaced with liferay-trash:undo" />
-	<property name="problem.section" value="#removed-the-liferay-uitrash-undo-tag-and-replaced-with-liferay-trashundo" />
-	<property name="problem.summary" value="Removed the liferay-ui:trash-undo Tag and Replaced with liferay-trash:undo" />
-	<property name="problem.tickets" value="LPS-60779" />
-	<property name="auto.correct" value="jsptag" />
-	<property name="implName" value="DeprecatedTrashUndoTags" />
-	<property name="version" value="7.0" />
-	<service>
-		<provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator" />
-		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
-	</service>
-	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedTrashUndoTags" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedTrashUndoTags">
+   <property name="file.extensions" value="jsp,jspf"/>
+   <property name="problem.title" value="Removed the liferay-ui:trash-undo Tag and Replaced with liferay-trash:undo"/>
+   <property name="problem.section" value="#removed-the-liferay-uitrash-undo-tag-and-replaced-with-liferay-trashundo"/>
+   <property name="problem.summary" value="Removed the liferay-ui:trash-undo Tag and Replaced with liferay-trash:undo"/>
+   <property name="problem.tickets" value="LPS-60779"/>
+   <property name="auto.correct" value="jsptag"/>
+   <property name="implName" value="DeprecatedTrashUndoTags"/>
+   <property name="version" value="7.0"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedTrashUndoTags"/>
 </scr:component>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.IndexerThreeMethodsChange" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
-	<property name="file.extensions" value="java,jsp,jspf" />
-	<property name="problem.title" value="Changes to Indexer methods" />
-	<property name="problem.summary" value="Method Indexer.addRelatedEntryFields(Document, Object) has been moved into RelatedEntryIndexer. Indexer.reindexDDMStructures(List&lt;Long&gt;) has been moved into DDMStructureIndexer. Indexer.getQueryString(SearchContext, Query) has been removed, in favor of calling SearchEngineUtil.getQueryString(SearchContext, Query)" />
-	<property name="problem.tickets" value="LPS-55928" />
-	<property name="problem.section" value="#moved-indexer-addrelatedentryfields-and-indexer-reindexddmstructures-and-re" />
-	<property name="implName" value="IndexerThreeMethodsChange" />
-	<property name="version" value="7.0" />
-	<service>
-		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
-	</service>
-	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.IndexerThreeMethodsChange" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.IndexerThreeMethodsChange">
+   <property name="file.extensions" value="java,jsp,jspf"/>
+   <property name="problem.title" value="Changes to Indexer methods"/>
+   <property name="problem.summary" value="Method Indexer.addRelatedEntryFields(Document, Object) has been moved into RelatedEntryIndexer. Indexer.reindexDDMStructures(List&lt;Long&gt;) has been moved into DDMStructureIndexer. Indexer.getQueryString(SearchContext, Query) has been removed, in favor of calling SearchEngineUtil.getQueryString(SearchContext, Query)"/>
+   <property name="problem.tickets" value="LPS-55928"/>
+   <property name="problem.section" value="#moved-indexer-addrelatedentryfields-and-indexer-reindexddmstructures-and-re"/>
+   <property name="implName" value="IndexerThreeMethodsChange"/>
+   <property name="version" value="7.0"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.IndexerThreeMethodsChange"/>
 </scr:component>

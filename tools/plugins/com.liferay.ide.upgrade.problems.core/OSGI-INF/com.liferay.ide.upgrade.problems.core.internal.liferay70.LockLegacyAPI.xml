@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.LockLegacyAPI" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
-	<property name="file.extensions" value="java,jsp,jspf" />
-	<property name="problem.summary" value="All Lock APIs previously exposed as Liferay Portal API in 6.2 have been move out from portal-service into separate OSGi modules" />
-	<property name="problem.tickets" value="LPS-55791" />
-	<property name="problem.title" value="Lock APIs migrated to OSGi module" />
-	<property name="problem.section" value="#legacy" />
-	<property name="implName" value="LockLegacyAPI" />
-	<property name="version" value="7.0" />
-	<service>
-		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
-	</service>
-	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.LockLegacyAPI" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.LockLegacyAPI">
+   <property name="file.extensions" value="java,jsp,jspf"/>
+   <property name="problem.summary" value="All Lock APIs previously exposed as Liferay Portal API in 6.2 have been move out from portal-service into separate OSGi modules"/>
+   <property name="problem.tickets" value="LPS-55791"/>
+   <property name="problem.title" value="Lock APIs migrated to OSGi module"/>
+   <property name="problem.section" value="#legacy"/>
+   <property name="implName" value="LockLegacyAPI"/>
+   <property name="version" value="7.0"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.LockLegacyAPI"/>
 </scr:component>
