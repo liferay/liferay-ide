@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -57,28 +58,26 @@ public class ResourceSelectionImpl implements ResourceSelection {
 	}
 
 	@Override
-	public IProject[] selectProjects(String message, boolean selectAllDefault) {
+	public List<IProject> selectProjects(String message, boolean selectAllDefault) {
 		final AtomicInteger returnCode = new AtomicInteger();
 
-		List<IProject> projects = new ArrayList<>();
+		List<IProject> selectedProjects = new ArrayList<>();
 
 		UIUtil.sync(
 			() -> {
-				ProjectsSelectionDialog dialog = new ProjectsSelectionDialog(
+				ProjectsSelectionDialog projectsSelectionDialog = new ProjectsSelectionDialog(
 					UIUtil.getActiveShell(), null, selectAllDefault, message);
 
-				returnCode.set(dialog.open());
+				returnCode.set(projectsSelectionDialog.open());
 
-				for (IProject project : dialog.getProjects()) {
-					projects.add(project);
-				}
+				selectedProjects.addAll(projectsSelectionDialog.getSelectedProjects());
 			});
 
 		if (returnCode.get() == Window.OK) {
-			return projects.toArray(new IProject[0]);
+			return selectedProjects;
 		}
 
-		return new IProject[0];
+		return Collections.emptyList();
 	}
 
 }

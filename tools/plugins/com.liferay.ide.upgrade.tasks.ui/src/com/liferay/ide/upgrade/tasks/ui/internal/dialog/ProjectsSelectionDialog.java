@@ -19,6 +19,8 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.LiferayUIPlugin;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
@@ -45,10 +47,12 @@ import org.eclipse.ui.dialogs.SelectionStatusDialog;
  */
 public class ProjectsSelectionDialog extends SelectionStatusDialog {
 
-	public ProjectsSelectionDialog(Shell parentShell, ViewerFilter filter, boolean selectAllDefault, String message) {
+	public ProjectsSelectionDialog(
+		Shell parentShell, ViewerFilter viewerFilter, boolean selectAllDefault, String message) {
+
 		super(parentShell);
 
-		_filter = filter;
+		_filter = viewerFilter;
 		_selectAllDefault = selectAllDefault;
 
 		setTitle("Project Selection");
@@ -66,14 +70,14 @@ public class ProjectsSelectionDialog extends SelectionStatusDialog {
 		}
 	}
 
-	public IProject[] getProjects() {
-		IProject[] projects = Stream.of(
+	public List<IProject> getSelectedProjects() {
+		return Stream.of(
 			getResult()
-		).toArray(
-			IProject[]::new
+		).map(
+			IProject.class::cast
+		).collect(
+			Collectors.toList()
 		);
-
-		return projects;
 	}
 
 	protected void computeResult() {

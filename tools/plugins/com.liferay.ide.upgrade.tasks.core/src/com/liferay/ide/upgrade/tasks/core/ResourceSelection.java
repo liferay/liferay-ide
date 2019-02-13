@@ -16,6 +16,8 @@ package com.liferay.ide.upgrade.tasks.core;
 
 import java.nio.file.Path;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 
 /**
@@ -26,6 +28,6 @@ public interface ResourceSelection {
 
 	public Path selectPath(String message);
 
-	public IProject[] selectProjects(String message, boolean selectAllDefault);
+	public List<IProject> selectProjects(String message, boolean selectAllDefault);
 
 }
