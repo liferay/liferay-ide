@@ -16,10 +16,7 @@ package com.liferay.ide.upgrade.tasks.core;
 
 import java.nio.file.Path;
 
-import java.util.function.Function;
-
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IStatus;
 
 /**
  * @author Gregory Amerson
@@ -27,8 +24,8 @@ import org.eclipse.core.runtime.IStatus;
  */
 public interface ResourceSelection {
 
-	public Path selectFolder(String message, Function<Path, IStatus> pathValidator);
+	public Path selectPath(String message);
 
-	public IProject[] selectProjects(String message, boolean selectAllDefault, Function<Path, IStatus> pathValidator);
+	public IProject[] selectProjects(String message, boolean selectAllDefault);
 
 }

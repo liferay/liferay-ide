@@ -24,10 +24,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.DirectoryDialog;
 
@@ -35,36 +33,31 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 @Component(service = ResourceSelection.class)
 public class ResourceSelectionImpl implements ResourceSelection {
 
 	@Override
-	public Path selectFolder(String message, Function<Path, IStatus> pathValidator) {
-		StringBuffer sb = new StringBuffer(1);
+	public Path selectPath(String message) {
+		final String[] pathValue = new String[0];
 
 		UIUtil.sync(
 			() -> {
 				DirectoryDialog directoryDialog = new DirectoryDialog(UIUtil.getActiveShell());
 
-				String pathValue = directoryDialog.open();
-
-				if (pathValue != null) {
-					sb.append(pathValue);
-				}
+				pathValue[0] = directoryDialog.open();
 			});
 
-		String path = sb.toString();
-
-		if ("".equals(path)) {
+		if (pathValue[0] == null) {
 			return null;
 		}
 
-		return Paths.get(path);
+		return Paths.get(pathValue[0]);
 	}
 
 	@Override
-	public IProject[] selectProjects(String message, boolean selectAllDefault, Function<Path, IStatus> pathValidator) {
+	public IProject[] selectProjects(String message, boolean selectAllDefault) {
 		final AtomicInteger returnCode = new AtomicInteger();
 
 		List<IProject> projects = new ArrayList<>();

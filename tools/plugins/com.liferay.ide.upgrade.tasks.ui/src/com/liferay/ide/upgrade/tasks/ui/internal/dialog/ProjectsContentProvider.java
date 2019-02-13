@@ -30,9 +30,9 @@ public class ProjectsContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(Object inputElement) {
 		if (inputElement instanceof IWorkspaceRoot) {
-			IWorkspaceRoot root = (IWorkspaceRoot)inputElement;
+			IWorkspaceRoot workspaceRoot = (IWorkspaceRoot)inputElement;
 
-			return root.getProjects();
+			return workspaceRoot.getProjects();
 		}
 
 		return null;

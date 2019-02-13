@@ -39,21 +39,13 @@ public class ImportPluginsSDKAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform() {
-		Path rootProjectPath = _projectSelection.selectFolder(
-			"Please select the root folder of you Liferay Plugins SDK", this::_pluginsSdkPathValidator);
+		Path rootProjectPath = _projectSelection.selectPath("Please select the root folder of you Liferay Plugins SDK");
 
 		if (rootProjectPath == null) {
 			return Status.CANCEL_STATUS;
 		}
 
 		return _projectImporter.importProjects(rootProjectPath);
-	}
-
-	private IStatus _pluginsSdkPathValidator(Path path) {
-
-		// TODO need to validate this import path to make sure this project isn't already in Eclipse workspace
-
-		return Status.OK_STATUS;
 	}
 
 	@Reference(target = "(type=plugins_sdk)")
