@@ -58,7 +58,7 @@ public class ResourceSelectionImpl implements ResourceSelection {
 	}
 
 	@Override
-	public List<IProject> selectProjects(String message, boolean selectAllDefault) {
+	public List<IProject> selectProjects(String message, boolean initialSelectAll) {
 		final AtomicInteger returnCode = new AtomicInteger();
 
 		List<IProject> selectedProjects = new ArrayList<>();
@@ -66,7 +66,7 @@ public class ResourceSelectionImpl implements ResourceSelection {
 		UIUtil.sync(
 			() -> {
 				ProjectsSelectionDialog projectsSelectionDialog = new ProjectsSelectionDialog(
-					UIUtil.getActiveShell(), null, selectAllDefault, message);
+					UIUtil.getActiveShell(), null, initialSelectAll, message);
 
 				returnCode.set(projectsSelectionDialog.open());
 

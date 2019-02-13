@@ -44,26 +44,27 @@ import org.eclipse.ui.dialogs.SelectionStatusDialog;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 public class ProjectsSelectionDialog extends SelectionStatusDialog {
 
 	public ProjectsSelectionDialog(
-		Shell parentShell, ViewerFilter viewerFilter, boolean selectAllDefault, String message) {
+		Shell parentShell, ViewerFilter viewerFilter, boolean initialSelectAll, String message) {
 
 		super(parentShell);
 
 		_filter = viewerFilter;
-		_selectAllDefault = selectAllDefault;
+		_initialSelectAll = initialSelectAll;
 
-		setTitle("Project Selection");
 		setMessage(message);
+		setTitle("Project Selection");
 	}
 
 	@Override
 	public void create() {
 		super.create();
 
-		Object[] checkedElements = tableViewer.getCheckedElements();
+		Object[] checkedElements = _tableViewer.getCheckedElements();
 
 		if (ListUtil.isEmpty(checkedElements)) {
 			getOkButton().setEnabled(false);
@@ -81,23 +82,23 @@ public class ProjectsSelectionDialog extends SelectionStatusDialog {
 	}
 
 	protected void computeResult() {
-		Object[] checkedElements = tableViewer.getCheckedElements();
+		Object[] checkedElements = _tableViewer.getCheckedElements();
 
 		setSelectionResult(checkedElements);
 	}
 
-	protected Control createDialogArea(Composite parent) {
-		Composite composite = (Composite)super.createDialogArea(parent);
+	protected Control createDialogArea(Composite parentComposite) {
+		Composite composite = (Composite)super.createDialogArea(parentComposite);
 
-		Font font = parent.getFont();
+		Font font = parentComposite.getFont();
 
 		composite.setFont(font);
 
 		createMessageArea(composite);
 
-		tableViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER);
+		_tableViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER);
 
-		tableViewer.addPostSelectionChangedListener(
+		_tableViewer.addPostSelectionChangedListener(
 			new ISelectionChangedListener() {
 
 				@Override
@@ -116,26 +117,26 @@ public class ProjectsSelectionDialog extends SelectionStatusDialog {
 		data.heightHint = 250;
 		data.widthHint = 300;
 
-		Table table = tableViewer.getTable();
+		Table table = _tableViewer.getTable();
 
 		table.setLayoutData(data);
 
-		tableViewer.setLabelProvider(new JavaElementLabelProvider());
-		tableViewer.setContentProvider(new ProjectsContentProvider());
-		tableViewer.setComparator(new JavaElementComparator());
+		_tableViewer.setLabelProvider(new JavaElementLabelProvider());
+		_tableViewer.setContentProvider(new ProjectsContentProvider());
+		_tableViewer.setComparator(new JavaElementComparator());
 
-		Control control = tableViewer.getControl();
+		Control control = _tableViewer.getControl();
 
 		control.setFont(font);
 
 		if (_filter != null) {
-			tableViewer.addFilter(_filter);
+			_tableViewer.addFilter(_filter);
 		}
 
-		tableViewer.setInput(CoreUtil.getWorkspaceRoot());
+		_tableViewer.setInput(CoreUtil.getWorkspaceRoot());
 
-		if (_selectAllDefault && ListUtil.isNotEmpty(table.getItems())) {
-			tableViewer.setAllChecked(true);
+		if (_initialSelectAll && ListUtil.isNotEmpty(table.getItems())) {
+			_tableViewer.setAllChecked(true);
 		}
 
 		updateStatus(new Status(IStatus.OK, LiferayUIPlugin.PLUGIN_ID, StringPool.EMPTY));
@@ -147,9 +148,8 @@ public class ProjectsSelectionDialog extends SelectionStatusDialog {
 		return composite;
 	}
 
-	protected CheckboxTableViewer tableViewer;
-
 	private ViewerFilter _filter;
-	private boolean _selectAllDefault;
+	private boolean _initialSelectAll;
+	private CheckboxTableViewer _tableViewer;
 
 }

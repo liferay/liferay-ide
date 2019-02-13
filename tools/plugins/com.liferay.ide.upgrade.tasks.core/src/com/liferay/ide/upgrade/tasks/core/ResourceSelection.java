@@ -28,6 +28,6 @@ public interface ResourceSelection {
 
 	public Path selectPath(String message);
 
-	public List<IProject> selectProjects(String message, boolean selectAllDefault);
+	public List<IProject> selectProjects(String message, boolean initialSelectAll);
 
 }
