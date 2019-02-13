@@ -64,30 +64,6 @@
 
 	<plugin
 		download-size="0"
-		id="com.gradleware.tooling.client"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
-		id="com.gradleware.tooling.model"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
-		id="com.gradleware.tooling.utils"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
 		id="minimal-json"
 		install-size="0"
 		unpack="false"
@@ -187,7 +163,7 @@
 		id="org.objectweb.asm"
 		install-size="0"
 		unpack="false"
-		version="6.0.0.v20180116-1719"
+		version="6.0.0.v20180414-0329"
 	/>
 
 	<plugin

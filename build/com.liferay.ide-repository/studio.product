@@ -125,12 +125,9 @@ to distribution rights of the Software.
 
       <feature id="org.eclipse.jdt" installMode="root"/>
 
-      <feature id="org.eclipse.jpt.common.eclipselink.feature" installMode="root"/>
+
       <feature id="org.eclipse.jpt.common.feature" installMode="root"/>
-      <feature id="org.eclipse.jpt.dbws.eclipselink.feature" installMode="root"/>
-      <feature id="org.eclipse.jpt.jaxb.eclipselink.feature" installMode="root"/>
       <feature id="org.eclipse.jpt.jaxb.feature" installMode="root"/>
-      <feature id="org.eclipse.jpt.jpa.eclipselink.feature" installMode="root"/>
       <feature id="org.eclipse.jpt.jpa.feature" installMode="root"/>
 
       <feature id="org.eclipse.jsf.feature"  installMode="root"/>
@@ -167,8 +164,6 @@ to distribution rights of the Software.
 
       <feature id="org.eclipse.pde" installMode="root"/>
 
-      <feature id="org.eclipse.recommenders.mylyn.rcp.feature" installMode="root"/>
-      <feature id="org.eclipse.recommenders.rcp.feature" installMode="root"/>
       <feature id="org.eclipse.rse" installMode="root"/>
       <feature id="org.eclipse.rse.useractions" installMode="root"/>
       <feature id="org.eclipse.tm.terminal.feature" installMode="root"/>
@@ -181,6 +176,7 @@ to distribution rights of the Software.
       <feature id="org.eclipse.wst.xml_ui.feature" installMode="root"/>
       <feature id="org.eclipse.wst.xsl.feature" installMode="root"/>
       <feature id="org.eclipse.epp.logging.aeri.feature" installMode="root"/>
+      <feature id="org.eclipse.equinox.core.feature" installMode="root"/>
    </features>
 
    <configurations>
