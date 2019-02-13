@@ -17,15 +17,16 @@ Require-Bundle: com.liferay.ide.project.core,
  org.eclipse.jdt.ui,
  org.eclipse.jface,
  org.eclipse.osgi,
+ org.eclipse.osgi.services,
+ org.eclipse.osgi.util,
  org.eclipse.sapphire.modeling,
  org.eclipse.sapphire.ui,
- org.eclipse.osgi.util,
  org.eclipse.ui,
  org.eclipse.ui.forms,
+ org.eclipse.ui.ide,
  org.eclipse.ui.navigator,
  org.eclipse.ui.navigator.resources,
  org.eclipse.ui.workbench,
- org.eclipse.ui.ide,
  org.eclipse.ui.workbench.texteditor
 Export-Package: com.liferay.ide.upgrade.plan.ui
 Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanInfoProviderService.xml
