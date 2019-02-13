@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.workspace.ImportWorkspaceTaskStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
-	<property name="id" value="import_liferay_workspace" />
-	<property name="requirement" value="required" />
-	<property name="order" value="1" />
-	<property name="taskId" value="migrate_workspace" />
-	<property name="title" value="Import Liferay Workspace" />
-	<service scope="prototype">
-		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep" />
-	</service>
-	<reference cardinality="1..1" field="_projectImporter" interface="com.liferay.ide.upgrade.tasks.core.ProjectImporter" name="_projectImporter" />
-	<implementation class="com.liferay.ide.upgrade.tasks.core.internal.workspace.ImportWorkspaceTaskStep" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.workspace.ImportWorkspaceTaskStep">
+   <property name="id" value="import_liferay_workspace"/>
+   <property name="requirement" value="required"/>
+   <property name="order" value="1"/>
+   <property name="taskId" value="migrate_workspace"/>
+   <property name="title" value="Import Liferay Workspace"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
+   </service>
+   <reference cardinality="1..1" field="_projectImporter" interface="com.liferay.ide.upgrade.tasks.core.ProjectImporter" name="_projectImporter"/>
+   <implementation class="com.liferay.ide.upgrade.tasks.core.internal.workspace.ImportWorkspaceTaskStep"/>
 </scr:component>

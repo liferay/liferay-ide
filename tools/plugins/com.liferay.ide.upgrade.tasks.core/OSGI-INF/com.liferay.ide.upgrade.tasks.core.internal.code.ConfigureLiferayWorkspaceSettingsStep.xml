@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.code.ConfigureLiferayWorkspaceSettingsStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
-	<property name="id" value="configure_liferay_workspace_settings" />
-	<property name="requirement" value="required" />
-	<property name="order" value="3" />
-	<property name="taskId" value="setup_development_environment" />
-	<property name="title" value="Configure Liferay Workspace Settings" />
-	<service scope="prototype">
-		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep" />
-	</service>
-	<implementation class="com.liferay.ide.upgrade.tasks.core.internal.code.ConfigureLiferayWorkspaceSettingsStep" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.code.ConfigureLiferayWorkspaceSettingsStep">
+   <property name="id" value="configure_liferay_workspace_settings"/>
+   <property name="requirement" value="required"/>
+   <property name="order" value="3"/>
+   <property name="taskId" value="setup_development_environment"/>
+   <property name="title" value="Configure Liferay Workspace Settings"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.tasks.core.internal.code.ConfigureLiferayWorkspaceSettingsStep"/>
 </scr:component>

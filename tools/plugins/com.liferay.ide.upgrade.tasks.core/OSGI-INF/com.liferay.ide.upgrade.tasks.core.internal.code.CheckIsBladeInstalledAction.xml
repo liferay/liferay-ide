@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.tasks.core.internal.code.CheckIsBladeInstalledAction" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
-	<property name="id" value="check_is_blade_installed" />
-	<property name="order" value="1" />
-	<property name="stepId" value="install_blade" />
-	<property name="title" value="Check is Blade installed" />
-	<service scope="prototype">
-		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction" />
-	</service>
-	<implementation class="com.liferay.ide.upgrade.tasks.core.internal.code.CheckIsBladeInstalledAction" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.code.CheckIsBladeInstalledAction">
+   <property name="id" value="check_is_blade_installed"/>
+   <property name="order" value="1"/>
+   <property name="stepId" value="install_blade"/>
+   <property name="title" value="Check is Blade installed"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.tasks.core.internal.code.CheckIsBladeInstalledAction"/>
 </scr:component>

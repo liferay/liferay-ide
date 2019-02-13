@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.tasks.ui.internal.NewLiferayWorkspaceAction" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
-	<property name="id" value="new_liferay_workspace" />
-	<property name="order" value="1" />
-	<property name="stepId" value="create_liferay_workspace" />
-	<property name="title" value="New Liferay Workspace" />
-	<service scope="prototype">
-		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction" />
-	</service>
-	<reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner" />
-	<implementation class="com.liferay.ide.upgrade.tasks.ui.internal.NewLiferayWorkspaceAction" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.ui.internal.NewLiferayWorkspaceAction">
+   <property name="id" value="new_liferay_workspace"/>
+   <property name="order" value="1"/>
+   <property name="stepId" value="create_liferay_workspace"/>
+   <property name="title" value="New Liferay Workspace"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>
+   </service>
+   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
+   <implementation class="com.liferay.ide.upgrade.tasks.ui.internal.NewLiferayWorkspaceAction"/>
 </scr:component>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.problems.core.internal.liferay70.MVCPortletInitParamsChangeClass" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
-	<property name="file.extensions" value="java" />
-	<property name="problem.title" value="copy-request-parameters init-param default value change" />
-	<property name="problem.summary" value="The copy-request-parameters init parameter&apos;s default value is now set to true in all portlets that extend MVCPortlet." />
-	<property name="problem.tickets" value="LPS-54798" />
-	<property name="problem.section" value="#changed-the-default-value-of-the-copy-request-parameters-init-parameter-for" />
-	<property name="implName" value="MVCPortletInitParamsChangeClass" />
-	<property name="version" value="7.0" />
-	<service>
-		<provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator" />
-	</service>
-	<implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.MVCPortletInitParamsChangeClass" />
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.MVCPortletInitParamsChangeClass">
+   <property name="file.extensions" value="java"/>
+   <property name="problem.title" value="copy-request-parameters init-param default value change"/>
+   <property name="problem.summary" value="The copy-request-parameters init parameter&apos;s default value is now set to true in all portlets that extend MVCPortlet."/>
+   <property name="problem.tickets" value="LPS-54798"/>
+   <property name="problem.section" value="#changed-the-default-value-of-the-copy-request-parameters-init-parameter-for"/>
+   <property name="implName" value="MVCPortletInitParamsChangeClass"/>
+   <property name="version" value="7.0"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.MVCPortletInitParamsChangeClass"/>
 </scr:component>
