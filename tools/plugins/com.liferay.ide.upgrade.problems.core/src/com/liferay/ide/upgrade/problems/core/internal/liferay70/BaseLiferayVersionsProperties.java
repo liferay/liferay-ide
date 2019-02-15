@@ -27,10 +27,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.osgi.framework.BundleContext;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
-import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker;
 import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker.KeyInfo;

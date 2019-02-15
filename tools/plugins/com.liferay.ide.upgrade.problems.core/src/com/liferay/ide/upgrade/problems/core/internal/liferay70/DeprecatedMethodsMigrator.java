@@ -26,9 +26,9 @@ import org.json.JSONObject;
 import org.osgi.service.component.annotations.Component;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
-import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
@@ -44,8 +44,7 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 		if (_deprecatedMethods == null) {
 			List<JSONArray> deprecatedMethodsList = new ArrayList<>();
 
-			String fqn =
-				"/com/liferay/ide/upgrade/plan/tasks/core/internal/problem/upgrade/liferay70/deprecatedmethods/";
+			String fqn = "/com/liferay/ide/upgrade/problems/core/internal/liferay70/";
 
 			String[] jsonFilePaths = {
 				fqn + "deprecatedMethods62.json", fqn + "deprecatedMethods61.json",

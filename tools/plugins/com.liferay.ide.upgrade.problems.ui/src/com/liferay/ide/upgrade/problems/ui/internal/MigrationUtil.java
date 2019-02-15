@@ -18,7 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
 
 import java.io.File;
 

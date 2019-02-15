@@ -14,20 +14,33 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Terry Jia
  * @author Gregory Amerson
  */
 public class MigrationProblemsContainer {
 
-	public ProjectProblemsContainer[] getProjectProblemsConatiners() {
-		return _projectProblemsConatiners;
+	public void addProjectProblemsContainer(ProjectProblemsContainer projectProblemsContainer) {
+		_projectProblemsContainers.add(projectProblemsContainer);
 	}
 
-	public void setProjectProblemsConatiners(ProjectProblemsContainer[] projectProblemsConatiners) {
-		_projectProblemsConatiners = projectProblemsConatiners;
+	public List<ProjectProblemsContainer> getProjectProblemsConatiners() {
+		return _projectProblemsContainers;
 	}
 
-	private ProjectProblemsContainer[] _projectProblemsConatiners;
+	public boolean isNotEmpty() {
+		for (ProjectProblemsContainer projectProblemsContainer : _projectProblemsContainers) {
+			if (!projectProblemsContainer.isEmpty()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private List<ProjectProblemsContainer> _projectProblemsContainers = new ArrayList<>();
 
 }

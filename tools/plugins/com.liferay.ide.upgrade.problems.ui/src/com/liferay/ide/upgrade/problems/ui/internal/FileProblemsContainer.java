@@ -14,11 +14,12 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
 
 import java.io.File;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Terry Jia
@@ -27,18 +28,14 @@ import java.util.Arrays;
 public class FileProblemsContainer {
 
 	public void addProblem(FileUpgradeProblem problem) {
-		FileUpgradeProblem[] problems = Arrays.copyOf(_problems, _problems.length + 1);
-
-		problems[problems.length - 1] = problem;
-
-		_problems = problems;
+		_problems.add(problem);
 	}
 
 	public File getFile() {
 		return _file;
 	}
 
-	public FileUpgradeProblem[] getProblems() {
+	public List<FileUpgradeProblem> getProblems() {
 		return _problems;
 	}
 
@@ -46,11 +43,7 @@ public class FileProblemsContainer {
 		_file = file;
 	}
 
-	public void setProblems(FileUpgradeProblem[] problems) {
-		_problems = problems;
-	}
-
 	private File _file;
-	private FileUpgradeProblem[] _problems = new FileUpgradeProblem[0];
+	private List<FileUpgradeProblem> _problems = new ArrayList<>();
 
 }

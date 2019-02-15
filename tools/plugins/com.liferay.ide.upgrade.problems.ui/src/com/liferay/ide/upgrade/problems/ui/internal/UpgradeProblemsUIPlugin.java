@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;

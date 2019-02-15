@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core;
+package com.liferay.ide.upgrade.plan.core;
 
 import java.io.File;
 

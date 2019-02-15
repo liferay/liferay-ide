@@ -14,11 +14,12 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
+import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
-import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 
 import java.io.File;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.osgi.service.component.annotations.Component;
@@ -91,11 +92,11 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 
 		File file = fileProblemsContainer.getFile();
 
-		FileUpgradeProblem[] problems = fileProblemsContainer.getProblems();
+		List<FileUpgradeProblem> problems = fileProblemsContainer.getProblems();
 
 		sb.append(file);
 		sb.append("<br />");
-		sb.append("It has " + problems.length + " issue(s) need to be solved.");
+		sb.append("It has " + problems.size() + " issue(s) need to be solved.");
 		sb.append("<br />");
 
 		for (FileUpgradeProblem problem : problems) {
@@ -133,11 +134,11 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 
 		StringBuffer sb = new StringBuffer();
 
-		FileProblemsContainer[] fileProblemsContainers = projectProblemsContainer.getFileProblemsContainers();
+		List<FileProblemsContainer> fileProblemsContainers = projectProblemsContainer.getFileProblemsContainers();
 
 		sb.append(projectProblemsContainer.getProjectName());
 		sb.append("<br />");
-		sb.append("It has " + fileProblemsContainers.length + " file(s) need to be solved.");
+		sb.append("It has " + fileProblemsContainers.size() + " file(s) need to be solved.");
 		sb.append("<br />");
 
 		for (FileProblemsContainer fileProblemsContainer : fileProblemsContainers) {

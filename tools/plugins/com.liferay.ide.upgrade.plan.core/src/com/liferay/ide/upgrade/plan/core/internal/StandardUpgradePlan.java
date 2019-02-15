@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
+import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
@@ -21,8 +22,11 @@ import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.nio.file.Path;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,6 +45,12 @@ public class StandardUpgradePlan implements UpgradePlan {
 		_currentVersion = currentVersion;
 		_targetVersion = targetVersion;
 		_currentProjectLocation = currentProjectLocation;
+		_fileUpgradeProblems = new HashSet<>();
+	}
+
+	@Override
+	public void addFileUpgradeProblems(Collection<FileUpgradeProblem> fileUpgradeProblems) {
+		_fileUpgradeProblems.addAll(fileUpgradeProblems);
 	}
 
 	@Override
@@ -51,6 +61,11 @@ public class StandardUpgradePlan implements UpgradePlan {
 	@Override
 	public String getCurrentVersion() {
 		return _currentVersion;
+	}
+
+	@Override
+	public Set<FileUpgradeProblem> getFileUpgradeProblems() {
+		return _fileUpgradeProblems;
 	}
 
 	@Override
@@ -120,6 +135,7 @@ public class StandardUpgradePlan implements UpgradePlan {
 
 	private final Path _currentProjectLocation;
 	private final String _currentVersion;
+	private Set<FileUpgradeProblem> _fileUpgradeProblems;
 	private final String _name;
 	private Path _targetProjectLocation;
 	private final String _targetVersion;

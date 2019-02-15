@@ -14,9 +14,9 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
+import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
-import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 
 import java.io.File;
 

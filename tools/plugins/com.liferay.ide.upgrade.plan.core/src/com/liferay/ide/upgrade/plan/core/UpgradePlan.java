@@ -16,16 +16,22 @@ package com.liferay.ide.upgrade.plan.core;
 
 import java.nio.file.Path;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Gregory Amerson
  */
 public interface UpgradePlan {
 
+	public void addFileUpgradeProblems(Collection<FileUpgradeProblem> fileUpgradeProblems);
+
 	public Path getCurrentProjectLocation();
 
 	public String getCurrentVersion();
+
+	public Set<FileUpgradeProblem> getFileUpgradeProblems();
 
 	public String getName();
 
