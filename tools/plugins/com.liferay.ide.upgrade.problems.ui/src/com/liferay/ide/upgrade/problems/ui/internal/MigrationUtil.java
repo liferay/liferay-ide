@@ -16,9 +16,8 @@ package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
 
@@ -28,7 +27,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.util.OpenStrategy;
@@ -44,85 +42,13 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public class MigrationUtil {
 
-	public static void addMarkers(List<FileUpgradeProblem> problems) {
-		IWorkspaceRoot ws = CoreUtil.getWorkspaceRoot();
+	public static void addMarkers(List<UpgradeProblem> problems) {
+		for (UpgradeProblem problem : problems) {
+			IResource upgradeProblemResource = problem.getResource();
 
-		for (FileUpgradeProblem problem : problems) {
-			IResource workspaceResource = null;
-
-			File problemFile = problem.file;
-
-			IResource[] containers = ws.findContainersForLocationURI(problemFile.toURI());
-
-			if (ListUtil.isNotEmpty(containers)) {
-
-				// prefer project containers
-
-				for (IResource container : containers) {
-					if (FileUtil.exists(container)) {
-						if (container.getType() == IResource.PROJECT) {
-							workspaceResource = container;
-
-							break;
-						}
-						else {
-							IProject project = container.getProject();
-
-							if (CoreUtil.isLiferayProject(project)) {
-								workspaceResource = container;
-
-								break;
-							}
-						}
-					}
-				}
-
-				if (workspaceResource == null) {
-					final IFile[] files = ws.findFilesForLocationURI(problemFile.toURI());
-
-					for (IFile file : files) {
-						if (file.exists()) {
-							if (workspaceResource == null) {
-								if (CoreUtil.isLiferayProject(file.getProject())) {
-									workspaceResource = file;
-								}
-							}
-							else {
-
-								// prefer the path that is shortest (to avoid a nested version)
-
-								if (FileUtil.getSegmentCount(file.getFullPath()) <
-										FileUtil.getSegmentCount(workspaceResource.getFullPath())) {
-
-									workspaceResource = file;
-								}
-							}
-						}
-					}
-				}
-
-				if (workspaceResource == null) {
-					for (IResource container : containers) {
-						if (workspaceResource == null) {
-							workspaceResource = container;
-						}
-						else {
-
-							// prefer the path that is shortest (to avoid a nested version)
-
-							if (FileUtil.getSegmentCount(container.getLocation()) <
-									FileUtil.getSegmentCount(workspaceResource.getLocation())) {
-
-								workspaceResource = container;
-							}
-						}
-					}
-				}
-			}
-
-			if (FileUtil.exists(workspaceResource)) {
+			if (FileUtil.exists(upgradeProblemResource)) {
 				try {
-					IMarker marker = workspaceResource.createMarker(FileUpgradeProblem.MARKER_TYPE);
+					IMarker marker = upgradeProblemResource.createMarker(UpgradeProblem.MARKER_TYPE);
 
 					problem.setMarkerId(marker.getId());
 
@@ -146,15 +72,15 @@ public class MigrationUtil {
 		}
 	}
 
-	public static void openEditor(FileUpgradeProblem problem) {
+	public static void openEditor(UpgradeProblem problem) {
 		try {
-			IResource resource = _getIResourceFromFile(problem.file);
+			IResource resource = problem.getResource();
 
 			if (resource instanceof IFile) {
 				IMarker marker = null;
 
 				try {
-					marker = resource.findMarker(problem.markerId);
+					marker = resource.findMarker(problem.getMarkerId());
 				}
 				catch (CoreException ce) {
 				}
@@ -168,7 +94,8 @@ public class MigrationUtil {
 					if (editor instanceof ITextEditor) {
 						ITextEditor textEditor = (ITextEditor)editor;
 
-						textEditor.selectAndReveal(problem.startOffset, problem.endOffset - problem.startOffset);
+						textEditor.selectAndReveal(
+							problem.getStartOffset(), problem.getEndOffset() - problem.getStartOffset());
 					}
 				}
 			}
@@ -177,19 +104,23 @@ public class MigrationUtil {
 		}
 	}
 
-	public static void problemToMarker(FileUpgradeProblem problem, IMarker marker) throws CoreException {
-		marker.setAttribute(IMarker.MESSAGE, problem.title);
-		marker.setAttribute("migrationProblem.summary", problem.summary);
-		marker.setAttribute("migrationProblem.ticket", problem.ticket);
-		marker.setAttribute("migrationProblem.type", problem.type);
-		marker.setAttribute(IMarker.LINE_NUMBER, problem.lineNumber);
-		marker.setAttribute(IMarker.CHAR_START, problem.startOffset);
-		marker.setAttribute(IMarker.CHAR_END, problem.endOffset);
+	public static void problemToMarker(UpgradeProblem problem, IMarker marker) throws CoreException {
+		marker.setAttribute(IMarker.MESSAGE, problem.getTitle());
+		marker.setAttribute("migrationProblem.summary", problem.getSummary());
+		marker.setAttribute("migrationProblem.ticket", problem.getTicket());
+		marker.setAttribute("migrationProblem.type", problem.getType());
+		marker.setAttribute(IMarker.LINE_NUMBER, problem.getLineNumber());
+		marker.setAttribute(IMarker.CHAR_START, problem.getStartOffset());
+		marker.setAttribute(IMarker.CHAR_END, problem.getEndOffset());
 		marker.setAttribute("migrationProblem.autoCorrectContext", problem.getAutoCorrectContext());
-		marker.setAttribute("migrationProblem.html", problem.html);
-		marker.setAttribute("migrationProblem.status", problem.status);
-		marker.setAttribute(IMarker.LOCATION, problem.file.getName());
-		marker.setAttribute(IMarker.SEVERITY, problem.markerType);
+		marker.setAttribute("migrationProblem.html", problem.getHtml());
+		marker.setAttribute("migrationProblem.status", problem.getStatus());
+
+		IResource resource = problem.getResource();
+
+		marker.setAttribute(IMarker.LOCATION, resource.getName());
+
+		marker.setAttribute(IMarker.SEVERITY, problem.getMarkerType());
 	}
 
 	private static IResource _getIResourceFromFile(File f) {

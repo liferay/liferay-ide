@@ -41,7 +41,7 @@ public class ResourceSelectionImpl implements ResourceSelection {
 
 	@Override
 	public Path selectPath(String message) {
-		final String[] pathValue = new String[0];
+		final String[] pathValue = new String[1];
 
 		UIUtil.sync(
 			() -> {

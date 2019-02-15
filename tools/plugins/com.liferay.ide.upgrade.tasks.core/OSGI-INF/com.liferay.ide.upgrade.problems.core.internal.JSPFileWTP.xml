@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component name="com.liferay.ide.upgrade.problems.core.internal.JSPFileWTP" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
-	<property name="file.extension" value="jsp" />
-	<service>
-		<provide interface="com.liferay.ide.upgrade.plan.tasks.core.JavaFile" />
-		<provide interface="com.liferay.ide.upgrade.plan.tasks.core.JSPFile" />
-	</service>
-	<implementation class="com.liferay.ide.upgrade.problems.core.internal.JSPFileWTP" />
-</scr:component>

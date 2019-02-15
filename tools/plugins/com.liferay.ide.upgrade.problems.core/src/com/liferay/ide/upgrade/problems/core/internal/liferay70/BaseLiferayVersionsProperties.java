@@ -27,28 +27,31 @@ import org.eclipse.core.runtime.CoreException;
 import org.osgi.framework.BundleContext;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
-import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker;
 import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker.KeyInfo;
 import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.WorkspaceFile;
 
 /**
  * @author Gregory Amerson
  */
 public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrator implements AutoFileMigrator {
 
+	private WorkspaceFile _workspaceFile;
 	public BaseLiferayVersionsProperties(String oldVersionPattern, String newVersion) {
 		_oldVersionPattern = oldVersionPattern;
 		_newVersion = newVersion;
+		_workspaceFile = new WorkspaceFile();
 	}
 
 	@Override
-	public List<FileUpgradeProblem> analyze(File file) {
-		List<FileUpgradeProblem> problems = new ArrayList<>();
+	public List<UpgradeProblem> analyze(File file) {
+		List<UpgradeProblem> problems = new ArrayList<>();
 
 		if ("liferay-plugin-package.properties".equals(file.getName())) {
 			PropertiesFileChecker propertiesFileChecker = new PropertiesFileChecker(file);
@@ -70,11 +73,11 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 							searchResult.autoCorrectContext = _PREFIX + "liferay-versions";
 
 							problems.add(
-								new FileUpgradeProblem(
-									problemTitle, problemSummary, problemType, problemTickets, version, file,
+								new UpgradeProblem(
+									problemTitle, problemSummary, problemType, problemTickets, version, _workspaceFile.getIFile(file),
 									searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
-									sectionHtml, searchResult.autoCorrectContext, FileUpgradeProblem.STATUS_NOT_RESOLVED,
-									FileUpgradeProblem.DEFAULT_MARKER_ID, FileUpgradeProblem.MARKER_ERROR));
+									sectionHtml, searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
+									UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));
 						}
 					}
 				}
@@ -85,7 +88,7 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 	}
 
 	@Override
-	public int correctProblems(File file, List<FileUpgradeProblem> problems) throws AutoFileMigrateException {
+	public int correctProblems(File file, List<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
 		try {
 			String contents = new String(Files.readAllBytes(file.toPath()));
 
@@ -97,9 +100,9 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 
 			int problemsFixed = 0;
 
-			for (FileUpgradeProblem problem : problems) {
-				if (problem.autoCorrectContext instanceof String) {
-					String propertyData = problem.autoCorrectContext;
+			for (UpgradeProblem upgradeProblem : upgradeProblems) {
+				if (upgradeProblem.getAutoCorrectContext() instanceof String) {
+					String propertyData = upgradeProblem.getAutoCorrectContext();
 
 					if ((propertyData != null) && propertyData.startsWith(_PREFIX)) {
 						String propertyValue = propertyData.substring(_PREFIX.length());

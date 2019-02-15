@@ -14,11 +14,12 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Terry Jia
@@ -26,31 +27,23 @@ import java.util.Arrays;
  */
 public class FileProblemsContainer {
 
-	public void addProblem(FileUpgradeProblem problem) {
-		FileUpgradeProblem[] problems = Arrays.copyOf(_problems, _problems.length + 1);
-
-		problems[problems.length - 1] = problem;
-
-		_problems = problems;
+	public void addUpgradeProblem(UpgradeProblem problem) {
+		_upgradeProblems.add(problem);
 	}
 
 	public File getFile() {
 		return _file;
 	}
 
-	public FileUpgradeProblem[] getProblems() {
-		return _problems;
+	public List<UpgradeProblem> getUpgradeProblems() {
+		return _upgradeProblems;
 	}
 
 	public void setFile(File file) {
 		_file = file;
 	}
 
-	public void setProblems(FileUpgradeProblem[] problems) {
-		_problems = problems;
-	}
-
 	private File _file;
-	private FileUpgradeProblem[] _problems = new FileUpgradeProblem[0];
+	private List<UpgradeProblem> _upgradeProblems = new ArrayList<>();
 
 }

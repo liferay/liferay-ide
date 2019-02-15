@@ -14,13 +14,34 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
 /**
  * @author Terry Jia
  * @author Gregory Amerson
  */
 public class ProjectProblemsContainer {
 
-	public FileProblemsContainer[] getFileProblemsContainers() {
+	public void addFileProblemsContainer(FileProblemsContainer fileProblemsContainer) {
+		_fileProblemsContainers.add(fileProblemsContainer);
+	}
+
+	public FileProblemsContainer getFileProblemsContainer(File file) {
+		Stream<FileProblemsContainer> stream = _fileProblemsContainers.stream();
+
+		return stream.filter(
+			fileProblemContainer -> file.equals(fileProblemContainer.getFile())
+		).findFirst(
+		).orElse(
+			null
+		);
+	}
+
+	public List<FileProblemsContainer> getFileProblemsContainers() {
 		return _fileProblemsContainers;
 	}
 
@@ -28,15 +49,15 @@ public class ProjectProblemsContainer {
 		return _projectName;
 	}
 
-	public void setFileProblemsContainers(FileProblemsContainer[] fileProblemsContainers) {
-		_fileProblemsContainers = fileProblemsContainers;
+	public boolean isEmpty() {
+		return _fileProblemsContainers.isEmpty();
 	}
 
 	public void setProjectName(String projectName) {
 		_projectName = projectName;
 	}
 
-	private FileProblemsContainer[] _fileProblemsContainers;
+	private List<FileProblemsContainer> _fileProblemsContainers = new ArrayList<>();
 	private String _projectName;
 
 }

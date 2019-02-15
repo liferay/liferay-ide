@@ -26,9 +26,9 @@ import org.json.JSONObject;
 import org.osgi.service.component.annotations.Component;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
-import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
@@ -44,8 +44,7 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 		if (_deprecatedMethods == null) {
 			List<JSONArray> deprecatedMethodsList = new ArrayList<>();
 
-			String fqn =
-				"/com/liferay/ide/upgrade/plan/tasks/core/internal/problem/upgrade/liferay70/deprecatedmethods/";
+			String fqn = "/com/liferay/ide/upgrade/problems/core/internal/liferay70/";
 
 			String[] jsonFilePaths = {
 				fqn + "deprecatedMethods62.json", fqn + "deprecatedMethods61.json",
@@ -73,8 +72,8 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 	}
 
 	@Override
-	public List<FileUpgradeProblem> analyze(File file) {
-		List<FileUpgradeProblem> problems = new ArrayList<>();
+	public List<UpgradeProblem> analyze(File file) {
+		List<UpgradeProblem> problems = new ArrayList<>();
 		String fileExtension = new Path(file.getAbsolutePath()).getFileExtension();
 
 		for (JSONArray deprecatedMethodsArray : _deprecatedMethods) {
@@ -86,18 +85,18 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 
 					if (searchResults != null) {
 						for (FileSearchResult searchResult : searchResults) {
-							int makerType = FileUpgradeProblem.MARKER_ERROR;
+							int makerType = UpgradeProblem.MARKER_ERROR;
 
 							if ("7.0".equals(_tempMethod.getString("deprecatedVersion"))) {
-								makerType = FileUpgradeProblem.MARKER_WARNING;
+								makerType = UpgradeProblem.MARKER_WARNING;
 							}
 
 							problems.add(
-								new FileUpgradeProblem(
+								new UpgradeProblem(
 									_tempMethod.getString("javadoc"), _tempMethod.getString("javadoc"), fileExtension, "",
-									"7.0", file, searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
+									"7.0", workspaceFile.getIFile(file), searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
 									_tempMethod.getString("javadoc"), searchResult.autoCorrectContext,
-									FileUpgradeProblem.STATUS_NOT_RESOLVED, FileUpgradeProblem.DEFAULT_MARKER_ID, makerType));
+									UpgradeProblem.STATUS_NOT_RESOLVED, UpgradeProblem.DEFAULT_MARKER_ID, makerType));
 						}
 					}
 				}

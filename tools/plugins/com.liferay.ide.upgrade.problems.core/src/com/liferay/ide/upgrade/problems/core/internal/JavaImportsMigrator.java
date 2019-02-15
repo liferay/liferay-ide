@@ -15,11 +15,11 @@
 package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.CUCache;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
-import com.liferay.ide.upgrade.problems.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 
 import java.io.BufferedReader;
@@ -58,22 +58,22 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 	}
 
 	@Override
-	public int correctProblems(File file, List<FileUpgradeProblem> problems) throws AutoFileMigrateException {
+	public int correctProblems(File file, List<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
 		int problemsFixed = 0;
 
 		List<String> importsToRewrite = new ArrayList<>();
 
-		for (FileUpgradeProblem problem : problems) {
+		for (UpgradeProblem upgradeProblem : upgradeProblems) {
 			boolean problemFound = false;
 
-			if (problem.autoCorrectContext instanceof String) {
-				String importData = problem.autoCorrectContext;
+			if (upgradeProblem.getAutoCorrectContext() instanceof String) {
+				String importData = upgradeProblem.getAutoCorrectContext();
 
 				if ((importData != null) && importData.startsWith(_PREFIX)) {
 					String importValue = importData.substring(_PREFIX.length());
 
 					if (_importFixes.containsKey(importValue)) {
-						importsToRewrite.add(problem.getLineNumber() + "," + importValue);
+						importsToRewrite.add(upgradeProblem.getLineNumber() + "," + importValue);
 
 						problemFound = true;
 					}

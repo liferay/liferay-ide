@@ -16,12 +16,15 @@ package com.liferay.ide.upgrade.plan.core;
 
 import java.nio.file.Path;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
  * @author Gregory Amerson
  */
 public interface UpgradePlan {
+
+	public void addUpgradeProblems(Collection<UpgradeProblem> upgradeProblems);
 
 	public Path getCurrentProjectLocation();
 
@@ -34,6 +37,8 @@ public interface UpgradePlan {
 	public String getTargetVersion();
 
 	public List<UpgradeTask> getTasks();
+
+	public Collection<UpgradeProblem> getUpgradeProblems();
 
 	public void setTargetProjectLocation(Path path);
 

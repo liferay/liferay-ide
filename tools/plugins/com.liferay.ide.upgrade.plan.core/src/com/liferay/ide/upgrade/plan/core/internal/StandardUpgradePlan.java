@@ -15,14 +15,18 @@
 package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.nio.file.Path;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,6 +45,12 @@ public class StandardUpgradePlan implements UpgradePlan {
 		_currentVersion = currentVersion;
 		_targetVersion = targetVersion;
 		_currentProjectLocation = currentProjectLocation;
+		_upgradeProblems = new HashSet<>();
+	}
+
+	@Override
+	public void addUpgradeProblems(Collection<UpgradeProblem> upgradeProblems) {
+		_upgradeProblems.addAll(upgradeProblems);
 	}
 
 	@Override
@@ -114,6 +124,11 @@ public class StandardUpgradePlan implements UpgradePlan {
 	}
 
 	@Override
+	public Set<UpgradeProblem> getUpgradeProblems() {
+		return _upgradeProblems;
+	}
+
+	@Override
 	public void setTargetProjectLocation(Path path) {
 		_targetProjectLocation = path;
 	}
@@ -123,6 +138,7 @@ public class StandardUpgradePlan implements UpgradePlan {
 	private final String _name;
 	private Path _targetProjectLocation;
 	private final String _targetVersion;
+	private Set<UpgradeProblem> _upgradeProblems;
 	private List<UpgradeTask> _upgradeTasks;
 
 }

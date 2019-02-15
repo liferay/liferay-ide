@@ -8,6 +8,5 @@
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
    </service>
-   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
    <implementation class="com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsTaskStep"/>
 </scr:component>

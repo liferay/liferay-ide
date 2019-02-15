@@ -14,35 +14,127 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
+import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+
+import java.io.File;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Terry Jia
  */
 public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProvider {
 
+	public UpgradeProblemsContentProvider() {
+		Bundle bundle = FrameworkUtil.getBundle(UpgradeProblemsContentProvider.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_upgradePlannerServiceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+
+		_upgradePlannerServiceTracker.open();
+	}
+
 	public Object[] getChildren(Object element) {
 		if (element instanceof MigrationProblemsContainer) {
 			MigrationProblemsContainer migrationProblemsContainer = (MigrationProblemsContainer)element;
 
-			return migrationProblemsContainer.getProjectProblemsConatiners();
+			List<ProjectProblemsContainer> projectProblemsContainers =
+				migrationProblemsContainer.getProjectProblemsConatiners();
+
+			Stream<ProjectProblemsContainer> stream = projectProblemsContainers.stream();
+
+			return stream.filter(
+				projectProblemsContainer -> !projectProblemsContainer.isEmpty()
+			).toArray();
 		}
 		else if (element instanceof ProjectProblemsContainer) {
 			ProjectProblemsContainer projectProblemsContainer = (ProjectProblemsContainer)element;
 
-			return projectProblemsContainer.getFileProblemsContainers();
+			List<FileProblemsContainer> fileProblemsContainers = projectProblemsContainer.getFileProblemsContainers();
+
+			return fileProblemsContainers.toArray();
 		}
 		else if (element instanceof FileProblemsContainer) {
 			FileProblemsContainer fileProblemsContainer = (FileProblemsContainer)element;
 
-			return fileProblemsContainer.getProblems();
+			List<UpgradeProblem> upgradeProblems = fileProblemsContainer.getUpgradeProblems();
+
+			return upgradeProblems.toArray();
 		}
 
 		return null;
 	}
 
 	public Object[] getElements(Object inputElement) {
-		return null;
+		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
+
+		UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
+
+		if (upgradePlan == null) {
+			return null;
+		}
+
+		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
+
+		MigrationProblemsContainer migrationProblemsContainer = new MigrationProblemsContainer();
+
+		for (IProject project : CoreUtil.getAllProjects()) {
+			ProjectProblemsContainer projectProblemsContainer = new ProjectProblemsContainer();
+
+			projectProblemsContainer.setProjectName(project.getName());
+
+			for (UpgradeProblem upgradeProblem : upgradeProblems) {
+				IResource resource = upgradeProblem.getResource();
+
+				File file = new File(resource.getLocationURI());
+
+				Path filePath = new Path(file.getPath());
+
+				IPath projectLocation = project.getLocation();
+
+				if (!projectLocation.isPrefixOf(filePath)) {
+					continue;
+				}
+
+				FileProblemsContainer fileProblemsContainer = projectProblemsContainer.getFileProblemsContainer(file);
+
+				if (fileProblemsContainer == null) {
+					fileProblemsContainer = new FileProblemsContainer();
+
+					fileProblemsContainer.setFile(file);
+
+					projectProblemsContainer.addFileProblemsContainer(fileProblemsContainer);
+				}
+
+				fileProblemsContainer.addUpgradeProblem(upgradeProblem);
+			}
+
+			migrationProblemsContainer.addProjectProblemsContainer(projectProblemsContainer);
+		}
+
+		if (migrationProblemsContainer.isNotEmpty()) {
+			return new Object[] {migrationProblemsContainer};
+		}
+		else {
+			return null;
+		}
 	}
 
 	public boolean hasChildren(Object element) {
@@ -63,5 +155,7 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 	public boolean hasPipelinedChildren(Object element, boolean currentHasChildren) {
 		return hasChildren(element);
 	}
+
+	private ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
 
 }
