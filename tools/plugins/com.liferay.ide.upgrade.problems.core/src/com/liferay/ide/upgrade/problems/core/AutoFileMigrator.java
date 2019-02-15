@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.core;
 
-import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
 
@@ -25,6 +25,6 @@ import java.util.List;
  */
 public interface AutoFileMigrator {
 
-	public int correctProblems(File file, List<FileUpgradeProblem> fileUpgradeProblems) throws AutoFileMigrateException;
+	public int correctProblems(File file, List<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException;
 
 }

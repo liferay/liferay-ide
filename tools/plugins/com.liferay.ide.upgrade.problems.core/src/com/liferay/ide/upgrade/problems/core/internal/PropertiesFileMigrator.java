@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 
@@ -46,11 +46,13 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 		version = (String)properties.get("version");
 
 		addPropertiesToSearch(this.properties);
+
+		_workspaceFile = new WorkspaceFile();
 	}
 
 	@Override
-	public List<FileUpgradeProblem> analyze(File file) {
-		List<FileUpgradeProblem> problems = new ArrayList<>();
+	public List<UpgradeProblem> analyze(File file) {
+		List<UpgradeProblem> problems = new ArrayList<>();
 
 		PropertiesFileChecker propertiesFileChecker = new PropertiesFileChecker(file);
 
@@ -71,11 +73,12 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 
 				for (FileSearchResult searchResult : results) {
 					problems.add(
-						new FileUpgradeProblem(
-							problemTitle, problemSummary, problemType, problemTickets, version, file,
-							searchResult.startLine, searchResult.startOffset, searchResult.endOffset, sectionHtml,
-							searchResult.autoCorrectContext, FileUpgradeProblem.STATUS_NOT_RESOLVED,
-							FileUpgradeProblem.DEFAULT_MARKER_ID, FileUpgradeProblem.MARKER_ERROR));
+						new UpgradeProblem(
+							problemTitle, problemSummary, problemType, problemTickets, version,
+							_workspaceFile.getIFile(file), searchResult.startLine, searchResult.startOffset,
+							searchResult.endOffset, sectionHtml, searchResult.autoCorrectContext,
+							UpgradeProblem.STATUS_NOT_RESOLVED, UpgradeProblem.DEFAULT_MARKER_ID,
+							UpgradeProblem.MARKER_ERROR));
 				}
 			}
 		}
@@ -93,5 +96,7 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 	protected final List<String> properties = new ArrayList<>();
 	protected String sectionKey = "";
 	protected String version = "";
+
+	private WorkspaceFile _workspaceFile;
 
 }

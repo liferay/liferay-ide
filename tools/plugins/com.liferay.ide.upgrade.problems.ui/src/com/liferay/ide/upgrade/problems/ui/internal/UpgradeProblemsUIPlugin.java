@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;
@@ -116,8 +116,8 @@ public class UpgradeProblemsUIPlugin extends AbstractUIPlugin {
 
 						Object element = treeSelection.getFirstElement();
 
-						if (element instanceof FileUpgradeProblem) {
-							MigrationUtil.openEditor((FileUpgradeProblem)element);
+						if (element instanceof UpgradeProblem) {
+							MigrationUtil.openEditor((UpgradeProblem)element);
 						}
 						else if (element instanceof FileProblemsContainer) {
 							MigrationUtil.openEditor((FileProblemsContainer)element);

@@ -16,17 +16,18 @@ package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
-import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
@@ -73,9 +74,9 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 		else if (element instanceof FileProblemsContainer) {
 			FileProblemsContainer fileProblemsContainer = (FileProblemsContainer)element;
 
-			List<FileUpgradeProblem> problems = fileProblemsContainer.getProblems();
+			List<UpgradeProblem> upgradeProblems = fileProblemsContainer.getUpgradeProblems();
 
-			return problems.toArray();
+			return upgradeProblems.toArray();
 		}
 
 		return null;
@@ -90,7 +91,7 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 			return null;
 		}
 
-		Set<FileUpgradeProblem> fileUpgradeProblems = upgradePlan.getFileUpgradeProblems();
+		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
 		MigrationProblemsContainer migrationProblemsContainer = new MigrationProblemsContainer();
 
@@ -99,8 +100,10 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 
 			projectProblemsContainer.setProjectName(project.getName());
 
-			for (FileUpgradeProblem fileUpgradeProblem : fileUpgradeProblems) {
-				File file = fileUpgradeProblem.getFile();
+			for (UpgradeProblem upgradeProblem : upgradeProblems) {
+				IResource resource = upgradeProblem.getResource();
+
+				File file = new File(resource.getLocationURI());
 
 				Path filePath = new Path(file.getPath());
 
@@ -120,7 +123,7 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 					projectProblemsContainer.addFileProblemsContainer(fileProblemsContainer);
 				}
 
-				fileProblemsContainer.addProblem(fileUpgradeProblem);
+				fileProblemsContainer.addUpgradeProblem(upgradeProblem);
 			}
 
 			migrationProblemsContainer.addProjectProblemsContainer(projectProblemsContainer);

@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
 
@@ -27,16 +27,16 @@ import java.util.List;
  */
 public class FileProblemsContainer {
 
-	public void addProblem(FileUpgradeProblem problem) {
-		_problems.add(problem);
+	public void addUpgradeProblem(UpgradeProblem problem) {
+		_upgradeProblems.add(problem);
 	}
 
 	public File getFile() {
 		return _file;
 	}
 
-	public List<FileUpgradeProblem> getProblems() {
-		return _problems;
+	public List<UpgradeProblem> getUpgradeProblems() {
+		return _upgradeProblems;
 	}
 
 	public void setFile(File file) {
@@ -44,6 +44,6 @@ public class FileProblemsContainer {
 	}
 
 	private File _file;
-	private List<FileUpgradeProblem> _problems = new ArrayList<>();
+	private List<UpgradeProblem> _upgradeProblems = new ArrayList<>();
 
 }

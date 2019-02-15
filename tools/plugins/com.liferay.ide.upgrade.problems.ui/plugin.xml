@@ -28,7 +28,7 @@
 					>
 					</instanceof>
 					<instanceof
-						value="com.liferay.ide.upgrade.problems.core.FileUpgradeProblem"
+						value="com.liferay.ide.upgrade.problems.core.UpgradeProblem"
 					>
 					</instanceof>
 					<instanceof

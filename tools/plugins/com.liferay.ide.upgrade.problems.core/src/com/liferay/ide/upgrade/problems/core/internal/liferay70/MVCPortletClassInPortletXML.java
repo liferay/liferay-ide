@@ -34,7 +34,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Text;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
@@ -59,7 +59,7 @@ import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 public class MVCPortletClassInPortletXML extends XMLFileMigrator implements AutoFileMigrator {
 
 	@Override
-	public int correctProblems(File file, List<FileUpgradeProblem> problems) throws AutoFileMigrateException {
+	public int correctProblems(File file, List<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
 		int corrected = 0;
 		IFile xmlFile = getXmlFile(file);
 		IDOMModel xmlModel = null;
@@ -72,9 +72,9 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 
 				List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
-				for (FileUpgradeProblem problem : problems) {
-					if (_KEY.equals(problem.autoCorrectContext)) {
-						IndexedRegion region = xmlModel.getIndexedRegion(problem.startOffset);
+				for (UpgradeProblem upgradeProblem : upgradeProblems) {
+					if (_KEY.equals(upgradeProblem.getAutoCorrectContext())) {
+						IndexedRegion region = xmlModel.getIndexedRegion(upgradeProblem.getStartOffset());
 
 						if (region instanceof IDOMElement) {
 							IDOMElement element = (IDOMElement)region;

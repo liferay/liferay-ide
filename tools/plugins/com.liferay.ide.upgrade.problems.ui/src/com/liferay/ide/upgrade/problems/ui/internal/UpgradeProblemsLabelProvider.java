@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
-import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 
 import org.eclipse.jface.resource.ImageRegistry;
@@ -54,7 +54,7 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 		else if (element instanceof FileProblemsContainer) {
 			return getImageRegistry().get("FileProblems");
 		}
-		else if (element instanceof FileUpgradeProblem) {
+		else if (element instanceof UpgradeProblem) {
 			return getImageRegistry().get("Problem");
 		}
 

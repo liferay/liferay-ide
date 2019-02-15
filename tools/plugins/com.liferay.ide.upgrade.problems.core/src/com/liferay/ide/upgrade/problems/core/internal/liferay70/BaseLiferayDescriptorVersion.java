@@ -27,7 +27,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocumentType;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
-import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
@@ -46,7 +46,7 @@ public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator imple
 	}
 
 	@Override
-	public int correctProblems(File file, List<FileUpgradeProblem> problems) throws AutoFileMigrateException {
+	public int correctProblems(File file, List<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
 		int problemsCorrected = 0;
 
 		try {

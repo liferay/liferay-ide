@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.core;
 
-import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
 
@@ -29,9 +29,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface FileMigration {
 
-	public List<FileUpgradeProblem> findProblems(File dir, List<String> versions, IProgressMonitor monitor);
+	public List<UpgradeProblem> findUpgradeProblems(File dir, List<String> versions, IProgressMonitor monitor);
 
-	public List<FileUpgradeProblem> findProblems(Set<File> files, List<String> versions, IProgressMonitor monitor);
+	public List<UpgradeProblem> findUpgradeProblems(Set<File> files, List<String> versions, IProgressMonitor monitor);
 
 	public int DETAIL_LONG = 1 << 2;
 

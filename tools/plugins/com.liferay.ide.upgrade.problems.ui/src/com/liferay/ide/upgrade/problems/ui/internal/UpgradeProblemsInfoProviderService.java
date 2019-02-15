@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 
 import java.io.File;
@@ -67,8 +67,8 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 		else if (element instanceof ProjectProblemsContainer) {
 			return _doProjectProblemsContainerLabel((ProjectProblemsContainer)element);
 		}
-		else if (element instanceof FileUpgradeProblem) {
-			return _doProblemLabel((FileUpgradeProblem)element);
+		else if (element instanceof UpgradeProblem) {
+			return _doProblemLabel((UpgradeProblem)element);
 		}
 
 		return null;
@@ -92,15 +92,15 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 
 		File file = fileProblemsContainer.getFile();
 
-		List<FileUpgradeProblem> problems = fileProblemsContainer.getProblems();
+		List<UpgradeProblem> problems = fileProblemsContainer.getUpgradeProblems();
 
 		sb.append(file);
 		sb.append("<br />");
 		sb.append("It has " + problems.size() + " issue(s) need to be solved.");
 		sb.append("<br />");
 
-		for (FileUpgradeProblem problem : problems) {
-			sb.append(problem.title);
+		for (UpgradeProblem problem : problems) {
+			sb.append(problem.getTitle());
 			sb.append("<br />");
 		}
 
@@ -116,15 +116,15 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 		return fileName + " [" + path + "]";
 	}
 
-	private String _doProblemLabel(FileUpgradeProblem problem) {
+	private String _doProblemLabel(UpgradeProblem problem) {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("[");
-		sb.append(problem.version);
+		sb.append(problem.getVersion());
 		sb.append("][");
-		sb.append(problem.lineNumber);
+		sb.append(problem.getLineNumber());
 		sb.append("]");
-		sb.append(problem.title);
+		sb.append(problem.getTitle());
 
 		return sb.toString();
 	}

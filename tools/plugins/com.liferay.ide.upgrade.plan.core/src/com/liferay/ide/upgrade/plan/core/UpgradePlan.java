@@ -18,20 +18,17 @@ import java.nio.file.Path;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Gregory Amerson
  */
 public interface UpgradePlan {
 
-	public void addFileUpgradeProblems(Collection<FileUpgradeProblem> fileUpgradeProblems);
+	public void addUpgradeProblems(Collection<UpgradeProblem> upgradeProblems);
 
 	public Path getCurrentProjectLocation();
 
 	public String getCurrentVersion();
-
-	public Set<FileUpgradeProblem> getFileUpgradeProblems();
 
 	public String getName();
 
@@ -40,6 +37,8 @@ public interface UpgradePlan {
 	public String getTargetVersion();
 
 	public List<UpgradeTask> getTasks();
+
+	public Collection<UpgradeProblem> getUpgradeProblems();
 
 	public void setTargetProjectLocation(Path path);
 

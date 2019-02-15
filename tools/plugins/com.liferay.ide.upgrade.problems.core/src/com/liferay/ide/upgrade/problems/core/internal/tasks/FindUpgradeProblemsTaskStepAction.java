@@ -16,9 +16,9 @@ package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
@@ -70,10 +70,10 @@ public class FindUpgradeProblemsTaskStepAction extends BaseUpgradeTaskStepAction
 					project -> {
 						File searchFile = FileUtil.getFile(project);
 
-						List<FileUpgradeProblem> fileUpgradeProblems = _fileMigration.findProblems(
+						List<UpgradeProblem> upgradeProblems = _fileMigration.findUpgradeProblems(
 							searchFile, versions, monitor);
 
-						upgradePlan.addFileUpgradeProblems(fileUpgradeProblems);
+						upgradePlan.addUpgradeProblems(upgradeProblems);
 					});
 
 				_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(FindUpgradeProblemsTaskStepAction.this));

@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.plan.core.FileUpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 
@@ -66,29 +66,28 @@ public class FileMigrationService implements FileMigration {
 	}
 
 	@Override
-	public List<FileUpgradeProblem> findProblems(File dir, List<String> versions, IProgressMonitor monitor) {
+	public List<UpgradeProblem> findUpgradeProblems(File dir, List<String> versions, IProgressMonitor monitor) {
 		monitor.beginTask("Searching for migration problems in " + dir, -1);
 
-		List<FileUpgradeProblem> fileUpgradeProblems = Collections.synchronizedList(
-			new ArrayList<FileUpgradeProblem>());
+		List<UpgradeProblem> upgradeProblems = Collections.synchronizedList(new ArrayList<UpgradeProblem>());
 
 		monitor.beginTask("Analyzing files", -1);
 
 		_countTotal(dir);
 
-		_walkFiles(dir, fileUpgradeProblems, versions, monitor);
+		_walkFiles(dir, upgradeProblems, versions, monitor);
 
 		monitor.done();
 
 		_count = 0;
 		_total = 0;
 
-		return fileUpgradeProblems;
+		return upgradeProblems;
 	}
 
 	@Override
-	public List<FileUpgradeProblem> findProblems(Set<File> files, List<String> versions, IProgressMonitor monitor) {
-		List<FileUpgradeProblem> problems = Collections.synchronizedList(new ArrayList<FileUpgradeProblem>());
+	public List<UpgradeProblem> findUpgradeProblems(Set<File> files, List<String> versions, IProgressMonitor monitor) {
+		List<UpgradeProblem> problems = Collections.synchronizedList(new ArrayList<UpgradeProblem>());
 
 		monitor.beginTask("Analyzing files", -1);
 
@@ -113,7 +112,7 @@ public class FileMigrationService implements FileMigration {
 	}
 
 	protected FileVisitResult analyzeFile(
-		File file, List<FileUpgradeProblem> problems, List<String> versions, IProgressMonitor monitor) {
+		File file, List<UpgradeProblem> upgradeProblems, List<String> versions, IProgressMonitor monitor) {
 
 		Path path = file.toPath();
 
@@ -201,11 +200,11 @@ public class FileMigrationService implements FileMigration {
 						_context::getService
 					).parallel(
 					).forEach(
-						fm -> {
-							List<FileUpgradeProblem> fileProlbems = fm.analyze(file);
+						fileMigrator -> {
+							List<UpgradeProblem> problems = fileMigrator.analyze(file);
 
-							if (ListUtil.isNotEmpty(fileProlbems)) {
-								problems.addAll(fileProlbems);
+							if (ListUtil.isNotEmpty(problems)) {
+								upgradeProblems.addAll(problems);
 							}
 						}
 					);
@@ -274,7 +273,7 @@ public class FileMigrationService implements FileMigration {
 	}
 
 	private void _walkFiles(
-		File startDir, List<FileUpgradeProblem> problems, List<String> versions, IProgressMonitor monitor) {
+		File startDir, List<UpgradeProblem> upgradeProblems, List<String> versions, IProgressMonitor monitor) {
 
 		SubMonitor progressMonitor = SubMonitor.convert(monitor, _total);
 
@@ -320,7 +319,7 @@ public class FileMigrationService implements FileMigration {
 				progressMonitor.split(1);
 
 				if (file.isFile() && attrs.isRegularFile() && (attrs.size() > 0)) {
-					FileVisitResult result = analyzeFile(file, problems, versions, monitor);
+					FileVisitResult result = analyzeFile(file, upgradeProblems, versions, monitor);
 
 					if (result.equals(FileVisitResult.TERMINATE)) {
 						return result;
