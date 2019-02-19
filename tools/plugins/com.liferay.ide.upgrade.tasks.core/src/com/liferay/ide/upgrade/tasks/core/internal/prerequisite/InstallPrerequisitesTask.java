@@ -12,26 +12,20 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core;
+package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 
-import java.nio.file.Path;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
+import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 
-import java.util.List;
-
-import org.eclipse.core.resources.IProject;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
- * @author Terry Jia
  */
-public interface ResourceSelection {
-
-	public List<IProject> selectJavaProjects(String message, boolean initialSelectAll);
-
-	public IProject selectLiferayWorkspaceProject(String message);
-
-	public Path selectPath(String message);
-
-	public List<IProject> selectProjects(String message, boolean initialSelectAll);
-
+@Component(
+	property = {"categoryId=code", "id=install_prerequisites", "order=1", "title=Install Prerequisites"},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
+)
+public class InstallPrerequisitesTask extends BaseUpgradeTask {
 }

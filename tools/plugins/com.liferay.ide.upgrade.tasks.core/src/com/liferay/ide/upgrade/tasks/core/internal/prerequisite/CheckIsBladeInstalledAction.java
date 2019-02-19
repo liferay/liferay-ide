@@ -12,23 +12,29 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal.tasks;
+package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
 @Component(
-	property = {
-		"id=remove_previous_result", "requirement=recommended", "order=2", "taskId=find_upgrade_problems",
-		"title=Remove Previous Result"
-	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
+	property = {"id=check_is_blade_installed", "order=1", "stepId=install_blade", "title=Check is Blade installed"},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class RemovePreviousResultTaskStep extends BaseUpgradeTaskStep {
+public class CheckIsBladeInstalledAction extends BaseUpgradeTaskStepAction {
+
+	@Override
+	public IStatus perform() {
+		return Status.OK_STATUS;
+	}
+
 }

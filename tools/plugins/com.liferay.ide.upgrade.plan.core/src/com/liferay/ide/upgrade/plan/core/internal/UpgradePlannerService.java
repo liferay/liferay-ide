@@ -85,8 +85,10 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	@Override
-	public UpgradePlan loadUpgradePlan(String name) {
-		return new StandardUpgradePlan(name, null, null, null);
+	public UpgradePlan loadUpgradePlan(
+		String name, String currentVersion, String targetVersion, Path currentProjectLocation) {
+
+		return new StandardUpgradePlan(name, currentVersion, targetVersion, currentProjectLocation);
 	}
 
 	@Override

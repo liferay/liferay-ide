@@ -12,23 +12,29 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal.tasks;
+package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.tasks.core.internal.UpgradeTasksCorePlugin;
+
+import org.eclipse.core.runtime.IStatus;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
 @Component(
-	property = {
-		"id=remove_previous_result", "requirement=recommended", "order=2", "taskId=find_upgrade_problems",
-		"title=Remove Previous Result"
-	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
+	property = {"id=check_installed_jdks", "order=1", "stepId=ensure_compatible_jdk", "title=Check Installed JDKs"},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class RemovePreviousResultTaskStep extends BaseUpgradeTaskStep {
+public class CheckInstalledJDKsAction extends BaseUpgradeTaskStepAction {
+
+	@Override
+	public IStatus perform() {
+		return UpgradeTasksCorePlugin.createErrorStatus("no compatible jdk found");
+	}
+
 }

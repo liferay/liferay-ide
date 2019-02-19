@@ -45,9 +45,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Gregory Amerson
  */
 @Component(
-	property = {
-		"id=new_liferay_workspace", "order=1", "stepId=create_liferay_workspace", "title=New Liferay Workspace"
-	},
+	property = {"id=new_liferay_workspace", "order=1", "stepId=setup_liferay_workspace", "title=New Liferay Workspace"},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class NewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction {

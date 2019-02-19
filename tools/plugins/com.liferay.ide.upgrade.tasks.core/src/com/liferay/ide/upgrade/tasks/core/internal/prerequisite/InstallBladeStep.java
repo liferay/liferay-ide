@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal.tasks;
+package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
@@ -21,14 +21,14 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"id=remove_previous_result", "requirement=recommended", "order=2", "taskId=find_upgrade_problems",
-		"title=Remove Previous Result"
+		"description=This is some description text for blade cli", "id=install_blade", "requirement=recommended",
+		"order=2", "taskId=install_prerequisites", "title=Install Blade CLI"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class RemovePreviousResultTaskStep extends BaseUpgradeTaskStep {
+public class InstallBladeStep extends BaseUpgradeTaskStep {
 }

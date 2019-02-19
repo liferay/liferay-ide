@@ -34,10 +34,21 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 	}
 
 	@Override
+	public UpgradeTaskStepActionStatus getStatus() {
+		return _upgradeTaskStepActionStatus;
+	}
+
+	@Override
 	public String getStepId() {
 		return _stepId;
 	}
 
+	@Override
+	public void setStatus(UpgradeTaskStepActionStatus upgradeTaskStepActionStatus) {
+		_upgradeTaskStepActionStatus = upgradeTaskStepActionStatus;
+	}
+
 	private String _stepId;
+	private UpgradeTaskStepActionStatus _upgradeTaskStepActionStatus = UpgradeTaskStepActionStatus.INCOMPLETE;
 
 }

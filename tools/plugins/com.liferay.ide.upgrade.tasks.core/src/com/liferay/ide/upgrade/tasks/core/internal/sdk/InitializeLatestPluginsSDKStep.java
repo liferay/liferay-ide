@@ -12,26 +12,23 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core;
+package com.liferay.ide.upgrade.tasks.core.internal.sdk;
 
-import java.nio.file.Path;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
-import java.util.List;
-
-import org.eclipse.core.resources.IProject;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
- * @author Gregory Amerson
  * @author Terry Jia
  */
-public interface ResourceSelection {
-
-	public List<IProject> selectJavaProjects(String message, boolean initialSelectAll);
-
-	public IProject selectLiferayWorkspaceProject(String message);
-
-	public Path selectPath(String message);
-
-	public List<IProject> selectProjects(String message, boolean initialSelectAll);
-
+@Component(
+	property = {
+		"id=initialize_latest_plugins_sdk", "requirement=required", "order=0", "taskId=migrate_plugins_sdk",
+		"title=Initialize the Latest Plugins SDK"
+	},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
+)
+public class InitializeLatestPluginsSDKStep extends BaseUpgradeTaskStep {
 }

@@ -67,6 +67,10 @@ public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements 
 
 			UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 
+			if (upgradePlanner == null) {
+				return;
+			}
+
 			Stream<UpgradeTaskStep> stream = upgradeTaskSteps.stream();
 
 			_upgradeTaskSteps = stream.filter(

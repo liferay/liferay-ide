@@ -58,11 +58,6 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	}
 
 	@Override
-	public UpgradeTaskStepStatus getStatus() {
-		return _upgradeTaskStepStatus;
-	}
-
-	@Override
 	public String getTaskId() {
 		return _taskId;
 	}
@@ -99,7 +94,6 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	private String _requirement;
 	private String _taskId;
 	private List<UpgradeTaskStepAction> _upgradeTaskStepActions;
-	private UpgradeTaskStepStatus _upgradeTaskStepStatus = UpgradeTaskStepStatus.INCOMPLETE;
 	private String _url;
 
 }

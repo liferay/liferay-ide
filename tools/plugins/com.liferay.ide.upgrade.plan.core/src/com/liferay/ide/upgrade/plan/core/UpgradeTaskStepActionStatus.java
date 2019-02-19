@@ -12,26 +12,14 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core;
-
-import java.nio.file.Path;
-
-import java.util.List;
-
-import org.eclipse.core.resources.IProject;
+package com.liferay.ide.upgrade.plan.core;
 
 /**
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public interface ResourceSelection {
+public enum UpgradeTaskStepActionStatus {
 
-	public List<IProject> selectJavaProjects(String message, boolean initialSelectAll);
-
-	public IProject selectLiferayWorkspaceProject(String message);
-
-	public Path selectPath(String message);
-
-	public List<IProject> selectProjects(String message, boolean initialSelectAll);
+	COMPLETED, INCOMPLETE, SKIPPED
 
 }

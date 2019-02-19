@@ -27,6 +27,7 @@ import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -51,19 +52,27 @@ public class FindUpgradeProblemsTaskStepAction extends BaseUpgradeTaskStepAction
 
 	@Override
 	public IStatus perform() {
-		List<IProject> projects = _resourceSelection.selectProjects("select projects", true);
+		List<IProject> projects = _resourceSelection.selectJavaProjects("select projects", true);
+
+		if (projects.isEmpty()) {
+			return Status.CANCEL_STATUS;
+		}
 
 		List<String> versions = new ArrayList<>();
 
 		versions.add("7.0");
 		versions.add("7.1");
 
+		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+
+		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
+
+		upgradeProblems.clear();
+
 		Job job = new Job("Finding migration problems...") {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
-
 				Stream<IProject> stream = projects.stream();
 
 				stream.forEach(

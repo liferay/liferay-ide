@@ -12,26 +12,23 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core;
+package com.liferay.ide.upgrade.tasks.ui.internal;
 
-import java.nio.file.Path;
+import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.tasks.core.MessagePrompt;
 
-import java.util.List;
-
-import org.eclipse.core.resources.IProject;
+import org.osgi.service.component.annotations.Component;
 
 /**
- * @author Gregory Amerson
  * @author Terry Jia
+ * @author Gregory Amerson
  */
-public interface ResourceSelection {
+@Component(service = MessagePrompt.class)
+public class MessagePromptImpl implements MessagePrompt {
 
-	public List<IProject> selectJavaProjects(String message, boolean initialSelectAll);
-
-	public IProject selectLiferayWorkspaceProject(String message);
-
-	public Path selectPath(String message);
-
-	public List<IProject> selectProjects(String message, boolean initialSelectAll);
+	@Override
+	public boolean prompt(String title, String message) {
+		return UIUtil.promptQuestion(title, message);
+	}
 
 }
