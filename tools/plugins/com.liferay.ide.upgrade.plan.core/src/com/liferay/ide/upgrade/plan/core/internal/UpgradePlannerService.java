@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.IMemento;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
@@ -127,9 +128,32 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 				String currentProjectLocation = upgradePlanMemento.getString("currentProjectLocation");
 
-				Path path = Paths.get(currentProjectLocation);
+				Path projectPath = null;
 
-				_currentUpgradePlan = new StandardUpgradePlan(name, currentVersion, targetVersion, path);
+				if (currentProjectLocation != null) {
+					projectPath = Paths.get(currentProjectLocation);
+				}
+
+				IMemento ugpradeCategoriesMemento = upgradePlanMemento.getChild("categories");
+
+				List<String> upgradeCategoryIds = new ArrayList<>();
+
+				if (ugpradeCategoriesMemento != null) {
+					IMemento[] upgradeCategoryMementos = ugpradeCategoriesMemento.getChildren("category");
+
+					if (ListUtil.isNotEmpty(upgradeCategoryMementos)) {
+						upgradeCategoryIds = Stream.of(
+							upgradeCategoryMementos
+						).map(
+							memento -> memento.getString("id")
+						).collect(
+							Collectors.toList()
+						);
+					}
+				}
+
+				_currentUpgradePlan = new StandardUpgradePlan(
+					name, currentVersion, targetVersion, projectPath, upgradeCategoryIds);
 
 				_loadActionStatus(upgradePlanMemento, _currentUpgradePlan);
 
@@ -147,9 +171,10 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 	@Override
 	public UpgradePlan newUpgradePlan(
-		String name, String currentVersion, String targetVersion, Path sourceCodeLocation) {
+		String name, String currentVersion, String targetVersion, Path sourceCodeLocation,
+		List<String> upgradeCategories) {
 
-		return new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation);
+		return new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation, upgradeCategories);
 	}
 
 	@Override
@@ -194,7 +219,22 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 			Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
 
-			upgradePlanMemento.putString("currentProjectLocation", currentProjectLocation.toString());
+			if (currentProjectLocation != null) {
+				upgradePlanMemento.putString("currentProjectLocation", currentProjectLocation.toString());
+			}
+
+			List<String> upgradeCategories = upgradePlan.getUpgradeCategories();
+
+			IMemento categoriesMemento = upgradePlanMemento.createChild("categories");
+
+			Stream<String> upgradeCategoriesStream = upgradeCategories.stream();
+
+			upgradeCategoriesStream.forEach(
+				upgradeCategory -> {
+					IMemento upgradeCategoryStream = categoriesMemento.createChild("category");
+
+					upgradeCategoryStream.putString("id", upgradeCategory);
+				});
 
 			_saveActionStatus(upgradePlanMemento, upgradePlan);
 

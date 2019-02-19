@@ -44,6 +44,14 @@ public class SapphireUtil {
 		list.clear();
 	}
 
+	public static void detachListener(ElementList<?> values, Listener listener) {
+		if ((values == null) || (listener == null)) {
+			return;
+		}
+
+		values.detach(listener);
+	}
+
 	public static void detachListener(Value<?> value, Listener listener) {
 		if ((value == null) || (listener == null)) {
 			return;

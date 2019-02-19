@@ -39,15 +39,20 @@ import org.osgi.framework.InvalidSyntaxException;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class StandardUpgradePlan implements UpgradePlan {
 
-	public StandardUpgradePlan(String name, String currentVersion, String targetVersion, Path currentProjectLocation) {
+	public StandardUpgradePlan(
+		String name, String currentVersion, String targetVersion, Path currentProjectLocation,
+		List<String> upgradeCategories) {
+
 		_name = name;
 		_currentVersion = currentVersion;
 		_targetVersion = targetVersion;
 		_currentProjectLocation = currentProjectLocation;
 		_upgradeProblems = new HashSet<>();
+		_upgradeCategories = upgradeCategories;
 	}
 
 	@Override
@@ -95,7 +100,16 @@ public class StandardUpgradePlan implements UpgradePlan {
 
 				Stream<UpgradeTaskCategory> stream = orderedUpgradeTaskCategories.stream();
 
-				upgradeTasks = stream.flatMap(
+				upgradeTasks = stream.filter(
+					upgradeCategory -> {
+						if (_upgradeCategories != null) {
+							return _upgradeCategories.contains(upgradeCategory.getId());
+						}
+						else {
+							return true;
+						}
+					}
+				).flatMap(
 					upgradeTaskCategory -> {
 						try {
 							List<UpgradeTask> orderedUpgradeTasks = ServicesLookup.getOrderedServices(
@@ -125,6 +139,11 @@ public class StandardUpgradePlan implements UpgradePlan {
 		}
 
 		return Collections.unmodifiableList(_upgradeTasks);
+	}
+
+	@Override
+	public List<String> getUpgradeCategories() {
+		return _upgradeCategories;
 	}
 
 	@Override
@@ -162,6 +181,10 @@ public class StandardUpgradePlan implements UpgradePlan {
 		_targetProjectLocation = path;
 	}
 
+	public void setUpgradeCategories(List<String> upgradeCategories) {
+		_upgradeCategories = upgradeCategories;
+	}
+
 	@SuppressWarnings("serial")
 	private static final List<String> _liferayVersions = new ArrayList<String>() {
 		{
@@ -176,6 +199,7 @@ public class StandardUpgradePlan implements UpgradePlan {
 	private final String _name;
 	private Path _targetProjectLocation;
 	private final String _targetVersion;
+	private List<String> _upgradeCategories;
 	private Set<UpgradeProblem> _upgradeProblems;
 	private List<UpgradeTask> _upgradeTasks;
 

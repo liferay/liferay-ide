@@ -16,8 +16,10 @@ package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
 
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
+import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.PossibleValues;
 import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
@@ -30,12 +32,15 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Siomn Jiang
  */
 public interface NewUpgradePlanOp extends ExecutableElement {
 
@@ -47,13 +52,19 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public Value<String> getCurrentVersion();
 
+	public Value<Boolean> getHasCodeUpgradeCategory();
+
 	public Value<Path> getLocation();
 
 	public Value<String> getName();
 
+	public ElementList<UpgradeCategoryElement> getSelectedUpgradeCategories();
+
 	public Value<String> getTargetVersion();
 
 	public void setCurrentVersion(String currentVersion);
+
+	public void setHasCodeUpgradeCategory(Boolean value);
 
 	public void setLocation(Path value);
 
@@ -65,14 +76,26 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	@PossibleValues(values = {"6.2", "7.0"})
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
 
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_HAS_CODE_UPGRADE_CATEGORY = new ValueProperty(TYPE, "HasCodeUpgradeCategory");
+
 	@AbsolutePath
 	@Label(standard = "source code location")
+	@Service(impl = SourceLocationValidationService.class)
 	@Type(base = Path.class)
 	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
 	@Required
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
+
+	@Label(standard = "Upgrade Categories")
+	@Listeners(HasUpgradeCodeCategoryListener.class)
+	@Service(impl = UpgradeCategoryPossibleValuesService.class)
+	@Service(impl = UpgradeCategoryValidationService.class)
+	@Type(base = UpgradeCategoryElement.class)
+	public ListProperty PROP_SELECTED_UPGRADE_CATEGORIES = new ListProperty(TYPE, "SelectedUpgradeCategories");
 
 	@DefaultValue(text = "7.1")
 	@PossibleValues(values = {"7.0", "7.1"})

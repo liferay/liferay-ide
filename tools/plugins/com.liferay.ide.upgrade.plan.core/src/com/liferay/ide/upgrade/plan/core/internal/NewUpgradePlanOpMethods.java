@@ -14,13 +14,19 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
+import com.liferay.ide.upgrade.plan.core.UpgradeCategoryElement;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
 import java.nio.file.Paths;
 
-import org.eclipse.sapphire.Value;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -33,8 +39,13 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class NewUpgradePlanOpMethods {
+
+	public static String upgradeCategoryCode = "code";
+	public static String upgradeCategoryConfig = "config";
+	public static String upgradeCategoryDatabase = "database";
 
 	public static final Status execute(NewUpgradePlanOp newUpgradePlanOp, ProgressMonitor progressMonitor) {
 		ServiceTracker<UpgradePlanner, UpgradePlanner> serviceTracker = _getServiceTracker();
@@ -45,22 +56,32 @@ public class NewUpgradePlanOpMethods {
 			return Status.createErrorStatus("Could not get UpgradePlanner service");
 		}
 
-		Value<String> upgradePlanName = newUpgradePlanOp.getName();
+		String name = SapphireUtil.getContent(newUpgradePlanOp.getName());
 
-		String name = upgradePlanName.content();
+		String currentVersion = SapphireUtil.getContent(newUpgradePlanOp.getCurrentVersion());
 
-		Value<String> currentVersion = newUpgradePlanOp.getCurrentVersion();
+		String targetVersion = SapphireUtil.getContent(newUpgradePlanOp.getTargetVersion());
 
-		Value<String> targetVersion = newUpgradePlanOp.getTargetVersion();
+		Path path = SapphireUtil.getContent(newUpgradePlanOp.getLocation());
 
-		Value<Path> location = newUpgradePlanOp.getLocation();
+		ElementList<UpgradeCategoryElement> selectedUpgradeCategories = newUpgradePlanOp.getSelectedUpgradeCategories();
 
-		Path path = location.content();
+		Stream<UpgradeCategoryElement> upgradeCategoryElements = selectedUpgradeCategories.stream();
 
-		java.nio.file.Path sourceCodeLocation = Paths.get(path.toOSString());
+		List<String> categories = upgradeCategoryElements.map(
+			category -> SapphireUtil.getContent(category.getUpgradeCategory())
+		).collect(
+			Collectors.toList()
+		);
+
+		java.nio.file.Path sourceCodeLocation = null;
+
+		if (path != null) {
+			sourceCodeLocation = Paths.get(path.toOSString());
+		}
 
 		UpgradePlan upgradePlan = upgradePlanner.newUpgradePlan(
-			name, currentVersion.content(), targetVersion.content(), sourceCodeLocation);
+			name, currentVersion, targetVersion, sourceCodeLocation, categories);
 
 		if (upgradePlan == null) {
 			return Status.createErrorStatus("Could not create upgrade plan named: " + name);
