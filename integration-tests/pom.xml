@@ -33,7 +33,7 @@
 
 	<properties>
 		<eclipse-site>https://download.eclipse.org/releases/2018-12/201812191000/</eclipse-site>
-		<tycho-version>1.0.0</tycho-version>
+		<tycho-version>1.3.0</tycho-version>
 		<liferay-ide-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide-repository/target/repository/</liferay-ide-site>
 	</properties>
 
