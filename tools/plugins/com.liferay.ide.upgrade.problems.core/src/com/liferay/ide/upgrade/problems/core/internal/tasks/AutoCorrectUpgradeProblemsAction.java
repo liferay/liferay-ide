@@ -23,12 +23,11 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
 
 import java.io.File;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -60,86 +59,95 @@ public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeTaskStepAction 
 
 	@Override
 	public IStatus perform() {
-		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+		final UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectUpgradeProblemsAction.class);
-
-		BundleContext context = bundle.getBundleContext();
-
-		WorkspaceJob job = new WorkspaceJob("Auto correcting all breaking changes.") {
+		WorkspaceJob workspaceJob = new WorkspaceJob("Auto correcting all breaking changes.") {
 
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) {
-				IStatus retval = Status.OK_STATUS;
-
-				Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
-
-				Stream<UpgradeProblem> stream = upgradeProblems.stream();
-
-				stream.filter(
-					upgradeProblem -> upgradeProblem.getStatus() != UpgradeProblem.STATUS_IGNORE
-				).filter(
-					upgradeProblem -> FileUtil.exists(upgradeProblem.getResource())
-				).filter(
-					upgradeProblem -> Objects.nonNull(upgradeProblem.getAutoCorrectContext())
-				).forEach(
-					upgradeProblem -> {
-						String autoCorrectContext = upgradeProblem.getAutoCorrectContext();
-
-						String autoCorrectKey = autoCorrectContext;
-
-						int filterKeyIndex = autoCorrectContext.indexOf(":");
-
-						if (filterKeyIndex > -1) {
-							autoCorrectKey = autoCorrectContext.substring(0, filterKeyIndex);
-						}
-
-						try {
-							String filter =
-								"(&(auto.correct=" + autoCorrectKey + ")(version=" + upgradeProblem.getVersion() + "))";
-
-							Collection<ServiceReference<AutoFileMigrator>> serviceReferences =
-								context.getServiceReferences(AutoFileMigrator.class, filter);
-
-							IResource resource = upgradeProblem.getResource();
-
-							File file = FileUtil.getFile(resource);
-
-							List<UpgradeProblem> problems = new ArrayList<>(upgradeProblems);
-
-							for (ServiceReference<AutoFileMigrator> reference : serviceReferences) {
-								AutoFileMigrator autoMigrator = context.getService(reference);
-
-								int problemsCorrected = autoMigrator.correctProblems(file, problems);
-
-								if ((problemsCorrected > 0) && (resource != null)) {
-									IMarker problemMarker = resource.findMarker(upgradeProblem.getMarkerId());
-
-									if ((problemMarker != null) && problemMarker.exists()) {
-										problemMarker.delete();
-									}
-								}
-							}
-						}
-						catch (InvalidSyntaxException ise) {
-						}
-						catch (AutoFileMigrateException afme) {
-						}
-						catch (CoreException ce) {
-						}
-					}
-				);
-
-				_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(AutoCorrectUpgradeProblemsAction.this));
-
-				return retval;
+				return _perform(upgradePlan);
 			}
 
 		};
 
-		job.schedule();
+		workspaceJob.schedule();
 
 		return Status.OK_STATUS;
+	}
+
+	private IStatus _perform(UpgradePlan upgradePlan) {
+		IStatus retval = Status.OK_STATUS;
+
+		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectUpgradeProblemsAction.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
+
+		Stream<UpgradeProblem> stream = upgradeProblems.stream();
+
+		stream.filter(
+			upgradeProblem -> upgradeProblem.getStatus() != UpgradeProblem.STATUS_IGNORE
+		).filter(
+			upgradeProblem -> FileUtil.exists(upgradeProblem.getResource())
+		).filter(
+			upgradeProblem -> Objects.nonNull(upgradeProblem.getAutoCorrectContext())
+		).forEach(
+			upgradeProblem -> {
+				String autoCorrectContext = upgradeProblem.getAutoCorrectContext();
+
+				String autoCorrectKey = autoCorrectContext;
+
+				int filterKeyIndex = autoCorrectContext.indexOf(":");
+
+				if (filterKeyIndex > -1) {
+					autoCorrectKey = autoCorrectContext.substring(0, filterKeyIndex);
+				}
+
+				try {
+					String filter =
+						"(&(auto.correct=" + autoCorrectKey + ")(version=" + upgradeProblem.getVersion() + "))";
+
+					Collection<ServiceReference<AutoFileMigrator>> serviceReferences =
+						bundleContext.getServiceReferences(AutoFileMigrator.class, filter);
+
+					IResource resource = upgradeProblem.getResource();
+
+					File file = FileUtil.getFile(resource);
+
+					for (ServiceReference<AutoFileMigrator> reference : serviceReferences) {
+						AutoFileMigrator autoMigrator = bundleContext.getService(reference);
+
+						int problemsCorrected = 0;
+
+						try {
+							problemsCorrected = autoMigrator.correctProblems(file, upgradeProblems);
+						}
+						catch (AutoFileMigrateException afme) {
+							UpgradeProblemsCorePlugin.logError(
+								"Error encountered auto migrating file " + file.getAbsolutePath(), afme);
+						}
+
+						if ((problemsCorrected > 0) && (resource != null)) {
+							IMarker problemMarker = resource.findMarker(upgradeProblem.getMarkerId());
+
+							if ((problemMarker != null) && problemMarker.exists()) {
+								problemMarker.delete();
+							}
+						}
+					}
+				}
+				catch (InvalidSyntaxException ise) {
+				}
+				catch (CoreException ce) {
+					UpgradeProblemsCorePlugin.logError("Could not read marker info. ", ce);
+				}
+			}
+		);
+
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(AutoCorrectUpgradeProblemsAction.this));
+
+		return retval;
 	}
 
 	@Reference
