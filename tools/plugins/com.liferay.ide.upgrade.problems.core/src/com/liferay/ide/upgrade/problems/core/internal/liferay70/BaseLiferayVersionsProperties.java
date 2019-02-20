@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -88,7 +89,7 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 	}
 
 	@Override
-	public int correctProblems(File file, List<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
+	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
 		try {
 			String contents = new String(Files.readAllBytes(file.toPath()));
 
