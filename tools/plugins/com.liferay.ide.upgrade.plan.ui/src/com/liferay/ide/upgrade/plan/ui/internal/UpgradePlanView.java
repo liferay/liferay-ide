@@ -14,34 +14,16 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatus;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskViewer;
 
-import java.io.File;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -123,21 +105,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			upgradePlanName -> {
 				UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
-				String currentVersion = memento.getString("currentVersion");
-				String targetVersion = memento.getString("targetVersion");
-
-				String path = memento.getString("currentProjectLocation");
-
-				Path currentProjectLocation = Paths.get(path);
-
-				UpgradePlan upgradePlan = upgradePlanner.loadUpgradePlan(
-					upgradePlanName, currentVersion, targetVersion, currentProjectLocation);
+				UpgradePlan upgradePlan = upgradePlanner.loadUpgradePlan(upgradePlanName);
 
 				upgradePlanner.startUpgradePlan(upgradePlan);
-
-				_loadActionStatus(memento, upgradePlan);
-
-				_loadUpgradeProblems(memento, upgradePlan);
 			}
 		);
 	}
@@ -151,22 +121,14 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	public void saveState(IMemento memento) {
 		super.saveState(memento);
 
-		Object upgradeTaskViewerInput = _upgradePlanViewer.getInput();
+		Object upgradePlanViewerInput = _upgradePlanViewer.getInput();
 
-		if (upgradeTaskViewerInput instanceof UpgradePlan) {
-			UpgradePlan upgradePlan = (UpgradePlan)upgradeTaskViewerInput;
+		if (upgradePlanViewerInput instanceof UpgradePlan) {
+			UpgradePlan upgradePlan = (UpgradePlan)upgradePlanViewerInput;
 
-			memento.putString("upgradePlanName", upgradePlan.getName());
-			memento.putString("currentVersion", upgradePlan.getCurrentVersion());
-			memento.putString("targetVersion", upgradePlan.getTargetVersion());
+			UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
-			Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
-
-			memento.putString("currentProjectLocation", currentProjectLocation.toString());
-
-			_saveActionStatus(memento, upgradePlan);
-
-			_saveUpgradeProblems(memento, upgradePlan);
+			upgradePlanner.saveUpgradePlan(upgradePlan);
 		}
 	}
 
@@ -224,148 +186,6 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 					UpgradePlanUIPlugin.logError("Error in selection changed listener.", e);
 				}
 			});
-	}
-
-	private void _loadActionStatus(IMemento memento, UpgradePlan upgradePlan) {
-		List<UpgradeTask> tasks = upgradePlan.getTasks();
-
-		for (UpgradeTask task : tasks) {
-			IMemento taskMemento = memento.getChild(task.getId());
-
-			List<UpgradeTaskStep> steps = task.getSteps();
-
-			for (UpgradeTaskStep step : steps) {
-				IMemento stepMemento = taskMemento.getChild(step.getId());
-
-				if (stepMemento == null) {
-					continue;
-				}
-
-				List<UpgradeTaskStepAction> actions = step.getActions();
-
-				for (UpgradeTaskStepAction action : actions) {
-					if (action == null) {
-						continue;
-					}
-
-					IMemento actionMemento = stepMemento.getChild(action.getId());
-
-					if (actionMemento != null) {
-						String status = actionMemento.getString("status");
-
-						action.setStatus(UpgradeTaskStepActionStatus.valueOf(status));
-					}
-				}
-			}
-		}
-	}
-
-	private void _loadUpgradeProblems(IMemento memento, UpgradePlan upgradePlan) {
-		IMemento[] upgradeProblemsMemento = memento.getChildren("upgradeProblem");
-
-		List<UpgradeProblem> upgradeProblems = Stream.of(
-			upgradeProblemsMemento
-		).map(
-			upgradeProblemMemento -> {
-				String autoCorrectContext = upgradeProblemMemento.getString("autoCorrectContext");
-				String html = upgradeProblemMemento.getString("html");
-				String summary = upgradeProblemMemento.getString("summary");
-				String ticket = upgradeProblemMemento.getString("ticket");
-				String title = upgradeProblemMemento.getString("title");
-				String type = upgradeProblemMemento.getString("type");
-				String uuid = upgradeProblemMemento.getString("uuid");
-				String version = upgradeProblemMemento.getString("version");
-				int endOffset = upgradeProblemMemento.getInteger("endOffset");
-				int lineNumber = upgradeProblemMemento.getInteger("lineNumber");
-
-				long markerId = 0;
-
-				try {
-					markerId = Long.parseLong(upgradeProblemMemento.getString("markerId"));
-				}
-				catch (NumberFormatException nfe) {
-				}
-
-				Integer markerType = upgradeProblemMemento.getInteger("markerType");
-
-				Integer startOffset = upgradeProblemMemento.getInteger("startOffset");
-				int status = upgradeProblemMemento.getInteger("status");
-
-				IFile[] resources = CoreUtil.findFilesForLocationURI(
-					new File(upgradeProblemMemento.getString("resourceLocation")).toURI());
-
-				UpgradeProblem upgradeProblem = new UpgradeProblem(
-					uuid, title, summary, type, ticket, version, resources[0], lineNumber, startOffset, endOffset, html,
-					autoCorrectContext, status, markerId, markerType);
-
-				return upgradeProblem;
-			}
-		).collect(
-			Collectors.toList()
-		);
-
-		upgradePlan.addUpgradeProblems(upgradeProblems);
-	}
-
-	private void _saveActionStatus(IMemento memento, UpgradePlan upgradePlan) {
-		List<UpgradeTask> tasks = upgradePlan.getTasks();
-
-		for (UpgradeTask task : tasks) {
-			IMemento taskMemento = memento.createChild(task.getId());
-
-			List<UpgradeTaskStep> steps = task.getSteps();
-
-			for (UpgradeTaskStep step : steps) {
-				IMemento stepMemento = taskMemento.createChild(step.getId());
-
-				List<UpgradeTaskStepAction> actions = step.getActions();
-
-				for (UpgradeTaskStepAction action : actions) {
-					IMemento actionMemento = stepMemento.createChild(action.getId());
-
-					actionMemento.putString("status", String.valueOf(action.getStatus()));
-				}
-			}
-		}
-	}
-
-	private void _saveUpgradeProblems(IMemento memento, UpgradePlan upgradePlan) {
-		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
-
-		for (UpgradeProblem upgradeProblem : upgradeProblems) {
-			IMemento upgradeProblemMemento = memento.createChild("upgradeProblem");
-
-			IResource resource = upgradeProblem.getResource();
-
-			IPath location = resource.getLocation();
-
-			if (location == null) {
-				continue;
-			}
-
-			upgradeProblemMemento.putString("autoCorrectContext", upgradeProblem.getAutoCorrectContext());
-			upgradeProblemMemento.putString("html", upgradeProblem.getHtml());
-			upgradeProblemMemento.putString("summary", upgradeProblem.getSummary());
-			upgradeProblemMemento.putString("ticket", upgradeProblem.getTicket());
-			upgradeProblemMemento.putString("title", upgradeProblem.getTitle());
-			upgradeProblemMemento.putString("type", upgradeProblem.getType());
-			upgradeProblemMemento.putString("uuid", upgradeProblem.getUuid());
-			upgradeProblemMemento.putString("version", upgradeProblem.getVersion());
-			upgradeProblemMemento.putInteger("endOffset", upgradeProblem.getEndOffset());
-			upgradeProblemMemento.putInteger("lineNumber", upgradeProblem.getLineNumber());
-
-			long markerId = upgradeProblem.getMarkerId();
-
-			upgradeProblemMemento.putString("markerId", String.valueOf(markerId));
-
-			upgradeProblemMemento.putInteger("markerType", upgradeProblem.getMarkerType());
-			upgradeProblemMemento.putInteger("number", upgradeProblem.getNumber());
-
-			upgradeProblemMemento.putString("resourceLocation", location.toOSString());
-
-			upgradeProblemMemento.putInteger("startOffset", upgradeProblem.getStartOffset());
-			upgradeProblemMemento.putInteger("status", upgradeProblem.getStatus());
-		}
 	}
 
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();

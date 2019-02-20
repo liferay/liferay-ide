@@ -36,10 +36,6 @@ public class UpgradePlanCorePlugin extends Plugin {
 		return new Status(IStatus.ERROR, ID, msg, e);
 	}
 
-	public static Plugin getDefault() {
-		return _instance;
-	}
-
 	public static UpgradePlanCorePlugin getInstance() {
 		return _instance;
 	}
