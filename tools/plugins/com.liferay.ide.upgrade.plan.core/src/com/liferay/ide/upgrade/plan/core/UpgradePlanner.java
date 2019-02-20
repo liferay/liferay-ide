@@ -27,6 +27,8 @@ public interface UpgradePlanner {
 
 	public UpgradePlan getCurrentUpgradePlan();
 
+	public UpgradePlan loadActiveUpgradePlan();
+
 	public UpgradePlan loadUpgradePlan(String name);
 
 	public UpgradePlan newUpgradePlan(

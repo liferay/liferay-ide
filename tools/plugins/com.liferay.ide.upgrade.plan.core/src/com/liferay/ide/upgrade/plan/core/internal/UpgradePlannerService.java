@@ -104,6 +104,26 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	@Override
+	public UpgradePlan loadActiveUpgradePlan() {
+		try (InputStream inputStream = new FileInputStream(_getUpgradePlannerStorageFile())) {
+			IMemento rootMemento = XMLMemento.loadMemento(inputStream);
+
+			if (rootMemento != null) {
+				String activeUpgradePlanName = rootMemento.getString("active");
+
+				if (activeUpgradePlanName != null) {
+					loadUpgradePlan(activeUpgradePlanName);
+				}
+			}
+		}
+		catch (IOException ioe) {
+			UpgradePlanCorePlugin.logError("Could not load active upgrade plan", ioe);
+		}
+
+		return null;
+	}
+
+	@Override
 	public UpgradePlan loadUpgradePlan(String name) {
 		try (InputStream inputStream = new FileInputStream(_getUpgradePlannerStorageFile())) {
 			IMemento rootMemento = XMLMemento.loadMemento(inputStream);
@@ -111,7 +131,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 			Optional<IMemento> upgradePlanMementoOptional = Stream.of(
 				rootMemento.getChildren("upgradePlan")
 			).filter(
-				memento -> name.equals(memento.getString("name"))
+				memento -> name.equals(memento.getString("upgradePlanName"))
 			).findFirst();
 
 			if (upgradePlanMementoOptional.isPresent()) {
@@ -125,6 +145,8 @@ public class UpgradePlannerService implements UpgradePlanner {
 				Path path = Paths.get(currentProjectLocation);
 
 				UpgradePlan upgradePlan = new StandardUpgradePlan(name, currentVersion, targetVersion, path);
+
+				startUpgradePlan(upgradePlan);
 
 				_loadActionStatus(upgradePlanMemento, upgradePlan);
 
@@ -175,10 +197,12 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 			String name = upgradePlan.getName();
 
+			rootMemento.putString("active", name);
+
 			Optional<IMemento> upgradePlanMementoOptional = Stream.of(
 				rootMemento.getChildren("upgradePlan")
 			).filter(
-				memento -> name.equals(memento.getString("name"))
+				memento -> name.equals(memento.getString("upgradePlanName"))
 			).findFirst();
 
 			IMemento upgradePlanMemento = upgradePlanMementoOptional.orElse(rootMemento.createChild("upgradePlan"));
@@ -321,17 +345,29 @@ public class UpgradePlannerService implements UpgradePlanner {
 		List<UpgradeTask> tasks = upgradePlan.getTasks();
 
 		for (UpgradeTask task : tasks) {
-			IMemento taskMemento = memento.createChild(task.getId());
+			IMemento taskMemento = memento.getChild(task.getId());
+
+			if (taskMemento == null) {
+				taskMemento = memento.createChild(task.getId());
+			}
 
 			List<UpgradeTaskStep> steps = task.getSteps();
 
 			for (UpgradeTaskStep step : steps) {
-				IMemento stepMemento = taskMemento.createChild(step.getId());
+				IMemento stepMemento = taskMemento.getChild(step.getId());
+
+				if (stepMemento == null) {
+					stepMemento = taskMemento.createChild(step.getId());
+				}
 
 				List<UpgradeTaskStepAction> actions = step.getActions();
 
 				for (UpgradeTaskStepAction action : actions) {
-					IMemento actionMemento = stepMemento.createChild(action.getId());
+					IMemento actionMemento = stepMemento.getChild(action.getId());
+
+					if (actionMemento == null) {
+						actionMemento = stepMemento.createChild(action.getId());
+					}
 
 					actionMemento.putString("status", String.valueOf(action.getStatus()));
 				}
