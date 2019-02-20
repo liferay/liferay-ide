@@ -59,7 +59,7 @@ import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 public class MVCPortletClassInPortletXML extends XMLFileMigrator implements AutoFileMigrator {
 
 	@Override
-	public int correctProblems(File file, List<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
+	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
 		int corrected = 0;
 		IFile xmlFile = getXmlFile(file);
 		IDOMModel xmlModel = null;

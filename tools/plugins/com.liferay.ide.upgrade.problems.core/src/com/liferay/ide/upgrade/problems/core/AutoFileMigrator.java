@@ -18,13 +18,13 @@ import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author Gregory Amerson
  */
 public interface AutoFileMigrator {
 
-	public int correctProblems(File file, List<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException;
+	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException;
 
 }

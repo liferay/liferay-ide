@@ -121,12 +121,14 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	public void saveState(IMemento memento) {
 		super.saveState(memento);
 
-		Object upgradeTaskViewerInput = _upgradePlanViewer.getInput();
+		Object upgradePlanViewerInput = _upgradePlanViewer.getInput();
 
-		if (upgradeTaskViewerInput instanceof UpgradePlan) {
-			UpgradePlan upgradePlan = (UpgradePlan)upgradeTaskViewerInput;
+		if (upgradePlanViewerInput instanceof UpgradePlan) {
+			UpgradePlan upgradePlan = (UpgradePlan)upgradePlanViewerInput;
 
-			memento.putString("upgradePlanName", upgradePlan.getName());
+			UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
+
+			upgradePlanner.saveUpgradePlan(upgradePlan);
 		}
 	}
 

@@ -21,8 +21,12 @@ import org.eclipse.core.runtime.IStatus;
  */
 public interface UpgradeTaskStepAction extends UpgradePlanElement {
 
+	public UpgradeTaskStepActionStatus getStatus();
+
 	public String getStepId();
 
 	public IStatus perform();
+
+	public void setStatus(UpgradeTaskStepActionStatus status);
 
 }

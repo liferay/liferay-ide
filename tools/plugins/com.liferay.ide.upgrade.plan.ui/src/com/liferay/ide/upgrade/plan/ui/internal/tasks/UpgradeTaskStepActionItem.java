@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatus;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 
@@ -231,6 +232,7 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 	}
 
 	private void _complete() {
+		_upgradeTaskStepAction.setStatus(UpgradeTaskStepActionStatus.COMPLETED);
 	}
 
 	private IStatus _perform() {

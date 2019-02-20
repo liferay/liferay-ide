@@ -58,7 +58,7 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 	}
 
 	@Override
-	public int correctProblems(File file, List<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
+	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
 		int problemsFixed = 0;
 
 		List<String> importsToRewrite = new ArrayList<>();

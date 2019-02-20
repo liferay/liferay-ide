@@ -26,6 +26,10 @@ import org.eclipse.core.resources.IProject;
  */
 public interface ResourceSelection {
 
+	public List<IProject> selectJavaProjects(String message, boolean initialSelectAll);
+
+	public IProject selectLiferayWorkspaceProject(String message);
+
 	public Path selectPath(String message);
 
 	public List<IProject> selectProjects(String message, boolean initialSelectAll);
