@@ -376,6 +376,11 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	private void _saveUpgradeProblems(IMemento memento, UpgradePlan upgradePlan) {
+
+		// we need to remove the previous problems firstly
+
+		memento.removeChildren("upgradeProblem");
+
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
 		for (UpgradeProblem upgradeProblem : upgradeProblems) {

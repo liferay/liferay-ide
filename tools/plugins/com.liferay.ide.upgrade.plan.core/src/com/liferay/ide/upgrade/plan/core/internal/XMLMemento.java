@@ -390,4 +390,15 @@ public final class XMLMemento implements IMemento {
            textNode.setData(data);
        }
    }
+
+	@Override
+	public void removeChild(IMemento child) {
+		// TODO Terry will implement it soon
+	}
+
+	@Override
+	public void removeChildren(String type) {
+		// TODO Terry will implement it soon
+	}
+
 }
