@@ -108,29 +108,31 @@ public class UpgradePlannerService implements UpgradePlanner {
 		try (InputStream inputStream = new FileInputStream(_getUpgradePlannerStorageFile())) {
 			IMemento rootMemento = XMLMemento.loadMemento(inputStream);
 
-			Optional<IMemento> upgradePlanMementoOptional = Stream.of(
-				rootMemento.getChildren("upgradePlan")
-			).filter(
-				memento -> name.equals(memento.getString("upgradePlanName"))
-			).findFirst();
+			if (rootMemento != null) {
+				Optional<IMemento> upgradePlanMementoOptional = Stream.of(
+					rootMemento.getChildren("upgradePlan")
+				).filter(
+					memento -> name.equals(memento.getString("upgradePlanName"))
+				).findFirst();
 
-			if (upgradePlanMementoOptional.isPresent()) {
-				IMemento upgradePlanMemento = upgradePlanMementoOptional.get();
+				if (upgradePlanMementoOptional.isPresent()) {
+					IMemento upgradePlanMemento = upgradePlanMementoOptional.get();
 
-				String currentVersion = upgradePlanMemento.getString("currentVersion");
-				String targetVersion = upgradePlanMemento.getString("targetVersion");
+					String currentVersion = upgradePlanMemento.getString("currentVersion");
+					String targetVersion = upgradePlanMemento.getString("targetVersion");
 
-				String currentProjectLocation = upgradePlanMemento.getString("currentProjectLocation");
+					String currentProjectLocation = upgradePlanMemento.getString("currentProjectLocation");
 
-				Path path = Paths.get(currentProjectLocation);
+					Path path = Paths.get(currentProjectLocation);
 
-				_currentUpgradePlan = new StandardUpgradePlan(name, currentVersion, targetVersion, path);
+					_currentUpgradePlan = new StandardUpgradePlan(name, currentVersion, targetVersion, path);
 
-				_loadActionStatus(upgradePlanMemento, _currentUpgradePlan);
+					_loadActionStatus(upgradePlanMemento, _currentUpgradePlan);
 
-				_loadUpgradeProblems(upgradePlanMemento, _currentUpgradePlan);
+					_loadUpgradeProblems(upgradePlanMemento, _currentUpgradePlan);
 
-				return _currentUpgradePlan;
+					return _currentUpgradePlan;
+				}
 			}
 		}
 		catch (IOException ioe) {
