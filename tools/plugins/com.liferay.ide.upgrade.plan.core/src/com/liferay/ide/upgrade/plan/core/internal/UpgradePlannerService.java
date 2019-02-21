@@ -111,7 +111,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 			Optional<IMemento> upgradePlanMementoOptional = Stream.of(
 				rootMemento.getChildren("upgradePlan")
 			).filter(
-				memento -> name.equals(memento.getString("name"))
+				memento -> name.equals(memento.getString("upgradePlanName"))
 			).findFirst();
 
 			if (upgradePlanMementoOptional.isPresent()) {
@@ -124,13 +124,13 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 				Path path = Paths.get(currentProjectLocation);
 
-				UpgradePlan upgradePlan = new StandardUpgradePlan(name, currentVersion, targetVersion, path);
+				_currentUpgradePlan = new StandardUpgradePlan(name, currentVersion, targetVersion, path);
 
-				_loadActionStatus(upgradePlanMemento, upgradePlan);
+				_loadActionStatus(upgradePlanMemento, _currentUpgradePlan);
 
-				_loadUpgradeProblems(upgradePlanMemento, upgradePlan);
+				_loadUpgradeProblems(upgradePlanMemento, _currentUpgradePlan);
 
-				return upgradePlan;
+				return _currentUpgradePlan;
 			}
 		}
 		catch (IOException ioe) {
@@ -178,7 +178,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 			Optional<IMemento> upgradePlanMementoOptional = Stream.of(
 				rootMemento.getChildren("upgradePlan")
 			).filter(
-				memento -> name.equals(memento.getString("name"))
+				memento -> name.equals(memento.getString("upgradePlanName"))
 			).findFirst();
 
 			IMemento upgradePlanMemento = upgradePlanMementoOptional.orElse(rootMemento.createChild("upgradePlan"));
@@ -321,17 +321,29 @@ public class UpgradePlannerService implements UpgradePlanner {
 		List<UpgradeTask> tasks = upgradePlan.getTasks();
 
 		for (UpgradeTask task : tasks) {
-			IMemento taskMemento = memento.createChild(task.getId());
+			IMemento taskMemento = memento.getChild(task.getId());
+
+			if (taskMemento == null) {
+				taskMemento = memento.createChild(task.getId());
+			}
 
 			List<UpgradeTaskStep> steps = task.getSteps();
 
 			for (UpgradeTaskStep step : steps) {
-				IMemento stepMemento = taskMemento.createChild(step.getId());
+				IMemento stepMemento = taskMemento.getChild(step.getId());
+
+				if (stepMemento == null) {
+					stepMemento = taskMemento.createChild(step.getId());
+				}
 
 				List<UpgradeTaskStepAction> actions = step.getActions();
 
 				for (UpgradeTaskStepAction action : actions) {
-					IMemento actionMemento = stepMemento.createChild(action.getId());
+					IMemento actionMemento = stepMemento.getChild(action.getId());
+
+					if (actionMemento == null) {
+						actionMemento = stepMemento.createChild(action.getId());
+					}
 
 					actionMemento.putString("status", String.valueOf(action.getStatus()));
 				}
@@ -340,6 +352,8 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	private void _saveUpgradeProblems(IMemento memento, UpgradePlan upgradePlan) {
+		memento.removeChildren("upgradeProblem");
+
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
 		for (UpgradeProblem upgradeProblem : upgradeProblems) {

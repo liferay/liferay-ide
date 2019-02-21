@@ -132,4 +132,9 @@ public interface IMemento {
 	 * @param value the value
 	 */
 	public void putString(String key, String value);
+
+	public void removeChild(IMemento child);
+
+	public void removeChildren(String type);
+
 }

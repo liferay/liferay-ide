@@ -95,16 +95,16 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
 
+		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
+
 		Optional.ofNullable(
 			memento
 		).map(
-			m -> m.getString("upgradePlanName")
+			m -> m.getString("activeUpgradePlanName")
 		).filter(
 			Objects::nonNull
 		).ifPresent(
 			upgradePlanName -> {
-				UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
-
 				UpgradePlan upgradePlan = upgradePlanner.loadUpgradePlan(upgradePlanName);
 
 				upgradePlanner.startUpgradePlan(upgradePlan);
@@ -129,6 +129,8 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
 			upgradePlanner.saveUpgradePlan(upgradePlan);
+
+			memento.putString("activeUpgradePlanName", upgradePlan.getName());
 		}
 	}
 
