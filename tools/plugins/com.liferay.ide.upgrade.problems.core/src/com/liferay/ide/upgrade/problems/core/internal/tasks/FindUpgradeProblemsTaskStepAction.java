@@ -60,10 +60,27 @@ public class FindUpgradeProblemsTaskStepAction extends BaseUpgradeTaskStepAction
 
 		List<String> versions = new ArrayList<>();
 
-		versions.add("7.0");
-		versions.add("7.1");
-
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+
+		String currentVersion = upgradePlan.getCurrentVersion();
+		String targetVersion = upgradePlan.getTargetVersion();
+
+		List<String> liferayVersions = _upgradePlanner.getLiferayVersions();
+
+		boolean begin = false;
+
+		for (String liferayVersion : liferayVersions) {
+			if (begin) {
+				versions.add(liferayVersion);
+
+				if (liferayVersion.equals(targetVersion)) {
+					break;
+				}
+			}
+			else if (liferayVersion.equals(currentVersion)) {
+				begin = true;
+			}
+		}
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 

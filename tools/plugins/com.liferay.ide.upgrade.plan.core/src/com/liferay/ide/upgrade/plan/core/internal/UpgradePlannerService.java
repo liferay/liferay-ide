@@ -54,6 +54,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 @Component
 public class UpgradePlannerService implements UpgradePlanner {
@@ -101,6 +102,17 @@ public class UpgradePlannerService implements UpgradePlanner {
 	@Override
 	public UpgradePlan getCurrentUpgradePlan() {
 		return _currentUpgradePlan;
+	}
+
+	@Override
+	public List<String> getLiferayVersions() {
+		List<String> liferayVersions = new ArrayList<>();
+
+		liferayVersions.add("6.2");
+		liferayVersions.add("7.0");
+		liferayVersions.add("7.1");
+
+		return liferayVersions;
 	}
 
 	@Override
