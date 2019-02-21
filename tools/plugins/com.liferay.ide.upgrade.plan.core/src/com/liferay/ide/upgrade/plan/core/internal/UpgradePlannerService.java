@@ -104,26 +104,6 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	@Override
-	public UpgradePlan loadActiveUpgradePlan() {
-		try (InputStream inputStream = new FileInputStream(_getUpgradePlannerStorageFile())) {
-			IMemento rootMemento = XMLMemento.loadMemento(inputStream);
-
-			if (rootMemento != null) {
-				String activeUpgradePlanName = rootMemento.getString("active");
-
-				if (activeUpgradePlanName != null) {
-					loadUpgradePlan(activeUpgradePlanName);
-				}
-			}
-		}
-		catch (IOException ioe) {
-			UpgradePlanCorePlugin.logError("Could not load active upgrade plan", ioe);
-		}
-
-		return null;
-	}
-
-	@Override
 	public UpgradePlan loadUpgradePlan(String name) {
 		try (InputStream inputStream = new FileInputStream(_getUpgradePlannerStorageFile())) {
 			IMemento rootMemento = XMLMemento.loadMemento(inputStream);
@@ -144,15 +124,13 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 				Path path = Paths.get(currentProjectLocation);
 
-				UpgradePlan upgradePlan = new StandardUpgradePlan(name, currentVersion, targetVersion, path);
+				_currentUpgradePlan = new StandardUpgradePlan(name, currentVersion, targetVersion, path);
 
-				startUpgradePlan(upgradePlan);
+				_loadActionStatus(upgradePlanMemento, _currentUpgradePlan);
 
-				_loadActionStatus(upgradePlanMemento, upgradePlan);
+				_loadUpgradeProblems(upgradePlanMemento, _currentUpgradePlan);
 
-				_loadUpgradeProblems(upgradePlanMemento, upgradePlan);
-
-				return upgradePlan;
+				return _currentUpgradePlan;
 			}
 		}
 		catch (IOException ioe) {
@@ -196,8 +174,6 @@ public class UpgradePlannerService implements UpgradePlanner {
 			}
 
 			String name = upgradePlan.getName();
-
-			rootMemento.putString("active", name);
 
 			Optional<IMemento> upgradePlanMementoOptional = Stream.of(
 				rootMemento.getChildren("upgradePlan")
@@ -376,9 +352,6 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	private void _saveUpgradeProblems(IMemento memento, UpgradePlan upgradePlan) {
-
-		// we need to remove the previous problems firstly
-
 		memento.removeChildren("upgradeProblem");
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();

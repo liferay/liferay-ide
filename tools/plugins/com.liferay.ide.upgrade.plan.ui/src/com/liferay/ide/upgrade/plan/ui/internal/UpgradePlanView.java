@@ -21,6 +21,9 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskViewer;
 
+import java.util.Objects;
+import java.util.Optional;
+
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -94,7 +97,19 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
-		upgradePlanner.loadActiveUpgradePlan();
+		Optional.ofNullable(
+			memento
+		).map(
+			m -> m.getString("activeUpgradePlanName")
+		).filter(
+			Objects::nonNull
+		).ifPresent(
+			upgradePlanName -> {
+				UpgradePlan upgradePlan = upgradePlanner.loadUpgradePlan(upgradePlanName);
+
+				upgradePlanner.startUpgradePlan(upgradePlan);
+			}
+		);
 	}
 
 	@Override
@@ -114,6 +129,8 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
 			upgradePlanner.saveUpgradePlan(upgradePlan);
+
+			memento.putString("activeUpgradePlanName", upgradePlan.getName());
 		}
 	}
 
