@@ -121,6 +121,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningJobs();
+
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		String className = "MyPortlet";
