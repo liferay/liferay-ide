@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<extension xmlns="http://www.eclipse.org/sapphire/xmlns/extension">
+	<function>
+		<name>Contain</name>
+		<impl>com.liferay.ide.upgrade.plan.core.ContainFunction</impl>
+	</function>
+</extension>
