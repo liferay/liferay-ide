@@ -22,7 +22,7 @@
 	                <property>TargetVersion</property>
 	            </property-editor>
                 <property-editor>
-                    <property>SelectedUpgradeCategories</property>
+                    <property>UpgradeCategories</property>
                     <show-label>true</show-label>
                     <hint>
                         <name>factory</name>

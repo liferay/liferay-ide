@@ -60,9 +60,9 @@ public class NewUpgradePlanOpMethods {
 
 		Path path = SapphireUtil.getContent(newUpgradePlanOp.getLocation());
 
-		ElementList<UpgradeCategoryElement> selectedUpgradeCategories = newUpgradePlanOp.getSelectedUpgradeCategories();
+		ElementList<UpgradeCategoryElement> upgradeCategories = newUpgradePlanOp.getUpgradeCategories();
 
-		Stream<UpgradeCategoryElement> upgradeCategoryElements = selectedUpgradeCategories.stream();
+		Stream<UpgradeCategoryElement> upgradeCategoryElements = upgradeCategories.stream();
 
 		List<String> categories = upgradeCategoryElements.map(
 			category -> SapphireUtil.getContent(category.getUpgradeCategory())

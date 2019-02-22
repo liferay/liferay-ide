@@ -58,9 +58,9 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public Value<String> getName();
 
-	public ElementList<UpgradeCategoryElement> getSelectedUpgradeCategories();
-
 	public Value<String> getTargetVersion();
+
+	public ElementList<UpgradeCategoryElement> getUpgradeCategories();
 
 	public void setCurrentVersion(String currentVersion);
 
@@ -84,14 +84,14 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	@Required
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
+	@DefaultValue(text = "7.1")
+	@PossibleValues(values = {"7.0", "7.1"})
+	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
+
 	@Label(standard = "Upgrade Categories")
 	@Service(impl = UpgradeCategoryPossibleValuesService.class)
 	@Service(impl = UpgradeCategoryValidationService.class)
 	@Type(base = UpgradeCategoryElement.class)
-	public ListProperty PROP_SELECTED_UPGRADE_CATEGORIES = new ListProperty(TYPE, "SelectedUpgradeCategories");
-
-	@DefaultValue(text = "7.1")
-	@PossibleValues(values = {"7.0", "7.1"})
-	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
+	public ListProperty PROP_UPGRADE_CATEGORIES = new ListProperty(TYPE, "UpgradeCategories");
 
 }

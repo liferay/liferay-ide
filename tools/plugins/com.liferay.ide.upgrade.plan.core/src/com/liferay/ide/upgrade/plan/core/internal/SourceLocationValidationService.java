@@ -37,7 +37,7 @@ public class SourceLocationValidationService extends ValidationService {
 
 		NewUpgradePlanOp op = context(NewUpgradePlanOp.class);
 
-		ElementList<UpgradeCategoryElement> selectedCategories = op.getSelectedUpgradeCategories();
+		ElementList<UpgradeCategoryElement> selectedCategories = op.getUpgradeCategories();
 
 		if (ListUtil.isNotEmpty(selectedCategories)) {
 			Path sourceLocation = SapphireUtil.getContent(op.getLocation());

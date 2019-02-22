@@ -33,7 +33,7 @@ public class UpgradeCategoryValidationService extends ValidationService {
 
 		NewUpgradePlanOp op = context(NewUpgradePlanOp.class);
 
-		ElementList<UpgradeCategoryElement> selectedUpgradeCategories = op.getSelectedUpgradeCategories();
+		ElementList<UpgradeCategoryElement> selectedUpgradeCategories = op.getUpgradeCategories();
 
 		if (ListUtil.isEmpty(selectedUpgradeCategories)) {
 			retval = Status.createErrorStatus("Please choose at lease one upgrade category item.");
