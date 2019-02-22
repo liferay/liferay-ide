@@ -105,17 +105,6 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	@Override
-	public List<String> getLiferayVersions() {
-		List<String> liferayVersions = new ArrayList<>();
-
-		liferayVersions.add("6.2");
-		liferayVersions.add("7.0");
-		liferayVersions.add("7.1");
-
-		return liferayVersions;
-	}
-
-	@Override
 	public UpgradePlan loadUpgradePlan(String name) {
 		try (InputStream inputStream = new FileInputStream(_getUpgradePlannerStorageFile())) {
 			IMemento rootMemento = XMLMemento.loadMemento(inputStream);

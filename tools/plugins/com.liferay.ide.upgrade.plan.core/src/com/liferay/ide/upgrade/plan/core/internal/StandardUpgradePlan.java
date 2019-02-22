@@ -22,6 +22,7 @@ import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.nio.file.Path;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -132,9 +133,43 @@ public class StandardUpgradePlan implements UpgradePlan {
 	}
 
 	@Override
+	public List<String> getUpgradeVersions() {
+		String currentVersion = getCurrentVersion();
+		String targetVersion = getTargetVersion();
+
+		boolean begin = false;
+
+		List<String> upgradeVersions = new ArrayList<>();
+
+		for (String liferayVersion : _liferayVersions) {
+			if (begin) {
+				upgradeVersions.add(liferayVersion);
+
+				if (liferayVersion.equals(targetVersion)) {
+					break;
+				}
+			}
+			else if (liferayVersion.equals(currentVersion)) {
+				begin = true;
+			}
+		}
+
+		return upgradeVersions;
+	}
+
+	@Override
 	public void setTargetProjectLocation(Path path) {
 		_targetProjectLocation = path;
 	}
+
+	@SuppressWarnings("serial")
+	private static final List<String> _liferayVersions = new ArrayList<String>() {
+		{
+			add("6.2");
+			add("7.0");
+			add("7.1");
+		}
+	};
 
 	private final Path _currentProjectLocation;
 	private final String _currentVersion;

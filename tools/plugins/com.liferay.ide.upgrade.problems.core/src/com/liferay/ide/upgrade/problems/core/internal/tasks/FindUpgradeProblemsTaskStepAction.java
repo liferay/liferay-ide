@@ -26,7 +26,6 @@ import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 
 import java.io.File;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -58,29 +57,9 @@ public class FindUpgradeProblemsTaskStepAction extends BaseUpgradeTaskStepAction
 			return Status.CANCEL_STATUS;
 		}
 
-		List<String> versions = new ArrayList<>();
-
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		String currentVersion = upgradePlan.getCurrentVersion();
-		String targetVersion = upgradePlan.getTargetVersion();
-
-		List<String> liferayVersions = _upgradePlanner.getLiferayVersions();
-
-		boolean begin = false;
-
-		for (String liferayVersion : liferayVersions) {
-			if (begin) {
-				versions.add(liferayVersion);
-
-				if (liferayVersion.equals(targetVersion)) {
-					break;
-				}
-			}
-			else if (liferayVersion.equals(currentVersion)) {
-				begin = true;
-			}
-		}
+		List<String> upgradeVersions = upgradePlan.getUpgradeVersions();
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
@@ -97,7 +76,7 @@ public class FindUpgradeProblemsTaskStepAction extends BaseUpgradeTaskStepAction
 						File searchFile = FileUtil.getFile(project);
 
 						List<UpgradeProblem> upgradeProblems = _fileMigration.findUpgradeProblems(
-							searchFile, versions, monitor);
+							searchFile, upgradeVersions, monitor);
 
 						upgradePlan.addUpgradeProblems(upgradeProblems);
 					});

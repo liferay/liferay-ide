@@ -16,8 +16,6 @@ package com.liferay.ide.upgrade.plan.core;
 
 import java.nio.file.Path;
 
-import java.util.List;
-
 /**
  * @author Gregory Amerson
  * @author Terry Jia
@@ -29,8 +27,6 @@ public interface UpgradePlanner {
 	public void dispatch(UpgradeEvent upgradeEvent);
 
 	public UpgradePlan getCurrentUpgradePlan();
-
-	public List<String> getLiferayVersions();
 
 	public UpgradePlan loadUpgradePlan(String name);
 
