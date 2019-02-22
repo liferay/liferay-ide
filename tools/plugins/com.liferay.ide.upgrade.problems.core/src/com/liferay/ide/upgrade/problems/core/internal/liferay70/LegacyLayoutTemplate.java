@@ -109,7 +109,7 @@ public class LegacyLayoutTemplate extends XMLFileMigrator implements AutoFileMig
 		List<FileSearchResult> results = new ArrayList<>();
 
 		for (Pattern pattern : _PATTERNS) {
-			results = xmlFileChecker.findElementAttribute("div", pattern);
+			results.addAll(xmlFileChecker.findElementAttribute("div", pattern));
 		}
 
 		return results;
