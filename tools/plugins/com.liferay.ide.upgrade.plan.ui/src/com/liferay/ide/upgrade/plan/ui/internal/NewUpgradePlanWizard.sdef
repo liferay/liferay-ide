@@ -30,7 +30,6 @@
                     </hint>
                 </property-editor>
                 <property-editor>
-                    <visible-when>${HasCodeUpgradeCategory}</visible-when>
                     <property>Location</property>
                 </property-editor>
             </content>
