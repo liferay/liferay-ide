@@ -30,6 +30,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocumentType;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -125,6 +126,63 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 
 						FileSearchResult result = new FileSearchResult(
 							file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
+
+						results.add(result);
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+		}
+		finally {
+			if (domModel != null) {
+				domModel.releaseFromRead();
+			}
+		}
+
+		return results;
+	}
+
+	@Override
+	public List<FileSearchResult> findElementAttribute(String tagName, Pattern pattern) {
+		List<FileSearchResult> results = new ArrayList<>();
+
+		IFile tplFile = getIFile(file);
+
+		IDOMModel domModel = null;
+
+		try {
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			domModel = (IDOMModel)modelManager.getModelForRead(tplFile);
+
+			IDOMDocument document = domModel.getDocument();
+
+			NodeList elements = document.getElementsByTagName(tagName);
+
+			if (elements != null) {
+				for (int i = 0; i < elements.getLength(); i++) {
+					IDOMElement element = (IDOMElement)elements.item(i);
+
+					String classValue = element.getAttribute("class");
+
+					Matcher matcher = pattern.matcher(classValue);
+
+					if ((classValue != null) && matcher.matches()) {
+						IStructuredDocument structuredDocument = document.getStructuredDocument();
+
+						IDOMNode attributeNode = (IDOMNode)element.getAttributeNode("class");
+
+						int startOffset = attributeNode.getStartOffset();
+						int endOffset = attributeNode.getEndOffset();
+
+						int startLine = structuredDocument.getLineOfOffset(startOffset) + 1;
+						int endLine = structuredDocument.getLineOfOffset(endOffset) + 1;
+
+						FileSearchResult result = new FileSearchResult(
+							file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
+
+						result.autoCorrectContext = "template:layout-template";
 
 						results.add(result);
 					}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.LegacyLayoutTemplate">
+   <property name="file.extensions" value="tpl"/>
+   <property name="problem.title" value="Layout Template breaking change"/>
+   <property name="problem.summary" value="The breaking change of Layout Template."/>
+   <property name="problem.section" value="#layout-template"/>
+   <property name="auto.correct" value="template"/>
+   <property name="implName" value="LiferayLayoutTemplate"/>
+   <property name="version" value="7.0"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.LegacyLayoutTemplate"/>
+</scr:component>
