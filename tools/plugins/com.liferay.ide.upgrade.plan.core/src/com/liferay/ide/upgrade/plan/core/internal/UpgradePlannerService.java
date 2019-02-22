@@ -109,31 +109,33 @@ public class UpgradePlannerService implements UpgradePlanner {
 		try (InputStream inputStream = new FileInputStream(_getUpgradePlannerStorageFile())) {
 			IMemento rootMemento = XMLMemento.loadMemento(inputStream);
 
-			if (rootMemento != null) {
-				Optional<IMemento> upgradePlanMementoOptional = Stream.of(
-					rootMemento.getChildren("upgradePlan")
-				).filter(
-					memento -> name.equals(memento.getString("upgradePlanName"))
-				).findFirst();
+			if (rootMemento == null) {
+				return null;
+			}
 
-				if (upgradePlanMementoOptional.isPresent()) {
-					IMemento upgradePlanMemento = upgradePlanMementoOptional.get();
+			Optional<IMemento> upgradePlanMementoOptional = Stream.of(
+				rootMemento.getChildren("upgradePlan")
+			).filter(
+				memento -> name.equals(memento.getString("upgradePlanName"))
+			).findFirst();
 
-					String currentVersion = upgradePlanMemento.getString("currentVersion");
-					String targetVersion = upgradePlanMemento.getString("targetVersion");
+			if (upgradePlanMementoOptional.isPresent()) {
+				IMemento upgradePlanMemento = upgradePlanMementoOptional.get();
 
-					String currentProjectLocation = upgradePlanMemento.getString("currentProjectLocation");
+				String currentVersion = upgradePlanMemento.getString("currentVersion");
+				String targetVersion = upgradePlanMemento.getString("targetVersion");
 
-					Path path = Paths.get(currentProjectLocation);
+				String currentProjectLocation = upgradePlanMemento.getString("currentProjectLocation");
 
-					_currentUpgradePlan = new StandardUpgradePlan(name, currentVersion, targetVersion, path);
+				Path path = Paths.get(currentProjectLocation);
 
-					_loadActionStatus(upgradePlanMemento, _currentUpgradePlan);
+				_currentUpgradePlan = new StandardUpgradePlan(name, currentVersion, targetVersion, path);
 
-					_loadUpgradeProblems(upgradePlanMemento, _currentUpgradePlan);
+				_loadActionStatus(upgradePlanMemento, _currentUpgradePlan);
 
-					return _currentUpgradePlan;
-				}
+				_loadUpgradeProblems(upgradePlanMemento, _currentUpgradePlan);
+
+				return _currentUpgradePlan;
 			}
 		}
 		catch (IOException ioe) {
