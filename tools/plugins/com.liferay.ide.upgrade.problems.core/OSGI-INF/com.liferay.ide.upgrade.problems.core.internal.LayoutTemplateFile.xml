@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.LayoutTemplateFile">
+   <property name="file.extension" value="tpl"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.XMLFile"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.LayoutTemplateFile"/>
+</scr:component>

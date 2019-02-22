@@ -12,21 +12,15 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core;
+package com.liferay.ide.upgrade.problems.core.internal;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.regex.Pattern;
+import com.liferay.ide.upgrade.problems.core.XMLFile;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
- * @author Gregory Amerson
+ * @author Seiphon Wang
  */
-public interface XMLFile extends SourceFile {
-
-	public FileSearchResult findDocumentTypeDeclaration(String name, Pattern idPattern);
-
-	public Collection<FileSearchResult> findElement(String elementName, String elementValue);
-
-	public List<FileSearchResult> findElementAttribute(String name, Pattern pattern);
-
+@Component(property = "file.extension=tpl", service = XMLFile.class)
+public class LayoutTemplateFile extends SSEXMLFile {
 }
