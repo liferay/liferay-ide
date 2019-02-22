@@ -31,8 +31,8 @@ public class ContainFunction extends AggregateFunction {
 		return new AggregateFunctionResult(this, context) {
 
 			@Override
-			protected Object evaluate(final List<Object> items) {
-				final Object targetValue = operand(2);
+			protected Object evaluate(List<Object> items) {
+				Object targetValue = operand(2);
 
 				Stream<Object> itemStream = items.stream();
 
