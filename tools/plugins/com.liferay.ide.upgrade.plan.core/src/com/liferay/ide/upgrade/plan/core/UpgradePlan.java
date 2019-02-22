@@ -40,6 +40,8 @@ public interface UpgradePlan {
 
 	public Collection<UpgradeProblem> getUpgradeProblems();
 
+	public List<String> getUpgradeVersions();
+
 	public void setTargetProjectLocation(Path path);
 
 }

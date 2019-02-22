@@ -54,6 +54,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 @Component
 public class UpgradePlannerService implements UpgradePlanner {
@@ -107,6 +108,10 @@ public class UpgradePlannerService implements UpgradePlanner {
 	public UpgradePlan loadUpgradePlan(String name) {
 		try (InputStream inputStream = new FileInputStream(_getUpgradePlannerStorageFile())) {
 			IMemento rootMemento = XMLMemento.loadMemento(inputStream);
+
+			if (rootMemento == null) {
+				return null;
+			}
 
 			Optional<IMemento> upgradePlanMementoOptional = Stream.of(
 				rootMemento.getChildren("upgradePlan")

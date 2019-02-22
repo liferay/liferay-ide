@@ -18,6 +18,7 @@ import java.nio.file.Path;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public interface UpgradePlanner {
 

@@ -392,13 +392,16 @@ public final class XMLMemento implements IMemento {
    }
 
 	@Override
-	public void removeChild(IMemento child) {
-		// TODO Terry will implement it soon
-	}
-
-	@Override
 	public void removeChildren(String type) {
-		// TODO Terry will implement it soon
+		NodeList childNodes = element.getChildNodes();
+
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node node = childNodes.item(i);
+
+			if (type.equals(node.getNodeName())) {
+				element.removeChild(node);
+			}
+		}
 	}
 
 }
