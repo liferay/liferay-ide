@@ -12,10 +12,11 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.SapphireUtil;
-import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
+import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
+import com.liferay.ide.upgrade.plan.core.UpgradeCategoryElement;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
@@ -42,7 +43,7 @@ public class HasUpgradeCodeCategoryListener extends FilteredListener<PropertyCon
 			for (UpgradeCategoryElement category : selectedCategories) {
 				String cateogryValue = SapphireUtil.getContent(category.getUpgradeCategory());
 
-				if (cateogryValue.equals(NewUpgradePlanOpMethods.upgradeCategoryCode)) {
+				if (cateogryValue.equals("code")) {
 					op.setHasCodeUpgradeCategory(true);
 
 					return;

@@ -12,10 +12,12 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
+import com.liferay.ide.upgrade.plan.core.UpgradeCategoryElement;
 
 import java.io.File;
 
@@ -33,11 +35,11 @@ public class SourceLocationValidationService extends ValidationService {
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
-		final NewUpgradePlanOp op = context(NewUpgradePlanOp.class);
+		NewUpgradePlanOp op = context(NewUpgradePlanOp.class);
 
 		ElementList<UpgradeCategoryElement> selectedCategories = op.getSelectedUpgradeCategories();
 
-		if ((selectedCategories != null) || ListUtil.isNotEmpty(selectedCategories)) {
+		if (ListUtil.isNotEmpty(selectedCategories)) {
 			Path sourceLocation = SapphireUtil.getContent(op.getLocation());
 
 			if ((sourceLocation == null) || sourceLocation.isEmpty() || !sourceLocation.isAbsolute()) {

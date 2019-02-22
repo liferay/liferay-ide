@@ -14,6 +14,9 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.upgrade.plan.core.internal.UpgradeCategoryValueImageService;
+import com.liferay.ide.upgrade.plan.core.internal.UpgradeCategoryValueLabelService;
+
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Value;

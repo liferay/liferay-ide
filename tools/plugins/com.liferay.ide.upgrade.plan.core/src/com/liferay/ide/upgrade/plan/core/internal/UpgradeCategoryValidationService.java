@@ -12,9 +12,11 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
+import com.liferay.ide.upgrade.plan.core.UpgradeCategoryElement;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Status;
@@ -29,11 +31,11 @@ public class UpgradeCategoryValidationService extends ValidationService {
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
-		final NewUpgradePlanOp op = context(NewUpgradePlanOp.class);
+		NewUpgradePlanOp op = context(NewUpgradePlanOp.class);
 
 		ElementList<UpgradeCategoryElement> selectedUpgradeCategories = op.getSelectedUpgradeCategories();
 
-		if ((selectedUpgradeCategories == null) || ListUtil.isEmpty(selectedUpgradeCategories)) {
+		if (ListUtil.isEmpty(selectedUpgradeCategories)) {
 			retval = Status.createErrorStatus("Please choose at lease one upgrade category item.");
 		}
 

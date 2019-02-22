@@ -14,7 +14,11 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.upgrade.plan.core.internal.HasUpgradeCodeCategoryListener;
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
+import com.liferay.ide.upgrade.plan.core.internal.SourceLocationValidationService;
+import com.liferay.ide.upgrade.plan.core.internal.UpgradeCategoryPossibleValuesService;
+import com.liferay.ide.upgrade.plan.core.internal.UpgradeCategoryValidationService;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;

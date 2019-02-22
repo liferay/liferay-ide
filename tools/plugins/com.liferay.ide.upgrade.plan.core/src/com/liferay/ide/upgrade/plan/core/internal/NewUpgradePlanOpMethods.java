@@ -43,10 +43,6 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class NewUpgradePlanOpMethods {
 
-	public static String upgradeCategoryCode = "code";
-	public static String upgradeCategoryConfig = "config";
-	public static String upgradeCategoryDatabase = "database";
-
 	public static final Status execute(NewUpgradePlanOp newUpgradePlanOp, ProgressMonitor progressMonitor) {
 		ServiceTracker<UpgradePlanner, UpgradePlanner> serviceTracker = _getServiceTracker();
 

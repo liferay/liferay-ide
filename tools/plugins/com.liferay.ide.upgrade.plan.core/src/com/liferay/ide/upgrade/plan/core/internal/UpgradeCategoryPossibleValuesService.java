@@ -12,19 +12,36 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.plan.core.internal;
 
-import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.sapphire.PossibleValuesService;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public class UpgradeCategoryPossibleValuesService extends PossibleValuesService {
+
+	public UpgradeCategoryPossibleValuesService() {
+		Bundle bundle = FrameworkUtil.getBundle(UpgradeCategoryPossibleValuesService.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_upgradeCategoryServiceTracker = new ServiceTracker<>(bundleContext, UpgradeTaskCategory.class, null);
+
+		_upgradeCategoryServiceTracker.open();
+	}
 
 	@Override
 	public boolean ordered() {
@@ -40,11 +57,18 @@ public class UpgradeCategoryPossibleValuesService extends PossibleValuesService 
 	protected void initPossibleValuesService() {
 		_upgradeCategoryValues = new HashSet<>();
 
-		_upgradeCategoryValues.add(NewUpgradePlanOpMethods.upgradeCategoryCode);
-		_upgradeCategoryValues.add(NewUpgradePlanOpMethods.upgradeCategoryConfig);
-		_upgradeCategoryValues.add(NewUpgradePlanOpMethods.upgradeCategoryDatabase);
+		Object[] services = _upgradeCategoryServiceTracker.getServices();
+
+		for (Object service : services) {
+			if (service instanceof UpgradePlanElement) {
+				UpgradePlanElement upgradePlanElement = (UpgradePlanElement)service;
+
+				_upgradeCategoryValues.add(upgradePlanElement.getId());
+			}
+		}
 	}
 
+	private ServiceTracker<UpgradeTaskCategory, UpgradeTaskCategory> _upgradeCategoryServiceTracker;
 	private Set<String> _upgradeCategoryValues;
 
 }

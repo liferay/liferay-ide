@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definition>
     <import>
-        <package>org.eclipse.sapphire.ui.forms.swt</package>
         <package>com.liferay.ide.upgrade.plan.core</package>
+        <package>org.eclipse.sapphire.ui.forms.swt</package>
     </import>
     <wizard>
         <id>NewUpgradePlan</id>
@@ -29,10 +29,10 @@
                         <value>CheckBoxListPropertyEditorPresentation$Factory</value>
                     </hint>
                 </property-editor>
-	            <property-editor>
-	            	<visible-when>${ HasCodeUpgradeCategory }</visible-when>
-	            	<property>Location</property>
-	            </property-editor>
+                <property-editor>
+                    <visible-when>${HasCodeUpgradeCategory}</visible-when>
+                    <property>Location</property>
+                </property-editor>
             </content>
         </page>
     </wizard>
