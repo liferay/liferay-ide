@@ -160,32 +160,34 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 
 			NodeList elements = document.getElementsByTagName(tagName);
 
-			if (elements != null) {
-				for (int i = 0; i < elements.getLength(); i++) {
-					IDOMElement element = (IDOMElement)elements.item(i);
+			if (elements == null) {
+				return results;
+			}
 
-					String classValue = element.getAttribute("class");
+			for (int i = 0; i < elements.getLength(); i++) {
+				IDOMElement element = (IDOMElement)elements.item(i);
 
-					Matcher matcher = pattern.matcher(classValue);
+				String classValue = element.getAttribute("class");
 
-					if ((classValue != null) && matcher.matches()) {
-						IStructuredDocument structuredDocument = document.getStructuredDocument();
+				Matcher matcher = pattern.matcher(classValue);
 
-						IDOMNode attributeNode = (IDOMNode)element.getAttributeNode("class");
+				if ((classValue != null) && matcher.matches()) {
+					IStructuredDocument structuredDocument = document.getStructuredDocument();
 
-						int startOffset = attributeNode.getStartOffset();
-						int endOffset = attributeNode.getEndOffset();
+					IDOMNode attributeNode = (IDOMNode)element.getAttributeNode("class");
 
-						int startLine = structuredDocument.getLineOfOffset(startOffset) + 1;
-						int endLine = structuredDocument.getLineOfOffset(endOffset) + 1;
+					int startOffset = attributeNode.getStartOffset();
+					int endOffset = attributeNode.getEndOffset();
 
-						FileSearchResult result = new FileSearchResult(
-							file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
+					int startLine = structuredDocument.getLineOfOffset(startOffset) + 1;
+					int endLine = structuredDocument.getLineOfOffset(endOffset) + 1;
 
-						result.autoCorrectContext = "template:layout-template";
+					FileSearchResult result = new FileSearchResult(
+						file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
 
-						results.add(result);
-					}
+					result.autoCorrectContext = "layout-template:css-class";
+
+					results.add(result);
 				}
 			}
 		}

@@ -90,7 +90,6 @@ public class LegacyLayoutTemplate extends XMLFileMigrator implements AutoFileMig
 				tplModel.save();
 			}
 			catch (Exception e) {
-				e.printStackTrace();
 			}
 			finally {
 				if (tplModel != null) {
@@ -127,7 +126,7 @@ public class LegacyLayoutTemplate extends XMLFileMigrator implements AutoFileMig
 		return content;
 	}
 
-	private static final String _KEY = "template:layout-template";
+	private static final String _KEY = "layout-template:css-class";
 
 	private static final String _tagName = "div";
 
