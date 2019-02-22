@@ -32,7 +32,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -153,26 +152,22 @@ public class FileMigrationService implements FileMigration {
 			);
 
 			if (ListUtil.isNotEmpty(versions) && (versions.size() > 1)) {
-				Collections.sort(
-					versions,
-					new Comparator<String>() {
+				versions.sort(
+					(v1, v2) -> {
+						Version version1 = new Version(v1);
+						Version version2 = new Version(v2);
 
-						@Override
-						public int compare(String version1, String version2) {
-							Version osgiVersion1 = new Version(version1);
-							Version osgiVersion2 = new Version(version2);
-
-							return osgiVersion2.compareTo(osgiVersion1);
-						}
-
+						return version2.compareTo(version1);
 					});
 
 				String version = versions.get(0);
 
 				Stream<ServiceReference<FileMigrator>> stream = fileMigrators.stream();
 
-				List<ServiceReference<FileMigrator>> serviceReferencesWithVersion = stream.filter(
+				List<String> serviceReferencesWithVersion = stream.filter(
 					serviceReference -> version.equals(serviceReference.getProperty("version"))
+				).map(
+					reference -> (String)reference.getProperty("implName")
 				).collect(
 					Collectors.toList()
 				);
@@ -186,7 +181,7 @@ public class FileMigrationService implements FileMigration {
 				);
 
 				for (ServiceReference<FileMigrator> serviceReferenceWithoutVersion : serviceReferencesWithoutVersion) {
-					if (serviceReferencesWithVersion.contains(serviceReferenceWithoutVersion)) {
+					if (serviceReferencesWithVersion.contains(serviceReferenceWithoutVersion.getProperty("implName"))) {
 						fileMigrators.remove(serviceReferenceWithoutVersion);
 					}
 				}
