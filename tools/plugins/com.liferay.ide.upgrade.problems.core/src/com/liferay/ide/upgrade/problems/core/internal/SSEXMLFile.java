@@ -156,25 +156,25 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 
 			domModel = (IDOMModel)modelManager.getModelForRead(tplFile);
 
-			IDOMDocument document = domModel.getDocument();
+			IDOMDocument domDocument = domModel.getDocument();
 
-			NodeList elements = document.getElementsByTagName(tagName);
+			NodeList elements = domDocument.getElementsByTagName(tagName);
 
 			if (elements == null) {
 				return results;
 			}
 
 			for (int i = 0; i < elements.getLength(); i++) {
-				IDOMElement element = (IDOMElement)elements.item(i);
+				IDOMElement domElement = (IDOMElement)elements.item(i);
 
-				String classValue = element.getAttribute("class");
+				String classValue = domElement.getAttribute("class");
 
 				Matcher matcher = pattern.matcher(classValue);
 
 				if ((classValue != null) && matcher.matches()) {
-					IStructuredDocument structuredDocument = document.getStructuredDocument();
+					IStructuredDocument structuredDocument = domDocument.getStructuredDocument();
 
-					IDOMNode attributeNode = (IDOMNode)element.getAttributeNode("class");
+					IDOMNode attributeNode = (IDOMNode)domElement.getAttributeNode("class");
 
 					int startOffset = attributeNode.getStartOffset();
 					int endOffset = attributeNode.getEndOffset();

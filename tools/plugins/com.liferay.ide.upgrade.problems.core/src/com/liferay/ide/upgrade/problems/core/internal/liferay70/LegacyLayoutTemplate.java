@@ -51,50 +51,53 @@ public class LegacyLayoutTemplate extends XMLFileMigrator implements AutoFileMig
 
 	@Override
 	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
-		int problemsCorrected = 0;
 		IFile tplFile = getXmlFile(file);
-		IDOMModel tplModel = null;
 
-		if (tplFile != null) {
-			try {
-				IModelManager modelManager = StructuredModelManager.getModelManager();
+		if (tplFile == null) {
+			return 0;
+		}
 
-				tplModel = (IDOMModel)modelManager.getModelForEdit(tplFile);
+		int problemsCorrected = 0;
+		IDOMModel tplDOMModel = null;
 
-				List<IDOMElement> elementsToCorrect = new ArrayList<>();
+		try {
+			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-				for (UpgradeProblem problem : upgradeProblems) {
-					if (_KEY.equals(problem.getAutoCorrectContext())) {
-						IndexedRegion region = tplModel.getIndexedRegion(problem.getStartOffset());
+			tplDOMModel = (IDOMModel)modelManager.getModelForEdit(tplFile);
 
-						if (region instanceof IDOMElement) {
-							IDOMElement element = (IDOMElement)region;
+			List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
-							elementsToCorrect.add(element);
-						}
+			for (UpgradeProblem upgradeProblem : upgradeProblems) {
+				if (_KEY.equals(upgradeProblem.getAutoCorrectContext())) {
+					IndexedRegion indexedRegion = tplDOMModel.getIndexedRegion(upgradeProblem.getStartOffset());
+
+					if (indexedRegion instanceof IDOMElement) {
+						IDOMElement element = (IDOMElement)indexedRegion;
+
+						elementsToCorrect.add(element);
 					}
 				}
-
-				for (IDOMElement element : elementsToCorrect) {
-					tplModel.aboutToChangeModel();
-
-					String content = _upgradeLayoutTplContent(element.getAttribute("class"));
-
-					element.setAttribute("class", content);
-
-					tplModel.changedModel();
-
-					problemsCorrected++;
-				}
-
-				tplModel.save();
 			}
-			catch (Exception e) {
+
+			for (IDOMElement domElement : elementsToCorrect) {
+				tplDOMModel.aboutToChangeModel();
+
+				String content = _upgradeLayoutTplContent(domElement.getAttribute("class"));
+
+				domElement.setAttribute("class", content);
+
+				tplDOMModel.changedModel();
+
+				problemsCorrected++;
 			}
-			finally {
-				if (tplModel != null) {
-					tplModel.releaseFromEdit();
-				}
+
+			tplDOMModel.save();
+		}
+		catch (Exception e) {
+		}
+		finally {
+			if (tplDOMModel != null) {
+				tplDOMModel.releaseFromEdit();
 			}
 		}
 
@@ -105,8 +108,8 @@ public class LegacyLayoutTemplate extends XMLFileMigrator implements AutoFileMig
 	protected List<FileSearchResult> searchFile(File file, XMLFile xmlFileChecker) {
 		List<FileSearchResult> results = new ArrayList<>();
 
-		for (Pattern pattern : _patternList) {
-			results = xmlFileChecker.findElementAttribute(_tagName, pattern);
+		for (Pattern pattern : _PATTERNS) {
+			results = xmlFileChecker.findElementAttribute("div", pattern);
 		}
 
 		return results;
@@ -128,9 +131,7 @@ public class LegacyLayoutTemplate extends XMLFileMigrator implements AutoFileMig
 
 	private static final String _KEY = "layout-template:css-class";
 
-	private static final String _tagName = "div";
-
-	private static final Pattern[] _patternList = {
+	private static final Pattern[] _PATTERNS = {
 		Pattern.compile(".*[\\s]{0,1}row-fluid", Pattern.CASE_INSENSITIVE | Pattern.DOTALL),
 		Pattern.compile(".*[\\s]{0,1}span[0-9]{1,2}", Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
 	};
