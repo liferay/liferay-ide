@@ -5,7 +5,7 @@
    <property name="problem.summary" value="The breaking change of Layout Template."/>
    <property name="problem.section" value="#layout-template"/>
    <property name="auto.correct" value="template"/>
-   <property name="implName" value="LiferayLayoutTemplate"/>
+   <property name="implName" value="LegacyLayoutTemplate"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>
