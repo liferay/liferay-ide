@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ValidationUtil;
@@ -37,7 +38,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Andy Wu
  */
-public class WorkspaceNameValidationService extends ValidationService {
+public class WorkspaceNameValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -67,7 +68,7 @@ public class WorkspaceNameValidationService extends ValidationService {
 			return StatusBridge.create(ce.getStatus());
 		}
 
-		String currentWorkspaceName = SapphireUtil.getContent(_op().getWorkspaceName());
+		String currentWorkspaceName = get(_op().getWorkspaceName());
 
 		if (CoreUtil.isNullOrEmpty(currentWorkspaceName)) {
 			return Status.createErrorStatus("Liferay Workspace project name could not be empty.");
@@ -111,7 +112,7 @@ public class WorkspaceNameValidationService extends ValidationService {
 	}
 
 	private boolean _isExistingFolder(String projectName) {
-		Path location = SapphireUtil.getContent(_op().getLocation());
+		Path location = get(_op().getLocation());
 
 		if (location != null) {
 			Path path = location.append(projectName);

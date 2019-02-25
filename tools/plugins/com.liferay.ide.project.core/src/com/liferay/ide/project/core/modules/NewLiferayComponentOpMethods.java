@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.CoreException;
@@ -31,8 +31,7 @@ import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 public class NewLiferayComponentOpMethods {
 
 	public static void createNewComponent(NewLiferayComponentOp op, IProgressMonitor monitor) throws CoreException {
-		IComponentTemplate<NewLiferayComponentOp> componentOp = SapphireUtil.getContent(
-			op.getComponentClassTemplateName());
+		IComponentTemplate<NewLiferayComponentOp> componentOp = _getter.get(op.getComponentClassTemplateName());
 
 		if (componentOp != null) {
 			componentOp.doExecute(op, monitor);
@@ -69,5 +68,7 @@ public class NewLiferayComponentOpMethods {
 
 		return retval;
 	}
+
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 }

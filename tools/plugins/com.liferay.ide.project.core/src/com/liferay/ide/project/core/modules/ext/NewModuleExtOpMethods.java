@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.modules.ext;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
@@ -43,7 +43,7 @@ public class NewModuleExtOpMethods {
 		Throwable errorStack = null;
 
 		try {
-			NewLiferayProjectProvider<BaseModuleOp> newLiferayProjectProvider = SapphireUtil.getContent(
+			NewLiferayProjectProvider<BaseModuleOp> newLiferayProjectProvider = _getter.get(
 				newModuleExtOp.getProjectProvider());
 
 			IStatus status = newLiferayProjectProvider.createNewProject(newModuleExtOp, progressMonitor);
@@ -68,5 +68,7 @@ public class NewModuleExtOpMethods {
 
 		return retval;
 	}
+
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 }

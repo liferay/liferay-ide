@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -33,7 +34,7 @@ import org.osgi.framework.Version;
 /**
  * @author Gregory Amerson
  */
-public class PortletFrameworkValidationService extends ValidationService {
+public class PortletFrameworkValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -50,8 +51,8 @@ public class PortletFrameworkValidationService extends ValidationService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		ILiferayProjectProvider projectProvider = SapphireUtil.getContent(op.getProjectProvider());
-		IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
+		ILiferayProjectProvider projectProvider = get(op.getProjectProvider());
+		IPortletFramework portletFramework = get(op.getPortletFramework());
 
 		if (!portletFramework.supports(projectProvider)) {
 			return Status.createErrorStatus(

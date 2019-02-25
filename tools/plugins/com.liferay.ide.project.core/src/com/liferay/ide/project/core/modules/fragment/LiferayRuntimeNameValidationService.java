@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.sapphire.modeling.Status;
@@ -24,7 +24,7 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Terry Jia
  */
-public class LiferayRuntimeNameValidationService extends ValidationService {
+public class LiferayRuntimeNameValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
@@ -32,7 +32,7 @@ public class LiferayRuntimeNameValidationService extends ValidationService {
 
 		final NewModuleFragmentOp op = context(NewModuleFragmentOp.class);
 
-		final String runtimeName = SapphireUtil.getContent(op.getLiferayRuntimeName());
+		final String runtimeName = get(op.getLiferayRuntimeName());
 
 		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 

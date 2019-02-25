@@ -17,7 +17,6 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
@@ -88,7 +87,8 @@ import org.w3c.dom.Document;
  */
 @SuppressWarnings("restriction")
 public class NewMavenPluginProjectProvider
-	extends LiferayMavenProjectProvider implements NewLiferayProjectProvider<NewLiferayPluginProjectOp> {
+	extends LiferayMavenProjectProvider
+	implements NewLiferayProjectProvider<NewLiferayPluginProjectOp>, MavenProfileCreator {
 
 	@Override
 	public IStatus createNewProject(NewLiferayPluginProjectOp op, IProgressMonitor monitor) throws CoreException {
@@ -100,15 +100,15 @@ public class NewMavenPluginProjectProvider
 		IMavenProjectRegistry mavenProjectRegistry = MavenPlugin.getMavenProjectRegistry();
 		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
-		String groupId = SapphireUtil.getContent(op.getGroupId());
-		String artifactId = SapphireUtil.getContent(op.getProjectName());
-		String version = SapphireUtil.getContent(op.getArtifactVersion());
-		String javaPackage = SapphireUtil.getContent(op.getGroupId());
-		String activeProfilesValue = SapphireUtil.getContent(op.getActiveProfilesValue());
-		IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
+		String groupId = get(op.getGroupId());
+		String artifactId = get(op.getProjectName());
+		String version = get(op.getArtifactVersion());
+		String javaPackage = get(op.getGroupId());
+		String activeProfilesValue = get(op.getActiveProfilesValue());
+		IPortletFramework portletFramework = get(op.getPortletFramework());
 		String frameworkName = NewLiferayPluginProjectOpMethods.getFrameworkName(op);
 
-		IPath location = PathBridge.create(SapphireUtil.getContent(op.getLocation()));
+		IPath location = PathBridge.create(get(op.getLocation()));
 
 		// for location we should use the parent location
 
@@ -120,7 +120,7 @@ public class NewMavenPluginProjectProvider
 			location = location.removeLastSegments(1);
 		}
 
-		String archetypeArtifactId = SapphireUtil.getContent(op.getArchetype());
+		String archetypeArtifactId = get(op.getArchetype());
 
 		Archetype archetype = new Archetype();
 
@@ -149,18 +149,16 @@ public class NewMavenPluginProjectProvider
 					if (prop instanceof RequiredProperty) {
 						RequiredProperty rProp = (RequiredProperty)prop;
 
-						PluginType pluginType = SapphireUtil.getContent(op.getPluginType());
+						PluginType pluginType = get(op.getPluginType());
 
 						if (pluginType.equals(PluginType.theme)) {
 							String key = rProp.getKey();
 
 							if (key.equals("themeParent")) {
-								properties.put(key, SapphireUtil.getContent(op.getThemeParent()));
+								properties.put(key, get(op.getThemeParent()));
 							}
 							else if (key.equals("themeType")) {
-								properties.put(
-									key,
-									ThemeUtil.getTemplateExtension(SapphireUtil.getContent(op.getThemeFramework())));
+								properties.put(key, ThemeUtil.getTemplateExtension(get(op.getThemeFramework())));
 							}
 						}
 						else {
@@ -241,7 +239,7 @@ public class NewMavenPluginProjectProvider
 						Document pomDocument = docBuilder.parse(settingsXmlFile.getCanonicalPath());
 
 						for (NewLiferayProfile newProfile : newUserSettingsProfiles) {
-							MavenUtil.createNewLiferayProfileNode(pomDocument, newProfile);
+							createNewLiferayProfileNode(pomDocument, newProfile);
 						}
 
 						TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -279,7 +277,7 @@ public class NewMavenPluginProjectProvider
 					domModel = (IDOMModel)modelManager.getModelForEdit(pomFile);
 
 					for (NewLiferayProfile newProfile : newProjectPomProfiles) {
-						MavenUtil.createNewLiferayProfileNode(domModel.getDocument(), newProfile);
+						createNewLiferayProfileNode(domModel.getDocument(), newProfile);
 					}
 
 					domModel.save();
@@ -311,10 +309,10 @@ public class NewMavenPluginProjectProvider
 				updateDtdVersion(firstProject, pluginVersion, archVersion);
 			}
 
-			PluginType pluginType = SapphireUtil.getContent(op.getPluginType());
+			PluginType pluginType = get(op.getPluginType());
 
 			if (pluginType.equals(PluginType.portlet)) {
-				String portletName = SapphireUtil.getContent(op.getPortletName(), false);
+				String portletName = get(op.getPortletName(), false);
 
 				retval = portletFramework.postProjectCreated(firstProject, frameworkName, portletName, monitor);
 			}

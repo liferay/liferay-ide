@@ -17,7 +17,7 @@ package com.liferay.ide.project.core.modules.fragment;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
@@ -48,14 +48,14 @@ public class NewModuleFragmentFilesOpMethods {
 
 		monitor.beginTask("Copy files (this process may take several minutes)", 100);
 
-		String projectName = SapphireUtil.getContent(op.getProjectName());
+		String projectName = _getter.get(op.getProjectName());
 
 		IProject project = CoreUtil.getProject(projectName);
 
 		Status retval = null;
 
 		try {
-			String hostBundleName = SapphireUtil.getContent(op.getHostOsgiBundle());
+			String hostBundleName = _getter.get(op.getHostOsgiBundle());
 
 			ProjectCore projectCore = ProjectCore.getDefault();
 
@@ -64,7 +64,7 @@ public class NewModuleFragmentFilesOpMethods {
 			IPath tempJarDir = LiferayCore.GLOBAL_USER_DIR.append(hostBundleName);
 
 			if (FileUtil.notExists(tempJarDir)) {
-				IRuntime runtime = ServerUtil.getRuntime(SapphireUtil.getContent(op.getLiferayRuntimeName()));
+				IRuntime runtime = ServerUtil.getRuntime(_getter.get(op.getLiferayRuntimeName()));
 
 				String hostOsgiJar = hostBundleName + ".jar";
 
@@ -83,7 +83,7 @@ public class NewModuleFragmentFilesOpMethods {
 			ElementList<OverrideFilePath> files = op.getOverrideFiles();
 
 			for (OverrideFilePath file : files) {
-				File fragmentFile = FileUtil.getFile(tempJarDir.append(SapphireUtil.getContent(file.getValue())));
+				File fragmentFile = FileUtil.getFile(tempJarDir.append(_getter.get(file.getValue())));
 
 				if (FileUtil.exists(fragmentFile)) {
 					File folder = null;
@@ -177,5 +177,7 @@ public class NewModuleFragmentFilesOpMethods {
 
 		return retval;
 	}
+
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 }

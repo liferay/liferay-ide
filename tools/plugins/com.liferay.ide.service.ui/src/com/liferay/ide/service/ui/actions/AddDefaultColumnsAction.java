@@ -15,7 +15,7 @@
 package com.liferay.ide.service.ui.actions;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.service.core.model.Entity;
 import com.liferay.ide.service.core.operation.ServiceBuilderDescriptorHelper;
 import com.liferay.ide.ui.util.UIUtil;
@@ -30,7 +30,7 @@ import org.eclipse.sapphire.ui.SapphirePart;
 /**
  * @author Kuo Zhang
  */
-public class AddDefaultColumnsAction extends SapphireActionHandler {
+public class AddDefaultColumnsAction extends SapphireActionHandler implements SapphireContentAccessor {
 
 	public AddDefaultColumnsAction() {
 	}
@@ -42,7 +42,7 @@ public class AddDefaultColumnsAction extends SapphireActionHandler {
 		Element element = sapphirePart.getLocalModelElement();
 
 		if (element instanceof Entity) {
-			String entityName = SapphireUtil.getContent(((Entity)element).getName());
+			String entityName = get(((Entity)element).getName());
 
 			if (CoreUtil.isNullOrEmpty(entityName)) {
 				String title = "Add Liferay Default Columns";

@@ -16,7 +16,7 @@ package com.liferay.ide.project.core.jsf;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
@@ -33,10 +33,24 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Simon Jiang
  */
-public class JSFModuleProjectNameListener extends FilteredListener<PropertyContentEvent> {
+public class JSFModuleProjectNameListener
+	extends FilteredListener<PropertyContentEvent> implements SapphireContentAccessor {
 
-	public static void updateLocation(NewLiferayJSFModuleProjectOp op) {
-		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		_updateLocation(op(event));
+	}
+
+	protected NewLiferayJSFModuleProjectOp op(PropertyContentEvent event) {
+		Property property = event.property();
+
+		Element element = property.element();
+
+		return element.nearest(NewLiferayJSFModuleProjectOp.class);
+	}
+
+	private void _updateLocation(NewLiferayJSFModuleProjectOp op) {
+		String currentProjectName = get(op.getProjectName());
 
 		Path newLocationBase = null;
 
@@ -44,13 +58,13 @@ public class JSFModuleProjectNameListener extends FilteredListener<PropertyConte
 			return;
 		}
 
-		boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
+		boolean useDefaultLocation = get(op.getUseDefaultLocation());
 
 		if (useDefaultLocation) {
 			newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRootLocation());
 		}
 		else {
-			Path currentProjectLocation = SapphireUtil.getContent(op.getLocation());
+			Path currentProjectLocation = get(op.getLocation());
 
 			boolean hasLiferayWorkspace = false;
 
@@ -98,19 +112,6 @@ public class JSFModuleProjectNameListener extends FilteredListener<PropertyConte
 		if (newLocationBase != null) {
 			op.setLocation(newLocationBase);
 		}
-	}
-
-	@Override
-	protected void handleTypedEvent(PropertyContentEvent event) {
-		updateLocation(op(event));
-	}
-
-	protected NewLiferayJSFModuleProjectOp op(PropertyContentEvent event) {
-		Property property = event.property();
-
-		Element element = property.element();
-
-		return element.nearest(NewLiferayJSFModuleProjectOp.class);
 	}
 
 }

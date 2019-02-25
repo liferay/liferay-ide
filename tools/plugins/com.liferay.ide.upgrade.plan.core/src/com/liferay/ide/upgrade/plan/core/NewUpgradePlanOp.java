@@ -15,9 +15,14 @@
 package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
+import com.liferay.ide.upgrade.plan.core.internal.SourceLocationValidationService;
+import com.liferay.ide.upgrade.plan.core.internal.UpgradeCategoryPossibleValuesService;
 
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
+import org.eclipse.sapphire.Length;
+import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.PossibleValues;
 import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
@@ -31,11 +36,13 @@ import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Siomn Jiang
  */
 public interface NewUpgradePlanOp extends ExecutableElement {
 
@@ -53,6 +60,8 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public Value<String> getTargetVersion();
 
+	public ElementList<UpgradeCategoryElement> getUpgradeCategories();
+
 	public void setCurrentVersion(String currentVersion);
 
 	public void setLocation(Path value);
@@ -67,6 +76,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	@AbsolutePath
 	@Label(standard = "source code location")
+	@Service(impl = SourceLocationValidationService.class)
 	@Type(base = Path.class)
 	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
@@ -77,5 +87,11 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	@DefaultValue(text = "7.1")
 	@PossibleValues(values = {"7.0", "7.1"})
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
+
+	@Label(standard = "Upgrade Categories")
+	@Length(min = 1)
+	@Service(impl = UpgradeCategoryPossibleValuesService.class)
+	@Type(base = UpgradeCategoryElement.class)
+	public ListProperty PROP_UPGRADE_CATEGORIES = new ListProperty(TYPE, "UpgradeCategories");
 
 }

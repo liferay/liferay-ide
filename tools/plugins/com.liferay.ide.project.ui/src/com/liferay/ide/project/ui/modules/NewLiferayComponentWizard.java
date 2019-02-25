@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.modules;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -45,7 +46,7 @@ import org.eclipse.ui.ide.IDE;
  * @author Charles Wu
  */
 public class NewLiferayComponentWizard
-	extends SapphireWizard<NewLiferayComponentOp> implements IWorkbenchWizard, INewWizard {
+	extends SapphireWizard<NewLiferayComponentOp> implements IWorkbenchWizard, INewWizard, SapphireContentAccessor {
 
 	public NewLiferayComponentWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(NewLiferayComponentWizard.class).wizard());
@@ -102,7 +103,7 @@ public class NewLiferayComponentWizard
 	public void performPostFinish() {
 		final NewLiferayComponentOp op = element().nearest(NewLiferayComponentOp.class);
 
-		IProject currentProject = CoreUtil.getProject(SapphireUtil.getContent(op.getProjectName()));
+		IProject currentProject = CoreUtil.getProject(get(op.getProjectName()));
 
 		if (currentProject == null) {
 			return;
@@ -115,7 +116,7 @@ public class NewLiferayComponentWizard
 		}
 
 		try {
-			String componentClass = SapphireUtil.getContent(op.getComponentClassName());
+			String componentClass = get(op.getComponentClassName());
 			String packageName = SapphireUtil.getText(op.getPackageName());
 
 			final IType type = javaProject.findType(packageName, componentClass);

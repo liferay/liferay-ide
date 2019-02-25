@@ -68,7 +68,7 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 	protected List<ProjectCheckboxElement> getInitItemsList() {
 		List<ProjectCheckboxElement> checkboxElementList = new ArrayList<>();
 
-		Path sdkLocation = SapphireUtil.getContent(_op().getSdkLocation());
+		Path sdkLocation = get(_op().getSdkLocation());
 
 		if (FileUtil.notExists(sdkLocation)) {
 			return checkboxElementList;

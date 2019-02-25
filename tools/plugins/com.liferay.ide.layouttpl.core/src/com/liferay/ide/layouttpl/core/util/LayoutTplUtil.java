@@ -16,11 +16,9 @@ package com.liferay.ide.layouttpl.core.util;
 
 import com.liferay.ide.core.templates.ITemplateContext;
 import com.liferay.ide.core.templates.ITemplateOperation;
-import com.liferay.ide.core.templates.TemplatesCore;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringUtil;
-import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
 
 import java.util.ArrayList;
@@ -30,9 +28,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.collections.ArrayStack;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
@@ -47,7 +42,14 @@ import org.w3c.dom.NodeList;
  * @author Joye Luo
  */
 @SuppressWarnings("restriction")
-public class LayoutTplUtil {
+public class LayoutTplUtil implements SapphireContentAccessor {
+
+	public static void createLayoutTplContext(ITemplateOperation op, LayoutTplElement layouttpl) {
+		ITemplateContext ctx = op.getContext();
+
+		ctx.put("root", layouttpl);
+		ctx.put("stack", new ArrayStack());
+	}
 
 	public static IDOMElement[] findChildElementsByClassName(
 		IDOMElement parentElement, String childElementTag, String className) {
@@ -114,33 +116,6 @@ public class LayoutTplUtil {
 		return retval;
 	}
 
-	public static String getTemplateSource(LayoutTplElement layouttpl) {
-		StringBuffer buffer = new StringBuffer();
-
-		try {
-			ITemplateOperation templateOperation = null;
-
-			if (SapphireUtil.getContent(layouttpl.getBootstrapStyle())) {
-				templateOperation = TemplatesCore.getTemplateOperation(
-					"com.liferay.ide.layouttpl.core.layoutTemplate.bootstrap");
-			}
-			else {
-				templateOperation = TemplatesCore.getTemplateOperation(
-					"com.liferay.ide.layouttpl.core.layoutTemplate.legacy");
-			}
-
-			_createLayoutTplContext(templateOperation, layouttpl);
-
-			templateOperation.setOutputBuffer(buffer);
-			templateOperation.execute(new NullProgressMonitor());
-		}
-		catch (Exception ex) {
-			LayoutTplCore.logError("Error getting template source.", ex);
-		}
-
-		return buffer.toString();
-	}
-
 	public static int getWeightValue(IDOMElement portletColumnElement, int defaultValue) {
 		int weightValue = defaultValue;
 
@@ -202,34 +177,6 @@ public class LayoutTplUtil {
 		}
 
 		return retval;
-	}
-
-	public static void saveToFile(LayoutTplElement diagramElement, IFile file, IProgressMonitor monitor) {
-		try {
-			ITemplateOperation op = null;
-
-			if (SapphireUtil.getContent(diagramElement.getBootstrapStyle())) {
-				op = TemplatesCore.getTemplateOperation("com.liferay.ide.layouttpl.core.layoutTemplate.bootstrap");
-			}
-			else {
-				op = TemplatesCore.getTemplateOperation("com.liferay.ide.layouttpl.core.layoutTemplate.legacy");
-			}
-
-			_createLayoutTplContext(op, diagramElement);
-
-			op.setOutputFile(file);
-			op.execute(monitor);
-		}
-		catch (Exception e) {
-			LayoutTplCore.logError(e);
-		}
-	}
-
-	private static void _createLayoutTplContext(ITemplateOperation op, LayoutTplElement layouttpl) {
-		ITemplateContext ctx = op.getContext();
-
-		ctx.put("root", layouttpl);
-		ctx.put("stack", new ArrayStack());
 	}
 
 	private static final Pattern _classAttributePattern = Pattern.compile("(.*span)(\\d+)");

@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.workspace;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
@@ -22,12 +22,11 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Terry Jia
  */
-public class WorkspaceProjectProviderValidationService extends ValidationService {
+public class WorkspaceProjectProviderValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
-		NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> projectProvider = SapphireUtil.getContent(
-			_op().getProjectProvider());
+		NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> projectProvider = get(_op().getProjectProvider());
 
 		if (projectProvider == null) {
 			return Status.createErrorStatus("Create workspace project failure, project provider can not be null.");

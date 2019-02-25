@@ -119,7 +119,7 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 			if (layouts.isEmpty() || _canOverride()) {
 				layouts.clear();
 
-				LayoutTemplatesFactory.add_Layout_1_2_1(element);
+				new LayoutTemplatesFactory().add_Layout_1_2_1(element);
 			}
 
 			return null;
@@ -161,7 +161,7 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 			if (layouts.isEmpty() || _canOverride()) {
 				layouts.clear();
 
-				LayoutTemplatesFactory.add_Layout_1_2_I(element);
+				new LayoutTemplatesFactory().add_Layout_1_2_I(element);
 			}
 
 			return null;
@@ -203,7 +203,7 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 			if (layouts.isEmpty() || _canOverride()) {
 				layouts.clear();
 
-				LayoutTemplatesFactory.add_Layout_1_2_II(element);
+				new LayoutTemplatesFactory().add_Layout_1_2_II(element);
 			}
 
 			return null;
@@ -245,7 +245,7 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 			if (layouts.isEmpty() || _canOverride()) {
 				layouts.clear();
 
-				LayoutTemplatesFactory.add_Layout_2_2(element);
+				new LayoutTemplatesFactory().add_Layout_2_2(element);
 			}
 
 			return null;

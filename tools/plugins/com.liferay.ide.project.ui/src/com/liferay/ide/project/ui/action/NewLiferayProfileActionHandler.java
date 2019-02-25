@@ -15,7 +15,7 @@
 package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.project.ui.wizard.NewLiferayPluginProjectWizard;
@@ -32,26 +32,7 @@ import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 /**
  * @author Gregory Amerson
  */
-public class NewLiferayProfileActionHandler extends PropertyEditorActionHandler {
-
-	public static void addToActiveProfiles(
-		final NewLiferayPluginProjectOp op, final NewLiferayProfile newLiferayProfile) {
-
-		// should append to current list
-
-		String activeProfilesValue = SapphireUtil.getContent(op.getActiveProfilesValue());
-
-		StringBuilder sb = new StringBuilder();
-
-		if (CoreUtil.isNotNullOrEmpty(activeProfilesValue)) {
-			sb.append(activeProfilesValue);
-			sb.append(',');
-		}
-
-		sb.append(SapphireUtil.getContent(newLiferayProfile.getId()));
-
-		op.setActiveProfilesValue(sb.toString());
-	}
+public class NewLiferayProfileActionHandler extends PropertyEditorActionHandler implements SapphireContentAccessor {
 
 	@Override
 	protected Object run(Presentation context) {
@@ -74,7 +55,7 @@ public class NewLiferayProfileActionHandler extends PropertyEditorActionHandler 
 			int result = dialog.open();
 
 			if (result == SapphireDialog.OK) {
-				addToActiveProfiles(op, newLiferayProfile);
+				_addToActiveProfiles(op, newLiferayProfile);
 			}
 			else {
 				profiles.remove(newLiferayProfile);
@@ -82,6 +63,24 @@ public class NewLiferayProfileActionHandler extends PropertyEditorActionHandler 
 		}
 
 		return null;
+	}
+
+	private void _addToActiveProfiles(final NewLiferayPluginProjectOp op, final NewLiferayProfile newLiferayProfile) {
+
+		// should append to current list
+
+		String activeProfilesValue = get(op.getActiveProfilesValue());
+
+		StringBuilder sb = new StringBuilder();
+
+		if (CoreUtil.isNotNullOrEmpty(activeProfilesValue)) {
+			sb.append(activeProfilesValue);
+			sb.append(',');
+		}
+
+		sb.append(get(newLiferayProfile.getId()));
+
+		op.setActiveProfilesValue(sb.toString());
 	}
 
 	private NewLiferayPluginProjectOp _op(Presentation context) {

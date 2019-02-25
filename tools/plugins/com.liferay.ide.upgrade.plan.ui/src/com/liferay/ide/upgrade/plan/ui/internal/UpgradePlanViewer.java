@@ -76,6 +76,8 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
 		upgradePlanner.removeListener(this);
+
+		_upgradePlannerServiceTracker.close();
 	}
 
 	@Override

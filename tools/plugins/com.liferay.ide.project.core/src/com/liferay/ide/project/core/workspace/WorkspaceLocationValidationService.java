@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.workspace;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 
 import java.io.File;
 
@@ -25,7 +25,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Andy Wu
  */
-public class WorkspaceLocationValidationService extends ValidationService {
+public class WorkspaceLocationValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
@@ -41,13 +41,13 @@ public class WorkspaceLocationValidationService extends ValidationService {
 		 * display the error of project name when project name and location are both
 		 * null.
 		 */
-		boolean useDefaultLocation = SapphireUtil.getContent(_op().getUseDefaultLocation());
+		boolean useDefaultLocation = get(_op().getUseDefaultLocation());
 
 		if (useDefaultLocation) {
 			return retval;
 		}
 
-		Path currentProjectLocation = SapphireUtil.getContent(_op().getLocation());
+		Path currentProjectLocation = get(_op().getLocation());
 
 		if (currentProjectLocation != null) {
 			String currentPath = currentProjectLocation.toOSString();

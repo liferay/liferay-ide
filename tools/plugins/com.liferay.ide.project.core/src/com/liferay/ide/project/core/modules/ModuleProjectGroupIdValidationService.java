@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
@@ -31,16 +32,16 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
-public class ModuleProjectGroupIdValidationService extends ValidationService {
+public class ModuleProjectGroupIdValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
 		NewLiferayModuleProjectOp op = _op();
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
+		NewLiferayProjectProvider<BaseModuleOp> provider = get(op.getProjectProvider());
 
 		if ("maven-module".equals(provider.getShortName())) {
-			String groupId = SapphireUtil.getContent(op.getGroupId());
+			String groupId = get(op.getGroupId());
 
 			IStatus javaStatus = JavaConventions.validatePackageName(
 				groupId, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);

@@ -51,6 +51,13 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 		_upgradePlannerServiceTracker.open();
 	}
 
+	@Override
+	public void dispose() {
+		super.dispose();
+
+		_upgradePlannerServiceTracker.close();
+	}
+
 	public Object[] getChildren(Object element) {
 		if (element instanceof MigrationProblemsContainer) {
 			MigrationProblemsContainer migrationProblemsContainer = (MigrationProblemsContainer)element;

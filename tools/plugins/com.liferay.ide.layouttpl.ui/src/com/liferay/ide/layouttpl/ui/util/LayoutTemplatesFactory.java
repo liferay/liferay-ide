@@ -14,7 +14,7 @@
 
 package com.liferay.ide.layouttpl.ui.util;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.layouttpl.core.model.CanAddPortletLayouts;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
 import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
@@ -26,9 +26,29 @@ import org.eclipse.sapphire.Value;
 /**
  * @author Kuo Zhang
  */
-public class LayoutTemplatesFactory {
+public class LayoutTemplatesFactory implements SapphireContentAccessor {
 
-	public static void add_Layout_1(LayoutTplElement layoutTpl) {
+	public static void add_Row_2_III(CanAddPortletLayouts element) {
+		ElementList<PortletLayoutElement> layouts = element.getPortletLayouts();
+
+		PortletLayoutElement row = layouts.insert();
+
+		ElementList<PortletColumnElement> columns = row.getPortletColumns();
+
+		PortletColumnElement column1 = columns.insert();
+		PortletColumnElement column2 = columns.insert();
+
+		if (_isBootstrapStyle(element)) {
+			column1.setWeight(8);
+			column2.setWeight(4);
+		}
+		else {
+			column1.setWeight(70);
+			column2.setWeight(30);
+		}
+	}
+
+	public void add_Layout_1(LayoutTplElement layoutTpl) {
 		ElementList<PortletLayoutElement> layouts = layoutTpl.getPortletLayouts();
 
 		PortletLayoutElement row = layouts.insert();
@@ -37,10 +57,10 @@ public class LayoutTemplatesFactory {
 
 		PortletColumnElement column = columns.insert();
 
-		column.setWeight(SapphireUtil.getContent(column.getFullWeight()));
+		column.setWeight(get(column.getFullWeight()));
 	}
 
-	public static void add_Layout_1_2_1(LayoutTplElement layoutTpl) {
+	public void add_Layout_1_2_1(LayoutTplElement layoutTpl) {
 		ElementList<PortletLayoutElement> layouts = layoutTpl.getPortletLayouts();
 
 		PortletLayoutElement row1 = layouts.insert();
@@ -49,7 +69,7 @@ public class LayoutTemplatesFactory {
 
 		PortletColumnElement column11 = columns1.insert();
 
-		int fullWeight = SapphireUtil.getContent(column11.getFullWeight());
+		int fullWeight = get(column11.getFullWeight());
 
 		column11.setWeight(fullWeight);
 
@@ -74,7 +94,7 @@ public class LayoutTemplatesFactory {
 		column31.setWeight(fullWeight);
 	}
 
-	public static void add_Layout_1_2_I(LayoutTplElement layoutTpl) {
+	public void add_Layout_1_2_I(LayoutTplElement layoutTpl) {
 		ElementList<PortletLayoutElement> layouts = layoutTpl.getPortletLayouts();
 
 		PortletLayoutElement row1 = layouts.insert();
@@ -83,7 +103,7 @@ public class LayoutTemplatesFactory {
 
 		PortletColumnElement column11 = columns1.insert();
 
-		column11.setWeight(SapphireUtil.getContent(column11.getFullWeight()));
+		column11.setWeight(get(column11.getFullWeight()));
 
 		PortletLayoutElement row2 = layouts.insert();
 
@@ -102,7 +122,7 @@ public class LayoutTemplatesFactory {
 		}
 	}
 
-	public static void add_Layout_1_2_II(LayoutTplElement layoutTpl) {
+	public void add_Layout_1_2_II(LayoutTplElement layoutTpl) {
 		ElementList<PortletLayoutElement> layouts = layoutTpl.getPortletLayouts();
 
 		PortletLayoutElement row1 = layouts.insert();
@@ -111,7 +131,7 @@ public class LayoutTemplatesFactory {
 
 		PortletColumnElement column11 = columns1.insert();
 
-		column11.setWeight(SapphireUtil.getContent(column11.getFullWeight()));
+		column11.setWeight(get(column11.getFullWeight()));
 
 		PortletLayoutElement row2 = layouts.insert();
 
@@ -130,7 +150,7 @@ public class LayoutTemplatesFactory {
 		}
 	}
 
-	public static void add_Layout_2_2(LayoutTplElement layoutTpl) {
+	public void add_Layout_2_2(LayoutTplElement layoutTpl) {
 		ElementList<PortletLayoutElement> layouts = layoutTpl.getPortletLayouts();
 
 		PortletLayoutElement row1 = layouts.insert();
@@ -161,23 +181,23 @@ public class LayoutTemplatesFactory {
 		}
 	}
 
-	public static void add_Layout_2_I(LayoutTplElement layoutTpl) {
+	public void add_Layout_2_I(LayoutTplElement layoutTpl) {
 		add_Row_2_I(layoutTpl);
 	}
 
-	public static void add_Layout_2_II(LayoutTplElement layoutTpl) {
+	public void add_Layout_2_II(LayoutTplElement layoutTpl) {
 		add_Row_2_II(layoutTpl);
 	}
 
-	public static void add_Layout_2_III(LayoutTplElement layoutTpl) {
+	public void add_Layout_2_III(LayoutTplElement layoutTpl) {
 		add_Row_2_III(layoutTpl);
 	}
 
-	public static void add_Layout_3(LayoutTplElement layoutTpl) {
+	public void add_Layout_3(LayoutTplElement layoutTpl) {
 		add_Row_3(layoutTpl);
 	}
 
-	public static void add_Row_1(CanAddPortletLayouts element) {
+	public void add_Row_1(CanAddPortletLayouts element) {
 		ElementList<PortletLayoutElement> layouts = element.getPortletLayouts();
 
 		PortletLayoutElement row = layouts.insert();
@@ -186,10 +206,10 @@ public class LayoutTemplatesFactory {
 
 		PortletColumnElement column = columns.insert();
 
-		column.setWeight(SapphireUtil.getContent(column.getFullWeight()));
+		column.setWeight(get(column.getFullWeight()));
 	}
 
-	public static void add_Row_2_I(CanAddPortletLayouts element) {
+	public void add_Row_2_I(CanAddPortletLayouts element) {
 		ElementList<PortletLayoutElement> layouts = element.getPortletLayouts();
 
 		PortletLayoutElement row = layouts.insert();
@@ -199,13 +219,13 @@ public class LayoutTemplatesFactory {
 		PortletColumnElement column1 = columns.insert();
 		PortletColumnElement column2 = columns.insert();
 
-		int fullWeight = SapphireUtil.getContent(column1.getFullWeight());
+		int fullWeight = get(column1.getFullWeight());
 
 		column1.setWeight(fullWeight / 2);
 		column2.setWeight(fullWeight / 2);
 	}
 
-	public static void add_Row_2_II(CanAddPortletLayouts element) {
+	public void add_Row_2_II(CanAddPortletLayouts element) {
 		ElementList<PortletLayoutElement> layouts = element.getPortletLayouts();
 
 		PortletLayoutElement row = layouts.insert();
@@ -225,27 +245,7 @@ public class LayoutTemplatesFactory {
 		}
 	}
 
-	public static void add_Row_2_III(CanAddPortletLayouts element) {
-		ElementList<PortletLayoutElement> layouts = element.getPortletLayouts();
-
-		PortletLayoutElement row = layouts.insert();
-
-		ElementList<PortletColumnElement> columns = row.getPortletColumns();
-
-		PortletColumnElement column1 = columns.insert();
-		PortletColumnElement column2 = columns.insert();
-
-		if (_isBootstrapStyle(element)) {
-			column1.setWeight(8);
-			column2.setWeight(4);
-		}
-		else {
-			column1.setWeight(70);
-			column2.setWeight(30);
-		}
-	}
-
-	public static void add_Row_3(CanAddPortletLayouts element) {
+	public void add_Row_3(CanAddPortletLayouts element) {
 		ElementList<PortletLayoutElement> layouts = element.getPortletLayouts();
 
 		PortletLayoutElement row = layouts.insert();
@@ -256,7 +256,7 @@ public class LayoutTemplatesFactory {
 		PortletColumnElement column2 = columns.insert();
 		PortletColumnElement column3 = columns.insert();
 
-		int fullWeight = SapphireUtil.getContent(column1.getFullWeight());
+		int fullWeight = get(column1.getFullWeight());
 
 		column1.setWeight(fullWeight / 3);
 		column2.setWeight(fullWeight / 3);

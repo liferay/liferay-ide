@@ -18,7 +18,7 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.BladeCLI;
@@ -48,7 +48,8 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Simon Jiang
  */
 public class GradleProjectProvider
-	extends AbstractLiferayProjectProvider implements NewLiferayProjectProvider<NewLiferayModuleProjectOp> {
+	extends AbstractLiferayProjectProvider
+	implements NewLiferayProjectProvider<NewLiferayModuleProjectOp>, SapphireContentAccessor {
 
 	public GradleProjectProvider() {
 		super(new Class<?>[] {IProject.class});
@@ -58,32 +59,31 @@ public class GradleProjectProvider
 	public IStatus createNewProject(NewLiferayModuleProjectOp op, IProgressMonitor monitor) throws CoreException {
 		IStatus retval = Status.OK_STATUS;
 
-		String projectName = SapphireUtil.getContent(op.getProjectName());
+		String projectName = get(op.getProjectName());
 
-		IPath location = PathBridge.create(SapphireUtil.getContent(op.getLocation()));
+		IPath location = PathBridge.create(get(op.getLocation()));
 
-		String className = SapphireUtil.getContent(op.getComponentName());
+		String className = get(op.getComponentName());
 
-		String liferayVersion = SapphireUtil.getContent(op.getLiferayVersion());
+		String liferayVersion = get(op.getLiferayVersion());
 
-		String serviceName = SapphireUtil.getContent(op.getServiceName());
+		String serviceName = get(op.getServiceName());
 
-		String packageName = SapphireUtil.getContent(op.getPackageName());
+		String packageName = get(op.getPackageName());
 
 		ElementList<PropertyKey> propertyKeys = op.getPropertyKeys();
 
 		List<String> properties = new ArrayList<>();
 
 		for (PropertyKey propertyKey : propertyKeys) {
-			properties.add(
-				SapphireUtil.getContent(propertyKey.getName()) + "=" + SapphireUtil.getContent(propertyKey.getValue()));
+			properties.add(get(propertyKey.getName()) + "=" + get(propertyKey.getValue()));
 		}
 
 		File targetDir = location.toFile();
 
 		targetDir.mkdirs();
 
-		String projectTemplateName = SapphireUtil.getContent(op.getProjectTemplateName());
+		String projectTemplateName = get(op.getProjectTemplateName());
 
 		StringBuilder sb = new StringBuilder();
 
@@ -150,7 +150,7 @@ public class GradleProjectProvider
 			}
 
 			boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
-			boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
+			boolean useDefaultLocation = get(op.getUseDefaultLocation());
 			boolean inWorkspacePath = false;
 
 			IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();

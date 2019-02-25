@@ -16,7 +16,7 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.CoreException;
@@ -39,11 +39,11 @@ public class ImportLiferayModuleProjectOpMethods {
 
 		monitor.beginTask("Importing Module project...", 100);
 
-		Path path = SapphireUtil.getContent(op.getLocation());
+		Path path = _getter.get(op.getLocation());
 
 		String location = path.toOSString();
 
-		ILiferayProjectImporter importer = LiferayCore.getImporter(SapphireUtil.getContent(op.getBuildType()));
+		ILiferayProjectImporter importer = LiferayCore.getImporter(_getter.get(op.getBuildType()));
 
 		Status retval = Status.createOkStatus();
 
@@ -91,5 +91,7 @@ public class ImportLiferayModuleProjectOpMethods {
 
 		return retval;
 	}
+
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 }

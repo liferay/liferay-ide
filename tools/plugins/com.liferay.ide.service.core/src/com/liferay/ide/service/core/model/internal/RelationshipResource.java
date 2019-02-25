@@ -14,7 +14,7 @@
 
 package com.liferay.ide.service.core.model.internal;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.service.core.model.Column;
 import com.liferay.ide.service.core.model.Entity;
 import com.liferay.ide.service.core.model.Relationship;
@@ -30,7 +30,7 @@ import org.eclipse.sapphire.ValuePropertyBinding;
 /**
  * @author Gregory Amerson
  */
-public class RelationshipResource extends Resource {
+public class RelationshipResource extends Resource implements SapphireContentAccessor {
 
 	public RelationshipResource(RelationshipObject obj, Resource parent) {
 		super(parent);
@@ -94,14 +94,16 @@ public class RelationshipResource extends Resource {
 		String fromName = _relationshipObject.getFromName();
 		String toName = _relationshipObject.getToName();
 
-		Entity fromEntity = EntityRelationshipService.findEntity(fromName, serviceBuilder);
-		Entity toEntity = EntityRelationshipService.findEntity(toName, serviceBuilder);
+		EntityRelationshipService entityRelationshipService = new EntityRelationshipService();
+
+		Entity fromEntity = entityRelationshipService.findEntity(fromName, serviceBuilder);
+		Entity toEntity = entityRelationshipService.findEntity(toName, serviceBuilder);
 
 		if ((fromEntity != null) && (toEntity != null)) {
 			Column primaryKeyColumn = null;
 
 			for (Column column : toEntity.getColumns()) {
-				if (SapphireUtil.getContent(column.isPrimary())) {
+				if (get(column.isPrimary())) {
 					primaryKeyColumn = column;
 
 					break;
@@ -113,7 +115,7 @@ public class RelationshipResource extends Resource {
 
 				Column column = columns.insert();
 
-				column.setName(SapphireUtil.getContent(primaryKeyColumn.getName()));
+				column.setName(get(primaryKeyColumn.getName()));
 				column.setType("long");
 			}
 		}

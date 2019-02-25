@@ -20,7 +20,7 @@ import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
@@ -53,7 +53,8 @@ import org.eclipse.wst.server.core.IServer;
  * @author Simon Jiang
  */
 public class LiferayGradleWorkspaceProjectProvider
-	extends AbstractLiferayProjectProvider implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> {
+	extends AbstractLiferayProjectProvider
+	implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp>, SapphireContentAccessor {
 
 	public LiferayGradleWorkspaceProjectProvider() {
 		super(new Class<?>[] {IProject.class, IServer.class});
@@ -65,7 +66,7 @@ public class LiferayGradleWorkspaceProjectProvider
 
 		IPath location = PathBridge.create(locationPath.content());
 
-		String workspaceName = SapphireUtil.getContent(op.getWorkspaceName());
+		String workspaceName = get(op.getWorkspaceName());
 
 		IPath workspaceLocation = location.append(workspaceName);
 
@@ -77,7 +78,7 @@ public class LiferayGradleWorkspaceProjectProvider
 		sb.append("\" ");
 		sb.append("init ");
 		sb.append("-v ");
-		sb.append(SapphireUtil.getContent(op.getLiferayVersion()));
+		sb.append(get(op.getLiferayVersion()));
 
 		try {
 			BladeCLI.execute(sb.toString());
@@ -90,8 +91,7 @@ public class LiferayGradleWorkspaceProjectProvider
 			PropertiesConfiguration config = new PropertiesConfiguration(
 				FileUtil.getFile(workspaceLocation.append("gradle.properties")));
 
-			config.setProperty(
-				WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, SapphireUtil.getContent(op.getTargetPlatform()));
+			config.setProperty(WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, get(op.getTargetPlatform()));
 
 			config.save();
 		}
@@ -107,12 +107,12 @@ public class LiferayGradleWorkspaceProjectProvider
 			return importProjectStatus;
 		}
 
-		boolean initBundle = SapphireUtil.getContent(op.getProvisionLiferayBundle());
+		boolean initBundle = get(op.getProvisionLiferayBundle());
 
 		if (initBundle) {
-			String bundleUrl = SapphireUtil.getContent(op.getBundleUrl());
+			String bundleUrl = get(op.getBundleUrl());
 
-			String serverName = SapphireUtil.getContent(op.getServerName());
+			String serverName = get(op.getServerName());
 
 			initBundle(bundleUrl, serverName, workspaceName);
 		}

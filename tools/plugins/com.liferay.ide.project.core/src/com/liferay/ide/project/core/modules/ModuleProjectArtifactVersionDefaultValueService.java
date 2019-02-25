@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 
 import org.eclipse.core.runtime.IPath;
@@ -26,13 +27,14 @@ import org.eclipse.sapphire.modeling.Path;
 /**
  * @author Simon Jiang
  */
-public class ModuleProjectArtifactVersionDefaultValueService extends DefaultValueService {
+public class ModuleProjectArtifactVersionDefaultValueService
+	extends DefaultValueService implements SapphireContentAccessor {
 
 	@Override
 	protected String compute() {
 		NewLiferayModuleProjectOp op = _op();
 
-		Path location = SapphireUtil.getContent(op.getLocation());
+		Path location = get(op.getLocation());
 
 		if (location == null) {
 			return "1.0.0-SNAPSHOT";
@@ -42,7 +44,7 @@ public class ModuleProjectArtifactVersionDefaultValueService extends DefaultValu
 
 		IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
 
-		String projectName = SapphireUtil.getContent(op.getProjectName());
+		String projectName = get(op.getProjectName());
 
 		String data = NewLiferayModuleProjectOpMethods.getMavenParentPomVersion(op, projectName, parentProjectOsPath);
 

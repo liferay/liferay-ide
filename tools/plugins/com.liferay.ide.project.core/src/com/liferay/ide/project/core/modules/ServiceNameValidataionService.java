@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 
 import org.eclipse.sapphire.FilteredListener;
@@ -26,7 +27,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-public class ServiceNameValidataionService extends ValidationService {
+public class ServiceNameValidataionService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -47,10 +48,10 @@ public class ServiceNameValidataionService extends ValidationService {
 
 		NewLiferayModuleProjectOp op = _op();
 
-		String projectTemplate = SapphireUtil.getContent(op.getProjectTemplateName());
+		String projectTemplate = get(op.getProjectTemplateName());
 
 		if ("service".equals(projectTemplate) || "service-wrapper".equals(projectTemplate)) {
-			String serviceName = SapphireUtil.getContent(op.getServiceName());
+			String serviceName = get(op.getServiceName());
 
 			if (CoreUtil.isNullOrEmpty(serviceName)) {
 				retVal = Status.createErrorStatus("The service name must be specified.");

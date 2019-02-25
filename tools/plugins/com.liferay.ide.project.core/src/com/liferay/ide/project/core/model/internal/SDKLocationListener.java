@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -29,12 +30,23 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Simon Jiang
  */
-public class SDKLocationListener extends FilteredListener<PropertyContentEvent> {
+public class SDKLocationListener extends FilteredListener<PropertyContentEvent> implements SapphireContentAccessor {
 
-	public static void updateLocation(NewLiferayPluginProjectOp op) {
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		_updateLocation(_op(event));
+	}
+
+	private NewLiferayPluginProjectOp _op(PropertyContentEvent event) {
+		Element element = SapphireUtil.getElement(event);
+
+		return element.nearest(NewLiferayPluginProjectOp.class);
+	}
+
+	private void _updateLocation(NewLiferayPluginProjectOp op) {
 		Path newLocationBase = null;
 
-		Path sdkLocation = SapphireUtil.getContent(op.getSdkLocation());
+		Path sdkLocation = get(op.getSdkLocation());
 
 		if (sdkLocation == null) {
 			return;
@@ -48,7 +60,7 @@ public class SDKLocationListener extends FilteredListener<PropertyContentEvent> 
 			return;
 		}
 
-		switch (SapphireUtil.getContent(op.getPluginType())) {
+		switch (get(op.getPluginType())) {
 			case portlet:
 			case servicebuilder:
 				newLocationBase = sdkLocation.append("portlets");
@@ -79,17 +91,6 @@ public class SDKLocationListener extends FilteredListener<PropertyContentEvent> 
 		if (newLocationBase != null) {
 			NewLiferayPluginProjectOpMethods.updateLocation(op, newLocationBase);
 		}
-	}
-
-	@Override
-	protected void handleTypedEvent(PropertyContentEvent event) {
-		updateLocation(_op(event));
-	}
-
-	private NewLiferayPluginProjectOp _op(PropertyContentEvent event) {
-		Element element = SapphireUtil.getElement(event);
-
-		return element.nearest(NewLiferayPluginProjectOp.class);
 	}
 
 }

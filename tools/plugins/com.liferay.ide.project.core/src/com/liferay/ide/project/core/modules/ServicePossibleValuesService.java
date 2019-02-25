@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
@@ -31,7 +32,7 @@ import org.eclipse.sapphire.modeling.Status;
  * @author Simon Jiang
  * @author Lovett Li
  */
-public class ServicePossibleValuesService extends PossibleValuesService {
+public class ServicePossibleValuesService extends PossibleValuesService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -55,7 +56,7 @@ public class ServicePossibleValuesService extends PossibleValuesService {
 	protected void compute(Set<String> values) {
 		NewLiferayModuleProjectOp op = _op();
 
-		String template = SapphireUtil.getContent(op.getProjectTemplateName());
+		String template = get(op.getProjectTemplateName());
 
 		if (template.equals("service-wrapper")) {
 			try {

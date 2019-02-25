@@ -15,7 +15,7 @@
 package com.liferay.ide.portlet.ui.navigator.actions;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.portlet.core.model.Portlet;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.portlet.ui.navigator.PortletNode;
@@ -59,7 +59,7 @@ import org.eclipse.ui.part.FileEditorInput;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  * @author Gregory Amerson
  */
-public class OpenPortletResourceAction extends BaseSelectionListenerAction {
+public class OpenPortletResourceAction extends BaseSelectionListenerAction implements SapphireContentAccessor {
 
 	public OpenPortletResourceAction() {
 		super(_ACTION_MESSAGE);
@@ -168,7 +168,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 		if (modelElement instanceof Portlet) {
 			Portlet portlet = (Portlet)modelElement;
 
-			JavaTypeName portletClassFile = SapphireUtil.getContent(portlet.getPortletClass());
+			JavaTypeName portletClassFile = get(portlet.getPortletClass());
 
 			Runnable run = new Runnable() {
 
@@ -262,14 +262,12 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 								MasterDetailsContentNodeList list = portletsNode.nodes();
 
 								for (MasterDetailsContentNodePart childNode : list.visible()) {
-									String selectedPortletName = SapphireUtil.getContent(
-										selectedPortlet.getPortletName());
+									String selectedPortletName = get(selectedPortlet.getPortletName());
 
 									if (childNode.getModelElement() instanceof Portlet) {
 										Portlet mpContentNodePortlet = (Portlet)childNode.getModelElement();
 
-										String mpContentNodePortletName = SapphireUtil.getContent(
-											mpContentNodePortlet.getPortletName());
+										String mpContentNodePortletName = get(mpContentNodePortlet.getPortletName());
 
 										if (selectedPortletName.equals(mpContentNodePortletName)) {
 											childNode.select();

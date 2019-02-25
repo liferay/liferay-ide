@@ -23,7 +23,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.IPortletFramework;
@@ -606,17 +606,16 @@ public class ProjectUtil {
 		String pluginType = null;
 
 		if (op != null) {
-			PluginType type = SapphireUtil.getContent(op.getPluginType());
+			PluginType type = _getter.get(op.getPluginType());
 
 			pluginType = type.name();
 
 			if (pluginType.equals(PluginType.theme.name())) {
 				newProjectDataModel.setProperty(
-					IPluginProjectDataModelProperties.THEME_PARENT, SapphireUtil.getContent(op.getThemeParent()));
+					IPluginProjectDataModelProperties.THEME_PARENT, _getter.get(op.getThemeParent()));
 
 				newProjectDataModel.setProperty(
-					IPluginProjectDataModelProperties.THEME_TEMPLATE_FRAMEWORK,
-					SapphireUtil.getContent(op.getThemeFramework()));
+					IPluginProjectDataModelProperties.THEME_TEMPLATE_FRAMEWORK, _getter.get(op.getThemeFramework()));
 			}
 		}
 		else {
@@ -627,7 +626,7 @@ public class ProjectUtil {
 			fpwc, pluginType, sdkLocation.toPortableString(), projectRecord);
 
 		if ((op != null) && pluginType.equals(PluginType.portlet.name())) {
-			IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
+			IPortletFramework portletFramework = _getter.get(op.getPortletFramework());
 
 			portletFramework.configureNewProject(newProjectDataModel, fpwc);
 		}
@@ -681,7 +680,7 @@ public class ProjectUtil {
 			IPluginProjectDataModelProperties.NESTED_PROJECT_DM);
 
 		if (op != null) {
-			if (SapphireUtil.getContent(op.getUseDefaultLocation())) {
+			if (_getter.get(op.getUseDefaultLocation())) {
 
 				// using Eclipse workspace location
 
@@ -696,12 +695,12 @@ public class ProjectUtil {
 			else {
 				nestedModel.setBooleanProperty(IPluginProjectDataModelProperties.USE_DEFAULT_LOCATION, false);
 
-				org.eclipse.sapphire.modeling.Path path = SapphireUtil.getContent(op.getLocation());
+				org.eclipse.sapphire.modeling.Path path = _getter.get(op.getLocation());
 
 				nestedModel.setStringProperty(
 					IPluginProjectDataModelProperties.USER_DEFINED_LOCATION, path.toOSString());
 
-				if (!SapphireUtil.getContent(op.getUseDefaultLocation())) {
+				if (!_getter.get(op.getUseDefaultLocation())) {
 					newProjectDataModel.setBooleanProperty(
 						IPluginProjectDataModelProperties.LIFERAY_USE_CUSTOM_LOCATION, true);
 				}
@@ -773,17 +772,16 @@ public class ProjectUtil {
 		String pluginType = null;
 
 		if (op != null) {
-			PluginType type = SapphireUtil.getContent(op.getPluginType());
+			PluginType type = _getter.get(op.getPluginType());
 
 			pluginType = type.name();
 
 			if (pluginType.equals(PluginType.theme.name())) {
 				newProjectDataModel.setProperty(
-					IPluginProjectDataModelProperties.THEME_PARENT, SapphireUtil.getContent(op.getThemeParent()));
+					IPluginProjectDataModelProperties.THEME_PARENT, _getter.get(op.getThemeParent()));
 
 				newProjectDataModel.setProperty(
-					IPluginProjectDataModelProperties.THEME_TEMPLATE_FRAMEWORK,
-					SapphireUtil.getContent(op.getThemeFramework()));
+					IPluginProjectDataModelProperties.THEME_TEMPLATE_FRAMEWORK, _getter.get(op.getThemeFramework()));
 			}
 		}
 		else {
@@ -795,7 +793,7 @@ public class ProjectUtil {
 		String portlet = PluginType.portlet.name();
 
 		if ((op != null) && portlet.equals(pluginType)) {
-			IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
+			IPortletFramework portletFramework = _getter.get(op.getPortletFramework());
 
 			portletFramework.configureNewProject(newProjectDataModel, fpwc);
 		}
@@ -917,8 +915,6 @@ public class ProjectUtil {
 		return preset.getProjectFacets();
 	}
 
-	// IDE-270
-
 	public static IProjectFacet getLiferayFacet(IFacetedProject facetedProject) {
 		for (IProjectFacetVersion projectFacet : facetedProject.getProjectFacets()) {
 			if (isLiferayFacet(projectFacet.getProjectFacet())) {
@@ -928,6 +924,8 @@ public class ProjectUtil {
 
 		return null;
 	}
+
+	// IDE-270
 
 	public static String getLiferayPluginType(String projectLocation) {
 		if (isLiferaySDKProjectDir(new File(projectLocation))) {
@@ -1712,6 +1710,7 @@ public class ProjectUtil {
 		return retval;
 	}
 
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 	private static final Pattern _themeBuilderPlugin = Pattern.compile(
 		".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.portal\\.tools\\.theme\\.builder[\'\"].*",
 		Pattern.MULTILINE | Pattern.DOTALL);

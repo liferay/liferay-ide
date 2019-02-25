@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -28,7 +29,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Kuo Zhang
  */
-public class UseDefaultLocationValidationService extends ValidationService {
+public class UseDefaultLocationValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -46,12 +47,10 @@ public class UseDefaultLocationValidationService extends ValidationService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
-			op.getProjectProvider());
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
-		if ((SapphireUtil.getContent(op.getProjectName()) != null) && "ant".equals(provider.getShortName()) &&
-			!SapphireUtil.getContent(op.getUseDefaultLocation()) &&
-			!NewLiferayPluginProjectOpMethods.canUseCustomLocation(op)) {
+		if ((get(op.getProjectName()) != null) && "ant".equals(provider.getShortName()) &&
+			!get(op.getUseDefaultLocation()) && !NewLiferayPluginProjectOpMethods.canUseCustomLocation(op)) {
 
 			retval = Status.createErrorStatus("The specified SDK version is not allowed to use custom location.");
 		}

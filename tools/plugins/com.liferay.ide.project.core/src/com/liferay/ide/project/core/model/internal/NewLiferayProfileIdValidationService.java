@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -29,7 +29,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Gregory Amerson
  */
-public class NewLiferayProfileIdValidationService extends ValidationService {
+public class NewLiferayProfileIdValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
@@ -37,7 +37,7 @@ public class NewLiferayProfileIdValidationService extends ValidationService {
 
 		NewLiferayProfile newLiferayProfile = _profile();
 
-		String profileId = SapphireUtil.getContent(newLiferayProfile.getId());
+		String profileId = get(newLiferayProfile.getId());
 
 		if ((profileId == null) || profileId.isEmpty()) {
 			retval = Status.createErrorStatus("Profile id can not be empty.");

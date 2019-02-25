@@ -18,7 +18,7 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
@@ -39,7 +39,8 @@ import org.osgi.framework.Version;
  * @author Charles Wu
  */
 public class GradleModuleExtProjectProvider
-	extends AbstractLiferayProjectProvider implements NewLiferayProjectProvider<NewModuleExtOp> {
+	extends AbstractLiferayProjectProvider
+	implements NewLiferayProjectProvider<NewModuleExtOp>, SapphireContentAccessor {
 
 	public GradleModuleExtProjectProvider() {
 		super(null);
@@ -49,12 +50,12 @@ public class GradleModuleExtProjectProvider
 	public IStatus createNewProject(NewModuleExtOp op, IProgressMonitor monitor) throws CoreException {
 		IStatus status = Status.OK_STATUS;
 
-		String projectName = SapphireUtil.getContent(op.getProjectName());
-		String originalModuleName = SapphireUtil.getContent(op.getOriginalModuleName());
-		Version originalModuleVersion = SapphireUtil.getContent(op.getOriginalModuleVersion());
-		String targetPlatform = SapphireUtil.getContent(op.getTargetPlatformVersion());
+		String projectName = get(op.getProjectName());
+		String originalModuleName = get(op.getOriginalModuleName());
+		Version originalModuleVersion = get(op.getOriginalModuleVersion());
+		String targetPlatform = get(op.getTargetPlatformVersion());
 
-		IPath location = PathBridge.create(SapphireUtil.getContent(op.getLocation()));
+		IPath location = PathBridge.create(get(op.getLocation()));
 
 		StringBuilder sb = new StringBuilder();
 

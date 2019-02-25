@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.JavaConventions;
@@ -27,13 +27,13 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
-public class ComponentNameValidationService extends ValidationService {
+public class ComponentNameValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
 		NewLiferayModuleProjectOp op = _op();
 
-		String className = SapphireUtil.getContent(op.getComponentName());
+		String className = get(op.getComponentName());
 
 		Status retval = Status.createOkStatus();
 

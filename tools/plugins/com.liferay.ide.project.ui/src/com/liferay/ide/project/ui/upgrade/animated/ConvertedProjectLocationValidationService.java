@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 
 import java.io.File;
 
@@ -26,13 +26,13 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Andy Wu
  */
-public class ConvertedProjectLocationValidationService extends ValidationService {
+public class ConvertedProjectLocationValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
-		Path currentProjectLocation = SapphireUtil.getContent(_op().getConvertedProjectLocation());
+		Path currentProjectLocation = get(_op().getConvertedProjectLocation());
 
 		if (currentProjectLocation != null) {
 			String currentPath = currentProjectLocation.toPortableString();

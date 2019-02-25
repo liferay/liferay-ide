@@ -18,7 +18,7 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -71,7 +71,8 @@ import org.osgi.framework.Version;
  * @author Terry Jia
  */
 public class PluginsSDKProjectProvider
-	extends AbstractLiferayProjectProvider implements NewLiferayProjectProvider<NewLiferayPluginProjectOp> {
+	extends AbstractLiferayProjectProvider
+	implements NewLiferayProjectProvider<NewLiferayPluginProjectOp>, SapphireContentAccessor {
 
 	public PluginsSDKProjectProvider() {
 		super(new Class<?>[] {IProject.class, IRuntime.class});
@@ -81,9 +82,9 @@ public class PluginsSDKProjectProvider
 	public IStatus createNewProject(NewLiferayPluginProjectOp op, IProgressMonitor monitor) throws CoreException {
 		ElementList<ProjectName> projectNames = op.getProjectNames();
 
-		PluginType pluginType = SapphireUtil.getContent(op.getPluginType());
+		PluginType pluginType = get(op.getPluginType());
 
-		String originalProjectName = SapphireUtil.getContent(op.getProjectName());
+		String originalProjectName = get(op.getProjectName());
 
 		String pluginTypeSuffix = NewLiferayPluginProjectOpMethods.getPluginTypeSuffix(pluginType);
 
@@ -96,7 +97,7 @@ public class PluginsSDKProjectProvider
 
 		String projectName = fixedProjectName;
 
-		String displayName = SapphireUtil.getContent(op.getDisplayName());
+		String displayName = get(op.getDisplayName());
 
 		boolean separateJRE = true;
 
@@ -238,7 +239,7 @@ public class PluginsSDKProjectProvider
 
 		NewLiferayPluginProjectOpMethods.updateLocation(op);
 
-		Path projectLocation = SapphireUtil.getContent(op.getLocation());
+		Path projectLocation = get(op.getLocation());
 
 		if (!hasGradleTools) {
 			File projectDir = projectLocation.toFile();
@@ -276,11 +277,11 @@ public class PluginsSDKProjectProvider
 
 		ProjectName name = projectNames.insert();
 
-		name.setName(SapphireUtil.getContent(op.getFinalProjectName()));
+		name.setName(get(op.getFinalProjectName()));
 
 		_projectCreated(newProject);
 
-		switch (SapphireUtil.getContent(op.getPluginType())) {
+		switch (get(op.getPluginType())) {
 			case portlet:
 
 				_portletProjectCreated(op, newProject, monitor);
@@ -378,7 +379,7 @@ public class PluginsSDKProjectProvider
 		return retval;
 	}
 
-	private static SDK _getSDK(NewLiferayPluginProjectOp op) {
+	private SDK _getSDK(NewLiferayPluginProjectOp op) {
 		SDK sdk = null;
 
 		try {
@@ -395,7 +396,7 @@ public class PluginsSDKProjectProvider
 			}
 
 			if (!sdkValid) {
-				Path sdkLocation = SapphireUtil.getContent(op.getSdkLocation());
+				Path sdkLocation = get(op.getSdkLocation());
 
 				if (sdkLocation != null) {
 					sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkLocation));
@@ -424,9 +425,9 @@ public class PluginsSDKProjectProvider
 	private void _portletProjectCreated(NewLiferayPluginProjectOp op, IProject newProject, IProgressMonitor monitor)
 		throws CoreException {
 
-		IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
+		IPortletFramework portletFramework = get(op.getPortletFramework());
 
-		String portletName = SapphireUtil.getContent(op.getPortletName(), false);
+		String portletName = get(op.getPortletName(), false);
 
 		String frameworkName = NewLiferayPluginProjectOpMethods.getFrameworkName(op);
 

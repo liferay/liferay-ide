@@ -17,23 +17,23 @@ package com.liferay.ide.layouttpl.core.tests;
 
 import static org.junit.Assert.assertEquals;
 
-import com.liferay.ide.core.tests.BaseTests;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
-import com.liferay.ide.layouttpl.core.model.LayoutTplElementsFactory;
-import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.liferay.ide.core.tests.BaseTests;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
+import com.liferay.ide.layouttpl.core.model.LayoutTplElementsFactory;
+import com.liferay.ide.layouttpl.core.util.LayoutTemplateAccessor;
 
 /**
  * @author Gregory Amerson
  * @author Cindy Li
  * @author Kuo Zhang
  */
-public abstract class LayoutTplCoreTests extends BaseTests
+public abstract class LayoutTplCoreTests extends BaseTests implements LayoutTemplateAccessor
 {
     private IProject a;
 
@@ -108,7 +108,7 @@ public abstract class LayoutTplCoreTests extends BaseTests
     {
         assertEquals( true, layoutTpl != null );
 
-        String templateSource = LayoutTplUtil.getTemplateSource( layoutTpl );
+        String templateSource = getTemplateSource( layoutTpl );
 
         assertEquals( false, templateSource.isEmpty() );
 
@@ -150,6 +150,6 @@ public abstract class LayoutTplCoreTests extends BaseTests
     protected String convertToTplClassName( String tplFileName )
     {
         //assume file name is "n_n_n_columns.*" and want "columns-n-n-n"
-        return "columns-" + tplFileName.replaceAll( "_columns\\..*", "" ).replaceAll( "_", "-" ); 
+        return "columns-" + tplFileName.replaceAll( "_columns\\..*", "" ).replaceAll( "_", "-" );
     }
 }

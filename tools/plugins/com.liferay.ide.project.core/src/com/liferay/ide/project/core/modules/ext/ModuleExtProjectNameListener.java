@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.modules.ext;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -30,16 +30,30 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Charles Wu
  */
-public class ModuleExtProjectNameListener extends FilteredListener<PropertyContentEvent> {
+public class ModuleExtProjectNameListener
+	extends FilteredListener<PropertyContentEvent> implements SapphireContentAccessor {
 
-	public static void updateLocation(NewModuleExtOp op) {
-		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		_updateLocation(op(event));
+	}
+
+	protected NewModuleExtOp op(PropertyContentEvent event) {
+		Property property = event.property();
+
+		Element element = property.element();
+
+		return element.nearest(NewModuleExtOp.class);
+	}
+
+	private void _updateLocation(NewModuleExtOp op) {
+		String currentProjectName = get(op.getProjectName());
 
 		if (CoreUtil.isNullOrEmpty(currentProjectName)) {
 			return;
 		}
 
-		boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
+		boolean useDefaultLocation = get(op.getUseDefaultLocation());
 
 		if (useDefaultLocation) {
 			Path newLocationBase = null;
@@ -60,19 +74,6 @@ public class ModuleExtProjectNameListener extends FilteredListener<PropertyConte
 				op.setLocation(newLocationBase);
 			}
 		}
-	}
-
-	@Override
-	protected void handleTypedEvent(PropertyContentEvent event) {
-		updateLocation(op(event));
-	}
-
-	protected NewModuleExtOp op(PropertyContentEvent event) {
-		Property property = event.property();
-
-		Element element = property.element();
-
-		return element.nearest(NewModuleExtOp.class);
 	}
 
 }

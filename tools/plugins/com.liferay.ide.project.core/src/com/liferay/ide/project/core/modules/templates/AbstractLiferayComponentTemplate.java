@@ -18,7 +18,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.IComponentTemplate;
@@ -72,7 +72,7 @@ import org.eclipse.sapphire.java.JavaPackageName;
  */
 @SuppressWarnings("rawtypes")
 public abstract class AbstractLiferayComponentTemplate
-	implements IComponentTemplate<NewLiferayComponentOp>, Comparable<IComponentTemplate> {
+	implements IComponentTemplate<NewLiferayComponentOp>, Comparable<IComponentTemplate>, SapphireContentAccessor {
 
 	public AbstractLiferayComponentTemplate() {
 	}
@@ -450,17 +450,16 @@ public abstract class AbstractLiferayComponentTemplate
 	}
 
 	protected void initializeOperation(NewLiferayComponentOp op) {
-		projectName = SapphireUtil.getContent(op.getProjectName());
-		packageName = SapphireUtil.getContent(op.getPackageName());
-		componentClassName = SapphireUtil.getContent(op.getComponentClassName());
+		projectName = get(op.getProjectName());
+		packageName = get(op.getPackageName());
+		componentClassName = get(op.getComponentClassName());
 
-		IComponentTemplate<NewLiferayComponentOp> componentTemplate = SapphireUtil.getContent(
-			op.getComponentClassTemplateName());
+		IComponentTemplate<NewLiferayComponentOp> componentTemplate = get(op.getComponentClassTemplateName());
 
 		templateName = componentTemplate.getShortName();
 
-		serviceName = SapphireUtil.getContent(op.getServiceName());
-		modelClass = SapphireUtil.getContent(op.getModelClass());
+		serviceName = get(op.getServiceName());
+		modelClass = get(op.getModelClass());
 
 		componentNameWithoutTemplateName = componentClassName.replace(templateName, "");
 
@@ -477,9 +476,9 @@ public abstract class AbstractLiferayComponentTemplate
 
 			StringBuilder sb = new StringBuilder();
 
-			sb.append(SapphireUtil.getContent(propertyKey.getName()));
+			sb.append(get(propertyKey.getName()));
 			sb.append("=");
-			sb.append(SapphireUtil.getContent(propertyKey.getValue()));
+			sb.append(get(propertyKey.getValue()));
 
 			if (i != (propertyKeys.size() - 1)) {
 				sb.append(",");

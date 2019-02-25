@@ -14,7 +14,7 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.portlet.core.model.PortletApp;
 import com.liferay.ide.portlet.core.model.PublicRenderParameter;
 
@@ -26,7 +26,7 @@ import org.eclipse.sapphire.PossibleValuesService;
 /**
  * @author Kamesh Sampath
  */
-public class PublicRenderParameterValuesService extends PossibleValuesService {
+public class PublicRenderParameterValuesService extends PossibleValuesService implements SapphireContentAccessor {
 
 	@Override
 	protected void compute(Set<String> values) {
@@ -35,7 +35,7 @@ public class PublicRenderParameterValuesService extends PossibleValuesService {
 		ElementList<PublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
 
 		for (PublicRenderParameter renderParameter : publicRenderParameters) {
-			String indentifer = SapphireUtil.getContent(renderParameter.getIdentifier());
+			String indentifer = get(renderParameter.getIdentifier());
 
 			values.add(indentifer);
 		}

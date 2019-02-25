@@ -93,7 +93,7 @@ public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFac
 		protected Object run(Presentation context) {
 			CanAddPortletLayouts element = getModelElement().nearest(CanAddPortletLayouts.class);
 
-			LayoutTemplatesFactory.add_Row_1(element);
+			new LayoutTemplatesFactory().add_Row_1(element);
 
 			return null;
 		}
@@ -125,7 +125,7 @@ public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFac
 		protected Object run(Presentation context) {
 			CanAddPortletLayouts element = getModelElement().nearest(CanAddPortletLayouts.class);
 
-			LayoutTemplatesFactory.add_Row_2_I(element);
+			new LayoutTemplatesFactory().add_Row_2_I(element);
 
 			return null;
 		}
@@ -157,7 +157,7 @@ public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFac
 		protected Object run(Presentation context) {
 			CanAddPortletLayouts element = getModelElement().nearest(CanAddPortletLayouts.class);
 
-			LayoutTemplatesFactory.add_Row_2_II(element);
+			new LayoutTemplatesFactory().add_Row_2_II(element);
 
 			return null;
 		}
@@ -221,7 +221,7 @@ public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFac
 		protected Object run(Presentation context) {
 			CanAddPortletLayouts element = getModelElement().nearest(CanAddPortletLayouts.class);
 
-			LayoutTemplatesFactory.add_Row_3(element);
+			new LayoutTemplatesFactory().add_Row_3(element);
 
 			return null;
 		}

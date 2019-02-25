@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.jsf;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
@@ -27,7 +28,8 @@ import org.eclipse.sapphire.PropertyContentEvent;
 /**
  * @author Simon Jiang
  */
-public class JSFModuleProjectArchetypeDefaultValueService extends DefaultValueService {
+public class JSFModuleProjectArchetypeDefaultValueService
+	extends DefaultValueService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -42,9 +44,9 @@ public class JSFModuleProjectArchetypeDefaultValueService extends DefaultValueSe
 	protected String compute() {
 		NewLiferayJSFModuleProjectOp op = _op();
 
-		String templateName = SapphireUtil.getContent(op.getTemplateName());
+		String templateName = get(op.getTemplateName());
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
+		NewLiferayProjectProvider<BaseModuleOp> provider = get(op.getProjectProvider());
 
 		List<String> data = provider.getData("archetypeGAV", String.class, templateName);
 

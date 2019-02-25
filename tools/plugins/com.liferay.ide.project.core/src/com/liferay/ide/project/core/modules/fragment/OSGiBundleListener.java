@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.util.ServerUtil;
@@ -30,7 +31,7 @@ import org.eclipse.wst.server.core.IRuntime;
  * @author Terry Jia
  * @author Andy Wu
  */
-public class OSGiBundleListener extends FilteredListener<PropertyContentEvent> {
+public class OSGiBundleListener extends FilteredListener<PropertyContentEvent> implements SapphireContentAccessor {
 
 	@Override
 	protected void handleTypedEvent(PropertyContentEvent event) {
@@ -40,8 +41,8 @@ public class OSGiBundleListener extends FilteredListener<PropertyContentEvent> {
 
 		IPath temp = projectCore.getStateLocation();
 
-		String runtimeName = SapphireUtil.getContent(op.getLiferayRuntimeName());
-		String hostOsgiBundle = SapphireUtil.getContent(op.getHostOsgiBundle());
+		String runtimeName = get(op.getLiferayRuntimeName());
+		String hostOsgiBundle = get(op.getHostOsgiBundle());
 
 		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 

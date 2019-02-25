@@ -15,7 +15,7 @@
 package com.liferay.ide.portlet.core.lfportlet.model.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -29,7 +29,7 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Simon Jiang
  * @Author Lu Li
  */
-public class NumberValueValidationService extends ValidationService {
+public class NumberValueValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
@@ -39,7 +39,7 @@ public class NumberValueValidationService extends ValidationService {
 			return Status.createOkStatus();
 		}
 
-		String triggerValue = SapphireUtil.getContent(modelElement.property(context(ValueProperty.class)));
+		String triggerValue = get(modelElement.property(context(ValueProperty.class)));
 
 		if (CoreUtil.isNullOrEmpty(triggerValue)) {
 			return Status.createOkStatus();

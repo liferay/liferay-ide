@@ -38,6 +38,8 @@ public interface UpgradePlan {
 
 	public List<UpgradeTask> getTasks();
 
+	public List<String> getUpgradeCategories();
+
 	public Collection<UpgradeProblem> getUpgradeProblems();
 
 	public List<String> getUpgradeVersions();

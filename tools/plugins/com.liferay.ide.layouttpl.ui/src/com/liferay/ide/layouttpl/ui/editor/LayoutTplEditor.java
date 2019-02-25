@@ -21,7 +21,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElementsFactory;
-import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
+import com.liferay.ide.layouttpl.core.util.LayoutTemplateAccessor;
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 
 import java.lang.reflect.Method;
@@ -57,7 +57,7 @@ import org.osgi.framework.Version;
  * @author Joye Luo
  */
 @SuppressWarnings("restriction")
-public class LayoutTplEditor extends SapphireEditor implements IExecutableExtension {
+public class LayoutTplEditor extends SapphireEditor implements IExecutableExtension, LayoutTemplateAccessor {
 
 	@Override
 	public void dispose() {
@@ -340,7 +340,7 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 
 	protected void refreshSourceModel(LayoutTplElement modelElement) {
 		if (_sourceModel != null) {
-			String templateSource = LayoutTplUtil.getTemplateSource(modelElement);
+			String templateSource = getTemplateSource(modelElement);
 
 			_sourceModel.aboutToChangeModel();
 

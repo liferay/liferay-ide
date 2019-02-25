@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -33,7 +34,7 @@ import org.eclipse.sapphire.modeling.Path;
 /**
  * @author Simon Jiang
  */
-public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService {
+public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService implements SapphireContentAccessor {
 
 	@Override
 	protected String compute() {
@@ -41,14 +42,14 @@ public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService
 
 		String groupId = "";
 
-		Path location = SapphireUtil.getContent(op.getLocation());
+		Path location = get(op.getLocation());
 
 		if (location != null) {
 			String parentProjectLocation = location.toOSString();
 
 			IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
 
-			String projectName = SapphireUtil.getContent(op.getProjectName());
+			String projectName = get(op.getProjectName());
 
 			groupId = NewLiferayModuleProjectOpMethods.getMavenParentPomGroupId(op, projectName, parentProjectOsPath);
 		}
@@ -57,7 +58,7 @@ public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService
 			groupId = _getDefaultMavenGroupId();
 
 			if (CoreUtil.isNullOrEmpty(groupId)) {
-				groupId = SapphireUtil.getContent(op.getPackageName());
+				groupId = get(op.getPackageName());
 			}
 		}
 

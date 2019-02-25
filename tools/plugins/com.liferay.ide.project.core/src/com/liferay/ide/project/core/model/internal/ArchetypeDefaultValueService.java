@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
@@ -29,7 +30,7 @@ import org.eclipse.sapphire.PropertyContentEvent;
 /**
  * @author Simon Jiang
  */
-public class ArchetypeDefaultValueService extends DefaultValueService {
+public class ArchetypeDefaultValueService extends DefaultValueService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -45,15 +46,15 @@ public class ArchetypeDefaultValueService extends DefaultValueService {
 	protected String compute() {
 		NewLiferayPluginProjectOp op = _op();
 
-		PluginType pluginType = SapphireUtil.getContent(op.getPluginType());
+		PluginType pluginType = get(op.getPluginType());
 
 		String frameworkType = null;
 
 		if (pluginType.equals(PluginType.portlet)) {
-			IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
+			IPortletFramework portletFramework = get(op.getPortletFramework());
 
 			if (portletFramework.isRequiresAdvanced()) {
-				IPortletFramework framework = SapphireUtil.getContent(op.getPortletFrameworkAdvanced());
+				IPortletFramework framework = get(op.getPortletFrameworkAdvanced());
 
 				frameworkType = framework.getShortName();
 			}
@@ -67,8 +68,7 @@ public class ArchetypeDefaultValueService extends DefaultValueService {
 
 		frameworkType = frameworkType.replaceAll("_", "-");
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
-			op.getProjectProvider());
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
 		List<String> data = provider.getData("archetypeGAV", String.class, frameworkType);
 

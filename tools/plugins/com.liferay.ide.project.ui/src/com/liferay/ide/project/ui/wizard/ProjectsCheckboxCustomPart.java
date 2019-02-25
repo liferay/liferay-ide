@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.ui.wizard;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.model.NamedItem;
 import com.liferay.ide.project.core.model.PluginType;
@@ -43,7 +43,7 @@ import org.eclipse.swt.graphics.RGB;
 /**
  * @author Simon Jiang
  */
-public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomPart {
+public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomPart implements SapphireContentAccessor {
 
 	public class ProjectCheckboxElement extends CheckboxElement {
 		public ProjectCheckboxElement(String name, String context, String location) {
@@ -149,7 +149,7 @@ public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomP
 						NamedItem projectItem = iterator.next();
 
 						for (CheckboxElement checkboxElement : checkboxElements) {
-							if (checkboxElement.name.equals(SapphireUtil.getContent(projectItem.getName()))) {
+							if (checkboxElement.name.equals(get(projectItem.getName()))) {
 								checkBoxViewer.setChecked(checkboxElement, true);
 
 								break;

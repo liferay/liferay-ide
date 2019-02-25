@@ -44,6 +44,14 @@ public class SapphireUtil {
 		list.clear();
 	}
 
+	public static void detachListener(ElementList<?> values, Listener listener) {
+		if ((values == null) || (listener == null)) {
+			return;
+		}
+
+		values.detach(listener);
+	}
+
 	public static void detachListener(Value<?> value, Listener listener) {
 		if ((value == null) || (listener == null)) {
 			return;
@@ -62,22 +70,6 @@ public class SapphireUtil {
 		}
 
 		return false;
-	}
-
-	public static <T> T getContent(Value<T> value) {
-		if (value != null) {
-			return value.content();
-		}
-
-		return null;
-	}
-
-	public static <T> T getContent(Value<T> value, boolean useDefaultValue) {
-		if (value != null) {
-			return value.content(useDefaultValue);
-		}
-
-		return null;
 	}
 
 	public static Element getElement(PropertyContentEvent event) {

@@ -16,7 +16,7 @@ package com.liferay.ide.project.ui.modules.fragment.action;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
 
 import java.io.File;
@@ -45,20 +45,18 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 /**
  * @author Terry Jia
  */
-public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog {
+public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog implements SapphireContentAccessor {
 
 	public OSGiBundleFileSelectionDialog(Shell parent, ElementList<OverrideFilePath> currentFiles, String projectName) {
 		super(parent, new FileLabelProvider(), new FileContentProvider());
 
 		_files = currentFiles;
-		this.projectName = projectName;
+		_projectName = projectName;
 
 		setComparator(new ViewerComparator());
 	}
 
-	protected static String projectName = "";
-
-	protected static class FileContentProvider implements ITreeContentProvider {
+	protected static class FileContentProvider implements ITreeContentProvider, SapphireContentAccessor {
 
 		public void dispose() {
 		}
@@ -96,13 +94,13 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog {
 			}
 
 			for (OverrideFilePath file : _files) {
-				String currentFile = SapphireUtil.getContent(file.getValue());
+				String currentFile = get(file.getValue());
 
 				possibleValues.remove(currentFile);
 			}
 
-			if (projectName != null) {
-				IProject project = CoreUtil.getProject(projectName);
+			if (_projectName != null) {
+				IProject project = CoreUtil.getProject(_projectName);
 
 				IFolder javaFolder = project.getFolder("src/main/java");
 
@@ -166,5 +164,6 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog {
 	}
 
 	private static ElementList<OverrideFilePath> _files;
+	private static String _projectName = "";
 
 }

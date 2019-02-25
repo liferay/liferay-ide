@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.ParentSDKProjectImportOp;
 import com.liferay.ide.sdk.core.SDK;
@@ -31,7 +31,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-public class SDKImportValidationService extends ValidationService {
+public class SDKImportValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
@@ -46,7 +46,7 @@ public class SDKImportValidationService extends ValidationService {
 				return StatusBridge.create(ProjectCore.createErrorStatus(" This workspace already has another sdk."));
 			}
 
-			Path currentProjectLocation = SapphireUtil.getContent(op.getSdkLocation());
+			Path currentProjectLocation = get(op.getSdkLocation());
 
 			if ((currentProjectLocation != null) && !currentProjectLocation.isEmpty()) {
 				sdk = SDKUtil.createSDKFromLocation(PathBridge.create(currentProjectLocation));

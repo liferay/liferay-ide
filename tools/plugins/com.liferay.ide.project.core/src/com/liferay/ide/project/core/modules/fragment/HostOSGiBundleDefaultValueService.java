@@ -17,7 +17,7 @@ package com.liferay.ide.project.core.modules.fragment;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.templates.BndProperties;
 import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
@@ -32,13 +32,13 @@ import org.eclipse.sapphire.DerivedValueService;
  * @author Terry Jia
  * @author Andy Wu
  */
-public class HostOSGiBundleDefaultValueService extends DerivedValueService {
+public class HostOSGiBundleDefaultValueService extends DerivedValueService implements SapphireContentAccessor {
 
 	@Override
 	protected String compute() {
 		NewModuleFragmentFilesOp op = _op();
 
-		String projectName = SapphireUtil.getContent(op.getProjectName());
+		String projectName = get(op.getProjectName());
 
 		if (CoreUtil.empty(projectName)) {
 			return null;

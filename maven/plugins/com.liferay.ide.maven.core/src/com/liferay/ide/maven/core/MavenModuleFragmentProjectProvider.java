@@ -15,7 +15,6 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
@@ -43,9 +42,9 @@ public class MavenModuleFragmentProjectProvider
 
 		IStatus retval = Status.OK_STATUS;
 
-		String projectName = SapphireUtil.getContent(op.getProjectName());
+		String projectName = get(op.getProjectName());
 
-		Path location = SapphireUtil.getContent(op.getLocation());
+		Path location = get(op.getLocation());
 
 		String[] bsnAndVersion = NewModuleFragmentOpMethods.getBsnAndVersion(op);
 

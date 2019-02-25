@@ -14,7 +14,7 @@
 
 package com.liferay.ide.portlet.core.lfportlet.model.internal;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -29,14 +29,14 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-public class LiferayPortletNameValidationService extends ValidationService {
+public class LiferayPortletNameValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
 		Element modelElement = context(Element.class);
 
 		if (!modelElement.disposed()) {
-			_liferayPortletName = SapphireUtil.getContent(modelElement.property(context(ValueProperty.class)));
+			_liferayPortletName = get(modelElement.property(context(ValueProperty.class)));
 
 			IProject project = modelElement.adapt(IProject.class);
 

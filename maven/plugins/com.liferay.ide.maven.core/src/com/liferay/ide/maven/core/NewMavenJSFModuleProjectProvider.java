@@ -17,7 +17,6 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
@@ -202,9 +201,9 @@ public class NewMavenJSFModuleProjectProvider
 		IPath projectLocation = null;
 		String javaPackage = "com.example";
 
-		String projectName = SapphireUtil.getContent(op.getProjectName());
+		String projectName = get(op.getProjectName());
 
-		IPath location = PathBridge.create(SapphireUtil.getContent(op.getLocation()));
+		IPath location = PathBridge.create(get(op.getLocation()));
 
 		// for location we should use the parent location
 
@@ -216,11 +215,11 @@ public class NewMavenJSFModuleProjectProvider
 			location = location.removeLastSegments(1);
 		}
 
-		String groupId = SapphireUtil.getContent(op.getProjectName());
-		String artifactId = SapphireUtil.getContent(op.getProjectName());
+		String groupId = get(op.getProjectName());
+		String artifactId = get(op.getProjectName());
 		String version = "1.0.0";
 
-		String archetypeArtifactId = SapphireUtil.getContent(op.getArchetype());
+		String archetypeArtifactId = get(op.getArchetype());
 
 		Archetype archetype = new Archetype();
 

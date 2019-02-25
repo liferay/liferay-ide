@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.upgrade.BreakingChangeSelectedProject;
 import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
@@ -46,6 +46,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -59,7 +61,7 @@ import org.osgi.framework.Bundle;
  * @author Joye Luo
  * @author Lovett Li
  */
-public class UpgradeView extends ViewPart implements SelectionChangedListener {
+public class UpgradeView extends ViewPart implements SapphireContentAccessor, SelectionChangedListener {
 
 	public static final String ID = "com.liferay.ide.project.ui.upgradeView";
 
@@ -79,6 +81,10 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 		if (targetPage != null) {
 			_currentPageList.add(targetPage);
 		}
+	}
+
+	public static UpgradeView getInstance() {
+		return _instance;
 	}
 
 	public static Page getPage(int i) {
@@ -103,72 +109,6 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 
 	public static int getPageNumber() {
 		return _pages.length;
-	}
-
-	public static void resetPages() {
-		_currentPageList.clear();
-
-		addPage(Page.welcomePageId);
-		addPage(Page.initConfigureProjectPageId);
-
-		boolean hasMavenProject = SapphireUtil.getContent(_dataModel.getHasMavenProject());
-		boolean hasGradleProject = SapphireUtil.getContent(_dataModel.getHasGradleProject());
-		boolean liferayWorkspace = SapphireUtil.getContent(_dataModel.getIsLiferayWorkspace());
-		boolean hasPortlet = SapphireUtil.getContent(_dataModel.getHasPortlet());
-		boolean hasServiceBuilder = SapphireUtil.getContent(_dataModel.getHasServiceBuilder());
-		boolean hasHook = SapphireUtil.getContent(_dataModel.getHasHook());
-		boolean hasLayout = SapphireUtil.getContent(_dataModel.getHasLayout());
-		/**
-		 * boolean hasTheme = dataModel.getHasTheme().content(); boolean hasExt =
-		 * dataModel.getHasExt().content(); boolean hasWorkspace =
-		 * dataModel.getConvertLiferayWorkspace().content();
-		 */
-		if (hasMavenProject) {
-			addPage(Page.upgradePomPageId);
-		}
-
-		if (hasPortlet || hasHook || hasServiceBuilder || hasMavenProject || hasGradleProject) {
-			addPage(Page.findbreackingchangesPageId);
-		}
-
-		if (!liferayWorkspace) {
-			if (hasPortlet || hasHook || hasServiceBuilder || hasLayout) {
-				addPage(Page.descriptorsPageId);
-			}
-
-			if (hasServiceBuilder) {
-				addPage(Page.buildservicePageId);
-			}
-
-			if (hasLayout) {
-				addPage(Page.layouttemplatePageId);
-			}
-
-			if (hasHook) {
-				addPage(Page.customjspPageId);
-			}
-		}
-
-		/**
-		 * if( hasExt || hasTheme || hasWorkspace ) { addPage( Page.EXTANDTHEME_PAGE_ID
-		 * ); }
-		 */
-		if (hasPortlet || hasHook || hasServiceBuilder || hasLayout || hasMavenProject || hasGradleProject) {
-			addPage(Page.buildPageId);
-			addPage(Page.summaryPageId);
-		}
-
-		_pages = _currentPageList.toArray(new Page[0]);
-
-		for (Page page : _pages) {
-			String pageActionName = UpgradeSettingsUtil.getProperty(page.getPageId());
-
-			if (pageActionName != null) {
-				PageAction pageAction = page.getSelectedAction(pageActionName);
-
-				page.setSelectedAction(pageAction);
-			}
-		}
 	}
 
 	public static void resumePages() {
@@ -449,12 +389,85 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 	}
 
 	@Override
+	public void init(IViewSite site, IMemento memento) throws PartInitException {
+		super.init(site, memento);
+
+		_instance = this;
+	}
+
+	@Override
 	public void onSelectionChanged(int targetSelection) {
 		StackLayout stackLayout = (StackLayout)_pagesSwitchControler.getLayout();
 
 		stackLayout.topControl = _pages[targetSelection];
 
 		_pagesSwitchControler.layout();
+	}
+
+	public void resetPages() {
+		_currentPageList.clear();
+
+		addPage(Page.welcomePageId);
+		addPage(Page.initConfigureProjectPageId);
+
+		boolean hasMavenProject = get(_dataModel.getHasMavenProject());
+		boolean hasGradleProject = get(_dataModel.getHasGradleProject());
+		boolean liferayWorkspace = get(_dataModel.getIsLiferayWorkspace());
+		boolean hasPortlet = get(_dataModel.getHasPortlet());
+		boolean hasServiceBuilder = get(_dataModel.getHasServiceBuilder());
+		boolean hasHook = get(_dataModel.getHasHook());
+		boolean hasLayout = get(_dataModel.getHasLayout());
+		/**
+		 * boolean hasTheme = dataModel.getHasTheme().content(); boolean hasExt =
+		 * dataModel.getHasExt().content(); boolean hasWorkspace =
+		 * dataModel.getConvertLiferayWorkspace().content();
+		 */
+		if (hasMavenProject) {
+			addPage(Page.upgradePomPageId);
+		}
+
+		if (hasPortlet || hasHook || hasServiceBuilder || hasMavenProject || hasGradleProject) {
+			addPage(Page.findbreackingchangesPageId);
+		}
+
+		if (!liferayWorkspace) {
+			if (hasPortlet || hasHook || hasServiceBuilder || hasLayout) {
+				addPage(Page.descriptorsPageId);
+			}
+
+			if (hasServiceBuilder) {
+				addPage(Page.buildservicePageId);
+			}
+
+			if (hasLayout) {
+				addPage(Page.layouttemplatePageId);
+			}
+
+			if (hasHook) {
+				addPage(Page.customjspPageId);
+			}
+		}
+
+		/**
+		 * if( hasExt || hasTheme || hasWorkspace ) { addPage( Page.EXTANDTHEME_PAGE_ID
+		 * ); }
+		 */
+		if (hasPortlet || hasHook || hasServiceBuilder || hasLayout || hasMavenProject || hasGradleProject) {
+			addPage(Page.buildPageId);
+			addPage(Page.summaryPageId);
+		}
+
+		_pages = _currentPageList.toArray(new Page[0]);
+
+		for (Page page : _pages) {
+			String pageActionName = UpgradeSettingsUtil.getProperty(page.getPageId());
+
+			if (pageActionName != null) {
+				PageAction pageAction = page.getSelectedAction(pageActionName);
+
+				page.setSelectedAction(pageAction);
+			}
+		}
 	}
 
 	@Override
@@ -538,6 +551,8 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 			}
 		}
 	}
+
+	private static UpgradeView _instance;
 
 	private static List<Page> _currentPageList = new ArrayList<>();
 	private static LiferayUpgradeDataModel _dataModel;

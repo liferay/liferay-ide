@@ -16,7 +16,7 @@ package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -41,7 +41,7 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Terry Jia
  */
-public class OverrideFilePathPossibleValuesService extends PossibleValuesService {
+public class OverrideFilePathPossibleValuesService extends PossibleValuesService implements SapphireContentAccessor {
 
 	@Override
 	public Status problem(Value<?> value) {
@@ -52,7 +52,7 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 		Object o = value.content();
 
 		for (OverrideFilePath currentFile : currentFiles) {
-			String content = SapphireUtil.getContent(currentFile.getValue());
+			String content = get(currentFile.getValue());
 
 			if (content != null) {
 				String v = o.toString();
@@ -77,7 +77,7 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 	protected void compute(Set<String> values) {
 		NewModuleFragmentOp op = _op();
 
-		String hostOSGiBundle = SapphireUtil.getContent(op.getHostOsgiBundle());
+		String hostOSGiBundle = get(op.getHostOsgiBundle());
 
 		if (hostOSGiBundle == null) {
 			return;
@@ -88,7 +88,7 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
 			_possibleValues = new HashSet<>();
 
-			String runtimeName = SapphireUtil.getContent(op.getLiferayRuntimeName());
+			String runtimeName = get(op.getLiferayRuntimeName());
 
 			IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
@@ -137,7 +137,7 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
 			if (currentFiles != null) {
 				for (OverrideFilePath cj : currentFiles) {
-					String value = SapphireUtil.getContent(cj.getValue());
+					String value = get(cj.getValue());
 
 					if (value != null) {
 						possibleValuesSet.remove(value);
@@ -145,7 +145,7 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 				}
 			}
 
-			String projectName = SapphireUtil.getContent(op.getProjectName());
+			String projectName = get(op.getProjectName());
 
 			if (projectName != null) {
 				IProject project = CoreUtil.getProject(projectName);

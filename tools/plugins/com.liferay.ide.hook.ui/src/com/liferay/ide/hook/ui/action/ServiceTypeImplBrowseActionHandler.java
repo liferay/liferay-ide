@@ -14,7 +14,7 @@
 
 package com.liferay.ide.hook.ui.action;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.hook.core.model.ServiceWrapper;
@@ -50,7 +50,7 @@ import org.eclipse.ui.dialogs.SelectionDialog;
 /**
  * @author Gregory Amerson
  */
-public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandler {
+public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandler implements SapphireContentAccessor {
 
 	public static final String ID = "ServiceTypeImpl.Browse.Java.Type";
 
@@ -157,7 +157,7 @@ public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandle
 
 		ServiceWrapper service = element.nearest(ServiceWrapper.class);
 
-		JavaTypeName javaTypeName = SapphireUtil.getContent(service.getServiceType(), false);
+		JavaTypeName javaTypeName = get(service.getServiceType(), false);
 
 		if (javaTypeName != null) {
 			retval = javaTypeName.qualified();

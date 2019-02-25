@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.SDKProjectsImportOp;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
@@ -30,7 +31,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Simon Jiang
  */
-public class SDKImportVersionDerivedValueService extends DerivedValueService {
+public class SDKImportVersionDerivedValueService extends DerivedValueService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -47,7 +48,7 @@ public class SDKImportVersionDerivedValueService extends DerivedValueService {
 	protected String compute() {
 		SDKProjectsImportOp op = _op();
 
-		Path sdkLocation = SapphireUtil.getContent(op.getSdkLocation());
+		Path sdkLocation = get(op.getSdkLocation());
 
 		if ((sdkLocation != null) && !sdkLocation.isEmpty()) {
 			IStatus status = ProjectImportUtil.validateSDKPath(sdkLocation.toPortableString());

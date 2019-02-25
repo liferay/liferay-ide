@@ -16,7 +16,7 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
@@ -28,7 +28,7 @@ import org.eclipse.sapphire.UniversalConversionService;
 /**
  * @author Gregory Amerson
  */
-public class IJavaProjectConversionService extends UniversalConversionService {
+public class IJavaProjectConversionService extends UniversalConversionService implements SapphireContentAccessor {
 
 	@Override
 	public <T> T convert(Object object, Class<T> type) {
@@ -38,7 +38,7 @@ public class IJavaProjectConversionService extends UniversalConversionService {
 
 		NewLiferayComponentOp op = (NewLiferayComponentOp)object;
 
-		String projectName = SapphireUtil.getContent(op.getProjectName());
+		String projectName = get(op.getProjectName());
 
 		if (projectName == null) {
 			return null;

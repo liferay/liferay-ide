@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -35,7 +36,7 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
-public class NewLiferayComponentValidationService extends ValidationService {
+public class NewLiferayComponentValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -59,7 +60,7 @@ public class NewLiferayComponentValidationService extends ValidationService {
 
 		NewLiferayComponentOp op = _op();
 
-		String className = SapphireUtil.getContent(op.getComponentClassName());
+		String className = get(op.getComponentClassName());
 
 		if (!CoreUtil.isNullOrEmpty(className)) {
 			IStatus status = JavaConventions.validateJavaTypeName(
@@ -76,14 +77,14 @@ public class NewLiferayComponentValidationService extends ValidationService {
 			}
 		}
 
-		String projectName = SapphireUtil.getContent(op.getProjectName());
+		String projectName = get(op.getProjectName());
 
 		if (projectName != null) {
 			IProject project = CoreUtil.getProject(projectName);
 
 			if (project != null) {
 				try {
-					JavaPackageName pack = SapphireUtil.getContent(op.getPackageName());
+					JavaPackageName pack = get(op.getPackageName());
 
 					if (pack != null) {
 						String packageName = pack.toString();

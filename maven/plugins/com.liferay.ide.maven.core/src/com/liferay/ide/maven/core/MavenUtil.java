@@ -18,11 +18,6 @@ import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.core.util.NodeUtil;
-import com.liferay.ide.core.util.SapphireUtil;
-import com.liferay.ide.project.core.model.NewLiferayProfile;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileReader;
@@ -84,13 +79,8 @@ import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.m2e.wtp.ProjectUtils;
 import org.eclipse.m2e.wtp.WarPluginConfiguration;
-import org.eclipse.wst.xml.core.internal.provisional.format.NodeFormatter;
 
 import org.osgi.framework.Version;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 /**
  * @author Gregory Amerson
@@ -98,85 +88,6 @@ import org.w3c.dom.Node;
  */
 @SuppressWarnings("restriction")
 public class MavenUtil {
-
-	public static Node createNewLiferayProfileNode(Document pomDocument, NewLiferayProfile newLiferayProfile) {
-		Node newNode = null;
-
-		String liferayVersion = SapphireUtil.getContent(newLiferayProfile.getLiferayVersion());
-
-		try {
-			String runtimeName = SapphireUtil.getContent(newLiferayProfile.getRuntimeName());
-
-			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(ServerUtil.getRuntime(runtimeName));
-
-			Element root = pomDocument.getDocumentElement();
-
-			Element profiles = NodeUtil.findChildElement(root, "profiles");
-
-			if (profiles == null) {
-				newNode = profiles = NodeUtil.appendChildElement(root, "profiles");
-			}
-
-			Element newProfile = null;
-
-			if (profiles != null) {
-				NodeUtil.appendTextNode(profiles, "\n");
-
-				newProfile = NodeUtil.appendChildElement(profiles, "profile");
-
-				NodeUtil.appendTextNode(profiles, "\n");
-
-				if (newNode == null) {
-					newNode = newProfile;
-				}
-			}
-
-			if (newProfile != null) {
-				IPath serverDir = liferayRuntime.getAppServerDir();
-
-				IPath rootPath = serverDir.removeLastSegments(1);
-
-				IPath autoDeployDir = rootPath.append("deploy");
-
-				NodeUtil.appendTextNode(newProfile, "\n\t");
-
-				NodeUtil.appendChildElement(newProfile, "id", SapphireUtil.getContent(newLiferayProfile.getId()));
-				NodeUtil.appendTextNode(newProfile, "\n\t");
-
-				Element propertiesElement = NodeUtil.appendChildElement(newProfile, "properties");
-
-				NodeUtil.appendTextNode(newProfile, "\n\t");
-				NodeUtil.appendTextNode(propertiesElement, "\n\t\t");
-				NodeUtil.appendChildElement(propertiesElement, "liferay.version", liferayVersion);
-				NodeUtil.appendTextNode(propertiesElement, "\n\t\t");
-				NodeUtil.appendChildElement(propertiesElement, "liferay.maven.plugin.version", liferayVersion);
-				NodeUtil.appendTextNode(propertiesElement, "\n\t\t");
-				NodeUtil.appendChildElement(propertiesElement, "liferay.auto.deploy.dir", autoDeployDir.toOSString());
-				NodeUtil.appendTextNode(propertiesElement, "\n\t\t");
-				NodeUtil.appendChildElement(
-					propertiesElement, "liferay.app.server.deploy.dir",
-					FileUtil.toOSString(liferayRuntime.getAppServerDeployDir()));
-				NodeUtil.appendTextNode(propertiesElement, "\n\t\t");
-				NodeUtil.appendChildElement(
-					propertiesElement, "liferay.app.server.lib.global.dir",
-					FileUtil.toOSString(liferayRuntime.getAppServerLibGlobalDir()));
-				NodeUtil.appendTextNode(propertiesElement, "\n\t\t");
-				NodeUtil.appendChildElement(
-					propertiesElement, "liferay.app.server.portal.dir",
-					FileUtil.toOSString(liferayRuntime.getAppServerPortalDir()));
-				NodeUtil.appendTextNode(propertiesElement, "\n\t");
-
-				NodeFormatter formatter = new NodeFormatter();
-
-				formatter.format(newNode);
-			}
-		}
-		catch (Exception e) {
-			LiferayMavenCore.logError("Unable to add new liferay profile.", e);
-		}
-
-		return newNode;
-	}
 
 	public static IStatus executeGoals(
 			IMavenProjectFacade facade, IMavenExecutionContext context, List<String> goals, IProgressMonitor monitor)

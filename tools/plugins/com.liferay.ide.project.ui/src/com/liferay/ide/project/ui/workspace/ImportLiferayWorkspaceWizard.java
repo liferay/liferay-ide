@@ -15,7 +15,6 @@
 package com.liferay.ide.project.ui.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -75,7 +74,7 @@ public class ImportLiferayWorkspaceWizard extends BaseProjectWizard<ImportLifera
 
 		ImportLiferayWorkspaceOp op = element().nearest(ImportLiferayWorkspaceOp.class);
 
-		Path projectPath = SapphireUtil.getContent(op.getWorkspaceLocation());
+		Path projectPath = get(op.getWorkspaceLocation());
 
 		IProject newProject = CoreUtil.getProject(projectPath.lastSegment());
 

@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.StringUtil;
@@ -77,7 +78,7 @@ import org.eclipse.ui.progress.IProgressService;
  * @author Simon Jiang
  * @author Joye Luo
  */
-public abstract class AbstractLiferayTableViewCustomPart extends Page {
+public abstract class AbstractLiferayTableViewCustomPart extends Page implements SapphireContentAccessor {
 
 	public static IPath getTempLocation(String prefix, String fileName) {
 		IPath tmpStation = ProjectUI.getPluginStateLocation();
@@ -316,7 +317,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 	}
 
 	protected String getUpgradeVersion() {
-		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
+		String upgradeVersion = get(dataModel.getUpgradeVersion());
 
 		if (StringUtil.contains(upgradeVersion, "7.1")) {
 			return "7.1.0";

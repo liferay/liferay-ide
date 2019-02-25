@@ -15,7 +15,7 @@
 package com.liferay.ide.project.ui.modules.fragment.action;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
@@ -44,7 +44,7 @@ import org.eclipse.wst.server.core.IRuntime;
  * @author Terry Jia
  * @author Joye Luo
  */
-public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler {
+public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler implements SapphireContentAccessor {
 
 	public AddFilesFromOSGiBundleAction() {
 	}
@@ -85,7 +85,7 @@ public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler {
 
 		NewModuleFragmentOp op = getModelElement().nearest(NewModuleFragmentOp.class);
 
-		String hostOsgiBundle = SapphireUtil.getContent(op.getHostOsgiBundle());
+		String hostOsgiBundle = get(op.getHostOsgiBundle());
 
 		if (hostOsgiBundle != null) {
 			enabled = true;
@@ -104,11 +104,11 @@ public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler {
 
 		final ElementList<OverrideFilePath> currentFiles = op.getOverrideFiles();
 
-		final String projectName = SapphireUtil.getContent(op.getProjectName());
+		final String projectName = get(op.getProjectName());
 
 		final OSGiBundleFileSelectionDialog dialog = new OSGiBundleFileSelectionDialog(null, currentFiles, projectName);
 
-		final String runtimeName = SapphireUtil.getContent(op.getLiferayRuntimeName());
+		final String runtimeName = get(op.getLiferayRuntimeName());
 
 		final IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
@@ -118,7 +118,7 @@ public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler {
 
 		dialog.setTitle("Add files from OSGi bundle to override");
 
-		String currentOSGiBundle = SapphireUtil.getContent(op.getHostOsgiBundle());
+		String currentOSGiBundle = get(op.getHostOsgiBundle());
 
 		if (!currentOSGiBundle.endsWith("jar")) {
 			currentOSGiBundle = currentOSGiBundle + ".jar";

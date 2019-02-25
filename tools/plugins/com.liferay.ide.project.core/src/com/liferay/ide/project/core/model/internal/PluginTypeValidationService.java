@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.model.internal;
 
 import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods.supportsTypePlugin;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
@@ -36,7 +37,7 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class PluginTypeValidationService extends ValidationService {
+public class PluginTypeValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
@@ -48,14 +49,14 @@ public class PluginTypeValidationService extends ValidationService {
 			SDK sdk = SDKUtil.getWorkspaceSDK();
 
 			if (sdk == null) {
-				Path sdkLocation = SapphireUtil.getContent(op.getSdkLocation());
+				Path sdkLocation = get(op.getSdkLocation());
 
 				if (sdkLocation != null) {
 					sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkLocation));
 				}
 			}
 
-			PluginType pluginType = SapphireUtil.getContent(op.getPluginType());
+			PluginType pluginType = get(op.getPluginType());
 
 			if (sdk != null) {
 				if (pluginType.equals(PluginType.web) && !supportsTypePlugin(op, "web")) {
