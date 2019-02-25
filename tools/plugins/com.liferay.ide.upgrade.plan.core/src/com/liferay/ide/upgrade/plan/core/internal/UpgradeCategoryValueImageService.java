@@ -15,21 +15,14 @@
 package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.sapphire.ImageData;
 import org.eclipse.sapphire.Result;
 import org.eclipse.sapphire.services.ValueImageService;
-
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 
 /**
  * @author Simon Jiang
@@ -42,28 +35,18 @@ public class UpgradeCategoryValueImageService extends ValueImageService {
 		ImageData imageData = _imageMap.get(value);
 
 		if (imageData == null) {
-			Bundle bundle = FrameworkUtil.getBundle(UpgradeCategoryPossibleValuesService.class);
+			UpgradeTaskCategory upgradeTaskCategory = ServicesLookup.getSingleService(
+				UpgradeTaskCategory.class, "(id=" + value + ")");
 
-			BundleContext bundleContext = bundle.getBundleContext();
+			if (upgradeTaskCategory != null) {
+				String imagePath = upgradeTaskCategory.getImagePath();
 
-			try {
-				List<ServiceReference<UpgradeTaskCategory>> serviceReferences = new ArrayList<>(
-					bundleContext.getServiceReferences(UpgradeTaskCategory.class, "(id=" + value + ")"));
+				Result<ImageData> imageResult = ImageData.readFromClassLoader(
+					UpgradeCategoryValueImageService.class, imagePath);
 
-				if (!serviceReferences.isEmpty()) {
-					UpgradeTaskCategory upgradeTaskCategory = bundleContext.getService(serviceReferences.get(0));
+				imageData = imageResult.required();
 
-					String imagePath = upgradeTaskCategory.getImagePath();
-
-					Result<ImageData> imageResult = ImageData.readFromClassLoader(
-						UpgradeCategoryValueImageService.class, imagePath);
-
-					imageData = imageResult.required();
-
-					_imageMap.put(value, imageData);
-				}
-			}
-			catch (InvalidSyntaxException ise) {
+				_imageMap.put(value, imageData);
 			}
 		}
 
