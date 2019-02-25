@@ -43,13 +43,13 @@ public class SourceLocationValidationService extends ValidationService implement
 			Path sourceLocation = get(op.getLocation());
 
 			if ((sourceLocation == null) || sourceLocation.isEmpty() || !sourceLocation.isAbsolute()) {
-				retval = Status.createErrorStatus("Plese select correct source code location.");
+				retval = Status.createErrorStatus("Source code location must be a non-empty absolute path.");
 			}
 			else {
 				File sourceLocationTarget = sourceLocation.toFile();
 
 				if (!(sourceLocationTarget.exists() && sourceLocationTarget.canRead())) {
-					retval = Status.createErrorStatus("Source location can not be found or read.");
+					retval = Status.createErrorStatus("Source code location must exist and be readable.");
 				}
 			}
 		}
