@@ -30,7 +30,7 @@
                     </hint>
                 </property-editor>
                     <property-editor>
-                    <visible-when>${Contain(UpgradeCategories,&quot;UpgradeCategory&quot;,&quot;code&quot;)}</visible-when>
+                    <visible-when>${Contains(UpgradeCategories,&quot;UpgradeCategory&quot;,&quot;code&quot;)}</visible-when>
                     <property>Location</property>
                 </property-editor>
             </content>

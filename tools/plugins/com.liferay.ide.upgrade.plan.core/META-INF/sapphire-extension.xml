@@ -2,7 +2,7 @@
 
 <extension xmlns="http://www.eclipse.org/sapphire/xmlns/extension">
 	<function>
-		<name>Contain</name>
-		<impl>com.liferay.ide.upgrade.plan.core.ContainFunction</impl>
+		<name>Contains</name>
+		<impl>com.liferay.ide.upgrade.plan.core.ContainsFunction</impl>
 	</function>
 </extension>

@@ -24,7 +24,7 @@ import org.eclipse.sapphire.modeling.el.FunctionResult;
 /**
  * @author Simon Jiang
  */
-public class ContainFunction extends AggregateFunction {
+public class ContainsFunction extends AggregateFunction {
 
 	@Override
 	public FunctionResult evaluate(FunctionContext context) {
@@ -49,7 +49,7 @@ public class ContainFunction extends AggregateFunction {
 
 	@Override
 	public String name() {
-		return "Contain";
+		return "Contains";
 	}
 
 }
