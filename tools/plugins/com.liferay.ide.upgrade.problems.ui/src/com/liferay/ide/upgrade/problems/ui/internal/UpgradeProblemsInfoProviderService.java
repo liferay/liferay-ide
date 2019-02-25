@@ -29,6 +29,7 @@ import org.osgi.util.promise.PromiseFactory;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 @Component
 public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
@@ -46,6 +47,9 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 		}
 		else if (element instanceof ProjectProblemsContainer) {
 			_doProjectProblemsContainerDetail((ProjectProblemsContainer)element, deferred);
+		}
+		else if (element instanceof UpgradeProblem) {
+			_doUpgradeProblemsDetail((UpgradeProblem)element, deferred);
 		}
 		else {
 			deferred.fail(new NoSuchElementException());
@@ -77,7 +81,7 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 	@Override
 	public boolean provides(Object element) {
 		if (element instanceof FileProblemsContainer || element instanceof MigrationProblemsContainer ||
-			element instanceof ProjectProblemsContainer) {
+			element instanceof ProjectProblemsContainer || element instanceof UpgradeProblem) {
 
 			return true;
 		}
@@ -151,6 +155,12 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 
 	private String _doProjectProblemsContainerLabel(ProjectProblemsContainer projectProblems) {
 		return projectProblems.getProjectName();
+	}
+
+	private void _doUpgradeProblemsDetail(UpgradeProblem upgradeProblem, Deferred<String> deferred) {
+		String html = upgradeProblem.getHtml();
+
+		deferred.resolve(html);
 	}
 
 	private final PromiseFactory _promiseFactory;
