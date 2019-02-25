@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
-import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 
 import java.util.HashSet;
@@ -38,9 +37,16 @@ public class UpgradeCategoryPossibleValuesService extends PossibleValuesService 
 
 		BundleContext bundleContext = bundle.getBundleContext();
 
-		_upgradeCategoryServiceTracker = new ServiceTracker<>(bundleContext, UpgradeTaskCategory.class, null);
+		_upgradeTaskCategoryServiceTracker = new ServiceTracker<>(bundleContext, UpgradeTaskCategory.class, null);
 
-		_upgradeCategoryServiceTracker.open();
+		_upgradeTaskCategoryServiceTracker.open();
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+
+		_upgradeTaskCategoryServiceTracker.close();
 	}
 
 	@Override
@@ -57,18 +63,15 @@ public class UpgradeCategoryPossibleValuesService extends PossibleValuesService 
 	protected void initPossibleValuesService() {
 		_upgradeCategoryValues = new HashSet<>();
 
-		Object[] services = _upgradeCategoryServiceTracker.getServices();
+		UpgradeTaskCategory[] upgradeTaskCategories = _upgradeTaskCategoryServiceTracker.getServices(
+			new UpgradeTaskCategory[0]);
 
-		for (Object service : services) {
-			if (service instanceof UpgradePlanElement) {
-				UpgradePlanElement upgradePlanElement = (UpgradePlanElement)service;
-
-				_upgradeCategoryValues.add(upgradePlanElement.getId());
-			}
+		for (UpgradeTaskCategory upgradeTaskCategory : upgradeTaskCategories) {
+			_upgradeCategoryValues.add(upgradeTaskCategory.getId());
 		}
 	}
 
-	private ServiceTracker<UpgradeTaskCategory, UpgradeTaskCategory> _upgradeCategoryServiceTracker;
 	private Set<String> _upgradeCategoryValues;
+	private ServiceTracker<UpgradeTaskCategory, UpgradeTaskCategory> _upgradeTaskCategoryServiceTracker;
 
 }

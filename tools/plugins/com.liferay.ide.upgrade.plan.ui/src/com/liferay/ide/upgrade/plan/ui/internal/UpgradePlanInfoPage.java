@@ -71,6 +71,13 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 	}
 
 	@Override
+	public void dispose() {
+		super.dispose();
+
+		_upgradeInfoProviderServiceTracker.close();
+	}
+
+	@Override
 	public Control getControl() {
 		return _composite;
 	}

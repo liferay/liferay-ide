@@ -84,6 +84,8 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 		if (_upgradeTaskViewer != null) {
 			_upgradeTaskViewer.dispose();
 		}
+
+		_upgradePlannerServiceTracker.close();
 	}
 
 	@Override

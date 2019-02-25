@@ -102,12 +102,11 @@ public class StandardUpgradePlan implements UpgradePlan {
 
 				upgradeTasks = stream.filter(
 					upgradeCategory -> {
-						if (_upgradeCategories != null) {
-							return _upgradeCategories.contains(upgradeCategory.getId());
-						}
-						else {
+						if (_upgradeCategories == null) {
 							return true;
 						}
+
+						return _upgradeCategories.contains(upgradeCategory.getId());
 					}
 				).flatMap(
 					upgradeTaskCategory -> {

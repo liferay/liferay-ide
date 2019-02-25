@@ -44,6 +44,13 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 	}
 
 	@Override
+	public void dispose() {
+		super.dispose();
+
+		_upgradeInfoProviderServiceTracker.close();
+	}
+
+	@Override
 	public Image getImage(Object element) {
 		if (element instanceof ProjectProblemsContainer) {
 			return getImageRegistry().get("ProjectMigrationProblems");
