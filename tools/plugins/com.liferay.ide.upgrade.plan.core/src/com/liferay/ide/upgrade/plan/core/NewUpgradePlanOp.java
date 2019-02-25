@@ -17,11 +17,11 @@ package com.liferay.ide.upgrade.plan.core;
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
 import com.liferay.ide.upgrade.plan.core.internal.SourceLocationValidationService;
 import com.liferay.ide.upgrade.plan.core.internal.UpgradeCategoryPossibleValuesService;
-import com.liferay.ide.upgrade.plan.core.internal.UpgradeCategoryValidationService;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
+import org.eclipse.sapphire.Length;
 import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.PossibleValues;
 import org.eclipse.sapphire.Type;
@@ -89,8 +89,8 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
 
 	@Label(standard = "Upgrade Categories")
+	@Length(min = 1)
 	@Service(impl = UpgradeCategoryPossibleValuesService.class)
-	@Service(impl = UpgradeCategoryValidationService.class)
 	@Type(base = UpgradeCategoryElement.class)
 	public ListProperty PROP_UPGRADE_CATEGORIES = new ListProperty(TYPE, "UpgradeCategories");
 
