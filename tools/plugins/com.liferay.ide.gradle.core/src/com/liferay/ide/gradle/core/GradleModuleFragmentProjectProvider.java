@@ -17,7 +17,7 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
@@ -40,7 +40,8 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Simon Jiang
  */
 public class GradleModuleFragmentProjectProvider
-	extends AbstractLiferayProjectProvider implements NewLiferayProjectProvider<NewModuleFragmentOp> {
+	extends AbstractLiferayProjectProvider
+	implements NewLiferayProjectProvider<NewModuleFragmentOp>, SapphireContentAccessor {
 
 	public GradleModuleFragmentProjectProvider() {
 		super(null);
@@ -50,8 +51,8 @@ public class GradleModuleFragmentProjectProvider
 	public IStatus createNewProject(NewModuleFragmentOp op, IProgressMonitor monitor) throws CoreException {
 		IStatus retval = Status.OK_STATUS;
 
-		String projectName = SapphireUtil.getContent(op.getProjectName());
-		IPath location = PathBridge.create(SapphireUtil.getContent(op.getLocation()));
+		String projectName = get(op.getProjectName());
+		IPath location = PathBridge.create(get(op.getLocation()));
 
 		String[] bsnAndVersion = NewModuleFragmentOpMethods.getBsnAndVersion(op);
 
@@ -101,7 +102,7 @@ public class GradleModuleFragmentProjectProvider
 		IPath projectLocation = location.append(projectName);
 
 		boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
-		boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
+		boolean useDefaultLocation = get(op.getUseDefaultLocation());
 		boolean inWorkspacePath = false;
 
 		IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();

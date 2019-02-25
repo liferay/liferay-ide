@@ -18,7 +18,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.ui.HookUI;
 
@@ -50,7 +50,7 @@ import org.eclipse.sapphire.ui.forms.PropertyEditorPart;
 /**
  * @author Gregory Amerson
  */
-public class CreateDirectoryActionHandler extends PropertyEditorActionHandler {
+public class CreateDirectoryActionHandler extends PropertyEditorActionHandler implements SapphireContentAccessor {
 
 	public CreateDirectoryActionHandler() {
 	}
@@ -142,10 +142,10 @@ public class CreateDirectoryActionHandler extends PropertyEditorActionHandler {
 
 			CustomJspDir customJspDir = (CustomJspDir)element;
 
-			Path customJspDirValue = SapphireUtil.getContent(customJspDir.getValue(), false);
+			Path customJspDirValue = get(customJspDir.getValue(), false);
 
 			if (customJspDirValue == null) {
-				customJspDirValue = SapphireUtil.getContent(customJspDir.getValue());
+				customJspDirValue = get(customJspDir.getValue());
 
 				customJspDir.setValue(customJspDirValue);
 			}

@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.modules;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
@@ -68,7 +69,7 @@ import org.eclipse.text.edits.TextEdit;
  */
 public class NewLiferayModuleProjectOpMethods {
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "deprecation"})
 	public static boolean addProperties(File dest, List<String> properties) throws Exception {
 		if (ListUtil.isEmpty(properties)) {
 			return false;
@@ -207,6 +208,7 @@ public class NewLiferayModuleProjectOpMethods {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public static boolean checkComponentAnnotation(File dest) throws Exception {
 		try {
 			ASTParser parser = ASTParser.newParser(AST.JLS8);
@@ -244,15 +246,15 @@ public class NewLiferayModuleProjectOpMethods {
 		Throwable errorStack = null;
 
 		try {
-			NewLiferayProjectProvider<BaseModuleOp> projectProvider = SapphireUtil.getContent(op.getProjectProvider());
+			NewLiferayProjectProvider<BaseModuleOp> projectProvider = _getter.get(op.getProjectProvider());
 
 			IStatus status = projectProvider.createNewProject(op, monitor);
 
 			retval = StatusBridge.create(status);
 
-			String projectName = SapphireUtil.getContent(op.getProjectName());
+			String projectName = _getter.get(op.getProjectName());
 
-			IPath location = PathBridge.create(SapphireUtil.getContent(op.getLocation()));
+			IPath location = PathBridge.create(_getter.get(op.getLocation()));
 
 			IPath projectLocation = location;
 
@@ -273,13 +275,11 @@ public class NewLiferayModuleProjectOpMethods {
 					List<String> properties = new ArrayList<>();
 
 					for (PropertyKey propertyKey : propertyKeys) {
-						properties.add(
-							SapphireUtil.getContent(propertyKey.getName()) + "=" +
-								SapphireUtil.getContent(propertyKey.getValue()));
+						properties.add(_getter.get(propertyKey.getName()) + "=" + _getter.get(propertyKey.getValue()));
 					}
 
 					if (addProperties(finalClassFile, properties)) {
-						IProject project = CoreUtil.getProject(SapphireUtil.getContent(op.getProjectName()));
+						IProject project = CoreUtil.getProject(_getter.get(op.getProjectName()));
 
 						project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 					}
@@ -313,7 +313,7 @@ public class NewLiferayModuleProjectOpMethods {
 
 		File parentProjectDir = path.toFile();
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
+		NewLiferayProjectProvider<BaseModuleOp> provider = _getter.get(op.getProjectProvider());
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
@@ -331,7 +331,7 @@ public class NewLiferayModuleProjectOpMethods {
 	public static String getMavenParentPomVersion(NewLiferayModuleProjectOp op, String projectName, IPath path) {
 		File parentProjectDir = path.toFile();
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
+		NewLiferayProjectProvider<BaseModuleOp> provider = _getter.get(op.getProjectProvider());
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
@@ -397,6 +397,8 @@ public class NewLiferayModuleProjectOpMethods {
 			ProjectCore.logError(msg, e);
 		}
 	}
+
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 	private static class CheckComponentAnnotationVistor extends ASTVisitor {
 

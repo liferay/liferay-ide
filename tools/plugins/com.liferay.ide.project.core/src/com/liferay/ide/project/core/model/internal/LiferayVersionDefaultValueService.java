@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.server.core.ILiferayRuntime;
@@ -41,7 +42,7 @@ import org.eclipse.sapphire.PropertyDef;
 /**
  * @author Gregory Amerson
  */
-public class LiferayVersionDefaultValueService extends DefaultValueService {
+public class LiferayVersionDefaultValueService extends DefaultValueService implements SapphireContentAccessor {
 
 	@Override
 	protected String compute() {
@@ -59,7 +60,7 @@ public class LiferayVersionDefaultValueService extends DefaultValueService {
 							return Status.OK_STATUS;
 						}
 
-						String runtimeName = SapphireUtil.getContent(newLiferayProfile.getRuntimeName());
+						String runtimeName = get(newLiferayProfile.getRuntimeName());
 
 						ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(runtimeName);
 

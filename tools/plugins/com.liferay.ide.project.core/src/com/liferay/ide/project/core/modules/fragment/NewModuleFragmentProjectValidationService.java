@@ -16,7 +16,7 @@ package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -26,13 +26,13 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Joye Luo
  */
-public class NewModuleFragmentProjectValidationService extends ValidationService {
+public class NewModuleFragmentProjectValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
 		NewModuleFragmentFilesOp op = context(NewModuleFragmentFilesOp.class);
 
-		String projectName = SapphireUtil.getContent(op.getProjectName());
+		String projectName = get(op.getProjectName());
 
 		if (projectName == null) {
 			return Status.createErrorStatus("No suitable Liferay fragment project.");

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -29,7 +30,7 @@ import org.eclipse.wst.server.core.IRuntime;
  * @author Terry Jia
  * @author Andy Wu
  */
-public class HostOSGiBundlePossibleValuesService extends PossibleValuesService {
+public class HostOSGiBundlePossibleValuesService extends PossibleValuesService implements SapphireContentAccessor {
 
 	@Override
 	public boolean ordered() {
@@ -45,7 +46,7 @@ public class HostOSGiBundlePossibleValuesService extends PossibleValuesService {
 			NewModuleFragmentOp op = _op();
 
 			if (!op.disposed()) {
-				String runtimeName = SapphireUtil.getContent(op.getLiferayRuntimeName());
+				String runtimeName = get(op.getLiferayRuntimeName());
 
 				IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 

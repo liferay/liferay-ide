@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
@@ -26,13 +26,14 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Andy Wu
  */
-public class WorkspaceUseDefaultLocationListener extends FilteredListener<PropertyContentEvent> {
+public class WorkspaceUseDefaultLocationListener
+	extends FilteredListener<PropertyContentEvent> implements SapphireContentAccessor {
 
 	@Override
 	protected void handleTypedEvent(PropertyContentEvent event) {
 		NewLiferayWorkspaceOp op = op(event);
 
-		if (SapphireUtil.getContent(op.getUseDefaultLocation())) {
+		if (get(op.getUseDefaultLocation())) {
 			op.setLocation(PathBridge.create(CoreUtil.getWorkspaceRootLocation()));
 		}
 	}

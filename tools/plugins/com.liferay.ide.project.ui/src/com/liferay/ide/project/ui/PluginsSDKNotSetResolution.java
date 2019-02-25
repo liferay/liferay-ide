@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.ui;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.model.LiferayPluginSDKOp;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.ui.util.UIUtil;
@@ -32,7 +32,7 @@ import org.eclipse.ui.IMarkerResolution;
 /**
  * @author Simon Jiang
  */
-public class PluginsSDKNotSetResolution implements IMarkerResolution {
+public class PluginsSDKNotSetResolution implements IMarkerResolution, SapphireContentAccessor {
 
 	public String getLabel() {
 		return Msgs.setSDKForProject;
@@ -59,7 +59,7 @@ public class PluginsSDKNotSetResolution implements IMarkerResolution {
 			int result = dialog.open();
 
 			if (result != SapphireDialog.CANCEL) {
-				String sdkName = SapphireUtil.getContent(op.getPluginsSDKName());
+				String sdkName = get(op.getPluginsSDKName());
 
 				SDKUtil.saveSDKNameSetting(proj, sdkName);
 			}

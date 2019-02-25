@@ -14,7 +14,7 @@
 
 package com.liferay.ide.service.core.model.internal;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.service.core.model.ServiceBuilder6xx;
 
 import java.util.Set;
@@ -25,7 +25,7 @@ import org.eclipse.sapphire.Version;
 /**
  * @author Cindy Li
  */
-public class TypePossibleValuesService extends PossibleValuesService {
+public class TypePossibleValuesService extends PossibleValuesService implements SapphireContentAccessor {
 
 	@Override
 	protected void compute(Set<String> values) {
@@ -33,7 +33,7 @@ public class TypePossibleValuesService extends PossibleValuesService {
 			values.add(type);
 		}
 
-		Version version = SapphireUtil.getContent(context(ServiceBuilder6xx.class).getVersion());
+		Version version = get(context(ServiceBuilder6xx.class).getVersion());
 
 		if (version.compareTo(new Version("6.2")) >= 0) {
 			values.add("Blob");

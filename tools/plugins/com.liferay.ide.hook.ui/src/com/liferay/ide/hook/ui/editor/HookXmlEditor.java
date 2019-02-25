@@ -22,6 +22,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.hook.core.model.CustomJsp;
 import com.liferay.ide.hook.core.model.CustomJspDir;
@@ -76,7 +77,7 @@ import org.eclipse.ui.part.FileEditorInput;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class HookXmlEditor extends SapphireEditorForXml {
+public class HookXmlEditor extends SapphireEditorForXml implements SapphireContentAccessor {
 
 	public HookXmlEditor() {
 		super(Hook6xx.TYPE, null);
@@ -257,7 +258,7 @@ public class HookXmlEditor extends SapphireEditorForXml {
 			CustomJspDir customJspDirElement = element.content();
 
 			if (SapphireUtil.ok(customJspDirElement)) {
-				Path customJspDir = SapphireUtil.getContent(customJspDirElement.getValue());
+				Path customJspDir = get(customJspDirElement.getValue());
 
 				IWebProject webproject = LiferayCore.create(IWebProject.class, getProject());
 
@@ -267,7 +268,7 @@ public class HookXmlEditor extends SapphireEditorForXml {
 					IFolder customJspFolder = defaultDocroot.getFolder(customJspDir.toPortableString());
 
 					for (CustomJsp customJsp : customJsps) {
-						String content = SapphireUtil.getContent(customJsp.getValue());
+						String content = get(customJsp.getValue());
 
 						if (!empty(content)) {
 							IFile customJspFile = customJspFolder.getFile(content);

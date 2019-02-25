@@ -15,7 +15,7 @@
 package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
@@ -36,7 +36,7 @@ import org.osgi.framework.Version;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class ProjectLocationValidationService extends ValidationService {
+public class ProjectLocationValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
@@ -48,7 +48,7 @@ public class ProjectLocationValidationService extends ValidationService {
 			return StatusBridge.create(ProjectCore.createErrorStatus("This workspace has more than one SDK."));
 		}
 
-		Path location = SapphireUtil.getContent(_op().getSdkLocation());
+		Path location = get(_op().getSdkLocation());
 
 		if ((location == null) || location.isEmpty()) {
 			return StatusBridge.create(

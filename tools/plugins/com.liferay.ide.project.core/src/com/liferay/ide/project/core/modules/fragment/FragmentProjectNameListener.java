@@ -17,7 +17,7 @@ package com.liferay.ide.project.core.modules.fragment;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
@@ -35,16 +35,30 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Simon Jiang
  * @author Andy Wu
  */
-public class FragmentProjectNameListener extends FilteredListener<PropertyContentEvent> {
+public class FragmentProjectNameListener
+	extends FilteredListener<PropertyContentEvent> implements SapphireContentAccessor {
 
-	public static void updateLocation(NewModuleFragmentOp op) {
-		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		_updateLocation(op(event));
+	}
+
+	protected NewModuleFragmentOp op(PropertyContentEvent event) {
+		Property property = event.property();
+
+		Element element = property.element();
+
+		return element.nearest(NewModuleFragmentOp.class);
+	}
+
+	private void _updateLocation(NewModuleFragmentOp op) {
+		String currentProjectName = get(op.getProjectName());
 
 		if ((currentProjectName == null) || CoreUtil.isNullOrEmpty(currentProjectName.trim())) {
 			return;
 		}
 
-		boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
+		boolean useDefaultLocation = get(op.getUseDefaultLocation());
 
 		if (useDefaultLocation) {
 			Path newLocationBase = null;
@@ -69,7 +83,7 @@ public class FragmentProjectNameListener extends FilteredListener<PropertyConten
 				boolean gradleModule = false;
 				boolean mavenModule = false;
 
-				ILiferayProjectProvider iProvider = SapphireUtil.getContent(op.getProjectProvider());
+				ILiferayProjectProvider iProvider = get(op.getProjectProvider());
 
 				if (iProvider != null) {
 					String shortName = iProvider.getShortName();
@@ -106,19 +120,6 @@ public class FragmentProjectNameListener extends FilteredListener<PropertyConten
 				op.setLocation(newLocationBase);
 			}
 		}
-	}
-
-	@Override
-	protected void handleTypedEvent(PropertyContentEvent event) {
-		updateLocation(op(event));
-	}
-
-	protected NewModuleFragmentOp op(PropertyContentEvent event) {
-		Property property = event.property();
-
-		Element element = property.element();
-
-		return element.nearest(NewModuleFragmentOp.class);
 	}
 
 }

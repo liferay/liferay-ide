@@ -15,7 +15,7 @@
 package com.liferay.ide.portlet.core.lfportlet.model.internal;
 
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.portlet.core.lfportlet.model.PortletStyleElement;
 
 import org.eclipse.core.resources.IContainer;
@@ -33,14 +33,14 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-public class PortletStyleValidationService extends ValidationService {
+public class PortletStyleValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
 		Element modelElement = context(Element.class);
 
 		if (!modelElement.disposed() && modelElement instanceof PortletStyleElement) {
-			Path path = SapphireUtil.getContent(modelElement.property(context(ValueProperty.class)));
+			Path path = get(modelElement.property(context(ValueProperty.class)));
 
 			if (path != null) {
 				String name = path.lastSegment();

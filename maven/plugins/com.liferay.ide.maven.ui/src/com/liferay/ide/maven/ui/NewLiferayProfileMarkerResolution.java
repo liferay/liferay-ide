@@ -15,10 +15,9 @@
 package com.liferay.ide.maven.ui;
 
 import com.liferay.ide.maven.core.LiferayMavenCore;
-import com.liferay.ide.maven.core.MavenUtil;
+import com.liferay.ide.maven.core.MavenProfileCreator;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
-import com.liferay.ide.project.ui.action.NewLiferayProfileActionHandler;
 import com.liferay.ide.project.ui.wizard.NewLiferayPluginProjectWizard;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -39,7 +38,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
  * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
-public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerResolution {
+public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerResolution implements MavenProfileCreator {
 
 	public NewLiferayProfileMarkerResolution() {
 	}
@@ -74,7 +73,7 @@ public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerReso
 
 				domModel = (IDOMModel)modelManager.getModelForEdit(pomFile);
 
-				MavenUtil.createNewLiferayProfileNode(domModel.getDocument(), newLiferayProfile);
+				createNewLiferayProfileNode(domModel.getDocument(), newLiferayProfile);
 
 				domModel.save();
 			}
@@ -87,7 +86,7 @@ public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerReso
 				}
 			}
 
-			NewLiferayProfileActionHandler.addToActiveProfiles(op, newLiferayProfile);
+			addToActiveProfiles(op, newLiferayProfile);
 		}
 		else {
 			ElementList<NewLiferayProfile> elementList = op.getNewLiferayProfiles();

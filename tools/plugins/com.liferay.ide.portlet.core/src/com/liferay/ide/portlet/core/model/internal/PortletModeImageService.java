@@ -14,7 +14,7 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.portlet.core.model.CustomPortletMode;
 import com.liferay.ide.portlet.core.model.PortletMode;
 
@@ -29,7 +29,7 @@ import org.eclipse.sapphire.PropertyContentEvent;
  * @author Kamesh Sampath
  * @author Gregory Amerson
  */
-public class PortletModeImageService extends ImageService {
+public class PortletModeImageService extends ImageService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -47,12 +47,12 @@ public class PortletModeImageService extends ImageService {
 		if (element instanceof CustomPortletMode) {
 			CustomPortletMode mode = (CustomPortletMode)element;
 
-			portletMode = SapphireUtil.getContent(mode.getPortletMode());
+			portletMode = get(mode.getPortletMode());
 		}
 		else if (element instanceof PortletMode) {
 			PortletMode mode = (PortletMode)element;
 
-			portletMode = SapphireUtil.getContent(mode.getPortletMode());
+			portletMode = get(mode.getPortletMode());
 		}
 
 		if (portletMode != null) {

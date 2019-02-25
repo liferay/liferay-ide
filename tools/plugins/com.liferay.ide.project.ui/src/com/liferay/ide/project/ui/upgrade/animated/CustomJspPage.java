@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.upgrade.animated;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
@@ -109,7 +110,7 @@ import org.eclipse.wst.server.ui.ServerUIUtil;
  * @author Andy Wu
  * @author Simon Jiang
  */
-public class CustomJspPage extends Page {
+public class CustomJspPage extends Page implements SapphireContentAccessor {
 
 	public CustomJspPage(Composite parent, int style, LiferayUpgradeDataModel dataModel) {
 		super(parent, style, dataModel, customjspPageId, true);
@@ -643,7 +644,7 @@ public class CustomJspPage extends Page {
 	}
 
 	private String _getLiferay62ServerLocation() {
-		String liferay62ServerLocation = SapphireUtil.getContent(dataModel.getLiferay62ServerLocation());
+		String liferay62ServerLocation = get(dataModel.getLiferay62ServerLocation());
 
 		if (liferay62ServerLocation == null) {
 			Set<IRuntime> liferayRuntimes = ServerUtil.getAvailableLiferayRuntimes();
@@ -710,7 +711,7 @@ public class CustomJspPage extends Page {
 	}
 
 	private IRuntime _getLiferay70Runtime() {
-		String serverName = SapphireUtil.getContent(dataModel.getLiferay70ServerName());
+		String serverName = get(dataModel.getLiferay70ServerName());
 
 		IServer server = ServerUtil.getServer(serverName);
 
@@ -858,7 +859,7 @@ public class CustomJspPage extends Page {
 		converter.setLiferay62ServerLocation(liferay62ServerLocation);
 		converter.setUi(this);
 
-		Path convertedProjectLocation = SapphireUtil.getContent(dataModel.getConvertedProjectLocation());
+		Path convertedProjectLocation = get(dataModel.getConvertedProjectLocation());
 
 		String targetPath = convertedProjectLocation.toPortableString();
 
@@ -1030,7 +1031,7 @@ public class CustomJspPage extends Page {
 					triggerValidationEvent(pe);
 				}
 				else if ("ConvertLiferayWorkspace".equals(property.name())) {
-					if (SapphireUtil.getContent(dataModel.getConvertLiferayWorkspace())) {
+					if (get(dataModel.getConvertLiferayWorkspace())) {
 						_updateDefaultLocation();
 					}
 				}

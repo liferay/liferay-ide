@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -25,7 +26,7 @@ import org.eclipse.sapphire.PropertyContentEvent;
 /**
  * @author Gregory Amerson
  */
-public class DisplayNameDefaultValueService extends DefaultValueService {
+public class DisplayNameDefaultValueService extends DefaultValueService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -42,7 +43,7 @@ public class DisplayNameDefaultValueService extends DefaultValueService {
 	protected String compute() {
 		NewLiferayPluginProjectOp op = _op();
 
-		return ProjectUtil.convertToDisplayName(SapphireUtil.getContent(op.getProjectName()));
+		return ProjectUtil.convertToDisplayName(get(op.getProjectName()));
 	}
 
 	@Override

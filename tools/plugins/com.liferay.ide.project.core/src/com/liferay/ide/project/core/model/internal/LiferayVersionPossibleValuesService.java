@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
@@ -32,7 +32,7 @@ import org.eclipse.sapphire.Value;
 /**
  * @author Gregory Amerson
  */
-public class LiferayVersionPossibleValuesService extends PossibleValuesService {
+public class LiferayVersionPossibleValuesService extends PossibleValuesService implements SapphireContentAccessor {
 
 	@Override
 	public boolean ordered() {
@@ -57,7 +57,7 @@ public class LiferayVersionPossibleValuesService extends PossibleValuesService {
 					NewLiferayPluginProjectOp op = _op();
 
 					if (!op.disposed()) {
-						ILiferayProjectProvider projectProvider = SapphireUtil.getContent(op.getProjectProvider());
+						ILiferayProjectProvider projectProvider = get(op.getProjectProvider());
 
 						try {
 							_versions = projectProvider.getData("liferayVersions", String.class, _groupId, _artifactId);

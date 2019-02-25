@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
@@ -28,16 +29,15 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Tao Tao
  */
-public class ActiveProfilesValidationService extends ValidationService {
+public class ActiveProfilesValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
 		NewLiferayPluginProjectOp op = _op();
 
-		String activeProfileId = SapphireUtil.getContent(op.getActiveProfilesValue());
+		String activeProfileId = get(op.getActiveProfilesValue());
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
-			op.getProjectProvider());
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
 		if ("maven".equals(provider.getShortName()) && (activeProfileId != null) &&
 			activeProfileId.contains(StringPool.SPACE)) {

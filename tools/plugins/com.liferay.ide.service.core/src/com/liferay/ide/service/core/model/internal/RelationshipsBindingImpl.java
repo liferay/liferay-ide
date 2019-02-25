@@ -16,7 +16,7 @@ package com.liferay.ide.service.core.model.internal;
 
 import static com.liferay.ide.core.util.CoreUtil.empty;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.service.core.model.Column;
 import com.liferay.ide.service.core.model.Entity;
 import com.liferay.ide.service.core.model.Relationship;
@@ -39,7 +39,7 @@ import org.eclipse.sapphire.Resource;
 /**
  * @author Gregory Amerson
  */
-public class RelationshipsBindingImpl extends LayeredListPropertyBinding {
+public class RelationshipsBindingImpl extends LayeredListPropertyBinding implements SapphireContentAccessor {
 
 	@Override
 	public void init(Property property) {
@@ -105,7 +105,7 @@ public class RelationshipsBindingImpl extends LayeredListPropertyBinding {
 	private Column _findPrimaryKey(Entity entity) {
 		if (entity != null) {
 			for (Column column : entity.getColumns()) {
-				if (SapphireUtil.getContent(column.isPrimary())) {
+				if (get(column.isPrimary())) {
 					return column;
 				}
 			}
@@ -122,24 +122,23 @@ public class RelationshipsBindingImpl extends LayeredListPropertyBinding {
 		for (Entity entity : _serviceBuilder().getEntities()) {
 			Column primaryKeyColumn = _findPrimaryKey(entity);
 
-			if ((primaryKeyColumn != null) && !empty(SapphireUtil.getContent(primaryKeyColumn.getName()))) {
-				primaryKeys.put(
-					SapphireUtil.getContent(primaryKeyColumn.getName()), SapphireUtil.getContent(entity.getName()));
+			if ((primaryKeyColumn != null) && !empty(get(primaryKeyColumn.getName()))) {
+				primaryKeys.put(get(primaryKeyColumn.getName()), get(entity.getName()));
 			}
 		}
 
 		for (Entity entity : _serviceBuilder().getEntities()) {
 			for (Column column : entity.getColumns()) {
-				if (SapphireUtil.getContent(column.isPrimary())) {
+				if (get(column.isPrimary())) {
 					continue;
 				}
 
-				String columnName = SapphireUtil.getContent(column.getName());
+				String columnName = get(column.getName());
 
 				String entityName = primaryKeys.get(columnName);
 
 				if (entityName != null) {
-					_relationships.add(new RelationshipObject(SapphireUtil.getContent(entity.getName()), entityName));
+					_relationships.add(new RelationshipObject(get(entity.getName()), entityName));
 				}
 			}
 		}
@@ -149,9 +148,11 @@ public class RelationshipsBindingImpl extends LayeredListPropertyBinding {
 		String fromName = relObject.getFromName();
 		String toName = relObject.getToName();
 
-		Entity fromEntity = EntityRelationshipService.findEntity(fromName, _serviceBuilder());
+		EntityRelationshipService entityRelationshipService = new EntityRelationshipService();
 
-		Entity toEntity = EntityRelationshipService.findEntity(toName, _serviceBuilder());
+		Entity fromEntity = entityRelationshipService.findEntity(fromName, _serviceBuilder());
+
+		Entity toEntity = entityRelationshipService.findEntity(toName, _serviceBuilder());
 
 		Column primaryKeyColumn = _findPrimaryKey(toEntity);
 
@@ -159,7 +160,7 @@ public class RelationshipsBindingImpl extends LayeredListPropertyBinding {
 			return;
 		}
 
-		String primaryKeyName = SapphireUtil.getContent(primaryKeyColumn.getName());
+		String primaryKeyName = get(primaryKeyColumn.getName());
 
 		if (empty(primaryKeyName)) {
 			return;
@@ -168,7 +169,7 @@ public class RelationshipsBindingImpl extends LayeredListPropertyBinding {
 		Column columnToRemove = null;
 
 		for (Column column : fromEntity.getColumns()) {
-			if (primaryKeyName.equals(SapphireUtil.getContent(column.getName()))) {
+			if (primaryKeyName.equals(get(column.getName()))) {
 				columnToRemove = column;
 
 				break;

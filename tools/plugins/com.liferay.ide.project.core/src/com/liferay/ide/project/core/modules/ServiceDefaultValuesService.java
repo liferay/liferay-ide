@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
 
@@ -27,13 +27,13 @@ import org.eclipse.sapphire.DefaultValueService;
  * @author Terry Jia
  * @author Simon Jiang
  */
-public class ServiceDefaultValuesService extends DefaultValueService {
+public class ServiceDefaultValuesService extends DefaultValueService implements SapphireContentAccessor {
 
 	@Override
 	protected String compute() {
 		NewLiferayModuleProjectOp op = _op();
 
-		String template = SapphireUtil.getContent(op.getProjectTemplateName());
+		String template = get(op.getProjectTemplateName());
 
 		String retVal = "";
 

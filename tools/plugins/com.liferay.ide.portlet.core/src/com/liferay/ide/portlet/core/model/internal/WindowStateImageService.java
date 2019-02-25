@@ -14,7 +14,7 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.portlet.core.model.CustomWindowState;
 import com.liferay.ide.portlet.core.model.WindowState;
 
@@ -28,7 +28,7 @@ import org.eclipse.sapphire.PropertyEvent;
 /**
  * @author Kamesh Sampath
  */
-public class WindowStateImageService extends ImageService {
+public class WindowStateImageService extends ImageService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -46,12 +46,12 @@ public class WindowStateImageService extends ImageService {
 		if (element instanceof CustomWindowState) {
 			CustomWindowState customWindowState = (CustomWindowState)element;
 
-			strWindowState = SapphireUtil.getContent(customWindowState.getWindowState());
+			strWindowState = get(customWindowState.getWindowState());
 		}
 		else if (element instanceof WindowState) {
 			WindowState windowState = (WindowState)element;
 
-			strWindowState = SapphireUtil.getContent(windowState.getWindowState());
+			strWindowState = get(windowState.getWindowState());
 		}
 
 		if ("MAXIMIZED".equalsIgnoreCase(strWindowState)) {

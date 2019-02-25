@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
@@ -54,7 +55,8 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
  * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
-public class BaseProjectWizard<T extends Element> extends SapphireWizard<T> implements IWorkbenchWizard, INewWizard {
+public class BaseProjectWizard<T extends Element>
+	extends SapphireWizard<T> implements IWorkbenchWizard, INewWizard, SapphireContentAccessor {
 
 	public BaseProjectWizard(T t, Reference<WizardDef> wizard) {
 		super(t, wizard);
@@ -98,6 +100,7 @@ public class BaseProjectWizard<T extends Element> extends SapphireWizard<T> impl
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected void addToWorkingSets(IProject newProject) throws Exception {
 		if (newProject != null) {
 			List<WizardPagePart> wizardPages = part().getPages();

@@ -20,6 +20,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.WorkspaceConstants;
@@ -94,7 +95,7 @@ import org.eclipse.swt.widgets.Text;
  * @author Terry Jia
  */
 @SuppressWarnings("unused")
-public class InitConfigureProjectPage extends Page implements SelectionChangedListener {
+public class InitConfigureProjectPage extends Page implements SapphireContentAccessor, SelectionChangedListener {
 
 	public InitConfigureProjectPage(final Composite parent, int style, LiferayUpgradeDataModel dataModel) {
 		super(parent, style, dataModel, initConfigureProjectPageId, false);
@@ -329,7 +330,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				_pageParent.layout();
 			});
 
-		IPath location = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
+		IPath location = PathBridge.create(get(dataModel.getSdkLocation()));
 
 		if (UpgradeUtil.isAlreadyImported(location)) {
 			Stream.of(
@@ -394,7 +395,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 				jobManager.join("org.eclipse.buildship.core.jobs", null);
 
-				if (SapphireUtil.getContent(dataModel.getDownloadBundle())) {
+				if (get(dataModel.getDownloadBundle())) {
 					_createInitBundle(monitor, groupMonitor);
 				}
 
@@ -413,7 +414,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 		else {
 			String newPath = "";
 
-			String version = SapphireUtil.getContent(dataModel.getUpgradeVersion());
+			String version = get(dataModel.getUpgradeVersion());
 
 			UpgradeUtil.createLiferayWorkspace(location, version, groupMonitor);
 
@@ -435,7 +436,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 			jobManager.join("org.eclipse.buildship.core.jobs", null);
 
-			if (SapphireUtil.getContent(dataModel.getDownloadBundle())) {
+			if (get(dataModel.getDownloadBundle())) {
 				_createInitBundle(monitor, groupMonitor);
 			}
 
@@ -572,7 +573,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 		Display pageDdisplay = _pageParent.getDisplay();
 
-		String bundleName = SapphireUtil.getContent(dataModel.getBundleName());
+		String bundleName = get(dataModel.getBundleName());
 
 		_bundleNameField.setText(bundleName != null ? bundleName : "");
 
@@ -582,7 +583,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 		_bundleUrlField.setForeground(pageDdisplay.getSystemColor(SWT.COLOR_DARK_GRAY));
 
-		_bundleUrlField.setText(SapphireUtil.getContent(dataModel.getBundleUrl()));
+		_bundleUrlField.setText(get(dataModel.getBundleUrl()));
 
 		_bundleUrlField.addModifyListener(
 			new ModifyListener() {
@@ -600,7 +601,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				@Override
 				public void focusGained(FocusEvent e) {
 					String input = ((Text)e.getSource()).getText();
-					String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
+					String upgradeVersion = get(dataModel.getUpgradeVersion());
 
 					String bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_0;
 
@@ -618,7 +619,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				@Override
 				public void focusLost(FocusEvent e) {
 					String input = ((Text)e.getSource()).getText();
-					String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
+					String upgradeVersion = get(dataModel.getUpgradeVersion());
 
 					String defaultBundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_0;
 
@@ -686,7 +687,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					Boolean importFinished = SapphireUtil.getContent(dataModel.getImportFinished());
+					Boolean importFinished = get(dataModel.getImportFinished());
 
 					if (_validationResult && !importFinished) {
 						_saveSettings();
@@ -754,7 +755,9 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 												return;
 											}
 
-											UpgradeView.resetPages();
+											UpgradeView upgradeView = UpgradeView.getInstance();
+
+											upgradeView.resetPages();
 
 											PageNavigateEvent event = new PageNavigateEvent();
 
@@ -803,13 +806,13 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 		_isCanceled(monitor);
 
-		IPath location = PathBridge.create(SapphireUtil.getContent(dataModel.getSdkLocation()));
+		IPath location = PathBridge.create(get(dataModel.getSdkLocation()));
 
 		IProject project = CoreUtil.getProject(location.lastSegment());
 
-		String serverName = SapphireUtil.getContent(dataModel.getBundleName());
+		String serverName = get(dataModel.getBundleName());
 
-		String bundleUrl = SapphireUtil.getContent(dataModel.getBundleUrl());
+		String bundleUrl = get(dataModel.getBundleUrl());
 
 		InitBundleJob job = new InitBundleJob(project, serverName, bundleUrl);
 
@@ -831,9 +834,9 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 		_upgradeVersionComb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
+		String upgradeVersion = get(dataModel.getUpgradeVersion());
 
-		boolean liferayWorkspace = SapphireUtil.getContent(dataModel.getIsLiferayWorkspace());
+		boolean liferayWorkspace = get(dataModel.getIsLiferayWorkspace());
 
 		if (liferayWorkspace) {
 			_configureUpgradeVersionComb(
@@ -959,7 +962,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 	private void _refreshUpgradeVersion() {
 		if ((_upgradeVersionLabel != null) && (_upgradeVersionComb != null) && !_upgradeVersionComb.isDisposed()) {
-			Boolean liferayWorkspace = SapphireUtil.getContent(dataModel.getIsLiferayWorkspace());
+			Boolean liferayWorkspace = get(dataModel.getIsLiferayWorkspace());
 
 			String[] upgradeVersdionItemNames = {"7.0", "7.1"};
 			String[] upgradeVersionsValues = {"7.0", "7.1"};
@@ -973,7 +976,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 
 			_upgradeVersionComb.setItems(upgradeVersdionItemNames);
 
-			String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
+			String upgradeVersion = get(dataModel.getUpgradeVersion());
 
 			for (int i = 0; i < upgradeVersionsValues.length; i++) {
 				if (StringUtil.equals(upgradeVersion, upgradeVersionsValues[i])) {
@@ -1038,9 +1041,9 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 					boolean inputValidation = true;
 					boolean layoutValidation = true;
 
-					boolean downloadBundle = SapphireUtil.getContent(dataModel.getDownloadBundle());
+					boolean downloadBundle = get(dataModel.getDownloadBundle());
 
-					String bundUrl = SapphireUtil.getContent(dataModel.getBundleUrl());
+					String bundUrl = get(dataModel.getBundleUrl());
 
 					String message = "ok";
 
@@ -1085,7 +1088,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 						layoutValidation = true;
 					}
 
-					Boolean importFinished = SapphireUtil.getContent(dataModel.getImportFinished());
+					Boolean importFinished = get(dataModel.getImportFinished());
 
 					if (importFinished) {
 						message = "Import has finished. If you want to reset, please click reset icon in view toolbar.";
@@ -1145,7 +1148,7 @@ public class InitConfigureProjectPage extends Page implements SelectionChangedLi
 				return;
 			}
 
-			org.eclipse.sapphire.modeling.Path path = SapphireUtil.getContent(dataModel.getSdkLocation());
+			org.eclipse.sapphire.modeling.Path path = get(dataModel.getSdkLocation());
 
 			Status compute = _locationValidation.compute();
 

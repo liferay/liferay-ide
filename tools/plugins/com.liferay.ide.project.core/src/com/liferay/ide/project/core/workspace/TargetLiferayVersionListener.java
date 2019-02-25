@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.workspace;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.WorkspaceConstants;
 
 import java.util.ArrayList;
@@ -29,7 +29,8 @@ import org.eclipse.sapphire.PropertyContentEvent;
  * @author Haoyi Sun
  * @author Terry Jia
  */
-public class TargetLiferayVersionListener extends FilteredListener<PropertyContentEvent> {
+public class TargetLiferayVersionListener
+	extends FilteredListener<PropertyContentEvent> implements SapphireContentAccessor {
 
 	@Override
 	protected void handleTypedEvent(PropertyContentEvent event) {
@@ -41,7 +42,7 @@ public class TargetLiferayVersionListener extends FilteredListener<PropertyConte
 
 		NewLiferayWorkspaceOp op = newLiferayWorkspaceOp.adapt(NewLiferayWorkspaceOp.class);
 
-		String bundleUrl = SapphireUtil.getContent(op.getBundleUrl());
+		String bundleUrl = get(op.getBundleUrl());
 
 		List<String> bundleUrls = new ArrayList<>();
 

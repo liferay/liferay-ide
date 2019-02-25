@@ -14,7 +14,7 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.portlet.core.model.EventDefinition;
 import com.liferay.ide.portlet.core.model.EventDefinitionRef;
 import com.liferay.ide.portlet.core.model.PortletApp;
@@ -32,7 +32,7 @@ import org.eclipse.sapphire.PossibleValuesService;
 /**
  * @author Kamesh Sampath
  */
-public class QNamesPossibleValuesService extends PossibleValuesService {
+public class QNamesPossibleValuesService extends PossibleValuesService implements SapphireContentAccessor {
 
 	@Override
 	protected void compute(Set<String> values) {
@@ -44,13 +44,12 @@ public class QNamesPossibleValuesService extends PossibleValuesService {
 			ElementList<EventDefinition> eventDefs = portletApp.getEventDefinitions();
 
 			for (EventDefinition eventDefinition : eventDefs) {
-				String nsURI = SapphireUtil.getContent(eventDefinition.getNamespaceURI());
-				String localPart = SapphireUtil.getContent(eventDefinition.getLocalPart());
+				String nsURI = get(eventDefinition.getNamespaceURI());
+				String localPart = get(eventDefinition.getLocalPart());
 
 				if ((nsURI != null) && (localPart != null)) {
 					String qname = _getQName(
-						SapphireUtil.getContent(eventDefinition.getNamespaceURI(), false),
-						SapphireUtil.getContent(eventDefinition.getLocalPart()));
+						get(eventDefinition.getNamespaceURI(), false), get(eventDefinition.getLocalPart()));
 
 					values.add(qname);
 				}
@@ -60,12 +59,11 @@ public class QNamesPossibleValuesService extends PossibleValuesService {
 			ElementList<PublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
 
 			for (PublicRenderParameter publicRenderParam : publicRenderParameters) {
-				if ((SapphireUtil.getContent(publicRenderParam.getNamespaceURI()) != null) &&
-					(SapphireUtil.getContent(publicRenderParam.getLocalPart()) != null)) {
+				if ((get(publicRenderParam.getNamespaceURI()) != null) &&
+					(get(publicRenderParam.getLocalPart()) != null)) {
 
 					String qname = _getQName(
-						SapphireUtil.getContent(publicRenderParam.getNamespaceURI(), false),
-						SapphireUtil.getContent(publicRenderParam.getLocalPart()));
+						get(publicRenderParam.getNamespaceURI(), false), get(publicRenderParam.getLocalPart()));
 
 					values.add(qname);
 				}

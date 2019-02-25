@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
 import org.eclipse.core.runtime.jobs.IJobManager;
@@ -28,7 +28,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Charles Wu
  */
-public class DumbStateValidationService extends ValidationService {
+public class DumbStateValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -41,7 +41,7 @@ public class DumbStateValidationService extends ValidationService {
 	protected Status compute() {
 		BaseModuleOp op = _op();
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
+		NewLiferayProjectProvider<BaseModuleOp> provider = get(op.getProjectProvider());
 
 		if (provider == null) {
 			return Status.createOkStatus();

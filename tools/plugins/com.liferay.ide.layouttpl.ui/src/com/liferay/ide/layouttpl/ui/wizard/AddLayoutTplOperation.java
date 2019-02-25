@@ -18,13 +18,17 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.templates.ITemplateContext;
+import com.liferay.ide.core.templates.ITemplateOperation;
+import com.liferay.ide.core.templates.TemplatesCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
 import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.layouttpl.core.operation.LayoutTplDescriptorHelper;
-import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.layouttpl.ui.util.LayoutTemplatesFactory;
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
@@ -35,6 +39,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import java.net.URL;
+
+import org.apache.commons.collections.ArrayStack;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
@@ -58,7 +64,8 @@ import org.osgi.framework.Version;
  * @author Kuo Zhang
  */
 @SuppressWarnings("restriction")
-public class AddLayoutTplOperation extends LiferayDataModelOperation implements INewLayoutTplDataModelProperties {
+public class AddLayoutTplOperation
+	extends LiferayDataModelOperation implements INewLayoutTplDataModelProperties, SapphireContentAccessor {
 
 	public AddLayoutTplOperation(IDataModel model, TemplateStore templateStore, TemplateContextType contextType) {
 		super(model, templateStore, contextType);
@@ -132,32 +139,34 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 		layoutTpl.setClassName(className);
 		layoutTpl.setIs62(is62);
 
+		LayoutTemplatesFactory layoutTemplatesFactory = new LayoutTemplatesFactory();
+
 		if (dm.getBooleanProperty(LAYOUT_IMAGE_1_COLUMN)) {
-			LayoutTemplatesFactory.add_Layout_1(layoutTpl);
+			layoutTemplatesFactory.add_Layout_1(layoutTpl);
 		}
 		else if (dm.getBooleanProperty(LAYOUT_IMAGE_1_2_I_COLUMN)) {
-			LayoutTemplatesFactory.add_Layout_1_2_I(layoutTpl);
+			layoutTemplatesFactory.add_Layout_1_2_I(layoutTpl);
 		}
 		else if (dm.getBooleanProperty(LAYOUT_IMAGE_1_2_II_COLUMN)) {
-			LayoutTemplatesFactory.add_Layout_1_2_II(layoutTpl);
+			layoutTemplatesFactory.add_Layout_1_2_II(layoutTpl);
 		}
 		else if (dm.getBooleanProperty(LAYOUT_IMAGE_1_2_1_COLUMN)) {
-			LayoutTemplatesFactory.add_Layout_1_2_1(layoutTpl);
+			layoutTemplatesFactory.add_Layout_1_2_1(layoutTpl);
 		}
 		else if (dm.getBooleanProperty(LAYOUT_IMAGE_2_I_COLUMN)) {
-			LayoutTemplatesFactory.add_Layout_2_I(layoutTpl);
+			layoutTemplatesFactory.add_Layout_2_I(layoutTpl);
 		}
 		else if (dm.getBooleanProperty(LAYOUT_IMAGE_2_II_COLUMN)) {
-			LayoutTemplatesFactory.add_Layout_2_II(layoutTpl);
+			layoutTemplatesFactory.add_Layout_2_II(layoutTpl);
 		}
 		else if (dm.getBooleanProperty(LAYOUT_IMAGE_2_III_COLUMN)) {
-			LayoutTemplatesFactory.add_Layout_2_III(layoutTpl);
+			layoutTemplatesFactory.add_Layout_2_III(layoutTpl);
 		}
 		else if (dm.getBooleanProperty(LAYOUT_IMAGE_2_2_COLUMN)) {
-			LayoutTemplatesFactory.add_Layout_2_2(layoutTpl);
+			layoutTemplatesFactory.add_Layout_2_2(layoutTpl);
 		}
 		else if (dm.getBooleanProperty(LAYOUT_IMAGE_3_COLUMN)) {
-			LayoutTemplatesFactory.add_Layout_3(layoutTpl);
+			layoutTemplatesFactory.add_Layout_3(layoutTpl);
 		}
 
 		return layoutTpl;
@@ -169,7 +178,7 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 		IFile templateFile = defaultDocroot.getFile(templateFileName);
 
 		if (element != null) {
-			LayoutTplUtil.saveToFile(element, templateFile, null);
+			_saveToFile(element, templateFile, null);
 		}
 		else {
 			try (ByteArrayInputStream input = new ByteArrayInputStream(StringPool.EMPTY.getBytes())) {
@@ -209,6 +218,13 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 		}
 	}
 
+	private static void _createLayoutTplContext(ITemplateOperation op, LayoutTplElement layouttpl) {
+		ITemplateContext ctx = op.getContext();
+
+		ctx.put("root", layouttpl);
+		ctx.put("stack", new ArrayStack());
+	}
+
 	private boolean _is62() {
 		IProject project = getTargetProject();
 
@@ -237,6 +253,27 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 		}
 
 		return true;
+	}
+
+	private void _saveToFile(LayoutTplElement diagramElement, IFile file, IProgressMonitor monitor) {
+		try {
+			ITemplateOperation op = null;
+
+			if (get(diagramElement.getBootstrapStyle())) {
+				op = TemplatesCore.getTemplateOperation("com.liferay.ide.layouttpl.core.layoutTemplate.bootstrap");
+			}
+			else {
+				op = TemplatesCore.getTemplateOperation("com.liferay.ide.layouttpl.core.layoutTemplate.legacy");
+			}
+
+			_createLayoutTplContext(op, diagramElement);
+
+			op.setOutputFile(file);
+			op.execute(monitor);
+		}
+		catch (Exception e) {
+			LayoutTplCore.logError(e);
+		}
 	}
 
 }

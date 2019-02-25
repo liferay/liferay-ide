@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
@@ -38,7 +39,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-public class ModuleProjectNameValidationService extends ValidationService {
+public class ModuleProjectNameValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -53,7 +54,7 @@ public class ModuleProjectNameValidationService extends ValidationService {
 
 		BaseModuleOp op = op();
 
-		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
+		String currentProjectName = get(op.getProjectName());
 
 		if (!CoreUtil.empty(currentProjectName)) {
 			IStatus nameStatus = CoreUtil.validateName(currentProjectName, IResource.PROJECT);
@@ -70,7 +71,7 @@ public class ModuleProjectNameValidationService extends ValidationService {
 				return Status.createErrorStatus("The project name is invalid.");
 			}
 
-			Path currentProjectLocation = SapphireUtil.getContent(op.getLocation());
+			Path currentProjectLocation = get(op.getLocation());
 
 			// double check to make sure this project wont overlap with existing dir
 
@@ -79,7 +80,7 @@ public class ModuleProjectNameValidationService extends ValidationService {
 
 				IPath osPath = org.eclipse.core.runtime.Path.fromOSString(currentPath);
 
-				NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
+				NewLiferayProjectProvider<BaseModuleOp> provider = get(op.getProjectProvider());
 
 				IStatus projectStatus = provider.validateProjectLocation(currentProjectName, osPath);
 

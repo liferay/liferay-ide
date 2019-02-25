@@ -20,7 +20,7 @@ import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.MarkerUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.FindBreakingChangesPage;
 import com.liferay.ide.project.ui.upgrade.animated.LiferayUpgradeDataModel;
@@ -59,7 +59,7 @@ import org.osgi.framework.ServiceReference;
  * @author Terry Jia
  * @author Lovett Li
  */
-public class AutoCorrectAction extends ProblemAction {
+public class AutoCorrectAction extends ProblemAction implements SapphireContentAccessor {
 
 	public AutoCorrectAction(ISelectionProvider provider) {
 		super(provider, "Correct automatically");
@@ -80,7 +80,7 @@ public class AutoCorrectAction extends ProblemAction {
 
 		LiferayUpgradeDataModel liferayUpgradeDataModel = findBreakingChangesPage.getDataModel();
 
-		String upgradeVersion = SapphireUtil.getContent(liferayUpgradeDataModel.getUpgradeVersion());
+		String upgradeVersion = get(liferayUpgradeDataModel.getUpgradeVersion());
 
 		_upgradeVersion = upgradeVersion;
 

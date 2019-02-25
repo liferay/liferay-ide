@@ -18,7 +18,7 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.ProjectCore;
@@ -72,7 +72,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
  * @author Terry Jia
  */
 @SuppressWarnings("restriction")
-public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider {
+public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider implements SapphireContentAccessor {
 
 	public LiferayMavenProjectProvider() {
 		super(new Class<?>[] {IProject.class});
@@ -303,8 +303,8 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 			for (String activeProfile : activeProfiles) {
 				for (NewLiferayProfile newProfile : newLiferayProfiles) {
-					if (StringUtil.equals(activeProfile, SapphireUtil.getContent(newProfile.getId()))) {
-						String liferayVersion = SapphireUtil.getContent(newProfile.getLiferayVersion());
+					if (StringUtil.equals(activeProfile, get(newProfile.getId()))) {
+						String liferayVersion = get(newProfile.getLiferayVersion());
 
 						org.osgi.framework.Version shortLiferayVersion = new org.osgi.framework.Version(
 							liferayVersion.substring(0, 3));
@@ -363,8 +363,8 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 		for (String activeProfile : activeProfiles) {
 			for (NewLiferayProfile newProfile : newLiferayProfiles) {
-				if (StringUtil.equals(activeProfile, SapphireUtil.getContent(newProfile.getId())) &&
-					location.equals(SapphireUtil.getContent(newProfile.getProfileLocation()))) {
+				if (StringUtil.equals(activeProfile, get(newProfile.getId())) &&
+					location.equals(get(newProfile.getProfileLocation()))) {
 
 					profilesToSave.add(newProfile);
 				}

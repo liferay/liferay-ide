@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.jsf;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
@@ -45,7 +46,7 @@ public class NewLiferayJSFModuleProjectOpMethods {
 		Throwable errorStack = null;
 
 		try {
-			NewLiferayProjectProvider<BaseModuleOp> projectProvider = SapphireUtil.getContent(op.getProjectProvider());
+			NewLiferayProjectProvider<BaseModuleOp> projectProvider = _getter.get(op.getProjectProvider());
 
 			IStatus status = projectProvider.createNewProject(op, monitor);
 
@@ -89,5 +90,7 @@ public class NewLiferayJSFModuleProjectOpMethods {
 			ProjectCore.logError(msg, e);
 		}
 	}
+
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 }

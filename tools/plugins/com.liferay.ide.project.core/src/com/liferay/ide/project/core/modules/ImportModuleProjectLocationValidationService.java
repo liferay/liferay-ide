@@ -16,7 +16,7 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 
@@ -28,11 +28,11 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Andy Wu
  */
-public class ImportModuleProjectLocationValidationService extends ValidationService {
+public class ImportModuleProjectLocationValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
-		Path path = SapphireUtil.getContent(_op().getLocation());
+		Path path = get(_op().getLocation());
 
 		if ((path == null) || path.isEmpty()) {
 			return Status.createOkStatus();

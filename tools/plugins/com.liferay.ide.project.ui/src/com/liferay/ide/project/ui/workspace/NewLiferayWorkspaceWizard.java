@@ -15,7 +15,6 @@
 package com.liferay.ide.project.ui.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -78,7 +77,7 @@ public class NewLiferayWorkspaceWizard extends BaseProjectWizard<NewLiferayWorks
 
 		NewLiferayWorkspaceOp op = element().nearest(NewLiferayWorkspaceOp.class);
 
-		IProject newProject = CoreUtil.getProject(SapphireUtil.getContent(op.getWorkspaceName()));
+		IProject newProject = CoreUtil.getProject(get(op.getWorkspaceName()));
 
 		try {
 			addToWorkingSets(newProject);

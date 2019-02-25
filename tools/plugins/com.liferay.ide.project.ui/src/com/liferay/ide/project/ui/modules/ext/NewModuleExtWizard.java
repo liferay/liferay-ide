@@ -15,7 +15,6 @@
 package com.liferay.ide.project.ui.modules.ext;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.modules.BaseProjectWizard;
@@ -38,7 +37,7 @@ public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> {
 
 		final NewModuleExtOp newModuleExtOp = element().nearest(NewModuleExtOp.class);
 
-		final IProject project = CoreUtil.getProject(SapphireUtil.getContent(newModuleExtOp.getProjectName()));
+		final IProject project = CoreUtil.getProject(get(newModuleExtOp.getProjectName()));
 
 		try {
 			addToWorkingSets(project);

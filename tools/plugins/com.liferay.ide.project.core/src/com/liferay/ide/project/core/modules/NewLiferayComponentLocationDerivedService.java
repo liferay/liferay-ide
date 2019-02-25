@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -26,7 +27,7 @@ import org.eclipse.sapphire.PropertyContentEvent;
 /**
  * @author Simon Jiang
  */
-public class NewLiferayComponentLocationDerivedService extends DerivedValueService {
+public class NewLiferayComponentLocationDerivedService extends DerivedValueService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -41,7 +42,7 @@ public class NewLiferayComponentLocationDerivedService extends DerivedValueServi
 
 	@Override
 	protected String compute() {
-		String projectName = SapphireUtil.getContent(_op().getProjectName());
+		String projectName = get(_op().getProjectName());
 
 		if (projectName != null) {
 			IProject project = CoreUtil.getProject(projectName);

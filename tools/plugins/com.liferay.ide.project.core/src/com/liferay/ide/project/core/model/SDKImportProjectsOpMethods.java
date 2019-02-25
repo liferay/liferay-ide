@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.core.util.MultiStatusBuilder;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 
@@ -44,7 +44,7 @@ public class SDKImportProjectsOpMethods {
 
 		Status retval = Status.createOkStatus();
 
-		Path projectLocation = SapphireUtil.getContent(op.getSdkLocation());
+		Path projectLocation = _getter.get(op.getSdkLocation());
 
 		if ((projectLocation == null) || projectLocation.isEmpty()) {
 			return Status.createErrorStatus("Project cannot be empty");
@@ -60,8 +60,7 @@ public class SDKImportProjectsOpMethods {
 				for (NamedItem projectNamedItem : projectItems) {
 					try {
 						if (projectNamedItem instanceof ProjectNamedItem) {
-							String projectPath = SapphireUtil.getContent(
-								((ProjectNamedItem)projectNamedItem).getLocation());
+							String projectPath = _getter.get(((ProjectNamedItem)projectNamedItem).getLocation());
 
 							String projectLocation = new Path(projectPath).toPortableString();
 
@@ -83,5 +82,7 @@ public class SDKImportProjectsOpMethods {
 
 		return retval;
 	}
+
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 }

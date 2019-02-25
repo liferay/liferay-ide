@@ -17,7 +17,7 @@ package com.liferay.ide.layouttpl.core.model;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
 
@@ -34,7 +34,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
  * @author Kuo Zhang
  */
 @SuppressWarnings("restriction")
-public class LayoutTplElementsFactory {
+public class LayoutTplElementsFactory implements SapphireContentAccessor {
 
 	public static final LayoutTplElementsFactory INSTANCE = new LayoutTplElementsFactory();
 
@@ -46,7 +46,7 @@ public class LayoutTplElementsFactory {
 		String existingClassName = domElement.getAttribute("class");
 
 		if (CoreUtil.isNotNullOrEmpty(existingClassName) &&
-			!existingClassName.equals(SapphireUtil.getContent(portletColumn.getClassName())) &&
+			!existingClassName.equals(get(portletColumn.getClassName())) &&
 			existingClassName.contains("portlet-column")) {
 
 			portletColumn.setClassName(existingClassName);
@@ -76,7 +76,7 @@ public class LayoutTplElementsFactory {
 		String existingClassName = domElement.getAttribute("class");
 
 		if (CoreUtil.isNotNullOrEmpty(existingClassName) &&
-			existingClassName.contains(SapphireUtil.getContent(portletLayout.getClassName()))) {
+			existingClassName.contains(get(portletLayout.getClassName()))) {
 
 			portletLayout.setClassName(existingClassName);
 		}

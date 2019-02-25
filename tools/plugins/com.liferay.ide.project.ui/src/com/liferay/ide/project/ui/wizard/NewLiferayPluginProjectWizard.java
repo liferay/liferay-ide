@@ -16,7 +16,6 @@ package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -142,7 +141,7 @@ public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayP
 		ElementList<ProjectName> projectNames = op.getProjectNames();
 
 		for (ProjectName projectName : projectNames) {
-			IProject newProject = CoreUtil.getProject(SapphireUtil.getContent(projectName.getName()));
+			IProject newProject = CoreUtil.getProject(get(projectName.getName()));
 
 			if (newProject != null) {
 				projects.add(newProject);
@@ -168,10 +167,10 @@ public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayP
 
 		// check if a new portlet wizard is needed, available for portlet projects.
 
-		boolean createNewPortlet = SapphireUtil.getContent(op.getCreateNewPortlet());
+		boolean createNewPortlet = get(op.getCreateNewPortlet());
 
-		if (createNewPortlet && PluginType.portlet.equals(SapphireUtil.getContent(op.getPluginType()))) {
-			final IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
+		if (createNewPortlet && PluginType.portlet.equals(get(op.getPluginType()))) {
+			final IPortletFramework portletFramework = get(op.getPortletFramework());
 			String wizardId = null;
 
 			if ("mvc".equals(portletFramework.getShortName())) {

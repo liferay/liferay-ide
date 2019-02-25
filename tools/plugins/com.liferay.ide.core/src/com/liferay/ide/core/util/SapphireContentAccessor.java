@@ -12,28 +12,29 @@
  * details.
  */
 
-package com.liferay.ide.project.core.model.internal;
+package com.liferay.ide.core.util;
 
-import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-
-import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 
 /**
  * @author Gregory Amerson
  */
-public class UseDefaultLocationListener extends ProjectNameListener implements SapphireContentAccessor {
+public interface SapphireContentAccessor {
 
-	@Override
-	protected void handleTypedEvent(PropertyContentEvent event) {
-		NewLiferayPluginProjectOp op = op(event);
+	public default <T> T get(Value<T> value) {
+		if (value != null) {
+			return value.content();
+		}
 
-		if (get(op.getUseDefaultLocation())) {
-			super.handleTypedEvent(event);
+		return null;
+	}
+
+	public default <T> T get(Value<T> value, boolean useDefaultValue) {
+		if (value != null) {
+			return value.content(useDefaultValue);
 		}
-		else {
-			op.setLocation((String)null);
-		}
+
+		return null;
 	}
 
 }

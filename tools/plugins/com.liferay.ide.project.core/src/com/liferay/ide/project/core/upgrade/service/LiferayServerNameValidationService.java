@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.upgrade.service;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.upgrade.CodeUpgradeOp;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -24,13 +24,13 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Terry Jia
  */
-public class LiferayServerNameValidationService extends ValidationService {
+public class LiferayServerNameValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
 		CodeUpgradeOp op = context(CodeUpgradeOp.class);
 
-		String serverName = SapphireUtil.getContent(op.getLiferayServerName());
+		String serverName = get(op.getLiferayServerName());
 
 		if (ServerUtil.getServer(serverName) != null) {
 			return Status.createOkStatus();

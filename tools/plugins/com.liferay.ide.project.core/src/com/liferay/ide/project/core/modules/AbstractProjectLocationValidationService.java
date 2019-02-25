@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
@@ -33,7 +34,8 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-public abstract class AbstractProjectLocationValidationService<T extends ExecutableElement> extends ValidationService {
+public abstract class AbstractProjectLocationValidationService<T extends ExecutableElement>
+	extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -54,10 +56,10 @@ public abstract class AbstractProjectLocationValidationService<T extends Executa
 
 		Status retval = Status.createOkStatus();
 
-		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
-		Path currentProjectLocation = SapphireUtil.getContent(op.getLocation());
+		String currentProjectName = get(op.getProjectName());
+		Path currentProjectLocation = get(op.getLocation());
 
-		Boolean userDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
+		Boolean userDefaultLocation = get(op.getUseDefaultLocation());
 
 		/**
 		 * Location won't be validated if the UseDefaultLocation has an error.
@@ -105,7 +107,7 @@ public abstract class AbstractProjectLocationValidationService<T extends Executa
 					}
 				}
 
-				NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
+				NewLiferayProjectProvider<BaseModuleOp> provider = get(op.getProjectProvider());
 
 				IStatus locationStatus = provider.validateProjectLocation(currentProjectName, osPath);
 

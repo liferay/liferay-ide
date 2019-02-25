@@ -16,7 +16,7 @@ package com.liferay.ide.project.ui.modules.ext;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.IWorkspaceProject;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.ui.util.UIUtil;
@@ -51,7 +51,7 @@ import org.eclipse.ui.dialogs.AbstractElementListSelectionDialog;
 /**
  * @author Charles Wu
  */
-public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog {
+public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog implements SapphireContentAccessor {
 
 	public ModuleExtBrowseDialog(Shell parent, Value<?> property) {
 		super(parent, new ColumnLabelProvider());
@@ -151,7 +151,7 @@ public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog {
 	private void _refreshAction(Composite composite) {
 		NewModuleExtOp newModuleExtOp = _property.nearest(NewModuleExtOp.class);
 
-		if (SapphireUtil.getContent(newModuleExtOp.getTargetPlatformVersion()) == null) {
+		if (get(newModuleExtOp.getTargetPlatformVersion()) == null) {
 			_customLabel.setText("No Target Plarform configuration detected in gradle.properties");
 
 			return;

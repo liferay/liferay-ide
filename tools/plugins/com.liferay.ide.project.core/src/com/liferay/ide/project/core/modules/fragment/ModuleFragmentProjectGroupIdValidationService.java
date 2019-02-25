@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 
@@ -34,7 +34,8 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Joye Luo
  */
 @SuppressWarnings("restriction")
-public class ModuleFragmentProjectGroupIdValidationService extends ValidationService {
+public class ModuleFragmentProjectGroupIdValidationService
+	extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -57,7 +58,7 @@ public class ModuleFragmentProjectGroupIdValidationService extends ValidationSer
 	protected Status compute() {
 		NewModuleFragmentOp op = _op();
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
+		NewLiferayProjectProvider<BaseModuleOp> provider = get(op.getProjectProvider());
 
 		if ("maven-module-fragment".equals(provider.getShortName())) {
 			Value<String> groupIdValue = _op().getGroupId();

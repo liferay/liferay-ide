@@ -15,7 +15,7 @@
 package com.liferay.ide.project.ui.migration;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.upgrade.BreakingChangeSelectedProject;
 import com.liferay.ide.project.core.upgrade.BreakingChangeSimpleProject;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
@@ -56,7 +56,7 @@ import org.eclipse.swt.widgets.TableItem;
  * @author Terry Jia
  * @author Simon Jiang
  */
-public class OpenJavaProjectSelectionDialogAction extends Action {
+public class OpenJavaProjectSelectionDialogAction extends Action implements SapphireContentAccessor {
 
 	public OpenJavaProjectSelectionDialogAction(String text, Shell shell) {
 		super(text);
@@ -124,11 +124,11 @@ public class OpenJavaProjectSelectionDialogAction extends Action {
 	private void _createUpgradeVersionControl(Composite composite) {
 		Group upgradeVersionGroup = SWTUtil.createGroup(composite, "Upgrade to Liferay Version", 2, 2);
 
-		String upgradeVersion = SapphireUtil.getContent(dataModel.getUpgradeVersion());
+		String upgradeVersion = get(dataModel.getUpgradeVersion());
 
 		boolean selectedValue = "7.0".equals(upgradeVersion);
 
-		boolean liferayWorkspace = SapphireUtil.getContent(dataModel.getIsLiferayWorkspace());
+		boolean liferayWorkspace = get(dataModel.getIsLiferayWorkspace());
 
 		Button upgradeVersion70Button = SWTUtil.createRadioButton(upgradeVersionGroup, "7.0", null, selectedValue, 1);
 

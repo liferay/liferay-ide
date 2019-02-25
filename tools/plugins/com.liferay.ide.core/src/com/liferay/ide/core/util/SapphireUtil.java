@@ -72,22 +72,6 @@ public class SapphireUtil {
 		return false;
 	}
 
-	public static <T> T getContent(Value<T> value) {
-		if (value != null) {
-			return value.content();
-		}
-
-		return null;
-	}
-
-	public static <T> T getContent(Value<T> value, boolean useDefaultValue) {
-		if (value != null) {
-			return value.content(useDefaultValue);
-		}
-
-		return null;
-	}
-
 	public static Element getElement(PropertyContentEvent event) {
 		Property property = event.property();
 

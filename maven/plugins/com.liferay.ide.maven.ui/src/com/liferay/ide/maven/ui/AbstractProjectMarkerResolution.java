@@ -15,7 +15,7 @@
 package com.liferay.ide.maven.ui;
 
 import com.liferay.ide.core.util.MarkerUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.maven.core.model.NewLiferayProfileOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.Profile;
@@ -45,7 +45,7 @@ import org.osgi.framework.Bundle;
 /**
  * @author Gregory Amerson
  */
-public abstract class AbstractProjectMarkerResolution implements IMarkerResolution2 {
+public abstract class AbstractProjectMarkerResolution implements IMarkerResolution2, SapphireContentAccessor {
 
 	public String getDescription() {
 		return getLabel();
@@ -86,7 +86,7 @@ public abstract class AbstractProjectMarkerResolution implements IMarkerResoluti
 			return;
 		}
 
-		configuration.setSelectedProfiles(SapphireUtil.getContent(op.getActiveProfilesValue()));
+		configuration.setSelectedProfiles(get(op.getActiveProfilesValue()));
 
 		boolean changed = projectManager.setResolverConfiguration(project, configuration);
 

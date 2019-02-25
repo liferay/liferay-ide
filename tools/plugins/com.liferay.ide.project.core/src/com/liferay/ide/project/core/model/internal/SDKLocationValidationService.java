@@ -18,6 +18,7 @@ import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethod
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
@@ -42,7 +43,7 @@ import org.osgi.framework.Version;
 /**
  * @author Simon Jiang
  */
-public class SDKLocationValidationService extends ValidationService {
+public class SDKLocationValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -60,8 +61,7 @@ public class SDKLocationValidationService extends ValidationService {
 	protected Status compute() {
 		NewLiferayPluginProjectOp op = _op();
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
-			op.getProjectProvider());
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
 		if (!"ant".equals(provider.getShortName())) {
 			return Status.createOkStatus();
@@ -73,7 +73,7 @@ public class SDKLocationValidationService extends ValidationService {
 			return StatusBridge.create(ProjectCore.createErrorStatus("This workspace has more than one SDK."));
 		}
 
-		Path sdkLocation = SapphireUtil.getContent(op.getSdkLocation());
+		Path sdkLocation = get(op.getSdkLocation());
 
 		if ((sdkLocation == null) || sdkLocation.isEmpty()) {
 			return StatusBridge.create(ProjectCore.createErrorStatus("This sdk location is empty."));
@@ -92,9 +92,9 @@ public class SDKLocationValidationService extends ValidationService {
 			return StatusBridge.create(ProjectCore.createErrorStatus("This sdk location is not correct."));
 		}
 
-		Path projectLocation = SapphireUtil.getContent(op.getLocation());
+		Path projectLocation = get(op.getLocation());
 
-		String projectName = SapphireUtil.getContent(op.getProjectName());
+		String projectName = get(op.getProjectName());
 
 		IPath projectPath = PathBridge.create(projectLocation);
 
@@ -104,7 +104,7 @@ public class SDKLocationValidationService extends ValidationService {
 					"Project(" + projectName + ") is existed in sdk folder, please set new project name."));
 		}
 
-		PluginType pluginType = SapphireUtil.getContent(op.getPluginType());
+		PluginType pluginType = get(op.getPluginType());
 
 		if (pluginType.equals(PluginType.web) && !supportsTypePlugin(op, "web")) {
 			StringBuilder sb = new StringBuilder();
@@ -125,7 +125,7 @@ public class SDKLocationValidationService extends ValidationService {
 			return Status.createErrorStatus(sb.toString());
 		}
 		else if (pluginType.equals(PluginType.portlet)) {
-			IPortletFramework portletFramework = SapphireUtil.getContent(op.getPortletFramework());
+			IPortletFramework portletFramework = get(op.getPortletFramework());
 
 			Version requiredVersion = Version.parseVersion(portletFramework.getRequiredSDKVersion());
 

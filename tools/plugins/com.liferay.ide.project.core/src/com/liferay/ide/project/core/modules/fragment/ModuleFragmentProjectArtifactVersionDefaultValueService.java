@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 
 import org.eclipse.core.runtime.IPath;
@@ -26,7 +27,8 @@ import org.eclipse.sapphire.modeling.Path;
 /**
  * @author Joye Luo
  */
-public class ModuleFragmentProjectArtifactVersionDefaultValueService extends DefaultValueService {
+public class ModuleFragmentProjectArtifactVersionDefaultValueService
+	extends DefaultValueService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -48,14 +50,14 @@ public class ModuleFragmentProjectArtifactVersionDefaultValueService extends Def
 
 		NewModuleFragmentOp op = _op();
 
-		Path location = SapphireUtil.getContent(op.getLocation());
+		Path location = get(op.getLocation());
 
 		if (location != null) {
 			String parentProjectLocation = location.toOSString();
 
 			IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
 
-			String projectName = SapphireUtil.getContent(op.getProjectName());
+			String projectName = get(op.getProjectName());
 
 			data = NewModuleFragmentOpMethods.getMavenParentPomVersion(op, projectName, parentProjectOsPath);
 		}

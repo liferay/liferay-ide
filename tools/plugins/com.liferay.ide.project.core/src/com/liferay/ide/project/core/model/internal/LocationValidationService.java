@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -38,7 +39,7 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-public class LocationValidationService extends ValidationService {
+public class LocationValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -59,8 +60,7 @@ public class LocationValidationService extends ValidationService {
 
 		NewLiferayPluginProjectOp op = _op();
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
-			op.getProjectProvider());
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
 		if ("ant".equals(provider.getShortName())) {
 			SDK sdk = null;
@@ -81,8 +81,8 @@ public class LocationValidationService extends ValidationService {
 			}
 		}
 
-		Path currentProjectLocation = SapphireUtil.getContent(op.getLocation());
-		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
+		Path currentProjectLocation = get(op.getLocation());
+		String currentProjectName = get(op.getProjectName());
 
 		/**
 		 * Location won't be validated if the UseDefaultLocation has an error.

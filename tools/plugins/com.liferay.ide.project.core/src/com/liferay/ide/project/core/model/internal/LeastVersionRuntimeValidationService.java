@@ -16,7 +16,7 @@ package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -34,7 +34,7 @@ import org.osgi.framework.Version;
 /**
  * @author Simon Jiang
  */
-public class LeastVersionRuntimeValidationService extends ValidationService {
+public class LeastVersionRuntimeValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
@@ -42,7 +42,7 @@ public class LeastVersionRuntimeValidationService extends ValidationService {
 
 		Value<?> value = (Value<?>)property;
 
-		Object o = SapphireUtil.getContent(value);
+		Object o = get(value);
 
 		String runtimeName = o.toString();
 

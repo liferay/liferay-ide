@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -36,7 +37,7 @@ import org.eclipse.swt.widgets.Shell;
 /**
  * @author Gregory Amerson
  */
-public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandler {
+public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandler implements SapphireContentAccessor {
 
 	@Override
 	protected Object run(Presentation context) {
@@ -45,14 +46,14 @@ public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandl
 
 			final NewLiferayPluginProjectOp op = getModelElement().nearest(NewLiferayPluginProjectOp.class);
 
-			final String previousActiveProfilesValue = SapphireUtil.getContent(op.getActiveProfilesValue());
+			final String previousActiveProfilesValue = get(op.getActiveProfilesValue());
 
 			// we need to rebuild the 'selected' list from what is specified in the
 			// 'activeProfiles' property
 
 			SapphireUtil.clear(op.getSelectedProfiles());
 
-			String activeProfiles = SapphireUtil.getContent(op.getActiveProfilesValue());
+			String activeProfiles = get(op.getActiveProfilesValue());
 
 			if (CoreUtil.isNotNullOrEmpty(activeProfiles)) {
 				final String[] profileIds = activeProfiles.split(",");
@@ -63,7 +64,7 @@ public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandl
 							boolean foundExistingProfile = false;
 
 							for (Profile profile : op.getSelectedProfiles()) {
-								if (profileId.equals(SapphireUtil.getContent(profile.getId()))) {
+								if (profileId.equals(get(profile.getId()))) {
 									foundExistingProfile = true;
 
 									break;

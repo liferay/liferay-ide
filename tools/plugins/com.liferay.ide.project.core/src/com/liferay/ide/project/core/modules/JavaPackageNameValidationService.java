@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 
 import java.util.List;
@@ -34,7 +35,7 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Terry Jia
  */
 @SuppressWarnings("restriction")
-public class JavaPackageNameValidationService extends ValidationService {
+public class JavaPackageNameValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
@@ -62,7 +63,7 @@ public class JavaPackageNameValidationService extends ValidationService {
 			}
 		}
 
-		JavaPackageName packageName = SapphireUtil.getContent(op.getPackageName());
+		JavaPackageName packageName = get(op.getPackageName());
 
 		if (packageName != null) {
 			IStatus status = JavaConventions.validatePackageName(

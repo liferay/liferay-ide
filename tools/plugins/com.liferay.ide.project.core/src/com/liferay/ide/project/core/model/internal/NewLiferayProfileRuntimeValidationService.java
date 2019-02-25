@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
@@ -27,7 +27,7 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Tao Tao
  */
-public class NewLiferayProfileRuntimeValidationService extends ValidationService {
+public class NewLiferayProfileRuntimeValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
@@ -35,13 +35,12 @@ public class NewLiferayProfileRuntimeValidationService extends ValidationService
 
 		NewLiferayPluginProjectOp op = context(NewLiferayPluginProjectOp.class);
 
-		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = SapphireUtil.getContent(
-			op.getProjectProvider());
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = get(op.getProjectProvider());
 
 		if ("maven".equals(provider.getShortName())) {
 			NewLiferayProfile newLiferayProfile = context(NewLiferayProfile.class);
 
-			String runtimeName = SapphireUtil.getContent(newLiferayProfile.getRuntimeName());
+			String runtimeName = get(newLiferayProfile.getRuntimeName());
 
 			IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 

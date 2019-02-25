@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -28,13 +29,13 @@ import org.eclipse.sapphire.modeling.Path;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class LocationListener extends FilteredListener<ValuePropertyContentEvent> {
+public class LocationListener extends FilteredListener<ValuePropertyContentEvent> implements SapphireContentAccessor {
 
 	@Override
 	protected void handleTypedEvent(ValuePropertyContentEvent event) {
 		NewLiferayPluginProjectOp op = op(event);
 
-		boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
+		boolean useDefaultLocation = get(op.getUseDefaultLocation());
 
 		if (useDefaultLocation) {
 			return;

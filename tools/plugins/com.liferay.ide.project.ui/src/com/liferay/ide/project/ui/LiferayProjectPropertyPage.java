@@ -18,7 +18,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
@@ -82,7 +82,7 @@ import org.osgi.service.prefs.BackingStoreException;
  * @author Simon Jiang
  */
 public class LiferayProjectPropertyPage
-	extends PropertyPage implements IWorkbenchPropertyPage, IPluginProjectDataModelProperties {
+	extends PropertyPage implements IWorkbenchPropertyPage, IPluginProjectDataModelProperties, SapphireContentAccessor {
 
 	public LiferayProjectPropertyPage() {
 		setImageDescriptor(ProjectUI.imageDescriptorFromPlugin(ProjectUI.PLUGIN_ID, "/icons/liferay_logo_16.png"));
@@ -239,7 +239,7 @@ public class LiferayProjectPropertyPage
 									int result = dialog.open();
 
 									if (result != SapphireDialog.CANCEL) {
-										_sdkLabel.setText(SapphireUtil.getContent(op.getPluginsSDKName()));
+										_sdkLabel.setText(get(op.getPluginsSDKName()));
 									}
 								}
 
@@ -321,7 +321,7 @@ public class LiferayProjectPropertyPage
 	protected IProject getProject() {
 		IAdaptable adaptable = getElement();
 
-		IProject project = (IProject)adaptable.getAdapter(IProject.class);
+		IProject project = adaptable.getAdapter(IProject.class);
 
 		return project;
 	}

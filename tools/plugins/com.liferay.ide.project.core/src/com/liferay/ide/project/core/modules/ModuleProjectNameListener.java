@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.modules;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCore;
@@ -35,16 +36,28 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Andy Wu
  * @author Joye Luo
  */
-public class ModuleProjectNameListener extends FilteredListener<PropertyContentEvent> {
+public class ModuleProjectNameListener
+	extends FilteredListener<PropertyContentEvent> implements SapphireContentAccessor {
 
-	public static void updateLocation(NewLiferayModuleProjectOp op) {
-		String currentProjectName = SapphireUtil.getContent(op.getProjectName());
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		_updateLocation(op(event));
+	}
+
+	protected NewLiferayModuleProjectOp op(PropertyContentEvent event) {
+		Element element = SapphireUtil.getElement(event);
+
+		return element.nearest(NewLiferayModuleProjectOp.class);
+	}
+
+	private void _updateLocation(NewLiferayModuleProjectOp op) {
+		String currentProjectName = get(op.getProjectName());
 
 		if (CoreUtil.isNullOrEmpty(currentProjectName)) {
 			return;
 		}
 
-		boolean useDefaultLocation = SapphireUtil.getContent(op.getUseDefaultLocation());
+		boolean useDefaultLocation = get(op.getUseDefaultLocation());
 
 		if (useDefaultLocation) {
 			Path newLocationBase = null;
@@ -69,7 +82,7 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
 				boolean gradleModule = false;
 				boolean mavenModule = false;
 
-				ILiferayProjectProvider provider = SapphireUtil.getContent(op.getProjectProvider());
+				ILiferayProjectProvider provider = get(op.getProjectProvider());
 
 				if (provider != null) {
 					String shortName = provider.getShortName();
@@ -85,9 +98,9 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
 				boolean themeProject = false;
 
 				if (op instanceof NewLiferayModuleProjectOp) {
-					NewLiferayModuleProjectOp moduleProjectOp = (NewLiferayModuleProjectOp)op;
+					NewLiferayModuleProjectOp moduleProjectOp = op;
 
-					String projectTemplateName = SapphireUtil.getContent(moduleProjectOp.getProjectTemplateName());
+					String projectTemplateName = get(moduleProjectOp.getProjectTemplateName());
 
 					for (String projectType : _WAR_TYPE_PROJECT) {
 						if (projectType.equals(projectTemplateName)) {
@@ -127,17 +140,6 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
 				op.setLocation(newLocationBase);
 			}
 		}
-	}
-
-	@Override
-	protected void handleTypedEvent(PropertyContentEvent event) {
-		updateLocation(op(event));
-	}
-
-	protected NewLiferayModuleProjectOp op(PropertyContentEvent event) {
-		Element element = SapphireUtil.getElement(event);
-
-		return element.nearest(NewLiferayModuleProjectOp.class);
 	}
 
 	private static final String[] _WAR_TYPE_PROJECT =

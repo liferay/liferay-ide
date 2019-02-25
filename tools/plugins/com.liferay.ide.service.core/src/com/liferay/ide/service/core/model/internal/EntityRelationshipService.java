@@ -14,7 +14,7 @@
 
 package com.liferay.ide.service.core.model.internal;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.service.core.model.Entity;
 import com.liferay.ide.service.core.model.ServiceBuilder;
 
@@ -24,13 +24,20 @@ import org.eclipse.sapphire.services.ReferenceService;
 /**
  * @author Gregory Amerson
  */
-public class EntityRelationshipService extends ReferenceService<Entity> {
+public class EntityRelationshipService extends ReferenceService<Entity> implements SapphireContentAccessor {
 
-	public static Entity findEntity(String entityName, ServiceBuilder serviceBuilder) {
+	@Override
+	public Entity compute() {
+		String reference = context(Value.class).text();
+
+		return findEntity(reference, context(ServiceBuilder.class));
+	}
+
+	public Entity findEntity(String entityName, ServiceBuilder serviceBuilder) {
 		if ((entityName != null) && (serviceBuilder != null)) {
 			if (serviceBuilder != null) {
 				for (Entity entity : serviceBuilder.getEntities()) {
-					if (entityName.equals(SapphireUtil.getContent(entity.getName()))) {
+					if (entityName.equals(get(entity.getName()))) {
 						return entity;
 					}
 				}
@@ -38,13 +45,6 @@ public class EntityRelationshipService extends ReferenceService<Entity> {
 		}
 
 		return null;
-	}
-
-	@Override
-	public Entity compute() {
-		String reference = context(Value.class).text();
-
-		return findEntity(reference, context(ServiceBuilder.class));
 	}
 
 }

@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
 import com.liferay.ide.upgrade.plan.core.UpgradeCategoryElement;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
@@ -52,20 +52,20 @@ public class NewUpgradePlanOpMethods {
 			return Status.createErrorStatus("Could not get UpgradePlanner service");
 		}
 
-		String name = SapphireUtil.getContent(newUpgradePlanOp.getName());
+		String name = _getter.get(newUpgradePlanOp.getName());
 
-		String currentVersion = SapphireUtil.getContent(newUpgradePlanOp.getCurrentVersion());
+		String currentVersion = _getter.get(newUpgradePlanOp.getCurrentVersion());
 
-		String targetVersion = SapphireUtil.getContent(newUpgradePlanOp.getTargetVersion());
+		String targetVersion = _getter.get(newUpgradePlanOp.getTargetVersion());
 
-		Path path = SapphireUtil.getContent(newUpgradePlanOp.getLocation());
+		Path path = _getter.get(newUpgradePlanOp.getLocation());
 
 		ElementList<UpgradeCategoryElement> upgradeCategories = newUpgradePlanOp.getUpgradeCategories();
 
 		Stream<UpgradeCategoryElement> upgradeCategoryElements = upgradeCategories.stream();
 
 		List<String> categories = upgradeCategoryElements.map(
-			category -> SapphireUtil.getContent(category.getUpgradeCategory())
+			category -> _getter.get(category.getUpgradeCategory())
 		).collect(
 			Collectors.toList()
 		);
@@ -102,6 +102,7 @@ public class NewUpgradePlanOpMethods {
 		return _serviceTracker;
 	}
 
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 	private static ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 
 }

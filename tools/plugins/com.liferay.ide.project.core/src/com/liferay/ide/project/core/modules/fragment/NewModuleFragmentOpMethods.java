@@ -18,6 +18,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.ZipUtil;
@@ -53,14 +54,14 @@ import org.eclipse.wst.server.core.IRuntime;
 public class NewModuleFragmentOpMethods {
 
 	public static void copyOverrideFiles(NewModuleFragmentOp op) {
-		String projectName = SapphireUtil.getContent(op.getProjectName());
+		String projectName = _getter.get(op.getProjectName());
 
-		IPath location = PathBridge.create(SapphireUtil.getContent(op.getLocation()));
+		IPath location = PathBridge.create(_getter.get(op.getLocation()));
 
 		ElementList<OverrideFilePath> files = op.getOverrideFiles();
 
 		for (OverrideFilePath file : files) {
-			File fragmentFile = new File(_hostBundleDir, SapphireUtil.getContent(file.getValue()));
+			File fragmentFile = new File(_hostBundleDir, _getter.get(file.getValue()));
 
 			if (FileUtil.notExists(fragmentFile)) {
 				continue;
@@ -159,7 +160,7 @@ public class NewModuleFragmentOpMethods {
 		Throwable errorStack = null;
 
 		try {
-			NewLiferayProjectProvider<BaseModuleOp> projectProvider = SapphireUtil.getContent(op.getProjectProvider());
+			NewLiferayProjectProvider<BaseModuleOp> projectProvider = _getter.get(op.getProjectProvider());
 
 			IStatus status = projectProvider.createNewProject(op, monitor);
 
@@ -188,7 +189,7 @@ public class NewModuleFragmentOpMethods {
 	}
 
 	public static String[] getBsnAndVersion(NewModuleFragmentOp op) throws CoreException {
-		String hostBundleName = SapphireUtil.getContent(op.getHostOsgiBundle());
+		String hostBundleName = _getter.get(op.getHostOsgiBundle());
 
 		ProjectCore projectCore = ProjectCore.getDefault();
 
@@ -197,7 +198,7 @@ public class NewModuleFragmentOpMethods {
 		File hostBundleJar = FileUtil.getFile(tempLocation.append(hostBundleName));
 
 		if (FileUtil.notExists(hostBundleJar)) {
-			IRuntime runtime = ServerUtil.getRuntime(SapphireUtil.getContent(op.getLiferayRuntimeName()));
+			IRuntime runtime = ServerUtil.getRuntime(_getter.get(op.getLiferayRuntimeName()));
 
 			hostBundleJar = ServerUtil.getModuleFileFrom70Server(runtime, hostBundleName, tempLocation);
 		}
@@ -231,7 +232,7 @@ public class NewModuleFragmentOpMethods {
 
 		File parentProjectDir = path.toFile();
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
+		NewLiferayProjectProvider<BaseModuleOp> provider = _getter.get(op.getProjectProvider());
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
@@ -251,7 +252,7 @@ public class NewModuleFragmentOpMethods {
 
 		File parentProjectDir = path.toFile();
 
-		NewLiferayProjectProvider<BaseModuleOp> provider = SapphireUtil.getContent(op.getProjectProvider());
+		NewLiferayProjectProvider<BaseModuleOp> provider = _getter.get(op.getProjectProvider());
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
@@ -283,6 +284,7 @@ public class NewModuleFragmentOpMethods {
 		}
 	}
 
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 	private static File _hostBundleDir = null;
 
 }

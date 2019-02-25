@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
 import com.liferay.ide.upgrade.plan.core.UpgradeCategoryElement;
 
@@ -29,7 +29,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-public class SourceLocationValidationService extends ValidationService {
+public class SourceLocationValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
@@ -40,7 +40,7 @@ public class SourceLocationValidationService extends ValidationService {
 		ElementList<UpgradeCategoryElement> selectedCategories = op.getUpgradeCategories();
 
 		if (ListUtil.isNotEmpty(selectedCategories)) {
-			Path sourceLocation = SapphireUtil.getContent(op.getLocation());
+			Path sourceLocation = get(op.getLocation());
 
 			if ((sourceLocation == null) || sourceLocation.isEmpty() || !sourceLocation.isAbsolute()) {
 				retval = Status.createErrorStatus("Plese select correct source code location.");

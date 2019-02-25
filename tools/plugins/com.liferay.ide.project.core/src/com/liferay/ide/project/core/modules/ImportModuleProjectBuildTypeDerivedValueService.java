@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 
 import org.eclipse.core.runtime.IStatus;
@@ -25,7 +26,8 @@ import org.eclipse.sapphire.modeling.Path;
 /**
  * @author Andy Wu
  */
-public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValueService {
+public class ImportModuleProjectBuildTypeDerivedValueService
+	extends DerivedValueService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -48,7 +50,7 @@ public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValu
 			return retVal;
 		}
 
-		Path path = SapphireUtil.getContent(op.getLocation());
+		Path path = get(op.getLocation());
 
 		if ((path != null) && !path.isEmpty()) {
 			String location = path.toOSString();

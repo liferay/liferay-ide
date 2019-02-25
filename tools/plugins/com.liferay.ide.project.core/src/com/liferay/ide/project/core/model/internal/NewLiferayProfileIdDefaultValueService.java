@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -32,13 +33,13 @@ import org.eclipse.sapphire.PropertyContentEvent;
 /**
  * @author Gregory Amerson
  */
-public class NewLiferayProfileIdDefaultValueService extends DefaultValueService {
+public class NewLiferayProfileIdDefaultValueService extends DefaultValueService implements SapphireContentAccessor {
 
 	@Override
 	protected String compute() {
 		NewLiferayProfile profile = _newLiferayProfile();
 
-		String defaultRuntimeName = SapphireUtil.getContent(profile.getRuntimeName());
+		String defaultRuntimeName = get(profile.getRuntimeName());
 
 		/**
 		 * First try to use this as a runtimeName, but need to check it against existing possible values.

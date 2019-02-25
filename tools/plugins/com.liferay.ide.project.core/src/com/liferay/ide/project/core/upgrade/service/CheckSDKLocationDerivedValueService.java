@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.upgrade.service;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.upgrade.CodeUpgradeOp;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
@@ -37,13 +37,13 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Andy Wu
  */
-public class CheckSDKLocationDerivedValueService extends DerivedValueService {
+public class CheckSDKLocationDerivedValueService extends DerivedValueService implements SapphireContentAccessor {
 
 	@Override
 	protected String compute() {
 		CodeUpgradeOp op = _op();
 
-		final Path path = SapphireUtil.getContent(op.getSdkLocation());
+		final Path path = get(op.getSdkLocation());
 
 		SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(path));
 

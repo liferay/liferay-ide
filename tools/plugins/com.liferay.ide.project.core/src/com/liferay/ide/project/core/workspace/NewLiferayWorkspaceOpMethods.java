@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
@@ -44,8 +45,7 @@ public class NewLiferayWorkspaceOpMethods {
 		Throwable errorStack = null;
 
 		try {
-			NewLiferayProjectProvider<NewLiferayWorkspaceOp> provider = SapphireUtil.getContent(
-				op.getProjectProvider());
+			NewLiferayProjectProvider<NewLiferayWorkspaceOp> provider = _getter.get(op.getProjectProvider());
 
 			IStatus status = provider.createNewProject(op, monitor);
 
@@ -90,5 +90,7 @@ public class NewLiferayWorkspaceOpMethods {
 			ProjectCore.logError(msg, e);
 		}
 	}
+
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 }
