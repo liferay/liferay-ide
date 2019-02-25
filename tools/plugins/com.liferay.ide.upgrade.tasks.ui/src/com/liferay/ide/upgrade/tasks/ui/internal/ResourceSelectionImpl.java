@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -71,6 +72,38 @@ public class ResourceSelectionImpl implements ResourceSelection {
 			() -> {
 				ProjectsSelectionDialog projectsSelectionDialog = new ProjectsSelectionDialog(
 					UIUtil.getActiveShell(), viewerFilter, initialSelectAll, message);
+
+				returnCode.set(projectsSelectionDialog.open());
+
+				selectedProjects.addAll(projectsSelectionDialog.getSelectedProjects());
+			});
+
+		if (returnCode.get() == Window.OK) {
+			return selectedProjects;
+		}
+
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<IProject> selectJavaProjects(String message, Predicate<IProject> filterPredicarte) {
+		final AtomicInteger returnCode = new AtomicInteger();
+
+		List<IProject> selectedProjects = new ArrayList<>();
+
+		ViewerFilter viewerFilter = new ViewerFilter() {
+
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				return filterPredicarte.test((IProject)element);
+			}
+
+		};
+
+		UIUtil.sync(
+			() -> {
+				ProjectsSelectionDialog projectsSelectionDialog = new ProjectsSelectionDialog(
+					UIUtil.getActiveShell(), viewerFilter, true, message);
 
 				returnCode.set(projectsSelectionDialog.open());
 

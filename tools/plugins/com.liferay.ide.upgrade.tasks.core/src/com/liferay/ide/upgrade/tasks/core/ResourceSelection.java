@@ -17,6 +17,7 @@ package com.liferay.ide.upgrade.tasks.core;
 import java.nio.file.Path;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IProject;
 
@@ -27,6 +28,8 @@ import org.eclipse.core.resources.IProject;
 public interface ResourceSelection {
 
 	public List<IProject> selectJavaProjects(String message, boolean initialSelectAll);
+
+	public List<IProject> selectJavaProjects(String message, Predicate<IProject> filterPredicarte);
 
 	public IProject selectLiferayWorkspaceProject(String message);
 
