@@ -15,7 +15,6 @@
 package com.liferay.ide.gradle.ui;
 
 import com.liferay.ide.core.IWorkspaceProject;
-import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
@@ -39,13 +38,12 @@ public class LiferayWatchDecorator extends LabelProvider implements ILightweight
 			return;
 		}
 
-		IWorkspaceProject workspaceProject = LiferayCore.create(
-			IWorkspaceProject.class, LiferayWorkspaceUtil.getWorkspaceProject());
-
 		IProject project = (IProject)element;
 
-		if (workspaceProject != null) {
-			if (ListUtil.contains(workspaceProject.watching(), project)) {
+		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
+		if (liferayWorkspaceProject != null) {
+			if (ListUtil.contains(liferayWorkspaceProject.watching(), project)) {
 				decoration.addSuffix(" [watching]");
 			}
 			else {
