@@ -288,7 +288,13 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static IWorkspaceProject getLiferayWorkspaceProject() {
-		return LiferayCore.create(IWorkspaceProject.class, getWorkspaceProject());
+		IProject workspaceProject = getWorkspaceProject();
+
+		if (workspaceProject != null) {
+			return LiferayCore.create(IWorkspaceProject.class, getWorkspaceProject());
+		}
+
+		return null;
 	}
 
 	public static String[] getLiferayWorkspaceProjectWarsDirs(String workspaceLocation) {
