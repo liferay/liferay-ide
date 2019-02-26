@@ -16,8 +16,9 @@ package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.sapphire.PossibleValuesService;
 
@@ -30,10 +31,10 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class UpgradeCategoryPossibleValuesService extends PossibleValuesService {
+public class UpgradeTaskCategoryPossibleValuesService extends PossibleValuesService {
 
-	public UpgradeCategoryPossibleValuesService() {
-		Bundle bundle = FrameworkUtil.getBundle(UpgradeCategoryPossibleValuesService.class);
+	public UpgradeTaskCategoryPossibleValuesService() {
+		Bundle bundle = FrameworkUtil.getBundle(UpgradeTaskCategoryPossibleValuesService.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
 
@@ -56,22 +57,21 @@ public class UpgradeCategoryPossibleValuesService extends PossibleValuesService 
 
 	@Override
 	protected void compute(Set<String> values) {
-		values.addAll(_upgradeCategoryValues);
+		values.addAll(_upgradeTaskCategoryValues);
 	}
 
 	@Override
 	protected void initPossibleValuesService() {
-		_upgradeCategoryValues = new HashSet<>();
-
-		UpgradeTaskCategory[] upgradeTaskCategories = _upgradeTaskCategoryServiceTracker.getServices(
-			new UpgradeTaskCategory[0]);
-
-		for (UpgradeTaskCategory upgradeTaskCategory : upgradeTaskCategories) {
-			_upgradeCategoryValues.add(upgradeTaskCategory.getId());
-		}
+		_upgradeTaskCategoryValues = Stream.of(
+			_upgradeTaskCategoryServiceTracker.getServices(new UpgradeTaskCategory[0])
+		).map(
+			UpgradeTaskCategory::getId
+		).collect(
+			Collectors.toSet()
+		);
 	}
 
-	private Set<String> _upgradeCategoryValues;
 	private ServiceTracker<UpgradeTaskCategory, UpgradeTaskCategory> _upgradeTaskCategoryServiceTracker;
+	private Set<String> _upgradeTaskCategoryValues;
 
 }

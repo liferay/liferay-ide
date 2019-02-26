@@ -45,14 +45,14 @@ public class StandardUpgradePlan implements UpgradePlan {
 
 	public StandardUpgradePlan(
 		String name, String currentVersion, String targetVersion, Path currentProjectLocation,
-		List<String> upgradeCategories) {
+		List<String> upgradeTaskCategories) {
 
 		_name = name;
 		_currentVersion = currentVersion;
 		_targetVersion = targetVersion;
 		_currentProjectLocation = currentProjectLocation;
 		_upgradeProblems = new HashSet<>();
-		_upgradeCategories = upgradeCategories;
+		_upgradeTaskCategories = upgradeTaskCategories;
 	}
 
 	@Override
@@ -101,12 +101,12 @@ public class StandardUpgradePlan implements UpgradePlan {
 				Stream<UpgradeTaskCategory> stream = orderedUpgradeTaskCategories.stream();
 
 				upgradeTasks = stream.filter(
-					upgradeCategory -> {
-						if (_upgradeCategories == null) {
+					upgradeTaskCategory -> {
+						if (_upgradeTaskCategories == null) {
 							return true;
 						}
 
-						return _upgradeCategories.contains(upgradeCategory.getId());
+						return _upgradeTaskCategories.contains(upgradeTaskCategory.getId());
 					}
 				).flatMap(
 					upgradeTaskCategory -> {
@@ -141,13 +141,13 @@ public class StandardUpgradePlan implements UpgradePlan {
 	}
 
 	@Override
-	public List<String> getUpgradeCategories() {
-		return _upgradeCategories;
+	public Set<UpgradeProblem> getUpgradeProblems() {
+		return _upgradeProblems;
 	}
 
 	@Override
-	public Set<UpgradeProblem> getUpgradeProblems() {
-		return _upgradeProblems;
+	public List<String> getUpgradeTaskCategories() {
+		return _upgradeTaskCategories;
 	}
 
 	@Override
@@ -180,10 +180,6 @@ public class StandardUpgradePlan implements UpgradePlan {
 		_targetProjectLocation = path;
 	}
 
-	public void setUpgradeCategories(List<String> upgradeCategories) {
-		_upgradeCategories = upgradeCategories;
-	}
-
 	@SuppressWarnings("serial")
 	private static final List<String> _liferayVersions = new ArrayList<String>() {
 		{
@@ -198,8 +194,8 @@ public class StandardUpgradePlan implements UpgradePlan {
 	private final String _name;
 	private Path _targetProjectLocation;
 	private final String _targetVersion;
-	private List<String> _upgradeCategories;
 	private Set<UpgradeProblem> _upgradeProblems;
+	private List<String> _upgradeTaskCategories;
 	private List<UpgradeTask> _upgradeTasks;
 
 }

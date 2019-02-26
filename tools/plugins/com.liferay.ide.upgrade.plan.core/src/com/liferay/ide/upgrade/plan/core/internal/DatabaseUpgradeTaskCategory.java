@@ -24,8 +24,8 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Gregory Amerson
  */
 @Component(
-	property = {"id=config", "imagePath=icons/category_config.png", "order=2", "title=Configuration Upgrade"},
+	property = {"id=database", "imagePath=icons/category_database.png", "order=1", "title=Database Upgrade"},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskCategory.class
 )
-public class ConfigUpgradeCategory extends BaseUpgradeTaskCategory {
+public class DatabaseUpgradeTaskCategory extends BaseUpgradeTaskCategory {
 }

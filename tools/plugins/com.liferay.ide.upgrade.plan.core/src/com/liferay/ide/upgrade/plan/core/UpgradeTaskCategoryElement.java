@@ -14,8 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import com.liferay.ide.upgrade.plan.core.internal.UpgradeCategoryValueImageService;
-import com.liferay.ide.upgrade.plan.core.internal.UpgradeCategoryValueLabelService;
+import com.liferay.ide.upgrade.plan.core.internal.UpgradeTaskCategoryValueImageService;
+import com.liferay.ide.upgrade.plan.core.internal.UpgradeTaskCategoryValueLabelService;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
@@ -27,18 +27,18 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 /**
  * @author Simon Jiang
  */
-public interface UpgradeCategoryElement extends Element {
+public interface UpgradeTaskCategoryElement extends Element {
 
-	public Value<String> getUpgradeCategory();
+	public Value<String> getUpgradeTaskCategory();
 
-	public void setUpgradeCategory(String value);
+	public void setUpgradeTaskCategory(String value);
 
 	@Label(standard = "Upgrade Category")
-	@Service(context = Service.Context.METAMODEL, impl = UpgradeCategoryValueImageService.class)
-	@Service(context = Service.Context.METAMODEL, impl = UpgradeCategoryValueLabelService.class)
-	public ValueProperty PROP_UPGRADE_CATEGORY = new ValueProperty(
-		new ElementType(UpgradeCategoryElement.class), "UpgradeCategory");
+	@Service(context = Service.Context.METAMODEL, impl = UpgradeTaskCategoryValueImageService.class)
+	@Service(context = Service.Context.METAMODEL, impl = UpgradeTaskCategoryValueLabelService.class)
+	public ValueProperty PROP_UPGRADE_TASK_CATEGORY = new ValueProperty(
+		new ElementType(UpgradeTaskCategoryElement.class), "UpgradeTaskCategory");
 
-	public ElementType TYPE = new ElementType(UpgradeCategoryElement.class);
+	public ElementType TYPE = new ElementType(UpgradeTaskCategoryElement.class);
 
 }

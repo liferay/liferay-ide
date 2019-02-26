@@ -20,32 +20,39 @@ import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.sapphire.services.ValueLabelService;
+import org.eclipse.sapphire.ImageData;
+import org.eclipse.sapphire.Result;
+import org.eclipse.sapphire.services.ValueImageService;
 
 /**
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class UpgradeCategoryValueLabelService extends ValueLabelService {
+public class UpgradeTaskCategoryValueImageService extends ValueImageService {
 
 	@Override
-	public String provide(String value) {
-		String label = _labelMap.get(value);
+	public ImageData provide(String value) {
+		ImageData imageData = _imageMap.get(value);
 
-		if (label == null) {
+		if (imageData == null) {
 			UpgradeTaskCategory upgradeTaskCategory = ServicesLookup.getSingleService(
 				UpgradeTaskCategory.class, "(id=" + value + ")");
 
 			if (upgradeTaskCategory != null) {
-				label = upgradeTaskCategory.getTitle();
+				String imagePath = upgradeTaskCategory.getImagePath();
 
-				_labelMap.put(value, label);
+				Result<ImageData> imageResult = ImageData.readFromClassLoader(
+					UpgradeTaskCategoryValueImageService.class, imagePath);
+
+				imageData = imageResult.required();
+
+				_imageMap.put(value, imageData);
 			}
 		}
 
-		return label;
+		return imageData;
 	}
 
-	private static Map<String, String> _labelMap = new HashMap<>();
+	private static Map<String, ImageData> _imageMap = new HashMap<>();
 
 }
