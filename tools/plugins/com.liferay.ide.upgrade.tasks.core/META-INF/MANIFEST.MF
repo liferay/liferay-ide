@@ -46,7 +46,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.Ini
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequisite.CheckInstalledJDKsAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequisite.EnsureCompatibleJDKStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequisite.InstallNodejsStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequisite.InstallPrerequisitesTask.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequisite.InstallBladeStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequisite.InstallBladeAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.InitializeServerBundleStepAction.xml,
