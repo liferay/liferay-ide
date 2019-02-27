@@ -35,48 +35,55 @@ import org.osgi.framework.ServiceReference;
  */
 public class ServicesLookup {
 
-	public static <T> List<T> getOrderedServices(
-		BundleContext bundleContext, Collection<ServiceReference<T>> serviceReferenceCollection) {
+	public static <T> List<T> getOrderedServices(BundleContext bundleContext, Class<T> clazz, String filter) {
+		try {
+			Collection<ServiceReference<T>> serviceReferenceCollection = bundleContext.getServiceReferences(
+				clazz, filter);
 
-		List<ServiceReference<T>> serviceReferenceList = new ArrayList<>(serviceReferenceCollection);
+			List<ServiceReference<T>> serviceReferenceList = new ArrayList<>(serviceReferenceCollection);
 
-		Collections.sort(
-			serviceReferenceList,
-			(srLeft, srRight) -> {
-				try {
-					Dictionary<String, Object> srLeftProperties = srLeft.getProperties();
-
-					Object srLeftOrder = srLeftProperties.get("order");
-
+			Collections.sort(
+				serviceReferenceList,
+				(srLeft, srRight) -> {
 					try {
-						double srLeftDouble = Double.parseDouble(srLeftOrder.toString());
+						Dictionary<String, Object> srLeftProperties = srLeft.getProperties();
 
-						Dictionary<String, Object> srRightProperties = srRight.getProperties();
+						Object srLeftOrder = srLeftProperties.get("order");
 
-						Object srRightOrder = srRightProperties.get("order");
+						try {
+							double srLeftDouble = Double.parseDouble(srLeftOrder.toString());
 
-						double srRightDouble = Double.parseDouble(srRightOrder.toString());
+							Dictionary<String, Object> srRightProperties = srRight.getProperties();
 
-						return Double.compare(srLeftDouble, srRightDouble);
+							Object srRightOrder = srRightProperties.get("order");
+
+							double srRightDouble = Double.parseDouble(srRightOrder.toString());
+
+							return Double.compare(srLeftDouble, srRightDouble);
+						}
+						catch (NumberFormatException nfe) {
+						}
 					}
-					catch (NumberFormatException nfe) {
+					catch (Throwable t) {
 					}
-				}
-				catch (Throwable t) {
-				}
 
-				return -1;
-			});
+					return -1;
+				});
 
-		Stream<ServiceReference<T>> stream = serviceReferenceList.stream();
+			Stream<ServiceReference<T>> stream = serviceReferenceList.stream();
 
-		return stream.map(
-			bundleContext::getServiceObjects
-		).map(
-			ServiceObjects::getService
-		).collect(
-			Collectors.toList()
-		);
+			return stream.map(
+				bundleContext::getServiceObjects
+			).map(
+				ServiceObjects::getService
+			).collect(
+				Collectors.toList()
+			);
+		}
+		catch (InvalidSyntaxException ise) {
+		}
+
+		return Collections.emptyList();
 	}
 
 	public static <T> T getSingleService(Class<T> serviceClass, String filter) {

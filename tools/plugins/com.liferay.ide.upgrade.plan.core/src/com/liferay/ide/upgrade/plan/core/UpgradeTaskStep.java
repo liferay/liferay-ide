@@ -22,7 +22,11 @@ import java.util.List;
  */
 public interface UpgradeTaskStep extends UpgradePlanElement {
 
+	public boolean enabled();
+
 	public List<UpgradeTaskStepAction> getActions();
+
+	public double getOrder();
 
 	public UpgradeTaskStepRequirement getRequirement();
 

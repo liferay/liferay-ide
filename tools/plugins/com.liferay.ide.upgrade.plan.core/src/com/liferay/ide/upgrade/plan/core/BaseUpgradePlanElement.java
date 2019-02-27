@@ -28,10 +28,10 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 	public void activate(ComponentContext componentContext) {
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
-		_description = getProperty(properties, "description");
-		_id = getProperty(properties, "id");
-		_imagePath = getProperty(properties, "imagePath");
-		_title = getProperty(properties, "title");
+		_description = getStringProperty(properties, "description");
+		_id = getStringProperty(properties, "id");
+		_imagePath = getStringProperty(properties, "imagePath");
+		_title = getStringProperty(properties, "title");
 	}
 
 	@Override

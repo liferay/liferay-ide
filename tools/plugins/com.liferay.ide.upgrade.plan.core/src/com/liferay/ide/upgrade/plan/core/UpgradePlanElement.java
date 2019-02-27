@@ -27,11 +27,25 @@ public interface UpgradePlanElement {
 
 	public String getDescription();
 
+	public default double getDoubleProperty(Dictionary<String, Object> properties, String key) {
+		Object value = properties.get(key);
+
+		if (value != null) {
+			try {
+				return Double.parseDouble(value.toString());
+			}
+			catch (NumberFormatException nfe) {
+			}
+		}
+
+		return -1;
+	}
+
 	public String getId();
 
 	public String getImagePath();
 
-	public default String getProperty(Dictionary<String, Object> properties, String key) {
+	public default String getStringProperty(Dictionary<String, Object> properties, String key) {
 		Object value = properties.get(key);
 
 		if (value instanceof String) {
