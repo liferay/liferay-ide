@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -47,7 +46,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class BuildServiceTaskStepAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public IStatus perform() {
+	public IStatus perform(IProgressMonitor progressMonitor) {
 		List<IProject> projects = _resourceSelection.selectProjects(
 			"Select Lifreay Service Builder Project", false, new SelectableServiceBuilderProjectFilter());
 
@@ -55,31 +54,21 @@ public class BuildServiceTaskStepAction extends BaseUpgradeTaskStepAction {
 			return Status.CANCEL_STATUS;
 		}
 
-		Job buildServiceJob = new Job("BuildServiceJob") {
+		try {
+			for (IProject project : projects) {
+				ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
-			public IStatus run(IProgressMonitor monitor) {
-				try {
-					for (IProject project : projects) {
-						ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
+				if (liferayProject != null) {
+					IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);
 
-						if (liferayProject != null) {
-							IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);
-
-							builder.buildService(monitor);
-						}
-					}
+					builder.buildService(progressMonitor);
 				}
-				catch (CoreException ce) {
-				}
-
-				_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(BuildServiceTaskStepAction.this));
-
-				return Status.OK_STATUS;
 			}
+		}
+		catch (CoreException ce) {
+		}
 
-		};
-
-		buildServiceJob.schedule();
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(BuildServiceTaskStepAction.this));
 
 		return Status.OK_STATUS;
 	}
