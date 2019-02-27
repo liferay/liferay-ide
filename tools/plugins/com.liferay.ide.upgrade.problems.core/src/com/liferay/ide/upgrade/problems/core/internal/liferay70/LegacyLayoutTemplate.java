@@ -42,7 +42,7 @@ import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 @Component(property = {
 		"file.extensions=tpl", "problem.title=Layout Template breaking change",
 		"problem.summary=The breaking change of Layout Template.",
-		"problem.section=#layout-template", "auto.correct=template", "implName=LegacyLayoutTemplate",
+		"problem.section=#layout-template", "auto.correct=layout-template", "implName=LegacyLayoutTemplate",
 		"version=7.0"
 	},
 		service = {AutoFileMigrator.class, FileMigrator.class})

@@ -4,7 +4,7 @@
    <property name="problem.title" value="Layout Template breaking change"/>
    <property name="problem.summary" value="The breaking change of Layout Template."/>
    <property name="problem.section" value="#layout-template"/>
-   <property name="auto.correct" value="template"/>
+   <property name="auto.correct" value="layout-template"/>
    <property name="implName" value="LegacyLayoutTemplate"/>
    <property name="version" value="7.0"/>
    <service>
