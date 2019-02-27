@@ -43,21 +43,10 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
-		_requirement = getProperty(properties, "requirement");
-		_taskId = getProperty(properties, "taskId");
-		_url = getProperty(properties, "url");
-
-		Object order = properties.get("order");
-
-		_order = 0;
-
-		if (order != null) {
-			try {
-				_order = Double.parseDouble(order.toString());
-			}
-			catch (NumberFormatException nfe) {
-			}
-		}
+		_requirement = getStringProperty(properties, "requirement");
+		_taskId = getStringProperty(properties, "taskId");
+		_order = getDoubleProperty(properties, "order");
+		_url = getStringProperty(properties, "url");
 
 		_lookupActions(componentContext);
 	}

@@ -40,7 +40,7 @@ public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements 
 
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
-		_categoryId = getProperty(properties, "categoryId");
+		_categoryId = getStringProperty(properties, "categoryId");
 
 		_lookupTaskSteps(componentContext);
 	}

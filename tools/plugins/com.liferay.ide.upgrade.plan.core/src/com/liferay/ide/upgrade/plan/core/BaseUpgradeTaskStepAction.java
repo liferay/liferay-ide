@@ -30,7 +30,7 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
-		_stepId = getProperty(properties, "stepId");
+		_stepId = getStringProperty(properties, "stepId");
 	}
 
 	@Override
