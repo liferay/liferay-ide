@@ -33,7 +33,7 @@ public interface UpgradeTaskCategoryElement extends Element {
 
 	public void setUpgradeTaskCategory(String value);
 
-	@Label(standard = "Upgrade Category")
+	@Label(standard = "Upgrade Task Category")
 	@Service(context = Service.Context.METAMODEL, impl = UpgradeTaskCategoryValueImageService.class)
 	@Service(context = Service.Context.METAMODEL, impl = UpgradeTaskCategoryValueLabelService.class)
 	public ValueProperty PROP_UPGRADE_TASK_CATEGORY = new ValueProperty(

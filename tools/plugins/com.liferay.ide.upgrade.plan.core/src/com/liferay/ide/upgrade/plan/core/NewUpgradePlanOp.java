@@ -71,6 +71,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	public void setTargetVersion(String targetVersion);
 
 	@DefaultValue(text = "6.2")
+	@Label(standard = "Current Liferay Version")
 	@PossibleValues(values = {"6.2", "7.0"})
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
 
@@ -85,6 +86,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
 	@DefaultValue(text = "7.1")
+	@Label(standard = "Target Liferay Version")
 	@PossibleValues(values = {"7.0", "7.1"})
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
 
