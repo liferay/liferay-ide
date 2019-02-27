@@ -52,7 +52,7 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	}
 
 	@Override
-	public boolean enable() {
+	public boolean enabled() {
 		BundleContext bundleContext = _componentContext.getBundleContext();
 
 		try {
