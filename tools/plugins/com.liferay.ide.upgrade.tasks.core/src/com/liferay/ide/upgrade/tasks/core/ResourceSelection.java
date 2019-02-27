@@ -29,6 +29,6 @@ public interface ResourceSelection {
 
 	public Path selectPath(String message);
 
-	public List<IProject> selectProjects(String message, boolean initialSelectAll, Predicate<IProject> predicate);
+	public List<IProject> selectProjects(String message, boolean initialSelectAll, Predicate<IProject> filter);
 
 }

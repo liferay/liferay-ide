@@ -22,7 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 /**
  * @author Terry Jia
  */
-public class JavaProjectPredicate implements Predicate<IProject> {
+public class SelectableJavaProjectFilter implements Predicate<IProject> {
 
 	@Override
 	public boolean test(IProject project) {

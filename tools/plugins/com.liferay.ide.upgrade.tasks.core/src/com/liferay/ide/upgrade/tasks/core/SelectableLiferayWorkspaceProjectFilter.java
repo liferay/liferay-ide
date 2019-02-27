@@ -17,22 +17,27 @@ package com.liferay.ide.upgrade.tasks.core;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
 
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IProject;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
-public class LiferayWorkspaceProjectPredicate implements Predicate<IProject> {
+public class SelectableLiferayWorkspaceProjectFilter implements Predicate<IProject> {
 
 	@Override
 	public boolean test(IProject project) {
-		if (LiferayCore.create(LiferayWorkspaceProject.class, project) != null) {
-			return true;
-		}
-
-		return false;
+		return Optional.ofNullable(
+			project
+		).map(
+			p -> LiferayCore.create(LiferayWorkspaceProject.class, p)
+		).filter(
+			Objects::nonNull
+		).isPresent();
 	}
 
 }

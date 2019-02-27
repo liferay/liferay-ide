@@ -22,8 +22,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
-import com.liferay.ide.upgrade.tasks.core.JavaProjectPredicate;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
+import com.liferay.ide.upgrade.tasks.core.SelectableJavaProjectFilter;
 
 import java.io.File;
 
@@ -53,7 +53,7 @@ public class FindUpgradeProblemsTaskStepAction extends BaseUpgradeTaskStepAction
 	@Override
 	public IStatus perform() {
 		List<IProject> projects = _resourceSelection.selectProjects(
-			"select projects", true, new JavaProjectPredicate());
+			"select projects", true, new SelectableJavaProjectFilter());
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;

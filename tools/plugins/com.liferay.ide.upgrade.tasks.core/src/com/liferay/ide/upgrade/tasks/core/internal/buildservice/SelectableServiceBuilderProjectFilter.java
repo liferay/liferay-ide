@@ -12,30 +12,33 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core;
+package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
 
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.adapter.NoopLiferayProject;
+import com.liferay.ide.project.core.util.SearchFilesVisitor;
+import com.liferay.ide.upgrade.tasks.core.SelectableLiferayProjectFilter;
 
+import java.util.List;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
 /**
+ * @author Simon Jiang
  * @author Terry Jia
  */
-public class LiferayProjectPredicate extends JavaProjectPredicate {
+public class SelectableServiceBuilderProjectFilter extends SelectableLiferayProjectFilter {
 
 	@Override
 	public boolean test(IProject project) {
-		if (super.test(project)) {
-			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
-
-			if ((liferayProject != null) && !(liferayProject instanceof NoopLiferayProject)) {
-				return true;
-			}
+		if (!super.test(project)) {
+			return false;
 		}
 
-		return false;
+		SearchFilesVisitor searchFilesVisitor = new SearchFilesVisitor();
+
+		List<IFile> serviceXmls = searchFilesVisitor.searchFiles(project, "service.xml");
+
+		return !serviceXmls.isEmpty();
 	}
 
 }

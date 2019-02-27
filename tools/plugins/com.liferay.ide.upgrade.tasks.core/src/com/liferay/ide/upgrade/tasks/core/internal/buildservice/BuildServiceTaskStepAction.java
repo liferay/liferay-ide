@@ -49,7 +49,7 @@ public class BuildServiceTaskStepAction extends BaseUpgradeTaskStepAction {
 	@Override
 	public IStatus perform() {
 		List<IProject> projects = _resourceSelection.selectProjects(
-			"Select Lifreay Service Builder Project", false, new ServiceBuilderProjectPredicate());
+			"Select Lifreay Service Builder Project", false, new SelectableServiceBuilderProjectFilter());
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;

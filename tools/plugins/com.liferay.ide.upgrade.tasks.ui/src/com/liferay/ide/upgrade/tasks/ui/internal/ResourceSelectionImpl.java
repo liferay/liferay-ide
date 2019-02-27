@@ -24,6 +24,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
@@ -61,7 +63,7 @@ public class ResourceSelectionImpl implements ResourceSelection {
 	}
 
 	@Override
-	public List<IProject> selectProjects(String message, boolean initialSelectAll, Predicate<IProject> predicate) {
+	public List<IProject> selectProjects(String message, boolean initialSelectAll, Predicate<IProject> filter) {
 		final AtomicInteger returnCode = new AtomicInteger();
 
 		List<IProject> selectedProjects = new ArrayList<>();
@@ -70,11 +72,15 @@ public class ResourceSelectionImpl implements ResourceSelection {
 
 			@Override
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				if (predicate != null) {
-					return predicate.test((IProject)element);
-				}
-
-				return true;
+				return Optional.ofNullable(
+					filter
+				).filter(
+					Objects::nonNull
+				).map(
+					predicate -> predicate.test((IProject)element)
+				).orElse(
+					true
+				);
 			}
 
 		};

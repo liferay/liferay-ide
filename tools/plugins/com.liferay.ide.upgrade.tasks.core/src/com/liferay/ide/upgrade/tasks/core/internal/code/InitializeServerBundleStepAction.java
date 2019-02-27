@@ -20,8 +20,8 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-import com.liferay.ide.upgrade.tasks.core.LiferayWorkspaceProjectPredicate;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
+import com.liferay.ide.upgrade.tasks.core.SelectableLiferayWorkspaceProjectFilter;
 
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class InitializeServerBundleStepAction extends BaseUpgradeTaskStepAction 
 	@Override
 	public IStatus perform() {
 		List<IProject> projects = _resourceSelection.selectProjects(
-			"select liferay workspace project", false, new LiferayWorkspaceProjectPredicate());
+			"select liferay workspace project", false, new SelectableLiferayWorkspaceProjectFilter());
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;
