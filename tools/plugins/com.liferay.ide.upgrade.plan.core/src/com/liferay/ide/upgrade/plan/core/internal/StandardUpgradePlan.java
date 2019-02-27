@@ -35,7 +35,6 @@ import java.util.stream.Stream;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
 
 /**
  * @author Gregory Amerson
@@ -94,45 +93,33 @@ public class StandardUpgradePlan implements UpgradePlan {
 
 			List<UpgradeTask> upgradeTasks = null;
 
-			try {
-				List<UpgradeTaskCategory> orderedUpgradeTaskCategories = ServicesLookup.getOrderedServices(
-					bundleContext, bundleContext.getServiceReferences(UpgradeTaskCategory.class, null));
+			List<UpgradeTaskCategory> orderedUpgradeTaskCategories = ServicesLookup.getOrderedServices(
+				bundleContext, UpgradeTaskCategory.class, null);
 
-				Stream<UpgradeTaskCategory> stream = orderedUpgradeTaskCategories.stream();
+			Stream<UpgradeTaskCategory> stream = orderedUpgradeTaskCategories.stream();
 
-				upgradeTasks = stream.filter(
-					upgradeTaskCategory -> {
-						if (_upgradeTaskCategories == null) {
-							return true;
-						}
-
-						return _upgradeTaskCategories.contains(upgradeTaskCategory.getId());
+			upgradeTasks = stream.filter(
+				upgradeTaskCategory -> {
+					if (_upgradeTaskCategories == null) {
+						return true;
 					}
-				).flatMap(
-					upgradeTaskCategory -> {
-						try {
-							List<UpgradeTask> orderedUpgradeTasks = ServicesLookup.getOrderedServices(
-								bundleContext,
-								bundleContext.getServiceReferences(
-									UpgradeTask.class, "(categoryId=" + upgradeTaskCategory.getId() + ")"));
 
-							return orderedUpgradeTasks.stream();
-						}
-						catch (InvalidSyntaxException ise) {
-							return null;
-						}
-					}
-				).filter(
-					Objects::nonNull
-				).filter(
-					upgradeTask -> upgradeTask.appliesTo(this)
-				).collect(
-					Collectors.toList()
-				);
-			}
-			catch (InvalidSyntaxException ise) {
-				upgradeTasks = Collections.emptyList();
-			}
+					return _upgradeTaskCategories.contains(upgradeTaskCategory.getId());
+				}
+			).flatMap(
+				upgradeTaskCategory -> {
+					List<UpgradeTask> orderedUpgradeTasks = ServicesLookup.getOrderedServices(
+						bundleContext, UpgradeTask.class, "(categoryId=" + upgradeTaskCategory.getId() + ")");
+
+					return orderedUpgradeTasks.stream();
+				}
+			).filter(
+				Objects::nonNull
+			).filter(
+				upgradeTask -> upgradeTask.appliesTo(this)
+			).collect(
+				Collectors.toList()
+			);
 
 			_upgradeTasks = upgradeTasks;
 		}

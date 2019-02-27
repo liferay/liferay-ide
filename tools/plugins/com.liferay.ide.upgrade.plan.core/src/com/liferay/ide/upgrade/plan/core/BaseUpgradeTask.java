@@ -16,7 +16,6 @@ package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
@@ -24,8 +23,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
@@ -58,29 +55,22 @@ public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements 
 	private void _lookupTaskSteps(ComponentContext componentContext) {
 		BundleContext bundleContext = componentContext.getBundleContext();
 
-		try {
-			Collection<ServiceReference<UpgradeTaskStep>> upgradeTaskStepServiceReferences =
-				bundleContext.getServiceReferences(UpgradeTaskStep.class, "(taskId=" + getId() + ")");
+		List<UpgradeTaskStep> upgradeTaskSteps = ServicesLookup.getOrderedServices(
+			bundleContext, UpgradeTaskStep.class, "(taskId=" + getId() + ")");
 
-			List<UpgradeTaskStep> upgradeTaskSteps = ServicesLookup.getOrderedServices(
-				bundleContext, upgradeTaskStepServiceReferences);
+		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 
-			UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
-
-			if (upgradePlanner == null) {
-				return;
-			}
-
-			Stream<UpgradeTaskStep> stream = upgradeTaskSteps.stream();
-
-			_upgradeTaskSteps = stream.filter(
-				upgradeTaskStep -> upgradeTaskStep.appliesTo(upgradePlanner.getCurrentUpgradePlan())
-			).collect(
-				Collectors.toList()
-			);
+		if (upgradePlanner == null) {
+			return;
 		}
-		catch (InvalidSyntaxException ise) {
-		}
+
+		Stream<UpgradeTaskStep> stream = upgradeTaskSteps.stream();
+
+		_upgradeTaskSteps = stream.filter(
+			upgradeTaskStep -> upgradeTaskStep.appliesTo(upgradePlanner.getCurrentUpgradePlan())
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	private String _categoryId;
