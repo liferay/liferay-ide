@@ -34,6 +34,8 @@
                     <property>Location</property>
                 </property-editor>
             </content>
+            <description>Create a new Upgrade Plan.</description>
+            <image>NewUpgradePlanWizard.png</image>
         </page>
     </wizard>
 </definition>
