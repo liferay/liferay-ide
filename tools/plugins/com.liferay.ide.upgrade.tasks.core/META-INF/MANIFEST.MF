@@ -58,5 +58,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.Ini
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.MoveLegacyProjectsAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.BuildServiceTask.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.BuildServiceTaskStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.BuildServiceTaskStepAction.xml
+ OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.BuildServiceTaskStepAction.xml,
+ OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.RemoveLegacyFilesAction.xml
 Export-Package: com.liferay.ide.upgrade.tasks.core

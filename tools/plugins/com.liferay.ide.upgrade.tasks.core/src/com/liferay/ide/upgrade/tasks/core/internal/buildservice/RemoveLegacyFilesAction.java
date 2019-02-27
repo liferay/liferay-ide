@@ -14,23 +14,22 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
 
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
+import com.liferay.ide.upgrade.tasks.core.internal.UpgradeTasksCorePlugin;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -41,10 +40,10 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Terry Jia
  */
 @Component(
-	property = {"id=build_services", "order=2", "stepId=build_services", "title=Build Services"},
+	property = {"id=remove_legacy_files", "order=1", "stepId=build_services", "title=Remove Legacy Files"},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class BuildServiceTaskStepAction extends BaseUpgradeTaskStepAction {
+public class RemoveLegacyFilesAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform() {
@@ -55,31 +54,36 @@ public class BuildServiceTaskStepAction extends BaseUpgradeTaskStepAction {
 			return Status.CANCEL_STATUS;
 		}
 
-		Job buildServiceJob = new Job("BuildServiceJob") {
+		for (IProject project : projects) {
+			try {
+				String relativePath = "/docroot/WEB-INF/src/META-INF";
 
-			public IStatus run(IProgressMonitor monitor) {
-				try {
-					for (IProject project : projects) {
-						ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
+				IFile portletSpringXML = project.getFile(relativePath + "/portlet-spring.xml");
 
-						if (liferayProject != null) {
-							IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);
-
-							builder.buildService(monitor);
-						}
-					}
-				}
-				catch (CoreException ce) {
+				if (portletSpringXML.exists()) {
+					portletSpringXML.delete(true, new NullProgressMonitor());
 				}
 
-				_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(BuildServiceTaskStepAction.this));
+				IFile shardDataSourceSpringXML = project.getFile(relativePath + "/shard-data-source-spring.xml");
 
-				return Status.OK_STATUS;
+				if (shardDataSourceSpringXML.exists()) {
+					shardDataSourceSpringXML.delete(true, new NullProgressMonitor());
+				}
+
+				// for 6.2 maven project
+
+				IFolder metaInfFolder = project.getFolder("/src/main/resources/META-INF/");
+
+				if (metaInfFolder.exists()) {
+					metaInfFolder.delete(true, new NullProgressMonitor());
+				}
 			}
+			catch (CoreException ce) {
+				UpgradeTasksCorePlugin.logError(ce.getMessage());
+			}
+		}
 
-		};
-
-		buildServiceJob.schedule();
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(RemoveLegacyFilesAction.this));
 
 		return Status.OK_STATUS;
 	}

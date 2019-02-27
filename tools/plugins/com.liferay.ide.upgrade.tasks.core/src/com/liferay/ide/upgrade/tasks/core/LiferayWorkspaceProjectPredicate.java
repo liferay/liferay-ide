@@ -14,21 +14,25 @@
 
 package com.liferay.ide.upgrade.tasks.core;
 
-import java.nio.file.Path;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.LiferayWorkspaceProject;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IProject;
 
 /**
- * @author Gregory Amerson
  * @author Terry Jia
  */
-public interface ResourceSelection {
+public class LiferayWorkspaceProjectPredicate implements Predicate<IProject> {
 
-	public Path selectPath(String message);
+	@Override
+	public boolean test(IProject project) {
+		if (LiferayCore.create(LiferayWorkspaceProject.class, project) != null) {
+			return true;
+		}
 
-	public List<IProject> selectProjects(String message, boolean initialSelectAll, Predicate<IProject> predicate);
+		return false;
+	}
 
 }

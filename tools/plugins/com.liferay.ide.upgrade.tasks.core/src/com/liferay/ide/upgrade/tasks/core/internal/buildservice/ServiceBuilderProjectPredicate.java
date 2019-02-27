@@ -12,23 +12,31 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core;
+package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
 
-import java.nio.file.Path;
+import com.liferay.ide.project.core.util.SearchFilesVisitor;
+import com.liferay.ide.upgrade.tasks.core.LiferayProjectPredicate;
 
 import java.util.List;
-import java.util.function.Predicate;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
 /**
- * @author Gregory Amerson
+ * @author Simon Jiang
  * @author Terry Jia
  */
-public interface ResourceSelection {
+public class ServiceBuilderProjectPredicate extends LiferayProjectPredicate {
 
-	public Path selectPath(String message);
+	@Override
+	public boolean test(IProject project) {
+		if (super.test(project)) {
+			List<IFile> serviceXmls = (new SearchFilesVisitor()).searchFiles(project, "service.xml");
 
-	public List<IProject> selectProjects(String message, boolean initialSelectAll, Predicate<IProject> predicate);
+			return !serviceXmls.isEmpty();
+		}
+
+		return false;
+	}
 
 }

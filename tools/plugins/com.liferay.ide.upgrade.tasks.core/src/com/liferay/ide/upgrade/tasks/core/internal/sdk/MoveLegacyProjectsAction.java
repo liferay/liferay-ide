@@ -39,7 +39,7 @@ public class MoveLegacyProjectsAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform() {
-		List<IProject> projects = _resourceSelection.selectProjects("select projects", true);
+		List<IProject> projects = _resourceSelection.selectProjects("select projects", true, null);
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;

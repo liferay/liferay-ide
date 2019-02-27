@@ -17,7 +17,10 @@ package com.liferay.ide.upgrade.tasks.core.internal.sdk;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.tasks.core.LiferayWorkspaceProjectPredicate;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
+
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -44,11 +47,14 @@ public class InitializeLatestPluginsSDKAction extends BaseUpgradeTaskStepAction 
 
 	@Override
 	public IStatus perform() {
-		IProject project = _resourceSelection.selectLiferayWorkspaceProject("select Liferay workspace project");
+		List<IProject> projects = _resourceSelection.selectProjects(
+			"select liferay workspace project", false, new LiferayWorkspaceProjectPredicate());
 
-		if (project == null) {
+		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;
 		}
+
+		IProject project = projects.get(0);
 
 		try {
 			GradleUtil.runGradleTask(project, "upgradePluginsSDK", new NullProgressMonitor());

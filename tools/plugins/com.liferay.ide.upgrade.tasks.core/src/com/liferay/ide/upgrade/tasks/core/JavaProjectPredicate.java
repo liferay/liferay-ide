@@ -14,21 +14,32 @@
 
 package com.liferay.ide.upgrade.tasks.core;
 
-import java.nio.file.Path;
-
-import java.util.List;
 import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 
 /**
- * @author Gregory Amerson
  * @author Terry Jia
  */
-public interface ResourceSelection {
+public class JavaProjectPredicate implements Predicate<IProject> {
 
-	public Path selectPath(String message);
+	@Override
+	public boolean test(IProject project) {
+		if (project == null) {
+			return false;
+		}
 
-	public List<IProject> selectProjects(String message, boolean initialSelectAll, Predicate<IProject> predicate);
+		if (!project.isOpen()) {
+			return false;
+		}
+
+		try {
+			return project.hasNature("org.eclipse.jdt.core.javanature");
+		}
+		catch (CoreException ce) {
+			return false;
+		}
+	}
 
 }

@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.tasks.ui.internal;
 
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 import com.liferay.ide.upgrade.tasks.ui.internal.dialog.ProjectsSelectionDialog;
@@ -30,7 +28,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
@@ -44,116 +41,6 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(service = ResourceSelection.class)
 public class ResourceSelectionImpl implements ResourceSelection {
-
-	@Override
-	public List<IProject> selectJavaProjects(String message, boolean initialSelectAll) {
-		final AtomicInteger returnCode = new AtomicInteger();
-
-		List<IProject> selectedProjects = new ArrayList<>();
-
-		ViewerFilter viewerFilter = new ViewerFilter() {
-
-			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				IProject project = (IProject)element;
-
-				try {
-					return project.hasNature("org.eclipse.jdt.core.javanature");
-				}
-				catch (CoreException ce) {
-				}
-
-				return false;
-			}
-
-		};
-
-		UIUtil.sync(
-			() -> {
-				ProjectsSelectionDialog projectsSelectionDialog = new ProjectsSelectionDialog(
-					UIUtil.getActiveShell(), viewerFilter, initialSelectAll, message);
-
-				returnCode.set(projectsSelectionDialog.open());
-
-				selectedProjects.addAll(projectsSelectionDialog.getSelectedProjects());
-			});
-
-		if (returnCode.get() == Window.OK) {
-			return selectedProjects;
-		}
-
-		return Collections.emptyList();
-	}
-
-	@Override
-	public List<IProject> selectJavaProjects(String message, Predicate<IProject> filterPredicarte) {
-		final AtomicInteger returnCode = new AtomicInteger();
-
-		List<IProject> selectedProjects = new ArrayList<>();
-
-		ViewerFilter viewerFilter = new ViewerFilter() {
-
-			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				return filterPredicarte.test((IProject)element);
-			}
-
-		};
-
-		UIUtil.sync(
-			() -> {
-				ProjectsSelectionDialog projectsSelectionDialog = new ProjectsSelectionDialog(
-					UIUtil.getActiveShell(), viewerFilter, true, message);
-
-				returnCode.set(projectsSelectionDialog.open());
-
-				selectedProjects.addAll(projectsSelectionDialog.getSelectedProjects());
-			});
-
-		if (returnCode.get() == Window.OK) {
-			return selectedProjects;
-		}
-
-		return Collections.emptyList();
-	}
-
-	@Override
-	public IProject selectLiferayWorkspaceProject(String message) {
-		final AtomicInteger returnCode = new AtomicInteger();
-
-		List<IProject> selectedProjects = new ArrayList<>();
-
-		ViewerFilter viewerFilter = new ViewerFilter() {
-
-			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				IProject project = (IProject)element;
-
-				if (LiferayCore.create(LiferayWorkspaceProject.class, project) != null) {
-					return true;
-				}
-
-				return false;
-			}
-
-		};
-
-		UIUtil.sync(
-			() -> {
-				ProjectsSelectionDialog projectsSelectionDialog = new ProjectsSelectionDialog(
-					UIUtil.getActiveShell(), viewerFilter, true, message);
-
-				returnCode.set(projectsSelectionDialog.open());
-
-				selectedProjects.addAll(projectsSelectionDialog.getSelectedProjects());
-			});
-
-		if (returnCode.get() == Window.OK) {
-			return selectedProjects.get(0);
-		}
-
-		return null;
-	}
 
 	@Override
 	public Path selectPath(String message) {
@@ -174,15 +61,28 @@ public class ResourceSelectionImpl implements ResourceSelection {
 	}
 
 	@Override
-	public List<IProject> selectProjects(String message, boolean initialSelectAll) {
+	public List<IProject> selectProjects(String message, boolean initialSelectAll, Predicate<IProject> predicate) {
 		final AtomicInteger returnCode = new AtomicInteger();
 
 		List<IProject> selectedProjects = new ArrayList<>();
 
+		ViewerFilter viewerFilter = new ViewerFilter() {
+
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				if (predicate != null) {
+					return predicate.test((IProject)element);
+				}
+
+				return true;
+			}
+
+		};
+
 		UIUtil.sync(
 			() -> {
 				ProjectsSelectionDialog projectsSelectionDialog = new ProjectsSelectionDialog(
-					UIUtil.getActiveShell(), null, initialSelectAll, message);
+					UIUtil.getActiveShell(), viewerFilter, initialSelectAll, message);
 
 				returnCode.set(projectsSelectionDialog.open());
 
