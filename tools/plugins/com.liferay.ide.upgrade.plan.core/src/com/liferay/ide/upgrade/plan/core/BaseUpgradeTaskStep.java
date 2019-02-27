@@ -31,6 +31,7 @@ import org.osgi.service.component.annotations.Activate;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement implements UpgradeTaskStep {
 
@@ -38,18 +39,71 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	public void activate(ComponentContext componentContext) {
 		super.activate(componentContext);
 
+		_componentContext = componentContext;
+
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
 		_requirement = getProperty(properties, "requirement");
 		_taskId = getProperty(properties, "taskId");
 		_url = getProperty(properties, "url");
 
+		Object order = properties.get("order");
+
+		_order = 0;
+
+		if (order != null) {
+			try {
+				_order = Double.parseDouble(order.toString());
+			}
+			catch (NumberFormatException nfe) {
+			}
+		}
+
 		_lookupActions(componentContext);
+	}
+
+	@Override
+	public boolean enable() {
+		BundleContext bundleContext = _componentContext.getBundleContext();
+
+		try {
+			Collection<ServiceReference<UpgradeTaskStep>> upgradeTaskStepServiceReferences =
+				bundleContext.getServiceReferences(
+					UpgradeTaskStep.class, "&(taskId=" + getTaskId() + ")(requirement=required)");
+
+			List<UpgradeTaskStep> upgradeTaskSteps = ServicesLookup.getOrderedServices(
+				bundleContext, upgradeTaskStepServiceReferences);
+
+			Stream<UpgradeTaskStep> upgradeTaskStepsStream = upgradeTaskSteps.stream();
+
+			long count = upgradeTaskStepsStream.filter(
+				upgradeTaskStep -> upgradeTaskStep.getOrder() < _order
+			).map(
+				upgradeTaskStep -> upgradeTaskStep.getActions()
+			).flatMap(
+				actions -> actions.stream()
+			).filter(
+				action -> UpgradeTaskStepActionStatus.INCOMPLETE.equals(action.getStatus())
+			).count();
+
+			if (count > 0) {
+				return false;
+			}
+		}
+		catch (InvalidSyntaxException ise) {
+		}
+
+		return true;
 	}
 
 	@Override
 	public List<UpgradeTaskStepAction> getActions() {
 		return Collections.unmodifiableList(_upgradeTaskStepActions);
+	}
+
+	@Override
+	public double getOrder() {
+		return _order;
 	}
 
 	@Override
@@ -91,6 +145,8 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 		}
 	}
 
+	private ComponentContext _componentContext;
+	private double _order;
 	private String _requirement;
 	private String _taskId;
 	private List<UpgradeTaskStepAction> _upgradeTaskStepActions;
