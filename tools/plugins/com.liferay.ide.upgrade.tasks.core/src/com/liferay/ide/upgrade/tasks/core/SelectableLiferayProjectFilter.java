@@ -14,21 +14,36 @@
 
 package com.liferay.ide.upgrade.tasks.core;
 
-import java.nio.file.Path;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.adapter.NoopLiferayProject;
 
-import java.util.List;
-import java.util.function.Predicate;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.eclipse.core.resources.IProject;
 
 /**
- * @author Gregory Amerson
  * @author Terry Jia
+ * @author Gregory Amerson
  */
-public interface ResourceSelection {
+public class SelectableLiferayProjectFilter extends SelectableJavaProjectFilter {
 
-	public Path selectPath(String message);
+	@Override
+	public boolean test(IProject project) {
+		if (!super.test(project)) {
+			return false;
+		}
 
-	public List<IProject> selectProjects(String message, boolean initialSelectAll, Predicate<IProject> filter);
+		return Optional.ofNullable(
+			project
+		).map(
+			p -> LiferayCore.create(ILiferayProject.class, p)
+		).filter(
+			Objects::nonNull
+		).filter(
+			p -> !(p instanceof NoopLiferayProject)
+		).isPresent();
+	}
 
 }

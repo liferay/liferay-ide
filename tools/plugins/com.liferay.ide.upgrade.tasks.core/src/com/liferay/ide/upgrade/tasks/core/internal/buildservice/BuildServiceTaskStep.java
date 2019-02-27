@@ -12,30 +12,22 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
+package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
- * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @Component(
-	property = {"id=check_is_blade_installed", "order=1", "stepId=install_blade", "title=Check is Blade installed"},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
+	property = {
+		"id=build_services", "requirement=recommended", "order=2", "taskId=build_service", "title=Build Services"
+	},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class CheckIsBladeInstalledAction extends BaseUpgradeTaskStepAction {
-
-	@Override
-	public IStatus perform(IProgressMonitor progressMonitor) {
-		return Status.OK_STATUS;
-	}
-
+public class BuildServiceTaskStep extends BaseUpgradeTaskStep {
 }

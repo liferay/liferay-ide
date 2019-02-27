@@ -23,6 +23,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
+import com.liferay.ide.upgrade.tasks.core.SelectableJavaProjectFilter;
 
 import java.io.File;
 
@@ -34,7 +35,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -50,8 +50,9 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class FindUpgradeProblemsTaskStepAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public IStatus perform() {
-		List<IProject> projects = _resourceSelection.selectJavaProjects("select projects", true);
+	public IStatus perform(IProgressMonitor progressMonitor) {
+		List<IProject> projects = _resourceSelection.selectProjects(
+			"select projects", true, new SelectableJavaProjectFilter());
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;
@@ -65,30 +66,19 @@ public class FindUpgradeProblemsTaskStepAction extends BaseUpgradeTaskStepAction
 
 		upgradeProblems.clear();
 
-		Job job = new Job("Finding migration problems...") {
+		Stream<IProject> stream = projects.stream();
 
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				Stream<IProject> stream = projects.stream();
+		stream.forEach(
+			project -> {
+				File searchFile = FileUtil.getFile(project);
 
-				stream.forEach(
-					project -> {
-						File searchFile = FileUtil.getFile(project);
+				List<UpgradeProblem> foundUpgradeProblems = _fileMigration.findUpgradeProblems(
+					searchFile, upgradeVersions, progressMonitor);
 
-						List<UpgradeProblem> upgradeProblems = _fileMigration.findUpgradeProblems(
-							searchFile, upgradeVersions, monitor);
+				upgradePlan.addUpgradeProblems(foundUpgradeProblems);
+			});
 
-						upgradePlan.addUpgradeProblems(upgradeProblems);
-					});
-
-				_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(FindUpgradeProblemsTaskStepAction.this));
-
-				return Status.OK_STATUS;
-			}
-
-		};
-
-		job.schedule();
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(FindUpgradeProblemsTaskStepAction.this));
 
 		return Status.OK_STATUS;
 	}

@@ -12,22 +12,34 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.core;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
+import java.util.function.Predicate;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 
 /**
- * @author Gregory Amerson
+ * @author Terry Jia
  */
-public interface UpgradeTaskStepAction extends UpgradePlanElement {
+public class SelectableJavaProjectFilter implements Predicate<IProject> {
 
-	public UpgradeTaskStepActionStatus getStatus();
+	@Override
+	public boolean test(IProject project) {
+		if (project == null) {
+			return false;
+		}
 
-	public String getStepId();
+		if (!project.isOpen()) {
+			return false;
+		}
 
-	public IStatus perform(IProgressMonitor progressMonitor);
-
-	public void setStatus(UpgradeTaskStepActionStatus status);
+		try {
+			return project.hasNature("org.eclipse.jdt.core.javanature");
+		}
+		catch (CoreException ce) {
+			return false;
+		}
+	}
 
 }

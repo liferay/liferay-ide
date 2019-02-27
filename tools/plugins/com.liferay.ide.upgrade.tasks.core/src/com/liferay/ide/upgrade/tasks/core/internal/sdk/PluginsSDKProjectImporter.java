@@ -22,8 +22,8 @@ import java.io.File;
 import java.nio.file.Path;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
@@ -36,7 +36,7 @@ import org.osgi.service.component.annotations.Component;
 public class PluginsSDKProjectImporter implements ProjectImporter {
 
 	@Override
-	public IStatus importProjects(Path rootProjectPath) {
+	public IStatus importProjects(Path rootProjectPath, IProgressMonitor progressMonitor) {
 		File file = rootProjectPath.toFile();
 
 		String pathValue = file.getAbsolutePath();
@@ -46,7 +46,7 @@ public class PluginsSDKProjectImporter implements ProjectImporter {
 		org.eclipse.core.runtime.Path path = new org.eclipse.core.runtime.Path(pathValue);
 
 		try {
-			CoreUtil.openProject(fileName, path, new NullProgressMonitor());
+			CoreUtil.openProject(fileName, path, progressMonitor);
 		}
 		catch (CoreException ce) {
 		}

@@ -12,18 +12,20 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.sdk;
+package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
 
-import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
-import com.liferay.ide.upgrade.tasks.core.SelectableLiferayWorkspaceProjectFilter;
+import com.liferay.ide.upgrade.tasks.core.internal.UpgradeTasksCorePlugin;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -34,40 +36,62 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
+ * @author Simon Jiang
  * @author Terry Jia
  */
 @Component(
-	property = {
-		"id=initialize_latest_plugins_sdk", "order=2", "stepId=initialize_latest_plugins_sdk",
-		"title=Initialize the Latest Plugins SDK"
-	},
+	property = {"id=remove_legacy_files", "order=1", "stepId=build_services", "title=Remove Legacy Files"},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class InitializeLatestPluginsSDKAction extends BaseUpgradeTaskStepAction {
+public class RemoveLegacyFilesAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		List<IProject> projects = _resourceSelection.selectProjects(
-			"select liferay workspace project", false, new SelectableLiferayWorkspaceProjectFilter());
+			"Select Lifreay Service Builder Project", false, new SelectableServiceBuilderProjectFilter());
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;
 		}
 
-		IProject project = projects.get(0);
+		for (IProject project : projects) {
+			try {
+				String relativePath = "/docroot/WEB-INF/src/META-INF";
 
-		try {
-			GradleUtil.runGradleTask(project, "upgradePluginsSDK", progressMonitor);
+				IFile portletSpringXML = project.getFile(relativePath + "/portlet-spring.xml");
 
-			project.refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
+				if (portletSpringXML.exists()) {
+					portletSpringXML.delete(true, progressMonitor);
+				}
+
+				IFile shardDataSourceSpringXML = project.getFile(relativePath + "/shard-data-source-spring.xml");
+
+				if (shardDataSourceSpringXML.exists()) {
+					shardDataSourceSpringXML.delete(true, progressMonitor);
+				}
+
+				// for 6.2 maven project
+
+				IFolder metaInfFolder = project.getFolder("/src/main/resources/META-INF/");
+
+				if (metaInfFolder.exists()) {
+					metaInfFolder.delete(true, progressMonitor);
+				}
+			}
+			catch (CoreException ce) {
+				UpgradeTasksCorePlugin.logError(ce.getMessage());
+			}
 		}
-		catch (CoreException ce) {
-		}
+
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(RemoveLegacyFilesAction.this));
 
 		return Status.OK_STATUS;
 	}
 
 	@Reference
 	private ResourceSelection _resourceSelection;
+
+	@Reference
+	private UpgradePlanner _upgradePlanner;
 
 }

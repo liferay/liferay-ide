@@ -17,6 +17,7 @@ package com.liferay.ide.upgrade.tasks.core.internal.code;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
@@ -35,7 +36,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class ImportLiferayWorkspaceAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public IStatus perform() {
+	public IStatus perform(IProgressMonitor progressMonitor) {
 		return Status.OK_STATUS;
 	}
 

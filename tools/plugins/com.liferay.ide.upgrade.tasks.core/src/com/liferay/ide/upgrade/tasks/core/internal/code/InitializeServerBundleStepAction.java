@@ -17,12 +17,16 @@ package com.liferay.ide.upgrade.tasks.core.internal.code;
 import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.jobs.InitBundleJob;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
+import com.liferay.ide.upgrade.tasks.core.SelectableLiferayWorkspaceProjectFilter;
 
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
@@ -42,8 +46,9 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class InitializeServerBundleStepAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public IStatus perform() {
-		List<IProject> projects = _resourceSelection.selectProjects("select projects", true);
+	public IStatus perform(IProgressMonitor progressMonitor) {
+		List<IProject> projects = _resourceSelection.selectProjects(
+			"select liferay workspace project", false, new SelectableLiferayWorkspaceProjectFilter());
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;
@@ -51,7 +56,20 @@ public class InitializeServerBundleStepAction extends BaseUpgradeTaskStepAction 
 
 		IProject project = projects.get(0);
 
-		InitBundleJob job = new InitBundleJob(project, project.getName(), WorkspaceConstants.BUNDLE_URL_CE_7_1);
+		String bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_1;
+
+		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+
+		String targetVersion = upgradePlan.getTargetVersion();
+
+		if ("7.0".equals(targetVersion)) {
+			bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_0;
+		}
+		else if ("7.1".equals(targetVersion)) {
+			bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_1;
+		}
+
+		InitBundleJob job = new InitBundleJob(project, project.getName(), bundleUrl);
 
 		job.schedule();
 
@@ -60,5 +78,8 @@ public class InitializeServerBundleStepAction extends BaseUpgradeTaskStepAction 
 
 	@Reference
 	private ResourceSelection _resourceSelection;
+
+	@Reference
+	private UpgradePlanner _upgradePlanner;
 
 }

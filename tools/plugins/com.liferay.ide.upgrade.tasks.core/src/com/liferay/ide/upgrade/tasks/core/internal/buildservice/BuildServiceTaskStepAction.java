@@ -12,15 +12,24 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.sdk;
+package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
+import com.liferay.ide.upgrade.tasks.core.internal.UpgradeTasksCorePlugin;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -30,26 +39,52 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
+ * @author Simon Jiang
  * @author Terry Jia
  */
 @Component(
-	property = {"id=move_legacy_projects", "order=1", "stepId=move_legacy_projects", "title=Move Legacy Projects"},
+	property = {"id=build_services", "order=2", "stepId=build_services", "title=Build Services"},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class MoveLegacyProjectsAction extends BaseUpgradeTaskStepAction {
+public class BuildServiceTaskStepAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		List<IProject> projects = _resourceSelection.selectProjects("select projects", true, null);
+		List<IProject> projects = _resourceSelection.selectProjects(
+			"Select Lifreay Service Builder Project", false, new SelectableServiceBuilderProjectFilter());
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;
 		}
+
+		Stream<IProject> stream = projects.stream();
+
+		stream.map(
+			p -> LiferayCore.create(ILiferayProject.class, p)
+		).filter(
+			Objects::nonNull
+		).map(
+			liferayProject -> liferayProject.adapt(IProjectBuilder.class)
+		).forEach(
+			projectBuilder -> {
+				try {
+					projectBuilder.buildService(progressMonitor);
+				}
+				catch (CoreException ce) {
+					UpgradeTasksCorePlugin.logError("Error building service", ce);
+				}
+			}
+		);
+
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(BuildServiceTaskStepAction.this));
 
 		return Status.OK_STATUS;
 	}
 
 	@Reference
 	private ResourceSelection _resourceSelection;
+
+	@Reference
+	private UpgradePlanner _upgradePlanner;
 
 }

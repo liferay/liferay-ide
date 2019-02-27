@@ -175,7 +175,7 @@ public class FileMigrationService implements FileMigration {
 				stream = fileMigrators.stream();
 
 				List<ServiceReference<FileMigrator>> serviceReferencesWithoutVersion = stream.filter(
-					predicate -> !version.equals(predicate.getProperty("version"))
+					fileMigrator -> !version.equals(fileMigrator.getProperty("version"))
 				).collect(
 					Collectors.toList()
 				);

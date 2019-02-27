@@ -26,6 +26,7 @@ import java.nio.file.Paths;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.window.Window;
@@ -51,7 +52,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class NewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public IStatus perform() {
+	public IStatus perform(IProgressMonitor progressMonitor) {
 		NewLiferayWorkspaceOp newLiferayWorkspaceOp = NewLiferayWorkspaceOp.TYPE.instantiate();
 
 		final AtomicInteger returnCode = new AtomicInteger();

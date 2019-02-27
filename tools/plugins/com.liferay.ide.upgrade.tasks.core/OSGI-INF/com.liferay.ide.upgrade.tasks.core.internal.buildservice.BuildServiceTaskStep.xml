@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.buildservice.BuildServiceTaskStep">
+   <property name="id" value="build_services"/>
+   <property name="requirement" value="recommended"/>
+   <property name="order" value="2"/>
+   <property name="taskId" value="build_service"/>
+   <property name="title" value="Build Services"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.tasks.core.internal.buildservice.BuildServiceTaskStep"/>
+</scr:component>
