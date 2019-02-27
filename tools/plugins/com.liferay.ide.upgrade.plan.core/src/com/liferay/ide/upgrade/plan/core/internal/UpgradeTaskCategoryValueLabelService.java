@@ -19,6 +19,8 @@ import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.eclipse.sapphire.services.ValueLabelService;
 
@@ -26,24 +28,23 @@ import org.eclipse.sapphire.services.ValueLabelService;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class UpgradeCategoryValueLabelService extends ValueLabelService {
+public class UpgradeTaskCategoryValueLabelService extends ValueLabelService {
 
 	@Override
 	public String provide(String value) {
-		String label = _labelMap.get(value);
-
-		if (label == null) {
-			UpgradeTaskCategory upgradeTaskCategory = ServicesLookup.getSingleService(
-				UpgradeTaskCategory.class, "(id=" + value + ")");
-
-			if (upgradeTaskCategory != null) {
-				label = upgradeTaskCategory.getTitle();
-
-				_labelMap.put(value, label);
-			}
-		}
-
-		return label;
+		return _labelMap.computeIfAbsent(
+			value,
+			v -> {
+				return Optional.ofNullable(
+					ServicesLookup.getSingleService(UpgradeTaskCategory.class, "(id=" + value + ")")
+				).filter(
+					Objects::nonNull
+				).map(
+					UpgradeTaskCategory::getTitle
+				).orElse(
+					null
+				);
+			});
 	}
 
 	private static Map<String, String> _labelMap = new HashMap<>();

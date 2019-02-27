@@ -19,6 +19,8 @@ import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.eclipse.sapphire.ImageData;
 import org.eclipse.sapphire.Result;
@@ -28,29 +30,29 @@ import org.eclipse.sapphire.services.ValueImageService;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class UpgradeCategoryValueImageService extends ValueImageService {
+public class UpgradeTaskCategoryValueImageService extends ValueImageService {
 
 	@Override
 	public ImageData provide(String value) {
-		ImageData imageData = _imageMap.get(value);
-
-		if (imageData == null) {
-			UpgradeTaskCategory upgradeTaskCategory = ServicesLookup.getSingleService(
-				UpgradeTaskCategory.class, "(id=" + value + ")");
-
-			if (upgradeTaskCategory != null) {
-				String imagePath = upgradeTaskCategory.getImagePath();
-
-				Result<ImageData> imageResult = ImageData.readFromClassLoader(
-					UpgradeCategoryValueImageService.class, imagePath);
-
-				imageData = imageResult.required();
-
-				_imageMap.put(value, imageData);
-			}
-		}
-
-		return imageData;
+		return _imageMap.computeIfAbsent(
+			value,
+			v -> {
+				return Optional.ofNullable(
+					ServicesLookup.getSingleService(UpgradeTaskCategory.class, "(id=" + value + ")")
+				).filter(
+					Objects::nonNull
+				).map(
+					UpgradeTaskCategory::getImagePath
+				).filter(
+					Objects::nonNull
+				).map(
+					imagePath -> ImageData.readFromClassLoader(UpgradeTaskCategoryValueImageService.class, imagePath)
+				).map(
+					Result::required
+				).orElse(
+					null
+				);
+			});
 	}
 
 	private static Map<String, ImageData> _imageMap = new HashMap<>();

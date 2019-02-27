@@ -34,7 +34,7 @@ public interface UpgradePlanner {
 
 	public UpgradePlan newUpgradePlan(
 		String name, String currentVersion, String targetVersion, Path sourceCodeLocation,
-		List<String> upgradeCategories);
+		List<String> upgradeTaskCategories);
 
 	public void removeListener(UpgradeListener upgradeListener);
 

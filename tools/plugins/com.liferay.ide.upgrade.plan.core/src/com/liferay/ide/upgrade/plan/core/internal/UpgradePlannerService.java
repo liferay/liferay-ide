@@ -136,14 +136,14 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 				IMemento ugpradeCategoriesMemento = upgradePlanMemento.getChild("categories");
 
-				List<String> upgradeCategoryIds = new ArrayList<>();
+				List<String> upgradeTaskCategoryIds = new ArrayList<>();
 
 				if (ugpradeCategoriesMemento != null) {
-					IMemento[] upgradeCategoryMementos = ugpradeCategoriesMemento.getChildren("category");
+					IMemento[] upgradeTaskCategoryMementos = ugpradeCategoriesMemento.getChildren("category");
 
-					if (ListUtil.isNotEmpty(upgradeCategoryMementos)) {
-						upgradeCategoryIds = Stream.of(
-							upgradeCategoryMementos
+					if (ListUtil.isNotEmpty(upgradeTaskCategoryMementos)) {
+						upgradeTaskCategoryIds = Stream.of(
+							upgradeTaskCategoryMementos
 						).map(
 							memento -> memento.getString("id")
 						).collect(
@@ -153,7 +153,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 				}
 
 				_currentUpgradePlan = new StandardUpgradePlan(
-					name, currentVersion, targetVersion, projectPath, upgradeCategoryIds);
+					name, currentVersion, targetVersion, projectPath, upgradeTaskCategoryIds);
 
 				_loadActionStatus(upgradePlanMemento, _currentUpgradePlan);
 
@@ -172,9 +172,9 @@ public class UpgradePlannerService implements UpgradePlanner {
 	@Override
 	public UpgradePlan newUpgradePlan(
 		String name, String currentVersion, String targetVersion, Path sourceCodeLocation,
-		List<String> upgradeCategories) {
+		List<String> upgradeTaskCategories) {
 
-		return new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation, upgradeCategories);
+		return new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation, upgradeTaskCategories);
 	}
 
 	@Override
@@ -223,17 +223,17 @@ public class UpgradePlannerService implements UpgradePlanner {
 				upgradePlanMemento.putString("currentProjectLocation", currentProjectLocation.toString());
 			}
 
-			List<String> upgradeCategories = upgradePlan.getUpgradeCategories();
+			List<String> upgradeTaskCategories = upgradePlan.getUpgradeTaskCategories();
 
 			IMemento categoriesMemento = upgradePlanMemento.createChild("categories");
 
-			Stream<String> upgradeCategoriesStream = upgradeCategories.stream();
+			Stream<String> stream = upgradeTaskCategories.stream();
 
-			upgradeCategoriesStream.forEach(
-				upgradeCategory -> {
-					IMemento upgradeCategoryStream = categoriesMemento.createChild("category");
+			stream.forEach(
+				upgradeTaskCategory -> {
+					IMemento childMemento = categoriesMemento.createChild("category");
 
-					upgradeCategoryStream.putString("id", upgradeCategory);
+					childMemento.putString("id", upgradeTaskCategory);
 				});
 
 			_saveActionStatus(upgradePlanMemento, upgradePlan);

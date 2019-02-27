@@ -16,9 +16,9 @@ package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
-import com.liferay.ide.upgrade.plan.core.UpgradeCategoryElement;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategoryElement;
 
 import java.nio.file.Paths;
 
@@ -60,12 +60,12 @@ public class NewUpgradePlanOpMethods {
 
 		Path path = _getter.get(newUpgradePlanOp.getLocation());
 
-		ElementList<UpgradeCategoryElement> upgradeCategories = newUpgradePlanOp.getUpgradeCategories();
+		ElementList<UpgradeTaskCategoryElement> upgradeTaskCategories = newUpgradePlanOp.getUpgradeTaskCategories();
 
-		Stream<UpgradeCategoryElement> upgradeCategoryElements = upgradeCategories.stream();
+		Stream<UpgradeTaskCategoryElement> upgradeTaskCategoryElements = upgradeTaskCategories.stream();
 
-		List<String> categories = upgradeCategoryElements.map(
-			category -> _getter.get(category.getUpgradeCategory())
+		List<String> categories = upgradeTaskCategoryElements.map(
+			category -> _getter.get(category.getUpgradeTaskCategory())
 		).collect(
 			Collectors.toList()
 		);

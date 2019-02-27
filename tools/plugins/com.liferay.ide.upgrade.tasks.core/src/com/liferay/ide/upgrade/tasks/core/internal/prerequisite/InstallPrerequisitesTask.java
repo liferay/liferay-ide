@@ -15,17 +15,14 @@
 package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
+ *
+ * @Component(
+ * property = {"categoryId=code", "id=install_prerequisites", "order=1", "title=Install Prerequisites"},
+ * scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
+ * )
  */
-@Component(
-	property = {"categoryId=code", "id=install_prerequisites", "order=1", "title=Install Prerequisites"},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
-)
 public class InstallPrerequisitesTask extends BaseUpgradeTask {
 }

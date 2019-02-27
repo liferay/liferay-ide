@@ -16,7 +16,7 @@ package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
 import com.liferay.ide.upgrade.plan.core.internal.SourceLocationValidationService;
-import com.liferay.ide.upgrade.plan.core.internal.UpgradeCategoryPossibleValuesService;
+import com.liferay.ide.upgrade.plan.core.internal.UpgradeTaskCategoryPossibleValuesService;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
@@ -60,7 +60,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public Value<String> getTargetVersion();
 
-	public ElementList<UpgradeCategoryElement> getUpgradeCategories();
+	public ElementList<UpgradeTaskCategoryElement> getUpgradeTaskCategories();
 
 	public void setCurrentVersion(String currentVersion);
 
@@ -71,6 +71,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	public void setTargetVersion(String targetVersion);
 
 	@DefaultValue(text = "6.2")
+	@Label(standard = "Current Liferay Version")
 	@PossibleValues(values = {"6.2", "7.0"})
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
 
@@ -85,13 +86,14 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
 	@DefaultValue(text = "7.1")
+	@Label(standard = "Target Liferay Version")
 	@PossibleValues(values = {"7.0", "7.1"})
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
 
-	@Label(standard = "Upgrade Categories")
+	@Label(standard = "Upgrade Task Categories")
 	@Length(min = 1)
-	@Service(impl = UpgradeCategoryPossibleValuesService.class)
-	@Type(base = UpgradeCategoryElement.class)
-	public ListProperty PROP_UPGRADE_CATEGORIES = new ListProperty(TYPE, "UpgradeCategories");
+	@Service(impl = UpgradeTaskCategoryPossibleValuesService.class)
+	@Type(base = UpgradeTaskCategoryElement.class)
+	public ListProperty PROP_UPGRADE_TASK_CATEGORIES = new ListProperty(TYPE, "UpgradeTaskCategories");
 
 }
