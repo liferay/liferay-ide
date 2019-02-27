@@ -14,7 +14,7 @@
 
 package com.liferay.ide.maven.core.tests.legacy;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.Profile;
 
@@ -42,7 +42,7 @@ public class ProfilePossibleValuesTests {
 
 		firstProfile.setId(firstProfileId);
 
-		Assert.assertEquals(firstProfileId, SapphireUtil.getContent(op.getActiveProfilesValue()));
+		Assert.assertEquals(firstProfileId, _getter.get(op.getActiveProfilesValue()));
 
 		Profile secondProfile = profiles.insert();
 
@@ -50,8 +50,9 @@ public class ProfilePossibleValuesTests {
 
 		secondProfile.setId(secondProfileId);
 
-		Assert.assertEquals(
-			firstProfileId + ',' + secondProfileId, SapphireUtil.getContent(op.getActiveProfilesValue()));
+		Assert.assertEquals(firstProfileId + ',' + secondProfileId, _getter.get(op.getActiveProfilesValue()));
 	}
+
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 }

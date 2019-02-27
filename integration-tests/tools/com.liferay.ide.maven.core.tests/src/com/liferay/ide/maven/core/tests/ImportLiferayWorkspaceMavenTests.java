@@ -16,7 +16,7 @@ package com.liferay.ide.maven.core.tests;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
@@ -68,7 +68,7 @@ public class ImportLiferayWorkspaceMavenTests extends ProjectOpBase<ImportLifera
 		op.setWorkspaceLocation(ips.getPath());
 		op.setProvisionLiferayBundle(true);
 
-		String bundleUrl = SapphireUtil.getContent(op.getBundleUrl());
+		String bundleUrl = _getter.get(op.getBundleUrl());
 
 		Assert.assertEquals(WorkspaceConstants.BUNDLE_URL_CE_7_0, bundleUrl);
 
@@ -154,5 +154,7 @@ public class ImportLiferayWorkspaceMavenTests extends ProjectOpBase<ImportLifera
 
 		JobHelpers.waitForJobsToComplete();
 	}
+
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 }

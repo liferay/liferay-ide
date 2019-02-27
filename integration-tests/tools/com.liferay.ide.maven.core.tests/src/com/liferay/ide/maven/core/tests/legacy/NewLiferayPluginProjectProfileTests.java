@@ -14,7 +14,7 @@
 
 package com.liferay.ide.maven.core.tests.legacy;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.project.core.model.Profile;
@@ -35,11 +35,11 @@ public class NewLiferayPluginProjectProfileTests {
 
 		op.setProjectProvider("maven");
 
-		Assert.assertEquals(SapphireUtil.getContent(op.getActiveProfilesValue()), null);
+		Assert.assertEquals(_getter.get(op.getActiveProfilesValue()), null);
 
 		op.setActiveProfilesValue("foo,bar");
 
-		Assert.assertEquals("foo,bar", SapphireUtil.getContent(op.getActiveProfilesValue()));
+		Assert.assertEquals("foo,bar", _getter.get(op.getActiveProfilesValue()));
 
 		ElementList<Profile> seletedProfiles = op.getSelectedProfiles();
 
@@ -60,5 +60,7 @@ public class NewLiferayPluginProjectProfileTests {
 
 		Assert.assertEquals(profiles.size(), 0, profiles.size());
 	}
+
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 }
