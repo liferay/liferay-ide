@@ -133,8 +133,8 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 					new Job("Performing " + _upgradeTaskStepAction.getTitle() + "...") {
 
 						@Override
-						protected IStatus run(IProgressMonitor monitor) {
-							return _perform();
+						protected IStatus run(IProgressMonitor progressMonitor) {
+							return _perform(progressMonitor);
 						}
 
 					}.schedule();
@@ -235,8 +235,8 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 		_upgradeTaskStepAction.setStatus(UpgradeTaskStepActionStatus.COMPLETED);
 	}
 
-	private IStatus _perform() {
-		return _upgradeTaskStepAction.perform();
+	private IStatus _perform(IProgressMonitor progressMonitor) {
+		return _upgradeTaskStepAction.perform(progressMonitor);
 	}
 
 	private Composite _buttonComposite;

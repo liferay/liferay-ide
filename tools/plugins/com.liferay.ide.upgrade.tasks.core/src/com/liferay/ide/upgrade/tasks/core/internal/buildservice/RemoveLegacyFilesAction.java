@@ -27,8 +27,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
@@ -46,7 +46,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class RemoveLegacyFilesAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public IStatus perform() {
+	public IStatus perform(IProgressMonitor progressMonitor) {
 		List<IProject> projects = _resourceSelection.selectProjects(
 			"Select Lifreay Service Builder Project", false, new SelectableServiceBuilderProjectFilter());
 
@@ -61,13 +61,13 @@ public class RemoveLegacyFilesAction extends BaseUpgradeTaskStepAction {
 				IFile portletSpringXML = project.getFile(relativePath + "/portlet-spring.xml");
 
 				if (portletSpringXML.exists()) {
-					portletSpringXML.delete(true, new NullProgressMonitor());
+					portletSpringXML.delete(true, progressMonitor);
 				}
 
 				IFile shardDataSourceSpringXML = project.getFile(relativePath + "/shard-data-source-spring.xml");
 
 				if (shardDataSourceSpringXML.exists()) {
-					shardDataSourceSpringXML.delete(true, new NullProgressMonitor());
+					shardDataSourceSpringXML.delete(true, progressMonitor);
 				}
 
 				// for 6.2 maven project
@@ -75,7 +75,7 @@ public class RemoveLegacyFilesAction extends BaseUpgradeTaskStepAction {
 				IFolder metaInfFolder = project.getFolder("/src/main/resources/META-INF/");
 
 				if (metaInfFolder.exists()) {
-					metaInfFolder.delete(true, new NullProgressMonitor());
+					metaInfFolder.delete(true, progressMonitor);
 				}
 			}
 			catch (CoreException ce) {

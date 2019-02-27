@@ -21,6 +21,7 @@ import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
@@ -38,7 +39,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class MoveLegacyProjectsAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public IStatus perform() {
+	public IStatus perform(IProgressMonitor progressMonitor) {
 		List<IProject> projects = _resourceSelection.selectProjects("select projects", true, null);
 
 		if (projects.isEmpty()) {

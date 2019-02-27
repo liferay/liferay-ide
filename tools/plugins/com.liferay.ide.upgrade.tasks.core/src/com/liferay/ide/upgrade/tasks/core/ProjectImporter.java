@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.tasks.core;
 
 import java.nio.file.Path;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
 /**
@@ -23,6 +24,6 @@ import org.eclipse.core.runtime.IStatus;
  */
 public interface ProjectImporter {
 
-	public IStatus importProjects(Path rootProjectPath);
+	public IStatus importProjects(Path rootProjectPath, IProgressMonitor progressMonitor);
 
 }

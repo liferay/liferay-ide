@@ -21,6 +21,7 @@ import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 
 import java.nio.file.Path;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
@@ -38,14 +39,14 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class ImportPluginsSDKAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public IStatus perform() {
+	public IStatus perform(IProgressMonitor progressMonitor) {
 		Path rootProjectPath = _projectSelection.selectPath("Please select the root folder of you Liferay Plugins SDK");
 
 		if (rootProjectPath == null) {
 			return Status.CANCEL_STATUS;
 		}
 
-		return _projectImporter.importProjects(rootProjectPath);
+		return _projectImporter.importProjects(rootProjectPath, progressMonitor);
 	}
 
 	@Reference(target = "(type=plugins_sdk)")

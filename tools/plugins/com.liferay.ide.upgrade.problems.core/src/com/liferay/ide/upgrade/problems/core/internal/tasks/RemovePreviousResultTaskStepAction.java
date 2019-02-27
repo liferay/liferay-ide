@@ -24,6 +24,7 @@ import com.liferay.ide.upgrade.tasks.core.MessagePrompt;
 
 import java.util.Collection;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
@@ -43,7 +44,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class RemovePreviousResultTaskStepAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public IStatus perform() {
+	public IStatus perform(IProgressMonitor progressMonitor) {
 		boolean result = _messagePrompt.prompt("Remove Previous Result", "Are you sure to remove the previous result?");
 
 		if (result) {

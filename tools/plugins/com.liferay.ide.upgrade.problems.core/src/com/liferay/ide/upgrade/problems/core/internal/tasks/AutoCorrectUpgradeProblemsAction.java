@@ -58,7 +58,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public IStatus perform() {
+	public IStatus perform(IProgressMonitor progressMonitor) {
 		final UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
 		WorkspaceJob workspaceJob = new WorkspaceJob("Auto correcting all breaking changes.") {

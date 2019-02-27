@@ -25,8 +25,8 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
@@ -46,7 +46,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class InitializeLatestPluginsSDKAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public IStatus perform() {
+	public IStatus perform(IProgressMonitor progressMonitor) {
 		List<IProject> projects = _resourceSelection.selectProjects(
 			"select liferay workspace project", false, new SelectableLiferayWorkspaceProjectFilter());
 
@@ -57,9 +57,9 @@ public class InitializeLatestPluginsSDKAction extends BaseUpgradeTaskStepAction 
 		IProject project = projects.get(0);
 
 		try {
-			GradleUtil.runGradleTask(project, "upgradePluginsSDK", new NullProgressMonitor());
+			GradleUtil.runGradleTask(project, "upgradePluginsSDK", progressMonitor);
 
-			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+			project.refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
 		}
 		catch (CoreException ce) {
 		}

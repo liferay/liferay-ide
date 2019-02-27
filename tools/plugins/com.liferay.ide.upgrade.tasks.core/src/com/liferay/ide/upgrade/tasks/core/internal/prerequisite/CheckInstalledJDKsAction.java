@@ -18,6 +18,7 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.tasks.core.internal.UpgradeTasksCorePlugin;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
 import org.osgi.service.component.annotations.Component;
@@ -33,7 +34,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class CheckInstalledJDKsAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public IStatus perform() {
+	public IStatus perform(IProgressMonitor progressMonitor) {
 		return UpgradeTasksCorePlugin.createErrorStatus("no compatible jdk found");
 	}
 
