@@ -17,7 +17,7 @@ package com.liferay.ide.maven.core.tests;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.maven.core.tests.util.MavenTestUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.test.core.base.support.LiferayWorkspaceSupport;
@@ -97,7 +97,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 		op.setProjectProvider(provider());
 		op.setProvisionLiferayBundle(true);
 
-		String bundleUrl = SapphireUtil.getContent(op.getBundleUrl());
+		String bundleUrl = _getter.get(op.getBundleUrl());
 
 		Assert.assertEquals(defaultBundleUrl, bundleUrl);
 
@@ -231,5 +231,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 		assertProjectFileNotExists(projectName, "build.gradle");
 		assertProjectFileExists(projectName, "pom.xml");
 	}
+
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 }
