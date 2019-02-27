@@ -22,8 +22,11 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
+import com.liferay.ide.upgrade.tasks.core.internal.UpgradeTasksCorePlugin;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -54,19 +57,24 @@ public class BuildServiceTaskStepAction extends BaseUpgradeTaskStepAction {
 			return Status.CANCEL_STATUS;
 		}
 
-		try {
-			for (IProject project : projects) {
-				ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
+		Stream<IProject> stream = projects.stream();
 
-				if (liferayProject != null) {
-					IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);
-
-					builder.buildService(progressMonitor);
+		stream.map(
+			p -> LiferayCore.create(ILiferayProject.class, p)
+		).filter(
+			Objects::nonNull
+		).map(
+			liferayProject -> liferayProject.adapt(IProjectBuilder.class)
+		).forEach(
+			projectBuilder -> {
+				try {
+					projectBuilder.buildService(progressMonitor);
+				}
+				catch (CoreException ce) {
+					UpgradeTasksCorePlugin.logError("Error building service", ce);
 				}
 			}
-		}
-		catch (CoreException ce) {
-		}
+		);
 
 		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(BuildServiceTaskStepAction.this));
 
