@@ -15,9 +15,9 @@
 package com.liferay.ide.upgrade.tasks.core;
 
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.adapter.NoopLiferayProject;
-import com.liferay.ide.project.core.LiferayWorkspaceProject;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -39,7 +39,7 @@ public class SelectableLiferayProjectFilter extends SelectableJavaProjectFilter 
 		boolean result = Optional.ofNullable(
 			project
 		).filter(
-			p -> LiferayCore.create(LiferayWorkspaceProject.class, project) == null
+			p -> LiferayCore.create(IWorkspaceProject.class, project) == null
 		).map(
 			p -> LiferayCore.create(ILiferayProject.class, p)
 		).filter(
