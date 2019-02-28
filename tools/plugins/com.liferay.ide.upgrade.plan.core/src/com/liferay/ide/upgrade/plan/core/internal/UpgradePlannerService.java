@@ -287,6 +287,10 @@ public class UpgradePlannerService implements UpgradePlanner {
 		for (UpgradeTask task : tasks) {
 			IMemento taskMemento = memento.getChild(task.getId());
 
+			if (taskMemento == null) {
+				continue;
+			}
+
 			List<UpgradeTaskStep> steps = task.getSteps();
 
 			for (UpgradeTaskStep step : steps) {
