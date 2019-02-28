@@ -181,6 +181,23 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 			});
 
+		Image taskStepActionSkipImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_ACTION_SKIP_IMAGE);
+
+		ImageHyperlink skipImageHyperlink = createImageHyperlink(
+			_formToolkit, _buttonComposite, taskStepActionSkipImage, this, "Skip");
+
+		skipImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+
+		skipImageHyperlink.addHyperlinkListener(
+			new HyperlinkAdapter() {
+
+				@Override
+				public void linkActivated(HyperlinkEvent e) {
+					_skip();
+				}
+
+			});
+
 		_disposables.add(() -> performImageHyperlink.dispose());
 	}
 
@@ -237,6 +254,10 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 	private IStatus _perform(IProgressMonitor progressMonitor) {
 		return _upgradeTaskStepAction.perform(progressMonitor);
+	}
+
+	private void _skip() {
+		_upgradeTaskStepAction.setStatus(UpgradeTaskStepActionStatus.SKIPPED);
 	}
 
 	private Composite _buttonComposite;

@@ -52,6 +52,8 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 
 	public static final String TASK_STEP_ACTION_PERFORM_IMAGE = "TASK_STEP_ACTION_PERFORM_IMAGE";
 
+	public static final String TASK_STEP_ACTION_SKIP_IMAGE = "TASK_STEP_ACTION_SKIP_IMAGE";
+
 	public static final String TASK_STEP_RESTART_IMAGE = "TASK_STEP_RESTART_IMAGE";
 
 	public static IStatus createErrorStatus(String msg) {
@@ -121,6 +123,12 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
 		imageRegistry.put(TASK_STEP_ACTION_COMPLETE_IMAGE, imageDescriptor);
+
+		path = _ICONS_PATH.append("skip_action.gif");
+
+		imageDescriptor = _createImageDescriptor(bundle, path);
+
+		imageRegistry.put(TASK_STEP_ACTION_SKIP_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("task_restart.gif");
 
