@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.sdk.InitializeLatestPluginsSDKStep">
    <property name="id" value="initialize_latest_plugins_sdk"/>
+   <property name="imagePath" value="icons/new.png"/>
    <property name="requirement" value="required"/>
    <property name="order" value="0"/>
    <property name="taskId" value="migrate_plugins_sdk"/>
