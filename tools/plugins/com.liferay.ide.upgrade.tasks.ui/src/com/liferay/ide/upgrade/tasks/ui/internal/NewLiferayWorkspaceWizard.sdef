@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*******************************************************************************
+ * Copyright (c) 2000-2014 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+ -->
+<definition>
+    <import>
+        <package>com.liferay.ide.project.ui.modules</package>
+    </import>
+    <wizard>
+        <id>NewLiferayWorkspaceWizard</id>
+        <label>New Liferay Workspace</label>
+        <page>
+            <id>LiferayWorkspacePage</id>
+            <label>Liferay Workspace Project</label>
+            <content>
+                <property-editor>WorkspaceName</property-editor>
+                <spacer/>
+                <property-editor>
+                    <property>UseDefaultLocation</property>
+                </property-editor>
+                <property-editor>
+                    <property>Location</property>
+                </property-editor>
+                <spacer/>
+                <property-editor>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <property>ProjectProvider</property>
+                </property-editor>
+                <spacer></spacer>
+                <custom>
+                    <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
+                </custom>
+            </content>
+            <description>Create a new liferay workspace</description>
+            <scale-vertically>true</scale-vertically>
+            <margin-right>10</margin-right>
+            <scroll-vertically>true</scroll-vertically>
+            <margin-left>0</margin-left>
+            <margin-bottom>0</margin-bottom>
+            <margin-top>0</margin-top>
+            <margin-horizontal>0</margin-horizontal>
+            <margin-vertical>0</margin-vertical>
+            <margin>0</margin>
+        </page>
+        <description>Create a new Liferay Workspace project</description>
+        <image>NewLiferayWorkspaceWizard.png</image>
+        <element-type>com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp</element-type>
+    </wizard>
+</definition>

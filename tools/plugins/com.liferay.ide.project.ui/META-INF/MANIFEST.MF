@@ -75,6 +75,7 @@ Export-Package: com.liferay.ide.project.ui,
  com.liferay.ide.project.ui.action.sdk,
  com.liferay.ide.project.ui.dialog,
  com.liferay.ide.project.ui.handlers,
+ com.liferay.ide.project.ui.modules,
  com.liferay.ide.project.ui.pref,
  com.liferay.ide.project.ui.wizard,
  com.liferay.ide.project.ui.workspace
