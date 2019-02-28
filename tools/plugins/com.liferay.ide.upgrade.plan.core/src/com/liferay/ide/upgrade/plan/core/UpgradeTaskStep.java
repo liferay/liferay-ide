@@ -22,6 +22,8 @@ import java.util.List;
  */
 public interface UpgradeTaskStep extends UpgradePlanElement {
 
+	public boolean completed();
+
 	public boolean enabled();
 
 	public List<UpgradeTaskStepAction> getActions();

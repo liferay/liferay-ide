@@ -49,6 +49,21 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	}
 
 	@Override
+	public boolean completed() {
+		Stream<UpgradeTaskStepAction> stream = getActions().stream();
+
+		long count = stream.filter(
+			action -> UpgradeTaskStepActionStatus.INCOMPLETE.equals(action.getStatus())
+		).count();
+
+		if (count == 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
 	public boolean enabled() {
 		BundleContext bundleContext = _componentContext.getBundleContext();
 
