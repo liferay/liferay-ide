@@ -181,15 +181,19 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 		refreshValidation();
 	}
 
-	protected long lastModified;
-	protected Object[] selectedProjects = new ProjectRecord[0];
-	protected IProject[] wsProjects;
+	private IProject[] _getPluginSDKProjects() {
+		if (_pluginSDKProjects == null) {
+			_pluginSDKProjects = ProjectUtil.getAllPluginsSDKProjects();
+		}
+
+		return _pluginSDKProjects;
+	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private Object[] _getProjectRecords() {
 		List projectRecords = new ArrayList();
 
-		for (Object project : selectedProjects) {
+		for (Object project : _selectedProjects) {
 			ProjectRecord projectRecord = (ProjectRecord)project;
 
 			if (_isProjectInWorkspace(projectRecord.getProjectName())) {
@@ -202,20 +206,12 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 		return projectRecords.toArray(new ProjectRecord[projectRecords.size()]);
 	}
 
-	private IProject[] _getProjectsInWorkspace() {
-		if (wsProjects == null) {
-			wsProjects = ProjectUtil.getAllPluginsSDKProjects();
-		}
-
-		return wsProjects;
-	}
-
 	private boolean _isProjectInWorkspace(String projectName) {
 		if (projectName == null) {
 			return false;
 		}
 
-		for (IProject project : _getProjectsInWorkspace()) {
+		for (IProject project : _getPluginSDKProjects()) {
 			if (FileUtil.nameEquals(project, projectName)) {
 				return true;
 			}
@@ -246,21 +242,17 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 		// on an empty path empty selectedProjects
 
 		if ((path == null) || (path.length() == 0)) {
-			selectedProjects = new ProjectRecord[0];
+			_selectedProjects = new ProjectRecord[0];
 
 			return null;
 		}
 
 		final File directory = new File(path);
 
-		long modified = directory.lastModified();
-
-		lastModified = modified;
-
 		final boolean dirSelected = true;
 
 		try {
-			selectedProjects = new ProjectRecord[0];
+			_selectedProjects = new ProjectRecord[0];
 
 			Collection<File> eclipseProjectFiles = new ArrayList<>();
 
@@ -273,16 +265,16 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 					return null;
 				}
 
-				selectedProjects = new ProjectRecord[eclipseProjectFiles.size() + liferayProjectDirs.size()];
+				_selectedProjects = new ProjectRecord[eclipseProjectFiles.size() + liferayProjectDirs.size()];
 
 				int index = 0;
 
 				for (File eclipseProjectFile : eclipseProjectFiles) {
-					selectedProjects[index++] = new ProjectRecord(eclipseProjectFile);
+					_selectedProjects[index++] = new ProjectRecord(eclipseProjectFile);
 				}
 
 				for (File liferayProjectDir : liferayProjectDirs) {
-					selectedProjects[index++] = new ProjectRecord(liferayProjectDir);
+					_selectedProjects[index++] = new ProjectRecord(liferayProjectDir);
 				}
 			}
 		}
@@ -296,5 +288,7 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 	}
 
 	private FilteredListener<PropertyContentEvent> _listener;
+	private IProject[] _pluginSDKProjects;
+	private Object[] _selectedProjects = new ProjectRecord[0];
 
 }
