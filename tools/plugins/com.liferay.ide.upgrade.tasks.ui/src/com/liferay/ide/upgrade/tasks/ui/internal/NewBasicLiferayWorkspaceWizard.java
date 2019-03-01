@@ -33,14 +33,14 @@ import org.eclipse.ui.IWorkbench;
  * @author Andy Wu
  * @author Terry Jia
  */
-public class NewLiferayWorkspaceWizard extends BaseProjectWizard<NewLiferayWorkspaceOp> {
+public class NewBasicLiferayWorkspaceWizard extends BaseProjectWizard<NewLiferayWorkspaceOp> {
 
-	public NewLiferayWorkspaceWizard() {
+	public NewBasicLiferayWorkspaceWizard() {
 		this(_createDefaultOp());
 	}
 
-	public NewLiferayWorkspaceWizard(NewLiferayWorkspaceOp newLiferayWorkspaceOp) {
-		super(newLiferayWorkspaceOp, DefinitionLoader.sdef(NewLiferayWorkspaceWizard.class).wizard());
+	public NewBasicLiferayWorkspaceWizard(NewLiferayWorkspaceOp newLiferayWorkspaceOp) {
+		super(newLiferayWorkspaceOp, DefinitionLoader.sdef(NewBasicLiferayWorkspaceWizard.class).wizard());
 	}
 
 	@Override

@@ -62,7 +62,7 @@ public class NewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction {
 
 		UIUtil.sync(
 			() -> {
-				NewLiferayWorkspaceWizard newLiferayWorkspaceWizard = new NewLiferayWorkspaceWizard(
+				NewBasicLiferayWorkspaceWizard newLiferayWorkspaceWizard = new NewBasicLiferayWorkspaceWizard(
 					newLiferayWorkspaceOp);
 
 				IWorkbench workbench = PlatformUI.getWorkbench();
