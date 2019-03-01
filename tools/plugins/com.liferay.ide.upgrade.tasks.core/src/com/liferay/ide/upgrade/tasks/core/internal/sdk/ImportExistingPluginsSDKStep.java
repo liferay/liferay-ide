@@ -25,8 +25,8 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=import_existing_plugins_sdk", "requirement=required", "order=1", "taskId=migrate_plugins_sdk",
-		"title=Import Existing Plugins SDK"
+		"id=import_existing_plugins_sdk", "imagePath=icons/import.png", "requirement=required", "order=1",
+		"taskId=migrate_plugins_sdk", "title=Import Existing Plugins SDK"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
