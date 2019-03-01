@@ -62,26 +62,30 @@ public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeTaskStepAction 
 
 	@Override
 	public String getDescription() {
-		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectUpgradeProblemsAction.class);
+		if (_description == null) {
+			Bundle bundle = FrameworkUtil.getBundle(AutoCorrectUpgradeProblemsAction.class);
 
-		BundleContext bundleContext = bundle.getBundleContext();
+			BundleContext bundleContext = bundle.getBundleContext();
 
-		List<FileMigrator> fileMigrators = ServicesLookup.getOrderedServices(
-			bundleContext, FileMigrator.class, "(auto.correct=*)");
+			List<FileMigrator> fileMigrators = ServicesLookup.getOrderedServices(
+				bundleContext, FileMigrator.class, "(auto.correct=*)");
 
-		StringBuffer sb = new StringBuffer();
+			StringBuffer sb = new StringBuffer();
 
-		sb.append("The following problems could be auto corrected.\n");
+			sb.append("The following problems could be auto corrected.\n");
 
-		for (FileMigrator fileMigrator : fileMigrators) {
-			Class<?> clazz = fileMigrator.getClass();
+			for (FileMigrator fileMigrator : fileMigrators) {
+				Class<?> clazz = fileMigrator.getClass();
 
-			sb.append(clazz.getName());
+				sb.append(clazz.getName());
 
-			sb.append("\n");
+				sb.append("\n");
+			}
+
+			_description = sb.toString();
 		}
 
-		return sb.toString();
+		return _description;
 	}
 
 	@Override
@@ -176,6 +180,8 @@ public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeTaskStepAction 
 
 		return retval;
 	}
+
+	private String _description;
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;
