@@ -52,17 +52,17 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
-		if (element instanceof ProjectProblemsContainer) {
-			return getImageRegistry().get("ProjectMigrationProblems");
+		if (element instanceof FileProblemsContainer) {
+			return getImageRegistry().get("FileProblemsContainer");
 		}
-		else if (element instanceof MigrationProblemsContainer) {
-			return getImageRegistry().get("MigrationProblemsContainer");
-		}
-		else if (element instanceof FileProblemsContainer) {
-			return getImageRegistry().get("FileProblems");
+		else if (element instanceof ProjectProblemsContainer) {
+			return getImageRegistry().get("ProjectProblemsContainer");
 		}
 		else if (element instanceof UpgradeProblem) {
-			return getImageRegistry().get("Problem");
+			return getImageRegistry().get("UpgradeProblem");
+		}
+		else if (element instanceof UpgradeProblemsContainer) {
+			return getImageRegistry().get("UpgradeProblemsContainer");
 		}
 
 		return null;
@@ -86,21 +86,21 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 	@Override
 	protected void initalizeImageRegistry(ImageRegistry imageRegistry) {
 		imageRegistry.put(
-			"MigrationProblemsContainer",
-			UpgradeProblemsUIPlugin.imageDescriptorFromPlugin(
-				UpgradeProblemsUIPlugin.PLUGIN_ID, "icons/liferay_logo_16.png"));
-		imageRegistry.put(
-			"ProjectMigrationProblems",
-			UpgradeProblemsUIPlugin.imageDescriptorFromPlugin(
-				UpgradeProblemsUIPlugin.PLUGIN_ID, ISharedImages.IMG_OBJ_FOLDER));
-		imageRegistry.put(
-			"FileProblems",
+			"FileProblemsContainer",
 			UpgradeProblemsUIPlugin.imageDescriptorFromPlugin(
 				UpgradeProblemsUIPlugin.PLUGIN_ID, ISharedImages.IMG_OBJ_FILE));
 		imageRegistry.put(
-			"Problem",
+			"ProjectProblemsContainer",
+			UpgradeProblemsUIPlugin.imageDescriptorFromPlugin(
+				UpgradeProblemsUIPlugin.PLUGIN_ID, ISharedImages.IMG_OBJ_FOLDER));
+		imageRegistry.put(
+			"UpgradeProblem",
 			UpgradeProblemsUIPlugin.imageDescriptorFromPlugin(
 				UpgradeProblemsUIPlugin.PLUGIN_ID, ISharedImages.IMG_OBJS_ERROR_TSK));
+		imageRegistry.put(
+			"UpgradeProblemsContainer",
+			UpgradeProblemsUIPlugin.imageDescriptorFromPlugin(
+				UpgradeProblemsUIPlugin.PLUGIN_ID, "icons/liferay_logo_16.png"));
 	}
 
 	private ServiceTracker<UpgradeInfoProvider, UpgradeInfoProvider> _upgradeInfoProviderServiceTracker;
