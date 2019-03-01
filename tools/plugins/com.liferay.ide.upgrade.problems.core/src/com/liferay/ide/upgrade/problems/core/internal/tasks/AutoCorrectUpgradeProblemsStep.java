@@ -16,7 +16,14 @@ package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
 
+import java.util.List;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
@@ -31,4 +38,35 @@ import org.osgi.service.component.annotations.ServiceScope;
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
 public class AutoCorrectUpgradeProblemsStep extends BaseUpgradeTaskStep {
+
+	@Override
+	public String getDescription() {
+		if (_description == null) {
+			Bundle bundle = FrameworkUtil.getBundle(AutoCorrectUpgradeProblemsStep.class);
+
+			BundleContext bundleContext = bundle.getBundleContext();
+
+			List<FileMigrator> fileMigrators = ServicesLookup.getOrderedServices(
+				bundleContext, FileMigrator.class, "(auto.correct=*)");
+
+			StringBuffer sb = new StringBuffer();
+
+			sb.append("The following problems could be auto corrected.\n");
+
+			for (FileMigrator fileMigrator : fileMigrators) {
+				Class<?> clazz = fileMigrator.getClass();
+
+				sb.append(clazz.getName());
+
+				sb.append("\n");
+			}
+
+			_description = sb.toString();
+		}
+
+		return _description;
+	}
+
+	private String _description;
+
 }
