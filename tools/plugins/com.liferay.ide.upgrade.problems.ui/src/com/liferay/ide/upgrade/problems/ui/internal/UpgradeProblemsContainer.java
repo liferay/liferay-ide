@@ -21,7 +21,7 @@ import java.util.List;
  * @author Terry Jia
  * @author Gregory Amerson
  */
-public class MigrationProblemsContainer {
+public class UpgradeProblemsContainer {
 
 	public void addProjectProblemsContainer(ProjectProblemsContainer projectProblemsContainer) {
 		_projectProblemsContainers.add(projectProblemsContainer);

@@ -12,16 +12,11 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.ui.internal;
+package com.liferay.ide.ui.util;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
-
-import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -37,32 +32,12 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * @author Gregory Amerson
- * @author Terry Jia
- * @author Lovett Li
  */
-public class MigrationUtil {
+public class Editors {
 
-	public static void addMarkers(List<UpgradeProblem> problems) {
-		for (UpgradeProblem problem : problems) {
-			IResource upgradeProblemResource = problem.getResource();
-
-			if (FileUtil.exists(upgradeProblemResource)) {
-				try {
-					IMarker marker = upgradeProblemResource.createMarker(UpgradeProblem.MARKER_TYPE);
-
-					problem.setMarkerId(marker.getId());
-
-					problemToMarker(problem, marker);
-				}
-				catch (CoreException ce) {
-				}
-			}
-		}
-	}
-
-	public static void openEditor(FileProblemsContainer problem) {
+	public static void open(File file) {
 		try {
-			IResource resource = _getIResourceFromFile(problem.getFile());
+			IResource resource = _getIResourceFromFile(file);
 
 			if (resource instanceof IFile) {
 				IDE.openEditor(UIUtil.getActivePage(), (IFile)resource);
@@ -72,15 +47,13 @@ public class MigrationUtil {
 		}
 	}
 
-	public static void openEditor(UpgradeProblem problem) {
+	public static void open(IResource resource, long markerId, int offset, int length) {
 		try {
-			IResource resource = problem.getResource();
-
 			if (resource instanceof IFile) {
 				IMarker marker = null;
 
 				try {
-					marker = resource.findMarker(problem.getMarkerId());
+					marker = resource.findMarker(markerId);
 				}
 				catch (CoreException ce) {
 				}
@@ -94,33 +67,13 @@ public class MigrationUtil {
 					if (editor instanceof ITextEditor) {
 						ITextEditor textEditor = (ITextEditor)editor;
 
-						textEditor.selectAndReveal(
-							problem.getStartOffset(), problem.getEndOffset() - problem.getStartOffset());
+						textEditor.selectAndReveal(offset, length);
 					}
 				}
 			}
 		}
 		catch (PartInitException pie) {
 		}
-	}
-
-	public static void problemToMarker(UpgradeProblem problem, IMarker marker) throws CoreException {
-		marker.setAttribute(IMarker.MESSAGE, problem.getTitle());
-		marker.setAttribute("migrationProblem.summary", problem.getSummary());
-		marker.setAttribute("migrationProblem.ticket", problem.getTicket());
-		marker.setAttribute("migrationProblem.type", problem.getType());
-		marker.setAttribute(IMarker.LINE_NUMBER, problem.getLineNumber());
-		marker.setAttribute(IMarker.CHAR_START, problem.getStartOffset());
-		marker.setAttribute(IMarker.CHAR_END, problem.getEndOffset());
-		marker.setAttribute("migrationProblem.autoCorrectContext", problem.getAutoCorrectContext());
-		marker.setAttribute("migrationProblem.html", problem.getHtml());
-		marker.setAttribute("migrationProblem.status", problem.getStatus());
-
-		IResource resource = problem.getResource();
-
-		marker.setAttribute(IMarker.LOCATION, resource.getName());
-
-		marker.setAttribute(IMarker.SEVERITY, problem.getMarkerType());
 	}
 
 	private static IResource _getIResourceFromFile(File f) {

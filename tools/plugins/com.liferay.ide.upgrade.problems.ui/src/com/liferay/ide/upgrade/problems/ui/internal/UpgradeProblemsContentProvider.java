@@ -62,11 +62,11 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 	}
 
 	public Object[] getChildren(Object element) {
-		if (element instanceof MigrationProblemsContainer) {
-			MigrationProblemsContainer migrationProblemsContainer = (MigrationProblemsContainer)element;
+		if (element instanceof UpgradeProblemsContainer) {
+			UpgradeProblemsContainer upgradeProblemsContainer = (UpgradeProblemsContainer)element;
 
 			List<ProjectProblemsContainer> projectProblemsContainers =
-				migrationProblemsContainer.getProjectProblemsConatiners();
+				upgradeProblemsContainer.getProjectProblemsConatiners();
 
 			Stream<ProjectProblemsContainer> stream = projectProblemsContainers.stream();
 
@@ -103,7 +103,7 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		MigrationProblemsContainer migrationProblemsContainer = new MigrationProblemsContainer();
+		UpgradeProblemsContainer upgradeProblemsContainer = new UpgradeProblemsContainer();
 
 		for (IProject project : CoreUtil.getAllProjects()) {
 			try {
@@ -147,11 +147,11 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 				fileProblemsContainer.addUpgradeProblem(upgradeProblem);
 			}
 
-			migrationProblemsContainer.addProjectProblemsContainer(projectProblemsContainer);
+			upgradeProblemsContainer.addProjectProblemsContainer(projectProblemsContainer);
 		}
 
-		if (migrationProblemsContainer.isNotEmpty()) {
-			return new Object[] {migrationProblemsContainer};
+		if (upgradeProblemsContainer.isNotEmpty()) {
+			return new Object[] {upgradeProblemsContainer};
 		}
 		else {
 			return null;
@@ -159,7 +159,7 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 	}
 
 	public boolean hasChildren(Object element) {
-		if (element instanceof MigrationProblemsContainer) {
+		if (element instanceof UpgradeProblemsContainer) {
 			return true;
 		}
 		else if (element instanceof ProjectProblemsContainer) {
