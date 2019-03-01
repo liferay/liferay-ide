@@ -12,7 +12,9 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core;
+package com.liferay.ide.upgrade.tasks.core.internal;
+
+import com.liferay.ide.upgrade.tasks.core.ImportSDKProjectsOp;
 
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;

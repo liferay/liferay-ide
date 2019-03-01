@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.tasks.core;
 
 import com.liferay.ide.project.core.model.ProjectNamedItem;
+import com.liferay.ide.upgrade.tasks.core.internal.ImportSDKProjectsOpMethods;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
