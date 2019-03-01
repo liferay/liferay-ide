@@ -21,13 +21,16 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
 
 import java.io.File;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -56,6 +59,30 @@ import org.osgi.service.component.annotations.ServiceScope;
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
+
+	@Override
+	public String getDescription() {
+		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectUpgradeProblemsAction.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		List<FileMigrator> fileMigrators = ServicesLookup.getOrderedServices(
+			bundleContext, FileMigrator.class, "(auto.correct=*)");
+
+		StringBuffer sb = new StringBuffer();
+
+		sb.append("The following problems could be auto corrected.\n");
+
+		for (FileMigrator fileMigrator : fileMigrators) {
+			Class<?> clazz = fileMigrator.getClass();
+
+			sb.append(clazz.getName());
+
+			sb.append("\n");
+		}
+
+		return sb.toString();
+	}
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
