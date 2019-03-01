@@ -21,7 +21,7 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-import com.liferay.ide.upgrade.tasks.core.SDKProjectsImportOp;
+import com.liferay.ide.upgrade.tasks.core.ImportSDKProjectsOp;
 
 import java.nio.file.Path;
 
@@ -56,7 +56,7 @@ public class MoveLegacyProjectsAction extends BaseUpgradeTaskStepAction {
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		final AtomicInteger returnCode = new AtomicInteger();
 
-		SDKProjectsImportOp sdkProjectsImportOp = SDKProjectsImportOp.TYPE.instantiate();
+		ImportSDKProjectsOp sdkProjectsImportOp = ImportSDKProjectsOp.TYPE.instantiate();
 
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 

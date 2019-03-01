@@ -22,7 +22,7 @@ import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.ProjectsCheckboxCustomPart;
-import com.liferay.ide.upgrade.tasks.core.SDKProjectsImportOp;
+import com.liferay.ide.upgrade.tasks.core.ImportSDKProjectsOp;
 
 import java.io.File;
 
@@ -52,7 +52,7 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 	@Override
 	public void dispose() {
 		if (_listener != null) {
-			Value<Object> sdkProperty = _op().property(SDKProjectsImportOp.PROP_SDK_LOCATION);
+			Value<Object> sdkProperty = _op().property(ImportSDKProjectsOp.PROP_SDK_LOCATION);
 
 			sdkProperty.detach(_listener);
 		}
@@ -117,7 +117,7 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 			protected void handleTypedEvent(final PropertyContentEvent event) {
 				PropertyDef eventDef = SapphireUtil.getPropertyDef(event);
 
-				if (eventDef.equals(SDKProjectsImportOp.PROP_SDK_LOCATION)) {
+				if (eventDef.equals(ImportSDKProjectsOp.PROP_SDK_LOCATION)) {
 					Value<Path> sdkLocationPath = _op().getSdkLocation();
 
 					Path sdkLocation = sdkLocationPath.content();
@@ -140,7 +140,7 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 
 		};
 
-		Value<Object> sdkLocation = _op().property(SDKProjectsImportOp.PROP_SDK_LOCATION);
+		Value<Object> sdkLocation = _op().property(ImportSDKProjectsOp.PROP_SDK_LOCATION);
 
 		sdkLocation.attach(_listener);
 	}
@@ -224,8 +224,8 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 		return false;
 	}
 
-	private SDKProjectsImportOp _op() {
-		return getLocalModelElement().nearest(SDKProjectsImportOp.class);
+	private ImportSDKProjectsOp _op() {
+		return getLocalModelElement().nearest(ImportSDKProjectsOp.class);
 	}
 
 	private void _sortProjectCheckboxElement(List<ProjectCheckboxElement> checkboxElementList) {

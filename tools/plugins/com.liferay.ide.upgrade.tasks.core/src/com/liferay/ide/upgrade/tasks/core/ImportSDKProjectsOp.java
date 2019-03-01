@@ -34,11 +34,11 @@ import org.eclipse.sapphire.modeling.annotations.Label;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public interface SDKProjectsImportOp extends ExecutableElement {
+public interface ImportSDKProjectsOp extends ExecutableElement {
 
-	public ElementType TYPE = new ElementType(SDKProjectsImportOp.class);
+	public ElementType TYPE = new ElementType(ImportSDKProjectsOp.class);
 
-	@DelegateImplementation(SDKImportProjectsOpMethods.class)
+	@DelegateImplementation(ImportSDKProjectsOpMethods.class)
 	@Override
 	public Status execute(ProgressMonitor monitor);
 

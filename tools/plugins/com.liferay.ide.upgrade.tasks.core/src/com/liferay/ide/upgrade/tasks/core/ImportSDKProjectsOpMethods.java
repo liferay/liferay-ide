@@ -20,9 +20,9 @@ import org.eclipse.sapphire.modeling.Status;
 /**
  * @author Terry Jia
  */
-public class SDKImportProjectsOpMethods {
+public class ImportSDKProjectsOpMethods {
 
-	public static final Status execute(SDKProjectsImportOp sdkProjectsImportOp, ProgressMonitor progressMonitor) {
+	public static final Status execute(ImportSDKProjectsOp sdkProjectsImportOp, ProgressMonitor progressMonitor) {
 		return Status.createOkStatus();
 	}
 

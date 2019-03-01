@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.tasks.ui.internal;
 
-import com.liferay.ide.upgrade.tasks.core.SDKProjectsImportOp;
+import com.liferay.ide.upgrade.tasks.core.ImportSDKProjectsOp;
 
 import java.io.File;
 
@@ -31,9 +31,9 @@ import org.eclipse.ui.IWorkbench;
 /**
  * @author Terry Jia
  */
-public class ImportSDKProjectsWizard extends SapphireWizard<SDKProjectsImportOp> implements INewWizard {
+public class ImportSDKProjectsWizard extends SapphireWizard<ImportSDKProjectsOp> implements INewWizard {
 
-	public ImportSDKProjectsWizard(SDKProjectsImportOp sdkProjectsImportOp, Path currentProjectLocation) {
+	public ImportSDKProjectsWizard(ImportSDKProjectsOp sdkProjectsImportOp, Path currentProjectLocation) {
 		super(
 			_createDefaultOp(sdkProjectsImportOp, currentProjectLocation),
 			DefinitionLoader.sdef(ImportSDKProjectsWizard.class).wizard());
@@ -43,7 +43,7 @@ public class ImportSDKProjectsWizard extends SapphireWizard<SDKProjectsImportOp>
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 	}
 
-	private static SDKProjectsImportOp _createDefaultOp(SDKProjectsImportOp sdkProjectsImportOp, Path path) {
+	private static ImportSDKProjectsOp _createDefaultOp(ImportSDKProjectsOp sdkProjectsImportOp, Path path) {
 		File file = path.toFile();
 
 		IPath sdkPath = new org.eclipse.core.runtime.Path(file.getPath());
