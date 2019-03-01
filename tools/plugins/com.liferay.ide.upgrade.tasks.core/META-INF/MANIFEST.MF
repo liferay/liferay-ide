@@ -55,7 +55,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.Ini
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.InitializeLatestPluginsSDKStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.InitializeLatestPluginsSDKAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.MoveLegacyProjectsStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.MoveLegacyProjectsAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.BuildServiceTask.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.BuildServiceTaskStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.BuildServiceTaskStepAction.xml,

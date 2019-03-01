@@ -12,32 +12,20 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core;
+package com.liferay.ide.upgrade.tasks.core.internal;
 
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.LiferayWorkspaceProject;
+import com.liferay.ide.upgrade.tasks.core.ImportSDKProjectsOp;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Predicate;
-
-import org.eclipse.core.resources.IProject;
+import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.eclipse.sapphire.modeling.Status;
 
 /**
  * @author Terry Jia
- * @author Gregory Amerson
  */
-public class SelectableLiferayWorkspaceProjectFilter implements Predicate<IProject> {
+public class ImportSDKProjectsOpMethods {
 
-	@Override
-	public boolean test(IProject project) {
-		return Optional.ofNullable(
-			project
-		).map(
-			p -> LiferayCore.create(LiferayWorkspaceProject.class, p)
-		).filter(
-			Objects::nonNull
-		).isPresent();
+	public static final Status execute(ImportSDKProjectsOp sdkProjectsImportOp, ProgressMonitor progressMonitor) {
+		return Status.createOkStatus();
 	}
 
 }
