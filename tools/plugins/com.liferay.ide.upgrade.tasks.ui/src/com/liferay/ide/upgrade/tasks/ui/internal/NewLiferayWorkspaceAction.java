@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.tasks.ui.internal;
 
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
-import com.liferay.ide.project.ui.workspace.NewLiferayWorkspaceWizard;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
@@ -55,11 +54,15 @@ public class NewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction {
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		NewLiferayWorkspaceOp newLiferayWorkspaceOp = NewLiferayWorkspaceOp.TYPE.instantiate();
 
+		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+
+		newLiferayWorkspaceOp.setLiferayVersion(upgradePlan.getTargetVersion());
+
 		final AtomicInteger returnCode = new AtomicInteger();
 
 		UIUtil.sync(
 			() -> {
-				NewLiferayWorkspaceWizard newLiferayWorkspaceWizard = new NewLiferayWorkspaceWizard(
+				NewBasicLiferayWorkspaceWizard newLiferayWorkspaceWizard = new NewBasicLiferayWorkspaceWizard(
 					newLiferayWorkspaceOp);
 
 				IWorkbench workbench = PlatformUI.getWorkbench();
@@ -75,8 +78,6 @@ public class NewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction {
 
 		if (returnCode.get() == Window.OK) {
 			Value<Path> location = newLiferayWorkspaceOp.getLocation();
-
-			UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
 			Path content = location.content();
 
