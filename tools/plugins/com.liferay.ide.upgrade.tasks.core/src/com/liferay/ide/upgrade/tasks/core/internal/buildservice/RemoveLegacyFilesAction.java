@@ -48,7 +48,7 @@ public class RemoveLegacyFilesAction extends BaseUpgradeTaskStepAction {
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		List<IProject> projects = _resourceSelection.selectProjects(
-			"Select Lifreay Service Builder Project", false, new SelectableServiceBuilderProjectFilter());
+			"Select Lifreay Service Builder Project", false, ResourceSelection.SERVICE_BUILDER_PROJECTS);
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;

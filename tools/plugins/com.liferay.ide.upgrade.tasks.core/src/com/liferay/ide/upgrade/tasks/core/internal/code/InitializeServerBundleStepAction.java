@@ -21,7 +21,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
-import com.liferay.ide.upgrade.tasks.core.SelectableLiferayWorkspaceProjectFilter;
 
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class InitializeServerBundleStepAction extends BaseUpgradeTaskStepAction 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		List<IProject> projects = _resourceSelection.selectProjects(
-			"select liferay workspace project", false, new SelectableLiferayWorkspaceProjectFilter());
+			"select liferay workspace project", false, ResourceSelection.WORKSPACE_PROJECTS);
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;
