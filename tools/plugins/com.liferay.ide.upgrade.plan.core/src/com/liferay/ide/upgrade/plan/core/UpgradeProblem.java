@@ -27,9 +27,13 @@ public class UpgradeProblem {
 
 	public static final String MARKER_ATTRIBUTE_AUTOCORRECTCONTEXT = "upgradeProblem.autoCorrectContext";
 
+	public static final String MARKER_ATTRIBUTE_HTML = "upgradeProblem.html";
+
 	public static final String MARKER_ATTRIBUTE_RESOLVED = "upgradeProblem.resolved";
 
 	public static final String MARKER_ATTRIBUTE_SECTION = "upgradeProblem.section";
+
+	public static final String MARKER_ATTRIBUTE_STATUS = "upgradeProblem.status";
 
 	public static final String MARKER_ATTRIBUTE_SUMMARY = "upgradeProblem.summary";
 
@@ -41,7 +45,7 @@ public class UpgradeProblem {
 
 	public static final int MARKER_ERROR = 2;
 
-	public static final String MARKER_TYPE = "com.liferay.ide.upgrade.plan.core.ugradeProblemMarker";
+	public static final String MARKER_TYPE = "com.liferay.ide.upgrade.plan.core.upgradeProblemMarker";
 
 	public static final int MARKER_WARNING = 1;
 
