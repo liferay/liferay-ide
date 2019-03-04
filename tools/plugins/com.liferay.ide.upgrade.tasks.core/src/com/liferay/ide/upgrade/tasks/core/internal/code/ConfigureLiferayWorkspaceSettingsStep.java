@@ -27,9 +27,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = {
 		"id=configure_liferay_workspace_settings", "imagePath=icons/config.png", "requirement=required", "order=3",
 		"taskId=setup_development_environment", "title=Configure Liferay Workspace Settings",
-		"description=This step will help you set the target platform version corresponding to Liferay Workspace " +
-			"version.The workspace module project dependency plugins generated after setting will discard the " +
-				"private version and update with target platform version."
+		"description=Configuring target plarform in your Liferay Workspace helps you target a specific release of Liferay Portal, so dependencies get resolved properly."
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

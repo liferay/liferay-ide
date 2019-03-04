@@ -27,9 +27,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = {
 		"id=setup_liferay_workspace", "imagePath=icons/liferay_new.png", "requirement=required", "order=2",
 		"taskId=setup_development_environment", "title=Setup Liferay Workspace",
-		"description=Create new Liferay Workspace that version will be the same as Target Liferay Version selected " +
-			"in the Liferay Upgrade Plan.Upgrade Workspace Plugin Version supports update of dependency plugin " +
-				"'com.liferay.gradle.plugins.workspace' in settings.gradle."
+		"description=Create a new Liferay Workspace with the same version as Target Liferay Version which you selected in new Liferay Upgrade Plan wizard. Your liferay workspace version will be updated to the version that has been set in settings.gralde which resides in your Workspace’s root folder"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

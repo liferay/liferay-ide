@@ -27,8 +27,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = {
 		"id=initialize_server_bundle", "imagePath=icons/server.gif", "requirement=recommended", "order=4",
 		"taskId=setup_development_environment", "title=Initialize Server Bundle",
-		"description=Select the Liferay Workspace set in the previous step to initialize Liferay Server Bundle.The " +
-			"version of Liferay Server Bundle is determined by the setting of gradle.properties in Liferay Workspace."
+		"description=Generate a liferay portal bundle in your selected workspace project. The default folder is bundles."
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

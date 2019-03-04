@@ -6,7 +6,7 @@
    <property name="order" value="3"/>
    <property name="taskId" value="setup_development_environment"/>
    <property name="title" value="Configure Liferay Workspace Settings"/>
-   <property name="description" value="This step will help you set the target platform version corresponding to Liferay Workspace version.The workspace module project dependency plugins generated after setting will discard the private version and update with target platform version."/>
+   <property name="description" value="Configuring target plarform in your Liferay Workspace helps you target a specific release of Liferay Portal, so dependencies get resolved properly."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
    </service>

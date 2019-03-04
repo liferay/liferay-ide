@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = {
 		"id=import_existing_plugins_sdk", "imagePath=icons/import.png", "requirement=required", "order=1",
 		"taskId=migrate_plugins_sdk", "title=Import Existing Plugins SDK",
-		"description=Open Import Existing Plugins SDK task,Select the SDK project you need to import set in the dialog,The project will appear in the Project Explorer list after import."
+		"description=Browse to the Plugins SDK project root location to proceed with importing your plugin into the workspace."
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

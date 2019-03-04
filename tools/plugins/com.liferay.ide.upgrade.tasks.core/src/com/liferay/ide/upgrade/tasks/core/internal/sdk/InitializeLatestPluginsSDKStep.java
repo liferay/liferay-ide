@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = {
 		"id=initialize_latest_plugins_sdk", "imagePath=icons/new.png", "requirement=required", "order=0",
 		"taskId=migrate_plugins_sdk", "title=Initialize the Latest Plugins SDK",
-		"description=Open Initialize the Latest Plugins SDK task and select the SDK project you want to operate in the dialog."
+		"description=Performing this step, it will download the latest sdk and extract into plugins-sdk folder in your liferay workspace project."
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

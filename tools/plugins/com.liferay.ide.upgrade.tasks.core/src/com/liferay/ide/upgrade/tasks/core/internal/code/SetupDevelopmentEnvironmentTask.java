@@ -27,9 +27,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = {
 		"categoryId=code", "imagePath=icons/setup.png", "id=setup_development_environment", "order=2",
 		"title=Setup Development Environment",
-		"description=This step will set the basic parameters of Liferay Workspace. According to different upgrade " +
-			"projects, workspace can be divided into two ways: import and create. The configuration of Workspace " +
-				"Plugin Version, Target Platform and Server is also supported."
+		"description=A Liferay Workspace is a generated environment that is built to hold and manage your Liferay projects. It is intended to aid in the management of Liferay projects by providing various Gradle build scripts and configured properties."
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )

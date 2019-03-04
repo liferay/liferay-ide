@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = {
 		"categoryId=code", "id=migrate_plugins_sdk", "order=4", "title=Migrate Plugins SDK",
 		"imagePath=icons/migrate_plugins_sdk.png",
-		"description=This step will help you: You can initialize the current latest SDK project, or import an existing SDK project, or you can quickly move the original Plugins SDK project into Liferay Workspace"
+		"description=Plugins SDK is deprecated as of Liferay Portal CE 7.x. After you’ve adapted your traditional plugin to Liferay Portal’s API, you can continue maintaining it in the Plugins SDK. In this section, you can initialize a latest SDK project, import an existing SDK project, or move the original Plugins SDK project into a Liferay Workspace."
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )
