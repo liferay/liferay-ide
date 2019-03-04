@@ -129,7 +129,7 @@ public class UpgradeTaskStepIntroItem implements IExpansionListener, UpgradeTask
 		ImageHyperlink taskStepRestartImageHyperlink = createImageHyperlink(
 			_formToolkit, _buttonComposite, taskStepRestartImage, this, "Click to restart");
 
-		taskStepRestartImageHyperlink.setEnabled(false);
+		taskStepRestartImageHyperlink.setEnabled(true);
 
 		taskStepRestartImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
