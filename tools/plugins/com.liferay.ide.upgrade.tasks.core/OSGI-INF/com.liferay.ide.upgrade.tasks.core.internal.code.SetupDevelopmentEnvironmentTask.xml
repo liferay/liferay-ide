@@ -5,6 +5,7 @@
    <property name="id" value="setup_development_environment"/>
    <property name="order" value="2"/>
    <property name="title" value="Setup Development Environment"/>
+   <property name="description" value="This step will set the basic parameters of Liferay Workspace. According to different upgrade projects, workspace can be divided into two ways: import and create. The configuration of Workspace Plugin Version, Target Platform and Server is also supported."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTask"/>
    </service>

@@ -6,6 +6,7 @@
    <property name="order" value="1"/>
    <property name="taskId" value="setup_development_environment"/>
    <property name="title" value="Import Existing Projects"/>
+   <property name="description" value="Import Liferay Workspace that need to be upgraded into Project Explorer."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
    </service>

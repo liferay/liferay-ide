@@ -6,6 +6,7 @@
    <property name="order" value="2"/>
    <property name="taskId" value="setup_development_environment"/>
    <property name="title" value="Setup Liferay Workspace"/>
+   <property name="description" value="Create new Liferay Workspace that version will be the same as Target Liferay Version selected in the Liferay Upgrade Plan.Upgrade Workspace Plugin Version supports update of dependency plugin &apos;com.liferay.gradle.plugins.workspace&apos; in settings.gradle."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
    </service>

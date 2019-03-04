@@ -6,6 +6,7 @@
    <property name="order" value="4"/>
    <property name="taskId" value="setup_development_environment"/>
    <property name="title" value="Initialize Server Bundle"/>
+   <property name="description" value="Select the Liferay Workspace set in the previous step to initialize Liferay Server Bundle.The version of Liferay Server Bundle is determined by the setting of gradle.properties in Liferay Workspace."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
    </service>

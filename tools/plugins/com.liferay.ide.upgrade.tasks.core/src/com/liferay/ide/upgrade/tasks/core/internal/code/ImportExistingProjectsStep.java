@@ -32,7 +32,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"id=import_existing_projects", "imagePath=icons/import_projects.png", "requirement=required", "order=1",
-		"taskId=setup_development_environment", "title=Import Existing Projects"
+		"taskId=setup_development_environment", "title=Import Existing Projects",
+		"description=Import Liferay Workspace that need to be upgraded into Project Explorer."
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

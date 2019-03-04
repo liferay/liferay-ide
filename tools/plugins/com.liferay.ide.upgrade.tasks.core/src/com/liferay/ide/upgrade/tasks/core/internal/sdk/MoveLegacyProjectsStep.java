@@ -26,7 +26,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"id=move_legacy_projects", "imagePath=icons/export.png", "requirement=recommended", "order=2",
-		"taskId=migrate_plugins_sdk", "title=Move Legacy Projects", "description=Move legacy SDK projects into liferay workspace."
+		"taskId=migrate_plugins_sdk", "title=Move Legacy Projects",
+		"description=Move legacy SDK projects into liferay workspace."
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
