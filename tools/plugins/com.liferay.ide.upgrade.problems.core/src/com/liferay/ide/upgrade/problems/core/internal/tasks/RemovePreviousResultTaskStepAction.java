@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
+import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
@@ -23,7 +24,10 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
 import com.liferay.ide.upgrade.tasks.core.MessagePrompt;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -51,6 +55,31 @@ public class RemovePreviousResultTaskStepAction extends BaseUpgradeTaskStepActio
 			UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
 			Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
+
+			Stream<UpgradeProblem> stream = upgradeProblems.stream();
+
+			stream.map(
+				upgradeProblem -> {
+					IResource resource = upgradeProblem.getResource();
+
+					try {
+						return resource.findMarker(upgradeProblem.getMarkerId());
+					}
+					catch (CoreException ce) {
+						return null;
+					}
+				}
+			).filter(
+				MarkerUtil::exists
+			).forEach(
+				problemMarker -> {
+					try {
+						problemMarker.delete();
+					}
+					catch (CoreException ce) {
+					}
+				}
+			);
 
 			upgradeProblems.clear();
 
