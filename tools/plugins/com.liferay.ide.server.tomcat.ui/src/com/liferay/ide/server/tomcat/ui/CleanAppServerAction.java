@@ -160,6 +160,7 @@ public class CleanAppServerAction extends AbstractObjectAction {
 
 		WizardFragment fragment = new WizardFragment() {
 
+			@SuppressWarnings("rawtypes")
 			protected void createChildFragments(List<WizardFragment> list) {
 				List fragments = fragment2.getChildFragments();
 
@@ -213,7 +214,7 @@ public class CleanAppServerAction extends AbstractObjectAction {
 					}
 
 					entry = zis.getNextEntry();
-				};
+				}
 			}
 			catch (Exception e) {
 				return result = LiferayTomcatPlugin.createErrorStatus(Msgs.bundleZipLocationNotValid);

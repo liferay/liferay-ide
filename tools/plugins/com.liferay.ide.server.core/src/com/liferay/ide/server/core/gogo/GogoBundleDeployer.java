@@ -208,7 +208,7 @@ public class GogoBundleDeployer {
 	}
 
 	public String run(String cmd, boolean successResult) throws IOException {
-		GogoTelnetClient client = new GogoTelnetClient(_host, _port);
+		GogoShellClient client = new GogoShellClient(_host, _port);
 
 		String result = client.send(cmd);
 

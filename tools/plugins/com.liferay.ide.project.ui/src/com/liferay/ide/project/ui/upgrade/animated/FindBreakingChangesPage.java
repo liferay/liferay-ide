@@ -507,7 +507,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
 		if (_migrationContentProvider != null) {
 			_correctAllImportIssuesButton.setEnabled(
-				(state == true && _migrationContentProvider.getProblemsCount() > 0) ? true : false);
+				(state && (_migrationContentProvider.getProblemsCount() > 0)) ? true : false);
 		}
 		else {
 			_correctAllImportIssuesButton.setEnabled(false);

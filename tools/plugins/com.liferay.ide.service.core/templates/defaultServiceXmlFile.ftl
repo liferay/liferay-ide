@@ -2,6 +2,7 @@
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder ${version}//EN" "http://www.liferay.com/dtd/liferay-service-builder_${version_}.dtd">
 <service-builder package-path="${package_path}">
 	<author>${author}</author>
+
 	<namespace>${namespace}</namespace>
 
 	<entity local-service="true" name="Foo" remote-service="true">

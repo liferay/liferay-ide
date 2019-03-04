@@ -267,7 +267,7 @@ public class LayeredModulePathFactory {
 
 			String layersProp = (String)properties.get("layers");
 
-			if ((layersProp == null) || (layersProp = layersProp.trim()).length() == 0) {
+			if ((layersProp == null) || ((layersProp = layersProp.trim()).length() == 0)) {
 				if (excludeBase) {
 					_layers = Collections.emptyList();
 				}

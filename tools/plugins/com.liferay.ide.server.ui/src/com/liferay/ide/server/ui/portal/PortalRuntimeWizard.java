@@ -77,7 +77,7 @@ public class PortalRuntimeWizard extends WizardFragment {
 		if (runtime != null) {
 			IStatus status = runtime.validate(null);
 
-			retval = status == null || status.getSeverity() != IStatus.ERROR;
+			retval = (status == null) || (status.getSeverity() != IStatus.ERROR);
 		}
 
 		return retval;

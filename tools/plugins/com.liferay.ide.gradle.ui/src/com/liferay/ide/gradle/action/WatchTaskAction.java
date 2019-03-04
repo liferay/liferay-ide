@@ -21,7 +21,7 @@ import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.core.WatchJob;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.server.core.ILiferayServer;
-import com.liferay.ide.server.core.gogo.GogoTelnetClient;
+import com.liferay.ide.server.core.gogo.GogoShellClient;
 import com.liferay.ide.server.core.portal.PortalServerBehavior;
 import com.liferay.ide.ui.action.AbstractObjectAction;
 import com.liferay.ide.ui.util.UIUtil;
@@ -108,7 +108,7 @@ public class WatchTaskAction extends AbstractObjectAction {
 							return;
 						}
 
-						try (GogoTelnetClient client = new GogoTelnetClient("localhost", 11311)) {
+						try (GogoShellClient client = new GogoShellClient("localhost", 11311)) {
 							for (Path bndPath : bndPaths) {
 								Properties properties = new Properties();
 

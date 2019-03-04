@@ -239,7 +239,7 @@ public class AutoCorrectAction extends ProblemAction implements SapphireContentA
 					Object[] problems = (Object[])obj;
 
 					for (Object o : problems) {
-						if (o instanceof Problem && ((Problem)o).autoCorrectContext != null) {
+						if (o instanceof Problem && (((Problem)o).autoCorrectContext != null)) {
 							allAutoCorrectContexts.add(((Problem)o).autoCorrectContext);
 						}
 					}

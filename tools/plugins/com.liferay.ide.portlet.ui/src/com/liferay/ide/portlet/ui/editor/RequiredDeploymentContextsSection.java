@@ -552,10 +552,11 @@ public class RequiredDeploymentContextsSection
 			canMove = true;
 		}
 
-		tablePart.setButtonEnabled(_UP_INDEX, canMove && isEditable() && hasSelection && table.getSelectionIndex() > 0);
+		tablePart.setButtonEnabled(
+			_UP_INDEX, canMove && isEditable() && hasSelection && (table.getSelectionIndex() > 0));
 		tablePart.setButtonEnabled(
 			_DOWN_INDEX,
-			canMove && hasSelection && isEditable() && table.getSelectionIndex() < table.getItemCount() - 1);
+			canMove && hasSelection && isEditable() && (table.getSelectionIndex() < table.getItemCount() - 1));
 	}
 
 	private static final int _ADD_INDEX = 0;

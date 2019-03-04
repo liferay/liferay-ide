@@ -90,7 +90,7 @@ public class HierarchyBrowseActionHandler extends BrowseActionHandler {
 			if (dlg.open() == SelectionDialog.OK) {
 				Object[] results = dlg.getResult();
 
-				assert results != null && results.length == 1;
+				assert (results != null) && (results.length == 1);
 
 				if (results[0] instanceof IType) {
 					return ((IType)results[0]).getFullyQualifiedName();
