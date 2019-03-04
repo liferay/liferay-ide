@@ -26,7 +26,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"id=initialize_latest_plugins_sdk", "imagePath=icons/new.png", "requirement=required", "order=0",
-		"taskId=migrate_plugins_sdk", "title=Initialize the Latest Plugins SDK"
+		"taskId=migrate_plugins_sdk", "title=Initialize the Latest Plugins SDK",
+		"description=Open Initialize the Latest Plugins SDK task and select the SDK project you want to operate in the dialog."
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

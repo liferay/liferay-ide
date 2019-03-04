@@ -6,6 +6,7 @@
    <property name="order" value="2"/>
    <property name="taskId" value="migrate_plugins_sdk"/>
    <property name="title" value="Move Legacy Projects"/>
+   <property name="description" value="Move legacy SDK projects into liferay workspace."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
    </service>

@@ -6,6 +6,7 @@
    <property name="order" value="1"/>
    <property name="taskId" value="migrate_plugins_sdk"/>
    <property name="title" value="Import Existing Plugins SDK"/>
+   <property name="description" value="Open Import Existing Plugins SDK task,Select the SDK project you need to import set in the dialog,The project will appear in the Project Explorer list after import."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
    </service>

@@ -6,6 +6,7 @@
    <property name="order" value="0"/>
    <property name="taskId" value="migrate_plugins_sdk"/>
    <property name="title" value="Initialize the Latest Plugins SDK"/>
+   <property name="description" value="Open Initialize the Latest Plugins SDK task and select the SDK project you want to operate in the dialog."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
    </service>
