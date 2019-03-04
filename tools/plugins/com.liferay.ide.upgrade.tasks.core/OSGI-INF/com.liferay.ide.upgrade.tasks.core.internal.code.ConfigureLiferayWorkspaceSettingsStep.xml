@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.code.ConfigureLiferayWorkspaceSettingsStep">
    <property name="id" value="configure_liferay_workspace_settings"/>
+   <property name="imagePath" value="icons/config.png"/>
    <property name="requirement" value="required"/>
    <property name="order" value="3"/>
    <property name="taskId" value="setup_development_environment"/>

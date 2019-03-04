@@ -31,8 +31,8 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=import_existing_projects", "requirement=required", "order=1", "taskId=setup_development_environment",
-		"title=Import Existing Projects"
+		"id=import_existing_projects", "imagePath=icons/import_projects.png", "requirement=required", "order=1",
+		"taskId=setup_development_environment", "title=Import Existing Projects"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

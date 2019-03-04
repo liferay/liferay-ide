@@ -4,6 +4,7 @@
    <property name="id" value="migrate_plugins_sdk"/>
    <property name="order" value="4"/>
    <property name="title" value="Migrate Plugins SDK"/>
+   <property name="imagePath" value="icons/migrate_plugins_sdk.png"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTask"/>
    </service>

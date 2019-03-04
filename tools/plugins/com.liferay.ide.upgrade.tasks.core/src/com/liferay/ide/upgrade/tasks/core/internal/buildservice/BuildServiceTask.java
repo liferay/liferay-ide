@@ -24,7 +24,9 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Simon Jiang
  */
 @Component(
-	property = {"categoryId=code", "id=build_service", "order=6", "title=Build Service"},
+	property = {
+		"categoryId=code", "id=build_service", "imagePath=icons/build_service.png", "order=6", "title=Build Service"
+	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )
 public class BuildServiceTask extends BaseUpgradeTask {

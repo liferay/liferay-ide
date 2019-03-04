@@ -2,6 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.buildservice.BuildServiceTask">
    <property name="categoryId" value="code"/>
    <property name="id" value="build_service"/>
+   <property name="imagePath" value="icons/build_service.png"/>
    <property name="order" value="6"/>
    <property name="title" value="Build Service"/>
    <service scope="prototype">
