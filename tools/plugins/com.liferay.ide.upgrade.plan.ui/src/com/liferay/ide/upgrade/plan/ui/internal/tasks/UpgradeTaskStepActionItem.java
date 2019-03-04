@@ -67,6 +67,8 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 		section.addExpansionListener(this);
 
+		section.setExpanded(true);
+
 		GridLayoutFactory gridLayoutFactory = GridLayoutFactory.fillDefaults();
 
 		gridLayoutFactory.margins(0, 0);
