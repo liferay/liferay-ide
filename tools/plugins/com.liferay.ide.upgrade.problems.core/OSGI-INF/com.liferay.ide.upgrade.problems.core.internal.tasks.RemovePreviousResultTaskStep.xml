@@ -6,6 +6,7 @@
    <property name="order" value="2"/>
    <property name="taskId" value="find_upgrade_problems"/>
    <property name="title" value="Remove Previous Result"/>
+   <property name="description" value="All previous found problems will be deleted."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
    </service>

@@ -6,6 +6,7 @@
    <property name="order" value="2"/>
    <property name="taskId" value="find_upgrade_problems"/>
    <property name="title" value="Find Upgrade Problems"/>
+   <property name="description" value="This step will help you find breaking changes for Java, JSP, XML and properties files. It does not support front-end code(e.g., JavaScript, CSS)."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
    </service>

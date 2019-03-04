@@ -51,6 +51,10 @@ public class AutoCorrectUpgradeProblemsStep extends BaseUpgradeTaskStep {
 
 			StringBuffer sb = new StringBuffer();
 
+			sb.append(
+				"Performing this step will correct some easy upgrade problems automatically. You can edit the rest " +
+					"problems manually according to the breaking changes provided.\n");
+
 			sb.append("The following problems could be auto corrected.\n");
 
 			for (FileMigrator fileMigrator : fileMigrators) {

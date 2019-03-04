@@ -26,7 +26,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"categoryId=code", "id=find_upgrade_problems", "imagePath=icons/find_problems.gif", "order=5",
-		"title=Find Upgrade Problems"
+		"title=Find Upgrade Problems",
+		"description=In this section, it finds affected plugin code and shows documentation that describes how to adapt it, helps to address the problems, to auto-correct some problems. It facilitates opening affected code in an editor to check and modify it."
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )

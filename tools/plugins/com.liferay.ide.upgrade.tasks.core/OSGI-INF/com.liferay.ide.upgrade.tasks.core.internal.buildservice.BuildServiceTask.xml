@@ -5,6 +5,7 @@
    <property name="imagePath" value="icons/build_service.png"/>
    <property name="order" value="6"/>
    <property name="title" value="Build Service"/>
+   <property name="description" value="Building service generates your project’s persistence layer by automating the creation of interfaces and classes according to your configurations."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTask"/>
    </service>

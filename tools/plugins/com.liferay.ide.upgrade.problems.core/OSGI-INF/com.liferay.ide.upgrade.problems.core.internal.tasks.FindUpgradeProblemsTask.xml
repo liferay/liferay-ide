@@ -5,6 +5,7 @@
    <property name="imagePath" value="icons/find_problems.gif"/>
    <property name="order" value="5"/>
    <property name="title" value="Find Upgrade Problems"/>
+   <property name="description" value="In this section, it finds affected plugin code and shows documentation that describes how to adapt it, helps to address the problems, to auto-correct some problems. It facilitates opening affected code in an editor to check and modify it."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTask"/>
    </service>

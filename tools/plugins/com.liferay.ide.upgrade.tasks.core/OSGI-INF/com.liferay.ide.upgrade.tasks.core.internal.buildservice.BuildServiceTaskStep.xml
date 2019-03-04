@@ -6,6 +6,7 @@
    <property name="order" value="2"/>
    <property name="taskId" value="build_service"/>
    <property name="title" value="Build Services"/>
+   <property name="description" value="In this step, we will delete some legacy service builder related files and re-run build-service on service builder projects. Note: Please make sure the default installed JRE is JDK 8 (Preferences -&gt; Java -&gt; Installed JREs)."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
    </service>
