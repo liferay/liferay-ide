@@ -17,7 +17,7 @@
 <definition>
     <wizard>
         <id>ImportSDKProjectsWizard</id>
-        <element-type>com.liferay.ide.upgrade.tasks.core.SDKProjectsImportOp</element-type>
+        <element-type>com.liferay.ide.upgrade.tasks.core.ImportSDKProjectsOp</element-type>
         <label>Import Liferay Plugins SDK Projects</label>
         <page>
             <id>ImportLiferaySDKProjectsPage</id>
