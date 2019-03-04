@@ -26,6 +26,7 @@ import java.util.function.Function;
 
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.swt.graphics.Image;
 
 import org.osgi.framework.Bundle;
@@ -64,7 +65,13 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 		else if (element instanceof UpgradeTaskStep) {
 			UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)element;
 
-			StyledString styledString = new StyledString(upgradeTaskStep.getTitle());
+			Styler styler = null;
+
+			if (upgradeTaskStep.completed() || !upgradeTaskStep.enabled()) {
+				styler = StyledString.QUALIFIER_STYLER;
+			}
+
+			StyledString styledString = new StyledString(upgradeTaskStep.getTitle(), styler);
 
 			UpgradeTaskStepRequirement upgradeTaskStepRequirement = upgradeTaskStep.getRequirement();
 

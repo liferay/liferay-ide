@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=move_legacy_projects", "imagePath=icons/export.png", "requirement=recommended", "order=1",
+		"id=move_legacy_projects", "imagePath=icons/export.png", "requirement=recommended", "order=2",
 		"taskId=migrate_plugins_sdk", "title=Move Legacy Projects"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class

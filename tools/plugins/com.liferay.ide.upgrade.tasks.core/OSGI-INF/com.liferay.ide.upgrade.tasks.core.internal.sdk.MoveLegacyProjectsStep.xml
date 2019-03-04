@@ -3,7 +3,7 @@
    <property name="id" value="move_legacy_projects"/>
    <property name="imagePath" value="icons/export.png"/>
    <property name="requirement" value="recommended"/>
-   <property name="order" value="1"/>
+   <property name="order" value="2"/>
    <property name="taskId" value="migrate_plugins_sdk"/>
    <property name="title" value="Move Legacy Projects"/>
    <service scope="prototype">

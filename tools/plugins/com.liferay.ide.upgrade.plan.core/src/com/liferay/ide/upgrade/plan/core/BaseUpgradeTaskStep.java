@@ -36,8 +36,6 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	public void activate(ComponentContext componentContext) {
 		super.activate(componentContext);
 
-		_componentContext = componentContext;
-
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
 		_requirement = getStringProperty(properties, "requirement");
@@ -65,15 +63,23 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 
 	@Override
 	public boolean enabled() {
-		BundleContext bundleContext = _componentContext.getBundleContext();
+		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 
-		List<UpgradeTaskStep> upgradeTaskSteps = ServicesLookup.getOrderedServices(
-			bundleContext, UpgradeTaskStep.class, "&(taskId=" + getTaskId() + ")(requirement=required)");
+		UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
 
-		Stream<UpgradeTaskStep> upgradeTaskStepsStream = upgradeTaskSteps.stream();
+		List<UpgradeTask> upgradeTasks = upgradePlan.getTasks();
 
-		long count = upgradeTaskStepsStream.filter(
-			upgradeTaskStep -> upgradeTaskStep.getOrder() < _order
+		Stream<UpgradeTask> upgradeTasksStream = upgradeTasks.stream();
+
+		long count = upgradeTasksStream.filter(
+			upgradeTask -> getTaskId().equals(upgradeTask.getId())
+		).map(
+			upgradeTask -> upgradeTask.getSteps()
+		).flatMap(
+			upgradeTaskStep -> upgradeTaskStep.stream()
+		).filter(
+			upgradeTaskStep -> (upgradeTaskStep.getOrder() < _order) &&
+			 UpgradeTaskStepRequirement.REQUIRED.equals(upgradeTaskStep.getRequirement())
 		).map(
 			upgradeTaskStep -> upgradeTaskStep.getActions()
 		).flatMap(
@@ -131,7 +137,6 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 		);
 	}
 
-	private ComponentContext _componentContext;
 	private double _order;
 	private String _requirement;
 	private String _taskId;
