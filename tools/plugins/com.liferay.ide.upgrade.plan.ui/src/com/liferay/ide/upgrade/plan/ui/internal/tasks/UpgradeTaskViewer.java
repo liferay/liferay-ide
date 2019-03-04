@@ -16,7 +16,6 @@ package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanViewer;
@@ -164,13 +163,6 @@ public class UpgradeTaskViewer implements ISelectionProvider {
 			_formToolkit, _scrolledForm, upgradeTaskStep);
 
 		upgradeTaskStepIntroItem.addSelectionChangedListener(this::_fireSelectionChanged);
-
-		for (UpgradeTaskStepAction upgradeTaskStepAction : upgradeTaskStep.getActions()) {
-			UpgradeTaskStepActionItem upgradeTaskStepActionItem = new UpgradeTaskStepActionItem(
-				_formToolkit, _scrolledForm, upgradeTaskStepAction);
-
-			upgradeTaskStepActionItem.addSelectionChangedListener(this::_fireSelectionChanged);
-		}
 	}
 
 	private List<Disposable> _disposables = new ArrayList<>();
