@@ -14,6 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
+
 import java.util.Dictionary;
 
 import org.osgi.service.component.ComponentContext;
@@ -31,6 +33,8 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
 		_stepId = getStringProperty(properties, "stepId");
+
+		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 	}
 
 	@Override
@@ -45,10 +49,16 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 
 	@Override
 	public void setStatus(UpgradeTaskStepActionStatus upgradeTaskStepActionStatus) {
+		UpgradeTaskStepActionStatusChangedEvent event = new UpgradeTaskStepActionStatusChangedEvent(
+			_upgradeTaskStepActionStatus, upgradeTaskStepActionStatus);
+
 		_upgradeTaskStepActionStatus = upgradeTaskStepActionStatus;
+
+		_upgradePlanner.dispatch(event);
 	}
 
 	private String _stepId;
+	private UpgradePlanner _upgradePlanner;
 	private UpgradeTaskStepActionStatus _upgradeTaskStepActionStatus = UpgradeTaskStepActionStatus.INCOMPLETE;
 
 }
