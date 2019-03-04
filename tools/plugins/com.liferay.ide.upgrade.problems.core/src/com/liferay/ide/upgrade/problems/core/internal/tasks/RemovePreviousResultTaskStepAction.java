@@ -26,6 +26,7 @@ import com.liferay.ide.upgrade.tasks.core.MessagePrompt;
 import java.util.Collection;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -59,26 +60,11 @@ public class RemovePreviousResultTaskStepAction extends BaseUpgradeTaskStepActio
 			Stream<UpgradeProblem> stream = upgradeProblems.stream();
 
 			stream.map(
-				upgradeProblem -> {
-					IResource resource = upgradeProblem.getResource();
-
-					try {
-						return resource.findMarker(upgradeProblem.getMarkerId());
-					}
-					catch (CoreException ce) {
-						return null;
-					}
-				}
+				this::_findMarker
 			).filter(
 				MarkerUtil::exists
 			).forEach(
-				problemMarker -> {
-					try {
-						problemMarker.delete();
-					}
-					catch (CoreException ce) {
-					}
-				}
+				this::_deleteMarker
 			);
 
 			upgradeProblems.clear();
@@ -87,6 +73,25 @@ public class RemovePreviousResultTaskStepAction extends BaseUpgradeTaskStepActio
 		}
 
 		return Status.OK_STATUS;
+	}
+
+	private void _deleteMarker(IMarker marker) {
+		try {
+			marker.delete();
+		}
+		catch (CoreException ce) {
+		}
+	}
+
+	private IMarker _findMarker(UpgradeProblem upgradeProblem) {
+		IResource resource = upgradeProblem.getResource();
+
+		try {
+			return resource.findMarker(upgradeProblem.getMarkerId());
+		}
+		catch (CoreException ce) {
+			return null;
+		}
 	}
 
 	@Reference
