@@ -443,7 +443,7 @@ public class ProjectImportUtil {
 
 				JarEntry jar = pluginBinary.getJarEntry(getConfigFileLocation(ILiferayConstants.WEB_XML_FILE));
 
-				valid = valid || jar != null;
+				valid = valid || (jar != null);
 			}
 		}
 		catch (IOException ioe) {

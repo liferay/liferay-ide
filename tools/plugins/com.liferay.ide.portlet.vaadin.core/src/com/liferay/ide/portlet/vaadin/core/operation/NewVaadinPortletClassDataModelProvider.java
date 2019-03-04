@@ -155,7 +155,7 @@ public class NewVaadinPortletClassDataModelProvider
 			String pkg = getDataModel().getStringProperty(JAVA_PACKAGE);
 			String cls = getDataModel().getStringProperty(CLASS_NAME);
 
-			String qualifiedApplicationClass = (pkg == null || StringPool.EMPTY.equals(pkg)) ? cls : pkg + "." + cls;
+			String qualifiedApplicationClass = ((pkg == null) || StringPool.EMPTY.equals(pkg)) ? cls : pkg + "." + cls;
 
 			paramValue.setValue(qualifiedApplicationClass);
 

@@ -753,9 +753,9 @@ public class NewPortletClassDataModelProvider
 
 	protected ParamValue[] createDefaultParamValuesForModes(String[] modes, String[] names, String[] values) {
 		Assert.isTrue(
-			modes != null &&
-			names != null &&
-			values != null &&
+			(modes != null) &&
+			(names != null) &&
+			(values != null) &&
 			 (modes.length == names.length) &&
 			 (names.length == values.length));
 

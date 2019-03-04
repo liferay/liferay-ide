@@ -72,7 +72,7 @@ public class ComponentUtil {
 		if (currentChildren == null) {
 			IModuleResource deltaModuleResource = delta.getModuleResource();
 
-			IFile file = (IFile)deltaModuleResource.getAdapter(IFile.class);
+			IFile file = deltaModuleResource.getAdapter(IFile.class);
 
 			if (file != null) {
 				IPath fileFullPath = file.getFullPath();
@@ -245,7 +245,7 @@ public class ComponentUtil {
 					IVirtualResource[] vResources = ComponentCore.createResources(resource);
 					boolean found = false;
 
-					for (int j = 0; !found && j < vResources.length; j++) {
+					for (int j = 0; !found && (j < vResources.length); j++) {
 						IVirtualComponent vResourceComponent = vResources[j].getComponent();
 
 						if (vResourceComponent.equals(vc)) {

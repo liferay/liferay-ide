@@ -376,13 +376,13 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 						// ignore the expression
 						// not strictly check the type and will check equals later
 
-						((typeHint != null && type != null &&
+						(((typeHint != null) && (type != null) &&
 							StringUtil.endsWith(type.getName(), typeHint)) ||
 
 							// with no typeHint then expressions can be used to
 							// match Static invocation
 
-							(typeHint == null && expression != null &&
+							((typeHint == null) && (expression != null) &&
 								StringUtil.equals(expression.toString(), expressionValue)))) {
 
 						boolean argumentsMatch = false;
