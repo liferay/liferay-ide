@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.code.ImportExistingProjectsStep">
    <property name="id" value="import_existing_projects"/>
+   <property name="imagePath" value="icons/import_projects.png"/>
    <property name="requirement" value="required"/>
    <property name="order" value="1"/>
    <property name="taskId" value="setup_development_environment"/>

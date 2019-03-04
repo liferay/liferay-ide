@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.code.InitializeServerBundleStep">
    <property name="id" value="initialize_server_bundle"/>
+   <property name="imagePath" value="icons/server.gif"/>
    <property name="requirement" value="recommended"/>
    <property name="order" value="4"/>
    <property name="taskId" value="setup_development_environment"/>

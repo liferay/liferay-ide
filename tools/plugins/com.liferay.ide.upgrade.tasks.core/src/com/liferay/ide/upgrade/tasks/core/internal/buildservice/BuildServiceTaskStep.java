@@ -25,7 +25,8 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=build_services", "requirement=recommended", "order=2", "taskId=build_service", "title=Build Services"
+		"id=build_services", "imagePath=icons/build_services.png", "requirement=recommended", "order=2",
+		"taskId=build_service", "title=Build Services"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

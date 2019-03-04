@@ -2,6 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsTask">
    <property name="categoryId" value="code"/>
    <property name="id" value="find_upgrade_problems"/>
+   <property name="imagePath" value="icons/find_problems.gif"/>
    <property name="order" value="5"/>
    <property name="title" value="Find Upgrade Problems"/>
    <service scope="prototype">
