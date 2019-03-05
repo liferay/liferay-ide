@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>com.liferay.ide.enterprise.plugins</groupId>
 		<artifactId>enterprise-plugins</artifactId>
-		<version>3.5.0-SNAPSHOT</version>
+		<version>3.6.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.scripting.core</artifactId>

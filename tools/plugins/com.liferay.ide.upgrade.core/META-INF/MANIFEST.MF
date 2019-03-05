@@ -4,7 +4,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Upgrade Core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.liferay.ide.upgrade.core;singleton:=true
-Bundle-Version: 3.5.0.qualifier
+Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Export-Package: com.liferay.blade.api,
  com.liferay.blade.util
