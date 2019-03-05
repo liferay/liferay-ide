@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.buildservice.RebuildServicesStep">
+   <property name="description" value="In this step, we will delete some legacy service builder related files and then re-run build service task on service builder projects. Note: Please make sure the default installed JRE is JDK 8 (Preferences -&gt; Java -&gt; Installed JREs)."/>
+   <property name="id" value="rebuild_services"/>
+   <property name="imagePath" value="icons/build_services.png"/>
+   <property name="requirement" value="recommended"/>
+   <property name="order" value="2"/>
+   <property name="taskId" value="rebuild_services"/>
+   <property name="title" value="Rebuild Liferay Services"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.tasks.core.internal.buildservice.RebuildServicesStep"/>
+</scr:component>

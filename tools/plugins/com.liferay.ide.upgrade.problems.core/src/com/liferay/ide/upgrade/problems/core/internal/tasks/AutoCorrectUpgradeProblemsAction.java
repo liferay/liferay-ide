@@ -21,10 +21,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
-import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
 
 import java.io.File;
@@ -36,7 +34,6 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -55,58 +52,18 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Terry Jia
  */
 @Component(
-	property = {"id=auto_correct_problems", "order=1", "stepId=auto_correct_problems", "title=Auto Correct Problems"},
+	property = {
+		"description=" + AutoCorrectUpgradeProblemsActionKeys.DESCRIPTION, "id=auto_correct_problems", "order=1",
+		"stepId=auto_correct_problems", "title=" + AutoCorrectUpgradeProblemsActionKeys.TITLE
+	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
 
 	@Override
-	public String getDescription() {
-		if (_description == null) {
-			Bundle bundle = FrameworkUtil.getBundle(AutoCorrectUpgradeProblemsAction.class);
-
-			BundleContext bundleContext = bundle.getBundleContext();
-
-			List<FileMigrator> fileMigrators = ServicesLookup.getOrderedServices(
-				bundleContext, FileMigrator.class, "(auto.correct=*)");
-
-			StringBuffer sb = new StringBuffer();
-
-			sb.append("The following problems could be auto corrected.\n");
-
-			for (FileMigrator fileMigrator : fileMigrators) {
-				Class<?> clazz = fileMigrator.getClass();
-
-				sb.append(clazz.getName());
-
-				sb.append("\n");
-			}
-
-			_description = sb.toString();
-		}
-
-		return _description;
-	}
-
-	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		final UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		WorkspaceJob workspaceJob = new WorkspaceJob("Auto correcting all breaking changes.") {
-
-			@Override
-			public IStatus runInWorkspace(IProgressMonitor monitor) {
-				return _perform(upgradePlan);
-			}
-
-		};
-
-		workspaceJob.schedule();
-
-		return Status.OK_STATUS;
-	}
-
-	private IStatus _perform(UpgradePlan upgradePlan) {
 		IStatus retval = Status.OK_STATUS;
 
 		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectUpgradeProblemsAction.class);
@@ -176,12 +133,10 @@ public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeTaskStepAction 
 			}
 		);
 
-		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(AutoCorrectUpgradeProblemsAction.this));
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent((List<?>)upgradeProblems, this));
 
 		return retval;
 	}
-
-	private String _description;
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;

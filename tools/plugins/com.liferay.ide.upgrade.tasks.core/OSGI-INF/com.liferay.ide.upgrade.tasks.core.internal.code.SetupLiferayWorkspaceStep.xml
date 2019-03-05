@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.code.SetupLiferayWorkspaceStep">
+   <property name="description" value="Create a new Liferay Workspace with the same version as Target Liferay Version which you selected in new Liferay Upgrade Plan wizard. Your Liferay Workspace version will be updated to the version that has been set in gradle.properties which resides in your Workspace’s root folder."/>
    <property name="id" value="setup_liferay_workspace"/>
    <property name="imagePath" value="icons/liferay_new.png"/>
    <property name="requirement" value="required"/>

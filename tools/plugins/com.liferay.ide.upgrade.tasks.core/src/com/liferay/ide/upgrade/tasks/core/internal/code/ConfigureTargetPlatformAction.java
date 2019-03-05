@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"id=configure_target_platform", "requirement=optional", "order=3",
-		"stepId=configure_liferay_workspace_settings", "title=Configure Target Platform"
+		"stepId=" + ConfigureLiferayWorkspaceSettingsStepKeys.ID, "title=Configure Target Platform"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )

@@ -25,8 +25,9 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=setup_liferay_workspace", "imagePath=icons/liferay_new.png", "requirement=required", "order=2",
-		"taskId=setup_development_environment", "title=Setup Liferay Workspace"
+		"description=" + SetupLiferayWorkspaceStepKeys.DESCRIPTION, "id=" + SetupLiferayWorkspaceStepKeys.ID,
+		"imagePath=icons/liferay_new.png", "requirement=required", "order=2",
+		"taskId=" + SetupDevelopmentEnvironmentTaskKeys.ID, "title=" + SetupLiferayWorkspaceStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

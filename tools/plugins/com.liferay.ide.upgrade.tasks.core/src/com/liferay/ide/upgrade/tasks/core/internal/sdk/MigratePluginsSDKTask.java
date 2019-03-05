@@ -25,8 +25,8 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"categoryId=code", "id=migrate_plugins_sdk", "order=4", "title=Migrate Plugins SDK",
-		"imagePath=icons/migrate_plugins_sdk.png"
+		"categoryId=code", "description=" + MigratePluginsSDKTaskKeys.DESCRIPTION, "id=" + MigratePluginsSDKTaskKeys.ID,
+		"imagePath=icons/migrate_plugins_sdk.png", "order=4", "title=" + MigratePluginsSDKTaskKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )

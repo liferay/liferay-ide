@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.tasks.AutoCorrectUpgradeProblemsAction">
+   <property name="description" value="Performing this step will correct some upgrade problems automatically. You can edit the rest problems manually according to the breaking changes documentation."/>
    <property name="id" value="auto_correct_problems"/>
    <property name="order" value="1"/>
    <property name="stepId" value="auto_correct_problems"/>
-   <property name="title" value="Auto Correct Problems"/>
+   <property name="title" value="Auto Correct Upgrade Problems"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>
    </service>

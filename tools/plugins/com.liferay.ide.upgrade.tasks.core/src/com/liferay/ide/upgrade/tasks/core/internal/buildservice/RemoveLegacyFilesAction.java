@@ -40,7 +40,10 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Terry Jia
  */
 @Component(
-	property = {"id=remove_legacy_files", "order=1", "stepId=build_services", "title=Remove Legacy Files"},
+	property = {
+		"description=" + RemoveLegacyFilesActionKeys.DESCRIPTION, "id=" + RemoveLegacyFilesActionKeys.ID, "order=1",
+		"stepId=" + RebuildServicesStepKeys.ID, "title=" + RemoveLegacyFilesActionKeys.TITLE
+	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class RemoveLegacyFilesAction extends BaseUpgradeTaskStepAction {
@@ -48,7 +51,7 @@ public class RemoveLegacyFilesAction extends BaseUpgradeTaskStepAction {
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		List<IProject> projects = _resourceSelection.selectProjects(
-			"Select Lifreay Service Builder Project", false, ResourceSelection.SERVICE_BUILDER_PROJECTS);
+			"Select Lifreay Service Builder Projects", false, ResourceSelection.SERVICE_BUILDER_PROJECTS);
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;
@@ -83,7 +86,7 @@ public class RemoveLegacyFilesAction extends BaseUpgradeTaskStepAction {
 			}
 		}
 
-		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(RemoveLegacyFilesAction.this));
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(projects, this));
 
 		return Status.OK_STATUS;
 	}

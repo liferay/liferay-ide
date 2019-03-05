@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.sdk.ImportExistingPluginsSDKStep">
+   <property name="description" value="Browse to the Plugins SDK project root location to proceed with importing your plugin into the workspace."/>
    <property name="id" value="import_existing_plugins_sdk"/>
    <property name="imagePath" value="icons/import.png"/>
    <property name="requirement" value="required"/>
