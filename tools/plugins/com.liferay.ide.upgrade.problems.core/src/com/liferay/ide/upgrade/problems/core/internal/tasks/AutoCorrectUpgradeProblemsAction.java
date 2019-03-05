@@ -33,7 +33,6 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -64,21 +63,6 @@ public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeTaskStepAction 
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		final UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		WorkspaceJob workspaceJob = new WorkspaceJob("Auto correcting all breaking changes.") {
-
-			@Override
-			public IStatus runInWorkspace(IProgressMonitor monitor) {
-				return _perform(upgradePlan);
-			}
-
-		};
-
-		workspaceJob.schedule();
-
-		return Status.OK_STATUS;
-	}
-
-	private IStatus _perform(UpgradePlan upgradePlan) {
 		IStatus retval = Status.OK_STATUS;
 
 		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectUpgradeProblemsAction.class);
