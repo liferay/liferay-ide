@@ -150,6 +150,16 @@ public class UpgradeTaskViewer implements ISelectionProvider {
 
 			_updateTaskStepItems(upgradeTaskStep);
 		}
+		else if (upgradePlanElement instanceof UpgradeTaskStepAction) {
+			UpgradeTaskStepAction upgradeTaskStepAction = (UpgradeTaskStepAction)upgradePlanElement;
+
+			_scrolledForm.setText(upgradeTaskStepAction.getTitle());
+
+			UpgradeTaskStepActionItem upgradeTaskStepActionItem = new UpgradeTaskStepActionItem(
+				_formToolkit, _scrolledForm, upgradeTaskStepAction);
+
+			upgradeTaskStepActionItem.addSelectionChangedListener(this::_fireSelectionChanged);
+		}
 		else if (upgradePlanElement != null) {
 			_scrolledForm.setText(upgradePlanElement.getTitle());
 
@@ -164,13 +174,6 @@ public class UpgradeTaskViewer implements ISelectionProvider {
 			_formToolkit, _scrolledForm, upgradeTaskStep);
 
 		upgradeTaskStepIntroItem.addSelectionChangedListener(this::_fireSelectionChanged);
-
-		for (UpgradeTaskStepAction upgradeTaskStepAction : upgradeTaskStep.getActions()) {
-			UpgradeTaskStepActionItem upgradeTaskStepActionItem = new UpgradeTaskStepActionItem(
-				_formToolkit, _scrolledForm, upgradeTaskStepAction);
-
-			upgradeTaskStepActionItem.addSelectionChangedListener(this::_fireSelectionChanged);
-		}
 	}
 
 	private List<Disposable> _disposables = new ArrayList<>();

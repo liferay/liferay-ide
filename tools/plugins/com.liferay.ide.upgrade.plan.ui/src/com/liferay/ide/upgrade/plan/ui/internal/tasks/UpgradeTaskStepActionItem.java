@@ -28,7 +28,6 @@ import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -46,7 +45,6 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
@@ -63,39 +61,19 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 		_scrolledForm = scrolledForm;
 		_upgradeTaskStepAction = upgradeTaskStepAction;
 
-		Section section = _formToolkit.createSection(_scrolledForm.getBody(), Section.TITLE_BAR | Section.TWISTIE);
-
-		section.addExpansionListener(this);
-
-		GridLayoutFactory gridLayoutFactory = GridLayoutFactory.fillDefaults();
-
-		gridLayoutFactory.margins(0, 0);
-
-		section.setLayout(gridLayoutFactory.create());
+		Composite parentComposite = _formToolkit.createComposite(_scrolledForm.getBody());
 
 		GridDataFactory gridDataFactory = GridDataFactory.fillDefaults();
 
-		gridDataFactory.grab(true, false);
+		gridDataFactory.grab(true, true);
 
-		section.setLayoutData(gridDataFactory.create());
+		parentComposite.setLayoutData(gridDataFactory.create());
 
-		section.setText(upgradeTaskStepAction.getTitle());
+		_disposables.add(() -> parentComposite.dispose());
 
-		section.addExpansionListener(this);
+		parentComposite.setLayout(new TableWrapLayout());
 
-		Composite bodyComposite = _formToolkit.createComposite(section);
-
-		section.setClient(bodyComposite);
-
-		_disposables.add(() -> section.dispose());
-
-		bodyComposite.setLayout(new TableWrapLayout());
-
-		bodyComposite.setLayoutData(new TableWrapData(TableWrapData.FILL));
-
-		_disposables.add(() -> bodyComposite.dispose());
-
-		Label label = _formToolkit.createLabel(bodyComposite, _upgradeTaskStepAction.getDescription());
+		Label label = _formToolkit.createLabel(parentComposite, _upgradeTaskStepAction.getDescription());
 
 		_disposables.add(() -> label.dispose());
 
@@ -103,7 +81,7 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 			return;
 		}
 
-		_buttonComposite = _formToolkit.createComposite(bodyComposite);
+		_buttonComposite = _formToolkit.createComposite(parentComposite);
 
 		GridLayout buttonGridLayout = new GridLayout(2, false);
 

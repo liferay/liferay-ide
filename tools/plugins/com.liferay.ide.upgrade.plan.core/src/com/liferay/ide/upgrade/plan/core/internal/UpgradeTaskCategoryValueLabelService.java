@@ -14,8 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
+import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
-import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +28,7 @@ import org.eclipse.sapphire.services.ValueLabelService;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class UpgradeTaskCategoryValueLabelService extends ValueLabelService {
+public class UpgradeTaskCategoryValueLabelService extends ValueLabelService implements UpgradePlanAcessor {
 
 	@Override
 	public String provide(String value) {
@@ -36,7 +36,7 @@ public class UpgradeTaskCategoryValueLabelService extends ValueLabelService {
 			value,
 			v -> {
 				return Optional.ofNullable(
-					ServicesLookup.getSingleService(UpgradeTaskCategory.class, "(id=" + value + ")")
+					getCategory(value)
 				).filter(
 					Objects::nonNull
 				).map(

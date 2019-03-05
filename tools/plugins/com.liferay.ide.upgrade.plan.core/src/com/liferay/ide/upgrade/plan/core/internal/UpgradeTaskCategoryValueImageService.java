@@ -14,8 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
+import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
-import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +30,7 @@ import org.eclipse.sapphire.services.ValueImageService;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class UpgradeTaskCategoryValueImageService extends ValueImageService {
+public class UpgradeTaskCategoryValueImageService extends ValueImageService implements UpgradePlanAcessor {
 
 	@Override
 	public ImageData provide(String value) {
@@ -38,7 +38,7 @@ public class UpgradeTaskCategoryValueImageService extends ValueImageService {
 			value,
 			v -> {
 				return Optional.ofNullable(
-					ServicesLookup.getSingleService(UpgradeTaskCategory.class, "(id=" + value + ")")
+					getCategory(value)
 				).filter(
 					Objects::nonNull
 				).map(
