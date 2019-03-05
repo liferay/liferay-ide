@@ -21,11 +21,16 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepRequirement;
 
 import java.util.function.Function;
 
+import org.eclipse.core.runtime.Adapters;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
+import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.swt.graphics.Image;
@@ -36,6 +41,7 @@ import org.osgi.framework.FrameworkUtil;
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class UpgradePlanLabelProvider extends BundleImageLabelProvider implements IStyledLabelProvider {
 
@@ -47,6 +53,28 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 	public Image getImage(Object element) {
 		if (UpgradePlanContentProvider.NO_TASKS.equals(element)) {
 			return UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.NO_TASKS_IMAGE);
+		}
+
+		Image baseImage = super.getImage(element);
+
+		UpgradeTaskStepAction upgradeTaskStepAction = Adapters.adapt(element, UpgradeTaskStepAction.class);
+
+		if (upgradeTaskStepAction != null) {
+			ImageDescriptor statusImageDescriptor = null;
+
+			if (UpgradeTaskStepActionStatus.COMPLETED.equals(upgradeTaskStepAction.getStatus())) {
+				statusImageDescriptor = UpgradePlanUIPlugin.getImageDescriptor(
+					UpgradePlanUIPlugin.TASK_STEP_ACTION_COMPLETE_OVERLAY_IMAGE);
+			}
+			else if (UpgradeTaskStepActionStatus.SKIPPED.equals(upgradeTaskStepAction.getStatus())) {
+				statusImageDescriptor = UpgradePlanUIPlugin.getImageDescriptor(
+					UpgradePlanUIPlugin.TASK_STEP_ACTION_SKIP_OVERLAY_IMAGE);
+			}
+
+			ImageDescriptor descriptor = new DecorationOverlayIcon(
+				baseImage, statusImageDescriptor, IDecoration.TOP_LEFT);
+
+			return descriptor.createImage();
 		}
 
 		return super.getImage(element);
