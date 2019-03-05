@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Upgrade Plan Core
 Bundle-SymbolicName: com.liferay.ide.upgrade.plan.core;singleton:=true
 Bundle-Activator: com.liferay.ide.upgrade.plan.core.internal.UpgradePlanCorePlugin
-Bundle-Version: 3.5.0.qualifier
+Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.project.core,
  org.eclipse.core.resources,

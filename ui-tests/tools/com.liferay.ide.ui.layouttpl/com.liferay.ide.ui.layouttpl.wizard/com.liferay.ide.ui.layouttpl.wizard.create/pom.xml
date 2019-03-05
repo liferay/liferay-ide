@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.ui.tests.layouttpl.wizard</groupId>
 		<artifactId>layouttpl-wizard-tests</artifactId>
-		<version>3.5.0-SNAPSHOT</version>
+		<version>3.6.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.ui.layouttpl.wizard.create.tests</artifactId>

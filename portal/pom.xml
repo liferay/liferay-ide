@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.liferay.ide</groupId>
         <artifactId>parent</artifactId>
-        <version>3.5.0-SNAPSHOT</version>
+        <version>3.6.0-SNAPSHOT</version>
         <relativePath>../build/parent/pom.xml</relativePath>
     </parent>
 
