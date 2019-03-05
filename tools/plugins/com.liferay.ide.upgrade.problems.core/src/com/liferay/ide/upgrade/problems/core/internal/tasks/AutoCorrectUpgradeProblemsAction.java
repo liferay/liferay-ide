@@ -21,16 +21,13 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
-import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
 
 import java.io.File;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -55,42 +52,13 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Terry Jia
  */
 @Component(
-	property = {"id=auto_correct_problems", "order=1", "stepId=auto_correct_problems", "title=Auto Correct Problems"},
+	property = {
+		"description=" + AutoCorrectUpgradeProblemsActionKeys.DESCRIPTION, "id=auto_correct_problems", "order=1",
+		"stepId=auto_correct_problems", "title=" + AutoCorrectUpgradeProblemsActionKeys.TITLE
+	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
-
-	@Override
-	public String getDescription() {
-		if (_description == null) {
-			Bundle bundle = FrameworkUtil.getBundle(AutoCorrectUpgradeProblemsAction.class);
-
-			BundleContext bundleContext = bundle.getBundleContext();
-
-			List<FileMigrator> fileMigrators = ServicesLookup.getOrderedServices(
-				bundleContext, FileMigrator.class, "(auto.correct=*)");
-
-			StringBuffer sb = new StringBuffer();
-
-			sb.append(
-				"Performing this step will correct some easy upgrade problems automatically. You can edit the rest " +
-					"problems manually according to the breaking changes provided.\n");
-
-			sb.append("The following problems could be auto corrected.\n");
-
-			for (FileMigrator fileMigrator : fileMigrators) {
-				Class<?> clazz = fileMigrator.getClass();
-
-				sb.append(clazz.getName());
-
-				sb.append("\n");
-			}
-
-			_description = sb.toString();
-		}
-
-		return _description;
-	}
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -184,8 +152,6 @@ public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeTaskStepAction 
 
 		return retval;
 	}
-
-	private String _description;
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;
