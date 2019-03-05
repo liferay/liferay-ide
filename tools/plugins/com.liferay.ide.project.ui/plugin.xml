@@ -1476,25 +1476,6 @@
 		>
 		</handler>
 	</extension>
-	<extension
-		point="org.eclipse.ui.views"
-	>
-		<category
-			id="com.liferay.ide.project.ui.liferay"
-			name="Liferay"
-		>
-		</category>
-		<view
-			allowMultiple="false"
-			category="com.liferay.ide.project.ui.liferay"
-			class="com.liferay.ide.project.ui.upgrade.animated.UpgradeView"
-			icon="icons/e16/migration-tasks.png"
-			id="com.liferay.ide.project.ui.upgradeView"
-			name="Liferay Code Upgrade"
-			restorable="true"
-		>
-		</view>
-	</extension>
 
 	<extension point="org.eclipse.ui.commands">
 		<command
