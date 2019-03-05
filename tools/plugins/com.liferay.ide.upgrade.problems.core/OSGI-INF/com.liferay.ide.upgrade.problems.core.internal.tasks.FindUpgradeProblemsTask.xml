@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsTask">
    <property name="categoryId" value="code"/>
-   <property name="title" value="Find Upgrade Problems"/>
    <property name="description" value="In this task, you will find source code that has been affected by breaking changes in the new Liferay version. For each problem that is found, the associated breaking change documentation will be shown to help you fix the problems.  In many cases the problems can be fixed automatically.  See more in Auto Correct Upgrade Problems step.&#x0A;For all breaking changes that can not be fixed automatically use the provided breaking changes documentation to manually fix the code to complete the upgrade."/>
    <property name="id" value="find_upgrade_problems"/>
    <property name="imagePath" value="icons/find_problems.gif"/>
    <property name="order" value="5"/>
+   <property name="title" value="Find Upgrade Problems"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTask"/>
    </service>
