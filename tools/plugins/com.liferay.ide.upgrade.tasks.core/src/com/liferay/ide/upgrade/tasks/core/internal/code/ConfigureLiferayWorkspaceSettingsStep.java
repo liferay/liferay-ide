@@ -25,9 +25,10 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"description=Configuring target plarform in your Liferay Workspace helps you target a specific release of Liferay Portal, so dependencies get resolved properly.",
-		"id=configure_liferay_workspace_settings", "imagePath=icons/config.png", "requirement=required", "order=3",
-		"taskId=setup_development_environment", "title=Configure Liferay Workspace Settings"
+		"description=" + ConfigureLiferayWorkspaceSettingsStepKeys.DESCRIPTION,
+		"id=" + ConfigureLiferayWorkspaceSettingsStepKeys.ID, "imagePath=icons/config.png", "requirement=required",
+		"order=3", "taskId=" + SetupDevelopmentEnvironmentTaskKeys.ID,
+		"title=" + ConfigureLiferayWorkspaceSettingsStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

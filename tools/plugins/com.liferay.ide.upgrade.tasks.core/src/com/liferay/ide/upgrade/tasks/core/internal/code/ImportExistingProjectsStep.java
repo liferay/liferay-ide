@@ -31,9 +31,9 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=import_existing_projects", "imagePath=icons/import_projects.png", "requirement=required", "order=1",
-		"taskId=setup_development_environment", "title=Import Existing Projects",
-		"description=Browse to the liferay workspace project root location to proceed with importing your plugin into the workspace."
+		"description=" + ImportExistingProjectsStepKeys.DESCRIPTION, "id=" + ImportExistingProjectsStepKeys.ID,
+		"imagePath=icons/import_projects.png", "requirement=required", "order=1",
+		"taskId=" + SetupDevelopmentEnvironmentTaskKeys.ID, "title=" + ImportExistingProjectsStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

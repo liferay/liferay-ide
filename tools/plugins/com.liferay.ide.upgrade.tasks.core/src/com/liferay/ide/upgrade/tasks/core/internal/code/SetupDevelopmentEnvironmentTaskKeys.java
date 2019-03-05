@@ -14,22 +14,18 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.code;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
 /**
  * @author Gregory Amerson
  */
-@Component(
-	property = {
-		"description=" + SetupLiferayWorkspaceStepKeys.DESCRIPTION, "id=" + SetupLiferayWorkspaceStepKeys.ID,
-		"imagePath=icons/liferay_new.png", "requirement=required", "order=2",
-		"taskId=" + SetupDevelopmentEnvironmentTaskKeys.ID, "title=" + SetupLiferayWorkspaceStepKeys.TITLE
-	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
-)
-public class SetupLiferayWorkspaceStep extends BaseUpgradeTaskStep {
+public class SetupDevelopmentEnvironmentTaskKeys {
+
+	public static final String DESCRIPTION =
+		"A Liferay Workspace is a generated environment that is built to hold and manage your Liferay projects. It " +
+		"is intended to aid in the management of Liferay projects by providing various Gradle build scripts and " +
+		"configured properties.";
+
+	public static final String ID = "setup_development_environment";
+
+	public static final String TITLE = "Setup Development Environment";
+
 }

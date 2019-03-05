@@ -14,21 +14,16 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.sdk;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
-@Component(
-	property = {
-		"categoryId=code", "description=" + MigratePluginsSDKTaskKeys.DESCRIPTION, "id=" + MigratePluginsSDKTaskKeys.ID,
-		"imagePath=icons/migrate_plugins_sdk.png", "order=4", "title=" + MigratePluginsSDKTaskKeys.TITLE
-	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
-)
-public class MigratePluginsSDKTask extends BaseUpgradeTask {
+public class ImportExistingPluginsSDKStepKeys {
+
+	public static final String DESCRIPTION =
+		"Browse to the Plugins SDK project root location to proceed with importing your plugin into the workspace.";
+
+	public static final String ID = "import_existing_plugins_sdk";
+
+	public static final String TITLE = "Import Existing Plugins SDK";
+
 }

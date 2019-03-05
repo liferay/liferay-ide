@@ -38,7 +38,8 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=initialize_server_bundle", "order=1", "stepId=initialize_server_bundle", "title=Initialize Server Bundle"
+		"id=initialize_server_bundle", "order=1", "stepId=" + InitializeServerBundleStepKeys.ID,
+		"title=Initialize Server Bundle"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )

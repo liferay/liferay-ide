@@ -37,12 +37,12 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=initialize_latest_plugins_sdk", "order=2", "stepId=initialize_latest_plugins_sdk",
-		"title=Initialize the Latest Plugins SDK"
+		"id=upgrade_to_latest_plugins_sdk", "order=2", "stepId=" + UpgradeToLatestPluginsSDKStepKeys.ID,
+		"title=Upgrade To Latest Plugins SDK"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class InitializeLatestPluginsSDKAction extends BaseUpgradeTaskStepAction {
+public class UpgradeToLatestPluginsSDKAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {

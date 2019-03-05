@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.sdk.UpgradeToLatestPlukginsSDKStep">
+   <property name="description" value="In this step, we will download the latest Plugins SDK and extract it into your workspace upgrade project."/>
+   <property name="id" value="upgrade_to_latest_plugins_sdk"/>
+   <property name="imagePath" value="icons/new.png"/>
+   <property name="requirement" value="required"/>
+   <property name="order" value="0"/>
+   <property name="taskId" value="migrate_plugins_sdk"/>
+   <property name="title" value="Upgrade to Latest Plugins SDK"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.tasks.core.internal.sdk.UpgradeToLatestPlukginsSDKStep"/>
+</scr:component>

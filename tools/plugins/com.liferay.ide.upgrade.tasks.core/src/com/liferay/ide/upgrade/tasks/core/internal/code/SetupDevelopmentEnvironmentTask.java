@@ -25,9 +25,9 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"categoryId=code", "imagePath=icons/setup.png", "id=setup_development_environment", "order=2",
-		"title=Setup Development Environment",
-		"description=A Liferay Workspace is a generated environment that is built to hold and manage your Liferay projects. It is intended to aid in the management of Liferay projects by providing various Gradle build scripts and configured properties."
+		"categoryId=code", "description=" + SetupDevelopmentEnvironmentTaskKeys.DESCRIPTION,
+		"id=" + SetupDevelopmentEnvironmentTaskKeys.ID, "imagePath=icons/setup.png", "order=2",
+		"title=" + SetupDevelopmentEnvironmentTaskKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )

@@ -44,8 +44,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.Ini
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.ConfigureTargetPlatformAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.ImportPluginsSDKAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.ImportExistingPluginsSDKStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.InitializeLatestPluginsSDKStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.InitializeLatestPluginsSDKAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.MoveLegacyProjectsStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.RemoveLegacyFilesAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.RebuildServicesTask.xml,
@@ -58,5 +56,7 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.Ini
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.config.ScanPortalExtPropertiesStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.database.SetPermissionsAlgorithmStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.InitializeServerBundleAction.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.BuildServicesAction.xml
+ OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.BuildServicesAction.xml,
+ OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.UpgradeToLatestPlukginsSDKStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.UpgradeToLatestPluginsSDKAction.xml
 Export-Package: com.liferay.ide.upgrade.tasks.core

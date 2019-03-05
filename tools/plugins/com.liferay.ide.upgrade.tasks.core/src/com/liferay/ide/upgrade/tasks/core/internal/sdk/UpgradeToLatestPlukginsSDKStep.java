@@ -25,11 +25,11 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=initialize_latest_plugins_sdk", "imagePath=icons/new.png", "requirement=required", "order=0",
-		"taskId=migrate_plugins_sdk", "title=Initialize the Latest Plugins SDK",
-		"description=Performing this step, it will download the latest sdk and extract into plugins-sdk folder in your liferay workspace project."
+		"description=" + UpgradeToLatestPluginsSDKStepKeys.DESCRIPTION, "id=" + UpgradeToLatestPluginsSDKStepKeys.ID,
+		"imagePath=icons/new.png", "requirement=required", "order=0", "taskId=" + MigratePluginsSDKTaskKeys.ID,
+		"title=" + UpgradeToLatestPluginsSDKStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class InitializeLatestPluginsSDKStep extends BaseUpgradeTaskStep {
+public class UpgradeToLatestPlukginsSDKStep extends BaseUpgradeTaskStep {
 }

@@ -14,21 +14,19 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.sdk;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
-@Component(
-	property = {
-		"categoryId=code", "description=" + MigratePluginsSDKTaskKeys.DESCRIPTION, "id=" + MigratePluginsSDKTaskKeys.ID,
-		"imagePath=icons/migrate_plugins_sdk.png", "order=4", "title=" + MigratePluginsSDKTaskKeys.TITLE
-	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
-)
-public class MigratePluginsSDKTask extends BaseUpgradeTask {
+public class MigratePluginsSDKTaskKeys {
+
+	public static final String DESCRIPTION =
+		"Plugins SDK is deprecated as of Liferay Portal CE 7.x. After you’ve adapted your traditional plugin to " +
+		"Liferay Portal’s API, you can continue maintaining it in the Plugins SDK. In this section, you can " +
+		"initialize a latest SDK project, import an existing SDK project, or move the original Plugins SDK project " +
+		"into a Liferay Workspace.";
+
+	public static final String ID = "migrate_plugins_sdk";
+
+	public static final String TITLE = "Migrate Plugins SDK";
+
 }

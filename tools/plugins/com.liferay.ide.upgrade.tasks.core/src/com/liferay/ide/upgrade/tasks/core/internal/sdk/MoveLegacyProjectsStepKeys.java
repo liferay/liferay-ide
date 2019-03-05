@@ -14,21 +14,15 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.sdk;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
-@Component(
-	property = {
-		"categoryId=code", "description=" + MigratePluginsSDKTaskKeys.DESCRIPTION, "id=" + MigratePluginsSDKTaskKeys.ID,
-		"imagePath=icons/migrate_plugins_sdk.png", "order=4", "title=" + MigratePluginsSDKTaskKeys.TITLE
-	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
-)
-public class MigratePluginsSDKTask extends BaseUpgradeTask {
+public class MoveLegacyProjectsStepKeys {
+
+	public static final String DESCRIPTION = "Move legacy SDK projects into liferay workspace.";
+
+	public static final String ID = "move_legacy_projects";
+
+	public static final String TITLE = "Move Legacy Projects";
+
 }

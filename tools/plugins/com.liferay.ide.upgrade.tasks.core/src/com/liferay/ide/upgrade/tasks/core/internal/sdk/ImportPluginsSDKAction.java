@@ -33,7 +33,9 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Gregory Amerson
  */
 @Component(
-	property = {"id=import_plugins_sdk", "order=1", "stepId=import_existing_plugins_sdk", "title=Import Plugins SDK"},
+	property = {
+		"id=import_plugins_sdk", "order=1", "stepId=" + ImportExistingPluginsSDKStepKeys.ID, "title=Import Plugins SDK"
+	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class ImportPluginsSDKAction extends BaseUpgradeTaskStepAction {

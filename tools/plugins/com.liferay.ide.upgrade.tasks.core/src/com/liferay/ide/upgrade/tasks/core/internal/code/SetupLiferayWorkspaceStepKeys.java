@@ -14,22 +14,18 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.code;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
 /**
  * @author Gregory Amerson
  */
-@Component(
-	property = {
-		"description=" + SetupLiferayWorkspaceStepKeys.DESCRIPTION, "id=" + SetupLiferayWorkspaceStepKeys.ID,
-		"imagePath=icons/liferay_new.png", "requirement=required", "order=2",
-		"taskId=" + SetupDevelopmentEnvironmentTaskKeys.ID, "title=" + SetupLiferayWorkspaceStepKeys.TITLE
-	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
-)
-public class SetupLiferayWorkspaceStep extends BaseUpgradeTaskStep {
+public class SetupLiferayWorkspaceStepKeys {
+
+	public static final String DESCRIPTION =
+		"Create a new Liferay Workspace with the same version as Target Liferay Version which you selected in new " +
+		"Liferay Upgrade Plan wizard. Your Liferay Workspace version will be updated to the version that has been " +
+		"set in gradle.properties which resides in your Workspace’s root folder.";
+
+	public static final String ID = "setup_liferay_workspace";
+
+	public static final String TITLE = "Setup Liferay Workspace";
+
 }

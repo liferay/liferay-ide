@@ -14,22 +14,17 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.code;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
 /**
  * @author Gregory Amerson
  */
-@Component(
-	property = {
-		"description=" + SetupLiferayWorkspaceStepKeys.DESCRIPTION, "id=" + SetupLiferayWorkspaceStepKeys.ID,
-		"imagePath=icons/liferay_new.png", "requirement=required", "order=2",
-		"taskId=" + SetupDevelopmentEnvironmentTaskKeys.ID, "title=" + SetupLiferayWorkspaceStepKeys.TITLE
-	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
-)
-public class SetupLiferayWorkspaceStep extends BaseUpgradeTaskStep {
+public class ImportExistingProjectsStepKeys {
+
+	public static final String DESCRIPTION =
+		"Browse to the existing Liferay workspace project root location to import it into Eclipse.  This is the " +
+		"codebase that will be used when upgrading to select Liferay version.";
+
+	public static final String ID = "import_existing_projects";
+
+	public static final String TITLE = "Import Existing Projects";
+
 }

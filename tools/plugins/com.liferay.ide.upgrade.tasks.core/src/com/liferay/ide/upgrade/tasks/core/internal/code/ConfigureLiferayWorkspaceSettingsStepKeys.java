@@ -14,22 +14,17 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.code;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
 /**
  * @author Gregory Amerson
  */
-@Component(
-	property = {
-		"description=" + SetupLiferayWorkspaceStepKeys.DESCRIPTION, "id=" + SetupLiferayWorkspaceStepKeys.ID,
-		"imagePath=icons/liferay_new.png", "requirement=required", "order=2",
-		"taskId=" + SetupDevelopmentEnvironmentTaskKeys.ID, "title=" + SetupLiferayWorkspaceStepKeys.TITLE
-	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
-)
-public class SetupLiferayWorkspaceStep extends BaseUpgradeTaskStep {
+public class ConfigureLiferayWorkspaceSettingsStepKeys {
+
+	public static final String DESCRIPTION =
+		"Configuring target plarform in your Liferay Workspace helps you target a specific release of Liferay " +
+		"Portal, so dependencies get resolved properly.";
+
+	public static final String ID = "configure_liferay_workspace_settings";
+
+	public static final String TITLE = "Configure Liferay Workspace Settings";
+
 }

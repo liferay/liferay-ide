@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.code.ImportExistingProjectsStep">
+   <property name="description" value="Browse to the existing Liferay workspace project root location to import it into Eclipse.  This is the codebase that will be used when upgrading to select Liferay version."/>
    <property name="id" value="import_existing_projects"/>
    <property name="imagePath" value="icons/import_projects.png"/>
    <property name="requirement" value="required"/>
    <property name="order" value="1"/>
    <property name="taskId" value="setup_development_environment"/>
    <property name="title" value="Import Existing Projects"/>
-   <property name="description" value="Browse to the liferay workspace project root location to proceed with importing your plugin into the workspace."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
    </service>

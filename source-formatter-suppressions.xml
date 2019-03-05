@@ -9,6 +9,11 @@
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/RemovePreviousUpgradeProblemsStepKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/buildservice/RebuildServicesStepKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/buildservice/RebuildServicesTaskKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/code/ConfigureLiferayWorkspaceSettingsStepKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/code/ImportExistingProjectsStepKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/code/SetupDevelopmentEnvironmentTaskKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/code/SetupLiferayWorkspaceStepKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/sdk/MigratePluginsSDKTaskKeys\.java" />
 	</checkstyle>
 	<source-check>
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/DefaultListenerRegistry\.java" />

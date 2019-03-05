@@ -14,22 +14,16 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.code;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
 /**
  * @author Gregory Amerson
  */
-@Component(
-	property = {
-		"description=" + SetupLiferayWorkspaceStepKeys.DESCRIPTION, "id=" + SetupLiferayWorkspaceStepKeys.ID,
-		"imagePath=icons/liferay_new.png", "requirement=required", "order=2",
-		"taskId=" + SetupDevelopmentEnvironmentTaskKeys.ID, "title=" + SetupLiferayWorkspaceStepKeys.TITLE
-	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
-)
-public class SetupLiferayWorkspaceStep extends BaseUpgradeTaskStep {
+public class InitializeServerBundleStepKeys {
+
+	public static final String DESCRIPTION =
+		"Generate a Liferay Portal bundle in your selected workspace project. The default folder is \"bundles\".";
+
+	public static final String ID = "initialize_server_bundle";
+
+	public static final String TITLE = "Initialize Server Bundle";
+
 }
