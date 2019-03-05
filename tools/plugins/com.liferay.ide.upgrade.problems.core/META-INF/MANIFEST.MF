@@ -159,9 +159,9 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LiferayDescriptorVersion70.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LiferayDescriptorVersion71.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsTaskStepAction.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.RemovePreviousResultTaskStepAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.AutoCorrectUpgradeProblemsStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.AutoCorrectUpgradeProblemsAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LayoutTemplateFile.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.LegacyLayoutTemplate.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.LegacyLayoutTemplate.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.RemovePreviousUpgradeProblemsTaskStepAction.xml
 Export-Package: com.liferay.ide.upgrade.problems.core

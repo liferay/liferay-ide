@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsTaskStep">
+   <property name="description" value="This step will help find breaking changes in Java, JSP, XML and properties files by adding problem markers to the problematic resources. Once upgrade problems are found, you can go to the Project Explorer to browse the upgrade problems and see associated breaking change documentation."/>
    <property name="id" value="find_upgrade_problems"/>
    <property name="imagePath" value="icons/find_upgrade_problems.gif"/>
    <property name="requirement" value="recommended"/>
    <property name="order" value="2"/>
    <property name="taskId" value="find_upgrade_problems"/>
    <property name="title" value="Find Upgrade Problems"/>
-   <property name="description" value="This step will help you find breaking changes for Java, JSP, XML and properties files. It does not support front-end code(e.g., JavaScript, CSS)."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
    </service>

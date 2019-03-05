@@ -17,12 +17,15 @@ package com.liferay.ide.upgrade.problems.core.internal.tasks;
 /**
  * @author Gregory Amerson
  */
-public class AutoCorrectUpgradeProblemsActionKeys {
+public class FindUpgradeProblemsTaskKeys {
 
 	public static final String DESCRIPTION =
-		"Performing this step will correct some upgrade problems automatically. You can edit the rest problems " +
-		"manually according to the breaking changes documentation.";
+		"In this task, you will find source code that has been affected by breaking changes in the new Liferay " +
+		"version. For each problem that is found, the associated breaking change documentation will be shown to " +
+		"help you fix the problems.  In many cases the problems can be fixed automatically.  See more in Auto " +
+		"Correct Upgrade Problems step.\nFor all breaking changes that can not be fixed automatically use the " +
+		"provided breaking changes documentation to manually fix the code to complete the upgrade.";
 
-	public static final String TITLE = "Auto Correct Upgrade Problems";
+	public static final String TITLE = "Find Upgrade Problems";
 
 }

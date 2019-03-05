@@ -14,21 +14,16 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
-@Component(
-	property = {
-		"categoryId=code", "description=" + FindUpgradeProblemsTaskKeys.DESCRIPTION, "id=find_upgrade_problems",
-		"imagePath=icons/find_problems.gif", "order=5", "title=" + FindUpgradeProblemsTaskKeys.TITLE
-	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
-)
-public class FindUpgradeProblemsTask extends BaseUpgradeTask {
+public class FindUpgradeProblemsTaskStepKeys {
+
+	public static final String DESCRIPTION =
+		"This step will help find breaking changes in Java, JSP, XML and properties files by adding problem markers " +
+		"to the problematic resources. Once upgrade problems are found, you can go to the Project Explorer to browse " +
+		"the upgrade problems and see associated breaking change documentation.";
+
+	public static final String TITLE = "Find Upgrade Problems";
+
 }

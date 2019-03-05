@@ -42,11 +42,12 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=remove_previous_result", "order=1", "stepId=remove_previous_result", "title=Remove Previous Result"
+		"description=" + RemovePreviousUpgradeProblemsTaskStepKeys.DESCRIPTION, "id=remove_previous_upgrade_problems",
+		"order=1", "stepId=remove_previous_upgrade_problems", "title=" + RemovePreviousUpgradeProblemsTaskStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class RemovePreviousResultTaskStepAction extends BaseUpgradeTaskStepAction {
+public class RemovePreviousUpgradeProblemsTaskStepAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -69,7 +70,8 @@ public class RemovePreviousResultTaskStepAction extends BaseUpgradeTaskStepActio
 
 			upgradeProblems.clear();
 
-			_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(RemovePreviousResultTaskStepAction.this));
+			_upgradePlanner.dispatch(
+				new UpgradeTaskStepActionDoneEvent(RemovePreviousUpgradeProblemsTaskStepAction.this));
 		}
 
 		return Status.OK_STATUS;

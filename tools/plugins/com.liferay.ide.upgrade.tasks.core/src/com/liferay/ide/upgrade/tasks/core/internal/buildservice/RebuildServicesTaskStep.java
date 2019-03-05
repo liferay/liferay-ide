@@ -14,8 +14,8 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -25,10 +25,11 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"categoryId=code", "id=build_service", "imagePath=icons/build_service.png", "order=6", "title=Build Service",
-		"description=Building service generates your project’s persistence layer by automating the creation of interfaces and classes according to your configurations."
+		"description=" + RebuildServicesTaskStepKeys.DESCRIPTION, "id=" + RebuildServicesTaskStepKeys.ID,
+		"imagePath=icons/build_services.png", "requirement=recommended", "order=2",
+		"taskId=" + RebuildServicesTaskKeys.ID, "title=" + RebuildServicesTaskStepKeys.TITLE
 	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class BuildServiceTask extends BaseUpgradeTask {
+public class RebuildServicesTaskStep extends BaseUpgradeTaskStep {
 }

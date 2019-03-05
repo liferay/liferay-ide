@@ -14,21 +14,15 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
-@Component(
-	property = {
-		"categoryId=code", "description=" + FindUpgradeProblemsTaskKeys.DESCRIPTION, "id=find_upgrade_problems",
-		"imagePath=icons/find_problems.gif", "order=5", "title=" + FindUpgradeProblemsTaskKeys.TITLE
-	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
-)
-public class FindUpgradeProblemsTask extends BaseUpgradeTask {
+public class AutoCorrectUpgradeProblemsStepKeys {
+
+	public static final String DESCRIPTION =
+		"Performing this step will correct some easy upgrade problems automatically. You can edit the rest problems " +
+		"manually according to the breaking changes provided.";
+
+	public static final String TITLE = "Auto Correct Upgrade Problems";
+
 }

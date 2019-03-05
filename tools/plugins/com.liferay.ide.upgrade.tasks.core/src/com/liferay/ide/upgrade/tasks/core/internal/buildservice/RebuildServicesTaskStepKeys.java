@@ -12,17 +12,20 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal.tasks;
+package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
 
 /**
  * @author Gregory Amerson
  */
-public class AutoCorrectUpgradeProblemsActionKeys {
+public class RebuildServicesTaskStepKeys {
 
 	public static final String DESCRIPTION =
-		"Performing this step will correct some upgrade problems automatically. You can edit the rest problems " +
-		"manually according to the breaking changes documentation.";
+		"In this step, we will delete some legacy service builder related files and then re-run build service task " +
+		"on service builder projects. Note: Please make sure the default installed JRE is JDK 8 (Preferences -> Java " +
+		"-> Installed JREs).";
 
-	public static final String TITLE = "Auto Correct Upgrade Problems";
+	public static final String ID = "rebuild_services";
+
+	public static final String TITLE = "Rebuild Liferay Services";
 
 }

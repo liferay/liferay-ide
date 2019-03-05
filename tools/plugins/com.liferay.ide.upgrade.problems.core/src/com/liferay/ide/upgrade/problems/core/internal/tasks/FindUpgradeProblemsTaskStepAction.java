@@ -46,7 +46,10 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Terry Jia
  */
 @Component(
-	property = {"id=find_upgrade_problems", "order=1", "stepId=find_upgrade_problems", "title=Find Upgrade Problems"},
+	property = {
+		"id=find_upgrade_problems", "order=1", "stepId=find_upgrade_problems",
+		"title=" + FindUpgradeProblemsTaskStepKeys.TITLE
+	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class FindUpgradeProblemsTaskStepAction extends BaseUpgradeTaskStepAction {
@@ -54,7 +57,7 @@ public class FindUpgradeProblemsTaskStepAction extends BaseUpgradeTaskStepAction
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		List<IProject> projects = _resourceSelection.selectProjects(
-			"select projects", true, ResourceSelection.JAVA_PROJECTS);
+			"Select projects to search for upgrade problems.", true, ResourceSelection.JAVA_PROJECTS);
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;

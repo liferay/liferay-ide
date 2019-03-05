@@ -25,9 +25,9 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=find_upgrade_problems", "imagePath=icons/find_upgrade_problems.gif", "requirement=recommended", "order=2",
-		"taskId=find_upgrade_problems", "title=Find Upgrade Problems",
-		"description=This step will help you find breaking changes for Java, JSP, XML and properties files. It does not support front-end code(e.g., JavaScript, CSS)."
+		"description=" + FindUpgradeProblemsTaskStepKeys.DESCRIPTION, "id=find_upgrade_problems",
+		"imagePath=icons/find_upgrade_problems.gif", "requirement=recommended", "order=2",
+		"taskId=find_upgrade_problems", "title=" + FindUpgradeProblemsTaskStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

@@ -43,15 +43,18 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Terry Jia
  */
 @Component(
-	property = {"id=build_services", "order=2", "stepId=build_services", "title=Build Services"},
+	property = {
+		"description=" + BuildServicesTaskStepActionKeys.DESCRIPTION, "id=build_services", "order=2",
+		"stepId=" + RebuildServicesTaskStepKeys.ID, "title=" + BuildServicesTaskStepActionKeys.TITLE
+	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class BuildServiceTaskStepAction extends BaseUpgradeTaskStepAction {
+public class BuildServicesTaskStepAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		List<IProject> projects = _resourceSelection.selectProjects(
-			"Select Lifreay Service Builder Project", false, ResourceSelection.SERVICE_BUILDER_PROJECTS);
+			"Select Service Builder Projects", false, ResourceSelection.SERVICE_BUILDER_PROJECTS);
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;
@@ -76,7 +79,7 @@ public class BuildServiceTaskStepAction extends BaseUpgradeTaskStepAction {
 			}
 		);
 
-		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(BuildServiceTaskStepAction.this));
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(projects, this));
 
 		return Status.OK_STATUS;
 	}

@@ -12,17 +12,15 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal.tasks;
+package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
 
 /**
  * @author Gregory Amerson
  */
-public class AutoCorrectUpgradeProblemsActionKeys {
+public class BuildServicesTaskStepActionKeys {
 
-	public static final String DESCRIPTION =
-		"Performing this step will correct some upgrade problems automatically. You can edit the rest problems " +
-		"manually according to the breaking changes documentation.";
+	public static final String DESCRIPTION = "Build Services";
 
-	public static final String TITLE = "Auto Correct Upgrade Problems";
+	public static final String TITLE = "Build Services";
 
 }
