@@ -19,6 +19,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskViewer;
 
 import java.util.Objects;
@@ -171,6 +172,12 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			upgradeEvent -> {
 				if (upgradeEvent instanceof UpgradeTaskStepActionDoneEvent) {
 					UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
+				}
+				else if (upgradeEvent instanceof UpgradeTaskStepActionStatusChangedEvent) {
+					UIUtil.sync(
+						() -> {
+							_upgradePlanViewer.refresh();
+						});
 				}
 			});
 
