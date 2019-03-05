@@ -26,6 +26,7 @@ import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 
 import java.io.File;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -85,7 +86,7 @@ public class FindUpgradeProblemsTaskStepAction extends BaseUpgradeTaskStepAction
 				_addMarkers(foundUpgradeProblems);
 			});
 
-		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(FindUpgradeProblemsTaskStepAction.this));
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(new ArrayList<>(upgradeProblems), this));
 
 		return Status.OK_STATUS;
 	}

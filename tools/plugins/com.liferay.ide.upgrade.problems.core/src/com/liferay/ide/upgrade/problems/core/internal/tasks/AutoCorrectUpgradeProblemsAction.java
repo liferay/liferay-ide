@@ -28,6 +28,7 @@ import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
 import java.io.File;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -132,7 +133,7 @@ public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeTaskStepAction 
 			}
 		);
 
-		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(AutoCorrectUpgradeProblemsAction.this));
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent((List<?>)upgradeProblems, this));
 
 		return retval;
 	}

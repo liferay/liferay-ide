@@ -16,28 +16,26 @@ package com.liferay.ide.upgrade.plan.core;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
-
 /**
  * @author Terry Jia
  * @author Gregory Amerson
  */
 public class UpgradeTaskStepActionDoneEvent implements UpgradeEvent {
 
-	public UpgradeTaskStepActionDoneEvent(List<IProject> projects, UpgradeTaskStepAction upgradeTaskStepAction) {
-		_projects = projects;
-		_upgradeTaskStepAction = upgradeTaskStepAction;
+	public UpgradeTaskStepActionDoneEvent(List<?> items, UpgradePlanElement upgradePlanElement) {
+		_items = items;
+		_upgradePlanElement = upgradePlanElement;
 	}
 
-	public List<IProject> getProjects() {
-		return _projects;
+	public List<?> getItems() {
+		return _items;
 	}
 
-	public UpgradeTaskStepAction getUgradeTaskStepAction() {
-		return _upgradeTaskStepAction;
+	public UpgradePlanElement getUpgradePlanElement() {
+		return _upgradePlanElement;
 	}
 
-	private List<IProject> _projects;
-	private UpgradeTaskStepAction _upgradeTaskStepAction;
+	private List<?> _items;
+	private UpgradePlanElement _upgradePlanElement;
 
 }
