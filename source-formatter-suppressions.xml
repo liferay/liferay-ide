@@ -4,11 +4,11 @@
 	<checkstyle>
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/AutoCorrectUpgradeProblemsActionKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/AutoCorrectUpgradeProblemsStepKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/FindUpgradeProblemsStepKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/FindUpgradeProblemsTaskKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/FindUpgradeProblemsTaskStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/RemovePreviousUpgradeProblemsTaskStepKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/RemovePreviousUpgradeProblemsStepKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/buildservice/RebuildServicesStepKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/buildservice/RebuildServicesTaskKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/buildservice/RebuildServicesTaskStepKeys\.java" />
 	</checkstyle>
 	<source-check>
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/DefaultListenerRegistry\.java" />

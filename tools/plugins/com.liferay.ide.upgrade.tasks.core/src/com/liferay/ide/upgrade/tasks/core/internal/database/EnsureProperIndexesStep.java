@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.code;
+package com.liferay.ide.upgrade.tasks.core.internal.database;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
@@ -25,11 +25,10 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"description=Configuring target plarform in your Liferay Workspace helps you target a specific release of Liferay Portal, so dependencies get resolved properly.",
-		"id=configure_liferay_workspace_settings", "imagePath=icons/config.png", "requirement=required", "order=3",
-		"taskId=setup_development_environment", "title=Configure Liferay Workspace Settings"
+		"id=ensure_proper_indexes", "requirement=recommended", "order=2", "taskId=prepare_database",
+		"title=Ensure Proper Indexes"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class ConfigureLiferayWorkspaceSettingsStep extends BaseUpgradeTaskStep {
+public class EnsureProperIndexesStep extends BaseUpgradeTaskStep {
 }

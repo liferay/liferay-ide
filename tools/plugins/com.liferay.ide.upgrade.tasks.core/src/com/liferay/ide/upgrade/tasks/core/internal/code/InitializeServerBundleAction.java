@@ -12,21 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
+package com.liferay.ide.upgrade.tasks.core.internal.code;
 
+import com.liferay.ide.core.util.WorkspaceConstants;
+import com.liferay.ide.project.core.jobs.InitBundleJob;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
-import com.liferay.ide.upgrade.tasks.core.internal.UpgradeTasksCorePlugin;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -36,57 +34,43 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
- * @author Simon Jiang
  * @author Terry Jia
  */
 @Component(
 	property = {
-		"description=" + RemoveLegacyFilesActionKeys.DESCRIPTION, "id=" + RemoveLegacyFilesActionKeys.ID, "order=1",
-		"stepId=" + RebuildServicesStepKeys.ID, "title=" + RemoveLegacyFilesActionKeys.TITLE
+		"id=initialize_server_bundle", "order=1", "stepId=initialize_server_bundle", "title=Initialize Server Bundle"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class RemoveLegacyFilesAction extends BaseUpgradeTaskStepAction {
+public class InitializeServerBundleAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		List<IProject> projects = _resourceSelection.selectProjects(
-			"Select Lifreay Service Builder Projects", false, ResourceSelection.SERVICE_BUILDER_PROJECTS);
+			"select liferay workspace project", false, ResourceSelection.WORKSPACE_PROJECTS);
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;
 		}
 
-		for (IProject project : projects) {
-			try {
-				String relativePath = "/docroot/WEB-INF/src/META-INF";
+		IProject project = projects.get(0);
 
-				IFile portletSpringXML = project.getFile(relativePath + "/portlet-spring.xml");
+		String bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_1;
 
-				if (portletSpringXML.exists()) {
-					portletSpringXML.delete(true, progressMonitor);
-				}
+		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-				IFile shardDataSourceSpringXML = project.getFile(relativePath + "/shard-data-source-spring.xml");
+		String targetVersion = upgradePlan.getTargetVersion();
 
-				if (shardDataSourceSpringXML.exists()) {
-					shardDataSourceSpringXML.delete(true, progressMonitor);
-				}
-
-				// for 6.2 maven project
-
-				IFolder metaInfFolder = project.getFolder("/src/main/resources/META-INF/");
-
-				if (metaInfFolder.exists()) {
-					metaInfFolder.delete(true, progressMonitor);
-				}
-			}
-			catch (CoreException ce) {
-				UpgradeTasksCorePlugin.logError(ce.getMessage());
-			}
+		if ("7.0".equals(targetVersion)) {
+			bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_0;
+		}
+		else if ("7.1".equals(targetVersion)) {
+			bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_1;
 		}
 
-		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(projects, this));
+		InitBundleJob job = new InitBundleJob(project, project.getName(), bundleUrl);
+
+		job.schedule();
 
 		return Status.OK_STATUS;
 	}

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.code;
+package com.liferay.ide.upgrade.tasks.core.internal.database;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
@@ -25,11 +25,11 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"description=Configuring target plarform in your Liferay Workspace helps you target a specific release of Liferay Portal, so dependencies get resolved properly.",
-		"id=configure_liferay_workspace_settings", "imagePath=icons/config.png", "requirement=required", "order=3",
-		"taskId=setup_development_environment", "title=Configure Liferay Workspace Settings"
+		"id=copy_database_to_backup", "requirement=required", "order=1", "taskId=prepare_database",
+		"title=Copy Database to Backup",
+		"url=https://dev.liferay.com/discover/deployment/-/knowledge_base/7-1/backing-up-a-liferay-installation"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class ConfigureLiferayWorkspaceSettingsStep extends BaseUpgradeTaskStep {
+public class CopyDatabaseToBackupStep extends BaseUpgradeTaskStep {
 }

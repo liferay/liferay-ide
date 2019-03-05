@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.code;
+package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
@@ -21,15 +21,15 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
- * @author Gregory Amerson
+ * @author Terry Jia
  */
 @Component(
 	property = {
-		"description=Configuring target plarform in your Liferay Workspace helps you target a specific release of Liferay Portal, so dependencies get resolved properly.",
-		"id=configure_liferay_workspace_settings", "imagePath=icons/config.png", "requirement=required", "order=3",
-		"taskId=setup_development_environment", "title=Configure Liferay Workspace Settings"
+		"description=" + FindUpgradeProblemsStepKeys.DESCRIPTION, "id=find_upgrade_problems",
+		"imagePath=icons/find_upgrade_problems.gif", "requirement=recommended", "order=2",
+		"taskId=find_upgrade_problems", "title=" + FindUpgradeProblemsStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class ConfigureLiferayWorkspaceSettingsStep extends BaseUpgradeTaskStep {
+public class FindUpgradeProblemsStep extends BaseUpgradeTaskStep {
 }
