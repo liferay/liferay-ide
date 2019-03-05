@@ -153,6 +153,8 @@ public class UpgradeTaskViewer implements ISelectionProvider {
 		else if (upgradePlanElement instanceof UpgradeTaskStepAction) {
 			UpgradeTaskStepAction upgradeTaskStepAction = (UpgradeTaskStepAction)upgradePlanElement;
 
+			_scrolledForm.setText(upgradeTaskStepAction.getTitle());
+
 			UpgradeTaskStepActionItem upgradeTaskStepActionItem = new UpgradeTaskStepActionItem(
 				_formToolkit, _scrolledForm, upgradeTaskStepAction);
 
