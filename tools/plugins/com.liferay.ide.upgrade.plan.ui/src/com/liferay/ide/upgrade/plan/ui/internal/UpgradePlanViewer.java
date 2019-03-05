@@ -128,6 +128,10 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 		}
 	}
 
+	public void refresh() {
+		_treeViewer.refresh();
+	}
+
 	private TreeViewer _treeViewer;
 	private ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
 
