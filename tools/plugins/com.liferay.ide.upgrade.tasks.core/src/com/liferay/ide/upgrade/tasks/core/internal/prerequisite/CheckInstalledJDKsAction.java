@@ -15,9 +15,10 @@
 package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatus;
-import com.liferay.ide.upgrade.tasks.core.internal.UpgradeTasksCorePlugin;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -28,6 +29,7 @@ import org.eclipse.jdt.launching.IVMInstallType;
 import org.eclipse.jdt.launching.JavaRuntime;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
@@ -71,20 +73,23 @@ public class CheckInstalledJDKsAction extends BaseUpgradeTaskStepAction {
 			}
 		}
 
+		UpgradeTaskStepActionStatus status = getStatus();
+
 		if (java8Installed) {
-			UpgradeTaskStepActionStatus status = getStatus();
-
-			if (status == UpgradeTaskStepActionStatus.FAILED) {
-				status = UpgradeTaskStepActionStatus.COMPLETED;
-			}
-
-			return new Status(IStatus.OK, UpgradeTasksCorePlugin.ID, "");
+			status = UpgradeTaskStepActionStatus.COMPLETED;
 		}
 		else {
-			setStatus(UpgradeTaskStepActionStatus.FAILED);
-
-			return UpgradeTasksCorePlugin.createErrorStatus("no compatible jdk found");
+			status = UpgradeTaskStepActionStatus.FAILED;
 		}
+
+		setStatus(status);
+
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(null, this));
+
+		return Status.OK_STATUS;
 	}
+
+	@Reference
+	private UpgradePlanner _upgradePlanner;
 
 }
