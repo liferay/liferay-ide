@@ -12,20 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.code;
+package com.liferay.ide.upgrade.tasks.core.code;
 
 /**
  * @author Gregory Amerson
  */
-public class SetupDevelopmentEnvironmentTaskKeys {
+public class ImportExistingProjectsStepKeys {
 
 	public static final String DESCRIPTION =
-		"A Liferay Workspace is a generated environment that is built to hold and manage your Liferay projects. It " +
-		"is intended to aid in the management of Liferay projects by providing various Gradle build scripts and " +
-		"configured properties.";
+		"Browse to the existing Liferay workspace project root location to import it into Eclipse.  This is the " +
+		"codebase that will be used when upgrading to select Liferay version.";
 
-	public static final String ID = "setup_development_environment";
+	public static final String ID = "import_existing_projects";
 
-	public static final String TITLE = "Setup Development Environment";
+	public static final String TITLE = "Import Existing Projects";
 
 }

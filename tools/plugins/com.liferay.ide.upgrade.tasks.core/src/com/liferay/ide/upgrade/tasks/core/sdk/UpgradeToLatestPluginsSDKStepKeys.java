@@ -12,17 +12,18 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
+package com.liferay.ide.upgrade.tasks.core.sdk;
 
 /**
  * @author Gregory Amerson
  */
-public class RemoveLegacyFilesActionKeys {
+public class UpgradeToLatestPluginsSDKStepKeys {
 
-	public static final String DESCRIPTION = "Remove Legacy Files";
+	public static final String DESCRIPTION =
+		"In this step, we will download the latest Plugins SDK and extract it into your workspace upgrade project.";
 
-	public static final String ID = "remove_legacy_files";
+	public static final String ID = "upgrade_to_latest_plugins_sdk";
 
-	public static final String TITLE = "Remove Legacy Files";
+	public static final String TITLE = "Upgrade to Latest Plugins SDK";
 
 }

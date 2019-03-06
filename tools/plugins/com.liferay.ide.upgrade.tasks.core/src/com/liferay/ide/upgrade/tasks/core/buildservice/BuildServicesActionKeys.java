@@ -12,19 +12,15 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.code;
+package com.liferay.ide.upgrade.tasks.core.buildservice;
 
 /**
  * @author Gregory Amerson
  */
-public class ImportExistingProjectsStepKeys {
+public class BuildServicesActionKeys {
 
-	public static final String DESCRIPTION =
-		"Browse to the existing Liferay workspace project root location to import it into Eclipse.  This is the " +
-		"codebase that will be used when upgrading to select Liferay version.";
+	public static final String DESCRIPTION = "Build Services";
 
-	public static final String ID = "import_existing_projects";
-
-	public static final String TITLE = "Import Existing Projects";
+	public static final String TITLE = "Build Services";
 
 }

@@ -12,20 +12,20 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
+package com.liferay.ide.upgrade.tasks.core.code;
 
 /**
  * @author Gregory Amerson
  */
-public class RebuildServicesStepKeys {
+public class SetupDevelopmentEnvironmentTaskKeys {
 
 	public static final String DESCRIPTION =
-		"In this step, we will delete some legacy service builder related files and then re-run build service task " +
-		"on service builder projects. Note: Please make sure the default installed JRE is JDK 8 (Preferences -> Java " +
-		"-> Installed JREs).";
+		"A Liferay Workspace is a generated environment that is built to hold and manage your Liferay projects. It " +
+		"is intended to aid in the management of Liferay projects by providing various Gradle build scripts and " +
+		"configured properties.";
 
-	public static final String ID = "rebuild_services";
+	public static final String ID = "setup_development_environment";
 
-	public static final String TITLE = "Rebuild Liferay Services";
+	public static final String TITLE = "Setup Development Environment";
 
 }

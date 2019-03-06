@@ -12,18 +12,20 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.sdk;
+package com.liferay.ide.upgrade.tasks.core.buildservice;
 
 /**
  * @author Gregory Amerson
  */
-public class UpgradeToLatestPluginsSDKStepKeys {
+public class RebuildServicesStepKeys {
 
 	public static final String DESCRIPTION =
-		"In this step, we will download the latest Plugins SDK and extract it into your workspace upgrade project.";
+		"In this step, we will delete some legacy service builder related files and then re-run build service task " +
+		"on service builder projects. Note: Please make sure the default installed JRE is JDK 8 (Preferences -> Java " +
+		"-> Installed JREs).";
 
-	public static final String ID = "upgrade_to_latest_plugins_sdk";
+	public static final String ID = "rebuild_services";
 
-	public static final String TITLE = "Upgrade to Latest Plugins SDK";
+	public static final String TITLE = "Rebuild Liferay Services";
 
 }

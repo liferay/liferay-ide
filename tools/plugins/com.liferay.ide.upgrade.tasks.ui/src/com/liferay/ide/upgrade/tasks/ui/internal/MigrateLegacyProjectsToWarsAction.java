@@ -24,6 +24,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.tasks.core.ImportSDKProjectsOp;
+import com.liferay.ide.upgrade.tasks.core.sdk.MoveLegacyProjectsStepKeys;
 
 import java.nio.file.Path;
 
@@ -50,7 +51,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=migrate_legacy_projects_to_wars", "order=2", "stepId=move_legacy_projects",
+		"id=migrate_legacy_projects_to_wars", "order=2", "stepId=" + MoveLegacyProjectsStepKeys.ID,
 		"title=Migrate Legacy Projects To Wars"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class

@@ -18,6 +18,8 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.tasks.core.code.ImportExistingProjectsStepKeys;
+import com.liferay.ide.upgrade.tasks.core.code.SetupDevelopmentEnvironmentTaskKeys;
 
 import java.nio.file.Path;
 

@@ -12,19 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.code;
+package com.liferay.ide.upgrade.tasks.core.buildservice;
 
 /**
  * @author Gregory Amerson
  */
-public class ConfigureLiferayWorkspaceSettingsStepKeys {
+public class RebuildServicesTaskKeys {
 
 	public static final String DESCRIPTION =
-		"Configuring target plarform in your Liferay Workspace helps you target a specific release of Liferay " +
-		"Portal, so dependencies get resolved properly.";
+		"For service builder projects, to properly upgrade you must rebuild all service classes after making sure " +
+		"all of your service.xml files are properly upgraded.";
 
-	public static final String ID = "configure_liferay_workspace_settings";
+	public static final String ID = "rebuild_services";
 
-	public static final String TITLE = "Configure Liferay Workspace Settings";
+	public static final String TITLE = "Rebuild Services";
 
 }

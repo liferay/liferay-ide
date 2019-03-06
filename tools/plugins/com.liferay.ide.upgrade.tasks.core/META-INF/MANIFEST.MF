@@ -59,4 +59,7 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.Ini
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.BuildServicesAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.UpgradeToLatestPlukginsSDKStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.UpgradeToLatestPluginsSDKAction.xml
-Export-Package: com.liferay.ide.upgrade.tasks.core
+Export-Package: com.liferay.ide.upgrade.tasks.core,
+ com.liferay.ide.upgrade.tasks.core.buildservice,
+ com.liferay.ide.upgrade.tasks.core.code,
+ com.liferay.ide.upgrade.tasks.core.sdk

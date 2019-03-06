@@ -12,20 +12,18 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.code;
+package com.liferay.ide.upgrade.tasks.core.code;
 
 /**
  * @author Gregory Amerson
  */
-public class SetupLiferayWorkspaceStepKeys {
+public class InitializeServerBundleStepKeys {
 
 	public static final String DESCRIPTION =
-		"Create a new Liferay Workspace with the same version as Target Liferay Version which you selected in new " +
-		"Liferay Upgrade Plan wizard. Your Liferay Workspace version will be updated to the version that has been " +
-		"set in gradle.properties which resides in your Workspace’s root folder.";
+		"Generate a Liferay Portal bundle in your selected workspace project. The default folder is \"bundles\".";
 
-	public static final String ID = "setup_liferay_workspace";
+	public static final String ID = "initialize_server_bundle";
 
-	public static final String TITLE = "Setup Liferay Workspace";
+	public static final String TITLE = "Initialize Server Bundle";
 
 }
