@@ -9,6 +9,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.liferay.ide.upgrade.problems.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 3.6.0.qualifier
+Export-Package: com.liferay.ide.upgrade.problems.core
 Require-Bundle: com.google.guava,
  com.liferay.ide.core,
  com.liferay.ide.project.core,
@@ -164,4 +165,3 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.RemovePreviousResultStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.RemovePreviousUpgradeProblemsAction.xml
-Export-Package: com.liferay.ide.upgrade.problems.core
