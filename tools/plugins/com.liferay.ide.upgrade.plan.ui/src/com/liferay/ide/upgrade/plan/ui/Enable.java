@@ -12,26 +12,14 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
+package com.liferay.ide.upgrade.plan.ui;
 
 /**
  * @author Gregory Amerson
  */
-public interface UpgradeTaskStepAction extends UpgradePlanElement {
+@FunctionalInterface
+public interface Enable {
 
-	public boolean completed();
-
-	public boolean enabled();
-
-	public UpgradeTaskStepActionStatus getStatus();
-
-	public String getStepId();
-
-	public IStatus perform(IProgressMonitor progressMonitor);
-
-	public void setStatus(UpgradeTaskStepActionStatus status);
+	public void enabled(boolean enabled);
 
 }

@@ -17,6 +17,8 @@ package com.liferay.ide.upgrade.plan.core;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.util.Dictionary;
+import java.util.List;
+import java.util.stream.Stream;
 
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
@@ -38,6 +40,40 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 	}
 
 	@Override
+	public boolean completed() {
+		if (!UpgradeTaskStepActionStatus.INCOMPLETE.equals(getStatus())) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean enabled() {
+		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+
+		List<UpgradeTask> upgradeTasks = upgradePlan.getTasks();
+
+		Stream<UpgradeTask> stream = upgradeTasks.stream();
+
+		UpgradeTaskStep upgradeTaskStep = stream.map(
+			upgradeTask -> upgradeTask.getSteps()
+		).flatMap(
+			upgradeTaskSteps -> upgradeTaskSteps.stream()
+		).filter(
+			upgradeStep -> getStepId().equals(upgradeStep.getId())
+		).findFirst(
+		).orElse(
+			null
+		);
+
+		if ((upgradeTaskStep != null) && upgradeTaskStep.enabled()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
 	public UpgradeTaskStepActionStatus getStatus() {
 		return _upgradeTaskStepActionStatus;
 	}
@@ -50,7 +86,7 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 	@Override
 	public void setStatus(UpgradeTaskStepActionStatus upgradeTaskStepActionStatus) {
 		UpgradeTaskStepActionStatusChangedEvent event = new UpgradeTaskStepActionStatusChangedEvent(
-			_upgradeTaskStepActionStatus, upgradeTaskStepActionStatus);
+			this, _upgradeTaskStepActionStatus, upgradeTaskStepActionStatus);
 
 		_upgradeTaskStepActionStatus = upgradeTaskStepActionStatus;
 

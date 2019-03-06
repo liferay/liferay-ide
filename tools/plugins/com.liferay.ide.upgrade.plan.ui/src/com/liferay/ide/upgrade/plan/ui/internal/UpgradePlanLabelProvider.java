@@ -115,7 +115,15 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 		else if (element instanceof UpgradeTaskStepAction) {
 			UpgradeTaskStepAction upgradeAction = (UpgradeTaskStepAction)element;
 
-			StyledString styledString = new StyledString(upgradeAction.getTitle());
+			Styler styler = null;
+
+			if (upgradeAction.completed() || !upgradeAction.enabled()) {
+				styler = StyledString.QUALIFIER_STYLER;
+			}
+
+			StyledString styledString = new StyledString(upgradeAction.getTitle(), styler);
+
+			styledString.setStyle(0, styledString.length(), styler);
 
 			return styledString;
 		}

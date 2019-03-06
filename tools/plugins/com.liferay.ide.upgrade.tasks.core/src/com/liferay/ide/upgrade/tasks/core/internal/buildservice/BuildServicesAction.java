@@ -20,7 +20,7 @@ import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 import com.liferay.ide.upgrade.tasks.core.buildservice.BuildServicesActionKeys;
 import com.liferay.ide.upgrade.tasks.core.buildservice.RebuildServicesStepKeys;
@@ -81,7 +81,7 @@ public class BuildServicesAction extends BaseUpgradeTaskStepAction {
 			}
 		);
 
-		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(projects, this));
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, projects));
 
 		return Status.OK_STATUS;
 	}
