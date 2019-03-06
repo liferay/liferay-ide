@@ -50,9 +50,13 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 
 	public static final String TASK_STEP_ACTION_COMPLETE_IMAGE = "TASK_STEP_ACTION_COMPLETE_IMAGE";
 
+	public static final String TASK_STEP_ACTION_COMPLETE_OVERLAY_IMAGE = "TASK_STEP_ACTION_COMPLETE_OVERLAY_IMAGE";
+
 	public static final String TASK_STEP_ACTION_PERFORM_IMAGE = "TASK_STEP_ACTION_PERFORM_IMAGE";
 
 	public static final String TASK_STEP_ACTION_SKIP_IMAGE = "TASK_STEP_ACTION_SKIP_IMAGE";
+
+	public static final String TASK_STEP_ACTION_SKIP_OVERLAY_IMAGE = "TASK_STEP_ACTION_SKIP_OVERLAY_IMAGE";
 
 	public static final String TASK_STEP_RESTART_IMAGE = "TASK_STEP_RESTART_IMAGE";
 
@@ -70,6 +74,14 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		ImageRegistry imageRegistry = upgradePlanUIPlugin.getImageRegistry();
 
 		return imageRegistry.get(key);
+	}
+
+	public static ImageDescriptor getImageDescriptor(String key) {
+		UpgradePlanUIPlugin upgradePlanUIPlugin = getInstance();
+
+		ImageRegistry imageRegistry = upgradePlanUIPlugin.getImageRegistry();
+
+		return imageRegistry.getDescriptor(key);
 	}
 
 	public static UpgradePlanUIPlugin getInstance() {
@@ -117,6 +129,18 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
 		imageRegistry.put(TASK_STEP_ACTION_PERFORM_IMAGE, imageDescriptor);
+
+		path = _ICONS_PATH.append("complete_status.gif");
+
+		imageDescriptor = _createImageDescriptor(bundle, path);
+
+		imageRegistry.put(TASK_STEP_ACTION_COMPLETE_OVERLAY_IMAGE, imageDescriptor);
+
+		path = _ICONS_PATH.append("skip_status.gif");
+
+		imageDescriptor = _createImageDescriptor(bundle, path);
+
+		imageRegistry.put(TASK_STEP_ACTION_SKIP_OVERLAY_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("complete_task.gif");
 

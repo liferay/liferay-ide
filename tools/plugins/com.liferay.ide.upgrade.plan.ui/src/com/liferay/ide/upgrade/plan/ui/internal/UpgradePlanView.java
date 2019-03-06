@@ -30,6 +30,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
@@ -149,7 +151,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	private void _createPartControl(Composite parentComposite) {
 		parentComposite.setLayout(new FillLayout());
 
-		_upgradePlanViewer = new UpgradePlanViewer(parentComposite);
+		SashForm sashForm = new SashForm(parentComposite, SWT.HORIZONTAL);
+
+		_upgradePlanViewer = new UpgradePlanViewer(sashForm);
 
 		_upgradePlanViewer.addPostSelectionChangedListener(this::_fireSelectionChanged);
 
@@ -181,7 +185,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 				}
 			});
 
-		_upgradeTaskViewer = new UpgradeTaskViewer(parentComposite, _upgradePlanViewer);
+		_upgradeTaskViewer = new UpgradeTaskViewer(sashForm, _upgradePlanViewer);
 
 		_upgradeTaskViewer.addSelectionChangedListener(this::_fireSelectionChanged);
 
