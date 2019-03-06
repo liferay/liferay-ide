@@ -70,9 +70,13 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 				statusImageDescriptor = UpgradePlanUIPlugin.getImageDescriptor(
 					UpgradePlanUIPlugin.TASK_STEP_ACTION_SKIP_OVERLAY_IMAGE);
 			}
+			else if (UpgradeTaskStepActionStatus.FAILED.equals(upgradeTaskStepAction.getStatus())) {
+				statusImageDescriptor = UpgradePlanUIPlugin.getImageDescriptor(
+					UpgradePlanUIPlugin.TASK_STEP_ACTION_FAILED_OVERLAY_IMAGE);
+			}
 
 			ImageDescriptor descriptor = new DecorationOverlayIcon(
-				baseImage, statusImageDescriptor, IDecoration.TOP_LEFT);
+				baseImage, statusImageDescriptor, IDecoration.TOP_RIGHT);
 
 			return descriptor.createImage();
 		}
