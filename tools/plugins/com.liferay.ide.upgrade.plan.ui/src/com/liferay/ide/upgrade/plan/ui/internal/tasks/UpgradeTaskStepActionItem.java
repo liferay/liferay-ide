@@ -177,6 +177,17 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 			});
 
 		_disposables.add(() -> performImageHyperlink.dispose());
+
+		if (!upgradeTaskStepAction.enabled() || upgradeTaskStepAction.completed()) {
+			performImageHyperlink.setEnabled(false);
+			completeImageHyperlink.setEnabled(false);
+			skipImageHyperlink.setEnabled(false);
+		}
+		else {
+			performImageHyperlink.setEnabled(true);
+			completeImageHyperlink.setEnabled(true);
+			skipImageHyperlink.setEnabled(true);
+		}
 	}
 
 	@Override

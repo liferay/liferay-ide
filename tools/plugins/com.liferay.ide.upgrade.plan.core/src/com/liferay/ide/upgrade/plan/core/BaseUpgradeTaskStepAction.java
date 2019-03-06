@@ -17,6 +17,8 @@ package com.liferay.ide.upgrade.plan.core;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.util.Dictionary;
+import java.util.List;
+import java.util.stream.Stream;
 
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
@@ -35,6 +37,38 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 		_stepId = getStringProperty(properties, "stepId");
 
 		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+	}
+
+	@Override
+	public boolean completed() {
+		if (!UpgradeTaskStepActionStatus.INCOMPLETE.equals(getStatus())) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean enabled() {
+		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+
+		List<UpgradeTask> upgradeTasks = upgradePlan.getTasks();
+
+		Stream<UpgradeTask> upgradeTasksStream = upgradeTasks.stream();
+
+		UpgradeTaskStep upgradeTaskStep = upgradeTasksStream.map(
+			UpgradeTask -> UpgradeTask.getSteps()
+		).flatMap(
+			upgradeTaskSteps -> upgradeTaskSteps.stream()
+		).filter(
+			UpgradeStep -> getStepId().equals(UpgradeStep.getId())
+		).findFirst(
+		).get();
+
+		if (upgradeTaskStep.enabled()) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
