@@ -19,7 +19,7 @@ package com.liferay.ide.upgrade.tasks.core.sdk;
  */
 public class MoveLegacyProjectsStepKeys {
 
-	public static final String DESCRIPTION = "Move legacy SDK projects into liferay workspace.";
+	public static final String DESCRIPTION = "Move legacy SDK projects into your liferay workspace.";
 
 	public static final String ID = "move_legacy_projects";
 
