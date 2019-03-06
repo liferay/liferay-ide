@@ -45,16 +45,16 @@ public class CheckInstalledJDKsAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		IVMInstall install = JavaRuntime.getDefaultVMInstall();
+		IVMInstall defaultVMInstall = JavaRuntime.getDefaultVMInstall();
 
-		IVMInstallType vmInstallType = install.getVMInstallType();
+		IVMInstallType vmInstallType = defaultVMInstall.getVMInstallType();
 
 		String name = vmInstallType.getName();
 
 		boolean java8Installed = false;
 
-		if ("Standard VM".equals(name) && install instanceof IVMInstall2) {
-			String jvmVersion = ((IVMInstall2)install).getJavaVersion();
+		if ("Standard VM".equals(name) && defaultVMInstall instanceof IVMInstall2) {
+			String jvmVersion = ((IVMInstall2)defaultVMInstall).getJavaVersion();
 
 			String[] jvmVersionParts = jvmVersion.split("\\.");
 
