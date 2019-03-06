@@ -20,6 +20,6 @@ package com.liferay.ide.upgrade.plan.core;
  */
 public enum UpgradeTaskStepActionStatus {
 
-	COMPLETED, INCOMPLETE, SKIPPED
+	COMPLETED, FAILED, INCOMPLETE, SKIPPED
 
 }
