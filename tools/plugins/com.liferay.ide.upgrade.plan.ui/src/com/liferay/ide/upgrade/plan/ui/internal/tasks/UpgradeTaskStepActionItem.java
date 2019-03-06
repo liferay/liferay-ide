@@ -14,13 +14,22 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
+import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
+import com.liferay.ide.upgrade.plan.core.UpgradeListener;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatus;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatusChangedEvent;
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
+import com.liferay.ide.upgrade.plan.ui.Enable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -52,7 +61,7 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
  * @author Terry Jia
  * @author Gregory Amerson
  */
-public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTaskItem {
+public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTaskItem, UpgradeListener {
 
 	public UpgradeTaskStepActionItem(
 		FormToolkit formToolkit, ScrolledForm scrolledForm, UpgradeTaskStepAction upgradeTaskStepAction) {
@@ -121,6 +130,7 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 			});
 
 		_disposables.add(() -> performImageHyperlink.dispose());
+		_enables.add(e -> performImageHyperlink.setEnabled(e));
 
 		Label fillLabel = _formToolkit.createLabel(_buttonComposite, null);
 
@@ -159,6 +169,9 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 			});
 
+		_disposables.add(() -> completeImageHyperlink.dispose());
+		_enables.add(enabled -> completeImageHyperlink.setEnabled(enabled));
+
 		Image taskStepActionSkipImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_ACTION_SKIP_IMAGE);
 
 		ImageHyperlink skipImageHyperlink = createImageHyperlink(
@@ -176,18 +189,14 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 			});
 
-		_disposables.add(() -> performImageHyperlink.dispose());
+		_disposables.add(() -> skipImageHyperlink.dispose());
+		_enables.add(e -> skipImageHyperlink.setEnabled(e));
 
-		if (!upgradeTaskStepAction.enabled() || upgradeTaskStepAction.completed()) {
-			performImageHyperlink.setEnabled(false);
-			completeImageHyperlink.setEnabled(false);
-			skipImageHyperlink.setEnabled(false);
-		}
-		else {
-			performImageHyperlink.setEnabled(true);
-			completeImageHyperlink.setEnabled(true);
-			skipImageHyperlink.setEnabled(true);
-		}
+		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+
+		_upgradePlanner.addListener(this);
+
+		_updateEnablement(upgradeTaskStepAction, _enables);
 	}
 
 	@Override
@@ -196,6 +205,8 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 	}
 
 	public void dispose() {
+		_upgradePlanner.removeListener(this);
+
 		for (Disposable disposable : _disposables) {
 			try {
 				disposable.dispose();
@@ -229,12 +240,37 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 	}
 
 	@Override
+	public void onUpgradeEvent(UpgradeEvent upgradeEvent) {
+		if (upgradeEvent instanceof UpgradeTaskStepActionStatusChangedEvent) {
+			UpgradeTaskStepActionStatusChangedEvent upgradeTaskStepActionStatusChangedEvent =
+				(UpgradeTaskStepActionStatusChangedEvent)upgradeEvent;
+
+			UpgradeTaskStepAction upgradeTaskStepAction =
+				upgradeTaskStepActionStatusChangedEvent.getUpgradeTaskStepAction();
+
+			if (upgradeTaskStepAction.equals(_upgradeTaskStepAction)) {
+				UIUtil.async(() -> _updateEnablement(_upgradeTaskStepAction, _enables));
+			}
+		}
+	}
+
+	@Override
 	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
 		_listeners.remove(listener);
 	}
 
 	@Override
 	public void setSelection(ISelection selection) {
+	}
+
+	private static void _updateEnablement(UpgradeTaskStepAction upgradeTaskStepAction, Collection<Enable> enables) {
+		AtomicBoolean enabled = new AtomicBoolean(false);
+
+		if (upgradeTaskStepAction.enabled() && !upgradeTaskStepAction.completed()) {
+			enabled.set(true);
+		}
+
+		enables.forEach(e -> e.enabled(enabled.get()));
 	}
 
 	private void _complete() {
@@ -251,9 +287,11 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 	private Composite _buttonComposite;
 	private List<Disposable> _disposables = new ArrayList<>();
+	private List<Enable> _enables = new ArrayList<>();
 	private FormToolkit _formToolkit;
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private ScrolledForm _scrolledForm;
+	private UpgradePlanner _upgradePlanner;
 	private final UpgradeTaskStepAction _upgradeTaskStepAction;
 
 }

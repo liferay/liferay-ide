@@ -86,7 +86,7 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 	@Override
 	public void setStatus(UpgradeTaskStepActionStatus upgradeTaskStepActionStatus) {
 		UpgradeTaskStepActionStatusChangedEvent event = new UpgradeTaskStepActionStatusChangedEvent(
-			_upgradeTaskStepActionStatus, upgradeTaskStepActionStatus);
+			this, _upgradeTaskStepActionStatus, upgradeTaskStepActionStatus);
 
 		_upgradeTaskStepActionStatus = upgradeTaskStepActionStatus;
 
