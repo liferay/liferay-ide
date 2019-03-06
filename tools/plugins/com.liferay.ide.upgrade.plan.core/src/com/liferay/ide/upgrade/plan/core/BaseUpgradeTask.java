@@ -16,11 +16,14 @@ package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.eclipse.core.runtime.Adapters;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
@@ -28,6 +31,7 @@ import org.osgi.service.component.annotations.Activate;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements UpgradeTask {
 
@@ -43,6 +47,27 @@ public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements 
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if ((obj instanceof BaseUpgradeTask) == false) {
+			return false;
+		}
+
+		BaseUpgradeTask target = Adapters.adapt(obj, BaseUpgradeTask.class);
+
+		if (target == null) {
+			return false;
+		}
+
+		if (super.equals(obj) && compare(_categoryId, target.getCategoryId()) &&
+			compare(_upgradeTaskSteps, target.getSteps())) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
 	public String getCategoryId() {
 		return _categoryId;
 	}
@@ -50,6 +75,16 @@ public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements 
 	@Override
 	public List<UpgradeTaskStep> getSteps() {
 		return Collections.unmodifiableList(_upgradeTaskSteps);
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = super.hashCode();
+
+		hash = 31 * hash + (_categoryId != null ? _categoryId.hashCode() : 0);
+		hash = 31 * hash + (Arrays.hashCode(_upgradeTaskSteps.toArray()));
+
+		return hash;
 	}
 
 	private void _lookupTaskSteps(ComponentContext componentContext) {

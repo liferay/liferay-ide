@@ -20,11 +20,14 @@ import java.util.Dictionary;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.Adapters;
+
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement implements UpgradeTaskStepAction {
 
@@ -75,6 +78,29 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if ((obj instanceof BaseUpgradeTaskStepAction) == false) {
+			return false;
+		}
+
+		BaseUpgradeTaskStepAction target = Adapters.adapt(obj, BaseUpgradeTaskStepAction.class);
+
+		if (target == null) {
+			return false;
+		}
+
+		UpgradePlanElementRequirement targetRequirement = target.getRequirement();
+
+		if (super.equals(obj) && compare(_stepId, target.getStepId()) &&
+			compare(_requirement, targetRequirement.toString())) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
 	public UpgradePlanElementRequirement getRequirement() {
 		return UpgradePlanElementRequirement.valueOf(UpgradePlanElementRequirement.class, _requirement.toUpperCase());
 	}
@@ -82,6 +108,16 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 	@Override
 	public String getStepId() {
 		return _stepId;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = super.hashCode();
+
+		hash = 31 * hash + (_stepId != null ? _stepId.hashCode() : 0);
+		hash = 31 * hash + (_requirement != null ? getRequirement().hashCode() : 0);
+
+		return hash;
 	}
 
 	private String _requirement;

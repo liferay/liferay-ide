@@ -18,6 +18,7 @@ import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public interface UpgradePlanAcessor {
 
@@ -29,8 +30,16 @@ public interface UpgradePlanAcessor {
 		return getCategory(upgradeTask.getCategoryId());
 	}
 
+	public default UpgradeTaskStep getStep(String id) {
+		return ServicesLookup.getSingleService(UpgradeTaskStep.class, "(id=" + id + ")");
+	}
+
 	public default UpgradeTaskStep getStep(UpgradeTaskStepAction upgradeTaskStepAction) {
 		return ServicesLookup.getSingleService(UpgradeTaskStep.class, "(id=" + upgradeTaskStepAction.getStepId() + ")");
+	}
+
+	public default UpgradeTask getTask(String id) {
+		return ServicesLookup.getSingleService(UpgradeTask.class, "(id=" + id + ")");
 	}
 
 	public default UpgradeTask getTask(UpgradeTaskStep upgradeTaskStep) {
