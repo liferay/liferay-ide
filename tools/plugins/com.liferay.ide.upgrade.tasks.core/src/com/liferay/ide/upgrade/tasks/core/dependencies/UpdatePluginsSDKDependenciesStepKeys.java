@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.dependencies;
+package com.liferay.ide.upgrade.tasks.core.dependencies;
 
 /**
  * @author Terry Jia

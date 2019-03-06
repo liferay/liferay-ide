@@ -20,8 +20,8 @@ package com.liferay.ide.upgrade.tasks.core.sdk;
 public class MigratePluginsSDKTaskKeys {
 
 	public static final String DESCRIPTION =
-		"Plugins SDK is deprecated as of Liferay Portal CE 7.x. After you’ve adapted your traditional plugin to " +
-		"Liferay Portal’s API, you can continue maintaining it in the Plugins SDK. In this section, you can " +
+		"Plugins SDK is deprecated as of Liferay Portal CE 7.x. After you have adapted your traditional plugin to " +
+		"Liferay Portal's API, you can continue maintaining it in the Plugins SDK. In this section, you can " +
 		"initialize a latest SDK project, import an existing SDK project, or move the original Plugins SDK project " +
 		"into a Liferay Workspace.";
 

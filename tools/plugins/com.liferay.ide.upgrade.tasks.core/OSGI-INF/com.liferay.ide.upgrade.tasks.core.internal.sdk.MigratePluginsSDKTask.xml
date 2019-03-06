@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.sdk.MigratePluginsSDKTask">
    <property name="categoryId" value="code"/>
-   <property name="description" value="Plugins SDK is deprecated as of Liferay Portal CE 7.x. After you’ve adapted your traditional plugin to Liferay Portal’s API, you can continue maintaining it in the Plugins SDK. In this section, you can initialize a latest SDK project, import an existing SDK project, or move the original Plugins SDK project into a Liferay Workspace."/>
+   <property name="description" value="Plugins SDK is deprecated as of Liferay Portal CE 7.x. After you have adapted your traditional plugin to Liferay Portal&apos;s API, you can continue maintaining it in the Plugins SDK. In this section, you can initialize a latest SDK project, import an existing SDK project, or move the original Plugins SDK project into a Liferay Workspace."/>
    <property name="id" value="migrate_plugins_sdk"/>
    <property name="imagePath" value="icons/migrate_plugins_sdk.png"/>
    <property name="order" value="4"/>

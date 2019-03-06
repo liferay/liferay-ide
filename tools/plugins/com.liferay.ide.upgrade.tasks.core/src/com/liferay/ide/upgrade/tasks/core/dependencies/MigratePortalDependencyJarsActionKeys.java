@@ -12,17 +12,17 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.dependencies;
+package com.liferay.ide.upgrade.tasks.core.dependencies;
 
 /**
  * @author Terry Jia
  */
-public class MigrateIvyDependenciesActionKeys {
+public class MigratePortalDependencyJarsActionKeys {
 
-	public static final String DESCRIPTION = "Migrate Ivy Dependencies";
+	public static final String DESCRIPTION = "Migrate Portal Dependency Jars";
 
-	public static final String ID = "migrate_ivy_dependencies";
+	public static final String ID = "migrate_portal_dependency_jars";
 
-	public static final String TITLE = "Migrate Ivy Dependencies";
+	public static final String TITLE = "Migrate Portal Dependency Jars";
 
 }

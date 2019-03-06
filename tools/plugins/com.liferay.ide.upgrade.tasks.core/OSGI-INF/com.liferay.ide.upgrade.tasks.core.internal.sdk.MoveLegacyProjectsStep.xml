@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.sdk.MoveLegacyProjectsStep">
-   <property name="description" value="Move legacy SDK projects into liferay workspace."/>
+   <property name="description" value="Move legacy SDK projects into your liferay workspace."/>
    <property name="id" value="move_legacy_projects"/>
    <property name="imagePath" value="icons/export.png"/>
    <property name="requirement" value="recommended"/>
