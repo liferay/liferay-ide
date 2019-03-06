@@ -18,17 +18,27 @@ import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -43,8 +53,9 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener {
+public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener, UpgradePlanAcessor {
 
 	public UpgradePlanViewer(Composite parentComposite) {
 		_treeViewer = new TreeViewer(parentComposite);
@@ -82,7 +93,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 
 	@Override
 	public void doubleClick(DoubleClickEvent doubleClickEvent) {
-		Optional.of(
+		Optional<Object> selectOptional = Optional.of(
 			doubleClickEvent.getSelection()
 		).filter(
 			selection -> selection instanceof IStructuredSelection
@@ -90,7 +101,19 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 			IStructuredSelection.class::cast
 		).map(
 			IStructuredSelection::getFirstElement
-		).filter(
+		);
+
+		selectOptional.filter(
+			item -> item instanceof UpgradePlanElement
+		).ifPresent(
+			s -> {
+				_treeViewer.setExpandedState(s, !_treeViewer.getExpandedState(s));
+
+				_treeViewer.refresh();
+			}
+		);
+
+		selectOptional.filter(
 			UpgradePlanContentProvider.NO_TASKS::equals
 		).ifPresent(
 			s -> {
@@ -105,6 +128,35 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 		);
 	}
 
+	public Map<String, Set<String>> getExpansion() {
+		Map<String, Set<String>> expansionMaps = new HashMap<>();
+		Object[] elements = _treeViewer.getExpandedElements();
+
+		Set<String> taskExpansions = new HashSet<>();
+		Set<String> taskStepExpansions = new HashSet<>();
+
+		UpgradePlanElement planElement = null;
+
+		for (Object element : elements) {
+			planElement = Adapters.adapt(element, UpgradeTask.class);
+
+			if (planElement != null) {
+				taskExpansions.add(planElement.getId());
+			}
+
+			planElement = Adapters.adapt(element, UpgradeTaskStep.class);
+
+			if (planElement != null) {
+				taskStepExpansions.add(planElement.getId());
+			}
+		}
+
+		expansionMaps.put("step", taskStepExpansions);
+		expansionMaps.put("task", taskExpansions);
+
+		return expansionMaps;
+	}
+
 	public Object getInput() {
 		return _treeViewer.getInput();
 	}
@@ -115,6 +167,23 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 		}
 
 		return null;
+	}
+
+	public void initTreeView(Map<String, Set<String>> expansionMaps) {
+		Set<String> tasks = expansionMaps.get("task");
+		Set<String> steps = expansionMaps.get("step");
+
+		for (String taskId : tasks) {
+			UpgradeTask task = getTask(taskId);
+
+			_expandTreeItem(task);
+		}
+
+		for (String stepId : steps) {
+			UpgradeTaskStep step = getStep(stepId);
+
+			_expandTreeItem(step);
+		}
 	}
 
 	@Override
@@ -129,7 +198,23 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 	}
 
 	public void refresh() {
-		_treeViewer.refresh();
+		if (_treeViewer != null) {
+			Object[] elements = _treeViewer.getExpandedElements();
+			TreePath[] treePaths = _treeViewer.getExpandedTreePaths();
+			_treeViewer.refresh(true);
+			_treeViewer.setExpandedElements(elements);
+			_treeViewer.setExpandedTreePaths(treePaths);
+		}
+	}
+
+	private void _expandTreeItem(Object element) {
+		UpgradePlanElement planElement = Adapters.adapt(element, UpgradePlanElement.class);
+
+		if (planElement == null) {
+			return;
+		}
+
+		_treeViewer.expandToLevel(element, 1, false);
 	}
 
 	private TreeViewer _treeViewer;

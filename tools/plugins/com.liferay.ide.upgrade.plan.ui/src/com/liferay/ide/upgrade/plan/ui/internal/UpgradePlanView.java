@@ -22,8 +22,12 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskViewer;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelection;
@@ -47,6 +51,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
@@ -100,6 +105,8 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
 
+		_memento = memento;
+
 		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
 		Optional.ofNullable(
@@ -132,6 +139,8 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			UpgradePlan upgradePlan = (UpgradePlan)upgradePlanViewerInput;
 
 			UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
+
+			_saveUpgradePlanExpansionState(memento, _upgradePlanViewer.getExpansion());
 
 			upgradePlanner.saveUpgradePlan(upgradePlan);
 
@@ -167,7 +176,37 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 					UpgradePlan upgradePlan = upgradePlanStartedEvent.getUpgradePlan();
 
 					if (upgradePlan != null) {
-						UIUtil.async(() -> setContentDescription("Active upgrade plan: " + upgradePlan.getName()));
+						Map<String, Set<String>> expansionMaps = new HashMap<>();
+						Set<String> taskExpansions = new HashSet<>();
+						Set<String> stepExpansions = new HashSet<>();
+
+						IMemento upgradeExpansionMemento = _memento.getChild("upgradePlanExpansion");
+
+						IMemento tasksMemento = upgradeExpansionMemento.getChild("tasks");
+
+						IMemento[] taskMementos = tasksMemento.getChildren("task");
+
+						for (IMemento taskMemento : taskMementos) {
+							taskExpansions.add(taskMemento.getString("id"));
+						}
+
+						expansionMaps.put("task", taskExpansions);
+
+						IMemento stepsMemento = upgradeExpansionMemento.getChild("steps");
+
+						IMemento[] stepMementos = stepsMemento.getChildren("step");
+
+						for (IMemento stepMemento : stepMementos) {
+							stepExpansions.add(stepMemento.getString("id"));
+						}
+
+						expansionMaps.put("step", stepExpansions);
+
+						UIUtil.async(
+							() -> {
+								setContentDescription("Active upgrade plan: " + upgradePlan.getName());
+								_upgradePlanViewer.initTreeView(expansionMaps);
+							});
 					}
 				}
 			});
@@ -205,7 +244,32 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			});
 	}
 
+	private void _saveUpgradePlanExpansionState(IMemento memento, Map<String, Set<String>> expansionMap) {
+		IMemento upgradePlanExpansionMemento = memento.createChild("upgradePlanExpansion");
+
+		IMemento tasksExpansionMemento = upgradePlanExpansionMemento.createChild("tasks");
+
+		Set<String> taskExpansions = expansionMap.get("task");
+
+		for (String taskId : taskExpansions) {
+			IMemento taskExpansionMemento = tasksExpansionMemento.createChild("task");
+
+			taskExpansionMemento.putString("id", taskId);
+		}
+
+		IMemento stepsExpansionMemento = upgradePlanExpansionMemento.createChild("steps");
+
+		Set<String> stepExpansions = expansionMap.get("step");
+
+		for (String stepId : stepExpansions) {
+			IMemento stepExpansionMemento = stepsExpansionMemento.createChild("step");
+
+			stepExpansionMemento.putString("id", stepId);
+		}
+	}
+
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
+	private IMemento _memento;
 	private ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
 	private UpgradePlanViewer _upgradePlanViewer;
 	private UpgradeTaskViewer _upgradeTaskViewer;
