@@ -17,7 +17,7 @@ package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatus;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -84,7 +84,7 @@ public class CheckInstalledJDKsAction extends BaseUpgradeTaskStepAction {
 
 		setStatus(status);
 
-		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(null, this));
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, null));
 
 		return Status.OK_STATUS;
 	}
