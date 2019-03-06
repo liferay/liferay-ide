@@ -52,6 +52,8 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 
 	public static final String TASK_STEP_ACTION_COMPLETE_OVERLAY_IMAGE = "TASK_STEP_ACTION_COMPLETE_OVERLAY_IMAGE";
 
+	public static final String TASK_STEP_ACTION_FAILED_OVERLAY_IMAGE = "TASK_STEP_ACTION_FAILED_OVERLAY_IMAGE";
+
 	public static final String TASK_STEP_ACTION_PERFORM_IMAGE = "TASK_STEP_ACTION_PERFORM_IMAGE";
 
 	public static final String TASK_STEP_ACTION_SKIP_IMAGE = "TASK_STEP_ACTION_SKIP_IMAGE";
@@ -129,6 +131,12 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
 		imageRegistry.put(TASK_STEP_ACTION_PERFORM_IMAGE, imageDescriptor);
+
+		path = _ICONS_PATH.append("failed_status.gif");
+
+		imageDescriptor = _createImageDescriptor(bundle, path);
+
+		imageRegistry.put(TASK_STEP_ACTION_FAILED_OVERLAY_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("complete_status.gif");
 
