@@ -18,6 +18,7 @@ import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
+import com.liferay.ide.upgrade.tasks.core.sdk.UpgradeToLatestPluginsSDKStepKeys;
 
 import java.util.List;
 

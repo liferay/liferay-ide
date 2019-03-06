@@ -16,6 +16,8 @@ package com.liferay.ide.upgrade.tasks.core.internal.code;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.tasks.core.code.SetupDevelopmentEnvironmentTaskKeys;
+import com.liferay.ide.upgrade.tasks.core.code.SetupLiferayWorkspaceStepKeys;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;

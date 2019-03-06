@@ -14,10 +14,10 @@
 
 package com.liferay.ide.upgrade.tasks.ui.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.model.ProjectNamedItem;
+import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
@@ -26,24 +26,14 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.tasks.core.ImportSDKProjectsOp;
 import com.liferay.ide.upgrade.tasks.core.sdk.MoveLegacyProjectsStepKeys;
 
-import java.io.File;
-import java.io.IOException;
-
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-import org.apache.commons.io.FileUtils;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ElementList;
@@ -61,11 +51,12 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=move_legacy_projects", "order=1", "stepId=" + MoveLegacyProjectsStepKeys.ID, "title=Move Legacy Projects"
+		"id=migrate_legacy_projects_to_wars", "order=2", "stepId=" + MoveLegacyProjectsStepKeys.ID,
+		"title=Migrate Legacy Projects To Wars"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class MoveLegacyProjectsAction extends BaseUpgradeTaskStepAction {
+public class MigrateLegacyProjectsToWarsAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -111,60 +102,33 @@ public class MoveLegacyProjectsAction extends BaseUpgradeTaskStepAction {
 			Stream<ProjectNamedItem> stream = projects.stream();
 
 			stream.map(
-				projectNamedItem -> _getter.get(projectNamedItem.getLocation())
-			).map(
-				location -> Paths.get(location)
+				projectNamedItem -> _getter.get(projectNamedItem.getName())
 			).forEach(
-				source -> {
-					int beginIndex = source.getNameCount() - 2;
-					int endIndex = source.getNameCount();
+				name -> {
+					StringBuilder sb = new StringBuilder();
 
-					Path subpath = source.subpath(beginIndex, endIndex);
+					sb.append("convert ");
+					sb.append("--source \"");
+					sb.append(pluginsSDKLoaction.toString());
+					sb.append("\" --base \"");
+					sb.append(targetProjectLocation.toString());
+					sb.append("\" \"");
+					sb.append(name);
+					sb.append("\"");
 
-					Path newLocation = pluginsSDKLoaction.resolve(subpath);
-
-					File sourceFile = source.toFile();
-
-					try {
-						FileUtils.copyDirectory(sourceFile, newLocation.toFile());
-					}
-					catch (IOException ioe) {
-						UpgradeTasksUIPlugin.logError(
-							"Copy project " + source + " failed, please clear the folder and try again", ioe);
-					}
-
-					org.eclipse.core.runtime.Path path = new org.eclipse.core.runtime.Path(newLocation.toString());
+					// TODO it needs to wait for BLADE-407, Terry will do it soon
 
 					try {
-						IProject newProject = CoreUtil.openProject(sourceFile.getName(), path, progressMonitor);
-
-						_addNaturesToProject(newProject, JavaCore.NATURE_ID, progressMonitor);
+						BladeCLI.execute(sb.toString());
 					}
-					catch (CoreException ce) {
+					catch (Exception e) {
+						UpgradeTasksUIPlugin.logError("Convert failed on project " + name, e);
 					}
 				}
 			);
 		}
 
 		return Status.OK_STATUS;
-	}
-
-	private void _addNaturesToProject(IProject project, String natureId, IProgressMonitor monitor)
-		throws CoreException {
-
-		IProjectDescription description = project.getDescription();
-
-		String[] prevNatures = description.getNatureIds();
-
-		String[] newNatures = new String[prevNatures.length + 1];
-
-		System.arraycopy(prevNatures, 0, newNatures, 0, prevNatures.length);
-
-		newNatures[newNatures.length - 1] = natureId;
-
-		description.setNatureIds(newNatures);
-
-		project.setDescription(description, monitor);
 	}
 
 	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};

@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.tasks.core.internal.sdk;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKTaskKeys;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;

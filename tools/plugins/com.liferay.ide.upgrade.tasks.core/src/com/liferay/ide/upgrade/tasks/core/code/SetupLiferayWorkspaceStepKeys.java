@@ -12,17 +12,20 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.sdk;
+package com.liferay.ide.upgrade.tasks.core.code;
 
 /**
  * @author Gregory Amerson
  */
-public class MoveLegacyProjectsStepKeys {
+public class SetupLiferayWorkspaceStepKeys {
 
-	public static final String DESCRIPTION = "Move legacy SDK projects into liferay workspace.";
+	public static final String DESCRIPTION =
+		"Create a new Liferay Workspace with the same version as Target Liferay Version which you selected in new " +
+		"Liferay Upgrade Plan wizard. Your Liferay Workspace version will be updated to the version that has been " +
+		"set in gradle.properties which resides in your Workspace’s root folder.";
 
-	public static final String ID = "move_legacy_projects";
+	public static final String ID = "setup_liferay_workspace";
 
-	public static final String TITLE = "Move Legacy Projects";
+	public static final String TITLE = "Setup Liferay Workspace";
 
 }

@@ -12,15 +12,17 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
+package com.liferay.ide.upgrade.tasks.core.buildservice;
 
 /**
  * @author Gregory Amerson
  */
-public class BuildServicesActionKeys {
+public class RemoveLegacyFilesActionKeys {
 
-	public static final String DESCRIPTION = "Build Services";
+	public static final String DESCRIPTION = "Remove Legacy Files";
 
-	public static final String TITLE = "Build Services";
+	public static final String ID = "remove_legacy_files";
+
+	public static final String TITLE = "Remove Legacy Files";
 
 }

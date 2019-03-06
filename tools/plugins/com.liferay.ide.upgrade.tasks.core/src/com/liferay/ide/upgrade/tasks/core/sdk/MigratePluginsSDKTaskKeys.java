@@ -12,19 +12,21 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
+package com.liferay.ide.upgrade.tasks.core.sdk;
 
 /**
  * @author Gregory Amerson
  */
-public class RebuildServicesTaskKeys {
+public class MigratePluginsSDKTaskKeys {
 
 	public static final String DESCRIPTION =
-		"For service builder projects, to properly upgrade you must rebuild all service classes after making sure " +
-		"all of your service.xml files are properly upgraded.";
+		"Plugins SDK is deprecated as of Liferay Portal CE 7.x. After you’ve adapted your traditional plugin to " +
+		"Liferay Portal’s API, you can continue maintaining it in the Plugins SDK. In this section, you can " +
+		"initialize a latest SDK project, import an existing SDK project, or move the original Plugins SDK project " +
+		"into a Liferay Workspace.";
 
-	public static final String ID = "rebuild_services";
+	public static final String ID = "migrate_plugins_sdk";
 
-	public static final String TITLE = "Rebuild Services";
+	public static final String TITLE = "Migrate Plugins SDK";
 
 }

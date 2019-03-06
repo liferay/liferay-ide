@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.sdk;
+package com.liferay.ide.upgrade.tasks.core.sdk;
 
 /**
  * @author Gregory Amerson

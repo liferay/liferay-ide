@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.tasks.core.internal.code;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.tasks.core.code.ConfigureLiferayWorkspaceSettingsStepKeys;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;

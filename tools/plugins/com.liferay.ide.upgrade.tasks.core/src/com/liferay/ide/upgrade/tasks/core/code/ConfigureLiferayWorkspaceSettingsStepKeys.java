@@ -12,18 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.code;
+package com.liferay.ide.upgrade.tasks.core.code;
 
 /**
  * @author Gregory Amerson
  */
-public class InitializeServerBundleStepKeys {
+public class ConfigureLiferayWorkspaceSettingsStepKeys {
 
 	public static final String DESCRIPTION =
-		"Generate a Liferay Portal bundle in your selected workspace project. The default folder is \"bundles\".";
+		"Configuring target plarform in your Liferay Workspace helps you target a specific release of Liferay " +
+		"Portal, so dependencies get resolved properly.";
 
-	public static final String ID = "initialize_server_bundle";
+	public static final String ID = "configure_liferay_workspace_settings";
 
-	public static final String TITLE = "Initialize Server Bundle";
+	public static final String TITLE = "Configure Liferay Workspace Settings";
 
 }
