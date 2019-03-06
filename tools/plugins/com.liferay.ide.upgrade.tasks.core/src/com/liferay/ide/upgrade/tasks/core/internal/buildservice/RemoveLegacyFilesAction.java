@@ -17,7 +17,7 @@ package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 import com.liferay.ide.upgrade.tasks.core.buildservice.RebuildServicesStepKeys;
 import com.liferay.ide.upgrade.tasks.core.buildservice.RemoveLegacyFilesActionKeys;
@@ -88,7 +88,7 @@ public class RemoveLegacyFilesAction extends BaseUpgradeTaskStepAction {
 			}
 		}
 
-		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(projects, this));
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, projects));
 
 		return Status.OK_STATUS;
 	}

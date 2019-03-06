@@ -20,22 +20,22 @@ import java.util.List;
  * @author Terry Jia
  * @author Gregory Amerson
  */
-public class UpgradeTaskStepActionDoneEvent implements UpgradeEvent {
+public class UpgradeTaskStepActionPerformedEvent implements UpgradeEvent {
 
-	public UpgradeTaskStepActionDoneEvent(List<?> items, UpgradePlanElement upgradePlanElement) {
-		_items = items;
+	public UpgradeTaskStepActionPerformedEvent(UpgradePlanElement upgradePlanElement, List<?> workItems) {
 		_upgradePlanElement = upgradePlanElement;
-	}
-
-	public List<?> getItems() {
-		return _items;
+		_workItems = workItems;
 	}
 
 	public UpgradePlanElement getUpgradePlanElement() {
 		return _upgradePlanElement;
 	}
 
-	private List<?> _items;
+	public List<?> getWorkItems() {
+		return _workItems;
+	}
+
 	private UpgradePlanElement _upgradePlanElement;
+	private List<?> _workItems;
 
 }

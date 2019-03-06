@@ -20,7 +20,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
@@ -133,7 +133,7 @@ public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeTaskStepAction 
 			}
 		);
 
-		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent((List<?>)upgradeProblems, this));
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, (List<?>)upgradeProblems));
 
 		return retval;
 	}

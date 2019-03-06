@@ -20,7 +20,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionDoneEvent;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 
@@ -86,7 +86,7 @@ public class FindUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
 				_addMarkers(foundUpgradeProblems);
 			});
 
-		_upgradePlanner.dispatch(new UpgradeTaskStepActionDoneEvent(new ArrayList<>(upgradeProblems), this));
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, new ArrayList<>(upgradeProblems)));
 
 		return Status.OK_STATUS;
 	}
