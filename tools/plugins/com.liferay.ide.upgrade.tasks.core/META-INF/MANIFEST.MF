@@ -23,6 +23,7 @@ Require-Bundle: com.google.guava,
  org.eclipse.core.runtime,
  org.eclipse.equinox.common,
  org.eclipse.jdt.core,
+ org.eclipse.jdt.launching,
  org.eclipse.jst.jsp.core,
  org.eclipse.osgi,
  org.eclipse.osgi.services,
@@ -67,4 +68,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequi
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.ImportExistingProjectsStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.UpgradeWorkspacePluginVersionAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.ImportPluginsSDKAction.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.RebuildServicesTask.xml
+ OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.RebuildServicesTask.xml,
+ OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequisite.CheckInstallationPrerequisitesStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequisite.PrepareForCodeUpgradeTask.xml

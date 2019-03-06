@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"categoryId=code", "description=" + RebuildServicesTaskKeys.DESCRIPTION, "id=" + RebuildServicesTaskKeys.ID,
-		"imagePath=icons/build_service.png", "order=6", "title=" + RebuildServicesTaskKeys.TITLE
+		"imagePath=icons/build_service.png", "order=7", "title=" + RebuildServicesTaskKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )

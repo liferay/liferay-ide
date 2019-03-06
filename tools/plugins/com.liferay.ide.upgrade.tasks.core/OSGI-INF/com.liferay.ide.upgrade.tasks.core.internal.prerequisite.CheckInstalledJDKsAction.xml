@@ -2,10 +2,11 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.prerequisite.CheckInstalledJDKsAction">
    <property name="id" value="check_installed_jdks"/>
    <property name="order" value="1"/>
-   <property name="stepId" value="ensure_compatible_jdk"/>
+   <property name="stepId" value="check_installation_prerequisites"/>
    <property name="title" value="Check Installed JDKs"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>
    </service>
+   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
    <implementation class="com.liferay.ide.upgrade.tasks.core.internal.prerequisite.CheckInstalledJDKsAction"/>
 </scr:component>

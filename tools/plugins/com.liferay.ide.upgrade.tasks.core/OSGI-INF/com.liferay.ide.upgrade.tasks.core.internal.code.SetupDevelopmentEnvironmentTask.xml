@@ -4,7 +4,7 @@
    <property name="description" value="A Liferay Workspace is a generated environment that is built to hold and manage your Liferay projects. It is intended to aid in the management of Liferay projects by providing various Gradle build scripts and configured properties."/>
    <property name="id" value="setup_development_environment"/>
    <property name="imagePath" value="icons/setup.png"/>
-   <property name="order" value="2"/>
+   <property name="order" value="4"/>
    <property name="title" value="Setup Development Environment"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTask"/>
