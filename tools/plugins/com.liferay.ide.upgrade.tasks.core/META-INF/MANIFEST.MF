@@ -10,6 +10,7 @@ Bundle-Version: 3.6.0.qualifier
 Export-Package: com.liferay.ide.upgrade.tasks.core,
  com.liferay.ide.upgrade.tasks.core.buildservice,
  com.liferay.ide.upgrade.tasks.core.code,
+ com.liferay.ide.upgrade.tasks.core.dependencies,
  com.liferay.ide.upgrade.tasks.core.sdk
 Require-Bundle: com.google.guava,
  com.liferay.ide.core,

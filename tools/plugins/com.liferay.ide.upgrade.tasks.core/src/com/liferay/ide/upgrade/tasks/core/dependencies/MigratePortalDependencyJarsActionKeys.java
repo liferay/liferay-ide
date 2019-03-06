@@ -12,17 +12,17 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.dependencies;
+package com.liferay.ide.upgrade.tasks.core.dependencies;
 
 /**
  * @author Terry Jia
  */
-public class UpdatePluginsSDKDependenciesStepKeys {
+public class MigratePortalDependencyJarsActionKeys {
 
-	public static final String DESCRIPTION = "Update Plugins SDK Dependencies";
+	public static final String DESCRIPTION = "Migrate Portal Dependency Jars";
 
-	public static final String ID = "update_plugins_sdk_dependencies";
+	public static final String ID = "migrate_portal_dependency_jars";
 
-	public static final String TITLE = "Update Plugins SDK Dependencies";
+	public static final String TITLE = "Migrate Portal Dependency Jars";
 
 }

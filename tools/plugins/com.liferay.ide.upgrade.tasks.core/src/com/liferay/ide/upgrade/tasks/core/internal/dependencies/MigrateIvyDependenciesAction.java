@@ -16,6 +16,8 @@ package com.liferay.ide.upgrade.tasks.core.internal.dependencies;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.tasks.core.dependencies.MigrateIvyDependenciesActionKeys;
+import com.liferay.ide.upgrade.tasks.core.dependencies.UpdatePluginsSDKDependenciesStepKeys;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
