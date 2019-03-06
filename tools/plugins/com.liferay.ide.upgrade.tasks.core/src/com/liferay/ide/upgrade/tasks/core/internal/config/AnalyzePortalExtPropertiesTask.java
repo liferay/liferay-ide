@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"categoryId=config", "id=analyze_portal_ext_properties", "order=1", "title=Analyze Portal Ext Properties"
+		"categoryId=config", "id=analyze_portal_ext_properties", "order=3", "title=Analyze Portal Ext Properties"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )

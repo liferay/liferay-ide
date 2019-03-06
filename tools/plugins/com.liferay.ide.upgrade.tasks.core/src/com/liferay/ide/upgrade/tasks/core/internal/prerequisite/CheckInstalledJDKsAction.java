@@ -16,26 +16,75 @@ package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatus;
 import com.liferay.ide.upgrade.tasks.core.internal.UpgradeTasksCorePlugin;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.IVMInstall2;
+import org.eclipse.jdt.launching.IVMInstallType;
+import org.eclipse.jdt.launching.JavaRuntime;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
+ * @author Christopher Bryan Boyd
  * @author Gregory Amerson
  */
 @Component(
-	property = {"id=check_installed_jdks", "order=1", "stepId=ensure_compatible_jdk", "title=Check Installed JDKs"},
+	property = {
+		"id=check_installed_jdks", "order=1", "stepId=" + CheckInstallationPrerequisitesStepKeys.ID,
+		"title=Check Installed JDKs"
+	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class CheckInstalledJDKsAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		return UpgradeTasksCorePlugin.createErrorStatus("no compatible jdk found");
+		IVMInstall install = JavaRuntime.getDefaultVMInstall();
+
+		IVMInstallType vmInstallType = install.getVMInstallType();
+
+		String name = vmInstallType.getName();
+
+		boolean java8Installed = false;
+
+		if ("Standard VM".equals(name) && install instanceof IVMInstall2) {
+			String jvmVersion = ((IVMInstall2)install).getJavaVersion();
+
+			String[] jvmVersionParts = jvmVersion.split("\\.");
+
+			try {
+				int major = Integer.parseInt(jvmVersionParts[0]);
+
+				int minor = Integer.parseInt(jvmVersionParts[1]);
+
+				if ((major == 1) && (minor == 8)) {
+					java8Installed = true;
+				}
+			}
+			catch (NumberFormatException nfe) {
+			}
+		}
+
+		if (java8Installed) {
+			UpgradeTaskStepActionStatus status = getStatus();
+
+			if (status == UpgradeTaskStepActionStatus.FAILED) {
+				status = UpgradeTaskStepActionStatus.COMPLETED;
+			}
+
+			return new Status(IStatus.OK, UpgradeTasksCorePlugin.ID, "");
+		}
+		else {
+			setStatus(UpgradeTaskStepActionStatus.FAILED);
+
+			return UpgradeTasksCorePlugin.createErrorStatus("no compatible jdk found");
+		}
 	}
 
 }

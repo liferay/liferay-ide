@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.prerequisite.CheckInstallationPrerequisitesStep">
+   <property name="description" value="Check Installation Prerequisites for upgrading Liferay."/>
+   <property name="id" value="check_installation_prerequisites"/>
+   <property name="imagePath" value="icons/export.png"/>
+   <property name="requirement" value="recommended"/>
+   <property name="order" value="1"/>
+   <property name="taskId" value="prepare_code_upgrade"/>
+   <property name="title" value="Check Installation Prerequisites"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.tasks.core.internal.prerequisite.CheckInstallationPrerequisitesStep"/>
+</scr:component>

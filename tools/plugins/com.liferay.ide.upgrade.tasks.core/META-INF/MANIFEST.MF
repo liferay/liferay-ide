@@ -28,7 +28,8 @@ Require-Bundle: com.google.guava,
  org.eclipse.osgi.services,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.xml.core,
- org.json
+ org.json,
+ org.eclipse.jdt.launching
 Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequisite.InstallNodejsStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.InitializeServerBundleStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.UpgradeToLatestPluginsSDKAction.xml,
@@ -67,4 +68,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequi
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.ImportExistingProjectsStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.UpgradeWorkspacePluginVersionAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.ImportPluginsSDKAction.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.RebuildServicesTask.xml
+ OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.RebuildServicesTask.xml,
+ OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequisite.CheckInstallationPrerequisitesStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequisite.PrepareForCodeUpgradeTask.xml
