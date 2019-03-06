@@ -53,18 +53,20 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 
 		List<UpgradeTask> upgradeTasks = upgradePlan.getTasks();
 
-		Stream<UpgradeTask> upgradeTasksStream = upgradeTasks.stream();
+		Stream<UpgradeTask> stream = upgradeTasks.stream();
 
-		UpgradeTaskStep upgradeTaskStep = upgradeTasksStream.map(
-			UpgradeTask -> UpgradeTask.getSteps()
+		UpgradeTaskStep upgradeTaskStep = stream.map(
+			upgradeTask -> upgradeTask.getSteps()
 		).flatMap(
 			upgradeTaskSteps -> upgradeTaskSteps.stream()
 		).filter(
-			UpgradeStep -> getStepId().equals(UpgradeStep.getId())
+			upgradeStep -> getStepId().equals(upgradeStep.getId())
 		).findFirst(
-		).get();
+		).orElse(
+			null
+		);
 
-		if (upgradeTaskStep.enabled()) {
+		if ((upgradeTaskStep != null) && upgradeTaskStep.enabled()) {
 			return true;
 		}
 
