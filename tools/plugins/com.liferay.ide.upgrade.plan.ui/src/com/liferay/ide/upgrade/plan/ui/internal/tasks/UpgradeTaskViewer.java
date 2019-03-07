@@ -170,10 +170,22 @@ public class UpgradeTaskViewer implements ISelectionProvider {
 	}
 
 	private void _updateTaskStepItems(UpgradeTaskStep upgradeTaskStep) {
-		UpgradeTaskStepIntroItem upgradeTaskStepIntroItem = new UpgradeTaskStepIntroItem(
-			_formToolkit, _scrolledForm, upgradeTaskStep);
+		List<UpgradeTaskStepAction> upgradeTaskStepActions = upgradeTaskStep.getActions();
 
-		upgradeTaskStepIntroItem.addSelectionChangedListener(this::_fireSelectionChanged);
+		if (upgradeTaskStepActions.isEmpty()) {
+			UpgradeTaskStepItem upgradeTaskStepItem = new UpgradeTaskStepItem(
+				_formToolkit, _scrolledForm, upgradeTaskStep);
+
+			upgradeTaskStepItem.addSelectionChangedListener(this::_fireSelectionChanged);
+		}
+		else {
+			UpgradeTaskStepIntroItem upgradeTaskStepIntroItem = new UpgradeTaskStepIntroItem(
+				_formToolkit, _scrolledForm, upgradeTaskStep);
+
+			upgradeTaskStepIntroItem.addSelectionChangedListener(this::_fireSelectionChanged);
+
+		}
+
 	}
 
 	private List<Disposable> _disposables = new ArrayList<>();
