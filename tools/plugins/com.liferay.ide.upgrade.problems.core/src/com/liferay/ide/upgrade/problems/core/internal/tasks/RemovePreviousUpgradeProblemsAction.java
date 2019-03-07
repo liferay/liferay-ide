@@ -23,8 +23,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.tasks.core.MessagePrompt;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
@@ -69,7 +69,7 @@ public class RemovePreviousUpgradeProblemsAction extends BaseUpgradeTaskStepActi
 				this::_deleteMarker
 			);
 
-			_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, (List<?>)upgradeProblems));
+			_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, new ArrayList<>(upgradeProblems)));
 
 			upgradeProblems.clear();
 		}
