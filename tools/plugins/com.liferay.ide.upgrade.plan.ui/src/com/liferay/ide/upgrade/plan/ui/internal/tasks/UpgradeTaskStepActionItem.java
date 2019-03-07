@@ -130,7 +130,13 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 			});
 
 		_disposables.add(() -> performImageHyperlink.dispose());
-		_enables.add(e -> performImageHyperlink.setEnabled(e));
+
+		_enables.add(
+			enabled -> {
+				if (!performImageHyperlink.isDisposed()) {
+					performImageHyperlink.setEnabled(enabled);
+				}
+			});
 
 		Label fillLabel = _formToolkit.createLabel(_buttonComposite, null);
 
@@ -170,7 +176,13 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 			});
 
 		_disposables.add(() -> completeImageHyperlink.dispose());
-		_enables.add(enabled -> completeImageHyperlink.setEnabled(enabled));
+
+		_enables.add(
+			enabled -> {
+				if (!completeImageHyperlink.isDisposed()) {
+					completeImageHyperlink.setEnabled(enabled);
+				}
+			});
 
 		Image taskStepActionSkipImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_ACTION_SKIP_IMAGE);
 
@@ -190,7 +202,13 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 			});
 
 		_disposables.add(() -> skipImageHyperlink.dispose());
-		_enables.add(e -> skipImageHyperlink.setEnabled(e));
+
+		_enables.add(
+			enabled -> {
+				if (!skipImageHyperlink.isDisposed()) {
+					skipImageHyperlink.setEnabled(enabled);
+				}
+			});
 
 		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 
