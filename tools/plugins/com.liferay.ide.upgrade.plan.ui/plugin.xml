@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+
+	<extension
+		point="org.eclipse.ui.commandImages"
+	>
+		<image
+			commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
+			icon="icons/liferay_logo_16.png"
+		/>
+	</extension>
 	<extension
 		point="org.eclipse.ui.perspectives"
 	>
@@ -52,6 +61,18 @@
 				commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
 				icon="icons/liferay_logo_16.png"
 				style="push"
+			>
+			</command>
+		</menuContribution>
+		<menuContribution
+			allPopups="false"
+			locationURI="menu:project?after=additions"
+		>
+			<command
+				commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
+				label="New Liferay Upgrade Plan..."
+				style="push"
+				tooltip="New Liferay Upgrade Plan......"
 			>
 			</command>
 		</menuContribution>

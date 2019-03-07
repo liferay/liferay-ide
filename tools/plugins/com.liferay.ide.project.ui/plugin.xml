@@ -1536,10 +1536,6 @@
 			icon="icons/e16/liferay_logo_16.png"
 		/>
 		<image
-			commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
-			icon="icons/e16/liferay_logo_16.png"
-		/>
-		<image
 			commandId="com.liferay.ide.project.ui.developerNetwork"
 			icon="icons/e16/liferay_logo_16.png"
 		/>
@@ -1883,23 +1879,6 @@
 			>
 			</adapter>
 		</factory>
-	</extension>
-
-	<extension
-		point="org.eclipse.ui.menus"
-	>
-		<menuContribution
-			allPopups="false"
-			locationURI="menu:project?after=additions"
-		>
-			<command
-				commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
-				label="New Liferay Upgrade Plan..."
-				style="push"
-				tooltip="New Liferay Upgrade Plan......"
-			>
-			</command>
-		</menuContribution>
 	</extension>
 	<extension
 		point="org.eclipse.ui.menus"
