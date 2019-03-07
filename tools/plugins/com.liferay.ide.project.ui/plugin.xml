@@ -1484,11 +1484,6 @@
 			name="Migrate Project"
 		/>
 		<command
-			description="Start Liferay Code Upgrade..."
-			id="com.liferay.ide.project.ui.codeUpgrade"
-			name="Liferay Code Upgrade"
-		/>
-		<command
 			description="Liferay Develper Network"
 			id="com.liferay.ide.project.ui.developerNetwork"
 			name="Liferay Develper Network"
@@ -1541,7 +1536,7 @@
 			icon="icons/e16/liferay_logo_16.png"
 		/>
 		<image
-			commandId="com.liferay.ide.project.ui.codeUpgrade"
+			commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
 			icon="icons/e16/liferay_logo_16.png"
 		/>
 		<image
@@ -1557,11 +1552,6 @@
 		<handler
 			class="com.liferay.ide.project.ui.migration.MigrateProjectHandler"
 			commandId="com.liferay.ide.project.ui.migrateProject"
-		>
-		</handler>
-		<handler
-			class="com.liferay.ide.project.ui.upgrade.CodeUpgradeHandler"
-			commandId="com.liferay.ide.project.ui.codeUpgrade"
 		>
 		</handler>
 		<handler
@@ -1903,10 +1893,10 @@
 			locationURI="menu:project?after=additions"
 		>
 			<command
-				commandId="com.liferay.ide.project.ui.codeUpgrade"
-				label="Liferay Code Upgrade Tool..."
+				commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
+				label="New Liferay Upgrade Plan..."
 				style="push"
-				tooltip="Liferay Code Upgrade Tool..."
+				tooltip="New Liferay Upgrade Plan......"
 			>
 			</command>
 		</menuContribution>
