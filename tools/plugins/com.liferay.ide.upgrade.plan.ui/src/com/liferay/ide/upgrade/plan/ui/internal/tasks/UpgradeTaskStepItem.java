@@ -23,13 +23,13 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
-import com.liferay.ide.upgrade.plan.ui.Enable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -46,6 +46,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
@@ -127,7 +128,8 @@ public class UpgradeTaskStepItem implements IExpansionListener, UpgradeTaskItem,
 			});
 
 		_disposables.add(() -> performImageHyperlink.dispose());
-		_enables.add(e -> performImageHyperlink.setEnabled(e));
+
+		_enables.add(performImageHyperlink);
 
 		Label fillLabel = _formToolkit.createLabel(_buttonComposite, null);
 
@@ -195,7 +197,8 @@ public class UpgradeTaskStepItem implements IExpansionListener, UpgradeTaskItem,
 			});
 
 		_disposables.add(() -> completeImageHyperlink.dispose());
-		_enables.add(enabled -> completeImageHyperlink.setEnabled(enabled));
+
+		_enables.add(completeImageHyperlink);
 
 		Image taskStepActionSkipImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_ACTION_SKIP_IMAGE);
 
@@ -215,7 +218,8 @@ public class UpgradeTaskStepItem implements IExpansionListener, UpgradeTaskItem,
 			});
 
 		_disposables.add(() -> skipImageHyperlink.dispose());
-		_enables.add(e -> skipImageHyperlink.setEnabled(e));
+
+		_enables.add(skipImageHyperlink);
 
 		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 
@@ -287,14 +291,20 @@ public class UpgradeTaskStepItem implements IExpansionListener, UpgradeTaskItem,
 	public void setSelection(ISelection selection) {
 	}
 
-	private static void _updateEnablement(UpgradeTaskStep upgradeTaskStep, Collection<Enable> enables) {
+	private static void _updateEnablement(UpgradeTaskStep upgradeTaskStep, Collection<Control> enables) {
 		AtomicBoolean enabled = new AtomicBoolean(false);
 
 		if (upgradeTaskStep.enabled() && !upgradeTaskStep.completed()) {
 			enabled.set(true);
 		}
 
-		enables.forEach(e -> e.enabled(enabled.get()));
+		Stream<Control> stream = enables.stream();
+
+		stream.filter(
+			c -> !c.isDisposed()
+		).forEach(
+			c -> c.setEnabled(enabled.get())
+		);
 	}
 
 	private void _complete() {
@@ -319,7 +329,7 @@ public class UpgradeTaskStepItem implements IExpansionListener, UpgradeTaskItem,
 
 	private Composite _buttonComposite;
 	private List<Disposable> _disposables = new ArrayList<>();
-	private List<Enable> _enables = new ArrayList<>();
+	private List<Control> _enables = new ArrayList<>();
 	private FormToolkit _formToolkit;
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private ScrolledForm _scrolledForm;
