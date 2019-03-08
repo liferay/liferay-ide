@@ -94,7 +94,7 @@ public class GradleModuleExtProjectProvider
 			GradleUtil.refreshProject(gradleWorkspaceProject.getProject());
 		}
 		else {
-			GradleUtil.sychronizeProject(projecLocation, monitor);
+			GradleUtil.synchronizeProject(projecLocation, monitor);
 		}
 
 		return status;

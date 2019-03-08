@@ -128,7 +128,7 @@ public class GradleModuleFragmentProjectProvider
 		}
 		else {
 			CoreUtil.openProject(projectName, projectLocation, monitor);
-			GradleUtil.sychronizeProject(projectLocation, monitor);
+			GradleUtil.synchronizeProject(projectLocation, monitor);
 		}
 
 		return retval;

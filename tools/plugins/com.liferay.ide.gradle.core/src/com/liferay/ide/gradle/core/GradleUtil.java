@@ -288,7 +288,7 @@ public class GradleUtil {
 		}
 	}
 
-	public static IStatus sychronizeProject(IPath dir, IProgressMonitor monitor) {
+	public static IStatus synchronizeProject(IPath dir, IProgressMonitor monitor) {
 		if (FileUtil.notExists(dir)) {
 			return LiferayGradleCore.createErrorStatus("Unable to find gradle project at " + dir);
 		}

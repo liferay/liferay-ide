@@ -7,6 +7,7 @@
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>
    </service>
+   <reference cardinality="1..1" field="_synchronizer" interface="com.liferay.ide.project.core.ProjectSynchronizer" name="_synchronizer" target="(type=gradle)"/>
    <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
    <implementation class="com.liferay.ide.upgrade.tasks.ui.internal.MigrateLegacyProjectsToWarsAction"/>
 </scr:component>

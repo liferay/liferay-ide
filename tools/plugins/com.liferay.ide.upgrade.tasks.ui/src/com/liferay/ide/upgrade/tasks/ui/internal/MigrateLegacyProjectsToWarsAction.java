@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.tasks.ui.internal;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.project.core.ProjectSynchronizer;
 import com.liferay.ide.project.core.model.ProjectNamedItem;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.ui.util.UIUtil;
@@ -68,7 +69,7 @@ public class MigrateLegacyProjectsToWarsAction extends BaseUpgradeTaskStepAction
 			return UpgradeTasksUIPlugin.createErrorStatus("There is no target project configured for current plan.");
 		}
 
-		Path pluginsSDKLoaction = targetProjectLocation.resolve("plugins-sdk");
+		Path pluginsSDKLoaction = upgradePlan.getCurrentProjectLocation();
 
 		if (FileUtil.notExists(pluginsSDKLoaction.toFile())) {
 			return UpgradeTasksUIPlugin.createErrorStatus("There is no plugins sdk folder in " + pluginsSDKLoaction);
@@ -102,10 +103,14 @@ public class MigrateLegacyProjectsToWarsAction extends BaseUpgradeTaskStepAction
 			Stream<ProjectNamedItem> stream = projects.stream();
 
 			stream.map(
-				projectNamedItem -> _getter.get(projectNamedItem.getName())
+				projectNamedItem -> _getter.get(projectNamedItem.getLocation())
 			).forEach(
-				name -> {
+				location -> {
 					StringBuilder sb = new StringBuilder();
+
+					org.eclipse.core.runtime.Path path = new org.eclipse.core.runtime.Path(location.toString());
+
+					String name = path.lastSegment();
 
 					sb.append("convert ");
 					sb.append("--source \"");
@@ -116,8 +121,6 @@ public class MigrateLegacyProjectsToWarsAction extends BaseUpgradeTaskStepAction
 					sb.append(name);
 					sb.append("\"");
 
-					// TODO it needs to wait for BLADE-407, Terry will do it soon
-
 					try {
 						BladeCLI.execute(sb.toString());
 					}
@@ -126,12 +129,19 @@ public class MigrateLegacyProjectsToWarsAction extends BaseUpgradeTaskStepAction
 					}
 				}
 			);
+
+			org.eclipse.core.runtime.Path path = new org.eclipse.core.runtime.Path(targetProjectLocation.toString());
+
+			_synchronizer.synchronizePath(path, progressMonitor);
 		}
 
 		return Status.OK_STATUS;
 	}
 
 	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+
+	@Reference(target = "(type=gradle)")
+	private ProjectSynchronizer _synchronizer;
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;
