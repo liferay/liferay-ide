@@ -24,6 +24,8 @@ import org.eclipse.core.runtime.IStatus;
  */
 public interface ProjectImporter {
 
+	public IStatus canImport(Path rootProjectPath);
+
 	public IStatus importProjects(Path rootProjectPath, IProgressMonitor progressMonitor);
 
 }
