@@ -43,9 +43,11 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 
 		ICommonActionExtensionSite commonActionExtensionSite = getActionSite();
 
-		StructuredViewer structuredViewer = commonActionExtensionSite.getStructuredViewer();
+		if (commonActionExtensionSite != null) {
+			StructuredViewer structuredViewer = commonActionExtensionSite.getStructuredViewer();
 
-		structuredViewer.removeDoubleClickListener(_doubleClickListener);
+			structuredViewer.removeDoubleClickListener(_doubleClickListener);
+		}
 
 		_doubleClickListener = null;
 	}
