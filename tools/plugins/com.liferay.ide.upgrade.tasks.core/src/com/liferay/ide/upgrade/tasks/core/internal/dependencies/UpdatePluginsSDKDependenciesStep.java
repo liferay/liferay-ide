@@ -28,8 +28,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"description=" + UpdatePluginsSDKDependenciesStepKeys.DESCRIPTION,
-		"id=" + UpdatePluginsSDKDependenciesStepKeys.ID, "imagePath=icons/import.png", "requirement=required",
-		"order=1", "taskId=" + UpgradeBuildDependenciesTaskKeys.ID,
+		"id=" + UpdatePluginsSDKDependenciesStepKeys.ID, "imagePath=icons/update_sdk_dependencies.png",
+		"requirement=required", "order=1", "taskId=" + UpgradeBuildDependenciesTaskKeys.ID,
 		"title=" + UpdatePluginsSDKDependenciesStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
