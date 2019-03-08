@@ -65,7 +65,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequi
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequisite.CheckInstalledJDKsAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.database.DisableSearchIndexesStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.MoveLegacyProjectsStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.ImportExistingProjectsStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.UpgradeWorkspacePluginVersionAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.ImportPluginsSDKAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.buildservice.RebuildServicesTask.xml,
