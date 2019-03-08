@@ -2,7 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.dependencies.UpdatePluginsSDKDependenciesStep">
    <property name="description" value="Update Plugins SDK Dependencies"/>
    <property name="id" value="update_plugins_sdk_dependencies"/>
-   <property name="imagePath" value="icons/import.png"/>
+   <property name="imagePath" value="icons/update_sdk_dependencies.png"/>
    <property name="requirement" value="required"/>
    <property name="order" value="1"/>
    <property name="taskId" value="upgrade_build_dependencies"/>

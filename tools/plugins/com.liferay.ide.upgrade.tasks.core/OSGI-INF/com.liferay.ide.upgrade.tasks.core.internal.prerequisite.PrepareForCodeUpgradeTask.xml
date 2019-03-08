@@ -3,7 +3,7 @@
    <property name="categoryId" value="code"/>
    <property name="description" value="Prepare for the code upgrade."/>
    <property name="id" value="prepare_code_upgrade"/>
-   <property name="imagePath" value="icons/setup.png"/>
+   <property name="imagePath" value="icons/prepare_code_upgrade.gif"/>
    <property name="order" value="1"/>
    <property name="title" value="Prepare for Code Upgrade"/>
    <service scope="prototype">

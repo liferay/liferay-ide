@@ -26,8 +26,9 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"description=" + CheckInstallationPrerequisitesStepKeys.DESCRIPTION,
-		"id=" + CheckInstallationPrerequisitesStepKeys.ID, "imagePath=icons/export.png", "requirement=recommended",
-		"order=1", "taskId=" + PrepareForCodeUpgradeTaskKeys.ID, "title=" + CheckInstallationPrerequisitesStepKeys.TITLE
+		"id=" + CheckInstallationPrerequisitesStepKeys.ID, "imagePath=icons/check_prerequisites.png",
+		"requirement=recommended", "order=1", "taskId=" + PrepareForCodeUpgradeTaskKeys.ID,
+		"title=" + CheckInstallationPrerequisitesStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
