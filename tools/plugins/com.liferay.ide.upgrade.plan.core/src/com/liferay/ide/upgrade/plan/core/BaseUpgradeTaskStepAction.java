@@ -74,27 +74,11 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 	}
 
 	@Override
-	public UpgradeElementStatus getStatus() {
-		return _upgradeTaskStepActionStatus;
-	}
-
-	@Override
 	public String getStepId() {
 		return _stepId;
 	}
 
-	@Override
-	public void setStatus(UpgradeElementStatus upgradeTaskStepActionStatus) {
-		UpgradeTaskStepActionStatusChangedEvent event = new UpgradeTaskStepActionStatusChangedEvent(
-			this, _upgradeTaskStepActionStatus, upgradeTaskStepActionStatus);
-
-		_upgradeTaskStepActionStatus = upgradeTaskStepActionStatus;
-
-		_upgradePlanner.dispatch(event);
-	}
-
 	private String _stepId;
 	private UpgradePlanner _upgradePlanner;
-	private UpgradeElementStatus _upgradeTaskStepActionStatus = UpgradeElementStatus.INCOMPLETE;
 
 }

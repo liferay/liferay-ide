@@ -15,11 +15,11 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeElementStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskViewer;
 
 import java.util.Objects;
@@ -177,7 +177,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 				if (upgradeEvent instanceof UpgradeTaskStepActionPerformedEvent) {
 					UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
 				}
-				else if (upgradeEvent instanceof UpgradeTaskStepActionStatusChangedEvent) {
+				else if (upgradeEvent instanceof UpgradeElementStatusChangedEvent) {
 					UIUtil.sync(
 						() -> {
 							_upgradePlanViewer.refresh();

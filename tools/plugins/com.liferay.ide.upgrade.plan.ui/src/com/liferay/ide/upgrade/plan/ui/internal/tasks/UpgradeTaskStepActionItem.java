@@ -16,11 +16,12 @@ package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeElementStatus;
+import com.liferay.ide.upgrade.plan.core.UpgradeElementStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
@@ -245,15 +246,18 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 	@Override
 	public void onUpgradeEvent(UpgradeEvent upgradeEvent) {
-		if (upgradeEvent instanceof UpgradeTaskStepActionStatusChangedEvent) {
-			UpgradeTaskStepActionStatusChangedEvent upgradeTaskStepActionStatusChangedEvent =
-				(UpgradeTaskStepActionStatusChangedEvent)upgradeEvent;
+		if (upgradeEvent instanceof UpgradeElementStatusChangedEvent) {
+			UpgradeElementStatusChangedEvent upgradeElementStatusChangedEvent =
+				(UpgradeElementStatusChangedEvent)upgradeEvent;
 
-			UpgradeTaskStepAction upgradeTaskStepAction =
-				upgradeTaskStepActionStatusChangedEvent.getUpgradeTaskStepAction();
+			UpgradePlanElement upgradePlanElement = upgradeElementStatusChangedEvent.getUpgradePlanElement();
 
-			if (upgradeTaskStepAction.equals(_upgradeTaskStepAction)) {
-				UIUtil.async(() -> _updateEnablement(_upgradeTaskStepAction, _enables));
+			if (upgradePlanElement instanceof UpgradeTaskStepAction) {
+				UpgradeTaskStepAction upgradeTaskStepAction = (UpgradeTaskStepAction)upgradePlanElement;
+
+				if (upgradeTaskStepAction.equals(_upgradeTaskStepAction)) {
+					UIUtil.async(() -> _updateEnablement(_upgradeTaskStepAction, _enables));
+				}
 			}
 		}
 	}

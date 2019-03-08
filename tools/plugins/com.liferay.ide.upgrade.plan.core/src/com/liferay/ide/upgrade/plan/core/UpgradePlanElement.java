@@ -16,8 +16,6 @@ package com.liferay.ide.upgrade.plan.core;
 
 import java.util.Dictionary;
 
-import org.apache.http.MethodNotSupportedException;
-
 /**
  * @author Gregory Amerson
  */
@@ -47,9 +45,7 @@ public interface UpgradePlanElement {
 
 	public String getImagePath();
 
-	public default UpgradeElementStatus getStatus() {
-		return UpgradeElementStatus.INCOMPLETE;
-	}
+	public UpgradeElementStatus getStatus();
 
 	public default String getStringProperty(Dictionary<String, Object> properties, String key) {
 		Object value = properties.get(key);
@@ -63,11 +59,6 @@ public interface UpgradePlanElement {
 
 	public String getTitle();
 
-	public default void setStatus(UpgradeElementStatus status) {
-		MethodNotSupportedException exception = new MethodNotSupportedException(
-			"Implementer must implement this method.");
-
-		throw new RuntimeException(exception);
-	}
+	public void setStatus(UpgradeElementStatus upgradeElementStatus);
 
 }
