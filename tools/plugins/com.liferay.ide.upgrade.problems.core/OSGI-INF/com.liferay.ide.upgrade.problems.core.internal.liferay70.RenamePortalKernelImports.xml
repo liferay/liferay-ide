@@ -6,7 +6,6 @@
    <property name="problem.title" value="Renamed Packages to Fix the Split Packages Problem"/>
    <property name="problem.section" value="#renamed-packages-to-fix-the-split-packages-problem"/>
    <property name="auto.correct" value="import"/>
-   <property name="implName" value="RenamePortalKernelImports"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>

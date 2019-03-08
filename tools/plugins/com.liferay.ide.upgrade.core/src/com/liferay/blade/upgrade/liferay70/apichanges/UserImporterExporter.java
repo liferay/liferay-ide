@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.title=User Operation and Importer/Exporter Classes and Utilities Moved or Removed",
 	"problem.section=#user-operation-and-importer-exporter-classes-and-utilities-have-been-moved-",
 	"problem.summary==User Operation and Importer/Exporter Classes and Utilities Moved or Removed",
-	"problem.tickets=LPS-63205", "implName=UserImporterExporter", "version=7.0"
+	"problem.tickets=LPS-63205", "version=7.0"
 },
 	service = FileMigrator.class)
 public class UserImporterExporter extends JavaFileMigrator {

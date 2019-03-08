@@ -23,8 +23,8 @@ import java.io.File;
 public class PHPPortletExtendsTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "PHPPortletExtends";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.PHPPortletExtends";
 	}
 
 	@Override

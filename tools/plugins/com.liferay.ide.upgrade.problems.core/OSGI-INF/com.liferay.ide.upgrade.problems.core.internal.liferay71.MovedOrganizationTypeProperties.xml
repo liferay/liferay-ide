@@ -5,7 +5,6 @@
    <property name="problem.summary" value="The organization type properties have been moved from portal.properties"/>
    <property name="problem.tickets" value="LPS-77183"/>
    <property name="problem.section" value="#moved-organization-type-properties"/>
-   <property name="implName" value="MovedOrganizationTypeProperties"/>
    <property name="version" value="7.1"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

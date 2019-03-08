@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.title=Removed the liferay-ui:trash-undo Tag and Replaced with liferay-trash:undo",
 	"problem.section=#removed-the-liferay-uitrash-undo-tag-and-replaced-with-liferay-trashundo",
 	"problem.summary=Removed the liferay-ui:trash-undo Tag and Replaced with liferay-trash:undo",
-	"problem.tickets=LPS-60779", "auto.correct=jsptag", "implName=DeprecatedTrashUndoTags", "version=7.0"
+	"problem.tickets=LPS-60779", "auto.correct=jsptag", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class DeprecatedTrashUndoTags extends JSPTagMigrator {

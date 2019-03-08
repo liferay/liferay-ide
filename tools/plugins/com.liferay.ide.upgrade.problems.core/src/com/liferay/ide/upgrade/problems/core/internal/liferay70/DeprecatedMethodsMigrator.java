@@ -36,7 +36,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
  * @author Gregory Amerson
  */
 @Component(
-	property = {"file.extensions=java,jsp,jspf", "implName=DeprecatedMethodsMigrator"}, service = FileMigrator.class
+	property = {"file.extensions=java,jsp,jspf"}, service = FileMigrator.class
 )
 public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 

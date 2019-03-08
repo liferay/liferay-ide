@@ -30,7 +30,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 @Component(property = {
 	"file.extensions=java,jsp,jspf", "problem.title=DateUtil.compareTo method removed",
 	"problem.section=#dateutil-compareto-method-removed", "problem.summary=DateUtil.compareTo method removed",
-	"problem.tickets=LPS-59192", "implName=DateUtilApiChange", "version=7.0"
+	"problem.tickets=LPS-59192",  "version=7.0"
 },
 	service = FileMigrator.class)
 public class DateUtilApiChange extends JavaFileMigrator {

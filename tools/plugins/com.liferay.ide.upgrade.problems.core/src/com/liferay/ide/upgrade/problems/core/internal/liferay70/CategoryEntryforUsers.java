@@ -34,7 +34,7 @@ import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 	"problem.summary=The category entry for Site Administration > Users has been deprecated in favor of Site " +
 		"Administration > Members.",
 	"problem.tickets=LPS-63466", "problem.section=#deprecated-category-entry-for-users",
-	"implName=CategoryEntryforUsers", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class CategoryEntryforUsers extends XMLFileMigrator {

@@ -27,7 +27,7 @@ import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 @Component(property = {
 	"file.extensions=properties", "problem.title=Asset Entry Validator Property",
 	"problem.summary=Removed the asset.entry.validator Property", "problem.tickets=LPS-64370",
-	"problem.section=#removed-the-asset-entry-validator-property", "implName=AssetEntryValidatorProperties",
+	"problem.section=#removed-the-asset-entry-validator-property", 
 	"version=7.0"
 },
 	service = FileMigrator.class)

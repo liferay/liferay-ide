@@ -5,7 +5,6 @@
    <property name="problem.summary" value="Moved Journal Portlet Properties to OSGi Configuration"/>
    <property name="problem.tickets" value="LPS-58672"/>
    <property name="problem.section" value="#moved-journal-portlet-properties-to-osgi-configuration"/>
-   <property name="implName" value="JournalPortletProperties"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

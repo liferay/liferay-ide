@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=java,jsp,jspf", "problem.title=FlagsEntryService.addEntry Method Throws PortalException",
 	"problem.section=#flagsentryservice-addentry-method-throws-portalexception",
 	"problem.summary=FlagsEntryService.addEntry Method Throws PortalException", "problem.tickets=LPS-63109",
-	"implName=FlagsEntryServiceInvocation", "version=7.0"
+	"version=7.0"
 },
 	service = FileMigrator.class)
 public class FlagsEntryServiceInvocation extends JavaFileMigrator {

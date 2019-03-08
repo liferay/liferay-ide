@@ -29,7 +29,7 @@ import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 	"problem.summary=Removed Portal Properties Used to Display Sections in Form Navigators",
 	"problem.tickets=LPS-54903",
 	"problem.section=#removed-portal-properties-used-to-display-sections-in-form-navigators",
-	"implName=PortalProperties", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class PortalProperties extends PropertiesFileMigrator {

@@ -48,8 +48,8 @@ public class AssetTagPropertiesTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "AssetTagProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.AssetTagProperties";
 	}
 
 	@Override

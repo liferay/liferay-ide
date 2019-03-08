@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=All Marketplace APIs previously exposed as Liferay Portal API in 6.2 have been move out from " +
 		"portal-service into separate OSGi modules",
 	"problem.tickets=LPS-54165", "problem.title=Marketplace APIs migrated to OSGi module", "problem.section=#legacy",
-	"implName=MarketplaceLegacyAPI", "version=7.0"
+	"version=7.0"
 },
 	service = FileMigrator.class)
 public class MarketplaceLegacyAPI extends JavaFileMigrator {

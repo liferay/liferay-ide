@@ -32,7 +32,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"problem.summary=All BackgroundTask APIs previously exposed as Liferay Portal API in 6.2 have been move out from " +
 		"portal-service into separate OSGi modules",
 	"problem.tickets=LPS-57740", "problem.title=BackgroundTask APIs migrated to OSGi module", "problem.section=#legacy",
-	"implName=BackgroundTaskLegacyAPI", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class BackgroundTaskLegacyAPI extends JavaFileMigrator {

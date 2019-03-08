@@ -6,7 +6,6 @@
    <property name="problem.summary" value="Removed the liferay-ui:asset-categories-navigation Tag and Replaced with liferay-asset:asset-categories-navigation"/>
    <property name="problem.tickets" value="LPS-60753"/>
    <property name="auto.correct" value="jsptag"/>
-   <property name="implName" value="AssetCategoriesNavigationTags"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.AutoMigrator"/>

@@ -23,8 +23,8 @@ import java.io.File;
 public class DDMStructureUpdateStructureInvocationTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "DDMStructureUpdateStructureInvocation";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.DDMStructureUpdateStructureInvocation";
 	}
 
 	@Override

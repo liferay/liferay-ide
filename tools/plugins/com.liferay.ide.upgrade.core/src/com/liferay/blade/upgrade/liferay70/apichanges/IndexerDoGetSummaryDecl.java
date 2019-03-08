@@ -33,8 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=Changed the AssetRenderer and Indexer APIs to Include the PortletRequest and PortletResponse " +
 		"Parameters",
 	"problem.tickets=LPS-44639,LPS-44894", "problem.title=Indexer API Changes",
-	"problem.section=#changed-the-assetrenderer-and-indexer-apis-to-include-the-portletrequest-an",
-	"implName=IndexerDoGetSummaryDecl", "version=7.0"
+	"problem.section=#changed-the-assetrenderer-and-indexer-apis-to-include-the-portletrequest-an", "version=7.0"
 },
 	service = FileMigrator.class)
 public class IndexerDoGetSummaryDecl extends JavaFileMigrator {

@@ -23,8 +23,8 @@ import java.io.File;
 public class PortalUtilGetClassNamePortletIdInvocationTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "PortalUtilGetClassNamePortletIdInvocation";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.PortalUtilGetClassNamePortletIdInvocation";
 	}
 
 	@Override

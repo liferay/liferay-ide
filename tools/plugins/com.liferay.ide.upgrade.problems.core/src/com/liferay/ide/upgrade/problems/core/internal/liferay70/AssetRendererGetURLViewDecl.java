@@ -32,7 +32,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"problem.summary=The getURLView method of AssetRenderer returns String instead of PortletURL",
 	"problem.tickets=LPS-61853", "problem.title=AssetRenderer API Changes",
 	"problem.section=#the-geturlview-method-of-assetrenderer-returns-string-instead-of-portleturl",
-	"implName=AssetRendererGetURLViewDecl", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class AssetRendererGetURLViewDecl extends JavaFileMigrator {

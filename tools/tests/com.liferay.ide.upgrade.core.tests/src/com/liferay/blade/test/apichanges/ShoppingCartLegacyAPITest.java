@@ -37,8 +37,8 @@ public class ShoppingCartLegacyAPITest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "ShoppingCartLegacyAPI";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.ShoppingCartLegacyAPI";
 	}
 
 	@Override

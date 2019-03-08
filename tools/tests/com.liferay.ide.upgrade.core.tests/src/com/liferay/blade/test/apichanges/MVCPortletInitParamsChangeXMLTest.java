@@ -27,8 +27,8 @@ public class MVCPortletInitParamsChangeXMLTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "MVCPortletInitParamsChangeXML";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.MVCPortletInitParamsChangeXML";
 	}
 
 	@Override

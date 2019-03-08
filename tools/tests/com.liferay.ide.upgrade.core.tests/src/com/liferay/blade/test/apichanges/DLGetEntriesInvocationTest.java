@@ -28,8 +28,8 @@ public class DLGetEntriesInvocationTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "DLGetEntriesInvocation";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.DLGetEntriesInvocation";
 	}
 
 	@Override

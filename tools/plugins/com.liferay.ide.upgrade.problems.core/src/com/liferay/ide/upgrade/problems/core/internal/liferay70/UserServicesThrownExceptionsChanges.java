@@ -31,7 +31,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"file.extensions=java", "problem.title=Changes in Exceptions Thrown by User Services",
 	"problem.section=#changes-in-exceptions-thrown-by-user-services",
 	"problem.summary=Changes in Exceptions Thrown by User Services", "problem.tickets=LPS-47130",
-	"implName=UserServicesThrownExceptionsChanges", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class UserServicesThrownExceptionsChanges extends JavaFileMigrator {

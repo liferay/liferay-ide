@@ -23,8 +23,8 @@ import java.io.File;
 public class AssetRendererGetURLViewDeclTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "AssetRendererGetURLViewDecl";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.AssetRendererGetURLViewDecl";
 	}
 
 	@Override

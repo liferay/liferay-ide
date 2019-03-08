@@ -5,7 +5,6 @@
    <property name="problem.summary" value="Moved Shopping File Uploads Portlet Properties to OSGi Configuration"/>
    <property name="problem.tickets" value="LPS-69210"/>
    <property name="problem.section" value="#moved-shopping-file-uploads-portlet-properties-to-osgi-configuration"/>
-   <property name="implName" value="ShoppingFileUploadsPortletProperties"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>

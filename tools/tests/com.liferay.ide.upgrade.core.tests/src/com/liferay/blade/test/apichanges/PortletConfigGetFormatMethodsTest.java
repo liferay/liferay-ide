@@ -36,8 +36,8 @@ public class PortletConfigGetFormatMethodsTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "PortletConfigGetFormatMethods";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.PortletConfigGetFormatMethods";
 	}
 
 	@Override

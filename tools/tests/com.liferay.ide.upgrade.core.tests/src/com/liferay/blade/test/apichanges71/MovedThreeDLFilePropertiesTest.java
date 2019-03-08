@@ -28,8 +28,8 @@ public class MovedThreeDLFilePropertiesTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "MovedThreeDLFileProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay71.apichanges.MovedThreeDLFileProperties";
 	}
 
 	@Override

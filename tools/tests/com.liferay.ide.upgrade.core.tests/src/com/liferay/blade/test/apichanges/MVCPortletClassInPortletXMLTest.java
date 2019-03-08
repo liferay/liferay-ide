@@ -35,8 +35,8 @@ public class MVCPortletClassInPortletXMLTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "MVCPortletClassInPortletXML";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.MVCPortletClassInPortletXML";
 	}
 
 	@Override

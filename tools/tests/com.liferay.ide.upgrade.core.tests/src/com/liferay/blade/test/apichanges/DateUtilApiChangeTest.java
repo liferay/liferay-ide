@@ -22,8 +22,8 @@ import java.io.File;
 public class DateUtilApiChangeTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "DateUtilApiChange";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.DateUtilApiChange";
 	}
 
 	@Override

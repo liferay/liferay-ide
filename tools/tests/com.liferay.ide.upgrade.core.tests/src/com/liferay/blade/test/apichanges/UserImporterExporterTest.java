@@ -28,8 +28,8 @@ public class UserImporterExporterTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "UserImporterExporter";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.UserImporterExporter";
 	}
 
 	@Override

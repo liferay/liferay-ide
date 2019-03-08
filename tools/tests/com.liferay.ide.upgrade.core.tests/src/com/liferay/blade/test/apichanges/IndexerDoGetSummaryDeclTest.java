@@ -23,8 +23,8 @@ import java.io.File;
 public class IndexerDoGetSummaryDeclTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "IndexerDoGetSummaryDecl";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.IndexerDoGetSummaryDecl";
 	}
 
 	@Override

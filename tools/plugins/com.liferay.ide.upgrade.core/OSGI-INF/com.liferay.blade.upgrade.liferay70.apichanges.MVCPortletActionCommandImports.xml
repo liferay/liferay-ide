@@ -6,7 +6,6 @@
    <property name="problem.title" value="Moved MVCPortlet, ActionCommand and ActionCommandCache from util-bridges.jar to portal-service.jar"/>
    <property name="problem.section" value="#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar"/>
    <property name="auto.correct" value="import"/>
-   <property name="implName" value="MVCPortletActionCommandImports"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.AutoMigrator"/>

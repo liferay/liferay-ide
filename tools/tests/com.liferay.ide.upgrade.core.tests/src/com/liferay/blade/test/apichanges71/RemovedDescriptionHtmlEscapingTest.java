@@ -24,8 +24,8 @@ import java.io.File;
 public class RemovedDescriptionHtmlEscapingTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "RemovedDescriptionHtmlEscaping";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay71.apichanges.RemovedDescriptionHtmlEscaping";
 	}
 
 	@Override

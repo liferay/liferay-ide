@@ -28,8 +28,8 @@ public class ChangedBrowserCachePropertiesTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "ChangedBrowserCacheProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay71.apichanges.ChangedBrowserCacheProperties";
 	}
 
 	@Override

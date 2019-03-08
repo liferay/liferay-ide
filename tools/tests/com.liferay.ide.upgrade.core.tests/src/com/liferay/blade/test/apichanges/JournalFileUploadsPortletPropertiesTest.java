@@ -28,8 +28,8 @@ public class JournalFileUploadsPortletPropertiesTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "JournalFileUploadsPortletProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.JournalFileUploadsPortletProperties";
 	}
 
 	@Override

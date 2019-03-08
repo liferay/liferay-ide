@@ -6,7 +6,6 @@
    <property name="problem.summary" value="Removed the liferay-ui:trash-undo Tag and Replaced with liferay-trash:undo"/>
    <property name="problem.tickets" value="LPS-60779"/>
    <property name="auto.correct" value="jsptag"/>
-   <property name="implName" value="DeprecatedTrashUndoTags"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>

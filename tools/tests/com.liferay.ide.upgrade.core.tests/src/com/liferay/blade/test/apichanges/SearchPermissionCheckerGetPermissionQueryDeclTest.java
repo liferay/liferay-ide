@@ -23,8 +23,8 @@ import java.io.File;
 public class SearchPermissionCheckerGetPermissionQueryDeclTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "SearchPermissionCheckerGetPermissionQueryDecl";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.SearchPermissionCheckerGetPermissionQueryDecl";
 	}
 
 	@Override

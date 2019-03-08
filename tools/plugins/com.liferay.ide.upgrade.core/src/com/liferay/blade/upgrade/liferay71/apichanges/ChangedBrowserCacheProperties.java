@@ -27,8 +27,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = {
 	"file.extensions=properties", "problem.title=Changed Default Value for Browser Cache Properties",
 	"problem.summary=Changed Default Value for Browser Cache Properties", "problem.tickets=LPS-74452",
-	"problem.section=#changed-default-value-for-browser-cache-properties", "implName=ChangedBrowserCacheProperties",
-	"version=7.1"
+	"problem.section=#changed-default-value-for-browser-cache-properties", "version=7.1"
 },
 	service = FileMigrator.class)
 public class ChangedBrowserCacheProperties extends PropertiesFileMigrator {

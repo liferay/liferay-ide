@@ -44,7 +44,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
 		"l of these packages are affected by the split package problem",
 	"problem.tickets=LPS-61952", "problem.title=Renamed Packages to Fix the Split Packages Problem",
 	"problem.section=#renamed-packages-to-fix-the-split-packages-problem", "auto.correct=import",
-	"implName=RenamePortalKernelImports", "version=7.0"
+	 "version=7.0"
 },
 	service = {AutoFileMigrator.class, FileMigrator.class})
 public class RenamePortalKernelImports extends JavaImportsMigrator {

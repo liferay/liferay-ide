@@ -28,7 +28,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
 	"problem.title=Deprecated the liferay-ui:flags Tag and Replaced with liferay-flags:flags",
 	"problem.section=#deprecated-the-liferay-uiflags-tag-and-replaced-with-liferay-flagsflags",
 	"problem.summary=Deprecated the liferay-ui:flags Tag and Replaced with liferay-flags:flags",
-	"problem.tickets=LPS-60967", "auto.correct=jsptag", "implName=LiferayUIFlagsTags", "version=7.0"
+	"problem.tickets=LPS-60967", "auto.correct=jsptag",  "version=7.0"
 },
 	service = {AutoFileMigrator.class, FileMigrator.class})
 public class LiferayUIFlagsTags extends JSPTagMigrator {

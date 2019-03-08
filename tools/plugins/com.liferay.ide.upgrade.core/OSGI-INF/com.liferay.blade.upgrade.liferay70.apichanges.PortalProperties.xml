@@ -5,7 +5,6 @@
    <property name="problem.summary" value="Removed Portal Properties Used to Display Sections in Form Navigators"/>
    <property name="problem.tickets" value="LPS-54903"/>
    <property name="problem.section" value="#removed-portal-properties-used-to-display-sections-in-form-navigators"/>
-   <property name="implName" value="PortalProperties"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>

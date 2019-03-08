@@ -33,7 +33,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"problem.summary=Web content is now required to use a structure and template. A default structure and template " +
 		"named Basic Web Content was added to the global scope, and can be modified or deleted.",
 	"problem.tickets=LPS-45107", "problem.section=#web-content-articles-now-require-a-structure-and-template",
-	"implName=WebContentArticlesStrucAndTempl", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class WebContentArticlesStrucAndTempl extends JavaFileMigrator {

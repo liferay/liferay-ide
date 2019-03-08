@@ -37,7 +37,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 				"vocabulary.",
 	"problem.tickets=LPS-50764",
 	"problem.section=#migration-of-the-field-type-from-the-journal-article-api-into-a-vocabulary",
-	"implName=WebContentTypeRemoved", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class WebContentTypeRemoved extends JavaFileMigrator {

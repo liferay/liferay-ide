@@ -37,8 +37,8 @@ public class MobileDeviceRulesLegacyAPITest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "MobileDeviceRulesLegacyAPI";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.MobileDeviceRulesLegacyAPI";
 	}
 
 	@Override

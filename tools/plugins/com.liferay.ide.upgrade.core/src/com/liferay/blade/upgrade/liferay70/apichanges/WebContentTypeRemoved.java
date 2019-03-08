@@ -37,8 +37,7 @@ import org.osgi.service.component.annotations.Component;
 			"previous versions of Liferay, and the types from the existing articles are kept as categories of this " +
 				"vocabulary.",
 	"problem.tickets=LPS-50764",
-	"problem.section=#migration-of-the-field-type-from-the-journal-article-api-into-a-vocabulary",
-	"implName=WebContentTypeRemoved", "version=7.0"
+	"problem.section=#migration-of-the-field-type-from-the-journal-article-api-into-a-vocabulary", "version=7.0"
 },
 	service = FileMigrator.class)
 public class WebContentTypeRemoved extends JavaFileMigrator {

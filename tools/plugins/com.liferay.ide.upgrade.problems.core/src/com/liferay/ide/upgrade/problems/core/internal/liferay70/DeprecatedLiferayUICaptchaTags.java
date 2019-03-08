@@ -28,7 +28,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
 	"problem.title=Deprecated the liferay-ui:captcha Tag and Replaced with liferay-captcha:captcha",
 	"problem.section=#deprecated-the-liferay-uicaptcha-tag-and-replaced-with-liferay-captchacaptc",
 	"problem.summary=Deprecated the liferay-ui:captcha Tag and Replaced with liferay-captcha:captcha",
-	"problem.tickets=LPS-69383", "auto.correct=jsptag", "implName=DeprecatedLiferayUICaptchaTags", "version=7.0"
+	"problem.tickets=LPS-69383", "auto.correct=jsptag",  "version=7.0"
 },
 	service = {AutoFileMigrator.class, FileMigrator.class})
 public class DeprecatedLiferayUICaptchaTags extends JSPTagMigrator {

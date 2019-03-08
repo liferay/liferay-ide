@@ -29,7 +29,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
  */
 @Component(property = {
 	"file.extensions=java", "problem.title=PHP Portlet Support", "problem.summary=Removed PHP Portlet Support",
-	"problem.tickets=LPS-64052", "problem.section=#removed-php-portlet-support", "implName=PHPPortletExtends",
+	"problem.tickets=LPS-64052", "problem.section=#removed-php-portlet-support", 
 	"version=7.0"
 },
 	service = FileMigrator.class)

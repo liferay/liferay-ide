@@ -6,7 +6,6 @@
    <property name="problem.tickets" value="LPS-55364"/>
    <property name="problem.section" value="#moved-the-contact-name-exception-classes-to-inner-classes-of-contactnameexc"/>
    <property name="auto.correct" value="import"/>
-   <property name="implName" value="ContactNameExceptionImport"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.AutoMigrator"/>

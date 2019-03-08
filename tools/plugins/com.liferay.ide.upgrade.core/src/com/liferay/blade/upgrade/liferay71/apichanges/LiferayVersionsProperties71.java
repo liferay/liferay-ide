@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = {
 	"file.extensions=properties", "problem.title=liferay-versions key in Liferay Plugin Packages Properties",
 	"problem.summary=In order to deploy this project to 7.1 the liferay-versions property must be set to 7.1.0+",
-	"problem.tickets=", "problem.section=", "auto.correct=property", "implName=LiferayVersionsProperties", "version=7.1"
+	"problem.tickets=", "problem.section=", "auto.correct=property", "version=7.1"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class LiferayVersionsProperties71 extends BaseLiferayVersionsProperties {

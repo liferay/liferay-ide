@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=All Dynamic Data Lists APIs previously exposed as Liferay Portal API in 6.2 have been move out " +
 		"from portal-service into separate OSGi modules",
 	"problem.tickets=LPS-54704", "problem.title=Dynamic Data Lists APIs migrated to OSGi module",
-	"problem.section=#legacy", "implName=DDLRecordLegacyAPI", "version=7.0"
+	"problem.section=#legacy", "version=7.0"
 },
 	service = FileMigrator.class)
 public class DDLRecordLegacyAPI extends JavaFileMigrator {

@@ -32,8 +32,7 @@ import org.osgi.service.component.annotations.Component;
 			"r it. The convert.processes key was removed from portal.properties. Consequentially, ConvertProcess imp" +
 				"lementations must register as OSGi components.",
 	"problem.tickets=LPS-50604",
-	"problem.section=#convert-process-classes-are-no-longer-specified-via-the-convert-processes-p",
-	"implName=ConvertProcessProperties", "version=7.0"
+	"problem.section=#convert-process-classes-are-no-longer-specified-via-the-convert-processes-p", "version=7.0"
 },
 	service = FileMigrator.class)
 public class ConvertProcessProperties extends PropertiesFileMigrator {

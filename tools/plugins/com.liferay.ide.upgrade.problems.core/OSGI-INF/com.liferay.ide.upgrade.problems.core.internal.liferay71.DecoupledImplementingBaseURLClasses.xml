@@ -5,7 +5,6 @@
    <property name="problem.summary" value="Decoupled Implementing BaseURL Classes"/>
    <property name="problem.tickets" value="LPS-82119"/>
    <property name="problem.section" value="#decoupled-implementing-baseurl-classes"/>
-   <property name="implName" value="DecoupledImplementingBaseURLClasses"/>
    <property name="version" value="7.1"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

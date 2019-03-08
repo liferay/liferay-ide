@@ -30,7 +30,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
 	"problem.section=#removed-the-liferay-uiasset-categories-navigation-tag-and-replaced-with-lif",
 	"problem.summary=Removed the liferay-ui:asset-categories-navigation Tag and Replaced with liferay-asset:asset-" +
 		"categories-navigation",
-	"problem.tickets=LPS-60753", "auto.correct=jsptag", "implName=AssetCategoriesNavigationTags", "version=7.0"
+	"problem.tickets=LPS-60753", "auto.correct=jsptag",  "version=7.0"
 },
 	service = {AutoFileMigrator.class, FileMigrator.class})
 public class AssetCategoriesNavigationTags extends JSPTagMigrator {

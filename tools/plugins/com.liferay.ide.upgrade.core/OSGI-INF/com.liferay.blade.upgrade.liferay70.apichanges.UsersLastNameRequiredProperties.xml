@@ -5,7 +5,6 @@
    <property name="problem.summary" value="The USERS_LAST_NAME_REQUIRED property has been removed from portal.properties and the corresponding UI. Required names are now handled on a per-language basis via the language.properties files. It has also been removed as an option from the Portal Settings section of the Control Panel."/>
    <property name="problem.tickets" value="LPS-54956"/>
    <property name="problem.section" value="#removed-userslastnamerequired-from-portal-properties-in-favor-of-language-p"/>
-   <property name="implName" value="UsersLastNameRequiredProperties"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>

@@ -28,8 +28,8 @@ public class DLAppHelperLocalServiceUtilInvocationTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "DLAppHelperLocalServiceUtilInvocation";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.DLAppHelperLocalServiceUtilInvocation";
 	}
 
 	@Override

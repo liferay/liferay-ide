@@ -30,7 +30,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 @Component(property = {
 	"file.extensions=java,jsp,jspf", "problem.title=Changed the Usage of Asset Preview",
 	"problem.section=#changed-the-usage-of-asset-preview", "problem.summary=Changed the Usage of Asset Preview",
-	"problem.tickets=LPS-53972", "implName=AssetPreviewTags", "version=7.0"
+	"problem.tickets=LPS-53972",  "version=7.0"
 },
 	service = FileMigrator.class)
 public class AssetPreviewTags extends JavaFileMigrator {

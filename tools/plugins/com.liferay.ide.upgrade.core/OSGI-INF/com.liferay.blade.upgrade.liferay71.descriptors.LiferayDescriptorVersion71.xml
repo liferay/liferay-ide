@@ -5,7 +5,6 @@
    <property name="problem.summary" value="The descriptor XML DTD versions should be matched with version 7.1."/>
    <property name="problem.section" value="#descriptor-XML-DTD-version"/>
    <property name="auto.correct" value="descriptor"/>
-   <property name="implName" value="LiferayDescriptorVersion"/>
    <property name="version" value="7.1"/>
    <service>
       <provide interface="com.liferay.blade.api.AutoMigrator"/>

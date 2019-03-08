@@ -37,8 +37,7 @@ import org.osgi.service.component.annotations.Component;
 			"SearchContext, Query) has been removed, in favor of calling SearchEngineUtil.getQueryString(" +
 				"SearchContext, Query)",
 	"problem.tickets=LPS-55928",
-	"problem.section=#moved-indexer-addrelatedentryfields-and-indexer-reindexddmstructures-and-re",
-	"implName=IndexerThreeMethodsChange", "version=7.0"
+	"problem.section=#moved-indexer-addrelatedentryfields-and-indexer-reindexddmstructures-and-re", "version=7.0"
 },
 	service = FileMigrator.class)
 public class IndexerThreeMethodsChange extends JavaFileMigrator {

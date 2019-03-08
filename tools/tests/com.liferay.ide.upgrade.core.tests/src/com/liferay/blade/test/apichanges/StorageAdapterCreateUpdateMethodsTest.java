@@ -28,8 +28,8 @@ public class StorageAdapterCreateUpdateMethodsTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "StorageAdapterCreateUpdateMethods";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.StorageAdapterCreateUpdateMethods";
 	}
 
 	@Override

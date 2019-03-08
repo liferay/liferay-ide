@@ -33,7 +33,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"problem.summary=The method render has been removed from the interfaces AssetRenderer and WorkflowHandler.",
 	"problem.tickets=LPS-56705", "problem.title=Removed render Method from AssetRenderer API and WorkflowHandler API",
 	"problem.section=#removed-render-method-from-assetrenderer-api-and-workflowhandler-api",
-	"implName=AssetRendererAndWorkflowHandlerRenderInvocation", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class AssetRendererAndWorkflowHandlerRenderInvocation extends JavaFileMigrator {

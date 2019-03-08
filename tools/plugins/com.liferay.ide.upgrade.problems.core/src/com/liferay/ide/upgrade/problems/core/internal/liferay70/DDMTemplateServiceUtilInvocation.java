@@ -33,7 +33,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"problem.title=Added Required Parameter resourceClassNameId for DDM Template Search Operations",
 	"problem.section=#added-required-parameter-resourceclassnameid-for-ddm-template-search-operat",
 	"problem.summary=Added Required Parameter resourceClassNameId for DDM Template Search Operations",
-	"problem.tickets=LPS-52990", "implName=DDMTemplateServiceUtilInvocation", "version=7.0"
+	"problem.tickets=LPS-52990",  "version=7.0"
 },
 	service = FileMigrator.class)
 public class DDMTemplateServiceUtilInvocation extends JavaFileMigrator {

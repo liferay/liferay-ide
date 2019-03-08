@@ -5,7 +5,6 @@
    <property name="problem.section" value="#removed-the-liferay-uijournal-article-tag"/>
    <property name="problem.summary" value="Removed the liferay-ui:journal-article Tag"/>
    <property name="problem.tickets" value="LPS-69321"/>
-   <property name="implName" value="JournalArticleTags"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>

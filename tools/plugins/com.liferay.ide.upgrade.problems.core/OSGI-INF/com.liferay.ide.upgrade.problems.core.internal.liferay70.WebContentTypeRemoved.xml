@@ -5,7 +5,6 @@
    <property name="problem.title" value="Migration of the Field Type from the Journal Article API into a Vocabulary. The Journal API no longer supports this parameter. A new vocabulary called Web Content Types is created when migrating from previous versions of Liferay, and the types from the existing articles are kept as categories of this vocabulary."/>
    <property name="problem.tickets" value="LPS-50764"/>
    <property name="problem.section" value="#migration-of-the-field-type-from-the-journal-article-api-into-a-vocabulary"/>
-   <property name="implName" value="WebContentTypeRemoved"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

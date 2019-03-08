@@ -23,8 +23,8 @@ import java.io.File;
 public class ReservedUserIdExceptionTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "ReservedUserIdExceptionCatch";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.ReservedUserIdExceptionCatch";
 	}
 
 	@Override

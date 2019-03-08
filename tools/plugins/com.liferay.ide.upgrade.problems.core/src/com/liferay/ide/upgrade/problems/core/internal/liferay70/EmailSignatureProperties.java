@@ -30,7 +30,7 @@ import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 		"d Wiki",
 	"problem.tickets=LPS-44599",
 	"problem.section=#merged-configured-email-signature-field-into-the-body-of-email-messages-fro",
-	"implName=EmailSignatureProperties", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class EmailSignatureProperties extends PropertiesFileMigrator {

@@ -22,8 +22,8 @@ import java.io.File;
 public class MVCPortletInitParamsChangeClassTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "MVCPortletInitParamsChangeClass";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.MVCPortletInitParamsChangeClass";
 	}
 
 	@Override

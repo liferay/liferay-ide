@@ -26,8 +26,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=jsp,jspf",
 	"problem.title=Changed Behavior of liferay-ui:input-date Taglib's showDisableCheckbox Argument",
 	"problem.summary=Changed Tag Input Date Argument ShowDisableCheckBox", "problem.tickets=LPS-78475",
-	"problem.section=#changed-tag-input-date-argument-showdisablecheckbox",
-	"implName=ChangedShowDisableCheckboxBehavior", "version=7.1"
+	"problem.section=#changed-tag-input-date-argument-showdisablecheckbox", "version=7.1"
 },
 	service = FileMigrator.class)
 public class ChangedShowDisableCheckboxBehavior extends JSPTagMigrator {

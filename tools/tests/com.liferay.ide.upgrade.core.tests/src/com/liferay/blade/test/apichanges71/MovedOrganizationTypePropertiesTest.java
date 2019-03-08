@@ -28,8 +28,8 @@ public class MovedOrganizationTypePropertiesTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "MovedOrganizationTypeProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay71.apichanges.MovedOrganizationTypeProperties";
 	}
 
 	@Override

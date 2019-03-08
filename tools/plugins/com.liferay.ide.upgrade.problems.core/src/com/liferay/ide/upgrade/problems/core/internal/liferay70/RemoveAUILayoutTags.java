@@ -26,7 +26,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
 	"file.extensions=jsp,jspf", "problem.title=Removed the aui:layout Tag with No Direct Replacement",
 	"problem.section=#removed-the-auilayout-tag-with-no-direct-replacement",
 	"problem.summary=Removed the aui:layout Tag with No Direct Replacement", "problem.tickets=LPS-62935",
-	"implName=RemoveAUILayoutTags", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class RemoveAUILayoutTags extends JSPTagMigrator {

@@ -32,8 +32,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=java,jsp,jspf",
 	"problem.summary=Changed the BaseAssetRenderer APIs getIconPath Method ThemeDisplay Parameters",
 	"problem.tickets=no ticket number", "problem.title=BaseAssetRenderer API Changes",
-	"problem.section=#changed-the-baseassetrenderer-apis-geticonpath-method-themedisplay-parameters",
-	"implName=BaseAssetRendererGetIconPathDecl", "version=7.0"
+	"problem.section=#changed-the-baseassetrenderer-apis-geticonpath-method-themedisplay-parameters", "version=7.0"
 },
 	service = FileMigrator.class)
 public class BaseAssetRendererGetIconPathDecl extends JavaFileMigrator {

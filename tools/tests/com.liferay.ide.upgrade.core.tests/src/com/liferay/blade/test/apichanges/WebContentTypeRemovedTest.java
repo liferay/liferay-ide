@@ -28,8 +28,8 @@ public class WebContentTypeRemovedTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "WebContentTypeRemoved";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.WebContentTypeRemoved";
 	}
 
 	@Override

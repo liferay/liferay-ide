@@ -23,8 +23,8 @@ import java.io.File;
 public class EmailSignaturePropertiesTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "EmailSignatureProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.EmailSignatureProperties";
 	}
 
 	@Override

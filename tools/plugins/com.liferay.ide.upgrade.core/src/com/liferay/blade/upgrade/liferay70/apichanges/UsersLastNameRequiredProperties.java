@@ -30,8 +30,7 @@ import org.osgi.service.component.annotations.Component;
 		"corresponding UI. Required names are now handled on a per-language basis via the language.properties files. " +
 			"It has also been removed as an option from the Portal Settings section of the Control Panel.",
 	"problem.tickets=LPS-54956",
-	"problem.section=#removed-userslastnamerequired-from-portal-properties-in-favor-of-language-p",
-	"implName=UsersLastNameRequiredProperties", "version=7.0"
+	"problem.section=#removed-userslastnamerequired-from-portal-properties-in-favor-of-language-p", "version=7.0"
 },
 	service = FileMigrator.class)
 public class UsersLastNameRequiredProperties extends PropertiesFileMigrator {

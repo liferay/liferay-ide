@@ -61,8 +61,8 @@ public class DeprecatedMethodsTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "DeprecatedMethodsMigrator";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.deprecatedmethods.DeprecatedMethodsMigrator";
 	}
 
 	@Override

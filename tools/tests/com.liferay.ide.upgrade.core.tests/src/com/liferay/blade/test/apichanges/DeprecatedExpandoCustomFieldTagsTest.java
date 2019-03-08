@@ -28,8 +28,8 @@ public class DeprecatedExpandoCustomFieldTagsTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "DeprecatedExpandoCustomFieldTags";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.DeprecatedExpandoCustomFieldTags";
 	}
 
 	@Override

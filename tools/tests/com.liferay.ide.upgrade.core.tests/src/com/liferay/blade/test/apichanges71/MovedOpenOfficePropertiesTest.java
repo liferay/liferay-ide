@@ -28,8 +28,8 @@ public class MovedOpenOfficePropertiesTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "MovedOpenOfficeProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay71.apichanges.MovedOpenOfficeProperties";
 	}
 
 	@Override

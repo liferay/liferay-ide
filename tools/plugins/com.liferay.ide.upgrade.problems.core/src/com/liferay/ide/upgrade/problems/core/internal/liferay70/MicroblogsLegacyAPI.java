@@ -32,7 +32,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"problem.summary=All Microblogs APIs previously exposed as Liferay Portal API in 6.2 have been move out from " +
 		"portal-service into separate OSGi modules",
 	"problem.tickets=LPS-56041", "problem.title=Microblogs APIs migrated to OSGi module", "problem.section=#legacy",
-	"implName=MicroblogsLegacyAPI", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class MicroblogsLegacyAPI extends JavaFileMigrator {

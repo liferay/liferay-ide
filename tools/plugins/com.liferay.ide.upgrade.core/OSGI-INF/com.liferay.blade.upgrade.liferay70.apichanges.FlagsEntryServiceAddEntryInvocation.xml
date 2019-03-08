@@ -5,7 +5,6 @@
    <property name="problem.section" value="#flagsentryservice-addentry-method-throws-portalexception"/>
    <property name="problem.summary" value="FlagsEntryService.addEntry Method Throws PortalException"/>
    <property name="problem.tickets" value="LPS-63109"/>
-   <property name="implName" value="FlagsEntryServiceAddEntryInvocation"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>

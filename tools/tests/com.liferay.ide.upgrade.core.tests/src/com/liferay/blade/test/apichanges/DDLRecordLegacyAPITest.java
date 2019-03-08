@@ -88,8 +88,8 @@ public class DDLRecordLegacyAPITest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "DDLRecordLegacyAPI";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.DDLRecordLegacyAPI";
 	}
 
 	@Override

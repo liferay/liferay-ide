@@ -34,7 +34,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
 			"ContactLastNameException has been moved to inner classes in a new class called ContactNameException.",
 		"problem.tickets=LPS-55364",
 		"problem.section=#moved-the-contact-name-exception-classes-to-inner-classes-of-contactnameexc",
-		"auto.correct=import", "implName=ContactNameExceptionImport", "version=7.0"
+		"auto.correct=import",  "version=7.0"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

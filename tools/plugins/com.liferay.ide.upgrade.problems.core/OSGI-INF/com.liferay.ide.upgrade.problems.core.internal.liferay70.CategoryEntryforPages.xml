@@ -5,7 +5,6 @@
    <property name="problem.summary" value="The category entry for Site Administration &gt; Pages has been deprecated in favor of Site Administration &gt; Navigation."/>
    <property name="problem.tickets" value="LPS-63667"/>
    <property name="problem.section" value="#deprecated-category-entry-for-pages"/>
-   <property name="implName" value="CategoryEntryforPages"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

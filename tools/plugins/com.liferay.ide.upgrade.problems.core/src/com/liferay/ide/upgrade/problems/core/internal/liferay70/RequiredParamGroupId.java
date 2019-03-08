@@ -34,7 +34,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 		"parameter. Previously, it had to be included in the ServiceContext parameter passed to the method.",
 	"problem.tickets=LPS-54570",
 	"problem.section=#added-required-parameter-groupid-for-adding-tags-categories-and-vocabularie",
-	"implName=RequiredParamGroupId", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class RequiredParamGroupId extends JavaFileMigrator {

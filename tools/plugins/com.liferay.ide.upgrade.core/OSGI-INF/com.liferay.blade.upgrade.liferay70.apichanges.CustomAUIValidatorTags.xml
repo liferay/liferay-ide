@@ -5,7 +5,6 @@
    <property name="problem.section" value="#custom-aui-validators-are-no-longer-implicitly-required"/>
    <property name="problem.summary" value="The AUI Validator tag no longer forces custom validators to be required"/>
    <property name="problem.tickets" value="LPS-60995"/>
-   <property name="implName" value="CustomAUIValidatorTags"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>

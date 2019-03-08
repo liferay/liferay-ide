@@ -55,8 +55,7 @@ import org.w3c.dom.Text;
 		"package com.liferay.portal.kernel.portlet.bridges.mvc in portal-service.jar.",
 	"problem.tickets=LPS-50156",
 	"problem.title=Moved MVCPortlet, ActionCommand and ActionCommandCache from util-bridges.jar to portal-service.jar",
-	"problem.section=#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar",
-	"implName=MVCPortletClassInPortletXML", "auto.correct=portlet-xml-portlet-class", "version=7.0"
+	"problem.section=#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 @SuppressWarnings("restriction")

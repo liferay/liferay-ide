@@ -37,8 +37,8 @@ public class BackgroundTaskLegacyAPITest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "BackgroundTaskLegacyAPI";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.BackgroundTaskLegacyAPI";
 	}
 
 	@Override
