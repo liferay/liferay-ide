@@ -17,10 +17,11 @@ package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
@@ -270,13 +271,13 @@ public class UpgradeTaskStepItem implements IExpansionListener, UpgradeTaskItem,
 
 	@Override
 	public void onUpgradeEvent(UpgradeEvent upgradeEvent) {
-		if (upgradeEvent instanceof UpgradeTaskStepStatusChangedEvent) {
-			UpgradeTaskStepStatusChangedEvent upgradeTaskStepActionStatusChangedEvent =
-				(UpgradeTaskStepStatusChangedEvent)upgradeEvent;
+		if (upgradeEvent instanceof UpgradePlanElementStatusChangedEvent) {
+			UpgradePlanElementStatusChangedEvent upgradePlanElementStatusChangedEvent =
+				(UpgradePlanElementStatusChangedEvent)upgradeEvent;
 
-			UpgradeTaskStep upgradeTaskStepAction = upgradeTaskStepActionStatusChangedEvent.getUpgradeTaskStep();
+			UpgradePlanElement upgradePlanElement = upgradePlanElementStatusChangedEvent.getUpgradePlanElement();
 
-			if (upgradeTaskStepAction.equals(_upgradeTaskStep)) {
+			if (upgradePlanElement.equals(_upgradeTaskStep)) {
 				UIUtil.async(() -> _updateEnablement(_upgradeTaskStep, _enables));
 			}
 		}
