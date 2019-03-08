@@ -36,6 +36,10 @@ public class UpgradeTasksCorePlugin extends Plugin {
 		return new Status(IStatus.ERROR, ID, msg, e);
 	}
 
+	public static IStatus createInfoStatus(String message) {
+		return new Status(IStatus.INFO, ID, message);
+	}
+
 	public static Plugin getDefault() {
 		return _instance;
 	}

@@ -3,6 +3,7 @@
    <property name="id" value="upgrade_workspace_plugin_version"/>
    <property name="order" value="2"/>
    <property name="stepId" value="setup_liferay_workspace"/>
+   <property name="requirement" value="recommended"/>
    <property name="title" value="Upgrade Workspace Plugin Version"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>

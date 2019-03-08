@@ -12,12 +12,12 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.sdk;
+package com.liferay.ide.upgrade.tasks.ui.internal.sdk;
 
 /**
  * @author Gregory Amerson
  */
-public class MoveLegacyProjectsStepKeys {
+public class MigratePluginsSDKProjectsToWorkspaceStepKeys {
 
 	public static final String DESCRIPTION = "Move legacy SDK projects into your liferay workspace.";
 

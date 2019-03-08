@@ -4,7 +4,7 @@
    <property name="id" value="setup_liferay_workspace"/>
    <property name="imagePath" value="icons/liferay_new.png"/>
    <property name="requirement" value="required"/>
-   <property name="order" value="2"/>
+   <property name="order" value="1"/>
    <property name="taskId" value="setup_development_environment"/>
    <property name="title" value="Setup Liferay Workspace"/>
    <service scope="prototype">

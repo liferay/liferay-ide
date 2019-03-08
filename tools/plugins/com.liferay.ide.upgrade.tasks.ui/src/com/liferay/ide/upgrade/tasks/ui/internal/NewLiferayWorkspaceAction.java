@@ -14,18 +14,25 @@
 
 package com.liferay.ide.upgrade.tasks.ui.internal;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
+import com.liferay.ide.upgrade.tasks.core.code.SetupLiferayWorkspaceStepKeys;
 
 import java.nio.file.Paths;
 
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -45,10 +52,24 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Gregory Amerson
  */
 @Component(
-	property = {"id=new_liferay_workspace", "order=1", "stepId=setup_liferay_workspace", "title=New Liferay Workspace"},
+	property = {
+		"id=new_liferay_workspace", "order=1", "stepId=" + SetupLiferayWorkspaceStepKeys.ID,
+		"title=New Liferay Workspace"
+	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class NewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction implements SapphireContentAccessor {
+
+	@Override
+	public boolean appliesTo(UpgradePlan upgradePlan) {
+		java.nio.file.Path path = upgradePlan.getCurrentProjectLocation();
+
+		if (LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toString())) {
+			return false;
+		}
+
+		return true;
+	}
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -81,9 +102,22 @@ public class NewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction impleme
 
 			java.nio.file.Path path = Paths.get(parentPath.toOSString());
 
-			path = path.resolve(get(newLiferayWorkspaceOp.getWorkspaceName()));
+			String workspaceName = get(newLiferayWorkspaceOp.getWorkspaceName());
+
+			path = path.resolve(workspaceName);
 
 			upgradePlan.setTargetProjectLocation(path);
+
+			setStatus(UpgradePlanElementStatus.COMPLETED);
+
+			IProject project = CoreUtil.getProject(workspaceName);
+
+			_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, Collections.singletonList(project)));
+		}
+		else {
+			setStatus(UpgradePlanElementStatus.FAILED);
+
+			return UpgradeTasksUIPlugin.createErrorStatus("New Liferay Workspace was not created.");
 		}
 
 		return Status.OK_STATUS;

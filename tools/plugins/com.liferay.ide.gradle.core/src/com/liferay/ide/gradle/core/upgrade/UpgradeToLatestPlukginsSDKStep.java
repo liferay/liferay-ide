@@ -12,12 +12,13 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.sdk;
+package com.liferay.ide.gradle.core.upgrade;
 
 import com.liferay.ide.gradle.core.GradleUtil;
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
+import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKTaskKeys;
 import com.liferay.ide.upgrade.tasks.core.sdk.UpgradeToLatestPluginsSDKStepKeys;
 
 import java.util.List;
@@ -38,12 +39,13 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=upgrade_to_latest_plugins_sdk", "order=2", "stepId=" + UpgradeToLatestPluginsSDKStepKeys.ID,
-		"title=Upgrade To Latest Plugins SDK"
+		"description=" + UpgradeToLatestPluginsSDKStepKeys.DESCRIPTION, "id=" + UpgradeToLatestPluginsSDKStepKeys.ID,
+		"imagePath=icons/new.png", "requirement=required", "order=0", "taskId=" + MigratePluginsSDKTaskKeys.ID,
+		"title=" + UpgradeToLatestPluginsSDKStepKeys.TITLE
 	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class UpgradeToLatestPluginsSDKAction extends BaseUpgradeTaskStepAction {
+public class UpgradeToLatestPlukginsSDKStep extends BaseUpgradeTaskStep {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {

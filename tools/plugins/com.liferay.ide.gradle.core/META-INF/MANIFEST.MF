@@ -29,6 +29,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.osgi.services,
  org.eclipse.jdt.launching,
  org.eclipse.ltk.core.refactoring,
- org.eclipse.core.expressions
+ org.eclipse.core.expressions,
+ com.liferay.ide.upgrade.tasks.core,
+ com.liferay.ide.upgrade.plan.core
 Service-Component: OSGI-INF/com.liferay.ide.gradle.core.LiferayGradleWorkspaceProjectProvider.xml,
- OSGI-INF/com.liferay.ide.gradle.core.GradleProjectSynchronizer.xml
+ OSGI-INF/com.liferay.ide.gradle.core.GradleProjectSynchronizer.xml,
+ OSGI-INF/com.liferay.ide.gradle.core.upgrade.UpgradeToLatestPlukginsSDKStep.xml

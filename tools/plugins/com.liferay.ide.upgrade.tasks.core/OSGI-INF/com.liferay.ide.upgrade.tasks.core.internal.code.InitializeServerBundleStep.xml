@@ -4,7 +4,7 @@
    <property name="id" value="initialize_server_bundle"/>
    <property name="imagePath" value="icons/server.gif"/>
    <property name="requirement" value="recommended"/>
-   <property name="order" value="4"/>
+   <property name="order" value="3"/>
    <property name="taskId" value="setup_development_environment"/>
    <property name="title" value="Initialize Server Bundle"/>
    <service scope="prototype">

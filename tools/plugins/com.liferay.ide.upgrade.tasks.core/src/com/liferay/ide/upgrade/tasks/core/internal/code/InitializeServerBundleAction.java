@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.jobs.InitBundleJob;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
@@ -73,6 +74,15 @@ public class InitializeServerBundleAction extends BaseUpgradeTaskStepAction {
 		InitBundleJob job = new InitBundleJob(project, project.getName(), bundleUrl);
 
 		job.schedule();
+
+		try {
+			job.join();
+		}
+		catch (InterruptedException ie) {
+			setStatus(UpgradePlanElementStatus.FAILED);
+		}
+
+		setStatus(UpgradePlanElementStatus.COMPLETED);
 
 		return Status.OK_STATUS;
 	}

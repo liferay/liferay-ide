@@ -40,7 +40,7 @@ public class GradleUtilTests extends ProjectBase {
 
 		ips.before();
 
-		GradleUtil.sychronizeProject(ips.getIPath(), npm);
+		GradleUtil.synchronizeProject(ips.getIPath(), npm);
 
 		waitForBuildAndValidation();
 
@@ -65,7 +65,7 @@ public class GradleUtilTests extends ProjectBase {
 
 		ips.before();
 
-		GradleUtil.sychronizeProject(ips.getIPath(), npm);
+		GradleUtil.synchronizeProject(ips.getIPath(), npm);
 
 		waitForBuildAndValidation();
 

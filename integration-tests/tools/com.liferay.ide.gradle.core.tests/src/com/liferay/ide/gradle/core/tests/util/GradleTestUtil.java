@@ -54,7 +54,7 @@ public class GradleTestUtil {
 	public static LiferayGradleProject fullImportGradleProject(ImportProjectSupport ips) throws Exception {
 		IProgressMonitor monitor = new NullProgressMonitor();
 
-		IStatus status = GradleUtil.sychronizeProject(new Path(ips.getPath()), monitor);
+		IStatus status = GradleUtil.synchronizeProject(new Path(ips.getPath()), monitor);
 
 		waitForBuildAndValidation();
 

@@ -22,6 +22,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
@@ -120,6 +121,12 @@ public class UpgradeTaskStepItem implements IExpansionListener, UpgradeTaskItem,
 
 						@Override
 						protected IStatus run(IProgressMonitor progressMonitor) {
+							List<UpgradeTaskStepAction> actions = _upgradeTaskStep.getActions();
+
+							if (actions.isEmpty()) {
+								return _upgradeTaskStep.perform(progressMonitor);
+							}
+
 							return Status.OK_STATUS;
 						}
 

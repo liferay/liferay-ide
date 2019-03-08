@@ -22,6 +22,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
@@ -118,6 +122,11 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	@Override
 	public String getUrl() {
 		return _url;
+	}
+
+	@Override
+	public IStatus perform(IProgressMonitor progressMonitor) {
+		return Status.CANCEL_STATUS;
 	}
 
 	private void _lookupActions(ComponentContext componentContext) {

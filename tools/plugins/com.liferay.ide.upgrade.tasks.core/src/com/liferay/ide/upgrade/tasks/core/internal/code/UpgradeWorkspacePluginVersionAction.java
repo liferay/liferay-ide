@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.tasks.core.internal.code;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.tasks.core.code.SetupLiferayWorkspaceStepKeys;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -29,8 +30,8 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=upgrade_workspace_plugin_version", "order=2", "stepId=setup_liferay_workspace",
-		"title=Upgrade Workspace Plugin Version"
+		"id=upgrade_workspace_plugin_version", "order=2", "stepId=" + SetupLiferayWorkspaceStepKeys.ID,
+		"requirement=recommended", "title=Upgrade Workspace Plugin Version"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
