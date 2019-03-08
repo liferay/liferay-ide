@@ -41,7 +41,7 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 
 	@Override
 	public boolean completed() {
-		if (!UpgradeTaskStepActionStatus.INCOMPLETE.equals(getStatus())) {
+		if (!UpgradePlanElementStatus.INCOMPLETE.equals(getStatus())) {
 			return true;
 		}
 
@@ -74,27 +74,11 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 	}
 
 	@Override
-	public UpgradeTaskStepActionStatus getStatus() {
-		return _upgradeTaskStepActionStatus;
-	}
-
-	@Override
 	public String getStepId() {
 		return _stepId;
 	}
 
-	@Override
-	public void setStatus(UpgradeTaskStepActionStatus upgradeTaskStepActionStatus) {
-		UpgradeTaskStepActionStatusChangedEvent event = new UpgradeTaskStepActionStatusChangedEvent(
-			this, _upgradeTaskStepActionStatus, upgradeTaskStepActionStatus);
-
-		_upgradeTaskStepActionStatus = upgradeTaskStepActionStatus;
-
-		_upgradePlanner.dispatch(event);
-	}
-
 	private String _stepId;
 	private UpgradePlanner _upgradePlanner;
-	private UpgradeTaskStepActionStatus _upgradeTaskStepActionStatus = UpgradeTaskStepActionStatus.INCOMPLETE;
 
 }

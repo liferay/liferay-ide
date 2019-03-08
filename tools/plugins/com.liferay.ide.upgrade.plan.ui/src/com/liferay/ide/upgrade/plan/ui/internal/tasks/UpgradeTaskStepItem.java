@@ -21,7 +21,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
@@ -60,17 +60,14 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
 /**
- * @author Terry Jia
- * @author Gregory Amerson
+ * @author Christopher Bryan Boyd
  */
-public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTaskItem, UpgradeListener {
+public class UpgradeTaskStepItem implements IExpansionListener, UpgradeTaskItem, UpgradeListener {
 
-	public UpgradeTaskStepActionItem(
-		FormToolkit formToolkit, ScrolledForm scrolledForm, UpgradeTaskStepAction upgradeTaskStepAction) {
-
+	public UpgradeTaskStepItem(FormToolkit formToolkit, ScrolledForm scrolledForm, UpgradeTaskStep upgradeTaskStep) {
 		_formToolkit = formToolkit;
 		_scrolledForm = scrolledForm;
-		_upgradeTaskStepAction = upgradeTaskStepAction;
+		_upgradeTaskStep = upgradeTaskStep;
 
 		Composite parentComposite = _formToolkit.createComposite(_scrolledForm.getBody());
 
@@ -84,11 +81,11 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 		parentComposite.setLayout(new TableWrapLayout());
 
-		Label label = _formToolkit.createLabel(parentComposite, _upgradeTaskStepAction.getDescription());
+		Label label = _formToolkit.createLabel(parentComposite, _upgradeTaskStep.getDescription());
 
 		_disposables.add(() -> label.dispose());
 
-		if (_upgradeTaskStepAction == null) {
+		if (_upgradeTaskStep == null) {
 			return;
 		}
 
@@ -119,11 +116,11 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 				@Override
 				public void linkActivated(HyperlinkEvent e) {
-					new Job("Performing " + _upgradeTaskStepAction.getTitle() + "...") {
+					new Job("Performing " + _upgradeTaskStep.getTitle() + "...") {
 
 						@Override
 						protected IStatus run(IProgressMonitor progressMonitor) {
-							return _perform(progressMonitor);
+							return Status.OK_STATUS;
 						}
 
 					}.schedule();
@@ -145,6 +142,34 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 		_disposables.add(() -> fillLabel.dispose());
 
+		Image taskStepRestartImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_RESTART_IMAGE);
+
+		ImageHyperlink taskStepRestartImageHyperlink = createImageHyperlink(
+			_formToolkit, _buttonComposite, taskStepRestartImage, this, "Click to restart");
+
+		taskStepRestartImageHyperlink.setEnabled(true);
+
+		taskStepRestartImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+
+		taskStepRestartImageHyperlink.addHyperlinkListener(
+			new HyperlinkAdapter() {
+
+				@Override
+				public void linkActivated(HyperlinkEvent e) {
+					new Job(_upgradeTaskStep.getTitle() + " restarting.") {
+
+						@Override
+						protected IStatus run(IProgressMonitor monitor) {
+							return _restartStep();
+						}
+
+					}.schedule();
+				}
+
+			});
+
+		_disposables.add(() -> taskStepRestartImageHyperlink.dispose());
+
 		Image taskStepActionCompleteImage = UpgradePlanUIPlugin.getImage(
 			UpgradePlanUIPlugin.TASK_STEP_ACTION_COMPLETE_IMAGE);
 
@@ -158,7 +183,7 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 				@Override
 				public void linkActivated(HyperlinkEvent e) {
-					new Job("Completing " + _upgradeTaskStepAction.getTitle() + "...") {
+					new Job("Completing " + _upgradeTaskStep.getTitle() + "...") {
 
 						@Override
 						protected IStatus run(IProgressMonitor monitor) {
@@ -201,7 +226,7 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 		_upgradePlanner.addListener(this);
 
-		_updateEnablement(upgradeTaskStepAction, _enables);
+		_updateEnablement(upgradeTaskStep, _enables);
 	}
 
 	@Override
@@ -223,7 +248,7 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 	@Override
 	public void expansionStateChanged(ExpansionEvent expansionEvent) {
-		ISelection selection = new StructuredSelection(_upgradeTaskStepAction);
+		ISelection selection = new StructuredSelection(_upgradeTaskStep);
 
 		SelectionChangedEvent selectionChangedEvent = new SelectionChangedEvent(this, selection);
 
@@ -252,12 +277,8 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 			UpgradePlanElement upgradePlanElement = upgradePlanElementStatusChangedEvent.getUpgradePlanElement();
 
-			if (upgradePlanElement instanceof UpgradeTaskStepAction) {
-				UpgradeTaskStepAction upgradeTaskStepAction = (UpgradeTaskStepAction)upgradePlanElement;
-
-				if (upgradeTaskStepAction.equals(_upgradeTaskStepAction)) {
-					UIUtil.async(() -> _updateEnablement(_upgradeTaskStepAction, _enables));
-				}
+			if (upgradePlanElement.equals(_upgradeTaskStep)) {
+				UIUtil.async(() -> _updateEnablement(_upgradeTaskStep, _enables));
 			}
 		}
 	}
@@ -271,10 +292,10 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 	public void setSelection(ISelection selection) {
 	}
 
-	private static void _updateEnablement(UpgradeTaskStepAction upgradeTaskStepAction, Collection<Control> enables) {
+	private static void _updateEnablement(UpgradeTaskStep upgradeTaskStep, Collection<Control> enables) {
 		AtomicBoolean enabled = new AtomicBoolean(false);
 
-		if (upgradeTaskStepAction.enabled() && !upgradeTaskStepAction.completed()) {
+		if (upgradeTaskStep.enabled() && !upgradeTaskStep.completed()) {
 			enabled.set(true);
 		}
 
@@ -288,15 +309,19 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 	}
 
 	private void _complete() {
-		_upgradeTaskStepAction.setStatus(UpgradePlanElementStatus.COMPLETED);
+		_upgradeTaskStep.setStatus(UpgradePlanElementStatus.COMPLETED);
 	}
 
-	private IStatus _perform(IProgressMonitor progressMonitor) {
-		return _upgradeTaskStepAction.perform(progressMonitor);
+	private IStatus _restartStep() {
+		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+
+		upgradePlanner.restartStep(_upgradeTaskStep);
+
+		return Status.OK_STATUS;
 	}
 
 	private void _skip() {
-		_upgradeTaskStepAction.setStatus(UpgradePlanElementStatus.SKIPPED);
+		_upgradeTaskStep.setStatus(UpgradePlanElementStatus.SKIPPED);
 	}
 
 	private Composite _buttonComposite;
@@ -306,6 +331,6 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private ScrolledForm _scrolledForm;
 	private UpgradePlanner _upgradePlanner;
-	private final UpgradeTaskStepAction _upgradeTaskStepAction;
+	private final UpgradeTaskStep _upgradeTaskStep;
 
 }

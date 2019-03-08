@@ -14,6 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
+
 import java.util.Dictionary;
 
 import org.osgi.service.component.ComponentContext;
@@ -32,6 +34,8 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 		_id = getStringProperty(properties, "id");
 		_imagePath = getStringProperty(properties, "imagePath");
 		_title = getStringProperty(properties, "title");
+
+		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 	}
 
 	@Override
@@ -54,8 +58,22 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 	}
 
 	@Override
+	public UpgradePlanElementStatus getStatus() {
+		return _upgradePlanElementStatus;
+	}
+
+	@Override
 	public String getTitle() {
 		return _title;
+	}
+
+	public void setStatus(UpgradePlanElementStatus upgradePlanElementStatus) {
+		UpgradePlanElementStatusChangedEvent upgradePlanElementStatusChangedEvent =
+			new UpgradePlanElementStatusChangedEvent(this, _upgradePlanElementStatus, upgradePlanElementStatus);
+
+		_upgradePlanElementStatus = upgradePlanElementStatus;
+
+		_upgradePlanner.dispatch(upgradePlanElementStatusChangedEvent);
 	}
 
 	@Override
@@ -67,5 +85,7 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 	private String _id;
 	private String _imagePath;
 	private String _title;
+	private UpgradePlanElementStatus _upgradePlanElementStatus = UpgradePlanElementStatus.INCOMPLETE;
+	private UpgradePlanner _upgradePlanner;
 
 }

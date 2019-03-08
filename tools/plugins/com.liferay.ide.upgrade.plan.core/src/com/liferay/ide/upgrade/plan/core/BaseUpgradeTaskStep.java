@@ -51,7 +51,7 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 		Stream<UpgradeTaskStepAction> stream = getActions().stream();
 
 		long count = stream.filter(
-			action -> UpgradeTaskStepActionStatus.INCOMPLETE.equals(action.getStatus())
+			action -> UpgradePlanElementStatus.INCOMPLETE.equals(action.getStatus())
 		).count();
 
 		if (count == 0) {
@@ -85,7 +85,7 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 		).flatMap(
 			actions -> actions.stream()
 		).filter(
-			action -> UpgradeTaskStepActionStatus.INCOMPLETE.equals(action.getStatus())
+			action -> UpgradePlanElementStatus.INCOMPLETE.equals(action.getStatus())
 		).count();
 
 		if (count > 0) {

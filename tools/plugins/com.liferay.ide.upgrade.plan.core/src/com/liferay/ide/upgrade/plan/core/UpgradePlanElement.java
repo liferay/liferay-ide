@@ -45,6 +45,8 @@ public interface UpgradePlanElement {
 
 	public String getImagePath();
 
+	public UpgradePlanElementStatus getStatus();
+
 	public default String getStringProperty(Dictionary<String, Object> properties, String key) {
 		Object value = properties.get(key);
 
@@ -56,5 +58,7 @@ public interface UpgradePlanElement {
 	}
 
 	public String getTitle();
+
+	public void setStatus(UpgradePlanElementStatus upgradePlanElementStatus);
 
 }
