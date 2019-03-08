@@ -155,6 +155,12 @@ public class UpgradePlannerService implements UpgradePlanner {
 				_currentUpgradePlan = new StandardUpgradePlan(
 					name, currentVersion, targetVersion, projectPath, upgradeTaskCategoryIds);
 
+				String targetProjectLocationValue = upgradePlanMemento.getString("targetProjectLocation");
+
+				if (targetProjectLocationValue != null) {
+					_currentUpgradePlan.setTargetProjectLocation(Paths.get(targetProjectLocationValue));
+				}
+
 				_loadActionStatus(upgradePlanMemento, _currentUpgradePlan);
 
 				_loadUpgradeProblems(upgradePlanMemento, _currentUpgradePlan);
@@ -226,6 +232,12 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 			if (currentProjectLocation != null) {
 				upgradePlanMemento.putString("currentProjectLocation", currentProjectLocation.toString());
+			}
+
+			Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
+
+			if (targetProjectLocation != null) {
+				upgradePlanMemento.putString("targetProjectLocation", targetProjectLocation.toString());
 			}
 
 			List<String> upgradeTaskCategories = upgradePlan.getUpgradeTaskCategories();
