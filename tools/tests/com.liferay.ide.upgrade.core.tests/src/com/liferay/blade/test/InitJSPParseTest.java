@@ -37,7 +37,7 @@ public class InitJSPParseTest {
 
 	@Test
 	public void initParseErrorCheck() throws Exception {
-		ServiceReference<Migration> sr = _context .getServiceReference(Migration.class);
+		ServiceReference<Migration> sr = _context.getServiceReference(Migration.class);
 
 		Migration m = _context.getService(sr);
 
@@ -45,7 +45,7 @@ public class InitJSPParseTest {
 
 		List<Problem> problems = m.findProblems(new File("jsptests/jukebox-portlet/"), versions, new NullProgressMonitor());
 
-		Assert.assertEquals("", 332, problems.size());
+		Assert.assertEquals("", 337, problems.size());
 
 		boolean found = false;
 
