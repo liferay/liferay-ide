@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.IStatus;
 /**
  * @author Terry Jia
  */
-public interface Synchronizer {
+public interface ProjectSynchronizer {
 
 	public IStatus synchronizePath(IPath path, IProgressMonitor progressMonitor);
 

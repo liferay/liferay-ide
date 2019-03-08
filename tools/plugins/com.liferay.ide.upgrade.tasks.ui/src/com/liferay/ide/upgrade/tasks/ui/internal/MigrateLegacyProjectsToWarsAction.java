@@ -16,7 +16,7 @@ package com.liferay.ide.upgrade.tasks.ui.internal;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.project.core.Synchronizer;
+import com.liferay.ide.project.core.ProjectSynchronizer;
 import com.liferay.ide.project.core.model.ProjectNamedItem;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.ui.util.UIUtil;
@@ -141,7 +141,7 @@ public class MigrateLegacyProjectsToWarsAction extends BaseUpgradeTaskStepAction
 	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 	@Reference(target = "(type=gradle)")
-	private Synchronizer _synchronizer;
+	private ProjectSynchronizer _synchronizer;
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;

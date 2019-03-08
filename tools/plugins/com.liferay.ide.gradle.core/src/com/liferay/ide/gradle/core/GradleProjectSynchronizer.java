@@ -14,7 +14,7 @@
 
 package com.liferay.ide.gradle.core;
 
-import com.liferay.ide.project.core.Synchronizer;
+import com.liferay.ide.project.core.ProjectSynchronizer;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -25,8 +25,8 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Terry Jia
  */
-@Component(property = "type=gradle", service = Synchronizer.class)
-public class GradleSynchronizer implements Synchronizer {
+@Component(property = "type=gradle", service = ProjectSynchronizer.class)
+public class GradleProjectSynchronizer implements ProjectSynchronizer {
 
 	@Override
 	public IStatus synchronizePath(IPath path, IProgressMonitor progressMonitor) {
