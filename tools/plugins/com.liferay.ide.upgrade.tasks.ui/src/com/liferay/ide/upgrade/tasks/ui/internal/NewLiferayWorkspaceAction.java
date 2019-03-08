@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.tasks.ui.internal;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
@@ -30,7 +31,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
@@ -77,15 +77,19 @@ public class NewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction {
 			});
 
 		if (returnCode.get() == Window.OK) {
-			Value<Path> location = newLiferayWorkspaceOp.getLocation();
+			Path parentPath = _getter.get(newLiferayWorkspaceOp.getLocation());
 
-			Path content = location.content();
+			java.nio.file.Path path = Paths.get(parentPath.toOSString());
 
-			upgradePlan.setTargetProjectLocation(Paths.get(content.toOSString()));
+			path = path.resolve(_getter.get(newLiferayWorkspaceOp.getWorkspaceName()));
+
+			upgradePlan.setTargetProjectLocation(path);
 		}
 
 		return Status.OK_STATUS;
 	}
+
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;
