@@ -20,18 +20,18 @@ package com.liferay.ide.upgrade.plan.core;
 public class UpgradeTaskStepStatusChangedEvent implements UpgradeEvent {
 
 	public UpgradeTaskStepStatusChangedEvent(
-		UpgradeTaskStep upgradeTaskStep, UpgradeTaskStepStatus oldStatus, UpgradeTaskStepStatus newStatus) {
+		UpgradeTaskStep upgradeTaskStep, UpgradeElementStatus oldStatus, UpgradeElementStatus newStatus) {
 
 		_upgradeTaskStep = upgradeTaskStep;
 		_oldStatus = oldStatus;
 		_newStatus = newStatus;
 	}
 
-	public UpgradeTaskStepStatus getNewStatus() {
+	public UpgradeElementStatus getNewStatus() {
 		return _newStatus;
 	}
 
-	public UpgradeTaskStepStatus getOldStatus() {
+	public UpgradeElementStatus getOldStatus() {
 		return _oldStatus;
 	}
 
@@ -39,8 +39,8 @@ public class UpgradeTaskStepStatusChangedEvent implements UpgradeEvent {
 		return _upgradeTaskStep;
 	}
 
-	private final UpgradeTaskStepStatus _newStatus;
-	private final UpgradeTaskStepStatus _oldStatus;
+	private final UpgradeElementStatus _newStatus;
+	private final UpgradeElementStatus _oldStatus;
 	private final UpgradeTaskStep _upgradeTaskStep;
 
 }

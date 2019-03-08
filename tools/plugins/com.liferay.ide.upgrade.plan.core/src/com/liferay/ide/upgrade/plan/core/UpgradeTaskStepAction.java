@@ -26,12 +26,8 @@ public interface UpgradeTaskStepAction extends UpgradePlanElement {
 
 	public boolean enabled();
 
-	public UpgradeTaskStepActionStatus getStatus();
-
 	public String getStepId();
 
 	public IStatus perform(IProgressMonitor progressMonitor);
-
-	public void setStatus(UpgradeTaskStepActionStatus status);
 
 }

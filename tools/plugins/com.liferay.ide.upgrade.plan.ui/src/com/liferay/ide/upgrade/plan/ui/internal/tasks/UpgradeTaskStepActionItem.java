@@ -15,11 +15,11 @@
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
 import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
@@ -284,7 +284,7 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 	}
 
 	private void _complete() {
-		_upgradeTaskStepAction.setStatus(UpgradeTaskStepActionStatus.COMPLETED);
+		_upgradeTaskStepAction.setStatus(UpgradeElementStatus.COMPLETED);
 	}
 
 	private IStatus _perform(IProgressMonitor progressMonitor) {
@@ -292,7 +292,7 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 	}
 
 	private void _skip() {
-		_upgradeTaskStepAction.setStatus(UpgradeTaskStepActionStatus.SKIPPED);
+		_upgradeTaskStepAction.setStatus(UpgradeElementStatus.SKIPPED);
 	}
 
 	private Composite _buttonComposite;

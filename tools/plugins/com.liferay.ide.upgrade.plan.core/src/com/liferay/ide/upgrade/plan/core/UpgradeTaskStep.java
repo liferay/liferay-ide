@@ -16,12 +16,6 @@ package com.liferay.ide.upgrade.plan.core;
 
 import java.util.List;
 
-import org.apache.http.MethodNotSupportedException;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-
 /**
  * @author Terry Jia
  * @author Gregory Amerson
@@ -38,23 +32,8 @@ public interface UpgradeTaskStep extends UpgradePlanElement {
 
 	public UpgradeTaskStepRequirement getRequirement();
 
-	public default UpgradeTaskStepStatus getStatus() {
-		return UpgradeTaskStepStatus.INCOMPLETE;
-	}
-
 	public String getTaskId();
 
 	public String getUrl();
-
-	public default IStatus perform(IProgressMonitor progressMonitor) {
-		return Status.OK_STATUS;
-	}
-
-	public default void setStatus(UpgradeTaskStepStatus status) {
-		MethodNotSupportedException exception = new MethodNotSupportedException(
-			"Implementer must implement this method.");
-
-		throw new RuntimeException(exception);
-	}
 
 }

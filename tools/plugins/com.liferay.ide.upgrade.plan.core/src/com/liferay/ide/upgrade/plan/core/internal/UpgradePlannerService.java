@@ -17,6 +17,7 @@ package com.liferay.ide.upgrade.plan.core.internal;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.IMemento;
+import com.liferay.ide.upgrade.plan.core.UpgradeElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
@@ -26,7 +27,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionStatus;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -196,7 +196,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 		Stream<UpgradeTaskStepAction> stream = actions.stream();
 
-		stream.forEach(action -> action.setStatus(UpgradeTaskStepActionStatus.INCOMPLETE));
+		stream.forEach(action -> action.setStatus(UpgradeElementStatus.INCOMPLETE));
 	}
 
 	@Override
@@ -329,7 +329,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 					if (actionMemento != null) {
 						String status = actionMemento.getString("status");
 
-						action.setStatus(UpgradeTaskStepActionStatus.valueOf(status));
+						action.setStatus(UpgradeElementStatus.valueOf(status));
 					}
 				}
 			}

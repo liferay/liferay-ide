@@ -15,11 +15,11 @@
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
 import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
@@ -102,45 +102,6 @@ public class UpgradeTaskStepItem implements IExpansionListener, UpgradeTaskItem,
 
 		_disposables.add(() -> _buttonComposite.dispose());
 
-		Image taskStepActionPerformImage = UpgradePlanUIPlugin.getImage(
-			UpgradePlanUIPlugin.TASK_STEP_ACTION_PERFORM_IMAGE);
-
-		ImageHyperlink performImageHyperlink = createImageHyperlink(
-			_formToolkit, _buttonComposite, taskStepActionPerformImage, this, "Click to perform");
-
-		performImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-		performImageHyperlink.addHyperlinkListener(
-			new HyperlinkAdapter() {
-
-				@Override
-				public void linkActivated(HyperlinkEvent e) {
-					new Job("Performing " + _upgradeTaskStep.getTitle() + "...") {
-
-						@Override
-						protected IStatus run(IProgressMonitor progressMonitor) {
-							return _perform(progressMonitor);
-						}
-
-					}.schedule();
-				}
-
-			});
-
-		_disposables.add(() -> performImageHyperlink.dispose());
-
-		_enables.add(performImageHyperlink);
-
-		Label fillLabel = _formToolkit.createLabel(_buttonComposite, null);
-
-		GridData gridData = new GridData();
-
-		gridData.widthHint = 16;
-
-		fillLabel.setLayoutData(gridData);
-
-		_disposables.add(() -> fillLabel.dispose());
-
 		Image taskStepRestartImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_RESTART_IMAGE);
 
 		ImageHyperlink taskStepRestartImageHyperlink = createImageHyperlink(
@@ -168,6 +129,16 @@ public class UpgradeTaskStepItem implements IExpansionListener, UpgradeTaskItem,
 			});
 
 		_disposables.add(() -> taskStepRestartImageHyperlink.dispose());
+
+		Label fillLabel = _formToolkit.createLabel(_buttonComposite, null);
+
+		GridData gridData = new GridData();
+
+		gridData.widthHint = 16;
+
+		fillLabel.setLayoutData(gridData);
+
+		_disposables.add(() -> fillLabel.dispose());
 
 		Image taskStepActionCompleteImage = UpgradePlanUIPlugin.getImage(
 			UpgradePlanUIPlugin.TASK_STEP_ACTION_COMPLETE_IMAGE);
@@ -308,11 +279,7 @@ public class UpgradeTaskStepItem implements IExpansionListener, UpgradeTaskItem,
 	}
 
 	private void _complete() {
-		_upgradeTaskStep.setStatus(UpgradeTaskStepStatus.COMPLETED);
-	}
-
-	private IStatus _perform(IProgressMonitor progressMonitor) {
-		return _upgradeTaskStep.perform(progressMonitor);
+		_upgradeTaskStep.setStatus(UpgradeElementStatus.COMPLETED);
 	}
 
 	private IStatus _restartStep() {
@@ -324,7 +291,7 @@ public class UpgradeTaskStepItem implements IExpansionListener, UpgradeTaskItem,
 	}
 
 	private void _skip() {
-		_upgradeTaskStep.setStatus(UpgradeTaskStepStatus.SKIPPED);
+		_upgradeTaskStep.setStatus(UpgradeElementStatus.SKIPPED);
 	}
 
 	private Composite _buttonComposite;
