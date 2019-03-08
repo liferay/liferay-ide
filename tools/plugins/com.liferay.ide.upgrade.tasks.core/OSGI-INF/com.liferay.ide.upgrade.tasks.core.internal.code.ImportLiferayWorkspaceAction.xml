@@ -7,5 +7,8 @@
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>
    </service>
+   <reference cardinality="1..1" field="_provider" interface="com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider" name="_provider" target="(type=gradle_workspace)"/>
+   <reference cardinality="1..1" field="_resourceSelection" interface="com.liferay.ide.upgrade.tasks.core.ResourceSelection" name="_resourceSelection"/>
+   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
    <implementation class="com.liferay.ide.upgrade.tasks.core.internal.code.ImportLiferayWorkspaceAction"/>
 </scr:component>

@@ -29,3 +29,4 @@ Export-Package: com.liferay.blade.gradle.model,
 Bundle-ClassPath: .,
  lib/com.liferay.blade.gradle.model.jar,
  lib/groovy-2.4.3.jar
+Service-Component: OSGI-INF/com.liferay.ide.gradle.core.LiferayGradleWorkspaceProjectProvider.xml

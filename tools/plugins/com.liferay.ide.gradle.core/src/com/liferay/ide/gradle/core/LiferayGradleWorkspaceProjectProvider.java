@@ -46,12 +46,15 @@ import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.wst.server.core.IServer;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Andy Wu
  * @author Terry Jia
  * @author Charles Wu
  * @author Simon Jiang
  */
+@Component(property = "type=gradle_workspace", service = NewLiferayWorkspaceProjectProvider.class)
 public class LiferayGradleWorkspaceProjectProvider
 	extends AbstractLiferayProjectProvider
 	implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp>, SapphireContentAccessor {
