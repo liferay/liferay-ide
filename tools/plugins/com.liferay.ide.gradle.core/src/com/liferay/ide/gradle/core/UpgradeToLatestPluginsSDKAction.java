@@ -12,9 +12,8 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.internal.sdk;
+package com.liferay.ide.gradle.core;
 
-import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;

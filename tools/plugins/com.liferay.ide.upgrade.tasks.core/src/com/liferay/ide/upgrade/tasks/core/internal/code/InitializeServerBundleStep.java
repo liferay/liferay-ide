@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"description=" + InitializeServerBundleStepKeys.DESCRIPTION, "id=" + InitializeServerBundleStepKeys.ID,
-		"imagePath=icons/server.gif", "requirement=recommended", "order=4",
+		"imagePath=icons/server.gif", "requirement=recommended", "order=3",
 		"taskId=" + SetupDevelopmentEnvironmentTaskKeys.ID, "title=" + InitializeServerBundleStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class

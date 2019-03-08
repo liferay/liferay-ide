@@ -69,11 +69,13 @@ public class MigrateLegacyProjectsToWarsAction extends BaseUpgradeTaskStepAction
 			return UpgradeTasksUIPlugin.createErrorStatus("There is no target project configured for current plan.");
 		}
 
-		Path pluginsSDKLoaction = upgradePlan.getCurrentProjectLocation();
+		Path workspaceLocation = upgradePlan.getCurrentProjectLocation();
 
-		if (FileUtil.notExists(pluginsSDKLoaction.toFile())) {
-			return UpgradeTasksUIPlugin.createErrorStatus("There is no plugins sdk folder in " + pluginsSDKLoaction);
+		if (FileUtil.notExists(workspaceLocation.toFile())) {
+			return UpgradeTasksUIPlugin.createErrorStatus("There is no code located at " + workspaceLocation);
 		}
+
+		Path legacyPluginsSDKPath = workspaceLocation.resolve("plugins-sdk");
 
 		final AtomicInteger returnCode = new AtomicInteger();
 
@@ -81,10 +83,8 @@ public class MigrateLegacyProjectsToWarsAction extends BaseUpgradeTaskStepAction
 
 		UIUtil.sync(
 			() -> {
-				Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
-
 				ImportSDKProjectsWizard importSDKProjectsWizard = new ImportSDKProjectsWizard(
-					sdkProjectsImportOp, currentProjectLocation);
+					sdkProjectsImportOp, legacyPluginsSDKPath);
 
 				IWorkbench workbench = PlatformUI.getWorkbench();
 
@@ -114,7 +114,7 @@ public class MigrateLegacyProjectsToWarsAction extends BaseUpgradeTaskStepAction
 
 					sb.append("convert ");
 					sb.append("--source \"");
-					sb.append(pluginsSDKLoaction.toString());
+					sb.append(legacyPluginsSDKPath.toString());
 					sb.append("\" --base \"");
 					sb.append(targetProjectLocation.toString());
 					sb.append("\" \"");

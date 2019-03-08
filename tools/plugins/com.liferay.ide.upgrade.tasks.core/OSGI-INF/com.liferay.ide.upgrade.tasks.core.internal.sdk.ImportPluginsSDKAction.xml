@@ -9,5 +9,6 @@
    </service>
    <reference cardinality="1..1" field="_projectImporter" interface="com.liferay.ide.upgrade.tasks.core.ProjectImporter" name="_projectImporter" target="(type=plugins_sdk)"/>
    <reference cardinality="1..1" field="_projectSelection" interface="com.liferay.ide.upgrade.tasks.core.ResourceSelection" name="_projectSelection"/>
+   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
    <implementation class="com.liferay.ide.upgrade.tasks.core.internal.sdk.ImportPluginsSDKAction"/>
 </scr:component>

@@ -19,13 +19,13 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
+import com.liferay.ide.upgrade.tasks.core.internal.UpgradeTasksCorePlugin;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMInstall2;
-import org.eclipse.jdt.launching.IVMInstallType;
 import org.eclipse.jdt.launching.JavaRuntime;
 
 import org.osgi.service.component.annotations.Component;
@@ -49,13 +49,9 @@ public class CheckInstalledJDKsAction extends BaseUpgradeTaskStepAction {
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		IVMInstall defaultVMInstall = JavaRuntime.getDefaultVMInstall();
 
-		IVMInstallType vmInstallType = defaultVMInstall.getVMInstallType();
-
-		String name = vmInstallType.getName();
-
 		boolean java8Installed = false;
 
-		if ("Standard VM".equals(name) && defaultVMInstall instanceof IVMInstall2) {
+		if (defaultVMInstall instanceof IVMInstall2) {
 			String jvmVersion = ((IVMInstall2)defaultVMInstall).getJavaVersion();
 
 			String[] jvmVersionParts = jvmVersion.split("\\.");
@@ -73,20 +69,25 @@ public class CheckInstalledJDKsAction extends BaseUpgradeTaskStepAction {
 			}
 		}
 
-		UpgradePlanElementStatus status = getStatus();
+		IStatus status = Status.OK_STATUS;
+
+		UpgradePlanElementStatus upgradePlanElementStatus = getStatus();
 
 		if (java8Installed) {
-			status = UpgradePlanElementStatus.COMPLETED;
+			status = UpgradeTasksCorePlugin.createInfoStatus("JDK8 is installed and the default VM install.");
+			upgradePlanElementStatus = UpgradePlanElementStatus.COMPLETED;
 		}
 		else {
-			status = UpgradePlanElementStatus.FAILED;
+			status = UpgradeTasksCorePlugin.createErrorStatus(
+				"JDK8 is not installed or is not the default VM in Eclipse preferences.");
+			upgradePlanElementStatus = UpgradePlanElementStatus.FAILED;
 		}
 
-		setStatus(status);
+		setStatus(upgradePlanElementStatus);
 
 		_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, null));
 
-		return Status.OK_STATUS;
+		return status;
 	}
 
 	@Reference

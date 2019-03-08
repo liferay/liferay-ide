@@ -15,12 +15,18 @@
 package com.liferay.ide.upgrade.tasks.core.internal.sdk;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.tasks.core.ProjectImporter;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 import com.liferay.ide.upgrade.tasks.core.sdk.ImportExistingPluginsSDKStepKeys;
 
 import java.nio.file.Path;
+
+import java.util.Collections;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -43,13 +49,30 @@ public class ImportPluginsSDKAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		Path rootProjectPath = _projectSelection.selectPath("Please select the root folder of you Liferay Plugins SDK");
+		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		if (rootProjectPath == null) {
-			return Status.CANCEL_STATUS;
+		Path rootProjectPath = upgradePlan.getCurrentProjectLocation();
+
+		IStatus status = _projectImporter.canImport(rootProjectPath);
+
+		if (!status.isOK()) {
+			setStatus(UpgradePlanElementStatus.FAILED);
+
+			return status;
 		}
 
-		return _projectImporter.importProjects(rootProjectPath, progressMonitor);
+		status = _projectImporter.importProjects(rootProjectPath, progressMonitor);
+
+		if (!status.isOK()) {
+			setStatus(UpgradePlanElementStatus.FAILED);
+
+			return status;
+		}
+
+		_upgradePlanner.dispatch(
+			new UpgradeTaskStepActionPerformedEvent(this, Collections.singletonList(rootProjectPath)));
+
+		return Status.OK_STATUS;
 	}
 
 	@Reference(target = "(type=plugins_sdk)")
@@ -57,5 +80,8 @@ public class ImportPluginsSDKAction extends BaseUpgradeTaskStepAction {
 
 	@Reference
 	private ResourceSelection _projectSelection;
+
+	@Reference
+	private UpgradePlanner _upgradePlanner;
 
 }

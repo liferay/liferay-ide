@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.sdk.UpgradeToLatestPluginsSDKAction">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.gradle.core.UpgradeToLatestPluginsSDKAction">
    <property name="id" value="upgrade_to_latest_plugins_sdk"/>
    <property name="order" value="2"/>
    <property name="stepId" value="upgrade_to_latest_plugins_sdk"/>
@@ -8,5 +8,5 @@
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>
    </service>
    <reference cardinality="1..1" field="_resourceSelection" interface="com.liferay.ide.upgrade.tasks.core.ResourceSelection" name="_resourceSelection"/>
-   <implementation class="com.liferay.ide.upgrade.tasks.core.internal.sdk.UpgradeToLatestPluginsSDKAction"/>
+   <implementation class="com.liferay.ide.gradle.core.UpgradeToLatestPluginsSDKAction"/>
 </scr:component>

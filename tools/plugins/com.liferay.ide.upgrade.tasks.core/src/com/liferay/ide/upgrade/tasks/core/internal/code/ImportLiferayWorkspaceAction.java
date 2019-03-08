@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.tasks.core.internal.code;
 
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
@@ -38,12 +39,23 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=import_liferay_workspace", "order=3", "stepId=" + SetupLiferayWorkspaceStepKeys.ID,
+		"id=import_liferay_workspace", "order=2", "stepId=" + SetupLiferayWorkspaceStepKeys.ID,
 		"title=Import Liferay Workspace"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class ImportLiferayWorkspaceAction extends BaseUpgradeTaskStepAction {
+
+	@Override
+	public boolean appliesTo(UpgradePlan upgradePlan) {
+		Path path = upgradePlan.getCurrentProjectLocation();
+
+		if (LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toString())) {
+			return true;
+		}
+
+		return false;
+	}
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
