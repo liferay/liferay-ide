@@ -48,7 +48,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = {"id=new_liferay_workspace", "order=1", "stepId=setup_liferay_workspace", "title=New Liferay Workspace"},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class NewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction {
+public class NewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction implements SapphireContentAccessor {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -77,19 +77,17 @@ public class NewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction {
 			});
 
 		if (returnCode.get() == Window.OK) {
-			Path parentPath = _getter.get(newLiferayWorkspaceOp.getLocation());
+			Path parentPath = get(newLiferayWorkspaceOp.getLocation());
 
 			java.nio.file.Path path = Paths.get(parentPath.toOSString());
 
-			path = path.resolve(_getter.get(newLiferayWorkspaceOp.getWorkspaceName()));
+			path = path.resolve(get(newLiferayWorkspaceOp.getWorkspaceName()));
 
 			upgradePlan.setTargetProjectLocation(path);
 		}
 
 		return Status.OK_STATUS;
 	}
-
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;
