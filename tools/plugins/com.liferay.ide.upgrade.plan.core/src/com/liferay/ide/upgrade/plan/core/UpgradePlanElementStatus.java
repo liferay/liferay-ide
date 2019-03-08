@@ -18,7 +18,7 @@ package com.liferay.ide.upgrade.plan.core;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public enum UpgradeElementStatus {
+public enum UpgradePlanElementStatus {
 
 	COMPLETED, FAILED, INCOMPLETE, SKIPPED
 

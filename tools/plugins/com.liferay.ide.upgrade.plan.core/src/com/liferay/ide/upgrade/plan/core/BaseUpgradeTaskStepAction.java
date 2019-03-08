@@ -41,7 +41,7 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 
 	@Override
 	public boolean completed() {
-		if (!UpgradeElementStatus.INCOMPLETE.equals(getStatus())) {
+		if (!UpgradePlanElementStatus.INCOMPLETE.equals(getStatus())) {
 			return true;
 		}
 

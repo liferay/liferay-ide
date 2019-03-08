@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.UpgradeElementStatus;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
@@ -73,13 +73,13 @@ public class CheckInstalledJDKsAction extends BaseUpgradeTaskStepAction {
 			}
 		}
 
-		UpgradeElementStatus status = getStatus();
+		UpgradePlanElementStatus status = getStatus();
 
 		if (java8Installed) {
-			status = UpgradeElementStatus.COMPLETED;
+			status = UpgradePlanElementStatus.COMPLETED;
 		}
 		else {
-			status = UpgradeElementStatus.FAILED;
+			status = UpgradePlanElementStatus.FAILED;
 		}
 
 		setStatus(status);

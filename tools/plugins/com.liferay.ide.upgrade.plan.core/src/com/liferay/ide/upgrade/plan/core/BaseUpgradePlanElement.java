@@ -58,8 +58,8 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 	}
 
 	@Override
-	public UpgradeElementStatus getStatus() {
-		return _upgradeElementStatus;
+	public UpgradePlanElementStatus getStatus() {
+		return _upgradePlanElementStatus;
 	}
 
 	@Override
@@ -67,13 +67,13 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 		return _title;
 	}
 
-	public void setStatus(UpgradeElementStatus upgradeElementStatus) {
-		UpgradeElementStatusChangedEvent upgradeElementStatusChangedEvent = new UpgradeElementStatusChangedEvent(
-			this, _upgradeElementStatus, upgradeElementStatus);
+	public void setStatus(UpgradePlanElementStatus upgradePlanElementStatus) {
+		UpgradePlanElementStatusChangedEvent upgradePlanElementStatusChangedEvent =
+			new UpgradePlanElementStatusChangedEvent(this, _upgradePlanElementStatus, upgradePlanElementStatus);
 
-		_upgradeElementStatus = upgradeElementStatus;
+		_upgradePlanElementStatus = upgradePlanElementStatus;
 
-		_upgradePlanner.dispatch(upgradeElementStatusChangedEvent);
+		_upgradePlanner.dispatch(upgradePlanElementStatusChangedEvent);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 	private String _id;
 	private String _imagePath;
 	private String _title;
-	private UpgradeElementStatus _upgradeElementStatus = UpgradeElementStatus.INCOMPLETE;
+	private UpgradePlanElementStatus _upgradePlanElementStatus = UpgradePlanElementStatus.INCOMPLETE;
 	private UpgradePlanner _upgradePlanner;
 
 }

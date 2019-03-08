@@ -15,9 +15,9 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.Pair;
-import com.liferay.ide.upgrade.plan.core.UpgradeElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
@@ -62,15 +62,15 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 		if (upgradeTaskStepAction != null) {
 			ImageDescriptor statusImageDescriptor = null;
 
-			if (UpgradeElementStatus.COMPLETED.equals(upgradeTaskStepAction.getStatus())) {
+			if (UpgradePlanElementStatus.COMPLETED.equals(upgradeTaskStepAction.getStatus())) {
 				statusImageDescriptor = UpgradePlanUIPlugin.getImageDescriptor(
 					UpgradePlanUIPlugin.TASK_STEP_ACTION_COMPLETE_OVERLAY_IMAGE);
 			}
-			else if (UpgradeElementStatus.SKIPPED.equals(upgradeTaskStepAction.getStatus())) {
+			else if (UpgradePlanElementStatus.SKIPPED.equals(upgradeTaskStepAction.getStatus())) {
 				statusImageDescriptor = UpgradePlanUIPlugin.getImageDescriptor(
 					UpgradePlanUIPlugin.TASK_STEP_ACTION_SKIP_OVERLAY_IMAGE);
 			}
-			else if (UpgradeElementStatus.FAILED.equals(upgradeTaskStepAction.getStatus())) {
+			else if (UpgradePlanElementStatus.FAILED.equals(upgradeTaskStepAction.getStatus())) {
 				statusImageDescriptor = UpgradePlanUIPlugin.getImageDescriptor(
 					UpgradePlanUIPlugin.TASK_STEP_ACTION_FAILED_OVERLAY_IMAGE);
 			}

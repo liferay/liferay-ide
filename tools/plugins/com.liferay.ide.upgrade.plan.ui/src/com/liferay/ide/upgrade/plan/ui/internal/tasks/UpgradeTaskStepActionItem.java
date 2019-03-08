@@ -15,11 +15,11 @@
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeElementStatus;
-import com.liferay.ide.upgrade.plan.core.UpgradeElementStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
@@ -246,11 +246,11 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 	@Override
 	public void onUpgradeEvent(UpgradeEvent upgradeEvent) {
-		if (upgradeEvent instanceof UpgradeElementStatusChangedEvent) {
-			UpgradeElementStatusChangedEvent upgradeElementStatusChangedEvent =
-				(UpgradeElementStatusChangedEvent)upgradeEvent;
+		if (upgradeEvent instanceof UpgradePlanElementStatusChangedEvent) {
+			UpgradePlanElementStatusChangedEvent upgradePlanElementStatusChangedEvent =
+				(UpgradePlanElementStatusChangedEvent)upgradeEvent;
 
-			UpgradePlanElement upgradePlanElement = upgradeElementStatusChangedEvent.getUpgradePlanElement();
+			UpgradePlanElement upgradePlanElement = upgradePlanElementStatusChangedEvent.getUpgradePlanElement();
 
 			if (upgradePlanElement instanceof UpgradeTaskStepAction) {
 				UpgradeTaskStepAction upgradeTaskStepAction = (UpgradeTaskStepAction)upgradePlanElement;
@@ -288,7 +288,7 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 	}
 
 	private void _complete() {
-		_upgradeTaskStepAction.setStatus(UpgradeElementStatus.COMPLETED);
+		_upgradeTaskStepAction.setStatus(UpgradePlanElementStatus.COMPLETED);
 	}
 
 	private IStatus _perform(IProgressMonitor progressMonitor) {
@@ -296,7 +296,7 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 	}
 
 	private void _skip() {
-		_upgradeTaskStepAction.setStatus(UpgradeElementStatus.SKIPPED);
+		_upgradeTaskStepAction.setStatus(UpgradePlanElementStatus.SKIPPED);
 	}
 
 	private Composite _buttonComposite;
