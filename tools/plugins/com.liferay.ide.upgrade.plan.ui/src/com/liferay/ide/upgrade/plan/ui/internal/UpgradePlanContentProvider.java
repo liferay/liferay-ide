@@ -101,7 +101,11 @@ public class UpgradePlanContentProvider implements ITreeContentProvider {
 			return true;
 		}
 		else if (element instanceof UpgradeTaskStep) {
-			return true;
+			UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)element;
+
+			List<UpgradeTaskStepAction> actions = upgradeTaskStep.getActions();
+
+			return !actions.isEmpty();
 		}
 
 		return false;

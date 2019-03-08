@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.ui.internal;
+package com.liferay.ide.upgrade.tasks.ui.internal.sdk;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -22,9 +22,9 @@ import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.tasks.core.ImportSDKProjectsOp;
-import com.liferay.ide.upgrade.tasks.core.sdk.MoveLegacyProjectsStepKeys;
+import com.liferay.ide.upgrade.tasks.ui.internal.ImportSDKProjectsWizard;
+import com.liferay.ide.upgrade.tasks.ui.internal.UpgradeTasksUIPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,19 +52,18 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
+ *
+ * @Component(
+ * property = {
+ * 	"id=move_legacy_projects", "order=1", "stepId=" + MigratePluginsSDKProjectsToWorkspaceStepKeys.ID, "title=Move Legacy Projects"
+ * },
+ * scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
+ *)
  */
-@Component(
-	property = {
-		"id=move_legacy_projects", "order=1", "stepId=" + MoveLegacyProjectsStepKeys.ID, "title=Move Legacy Projects"
-	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
-)
 public class MoveLegacyProjectsAction extends BaseUpgradeTaskStepAction {
 
 	@Override

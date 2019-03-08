@@ -16,6 +16,9 @@ package com.liferay.ide.upgrade.plan.core;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+
 /**
  * @author Terry Jia
  * @author Gregory Amerson
@@ -35,5 +38,7 @@ public interface UpgradeTaskStep extends UpgradePlanElement {
 	public String getTaskId();
 
 	public String getUrl();
+
+	public IStatus perform(IProgressMonitor progressMonitor);
 
 }

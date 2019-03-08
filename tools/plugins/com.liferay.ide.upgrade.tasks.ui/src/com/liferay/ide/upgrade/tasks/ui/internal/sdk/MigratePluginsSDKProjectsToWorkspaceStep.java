@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.ui.internal;
+package com.liferay.ide.upgrade.tasks.ui.internal.sdk;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
@@ -20,12 +20,14 @@ import com.liferay.ide.project.core.ProjectSynchronizer;
 import com.liferay.ide.project.core.model.ProjectNamedItem;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.tasks.core.ImportSDKProjectsOp;
-import com.liferay.ide.upgrade.tasks.core.sdk.MoveLegacyProjectsStepKeys;
+import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKTaskKeys;
+import com.liferay.ide.upgrade.tasks.ui.internal.ImportSDKProjectsWizard;
+import com.liferay.ide.upgrade.tasks.ui.internal.UpgradeTasksUIPlugin;
 
 import java.nio.file.Path;
 
@@ -52,12 +54,14 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=migrate_legacy_projects_to_wars", "order=2", "stepId=" + MoveLegacyProjectsStepKeys.ID,
-		"title=Migrate Legacy Projects To Wars"
+		"description=" + MigratePluginsSDKProjectsToWorkspaceStepKeys.DESCRIPTION,
+		"id=" + MigratePluginsSDKProjectsToWorkspaceStepKeys.ID, "imagePath=icons/export.png",
+		"requirement=recommended", "order=2", "taskId=" + MigratePluginsSDKTaskKeys.ID,
+		"title=" + MigratePluginsSDKProjectsToWorkspaceStepKeys.TITLE
 	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class MigrateLegacyProjectsToWarsAction extends BaseUpgradeTaskStepAction {
+public class MigratePluginsSDKProjectsToWorkspaceStep extends BaseUpgradeTaskStep {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {

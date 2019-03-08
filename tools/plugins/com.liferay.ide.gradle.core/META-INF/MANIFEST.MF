@@ -34,4 +34,4 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.upgrade.plan.core
 Service-Component: OSGI-INF/com.liferay.ide.gradle.core.LiferayGradleWorkspaceProjectProvider.xml,
  OSGI-INF/com.liferay.ide.gradle.core.GradleProjectSynchronizer.xml,
- OSGI-INF/com.liferay.ide.gradle.core.UpgradeToLatestPluginsSDKAction.xml
+ OSGI-INF/com.liferay.ide.gradle.core.upgrade.UpgradeToLatestPlukginsSDKStep.xml

@@ -23,5 +23,4 @@ Require-Bundle: com.liferay.ide.project.ui,
 Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.NewLiferayWorkspaceAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.ResourceSelectionImpl.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.MessagePromptImpl.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.MoveLegacyProjectsAction.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.MigrateLegacyProjectsToWarsAction.xml
+ OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.sdk.MigratePluginsSDKProjectsToWorkspaceStep.xml
