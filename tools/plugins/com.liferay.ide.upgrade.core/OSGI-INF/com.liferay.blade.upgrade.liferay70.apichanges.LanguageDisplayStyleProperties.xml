@@ -5,7 +5,6 @@
    <property name="problem.summary" value="Replaced the Language Portlet&apos;s Display Styles with ADTs"/>
    <property name="problem.tickets" value="LPS-54419"/>
    <property name="problem.section" value="#replaced-the-language-portlets-display-styles-with-adts"/>
-   <property name="implName" value="LanguageDisplayStyleProperties"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>

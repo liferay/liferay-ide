@@ -24,8 +24,8 @@ import java.io.File;
 public class ChangedShowDisableCheckboxBehaviorTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "ChangedShowDisableCheckboxBehavior";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay71.apichanges.ChangedShowDisableCheckboxBehavior";
 	}
 
 	@Override

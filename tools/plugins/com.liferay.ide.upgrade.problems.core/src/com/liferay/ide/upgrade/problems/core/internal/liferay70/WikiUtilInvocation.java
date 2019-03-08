@@ -31,7 +31,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"file.extensions=java,jsp,jspf", "problem.title=Removed the getPageOrderByComparator Method from WikiUtil",
 	"problem.section=#removed-the-getpageorderbycomparator-method-from-wikiutil",
 	"problem.summary=Removed the getPageOrderByComparator Method from WikiUtil", "problem.tickets=LPS-60843",
-	"implName=WikiUtilInvocation", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class WikiUtilInvocation extends JavaFileMigrator {

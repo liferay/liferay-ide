@@ -33,8 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=java", "problem.title=StorageAdapter API Changes",
 	"problem.summary=Removed Operations That Used the Fields Class from the StorageAdapter Interface",
 	"problem.tickets=LPS-53021", "problem.type=java",
-	"problem.section=#removed-operations-that-used-the-fields-class-from-the-storageadapter-inter",
-	"implName=StorageAdapterCreateUpdateMethods", "version=7.0"
+	"problem.section=#removed-operations-that-used-the-fields-class-from-the-storageadapter-inter", "version=7.0"
 },
 	service = FileMigrator.class)
 public class StorageAdapterCreateUpdateMethods extends JavaFileMigrator {

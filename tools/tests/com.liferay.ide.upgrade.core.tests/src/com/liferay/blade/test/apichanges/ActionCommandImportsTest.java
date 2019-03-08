@@ -31,8 +31,8 @@ import org.junit.Test;
 public class ActionCommandImportsTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "MVCPortletActionCommandImports";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.MVCPortletActionCommandImports";
 	}
 
 	@Override

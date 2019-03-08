@@ -28,8 +28,8 @@ public class RemovedJavaScriptMinificationPropertiesTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "RemovedJavaScriptMinificationProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay71.apichanges.RemovedJavaScriptMinificationProperties";
 	}
 
 	@Override

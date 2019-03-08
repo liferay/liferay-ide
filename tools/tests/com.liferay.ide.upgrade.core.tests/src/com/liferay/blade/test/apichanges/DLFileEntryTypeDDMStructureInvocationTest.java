@@ -28,8 +28,8 @@ public class DLFileEntryTypeDDMStructureInvocationTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "DLFileEntryTypeDDMStructureInvocation";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.DLFileEntryTypeDDMStructureInvocation";
 	}
 
 	@Override

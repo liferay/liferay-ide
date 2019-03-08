@@ -25,8 +25,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = {
 	"file.extensions=jsp,jspf", "problem.title=Changed the Usage of the liferay-ui:restore-entry Tag",
 	"problem.section=#changed-the-usage-of-the-liferay-uirestore-entry-tag",
-	"problem.summary=Changed the Usage of the liferay-ui:restore-entry Tag", "problem.tickets=LPS-54106",
-	"implName=RestoreEntryTags", "version=7.0"
+	"problem.summary=Changed the Usage of the liferay-ui:restore-entry Tag", "problem.tickets=LPS-54106", "version=7.0"
 },
 	service = FileMigrator.class)
 public class RestoreEntryTags extends JSPTagMigrator {

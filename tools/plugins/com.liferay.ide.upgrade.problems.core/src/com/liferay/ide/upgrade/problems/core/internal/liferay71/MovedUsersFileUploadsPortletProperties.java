@@ -27,8 +27,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = {
 	"file.extensions=properties", "problem.title=Moved Users File Uploads Portlet Properties to OSGi Configuration",
 	"problem.summary=Moved Users File Uploads Portlet Properties", "problem.tickets=LPS-69211",
-	"problem.section=#moved-users-file-uploads-portlet-properties", "implName=MovedUsersFileUploadsPortletProperties",
-	"version=7.1"
+	"problem.section=#moved-users-file-uploads-portlet-properties", "version=7.1"
 },
 	service = FileMigrator.class)
 public class MovedUsersFileUploadsPortletProperties extends PropertiesFileMigrator {

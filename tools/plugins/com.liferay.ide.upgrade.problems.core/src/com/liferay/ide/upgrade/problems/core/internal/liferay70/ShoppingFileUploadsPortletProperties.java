@@ -28,7 +28,7 @@ import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 	"file.extensions=properties", "problem.title=Moved Shopping File Uploads Portlet Properties to OSGi Configuration",
 	"problem.summary=Moved Shopping File Uploads Portlet Properties to OSGi Configuration", "problem.tickets=LPS-69210",
 	"problem.section=#moved-shopping-file-uploads-portlet-properties-to-osgi-configuration",
-	"implName=ShoppingFileUploadsPortletProperties", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class ShoppingFileUploadsPortletProperties extends PropertiesFileMigrator {

@@ -27,8 +27,8 @@ public class BuildAutoUpgradePropertiesTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "BuildAutoUpgradeProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.BuildAutoUpgradeProperties";
 	}
 
 	@Override

@@ -32,7 +32,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"problem.summary=Changed the AssetRenderer API to Include the PortletRequest and PortletResponse Parameters",
 	"problem.tickets=LPS-44639,LPS-44894", "problem.title=AssetRenderer API Changes",
 	"problem.section=#changed-the-assetrenderer-and-indexer-apis-to-include-the-portletrequest-an",
-	"implName=AssetRendererGetSummaryDecl", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class AssetRendererGetSummaryDecl extends JavaFileMigrator {

@@ -33,7 +33,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
 	"problem.tickets=LPS-50156",
 	"problem.title=Moved MVCPortlet, ActionCommand and ActionCommandCache from util-bridges.jar to portal-service.jar",
 	"problem.section=#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar",
-	"auto.correct=import", "implName=MVCPortletActionCommandImports", "version=7.0"
+	"auto.correct=import",  "version=7.0"
 },
 	service = {AutoFileMigrator.class, FileMigrator.class})
 public class MVCPortletActionCommandImports extends JavaImportsMigrator {

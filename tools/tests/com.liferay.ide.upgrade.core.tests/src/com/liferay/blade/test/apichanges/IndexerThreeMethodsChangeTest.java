@@ -28,8 +28,8 @@ public class IndexerThreeMethodsChangeTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "IndexerThreeMethodsChange";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.IndexerThreeMethodsChange";
 	}
 
 	@Override

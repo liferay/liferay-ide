@@ -28,8 +28,8 @@ public class RequiredParamGroupIdTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "RequiredParamGroupId";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.RequiredParamGroupId";
 	}
 
 	@Override

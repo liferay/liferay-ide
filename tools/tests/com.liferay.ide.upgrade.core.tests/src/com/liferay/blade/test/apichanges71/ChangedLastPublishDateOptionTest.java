@@ -24,8 +24,8 @@ import java.io.File;
 public class ChangedLastPublishDateOptionTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "ChangedLastPublishDateOption";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay71.apichanges.ChangedLastPublishDateOption";
 	}
 
 	@Override

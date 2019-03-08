@@ -32,7 +32,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"problem.title=Removed the getClassNamePortletId(String) Method from PortalUtil Class",
 	"problem.section=#removed-the-getclassnameportletidstring-method-from-portalutil-class",
 	"problem.summary=Removed the getClassNamePortletId(String) Method from PortalUtil Class",
-	"problem.tickets=LPS-50604", "implName=PortalUtilGetClassNamePortletIdInvocation", "version=7.0"
+	"problem.tickets=LPS-50604",  "version=7.0"
 },
 	service = FileMigrator.class)
 public class PortalUtilGetClassNamePortletIdInvocation extends JavaFileMigrator {

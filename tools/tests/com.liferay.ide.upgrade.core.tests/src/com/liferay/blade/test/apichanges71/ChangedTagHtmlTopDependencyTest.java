@@ -24,8 +24,8 @@ import java.io.File;
 public class ChangedTagHtmlTopDependencyTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "ChangedTagHtmlTopDependency";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay71.apichanges.ChangedTagHtmlTopDependency";
 	}
 
 	@Override

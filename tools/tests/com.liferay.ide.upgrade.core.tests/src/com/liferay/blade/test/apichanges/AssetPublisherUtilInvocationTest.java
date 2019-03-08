@@ -28,8 +28,8 @@ public class AssetPublisherUtilInvocationTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "AssetPublisherUtilInvocation";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.AssetPublisherUtilInvocation";
 	}
 
 	@Override

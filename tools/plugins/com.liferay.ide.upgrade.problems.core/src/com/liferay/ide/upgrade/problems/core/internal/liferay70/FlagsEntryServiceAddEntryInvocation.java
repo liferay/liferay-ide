@@ -31,7 +31,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"file.extensions=java", "problem.title=FlagsEntryService.addEntry Method Throws PortalException",
 	"problem.section=#flagsentryservice-addentry-method-throws-portalexception",
 	"problem.summary=FlagsEntryService.addEntry Method Throws PortalException", "problem.tickets=LPS-63109",
-	"implName=FlagsEntryServiceAddEntryInvocation", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class FlagsEntryServiceAddEntryInvocation extends JavaFileMigrator {

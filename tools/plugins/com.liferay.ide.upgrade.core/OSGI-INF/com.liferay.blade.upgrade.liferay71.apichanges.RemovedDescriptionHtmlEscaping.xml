@@ -5,7 +5,6 @@
    <property name="problem.summary" value="Removed Description Html Escaping"/>
    <property name="problem.tickets" value="LPS-83185"/>
    <property name="problem.section" value="#removed-description-html-escaping-in-portletdisplay"/>
-   <property name="implName" value="RemovedDescriptionHtmlEscaping"/>
    <property name="version" value="7.1"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>

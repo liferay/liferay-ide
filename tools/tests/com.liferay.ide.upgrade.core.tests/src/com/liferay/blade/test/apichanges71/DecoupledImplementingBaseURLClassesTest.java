@@ -24,8 +24,8 @@ import java.io.File;
 public class DecoupledImplementingBaseURLClassesTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "DecoupledImplementingBaseURLClasses";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay71.apichanges.DecoupledImplementingBaseURLClasses";
 	}
 
 	@Override

@@ -37,7 +37,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 				"SearchContext, Query)",
 	"problem.tickets=LPS-55928",
 	"problem.section=#moved-indexer-addrelatedentryfields-and-indexer-reindexddmstructures-and-re",
-	"implName=IndexerThreeMethodsChange", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class IndexerThreeMethodsChange extends JavaFileMigrator {

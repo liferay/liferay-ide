@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(property = {
 	"file.extensions=properties", "problem.title=Moved OpenOffice Properties to OSGi Configuration",
 	"problem.summary=The OpenOffice properties have been moved from Server Administration", "problem.tickets=LPS-71382",
-	"problem.section=#moved-openOffice-properties", "implName=MovedOpenOfficeProperties", "version=7.1"
+	"problem.section=#moved-openOffice-properties", "version=7.1"
 },
 	service = FileMigrator.class)
 public class MovedOpenOfficeProperties extends PropertiesFileMigrator {

@@ -5,7 +5,6 @@
    <property name="problem.summary" value="Changed Dependency For liferay-util:html-top JSP Tag"/>
    <property name="problem.tickets" value="LPS-81983"/>
    <property name="problem.section" value="#changed-dependency-for-liferay-util-html-top-jsp-tag"/>
-   <property name="implName" value="ChangedTagHtmlTopDependency"/>
    <property name="version" value="7.1"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>

@@ -30,7 +30,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 @Component(property = {
 	"file.extensions=java", "problem.title=Removed WikiUtil.getEntries Method",
 	"problem.section=#removed-wikiutil-getentries-method", "problem.summary=Removed WikiUtil.getEntries Method",
-	"problem.tickets=LPS-56242", "implName=WikiUtilGetEntriesInvocation", "version=7.0"
+	"problem.tickets=LPS-56242",  "version=7.0"
 },
 	service = FileMigrator.class)
 public class WikiUtilGetEntriesInvocation extends JavaFileMigrator {

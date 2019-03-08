@@ -27,7 +27,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
 	"problem.title=Removed mbMessages and fileEntryTuples Attributes from app-view-search-entry Tag",
 	"problem.section=#removed-mbmessages-and-fileentrytuples-attributes-from-app-view-search-entr",
 	"problem.summary=Removed mbMessages and fileEntryTuples Attributes from app-view-search-entry Tag",
-	"problem.tickets=LPS-55886", "implName=AppViewSearchEntryTags", "version=7.0"
+	"problem.tickets=LPS-55886",  "version=7.0"
 },
 	service = FileMigrator.class)
 public class AppViewSearchEntryTags extends JSPTagMigrator {

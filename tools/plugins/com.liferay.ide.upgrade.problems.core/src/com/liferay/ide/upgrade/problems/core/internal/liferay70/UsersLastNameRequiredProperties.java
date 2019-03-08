@@ -31,7 +31,7 @@ import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 			"It has also been removed as an option from the Portal Settings section of the Control Panel.",
 	"problem.tickets=LPS-54956",
 	"problem.section=#removed-userslastnamerequired-from-portal-properties-in-favor-of-language-p",
-	"implName=UsersLastNameRequiredProperties", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class UsersLastNameRequiredProperties extends PropertiesFileMigrator {

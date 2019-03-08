@@ -28,8 +28,8 @@ public class DLAppServiceUtilInvocationTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "DLAppServiceUtilInvocation";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.DLAppServiceUtilInvocation";
 	}
 
 	@Override

@@ -33,7 +33,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 		"All Calendar APIs previously exposed as Liferay Portal API in 6.2 have been move out from portal-service i" +
 			"nto separate OSGi modules",
 	"problem.tickets=LPS-55026", "problem.title=Calendar APIs migrated to OSGi module", "problem.section=#legacy",
-	"implName=CalendarLegacyAPI", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class CalendarLegacyAPI extends JavaFileMigrator {

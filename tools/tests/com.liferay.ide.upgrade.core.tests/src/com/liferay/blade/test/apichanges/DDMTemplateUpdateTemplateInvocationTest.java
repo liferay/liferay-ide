@@ -23,8 +23,8 @@ import java.io.File;
 public class DDMTemplateUpdateTemplateInvocationTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "DDMTemplateUpdateTemplateInvocation";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.DDMTemplateUpdateTemplateInvocation";
 	}
 
 	@Override

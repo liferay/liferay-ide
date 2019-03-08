@@ -32,7 +32,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"problem.title=Moved the AssetPublisherUtil Class and Removed It from the Public API",
 	"problem.section=#moved-the-assetpublisherutil-class-and-removed-it-from-the-public-api",
 	"problem.summary=Moved the AssetPublisherUtil Class and Removed It from the Public API",
-	"problem.tickets=LPS-52744", "implName=AssetPublisherUtilInvocation", "version=7.0"
+	"problem.tickets=LPS-52744",  "version=7.0"
 },
 	service = FileMigrator.class)
 public class AssetPublisherUtilInvocation extends JavaFileMigrator {

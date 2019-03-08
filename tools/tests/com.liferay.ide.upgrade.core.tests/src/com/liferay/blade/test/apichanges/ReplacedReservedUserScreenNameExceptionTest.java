@@ -23,8 +23,8 @@ import java.io.File;
 public class ReplacedReservedUserScreenNameExceptionTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "ReplacedReservedUserScreenNameException";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.ReplacedReservedUserScreenNameException";
 	}
 
 	@Override

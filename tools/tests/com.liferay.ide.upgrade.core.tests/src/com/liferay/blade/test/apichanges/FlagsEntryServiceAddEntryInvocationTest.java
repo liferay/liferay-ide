@@ -23,8 +23,8 @@ import java.io.File;
 public class FlagsEntryServiceAddEntryInvocationTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "FlagsEntryServiceAddEntryInvocation";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.FlagsEntryServiceAddEntryInvocation";
 	}
 
 	@Override

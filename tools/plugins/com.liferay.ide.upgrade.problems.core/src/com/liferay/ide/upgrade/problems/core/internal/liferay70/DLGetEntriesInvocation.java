@@ -33,7 +33,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"problem.summary=The getEntries method was no longer used, and contained hardcoded references to classes that " +
 		"will be moved into OSGi bundles.",
 	"problem.tickets=LPS-56247", "problem.title=Removed Method getEntries from DL, DLImpl, and DLUtil Classes",
-	"problem.section=#removed-method-getentries-from-dl-dlimpl-and-dlutil-classes", "implName=DLGetEntriesInvocation",
+	"problem.section=#removed-method-getentries-from-dl-dlimpl-and-dlutil-classes", 
 	"version=7.0"
 },
 	service = FileMigrator.class)

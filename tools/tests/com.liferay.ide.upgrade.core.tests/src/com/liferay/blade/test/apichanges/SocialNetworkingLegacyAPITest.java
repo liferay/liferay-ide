@@ -37,8 +37,8 @@ public class SocialNetworkingLegacyAPITest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "SocialNetworkingLegacyAPI";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.SocialNetworkingLegacyAPI";
 	}
 
 	@Override

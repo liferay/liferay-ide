@@ -28,8 +28,8 @@ public class RemovedAbilitySpecifyClassLoadersInScriptingTest extends APITestBas
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "RemovedAbilitySpecifyClassLoaders";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.RemovedAbilitySpecifyClassLoaders";
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedMethodsMigrator">
    <property name="file.extensions" value="java,jsp,jspf"/>
-   <property name="implName" value="DeprecatedMethodsMigrator"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
    </service>

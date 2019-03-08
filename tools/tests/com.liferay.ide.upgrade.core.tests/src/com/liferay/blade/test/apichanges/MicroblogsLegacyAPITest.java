@@ -37,8 +37,8 @@ public class MicroblogsLegacyAPITest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "MicroblogsLegacyAPI";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.MicroblogsLegacyAPI";
 	}
 
 	@Override

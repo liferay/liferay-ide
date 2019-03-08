@@ -32,7 +32,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"file.extensions=java", "problem.title=MBMessageService API Changes",
 	"problem.section=#removed-permissionclassname-permissionclasspk-and-permissionowner-parameter",
 	"problem.summary=Removed permissionClassName, permissionClassPK, and permissionOwner Parameters from MBMessage API",
-	"problem.tickets=LPS-55877", "implName=MBMessageServiceUtilInvocation", "version=7.0"
+	"problem.tickets=LPS-55877",  "version=7.0"
 },
 	service = FileMigrator.class)
 public class MBMessageServiceUtilInvocation extends JavaFileMigrator {

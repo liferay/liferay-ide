@@ -28,8 +28,8 @@ public class MovedUploadServletRequestPortalPropertiesTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "MovedUploadServletRequestPortalProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay71.apichanges.MovedUploadServletRequestPortalProperties";
 	}
 
 	@Override

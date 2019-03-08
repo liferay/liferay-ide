@@ -28,8 +28,8 @@ public class BreadcrumbPropertiesTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "BreadcrumbProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.BreadcrumbProperties";
 	}
 
 	@Override

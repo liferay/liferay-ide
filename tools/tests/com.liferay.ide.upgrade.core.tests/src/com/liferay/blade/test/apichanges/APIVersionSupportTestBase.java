@@ -23,7 +23,7 @@ public abstract class APIVersionSupportTestBase extends APITestBase {
 
 	@Override
 	protected Filter getFilter() throws Exception {
-		return context.createFilter("(&(implName=" + getImplClassName() + ")(version=" + getVersion() + "))");
+		return context.createFilter("(&(component.name=" + getComponentName() + ")(version=" + getVersion() + "))");
 	}
 
 	public abstract String getVersion();

@@ -33,8 +33,7 @@ import org.osgi.service.component.annotations.Component;
 	"file.extensions=java,jsp,jspf",
 	"problem.summary=Removed get and format Methods that Used PortletConfig Parameters", "problem.tickets=LPS-44342",
 	"problem.title=PortletConfig get/format methods",
-	"problem.section=#removed-get-and-format-methods-that-used-portletconfig-parameters",
-	"implName=PortletConfigGetFormatMethods", "version=7.0"
+	"problem.section=#removed-get-and-format-methods-that-used-portletconfig-parameters", "version=7.0"
 },
 	service = FileMigrator.class)
 public class PortletConfigGetFormatMethods extends JavaFileMigrator {

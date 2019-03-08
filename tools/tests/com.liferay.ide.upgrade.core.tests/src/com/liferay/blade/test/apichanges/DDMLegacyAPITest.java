@@ -116,8 +116,8 @@ public class DDMLegacyAPITest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "DDMLegacyAPI";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.DDMLegacyAPI";
 	}
 
 	@Override

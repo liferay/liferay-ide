@@ -37,8 +37,8 @@ public class WebContentLegacyAPITest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "WebContentLegacyAPI";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.WebContentLegacyAPI";
 	}
 
 	@Override

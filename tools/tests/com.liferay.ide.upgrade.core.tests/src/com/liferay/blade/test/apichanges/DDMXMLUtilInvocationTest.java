@@ -23,8 +23,8 @@ import java.io.File;
 public class DDMXMLUtilInvocationTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "DDMXMLUtilInvocation";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.DDMXMLUtilInvocation";
 	}
 
 	@Override

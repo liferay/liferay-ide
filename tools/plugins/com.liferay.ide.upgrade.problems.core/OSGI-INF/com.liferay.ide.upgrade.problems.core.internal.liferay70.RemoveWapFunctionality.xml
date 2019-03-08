@@ -5,7 +5,6 @@
    <property name="problem.tickets" value="LPS-62920"/>
    <property name="problem.title" value="Removed the WAP Functionality"/>
    <property name="problem.section" value="#removed-the-wap-functionality"/>
-   <property name="implName" value="RemoveWapFunctionality"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

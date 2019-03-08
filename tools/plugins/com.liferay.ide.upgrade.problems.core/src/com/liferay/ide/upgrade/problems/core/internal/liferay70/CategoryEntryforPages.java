@@ -34,7 +34,7 @@ import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 	"problem.summary=The category entry for Site Administration > Pages has been deprecated in favor of Site " +
 		"Administration > Navigation.",
 	"problem.tickets=LPS-63667", "problem.section=#deprecated-category-entry-for-pages",
-	"implName=CategoryEntryforPages", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class CategoryEntryforPages extends XMLFileMigrator {

@@ -28,8 +28,8 @@ public class WebContentArticlesStrucAndTemplTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "WebContentArticlesStrucAndTempl";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.WebContentArticlesStrucAndTempl";
 	}
 
 	@Override

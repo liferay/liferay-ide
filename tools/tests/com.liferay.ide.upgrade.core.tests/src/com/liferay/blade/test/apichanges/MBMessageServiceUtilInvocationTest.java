@@ -28,8 +28,8 @@ public class MBMessageServiceUtilInvocationTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "MBMessageServiceUtilInvocation";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.MBMessageServiceUtilInvocation";
 	}
 
 	@Override

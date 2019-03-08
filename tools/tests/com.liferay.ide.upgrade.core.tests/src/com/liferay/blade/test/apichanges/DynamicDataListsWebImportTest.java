@@ -27,8 +27,8 @@ public class DynamicDataListsWebImportTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "DynamicDataListsWebImport";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.DynamicDataListsWebImport";
 	}
 
 	@Override

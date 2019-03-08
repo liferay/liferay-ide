@@ -27,7 +27,7 @@ import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 @Component(property = {
 	"file.extensions=properties", "problem.title=Moved Journal Portlet Properties to OSGi Configuration",
 	"problem.summary=Moved Journal Portlet Properties to OSGi Configuration", "problem.tickets=LPS-58672",
-	"problem.section=#moved-journal-portlet-properties-to-osgi-configuration", "implName=JournalPortletProperties",
+	"problem.section=#moved-journal-portlet-properties-to-osgi-configuration", 
 	"version=7.0"
 },
 	service = FileMigrator.class)

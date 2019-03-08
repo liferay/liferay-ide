@@ -33,7 +33,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 		"DDMTemplateLocalService",
 	"problem.tickets=LPS-50939", "problem.title=DDMStructureLocalService add new param userId",
 	"problem.section=#added-userid-parameter-to-update-operations-of-ddmstructurelocalservice-and",
-	"implName=DDMStructureUpdateStructureInvocation", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class DDMStructureUpdateStructureInvocation extends JavaFileMigrator {

@@ -28,7 +28,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
 	"problem.section=#changed-usage-of-the-liferay-uiddm-template-selector-tag",
 	"problem.summary=The attribute classNameId of the liferay-ui:ddm-template-selector taglib tag has been renamed c" +
 		"lassName",
-	"problem.tickets=LPS-53790", "auto.correct=jsptag", "implName=DdmTemplateSelectorTags", "version=7.0"
+	"problem.tickets=LPS-53790", "auto.correct=jsptag",  "version=7.0"
 },
 	service = {AutoFileMigrator.class, FileMigrator.class})
 public class DdmTemplateSelectorTags extends JSPTagMigrator {

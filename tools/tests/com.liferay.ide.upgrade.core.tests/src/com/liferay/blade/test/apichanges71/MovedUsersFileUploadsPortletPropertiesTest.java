@@ -28,8 +28,8 @@ public class MovedUsersFileUploadsPortletPropertiesTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "MovedUsersFileUploadsPortletProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay71.apichanges.MovedUsersFileUploadsPortletProperties";
 	}
 
 	@Override

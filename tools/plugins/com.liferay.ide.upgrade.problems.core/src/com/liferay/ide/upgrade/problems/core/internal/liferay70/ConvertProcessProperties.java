@@ -33,7 +33,7 @@ import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 				"lementations must register as OSGi components.",
 	"problem.tickets=LPS-50604",
 	"problem.section=#convert-process-classes-are-no-longer-specified-via-the-convert-processes-p",
-	"implName=ConvertProcessProperties", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class ConvertProcessProperties extends PropertiesFileMigrator {

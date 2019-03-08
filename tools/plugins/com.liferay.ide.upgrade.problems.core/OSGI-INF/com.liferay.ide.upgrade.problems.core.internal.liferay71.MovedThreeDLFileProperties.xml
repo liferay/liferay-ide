@@ -5,7 +5,6 @@
    <property name="problem.summary" value="Two DL File properties have been moved from Server Administration"/>
    <property name="problem.tickets" value="LPS-69208"/>
    <property name="problem.section" value="#moved-three-dl-file-properties"/>
-   <property name="implName" value="MovedThreeDLFileProperties"/>
    <property name="version" value="7.1"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

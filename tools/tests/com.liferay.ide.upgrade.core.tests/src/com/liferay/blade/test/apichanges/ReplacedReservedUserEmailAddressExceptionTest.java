@@ -23,8 +23,8 @@ import java.io.File;
 public class ReplacedReservedUserEmailAddressExceptionTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "ReplacedReservedUserEmailAddressException";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.ReplacedReservedUserEmailAddressException";
 	}
 
 	@Override

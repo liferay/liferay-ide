@@ -33,7 +33,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"problem.summary=Removed Operations That Used the Fields Class from the StorageAdapter Interface",
 	"problem.tickets=LPS-53021", "problem.type=java",
 	"problem.section=#removed-operations-that-used-the-fields-class-from-the-storageadapter-inter",
-	"implName=StorageAdapterCreateUpdateMethods", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class StorageAdapterCreateUpdateMethods extends JavaFileMigrator {

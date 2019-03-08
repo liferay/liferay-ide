@@ -32,7 +32,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"file.extensions=java,jsp,jspf", "problem.title=Moved Recycle Bin Logic Into a New DLTrashService Interface",
 	"problem.section=#moved-recycle-bin-logic-into-a-new-dltrashservice-interface",
 	"problem.summary=Moved Recycle Bin Logic Into a New DLTrashService Interface", "problem.tickets=LPS-60810",
-	"implName=DLAppServiceUtilInvocation", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class DLAppServiceUtilInvocation extends JavaFileMigrator {

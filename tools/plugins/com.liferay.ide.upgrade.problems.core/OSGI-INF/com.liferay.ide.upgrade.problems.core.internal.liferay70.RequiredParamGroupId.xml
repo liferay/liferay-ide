@@ -5,7 +5,6 @@
    <property name="problem.summary" value="The API for adding tags, categories, and vocabularies now requires passing the groupId parameter. Previously, it had to be included in the ServiceContext parameter passed to the method."/>
    <property name="problem.tickets" value="LPS-54570"/>
    <property name="problem.section" value="#added-required-parameter-groupid-for-adding-tags-categories-and-vocabularie"/>
-   <property name="implName" value="RequiredParamGroupId"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

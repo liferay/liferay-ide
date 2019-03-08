@@ -5,7 +5,6 @@
    <property name="problem.section" value="#removed-the-com-liferay-dynamic-data-mapping-util-ddmxmlutil-class"/>
    <property name="problem.summary" value="The class com.liferay.dynamic.data.mapping.util.DDMXMLUtil has been removed with no replacement"/>
    <property name="problem.tickets" value="LPS-63928"/>
-   <property name="implName" value="DDMXMLUtilInvocation"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>

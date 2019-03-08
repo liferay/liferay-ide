@@ -167,7 +167,7 @@ public class FileMigrationService implements FileMigration {
 				List<String> serviceReferencesWithVersion = stream.filter(
 					serviceReference -> version.equals(serviceReference.getProperty("version"))
 				).map(
-					reference -> (String)reference.getProperty("implName")
+					reference -> (String)reference.getProperty("component.name")
 				).collect(
 					Collectors.toList()
 				);
@@ -181,7 +181,9 @@ public class FileMigrationService implements FileMigration {
 				);
 
 				for (ServiceReference<FileMigrator> serviceReferenceWithoutVersion : serviceReferencesWithoutVersion) {
-					if (serviceReferencesWithVersion.contains(serviceReferenceWithoutVersion.getProperty("implName"))) {
+					if (serviceReferencesWithVersion.contains(
+							serviceReferenceWithoutVersion.getProperty("component.name"))) {
+
 						fileMigrators.remove(serviceReferenceWithoutVersion);
 					}
 				}

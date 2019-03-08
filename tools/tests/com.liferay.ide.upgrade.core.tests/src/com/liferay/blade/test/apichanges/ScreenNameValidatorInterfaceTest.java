@@ -23,8 +23,8 @@ import java.io.File;
 public class ScreenNameValidatorInterfaceTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "ScreenNameValidatorInterface";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.ScreenNameValidatorInterface";
 	}
 
 	@Override

@@ -29,7 +29,7 @@ import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 	"problem.summary=Removed Liferay Frontend Editor BBCode Web, Previously Known as Liferay BBCode Editor",
 	"problem.tickets=LPS-48334",
 	"problem.section=#removed-liferay-frontend-editor-bbcode-web-previously-known-as-liferay-bbco",
-	"implName=BBCodeProperties", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class BBCodeProperties extends PropertiesFileMigrator {

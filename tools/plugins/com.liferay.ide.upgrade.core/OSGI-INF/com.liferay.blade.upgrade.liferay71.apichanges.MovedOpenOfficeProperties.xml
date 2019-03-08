@@ -5,7 +5,6 @@
    <property name="problem.summary" value="The OpenOffice properties have been moved from Server Administration"/>
    <property name="problem.tickets" value="LPS-71382"/>
    <property name="problem.section" value="#moved-openOffice-properties"/>
-   <property name="implName" value="MovedOpenOfficeProperties"/>
    <property name="version" value="7.1"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>

@@ -23,8 +23,8 @@ import java.io.File;
 public class BBCodePropertiesTest extends APITestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "BBCodeProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.BBCodeProperties";
 	}
 
 	@Override

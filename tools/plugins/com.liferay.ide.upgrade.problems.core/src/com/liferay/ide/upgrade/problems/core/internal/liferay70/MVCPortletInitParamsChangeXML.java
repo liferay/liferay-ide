@@ -35,7 +35,7 @@ import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 		"that extend MVCPortlet.",
 	"problem.tickets=LPS-54798",
 	"problem.section=#changed-the-default-value-of-the-copy-request-parameters-init-parameter-for",
-	"implName=MVCPortletInitParamsChangeXML", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class MVCPortletInitParamsChangeXML extends XMLFileMigrator {

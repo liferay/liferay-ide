@@ -32,7 +32,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"problem.summary=The ReservedUserIdException has been deprecated and replaced with UserIdException. MustNotBeRes" +
 		"erved.",
 	"problem.tickets=LPS-53487", "problem.section=#replaced-reserveduseridexception-with-useridexception-inner-classes",
-	"implName=ReservedUserIdExceptionCatch", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class ReservedUserIdExceptionCatch extends JavaFileMigrator {

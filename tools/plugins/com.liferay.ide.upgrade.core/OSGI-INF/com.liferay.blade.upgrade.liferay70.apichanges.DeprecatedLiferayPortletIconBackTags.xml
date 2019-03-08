@@ -5,7 +5,6 @@
    <property name="problem.section" value="#deprecated-the-liferay-portleticon-back-tag-with-no-direct-replacement"/>
    <property name="problem.summary" value="Deprecated the liferay-portlet:icon-back Tag with No Direct Replacement"/>
    <property name="problem.tickets" value="LPS-63101"/>
-   <property name="implName" value="DeprecatedLiferaySecurityEncryptTag"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.blade.api.FileMigrator"/>

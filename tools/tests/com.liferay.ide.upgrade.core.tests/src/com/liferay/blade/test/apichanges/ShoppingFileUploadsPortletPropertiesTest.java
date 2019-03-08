@@ -28,8 +28,8 @@ public class ShoppingFileUploadsPortletPropertiesTest extends APITestBase {
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "ShoppingFileUploadsPortletProperties";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.ShoppingFileUploadsPortletProperties";
 	}
 
 	@Override

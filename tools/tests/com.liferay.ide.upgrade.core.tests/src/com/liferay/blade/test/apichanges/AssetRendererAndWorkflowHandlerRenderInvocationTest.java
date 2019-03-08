@@ -28,8 +28,8 @@ public class AssetRendererAndWorkflowHandlerRenderInvocationTest extends APITest
 	}
 
 	@Override
-	public String getImplClassName() {
-		return "AssetRendererAndWorkflowHandlerRenderInvocation";
+	public String getComponentName() {
+		return "com.liferay.blade.upgrade.liferay70.apichanges.AssetRendererAndWorkflowHandlerRenderInvocation";
 	}
 
 	@Override

@@ -28,7 +28,7 @@ import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 	"file.extensions=properties", "problem.title=Asset Publisher Properties Removed",
 	"problem.summary=Removed the asset.publisher.asset.entry.query.processors Property", "problem.tickets=LPS-52966",
 	"problem.section=#removed-the-asset-publisher-asset-entry-query-processors-property",
-	"implName=AssetPublisherProperties", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class AssetPublisherProperties extends PropertiesFileMigrator {

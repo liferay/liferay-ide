@@ -44,8 +44,7 @@ import org.osgi.service.component.annotations.Component;
 	"problem.summary=The portal-kernel and portal-impl folders have many packages with the same name. Therefore, al" +
 		"l of these packages are affected by the split package problem",
 	"problem.tickets=LPS-61952", "problem.title=Renamed Packages to Fix the Split Packages Problem",
-	"problem.section=#renamed-packages-to-fix-the-split-packages-problem", "auto.correct=import",
-	"implName=RenamePortalKernelImports", "version=7.0"
+	"problem.section=#renamed-packages-to-fix-the-split-packages-problem", "auto.correct=import", "version=7.0"
 },
 	service = {AutoMigrator.class, FileMigrator.class})
 public class RenamePortalKernelImports extends ImportStatementMigrator {

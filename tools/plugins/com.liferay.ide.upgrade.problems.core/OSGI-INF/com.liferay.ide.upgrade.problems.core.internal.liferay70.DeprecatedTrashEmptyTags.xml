@@ -6,7 +6,6 @@
    <property name="problem.summary" value="Removed the liferay-ui:trash-empty Tag and Replaced with liferay-trash:empty"/>
    <property name="problem.tickets" value="LPS-60779"/>
    <property name="auto.correct" value="jsptag"/>
-   <property name="implName" value="DeprecatedTrashEmptyTags"/>
    <property name="version" value="7.0"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>

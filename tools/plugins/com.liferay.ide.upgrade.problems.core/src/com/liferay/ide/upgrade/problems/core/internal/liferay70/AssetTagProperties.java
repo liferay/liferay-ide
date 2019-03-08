@@ -33,7 +33,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"problem.summary=The Asset Tag Properties have been removed. The service no longer exists and the Asset Tag " +
 		"Service API no longer has this parameter. The behavior associated with tag properties in the Asset " +
 			"Publisher and XSL portlets has also been removed.",
-	"problem.tickets=LPS-52588", "problem.section=#removed-asset-tag-properties", "implName=AssetTagProperties",
+	"problem.tickets=LPS-52588", "problem.section=#removed-asset-tag-properties", 
 	"version=7.0"
 },
 	service = FileMigrator.class)

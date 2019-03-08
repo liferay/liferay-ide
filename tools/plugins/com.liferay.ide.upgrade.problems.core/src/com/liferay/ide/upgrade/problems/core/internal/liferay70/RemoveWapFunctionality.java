@@ -31,7 +31,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 @Component(property = {
 	"file.extensions=java,jsp,jspf", "problem.summary=Removed the WAP Functionality", "problem.tickets=LPS-62920",
 	"problem.title=Removed the WAP Functionality", "problem.section=#removed-the-wap-functionality",
-	"implName=RemoveWapFunctionality", "version=7.0"
+	 "version=7.0"
 },
 	service = FileMigrator.class)
 public class RemoveWapFunctionality extends JavaFileMigrator {
