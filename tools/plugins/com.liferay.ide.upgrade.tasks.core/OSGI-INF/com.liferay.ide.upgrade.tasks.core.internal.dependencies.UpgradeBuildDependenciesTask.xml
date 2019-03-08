@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.dependencies.UpgradeBuildDependenciesTask">
-   <property name="categoryId" value="code"/>
    <property name="description" value="Plugins rely on their dependencies&apos; availability at compile time and run time.&#x0A; Some classes are listed as undefined classes or unresolved symbols in your legacy projects because they&apos;ve been moved, renamed, or removed. As a part of modularization in Liferay Portal, many of these classes reside in new modules. To run your project, the container must be able to find all your plugins."/>
    <property name="id" value="upgrade_build_dependencies"/>
    <property name="imagePath" value="icons/upgrade_build_dependencies.png"/>
