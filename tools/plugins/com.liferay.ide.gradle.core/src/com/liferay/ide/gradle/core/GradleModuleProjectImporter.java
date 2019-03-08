@@ -98,7 +98,7 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter 
 			_refreshProject = null;
 		}
 		else {
-			GradleUtil.sychronizeProject(new Path(location), monitor);
+			GradleUtil.synchronizeProject(new Path(location), monitor);
 		}
 
 		// To-Do need return the projects added

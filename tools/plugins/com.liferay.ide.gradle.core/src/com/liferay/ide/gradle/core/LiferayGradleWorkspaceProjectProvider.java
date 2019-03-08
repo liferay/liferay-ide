@@ -138,7 +138,7 @@ public class LiferayGradleWorkspaceProjectProvider
 			return ProjectCore.createErrorStatus(ce);
 		}
 
-		return GradleUtil.sychronizeProject(wsLocation, monitor);
+		return GradleUtil.synchronizeProject(wsLocation, monitor);
 	}
 
 	@Override
