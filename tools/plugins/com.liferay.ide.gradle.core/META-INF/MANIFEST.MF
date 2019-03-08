@@ -1,10 +1,18 @@
 Manifest-Version: 1.0
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: com.liferay.ide.gradle.core.LiferayGradleCore
+Bundle-ClassPath: .,
+ lib/com.liferay.blade.gradle.model.jar,
+ lib/groovy-2.4.3.jar
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Gradle Core
 Bundle-SymbolicName: com.liferay.ide.gradle.core;singleton:=true
-Bundle-Version: 3.6.0.qualifier
-Bundle-Activator: com.liferay.ide.gradle.core.LiferayGradleCore
 Bundle-Vendor: Liferay, Inc.
+Bundle-Version: 3.6.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: com.liferay.blade.gradle.model,
+ com.liferay.ide.gradle.core,
+ com.liferay.ide.gradle.core.parser
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  com.liferay.ide.core,
@@ -21,12 +29,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jdt.launching,
  org.eclipse.ltk.core.refactoring,
  org.eclipse.core.expressions
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.blade.gradle.model,
- com.liferay.ide.gradle.core,
- com.liferay.ide.gradle.core.parser
-Bundle-ClassPath: .,
- lib/com.liferay.blade.gradle.model.jar,
- lib/groovy-2.4.3.jar
 Service-Component: OSGI-INF/com.liferay.ide.gradle.core.LiferayGradleWorkspaceProjectProvider.xml
