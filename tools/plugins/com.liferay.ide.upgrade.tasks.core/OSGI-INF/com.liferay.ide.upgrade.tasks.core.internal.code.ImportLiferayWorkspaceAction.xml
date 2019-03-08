@@ -2,7 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.code.ImportLiferayWorkspaceAction">
    <property name="id" value="import_liferay_workspace"/>
    <property name="order" value="3"/>
-   <property name="stepId" value="import_existing_projects"/>
+   <property name="stepId" value="setup_liferay_workspace"/>
    <property name="title" value="Import Liferay Workspace"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>
