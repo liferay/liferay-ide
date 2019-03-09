@@ -34,6 +34,7 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
+		_requirement = getStringProperty(properties, "requirement");
 		_stepId = getStringProperty(properties, "stepId");
 
 		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
@@ -74,10 +75,16 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 	}
 
 	@Override
+	public UpgradePlanElementRequirement getRequirement() {
+		return UpgradePlanElementRequirement.valueOf(UpgradePlanElementRequirement.class, _requirement.toUpperCase());
+	}
+
+	@Override
 	public String getStepId() {
 		return _stepId;
 	}
 
+	private String _requirement;
 	private String _stepId;
 	private UpgradePlanner _upgradePlanner;
 

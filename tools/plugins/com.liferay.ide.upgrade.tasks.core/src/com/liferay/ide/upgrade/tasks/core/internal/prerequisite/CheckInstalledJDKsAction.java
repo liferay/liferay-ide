@@ -38,8 +38,8 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=check_installed_jdks", "order=1", "stepId=" + CheckInstallationPrerequisitesStepKeys.ID,
-		"title=Check Installed JDKs"
+		"id=check_installed_jdks", "order=1", "requirement=recommended",
+		"stepId=" + CheckInstallationPrerequisitesStepKeys.ID, "title=Check Installed JDKs"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )

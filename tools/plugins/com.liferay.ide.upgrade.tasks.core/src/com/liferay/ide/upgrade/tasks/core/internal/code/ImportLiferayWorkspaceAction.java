@@ -39,7 +39,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=import_liferay_workspace", "order=2", "stepId=" + SetupLiferayWorkspaceStepKeys.ID,
+		"id=import_liferay_workspace", "order=2", "requirement=required", "stepId=" + SetupLiferayWorkspaceStepKeys.ID,
 		"title=Import Liferay Workspace"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class

@@ -28,7 +28,9 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Gregory Amerson
  */
 @Component(
-	property = {"id=install_blade", "order=2", "stepId=install_blade", "title=Install blade"},
+	property = {
+		"id=install_blade", "order=2", "requirement=recommended", "stepId=install_blade", "title=Install blade"
+	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class InstallBladeAction extends BaseUpgradeTaskStepAction {

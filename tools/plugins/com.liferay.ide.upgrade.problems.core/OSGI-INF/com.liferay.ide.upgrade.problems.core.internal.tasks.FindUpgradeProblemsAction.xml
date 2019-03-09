@@ -2,6 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsAction">
    <property name="id" value="find_upgrade_problems"/>
    <property name="order" value="1"/>
+   <property name="requirement" value="recommended"/>
    <property name="stepId" value="find_upgrade_problems"/>
    <property name="title" value="Find Upgrade Problems"/>
    <service scope="prototype">

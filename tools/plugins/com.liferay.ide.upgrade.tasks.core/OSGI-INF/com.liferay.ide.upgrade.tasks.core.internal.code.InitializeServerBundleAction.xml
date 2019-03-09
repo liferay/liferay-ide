@@ -2,6 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.code.InitializeServerBundleAction">
    <property name="id" value="initialize_server_bundle"/>
    <property name="order" value="1"/>
+   <property name="requirement" value="required"/>
    <property name="stepId" value="initialize_server_bundle"/>
    <property name="title" value="Initialize Server Bundle"/>
    <service scope="prototype">

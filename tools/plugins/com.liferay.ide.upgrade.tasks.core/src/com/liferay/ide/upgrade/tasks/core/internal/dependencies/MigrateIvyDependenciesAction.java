@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"id=" + MigrateIvyDependenciesActionKeys.ID, "description=" + MigrateIvyDependenciesActionKeys.DESCRIPTION,
-		"order=1", "stepId=" + UpdatePluginsSDKDependenciesStepKeys.ID,
+		"order=1", "requirement=recommended", "stepId=" + UpdatePluginsSDKDependenciesStepKeys.ID,
 		"title=" + MigrateIvyDependenciesActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class

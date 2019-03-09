@@ -52,14 +52,21 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 
 	@Override
 	public boolean completed() {
-		Stream<UpgradeTaskStepAction> stream = getActions().stream();
+		List<UpgradeTaskStepAction> actions = getActions();
 
-		long count = stream.filter(
-			action -> UpgradePlanElementStatus.INCOMPLETE.equals(action.getStatus())
-		).count();
+		if (actions.isEmpty()) {
+			return getStatus().equals(UpgradePlanElementStatus.COMPLETED);
+		}
+		else {
+			Stream<UpgradeTaskStepAction> stream = actions.stream();
 
-		if (count == 0) {
-			return true;
+			long count = stream.filter(
+				action -> UpgradePlanElementStatus.INCOMPLETE.equals(action.getStatus())
+			).count();
+
+			if (count == 0) {
+				return true;
+			}
 		}
 
 		return false;
@@ -83,7 +90,7 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 			upgradeTaskStep -> upgradeTaskStep.stream()
 		).filter(
 			upgradeTaskStep -> (upgradeTaskStep.getOrder() < _order) &&
-			 UpgradeTaskStepRequirement.REQUIRED.equals(upgradeTaskStep.getRequirement())
+			 UpgradePlanElementRequirement.REQUIRED.equals(upgradeTaskStep.getRequirement())
 		).map(
 			upgradeTaskStep -> upgradeTaskStep.getActions()
 		).flatMap(
@@ -110,8 +117,8 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	}
 
 	@Override
-	public UpgradeTaskStepRequirement getRequirement() {
-		return UpgradeTaskStepRequirement.valueOf(UpgradeTaskStepRequirement.class, _requirement.toUpperCase());
+	public UpgradePlanElementRequirement getRequirement() {
+		return UpgradePlanElementRequirement.valueOf(UpgradePlanElementRequirement.class, _requirement.toUpperCase());
 	}
 
 	@Override

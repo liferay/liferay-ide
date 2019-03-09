@@ -44,7 +44,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"description=" + RemovePreviousUpgradeProblemsStepKeys.DESCRIPTION, "id=remove_previous_upgrade_problems",
-		"order=1", "stepId=remove_previous_upgrade_problems", "title=" + RemovePreviousUpgradeProblemsStepKeys.TITLE
+		"order=1", "requirement=recommended", "stepId=remove_previous_upgrade_problems",
+		"title=" + RemovePreviousUpgradeProblemsStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )

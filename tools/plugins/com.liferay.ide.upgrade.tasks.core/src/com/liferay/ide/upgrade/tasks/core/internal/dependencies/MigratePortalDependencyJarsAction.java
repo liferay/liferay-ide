@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"id=" + MigratePortalDependencyJarsActionKeys.ID,
-		"description=" + MigratePortalDependencyJarsActionKeys.DESCRIPTION, "order=1",
+		"description=" + MigratePortalDependencyJarsActionKeys.DESCRIPTION, "order=1", "requirement=recommended",
 		"stepId=" + UpdatePluginsSDKDependenciesStepKeys.ID, "title=" + MigratePortalDependencyJarsActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class

@@ -2,6 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.prerequisite.CheckIsBladeInstalledAction">
    <property name="id" value="check_is_blade_installed"/>
    <property name="order" value="1"/>
+   <property name="requirement" value="recommended"/>
    <property name="stepId" value="install_blade"/>
    <property name="title" value="Check is Blade installed"/>
    <service scope="prototype">
