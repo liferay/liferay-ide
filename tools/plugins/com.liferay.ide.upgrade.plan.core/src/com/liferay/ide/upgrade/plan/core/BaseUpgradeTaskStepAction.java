@@ -75,8 +75,8 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 	}
 
 	@Override
-	public UpgradeElementRequirement getRequirement() {
-		return UpgradeElementRequirement.valueOf(UpgradeElementRequirement.class, _requirement.toUpperCase());
+	public UpgradePlanElementRequirement getRequirement() {
+		return UpgradePlanElementRequirement.valueOf(UpgradePlanElementRequirement.class, _requirement.toUpperCase());
 	}
 
 	@Override

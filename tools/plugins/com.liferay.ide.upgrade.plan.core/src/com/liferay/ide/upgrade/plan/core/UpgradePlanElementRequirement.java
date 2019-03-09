@@ -17,7 +17,7 @@ package com.liferay.ide.upgrade.plan.core;
 /**
  * @author Gregory Amerson
  */
-public enum UpgradeElementRequirement {
+public enum UpgradePlanElementRequirement {
 
 	OPTIONAL("Optional"), RECOMMENDED("Recommended"), REQUIRED("Required");
 
@@ -26,7 +26,7 @@ public enum UpgradeElementRequirement {
 		return _text;
 	}
 
-	private UpgradeElementRequirement(String text) {
+	private UpgradePlanElementRequirement(String text) {
 		_text = text;
 	}
 

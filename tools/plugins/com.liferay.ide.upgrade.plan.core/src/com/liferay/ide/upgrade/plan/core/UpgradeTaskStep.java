@@ -33,7 +33,7 @@ public interface UpgradeTaskStep extends UpgradePlanElement {
 
 	public double getOrder();
 
-	public UpgradeElementRequirement getRequirement();
+	public UpgradePlanElementRequirement getRequirement();
 
 	public String getTaskId();
 
