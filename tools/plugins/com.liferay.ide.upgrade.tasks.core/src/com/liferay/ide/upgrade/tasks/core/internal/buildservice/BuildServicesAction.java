@@ -46,7 +46,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"description=" + BuildServicesActionKeys.DESCRIPTION, "id=build_services", "order=2",
+		"description=" + BuildServicesActionKeys.DESCRIPTION, "id=build_services", "order=2", "requirement=required",
 		"stepId=" + RebuildServicesStepKeys.ID, "title=" + BuildServicesActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class

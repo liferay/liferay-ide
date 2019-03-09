@@ -44,7 +44,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"description=" + RemoveLegacyFilesActionKeys.DESCRIPTION, "id=" + RemoveLegacyFilesActionKeys.ID, "order=1",
-		"stepId=" + RebuildServicesStepKeys.ID, "title=" + RemoveLegacyFilesActionKeys.TITLE
+		"requirement=optional", "stepId=" + RebuildServicesStepKeys.ID, "title=" + RemoveLegacyFilesActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )

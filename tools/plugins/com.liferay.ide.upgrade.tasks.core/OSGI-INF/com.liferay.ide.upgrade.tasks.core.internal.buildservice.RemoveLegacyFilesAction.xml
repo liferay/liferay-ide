@@ -3,6 +3,7 @@
    <property name="description" value="Remove Legacy Files"/>
    <property name="id" value="remove_legacy_files"/>
    <property name="order" value="1"/>
+   <property name="requirement" value="optional"/>
    <property name="stepId" value="rebuild_services"/>
    <property name="title" value="Remove Legacy Files"/>
    <service scope="prototype">

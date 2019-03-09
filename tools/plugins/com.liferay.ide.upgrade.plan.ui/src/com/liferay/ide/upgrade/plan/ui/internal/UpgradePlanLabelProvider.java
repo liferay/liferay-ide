@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.Pair;
+import com.liferay.ide.upgrade.plan.core.UpgradeElementRequirement;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
@@ -22,7 +23,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepRequirement;
 
 import java.util.function.Function;
 
@@ -106,7 +106,7 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 
 			StyledString styledString = new StyledString(upgradeTaskStep.getTitle(), styler);
 
-			UpgradeTaskStepRequirement upgradeTaskStepRequirement = upgradeTaskStep.getRequirement();
+			UpgradeElementRequirement upgradeTaskStepRequirement = upgradeTaskStep.getRequirement();
 
 			styledString.append(" [" + upgradeTaskStepRequirement.toString() + "]", StyledString.DECORATIONS_STYLER);
 
@@ -124,6 +124,10 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 			StyledString styledString = new StyledString(upgradeAction.getTitle(), styler);
 
 			styledString.setStyle(0, styledString.length(), styler);
+
+			UpgradeElementRequirement upgradeTaskStepRequirement = upgradeAction.getRequirement();
+
+			styledString.append(" [" + upgradeTaskStepRequirement.toString() + "]", StyledString.DECORATIONS_STYLER);
 
 			return styledString;
 		}

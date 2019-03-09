@@ -90,7 +90,7 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 			upgradeTaskStep -> upgradeTaskStep.stream()
 		).filter(
 			upgradeTaskStep -> (upgradeTaskStep.getOrder() < _order) &&
-			 UpgradeTaskStepRequirement.REQUIRED.equals(upgradeTaskStep.getRequirement())
+			 UpgradeElementRequirement.REQUIRED.equals(upgradeTaskStep.getRequirement())
 		).map(
 			upgradeTaskStep -> upgradeTaskStep.getActions()
 		).flatMap(
@@ -117,8 +117,8 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	}
 
 	@Override
-	public UpgradeTaskStepRequirement getRequirement() {
-		return UpgradeTaskStepRequirement.valueOf(UpgradeTaskStepRequirement.class, _requirement.toUpperCase());
+	public UpgradeElementRequirement getRequirement() {
+		return UpgradeElementRequirement.valueOf(UpgradeElementRequirement.class, _requirement.toUpperCase());
 	}
 
 	@Override
