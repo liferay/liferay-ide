@@ -90,17 +90,43 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 			upgradeTaskStep -> upgradeTaskStep.stream()
 		).filter(
 			upgradeTaskStep -> (upgradeTaskStep.getOrder() < _order) &&
-			 UpgradePlanElementRequirement.REQUIRED.equals(upgradeTaskStep.getRequirement())
+			UpgradePlanElementRequirement.REQUIRED.equals(upgradeTaskStep.getRequirement())
 		).map(
 			upgradeTaskStep -> upgradeTaskStep.getActions()
 		).flatMap(
 			actions -> actions.stream()
+		).filter(
+			action -> UpgradePlanElementRequirement.REQUIRED.equals(action.getRequirement())
 		).filter(
 			action -> UpgradePlanElementStatus.INCOMPLETE.equals(action.getStatus())
 		).count();
 
 		if (count > 0) {
 			return false;
+		}
+		else {
+			upgradeTasksStream = upgradeTasks.stream();
+
+			count = upgradeTasksStream.filter(
+				upgradeTask -> getTaskId().equals(upgradeTask.getId())
+			).map(
+				upgradeTask -> upgradeTask.getSteps()
+			).flatMap(
+				upgradeTaskStep -> upgradeTaskStep.stream()
+			).filter(
+				upgradeTaskStep -> (upgradeTaskStep.getOrder() < _order) &&
+				UpgradePlanElementRequirement.REQUIRED.equals(upgradeTaskStep.getRequirement())
+			).filter(
+				upgradeTaskStep -> UpgradePlanElementStatus.INCOMPLETE.equals(upgradeTaskStep.getStatus())
+			).map(
+				upgradeTaskStep -> upgradeTaskStep.getActions()
+			).filter(
+				actions -> actions.isEmpty()
+			).count();
+
+			if (count > 0) {
+				return false;
+			}
 		}
 
 		return true;
