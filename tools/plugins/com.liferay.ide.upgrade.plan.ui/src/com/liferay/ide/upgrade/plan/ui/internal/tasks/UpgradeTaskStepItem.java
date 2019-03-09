@@ -149,34 +149,6 @@ public class UpgradeTaskStepItem implements IExpansionListener, UpgradeTaskItem,
 
 		_disposables.add(() -> fillLabel.dispose());
 
-		Image taskStepRestartImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_RESTART_IMAGE);
-
-		ImageHyperlink taskStepRestartImageHyperlink = createImageHyperlink(
-			_formToolkit, _buttonComposite, taskStepRestartImage, this, "Click to restart");
-
-		taskStepRestartImageHyperlink.setEnabled(true);
-
-		taskStepRestartImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-		taskStepRestartImageHyperlink.addHyperlinkListener(
-			new HyperlinkAdapter() {
-
-				@Override
-				public void linkActivated(HyperlinkEvent e) {
-					new Job(_upgradeTaskStep.getTitle() + " restarting.") {
-
-						@Override
-						protected IStatus run(IProgressMonitor monitor) {
-							return _restartStep();
-						}
-
-					}.schedule();
-				}
-
-			});
-
-		_disposables.add(() -> taskStepRestartImageHyperlink.dispose());
-
 		Image taskStepActionCompleteImage = UpgradePlanUIPlugin.getImage(
 			UpgradePlanUIPlugin.TASK_STEP_ACTION_COMPLETE_IMAGE);
 
