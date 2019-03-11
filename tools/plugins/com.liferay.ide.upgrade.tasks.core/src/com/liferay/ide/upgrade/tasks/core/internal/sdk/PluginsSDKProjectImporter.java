@@ -15,9 +15,10 @@
 package com.liferay.ide.upgrade.tasks.core.internal.sdk;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.upgrade.tasks.core.ProjectImporter;
+import com.liferay.ide.upgrade.tasks.core.internal.UpgradeTasksCorePlugin;
 
 import java.io.File;
 
@@ -39,9 +40,23 @@ public class PluginsSDKProjectImporter implements ProjectImporter {
 
 	@Override
 	public IStatus canImport(Path rootProjectPath) {
-		SDK sdk = SDKUtil.createSDKFromLocation(new org.eclipse.core.runtime.Path(rootProjectPath.toString()));
+		if ((rootProjectPath == null) || FileUtil.notExists(rootProjectPath.toFile())) {
+			return UpgradeTasksCorePlugin.createErrorStatus("SDK location does not exists.");
+		}
 
-		return sdk.validate();
+		Path buildProperties = rootProjectPath.resolve(ISDKConstants.BUILD_PROPERTIES);
+
+		Path portletsBuildXml = rootProjectPath.resolve(ISDKConstants.PORTLET_PLUGIN_ANT_BUILD);
+
+		Path hooksBuildXml = rootProjectPath.resolve(ISDKConstants.HOOK_PLUGIN_ANT_BUILD);
+
+		if (FileUtil.notExists(buildProperties.toFile()) || FileUtil.notExists(portletsBuildXml.toFile()) ||
+			FileUtil.notExists(hooksBuildXml.toFile())) {
+
+			return UpgradeTasksCorePlugin.createErrorStatus("The folder is not a valid sdk loaction.");
+		}
+
+		return Status.OK_STATUS;
 	}
 
 	@Override
