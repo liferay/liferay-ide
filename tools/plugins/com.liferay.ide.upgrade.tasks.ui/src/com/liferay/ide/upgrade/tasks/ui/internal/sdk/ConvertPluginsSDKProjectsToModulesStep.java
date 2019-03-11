@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.tasks.ui.internal.sdk;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.MultiStatusBuilder;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectSynchronizer;
 import com.liferay.ide.project.core.model.ProjectNamedItem;
@@ -51,17 +52,17 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"description=" + MigratePluginsSDKProjectsToWorkspaceStepKeys.DESCRIPTION,
-		"id=" + MigratePluginsSDKProjectsToWorkspaceStepKeys.ID, "imagePath=icons/export.png",
-		"requirement=recommended", "order=2", "taskId=" + MigratePluginsSDKTaskKeys.ID,
-		"title=" + MigratePluginsSDKProjectsToWorkspaceStepKeys.TITLE
+		"description=" + ConvertPluginsSDKProjectsToModulesStepKeys.DESCRIPTION,
+		"id=" + ConvertPluginsSDKProjectsToModulesStepKeys.ID, "imagePath=icons/export.png", "requirement=recommended",
+		"order=4", "taskId=" + MigratePluginsSDKTaskKeys.ID, "title=" + ConvertPluginsSDKProjectsToModulesStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class MigratePluginsSDKProjectsToWorkspaceStep extends BaseUpgradeTaskStep {
+public class ConvertPluginsSDKProjectsToModulesStep extends BaseUpgradeTaskStep {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -73,13 +74,11 @@ public class MigratePluginsSDKProjectsToWorkspaceStep extends BaseUpgradeTaskSte
 			return UpgradeTasksUIPlugin.createErrorStatus("There is no target project configured for current plan.");
 		}
 
-		Path workspaceLocation = upgradePlan.getCurrentProjectLocation();
-
-		if (FileUtil.notExists(workspaceLocation.toFile())) {
-			return UpgradeTasksUIPlugin.createErrorStatus("There is no code located at " + workspaceLocation);
+		if (FileUtil.notExists(targetProjectLocation.toFile())) {
+			return UpgradeTasksUIPlugin.createErrorStatus("There is no code located at " + targetProjectLocation);
 		}
 
-		Path legacyPluginsSDKPath = workspaceLocation.resolve("plugins-sdk");
+		Path pluginsSDKPath = targetProjectLocation.resolve("plugins-sdk");
 
 		final AtomicInteger returnCode = new AtomicInteger();
 
@@ -88,7 +87,7 @@ public class MigratePluginsSDKProjectsToWorkspaceStep extends BaseUpgradeTaskSte
 		UIUtil.sync(
 			() -> {
 				ImportSDKProjectsWizard importSDKProjectsWizard = new ImportSDKProjectsWizard(
-					sdkProjectsImportOp, legacyPluginsSDKPath);
+					sdkProjectsImportOp, pluginsSDKPath);
 
 				IWorkbench workbench = PlatformUI.getWorkbench();
 
@@ -101,10 +100,14 @@ public class MigratePluginsSDKProjectsToWorkspaceStep extends BaseUpgradeTaskSte
 				returnCode.set(wizardDialog.open());
 			});
 
+		IStatus status = Status.OK_STATUS;
+
 		if (returnCode.get() == Window.OK) {
 			ElementList<ProjectNamedItem> projects = sdkProjectsImportOp.getSelectedProjects();
 
 			Stream<ProjectNamedItem> stream = projects.stream();
+
+			MultiStatusBuilder multiStatusBuilder = new MultiStatusBuilder(UpgradeTasksUIPlugin.PLUGIN_ID);
 
 			stream.map(
 				projectNamedItem -> _getter.get(projectNamedItem.getLocation())
@@ -116,9 +119,11 @@ public class MigratePluginsSDKProjectsToWorkspaceStep extends BaseUpgradeTaskSte
 
 					String name = path.lastSegment();
 
+					progressMonitor.subTask("Converting " + name + " to a module");
+
 					sb.append("convert ");
 					sb.append("--source \"");
-					sb.append(legacyPluginsSDKPath.toString());
+					sb.append(pluginsSDKPath.toString());
 					sb.append("\" --base \"");
 					sb.append(targetProjectLocation.toString());
 					sb.append("\" \"");
@@ -127,19 +132,30 @@ public class MigratePluginsSDKProjectsToWorkspaceStep extends BaseUpgradeTaskSte
 
 					try {
 						BladeCLI.execute(sb.toString());
+
+						multiStatusBuilder.add(Status.OK_STATUS);
 					}
 					catch (Exception e) {
-						UpgradeTasksUIPlugin.logError("Convert failed on project " + name, e);
+						IStatus errorStatus = UpgradeTasksUIPlugin.createErrorStatus(
+							"Convert failed on project " + name, e);
+
+						UpgradeTasksUIPlugin.log(errorStatus);
+
+						multiStatusBuilder.add(errorStatus);
 					}
 				}
 			);
 
 			org.eclipse.core.runtime.Path path = new org.eclipse.core.runtime.Path(targetProjectLocation.toString());
 
-			_synchronizer.synchronizePath(path, progressMonitor);
+			IStatus syncStatus = _synchronizer.synchronizePath(path, progressMonitor);
+
+			multiStatusBuilder.add(syncStatus);
+
+			status = multiStatusBuilder.build();
 		}
 
-		return Status.OK_STATUS;
+		return status;
 	}
 
 	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};

@@ -36,6 +36,12 @@ public class UpgradeTasksUIPlugin extends AbstractUIPlugin {
 		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
 	}
 
+	public static void log(IStatus status) {
+		ILog log = _instance.getLog();
+
+		log.log(status);
+	}
+
 	public static void logError(String msg) {
 		ILog log = _instance.getLog();
 

@@ -4,7 +4,7 @@
    <property name="id" value="import_existing_plugins_sdk"/>
    <property name="imagePath" value="icons/import.png"/>
    <property name="requirement" value="required"/>
-   <property name="order" value="1"/>
+   <property name="order" value="2"/>
    <property name="taskId" value="migrate_plugins_sdk"/>
    <property name="title" value="Import Existing Plugins SDK"/>
    <service scope="prototype">

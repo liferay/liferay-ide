@@ -19,10 +19,12 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.model.ProjectNamedItem;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.tasks.core.ImportSDKProjectsOp;
+import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKTaskKeys;
 import com.liferay.ide.upgrade.tasks.ui.internal.ImportSDKProjectsWizard;
 import com.liferay.ide.upgrade.tasks.ui.internal.UpgradeTasksUIPlugin;
 
@@ -52,28 +54,34 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
- *
- * @Component(
- * property = {
- * 	"id=move_legacy_projects", "order=1", "stepId=" + MigratePluginsSDKProjectsToWorkspaceStepKeys.ID, "title=Move Legacy Projects"
- * },
- * scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
- *)
+ * @author Gregory Amerson
  */
-public class MoveLegacyProjectsAction extends BaseUpgradeTaskStepAction {
+@Component(
+	property = {
+		"id=move_plugins_sdk_projects_to_workspace", "order=3", "requirement=required",
+		"taskId=" + MigratePluginsSDKTaskKeys.ID, "title=Move Plugins SDK Projects to Workspace"
+	},
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
+)
+public class MovePluginsSDKProjectsToWorkspaceStep extends BaseUpgradeTaskStep implements SapphireContentAccessor {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
+		Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
+
 		Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
 
-		if (targetProjectLocation == null) {
-			return UpgradeTasksUIPlugin.createErrorStatus("There is no target project configured for current plan.");
+		if (currentProjectLocation == null) {
+			return UpgradeTasksUIPlugin.createErrorStatus(
+				"There is no current project location configured for current plan.");
 		}
 
 		Path pluginsSDKLoaction = targetProjectLocation.resolve("plugins-sdk");
@@ -88,8 +96,6 @@ public class MoveLegacyProjectsAction extends BaseUpgradeTaskStepAction {
 
 		UIUtil.sync(
 			() -> {
-				Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
-
 				ImportSDKProjectsWizard importSDKProjectsWizard = new ImportSDKProjectsWizard(
 					sdkProjectsImportOp, currentProjectLocation);
 
@@ -110,7 +116,7 @@ public class MoveLegacyProjectsAction extends BaseUpgradeTaskStepAction {
 			Stream<ProjectNamedItem> stream = projects.stream();
 
 			stream.map(
-				projectNamedItem -> _getter.get(projectNamedItem.getLocation())
+				projectNamedItem -> get(projectNamedItem.getLocation())
 			).map(
 				location -> Paths.get(location)
 			).forEach(
@@ -165,8 +171,6 @@ public class MoveLegacyProjectsAction extends BaseUpgradeTaskStepAction {
 
 		project.setDescription(description, monitor);
 	}
-
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;

@@ -43,7 +43,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"description=" + ImportExistingPluginsSDKStepKeys.DESCRIPTION, "id=" + ImportExistingPluginsSDKStepKeys.ID,
-		"imagePath=icons/import.png", "requirement=required", "order=1", "taskId=" + MigratePluginsSDKTaskKeys.ID,
+		"imagePath=icons/import.png", "requirement=required", "order=2", "taskId=" + MigratePluginsSDKTaskKeys.ID,
 		"title=" + ImportExistingPluginsSDKStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
