@@ -135,15 +135,7 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 		_enables.add(performImageHyperlink);
 
-		Label fillLabel = _formToolkit.createLabel(_buttonComposite, null);
-
-		GridData gridData = new GridData();
-
-		gridData.widthHint = 16;
-
-		fillLabel.setLayoutData(gridData);
-
-		_disposables.add(() -> fillLabel.dispose());
+		_fill(_formToolkit, _buttonComposite, _disposables);
 
 		Image taskStepActionCompleteImage = UpgradePlanUIPlugin.getImage(
 			UpgradePlanUIPlugin.TASK_STEP_ACTION_COMPLETE_IMAGE);
@@ -175,6 +167,8 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 		_disposables.add(() -> completeImageHyperlink.dispose());
 
 		_enables.add(completeImageHyperlink);
+
+		_fill(formToolkit, _buttonComposite, _disposables);
 
 		Image taskStepActionSkipImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_ACTION_SKIP_IMAGE);
 
@@ -289,6 +283,18 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTas
 
 	private void _complete() {
 		_upgradeTaskStepAction.setStatus(UpgradePlanElementStatus.COMPLETED);
+	}
+
+	private void _fill(FormToolkit formToolkit, Composite parent, List<Disposable> disposables) {
+		Label fillLabel = formToolkit.createLabel(parent, null);
+
+		GridData gridData = new GridData();
+
+		gridData.widthHint = 16;
+
+		fillLabel.setLayoutData(gridData);
+
+		disposables.add(() -> fillLabel.dispose());
 	}
 
 	private IStatus _perform(IProgressMonitor progressMonitor) {
