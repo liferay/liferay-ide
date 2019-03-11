@@ -17,12 +17,13 @@ package com.liferay.ide.upgrade.tasks.ui.internal.sdk;
 /**
  * @author Gregory Amerson
  */
-public class MigratePluginsSDKProjectsToWorkspaceStepKeys {
+public class ConvertPluginsSDKProjectsToModulesStepKeys {
 
-	public static final String DESCRIPTION = "Move legacy SDK projects into your liferay workspace.";
+	public static final String DESCRIPTION =
+		"Convert Plugin SDK projects to modules (jars or wars) in your Liferay workspace.";
 
-	public static final String ID = "move_legacy_projects";
+	public static final String ID = "convert_plugins_sdk_projects_to_modules";
 
-	public static final String TITLE = "Move Legacy Projects";
+	public static final String TITLE = "Convert Plugin SDK Projects to Modules";
 
 }

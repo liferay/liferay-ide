@@ -4,7 +4,7 @@
    <property name="id" value="auto_correct_problems"/>
    <property name="order" value="1"/>
    <property name="requirement" value="recommended"/>
-   <property name="stepId" value="auto_correct_problems"/>
+   <property name="stepId" value="auto_correct_upgrade_problems"/>
    <property name="title" value="Auto Correct Upgrade Problems"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>

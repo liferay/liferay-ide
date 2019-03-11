@@ -47,7 +47,7 @@ public class MultiStatusBuilder {
 		return this;
 	}
 
-	public IStatus retval() {
+	public IStatus build() {
 		return _retval;
 	}
 

@@ -26,6 +26,8 @@ public class FindUpgradeProblemsTaskKeys {
 		"Correct Upgrade Problems step.\nFor all breaking changes that can not be fixed automatically use the " +
 		"provided breaking changes documentation to manually fix the code to complete the upgrade.";
 
+	public static final String ID = "find_upgrade_problems";
+
 	public static final String TITLE = "Find Upgrade Problems";
 
 }

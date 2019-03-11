@@ -73,7 +73,7 @@ public class SDKImportProjectsOpMethods {
 					}
 				}
 
-				return statusBuilder.retval();
+				return statusBuilder.build();
 			}
 
 		};
