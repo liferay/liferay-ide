@@ -38,6 +38,7 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 		_imagePath = getStringProperty(properties, "imagePath");
 		_title = getStringProperty(properties, "title");
 		_order = getDoubleProperty(properties, "order");
+		_url = getStringProperty(properties, "url");
 
 		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 
@@ -101,6 +102,11 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 	}
 
 	@Override
+	public String getUrl() {
+		return _url;
+	}
+
+	@Override
 	public int hashCode() {
 		int hash = 31;
 
@@ -137,5 +143,6 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 	private String _title;
 	private UpgradePlanElementStatus _upgradePlanElementStatus = UpgradePlanElementStatus.INCOMPLETE;
 	private UpgradePlanner _upgradePlanner;
+	private String _url;
 
 }

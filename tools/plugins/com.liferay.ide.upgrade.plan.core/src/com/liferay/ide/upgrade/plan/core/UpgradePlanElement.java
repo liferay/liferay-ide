@@ -65,6 +65,8 @@ public interface UpgradePlanElement {
 
 	public String getTitle();
 
+	public String getUrl();
+
 	public default <T extends UpgradePlanElement> boolean isEqual(List<T> source, List<T> target) {
 		if (source == null) {
 			if (target == null) {

@@ -16,7 +16,6 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 
 import com.vladsch.flexmark.ast.Document;
@@ -63,7 +62,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		if (element instanceof UpgradePlanElement) {
 			UpgradePlanElement upgradePlanElement = (UpgradePlanElement)element;
 
-			new Job(upgradePlanElement.getTitle() + " detail...") {
+			new Job("Retrieving " + upgradePlanElement.getTitle() + " detail...") {
 
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
@@ -96,8 +95,8 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 	@Override
 	public String getLabel(Object element) {
-		if (element instanceof UpgradeTaskStep) {
-			return _doUpgradeTaskStepLabel((UpgradeTaskStep)element);
+		if (element instanceof UpgradePlanElement) {
+			return _doUpgradePlanElementLabel((UpgradePlanElement)element);
 		}
 
 		return null;
@@ -109,18 +108,9 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 	}
 
 	private void _doUpgradePlanElementDetail(UpgradePlanElement upgradePlanElement, Deferred<String> deferred) {
-		if (upgradePlanElement instanceof UpgradeTaskStep) {
-			_doUpgradeTaskStepDetail((UpgradeTaskStep)upgradePlanElement, deferred);
-		}
-		else {
-			deferred.resolve(upgradePlanElement.getDescription());
-		}
-	}
-
-	private void _doUpgradeTaskStepDetail(UpgradeTaskStep upgradeTaskStep, Deferred<String> deferred) {
 		String detail = null;
 
-		String url = upgradeTaskStep.getUrl();
+		String url = upgradePlanElement.getUrl();
 
 		if (CoreUtil.isNotNullOrEmpty(url)) {
 			if (url.endsWith(".markdown")) {
@@ -138,11 +128,11 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		else {
 			StringBuffer sb = new StringBuffer();
 
-			sb.append(upgradeTaskStep.getTitle());
+			sb.append(upgradePlanElement.getTitle());
 
 			sb.append("<br />");
 
-			sb.append(upgradeTaskStep.getDescription());
+			sb.append(upgradePlanElement.getDescription());
 
 			detail = sb.toString();
 		}
@@ -150,8 +140,8 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		deferred.resolve(detail);
 	}
 
-	private String _doUpgradeTaskStepLabel(UpgradeTaskStep upgradeTaskStep) {
-		return upgradeTaskStep.getTitle();
+	private String _doUpgradePlanElementLabel(UpgradePlanElement upgradePlanElement) {
+		return upgradePlanElement.getTitle();
 	}
 
 	private String _downloadAndRenderMarkdown(String url) throws IOException {

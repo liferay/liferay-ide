@@ -35,8 +35,6 @@ public interface UpgradeTaskStep extends UpgradePlanElement {
 
 	public String getTaskId();
 
-	public String getUrl();
-
 	public IStatus perform(IProgressMonitor progressMonitor);
 
 }

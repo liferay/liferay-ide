@@ -28,6 +28,7 @@
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectDeletedEvent\.java" />
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectMovedEvent\.java" />
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectOpenedEvent\.java" />
+		<suppress checks="JavaLongLinesCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.ui/src/com/liferay/ide/upgrade/tasks/ui/internal/NewLiferayWorkspaceActionKeys\.java" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.gradle.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.plan.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.plan.ui/OSGI-INF/.*\.xml" />

@@ -5,6 +5,7 @@
    <property name="requirement" value="required"/>
    <property name="stepId" value="setup_liferay_workspace"/>
    <property name="title" value="New Liferay Workspace"/>
+   <property name="url" value="https://raw.githubusercontent.com/liferay/liferay-docs/7.1.x/develop/tutorials/articles/100-tooling/02-liferay-ide/02-creating-a-liferay-workspace-with-liferay-ide.markdown"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>
    </service>

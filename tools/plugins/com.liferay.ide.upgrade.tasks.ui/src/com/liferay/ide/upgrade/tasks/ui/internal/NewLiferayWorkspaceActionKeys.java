@@ -12,16 +12,14 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.tasks.ui.internal;
 
 /**
  * @author Gregory Amerson
  */
-public class BaseUpgradeTaskCategory extends BaseUpgradePlanElement implements UpgradeTaskCategory {
+public class NewLiferayWorkspaceActionKeys {
 
-	@Override
-	public String getUrl() {
-		return null;
-	}
+	public static final String URL =
+		"https://raw.githubusercontent.com/liferay/liferay-docs/7.1.x/develop/tutorials/articles/100-tooling/02-liferay-ide/02-creating-a-liferay-workspace-with-liferay-ide.markdown";
 
 }

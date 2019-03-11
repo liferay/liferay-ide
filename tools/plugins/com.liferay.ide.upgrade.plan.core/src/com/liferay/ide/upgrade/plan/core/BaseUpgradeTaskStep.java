@@ -47,7 +47,6 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 
 		_requirement = getStringProperty(properties, "requirement");
 		_taskId = getStringProperty(properties, "taskId");
-		_url = getStringProperty(properties, "url");
 
 		_lookupActions(componentContext);
 	}
@@ -150,7 +149,7 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 
 		if (super.equals(object) && isEqualIgnoreCase(_taskId, baseUpgradeTaskStep.getTaskId()) &&
 			isEqual(_upgradeTaskStepActions, baseUpgradeTaskStep.getActions()) &&
-			isEqualIgnoreCase(_url, baseUpgradeTaskStep.getUrl()) &&
+			isEqualIgnoreCase(getUrl(), baseUpgradeTaskStep.getUrl()) &&
 			isEqualIgnoreCase(_requirement, targetRequirement.toString())) {
 
 			return true;
@@ -175,18 +174,13 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	}
 
 	@Override
-	public String getUrl() {
-		return _url;
-	}
-
-	@Override
 	public int hashCode() {
 		int hash = super.hashCode();
 
 		hash = 31 * hash + (_requirement != null ? _requirement.hashCode() : 0);
 		hash = 31 * hash + (_taskId != null ? _taskId.hashCode() : 0);
 		hash = 31 * hash + (Arrays.hashCode(_upgradeTaskStepActions.toArray()));
-		hash = 31 * hash + (_url != null ? _url.hashCode() : 0);
+		hash = 31 * hash + (getUrl() != null ? getUrl().hashCode() : 0);
 
 		return hash;
 	}
@@ -216,6 +210,5 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	private String _requirement;
 	private String _taskId;
 	private List<UpgradeTaskStepAction> _upgradeTaskStepActions;
-	private String _url;
 
 }
