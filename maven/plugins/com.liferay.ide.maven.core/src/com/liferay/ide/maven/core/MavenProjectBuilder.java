@@ -185,7 +185,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 				multiStatusBuilder.add(execStatus);
 				multiStatusBuilder.addAll(exceptions);
 
-				return multiStatusBuilder.retval();
+				return multiStatusBuilder.build();
 			}
 
 		};
