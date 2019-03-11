@@ -319,6 +319,12 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 				List<UpgradeTaskStepAction> actions = step.getActions();
 
+				String stepStatus = stepMemento.getString("status");
+
+				if (stepStatus != null) {
+					step.setStatus(UpgradePlanElementStatus.valueOf(stepStatus));
+				}
+
 				for (UpgradeTaskStepAction action : actions) {
 					if (action == null) {
 						continue;
@@ -327,9 +333,9 @@ public class UpgradePlannerService implements UpgradePlanner {
 					IMemento actionMemento = stepMemento.getChild(action.getId());
 
 					if (actionMemento != null) {
-						String status = actionMemento.getString("status");
+						String actionStatus = actionMemento.getString("status");
 
-						action.setStatus(UpgradePlanElementStatus.valueOf(status));
+						action.setStatus(UpgradePlanElementStatus.valueOf(actionStatus));
 					}
 				}
 			}
@@ -401,6 +407,8 @@ public class UpgradePlannerService implements UpgradePlanner {
 				if (stepMemento == null) {
 					stepMemento = taskMemento.createChild(step.getId());
 				}
+
+				stepMemento.putString("status", String.valueOf(step.getStatus()));
 
 				List<UpgradeTaskStepAction> actions = step.getActions();
 
