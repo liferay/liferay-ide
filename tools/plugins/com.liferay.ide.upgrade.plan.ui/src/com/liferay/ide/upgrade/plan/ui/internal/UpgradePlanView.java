@@ -180,7 +180,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 							() -> {
 								setContentDescription("Active upgrade plan: " + upgradePlan.getName());
 
-								_upgradePlanViewer.initTreeExpansion(_loadTreeExpansion());
+								if (_memento != null) {
+									_upgradePlanViewer.initTreeExpansion(_loadTreeExpansion());
+								}
 							});
 					}
 				}
