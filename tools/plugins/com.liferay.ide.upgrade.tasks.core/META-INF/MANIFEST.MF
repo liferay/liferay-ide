@@ -50,7 +50,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequi
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.database.PublishStagingContentStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.config.ScanPortalExtPropertiesStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.ImportLiferayWorkspaceAction.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.InitializeServerBundleAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.sdk.MigratePluginsSDKTask.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.code.ConfigureLiferayWorkspaceSettingsStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.core.internal.prerequisite.InstallBladeAction.xml,
