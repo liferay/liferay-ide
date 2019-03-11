@@ -130,7 +130,19 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		);
 	}
 
-	public Map<String, Set<String>> getExpansion() {
+	public Object getInput() {
+		return _treeViewer.getInput();
+	}
+
+	public ISelection getSelection() {
+		if (_treeViewer != null) {
+			return _treeViewer.getSelection();
+		}
+
+		return null;
+	}
+
+	public Map<String, Set<String>> getTreeExpansion() {
 		Map<String, Set<String>> expansionMap = new HashMap<>();
 
 		Object[] elements = _treeViewer.getExpandedElements();
@@ -166,19 +178,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		return expansionMap;
 	}
 
-	public Object getInput() {
-		return _treeViewer.getInput();
-	}
-
-	public ISelection getSelection() {
-		if (_treeViewer != null) {
-			return _treeViewer.getSelection();
-		}
-
-		return null;
-	}
-
-	public void initTreeView(Map<String, Set<String>> expansionMap) {
+	public void initTreeExpansion(Map<String, Set<String>> expansionMap) {
 		Set<String> tasks = expansionMap.get("task");
 
 		Stream<String> tasksStream = tasks.stream();

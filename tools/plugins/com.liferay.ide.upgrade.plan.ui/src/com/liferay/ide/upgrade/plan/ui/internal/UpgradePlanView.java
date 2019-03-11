@@ -140,7 +140,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 			UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
-			_saveTreeExpansion(memento, _upgradePlanViewer.getExpansion());
+			_saveTreeExpansion(memento, _upgradePlanViewer.getTreeExpansion());
 
 			upgradePlanner.saveUpgradePlan(upgradePlan);
 
@@ -180,7 +180,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 							() -> {
 								setContentDescription("Active upgrade plan: " + upgradePlan.getName());
 
-								_upgradePlanViewer.initTreeView(_loadTreeExpansion());
+								_upgradePlanViewer.initTreeExpansion(_loadTreeExpansion());
 							});
 					}
 				}
@@ -220,11 +220,11 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	}
 
 	private Map<String, Set<String>> _loadTreeExpansion() {
-		Map<String, Set<String>> expansionMap = new HashMap<>();
+		Map<String, Set<String>> treeExpansionMap = new HashMap<>();
 
-		IMemento upgradeExpansionMemento = _memento.getChild("upgradePlanExpansion");
+		IMemento upgradePlanTreeExpansionMemento = _memento.getChild("upgradePlanTreeExpansion");
 
-		IMemento tasksMemento = upgradeExpansionMemento.getChild("tasks");
+		IMemento tasksMemento = upgradePlanTreeExpansionMemento.getChild("tasks");
 
 		IMemento[] taskMementos = tasksMemento.getChildren("task");
 
@@ -234,9 +234,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			taskExpansionSet.add(taskMemento.getString("id"));
 		}
 
-		expansionMap.put("task", taskExpansionSet);
+		treeExpansionMap.put("task", taskExpansionSet);
 
-		IMemento stepsMemento = upgradeExpansionMemento.getChild("steps");
+		IMemento stepsMemento = upgradePlanTreeExpansionMemento.getChild("steps");
 
 		IMemento[] stepMementos = stepsMemento.getChildren("step");
 
@@ -246,15 +246,15 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			stepExpansionSet.add(stepMemento.getString("id"));
 		}
 
-		expansionMap.put("step", stepExpansionSet);
+		treeExpansionMap.put("step", stepExpansionSet);
 
-		return expansionMap;
+		return treeExpansionMap;
 	}
 
 	private void _saveTreeExpansion(IMemento memento, Map<String, Set<String>> expansionMap) {
-		IMemento upgradePlanExpansionMemento = memento.createChild("upgradePlanExpansion");
+		IMemento upgradePlanTreeExpansionMemento = memento.createChild("upgradePlanTreeExpansion");
 
-		IMemento tasksExpansionMemento = upgradePlanExpansionMemento.createChild("tasks");
+		IMemento tasksExpansionMemento = upgradePlanTreeExpansionMemento.createChild("tasks");
 
 		Set<String> taskExpansions = expansionMap.get("task");
 
@@ -264,7 +264,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			taskExpansionMemento.putString("id", taskId);
 		}
 
-		IMemento stepsExpansionMemento = upgradePlanExpansionMemento.createChild("steps");
+		IMemento stepsExpansionMemento = upgradePlanTreeExpansionMemento.createChild("steps");
 
 		Set<String> stepExpansions = expansionMap.get("step");
 
