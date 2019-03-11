@@ -63,7 +63,7 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
  * @author Terry Jia
  * @author Gregory Amerson
  */
-public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeTaskItem, UpgradeListener {
+public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeItem, UpgradeListener {
 
 	public UpgradeTaskStepActionItem(
 		FormToolkit formToolkit, ScrolledForm scrolledForm, UpgradeTaskStepAction upgradeTaskStepAction) {
