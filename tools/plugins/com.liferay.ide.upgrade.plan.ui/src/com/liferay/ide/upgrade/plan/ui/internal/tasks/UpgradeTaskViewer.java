@@ -149,7 +149,7 @@ public class UpgradeTaskViewer implements ISelectionProvider {
 
 			_scrolledForm.setText(upgradeTask.getTitle());
 
-			UpgradeTaskItemImpl upgradeTaskItemImpl = new UpgradeTaskItemImpl(_formToolkit, _scrolledForm, upgradeTask);
+			UpgradeTaskItem upgradeTaskItemImpl = new UpgradeTaskItem(_formToolkit, _scrolledForm, upgradeTask);
 
 			upgradeTaskItemImpl.addSelectionChangedListener(this::_fireSelectionChanged);
 		}
