@@ -9,7 +9,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.liferay.ide.upgrade.problems.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 3.6.0.qualifier
-Export-Package: com.liferay.ide.upgrade.problems.core
+Export-Package: com.liferay.ide.upgrade.problems.core,
+ com.liferay.ide.upgrade.problems.core.tasks
 Require-Bundle: com.google.guava,
  com.liferay.ide.core,
  com.liferay.ide.project.core,
@@ -33,7 +34,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.CUCacheJDT.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.CUCacheWTP.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.JavaFileJDT.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsTask.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.DecoupledImplementingBaseURLClasses.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.MovedOrganizationTypeProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.RemovedDescriptionHtmlEscaping.xml,
@@ -162,6 +162,7 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LayoutTemplateFile.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.LegacyLayoutTemplate.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.RemovePreviousResultStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsAction.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.RemovePreviousUpgradeProblemsAction.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.FixUpgradeProblemsTask.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.AutoCorrectFindUpgradeProblemsAction.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.RemoveUpgradeProblemMarkersAction.xml

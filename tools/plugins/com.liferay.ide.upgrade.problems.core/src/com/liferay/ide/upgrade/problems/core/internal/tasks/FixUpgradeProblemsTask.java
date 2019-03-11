@@ -14,9 +14,8 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-import com.liferay.ide.upgrade.problems.core.tasks.FindUpgradeProblemsStepKeys;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
+import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.problems.core.tasks.FixUpgradeProblemsTaskKeys;
 
 import org.osgi.service.component.annotations.Component;
@@ -24,14 +23,15 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"description=" + FindUpgradeProblemsStepKeys.DESCRIPTION, "id=" + FindUpgradeProblemsStepKeys.ID,
-		"imagePath=icons/find_upgrade_problems.gif", "requirement=recommended", "order=2",
-		"taskId=" + FixUpgradeProblemsTaskKeys.ID, "title=" + FindUpgradeProblemsStepKeys.TITLE
+		"categoryId=code", "description=" + FixUpgradeProblemsTaskKeys.DESCRIPTION,
+		"id=" + FixUpgradeProblemsTaskKeys.ID, "imagePath=icons/find_problems.gif", "order=6",
+		"title=" + FixUpgradeProblemsTaskKeys.TITLE
 	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )
-public class FindUpgradeProblemsStep extends BaseUpgradeTaskStep {
+public class FixUpgradeProblemsTask extends BaseUpgradeTask {
 }

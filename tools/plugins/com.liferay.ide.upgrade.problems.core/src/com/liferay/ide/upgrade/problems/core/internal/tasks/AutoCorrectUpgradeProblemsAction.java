@@ -24,6 +24,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
+import com.liferay.ide.upgrade.problems.core.tasks.AutoCorrectUpgradeProblemsStepKeys;
 
 import java.io.File;
 
@@ -53,7 +54,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"description=" + AutoCorrectUpgradeProblemsActionKeys.DESCRIPTION, "id=auto_correct_problems", "order=1",
+		"description=" + AutoCorrectUpgradeProblemsActionKeys.DESCRIPTION, "id=auto_correct_problems", "order=2",
 		"requirement=recommended", "stepId=" + AutoCorrectUpgradeProblemsStepKeys.ID,
 		"title=" + AutoCorrectUpgradeProblemsActionKeys.TITLE
 	},

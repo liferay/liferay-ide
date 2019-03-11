@@ -12,25 +12,33 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal.tasks;
+package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.problems.core.tasks.FindUpgradeProblemsStepKeys;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
- * @author Terry Jia
  * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"categoryId=code", "description=" + FindUpgradeProblemsTaskKeys.DESCRIPTION,
-		"id=" + FindUpgradeProblemsTaskKeys.ID, "imagePath=icons/find_problems.gif", "order=6",
-		"title=" + FindUpgradeProblemsTaskKeys.TITLE
+		"id=show_upgrade_problems", "order=2", "requirement=recommended", "stepId=" + FindUpgradeProblemsStepKeys.ID,
+		"title=Show Upgrade problems"
 	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class FindUpgradeProblemsTask extends BaseUpgradeTask {
+public class ShowUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
+
+	@Override
+	public IStatus perform(IProgressMonitor progressMonitor) {
+		return null;
+	}
+
 }

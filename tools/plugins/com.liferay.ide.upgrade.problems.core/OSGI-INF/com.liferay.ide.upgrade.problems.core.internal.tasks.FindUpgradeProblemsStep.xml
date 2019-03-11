@@ -5,7 +5,7 @@
    <property name="imagePath" value="icons/find_upgrade_problems.gif"/>
    <property name="requirement" value="recommended"/>
    <property name="order" value="2"/>
-   <property name="taskId" value="find_upgrade_problems"/>
+   <property name="taskId" value="fix_upgrade_problems"/>
    <property name="title" value="Find Upgrade Problems"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>

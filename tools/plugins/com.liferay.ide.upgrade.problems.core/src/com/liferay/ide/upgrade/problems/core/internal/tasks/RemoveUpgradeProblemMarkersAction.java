@@ -21,6 +21,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
+import com.liferay.ide.upgrade.problems.core.tasks.AutoCorrectUpgradeProblemsStepKeys;
 import com.liferay.ide.upgrade.tasks.core.MessagePrompt;
 
 import java.util.ArrayList;
@@ -40,20 +41,22 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"description=" + RemovePreviousUpgradeProblemsStepKeys.DESCRIPTION, "id=remove_previous_upgrade_problems",
-		"order=1", "requirement=recommended", "stepId=remove_previous_upgrade_problems",
-		"title=" + RemovePreviousUpgradeProblemsStepKeys.TITLE
+		"description=" + RemoveUpgradeProblemMarkersActionKeys.DESCRIPTION, "id=remove_previous_upgrade_problems",
+		"imagePath=icons/remove_previous_result.png", "order=3", "requirement=recommended",
+		"stepId=" + AutoCorrectUpgradeProblemsStepKeys.ID, "title=" + RemoveUpgradeProblemMarkersActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class RemovePreviousUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
+public class RemoveUpgradeProblemMarkersAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		boolean result = _messagePrompt.prompt("Remove Previous Result", "Are you sure to remove the previous result?");
+		boolean result = _messagePrompt.prompt(
+			"Remove Upgrade Proble Markers", "Are you sure to remove the upgrade problem markers?");
 
 		if (result) {
 			UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
