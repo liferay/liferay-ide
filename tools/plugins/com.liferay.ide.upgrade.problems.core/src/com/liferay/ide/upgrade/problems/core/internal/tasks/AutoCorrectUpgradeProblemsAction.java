@@ -54,7 +54,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"description=" + AutoCorrectUpgradeProblemsActionKeys.DESCRIPTION, "id=auto_correct_problems", "order=1",
-		"requirement=recommended", "stepId=auto_correct_problems", "title=" + AutoCorrectUpgradeProblemsActionKeys.TITLE
+		"requirement=recommended", "stepId=" + AutoCorrectUpgradeProblemsStepKeys.ID,
+		"title=" + AutoCorrectUpgradeProblemsActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )

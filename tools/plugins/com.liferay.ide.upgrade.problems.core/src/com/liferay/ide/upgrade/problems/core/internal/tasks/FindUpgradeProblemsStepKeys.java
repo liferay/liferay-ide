@@ -24,6 +24,8 @@ public class FindUpgradeProblemsStepKeys {
 		"to the problematic resources. Once upgrade problems are found, you can go to the Project Explorer to browse " +
 		"the upgrade problems and see associated breaking change documentation.";
 
+	public static final String ID = "find_upgrade_problems";
+
 	public static final String TITLE = "Find Upgrade Problems";
 
 }

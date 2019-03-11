@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = {
 		"description=" + RemovePreviousUpgradeProblemsStepKeys.DESCRIPTION, "id=remove_previous_upgrade_problems",
 		"imagePath=icons/remove_previous_result.png", "requirement=recommended", "order=2",
-		"taskId=find_upgrade_problems", "title=" + RemovePreviousUpgradeProblemsStepKeys.TITLE
+		"taskId=" + FindUpgradeProblemsTaskKeys.ID, "title=" + RemovePreviousUpgradeProblemsStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

@@ -23,6 +23,8 @@ public class AutoCorrectUpgradeProblemsStepKeys {
 		"Performing this step will correct some easy upgrade problems automatically. You can edit the rest problems " +
 		"manually according to the breaking changes provided.";
 
+	public static final String ID = "auto_correct_upgrade_problems";
+
 	public static final String TITLE = "Auto Correct Upgrade Problems";
 
 }

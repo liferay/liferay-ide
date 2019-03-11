@@ -22,11 +22,13 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"categoryId=code", "description=" + FindUpgradeProblemsTaskKeys.DESCRIPTION, "id=find_upgrade_problems",
-		"imagePath=icons/find_problems.gif", "order=6", "title=" + FindUpgradeProblemsTaskKeys.TITLE
+		"categoryId=code", "description=" + FindUpgradeProblemsTaskKeys.DESCRIPTION,
+		"id=" + FindUpgradeProblemsTaskKeys.ID, "imagePath=icons/find_problems.gif", "order=6",
+		"title=" + FindUpgradeProblemsTaskKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTask.class
 )
