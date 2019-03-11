@@ -34,9 +34,9 @@ public class ExpandHandler extends AbstractHandler {
 		if (part instanceof UpgradePlanView) {
 			UpgradePlanView upgradePlanView = (UpgradePlanView)part;
 
-			UpgradePlanViewer upradPlanViewer = upgradePlanView.getUpgradePlanViewer();
+			UpgradePlanViewer uprgadePlanViewer = upgradePlanView.getUpgradePlanViewer();
 
-			TreeViewer treeViewer = upradPlanViewer.getTreeViewer();
+			TreeViewer treeViewer = uprgadePlanViewer.getTreeViewer();
 
 			Tree tree = treeViewer.getTree();
 
