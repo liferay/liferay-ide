@@ -29,51 +29,6 @@ public interface UpgradePlanElement {
 		return true;
 	}
 
-	public default <T extends UpgradePlanElement> boolean compare(List<T> source, List<T> target) {
-		if (source == null) {
-			if (target == null) {
-				return true;
-			}
-
-			return false;
-		}
-
-		if (target == null) {
-			return false;
-		}
-
-		if (source.size() != target.size()) {
-			return false;
-		}
-
-		Stream<T> targetStream = target.stream();
-
-		List<String> targetElementIds = targetStream.map(
-			element -> element.getId()
-		).collect(
-			Collectors.toList()
-		);
-
-		Stream<T> sourceStream = source.stream();
-
-		return sourceStream.filter(
-			element -> targetElementIds.contains(element.getId())
-		).findAny(
-		).isPresent();
-	}
-
-	public default boolean compare(String original, String target) {
-		if (original != null) {
-			return original.equalsIgnoreCase(target);
-		}
-
-		if (target == null) {
-			return true;
-		}
-
-		return false;
-	}
-
 	public String getDescription();
 
 	public default double getDoubleProperty(Dictionary<String, Object> properties, String key) {
@@ -109,6 +64,51 @@ public interface UpgradePlanElement {
 	}
 
 	public String getTitle();
+
+	public default <T extends UpgradePlanElement> boolean isEqual(List<T> source, List<T> target) {
+		if (source == null) {
+			if (target == null) {
+				return true;
+			}
+
+			return false;
+		}
+
+		if (target == null) {
+			return false;
+		}
+
+		if (source.size() != target.size()) {
+			return false;
+		}
+
+		Stream<T> targetStream = target.stream();
+
+		List<String> targetElementIds = targetStream.map(
+			element -> element.getId()
+		).collect(
+			Collectors.toList()
+		);
+
+		Stream<T> sourceStream = source.stream();
+
+		return sourceStream.filter(
+			element -> targetElementIds.contains(element.getId())
+		).findAny(
+		).isPresent();
+	}
+
+	public default boolean isEqualIgnoreCase(String original, String target) {
+		if (original != null) {
+			return original.equalsIgnoreCase(target);
+		}
+
+		if (target == null) {
+			return true;
+		}
+
+		return false;
+	}
 
 	public void setStatus(UpgradePlanElementStatus upgradePlanElementStatus);
 

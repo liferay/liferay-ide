@@ -58,9 +58,11 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 			return false;
 		}
 
-		if (compare(_description, upgradePlanElement.getDescription()) && compare(_id, upgradePlanElement.getId()) &&
-			compare(_imagePath, upgradePlanElement.getImagePath()) && (_order == upgradePlanElement.getOrder()) &&
-			compare(_title, upgradePlanElement.getTitle()) && _upgradePlanElementStatus.equals(getStatus())) {
+		if (isEqualIgnoreCase(_description, upgradePlanElement.getDescription()) &&
+			isEqualIgnoreCase(_id, upgradePlanElement.getId()) &&
+			isEqualIgnoreCase(_imagePath, upgradePlanElement.getImagePath()) &&
+			(_order == upgradePlanElement.getOrder()) && isEqualIgnoreCase(_title, upgradePlanElement.getTitle()) &&
+			_upgradePlanElementStatus.equals(getStatus())) {
 
 			return true;
 		}

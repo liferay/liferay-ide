@@ -58,8 +58,8 @@ public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements 
 			return false;
 		}
 
-		if (super.equals(object) && compare(_categoryId, target.getCategoryId()) &&
-			compare(_upgradeTaskSteps, target.getSteps())) {
+		if (super.equals(object) && isEqualIgnoreCase(_categoryId, target.getCategoryId()) &&
+			isEqual(_upgradeTaskSteps, target.getSteps())) {
 
 			return true;
 		}
