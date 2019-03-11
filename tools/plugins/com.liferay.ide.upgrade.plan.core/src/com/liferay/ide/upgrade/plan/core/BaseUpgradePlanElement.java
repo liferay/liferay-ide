@@ -48,15 +48,15 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 			return false;
 		}
 
-		BaseUpgradePlanElement target = Adapters.adapt(obj, BaseUpgradePlanElement.class);
+		BaseUpgradePlanElement upgradePlanElement = Adapters.adapt(obj, BaseUpgradePlanElement.class);
 
-		if (target == null) {
+		if (upgradePlanElement == null) {
 			return false;
 		}
 
-		if (compare(_description, target.getDescription()) && compare(_id, target.getId()) &&
-			compare(_imagePath, target.getImagePath()) && (_order == target.getOrder()) &&
-			compare(_title, target.getTitle()) && _upgradePlanElementStatus.equals(getStatus())) {
+		if (compare(_description, upgradePlanElement.getDescription()) && compare(_id, upgradePlanElement.getId()) &&
+			compare(_imagePath, upgradePlanElement.getImagePath()) && (_order == upgradePlanElement.getOrder()) &&
+			compare(_title, upgradePlanElement.getTitle()) && _upgradePlanElementStatus.equals(getStatus())) {
 
 			return true;
 		}
