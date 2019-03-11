@@ -47,12 +47,12 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if ((obj instanceof BaseUpgradePlanElement) == false) {
+	public boolean equals(Object object) {
+		if ((object instanceof BaseUpgradePlanElement) == false) {
 			return false;
 		}
 
-		BaseUpgradePlanElement upgradePlanElement = Adapters.adapt(obj, BaseUpgradePlanElement.class);
+		BaseUpgradePlanElement upgradePlanElement = Adapters.adapt(object, BaseUpgradePlanElement.class);
 
 		if (upgradePlanElement == null) {
 			return false;

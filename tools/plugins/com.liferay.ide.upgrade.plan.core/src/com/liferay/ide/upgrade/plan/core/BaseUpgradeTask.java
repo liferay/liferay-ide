@@ -47,18 +47,18 @@ public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements 
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if ((obj instanceof BaseUpgradeTask) == false) {
+	public boolean equals(Object object) {
+		if ((object instanceof BaseUpgradeTask) == false) {
 			return false;
 		}
 
-		BaseUpgradeTask target = Adapters.adapt(obj, BaseUpgradeTask.class);
+		BaseUpgradeTask target = Adapters.adapt(object, BaseUpgradeTask.class);
 
 		if (target == null) {
 			return false;
 		}
 
-		if (super.equals(obj) && compare(_categoryId, target.getCategoryId()) &&
+		if (super.equals(object) && compare(_categoryId, target.getCategoryId()) &&
 			compare(_upgradeTaskSteps, target.getSteps())) {
 
 			return true;
