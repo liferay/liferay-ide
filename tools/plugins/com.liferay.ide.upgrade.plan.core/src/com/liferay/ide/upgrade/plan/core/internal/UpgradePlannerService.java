@@ -192,6 +192,8 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 	@Override
 	public void restartStep(UpgradeTaskStep upgradeTaskStep) {
+		upgradeTaskStep.setStatus(UpgradePlanElementStatus.INCOMPLETE);
+
 		List<UpgradeTaskStepAction> actions = upgradeTaskStep.getActions();
 
 		Stream<UpgradeTaskStepAction> stream = actions.stream();
@@ -201,6 +203,18 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 	@Override
 	public void restartTask(UpgradeTask upgradeTask) {
+		List<UpgradeTaskStep> upgradeTaskSteps = upgradeTask.getSteps();
+
+		for (UpgradeTaskStep upgradeTaskStep : upgradeTaskSteps) {
+			upgradeTaskStep.setStatus(UpgradePlanElementStatus.INCOMPLETE);
+
+			List<UpgradeTaskStepAction> actions = upgradeTaskStep.getActions();
+
+			Stream<UpgradeTaskStepAction> stream = actions.stream();
+
+			stream.forEach(action -> action.setStatus(UpgradePlanElementStatus.INCOMPLETE));
+		}
+
 	}
 
 	@Override

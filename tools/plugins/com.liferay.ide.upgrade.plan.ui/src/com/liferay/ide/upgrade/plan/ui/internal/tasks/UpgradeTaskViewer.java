@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
+import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
@@ -143,7 +144,16 @@ public class UpgradeTaskViewer implements ISelectionProvider {
 
 		UpgradePlanElement upgradePlanElement = _getSelectedUpgradePlanElement(selection);
 
-		if (upgradePlanElement instanceof UpgradeTaskStep) {
+		if (upgradePlanElement instanceof UpgradeTask) {
+			UpgradeTask upgradeTask = (UpgradeTask)upgradePlanElement;
+
+			_scrolledForm.setText(upgradeTask.getTitle());
+
+			UpgradeTaskItemImpl upgradeTaskItemImpl = new UpgradeTaskItemImpl(_formToolkit, _scrolledForm, upgradeTask);
+
+			upgradeTaskItemImpl.addSelectionChangedListener(this::_fireSelectionChanged);
+		}
+		else if (upgradePlanElement instanceof UpgradeTaskStep) {
 			UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)upgradePlanElement;
 
 			_scrolledForm.setText(upgradeTaskStep.getTitle());
