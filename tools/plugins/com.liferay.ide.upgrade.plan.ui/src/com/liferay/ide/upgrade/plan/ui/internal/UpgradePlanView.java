@@ -101,6 +101,10 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 		return _upgradeTaskViewer.getSelection();
 	}
 
+	public UpgradePlanViewer getUpgradePlanViewer() {
+		return _upgradePlanViewer;
+	}
+
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);

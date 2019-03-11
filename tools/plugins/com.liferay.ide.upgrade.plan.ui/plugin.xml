@@ -6,6 +6,14 @@
 		point="org.eclipse.ui.commandImages"
 	>
 		<image
+			commandId="com.liferay.ide.upgrade.plan.ui.expandall"
+			icon="icons/expand_node.png"
+		/>
+		<image
+			commandId="com.liferay.ide.upgrade.plan.ui.collapseall"
+			icon="icons/collapse_node.png"
+		/>
+		<image
 			commandId="com.liferay.ide.upgrade.plan.ui.restartupgradeplan"
 			icon="icons/restart.gif"
 		/>
@@ -62,6 +70,18 @@
 			locationURI="toolbar:com.liferay.ide.upgrade.plan.view"
 		>
 			<command
+				commandId="com.liferay.ide.upgrade.plan.ui.expandall"
+				icon="icons/expand_node.png"
+				style="push"
+			>
+			</command>
+			<command
+				commandId="com.liferay.ide.upgrade.plan.ui.collapseall"
+				icon="icons/collapse_node.png"
+				style="push"
+			>
+			</command>
+			<command
 				commandId="com.liferay.ide.upgrade.plan.ui.restartupgradeplan"
 				icon="icons/restart.gif"
 				style="push"
@@ -91,6 +111,16 @@
 		point="org.eclipse.ui.commands"
 	>
 		<command
+			id="com.liferay.ide.upgrade.plan.ui.expandall"
+			name="Expand All"
+		>
+		</command>
+		<command
+			id="com.liferay.ide.upgrade.plan.ui.collapseall"
+			name="Collapse All"
+		>
+		</command>
+		<command
 			id="com.liferay.ide.upgrade.plan.ui.restartupgradeplan"
 			name="Restart Upgrade Plan"
 		>
@@ -104,6 +134,16 @@
 	<extension
 		point="org.eclipse.ui.handlers"
 	>
+		<handler
+			class="com.liferay.ide.upgrade.plan.ui.internal.ExpandHandler"
+			commandId="com.liferay.ide.upgrade.plan.ui.expandall"
+		>
+		</handler>
+		<handler
+			class="com.liferay.ide.upgrade.plan.ui.internal.CollapseHandler"
+			commandId="com.liferay.ide.upgrade.plan.ui.collapseall"
+		>
+		</handler>
 		<handler
 			class="com.liferay.ide.upgrade.plan.ui.internal.RestartUpgradeHandler"
 			commandId="com.liferay.ide.upgrade.plan.ui.restartupgradeplan"
