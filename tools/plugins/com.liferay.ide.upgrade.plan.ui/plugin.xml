@@ -6,6 +6,10 @@
 		point="org.eclipse.ui.commandImages"
 	>
 		<image
+			commandId="com.liferay.ide.upgrade.plan.ui.restartupgradeplan"
+			icon="icons/restart.gif"
+		/>
+		<image
 			commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
 			icon="icons/liferay_logo_16.png"
 		/>
@@ -58,6 +62,12 @@
 			locationURI="toolbar:com.liferay.ide.upgrade.plan.view"
 		>
 			<command
+				commandId="com.liferay.ide.upgrade.plan.ui.restartupgradeplan"
+				icon="icons/restart.gif"
+				style="push"
+			>
+			</command>
+			<command
 				commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
 				icon="icons/liferay_logo_16.png"
 				style="push"
@@ -81,6 +91,11 @@
 		point="org.eclipse.ui.commands"
 	>
 		<command
+			id="com.liferay.ide.upgrade.plan.ui.restartupgradeplan"
+			name="Restart Upgrade Plan"
+		>
+		</command>
+		<command
 			id="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
 			name="New Upgrade Plan"
 		>
@@ -89,6 +104,11 @@
 	<extension
 		point="org.eclipse.ui.handlers"
 	>
+		<handler
+			class="com.liferay.ide.upgrade.plan.ui.internal.RestartUpgradeHandler"
+			commandId="com.liferay.ide.upgrade.plan.ui.restartupgradeplan"
+		>
+		</handler>
 		<handler
 			class="com.liferay.ide.upgrade.plan.ui.internal.NewUpgradePlanHandler"
 			commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
