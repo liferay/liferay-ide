@@ -78,20 +78,20 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if ((obj instanceof BaseUpgradeTaskStepAction) == false) {
+	public boolean equals(Object object) {
+		if ((object instanceof BaseUpgradeTaskStepAction) == false) {
 			return false;
 		}
 
-		BaseUpgradeTaskStepAction target = Adapters.adapt(obj, BaseUpgradeTaskStepAction.class);
+		BaseUpgradeTaskStepAction baseUpgradeTaskStepAction = Adapters.adapt(object, BaseUpgradeTaskStepAction.class);
 
-		if (target == null) {
+		if (baseUpgradeTaskStepAction == null) {
 			return false;
 		}
 
-		UpgradePlanElementRequirement targetRequirement = target.getRequirement();
+		UpgradePlanElementRequirement targetRequirement = baseUpgradeTaskStepAction.getRequirement();
 
-		if (super.equals(obj) && isEqualIgnoreCase(_stepId, target.getStepId()) &&
+		if (super.equals(object) && isEqualIgnoreCase(_stepId, baseUpgradeTaskStepAction.getStepId()) &&
 			isEqualIgnoreCase(_requirement, targetRequirement.toString())) {
 
 			return true;
