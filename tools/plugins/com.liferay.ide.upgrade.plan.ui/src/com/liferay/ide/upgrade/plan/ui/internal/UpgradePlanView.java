@@ -140,7 +140,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 			UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
-			_saveUpgradePlanExpansionState(memento, _upgradePlanViewer.getExpansion());
+			_saveTreeExpansion(memento, _upgradePlanViewer.getExpansion());
 
 			upgradePlanner.saveUpgradePlan(upgradePlan);
 
@@ -176,36 +176,11 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 					UpgradePlan upgradePlan = upgradePlanStartedEvent.getUpgradePlan();
 
 					if (upgradePlan != null) {
-						Map<String, Set<String>> expansionMaps = new HashMap<>();
-						Set<String> taskExpansions = new HashSet<>();
-						Set<String> stepExpansions = new HashSet<>();
-
-						IMemento upgradeExpansionMemento = _memento.getChild("upgradePlanExpansion");
-
-						IMemento tasksMemento = upgradeExpansionMemento.getChild("tasks");
-
-						IMemento[] taskMementos = tasksMemento.getChildren("task");
-
-						for (IMemento taskMemento : taskMementos) {
-							taskExpansions.add(taskMemento.getString("id"));
-						}
-
-						expansionMaps.put("task", taskExpansions);
-
-						IMemento stepsMemento = upgradeExpansionMemento.getChild("steps");
-
-						IMemento[] stepMementos = stepsMemento.getChildren("step");
-
-						for (IMemento stepMemento : stepMementos) {
-							stepExpansions.add(stepMemento.getString("id"));
-						}
-
-						expansionMaps.put("step", stepExpansions);
-
 						UIUtil.async(
 							() -> {
 								setContentDescription("Active upgrade plan: " + upgradePlan.getName());
-								_upgradePlanViewer.initTreeView(expansionMaps);
+
+								_upgradePlanViewer.initTreeView(_loadTreeExpansion());
 							});
 					}
 				}
@@ -244,7 +219,39 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			});
 	}
 
-	private void _saveUpgradePlanExpansionState(IMemento memento, Map<String, Set<String>> expansionMap) {
+	private Map<String, Set<String>> _loadTreeExpansion() {
+		Map<String, Set<String>> expansionMap = new HashMap<>();
+
+		IMemento upgradeExpansionMemento = _memento.getChild("upgradePlanExpansion");
+
+		IMemento tasksMemento = upgradeExpansionMemento.getChild("tasks");
+
+		IMemento[] taskMementos = tasksMemento.getChildren("task");
+
+		Set<String> taskExpansionSet = new HashSet<>();
+
+		for (IMemento taskMemento : taskMementos) {
+			taskExpansionSet.add(taskMemento.getString("id"));
+		}
+
+		expansionMap.put("task", taskExpansionSet);
+
+		IMemento stepsMemento = upgradeExpansionMemento.getChild("steps");
+
+		IMemento[] stepMementos = stepsMemento.getChildren("step");
+
+		Set<String> stepExpansionSet = new HashSet<>();
+
+		for (IMemento stepMemento : stepMementos) {
+			stepExpansionSet.add(stepMemento.getString("id"));
+		}
+
+		expansionMap.put("step", stepExpansionSet);
+
+		return expansionMap;
+	}
+
+	private void _saveTreeExpansion(IMemento memento, Map<String, Set<String>> expansionMap) {
 		IMemento upgradePlanExpansionMemento = memento.createChild("upgradePlanExpansion");
 
 		IMemento tasksExpansionMemento = upgradePlanExpansionMemento.createChild("tasks");

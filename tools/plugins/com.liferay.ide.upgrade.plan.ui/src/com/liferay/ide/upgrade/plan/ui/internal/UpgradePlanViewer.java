@@ -26,10 +26,12 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
@@ -129,32 +131,39 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 	}
 
 	public Map<String, Set<String>> getExpansion() {
-		Map<String, Set<String>> expansionMaps = new HashMap<>();
+		Map<String, Set<String>> expansionMap = new HashMap<>();
+
 		Object[] elements = _treeViewer.getExpandedElements();
 
-		Set<String> taskExpansions = new HashSet<>();
-		Set<String> taskStepExpansions = new HashSet<>();
+		Set<String> taskExpansionSet = Stream.of(
+			elements
+		).map(
+			element -> Adapters.adapt(element, UpgradeTask.class)
+		).filter(
+			Objects::nonNull
+		).map(
+			element -> element.getId()
+		).collect(
+			Collectors.toSet()
+		);
 
-		UpgradePlanElement planElement = null;
+		expansionMap.put("task", taskExpansionSet);
 
-		for (Object element : elements) {
-			planElement = Adapters.adapt(element, UpgradeTask.class);
+		Set<String> stepExpansionSet = Stream.of(
+			elements
+		).map(
+			element -> Adapters.adapt(element, UpgradeTaskStep.class)
+		).filter(
+			Objects::nonNull
+		).map(
+			element -> element.getId()
+		).collect(
+			Collectors.toSet()
+		);
 
-			if (planElement != null) {
-				taskExpansions.add(planElement.getId());
-			}
+		expansionMap.put("step", stepExpansionSet);
 
-			planElement = Adapters.adapt(element, UpgradeTaskStep.class);
-
-			if (planElement != null) {
-				taskStepExpansions.add(planElement.getId());
-			}
-		}
-
-		expansionMaps.put("step", taskStepExpansions);
-		expansionMaps.put("task", taskExpansions);
-
-		return expansionMaps;
+		return expansionMap;
 	}
 
 	public Object getInput() {
@@ -169,21 +178,26 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		return null;
 	}
 
-	public void initTreeView(Map<String, Set<String>> expansionMaps) {
-		Set<String> tasks = expansionMaps.get("task");
-		Set<String> steps = expansionMaps.get("step");
+	public void initTreeView(Map<String, Set<String>> expansionMap) {
+		Set<String> tasks = expansionMap.get("task");
 
-		for (String taskId : tasks) {
-			UpgradeTask task = getTask(taskId);
+		Stream<String> tasksStream = tasks.stream();
 
-			_expandTreeItem(task);
-		}
+		tasksStream.map(
+			this::getTask
+		).forEach(
+			this::_expandTreeItem
+		);
 
-		for (String stepId : steps) {
-			UpgradeTaskStep step = getStep(stepId);
+		Set<String> steps = expansionMap.get("step");
 
-			_expandTreeItem(step);
-		}
+		Stream<String> stepsStream = steps.stream();
+
+		stepsStream.map(
+			this::getStep
+		).forEach(
+			this::_expandTreeItem
+		);
 	}
 
 	@Override
