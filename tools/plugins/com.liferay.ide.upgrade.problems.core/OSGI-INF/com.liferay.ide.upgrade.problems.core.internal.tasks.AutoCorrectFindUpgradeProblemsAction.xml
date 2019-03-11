@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.tasks.AutoCorrectFindUpgradeProblemsAction">
+   <property name="id" value="auto_correct_find_upgrade_problems"/>
+   <property name="order" value="1"/>
+   <property name="requirement" value="required"/>
+   <property name="stepId" value="auto_correct_upgrade_problems"/>
+   <property name="title" value="Find Upgrade Problems"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.tasks.AutoCorrectFindUpgradeProblemsAction"/>
+</scr:component>

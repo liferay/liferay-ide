@@ -3,10 +3,10 @@
 <suppressions>
 	<checkstyle>
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/AutoCorrectUpgradeProblemsActionKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/AutoCorrectUpgradeProblemsStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/FindUpgradeProblemsStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/FindUpgradeProblemsTaskKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/RemovePreviousUpgradeProblemsStepKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/tasks/RemoveUpgradeProblemMarkersActionKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/tasks/AutoCorrectUpgradeProblemsStepKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/tasks/FindUpgradeProblemsStepKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/tasks/FixUpgradeProblemsTaskKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/buildservice/RebuildServicesStepKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/buildservice/RebuildServicesTaskKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/code/ConfigureLiferayWorkspaceSettingsStepKeys\.java" />

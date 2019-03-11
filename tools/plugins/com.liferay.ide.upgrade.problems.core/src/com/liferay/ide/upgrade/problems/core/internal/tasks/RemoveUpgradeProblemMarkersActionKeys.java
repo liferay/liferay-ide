@@ -17,15 +17,12 @@ package com.liferay.ide.upgrade.problems.core.internal.tasks;
 /**
  * @author Gregory Amerson
  */
-public class FindUpgradeProblemsStepKeys {
+public class RemoveUpgradeProblemMarkersActionKeys {
 
 	public static final String DESCRIPTION =
-		"This step will help find breaking changes in Java, JSP, XML and properties files by adding problem markers " +
-		"to the problematic resources. Once upgrade problems are found, you can go to the Project Explorer to browse " +
-		"the upgrade problems and see associated breaking change documentation.";
+		"All previously found upgrade problem markers will be removed. This is highly recommended before performing " +
+		"the find upgrade problems step.";
 
-	public static final String ID = "find_upgrade_problems";
-
-	public static final String TITLE = "Find Upgrade Problems";
+	public static final String TITLE = "Remove Previous Upgrade Problems";
 
 }

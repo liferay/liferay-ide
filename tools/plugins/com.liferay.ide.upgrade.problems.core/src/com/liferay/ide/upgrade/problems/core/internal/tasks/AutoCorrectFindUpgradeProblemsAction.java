@@ -14,22 +14,22 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.problems.core.tasks.AutoCorrectUpgradeProblemsStepKeys;
+import com.liferay.ide.upgrade.problems.core.tasks.FindUpgradeProblemsStepKeys;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"description=" + RemovePreviousUpgradeProblemsStepKeys.DESCRIPTION, "id=remove_previous_upgrade_problems",
-		"imagePath=icons/remove_previous_result.png", "requirement=recommended", "order=2",
-		"taskId=" + FindUpgradeProblemsTaskKeys.ID, "title=" + RemovePreviousUpgradeProblemsStepKeys.TITLE
+		"id=auto_correct_find_upgrade_problems", "order=1", "requirement=required",
+		"stepId=" + AutoCorrectUpgradeProblemsStepKeys.ID, "title=" + FindUpgradeProblemsStepKeys.TITLE
 	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class RemovePreviousResultStep extends BaseUpgradeTaskStep {
+public class AutoCorrectFindUpgradeProblemsAction extends FindUpgradeProblemsAction {
 }

@@ -15,7 +15,9 @@
 package com.liferay.ide.gradle.core.upgrade;
 
 import com.liferay.ide.gradle.core.GradleUtil;
+import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKTaskKeys;
@@ -62,8 +64,17 @@ public class UpgradeToLatestPlukginsSDKStep extends BaseUpgradeTaskStep {
 			GradleUtil.runGradleTask(project, "upgradePluginsSDK", progressMonitor);
 
 			project.refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
+
+			setStatus(UpgradePlanElementStatus.COMPLETED);
 		}
 		catch (CoreException ce) {
+			setStatus(UpgradePlanElementStatus.FAILED);
+
+			IStatus error = LiferayGradleCore.createErrorStatus("Unable to run task upgradePluginsSDK", ce);
+
+			LiferayGradleCore.log(error);
+
+			return error;
 		}
 
 		return Status.OK_STATUS;

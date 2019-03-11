@@ -89,6 +89,12 @@ public class LiferayGradleCore extends Plugin {
 		return retval;
 	}
 
+	public static void log(IStatus status) {
+		ILog log = getDefault().getLog();
+
+		log.log(status);
+	}
+
 	public static void logError(Exception ex) {
 		ILog log = getDefault().getLog();
 

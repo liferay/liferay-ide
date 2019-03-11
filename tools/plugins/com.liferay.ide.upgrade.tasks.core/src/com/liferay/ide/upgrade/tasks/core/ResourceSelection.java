@@ -19,6 +19,7 @@ import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.adapter.NoopLiferayProject;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
 import java.nio.file.Path;
@@ -55,7 +56,13 @@ public interface ResourceSelection {
 			}
 
 			try {
-				return project.hasNature("org.eclipse.jdt.core.javanature");
+				if (project.hasNature("org.eclipse.jdt.core.javanature") &&
+					!LiferayWorkspaceUtil.isValidWorkspace(project)) {
+
+					return true;
+				}
+
+				return false;
 			}
 			catch (CoreException ce) {
 				return false;

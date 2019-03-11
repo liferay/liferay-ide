@@ -16,6 +16,8 @@ package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.problems.core.tasks.AutoCorrectUpgradeProblemsStepKeys;
+import com.liferay.ide.upgrade.problems.core.tasks.FixUpgradeProblemsTaskKeys;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -25,9 +27,9 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"description=" + AutoCorrectUpgradeProblemsStepKeys.DESCRIPTION, "id=auto_correct_problems",
-		"imagePath=icons/auto_correct_problems.png", "requirement=recommended", "order=2",
-		"taskId=" + FindUpgradeProblemsTaskKeys.ID, "title=" + AutoCorrectUpgradeProblemsStepKeys.TITLE
+		"description=" + AutoCorrectUpgradeProblemsStepKeys.DESCRIPTION, "id=" + AutoCorrectUpgradeProblemsStepKeys.ID,
+		"imagePath=icons/auto_correct_problems.png", "requirement=recommended", "order=1",
+		"taskId=" + FixUpgradeProblemsTaskKeys.ID, "title=" + AutoCorrectUpgradeProblemsStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )

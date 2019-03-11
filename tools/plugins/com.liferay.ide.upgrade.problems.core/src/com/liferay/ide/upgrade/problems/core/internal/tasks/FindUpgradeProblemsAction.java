@@ -21,7 +21,9 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
+import com.liferay.ide.upgrade.problems.core.tasks.FindUpgradeProblemsStepKeys;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 
 import java.io.File;
@@ -40,7 +42,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
@@ -48,12 +49,18 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=find_upgrade_problems", "order=1", "requirement=recommended", "stepId=" + FindUpgradeProblemsStepKeys.ID,
+		"id=find_upgrade_problems", "order=1", "requirement=required", "stepId=" + FindUpgradeProblemsStepKeys.ID,
 		"title=" + FindUpgradeProblemsStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class FindUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
+
+	public FindUpgradeProblemsAction() {
+		_fileMigration = ServicesLookup.getSingleService(FileMigration.class, null);
+		_resourceSelection = ServicesLookup.getSingleService(ResourceSelection.class, null);
+		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+	}
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -132,13 +139,8 @@ public class FindUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
 		marker.setAttribute(IMarker.SEVERITY, upgradeProblem.getMarkerType());
 	}
 
-	@Reference
 	private FileMigration _fileMigration;
-
-	@Reference
 	private ResourceSelection _resourceSelection;
-
-	@Reference
 	private UpgradePlanner _upgradePlanner;
 
 }

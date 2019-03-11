@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal.tasks;
+package com.liferay.ide.upgrade.problems.core.tasks;
 
 /**
  * @author Gregory Amerson

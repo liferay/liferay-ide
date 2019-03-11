@@ -12,19 +12,17 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal.tasks;
+package com.liferay.ide.upgrade.problems.core.tasks;
 
 /**
  * @author Gregory Amerson
  */
-public class FindUpgradeProblemsTaskKeys {
+public class FindUpgradeProblemsStepKeys {
 
 	public static final String DESCRIPTION =
-		"In this task, you will find source code that has been affected by breaking changes in the new Liferay " +
-		"version. For each problem that is found, the associated breaking change documentation will be shown to " +
-		"help you fix the problems.  In many cases the problems can be fixed automatically.  See more in Auto " +
-		"Correct Upgrade Problems step.\nFor all breaking changes that can not be fixed automatically use the " +
-		"provided breaking changes documentation to manually fix the code to complete the upgrade.";
+		"This step will help find breaking changes in Java, JSP, XML and properties files by adding problem markers " +
+		"to the problematic resources. Once upgrade problems are found, you can go to the Project Explorer to browse " +
+		"the upgrade problems and see associated breaking change documentation.";
 
 	public static final String ID = "find_upgrade_problems";
 
