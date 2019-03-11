@@ -40,6 +40,10 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 		_order = getDoubleProperty(properties, "order");
 
 		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+
+		if (_description == null) {
+			_description = _title;
+		}
 	}
 
 	@Override
@@ -66,10 +70,6 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 
 	@Override
 	public String getDescription() {
-		if (_description == null) {
-			_description = getTitle();
-		}
-
 		return _description;
 	}
 
