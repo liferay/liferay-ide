@@ -101,16 +101,16 @@ public class UpgradeTaskItem implements IExpansionListener, UpgradeItem {
 
 		_disposables.add(() -> fillLabel.dispose());
 
-		Image taskStepRestartImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_RESTART_IMAGE);
+		Image taskRestartImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_RESTART_IMAGE);
 
-		ImageHyperlink taskStepRestartImageHyperlink = createImageHyperlink(
-			_formToolkit, _buttonComposite, taskStepRestartImage, this, "Click to restart");
+		ImageHyperlink taskRestartImageHyperlink = createImageHyperlink(
+			_formToolkit, _buttonComposite, taskRestartImage, this, "Click to restart");
 
-		taskStepRestartImageHyperlink.setEnabled(true);
+		taskRestartImageHyperlink.setEnabled(true);
 
-		taskStepRestartImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		taskRestartImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-		taskStepRestartImageHyperlink.addHyperlinkListener(
+		taskRestartImageHyperlink.addHyperlinkListener(
 			new HyperlinkAdapter() {
 
 				@Override
@@ -119,7 +119,7 @@ public class UpgradeTaskItem implements IExpansionListener, UpgradeItem {
 
 						@Override
 						protected IStatus run(IProgressMonitor monitor) {
-							return _restartStep();
+							return _restartTask();
 						}
 
 					}.schedule();
@@ -127,7 +127,7 @@ public class UpgradeTaskItem implements IExpansionListener, UpgradeItem {
 
 			});
 
-		_disposables.add(() -> taskStepRestartImageHyperlink.dispose());
+		_disposables.add(() -> taskRestartImageHyperlink.dispose());
 	}
 
 	@Override
@@ -177,7 +177,7 @@ public class UpgradeTaskItem implements IExpansionListener, UpgradeItem {
 	public void setSelection(ISelection selection) {
 	}
 
-	private IStatus _restartStep() {
+	private IStatus _restartTask() {
 		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 
 		upgradePlanner.restartTask(_upgradeTask);
