@@ -15,9 +15,13 @@
 package com.liferay.ide.upgrade.plan.core;
 
 import java.util.Dictionary;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public interface UpgradePlanElement {
 
@@ -45,6 +49,8 @@ public interface UpgradePlanElement {
 
 	public String getImagePath();
 
+	public double getOrder();
+
 	public UpgradePlanElementStatus getStatus();
 
 	public default String getStringProperty(Dictionary<String, Object> properties, String key) {
@@ -58,6 +64,51 @@ public interface UpgradePlanElement {
 	}
 
 	public String getTitle();
+
+	public default <T extends UpgradePlanElement> boolean isEqual(List<T> source, List<T> target) {
+		if (source == null) {
+			if (target == null) {
+				return true;
+			}
+
+			return false;
+		}
+
+		if (target == null) {
+			return false;
+		}
+
+		if (source.size() != target.size()) {
+			return false;
+		}
+
+		Stream<T> targetStream = target.stream();
+
+		List<String> targetElementIds = targetStream.map(
+			element -> element.getId()
+		).collect(
+			Collectors.toList()
+		);
+
+		Stream<T> sourceStream = source.stream();
+
+		return sourceStream.filter(
+			element -> targetElementIds.contains(element.getId())
+		).findAny(
+		).isPresent();
+	}
+
+	public default boolean isEqualIgnoreCase(String original, String target) {
+		if (original != null) {
+			return original.equalsIgnoreCase(target);
+		}
+
+		if (target == null) {
+			return true;
+		}
+
+		return false;
+	}
 
 	public void setStatus(UpgradePlanElementStatus upgradePlanElementStatus);
 

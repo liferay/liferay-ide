@@ -18,11 +18,14 @@ import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.util.Dictionary;
 
+import org.eclipse.core.runtime.Adapters;
+
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 
@@ -34,16 +37,41 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 		_id = getStringProperty(properties, "id");
 		_imagePath = getStringProperty(properties, "imagePath");
 		_title = getStringProperty(properties, "title");
+		_order = getDoubleProperty(properties, "order");
 
 		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+
+		if (_description == null) {
+			_description = _title;
+		}
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if ((object instanceof BaseUpgradePlanElement) == false) {
+			return false;
+		}
+
+		BaseUpgradePlanElement upgradePlanElement = Adapters.adapt(object, BaseUpgradePlanElement.class);
+
+		if (upgradePlanElement == null) {
+			return false;
+		}
+
+		if (isEqualIgnoreCase(_description, upgradePlanElement.getDescription()) &&
+			isEqualIgnoreCase(_id, upgradePlanElement.getId()) &&
+			isEqualIgnoreCase(_imagePath, upgradePlanElement.getImagePath()) &&
+			(_order == upgradePlanElement.getOrder()) && isEqualIgnoreCase(_title, upgradePlanElement.getTitle()) &&
+			_upgradePlanElementStatus.equals(getStatus())) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
 	public String getDescription() {
-		if (_description == null) {
-			return getTitle();
-		}
-
 		return _description;
 	}
 
@@ -58,6 +86,11 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 	}
 
 	@Override
+	public double getOrder() {
+		return _order;
+	}
+
+	@Override
 	public UpgradePlanElementStatus getStatus() {
 		return _upgradePlanElementStatus;
 	}
@@ -65,6 +98,22 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 	@Override
 	public String getTitle() {
 		return _title;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 31;
+
+		Double orderDouble = Double.valueOf(_order);
+
+		hash = 31 * hash + orderDouble.hashCode();
+		hash = 31 * hash + (_description != null ? _description.hashCode() : 0);
+		hash = 31 * hash + (_imagePath != null ? _imagePath.hashCode() : 0);
+		hash = 31 * hash + (_title != null ? _title.hashCode() : 0);
+		hash = 31 * hash + (_id != null ? _id.hashCode() : 0);
+		hash = 31 * hash + (_upgradePlanElementStatus != null ? _upgradePlanElementStatus.hashCode() : 0);
+
+		return hash;
 	}
 
 	public void setStatus(UpgradePlanElementStatus upgradePlanElementStatus) {
@@ -84,6 +133,7 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 	private String _description;
 	private String _id;
 	private String _imagePath;
+	private double _order;
 	private String _title;
 	private UpgradePlanElementStatus _upgradePlanElementStatus = UpgradePlanElementStatus.INCOMPLETE;
 	private UpgradePlanner _upgradePlanner;

@@ -16,12 +16,14 @@ package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -33,6 +35,7 @@ import org.osgi.service.component.annotations.Activate;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement implements UpgradeTaskStep {
 
@@ -44,7 +47,6 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 
 		_requirement = getStringProperty(properties, "requirement");
 		_taskId = getStringProperty(properties, "taskId");
-		_order = getDoubleProperty(properties, "order");
 		_url = getStringProperty(properties, "url");
 
 		_lookupActions(componentContext);
@@ -89,7 +91,7 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 		).flatMap(
 			upgradeTaskStep -> upgradeTaskStep.stream()
 		).filter(
-			upgradeTaskStep -> (upgradeTaskStep.getOrder() < _order) &&
+			upgradeTaskStep -> (upgradeTaskStep.getOrder() < getOrder()) &&
 			UpgradePlanElementRequirement.REQUIRED.equals(upgradeTaskStep.getRequirement())
 		).map(
 			upgradeTaskStep -> upgradeTaskStep.getActions()
@@ -114,7 +116,7 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 			).flatMap(
 				upgradeTaskStep -> upgradeTaskStep.stream()
 			).filter(
-				upgradeTaskStep -> (upgradeTaskStep.getOrder() < _order) &&
+				upgradeTaskStep -> (upgradeTaskStep.getOrder() < getOrder()) &&
 				UpgradePlanElementRequirement.REQUIRED.equals(upgradeTaskStep.getRequirement())
 			).filter(
 				upgradeTaskStep -> UpgradePlanElementStatus.INCOMPLETE.equals(upgradeTaskStep.getStatus())
@@ -133,13 +135,33 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	}
 
 	@Override
-	public List<UpgradeTaskStepAction> getActions() {
-		return Collections.unmodifiableList(_upgradeTaskStepActions);
+	public boolean equals(Object object) {
+		if ((object instanceof BaseUpgradeTaskStep) == false) {
+			return false;
+		}
+
+		BaseUpgradeTaskStep baseUpgradeTaskStep = Adapters.adapt(object, BaseUpgradeTaskStep.class);
+
+		if (baseUpgradeTaskStep == null) {
+			return false;
+		}
+
+		UpgradePlanElementRequirement targetRequirement = baseUpgradeTaskStep.getRequirement();
+
+		if (super.equals(object) && isEqualIgnoreCase(_taskId, baseUpgradeTaskStep.getTaskId()) &&
+			isEqual(_upgradeTaskStepActions, baseUpgradeTaskStep.getActions()) &&
+			isEqualIgnoreCase(_url, baseUpgradeTaskStep.getUrl()) &&
+			isEqualIgnoreCase(_requirement, targetRequirement.toString())) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
-	public double getOrder() {
-		return _order;
+	public List<UpgradeTaskStepAction> getActions() {
+		return Collections.unmodifiableList(_upgradeTaskStepActions);
 	}
 
 	@Override
@@ -155,6 +177,18 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	@Override
 	public String getUrl() {
 		return _url;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = super.hashCode();
+
+		hash = 31 * hash + (_requirement != null ? _requirement.hashCode() : 0);
+		hash = 31 * hash + (_taskId != null ? _taskId.hashCode() : 0);
+		hash = 31 * hash + (Arrays.hashCode(_upgradeTaskStepActions.toArray()));
+		hash = 31 * hash + (_url != null ? _url.hashCode() : 0);
+
+		return hash;
 	}
 
 	@Override
@@ -179,7 +213,6 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 		);
 	}
 
-	private double _order;
 	private String _requirement;
 	private String _taskId;
 	private List<UpgradeTaskStepAction> _upgradeTaskStepActions;

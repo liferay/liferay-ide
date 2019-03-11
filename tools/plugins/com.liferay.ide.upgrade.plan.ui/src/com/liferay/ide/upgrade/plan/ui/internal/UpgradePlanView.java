@@ -22,8 +22,12 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradeTaskViewer;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelection;
@@ -47,6 +51,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
@@ -100,6 +105,8 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
 
+		_memento = memento;
+
 		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
 		Optional.ofNullable(
@@ -132,6 +139,8 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			UpgradePlan upgradePlan = (UpgradePlan)upgradePlanViewerInput;
 
 			UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
+
+			_saveTreeExpansion(memento, _upgradePlanViewer.getTreeExpansion());
 
 			upgradePlanner.saveUpgradePlan(upgradePlan);
 
@@ -167,7 +176,12 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 					UpgradePlan upgradePlan = upgradePlanStartedEvent.getUpgradePlan();
 
 					if (upgradePlan != null) {
-						UIUtil.async(() -> setContentDescription("Active upgrade plan: " + upgradePlan.getName()));
+						UIUtil.async(
+							() -> {
+								setContentDescription("Active upgrade plan: " + upgradePlan.getName());
+
+								_upgradePlanViewer.initTreeExpansion(_loadTreeExpansion());
+							});
 					}
 				}
 			});
@@ -205,7 +219,64 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			});
 	}
 
+	private Map<String, Set<String>> _loadTreeExpansion() {
+		Map<String, Set<String>> treeExpansionMap = new HashMap<>();
+
+		IMemento upgradePlanTreeExpansionMemento = _memento.getChild("upgradePlanTreeExpansion");
+
+		IMemento tasksMemento = upgradePlanTreeExpansionMemento.getChild("tasks");
+
+		IMemento[] taskMementos = tasksMemento.getChildren("task");
+
+		Set<String> taskExpansionSet = new HashSet<>();
+
+		for (IMemento taskMemento : taskMementos) {
+			taskExpansionSet.add(taskMemento.getString("id"));
+		}
+
+		treeExpansionMap.put("task", taskExpansionSet);
+
+		IMemento stepsMemento = upgradePlanTreeExpansionMemento.getChild("steps");
+
+		IMemento[] stepMementos = stepsMemento.getChildren("step");
+
+		Set<String> stepExpansionSet = new HashSet<>();
+
+		for (IMemento stepMemento : stepMementos) {
+			stepExpansionSet.add(stepMemento.getString("id"));
+		}
+
+		treeExpansionMap.put("step", stepExpansionSet);
+
+		return treeExpansionMap;
+	}
+
+	private void _saveTreeExpansion(IMemento memento, Map<String, Set<String>> expansionMap) {
+		IMemento upgradePlanTreeExpansionMemento = memento.createChild("upgradePlanTreeExpansion");
+
+		IMemento tasksExpansionMemento = upgradePlanTreeExpansionMemento.createChild("tasks");
+
+		Set<String> taskExpansions = expansionMap.get("task");
+
+		for (String taskId : taskExpansions) {
+			IMemento taskExpansionMemento = tasksExpansionMemento.createChild("task");
+
+			taskExpansionMemento.putString("id", taskId);
+		}
+
+		IMemento stepsExpansionMemento = upgradePlanTreeExpansionMemento.createChild("steps");
+
+		Set<String> stepExpansions = expansionMap.get("step");
+
+		for (String stepId : stepExpansions) {
+			IMemento stepExpansionMemento = stepsExpansionMemento.createChild("step");
+
+			stepExpansionMemento.putString("id", stepId);
+		}
+	}
+
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
+	private IMemento _memento;
 	private ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
 	private UpgradePlanViewer _upgradePlanViewer;
 	private UpgradeTaskViewer _upgradeTaskViewer;
