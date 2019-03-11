@@ -37,9 +37,9 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 		_id = getStringProperty(properties, "id");
 		_imagePath = getStringProperty(properties, "imagePath");
 		_title = getStringProperty(properties, "title");
+		_order = getDoubleProperty(properties, "order");
 
 		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
-		_order = getDoubleProperty(properties, "order");
 	}
 
 	@Override
