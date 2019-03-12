@@ -178,6 +178,10 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		return expansionMap;
 	}
 
+	public TreeViewer getTreeViewer() {
+		return _treeViewer;
+	}
+
 	public void initTreeExpansion(Map<String, Set<String>> expansionMap) {
 		Set<String> tasks = expansionMap.get("task");
 
