@@ -17,6 +17,7 @@ package com.liferay.ide.upgrade.tasks.core.internal.code;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.tasks.core.code.ConfigureLiferayWorkspaceSettingsStepKeys;
+import com.liferay.ide.upgrade.tasks.core.code.ConfigureTargetPlatformActionKeys;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -30,8 +31,9 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=configure_target_platform", "requirement=optional", "order=3",
-		"stepId=" + ConfigureLiferayWorkspaceSettingsStepKeys.ID, "title=Configure Target Platform"
+		"id=" + ConfigureTargetPlatformActionKeys.ID, "requirement=optional", "order=3",
+		"stepId=" + ConfigureLiferayWorkspaceSettingsStepKeys.ID, "title=" + ConfigureTargetPlatformActionKeys.TITLE,
+		"description=" + ConfigureTargetPlatformActionKeys.DESCRIPTION
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )

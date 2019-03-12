@@ -5,6 +5,7 @@
    <property name="order" value="3"/>
    <property name="stepId" value="configure_liferay_workspace_settings"/>
    <property name="title" value="Configure Target Platform"/>
+   <property name="description" value="This Action has not been implemented, select &quot;Click to Complete&quot; to continue upgrade plan."/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>
    </service>
