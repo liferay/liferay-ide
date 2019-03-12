@@ -23,8 +23,8 @@ public class CheckForUpdatesActionKeys {
 		"Before contining an update plan, it is recommended to update to the latest version of Liferay Developer " +
 		"Studio or Liferay IDE (whichever version you are using).  Click \"Perform\" to check for updates.  If there " +
 		"is an update available, installed it, and afterwards you can return ot this step in upgrade plan and " +
-		"continue the upgrade plan.<br/><br/>This Action has not been implemented, select \"Click to Complete\" to " +
-		"continue upgrade plan.";
+		"continue the upgrade plan.<br/><br/><b>This action has not been implemented. Select \"Click to Complete\" " +
+		"to continue.</b>";
 
 	public static final String ID = "check_for_updates";
 

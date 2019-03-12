@@ -52,14 +52,14 @@ public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements 
 			return false;
 		}
 
-		BaseUpgradeTask target = Adapters.adapt(object, BaseUpgradeTask.class);
+		BaseUpgradeTask baseUpgradeTask = Adapters.adapt(object, BaseUpgradeTask.class);
 
-		if (target == null) {
+		if (baseUpgradeTask == null) {
 			return false;
 		}
 
-		if (super.equals(object) && isEqualIgnoreCase(_categoryId, target.getCategoryId()) &&
-			isEqual(_upgradeTaskSteps, target.getSteps())) {
+		if (super.equals(object) && isEqualIgnoreCase(_categoryId, baseUpgradeTask._categoryId) &&
+			isEqual(_upgradeTaskSteps, baseUpgradeTask._upgradeTaskSteps)) {
 
 			return true;
 		}
