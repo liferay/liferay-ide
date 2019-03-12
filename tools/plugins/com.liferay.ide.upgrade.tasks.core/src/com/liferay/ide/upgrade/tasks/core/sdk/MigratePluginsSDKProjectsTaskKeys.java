@@ -22,8 +22,8 @@ public class MigratePluginsSDKProjectsTaskKeys {
 	public static final String DESCRIPTION =
 		"<p>The Plugins SDK is deprecated as of Liferay Portal CE 7.0. So, during this upgrade process, you have the " +
 		"following options.<li>Convert your plugins to workspace modules</li><li>Adapt your Plugins SDK style plugin " +
-		"to use a new legacy Plugins SDK for 7.x. This allows you to choose how you will upgrade your plugins that " +
-		"best works for your project, either converting to modules to leaveing as traditional plugins. In some cases " +
+		"to use a new legacy Plugins SDK for 7.x</li>This allows you to choose how to best upgrade your plugins in" +
+		"way that works best, either converting to modules to leaveing as traditional plugins. In some cases " +
 		"converting to modules will be recommended (i.e. service-builder portlets) and sometimes it will be required " +
 		"(i.e. custom jsps or ext).</p>";
 

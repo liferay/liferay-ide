@@ -3,7 +3,7 @@
 <plugin>
 	<extension
 		id="upgradeProblemMarker"
-		name="Upgrade Problem"
+		name="Liferay Upgrade Problem"
 		point="org.eclipse.core.resources.markers"
 	>
 		<super

@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.tasks.core.internal.buildservice;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
@@ -84,9 +85,17 @@ public class RemoveLegacyFilesAction extends BaseUpgradeTaskStepAction {
 				}
 			}
 			catch (CoreException ce) {
-				UpgradeTasksCorePlugin.logError(ce.getMessage());
+				setStatus(UpgradePlanElementStatus.FAILED);
+
+				IStatus status = UpgradeTasksCorePlugin.createErrorStatus("Unable to delete legacy files.", ce);
+
+				UpgradeTasksCorePlugin.log(status);
+
+				return status;
 			}
 		}
+
+		setStatus(UpgradePlanElementStatus.COMPLETED);
 
 		_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, projects));
 
