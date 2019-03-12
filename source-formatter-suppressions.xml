@@ -14,11 +14,12 @@
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/code/SetupDevelopmentEnvironmentTaskKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/code/SetupLiferayWorkspaceStepKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/dependencies/UpgradeBuildDependenciesTaskKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/prerequisite/CheckForUpdatesActionKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/prerequisite/CheckForUpgradePlannerUpdatesActionKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/prerequisite/CheckInstallationPrerequisitesStepKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/prerequisite/CheckInstalledJDKsActionKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/internal/prerequisite/PrepareForCodeUpgradeTaskKeys\.java" />
 		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.core/src/com/liferay/ide/upgrade/tasks/core/sdk/MigratePluginsSDKTaskKeys\.java" />
+		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.ui/src/com/liferay/ide/upgrade/tasks/ui/internal/CreateNewLiferayWorkspaceActionKeys\.java" />
 	</checkstyle>
 	<source-check>
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/DefaultListenerRegistry\.java" />
@@ -32,7 +33,7 @@
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectDeletedEvent\.java" />
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectMovedEvent\.java" />
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectOpenedEvent\.java" />
-		<suppress checks="JavaLongLinesCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.ui/src/com/liferay/ide/upgrade/tasks/ui/internal/NewLiferayWorkspaceActionKeys\.java" />
+		<suppress checks="JavaLongLinesCheck" files="tools/plugins/com.liferay.ide.upgrade.tasks.ui/src/com/liferay/ide/upgrade/tasks/ui/internal/CreateNewLiferayWorkspaceActionKeys\.java" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.gradle.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.plan.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.plan.ui/OSGI-INF/.*\.xml" />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.tasks.AutoCorrectUpgradeProblemsStep">
-   <property name="description" value="Performing this step will correct some easy upgrade problems automatically. You can edit the rest problems manually according to the breaking changes provided."/>
+   <property name="description" value="&lt;p&gt;Performing this step will correct some easy upgrade problems automatically. You can edit the rest problems manually according to the breaking changes provided.&lt;/p&gt;"/>
    <property name="id" value="auto_correct_upgrade_problems"/>
    <property name="imagePath" value="icons/auto_correct_problems.png"/>
    <property name="requirement" value="recommended"/>

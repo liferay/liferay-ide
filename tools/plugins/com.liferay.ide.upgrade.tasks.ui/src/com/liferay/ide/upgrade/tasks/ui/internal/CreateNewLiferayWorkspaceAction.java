@@ -53,12 +53,14 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=new_liferay_workspace", "order=1", "requirement=required", "stepId=" + SetupLiferayWorkspaceStepKeys.ID,
-		"title=New Liferay Workspace", "url=" + NewLiferayWorkspaceActionKeys.URL
+		"description=" + CreateNewLiferayWorkspaceActionKeys.DESCRIPTION,
+		"id=" + CreateNewLiferayWorkspaceActionKeys.ID, "order=1", "requirement=required",
+		"stepId=" + SetupLiferayWorkspaceStepKeys.ID, "title=" + CreateNewLiferayWorkspaceActionKeys.TITLE,
+		"url=" + CreateNewLiferayWorkspaceActionKeys.URL
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class NewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction implements SapphireContentAccessor {
+public class CreateNewLiferayWorkspaceAction extends BaseUpgradeTaskStepAction implements SapphireContentAccessor {
 
 	@Override
 	public boolean appliesTo(UpgradePlan upgradePlan) {

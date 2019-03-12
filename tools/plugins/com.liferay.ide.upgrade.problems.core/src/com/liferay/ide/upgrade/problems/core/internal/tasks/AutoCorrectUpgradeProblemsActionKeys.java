@@ -20,8 +20,8 @@ package com.liferay.ide.upgrade.problems.core.internal.tasks;
 public class AutoCorrectUpgradeProblemsActionKeys {
 
 	public static final String DESCRIPTION =
-		"Performing this step will correct some upgrade problems automatically. You can edit the rest problems " +
-		"manually according to the breaking changes documentation.";
+		"<p>Performing this step will correct some upgrade problems automatically. You can edit the rest problems " +
+		"manually according to the breaking changes documentation.</p>";
 
 	public static final String TITLE = "Auto Correct Upgrade Problems";
 

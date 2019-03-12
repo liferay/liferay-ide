@@ -20,9 +20,9 @@ package com.liferay.ide.upgrade.problems.core.tasks;
 public class FindUpgradeProblemsStepKeys {
 
 	public static final String DESCRIPTION =
-		"This step will help find breaking changes in Java, JSP, XML and properties files by adding problem markers " +
-		"to the problematic resources. Once upgrade problems are found, you can go to the Project Explorer to browse " +
-		"the upgrade problems and see associated breaking change documentation.";
+		"<p>This step will help find breaking changes in Java, JSP, XML and properties files by adding problem " +
+		"markers to the problematic resources. Once upgrade problems are found, you can go to the Project Explorer " +
+		"to browse the upgrade problems and see associated breaking change documentation.</p>";
 
 	public static final String ID = "find_upgrade_problems";
 

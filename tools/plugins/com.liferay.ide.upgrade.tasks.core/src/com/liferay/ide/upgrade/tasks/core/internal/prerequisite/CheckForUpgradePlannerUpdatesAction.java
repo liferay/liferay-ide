@@ -30,13 +30,13 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"description=" + CheckForUpdatesActionKeys.DESCRIPTION, "id=" + CheckForUpdatesActionKeys.ID, "order=1",
-		"requirement=recommended", "stepId=" + CheckInstallationPrerequisitesStepKeys.ID,
-		"title=" + CheckForUpdatesActionKeys.TITLE
+		"description=" + CheckForUpgradePlannerUpdatesActionKeys.DESCRIPTION,
+		"id=" + CheckForUpgradePlannerUpdatesActionKeys.ID, "order=1", "requirement=recommended",
+		"stepId=" + CheckInstallationPrerequisitesStepKeys.ID, "title=" + CheckForUpgradePlannerUpdatesActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class CheckForUpdatesAction extends BaseUpgradeTaskStepAction {
+public class CheckForUpgradePlannerUpdatesAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {

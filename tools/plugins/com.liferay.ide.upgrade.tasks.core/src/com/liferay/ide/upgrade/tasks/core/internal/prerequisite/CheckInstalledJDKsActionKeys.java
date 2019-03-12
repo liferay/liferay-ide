@@ -22,9 +22,9 @@ public class CheckInstalledJDKsActionKeys {
 	public static final String DESCRIPTION =
 		"In order to make sure that you have a complatible JDK installed and configured, we need to perform a check " +
 		"on this Eclipse installation to make sure that <li>1) There is a JDK8 VM available</li><li>2) that it is " +
-		"set as the default.  \"Click perform\" to check.  IF there is an error message, then you must go to the " +
-		"Prefernces > Java > Installed JREs and add a JRE entry that points to a JDK8 installation and set it as the " +
-		"default.";
+		"set as the default.</li><b>Click to perform</b> to check. If there is an error message, then you must go to " +
+		"the Prefernces > Java > Installed JREs and add a JRE entry that points to a JDK8 installation and set it as " +
+		"the default.";
 
 	public static final String ID = "check_installed_jdks";
 

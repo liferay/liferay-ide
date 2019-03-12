@@ -20,7 +20,7 @@ package com.liferay.ide.upgrade.tasks.core.code;
 public class UpgradeWorkspacePluginVersionActionKeys {
 
 	public static final String DESCRIPTION =
-		"This Action has not been implemented, select \"Click to Complete\" to continue upgrade plan.";
+		"This Action has not been implemented, select <b>Click when Complete</b> to continue.";
 
 	public static final String ID = "upgrade_workspace_plugin_version";
 
