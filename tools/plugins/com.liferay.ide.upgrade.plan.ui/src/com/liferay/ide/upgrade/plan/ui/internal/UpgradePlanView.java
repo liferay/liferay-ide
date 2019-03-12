@@ -226,29 +226,35 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 		IMemento upgradePlanTreeExpansionMemento = _memento.getChild("upgradePlanTreeExpansion");
 
-		IMemento tasksMemento = upgradePlanTreeExpansionMemento.getChild("tasks");
+		if (upgradePlanTreeExpansionMemento != null) {
+			IMemento tasksMemento = upgradePlanTreeExpansionMemento.getChild("tasks");
 
-		IMemento[] taskMementos = tasksMemento.getChildren("task");
+			if (tasksMemento != null) {
+				IMemento[] taskMementos = tasksMemento.getChildren("task");
 
-		Set<String> taskExpansionSet = new HashSet<>();
+				Set<String> taskExpansionSet = new HashSet<>();
 
-		for (IMemento taskMemento : taskMementos) {
-			taskExpansionSet.add(taskMemento.getString("id"));
+				for (IMemento taskMemento : taskMementos) {
+					taskExpansionSet.add(taskMemento.getString("id"));
+				}
+
+				treeExpansionMap.put("task", taskExpansionSet);
+			}
+
+			IMemento stepsMemento = upgradePlanTreeExpansionMemento.getChild("steps");
+
+			if (stepsMemento != null) {
+				IMemento[] stepMementos = stepsMemento.getChildren("step");
+
+				Set<String> stepExpansionSet = new HashSet<>();
+
+				for (IMemento stepMemento : stepMementos) {
+					stepExpansionSet.add(stepMemento.getString("id"));
+				}
+
+				treeExpansionMap.put("step", stepExpansionSet);
+			}
 		}
-
-		treeExpansionMap.put("task", taskExpansionSet);
-
-		IMemento stepsMemento = upgradePlanTreeExpansionMemento.getChild("steps");
-
-		IMemento[] stepMementos = stepsMemento.getChildren("step");
-
-		Set<String> stepExpansionSet = new HashSet<>();
-
-		for (IMemento stepMemento : stepMementos) {
-			stepExpansionSet.add(stepMemento.getString("id"));
-		}
-
-		treeExpansionMap.put("step", stepExpansionSet);
 
 		return treeExpansionMap;
 	}
