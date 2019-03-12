@@ -16,10 +16,14 @@ package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 
 /**
  * @author Christopher Bryan Boyd
+ * @author Gregory Amerson
  */
 public class CheckInstallationPrerequisitesStepKeys {
 
-	public static final String DESCRIPTION = "Check Installation Prerequisites for upgrading Liferay.";
+	public static final String DESCRIPTION =
+		"The first step in preparing for your Code Upgrade is to ensure that your tools installation meets all the " +
+		"necessary requirements.  While not every step is required, it is highly recommended to make sure you have " +
+		"a better upgrade experience.";
 
 	public static final String ID = "check_installation_prerequisites";
 

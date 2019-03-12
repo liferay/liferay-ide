@@ -24,11 +24,11 @@ public class CheckInstalledJDKsActionKeys {
 		"on this Eclipse installation to make sure that 1) There is a JDK8 VM available, 2) that it is set as the " +
 		"default.  \"Click perform\" to check.  IF there is an error message, then you must go to the " +
 		"Prefernces > Java > Installed JREs and add a JRE entry that points to a JDK8 installation and set it as the " +
-		"default.  Then restart this Before contining an update plan, it is recommended to update to the latest version of Liferay Developer " +
-		"Studio or Liferay IDE (whichever version you are using).  Click \"Perform\" to check for updates.  If there " +
-		"is an update available, installed it, and afterwards you can return ot this step in upgrade plan and " +
-		"continue the upgrade plan.<br/><br/>This Action has not been implemented, select \"Click to Complete\" to " +
-		"continue upgrade plan.";
+		"default.  Then restart this Before contining an update plan, it is recommended to update to the latest " +
+		"version of Liferay Developer Studio or Liferay IDE (whichever version you are using).  Click \"Perform\" to " +
+		"check for updates.  If there is an update available, installed it, and afterwards you can return ot this " +
+		"step in upgrade plan and continue the upgrade plan.<br/><br/>This Action has not been implemented, select " +
+		"\"Click to Complete\" to continue upgrade plan.";
 
 	public static final String ID = "check_installed_jdks";
 
