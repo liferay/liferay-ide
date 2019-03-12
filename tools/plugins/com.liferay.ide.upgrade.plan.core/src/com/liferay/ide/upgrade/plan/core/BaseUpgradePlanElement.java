@@ -73,7 +73,7 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 
 	@Override
 	public String getDescription() {
-		return _description;
+		return "<form>" + _description + "</form>";
 	}
 
 	@Override
