@@ -16,10 +16,13 @@ package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 
 /**
  * @author Christopher Bryan Boyd
+ * @author Gregory Amerson
  */
 public class PrepareForCodeUpgradeTaskKeys {
 
-	public static final String DESCRIPTION = "Prepare for the code upgrade.";
+	public static final String DESCRIPTION =
+		"Before staring to upgrade any code, we need to perform as steps to ensure everything is prepared in your " +
+		"environment and will be optimized for a successful upgrade procress.";
 
 	public static final String ID = "prepare_code_upgrade";
 

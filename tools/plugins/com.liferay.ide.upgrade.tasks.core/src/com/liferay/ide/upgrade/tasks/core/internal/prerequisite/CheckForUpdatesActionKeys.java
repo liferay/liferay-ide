@@ -15,18 +15,19 @@
 package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 
 /**
- * @author Christopher Bryan Boyd
  * @author Gregory Amerson
  */
-public class CheckInstallationPrerequisitesStepKeys {
+public class CheckForUpdatesActionKeys {
 
 	public static final String DESCRIPTION =
-		"The first step in preparing for your Code Upgrade is to ensure that your tools installation meets all the " +
-		"necessary requirements.  While not every step is required, it is highly recommended to make sure you have " +
-		"a better upgrade experience.";
+		"Before contining an update plan, it is recommended to update to the latest version of Liferay Developer " +
+		"Studio or Liferay IDE (whichever version you are using).  Click \"Perform\" to check for updates.  If there " +
+		"is an update available, installed it, and afterwards you can return ot this step in upgrade plan and " +
+		"continue the upgrade plan.<br/><br/>This Action has not been implemented, select \"Click to Complete\" to " +
+		"continue upgrade plan.";
 
-	public static final String ID = "check_installation_prerequisites";
+	public static final String ID = "check_for_updates";
 
-	public static final String TITLE = "Check Installation Prerequisites";
+	public static final String TITLE = "Check For Updates";
 
 }

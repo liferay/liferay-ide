@@ -42,9 +42,9 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
  * @author Terry Jia
  * @author Gregory Amerson
  */
-public class UpgradeTaskViewer implements ISelectionProvider {
+public class UpgradePlanElementViewer implements ISelectionProvider {
 
-	public UpgradeTaskViewer(Composite parentComposite, UpgradePlanViewer upgradePlanViewer) {
+	public UpgradePlanElementViewer(Composite parentComposite, UpgradePlanViewer upgradePlanViewer) {
 		_formToolkit = new FormToolkit(parentComposite.getDisplay());
 
 		_scrolledForm = _formToolkit.createScrolledForm(parentComposite);
