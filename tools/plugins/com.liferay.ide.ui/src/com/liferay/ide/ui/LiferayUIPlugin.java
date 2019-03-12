@@ -277,13 +277,13 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 
 		URI liferayUri = new URI("https://releases.liferay.com/tools/ide/latest/stable/");
 
-		boolean containLifreayUri = Stream.of(
+		boolean containLiferayUri = Stream.of(
 			knownRepositories
 		).anyMatch(
 			uri -> Objects.equals(uri, liferayUri)
 		);
 
-		if (!containLifreayUri) {
+		if (!containLiferayUri) {
 			repositoryTracker.addRepository(liferayUri, "Liferay IDE Stable releases", provisioningSession);
 		}
 	}

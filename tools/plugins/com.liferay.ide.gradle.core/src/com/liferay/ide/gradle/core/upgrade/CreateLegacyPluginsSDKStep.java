@@ -18,11 +18,14 @@ import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
-import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKTaskKeys;
-import com.liferay.ide.upgrade.tasks.core.sdk.UpgradeToLatestPluginsSDKStepKeys;
+import com.liferay.ide.upgrade.tasks.core.sdk.CreateLegacyPluginsSDKStepKeys;
+import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKProjectsTaskKeys;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -38,21 +41,22 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"description=" + UpgradeToLatestPluginsSDKStepKeys.DESCRIPTION, "id=" + UpgradeToLatestPluginsSDKStepKeys.ID,
-		"imagePath=icons/new.png", "requirement=required", "order=1", "taskId=" + MigratePluginsSDKTaskKeys.ID,
-		"title=" + UpgradeToLatestPluginsSDKStepKeys.TITLE
+		"description=" + CreateLegacyPluginsSDKStepKeys.DESCRIPTION, "id=" + CreateLegacyPluginsSDKStepKeys.ID,
+		"imagePath=icons/new.png", "requirement=required", "order=1", "taskId=" + MigratePluginsSDKProjectsTaskKeys.ID,
+		"title=" + CreateLegacyPluginsSDKStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class UpgradeToLatestPlukginsSDKStep extends BaseUpgradeTaskStep {
+public class CreateLegacyPluginsSDKStep extends BaseUpgradeTaskStep {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		List<IProject> projects = _resourceSelection.selectProjects(
-			"select liferay workspace project", false, ResourceSelection.WORKSPACE_PROJECTS);
+			"Select Liferay Workspace Project", false, ResourceSelection.WORKSPACE_PROJECTS);
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;
@@ -66,6 +70,8 @@ public class UpgradeToLatestPlukginsSDKStep extends BaseUpgradeTaskStep {
 			project.refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
 
 			setStatus(UpgradePlanElementStatus.COMPLETED);
+
+			_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, Collections.singletonList(project)));
 		}
 		catch (CoreException ce) {
 			setStatus(UpgradePlanElementStatus.FAILED);
@@ -82,5 +88,8 @@ public class UpgradeToLatestPlukginsSDKStep extends BaseUpgradeTaskStep {
 
 	@Reference
 	private ResourceSelection _resourceSelection;
+
+	@Reference
+	private UpgradePlanner _upgradePlanner;
 
 }

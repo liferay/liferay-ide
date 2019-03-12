@@ -12,11 +12,11 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.ui.internal;
+package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
-import com.liferay.ide.upgrade.problems.core.tasks.FindUpgradeProblemsStepKeys;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -30,15 +30,18 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=show_upgrade_problems", "order=2", "requirement=recommended", "stepId=" + FindUpgradeProblemsStepKeys.ID,
-		"title=Show Upgrade problems"
+		"description=" + CheckForUpgradePlannerUpdatesActionKeys.DESCRIPTION,
+		"id=" + CheckForUpgradePlannerUpdatesActionKeys.ID, "order=1", "requirement=recommended",
+		"stepId=" + CheckInstallationPrerequisitesStepKeys.ID, "title=" + CheckForUpgradePlannerUpdatesActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class ShowUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
+public class CheckForUpgradePlannerUpdatesAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
+		setStatus(UpgradePlanElementStatus.COMPLETED);
+
 		return Status.OK_STATUS;
 	}
 

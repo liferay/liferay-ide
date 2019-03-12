@@ -20,9 +20,12 @@ package com.liferay.ide.upgrade.problems.core.tasks;
 public class FindUpgradeProblemsStepKeys {
 
 	public static final String DESCRIPTION =
-		"This step will help find breaking changes in Java, JSP, XML and properties files by adding problem markers " +
-		"to the problematic resources. Once upgrade problems are found, you can go to the Project Explorer to browse " +
-		"the upgrade problems and see associated breaking change documentation.";
+		"<p>Peform this action to find upgrade problems in Java, JSP, XML, and properties in your workspace. For " +
+		"each problem that is found, a marker will be indicate by location in the source file that requires an " +
+		"upgrade. These markers will be displayed in the following locations:<li>Project Explorer > Liferay Upgrade " +
+		"Problems node</li><li>In each source file as a marker annotation (sidebar gutter or underlined)</li><li>" +
+		"Markers view under the heading <b>Liferay Upgrade Problem</b></li>When you select an upgrade problem, you " +
+		"can see relevant documentation on how to fix the problem in the <b>Liferay Upgrade Plan Info View</b></p>";
 
 	public static final String ID = "find_upgrade_problems";
 

@@ -21,10 +21,12 @@ import com.liferay.ide.project.core.model.ProjectNamedItem;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.tasks.core.ImportSDKProjectsOp;
-import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKTaskKeys;
+import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKProjectsTaskKeys;
 import com.liferay.ide.upgrade.tasks.ui.internal.ImportSDKProjectsWizard;
 import com.liferay.ide.upgrade.tasks.ui.internal.UpgradeTasksUIPlugin;
 
@@ -34,7 +36,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
@@ -64,12 +69,13 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=move_plugins_sdk_projects_to_workspace", "order=3", "requirement=required",
-		"taskId=" + MigratePluginsSDKTaskKeys.ID, "title=Move Plugins SDK Projects to Workspace"
+		"description=" + CopyPluginsSDKProjectsToWorkspaceStepKeys.DESCRIPTION,
+		"id=" + CopyPluginsSDKProjectsToWorkspaceStepKeys.ID, "order=3", "requirement=required",
+		"taskId=" + MigratePluginsSDKProjectsTaskKeys.ID, "title=" + CopyPluginsSDKProjectsToWorkspaceStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class MovePluginsSDKProjectsToWorkspaceStep extends BaseUpgradeTaskStep implements SapphireContentAccessor {
+public class CopyPluginsSDKProjectsToWorkspaceStep extends BaseUpgradeTaskStep implements SapphireContentAccessor {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -111,15 +117,15 @@ public class MovePluginsSDKProjectsToWorkspaceStep extends BaseUpgradeTaskStep i
 			});
 
 		if (returnCode.get() == Window.OK) {
-			ElementList<ProjectNamedItem> projects = sdkProjectsImportOp.getSelectedProjects();
+			ElementList<ProjectNamedItem> projectNamedItems = sdkProjectsImportOp.getSelectedProjects();
 
-			Stream<ProjectNamedItem> stream = projects.stream();
+			Stream<ProjectNamedItem> stream = projectNamedItems.stream();
 
-			stream.map(
+			List<IProject> projects = stream.map(
 				projectNamedItem -> get(projectNamedItem.getLocation())
 			).map(
 				location -> Paths.get(location)
-			).forEach(
+			).map(
 				source -> {
 					int beginIndex = source.getNameCount() - 2;
 					int endIndex = source.getNameCount();
@@ -140,15 +146,27 @@ public class MovePluginsSDKProjectsToWorkspaceStep extends BaseUpgradeTaskStep i
 
 					org.eclipse.core.runtime.Path path = new org.eclipse.core.runtime.Path(newLocation.toString());
 
+					IProject newProject = null;
+
 					try {
-						IProject newProject = CoreUtil.openProject(sourceFile.getName(), path, progressMonitor);
+						newProject = CoreUtil.openProject(sourceFile.getName(), path, progressMonitor);
 
 						_addNaturesToProject(newProject, JavaCore.NATURE_ID, progressMonitor);
 					}
 					catch (CoreException ce) {
 					}
+
+					return newProject;
 				}
+			).filter(
+				Objects::nonNull
+			).collect(
+				Collectors.toList()
 			);
+
+			setStatus(UpgradePlanElementStatus.COMPLETED);
+
+			_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, projects));
 		}
 
 		return Status.OK_STATUS;

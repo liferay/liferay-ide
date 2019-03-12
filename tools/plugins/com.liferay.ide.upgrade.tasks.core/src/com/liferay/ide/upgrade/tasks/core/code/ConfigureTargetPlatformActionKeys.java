@@ -16,11 +16,12 @@ package com.liferay.ide.upgrade.tasks.core.code;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 public class ConfigureTargetPlatformActionKeys {
 
 	public static final String DESCRIPTION =
-		"This Action has not been implemented, select \"Click to Complete\" to continue upgrade plan.";
+		"<p>This Action has not been implemented, select <b>Click when Complete</b> to continue upgrade plan.</p>";
 
 	public static final String ID = "configure_target_platform";
 

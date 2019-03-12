@@ -17,6 +17,7 @@ package com.liferay.ide.upgrade.problems.core.internal.tasks;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
@@ -54,9 +55,9 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"description=" + AutoCorrectUpgradeProblemsActionKeys.DESCRIPTION, "id=auto_correct_problems", "order=2",
-		"requirement=recommended", "stepId=" + AutoCorrectUpgradeProblemsStepKeys.ID,
-		"title=" + AutoCorrectUpgradeProblemsActionKeys.TITLE
+		"description=" + AutoCorrectUpgradeProblemsActionKeys.DESCRIPTION,
+		"id=" + AutoCorrectUpgradeProblemsActionKeys.ID, "order=2", "requirement=recommended",
+		"stepId=" + AutoCorrectUpgradeProblemsStepKeys.ID, "title=" + AutoCorrectUpgradeProblemsActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
@@ -134,6 +135,8 @@ public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeTaskStepAction 
 				}
 			}
 		);
+
+		setStatus(UpgradePlanElementStatus.COMPLETED);
 
 		_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, new ArrayList<>(upgradeProblems)));
 

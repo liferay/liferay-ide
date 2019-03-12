@@ -21,10 +21,12 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 import com.liferay.ide.upgrade.tasks.core.code.InitializeServerBundleStepKeys;
 import com.liferay.ide.upgrade.tasks.core.code.SetupDevelopmentEnvironmentTaskKeys;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -52,7 +54,7 @@ public class InitializeServerBundleStep extends BaseUpgradeTaskStep {
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		List<IProject> projects = _resourceSelection.selectProjects(
-			"select liferay workspace project", false, ResourceSelection.WORKSPACE_PROJECTS);
+			"Select Liferay Workspace Project", false, ResourceSelection.WORKSPACE_PROJECTS);
 
 		if (projects.isEmpty()) {
 			return Status.CANCEL_STATUS;
@@ -85,6 +87,8 @@ public class InitializeServerBundleStep extends BaseUpgradeTaskStep {
 		}
 
 		setStatus(UpgradePlanElementStatus.COMPLETED);
+
+		_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, Collections.singletonList(project)));
 
 		return Status.OK_STATUS;
 	}

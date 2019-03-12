@@ -20,9 +20,12 @@ package com.liferay.ide.upgrade.problems.core.internal.tasks;
 public class RemoveUpgradeProblemMarkersActionKeys {
 
 	public static final String DESCRIPTION =
-		"All previously found upgrade problem markers will be removed. This is highly recommended before performing " +
-		"the find upgrade problems step.";
+		"<p>After performing auto correct of upgrade problems, all of the previously found markers must be removed " +
+		"because in most cases the line number or other marker information is out of date and must be removed before " +
+		"continuing.</p>";
 
-	public static final String TITLE = "Remove Previous Upgrade Problems";
+	public static final String ID = "remove_upgrade_problems_markers";
+
+	public static final String TITLE = "Remove Upgrade Problems Markers";
 
 }

@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
@@ -42,9 +43,10 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"description=" + RemoveUpgradeProblemMarkersActionKeys.DESCRIPTION, "id=remove_previous_upgrade_problems",
-		"imagePath=icons/remove_previous_result.png", "order=3", "requirement=recommended",
-		"stepId=" + AutoCorrectUpgradeProblemsStepKeys.ID, "title=" + RemoveUpgradeProblemMarkersActionKeys.TITLE
+		"description=" + RemoveUpgradeProblemMarkersActionKeys.DESCRIPTION,
+		"id=" + RemoveUpgradeProblemMarkersActionKeys.ID, "imagePath=icons/remove_previous_result.png", "order=3",
+		"requirement=recommended", "stepId=" + AutoCorrectUpgradeProblemsStepKeys.ID,
+		"title=" + RemoveUpgradeProblemMarkersActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
@@ -69,6 +71,8 @@ public class RemoveUpgradeProblemMarkersAction extends BaseUpgradeTaskStepAction
 			).forEach(
 				this::deleteMarker
 			);
+
+			setStatus(UpgradePlanElementStatus.COMPLETED);
 
 			_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, new ArrayList<>(upgradeProblems)));
 

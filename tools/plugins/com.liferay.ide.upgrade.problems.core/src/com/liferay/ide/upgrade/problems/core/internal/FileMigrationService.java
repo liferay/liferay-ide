@@ -32,6 +32,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Dictionary;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -65,7 +66,9 @@ public class FileMigrationService implements FileMigration {
 	}
 
 	@Override
-	public List<UpgradeProblem> findUpgradeProblems(File dir, List<String> versions, IProgressMonitor monitor) {
+	public List<UpgradeProblem> findUpgradeProblems(
+		File dir, List<String> versions, Set<String> requiredProperties, IProgressMonitor monitor) {
+
 		monitor.beginTask("Searching for migration problems in " + dir, -1);
 
 		List<UpgradeProblem> upgradeProblems = Collections.synchronizedList(new ArrayList<UpgradeProblem>());
@@ -74,7 +77,7 @@ public class FileMigrationService implements FileMigration {
 
 		_countTotal(dir);
 
-		_walkFiles(dir, upgradeProblems, versions, monitor);
+		_walkFiles(dir, upgradeProblems, versions, requiredProperties, monitor);
 
 		monitor.done();
 
@@ -84,34 +87,9 @@ public class FileMigrationService implements FileMigration {
 		return upgradeProblems;
 	}
 
-	@Override
-	public List<UpgradeProblem> findUpgradeProblems(Set<File> files, List<String> versions, IProgressMonitor monitor) {
-		List<UpgradeProblem> problems = Collections.synchronizedList(new ArrayList<UpgradeProblem>());
-
-		monitor.beginTask("Analyzing files", -1);
-
-		_total = files.size();
-
-		for (File file : files) {
-			_count++;
-
-			if (monitor.isCanceled()) {
-				return Collections.emptyList();
-			}
-
-			analyzeFile(file, problems, versions, monitor);
-		}
-
-		monitor.done();
-
-		_count = 0;
-		_total = 0;
-
-		return problems;
-	}
-
 	protected FileVisitResult analyzeFile(
-		File file, List<UpgradeProblem> upgradeProblems, List<String> versions, IProgressMonitor monitor) {
+		File file, List<UpgradeProblem> upgradeProblems, List<String> versions, Set<String> requiredProperties,
+		IProgressMonitor monitor) {
 
 		Path path = file.toPath();
 
@@ -193,7 +171,25 @@ public class FileMigrationService implements FileMigration {
 				try {
 					Stream<ServiceReference<FileMigrator>> migratorStream = fileMigrators.stream();
 
-					migratorStream.map(
+					migratorStream.filter(
+						serviceReference -> {
+							if (requiredProperties == null) {
+								return true;
+							}
+
+							Dictionary<String, Object> properties = serviceReference.getProperties();
+
+							for (String key : requiredProperties) {
+								Object value = properties.get(key);
+
+								if (value == null) {
+									return false;
+								}
+							}
+
+							return true;
+						}
+					).map(
 						_context::getService
 					).parallel(
 					).forEach(
@@ -270,7 +266,8 @@ public class FileMigrationService implements FileMigration {
 	}
 
 	private void _walkFiles(
-		File startDir, List<UpgradeProblem> upgradeProblems, List<String> versions, IProgressMonitor monitor) {
+		File startDir, List<UpgradeProblem> upgradeProblems, List<String> versions, Set<String> requiredProperties,
+		IProgressMonitor monitor) {
 
 		SubMonitor progressMonitor = SubMonitor.convert(monitor, _total);
 
@@ -316,7 +313,7 @@ public class FileMigrationService implements FileMigration {
 				progressMonitor.split(1);
 
 				if (file.isFile() && attrs.isRegularFile() && (attrs.size() > 0)) {
-					FileVisitResult result = analyzeFile(file, upgradeProblems, versions, monitor);
+					FileVisitResult result = analyzeFile(file, upgradeProblems, versions, requiredProperties, monitor);
 
 					if (result.equals(FileVisitResult.TERMINATE)) {
 						return result;

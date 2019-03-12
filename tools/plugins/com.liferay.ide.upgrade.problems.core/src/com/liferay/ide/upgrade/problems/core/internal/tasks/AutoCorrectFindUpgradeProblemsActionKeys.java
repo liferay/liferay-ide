@@ -12,18 +12,18 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.code;
+package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
-public class UpgradeWorkspacePluginVersionActionKeys {
+public class AutoCorrectFindUpgradeProblemsActionKeys {
 
 	public static final String DESCRIPTION =
-		"<p>This Action has not been implemented, select <b>Click when Complete</b> to continue.</p>";
+		"<p>Peform this action to findl all upgrade problems that can be automatically fixed in your workspace.</p>";
 
-	public static final String ID = "upgrade_workspace_plugin_version";
+	public static final String ID = "auto_correct_find_upgrade_problems";
 
-	public static final String TITLE = "Upgrade Workspace Plugin Version";
+	public static final String TITLE = "Find Upgrade Problems";
 
 }

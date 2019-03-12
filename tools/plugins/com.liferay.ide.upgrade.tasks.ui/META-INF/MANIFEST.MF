@@ -20,8 +20,8 @@ Require-Bundle: com.liferay.ide.project.ui,
  org.eclipse.osgi,
  org.eclipse.osgi.services,
  org.eclipse.sapphire.ui
-Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.NewLiferayWorkspaceAction.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.ResourceSelectionImpl.xml,
+Service-Component: OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.ResourceSelectionImpl.xml,
  OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.MessagePromptImpl.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.sdk.MovePluginsSDKProjectsToWorkspaceStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.sdk.ConvertPluginsSDKProjectsToModulesStep.xml
+ OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.sdk.ConvertPluginsSDKProjectsToModulesStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.CreateNewLiferayWorkspaceAction.xml,
+ OSGI-INF/com.liferay.ide.upgrade.tasks.ui.internal.sdk.CopyPluginsSDKProjectsToWorkspaceStep.xml

@@ -20,11 +20,13 @@ package com.liferay.ide.upgrade.problems.core.tasks;
 public class FixUpgradeProblemsTaskKeys {
 
 	public static final String DESCRIPTION =
-		"In this task, you will find source code that has been affected by breaking changes in the new Liferay " +
-		"version. For each problem that is found, the associated breaking change documentation will be shown to " +
-		"help you fix the problems.  In many cases the problems can be fixed automatically.  See more in Auto " +
-		"Correct Upgrade Problems step.\nFor all breaking changes that can not be fixed automatically use the " +
-		"provided breaking changes documentation to manually fix the code to complete the upgrade.";
+		"<p>Now that you have your projects in your workspace, it is time to find and fix all of the known upgrade " +
+		"problems that you will encounter. The steps below will help you address each problem either automatically " +
+		"or provide the associated breaking change documentation with instructions on how to manually adapt your " +
+		"code.<br/><br/>This task will not find 100% of all upgrade problems, but we plan to continue improving the " +
+		"detection and provide additional steps for new required upgrades. Please contact Liferay Devtools team if " +
+		"your upgrade process identified additional problems that needed to be fixed and we can try to incorporate " +
+		"those steps in a future version of this planner.</p>";
 
 	public static final String ID = "fix_upgrade_problems";
 

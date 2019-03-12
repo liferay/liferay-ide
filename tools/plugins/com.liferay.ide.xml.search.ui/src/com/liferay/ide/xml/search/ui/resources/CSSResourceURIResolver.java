@@ -19,7 +19,7 @@ import java.util.Set;
 
 /**
  * Extension of WTP/XML Search resources uri resolver for Liferay to manage css,
- * js, icons used in the descriptor of lifreay which starts with "/". Ex :
+ * js, icons used in the descriptor of Liferay which starts with "/". Ex :
  *
  * <pre>
  * &lt;header-portlet-css&gt;/html/portlet/directory/css/main.css&lt;/header-portlet-css&gt;

@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.tasks.core.internal.code;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.tasks.core.code.ConfigureLiferayWorkspaceSettingsStepKeys;
 import com.liferay.ide.upgrade.tasks.core.code.ConfigureTargetPlatformActionKeys;
@@ -28,12 +29,13 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"id=" + ConfigureTargetPlatformActionKeys.ID, "requirement=optional", "order=3",
-		"stepId=" + ConfigureLiferayWorkspaceSettingsStepKeys.ID, "title=" + ConfigureTargetPlatformActionKeys.TITLE,
-		"description=" + ConfigureTargetPlatformActionKeys.DESCRIPTION
+		"description=" + ConfigureTargetPlatformActionKeys.DESCRIPTION, "id=" + ConfigureTargetPlatformActionKeys.ID,
+		"requirement=optional", "order=3", "stepId=" + ConfigureLiferayWorkspaceSettingsStepKeys.ID,
+		"title=" + ConfigureTargetPlatformActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
@@ -41,6 +43,8 @@ public class ConfigureTargetPlatformAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
+		setStatus(UpgradePlanElementStatus.COMPLETED);
+
 		return Status.OK_STATUS;
 	}
 
