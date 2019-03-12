@@ -45,6 +45,8 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 		if (_description == null) {
 			_description = _title;
 		}
+
+		_description = "<form>" + _description + "</form>";
 	}
 
 	@Override
@@ -73,7 +75,7 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 
 	@Override
 	public String getDescription() {
-		return "<form>" + _description + "</form>";
+		return _description;
 	}
 
 	@Override
