@@ -91,7 +91,7 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 
 		UpgradePlanElementRequirement targetRequirement = baseUpgradeTaskStepAction.getRequirement();
 
-		if (super.equals(object) && isEqualIgnoreCase(_stepId, baseUpgradeTaskStepAction.getStepId()) &&
+		if (super.equals(object) && isEqualIgnoreCase(_stepId, baseUpgradeTaskStepAction._stepId) &&
 			isEqualIgnoreCase(_requirement, targetRequirement.toString())) {
 
 			return true;
