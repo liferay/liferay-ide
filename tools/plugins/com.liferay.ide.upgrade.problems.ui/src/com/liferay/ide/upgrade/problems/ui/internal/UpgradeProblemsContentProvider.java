@@ -17,6 +17,7 @@ package com.liferay.ide.upgrade.problems.ui.internal;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
@@ -123,6 +124,10 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 
 			for (UpgradeProblem upgradeProblem : upgradeProblems) {
 				IResource resource = upgradeProblem.getResource();
+
+				if (FileUtil.notExists(resource)) {
+					continue;
+				}
 
 				File file = new File(resource.getLocationURI());
 
