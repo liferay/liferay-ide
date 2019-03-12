@@ -125,12 +125,14 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 	}
 
 	public void setStatus(UpgradePlanElementStatus upgradePlanElementStatus) {
-		UpgradePlanElementStatusChangedEvent upgradePlanElementStatusChangedEvent =
-			new UpgradePlanElementStatusChangedEvent(this, _upgradePlanElementStatus, upgradePlanElementStatus);
+		if (!_upgradePlanElementStatus.equals(upgradePlanElementStatus)) {
+			UpgradePlanElementStatusChangedEvent upgradePlanElementStatusChangedEvent =
+				new UpgradePlanElementStatusChangedEvent(this, _upgradePlanElementStatus, upgradePlanElementStatus);
 
-		_upgradePlanElementStatus = upgradePlanElementStatus;
+			_upgradePlanElementStatus = upgradePlanElementStatus;
 
-		_upgradePlanner.dispatch(upgradePlanElementStatusChangedEvent);
+			_upgradePlanner.dispatch(upgradePlanElementStatusChangedEvent);
+		}
 	}
 
 	@Override

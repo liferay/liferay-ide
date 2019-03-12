@@ -36,6 +36,10 @@ public class RestartUpgradeHandler extends AbstractHandler {
 
 		UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
 
+		if (upgradePlan == null) {
+			return null;
+		}
+
 		List<UpgradeTask> upgradeTasks = upgradePlan.getTasks();
 
 		for (UpgradeTask upgradeTask : upgradeTasks) {

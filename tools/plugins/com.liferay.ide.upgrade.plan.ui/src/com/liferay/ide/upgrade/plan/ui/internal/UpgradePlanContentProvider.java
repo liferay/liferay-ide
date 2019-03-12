@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
@@ -26,8 +27,9 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public class UpgradePlanContentProvider implements ITreeContentProvider {
+public class UpgradePlanContentProvider implements ITreeContentProvider, UpgradePlanAcessor {
 
 	public static final Object NO_TASKS = new Object() {
 
@@ -87,6 +89,16 @@ public class UpgradePlanContentProvider implements ITreeContentProvider {
 	public Object getParent(Object element) {
 		if (NO_TASKS.equals(element)) {
 			return null;
+		}
+		else if (element instanceof UpgradeTaskStepAction) {
+			UpgradeTaskStepAction upgradeTaskStepAction = (UpgradeTaskStepAction)element;
+
+			return getStep(upgradeTaskStepAction);
+		}
+		else if (element instanceof UpgradeTaskStep) {
+			UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)element;
+
+			return getTask(upgradeTaskStep);
 		}
 
 		return null;

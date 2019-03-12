@@ -16,24 +16,34 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradePlanElementViewer;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FillLayout;
@@ -161,6 +171,162 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 		_upgradePlanElementViewer.setSelection(selection);
 	}
 
+	private void _changeSelection(ISelection selection, boolean deepFind, boolean findFirstLeaf) {
+		if (_upgradePlanViewer != null) {
+			if (selection instanceof IStructuredSelection) {
+				IStructuredSelection structureSelection = (IStructuredSelection)selection;
+
+				Object selectedObject = structureSelection.getFirstElement();
+
+				if (selectedObject == null) {
+					return;
+				}
+
+				TreeViewer treeViewer = _upgradePlanViewer.getTreeViewer();
+
+				IContentProvider contentProvider = treeViewer.getContentProvider();
+
+				ITreeContentProvider upgradePlanTreeContentProvider = Adapters.adapt(
+					contentProvider, ITreeContentProvider.class);
+
+				Object parentObject = upgradePlanTreeContentProvider.getParent(selectedObject);
+
+				UpgradePlanElement selectedElement = Adapters.adapt(selectedObject, UpgradePlanElement.class);
+
+				if (deepFind) {
+					if (!upgradePlanTreeContentProvider.hasChildren(selectedObject)) {
+						if (parentObject != null) {
+							Object[] childrenElement = upgradePlanTreeContentProvider.getChildren(parentObject);
+
+							boolean lastOne = true;
+
+							for (Object childObject : childrenElement) {
+								UpgradePlanElement childElement = Adapters.adapt(childObject, UpgradePlanElement.class);
+
+								if (findFirstLeaf) {
+									return;
+								}
+
+								if (childElement.getOrder() > selectedElement.getOrder()) {
+									selectedElement = childElement;
+									lastOne = false;
+
+									break;
+								}
+							}
+
+							ISelection nextSelection = null;
+
+							if (lastOne) {
+								treeViewer.collapseToLevel(parentObject, 1);
+								nextSelection = new StructuredSelection(parentObject);
+
+								_changeSelection(nextSelection, false, true);
+							}
+							else {
+								nextSelection = new StructuredSelection(selectedElement);
+
+								treeViewer.setSelection(nextSelection);
+							}
+						}
+						else {
+							Object treeInput = _upgradePlanViewer.getInput();
+
+							UpgradePlan upgradePlan = Adapters.adapt(treeInput, UpgradePlan.class);
+
+							List<UpgradeTask> upgradePlanTasks = upgradePlan.getTasks();
+
+							UpgradePlanElement nextSelectedElement = null;
+
+							for (UpgradePlanElement planElement : upgradePlanTasks) {
+								if (planElement.getOrder() > selectedElement.getOrder()) {
+									nextSelectedElement = planElement;
+
+									break;
+								}
+							}
+
+							if (nextSelectedElement != null) {
+								ISelection newSelection = new StructuredSelection(nextSelectedElement);
+								treeViewer.expandToLevel(nextSelectedElement, 1);
+								treeViewer.setSelection(newSelection);
+								_changeSelection(newSelection, true, true);
+							}
+						}
+					}
+					else {
+						Object[] childrenElements = upgradePlanTreeContentProvider.getChildren(selectedObject);
+
+						if ((childrenElements != null) && (childrenElements.length > 0)) {
+							ISelection newSelection = new StructuredSelection(childrenElements[0]);
+
+							treeViewer.setSelection(newSelection);
+							_changeSelection(newSelection, true, true);
+						}
+					}
+				}
+				else {
+					if (parentObject != null) {
+						Object[] childrenObjects = upgradePlanTreeContentProvider.getChildren(parentObject);
+						boolean lastOne = true;
+
+						for (Object childObject : childrenObjects) {
+							UpgradePlanElement childElement = Adapters.adapt(childObject, UpgradePlanElement.class);
+
+							if (childElement.getOrder() > selectedElement.getOrder()) {
+								lastOne = false;
+								selectedElement = childElement;
+
+								break;
+							}
+						}
+
+						ISelection nextSelection = null;
+
+						if (lastOne) {
+							treeViewer.collapseToLevel(parentObject, 1);
+							nextSelection = new StructuredSelection(parentObject);
+
+							_changeSelection(nextSelection, false, true);
+						}
+						else {
+							nextSelection = new StructuredSelection(selectedElement);
+
+							treeViewer.setSelection(nextSelection);
+
+							treeViewer.expandToLevel(selectedElement, 1, true);
+							_changeSelection(nextSelection, true, true);
+						}
+					}
+					else {
+						Object viewInput = _upgradePlanViewer.getInput();
+
+						UpgradePlan upgradePlan = Adapters.adapt(viewInput, UpgradePlan.class);
+
+						List<UpgradeTask> tasks = upgradePlan.getTasks();
+
+						UpgradePlanElement nextSelectElement = null;
+
+						for (UpgradePlanElement element : tasks) {
+							if (element.getOrder() > selectedElement.getOrder()) {
+								nextSelectElement = element;
+
+								break;
+							}
+						}
+
+						if (nextSelectElement != null) {
+							ISelection newSelection = new StructuredSelection(nextSelectElement);
+							treeViewer.expandToLevel(nextSelectElement, 1);
+							treeViewer.setSelection(newSelection);
+							_changeSelection(newSelection, true, true);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	private void _createPartControl(Composite parentComposite) {
 		parentComposite.setLayout(new FillLayout());
 
@@ -200,6 +366,17 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 				else if (upgradeEvent instanceof UpgradePlanElementStatusChangedEvent) {
 					UIUtil.sync(
 						() -> {
+							if (_upgradePlanViewer != null) {
+								UpgradePlanElementStatusChangedEvent statusEvent = Adapters.adapt(
+									upgradeEvent, UpgradePlanElementStatusChangedEvent.class);
+
+								UpgradePlanElementStatus newUpgradePlanElementStatus = statusEvent.getNewStatus();
+
+								if (!newUpgradePlanElementStatus.equals(UpgradePlanElementStatus.INCOMPLETE)) {
+									_changeSelection(_upgradePlanViewer.getSelection(), true, false);
+								}
+							}
+
 							_upgradePlanViewer.refresh();
 						});
 				}

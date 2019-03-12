@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
@@ -36,10 +37,12 @@ import java.util.stream.Stream;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -107,6 +110,14 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 		selectOptional.filter(
 			item -> item instanceof UpgradePlanElement
+		).filter(
+			item -> {
+				IContentProvider iContentProvider = _treeViewer.getContentProvider();
+
+				ITreeContentProvider contentProvider = Adapters.adapt(iContentProvider, ITreeContentProvider.class);
+
+				return contentProvider.hasChildren(item);
+			}
 		).ifPresent(
 			s -> {
 				_treeViewer.setExpandedState(s, !_treeViewer.getExpandedState(s));
@@ -185,6 +196,10 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 	public void initTreeExpansion(Map<String, Set<String>> expansionMap) {
 		Set<String> tasks = expansionMap.get("task");
 
+		if (ListUtil.isEmpty(tasks)) {
+			return;
+		}
+
 		Stream<String> tasksStream = tasks.stream();
 
 		tasksStream.map(
@@ -194,6 +209,10 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		);
 
 		Set<String> steps = expansionMap.get("step");
+
+		if (ListUtil.isEmpty(steps)) {
+			return;
+		}
 
 		Stream<String> stepsStream = steps.stream();
 
