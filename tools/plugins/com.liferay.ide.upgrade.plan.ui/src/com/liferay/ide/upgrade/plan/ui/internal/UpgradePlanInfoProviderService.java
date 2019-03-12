@@ -108,7 +108,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 	}
 
 	private void _doUpgradePlanElementDetail(UpgradePlanElement upgradePlanElement, Deferred<String> deferred) {
-		String detail = null;
+		String detail = "about:blank";
 
 		String url = upgradePlanElement.getUrl();
 
@@ -124,17 +124,6 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 			else if (url.startsWith("https://")) {
 				detail = url;
 			}
-		}
-		else {
-			StringBuffer sb = new StringBuffer();
-
-			sb.append(upgradePlanElement.getTitle());
-
-			sb.append("<br />");
-
-			sb.append(upgradePlanElement.getDescription());
-
-			detail = sb.toString();
 		}
 
 		deferred.resolve(detail);

@@ -126,7 +126,9 @@ public class UpgradePlanInfoPage extends Page implements ISelectionChangedListen
 										else {
 											String detailValue = detail.getValue();
 
-											if (detailValue.startsWith("https://")) {
+											if (detailValue.startsWith("https://") ||
+												detailValue.equals("about:blank")) {
+
 												_browser.setUrl(detailValue);
 											}
 											else {
