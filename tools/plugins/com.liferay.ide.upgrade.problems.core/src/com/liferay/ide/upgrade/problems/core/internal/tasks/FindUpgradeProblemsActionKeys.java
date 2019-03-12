@@ -12,18 +12,17 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.tasks.core.sdk;
+package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
 /**
  * @author Gregory Amerson
  */
-public class UpgradeToLatestPluginsSDKStepKeys {
+public class FindUpgradeProblemsActionKeys {
 
-	public static final String DESCRIPTION =
-		"In this step, we will download the latest Plugins SDK and extract it into your workspace upgrade project.";
+	public static final String DESCRIPTION = "<p>Peform this action to find upgrade problems in your workspace.</p>";
 
-	public static final String ID = "upgrade_to_latest_plugins_sdk";
+	public static final String ID = "find_upgrade_problems";
 
-	public static final String TITLE = "Upgrade to Latest Plugins SDK";
+	public static final String TITLE = "Find Upgrade Problems";
 
 }

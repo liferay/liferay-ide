@@ -21,7 +21,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
 import com.liferay.ide.upgrade.problems.core.MarkerSupport;
 import com.liferay.ide.upgrade.problems.core.tasks.FindUpgradeProblemsStepKeys;
@@ -34,34 +33,28 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"id=find_upgrade_problems", "order=1", "requirement=required", "stepId=" + FindUpgradeProblemsStepKeys.ID,
-		"title=" + FindUpgradeProblemsStepKeys.TITLE
+		"description=" + FindUpgradeProblemsActionKeys.DESCRIPTION, "id=" + FindUpgradeProblemsActionKeys.ID, "order=1",
+		"requirement=required", "stepId=" + FindUpgradeProblemsStepKeys.ID,
+		"title=" + FindUpgradeProblemsActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
 public class FindUpgradeProblemsAction extends BaseUpgradeTaskStepAction implements MarkerSupport {
-
-	public FindUpgradeProblemsAction() {
-		_fileMigration = ServicesLookup.getSingleService(FileMigration.class, null);
-		_resourceSelection = ServicesLookup.getSingleService(ResourceSelection.class, null);
-		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
-	}
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -101,7 +94,7 @@ public class FindUpgradeProblemsAction extends BaseUpgradeTaskStepAction impleme
 
 				upgradePlan.addUpgradeProblems(foundUpgradeProblems);
 
-				_addMarkers(foundUpgradeProblems);
+				addMarkers(foundUpgradeProblems);
 			});
 
 		_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, new ArrayList<>(upgradeProblems)));
@@ -109,49 +102,13 @@ public class FindUpgradeProblemsAction extends BaseUpgradeTaskStepAction impleme
 		return Status.OK_STATUS;
 	}
 
-	private void _addMarkers(List<UpgradeProblem> upgradeProblems) {
-		Stream<UpgradeProblem> stream = upgradeProblems.stream();
-
-		stream.filter(
-			upgradeProblem -> FileUtil.exists(upgradeProblem.getResource())
-		).forEach(
-			upgradeProblem -> {
-				IResource resource = upgradeProblem.getResource();
-
-				try {
-					IMarker marker = resource.createMarker(UpgradeProblem.MARKER_TYPE);
-
-					upgradeProblem.setMarkerId(marker.getId());
-
-					_upgradeProblemToMarker(upgradeProblem, marker);
-				}
-				catch (CoreException ce) {
-				}
-			}
-		);
-	}
-
-	private void _upgradeProblemToMarker(UpgradeProblem upgradeProblem, IMarker marker) throws CoreException {
-		marker.setAttribute(IMarker.CHAR_START, upgradeProblem.getStartOffset());
-		marker.setAttribute(IMarker.CHAR_END, upgradeProblem.getEndOffset());
-		marker.setAttribute(IMarker.LINE_NUMBER, upgradeProblem.getLineNumber());
-		marker.setAttribute(IMarker.MESSAGE, upgradeProblem.getTitle());
-		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_AUTOCORRECTCONTEXT, upgradeProblem.getAutoCorrectContext());
-		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_HTML, upgradeProblem.getHtml());
-		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_SUMMARY, upgradeProblem.getSummary());
-		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_STATUS, upgradeProblem.getStatus());
-		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_TICKET, upgradeProblem.getTicket());
-		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_TYPE, upgradeProblem.getType());
-
-		IResource resource = upgradeProblem.getResource();
-
-		marker.setAttribute(IMarker.LOCATION, resource.getName());
-
-		marker.setAttribute(IMarker.SEVERITY, upgradeProblem.getMarkerType());
-	}
-
+	@Reference
 	private FileMigration _fileMigration;
+
+	@Reference
 	private ResourceSelection _resourceSelection;
+
+	@Reference
 	private UpgradePlanner _upgradePlanner;
 
 }

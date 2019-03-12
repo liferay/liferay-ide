@@ -20,10 +20,16 @@ package com.liferay.ide.upgrade.tasks.ui.internal.sdk;
 public class ConvertPluginsSDKProjectsToModulesStepKeys {
 
 	public static final String DESCRIPTION =
-		"Convert Plugin SDK projects to modules (jars or wars) in your Liferay workspace.";
+		"<p>Now that you have selected which plugins you need to migrate, you may now choose which projects you plan " +
+		"on converting. There are many things to consider when planning this step. Some plugins you are required to " +
+		"convert to modules such as custom JSPs or EXT plugins. Also, some plugins it is highly recommended that you " +
+		"convert to modules to best take advantage of the new modular framework in Liferay, e.g. Service Builder " +
+		"portlets.<br/><br/>Click <b>Perform</b> to select hich projects you wish to convert. The Upgrade Planner " +
+		"will convert each of them to a gradle module that lives inside either the <b>modules</b> or <b>wars</b> " +
+		"directory of your workspace depending on the type of plugin you are converting.<br/<br/></p>";
 
 	public static final String ID = "convert_plugins_sdk_projects_to_modules";
 
-	public static final String TITLE = "Convert Plugin SDK Projects to Modules";
+	public static final String TITLE = "Convert 6.x Plugins SDK Projects to Modules";
 
 }

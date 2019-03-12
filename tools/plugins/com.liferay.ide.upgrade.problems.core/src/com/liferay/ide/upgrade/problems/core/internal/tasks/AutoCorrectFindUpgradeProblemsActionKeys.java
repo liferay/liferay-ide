@@ -12,20 +12,18 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.tasks;
+package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
 /**
  * @author Gregory Amerson
  */
-public class AutoCorrectUpgradeProblemsStepKeys {
+public class AutoCorrectFindUpgradeProblemsActionKeys {
 
 	public static final String DESCRIPTION =
-		"<p>In many cases the upgrade problems that exist in your codebase can be found and fixed automatically. " +
-		"Types of fixes that are done automatically are: <li>package imports</li><li>jsp tag names</li><li>Liferay " +
-		"descriptor versions</li><li>XML descriptor content</li></p>";
+		"<p>Peform this action to findl all upgrade problems that can be automatically fixed in your workspace.</p>";
 
-	public static final String ID = "auto_correct_upgrade_problems";
+	public static final String ID = "auto_correct_find_upgrade_problems";
 
-	public static final String TITLE = "Auto Correct Upgrade Problems";
+	public static final String TITLE = "Find Upgrade Problems";
 
 }

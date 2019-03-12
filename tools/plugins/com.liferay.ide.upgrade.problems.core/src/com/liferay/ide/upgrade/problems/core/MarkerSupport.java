@@ -14,6 +14,12 @@
 
 package com.liferay.ide.upgrade.problems.core;
 
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -22,6 +28,28 @@ import org.eclipse.core.runtime.CoreException;
  * @author Gregory Amerson
  */
 public interface MarkerSupport {
+
+	public default void addMarkers(List<UpgradeProblem> upgradeProblems) {
+		Stream<UpgradeProblem> stream = upgradeProblems.stream();
+
+		stream.filter(
+			upgradeProblem -> FileUtil.exists(upgradeProblem.getResource())
+		).forEach(
+			upgradeProblem -> {
+				IResource resource = upgradeProblem.getResource();
+
+				try {
+					IMarker marker = resource.createMarker(UpgradeProblem.MARKER_TYPE);
+
+					upgradeProblem.setMarkerId(marker.getId());
+
+					upgradeProblemToMarker(upgradeProblem, marker);
+				}
+				catch (CoreException ce) {
+				}
+			}
+		);
+	}
 
 	public default void deleteMarker(IMarker marker) {
 		try {
@@ -46,6 +74,25 @@ public interface MarkerSupport {
 		}
 
 		return false;
+	}
+
+	public default void upgradeProblemToMarker(UpgradeProblem upgradeProblem, IMarker marker) throws CoreException {
+		marker.setAttribute(IMarker.CHAR_START, upgradeProblem.getStartOffset());
+		marker.setAttribute(IMarker.CHAR_END, upgradeProblem.getEndOffset());
+		marker.setAttribute(IMarker.LINE_NUMBER, upgradeProblem.getLineNumber());
+		marker.setAttribute(IMarker.MESSAGE, upgradeProblem.getTitle());
+		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_AUTOCORRECTCONTEXT, upgradeProblem.getAutoCorrectContext());
+		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_HTML, upgradeProblem.getHtml());
+		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_SUMMARY, upgradeProblem.getSummary());
+		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_STATUS, upgradeProblem.getStatus());
+		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_TICKET, upgradeProblem.getTicket());
+		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_TYPE, upgradeProblem.getType());
+
+		IResource resource = upgradeProblem.getResource();
+
+		marker.setAttribute(IMarker.LOCATION, resource.getName());
+
+		marker.setAttribute(IMarker.SEVERITY, upgradeProblem.getMarkerType());
 	}
 
 }

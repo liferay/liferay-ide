@@ -23,16 +23,20 @@ import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.tasks.core.ImportSDKProjectsOp;
-import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKTaskKeys;
+import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKProjectsTaskKeys;
 import com.liferay.ide.upgrade.tasks.ui.internal.ImportSDKProjectsWizard;
 import com.liferay.ide.upgrade.tasks.ui.internal.UpgradeTasksUIPlugin;
 
 import java.nio.file.Path;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -58,11 +62,12 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = {
 		"description=" + ConvertPluginsSDKProjectsToModulesStepKeys.DESCRIPTION,
 		"id=" + ConvertPluginsSDKProjectsToModulesStepKeys.ID, "imagePath=icons/export.png", "requirement=recommended",
-		"order=4", "taskId=" + MigratePluginsSDKTaskKeys.ID, "title=" + ConvertPluginsSDKProjectsToModulesStepKeys.TITLE
+		"order=4", "taskId=" + MigratePluginsSDKProjectsTaskKeys.ID,
+		"title=" + ConvertPluginsSDKProjectsToModulesStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
-public class ConvertPluginsSDKProjectsToModulesStep extends BaseUpgradeTaskStep {
+public class ConvertPluginsSDKProjectsToModulesStep extends BaseUpgradeTaskStep implements SapphireContentAccessor {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -110,7 +115,7 @@ public class ConvertPluginsSDKProjectsToModulesStep extends BaseUpgradeTaskStep 
 			MultiStatusBuilder multiStatusBuilder = new MultiStatusBuilder(UpgradeTasksUIPlugin.PLUGIN_ID);
 
 			stream.map(
-				projectNamedItem -> _getter.get(projectNamedItem.getLocation())
+				projectNamedItem -> get(projectNamedItem.getLocation())
 			).forEach(
 				location -> {
 					StringBuilder sb = new StringBuilder();
@@ -153,12 +158,24 @@ public class ConvertPluginsSDKProjectsToModulesStep extends BaseUpgradeTaskStep 
 			multiStatusBuilder.add(syncStatus);
 
 			status = multiStatusBuilder.build();
+
+			if (status.isOK()) {
+				setStatus(UpgradePlanElementStatus.COMPLETED);
+
+				Stream<ProjectNamedItem> projectNamedItems = projects.stream();
+
+				List<String> projectNames = projectNamedItems.map(
+					projectNamedItem -> get(projectNamedItem.getLocation())
+				).collect(
+					Collectors.toList()
+				);
+
+				_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, projectNames));
+			}
 		}
 
 		return status;
 	}
-
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
 
 	@Reference(target = "(type=gradle)")
 	private ProjectSynchronizer _synchronizer;

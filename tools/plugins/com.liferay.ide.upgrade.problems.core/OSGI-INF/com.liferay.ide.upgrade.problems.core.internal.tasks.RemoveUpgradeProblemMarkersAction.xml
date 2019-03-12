@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.tasks.RemoveUpgradeProblemMarkersAction">
-   <property name="description" value="&lt;p&gt;All previously found upgrade problem markers will be removed. This is highly recommended before performing the find upgrade problems step.&lt;/p&gt;"/>
-   <property name="id" value="remove_previous_upgrade_problems"/>
+   <property name="description" value="&lt;p&gt;After performing auto correct of upgrade problems, all of the previously found markers must be removed because in most cases the line number or other marker information is out of date and must be removed before continuing.&lt;/p&gt;"/>
+   <property name="id" value="remove_upgrade_problems_markers"/>
    <property name="imagePath" value="icons/remove_previous_result.png"/>
    <property name="order" value="3"/>
    <property name="requirement" value="recommended"/>
    <property name="stepId" value="auto_correct_upgrade_problems"/>
-   <property name="title" value="Remove Previous Upgrade Problems"/>
+   <property name="title" value="Remove Upgrade Problems Markers"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction"/>
    </service>

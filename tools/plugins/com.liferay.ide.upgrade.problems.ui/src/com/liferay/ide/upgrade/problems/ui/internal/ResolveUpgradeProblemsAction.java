@@ -30,12 +30,13 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"id=show_upgrade_problems", "order=2", "requirement=recommended", "stepId=" + FindUpgradeProblemsStepKeys.ID,
-		"title=Show Upgrade problems"
+		"description=" + ResolveUpgradeProblemsActionKeys.DESCRIPTION, "id=" + ResolveUpgradeProblemsActionKeys.ID,
+		"order=2", "requirement=recommended", "stepId=" + FindUpgradeProblemsStepKeys.ID,
+		"title=" + ResolveUpgradeProblemsActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class ShowUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
+public class ResolveUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {

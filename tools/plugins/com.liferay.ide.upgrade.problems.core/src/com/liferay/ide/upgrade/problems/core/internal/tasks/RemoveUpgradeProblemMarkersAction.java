@@ -42,9 +42,10 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"description=" + RemoveUpgradeProblemMarkersActionKeys.DESCRIPTION, "id=remove_previous_upgrade_problems",
-		"imagePath=icons/remove_previous_result.png", "order=3", "requirement=recommended",
-		"stepId=" + AutoCorrectUpgradeProblemsStepKeys.ID, "title=" + RemoveUpgradeProblemMarkersActionKeys.TITLE
+		"description=" + RemoveUpgradeProblemMarkersActionKeys.DESCRIPTION,
+		"id=" + RemoveUpgradeProblemMarkersActionKeys.ID, "imagePath=icons/remove_previous_result.png", "order=3",
+		"requirement=recommended", "stepId=" + AutoCorrectUpgradeProblemsStepKeys.ID,
+		"title=" + RemoveUpgradeProblemMarkersActionKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )

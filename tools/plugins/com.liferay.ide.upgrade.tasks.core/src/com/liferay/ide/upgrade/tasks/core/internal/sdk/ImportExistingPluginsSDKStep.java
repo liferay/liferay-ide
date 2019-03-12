@@ -23,7 +23,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.tasks.core.ProjectImporter;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 import com.liferay.ide.upgrade.tasks.core.sdk.ImportExistingPluginsSDKStepKeys;
-import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKTaskKeys;
+import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKProjectsTaskKeys;
 
 import java.nio.file.Path;
 
@@ -43,8 +43,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"description=" + ImportExistingPluginsSDKStepKeys.DESCRIPTION, "id=" + ImportExistingPluginsSDKStepKeys.ID,
-		"imagePath=icons/import.png", "requirement=required", "order=2", "taskId=" + MigratePluginsSDKTaskKeys.ID,
-		"title=" + ImportExistingPluginsSDKStepKeys.TITLE
+		"imagePath=icons/import.png", "requirement=required", "order=2",
+		"taskId=" + MigratePluginsSDKProjectsTaskKeys.ID, "title=" + ImportExistingPluginsSDKStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
 )
