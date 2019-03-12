@@ -57,29 +57,12 @@ public class MarkerUtil {
 		}
 	}
 
-	public static void deleteMarker(IMarker marker) {
-		try {
-			marker.delete();
-		}
-		catch (CoreException ce) {
-		}
-	}
-
 	public static boolean exists(IMarker marker) {
 		if ((marker != null) && marker.exists()) {
 			return true;
 		}
 
 		return false;
-	}
-
-	public static IMarker findMarker(IResource resource, long markerId) {
-		try {
-			return resource.findMarker(markerId);
-		}
-		catch (CoreException ce) {
-			return null;
-		}
 	}
 
 	public static IMarker[] findMarkers(IResource resource, String markerType, String sourceId) {

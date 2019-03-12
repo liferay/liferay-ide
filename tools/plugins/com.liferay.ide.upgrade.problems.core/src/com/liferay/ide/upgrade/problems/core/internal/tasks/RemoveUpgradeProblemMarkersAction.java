@@ -14,13 +14,13 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
-import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
+import com.liferay.ide.upgrade.problems.core.MarkerSupport;
 import com.liferay.ide.upgrade.problems.core.tasks.AutoCorrectUpgradeProblemsStepKeys;
 import com.liferay.ide.upgrade.tasks.core.MessagePrompt;
 
@@ -48,7 +48,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class RemoveUpgradeProblemMarkersAction extends BaseUpgradeTaskStepAction {
+public class RemoveUpgradeProblemMarkersAction extends BaseUpgradeTaskStepAction implements MarkerSupport {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -63,11 +63,11 @@ public class RemoveUpgradeProblemMarkersAction extends BaseUpgradeTaskStepAction
 			Stream<UpgradeProblem> stream = upgradeProblems.stream();
 
 			stream.map(
-				upgradeProblem -> MarkerUtil.findMarker(upgradeProblem.getResource(), upgradeProblem.getMarkerId())
+				upgradeProblem -> findMarker(upgradeProblem.getResource(), upgradeProblem.getMarkerId())
 			).filter(
-				MarkerUtil::exists
+				this::markerExists
 			).forEach(
-				MarkerUtil::deleteMarker
+				this::deleteMarker
 			);
 
 			_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, new ArrayList<>(upgradeProblems)));

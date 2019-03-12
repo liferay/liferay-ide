@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
@@ -24,6 +23,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
+import com.liferay.ide.upgrade.problems.core.MarkerSupport;
 import com.liferay.ide.upgrade.problems.core.tasks.FindUpgradeProblemsStepKeys;
 import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
 
@@ -55,7 +55,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStepAction.class
 )
-public class FindUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
+public class FindUpgradeProblemsAction extends BaseUpgradeTaskStepAction implements MarkerSupport {
 
 	public FindUpgradeProblemsAction() {
 		_fileMigration = ServicesLookup.getSingleService(FileMigration.class, null);
@@ -78,14 +78,14 @@ public class FindUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		Stream<UpgradeProblem> ugradeProblemstream = upgradeProblems.stream();
+		Stream<UpgradeProblem> ugradeProblemsStream = upgradeProblems.stream();
 
-		ugradeProblemstream.map(
-			upgradeProblem -> MarkerUtil.findMarker(upgradeProblem.getResource(), upgradeProblem.getMarkerId())
+		ugradeProblemsStream.map(
+			upgradeProblem -> findMarker(upgradeProblem.getResource(), upgradeProblem.getMarkerId())
 		).filter(
-			MarkerUtil::exists
+			this::markerExists
 		).forEach(
-			MarkerUtil::deleteMarker
+			this::deleteMarker
 		);
 
 		upgradeProblems.clear();
