@@ -20,6 +20,7 @@ import com.liferay.ide.upgrade.problems.core.tasks.FindUpgradeProblemsStepKeys;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -38,7 +39,7 @@ public class ShowUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		return null;
+		return Status.OK_STATUS;
 	}
 
 }
