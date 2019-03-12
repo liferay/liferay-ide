@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.problems.core.internal.tasks;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStepAction;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
@@ -76,6 +77,16 @@ public class FindUpgradeProblemsAction extends BaseUpgradeTaskStepAction {
 		List<String> upgradeVersions = upgradePlan.getUpgradeVersions();
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
+
+		Stream<UpgradeProblem> ugradeProblemstream = upgradeProblems.stream();
+
+		ugradeProblemstream.map(
+			upgradeProblem -> MarkerUtil.findMarker(upgradeProblem.getResource(), upgradeProblem.getMarkerId())
+		).filter(
+			MarkerUtil::exists
+		).forEach(
+			MarkerUtil::deleteMarker
+		);
 
 		upgradeProblems.clear();
 

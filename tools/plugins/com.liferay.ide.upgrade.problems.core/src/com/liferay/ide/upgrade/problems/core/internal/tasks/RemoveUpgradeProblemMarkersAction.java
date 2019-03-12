@@ -28,9 +28,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -66,11 +63,11 @@ public class RemoveUpgradeProblemMarkersAction extends BaseUpgradeTaskStepAction
 			Stream<UpgradeProblem> stream = upgradeProblems.stream();
 
 			stream.map(
-				this::_findMarker
+				upgradeProblem -> MarkerUtil.findMarker(upgradeProblem.getResource(), upgradeProblem.getMarkerId())
 			).filter(
 				MarkerUtil::exists
 			).forEach(
-				this::_deleteMarker
+				MarkerUtil::deleteMarker
 			);
 
 			_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, new ArrayList<>(upgradeProblems)));
@@ -79,25 +76,6 @@ public class RemoveUpgradeProblemMarkersAction extends BaseUpgradeTaskStepAction
 		}
 
 		return Status.OK_STATUS;
-	}
-
-	private void _deleteMarker(IMarker marker) {
-		try {
-			marker.delete();
-		}
-		catch (CoreException ce) {
-		}
-	}
-
-	private IMarker _findMarker(UpgradeProblem upgradeProblem) {
-		IResource resource = upgradeProblem.getResource();
-
-		try {
-			return resource.findMarker(upgradeProblem.getMarkerId());
-		}
-		catch (CoreException ce) {
-			return null;
-		}
 	}
 
 	@Reference
