@@ -53,6 +53,7 @@ import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
+import org.eclipse.ui.forms.widgets.FormText;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
@@ -72,7 +73,7 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeIte
 		_scrolledForm = scrolledForm;
 		_upgradeTaskStepAction = upgradeTaskStepAction;
 
-		Composite parentComposite = _formToolkit.createComposite(_scrolledForm.getBody());
+		Composite parentComposite = _scrolledForm.getBody();
 
 		GridDataFactory gridDataFactory = GridDataFactory.fillDefaults();
 
@@ -84,13 +85,15 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeIte
 
 		parentComposite.setLayout(new TableWrapLayout());
 
-		Label label = _formToolkit.createLabel(parentComposite, _upgradeTaskStepAction.getDescription());
-
-		_disposables.add(() -> label.dispose());
-
 		if (_upgradeTaskStepAction == null) {
 			return;
 		}
+
+		FormText description = _formToolkit.createFormText(parentComposite, true);
+
+		description.setText(_upgradeTaskStepAction.getDescription(), true, false);
+
+		_disposables.add(() -> description.dispose());
 
 		_buttonComposite = _formToolkit.createComposite(parentComposite);
 
