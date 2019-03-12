@@ -24,7 +24,7 @@ public class CheckForUpgradePlannerUpdatesActionKeys {
 		"Studio or Liferay IDE (whichever version you are using).  Click <b>Perform</b> to check for updates.  If " +
 		"there is an update available, installed it, and afterwards you can return ot this step in upgrade plan and " +
 		"continue the upgrade plan.<br/><br/><b>This action has not been implemented.</b> Select <b>Click to " +
-		"Complete</b> to continue.";
+		"Complete</b> to continue.</p>";
 
 	public static final String ID = "check_for_upgrade_planner_updates";
 

@@ -24,7 +24,7 @@ public class ResolveUpgradeProblemsActionKeys {
 		"Explorer > Liferay Upgrade Problems</b> node. Then as you select each upgrade problem, the documentation " +
 		"for how to adapt your code will be disabled in the <b>Liferay Upgrade Plan Info VIew</<b><br/><br/>" +
 		"For each upgrade problem node, you can mark them as resolved/skipped using the context menu. Leave this " +
-		"step marked as INCOMPLETE until after you have resolved all upgrade problems accordingly.";
+		"step marked as INCOMPLETE until after you have resolved all upgrade problems accordingly.</p>";
 
 	public static final String ID = "resole_upgrade_problems";
 

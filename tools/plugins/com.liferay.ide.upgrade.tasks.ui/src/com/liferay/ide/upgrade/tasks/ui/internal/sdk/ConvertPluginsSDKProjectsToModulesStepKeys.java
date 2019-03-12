@@ -26,7 +26,7 @@ public class ConvertPluginsSDKProjectsToModulesStepKeys {
 		"convert to modules to best take advantage of the new modular framework in Liferay, e.g. Service Builder " +
 		"portlets.<br/><br/>Click <b>Perform</b> to select hich projects you wish to convert. The Upgrade Planner " +
 		"will convert each of them to a gradle module that lives inside either the <b>modules</b> or <b>wars</b> " +
-		"directory of your workspace depending on the type of plugin you are converting.<br/<br/></p>";
+		"directory of your workspace depending on the type of plugin you are converting.<br/><br/></p>";
 
 	public static final String ID = "convert_plugins_sdk_projects_to_modules";
 
