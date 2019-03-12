@@ -15,10 +15,15 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
+import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategoryElement;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
+import org.eclipse.sapphire.ui.forms.WizardDef;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
@@ -48,6 +53,20 @@ public class NewUpgradePlanWizard extends SapphireWizard<NewUpgradePlanOp> {
 		}
 
 		return wizardPages;
+	}
+
+	@Override
+	protected void init(ElementType type, Reference<WizardDef> definition) {
+		super.init(type, definition);
+
+		NewUpgradePlanOp newUpgradePlanOp = element();
+
+		ElementList<UpgradeTaskCategoryElement> upgradeTaskCategoriesCategories =
+			newUpgradePlanOp.getUpgradeTaskCategories();
+
+		UpgradeTaskCategoryElement upgradeTaskCategoryElement = upgradeTaskCategoriesCategories.insert();
+
+		upgradeTaskCategoryElement.setUpgradeTaskCategory("code");
 	}
 
 	@Override
