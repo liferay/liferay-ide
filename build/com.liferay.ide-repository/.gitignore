@@ -1,3 +1,4 @@
+.gradle/
 bundle/builder/
 bundle/downloads/
 bundle/target/
