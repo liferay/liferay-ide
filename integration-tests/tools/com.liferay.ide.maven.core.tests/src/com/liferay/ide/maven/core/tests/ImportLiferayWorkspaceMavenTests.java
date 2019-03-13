@@ -27,6 +27,7 @@ import org.eclipse.m2e.tests.common.JobHelpers;
 import org.eclipse.sapphire.modeling.Status;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -57,6 +58,7 @@ public class ImportLiferayWorkspaceMavenTests extends ProjectOpBase<ImportLifera
 		deleteProject(ips.getName());
 	}
 
+	@Ignore("Ignore because of the internet to init bundle")
 	@Test
 	public void importLiferayWorkspaceInitBundle() {
 		ImportProjectSupport ips = new ImportProjectSupport("test-liferay-workspace-maven");
