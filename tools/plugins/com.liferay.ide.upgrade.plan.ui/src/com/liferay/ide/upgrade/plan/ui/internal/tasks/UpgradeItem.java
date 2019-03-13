@@ -15,11 +15,18 @@
 package com.liferay.ide.upgrade.plan.ui.internal.tasks;
 
 import com.liferay.ide.upgrade.plan.ui.Disposable;
+import com.liferay.ide.upgrade.plan.ui.Perform;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.events.HyperlinkAdapter;
+import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 
@@ -29,14 +36,34 @@ import org.eclipse.ui.forms.widgets.ImageHyperlink;
 public interface UpgradeItem extends Disposable, ISelectionProvider {
 
 	public default ImageHyperlink createImageHyperlink(
-		FormToolkit formToolkit, Composite parentComposite, Image image, Object data, String linkText) {
+		FormToolkit formToolkit, Composite parentComposite, Image image, Object data, String linkText, String jobText,
+		Perform perform) {
 
 		ImageHyperlink imageHyperlink = formToolkit.createImageHyperlink(parentComposite, SWT.NULL);
 
 		imageHyperlink.setData(data);
+		imageHyperlink.setEnabled(true);
+		imageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		imageHyperlink.setImage(image);
 		imageHyperlink.setText(linkText);
 		imageHyperlink.setToolTipText(linkText);
+
+		imageHyperlink.addHyperlinkListener(
+			new HyperlinkAdapter() {
+
+				@Override
+				public void linkActivated(HyperlinkEvent e) {
+					new Job(jobText) {
+
+						@Override
+						protected IStatus run(IProgressMonitor progressMonitor) {
+							return perform.apply(progressMonitor);
+						}
+
+					}.schedule();
+				}
+
+			});
 
 		return imageHyperlink;
 	}

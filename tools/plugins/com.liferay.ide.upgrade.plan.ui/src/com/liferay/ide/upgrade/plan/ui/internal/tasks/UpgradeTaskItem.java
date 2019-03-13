@@ -27,21 +27,17 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.ExpansionEvent;
-import org.eclipse.ui.forms.events.HyperlinkAdapter;
-import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.FormText;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -109,28 +105,8 @@ public class UpgradeTaskItem implements IExpansionListener, UpgradeItem {
 		Image taskRestartImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_RESTART_IMAGE);
 
 		ImageHyperlink taskRestartImageHyperlink = createImageHyperlink(
-			_formToolkit, _buttonComposite, taskRestartImage, this, "Click to restart");
-
-		taskRestartImageHyperlink.setEnabled(true);
-
-		taskRestartImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-		taskRestartImageHyperlink.addHyperlinkListener(
-			new HyperlinkAdapter() {
-
-				@Override
-				public void linkActivated(HyperlinkEvent e) {
-					new Job(_upgradeTask.getTitle() + " restarting.") {
-
-						@Override
-						protected IStatus run(IProgressMonitor monitor) {
-							return _restartTask();
-						}
-
-					}.schedule();
-				}
-
-			});
+			_formToolkit, _buttonComposite, taskRestartImage, this, "Click to restart",
+			"Restarting " + _upgradeTask.getTitle() + "...", this::_restartTask);
 
 		_disposables.add(() -> taskRestartImageHyperlink.dispose());
 	}
@@ -182,7 +158,7 @@ public class UpgradeTaskItem implements IExpansionListener, UpgradeItem {
 	public void setSelection(ISelection selection) {
 	}
 
-	private IStatus _restartTask() {
+	private IStatus _restartTask(IProgressMonitor progressMonitor) {
 		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 
 		upgradePlanner.restartTask(_upgradeTask);

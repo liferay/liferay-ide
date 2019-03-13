@@ -36,13 +36,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -50,8 +48,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.ExpansionEvent;
-import org.eclipse.ui.forms.events.HyperlinkAdapter;
-import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.FormText;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -113,26 +109,8 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeIte
 			UpgradePlanUIPlugin.TASK_STEP_ACTION_PERFORM_IMAGE);
 
 		ImageHyperlink performImageHyperlink = createImageHyperlink(
-			_formToolkit, _buttonComposite, taskStepActionPerformImage, this, "Click to perform");
-
-		performImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-		performImageHyperlink.addHyperlinkListener(
-			new HyperlinkAdapter() {
-
-				@Override
-				public void linkActivated(HyperlinkEvent e) {
-					new Job("Performing " + _upgradeTaskStepAction.getTitle() + "...") {
-
-						@Override
-						protected IStatus run(IProgressMonitor progressMonitor) {
-							return _perform(progressMonitor);
-						}
-
-					}.schedule();
-				}
-
-			});
+			_formToolkit, _buttonComposite, taskStepActionPerformImage, this, "Click to perform",
+			"Performing " + _upgradeTaskStepAction.getTitle() + "...", this::_perform);
 
 		_disposables.add(() -> performImageHyperlink.dispose());
 
@@ -144,28 +122,8 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeIte
 			UpgradePlanUIPlugin.TASK_STEP_ACTION_COMPLETE_IMAGE);
 
 		ImageHyperlink completeImageHyperlink = createImageHyperlink(
-			_formToolkit, _buttonComposite, taskStepActionCompleteImage, this, "Click when complete");
-
-		completeImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-		completeImageHyperlink.addHyperlinkListener(
-			new HyperlinkAdapter() {
-
-				@Override
-				public void linkActivated(HyperlinkEvent e) {
-					new Job("Completing " + _upgradeTaskStepAction.getTitle() + "...") {
-
-						@Override
-						protected IStatus run(IProgressMonitor monitor) {
-							_complete();
-
-							return Status.OK_STATUS;
-						}
-
-					}.schedule();
-				}
-
-			});
+			_formToolkit, _buttonComposite, taskStepActionCompleteImage, this, "Click when complete",
+			"Completing " + _upgradeTaskStepAction.getTitle() + "...", this::_complete);
 
 		_disposables.add(() -> completeImageHyperlink.dispose());
 
@@ -176,19 +134,8 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeIte
 		Image taskStepActionSkipImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_ACTION_SKIP_IMAGE);
 
 		ImageHyperlink skipImageHyperlink = createImageHyperlink(
-			_formToolkit, _buttonComposite, taskStepActionSkipImage, this, "Skip");
-
-		skipImageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-		skipImageHyperlink.addHyperlinkListener(
-			new HyperlinkAdapter() {
-
-				@Override
-				public void linkActivated(HyperlinkEvent e) {
-					_skip();
-				}
-
-			});
+			_formToolkit, _buttonComposite, taskStepActionSkipImage, this, "Skip",
+			"Skipping " + _upgradeTaskStepAction.getTitle() + "...", this::_skip);
 
 		_disposables.add(() -> skipImageHyperlink.dispose());
 
@@ -284,8 +231,10 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeIte
 		);
 	}
 
-	private void _complete() {
+	private IStatus _complete(IProgressMonitor progressMonitor) {
 		_upgradeTaskStepAction.setStatus(UpgradePlanElementStatus.COMPLETED);
+
+		return Status.OK_STATUS;
 	}
 
 	private void _fill(FormToolkit formToolkit, Composite parent, List<Disposable> disposables) {
@@ -304,8 +253,10 @@ public class UpgradeTaskStepActionItem implements IExpansionListener, UpgradeIte
 		return _upgradeTaskStepAction.perform(progressMonitor);
 	}
 
-	private void _skip() {
+	private IStatus _skip(IProgressMonitor progressMonitor) {
 		_upgradeTaskStepAction.setStatus(UpgradePlanElementStatus.SKIPPED);
+
+		return Status.OK_STATUS;
 	}
 
 	private Composite _buttonComposite;

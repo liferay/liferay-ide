@@ -48,6 +48,12 @@ public class UpgradeTasksCorePlugin extends Plugin {
 		return _instance;
 	}
 
+	public static void log(IStatus status) {
+		ILog log = _instance.getLog();
+
+		log.log(status);
+	}
+
 	public static void logError(String msg) {
 		ILog log = _instance.getLog();
 
