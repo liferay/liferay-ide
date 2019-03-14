@@ -189,126 +189,83 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			return;
 		}
 
+		boolean hasChildren = _treeContentProvider.hasChildren(selectedObject);
+
 		Object parent = _treeContentProvider.getParent(selectedObject);
 
 		UpgradePlanElement selectedElement = Adapters.adapt(selectedObject, UpgradePlanElement.class);
 
-		Object treeInput = _upgradePlanViewer.getInput();
-
-		UpgradePlan upgradePlan = Adapters.adapt(treeInput, UpgradePlan.class);
-
-		List<UpgradeTask> tasks = upgradePlan.getTasks();
-
 		double selectedOrder = selectedElement.getOrder();
 
-		if (deepFind) {
-			if (_treeContentProvider.hasChildren(selectedObject)) {
-				Object[] childrenElements = _treeContentProvider.getChildren(selectedObject);
+		if (deepFind && hasChildren) {
+			Object[] childrenElements = _treeContentProvider.getChildren(selectedObject);
 
-				ISelection newSelection = new StructuredSelection(childrenElements[0]);
+			ISelection newSelection = new StructuredSelection(childrenElements[0]);
 
-				_treeViewer.setSelection(newSelection);
+			_treeViewer.setSelection(newSelection);
 
-				_changeSelection(newSelection, true, true);
-			}
-			else {
-				if (parent != null) {
-					if (findFirstLeaf) {
-						return;
-					}
-
-					Optional<StructuredSelection> optional = Stream.of(
-						_treeContentProvider.getChildren(parent)
-					).map(
-						childObject -> Adapters.adapt(childObject, UpgradePlanElement.class)
-					).filter(
-						childElement -> childElement.getOrder() > selectedOrder
-					).filter(
-						Objects::nonNull
-					).map(
-						childElement -> new StructuredSelection(childElement)
-					).findFirst(
-					);
-
-					if (optional.isPresent()) {
-						ISelection nextSelection = optional.get();
-
-						_treeViewer.setSelection(nextSelection);
-					}
-					else {
-						_treeViewer.collapseToLevel(parent, 1);
-
-						ISelection nextSelection = new StructuredSelection(parent);
-
-						_changeSelection(nextSelection, false, true);
-					}
-				}
-				else {
-					Stream<UpgradeTask> stream = tasks.stream();
-
-					stream.filter(
-						element -> element.getOrder() > selectedOrder
-					).findFirst(
-					).ifPresent(
-						element -> {
-							ISelection newSelection = new StructuredSelection(element);
-
-							_treeViewer.expandToLevel(element, 1);
-							_treeViewer.setSelection(newSelection);
-
-							_changeSelection(newSelection, true, true);
-						}
-					);
-				}
-			}
+			_changeSelection(newSelection, true, true);
 		}
-		else {
-			if (parent != null) {
-				Object[] childrenObjects = _treeContentProvider.getChildren(parent);
 
-				Optional<UpgradePlanElement> optional = Stream.of(
-					childrenObjects
-				).map(
-					childObject -> Adapters.adapt(childObject, UpgradePlanElement.class)
-				).filter(
-					element -> element.getOrder() > selectedOrder
-				).findFirst();
+		if ((deepFind && !hasChildren && (parent != null) && findFirstLeaf) || (deepFind && hasChildren)) {
+			return;
+		}
 
-				if (optional.isPresent()) {
-					UpgradePlanElement element = optional.get();
+		if ((deepFind && !hasChildren && (parent == null)) || (!deepFind && (parent == null))) {
+			Object input = _upgradePlanViewer.getInput();
 
+			UpgradePlan upgradePlan = Adapters.adapt(input, UpgradePlan.class);
+
+			List<UpgradeTask> tasks = upgradePlan.getTasks();
+
+			Stream<UpgradeTask> stream = tasks.stream();
+
+			stream.filter(
+				element -> element.getOrder() > selectedOrder
+			).findFirst(
+			).ifPresent(
+				element -> {
 					ISelection newSelection = new StructuredSelection(element);
 
+					_treeViewer.expandToLevel(element, 1);
 					_treeViewer.setSelection(newSelection);
-					_treeViewer.expandToLevel(element, 1, true);
 
 					_changeSelection(newSelection, true, true);
 				}
-				else {
-					_treeViewer.collapseToLevel(parent, 1);
+			);
+		}
 
-					ISelection newSelection = new StructuredSelection(parent);
+		if (parent == null) {
+			return;
+		}
 
-					_changeSelection(newSelection, false, true);
-				}
+		Optional<UpgradePlanElement> optional = Stream.of(
+			_treeContentProvider.getChildren(parent)
+		).map(
+			childObject -> Adapters.adapt(childObject, UpgradePlanElement.class)
+		).filter(
+			element -> element.getOrder() > selectedOrder
+		).findFirst();
+
+		if (optional.isPresent()) {
+			UpgradePlanElement element = optional.get();
+
+			ISelection newSelection = new StructuredSelection(element);
+
+			_treeViewer.setSelection(newSelection);
+
+			if (!deepFind) {
+				_treeViewer.expandToLevel(element, 1, true);
+
+				_changeSelection(newSelection, true, true);
 			}
-			else {
-				Stream<UpgradeTask> stream = tasks.stream();
+		}
+		else {
+			_treeViewer.collapseToLevel(parent, 1);
 
-				stream.filter(
-					element -> element.getOrder() > selectedOrder
-				).findFirst(
-				).ifPresent(
-					element -> {
-						ISelection newSelection = new StructuredSelection(element);
+			ISelection newSelection = new StructuredSelection(parent);
 
-						_treeViewer.expandToLevel(element, 1);
-						_treeViewer.setSelection(newSelection);
-
-						_changeSelection(newSelection, true, true);
-					}
-				);
-			}
+			_changeSelection(newSelection, false, true);
 		}
 	}
 
