@@ -54,7 +54,7 @@ public class LiferaryWorkspaceTomcat7xSupport extends SupportBase {
 		return getServerName() + "  [Stopped]";
 	}
 
-	public String serverName = "Liferay Community Edition Portal 7.1.0 CE GA2";
+	public String serverName = "Liferay Community Edition Portal 7.1.2 CE GA3";
 
 	private LiferayWorkspaceSupport _workspace;
 
