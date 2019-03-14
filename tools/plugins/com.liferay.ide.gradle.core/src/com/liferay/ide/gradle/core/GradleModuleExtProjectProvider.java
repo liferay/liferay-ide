@@ -53,7 +53,6 @@ public class GradleModuleExtProjectProvider
 		String projectName = get(op.getProjectName());
 		String originalModuleName = get(op.getOriginalModuleName());
 		Version originalModuleVersion = get(op.getOriginalModuleVersion());
-		String targetPlatform = get(op.getTargetPlatformVersion());
 
 		IPath location = PathBridge.create(get(op.getLocation()));
 
@@ -67,11 +66,8 @@ public class GradleModuleExtProjectProvider
 		sb.append("modules-ext ");
 		sb.append("-m ");
 		sb.append(originalModuleName);
-
-		if (CoreUtil.isNullOrEmpty(targetPlatform)) {
-			sb.append(" -M ");
-			sb.append(originalModuleVersion);
-		}
+		sb.append(" -M ");
+		sb.append(originalModuleVersion);
 
 		sb.append(" \"");
 		sb.append(projectName);
