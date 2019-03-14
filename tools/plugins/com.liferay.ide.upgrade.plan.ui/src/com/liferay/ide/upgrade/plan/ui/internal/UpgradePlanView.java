@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
@@ -26,7 +25,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradePlanElementViewer;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -69,8 +67,6 @@ import org.osgi.util.tracker.ServiceTracker;
 public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 	public static final String ID = "com.liferay.ide.upgrade.plan.view";
-	private ITreeContentProvider _treeContentProvider;
-	private TreeViewer _treeViewer;
 
 	public UpgradePlanView() {
 		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanView.class);
@@ -177,21 +173,11 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	}
 
 	private void _changeSelection(ISelection selection, boolean deepFind, boolean findFirstLeaf) {
-		if (!(selection instanceof IStructuredSelection)) {
-			return;
-		}
-
 		IStructuredSelection structureSelection = (IStructuredSelection)selection;
 
 		Object selectedObject = structureSelection.getFirstElement();
 
-		if (selectedObject == null) {
-			return;
-		}
-
 		boolean hasChildren = _treeContentProvider.hasChildren(selectedObject);
-
-		Object parent = _treeContentProvider.getParent(selectedObject);
 
 		UpgradePlanElement selectedElement = Adapters.adapt(selectedObject, UpgradePlanElement.class);
 
@@ -207,11 +193,17 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			_changeSelection(newSelection, true, true);
 		}
 
-		if ((deepFind && !hasChildren && (parent != null) && findFirstLeaf) || (deepFind && hasChildren)) {
+		Object parent = _treeContentProvider.getParent(selectedObject);
+
+		if (deepFind && hasChildren) {
 			return;
 		}
 
-		if ((deepFind && !hasChildren && (parent == null)) || (!deepFind && (parent == null))) {
+		if (deepFind && !hasChildren && (parent != null) && findFirstLeaf) {
+			return;
+		}
+
+		if (!deepFind && (parent == null)) {
 			Object input = _upgradePlanViewer.getInput();
 
 			UpgradePlan upgradePlan = Adapters.adapt(input, UpgradePlan.class);
@@ -314,15 +306,15 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 				else if (upgradeEvent instanceof UpgradePlanElementStatusChangedEvent) {
 					UIUtil.sync(
 						() -> {
-							if (_upgradePlanViewer != null) {
-								UpgradePlanElementStatusChangedEvent statusEvent = Adapters.adapt(
-									upgradeEvent, UpgradePlanElementStatusChangedEvent.class);
+							UpgradePlanElementStatusChangedEvent statusEvent = Adapters.adapt(
+								upgradeEvent, UpgradePlanElementStatusChangedEvent.class);
 
-								UpgradePlanElementStatus newUpgradePlanElementStatus = statusEvent.getNewStatus();
+							UpgradePlanElementStatus newStatus = statusEvent.getNewStatus();
 
-								if (!newUpgradePlanElementStatus.equals(UpgradePlanElementStatus.INCOMPLETE)) {
-									_changeSelection(_upgradePlanViewer.getSelection(), true, false);
-								}
+							if (!newStatus.equals(UpgradePlanElementStatus.INCOMPLETE)) {
+								ISelection selection = _upgradePlanViewer.getSelection();
+
+								_changeSelection(selection, true, false);
 							}
 
 							_upgradePlanViewer.refresh();
@@ -414,6 +406,8 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private IMemento _memento;
+	private ITreeContentProvider _treeContentProvider;
+	private TreeViewer _treeViewer;
 	private UpgradePlanElementViewer _upgradePlanElementViewer;
 	private ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
 	private UpgradePlanViewer _upgradePlanViewer;
