@@ -33,6 +33,7 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
 /**
+ * @author Christopher Bryan Boyd
  * @author Gregory Amerson
  * @author Terry Jia
  * @author Simon Jiang
@@ -161,6 +162,37 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	@Override
 	public List<UpgradeTaskStepAction> getActions() {
 		return Collections.unmodifiableList(_upgradeTaskStepActions);
+	}
+
+	@Override
+	public String getImagePath() {
+		boolean complete = true;
+		List<UpgradeTaskStepAction> actions = getActions();
+
+		if (!actions.isEmpty()) {
+			for (UpgradeTaskStepAction action : actions) {
+				UpgradePlanElementStatus status = action.getStatus();
+
+				if ((status != UpgradePlanElementStatus.COMPLETED) && (status != UpgradePlanElementStatus.SKIPPED)) {
+					complete = false;
+
+					break;
+				}
+			}
+		}
+		else {
+			UpgradePlanElementStatus status = getStatus();
+
+			if ((status != UpgradePlanElementStatus.COMPLETED) && (status != UpgradePlanElementStatus.SKIPPED)) {
+				complete = false;
+			}
+		}
+
+		if (complete) {
+			return "icons/complete_task.gif";
+		}
+
+		return super.getImagePath();
 	}
 
 	@Override

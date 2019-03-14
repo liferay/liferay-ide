@@ -24,6 +24,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.Adapters;
@@ -79,6 +80,30 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 				baseImage, statusImageDescriptor, IDecoration.TOP_RIGHT);
 
 			return descriptor.createImage();
+		}
+
+		UpgradeTaskStep upgradeTaskStep = Adapters.adapt(element, UpgradeTaskStep.class);
+
+		if (upgradeTaskStep != null) {
+			List<UpgradeTaskStepAction> actions = upgradeTaskStep.getActions();
+
+			if (actions.isEmpty()) {
+				UpgradePlanElementStatus status = upgradeTaskStep.getStatus();
+
+				if (status.equals(UpgradePlanElementStatus.SKIPPED) ||
+					status.equals(UpgradePlanElementStatus.COMPLETED)) {
+
+					ImageDescriptor statusImageDescriptor = UpgradePlanUIPlugin.getImageDescriptor(
+						UpgradePlanUIPlugin.TASK_STEP_ACTION_COMPLETE_OVERLAY_IMAGE);
+
+					ImageDescriptor descriptor = new DecorationOverlayIcon(
+						baseImage, statusImageDescriptor, IDecoration.TOP_RIGHT);
+
+					return descriptor.createImage();
+				}
+			}
+			else {
+			}
 		}
 
 		return super.getImage(element);
