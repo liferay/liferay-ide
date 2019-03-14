@@ -36,7 +36,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.FormText;
@@ -80,7 +79,7 @@ public class UpgradeTaskItem implements IExpansionListener, UpgradeItem {
 
 		_buttonComposite = _formToolkit.createComposite(parentComposite);
 
-		GridLayout buttonGridLayout = new GridLayout(4, false);
+		GridLayout buttonGridLayout = new GridLayout(1, false);
 
 		buttonGridLayout.marginHeight = 2;
 		buttonGridLayout.marginWidth = 2;
@@ -92,15 +91,9 @@ public class UpgradeTaskItem implements IExpansionListener, UpgradeItem {
 
 		_disposables.add(() -> _buttonComposite.dispose());
 
-		Label fillLabel = _formToolkit.createLabel(_buttonComposite, null);
-
 		GridData gridData = new GridData();
 
 		gridData.widthHint = 16;
-
-		fillLabel.setLayoutData(gridData);
-
-		_disposables.add(() -> fillLabel.dispose());
 
 		Image taskRestartImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_RESTART_IMAGE);
 
@@ -109,6 +102,14 @@ public class UpgradeTaskItem implements IExpansionListener, UpgradeItem {
 			"Restarting " + _upgradeTask.getTitle() + "...", this::_restartTask);
 
 		_disposables.add(() -> taskRestartImageHyperlink.dispose());
+
+		Image taskStepActionSkipImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.TASK_STEP_ACTION_SKIP_IMAGE);
+
+		ImageHyperlink skipImageHyperlink = createImageHyperlink(
+			_formToolkit, _buttonComposite, taskStepActionSkipImage, this, "Skip",
+			"Skipping " + _upgradeTask.getTitle() + "...", this::_skip);
+
+		_disposables.add(() -> skipImageHyperlink.dispose());
 	}
 
 	@Override
@@ -162,6 +163,14 @@ public class UpgradeTaskItem implements IExpansionListener, UpgradeItem {
 		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 
 		upgradePlanner.restartTask(_upgradeTask);
+
+		return Status.OK_STATUS;
+	}
+
+	private IStatus _skip(IProgressMonitor progressMonitor) {
+		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+
+		upgradePlanner.skipTask(_upgradeTask);
 
 		return Status.OK_STATUS;
 	}

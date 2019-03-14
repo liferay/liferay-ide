@@ -44,6 +44,10 @@ public interface UpgradePlanner {
 
 	public void saveUpgradePlan(UpgradePlan upgradePlan);
 
+	public void skipTask(UpgradeTask upgradeTask);
+
+	public void skipTaskStep(UpgradeTaskStep upgradeTaskStep);
+
 	public void startUpgradePlan(UpgradePlan upgradePlan);
 
 }

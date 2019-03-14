@@ -283,6 +283,32 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	@Override
+	public void skipTask(UpgradeTask upgradeTask) {
+		upgradeTask.setStatus(UpgradePlanElementStatus.SKIPPED);
+
+		for (UpgradeTaskStep upgradeTaskStep : upgradeTask.getSteps()) {
+			upgradeTaskStep.setStatus(UpgradePlanElementStatus.SKIPPED);
+
+			List<UpgradeTaskStepAction> actions = upgradeTaskStep.getActions();
+
+			for (UpgradeTaskStepAction action : actions) {
+				action.setStatus(UpgradePlanElementStatus.SKIPPED);
+			}
+		}
+	}
+
+	@Override
+	public void skipTaskStep(UpgradeTaskStep upgradeTaskStep) {
+		upgradeTaskStep.setStatus(UpgradePlanElementStatus.SKIPPED);
+
+		List<UpgradeTaskStepAction> actions = upgradeTaskStep.getActions();
+
+		for (UpgradeTaskStepAction action : actions) {
+			action.setStatus(UpgradePlanElementStatus.SKIPPED);
+		}
+	}
+
+	@Override
 	public void startUpgradePlan(UpgradePlan upgradePlan) {
 		_currentUpgradePlan = upgradePlan;
 
