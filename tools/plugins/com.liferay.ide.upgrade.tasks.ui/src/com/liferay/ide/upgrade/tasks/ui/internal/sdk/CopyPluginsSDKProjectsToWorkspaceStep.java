@@ -69,7 +69,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {
-		"description=" + CopyPluginsSDKProjectsToWorkspaceStepKeys.DESCRIPTION,
+		"description=" + CopyPluginsSDKProjectsToWorkspaceStepKeys.DESCRIPTION, "imagePath=icons/copy_to_workspace.png",
 		"id=" + CopyPluginsSDKProjectsToWorkspaceStepKeys.ID, "order=3", "requirement=required",
 		"taskId=" + MigratePluginsSDKProjectsTaskKeys.ID, "title=" + CopyPluginsSDKProjectsToWorkspaceStepKeys.TITLE
 	},
@@ -93,7 +93,7 @@ public class CopyPluginsSDKProjectsToWorkspaceStep extends BaseUpgradeTaskStep i
 		Path pluginsSDKLoaction = targetProjectLocation.resolve("plugins-sdk");
 
 		if (FileUtil.notExists(pluginsSDKLoaction.toFile())) {
-			return UpgradeTasksUIPlugin.createErrorStatus("There is no plugins sdk folder in " + pluginsSDKLoaction);
+			return UpgradeTasksUIPlugin.createErrorStatus("There is no plugins-sdk folder in " + targetProjectLocation);
 		}
 
 		final AtomicInteger returnCode = new AtomicInteger();
