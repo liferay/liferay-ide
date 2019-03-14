@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
@@ -25,6 +26,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradePlanElementViewer;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,6 +34,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.ListenerList;
@@ -66,6 +69,8 @@ import org.osgi.util.tracker.ServiceTracker;
 public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 	public static final String ID = "com.liferay.ide.upgrade.plan.view";
+	private ITreeContentProvider _treeContentProvider;
+	private TreeViewer _treeViewer;
 
 	public UpgradePlanView() {
 		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanView.class);
@@ -172,157 +177,137 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	}
 
 	private void _changeSelection(ISelection selection, boolean deepFind, boolean findFirstLeaf) {
-		if (_upgradePlanViewer != null) {
-			if (selection instanceof IStructuredSelection) {
-				IStructuredSelection structureSelection = (IStructuredSelection)selection;
+		if (!(selection instanceof IStructuredSelection)) {
+			return;
+		}
 
-				Object selectedObject = structureSelection.getFirstElement();
+		IStructuredSelection structureSelection = (IStructuredSelection)selection;
 
-				if (selectedObject == null) {
-					return;
-				}
+		Object selectedObject = structureSelection.getFirstElement();
 
-				TreeViewer treeViewer = _upgradePlanViewer.getTreeViewer();
+		if (selectedObject == null) {
+			return;
+		}
 
-				IContentProvider contentProvider = treeViewer.getContentProvider();
+		Object parent = _treeContentProvider.getParent(selectedObject);
 
-				ITreeContentProvider upgradePlanTreeContentProvider = Adapters.adapt(
-					contentProvider, ITreeContentProvider.class);
+		UpgradePlanElement selectedElement = Adapters.adapt(selectedObject, UpgradePlanElement.class);
 
-				Object parentObject = upgradePlanTreeContentProvider.getParent(selectedObject);
+		Object treeInput = _upgradePlanViewer.getInput();
 
-				UpgradePlanElement selectedElement = Adapters.adapt(selectedObject, UpgradePlanElement.class);
+		UpgradePlan upgradePlan = Adapters.adapt(treeInput, UpgradePlan.class);
 
-				if (deepFind) {
-					if (!upgradePlanTreeContentProvider.hasChildren(selectedObject)) {
-						if (parentObject != null) {
-							Object[] childrenElement = upgradePlanTreeContentProvider.getChildren(parentObject);
+		List<UpgradeTask> tasks = upgradePlan.getTasks();
 
-							boolean lastOne = true;
+		double selectedOrder = selectedElement.getOrder();
 
-							for (Object childObject : childrenElement) {
-								UpgradePlanElement childElement = Adapters.adapt(childObject, UpgradePlanElement.class);
+		if (deepFind) {
+			if (_treeContentProvider.hasChildren(selectedObject)) {
+				Object[] childrenElements = _treeContentProvider.getChildren(selectedObject);
 
-								if (findFirstLeaf) {
-									return;
-								}
+				ISelection newSelection = new StructuredSelection(childrenElements[0]);
 
-								if (childElement.getOrder() > selectedElement.getOrder()) {
-									selectedElement = childElement;
-									lastOne = false;
+				_treeViewer.setSelection(newSelection);
 
-									break;
-								}
-							}
+				_changeSelection(newSelection, true, true);
+			}
+			else {
+				if (parent != null) {
+					if (findFirstLeaf) {
+						return;
+					}
 
-							ISelection nextSelection = null;
+					Optional<StructuredSelection> optional = Stream.of(
+						_treeContentProvider.getChildren(parent)
+					).map(
+						childObject -> Adapters.adapt(childObject, UpgradePlanElement.class)
+					).filter(
+						childElement -> childElement.getOrder() > selectedOrder
+					).filter(
+						Objects::nonNull
+					).map(
+						childElement -> new StructuredSelection(childElement)
+					).findFirst(
+					);
 
-							if (lastOne) {
-								treeViewer.collapseToLevel(parentObject, 1);
-								nextSelection = new StructuredSelection(parentObject);
+					if (optional.isPresent()) {
+						ISelection nextSelection = optional.get();
 
-								_changeSelection(nextSelection, false, true);
-							}
-							else {
-								nextSelection = new StructuredSelection(selectedElement);
-
-								treeViewer.setSelection(nextSelection);
-							}
-						}
-						else {
-							Object treeInput = _upgradePlanViewer.getInput();
-
-							UpgradePlan upgradePlan = Adapters.adapt(treeInput, UpgradePlan.class);
-
-							List<UpgradeTask> upgradePlanTasks = upgradePlan.getTasks();
-
-							UpgradePlanElement nextSelectedElement = null;
-
-							for (UpgradePlanElement planElement : upgradePlanTasks) {
-								if (planElement.getOrder() > selectedElement.getOrder()) {
-									nextSelectedElement = planElement;
-
-									break;
-								}
-							}
-
-							if (nextSelectedElement != null) {
-								ISelection newSelection = new StructuredSelection(nextSelectedElement);
-								treeViewer.expandToLevel(nextSelectedElement, 1);
-								treeViewer.setSelection(newSelection);
-								_changeSelection(newSelection, true, true);
-							}
-						}
+						_treeViewer.setSelection(nextSelection);
 					}
 					else {
-						Object[] childrenElements = upgradePlanTreeContentProvider.getChildren(selectedObject);
+						_treeViewer.collapseToLevel(parent, 1);
 
-						if ((childrenElements != null) && (childrenElements.length > 0)) {
-							ISelection newSelection = new StructuredSelection(childrenElements[0]);
+						ISelection nextSelection = new StructuredSelection(parent);
 
-							treeViewer.setSelection(newSelection);
-							_changeSelection(newSelection, true, true);
-						}
+						_changeSelection(nextSelection, false, true);
 					}
 				}
 				else {
-					if (parentObject != null) {
-						Object[] childrenObjects = upgradePlanTreeContentProvider.getChildren(parentObject);
-						boolean lastOne = true;
+					Stream<UpgradeTask> stream = tasks.stream();
 
-						for (Object childObject : childrenObjects) {
-							UpgradePlanElement childElement = Adapters.adapt(childObject, UpgradePlanElement.class);
+					stream.filter(
+						element -> element.getOrder() > selectedOrder
+					).findFirst(
+					).ifPresent(
+						element -> {
+							ISelection newSelection = new StructuredSelection(element);
 
-							if (childElement.getOrder() > selectedElement.getOrder()) {
-								lastOne = false;
-								selectedElement = childElement;
+							_treeViewer.expandToLevel(element, 1);
+							_treeViewer.setSelection(newSelection);
 
-								break;
-							}
-						}
-
-						ISelection nextSelection = null;
-
-						if (lastOne) {
-							treeViewer.collapseToLevel(parentObject, 1);
-							nextSelection = new StructuredSelection(parentObject);
-
-							_changeSelection(nextSelection, false, true);
-						}
-						else {
-							nextSelection = new StructuredSelection(selectedElement);
-
-							treeViewer.setSelection(nextSelection);
-
-							treeViewer.expandToLevel(selectedElement, 1, true);
-							_changeSelection(nextSelection, true, true);
-						}
-					}
-					else {
-						Object viewInput = _upgradePlanViewer.getInput();
-
-						UpgradePlan upgradePlan = Adapters.adapt(viewInput, UpgradePlan.class);
-
-						List<UpgradeTask> tasks = upgradePlan.getTasks();
-
-						UpgradePlanElement nextSelectElement = null;
-
-						for (UpgradePlanElement element : tasks) {
-							if (element.getOrder() > selectedElement.getOrder()) {
-								nextSelectElement = element;
-
-								break;
-							}
-						}
-
-						if (nextSelectElement != null) {
-							ISelection newSelection = new StructuredSelection(nextSelectElement);
-							treeViewer.expandToLevel(nextSelectElement, 1);
-							treeViewer.setSelection(newSelection);
 							_changeSelection(newSelection, true, true);
 						}
-					}
+					);
 				}
+			}
+		}
+		else {
+			if (parent != null) {
+				Object[] childrenObjects = _treeContentProvider.getChildren(parent);
+
+				Optional<UpgradePlanElement> optional = Stream.of(
+					childrenObjects
+				).map(
+					childObject -> Adapters.adapt(childObject, UpgradePlanElement.class)
+				).filter(
+					element -> element.getOrder() > selectedOrder
+				).findFirst();
+
+				if (optional.isPresent()) {
+					UpgradePlanElement element = optional.get();
+
+					ISelection newSelection = new StructuredSelection(element);
+
+					_treeViewer.setSelection(newSelection);
+					_treeViewer.expandToLevel(element, 1, true);
+
+					_changeSelection(newSelection, true, true);
+				}
+				else {
+					_treeViewer.collapseToLevel(parent, 1);
+
+					ISelection newSelection = new StructuredSelection(parent);
+
+					_changeSelection(newSelection, false, true);
+				}
+			}
+			else {
+				Stream<UpgradeTask> stream = tasks.stream();
+
+				stream.filter(
+					element -> element.getOrder() > selectedOrder
+				).findFirst(
+				).ifPresent(
+					element -> {
+						ISelection newSelection = new StructuredSelection(element);
+
+						_treeViewer.expandToLevel(element, 1);
+						_treeViewer.setSelection(newSelection);
+
+						_changeSelection(newSelection, true, true);
+					}
+				);
 			}
 		}
 	}
@@ -335,6 +320,12 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 		_upgradePlanViewer = new UpgradePlanViewer(sashForm);
 
 		_upgradePlanViewer.addPostSelectionChangedListener(this::_fireSelectionChanged);
+
+		_treeViewer = _upgradePlanViewer.getTreeViewer();
+
+		IContentProvider contentProvider = _treeViewer.getContentProvider();
+
+		_treeContentProvider = Adapters.adapt(contentProvider, ITreeContentProvider.class);
 
 		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 

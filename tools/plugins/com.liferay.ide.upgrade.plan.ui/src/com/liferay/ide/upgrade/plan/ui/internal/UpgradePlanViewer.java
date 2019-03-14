@@ -108,16 +108,14 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 			IStructuredSelection::getFirstElement
 		);
 
+		IContentProvider contentProvider = _treeViewer.getContentProvider();
+
+		ITreeContentProvider treeContentProvider = Adapters.adapt(contentProvider, ITreeContentProvider.class);
+
 		selectOptional.filter(
 			item -> item instanceof UpgradePlanElement
 		).filter(
-			item -> {
-				IContentProvider iContentProvider = _treeViewer.getContentProvider();
-
-				ITreeContentProvider contentProvider = Adapters.adapt(iContentProvider, ITreeContentProvider.class);
-
-				return contentProvider.hasChildren(item);
-			}
+			treeContentProvider::hasChildren
 		).ifPresent(
 			s -> {
 				_treeViewer.setExpandedState(s, !_treeViewer.getExpandedState(s));
