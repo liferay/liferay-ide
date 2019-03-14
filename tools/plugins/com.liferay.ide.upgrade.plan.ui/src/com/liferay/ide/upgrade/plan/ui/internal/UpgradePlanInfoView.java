@@ -41,8 +41,8 @@ public class UpgradePlanInfoView extends PageBookView {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("This view displays information about the selected item in the Liferay Upgrade Plan outline. Begin ");
-		sb.append("a new upgrade plan by using \"Project > New Liferay Upgrade Plan...\" action. If an upgrade plan ");
-		sb.append("is already active, then select any item in the outline view to display more information.");
+		sb.append("a new upgrade plan by navigating to \"Project > New Liferay Upgrade Plan...\". If an upgrade plan ");
+		sb.append("is already active, select any item in the outline view to display more information.");
 
 		page.setMessage(sb.toString());
 

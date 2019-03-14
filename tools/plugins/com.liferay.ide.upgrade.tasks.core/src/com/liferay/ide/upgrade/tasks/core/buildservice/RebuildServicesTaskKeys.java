@@ -20,8 +20,8 @@ package com.liferay.ide.upgrade.tasks.core.buildservice;
 public class RebuildServicesTaskKeys {
 
 	public static final String DESCRIPTION =
-		"For service builder projects, to properly upgrade you must rebuild all service classes after making sure " +
-		"all of your service.xml files are properly upgraded.";
+		"To properly upgrade service builder projects, you must rebuild all service classes after making sure " +
+		"all of your <i>service.xml</i> files are properly upgraded.";
 
 	public static final String ID = "rebuild_services";
 

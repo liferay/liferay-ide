@@ -20,9 +20,9 @@ package com.liferay.ide.upgrade.tasks.core.code;
 public class SetupLiferayWorkspaceStepKeys {
 
 	public static final String DESCRIPTION =
-		"Create a new Liferay Workspace with the same version as Target Liferay Version which you selected in new " +
+		"Create a new Liferay Workspace matching the Target Liferay Version you selected in the new " +
 		"Liferay Upgrade Plan wizard. Your Liferay Workspace version will be updated to the version that has been " +
-		"set in gradle.properties which resides in your Workspace's root folder.";
+		"set in your Workspace's <i>gradle.properties</i> file.";
 
 	public static final String ID = "setup_liferay_workspace";
 

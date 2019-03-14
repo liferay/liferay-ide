@@ -21,8 +21,8 @@ public class AutoCorrectUpgradeProblemsStepKeys {
 
 	public static final String DESCRIPTION =
 		"<p>In many cases the upgrade problems that exist in your codebase can be found and fixed automatically. " +
-		"Types of fixes that are done automatically are: <li>package imports</li><li>jsp tag names</li><li>Liferay " +
-		"descriptor versions</li><li>XML descriptor content</li></p>";
+		"Types of fixes that are done automatically are: <ul><li>package imports</li><li>JSP tag names</li><li>Liferay " +
+		"descriptor versions</li><li>XML descriptor content</li></ul></p>";
 
 	public static final String ID = "auto_correct_upgrade_problems";
 

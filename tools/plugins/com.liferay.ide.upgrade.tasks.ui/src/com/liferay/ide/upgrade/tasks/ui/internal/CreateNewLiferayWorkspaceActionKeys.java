@@ -21,10 +21,10 @@ public class CreateNewLiferayWorkspaceActionKeys {
 
 	public static final String DESCRIPTION =
 		"<p>Starting in Liferay 7.0 and greater, the recommended way to build Liferay projects is to use a Liferay " +
-		"Workspace, which is a generated project scaffolding with associated gradle or maven plugins. To see more " +
-		"information view the associated documentation in the <b>Liferay Upgrade Plan Info</b> view.<br/><br/>To " +
-		"begin the code upgrade process, first create a new Liferay workspace by clicking <b>Perform</b> below.<br/>" +
-		"<br/><b>Note: this tool only supports creating gradle workspaces at this time.</b></p>";
+		"Workspace, which is a generated project scaffolding with associated Gradle or Maven plugins. To see more " +
+		"information, view the associated documentation in the <b>Liferay Upgrade Plan Info</b> view.<br/><br/>To " +
+		"begin the code upgrade process, first create a new Liferay Workspace by selecting <b>Click to perform</b> below.<br/>" +
+		"<br/><b>Note: this tool only supports creating Gradle workspaces at this time.</b></p>";
 
 	public static final String ID = "create_new_liferay_workspace";
 

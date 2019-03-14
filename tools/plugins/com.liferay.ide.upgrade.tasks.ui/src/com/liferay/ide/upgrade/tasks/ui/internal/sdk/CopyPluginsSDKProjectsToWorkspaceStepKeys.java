@@ -20,11 +20,10 @@ package com.liferay.ide.upgrade.tasks.ui.internal.sdk;
 public class CopyPluginsSDKProjectsToWorkspaceStepKeys {
 
 	public static final String DESCRIPTION =
-		"<p>During any Liferay upgrade, it is a good time to consider which existing plugins you want to continue to " +
-		"support development when building for Liferay 7.x and greater. Some plugins you may wish to not migrate to " +
-		"your new workspace.  In this step you will select which existing Plugins SDK 6.x plugins you wish to copy " +
-		"to your new workspace in order to continue with the upgrade process, e.g. converting or adapting them to " +
-		"new APIs.</p>";
+		"<p>During any Liferay upgrade, it is a good time to consider which existing plugins you want to continue " +
+		"supporting when building for Liferay 7.x and greater. You may opt to not migrate some plugins to your new " +
+		"workspace.  In this step, you will select which existing Plugins SDK 6.x plugins you wish to copy to your " +
+		"new workspace to continue with the upgrade process (e.g., converting or adapting them to new APIs).";
 
 	public static final String ID = "move_plugins_sdk_projects_to_workspace";
 

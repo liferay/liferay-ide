@@ -20,7 +20,7 @@ package com.liferay.ide.upgrade.tasks.core.code;
 public class ConfigureLiferayWorkspaceSettingsStepKeys {
 
 	public static final String DESCRIPTION =
-		"Configuring target platform in your Liferay Workspace helps you target a specific release of Liferay " +
+		"Configuring the target platform in your Liferay Workspace helps you target a specific release of Liferay " +
 		"Portal, so dependencies get resolved properly.";
 
 	public static final String ID = "configure_liferay_workspace_settings";

@@ -22,8 +22,8 @@ public class CheckInstallationPrerequisitesStepKeys {
 
 	public static final String DESCRIPTION =
 		"The first step in preparing for your Code Upgrade is to ensure that your tools installation meets all the " +
-		"necessary requirements.  While not every step is required, it is highly recommended to make sure you have " +
-		"a better upgrade experience.";
+		"necessary requirements.  While not every step is required, it is highly recommended to complete all applicable " +
+		"steps to ensure you have a positive upgrade experience.";
 
 	public static final String ID = "check_installation_prerequisites";
 
