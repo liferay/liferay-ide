@@ -280,9 +280,9 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 		boolean hasChildren = treeContentProvider.hasChildren(selectedObject);
 
-		UpgradePlanElement selectedElement = Adapters.adapt(selectedObject, UpgradePlanElement.class);
+		UpgradePlanElement upgradePlanElement = Adapters.adapt(selectedObject, UpgradePlanElement.class);
 
-		double selectedOrder = selectedElement.getOrder();
+		double selectedOrder = upgradePlanElement.getOrder();
 
 		if (deepFind && hasChildren) {
 			Object[] childrenElements = treeContentProvider.getChildren(selectedObject);
@@ -309,9 +309,9 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 			UpgradePlan upgradePlan = Adapters.adapt(input, UpgradePlan.class);
 
-			List<UpgradeTask> tasks = upgradePlan.getTasks();
+			List<UpgradeTask> upgradeTasks = upgradePlan.getTasks();
 
-			Stream<UpgradeTask> stream = tasks.stream();
+			Stream<UpgradeTask> stream = upgradeTasks.stream();
 
 			stream.filter(
 				element -> element.getOrder() > selectedOrder
@@ -341,14 +341,14 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		).findFirst();
 
 		if (optional.isPresent()) {
-			UpgradePlanElement element = optional.get();
+			upgradePlanElement = optional.get();
 
-			ISelection newSelection = new StructuredSelection(element);
+			ISelection newSelection = new StructuredSelection(upgradePlanElement);
 
 			_treeViewer.setSelection(newSelection);
 
 			if (!deepFind) {
-				_treeViewer.expandToLevel(element, 1, true);
+				_treeViewer.expandToLevel(upgradePlanElement, 1, true);
 
 				_changeSelection(newSelection, true, true);
 			}
