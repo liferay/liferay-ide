@@ -33,6 +33,7 @@ import org.osgi.service.component.annotations.Activate;
  * @author Christopher Bryan Boyd
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements UpgradeTask {
 
@@ -45,6 +46,30 @@ public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements 
 		_categoryId = getStringProperty(properties, "categoryId");
 
 		_lookupTaskSteps(componentContext);
+	}
+
+	public boolean completed() {
+		List<UpgradeTaskStep> steps = getSteps();
+
+		if (steps.isEmpty()) {
+			return super.completed();
+		}
+
+		for (UpgradeTaskStep step : steps) {
+			List<UpgradeTaskStepAction> actions = step.getActions();
+
+			if (actions.isEmpty() && !step.completed()) {
+				return false;
+			}
+
+			for (UpgradeTaskStepAction action : actions) {
+				if (!action.completed()) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	@Override
@@ -71,57 +96,6 @@ public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements 
 	@Override
 	public String getCategoryId() {
 		return _categoryId;
-	}
-
-	@Override
-	public String getImagePath() {
-		List<UpgradeTaskStep> steps = getSteps();
-
-		if (steps.isEmpty()) {
-			UpgradePlanElementStatus status = getStatus();
-
-			if ((status == UpgradePlanElementStatus.COMPLETED) || (status == UpgradePlanElementStatus.SKIPPED)) {
-				return "icons/complete_task.gif";
-			}
-		}
-		else {
-			boolean complete = true;
-
-			for (UpgradeTaskStep step : steps) {
-				List<UpgradeTaskStepAction> actions = step.getActions();
-
-				if (!actions.isEmpty()) {
-					for (UpgradeTaskStepAction action : actions) {
-						UpgradePlanElementStatus status = action.getStatus();
-
-						if ((status != UpgradePlanElementStatus.COMPLETED) &&
-							(status != UpgradePlanElementStatus.SKIPPED)) {
-
-							complete = false;
-
-							break;
-						}
-					}
-				}
-				else {
-					UpgradePlanElementStatus status = step.getStatus();
-
-					if ((status != UpgradePlanElementStatus.COMPLETED) &&
-						(status != UpgradePlanElementStatus.SKIPPED)) {
-
-						complete = false;
-
-						break;
-					}
-				}
-			}
-
-			if (complete) {
-				return "icons/complete_task.gif";
-			}
-		}
-
-		return super.getImagePath();
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import org.osgi.service.component.annotations.Activate;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 
@@ -85,6 +86,10 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 
 	@Override
 	public String getImagePath() {
+		if (completed()) {
+			return "icons/completed.gif";
+		}
+
 		return _imagePath;
 	}
 

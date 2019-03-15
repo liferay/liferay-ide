@@ -18,20 +18,14 @@ import com.liferay.ide.upgrade.plan.core.Pair;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanElementRequirement;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
 
-import java.util.List;
 import java.util.function.Function;
 
-import org.eclipse.core.runtime.Adapters;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
-import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.swt.graphics.Image;
@@ -54,56 +48,6 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 	public Image getImage(Object element) {
 		if (UpgradePlanContentProvider.NO_TASKS.equals(element)) {
 			return UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.NO_TASKS_IMAGE);
-		}
-
-		Image baseImage = super.getImage(element);
-
-		UpgradeTaskStepAction upgradeTaskStepAction = Adapters.adapt(element, UpgradeTaskStepAction.class);
-
-		if (upgradeTaskStepAction != null) {
-			ImageDescriptor statusImageDescriptor = null;
-
-			if (UpgradePlanElementStatus.COMPLETED.equals(upgradeTaskStepAction.getStatus())) {
-				statusImageDescriptor = UpgradePlanUIPlugin.getImageDescriptor(
-					UpgradePlanUIPlugin.TASK_STEP_ACTION_COMPLETE_OVERLAY_IMAGE);
-			}
-			else if (UpgradePlanElementStatus.SKIPPED.equals(upgradeTaskStepAction.getStatus())) {
-				statusImageDescriptor = UpgradePlanUIPlugin.getImageDescriptor(
-					UpgradePlanUIPlugin.TASK_STEP_ACTION_SKIP_OVERLAY_IMAGE);
-			}
-			else if (UpgradePlanElementStatus.FAILED.equals(upgradeTaskStepAction.getStatus())) {
-				statusImageDescriptor = UpgradePlanUIPlugin.getImageDescriptor(
-					UpgradePlanUIPlugin.TASK_STEP_ACTION_FAILED_OVERLAY_IMAGE);
-			}
-
-			ImageDescriptor descriptor = new DecorationOverlayIcon(
-				baseImage, statusImageDescriptor, IDecoration.TOP_RIGHT);
-
-			return descriptor.createImage();
-		}
-
-		UpgradeTaskStep upgradeTaskStep = Adapters.adapt(element, UpgradeTaskStep.class);
-
-		if (upgradeTaskStep != null) {
-			List<UpgradeTaskStepAction> actions = upgradeTaskStep.getActions();
-
-			if (actions.isEmpty()) {
-				UpgradePlanElementStatus status = upgradeTaskStep.getStatus();
-
-				if (status.equals(UpgradePlanElementStatus.SKIPPED) ||
-					status.equals(UpgradePlanElementStatus.COMPLETED)) {
-
-					ImageDescriptor statusImageDescriptor = UpgradePlanUIPlugin.getImageDescriptor(
-						UpgradePlanUIPlugin.TASK_STEP_ACTION_COMPLETE_OVERLAY_IMAGE);
-
-					ImageDescriptor descriptor = new DecorationOverlayIcon(
-						baseImage, statusImageDescriptor, IDecoration.TOP_RIGHT);
-
-					return descriptor.createImage();
-				}
-			}
-			else {
-			}
 		}
 
 		return super.getImage(element);

@@ -22,8 +22,6 @@ import org.eclipse.core.runtime.IStatus;
  */
 public interface UpgradeTaskStepAction extends UpgradePlanElement {
 
-	public boolean completed();
-
 	public boolean enabled();
 
 	public UpgradePlanElementRequirement getRequirement();

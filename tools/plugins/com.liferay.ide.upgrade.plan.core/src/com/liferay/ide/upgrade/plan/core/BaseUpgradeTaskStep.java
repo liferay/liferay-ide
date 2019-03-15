@@ -57,13 +57,13 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 		List<UpgradeTaskStepAction> actions = getActions();
 
 		if (actions.isEmpty()) {
-			return getStatus().equals(UpgradePlanElementStatus.COMPLETED);
+			return super.completed();
 		}
 		else {
 			Stream<UpgradeTaskStepAction> stream = actions.stream();
 
 			long count = stream.filter(
-				action -> UpgradePlanElementStatus.INCOMPLETE.equals(action.getStatus())
+				action -> !action.completed()
 			).count();
 
 			if (count == 0) {
@@ -162,37 +162,6 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 	@Override
 	public List<UpgradeTaskStepAction> getActions() {
 		return Collections.unmodifiableList(_upgradeTaskStepActions);
-	}
-
-	@Override
-	public String getImagePath() {
-		boolean complete = true;
-		List<UpgradeTaskStepAction> actions = getActions();
-
-		if (!actions.isEmpty()) {
-			for (UpgradeTaskStepAction action : actions) {
-				UpgradePlanElementStatus status = action.getStatus();
-
-				if ((status != UpgradePlanElementStatus.COMPLETED) && (status != UpgradePlanElementStatus.SKIPPED)) {
-					complete = false;
-
-					break;
-				}
-			}
-		}
-		else {
-			UpgradePlanElementStatus status = getStatus();
-
-			if ((status != UpgradePlanElementStatus.COMPLETED) && (status != UpgradePlanElementStatus.SKIPPED)) {
-				complete = false;
-			}
-		}
-
-		if (complete) {
-			return "icons/complete_task.gif";
-		}
-
-		return super.getImagePath();
 	}
 
 	@Override
