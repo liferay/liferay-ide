@@ -21,8 +21,8 @@ public class CreateLegacyPluginsSDKStepKeys {
 
 	public static final String DESCRIPTION =
 		"<p>For any plugins that you wish to just adapt to new APIs but continue to build in the traditional way " +
-		"(i.e., as a Plugins SDK ant-style project), we will need to create a compatibility Plugins SDK folder inside " +
-		"your new workspace. This new folder is called \"plugins-sdk\" by default.</p>";
+		"(i.e., as a Plugins SDK ant-style project), we will need to create a compatibility Plugins SDK folder " +
+		"inside your new workspace. This new folder is called \"plugins-sdk\" by default.</p>";
 
 	public static final String ID = "create_legacy_plugins_sdk";
 

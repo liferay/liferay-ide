@@ -24,9 +24,9 @@ public class FixUpgradeProblemsTaskKeys {
 		"problems that you will encounter. The steps below will help you address each problem either automatically " +
 		"or provide the associated breaking change documentation with instructions on how to manually adapt your " +
 		"code.<br/><br/>This task will not find all upgrade problems, but we plan to continue improving the " +
-		"detection and provide additional steps for new required upgrades. Please contact the Liferay Dev Tools team if " +
-		"your upgrade process identified additional problems that needed to be fixed; we can try to incorporate " +
-		"those steps in a future version of this planner.</p>";
+		"detection and provide additional steps for new required upgrades. Please contact the Liferay Dev Tools " +
+		"team if your upgrade process identified additional problems that needed to be fixed; we can try to " +
+		"incorporate those steps in a future version of this planner.</p>";
 
 	public static final String ID = "fix_upgrade_problems";
 

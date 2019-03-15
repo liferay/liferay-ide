@@ -20,9 +20,9 @@ package com.liferay.ide.upgrade.tasks.core.buildservice;
 public class RebuildServicesStepKeys {
 
 	public static final String DESCRIPTION =
-		"In this step, we will delete some legacy service builder related files and then re-run the <i>buildService</i> task " +
-		"on service builder projects. Note: Please make sure the default installed JRE is JDK 8 (Preferences -> Java " +
-		"-> Installed JREs).";
+		"In this step, we will delete some legacy service builder related files and then re-run the " +
+		"<i>buildService</i> task on service builder projects. Note: Please make sure the default installed JRE is " +
+		"JDK 8 (Preferences -> Java -> Installed JREs).";
 
 	public static final String ID = "rebuild_services";
 
