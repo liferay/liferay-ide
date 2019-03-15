@@ -92,103 +92,6 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		_treeViewer.addPostSelectionChangedListener(selectionChangedListener);
 	}
 
-	public void changeSelection(ISelection selection, boolean deepFind, boolean findFirstLeaf) {
-		IStructuredSelection structureSelection = (IStructuredSelection)selection;
-
-		Object selectedObject = structureSelection.getFirstElement();
-
-		IContentProvider contentProvider = _treeViewer.getContentProvider();
-
-		if (contentProvider == null) {
-			return;
-		}
-
-		ITreeContentProvider treeContentProvider = Adapters.adapt(contentProvider, ITreeContentProvider.class);
-
-		boolean hasChildren = treeContentProvider.hasChildren(selectedObject);
-
-		UpgradePlanElement selectedElement = Adapters.adapt(selectedObject, UpgradePlanElement.class);
-
-		double selectedOrder = selectedElement.getOrder();
-
-		if (deepFind && hasChildren) {
-			Object[] childrenElements = treeContentProvider.getChildren(selectedObject);
-
-			ISelection newSelection = new StructuredSelection(childrenElements[0]);
-
-			_treeViewer.setSelection(newSelection);
-
-			changeSelection(newSelection, true, true);
-		}
-
-		Object parent = treeContentProvider.getParent(selectedObject);
-
-		if (deepFind && hasChildren) {
-			return;
-		}
-
-		if (deepFind && !hasChildren && (parent != null) && findFirstLeaf) {
-			return;
-		}
-
-		if (!deepFind && (parent == null)) {
-			Object input = _treeViewer.getInput();
-
-			UpgradePlan upgradePlan = Adapters.adapt(input, UpgradePlan.class);
-
-			List<UpgradeTask> tasks = upgradePlan.getTasks();
-
-			Stream<UpgradeTask> stream = tasks.stream();
-
-			stream.filter(
-				element -> element.getOrder() > selectedOrder
-			).findFirst(
-			).ifPresent(
-				element -> {
-					ISelection newSelection = new StructuredSelection(element);
-
-					_treeViewer.expandToLevel(element, 1);
-					_treeViewer.setSelection(newSelection);
-
-					changeSelection(newSelection, true, true);
-				}
-			);
-		}
-
-		if (parent == null) {
-			return;
-		}
-
-		Optional<UpgradePlanElement> optional = Stream.of(
-			treeContentProvider.getChildren(parent)
-		).map(
-			childObject -> Adapters.adapt(childObject, UpgradePlanElement.class)
-		).filter(
-			element -> element.getOrder() > selectedOrder
-		).findFirst();
-
-		if (optional.isPresent()) {
-			UpgradePlanElement element = optional.get();
-
-			ISelection newSelection = new StructuredSelection(element);
-
-			_treeViewer.setSelection(newSelection);
-
-			if (!deepFind) {
-				_treeViewer.expandToLevel(element, 1, true);
-
-				changeSelection(newSelection, true, true);
-			}
-		}
-		else {
-			_treeViewer.collapseToLevel(parent, 1);
-
-			ISelection newSelection = new StructuredSelection(parent);
-
-			changeSelection(newSelection, false, true);
-		}
-	}
-
 	public void dispose() {
 		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
@@ -344,7 +247,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 						ISelection selection = _treeViewer.getSelection();
 
-						changeSelection(selection, true, false);
+						_changeSelection(selection, true, false);
 					}
 
 					refresh();
@@ -359,6 +262,103 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 			_treeViewer.refresh(true);
 			_treeViewer.setExpandedElements(elements);
 			_treeViewer.setExpandedTreePaths(treePaths);
+		}
+	}
+
+	private void _changeSelection(ISelection selection, boolean deepFind, boolean findFirstLeaf) {
+		IStructuredSelection structureSelection = (IStructuredSelection)selection;
+
+		Object selectedObject = structureSelection.getFirstElement();
+
+		IContentProvider contentProvider = _treeViewer.getContentProvider();
+
+		if (contentProvider == null) {
+			return;
+		}
+
+		ITreeContentProvider treeContentProvider = Adapters.adapt(contentProvider, ITreeContentProvider.class);
+
+		boolean hasChildren = treeContentProvider.hasChildren(selectedObject);
+
+		UpgradePlanElement selectedElement = Adapters.adapt(selectedObject, UpgradePlanElement.class);
+
+		double selectedOrder = selectedElement.getOrder();
+
+		if (deepFind && hasChildren) {
+			Object[] childrenElements = treeContentProvider.getChildren(selectedObject);
+
+			ISelection newSelection = new StructuredSelection(childrenElements[0]);
+
+			_treeViewer.setSelection(newSelection);
+
+			_changeSelection(newSelection, true, true);
+		}
+
+		Object parent = treeContentProvider.getParent(selectedObject);
+
+		if (deepFind && hasChildren) {
+			return;
+		}
+
+		if (deepFind && !hasChildren && (parent != null) && findFirstLeaf) {
+			return;
+		}
+
+		if (!deepFind && (parent == null)) {
+			Object input = _treeViewer.getInput();
+
+			UpgradePlan upgradePlan = Adapters.adapt(input, UpgradePlan.class);
+
+			List<UpgradeTask> tasks = upgradePlan.getTasks();
+
+			Stream<UpgradeTask> stream = tasks.stream();
+
+			stream.filter(
+				element -> element.getOrder() > selectedOrder
+			).findFirst(
+			).ifPresent(
+				element -> {
+					ISelection newSelection = new StructuredSelection(element);
+
+					_treeViewer.expandToLevel(element, 1);
+					_treeViewer.setSelection(newSelection);
+
+					_changeSelection(newSelection, true, true);
+				}
+			);
+		}
+
+		if (parent == null) {
+			return;
+		}
+
+		Optional<UpgradePlanElement> optional = Stream.of(
+			treeContentProvider.getChildren(parent)
+		).map(
+			childObject -> Adapters.adapt(childObject, UpgradePlanElement.class)
+		).filter(
+			element -> element.getOrder() > selectedOrder
+		).findFirst();
+
+		if (optional.isPresent()) {
+			UpgradePlanElement element = optional.get();
+
+			ISelection newSelection = new StructuredSelection(element);
+
+			_treeViewer.setSelection(newSelection);
+
+			if (!deepFind) {
+				_treeViewer.expandToLevel(element, 1, true);
+
+				_changeSelection(newSelection, true, true);
+			}
+		}
+		else {
+			_treeViewer.collapseToLevel(parent, 1);
+
+			ISelection newSelection = new StructuredSelection(parent);
+
+			_changeSelection(newSelection, false, true);
 		}
 	}
 
