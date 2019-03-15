@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.buildservice.RebuildServicesTask">
    <property name="categoryId" value="code"/>
-   <property name="description" value="For service builder projects, to properly upgrade you must rebuild all service classes after making sure all of your service.xml files are properly upgraded."/>
+   <property name="description" value="To properly upgrade service builder projects, you must rebuild all service classes after making sure all of your &lt;i&gt;service.xml&lt;/i&gt; files are properly upgraded."/>
    <property name="id" value="rebuild_services"/>
    <property name="imagePath" value="icons/build_service.png"/>
    <property name="order" value="7"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.tasks.core.internal.prerequisite.CheckInstallationPrerequisitesStep">
-   <property name="description" value="The first step in preparing for your Code Upgrade is to ensure that your tools installation meets all the necessary requirements.  While not every step is required, it is highly recommended to make sure you have a better upgrade experience."/>
+   <property name="description" value="The first step in preparing for your Code Upgrade is to ensure that your tools installation meets all the necessary requirements.  While not every step is required, it is highly recommended to complete all applicable steps to ensure you have a positive upgrade experience."/>
    <property name="id" value="check_installation_prerequisites"/>
    <property name="imagePath" value="icons/check_prerequisites.png"/>
    <property name="requirement" value="recommended"/>

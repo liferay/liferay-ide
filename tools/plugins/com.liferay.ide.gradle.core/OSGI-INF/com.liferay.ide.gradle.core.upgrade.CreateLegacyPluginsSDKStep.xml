@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.gradle.core.upgrade.CreateLegacyPluginsSDKStep">
-   <property name="description" value="&lt;p&gt;For any plugins that you wish to just adapt to new APIs but continue to build in the traditional way (i.e. as a Plugins SDK ant-style project), we will need to create a compatibility Plugins SDK folder inside your new workspace.&lt;/p&gt;"/>
+   <property name="description" value="&lt;p&gt;For any plugins that you wish to just adapt to new APIs but continue to build in the traditional way (i.e., as a Plugins SDK ant-style project), we will need to create a compatibility Plugins SDK folder inside your new workspace. This new folder is called &quot;plugins-sdk&quot; by default.&lt;/p&gt;"/>
    <property name="id" value="create_legacy_plugins_sdk"/>
    <property name="imagePath" value="icons/new.png"/>
    <property name="requirement" value="required"/>
