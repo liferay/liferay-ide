@@ -31,6 +31,14 @@ public interface UpgradePlanElement {
 		return true;
 	}
 
+	public default boolean completed() {
+		if ((getStatus() == UpgradePlanElementStatus.COMPLETED) || (getStatus() == UpgradePlanElementStatus.SKIPPED)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public String getDescription();
 
 	public default double getDoubleProperty(Dictionary<String, Object> properties, String key) {

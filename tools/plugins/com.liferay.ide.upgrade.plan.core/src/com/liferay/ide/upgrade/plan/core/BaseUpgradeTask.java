@@ -30,8 +30,10 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
 /**
+ * @author Christopher Bryan Boyd
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements UpgradeTask {
 
@@ -44,6 +46,30 @@ public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements 
 		_categoryId = getStringProperty(properties, "categoryId");
 
 		_lookupTaskSteps(componentContext);
+	}
+
+	public boolean completed() {
+		List<UpgradeTaskStep> upgradeTaskSteps = getSteps();
+
+		if (upgradeTaskSteps.isEmpty()) {
+			return super.completed();
+		}
+
+		for (UpgradeTaskStep upgradeTaskStep : upgradeTaskSteps) {
+			List<UpgradeTaskStepAction> upgradeTaskStepActions = upgradeTaskStep.getActions();
+
+			if (upgradeTaskStepActions.isEmpty() && !upgradeTaskStep.completed()) {
+				return false;
+			}
+
+			for (UpgradeTaskStepAction upgradeTaskStepAction : upgradeTaskStepActions) {
+				if (!upgradeTaskStepAction.completed()) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	@Override

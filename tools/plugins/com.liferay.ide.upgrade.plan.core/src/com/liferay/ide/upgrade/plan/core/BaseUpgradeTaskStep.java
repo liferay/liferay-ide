@@ -33,6 +33,7 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
 /**
+ * @author Christopher Bryan Boyd
  * @author Gregory Amerson
  * @author Terry Jia
  * @author Simon Jiang
@@ -56,13 +57,13 @@ public abstract class BaseUpgradeTaskStep extends BaseUpgradePlanElement impleme
 		List<UpgradeTaskStepAction> actions = getActions();
 
 		if (actions.isEmpty()) {
-			return getStatus().equals(UpgradePlanElementStatus.COMPLETED);
+			return super.completed();
 		}
 		else {
 			Stream<UpgradeTaskStepAction> stream = actions.stream();
 
 			long count = stream.filter(
-				action -> UpgradePlanElementStatus.INCOMPLETE.equals(action.getStatus())
+				action -> !action.completed()
 			).count();
 
 			if (count == 0) {

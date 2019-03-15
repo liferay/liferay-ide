@@ -43,15 +43,6 @@ public abstract class BaseUpgradeTaskStepAction extends BaseUpgradePlanElement i
 		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 	}
 
-	@Override
-	public boolean completed() {
-		if (!UpgradePlanElementStatus.INCOMPLETE.equals(getStatus())) {
-			return true;
-		}
-
-		return false;
-	}
-
 	public boolean enabled() {
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
