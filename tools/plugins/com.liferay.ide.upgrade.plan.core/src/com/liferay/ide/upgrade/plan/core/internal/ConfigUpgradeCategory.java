@@ -14,15 +14,15 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskCategory;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeStepCategory;
 
 /**
  * @author Gregory Amerson
  *
  * @Component(
  *property = {"id=config", "imagePath=icons/category_config.png", "order=2", "title=Configuration Upgrade"},
- *scope = ServiceScope.PROTOTYPE, service = UpgradeTaskCategory.class
+ *scope = ServiceScope.PROTOTYPE, service = UpgradeStepCategory.class
  *)
  */
-public class ConfigUpgradeCategory extends BaseUpgradeTaskCategory {
+public class ConfigUpgradeCategory extends BaseUpgradeStepCategory {
 }

@@ -16,11 +16,11 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepAction;
+import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
@@ -31,11 +31,11 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
  */
 public class UpgradePlanContentProvider implements ITreeContentProvider, UpgradePlanAcessor {
 
-	public static final Object NO_TASKS = new Object() {
+	public static final Object NO_STEPS = new Object() {
 
 		@Override
 		public String toString() {
-			return "NO_TASKS";
+			return "NO_STEPS";
 		}
 
 	};
@@ -51,19 +51,14 @@ public class UpgradePlanContentProvider implements ITreeContentProvider, Upgrade
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof UpgradeTask) {
-			UpgradeTask upgradeTask = (UpgradeTask)parentElement;
+		if (parentElement instanceof UpgradeStep) {
+			UpgradeStep upgradeStep = (UpgradeStep)parentElement;
 
-			List<UpgradeTaskStep> upgradeTaskSteps = upgradeTask.getSteps();
-
-			return upgradeTaskSteps.toArray(new UpgradeTaskStep[0]);
-		}
-		else if (parentElement instanceof UpgradeTaskStep) {
-			UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)parentElement;
-
-			List<UpgradeTaskStepAction> upgradeActions = upgradeTaskStep.getActions();
-
-			return upgradeActions.toArray(new UpgradeTaskStepAction[0]);
+			return Stream.of(
+				upgradeStep.getChildrenIds()
+			).map(
+				this::getStep
+			).toArray();
 		}
 
 		return null;
@@ -72,14 +67,14 @@ public class UpgradePlanContentProvider implements ITreeContentProvider, Upgrade
 	@Override
 	public Object[] getElements(Object element) {
 		if (NO_UPGRADE_PLAN_ACTIVE.equals(element)) {
-			return new Object[] {NO_TASKS};
+			return new Object[] {NO_STEPS};
 		}
 		else if (element instanceof UpgradePlan) {
 			UpgradePlan upgradePlan = (UpgradePlan)element;
 
-			List<UpgradeTask> upgradeTasks = upgradePlan.getTasks();
+			List<UpgradeStep> upgradeSteps = upgradePlan.getRootSteps();
 
-			return upgradeTasks.toArray(new UpgradeTask[0]);
+			return upgradeSteps.toArray(new UpgradeStep[0]);
 		}
 
 		return null;
@@ -87,18 +82,13 @@ public class UpgradePlanContentProvider implements ITreeContentProvider, Upgrade
 
 	@Override
 	public Object getParent(Object element) {
-		if (NO_TASKS.equals(element)) {
+		if (NO_STEPS.equals(element)) {
 			return null;
 		}
-		else if (element instanceof UpgradeTaskStepAction) {
-			UpgradeTaskStepAction upgradeTaskStepAction = (UpgradeTaskStepAction)element;
+		else if (element instanceof UpgradeStep) {
+			UpgradeStep upgradeStep = (UpgradeStep)element;
 
-			return getStep(upgradeTaskStepAction);
-		}
-		else if (element instanceof UpgradeTaskStep) {
-			UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)element;
-
-			return getTask(upgradeTaskStep);
+			return getStep(upgradeStep.getParentId());
 		}
 
 		return null;
@@ -106,18 +96,21 @@ public class UpgradePlanContentProvider implements ITreeContentProvider, Upgrade
 
 	@Override
 	public boolean hasChildren(Object element) {
-		if (NO_TASKS.equals(element)) {
+		if (NO_STEPS.equals(element)) {
 			return false;
 		}
-		else if (element instanceof UpgradeTask) {
-			return true;
-		}
-		else if (element instanceof UpgradeTaskStep) {
-			UpgradeTaskStep upgradeTaskStep = (UpgradeTaskStep)element;
+		else if (element instanceof UpgradeStep) {
+			UpgradeStep upgradeStep = (UpgradeStep)element;
 
-			List<UpgradeTaskStepAction> actions = upgradeTaskStep.getActions();
+			List<UpgradeStep> children = Stream.of(
+				upgradeStep.getChildrenIds()
+			).map(
+				this::getStep
+			).collect(
+				Collectors.toList()
+			);
 
-			return !actions.isEmpty();
+			return !children.isEmpty();
 		}
 
 		return false;

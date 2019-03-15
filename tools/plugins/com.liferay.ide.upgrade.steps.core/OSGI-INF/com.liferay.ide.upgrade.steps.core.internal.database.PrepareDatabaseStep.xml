@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.core.internal.database.PrepareDatabaseStep">
+   <property name="categoryId" value="database"/>
+   <property name="id" value="prepare_database"/>
+   <property name="order" value="2"/>
+   <property name="title" value="Prepare Database for Upgrade"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.steps.core.internal.database.PrepareDatabaseStep"/>
+</scr:component>

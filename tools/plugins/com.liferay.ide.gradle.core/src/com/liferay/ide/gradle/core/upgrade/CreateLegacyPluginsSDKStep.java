@@ -16,14 +16,14 @@ package com.liferay.ide.gradle.core.upgrade;
 
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
-import com.liferay.ide.upgrade.tasks.core.ResourceSelection;
-import com.liferay.ide.upgrade.tasks.core.sdk.CreateLegacyPluginsSDKStepKeys;
-import com.liferay.ide.upgrade.tasks.core.sdk.MigratePluginsSDKProjectsTaskKeys;
+import com.liferay.ide.upgrade.plan.core.UpgradeStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
+import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
+import com.liferay.ide.upgrade.steps.core.ResourceSelection;
+import com.liferay.ide.upgrade.steps.core.sdk.CreateLegacyPluginsSDKStepKeys;
+import com.liferay.ide.upgrade.steps.core.sdk.MigratePluginsSDKProjectsStepKeys;
 
 import java.util.Collections;
 import java.util.List;
@@ -46,12 +46,12 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"description=" + CreateLegacyPluginsSDKStepKeys.DESCRIPTION, "id=" + CreateLegacyPluginsSDKStepKeys.ID,
-		"imagePath=icons/new.png", "requirement=required", "order=1", "taskId=" + MigratePluginsSDKProjectsTaskKeys.ID,
-		"title=" + CreateLegacyPluginsSDKStepKeys.TITLE
+		"imagePath=icons/new.png", "requirement=required", "order=1",
+		"parentId=" + MigratePluginsSDKProjectsStepKeys.ID, "title=" + CreateLegacyPluginsSDKStepKeys.TITLE
 	},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskStep.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeStep.class
 )
-public class CreateLegacyPluginsSDKStep extends BaseUpgradeTaskStep {
+public class CreateLegacyPluginsSDKStep extends BaseUpgradeStep {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -69,12 +69,12 @@ public class CreateLegacyPluginsSDKStep extends BaseUpgradeTaskStep {
 
 			project.refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
 
-			setStatus(UpgradePlanElementStatus.COMPLETED);
+			setStatus(UpgradeStepStatus.COMPLETED);
 
-			_upgradePlanner.dispatch(new UpgradeTaskStepActionPerformedEvent(this, Collections.singletonList(project)));
+			_upgradePlanner.dispatch(new UpgradeStepPerformedEvent(this, Collections.singletonList(project)));
 		}
 		catch (CoreException ce) {
-			setStatus(UpgradePlanElementStatus.FAILED);
+			setStatus(UpgradeStepStatus.FAILED);
 
 			IStatus error = LiferayGradleCore.createErrorStatus("Unable to run task upgradePluginsSDK", ce);
 

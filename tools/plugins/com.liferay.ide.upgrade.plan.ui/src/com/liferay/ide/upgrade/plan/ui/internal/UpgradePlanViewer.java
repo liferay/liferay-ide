@@ -14,27 +14,19 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
+import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Adapters;
@@ -75,6 +67,14 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 		_treeViewer.setInput(UpgradePlanContentProvider.NO_UPGRADE_PLAN_ACTIVE);
 
+		IContentProvider contentProvider = _treeViewer.getContentProvider();
+
+		if (contentProvider == null) {
+			return;
+		}
+
+		_treeContentProvider = Adapters.adapt(contentProvider, ITreeContentProvider.class);
+
 		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanView.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
@@ -112,14 +112,8 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 			IStructuredSelection::getFirstElement
 		);
 
-		IContentProvider contentProvider = _treeViewer.getContentProvider();
-
-		ITreeContentProvider treeContentProvider = Adapters.adapt(contentProvider, ITreeContentProvider.class);
-
 		selectOptional.filter(
-			item -> item instanceof UpgradePlanElement
-		).filter(
-			treeContentProvider::hasChildren
+			item -> item instanceof UpgradeStep
 		).ifPresent(
 			s -> {
 				_treeViewer.setExpandedState(s, !_treeViewer.getExpandedState(s));
@@ -129,7 +123,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		);
 
 		selectOptional.filter(
-			UpgradePlanContentProvider.NO_TASKS::equals
+			UpgradePlanContentProvider.NO_STEPS::equals
 		).ifPresent(
 			s -> {
 				Viewer viewer = doubleClickEvent.getViewer();
@@ -155,73 +149,27 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		return null;
 	}
 
-	public Map<String, Set<String>> getTreeExpansion() {
-		Map<String, Set<String>> expansionMap = new HashMap<>();
-
-		Object[] elements = _treeViewer.getExpandedElements();
-
-		Set<String> taskExpansionSet = Stream.of(
-			elements
-		).map(
-			element -> Adapters.adapt(element, UpgradeTask.class)
-		).filter(
-			Objects::nonNull
-		).map(
-			element -> element.getId()
-		).collect(
-			Collectors.toSet()
-		);
-
-		expansionMap.put("task", taskExpansionSet);
-
-		Set<String> stepExpansionSet = Stream.of(
-			elements
-		).map(
-			element -> Adapters.adapt(element, UpgradeTaskStep.class)
-		).filter(
-			Objects::nonNull
-		).map(
-			element -> element.getId()
-		).collect(
-			Collectors.toSet()
-		);
-
-		expansionMap.put("step", stepExpansionSet);
-
-		return expansionMap;
+	public Object[] getTreeExpansion() {
+		return _treeViewer.getExpandedElements();
 	}
 
 	public TreeViewer getTreeViewer() {
 		return _treeViewer;
 	}
 
-	public void initTreeExpansion(Map<String, Set<String>> expansionMap) {
-		Set<String> tasks = expansionMap.get("task");
-
-		if (ListUtil.isEmpty(tasks)) {
-			return;
-		}
-
-		Stream<String> tasksStream = tasks.stream();
-
-		tasksStream.map(
-			this::getTask
-		).forEach(
-			this::_expandTreeItem
-		);
-
-		Set<String> steps = expansionMap.get("step");
-
-		if (ListUtil.isEmpty(steps)) {
-			return;
-		}
-
-		Stream<String> stepsStream = steps.stream();
-
-		stepsStream.map(
+	public void initTreeExpansion(String[] stepIds) {
+		Stream.of(
+			stepIds
+		).map(
 			this::getStep
+		).map(
+			step -> Adapters.adapt(step, UpgradeStep.class)
+		).filter(
+			Objects::nonNull
 		).forEach(
-			this::_expandTreeItem
+			step -> {
+				_treeViewer.expandToLevel(step, 1, false);
+			}
 		);
 	}
 
@@ -234,20 +182,31 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 			UIUtil.async(() -> _treeViewer.setInput(upgradePlan));
 		}
-		else if (upgradeEvent instanceof UpgradePlanElementStatusChangedEvent) {
+		else if (upgradeEvent instanceof UpgradeStepStatusChangedEvent) {
 			UIUtil.async(
 				() -> {
-					UpgradePlanElementStatusChangedEvent statusEvent = Adapters.adapt(
-						upgradeEvent, UpgradePlanElementStatusChangedEvent.class);
+					UpgradeStepStatusChangedEvent statusEvent = Adapters.adapt(
+						upgradeEvent, UpgradeStepStatusChangedEvent.class);
 
-					UpgradePlanElementStatus newStatus = statusEvent.getNewStatus();
+					UpgradeStepStatus newStatus = statusEvent.getNewStatus();
 
-					if (!newStatus.equals(UpgradePlanElementStatus.INCOMPLETE) &&
-						!newStatus.equals(UpgradePlanElementStatus.FAILED)) {
+					ISelection selection = _treeViewer.getSelection();
 
-						ISelection selection = _treeViewer.getSelection();
+					IStructuredSelection structureSelection = (IStructuredSelection)selection;
 
-						_changeSelection(selection, true, false);
+					boolean hasChildren = _treeContentProvider.hasChildren(structureSelection.getFirstElement());
+
+					UpgradeStep upgradeStep = Adapters.adapt(structureSelection.getFirstElement(), UpgradeStep.class);
+
+					if (upgradeStep == null) {
+						return;
+					}
+
+					if ((upgradeStep != null) && !hasChildren &&
+						(newStatus.equals(UpgradeStepStatus.COMPLETED) ||
+						 newStatus.equals(UpgradeStepStatus.SKIPPED))) {
+
+						_changeSelection(selection);
 					}
 
 					refresh();
@@ -265,113 +224,61 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		}
 	}
 
-	private void _changeSelection(ISelection selection, boolean deepFind, boolean findFirstLeaf) {
+	private void _changeSelection(ISelection selection) {
 		IStructuredSelection structureSelection = (IStructuredSelection)selection;
 
 		Object selectedObject = structureSelection.getFirstElement();
 
-		IContentProvider contentProvider = _treeViewer.getContentProvider();
-
-		if (contentProvider == null) {
-			return;
-		}
-
-		ITreeContentProvider treeContentProvider = Adapters.adapt(contentProvider, ITreeContentProvider.class);
-
-		boolean hasChildren = treeContentProvider.hasChildren(selectedObject);
-
-		UpgradePlanElement upgradePlanElement = Adapters.adapt(selectedObject, UpgradePlanElement.class);
-
-		double selectedOrder = upgradePlanElement.getOrder();
-
-		if (deepFind && hasChildren) {
-			Object[] childrenElements = treeContentProvider.getChildren(selectedObject);
-
-			ISelection newSelection = new StructuredSelection(childrenElements[0]);
-
-			_treeViewer.setSelection(newSelection);
-
-			_changeSelection(newSelection, true, true);
-		}
-
-		Object parent = treeContentProvider.getParent(selectedObject);
-
-		if (deepFind && hasChildren) {
-			return;
-		}
-
-		if (deepFind && !hasChildren && (parent != null) && findFirstLeaf) {
-			return;
-		}
-
-		if (!deepFind && (parent == null)) {
-			Object input = _treeViewer.getInput();
-
-			UpgradePlan upgradePlan = Adapters.adapt(input, UpgradePlan.class);
-
-			List<UpgradeTask> upgradeTasks = upgradePlan.getTasks();
-
-			Stream<UpgradeTask> stream = upgradeTasks.stream();
-
-			stream.filter(
-				element -> element.getOrder() > selectedOrder
-			).findFirst(
-			).ifPresent(
-				element -> {
-					ISelection newSelection = new StructuredSelection(element);
-
-					_treeViewer.expandToLevel(element, 1);
-					_treeViewer.setSelection(newSelection);
-
-					_changeSelection(newSelection, true, true);
-				}
-			);
-		}
+		Object parent = _treeContentProvider.getParent(selectedObject);
 
 		if (parent == null) {
 			return;
 		}
 
-		Optional<UpgradePlanElement> optional = Stream.of(
-			treeContentProvider.getChildren(parent)
-		).map(
-			childObject -> Adapters.adapt(childObject, UpgradePlanElement.class)
-		).filter(
-			element -> element.getOrder() > selectedOrder
-		).findFirst();
+		UpgradeStep upgradeStep = Adapters.adapt(selectedObject, UpgradeStep.class);
 
-		if (optional.isPresent()) {
-			upgradePlanElement = optional.get();
+		double selectedOrder = upgradeStep.getOrder();
 
-			ISelection newSelection = new StructuredSelection(upgradePlanElement);
+		UpgradeStep nextStep = _findNextStep(selectedOrder, parent);
+
+		if (nextStep != null) {
+			_treeViewer.expandToLevel(nextStep, 1, true);
+
+			StructuredSelection newSelection = new StructuredSelection(nextStep);
 
 			_treeViewer.setSelection(newSelection);
-
-			if (!deepFind) {
-				_treeViewer.expandToLevel(upgradePlanElement, 1, true);
-
-				_changeSelection(newSelection, true, true);
-			}
 		}
 		else {
 			_treeViewer.collapseToLevel(parent, 1);
 
 			ISelection newSelection = new StructuredSelection(parent);
 
-			_changeSelection(newSelection, false, true);
+			_treeViewer.setSelection(newSelection);
+
+			_changeSelection(newSelection);
 		}
 	}
 
-	private void _expandTreeItem(Object element) {
-		UpgradePlanElement planElement = Adapters.adapt(element, UpgradePlanElement.class);
+	private UpgradeStep _findNextStep(double order, Object parent) {
+		Object[] children = _treeContentProvider.getChildren(parent);
 
-		if (planElement == null) {
-			return;
+		if (children == null) {
+			return null;
 		}
 
-		_treeViewer.expandToLevel(element, 1, false);
+		return Stream.of(
+			_treeContentProvider.getChildren(parent)
+		).map(
+			childObject -> Adapters.adapt(childObject, UpgradeStep.class)
+		).filter(
+			element -> element.getOrder() > order
+		).findFirst(
+		).orElse(
+			null
+		);
 	}
 
+	private ITreeContentProvider _treeContentProvider;
 	private TreeViewer _treeViewer;
 	private ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
 

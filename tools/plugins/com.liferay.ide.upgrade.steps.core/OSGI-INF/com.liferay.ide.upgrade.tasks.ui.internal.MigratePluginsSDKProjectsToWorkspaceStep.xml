@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.upgrade.tasks.ui.internal.MigratePluginsSDKProjectsToWorkspaceStep" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+	<property name="description" value="Move legacy SDK projects into your liferay workspace." />
+	<property name="id" value="move_legacy_projects" />
+	<property name="imagePath" value="icons/export.png" />
+	<property name="requirement" value="recommended" />
+	<property name="order" value="2" />
+	<property name="taskId" value="migrate_plugins_sdk" />
+	<property name="title" value="Move Legacy Projects" />
+	<service scope="prototype">
+		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep" />
+	</service>
+	<implementation class="com.liferay.ide.upgrade.tasks.ui.internal.MigratePluginsSDKProjectsToWorkspaceStep" />
+</scr:component>

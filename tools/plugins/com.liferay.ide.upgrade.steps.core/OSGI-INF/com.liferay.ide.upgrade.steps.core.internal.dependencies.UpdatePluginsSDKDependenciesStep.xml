@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.core.internal.dependencies.UpdatePluginsSDKDependenciesStep">
+   <property name="description" value="Update Plugins SDK Dependencies"/>
+   <property name="id" value="update_plugins_sdk_dependencies"/>
+   <property name="imagePath" value="icons/update_sdk_dependencies.png"/>
+   <property name="requirement" value="required"/>
+   <property name="order" value="1"/>
+   <property name="parentId" value="upgrade_build_dependencies"/>
+   <property name="title" value="Update Plugins SDK Dependencies"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.steps.core.internal.dependencies.UpdatePluginsSDKDependenciesStep"/>
+</scr:component>

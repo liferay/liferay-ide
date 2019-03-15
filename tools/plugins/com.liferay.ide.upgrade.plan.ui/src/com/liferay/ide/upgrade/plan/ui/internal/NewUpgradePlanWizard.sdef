@@ -22,7 +22,7 @@
 	                <property>TargetVersion</property>
 	            </property-editor>
                 <property-editor>
-                    <property>UpgradeTaskCategories</property>
+                    <property>UpgradeStepCategories</property>
                     <show-label>true</show-label>
                     <hint>
                         <name>factory</name>
@@ -30,7 +30,7 @@
                     </hint>
                 </property-editor>
                     <property-editor>
-                    <visible-when>${Contains(UpgradeTaskCategories,&quot;UpgradeTaskCategory&quot;,&quot;code&quot;)}</visible-when>
+                    <visible-when>${Contains(UpgradeStepCategories,&quot;UpgradeStepCategory&quot;,&quot;code&quot;)}</visible-when>
                     <property>Location</property>
                 </property-editor>
             </content>

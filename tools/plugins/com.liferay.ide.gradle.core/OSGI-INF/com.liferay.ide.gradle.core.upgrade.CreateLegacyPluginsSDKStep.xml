@@ -5,12 +5,12 @@
    <property name="imagePath" value="icons/new.png"/>
    <property name="requirement" value="required"/>
    <property name="order" value="1"/>
-   <property name="taskId" value="migrate_plugins_sdk_projects"/>
+   <property name="parentId" value="migrate_plugins_sdk_projects"/>
    <property name="title" value="Create Legacy Plugins SDK"/>
    <service scope="prototype">
-      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeTaskStep"/>
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
    </service>
-   <reference cardinality="1..1" field="_resourceSelection" interface="com.liferay.ide.upgrade.tasks.core.ResourceSelection" name="_resourceSelection"/>
+   <reference cardinality="1..1" field="_resourceSelection" interface="com.liferay.ide.upgrade.steps.core.ResourceSelection" name="_resourceSelection"/>
    <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
    <implementation class="com.liferay.ide.gradle.core.upgrade.CreateLegacyPluginsSDKStep"/>
 </scr:component>

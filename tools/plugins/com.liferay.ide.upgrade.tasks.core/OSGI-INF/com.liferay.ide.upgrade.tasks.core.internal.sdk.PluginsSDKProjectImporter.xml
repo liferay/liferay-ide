@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.tasks.core.internal.sdk.PluginsSDKProjectImporter">
-   <property name="type" value="plugins_sdk"/>
-   <service>
-      <provide interface="com.liferay.ide.upgrade.tasks.core.ProjectImporter"/>
-   </service>
-   <implementation class="com.liferay.ide.upgrade.tasks.core.internal.sdk.PluginsSDKProjectImporter"/>
-</scr:component>

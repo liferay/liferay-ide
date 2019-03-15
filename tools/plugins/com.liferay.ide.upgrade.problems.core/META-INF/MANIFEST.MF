@@ -10,14 +10,14 @@ Bundle-SymbolicName: com.liferay.ide.upgrade.problems.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 3.6.0.qualifier
 Export-Package: com.liferay.ide.upgrade.problems.core,
- com.liferay.ide.upgrade.problems.core.tasks
+ com.liferay.ide.upgrade.problems.core.steps
 Require-Bundle: com.google.guava,
  com.liferay.ide.core,
  com.liferay.ide.project.core,
  com.liferay.ide.sdk.core,
  com.liferay.ide.server.core,
  com.liferay.ide.upgrade.plan.core,
- com.liferay.ide.upgrade.tasks.core,
+ com.liferay.ide.upgrade.steps.core,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.equinox.common,
@@ -157,12 +157,12 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LiferayVersionsProperties71.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LiferayDescriptorVersion70.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LiferayDescriptorVersion71.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.AutoCorrectUpgradeProblemsStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.AutoCorrectUpgradeProblemsAction.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LayoutTemplateFile.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.LegacyLayoutTemplate.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.FindUpgradeProblemsAction.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.FixUpgradeProblemsTask.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.AutoCorrectFindUpgradeProblemsAction.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.tasks.RemoveUpgradeProblemMarkersAction.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.AutoCorrectUpgradeProblemsAction.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.FindUpgradeProblemsStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.AutoCorrectUpgradeProblemsStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.FindUpgradeProblemsAction.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.AutoCorrectFindUpgradeProblemsStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.RemoveUpgradeProblemMarkersStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.FixUpgradeProblemsStep.xml

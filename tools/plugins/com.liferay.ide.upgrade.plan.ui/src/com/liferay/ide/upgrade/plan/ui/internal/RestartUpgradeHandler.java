@@ -16,7 +16,7 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
+import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.util.List;
@@ -40,10 +40,10 @@ public class RestartUpgradeHandler extends AbstractHandler {
 			return null;
 		}
 
-		List<UpgradeTask> upgradeTasks = upgradePlan.getTasks();
+		List<UpgradeStep> rootSteps = upgradePlan.getRootSteps();
 
-		for (UpgradeTask upgradeTask : upgradeTasks) {
-			upgradePlanner.restartTask(upgradeTask);
+		for (UpgradeStep step : rootSteps) {
+			upgradePlanner.restartStep(step);
 		}
 
 		return null;

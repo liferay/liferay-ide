@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.core.internal.code.ConfigureTargetPlatformStep">
+   <property name="description" value="&lt;p&gt;This step has not been implemented, select &lt;b&gt;Click when Complete&lt;/b&gt; to continue upgrade plan.&lt;/p&gt;"/>
+   <property name="id" value="configure_target_platform"/>
+   <property name="requirement" value="optional"/>
+   <property name="order" value="3"/>
+   <property name="parentId" value="configure_liferay_workspace_settings"/>
+   <property name="title" value="Configure Target Platform"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.steps.core.internal.code.ConfigureTargetPlatformStep"/>
+</scr:component>

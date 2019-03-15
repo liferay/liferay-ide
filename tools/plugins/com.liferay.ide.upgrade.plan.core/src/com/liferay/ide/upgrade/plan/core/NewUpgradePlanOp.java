@@ -16,7 +16,7 @@ package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
 import com.liferay.ide.upgrade.plan.core.internal.SourceLocationValidationService;
-import com.liferay.ide.upgrade.plan.core.internal.UpgradeTaskCategoryPossibleValuesService;
+import com.liferay.ide.upgrade.plan.core.internal.UpgradeStepCategoryPossibleValuesService;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
@@ -61,7 +61,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public Value<String> getTargetVersion();
 
-	public ElementList<UpgradeTaskCategoryElement> getUpgradeTaskCategories();
+	public ElementList<UpgradeStepCategoryElement> getUpgradeStepCategories();
 
 	public void setCurrentVersion(String currentVersion);
 
@@ -92,10 +92,10 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	@PossibleValues(values = {"7.0", "7.1"})
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
 
-	@Label(standard = "Upgrade Task Categories")
+	@Label(standard = "Upgrade Step Categories")
 	@Length(min = 1)
-	@Service(impl = UpgradeTaskCategoryPossibleValuesService.class)
-	@Type(base = UpgradeTaskCategoryElement.class)
-	public ListProperty PROP_UPGRADE_TASK_CATEGORIES = new ListProperty(TYPE, "UpgradeTaskCategories");
+	@Service(impl = UpgradeStepCategoryPossibleValuesService.class)
+	@Type(base = UpgradeStepCategoryElement.class)
+	public ListProperty PROP_UPGRADE_STEP_CATEGORIES = new ListProperty(TYPE, "UpgradeStepCategories");
 
 }

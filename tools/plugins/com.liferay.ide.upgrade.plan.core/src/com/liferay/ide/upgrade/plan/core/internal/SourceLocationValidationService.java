@@ -17,7 +17,7 @@ package com.liferay.ide.upgrade.plan.core.internal;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategoryElement;
+import com.liferay.ide.upgrade.plan.core.UpgradeStepCategoryElement;
 
 import java.io.File;
 
@@ -37,7 +37,7 @@ public class SourceLocationValidationService extends ValidationService implement
 
 		NewUpgradePlanOp op = context(NewUpgradePlanOp.class);
 
-		ElementList<UpgradeTaskCategoryElement> selectedCategories = op.getUpgradeTaskCategories();
+		ElementList<UpgradeStepCategoryElement> selectedCategories = op.getUpgradeStepCategories();
 
 		if (ListUtil.isNotEmpty(selectedCategories)) {
 			Path sourceLocation = get(op.getLocation());

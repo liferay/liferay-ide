@@ -14,15 +14,15 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskCategory;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeStepCategory;
 
 /**
  * @author Gregory Amerson
  *
  *@Component(
  * property = {"id=database", "imagePath=icons/category_database.png", "order=1", "title=Database Upgrade"},
- * scope = ServiceScope.PROTOTYPE, service = UpgradeTaskCategory.class
+ * scope = ServiceScope.PROTOTYPE, service = UpgradeStepCategory.class
  *)
  */
-public class DatabaseUpgradeCategory extends BaseUpgradeTaskCategory {
+public class DatabaseUpgradeCategory extends BaseUpgradeStepCategory {
 }

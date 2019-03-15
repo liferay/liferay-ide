@@ -16,8 +16,8 @@ package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
+import com.liferay.ide.upgrade.plan.core.UpgradeStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeStepCategory;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.nio.file.Path;
@@ -44,14 +44,14 @@ public class StandardUpgradePlan implements UpgradePlan {
 
 	public StandardUpgradePlan(
 		String name, String currentVersion, String targetVersion, Path currentProjectLocation,
-		List<String> upgradeTaskCategories) {
+		List<String> upgradeStepCategories) {
 
 		_name = name;
 		_currentVersion = currentVersion;
 		_targetVersion = targetVersion;
 		_currentProjectLocation = currentProjectLocation;
 		_upgradeProblems = new HashSet<>();
-		_upgradeTaskCategories = upgradeTaskCategories;
+		_upgradeStepCategories = upgradeStepCategories;
 	}
 
 	@Override
@@ -75,6 +75,47 @@ public class StandardUpgradePlan implements UpgradePlan {
 	}
 
 	@Override
+	public List<UpgradeStep> getRootSteps() {
+		if (_rootSteps == null) {
+			Bundle bundle = FrameworkUtil.getBundle(StandardUpgradePlan.class);
+
+			BundleContext bundleContext = bundle.getBundleContext();
+
+			List<UpgradeStepCategory> orderedUpgradeCategories = ServicesLookup.getOrderedServices(
+				bundleContext, UpgradeStepCategory.class, null);
+
+			Stream<UpgradeStepCategory> stream = orderedUpgradeCategories.stream();
+
+			List<UpgradeStep> rootSteps = stream.filter(
+				upgradeStepCategory -> {
+					if (_upgradeStepCategories == null) {
+						return true;
+					}
+
+					return _upgradeStepCategories.contains(upgradeStepCategory.getId());
+				}
+			).flatMap(
+				upgradeCategory -> {
+					List<UpgradeStep> orderedUpgradeSteps = ServicesLookup.getOrderedServices(
+						bundleContext, UpgradeStep.class, "(categoryId=" + upgradeCategory.getId() + ")");
+
+					return orderedUpgradeSteps.stream();
+				}
+			).filter(
+				Objects::nonNull
+			).filter(
+				step -> step.appliesTo(this)
+			).collect(
+				Collectors.toList()
+			);
+
+			_rootSteps = rootSteps;
+		}
+
+		return Collections.unmodifiableList(_rootSteps);
+	}
+
+	@Override
 	public Path getTargetProjectLocation() {
 		return _targetProjectLocation;
 	}
@@ -85,56 +126,13 @@ public class StandardUpgradePlan implements UpgradePlan {
 	}
 
 	@Override
-	public List<UpgradeTask> getTasks() {
-		if (_upgradeTasks == null) {
-			Bundle bundle = FrameworkUtil.getBundle(StandardUpgradePlan.class);
-
-			BundleContext bundleContext = bundle.getBundleContext();
-
-			List<UpgradeTask> upgradeTasks = null;
-
-			List<UpgradeTaskCategory> orderedUpgradeTaskCategories = ServicesLookup.getOrderedServices(
-				bundleContext, UpgradeTaskCategory.class, null);
-
-			Stream<UpgradeTaskCategory> stream = orderedUpgradeTaskCategories.stream();
-
-			upgradeTasks = stream.filter(
-				upgradeTaskCategory -> {
-					if (_upgradeTaskCategories == null) {
-						return true;
-					}
-
-					return _upgradeTaskCategories.contains(upgradeTaskCategory.getId());
-				}
-			).flatMap(
-				upgradeTaskCategory -> {
-					List<UpgradeTask> orderedUpgradeTasks = ServicesLookup.getOrderedServices(
-						bundleContext, UpgradeTask.class, "(categoryId=" + upgradeTaskCategory.getId() + ")");
-
-					return orderedUpgradeTasks.stream();
-				}
-			).filter(
-				Objects::nonNull
-			).filter(
-				upgradeTask -> upgradeTask.appliesTo(this)
-			).collect(
-				Collectors.toList()
-			);
-
-			_upgradeTasks = upgradeTasks;
-		}
-
-		return Collections.unmodifiableList(_upgradeTasks);
-	}
-
-	@Override
 	public Set<UpgradeProblem> getUpgradeProblems() {
 		return _upgradeProblems;
 	}
 
 	@Override
-	public List<String> getUpgradeTaskCategories() {
-		return _upgradeTaskCategories;
+	public List<String> getUpgradeStepCategories() {
+		return _upgradeStepCategories;
 	}
 
 	@Override
@@ -179,10 +177,10 @@ public class StandardUpgradePlan implements UpgradePlan {
 	private final Path _currentProjectLocation;
 	private final String _currentVersion;
 	private final String _name;
+	private List<UpgradeStep> _rootSteps;
 	private Path _targetProjectLocation;
 	private final String _targetVersion;
 	private Set<UpgradeProblem> _upgradeProblems;
-	private List<String> _upgradeTaskCategories;
-	private List<UpgradeTask> _upgradeTasks;
+	private List<String> _upgradeStepCategories;
 
 }
