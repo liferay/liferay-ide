@@ -20,7 +20,8 @@ package com.liferay.ide.upgrade.problems.core.internal.tasks;
 public class AutoCorrectFindUpgradeProblemsActionKeys {
 
 	public static final String DESCRIPTION =
-		"<p>Peform this action to findl all upgrade problems that can be automatically fixed in your workspace.</p>";
+		"<p>Perform this action to find all upgrade problems that can be automatically fixed in your workspace. " +
+			"Remember, this is only finding upgrade problems for the plugins you selected to migrate to modules.</p>";
 
 	public static final String ID = "auto_correct_find_upgrade_problems";
 

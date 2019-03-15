@@ -22,9 +22,9 @@ public class ResolveUpgradeProblemsActionKeys {
 	public static final String DESCRIPTION =
 		"<p>Now that the upgrade problems have been located, perform this to display results in the <b>Project " +
 		"Explorer > Liferay Upgrade Problems</b> node. Then as you select each upgrade problem, the documentation " +
-		"for how to adapt your code will be disabled in the <b>Liferay Upgrade Plan Info View</b><br/><br/>For each " +
-		"upgrade problem node, you can mark them as resolved/skipped using the context menu. Leave this step marked " +
-		"as INCOMPLETE until after you have resolved all upgrade problems accordingly.</p>";
+		"for how to adapt your code will be displayed in the <b>Liferay Upgrade Plan Info View</b>.<br/><br/>For " +
+		"each upgrade problem node, you can mark them as resolved/skipped using the context menu. Leave this step " +
+		"marked as INCOMPLETE until after you have resolved all upgrade problems accordingly.</p>";
 
 	public static final String ID = "resole_upgrade_problems";
 

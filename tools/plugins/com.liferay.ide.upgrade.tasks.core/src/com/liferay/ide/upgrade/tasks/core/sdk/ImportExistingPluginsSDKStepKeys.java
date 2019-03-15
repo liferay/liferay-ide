@@ -20,9 +20,10 @@ package com.liferay.ide.upgrade.tasks.core.sdk;
 public class ImportExistingPluginsSDKStepKeys {
 
 	public static final String DESCRIPTION =
-		"<p>Import your existing Plugins SDK 6.x directory into Eclipse so that you can prepare those plugings to be " +
-		"migrated to Liferay Workspace.<br/><br/>If you already have your Plugins SDK 6.x directory open as a " +
-		"project in Eclipse you can <b>Skip</b> or mark this Step as <b>Complete</b></p>";
+		"<p>Import your existing Plugins SDK 6.x directory into Eclipse so you can prepare those plugins for " +
+		"migration to Liferay Workspace. Your Plugins SDK folder will be viewable from the root level in the " +
+		"Project Explorer.<br/><br/>If you already have your Plugins SDK 6.x directory open as a project in " +
+		"Eclipse, you can <b>Skip</b> or mark this step as <b>Complete</b></p>";
 
 	public static final String ID = "import_existing_plugins_sdk";
 

@@ -20,11 +20,11 @@ package com.liferay.ide.upgrade.tasks.core.internal.prerequisite;
 public class CheckInstalledJDKsActionKeys {
 
 	public static final String DESCRIPTION =
-		"In order to make sure that you have a complatible JDK installed and configured, we need to perform a check " +
-		"on this Eclipse installation to make sure that <li>1) There is a JDK8 VM available</li><li>2) that it is " +
-		"set as the default.</li><b>Click to perform</b> to check. If there is an error message, then you must go to " +
-		"the Prefernces > Java > Installed JREs and add a JRE entry that points to a JDK8 installation and set it as " +
-		"the default.";
+		"To make sure you have a compatible JDK installed and configured, we need to perform a check " +
+		"on this Eclipse installation to make sure that <ol><li>There is a JDK8 VM available</li><li>That JDK is " +
+		"set as the default.</li></ol> Select <b>Click to perform</b> to check for these requirements. If there is " +
+		"an error message, you must go to the Preferences > Java > Installed JREs menu and add a JRE entry that " +
+		"points to a JDK8 installation and set it as the default.";
 
 	public static final String ID = "check_installed_jdks";
 
