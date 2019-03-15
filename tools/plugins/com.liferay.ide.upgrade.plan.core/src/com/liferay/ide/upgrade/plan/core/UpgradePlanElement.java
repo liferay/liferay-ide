@@ -14,6 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.core.util.ListUtil;
+
 import java.util.Dictionary;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -82,6 +84,10 @@ public interface UpgradePlanElement {
 
 		if (source.size() != target.size()) {
 			return false;
+		}
+
+		if (ListUtil.isEmpty(source) && ListUtil.isEmpty(target)) {
+			return true;
 		}
 
 		Stream<T> targetStream = target.stream();

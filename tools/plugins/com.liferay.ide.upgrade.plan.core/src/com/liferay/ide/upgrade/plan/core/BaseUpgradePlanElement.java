@@ -125,6 +125,14 @@ public abstract class BaseUpgradePlanElement implements UpgradePlanElement {
 	}
 
 	public void setStatus(UpgradePlanElementStatus upgradePlanElementStatus) {
+		if (upgradePlanElementStatus == null) {
+			throw new IllegalArgumentException("status can not be null");
+		}
+
+		if (_upgradePlanElementStatus.equals(upgradePlanElementStatus)) {
+			return;
+		}
+
 		UpgradePlanElementStatusChangedEvent upgradePlanElementStatusChangedEvent =
 			new UpgradePlanElementStatusChangedEvent(this, _upgradePlanElementStatus, upgradePlanElementStatus);
 

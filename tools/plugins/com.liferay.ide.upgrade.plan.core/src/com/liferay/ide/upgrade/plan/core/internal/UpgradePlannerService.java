@@ -40,10 +40,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -56,39 +56,34 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Simon Jiang
  */
 @Component
 public class UpgradePlannerService implements UpgradePlanner {
 
 	@Override
 	public void addListener(UpgradeListener upgradeListener) {
-		synchronized (this) {
-			if (_upgradeListeners.contains(upgradeListener)) {
-				return;
+		if (_upgradeListeners.contains(upgradeListener)) {
+			return;
+		}
+
+		_upgradeListeners.add(upgradeListener);
+
+		for (UpgradeEvent upgradeEvent : _upgradeEvents) {
+			try {
+				upgradeListener.onUpgradeEvent(upgradeEvent);
 			}
-
-			_upgradeListeners.add(upgradeListener);
-
-			for (UpgradeEvent upgradeEvent : _upgradeEvents) {
-				try {
-					upgradeListener.onUpgradeEvent(upgradeEvent);
-				}
-				catch (Exception e) {
-					UpgradePlanCorePlugin.logError("onUpgradeEvent error", e);
-				}
+			catch (Exception e) {
+				UpgradePlanCorePlugin.logError("onUpgradeEvent error", e);
 			}
 		}
 	}
 
 	@Override
 	public void dispatch(UpgradeEvent upgradeEvent) {
-		Collection<UpgradeListener> upgradeListeners;
+		Collection<UpgradeListener> upgradeListeners = Collections.unmodifiableCollection(_upgradeListeners);
 
-		synchronized (this) {
-			upgradeListeners = Collections.unmodifiableCollection(_upgradeListeners);
-
-			_upgradeEvents.add(upgradeEvent);
-		}
+		_upgradeEvents.add(upgradeEvent);
 
 		for (UpgradeListener upgradeListener : upgradeListeners) {
 			try {
@@ -185,9 +180,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 	@Override
 	public void removeListener(UpgradeListener upgradeListener) {
-		synchronized (this) {
-			_upgradeListeners.remove(upgradeListener);
-		}
+		_upgradeListeners.remove(upgradeListener);
 	}
 
 	@Override
@@ -483,7 +476,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	private UpgradePlan _currentUpgradePlan;
-	private final List<UpgradeEvent> _upgradeEvents = new ArrayList<>();
-	private final Set<UpgradeListener> _upgradeListeners = new LinkedHashSet<>();
+	private final Collection<UpgradeEvent> _upgradeEvents = new CopyOnWriteArrayList<>();
+	private final Collection<UpgradeListener> _upgradeListeners = new CopyOnWriteArraySet<>();
 
 }
