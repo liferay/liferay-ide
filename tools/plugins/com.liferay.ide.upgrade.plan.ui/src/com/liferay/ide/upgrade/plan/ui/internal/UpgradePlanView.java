@@ -16,35 +16,23 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatus;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanElementStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.core.UpgradeTask;
 import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
 import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradePlanElementViewer;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
-import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.ListenerList;
-import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FillLayout;
@@ -172,95 +160,6 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 		_upgradePlanElementViewer.setSelection(selection);
 	}
 
-	private void _changeSelection(ISelection selection, boolean deepFind, boolean findFirstLeaf) {
-		IStructuredSelection structureSelection = (IStructuredSelection)selection;
-
-		Object selectedObject = structureSelection.getFirstElement();
-
-		boolean hasChildren = _treeContentProvider.hasChildren(selectedObject);
-
-		UpgradePlanElement selectedElement = Adapters.adapt(selectedObject, UpgradePlanElement.class);
-
-		double selectedOrder = selectedElement.getOrder();
-
-		if (deepFind && hasChildren) {
-			Object[] childrenElements = _treeContentProvider.getChildren(selectedObject);
-
-			ISelection newSelection = new StructuredSelection(childrenElements[0]);
-
-			_treeViewer.setSelection(newSelection);
-
-			_changeSelection(newSelection, true, true);
-		}
-
-		Object parent = _treeContentProvider.getParent(selectedObject);
-
-		if (deepFind && hasChildren) {
-			return;
-		}
-
-		if (deepFind && !hasChildren && (parent != null) && findFirstLeaf) {
-			return;
-		}
-
-		if (!deepFind && (parent == null)) {
-			Object input = _upgradePlanViewer.getInput();
-
-			UpgradePlan upgradePlan = Adapters.adapt(input, UpgradePlan.class);
-
-			List<UpgradeTask> tasks = upgradePlan.getTasks();
-
-			Stream<UpgradeTask> stream = tasks.stream();
-
-			stream.filter(
-				element -> element.getOrder() > selectedOrder
-			).findFirst(
-			).ifPresent(
-				element -> {
-					ISelection newSelection = new StructuredSelection(element);
-
-					_treeViewer.expandToLevel(element, 1);
-					_treeViewer.setSelection(newSelection);
-
-					_changeSelection(newSelection, true, true);
-				}
-			);
-		}
-
-		if (parent == null) {
-			return;
-		}
-
-		Optional<UpgradePlanElement> optional = Stream.of(
-			_treeContentProvider.getChildren(parent)
-		).map(
-			childObject -> Adapters.adapt(childObject, UpgradePlanElement.class)
-		).filter(
-			element -> element.getOrder() > selectedOrder
-		).findFirst();
-
-		if (optional.isPresent()) {
-			UpgradePlanElement element = optional.get();
-
-			ISelection newSelection = new StructuredSelection(element);
-
-			_treeViewer.setSelection(newSelection);
-
-			if (!deepFind) {
-				_treeViewer.expandToLevel(element, 1, true);
-
-				_changeSelection(newSelection, true, true);
-			}
-		}
-		else {
-			_treeViewer.collapseToLevel(parent, 1);
-
-			ISelection newSelection = new StructuredSelection(parent);
-
-			_changeSelection(newSelection, false, true);
-		}
-	}
-
 	private void _createPartControl(Composite parentComposite) {
 		parentComposite.setLayout(new FillLayout());
 
@@ -269,12 +168,6 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 		_upgradePlanViewer = new UpgradePlanViewer(sashForm);
 
 		_upgradePlanViewer.addPostSelectionChangedListener(this::_fireSelectionChanged);
-
-		_treeViewer = _upgradePlanViewer.getTreeViewer();
-
-		IContentProvider contentProvider = _treeViewer.getContentProvider();
-
-		_treeContentProvider = Adapters.adapt(contentProvider, ITreeContentProvider.class);
 
 		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
 
@@ -302,23 +195,6 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			upgradeEvent -> {
 				if (upgradeEvent instanceof UpgradeTaskStepActionPerformedEvent) {
 					UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
-				}
-				else if (upgradeEvent instanceof UpgradePlanElementStatusChangedEvent) {
-					UIUtil.sync(
-						() -> {
-							UpgradePlanElementStatusChangedEvent statusEvent = Adapters.adapt(
-								upgradeEvent, UpgradePlanElementStatusChangedEvent.class);
-
-							UpgradePlanElementStatus newStatus = statusEvent.getNewStatus();
-
-							if (!newStatus.equals(UpgradePlanElementStatus.INCOMPLETE)) {
-								ISelection selection = _upgradePlanViewer.getSelection();
-
-								_changeSelection(selection, true, false);
-							}
-
-							_upgradePlanViewer.refresh();
-						});
 				}
 			});
 
@@ -406,8 +282,6 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private IMemento _memento;
-	private ITreeContentProvider _treeContentProvider;
-	private TreeViewer _treeViewer;
 	private UpgradePlanElementViewer _upgradePlanElementViewer;
 	private ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
 	private UpgradePlanViewer _upgradePlanViewer;
