@@ -289,10 +289,10 @@ public class UpgradePlannerService implements UpgradePlanner {
 		for (UpgradeTaskStep upgradeTaskStep : upgradeTask.getSteps()) {
 			upgradeTaskStep.setStatus(UpgradePlanElementStatus.SKIPPED);
 
-			List<UpgradeTaskStepAction> actions = upgradeTaskStep.getActions();
+			List<UpgradeTaskStepAction> upgradeTaskStepActions = upgradeTaskStep.getActions();
 
-			for (UpgradeTaskStepAction action : actions) {
-				action.setStatus(UpgradePlanElementStatus.SKIPPED);
+			for (UpgradeTaskStepAction upgradeTaskStepAction : upgradeTaskStepActions) {
+				upgradeTaskStepAction.setStatus(UpgradePlanElementStatus.SKIPPED);
 			}
 		}
 	}
