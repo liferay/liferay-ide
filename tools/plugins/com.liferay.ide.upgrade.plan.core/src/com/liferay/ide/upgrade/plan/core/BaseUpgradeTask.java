@@ -49,21 +49,21 @@ public abstract class BaseUpgradeTask extends BaseUpgradePlanElement implements 
 	}
 
 	public boolean completed() {
-		List<UpgradeTaskStep> steps = getSteps();
+		List<UpgradeTaskStep> upgradeTaskSteps = getSteps();
 
-		if (steps.isEmpty()) {
+		if (upgradeTaskSteps.isEmpty()) {
 			return super.completed();
 		}
 
-		for (UpgradeTaskStep step : steps) {
-			List<UpgradeTaskStepAction> actions = step.getActions();
+		for (UpgradeTaskStep upgradeTaskStep : upgradeTaskSteps) {
+			List<UpgradeTaskStepAction> upgradeTaskStepActions = upgradeTaskStep.getActions();
 
-			if (actions.isEmpty() && !step.completed()) {
+			if (upgradeTaskStepActions.isEmpty() && !upgradeTaskStep.completed()) {
 				return false;
 			}
 
-			for (UpgradeTaskStepAction action : actions) {
-				if (!action.completed()) {
+			for (UpgradeTaskStepAction upgradeTaskStepAction : upgradeTaskStepActions) {
+				if (!upgradeTaskStepAction.completed()) {
 					return false;
 				}
 			}
