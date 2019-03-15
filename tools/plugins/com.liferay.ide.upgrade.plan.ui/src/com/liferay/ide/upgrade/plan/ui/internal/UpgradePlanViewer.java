@@ -235,7 +235,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 			UIUtil.async(() -> _treeViewer.setInput(upgradePlan));
 		}
 		else if (upgradeEvent instanceof UpgradePlanElementStatusChangedEvent) {
-			UIUtil.sync(
+			UIUtil.async(
 				() -> {
 					UpgradePlanElementStatusChangedEvent statusEvent = Adapters.adapt(
 						upgradeEvent, UpgradePlanElementStatusChangedEvent.class);
