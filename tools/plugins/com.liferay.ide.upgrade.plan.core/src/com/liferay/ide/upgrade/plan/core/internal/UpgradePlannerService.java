@@ -141,9 +141,9 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 					_currentUpgradePlan.setTargetProjectLocation(Paths.get(targetProjectLocationValue));
 				}
 
-				List<UpgradeStep> rootSteps = _currentUpgradePlan.getRootSteps();
+				List<UpgradeStep> rootUpgradeSteps = _currentUpgradePlan.getRootSteps();
 
-				_loadStepsStatus(upgradePlanMemento, rootSteps);
+				_loadStepsStatus(upgradePlanMemento, rootUpgradeSteps);
 
 				_loadUpgradeProblems(upgradePlanMemento, _currentUpgradePlan);
 
@@ -225,9 +225,9 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 			upgradePlanMemento.putString(
 				"categories", StringUtil.merge(upgradeStepCategories.toArray(new String[0]), ","));
 
-			List<UpgradeStep> steps = upgradePlan.getRootSteps();
+			List<UpgradeStep> rootUpgradeSteps = upgradePlan.getRootSteps();
 
-			_saveStepsStatus(upgradePlanMemento, steps);
+			_saveStepsStatus(upgradePlanMemento, rootUpgradeSteps);
 
 			_saveUpgradeProblems(upgradePlanMemento, upgradePlan);
 
