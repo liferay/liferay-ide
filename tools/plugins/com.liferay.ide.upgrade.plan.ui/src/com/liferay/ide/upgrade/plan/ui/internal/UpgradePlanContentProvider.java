@@ -55,7 +55,7 @@ public class UpgradePlanContentProvider implements ITreeContentProvider, Upgrade
 			UpgradeStep upgradeStep = (UpgradeStep)parentElement;
 
 			return Stream.of(
-				upgradeStep.getChildrenIds()
+				upgradeStep.getChildIds()
 			).map(
 				this::getStep
 			).toArray();
@@ -103,7 +103,7 @@ public class UpgradePlanContentProvider implements ITreeContentProvider, Upgrade
 			UpgradeStep upgradeStep = (UpgradeStep)element;
 
 			List<UpgradeStep> children = Stream.of(
-				upgradeStep.getChildrenIds()
+				upgradeStep.getChildIds()
 			).map(
 				this::getStep
 			).collect(

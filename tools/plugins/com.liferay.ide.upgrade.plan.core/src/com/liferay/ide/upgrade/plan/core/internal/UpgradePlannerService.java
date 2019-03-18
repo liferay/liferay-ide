@@ -175,7 +175,7 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 		upgradeStep.setStatus(UpgradeStepStatus.INCOMPLETE);
 
 		Stream.of(
-			upgradeStep.getChildrenIds()
+			upgradeStep.getChildIds()
 		).map(
 			this::getStep
 		).forEach(
@@ -252,7 +252,7 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 		upgradeStep.setStatus(UpgradeStepStatus.SKIPPED);
 
 		Stream.of(
-			upgradeStep.getChildrenIds()
+			upgradeStep.getChildIds()
 		).map(
 			this::getStep
 		).forEach(
@@ -298,7 +298,7 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 			upgradeStep.setStatus(UpgradeStepStatus.valueOf(status));
 
 			List<UpgradeStep> children = Stream.of(
-				upgradeStep.getChildrenIds()
+				upgradeStep.getChildIds()
 			).map(
 				this::getStep
 			).collect(
@@ -369,7 +369,7 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 			stepMemento.putString("status", String.valueOf(upgradeStep.getStatus()));
 
 			List<UpgradeStep> children = Stream.of(
-				upgradeStep.getChildrenIds()
+				upgradeStep.getChildIds()
 			).map(
 				this::getStep
 			).collect(

@@ -72,7 +72,7 @@ public class UpgradePlanLabelProvider
 			StyledString styledString = new StyledString(upgradeStep.getTitle(), styler);
 
 			List<UpgradeStep> children = Stream.of(
-				upgradeStep.getChildrenIds()
+				upgradeStep.getChildIds()
 			).map(
 				this::getStep
 			).collect(

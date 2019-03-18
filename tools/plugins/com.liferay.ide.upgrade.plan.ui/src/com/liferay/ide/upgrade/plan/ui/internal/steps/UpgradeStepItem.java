@@ -101,7 +101,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 		_disposables.add(() -> _buttonComposite.dispose());
 
 		List<UpgradeStep> children = Stream.of(
-			_upgradeStep.getChildrenIds()
+			_upgradeStep.getChildIds()
 		).map(
 			this::getStep
 		).collect(

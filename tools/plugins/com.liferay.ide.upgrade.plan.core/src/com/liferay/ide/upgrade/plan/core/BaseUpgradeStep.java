@@ -92,10 +92,10 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 			return true;
 		}
 
-		String[] siblingId = parent.getChildrenIds();
+		String[] siblingIds = parent.getChildIds();
 
 		long count = Stream.of(
-			siblingId
+			siblingIds
 		).map(
 			this::getStep
 		).filter(
@@ -139,7 +139,7 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 		return _categoryId;
 	}
 
-	public String[] getChildrenIds() {
+	public String[] getChildIds() {
 		return _childrenIds;
 	}
 

@@ -42,7 +42,7 @@ public interface UpgradeStep {
 
 	public String getCategoryId();
 
-	public String[] getChildrenIds();
+	public String[] getChildIds();
 
 	public String getDescription();
 
