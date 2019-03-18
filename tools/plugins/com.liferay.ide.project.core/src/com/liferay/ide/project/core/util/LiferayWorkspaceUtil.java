@@ -276,8 +276,8 @@ public class LiferayWorkspaceUtil {
 
 			String homeDir = getHomeDir(projectLocation.toOSString());
 
-			if (CoreUtil.isNullOrEmpty(homeDir)) {
-				projectLocation.append(homeDir);
+			if (CoreUtil.isNotNullOrEmpty(homeDir)) {
+				return projectLocation.append(homeDir);
 			}
 			else {
 				return null;

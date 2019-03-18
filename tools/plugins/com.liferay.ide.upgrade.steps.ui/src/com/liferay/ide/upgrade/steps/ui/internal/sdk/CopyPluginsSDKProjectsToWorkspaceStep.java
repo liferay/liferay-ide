@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.steps.ui.internal.sdk;
 
+import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
@@ -70,7 +71,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"description=" + CopyPluginsSDKProjectsToWorkspaceStepKeys.DESCRIPTION, "imagePath=icons/copy_to_workspace.png",
-		"id=" + CopyPluginsSDKProjectsToWorkspaceStepKeys.ID, "order=3", "requirement=required",
+		"id=" + CopyPluginsSDKProjectsToWorkspaceStepKeys.ID, "order=5", "requirement=required",
 		"parentId=" + MigratePluginsSDKProjectsStepKeys.ID, "title=" + CopyPluginsSDKProjectsToWorkspaceStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeStep.class
@@ -152,6 +153,8 @@ public class CopyPluginsSDKProjectsToWorkspaceStep extends BaseUpgradeStep imple
 						newProject = CoreUtil.openProject(sourceFile.getName(), path, progressMonitor);
 
 						_addNaturesToProject(newProject, JavaCore.NATURE_ID, progressMonitor);
+
+						_addNaturesToProject(newProject, LiferayNature.NATURE_ID, progressMonitor);
 					}
 					catch (CoreException ce) {
 					}
