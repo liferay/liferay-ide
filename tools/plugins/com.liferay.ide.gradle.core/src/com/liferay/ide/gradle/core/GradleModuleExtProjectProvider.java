@@ -16,7 +16,6 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
@@ -26,6 +25,7 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -37,6 +37,7 @@ import org.osgi.framework.Version;
 
 /**
  * @author Charles Wu
+ * @author Simon Jiang
  */
 public class GradleModuleExtProjectProvider
 	extends AbstractLiferayProjectProvider
@@ -53,8 +54,10 @@ public class GradleModuleExtProjectProvider
 		String projectName = get(op.getProjectName());
 		String originalModuleName = get(op.getOriginalModuleName());
 		Version originalModuleVersion = get(op.getOriginalModuleVersion());
+		String targetPlatform = get(op.getTargetPlatformVersion());
 
 		IPath location = PathBridge.create(get(op.getLocation()));
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
 		StringBuilder sb = new StringBuilder();
 
@@ -62,12 +65,25 @@ public class GradleModuleExtProjectProvider
 
 		sb.append("create -d \"");
 		sb.append(locationFile.getAbsolutePath());
+
+		if (workspaceProject != null) {
+			sb.append("\" ");
+			sb.append("--base \"");
+
+			IPath workspaceLocation = workspaceProject.getLocation();
+
+			sb.append(workspaceLocation.toOSString());
+		}
+
 		sb.append("\" -t ");
 		sb.append("modules-ext ");
 		sb.append("-m ");
 		sb.append(originalModuleName);
-		sb.append(" -M ");
-		sb.append(originalModuleVersion);
+
+		if (CoreUtil.isNullOrEmpty(targetPlatform)) {
+			sb.append(" -M ");
+			sb.append(originalModuleVersion);
+		}
 
 		sb.append(" \"");
 		sb.append(projectName);
@@ -84,10 +100,8 @@ public class GradleModuleExtProjectProvider
 
 		CoreUtil.openProject(projectName, projecLocation, monitor);
 
-		IWorkspaceProject gradleWorkspaceProject = LiferayWorkspaceUtil.getGradleWorkspaceProject();
-
 		if (LiferayWorkspaceUtil.inLiferayWorkspace(projecLocation)) {
-			GradleUtil.refreshProject(gradleWorkspaceProject.getProject());
+			GradleUtil.refreshProject(workspaceProject);
 		}
 		else {
 			GradleUtil.synchronizeProject(projecLocation, monitor);
