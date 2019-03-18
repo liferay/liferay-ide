@@ -14,19 +14,19 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskStepActionPerformedEvent;
-import com.liferay.ide.upgrade.plan.ui.internal.tasks.UpgradePlanElementViewer;
+import com.liferay.ide.upgrade.plan.core.UpgradeStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
+import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
+import com.liferay.ide.upgrade.plan.ui.internal.steps.UpgradeStepViewer;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelection;
@@ -193,12 +193,18 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 		upgradePlanner.addListener(
 			upgradeEvent -> {
-				if (upgradeEvent instanceof UpgradeTaskStepActionPerformedEvent) {
+				if (upgradeEvent instanceof UpgradeStepPerformedEvent) {
 					UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
+				}
+				else if (upgradeEvent instanceof UpgradeStepStatusChangedEvent) {
+					UIUtil.sync(
+						() -> {
+							_upgradePlanViewer.refresh();
+						});
 				}
 			});
 
-		_upgradePlanElementViewer = new UpgradePlanElementViewer(sashForm, _upgradePlanViewer);
+		_upgradePlanElementViewer = new UpgradeStepViewer(sashForm, _upgradePlanViewer);
 
 		_upgradePlanElementViewer.addSelectionChangedListener(this::_fireSelectionChanged);
 
@@ -218,71 +224,35 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			});
 	}
 
-	private Map<String, Set<String>> _loadTreeExpansion() {
-		Map<String, Set<String>> treeExpansionMap = new HashMap<>();
+	private String[] _loadTreeExpansion() {
+		String stepIdsValue = _memento.getString("stepIds");
 
-		IMemento upgradePlanTreeExpansionMemento = _memento.getChild("upgradePlanTreeExpansion");
-
-		if (upgradePlanTreeExpansionMemento != null) {
-			IMemento tasksMemento = upgradePlanTreeExpansionMemento.getChild("tasks");
-
-			if (tasksMemento != null) {
-				IMemento[] taskMementos = tasksMemento.getChildren("task");
-
-				Set<String> taskExpansionSet = new HashSet<>();
-
-				for (IMemento taskMemento : taskMementos) {
-					taskExpansionSet.add(taskMemento.getString("id"));
-				}
-
-				treeExpansionMap.put("task", taskExpansionSet);
-			}
-
-			IMemento stepsMemento = upgradePlanTreeExpansionMemento.getChild("steps");
-
-			if (stepsMemento != null) {
-				IMemento[] stepMementos = stepsMemento.getChildren("step");
-
-				Set<String> stepExpansionSet = new HashSet<>();
-
-				for (IMemento stepMemento : stepMementos) {
-					stepExpansionSet.add(stepMemento.getString("id"));
-				}
-
-				treeExpansionMap.put("step", stepExpansionSet);
-			}
+		if (stepIdsValue == null) {
+			return new String[0];
 		}
 
-		return treeExpansionMap;
+		String[] stepIds = stepIdsValue.split(",");
+
+		return stepIds;
 	}
 
-	private void _saveTreeExpansion(IMemento memento, Map<String, Set<String>> expansionMap) {
-		IMemento upgradePlanTreeExpansionMemento = memento.createChild("upgradePlanTreeExpansion");
+	private void _saveTreeExpansion(IMemento memento, Object[] expansions) {
+		String[] stepIds = Stream.of(
+			expansions
+		).map(
+			expansion -> (UpgradeStep)expansion
+		).map(
+			upgradeStep -> upgradeStep.getId()
+		).toArray(
+			String[]::new
+		);
 
-		IMemento tasksExpansionMemento = upgradePlanTreeExpansionMemento.createChild("tasks");
-
-		Set<String> taskExpansions = expansionMap.get("task");
-
-		for (String taskId : taskExpansions) {
-			IMemento taskExpansionMemento = tasksExpansionMemento.createChild("task");
-
-			taskExpansionMemento.putString("id", taskId);
-		}
-
-		IMemento stepsExpansionMemento = upgradePlanTreeExpansionMemento.createChild("steps");
-
-		Set<String> stepExpansions = expansionMap.get("step");
-
-		for (String stepId : stepExpansions) {
-			IMemento stepExpansionMemento = stepsExpansionMemento.createChild("step");
-
-			stepExpansionMemento.putString("id", stepId);
-		}
+		memento.putString("stepIds", StringUtil.merge(stepIds, ","));
 	}
 
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private IMemento _memento;
-	private UpgradePlanElementViewer _upgradePlanElementViewer;
+	private UpgradeStepViewer _upgradePlanElementViewer;
 	private ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
 	private UpgradePlanViewer _upgradePlanViewer;
 

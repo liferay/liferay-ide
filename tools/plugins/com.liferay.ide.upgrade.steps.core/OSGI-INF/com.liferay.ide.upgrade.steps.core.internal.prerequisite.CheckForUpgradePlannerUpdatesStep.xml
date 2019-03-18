@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.core.internal.prerequisite.CheckForUpgradePlannerUpdatesStep">
+   <property name="description" value="&lt;p&gt;Before continuing an update plan, it is recommended to update to the latest version of Liferay Developer Studio or Liferay IDE (whichever version you are using).  Select &lt;b&gt;Click to perform&lt;/b&gt; to check for updates. If there is an update available, install it; afterwards, you can return to this step and continue the upgrade plan.&lt;br/&gt;&lt;br/&gt;&lt;b&gt;This action has not been implemented.&lt;/b&gt; Select &lt;b&gt;Click when complete&lt;/b&gt;to continue.&lt;/p&gt;"/>
+   <property name="id" value="check_for_upgrade_planner_updates"/>
+   <property name="order" value="1"/>
+   <property name="requirement" value="recommended"/>
+   <property name="parentId" value="check_installation_prerequisites"/>
+   <property name="title" value="Check For Upgrade Planner Updates"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.steps.core.internal.prerequisite.CheckForUpgradePlannerUpdatesStep"/>
+</scr:component>

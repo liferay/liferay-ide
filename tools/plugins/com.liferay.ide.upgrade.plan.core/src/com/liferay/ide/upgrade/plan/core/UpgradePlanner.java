@@ -34,19 +34,15 @@ public interface UpgradePlanner {
 
 	public UpgradePlan newUpgradePlan(
 		String name, String currentVersion, String targetVersion, Path sourceCodeLocation,
-		List<String> upgradeTaskCategories);
+		List<String> upgradeStepCategories);
 
 	public void removeListener(UpgradeListener upgradeListener);
 
-	public void restartStep(UpgradeTaskStep upgradeTaskStep);
-
-	public void restartTask(UpgradeTask upgradeTask);
+	public void restartStep(UpgradeStep upgradeStep);
 
 	public void saveUpgradePlan(UpgradePlan upgradePlan);
 
-	public void skipTask(UpgradeTask upgradeTask);
-
-	public void skipTaskStep(UpgradeTaskStep upgradeTaskStep);
+	public void skipStep(UpgradeStep upgradeTaskStep);
 
 	public void startUpgradePlan(UpgradePlan upgradePlan);
 

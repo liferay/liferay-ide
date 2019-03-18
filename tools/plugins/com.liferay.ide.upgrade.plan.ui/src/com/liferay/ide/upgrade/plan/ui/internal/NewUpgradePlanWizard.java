@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategoryElement;
+import com.liferay.ide.upgrade.plan.core.UpgradeStepCategoryElement;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -61,12 +61,11 @@ public class NewUpgradePlanWizard extends SapphireWizard<NewUpgradePlanOp> {
 
 		NewUpgradePlanOp newUpgradePlanOp = element();
 
-		ElementList<UpgradeTaskCategoryElement> upgradeTaskCategoriesCategories =
-			newUpgradePlanOp.getUpgradeTaskCategories();
+		ElementList<UpgradeStepCategoryElement> upgradeStepCategories = newUpgradePlanOp.getUpgradeStepCategories();
 
-		UpgradeTaskCategoryElement upgradeTaskCategoryElement = upgradeTaskCategoriesCategories.insert();
+		UpgradeStepCategoryElement upgradeStepCategoryElement = upgradeStepCategories.insert();
 
-		upgradeTaskCategoryElement.setUpgradeTaskCategory("code");
+		upgradeStepCategoryElement.setUpgradeStepCategory("code");
 	}
 
 	@Override

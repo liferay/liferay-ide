@@ -40,13 +40,13 @@ public class UpgradeProblemsUIPlugin extends AbstractUIPlugin {
 
 	public static final String CATEGORY_DATABASE_IMAGE = "CATEGORY_DATABASE";
 
-	public static final String COMPOSITE_TASK_START_IMAGE = "COMPOSITE_TASK_START";
+	public static final String COMPOSITE_STEP_START_IMAGE = "COMPOSITE_STEP_START";
 
 	public static final String ITEM_COMPLETE_IMAGE = "ITEM_COMPLETE";
 
 	public static final String ITEM_SKIP_IMAGE = "ITEM_SKIP";
 
-	public static final String NO_TASKS_IMAGE = "NO_TASKS";
+	public static final String NO_STEPS_IMAGE = "NO_STEPS";
 
 	public static final String PLUGIN_ID = "com.liferay.ide.upgrade.problems.ui";
 
@@ -116,13 +116,13 @@ public class UpgradeProblemsUIPlugin extends AbstractUIPlugin {
 
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
-		imageRegistry.put(COMPOSITE_TASK_START_IMAGE, imageDescriptor);
+		imageRegistry.put(COMPOSITE_STEP_START_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("information.gif");
 
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
-		imageRegistry.put(NO_TASKS_IMAGE, imageDescriptor);
+		imageRegistry.put(NO_STEPS_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("category_code.png");
 

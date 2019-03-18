@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.core.internal.prerequisite.PrepareForCodeUpgradeStep">
+   <property name="categoryId" value="code"/>
+   <property name="description" value="Before staring to upgrade any code, we need to perform as steps to ensure everything is prepared in your environment and will be optimized for a successful upgrade procress."/>
+   <property name="id" value="prepare_code_upgrade"/>
+   <property name="imagePath" value="icons/prepare_code_upgrade.gif"/>
+   <property name="order" value="1"/>
+   <property name="title" value="Prepare for Code Upgrade"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.steps.core.internal.prerequisite.PrepareForCodeUpgradeStep"/>
+</scr:component>

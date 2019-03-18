@@ -19,31 +19,20 @@ import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public interface UpgradePlanAcessor {
 
-	public default UpgradeTaskCategory getCategory(String id) {
-		return ServicesLookup.getSingleService(UpgradeTaskCategory.class, "(id=" + id + ")");
+	public default UpgradeStepCategory getCategory(String id) {
+		return ServicesLookup.getSingleService(UpgradeStepCategory.class, "(id=" + id + ")");
 	}
 
-	public default UpgradeTaskCategory getCategory(UpgradeTask upgradeTask) {
-		return getCategory(upgradeTask.getCategoryId());
+	public default UpgradeStepCategory getCategory(UpgradeStep step) {
+		return getCategory(step.getCategoryId());
 	}
 
-	public default UpgradeTaskStep getStep(String id) {
-		return ServicesLookup.getSingleService(UpgradeTaskStep.class, "(id=" + id + ")");
-	}
-
-	public default UpgradeTaskStep getStep(UpgradeTaskStepAction upgradeTaskStepAction) {
-		return ServicesLookup.getSingleService(UpgradeTaskStep.class, "(id=" + upgradeTaskStepAction.getStepId() + ")");
-	}
-
-	public default UpgradeTask getTask(String id) {
-		return ServicesLookup.getSingleService(UpgradeTask.class, "(id=" + id + ")");
-	}
-
-	public default UpgradeTask getTask(UpgradeTaskStep upgradeTaskStep) {
-		return ServicesLookup.getSingleService(UpgradeTask.class, "(id=" + upgradeTaskStep.getTaskId() + ")");
+	public default UpgradeStep getStep(String id) {
+		return ServicesLookup.getSingleService(UpgradeStep.class, "(id=" + id + ")");
 	}
 
 }

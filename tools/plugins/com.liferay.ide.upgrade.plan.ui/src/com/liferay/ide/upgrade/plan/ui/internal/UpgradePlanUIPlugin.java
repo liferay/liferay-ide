@@ -42,25 +42,23 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 
 	public static final String ITEM_SKIP_IMAGE = "ITEM_SKIP";
 
-	public static final String NO_TASKS_IMAGE = "NO_TASKS";
+	public static final String NO_STEPS_IMAGE = "NO_STEPS";
 
 	public static final String PLUGIN_ID = "com.liferay.ide.upgrade.plan.ui";
 
-	public static final String TASK_RESTART_IMAGE = "TASK_RESTART_IMAGE";
+	public static final String STEP_COMPLETE_IMAGE = "STEP_COMPLETE_IMAGE";
 
-	public static final String TASK_STEP_ACTION_COMPLETE_IMAGE = "TASK_STEP_ACTION_COMPLETE_IMAGE";
+	public static final String STEP_COMPLETE_OVERLAY_IMAGE = "STEP_COMPLETE_OVERLAY_IMAGE";
 
-	public static final String TASK_STEP_ACTION_COMPLETE_OVERLAY_IMAGE = "TASK_STEP_ACTION_COMPLETE_OVERLAY_IMAGE";
+	public static final String STEP_FAILED_OVERLAY_IMAGE = "STEP_FAILED_OVERLAY_IMAGE";
 
-	public static final String TASK_STEP_ACTION_FAILED_OVERLAY_IMAGE = "TASK_STEP_ACTION_FAILED_OVERLAY_IMAGE";
+	public static final String STEP_PERFORM_IMAGE = "STEP_PERFORM_IMAGE";
 
-	public static final String TASK_STEP_ACTION_PERFORM_IMAGE = "TASK_STEP_ACTION_PERFORM_IMAGE";
+	public static final String STEP_RESTART_IMAGE = "STEP_RESTART_IMAGE";
 
-	public static final String TASK_STEP_ACTION_SKIP_IMAGE = "TASK_STEP_ACTION_SKIP_IMAGE";
+	public static final String STEP_SKIP_IMAGE = "STEP_SKIP_IMAGE";
 
-	public static final String TASK_STEP_ACTION_SKIP_OVERLAY_IMAGE = "TASK_STEP_ACTION_SKIP_OVERLAY_IMAGE";
-
-	public static final String TASK_STEP_RESTART_IMAGE = "TASK_STEP_RESTART_IMAGE";
+	public static final String STEP_SKIP_OVERLAY_IMAGE = "STEP_SKIP_OVERLAY_IMAGE";
 
 	public static IStatus createErrorStatus(String msg) {
 		return createErrorStatus(msg, null);
@@ -130,55 +128,49 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
-		imageRegistry.put(TASK_STEP_ACTION_PERFORM_IMAGE, imageDescriptor);
+		imageRegistry.put(STEP_PERFORM_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("failed_status.gif");
 
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
-		imageRegistry.put(TASK_STEP_ACTION_FAILED_OVERLAY_IMAGE, imageDescriptor);
+		imageRegistry.put(STEP_FAILED_OVERLAY_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("complete_status.gif");
 
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
-		imageRegistry.put(TASK_STEP_ACTION_COMPLETE_OVERLAY_IMAGE, imageDescriptor);
+		imageRegistry.put(STEP_COMPLETE_OVERLAY_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("skip_status.gif");
 
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
-		imageRegistry.put(TASK_STEP_ACTION_SKIP_OVERLAY_IMAGE, imageDescriptor);
+		imageRegistry.put(STEP_SKIP_OVERLAY_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("complete_task.gif");
 
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
-		imageRegistry.put(TASK_STEP_ACTION_COMPLETE_IMAGE, imageDescriptor);
+		imageRegistry.put(STEP_COMPLETE_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("skip_action.gif");
 
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
-		imageRegistry.put(TASK_STEP_ACTION_SKIP_IMAGE, imageDescriptor);
+		imageRegistry.put(STEP_SKIP_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("task_restart.gif");
 
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
-		imageRegistry.put(TASK_RESTART_IMAGE, imageDescriptor);
-
-		path = _ICONS_PATH.append("task_step_restart.gif");
-
-		imageDescriptor = _createImageDescriptor(bundle, path);
-
-		imageRegistry.put(TASK_STEP_RESTART_IMAGE, imageDescriptor);
+		imageRegistry.put(STEP_RESTART_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("information.gif");
 
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
-		imageRegistry.put(NO_TASKS_IMAGE, imageDescriptor);
+		imageRegistry.put(NO_STEPS_IMAGE, imageDescriptor);
 
 		path = _ICONS_PATH.append("category_code.png");
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.core.internal.code.UpgradeWorkspacePluginVersionStep">
+   <property name="id" value="upgrade_workspace_plugin_version"/>
+   <property name="order" value="2"/>
+   <property name="parentId" value="setup_liferay_workspace"/>
+   <property name="requirement" value="recommended"/>
+   <property name="title" value="Upgrade Workspace Plugin Version"/>
+   <property name="description" value="&lt;p&gt;This Action has not been implemented, select &lt;b&gt;Click when complete&lt;/b&gt; to continue.&lt;/p&gt;"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.steps.core.internal.code.UpgradeWorkspacePluginVersionStep"/>
+</scr:component>

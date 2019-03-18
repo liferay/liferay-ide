@@ -14,8 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeTaskCategory;
-import com.liferay.ide.upgrade.plan.core.UpgradeTaskCategory;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeStepCategory;
+import com.liferay.ide.upgrade.plan.core.UpgradeStepCategory;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = {"id=code", "imagePath=icons/category_code.png", "order=3", "title=Code Upgrade"},
-	scope = ServiceScope.PROTOTYPE, service = UpgradeTaskCategory.class
+	scope = ServiceScope.PROTOTYPE, service = UpgradeStepCategory.class
 )
-public class CodeUpgradeCategory extends BaseUpgradeTaskCategory {
+public class CodeUpgradeCategory extends BaseUpgradeStepCategory {
 }

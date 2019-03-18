@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanElement;
+import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 
 import com.vladsch.flexmark.ast.Document;
@@ -59,14 +59,14 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 	public Promise<String> getDetail(Object element) {
 		Deferred<String> deferred = _promiseFactory.deferred();
 
-		if (element instanceof UpgradePlanElement) {
-			UpgradePlanElement upgradePlanElement = (UpgradePlanElement)element;
+		if (element instanceof UpgradeStep) {
+			UpgradeStep upgradeStep = (UpgradeStep)element;
 
-			new Job("Retrieving " + upgradePlanElement.getTitle() + " detail...") {
+			new Job("Retrieving " + upgradeStep.getTitle() + " detail...") {
 
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					_doUpgradePlanElementDetail(upgradePlanElement, deferred);
+					_doUpgradeStepDetail(upgradeStep, deferred);
 
 					Promise<String> promise = deferred.getPromise();
 
@@ -75,7 +75,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 						if (failure != null) {
 							return UpgradePlanUIPlugin.createErrorStatus(
-								"Error retrieving " + upgradePlanElement.getTitle() + " detail.", failure);
+								"Error retrieving " + upgradeStep.getTitle() + " detail.", failure);
 						}
 					}
 					catch (InterruptedException ie) {
@@ -95,8 +95,8 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 	@Override
 	public String getLabel(Object element) {
-		if (element instanceof UpgradePlanElement) {
-			return _doUpgradePlanElementLabel((UpgradePlanElement)element);
+		if (element instanceof UpgradeStep) {
+			return _doUpgradeStepLabel((UpgradeStep)element);
 		}
 
 		return null;
@@ -104,13 +104,13 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 	@Override
 	public boolean provides(Object element) {
-		return element instanceof UpgradePlanElement;
+		return element instanceof UpgradeStep;
 	}
 
-	private void _doUpgradePlanElementDetail(UpgradePlanElement upgradePlanElement, Deferred<String> deferred) {
+	private void _doUpgradeStepDetail(UpgradeStep upgradeStep, Deferred<String> deferred) {
 		String detail = "about:blank";
 
-		String url = upgradePlanElement.getUrl();
+		String url = upgradeStep.getUrl();
 
 		if (CoreUtil.isNotNullOrEmpty(url)) {
 			if (url.endsWith(".markdown")) {
@@ -129,8 +129,8 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		deferred.resolve(detail);
 	}
 
-	private String _doUpgradePlanElementLabel(UpgradePlanElement upgradePlanElement) {
-		return upgradePlanElement.getTitle();
+	private String _doUpgradeStepLabel(UpgradeStep upgradeStep) {
+		return upgradeStep.getTitle();
 	}
 
 	private String _downloadAndRenderMarkdown(String url) throws IOException {

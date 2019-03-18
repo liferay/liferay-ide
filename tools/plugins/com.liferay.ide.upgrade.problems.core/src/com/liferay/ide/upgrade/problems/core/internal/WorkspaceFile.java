@@ -18,7 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.problems.core.SourceFile;
-import com.liferay.ide.upgrade.tasks.core.UpgradeTaskConstants;
+import com.liferay.ide.upgrade.steps.core.UpgradeStepConstants;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -120,7 +120,7 @@ public class WorkspaceFile implements SourceFile {
 
 		if (retval == null) {
 			try {
-				retval = createIFile(UpgradeTaskConstants.HELPER_PROJECT_NAME, file);
+				retval = createIFile(UpgradeStepConstants.HELPER_PROJECT_NAME, file);
 			}
 			catch (CoreException | IOException e) {
 				e.printStackTrace();

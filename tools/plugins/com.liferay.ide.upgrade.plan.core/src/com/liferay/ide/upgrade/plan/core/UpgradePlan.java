@@ -32,15 +32,15 @@ public interface UpgradePlan {
 
 	public String getName();
 
+	public List<UpgradeStep> getRootSteps();
+
 	public Path getTargetProjectLocation();
 
 	public String getTargetVersion();
 
-	public List<UpgradeTask> getTasks();
-
 	public Collection<UpgradeProblem> getUpgradeProblems();
 
-	public List<String> getUpgradeTaskCategories();
+	public List<String> getUpgradeStepCategories();
 
 	public List<String> getUpgradeVersions();
 
