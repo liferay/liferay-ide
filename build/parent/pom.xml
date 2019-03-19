@@ -170,6 +170,12 @@
                 <groupId>org.eclipse.tycho</groupId>
                 <artifactId>tycho-versions-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jarsigner-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
         </plugins>
 
         <pluginManagement>
@@ -318,4 +324,34 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+		<profile>
+			<id>jarsigner</id>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-jarsigner-plugin</artifactId>
+							<configuration>
+								<alias>${jarsigner.alias}</alias>
+								<keystore>${jarsigner.keystore}</keystore>
+								<storepass>${jarsigner.storepass}</storepass>
+							</configuration>
+							<executions>
+								<execution>
+									<id>sign</id>
+									<goals>
+										<goal>sign</goal>
+									</goals>
+								</execution>
+							</executions>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
+
 </project>
