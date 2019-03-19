@@ -154,7 +154,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 
 		_enables.add(skipImageHyperlink);
 
-		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
 
 		_upgradePlanner.addListener(this);
 

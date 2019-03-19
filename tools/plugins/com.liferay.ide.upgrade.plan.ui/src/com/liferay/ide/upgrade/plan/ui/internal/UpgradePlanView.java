@@ -22,6 +22,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.internal.steps.UpgradeStepViewer;
 
 import java.util.Objects;
@@ -42,11 +43,6 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.util.tracker.ServiceTracker;
-
 /**
  * @author Terry Jia
  * @author Gregory Amerson
@@ -55,16 +51,6 @@ import org.osgi.util.tracker.ServiceTracker;
 public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 	public static final String ID = "com.liferay.ide.upgrade.plan.view";
-
-	public UpgradePlanView() {
-		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanView.class);
-
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_upgradePlannerServiceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
-
-		_upgradePlannerServiceTracker.open();
-	}
 
 	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
@@ -91,8 +77,6 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 		if (_upgradePlanElementViewer != null) {
 			_upgradePlanElementViewer.dispose();
 		}
-
-		_upgradePlannerServiceTracker.close();
 	}
 
 	@Override
@@ -110,7 +94,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 		_memento = memento;
 
-		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
+		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
 
 		Optional.ofNullable(
 			memento
@@ -141,7 +125,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 		if (upgradePlanViewerInput instanceof UpgradePlan) {
 			UpgradePlan upgradePlan = (UpgradePlan)upgradePlanViewerInput;
 
-			UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
+			UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
 
 			_saveTreeExpansion(memento, _upgradePlanViewer.getTreeExpansion());
 
@@ -169,7 +153,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 		_upgradePlanViewer.addPostSelectionChangedListener(this::_fireSelectionChanged);
 
-		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
+		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
 
 		upgradePlanner.addListener(
 			upgradeEvent -> {
@@ -253,7 +237,6 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private IMemento _memento;
 	private UpgradeStepViewer _upgradePlanElementViewer;
-	private ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
 	private UpgradePlanViewer _upgradePlanViewer;
 
 }

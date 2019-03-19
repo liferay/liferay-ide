@@ -32,7 +32,7 @@ public class RestartUpgradeHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
 
 		UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
 

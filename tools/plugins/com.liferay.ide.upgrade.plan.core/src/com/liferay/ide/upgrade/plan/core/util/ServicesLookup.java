@@ -86,6 +86,10 @@ public class ServicesLookup {
 		return Collections.emptyList();
 	}
 
+	public static <T> T getSingleService(Class<T> serviceClass) {
+		return getSingleService(serviceClass, null);
+	}
+
 	public static <T> T getSingleService(Class<T> serviceClass, String filter) {
 		Bundle bundle = FrameworkUtil.getBundle(ServicesLookup.class);
 

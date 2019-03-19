@@ -24,6 +24,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -45,11 +46,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Terry Jia
@@ -75,15 +71,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 		_treeContentProvider = Adapters.adapt(contentProvider, ITreeContentProvider.class);
 
-		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanView.class);
-
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_upgradePlannerServiceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
-
-		_upgradePlannerServiceTracker.open();
-
-		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
+		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
 
 		upgradePlanner.addListener(this);
 	}
@@ -93,11 +81,9 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 	}
 
 	public void dispose() {
-		UpgradePlanner upgradePlanner = _upgradePlannerServiceTracker.getService();
+		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
 
 		upgradePlanner.removeListener(this);
-
-		_upgradePlannerServiceTracker.close();
 	}
 
 	@Override
@@ -194,13 +180,15 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 					IStructuredSelection structureSelection = (IStructuredSelection)selection;
 
-					boolean hasChildren = _treeContentProvider.hasChildren(structureSelection.getFirstElement());
+					Object selectedObject = structureSelection.getFirstElement();
 
-					UpgradeStep upgradeStep = Adapters.adapt(structureSelection.getFirstElement(), UpgradeStep.class);
+					UpgradeStep upgradeStep = Adapters.adapt(selectedObject, UpgradeStep.class);
 
 					if (upgradeStep == null) {
 						return;
 					}
+
+					boolean hasChildren = _treeContentProvider.hasChildren(selectedObject);
 
 					if ((upgradeStep != null) && !hasChildren &&
 						(newStatus.equals(UpgradeStepStatus.COMPLETED) ||
@@ -280,6 +268,5 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 	private ITreeContentProvider _treeContentProvider;
 	private TreeViewer _treeViewer;
-	private ServiceTracker<UpgradePlanner, UpgradePlanner> _upgradePlannerServiceTracker;
 
 }

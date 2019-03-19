@@ -54,8 +54,9 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"description=" + AutoCorrectFindUpgradeProblemsStepKeys.DESCRIPTION,
-		"id=" + AutoCorrectFindUpgradeProblemsStepKeys.ID, "order=1", "requirement=required",
-		"parentId=" + AutoCorrectUpgradeProblemsStepKeys.ID, "title=" + AutoCorrectFindUpgradeProblemsStepKeys.TITLE
+		"imagePath=icons/auto_correct_problems.png", "id=" + AutoCorrectFindUpgradeProblemsStepKeys.ID, "order=1",
+		"requirement=required", "parentId=" + AutoCorrectUpgradeProblemsStepKeys.ID,
+		"title=" + AutoCorrectFindUpgradeProblemsStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeStep.class
 )
