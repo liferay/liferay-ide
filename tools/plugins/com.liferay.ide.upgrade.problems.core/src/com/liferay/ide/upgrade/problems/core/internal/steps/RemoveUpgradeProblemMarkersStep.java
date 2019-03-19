@@ -22,6 +22,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.problems.core.MarkerSupport;
+import com.liferay.ide.upgrade.problems.core.steps.AutoCorrectUpgradeProblemsStepKeys;
 import com.liferay.ide.upgrade.problems.core.steps.RemoveUpgradeProblemMarkersStepKeys;
 import com.liferay.ide.upgrade.steps.core.MessagePrompt;
 
@@ -45,7 +46,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = {
 		"description=" + RemoveUpgradeProblemMarkersStepKeys.DESCRIPTION,
 		"id=" + RemoveUpgradeProblemMarkersStepKeys.ID, "imagePath=icons/remove_previous_result.png", "order=3",
-		"requirement=recommended", "parentId=", "title=" + RemoveUpgradeProblemMarkersStepKeys.TITLE
+		"requirement=recommended", "parentId=" + AutoCorrectUpgradeProblemsStepKeys.ID,
+		"title=" + RemoveUpgradeProblemMarkersStepKeys.TITLE
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeStep.class
 )

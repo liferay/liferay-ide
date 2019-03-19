@@ -46,7 +46,7 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 		_requirement = getStringProperty(properties, "requirement", "Optional");
 		_categoryId = getStringProperty(properties, "categoryId");
 
-		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
 
 		if (_description == null) {
 			_description = _title;
@@ -54,15 +54,15 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 
 		_description = "<form>" + _description + "</form>";
 
-		_lookupChildren(componentContext);
+		_lookupChildIds(componentContext);
 
 		_parentId = getStringProperty(properties, "parentId");
 	}
 
 	@Override
 	public boolean completed() {
-		if (_childrenIds.length != 0) {
-			for (String childId : _childrenIds) {
+		if (_childIds.length != 0) {
+			for (String childId : _childIds) {
 				UpgradeStep child = ServicesLookup.getSingleService(UpgradeStep.class, "(id=" + childId + ")");
 
 				if (!child.completed()) {
@@ -140,7 +140,7 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 	}
 
 	public String[] getChildIds() {
-		return _childrenIds;
+		return _childIds;
 	}
 
 	@Override
@@ -229,7 +229,7 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 		return false;
 	}
 
-	private void _lookupChildren(ComponentContext componentContext) {
+	private void _lookupChildIds(ComponentContext componentContext) {
 		BundleContext bundleContext = componentContext.getBundleContext();
 
 		String id = getId();
@@ -237,7 +237,7 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 		List<UpgradeStep> children = ServicesLookup.getOrderedServices(
 			bundleContext, UpgradeStep.class, "(parentId=" + id + ")");
 
-		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
+		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
 
 		if (upgradePlanner == null) {
 			return;
@@ -245,7 +245,7 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 
 		Stream<UpgradeStep> stream = children.stream();
 
-		_childrenIds = stream.filter(
+		_childIds = stream.filter(
 			child -> child.appliesTo(upgradePlanner.getCurrentUpgradePlan())
 		).map(
 			child -> child.getId()
@@ -255,7 +255,7 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 	}
 
 	private String _categoryId;
-	private String[] _childrenIds;
+	private String[] _childIds;
 	private String _description;
 	private String _id;
 	private String _imagePath;
