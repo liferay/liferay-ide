@@ -1,3 +1,0 @@
-<%
-	model.removeFlags(CreateJavaEEArtifactTemplateModel.FLAG_QUALIFIED_SUPERCLASS_NAME); 
-%>

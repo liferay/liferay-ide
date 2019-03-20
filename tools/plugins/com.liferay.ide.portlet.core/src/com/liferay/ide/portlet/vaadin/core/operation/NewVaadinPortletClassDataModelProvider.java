@@ -16,8 +16,8 @@ package com.liferay.ide.portlet.vaadin.core.operation;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.operation.NewPortletClassDataModelProvider;
-import com.liferay.ide.portlet.vaadin.core.VaadinCore;
 import com.liferay.ide.sdk.core.ISDKConstants;
 
 import java.util.ArrayList;
@@ -124,7 +124,7 @@ public class NewVaadinPortletClassDataModelProvider
 			String superclass = getStringProperty(propertyName);
 
 			if (CoreUtil.isNullOrEmpty(superclass)) {
-				return VaadinCore.createErrorStatus(Msgs.specifyPortletSuperclass);
+				return PortletCore.createErrorStatus(Msgs.specifyPortletSuperclass);
 			}
 
 			return JavaConventions.validateJavaTypeName(superclass, JavaCore.VERSION_1_5, JavaCore.VERSION_1_5);
@@ -134,7 +134,7 @@ public class NewVaadinPortletClassDataModelProvider
 			String vaadinPortletClass = getStringProperty(propertyName);
 
 			if (CoreUtil.isNullOrEmpty(vaadinPortletClass)) {
-				return VaadinCore.createErrorStatus(Msgs.specifyVaadinPortletClass);
+				return PortletCore.createErrorStatus(Msgs.specifyVaadinPortletClass);
 			}
 
 			return JavaConventions.validateJavaTypeName(vaadinPortletClass, JavaCore.VERSION_1_5, JavaCore.VERSION_1_5);

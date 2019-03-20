@@ -33,7 +33,11 @@ Require-Bundle: org.eclipse.ui,
  com.liferay.ide.sdk.core,
  org.eclipse.epp.logging.aeri.ide;resolution:=optional,
  org.eclipse.equinox.p2.ui,
- org.eclipse.equinox.p2.operations
+ org.eclipse.equinox.p2.operations,
+ org.eclipse.mylyn.commons.notifications.ui,
+ org.eclipse.mylyn.commons.notifications.core,
+ org.eclipse.mylyn.commons.workbench,
+ org.eclipse.mylyn.commons.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.ui,

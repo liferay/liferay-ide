@@ -30,6 +30,8 @@ import java.lang.management.ManagementFactory;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -51,7 +53,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
+import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.p2.operations.ProvisioningSession;
 import org.eclipse.equinox.p2.operations.RepositoryTracker;
@@ -61,6 +66,10 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.text.templates.ContextTypeRegistry;
 import org.eclipse.jface.text.templates.TemplateContextType;
+import org.eclipse.mylyn.commons.notifications.core.AbstractNotification;
+import org.eclipse.mylyn.commons.notifications.core.INotificationService;
+import org.eclipse.mylyn.commons.notifications.ui.AbstractUiNotification;
+import org.eclipse.mylyn.commons.notifications.ui.NotificationsUi;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -79,6 +88,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
@@ -96,6 +106,8 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 	// The plugin ID
 
 	public static final String PLUGIN_ID = "com.liferay.ide.ui";
+
+	public static final String SHOULD_SHOW_NOTIFICATIONS = "SHOULD_SHOW_NOTIFICATIONS";
 
 	// The shared instance
 
@@ -121,11 +133,6 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 		return workbenchWindow.getActivePage();
 	}
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
 	public static LiferayUIPlugin getDefault() {
 		return _plugin;
 	}
@@ -144,9 +151,6 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 		log.log(new Status(IStatus.ERROR, PLUGIN_ID, msg, e));
 	}
 
-	/**
-	 * The constructor
-	 */
 	public LiferayUIPlugin() {
 	}
 
@@ -159,6 +163,12 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 		_applyWorkspaceBadge();
 
 		_registerResolvers();
+
+		if (_shouldShowNotifications() && !_matchRequiredJavaVersion()) {
+			INotificationService notificationService = NotificationsUi.getService();
+
+			notificationService.notify(Collections.singletonList(_createJava8RequiredNotification()));
+		}
 	}
 
 	public Image getImage(String key) {
@@ -179,11 +189,6 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 		return fTextFileDocumentProvider;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * @see AbstractUIPlugin#start(org.osgi.framework.
-	 * BundleContext )
-	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -230,11 +235,6 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 		context.addServiceListener(_serviceListener);
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * @see AbstractUIPlugin#stop(org.osgi.framework.
-	 * BundleContext )
-	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
@@ -324,6 +324,51 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 			});
 	}
 
+	private AbstractNotification _createJava8RequiredNotification() {
+		Date date = new Date();
+
+		return new AbstractUiNotification("com.liferay.ide.ui.notifications.java8required") {
+
+			@SuppressWarnings({"rawtypes", "unchecked"})
+			public Object getAdapter(Class adapter) {
+				return null;
+			}
+
+			@Override
+			public Date getDate() {
+				return date;
+			}
+
+			@Override
+			public String getDescription() {
+				String javaVersion = System.getProperty("java.specification.version");
+
+				return "This Eclipse instance is running on java " + javaVersion + "\n" +
+					"Liferay IDE needs at least Java 1.8 to run, please launch Eclipse with 1.8 and try again.";
+			}
+
+			@Override
+			public String getLabel() {
+				return "Java 8 Required";
+			}
+
+			@Override
+			public Image getNotificationImage() {
+				return null;
+			}
+
+			@Override
+			public Image getNotificationKindImage() {
+				return null;
+			}
+
+			@Override
+			public void open() {
+			}
+
+		};
+	}
+
 	private void _enableGradleAutoSync() {
 		IEclipsePreferences gradlePrefs = InstanceScope.INSTANCE.getNode("org.eclipse.buildship.core");
 
@@ -377,6 +422,20 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 		}
 	}
 
+	private boolean _matchRequiredJavaVersion() {
+		String javaVersion = System.getProperty("java.specification.version");
+
+		Version currentVersion = new Version(javaVersion);
+
+		Version requiredVersion = new Version("1.8");
+
+		if (currentVersion.compareTo(requiredVersion) >= 0) {
+			return true;
+		}
+
+		return false;
+	}
+
 	private void _registerMBeans() {
 		try {
 			MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
@@ -408,6 +467,14 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 				}
 			}
 		}
+	}
+
+	private boolean _shouldShowNotifications() {
+		IScopeContext[] scopes = {ConfigurationScope.INSTANCE, InstanceScope.INSTANCE};
+
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+
+		return preferencesService.getBoolean(PLUGIN_ID, SHOULD_SHOW_NOTIFICATIONS, true, scopes);
 	}
 
 	private static LiferayUIPlugin _plugin;

@@ -220,4 +220,41 @@
 		>
 		</portletFramework>
 	</extension>
+	<extension
+		point="com.liferay.ide.project.core.portletFrameworks"
+	>
+		<portletFramework
+			class="com.liferay.ide.portlet.vaadin.core.VaadinPortletFramework"
+			default="false"
+			description="%vaadin.portlet.framework.description"
+			displayName="%vaadin.portlet.framework.display.name"
+			helpUrl="http://vaadin.com"
+			id="com.liferay.ide.project.core.framework.vaadin"
+			requiredSDKVersion="6.0.5"
+			shortName="vaadin"
+		>
+		</portletFramework>
+	</extension>
+	<extension
+		point="com.liferay.ide.project.core.liferayDescriptorHelpers"
+	>
+		<liferayDescriptorHelper
+			class="com.liferay.ide.portlet.vaadin.core.dd.VaadinPortletDescriptorHelper"
+			contentTypeBinding="com.liferay.ide.portlet.core.portletxml"
+			id="com.liferay.ide.portlet.vaadin.core.vaadinPortletDescriptorHelper"
+		>
+		</liferayDescriptorHelper>
+		<liferayDescriptorHelper
+			class="com.liferay.ide.portlet.vaadin.core.dd.VaadinLiferayPortletDescriptorHelper"
+			contentTypeBinding="com.liferay.ide.portlet.core.liferayportletxml"
+			id="com.liferay.ide.portlet.vaadin.core.vaadinLiferayPortletDescriptorHelper"
+		>
+		</liferayDescriptorHelper>
+		<liferayDescriptorHelper
+			class="com.liferay.ide.portlet.vaadin.core.dd.VaadinPluginPackageDescriptorHelper"
+			contentTypeBinding="com.liferay.ide.portlet.core.liferaypluginpackageproperties"
+			id="com.liferay.ide.portlet.vaadin.core.vaadinPluginPackageDescriptorHelper"
+		>
+		</liferayDescriptorHelper>
+	</extension>
 </plugin>

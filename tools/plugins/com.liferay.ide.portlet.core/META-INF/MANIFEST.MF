@@ -49,4 +49,5 @@ Export-Package: com.liferay.ide.portlet.core,
  com.liferay.ide.portlet.core.model,
  com.liferay.ide.portlet.core.model.internal,
  com.liferay.ide.portlet.core.operation,
- com.liferay.ide.portlet.core.util
+ com.liferay.ide.portlet.core.util,
+ com.liferay.ide.portlet.vaadin.core.operation
