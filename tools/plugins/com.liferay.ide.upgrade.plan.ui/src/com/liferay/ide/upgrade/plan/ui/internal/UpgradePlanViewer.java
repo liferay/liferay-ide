@@ -41,6 +41,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -100,6 +101,8 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 		selectOptional.filter(
 			item -> item instanceof UpgradeStep
+		).filter(
+			_treeContentProvider::hasChildren
 		).ifPresent(
 			s -> {
 				_treeViewer.setExpandedState(s, !_treeViewer.getExpandedState(s));
@@ -132,7 +135,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 			return _treeViewer.getSelection();
 		}
 
-		return null;
+		return TreeSelection.EMPTY;
 	}
 
 	public Object[] getTreeExpansion() {
@@ -176,25 +179,16 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 					UpgradeStepStatus newStatus = statusEvent.getNewStatus();
 
-					ISelection selection = _treeViewer.getSelection();
+					UpgradeStep changeEventStep = statusEvent.getUpgradeStep();
 
-					IStructuredSelection structureSelection = (IStructuredSelection)selection;
+					StructuredSelection newSelection = new StructuredSelection(changeEventStep);
 
-					Object selectedObject = structureSelection.getFirstElement();
+					if (newStatus.equals(UpgradeStepStatus.COMPLETED) || newStatus.equals(UpgradeStepStatus.SKIPPED)) {
+						boolean hasChildren = _treeContentProvider.hasChildren(changeEventStep);
 
-					UpgradeStep upgradeStep = Adapters.adapt(selectedObject, UpgradeStep.class);
-
-					if (upgradeStep == null) {
-						return;
-					}
-
-					boolean hasChildren = _treeContentProvider.hasChildren(selectedObject);
-
-					if ((upgradeStep != null) && !hasChildren &&
-						(newStatus.equals(UpgradeStepStatus.COMPLETED) ||
-						 newStatus.equals(UpgradeStepStatus.SKIPPED))) {
-
-						_changeSelection(selection);
+						if ((changeEventStep != null) && !hasChildren) {
+							_changeSelection(newSelection);
+						}
 					}
 
 					refresh();
@@ -255,7 +249,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		}
 
 		return Stream.of(
-			_treeContentProvider.getChildren(parent)
+			children
 		).map(
 			childObject -> Adapters.adapt(childObject, UpgradeStep.class)
 		).filter(

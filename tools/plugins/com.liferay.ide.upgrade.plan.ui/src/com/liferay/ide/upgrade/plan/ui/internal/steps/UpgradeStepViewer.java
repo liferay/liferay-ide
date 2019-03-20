@@ -38,6 +38,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class UpgradeStepViewer implements ISelectionProvider {
 
@@ -103,10 +104,18 @@ public class UpgradeStepViewer implements ISelectionProvider {
 	}
 
 	private void _clearScrolledForm() {
+		if (_upgradeStepItem != null) {
+			_upgradeStepItem.dispose();
+		}
+
 		Composite bodyComposite = _scrolledForm.getBody();
 
-		for (Control control : bodyComposite.getChildren()) {
-			control.dispose();
+		if (!bodyComposite.isDisposed()) {
+			for (Control control : bodyComposite.getChildren()) {
+				if (!control.isDisposed()) {
+					control.dispose();
+				}
+			}
 		}
 	}
 
@@ -144,9 +153,9 @@ public class UpgradeStepViewer implements ISelectionProvider {
 		if (upgradeStep != null) {
 			_scrolledForm.setText(upgradeStep.getTitle());
 
-			UpgradeStepItem upgradeStepItem = new UpgradeStepItem(_formToolkit, _scrolledForm, upgradeStep.getId());
+			_upgradeStepItem = new UpgradeStepItem(_formToolkit, _scrolledForm, upgradeStep.getId());
 
-			upgradeStepItem.addSelectionChangedListener(this::_fireSelectionChanged);
+			_upgradeStepItem.addSelectionChangedListener(this::_fireSelectionChanged);
 		}
 
 		_scrolledForm.reflow(true);
@@ -156,5 +165,6 @@ public class UpgradeStepViewer implements ISelectionProvider {
 	private FormToolkit _formToolkit;
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private ScrolledForm _scrolledForm;
+	private UpgradeStepItem _upgradeStepItem;
 
 }

@@ -22,6 +22,7 @@ Require-Bundle: com.liferay.ide.project.core,
  org.eclipse.osgi.util,
  org.eclipse.sapphire.modeling,
  org.eclipse.sapphire.ui,
+ org.eclipse.swt,
  org.eclipse.ui,
  org.eclipse.ui.forms,
  org.eclipse.ui.ide,
@@ -29,4 +30,5 @@ Require-Bundle: com.liferay.ide.project.core,
  org.eclipse.ui.navigator.resources,
  org.eclipse.ui.workbench,
  org.eclipse.ui.workbench.texteditor
+Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanInfoProviderService.xml
 Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanInfoProviderService.xml

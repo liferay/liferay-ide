@@ -14,8 +14,10 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.stream.Stream;
@@ -61,7 +63,7 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 
 	@Override
 	public boolean completed() {
-		if (_childIds.length != 0) {
+		if (ListUtil.isNotEmpty(_childIds)) {
 			for (String childId : _childIds) {
 				UpgradeStep child = ServicesLookup.getSingleService(UpgradeStep.class, "(id=" + childId + ")");
 
@@ -124,9 +126,12 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 		}
 
 		if (isEqualIgnoreCase(_description, baseUpgradeStep._description) &&
-			isEqualIgnoreCase(_id, baseUpgradeStep._id) && isEqualIgnoreCase(_imagePath, baseUpgradeStep._imagePath) &&
-			(_order == baseUpgradeStep._order) && isEqualIgnoreCase(_title, baseUpgradeStep._title) &&
-			_status.equals(baseUpgradeStep._status)) {
+			isEqualIgnoreCase(_categoryId, baseUpgradeStep._categoryId) &&
+			isEqualIgnoreCase(_requirement, baseUpgradeStep._requirement) &&
+			isEqualIgnoreCase(_parentId, baseUpgradeStep._parentId) && isEqualIgnoreCase(_url, baseUpgradeStep._url) &&
+			isEqual(_childIds, baseUpgradeStep._childIds) && isEqualIgnoreCase(_id, baseUpgradeStep._id) &&
+			isEqualIgnoreCase(_imagePath, baseUpgradeStep._imagePath) && (_order == baseUpgradeStep._order) &&
+			isEqualIgnoreCase(_title, baseUpgradeStep._title) && _status.equals(baseUpgradeStep._status)) {
 
 			return true;
 		}
@@ -140,6 +145,10 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 	}
 
 	public String[] getChildIds() {
+		if (_childIds == null) {
+			_childIds = new String[0];
+		}
+
 		return _childIds;
 	}
 
@@ -199,6 +208,11 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 
 		hash = 31 * hash + orderDouble.hashCode();
 		hash = 31 * hash + (_description != null ? _description.hashCode() : 0);
+		hash = 31 * hash + (_categoryId != null ? _categoryId.hashCode() : 0);
+		hash = 31 * hash + (_childIds != null ? Arrays.hashCode(_childIds) : 0);
+		hash = 31 * hash + (_parentId != null ? _parentId.hashCode() : 0);
+		hash = 31 * hash + (_requirement != null ? _requirement.hashCode() : 0);
+		hash = 31 * hash + (_url != null ? _url.hashCode() : 0);
 		hash = 31 * hash + (_imagePath != null ? _imagePath.hashCode() : 0);
 		hash = 31 * hash + (_title != null ? _title.hashCode() : 0);
 		hash = 31 * hash + (_id != null ? _id.hashCode() : 0);

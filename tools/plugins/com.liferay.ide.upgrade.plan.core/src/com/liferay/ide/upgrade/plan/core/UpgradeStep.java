@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.core.util.ListUtil;
 
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -123,6 +124,37 @@ public interface UpgradeStep {
 
 		return sourceStream.filter(
 			element -> targetElementIds.contains(element.getId())
+		).findAny(
+		).isPresent();
+	}
+
+	public default boolean isEqual(String[] source, String[] target) {
+		if (source == null) {
+			if (target == null) {
+				return true;
+			}
+
+			return false;
+		}
+
+		if (target == null) {
+			return false;
+		}
+
+		if (source.length != target.length) {
+			return false;
+		}
+
+		if (ListUtil.isEmpty(source) && ListUtil.isEmpty(target)) {
+			return true;
+		}
+
+		List<String> targetList = Arrays.asList(target);
+
+		return Stream.of(
+			source
+		).filter(
+			element -> targetList.contains(element)
 		).findAny(
 		).isPresent();
 	}

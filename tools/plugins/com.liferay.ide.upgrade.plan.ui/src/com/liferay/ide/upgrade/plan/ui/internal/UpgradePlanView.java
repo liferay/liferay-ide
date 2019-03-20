@@ -21,7 +21,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.internal.steps.UpgradeStepViewer;
 
@@ -74,14 +73,14 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			_upgradePlanViewer.dispose();
 		}
 
-		if (_upgradePlanElementViewer != null) {
-			_upgradePlanElementViewer.dispose();
+		if (_upgradeStepViewer != null) {
+			_upgradeStepViewer.dispose();
 		}
 	}
 
 	@Override
 	public ISelection getSelection() {
-		return _upgradePlanElementViewer.getSelection();
+		return _upgradeStepViewer.getSelection();
 	}
 
 	public UpgradePlanViewer getUpgradePlanViewer() {
@@ -141,7 +140,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 	@Override
 	public void setSelection(ISelection selection) {
-		_upgradePlanElementViewer.setSelection(selection);
+		_upgradeStepViewer.setSelection(selection);
 	}
 
 	private void _createPartControl(Composite parentComposite) {
@@ -180,17 +179,11 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 				if (upgradeEvent instanceof UpgradeStepPerformedEvent) {
 					UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
 				}
-				else if (upgradeEvent instanceof UpgradeStepStatusChangedEvent) {
-					UIUtil.sync(
-						() -> {
-							_upgradePlanViewer.refresh();
-						});
-				}
 			});
 
-		_upgradePlanElementViewer = new UpgradeStepViewer(sashForm, _upgradePlanViewer);
+		_upgradeStepViewer = new UpgradeStepViewer(sashForm, _upgradePlanViewer);
 
-		_upgradePlanElementViewer.addSelectionChangedListener(this::_fireSelectionChanged);
+		_upgradeStepViewer.addSelectionChangedListener(this::_fireSelectionChanged);
 
 		setContentDescription(
 			"No active upgrade plan. Use view menu 'New Upgrade Plan' action to start a new upgrade.");
@@ -236,7 +229,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private IMemento _memento;
-	private UpgradeStepViewer _upgradePlanElementViewer;
 	private UpgradePlanViewer _upgradePlanViewer;
+	private UpgradeStepViewer _upgradeStepViewer;
 
 }

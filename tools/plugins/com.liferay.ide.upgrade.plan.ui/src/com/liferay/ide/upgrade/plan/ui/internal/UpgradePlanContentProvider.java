@@ -61,7 +61,7 @@ public class UpgradePlanContentProvider implements ITreeContentProvider, Upgrade
 			).toArray();
 		}
 
-		return null;
+		return new Object[0];
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class UpgradePlanContentProvider implements ITreeContentProvider, Upgrade
 			return upgradeSteps.toArray(new UpgradeStep[0]);
 		}
 
-		return null;
+		return new Object[0];
 	}
 
 	@Override
