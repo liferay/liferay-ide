@@ -14,6 +14,8 @@
 
 package com.liferay.ide.ui.notifications;
 
+import com.liferay.ide.ui.LiferayUIPlugin;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -93,13 +95,13 @@ public class Java8requiredSink extends PopupNotificationSink {
 						private void _preventShowNotifications() {
 							try {
 								IEclipsePreferences prefs = ConfigurationScope.INSTANCE.getNode(
-									NotificationsCore.PLUGIN_ID);
+									LiferayUIPlugin.PLUGIN_ID);
 
-								prefs.putBoolean(NotificationsCore.SHOULD_SHOW_NOTIFICATIONS, false);
+								prefs.putBoolean(LiferayUIPlugin.SHOULD_SHOW_NOTIFICATIONS, false);
 								prefs.flush();
 							}
 							catch (BackingStoreException bse) {
-								NotificationsCore.logError(bse);
+								LiferayUIPlugin.logError(bse);
 							}
 						}
 

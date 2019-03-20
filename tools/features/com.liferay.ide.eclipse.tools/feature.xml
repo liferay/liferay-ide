@@ -167,22 +167,6 @@
 
 	<plugin
 		download-size="0"
-		id="com.liferay.ide.portlet.vaadin.core"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
-		id="com.liferay.ide.portlet.vaadin.ui"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
 		id="com.liferay.ide.service.core"
 		install-size="0"
 		unpack="false"
@@ -216,14 +200,6 @@
 	<plugin
 		download-size="0"
 		id="com.liferay.ide.sdk.core"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
-		id="com.liferay.ide.ui.notifications"
 		install-size="0"
 		unpack="false"
 		version="0.0.0"

@@ -19,7 +19,6 @@ import com.liferay.ide.portlet.ui.template.PortletTemplateContextTypeIds;
 import com.liferay.ide.portlet.ui.wizard.NewLiferayPortletWizardPage;
 import com.liferay.ide.portlet.ui.wizard.NewPortletWizard;
 import com.liferay.ide.portlet.vaadin.core.operation.NewVaadinPortletClassDataModelProvider;
-import com.liferay.ide.portlet.vaadin.ui.VaadinUI;
 import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -38,7 +37,7 @@ import org.osgi.framework.Bundle;
 /**
  * @author Henri Sara
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings({"restriction", "deprecation"})
 public class NewVaadinPortletWizard extends NewPortletWizard {
 
 	public static final String ID = "com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.portlet";
@@ -107,9 +106,9 @@ public class NewVaadinPortletWizard extends NewPortletWizard {
 
 	@Override
 	protected ImageDescriptor getImage() {
-		VaadinUI vaadinUI = VaadinUI.getDefault();
+		PortletUIPlugin portletUI = PortletUIPlugin.getDefault();
 
-		Bundle bundle = vaadinUI.getBundle();
+		Bundle bundle = portletUI.getBundle();
 
 		return ImageDescriptor.createFromURL(bundle.getEntry("/icons/wizban/vaadin_wiz.png"));
 	}

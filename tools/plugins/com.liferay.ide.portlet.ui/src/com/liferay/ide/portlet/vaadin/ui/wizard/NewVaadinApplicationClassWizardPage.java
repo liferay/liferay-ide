@@ -15,9 +15,9 @@
 package com.liferay.ide.portlet.vaadin.ui.wizard;
 
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.portlet.ui.wizard.NewPortletClassWizardPage;
 import com.liferay.ide.portlet.vaadin.core.operation.INewVaadinPortletClassDataModelProperties;
-import com.liferay.ide.portlet.vaadin.ui.VaadinUI;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import java.net.URL;
@@ -169,9 +169,9 @@ public class NewVaadinApplicationClassWizardPage
 	}
 
 	protected void setShellImage() {
-		VaadinUI vaadinUI = VaadinUI.getDefault();
+		PortletUIPlugin portletUI = PortletUIPlugin.getDefault();
 
-		Bundle bundle = vaadinUI.getBundle();
+		Bundle bundle = portletUI.getBundle();
 
 		URL url = bundle.getEntry("/icons/e16/vaadinportlet.png");
 

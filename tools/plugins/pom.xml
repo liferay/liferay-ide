@@ -47,8 +47,6 @@
 		<module>com.liferay.ide.layouttpl.ui</module>
 		<module>com.liferay.ide.portlet.core</module>
 		<module>com.liferay.ide.portlet.ui</module>
-		<module>com.liferay.ide.portlet.vaadin.core</module>
-		<module>com.liferay.ide.portlet.vaadin.ui</module>
 		<module>com.liferay.ide.project.core</module>
 		<module>com.liferay.ide.project.ui</module>
 		<module>com.liferay.ide.sdk.core</module>
@@ -60,7 +58,6 @@
 		<module>com.liferay.ide.service.ui</module>
 		<module>com.liferay.ide.theme.core</module>
 		<module>com.liferay.ide.ui</module>
-		<module>com.liferay.ide.ui.notifications</module>
 		<module>com.liferay.ide.ui.snippets</module>
 		<module>com.liferay.ide.upgrade.core</module>
 		<module>com.liferay.ide.upgrade.plan.core</module>
