@@ -5,6 +5,7 @@
    <property name="imagePath" value="icons/migrate_plugins_sdk.png"/>
    <property name="order" value="4"/>
    <property name="title" value="Upgrade Build Dependencies"/>
+   <property name="categoryId" value="code"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
    </service>

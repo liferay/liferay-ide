@@ -27,7 +27,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = {
 		"description=" + UpgradeBuildDependenciesStepKeys.DESCRIPTION, "id=" + UpgradeBuildDependenciesStepKeys.ID,
-		"imagePath=icons/migrate_plugins_sdk.png", "order=4", "title=" + UpgradeBuildDependenciesStepKeys.TITLE
+		"imagePath=icons/migrate_plugins_sdk.png", "order=4", "title=" + UpgradeBuildDependenciesStepKeys.TITLE,
+		"categoryId=code"
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeStep.class
 )

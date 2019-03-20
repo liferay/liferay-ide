@@ -28,8 +28,8 @@ Require-Bundle: com.google.guava,
  org.eclipse.osgi.services,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.xml.core,
- org.json,
- org.jdom
+ org.jdom,
+ org.json
 Service-Component: OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.code.ConfigureLiferayWorkspaceSettingsStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.code.SetupLiferayWorkspaceStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.code.InitializeServerBundleStep.xml,
@@ -65,5 +65,5 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.code.Con
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.prerequisite.CheckIsBladeInstalledStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.prerequisite.PrepareForCodeUpgradeStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.sdk.MigratePluginsSDKProjectsStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.sdk.UpgradeSDKIvySettingStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.sdk.UpdateSDKBuildPropertiesStep.xml
+ OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.sdk.UpdateSDKBuildPropertiesStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.dependencies.RemovePrivateConfigurationInIvyStep.xml

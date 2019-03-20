@@ -12,17 +12,18 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.steps.core.sdk;
+package com.liferay.ide.upgrade.steps.core.dependencies;
 
 /**
  * @author Simon Jiang
+ * @author Terry Jia
  */
-public class UpdateSDKIvySettingStepKeys {
+public class RemovePrivateConfigurationInIvyStepKeys {
 
-	public static final String DESCRIPTION = "<p>Update plugin sdk Ivy settings, rmove private configuration.</p> ";
+	public static final String DESCRIPTION = "<p>Remove private configuration in Ivy.</p> ";
 
-	public static final String ID = "update_plugins_sdk_ivy_settings";
+	public static final String ID = "remove_private_configuration_in_ivy";
 
-	public static final String TITLE = "Update SDK Ivy Settings Configuration";
+	public static final String TITLE = "Remove Private Configration In Ivy";
 
 }

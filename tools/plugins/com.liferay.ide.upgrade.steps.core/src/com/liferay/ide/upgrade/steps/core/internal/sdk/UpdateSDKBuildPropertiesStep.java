@@ -16,7 +16,6 @@ package com.liferay.ide.upgrade.steps.core.internal.sdk;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -27,6 +26,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
+import com.liferay.ide.upgrade.steps.core.WorkspaceSupport;
 import com.liferay.ide.upgrade.steps.core.internal.UpgradeStepsCorePlugin;
 import com.liferay.ide.upgrade.steps.core.sdk.MigratePluginsSDKProjectsStepKeys;
 import com.liferay.ide.upgrade.steps.core.sdk.UpdateSDKBuildPropertiesStepKeys;
@@ -50,6 +50,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Simon Jiang
+ * @author Terry Jia
  */
 @Component(
 	property = {
@@ -59,7 +60,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeStep.class
 )
-public class UpdateSDKBuildPropertiesStep extends BaseUpgradeStep {
+public class UpdateSDKBuildPropertiesStep extends BaseUpgradeStep implements WorkspaceSupport {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -67,89 +68,70 @@ public class UpdateSDKBuildPropertiesStep extends BaseUpgradeStep {
 
 		Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
 
-		Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
-
 		if (currentProjectLocation == null) {
 			return UpgradeStepsCorePlugin.createErrorStatus(
 				"There is no current project location configured for current plan.");
 		}
 
-		IStatus updatePluginsSdkPropertiesStatus = _updatePluginsSdkProperties(targetProjectLocation);
+		Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
 
-		if (updatePluginsSdkPropertiesStatus.isOK()) {
+		IPath bundleLcoation = getHomeLocation(targetProjectLocation);
+
+		PortalBundle liferayPortalBundle = LiferayServerCore.newPortalBundle(bundleLcoation);
+
+		if (liferayPortalBundle == null) {
+			return UpgradeStepsCorePlugin.createErrorStatus("There is no liferay bundle in current liferay workspace.");
+		}
+
+		IPath pluginSdkPath = getPluginsSDKLocation(targetProjectLocation);
+
+		SDK sdk = SDKUtil.createSDKFromLocation(pluginSdkPath);
+
+		if (sdk == null) {
+			return UpgradeStepsCorePlugin.createErrorStatus("There is no plugins sdk in current liferay workspace.");
+		}
+
+		IStatus status = Status.OK_STATUS;
+
+		try {
+			Map<String, String> appServerPropertiesMap = new HashMap<>();
+
+			appServerPropertiesMap.put(
+				"app.server.deploy.dir", FileUtil.toOSString(liferayPortalBundle.getAppServerDeployDir()));
+			appServerPropertiesMap.put("app.server.dir", FileUtil.toOSString(liferayPortalBundle.getAppServerDir()));
+			appServerPropertiesMap.put(
+				"app.server.lib.global.dir", FileUtil.toOSString(liferayPortalBundle.getAppServerLibGlobalDir()));
+			appServerPropertiesMap.put(
+				"app.server.parent.dir", FileUtil.toOSString(liferayPortalBundle.getLiferayHome()));
+			appServerPropertiesMap.put(
+				"app.server.portal.dir", FileUtil.toOSString(liferayPortalBundle.getAppServerPortalDir()));
+			appServerPropertiesMap.put("app.server.type", liferayPortalBundle.getType());
+
+			sdk.addOrUpdateServerProperties(appServerPropertiesMap);
+
+			IProject sdkProject = CoreUtil.getProject(pluginSdkPath);
+
+			if (sdkProject != null) {
+				sdkProject.refreshLocal(IResource.DEPTH_INFINITE, null);
+			}
+
+			sdk.validate(true);
+
 			setStatus(UpgradeStepStatus.COMPLETED);
 		}
-		else {
+		catch (Exception e) {
+			status = UpgradeStepsCorePlugin.createErrorStatus(e.getMessage());
+
 			setStatus(UpgradeStepStatus.FAILED);
 		}
 
 		_upgradePlanner.dispatch(
 			new UpgradeStepPerformedEvent(this, Collections.singletonList(upgradePlan.getTargetProjectLocation())));
 
-		return Status.OK_STATUS;
+		return status;
 	}
 
-	private IStatus _updatePluginsSdkProperties(Path targetProjectLocation) {
-		Path pluginsSDKLoaction = targetProjectLocation.resolve("plugins-sdk");
-
-		IProject workspaceProject = CoreUtil.getProject(targetProjectLocation.toFile());
-
-		if (FileUtil.exists(pluginsSDKLoaction.toFile())) {
-			String pluginsSDKDirName = LiferayWorkspaceUtil.getPluginsSDKDir(targetProjectLocation.toString());
-
-			if (CoreUtil.isNullOrEmpty(pluginsSDKDirName)) {
-				return UpgradeStepsCorePlugin.createErrorStatus("Not found plugins sdk folder.");
-			}
-
-			IPath workspaceProjectPath = workspaceProject.getLocation();
-
-			IPath pluginSdkPath = workspaceProjectPath.append(pluginsSDKDirName);
-
-			SDK sdk = SDKUtil.createSDKFromLocation(pluginSdkPath);
-
-			if (sdk != null) {
-				IPath bundleLcoation = LiferayWorkspaceUtil.getHomeLocation(workspaceProject);
-
-				PortalBundle liferayPortalBundle = LiferayServerCore.newPortalBundle(bundleLcoation);
-
-				if (liferayPortalBundle != null) {
-					try {
-						Map<String, String> appServerPropertiesMap = new HashMap<>();
-
-						appServerPropertiesMap.put(
-							"app.server.deploy.dir", FileUtil.toOSString(liferayPortalBundle.getAppServerDeployDir()));
-						appServerPropertiesMap.put(
-							"app.server.dir", FileUtil.toOSString(liferayPortalBundle.getAppServerDir()));
-						appServerPropertiesMap.put(
-							"app.server.lib.global.dir",
-							FileUtil.toOSString(liferayPortalBundle.getAppServerLibGlobalDir()));
-						appServerPropertiesMap.put(
-							"app.server.parent.dir", FileUtil.toOSString(liferayPortalBundle.getLiferayHome()));
-						appServerPropertiesMap.put(
-							"app.server.portal.dir", FileUtil.toOSString(liferayPortalBundle.getAppServerPortalDir()));
-						appServerPropertiesMap.put("app.server.type", liferayPortalBundle.getType());
-
-						sdk.addOrUpdateServerProperties(appServerPropertiesMap);
-
-						IProject sdkProject = CoreUtil.getProject(pluginsSDKLoaction.toFile());
-
-						if (sdkProject != null) {
-							sdkProject.refreshLocal(IResource.DEPTH_INFINITE, null);
-						}
-
-						sdk.validate(true);
-					}
-					catch (Exception e) {
-						return UpgradeStepsCorePlugin.createErrorStatus(e.getMessage());
-					}
-				}
-			}
-		}
-
-		return Status.OK_STATUS;
-
-	}
-
-	@Reference private UpgradePlanner _upgradePlanner;
+	@Reference
+	private UpgradePlanner _upgradePlanner;
 
 }
