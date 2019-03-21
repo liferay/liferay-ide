@@ -403,6 +403,12 @@ public class CoreUtil {
 		return resource.getProject();
 	}
 
+	public static IProject getProject(IPath path) {
+		File file = path.toFile();
+
+		return getProject(file);
+	}
+
 	public static IProject getProject(String projectName) {
 		return getWorkspaceRoot().getProject(projectName);
 	}

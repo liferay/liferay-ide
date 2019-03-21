@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.core.internal.dependencies.RemovePrivateConfigurationInIvyStep">
+   <property name="description" value="&lt;p&gt;Remove private configuration in Ivy.&lt;/p&gt;"/>
+   <property name="id" value="remove_private_configuration_in_ivy"/>
+   <property name="imagePath" value="icons/update_sdk_ivy.png"/>
+   <property name="requirement" value="required"/>
+   <property name="order" value="3"/>
+   <property name="parentId" value="update_plugins_sdk_dependencies"/>
+   <property name="title" value="Remove Private Configuration In Ivy"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
+   </service>
+   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
+   <implementation class="com.liferay.ide.upgrade.steps.core.internal.dependencies.RemovePrivateConfigurationInIvyStep"/>
+</scr:component>
