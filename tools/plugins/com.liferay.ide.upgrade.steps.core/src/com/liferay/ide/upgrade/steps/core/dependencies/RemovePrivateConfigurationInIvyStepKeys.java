@@ -24,6 +24,6 @@ public class RemovePrivateConfigurationInIvyStepKeys {
 
 	public static final String ID = "remove_private_configuration_in_ivy";
 
-	public static final String TITLE = "Remove Private Configration In Ivy";
+	public static final String TITLE = "Remove Private Configuration In Ivy";
 
 }

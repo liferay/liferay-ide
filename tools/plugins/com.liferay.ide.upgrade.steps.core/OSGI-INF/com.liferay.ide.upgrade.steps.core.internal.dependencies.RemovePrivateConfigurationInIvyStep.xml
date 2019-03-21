@@ -6,7 +6,7 @@
    <property name="requirement" value="required"/>
    <property name="order" value="3"/>
    <property name="parentId" value="update_plugins_sdk_dependencies"/>
-   <property name="title" value="Remove Private Configration In Ivy"/>
+   <property name="title" value="Remove Private Configuration In Ivy"/>
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
    </service>

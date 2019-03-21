@@ -27,7 +27,6 @@ import com.liferay.ide.upgrade.steps.core.dependencies.UpdatePluginsSDKDependenc
 import com.liferay.ide.upgrade.steps.core.internal.UpgradeStepsCorePlugin;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -45,7 +44,6 @@ import org.eclipse.core.runtime.Status;
 
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.JDOMException;
 import org.jdom.filter.ElementFilter;
 import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
@@ -156,9 +154,7 @@ public class RemovePrivateConfigurationInIvyStep extends BaseUpgradeStep impleme
 			).flatMap(
 				chains -> chains.stream()
 			).forEach(
-				chain -> {
-					((Element)chain).removeContent(resolverFilter);
-				}
+				chain -> ((Element)chain).removeContent(resolverFilter)
 			);
 
 			resolversStream = resolversElements.stream();
@@ -178,10 +174,7 @@ public class RemovePrivateConfigurationInIvyStep extends BaseUpgradeStep impleme
 
 			};
 
-			resolversStream.forEach(
-				resolvers -> {
-					((Element)resolvers).removeContent(ibiblioFilter);
-				});
+			resolversStream.forEach(resolvers -> resolvers.removeContent(ibiblioFilter));
 
 			XMLOutputter xmlOutputter = new XMLOutputter();
 
@@ -189,11 +182,8 @@ public class RemovePrivateConfigurationInIvyStep extends BaseUpgradeStep impleme
 				xmlOutputter.output(document, output);
 			}
 		}
-		catch (IOException ioe) {
-			return UpgradeStepsCorePlugin.createErrorStatus(ioe.getMessage());
-		}
-		catch (JDOMException jdome) {
-			return UpgradeStepsCorePlugin.createErrorStatus(jdome.getMessage());
+		catch (Exception e) {
+			return UpgradeStepsCorePlugin.createErrorStatus(e.getMessage());
 		}
 
 		return Status.OK_STATUS;
