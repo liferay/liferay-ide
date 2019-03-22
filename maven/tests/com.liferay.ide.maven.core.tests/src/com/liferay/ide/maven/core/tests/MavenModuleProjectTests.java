@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core.tests;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
@@ -76,6 +77,8 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 	public void testMavenDependencyUpdate() throws Exception {
 		String[][] dependency = {{"com.liferay.portal", "com.liferay.portal.kernel", "2.6.0"}};
 
+		Artifact artiface = new Artifact("com.liferay.portal", "com.liferay.portal.kernel", "2.6.0", "compile", null);
+
 		Dependency mavenDependency = new Dependency();
 
 		mavenDependency.setGroupId(dependency[0][0]);
@@ -119,7 +122,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase {
 
 		IProjectBuilder projectBuilder = liferayMavenDependencyProject.adapt(IProjectBuilder.class);
 
-		projectBuilder.updateProjectDependency(mavenDependencyTestProject, Arrays.asList(dependency));
+		projectBuilder.updateDependencies(mavenDependencyTestProject, Arrays.asList(artiface));
 
 		waitForJobsToComplete(monitor);
 
