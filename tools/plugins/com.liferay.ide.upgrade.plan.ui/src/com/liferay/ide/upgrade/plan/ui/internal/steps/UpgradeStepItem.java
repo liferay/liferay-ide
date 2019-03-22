@@ -21,7 +21,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
@@ -133,7 +132,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 
 			ImageHyperlink performImageHyperlink = createImageHyperlink(
 				_formToolkit, _buttonComposite, stepPerformImage, this, "Click to perform",
-				"Performing " + _upgradeStep.getTitle() + "...", this::_perform);
+				"Performing " + _upgradeStep.getTitle() + "...", this::_perform, _upgradeStep);
 
 			_disposables.add(() -> performImageHyperlink.dispose());
 
@@ -145,7 +144,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 
 			ImageHyperlink completeImageHyperlink = createImageHyperlink(
 				_formToolkit, _buttonComposite, stepCompleteImage, this, "Click when complete",
-				"Completing " + _upgradeStep.getTitle() + "...", this::_complete);
+				"Completing " + _upgradeStep.getTitle() + "...", this::_complete, _upgradeStep);
 
 			_disposables.add(() -> completeImageHyperlink.dispose());
 
@@ -158,7 +157,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 
 		ImageHyperlink restartImageHyperlink = createImageHyperlink(
 			_formToolkit, _buttonComposite, stepRestartImage, this, "Restart",
-			"Restarting " + _upgradeStep.getTitle() + "...", this::_restart);
+			"Restarting " + _upgradeStep.getTitle() + "...", this::_restart, _upgradeStep);
 
 		_disposables.add(() -> restartImageHyperlink.dispose());
 
@@ -168,7 +167,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 
 		ImageHyperlink skipImageHyperlink = createImageHyperlink(
 			_formToolkit, _buttonComposite, stepSkipImage, this, "Skip", "Skipping " + _upgradeStep.getTitle() + "...",
-			this::_skip);
+			this::_skip, _upgradeStep);
 
 		_disposables.add(() -> skipImageHyperlink.dispose());
 
@@ -255,8 +254,6 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 	}
 
 	private IStatus _complete(IProgressMonitor progressMonitor) {
-		_upgradeStep.setStatus(UpgradeStepStatus.COMPLETED);
-
 		return Status.OK_STATUS;
 	}
 

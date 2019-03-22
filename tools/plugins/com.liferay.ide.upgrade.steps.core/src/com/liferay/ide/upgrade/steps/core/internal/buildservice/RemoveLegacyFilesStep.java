@@ -18,7 +18,6 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.steps.core.ResourceSelection;
 import com.liferay.ide.upgrade.steps.core.buildservice.RebuildServicesStepKeys;
 import com.liferay.ide.upgrade.steps.core.buildservice.RemoveLegacyFilesStepKeys;
@@ -92,17 +91,13 @@ public class RemoveLegacyFilesStep extends BaseUpgradeStep {
 				}
 			}
 			catch (CoreException ce) {
-				setStatus(UpgradeStepStatus.FAILED);
+				IStatus error = UpgradeStepsCorePlugin.createErrorStatus("Unable to delete legacy files.", ce);
 
-				IStatus status = UpgradeStepsCorePlugin.createErrorStatus("Unable to delete legacy files.", ce);
+				UpgradeStepsCorePlugin.log(error);
 
-				UpgradeStepsCorePlugin.log(status);
-
-				return status;
+				return error;
 			}
 		}
-
-		setStatus(UpgradeStepStatus.COMPLETED);
 
 		_upgradePlanner.dispatch(new UpgradeStepPerformedEvent(this, projects));
 

@@ -21,7 +21,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
 import com.liferay.ide.upgrade.problems.core.MarkerSupport;
 import com.liferay.ide.upgrade.problems.core.steps.AutoCorrectFindUpgradeProblemsStepKeys;
@@ -109,8 +108,6 @@ public class AutoCorrectFindUpgradeProblemsStep extends BaseUpgradeStep implemen
 
 				_addMarkers(foundUpgradeProblems);
 			});
-
-		setStatus(UpgradeStepStatus.COMPLETED);
 
 		_upgradePlanner.dispatch(new UpgradeStepPerformedEvent(this, new ArrayList<>(upgradeProblems)));
 

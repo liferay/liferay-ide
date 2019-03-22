@@ -20,7 +20,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.problems.core.MarkerSupport;
 import com.liferay.ide.upgrade.problems.core.steps.AutoCorrectUpgradeProblemsStepKeys;
 import com.liferay.ide.upgrade.problems.core.steps.RemoveUpgradeProblemMarkersStepKeys;
@@ -79,8 +78,6 @@ public class RemoveUpgradeProblemMarkersStep extends BaseUpgradeStep implements 
 			).forEach(
 				this::deleteMarker
 			);
-
-			setStatus(UpgradeStepStatus.COMPLETED);
 
 			_upgradePlanner.dispatch(new UpgradeStepPerformedEvent(this, new ArrayList<>(upgradeProblems)));
 

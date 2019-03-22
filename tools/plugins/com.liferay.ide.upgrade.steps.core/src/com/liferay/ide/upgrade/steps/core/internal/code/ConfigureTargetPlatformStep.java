@@ -17,7 +17,6 @@ package com.liferay.ide.upgrade.steps.core.internal.code;
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.steps.core.code.ConfigureLiferayWorkspaceSettingsStepKeys;
 import com.liferay.ide.upgrade.steps.core.code.ConfigureTargetPlatformStepKeys;
 
@@ -52,8 +51,6 @@ public class ConfigureTargetPlatformStep extends BaseUpgradeStep {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		setStatus(UpgradeStepStatus.COMPLETED);
-
 		return Status.OK_STATUS;
 	}
 

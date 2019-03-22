@@ -21,7 +21,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
@@ -142,8 +141,6 @@ public class AutoCorrectUpgradeProblemsAction extends BaseUpgradeStep {
 				}
 			}
 		);
-
-		setStatus(UpgradeStepStatus.COMPLETED);
 
 		_upgradePlanner.dispatch(new UpgradeStepPerformedEvent(this, new ArrayList<>(upgradeProblems)));
 
