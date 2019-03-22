@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.ui.modules.ext;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
 import com.liferay.ide.project.core.modules.ext.OverrideSourceEntry;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -39,46 +39,46 @@ import org.eclipse.sapphire.ui.SapphirePart;
 /**
  * @author Charles Wu
  */
-public class AddFilesFromSourceJarAction extends SapphireActionHandler {
+public class AddFilesFromSourceJarAction extends SapphireActionHandler implements SapphireContentAccessor {
 
 	@Override
 	protected Object run(Presentation context) {
-		try {
-			SapphirePart sapphirePart = context.part();
+		SapphirePart sapphirePart = context.part();
 
-			if (sapphirePart.validation() != Status.createOkStatus()) {
-				return null;
+		if (sapphirePart.validation() != Status.createOkStatus()) {
+			return null;
+		}
+
+		Element modelElement = sapphirePart.getModelElement();
+
+		NewModuleExtOp moduleExtOp = modelElement.nearest(NewModuleExtOp.class);
+
+		URI sourceFileURI = get(moduleExtOp.getSourceFileURI());
+
+		JarEntrySelectionDialog dialog = new JarEntrySelectionDialog(UIUtil.getActiveShell());
+
+		if (sourceFileURI != null) {
+			try {
+				dialog.setInput(new ZipFile(new File(sourceFileURI)));
 			}
-
-			Element modelElement = sapphirePart.getModelElement();
-
-			NewModuleExtOp moduleExtOp = modelElement.nearest(NewModuleExtOp.class);
-
-			URI sourceFileUri = SapphireUtil.getContent(moduleExtOp.getSourceFileUri());
-
-			JarEntrySelectionDialog dialog = new JarEntrySelectionDialog(UIUtil.getActiveShell());
-
-			if (sourceFileUri != null) {
-				dialog.setInput(new ZipFile(new File(sourceFileUri)));
-			}
-			else {
+			catch (IOException e) {
 				dialog.setMessage("Unable to get source files in current context.");
 			}
-
-			dialog.setTitle("Select Override Files");
-
-			if (dialog.open() == Window.OK) {
-				for (Object result : dialog.getResult()) {
-					ElementList<OverrideSourceEntry> overrideFiles = moduleExtOp.getOverrideFiles();
-
-					OverrideSourceEntry fileEntry = overrideFiles.insert();
-
-					fileEntry.setValue(result.toString());
-				}
-			}
 		}
-		catch (IOException ioe) {
-			ProjectUI.logError(ioe);
+		else {
+			dialog.setMessage("Unable to get source files in current context.");
+		}
+
+		dialog.setTitle("Select Override Files");
+
+		if (dialog.open() == Window.OK) {
+			for (Object result : dialog.getResult()) {
+				ElementList<OverrideSourceEntry> overrideFiles = moduleExtOp.getOverrideFiles();
+
+				OverrideSourceEntry fileEntry = overrideFiles.insert();
+
+				fileEntry.setValue(result.toString());
+			}
 		}
 
 		return null;

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.templates.authenticator;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
@@ -22,7 +23,6 @@ import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -55,12 +55,12 @@ public class NewLiferayComponentAuthenticatorOperation extends AbstractLiferayCo
 	}
 
 	@Override
-	protected List<String[]> getComponentDependency() throws CoreException {
-		List<String[]> specialList = new LinkedList<>(super.getComponentDependency());
+	protected List<Artifact> getComponentDependencies() throws CoreException {
+		List<Artifact> dependencies = super.getComponentDependencies();
 
-		specialList.add(new String[] {"org.apache.shiro", "shiro-core", "1.1.0"});
+		dependencies.add(new Artifact("org.apache.shiro", "shiro-core", "1.1.0", "compileOnly", null));
 
-		return specialList;
+		return dependencies;
 	}
 
 	@Override

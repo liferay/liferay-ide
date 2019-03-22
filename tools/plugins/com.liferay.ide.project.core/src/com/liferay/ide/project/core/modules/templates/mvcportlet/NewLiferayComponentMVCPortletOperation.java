@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.templates.mvcportlet;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
@@ -94,12 +95,12 @@ public class NewLiferayComponentMVCPortletOperation extends AbstractLiferayCompo
 	}
 
 	@Override
-	protected List<String[]> getComponentDependency() throws CoreException {
-		List<String[]> componentDependency = super.getComponentDependency();
+	protected List<Artifact> getComponentDependencies() throws CoreException {
+		List<Artifact> dependencies = super.getComponentDependencies();
 
-		componentDependency.add(new String[] {"javax.portlet", "portlet-api", "2.0"});
+		dependencies.add(new Artifact("javax.portlet", "portlet-api", "2.0", "compileOnly", null));
 
-		return componentDependency;
+		return dependencies;
 	}
 
 	@Override

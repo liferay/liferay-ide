@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.templates.portletinactioncommand;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -84,7 +85,7 @@ public class NewLiferayComponentPortletActionCommandOperation extends AbstractLi
 
 					doMergeBndOperation();
 
-					doMergeDependencyOperation();
+					doMergeDependenciesOperation();
 
 					project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 				}
@@ -120,15 +121,15 @@ public class NewLiferayComponentPortletActionCommandOperation extends AbstractLi
 	}
 
 	@Override
-	protected List<String[]> getComponentDependency() throws CoreException {
-		List<String[]> componentDependency = super.getComponentDependency();
+	protected List<Artifact> getComponentDependencies() throws CoreException {
+		List<Artifact> dependencies = super.getComponentDependencies();
 
-		componentDependency.add(new String[] {"com.liferay.portal", "com.liferay.util.bridges", "2.0.0"});
-		componentDependency.add(new String[] {"com.liferay.portal", "com.liferay.util.taglib", "2.0.0"});
-		componentDependency.add(new String[] {"javax.portlet", "portlet-api", "2.0"});
-		componentDependency.add(new String[] {"javax.servlet", "javax.servlet-api", "3.0.1"});
+		dependencies.add(new Artifact("com.liferay.portal", "com.liferay.util.bridges", "2.0.0", "compileOnly", null));
+		dependencies.add(new Artifact("com.liferay.portal", "com.liferay.util.taglib", "2.0.0", "compileOnly", null));
+		dependencies.add(new Artifact("javax.portlet", "portlet-api", "2.0", "compileOnly", null));
+		dependencies.add(new Artifact("javax.servlet", "javax.servlet-api", "3.0.1", "compileOnly", null));
 
-		return componentDependency;
+		return dependencies;
 	}
 
 	@Override

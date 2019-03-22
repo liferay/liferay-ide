@@ -18,7 +18,6 @@ import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 
 import java.io.IOException;
@@ -43,7 +42,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.core.IClasspathEntry;
 
 import org.gradle.tooling.CancellationTokenSource;
 import org.gradle.tooling.GradleConnector;
@@ -176,11 +174,11 @@ public class GradleUtil {
 		try {
 			GradleDependencyUpdater updater = new GradleDependencyUpdater(buildFile);
 
-			List<GradleDependency> dependencies = updater.getAllBuildDependencies();
+			List<Artifact> dependencies = updater.getDependencies("classpath");
 
-			for (GradleDependency dependency : dependencies) {
-				String group = dependency.getGroup();
-				String name = dependency.getName();
+			for (Artifact dependency : dependencies) {
+				String group = dependency.getGroupId();
+				String name = dependency.getArtifactId();
 				Version version = new Version("0");
 				String dependencyVersion = dependency.getVersion();
 
@@ -215,31 +213,6 @@ public class GradleUtil {
 		}
 
 		return watchable;
-	}
-
-	public static Artifact parseGradleDependency(IClasspathEntry entry) {
-		if (entry == null) {
-			return null;
-		}
-
-		try {
-			IPath path = entry.getPath();
-
-			String[] items = path.segments();
-
-			//parse from file path "**/**/group name/artifact name/version/sha1 value/jar name"
-
-			if (Version.valueOf(items[items.length - 3]) != null) {
-				return new Artifact(
-					items[items.length - 5], items[items.length - 4], items[items.length - 3],
-					FileUtil.getFile(entry.getSourceAttachmentPath()));
-			}
-
-			return null;
-		}
-		catch (Exception e) {
-			return null;
-		}
 	}
 
 	public static void refreshProject(IProject project) {

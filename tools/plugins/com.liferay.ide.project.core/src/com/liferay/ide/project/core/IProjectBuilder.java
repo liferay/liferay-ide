@@ -14,8 +14,6 @@
 
 package com.liferay.ide.project.core;
 
-import com.google.common.collect.ListMultimap;
-
 import com.liferay.ide.core.Artifact;
 
 import java.util.List;
@@ -28,6 +26,7 @@ import org.eclipse.core.runtime.IStatus;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public interface IProjectBuilder {
 
@@ -37,12 +36,8 @@ public interface IProjectBuilder {
 
 	public IStatus buildWSDD(IProgressMonitor monitor) throws CoreException;
 
-	/**
-	 * @return configuration name -> [Artifact1, Artifact2, Artifact3] ,
-	 *  the configuration name could be null
-	 */
-	public ListMultimap<String, Artifact> getDependencies();
+	public List<Artifact> getDependencies(String configration);
 
-	public IStatus updateProjectDependency(IProject project, List<String[]> dependecies) throws CoreException;
+	public IStatus updateDependencies(IProject project, List<Artifact> dependecies) throws CoreException;
 
 }

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.ext;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.util.StringPool;
 
@@ -27,7 +28,7 @@ import org.osgi.framework.Version;
 /**
  * @author Charles Wu
  */
-public class OriginalModuleHintDefaultValueService extends DerivedValueService {
+public class OriginalModuleHintDefaultValueService extends DerivedValueService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -45,8 +46,8 @@ public class OriginalModuleHintDefaultValueService extends DerivedValueService {
 	protected String compute() {
 		NewModuleExtOp moduleExtOp = _op();
 
-		String name = SapphireUtil.getContent(moduleExtOp.getOriginalModuleName());
-		Version version = SapphireUtil.getContent(moduleExtOp.getOriginalModuleVersion());
+		String name = get(moduleExtOp.getOriginalModuleName());
+		Version version = get(moduleExtOp.getOriginalModuleVersion());
 
 		if ((name != null) && (version != null)) {
 			return name + ":" + version;

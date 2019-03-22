@@ -14,16 +14,17 @@
 
 package com.liferay.ide.gradle.core.parser;
 
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.MultimapBuilder;
-
 import com.liferay.ide.core.Artifact;
+import com.liferay.ide.core.util.CoreUtil;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.codehaus.groovy.ast.CodeVisitorSupport;
 import org.codehaus.groovy.ast.expr.ArgumentListExpression;
+import org.codehaus.groovy.ast.expr.ClosureExpression;
 import org.codehaus.groovy.ast.expr.Expression;
 import org.codehaus.groovy.ast.expr.MapEntryExpression;
 import org.codehaus.groovy.ast.expr.MapExpression;
@@ -34,96 +35,157 @@ import org.codehaus.groovy.ast.stmt.BlockStatement;
  * Visit gradle dependencies closure to collect all dependencies' info
  *
  * @author Charles Wu
+ * @author Terry Jia
  */
 public class DependenciesClosureVisitor extends CodeVisitorSupport {
 
-	public ListMultimap<String, Artifact> getDependencies() {
-		return _dependencies;
+	public int getColumnNumber() {
+		return _columnNumber;
+	}
+
+	public int getDependenceLineNumber() {
+		return _dependenceLineNumber;
+	}
+
+	public List<Artifact> getDependencies(String configuration) {
+		if ("*".equals(configuration)) {
+			return _dependencies;
+		}
+
+		Stream<Artifact> stream = _dependencies.stream();
+
+		return stream.filter(
+			artifact -> configuration.equals(artifact.getConfiguration())
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	/**
 	 * parse "group:name:version:classifier"
 	 */
 	@Override
-	public void visitArgumentlistExpression(ArgumentListExpression ale) {
-		if ("".equals(_configurationName)) {
-			super.visitArgumentlistExpression(ale);
+	public void visitArgumentlistExpression(ArgumentListExpression argumentListExpression) {
+		if (CoreUtil.isNullOrEmpty(_configurationName)) {
+			super.visitArgumentlistExpression(argumentListExpression);
 		}
 		else {
-			String text = _getExpressionText(ale.getExpression(0));
+			Expression expression = argumentListExpression.getExpression(0);
+
+			String text = expression.getText();
 
 			String[] groups = text.split(":");
 
-			String version = groups.length > 2 ? groups[2] : null;
+			String version = groups.length > 2 ? groups[2] : "";
 
-			_dependencies.put(_configurationName, new Artifact(groups[0], groups[1], version));
+			Artifact artifact = new Artifact();
 
-			super.visitArgumentlistExpression(ale);
+			artifact.setGroupId(groups[0]);
+			artifact.setArtifactId(groups[1]);
+			artifact.setVersion(version);
+			artifact.setConfiguration(_configurationName);
+
+			_dependencies.add(artifact);
+
+			super.visitArgumentlistExpression(argumentListExpression);
 		}
 	}
 
 	@Override
-	public void visitBlockStatement(BlockStatement block) {
+	public void visitBlockStatement(BlockStatement blockStatement) {
 		if (_dependenciesClosure) {
 			_dependencyStatement = true;
-			super.visitBlockStatement(block);
+
+			super.visitBlockStatement(blockStatement);
 
 			_dependencyStatement = false;
 		}
 		else {
-			super.visitBlockStatement(block);
+			super.visitBlockStatement(blockStatement);
 		}
+	}
+
+	@Override
+	public void visitClosureExpression(ClosureExpression closureExpression) {
+		if ((_dependenceLineNumber != -1) &&
+			(closureExpression.getLineNumber() == closureExpression.getLastLineNumber())) {
+
+			_columnNumber = closureExpression.getLastColumnNumber();
+		}
+
+		super.visitClosureExpression(closureExpression);
 	}
 
 	/**
-	 * parse "configurationName group: group:, name: name, version: version"
+	 * parse "configuration Name group: group:, name: name, version: version"
 	 */
 	@Override
 	public void visitMapExpression(MapExpression expression) {
-		if ("".equals(_configurationName)) {
+		if (CoreUtil.isNullOrEmpty(_configurationName)) {
 			super.visitMapExpression(expression);
 		}
 		else {
-			Map<String, String> dependenceMap = new HashMap<>();
+			Artifact artifact = new Artifact();
 
 			for (MapEntryExpression mapEntryExpression : expression.getMapEntryExpressions()) {
-				String key = _getExpressionText(mapEntryExpression.getKeyExpression());
+				Expression keyExpression = mapEntryExpression.getKeyExpression();
 
-				String value = _getExpressionText(mapEntryExpression.getValueExpression());
+				String key = keyExpression.getText();
 
-				dependenceMap.put(key, value);
+				Expression valueExpression = mapEntryExpression.getValueExpression();
+
+				String value = valueExpression.getText();
+
+				if ("group".equals(key)) {
+					artifact.setGroupId(value);
+				}
+				else if ("name".equals(key)) {
+					artifact.setArtifactId(value);
+				}
+				else if ("version".equals(key)) {
+					artifact.setVersion(value);
+				}
 			}
 
-			_dependencies.put(_configurationName, new Artifact(dependenceMap));
+			artifact.setConfiguration(_configurationName);
+
+			_dependencies.add(artifact);
 
 			super.visitMapExpression(expression);
 		}
 	}
 
 	@Override
-	public void visitMethodCallExpression(MethodCallExpression call) {
-		if ("dependencies".equals(call.getMethodAsString())) {
+	public void visitMethodCallExpression(MethodCallExpression methodCallExpression) {
+		String methodString = methodCallExpression.getMethodAsString();
+
+		if ("dependencies".equals(methodString)) {
 			_dependenciesClosure = true;
-			super.visitMethodCallExpression(call);
+
+			if (_dependenceLineNumber == -1) {
+				_dependenceLineNumber = methodCallExpression.getLastLineNumber();
+			}
+
+			super.visitMethodCallExpression(methodCallExpression);
 
 			_dependenciesClosure = false;
 		}
-		else if ("buildscript".equals(call.getMethodAsString())) {
-			super.visitMethodCallExpression(call);
+		else if ("buildscript".equals(methodString)) {
+			super.visitMethodCallExpression(methodCallExpression);
 		}
 		else if (_dependenciesClosure && _dependencyStatement) {
-			_configurationName = call.getMethodAsString();
-			super.visitMethodCallExpression(call);
+			_configurationName = methodString;
+
+			super.visitMethodCallExpression(methodCallExpression);
+
 			_configurationName = "";
 		}
 	}
 
-	private String _getExpressionText(Expression expression) {
-		return expression.getText();
-	}
-
+	private int _columnNumber;
 	private String _configurationName = "";
-	private ListMultimap<String, Artifact> _dependencies = MultimapBuilder.hashKeys().arrayListValues().build();
+	private int _dependenceLineNumber = -1;
+	private List<Artifact> _dependencies = new ArrayList<>();
 	private boolean _dependenciesClosure = false;
 	private boolean _dependencyStatement = false;
 

@@ -24,7 +24,6 @@ Require-Bundle: org.eclipse.ant.core,
  org.apache.commons.logging,
  org.apache.commons.lang;visibility:=reexport,
  org.apache.commons.collections,
- com.google.guava;bundle-version="[16.0.0,27.0.0]",
  org.json
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

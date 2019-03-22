@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.templates.servicewrapper;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.project.core.modules.ServiceContainer;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
@@ -34,25 +35,28 @@ public class NewLiferayComponentServiceOperation extends AbstractLiferayComponen
 	}
 
 	@Override
-	protected List<String[]> getComponentDependency() throws CoreException {
-		List<String[]> componentDependency = super.getComponentDependency();
+	protected List<Artifact> getComponentDependencies() throws CoreException {
+		List<Artifact> dependencies = super.getComponentDependencies();
+
+		ServiceContainer serviceBundle = null;
 
 		try {
-			ServiceContainer serviceBundle = TargetPlatformUtil.getServiceWrapperBundle(serviceName);
-
-			if (serviceBundle != null) {
-				Version retriveVersion = new Version(serviceBundle.getBundleVersion());
-
-				componentDependency.add(new String[] {
-					serviceBundle.getBundleGroup(), serviceBundle.getBundleName(),
-					retriveVersion.getMajor() + "." + retriveVersion.getMinor() + ".0"
-				});
-			}
+			serviceBundle = TargetPlatformUtil.getServiceWrapperBundle(serviceName);
 		}
 		catch (Exception e) {
 		}
 
-		return componentDependency;
+		if (serviceBundle != null) {
+			Version retriveVersion = new Version(serviceBundle.getBundleVersion());
+
+			String version = retriveVersion.getMajor() + "." + retriveVersion.getMinor() + ".0";
+
+			dependencies.add(
+				new Artifact(
+					serviceBundle.getBundleGroup(), serviceBundle.getBundleName(), version, "compileOnly", null));
+		}
+
+		return dependencies;
 	}
 
 	@Override

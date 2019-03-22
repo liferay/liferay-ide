@@ -14,8 +14,6 @@
 
 package com.liferay.ide.project.ui.modules.ext;
 
-import com.google.common.collect.ListMultimap;
-
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
@@ -80,20 +78,18 @@ public class NewModuleExtFilesWizard
 
 				IProjectBuilder builder = extProject.adapt(IProjectBuilder.class);
 
-				ListMultimap<String, Artifact> configurations = builder.getDependencies();
-
-				List<Artifact> dependencies = configurations.get("originalModule");
+				List<Artifact> dependencies = builder.getDependencies("originalModule");
 
 				if (!dependencies.isEmpty()) {
 					Artifact artifact = dependencies.get(0);
 
-					File sourceFile = artifact.getSourceFile();
+					File sourceFile = artifact.getSource();
 
 					if (FileUtil.exists(sourceFile)) {
 						NewModuleExtFilesOp moduleExtFilesOp = element();
 
-						moduleExtFilesOp.setSourceFileUri(sourceFile.toURI());
-						moduleExtFilesOp.setOriginalModuleName(artifact.getArtifact());
+						moduleExtFilesOp.setSourceFileURI(sourceFile.toURI());
+						moduleExtFilesOp.setOriginalModuleName(artifact.getArtifactId());
 						moduleExtFilesOp.setOriginalModuleVersion(new Version(artifact.getVersion()));
 						moduleExtFilesOp.setProjectName(_initialProject.getName());
 

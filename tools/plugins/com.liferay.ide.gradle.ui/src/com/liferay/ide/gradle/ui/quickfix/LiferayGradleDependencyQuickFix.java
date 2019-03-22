@@ -15,8 +15,8 @@
 package com.liferay.ide.gradle.ui.quickfix;
 
 import com.liferay.ide.core.Artifact;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleWorkspaceProject;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
@@ -232,17 +232,17 @@ public class LiferayGradleDependencyQuickFix implements IQuickFixProcessor {
 							classpathContainer, packageFragmentroot.getPath());
 
 						if (classpathEntry != null) {
-							dependency = GradleUtil.parseGradleDependency(classpathEntry);
+							dependency = CoreUtil.parseDependency(classpathEntry);
 						}
 					}
 				}
 				else if (entryKind == IClasspathEntry.CPE_LIBRARY) {
-					dependency = GradleUtil.parseGradleDependency(classpathEntry);
+					dependency = CoreUtil.parseDependency(classpathEntry);
 				}
 
 				if (dependency != null) {
 					String displayName =
-						"Add Dependency '" + dependency.getGroup() + ":" + dependency.getArtifact() + ":" +
+						"Add Dependency '" + dependency.getGroupId() + ":" + dependency.getArtifactId() + ":" +
 							dependency.getVersion() + "' to Gradle";
 
 					javaCompletionProposals.add(

@@ -15,7 +15,10 @@
 package com.liferay.ide.project.core.modules.ext;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.Pair;
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
@@ -25,11 +28,9 @@ import java.io.IOException;
 
 import java.net.URI;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -37,7 +38,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -91,68 +91,67 @@ public class NewModuleExtOpMethods {
 	}
 
 	protected static void copyFiles(NewModuleExtOp moduleExtOp) {
-		Job copyFilesJob = new Job("Copying files") {
+		URI sourceJar = _getter.get(moduleExtOp.getSourceFileURI());
 
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				IPath projectFolder = PathBridge.create(SapphireUtil.getContent(moduleExtOp.getLocation()));
+		if (sourceJar == null) {
+			return;
+		}
 
-				IPath projecLocation = projectFolder.append(SapphireUtil.getContent(moduleExtOp.getProjectName()));
+		ElementList<OverrideSourceEntry> overrideFiles = moduleExtOp.getOverrideFiles();
 
-				ElementList<OverrideSourceEntry> overrideFiles = moduleExtOp.getOverrideFiles();
+		Stream<OverrideSourceEntry> stream = overrideFiles.stream();
 
-				List<String> relativePaths = new ArrayList<>(overrideFiles.size());
+		List<String> relativePaths = stream.map(
+			element -> element.getValue()
+		).map(
+			_getter::get
+		).collect(
+			Collectors.toList()
+		);
 
-				overrideFiles.forEach(
-					entry -> {
-						relativePaths.add(SapphireUtil.getContent(entry.getValue()));
-					});
+		if (relativePaths.isEmpty()) {
+			return;
+		}
 
-				URI sourceJar = SapphireUtil.getContent(moduleExtOp.getSourceFileUri());
+		IPath projectFolder = PathBridge.create(_getter.get(moduleExtOp.getLocation()));
 
-				if ((sourceJar == null) || relativePaths.isEmpty()) {
-					return org.eclipse.core.runtime.Status.OK_STATUS;
-				}
+		IPath projecLocation = projectFolder.append(_getter.get(moduleExtOp.getProjectName()));
 
-				Path sourceFolder = Paths.get(projecLocation.toString(), "src/main/java/");
-				Path resourcesFolder = Paths.get(projecLocation.toString(), "src/main/resources/");
+		File sourceFolder = FileUtil.getFile(projecLocation.append("src/main/java/"));
 
-				try {
-					ZipUtil.unzip(
-						new File(sourceJar), sourceFolder.toFile(),
-						path -> {
+		try {
+			ZipUtil.unzip(
+				new File(sourceJar), sourceFolder,
+				path -> {
+					boolean containsPath = relativePaths.contains(path);
 
-							// choose the folder which the file should go
+					File file = null;
 
-							if (relativePaths.contains(path)) {
-								if (path.startsWith("com/")) {
-									return Pair.create(true, sourceFolder.toFile());
-								}
-								else {
-									return Pair.create(true, resourcesFolder.toFile());
-								}
-							}
-							else {
-								return Pair.create(false, null);
-							}
-						});
+					if (containsPath && path.startsWith("com/")) {
+						if (path.startsWith("com/")) {
+							file = sourceFolder;
+						}
+						else {
+							file = FileUtil.getFile(projecLocation.append("src/main/resources/"));
+						}
+					}
 
-					String projectName = SapphireUtil.getContent(moduleExtOp.getProjectName());
+					return Pair.create(containsPath, file);
+				});
+		}
+		catch (IOException ioe) {
+			ProjectCore.logError(ioe);
+		}
 
-					IProject project = CoreUtil.getProject(projectName);
+		String projectName = _getter.get(moduleExtOp.getProjectName());
 
-					project.refreshLocal(IResource.DEPTH_INFINITE, null);
-				}
-				catch (CoreException | IOException e) {
-					ProjectCore.logError(e);
-				}
+		IProject project = CoreUtil.getProject(projectName);
 
-				return org.eclipse.core.runtime.Status.OK_STATUS;
-			}
-
-		};
-
-		copyFilesJob.schedule();
+		try {
+			project.refreshLocal(IResource.DEPTH_INFINITE, null);
+		}
+		catch (CoreException ce) {
+		}
 	}
 
 	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};

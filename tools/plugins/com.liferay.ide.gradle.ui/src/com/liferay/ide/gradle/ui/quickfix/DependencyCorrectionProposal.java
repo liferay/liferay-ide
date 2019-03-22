@@ -50,9 +50,9 @@ public class DependencyCorrectionProposal extends CUCorrectionProposal {
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("compileOnly '");
-			sb.append(_artifact.getGroup());
+			sb.append(_artifact.getGroupId());
 			sb.append(":");
-			sb.append(_artifact.getArtifact());
+			sb.append(_artifact.getArtifactId());
 
 			IWorkspaceProject workspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 

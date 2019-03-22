@@ -14,21 +14,18 @@
 
 package com.liferay.ide.gradle.core;
 
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.MultimapBuilder;
-
 import com.liferay.ide.core.Artifact;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.WorkspaceConstants;
-import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 
 import java.io.IOException;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -45,6 +42,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 
 /**
  * @author Terry Jia
@@ -76,45 +74,47 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 	}
 
 	@Override
-	public ListMultimap<String, Artifact> getDependencies() {
-		ListMultimap<String, Artifact> multiMap = MultimapBuilder.hashKeys(
-		).arrayListValues(
-		).build();
-
+	public List<Artifact> getDependencies(String configuration) {
 		if (FileUtil.notExists(_gradleBuildFile)) {
-			return multiMap;
+			return Collections.emptyList();
 		}
+
+		GradleDependencyUpdater dependencyUpdater = null;
 
 		try {
-			GradleDependencyUpdater dependencyUpdater = new GradleDependencyUpdater(_gradleBuildFile);
-
-			ListMultimap<String, Artifact> dependencies = dependencyUpdater.getAllDependenciesWithConfiguration();
-
-			IJavaProject javaProject = JavaCore.create(getProject());
-
-			Stream.of(
-				javaProject.getResolvedClasspath(true)
-			).map(
-				GradleUtil::parseGradleDependency
-			).filter(
-				Objects::nonNull
-			).forEach(
-				artifactWithSourcePath -> {
-					for (Map.Entry<String, Artifact> entry : dependencies.entries()) {
-						Artifact artifactEntry = entry.getValue();
-
-						if (Objects.equals(artifactEntry.getArtifact(), artifactWithSourcePath.getArtifact())) {
-							multiMap.put(entry.getKey(), artifactWithSourcePath);
-						}
-					}
-				}
-			);
+			dependencyUpdater = new GradleDependencyUpdater(_gradleBuildFile);
 		}
-		catch (Exception e) {
-			LiferayGradleCore.logError(e);
+		catch (IOException ioe) {
 		}
 
-		return multiMap;
+		if (dependencyUpdater == null) {
+			return Collections.emptyList();
+		}
+
+		List<Artifact> dependencies = dependencyUpdater.getDependencies(configuration);
+
+		IJavaProject javaProject = JavaCore.create(getProject());
+
+		try {
+			for (Artifact artifact : dependencies) {
+				Stream.of(
+					javaProject.getResolvedClasspath(true)
+				).map(
+					CoreUtil::parseDependency
+				).filter(
+					Objects::nonNull
+				).filter(
+					artifactWithSourcePath -> Objects.equals(artifactWithSourcePath, artifact)
+				).findFirst(
+				).ifPresent(
+					artifactWithSourcePath -> artifact.setSource(artifactWithSourcePath.getSource())
+				);
+			}
+		}
+		catch (JavaModelException jme) {
+		}
+
+		return dependencies;
 	}
 
 	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) {
@@ -144,7 +144,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 	}
 
 	@Override
-	public IStatus updateProjectDependency(IProject project, List<String[]> dependencies) throws CoreException {
+	public IStatus updateDependencies(IProject project, List<Artifact> dependencies) throws CoreException {
 		if (FileUtil.notExists(_gradleBuildFile)) {
 			return Status.OK_STATUS;
 		}
@@ -152,13 +152,11 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 		try {
 			GradleDependencyUpdater updater = new GradleDependencyUpdater(FileUtil.getFile(_gradleBuildFile));
 
-			List<GradleDependency> existDependencies = updater.getAllDependencies();
+			List<Artifact> existDependencies = updater.getDependencies("*");
 
-			for (String[] dependency : dependencies) {
-				GradleDependency gd = new GradleDependency(dependency[0], dependency[1], dependency[2]);
-
-				if (!existDependencies.contains(gd)) {
-					updater.insertDependency(gd);
+			for (Artifact artifact : dependencies) {
+				if (!existDependencies.contains(artifact)) {
+					updater.insertDependency(artifact);
 
 					FileUtils.writeLines(FileUtil.getFile(_gradleBuildFile), updater.getGradleFileContents());
 

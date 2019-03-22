@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
@@ -97,7 +98,7 @@ public class SDKProjectBuilder extends AbstractProjectBuilder {
 	}
 
 	@Override
-	public IStatus updateProjectDependency(IProject project, List<String[]> dependency) throws CoreException {
+	public IStatus updateDependencies(IProject project, List<Artifact> dependencies) throws CoreException {
 		throw new CoreException(ProjectCore.createErrorStatus("Not implemented"));
 	}
 

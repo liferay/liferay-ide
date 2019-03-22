@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.templates.pollerprocessor;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -149,12 +150,12 @@ public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferay
 	}
 
 	@Override
-	protected List<String[]> getComponentDependency() throws CoreException {
-		List<String[]> componentDependency = super.getComponentDependency();
+	protected List<Artifact> getComponentDependencies() throws CoreException {
+		List<Artifact> dependencies = super.getComponentDependencies();
 
-		componentDependency.add(new String[] {"javax.portlet", "portlet-api", "2.0"});
+		dependencies.add(new Artifact("javax.portlet", "portlet-api", "2.0", "compileOnly", null));
 
-		return componentDependency;
+		return dependencies;
 	}
 
 	@Override

@@ -67,7 +67,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ltk.core.refactoring,
  biz.aQute.bndlib;bundle-version="[4,5)",
  org.eclipse.wst.xml.core,
- com.google.guava;bundle-version="[16.0.0,27.0.0]",
  org.eclipse.wst.ws
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

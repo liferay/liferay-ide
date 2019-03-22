@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.ext;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 
 import java.net.URI;
@@ -27,7 +28,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Charles Wu
  */
-public class OriginalModuleHintValidationService extends ValidationService {
+public class OriginalModuleHintValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
@@ -45,7 +46,7 @@ public class OriginalModuleHintValidationService extends ValidationService {
 	protected Status compute() {
 		NewModuleExtOp moduleExtOp = _op();
 
-		URI uri = SapphireUtil.getContent(moduleExtOp.getSourceFileUri());
+		URI uri = get(moduleExtOp.getSourceFileURI());
 
 		if (uri == null) {
 			if (moduleExtOp instanceof NewModuleExtFilesOp) {

@@ -55,7 +55,7 @@ public interface NewModuleExtOp extends BaseModuleOp {
 
 	public ElementList<OverrideSourceEntry> getOverrideFiles();
 
-	public Value<URI> getSourceFileUri();
+	public Value<URI> getSourceFileURI();
 
 	public Value<String> getTargetPlatformVersion();
 
@@ -63,7 +63,7 @@ public interface NewModuleExtOp extends BaseModuleOp {
 
 	public void setOriginalModuleVersion(Version value);
 
-	public void setSourceFileUri(URI value);
+	public void setSourceFileURI(URI value);
 
 	public void setTargetPlatformVersion(String value);
 
