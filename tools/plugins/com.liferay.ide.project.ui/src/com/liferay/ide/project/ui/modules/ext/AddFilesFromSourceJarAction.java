@@ -17,7 +17,6 @@ package com.liferay.ide.project.ui.modules.ext;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
 import com.liferay.ide.project.core.modules.ext.OverrideSourceEntry;
-import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.dialog.JarEntrySelectionDialog;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -61,7 +60,7 @@ public class AddFilesFromSourceJarAction extends SapphireActionHandler implement
 			try {
 				dialog.setInput(new ZipFile(new File(sourceFileURI)));
 			}
-			catch (IOException e) {
+			catch (IOException ioe) {
 				dialog.setMessage("Unable to get source files in current context.");
 			}
 		}
