@@ -64,22 +64,6 @@
 
 	<plugin
 		download-size="0"
-		id="minimal-json"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
-		id="minimatch.java"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
 		id="org.apache.commons.codec"
 		install-size="0"
 		unpack="false"
@@ -164,14 +148,6 @@
 		install-size="0"
 		unpack="false"
 		version="6.0.0.v20180414-0329"
-	/>
-
-	<plugin
-		download-size="0"
-		id="javax.websocket-api"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
 	/>
 
 </feature>

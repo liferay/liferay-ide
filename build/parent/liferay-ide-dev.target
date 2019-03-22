@@ -65,19 +65,6 @@
 <repository location="http://download.eclipse.org/webtools/downloads/drops/R3.6.3/R-3.6.3-20150216091848/repository/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="tern-server-nodejs-feature.feature.group" version="1.0.0.201508302102"/>
-<unit id="tern.eclipse.ide.server.nodejs.embed.feature.group" version="1.0.0.201508302102"/>
-<unit id="tern-feature.source.feature.group" version="1.0.0.201508302102"/>
-<unit id="tern-linters-feature.feature.group" version="1.0.0.201508302102"/>
-<unit id="tern-server-nodejs-feature.source.feature.group" version="1.0.0.201508302102"/>
-<unit id="tern.eclipse.ide.server.nodejs.embed.source.feature.group" version="1.0.0.201508302102"/>
-<unit id="tern-linters-feature.source.feature.group" version="1.0.0.201508302102"/>
-<unit id="tern-jsdt-feature.source.feature.group" version="1.0.0.201508302102"/>
-<unit id="tern-feature.feature.group" version="1.0.0.201508302102"/>
-<unit id="tern-jsdt-feature.feature.group" version="1.0.0.201508302102"/>
-<repository location="http://oss.opensagres.fr/tern.repository/1.0.0/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.ivyde.feature.feature.group" version="2.2.0.final-201311091524-RELEASE"/>
 <repository location="https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/"/>
 </location>

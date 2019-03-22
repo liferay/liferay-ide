@@ -3,9 +3,6 @@
     <feature id="com.liferay.ide.eclipse.tools" version="0.0.0">
         <category name="liferay-ide" />
     </feature>
-    <feature id="com.liferay.ide.alloy" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
     <feature id="com.liferay.ide.maven" version="0.0.0">
         <category name="liferay-ide" />
     </feature>

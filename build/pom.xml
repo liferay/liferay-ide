@@ -26,7 +26,6 @@
             </activation>
             <modules>
                 <module>../tools</module>
-                <module>../jsdt</module>
                 <module>../maven</module>
                 <module>../enterprise</module>
                 <module>com.liferay.ide-repository</module>
@@ -37,7 +36,6 @@
             <id>installers</id>
             <modules>
                 <module>../tools</module>
-                <module>../jsdt</module>
                 <module>../maven</module>
                 <module>../enterprise</module>
                 <module>com.liferay.ide-repository</module>
@@ -56,8 +54,6 @@
             <modules>
                 <module>../tools/plugins</module>
                 <module>../tools/features</module>
-                <module>../jsdt/plugins</module>
-                <module>../jsdt/features</module>
                 <module>../maven/plugins</module>
                 <module>../maven/features</module>
                 <module>../enterprise/plugins</module>

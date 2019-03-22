@@ -37,7 +37,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>com.liferay.ide.bndtools.core</module>
 		<module>com.liferay.ide.core</module>
 		<module>com.liferay.ide.gradle.core</module>
 		<module>com.liferay.ide.gradle.ui</module>

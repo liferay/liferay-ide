@@ -45,10 +45,6 @@
       <feature id="org.eclipse.wst.xml.search.core-feature" />
       <feature id="org.sonatype.m2e.mavenarchiver.feature" />
       <feature id="org.sonatype.tycho.m2e.feature" />
-      <feature id="tern-feature" />
-      <feature id="tern-jsdt-feature" />
-      <feature id="tern-server-nodejs-feature" />
-      <feature id="tern.eclipse.ide.server.nodejs.embed" />
       <feature id="org.eclipse.tm.terminal.connector.telnet.feature" />
       <feature id="org.eclipse.tm.terminal.control.feature" />
       <feature id="org.eclipse.tm.terminal.view.feature" />
