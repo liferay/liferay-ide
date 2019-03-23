@@ -181,13 +181,17 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 			}
 		}
 
-		if (!_parentComposite.isDisposed()) {
-			for (Control control : _parentComposite.getChildren()) {
-				if (!control.isDisposed()) {
-					control.dispose();
-				}
-			}
+		if (_parentComposite.isDisposed()) {
+			return;
 		}
+
+		Stream.of(
+			_parentComposite.getChildren()
+		).filter(
+			control -> !control.isDisposed()
+		).forEach(
+			control -> control.dispose()
+		);
 	}
 
 	@Override
