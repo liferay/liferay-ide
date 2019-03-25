@@ -84,7 +84,6 @@ to distribution rights of the Software.
    </plugins>
 
    <features>
-      <feature id="com.liferay.ide.alloy" installMode="root"/>
       <feature id="com.liferay.ide.eclipse.tools" installMode="root"/>
       <feature id="com.liferay.ide.enterprise" installMode="root"/>
       <feature id="com.liferay.ide.maven" installMode="root"/>

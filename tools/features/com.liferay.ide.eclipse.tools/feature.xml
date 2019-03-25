@@ -33,7 +33,7 @@
 	</license>
 
 	<requires>
-		<import feature="bndtools.main.feature" match="greaterOrEqual" version="3.4.0" />
+		<import feature="bndtools.main.feature" match="greaterOrEqual" version="4.2.0" />
 		<import feature="org.apache.ivy.feature" match="greaterOrEqual" version="2.3.0" />
 		<import feature="org.apache.ivyde.feature" match="greaterOrEqual" version="2.2.0" />
 		<import feature="org.eclipse.buildship" match="greaterOrEqual" version="2.1.1" />
@@ -232,14 +232,6 @@
 	<plugin
 		download-size="0"
 		id="com.liferay.ide.gradle.ui"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
-		id="com.liferay.ide.bndtools.core"
 		install-size="0"
 		unpack="false"
 		version="0.0.0"
