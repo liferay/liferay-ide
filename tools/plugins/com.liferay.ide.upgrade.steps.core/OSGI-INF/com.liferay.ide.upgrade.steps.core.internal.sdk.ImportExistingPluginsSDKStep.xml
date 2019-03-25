@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.core.internal.sdk.ImportExistingPluginsSDKStep">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" activate="activate" name="com.liferay.ide.upgrade.steps.core.internal.sdk.ImportExistingPluginsSDKStep">
    <property name="description" value="&lt;p&gt;Import your existing Plugins SDK 6.x directory into Eclipse so you can prepare those plugins for migration to Liferay Workspace. Your Plugins SDK folder will be viewable from the root level in the Project Explorer.&lt;br/&gt;&lt;br/&gt;If you already have your Plugins SDK 6.x directory open as a project in Eclipse, you can &lt;b&gt;Skip&lt;/b&gt; or mark this step as &lt;b&gt;Complete&lt;/b&gt;&lt;/p&gt;"/>
    <property name="id" value="import_existing_plugins_sdk"/>
    <property name="imagePath" value="icons/import.png"/>

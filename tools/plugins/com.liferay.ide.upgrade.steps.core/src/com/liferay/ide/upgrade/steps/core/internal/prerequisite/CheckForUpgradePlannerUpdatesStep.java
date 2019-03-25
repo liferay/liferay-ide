@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.steps.core.internal.prerequisite;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeStep;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 
@@ -22,7 +23,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
@@ -38,11 +42,19 @@ import org.osgi.service.component.annotations.ServiceScope;
 )
 public class CheckForUpgradePlannerUpdatesStep extends BaseUpgradeStep {
 
+	@Activate
+	public void activate(ComponentContext componentContext) {
+		super.activate(_upgradePlanner, componentContext);
+	}
+
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		setStatus(UpgradeStepStatus.COMPLETED);
 
 		return Status.OK_STATUS;
 	}
+
+	@Reference
+	private UpgradePlanner _upgradePlanner;
 
 }

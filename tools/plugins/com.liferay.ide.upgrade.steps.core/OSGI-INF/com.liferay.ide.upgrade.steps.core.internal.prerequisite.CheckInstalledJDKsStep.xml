@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.core.internal.prerequisite.CheckInstalledJDKsStep">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" activate="activate" name="com.liferay.ide.upgrade.steps.core.internal.prerequisite.CheckInstalledJDKsStep">
    <property name="description" value="To make sure you have a compatible JDK installed and configured, we need to perform a check on this Eclipse installation to make sure that &lt;ol&gt;&lt;li&gt;There is a JDK8 VM available&lt;/li&gt;&lt;li&gt;That JDK is set as the default.&lt;/li&gt;&lt;/ol&gt; Select &lt;b&gt;Click to perform&lt;/b&gt; to check for these requirements. If there is an error message, you must go to the Preferences &gt; Java &gt; Installed JREs menu and add a JRE entry that points to a JDK8 installation and set it as the default."/>
    <property name="id" value="check_installed_jdks"/>
    <property name="order" value="2"/>

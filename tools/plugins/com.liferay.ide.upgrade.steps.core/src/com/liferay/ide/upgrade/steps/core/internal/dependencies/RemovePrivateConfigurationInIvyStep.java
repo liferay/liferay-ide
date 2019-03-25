@@ -49,6 +49,8 @@ import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -68,6 +70,11 @@ import org.osgi.service.component.annotations.ServiceScope;
 )
 @SuppressWarnings("unchecked")
 public class RemovePrivateConfigurationInIvyStep extends BaseUpgradeStep implements WorkspaceSupport {
+
+	@Activate
+	public void activate(ComponentContext componentContext) {
+		super.activate(_upgradePlanner, componentContext);
+	}
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {

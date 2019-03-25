@@ -14,10 +14,14 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeStepCategory;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeStep;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepCategory;
 
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
@@ -27,5 +31,14 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = {"id=code", "imagePath=icons/category_code.png", "order=3", "title=Code Upgrade"},
 	scope = ServiceScope.PROTOTYPE, service = UpgradeStepCategory.class
 )
-public class CodeUpgradeCategory extends BaseUpgradeStepCategory {
+public class CodeUpgradeCategory extends BaseUpgradeStep implements UpgradeStepCategory {
+
+	@Activate
+	public void activate(ComponentContext componentContext) {
+		super.activate(_upgradePlanner, componentContext);
+	}
+
+	@Reference
+	private UpgradePlanner _upgradePlanner;
+
 }

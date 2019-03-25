@@ -24,7 +24,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
-import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -41,11 +40,17 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Terry Jia
@@ -65,15 +70,23 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 		IContentProvider contentProvider = _treeViewer.getContentProvider();
 
+		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanViewer.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+
+		_serviceTracker.open();
+
+		_upgradePlanner = _serviceTracker.getService();
+
+		_upgradePlanner.addListener(this);
+
 		if (contentProvider == null) {
 			return;
 		}
 
 		_treeContentProvider = Adapters.adapt(contentProvider, ITreeContentProvider.class);
-
-		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
-
-		upgradePlanner.addListener(this);
 	}
 
 	public void addPostSelectionChangedListener(ISelectionChangedListener selectionChangedListener) {
@@ -81,9 +94,9 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 	}
 
 	public void dispose() {
-		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
+		_upgradePlanner.removeListener(this);
 
-		upgradePlanner.removeListener(this);
+		_serviceTracker.close();
 	}
 
 	@Override
@@ -100,6 +113,8 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 		selectOptional.filter(
 			item -> item instanceof UpgradeStep
+		).filter(
+			_treeContentProvider::hasChildren
 		).ifPresent(
 			s -> {
 				_treeViewer.setExpandedState(s, !_treeViewer.getExpandedState(s));
@@ -132,7 +147,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 			return _treeViewer.getSelection();
 		}
 
-		return null;
+		return TreeSelection.EMPTY;
 	}
 
 	public Object[] getTreeExpansion() {
@@ -176,25 +191,16 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 					UpgradeStepStatus newStatus = statusEvent.getNewStatus();
 
-					ISelection selection = _treeViewer.getSelection();
+					UpgradeStep changeEventStep = statusEvent.getUpgradeStep();
 
-					IStructuredSelection structureSelection = (IStructuredSelection)selection;
+					StructuredSelection newSelection = new StructuredSelection(changeEventStep);
 
-					Object selectedObject = structureSelection.getFirstElement();
+					if (newStatus.equals(UpgradeStepStatus.COMPLETED) || newStatus.equals(UpgradeStepStatus.SKIPPED)) {
+						boolean hasChildren = _treeContentProvider.hasChildren(changeEventStep);
 
-					UpgradeStep upgradeStep = Adapters.adapt(selectedObject, UpgradeStep.class);
-
-					if (upgradeStep == null) {
-						return;
-					}
-
-					boolean hasChildren = _treeContentProvider.hasChildren(selectedObject);
-
-					if ((upgradeStep != null) && !hasChildren &&
-						(newStatus.equals(UpgradeStepStatus.COMPLETED) ||
-						 newStatus.equals(UpgradeStepStatus.SKIPPED))) {
-
-						_changeSelection(selection);
+						if ((changeEventStep != null) && !hasChildren) {
+							_changeSelection(newSelection);
+						}
 					}
 
 					refresh();
@@ -255,7 +261,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		}
 
 		return Stream.of(
-			_treeContentProvider.getChildren(parent)
+			children
 		).map(
 			childObject -> Adapters.adapt(childObject, UpgradeStep.class)
 		).filter(
@@ -266,7 +272,9 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		);
 	}
 
+	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 	private ITreeContentProvider _treeContentProvider;
 	private TreeViewer _treeViewer;
+	private final UpgradePlanner _upgradePlanner;
 
 }

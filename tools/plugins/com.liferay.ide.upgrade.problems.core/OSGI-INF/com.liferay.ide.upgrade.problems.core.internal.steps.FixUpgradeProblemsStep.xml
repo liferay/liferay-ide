@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.steps.FixUpgradeProblemsStep">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" activate="activate" name="com.liferay.ide.upgrade.problems.core.internal.steps.FixUpgradeProblemsStep">
    <property name="categoryId" value="code"/>
    <property name="description" value="&lt;p&gt;Now that you have your projects in your workspace, it is time to find and fix all of the known upgrade problems that you will encounter. The steps below will help you address each problem either automatically or provide the associated breaking change documentation with instructions on how to manually adapt your code.&lt;br/&gt;&lt;br/&gt;This task will not find all upgrade problems, but we plan to continue improving the detection and provide additional steps for new required upgrades. Please contact the Liferay Dev Tools team if your upgrade process identified additional problems that needed to be fixed; we can try to incorporate those steps in a future version of this planner.&lt;/p&gt;"/>
    <property name="id" value="fix_upgrade_problems"/>
@@ -9,5 +9,6 @@
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
    </service>
+   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
    <implementation class="com.liferay.ide.upgrade.problems.core.internal.steps.FixUpgradeProblemsStep"/>
 </scr:component>

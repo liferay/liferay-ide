@@ -16,13 +16,13 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
+import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
-import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.internal.steps.UpgradeStepViewer;
 
 import java.util.Objects;
@@ -43,14 +43,29 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Terry Jia
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class UpgradePlanView extends ViewPart implements ISelectionProvider {
+public class UpgradePlanView extends ViewPart implements ISelectionProvider, UpgradeListener {
 
 	public static final String ID = "com.liferay.ide.upgrade.plan.view";
+
+	public UpgradePlanView() {
+		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanView.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+
+		_serviceTracker.open();
+	}
 
 	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
@@ -70,18 +85,21 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 	public void dispose() {
 		super.dispose();
 
+		_upgradePlanner.removeListener(this);
+		_serviceTracker.close();
+
 		if (_upgradePlanViewer != null) {
 			_upgradePlanViewer.dispose();
 		}
 
-		if (_upgradePlanElementViewer != null) {
-			_upgradePlanElementViewer.dispose();
+		if (_upgradeStepViewer != null) {
+			_upgradeStepViewer.dispose();
 		}
 	}
 
 	@Override
 	public ISelection getSelection() {
-		return _upgradePlanElementViewer.getSelection();
+		return _upgradeStepViewer.getSelection();
 	}
 
 	public UpgradePlanViewer getUpgradePlanViewer() {
@@ -94,7 +112,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 		_memento = memento;
 
-		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
+		_upgradePlanner = _serviceTracker.getService();
 
 		Optional.ofNullable(
 			memento
@@ -104,11 +122,34 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 			Objects::nonNull
 		).ifPresent(
 			upgradePlanName -> {
-				UpgradePlan upgradePlan = upgradePlanner.loadUpgradePlan(upgradePlanName);
+				UpgradePlan upgradePlan = _upgradePlanner.loadUpgradePlan(upgradePlanName);
 
-				upgradePlanner.startUpgradePlan(upgradePlan);
+				_upgradePlanner.startUpgradePlan(upgradePlan);
 			}
 		);
+	}
+
+	@Override
+	public void onUpgradeEvent(UpgradeEvent upgradeEvent) {
+		if (upgradeEvent instanceof UpgradePlanStartedEvent) {
+			UpgradePlanStartedEvent upgradePlanStartedEvent = (UpgradePlanStartedEvent)upgradeEvent;
+
+			UpgradePlan upgradePlan = upgradePlanStartedEvent.getUpgradePlan();
+
+			if (upgradePlan != null) {
+				UIUtil.async(
+					() -> {
+						setContentDescription("Active upgrade plan: " + upgradePlan.getName());
+
+						if (_memento != null) {
+							_upgradePlanViewer.initTreeExpansion(_loadTreeExpansion());
+						}
+					});
+			}
+		}
+		else if (upgradeEvent instanceof UpgradeStepPerformedEvent) {
+			UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
+		}
 	}
 
 	@Override
@@ -125,11 +166,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 		if (upgradePlanViewerInput instanceof UpgradePlan) {
 			UpgradePlan upgradePlan = (UpgradePlan)upgradePlanViewerInput;
 
-			UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
-
 			_saveTreeExpansion(memento, _upgradePlanViewer.getTreeExpansion());
 
-			upgradePlanner.saveUpgradePlan(upgradePlan);
+			_upgradePlanner.saveUpgradePlan(upgradePlan);
 
 			memento.putString("activeUpgradePlanName", upgradePlan.getName());
 		}
@@ -141,7 +180,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 	@Override
 	public void setSelection(ISelection selection) {
-		_upgradePlanElementViewer.setSelection(selection);
+		_upgradeStepViewer.setSelection(selection);
 	}
 
 	private void _createPartControl(Composite parentComposite) {
@@ -153,44 +192,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 		_upgradePlanViewer.addPostSelectionChangedListener(this::_fireSelectionChanged);
 
-		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
+		_upgradeStepViewer = new UpgradeStepViewer(sashForm, _upgradePlanViewer);
 
-		upgradePlanner.addListener(
-			upgradeEvent -> {
-				if (upgradeEvent instanceof UpgradePlanStartedEvent) {
-					UpgradePlanStartedEvent upgradePlanStartedEvent = (UpgradePlanStartedEvent)upgradeEvent;
-
-					UpgradePlan upgradePlan = upgradePlanStartedEvent.getUpgradePlan();
-
-					if (upgradePlan != null) {
-						UIUtil.async(
-							() -> {
-								setContentDescription("Active upgrade plan: " + upgradePlan.getName());
-
-								if (_memento != null) {
-									_upgradePlanViewer.initTreeExpansion(_loadTreeExpansion());
-								}
-							});
-					}
-				}
-			});
-
-		upgradePlanner.addListener(
-			upgradeEvent -> {
-				if (upgradeEvent instanceof UpgradeStepPerformedEvent) {
-					UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
-				}
-				else if (upgradeEvent instanceof UpgradeStepStatusChangedEvent) {
-					UIUtil.sync(
-						() -> {
-							_upgradePlanViewer.refresh();
-						});
-				}
-			});
-
-		_upgradePlanElementViewer = new UpgradeStepViewer(sashForm, _upgradePlanViewer);
-
-		_upgradePlanElementViewer.addSelectionChangedListener(this::_fireSelectionChanged);
+		_upgradeStepViewer.addSelectionChangedListener(this::_fireSelectionChanged);
 
 		setContentDescription(
 			"No active upgrade plan. Use view menu 'New Upgrade Plan' action to start a new upgrade.");
@@ -236,7 +240,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider {
 
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private IMemento _memento;
-	private UpgradeStepViewer _upgradePlanElementViewer;
+	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
+	private UpgradePlanner _upgradePlanner;
 	private UpgradePlanViewer _upgradePlanViewer;
+	private UpgradeStepViewer _upgradeStepViewer;
 
 }

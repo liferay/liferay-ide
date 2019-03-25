@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.steps.FindUpgradeProblemsStep">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" activate="activate" name="com.liferay.ide.upgrade.problems.core.internal.steps.FindUpgradeProblemsStep">
    <property name="description" value="&lt;p&gt;Perform this action to find upgrade problems in Java, JSP, XML, and properties in your workspace. For each problem that is found, a marker will indicate the source file location that requires an upgrade. These markers will be displayed in the following locations:&lt;ul&gt;&lt;li&gt;Project Explorer &gt; Liferay Upgrade Problems node&lt;/li&gt;&lt;li&gt;In each source file as a marker annotation (sidebar gutter or underlined)&lt;/li&gt;&lt;li&gt;Markers view under the heading &lt;b&gt;Liferay Upgrade Problem&lt;/b&gt;&lt;/li&gt;&lt;/ul&gt;When you select an upgrade problem, you can see relevant documentation on how to fix the problem in the &lt;b&gt;Liferay Upgrade Plan Info View&lt;/b&gt;.&lt;/p&gt;"/>
    <property name="id" value="find_upgrade_problems"/>
    <property name="imagePath" value="icons/find_upgrade_problems.gif"/>
@@ -10,5 +10,6 @@
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
    </service>
+   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
    <implementation class="com.liferay.ide.upgrade.problems.core.internal.steps.FindUpgradeProblemsStep"/>
 </scr:component>

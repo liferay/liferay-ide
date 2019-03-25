@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.ui.internal.sdk.ConvertPluginsSDKProjectsToModulesStep">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" activate="activate" name="com.liferay.ide.upgrade.steps.ui.internal.sdk.ConvertPluginsSDKProjectsToModulesStep">
    <property name="description" value="&lt;p&gt;Now that you have selected which plugins you need to migrate, you should now choose which projects you plan to convert to modules. There are many things to consider when planning this step. You are required to convert some plugins to modules such as custom JSPs or EXT plugins. Also, it is highly recommended to convert some plugins to modules to take advantage of the new modular framework in Liferay (e.g., Service Builder portlets).&lt;br/&gt;&lt;br/&gt;Select &lt;b&gt;Click to perform&lt;/b&gt; to select the projects you wish to convert. The Upgrade Planner will convert each of them to a Gradle module that lives inside either the &lt;b&gt;modules&lt;/b&gt; or &lt;b&gt;wars&lt;/b&gt; directory of your workspace, depending on the type of plugin you are converting.&lt;br/&gt;&lt;br/&gt;&lt;/p&gt;"/>
    <property name="id" value="convert_plugins_sdk_projects_to_modules"/>
    <property name="imagePath" value="icons/export.png"/>

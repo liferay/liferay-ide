@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal.steps;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
@@ -22,7 +23,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
-import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 
@@ -40,6 +40,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -53,9 +54,15 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePlanAcessor {
 
@@ -64,29 +71,44 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 		_scrolledForm = scrolledForm;
 		_upgradeStep = getStep(upgradeStepId);
 
-		Composite parentComposite = _scrolledForm.getBody();
+		_parentComposite = _scrolledForm.getBody();
 
 		GridDataFactory gridDataFactory = GridDataFactory.fillDefaults();
 
 		gridDataFactory.grab(true, true);
 
-		parentComposite.setLayoutData(gridDataFactory.create());
+		_parentComposite.setLayoutData(gridDataFactory.create());
 
-		_disposables.add(() -> parentComposite.dispose());
+		_parentComposite.setLayout(new TableWrapLayout());
 
-		parentComposite.setLayout(new TableWrapLayout());
+		Bundle bundle = FrameworkUtil.getBundle(UpgradeStepItem.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+
+		_serviceTracker.open();
+
+		_upgradePlanner = _serviceTracker.getService();
+
+		_upgradePlanner.addListener(this);
 
 		if (_upgradeStep == null) {
 			return;
 		}
 
-		FormText description = _formToolkit.createFormText(parentComposite, true);
+		FormText description = _formToolkit.createFormText(_parentComposite, true);
 
-		description.setText(_upgradeStep.getDescription(), true, false);
+		if (CoreUtil.isNotNullOrEmpty(_upgradeStep.getDescription())) {
+			description.setText(_upgradeStep.getDescription(), true, false);
+		}
+		else {
+			description.setText("", true, false);
+		}
 
 		_disposables.add(() -> description.dispose());
 
-		_buttonComposite = _formToolkit.createComposite(parentComposite);
+		_buttonComposite = _formToolkit.createComposite(_parentComposite);
 
 		GridLayout buttonGridLayout = new GridLayout(2, false);
 
@@ -97,8 +119,6 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 		_buttonComposite.setLayout(buttonGridLayout);
 
 		_buttonComposite.setLayoutData(new TableWrapData(TableWrapData.FILL));
-
-		_disposables.add(() -> _buttonComposite.dispose());
 
 		List<UpgradeStep> children = Stream.of(
 			_upgradeStep.getChildIds()
@@ -130,9 +150,9 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 			_disposables.add(() -> completeImageHyperlink.dispose());
 
 			_enables.add(completeImageHyperlink);
-
-			_fill(formToolkit, _buttonComposite, _disposables);
 		}
+
+		_fill(formToolkit, _buttonComposite, _disposables);
 
 		Image stepRestartImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.STEP_RESTART_IMAGE);
 
@@ -154,10 +174,6 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 
 		_enables.add(skipImageHyperlink);
 
-		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
-
-		_upgradePlanner.addListener(this);
-
 		_updateEnablement(_upgradeStep, _enables);
 	}
 
@@ -168,6 +184,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 
 	public void dispose() {
 		_upgradePlanner.removeListener(this);
+		_serviceTracker.close();
 
 		for (Disposable disposable : _disposables) {
 			try {
@@ -176,11 +193,23 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 			catch (Throwable t) {
 			}
 		}
+
+		if (_parentComposite.isDisposed()) {
+			return;
+		}
+
+		Stream.of(
+			_parentComposite.getChildren()
+		).filter(
+			control -> !control.isDisposed()
+		).forEach(
+			control -> control.dispose()
+		);
 	}
 
 	@Override
 	public ISelection getSelection() {
-		return null;
+		return TreeSelection.EMPTY;
 	}
 
 	@Override
@@ -188,10 +217,14 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 		if (upgradeEvent instanceof UpgradeStepStatusChangedEvent) {
 			UpgradeStepStatusChangedEvent upgradeStepStatusChangedEvent = (UpgradeStepStatusChangedEvent)upgradeEvent;
 
-			UpgradeStep upgradeStep = upgradeStepStatusChangedEvent.getUpgradeStep();
+			UpgradeStepStatus newStatus = upgradeStepStatusChangedEvent.getNewStatus();
 
-			if (upgradeStep.equals(_upgradeStep)) {
-				UIUtil.async(() -> _updateEnablement(_upgradeStep, _enables));
+			if (newStatus.equals(UpgradeStepStatus.FAILED) || newStatus.equals(UpgradeStepStatus.INCOMPLETE)) {
+				UpgradeStep upgradeStep = upgradeStepStatusChangedEvent.getUpgradeStep();
+
+				if (upgradeStep.equals(_upgradeStep)) {
+					UIUtil.async(() -> _updateEnablement(_upgradeStep, _enables));
+				}
 			}
 		}
 	}
@@ -260,7 +293,9 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 	private List<Control> _enables = new ArrayList<>();
 	private FormToolkit _formToolkit;
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
+	private Composite _parentComposite;
 	private ScrolledForm _scrolledForm;
+	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 	private UpgradePlanner _upgradePlanner;
 	private final UpgradeStep _upgradeStep;
 

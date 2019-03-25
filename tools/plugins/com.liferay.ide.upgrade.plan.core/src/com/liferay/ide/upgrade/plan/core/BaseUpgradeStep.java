@@ -14,8 +14,10 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.stream.Stream;
@@ -24,7 +26,6 @@ import org.eclipse.core.runtime.Adapters;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
 
 /**
  * @author Gregory Amerson
@@ -33,8 +34,9 @@ import org.osgi.service.component.annotations.Activate;
  */
 public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor {
 
-	@Activate
-	public void activate(ComponentContext componentContext) {
+	public void activate(UpgradePlanner upgradePlanner, ComponentContext componentContext) {
+		_upgradePlanner = upgradePlanner;
+
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
 		_description = getStringProperty(properties, "description");
@@ -45,8 +47,6 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 		_url = getStringProperty(properties, "url");
 		_requirement = getStringProperty(properties, "requirement", "Optional");
 		_categoryId = getStringProperty(properties, "categoryId");
-
-		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
 
 		if (_description == null) {
 			_description = _title;
@@ -61,11 +61,12 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 
 	@Override
 	public boolean completed() {
-		if (_childIds.length != 0) {
+		if (ListUtil.isNotEmpty(_childIds)) {
 			for (String childId : _childIds) {
-				UpgradeStep child = ServicesLookup.getSingleService(UpgradeStep.class, "(id=" + childId + ")");
+				UpgradeStep childUpgradeStep = ServicesLookup.getSingleService(
+					UpgradeStep.class, "(id=" + childId + ")");
 
-				if (!child.completed()) {
+				if (!childUpgradeStep.completed()) {
 					return false;
 				}
 			}
@@ -86,13 +87,13 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 			return true;
 		}
 
-		UpgradeStep parent = getStep(_parentId);
+		UpgradeStep parentStep = getStep(_parentId);
 
-		if (parent == null) {
+		if (parentStep == null) {
 			return true;
 		}
 
-		String[] siblingIds = parent.getChildIds();
+		String[] siblingIds = parentStep.getChildIds();
 
 		long count = Stream.of(
 			siblingIds
@@ -104,7 +105,7 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 			this::_isRequiredIncompleted
 		).count();
 
-		if ((count == 0) && parent.enabled()) {
+		if ((count == 0) && parentStep.enabled()) {
 			return true;
 		}
 
@@ -124,9 +125,12 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 		}
 
 		if (isEqualIgnoreCase(_description, baseUpgradeStep._description) &&
-			isEqualIgnoreCase(_id, baseUpgradeStep._id) && isEqualIgnoreCase(_imagePath, baseUpgradeStep._imagePath) &&
-			(_order == baseUpgradeStep._order) && isEqualIgnoreCase(_title, baseUpgradeStep._title) &&
-			_status.equals(baseUpgradeStep._status)) {
+			isEqualIgnoreCase(_categoryId, baseUpgradeStep._categoryId) &&
+			isEqualIgnoreCase(_requirement, baseUpgradeStep._requirement) &&
+			isEqualIgnoreCase(_parentId, baseUpgradeStep._parentId) && isEqualIgnoreCase(_url, baseUpgradeStep._url) &&
+			isEqual(_childIds, baseUpgradeStep._childIds) && isEqualIgnoreCase(_id, baseUpgradeStep._id) &&
+			isEqualIgnoreCase(_imagePath, baseUpgradeStep._imagePath) && (_order == baseUpgradeStep._order) &&
+			isEqualIgnoreCase(_title, baseUpgradeStep._title) && _status.equals(baseUpgradeStep._status)) {
 
 			return true;
 		}
@@ -199,6 +203,11 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 
 		hash = 31 * hash + orderDouble.hashCode();
 		hash = 31 * hash + (_description != null ? _description.hashCode() : 0);
+		hash = 31 * hash + (_categoryId != null ? _categoryId.hashCode() : 0);
+		hash = 31 * hash + (_childIds != null ? Arrays.hashCode(_childIds) : 0);
+		hash = 31 * hash + (_parentId != null ? _parentId.hashCode() : 0);
+		hash = 31 * hash + (_requirement != null ? _requirement.hashCode() : 0);
+		hash = 31 * hash + (_url != null ? _url.hashCode() : 0);
 		hash = 31 * hash + (_imagePath != null ? _imagePath.hashCode() : 0);
 		hash = 31 * hash + (_title != null ? _title.hashCode() : 0);
 		hash = 31 * hash + (_id != null ? _id.hashCode() : 0);
@@ -230,6 +239,12 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 	}
 
 	private void _lookupChildIds(ComponentContext componentContext) {
+		if (_upgradePlanner == null) {
+			_childIds = new String[0];
+
+			return;
+		}
+
 		BundleContext bundleContext = componentContext.getBundleContext();
 
 		String id = getId();
@@ -237,16 +252,10 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 		List<UpgradeStep> children = ServicesLookup.getOrderedServices(
 			bundleContext, UpgradeStep.class, "(parentId=" + id + ")");
 
-		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
-
-		if (upgradePlanner == null) {
-			return;
-		}
-
 		Stream<UpgradeStep> stream = children.stream();
 
 		_childIds = stream.filter(
-			child -> child.appliesTo(upgradePlanner.getCurrentUpgradePlan())
+			child -> child.appliesTo(_upgradePlanner.getCurrentUpgradePlan())
 		).map(
 			child -> child.getId()
 		).toArray(

@@ -19,7 +19,6 @@ import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepCategoryElement;
-import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.nio.file.Paths;
 
@@ -32,6 +31,11 @@ import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Terry Jia
  * @author Gregory Amerson
@@ -40,7 +44,16 @@ import org.eclipse.sapphire.modeling.Status;
 public class NewUpgradePlanOpMethods {
 
 	public static final Status execute(NewUpgradePlanOp newUpgradePlanOp, ProgressMonitor progressMonitor) {
-		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
+		Bundle bundle = FrameworkUtil.getBundle(NewUpgradePlanOpMethods.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		ServiceTracker<UpgradePlanner, UpgradePlanner> serviceTracker = new ServiceTracker<>(
+			bundleContext, UpgradePlanner.class, null);
+
+		serviceTracker.open();
+
+		UpgradePlanner upgradePlanner = serviceTracker.getService();
 
 		if (upgradePlanner == null) {
 			return Status.createErrorStatus("Could not get UpgradePlanner service");

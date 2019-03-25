@@ -15,6 +15,11 @@
 package com.liferay.ide.upgrade.steps.core.internal.prerequisite;
 
 import com.liferay.ide.upgrade.plan.core.BaseUpgradeStep;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Gregory Amerson
@@ -25,4 +30,13 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeStep;
  * )
  */
 public class InstallPrerequisitesStep extends BaseUpgradeStep {
+
+	@Activate
+	public void activate(ComponentContext componentContext) {
+		super.activate(_upgradePlanner, componentContext);
+	}
+
+	@Reference
+	private UpgradePlanner _upgradePlanner;
+
 }

@@ -18,4 +18,9 @@ package com.liferay.ide.upgrade.plan.core;
  * @author Gregory Amerson
  */
 public interface UpgradeStepCategory extends UpgradeStep {
+
+	public default String getUrl() {
+		return null;
+	}
+
 }
