@@ -17,7 +17,11 @@ package com.liferay.ide.project.core.modules.ext;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
 
+import java.net.URI;
+
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
@@ -25,7 +29,9 @@ import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
+import org.eclipse.sapphire.modeling.annotations.Derived;
 import org.eclipse.sapphire.modeling.annotations.Enablement;
+import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
@@ -47,17 +53,29 @@ public interface NewModuleExtOp extends BaseModuleOp {
 
 	public Value<Version> getOriginalModuleVersion();
 
+	public ElementList<OverrideSourceEntry> getOverrideFiles();
+
+	public Value<URI> getSourceFileURI();
+
 	public Value<String> getTargetPlatformVersion();
 
 	public void setOriginalModuleName(String value);
 
 	public void setOriginalModuleVersion(Version value);
 
+	public void setSourceFileURI(URI value);
+
 	public void setTargetPlatformVersion(String value);
 
 	@Service(impl = CommonProjectLocationInitialValueService.class)
 	@Service(impl = ModuleExtProjectLocationValidationService.class)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_LOCATION);
+
+	@Derived
+	@Label(standard = "Original Module")
+	@Service(impl = OriginalModuleHintDefaultValueService.class)
+	@Service(impl = OriginalModuleHintValidationService.class)
+	public ValueProperty PROP_ORIGINAL_MODULE_HINT = new ValueProperty(TYPE, "OriginalModuleHint");
 
 	@Required
 	public ValueProperty PROP_ORIGINAL_MODULE_NAME = new ValueProperty(TYPE, "OriginalModuleName");
@@ -67,12 +85,19 @@ public interface NewModuleExtOp extends BaseModuleOp {
 	@Type(base = Version.class)
 	public ValueProperty PROP_ORIGINAL_MODULE_VERSION = new ValueProperty(TYPE, "OriginalModuleVersion");
 
+	@Label(standard = "Overridden files")
+	@Type(base = OverrideSourceEntry.class)
+	public ListProperty PROP_OVERRIDE_FILES = new ListProperty(TYPE, "OverrideFiles");
+
 	@Listeners(ModuleExtProjectNameListener.class)
 	@Service(impl = ModuleExtProjectNameValidationService.class)
 	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_NAME);
 
 	@DefaultValue(text = "gradle-module-ext")
 	public ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_PROVIDER);
+
+	@Type(base = URI.class)
+	public ValueProperty PROP_SOURCE_FILE_URI = new ValueProperty(TYPE, "SourceFileUri");
 
 	@Service(impl = TargetPlatformVersionDefaultValueService.class)
 	@Type(base = String.class)

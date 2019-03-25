@@ -136,7 +136,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 						_targetPlatformArtifacts.add(
 							new Artifact(
 								gradleModuleVersion.getGroup(), gradleModuleVersion.getName(),
-								gradleModuleVersion.getVersion(), eclipseExternalDependency.getSource()));
+								gradleModuleVersion.getVersion(), "classpath", eclipseExternalDependency.getSource()));
 					}
 				}
 			}

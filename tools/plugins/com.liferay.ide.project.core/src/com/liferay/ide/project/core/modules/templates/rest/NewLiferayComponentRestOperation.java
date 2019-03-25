@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.templates.rest;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
 import com.liferay.ide.project.core.modules.templates.BndProperties;
 import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
@@ -33,12 +34,12 @@ public class NewLiferayComponentRestOperation extends AbstractLiferayComponentTe
 	}
 
 	@Override
-	protected List<String[]> getComponentDependency() throws CoreException {
-		List<String[]> componentDependency = super.getComponentDependency();
+	protected List<Artifact> getComponentDependencies() throws CoreException {
+		List<Artifact> dependencies = super.getComponentDependencies();
 
-		componentDependency.add(new String[] {"javax.ws.rs", "javax.ws.rs-api", "2.0.1"});
+		dependencies.add(new Artifact("javax.ws.rs", "javax.ws.rs-api", "2.0.1", "compileOnly", null));
 
-		return componentDependency;
+		return dependencies;
 	}
 
 	@Override

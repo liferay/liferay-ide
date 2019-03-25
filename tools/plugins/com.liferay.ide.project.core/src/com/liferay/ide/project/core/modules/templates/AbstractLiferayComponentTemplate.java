@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.templates;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -167,7 +168,7 @@ public abstract class AbstractLiferayComponentTemplate
 
 			doMergeBndOperation();
 
-			doMergeDependencyOperation();
+			doMergeDependenciesOperation();
 
 			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		}
@@ -301,10 +302,10 @@ public abstract class AbstractLiferayComponentTemplate
 		}
 	}
 
-	protected void doMergeDependencyOperation() throws CoreException {
+	protected void doMergeDependenciesOperation() throws CoreException {
 		IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);
 
-		builder.updateProjectDependency(project, getComponentDependency());
+		builder.updateDependencies(project, getComponentDependencies());
 	}
 
 	protected void doMergeResourcesOperation() throws CoreException {
@@ -344,14 +345,14 @@ public abstract class AbstractLiferayComponentTemplate
 		return bndProperty.getPropertyValue("Bundle-SymbolicName");
 	}
 
-	protected List<String[]> getComponentDependency() throws CoreException {
-		List<String[]> dependencyList = new ArrayList<>();
+	protected List<Artifact> getComponentDependencies() throws CoreException {
+		List<Artifact> dependencies = new ArrayList<>();
 
-		for (String[] dependency : _DEPENDENCY) {
-			dependencyList.add(dependency);
-		}
+		dependencies.add(new Artifact("com.liferay.portal", "com.liferay.portal.kernel", "2.0.0", "compileOnly", null));
+		dependencies.add(
+			new Artifact("org.osgi", "org.osgi.service.component.annotations", "1.3.0", "compileOnly", null));
 
-		return dependencyList;
+		return dependencies;
 	}
 
 	protected String getExtensionClass() {
@@ -549,10 +550,5 @@ public abstract class AbstractLiferayComponentTemplate
 	protected String simpleModelClass;
 	protected File[] sourceTemplateFiles;
 	protected String templateName;
-
-	private static final String[][] _DEPENDENCY = {
-		{"com.liferay.portal", "com.liferay.portal.kernel", "2.0.0"},
-		{"org.osgi", "org.osgi.service.component.annotations", "1.3.0"}
-	};
 
 }

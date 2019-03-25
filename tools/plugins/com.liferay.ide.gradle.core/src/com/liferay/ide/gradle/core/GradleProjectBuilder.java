@@ -14,16 +14,20 @@
 
 package com.liferay.ide.gradle.core;
 
+import com.liferay.ide.core.Artifact;
+import com.liferay.ide.core.ArtifactBuilder;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.WorkspaceConstants;
-import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 
 import java.io.IOException;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -36,11 +40,14 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 
 /**
  * @author Terry Jia
  */
-public class GradleProjectBuilder extends AbstractProjectBuilder implements IWorkspaceProjectBuilder {
+public class GradleProjectBuilder extends AbstractProjectBuilder implements ArtifactBuilder, IWorkspaceProjectBuilder {
 
 	public GradleProjectBuilder(IProject project) {
 		super(project);
@@ -64,6 +71,50 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 		// TODO Waiting for IDE-2850
 
 		return null;
+	}
+
+	@Override
+	public List<Artifact> getDependencies(String configuration) {
+		if (FileUtil.notExists(_gradleBuildFile)) {
+			return Collections.emptyList();
+		}
+
+		GradleDependencyUpdater dependencyUpdater = null;
+
+		try {
+			dependencyUpdater = new GradleDependencyUpdater(_gradleBuildFile);
+		}
+		catch (IOException ioe) {
+		}
+
+		if (dependencyUpdater == null) {
+			return Collections.emptyList();
+		}
+
+		List<Artifact> dependencies = dependencyUpdater.getDependencies(configuration);
+
+		IJavaProject javaProject = JavaCore.create(getProject());
+
+		try {
+			for (Artifact artifact : dependencies) {
+				Stream.of(
+					javaProject.getResolvedClasspath(true)
+				).map(
+					this::classpathEntryToArtifact
+				).filter(
+					Objects::nonNull
+				).filter(
+					artifactWithSourcePath -> Objects.equals(artifactWithSourcePath, artifact)
+				).findFirst(
+				).ifPresent(
+					artifactWithSourcePath -> artifact.setSource(artifactWithSourcePath.getSource())
+				);
+			}
+		}
+		catch (JavaModelException jme) {
+		}
+
+		return dependencies;
 	}
 
 	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) {
@@ -93,7 +144,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 	}
 
 	@Override
-	public IStatus updateProjectDependency(IProject project, List<String[]> dependencies) throws CoreException {
+	public IStatus updateDependencies(IProject project, List<Artifact> dependencies) throws CoreException {
 		if (FileUtil.notExists(_gradleBuildFile)) {
 			return Status.OK_STATUS;
 		}
@@ -101,13 +152,11 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 		try {
 			GradleDependencyUpdater updater = new GradleDependencyUpdater(FileUtil.getFile(_gradleBuildFile));
 
-			List<GradleDependency> existDependencies = updater.getAllDependencies();
+			List<Artifact> existDependencies = updater.getDependencies("*");
 
-			for (String[] dependency : dependencies) {
-				GradleDependency gd = new GradleDependency(dependency[0], dependency[1], dependency[2]);
-
-				if (!existDependencies.contains(gd)) {
-					updater.insertDependency(gd);
+			for (Artifact artifact : dependencies) {
+				if (!existDependencies.contains(artifact)) {
+					updater.insertDependency(artifact);
 
 					FileUtils.writeLines(FileUtil.getFile(_gradleBuildFile), updater.getGradleFileContents());
 

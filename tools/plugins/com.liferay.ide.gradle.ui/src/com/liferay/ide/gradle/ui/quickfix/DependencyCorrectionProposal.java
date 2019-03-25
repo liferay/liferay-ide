@@ -14,10 +14,10 @@
 
 package com.liferay.ide.gradle.ui.quickfix;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
-import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -35,12 +35,10 @@ import org.eclipse.jface.text.IDocument;
  */
 public class DependencyCorrectionProposal extends CUCorrectionProposal {
 
-	public DependencyCorrectionProposal(
-		String name, ICompilationUnit compiletionUnit, GradleDependency gradleDependency, IFile file) {
-
+	public DependencyCorrectionProposal(String name, ICompilationUnit compiletionUnit, Artifact artifact, IFile file) {
 		super(name, compiletionUnit, 30, ProjectUI.getPluginImageRegistry().get(ProjectUI.LIFERAY_LOGO_IMAGE_ID));
 
-		_gradleDependency = gradleDependency;
+		_artifact = artifact;
 		_gradleFile = file;
 	}
 
@@ -52,15 +50,15 @@ public class DependencyCorrectionProposal extends CUCorrectionProposal {
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("compileOnly '");
-			sb.append(_gradleDependency.getGroup());
+			sb.append(_artifact.getGroupId());
 			sb.append(":");
-			sb.append(_gradleDependency.getName());
+			sb.append(_artifact.getArtifactId());
 
 			IWorkspaceProject workspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
 			if (workspaceProject.getTargetPlatformVersion() == null) {
 				sb.append(":");
-				sb.append(_gradleDependency.getVersion());
+				sb.append(_artifact.getVersion());
 			}
 
 			sb.append("'");
@@ -88,11 +86,11 @@ public class DependencyCorrectionProposal extends CUCorrectionProposal {
 
 		DependencyCorrectionProposal otherDependencyCorrectionProposal = (DependencyCorrectionProposal)obj;
 
-		if ((_gradleDependency == null) || (otherDependencyCorrectionProposal._gradleDependency == null)) {
+		if ((_artifact == null) || (otherDependencyCorrectionProposal._artifact == null)) {
 			return false;
 		}
 
-		if (!_gradleDependency.equals(otherDependencyCorrectionProposal._gradleDependency)) {
+		if (!_artifact.equals(otherDependencyCorrectionProposal._artifact)) {
 			return false;
 		}
 
@@ -108,12 +106,12 @@ public class DependencyCorrectionProposal extends CUCorrectionProposal {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((_gradleDependency == null) ? 0 : _gradleDependency.hashCode());
+		result = prime * result + ((_artifact == null) ? 0 : _artifact.hashCode());
 
 		return result;
 	}
 
-	private final GradleDependency _gradleDependency;
+	private final Artifact _artifact;
 	private final IFile _gradleFile;
 
 }

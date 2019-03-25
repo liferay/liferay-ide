@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.blade.util;
+package com.liferay.ide.core.util;
 
 /**
  * @author Alberto Chaparro

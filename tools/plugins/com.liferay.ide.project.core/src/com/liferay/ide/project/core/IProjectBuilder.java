@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.Artifact;
+
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -24,6 +26,7 @@ import org.eclipse.core.runtime.IStatus;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public interface IProjectBuilder {
 
@@ -33,6 +36,8 @@ public interface IProjectBuilder {
 
 	public IStatus buildWSDD(IProgressMonitor monitor) throws CoreException;
 
-	public IStatus updateProjectDependency(IProject project, List<String[]> dependecies) throws CoreException;
+	public List<Artifact> getDependencies(String configration);
+
+	public IStatus updateDependencies(IProject project, List<Artifact> dependencies) throws CoreException;
 
 }

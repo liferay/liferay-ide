@@ -17,6 +17,8 @@ package com.liferay.ide.project.ui.modules.ext;
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
 
+import java.io.File;
+
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.forms.BrowseActionHandler;
@@ -36,24 +38,30 @@ public final class ModuleExtArtifactsBrowseActionHandler extends BrowseActionHan
 	}
 
 	@Override
-	protected String browse(final Presentation presentation) {
+	protected String browse(Presentation presentation) {
 		Value<?> property = property();
 
 		NewModuleExtOp newModuleExtOp = property.nearest(NewModuleExtOp.class);
 
-		final ModuleExtBrowseDialog moduleExtBrowseDialog = new ModuleExtBrowseDialog(
+		ModuleExtBrowseDialog moduleExtBrowseDialog = new ModuleExtBrowseDialog(
 			((FormComponentPresentation)presentation).shell(), property);
 
 		moduleExtBrowseDialog.open();
 
-		final Object[] result = moduleExtBrowseDialog.getResult();
+		Object[] result = moduleExtBrowseDialog.getResult();
 
 		if ((result != null) && (result.length == 1)) {
 			Artifact artifact = (Artifact)result[0];
 
-			newModuleExtOp.setOriginalModuleVersion(new Version(artifact.getVersion()));
+			Version version = new Version(artifact.getVersion());
 
-			return artifact.getArtifact();
+			newModuleExtOp.setOriginalModuleVersion(version);
+
+			File source = artifact.getSource();
+
+			newModuleExtOp.setSourceFileURI(source.toURI());
+
+			return artifact.getArtifactId();
 		}
 
 		return null;

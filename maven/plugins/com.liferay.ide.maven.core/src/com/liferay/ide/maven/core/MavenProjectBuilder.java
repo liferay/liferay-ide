@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -394,7 +395,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 	}
 
 	@Override
-	public IStatus updateProjectDependency(IProject project, List<String[]> dependencies) throws CoreException {
+	public IStatus updateDependencies(IProject project, List<Artifact> dependencies) throws CoreException {
 		IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade(project, new NullProgressMonitor());
 
 		if (projectFacade != null) {
@@ -408,14 +409,14 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
 			Model model = maven.readModel(pomFile);
 
-			for (String[] dependency : dependencies) {
-				Dependency de = new Dependency();
+			for (Artifact artifact : dependencies) {
+				Dependency dependency = new Dependency();
 
-				de.setGroupId(dependency[0]);
-				de.setArtifactId(dependency[1]);
-				de.setVersion(dependency[2]);
+				dependency.setGroupId(artifact.getGroupId());
+				dependency.setArtifactId(artifact.getArtifactId());
+				dependency.setVersion(artifact.getVersion());
 
-				String newKey = de.getManagementKey();
+				String newKey = dependency.getManagementKey();
 
 				boolean existed = false;
 
@@ -430,7 +431,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 				}
 
 				if (!existed && (model != null)) {
-					model.addDependency(de);
+					model.addDependency(dependency);
 				}
 			}
 

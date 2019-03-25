@@ -14,8 +14,12 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -30,6 +34,11 @@ public abstract class AbstractProjectBuilder implements IProjectBuilder {
 
 	public AbstractProjectBuilder(IProject project) {
 		_project = project;
+	}
+
+	@Override
+	public List<Artifact> getDependencies(String configuration) {
+		return Collections.emptyList();
 	}
 
 	public IProject getProject() {

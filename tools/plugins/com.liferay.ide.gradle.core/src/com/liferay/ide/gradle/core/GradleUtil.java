@@ -14,10 +14,10 @@
 
 package com.liferay.ide.gradle.core;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 
 import java.io.IOException;
@@ -174,11 +174,11 @@ public class GradleUtil {
 		try {
 			GradleDependencyUpdater updater = new GradleDependencyUpdater(buildFile);
 
-			List<GradleDependency> dependencies = updater.getAllBuildDependencies();
+			List<Artifact> dependencies = updater.getDependencies("classpath");
 
-			for (GradleDependency dependency : dependencies) {
-				String group = dependency.getGroup();
-				String name = dependency.getName();
+			for (Artifact dependency : dependencies) {
+				String group = dependency.getGroupId();
+				String name = dependency.getArtifactId();
 				Version version = new Version("0");
 				String dependencyVersion = dependency.getVersion();
 

@@ -14,9 +14,10 @@
 
 package com.liferay.ide.gradle.ui.quickfix;
 
+import com.liferay.ide.core.Artifact;
+import com.liferay.ide.core.ArtifactBuilder;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.LiferayGradleWorkspaceProject;
-import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ import org.eclipse.jdt.ui.text.java.IQuickFixProcessor;
  * @author Charles Wu
  */
 @SuppressWarnings("restriction")
-public class LiferayGradleDependencyQuickFix implements IQuickFixProcessor {
+public class LiferayGradleDependencyQuickFix implements ArtifactBuilder, IQuickFixProcessor {
 
 	@Override
 	public IJavaCompletionProposal[] getCorrections(IInvocationContext context, IProblemLocation[] problemLocations)
@@ -101,21 +102,6 @@ public class LiferayGradleDependencyQuickFix implements IQuickFixProcessor {
 				return true;
 			default:
 				return false;
-		}
-	}
-
-	private GradleDependency _parseGradleDependency(IClasspathEntry classpathEntry) {
-		try {
-			IPath path = classpathEntry.getPath();
-
-			String[] items = path.segments();
-
-			//parse from file path "**/**/group name/artifact name/version/sha1 value/jar name"
-
-			return new GradleDependency(items[items.length - 5], items[items.length - 4], items[items.length - 3]);
-		}
-		catch (Exception e) {
-			return null;
 		}
 	}
 
@@ -229,7 +215,7 @@ public class LiferayGradleDependencyQuickFix implements IQuickFixProcessor {
 
 				int entryKind = classpathEntry.getEntryKind();
 
-				GradleDependency gradleDependency = null;
+				Artifact dependency = null;
 
 				if (entryKind == IClasspathEntry.CPE_CONTAINER) {
 					IPath entryPath = classpathEntry.getPath();
@@ -246,21 +232,21 @@ public class LiferayGradleDependencyQuickFix implements IQuickFixProcessor {
 							classpathContainer, packageFragmentroot.getPath());
 
 						if (classpathEntry != null) {
-							gradleDependency = _parseGradleDependency(classpathEntry);
+							dependency = classpathEntryToArtifact(classpathEntry);
 						}
 					}
 				}
 				else if (entryKind == IClasspathEntry.CPE_LIBRARY) {
-					gradleDependency = _parseGradleDependency(classpathEntry);
+					dependency = classpathEntryToArtifact(classpathEntry);
 				}
 
-				if (gradleDependency != null) {
+				if (dependency != null) {
 					String displayName =
-						"Add Dependency '" + gradleDependency.getGroup() + ":" + gradleDependency.getName() + ":" +
-							gradleDependency.getVersion() + "' to Gradle";
+						"Add Dependency '" + dependency.getGroupId() + ":" + dependency.getArtifactId() + ":" +
+							dependency.getVersion() + "' to Gradle";
 
 					javaCompletionProposals.add(
-						new DependencyCorrectionProposal(displayName, compilationUnit, gradleDependency, gradleFile));
+						new DependencyCorrectionProposal(displayName, compilationUnit, dependency, gradleFile));
 				}
 			}
 		}

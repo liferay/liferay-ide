@@ -14,6 +14,7 @@
 
 package com.liferay.ide.gradle.core.parser;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 
@@ -37,6 +38,7 @@ import org.eclipse.core.resources.IFile;
 /**
  * @author Lovett Li
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public class GradleDependencyUpdater {
 
@@ -58,44 +60,43 @@ public class GradleDependencyUpdater {
 		_nodes = builder.buildFromString(scriptContents);
 	}
 
-	public List<GradleDependency> getAllBuildDependencies() {
-		FindBuildDependenciesVisitor visitor = new FindBuildDependenciesVisitor();
+	public List<Artifact> getDependencies(String configuration) {
+		DependenciesClosureVisitor visitor = new DependenciesClosureVisitor();
 
-		walkScript(visitor);
+		_walkScript(visitor);
 
-		return visitor.getDependencies();
-	}
-
-	public List<GradleDependency> getAllDependencies() {
-		FindDependenciesVisitor visitor = new FindDependenciesVisitor();
-
-		walkScript(visitor);
-
-		return visitor.getDependencies();
+		return visitor.getDependencies(configuration);
 	}
 
 	public List<String> getGradleFileContents() {
 		return _gradleFileContents;
 	}
 
-	public FindDependenciesVisitor insertDependency(GradleDependency gradleDependency) throws IOException {
+	public void insertDependency(Artifact artifact) throws IOException {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("compile group: \"");
-		sb.append(gradleDependency.getGroup());
+		sb.append(artifact.getConfiguration());
+		sb.append(" group: \"");
+		sb.append(artifact.getGroupId());
 		sb.append("\", name:\"");
-		sb.append(gradleDependency.getName());
+		sb.append(artifact.getArtifactId());
 		sb.append("\", version:\"");
-		sb.append(gradleDependency.getVersion());
+		sb.append(artifact.getVersion());
 		sb.append("\"");
 
-		return insertDependency(sb.toString());
+		_insertDependency(sb.toString());
 	}
 
-	public FindDependenciesVisitor insertDependency(String dependency) throws IOException {
-		FindDependenciesVisitor visitor = new FindDependenciesVisitor();
+	public void updateDependency(String dependency) throws IOException {
+		_insertDependency(dependency);
 
-		walkScript(visitor);
+		FileUtils.writeLines(_file, _gradleFileContents);
+	}
+
+	private void _insertDependency(String dependency) throws IOException {
+		DependenciesClosureVisitor visitor = new DependenciesClosureVisitor();
+
+		_walkScript(visitor);
 
 		_gradleFileContents = FileUtils.readLines(_file);
 
@@ -103,19 +104,22 @@ public class GradleDependencyUpdater {
 			dependency = "\t" + dependency;
 		}
 
-		if (visitor.getDependenceLineNum() == -1) {
+		int dependencyLineNumber = visitor.getDependenceLineNumber();
+		int columnNumber = visitor.getColumnNumber();
+
+		if (dependencyLineNumber == -1) {
 			_gradleFileContents.add("");
 			_gradleFileContents.add("dependencies {");
 			_gradleFileContents.add(dependency);
 			_gradleFileContents.add("}");
 		}
 		else {
-			if (visitor.getColumnNum() != -1) {
+			if (columnNumber != -1) {
 				_gradleFileContents = Files.readAllLines(Paths.get(_file.toURI()), StandardCharsets.UTF_8);
 
-				StringBuilder builder = new StringBuilder(_gradleFileContents.get(visitor.getDependenceLineNum() - 1));
+				StringBuilder builder = new StringBuilder(_gradleFileContents.get(dependencyLineNumber - 1));
 
-				builder.insert(visitor.getColumnNum() - 2, "\n" + dependency + "\n");
+				builder.insert(columnNumber - 2, "\n" + dependency + "\n");
 
 				String dep = builder.toString();
 
@@ -126,23 +130,16 @@ public class GradleDependencyUpdater {
 					dep.replace("\n", "\r");
 				}
 
-				_gradleFileContents.remove(visitor.getDependenceLineNum() - 1);
-				_gradleFileContents.add(visitor.getDependenceLineNum() - 1, dep);
+				_gradleFileContents.remove(dependencyLineNumber - 1);
+				_gradleFileContents.add(dependencyLineNumber - 1, dep);
 			}
 			else {
-				_gradleFileContents.add(visitor.getDependenceLineNum() - 1, dependency);
+				_gradleFileContents.add(dependencyLineNumber - 1, dependency);
 			}
 		}
-
-		return visitor;
 	}
 
-	public void updateDependency(String dependency) throws IOException {
-		insertDependency(dependency);
-		FileUtils.writeLines(_file, _gradleFileContents);
-	}
-
-	public void walkScript(GroovyCodeVisitor visitor) {
+	private void _walkScript(GroovyCodeVisitor visitor) {
 		for (ASTNode node : _nodes) {
 			node.visit(visitor);
 		}

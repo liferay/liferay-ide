@@ -1414,6 +1414,35 @@ public class ProjectUtil {
 		return retval;
 	}
 
+	public static boolean isModuleExtProject(Object resource) throws Exception {
+		IProject project = null;
+
+		if (resource instanceof IFile) {
+			project = ((IFile)resource).getProject();
+		}
+		else if (resource instanceof IProject) {
+			project = (IProject)resource;
+		}
+
+		if (FileUtil.notExists(project)) {
+			return false;
+		}
+
+		IFile gradleFile = project.getFile("build.gradle");
+
+		if (FileUtil.notExists(gradleFile)) {
+			return false;
+		}
+
+		String contents = FileUtil.readContents(gradleFile);
+
+		if (!contents.contains("originalModule")) {
+			return false;
+		}
+
+		return true;
+	}
+
 	public static boolean isParent(IFolder folder, IResource resource) {
 		if ((folder == null) || (resource == null)) {
 			return false;

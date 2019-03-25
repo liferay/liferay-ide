@@ -73,6 +73,25 @@
 		<wizard
 			category="com.liferay.ide.newWizards"
 			icon="icons/e16/bundle.png"
+			id="com.liferay.ide.project.ui.newModuleExtFilesWizard"
+			name="Liferay Module Ext Files"
+		>
+			<class
+				class="com.liferay.ide.project.ui.modules.ext.NewModuleExtFilesWizard"
+			>
+			</class>
+			<description>
+			Liferay Module Ext Files
+			</description>
+			<selection
+				class="org.eclipse.core.resources.IResource"
+			>
+			</selection>
+		</wizard>
+
+		<wizard
+			category="com.liferay.ide.newWizards"
+			icon="icons/e16/bundle.png"
 			id="com.liferay.ide.project.ui.newModuleFragmentFilesWizard"
 			name="Liferay Module Fragment Files"
 		>
@@ -304,6 +323,14 @@
 			namespace="com.liferay.ide.project.ui"
 			properties="notLiferayProjectInSDK"
 			type="org.eclipse.core.resources.IProject"
+		>
+		</propertyTester>
+		<propertyTester
+			class="com.liferay.ide.project.ui.ModuleExtPropertyTester"
+			id="com.liferay.ide.project.ui.isModuleExtProject"
+			namespace="com.liferay.ide.project.ui"
+			properties="isModuleExtProject"
+			type="org.eclipse.core.resources.IResource"
 		>
 		</propertyTester>
 	</extension>
@@ -1691,6 +1718,20 @@
 							</count>
 						</and>
 					</or></enablement>
+			</commonWizard>
+			<commonWizard
+				type="new"
+				wizardId="com.liferay.ide.project.ui.newModuleExtFilesWizard"
+			>
+				<enablement>
+					<adapt type="org.eclipse.core.resources.IResource">
+						<test
+							forcePluginActivation="true"
+							property="com.liferay.ide.project.ui.isModuleExtProject"
+							value="true"
+						/>
+					</adapt>
+				</enablement>
 			</commonWizard>
 			<commonWizard
 				type="new"

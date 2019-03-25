@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.templates.strutsinaction;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
@@ -67,12 +68,12 @@ public class NewLiferayComponentStrutsInActionOperation extends AbstractLiferayC
 	}
 
 	@Override
-	protected List<String[]> getComponentDependency() throws CoreException {
-		List<String[]> componentDependency = super.getComponentDependency();
+	protected List<Artifact> getComponentDependencies() throws CoreException {
+		List<Artifact> dependencies = super.getComponentDependencies();
 
-		componentDependency.add(new String[] {"javax.servlet", "javax.servlet-api", "3.0.1"});
+		dependencies.add(new Artifact("javax.servlet", "javax.servlet-api", "3.0.1", "compileOnly", null));
 
-		return componentDependency;
+		return dependencies;
 	}
 
 	@Override

@@ -144,7 +144,7 @@ public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog im
 		Stream<Artifact> stream = artifacts.stream();
 
 		return stream.filter(
-			artifact -> "com.liferay".equals(artifact.getGroup())
+			artifact -> "com.liferay".equals(artifact.getGroupId())
 		).toArray();
 	}
 

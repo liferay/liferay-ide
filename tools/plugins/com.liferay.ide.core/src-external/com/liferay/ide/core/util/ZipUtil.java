@@ -16,6 +16,7 @@ package com.liferay.ide.core.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +25,8 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -89,6 +92,62 @@ public final class ZipUtil {
 
 	public static void unzip(File file, File destdir, IProgressMonitor monitor) throws IOException {
 		unzip(file, null, destdir, monitor);
+	}
+
+	public static void unzip(File file, File destDir, PathFilter pathFilter) throws IOException {
+		ZipFile zipFile = open(file);
+
+		try {
+			Enumeration<? extends ZipEntry> entries = zipFile.entries();
+			Map<String, File> folders = new HashMap<>();
+
+			while (entries.hasMoreElements()) {
+				ZipEntry entry = entries.nextElement();
+
+				String entryName = entry.getName();
+
+				if (!folders.isEmpty()) {
+					boolean hasCopied = false;
+
+					for (Map.Entry<String, File> e : folders.entrySet()) {
+						if (entryName.startsWith(e.getKey())) {
+							//if the entry folder is accepted that means the sub-nodes should be accepted too
+
+							_copyEntry(zipFile, entry, e.getValue());
+							hasCopied = true;
+
+							break;
+						}
+					}
+
+					if (hasCopied) {
+						continue;
+					}
+				}
+
+				if (pathFilter != null) {
+					Pair<Boolean, File> pair = pathFilter.accept(entryName);
+
+					if (pair.first()) {
+						if (entry.isDirectory()) {
+							folders.put(entryName, pair.second());
+						}
+
+						_copyEntry(zipFile, entry, pair.second());
+					}
+				}
+				else {
+					_copyEntry(zipFile, entry, destDir);
+				}
+			}
+		}
+		finally {
+			try {
+				zipFile.close();
+			}
+			catch (IOException ioe) {
+			}
+		}
 	}
 
 	public static void unzip(File file, String entryToStart, File destdir, IProgressMonitor monitor)
@@ -194,6 +253,52 @@ public final class ZipUtil {
 			ZipOutputStream zip = new ZipOutputStream(output)) {
 
 			_zipDir(target, zip, dir, filenameFilter, "");
+		}
+	}
+
+	@FunctionalInterface
+	public interface PathFilter {
+
+		/**
+		 * A filter for zip entry
+		 *
+		 * @return a pair of return values, if the input entry path is accepted then
+		 * return true and the expected directory, otherwise return false and null.
+		 */
+		public Pair<Boolean, File> accept(String entryPath);
+
+	}
+
+	private static void _copyEntry(ZipFile zip, ZipEntry entry, File destDir) throws IOException {
+		String entryName = entry.getName();
+
+		if (entry.isDirectory()) {
+			File emptyDir = new File(destDir, entryName);
+
+			_mkdir(emptyDir);
+
+			return;
+		}
+
+		File file = new File(destDir, entryName);
+
+		File dir = file.getParentFile();
+
+		_mkdir(dir);
+
+		try (InputStream in = zip.getInputStream(entry);
+			FileOutputStream out = new FileOutputStream(file)) {
+
+			byte[] bytes = new byte[1024];
+
+			int count = in.read(bytes);
+
+			while (count != -1) {
+				out.write(bytes, 0, count);
+				count = in.read(bytes);
+			}
+
+			out.flush();
 		}
 	}
 
