@@ -208,7 +208,7 @@ public final class XMLMemento implements IMemento {
 		try {
 			return new Integer(strValue);
 		} catch (NumberFormatException e) {
-			return null;
+			return -1;
 		}
 	}
 

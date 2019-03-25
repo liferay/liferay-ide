@@ -337,9 +337,9 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 				catch (NumberFormatException nfe) {
 				}
 
-				Integer markerType = upgradeProblemMemento.getInteger("markerType");
+				int markerType = upgradeProblemMemento.getInteger("markerType");
 
-				Integer startOffset = upgradeProblemMemento.getInteger("startOffset");
+				int startOffset = upgradeProblemMemento.getInteger("startOffset");
 				int status = upgradeProblemMemento.getInteger("status");
 
 				IFile[] resources = CoreUtil.findFilesForLocationURI(
