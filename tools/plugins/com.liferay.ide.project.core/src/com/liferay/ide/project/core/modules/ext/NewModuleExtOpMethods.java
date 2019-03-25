@@ -136,7 +136,7 @@ public class NewModuleExtOpMethods {
 						}
 					}
 
-					return Pair.create(containsPath, file);
+					return new Pair<>(containsPath, file);
 				});
 		}
 		catch (IOException ioe) {

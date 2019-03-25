@@ -38,6 +38,6 @@ public interface IProjectBuilder {
 
 	public List<Artifact> getDependencies(String configration);
 
-	public IStatus updateDependencies(IProject project, List<Artifact> dependecies) throws CoreException;
+	public IStatus updateDependencies(IProject project, List<Artifact> dependencies) throws CoreException;
 
 }

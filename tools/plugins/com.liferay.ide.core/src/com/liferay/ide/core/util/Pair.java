@@ -19,10 +19,6 @@ package com.liferay.ide.core.util;
  */
 public class Pair<F, S> {
 
-	public static <F, S> Pair<F, S> create(F first, S second) {
-		return new Pair<>(first, second);
-	}
-
 	public Pair(F l, S r) {
 		_first = l;
 		_second = r;

@@ -15,7 +15,7 @@
 package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.Artifact;
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.ArtifactBuilder;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
@@ -47,7 +47,7 @@ import org.eclipse.jdt.core.JavaModelException;
 /**
  * @author Terry Jia
  */
-public class GradleProjectBuilder extends AbstractProjectBuilder implements IWorkspaceProjectBuilder {
+public class GradleProjectBuilder extends AbstractProjectBuilder implements ArtifactBuilder, IWorkspaceProjectBuilder {
 
 	public GradleProjectBuilder(IProject project) {
 		super(project);
@@ -100,7 +100,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 				Stream.of(
 					javaProject.getResolvedClasspath(true)
 				).map(
-					CoreUtil::parseDependency
+					this::classpathEntryToArtifact
 				).filter(
 					Objects::nonNull
 				).filter(

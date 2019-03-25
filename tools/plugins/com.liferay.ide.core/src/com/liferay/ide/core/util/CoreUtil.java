@@ -14,7 +14,6 @@
 
 package com.liferay.ide.core.util;
 
-import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
@@ -599,33 +598,6 @@ public class CoreUtil {
 		project.open(monitor);
 
 		return project;
-	}
-
-	public static Artifact parseDependency(IClasspathEntry classpathEntry) {
-		if (classpathEntry == null) {
-			return null;
-		}
-
-		try {
-			IPath path = classpathEntry.getPath();
-
-			String[] segments = path.segments();
-
-			//parse from file path "**/**/group name/artifact name/version/sha1 value/jar name"
-
-			int length = segments.length;
-
-			if (Version.valueOf(segments[length - 3]) != null) {
-				return new Artifact(
-					segments[length - 5], segments[length - 4], segments[length - 3], "classpath",
-					FileUtil.getFile(classpathEntry.getSourceAttachmentPath()));
-			}
-
-			return null;
-		}
-		catch (Exception e) {
-			return null;
-		}
 	}
 
 	public static void prepareFolder(IFolder folder) throws CoreException {
