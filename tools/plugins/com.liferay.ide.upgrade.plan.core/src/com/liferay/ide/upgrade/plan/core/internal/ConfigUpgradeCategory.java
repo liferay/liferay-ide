@@ -14,7 +14,13 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
-import com.liferay.ide.upgrade.plan.core.BaseUpgradeStepCategory;
+import com.liferay.ide.upgrade.plan.core.BaseUpgradeStep;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradeStepCategory;
+
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Gregory Amerson
@@ -24,5 +30,14 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeStepCategory;
  *scope = ServiceScope.PROTOTYPE, service = UpgradeStepCategory.class
  *)
  */
-public class ConfigUpgradeCategory extends BaseUpgradeStepCategory {
+public class ConfigUpgradeCategory extends BaseUpgradeStep implements UpgradeStepCategory {
+
+	@Activate
+	public void activate(ComponentContext componentContext) {
+		super.activate(_upgradePlanner, componentContext);
+	}
+
+	@Reference
+	private UpgradePlanner _upgradePlanner;
+
 }

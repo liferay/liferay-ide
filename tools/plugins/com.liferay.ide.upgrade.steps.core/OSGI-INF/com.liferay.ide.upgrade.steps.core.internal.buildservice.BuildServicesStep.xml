@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.core.internal.buildservice.BuildServicesStep">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" activate="activate" name="com.liferay.ide.upgrade.steps.core.internal.buildservice.BuildServicesStep">
    <property name="description" value="Build Services"/>
    <property name="id" value="build_services"/>
    <property name="order" value="2"/>

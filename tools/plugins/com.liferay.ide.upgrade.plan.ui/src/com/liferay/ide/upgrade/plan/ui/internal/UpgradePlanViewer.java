@@ -24,7 +24,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
-import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -48,6 +47,11 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Terry Jia
  * @author Gregory Amerson
@@ -66,15 +70,23 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 		IContentProvider contentProvider = _treeViewer.getContentProvider();
 
+		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanViewer.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+
+		_serviceTracker.open();
+
+		_upgradePlanner = _serviceTracker.getService();
+
+		_upgradePlanner.addListener(this);
+
 		if (contentProvider == null) {
 			return;
 		}
 
 		_treeContentProvider = Adapters.adapt(contentProvider, ITreeContentProvider.class);
-
-		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
-
-		upgradePlanner.addListener(this);
 	}
 
 	public void addPostSelectionChangedListener(ISelectionChangedListener selectionChangedListener) {
@@ -82,9 +94,9 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 	}
 
 	public void dispose() {
-		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
+		_upgradePlanner.removeListener(this);
 
-		upgradePlanner.removeListener(this);
+		_serviceTracker.close();
 	}
 
 	@Override
@@ -260,7 +272,9 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		);
 	}
 
+	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 	private ITreeContentProvider _treeContentProvider;
 	private TreeViewer _treeViewer;
+	private final UpgradePlanner _upgradePlanner;
 
 }

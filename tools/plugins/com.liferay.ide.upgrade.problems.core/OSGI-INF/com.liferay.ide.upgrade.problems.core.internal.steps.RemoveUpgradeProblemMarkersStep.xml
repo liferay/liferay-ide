@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.steps.RemoveUpgradeProblemMarkersStep">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" activate="activate" name="com.liferay.ide.upgrade.problems.core.internal.steps.RemoveUpgradeProblemMarkersStep">
    <property name="description" value="&lt;p&gt;After auto correcting upgrade problems, all of the previously found markers must be removed because in most cases, the line number or other marker information is out of date and must be removed before continuing.&lt;/p&gt;"/>
    <property name="id" value="remove_upgrade_problems_markers"/>
    <property name="imagePath" value="icons/remove_previous_result.png"/>

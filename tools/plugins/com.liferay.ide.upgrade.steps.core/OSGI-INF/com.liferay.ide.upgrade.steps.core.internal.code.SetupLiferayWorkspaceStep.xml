@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.core.internal.code.SetupLiferayWorkspaceStep">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" activate="activate" name="com.liferay.ide.upgrade.steps.core.internal.code.SetupLiferayWorkspaceStep">
    <property name="description" value="Create a new Liferay Workspace matching the Target Liferay Version you selected in the new Liferay Upgrade Plan wizard. Your Liferay Workspace version will be updated to the version that has been set in your Workspace&apos;s &lt;i&gt;gradle.properties&lt;/i&gt; file."/>
    <property name="id" value="setup_liferay_workspace"/>
    <property name="imagePath" value="icons/liferay_new.png"/>
@@ -10,5 +10,6 @@
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
    </service>
+   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
    <implementation class="com.liferay.ide.upgrade.steps.core.internal.code.SetupLiferayWorkspaceStep"/>
 </scr:component>

@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.Adapters;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
 
 /**
  * @author Gregory Amerson
@@ -35,8 +34,9 @@ import org.osgi.service.component.annotations.Activate;
  */
 public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor {
 
-	@Activate
-	public void activate(ComponentContext componentContext) {
+	public void activate(UpgradePlanner upgradePlanner, ComponentContext componentContext) {
+		_upgradePlanner = upgradePlanner;
+
 		Dictionary<String, Object> properties = componentContext.getProperties();
 
 		_description = getStringProperty(properties, "description");
@@ -47,8 +47,6 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 		_url = getStringProperty(properties, "url");
 		_requirement = getStringProperty(properties, "requirement", "Optional");
 		_categoryId = getStringProperty(properties, "categoryId");
-
-		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
 
 		if (_description == null) {
 			_description = _title;
@@ -65,9 +63,10 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 	public boolean completed() {
 		if (ListUtil.isNotEmpty(_childIds)) {
 			for (String childId : _childIds) {
-				UpgradeStep child = ServicesLookup.getSingleService(UpgradeStep.class, "(id=" + childId + ")");
+				UpgradeStep childUpgradeStep = ServicesLookup.getSingleService(
+					UpgradeStep.class, "(id=" + childId + ")");
 
-				if (!child.completed()) {
+				if (!childUpgradeStep.completed()) {
 					return false;
 				}
 			}
@@ -88,13 +87,13 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 			return true;
 		}
 
-		UpgradeStep parent = getStep(_parentId);
+		UpgradeStep parentStep = getStep(_parentId);
 
-		if (parent == null) {
+		if (parentStep == null) {
 			return true;
 		}
 
-		String[] siblingIds = parent.getChildIds();
+		String[] siblingIds = parentStep.getChildIds();
 
 		long count = Stream.of(
 			siblingIds
@@ -106,7 +105,7 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 			this::_isRequiredIncompleted
 		).count();
 
-		if ((count == 0) && parent.enabled()) {
+		if ((count == 0) && parentStep.enabled()) {
 			return true;
 		}
 
@@ -145,10 +144,6 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 	}
 
 	public String[] getChildIds() {
-		if (_childIds == null) {
-			_childIds = new String[0];
-		}
-
 		return _childIds;
 	}
 
@@ -244,6 +239,12 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 	}
 
 	private void _lookupChildIds(ComponentContext componentContext) {
+		if (_upgradePlanner == null) {
+			_childIds = new String[0];
+
+			return;
+		}
+
 		BundleContext bundleContext = componentContext.getBundleContext();
 
 		String id = getId();
@@ -251,16 +252,10 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 		List<UpgradeStep> children = ServicesLookup.getOrderedServices(
 			bundleContext, UpgradeStep.class, "(parentId=" + id + ")");
 
-		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
-
-		if (upgradePlanner == null) {
-			return;
-		}
-
 		Stream<UpgradeStep> stream = children.stream();
 
 		_childIds = stream.filter(
-			child -> child.appliesTo(upgradePlanner.getCurrentUpgradePlan())
+			child -> child.appliesTo(_upgradePlanner.getCurrentUpgradePlan())
 		).map(
 			child -> child.getId()
 		).toArray(

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.core.internal.config.ScanPortalExtPropertiesStep">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" activate="activate" name="com.liferay.ide.upgrade.steps.core.internal.config.ScanPortalExtPropertiesStep">
    <property name="id" value="scan_portal_ext_properties"/>
    <property name="requirement" value="required"/>
    <property name="order" value="1"/>
@@ -8,5 +8,6 @@
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeStep"/>
    </service>
+   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
    <implementation class="com.liferay.ide.upgrade.steps.core.internal.config.ScanPortalExtPropertiesStep"/>
 </scr:component>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.steps.ui.internal.CreateNewLiferayWorkspaceStep">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" activate="activate" name="com.liferay.ide.upgrade.steps.ui.internal.CreateNewLiferayWorkspaceStep">
    <property name="description" value="&lt;p&gt;Starting in Liferay 7.0 and greater, the recommended way to build Liferay projects is to use a Liferay Workspace, which is a generated project scaffolding with associated Gradle or Maven plugins. To see more information, view the associated documentation in the &lt;b&gt;Liferay Upgrade Plan Info&lt;/b&gt; view.&lt;br/&gt;&lt;br/&gt;To begin the code upgrade process, first create a new Liferay Workspace by selecting &lt;b&gt;Click to perform&lt;/b&gt; below.&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Note: this tool only supports creating Gradle workspaces at this time.&lt;/b&gt;&lt;/p&gt;"/>
    <property name="id" value="create_new_liferay_workspace"/>
    <property name="order" value="1"/>

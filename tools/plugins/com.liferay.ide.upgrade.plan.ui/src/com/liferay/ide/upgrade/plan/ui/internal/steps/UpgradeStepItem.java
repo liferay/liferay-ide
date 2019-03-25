@@ -23,7 +23,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
-import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 
@@ -55,6 +54,11 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Terry Jia
  * @author Gregory Amerson
@@ -76,6 +80,18 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 		_parentComposite.setLayoutData(gridDataFactory.create());
 
 		_parentComposite.setLayout(new TableWrapLayout());
+
+		Bundle bundle = FrameworkUtil.getBundle(UpgradeStepItem.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+
+		_serviceTracker.open();
+
+		_upgradePlanner = _serviceTracker.getService();
+
+		_upgradePlanner.addListener(this);
 
 		if (_upgradeStep == null) {
 			return;
@@ -158,10 +174,6 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 
 		_enables.add(skipImageHyperlink);
 
-		_upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class);
-
-		_upgradePlanner.addListener(this);
-
 		_updateEnablement(_upgradeStep, _enables);
 	}
 
@@ -172,6 +184,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 
 	public void dispose() {
 		_upgradePlanner.removeListener(this);
+		_serviceTracker.close();
 
 		for (Disposable disposable : _disposables) {
 			try {
@@ -282,6 +295,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private Composite _parentComposite;
 	private ScrolledForm _scrolledForm;
+	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 	private UpgradePlanner _upgradePlanner;
 	private final UpgradeStep _upgradeStep;
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.steps.FindUpgradeProblemsAction">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" activate="activate" name="com.liferay.ide.upgrade.problems.core.internal.steps.FindUpgradeProblemsAction">
    <property name="description" value="&lt;p&gt;Peform this action to find upgrade problems in your workspace.&lt;/p&gt;"/>
    <property name="id" value="find_upgrade_problems"/>
    <property name="order" value="1"/>

@@ -55,7 +55,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.code.Con
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.code.ImportLiferayWorkspaceStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.code.SetupDevelopmentEnvironmentStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.code.UpgradeWorkspacePluginVersionStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.config.AnalyzePortalExtPropertiesStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.database.PrepareDatabaseStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.dependencies.MigrateIvyDependenciesStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.dependencies.MigratePortalDependencyJarsStep.xml,
@@ -66,4 +65,5 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.code.Con
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.prerequisite.PrepareForCodeUpgradeStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.sdk.MigratePluginsSDKProjectsStep.xml,
  OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.sdk.UpdateSDKBuildPropertiesStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.dependencies.RemovePrivateConfigurationInIvyStep.xml
+ OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.dependencies.RemovePrivateConfigurationInIvyStep.xml,
+ OSGI-INF/com.liferay.ide.upgrade.steps.core.internal.config.AnalyzePortalExtPropertiesStep.xml
