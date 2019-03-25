@@ -90,6 +90,15 @@ public interface IMemento {
 	public Integer getInteger(String key);
 
 	/**
+	 * Returns the long value of the given key.
+	 *
+	 * @param key the key
+	 * @return the value, or <code>null</code> if the key was not found or was found
+	 *   but was not an integer
+	 */
+	public Long getLong(String key);
+
+	/**
 	 * Returns the string value of the given key.
 	 *
 	 * @param key the key

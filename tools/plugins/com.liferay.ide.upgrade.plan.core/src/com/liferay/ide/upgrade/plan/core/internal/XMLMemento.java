@@ -215,6 +215,21 @@ public final class XMLMemento implements IMemento {
 	/*
 	 * @see IMemento
 	 */
+	public Long getLong(String key) {
+		Attr attr = element.getAttributeNode(key);
+		if (attr == null)
+			return null;
+		String strValue = attr.getValue();
+		try {
+			return new Long(strValue);
+		} catch (NumberFormatException e) {
+			return -1l;
+		}
+	}
+
+	/*
+	 * @see IMemento
+	 */
 	public String getString(String key) {
 		Attr attr = element.getAttributeNode(key);
 		if (attr == null)
