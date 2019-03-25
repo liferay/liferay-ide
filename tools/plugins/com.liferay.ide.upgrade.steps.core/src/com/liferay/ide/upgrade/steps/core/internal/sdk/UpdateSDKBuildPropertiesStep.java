@@ -25,7 +25,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.steps.core.WorkspaceSupport;
 import com.liferay.ide.upgrade.steps.core.internal.UpgradeStepsCorePlugin;
 import com.liferay.ide.upgrade.steps.core.sdk.MigratePluginsSDKProjectsStepKeys;
@@ -98,8 +97,6 @@ public class UpdateSDKBuildPropertiesStep extends BaseUpgradeStep implements Wor
 			return UpgradeStepsCorePlugin.createErrorStatus("There is no plugins sdk in current liferay workspace.");
 		}
 
-		IStatus status = Status.OK_STATUS;
-
 		try {
 			Map<String, String> appServerPropertiesMap = new HashMap<>();
 
@@ -124,18 +121,15 @@ public class UpdateSDKBuildPropertiesStep extends BaseUpgradeStep implements Wor
 
 			sdk.validate(true);
 
-			setStatus(UpgradeStepStatus.COMPLETED);
+			_upgradePlanner.dispatch(
+				new UpgradeStepPerformedEvent(this, Collections.singletonList(upgradePlan.getTargetProjectLocation())));
+
+			return Status.OK_STATUS;
 		}
 		catch (Exception e) {
-			status = UpgradeStepsCorePlugin.createErrorStatus(e.getMessage());
+			return UpgradeStepsCorePlugin.createErrorStatus(e.getMessage());
 
-			setStatus(UpgradeStepStatus.FAILED);
 		}
-
-		_upgradePlanner.dispatch(
-			new UpgradeStepPerformedEvent(this, Collections.singletonList(upgradePlan.getTargetProjectLocation())));
-
-		return status;
 	}
 
 	@Reference

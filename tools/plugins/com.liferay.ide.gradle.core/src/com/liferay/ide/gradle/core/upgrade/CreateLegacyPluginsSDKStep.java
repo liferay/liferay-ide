@@ -20,7 +20,6 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.steps.core.ResourceSelection;
 import com.liferay.ide.upgrade.steps.core.sdk.CreateLegacyPluginsSDKStepKeys;
 import com.liferay.ide.upgrade.steps.core.sdk.MigratePluginsSDKProjectsStepKeys;
@@ -76,21 +75,17 @@ public class CreateLegacyPluginsSDKStep extends BaseUpgradeStep {
 
 			project.refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
 
-			setStatus(UpgradeStepStatus.COMPLETED);
-
 			_upgradePlanner.dispatch(new UpgradeStepPerformedEvent(this, Collections.singletonList(project)));
+
+			return Status.OK_STATUS;
 		}
 		catch (CoreException ce) {
-			setStatus(UpgradeStepStatus.FAILED);
-
 			IStatus error = LiferayGradleCore.createErrorStatus("Unable to run task upgradePluginsSDK", ce);
 
 			LiferayGradleCore.log(error);
 
 			return error;
 		}
-
-		return Status.OK_STATUS;
 	}
 
 	@Reference

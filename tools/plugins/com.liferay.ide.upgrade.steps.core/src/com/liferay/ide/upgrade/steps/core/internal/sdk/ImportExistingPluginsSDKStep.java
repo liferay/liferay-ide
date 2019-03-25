@@ -19,7 +19,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.steps.core.ProjectImporter;
 import com.liferay.ide.upgrade.steps.core.ResourceSelection;
 import com.liferay.ide.upgrade.steps.core.sdk.ImportExistingPluginsSDKStepKeys;
@@ -66,20 +65,14 @@ public class ImportExistingPluginsSDKStep extends BaseUpgradeStep {
 		IStatus status = _projectImporter.canImport(rootProjectPath);
 
 		if (!status.isOK()) {
-			setStatus(UpgradeStepStatus.FAILED);
-
 			return status;
 		}
 
 		status = _projectImporter.importProjects(rootProjectPath, progressMonitor);
 
 		if (!status.isOK()) {
-			setStatus(UpgradeStepStatus.FAILED);
-
 			return status;
 		}
-
-		setStatus(UpgradeStepStatus.COMPLETED);
 
 		_upgradePlanner.dispatch(new UpgradeStepPerformedEvent(this, Collections.singletonList(rootProjectPath)));
 

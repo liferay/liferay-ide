@@ -24,7 +24,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.steps.core.code.SetupLiferayWorkspaceStepKeys;
 
 import java.nio.file.Paths;
@@ -116,19 +115,15 @@ public class CreateNewLiferayWorkspaceStep extends BaseUpgradeStep implements Sa
 
 			upgradePlan.setTargetProjectLocation(path);
 
-			setStatus(UpgradeStepStatus.COMPLETED);
-
 			IProject project = CoreUtil.getProject(workspaceName);
 
 			_upgradePlanner.dispatch(new UpgradeStepPerformedEvent(this, Collections.singletonList(project)));
+
+			return Status.OK_STATUS;
 		}
 		else {
-			setStatus(UpgradeStepStatus.FAILED);
-
 			return UpgradeStepsUIPlugin.createErrorStatus("New Liferay Workspace was not created.");
 		}
-
-		return Status.OK_STATUS;
 	}
 
 	@Reference

@@ -25,7 +25,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.steps.core.ImportSDKProjectsOp;
 import com.liferay.ide.upgrade.steps.core.sdk.MigratePluginsSDKProjectsStepKeys;
 import com.liferay.ide.upgrade.steps.ui.internal.ImportSDKProjectsWizard;
@@ -173,8 +172,6 @@ public class CopyPluginsSDKProjectsToWorkspaceStep extends BaseUpgradeStep imple
 			).collect(
 				Collectors.toList()
 			);
-
-			setStatus(UpgradeStepStatus.COMPLETED);
 
 			_upgradePlanner.dispatch(new UpgradeStepPerformedEvent(this, projects));
 		}

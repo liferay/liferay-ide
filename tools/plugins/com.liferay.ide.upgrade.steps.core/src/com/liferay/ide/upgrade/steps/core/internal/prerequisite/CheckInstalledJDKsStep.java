@@ -18,7 +18,6 @@ import com.liferay.ide.upgrade.plan.core.BaseUpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.steps.core.internal.UpgradeStepsCorePlugin;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -79,19 +78,13 @@ public class CheckInstalledJDKsStep extends BaseUpgradeStep {
 
 		IStatus status = Status.OK_STATUS;
 
-		UpgradeStepStatus upgradePlanElementStatus = getStatus();
-
 		if (java8Installed) {
 			status = UpgradeStepsCorePlugin.createInfoStatus("JDK8 is installed and the default VM install.");
-			upgradePlanElementStatus = UpgradeStepStatus.COMPLETED;
 		}
 		else {
 			status = UpgradeStepsCorePlugin.createErrorStatus(
 				"JDK8 is not installed or is not the default VM in Eclipse preferences.");
-			upgradePlanElementStatus = UpgradeStepStatus.FAILED;
 		}
-
-		setStatus(upgradePlanElementStatus);
 
 		_upgradePlanner.dispatch(new UpgradeStepPerformedEvent(this, null));
 

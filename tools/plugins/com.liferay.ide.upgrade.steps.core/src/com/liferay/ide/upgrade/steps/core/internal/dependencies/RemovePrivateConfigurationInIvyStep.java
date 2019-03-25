@@ -20,7 +20,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.steps.core.WorkspaceSupport;
 import com.liferay.ide.upgrade.steps.core.dependencies.RemovePrivateConfigurationInIvyStepKeys;
 import com.liferay.ide.upgrade.steps.core.dependencies.UpdatePluginsSDKDependenciesStepKeys;
@@ -109,13 +108,6 @@ public class RemovePrivateConfigurationInIvyStep extends BaseUpgradeStep impleme
 		File file = ivySettingFile.toFile();
 
 		IStatus status = _removeIvyPrivateSetting(file.toPath());
-
-		if (status.isOK()) {
-			setStatus(UpgradeStepStatus.COMPLETED);
-		}
-		else {
-			setStatus(UpgradeStepStatus.FAILED);
-		}
 
 		_upgradePlanner.dispatch(
 			new UpgradeStepPerformedEvent(this, Collections.singletonList(upgradePlan.getTargetProjectLocation())));

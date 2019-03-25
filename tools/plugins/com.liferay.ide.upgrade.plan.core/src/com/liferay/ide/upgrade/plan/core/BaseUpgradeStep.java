@@ -162,6 +162,9 @@ public abstract class BaseUpgradeStep implements UpgradeStep, UpgradePlanAcessor
 		if (completed()) {
 			return "icons/completed.gif";
 		}
+		else if (_status.equals(UpgradeStepStatus.FAILED)) {
+			return "icons/failed.png";
+		}
 
 		return _imagePath;
 	}

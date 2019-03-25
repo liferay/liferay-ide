@@ -21,10 +21,10 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.steps.core.ResourceSelection;
 import com.liferay.ide.upgrade.steps.core.code.InitializeServerBundleStepKeys;
 import com.liferay.ide.upgrade.steps.core.code.SetupDevelopmentEnvironmentStepKeys;
+import com.liferay.ide.upgrade.steps.core.internal.UpgradeStepsCorePlugin;
 
 import java.util.Collections;
 import java.util.List;
@@ -90,10 +90,12 @@ public class InitializeServerBundleStep extends BaseUpgradeStep {
 			job.join();
 		}
 		catch (InterruptedException ie) {
-			setStatus(UpgradeStepStatus.FAILED);
-		}
+			IStatus error = UpgradeStepsCorePlugin.createErrorStatus("Unable to initialize server bundle", ie);
 
-		setStatus(UpgradeStepStatus.COMPLETED);
+			UpgradeStepsCorePlugin.log(error);
+
+			return error;
+		}
 
 		_upgradePlanner.dispatch(new UpgradeStepPerformedEvent(this, Collections.singletonList(project)));
 
