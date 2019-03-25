@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 
 import org.codehaus.groovy.ast.CodeVisitorSupport;
 import org.codehaus.groovy.ast.expr.ArgumentListExpression;
-import org.codehaus.groovy.ast.expr.ClosureExpression;
 import org.codehaus.groovy.ast.expr.Expression;
 import org.codehaus.groovy.ast.expr.MapEntryExpression;
 import org.codehaus.groovy.ast.expr.MapExpression;
@@ -39,8 +38,12 @@ import org.codehaus.groovy.ast.stmt.BlockStatement;
  */
 public class DependenciesClosureVisitor extends CodeVisitorSupport {
 
-	public int getColumnNumber() {
-		return _columnNumber;
+	public DependenciesClosureVisitor() {
+		_buildscript = false;
+	}
+
+	public DependenciesClosureVisitor(boolean buildscript) {
+		_buildscript = buildscript;
 	}
 
 	public int getDependenceLineNumber() {
@@ -105,17 +108,6 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 		}
 	}
 
-	@Override
-	public void visitClosureExpression(ClosureExpression closureExpression) {
-		if ((_dependenceLineNumber != -1) &&
-			(closureExpression.getLineNumber() == closureExpression.getLastLineNumber())) {
-
-			_columnNumber = closureExpression.getLastColumnNumber();
-		}
-
-		super.visitClosureExpression(closureExpression);
-	}
-
 	/**
 	 * parse "configuration Name group: group:, name: name, version: version"
 	 */
@@ -170,7 +162,7 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 
 			_dependenciesClosure = false;
 		}
-		else if ("buildscript".equals(methodString)) {
+		else if (_buildscript && "buildscript".equals(methodString)) {
 			super.visitMethodCallExpression(methodCallExpression);
 		}
 		else if (_dependenciesClosure && _dependencyStatement) {
@@ -182,7 +174,7 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 		}
 	}
 
-	private int _columnNumber;
+	private boolean _buildscript;
 	private String _configurationName = "";
 	private int _dependenceLineNumber = -1;
 	private List<Artifact> _dependencies = new ArrayList<>();
