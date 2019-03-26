@@ -44,7 +44,7 @@
 			class="com.liferay.ide.ui.LiferayPerspectiveFactory"
 			icon="icons/liferay_logo_16.png"
 			id="com.liferay.ide.eclipse.ui.perspective.liferay"
-			name="Liferay Plugins"
+			name="Liferay Plugins (Legacy)"
 		>
 		</perspective>
 		<perspective
