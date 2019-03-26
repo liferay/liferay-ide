@@ -432,7 +432,7 @@ public interface UI {
 
 	public final String LIFERAY_PLUGIN_PROJECT = "Liferay Plugin Project";
 
-	public final String LIFERAY_PLUGINS = "Liferay Plugins (Deprecated)";
+	public final String LIFERAY_PLUGINS = "Liferay Plugins (Legacy)";
 
 	public final String LIFERAY_PORTAL_BUNDLE = "Liferay Community Edition Portal 7.0.4 GA5";
 
@@ -500,34 +500,34 @@ public interface UI {
 
 	public final String NEW_LIFERAY_HOOK = "New Liferay Hook";
 
-	public final String NEW_LIFERAY_HOOK_CONFIGURATION = "New Liferay Hook Configuration (Deprecated)";
+	public final String NEW_LIFERAY_HOOK_CONFIGURATION = "New Liferay Hook Configuration (Legacy)";
 
-	public final String NEW_LIFERAY_JSF_PORTLET = "New Liferay JSF Portlet (Deprecated)";
+	public final String NEW_LIFERAY_JSF_PORTLET = "New Liferay JSF Portlet (Legacy)";
 
 	public final String NEW_LIFERAY_JSF_PROJECT = "New Liferay JSF Project";
 
 	public final String NEW_LIFERAY_KALEO_WORKFLOW = "New Liferay Kaleo Workflow";
 
-	public final String NEW_LIFERAY_LAYOUT_TMEPLATE = "New Liferay Layout Template (Deprecated)";
+	public final String NEW_LIFERAY_LAYOUT_TMEPLATE = "New Liferay Layout Template (Legacy)";
 
 	public final String NEW_LIFERAY_MODULE_PROJECT = "New Liferay Module Project";
 
 	public final String NEW_LIFERAY_MODULE_PROJECT_FRAGMENT = "New Liferay Module Project Fragment";
 
-	public final String NEW_LIFERAY_PLUGIN_PROJECT = "New Liferay Plugin Project (Deprecated)";
+	public final String NEW_LIFERAY_PLUGIN_PROJECT = "New Liferay Plugin Project (Legacy)";
 
 	public final String NEW_LIFERAY_PLUGIN_PROJECTS_FROM_EXISING_SOURCE =
-		"New Liferay Plugin Projects from Existing Source (Deprecated)";
+		"New Liferay Plugin Projects from Existing Source (Legacy)";
 
-	public final String NEW_LIFERAY_PORTLET = "New Liferay Portlet (Deprecated)";
+	public final String NEW_LIFERAY_PORTLET = "New Liferay Portlet (Legacy)";
 
 	public final String NEW_LIFERAY_RUNTIME = "New Liferay Runtime...";
 
 	public final String NEW_LIFERAY_SERVER = "New Liferay Server";
 
-	public final String NEW_LIFERAY_SERVICE_BUILDER = "New Liferay Service Builder (Deprecated)";
+	public final String NEW_LIFERAY_SERVICE_BUILDER = "New Liferay Service Builder (Legacy)";
 
-	public final String NEW_LIFERAY_VAADIN_PORTLET = "New Liferay Vaadin Portlet (Deprecated)";
+	public final String NEW_LIFERAY_VAADIN_PORTLET = "New Liferay Vaadin Portlet (Legacy)";
 
 	public final String NEW_LIFERAY_WORPSPACE_PROJECT = "New Liferay Workspace Project";
 

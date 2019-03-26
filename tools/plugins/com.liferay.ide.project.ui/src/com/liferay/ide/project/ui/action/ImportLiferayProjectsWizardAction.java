@@ -36,7 +36,7 @@ public class ImportLiferayProjectsWizardAction extends NewWizardAction {
 
 		@Override
 		protected Object createNewWizard() {
-			return new ImportSDKProjectsWizard("New Liferay Plugin Projects from Existing Source (Deprecated)");
+			return new ImportSDKProjectsWizard("New Liferay Plugin Projects from Existing Source (Legacy)");
 		}
 
 		@Override

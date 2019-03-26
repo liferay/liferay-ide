@@ -356,7 +356,7 @@
 			class="com.liferay.ide.project.ui.wizard.ImportSDKProjectsWizard"
 			icon="icons/e16/import.png"
 			id="com.liferay.ide.project.ui.importSDKProjectsWizard"
-			name="Liferay Projects From Plugins SDK (Deprecated)"
+			name="Liferay Projects From Plugins SDK (Legacy)"
 		>
 			<description>
 			%import.projects.sdk.wizard.description
@@ -367,7 +367,7 @@
 			class="com.liferay.ide.project.ui.wizard.ParentSDKProjectImportWizard"
 			icon="icons/e16/liferay_logo_16.png"
 			id="com.liferay.ide.project.ui.parentSDKProjectImportWizard"
-			name="Liferay Plugins SDK Directory (Deprecated)"
+			name="Liferay Plugins SDK Directory (Legacy)"
 		>
 			<description>
 			Liferay Plugins SDK Directory

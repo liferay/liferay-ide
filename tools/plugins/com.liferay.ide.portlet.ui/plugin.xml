@@ -398,7 +398,7 @@
 			class="com.liferay.ide.portlet.ui.jsf.NewJSFPortletWizard"
 			icon="icons/n16/liferay_faces_new.png"
 			id="com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet"
-			name="Liferay JSF Portlet (Deprecated)"
+			name="Liferay JSF Portlet (Legacy)"
 		>
 			<class class="com.liferay.ide.portlet.ui.jsf.NewJSFPortletWizard">
 				<parameter name="liferay_extra_artifact" value="true" />
