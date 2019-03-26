@@ -203,7 +203,7 @@ public final class XMLMemento implements IMemento {
 	public Integer getInteger(String key) {
 		Attr attr = element.getAttributeNode(key);
 		if (attr == null)
-			return null;
+			return -1;
 		String strValue = attr.getValue();
 		try {
 			return new Integer(strValue);
@@ -218,7 +218,7 @@ public final class XMLMemento implements IMemento {
 	public Long getLong(String key) {
 		Attr attr = element.getAttributeNode(key);
 		if (attr == null)
-			return null;
+			return -1l;
 		String strValue = attr.getValue();
 		try {
 			return new Long(strValue);
