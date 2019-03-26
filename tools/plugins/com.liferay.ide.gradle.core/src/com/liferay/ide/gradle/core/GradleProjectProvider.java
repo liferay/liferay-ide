@@ -91,6 +91,19 @@ public class GradleProjectProvider
 		sb.append("-d \"");
 		sb.append(targetDir.getAbsolutePath());
 		sb.append("\" ");
+
+		IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		if (liferayWorkspaceProject != null) {
+			sb.append("--base \"");
+
+			IPath workspaceLocation = liferayWorkspaceProject.getLocation();
+
+			sb.append(workspaceLocation.toOSString());
+
+			sb.append("\" ");
+		}
+
 		sb.append("-v ");
 		sb.append(liferayVersion);
 		sb.append(" ");
@@ -152,8 +165,6 @@ public class GradleProjectProvider
 			boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
 			boolean useDefaultLocation = get(op.getUseDefaultLocation());
 			boolean inWorkspacePath = false;
-
-			IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
 			if (hasGradleWorkspace && (liferayWorkspaceProject != null) && !useDefaultLocation) {
 				IPath workspaceLocation = liferayWorkspaceProject.getLocation();
