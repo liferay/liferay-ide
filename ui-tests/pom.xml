@@ -126,11 +126,6 @@
 										</requirement>
 										<requirement>
 											<type>eclipse-feature</type>
-											<id>com.liferay.ide.alloy</id>
-											<versionRange>0.0.0</versionRange>
-										</requirement>
-										<requirement>
-											<type>eclipse-feature</type>
 											<id>com.liferay.ide.enterprise</id>
 											<versionRange>0.0.0</versionRange>
 										</requirement>
@@ -186,11 +181,6 @@
 										<requirement>
 											<type>eclipse-feature</type>
 											<id>com.liferay.ide.eclipse.tools</id>
-											<versionRange>0.0.0</versionRange>
-										</requirement>
-										<requirement>
-											<type>eclipse-feature</type>
-											<id>com.liferay.ide.alloy</id>
 											<versionRange>0.0.0</versionRange>
 										</requirement>
 										<requirement>
@@ -272,11 +262,6 @@
 										</requirement>
 										<requirement>
 											<type>eclipse-feature</type>
-											<id>com.liferay.ide.alloy</id>
-											<versionRange>0.0.0</versionRange>
-										</requirement>
-										<requirement>
-											<type>eclipse-feature</type>
 											<id>com.liferay.ide.enterprise</id>
 											<versionRange>0.0.0</versionRange>
 										</requirement>
@@ -350,11 +335,6 @@
 										<requirement>
 											<type>eclipse-feature</type>
 											<id>com.liferay.ide.eclipse.tools</id>
-											<versionRange>0.0.0</versionRange>
-										</requirement>
-										<requirement>
-											<type>eclipse-feature</type>
-											<id>com.liferay.ide.alloy</id>
 											<versionRange>0.0.0</versionRange>
 										</requirement>
 										<requirement>
