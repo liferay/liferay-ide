@@ -15,15 +15,10 @@
 package com.liferay.ide.gradle.core.parser;
 
 import com.liferay.ide.core.Artifact;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
-
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import java.util.List;
 
@@ -60,6 +55,14 @@ public class GradleDependencyUpdater {
 		_nodes = builder.buildFromString(scriptContents);
 	}
 
+	public List<Artifact> getDependencies(boolean buildscript, String configuration) {
+		DependenciesClosureVisitor visitor = new DependenciesClosureVisitor(buildscript);
+
+		_walkScript(visitor);
+
+		return visitor.getDependencies(configuration);
+	}
+
 	public List<Artifact> getDependencies(String configuration) {
 		DependenciesClosureVisitor visitor = new DependenciesClosureVisitor();
 
@@ -72,7 +75,7 @@ public class GradleDependencyUpdater {
 		return _gradleFileContents;
 	}
 
-	public void insertDependency(Artifact artifact) throws IOException {
+	public DependenciesClosureVisitor insertDependency(Artifact artifact) throws IOException {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(artifact.getConfiguration());
@@ -84,7 +87,7 @@ public class GradleDependencyUpdater {
 		sb.append(artifact.getVersion());
 		sb.append("\"");
 
-		_insertDependency(sb.toString());
+		return _insertDependency(sb.toString());
 	}
 
 	public void updateDependency(String dependency) throws IOException {
@@ -93,7 +96,7 @@ public class GradleDependencyUpdater {
 		FileUtils.writeLines(_file, _gradleFileContents);
 	}
 
-	private void _insertDependency(String dependency) throws IOException {
+	private DependenciesClosureVisitor _insertDependency(String dependency) throws IOException {
 		DependenciesClosureVisitor visitor = new DependenciesClosureVisitor();
 
 		_walkScript(visitor);
@@ -105,7 +108,6 @@ public class GradleDependencyUpdater {
 		}
 
 		int dependencyLineNumber = visitor.getDependenceLineNumber();
-		int columnNumber = visitor.getColumnNumber();
 
 		if (dependencyLineNumber == -1) {
 			_gradleFileContents.add("");
@@ -114,29 +116,10 @@ public class GradleDependencyUpdater {
 			_gradleFileContents.add("}");
 		}
 		else {
-			if (columnNumber != -1) {
-				_gradleFileContents = Files.readAllLines(Paths.get(_file.toURI()), StandardCharsets.UTF_8);
-
-				StringBuilder builder = new StringBuilder(_gradleFileContents.get(dependencyLineNumber - 1));
-
-				builder.insert(columnNumber - 2, "\n" + dependency + "\n");
-
-				String dep = builder.toString();
-
-				if (CoreUtil.isWindows()) {
-					dep.replace("\n", "\r\n");
-				}
-				else if (CoreUtil.isMac()) {
-					dep.replace("\n", "\r");
-				}
-
-				_gradleFileContents.remove(dependencyLineNumber - 1);
-				_gradleFileContents.add(dependencyLineNumber - 1, dep);
-			}
-			else {
-				_gradleFileContents.add(dependencyLineNumber - 1, dependency);
-			}
+			_gradleFileContents.add(dependencyLineNumber - 1, dependency);
 		}
+
+		return visitor;
 	}
 
 	private void _walkScript(GroovyCodeVisitor visitor) {

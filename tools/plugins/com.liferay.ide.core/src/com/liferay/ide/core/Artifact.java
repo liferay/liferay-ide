@@ -51,8 +51,10 @@ public class Artifact {
 
 		Artifact artifact = (Artifact)object;
 
-		if (Objects.equals(_artifactId, artifact._artifactId) && Objects.equals(_groupId, artifact._groupId) &&
-			Objects.equals(_version, artifact._version)) {
+		if (Objects.equals(_artifactId, artifact._artifactId) && Objects.equals(_groupId, artifact._groupId)) {
+			if ((_version != null) && (artifact._version != null)) {
+				return Objects.equals(_version, artifact._version);
+			}
 
 			return true;
 		}

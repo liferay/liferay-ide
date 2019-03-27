@@ -15,12 +15,12 @@
 package com.liferay.ide.gradle.core.tests;
 
 import com.liferay.blade.gradle.model.CustomModel;
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.core.LiferayGradleProject;
-import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.gradle.core.tests.util.GradleTestUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
@@ -118,10 +118,7 @@ public class GradleProjectTests extends ProjectBase {
 
 		assertProjectExists(ips);
 
-		String[][] gradleDependencies = {{"com.liferay.portal", "com.liferay.portal.kernel", "2.6.0"}};
-
-		GradleDependency gd = new GradleDependency(
-			gradleDependencies[0][0], gradleDependencies[0][1], gradleDependencies[0][2]);
+		Artifact artifact = new Artifact("com.liferay.portal", "com.liferay.portal.kernel", "2.6.0", "complie", null);
 
 		IProject project = gradleProject.getProject();
 
@@ -129,19 +126,19 @@ public class GradleProjectTests extends ProjectBase {
 
 		GradleDependencyUpdater updater = new GradleDependencyUpdater(FileUtil.getFile(gradileFile));
 
-		List<GradleDependency> existDependencies = updater.getAllDependencies();
+		List<Artifact> existDependencies = updater.getDependencies("*");
 
-		Assert.assertFalse(existDependencies.contains(gd));
+		Assert.assertFalse(existDependencies.contains(artifact));
 
 		IProjectBuilder gradleProjectBuilder = gradleProject.adapt(IProjectBuilder.class);
 
-		gradleProjectBuilder.updateProjectDependency(project, Arrays.asList(gradleDependencies));
+		gradleProjectBuilder.updateDependencies(project, Arrays.asList(artifact));
 
 		GradleDependencyUpdater dependencyUpdater = new GradleDependencyUpdater(FileUtil.getFile(gradileFile));
 
-		List<GradleDependency> updatedDependencies = dependencyUpdater.getAllDependencies();
+		List<Artifact> updatedDependencies = dependencyUpdater.getDependencies("*");
 
-		Assert.assertTrue(updatedDependencies.contains(gd));
+		Assert.assertTrue(updatedDependencies.contains(artifact));
 
 		deleteProject(ips);
 	}

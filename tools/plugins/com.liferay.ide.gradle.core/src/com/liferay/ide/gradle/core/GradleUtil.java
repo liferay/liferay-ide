@@ -174,7 +174,7 @@ public class GradleUtil {
 		try {
 			GradleDependencyUpdater updater = new GradleDependencyUpdater(buildFile);
 
-			List<Artifact> dependencies = updater.getDependencies("classpath");
+			List<Artifact> dependencies = updater.getDependencies(true, "classpath");
 
 			for (Artifact dependency : dependencies) {
 				String group = dependency.getGroupId();

@@ -107,7 +107,10 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 					artifactWithSourcePath -> Objects.equals(artifactWithSourcePath, artifact)
 				).findFirst(
 				).ifPresent(
-					artifactWithSourcePath -> artifact.setSource(artifactWithSourcePath.getSource())
+					artifactWithSourcePath -> {
+						artifact.setSource(artifactWithSourcePath.getSource());
+						artifact.setVersion(artifactWithSourcePath.getVersion());
+					}
 				);
 			}
 		}
