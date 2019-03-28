@@ -17,8 +17,9 @@ package com.liferay.ide.upgrade.plan.core;
 import com.liferay.ide.core.util.ListUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Adapters;
@@ -55,6 +56,8 @@ public class UpgradeStep {
 		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
 
 		_serviceTracker.open();
+
+		_upgradePlanner = _serviceTracker.getService();
 	}
 
 	public void appendChild(UpgradeStep upgradeStep) {
@@ -80,7 +83,17 @@ public class UpgradeStep {
 	}
 
 	public void dispose() {
-		_serviceTracker.close();
+		List<UpgradeStep> childrenSteps = getChildren();
+
+		Stream<UpgradeStep> stepStream = childrenSteps.stream();
+
+		stepStream.forEach(
+			step -> step.dispose()
+		);
+
+		if (_serviceTracker != null) {
+			_serviceTracker.close();
+		}
 	}
 
 	public boolean enabled() {
@@ -119,9 +132,11 @@ public class UpgradeStep {
 		}
 
 		if (isEqualIgnoreCase(_description, baseUpgradeStep._description) &&
+			isEqualIgnoreCase(_icon, baseUpgradeStep._icon) &&
 			isEqualIgnoreCase(_requirement, baseUpgradeStep._requirement) &&
-			isEqualIgnoreCase(_url, baseUpgradeStep._url) && isEqualIgnoreCase(_icon, baseUpgradeStep._icon) &&
-			isEqualIgnoreCase(_title, baseUpgradeStep._title) && _status.equals(baseUpgradeStep._status)) {
+			isEqualIgnoreCase(_commandId, baseUpgradeStep._commandId) &&
+			isEqualIgnoreCase(_url, baseUpgradeStep._url) && isEqual(_children, baseUpgradeStep._children) &&
+			isEqualIgnoreCase(_title, baseUpgradeStep._title)) {
 
 			return true;
 		}
@@ -178,16 +193,27 @@ public class UpgradeStep {
 		int hash = 31;
 
 		hash = 31 * hash + (_description != null ? _description.hashCode() : 0);
-		hash = 31 * hash + (_requirement != null ? _requirement.hashCode() : 0);
-		hash = 31 * hash + (_url != null ? _url.hashCode() : 0);
 		hash = 31 * hash + (_icon != null ? _icon.hashCode() : 0);
+
+		Stream<UpgradeStep> childrenStream = _children.stream();
+
+		int childrenHashCodes = childrenStream.map(
+			child -> child.hashCode()
+		).reduce(
+			0, Integer::sum
+		).intValue();
+
+		hash = 31 * hash + (_requirement != null ? _requirement.hashCode() : 0);
+		hash = 31 * hash + childrenHashCodes;
+		hash = 31 * hash + (_url != null ? _url.hashCode() : 0);
 		hash = 31 * hash + (_title != null ? _title.hashCode() : 0);
+		hash = 31 * hash + (_commandId != null ? _commandId.hashCode() : 0);
 		hash = 31 * hash + (_status != null ? _status.hashCode() : 0);
 
 		return hash;
 	}
 
-	public boolean isEqual(String[] source, String[] target) {
+	public <T extends UpgradeStep> boolean isEqual(Collection<T> source, Collection<T> target) {
 		if (source == null) {
 			if (target == null) {
 				return true;
@@ -200,7 +226,7 @@ public class UpgradeStep {
 			return false;
 		}
 
-		if (source.length != target.length) {
+		if (source.size() != target.size()) {
 			return false;
 		}
 
@@ -208,12 +234,18 @@ public class UpgradeStep {
 			return true;
 		}
 
-		List<String> targetList = Arrays.asList(target);
+		Stream<T> targetStream = target.stream();
 
-		return Stream.of(
-			source
-		).filter(
-			element -> targetList.contains(element)
+		Collection<String> targetTitles = targetStream.map(
+			element -> element.getTitle()
+		).collect(
+			Collectors.toList()
+		);
+
+		Stream<T> sourceStream = source.stream();
+
+		return sourceStream.filter(
+			element -> targetTitles.contains(element.getTitle())
 		).findAny(
 		).isPresent();
 	}
@@ -250,9 +282,7 @@ public class UpgradeStep {
 
 		_status = status;
 
-		UpgradePlanner upgradePlanner = _serviceTracker.getService();
-
-		upgradePlanner.dispatch(upgradeStepStatusChangedEvent);
+		_upgradePlanner.dispatch(upgradeStepStatusChangedEvent);
 	}
 
 	private boolean _isRequiredIncompleted(UpgradeStep upgradeStep) {
@@ -272,6 +302,7 @@ public class UpgradeStep {
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 	private UpgradeStepStatus _status = UpgradeStepStatus.INCOMPLETE;
 	private String _title;
+	private UpgradePlanner _upgradePlanner;
 	private String _url;
 
 }

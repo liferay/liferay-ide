@@ -15,15 +15,12 @@
 package com.liferay.ide.upgrade.plan.ui.internal.steps;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.Perform;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -65,23 +62,6 @@ public interface UpgradeItem extends Disposable, ISelectionProvider {
 						}
 
 					};
-
-					job.addJobChangeListener(
-						new JobChangeAdapter() {
-
-							@Override
-							public void done(IJobChangeEvent event) {
-								IStatus result = event.getResult();
-
-								if (result.isOK()) {
-									upgradeStep.setStatus(UpgradeStepStatus.COMPLETED);
-								}
-								else {
-									upgradeStep.setStatus(UpgradeStepStatus.FAILED);
-								}
-							}
-
-						});
 
 					job.schedule();
 				}

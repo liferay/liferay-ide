@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.wizard;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.model.NamedItem;
@@ -139,6 +140,10 @@ public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomP
 
 				@Override
 				public void run() {
+					if (ListUtil.isEmpty(checkboxElements)) {
+						return;
+					}
+
 					checkBoxViewer.setInput(checkboxElements);
 
 					ElementList<ProjectNamedItem> selectedElements = getSelectedElements();

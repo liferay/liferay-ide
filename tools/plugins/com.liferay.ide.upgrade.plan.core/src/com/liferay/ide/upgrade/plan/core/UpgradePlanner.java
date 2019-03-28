@@ -18,9 +18,13 @@ import java.io.IOException;
 
 import java.nio.file.Path;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public interface UpgradePlanner {
 
@@ -29,6 +33,18 @@ public interface UpgradePlanner {
 	public void completeStep(UpgradeStep upgradeStep);
 
 	public void dispatch(UpgradeEvent upgradeEvent);
+
+	public default void dispose(UpgradePlan upgradePlan) {
+		if (upgradePlan != null) {
+			List<UpgradeStep> upgradeSteps = upgradePlan.getUpgradeSteps();
+
+			Stream<UpgradeStep> stepsStream = upgradeSteps.stream();
+
+			stepsStream.forEach(
+				step -> step.dispose()
+			);
+		}
+	}
 
 	public UpgradePlan getCurrentUpgradePlan();
 

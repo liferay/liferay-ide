@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
@@ -25,9 +25,11 @@ import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Adapters;
@@ -160,17 +162,15 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 	}
 
 	public void initTreeExpansion(UpgradePlan upgradePlan, String[] titles) {
-		Stream.of(
-			titles
-		).map(
-			title -> _findUpgradeStep(upgradePlan, title)
-		).filter(
-			Objects::nonNull
-		).forEach(
-			step -> {
-				_treeViewer.expandToLevel(step, 1, false);
-			}
-		);
+		List<UpgradeStep> upgradeSteps = upgradePlan.getUpgradeSteps();
+		List<UpgradeStep> matchedSteps = new ArrayList<>();
+		List<String> findTitles = Arrays.asList(titles);
+
+		_getMathcedSteps(upgradeSteps, findTitles, matchedSteps);
+
+		_treeViewer.setExpandedElements(matchedSteps.toArray(new UpgradeStep[0]));
+
+		refresh();
 	}
 
 	@Override
@@ -180,7 +180,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 
 			UpgradePlan upgradePlan = upgradePlanStartedEvent.getUpgradePlan();
 
-			UIUtil.async(() -> _treeViewer.setInput(upgradePlan));
+			UIUtil.sync(() -> _treeViewer.setInput(upgradePlan));
 		}
 		else if (upgradeEvent instanceof UpgradeStepStatusChangedEvent) {
 			UIUtil.async(
@@ -274,32 +274,38 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 		return null;
 	}
 
-	private UpgradeStep _findUpgradeStep(UpgradePlan upgradePlan, String title) {
-		List<UpgradeStep> upgradeSteps = upgradePlan.getUpgradeSteps();
+	private void _getMathcedSteps(List<UpgradeStep> upgradeSteps, List<String> titles, List<UpgradeStep> resultSteps) {
+		if (ListUtil.isEmpty(upgradeSteps)) {
+			return;
+		}
 
-		for (UpgradeStep upgradeStep : upgradeSteps) {
-			UpgradeStep childUpgradeStep = _findUpgradeStep(upgradeStep, title);
+		Stream<UpgradeStep> stepsStream = upgradeSteps.stream();
 
-			if (childUpgradeStep != null) {
-				return childUpgradeStep;
+		resultSteps.addAll(
+			stepsStream.filter(
+				step -> titles.contains(step.getTitle())
+			).collect(
+				Collectors.toList()
+			)
+		);
+
+		Stream<UpgradeStep> childrenStepStream = upgradeSteps.stream();
+
+		List<UpgradeStep> nestSteps = childrenStepStream.filter(
+			step -> ListUtil.isNotEmpty(step.getChildren())
+		).flatMap(
+			step -> {
+				List<UpgradeStep> childrenSteps = step.getChildren();
+
+				return childrenSteps.stream();
 			}
-		}
+		).collect(
+			Collectors.toList()
+		);
 
-		return null;
-	}
+		_getMathcedSteps(nestSteps, titles, resultSteps);
 
-	private UpgradeStep _findUpgradeStep(UpgradeStep upgradeStep, String title) {
-		if (StringUtil.equals(upgradeStep.getTitle(), title)) {
-			return upgradeStep;
-		}
-
-		List<UpgradeStep> childUpgradeSteps = upgradeStep.getChildren();
-
-		for (UpgradeStep childUpgradeStep : childUpgradeSteps) {
-			return _findUpgradeStep(childUpgradeStep, title);
-		}
-
-		return null;
+		return;
 	}
 
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
