@@ -153,7 +153,7 @@ public class UpgradeStepViewer implements ISelectionProvider {
 		if (upgradeStep != null) {
 			_scrolledForm.setText(upgradeStep.getTitle());
 
-			_upgradeStepItem = new UpgradeStepItem(_formToolkit, _scrolledForm, upgradeStep.getId());
+			_upgradeStepItem = new UpgradeStepItem(_formToolkit, _scrolledForm, upgradeStep);
 
 			_upgradeStepItem.addSelectionChangedListener(this::_fireSelectionChanged);
 		}

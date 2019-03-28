@@ -10,14 +10,14 @@ Bundle-SymbolicName: com.liferay.ide.upgrade.problems.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 3.6.0.qualifier
 Export-Package: com.liferay.ide.upgrade.problems.core,
- com.liferay.ide.upgrade.problems.core.steps
+ com.liferay.ide.upgrade.problems.core.commands
 Require-Bundle: com.google.guava,
  com.liferay.ide.core,
  com.liferay.ide.project.core,
  com.liferay.ide.sdk.core,
  com.liferay.ide.server.core,
  com.liferay.ide.upgrade.plan.core,
- com.liferay.ide.upgrade.steps.core,
+ com.liferay.ide.upgrade.commands.core,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.equinox.common,
@@ -159,10 +159,7 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LiferayDescriptorVersion71.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.LayoutTemplateFile.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.LegacyLayoutTemplate.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.AutoCorrectUpgradeProblemsAction.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.FindUpgradeProblemsStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.AutoCorrectUpgradeProblemsStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.FindUpgradeProblemsAction.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.AutoCorrectFindUpgradeProblemsStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.RemoveUpgradeProblemMarkersStep.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.steps.FixUpgradeProblemsStep.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.commands.AutoCorrectFindUpgradeProblemsCommand.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.commands.AutoCorrectUpgradeProblemsCommand.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.commands.FindUpgradeProblemsCommand.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.commands.RemoveUpgradeProblemMarkersCommand.xml

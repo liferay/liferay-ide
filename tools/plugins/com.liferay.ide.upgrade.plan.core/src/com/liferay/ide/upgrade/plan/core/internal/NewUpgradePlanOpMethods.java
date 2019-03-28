@@ -18,15 +18,9 @@ import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepCategoryElement;
 
 import java.nio.file.Paths;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -67,16 +61,6 @@ public class NewUpgradePlanOpMethods {
 
 		Path path = _getter.get(newUpgradePlanOp.getLocation());
 
-		ElementList<UpgradeStepCategoryElement> upgradeStepCategories = newUpgradePlanOp.getUpgradeStepCategories();
-
-		Stream<UpgradeStepCategoryElement> upgradeStepCategoryElements = upgradeStepCategories.stream();
-
-		List<String> categories = upgradeStepCategoryElements.map(
-			category -> _getter.get(category.getUpgradeStepCategory())
-		).collect(
-			Collectors.toList()
-		);
-
 		java.nio.file.Path sourceCodeLocation = null;
 
 		if (path != null) {
@@ -84,7 +68,7 @@ public class NewUpgradePlanOpMethods {
 		}
 
 		UpgradePlan upgradePlan = upgradePlanner.newUpgradePlan(
-			name, currentVersion, targetVersion, sourceCodeLocation, categories);
+			name, currentVersion, targetVersion, sourceCodeLocation);
 
 		if (upgradePlan == null) {
 			return Status.createErrorStatus("Could not create upgrade plan named: " + name);

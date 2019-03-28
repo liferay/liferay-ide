@@ -16,13 +16,14 @@ package com.liferay.ide.upgrade.plan.ui.internal.steps;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
 
@@ -30,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -64,12 +64,12 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePlanAcessor {
+public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 
-	public UpgradeStepItem(FormToolkit formToolkit, ScrolledForm scrolledForm, String upgradeStepId) {
+	public UpgradeStepItem(FormToolkit formToolkit, ScrolledForm scrolledForm, UpgradeStep upgradeStep) {
 		_formToolkit = formToolkit;
 		_scrolledForm = scrolledForm;
-		_upgradeStep = getStep(upgradeStepId);
+		_upgradeStep = upgradeStep;
 
 		_parentComposite = _scrolledForm.getBody();
 
@@ -99,8 +99,10 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 
 		FormText description = _formToolkit.createFormText(_parentComposite, true);
 
-		if (CoreUtil.isNotNullOrEmpty(_upgradeStep.getDescription())) {
-			description.setText(_upgradeStep.getDescription(), true, false);
+		String des = _upgradeStep.getDescription();
+
+		if (CoreUtil.isNotNullOrEmpty(des)) {
+			description.setText(des, true, false);
 		}
 		else {
 			description.setText("", true, false);
@@ -120,36 +122,35 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 
 		_buttonComposite.setLayoutData(new TableWrapData(TableWrapData.FILL));
 
-		List<UpgradeStep> children = Stream.of(
-			_upgradeStep.getChildIds()
-		).map(
-			this::getStep
-		).collect(
-			Collectors.toList()
-		);
+		List<UpgradeStep> children = _upgradeStep.getChildren();
 
 		if (children.isEmpty()) {
-			Image stepPerformImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.STEP_PERFORM_IMAGE);
+			String commandId = _upgradeStep.getCommandId();
 
-			ImageHyperlink performImageHyperlink = createImageHyperlink(
-				_formToolkit, _buttonComposite, stepPerformImage, this, "Click to perform",
-				"Performing " + _upgradeStep.getTitle() + "...", this::_perform, _upgradeStep);
+			if (CoreUtil.isNotNullOrEmpty(commandId)) {
+				Image stepPerformImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.STEP_PERFORM_IMAGE);
 
-			_disposables.add(() -> performImageHyperlink.dispose());
+				ImageHyperlink performImageHyperlink = createImageHyperlink(
+					_formToolkit, _buttonComposite, stepPerformImage, this, "Click to perform",
+					"Performing " + _upgradeStep.getTitle() + "...", this::_perform, _upgradeStep);
 
-			_enables.add(performImageHyperlink);
+				_disposables.add(() -> performImageHyperlink.dispose());
 
-			_fill(_formToolkit, _buttonComposite, _disposables);
+				_enables.add(performImageHyperlink);
 
-			Image stepCompleteImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.STEP_COMPLETE_IMAGE);
+				_fill(_formToolkit, _buttonComposite, _disposables);
+			}
+			else {
+				Image stepCompleteImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.STEP_COMPLETE_IMAGE);
 
-			ImageHyperlink completeImageHyperlink = createImageHyperlink(
-				_formToolkit, _buttonComposite, stepCompleteImage, this, "Click when complete",
-				"Completing " + _upgradeStep.getTitle() + "...", this::_complete, _upgradeStep);
+				ImageHyperlink completeImageHyperlink = createImageHyperlink(
+					_formToolkit, _buttonComposite, stepCompleteImage, this, "Click when complete",
+					"Completing " + _upgradeStep.getTitle() + "...", this::_complete, _upgradeStep);
 
-			_disposables.add(() -> completeImageHyperlink.dispose());
+				_disposables.add(() -> completeImageHyperlink.dispose());
 
-			_enables.add(completeImageHyperlink);
+				_enables.add(completeImageHyperlink);
+			}
 		}
 
 		_fill(formToolkit, _buttonComposite, _disposables);
@@ -271,7 +272,15 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener, UpgradePla
 	}
 
 	private IStatus _perform(IProgressMonitor progressMonitor) {
-		return _upgradeStep.perform(progressMonitor);
+		String commandId = _upgradeStep.getCommandId();
+
+		UpgradeCommand upgradeCommand = ServicesLookup.getSingleService(UpgradeCommand.class, "(id=" + commandId + ")");
+
+		if (upgradeCommand != null) {
+			return upgradeCommand.perform(progressMonitor);
+		}
+
+		return Status.CANCEL_STATUS;
 	}
 
 	private IStatus _restart(IProgressMonitor progressMonitor) {

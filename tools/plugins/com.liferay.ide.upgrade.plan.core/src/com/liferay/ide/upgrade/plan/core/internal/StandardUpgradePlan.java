@@ -14,11 +14,10 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepCategory;
-import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.nio.file.Path;
 
@@ -27,14 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
 
 /**
  * @author Gregory Amerson
@@ -42,16 +34,12 @@ import org.osgi.framework.FrameworkUtil;
  */
 public class StandardUpgradePlan implements UpgradePlan {
 
-	public StandardUpgradePlan(
-		String name, String currentVersion, String targetVersion, Path currentProjectLocation,
-		List<String> upgradeStepCategories) {
-
+	public StandardUpgradePlan(String name, String currentVersion, String targetVersion, Path currentProjectLocation) {
 		_name = name;
 		_currentVersion = currentVersion;
 		_targetVersion = targetVersion;
 		_currentProjectLocation = currentProjectLocation;
 		_upgradeProblems = new HashSet<>();
-		_upgradeStepCategories = upgradeStepCategories;
 	}
 
 	@Override
@@ -75,47 +63,6 @@ public class StandardUpgradePlan implements UpgradePlan {
 	}
 
 	@Override
-	public List<UpgradeStep> getRootSteps() {
-		if (_rootSteps == null) {
-			Bundle bundle = FrameworkUtil.getBundle(StandardUpgradePlan.class);
-
-			BundleContext bundleContext = bundle.getBundleContext();
-
-			List<UpgradeStepCategory> orderedUpgradeCategories = ServicesLookup.getOrderedServices(
-				bundleContext, UpgradeStepCategory.class, null);
-
-			Stream<UpgradeStepCategory> stream = orderedUpgradeCategories.stream();
-
-			List<UpgradeStep> rootSteps = stream.filter(
-				upgradeStepCategory -> {
-					if (_upgradeStepCategories == null) {
-						return true;
-					}
-
-					return _upgradeStepCategories.contains(upgradeStepCategory.getId());
-				}
-			).flatMap(
-				upgradeCategory -> {
-					List<UpgradeStep> orderedUpgradeSteps = ServicesLookup.getOrderedServices(
-						bundleContext, UpgradeStep.class, "(categoryId=" + upgradeCategory.getId() + ")");
-
-					return orderedUpgradeSteps.stream();
-				}
-			).filter(
-				Objects::nonNull
-			).filter(
-				step -> step.appliesTo(this)
-			).collect(
-				Collectors.toList()
-			);
-
-			_rootSteps = rootSteps;
-		}
-
-		return Collections.unmodifiableList(_rootSteps);
-	}
-
-	@Override
 	public Path getTargetProjectLocation() {
 		return _targetProjectLocation;
 	}
@@ -130,9 +77,21 @@ public class StandardUpgradePlan implements UpgradePlan {
 		return _upgradeProblems;
 	}
 
+	public UpgradeStep getUpgradeStep(String title) {
+		for (UpgradeStep upgradeStep : _upgradeSteps) {
+			UpgradeStep step = _getUpgradeStep(upgradeStep, title);
+
+			if (step != null) {
+				return step;
+			}
+		}
+
+		return null;
+	}
+
 	@Override
-	public List<String> getUpgradeStepCategories() {
-		return _upgradeStepCategories;
+	public List<UpgradeStep> getUpgradeSteps() {
+		return Collections.unmodifiableList(_upgradeSteps);
 	}
 
 	@Override
@@ -165,6 +124,24 @@ public class StandardUpgradePlan implements UpgradePlan {
 		_targetProjectLocation = path;
 	}
 
+	public void setUpgradeSteps(List<UpgradeStep> upgradeSteps) {
+		_upgradeSteps = upgradeSteps;
+	}
+
+	private UpgradeStep _getUpgradeStep(UpgradeStep upgradeStep, String title) {
+		if (StringUtil.equals(upgradeStep.getTitle(), title)) {
+			return upgradeStep;
+		}
+
+		List<UpgradeStep> children = upgradeStep.getChildren();
+
+		for (UpgradeStep child : children) {
+			_getUpgradeStep(child, title);
+		}
+
+		return null;
+	}
+
 	@SuppressWarnings("serial")
 	private static final List<String> _liferayVersions = new ArrayList<String>() {
 		{
@@ -177,10 +154,9 @@ public class StandardUpgradePlan implements UpgradePlan {
 	private final Path _currentProjectLocation;
 	private final String _currentVersion;
 	private final String _name;
-	private List<UpgradeStep> _rootSteps;
 	private Path _targetProjectLocation;
 	private final String _targetVersion;
 	private Set<UpgradeProblem> _upgradeProblems;
-	private List<String> _upgradeStepCategories;
+	private List<UpgradeStep> _upgradeSteps;
 
 }

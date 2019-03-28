@@ -16,119 +16,162 @@ package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.core.util.ListUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Dictionary;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.Adapters;
 
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  * @author Terry Jia
  */
-public interface UpgradeStep {
+public class UpgradeStep {
 
-	public default boolean appliesTo(UpgradePlan upgradePlan) {
-		return true;
+	public UpgradeStep(
+		UpgradePlanner upgradePlanner, String title, String description, String imagePath, String url,
+		String requirement, UpgradeStepStatus status, String commandId, UpgradeStep parent) {
+
+		_upgradePlanner = upgradePlanner;
+		_title = title;
+		_description = description;
+		_icon = imagePath;
+		_url = url;
+		_requirement = requirement;
+		_status = status;
+		_commandId = commandId;
+		_parent = parent;
 	}
 
-	public boolean completed();
-
-	public boolean enabled();
-
-	public String getCategoryId();
-
-	public String[] getChildIds();
-
-	public String getDescription();
-
-	public default double getDoubleProperty(Dictionary<String, Object> properties, String key) {
-		Object value = properties.get(key);
-
-		if (value != null) {
-			try {
-				return Double.parseDouble(value.toString());
-			}
-			catch (NumberFormatException nfe) {
-			}
-		}
-
-		return -1;
+	public void appendChild(UpgradeStep upgradeStep) {
+		_children.add(upgradeStep);
 	}
 
-	public String getId();
-
-	public String getImagePath();
-
-	public double getOrder();
-
-	public String getParentId();
-
-	public UpgradeStepRequirement getRequirement();
-
-	public UpgradeStepStatus getStatus();
-
-	public default String getStringProperty(Dictionary<String, Object> properties, String key) {
-		return getStringProperty(properties, key, null);
-	}
-
-	public default String getStringProperty(Dictionary<String, Object> properties, String key, String defaultValue) {
-		Object value = properties.get(key);
-
-		if (value instanceof String) {
-			return (String)value;
-		}
-
-		return defaultValue;
-	}
-
-	public String getTitle();
-
-	public String getUrl();
-
-	public default <T extends UpgradeStep> boolean isEqual(List<T> source, List<T> target) {
-		if (source == null) {
-			if (target == null) {
-				return true;
+	public boolean completed() {
+		if (ListUtil.isNotEmpty(_children)) {
+			for (UpgradeStep childUpgradeStep : _children) {
+				if (!childUpgradeStep.completed()) {
+					return false;
+				}
 			}
 
-			return false;
-		}
-
-		if (target == null) {
-			return false;
-		}
-
-		if (source.size() != target.size()) {
-			return false;
-		}
-
-		if (ListUtil.isEmpty(source) && ListUtil.isEmpty(target)) {
 			return true;
 		}
 
-		Stream<T> targetStream = target.stream();
+		if ((getStatus() == UpgradeStepStatus.COMPLETED) || (getStatus() == UpgradeStepStatus.SKIPPED)) {
+			return true;
+		}
 
-		List<String> targetElementIds = targetStream.map(
-			element -> element.getId()
-		).collect(
-			Collectors.toList()
-		);
-
-		Stream<T> sourceStream = source.stream();
-
-		return sourceStream.filter(
-			element -> targetElementIds.contains(element.getId())
-		).findAny(
-		).isPresent();
+		return false;
 	}
 
-	public default boolean isEqual(String[] source, String[] target) {
+	public boolean enabled() {
+		if (_parent == null) {
+			return true;
+		}
+
+		List<UpgradeStep> siblings = _parent.getChildren();
+
+		for (UpgradeStep sibling : siblings) {
+			if (sibling.equals(this)) {
+				break;
+			}
+
+			if (_isRequiredIncompleted(sibling)) {
+				return false;
+			}
+		}
+
+		if (_parent.enabled()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean equals(Object object) {
+		if ((object instanceof UpgradeStep) == false) {
+			return false;
+		}
+
+		UpgradeStep baseUpgradeStep = Adapters.adapt(object, UpgradeStep.class);
+
+		if (baseUpgradeStep == null) {
+			return false;
+		}
+
+		if (isEqualIgnoreCase(_description, baseUpgradeStep._description) &&
+			isEqualIgnoreCase(_requirement, baseUpgradeStep._requirement) &&
+			isEqualIgnoreCase(_url, baseUpgradeStep._url) && isEqualIgnoreCase(_icon, baseUpgradeStep._icon) &&
+			isEqualIgnoreCase(_title, baseUpgradeStep._title) && _status.equals(baseUpgradeStep._status)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public List<UpgradeStep> getChildren() {
+		return _children;
+	}
+
+	public String getCommandId() {
+		return _commandId;
+	}
+
+	public String getDescription() {
+		return "<form>" + _description + "</form>";
+	}
+
+	public String getIcon() {
+		if (completed()) {
+			return "icons/completed.gif";
+		}
+		else if (_status.equals(UpgradeStepStatus.FAILED)) {
+			return "icons/failed.png";
+		}
+
+		// TODO need to use the special icon instead
+
+		return "icons/step_default.gif";
+	}
+
+	public UpgradeStep getParent() {
+		return _parent;
+	}
+
+	public UpgradeStepRequirement getRequirement() {
+		return UpgradeStepRequirement.valueOf(UpgradeStepRequirement.class, _requirement.toUpperCase());
+	}
+
+	public UpgradeStepStatus getStatus() {
+		return _status;
+	}
+
+	public String getTitle() {
+		return _title;
+	}
+
+	public String getUrl() {
+		return _url;
+	}
+
+	public int hashCode() {
+		int hash = 31;
+
+		hash = 31 * hash + (_description != null ? _description.hashCode() : 0);
+		hash = 31 * hash + (_requirement != null ? _requirement.hashCode() : 0);
+		hash = 31 * hash + (_url != null ? _url.hashCode() : 0);
+		hash = 31 * hash + (_icon != null ? _icon.hashCode() : 0);
+		hash = 31 * hash + (_title != null ? _title.hashCode() : 0);
+		hash = 31 * hash + (_status != null ? _status.hashCode() : 0);
+
+		return hash;
+	}
+
+	public boolean isEqual(String[] source, String[] target) {
 		if (source == null) {
 			if (target == null) {
 				return true;
@@ -159,7 +202,7 @@ public interface UpgradeStep {
 		).isPresent();
 	}
 
-	public default boolean isEqualIgnoreCase(String original, String target) {
+	public boolean isEqualIgnoreCase(String original, String target) {
 		if (original != null) {
 			return original.equalsIgnoreCase(target);
 		}
@@ -171,10 +214,32 @@ public interface UpgradeStep {
 		return false;
 	}
 
-	public default IStatus perform(IProgressMonitor progressMonitor) {
-		return Status.OK_STATUS;
+	public void setStatus(UpgradeStepStatus status) {
+		UpgradeStepStatusChangedEvent upgradeStepStatusChangedEvent = new UpgradeStepStatusChangedEvent(
+			this, _status, status);
+
+		_status = status;
+
+		_upgradePlanner.dispatch(upgradeStepStatusChangedEvent);
 	}
 
-	public void setStatus(UpgradeStepStatus upgradeStepStatus);
+	private boolean _isRequiredIncompleted(UpgradeStep upgradeStep) {
+		if (UpgradeStepRequirement.REQUIRED.equals(upgradeStep.getRequirement()) && !upgradeStep.completed()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private List<UpgradeStep> _children = new ArrayList<>();
+	private String _commandId;
+	private String _description;
+	private String _icon;
+	private UpgradeStep _parent;
+	private String _requirement;
+	private UpgradeStepStatus _status = UpgradeStepStatus.INCOMPLETE;
+	private String _title;
+	private UpgradePlanner _upgradePlanner;
+	private String _url;
 
 }

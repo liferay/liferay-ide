@@ -24,5 +24,4 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.ui.navigator,
  org.eclipse.ui.navigator.resources,
  org.eclipse.ui.workbench.texteditor
-Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.ui.internal.UpgradeProblemsInfoProviderService.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.ui.internal.ResolveUpgradeProblemsStep.xml
+Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.ui.internal.UpgradeProblemsInfoProviderService.xml

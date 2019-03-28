@@ -63,8 +63,8 @@
 		<module>com.liferay.ide.upgrade.plan.ui</module>
 		<module>com.liferay.ide.upgrade.problems.core</module>
 		<module>com.liferay.ide.upgrade.problems.ui</module>
-		<module>com.liferay.ide.upgrade.steps.core</module>
-		<module>com.liferay.ide.upgrade.steps.ui</module>
+		<module>com.liferay.ide.upgrade.commands.core</module>
+		<module>com.liferay.ide.upgrade.commands.ui</module>
 		<module>com.liferay.ide.xml.search.ui</module>
 	</modules>
 </project>

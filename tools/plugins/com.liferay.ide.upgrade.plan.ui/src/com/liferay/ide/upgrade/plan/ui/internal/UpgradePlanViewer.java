@@ -18,7 +18,6 @@ import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
@@ -57,7 +56,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener, UpgradePlanAcessor {
+public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener {
 
 	public UpgradePlanViewer(Composite parentComposite) {
 		_treeViewer = new TreeViewer(parentComposite);
@@ -158,13 +157,11 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		return _treeViewer;
 	}
 
-	public void initTreeExpansion(String[] stepIds) {
+	public void initTreeExpansion(UpgradePlan upgradePlan, String[] titles) {
 		Stream.of(
-			stepIds
+			titles
 		).map(
-			this::getStep
-		).map(
-			step -> Adapters.adapt(step, UpgradeStep.class)
+			upgradePlan::getUpgradeStep
 		).filter(
 			Objects::nonNull
 		).forEach(
@@ -231,9 +228,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 
 		UpgradeStep upgradeStep = Adapters.adapt(selectedObject, UpgradeStep.class);
 
-		double selectedOrder = upgradeStep.getOrder();
-
-		UpgradeStep nextStep = _findNextStep(selectedOrder, parent);
+		UpgradeStep nextStep = _findNextStep(upgradeStep, parent);
 
 		if (nextStep != null) {
 			_treeViewer.expandToLevel(nextStep, 1, true);
@@ -253,23 +248,28 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener,
 		}
 	}
 
-	private UpgradeStep _findNextStep(double order, Object parent) {
+	private UpgradeStep _findNextStep(UpgradeStep currentUpgradeStep, Object parent) {
 		Object[] children = _treeContentProvider.getChildren(parent);
 
 		if (children == null) {
 			return null;
 		}
 
-		return Stream.of(
-			children
-		).map(
-			childObject -> Adapters.adapt(childObject, UpgradeStep.class)
-		).filter(
-			element -> element.getOrder() > order
-		).findFirst(
-		).orElse(
-			null
-		);
+		boolean found = false;
+
+		for (Object childObject : children) {
+			UpgradeStep upgradeStep = Adapters.adapt(childObject, UpgradeStep.class);
+
+			if (found) {
+				return upgradeStep;
+			}
+
+			if (upgradeStep.equals(currentUpgradeStep)) {
+				found = true;
+			}
+		}
+
+		return null;
 	}
 
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;

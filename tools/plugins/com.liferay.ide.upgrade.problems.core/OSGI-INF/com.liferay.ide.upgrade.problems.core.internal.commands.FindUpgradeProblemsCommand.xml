@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.commands.FindUpgradeProblemsCommand">
+   <property name="id" value="find_upgrade_problems"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeCommand"/>
+   </service>
+   <reference cardinality="1..1" field="_fileMigration" interface="com.liferay.ide.upgrade.problems.core.FileMigration" name="_fileMigration"/>
+   <reference cardinality="1..1" field="_resourceSelection" interface="com.liferay.ide.upgrade.commands.core.ResourceSelection" name="_resourceSelection"/>
+   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.commands.FindUpgradeProblemsCommand"/>
+</scr:component>

@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-Activator: com.liferay.ide.upgrade.commands.ui.internal.UpgradeCommandsUIPlugin
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Upgrade Plan Commands UI
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-SymbolicName: com.liferay.ide.upgrade.commands.ui;singleton:=true
+Bundle-Vendor: Liferay, Inc.
+Bundle-Version: 3.6.0.qualifier
+Require-Bundle: com.liferay.ide.project.ui,
+ com.liferay.ide.ui,
+ com.liferay.ide.upgrade.plan.core,
+ com.liferay.ide.upgrade.commands.core,
+ org.apache.commons.io,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.help,
+ org.eclipse.jdt.ui,
+ org.eclipse.osgi,
+ org.eclipse.osgi.services,
+ org.eclipse.sapphire.ui
+Service-Component: OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.ResourceSelectionImpl.xml,
+ OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.MessagePromptImpl.xml,
+ OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.CreateNewLiferayWorkspaceCommand.xml,
+ OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.sdk.ConvertPluginsSDKProjectsToModulesCommand.xml,
+ OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.sdk.CopyPluginsSDKProjectsToWorkspaceCommand.xml

@@ -16,13 +16,13 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepPerformedEvent;
 import com.liferay.ide.upgrade.plan.ui.internal.steps.UpgradeStepViewer;
 
 import java.util.Objects;
@@ -114,6 +114,8 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 
 		_upgradePlanner = _serviceTracker.getService();
 
+		_upgradePlanner.addListener(this);
+
 		Optional.ofNullable(
 			memento
 		).map(
@@ -142,12 +144,12 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 						setContentDescription("Active upgrade plan: " + upgradePlan.getName());
 
 						if (_memento != null) {
-							_upgradePlanViewer.initTreeExpansion(_loadTreeExpansion());
+							_upgradePlanViewer.initTreeExpansion(upgradePlan, _loadTreeExpansion());
 						}
 					});
 			}
 		}
-		else if (upgradeEvent instanceof UpgradeStepPerformedEvent) {
+		else if (upgradeEvent instanceof UpgradeCommandPerformedEvent) {
 			UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
 		}
 	}
@@ -213,29 +215,29 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 	}
 
 	private String[] _loadTreeExpansion() {
-		String stepIdsValue = _memento.getString("stepIds");
+		String stepTitles = _memento.getString("stepTitles");
 
-		if (stepIdsValue == null) {
+		if (stepTitles == null) {
 			return new String[0];
 		}
 
-		String[] stepIds = stepIdsValue.split(",");
+		String[] titles = stepTitles.split(",");
 
-		return stepIds;
+		return titles;
 	}
 
 	private void _saveTreeExpansion(IMemento memento, Object[] expansions) {
-		String[] stepIds = Stream.of(
+		String[] stepTitles = Stream.of(
 			expansions
 		).map(
 			expansion -> (UpgradeStep)expansion
 		).map(
-			upgradeStep -> upgradeStep.getId()
+			upgradeStep -> upgradeStep.getTitle()
 		).toArray(
 			String[]::new
 		);
 
-		memento.putString("stepIds", StringUtil.merge(stepIds, ","));
+		memento.putString("stepTitles", StringUtil.merge(stepTitles, ","));
 	}
 
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();

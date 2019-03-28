@@ -21,18 +21,6 @@
 	                <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
 	                <property>TargetVersion</property>
 	            </property-editor>
-                <property-editor>
-                    <property>UpgradeStepCategories</property>
-                    <show-label>true</show-label>
-                    <hint>
-                        <name>factory</name>
-                        <value>CheckBoxListPropertyEditorPresentation$Factory</value>
-                    </hint>
-                </property-editor>
-                    <property-editor>
-                    <visible-when>${Contains(UpgradeStepCategories,&quot;UpgradeStepCategory&quot;,&quot;code&quot;)}</visible-when>
-                    <property>Location</property>
-                </property-editor>
             </content>
             <description>Create and start a new Upgrade Plan. Any existing plan will be replaced.</description>
             <image>NewUpgradePlanWizard.png</image>
