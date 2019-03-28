@@ -510,6 +510,8 @@ public interface UI {
 
 	public final String NEW_LIFERAY_LAYOUT_TMEPLATE = "New Liferay Layout Template (Legacy)";
 
+	public final String NEW_LIFERAY_MODULE_EXT_PROJECT = "New Liferay Module Ext Project";
+
 	public final String NEW_LIFERAY_MODULE_PROJECT = "New Liferay Module Project";
 
 	public final String NEW_LIFERAY_MODULE_PROJECT_FRAGMENT = "New Liferay Module Project Fragment";
