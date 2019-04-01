@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Functional Modules Ext Wizard Create Tests
+Bundle-SymbolicName: com.liferay.ide.functional.modules.ext.wizard.create.tests
+Bundle-Version: 3.6.0.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.junit,
+ org.eclipse.ui.console,
+ org.eclipse.swtbot.go,
+ com.liferay.ide.ui.swtbot,
+ com.liferay.ide.ui.liferay,
+ org.eclipse.core.resources
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Import-Package: com.liferay.ide.functional.modules.ext.base

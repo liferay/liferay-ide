@@ -35,6 +35,7 @@ import com.liferay.ide.ui.liferay.page.wizard.project.NewFragmentWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayJsfWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayModuleInfoWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayModuleWizard;
+import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayModulesExtWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayPluginWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayWorkspaceWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewProjectWizard;
@@ -191,6 +192,14 @@ public class WizardAction extends UIAction {
 		menu.click();
 	}
 
+	public void openNewLiferayModulesExtWizard() {
+		assertTitleStartBy(_getWizard(), ide.getShell());
+
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayModulesExt();
+
+		menu.click();
+	}
+
 	public void openNewLiferayModuleWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
@@ -257,6 +266,7 @@ public class WizardAction extends UIAction {
 	public NewLiferayWorkspaceWizardAction newLiferayWorkspace = new NewLiferayWorkspaceWizardAction();
 	public NewModuleWizardAction newModule = new NewModuleWizardAction();
 	public NewModuleInfoWizardAction newModuleInfo = new NewModuleInfoWizardAction();
+	public NewLiferayModulesExtWizardAction newModulesExt = new NewLiferayModulesExtWizardAction();
 	public NewPluginWizardAction newPlugin = new NewPluginWizardAction();
 	public NewProjectWizardAction newProject = new NewProjectWizardAction();
 	public NewRuntimeWizardAction newRuntime = new NewRuntimeWizardAction();
@@ -752,6 +762,24 @@ public class WizardAction extends UIAction {
 		}
 
 		private final NewLiferayJsfWizard _newJsfProjectWizard = new NewLiferayJsfWizard(bot);
+
+	}
+
+	public class NewLiferayModulesExtWizardAction extends NewProjectWizardAction {
+
+		public ToolbarButtonWithTooltip browseBtn() {
+			return _newModulesExtWizard.getBrowseBtn();
+		}
+
+		public void openSelectBrowseDialog() {
+			browseBtn().click();
+		}
+
+		public void prepare(String projectName) {
+			_newModulesExtWizard.setProjectName(projectName);
+		}
+
+		private final NewLiferayModulesExtWizard _newModulesExtWizard = new NewLiferayModulesExtWizard(bot);
 
 	}
 
