@@ -42,7 +42,6 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
-import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.manipulation.TypeNameMatchCollector;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
@@ -135,13 +134,6 @@ public class LiferayGradleDependencyQuickFix implements ArtifactBuilder, IQuickF
 			}
 
 			return _processProposals(name, context);
-		}
-		else {
-			if (selectedASTNode instanceof Name) {
-				Name node = (Name)selectedASTNode;
-
-				return _processProposals(node.getFullyQualifiedName(), context);
-			}
 		}
 
 		return Collections.emptySet();
