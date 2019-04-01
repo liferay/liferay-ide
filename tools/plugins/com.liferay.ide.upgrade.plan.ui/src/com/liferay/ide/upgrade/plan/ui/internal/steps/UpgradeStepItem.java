@@ -137,8 +137,6 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 				_disposables.add(() -> performImageHyperlink.dispose());
 
 				_enables.add(performImageHyperlink);
-
-				_fill(_formToolkit, _buttonComposite, _disposables);
 			}
 			else {
 				Image stepCompleteImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.STEP_COMPLETE_IMAGE);
