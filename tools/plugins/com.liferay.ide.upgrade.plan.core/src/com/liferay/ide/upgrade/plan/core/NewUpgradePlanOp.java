@@ -71,7 +71,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
 
 	@AbsolutePath
-	@Fact(statement = "This location should be either a Plugins SDK, Liferay Workspace, or a Maven parent project.")
+	@Fact(statement = "This location should be either a Plugins SDK, Liferay Workspace.")
 	@Label(standard = "Current Code Location")
 	@Service(impl = SourceLocationValidationService.class)
 	@Type(base = Path.class)
