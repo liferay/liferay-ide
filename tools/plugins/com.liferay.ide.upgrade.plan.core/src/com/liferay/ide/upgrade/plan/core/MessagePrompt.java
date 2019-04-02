@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.commands.core;
+package com.liferay.ide.upgrade.plan.core;
 
 /**
  * @author Gregory Amerson

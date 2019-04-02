@@ -14,9 +14,9 @@
 
 package com.liferay.ide.upgrade.commands.core.internal.buildservice;
 
-import com.liferay.ide.upgrade.commands.core.ResourceSelection;
 import com.liferay.ide.upgrade.commands.core.buildservice.RemoveLegacyFilesCommandKeys;
 import com.liferay.ide.upgrade.commands.core.internal.UpgradeCommandsCorePlugin;
+import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;

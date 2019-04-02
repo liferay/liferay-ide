@@ -15,8 +15,8 @@
 package com.liferay.ide.upgrade.commands.core.internal.sdk;
 
 import com.liferay.ide.upgrade.commands.core.ProjectImporter;
-import com.liferay.ide.upgrade.commands.core.ResourceSelection;
 import com.liferay.ide.upgrade.commands.core.sdk.ImportExistingPluginsSDKCommandKeys;
+import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;

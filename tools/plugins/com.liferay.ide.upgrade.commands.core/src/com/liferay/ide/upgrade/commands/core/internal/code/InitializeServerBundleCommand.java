@@ -16,9 +16,9 @@ package com.liferay.ide.upgrade.commands.core.internal.code;
 
 import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.jobs.InitBundleJob;
-import com.liferay.ide.upgrade.commands.core.ResourceSelection;
 import com.liferay.ide.upgrade.commands.core.code.InitializeServerBundleCommandKeys;
 import com.liferay.ide.upgrade.commands.core.internal.UpgradeCommandsCorePlugin;
+import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;

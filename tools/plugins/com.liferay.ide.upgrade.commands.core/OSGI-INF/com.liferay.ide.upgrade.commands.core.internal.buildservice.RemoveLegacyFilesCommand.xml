@@ -4,7 +4,7 @@
    <service scope="prototype">
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeCommand"/>
    </service>
-   <reference cardinality="1..1" field="_resourceSelection" interface="com.liferay.ide.upgrade.commands.core.ResourceSelection" name="_resourceSelection"/>
+   <reference cardinality="1..1" field="_resourceSelection" interface="com.liferay.ide.upgrade.plan.core.ResourceSelection" name="_resourceSelection"/>
    <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
    <implementation class="com.liferay.ide.upgrade.commands.core.internal.buildservice.RemoveLegacyFilesCommand"/>
 </scr:component>

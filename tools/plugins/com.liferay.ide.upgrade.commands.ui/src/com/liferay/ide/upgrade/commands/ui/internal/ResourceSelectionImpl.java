@@ -15,8 +15,8 @@
 package com.liferay.ide.upgrade.commands.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.commands.core.ResourceSelection;
 import com.liferay.ide.upgrade.commands.ui.internal.dialog.ProjectsSelectionDialog;
+import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

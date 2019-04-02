@@ -16,8 +16,8 @@ package com.liferay.ide.gradle.core.upgrade;
 
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
-import com.liferay.ide.upgrade.commands.core.ResourceSelection;
 import com.liferay.ide.upgrade.commands.core.sdk.CreateLegacyPluginsSDKCommandKeys;
+import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;

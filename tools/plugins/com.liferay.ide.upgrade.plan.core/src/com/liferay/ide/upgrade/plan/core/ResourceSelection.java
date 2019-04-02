@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.commands.core;
+package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;

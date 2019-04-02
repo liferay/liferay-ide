@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.commands.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.commands.core.MessagePrompt;
+import com.liferay.ide.upgrade.plan.core.MessagePrompt;
 
 import org.osgi.service.component.annotations.Component;
 

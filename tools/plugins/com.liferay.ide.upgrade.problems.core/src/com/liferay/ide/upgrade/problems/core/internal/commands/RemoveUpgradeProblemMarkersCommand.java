@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.commands;
 
-import com.liferay.ide.upgrade.commands.core.MessagePrompt;
+import com.liferay.ide.upgrade.plan.core.MessagePrompt;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
