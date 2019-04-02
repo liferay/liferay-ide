@@ -25,7 +25,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
-import com.liferay.ide.upgrade.plan.core.util.StepTreeParser;
 
 import java.io.File;
 import java.io.FileInputStream;

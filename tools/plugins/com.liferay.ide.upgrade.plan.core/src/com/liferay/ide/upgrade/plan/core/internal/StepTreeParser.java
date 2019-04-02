@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core.util;
+package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
