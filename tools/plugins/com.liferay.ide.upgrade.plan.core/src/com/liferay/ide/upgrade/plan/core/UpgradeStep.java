@@ -139,7 +139,7 @@ public class UpgradeStep {
 		return "<form>" + _description + "</form>";
 	}
 
-	public String getIcon() {
+	public String getImagePath() {
 		if (completed()) {
 			return "icons/completed.gif";
 		}

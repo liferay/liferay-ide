@@ -89,7 +89,7 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 			if (element instanceof UpgradeStep) {
 				UpgradeStep upgradeStep = (UpgradeStep)element;
 
-				imagePath = upgradeStep.getIcon();
+				imagePath = upgradeStep.getImagePath();
 
 				if (imagePath != null) {
 					bundle = FrameworkUtil.getBundle(element.getClass());

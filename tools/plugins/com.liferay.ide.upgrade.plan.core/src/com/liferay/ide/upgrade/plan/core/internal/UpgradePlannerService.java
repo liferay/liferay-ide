@@ -320,7 +320,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 			String title = upgradeStepMemento.getString("title");
 			String description = upgradeStepMemento.getString("title");
 			String commandId = upgradeStepMemento.getString("commandId");
-			String icon = upgradeStepMemento.getString("icon");
+			String icon = upgradeStepMemento.getString("imagePath");
 			String url = upgradeStepMemento.getString("url");
 			String status = upgradeStepMemento.getString("status");
 			String requirement = upgradeStepMemento.getString("requirement");
@@ -407,7 +407,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 			stepMemento.putString("title", upgradeStep.getTitle());
 			stepMemento.putString("description", upgradeStep.getDescription());
-			stepMemento.putString("icon", upgradeStep.getIcon());
+			stepMemento.putString("imagePath", upgradeStep.getImagePath());
 			stepMemento.putString("url", upgradeStep.getUrl());
 			stepMemento.putString("commandId", upgradeStep.getCommandId());
 			stepMemento.putString("requirement", String.valueOf(upgradeStep.getRequirement()));
