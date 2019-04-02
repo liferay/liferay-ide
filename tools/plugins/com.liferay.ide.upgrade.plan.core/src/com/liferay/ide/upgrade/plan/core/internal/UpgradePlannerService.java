@@ -157,7 +157,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 	public UpgradePlan newUpgradePlan(
 		String name, String currentVersion, String targetVersion, Path sourceCodeLocation) {
 
-		List<UpgradeStep> upgradeSteps = StepTreeParser.parseStepTree(this);
+		List<UpgradeStep> upgradeSteps = StepTreeParser.parseStepTree();
 
 		return new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation, upgradeSteps);
 	}
@@ -324,7 +324,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 			String requirement = upgradeStepMemento.getString("requirement");
 
 			UpgradeStep upgradeStep = new UpgradeStep(
-				this, title, description, icon, url, requirement, UpgradeStepStatus.valueOf(status), commandId,
+				title, description, icon, url, requirement, UpgradeStepStatus.valueOf(status), commandId,
 				parentUpgradeStep);
 
 			if (parentUpgradeStep == null) {

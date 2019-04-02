@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.plan.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.knowledge.base.markdown.converter.MarkdownConverter;
@@ -36,7 +35,7 @@ import org.jsoup.select.Elements;
  */
 public class StepTreeParser {
 
-	public static List<UpgradeStep> parseStepTree(UpgradePlanner upgradePlanner) {
+	public static List<UpgradeStep> parseStepTree() {
 		if (_upgradeSteps.size() == 0) {
 			try {
 				String markdown = CoreUtil.readStreamToString(
@@ -52,7 +51,7 @@ public class StepTreeParser {
 
 				Element root = roots.get(0);
 
-				_loopChildren(upgradePlanner, null, root);
+				_loopChildren(null, root);
 			}
 			catch (IOException ioe) {
 				ioe.printStackTrace();
@@ -62,7 +61,7 @@ public class StepTreeParser {
 		return _upgradeSteps;
 	}
 
-	private static void _loopChildren(UpgradePlanner upgradePlanner, UpgradeStep parent, Element olElement) {
+	private static void _loopChildren(UpgradeStep parent, Element olElement) {
 		Elements children = olElement.children();
 
 		UpgradeStep upgradeStep = null;
@@ -109,8 +108,7 @@ public class StepTreeParser {
 				}
 
 				upgradeStep = new UpgradeStep(
-					upgradePlanner, title, description, imagePath, url, requirement, UpgradeStepStatus.INCOMPLETE,
-					commandId, parent);
+					title, description, imagePath, url, requirement, UpgradeStepStatus.INCOMPLETE, commandId, parent);
 
 				if (parent == null) {
 					_upgradeSteps.add(upgradeStep);
@@ -120,7 +118,7 @@ public class StepTreeParser {
 				}
 			}
 			else if (html.startsWith("<ol")) {
-				_loopChildren(upgradePlanner, upgradeStep, child);
+				_loopChildren(upgradeStep, child);
 			}
 		}
 	}

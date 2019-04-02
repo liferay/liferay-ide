@@ -23,6 +23,11 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Adapters;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
@@ -31,10 +36,9 @@ import org.eclipse.core.runtime.Adapters;
 public class UpgradeStep {
 
 	public UpgradeStep(
-		UpgradePlanner upgradePlanner, String title, String description, String imagePath, String url,
-		String requirement, UpgradeStepStatus status, String commandId, UpgradeStep parent) {
+		String title, String description, String imagePath, String url, String requirement, UpgradeStepStatus status,
+		String commandId, UpgradeStep parentUpgradeStep) {
 
-		_upgradePlanner = upgradePlanner;
 		_title = title;
 		_description = description;
 		_icon = imagePath;
@@ -42,7 +46,13 @@ public class UpgradeStep {
 		_requirement = requirement;
 		_status = status;
 		_commandId = commandId;
-		_parent = parent;
+		_parentUpgradeStep = parentUpgradeStep;
+
+		Bundle bundle = FrameworkUtil.getBundle(UpgradeStep.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
 	}
 
 	public void appendChild(UpgradeStep upgradeStep) {
@@ -67,12 +77,16 @@ public class UpgradeStep {
 		return false;
 	}
 
+	public void dispose() {
+		_serviceTracker.close();
+	}
+
 	public boolean enabled() {
-		if (_parent == null) {
+		if (_parentUpgradeStep == null) {
 			return true;
 		}
 
-		List<UpgradeStep> siblings = _parent.getChildren();
+		List<UpgradeStep> siblings = _parentUpgradeStep.getChildren();
 
 		for (UpgradeStep sibling : siblings) {
 			if (sibling.equals(this)) {
@@ -84,7 +98,7 @@ public class UpgradeStep {
 			}
 		}
 
-		if (_parent.enabled()) {
+		if (_parentUpgradeStep.enabled()) {
 			return true;
 		}
 
@@ -139,7 +153,7 @@ public class UpgradeStep {
 	}
 
 	public UpgradeStep getParent() {
-		return _parent;
+		return _parentUpgradeStep;
 	}
 
 	public UpgradeStepRequirement getRequirement() {
@@ -220,7 +234,9 @@ public class UpgradeStep {
 
 		_status = status;
 
-		_upgradePlanner.dispatch(upgradeStepStatusChangedEvent);
+		UpgradePlanner upgradePlanner = _serviceTracker.getService();
+
+		upgradePlanner.dispatch(upgradeStepStatusChangedEvent);
 	}
 
 	private boolean _isRequiredIncompleted(UpgradeStep upgradeStep) {
@@ -235,11 +251,11 @@ public class UpgradeStep {
 	private String _commandId;
 	private String _description;
 	private String _icon;
-	private UpgradeStep _parent;
+	private UpgradeStep _parentUpgradeStep;
 	private String _requirement;
+	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 	private UpgradeStepStatus _status = UpgradeStepStatus.INCOMPLETE;
 	private String _title;
-	private UpgradePlanner _upgradePlanner;
 	private String _url;
 
 }
