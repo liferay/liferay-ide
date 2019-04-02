@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
@@ -24,6 +25,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -161,7 +163,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 		Stream.of(
 			titles
 		).map(
-			upgradePlan::getUpgradeStep
+			title -> _findUpgradeStep(upgradePlan, title)
 		).filter(
 			Objects::nonNull
 		).forEach(
@@ -267,6 +269,34 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 			if (upgradeStep.equals(currentUpgradeStep)) {
 				found = true;
 			}
+		}
+
+		return null;
+	}
+
+	private UpgradeStep _findUpgradeStep(UpgradePlan upgradePlan, String title) {
+		List<UpgradeStep> upgradeSteps = upgradePlan.getUpgradeSteps();
+
+		for (UpgradeStep upgradeStep : upgradeSteps) {
+			UpgradeStep childUpgradeStep = _findUpgradeStep(upgradeStep, title);
+
+			if (childUpgradeStep != null) {
+				return childUpgradeStep;
+			}
+		}
+
+		return null;
+	}
+
+	private UpgradeStep _findUpgradeStep(UpgradeStep upgradeStep, String title) {
+		if (StringUtil.equals(upgradeStep.getTitle(), title)) {
+			return upgradeStep;
+		}
+
+		List<UpgradeStep> childUpgradeSteps = upgradeStep.getChildren();
+
+		for (UpgradeStep childUpgradeStep : childUpgradeSteps) {
+			return _findUpgradeStep(childUpgradeStep, title);
 		}
 
 		return null;

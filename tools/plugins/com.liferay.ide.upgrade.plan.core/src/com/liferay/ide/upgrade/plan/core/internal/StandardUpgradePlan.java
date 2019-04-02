@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
-import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
@@ -77,18 +76,6 @@ public class StandardUpgradePlan implements UpgradePlan {
 		return _upgradeProblems;
 	}
 
-	public UpgradeStep getUpgradeStep(String title) {
-		for (UpgradeStep upgradeStep : _upgradeSteps) {
-			UpgradeStep step = _getUpgradeStep(upgradeStep, title);
-
-			if (step != null) {
-				return step;
-			}
-		}
-
-		return null;
-	}
-
 	@Override
 	public List<UpgradeStep> getUpgradeSteps() {
 		return Collections.unmodifiableList(_upgradeSteps);
@@ -126,20 +113,6 @@ public class StandardUpgradePlan implements UpgradePlan {
 
 	public void setUpgradeSteps(List<UpgradeStep> upgradeSteps) {
 		_upgradeSteps = upgradeSteps;
-	}
-
-	private UpgradeStep _getUpgradeStep(UpgradeStep upgradeStep, String title) {
-		if (StringUtil.equals(upgradeStep.getTitle(), title)) {
-			return upgradeStep;
-		}
-
-		List<UpgradeStep> children = upgradeStep.getChildren();
-
-		for (UpgradeStep child : children) {
-			_getUpgradeStep(child, title);
-		}
-
-		return null;
 	}
 
 	@SuppressWarnings("serial")

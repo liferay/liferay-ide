@@ -38,8 +38,6 @@ public interface UpgradePlan {
 
 	public Collection<UpgradeProblem> getUpgradeProblems();
 
-	public UpgradeStep getUpgradeStep(String title);
-
 	public List<UpgradeStep> getUpgradeSteps();
 
 	public List<String> getUpgradeVersions();
