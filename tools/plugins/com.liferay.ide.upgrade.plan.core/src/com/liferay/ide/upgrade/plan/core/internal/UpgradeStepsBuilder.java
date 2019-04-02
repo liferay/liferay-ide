@@ -21,6 +21,7 @@ import com.liferay.knowledge.base.markdown.converter.MarkdownConverter;
 import com.liferay.knowledge.base.markdown.converter.factory.MarkdownConverterFactoryUtil;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,35 +34,40 @@ import org.jsoup.select.Elements;
 /**
  * @author Terry Jia
  */
-public class StepTreeParser {
+public class UpgradeStepsBuilder {
 
-	public static List<UpgradeStep> parseStepTree() {
-		if (_upgradeSteps.size() == 0) {
-			try {
-				String markdown = CoreUtil.readStreamToString(
-					StepTreeParser.class.getResourceAsStream(_STEPS_FILE_PATH));
-
-				MarkdownConverter markdownConverter = MarkdownConverterFactoryUtil.create();
-
-				String html = markdownConverter.convert(markdown);
-
-				Document document = Jsoup.parse(html);
-
-				Elements roots = document.select("#root");
-
-				Element root = roots.get(0);
-
-				_loopChildren(null, root);
-			}
-			catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
-		}
-
-		return _upgradeSteps;
+	public UpgradeStepsBuilder() {
 	}
 
-	private static void _loopChildren(UpgradeStep parent, Element olElement) {
+	public UpgradeStepsBuilder(InputStream builderInputStream) {
+		inputStream(builderInputStream);
+	}
+
+	public List<UpgradeStep> build() throws IOException {
+		List<UpgradeStep> upgradeSteps = new ArrayList<>();
+
+		String markdown = CoreUtil.readStreamToString(_builderInputStream);
+
+		MarkdownConverter markdownConverter = MarkdownConverterFactoryUtil.create();
+
+		String html = markdownConverter.convert(markdown);
+
+		Document document = Jsoup.parse(html);
+
+		Elements roots = document.select("#root");
+
+		Element root = roots.get(0);
+
+		_loopChildren(upgradeSteps, null, root);
+
+		return upgradeSteps;
+	}
+
+	public void inputStream(InputStream builderInputStream) {
+		_builderInputStream = builderInputStream;
+	}
+
+	private static void _loopChildren(List<UpgradeStep> upgradeSteps, UpgradeStep parent, Element olElement) {
 		Elements children = olElement.children();
 
 		UpgradeStep upgradeStep = null;
@@ -111,20 +117,18 @@ public class StepTreeParser {
 					title, description, imagePath, url, requirement, UpgradeStepStatus.INCOMPLETE, commandId, parent);
 
 				if (parent == null) {
-					_upgradeSteps.add(upgradeStep);
+					upgradeSteps.add(upgradeStep);
 				}
 				else {
 					parent.appendChild(upgradeStep);
 				}
 			}
 			else if (html.startsWith("<ol")) {
-				_loopChildren(upgradeStep, child);
+				_loopChildren(upgradeSteps, upgradeStep, child);
 			}
 		}
 	}
 
-	private static final String _STEPS_FILE_PATH = "liferay-upgrade-plan.markdown";
-
-	private static List<UpgradeStep> _upgradeSteps = new ArrayList<>();
+	private InputStream _builderInputStream;
 
 }

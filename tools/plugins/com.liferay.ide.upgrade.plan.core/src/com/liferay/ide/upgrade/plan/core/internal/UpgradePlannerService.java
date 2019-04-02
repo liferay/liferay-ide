@@ -153,10 +153,13 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	@Override
-	public UpgradePlan newUpgradePlan(
-		String name, String currentVersion, String targetVersion, Path sourceCodeLocation) {
+	public UpgradePlan newUpgradePlan(String name, String currentVersion, String targetVersion, Path sourceCodeLocation)
+		throws IOException {
 
-		List<UpgradeStep> upgradeSteps = StepTreeParser.parseStepTree();
+		UpgradeStepsBuilder upgradeStepsBuilder = new UpgradeStepsBuilder(
+			UpgradePlannerService.class.getResourceAsStream(_LIFERAY_UPGRADE_PLUGIN_MARKDOWN));
+
+		List<UpgradeStep> upgradeSteps = upgradeStepsBuilder.build();
 
 		return new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation, upgradeSteps);
 	}
@@ -417,6 +420,8 @@ public class UpgradePlannerService implements UpgradePlanner {
 			}
 		}
 	}
+
+	private static final String _LIFERAY_UPGRADE_PLUGIN_MARKDOWN = "liferay-upgrade-plan.markdown";
 
 	private UpgradePlan _currentUpgradePlan;
 	private final Collection<UpgradeEvent> _upgradeEvents = new CopyOnWriteArrayList<>();
