@@ -16,13 +16,9 @@ package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
 import com.liferay.ide.upgrade.plan.core.internal.SourceLocationValidationService;
-import com.liferay.ide.upgrade.plan.core.internal.UpgradeStepCategoryPossibleValuesService;
 
-import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
-import org.eclipse.sapphire.Length;
-import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.PossibleValues;
 import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
@@ -61,8 +57,6 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public Value<String> getTargetVersion();
 
-	public ElementList<UpgradeStepCategoryElement> getUpgradeStepCategories();
-
 	public void setCurrentVersion(String currentVersion);
 
 	public void setLocation(Path value);
@@ -77,7 +71,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
 
 	@AbsolutePath
-	@Fact(statement = "This location should be either a Plugins SDK, Liferay Workspace, or a Maven parent project.")
+	@Fact(statement = "This location should be either a Plugins SDK, Liferay Workspace.")
 	@Label(standard = "Current Code Location")
 	@Service(impl = SourceLocationValidationService.class)
 	@Type(base = Path.class)
@@ -91,11 +85,5 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	@Label(standard = "Target Liferay Version")
 	@PossibleValues(values = {"7.0", "7.1"})
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
-
-	@Label(standard = "Upgrade Step Categories")
-	@Length(min = 1)
-	@Service(impl = UpgradeStepCategoryPossibleValuesService.class)
-	@Type(base = UpgradeStepCategoryElement.class)
-	public ListProperty PROP_UPGRADE_STEP_CATEGORIES = new ListProperty(TYPE, "UpgradeStepCategories");
 
 }

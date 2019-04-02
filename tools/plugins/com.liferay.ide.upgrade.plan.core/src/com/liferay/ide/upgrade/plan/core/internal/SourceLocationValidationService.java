@@ -14,14 +14,11 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepCategoryElement;
 
 import java.io.File;
 
-import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
@@ -37,20 +34,13 @@ public class SourceLocationValidationService extends ValidationService implement
 
 		NewUpgradePlanOp op = context(NewUpgradePlanOp.class);
 
-		ElementList<UpgradeStepCategoryElement> selectedCategories = op.getUpgradeStepCategories();
+		Path sourceLocation = get(op.getLocation());
 
-		if (ListUtil.isNotEmpty(selectedCategories)) {
-			Path sourceLocation = get(op.getLocation());
+		if (sourceLocation != null) {
+			File sourceLocationTarget = sourceLocation.toFile();
 
-			if ((sourceLocation == null) || sourceLocation.isEmpty() || !sourceLocation.isAbsolute()) {
-				retval = Status.createErrorStatus("Source code location must be a non-empty absolute path.");
-			}
-			else {
-				File sourceLocationTarget = sourceLocation.toFile();
-
-				if (!(sourceLocationTarget.exists() && sourceLocationTarget.canRead())) {
-					retval = Status.createErrorStatus("Source code location must exist and be readable.");
-				}
+			if (!(sourceLocationTarget.exists() && sourceLocationTarget.canRead())) {
+				retval = Status.createErrorStatus("Source code location must exist and be readable.");
 			}
 		}
 

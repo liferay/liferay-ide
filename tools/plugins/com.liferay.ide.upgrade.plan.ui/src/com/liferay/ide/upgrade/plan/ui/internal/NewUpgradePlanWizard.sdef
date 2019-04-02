@@ -13,24 +13,15 @@
             <label>New Liferay Upgrade Plan</label>
             <content>
                 <property-editor>Name</property-editor>
-	            <property-editor>
-	                <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
-	                <property>CurrentVersion</property>
-	            </property-editor>
-	            <property-editor>
-	                <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
-	                <property>TargetVersion</property>
-	            </property-editor>
                 <property-editor>
-                    <property>UpgradeStepCategories</property>
-                    <show-label>true</show-label>
-                    <hint>
-                        <name>factory</name>
-                        <value>CheckBoxListPropertyEditorPresentation$Factory</value>
-                    </hint>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <property>CurrentVersion</property>
                 </property-editor>
-                    <property-editor>
-                    <visible-when>${Contains(UpgradeStepCategories,&quot;UpgradeStepCategory&quot;,&quot;code&quot;)}</visible-when>
+                <property-editor>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <property>TargetVersion</property>
+                </property-editor>
+                <property-editor>
                     <property>Location</property>
                 </property-editor>
             </content>

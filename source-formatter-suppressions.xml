@@ -1,32 +1,6 @@
 <?xml version="1.0"?>
 
 <suppressions>
-	<checkstyle>
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/internal/steps/AutoCorrectUpgradeProblemsActionKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/steps/AutoCorrectUpgradeProblemsActionKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/steps/AutoCorrectUpgradeProblemsStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/steps/FindUpgradeProblemsStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/steps/FixUpgradeProblemsStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/src/com/liferay/ide/upgrade/problems/core/steps/RemoveUpgradeProblemMarkersStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.ui/src/com/liferay/ide/upgrade/problems/ui/internal/ResolveUpgradeProblemsStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/buildservice/RebuildServicesStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/buildservice/RebuildServicesTaskKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/code/ConfigureLiferayWorkspaceSettingsStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/code/ImportExistingProjectsStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/code/SetupDevelopmentEnvironmentStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/code/SetupLiferayWorkspaceStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/dependencies/UpgradeBuildDependenciesStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/internal/prerequisite/CheckForUpgradePlannerUpdatesStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/internal/prerequisite/CheckInstallationPrerequisitesStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/internal/prerequisite/CheckInstalledJDKsStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/internal/prerequisite/PrepareForCodeUpgradeStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/sdk/CreateLegacyPluginsSDKStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/sdk/ImportExistingPluginsSDKStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/src/com/liferay/ide/upgrade/steps/core/sdk/MigratePluginsSDKProjectsStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.ui/src/com/liferay/ide/upgrade/steps/ui/internal/CreateNewLiferayWorkspaceStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.ui/src/com/liferay/ide/upgrade/steps/ui/internal/sdk/ConvertPluginsSDKProjectsToModulesStepKeys\.java" />
-		<suppress checks="IndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.ui/src/com/liferay/ide/upgrade/steps/ui/internal/sdk/CopyPluginsSDKProjectsToWorkspaceStepKeys\.java" />
-	</checkstyle>
 	<source-check>
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/DefaultListenerRegistry\.java" />
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/Event\.java" />
@@ -39,27 +13,26 @@
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectDeletedEvent\.java" />
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectMovedEvent\.java" />
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectOpenedEvent\.java" />
-		<suppress checks="JavaLongLinesCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.ui/src/com/liferay/ide/upgrade/steps/ui/internal/CreateNewLiferayWorkspaceStepKeys\.java" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.gradle.core/OSGI-INF/.*\.xml" />
+		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.commands.core/OSGI-INF/.*\.xml" />
+		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.commands.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.plan.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.plan.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.ui/OSGI-INF/.*\.xml" />
-		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/OSGI-INF/.*\.xml" />
-		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.gradle.core/OSGI-INF/.*\.xml" />
+		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.upgrade.commands.core/OSGI-INF/.*\.xml" />
+		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.upgrade.commands.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.upgrade.plan.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.upgrade.plan.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.ui/OSGI-INF/.*\.xml" />
-		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/OSGI-INF/.*\.xml" />
-		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.gradle.core/OSGI-INF/.*\.xml" />
+		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.upgrade.commands.core/OSGI-INF/.*\.xml" />
+		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.upgrade.commands.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.upgrade.plan.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.upgrade.plan.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.ui/OSGI-INF/.*\.xml" />
-		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.core/OSGI-INF/.*\.xml" />
-		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.upgrade.steps.ui/OSGI-INF/.*\.xml" />
 	</source-check>
 </suppressions>

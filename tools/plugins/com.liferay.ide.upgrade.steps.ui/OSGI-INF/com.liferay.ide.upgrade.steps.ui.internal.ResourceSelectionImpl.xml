@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.steps.ui.internal.ResourceSelectionImpl">
-   <service>
-      <provide interface="com.liferay.ide.upgrade.steps.core.ResourceSelection"/>
-   </service>
-   <implementation class="com.liferay.ide.upgrade.steps.ui.internal.ResourceSelectionImpl"/>
-</scr:component>

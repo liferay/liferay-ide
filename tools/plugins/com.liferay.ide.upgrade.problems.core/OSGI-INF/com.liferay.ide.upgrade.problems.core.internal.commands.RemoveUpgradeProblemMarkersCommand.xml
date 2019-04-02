@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.problems.core.internal.commands.RemoveUpgradeProblemMarkersCommand">
+   <property name="id" value="remove_upgrade_problems_markers"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeCommand"/>
+   </service>
+   <reference cardinality="1..1" field="_messagePrompt" interface="com.liferay.ide.upgrade.plan.core.MessagePrompt" name="_messagePrompt"/>
+   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.commands.RemoveUpgradeProblemMarkersCommand"/>
+</scr:component>

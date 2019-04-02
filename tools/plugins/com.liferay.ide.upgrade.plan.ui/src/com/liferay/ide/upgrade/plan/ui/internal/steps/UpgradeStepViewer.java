@@ -21,6 +21,7 @@ import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanViewer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -31,7 +32,6 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
@@ -110,13 +110,17 @@ public class UpgradeStepViewer implements ISelectionProvider {
 
 		Composite bodyComposite = _scrolledForm.getBody();
 
-		if (!bodyComposite.isDisposed()) {
-			for (Control control : bodyComposite.getChildren()) {
-				if (!control.isDisposed()) {
-					control.dispose();
-				}
-			}
+		if (bodyComposite.isDisposed()) {
+			return;
 		}
+
+		Stream.of(
+			bodyComposite.getChildren()
+		).filter(
+			child -> !child.isDisposed()
+		).forEach(
+			child -> child.dispose()
+		);
 	}
 
 	private void _fireSelectionChanged(SelectionChangedEvent selectionChangedEvent) {
@@ -153,7 +157,7 @@ public class UpgradeStepViewer implements ISelectionProvider {
 		if (upgradeStep != null) {
 			_scrolledForm.setText(upgradeStep.getTitle());
 
-			_upgradeStepItem = new UpgradeStepItem(_formToolkit, _scrolledForm, upgradeStep.getId());
+			_upgradeStepItem = new UpgradeStepItem(_formToolkit, _scrolledForm, upgradeStep);
 
 			_upgradeStepItem.addSelectionChangedListener(this::_fireSelectionChanged);
 		}

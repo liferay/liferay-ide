@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.commands.ui.internal.MessagePromptImpl">
+   <service>
+      <provide interface="com.liferay.ide.upgrade.plan.core.MessagePrompt"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.commands.ui.internal.MessagePromptImpl"/>
+</scr:component>

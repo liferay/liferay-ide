@@ -62,7 +62,7 @@ public class RestartUpgradeHandler extends AbstractHandler {
 			return null;
 		}
 
-		List<UpgradeStep> rootUpgradeSteps = upgradePlan.getRootSteps();
+		List<UpgradeStep> rootUpgradeSteps = upgradePlan.getUpgradeSteps();
 
 		for (UpgradeStep upgradeStep : rootUpgradeSteps) {
 			upgradePlanner.restartStep(upgradeStep);

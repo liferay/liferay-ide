@@ -15,15 +15,11 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.Pair;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepCategory;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepRequirement;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
@@ -38,8 +34,7 @@ import org.osgi.framework.FrameworkUtil;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class UpgradePlanLabelProvider
-	extends BundleImageLabelProvider implements IStyledLabelProvider, UpgradePlanAcessor {
+public class UpgradePlanLabelProvider extends BundleImageLabelProvider implements IStyledLabelProvider {
 
 	public UpgradePlanLabelProvider() {
 		super(_imagePathMapper());
@@ -71,13 +66,7 @@ public class UpgradePlanLabelProvider
 
 			StyledString styledString = new StyledString(upgradeStep.getTitle(), styler);
 
-			List<UpgradeStep> children = Stream.of(
-				upgradeStep.getChildIds()
-			).map(
-				this::getStep
-			).collect(
-				Collectors.toList()
-			);
+			List<UpgradeStep> children = upgradeStep.getChildren();
 
 			if (children.isEmpty()) {
 				UpgradeStepRequirement upgradeStepRequirement = upgradeStep.getRequirement();
@@ -107,18 +96,6 @@ public class UpgradePlanLabelProvider
 				}
 			}
 
-			if ((imagePath == null) && (element instanceof UpgradeStep)) {
-				UpgradeStep upgradeStep = (UpgradeStep)element;
-
-				UpgradeStepCategory upgradeStepCategory = _accessor.getCategory(upgradeStep);
-
-				if (upgradeStepCategory != null) {
-					imagePath = upgradeStepCategory.getImagePath();
-
-					bundle = FrameworkUtil.getBundle(upgradeStepCategory.getClass());
-				}
-			}
-
 			if ((bundle != null) && (imagePath != null)) {
 				return new Pair<>(bundle, imagePath);
 			}
@@ -126,7 +103,5 @@ public class UpgradePlanLabelProvider
 			return null;
 		};
 	}
-
-	private static UpgradePlanAcessor _accessor = new UpgradePlanAcessor() {};
 
 }

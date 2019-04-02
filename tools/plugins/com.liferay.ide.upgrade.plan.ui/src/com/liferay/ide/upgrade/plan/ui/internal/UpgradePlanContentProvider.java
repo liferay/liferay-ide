@@ -15,12 +15,9 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
@@ -29,7 +26,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class UpgradePlanContentProvider implements ITreeContentProvider, UpgradePlanAcessor {
+public class UpgradePlanContentProvider implements ITreeContentProvider {
 
 	public static final Object NO_STEPS = new Object() {
 
@@ -54,11 +51,9 @@ public class UpgradePlanContentProvider implements ITreeContentProvider, Upgrade
 		if (parentElement instanceof UpgradeStep) {
 			UpgradeStep upgradeStep = (UpgradeStep)parentElement;
 
-			return Stream.of(
-				upgradeStep.getChildIds()
-			).map(
-				this::getStep
-			).toArray();
+			List<UpgradeStep> children = upgradeStep.getChildren();
+
+			return children.toArray();
 		}
 
 		return new Object[0];
@@ -72,7 +67,7 @@ public class UpgradePlanContentProvider implements ITreeContentProvider, Upgrade
 		else if (element instanceof UpgradePlan) {
 			UpgradePlan upgradePlan = (UpgradePlan)element;
 
-			List<UpgradeStep> upgradeSteps = upgradePlan.getRootSteps();
+			List<UpgradeStep> upgradeSteps = upgradePlan.getUpgradeSteps();
 
 			return upgradeSteps.toArray(new UpgradeStep[0]);
 		}
@@ -88,7 +83,7 @@ public class UpgradePlanContentProvider implements ITreeContentProvider, Upgrade
 		else if (element instanceof UpgradeStep) {
 			UpgradeStep upgradeStep = (UpgradeStep)element;
 
-			return getStep(upgradeStep.getParentId());
+			return upgradeStep.getParent();
 		}
 
 		return null;
@@ -102,13 +97,7 @@ public class UpgradePlanContentProvider implements ITreeContentProvider, Upgrade
 		else if (element instanceof UpgradeStep) {
 			UpgradeStep upgradeStep = (UpgradeStep)element;
 
-			List<UpgradeStep> children = Stream.of(
-				upgradeStep.getChildIds()
-			).map(
-				this::getStep
-			).collect(
-				Collectors.toList()
-			);
+			List<UpgradeStep> children = upgradeStep.getChildren();
 
 			return !children.isEmpty();
 		}

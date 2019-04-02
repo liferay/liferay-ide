@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.commands.core.internal.sdk.ImportExistingPluginsSDKCommand">
+   <property name="id" value="import_existing_plugins_sdk"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeCommand"/>
+   </service>
+   <reference cardinality="1..1" field="_projectImporter" interface="com.liferay.ide.upgrade.commands.core.ProjectImporter" name="_projectImporter" target="(type=plugins_sdk)"/>
+   <reference cardinality="1..1" field="_projectSelection" interface="com.liferay.ide.upgrade.plan.core.ResourceSelection" name="_projectSelection"/>
+   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
+   <implementation class="com.liferay.ide.upgrade.commands.core.internal.sdk.ImportExistingPluginsSDKCommand"/>
+</scr:component>

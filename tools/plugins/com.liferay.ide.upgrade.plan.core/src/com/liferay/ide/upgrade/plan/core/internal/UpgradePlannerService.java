@@ -20,7 +20,6 @@ import com.liferay.ide.upgrade.plan.core.IMemento;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanAcessor;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
@@ -36,7 +35,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -58,7 +57,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Simon Jiang
  */
 @Component
-public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor {
+public class UpgradePlannerService implements UpgradePlanner {
 
 	@Override
 	public void addListener(UpgradeListener upgradeListener) {
@@ -128,22 +127,18 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 					projectPath = Paths.get(currentProjectLocation);
 				}
 
-				String categoriesValue = upgradePlanMemento.getString("categories");
+				List<UpgradeStep> upgradeSteps = new ArrayList<>();
 
-				String[] categories = categoriesValue.split(",");
+				_loadUpgradeSteps(upgradePlanMemento, upgradeSteps, null);
 
 				_currentUpgradePlan = new StandardUpgradePlan(
-					name, currentVersion, targetVersion, projectPath, Arrays.asList(categories));
+					name, currentVersion, targetVersion, projectPath, upgradeSteps);
 
 				String targetProjectLocationValue = upgradePlanMemento.getString("targetProjectLocation");
 
 				if (targetProjectLocationValue != null) {
 					_currentUpgradePlan.setTargetProjectLocation(Paths.get(targetProjectLocationValue));
 				}
-
-				List<UpgradeStep> rootUpgradeSteps = _currentUpgradePlan.getRootSteps();
-
-				_loadStepsStatus(upgradePlanMemento, rootUpgradeSteps);
 
 				_loadUpgradeProblems(upgradePlanMemento, _currentUpgradePlan);
 
@@ -158,11 +153,15 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 	}
 
 	@Override
-	public UpgradePlan newUpgradePlan(
-		String name, String currentVersion, String targetVersion, Path sourceCodeLocation,
-		List<String> upgradeStepCategories) {
+	public UpgradePlan newUpgradePlan(String name, String currentVersion, String targetVersion, Path sourceCodeLocation)
+		throws IOException {
 
-		return new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation, upgradeStepCategories);
+		UpgradeStepsBuilder upgradeStepsBuilder = new UpgradeStepsBuilder(
+			UpgradePlannerService.class.getResourceAsStream(_LIFERAY_UPGRADE_PLUGIN_MARKDOWN));
+
+		List<UpgradeStep> upgradeSteps = upgradeStepsBuilder.build();
+
+		return new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation, upgradeSteps);
 	}
 
 	@Override
@@ -174,13 +173,11 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 	public void restartStep(UpgradeStep upgradeStep) {
 		upgradeStep.setStatus(UpgradeStepStatus.INCOMPLETE);
 
-		Stream.of(
-			upgradeStep.getChildIds()
-		).map(
-			this::getStep
-		).forEach(
-			this::restartStep
-		);
+		List<UpgradeStep> children = upgradeStep.getChildren();
+
+		for (UpgradeStep child : children) {
+			restartStep(child);
+		}
 	}
 
 	@Override
@@ -220,14 +217,9 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 				upgradePlanMemento.putString("targetProjectLocation", targetProjectLocation.toString());
 			}
 
-			List<String> upgradeStepCategories = upgradePlan.getUpgradeStepCategories();
+			List<UpgradeStep> rootUpgradeSteps = upgradePlan.getUpgradeSteps();
 
-			upgradePlanMemento.putString(
-				"categories", StringUtil.merge(upgradeStepCategories.toArray(new String[0]), ","));
-
-			List<UpgradeStep> rootUpgradeSteps = upgradePlan.getRootSteps();
-
-			_saveStepsStatus(upgradePlanMemento, rootUpgradeSteps);
+			_saveUpgradeSteps(upgradePlanMemento, rootUpgradeSteps);
 
 			_saveUpgradeProblems(upgradePlanMemento, upgradePlan);
 
@@ -251,13 +243,11 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 	public void skipStep(UpgradeStep upgradeStep) {
 		upgradeStep.setStatus(UpgradeStepStatus.SKIPPED);
 
-		Stream.of(
-			upgradeStep.getChildIds()
-		).map(
-			this::getStep
-		).forEach(
-			this::skipStep
-		);
+		List<UpgradeStep> children = upgradeStep.getChildren();
+
+		for (UpgradeStep child : children) {
+			skipStep(child);
+		}
 	}
 
 	@Override
@@ -283,32 +273,6 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 		}
 
 		return file;
-	}
-
-	private void _loadStepsStatus(IMemento memento, List<UpgradeStep> upgradeSteps) {
-		for (UpgradeStep upgradeStep : upgradeSteps) {
-			IMemento stepMemento = memento.getChild(upgradeStep.getId());
-
-			if (stepMemento == null) {
-				continue;
-			}
-
-			String status = stepMemento.getString("status");
-
-			upgradeStep.setStatus(UpgradeStepStatus.valueOf(status));
-
-			List<UpgradeStep> children = Stream.of(
-				upgradeStep.getChildIds()
-			).map(
-				this::getStep
-			).collect(
-				Collectors.toList()
-			);
-
-			if (!children.isEmpty()) {
-				_loadStepsStatus(stepMemento, children);
-			}
-		}
 	}
 
 	private void _loadUpgradeProblems(IMemento memento, UpgradePlan upgradePlan) {
@@ -349,26 +313,33 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 		upgradePlan.addUpgradeProblems(upgradeProblems);
 	}
 
-	private void _saveStepsStatus(IMemento memento, List<UpgradeStep> upgradeSteps) {
-		for (UpgradeStep upgradeStep : upgradeSteps) {
-			IMemento stepMemento = memento.getChild(upgradeStep.getId());
+	private void _loadUpgradeSteps(IMemento memento, List<UpgradeStep> upgradeSteps, UpgradeStep parentUpgradeStep) {
+		IMemento[] upgradeStepMementos = memento.getChildren("upgradeStep");
 
-			if (stepMemento == null) {
-				stepMemento = memento.createChild(upgradeStep.getId());
+		for (IMemento upgradeStepMemento : upgradeStepMementos) {
+			String title = upgradeStepMemento.getString("title");
+			String description = upgradeStepMemento.getString("title");
+			String commandId = upgradeStepMemento.getString("commandId");
+			String icon = upgradeStepMemento.getString("imagePath");
+			String url = upgradeStepMemento.getString("url");
+			String status = upgradeStepMemento.getString("status");
+			String requirement = upgradeStepMemento.getString("requirement");
+
+			UpgradeStep upgradeStep = new UpgradeStep(
+				title, description, icon, url, requirement, UpgradeStepStatus.valueOf(status), commandId,
+				parentUpgradeStep);
+
+			if (parentUpgradeStep == null) {
+				upgradeSteps.add(upgradeStep);
+			}
+			else {
+				parentUpgradeStep.appendChild(upgradeStep);
 			}
 
-			stepMemento.putString("status", String.valueOf(upgradeStep.getStatus()));
+			IMemento[] childUpgradeStepMementos = upgradeStepMemento.getChildren("upgradeStep");
 
-			List<UpgradeStep> children = Stream.of(
-				upgradeStep.getChildIds()
-			).map(
-				this::getStep
-			).collect(
-				Collectors.toList()
-			);
-
-			if (!children.isEmpty()) {
-				_saveStepsStatus(stepMemento, children);
+			if (childUpgradeStepMementos.length > 0) {
+				_loadUpgradeSteps(upgradeStepMemento, upgradeSteps, upgradeStep);
 			}
 		}
 	}
@@ -413,6 +384,44 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradePlanAcessor
 			upgradeProblemMemento.putInteger("status", upgradeProblem.getStatus());
 		}
 	}
+
+	private void _saveUpgradeSteps(IMemento memento, List<UpgradeStep> upgradeSteps) {
+		IMemento[] childMementos = memento.getChildren("upgradeStep");
+
+		for (UpgradeStep upgradeStep : upgradeSteps) {
+			IMemento stepMemento = null;
+
+			for (IMemento childMemento : childMementos) {
+				String title = childMemento.getString("title");
+
+				if (StringUtil.equals(upgradeStep.getTitle(), title)) {
+					stepMemento = childMemento;
+
+					break;
+				}
+			}
+
+			if (stepMemento == null) {
+				stepMemento = memento.createChild("upgradeStep");
+			}
+
+			stepMemento.putString("title", upgradeStep.getTitle());
+			stepMemento.putString("description", upgradeStep.getDescription());
+			stepMemento.putString("imagePath", upgradeStep.getImagePath());
+			stepMemento.putString("url", upgradeStep.getUrl());
+			stepMemento.putString("commandId", upgradeStep.getCommandId());
+			stepMemento.putString("requirement", String.valueOf(upgradeStep.getRequirement()));
+			stepMemento.putString("status", String.valueOf(upgradeStep.getStatus()));
+
+			List<UpgradeStep> children = upgradeStep.getChildren();
+
+			if (!children.isEmpty()) {
+				_saveUpgradeSteps(stepMemento, children);
+			}
+		}
+	}
+
+	private static final String _LIFERAY_UPGRADE_PLUGIN_MARKDOWN = "liferay-upgrade-plan.markdown";
 
 	private UpgradePlan _currentUpgradePlan;
 	private final Collection<UpgradeEvent> _upgradeEvents = new CopyOnWriteArrayList<>();

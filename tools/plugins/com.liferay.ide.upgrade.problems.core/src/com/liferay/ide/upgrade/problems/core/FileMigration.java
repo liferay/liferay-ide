@@ -42,4 +42,6 @@ public interface FileMigration {
 
 	public int DETAIL_SHORT = 1 << 1;
 
+	public String HELPER_PROJECT_NAME = "__upgrade_helper__";
+
 }

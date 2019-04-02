@@ -1,7 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.liferay.ide.upgrade.plan.core.internal.UpgradePlanCorePlugin
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ libs/com.liferay.markdown.parser.jar
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Upgrade Plan Core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
@@ -14,6 +15,6 @@ Require-Bundle: com.liferay.ide.project.core,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.osgi.services,
- org.eclipse.sapphire.modeling
-Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.UpgradePlannerService.xml,
- OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.CodeUpgradeCategory.xml
+ org.eclipse.sapphire.modeling,
+ org.json
+Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.core.internal.UpgradePlannerService.xml
