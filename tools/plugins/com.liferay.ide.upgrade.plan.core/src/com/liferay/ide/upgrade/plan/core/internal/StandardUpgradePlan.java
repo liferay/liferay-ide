@@ -33,12 +33,16 @@ import java.util.Set;
  */
 public class StandardUpgradePlan implements UpgradePlan {
 
-	public StandardUpgradePlan(String name, String currentVersion, String targetVersion, Path currentProjectLocation) {
+	public StandardUpgradePlan(
+		String name, String currentVersion, String targetVersion, Path currentProjectLocation,
+		List<UpgradeStep> upgradeSteps) {
+
 		_name = name;
 		_currentVersion = currentVersion;
 		_targetVersion = targetVersion;
 		_currentProjectLocation = currentProjectLocation;
 		_upgradeProblems = new HashSet<>();
+		_upgradeSteps = upgradeSteps;
 	}
 
 	@Override
@@ -111,10 +115,6 @@ public class StandardUpgradePlan implements UpgradePlan {
 		_targetProjectLocation = path;
 	}
 
-	public void setUpgradeSteps(List<UpgradeStep> upgradeSteps) {
-		_upgradeSteps = upgradeSteps;
-	}
-
 	@SuppressWarnings("serial")
 	private static final List<String> _liferayVersions = new ArrayList<String>() {
 		{
@@ -130,6 +130,6 @@ public class StandardUpgradePlan implements UpgradePlan {
 	private Path _targetProjectLocation;
 	private final String _targetVersion;
 	private Set<UpgradeProblem> _upgradeProblems;
-	private List<UpgradeStep> _upgradeSteps;
+	private final List<UpgradeStep> _upgradeSteps;
 
 }

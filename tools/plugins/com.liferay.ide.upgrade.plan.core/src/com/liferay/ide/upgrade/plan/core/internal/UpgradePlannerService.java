@@ -128,19 +128,18 @@ public class UpgradePlannerService implements UpgradePlanner {
 					projectPath = Paths.get(currentProjectLocation);
 				}
 
-				_currentUpgradePlan = new StandardUpgradePlan(name, currentVersion, targetVersion, projectPath);
+				List<UpgradeStep> upgradeSteps = new ArrayList<>();
+
+				_loadUpgradeSteps(upgradePlanMemento, upgradeSteps, null);
+
+				_currentUpgradePlan = new StandardUpgradePlan(
+					name, currentVersion, targetVersion, projectPath, upgradeSteps);
 
 				String targetProjectLocationValue = upgradePlanMemento.getString("targetProjectLocation");
 
 				if (targetProjectLocationValue != null) {
 					_currentUpgradePlan.setTargetProjectLocation(Paths.get(targetProjectLocationValue));
 				}
-
-				List<UpgradeStep> upgradeSteps = new ArrayList<>();
-
-				_loadUpgradeSteps(upgradePlanMemento, upgradeSteps, null);
-
-				_currentUpgradePlan.setUpgradeSteps(upgradeSteps);
 
 				_loadUpgradeProblems(upgradePlanMemento, _currentUpgradePlan);
 
@@ -158,14 +157,9 @@ public class UpgradePlannerService implements UpgradePlanner {
 	public UpgradePlan newUpgradePlan(
 		String name, String currentVersion, String targetVersion, Path sourceCodeLocation) {
 
-		StandardUpgradePlan upgradePlan = new StandardUpgradePlan(
-			name, currentVersion, targetVersion, sourceCodeLocation);
+		List<UpgradeStep> upgradeSteps = StepTreeParser.parseStepTree(this);
 
-		List<UpgradeStep> steps = StepTreeParser.parseStepTree(this);
-
-		upgradePlan.setUpgradeSteps(steps);
-
-		return upgradePlan;
+		return new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation, upgradeSteps);
 	}
 
 	@Override

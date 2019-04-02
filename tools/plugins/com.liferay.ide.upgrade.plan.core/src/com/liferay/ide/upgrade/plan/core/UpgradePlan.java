@@ -44,6 +44,4 @@ public interface UpgradePlan {
 
 	public void setTargetProjectLocation(Path path);
 
-	public void setUpgradeSteps(List<UpgradeStep> upgradeSteps);
-
 }
