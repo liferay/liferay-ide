@@ -76,7 +76,6 @@ public class UpgradeStepsBuilder {
 			String html = child.toString();
 
 			if (html.startsWith("<li")) {
-				String imagePath = child.attr("imagePath");
 				String requirement = child.attr("requirement");
 				String commandId = child.attr("commandId");
 
@@ -112,6 +111,10 @@ public class UpgradeStepsBuilder {
 
 					description = descriptionElement.html();
 				}
+
+				// String imagePath = child.attr("imagePath");
+
+				String imagePath = "";
 
 				upgradeStep = new UpgradeStep(
 					title, description, imagePath, url, requirement, UpgradeStepStatus.INCOMPLETE, commandId, parent);
