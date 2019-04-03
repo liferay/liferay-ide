@@ -141,7 +141,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 			else {
 				Image stepCompleteImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.STEP_COMPLETE_IMAGE);
 
-				ImageHyperlink completeImageHyperlink = createImageHyperlink(
+				ImageHyperlink completeImageHyperlink = createNoneJobImageHyperlink(
 					_formToolkit, _buttonComposite, stepCompleteImage, this, "Click when complete",
 					"Completing " + _upgradeStep.getTitle() + "...", this::_complete, _upgradeStep);
 
@@ -155,7 +155,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 
 		Image stepRestartImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.STEP_RESTART_IMAGE);
 
-		ImageHyperlink restartImageHyperlink = createImageHyperlink(
+		ImageHyperlink restartImageHyperlink = createNoneJobImageHyperlink(
 			_formToolkit, _buttonComposite, stepRestartImage, this, "Restart",
 			"Restarting " + _upgradeStep.getTitle() + "...", this::_restart, _upgradeStep);
 
@@ -165,7 +165,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 
 		Image stepSkipImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.STEP_SKIP_IMAGE);
 
-		ImageHyperlink skipImageHyperlink = createImageHyperlink(
+		ImageHyperlink skipImageHyperlink = createNoneJobImageHyperlink(
 			_formToolkit, _buttonComposite, stepSkipImage, this, "Skip", "Skipping " + _upgradeStep.getTitle() + "...",
 			this::_skip, _upgradeStep);
 
@@ -254,6 +254,8 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 	}
 
 	private IStatus _complete(IProgressMonitor progressMonitor) {
+		_upgradePlanner.completeStep(_upgradeStep);
+
 		return Status.OK_STATUS;
 	}
 

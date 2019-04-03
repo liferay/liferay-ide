@@ -91,4 +91,30 @@ public interface UpgradeItem extends Disposable, ISelectionProvider {
 		return imageHyperlink;
 	}
 
+	public default ImageHyperlink createNoneJobImageHyperlink(
+		FormToolkit formToolkit, Composite parentComposite, Image image, Object data, String linkText, String jobText,
+		Perform perform, UpgradeStep upgradeStep) {
+
+		ImageHyperlink imageHyperlink = formToolkit.createImageHyperlink(parentComposite, SWT.NULL);
+
+		imageHyperlink.setData(data);
+		imageHyperlink.setEnabled(true);
+		imageHyperlink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		imageHyperlink.setImage(image);
+		imageHyperlink.setText(linkText);
+		imageHyperlink.setToolTipText(linkText);
+
+		imageHyperlink.addHyperlinkListener(
+			new HyperlinkAdapter() {
+
+				@Override
+				public void linkActivated(HyperlinkEvent e) {
+					perform.apply(null);
+				}
+
+			});
+
+		return imageHyperlink;
+	}
+
 }
