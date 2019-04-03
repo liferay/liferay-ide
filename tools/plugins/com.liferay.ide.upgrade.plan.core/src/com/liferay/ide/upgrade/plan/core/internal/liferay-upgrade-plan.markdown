@@ -270,7 +270,7 @@ Here are the steps for upgrading Liferay and your custom plugins to @product-ver
 				<div class="title">Configure Bundle URL</div>
 				<div class="description">Configure Bundle URL</div>
 			</li>
-			<li requirement="required">
+			<li requirement="required" commandId="configure_target_platform_version">
 				<div class="title">Configure Target Platform Version</div>
 				<div class="description">Configure Target Platform Version</div>
 			</li>
