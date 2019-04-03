@@ -25,7 +25,7 @@
     <wizard>
         <id>ParentSDKProjectImportWizard</id>
         <element-type>com.liferay.ide.project.core.model.ParentSDKProjectImportOp</element-type>
-        <label>Import Liferay Plugins SDK Parent Project</label>
+        <label>Import Liferay Plugins SDK Parent Project (Legacy)</label>
         <page>
             <id>ImportLiferayParentSDKPage</id>
             <label>Liferay Plugins SDK Parent Project</label>

@@ -25,7 +25,7 @@
     <wizard>
         <id>NewLiferayPluginProjectWizard</id>
         <element-type>com.liferay.ide.project.core.model.NewLiferayPluginProjectOp</element-type>
-        <label>New Liferay Plugin Project</label>
+        <label>New Liferay Plugin Project (Legacy)</label>
         <page>
             <id>LiferayPluginProjectWizardPage</id>
             <label>Liferay Plugin Project</label>
