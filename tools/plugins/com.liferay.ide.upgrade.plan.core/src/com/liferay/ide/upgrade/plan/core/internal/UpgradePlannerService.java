@@ -78,6 +78,17 @@ public class UpgradePlannerService implements UpgradePlanner {
 	}
 
 	@Override
+	public void completeStep(UpgradeStep upgradeStep) {
+		upgradeStep.setStatus(UpgradeStepStatus.COMPLETED);
+
+		List<UpgradeStep> children = upgradeStep.getChildren();
+
+		for (UpgradeStep child : children) {
+			completeStep(child);
+		}
+	}
+
+	@Override
 	public void dispatch(UpgradeEvent upgradeEvent) {
 		Collection<UpgradeListener> upgradeListeners = Collections.unmodifiableCollection(_upgradeListeners);
 

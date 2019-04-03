@@ -53,6 +53,8 @@ public class UpgradeStep {
 		BundleContext bundleContext = bundle.getBundleContext();
 
 		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+
+		_serviceTracker.open();
 	}
 
 	public void appendChild(UpgradeStep upgradeStep) {
@@ -223,6 +225,20 @@ public class UpgradeStep {
 
 		if (target == null) {
 			return true;
+		}
+
+		return false;
+	}
+
+	public boolean restartable() {
+		if (ListUtil.isEmpty(_children)) {
+			return completed();
+		}
+
+		for (UpgradeStep childUpgradeStep : _children) {
+			if (childUpgradeStep.completed()) {
+				return true;
+			}
 		}
 
 		return false;

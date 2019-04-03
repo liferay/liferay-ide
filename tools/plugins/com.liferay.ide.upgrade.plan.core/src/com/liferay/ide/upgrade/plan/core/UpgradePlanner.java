@@ -26,6 +26,8 @@ public interface UpgradePlanner {
 
 	public void addListener(UpgradeListener upgradeListener);
 
+	public void completeStep(UpgradeStep upgradeStep);
+
 	public void dispatch(UpgradeEvent upgradeEvent);
 
 	public UpgradePlan getCurrentUpgradePlan();
@@ -41,7 +43,7 @@ public interface UpgradePlanner {
 
 	public void saveUpgradePlan(UpgradePlan upgradePlan);
 
-	public void skipStep(UpgradeStep upgradeTaskStep);
+	public void skipStep(UpgradeStep upgradeStep);
 
 	public void startUpgradePlan(UpgradePlan upgradePlan);
 
