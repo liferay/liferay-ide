@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,11 +23,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Adapters;
-
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Gregory Amerson
@@ -47,12 +43,6 @@ public class UpgradeStep {
 		_status = status;
 		_commandId = commandId;
 		_parentUpgradeStep = parentUpgradeStep;
-
-		Bundle bundle = FrameworkUtil.getBundle(UpgradeStep.class);
-
-		BundleContext bundleContext = bundle.getBundleContext();
-
-		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
 	}
 
 	public void appendChild(UpgradeStep upgradeStep) {
@@ -75,10 +65,6 @@ public class UpgradeStep {
 		}
 
 		return false;
-	}
-
-	public void dispose() {
-		_serviceTracker.close();
 	}
 
 	public boolean enabled() {
@@ -234,7 +220,7 @@ public class UpgradeStep {
 
 		_status = status;
 
-		UpgradePlanner upgradePlanner = _serviceTracker.getService();
+		UpgradePlanner upgradePlanner = ServicesLookup.getSingleService(UpgradePlanner.class, null);
 
 		upgradePlanner.dispatch(upgradeStepStatusChangedEvent);
 	}
@@ -253,7 +239,6 @@ public class UpgradeStep {
 	private String _icon;
 	private UpgradeStep _parentUpgradeStep;
 	private String _requirement;
-	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 	private UpgradeStepStatus _status = UpgradeStepStatus.INCOMPLETE;
 	private String _title;
 	private String _url;
