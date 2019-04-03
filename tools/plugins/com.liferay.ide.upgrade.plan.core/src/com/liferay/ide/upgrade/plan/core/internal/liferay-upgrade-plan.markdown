@@ -266,7 +266,7 @@ Here are the steps for upgrading Liferay and your custom plugins to @product-ver
 			<div class="description">Configure Liferay Workspace Settings</div>
 		</li>
 		<ol>
-			<li requirement="required">
+			<li requirement="required" commandId="configure_bundle_url">
 				<div class="title">Configure Bundle URL</div>
 				<div class="description">Configure Bundle URL</div>
 			</li>
