@@ -317,11 +317,11 @@ Here are the steps for upgrading Liferay and your custom plugins to @product-ver
 		<div class="description">Fix Upgrade Problems</div>
 	</li>
 	<ol>
-		<li imagePath="" requirement="required">
+		<li imagePath="" requirement="required" commandId="auto_correct_find_upgrade_problems">
 			<div class="title">Auto-Correct Upgrade Problems</div>
 			<div class="description">Auto-Correct Upgrade Problems</div>
 		</li>
-		<li imagePath="" requirement="required">
+		<li imagePath="" requirement="required" commandId="find_upgrade_problems">
 			<div class="title">Find Upgrade Problems</div>
 			<div class="description">Find Upgrade Problems</div>
 		</li>
@@ -329,7 +329,7 @@ Here are the steps for upgrading Liferay and your custom plugins to @product-ver
 			<div class="title">Resolve Upgrade Problems</div>
 			<div class="description">Resolve Upgrade Problems</div>
 		</li>
-		<li imagePath="" requirement="required">
+		<li imagePath="" requirement="required" commandId="remove_upgrade_problems_markers">
 			<div class="title">Remove Problem Markers</div>
 			<div class="description">Remove Problem Markers</div>
 		</li>
