@@ -62,6 +62,31 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 		Assert.assertFalse(viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName()));
 	}
 
+	@Test
+	public void watchWarMvcPortlet() {
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET, "7.1");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.servers.startWatchingProject(server.getStartedLabel(), workspace.getName(), project.getName());
+
+		jobAction.waitForConsoleContent(
+			server.getServerName() + " [Liferay 7.x]", "STARTED " + project.getName() + "_", M1);
+
+		viewAction.servers.stopWatchingProject(
+			server.getStartedLabel(), workspace.getName(), project.getName() + " [watching]");
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.closeAndDeleteFromDisk(workspace.getWarFiles(project.getName()));
+
+		Assert.assertFalse(viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName()));
+	}
+
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
 
