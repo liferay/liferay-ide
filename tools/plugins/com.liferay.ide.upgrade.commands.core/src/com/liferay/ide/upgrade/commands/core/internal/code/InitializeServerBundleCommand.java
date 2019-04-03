@@ -54,12 +54,12 @@ public class InitializeServerBundleCommand implements UpgradeCommand {
 
 		IProject project = projects.get(0);
 
-		InitBundleJob job = new InitBundleJob(project, project.getName(), null);
+		InitBundleJob initBundleJob = new InitBundleJob(project, project.getName(), null);
 
-		job.schedule();
+		initBundleJob.schedule();
 
 		try {
-			job.join();
+			initBundleJob.join();
 		}
 		catch (InterruptedException ie) {
 			IStatus error = UpgradeCommandsCorePlugin.createErrorStatus("Unable to initialize server bundle", ie);
