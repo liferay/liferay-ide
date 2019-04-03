@@ -17,8 +17,8 @@ package com.liferay.ide.upgrade.commands.ui.internal.sdk;
 /**
  * @author Gregory Amerson
  */
-public class CopyPluginsSDKProjectsToWorkspaceCommandKeys {
+public class MigrateExistingPluginsToWorkspaceCommandKeys {
 
-	public static final String ID = "move_plugins_sdk_projects_to_workspace";
+	public static final String ID = "migrate_existing_plugins_to_workspace";
 
 }

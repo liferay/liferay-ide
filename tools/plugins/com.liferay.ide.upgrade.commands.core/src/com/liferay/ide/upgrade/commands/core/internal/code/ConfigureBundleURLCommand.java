@@ -12,22 +12,26 @@
  * details.
  */
 
-package com.liferay.ide.gradle.core.upgrade;
+package com.liferay.ide.upgrade.commands.core.internal.code;
 
-import com.liferay.ide.gradle.core.GradleUtil;
-import com.liferay.ide.gradle.core.LiferayGradleCore;
-import com.liferay.ide.upgrade.commands.core.sdk.CreateLegacyPluginsSDKCommandKeys;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.WorkspaceConstants;
+import com.liferay.ide.upgrade.commands.core.code.ConfigureBundleURLCommandKeys;
+import com.liferay.ide.upgrade.commands.core.internal.UpgradeCommandsCorePlugin;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
+import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -38,13 +42,11 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Terry Jia
- * @author Gregory Amerson
  */
 @Component(
-	property = "id=" + CreateLegacyPluginsSDKCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
-	service = UpgradeCommand.class
+	property = "id=" + ConfigureBundleURLCommandKeys.ID, scope = ServiceScope.PROTOTYPE, service = UpgradeCommand.class
 )
-public class CreateLegacyPluginsSDKCommand implements UpgradeCommand {
+public class ConfigureBundleURLCommand implements UpgradeCommand {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -57,22 +59,37 @@ public class CreateLegacyPluginsSDKCommand implements UpgradeCommand {
 
 		IProject project = projects.get(0);
 
-		try {
-			GradleUtil.runGradleTask(project, "upgradePluginsSDK", progressMonitor);
+		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-			project.refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
+		String bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_1;
 
-			_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, Collections.singletonList(project)));
+		String targetVersion = upgradePlan.getTargetVersion();
 
-			return Status.OK_STATUS;
+		if ("7.0".equals(targetVersion)) {
+			bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_0;
 		}
-		catch (CoreException ce) {
-			IStatus error = LiferayGradleCore.createErrorStatus("Unable to run task upgradePluginsSDK", ce);
-
-			LiferayGradleCore.log(error);
-
-			return error;
+		else if ("7.1".equals(targetVersion)) {
+			bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_1;
 		}
+
+		IFile gradeProperties = project.getFile("gradle.properties");
+
+		if (FileUtil.exists(gradeProperties)) {
+			try {
+				PropertiesConfiguration config = new PropertiesConfiguration(FileUtil.getFile(gradeProperties));
+
+				config.setProperty(WorkspaceConstants.BUNDLE_URL_PROPERTY, bundleUrl);
+
+				config.save();
+			}
+			catch (ConfigurationException ce) {
+				return UpgradeCommandsCorePlugin.createErrorStatus("Unable to configure bundle url", ce);
+			}
+		}
+
+		_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, Collections.singletonList(project)));
+
+		return Status.OK_STATUS;
 	}
 
 	@Reference

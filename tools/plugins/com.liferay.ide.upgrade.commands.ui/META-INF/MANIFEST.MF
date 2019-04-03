@@ -10,8 +10,8 @@ Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 3.6.0.qualifier
 Require-Bundle: com.liferay.ide.project.ui,
  com.liferay.ide.ui,
- com.liferay.ide.upgrade.plan.core,
  com.liferay.ide.upgrade.commands.core,
+ com.liferay.ide.upgrade.plan.core,
  org.apache.commons.io,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
@@ -23,5 +23,4 @@ Require-Bundle: com.liferay.ide.project.ui,
 Service-Component: OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.ResourceSelectionImpl.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.MessagePromptImpl.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.CreateNewLiferayWorkspaceCommand.xml,
- OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.sdk.ConvertPluginsSDKProjectsToModulesCommand.xml,
- OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.sdk.CopyPluginsSDKProjectsToWorkspaceCommand.xml
+ OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.sdk.MigrateExistingPluginsToWorkspaceCommand.xml

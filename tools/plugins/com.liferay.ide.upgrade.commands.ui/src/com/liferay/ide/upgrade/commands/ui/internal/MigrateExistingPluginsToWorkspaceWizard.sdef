@@ -16,18 +16,18 @@
  -->
 <definition>
     <wizard>
-        <id>ImportSDKProjectsWizard</id>
-        <element-type>com.liferay.ide.upgrade.steps.core.ImportSDKProjectsOp</element-type>
-        <label>Import Liferay Plugins SDK Projects</label>
+        <id>MigrateExistingPluginsToWorkspaceWizard</id>
+        <element-type>com.liferay.ide.upgrade.commands.core.MigrateExistingPluginsToWorkspaceOp</element-type>
+        <label>Migrate Existing Plugins To Workspace</label>
         <page>
-            <id>ImportLiferaySDKProjectsPage</id>
-            <label>Import Liferay Plugins SDK Projects</label>
+            <id>MigrateExistingPluginsToWorkspacePage</id>
+            <label>Migrate Existing Plugins To Workspace</label>
             <content>
                 <property-editor>SdkLocation</property-editor>
                 <spacer></spacer>
                 <custom>
                     <scale-vertically>true</scale-vertically>
-                    <class>com.liferay.ide.upgrade.steps.ui.internal.ImportSDKProjectsCheckboxCustomPart</class>
+                    <class>com.liferay.ide.upgrade.commands.ui.internal.MigrateExistingPluginsToWorkspaceCheckboxCustomPart</class>
                 </custom>
             </content>
             <scale-vertically>true</scale-vertically>
@@ -40,6 +40,6 @@
             <margin-vertical>0</margin-vertical>
             <margin>0</margin>
         </page>
-        <description>Import Liferay Plugin SDK Projects</description>
+        <description>Migrate Existing Plugins To Workspace</description>
     </wizard>
 </definition>

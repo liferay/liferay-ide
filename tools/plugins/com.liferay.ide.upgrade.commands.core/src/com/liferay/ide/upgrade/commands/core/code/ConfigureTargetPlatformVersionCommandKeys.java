@@ -12,20 +12,13 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.commands.core.internal;
-
-import com.liferay.ide.upgrade.commands.core.ImportSDKProjectsOp;
-
-import org.eclipse.sapphire.modeling.ProgressMonitor;
-import org.eclipse.sapphire.modeling.Status;
+package com.liferay.ide.upgrade.commands.core.code;
 
 /**
  * @author Terry Jia
  */
-public class ImportSDKProjectsOpMethods {
+public class ConfigureTargetPlatformVersionCommandKeys {
 
-	public static final Status execute(ImportSDKProjectsOp sdkProjectsImportOp, ProgressMonitor progressMonitor) {
-		return Status.createOkStatus();
-	}
+	public static final String ID = "configure_target_platform_version";
 
 }

@@ -12,13 +12,22 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.commands.core.sdk;
+package com.liferay.ide.upgrade.commands.core.internal;
+
+import com.liferay.ide.upgrade.commands.core.MigrateExistingPluginsToWorkspaceOp;
+
+import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.eclipse.sapphire.modeling.Status;
 
 /**
- * @author Gregory Amerson
+ * @author Terry Jia
  */
-public class CreateLegacyPluginsSDKCommandKeys {
+public class MigrateExistingPluginsToWorkspacOpMethods {
 
-	public static final String ID = "create_legacy_plugins_sdk";
+	public static final Status execute(
+		MigrateExistingPluginsToWorkspaceOp sdkProjectsImportOp, ProgressMonitor progressMonitor) {
+
+		return Status.createOkStatus();
+	}
 
 }
