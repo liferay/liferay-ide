@@ -19,6 +19,7 @@ import com.liferay.ide.ui.liferay.page.view.CodeUpgradeView;
 import com.liferay.ide.ui.swtbot.eclipse.page.DeleteResourcesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.ErrorLogView;
 import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
+import com.liferay.ide.ui.swtbot.eclipse.page.ProgressView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ProjectExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServersView;
 import com.liferay.ide.ui.swtbot.page.Perspective;
@@ -66,6 +67,7 @@ public class ViewAction extends UIAction {
 
 	public CodeUpgradeViewAction codeUpgrade = new CodeUpgradeViewAction();
 	public ErrorLogViewAction errorLog = new ErrorLogViewAction();
+	public ProgressViewAction progress = new ProgressViewAction();
 	public ProjectViewAction project = new ProjectViewAction();
 	public ServersViewAction servers = new ServersViewAction();
 
@@ -106,6 +108,16 @@ public class ViewAction extends UIAction {
 		}
 
 		private final ErrorLogView _errorLogView = new ErrorLogView(bot);
+
+	}
+
+	public class ProgressViewAction {
+
+		public void stopWatch() {
+			_progressView.clickCancelOperationBtn();
+		}
+
+		private final ProgressView _progressView = new ProgressView(bot);
 
 	}
 
@@ -282,6 +294,10 @@ public class ViewAction extends UIAction {
 
 				_getProjects().contextMenu(INIT_BUNDLE, projectNames);
 			}
+		}
+
+		public void runWatch(String projectName) {
+			_getProjects().contextMenu(WATCH, projectName);
 		}
 
 		public boolean visibleFileTry(String... files) {

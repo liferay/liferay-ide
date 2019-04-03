@@ -125,6 +125,10 @@ public class Eclipse extends BasePageObject {
 		showView(ERROR_LOG);
 	}
 
+	public void showProgressView() {
+		showView(PROGRESS);
+	}
+
 	public void showServersView() {
 		showView(SERVERS);
 	}
