@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.commands.ui.internal;
 
-import com.liferay.ide.upgrade.commands.core.ImportSDKProjectsOp;
+import com.liferay.ide.upgrade.commands.core.MigrateExistingPluginsToWorkspaceOp;
 
 import java.io.File;
 
@@ -31,19 +31,24 @@ import org.eclipse.ui.IWorkbench;
 /**
  * @author Terry Jia
  */
-public class ImportSDKProjectsWizard extends SapphireWizard<ImportSDKProjectsOp> implements INewWizard {
+public class MigrateExistingPluginsToWorkspaceWizard
+	extends SapphireWizard<MigrateExistingPluginsToWorkspaceOp> implements INewWizard {
 
-	public ImportSDKProjectsWizard(ImportSDKProjectsOp sdkProjectsImportOp, Path currentProjectLocation) {
+	public MigrateExistingPluginsToWorkspaceWizard(
+		MigrateExistingPluginsToWorkspaceOp sdkProjectsImportOp, Path currentProjectLocation) {
+
 		super(
 			_createDefaultOp(sdkProjectsImportOp, currentProjectLocation),
-			DefinitionLoader.sdef(ImportSDKProjectsWizard.class).wizard());
+			DefinitionLoader.sdef(MigrateExistingPluginsToWorkspaceWizard.class).wizard());
 	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 	}
 
-	private static ImportSDKProjectsOp _createDefaultOp(ImportSDKProjectsOp sdkProjectsImportOp, Path path) {
+	private static MigrateExistingPluginsToWorkspaceOp _createDefaultOp(
+		MigrateExistingPluginsToWorkspaceOp sdkProjectsImportOp, Path path) {
+
 		File file = path.toFile();
 
 		IPath sdkPath = new org.eclipse.core.runtime.Path(file.getPath());

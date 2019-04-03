@@ -21,8 +21,8 @@ import com.liferay.ide.project.core.ProjectSynchronizer;
 import com.liferay.ide.project.core.model.ProjectNamedItem;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.upgrade.commands.core.ImportSDKProjectsOp;
-import com.liferay.ide.upgrade.commands.ui.internal.ImportSDKProjectsWizard;
+import com.liferay.ide.upgrade.commands.core.MigrateExistingPluginsToWorkspaceOp;
+import com.liferay.ide.upgrade.commands.ui.internal.MigrateExistingPluginsToWorkspaceWizard;
 import com.liferay.ide.upgrade.commands.ui.internal.UpgradeCommandsUIPlugin;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
@@ -56,14 +56,25 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Gregory Amerson
  */
 @Component(
-	property = "id=" + ConvertPluginsSDKProjectsToModulesCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
+	property = "id=" + MigrateExistingPluginsToWorkspaceCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
 	service = UpgradeCommand.class
 )
-public class ConvertPluginsSDKProjectsToModulesCommand implements UpgradeCommand, SapphireContentAccessor {
+public class MigrateExistingPluginsToWorkspaceCommand implements UpgradeCommand, SapphireContentAccessor {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+
+		Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
+
+		if (currentProjectLocation == null) {
+			return UpgradeCommandsUIPlugin.createErrorStatus(
+				"There is no current project configured for current plan.");
+		}
+
+		if (FileUtil.notExists(currentProjectLocation.toFile())) {
+			return UpgradeCommandsUIPlugin.createErrorStatus("There is no code located at " + currentProjectLocation);
+		}
 
 		Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
 
@@ -75,16 +86,15 @@ public class ConvertPluginsSDKProjectsToModulesCommand implements UpgradeCommand
 			return UpgradeCommandsUIPlugin.createErrorStatus("There is no code located at " + targetProjectLocation);
 		}
 
-		Path pluginsSDKPath = targetProjectLocation.resolve("plugins-sdk");
-
 		final AtomicInteger returnCode = new AtomicInteger();
 
-		ImportSDKProjectsOp sdkProjectsImportOp = ImportSDKProjectsOp.TYPE.instantiate();
+		MigrateExistingPluginsToWorkspaceOp sdkProjectsImportOp =
+			MigrateExistingPluginsToWorkspaceOp.TYPE.instantiate();
 
 		UIUtil.sync(
 			() -> {
-				ImportSDKProjectsWizard importSDKProjectsWizard = new ImportSDKProjectsWizard(
-					sdkProjectsImportOp, pluginsSDKPath);
+				MigrateExistingPluginsToWorkspaceWizard importSDKProjectsWizard =
+					new MigrateExistingPluginsToWorkspaceWizard(sdkProjectsImportOp, currentProjectLocation);
 
 				IWorkbench workbench = PlatformUI.getWorkbench();
 
@@ -120,7 +130,7 @@ public class ConvertPluginsSDKProjectsToModulesCommand implements UpgradeCommand
 
 					sb.append("convert ");
 					sb.append("--source \"");
-					sb.append(pluginsSDKPath.toString());
+					sb.append(currentProjectLocation.toString());
 					sb.append("\" --base \"");
 					sb.append(targetProjectLocation.toString());
 					sb.append("\" \"");

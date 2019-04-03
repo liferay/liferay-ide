@@ -12,13 +12,22 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.commands.ui.internal.sdk;
+package com.liferay.ide.upgrade.commands.core.internal;
+
+import com.liferay.ide.upgrade.commands.core.MigrateExistingPluginsToWorkspaceOp;
+
+import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.eclipse.sapphire.modeling.Status;
 
 /**
- * @author Gregory Amerson
+ * @author Terry Jia
  */
-public class CopyPluginsSDKProjectsToWorkspaceCommandKeys {
+public class MigrateExistingPluginsToWorkspacOpMethods {
 
-	public static final String ID = "move_plugins_sdk_projects_to_workspace";
+	public static final Status execute(
+		MigrateExistingPluginsToWorkspaceOp sdkProjectsImportOp, ProgressMonitor progressMonitor) {
+
+		return Status.createOkStatus();
+	}
 
 }

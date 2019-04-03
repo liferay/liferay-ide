@@ -22,7 +22,7 @@ import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.ProjectsCheckboxCustomPart;
-import com.liferay.ide.upgrade.commands.core.ImportSDKProjectsOp;
+import com.liferay.ide.upgrade.commands.core.MigrateExistingPluginsToWorkspaceOp;
 
 import java.io.File;
 
@@ -47,12 +47,12 @@ import org.eclipse.swt.widgets.Table;
 /**
  * @author Simon Jiang
  */
-public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomPart {
+public class MigrateExistingPluginsToWorkspaceCheckboxCustomPart extends ProjectsCheckboxCustomPart {
 
 	@Override
 	public void dispose() {
 		if (_listener != null) {
-			Value<Object> sdkProperty = _op().property(ImportSDKProjectsOp.PROP_SDK_LOCATION);
+			Value<Object> sdkProperty = _op().property(MigrateExistingPluginsToWorkspaceOp.PROP_SDK_LOCATION);
 
 			sdkProperty.detach(_listener);
 		}
@@ -117,7 +117,7 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 			protected void handleTypedEvent(final PropertyContentEvent event) {
 				PropertyDef eventDef = SapphireUtil.getPropertyDef(event);
 
-				if (eventDef.equals(ImportSDKProjectsOp.PROP_SDK_LOCATION)) {
+				if (eventDef.equals(MigrateExistingPluginsToWorkspaceOp.PROP_SDK_LOCATION)) {
 					Value<Path> sdkLocationPath = _op().getSdkLocation();
 
 					Path sdkLocation = sdkLocationPath.content();
@@ -140,7 +140,7 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 
 		};
 
-		Value<Object> sdkLocation = _op().property(ImportSDKProjectsOp.PROP_SDK_LOCATION);
+		Value<Object> sdkLocation = _op().property(MigrateExistingPluginsToWorkspaceOp.PROP_SDK_LOCATION);
 
 		sdkLocation.attach(_listener);
 	}
@@ -220,8 +220,8 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 		return false;
 	}
 
-	private ImportSDKProjectsOp _op() {
-		return getLocalModelElement().nearest(ImportSDKProjectsOp.class);
+	private MigrateExistingPluginsToWorkspaceOp _op() {
+		return getLocalModelElement().nearest(MigrateExistingPluginsToWorkspaceOp.class);
 	}
 
 	private void _sortProjectCheckboxElement(List<ProjectCheckboxElement> checkboxElementList) {

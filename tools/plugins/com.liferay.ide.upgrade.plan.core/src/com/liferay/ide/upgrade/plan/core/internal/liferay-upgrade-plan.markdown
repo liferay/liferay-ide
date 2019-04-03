@@ -285,11 +285,11 @@ Here are the steps for upgrading Liferay and your custom plugins to @product-ver
 		<div class="description">Migrate Plugin SDK Projects</div>
 	</li>
 	<ol>
-		<li requirement="required">
+		<li requirement="required" commandId="import_existing_plugins_sdk">
 			<div class="title">Import Existing Plugins SDK Projects</div>
 			<div class="description">Import Existing Plugins SDK Projects</div>
 		</li>
-		<li requirement="required">
+		<li requirement="required" commandId="migrate_existing_plugins_to_workspace">
 			<div class="title">Migrate Existing Plugins to Workspace</div>
 			<div class="description">Migrate Existing Plugins to Workspace</div>
 		</li>

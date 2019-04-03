@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.commands.core;
 
 import com.liferay.ide.project.core.model.ProjectNamedItem;
-import com.liferay.ide.upgrade.commands.core.internal.ImportSDKProjectsOpMethods;
+import com.liferay.ide.upgrade.commands.core.internal.MigrateExistingPluginsToWorkspacOpMethods;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
@@ -35,11 +35,11 @@ import org.eclipse.sapphire.modeling.annotations.Label;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public interface ImportSDKProjectsOp extends ExecutableElement {
+public interface MigrateExistingPluginsToWorkspaceOp extends ExecutableElement {
 
-	public ElementType TYPE = new ElementType(ImportSDKProjectsOp.class);
+	public ElementType TYPE = new ElementType(MigrateExistingPluginsToWorkspaceOp.class);
 
-	@DelegateImplementation(ImportSDKProjectsOpMethods.class)
+	@DelegateImplementation(MigrateExistingPluginsToWorkspacOpMethods.class)
 	@Override
 	public Status execute(ProgressMonitor monitor);
 
