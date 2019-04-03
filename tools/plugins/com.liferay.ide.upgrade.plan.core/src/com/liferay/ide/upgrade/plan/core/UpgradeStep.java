@@ -230,6 +230,20 @@ public class UpgradeStep {
 		return false;
 	}
 
+	public boolean restartable() {
+		if (ListUtil.isEmpty(_children)) {
+			return completed();
+		}
+
+		for (UpgradeStep childUpgradeStep : _children) {
+			if (childUpgradeStep.completed()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public void setStatus(UpgradeStepStatus status) {
 		UpgradeStepStatusChangedEvent upgradeStepStatusChangedEvent = new UpgradeStepStatusChangedEvent(
 			this, _status, status);

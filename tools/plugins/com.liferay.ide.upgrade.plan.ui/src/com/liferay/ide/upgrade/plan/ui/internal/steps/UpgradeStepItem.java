@@ -155,11 +155,13 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 
 		Image stepRestartImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.STEP_RESTART_IMAGE);
 
-		ImageHyperlink restartImageHyperlink = createNoneJobImageHyperlink(
+		_restartImageHyperlink = createNoneJobImageHyperlink(
 			_formToolkit, _buttonComposite, stepRestartImage, this, "Restart",
 			"Restarting " + _upgradeStep.getTitle() + "...", this::_restart, _upgradeStep);
 
-		_disposables.add(() -> restartImageHyperlink.dispose());
+		_updateEnablementRestart(_upgradeStep, _restartImageHyperlink);
+
+		_disposables.add(() -> _restartImageHyperlink.dispose());
 
 		_fill(formToolkit, _buttonComposite, _disposables);
 
@@ -223,6 +225,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 
 				if (upgradeStep.equals(_upgradeStep)) {
 					UIUtil.async(() -> _updateEnablement(_upgradeStep, _enables));
+					UIUtil.async(() -> _updateEnablementRestart(_upgradeStep, _restartImageHyperlink));
 				}
 			}
 		}
@@ -251,6 +254,12 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 		).forEach(
 			c -> c.setEnabled(enabled.get())
 		);
+	}
+
+	private static void _updateEnablementRestart(UpgradeStep upgradeStep, Control restartLink) {
+		if (!restartLink.isDisposed()) {
+			restartLink.setEnabled(upgradeStep.restartable());
+		}
 	}
 
 	private IStatus _complete(IProgressMonitor progressMonitor) {
@@ -301,6 +310,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 	private FormToolkit _formToolkit;
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private Composite _parentComposite;
+	private ImageHyperlink _restartImageHyperlink;
 	private ScrolledForm _scrolledForm;
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 	private UpgradePlanner _upgradePlanner;
