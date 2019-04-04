@@ -191,6 +191,18 @@ public class ViewAction extends UIAction {
 			return _getProjects().getItemLabels();
 		}
 
+		public void implementMethods(String... files) {
+			ide.sleep(1000);
+
+			try {
+				_getProjects().contextMenu("Override/Implement Methods...", files);
+
+				ide.sleep(2000);
+			}
+			catch (Exception e) {
+			}
+		}
+
 		public void openComponentClassWizard(String... projectNames) {
 			_getProjects().contextMenu(LIFERAY_COMPONENT_CLASS, projectNames);
 		}
