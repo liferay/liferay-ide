@@ -16,17 +16,26 @@ package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.ui.util.Editors;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+import com.liferay.ide.upgrade.problems.ui.internal.migration.AutoCorrectAction;
+import com.liferay.ide.upgrade.problems.ui.internal.migration.IgnoreAction;
+import com.liferay.ide.upgrade.problems.ui.internal.migration.IgnoreAlwaysAction;
+import com.liferay.ide.upgrade.problems.ui.internal.migration.MarkDoneAction;
+import com.liferay.ide.upgrade.problems.ui.internal.migration.MarkUndoneAction;
 
 import java.io.File;
+
+import java.util.Iterator;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
+import org.eclipse.ui.navigator.ICommonViewerSite;
 
 /**
  * @author Terry Jia
@@ -54,10 +63,55 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 
 	@Override
 	public void fillContextMenu(IMenuManager menuManager) {
+		menuManager.removeAll();
+
+		ICommonViewerSite site = _actionSite.getViewSite();
+
+		ISelectionProvider provider = site.getSelectionProvider();
+
+		ISelection selection = provider.getSelection();
+
+		if (selection instanceof TreeSelection) {
+			TreeSelection treeSelection = (TreeSelection)selection;
+
+			Iterator<?> items = treeSelection.iterator();
+
+			boolean selectionCompatible = true;
+
+			while (items.hasNext()) {
+				Object item = items.next();
+
+				if (!(item instanceof UpgradeProblem)) {
+					selectionCompatible = false;
+
+					break;
+				}
+			}
+
+			if (selectionCompatible) {
+				MarkDoneAction markDoneAction = new MarkDoneAction(provider);
+
+				MarkUndoneAction markUndoneAction = new MarkUndoneAction(provider);
+
+				IgnoreAction ignoreAction = new IgnoreAction(provider);
+
+				AutoCorrectAction autoCorrectAction = new AutoCorrectAction(provider);
+
+				IgnoreAlwaysAction ignoreAlwaysAction = new IgnoreAlwaysAction(provider);
+
+				menuManager.add(markDoneAction);
+				menuManager.add(markUndoneAction);
+				menuManager.add(ignoreAction);
+				menuManager.add(autoCorrectAction);
+				menuManager.add(ignoreAlwaysAction);
+			}
+		}
 	}
 
 	@Override
 	public void init(ICommonActionExtensionSite commandActionExtensionSite) {
+		_actionSite = commandActionExtensionSite;
+
 		_doubleClickListener = new IDoubleClickListener() {
 
 			@Override
@@ -95,6 +149,7 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 		structuredViewer.addDoubleClickListener(_doubleClickListener);
 	}
 
+	private ICommonActionExtensionSite _actionSite;
 	private IDoubleClickListener _doubleClickListener;
 
 }

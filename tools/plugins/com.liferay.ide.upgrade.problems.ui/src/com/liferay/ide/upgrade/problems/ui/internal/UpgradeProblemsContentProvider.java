@@ -27,6 +27,7 @@ import java.io.File;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
@@ -86,6 +87,14 @@ public class UpgradeProblemsContentProvider extends AbstractNavigatorContentProv
 			FileProblemsContainer fileProblemsContainer = (FileProblemsContainer)element;
 
 			List<UpgradeProblem> upgradeProblems = fileProblemsContainer.getUpgradeProblems();
+
+			Stream<UpgradeProblem> stream = upgradeProblems.stream();
+
+			upgradeProblems = stream.filter(
+				upgradeProblem -> upgradeProblem.getStatus() != UpgradeProblem.STATUS_IGNORE
+			).collect(
+				Collectors.toList()
+			);
 
 			return upgradeProblems.toArray();
 		}

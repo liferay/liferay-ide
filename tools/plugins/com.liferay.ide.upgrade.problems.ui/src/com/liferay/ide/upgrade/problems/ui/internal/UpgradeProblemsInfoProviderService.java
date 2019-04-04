@@ -130,6 +130,10 @@ public class UpgradeProblemsInfoProviderService implements UpgradeInfoProvider {
 		sb.append("]");
 		sb.append(problem.getTitle());
 
+		if (UpgradeProblem.STATUS_RESOLVED == problem.getStatus()) {
+			sb.append(" [resolved]");
+		}
+
 		return sb.toString();
 	}
 
