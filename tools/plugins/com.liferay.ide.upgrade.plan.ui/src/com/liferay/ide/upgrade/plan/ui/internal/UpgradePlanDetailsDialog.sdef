@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition>
+    <import>
+        <package>com.liferay.ide.upgrade.plan.core</package>
+        <package>org.eclipse.sapphire.ui.forms.swt</package>
+    </import>
+    <dialog>
+        <id>UpgradePlanDetails</id>
+        <element-type>com.liferay.ide.upgrade.plan.core.UpgradePlanDetailsOp</element-type>
+        <label>Upgrade Plan Details</label>
+        <content>
+            <property-editor>Name</property-editor>
+            <property-editor>CurrentVersion</property-editor>
+            <property-editor>Location</property-editor>
+            <property-editor>TargetVersion</property-editor>
+            <property-editor>TargetLocation</property-editor>
+            <property-editor>ProblemAmount</property-editor>
+        </content>
+    </dialog>
+</definition>
