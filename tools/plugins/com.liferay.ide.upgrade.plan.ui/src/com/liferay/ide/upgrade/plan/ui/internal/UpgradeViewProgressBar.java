@@ -55,6 +55,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 
@@ -69,6 +70,7 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 				@Override
 				public void controlResized(ControlEvent e) {
 					_colorBarWidth = _scale(_currentCompleteStepsCount);
+
 					redraw();
 				}
 
@@ -116,6 +118,7 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 	@Override
 	public Point computeSize(int wHint, int hHint, boolean changed) {
 		checkWidget();
+
 		Point size = new Point(_defaultWidth, _defaultHeight);
 
 		if (wHint != SWT.DEFAULT) {
@@ -155,27 +158,19 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 			if (upgradePlan != null) {
 				_completedUpgradeSteps.clear();
 
-				List<UpgradeStep> rootSteps = upgradePlan.getUpgradeSteps();
+				Set<UpgradeStep> noChildrenUpgradeSteps = new HashSet<>();
 
-				Set<UpgradeStep> leafSteps = new HashSet<>();
+				for (UpgradeStep upgradeStep : upgradePlan.getUpgradeSteps()) {
+					_calculateNoChildrenSteps(upgradeStep, noChildrenUpgradeSteps);
+				}
 
-				_getTotalSteps(rootSteps, leafSteps);
+				_totalStepsCount = noChildrenUpgradeSteps.size();
 
-				_totalStepsCount = leafSteps.size();
-
-				Stream<UpgradeStep> leafStepsStream = leafSteps.stream();
+				Stream<UpgradeStep> leafStepsStream = noChildrenUpgradeSteps.stream();
 
 				_completedUpgradeSteps.addAll(
 					leafStepsStream.filter(
-						step -> {
-							if (UpgradeStepStatus.COMPLETED.equals(step.getStatus()) ||
-								UpgradeStepStatus.SKIPPED.equals(step.getStatus())) {
-
-								return true;
-							}
-
-							return false;
-						}
+						step -> step.completed()
 					).collect(
 						Collectors.toList()
 					));
@@ -189,9 +184,7 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 
 			UpgradeStep changeEventStep = statusEvent.getUpgradeStep();
 
-			boolean noChildren = ListUtil.isEmpty(changeEventStep.getChildren());
-
-			if ((changeEventStep != null) && noChildren) {
+			if ((changeEventStep != null) && ListUtil.isEmpty(changeEventStep.getChildren())) {
 				if (newStatus.equals(UpgradeStepStatus.COMPLETED) || newStatus.equals(UpgradeStepStatus.SKIPPED)) {
 					_completedUpgradeSteps.add(changeEventStep);
 				}
@@ -208,84 +201,63 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 			});
 	}
 
-	private void _drawBevelRect(GC gc, int x, int y, int w, int h, Color topleft, Color bottomright) {
+	private void _calculateNoChildrenSteps(UpgradeStep upgradeStep, Set<UpgradeStep> noChildrenUpgradeSteps) {
+		List<UpgradeStep> childUpgradeSteps = upgradeStep.getChildren();
+
+		if (ListUtil.isEmpty(childUpgradeSteps)) {
+			noChildrenUpgradeSteps.add(upgradeStep);
+		}
+		else {
+			for (UpgradeStep childStep : childUpgradeSteps) {
+				_calculateNoChildrenSteps(childStep, noChildrenUpgradeSteps);
+			}
+		}
+	}
+
+	private void _drawBevelRect(GC gc, int x, int y, int w, int h, Color topleft, Color bottomRight) {
 		gc.setForeground(topleft);
 		gc.drawLine(x, y, x + w - 1, y);
 		gc.drawLine(x, y, x, y + h - 1);
 
-		gc.setForeground(bottomright);
+		gc.setForeground(bottomRight);
 		gc.drawLine(x + w, y, x + w, y + h);
 		gc.drawLine(x, y + h, x + w, y + h);
 	}
 
-	private void _getTotalSteps(List<UpgradeStep> upgradeSteps, Set<UpgradeStep> leafSteps) {
-		if (ListUtil.isEmpty(upgradeSteps)) {
-			return;
-		}
-
-		Stream<UpgradeStep> leafStepStream = upgradeSteps.stream();
-
-		leafSteps.addAll(
-			leafStepStream.filter(
-				step -> ListUtil.isEmpty(step.getChildren())
-			).collect(
-				Collectors.toList()
-			)
-		);
-
-		Stream<UpgradeStep> stepsStream = upgradeSteps.stream();
-
-		List<UpgradeStep> nestSteps = stepsStream.filter(
-			step -> ListUtil.isNotEmpty(step.getChildren())
-		).flatMap(
-			step -> {
-				List<UpgradeStep> childrenSteps = step.getChildren();
-
-				return childrenSteps.stream();
-			}
-		).collect(
-			Collectors.toList()
-		);
-
-		_getTotalSteps(nestSteps, leafSteps);
-
-		return;
-	}
-
-	private void _paint(PaintEvent event) {
-		GC gc = event.gc;
+	private void _paint(PaintEvent paintEvent) {
+		GC gc = paintEvent.gc;
 
 		if (isDisposed()) {
 			return;
 		}
 
-		Rectangle rect = getClientArea();
+		Rectangle rectangle = getClientArea();
 
-		gc.fillRectangle(rect);
+		gc.fillRectangle(rectangle);
 
 		_drawBevelRect(
-			gc, rect.x, rect.y, rect.width - 1, rect.height - 1,
+			gc, rectangle.x, rectangle.y, rectangle.width - 1, rectangle.height - 1,
 			_display.getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW),
 			_display.getSystemColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
 
 		_setProgressColor(gc);
 
-		_colorBarWidth = Math.min(rect.width - 2, _colorBarWidth);
+		_colorBarWidth = Math.min(rectangle.width - 2, _colorBarWidth);
 
-		gc.fillRectangle(1, 1, _colorBarWidth, rect.height - 2);
+		gc.fillRectangle(1, 1, _colorBarWidth, rectangle.height - 2);
 	}
 
-	private void _reset(int completedSteps) {
-		boolean noChange = false;
+	private void _reset(int completedStepsCount) {
+		boolean changed = false;
 
-		if (_currentCompleteStepsCount == completedSteps) {
-			noChange = true;
+		if (_currentCompleteStepsCount != completedStepsCount) {
+			changed = true;
 		}
 
-		_currentCompleteStepsCount = completedSteps;
+		_currentCompleteStepsCount = completedStepsCount;
 
-		if (!noChange) {
-			_colorBarWidth = _scale(completedSteps);
+		if (changed) {
+			_colorBarWidth = _scale(completedStepsCount);
 
 			if (isDisposed()) {
 				return;
@@ -301,10 +273,10 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 				return value;
 			}
 
-			Rectangle r = getClientArea();
+			Rectangle rectangle = getClientArea();
 
-			if (r.width != 0) {
-				return Math.max(0, value * (r.width - 2) / _totalStepsCount);
+			if (rectangle.width != 0) {
+				return Math.max(0, value * (rectangle.width - 2) / _totalStepsCount);
 			}
 		}
 

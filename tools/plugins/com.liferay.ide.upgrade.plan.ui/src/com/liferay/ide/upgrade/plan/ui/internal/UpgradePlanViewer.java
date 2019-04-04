@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
@@ -26,11 +25,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
@@ -161,12 +157,13 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 		return _treeViewer;
 	}
 
-	public void initTreeExpansion(UpgradePlan upgradePlan, String[] titles) {
+	public void initTreeExpansion(UpgradePlan upgradePlan, List<String> titles) {
 		List<UpgradeStep> upgradeSteps = upgradePlan.getUpgradeSteps();
 		List<UpgradeStep> matchedSteps = new ArrayList<>();
-		List<String> findTitles = Arrays.asList(titles);
 
-		_getMathcedSteps(upgradeSteps, findTitles, matchedSteps);
+		for (UpgradeStep upgradeStep : upgradeSteps) {
+			_findTitleMathcedSteps(upgradeStep, titles, matchedSteps);
+		}
 
 		_treeViewer.setExpandedElements(matchedSteps.toArray(new UpgradeStep[0]));
 
@@ -274,38 +271,16 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 		return null;
 	}
 
-	private void _getMathcedSteps(List<UpgradeStep> upgradeSteps, List<String> titles, List<UpgradeStep> resultSteps) {
-		if (ListUtil.isEmpty(upgradeSteps)) {
-			return;
+	private void _findTitleMathcedSteps(UpgradeStep upgradeStep, List<String> titles, List<UpgradeStep> resultSteps) {
+		if (titles.contains(upgradeStep.getTitle())) {
+			resultSteps.add(upgradeStep);
 		}
 
-		Stream<UpgradeStep> stepsStream = upgradeSteps.stream();
+		List<UpgradeStep> childUpgradeSteps = upgradeStep.getChildren();
 
-		resultSteps.addAll(
-			stepsStream.filter(
-				step -> titles.contains(step.getTitle())
-			).collect(
-				Collectors.toList()
-			)
-		);
-
-		Stream<UpgradeStep> childrenStepStream = upgradeSteps.stream();
-
-		List<UpgradeStep> nestSteps = childrenStepStream.filter(
-			step -> ListUtil.isNotEmpty(step.getChildren())
-		).flatMap(
-			step -> {
-				List<UpgradeStep> childrenSteps = step.getChildren();
-
-				return childrenSteps.stream();
-			}
-		).collect(
-			Collectors.toList()
-		);
-
-		_getMathcedSteps(nestSteps, titles, resultSteps);
-
-		return;
+		for (UpgradeStep childUpgradeStep : childUpgradeSteps) {
+			_findTitleMathcedSteps(childUpgradeStep, titles, resultSteps);
+		}
 	}
 
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;

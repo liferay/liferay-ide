@@ -26,6 +26,9 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.ui.internal.steps.UpgradeStepViewer;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -135,7 +138,6 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 
 				_upgradePlanner.startUpgradePlan(upgradePlan);
 			}
-
 		);
 	}
 
@@ -231,16 +233,16 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 			});
 	}
 
-	private String[] _loadTreeExpansion() {
+	private List<String> _loadTreeExpansion() {
 		String stepTitles = _memento.getString("stepTitles");
 
 		if (stepTitles == null) {
-			return new String[0];
+			return Collections.emptyList();
 		}
 
 		String[] titles = stepTitles.split(",");
 
-		return titles;
+		return Arrays.asList(titles);
 	}
 
 	private void _saveTreeExpansion(IMemento memento, Object[] expansions) {

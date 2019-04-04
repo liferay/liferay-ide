@@ -56,8 +56,6 @@ public class UpgradeStep {
 		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
 
 		_serviceTracker.open();
-
-		_upgradePlanner = _serviceTracker.getService();
 	}
 
 	public void appendChild(UpgradeStep upgradeStep) {
@@ -83,17 +81,13 @@ public class UpgradeStep {
 	}
 
 	public void dispose() {
-		List<UpgradeStep> childrenSteps = getChildren();
+		Stream<UpgradeStep> childStepsStream = _children.stream();
 
-		Stream<UpgradeStep> stepStream = childrenSteps.stream();
-
-		stepStream.forEach(
+		childStepsStream.forEach(
 			step -> step.dispose()
 		);
 
-		if (_serviceTracker != null) {
-			_serviceTracker.close();
-		}
+		_serviceTracker.close();
 	}
 
 	public boolean enabled() {
@@ -244,8 +238,10 @@ public class UpgradeStep {
 
 		Stream<T> sourceStream = source.stream();
 
-		return sourceStream.filter(
-			element -> targetTitles.contains(element.getTitle())
+		return sourceStream.map(
+			element -> element.getTitle()
+		).filter(
+			targetTitles::contains
 		).findAny(
 		).isPresent();
 	}
@@ -282,7 +278,9 @@ public class UpgradeStep {
 
 		_status = status;
 
-		_upgradePlanner.dispatch(upgradeStepStatusChangedEvent);
+		UpgradePlanner upgradePlanner = _serviceTracker.getService();
+
+		upgradePlanner.dispatch(upgradeStepStatusChangedEvent);
 	}
 
 	private boolean _isRequiredIncompleted(UpgradeStep upgradeStep) {
@@ -302,7 +300,6 @@ public class UpgradeStep {
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 	private UpgradeStepStatus _status = UpgradeStepStatus.INCOMPLETE;
 	private String _title;
-	private UpgradePlanner _upgradePlanner;
 	private String _url;
 
 }

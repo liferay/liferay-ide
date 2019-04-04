@@ -257,7 +257,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 	}
 
 	private IStatus _complete(IProgressMonitor progressMonitor) {
-		_upgradeStep.setStatus(UpgradeStepStatus.COMPLETED);
+		_upgradePlanner.completeStep(_upgradeStep);
 
 		return Status.OK_STATUS;
 	}
