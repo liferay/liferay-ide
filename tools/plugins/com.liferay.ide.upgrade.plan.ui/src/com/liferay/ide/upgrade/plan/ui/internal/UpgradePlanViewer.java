@@ -162,7 +162,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 		List<UpgradeStep> matchedSteps = new ArrayList<>();
 
 		for (UpgradeStep upgradeStep : upgradeSteps) {
-			_findTitleMathcedSteps(upgradeStep, titles, matchedSteps);
+			_findMatchedSteps(upgradeStep, titles, matchedSteps);
 		}
 
 		_treeViewer.setExpandedElements(matchedSteps.toArray(new UpgradeStep[0]));
@@ -247,6 +247,18 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 		}
 	}
 
+	private void _findMatchedSteps(UpgradeStep upgradeStep, List<String> titles, List<UpgradeStep> resultSteps) {
+		if (titles.contains(upgradeStep.getTitle())) {
+			resultSteps.add(upgradeStep);
+		}
+
+		List<UpgradeStep> childUpgradeSteps = upgradeStep.getChildren();
+
+		for (UpgradeStep childUpgradeStep : childUpgradeSteps) {
+			_findMatchedSteps(childUpgradeStep, titles, resultSteps);
+		}
+	}
+
 	private UpgradeStep _findNextStep(UpgradeStep currentUpgradeStep, Object parent) {
 		Object[] children = _treeContentProvider.getChildren(parent);
 
@@ -269,18 +281,6 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 		}
 
 		return null;
-	}
-
-	private void _findTitleMathcedSteps(UpgradeStep upgradeStep, List<String> titles, List<UpgradeStep> resultSteps) {
-		if (titles.contains(upgradeStep.getTitle())) {
-			resultSteps.add(upgradeStep);
-		}
-
-		List<UpgradeStep> childUpgradeSteps = upgradeStep.getChildren();
-
-		for (UpgradeStep childUpgradeStep : childUpgradeSteps) {
-			_findTitleMathcedSteps(childUpgradeStep, titles, resultSteps);
-		}
 	}
 
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;

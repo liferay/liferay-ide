@@ -46,6 +46,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
 import org.osgi.framework.Bundle;
@@ -59,10 +60,10 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 
-	public UpgradeViewProgressBar(Composite parent) {
-		super(parent, SWT.NONE);
+	public UpgradeViewProgressBar(Composite composite) {
+		super(composite, SWT.NONE);
 
-		_parentComposite = parent;
+		_parentComposite = composite;
 
 		addControlListener(
 			new ControlAdapter() {
@@ -137,13 +138,7 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 		_upgradePlanner.removeListener(this);
 		_serviceTracker.close();
 
-		Stream.of(
-			_parentComposite.getChildren()
-		).filter(
-			control -> !control.isDisposed()
-		).forEach(
-			control -> control.dispose()
-		);
+		Stream.of(_parentComposite.getChildren()).filter(control -> !control.isDisposed()).forEach(Control::dispose);
 
 		super.dispose();
 	}
@@ -166,14 +161,8 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 
 				_totalStepsCount = noChildrenUpgradeSteps.size();
 
-				Stream<UpgradeStep> leafStepsStream = noChildrenUpgradeSteps.stream();
-
 				_completedUpgradeSteps.addAll(
-					leafStepsStream.filter(
-						step -> step.completed()
-					).collect(
-						Collectors.toList()
-					));
+					noChildrenUpgradeSteps.stream().filter(UpgradeStep::completed).collect(Collectors.toList()));
 			}
 		}
 		else if (upgradeEvent instanceof UpgradeStepStatusChangedEvent) {
@@ -195,10 +184,7 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 			}
 		}
 
-		UIUtil.async(
-			() -> {
-				_reset(_completedUpgradeSteps.size());
-			});
+		UIUtil.async(() -> _reset(_completedUpgradeSteps.size()));
 	}
 
 	private void _calculateNoChildrenSteps(UpgradeStep upgradeStep, Set<UpgradeStep> noChildrenUpgradeSteps) {
