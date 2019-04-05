@@ -209,7 +209,9 @@ public class NewEventActionClassDialog extends Dialog {
 	protected void initializeBounds() {
 		super.initializeBounds();
 
-		getShell().setSize(475, 250);
+		Shell shell = getShell();
+
+		shell.setSize(475, 250);
 	}
 
 	@Override
@@ -263,7 +265,9 @@ public class NewEventActionClassDialog extends Dialog {
 			packageNameAndClassNameValid = true;
 		}
 
-		getButton(IDialogConstants.OK_ID).setEnabled(packageNameAndClassNameValid);
+		Button button = getButton(IDialogConstants.OK_ID);
+
+		button.setEnabled(packageNameAndClassNameValid);
 
 		if ((classNameSeverity == IStatus.ERROR) && (packageNameSeverity == IStatus.ERROR)) {
 			this.errorMessageLabel.setText("Invalid package and class name");

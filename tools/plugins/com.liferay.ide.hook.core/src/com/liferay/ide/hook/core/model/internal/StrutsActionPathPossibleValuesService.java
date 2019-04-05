@@ -30,6 +30,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.services.ServiceContext;
 
 /**
  * @author Gregory Amerson
@@ -42,8 +43,10 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
 			if (_possibleValues == null) {
 				IPath strutsConfigPath = _portalDir.append("WEB-INF/struts-config.xml");
 
+				ServiceContext serviceContext = context();
+
 				StrutsActionPathPossibleValuesCacheService cacheService =
-					context().service(StrutsActionPathPossibleValuesCacheService.class);
+					serviceContext.service(StrutsActionPathPossibleValuesCacheService.class);
 
 				_possibleValues = cacheService.getPossibleValuesForPath(strutsConfigPath);
 			}
@@ -52,7 +55,9 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
 
 			// add the value that is current set by the user
 
-			Value<String> strutsActionPathValue = context(StrutsAction.class).getStrutsActionPath();
+			StrutsAction strutsAction = context(StrutsAction.class);
+
+			Value<String> strutsActionPathValue = strutsAction.getStrutsActionPath();
 
 			String actionPath = strutsActionPathValue.content(false);
 
@@ -63,7 +68,9 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
 	}
 
 	protected Hook hook() {
-		return context().find(Hook.class);
+		ServiceContext serviceContext = context();
+
+		return serviceContext.find(Hook.class);
 	}
 
 	@Override
@@ -82,7 +89,9 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
 	}
 
 	protected IProject project() {
-		return hook().adapt(IProject.class);
+		Hook hook = hook();
+
+		return hook.adapt(IProject.class);
 	}
 
 	private IPath _portalDir;

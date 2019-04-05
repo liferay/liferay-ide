@@ -78,10 +78,15 @@ public class SDK {
 		Arrays.asList("tomcat", "jboss", "glassfish", "jetty", "wildfly"));
 
 	public SDK() {
+		this(null);
 	}
 
 	public SDK(IPath location) {
 		this.location = location;
+
+		 SDKCorePlugin sdkCorePlugin = SDKCorePlugin.getDefault();
+
+		_sdkPluginLocation = sdkCorePlugin.getStateLocation();
 	}
 
 	public void addOrUpdateServerProperties(Map<String, String> appServerPropertiesMap) throws IOException {
@@ -1151,7 +1156,7 @@ public class SDK {
 		}
 	}
 
-	private IPath _sdkPluginLocation = SDKCorePlugin.getDefault().getStateLocation();
+	private final IPath _sdkPluginLocation;
 
 	private static class Msgs extends NLS {
 

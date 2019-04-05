@@ -17,6 +17,7 @@ package com.liferay.ide.portlet.core.model.internal;
 import com.liferay.ide.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.portlet.core.model.Portlet;
 import com.liferay.ide.portlet.core.model.SupportedLocales;
@@ -44,7 +45,7 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Kamesh Sampath
  * @author Kuo Zhang
  */
-public class LocaleBundleValidationService extends ValidationService {
+public class LocaleBundleValidationService extends ValidationService implements SapphireContentAccessor {
 
 	public Status compute() {
 		Element modelElement = context(Element.class);
@@ -61,7 +62,7 @@ public class LocaleBundleValidationService extends ValidationService {
 				return Status.createOkStatus();
 			}
 
-			String locale = SapphireUtil.getText(modelElement.property(context(ValueProperty.class)), false);
+			String locale = getText(modelElement.property(context(ValueProperty.class)), false);
 
 			Value<Path> resourceBundle = portlet.getResourceBundle();
 
@@ -107,7 +108,9 @@ public class LocaleBundleValidationService extends ValidationService {
 	@Override
 	public void dispose() {
 		try {
-			Portlet portlet = context(SupportedLocales.class).nearest(Portlet.class);
+			SupportedLocales supportedLocales = context(SupportedLocales.class);
+
+			Portlet portlet = supportedLocales.nearest(Portlet.class);
 
 			SapphireUtil.detachListener(portlet.getResourceBundle(), _listener);
 		}
@@ -116,7 +119,9 @@ public class LocaleBundleValidationService extends ValidationService {
 	}
 
 	public void forceRefresh() {
-		if (!context(SupportedLocales.class).disposed()) {
+		SupportedLocales supportedLocales = context(SupportedLocales.class);
+
+		if (!supportedLocales.disposed()) {
 			refresh();
 		}
 	}
@@ -126,17 +131,19 @@ public class LocaleBundleValidationService extends ValidationService {
 	 * validated once ResourceBundle gets changed.
 	 */
 	protected void initValidationService() {
+		SupportedLocales supportedLocales = context(SupportedLocales.class);
+
 		_listener = new FilteredListener<PropertyContentEvent>() {
 
 			protected void handleTypedEvent(PropertyContentEvent event) {
-				if (!context(SupportedLocales.class).disposed()) {
+				if (!supportedLocales.disposed()) {
 					refresh();
 				}
 			}
 
 		};
 
-		Portlet portlet = context(SupportedLocales.class).nearest(Portlet.class);
+		Portlet portlet = supportedLocales.nearest(Portlet.class);
 
 		SapphireUtil.attachListener(portlet.getResourceBundle(), _listener);
 	}

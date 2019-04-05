@@ -30,11 +30,17 @@ public class DisplayRootElementController extends VersionedDTDRootElementControl
 
 	public static final String SYSTEM_ID_TEMPLATE = "http://www.liferay.com/dtd/liferay-display_{0}.dtd";
 
-	public static final String XML_BINDING_PATH = Display6xx.class.getAnnotation(XmlBinding.class).path();
+	public static final String XML_BINDING_PATH;
 
 	public static final Pattern publicIdPattern = Pattern.compile("^-//Liferay//DTD Display (.*)//EN$");
 	public static final Pattern systemIdPattern = Pattern.compile(
 		"^http://www.liferay.com/dtd/liferay-display_(.*).dtd$");
+
+	static {
+		XmlBinding xmlBinding = Display6xx.class.getAnnotation(XmlBinding.class);
+
+		XML_BINDING_PATH = xmlBinding.path();
+	}
 
 	public DisplayRootElementController() {
 		super(XML_BINDING_PATH, PUBLIC_ID_TEMPALTE, SYSTEM_ID_TEMPLATE, publicIdPattern, systemIdPattern);

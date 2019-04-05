@@ -36,6 +36,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPage;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Gregory Amerson
  */
@@ -109,12 +111,12 @@ public class NewLayoutTplLayoutWizardPage extends DataModelWizardPage implements
 		group.setLayout(rowLayout);
 
 		if ((LAYOUT_PROPERTIES.length == LAYOUT_OPTIONS_TEXT.length) &&
-			(LAYOUT_PROPERTIES.length == layoutOptionsImages.length)) {
+			(LAYOUT_PROPERTIES.length == layoutTplUIBundleImages.length)) {
 
 			imagesToDispose = new ArrayList<>();
 
 			for (int i = 0; i < LAYOUT_PROPERTIES.length; i++) {
-				Image img = layoutOptionsImages[i].createImage();
+				Image img = layoutTplUIBundleImages[i].createImage();
 
 				createLayoutOption(group, LAYOUT_PROPERTIES[i], LAYOUT_OPTIONS_TEXT[i], img);
 				imagesToDispose.add(img);
@@ -141,20 +143,18 @@ public class NewLayoutTplLayoutWizardPage extends DataModelWizardPage implements
 		Msgs.twoColumns3070, Msgs.twoColumns7030, Msgs.twoTwoColumns, Msgs.threeColumns
 	};
 
-	protected static final ImageDescriptor[] layoutOptionsImages = {
-		ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/layouts/1_column.png")),
-		ImageDescriptor.createFromURL(LayoutTplUI.
-			getDefault().getBundle().getEntry("/icons/layouts/1_2_columns_i.png")),
-		ImageDescriptor.createFromURL(LayoutTplUI.
-			getDefault().getBundle().getEntry("/icons/layouts/1_2_columns_ii.png")),
-		ImageDescriptor.createFromURL(LayoutTplUI.
-			getDefault().getBundle().getEntry("/icons/layouts/1_2_1_columns.png")),
-		ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/layouts/2_columns_i.png")),
-		ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/layouts/2_columns_ii.png")),
-		ImageDescriptor.createFromURL(LayoutTplUI.
-			getDefault().getBundle().getEntry("/icons/layouts/2_columns_iii.png")),
-		ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/layouts/2_2_columns.png")),
-		ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/layouts/3_columns.png"))
+	protected static final LayoutTplUI layoutTplUI = LayoutTplUI.getDefault();
+	protected static final Bundle layoutTplUIBundle = layoutTplUI.getBundle();
+	protected static final ImageDescriptor[] layoutTplUIBundleImages = {
+		ImageDescriptor.createFromURL(layoutTplUIBundle.getEntry("/icons/layouts/1_column.png")),
+		ImageDescriptor.createFromURL(layoutTplUIBundle.getEntry("/icons/layouts/1_2_columns_i.png")),
+		ImageDescriptor.createFromURL(layoutTplUIBundle.getEntry("/icons/layouts/1_2_columns_ii.png")),
+		ImageDescriptor.createFromURL(layoutTplUIBundle.getEntry("/icons/layouts/1_2_1_columns.png")),
+		ImageDescriptor.createFromURL(layoutTplUIBundle.getEntry("/icons/layouts/2_columns_i.png")),
+		ImageDescriptor.createFromURL(layoutTplUIBundle.getEntry("/icons/layouts/2_columns_ii.png")),
+		ImageDescriptor.createFromURL(layoutTplUIBundle.getEntry("/icons/layouts/2_columns_iii.png")),
+		ImageDescriptor.createFromURL(layoutTplUIBundle.getEntry("/icons/layouts/2_2_columns.png")),
+		ImageDescriptor.createFromURL(layoutTplUIBundle.getEntry("/icons/layouts/3_columns.png"))
 	};
 
 	protected List<Image> imagesToDispose;

@@ -24,6 +24,7 @@ import org.eclipse.sapphire.ImageData;
 import org.eclipse.sapphire.ImageService;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyEvent;
+import org.eclipse.sapphire.Result;
 
 /**
  * @author Kamesh Sampath
@@ -34,7 +35,9 @@ public class WindowStateImageService extends ImageService implements SapphireCon
 	public void dispose() {
 		super.dispose();
 
-		context(Element.class).detach(_listener, WindowState.PROP_WINDOW_STATE.name());
+		Element element = context(Element.class);
+
+		element.detach(_listener, WindowState.PROP_WINDOW_STATE.name());
 	}
 
 	@Override
@@ -55,14 +58,14 @@ public class WindowStateImageService extends ImageService implements SapphireCon
 		}
 
 		if ("MAXIMIZED".equalsIgnoreCase(strWindowState)) {
-			imageData = _IMG_MAXIMIZED;
+			imageData = _imgMaximized;
 		}
 		else if ("MINIMIZED".equalsIgnoreCase(strWindowState)) {
-			imageData = _IMG_MINIMIZED;
+			imageData = _imgMinimized;
 		}
 
 		if (imageData == null) {
-			imageData = _IMG_DEFAULT;
+			imageData = _imgDefault;
 		}
 
 		return imageData;
@@ -79,17 +82,29 @@ public class WindowStateImageService extends ImageService implements SapphireCon
 
 		};
 
-		context(Element.class).attach(_listener, WindowState.PROP_WINDOW_STATE.name());
+		Element element = context(Element.class);
+
+		element.attach(_listener, WindowState.PROP_WINDOW_STATE.name());
 	}
 
-	private static final ImageData _IMG_DEFAULT = ImageData.readFromClassLoader(
-		WindowStateImageService.class, "images/window_states.png").required();
+	private static ImageData _imgDefault;
+	private static ImageData _imgMaximized;
+	private static ImageData _imgMinimized;
 
-	private static final ImageData _IMG_MAXIMIZED = ImageData.readFromClassLoader(
-		WindowStateImageService.class, "images/maximize.png").required();
+	static {
+		Result<ImageData> result =
+			ImageData.readFromClassLoader(WindowStateImageService.class, "images/window_states.png");
 
-	private static final ImageData _IMG_MINIMIZED = ImageData.readFromClassLoader(
-		WindowStateImageService.class, "images/minimize.png").required();
+		_imgDefault = result.required();
+
+		Result<ImageData> result2 = ImageData.readFromClassLoader(WindowStateImageService.class, "images/maximize.png");
+
+		_imgMaximized = result2.required();
+
+		Result<ImageData> result3 = ImageData.readFromClassLoader(WindowStateImageService.class, "images/minimize.png");
+
+		_imgMinimized = result3.required();
+	}
 
 	private Listener _listener;
 

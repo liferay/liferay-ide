@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.core.model.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.portlet.core.model.QName;
 
@@ -31,7 +32,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Kamesh Sampath
  */
-public class NameOrQnameValidationService extends ValidationService {
+public class NameOrQnameValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	public Status compute() {
@@ -49,8 +50,8 @@ public class NameOrQnameValidationService extends ValidationService {
 		if (element instanceof QName) {
 			iqName = (QName)element;
 
-			nsURI = SapphireUtil.getText(iqName.getNamespaceURI(), false);
-			localPart = SapphireUtil.getText(iqName.getLocalPart(), false);
+			nsURI = getText(iqName.getNamespaceURI(), false);
+			localPart = getText(iqName.getLocalPart(), false);
 		}
 
 		if (CoreUtil.isNullOrEmpty(name) && CoreUtil.isNullOrEmpty(nsURI) && CoreUtil.isNullOrEmpty(localPart)) {

@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
@@ -34,6 +35,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.Assert;
+
+import org.osgi.framework.Bundle;
 
 /**
  * @author Terry Jia
@@ -45,7 +48,9 @@ public class EnvAction {
 	}
 
 	public File getBundleFile(String fileName) {
-		IPath path = getBundlesPath().append(fileName);
+		IPath bundlesPath = getBundlesPath();
+
+		IPath path = bundlesPath.append(fileName);
 
 		return path.toFile();
 	}
@@ -57,10 +62,14 @@ public class EnvAction {
 	public IPath getBundlesPath() {
 		if (_bundlesPath == null) {
 			if ((_bundlesDir == null) || _bundlesDir.equals("") || _bundlesDir.equals("null")) {
-				URL rootUrl = Platform.getBundle("com.liferay.ide.test.core.base").getEntry("/");
+				Bundle bundle = Platform.getBundle("com.liferay.ide.test.core.base");
+
+				URL rootUrl = bundle.getEntry("/");
 
 				try {
-					String filePath = FileLocator.toFileURL(rootUrl).getFile();
+					URL fileURL = FileLocator.toFileURL(rootUrl);
+
+					String filePath = fileURL.getFile();
 
 					if (filePath.contains("target/work/configuration")) {
 						int index = filePath.indexOf("/integration-tests/");
@@ -68,7 +77,11 @@ public class EnvAction {
 						_bundlesPath = new Path(filePath.substring(0, index) + "/tests-resources");
 					}
 					else {
-						_bundlesPath = new Path(filePath).removeLastSegments(3).append("tests-resources");
+						Path path = new Path(filePath);
+
+						IPath removeLastSegments = path.removeLastSegments(3);
+
+						_bundlesPath = removeLastSegments.append("tests-resources");
 					}
 				}
 				catch (IOException ioe) {
@@ -79,31 +92,41 @@ public class EnvAction {
 			}
 		}
 
-		Assert.assertTrue(_bundlesPath.toFile().exists());
+		File file = _bundlesPath.toFile();
+
+		Assert.assertTrue(file.exists());
 
 		return _bundlesPath;
 	}
 
 	public IPath getEclipseWorkspacePath() {
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		IWorkspaceRoot root = workspace.getRoot();
 
 		return root.getLocation();
 	}
 
 	public File getFilesDir() {
-		IPath path = getBundlesPath().append("files");
+		IPath bundlesPath = getBundlesPath();
+
+		IPath path = bundlesPath.append("files");
 
 		return path.toFile();
 	}
 
 	public File getProjectsDir() {
-		IPath path = getBundlesPath().append("projects");
+		IPath bundlesPath = getBundlesPath();
+
+		IPath path = bundlesPath.append("projects");
 
 		return path.toFile();
 	}
 
 	public File getTempDir() {
-		IPath path = getBundlesPath().append("bundles");
+		IPath bundlesPath = getBundlesPath();
+
+		IPath path = bundlesPath.append("bundles");
 
 		File tempDir = path.toFile();
 
@@ -127,7 +150,9 @@ public class EnvAction {
 	}
 
 	public File getValidationDir() {
-		IPath path = getBundlesPath().append("validation");
+		IPath bundlesPath = getBundlesPath();
+
+		IPath path = bundlesPath.append("validation");
 
 		return path.toFile();
 	}

@@ -30,10 +30,12 @@ public class LocaleTextNodeValueBinding extends XmlValueBindingImpl {
 	public String read() {
 		String value = null;
 
-		XmlElement element = xml(false);
+		XmlElement xmlElement = xml(false);
 
-		if (element != null) {
-			value = xml(true).getText();
+		if (xmlElement != null) {
+			xmlElement = xml(true);
+
+			value = xmlElement.getText();
 
 			if (!value.isEmpty()) {
 				value = value.trim();
@@ -58,7 +60,9 @@ public class LocaleTextNodeValueBinding extends XmlValueBindingImpl {
 		if (val != null) {
 			val = PortletUtil.localeString(value.trim());
 
-			xml(true).setText(val);
+			XmlElement xmlElement = xml(true);
+
+			xmlElement.setText(val);
 		}
 	}
 

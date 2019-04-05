@@ -23,7 +23,9 @@ public class JSFModuleProjectUseDefaultLocationListener extends JSFModuleProject
 
 	@Override
 	protected void handleTypedEvent(PropertyContentEvent event) {
-		if (get(op(event).getUseDefaultLocation())) {
+		NewLiferayJSFModuleProjectOp op = op(event);
+
+		if (get(op.getUseDefaultLocation())) {
 			super.handleTypedEvent(event);
 		}
 	}

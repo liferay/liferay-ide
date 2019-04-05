@@ -35,7 +35,9 @@ public class ImportPathService extends RelativePathService {
 	@Override
 	public Path convertToAbsolute(Path path) {
 		if (path != null) {
-			IFile file = context(Element.class).adapt(IFile.class);
+			Element element = context(Element.class);
+
+			IFile file = element.adapt(IFile.class);
 
 			if (file != null) {
 				IContainer parent = file.getParent();
@@ -56,7 +58,9 @@ public class ImportPathService extends RelativePathService {
 	@Override
 	public Path convertToRelative(Path path) {
 		if (path != null) {
-			IFile file = context(Element.class).adapt(IFile.class);
+			Element element = context(Element.class);
+
+			IFile file = element.adapt(IFile.class);
 
 			if (file != null) {
 				IContainer parent = file.getParent();
@@ -79,7 +83,9 @@ public class ImportPathService extends RelativePathService {
 
 	@Override
 	public List<Path> roots() {
-		File file = context(Element.class).adapt(File.class);
+		Element element = context(Element.class);
+
+		File file = element.adapt(File.class);
 
 		if (file == null) {
 			return Collections.emptyList();

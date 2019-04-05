@@ -44,7 +44,9 @@ public class PortletNamePossibleValueService extends PossibleValuesService {
 
 	@Override
 	protected void compute(Set<String> values) {
-		Resource resource = context(Element.class).resource();
+		Element element = context(Element.class);
+
+		Resource resource = element.resource();
 
 		IFile displayXmlFile = resource.adapt(IFile.class);
 

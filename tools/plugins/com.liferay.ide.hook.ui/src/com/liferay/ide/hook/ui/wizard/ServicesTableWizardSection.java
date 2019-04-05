@@ -154,14 +154,20 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 				errorMessageLabel.setText("Invalid class name");
 			}
 
-			this.errorMessageLabel.setVisible(!(serviceTypeValid && implClassValid));
-			getButton(IDialogConstants.OK_ID).setEnabled(serviceTypeValid && implClassValid);
+			errorMessageLabel.setVisible(!(serviceTypeValid && implClassValid));
+
+			Button button = getButton(IDialogConstants.OK_ID);
+
+			button.setEnabled(serviceTypeValid && implClassValid);
 		}
 
 		@Override
 		protected Control createContents(Composite parent) {
 			Composite composite = (Composite)super.createContents(parent);
-			getButton(IDialogConstants.OK_ID).setEnabled(false);
+
+			Button button = getButton(IDialogConstants.OK_ID);
+
+			button.setEnabled(false);
 
 			return composite;
 		}
@@ -411,7 +417,9 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 
 			this.errorMessageLabel.setVisible(!(serviceTypeValid && implClassValid));
 
-			getButton(IDialogConstants.OK_ID).setEnabled(serviceTypeValid && implClassValid);
+			Button button = getButton(IDialogConstants.OK_ID);
+
+			button.setEnabled(serviceTypeValid && implClassValid);
 		}
 
 		protected CLabel errorMessageLabel;

@@ -267,11 +267,21 @@ public class BladeCLI {
 	}
 
 	private static File _bladeJarCacheFile = null;
-	private static final IPath _bladeJarInstanceArea = ProjectCore.getDefault().getStateLocation().append("blade-jar");
-	private static final IPath _bladeJarInstancePath = _bladeJarInstanceArea.append(BLADE_JAR_FILE_NAME);
+	private static IPath _bladeJarInstanceArea;
+	private static IPath _bladeJarInstancePath;
 
 	static {
-		FileUtil.getFile(_bladeJarInstanceArea).mkdirs();
+		ProjectCore projectCore = ProjectCore.getDefault();
+
+		IPath stateLocation = projectCore.getStateLocation();
+
+		_bladeJarInstanceArea = stateLocation.append("blade-jar");
+
+		_bladeJarInstancePath = _bladeJarInstanceArea.append(BLADE_JAR_FILE_NAME);
+
+		File file = FileUtil.getFile(_bladeJarInstanceArea);
+
+		file.mkdirs();
 	}
 
 }

@@ -45,6 +45,7 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import org.gradle.tooling.CancellationTokenSource;
 import org.gradle.tooling.GradleConnector;
+import org.gradle.tooling.ModelBuilder;
 import org.gradle.tooling.model.DomainObjectSet;
 import org.gradle.tooling.model.GradleProject;
 
@@ -121,9 +122,9 @@ public class GradleUtil {
 
 			return gradleBuild.withConnection(
 				connection -> {
-					return connection.model(
-						GradleProject.class
-					).get();
+					ModelBuilder<GradleProject> model = connection.model(GradleProject.class);
+
+					return model.get();
 				},
 				new NullProgressMonitor());
 		}

@@ -25,6 +25,7 @@ import org.eclipse.sapphire.ImageData;
 import org.eclipse.sapphire.ImageService;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyEvent;
+import org.eclipse.sapphire.Result;
 
 /**
  * @author Gregory Amerson
@@ -33,12 +34,12 @@ public class ColumnImageService extends ImageService implements SapphireContentA
 
 	@Override
 	public ImageData compute() {
-		ImageData imageData = _IMG_COLUMN;
+		ImageData imageData = _imgColumn;
 
 		Column column = context(Column.class);
 
 		if (get(column.isPrimary())) {
-			imageData = _IMG_COLUMN_PRIMARY;
+			imageData = _imgColumnPrimary;
 		}
 
 		return imageData;
@@ -55,7 +56,9 @@ public class ColumnImageService extends ImageService implements SapphireContentA
 
 		};
 
-		context(Element.class).attach(_listener, Column.PROP_PRIMARY.name());
+		Element element = context(Element.class);
+
+		element.attach(_listener, Column.PROP_PRIMARY.name());
 
 		attach(
 			new Listener() {
@@ -63,18 +66,27 @@ public class ColumnImageService extends ImageService implements SapphireContentA
 				@Override
 				public void handle(Event event) {
 					if (event instanceof DisposeEvent) {
-						context(Element.class).detach(_listener, Column.PROP_PRIMARY.name());
+						element.detach(_listener, Column.PROP_PRIMARY.name());
 					}
 				}
 
 			});
 	}
 
-	private static final ImageData _IMG_COLUMN = ImageData.readFromClassLoader(
-		ColumnImageService.class, "images/column_16x16.gif").required();
+	private static ImageData _imgColumn;
+	{
+		Result<ImageData> result = ImageData.readFromClassLoader(ColumnImageService.class, "images/column_16x16.gif");
 
-	private static final ImageData _IMG_COLUMN_PRIMARY = ImageData.readFromClassLoader(
-		ColumnImageService.class, "images/column_primary_16x16.png").required();
+		_imgColumn = result.required();
+	}
+
+	private static ImageData _imgColumnPrimary;
+	{
+		Result<ImageData> result =
+			ImageData.readFromClassLoader(ColumnImageService.class, "images/column_primary_16x16.png");
+
+		_imgColumnPrimary = result.required();
+	}
 
 	private Listener _listener;
 

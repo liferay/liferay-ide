@@ -476,7 +476,9 @@ public class PropertiesUtil {
 
 		try {
 			if (FileUtil.exists(portletXml)) {
-				String[] resourceBundleValues = _getResourceNodeInfo(portletXml).getResourceBundlePatterns();
+				ResourceNodeInfo resourceNodeInfo = _getResourceNodeInfo(portletXml);
+
+				String[] resourceBundleValues = resourceNodeInfo.getResourceBundlePatterns();
 
 				for (String resourceBundleValue : resourceBundleValues) {
 					for (IFolder srcFolder : srcFolders) {
@@ -492,7 +494,7 @@ public class PropertiesUtil {
 					}
 				}
 
-				String[] supportedLocaleValues = _getResourceNodeInfo(portletXml).getSupportedLocalePatterns();
+				String[] supportedLocaleValues = resourceNodeInfo.getSupportedLocalePatterns();
 
 				for (String suportedLocaleValue : supportedLocaleValues) {
 					for (IFolder srcFolder : srcFolders) {
@@ -510,7 +512,9 @@ public class PropertiesUtil {
 			}
 
 			if (FileUtil.exists(liferayHookXml)) {
-				String[] languagePropertyValues = _getLanguageFileInfo(liferayHookXml).getLanguagePropertyPatterns();
+				LanguageFileInfo languageFileInfo = _getLanguageFileInfo(liferayHookXml);
+
+				String[] languagePropertyValues = languageFileInfo.getLanguagePropertyPatterns();
 
 				for (String languagePropertyValue : languagePropertyValues) {
 					for (IFolder srcFolder : srcFolders) {

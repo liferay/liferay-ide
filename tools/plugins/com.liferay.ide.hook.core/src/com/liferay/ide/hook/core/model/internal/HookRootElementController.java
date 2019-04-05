@@ -34,10 +34,16 @@ public class HookRootElementController extends VersionedDTDRootElementController
 
 	private static final String _SYSTEM_ID_TEMPLATE = "http://www.liferay.com/dtd/liferay-hook_{0}.dtd";
 
-	private static final String _XML_BINGDING_PATH = Hook6xx.class.getAnnotation(XmlBinding.class).path();
+	private static final String _XML_BINGDING_PATH;
 
 	private static final Pattern _publicIdPattern = Pattern.compile("^-//Liferay//DTD Hook (.*)//EN$");
 	private static final Pattern _systemIdPattern = Pattern.compile(
 		"^http://www.liferay.com/dtd/liferay-hook_(.*).dtd$");
+
+	static {
+		XmlBinding xmlBinding = Hook6xx.class.getAnnotation(XmlBinding.class);
+
+		_XML_BINGDING_PATH = xmlBinding.path();
+	}
 
 }

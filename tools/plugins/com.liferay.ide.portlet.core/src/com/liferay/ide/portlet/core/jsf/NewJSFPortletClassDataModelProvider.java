@@ -58,7 +58,9 @@ public class NewJSFPortletClassDataModelProvider
 			return true; // to prevent a new class from being created
 		}
 		else if (CREATE_JSPS_FOLDER.equals(propertyName)) {
-			String portletName = getProperty(PORTLET_NAME).toString();
+			Object property = getProperty(PORTLET_NAME);
+
+			String portletName = property.toString();
 
 			return "/WEB-INF/views/" + portletName.toLowerCase();
 		}

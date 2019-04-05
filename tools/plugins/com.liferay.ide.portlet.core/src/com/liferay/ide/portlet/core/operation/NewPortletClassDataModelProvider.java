@@ -134,96 +134,101 @@ public class NewPortletClassDataModelProvider
 		}
 		else if (CREATE_JSPS.equals(propertyName)) {
 			return true;
-		}
-		else if (CREATE_JSPS_FOLDER.equals(propertyName)) {
-			if (getBooleanProperty(CREATE_NEW_PORTLET_CLASS)) {
-				String tempStr = getProperty(CLASS_NAME).toString();
+		} else {
+			Object portletName = getProperty(PORTLET_NAME);
 
-				String property = tempStr.toLowerCase();
+			if (CREATE_JSPS_FOLDER.equals(propertyName)) {
+				if (getBooleanProperty(CREATE_NEW_PORTLET_CLASS)) {
+					Object className = getProperty(CLASS_NAME);
 
-				return "/html/" + property.replaceAll(_PORTLET_SUFFIX_PATTERN, "");
+					String tempStr = className.toString();
+
+					String property = tempStr.toLowerCase();
+
+					return "/html/" + property.replaceAll(_PORTLET_SUFFIX_PATTERN, "");
+				}
+				else {
+					String tempStr = portletName.toString();
+
+					String property = tempStr.toLowerCase();
+
+					return "/html/" + property.replaceAll(_PORTLET_SUFFIX_PATTERN, "");
+				}
 			}
-			else {
-				String tempStr = getProperty(PORTLET_NAME).toString();
-
-				String property = tempStr.toLowerCase();
-
-				return "/html/" + property.replaceAll(_PORTLET_SUFFIX_PATTERN, "");
+			else if (ICON_FILE.equals(propertyName)) {
+				return "/icon.png";
 			}
-		}
-		else if (ICON_FILE.equals(propertyName)) {
-			return "/icon.png";
-		}
-		else if (CREATE_RESOURCE_BUNDLE_FILE.equals(propertyName)) {
-			return false;
-		}
-		else if (CREATE_RESOURCE_BUNDLE_FILE_PATH.equals(propertyName)) {
-			return "content/Language.properties";
-		}
-		else if (ALLOW_MULTIPLE.equals(propertyName)) {
-			return false;
-		}
-		else if (CSS_FILE.equals(propertyName)) {
-			return "/css/main.css";
-		}
-		else if (JAVASCRIPT_FILE.equals(propertyName)) {
-			return "/js/main.js";
-		}
-		else if (CSS_CLASS_WRAPPER.equals(propertyName)) {
-			String property = getProperty(PORTLET_NAME).toString();
-
-			return property.toLowerCase() + "-portlet";
-		}
-		else if (ID.equals(propertyName)) {
-			return getProperty(PORTLET_NAME);
-		}
-		else if (CATEGORY.equals(propertyName)) {
-			return "category.sample";
-		}
-		else if (ENTRY_CATEGORY.equals(propertyName)) {
-			return "category.my";
-		}
-		else if (ENTRY_WEIGHT.equals(propertyName)) {
-			return "1.5";
-		}
-		else if (ENTRY_CLASS_NAME.equals(propertyName)) {
-			return getStringProperty(CLASS_NAME) + "ControlPanelEntry";
-		}
-		else if (SHOW_NEW_CLASS_OPTION.equals(propertyName)) {
-			return true;
-		}
-		else if (CREATE_NEW_PORTLET_CLASS.equals(propertyName)) {
-			return true;
-		}
-		else if (USE_DEFAULT_PORTLET_CLASS.equals(propertyName)) {
-			return false;
-		}
-		else if (QUALIFIED_CLASS_NAME.equals(propertyName)) {
-			if (getBooleanProperty(USE_DEFAULT_PORTLET_CLASS)) {
-				return QUALIFIED_MVC_PORTLET;
+			else if (CREATE_RESOURCE_BUNDLE_FILE.equals(propertyName)) {
+				return false;
 			}
-		}
-		else if (PROJECT_NAME.equals(propertyName) && (initialProject != null)) {
-			return initialProject.getName();
-		}
-		else if (INIT_PARAMETER_NAME.equals(propertyName)) {
-			String initParameterName = "template";
+			else if (CREATE_RESOURCE_BUNDLE_FILE_PATH.equals(propertyName)) {
+				return "content/Language.properties";
+			}
+			else if (ALLOW_MULTIPLE.equals(propertyName)) {
+				return false;
+			}
+			else if (CSS_FILE.equals(propertyName)) {
+				return "/css/main.css";
+			}
+			else if (JAVASCRIPT_FILE.equals(propertyName)) {
+				return "/js/main.js";
+			}
+			else if (CSS_CLASS_WRAPPER.equals(propertyName)) {
+				String property = portletName.toString();
 
-			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, getProject());
+				return property.toLowerCase() + "-portlet";
+			}
+			else if (ID.equals(propertyName)) {
+				return portletName;
+			}
+			else if (CATEGORY.equals(propertyName)) {
+				return "category.sample";
+			}
+			else if (ENTRY_CATEGORY.equals(propertyName)) {
+				return "category.my";
+			}
+			else if (ENTRY_WEIGHT.equals(propertyName)) {
+				return "1.5";
+			}
+			else if (ENTRY_CLASS_NAME.equals(propertyName)) {
+				return getStringProperty(CLASS_NAME) + "ControlPanelEntry";
+			}
+			else if (SHOW_NEW_CLASS_OPTION.equals(propertyName)) {
+				return true;
+			}
+			else if (CREATE_NEW_PORTLET_CLASS.equals(propertyName)) {
+				return true;
+			}
+			else if (USE_DEFAULT_PORTLET_CLASS.equals(propertyName)) {
+				return false;
+			}
+			else if (QUALIFIED_CLASS_NAME.equals(propertyName)) {
+				if (getBooleanProperty(USE_DEFAULT_PORTLET_CLASS)) {
+					return QUALIFIED_MVC_PORTLET;
+				}
+			}
+			else if (PROJECT_NAME.equals(propertyName) && (initialProject != null)) {
+				return initialProject.getName();
+			}
+			else if (INIT_PARAMETER_NAME.equals(propertyName)) {
+				String initParameterName = "template";
 
-			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
+				ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, getProject());
 
-			if (portal != null) {
-				String version = portal.getVersion();
+				ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
-				if (version != null) {
-					Version portalVersion = Version.parseVersion(version);
+				if (portal != null) {
+					String version = portal.getVersion();
 
-					if (CoreUtil.compareVersions(portalVersion, ILiferayConstants.V610) < 0) {
-						initParameterName = "jsp";
+					if (version != null) {
+						Version portalVersion = Version.parseVersion(version);
+
+						if (CoreUtil.compareVersions(portalVersion, ILiferayConstants.V610) < 0) {
+							initParameterName = "jsp";
+						}
+
+						return initParameterName;
 					}
-
-					return initParameterName;
 				}
 			}
 		}
@@ -261,7 +266,9 @@ public class NewPortletClassDataModelProvider
 			return new DataModelPropertyDescriptor(getProperty(propertyName), "print");
 		}
 		else if (CATEGORY.equals(propertyName)) {
-			if (getProperty(CATEGORY).equals("category.sample")) {
+			Object category = getProperty(CATEGORY);
+
+			if (category.equals("category.sample")) {
 				return new DataModelPropertyDescriptor("category.sample", "Sample");
 			}
 		}
@@ -273,11 +280,9 @@ public class NewPortletClassDataModelProvider
 
 			Object entryCategory = getProperty(ENTRY_CATEGORY);
 
-			if ((entryCategory != null) && (getEntryCategories() != null) &&
-				(getEntryCategories().get(entryCategory) != null)) {
+			Properties entryCategories = getEntryCategories();
 
-				Properties entryCategories = getEntryCategories();
-
+			if ((entryCategory != null) && (entryCategories != null) && (entryCategories.get(entryCategory) != null)) {
 				Object o = entryCategories.get(entryCategory);
 
 				DataModelPropertyDescriptor descriptor = new DataModelPropertyDescriptor(entryCategory, o.toString());
@@ -732,7 +737,9 @@ public class NewPortletClassDataModelProvider
 
 			String entryclasswrapper = getStringProperty(propertyName);
 
-			if (validateJavaClassName(entryclasswrapper).getSeverity() != IStatus.ERROR) {
+			IStatus status = validateJavaClassName(entryclasswrapper);
+
+			if (status.getSeverity() != IStatus.ERROR) {
 				IStatus existsStatus = canCreateTypeInClasspath(entryclasswrapper);
 
 				if (existsStatus.matches(IStatus.ERROR | IStatus.WARNING)) {
@@ -740,7 +747,7 @@ public class NewPortletClassDataModelProvider
 				}
 			}
 
-			return validateJavaClassName(entryclasswrapper);
+			return status;
 		}
 		else if (CLASS_NAME.equals(propertyName)) {
 			if (getBooleanProperty(USE_DEFAULT_PORTLET_CLASS)) {

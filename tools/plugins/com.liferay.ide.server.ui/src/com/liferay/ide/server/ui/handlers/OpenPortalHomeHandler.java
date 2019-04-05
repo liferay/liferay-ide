@@ -14,6 +14,8 @@
 
 package com.liferay.ide.server.ui.handlers;
 
+import com.liferay.ide.server.core.ILiferayServer;
+
 import java.net.URL;
 
 import org.eclipse.osgi.util.NLS;
@@ -24,7 +26,9 @@ import org.eclipse.osgi.util.NLS;
 public class OpenPortalHomeHandler extends OpenPortalURLHandler {
 
 	protected URL getPortalURL(Object selected) {
-		return getLiferayServer(selected).getPortalHomeUrl();
+		ILiferayServer liferayServer = getLiferayServer(selected);
+
+		return liferayServer.getPortalHomeUrl();
 	}
 
 	@Override

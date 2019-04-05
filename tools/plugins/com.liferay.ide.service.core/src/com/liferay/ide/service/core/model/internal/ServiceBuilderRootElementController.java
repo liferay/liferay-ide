@@ -30,11 +30,17 @@ public class ServiceBuilderRootElementController extends VersionedDTDRootElement
 
 	public static final String SYSTEM_ID_TEMPLATE = "http://www.liferay.com/dtd/liferay-service-builder_{0}.dtd";
 
-	public static final String XML_BINDING_PATH = ServiceBuilder6xx.class.getAnnotation(XmlBinding.class).path();
+	public static final String XML_BINDING_PATH;
 
 	public static final Pattern publicIdPattern = Pattern.compile("^-//Liferay//DTD Service Builder (.*)//EN$");
 	public static final Pattern systemIdPattern = Pattern.compile(
 		"^http://www.liferay.com/dtd/liferay-service-builder_(.*).dtd$");
+
+	static {
+		XmlBinding xmlBinding = ServiceBuilder6xx.class.getAnnotation(XmlBinding.class);
+
+		XML_BINDING_PATH = xmlBinding.path();
+	}
 
 	public ServiceBuilderRootElementController() {
 		super(XML_BINDING_PATH, PUBLIC_IDE_TEMPLATE, SYSTEM_ID_TEMPLATE, publicIdPattern, systemIdPattern);

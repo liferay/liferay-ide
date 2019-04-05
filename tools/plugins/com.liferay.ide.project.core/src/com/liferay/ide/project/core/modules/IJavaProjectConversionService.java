@@ -72,7 +72,9 @@ public class IJavaProjectConversionService extends UniversalConversionService im
 
 		};
 
-		context(NewLiferayComponentOp.class).attach(listener, NewLiferayComponentOp.PROP_PROJECT_NAME.name());
+		NewLiferayComponentOp newLiferayComponentOp = context(NewLiferayComponentOp.class);
+
+		newLiferayComponentOp.attach(listener, NewLiferayComponentOp.PROP_PROJECT_NAME.name());
 	}
 
 }
