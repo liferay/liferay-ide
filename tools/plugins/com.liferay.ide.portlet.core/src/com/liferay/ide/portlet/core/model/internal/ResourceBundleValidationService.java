@@ -14,7 +14,7 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.portlet.core.model.ResourceBundle;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -30,13 +30,13 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-public class ResourceBundleValidationService extends ValidationService {
+public class ResourceBundleValidationService extends ValidationService implements SapphireContentAccessor {
 
 	public Status compute() {
 		Element modelElement = context(Element.class);
 
 		if (!modelElement.disposed() && modelElement instanceof ResourceBundle) {
-			String bundle = SapphireUtil.getText(modelElement.property(context(ValueProperty.class)), false);
+			String bundle = getText(modelElement.property(context(ValueProperty.class)), false);
 
 			if ((bundle != null) && (bundle.indexOf("/") != -1)) {
 				bundle = bundle.replace("/", ".");
@@ -60,17 +60,19 @@ public class ResourceBundleValidationService extends ValidationService {
 	}
 
 	protected void initValidationService() {
+		ResourceBundle resourceBundle = context(ResourceBundle.class);
+
 		_listener = new FilteredListener<PropertyContentEvent>() {
 
 			protected void handleTypedEvent(PropertyContentEvent event) {
-				if (!context(ResourceBundle.class).disposed()) {
+				if (!resourceBundle.disposed()) {
 					refresh();
 				}
 			}
 
 		};
 
-		context(ResourceBundle.class).attach(_listener);
+		resourceBundle.attach(_listener);
 	}
 
 	private FilteredListener<PropertyContentEvent> _listener;

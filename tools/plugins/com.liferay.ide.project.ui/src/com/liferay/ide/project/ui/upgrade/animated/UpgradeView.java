@@ -65,8 +65,6 @@ public class UpgradeView extends ViewPart implements SapphireContentAccessor, Se
 
 	public static final String ID = "com.liferay.ide.project.ui.upgradeView";
 
-	public static final Bundle bundle = ProjectUI.getDefault().getBundle();
-
 	public static void addPage(String pageid) {
 		Page targetPage = null;
 
@@ -349,6 +347,10 @@ public class UpgradeView extends ViewPart implements SapphireContentAccessor, Se
 		IActionBars actionBars = getViewSite().getActionBars();
 
 		final IToolBarManager mgr = actionBars.getToolBarManager();
+
+		ProjectUI projectUI = ProjectUI.getDefault();
+
+		final Bundle bundle = projectUI.getBundle();
 
 		final IAction restart =
 			new Action("Restart Upgrade", ImageDescriptor.createFromURL(bundle.getEntry("icons/e16/restart.gif"))) {

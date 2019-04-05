@@ -14,7 +14,7 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.portlet.core.model.CustomPortletMode;
 import com.liferay.ide.portlet.core.model.PortletApp;
 
@@ -26,7 +26,7 @@ import org.eclipse.sapphire.PossibleValuesService;
 /**
  * @author Kamesh Sampath
  */
-public class PortletModePossibleValueService extends PossibleValuesService {
+public class PortletModePossibleValueService extends PossibleValuesService implements SapphireContentAccessor {
 
 	// provided by Portlet Specification and Liferay
 
@@ -43,7 +43,7 @@ public class PortletModePossibleValueService extends PossibleValuesService {
 		List<CustomPortletMode> customPortletModes = portletApp.getCustomPortletModes();
 
 		for (CustomPortletMode iCustomPortletMode : customPortletModes) {
-			String customPortletMode = SapphireUtil.getText(iCustomPortletMode.getPortletMode(), false);
+			String customPortletMode = getText(iCustomPortletMode.getPortletMode(), false);
 
 			if (customPortletMode != null) {
 				values.add(customPortletMode);

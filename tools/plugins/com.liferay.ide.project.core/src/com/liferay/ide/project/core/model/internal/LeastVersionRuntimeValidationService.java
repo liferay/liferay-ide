@@ -38,7 +38,11 @@ public class LeastVersionRuntimeValidationService extends ValidationService impl
 
 	@Override
 	protected Status compute() {
-		Property property = context(Element.class).property(context(Property.class).definition());
+		Element element = context(Element.class);
+
+		Property p = context(Property.class);
+
+		Property property = element.property(p.definition());
 
 		Value<?> value = (Value<?>)property;
 

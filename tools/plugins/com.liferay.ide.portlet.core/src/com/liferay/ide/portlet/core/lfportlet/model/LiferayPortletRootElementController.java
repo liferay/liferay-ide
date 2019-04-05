@@ -29,11 +29,17 @@ public class LiferayPortletRootElementController extends VersionedDTDRootElement
 
 	public static final String SYSTEM_ID_TEMPLATE = "http://www.liferay.com/dtd/liferay-portlet-app_{0}.dtd";
 
-	public static final String XML_BINDING_PATH = LiferayPortletXml.class.getAnnotation(XmlBinding.class).path();
+	public static final String XML_BINDING_PATH;
 
 	public static final Pattern publicIdPattern = Pattern.compile("^-//Liferay//DTD Portlet Application (.*)//EN$");
 	public static final Pattern systemIdPattern = Pattern.compile(
 		"^http://www.liferay.com/dtd/liferay-portlet-app_(.*).dtd$");
+
+	static {
+		XmlBinding xmlBinding = LiferayPortletXml.class.getAnnotation(XmlBinding.class);
+
+		XML_BINDING_PATH = xmlBinding.path();
+	}
 
 	public LiferayPortletRootElementController() {
 		super(XML_BINDING_PATH, PUBLIC_ID_TEMPLATE, SYSTEM_ID_TEMPLATE, publicIdPattern, systemIdPattern);

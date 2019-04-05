@@ -79,7 +79,9 @@ public class PortletTemplate extends AbstractProjectTemplate {
 
 		String pkgPath = lowerCase.replaceAll("\\.", "/");
 
-		String noEmptyClassName = safeJavaClassName(projectName).replaceAll("^Rule", "");
+		String safeJavaClassName = safeJavaClassName(projectName);
+
+		String noEmptyClassName = safeJavaClassName.replaceAll("^Rule", "");
 
 		String ruleJavaClassName = noEmptyClassName.replaceAll("Test$", "");
 

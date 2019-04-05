@@ -30,7 +30,9 @@ public class CSVReader {
 			return null;
 		}
 
-		String[][] results = new String[lines.length][lines[0].split(",").length];
+		String[] split = lines[0].split(",");
+
+		String[][] results = new String[lines.length][split.length];
 
 		for (int i = 0; i < lines.length; i++) {
 			String line = lines[i];

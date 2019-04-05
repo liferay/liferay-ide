@@ -92,14 +92,6 @@ public class SapphireUtil {
 		return "";
 	}
 
-	public static <T> String getText(Value<T> value, boolean useDefaultValue) {
-		if (value != null) {
-			return value.text(useDefaultValue);
-		}
-
-		return "";
-	}
-
 	public static boolean ok(Element element) {
 		if (element == null) {
 			return false;

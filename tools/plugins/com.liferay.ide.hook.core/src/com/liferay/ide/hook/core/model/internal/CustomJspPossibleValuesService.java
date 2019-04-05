@@ -91,7 +91,9 @@ public class CustomJspPossibleValuesService extends PossibleValuesService {
 	}
 
 	protected IProject project() {
-		Element root = context(Element.class).root();
+		Element element = context(Element.class);
+
+		Element root = element.root();
 
 		IFile file = root.adapt(IFile.class);
 

@@ -35,6 +35,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+import org.gradle.tooling.ModelBuilder;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 
@@ -83,11 +85,11 @@ public class GradleTooling {
 
 			retval = gradleBuild.withConnection(
 				connection -> {
-					return connection.model(
-						modelClass
-					).withArguments(
-						"--init-script", scriptFile.getAbsolutePath()
-					).get();
+					ModelBuilder<T> model = connection.model(modelClass);
+
+					ModelBuilder<T> withArguments = model.withArguments("--init-script", scriptFile.getAbsolutePath());
+
+					return withArguments.get();
 				},
 				new NullProgressMonitor());
 		}

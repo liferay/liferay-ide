@@ -17,9 +17,9 @@ package com.liferay.ide.upgrade.plan.core;
 import com.liferay.ide.core.util.ListUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Adapters;
 
@@ -80,6 +80,8 @@ public class UpgradeStep {
 	}
 
 	public void dispose() {
+		_children.stream().forEach(UpgradeStep::dispose);
+
 		_serviceTracker.close();
 	}
 
@@ -119,9 +121,11 @@ public class UpgradeStep {
 		}
 
 		if (isEqualIgnoreCase(_description, baseUpgradeStep._description) &&
+			isEqualIgnoreCase(_icon, baseUpgradeStep._icon) &&
 			isEqualIgnoreCase(_requirement, baseUpgradeStep._requirement) &&
-			isEqualIgnoreCase(_url, baseUpgradeStep._url) && isEqualIgnoreCase(_icon, baseUpgradeStep._icon) &&
-			isEqualIgnoreCase(_title, baseUpgradeStep._title) && _status.equals(baseUpgradeStep._status)) {
+			isEqualIgnoreCase(_commandId, baseUpgradeStep._commandId) &&
+			isEqualIgnoreCase(_url, baseUpgradeStep._url) && isEqual(_children, baseUpgradeStep._children) &&
+			isEqualIgnoreCase(_title, baseUpgradeStep._title)) {
 
 			return true;
 		}
@@ -178,16 +182,21 @@ public class UpgradeStep {
 		int hash = 31;
 
 		hash = 31 * hash + (_description != null ? _description.hashCode() : 0);
-		hash = 31 * hash + (_requirement != null ? _requirement.hashCode() : 0);
-		hash = 31 * hash + (_url != null ? _url.hashCode() : 0);
 		hash = 31 * hash + (_icon != null ? _icon.hashCode() : 0);
+
+		int childrenHashCodes = _children.stream().map(Object::hashCode).reduce(0, Integer::sum).intValue();
+
+		hash = 31 * hash + (_requirement != null ? _requirement.hashCode() : 0);
+		hash = 31 * hash + childrenHashCodes;
+		hash = 31 * hash + (_url != null ? _url.hashCode() : 0);
 		hash = 31 * hash + (_title != null ? _title.hashCode() : 0);
+		hash = 31 * hash + (_commandId != null ? _commandId.hashCode() : 0);
 		hash = 31 * hash + (_status != null ? _status.hashCode() : 0);
 
 		return hash;
 	}
 
-	public boolean isEqual(String[] source, String[] target) {
+	public <T extends UpgradeStep> boolean isEqual(Collection<T> source, Collection<T> target) {
 		if (source == null) {
 			if (target == null) {
 				return true;
@@ -200,7 +209,7 @@ public class UpgradeStep {
 			return false;
 		}
 
-		if (source.length != target.length) {
+		if (source.size() != target.size()) {
 			return false;
 		}
 
@@ -208,14 +217,9 @@ public class UpgradeStep {
 			return true;
 		}
 
-		List<String> targetList = Arrays.asList(target);
+		Collection<String> targetTitles = target.stream().map(UpgradeStep::getTitle).collect(Collectors.toList());
 
-		return Stream.of(
-			source
-		).filter(
-			element -> targetList.contains(element)
-		).findAny(
-		).isPresent();
+		return source.stream().map(UpgradeStep::getTitle).filter(targetTitles::contains).findAny().isPresent();
 	}
 
 	public boolean isEqualIgnoreCase(String original, String target) {

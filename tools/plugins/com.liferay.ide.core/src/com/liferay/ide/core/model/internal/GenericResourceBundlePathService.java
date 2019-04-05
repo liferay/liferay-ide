@@ -92,7 +92,9 @@ public class GenericResourceBundlePathService extends RelativePathService {
 	 * @return handle to IProject
 	 */
 	protected IProject project() {
-		return context(Element.class).adapt(IProject.class);
+		Element element = context(Element.class);
+
+		return element.adapt(IProject.class);
 	}
 
 }

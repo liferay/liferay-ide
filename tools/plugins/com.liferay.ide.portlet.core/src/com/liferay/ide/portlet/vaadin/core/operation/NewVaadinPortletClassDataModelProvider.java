@@ -31,6 +31,7 @@ import org.eclipse.jst.j2ee.common.CommonFactory;
 import org.eclipse.jst.j2ee.common.ParamValue;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
  * @author Henri Sara
@@ -147,13 +148,17 @@ public class NewVaadinPortletClassDataModelProvider
 	protected Object getInitParams() {
 		List<ParamValue> initParams = new ArrayList<>();
 
-		if (getStringProperty(VAADIN_PORTLET_CLASS).equals(QUALIFIED_VAADIN_PORTLET)) {
+		String vaadinPortletClass = getStringProperty(VAADIN_PORTLET_CLASS);
+
+		if (vaadinPortletClass.equals(QUALIFIED_VAADIN_PORTLET)) {
 			ParamValue paramValue = CommonFactory.eINSTANCE.createParamValue();
 
 			paramValue.setName("application");
 
-			String pkg = getDataModel().getStringProperty(JAVA_PACKAGE);
-			String cls = getDataModel().getStringProperty(CLASS_NAME);
+			IDataModel dataModel = getDataModel();
+
+			String pkg = dataModel.getStringProperty(JAVA_PACKAGE);
+			String cls = dataModel.getStringProperty(CLASS_NAME);
 
 			String qualifiedApplicationClass = ((pkg == null) || StringPool.EMPTY.equals(pkg)) ? cls : pkg + "." + cls;
 
@@ -166,7 +171,9 @@ public class NewVaadinPortletClassDataModelProvider
 	}
 
 	private String _getPortletName() {
-		String property = getProperty(CLASS_NAME).toString();
+		Object className = getProperty(CLASS_NAME);
+
+		String property = className.toString();
 
 		return property.replaceAll("Application", StringPool.EMPTY);
 	}

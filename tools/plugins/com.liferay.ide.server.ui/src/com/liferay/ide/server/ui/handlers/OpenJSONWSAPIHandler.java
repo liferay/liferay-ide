@@ -14,6 +14,8 @@
 
 package com.liferay.ide.server.ui.handlers;
 
+import com.liferay.ide.server.core.ILiferayServer;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -26,7 +28,9 @@ public class OpenJSONWSAPIHandler extends OpenPortalURLHandler {
 
 	protected URL getPortalURL(Object selected) {
 		try {
-			return new URL(getLiferayServer(selected).getPortalHomeUrl(), "/api/jsonws");
+			ILiferayServer liferayServer = getLiferayServer(selected);
+
+			return new URL(liferayServer.getPortalHomeUrl(), "/api/jsonws");
 		}
 		catch (MalformedURLException murle) {
 		}

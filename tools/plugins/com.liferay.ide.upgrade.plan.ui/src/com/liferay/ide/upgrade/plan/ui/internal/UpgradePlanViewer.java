@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
-import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
@@ -25,10 +24,9 @@ import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
@@ -159,18 +157,17 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 		return _treeViewer;
 	}
 
-	public void initTreeExpansion(UpgradePlan upgradePlan, String[] titles) {
-		Stream.of(
-			titles
-		).map(
-			title -> _findUpgradeStep(upgradePlan, title)
-		).filter(
-			Objects::nonNull
-		).forEach(
-			step -> {
-				_treeViewer.expandToLevel(step, 1, false);
-			}
-		);
+	public void initTreeExpansion(UpgradePlan upgradePlan, List<String> titles) {
+		List<UpgradeStep> upgradeSteps = upgradePlan.getUpgradeSteps();
+		List<UpgradeStep> matchedSteps = new ArrayList<>();
+
+		for (UpgradeStep upgradeStep : upgradeSteps) {
+			_findMatchedSteps(upgradeStep, titles, matchedSteps);
+		}
+
+		_treeViewer.setExpandedElements(matchedSteps.toArray(new UpgradeStep[0]));
+
+		refresh();
 	}
 
 	@Override
@@ -180,7 +177,7 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 
 			UpgradePlan upgradePlan = upgradePlanStartedEvent.getUpgradePlan();
 
-			UIUtil.async(() -> _treeViewer.setInput(upgradePlan));
+			UIUtil.sync(() -> _treeViewer.setInput(upgradePlan));
 		}
 		else if (upgradeEvent instanceof UpgradeStepStatusChangedEvent) {
 			UIUtil.async(
@@ -250,6 +247,18 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 		}
 	}
 
+	private void _findMatchedSteps(UpgradeStep upgradeStep, List<String> titles, List<UpgradeStep> resultSteps) {
+		if (titles.contains(upgradeStep.getTitle())) {
+			resultSteps.add(upgradeStep);
+		}
+
+		List<UpgradeStep> childUpgradeSteps = upgradeStep.getChildren();
+
+		for (UpgradeStep childUpgradeStep : childUpgradeSteps) {
+			_findMatchedSteps(childUpgradeStep, titles, resultSteps);
+		}
+	}
+
 	private UpgradeStep _findNextStep(UpgradeStep currentUpgradeStep, Object parent) {
 		Object[] children = _treeContentProvider.getChildren(parent);
 
@@ -269,34 +278,6 @@ public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener 
 			if (upgradeStep.equals(currentUpgradeStep)) {
 				found = true;
 			}
-		}
-
-		return null;
-	}
-
-	private UpgradeStep _findUpgradeStep(UpgradePlan upgradePlan, String title) {
-		List<UpgradeStep> upgradeSteps = upgradePlan.getUpgradeSteps();
-
-		for (UpgradeStep upgradeStep : upgradeSteps) {
-			UpgradeStep childUpgradeStep = _findUpgradeStep(upgradeStep, title);
-
-			if (childUpgradeStep != null) {
-				return childUpgradeStep;
-			}
-		}
-
-		return null;
-	}
-
-	private UpgradeStep _findUpgradeStep(UpgradeStep upgradeStep, String title) {
-		if (StringUtil.equals(upgradeStep.getTitle(), title)) {
-			return upgradeStep;
-		}
-
-		List<UpgradeStep> childUpgradeSteps = upgradeStep.getChildren();
-
-		for (UpgradeStep childUpgradeStep : childUpgradeSteps) {
-			return _findUpgradeStep(childUpgradeStep, title);
 		}
 
 		return null;

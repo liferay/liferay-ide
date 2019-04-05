@@ -40,7 +40,9 @@ public class VersionedDTDDefaultValueService extends DefaultValueService {
 	protected String compute() {
 		String defaultVersion = null;
 
-		Resource resource = context(Element.class).resource();
+		Element element = context(Element.class);
+
+		Resource resource = element.resource();
 
 		RootXmlResource xmlResource = resource.adapt(RootXmlResource.class);
 

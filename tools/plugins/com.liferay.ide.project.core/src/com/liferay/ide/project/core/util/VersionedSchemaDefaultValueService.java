@@ -41,7 +41,9 @@ public class VersionedSchemaDefaultValueService extends DefaultValueService {
 	protected String compute() {
 		String version = _defaultVersion;
 
-		Resource elementResource = context(Element.class).resource();
+		Element element = context(Element.class);
+
+		Resource elementResource = element.resource();
 
 		RootXmlResource resource = elementResource.adapt(RootXmlResource.class);
 

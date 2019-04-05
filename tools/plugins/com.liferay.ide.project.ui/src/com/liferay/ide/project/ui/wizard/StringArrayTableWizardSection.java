@@ -442,7 +442,9 @@ public class StringArrayTableWizardSection extends Composite {
 		protected String windowTitle;
 
 		private void _updateOKButton() {
-			getButton(IDialogConstants.OK_ID).setEnabled(callback.validate(texts));
+			Button button = getButton(IDialogConstants.OK_ID);
+
+			button.setEnabled(callback.validate(texts));
 		}
 
 	}

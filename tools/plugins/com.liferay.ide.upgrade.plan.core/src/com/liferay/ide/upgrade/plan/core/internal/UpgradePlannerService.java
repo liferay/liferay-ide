@@ -104,6 +104,14 @@ public class UpgradePlannerService implements UpgradePlanner {
 		}
 	}
 
+	public void dispose(UpgradePlan upgradePlan) {
+		if (upgradePlan != null) {
+			List<UpgradeStep> upgradeSteps = upgradePlan.getUpgradeSteps();
+
+			upgradeSteps.stream().forEach(UpgradeStep::dispose);
+		}
+	}
+
 	@Override
 	public UpgradePlan getCurrentUpgradePlan() {
 		return _currentUpgradePlan;

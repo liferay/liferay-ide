@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.internal.wizards.datatransfer.ZipLeveledStructureProvider;
@@ -82,6 +83,17 @@ public class JarEntrySelectionDialog extends ElementTreeSelectionDialog {
 
 	public static class ZipEntryLabelProvider extends LabelProvider {
 
+		public ZipEntryLabelProvider() {
+		
+
+			IWorkbench workbench = PlatformUI.getWorkbench();
+
+			ISharedImages sharedImages = workbench.getSharedImages();
+
+			_imgFile = sharedImages.getImage(ISharedImages.IMG_OBJ_FILE);
+			_imgFolder = sharedImages.getImage(ISharedImages.IMG_OBJ_FOLDER);
+		}
+
 		@Override
 		public Image getImage(Object element) {
 			ZipEntry entry = (ZipEntry)element;
@@ -105,9 +117,8 @@ public class JarEntrySelectionDialog extends ElementTreeSelectionDialog {
 			return strings[strings.length - 1];
 		}
 
-		private final Image _imgFile = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
-		private final Image _imgFolder =
-			PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER);
+		private final Image _imgFile;
+		private final Image _imgFolder;
 
 	}
 

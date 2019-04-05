@@ -83,7 +83,7 @@ public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implement
 
 		name = SWTUtil.createText(parent, 1);
 
-		this.synchHelper.synchText(name, LAYOUT_TEMPLATE_NAME, null);
+		synchHelper.synchText(name, LAYOUT_TEMPLATE_NAME, null);
 
 		SWTUtil.createLabel(parent, StringPool.EMPTY, 1);
 
@@ -91,7 +91,7 @@ public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implement
 
 		id = SWTUtil.createText(parent, 1);
 
-		this.synchHelper.synchText(id, LAYOUT_TEMPLATE_ID, null);
+		synchHelper.synchText(id, LAYOUT_TEMPLATE_ID, null);
 
 		SWTUtil.createLabel(parent, StringPool.EMPTY, 1);
 
@@ -99,7 +99,7 @@ public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implement
 
 		templateFile = SWTUtil.createText(parent, 1);
 
-		this.synchHelper.synchText(templateFile, LAYOUT_TEMPLATE_FILE, null);
+		synchHelper.synchText(templateFile, LAYOUT_TEMPLATE_FILE, null);
 
 		Button templateFileBrowse = SWTUtil.createPushButton(parent, Msgs.browse, null);
 
@@ -146,7 +146,7 @@ public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implement
 
 		thumbnailFile = SWTUtil.createText(parent, 1);
 
-		this.synchHelper.synchText(thumbnailFile, LAYOUT_THUMBNAIL_FILE, null);
+		synchHelper.synchText(thumbnailFile, LAYOUT_THUMBNAIL_FILE, null);
 
 		Button thumbnailFileBrowse = SWTUtil.createPushButton(parent, Msgs.browse, null);
 

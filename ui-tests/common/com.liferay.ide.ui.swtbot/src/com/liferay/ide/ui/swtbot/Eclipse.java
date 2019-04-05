@@ -48,15 +48,21 @@ public class Eclipse extends BasePageObject {
 	}
 
 	public void clickFileMenu(String menu) {
-		getFileMenu().clickMenu(menu);
+		Menu fileMenu = getFileMenu();
+
+		fileMenu.clickMenu(menu);
 	}
 
 	public void clickFileMenu(String menu, String submenu) {
-		getFileMenu().clickMenu(menu, submenu);
+		Menu fileMenu = getFileMenu();
+
+		fileMenu.clickMenu(menu, submenu);
 	}
 
 	public void clickInstallMenu() {
-		getInstallMenu().click();
+		Menu installMenu = getInstallMenu();
+
+		installMenu.click();
 	}
 
 	public Editor getEditor(String fileName) {
@@ -64,13 +70,17 @@ public class Eclipse extends BasePageObject {
 	}
 
 	public Menu getFileMenu() {
-		return new Menu(_getShell(label).bot(), FILE);
+		SWTBotShell swtBotShell = _getShell(label);
+
+		return new Menu(swtBotShell.bot(), FILE);
 	}
 
 	public Menu getInstallMenu() {
 		String[] installLabel = {HELP, INSTALL_NEW_SOFTWARE};
 
-		return new Menu(_getShell(label).bot(), installLabel);
+		SWTBotShell swtBotShell = _getShell(label);
+
+		return new Menu(swtBotShell.bot(), installLabel);
 	}
 
 	public String getLabel() {
@@ -80,7 +90,9 @@ public class Eclipse extends BasePageObject {
 	public Menu getOtherMenu() {
 		String[] otherLabel = {WINDOW, SHOW_VIEW, OTHER};
 
-		return new Menu(_getShell(label).bot(), otherLabel);
+		SWTBotShell swtBotShell = _getShell(label);
+
+		return new Menu(swtBotShell.bot(), otherLabel);
 	}
 
 	public String getPerspectiveLabel() {
@@ -92,7 +104,9 @@ public class Eclipse extends BasePageObject {
 	public Menu getPreferencesMenu() {
 		String[] preferencesLabel = {WINDOW, PREFERENCES};
 
-		return new Menu(_getShell(label).bot(), preferencesLabel);
+		SWTBotShell swtBotShell = _getShell(label);
+
+		return new Menu(swtBotShell.bot(), preferencesLabel);
 	}
 
 	public Text getQuickAccess() {

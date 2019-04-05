@@ -524,7 +524,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
 		return true;
 	}
 
-	protected static final String PREFERENCE_NODE_QUALIFIER = ProjectCore.getDefault().getBundle().getSymbolicName();
+	protected static final String PREFERENCE_NODE_QUALIFIER = ProjectCore.PLUGIN_ID;
 
 	protected static class Msgs extends NLS {
 

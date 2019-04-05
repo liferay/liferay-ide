@@ -19,6 +19,7 @@ import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
+import org.eclipse.sapphire.modeling.xml.XmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 
@@ -48,17 +49,21 @@ public class TextNodeValueBinding extends XmlValueBindingImpl {
 
 		_params = binding.params();
 
-		_path = new XmlPath(_params[0], resource().getXmlNamespaceResolver());
+		XmlResource xmlResource = resource();
+
+		_path = new XmlPath(_params[0], xmlResource.getXmlNamespaceResolver());
 	}
 
 	@Override
 	public String read() {
 		String value = "";
 
-		XmlElement element = xml(false);
+		XmlElement xmlElement = xml(false);
 
-		if (element != null) {
-			value = xml(true).getText();
+		if (xmlElement != null) {
+			xmlElement = xml(true);
+
+			value = xmlElement.getText();
 
 			if (value != null) {
 				value = value.trim();
@@ -76,7 +81,9 @@ public class TextNodeValueBinding extends XmlValueBindingImpl {
 			val = value.trim();
 		}
 
-		xml(true).setText(val);
+		XmlElement xmlElement = xml(true);
+
+		xmlElement.setText(val);
 	}
 
 	private String[] _params;

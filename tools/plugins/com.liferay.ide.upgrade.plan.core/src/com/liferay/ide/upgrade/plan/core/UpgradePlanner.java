@@ -21,6 +21,7 @@ import java.nio.file.Path;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public interface UpgradePlanner {
 
@@ -29,6 +30,8 @@ public interface UpgradePlanner {
 	public void completeStep(UpgradeStep upgradeStep);
 
 	public void dispatch(UpgradeEvent upgradeEvent);
+
+	public void dispose(UpgradePlan upgradePlan);
 
 	public UpgradePlan getCurrentUpgradePlan();
 

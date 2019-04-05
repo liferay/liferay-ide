@@ -125,9 +125,11 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 				errorMessageLabel.setText("Invalid class name");
 			}
 
-			this.errorMessageLabel.setVisible(!classNameValid);
+			errorMessageLabel.setVisible(!classNameValid);
 
-			getButton(IDialogConstants.OK_ID).setEnabled(classNameValid);
+			Button button = getButton(IDialogConstants.OK_ID);
+
+			button.setEnabled(classNameValid);
 		}
 
 		protected CLabel errorMessageLabel;
@@ -223,16 +225,20 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 				errorMessageLabel.setText("Invalid class name");
 			}
 
-			this.errorMessageLabel.setVisible(!classNameValid);
+			errorMessageLabel.setVisible(!classNameValid);
 
-			getButton(IDialogConstants.OK_ID).setEnabled(classNameValid);
+			Button button = getButton(IDialogConstants.OK_ID);
+
+			button.setEnabled(classNameValid);
 		}
 
 		@Override
 		protected Control createContents(Composite parent) {
 			Composite composite = (Composite)super.createContents(parent);
 
-			getButton(IDialogConstants.OK_ID).setEnabled(false);
+			Button button = getButton(IDialogConstants.OK_ID);
+
+			button.setEnabled(false);
 
 			return composite;
 		}

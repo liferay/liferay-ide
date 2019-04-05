@@ -38,7 +38,7 @@ public class QNamesPossibleValuesService extends PossibleValuesService implement
 	protected void compute(Set<String> values) {
 		Element element = context(Element.class);
 
-		PortletApp portletApp = context(Element.class).nearest(PortletApp.class);
+		PortletApp portletApp = element.nearest(PortletApp.class);
 
 		if (element instanceof EventDefinitionRef) {
 			ElementList<EventDefinition> eventDefs = portletApp.getEventDefinitions();

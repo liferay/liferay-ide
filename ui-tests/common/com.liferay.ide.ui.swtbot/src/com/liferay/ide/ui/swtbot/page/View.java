@@ -33,11 +33,15 @@ public class View extends AbstractPart {
 	}
 
 	public void clickToolbarButton(String btnLabel) {
-		toolbarBtn(btnLabel).click();
+		SWTBotToolbarButton swtBotToolbarButton = toolbarBtn(btnLabel);
+
+		swtBotToolbarButton.click();
 	}
 
 	public void clickToolBarWithTooltipButton(String btnLabel) {
-		toolbarBtn(btnLabel).click();
+		SWTBotToolbarButton swtBotToolbarButton = toolbarBtn(btnLabel);
+
+		swtBotToolbarButton.click();
 	}
 
 	public String getLabel() {
@@ -45,7 +49,9 @@ public class View extends AbstractPart {
 	}
 
 	public SWTBotToolbarButton toolbarBtn(String btnLabel) {
-		return getPart().toolbarButton(btnLabel);
+		SWTBotView swtBotView = getPart();
+
+		return swtBotView.toolbarButton(btnLabel);
 	}
 
 	protected SWTBotView getPart() {

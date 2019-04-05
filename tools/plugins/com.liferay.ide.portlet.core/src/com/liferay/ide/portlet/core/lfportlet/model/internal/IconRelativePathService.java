@@ -34,7 +34,9 @@ public class IconRelativePathService extends RelativePathService {
 
 	@Override
 	public List<Path> roots() {
-		IProject project = context(Element.class).adapt(IProject.class);
+		Element element = context(Element.class);
+
+		IProject project = element.adapt(IProject.class);
 
 		if (project == null) {
 			return Collections.emptyList();

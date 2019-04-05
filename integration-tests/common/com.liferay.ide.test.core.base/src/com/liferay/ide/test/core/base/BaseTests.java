@@ -144,7 +144,9 @@ public class BaseTests {
 	}
 
 	protected void assertFileSuffix(IFile file, String expectedSuffix) {
-		Assert.assertTrue(file.getName().endsWith(expectedSuffix));
+		String name = file.getName();
+
+		Assert.assertTrue(name.endsWith(expectedSuffix));
 	}
 
 	protected void assertFileSuffix(IPath path, String expectedSuffix) {

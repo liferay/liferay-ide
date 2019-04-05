@@ -42,11 +42,15 @@ public class CustomJspValidationService extends ValidationService {
 
 	@Override
 	public Status compute() {
-		Value<?> value = (Value<?>)context(Element.class).property(context(Property.class).definition());
+		Element element = context(Element.class);
 
-		ValueProperty property = value.definition();
+		Property property = context(Property.class);
 
-		String label = property.getLabel(true, CapitalizationType.NO_CAPS, false);
+		Value<?> value = (Value<?>)element.property(property.definition());
+
+		ValueProperty valueProperty = value.definition();
+
+		String label = valueProperty.getLabel(true, CapitalizationType.NO_CAPS, false);
 
 		if (_isValueEmpty(value)) {
 			String msg = NLS.bind(Msgs.nonEmptyValueRequired, label);

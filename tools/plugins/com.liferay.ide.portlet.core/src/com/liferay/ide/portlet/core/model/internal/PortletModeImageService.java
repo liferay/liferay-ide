@@ -24,6 +24,7 @@ import org.eclipse.sapphire.ImageData;
 import org.eclipse.sapphire.ImageService;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Result;
 
 /**
  * @author Kamesh Sampath
@@ -35,7 +36,9 @@ public class PortletModeImageService extends ImageService implements SapphireCon
 	public void dispose() {
 		super.dispose();
 
-		context(Element.class).detach(_listener, PortletMode.PROP_PORTLET_MODE.name());
+		Element element = context(Element.class);
+
+		element.detach(_listener, PortletMode.PROP_PORTLET_MODE.name());
 	}
 
 	@Override
@@ -57,18 +60,18 @@ public class PortletModeImageService extends ImageService implements SapphireCon
 
 		if (portletMode != null) {
 			if ("VIEW".equalsIgnoreCase(portletMode)) {
-				imageData = _IMG_VIEW;
+				imageData = _imgView;
 			}
 			else if ("EDIT".equalsIgnoreCase(portletMode)) {
-				imageData = _IMG_EDIT;
+				imageData = _imgEdit;
 			}
 			else if ("HELP".equalsIgnoreCase(portletMode)) {
-				imageData = _IMG_HELP;
+				imageData = _imgHelp;
 			}
 		}
 
 		if (imageData == null) {
-			imageData = _IMG_DEFAULT;
+			imageData = _imgDefault;
 		}
 
 		return imageData;
@@ -85,20 +88,33 @@ public class PortletModeImageService extends ImageService implements SapphireCon
 
 		};
 
-		context(Element.class).attach(_listener, PortletMode.PROP_PORTLET_MODE.name());
+		Element element = context(Element.class);
+
+		element.attach(_listener, PortletMode.PROP_PORTLET_MODE.name());
 	}
 
-	private static final ImageData _IMG_DEFAULT = ImageData.readFromClassLoader(
-		PortletModeImageService.class, "images/portlet.png").required();
+	private static ImageData _imgDefault;
+	private static ImageData _imgEdit;
+	private static ImageData _imgHelp;
+	private static ImageData _imgView;
 
-	private static final ImageData _IMG_EDIT = ImageData.readFromClassLoader(
-		PortletModeImageService.class, "images/edit.png").required();
+	static {
+		Result<ImageData> result = ImageData.readFromClassLoader(PortletModeImageService.class, "images/portlet.png");
 
-	private static final ImageData _IMG_HELP = ImageData.readFromClassLoader(
-		PortletModeImageService.class, "images/help.png").required();
+		_imgDefault = result.required();
 
-	private static final ImageData _IMG_VIEW = ImageData.readFromClassLoader(
-		PortletModeImageService.class, "images/view.png").required();
+		result = ImageData.readFromClassLoader(PortletModeImageService.class, "images/edit.png");
+
+		_imgEdit = result.required();
+
+		result = ImageData.readFromClassLoader(PortletModeImageService.class, "images/help.png");
+
+		_imgHelp = result.required();
+
+		result = ImageData.readFromClassLoader(PortletModeImageService.class, "images/view.png");
+
+		_imgView = result.required();
+	}
 
 	private Listener _listener;
 

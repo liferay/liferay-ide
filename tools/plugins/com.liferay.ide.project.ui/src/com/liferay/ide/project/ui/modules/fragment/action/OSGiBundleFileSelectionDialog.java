@@ -39,6 +39,7 @@ import org.eclipse.sapphire.ElementList;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
@@ -159,7 +160,17 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog im
 			return element.toString();
 		}
 
-		private final Image _imgFile = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
+		protected FileLabelProvider() {
+		
+
+			IWorkbench workbench = PlatformUI.getWorkbench();
+
+			ISharedImages sharedImages = workbench.getSharedImages();
+
+			_imgFile = sharedImages.getImage(ISharedImages.IMG_OBJ_FILE);
+		}
+
+		private final Image _imgFile;
 
 	}
 

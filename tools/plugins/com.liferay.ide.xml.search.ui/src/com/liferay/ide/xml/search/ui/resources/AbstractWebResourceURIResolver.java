@@ -49,8 +49,10 @@ public abstract class AbstractWebResourceURIResolver extends ResourceBaseURIReso
 		}
 
 		if (fullMatch) {
+			String resolve = resolve(selectedNode, rootContainer, file);
+
 			if (_canStartsWithoutSlash) {
-				String uri = resolve(selectedNode, rootContainer, file).toLowerCase();
+				String uri = resolve.toLowerCase();
 
 				if (uri.equals(matching) || uri.equals("/" + matching)) {
 					return true;
@@ -59,7 +61,7 @@ public abstract class AbstractWebResourceURIResolver extends ResourceBaseURIReso
 				return false;
 			}
 
-			return resolve(selectedNode, rootContainer, file).equals(matching);
+			return resolve.equals(matching);
 		}
 
 		return super.accept(selectedNode, rootContainer, file, matching, fullMatch);

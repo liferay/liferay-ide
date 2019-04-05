@@ -114,7 +114,9 @@ public class LiferayVersionDefaultValueService extends DefaultValueService imple
 
 		PropertyDef def = context().find(PropertyDef.class);
 
-		Property property = context(Element.class).property(def);
+		Element element = context(Element.class);
+
+		Property property = element.property(def);
 
 		PossibleValuesService possibleValuesService = property.service(PossibleValuesService.class);
 

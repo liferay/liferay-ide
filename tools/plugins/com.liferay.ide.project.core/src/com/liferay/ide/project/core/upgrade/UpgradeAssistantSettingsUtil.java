@@ -51,6 +51,12 @@ public class UpgradeAssistantSettingsUtil {
 		mapper.writeValue(storageFile, object);
 	}
 
-	private static final IPath _storageLocation = ProjectCore.getDefault().getStateLocation();
+	private static IPath _storageLocation;
+
+	{
+		ProjectCore projectCore = ProjectCore.getDefault();
+
+		_storageLocation = projectCore.getStateLocation();
+	}
 
 }

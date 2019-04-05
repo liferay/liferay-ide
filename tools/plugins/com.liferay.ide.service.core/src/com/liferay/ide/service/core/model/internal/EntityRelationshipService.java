@@ -28,7 +28,9 @@ public class EntityRelationshipService extends ReferenceService<Entity> implemen
 
 	@Override
 	public Entity compute() {
-		String reference = context(Value.class).text();
+		Value<?> value = context(Value.class);
+
+		String reference = value.text();
 
 		return findEntity(reference, context(ServiceBuilder.class));
 	}

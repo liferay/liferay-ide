@@ -33,7 +33,9 @@ public class TypePossibleValuesService extends PossibleValuesService implements 
 			values.add(type);
 		}
 
-		Version version = get(context(ServiceBuilder6xx.class).getVersion());
+		ServiceBuilder6xx serviceBuilder6xx = context(ServiceBuilder6xx.class);
+
+		Version version = get(serviceBuilder6xx.getVersion());
 
 		if (version.compareTo(new Version("6.2")) >= 0) {
 			values.add("Blob");

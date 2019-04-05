@@ -31,7 +31,9 @@ public class UrlPathValidationService extends ValidationService {
 	public Status compute() {
 		ValueProperty valueProperty = context(ValueProperty.class);
 
-		Value<?> value = context(Element.class).property(valueProperty);
+		Element element = context(Element.class);
+
+		Value<?> value = element.property(valueProperty);
 
 		String urlPath = value.text();
 

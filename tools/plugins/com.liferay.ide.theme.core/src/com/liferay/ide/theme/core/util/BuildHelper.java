@@ -148,6 +148,12 @@ public class BuildHelper {
 	 *            the folder will be created
 	 */
 	public BuildHelper() {
+		ThemeCore themeCore = ThemeCore.getDefault();
+
+		IPath stateLocation = themeCore.getStateLocation();
+
+		_defaultTempDir = stateLocation.toFile();
+
 		_tempDir = _defaultTempDir;
 
 		if (!_tempDir.exists()) {
@@ -541,13 +547,13 @@ public class BuildHelper {
 				IFile mf = (IFile)current;
 
 				long mod = -1;
-				IFile file = (IFile)mf.getAdapter(IFile.class);
+				IFile file = mf.getAdapter(IFile.class);
 
 				if (file != null) {
 					mod = file.getLocalTimeStamp();
 				}
 				else {
-					File file2 = (File)mf.getAdapter(File.class);
+					File file2 = mf.getAdapter(File.class);
 
 					mod = file2.lastModified();
 				}
@@ -916,7 +922,7 @@ public class BuildHelper {
 			return;
 		}
 
-		IFile file = (IFile)mf.getAdapter(IFile.class);
+		IFile file = mf.getAdapter(IFile.class);
 
 		if (file != null) {
 			try (InputStream inputStream = file.getContents()) {
@@ -930,7 +936,7 @@ public class BuildHelper {
 			}
 		}
 		else {
-			File file2 = (File)mf.getAdapter(File.class);
+			File file2 = mf.getAdapter(File.class);
 			InputStream in = null;
 
 			try {
@@ -1135,8 +1141,8 @@ public class BuildHelper {
 	private static final String _TEMPFILE_PREFIX = ".tmp-safe-to-delete-";
 
 	private static byte[] _buf = new byte[_BUFFER];
-	private static final File _defaultTempDir = ThemeCore.getDefault().getStateLocation().toFile();
 
+	private final File _defaultTempDir;
 	private File _tempDir;
 
 }

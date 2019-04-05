@@ -182,7 +182,9 @@ public class MigrationUtil {
 
 	public static IMarker getMarker(Problem problem) {
 		try {
-			return getIResourceFromProblem(problem).findMarker(problem.markerId);
+			IResource resource = getIResourceFromProblem(problem);
+
+			return resource.findMarker(problem.markerId);
 		}
 		catch (CoreException ce) {
 		}

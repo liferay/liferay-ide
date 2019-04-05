@@ -32,6 +32,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 
@@ -127,9 +128,19 @@ public class ExternalFileSelectionDialog extends FilteredElementTreeSelectionDia
 			return super.getText(element);
 		}
 
-		private final Image _imgFile = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
-		private final Image _imgFolder = PlatformUI.getWorkbench().getSharedImages().getImage(
-			ISharedImages.IMG_OBJ_FOLDER);
+		protected FileLabelProvider() {
+		
+
+			IWorkbench workbench = PlatformUI.getWorkbench();
+
+			ISharedImages sharedImages = workbench.getSharedImages();
+
+			_imgFile = sharedImages.getImage(ISharedImages.IMG_OBJ_FILE);
+			_imgFolder = sharedImages.getImage(ISharedImages.IMG_OBJ_FOLDER);
+		}
+
+		private final Image _imgFile;
+		private final Image _imgFolder;
 
 	}
 

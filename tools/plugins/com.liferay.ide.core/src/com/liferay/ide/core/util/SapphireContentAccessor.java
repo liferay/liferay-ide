@@ -37,4 +37,12 @@ public interface SapphireContentAccessor {
 		return null;
 	}
 
+	public default <T> String getText(Value<T> value, boolean useDefaultValue) {
+		if (value != null) {
+			return value.text(useDefaultValue);
+		}
+
+		return "";
+	}
+
 }
