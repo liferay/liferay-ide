@@ -68,7 +68,7 @@ public class FindUpgradeProblemsCommand implements UpgradeCommand, MarkerSupport
 		Stream<UpgradeProblem> ugradeProblemsStream = upgradeProblems.stream();
 
 		ugradeProblemsStream.map(
-			upgradeProblem -> findMarker(upgradeProblem.getResource(), upgradeProblem.getMarkerId())
+			this::findMarker
 		).filter(
 			this::markerExists
 		).forEach(

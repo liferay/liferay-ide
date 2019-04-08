@@ -16,11 +16,6 @@ package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.ui.util.Editors;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.ui.internal.migration.AutoCorrectAction;
-import com.liferay.ide.upgrade.problems.ui.internal.migration.IgnoreAction;
-import com.liferay.ide.upgrade.problems.ui.internal.migration.IgnoreAlwaysAction;
-import com.liferay.ide.upgrade.problems.ui.internal.migration.MarkDoneAction;
-import com.liferay.ide.upgrade.problems.ui.internal.migration.MarkUndoneAction;
 
 import java.io.File;
 
@@ -65,11 +60,11 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 	public void fillContextMenu(IMenuManager menuManager) {
 		menuManager.removeAll();
 
-		ICommonViewerSite site = _actionSite.getViewSite();
+		ICommonViewerSite commonViewerSite = _commonActionExtensionSite.getViewSite();
 
-		ISelectionProvider provider = site.getSelectionProvider();
+		ISelectionProvider selectionProvider = commonViewerSite.getSelectionProvider();
 
-		ISelection selection = provider.getSelection();
+		ISelection selection = selectionProvider.getSelection();
 
 		if (selection instanceof TreeSelection) {
 			TreeSelection treeSelection = (TreeSelection)selection;
@@ -89,15 +84,15 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 			}
 
 			if (selectionCompatible) {
-				MarkDoneAction markDoneAction = new MarkDoneAction(provider);
+				MarkDoneAction markDoneAction = new MarkDoneAction(selectionProvider);
 
-				MarkUndoneAction markUndoneAction = new MarkUndoneAction(provider);
+				MarkUndoneAction markUndoneAction = new MarkUndoneAction(selectionProvider);
 
-				IgnoreAction ignoreAction = new IgnoreAction(provider);
+				IgnoreAction ignoreAction = new IgnoreAction(selectionProvider);
 
-				AutoCorrectAction autoCorrectAction = new AutoCorrectAction(provider);
+				AutoCorrectAction autoCorrectAction = new AutoCorrectAction(selectionProvider);
 
-				IgnoreAlwaysAction ignoreAlwaysAction = new IgnoreAlwaysAction(provider);
+				IgnoreAlwaysAction ignoreAlwaysAction = new IgnoreAlwaysAction(selectionProvider);
 
 				menuManager.add(markDoneAction);
 				menuManager.add(markUndoneAction);
@@ -110,7 +105,7 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 
 	@Override
 	public void init(ICommonActionExtensionSite commandActionExtensionSite) {
-		_actionSite = commandActionExtensionSite;
+		_commonActionExtensionSite = commandActionExtensionSite;
 
 		_doubleClickListener = new IDoubleClickListener() {
 
@@ -149,7 +144,7 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 		structuredViewer.addDoubleClickListener(_doubleClickListener);
 	}
 
-	private ICommonActionExtensionSite _actionSite;
+	private ICommonActionExtensionSite _commonActionExtensionSite;
 	private IDoubleClickListener _doubleClickListener;
 
 }

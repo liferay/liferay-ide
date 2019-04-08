@@ -26,26 +26,40 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 /**
  * @author Seiphon Wang
  */
-public class MigrationUtil {
+public interface UpgradeProblemSupport {
 
-	public static List<UpgradeProblem> getProblemsFromSelection(ISelection selection) {
-		final List<UpgradeProblem> problems = new ArrayList<>();
+	public default UpgradeProblem getUpgradeProblem(ISelection selection) {
+		if (selection instanceof IStructuredSelection) {
+			IStructuredSelection structureSelection = (IStructuredSelection)selection;
+
+			Object element = structureSelection.getFirstElement();
+
+			if (element instanceof UpgradeProblem) {
+				return (UpgradeProblem)element;
+			}
+		}
+
+		return null;
+	}
+
+	public default List<UpgradeProblem> getUpgradeProblems(ISelection selection) {
+		List<UpgradeProblem> upgradeProblems = new ArrayList<>();
 
 		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection ss = (IStructuredSelection)selection;
+			IStructuredSelection structuredSelection = (IStructuredSelection)selection;
 
-			Iterator<?> elements = ss.iterator();
+			Iterator<?> elements = structuredSelection.iterator();
 
 			while (elements.hasNext()) {
 				Object element = elements.next();
 
 				if (element instanceof UpgradeProblem) {
-					problems.add((UpgradeProblem)element);
+					upgradeProblems.add((UpgradeProblem)element);
 				}
 			}
 		}
 
-		return problems;
+		return upgradeProblems;
 	}
 
 }
