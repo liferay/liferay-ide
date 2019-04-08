@@ -134,7 +134,8 @@ public class NewPortletClassDataModelProvider
 		}
 		else if (CREATE_JSPS.equals(propertyName)) {
 			return true;
-		} else {
+		}
+		else {
 			Object portletName = getProperty(PORTLET_NAME);
 
 			if (CREATE_JSPS_FOLDER.equals(propertyName)) {

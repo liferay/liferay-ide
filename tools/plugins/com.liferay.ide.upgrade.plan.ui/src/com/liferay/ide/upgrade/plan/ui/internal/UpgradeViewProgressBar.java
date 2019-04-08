@@ -138,7 +138,13 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 		_upgradePlanner.removeListener(this);
 		_serviceTracker.close();
 
-		Stream.of(_parentComposite.getChildren()).filter(control -> !control.isDisposed()).forEach(Control::dispose);
+		Stream.of(
+			_parentComposite.getChildren()
+		).filter(
+			control -> !control.isDisposed()
+		).forEach(
+			Control::dispose
+		);
 
 		super.dispose();
 	}
@@ -161,8 +167,15 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 
 				_totalStepsCount = noChildrenUpgradeSteps.size();
 
+				Stream<UpgradeStep> stream = noChildrenUpgradeSteps.stream();
+
 				_completedUpgradeSteps.addAll(
-					noChildrenUpgradeSteps.stream().filter(UpgradeStep::completed).collect(Collectors.toList()));
+					stream.filter(
+						UpgradeStep::completed
+					).collect(
+						Collectors.toList()
+					)
+				);
 			}
 		}
 		else if (upgradeEvent instanceof UpgradeStepStatusChangedEvent) {

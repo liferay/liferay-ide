@@ -108,7 +108,9 @@ public class UpgradePlannerService implements UpgradePlanner {
 		if (upgradePlan != null) {
 			List<UpgradeStep> upgradeSteps = upgradePlan.getUpgradeSteps();
 
-			upgradeSteps.stream().forEach(UpgradeStep::dispose);
+			Stream<UpgradeStep> stream = upgradeSteps.stream();
+
+			stream.forEach(UpgradeStep::dispose);
 		}
 	}
 

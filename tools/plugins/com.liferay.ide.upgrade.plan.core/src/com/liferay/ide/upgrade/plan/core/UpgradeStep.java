@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Adapters;
 
@@ -80,7 +81,9 @@ public class UpgradeStep {
 	}
 
 	public void dispose() {
-		_children.stream().forEach(UpgradeStep::dispose);
+		Stream<UpgradeStep> stream = _children.stream();
+
+		stream.forEach(UpgradeStep::dispose);
 
 		_serviceTracker.close();
 	}
@@ -184,7 +187,13 @@ public class UpgradeStep {
 		hash = 31 * hash + (_description != null ? _description.hashCode() : 0);
 		hash = 31 * hash + (_icon != null ? _icon.hashCode() : 0);
 
-		int childrenHashCodes = _children.stream().map(Object::hashCode).reduce(0, Integer::sum).intValue();
+		Stream<UpgradeStep> stream = _children.stream();
+
+		int childrenHashCodes = stream.map(
+			Object::hashCode
+		).reduce(
+			0, Integer::sum
+		).intValue();
 
 		hash = 31 * hash + (_requirement != null ? _requirement.hashCode() : 0);
 		hash = 31 * hash + childrenHashCodes;
@@ -217,9 +226,22 @@ public class UpgradeStep {
 			return true;
 		}
 
-		Collection<String> targetTitles = target.stream().map(UpgradeStep::getTitle).collect(Collectors.toList());
+		Stream<T> targetStream = target.stream();
 
-		return source.stream().map(UpgradeStep::getTitle).filter(targetTitles::contains).findAny().isPresent();
+		Collection<String> targetTitles = targetStream.map(
+			UpgradeStep::getTitle
+		).collect(
+			Collectors.toList()
+		);
+
+		Stream<T> sourceStream = source.stream();
+
+		return sourceStream.map(
+			UpgradeStep::getTitle
+		).filter(
+			targetTitles::contains
+		).findAny(
+		).isPresent();
 	}
 
 	public boolean isEqualIgnoreCase(String original, String target) {

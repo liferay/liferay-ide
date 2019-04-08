@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 
@@ -77,7 +78,15 @@ public class FileListing {
 	public static List<IPath> getFileListing(File dir, String fileType) {
 		Collection<File> files = FileUtils.listFiles(dir, new String[] {fileType}, true);
 
-		return files.stream().filter(File::exists).map(file -> new Path(file.getPath())).collect(Collectors.toList());
+		Stream<File> stream = files.stream();
+
+		return stream.filter(
+			File::exists
+		).map(
+			file -> new Path(file.getPath())
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	/**

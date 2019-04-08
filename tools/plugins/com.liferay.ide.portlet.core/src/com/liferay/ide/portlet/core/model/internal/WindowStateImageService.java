@@ -92,8 +92,8 @@ public class WindowStateImageService extends ImageService implements SapphireCon
 	private static ImageData _imgMinimized;
 
 	static {
-		Result<ImageData> result =
-			ImageData.readFromClassLoader(WindowStateImageService.class, "images/window_states.png");
+		Result<ImageData> result = ImageData.readFromClassLoader(
+			WindowStateImageService.class, "images/window_states.png");
 
 		_imgDefault = result.required();
 

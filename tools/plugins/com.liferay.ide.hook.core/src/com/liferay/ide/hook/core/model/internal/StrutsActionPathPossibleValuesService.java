@@ -45,8 +45,8 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
 
 				ServiceContext serviceContext = context();
 
-				StrutsActionPathPossibleValuesCacheService cacheService =
-					serviceContext.service(StrutsActionPathPossibleValuesCacheService.class);
+				StrutsActionPathPossibleValuesCacheService cacheService = serviceContext.service(
+					StrutsActionPathPossibleValuesCacheService.class);
 
 				_possibleValues = cacheService.getPossibleValuesForPath(strutsConfigPath);
 			}
