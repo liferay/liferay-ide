@@ -246,7 +246,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 		stream.filter(
 			c -> !c.isDisposed()
 		).forEach(
-			c -> c.setEnabled(enabled.get())
+			c -> c.setEnabled(enabled.get() && upgradeStep.enabled())
 		);
 	}
 
