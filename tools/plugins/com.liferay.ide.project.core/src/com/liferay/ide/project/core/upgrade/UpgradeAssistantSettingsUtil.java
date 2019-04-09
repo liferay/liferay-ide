@@ -53,7 +53,7 @@ public class UpgradeAssistantSettingsUtil {
 
 	private static IPath _storageLocation;
 
-	{
+	static {
 		ProjectCore projectCore = ProjectCore.getDefault();
 
 		_storageLocation = projectCore.getStateLocation();
