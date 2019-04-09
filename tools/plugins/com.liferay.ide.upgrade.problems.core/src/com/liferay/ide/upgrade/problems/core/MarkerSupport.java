@@ -65,6 +65,7 @@ public interface MarkerSupport {
 		}
 
 		IResource resource = upgradeProblem.getResource();
+
 		long markerId = upgradeProblem.getMarkerId();
 
 		try {
