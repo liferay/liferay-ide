@@ -86,8 +86,8 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 			if (selectionCompatible) {
 				menuManager.add(new MarkDoneAction(selectionProvider));
 				menuManager.add(new MarkUndoneAction(selectionProvider));
-				menuManager.add(new IgnoreAction(selectionProvider));
 				menuManager.add(new AutoCorrectAction(selectionProvider));
+				menuManager.add(new IgnoreAction(selectionProvider));
 				menuManager.add(new IgnoreAlwaysAction(selectionProvider));
 			}
 		}
