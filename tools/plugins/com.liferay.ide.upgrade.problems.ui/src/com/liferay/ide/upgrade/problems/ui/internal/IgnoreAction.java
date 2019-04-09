@@ -16,11 +16,10 @@ package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.MarkerSupport;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.actions.SelectionProviderAction;
@@ -29,7 +28,7 @@ import org.eclipse.ui.actions.SelectionProviderAction;
  * @author Seiphon Wang
  * @author Terry Jia
  */
-public class IgnoreAction extends SelectionProviderAction implements MarkerSupport, UpgradeProblemSupport {
+public class IgnoreAction extends SelectionProviderAction implements UpgradeProblemSupport {
 
 	public IgnoreAction(ISelectionProvider provider) {
 		super(provider, "Ignore");
@@ -39,17 +38,9 @@ public class IgnoreAction extends SelectionProviderAction implements MarkerSuppo
 	public void run() {
 		List<UpgradeProblem> upgradeProblems = getUpgradeProblems(getSelection());
 
-		upgradeProblems.stream().forEach(
-			upgradeProblem -> {
-				upgradeProblem.setStatus(UpgradeProblem.STATUS_IGNORE);
+		Stream<UpgradeProblem> stream = upgradeProblems.stream();
 
-				IMarker marker = findMarker(upgradeProblem);
-
-				if (markerExists(marker)) {
-					deleteMarker(marker);
-				}
-			}
-		);
+		stream.forEach(this::ignore);
 
 		Viewer viewer = (Viewer)getSelectionProvider();
 

@@ -19,11 +19,10 @@ import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.MarkerSupport;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.actions.SelectionProviderAction;
@@ -37,7 +36,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Seiphon Wang
  * @author Terry Jia
  */
-public class IgnoreAlwaysAction extends SelectionProviderAction implements MarkerSupport, UpgradeProblemSupport {
+public class IgnoreAlwaysAction extends SelectionProviderAction implements UpgradeProblemSupport {
 
 	public IgnoreAlwaysAction(ISelectionProvider provider) {
 		super(provider, "Ignore all problems of this type");
@@ -61,18 +60,12 @@ public class IgnoreAlwaysAction extends SelectionProviderAction implements Marke
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		upgradeProblems.stream().filter(
+		Stream<UpgradeProblem> stream = upgradeProblems.stream();
+
+		stream.filter(
 			upgradeProblem -> StringUtil.equals(upgradeProblem.getTicket(), problem.getTicket())
 		).forEach(
-			upgradeProblem -> {
-				upgradeProblem.setStatus(UpgradeProblem.STATUS_IGNORE);
-
-				IMarker marker = findMarker(upgradeProblem);
-
-				if (markerExists(marker)) {
-					deleteMarker(marker);
-				}
-			}
+			this::ignore
 		);
 
 		Viewer viewer = (Viewer)getSelectionProvider();

@@ -15,18 +15,20 @@
 package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+import com.liferay.ide.upgrade.problems.core.MarkerSupport;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 /**
  * @author Seiphon Wang
  */
-public interface UpgradeProblemSupport {
+public interface UpgradeProblemSupport extends MarkerSupport {
 
 	public default UpgradeProblem getUpgradeProblem(ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
@@ -60,6 +62,16 @@ public interface UpgradeProblemSupport {
 		}
 
 		return upgradeProblems;
+	}
+
+	public default void ignore(UpgradeProblem upgradeProblem) {
+		upgradeProblem.setStatus(UpgradeProblem.STATUS_IGNORE);
+
+		IMarker marker = findMarker(upgradeProblem);
+
+		if (markerExists(marker)) {
+			deleteMarker(marker);
+		}
 	}
 
 }

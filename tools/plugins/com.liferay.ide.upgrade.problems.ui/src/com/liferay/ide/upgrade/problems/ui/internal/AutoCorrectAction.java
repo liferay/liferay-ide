@@ -20,8 +20,8 @@ import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
-import com.liferay.ide.upgrade.problems.core.MarkerSupport;
 
 import java.io.File;
 
@@ -40,6 +40,7 @@ import org.eclipse.ui.actions.SelectionProviderAction;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -47,7 +48,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Seiphon Wang
  * @author Terry Jia
  */
-public class AutoCorrectAction extends SelectionProviderAction implements UpgradeProblemSupport, MarkerSupport {
+public class AutoCorrectAction extends SelectionProviderAction implements UpgradeProblemSupport {
 
 	public AutoCorrectAction(ISelectionProvider provider) {
 		super(provider, "Correct automatically");
@@ -87,13 +88,19 @@ public class AutoCorrectAction extends SelectionProviderAction implements Upgrad
 
 		File file = FileUtil.getFile(resource);
 
+		Collection<ServiceReference<AutoFileMigrator>> serviceReferences = Collections.emptyList();
+
 		try {
-			Collection<ServiceReference<AutoFileMigrator>> serviceReferences = context.getServiceReferences(
+			serviceReferences = context.getServiceReferences(
 				AutoFileMigrator.class, "(auto.correct=" + autoCorrectContext + ")");
+		}
+		catch (InvalidSyntaxException ise) {
+		}
 
-			for (ServiceReference<AutoFileMigrator> serviceReference : serviceReferences) {
-				AutoFileMigrator autoFileMigrator = context.getService(serviceReference);
+		for (ServiceReference<AutoFileMigrator> serviceReference : serviceReferences) {
+			AutoFileMigrator autoFileMigrator = context.getService(serviceReference);
 
+			try {
 				int problemsCorrected = autoFileMigrator.correctProblems(
 					file, Collections.singletonList(upgradeProblem));
 
@@ -105,21 +112,22 @@ public class AutoCorrectAction extends SelectionProviderAction implements Upgrad
 					}
 				}
 			}
-
-			UpgradePlanner upgradePlanner = _serviceTracker.getService();
-
-			UpgradePlan currentUpgradePlan = upgradePlanner.getCurrentUpgradePlan();
-
-			Collection<UpgradeProblem> upgradeProblems = currentUpgradePlan.getUpgradeProblems();
-
-			upgradeProblems.remove(upgradeProblem);
-
-			Viewer viewer = (Viewer)getSelectionProvider();
-
-			UIUtil.async(() -> viewer.refresh());
+			catch (AutoFileMigrateException afme) {
+				UpgradeProblemsUIPlugin.logError("Problem encountered when automatically migrating file " + file, afme);
+			}
 		}
-		catch (Exception e) {
-		}
+
+		UpgradePlanner upgradePlanner = _serviceTracker.getService();
+
+		UpgradePlan currentUpgradePlan = upgradePlanner.getCurrentUpgradePlan();
+
+		Collection<UpgradeProblem> upgradeProblems = currentUpgradePlan.getUpgradeProblems();
+
+		upgradeProblems.remove(upgradeProblem);
+
+		Viewer viewer = (Viewer)getSelectionProvider();
+
+		UIUtil.async(() -> viewer.refresh());
 	}
 
 	@Override

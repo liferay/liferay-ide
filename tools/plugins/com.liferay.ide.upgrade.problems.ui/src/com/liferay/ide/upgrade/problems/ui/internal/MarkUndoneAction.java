@@ -16,9 +16,9 @@ package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.MarkerSupport;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -30,7 +30,7 @@ import org.eclipse.ui.actions.SelectionProviderAction;
  * @author Seiphon Wang
  * @author Terry Jia
  */
-public class MarkUndoneAction extends SelectionProviderAction implements MarkerSupport, UpgradeProblemSupport {
+public class MarkUndoneAction extends SelectionProviderAction implements UpgradeProblemSupport {
 
 	public MarkUndoneAction(ISelectionProvider provider) {
 		super(provider, "Mark undone");
@@ -40,26 +40,28 @@ public class MarkUndoneAction extends SelectionProviderAction implements MarkerS
 	public void run() {
 		List<UpgradeProblem> upgradeProblems = getUpgradeProblems(getSelection());
 
-		upgradeProblems.stream().forEach(
-			upgradeProblem -> {
-				upgradeProblem.setStatus(UpgradeProblem.STATUS_NOT_RESOLVED);
+		Stream<UpgradeProblem> stream = upgradeProblems.stream();
 
-				IMarker marker = findMarker(upgradeProblem);
-
-				if (marker != null) {
-					try {
-						marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-						marker.setAttribute("upgradeProblem.resolved", Boolean.FALSE);
-					}
-					catch (CoreException ce) {
-					}
-				}
-			}
-		);
+		stream.forEach(this::_notResolved);
 
 		Viewer viewer = (Viewer)getSelectionProvider();
 
 		UIUtil.async(() -> viewer.refresh());
+	}
+
+	private void _notResolved(UpgradeProblem upgradeProblem) {
+		upgradeProblem.setStatus(UpgradeProblem.STATUS_NOT_RESOLVED);
+
+		IMarker marker = findMarker(upgradeProblem);
+
+		if (marker != null) {
+			try {
+				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+				marker.setAttribute("upgradeProblem.resolved", Boolean.FALSE);
+			}
+			catch (CoreException ce) {
+			}
+		}
 	}
 
 }

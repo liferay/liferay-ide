@@ -16,9 +16,9 @@ package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.MarkerSupport;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -30,7 +30,7 @@ import org.eclipse.ui.actions.SelectionProviderAction;
  * @author Seiphon Wang
  * @author Terry Jia
  */
-public class MarkDoneAction extends SelectionProviderAction implements MarkerSupport, UpgradeProblemSupport {
+public class MarkDoneAction extends SelectionProviderAction implements UpgradeProblemSupport {
 
 	public MarkDoneAction(ISelectionProvider provider) {
 		super(provider, "Mark done");
@@ -40,26 +40,28 @@ public class MarkDoneAction extends SelectionProviderAction implements MarkerSup
 	public void run() {
 		List<UpgradeProblem> upgradeProblems = getUpgradeProblems(getSelection());
 
-		upgradeProblems.stream().forEach(
-			upgradeProblem -> {
-				upgradeProblem.setStatus(UpgradeProblem.STATUS_RESOLVED);
+		Stream<UpgradeProblem> stream = upgradeProblems.stream();
 
-				IMarker marker = findMarker(upgradeProblem);
-
-				if (marker != null) {
-					try {
-						marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_INFO);
-						marker.setAttribute("upgradeProblem.resolved", Boolean.TRUE);
-					}
-					catch (CoreException ce) {
-					}
-				}
-			}
-		);
+		stream.forEach(this::_resolve);
 
 		Viewer viewer = (Viewer)getSelectionProvider();
 
 		UIUtil.async(() -> viewer.refresh());
+	}
+
+	private void _resolve(UpgradeProblem upgradeProblem) {
+		upgradeProblem.setStatus(UpgradeProblem.STATUS_RESOLVED);
+
+		IMarker marker = findMarker(upgradeProblem);
+
+		if (marker != null) {
+			try {
+				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_INFO);
+				marker.setAttribute("upgradeProblem.resolved", Boolean.TRUE);
+			}
+			catch (CoreException ce) {
+			}
+		}
 	}
 
 }
