@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.core.util.StringUtil;
 
 import java.io.File;
 
@@ -50,7 +49,7 @@ public class ProjectProblemsContainer {
 		}
 
 		if (_isEqualFileProblem(_fileProblemsContainers, projectProblemsContainer._fileProblemsContainers) &&
-			StringUtil.equalsIgnoreCase(_projectName, projectProblemsContainer._projectName)) {
+			_projectName.equals(projectProblemsContainer._projectName)) {
 
 			return true;
 		}

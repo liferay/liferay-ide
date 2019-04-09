@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import com.liferay.ide.core.util.StringUtil;
-
 import java.util.UUID;
 
 import org.eclipse.core.resources.IResource;
@@ -99,28 +97,100 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		UpgradeProblem baseUpgradeProblem = Adapters.adapt(object, UpgradeProblem.class);
+		UpgradeProblem other = Adapters.adapt(object, UpgradeProblem.class);
 
-		if (baseUpgradeProblem == null) {
-			return false;
-		}
-
-		if (StringUtil.equalsIgnoreCase(_autoCorrectContext, baseUpgradeProblem._autoCorrectContext) &&
-			StringUtil.equalsIgnoreCase(_html, baseUpgradeProblem._html) &&
-			StringUtil.equalsIgnoreCase(_summary, baseUpgradeProblem._summary) &&
-			StringUtil.equalsIgnoreCase(_ticket, baseUpgradeProblem._ticket) &&
-			StringUtil.equalsIgnoreCase(_type, baseUpgradeProblem._type) &&
-			StringUtil.equalsIgnoreCase(_uuid, baseUpgradeProblem._uuid) &&
-			StringUtil.equalsIgnoreCase(_version, baseUpgradeProblem._version) &&
-			(_endOffset == baseUpgradeProblem._endOffset) && (_lineNumber == baseUpgradeProblem._lineNumber) &&
-			(_markerType == baseUpgradeProblem._markerType) && (_number == baseUpgradeProblem._number) &&
-			(_startOffset == baseUpgradeProblem._startOffset) && (_markerId == baseUpgradeProblem._markerId) &&
-			_resource.equals(baseUpgradeProblem._resource)) {
-
+		if (_uuid.equals(other._uuid)) {
 			return true;
 		}
 
-		return false;
+		if (_endOffset != other._endOffset) {
+			return false;
+		}
+
+		if (_resource == null) {
+			if (other._resource != null) {
+				return false;
+			}
+		}
+		else if (!_resource.equals(other._resource)) {
+			return false;
+		}
+
+		if (_lineNumber != other._lineNumber) {
+			return false;
+		}
+
+		if (_number != other._number) {
+			return false;
+		}
+
+		if (_startOffset != other._startOffset) {
+			return false;
+		}
+
+		if (_summary == null) {
+			if (other._summary != null) {
+				return false;
+			}
+		}
+		else if (!_summary.equals(other._summary)) {
+			return false;
+		}
+
+		if (_ticket == null) {
+			if (other._ticket != null) {
+				return false;
+			}
+		}
+		else if (!_ticket.equals(other._ticket)) {
+			return false;
+		}
+
+		if (_title == null) {
+			if (other._title != null) {
+				return false;
+			}
+		}
+		else if (!_title.equals(other._title)) {
+			return false;
+		}
+
+		if (_type == null) {
+			if (other._type != null) {
+				return false;
+			}
+		}
+		else if (!_type.equals(other._type)) {
+			return false;
+		}
+
+		if (_version == null) {
+			if (other._version != null) {
+				return false;
+			}
+		}
+		else if (!_version.equals(other._version)) {
+			return false;
+		}
+
+		if (_autoCorrectContext == null) {
+			if (other._autoCorrectContext != null) {
+				return false;
+			}
+		}
+		else if (!_autoCorrectContext.equals(other._autoCorrectContext)) {
+			return false;
+		}
+
+		if (_markerId != other._markerId) {
+			return false;
+		}
+
+		if (_markerType != other._markerType) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public String getAutoCorrectContext() {
