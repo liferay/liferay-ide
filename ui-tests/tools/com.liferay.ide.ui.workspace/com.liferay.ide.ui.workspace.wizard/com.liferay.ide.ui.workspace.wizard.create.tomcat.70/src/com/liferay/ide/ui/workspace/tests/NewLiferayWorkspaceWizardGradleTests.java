@@ -31,6 +31,126 @@ import org.junit.Test;
 public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
+	public void checkDependenciesVersionForExt() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.1");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayModulesExtWizard();
+
+		String projectName = "test-ext";
+
+		wizardAction.newModulesExt.prepare(projectName);
+
+		wizardAction.newModulesExt.openSelectBrowseDialog();
+
+		dialogAction.prepareText("com.liferay.login.web");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.refreshGradleProject(project.getName());
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(project.getName(), "ext", projectName, "build.gradle");
+
+		validationAction.assertDoesNotContains("version", editorAction.getContent());
+
+		editorAction.close();
+
+		String[] projectNames = {project.getName(), "ext", projectName};
+		String[] newModuleNames = {project.getName(), "ext"};
+
+		viewAction.project.closeAndDelete(projectNames);
+		viewAction.project.closeAndDelete(newModuleNames);
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
+	public void checkDependenciesVersionForModule() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		String projectName = "test-mvc-portlet";
+
+		wizardAction.newModule.prepareGradle(projectName, MVC_PORTLET);
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.refreshGradleProject(project.getName());
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(project.getName(), "modules", projectName, "build.gradle");
+
+		validationAction.assertDoesNotContains("version", editorAction.getContent());
+
+		editorAction.close();
+
+		String[] projectNames = {project.getName(), "modules", projectName};
+		String[] newModuleNames = {project.getName(), "modules"};
+
+		viewAction.project.closeAndDelete(projectNames);
+		viewAction.project.closeAndDelete(newModuleNames);
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
+	public void checkDependenciesVersionForWar() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		String projectName = "test-war-hook";
+
+		wizardAction.newModule.prepareGradle(projectName, WAR_HOOK);
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.refreshGradleProject(project.getName());
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(project.getName(), "wars", projectName, "build.gradle");
+
+		validationAction.assertDoesNotContains("version", editorAction.getContent());
+
+		editorAction.close();
+
+		String[] projectNames = {project.getName(), "wars", projectName};
+		String[] newModuleNames = {project.getName(), "wars"};
+
+		viewAction.project.closeAndDelete(projectNames);
+		viewAction.project.closeAndDelete(newModuleNames);
+		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
 	public void createLiferayWorkspace() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
