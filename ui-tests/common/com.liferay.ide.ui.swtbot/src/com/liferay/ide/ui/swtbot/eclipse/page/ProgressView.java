@@ -15,17 +15,27 @@
 package com.liferay.ide.ui.swtbot.eclipse.page;
 
 import com.liferay.ide.ui.swtbot.page.Text;
+import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.ui.swtbot.page.View;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
+ * @author Rui Wang
  */
 public class ProgressView extends View {
 
 	public ProgressView(SWTWorkbenchBot bot) {
 		super(bot, PROGRESS);
+	}
+
+	public ToolbarButtonWithTooltip cancelOperationBtn() {
+		return new ToolbarButtonWithTooltip(getPart().bot(), CANCEL_OPERATION);
+	}
+
+	public void clickCancelOperationBtn() {
+		cancelOperationBtn().click();
 	}
 
 	public Text getNoOperation() {

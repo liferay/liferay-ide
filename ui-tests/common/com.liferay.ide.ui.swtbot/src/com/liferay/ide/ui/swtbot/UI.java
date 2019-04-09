@@ -121,6 +121,8 @@ public interface UI {
 
 	public final String CANCEL = "Cancel";
 
+	public final String CANCEL_OPERATION = "Cancel Operation";
+
 	public final String CHOOSE_A_PACKAGE = "Choose a package:";
 
 	public final String CHOOSE_A_SUPERCLASS = "Choose a superclass:";
@@ -872,6 +874,8 @@ public interface UI {
 	public final String WAR_HOOK = "war-hook";
 
 	public final String WAR_MVC_PORTLET = "war-mvc-portlet";
+
+	public final String WATCH = "watch";
 
 	public final String WEB = "Web";
 
