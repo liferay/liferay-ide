@@ -107,4 +107,16 @@ public class ListUtil {
 		return !contains(set, o);
 	}
 
+	public static boolean sizeEquals(Collection<?> collection1, Collection<?> collection2) {
+		if (isEmpty(collection1) && isEmpty(collection2)) {
+			return true;
+		}
+
+		if (collection1.size() == collection2.size()) {
+			return true;
+		}
+
+		return false;
+	}
+
 }

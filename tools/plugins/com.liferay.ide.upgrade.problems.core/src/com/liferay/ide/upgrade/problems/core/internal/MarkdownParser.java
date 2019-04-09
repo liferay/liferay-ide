@@ -38,7 +38,7 @@ import org.jsoup.select.Elements;
 public class MarkdownParser {
 
 	public static String getSection(String fileName, String sectionKey) {
-		String retval = null;
+		String retval = "";
 
 		if (sectionKey.equals("#legacy")) {
 			retval = "#legacy";

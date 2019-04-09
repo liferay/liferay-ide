@@ -83,7 +83,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 
 			String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);
 
-			if ((sectionHtml != null) && sectionHtml.equals("#legacy")) {
+			if (sectionHtml.equals("#legacy")) {
 				sectionHtml = problemSummary;
 			}
 

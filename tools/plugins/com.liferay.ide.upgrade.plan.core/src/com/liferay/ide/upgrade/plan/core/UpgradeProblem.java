@@ -17,9 +17,11 @@ package com.liferay.ide.upgrade.plan.core;
 import java.util.UUID;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Adapters;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class UpgradeProblem {
 
@@ -90,21 +92,12 @@ public class UpgradeProblem {
 		_markerType = markerType;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-
-		if (obj == null) {
+	public boolean equals(Object object) {
+		if ((object instanceof UpgradeProblem) == false) {
 			return false;
 		}
 
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-
-		UpgradeProblem other = (UpgradeProblem)obj;
+		UpgradeProblem other = Adapters.adapt(object, UpgradeProblem.class);
 
 		if (_uuid.equals(other._uuid)) {
 			return true;
@@ -189,10 +182,6 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (_status != other._status) {
-			return false;
-		}
-
 		if (_markerId != other._markerId) {
 			return false;
 		}
@@ -266,6 +255,30 @@ public class UpgradeProblem {
 
 	public String getVersion() {
 		return _version;
+	}
+
+	public int hashCode() {
+		int hash = 31;
+
+		hash = 31 * hash + (_autoCorrectContext != null ? _autoCorrectContext.hashCode() : 0);
+		hash = 31 * hash + (_html != null ? _html.hashCode() : 0);
+
+		hash = 31 * hash + (Integer.hashCode(_endOffset));
+		hash = 31 * hash + (Integer.hashCode(_lineNumber));
+		hash = 31 * hash + (Long.hashCode(_markerId));
+		hash = 31 * hash + (Integer.hashCode(_markerType));
+		hash = 31 * hash + (Integer.hashCode(_number));
+		hash = 31 * hash + (Integer.hashCode(_startOffset));
+
+		hash = 31 * hash + (_resource != null ? _resource.hashCode() : 0);
+		hash = 31 * hash + (_summary != null ? _summary.hashCode() : 0);
+		hash = 31 * hash + (_title != null ? _title.hashCode() : 0);
+		hash = 31 * hash + (_ticket != null ? _ticket.hashCode() : 0);
+		hash = 31 * hash + (_type != null ? _type.hashCode() : 0);
+		hash = 31 * hash + (_uuid != null ? _uuid.hashCode() : 0);
+		hash = 31 * hash + (_version != null ? _version.hashCode() : 0);
+
+		return hash;
 	}
 
 	public void setAutoCorrectContext(String autoCorrectContext) {

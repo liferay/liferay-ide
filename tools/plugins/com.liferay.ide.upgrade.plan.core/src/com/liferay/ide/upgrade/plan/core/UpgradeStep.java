@@ -200,7 +200,6 @@ public class UpgradeStep {
 		hash = 31 * hash + (_url != null ? _url.hashCode() : 0);
 		hash = 31 * hash + (_title != null ? _title.hashCode() : 0);
 		hash = 31 * hash + (_commandId != null ? _commandId.hashCode() : 0);
-		hash = 31 * hash + (_status != null ? _status.hashCode() : 0);
 
 		return hash;
 	}
