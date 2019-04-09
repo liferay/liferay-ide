@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.LiferayDescriptorVersion70">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay71.LiferayDescriptorVersion">
    <property name="file.extensions" value="xml"/>
    <property name="problem.title" value="Descriptor XML DTD Versions Changes"/>
-   <property name="problem.summary" value="The descriptor XML DTD versions should be matched with version 7.0."/>
+   <property name="problem.summary" value="The descriptor XML DTD versions should be matched with version 7.1."/>
    <property name="problem.section" value="#descriptor-XML-DTD-version"/>
    <property name="auto.correct" value="descriptor"/>
-   <property name="version" value="7.0"/>
+   <property name="version" value="7.1"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
    </service>
-   <implementation class="com.liferay.ide.upgrade.problems.core.internal.LiferayDescriptorVersion70"/>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay71.LiferayDescriptorVersion"/>
 </scr:component>

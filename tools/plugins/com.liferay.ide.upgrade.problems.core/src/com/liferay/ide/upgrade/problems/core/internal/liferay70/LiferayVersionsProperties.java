@@ -28,9 +28,9 @@ import com.liferay.ide.upgrade.problems.core.FileMigrator;
 	"problem.tickets=", "problem.section=", "auto.correct=property",  "version=7.0"
 },
 	service = {AutoFileMigrator.class, FileMigrator.class})
-public class LiferayVersionsProperties70 extends BaseLiferayVersionsProperties {
+public class LiferayVersionsProperties extends BaseLiferayVersionsProperties {
 
-	public LiferayVersionsProperties70() {
+	public LiferayVersionsProperties() {
 		super(".*7\\.[0-9]\\.[0-9].*", "7.0.0+");
 	}
 
