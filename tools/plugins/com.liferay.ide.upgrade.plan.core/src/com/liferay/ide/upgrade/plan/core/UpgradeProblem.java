@@ -17,11 +17,13 @@ package com.liferay.ide.upgrade.plan.core;
 import java.util.UUID;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Adapters;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public class UpgradeProblem {
+public class UpgradeProblem implements Problem {
 
 	public static final long DEFAULT_MARKER_ID = -1;
 
@@ -90,118 +92,32 @@ public class UpgradeProblem {
 		_markerType = markerType;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
+	public boolean equals(Object object) {
+		if ((object instanceof UpgradeProblem) == false) {
+			return false;
+		}
+
+		UpgradeProblem baseUpgradeProblem = Adapters.adapt(object, UpgradeProblem.class);
+
+		if (baseUpgradeProblem == null) {
+			return false;
+		}
+
+		if (isEqualIgnoreCase(_autoCorrectContext, baseUpgradeProblem._autoCorrectContext) &&
+			isEqualIgnoreCase(_html, baseUpgradeProblem._html) &&
+			isEqualIgnoreCase(_summary, baseUpgradeProblem._summary) &&
+			isEqualIgnoreCase(_ticket, baseUpgradeProblem._ticket) &&
+			isEqualIgnoreCase(_type, baseUpgradeProblem._type) && isEqualIgnoreCase(_uuid, baseUpgradeProblem._uuid) &&
+			isEqualIgnoreCase(_version, baseUpgradeProblem._version) &&
+			(_endOffset == baseUpgradeProblem._endOffset) && (_lineNumber == baseUpgradeProblem._lineNumber) &&
+			(_markerType == baseUpgradeProblem._markerType) && (_number == baseUpgradeProblem._number) &&
+			(_startOffset == baseUpgradeProblem._startOffset) && (_markerId == baseUpgradeProblem._markerId) &&
+			isEqual(_resource, baseUpgradeProblem._resource)) {
+
 			return true;
 		}
 
-		if (obj == null) {
-			return false;
-		}
-
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-
-		UpgradeProblem other = (UpgradeProblem)obj;
-
-		if (_uuid.equals(other._uuid)) {
-			return true;
-		}
-
-		if (_endOffset != other._endOffset) {
-			return false;
-		}
-
-		if (_resource == null) {
-			if (other._resource != null) {
-				return false;
-			}
-		}
-		else if (!_resource.equals(other._resource)) {
-			return false;
-		}
-
-		if (_lineNumber != other._lineNumber) {
-			return false;
-		}
-
-		if (_number != other._number) {
-			return false;
-		}
-
-		if (_startOffset != other._startOffset) {
-			return false;
-		}
-
-		if (_summary == null) {
-			if (other._summary != null) {
-				return false;
-			}
-		}
-		else if (!_summary.equals(other._summary)) {
-			return false;
-		}
-
-		if (_ticket == null) {
-			if (other._ticket != null) {
-				return false;
-			}
-		}
-		else if (!_ticket.equals(other._ticket)) {
-			return false;
-		}
-
-		if (_title == null) {
-			if (other._title != null) {
-				return false;
-			}
-		}
-		else if (!_title.equals(other._title)) {
-			return false;
-		}
-
-		if (_type == null) {
-			if (other._type != null) {
-				return false;
-			}
-		}
-		else if (!_type.equals(other._type)) {
-			return false;
-		}
-
-		if (_version == null) {
-			if (other._version != null) {
-				return false;
-			}
-		}
-		else if (!_version.equals(other._version)) {
-			return false;
-		}
-
-		if (_autoCorrectContext == null) {
-			if (other._autoCorrectContext != null) {
-				return false;
-			}
-		}
-		else if (!_autoCorrectContext.equals(other._autoCorrectContext)) {
-			return false;
-		}
-
-		if (_status != other._status) {
-			return false;
-		}
-
-		if (_markerId != other._markerId) {
-			return false;
-		}
-
-		if (_markerType != other._markerType) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	public String getAutoCorrectContext() {
@@ -266,6 +182,30 @@ public class UpgradeProblem {
 
 	public String getVersion() {
 		return _version;
+	}
+
+	public int hashCode() {
+		int hash = 31;
+
+		hash = 31 * hash + (_autoCorrectContext != null ? _autoCorrectContext.hashCode() : 0);
+		hash = 31 * hash + (_html != null ? _html.hashCode() : 0);
+
+		hash = 31 * hash + (Integer.hashCode(_endOffset));
+		hash = 31 * hash + (Integer.hashCode(_lineNumber));
+		hash = 31 * hash + (Long.hashCode(_markerId));
+		hash = 31 * hash + (Integer.hashCode(_markerType));
+		hash = 31 * hash + (Integer.hashCode(_number));
+		hash = 31 * hash + (Integer.hashCode(_startOffset));
+
+		hash = 31 * hash + (_resource != null ? _resource.hashCode() : 0);
+		hash = 31 * hash + (_summary != null ? _summary.hashCode() : 0);
+		hash = 31 * hash + (_title != null ? _title.hashCode() : 0);
+		hash = 31 * hash + (_ticket != null ? _ticket.hashCode() : 0);
+		hash = 31 * hash + (_type != null ? _type.hashCode() : 0);
+		hash = 31 * hash + (_uuid != null ? _uuid.hashCode() : 0);
+		hash = 31 * hash + (_version != null ? _version.hashCode() : 0);
+
+		return hash;
 	}
 
 	public void setAutoCorrectContext(String autoCorrectContext) {

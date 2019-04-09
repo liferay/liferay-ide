@@ -14,21 +14,91 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
+import com.liferay.ide.upgrade.plan.core.Problem;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.eclipse.core.runtime.Adapters;
 
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public class UpgradeProblemsContainer {
+public class UpgradeProblemsContainer implements Problem {
 
 	public void addProjectProblemsContainer(ProjectProblemsContainer projectProblemsContainer) {
 		_projectProblemsContainers.add(projectProblemsContainer);
 	}
 
+	public boolean equals(Object object) {
+		if ((object instanceof UpgradeProblemsContainer) == false) {
+			return false;
+		}
+
+		UpgradeProblemsContainer upgradeProblemsContainer = Adapters.adapt(object, UpgradeProblemsContainer.class);
+
+		if (upgradeProblemsContainer == null) {
+			return false;
+		}
+
+		if (isEqualProjectProblem(_projectProblemsContainers, upgradeProblemsContainer._projectProblemsContainers)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public List<ProjectProblemsContainer> getProjectProblemsConatiners() {
 		return _projectProblemsContainers;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 31;
+
+		Stream<ProjectProblemsContainer> projectProblemStream = _projectProblemsContainers.stream();
+
+		int projectProblemsHashCodes = projectProblemStream.map(
+			Object::hashCode
+		).reduce(
+			0, Integer::sum
+		).intValue();
+
+		hash = 31 * hash + projectProblemsHashCodes;
+
+		return hash;
+	}
+
+	public boolean isEqualProjectProblem(
+		Collection<ProjectProblemsContainer> source, Collection<ProjectProblemsContainer> target) {
+
+		boolean result = checkList(source, target);
+
+		if (!result) {
+			return result;
+		}
+
+		Stream<ProjectProblemsContainer> targetStream = target.stream();
+
+		Collection<String> targetTitles = targetStream.map(
+			ProjectProblemsContainer::getProjectName
+		).collect(
+			Collectors.toList()
+		);
+
+		Stream<ProjectProblemsContainer> projectProblemStream = source.stream();
+
+		return projectProblemStream.map(
+			ProjectProblemsContainer::getProjectName
+		).filter(
+			targetTitles::contains
+		).findAny(
+		).isPresent();
 	}
 
 	public boolean isNotEmpty() {

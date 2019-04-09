@@ -14,20 +14,47 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
+import com.liferay.ide.upgrade.plan.core.Problem;
+
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.eclipse.core.runtime.Adapters;
 
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public class ProjectProblemsContainer {
+public class ProjectProblemsContainer implements Problem {
 
 	public void addFileProblemsContainer(FileProblemsContainer fileProblemsContainer) {
 		_fileProblemsContainers.add(fileProblemsContainer);
+	}
+
+	public boolean equals(Object object) {
+		if ((object instanceof ProjectProblemsContainer) == false) {
+			return false;
+		}
+
+		ProjectProblemsContainer projectProblemsContainer = Adapters.adapt(object, ProjectProblemsContainer.class);
+
+		if (projectProblemsContainer == null) {
+			return false;
+		}
+
+		if (isEqualFileProblem(_fileProblemsContainers, projectProblemsContainer._fileProblemsContainers) &&
+			isEqualIgnoreCase(_projectName, projectProblemsContainer._projectName)) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	public FileProblemsContainer getFileProblemsContainer(File file) {
@@ -49,8 +76,53 @@ public class ProjectProblemsContainer {
 		return _projectName;
 	}
 
+	public int hashCode() {
+		int hash = 31;
+
+		hash = 31 * hash + (_projectName != null ? _projectName.hashCode() : 0);
+
+		Stream<FileProblemsContainer> fileProblemStream = _fileProblemsContainers.stream();
+
+		int fileProblemsHashCodes = fileProblemStream.map(
+			Object::hashCode
+		).reduce(
+			0, Integer::sum
+		).intValue();
+
+		hash = 31 * hash + fileProblemsHashCodes;
+
+		return hash;
+	}
+
 	public boolean isEmpty() {
 		return _fileProblemsContainers.isEmpty();
+	}
+
+	public boolean isEqualFileProblem(
+		Collection<FileProblemsContainer> source, Collection<FileProblemsContainer> target) {
+
+		boolean result = checkList(source, target);
+
+		if (!result) {
+			return result;
+		}
+
+		Stream<FileProblemsContainer> targetStream = target.stream();
+
+		Collection<File> targetTitles = targetStream.map(
+			FileProblemsContainer::getFile
+		).collect(
+			Collectors.toList()
+		);
+
+		Stream<FileProblemsContainer> sourceStream = source.stream();
+
+		return sourceStream.map(
+			FileProblemsContainer::getFile
+		).filter(
+			targetTitles::contains
+		).findAny(
+		).isPresent();
 	}
 
 	public void setProjectName(String projectName) {
