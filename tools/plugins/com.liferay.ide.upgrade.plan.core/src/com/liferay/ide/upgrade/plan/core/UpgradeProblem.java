@@ -14,6 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import java.util.UUID;
 
 import org.eclipse.core.resources.IResource;
@@ -23,7 +25,7 @@ import org.eclipse.core.runtime.Adapters;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class UpgradeProblem implements Problem {
+public class UpgradeProblem {
 
 	public static final long DEFAULT_MARKER_ID = -1;
 
@@ -103,16 +105,17 @@ public class UpgradeProblem implements Problem {
 			return false;
 		}
 
-		if (isEqualIgnoreCase(_autoCorrectContext, baseUpgradeProblem._autoCorrectContext) &&
-			isEqualIgnoreCase(_html, baseUpgradeProblem._html) &&
-			isEqualIgnoreCase(_summary, baseUpgradeProblem._summary) &&
-			isEqualIgnoreCase(_ticket, baseUpgradeProblem._ticket) &&
-			isEqualIgnoreCase(_type, baseUpgradeProblem._type) && isEqualIgnoreCase(_uuid, baseUpgradeProblem._uuid) &&
-			isEqualIgnoreCase(_version, baseUpgradeProblem._version) &&
+		if (StringUtil.equalsIgnoreCase(_autoCorrectContext, baseUpgradeProblem._autoCorrectContext) &&
+			StringUtil.equalsIgnoreCase(_html, baseUpgradeProblem._html) &&
+			StringUtil.equalsIgnoreCase(_summary, baseUpgradeProblem._summary) &&
+			StringUtil.equalsIgnoreCase(_ticket, baseUpgradeProblem._ticket) &&
+			StringUtil.equalsIgnoreCase(_type, baseUpgradeProblem._type) &&
+			StringUtil.equalsIgnoreCase(_uuid, baseUpgradeProblem._uuid) &&
+			StringUtil.equalsIgnoreCase(_version, baseUpgradeProblem._version) &&
 			(_endOffset == baseUpgradeProblem._endOffset) && (_lineNumber == baseUpgradeProblem._lineNumber) &&
 			(_markerType == baseUpgradeProblem._markerType) && (_number == baseUpgradeProblem._number) &&
 			(_startOffset == baseUpgradeProblem._startOffset) && (_markerId == baseUpgradeProblem._markerId) &&
-			isEqual(_resource, baseUpgradeProblem._resource)) {
+			_resource.equals(baseUpgradeProblem._resource)) {
 
 			return true;
 		}

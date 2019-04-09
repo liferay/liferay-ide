@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
@@ -32,7 +32,7 @@ import org.eclipse.core.runtime.Adapters;
  * @author Gregory Amreson
  * @author Simon Jiang
  */
-public class FileProblemsContainer implements Problem {
+public class FileProblemsContainer {
 
 	public void addUpgradeProblem(UpgradeProblem problem) {
 		_upgradeProblems.add(problem);
@@ -49,8 +49,8 @@ public class FileProblemsContainer implements Problem {
 			return false;
 		}
 
-		if (isEqualUpgradeProblem(_upgradeProblems, fileProblemsContainer._upgradeProblems) &&
-			isEqual(_file, fileProblemsContainer._file)) {
+		if (_isEqualUpgradeProblem(_upgradeProblems, fileProblemsContainer._upgradeProblems) &&
+			_file.equals(fileProblemsContainer._file)) {
 
 			return true;
 		}
@@ -85,11 +85,15 @@ public class FileProblemsContainer implements Problem {
 		return hash;
 	}
 
-	public boolean isEqualUpgradeProblem(Collection<UpgradeProblem> source, Collection<UpgradeProblem> target) {
-		boolean result = checkList(source, target);
+	public void setFile(File file) {
+		_file = file;
+	}
 
-		if (!result) {
-			return result;
+	private boolean _isEqualUpgradeProblem(Collection<UpgradeProblem> source, Collection<UpgradeProblem> target) {
+		boolean sizeEquals = ListUtil.sizeEquals(source, target);
+
+		if (!sizeEquals) {
+			return false;
 		}
 
 		Stream<UpgradeProblem> targetStream = target.stream();
@@ -108,10 +112,6 @@ public class FileProblemsContainer implements Problem {
 			targetTitles::contains
 		).findAny(
 		).isPresent();
-	}
-
-	public void setFile(File file) {
-		_file = file;
 	}
 
 	private File _file;

@@ -14,7 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.Adapters;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class UpgradeProblemsContainer implements Problem {
+public class UpgradeProblemsContainer {
 
 	public void addProjectProblemsContainer(ProjectProblemsContainer projectProblemsContainer) {
 		_projectProblemsContainers.add(projectProblemsContainer);
@@ -77,10 +77,10 @@ public class UpgradeProblemsContainer implements Problem {
 	public boolean isEqualProjectProblem(
 		Collection<ProjectProblemsContainer> source, Collection<ProjectProblemsContainer> target) {
 
-		boolean result = checkList(source, target);
+		boolean sizeEquals = ListUtil.sizeEquals(source, target);
 
-		if (!result) {
-			return result;
+		if (!sizeEquals) {
+			return false;
 		}
 
 		Stream<ProjectProblemsContainer> targetStream = target.stream();

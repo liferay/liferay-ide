@@ -14,7 +14,8 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.upgrade.plan.core.Problem;
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.File;
 
@@ -31,7 +32,7 @@ import org.eclipse.core.runtime.Adapters;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class ProjectProblemsContainer implements Problem {
+public class ProjectProblemsContainer {
 
 	public void addFileProblemsContainer(FileProblemsContainer fileProblemsContainer) {
 		_fileProblemsContainers.add(fileProblemsContainer);
@@ -48,8 +49,8 @@ public class ProjectProblemsContainer implements Problem {
 			return false;
 		}
 
-		if (isEqualFileProblem(_fileProblemsContainers, projectProblemsContainer._fileProblemsContainers) &&
-			isEqualIgnoreCase(_projectName, projectProblemsContainer._projectName)) {
+		if (_isEqualFileProblem(_fileProblemsContainers, projectProblemsContainer._fileProblemsContainers) &&
+			StringUtil.equalsIgnoreCase(_projectName, projectProblemsContainer._projectName)) {
 
 			return true;
 		}
@@ -98,13 +99,17 @@ public class ProjectProblemsContainer implements Problem {
 		return _fileProblemsContainers.isEmpty();
 	}
 
-	public boolean isEqualFileProblem(
+	public void setProjectName(String projectName) {
+		_projectName = projectName;
+	}
+
+	private boolean _isEqualFileProblem(
 		Collection<FileProblemsContainer> source, Collection<FileProblemsContainer> target) {
 
-		boolean result = checkList(source, target);
+		boolean sizeEquals = ListUtil.sizeEquals(source, target);
 
-		if (!result) {
-			return result;
+		if (!sizeEquals) {
+			return false;
 		}
 
 		Stream<FileProblemsContainer> targetStream = target.stream();
@@ -123,10 +128,6 @@ public class ProjectProblemsContainer implements Problem {
 			targetTitles::contains
 		).findAny(
 		).isPresent();
-	}
-
-	public void setProjectName(String projectName) {
-		_projectName = projectName;
 	}
 
 	private List<FileProblemsContainer> _fileProblemsContainers = new ArrayList<>();

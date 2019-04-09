@@ -233,7 +233,7 @@ public final class XMLMemento implements IMemento {
 	public String getString(String key) {
 		Attr attr = element.getAttributeNode(key);
 		if (attr == null)
-			return null;
+			return "";
 		return attr.getValue();
 	}
 
