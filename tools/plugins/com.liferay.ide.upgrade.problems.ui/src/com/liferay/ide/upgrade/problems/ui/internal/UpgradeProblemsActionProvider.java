@@ -84,21 +84,11 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 			}
 
 			if (selectionCompatible) {
-				MarkDoneAction markDoneAction = new MarkDoneAction(selectionProvider);
-
-				MarkUndoneAction markUndoneAction = new MarkUndoneAction(selectionProvider);
-
-				IgnoreAction ignoreAction = new IgnoreAction(selectionProvider);
-
-				AutoCorrectAction autoCorrectAction = new AutoCorrectAction(selectionProvider);
-
-				IgnoreAlwaysAction ignoreAlwaysAction = new IgnoreAlwaysAction(selectionProvider);
-
-				menuManager.add(markDoneAction);
-				menuManager.add(markUndoneAction);
-				menuManager.add(ignoreAction);
-				menuManager.add(autoCorrectAction);
-				menuManager.add(ignoreAlwaysAction);
+				menuManager.add(new MarkDoneAction(selectionProvider));
+				menuManager.add(new MarkUndoneAction(selectionProvider));
+				menuManager.add(new IgnoreAction(selectionProvider));
+				menuManager.add(new AutoCorrectAction(selectionProvider));
+				menuManager.add(new IgnoreAlwaysAction(selectionProvider));
 			}
 		}
 	}
