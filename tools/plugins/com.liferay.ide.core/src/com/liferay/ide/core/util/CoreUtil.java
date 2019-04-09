@@ -40,6 +40,7 @@ import java.net.URI;
 import java.security.MessageDigest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
@@ -415,12 +416,19 @@ public class CoreUtil {
 
 	public static final List<IFolder> getSourceFolders(IJavaProject project) {
 		if (FileUtil.notExists(project)) {
-			return new ArrayList<>();
+			return Collections.emptyList();
 		}
 
 		List<IFolder> folders = new ArrayList<>();
 
-		IClasspathEntry[] entries = project.readRawClasspath();
+		IClasspathEntry[] entries;
+
+		try {
+			entries = project.readRawClasspath();
+		}
+		catch (Exception e) {
+			return Collections.emptyList();
+		}
 
 		for (IClasspathEntry entry : entries) {
 			if (entry.getEntryKind() != IClasspathEntry.CPE_SOURCE) {
