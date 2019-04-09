@@ -82,8 +82,8 @@ public class ColumnImageService extends ImageService implements SapphireContentA
 
 	private static ImageData _imgColumnPrimary;
 	{
-		Result<ImageData> result =
-			ImageData.readFromClassLoader(ColumnImageService.class, "images/column_primary_16x16.png");
+		Result<ImageData> result = ImageData.readFromClassLoader(
+			ColumnImageService.class, "images/column_primary_16x16.png");
 
 		_imgColumnPrimary = result.required();
 	}

@@ -161,8 +161,6 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog im
 		}
 
 		protected FileLabelProvider() {
-		
-
 			IWorkbench workbench = PlatformUI.getWorkbench();
 
 			ISharedImages sharedImages = workbench.getSharedImages();

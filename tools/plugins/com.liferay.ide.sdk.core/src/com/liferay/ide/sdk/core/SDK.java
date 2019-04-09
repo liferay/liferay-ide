@@ -84,7 +84,7 @@ public class SDK {
 	public SDK(IPath location) {
 		this.location = location;
 
-		 SDKCorePlugin sdkCorePlugin = SDKCorePlugin.getDefault();
+		SDKCorePlugin sdkCorePlugin = SDKCorePlugin.getDefault();
 
 		_sdkPluginLocation = sdkCorePlugin.getStateLocation();
 	}

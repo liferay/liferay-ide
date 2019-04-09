@@ -45,6 +45,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -294,8 +295,19 @@ public class CoreUtil {
 	}
 
 	public static Set<IProject> getJavaProjects(Set<IProject> projects) {
-		return projects.stream().map(JavaCore::create).filter(Objects::nonNull).filter(IJavaProject::isOpen).map(
-			IJavaProject::getProject).collect(Collectors.toSet());
+		Stream<IProject> stream = projects.stream();
+
+		return stream.map(
+			JavaCore::create
+		).filter(
+			Objects::nonNull
+		).filter(
+			IJavaProject::isOpen
+		).map(
+			IJavaProject::getProject
+		).collect(
+			Collectors.toSet()
+		);
 	}
 
 	public static IProject getLiferayProject(IResource resource) {

@@ -84,8 +84,6 @@ public class JarEntrySelectionDialog extends ElementTreeSelectionDialog {
 	public static class ZipEntryLabelProvider extends LabelProvider {
 
 		public ZipEntryLabelProvider() {
-		
-
 			IWorkbench workbench = PlatformUI.getWorkbench();
 
 			ISharedImages sharedImages = workbench.getSharedImages();
