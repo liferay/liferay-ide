@@ -58,7 +58,7 @@ public class RemoveUpgradeProblemMarkersCommand implements UpgradeCommand, Marke
 			Stream<UpgradeProblem> stream = upgradeProblems.stream();
 
 			stream.map(
-				upgradeProblem -> findMarker(upgradeProblem.getResource(), upgradeProblem.getMarkerId())
+				this::findMarker
 			).filter(
 				this::markerExists
 			).forEach(

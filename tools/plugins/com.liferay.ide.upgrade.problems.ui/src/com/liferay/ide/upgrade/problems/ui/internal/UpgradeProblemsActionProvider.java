@@ -19,14 +19,18 @@ import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
 
+import java.util.Iterator;
+
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
+import org.eclipse.ui.navigator.ICommonViewerSite;
 
 /**
  * @author Terry Jia
@@ -54,10 +58,45 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 
 	@Override
 	public void fillContextMenu(IMenuManager menuManager) {
+		menuManager.removeAll();
+
+		ICommonViewerSite commonViewerSite = _commonActionExtensionSite.getViewSite();
+
+		ISelectionProvider selectionProvider = commonViewerSite.getSelectionProvider();
+
+		ISelection selection = selectionProvider.getSelection();
+
+		if (selection instanceof TreeSelection) {
+			TreeSelection treeSelection = (TreeSelection)selection;
+
+			Iterator<?> items = treeSelection.iterator();
+
+			boolean selectionCompatible = true;
+
+			while (items.hasNext()) {
+				Object item = items.next();
+
+				if (!(item instanceof UpgradeProblem)) {
+					selectionCompatible = false;
+
+					break;
+				}
+			}
+
+			if (selectionCompatible) {
+				menuManager.add(new MarkDoneAction(selectionProvider));
+				menuManager.add(new MarkUndoneAction(selectionProvider));
+				menuManager.add(new AutoCorrectAction(selectionProvider));
+				menuManager.add(new IgnoreAction(selectionProvider));
+				menuManager.add(new IgnoreAlwaysAction(selectionProvider));
+			}
+		}
 	}
 
 	@Override
 	public void init(ICommonActionExtensionSite commandActionExtensionSite) {
+		_commonActionExtensionSite = commandActionExtensionSite;
+
 		_doubleClickListener = new IDoubleClickListener() {
 
 			@Override
@@ -95,6 +134,7 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 		structuredViewer.addDoubleClickListener(_doubleClickListener);
 	}
 
+	private ICommonActionExtensionSite _commonActionExtensionSite;
 	private IDoubleClickListener _doubleClickListener;
 
 }

@@ -59,7 +59,15 @@ public interface MarkerSupport {
 		}
 	}
 
-	public default IMarker findMarker(IResource resource, long markerId) {
+	public default IMarker findMarker(UpgradeProblem upgradeProblem) {
+		if (upgradeProblem == null) {
+			return null;
+		}
+
+		IResource resource = upgradeProblem.getResource();
+
+		long markerId = upgradeProblem.getMarkerId();
+
 		try {
 			return resource.findMarker(markerId);
 		}
