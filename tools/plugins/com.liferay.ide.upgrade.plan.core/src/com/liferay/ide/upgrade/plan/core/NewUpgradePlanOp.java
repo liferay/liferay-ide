@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
 import com.liferay.ide.upgrade.plan.core.internal.SourceLocationValidationService;
+import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanNameValidationService;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
@@ -85,6 +86,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
 	@Required
+	@Service(impl = UpgradePlanNameValidationService.class)
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
 	@DefaultValue(text = "7.1")
