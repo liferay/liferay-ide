@@ -21,16 +21,21 @@ import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
 import com.liferay.ide.upgrade.problems.core.MarkerSupport;
 import com.liferay.ide.upgrade.problems.core.commands.AutoCorrectFindUpgradeProblemsCommandKeys;
+import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
 
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
@@ -41,12 +46,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @Component(
 	property = "id=" + AutoCorrectFindUpgradeProblemsCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
@@ -92,53 +103,91 @@ public class AutoCorrectFindUpgradeProblemsCommand implements MarkerSupport, Upg
 
 				upgradePlan.addUpgradeProblems(foundUpgradeProblems);
 
-				_addMarkers(foundUpgradeProblems);
+				addMarkers(foundUpgradeProblems);
 			});
+
+		_autoCorrectProblem(upgradePlan.getUpgradeProblems());
 
 		_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, new ArrayList<>(upgradeProblems)));
 
 		return Status.OK_STATUS;
 	}
 
-	private void _addMarkers(List<UpgradeProblem> upgradeProblems) {
+	private void _autoCorrectProblem(Collection<UpgradeProblem> upgradeProblems) {
+		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectFindUpgradeProblemsCommand.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
 		Stream<UpgradeProblem> stream = upgradeProblems.stream();
 
 		stream.filter(
+			upgradeProblem -> upgradeProblem.getStatus() != UpgradeProblem.STATUS_IGNORE
+		).filter(
 			upgradeProblem -> FileUtil.exists(upgradeProblem.getResource())
+		).filter(
+			upgradeProblem -> Objects.nonNull(upgradeProblem.getAutoCorrectContext())
 		).forEach(
 			upgradeProblem -> {
-				IResource resource = upgradeProblem.getResource();
+				String autoCorrectContext = upgradeProblem.getAutoCorrectContext();
+
+				String autoCorrectKey = autoCorrectContext;
+
+				int filterKeyIndex = autoCorrectContext.indexOf(":");
+
+				if (filterKeyIndex > -1) {
+					autoCorrectKey = autoCorrectContext.substring(0, filterKeyIndex);
+				}
 
 				try {
-					IMarker marker = resource.createMarker(UpgradeProblem.MARKER_TYPE);
+					String filter =
+						"(&(auto.correct=" + autoCorrectKey + ")(version=" + upgradeProblem.getVersion() + "))";
 
-					upgradeProblem.setMarkerId(marker.getId());
+					Collection<ServiceReference<AutoFileMigrator>> serviceReferences =
+						bundleContext.getServiceReferences(AutoFileMigrator.class, filter);
 
-					_upgradeProblemToMarker(upgradeProblem, marker);
+					IResource resource = upgradeProblem.getResource();
+
+					File file = FileUtil.getFile(resource);
+
+					int problemsCorrected = 0;
+
+					for (ServiceReference<AutoFileMigrator> reference : serviceReferences) {
+						AutoFileMigrator autoMigrator = bundleContext.getService(reference);
+
+						try {
+							problemsCorrected =
+								problemsCorrected + autoMigrator.correctProblems(file, Arrays.asList(upgradeProblem));
+						}
+						catch (AutoFileMigrateException afme) {
+							UpgradeProblemsCorePlugin.logError(
+								"Error encountered auto migrating file " + file.getAbsolutePath(), afme);
+						}
+					}
+
+					if ((problemsCorrected > 0) && (resource != null)) {
+						_resolveMarker(upgradeProblem);
+					}
 				}
-				catch (CoreException ce) {
+				catch (InvalidSyntaxException ise) {
 				}
 			}
 		);
 	}
 
-	private void _upgradeProblemToMarker(UpgradeProblem upgradeProblem, IMarker marker) throws CoreException {
-		marker.setAttribute(IMarker.CHAR_START, upgradeProblem.getStartOffset());
-		marker.setAttribute(IMarker.CHAR_END, upgradeProblem.getEndOffset());
-		marker.setAttribute(IMarker.LINE_NUMBER, upgradeProblem.getLineNumber());
-		marker.setAttribute(IMarker.MESSAGE, upgradeProblem.getTitle());
-		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_AUTOCORRECTCONTEXT, upgradeProblem.getAutoCorrectContext());
-		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_HTML, upgradeProblem.getHtml());
-		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_SUMMARY, upgradeProblem.getSummary());
-		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_STATUS, upgradeProblem.getStatus());
-		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_TICKET, upgradeProblem.getTicket());
-		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_TYPE, upgradeProblem.getType());
+	private void _resolveMarker(UpgradeProblem upgradeProblem) {
+		upgradeProblem.setStatus(UpgradeProblem.STATUS_RESOLVED);
 
-		IResource resource = upgradeProblem.getResource();
+		IMarker marker = findMarker(upgradeProblem);
 
-		marker.setAttribute(IMarker.LOCATION, resource.getName());
-
-		marker.setAttribute(IMarker.SEVERITY, upgradeProblem.getMarkerType());
+		if (marker != null) {
+			try {
+				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_INFO);
+				marker.setAttribute(IMarker.DONE, Boolean.TRUE);
+				marker.setAttribute("upgradeProblem.resolved", Boolean.TRUE);
+			}
+			catch (CoreException ce) {
+			}
+		}
 	}
 
 	@Reference
