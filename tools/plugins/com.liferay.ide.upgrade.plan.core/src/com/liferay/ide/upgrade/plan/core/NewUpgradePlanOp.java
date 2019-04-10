@@ -29,6 +29,7 @@ import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
+import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.Fact;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
@@ -57,6 +58,8 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public Value<String> getTargetVersion();
 
+	public Value<String> getUpgradeType();
+
 	public void setCurrentVersion(String currentVersion);
 
 	public void setLocation(Path value);
@@ -65,12 +68,15 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public void setTargetVersion(String targetVersion);
 
+	public void setUpgradeType(String upgradeType);
+
 	@DefaultValue(text = "6.2")
 	@Label(standard = "Current Liferay Version")
 	@PossibleValues(values = {"6.2", "7.0"})
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
 
 	@AbsolutePath
+	@Enablement(expr = "${UpgradeType == 'liferay-code-upgrade-plan'}")
 	@Fact(statement = "This location should be either a Plugins SDK, Liferay Workspace.")
 	@Label(standard = "Current Code Location")
 	@Service(impl = SourceLocationValidationService.class)
@@ -85,5 +91,10 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	@Label(standard = "Target Liferay Version")
 	@PossibleValues(values = {"7.0", "7.1"})
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
+
+	@DefaultValue(text = "liferay-upgrade-plan")
+	@PossibleValues(values = {"liferay-upgrade-plan", "liferay-code-upgrade-plan"})
+	@Required
+	public ValueProperty PROP_UPGRADE_TYPE = new ValueProperty(TYPE, "UpgradeType");
 
 }

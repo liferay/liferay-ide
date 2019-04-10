@@ -57,6 +57,8 @@ public class NewUpgradePlanOpMethods {
 
 		String name = _getter.get(newUpgradePlanOp.getName());
 
+		String upgradeType = _getter.get(newUpgradePlanOp.getUpgradeType());
+
 		String currentVersion = _getter.get(newUpgradePlanOp.getCurrentVersion());
 
 		String targetVersion = _getter.get(newUpgradePlanOp.getTargetVersion());
@@ -71,7 +73,7 @@ public class NewUpgradePlanOpMethods {
 
 		try {
 			UpgradePlan upgradePlan = upgradePlanner.newUpgradePlan(
-				name, currentVersion, targetVersion, sourceCodeLocation);
+				name, upgradeType, currentVersion, targetVersion, sourceCodeLocation);
 
 			upgradePlanner.startUpgradePlan(upgradePlan);
 		}
