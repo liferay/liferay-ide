@@ -58,8 +58,6 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 
 	@Override
 	public void fillContextMenu(IMenuManager menuManager) {
-		menuManager.removeAll();
-
 		ICommonViewerSite commonViewerSite = _commonActionExtensionSite.getViewSite();
 
 		ISelectionProvider selectionProvider = commonViewerSite.getSelectionProvider();
@@ -84,6 +82,8 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 			}
 
 			if (selectionCompatible) {
+				menuManager.removeAll();
+
 				menuManager.add(new MarkDoneAction(selectionProvider));
 				menuManager.add(new MarkUndoneAction(selectionProvider));
 				menuManager.add(new AutoCorrectAction(selectionProvider));
