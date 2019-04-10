@@ -113,9 +113,16 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory {
 	private static IPath[] _getFilesForModule(File modulesFolder, String moduleName, String slot, FileFilter filter) {
 		String slashed = moduleName.replaceAll("\\.", "/");
 
-		slot = slot == null ? "main" : slot;
+		slot = (slot == null) ? "main" : slot;
 
-		return _getFiles(modulesFolder, new Path(slashed).append(slot), filter);
+		return _getFiles(
+			modulesFolder,
+			new Path(
+				slashed
+			).append(
+				slot
+			),
+			filter);
 	}
 
 	private static IPath[] _getFilesFrom(File layeredPath, FileFilter filter) {

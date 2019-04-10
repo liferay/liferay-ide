@@ -67,7 +67,9 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 	public List<UpgradeProblem> analyze(File file) {
 		List<UpgradeProblem> problems = new ArrayList<>();
 
-		String fileExtension = new Path(file.getAbsolutePath()).getFileExtension();
+		String fileExtension = new Path(
+			file.getAbsolutePath()
+		).getFileExtension();
 
 		List<FileSearchResult> searchResults = searchFile(file, createFileChecker(type, file, fileExtension));
 

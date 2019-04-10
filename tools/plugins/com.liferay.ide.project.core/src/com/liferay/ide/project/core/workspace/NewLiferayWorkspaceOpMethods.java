@@ -91,6 +91,7 @@ public class NewLiferayWorkspaceOpMethods {
 		}
 	}
 
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
+	};
 
 }

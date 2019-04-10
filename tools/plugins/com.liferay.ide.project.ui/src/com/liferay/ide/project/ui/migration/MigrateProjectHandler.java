@@ -429,7 +429,8 @@ public class MigrateProjectHandler extends AbstractHandler {
 
 					for (MigrationProblems project : mc.getProblemsArray()) {
 						Iterator<FileProblems> fileProblemItertor = new LinkedList<>(
-							Arrays.asList(project.getProblems())).iterator();
+							Arrays.asList(project.getProblems())
+						).iterator();
 
 						while (fileProblemItertor.hasNext()) {
 							FileProblems fileProblem = fileProblemItertor.next();
@@ -500,8 +501,8 @@ public class MigrateProjectHandler extends AbstractHandler {
 
 								// prefer the path that is shortest (to avoid a nested version)
 
-								if (FileUtil.getSegmentCount(file.getFullPath()) <
-										FileUtil.getSegmentCount(workspaceResource.getFullPath())) {
+								if (FileUtil.getSegmentCount(file.getFullPath()) < FileUtil.getSegmentCount(
+										workspaceResource.getFullPath())) {
 
 									workspaceResource = file;
 								}
@@ -519,8 +520,8 @@ public class MigrateProjectHandler extends AbstractHandler {
 
 							// prefer the path that is shortest (to avoid a nested version)
 
-							if (FileUtil.getSegmentCount(container.getLocation()) <
-									FileUtil.getSegmentCount(workspaceResource.getLocation())) {
+							if (FileUtil.getSegmentCount(container.getLocation()) < FileUtil.getSegmentCount(
+									workspaceResource.getLocation())) {
 
 								workspaceResource = container;
 							}

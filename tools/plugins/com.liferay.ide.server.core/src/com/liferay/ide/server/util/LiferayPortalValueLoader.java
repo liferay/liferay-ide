@@ -160,7 +160,9 @@ public class LiferayPortalValueLoader {
 
 		if (ListUtil.isNotEmpty(_userLibs)) {
 			for (IPath url : _userLibs) {
-				URI uri = new File(url.toOSString()).toURI();
+				URI uri = new File(
+					url.toOSString()
+				).toURI();
 
 				libUrlList.add(uri.toURL());
 			}
@@ -168,7 +170,11 @@ public class LiferayPortalValueLoader {
 
 		URL[] urls = libUrlList.toArray(new URL[libUrlList.size()]);
 
-		return new URLClassLoader(urls).loadClass(className);
+		return new URLClassLoader(
+			urls
+		).loadClass(
+			className
+		);
 	}
 
 	private IPath _portalDir;

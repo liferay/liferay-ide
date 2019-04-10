@@ -68,8 +68,9 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] pageFile =
-			{project.getName(), "src", "main", "resources", "META-INF", "resources", "article", "display_page.jsp"};
+		String[] pageFile = {
+			project.getName(), "src", "main", "resources", "META-INF", "resources", "article", "display_page.jsp"
+		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(pageFile));
 
@@ -117,8 +118,9 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] jspfFile =
-			{project.getName(), "src", "main", "resources", "META-INF", "resources", "edit_vocabulary_settings.jspf"};
+		String[] jspfFile = {
+			project.getName(), "src", "main", "resources", "META-INF", "resources", "edit_vocabulary_settings.jspf"
+		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspfFile));
 
@@ -220,8 +222,9 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] resourceActionFile =
-			{project.getName(), "src", "main", "resources", "resource-actions", "default-ext.xml"};
+		String[] resourceActionFile = {
+			project.getName(), "src", "main", "resources", "resource-actions", "default-ext.xml"
+		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(resourceActionFile));
 
@@ -245,8 +248,9 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		String[] files =
-			{"META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp", "META-INF/resources/view.jsp"};
+		String[] files = {
+			"META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp", "META-INF/resources/view.jsp"
+		};
 
 		viewAction.project.openFragmentFilesWizard();
 

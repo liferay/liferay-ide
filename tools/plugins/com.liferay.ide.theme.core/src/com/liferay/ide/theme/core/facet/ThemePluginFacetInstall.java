@@ -69,6 +69,7 @@ public class ThemePluginFacetInstall extends PluginFacetInstall {
 		IDataModel masterModel = (IDataModel)model.getProperty(FacetInstallDataModelProvider.MASTER_PROJECT_DM);
 
 		if ((masterModel != null) && masterModel.getBooleanProperty(CREATE_PROJECT_OPERATION)) {
+
 			/**
 			 * // get the template zip for theme and extract into the project
 			 * SDK sdk = getSDK(); String themeName =

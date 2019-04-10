@@ -93,7 +93,7 @@ public final class PossibleValuesRadioButtonsGroupBinding<T> extends AbstractBin
 		if (newSelection == _possibleValues.size()) {
 			final String newValueString = value.text(true);
 
-			final String label = newValueString == null ? _nullValueLabel.text() : newValueString;
+			final String label = (newValueString == null) ? _nullValueLabel.text() : newValueString;
 
 			_createMalformedItem(label);
 		}

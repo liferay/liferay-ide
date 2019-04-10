@@ -78,7 +78,9 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 
 	public LiferayPropertiesSourceViewerConfiguration(ITextEditor editor) {
 		super(
-			JavaPlugin.getDefault().getJavaTextTools().getColorManager(),
+			JavaPlugin.getDefault(
+			).getJavaTextTools(
+			).getColorManager(),
 			JavaPlugin.getDefault().getCombinedPreferenceStore(), editor,
 			IPropertiesFilePartitions.PROPERTIES_FILE_PARTITIONING);
 	}
@@ -272,7 +274,7 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 
 			String comment = layout.getComment(key);
 
-			parsed.add(new PropKey(key, comment == null ? null : comment.replaceAll("\n", "\n<br/>")));
+			parsed.add(new PropKey(key, (comment == null) ? null : comment.replaceAll("\n", "\n<br/>")));
 		}
 
 		PropKey[] parsedKeys = parsed.toArray(new PropKey[0]);

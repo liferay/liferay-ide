@@ -107,7 +107,7 @@ public class WorkspaceHelper {
 		if (!javaProject.exists()) {
 			IWorkspace workspace = CoreUtil.getWorkspace();
 
-			IProjectDescription description = workspace .newProjectDescription(projectName);
+			IProjectDescription description = workspace.newProjectDescription(projectName);
 
 			javaProject.create(monitor);
 			javaProject.open(monitor);

@@ -30,8 +30,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 @Component(property = {
 	"file.extensions=java,jsp,jspf", "problem.title=DDMTemplateLocalService add new param userId",
 	"problem.section=#added-userid-parameter-to-update-operations-of-ddmstructurelocalservice-and",
-	"problem.summary=Added userId Parameter to Update Operations of DDMStructureLocalService and " +
-		"DDMTemplateLocalService",
+	"problem.summary=Added userId Parameter to Update Operations of DDMStructureLocalService and DDMTemplateLocalService",
 	"problem.tickets=LPS-50939",  "version=7.0"
 },
 	service = FileMigrator.class)

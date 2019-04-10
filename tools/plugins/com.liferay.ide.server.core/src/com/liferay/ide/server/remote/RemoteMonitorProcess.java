@@ -93,7 +93,7 @@ public class RemoteMonitorProcess extends Process implements IProcess {
 				port = wasServer.getHTTPPort();
 			}
 
-			label = (host != null ? host : StringPool.EMPTY) + ":" + (port != null ? port : StringPool.EMPTY);
+			label = ((host != null) ? host : StringPool.EMPTY) + ":" + ((port != null) ? port : StringPool.EMPTY);
 		}
 
 		return label;

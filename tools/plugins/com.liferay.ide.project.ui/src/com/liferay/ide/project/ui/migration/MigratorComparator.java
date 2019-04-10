@@ -43,7 +43,7 @@ public class MigratorComparator extends ViewerComparator {
 				break;
 
 			case 1:
-				flag = t1.getLineNumber() >= t2.getLineNumber() ? 1 : -1;
+				flag = (t1.getLineNumber() >= t2.getLineNumber()) ? 1 : -1;
 
 				break;
 
@@ -51,7 +51,7 @@ public class MigratorComparator extends ViewerComparator {
 				String title1 = t1.getTitle();
 
 				if (title1.compareTo(t2.getTitle()) != 0) {
-					flag = title1.compareTo(t2.getTitle()) > 0 ? 1 : -1;
+					flag = (title1.compareTo(t2.getTitle()) > 0) ? 1 : -1;
 				}
 
 				break;

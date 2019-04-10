@@ -175,7 +175,7 @@ public abstract class ThemePluginBuildParticipant extends AbstractBuildParticipa
 				retval = LiferayMavenCore.createMultiStatus(IStatus.ERROR, statuses.toArray(new IStatus[0]));
 			}
 
-			retval = retval == null ? Status.OK_STATUS : retval;
+			retval = (retval == null) ? Status.OK_STATUS : retval;
 		}
 		catch (CoreException ce) {
 			retval = LiferayMavenCore.createErrorStatus(ce);

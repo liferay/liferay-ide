@@ -61,6 +61,7 @@ public class NewLiferayPluginProjectProfileTests {
 		Assert.assertEquals(profiles.size(), 0, profiles.size());
 	}
 
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
+	};
 
 }

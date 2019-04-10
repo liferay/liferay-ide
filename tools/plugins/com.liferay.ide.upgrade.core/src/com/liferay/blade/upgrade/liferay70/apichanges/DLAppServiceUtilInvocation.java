@@ -29,13 +29,15 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf", "problem.title=Moved Recycle Bin Logic Into a New DLTrashService Interface",
-	"problem.section=#moved-recycle-bin-logic-into-a-new-dltrashservice-interface",
-	"problem.summary=Moved Recycle Bin Logic Into a New DLTrashService Interface", "problem.tickets=LPS-60810",
-	"version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf", "problem.title=Moved Recycle Bin Logic Into a New DLTrashService Interface",
+		"problem.section=#moved-recycle-bin-logic-into-a-new-dltrashservice-interface",
+		"problem.summary=Moved Recycle Bin Logic Into a New DLTrashService Interface", "problem.tickets=LPS-60810",
+		"version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class DLAppServiceUtilInvocation extends JavaFileMigrator {
 
 	@Override

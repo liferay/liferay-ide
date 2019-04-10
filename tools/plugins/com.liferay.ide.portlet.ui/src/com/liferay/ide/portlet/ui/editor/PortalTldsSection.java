@@ -548,25 +548,26 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	private static final int _UP_INDEX = 2;
 
 	/**
-	public void modelsChanged(PluginModelDelta delta) {
-		fImports = null;
-		final Control control = fImportViewer.getControl();
+	 public void modelsChanged(PluginModelDelta delta) {
+	 fImports = null;
+	 final Control control = fImportViewer.getControl();
+	 
+	 if (!control.isDisposed()) {
+	 Runable run = new Runnable() {
 
-		if (!control.isDisposed()) {
-		Runable run = new Runnable() {
-
-				public void run() {
-					if (!control.isDisposed()) {
-						fImportViewer.refresh();
-					}
-				}
-
-		};
-
-		control.getDisplay().asyncExec(run);
-		}
-	}
-
+	 
+	 public void run() {
+	 if (!control.isDisposed()) {
+	 fImportViewer.refresh();
+	 }
+	 }
+	 
+	 };
+	 
+	 control.getDisplay().asyncExec(run);
+	 }
+	 }
+	 
 	 */
 	private Action _fAddAction;
 

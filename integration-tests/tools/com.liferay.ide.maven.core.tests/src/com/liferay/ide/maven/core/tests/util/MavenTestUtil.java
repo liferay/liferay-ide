@@ -169,7 +169,6 @@ public class MavenTestUtil {
 
 				return false;
 			},
-
 			30 * 60 * 1000);
 
 		JobHelpers.waitForJobsToComplete();

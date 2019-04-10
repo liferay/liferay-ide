@@ -51,7 +51,8 @@ public class PortletModePossibleValueService extends PossibleValuesService imple
 		}
 	}
 
-	private static final String[] _DEFAULT_MODES =
-		{"view", "edit", "help", "about", "config", "edit_defaults", "edit_guest", "preview", "print"};
+	private static final String[] _DEFAULT_MODES = {
+		"view", "edit", "help", "about", "config", "edit_defaults", "edit_guest", "preview", "print"
+	};
 
 }

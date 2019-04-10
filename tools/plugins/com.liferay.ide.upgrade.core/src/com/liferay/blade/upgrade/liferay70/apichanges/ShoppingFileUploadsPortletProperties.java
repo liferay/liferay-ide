@@ -24,12 +24,16 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=Moved Shopping File Uploads Portlet Properties to OSGi Configuration",
-	"problem.summary=Moved Shopping File Uploads Portlet Properties to OSGi Configuration", "problem.tickets=LPS-69210",
-	"problem.section=#moved-shopping-file-uploads-portlet-properties-to-osgi-configuration", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=properties",
+		"problem.title=Moved Shopping File Uploads Portlet Properties to OSGi Configuration",
+		"problem.summary=Moved Shopping File Uploads Portlet Properties to OSGi Configuration",
+		"problem.tickets=LPS-69210",
+		"problem.section=#moved-shopping-file-uploads-portlet-properties-to-osgi-configuration", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class ShoppingFileUploadsPortletProperties extends PropertiesFileMigrator {
 
 	@Override

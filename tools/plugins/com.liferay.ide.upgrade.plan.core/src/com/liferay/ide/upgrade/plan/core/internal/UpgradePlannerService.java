@@ -319,7 +319,9 @@ public class UpgradePlannerService implements UpgradePlanner {
 				int status = upgradeProblemMemento.getInteger("status");
 
 				IFile[] resources = CoreUtil.findFilesForLocationURI(
-					new File(upgradeProblemMemento.getString("resourceLocation")).toURI());
+					new File(
+						upgradeProblemMemento.getString("resourceLocation")
+					).toURI());
 
 				UpgradeProblem upgradeProblem = new UpgradeProblem(
 					uuid, title, summary, type, ticket, version, resources[0], lineNumber, startOffset, endOffset, html,

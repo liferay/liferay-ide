@@ -43,7 +43,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = "id=" + RemoveUpgradeProblemMarkersCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
 	service = UpgradeCommand.class
 )
-public class RemoveUpgradeProblemMarkersCommand implements UpgradeCommand, MarkerSupport {
+public class RemoveUpgradeProblemMarkersCommand implements MarkerSupport, UpgradeCommand {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {

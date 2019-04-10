@@ -287,7 +287,8 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 		int extSeparatorPos = deployedFileName.lastIndexOf('.');
 
-		String deployedName = extSeparatorPos > -1 ? deployedFileName.substring(0, extSeparatorPos) : deployedFileName;
+		String deployedName =
+			(extSeparatorPos > -1) ? deployedFileName.substring(0, extSeparatorPos) : deployedFileName;
 
 		// From jerr's patch in MNGECLIPSE-965
 
@@ -442,7 +443,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 				warnings.add(versionProblem);
 			}
 
-			String[] configDirParams = {ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_PORTAL_DIR, };
+			String[] configDirParams = {ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_PORTAL_DIR};
 
 			for (String configParam : configDirParams) {
 				MavenProblemInfo configProblemInfo = _checkValidConfigDir(liferayMavenPlugin, config, configParam);
@@ -548,7 +549,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 					Throwable cause = e.getCause();
 
 					String problemMsg = NLS.bind(
-						Msgs.facetInstallError, pluginType, cause != null ? cause.getMessage() : e.getMessage());
+						Msgs.facetInstallError, pluginType, (cause != null) ? cause.getMessage() : e.getMessage());
 
 					retval = new MavenProblemInfo(location, e);
 
@@ -652,6 +653,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 		}
 
 		if (retval == null) {
+
 			/**
 			 * if no explicit warSourceDirectory set we assume the default warSource
 			 * directory ${basedir}/src/main/webapp refer to

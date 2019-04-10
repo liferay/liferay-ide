@@ -288,7 +288,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
 	protected String getMessageText(ValidationType validationType, IXMLReferenceTo referenceTo, Node node, IFile file) {
 		String nodeValue = DOMUtils.getNodeValue(node);
 
-		String textContent = nodeValue == null ? "" : nodeValue;
+		String textContent = (nodeValue == null) ? "" : nodeValue;
 
 		switch (validationType) {
 			case SYNTAX_INVALID:
@@ -323,13 +323,13 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
 				IFile referencedFile = getReferencedFile(referenceTo, node, file);
 
 				return NLS.bind(
-					MESSAGE_REFERENCE_NOT_FOUND, textContent, referencedFile != null ? referencedFile.getName() : "");
+					MESSAGE_REFERENCE_NOT_FOUND, textContent, (referencedFile != null) ? referencedFile.getName() : "");
 			case PROPERTY_NOT_FOUND:
 				IFile languagePropertiesFile = getReferencedFile(referenceTo, node, file);
 
 				return NLS.bind(
 					MESSAGE_PROPERTY_NOT_FOUND, textContent,
-					languagePropertiesFile != null ? languagePropertiesFile.getName() : "any resource files");
+					(languagePropertiesFile != null) ? languagePropertiesFile.getName() : "any resource files");
 			case STATIC_VALUE_UNDEFINED:
 				return NLS.bind(MESSAGE_STATIC_VALUE_UNDEFINED, textContent);
 		}

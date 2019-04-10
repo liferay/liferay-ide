@@ -49,8 +49,8 @@ public class LiferayDisplayDescriptorValidator extends LiferayBaseValidator {
 
 		Element element = ((Attr)node).getOwnerElement();
 
-		if ((node.getNodeType() == Node.ATTRIBUTE_NODE) &&
-			"name".equals(node.getNodeName()) && "category".equals(element.getNodeName())) {
+		if ((node.getNodeType() == Node.ATTRIBUTE_NODE) && "name".equals(node.getNodeName()) &&
+			"category".equals(element.getNodeName())) {
 
 			String nodeValue = node.getNodeValue();
 

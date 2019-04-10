@@ -28,12 +28,14 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf", "problem.title=Changed the Usage of Asset Preview",
-	"problem.section=#changed-the-usage-of-asset-preview", "problem.summary=Changed the Usage of Asset Preview",
-	"problem.tickets=LPS-53972", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf", "problem.title=Changed the Usage of Asset Preview",
+		"problem.section=#changed-the-usage-of-asset-preview", "problem.summary=Changed the Usage of Asset Preview",
+		"problem.tickets=LPS-53972", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class AssetPreviewTags extends JavaFileMigrator {
 
 	@Override

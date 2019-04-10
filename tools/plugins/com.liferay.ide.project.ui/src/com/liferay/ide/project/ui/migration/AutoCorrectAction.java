@@ -199,10 +199,10 @@ public class AutoCorrectAction extends ProblemAction implements SapphireContentA
 				}
 
 				if (lastItem != null) {
-					String prCurrentKey =
-						((Problem)item).autoCorrectContext.substring(0, problem.autoCorrectContext.indexOf(":"));
-					String prLastKey =
-						((Problem)lastItem).autoCorrectContext.substring(0, problem.autoCorrectContext.indexOf(":"));
+					String prCurrentKey = ((Problem)item).autoCorrectContext.substring(
+						0, problem.autoCorrectContext.indexOf(":"));
+					String prLastKey = ((Problem)lastItem).autoCorrectContext.substring(
+						0, problem.autoCorrectContext.indexOf(":"));
 
 					if (!prCurrentKey.equals(prLastKey)) {
 						selectionCompatible = false;

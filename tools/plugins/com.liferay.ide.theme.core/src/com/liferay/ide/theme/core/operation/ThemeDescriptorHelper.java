@@ -110,7 +110,9 @@ public class ThemeDescriptorHelper extends LiferayDescriptorHelper {
 	}
 
 	protected void setTemplateExtension(IFile lookAndFeelFile, String extension) {
-		new DOMModelEditOperation(lookAndFeelFile) {
+		new DOMModelEditOperation(
+			lookAndFeelFile
+		) {
 
 			protected void createDefaultFile() {
 			}

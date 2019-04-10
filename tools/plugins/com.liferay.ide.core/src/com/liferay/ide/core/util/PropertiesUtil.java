@@ -101,7 +101,9 @@ public class PropertiesUtil {
 				return new String[0];
 			}
 
-			baseValue = new Path(baseValue.replace(".", IPath.SEPARATOR + "")).toString();
+			baseValue = new Path(
+				baseValue.replace(".", IPath.SEPARATOR + "")
+			).toString();
 
 			if (!baseValue.contains("_")) {
 				regex = baseValue + "_.*";
@@ -112,7 +114,9 @@ public class PropertiesUtil {
 				return new String[0];
 			}
 
-			baseValue = new Path(baseValue.replace(PROPERTIES_FILE_SUFFIX, "")).toString();
+			baseValue = new Path(
+				baseValue.replace(PROPERTIES_FILE_SUFFIX, "")
+			).toString();
 
 			if (baseValue.contains("*")) {
 				regex = baseValue.replace("*", ".*");
@@ -136,13 +140,19 @@ public class PropertiesUtil {
 		String regex = null;
 
 		if (elementName.equals(ELEMENT_RESOURCE_BUNDLE)) {
-			baseValue = new Path(baseValue.replace(".", IPath.SEPARATOR + "")).toString();
+			baseValue = new Path(
+				baseValue.replace(".", IPath.SEPARATOR + "")
+			).toString();
 		}
 		else if (elementName.equals(ELEMENT_PORTAL_PROPERTIES)) {
-			baseValue = new Path(baseValue.replace(PROPERTIES_FILE_SUFFIX, "")).toString();
+			baseValue = new Path(
+				baseValue.replace(PROPERTIES_FILE_SUFFIX, "")
+			).toString();
 		}
 		else if (elementName.equals(ELEMENT_LANGUAGE_PROPERTIES)) {
-			baseValue = new Path(baseValue.replace(PROPERTIES_FILE_SUFFIX, "")).toString();
+			baseValue = new Path(
+				baseValue.replace(PROPERTIES_FILE_SUFFIX, "")
+			).toString();
 
 			if (baseValue.contains("*")) {
 				regex = baseValue.replace("*", ".*");
@@ -272,7 +282,9 @@ public class PropertiesUtil {
 			if (!resourceBundle.endsWith(PROPERTIES_FILE_SUFFIX) && !resourceBundle.contains(IPath.SEPARATOR + "") &&
 				!(CoreUtil.isWindows() && resourceBundle.contains("\\"))) {
 
-				resourceBundle = new Path(resourceBundle.replace(".", IPath.SEPARATOR + "")).toString();
+				resourceBundle = new Path(
+					resourceBundle.replace(".", IPath.SEPARATOR + "")
+				).toString();
 			}
 
 			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
@@ -726,7 +738,8 @@ public class PropertiesUtil {
 									!(CoreUtil.isWindows() && resourceBundle.contains("\\"))) {
 
 									resourceBundle = new Path(
-										resourceBundle.replace(".", IPath.SEPARATOR + "")).toString();
+										resourceBundle.replace(".", IPath.SEPARATOR + "")
+									).toString();
 								}
 
 								retval.putResourceBundle(resourceBundle);

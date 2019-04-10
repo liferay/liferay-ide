@@ -69,12 +69,13 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
  */
 @SuppressWarnings("restriction")
 public class NewPortletWizard
-	extends NewWebArtifactWizard implements IPluginWizardFragment, INewPortletClassDataModelProperties {
+	extends NewWebArtifactWizard implements INewPortletClassDataModelProperties, IPluginWizardFragment {
 
 	public static final String ID = "com.liferay.ide.eclipse.portlet.ui.wizard.portlet";
 
 	public NewPortletWizard() {
 		this((IDataModel)null);
+
 		setupWizard();
 	}
 
@@ -87,6 +88,7 @@ public class NewPortletWizard
 
 	public NewPortletWizard(IProject project) {
 		this((IDataModel)null);
+
 		initialProject = project;
 		setupWizard();
 	}

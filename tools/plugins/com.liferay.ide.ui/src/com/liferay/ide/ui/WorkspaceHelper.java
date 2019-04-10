@@ -72,13 +72,14 @@ public class WorkspaceHelper implements WorkspaceHelperMBean {
 								public void run() {
 									try {
 										new ProgressMonitorDialog(
-											UIUtil.getActiveShell()).run(true, true,
+											UIUtil.getActiveShell()
+										).run(
+											true, true,
 											new IRunnableWithProgress() {
 
 												@Override
 												public void run(IProgressMonitor monitor)
-													throws InterruptedException,
-														   InvocationTargetException {
+													throws InterruptedException, InvocationTargetException {
 
 													try {
 														importer.importProjects(path, monitor);
@@ -88,7 +89,8 @@ public class WorkspaceHelper implements WorkspaceHelperMBean {
 													}
 												}
 
-											});
+											}
+										);
 									}
 									catch (InterruptedException | InvocationTargetException e) {
 									}
@@ -116,7 +118,11 @@ public class WorkspaceHelper implements WorkspaceHelperMBean {
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
 			IProjectDescription description = workspace.loadProjectDescription(
-				new Path(dir.getAbsolutePath()).append(".project"));
+				new Path(
+					dir.getAbsolutePath()
+				).append(
+					".project"
+				));
 
 			String name = description.getName();
 
@@ -167,7 +173,11 @@ public class WorkspaceHelper implements WorkspaceHelperMBean {
 						@Override
 						public void run() {
 							try {
-								new ProgressMonitorDialog(UIUtil.getActiveShell()).run(true, true, runnable);
+								new ProgressMonitorDialog(
+									UIUtil.getActiveShell()
+								).run(
+									true, true, runnable
+								);
 							}
 							catch (InterruptedException | InvocationTargetException e) {
 							}

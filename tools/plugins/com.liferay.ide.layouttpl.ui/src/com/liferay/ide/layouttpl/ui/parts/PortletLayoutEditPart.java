@@ -134,6 +134,7 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 		// need to rebuild column widths based on weight
 
 		if (numColumns > 0) {
+
 			/**
 			 * get width of our own part to calculate new width this method is
 			 * invoked recursively, so it's complicated to compute the very

@@ -51,7 +51,9 @@ public class PortalJBossBundleFactory extends AbstractPortalBundleFactory {
 		if (FileUtil.exists(bundlesPath) && FileUtil.exists(modulesPath) && FileUtil.exists(standalonePath) &&
 			FileUtil.exists(binPath)) {
 
-			String mainFolder = new Path("modules/org/jboss/as/server/main").toOSString();
+			String mainFolder = new Path(
+				"modules/org/jboss/as/server/main"
+			).toOSString();
 
 			return JavaUtil.scanFolderJarsForManifestProp(path.toFile(), mainFolder, _JBAS7_RELEASE_VERSION, "7.");
 		}

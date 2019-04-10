@@ -21,7 +21,9 @@ import org.eclipse.sapphire.modeling.annotations.Label;
  */
 public enum ProfileLocation {
 
-	@Label(standard = "Project pom.xml") projectPom,
-	@Label(standard = "User settings at ${user.home}/.m2/settings.xml") userSettings
+	@Label(standard = "Project pom.xml")
+	projectPom,
+	@Label(standard = "User settings at ${user.home}/.m2/settings.xml")
+	userSettings
 
 }

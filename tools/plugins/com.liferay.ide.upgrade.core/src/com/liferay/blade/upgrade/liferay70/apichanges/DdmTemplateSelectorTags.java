@@ -23,14 +23,15 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf", "problem.title=Changed Usage of the liferay-ui:ddm-template-selector Tag",
-	"problem.section=#changed-usage-of-the-liferay-uiddm-template-selector-tag",
-	"problem.summary=The attribute classNameId of the liferay-ui:ddm-template-selector taglib tag has been renamed c" +
-		"lassName",
-	"problem.tickets=LPS-53790", "auto.correct=jsptag", "version=7.0"
-},
-	service = {AutoMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=jsp,jspf", "problem.title=Changed Usage of the liferay-ui:ddm-template-selector Tag",
+		"problem.section=#changed-usage-of-the-liferay-uiddm-template-selector-tag",
+		"problem.summary=The attribute classNameId of the liferay-ui:ddm-template-selector taglib tag has been renamed className",
+		"problem.tickets=LPS-53790", "auto.correct=jsptag", "version=7.0"
+	},
+	service = {AutoMigrator.class, FileMigrator.class}
+)
 public class DdmTemplateSelectorTags extends JSPTagMigrator {
 
 	public DdmTemplateSelectorTags() {

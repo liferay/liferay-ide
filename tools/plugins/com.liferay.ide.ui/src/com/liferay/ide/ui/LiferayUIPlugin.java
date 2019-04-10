@@ -220,7 +220,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 						if ((content != null) && (content.indexOf("label=\"Liferay\"") != -1)) {
 							content = content.replaceFirst("label=\"Liferay\"", "label=\"Liferay Plugins\"");
 
-							try (InputStream ins = new ByteArrayInputStream(content.getBytes());) {
+							try (InputStream ins = new ByteArrayInputStream(content.getBytes())) {
 								FileUtil.writeFile(file, ins);
 							}
 							catch (Exception e) {
@@ -408,7 +408,9 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 			SDK sdk = SDKUtil.createSDKFromLocation(new Path(liferay7SDKdir));
 
 			if (sdk != null) {
-				new WorkspaceJob("Opening Liferay 7 Plugins SDK Project") {
+				new WorkspaceJob(
+					"Opening Liferay 7 Plugins SDK Project"
+				) {
 
 					@Override
 					public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {

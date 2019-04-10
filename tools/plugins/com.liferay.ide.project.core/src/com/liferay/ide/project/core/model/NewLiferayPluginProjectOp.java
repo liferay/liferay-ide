@@ -248,8 +248,9 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement {
 	@Label(standard = "plugin type")
 	@Listeners(PluginTypeListener.class)
 	@Services(
-		value =
-			{@Service(impl = PluginTypePossibleValuesService.class), @Service(impl = PluginTypeValidationService.class)}
+		value = {
+			@Service(impl = PluginTypePossibleValuesService.class), @Service(impl = PluginTypeValidationService.class)
+		}
 	)
 	@Type(base = PluginType.class)
 	public ValueProperty PROP_PLUGIN_TYPE = new ValueProperty(TYPE, "PluginType");

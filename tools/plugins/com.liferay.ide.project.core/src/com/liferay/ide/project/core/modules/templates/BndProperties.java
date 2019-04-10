@@ -386,7 +386,7 @@ public class BndProperties extends Properties {
 
 	@Override
 	public void store(OutputStream out, String header) throws IOException {
-		try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(out));) {
+		try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(out))) {
 			if (header != null) {
 				writer.println("#" + header);
 

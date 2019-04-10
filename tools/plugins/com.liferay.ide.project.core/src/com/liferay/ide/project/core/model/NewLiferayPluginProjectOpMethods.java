@@ -211,7 +211,7 @@ public class NewLiferayPluginProjectOpMethods {
 
 		Path currentLocation = _getter.get(op.getLocation());
 
-		File param = currentLocation != null ? currentLocation.toFile() : null;
+		File param = (currentLocation != null) ? currentLocation.toFile() : null;
 
 		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = _getter.get(op.getProjectProvider());
 
@@ -280,7 +280,8 @@ public class NewLiferayPluginProjectOpMethods {
 			}
 		}
 
-		return (projectName == null ? StringPool.EMPTY : projectName) + (suffix == null ? StringPool.EMPTY : suffix);
+		return ((projectName == null) ? StringPool.EMPTY : projectName) +
+			((suffix == null) ? StringPool.EMPTY : suffix);
 	}
 
 	public static boolean supportsTypePlugin(NewLiferayPluginProjectOp op, String type) {
@@ -491,8 +492,9 @@ public class NewLiferayPluginProjectOpMethods {
 
 				IFolder docroot = webproject.getDefaultDocrootFolder();
 
-				IFile[] sampleFiles =
-					{docroot.getFile("view.jsp"), docroot.getFile("css/main.css"), docroot.getFile("js/main.js")};
+				IFile[] sampleFiles = {
+					docroot.getFile("view.jsp"), docroot.getFile("css/main.css"), docroot.getFile("js/main.js")
+				};
 
 				for (IFile file : sampleFiles) {
 					if (FileUtil.exists(file)) {
@@ -537,6 +539,7 @@ public class NewLiferayPluginProjectOpMethods {
 		}
 	}
 
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
+	};
 
 }

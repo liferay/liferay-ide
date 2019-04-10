@@ -198,7 +198,9 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 				}
 			}
 
-			new Job("publish theme delta") {
+			new Job(
+				"publish theme delta"
+			) {
 
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {

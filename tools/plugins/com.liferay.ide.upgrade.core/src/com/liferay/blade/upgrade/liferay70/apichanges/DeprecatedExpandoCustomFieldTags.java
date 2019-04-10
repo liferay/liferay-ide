@@ -23,13 +23,15 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf", "problem.title=Moved the Expando Custom Field Tags to liferay-expando Taglib",
-	"problem.section=#moved-the-expando-custom-field-tags-to-liferay-expando-taglib",
-	"problem.summary=Moved the Expando Custom Field Tags to liferay-expando Taglib", "problem.tickets=LPS-69400",
-	"auto.correct=jsptag", "version=7.0"
-},
-	service = {AutoMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=jsp,jspf", "problem.title=Moved the Expando Custom Field Tags to liferay-expando Taglib",
+		"problem.section=#moved-the-expando-custom-field-tags-to-liferay-expando-taglib",
+		"problem.summary=Moved the Expando Custom Field Tags to liferay-expando Taglib", "problem.tickets=LPS-69400",
+		"auto.correct=jsptag", "version=7.0"
+	},
+	service = {AutoMigrator.class, FileMigrator.class}
+)
 public class DeprecatedExpandoCustomFieldTags extends JSPTagMigrator {
 
 	public DeprecatedExpandoCustomFieldTags() {
@@ -41,7 +43,8 @@ public class DeprecatedExpandoCustomFieldTags extends JSPTagMigrator {
 		"liferay-expando:custom-attributes-available"
 	};
 
-	private static final String[] _TAG_NAMES =
-		{"liferay-ui:custom-attribute", "liferay-ui:custom-attribute-list", "liferay-ui:custom-attributes-available"};
+	private static final String[] _TAG_NAMES = {
+		"liferay-ui:custom-attribute", "liferay-ui:custom-attribute-list", "liferay-ui:custom-attributes-available"
+	};
 
 }

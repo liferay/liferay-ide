@@ -77,7 +77,7 @@ public class CleanAppServerJob extends SDKJob {
 			IServer[] servers = ServerCore.getServers();
 
 			for (IServer server : servers) {
-				String mode = server.getServerState() == IServer.STATE_STARTED ? server.getMode() : null;
+				String mode = (server.getServerState() == IServer.STATE_STARTED) ? server.getMode() : null;
 
 				if (mode != null) {
 					IRuntime serverRuntime = server.getRuntime();

@@ -38,7 +38,9 @@ public class BuildWSDDActionHandler extends SapphireActionHandler {
 		IFile file = modelElement.adapt(IFile.class);
 
 		if (FileUtil.exists(file) && ServiceUIUtil.shouldCreateServiceBuilderJob(file)) {
-			new BuildWSDDJob(file.getProject()).schedule();
+			new BuildWSDDJob(
+				file.getProject()
+			).schedule();
 		}
 
 		return null;

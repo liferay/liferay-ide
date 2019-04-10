@@ -30,7 +30,7 @@ import org.eclipse.ui.forms.editor.IFormPage;
 /**
  * @author Gregory Amerson
  */
-public abstract class ModelUndoManager implements IModelUndoManager, IModelChangedListener {
+public abstract class ModelUndoManager implements IModelChangedListener, IModelUndoManager {
 
 	public ModelUndoManager(IDEFormEditor editor) {
 		_editor = editor;

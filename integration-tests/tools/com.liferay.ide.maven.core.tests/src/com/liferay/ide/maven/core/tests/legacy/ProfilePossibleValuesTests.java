@@ -53,6 +53,7 @@ public class ProfilePossibleValuesTests {
 		Assert.assertEquals(firstProfileId + ',' + secondProfileId, _getter.get(op.getActiveProfilesValue()));
 	}
 
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
+	};
 
 }

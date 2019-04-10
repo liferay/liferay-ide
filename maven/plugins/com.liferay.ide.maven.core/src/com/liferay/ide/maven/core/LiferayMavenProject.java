@@ -50,7 +50,7 @@ import org.eclipse.m2e.jdt.MavenJdtPlugin;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public abstract class LiferayMavenProject extends BaseLiferayProject implements IMavenProject, EventListener {
+public abstract class LiferayMavenProject extends BaseLiferayProject implements EventListener, IMavenProject {
 
 	public LiferayMavenProject(IProject project) {
 		super(project);

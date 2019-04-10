@@ -83,7 +83,9 @@ public class HookCustomJspValidationResolution implements IMarkerResolution2 {
 								UIUtil.getActiveShell(), Msgs.revalidateTitle, Msgs.revalidateMsg);
 
 							if (revalidate) {
-								new WorkspaceJob("revalidating " + project.getName()) {
+								new WorkspaceJob(
+									"revalidating " + project.getName()
+								) {
 
 									@Override
 									public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {

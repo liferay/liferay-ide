@@ -41,7 +41,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlSchema;
 	location = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd",
 	namespace = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
 )
-public interface PortletApp extends ResourceBundle, Identifiable {
+public interface PortletApp extends Identifiable, ResourceBundle {
 
 	public ElementType TYPE = new ElementType(PortletApp.class);
 

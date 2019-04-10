@@ -77,7 +77,7 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
  */
 @SuppressWarnings({"restriction", "rawtypes"})
 public class PortalServerBehavior
-	extends ServerBehaviourDelegate implements ILiferayServerBehavior, IJavaLaunchConfigurationConstants {
+	extends ServerBehaviourDelegate implements IJavaLaunchConfigurationConstants, ILiferayServerBehavior {
 
 	public static final String ATTR_STOP = "stop-server";
 
@@ -266,8 +266,8 @@ public class PortalServerBehavior
 				return;
 			}
 
-			ILaunchConfiguration launchConfiguration =
-				getServer().getLaunchConfiguration(false, new NullProgressMonitor());
+			ILaunchConfiguration launchConfiguration = getServer().getLaunchConfiguration(
+				false, new NullProgressMonitor());
 
 			if (launchConfiguration != null) {
 				AbstractSourceLookupDirector abstractSourceLookupDirector =
@@ -354,7 +354,11 @@ public class PortalServerBehavior
 
 				String typeId = vmInstallType.getId();
 
-				IPath typeIdPath = new Path(JavaRuntime.JRE_CONTAINER).append(typeId);
+				IPath typeIdPath = new Path(
+					JavaRuntime.JRE_CONTAINER
+				).append(
+					typeId
+				);
 
 				IRuntimeClasspathEntry newJRECp = JavaRuntime.newRuntimeContainerClasspathEntry(
 					typeIdPath.append(vmInstall.getName()), IRuntimeClasspathEntry.BOOTSTRAP_CLASSES);
@@ -701,7 +705,7 @@ public class PortalServerBehavior
 			retval = orgArgsString;
 		}
 		else {
-			retval = orgArgsString == null ? "" : orgArgsString;
+			retval = (orgArgsString == null) ? "" : orgArgsString;
 
 			String xbootClasspath = "";
 
@@ -777,11 +781,13 @@ public class PortalServerBehavior
 
 								// If remainder will become the first argument, remove leading blanks
 
-								while ((index2 < retval.length()) &&
-									   Character.isWhitespace(retval.charAt(index2)))index2 += 1;
+								while ((index2 < retval.length()) && Character.isWhitespace(retval.charAt(index2)))
+									index2 += 1;
 								retval = s + retval.substring(index2);
 							}
-							else retval = s;
+
+							else
+							retval = s;
 						}
 					}
 					else if (ind2 >= 0) {
@@ -801,11 +807,12 @@ public class PortalServerBehavior
 
 								// If remainder will become the first argument, remove leading blanks
 
-								while ((index2 < retval.length()) &&
-									   Character.isWhitespace(retval.charAt(index2)))index2 += 1;
+								while ((index2 < retval.length()) && Character.isWhitespace(retval.charAt(index2)))
+									index2 += 1;
 								retval = s + retval.substring(index2);
 							}
-							else retval = s;
+							else
+							retval = s;
 						}
 					}
 					else {
@@ -825,8 +832,8 @@ public class PortalServerBehavior
 
 								// Remove leading blanks
 
-								while ((index2 < retval.length()) &&
-									   Character.isWhitespace(retval.charAt(index2)))index2 += 1;
+								while ((index2 < retval.length()) && Character.isWhitespace(retval.charAt(index2)))
+									index2 += 1;
 								retval = s + retval.substring(index2);
 							}
 							else {
@@ -860,7 +867,7 @@ public class PortalServerBehavior
 
 					int tailIndex = _getNextToken(retval, xbootIndex);
 
-					String tail = retval.substring(tailIndex == retval.length() ? retval.length() : tailIndex + 1);
+					String tail = retval.substring((tailIndex == retval.length()) ? retval.length() : tailIndex + 1);
 
 					retval = head + tail;
 

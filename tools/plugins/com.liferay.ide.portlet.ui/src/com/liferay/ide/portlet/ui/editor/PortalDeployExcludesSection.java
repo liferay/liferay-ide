@@ -199,103 +199,103 @@ public class PortalDeployExcludesSection
 		}
 
 		/**
-
-				if (event.getChangedProperty() == IPluginBase.P_IMPORT_ORDER) {
-					refresh();
-					updateButtons();
-
-					return;
-				}
-
-				Object[] changedObjects = event.getChangedObjects();
-
-				if (changedObjects[0] instanceof IPluginImport) {
-					int index = 0;
-
-					for (Object changeObject : changedObjects) {
-						IPluginImport iimport = (IPluginImport)changeObject;
-
-						if (event.getChangeType() == IModelChangedEvent.INSERT) {
-							ImportObject iobj = new ImportObject(iimport);
-
-							if (fImports == null) {
-
-								// createImportObjects method will find new addition
-
-								createImportObjects();
-							}
-							else {
-								int insertIndex = getImportInsertIndex();
-
-								if (insertIndex < 0) {
-
-									// Add Button
-
-									fImports.add(iobj);
-								}
-								else {
-
-									// DND
-
-									fImports.add(insertIndex, iobj);
-								}
-							}
-						}
-						else {
-							ImportObject iobj = findImportObject(iimport);
-
-							if (iobj != null) {
-								if (event.getChangeType() == IModelChangedEvent.REMOVE) {
-									if (fImports == null) {
-
-										// createImportObjects method will not include the removed import
-
-										createImportObjects();
-									}
-									else fImports.remove(iobj);
-									Table table = fImportViewer.getTable();
-
-									index = table.getSelectionIndex();
-									fImportViewer.remove(iobj);
-								}
-								else {
-									fImportViewer.update(iobj, null);
-								}
-							}
-						}
-					}
-
-					if (event.getChangeType() == IModelChangedEvent.INSERT) {
-						if (changedObjects.length > 0) {
-
-							// Refresh the viewer
-
-							fImportViewer.refresh();
-
-							// Get the last import added to the viewer
-
-							IPluginImport lastImport = (IPluginImport)changedObjects[changedObjects.length - 1];
-
-							//Find the corresponding bundle object for the plugin import
-							ImportObject lastImportObject = findImportObject(lastImport);
-
-							if (lastImportObject != null) {
-								fImportViewer.setSelection(new StructuredSelection(lastImportObject));
-							}
-
-							fImportViewer.getTable().setFocus();
-						}
-					}
-					else if (event.getChangeType() == IModelChangedEvent.REMOVE) {
-						Table table = fImportViewer.getTable();
-
-						table.setSelection(index < table.getItemCount() ? index : table.getItemCount() - 1);
-					}
-				}
-				else {
-					fImportViewer.update(((IStructuredSelection)fImportViewer.getSelection()).toArray(), null);
-				}
-
+		 
+		 if (event.getChangedProperty() == IPluginBase.P_IMPORT_ORDER) {
+		 refresh();
+		 updateButtons();
+		 
+		 return;
+		 }
+		 
+		 Object[] changedObjects = event.getChangedObjects();
+		 
+		 if (changedObjects[0] instanceof IPluginImport) {
+		 int index = 0;
+		 
+		 for (Object changeObject : changedObjects) {
+		 IPluginImport iimport = (IPluginImport)changeObject;
+		 
+		 if (event.getChangeType() == IModelChangedEvent.INSERT) {
+		 ImportObject iobj = new ImportObject(iimport);
+		 
+		 if (fImports == null) {
+		 
+		 // createImportObjects method will find new addition
+		 
+		 createImportObjects();
+		 }
+		 else {
+		 int insertIndex = getImportInsertIndex();
+		 
+		 if (insertIndex < 0) {
+		 
+		 // Add Button
+		 
+		 fImports.add(iobj);
+		 }
+		 else {
+		 
+		 // DND
+		 
+		 fImports.add(insertIndex, iobj);
+		 }
+		 }
+		 }
+		 else {
+		 ImportObject iobj = findImportObject(iimport);
+		 
+		 if (iobj != null) {
+		 if (event.getChangeType() == IModelChangedEvent.REMOVE) {
+		 if (fImports == null) {
+		 
+		 // createImportObjects method will not include the removed import
+		 
+		 createImportObjects();
+		 }
+		 else fImports.remove(iobj);
+		 Table table = fImportViewer.getTable();
+		 
+		 index = table.getSelectionIndex();
+		 fImportViewer.remove(iobj);
+		 }
+		 else {
+		 fImportViewer.update(iobj, null);
+		 }
+		 }
+		 }
+		 }
+		 
+		 if (event.getChangeType() == IModelChangedEvent.INSERT) {
+		 if (changedObjects.length > 0) {
+		 
+		 // Refresh the viewer
+		 
+		 fImportViewer.refresh();
+		 
+		 // Get the last import added to the viewer
+		 
+		 IPluginImport lastImport = (IPluginImport)changedObjects[changedObjects.length - 1];
+		 
+		 //Find the corresponding bundle object for the plugin import
+		 ImportObject lastImportObject = findImportObject(lastImport);
+		 
+		 if (lastImportObject != null) {
+		 fImportViewer.setSelection(new StructuredSelection(lastImportObject));
+		 }
+		 
+		 fImportViewer.getTable().setFocus();
+		 }
+		 }
+		 else if (event.getChangeType() == IModelChangedEvent.REMOVE) {
+		 Table table = fImportViewer.getTable();
+		 
+		 table.setSelection(index < table.getItemCount() ? index : table.getItemCount() - 1);
+		 }
+		 }
+		 else {
+		 fImportViewer.update(((IStructuredSelection)fImportViewer.getSelection()).toArray(), null);
+		 }
+		 
 		 */
 	}
 
@@ -386,19 +386,19 @@ public class PortalDeployExcludesSection
 
 	protected void buttonSelected(int index) {
 		switch (index) {
-			case _ADD_INDEX :
+			case _ADD_INDEX:
 				_handleAdd();
 
 				break;
-			case _REMOVE_INDEX :
+			case _REMOVE_INDEX:
 				_handleRemove();
 
 				break;
-			case _UP_INDEX :
+			case _UP_INDEX:
 				_handleUp();
 
 				break;
-			case _DOWN_INDEX :
+			case _DOWN_INDEX:
 				_handleDown();
 
 				break;
@@ -593,9 +593,7 @@ public class PortalDeployExcludesSection
 				}
 			}
 		}
-
-		else
-		{
+		else {
 			MessageDialog.openInformation(
 				getPage().getShell(), Msgs.liferayPluginPackageEditor, Msgs.notDeterminePortalDirectory);
 		}
@@ -747,8 +745,7 @@ public class PortalDeployExcludesSection
 		public static String portalDeployExcludeJars;
 		public static String remove;
 
-		static
-		{
+		static {
 			initializeMessages(PortalDeployExcludesSection.class.getName(), Msgs.class);
 		}
 

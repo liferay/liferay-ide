@@ -79,6 +79,7 @@ public class LiferayPublishOperation extends PublishOperation {
 			_helper = new PublishHelper(temp.toFile());
 		}
 		else {
+
 			/**
 			 * We are doomed without a base directory. However, allow the catastrophe
 			 * to occur elsewhere and hope for a useful error message.
@@ -98,7 +99,7 @@ public class LiferayPublishOperation extends PublishOperation {
 			}
 		}
 
-			// Else a child module
+		// Else a child module
 
 		else {
 			Properties p = server.loadModulePublishLocations();
@@ -150,7 +151,8 @@ public class LiferayPublishOperation extends PublishOperation {
 
 		int size = a.length;
 
-		for (int i = 0; i < size; i++)list.add(a[i]);
+		for (int i = 0; i < size; i++)
+			list.add(a[i]);
 	}
 
 	protected static void throwException(List<IStatus> status) throws CoreException {

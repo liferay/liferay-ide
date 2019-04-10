@@ -157,6 +157,7 @@ public class ImportLiferayWorkspaceMavenTests extends ProjectOpBase<ImportLifera
 		JobHelpers.waitForJobsToComplete();
 	}
 
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
+	};
 
 }

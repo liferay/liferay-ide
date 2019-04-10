@@ -34,7 +34,7 @@ import org.eclipse.ui.IWorkbenchWizard;
  * @author Terry Jia
  */
 public class NewModuleFragmentFilesWizard
-	extends SapphireWizard<NewModuleFragmentFilesOp> implements IWorkbenchWizard, INewWizard {
+	extends SapphireWizard<NewModuleFragmentFilesOp> implements INewWizard, IWorkbenchWizard {
 
 	public NewModuleFragmentFilesWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(NewModuleFragmentFilesWizard.class).wizard());

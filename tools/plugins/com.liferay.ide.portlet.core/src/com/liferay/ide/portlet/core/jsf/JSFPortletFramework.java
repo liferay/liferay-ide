@@ -59,7 +59,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
  */
 @SuppressWarnings("restriction")
 public class JSFPortletFramework
-	extends BasePortletFramework implements IJSFPortletFrameworkProperties, IJSFFacetInstallDataModelProperties {
+	extends BasePortletFramework implements IJSFFacetInstallDataModelProperties, IJSFPortletFrameworkProperties {
 
 	public static final String DEFAULT_FRAMEWORK_NAME = "jsf-2.x";
 

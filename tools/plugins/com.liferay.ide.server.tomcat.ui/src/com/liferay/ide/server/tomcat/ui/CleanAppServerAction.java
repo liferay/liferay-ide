@@ -123,7 +123,9 @@ public class CleanAppServerAction extends AbstractObjectAction {
 		int retval = dialog.open();
 
 		if (retval == MessageDialog.OK) {
-			new CleanAppServerJob(project, bundleZipLocation).schedule();
+			new CleanAppServerJob(
+				project, bundleZipLocation
+			).schedule();
 		}
 	}
 
@@ -194,7 +196,11 @@ public class CleanAppServerAction extends AbstractObjectAction {
 
 				ZipEntry rootEntry = zis.getNextEntry();
 
-				rootEntryName = new Path(rootEntry.getName()).segment(0);
+				rootEntryName = new Path(
+					rootEntry.getName()
+				).segment(
+					0
+				);
 
 				if (rootEntryName.endsWith(StringPool.FORWARD_SLASH)) {
 					rootEntryName = rootEntryName.substring(0, rootEntryName.length() - 1);

@@ -595,7 +595,7 @@ public class RemoteServerBehavior
 	protected int publishModuleFull(IModule[] module, int deltaKind, IProgressMonitor monitor) throws CoreException {
 		if (module == null) {
 			throw new CoreException(
-				LiferayServerCore.error("Cannot publish module with length " + (module != null ? module.length : 0)));
+				LiferayServerCore.error("Cannot publish module with length " + ((module != null) ? module.length : 0)));
 		}
 
 		if (monitor == null) {
@@ -708,7 +708,7 @@ public class RemoteServerBehavior
 	protected int removeModule(IModule[] module, IProgressMonitor monitor) throws CoreException {
 		if (module == null) {
 			throw new CoreException(
-				LiferayServerCore.error("Cannot publish module with length " + (module != null ? module.length : 0)));
+				LiferayServerCore.error("Cannot publish module with length " + ((module != null) ? module.length : 0)));
 		}
 
 		if (monitor == null) {

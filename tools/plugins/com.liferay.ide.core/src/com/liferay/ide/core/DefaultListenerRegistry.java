@@ -34,6 +34,7 @@ public final class DefaultListenerRegistry implements ListenerRegistry {
 	@Override
 	public void dispatch(Event event) {
 		Collection<EventListener> listeners;
+
 		synchronized (_lock) {
 			listeners = new ArrayList<>(_listeners);
 		}

@@ -233,8 +233,8 @@ public class SDKUtil {
 		try {
 			String version = readSDKVersion(location);
 
-			retval = CoreUtil.compareVersions(
-				Version.parseVersion(version), ISDKConstants.LEAST_SUPPORTED_SDK_VERSION) >= 0;
+			retval =
+				CoreUtil.compareVersions(Version.parseVersion(version), ISDKConstants.LEAST_SUPPORTED_SDK_VERSION) >= 0;
 		}
 		catch (Exception e) {
 
@@ -366,7 +366,11 @@ public class SDKUtil {
 
 	public static void saveSDKNameSetting(IProject project, String sdkName) {
 		try {
-			IEclipsePreferences prefs = new ProjectScope(project).getNode(SDKCorePlugin.PLUGIN_ID);
+			IEclipsePreferences prefs = new ProjectScope(
+				project
+			).getNode(
+				SDKCorePlugin.PLUGIN_ID
+			);
 
 			prefs.put(SDKCorePlugin.PREF_KEY_SDK_NAME, sdkName);
 			prefs.flush();

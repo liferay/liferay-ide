@@ -50,7 +50,9 @@ public class LiferayVersionDefaultValueService extends DefaultValueService imple
 
 		if (_possibleValues.size() > 0) {
 			if (_runtimeVersion == null) {
-				new Job("get runtime version") {
+				new Job(
+					"get runtime version"
+				) {
 
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {

@@ -88,7 +88,7 @@ import org.w3c.dom.Document;
 @SuppressWarnings("restriction")
 public class NewMavenPluginProjectProvider
 	extends LiferayMavenProjectProvider
-	implements NewLiferayProjectProvider<NewLiferayPluginProjectOp>, MavenProfileCreator {
+	implements MavenProfileCreator, NewLiferayProjectProvider<NewLiferayPluginProjectOp> {
 
 	@Override
 	public IStatus createNewProject(NewLiferayPluginProjectOp op, IProgressMonitor monitor) throws CoreException {
@@ -388,7 +388,11 @@ public class NewMavenPluginProjectProvider
 	private File _getBackupFile(File file) {
 		Calendar calendar = Calendar.getInstance();
 
-		String suffix = new SimpleDateFormat("yyyyMMddhhmmss").format(calendar.getTime());
+		String suffix = new SimpleDateFormat(
+			"yyyyMMddhhmmss"
+		).format(
+			calendar.getTime()
+		);
 
 		return new File(file.getParentFile(), file.getName() + "." + suffix);
 	}

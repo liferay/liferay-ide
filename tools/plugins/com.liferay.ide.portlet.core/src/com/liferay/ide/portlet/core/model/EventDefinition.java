@@ -35,7 +35,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  */
 @Image(path = "images/elcl16/event_16x16.gif")
 @Label(full = "Event Definition", standard = "Event Definition")
-public interface EventDefinition extends QName, Identifiable, Describeable {
+public interface EventDefinition extends Describeable, Identifiable, QName {
 
 	public ElementType TYPE = new ElementType(EventDefinition.class);
 

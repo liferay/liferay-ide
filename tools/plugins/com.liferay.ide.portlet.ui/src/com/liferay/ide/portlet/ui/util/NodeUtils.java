@@ -59,7 +59,11 @@ public class NodeUtils {
 
 						for (IFile prop : props) {
 							try (InputStream inputStream = prop.getContents()) {
-								KeyInfo info = new PropertiesFileLookup(inputStream, key, loadValues).getKeyInfo(key);
+								KeyInfo info = new PropertiesFileLookup(
+									inputStream, key, loadValues
+								).getKeyInfo(
+									key
+								);
 
 								if ((info != null) && (info.offset >= 0)) {
 									keys.add(new MessageKey(prop, key, info.offset, info.length, info.value));

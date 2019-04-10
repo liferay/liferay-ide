@@ -124,8 +124,7 @@ public class UIUtil {
 	}
 
 	public static void executeCommand(String commandId, ISelection selection, Map<String, Object> parameters)
-		throws ExecutionException, NotDefinedException, NotEnabledException,
-			   NotHandledException {
+		throws ExecutionException, NotDefinedException, NotEnabledException, NotHandledException {
 
 		IEvaluationContext evaluationContext = new EvaluationContext(null, Collections.emptyList());
 

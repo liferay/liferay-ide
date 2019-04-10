@@ -55,8 +55,8 @@ public class BaseCUCache {
 					// prefer the path that is shortest (to avoid a nested
 					// version)
 
-					if (FileUtil.getSegmentCount(iFile.getFullPath()) <
-							FileUtil.getSegmentCount(retval.getFullPath())) {
+					if (FileUtil.getSegmentCount(iFile.getFullPath()) < FileUtil.getSegmentCount(
+							retval.getFullPath())) {
 
 						retval = iFile;
 					}

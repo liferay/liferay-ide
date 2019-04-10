@@ -88,7 +88,9 @@ public class ProjectRecord {
 			path = liferayProjectDir.getPath();
 		}
 		else if (project != null) {
-			path = new Path(projectLocation).toOSString();
+			path = new Path(
+				projectLocation
+			).toOSString();
 		}
 
 		return NLS.bind("{0} ({1})", projectName, path);

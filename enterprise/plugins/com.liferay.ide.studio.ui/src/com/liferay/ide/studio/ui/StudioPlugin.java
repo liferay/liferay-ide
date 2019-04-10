@@ -101,7 +101,7 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 
-		return !(preferencesService.getBoolean(PLUGIN_ID, FIRST_LAUNCH_COMPLETE, false, scopes));
+		return !preferencesService.getBoolean(PLUGIN_ID, FIRST_LAUNCH_COMPLETE, false, scopes);
 	}
 
 	public static boolean isProductRunning() {
@@ -195,10 +195,7 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 									SnippetsUtil.importSnippetsFromFile(snippetFile);
 								}
 								catch (Exception ex) {
-									logError(
-										"Failed to import snippet file: " +
-											snippetFile.getName(),
-										ex);
+									logError("Failed to import snippet file: " + snippetFile.getName(), ex);
 								}
 
 								_storeFileImported(snippetFile);

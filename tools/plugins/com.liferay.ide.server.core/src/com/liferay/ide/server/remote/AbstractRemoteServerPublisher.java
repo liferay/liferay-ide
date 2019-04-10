@@ -124,7 +124,7 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
 			file += "/.*";
 		}
 
-		deleteEntries.put(zipEntry, (existingFiles != null ? existingFiles : StringPool.EMPTY) + (file + "\n"));
+		deleteEntries.put(zipEntry, ((existingFiles != null) ? existingFiles : StringPool.EMPTY) + (file + "\n"));
 	}
 
 	protected void addToZip(IPath path, IResource resource, ZipOutputStream zip, boolean adjustGMTOffset)

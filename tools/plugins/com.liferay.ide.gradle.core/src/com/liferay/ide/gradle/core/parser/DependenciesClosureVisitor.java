@@ -79,7 +79,7 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 
 			String[] groups = text.split(":");
 
-			String version = groups.length > 2 ? groups[2] : "";
+			String version = (groups.length > 2) ? groups[2] : "";
 
 			Artifact artifact = new Artifact();
 

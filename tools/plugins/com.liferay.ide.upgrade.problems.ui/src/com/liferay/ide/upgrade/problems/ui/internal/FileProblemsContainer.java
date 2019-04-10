@@ -70,7 +70,7 @@ public class FileProblemsContainer {
 	public int hashCode() {
 		int hash = 31;
 
-		hash = 31 * hash + (_file != null ? _file.hashCode() : 0);
+		hash = 31 * hash + ((_file != null) ? _file.hashCode() : 0);
 
 		Stream<UpgradeProblem> problemStream = _upgradeProblems.stream();
 

@@ -85,7 +85,11 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
 		if (key != null) {
 			String gif = "/" + key + ".png";
 
-			IPath path = new Path(_ICON_DIR).append(gif);
+			IPath path = new Path(
+				_ICON_DIR
+			).append(
+				gif
+			);
 
 			URL gifImageURL = FileLocator.find(Platform.getBundle(ProjectUI.PLUGIN_ID), path, null);
 

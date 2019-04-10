@@ -79,7 +79,7 @@ public class ProjectProblemsContainer {
 	public int hashCode() {
 		int hash = 31;
 
-		hash = 31 * hash + (_projectName != null ? _projectName.hashCode() : 0);
+		hash = 31 * hash + ((_projectName != null) ? _projectName.hashCode() : 0);
 
 		Stream<FileProblemsContainer> fileProblemStream = _fileProblemsContainers.stream();
 

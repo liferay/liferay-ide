@@ -755,7 +755,6 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 				// Do nothing
 
 			}
-
 		}
 	}
 

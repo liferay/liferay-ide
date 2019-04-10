@@ -30,8 +30,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
  */
 @Component(property = {
 	"file.extensions=java,jsp,jspf", "problem.title=Web Content Articles Now Require a Structure and Template",
-	"problem.summary=Web content is now required to use a structure and template. A default structure and template " +
-		"named Basic Web Content was added to the global scope, and can be modified or deleted.",
+	"problem.summary=Web content is now required to use a structure and template. A default structure and template named Basic Web Content was added to the global scope, and can be modified or deleted.",
 	"problem.tickets=LPS-45107", "problem.section=#web-content-articles-now-require-a-structure-and-template",
 	 "version=7.0"
 },

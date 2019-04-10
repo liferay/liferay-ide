@@ -60,8 +60,9 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 	@Override
 	public boolean isNeedUpgrade(IFile pomFile) {
 		String tagName = "artifactId";
-		String[] values =
-			{"liferay-maven-plugin", "portal-service", "util-java", "util-bridges", "util-taglib", "util-slf4j"};
+		String[] values = {
+			"liferay-maven-plugin", "portal-service", "util-java", "util-bridges", "util-taglib", "util-slf4j"
+		};
 
 		IDOMModel domModel = null;
 
@@ -164,7 +165,7 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 								pluginsNode.removeChild(liferayMavenPluginNode);
 							}
 
-								// fix dependencies
+							// fix dependencies
 
 							else if (textContent.equals("portal-service") || textContent.equals("util-java") ||
 									 textContent.equals("util-bridges") || textContent.equals("util-taglib") ||

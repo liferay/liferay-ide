@@ -102,7 +102,6 @@ public class CopyPortalSettingsCommand implements Command {
 		return null;
 	}
 
-	private static final String[] _PROPERTIES_FILENAME_PATTERNS =
-		{"portal-.*\\.properties", "system-ext\\.properties", };
+	private static final String[] _PROPERTIES_FILENAME_PATTERNS = {"portal-.*\\.properties", "system-ext\\.properties"};
 
 }

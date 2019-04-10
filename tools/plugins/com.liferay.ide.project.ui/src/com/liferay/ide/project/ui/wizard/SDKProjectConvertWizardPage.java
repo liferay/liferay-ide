@@ -136,8 +136,8 @@ public class SDKProjectConvertWizardPage
 						monitor.worked(10);
 
 						if (dirSelected && directory.isDirectory()) {
-							ProjectRecord[] projectToConvert =
-								(ProjectRecord[])getDataModel().getProperty(SELECTED_PROJECTS);
+							ProjectRecord[] projectToConvert = (ProjectRecord[])getDataModel().getProperty(
+								SELECTED_PROJECTS);
 
 							IPath dir = new Path(directory.getPath());
 
@@ -298,8 +298,16 @@ public class SDKProjectConvertWizardPage
 
 		Control control = projectsList.getControl();
 
-		gridData.widthHint = new PixelConverter(control).convertWidthInCharsToPixels(25);
-		gridData.heightHint = new PixelConverter(control).convertHeightInCharsToPixels(10);
+		gridData.widthHint = new PixelConverter(
+			control
+		).convertWidthInCharsToPixels(
+			25
+		);
+		gridData.heightHint = new PixelConverter(
+			control
+		).convertHeightInCharsToPixels(
+			10
+		);
 
 		control.setLayoutData(gridData);
 

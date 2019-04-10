@@ -317,7 +317,10 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
 				if (portletProject != null) {
 					retval = new MavenProjectBuilder(
-						portletProject).getDocrootFile("WEB-INF/" + ILiferayConstants.SERVICE_XML_FILE);
+						portletProject
+					).getDocrootFile(
+						"WEB-INF/" + ILiferayConstants.SERVICE_XML_FILE
+					);
 				}
 			}
 		}
@@ -351,7 +354,11 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 				IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
 
 				IFile apiBasePomFile = workspaceRoot.getFileForLocation(
-					new Path(apiBaseDirValue).append(IMavenConstants.POM_FILE_NAME));
+					new Path(
+						apiBaseDirValue
+					).append(
+						IMavenConstants.POM_FILE_NAME
+					));
 
 				IMavenProjectFacade apiBaseFacade = this.projectManager.create(apiBasePomFile, true, monitor);
 

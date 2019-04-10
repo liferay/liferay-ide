@@ -91,7 +91,7 @@ public class DependenciesFormPage extends IDEFormPage {
 
 		// "Up", // "Down"
 
-		return new String[] {Msgs.add, Msgs.remove, };
+		return new String[] {Msgs.add, Msgs.remove};
 	}
 
 	private static class Msgs extends NLS {

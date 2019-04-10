@@ -31,8 +31,7 @@ import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
  */
 @Component(property = {
 	"file.extensions=xml", "problem.title=Deprecated Category Entry for Pages",
-	"problem.summary=The category entry for Site Administration > Pages has been deprecated in favor of Site " +
-		"Administration > Navigation.",
+	"problem.summary=The category entry for Site Administration > Pages has been deprecated in favor of Site Administration > Navigation.",
 	"problem.tickets=LPS-63667", "problem.section=#deprecated-category-entry-for-pages",
 	 "version=7.0"
 },

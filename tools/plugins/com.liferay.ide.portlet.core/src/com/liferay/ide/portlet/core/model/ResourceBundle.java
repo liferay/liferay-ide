@@ -47,9 +47,12 @@ public interface ResourceBundle extends Element {
 	public void setResourceBundle(String value);
 
 	@FileExtensions(expr = "properties")
-	@Services(value = {
-		@Service(impl = GenericResourceBundlePathService.class), @Service(impl = ResourceBundleValidationService.class)
-	})
+	@Services(
+		value = {
+			@Service(impl = GenericResourceBundlePathService.class),
+			@Service(impl = ResourceBundleValidationService.class)
+		}
+	)
 	@Type(base = Path.class)
 	@ValidFileSystemResourceType(FileSystemResourceType.FILE)
 	@XmlBinding(path = "resource-bundle")

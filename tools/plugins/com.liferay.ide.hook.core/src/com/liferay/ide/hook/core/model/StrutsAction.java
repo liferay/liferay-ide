@@ -70,10 +70,12 @@ public interface StrutsAction extends Element {
 
 	@Label(standard = "Struts Action Path")
 	@Required
-	@Services(value = {
-		@Service(context = Context.METAMODEL, impl = StrutsActionPathPossibleValuesCacheService.class),
-		@Service(impl = StrutsActionPathPossibleValuesService.class)
-	})
+	@Services(
+		value = {
+			@Service(context = Context.METAMODEL, impl = StrutsActionPathPossibleValuesCacheService.class),
+			@Service(impl = StrutsActionPathPossibleValuesService.class)
+		}
+	)
 	@XmlBinding(path = "struts-action-path")
 	public ValueProperty PROP_STRUTS_ACTION_PATH = new ValueProperty(TYPE, "StrutsActionPath");
 

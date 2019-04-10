@@ -23,16 +23,16 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf",
-	"problem.title=Removed the liferay-ui:asset-categories-navigation Tag and Replaced with liferay-asset:asset-cate" +
-		"gories-navigation",
-	"problem.section=#removed-the-liferay-uiasset-categories-navigation-tag-and-replaced-with-lif",
-	"problem.summary=Removed the liferay-ui:asset-categories-navigation Tag and Replaced with liferay-asset:asset-" +
-		"categories-navigation",
-	"problem.tickets=LPS-60753", "auto.correct=jsptag", "version=7.0"
-},
-	service = {AutoMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=jsp,jspf",
+		"problem.title=Removed the liferay-ui:asset-categories-navigation Tag and Replaced with liferay-asset:asset-categories-navigation",
+		"problem.section=#removed-the-liferay-uiasset-categories-navigation-tag-and-replaced-with-lif",
+		"problem.summary=Removed the liferay-ui:asset-categories-navigation Tag and Replaced with liferay-asset:asset-categories-navigation",
+		"problem.tickets=LPS-60753", "auto.correct=jsptag", "version=7.0"
+	},
+	service = {AutoMigrator.class, FileMigrator.class}
+)
 public class AssetCategoriesNavigationTags extends JSPTagMigrator {
 
 	public AssetCategoriesNavigationTags() {

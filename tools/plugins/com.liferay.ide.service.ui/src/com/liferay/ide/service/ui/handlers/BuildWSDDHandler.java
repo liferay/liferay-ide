@@ -31,7 +31,9 @@ public class BuildWSDDHandler extends BuildServiceHandler {
 		IStatus retval = null;
 
 		try {
-			new BuildWSDDJob(project).schedule();
+			new BuildWSDDJob(
+				project
+			).schedule();
 			retval = Status.OK_STATUS;
 		}
 		catch (Exception e) {

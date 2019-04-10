@@ -21,7 +21,7 @@ import java.util.List;
  * @author Gregory Amerson
  */
 public abstract class AbstractLiferayProjectProvider
-	implements ILiferayProjectProvider, Comparable<ILiferayProjectProvider> {
+	implements Comparable<ILiferayProjectProvider>, ILiferayProjectProvider {
 
 	public AbstractLiferayProjectProvider(Class<?>[] types) {
 		_classTypes = types;

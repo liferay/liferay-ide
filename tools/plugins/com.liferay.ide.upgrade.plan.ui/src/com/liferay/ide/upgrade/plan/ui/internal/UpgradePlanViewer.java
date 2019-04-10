@@ -56,7 +56,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class UpgradePlanViewer implements UpgradeListener, IDoubleClickListener {
+public class UpgradePlanViewer implements IDoubleClickListener, UpgradeListener {
 
 	public UpgradePlanViewer(Composite parentComposite) {
 		_treeViewer = new TreeViewer(parentComposite);

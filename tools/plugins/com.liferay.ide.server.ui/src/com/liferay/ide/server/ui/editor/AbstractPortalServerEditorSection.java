@@ -67,8 +67,8 @@ public abstract class AbstractPortalServerEditorSection extends ServerEditorSect
 
 		section = toolkit.createSection(
 			parent,
-			ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED |
-			ExpandableComposite.TITLE_BAR | Section.DESCRIPTION | ExpandableComposite.FOCUS_TITLE);
+			ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR |
+			Section.DESCRIPTION | ExpandableComposite.FOCUS_TITLE);
 
 		section.setText(getSectionLabel());
 		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL));

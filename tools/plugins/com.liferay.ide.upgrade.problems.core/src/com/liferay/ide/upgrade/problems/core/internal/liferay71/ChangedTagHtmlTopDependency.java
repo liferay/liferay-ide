@@ -22,12 +22,14 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Haoyi Sun
  */
-@Component(property = {
-	"file.extensions=jsp,jspf", "problem.title=Changed the Dependency for the liferay-util:html-top JSP tag",
-	"problem.summary=Changed Dependency For liferay-util:html-top JSP Tag", "problem.tickets=LPS-81983",
-	"problem.section=#changed-dependency-for-liferay-util-html-top-jsp-tag", "version=7.1"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=jsp,jspf", "problem.title=Changed the Dependency for the liferay-util:html-top JSP tag",
+		"problem.summary=Changed Dependency For liferay-util:html-top JSP Tag", "problem.tickets=LPS-81983",
+		"problem.section=#changed-dependency-for-liferay-util-html-top-jsp-tag", "version=7.1"
+	},
+	service = FileMigrator.class
+)
 public class ChangedTagHtmlTopDependency extends JSPTagMigrator {
 
 	public ChangedTagHtmlTopDependency() {

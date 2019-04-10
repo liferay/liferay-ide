@@ -131,7 +131,7 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 
 		File workingDir = verifyWorkingDirectory(config);
 
-		String workingDirPath = workingDir != null ? workingDir.getAbsolutePath() : null;
+		String workingDirPath = (workingDir != null) ? workingDir.getAbsolutePath() : null;
 
 		String progArgs = getProgramArguments(config);
 		String vmArgs = getVMArguments(config);

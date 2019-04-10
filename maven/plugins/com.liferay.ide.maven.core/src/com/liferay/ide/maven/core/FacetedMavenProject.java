@@ -44,7 +44,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
  * @author Cindy Li
  * @author Simon Jiang
  */
-public class FacetedMavenProject extends LiferayMavenProject implements IWebProject, IResourceBundleProject {
+public class FacetedMavenProject extends LiferayMavenProject implements IResourceBundleProject, IWebProject {
 
 	public FacetedMavenProject(IProject project) {
 		super(project);
@@ -111,7 +111,11 @@ public class FacetedMavenProject extends LiferayMavenProject implements IWebProj
 		if (buildIfNeeded) {
 			getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
 
-			new MavenProjectBuilder(getProject()).runMavenGoal(getProject(), "package", monitor);
+			new MavenProjectBuilder(
+				getProject()
+			).runMavenGoal(
+				getProject(), "package", monitor
+			);
 
 			IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade(getProject(), monitor);
 
@@ -122,7 +126,12 @@ public class FacetedMavenProject extends LiferayMavenProject implements IWebProj
 			String targetFolder = build.getDirectory();
 			String targetWar = build.getFinalName() + "." + mavenProject.getPackaging();
 
-			IFile output = getProject().getFile(new Path(targetFolder).append(targetWar));
+			IFile output = getProject().getFile(
+				new Path(
+					targetFolder
+				).append(
+					targetWar
+				));
 
 			if (FileUtil.exists(output)) {
 				outputs.add(output);

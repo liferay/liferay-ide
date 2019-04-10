@@ -146,7 +146,9 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
 	@Override
 	public String[] getHookSupportedProperties() {
-		return new LiferayPortalValueLoader(getUserLibs()).loadHookPropertiesFromClass();
+		return new LiferayPortalValueLoader(
+			getUserLibs()
+		).loadHookPropertiesFromClass();
 	}
 
 	@Override
@@ -196,13 +198,14 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
 				if (serverInfo == null) {
 					try {
-						serverInfo = new LiferayPortalValueLoader(getUserLibs()).loadServerInfoFromClass();
+						serverInfo = new LiferayPortalValueLoader(
+							getUserLibs()
+						).loadServerInfoFromClass();
 					}
 					catch (Exception e) {
 						LiferayTomcatPlugin.logError(
 							"Could not load server info at: runtimeLocation=" + getRuntimeLocation().toOSString() +
-								", portalDir=" +
-									getAppServerPortalDir(),
+								", portalDir=" + getAppServerPortalDir(),
 							e);
 					}
 				}
@@ -395,7 +398,11 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 				File javaw = new File(location.toFile(), dir + "/win/bin/javaw.exe");
 
 				if (FileUtil.exists(javaw)) {
-					return new Path(javaw.getPath()).removeLastSegments(2);
+					return new Path(
+						javaw.getPath()
+					).removeLastSegments(
+						2
+					);
 				}
 			}
 		}

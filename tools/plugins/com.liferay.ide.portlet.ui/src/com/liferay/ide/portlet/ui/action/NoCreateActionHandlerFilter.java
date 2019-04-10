@@ -26,7 +26,7 @@ public class NoCreateActionHandlerFilter extends SapphireActionHandlerFilter {
 
 	@Override
 	public boolean check(SapphireActionHandler handler) {
-		return !(StringUtil.contains(handler.getId(), "Sapphire.Create.Java"));
+		return !StringUtil.contains(handler.getId(), "Sapphire.Create.Java");
 	}
 
 }

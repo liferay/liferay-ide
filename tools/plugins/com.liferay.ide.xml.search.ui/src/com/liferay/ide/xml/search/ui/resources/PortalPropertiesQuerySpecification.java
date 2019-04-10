@@ -28,7 +28,7 @@ import org.eclipse.wst.xml.search.editor.util.JdtUtils;
  * @author Kuo Zhang
  */
 public class PortalPropertiesQuerySpecification
-	implements IResourceRequestorProvider, IURIResolverProvider, IMultiResourceProvider {
+	implements IMultiResourceProvider, IResourceRequestorProvider, IURIResolverProvider {
 
 	public static final String ID = "liferay.webresources.portalproperties.querySpecification";
 

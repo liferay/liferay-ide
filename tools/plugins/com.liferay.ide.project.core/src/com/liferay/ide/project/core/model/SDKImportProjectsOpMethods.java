@@ -62,7 +62,9 @@ public class SDKImportProjectsOpMethods {
 						if (projectNamedItem instanceof ProjectNamedItem) {
 							String projectPath = _getter.get(((ProjectNamedItem)projectNamedItem).getLocation());
 
-							String projectLocation = new Path(projectPath).toPortableString();
+							String projectLocation = new Path(
+								projectPath
+							).toPortableString();
 
 							ProjectImportUtil.importProject(
 								PathBridge.create(new Path(projectLocation)), new NullProgressMonitor(), null);
@@ -83,6 +85,7 @@ public class SDKImportProjectsOpMethods {
 		return retval;
 	}
 
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
+	};
 
 }

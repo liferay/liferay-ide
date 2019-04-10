@@ -28,14 +28,16 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.title=Moved the AssetPublisherUtil Class and Removed It from the Public API",
-	"problem.section=#moved-the-assetpublisherutil-class-and-removed-it-from-the-public-api",
-	"problem.summary=Moved the AssetPublisherUtil Class and Removed It from the Public API",
-	"problem.tickets=LPS-52744", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.title=Moved the AssetPublisherUtil Class and Removed It from the Public API",
+		"problem.section=#moved-the-assetpublisherutil-class-and-removed-it-from-the-public-api",
+		"problem.summary=Moved the AssetPublisherUtil Class and Removed It from the Public API",
+		"problem.tickets=LPS-52744", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class AssetPublisherUtilInvocation extends JavaFileMigrator {
 
 	@Override

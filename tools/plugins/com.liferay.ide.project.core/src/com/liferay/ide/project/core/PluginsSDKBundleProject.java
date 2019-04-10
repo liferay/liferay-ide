@@ -49,7 +49,7 @@ import org.w3c.dom.NodeList;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class PluginsSDKBundleProject extends FlexibleProject implements IWebProject, IBundleProject {
+public class PluginsSDKBundleProject extends FlexibleProject implements IBundleProject, IWebProject {
 
 	public PluginsSDKBundleProject(IProject project, PortalBundle portalBundle) {
 		super(project);

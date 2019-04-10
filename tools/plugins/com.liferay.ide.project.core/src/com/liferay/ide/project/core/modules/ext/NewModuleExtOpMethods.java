@@ -154,6 +154,7 @@ public class NewModuleExtOpMethods {
 		}
 	}
 
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
+	};
 
 }

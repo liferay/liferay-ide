@@ -76,9 +76,12 @@ public class LayeredModulePathFactory {
 				case '\r':
 
 					break;
-				case -1: return false;
-				case '\n': return true;
-				default: buffer.append((char)c);
+				case -1:
+					return false;
+				case '\n':
+					return true;
+				default:
+					buffer.append((char)c);
 			}
 		}
 	}
@@ -119,7 +122,8 @@ public class LayeredModulePathFactory {
 					refs.add(ref);
 				}
 			}
-		} while (readLine(is, buffer));
+		}
+		while (readLine(is, buffer));
 
 		return refs;
 	}
@@ -192,7 +196,9 @@ public class LayeredModulePathFactory {
 
 				// Now add-ons
 
-				File[] addOns = new File(file, layersConfig._getAddOnsPath()).listFiles();
+				File[] addOns = new File(
+					file, layersConfig._getAddOnsPath()
+				).listFiles();
 
 				if (addOns != null) {
 					for (File addOn : addOns) {

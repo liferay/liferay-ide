@@ -216,6 +216,6 @@ public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspat
 		return JavaCore.newClasspathAttribute(IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME, url);
 	}
 
-	private static final String[] _JARS = {"portal-impl.jar", "portal-service.jar", "support-tomcat.jar", };
+	private static final String[] _JARS = {"portal-impl.jar", "portal-service.jar", "support-tomcat.jar"};
 
 }

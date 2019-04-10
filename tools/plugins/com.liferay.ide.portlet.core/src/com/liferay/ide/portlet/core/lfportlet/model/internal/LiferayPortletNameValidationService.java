@@ -40,7 +40,9 @@ public class LiferayPortletNameValidationService extends ValidationService imple
 
 			IProject project = modelElement.adapt(IProject.class);
 
-			String[] portletNames = new PortletDescriptorHelper(project).getAllPortletNames();
+			String[] portletNames = new PortletDescriptorHelper(
+				project
+			).getAllPortletNames();
 
 			if (portletNames != null) {
 				for (String portletName : portletNames) {

@@ -56,7 +56,7 @@ public class IgnoreAlwaysAction extends SelectionProviderAction implements Upgra
 
 		UpgradePlanner upgradePlanner = _serviceTracker.getService();
 
-		UpgradePlan upgradePlan = upgradePlanner .getCurrentUpgradePlan();
+		UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 

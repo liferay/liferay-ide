@@ -264,9 +264,17 @@ public class SDKProjectsImportWizardPage
 
 		Control control = projectsList.getControl();
 
-		gridData.widthHint = new PixelConverter(control).convertWidthInCharsToPixels(25);
+		gridData.widthHint = new PixelConverter(
+			control
+		).convertWidthInCharsToPixels(
+			25
+		);
 
-		gridData.heightHint = new PixelConverter(control).convertHeightInCharsToPixels(10);
+		gridData.heightHint = new PixelConverter(
+			control
+		).convertHeightInCharsToPixels(
+			10
+		);
 
 		control.setLayoutData(gridData);
 

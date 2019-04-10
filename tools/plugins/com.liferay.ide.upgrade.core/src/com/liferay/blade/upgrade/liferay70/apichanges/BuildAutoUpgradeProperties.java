@@ -24,11 +24,13 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Joye Luo
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=Build Auto Upgrade", "problem.summary=Build Auto Upgrade",
-	"problem.tickets=LPS-73967", "problem.section=#build-auto-upgrade", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=properties", "problem.title=Build Auto Upgrade", "problem.summary=Build Auto Upgrade",
+		"problem.tickets=LPS-73967", "problem.section=#build-auto-upgrade", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class BuildAutoUpgradeProperties extends PropertiesFileMigrator {
 
 	@Override

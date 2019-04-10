@@ -204,7 +204,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 
 		Boolean speedFiltersEnabled = getModel().isSpeedFiltersEnabled();
 
-		speedFilters.setSelection(speedFiltersEnabled != null ? speedFiltersEnabled.booleanValue() : false);
+		speedFilters.setSelection((speedFiltersEnabled != null) ? speedFiltersEnabled.booleanValue() : false);
 
 		super.refresh();
 	}

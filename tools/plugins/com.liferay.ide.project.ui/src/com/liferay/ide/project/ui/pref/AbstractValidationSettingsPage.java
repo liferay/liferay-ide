@@ -466,7 +466,11 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 					// Filter out projects that use project-specific settings or have been closed
 
 					for (IProject project : projects) {
-						prefs = new ProjectScope(project).getNode(getPreferenceNodeQualifier());
+						prefs = new ProjectScope(
+							project
+						).getNode(
+							getPreferenceNodeQualifier()
+						);
 
 						if (project.isAccessible() && !prefs.getBoolean(getProjectSettingsKey(), false)) {
 							projectList.add(project);

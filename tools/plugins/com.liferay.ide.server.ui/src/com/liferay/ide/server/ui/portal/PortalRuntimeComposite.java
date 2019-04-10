@@ -59,7 +59,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 
 	public static void setFieldValue(Text field, String value) {
 		if ((field != null) && !field.isDisposed()) {
-			field.setText(value != null ? value : StringPool.EMPTY);
+			field.setText((value != null) ? value : StringPool.EMPTY);
 		}
 	}
 
@@ -178,7 +178,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 		IPath location = getRuntime().getLocation();
 
 		setFieldValue(_nameField, getRuntime().getName());
-		setFieldValue(_dirField, location != null ? location.toOSString() : StringPool.EMPTY);
+		setFieldValue(_dirField, (location != null) ? location.toOSString() : StringPool.EMPTY);
 
 		_updateFields();
 	}
@@ -338,7 +338,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 		if (portalRuntime != null) {
 			PortalBundle portalBundle = portalRuntime.getPortalBundle();
 
-			setFieldValue(_typeField, portalBundle != null ? portalBundle.getDisplayName() : StringPool.BLANK);
+			setFieldValue(_typeField, (portalBundle != null) ? portalBundle.getDisplayName() : StringPool.BLANK);
 		}
 	}
 

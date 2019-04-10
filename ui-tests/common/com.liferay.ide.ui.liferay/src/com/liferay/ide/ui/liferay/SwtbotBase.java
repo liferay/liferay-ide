@@ -49,7 +49,7 @@ import org.junit.runner.RunWith;
  * @author Ying Xu
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class SwtbotBase implements UI, Keys, Messages, FileConstants, Times {
+public class SwtbotBase implements FileConstants, Keys, Messages, Times, UI {
 
 	public static SWTWorkbenchBot bot = new SWTWorkbenchBot();
 	public static BrowserAction browserAction;
@@ -168,7 +168,9 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants, Times {
 
 		dialogAction.cancel();
 
-		String currentTitle = new Shell(bot).getLabel();
+		String currentTitle = new Shell(
+			bot
+		).getLabel();
 
 		Assert.assertNotEquals("Unable to close the shell " + title, title, currentTitle);
 

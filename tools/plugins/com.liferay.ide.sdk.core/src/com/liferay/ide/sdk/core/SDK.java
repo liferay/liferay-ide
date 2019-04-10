@@ -231,7 +231,11 @@ public class SDK {
 		try {
 			Map<String, String> properties = new HashMap<>();
 
-			IPath workPath = new Path(appServerDir).removeLastSegments(2);
+			IPath workPath = new Path(
+				appServerDir
+			).removeLastSegments(
+				2
+			);
 
 			properties.put(ISDKConstants.PROPERTY_APP_ZIP_NAME, bundleZipLocation);
 			properties.put(ISDKConstants.PROPERTY_EXT_WORK_DIR, workPath.toOSString());
@@ -627,22 +631,14 @@ public class SDK {
 
 				Map<String, String> propertyCopyList = new HashMap<>();
 
+				propertyCopyList.put("app.server." + project.getProperty("app.server.type") + ".dir", "app.server.dir");
 				propertyCopyList.put(
-					"app.server." + project.getProperty("app.server.type") +
-						".dir",
-					"app.server.dir");
+					"app.server." + project.getProperty("app.server.type") + ".deploy.dir", "app.server.deploy.dir");
 				propertyCopyList.put(
-					"app.server." + project.getProperty("app.server.type") +
-						".deploy.dir",
-					"app.server.deploy.dir");
-				propertyCopyList.put(
-					"app.server." + project.getProperty("app.server.type") +
-						".lib.global.dir",
+					"app.server." + project.getProperty("app.server.type") + ".lib.global.dir",
 					"app.server.lib.global.dir");
 				propertyCopyList.put(
-					"app.server." + project.getProperty("app.server.type") +
-						".portal.dir",
-					"app.server.portal.dir");
+					"app.server." + project.getProperty("app.server.type") + ".portal.dir", "app.server.portal.dir");
 
 				for (String key : propertyCopyList.keySet()) {
 					AntPropertyCopy propertyCopyTask = new AntPropertyCopy();

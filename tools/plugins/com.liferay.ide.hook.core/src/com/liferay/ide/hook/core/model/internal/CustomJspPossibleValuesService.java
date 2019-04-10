@@ -83,7 +83,11 @@ public class CustomJspPossibleValuesService extends PossibleValuesService {
 
 		if (_possibleValues != null) {
 			for (File file : _possibleValues) {
-				Path path = new Path(file.getAbsolutePath()).makeRelativeTo(_portalDir);
+				Path path = new Path(
+					file.getAbsolutePath()
+				).makeRelativeTo(
+					_portalDir
+				);
 
 				values.add(path.toPortableString());
 			}

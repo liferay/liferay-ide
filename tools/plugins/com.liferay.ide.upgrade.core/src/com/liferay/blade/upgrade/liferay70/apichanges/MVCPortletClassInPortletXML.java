@@ -49,15 +49,16 @@ import org.w3c.dom.Text;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=xml",
-	"problem.summary=The classes from package com.liferay.util.bridges.mvc in util-bridges.jar were moved to a new " +
-		"package com.liferay.portal.kernel.portlet.bridges.mvc in portal-service.jar.",
-	"problem.tickets=LPS-50156",
-	"problem.title=Moved MVCPortlet, ActionCommand and ActionCommandCache from util-bridges.jar to portal-service.jar",
-	"problem.section=#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar", "version=7.0"
-},
-	service = {AutoMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=xml",
+		"problem.summary=The classes from package com.liferay.util.bridges.mvc in util-bridges.jar were moved to a new package com.liferay.portal.kernel.portlet.bridges.mvc in portal-service.jar.",
+		"problem.tickets=LPS-50156",
+		"problem.title=Moved MVCPortlet, ActionCommand and ActionCommandCache from util-bridges.jar to portal-service.jar",
+		"problem.section=#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar", "version=7.0"
+	},
+	service = {AutoMigrator.class, FileMigrator.class}
+)
 @SuppressWarnings("restriction")
 public class MVCPortletClassInPortletXML extends XMLFileMigrator implements AutoMigrator {
 

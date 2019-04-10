@@ -348,8 +348,7 @@ public interface LiferayPortlet extends Element {
 
 	@Type(base = SocialActivityInterpreterClass.class)
 	@XmlListBinding(
-		mappings = @XmlListBinding.Mapping(
-			element = "social-activity-interpreter-class", type = SocialActivityInterpreterClass.class)
+		mappings = @XmlListBinding.Mapping(element = "social-activity-interpreter-class", type = SocialActivityInterpreterClass.class)
 	)
 	public ListProperty PROP_SOCIAL_ACTIVITY_INTERPRETER_CLASSES = new ListProperty(
 		TYPE, "SocialActivityInterpreterClasses");
@@ -357,8 +356,7 @@ public interface LiferayPortlet extends Element {
 	@Label(standard = "Staged Model Data Handler Classes")
 	@Type(base = StagedModelDataHandlerClass.class)
 	@XmlListBinding(
-		mappings = @XmlListBinding.Mapping(
-			element = "staged-model-data-handler-class", type = StagedModelDataHandlerClass.class)
+		mappings = @XmlListBinding.Mapping(element = "staged-model-data-handler-class", type = StagedModelDataHandlerClass.class)
 	)
 	public ListProperty PROP_STAGED_MODEL_DATA_HANDLER_CLASSES = new ListProperty(
 		TYPE, "StagedModelDataHandlerClasses");

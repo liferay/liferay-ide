@@ -28,12 +28,14 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java", "problem.title=Created a New getType Method That is Implemented in DLProcessor",
-	"problem.summary=The DLProcessor interface has a new method getType().", "problem.tickets=LPS-53574",
-	"problem.section=#created-a-new-gettype-method-that-is-implemented-in-dlprocessor", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java", "problem.title=Created a New getType Method That is Implemented in DLProcessor",
+		"problem.summary=The DLProcessor interface has a new method getType().", "problem.tickets=LPS-53574",
+		"problem.section=#created-a-new-gettype-method-that-is-implemented-in-dlprocessor", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class DLProcessorGetType extends JavaFileMigrator {
 
 	@Override

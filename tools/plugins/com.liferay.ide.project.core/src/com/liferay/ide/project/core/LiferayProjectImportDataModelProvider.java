@@ -68,7 +68,9 @@ public class LiferayProjectImportDataModelProvider
 				SDK sdk = SDKUtil.getSDKFromProjectDir(new File(projectLoc));
 
 				if (sdk != null) {
-					return new Version(sdk.getVersion()).toString();
+					return new Version(
+						sdk.getVersion()
+					).toString();
 				}
 			}
 			catch (Exception e) {

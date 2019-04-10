@@ -32,7 +32,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author Kamesh Sampath
  */
 @Image(path = "images/elcl16/constraint_16x16.png")
-public interface SecurityConstraint extends Element, Identifiable, Displayable {
+public interface SecurityConstraint extends Displayable, Element, Identifiable {
 
 	public ElementType TYPE = new ElementType(SecurityConstraint.class);
 

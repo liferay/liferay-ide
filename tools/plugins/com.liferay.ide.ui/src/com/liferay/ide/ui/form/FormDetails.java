@@ -27,7 +27,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 /**
  * @author Gregory Amerson
  */
-public abstract class FormDetails extends AbstractFormPart implements IDetailsPage, IContextPart {
+public abstract class FormDetails extends AbstractFormPart implements IContextPart, IDetailsPage {
 
 	public FormDetails() {
 	}

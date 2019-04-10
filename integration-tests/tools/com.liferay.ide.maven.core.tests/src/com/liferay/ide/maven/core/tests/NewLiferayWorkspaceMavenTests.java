@@ -232,6 +232,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 		assertProjectFileExists(projectName, "pom.xml");
 	}
 
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
+	};
 
 }

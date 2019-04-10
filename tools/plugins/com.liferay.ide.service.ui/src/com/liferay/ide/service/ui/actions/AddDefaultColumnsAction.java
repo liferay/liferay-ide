@@ -53,7 +53,11 @@ public class AddDefaultColumnsAction extends SapphireActionHandler implements Sa
 			else {
 				IFile serviceXML = element.adapt(IFile.class);
 
-				new ServiceBuilderDescriptorHelper(serviceXML).addDefaultColumns(entityName);
+				new ServiceBuilderDescriptorHelper(
+					serviceXML
+				).addDefaultColumns(
+					entityName
+				);
 			}
 		}
 

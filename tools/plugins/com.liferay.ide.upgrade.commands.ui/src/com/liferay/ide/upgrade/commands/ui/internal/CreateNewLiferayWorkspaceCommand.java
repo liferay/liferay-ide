@@ -51,7 +51,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = "id=" + CreateNewLiferayWorkspaceCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
 	service = UpgradeCommand.class
 )
-public class CreateNewLiferayWorkspaceCommand implements UpgradeCommand, SapphireContentAccessor {
+public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor, UpgradeCommand {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {

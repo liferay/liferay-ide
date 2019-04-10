@@ -40,6 +40,7 @@ public class LayoutTplRootEditPart extends SimpleRootEditPart implements LayerCo
 	}
 
 	public DragTracker getDragTracker(Request req) {
+
 		/**
 		 * The root will only be asked for a drag tracker if for some reason the
 		 * contents editpart says it is neither selector nor opaque.
@@ -48,6 +49,7 @@ public class LayoutTplRootEditPart extends SimpleRootEditPart implements LayerCo
 	}
 
 	public IFigure getLayer(Object key) {
+
 		/**
 		 * if (innerLayers == null) return null; IFigure layer =
 		 * printableLayers.getLayer(key); if (layer != null) return layer;
@@ -68,6 +70,7 @@ public class LayoutTplRootEditPart extends SimpleRootEditPart implements LayerCo
 	}
 
 	protected void createLayers(LayeredPane layeredPane) {
+
 		/**
 		 * layeredPane.add(getScaledLayers(), SCALABLE_LAYERS);
 		 * layeredPane.add(getPrintableLayers(), PRINTABLE_LAYERS);

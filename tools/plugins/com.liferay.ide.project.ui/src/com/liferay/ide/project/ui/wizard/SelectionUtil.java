@@ -30,7 +30,7 @@ import org.eclipse.ui.IWorkingSet;
 public class SelectionUtil {
 
 	public static IWorkingSet getSelectedWorkingSet(IStructuredSelection selection) {
-		Object element = selection == null ? null : selection.getFirstElement();
+		Object element = (selection == null) ? null : selection.getFirstElement();
 
 		if (element == null) {
 			return null;

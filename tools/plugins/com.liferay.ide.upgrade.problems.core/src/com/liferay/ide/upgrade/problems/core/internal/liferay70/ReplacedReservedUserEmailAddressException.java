@@ -31,8 +31,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 	"file.extensions=java",
 	"problem.title=Replaced the ReservedUserEmailAddressException with UserEmailAddressException",
 	"problem.section=#replaced-the-reserveduseremailaddressexception-with-useremailaddressexcepti",
-	"problem.summary=Replaced the ReservedUserEmailAddressException with UserEmailAddressException Inner Classes in " +
-		"User Services",
+	"problem.summary=Replaced the ReservedUserEmailAddressException with UserEmailAddressException Inner Classes in User Services",
 	"problem.tickets=LPS-53279",  "version=7.0"
 },
 	service = FileMigrator.class)

@@ -115,7 +115,9 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 		IPath portalDir = getAppServerPortalDir();
 		IPath[] extraLibs = getBundleDependencyJars();
 
-		return new LiferayPortalValueLoader(portalDir, extraLibs).loadHookPropertiesFromClass();
+		return new LiferayPortalValueLoader(
+			portalDir, extraLibs
+		).loadHookPropertiesFromClass();
 	}
 
 	@Override

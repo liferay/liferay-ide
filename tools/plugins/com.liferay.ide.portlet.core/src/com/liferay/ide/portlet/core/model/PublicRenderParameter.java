@@ -32,7 +32,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  */
 @Image(path = "/images/elcl16/parameter_16x16.gif")
 @Label(full = "Public Render Parameter", standard = "Public Render Parameter")
-public interface PublicRenderParameter extends QName, Identifiable {
+public interface PublicRenderParameter extends Identifiable, QName {
 
 	public ElementType TYPE = new ElementType(PublicRenderParameter.class);
 

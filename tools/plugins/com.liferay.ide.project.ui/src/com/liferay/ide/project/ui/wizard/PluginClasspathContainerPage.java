@@ -129,11 +129,11 @@ public class PluginClasspathContainerPage
 	}
 
 	public void initialize(IJavaProject project, IClasspathEntry[] currentEntries) {
-		_ownerProject = project == null ? null : project.getProject();
+		_ownerProject = (project == null) ? null : project.getProject();
 	}
 
 	public void setSelection(IClasspathEntry entry) {
-		final IPath path = entry == null ? null : entry.getPath();
+		final IPath path = (entry == null) ? null : entry.getPath();
 
 		if ((path != null) && (path.segmentCount() == 2)) {
 			_type = path.segment(1);

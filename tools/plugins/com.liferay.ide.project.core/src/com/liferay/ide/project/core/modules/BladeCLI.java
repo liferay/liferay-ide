@@ -119,7 +119,6 @@ public class BladeCLI {
 			if ((returnCode != 0) || hasErrors) {
 				throw new BladeCLIException(errors.toString());
 			}
-
 		}
 		catch (IOException ioe) {
 			throw new BladeCLIException(ioe.getMessage(), ioe);

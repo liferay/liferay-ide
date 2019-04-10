@@ -118,8 +118,9 @@ public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator imple
 		Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
 	private Pattern _idPattern;
-	private String[] _liferayDtdNames =
-		{"liferay-portlet-app", "display", "service-builder", "hook", "layout-templates", "look-and-feel"};
+	private String[] _liferayDtdNames = {
+		"liferay-portlet-app", "display", "service-builder", "hook", "layout-templates", "look-and-feel"
+	};
 	private String _version;
 
 }

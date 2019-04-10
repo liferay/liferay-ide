@@ -1739,7 +1739,8 @@ public class ProjectUtil {
 		return retval;
 	}
 
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
+	};
 	private static final Pattern _themeBuilderPlugin = Pattern.compile(
 		".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.portal\\.tools\\.theme\\.builder[\'\"].*",
 		Pattern.MULTILINE | Pattern.DOTALL);

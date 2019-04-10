@@ -77,7 +77,9 @@ public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayP
 
 	public static void checkAndConfigureIvy(final IProject project) {
 		if ((project != null) && FileUtil.exists(project.getFile(ISDKConstants.IVY_XML_FILE))) {
-			new WorkspaceJob("Configuring project with Ivy dependencies") {
+			new WorkspaceJob(
+				"Configuring project with Ivy dependencies"
+			) {
 
 				@Override
 				public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
