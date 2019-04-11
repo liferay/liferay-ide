@@ -32,7 +32,7 @@ Here are the steps for upgrading your custom plugins to @product-ver@.
                 <div class="title"><a href="">Create New Liferay Workspace</a></div>
                 <div class="description">If you have an existing 7.x workspace, skip to the next step.</div>
             </li>
-            <li icon="" requirement="required" commandId="import_existing_projects">
+            <li icon="" requirement="required" commandId="import_existing_liferay_workspace">
                 <div class="title"><a href="">Import Existing Liferay Workspace</a></div>
                 <div class="description">If you do not have an existing 7.x workspace, go to the previous step.</div>
             </li>
