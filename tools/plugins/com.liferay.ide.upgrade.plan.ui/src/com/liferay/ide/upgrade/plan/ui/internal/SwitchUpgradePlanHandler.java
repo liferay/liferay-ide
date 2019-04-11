@@ -27,7 +27,12 @@ public class SwitchUpgradePlanHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		SwitchUpgradePlanDialog switchUpgradePlanDialog = new SwitchUpgradePlanDialog();
 
-		return switchUpgradePlanDialog.open();
+		try {
+			return switchUpgradePlanDialog.open();
+		}
+		catch (Exception e) {
+			return null;
+		}
 	}
 
 }

@@ -19,7 +19,7 @@
 		/>
 		<image
 			commandId="com.liferay.ide.upgrade.plan.ui.switchupgradeplan"
-			icon="icons/switch_plan.gif"
+			icon="icons/switch_plan.png"
 		/>
 		<image
 			commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
@@ -93,7 +93,7 @@
 			</command>
 			<command
 				commandId="com.liferay.ide.upgrade.plan.ui.switchupgradeplan"
-				icon="icons/switch_plan.gif"
+				icon="icons/switch_plan.png"
 				style="push"
 			>
 			</command>
