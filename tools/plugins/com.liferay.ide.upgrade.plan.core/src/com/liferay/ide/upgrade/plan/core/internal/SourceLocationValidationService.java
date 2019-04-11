@@ -16,6 +16,8 @@ package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
+import com.liferay.ide.upgrade.plan.core.SDKSupport;
+import com.liferay.ide.upgrade.plan.core.WorkspaceSupport;
 
 import java.io.File;
 
@@ -25,8 +27,10 @@ import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Simon Jiang
+ * @author Terry Jia
  */
-public class SourceLocationValidationService extends ValidationService implements SapphireContentAccessor {
+public class SourceLocationValidationService
+	extends ValidationService implements SapphireContentAccessor, SDKSupport, WorkspaceSupport {
 
 	@Override
 	protected Status compute() {
@@ -41,6 +45,10 @@ public class SourceLocationValidationService extends ValidationService implement
 
 			if (!(sourceLocationTarget.exists() && sourceLocationTarget.canRead())) {
 				retval = Status.createErrorStatus("Source code location must exist and be readable.");
+			}
+
+			if (!(isValidGradleWorkspace(sourceLocationTarget) || isValidSDK(sourceLocationTarget))) {
+				retval = Status.createErrorStatus("Source code location must be a vailid gradle liferay workspace.");
 			}
 		}
 

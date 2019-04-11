@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.commands.core.internal.code;
 
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
-import com.liferay.ide.upgrade.commands.core.sdk.ImportExistingPluginsSDKCommandKeys;
+import com.liferay.ide.upgrade.commands.core.code.ImportExistingLiferayWorkspaceCommandKeys;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
@@ -36,10 +36,10 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Terry Jia
  */
 @Component(
-	property = "id=" + ImportExistingPluginsSDKCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
+	property = "id=" + ImportExistingLiferayWorkspaceCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
 	service = UpgradeCommand.class
 )
-public class ImportLiferayWorkspaceCommand implements UpgradeCommand {
+public class ImportExistingLiferayWorkspaceCommand implements UpgradeCommand {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {

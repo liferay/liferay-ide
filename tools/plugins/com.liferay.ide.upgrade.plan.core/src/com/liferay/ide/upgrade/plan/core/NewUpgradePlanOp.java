@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.upgrade.plan.core.internal.NameValidationService;
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
 import com.liferay.ide.upgrade.plan.core.internal.SourceLocationValidationService;
 
@@ -57,6 +58,8 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public Value<String> getTargetVersion();
 
+	public Value<String> getUpgradePlanOutline();
+
 	public void setCurrentVersion(String currentVersion);
 
 	public void setLocation(Path value);
@@ -65,9 +68,11 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public void setTargetVersion(String targetVersion);
 
+	public void setUpgradePlanOutline(String upgradePlanOutline);
+
 	@DefaultValue(text = "6.2")
 	@Label(standard = "Current Liferay Version")
-	@PossibleValues(values = {"6.2", "7.0"})
+	@PossibleValues(values = {"6.2", "7.0", "7.1"})
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
 
 	@AbsolutePath
@@ -79,11 +84,17 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
 	@Required
+	@Service(impl = NameValidationService.class)
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-	@DefaultValue(text = "7.1")
+	@DefaultValue(text = "7.2")
 	@Label(standard = "Target Liferay Version")
-	@PossibleValues(values = {"7.0", "7.1"})
+	@PossibleValues(values = {"7.0", "7.1", "7.2"})
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
+
+	@DefaultValue(text = "07-liferay-code-upgrade-plan")
+	@PossibleValues(values = {"06-liferay-data-upgrade-plan", "07-liferay-code-upgrade-plan"})
+	@Required
+	public ValueProperty PROP_UPGRADE_PLAN_OUTLINE = new ValueProperty(TYPE, "UpgradePlanOutline");
 
 }

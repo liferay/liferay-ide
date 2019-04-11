@@ -15,15 +15,10 @@
 package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradePlansOp;
 
-import java.io.IOException;
-
-import java.nio.file.Paths;
-
-import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 
@@ -34,13 +29,11 @@ import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Terry Jia
- * @author Gregory Amerson
- * @author Simon Jiang
  */
-public class NewUpgradePlanOpMethods {
+public class SwitchUpgradePlanOpMethods {
 
-	public static final Status execute(NewUpgradePlanOp newUpgradePlanOp, ProgressMonitor progressMonitor) {
-		Bundle bundle = FrameworkUtil.getBundle(NewUpgradePlanOpMethods.class);
+	public static final Status execute(UpgradePlansOp upgradePlansOp, ProgressMonitor progressMonitor) {
+		Bundle bundle = FrameworkUtil.getBundle(SwitchUpgradePlanOpMethods.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
 
@@ -55,31 +48,15 @@ public class NewUpgradePlanOpMethods {
 			return Status.createErrorStatus("Could not get UpgradePlanner service");
 		}
 
-		String name = _getter.get(newUpgradePlanOp.getName());
+		String name = _getter.get(upgradePlansOp.getName());
 
-		String upgradePlanOutline = _getter.get(newUpgradePlanOp.getUpgradePlanOutline());
+		UpgradePlan currentUpgradePlan = upgradePlanner.getCurrentUpgradePlan();
 
-		String currentVersion = _getter.get(newUpgradePlanOp.getCurrentVersion());
+		upgradePlanner.saveUpgradePlan(currentUpgradePlan);
 
-		String targetVersion = _getter.get(newUpgradePlanOp.getTargetVersion());
+		UpgradePlan upgradePlan = upgradePlanner.loadUpgradePlan(name);
 
-		Path path = _getter.get(newUpgradePlanOp.getLocation());
-
-		java.nio.file.Path sourceCodeLocation = null;
-
-		if (path != null) {
-			sourceCodeLocation = Paths.get(path.toOSString());
-		}
-
-		try {
-			UpgradePlan upgradePlan = upgradePlanner.newUpgradePlan(
-				name, upgradePlanOutline, currentVersion, targetVersion, sourceCodeLocation);
-
-			upgradePlanner.startUpgradePlan(upgradePlan);
-		}
-		catch (IOException ioe) {
-			return Status.createErrorStatus("Could not create upgrade plan named: " + name, ioe);
-		}
+		upgradePlanner.startUpgradePlan(upgradePlan);
 
 		return Status.createOkStatus();
 	}

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.commands.core;
+package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
@@ -23,6 +23,8 @@ import java.io.File;
 import java.nio.file.Path;
 
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IPath;
 
@@ -68,5 +70,32 @@ public interface WorkspaceSupport {
 
 		return new org.eclipse.core.runtime.Path(pluginsSDKLocation.toString());
 	}
+
+	public default boolean isValidGradleWorkspace(File workspaceDir) {
+		File buildGradle = new File(workspaceDir, "build.gradle");
+		File settingsGradle = new File(workspaceDir, "settings.gradle");
+		File gradleProperties = new File(workspaceDir, "gradle.properties");
+
+		if (FileUtil.notExists(buildGradle) || FileUtil.notExists(settingsGradle) ||
+			FileUtil.notExists(gradleProperties)) {
+
+			return false;
+		}
+
+		String settingsContent = FileUtil.readContents(settingsGradle, true);
+
+		if (settingsContent != null) {
+			Matcher matcher = workspacePluginPattern.matcher(settingsContent);
+
+			if (matcher.matches()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public final Pattern workspacePluginPattern = Pattern.compile(
+		".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.workspace[\'\"].*", Pattern.MULTILINE | Pattern.DOTALL);
 
 }

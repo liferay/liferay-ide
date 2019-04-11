@@ -16,9 +16,10 @@ package com.liferay.ide.upgrade.commands.core.code;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
-public class ImportExistingProjectsCommandKeys {
+public class ImportExistingLiferayWorkspaceCommandKeys {
 
-	public static final String ID = "import_existing_projects";
+	public static final String ID = "import_existing_liferay_workspace";
 
 }
