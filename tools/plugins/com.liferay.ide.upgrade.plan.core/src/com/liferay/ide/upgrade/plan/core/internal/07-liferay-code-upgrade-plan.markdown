@@ -1,4 +1,4 @@
-# Liferay Code Upgrade Plan 
+# Liferay Code Upgrade Plan
 
 [TOC levels=1-4]
 

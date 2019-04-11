@@ -3,19 +3,19 @@
 [TOC levels=1-4]
 
 <p>
-Here are the steps for upgrading your Liferay database and configuration. The steps here outline the process and link to the detailed articles. 
+Here are the steps for upgrading your Liferay database and configuration. The steps here outline the process and link to the detailed articles.
 </p>
 
 <p>
-<strong>Important:</strong> If you're upgrading a <a href="/docs/7-2/deploy/-/knowledge_base/deploy/updating-a-cluster">cluster</a> or <a href="/docs/7-2/deploy/-/knowledge_base/deploy/upgrading-sharded-environment">sharded environment</a>, read their upgrade instructions first. 
+<strong>Important:</strong> If you're upgrading a <a href="/docs/7-2/deploy/-/knowledge_base/deploy/updating-a-cluster">cluster</a> or <a href="/docs/7-2/deploy/-/knowledge_base/deploy/upgrading-sharded-environment">sharded environment</a>, read their upgrade instructions first.
 </p>
 
 <p>
-<strong>Important:</strong> If you're on Liferay Portal 6.0.x, <a href="/docs/6-2/deploy/-/knowledge_base/deploy/upgrading-liferay">upgrade to Liferay Portal 6.2</a> before upgrading to 7.2. 
+<strong>Important:</strong> If you're on Liferay Portal 6.0.x, <a href="/docs/6-2/deploy/-/knowledge_base/deploy/upgrading-liferay">upgrade to Liferay Portal 6.2</a> before upgrading to 7.2.
 </p>
 
 <p>
-<strong>Important:</strong> If you're running on Liferay Portal 6.1.x, <a href="/docs/7-1/deploy/-/knowledge_base/deploy/upgrading-to-liferay-71">upgrade to Liferay 7.1</a><a href="/docs/7-1/deploy/-/knowledge_base/deploy/upgrading-to-liferay-71"> before upgrading to 7.2. 
+<strong>Important:</strong> If you're running on Liferay Portal 6.1.x, <a href="/docs/7-1/deploy/-/knowledge_base/deploy/upgrading-to-liferay-71">upgrade to Liferay 7.1</a><a href="/docs/7-1/deploy/-/knowledge_base/deploy/upgrading-to-liferay-71"> before upgrading to 7.2.
 </p>
 
 <p>
@@ -68,7 +68,7 @@ Here are the data upgrade steps:
 			<div class="title"><a href="https://github.com/jhinkey/liferay-docs/blob/72-upgrading-liferay/deployment/articles/05-upgrading-to-liferay-7-2/03-test-upgrading-a-liferay-backup-copy.markdown#upgrade-the-database">Upgrade the Liferay Database</a></a></div>
 			<div class="description">Upgrade the Liferay database</a>; then return here.</div>
 		</li>
-		<li> 
+		<li>
 			<div class="title"><a href="https://github.com/jhinkey/liferay-docs/blob/72-upgrading-liferay/deployment/articles/05-upgrading-to-liferay-7-2/03-test-upgrading-a-liferay-backup-copy.markdown#test-upgrading-a-product-backup-copy">If the Upgrade Took Too Long, Prune the Database More and Restart the Upgrade</a></div>
 			<div class="description">If the upgrade took too long search the upgrade log for more unused objects. Then restart testing upgrades on a fresh copy of the Liferay database.</div>
 		</li>
