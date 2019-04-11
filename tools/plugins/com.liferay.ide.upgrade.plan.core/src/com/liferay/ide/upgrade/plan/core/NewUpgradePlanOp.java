@@ -14,9 +14,9 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.upgrade.plan.core.internal.NameValidationService;
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
 import com.liferay.ide.upgrade.plan.core.internal.SourceLocationValidationService;
-import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanNameValidationService;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
@@ -59,7 +59,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public Value<String> getTargetVersion();
 
-	public Value<String> getUpgradeType();
+	public Value<String> getUpgradePlanName();
 
 	public void setCurrentVersion(String currentVersion);
 
@@ -69,7 +69,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public void setTargetVersion(String targetVersion);
 
-	public void setUpgradeType(String upgradeType);
+	public void setUpgradePlanName(String upgradePlanName);
 
 	@DefaultValue(text = "6.2")
 	@Label(standard = "Current Liferay Version")
@@ -77,7 +77,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
 
 	@AbsolutePath
-	@Enablement(expr = "${UpgradeType == 'liferay-code-upgrade-plan'}")
+	@Enablement(expr = "${UpgradePlanName == 'liferay-code-upgrade-plan'}")
 	@Fact(statement = "This location should be either a Plugins SDK, Liferay Workspace.")
 	@Label(standard = "Current Code Location")
 	@Service(impl = SourceLocationValidationService.class)
@@ -86,7 +86,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
 	@Required
-	@Service(impl = UpgradePlanNameValidationService.class)
+	@Service(impl = NameValidationService.class)
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
 	@DefaultValue(text = "7.1")
@@ -97,6 +97,6 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	@DefaultValue(text = "liferay-upgrade-plan")
 	@PossibleValues(values = {"liferay-upgrade-plan", "liferay-code-upgrade-plan"})
 	@Required
-	public ValueProperty PROP_UPGRADE_TYPE = new ValueProperty(TYPE, "UpgradeType");
+	public ValueProperty PROP_UPGRADE_PLAN_NAME = new ValueProperty(TYPE, "UpgradePlanName");
 
 }

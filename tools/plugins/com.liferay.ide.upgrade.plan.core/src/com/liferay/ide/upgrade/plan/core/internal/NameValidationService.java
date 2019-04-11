@@ -34,7 +34,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Terry Jia
  */
-public class UpgradePlanNameValidationService extends ValidationService implements SapphireContentAccessor {
+public class NameValidationService extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
