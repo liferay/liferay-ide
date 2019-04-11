@@ -35,7 +35,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -82,9 +81,8 @@ public class AutoCorrectFindUpgradeProblemsCommand implements MarkerSupport, Upg
 
 		upgradeProblems.clear();
 
-		Stream<IProject> stream = projects.stream();
-
-		stream.map(
+		projects.stream(
+		).map(
 			FileUtil::getFile
 		).map(
 			projectFile -> _fileMigration.findUpgradeProblems(
@@ -125,17 +123,20 @@ public class AutoCorrectFindUpgradeProblemsCommand implements MarkerSupport, Upg
 
 			File file = FileUtil.getFile(resource);
 
-			for (ServiceReference<AutoFileMigrator> reference : serviceReferences) {
-				AutoFileMigrator autoMigrator = bundleContext.getService(reference);
-
-				try {
-					autoMigrator.correctProblems(file, Arrays.asList(upgradeProblem));
+			serviceReferences.stream(
+			).map(
+				bundleContext::getService
+			).forEach(
+				autoMigrator -> {
+					try {
+						autoMigrator.correctProblems(file, Arrays.asList(upgradeProblem));
+					}
+					catch (AutoFileMigrateException afme) {
+						UpgradeProblemsCorePlugin.logError(
+							"Error encountered auto migrating file " + file.getAbsolutePath(), afme);
+					}
 				}
-				catch (AutoFileMigrateException afme) {
-					UpgradeProblemsCorePlugin.logError(
-						"Error encountered auto migrating file " + file.getAbsolutePath(), afme);
-				}
-			}
+			);
 		}
 		catch (InvalidSyntaxException ise) {
 		}
