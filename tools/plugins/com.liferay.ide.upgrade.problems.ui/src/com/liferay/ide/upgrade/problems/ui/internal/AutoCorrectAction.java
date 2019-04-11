@@ -92,7 +92,8 @@ public class AutoCorrectAction extends SelectionProviderAction implements Upgrad
 
 		try {
 			serviceReferences = context.getServiceReferences(
-				AutoFileMigrator.class, "(auto.correct=" + autoCorrectContext + ")");
+				AutoFileMigrator.class,
+				"(&(auto.correct=" + autoCorrectContext + ")(version=" + upgradeProblem.getVersion() + "))");
 		}
 		catch (InvalidSyntaxException ise) {
 		}
