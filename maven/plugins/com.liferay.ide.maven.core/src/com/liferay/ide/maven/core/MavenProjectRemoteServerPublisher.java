@@ -123,7 +123,11 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 				IPath targetPath = javaProject.getOutputLocation();
 
 				deltaZip = true;
-				deltaPath = new Path("WEB-INF/classes").append(deltaFullPath.makeRelativeTo(targetPath));
+				deltaPath = new Path(
+					"WEB-INF/classes"
+				).append(
+					deltaFullPath.makeRelativeTo(targetPath)
+				);
 			}
 
 			if (deltaZip) {
@@ -155,7 +159,11 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 			String targetFolder = build.getDirectory();
 			String targetWar = build.getFinalName() + "." + mavenProject.getPackaging();
 
-			retval = new Path(targetFolder).append(targetWar);
+			retval = new Path(
+				targetFolder
+			).append(
+				targetWar
+			);
 		}
 
 		return retval;

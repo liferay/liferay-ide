@@ -29,9 +29,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
  */
 @Component(property = {
 	"file.extensions=java,jsp,jspf",
-	"problem.summary=" +
-		"All Calendar APIs previously exposed as Liferay Portal API in 6.2 have been move out from portal-service i" +
-			"nto separate OSGi modules",
+	"problem.summary=All Calendar APIs previously exposed as Liferay Portal API in 6.2 have been move out from portal-service into separate OSGi modules",
 	"problem.tickets=LPS-55026", "problem.title=Calendar APIs migrated to OSGi module", "problem.section=#legacy",
 	 "version=7.0"
 },

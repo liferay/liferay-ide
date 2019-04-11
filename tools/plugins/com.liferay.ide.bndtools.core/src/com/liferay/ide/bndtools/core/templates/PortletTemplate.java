@@ -51,8 +51,9 @@ public class PortletTemplate extends AbstractProjectTemplate {
 
 		model.setIncludeResource(Collections.singletonList("${includeresource-rule}"));
 
-		ImportPattern[] patterns =
-			{new ImportPattern("${imports-rule}", Attrs.EMPTY_ATTRS), new ImportPattern("*", new Attrs())};
+		ImportPattern[] patterns = {
+			new ImportPattern("${imports-rule}", Attrs.EMPTY_ATTRS), new ImportPattern("*", new Attrs())
+		};
 
 		patterns[1].setOptional(true);
 		model.setImportPatterns(Arrays.asList(patterns));

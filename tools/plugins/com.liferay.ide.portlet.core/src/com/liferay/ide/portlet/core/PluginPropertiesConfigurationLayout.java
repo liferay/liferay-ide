@@ -60,7 +60,7 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
 		if (key.equals(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS) ||
 			key.equals(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS) ||
 			key.equals(IPluginPackageModel.PROPERTY_DEPLOY_EXCLUDE) ||
-			key .equals(IPluginPackageModel.PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS)) {
+			key.equals(IPluginPackageModel.PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS)) {
 
 			return true;
 		}

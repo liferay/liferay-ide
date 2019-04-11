@@ -23,26 +23,26 @@ import org.eclipse.sapphire.modeling.annotations.Label;
  */
 public enum PluginType {
 
+	@Image(path = "images/ext.png")
 	@Label(standard = "Ext")
-		@Image(path = "images/ext.png")
 	ext,
+	@Image(path = "images/hook.png")
 	@Label(standard = "Hook")
-		@Image(path = "images/hook.png")
 	hook,
+	@Image(path = "images/layout.png")
 	@Label(standard = "Layout Template")
-		@Image(path = "images/layout.png")
 	layouttpl,
+	@Image(path = "images/portlet.png")
 	@Label(standard = "Portlet")
-		@Image(path = "images/portlet.png")
 	portlet,
+	@Image(path = "images/service.png")
 	@Label(standard = "Service Builder Portlet")
-		@Image(path = "images/service.png")
 	servicebuilder,
+	@Image(path = "images/theme.png")
 	@Label(standard = "Theme")
-		@Image(path = "images/theme.png")
 	theme,
+	@Image(path = "images/web.png")
 	@Label(standard = "Web")
-		@Image(path = "images/web.png")
 	web
 
 }

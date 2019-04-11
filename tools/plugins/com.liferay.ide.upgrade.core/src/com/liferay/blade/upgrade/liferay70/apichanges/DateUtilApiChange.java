@@ -28,12 +28,14 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Andy Wu
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf", "problem.title=DateUtil.compareTo method removed",
-	"problem.section=#dateutil-compareto-method-removed", "problem.summary=DateUtil.compareTo method removed",
-	"problem.tickets=LPS-59192", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf", "problem.title=DateUtil.compareTo method removed",
+		"problem.section=#dateutil-compareto-method-removed", "problem.summary=DateUtil.compareTo method removed",
+		"problem.tickets=LPS-59192", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class DateUtilApiChange extends JavaFileMigrator {
 
 	@Override

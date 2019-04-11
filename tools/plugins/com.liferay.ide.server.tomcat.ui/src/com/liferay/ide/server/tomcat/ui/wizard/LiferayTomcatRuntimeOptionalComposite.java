@@ -177,7 +177,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 	public static void setFieldValue(Text field, String value) {
 		if ((field != null) && !field.isDisposed()) {
-			field.setText(value != null ? value : StringPool.EMPTY);
+			field.setText((value != null) ? value : StringPool.EMPTY);
 		}
 	}
 
@@ -342,7 +342,11 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 			ZipEntry rootEntry = zipEntries.nextElement();
 
-			rootEntryName = new Path(rootEntry.getName()).segment(0);
+			rootEntryName = new Path(
+				rootEntry.getName()
+			).segment(
+				0
+			);
 
 			if (rootEntryName.endsWith(StringPool.FORWARD_SLASH)) {
 				rootEntryName = rootEntryName.substring(0, rootEntryName.length() - 1);
@@ -446,11 +450,11 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 		String javadocURL = getLiferayTomcatRuntime().getJavadocURL();
 
-		setFieldValue(_javadocField, javadocURL != null ? javadocURL : StringPool.EMPTY);
+		setFieldValue(_javadocField, (javadocURL != null) ? javadocURL : StringPool.EMPTY);
 
 		IPath sourceLocation = getLiferayTomcatRuntime().getSourceLocation();
 
-		setFieldValue(_sourceField, sourceLocation != null ? sourceLocation.toOSString() : StringPool.EMPTY);
+		setFieldValue(_sourceField, (sourceLocation != null) ? sourceLocation.toOSString() : StringPool.EMPTY);
 	}
 
 	protected boolean ignoreModifyEvent;

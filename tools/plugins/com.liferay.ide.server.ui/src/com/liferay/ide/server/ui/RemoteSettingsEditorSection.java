@@ -266,7 +266,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 
 			messageManager.addMessage(
 				remoteServer, status.getMessage(), status,
-				status.getSeverity() == IStatus.ERROR ? IMessageProvider.ERROR : IMessageProvider.WARNING);
+				(status.getSeverity() == IStatus.ERROR) ? IMessageProvider.ERROR : IMessageProvider.WARNING);
 		}
 	}
 
@@ -279,7 +279,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 		if (!status.isOK()) {
 			messageManager.addMessage(
 				remoteServer, status.getMessage(), status,
-				status.getSeverity() == IStatus.ERROR ? IMessageProvider.ERROR : IMessageProvider.WARNING);
+				(status.getSeverity() == IStatus.ERROR) ? IMessageProvider.ERROR : IMessageProvider.WARNING);
 		}
 		else {
 			messageManager.removeMessage(remoteServer);
@@ -395,8 +395,8 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 	protected Section createSettingsSection(Composite parent, FormToolkit toolkit) {
 		return toolkit.createSection(
 			parent,
-			ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED |
-			ExpandableComposite.TITLE_BAR | Section.DESCRIPTION | ExpandableComposite.FOCUS_TITLE);
+			ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR |
+			Section.DESCRIPTION | ExpandableComposite.FOCUS_TITLE);
 	}
 
 	protected void initialize() {

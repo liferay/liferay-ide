@@ -42,8 +42,11 @@ public interface ILiferayTomcatConstants {
 
 	public static final int DEVELOPMENT_SERVER_MODE = 2;
 
-	public static final String[] LIB_EXCLUDES = defaultPrefs.get("tomcat.lib.excludes", StringPool.EMPTY).split(
-		StringPool.COMMA);
+	public static final String[] LIB_EXCLUDES = defaultPrefs.get(
+		"tomcat.lib.excludes", StringPool.EMPTY
+	).split(
+		StringPool.COMMA
+	);
 
 	public static final boolean PREVENT_MULTI_EXT_PLUGINS_DEPLOY = defaultPrefs.getBoolean(
 		"prevent.multi.ext.plugins.deploy", false);

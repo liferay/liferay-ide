@@ -24,7 +24,7 @@ public class NoBrowseActionHandlerFilter extends SapphireActionHandlerFilter {
 
 	@Override
 	public boolean check(SapphireActionHandler handler) {
-		return !("Sapphire.Browse.Java.Type".equals(handler.getId()));
+		return !"Sapphire.Browse.Java.Type".equals(handler.getId());
 	}
 
 }

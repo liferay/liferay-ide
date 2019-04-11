@@ -28,13 +28,15 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.summary=Changed the BaseAssetRenderer APIs getIconPath Method ThemeDisplay Parameters",
-	"problem.tickets=no ticket number", "problem.title=BaseAssetRenderer API Changes",
-	"problem.section=#changed-the-baseassetrenderer-apis-geticonpath-method-themedisplay-parameters", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.summary=Changed the BaseAssetRenderer APIs getIconPath Method ThemeDisplay Parameters",
+		"problem.tickets=no ticket number", "problem.title=BaseAssetRenderer API Changes",
+		"problem.section=#changed-the-baseassetrenderer-apis-geticonpath-method-themedisplay-parameters", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class BaseAssetRendererGetIconPathDecl extends JavaFileMigrator {
 
 	@Override

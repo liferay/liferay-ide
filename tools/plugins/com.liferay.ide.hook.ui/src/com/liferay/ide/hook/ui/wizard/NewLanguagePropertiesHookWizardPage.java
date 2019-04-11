@@ -247,7 +247,6 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
 				// Do nothing
 
 			}
-
 		}
 	}
 

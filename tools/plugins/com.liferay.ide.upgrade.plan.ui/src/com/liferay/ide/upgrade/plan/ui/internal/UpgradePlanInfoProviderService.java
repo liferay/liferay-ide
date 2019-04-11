@@ -62,7 +62,9 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		if (element instanceof UpgradeStep) {
 			UpgradeStep upgradeStep = (UpgradeStep)element;
 
-			new Job("Retrieving " + upgradeStep.getTitle() + " detail...") {
+			new Job(
+				"Retrieving " + upgradeStep.getTitle() + " detail..."
+			) {
 
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {

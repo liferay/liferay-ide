@@ -26,7 +26,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-public interface SecurityRoleRef extends Element, Identifiable, Describeable {
+public interface SecurityRoleRef extends Describeable, Element, Identifiable {
 
 	public ElementType TYPE = new ElementType(SecurityRoleRef.class);
 

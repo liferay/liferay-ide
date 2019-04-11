@@ -115,8 +115,7 @@ public class ZipUtil {
 						throw new IOException(msg);
 					}
 
-					try (OutputStream outputStream = Files.newOutputStream(entryFile.toPath());)
-					{
+					try (OutputStream outputStream = Files.newOutputStream(entryFile.toPath())) {
 						int length = 0;
 						byte[] b = new byte[2048];
 
@@ -204,10 +203,7 @@ public class ZipUtil {
 					throw new IOException(msg);
 				}
 
-				try (InputStream in = zip.getInputStream(entry);
-					OutputStream out = Files.newOutputStream(f.toPath());)
-				{
-
+				try (InputStream in = zip.getInputStream(entry); OutputStream out = Files.newOutputStream(f.toPath())) {
 					byte[] bytes = new byte[1024];
 
 					int count = in.read(bytes);
@@ -261,7 +257,7 @@ public class ZipUtil {
 	private static void _zipDir(File target, ZipOutputStream zip, File dir, FilenameFilter filter, String path)
 		throws IOException {
 
-		for (File f : filter != null ? dir.listFiles(filter) : dir.listFiles()) {
+		for (File f : (filter != null) ? dir.listFiles(filter) : dir.listFiles()) {
 			String cpath = path + f.getName();
 
 			if (f.isDirectory()) {

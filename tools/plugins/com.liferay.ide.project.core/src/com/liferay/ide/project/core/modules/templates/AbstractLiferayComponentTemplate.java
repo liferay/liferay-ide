@@ -73,7 +73,7 @@ import org.eclipse.sapphire.java.JavaPackageName;
  */
 @SuppressWarnings("rawtypes")
 public abstract class AbstractLiferayComponentTemplate
-	implements IComponentTemplate<NewLiferayComponentOp>, Comparable<IComponentTemplate>, SapphireContentAccessor {
+	implements Comparable<IComponentTemplate>, IComponentTemplate<NewLiferayComponentOp>, SapphireContentAccessor {
 
 	public AbstractLiferayComponentTemplate() {
 	}
@@ -317,9 +317,7 @@ public abstract class AbstractLiferayComponentTemplate
 	protected void doSourceCodeOperation(IFile srcFile) throws CoreException {
 		File file = FileUtil.getFile(srcFile);
 
-		try (OutputStream fos = Files.newOutputStream(file.toPath());
-			Writer out = new OutputStreamWriter(fos)) {
-
+		try (OutputStream fos = Files.newOutputStream(file.toPath()); Writer out = new OutputStreamWriter(fos)) {
 			Template temp = cfg.getTemplate(getTemplateFile());
 
 			Map<String, Object> root = getTemplateMap();

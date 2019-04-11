@@ -71,9 +71,7 @@ public class AlloyJsTranslator extends JsTranslator {
 							 */
 							if (NodeHelper.isInArray(JsDataTypes.JSVALIDDATATYPES, nh.getAttributeValue("type")) ||
 								NodeHelper.isInArray(JsDataTypes.JSVALIDDATATYPES, nh.getAttributeValue("language")) ||
-								((nh.getAttributeValue("type") == null) &&
-								 (nh.getAttributeValue("language"
-							 ) == null) &&
+								((nh.getAttributeValue("type") == null) && (nh.getAttributeValue("language") == null) &&
 								 isGlobalJs())) {
 
 								if (nh.containsAttribute(new String[] {"src"})) {
@@ -91,10 +89,7 @@ public class AlloyJsTranslator extends JsTranslator {
 							/* Check for embedded JS events in any tags */
 							translateInlineJSNode(getCurrentNode());
 						}
-						else if (nh.nameEquals("META") &&
-								 nh.attrEquals(
-									 "http-equiv",
-									 "Content-Script-Type") &&
+						else if (nh.nameEquals("META") && nh.attrEquals("http-equiv", "Content-Script-Type") &&
 								 nh.containsAttribute(new String[] {"content"})) {
 
 							setIsGlobalJs(
@@ -135,13 +130,12 @@ public class AlloyJsTranslator extends JsTranslator {
 				r.getTextEnd();
 
 				String tagAttrname = container.getText(r);
+
 				/**
 				 * Attribute values aren't case sensative, also make sure next region is attrib
 				 * value
 				 */
-				if (NodeHelper.isInArray(
-						JsDataTypes.HTMLATREVENTS,
-						tagAttrname) ||
+				if (NodeHelper.isInArray(JsDataTypes.HTMLATREVENTS, tagAttrname) ||
 					NodeHelper.isInArray(ALLOYATTREVENTS, tagAttrname)) {
 
 					if (regionIterator.hasNext()) {

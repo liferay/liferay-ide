@@ -271,6 +271,7 @@ public class CoreUtil {
 		Reader in = new InputStreamReader(contents, "UTF-8"); //$NON-NLS-1$
 
 		int read;
+
 		do {
 			read = in.read(buffer, 0, buffer.length);
 
@@ -307,6 +308,7 @@ public class CoreUtil {
 		Writer out = new OutputStreamWriter(outputStream, "UTF-8"); //$NON-NLS-1$
 
 		int read;
+
 		do {
 			read = in.read(buffer, 0, buffer.length);
 

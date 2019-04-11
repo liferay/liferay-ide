@@ -272,6 +272,7 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 		}
 
 		if ((lastActivePage[0] == _SOURCE_PAGE_INDEX) && (pageIndex == _PREVIEW_PAGE_INDEX)) {
+
 			/**
 			 * if the source page is dirty, but the model didn't get changed,
 			 * then don't refresh the model element
@@ -315,6 +316,7 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 			getFile(), _bootstrapStyle, _is62);
 
 		if (newElement == null) {
+
 			/**
 			 * create an empty model for diagram in memory, but not write to
 			 * source

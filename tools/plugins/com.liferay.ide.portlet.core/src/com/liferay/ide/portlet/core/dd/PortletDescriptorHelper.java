@@ -83,7 +83,9 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 	public IStatus configurePortletXml(String newPortletName) {
 		IFile descriptorFile = getDescriptorFile();
 
-		IStatus status = new DOMModelEditOperation(descriptorFile) {
+		IStatus status = new DOMModelEditOperation(
+			descriptorFile
+		) {
 
 			protected IStatus doExecute(IDOMDocument document) {
 				Element rootElement = document.getDocumentElement();

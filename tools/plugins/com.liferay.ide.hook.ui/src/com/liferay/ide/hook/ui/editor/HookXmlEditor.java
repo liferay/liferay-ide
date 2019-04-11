@@ -230,7 +230,9 @@ public class HookXmlEditor extends SapphireEditorForXml implements SapphireConte
 								Msgs.disableCustomValidationMsg);
 
 							if (addDisableCustomJspValidation) {
-								new WorkspaceJob(" disable custom jsp validation for " + project.getName()) {
+								new WorkspaceJob(
+									" disable custom jsp validation for " + project.getName()
+								) {
 
 									@Override
 									public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
@@ -282,8 +284,8 @@ public class HookXmlEditor extends SapphireEditorForXml implements SapphireConte
 									if (FileUtil.exists(portalJsp)) {
 										File portalJspFile = portalJsp.toFile();
 
-										try (InputStream jspInputStream =
-												Files.newInputStream(portalJspFile.toPath())) {
+										try (InputStream jspInputStream = Files.newInputStream(
+												portalJspFile.toPath())) {
 
 											customJspFile.create(jspInputStream, true, null);
 										}

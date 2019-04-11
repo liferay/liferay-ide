@@ -29,8 +29,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
  */
 @Component(property = {
 	"file.extensions=java", "problem.title=copy-request-parameters init-param default value change",
-	"problem.summary=The copy-request-parameters init parameter's default value is now set to true in all portlets " +
-		"that extend MVCPortlet.",
+	"problem.summary=The copy-request-parameters init parameter's default value is now set to true in all portlets that extend MVCPortlet.",
 	"problem.tickets=LPS-54798",
 	"problem.section=#changed-the-default-value-of-the-copy-request-parameters-init-parameter-for",
 	 "version=7.0"

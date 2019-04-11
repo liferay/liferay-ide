@@ -27,10 +27,7 @@ import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 @Component(property = {
 	"file.extensions=properties",
 	"problem.title=Convert Process Classes do not support convert.processes Portal Property",
-	"problem.summary=The implementation class com.liferay.portal.convert.ConvertProcess was renamed com.liferay.port" +
-		"al. convert.BaseConvertProcess. An interface named com.liferay.portal.convert.ConvertProcess was created fo" +
-			"r it. The convert.processes key was removed from portal.properties. Consequentially, ConvertProcess imp" +
-				"lementations must register as OSGi components.",
+	"problem.summary=The implementation class com.liferay.portal.convert.ConvertProcess was renamed com.liferay.portal. convert.BaseConvertProcess. An interface named com.liferay.portal.convert.ConvertProcess was created for it. The convert.processes key was removed from portal.properties. Consequentially, ConvertProcess implementations must register as OSGi components.",
 	"problem.tickets=LPS-50604",
 	"problem.section=#convert-process-classes-are-no-longer-specified-via-the-convert-processes-p",
 	 "version=7.0"

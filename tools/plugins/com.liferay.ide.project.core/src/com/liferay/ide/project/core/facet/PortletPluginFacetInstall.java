@@ -135,7 +135,11 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 
 			Bundle bundle = jspCorePlugin.getBundle();
 
-			IEclipsePreferences node = new ProjectScope(this.project).getNode(bundle.getSymbolicName());
+			IEclipsePreferences node = new ProjectScope(
+				this.project
+			).getNode(
+				bundle.getSymbolicName()
+			);
 
 			node.putBoolean(JSPCorePreferenceNames.VALIDATE_FRAGMENTS, false);
 

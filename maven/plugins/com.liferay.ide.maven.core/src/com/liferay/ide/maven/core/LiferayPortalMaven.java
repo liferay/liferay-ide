@@ -70,7 +70,8 @@ public class LiferayPortalMaven implements ILiferayPortal {
 	@Override
 	public String[] getHookSupportedProperties() {
 		return new LiferayPortalValueLoader(
-			getAppServerPortalDir(), this._lrMvnProject.getUserLibs()).loadHookPropertiesFromClass();
+			getAppServerPortalDir(), this._lrMvnProject.getUserLibs()
+		).loadHookPropertiesFromClass();
 	}
 
 	@Override

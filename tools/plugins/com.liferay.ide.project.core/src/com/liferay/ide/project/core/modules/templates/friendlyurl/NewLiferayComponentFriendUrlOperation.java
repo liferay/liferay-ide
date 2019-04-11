@@ -91,8 +91,9 @@ public class NewLiferayComponentFriendUrlOperation extends AbstractLiferayCompon
 
 	private static final String _EXTENSION_CLASS = "FriendlyURLMapper.class";
 
-	private static final String[] _PROPERTIES_LIST =
-		{"javax.portlet.name=com_liferay_network_utilities_web_portlet_NetworkUtilitiesPortlet"};
+	private static final String[] _PROPERTIES_LIST = {
+		"javax.portlet.name=com_liferay_network_utilities_web_portlet_NetworkUtilitiesPortlet"
+	};
 
 	private static final String _SUPER_CLASS = "DefaultFriendlyURLMapper";
 

@@ -53,7 +53,7 @@ public class LiferayProjectImporterReader extends ExtensionReader<ILiferayProjec
 
 				@Override
 				public int compare(ILiferayProjectImporter importer1, ILiferayProjectImporter importer2) {
-					return importer1.getPriority() > importer2.getPriority() ? 1 : -1;
+					return (importer1.getPriority() > importer2.getPriority()) ? 1 : -1;
 				}
 
 			});

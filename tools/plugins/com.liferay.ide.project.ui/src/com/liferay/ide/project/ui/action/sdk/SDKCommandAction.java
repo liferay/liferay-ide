@@ -64,7 +64,9 @@ public abstract class SDKCommandAction extends AbstractObjectAction {
 				final IProject p = project;
 				final IFile buildFile = buildXmlFile;
 
-				new Job(p.getName() + " : " + getSDKCommand()) {
+				new Job(
+					p.getName() + " : " + getSDKCommand()
+				) {
 
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {

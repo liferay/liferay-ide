@@ -359,7 +359,7 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 		}
 
 		public void update() {
-			setEnabled(fEditor != null ? fEditor.isDirty() : false);
+			setEnabled((fEditor != null) ? fEditor.isDirty() : false);
 		}
 
 	}
@@ -378,7 +378,7 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 		}
 
 		public void update() {
-			setEnabled(fEditor != null ? fEditor.isDirty() : false);
+			setEnabled((fEditor != null) ? fEditor.isDirty() : false);
 		}
 
 	}

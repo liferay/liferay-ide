@@ -65,7 +65,7 @@ import org.gradle.tooling.model.GradleProject;
  * @author Andy Wu
  */
 public class LiferayGradleProject
-	extends BaseLiferayProject implements IBundleProject, IResourceBundleProject, EventListener {
+	extends BaseLiferayProject implements EventListener, IBundleProject, IResourceBundleProject {
 
 	public LiferayGradleProject(IProject project) {
 		super(project);
@@ -152,7 +152,6 @@ public class LiferayGradleProject
 
 						return null;
 					},
-
 					monitor);
 			}
 		}

@@ -26,8 +26,7 @@ import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
  */
 @Component(property = {
 	"file.extensions=properties", "problem.title=Email Signature Properties",
-	"problem.summary=Merged Configured Email Signature Field into the Body of Email Messages from Message Boards an" +
-		"d Wiki",
+	"problem.summary=Merged Configured Email Signature Field into the Body of Email Messages from Message Boards and Wiki",
 	"problem.tickets=LPS-44599",
 	"problem.section=#merged-configured-email-signature-field-into-the-body-of-email-messages-fro",
 	 "version=7.0"

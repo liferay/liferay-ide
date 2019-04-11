@@ -124,6 +124,7 @@ public class UpgradeLiferayProjectsOpMethods {
 		return retval.toArray(new Status[0]);
 	}
 
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
+	};
 
 }

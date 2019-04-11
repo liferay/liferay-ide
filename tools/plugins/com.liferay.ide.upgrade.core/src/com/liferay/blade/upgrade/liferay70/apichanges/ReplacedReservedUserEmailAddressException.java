@@ -28,15 +28,16 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java",
-	"problem.title=Replaced the ReservedUserEmailAddressException with UserEmailAddressException",
-	"problem.section=#replaced-the-reserveduseremailaddressexception-with-useremailaddressexcepti",
-	"problem.summary=Replaced the ReservedUserEmailAddressException with UserEmailAddressException Inner Classes in " +
-		"User Services",
-	"problem.tickets=LPS-53279", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java",
+		"problem.title=Replaced the ReservedUserEmailAddressException with UserEmailAddressException",
+		"problem.section=#replaced-the-reserveduseremailaddressexception-with-useremailaddressexcepti",
+		"problem.summary=Replaced the ReservedUserEmailAddressException with UserEmailAddressException Inner Classes in User Services",
+		"problem.tickets=LPS-53279", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class ReplacedReservedUserEmailAddressException extends JavaFileMigrator {
 
 	@Override

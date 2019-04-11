@@ -68,8 +68,9 @@ public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] jspfFile =
-			{project.getName(), "src", "main", "resources", "META-INF", "resources", "article_vertical_card.jspf"};
+		String[] jspfFile = {
+			project.getName(), "src", "main", "resources", "META-INF", "resources", "article_vertical_card.jspf"
+		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspfFile));
 
@@ -117,8 +118,9 @@ public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] jspfFile =
-			{project.getName(), "src", "main", "resources", "META-INF", "resources", "user_search_columns.jspf"};
+		String[] jspfFile = {
+			project.getName(), "src", "main", "resources", "META-INF", "resources", "user_search_columns.jspf"
+		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspfFile));
 
@@ -220,8 +222,9 @@ public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] resourceActionFile =
-			{project.getName(), "src", "main", "resources", "resource-actions", "default-ext.xml"};
+		String[] resourceActionFile = {
+			project.getName(), "src", "main", "resources", "resource-actions", "default-ext.xml"
+		};
 
 		String[] portletPropertiesFile = {project.getName(), "src", "main", "resources", "portlet-ext.properties"};
 
@@ -249,8 +252,9 @@ public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		String[] files =
-			{"META-INF/resources/init-ext.jsp", "META-INF/resources/view.jsp", "META-INF/resources/init.jsp"};
+		String[] files = {
+			"META-INF/resources/init-ext.jsp", "META-INF/resources/view.jsp", "META-INF/resources/init.jsp"
+		};
 
 		viewAction.project.openFragmentFilesWizard();
 

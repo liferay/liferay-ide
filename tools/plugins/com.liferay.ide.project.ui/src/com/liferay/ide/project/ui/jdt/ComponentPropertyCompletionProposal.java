@@ -136,7 +136,7 @@ public class ComponentPropertyCompletionProposal extends JavaCompletionProposal 
 		}
 
 		if (_fIsValidated && (event != null)) {
-			int delta = (event.fText == null ? 0 : event.fText.length()) - event.fLength;
+			int delta = ((event.fText == null) ? 0 : event.fText.length()) - event.fLength;
 
 			final int newLength = Math.max(getReplacementLength() + delta, 0);
 

@@ -29,17 +29,16 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.summary=The field type from the Journal Article entity has been removed. ",
-	"problem.title=Migration of the Field Type from the Journal Article API into a Vocabulary. The Journal API no " +
-		"longer supports this parameter. A new vocabulary called Web Content Types is created when migrating from " +
-			"previous versions of Liferay, and the types from the existing articles are kept as categories of this " +
-				"vocabulary.",
-	"problem.tickets=LPS-50764",
-	"problem.section=#migration-of-the-field-type-from-the-journal-article-api-into-a-vocabulary", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.summary=The field type from the Journal Article entity has been removed. ",
+		"problem.title=Migration of the Field Type from the Journal Article API into a Vocabulary. The Journal API no longer supports this parameter. A new vocabulary called Web Content Types is created when migrating from previous versions of Liferay, and the types from the existing articles are kept as categories of this vocabulary.",
+		"problem.tickets=LPS-50764",
+		"problem.section=#migration-of-the-field-type-from-the-journal-article-api-into-a-vocabulary", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class WebContentTypeRemoved extends JavaFileMigrator {
 
 	@Override

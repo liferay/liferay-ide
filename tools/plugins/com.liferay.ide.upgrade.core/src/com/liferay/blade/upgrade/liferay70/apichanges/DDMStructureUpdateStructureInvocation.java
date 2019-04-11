@@ -28,14 +28,15 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.summary=Added userId Parameter to Update Operations of DDMStructureLocalService and " +
-		"DDMTemplateLocalService",
-	"problem.tickets=LPS-50939", "problem.title=DDMStructureLocalService add new param userId",
-	"problem.section=#added-userid-parameter-to-update-operations-of-ddmstructurelocalservice-and", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.summary=Added userId Parameter to Update Operations of DDMStructureLocalService and DDMTemplateLocalService",
+		"problem.tickets=LPS-50939", "problem.title=DDMStructureLocalService add new param userId",
+		"problem.section=#added-userid-parameter-to-update-operations-of-ddmstructurelocalservice-and", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class DDMStructureUpdateStructureInvocation extends JavaFileMigrator {
 
 	@Override

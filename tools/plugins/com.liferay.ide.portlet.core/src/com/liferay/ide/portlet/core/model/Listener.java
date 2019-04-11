@@ -36,7 +36,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author Simon Jiang
  */
 @Image(path = "images/obj16/portlet_class_obj.gif")
-public interface Listener extends Element, Describeable, Displayable {
+public interface Listener extends Describeable, Displayable, Element {
 
 	public ElementType TYPE = new ElementType(Listener.class);
 

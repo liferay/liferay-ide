@@ -284,19 +284,19 @@ public class RequiredDeploymentContextsSection
 
 	protected void buttonSelected(int index) {
 		switch (index) {
-			case _ADD_INDEX :
+			case _ADD_INDEX:
 				_handleAdd();
 
 				break;
-			case _REMOVE_INDEX :
+			case _REMOVE_INDEX:
 				_handleRemove();
 
 				break;
-			case _UP_INDEX :
+			case _UP_INDEX:
 				_handleUp();
 
 				break;
-			case _DOWN_INDEX :
+			case _DOWN_INDEX:
 				_handleDown();
 
 				break;
@@ -587,8 +587,7 @@ public class RequiredDeploymentContextsSection
 		public static String serviceDependencies;
 		public static String specifyPlugins;
 
-		static
-		{
+		static {
 			initializeMessages(RequiredDeploymentContextsSection.class.getName(), Msgs.class);
 		}
 

@@ -41,7 +41,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author Simon Jiang
  */
 @Image(path = "images/elcl16/portlet_16x16.png")
-public interface Portlet extends ResourceBundle, Identifiable, Describeable, Displayable {
+public interface Portlet extends Describeable, Displayable, Identifiable, ResourceBundle {
 
 	public ElementType TYPE = new ElementType(Portlet.class);
 
@@ -154,8 +154,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
 	@Label(standard = "Public Render Parameters")
 	@Type(base = SupportedPublicRenderParameter.class)
 	@XmlListBinding(
-		mappings = @XmlListBinding.Mapping(
-			element = "supported-public-render-parameter", type = SupportedPublicRenderParameter.class)
+		mappings = @XmlListBinding.Mapping(element = "supported-public-render-parameter", type = SupportedPublicRenderParameter.class)
 	)
 	public ListProperty PROP_SUPPORTED_PUBLIC_RENDER_PARAMETERS = new ListProperty(
 		TYPE, "SupportedPublicRenderParameters");

@@ -56,7 +56,7 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
  */
 @SuppressWarnings("restriction")
 public class BaseProjectWizard<T extends Element>
-	extends SapphireWizard<T> implements IWorkbenchWizard, INewWizard, SapphireContentAccessor {
+	extends SapphireWizard<T> implements INewWizard, IWorkbenchWizard, SapphireContentAccessor {
 
 	public BaseProjectWizard(T t, Reference<WizardDef> wizard) {
 		super(t, wizard);

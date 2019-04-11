@@ -40,8 +40,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
  */
 @Component(property = {
 	"file.extensions=java,jsp,jspf",
-	"problem.summary=The portal-kernel and portal-impl folders have many packages with the same name. Therefore, al" +
-		"l of these packages are affected by the split package problem",
+	"problem.summary=The portal-kernel and portal-impl folders have many packages with the same name. Therefore, all of these packages are affected by the split package problem",
 	"problem.tickets=LPS-61952", "problem.title=Renamed Packages to Fix the Split Packages Problem",
 	"problem.section=#renamed-packages-to-fix-the-split-packages-problem", "auto.correct=import",
 	 "version=7.0"

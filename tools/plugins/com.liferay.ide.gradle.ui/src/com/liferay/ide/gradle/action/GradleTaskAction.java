@@ -185,7 +185,7 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 			DomainObjectSet<? extends GradleProject> childGradleProjects = gradleProject.getChildren();
 
 			for (GradleProject childGradleProject : childGradleProjects) {
-				 _fetchModelTasks(childGradleProject, taskName, tasks);
+				_fetchModelTasks(childGradleProject, taskName, tasks);
 			}
 		}
 

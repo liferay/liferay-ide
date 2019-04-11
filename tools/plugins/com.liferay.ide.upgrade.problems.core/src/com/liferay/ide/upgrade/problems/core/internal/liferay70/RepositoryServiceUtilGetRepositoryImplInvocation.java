@@ -30,8 +30,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 @Component(property = {
 	"file.extensions=java,jsp,jspf", "problem.title=RepositoryLocalServiceUtil changes",
 	"problem.section=#removed-methods-getgrouplocalrepositoryimpl-and-getlocalrepositoryimpl-from",
-	"problem.summary=Removed Methods getGroupLocalRepositoryImpl and getLocalRepositoryImpl from " +
-		"RepositoryLocalService and RepositoryService",
+	"problem.summary=Removed Methods getGroupLocalRepositoryImpl and getLocalRepositoryImpl from RepositoryLocalService and RepositoryService",
 	"problem.tickets=LPS-55566",  "version=7.0"
 },
 	service = FileMigrator.class)

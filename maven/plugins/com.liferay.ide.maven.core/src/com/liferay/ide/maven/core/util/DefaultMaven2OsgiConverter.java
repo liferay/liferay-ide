@@ -44,8 +44,7 @@ import org.apache.maven.artifact.Artifact;
  * @plexus.component
  *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
- * @version $Id$
-*/
+ */
 public class DefaultMaven2OsgiConverter {
 
 	// Bundle-Version must match this pattern
@@ -200,6 +199,7 @@ public class DefaultMaven2OsgiConverter {
 			String s4 = m.group(4);
 
 			Matcher qualifierMatcher = _onlyNumbers.matcher(s3);
+
 			/**
 			 * if last portion before dot is only numbers then it's not in the middle of the
 			 * qualifier
@@ -359,11 +359,11 @@ public class DefaultMaven2OsgiConverter {
 	private String _getVersion(String major, String minor, String service, String qualifier) {
 		StringBuffer sb = new StringBuffer();
 
-		sb.append(major != null ? major : "0");
+		sb.append((major != null) ? major : "0");
 		sb.append('.');
-		sb.append(minor != null ? minor : "0");
+		sb.append((minor != null) ? minor : "0");
 		sb.append('.');
-		sb.append(service != null ? service : "0");
+		sb.append((service != null) ? service : "0");
 
 		if (qualifier != null) {
 			sb.append('.');

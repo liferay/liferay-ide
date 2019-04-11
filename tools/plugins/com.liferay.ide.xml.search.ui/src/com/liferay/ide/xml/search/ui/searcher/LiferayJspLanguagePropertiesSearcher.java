@@ -52,7 +52,7 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
 			for (IFile languageFile : languageFiles) {
 				Properties properties = new Properties();
 
-				try (InputStream contents = languageFile.getContents();) {
+				try (InputStream contents = languageFile.getContents()) {
 					properties.load(contents);
 
 					Object key = properties.get(mathingString);

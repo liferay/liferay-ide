@@ -44,7 +44,7 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
  * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
-public class NewHookWizard extends DataModelWizard implements INewWizard, INewHookDataModelProperties {
+public class NewHookWizard extends DataModelWizard implements INewHookDataModelProperties, INewWizard {
 
 	public static final String CUSTOM_JSPS_PAGE = "customJSPsPage";
 
@@ -52,8 +52,9 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 
 	public static final String LANGUAGE_PROPERTIES_PAGE = "languagePropertiesPage";
 
-	public static final String[] PAGE_PROPERTIES =
-		{CREATE_CUSTOM_JSPS, CREATE_PORTAL_PROPERTIES, CREATE_SERVICES, CREATE_LANGUAGE_PROPERTIES};
+	public static final String[] PAGE_PROPERTIES = {
+		CREATE_CUSTOM_JSPS, CREATE_PORTAL_PROPERTIES, CREATE_SERVICES, CREATE_LANGUAGE_PROPERTIES
+	};
 
 	public static final String PORTAL_PROPERTIES_PAGE = "portalPropertiesPage";
 
@@ -61,8 +62,9 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 
 	public static final String TYPE_PAGE = "typePage";
 
-	public static final String[] WIZARD_PAGES =
-		{CUSTOM_JSPS_PAGE, PORTAL_PROPERTIES_PAGE, SERVICES_PAGE, LANGUAGE_PROPERTIES_PAGE};
+	public static final String[] WIZARD_PAGES = {
+		CUSTOM_JSPS_PAGE, PORTAL_PROPERTIES_PAGE, SERVICES_PAGE, LANGUAGE_PROPERTIES_PAGE
+	};
 
 	public NewHookWizard() {
 		this(null);
@@ -237,7 +239,8 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 		if (ListUtil.isNotEmpty(languagePropertiesFiles)) {
 			Iterator<IFile> iterator = languagePropertiesFiles.iterator();
 
-			 // just openthe first one
+			// just openthe first one
+
 			openWebFile(iterator.next());
 		}
 	}

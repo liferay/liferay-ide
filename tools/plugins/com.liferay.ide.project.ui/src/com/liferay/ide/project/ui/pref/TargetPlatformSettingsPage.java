@@ -72,7 +72,11 @@ public class TargetPlatformSettingsPage extends PreferencePage implements IWorkb
 		layout.horizontalSpacing = 10;
 		comp.setLayout(layout);
 
-		new Label(comp, SWT.NONE).setText("Liferay Target Platform Version:");
+		new Label(
+			comp, SWT.NONE
+		).setText(
+			"Liferay Target Platform Version:"
+		);
 
 		_targetPlatFormVersion = new ComboViewer(comp, SWT.READ_ONLY);
 

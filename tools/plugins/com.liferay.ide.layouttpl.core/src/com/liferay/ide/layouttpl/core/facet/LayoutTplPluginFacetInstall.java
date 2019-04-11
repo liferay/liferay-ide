@@ -72,7 +72,9 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 
 		removeUnneededClasspathEntries();
 
-		IFolder folder = new PluginsSDKBundleProject(project, null).getDefaultDocrootFolder();
+		IFolder folder = new PluginsSDKBundleProject(
+			project, null
+		).getDefaultDocrootFolder();
 
 		if (FileUtil.exists(folder)) {
 			IResource libRes = folder.findMember("WEB-INF/lib");

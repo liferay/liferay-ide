@@ -205,7 +205,10 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 			rootComponent.getProject(), type + relativePath.toString());
 
 		IVirtualReference ref = ComponentCore.createReference(
-			rootComponent, archive, new Path(J2EEConstants.WEB_INF_LIB).makeAbsolute());
+			rootComponent, archive,
+			new Path(
+				J2EEConstants.WEB_INF_LIB
+			).makeAbsolute());
 
 		ref.setArchiveName(serviceJarPath.lastSegment());
 
@@ -255,7 +258,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 			return;
 		}
 
-		new WorkspaceJob("copy portal tlds") {
+		new WorkspaceJob(
+			"copy portal tlds"
+		) {
 
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
@@ -323,7 +328,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
 		Properties props = new Properties();
 
-		try (InputStream contents = pluginPackagePropertiesFile.getContents();) {
+		try (InputStream contents = pluginPackagePropertiesFile.getContents()) {
 			props.load(contents);
 
 			// processPortalDependencyTlds(props, pluginPackagePropertiesFile.getProject());
@@ -389,7 +394,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 			}
 		}
 
-		new WorkspaceJob("Update virtual component.") {
+		new WorkspaceJob(
+			"Update virtual component."
+		) {
 
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
@@ -408,7 +415,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
 		IFile pluginPackagePropertiesFile = _getWorkspaceFile(deltaPath);
 
-		new WorkspaceJob(Msgs.processingPluginPackageResource) {
+		new WorkspaceJob(
+			Msgs.processingPluginPackageResource
+		) {
 
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {

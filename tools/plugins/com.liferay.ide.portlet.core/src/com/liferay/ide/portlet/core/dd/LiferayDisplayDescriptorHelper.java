@@ -57,7 +57,9 @@ public class LiferayDisplayDescriptorHelper
 	}
 
 	public IStatus configureLiferayDisplayXml(String newPortletName) {
-		IStatus status = new DOMModelEditOperation(getDescriptorFile()) {
+		IStatus status = new DOMModelEditOperation(
+			getDescriptorFile()
+		) {
 
 			protected IStatus doExecute(IDOMDocument document) {
 				Element rootElement = document.getDocumentElement();

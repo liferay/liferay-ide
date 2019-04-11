@@ -40,6 +40,7 @@ public class BinaryProjectsImportWizard extends DataModelWizard implements IWork
 
 	public BinaryProjectsImportWizard() {
 		this((IDataModel)null);
+
 		dataModelProvider = new BinaryProjectsImportDataModelProvider();
 	}
 

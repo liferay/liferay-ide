@@ -433,7 +433,7 @@ public class MigrationUtil {
 				fileProblem -> {
 					IResource resource = getIResourceFromFileProblems(fileProblem);
 
-					IProject project = resource .getProject();
+					IProject project = resource.getProject();
 
 					IPath resourceFullPath = resource.getFullPath();
 

@@ -91,7 +91,9 @@ public class BuildServiceHandler extends AbstractHandler {
 		IStatus retval = null;
 
 		try {
-			new BuildServiceJob(project).schedule();
+			new BuildServiceJob(
+				project
+			).schedule();
 
 			retval = Status.OK_STATUS;
 		}

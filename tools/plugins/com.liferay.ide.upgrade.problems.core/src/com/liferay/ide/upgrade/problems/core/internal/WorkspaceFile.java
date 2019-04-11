@@ -109,8 +109,8 @@ public class WorkspaceFile implements SourceFile {
 					// prefer the path that is shortest (to avoid a nested
 					// version)
 
-					if (FileUtil.getSegmentCount(iFile.getFullPath()) <
-							FileUtil.getSegmentCount(retval.getFullPath())) {
+					if (FileUtil.getSegmentCount(iFile.getFullPath()) < FileUtil.getSegmentCount(
+							retval.getFullPath())) {
 
 						retval = iFile;
 					}
@@ -165,7 +165,7 @@ public class WorkspaceFile implements SourceFile {
 		if (!javaProject.exists()) {
 			IWorkspace workspace = CoreUtil.getWorkspace();
 
-			IProjectDescription description = workspace .newProjectDescription(projectName);
+			IProjectDescription description = workspace.newProjectDescription(projectName);
 
 			javaProject.create(monitor);
 			javaProject.open(monitor);

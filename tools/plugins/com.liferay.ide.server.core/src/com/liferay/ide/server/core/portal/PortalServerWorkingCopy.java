@@ -19,7 +19,7 @@ import com.liferay.ide.server.core.ILiferayServerWorkingCopy;
 /**
  * @author Terry Jia
  */
-public interface PortalServerWorkingCopy extends PortalServer, ILiferayServerWorkingCopy {
+public interface PortalServerWorkingCopy extends ILiferayServerWorkingCopy, PortalServer {
 
 	public void setDeveloperMode(boolean developmentMode);
 

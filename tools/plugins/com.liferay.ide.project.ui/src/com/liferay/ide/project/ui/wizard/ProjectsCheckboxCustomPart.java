@@ -47,6 +47,7 @@ import org.eclipse.swt.graphics.RGB;
 public abstract class ProjectsCheckboxCustomPart extends AbstractCheckboxCustomPart implements SapphireContentAccessor {
 
 	public class ProjectCheckboxElement extends CheckboxElement {
+
 		public ProjectCheckboxElement(String name, String context, String location) {
 			super(name, context);
 

@@ -28,13 +28,15 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java", "problem.title=Added New Methods in the ScreenNameValidator Interface",
-	"problem.summary=The ScreenNameValidator interface has new methods getDescription(Locale) and getJSValidation().",
-	"problem.tickets=LPS-53409", "problem.section=#added-new-methods-in-the-screennamevalidator-interface",
-	"version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java", "problem.title=Added New Methods in the ScreenNameValidator Interface",
+		"problem.summary=The ScreenNameValidator interface has new methods getDescription(Locale) and getJSValidation().",
+		"problem.tickets=LPS-53409", "problem.section=#added-new-methods-in-the-screennamevalidator-interface",
+		"version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class ScreenNameValidatorInterface extends JavaFileMigrator {
 
 	@Override

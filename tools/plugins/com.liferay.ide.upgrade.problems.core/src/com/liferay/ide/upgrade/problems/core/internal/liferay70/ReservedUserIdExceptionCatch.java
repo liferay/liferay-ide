@@ -29,8 +29,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
  */
 @Component(property = {
 	"file.extensions=java", "problem.title=Replaced ReservedUserIdException with UserIdException Inner Classes",
-	"problem.summary=The ReservedUserIdException has been deprecated and replaced with UserIdException. MustNotBeRes" +
-		"erved.",
+	"problem.summary=The ReservedUserIdException has been deprecated and replaced with UserIdException. MustNotBeReserved.",
 	"problem.tickets=LPS-53487", "problem.section=#replaced-reserveduseridexception-with-useridexception-inner-classes",
 	 "version=7.0"
 },

@@ -36,6 +36,7 @@ public abstract class PortletRowLayoutEditPart extends BaseGraphicalEditPart {
 	public static final int DEFAULT_COLUMN_HEIGHT = -1;
 
 	public int getContainerWidth() {
+
 		/**
 		 * XXX to be continued, temporarily fix NullPointerException for parent
 		 * column

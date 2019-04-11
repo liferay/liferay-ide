@@ -174,8 +174,7 @@ public class UpgradeViewProgressBar extends Canvas implements UpgradeListener {
 						UpgradeStep::completed
 					).collect(
 						Collectors.toList()
-					)
-				);
+					));
 			}
 		}
 		else if (upgradeEvent instanceof UpgradeStepStatusChangedEvent) {

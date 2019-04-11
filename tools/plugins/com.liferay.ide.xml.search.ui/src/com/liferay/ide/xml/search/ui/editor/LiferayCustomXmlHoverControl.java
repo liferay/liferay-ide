@@ -241,7 +241,7 @@ public class LiferayCustomXmlHoverControl
 
 			Point constraints = getSizeConstraints();
 
-			Point contentSize = composite.computeSize(constraints != null ? constraints.x : SWT.DEFAULT, SWT.DEFAULT);
+			Point contentSize = composite.computeSize((constraints != null) ? constraints.x : SWT.DEFAULT, SWT.DEFAULT);
 
 			composite.setSize(new Point(contentSize.x, contentSize.y));
 		}

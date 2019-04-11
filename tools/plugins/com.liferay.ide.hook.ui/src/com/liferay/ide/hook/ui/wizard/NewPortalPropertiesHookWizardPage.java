@@ -283,7 +283,6 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 				// Do nothing
 
 			}
-
 		}
 	}
 

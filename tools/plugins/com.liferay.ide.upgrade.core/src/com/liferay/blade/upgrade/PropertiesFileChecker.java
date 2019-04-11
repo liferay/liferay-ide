@@ -231,6 +231,7 @@ public class PropertiesFileChecker {
 
 					keyLen++;
 				}
+
 				while (valueStart < limit[0]) {
 					c = lr._lineBuf[valueStart];
 

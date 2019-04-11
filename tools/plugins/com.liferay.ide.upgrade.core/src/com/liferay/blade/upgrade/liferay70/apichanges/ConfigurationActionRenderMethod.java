@@ -29,12 +29,14 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java", "problem.summary=Removed render Method from ConfigurationAction API",
-	"problem.tickets=LPS-56300", "problem.title=ConfigurationAction render method",
-	"problem.section=#removed-render-method-from-configurationaction-api", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java", "problem.summary=Removed render Method from ConfigurationAction API",
+		"problem.tickets=LPS-56300", "problem.title=ConfigurationAction render method",
+		"problem.section=#removed-render-method-from-configurationaction-api", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class ConfigurationActionRenderMethod extends JavaFileMigrator {
 
 	@Override

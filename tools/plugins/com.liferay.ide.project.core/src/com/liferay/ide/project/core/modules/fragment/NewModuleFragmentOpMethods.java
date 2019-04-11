@@ -284,7 +284,8 @@ public class NewModuleFragmentOpMethods {
 		}
 	}
 
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
+	};
 	private static File _hostBundleDir = null;
 
 }

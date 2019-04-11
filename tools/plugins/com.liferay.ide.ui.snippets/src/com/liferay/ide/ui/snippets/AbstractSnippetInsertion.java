@@ -93,6 +93,7 @@ public abstract class AbstractSnippetInsertion extends DefaultSnippetInsertion {
 			event.data = content;
 		}
 		else {
+
 			/**
 			 * All complex insertions send an XML encoded version of the item
 			 * itself as the data. The drop action must use this to prompt the

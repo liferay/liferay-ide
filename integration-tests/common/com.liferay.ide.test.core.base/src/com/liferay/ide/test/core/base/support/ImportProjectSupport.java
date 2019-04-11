@@ -55,7 +55,11 @@ public class ImportProjectSupport extends ProjectSupport {
 	}
 
 	public IPath getFile(String filePath) {
-		return new Path(_projectFile.getPath()).append(filePath);
+		return new Path(
+			_projectFile.getPath()
+		).append(
+			filePath
+		);
 	}
 
 	public IPath getIPath() {

@@ -31,7 +31,7 @@ import tern.server.TernPlugin;
 /**
  * @author Gregory Amerson
  */
-public class LiferayProjectTernAdapter implements ITernNatureCapability, IDefaultTernModulesProvider {
+public class LiferayProjectTernAdapter implements IDefaultTernModulesProvider, ITernNatureCapability {
 
 	@Override
 	public Collection<DefaultTernModule> getTernModules(IProject project) {

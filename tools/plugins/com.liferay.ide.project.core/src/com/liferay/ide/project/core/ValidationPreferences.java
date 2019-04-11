@@ -176,7 +176,11 @@ public class ValidationPreferences {
 	public static void setProjectScopeValidationLevel(
 		IProject project, String liferayPluginValidationType, int validationLevel) {
 
-		IEclipsePreferences node = new ProjectScope(project).getNode(ProjectCore.PLUGIN_ID);
+		IEclipsePreferences node = new ProjectScope(
+			project
+		).getNode(
+			ProjectCore.PLUGIN_ID
+		);
 
 		if (_preferenceKeys.contains(liferayPluginValidationType) &&
 			((validationLevel == -1) || (validationLevel == 1) || (validationLevel == 2))) {

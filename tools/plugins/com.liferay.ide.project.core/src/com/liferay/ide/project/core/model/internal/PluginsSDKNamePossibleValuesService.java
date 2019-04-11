@@ -91,7 +91,9 @@ public class PluginsSDKNamePossibleValuesService extends PossibleValuesService i
 	}
 
 	private void _refreshSafe() {
-		new Job("refreshing") {
+		new Job(
+			"refreshing"
+		) {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {

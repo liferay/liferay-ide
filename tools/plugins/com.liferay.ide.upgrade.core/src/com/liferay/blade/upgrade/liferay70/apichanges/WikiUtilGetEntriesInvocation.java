@@ -28,12 +28,14 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java", "problem.title=Removed WikiUtil.getEntries Method",
-	"problem.section=#removed-wikiutil-getentries-method", "problem.summary=Removed WikiUtil.getEntries Method",
-	"problem.tickets=LPS-56242", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java", "problem.title=Removed WikiUtil.getEntries Method",
+		"problem.section=#removed-wikiutil-getentries-method", "problem.summary=Removed WikiUtil.getEntries Method",
+		"problem.tickets=LPS-56242", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class WikiUtilGetEntriesInvocation extends JavaFileMigrator {
 
 	@Override

@@ -33,7 +33,7 @@ import org.eclipse.sapphire.modeling.annotations.Services;
 /**
  * @author Gregory Amerson
  */
-public interface NewLiferayProfile extends Profile, HasLiferayRuntime {
+public interface NewLiferayProfile extends HasLiferayRuntime, Profile {
 
 	public ElementType TYPE = new ElementType(NewLiferayProfile.class);
 

@@ -80,7 +80,9 @@ public class PluginsSDKNameDefaultValueService extends DefaultValueService imple
 	protected static final String NONE = "<None>";
 
 	private void _refreshSafe() {
-		new Job("refreshing") {
+		new Job(
+			"refreshing"
+		) {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {

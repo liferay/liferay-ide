@@ -61,7 +61,9 @@ public abstract class OpenPortalURLHandler extends AbstractHandler {
 				if (selected instanceof IServer) {
 					ILiferayServer portalServer = getLiferayServer(selected);
 
-					new Job(Msgs.openPortalUrl) {
+					new Job(
+						Msgs.openPortalUrl
+					) {
 
 						@Override
 						protected IStatus run(IProgressMonitor monitor) {

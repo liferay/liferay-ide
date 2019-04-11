@@ -28,7 +28,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-public interface UserDataConstraint extends Element, Identifiable, Describeable {
+public interface UserDataConstraint extends Describeable, Element, Identifiable {
 
 	public ElementType TYPE = new ElementType(UserDataConstraint.class);
 

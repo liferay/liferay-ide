@@ -31,8 +31,11 @@ public interface ISDKConstants {
 
 	public static final IEclipsePreferences defaultPrefs = DefaultScope.INSTANCE.getNode(SDKCorePlugin.PLUGIN_ID);
 
-	public static final String[] ANT_LIBRARIES = defaultPrefs.get("ant.libraries", StringPool.EMPTY).split(
-		StringPool.COMMA);
+	public static final String[] ANT_LIBRARIES = defaultPrefs.get(
+		"ant.libraries", StringPool.EMPTY
+	).split(
+		StringPool.COMMA
+	);
 
 	public static final String[] BINARY_PLUGIN_EXTENSIONS = {"*.war"};
 
@@ -84,7 +87,10 @@ public interface ISDKConstants {
 	public static final String PORTLET_PLUGIN_PROJECT_SUFFIX = "-portlet";
 
 	public static final String[] PORTLET_PLUGIN_ZIP_IGNORE_FILES = defaultPrefs.get(
-		"portlet.plugin.zip.ignore.files", StringPool.EMPTY).split(StringPool.COMMA);
+		"portlet.plugin.zip.ignore.files", StringPool.EMPTY
+	).split(
+		StringPool.COMMA
+	);
 
 	public static final String PORTLET_PLUGIN_ZIP_PATH = defaultPrefs.get("portlet.plugin.zip.path", null);
 

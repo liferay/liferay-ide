@@ -85,7 +85,11 @@ public class EnvAction extends UIAction {
 						_bundlesPath = new Path(filePath.substring(0, index) + "/tests-resources");
 					}
 					else {
-						IPath path = new Path(filePath).removeLastSegments(3);
+						IPath path = new Path(
+							filePath
+						).removeLastSegments(
+							3
+						);
 
 						_bundlesPath = path.append("tests-resources");
 					}

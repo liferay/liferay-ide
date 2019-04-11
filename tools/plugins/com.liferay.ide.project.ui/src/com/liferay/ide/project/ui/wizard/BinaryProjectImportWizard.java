@@ -52,6 +52,7 @@ public class BinaryProjectImportWizard extends DataModelWizard implements IWorkb
 
 	public BinaryProjectImportWizard(SDK sdk) {
 		this((IDataModel)null);
+
 		this.sdk = sdk;
 	}
 

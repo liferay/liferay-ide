@@ -82,7 +82,7 @@ import org.osgi.service.prefs.BackingStoreException;
  * @author Simon Jiang
  */
 public class LiferayProjectPropertyPage
-	extends PropertyPage implements IWorkbenchPropertyPage, IPluginProjectDataModelProperties, SapphireContentAccessor {
+	extends PropertyPage implements IPluginProjectDataModelProperties, IWorkbenchPropertyPage, SapphireContentAccessor {
 
 	public LiferayProjectPropertyPage() {
 		setImageDescriptor(ProjectUI.imageDescriptorFromPlugin(ProjectUI.PLUGIN_ID, "/icons/liferay_logo_16.png"));
@@ -141,7 +141,11 @@ public class LiferayProjectPropertyPage
 
 			if (!CoreUtil.isNullOrEmpty(sdkName)) {
 				try {
-					final IEclipsePreferences prefs = new ProjectScope(getProject()).getNode(SDKCorePlugin.PLUGIN_ID);
+					final IEclipsePreferences prefs = new ProjectScope(
+						getProject()
+					).getNode(
+						SDKCorePlugin.PLUGIN_ID
+					);
 
 					prefs.put(SDKCorePlugin.PREF_KEY_SDK_NAME, sdkName);
 					prefs.flush();
@@ -177,7 +181,11 @@ public class LiferayProjectPropertyPage
 	}
 
 	protected void createInfoGroup(final Composite parent) {
-		new Label(parent, SWT.LEFT).setText(Msgs.liferayPluginTypeLabel);
+		new Label(
+			parent, SWT.LEFT
+		).setText(
+			Msgs.liferayPluginTypeLabel
+		);
 
 		Text pluginTypeLabel = new Text(parent, SWT.READ_ONLY | SWT.BORDER);
 
@@ -195,7 +203,11 @@ public class LiferayProjectPropertyPage
 			try {
 				if (!ProjectUtil.isMavenProject(proj)) {
 					final SDK projectSdk = SDKUtil.getSDK(getProject());
-					new Label(parent, SWT.LEFT).setText(Msgs.liferaySdkLabel);
+					new Label(
+						parent, SWT.LEFT
+					).setText(
+						Msgs.liferaySdkLabel
+					);
 
 					_sdkLabel = new Text(parent, SWT.READ_ONLY | SWT.BORDER);
 
@@ -251,7 +263,11 @@ public class LiferayProjectPropertyPage
 					if (CoreUtil.compareVersions(
 							Version.parseVersion(projectSdk.getVersion()), ILiferayConstants.V700) < 0) {
 
-						new Label(parent, SWT.LEFT).setText(Msgs.liferayRuntimeLabel);
+						new Label(
+							parent, SWT.LEFT
+						).setText(
+							Msgs.liferayRuntimeLabel
+						);
 
 						_runtimeCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
 

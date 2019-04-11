@@ -28,14 +28,15 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.summary=All Mobile Device Rules APIs previously exposed as Liferay Portal API in 6.2 have been move ou" +
-		"t from portal-service into separate OSGi modules",
-	"problem.tickets=LPS-57519", "problem.title=Mobile Device Rules APIs migrated to OSGi module",
-	"problem.section=#legacy", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.summary=All Mobile Device Rules APIs previously exposed as Liferay Portal API in 6.2 have been move out from portal-service into separate OSGi modules",
+		"problem.tickets=LPS-57519", "problem.title=Mobile Device Rules APIs migrated to OSGi module",
+		"problem.section=#legacy", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class MobileDeviceRulesLegacyAPI extends JavaFileMigrator {
 
 	@Override

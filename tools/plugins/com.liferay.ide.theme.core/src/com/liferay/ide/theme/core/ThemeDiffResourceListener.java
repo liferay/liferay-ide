@@ -96,7 +96,9 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 	}
 
 	protected void processResourceChanged(IResourceDelta delta) throws CoreException {
-		new WorkspaceJob(Msgs.compilingTheme) {
+		new WorkspaceJob(
+			Msgs.compilingTheme
+		) {
 
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {

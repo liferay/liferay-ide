@@ -205,10 +205,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation {
 				}
 			}
 			catch (Exception e) {
-				retval = LiferayServerCore.error(
-					"Unable to deploy bundle remotely " +
-						output.toPortableString(),
-					e);
+				retval = LiferayServerCore.error("Unable to deploy bundle remotely " + output.toPortableString(), e);
 			}
 		}
 		else {

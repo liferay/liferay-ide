@@ -79,7 +79,7 @@ public class OpenDeployedFolderAction extends AbstractServerRunningAction {
 	@Override
 	protected int getRequiredServerState() {
 		return IServer.STATE_STARTED | IServer.STATE_STOPPED | IServer.STATE_STARTING | IServer.STATE_STOPPING |
-			IServer.STATE_UNKNOWN;
+			   IServer.STATE_UNKNOWN;
 	}
 
 	private IPath _getDeployFolderPath() {

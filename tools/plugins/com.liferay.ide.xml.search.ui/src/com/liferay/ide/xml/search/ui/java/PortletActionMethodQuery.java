@@ -23,7 +23,7 @@ import org.eclipse.wst.xml.search.editor.searchers.javamethod.requestor.IJavaMet
 /**
  * @author Gregory Amerson
  */
-public class PortletActionMethodQuery implements IJavaMethodRequestorProvider, IClassNameExtractorProvider {
+public class PortletActionMethodQuery implements IClassNameExtractorProvider, IJavaMethodRequestorProvider {
 
 	public PortletActionMethodQuery() {
 	}

@@ -184,7 +184,7 @@ public class LaunchHelper implements IDebugEventSetListener {
 
 		IProcess[] processes = launch.getProcesses();
 
-		IProcess process = processes.length > 0 ? processes[0] : null;
+		IProcess process = (processes.length > 0) ? processes[0] : null;
 
 		if (isLaunchSync()) {
 			runningLaunch = launch;

@@ -28,7 +28,7 @@ import org.eclipse.wst.xml.search.core.resource.IURIResolverProvider;
  * @author Kuo Zhang
  */
 public class JSPDirectoryQuerySpecification
-	implements IResourceRequestorProvider, IURIResolverProvider, IResourceProvider {
+	implements IResourceProvider, IResourceRequestorProvider, IURIResolverProvider {
 
 	@Override
 	public IResourceRequestor getRequestor() {

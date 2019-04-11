@@ -28,7 +28,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-public interface CustomPortletMode extends Element, Describeable, Identifiable {
+public interface CustomPortletMode extends Describeable, Element, Identifiable {
 
 	public ElementType TYPE = new ElementType(CustomPortletMode.class);
 

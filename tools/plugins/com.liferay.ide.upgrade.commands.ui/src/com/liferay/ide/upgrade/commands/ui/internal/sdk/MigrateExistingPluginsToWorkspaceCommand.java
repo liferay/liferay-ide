@@ -59,7 +59,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = "id=" + MigrateExistingPluginsToWorkspaceCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
 	service = UpgradeCommand.class
 )
-public class MigrateExistingPluginsToWorkspaceCommand implements UpgradeCommand, SapphireContentAccessor {
+public class MigrateExistingPluginsToWorkspaceCommand implements SapphireContentAccessor, UpgradeCommand {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {

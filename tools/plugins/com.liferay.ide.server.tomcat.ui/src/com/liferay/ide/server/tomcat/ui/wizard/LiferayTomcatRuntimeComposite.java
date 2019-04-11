@@ -66,7 +66,7 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 
 	public static void setFieldValue(Text field, String value) {
 		if ((field != null) && !field.isDisposed()) {
-			field.setText(value != null ? value : StringPool.EMPTY);
+			field.setText((value != null) ? value : StringPool.EMPTY);
 		}
 	}
 
@@ -349,7 +349,7 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 
 		IPath runtimeLocation = getRuntime().getLocation();
 
-		setFieldValue(dirField, runtimeLocation != null ? runtimeLocation.toOSString() : StringPool.EMPTY);
+		setFieldValue(dirField, (runtimeLocation != null) ? runtimeLocation.toOSString() : StringPool.EMPTY);
 	}
 
 	protected void updateJREs() {

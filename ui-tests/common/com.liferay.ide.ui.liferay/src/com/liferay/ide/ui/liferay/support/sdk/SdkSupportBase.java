@@ -114,7 +114,9 @@ public class SdkSupportBase extends SupportBase {
 	}
 
 	public String getFullSdkDir() {
-		return new File(envAction.getTempDir(), getSdkDirName()).getAbsolutePath();
+		return new File(
+			envAction.getTempDir(), getSdkDirName()
+		).getAbsolutePath();
 	}
 
 	public String getSdkDirName() {

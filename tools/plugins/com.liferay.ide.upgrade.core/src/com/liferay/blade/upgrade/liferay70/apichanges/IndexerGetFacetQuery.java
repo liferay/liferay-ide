@@ -29,13 +29,15 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.summary=Replaced Method getFacetQuery with getFacetBooleanFilter in Indexer", "problem.tickets=LPS-56064",
-	"problem.title=Indexer API Changes",
-	"problem.section=#replaced-method-getpermissionquery-with-getpermissionfilter-in-searchpermis", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.summary=Replaced Method getFacetQuery with getFacetBooleanFilter in Indexer",
+		"problem.tickets=LPS-56064", "problem.title=Indexer API Changes",
+		"problem.section=#replaced-method-getpermissionquery-with-getpermissionfilter-in-searchpermis", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class IndexerGetFacetQuery extends JavaFileMigrator {
 
 	@Override

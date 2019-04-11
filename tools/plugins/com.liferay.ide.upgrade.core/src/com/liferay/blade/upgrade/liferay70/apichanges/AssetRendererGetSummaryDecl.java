@@ -28,13 +28,15 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.summary=Changed the AssetRenderer API to Include the PortletRequest and PortletResponse Parameters",
-	"problem.tickets=LPS-44639,LPS-44894", "problem.title=AssetRenderer API Changes",
-	"problem.section=#changed-the-assetrenderer-and-indexer-apis-to-include-the-portletrequest-an", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.summary=Changed the AssetRenderer API to Include the PortletRequest and PortletResponse Parameters",
+		"problem.tickets=LPS-44639,LPS-44894", "problem.title=AssetRenderer API Changes",
+		"problem.section=#changed-the-assetrenderer-and-indexer-apis-to-include-the-portletrequest-an", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class AssetRendererGetSummaryDecl extends JavaFileMigrator {
 
 	@Override

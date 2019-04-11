@@ -23,14 +23,16 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf",
-	"problem.title=Deprecated the liferay-ui:captcha Tag and Replaced with liferay-captcha:captcha",
-	"problem.section=#deprecated-the-liferay-uicaptcha-tag-and-replaced-with-liferay-captchacaptc",
-	"problem.summary=Deprecated the liferay-ui:captcha Tag and Replaced with liferay-captcha:captcha",
-	"problem.tickets=LPS-69383", "auto.correct=jsptag", "version=7.0"
-},
-	service = {AutoMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=jsp,jspf",
+		"problem.title=Deprecated the liferay-ui:captcha Tag and Replaced with liferay-captcha:captcha",
+		"problem.section=#deprecated-the-liferay-uicaptcha-tag-and-replaced-with-liferay-captchacaptc",
+		"problem.summary=Deprecated the liferay-ui:captcha Tag and Replaced with liferay-captcha:captcha",
+		"problem.tickets=LPS-69383", "auto.correct=jsptag", "version=7.0"
+	},
+	service = {AutoMigrator.class, FileMigrator.class}
+)
 public class DeprecatedLiferayUICaptchaTags extends JSPTagMigrator {
 
 	public DeprecatedLiferayUICaptchaTags() {

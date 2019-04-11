@@ -43,7 +43,7 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 /**
  * @author Gregory Amerson
  */
-public abstract class FlexibleProject extends BaseLiferayProject implements IWebProject, IResourceBundleProject {
+public abstract class FlexibleProject extends BaseLiferayProject implements IResourceBundleProject, IWebProject {
 
 	public FlexibleProject(IProject project) {
 		super(project);
@@ -90,7 +90,12 @@ public abstract class FlexibleProject extends BaseLiferayProject implements IWeb
 		IFolder defaultDocrootFolder = getDefaultDocrootFolder();
 
 		if (FileUtil.exists(defaultDocrootFolder)) {
-			retval = defaultDocrootFolder.getFile(new Path("WEB-INF").append(name));
+			retval = defaultDocrootFolder.getFile(
+				new Path(
+					"WEB-INF"
+				).append(
+					name
+				));
 		}
 
 		if (retval != null) {
@@ -107,7 +112,12 @@ public abstract class FlexibleProject extends BaseLiferayProject implements IWeb
 
 		for (IContainer container : webappRoot.getUnderlyingFolders()) {
 			if (FileUtil.exists(container)) {
-				IFile descriptorFile = container.getFile(new Path("WEB-INF").append(name));
+				IFile descriptorFile = container.getFile(
+					new Path(
+						"WEB-INF"
+					).append(
+						name
+					));
 
 				if (descriptorFile.exists()) {
 					retval = descriptorFile;

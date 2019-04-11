@@ -260,23 +260,21 @@ public class UpgradeProblem {
 	public int hashCode() {
 		int hash = 31;
 
-		hash = 31 * hash + (_autoCorrectContext != null ? _autoCorrectContext.hashCode() : 0);
-		hash = 31 * hash + (_html != null ? _html.hashCode() : 0);
-
-		hash = 31 * hash + (Integer.hashCode(_endOffset));
-		hash = 31 * hash + (Integer.hashCode(_lineNumber));
-		hash = 31 * hash + (Long.hashCode(_markerId));
-		hash = 31 * hash + (Integer.hashCode(_markerType));
-		hash = 31 * hash + (Integer.hashCode(_number));
-		hash = 31 * hash + (Integer.hashCode(_startOffset));
-
-		hash = 31 * hash + (_resource != null ? _resource.hashCode() : 0);
-		hash = 31 * hash + (_summary != null ? _summary.hashCode() : 0);
-		hash = 31 * hash + (_title != null ? _title.hashCode() : 0);
-		hash = 31 * hash + (_ticket != null ? _ticket.hashCode() : 0);
-		hash = 31 * hash + (_type != null ? _type.hashCode() : 0);
-		hash = 31 * hash + (_uuid != null ? _uuid.hashCode() : 0);
-		hash = 31 * hash + (_version != null ? _version.hashCode() : 0);
+		hash = 31 * hash + ((_autoCorrectContext != null) ? _autoCorrectContext.hashCode() : 0);
+		hash = 31 * hash + ((_html != null) ? _html.hashCode() : 0);
+		hash = 31 * hash + Integer.hashCode(_endOffset);
+		hash = 31 * hash + Integer.hashCode(_lineNumber);
+		hash = 31 * hash + Long.hashCode(_markerId);
+		hash = 31 * hash + Integer.hashCode(_markerType);
+		hash = 31 * hash + Integer.hashCode(_number);
+		hash = 31 * hash + Integer.hashCode(_startOffset);
+		hash = 31 * hash + ((_resource != null) ? _resource.hashCode() : 0);
+		hash = 31 * hash + ((_summary != null) ? _summary.hashCode() : 0);
+		hash = 31 * hash + ((_title != null) ? _title.hashCode() : 0);
+		hash = 31 * hash + ((_ticket != null) ? _ticket.hashCode() : 0);
+		hash = 31 * hash + ((_type != null) ? _type.hashCode() : 0);
+		hash = 31 * hash + ((_uuid != null) ? _uuid.hashCode() : 0);
+		hash = 31 * hash + ((_version != null) ? _version.hashCode() : 0);
 
 		return hash;
 	}

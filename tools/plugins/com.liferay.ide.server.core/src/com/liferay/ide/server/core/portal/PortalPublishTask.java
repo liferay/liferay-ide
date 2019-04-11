@@ -88,48 +88,48 @@ public class PortalPublishTask extends PublishTaskDelegate {
 						IProject project = module[0].getProject();
 
 						switch (deltaKind) {
-						case ServerBehaviourDelegate.ADDED:
-							_addOperation(BundlePublishFullAddCleanBuild.class, tasks, server, module);
-
-							break;
-
-						case ServerBehaviourDelegate.CHANGED:
-							if (needClean) {
+							case ServerBehaviourDelegate.ADDED:
 								_addOperation(BundlePublishFullAddCleanBuild.class, tasks, server, module);
-							}
-							else {
-								_addOperation(BundlePublishFullAdd.class, tasks, server, module);
-							}
 
-							break;
+								break;
 
-						case ServerBehaviourDelegate.REMOVED:
-							_addOperation(BundlePublishFullRemove.class, tasks, server, module);
+							case ServerBehaviourDelegate.CHANGED:
+								if (needClean) {
+									_addOperation(BundlePublishFullAddCleanBuild.class, tasks, server, module);
+								}
+								else {
+									_addOperation(BundlePublishFullAdd.class, tasks, server, module);
+								}
 
-							break;
+								break;
 
-						case ServerBehaviourDelegate.NO_CHANGE:
-							IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
+							case ServerBehaviourDelegate.REMOVED:
+								_addOperation(BundlePublishFullRemove.class, tasks, server, module);
 
-							if (bundleProject != null) {
-								try {
-									if (_isUserRedeploy(serverBehavior, module[0]) ||
-										!_isDeployed(server, bundleProject.getSymbolicName())) {
+								break;
 
-										_addOperation(BundlePublishFullAddCleanBuild.class, tasks, server, module);
+							case ServerBehaviourDelegate.NO_CHANGE:
+								IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
+
+								if (bundleProject != null) {
+									try {
+										if (_isUserRedeploy(serverBehavior, module[0]) ||
+											!_isDeployed(server, bundleProject.getSymbolicName())) {
+
+											_addOperation(BundlePublishFullAddCleanBuild.class, tasks, server, module);
+										}
+									}
+									catch (CoreException ce) {
+										LiferayServerCore.logError(
+											"Unable to get bsn for project " + project.getName(), ce);
 									}
 								}
-								catch (CoreException ce) {
-									LiferayServerCore.logError(
-										"Unable to get bsn for project " + project.getName(), ce);
-								}
-							}
 
-							break;
+								break;
 
-						default:
+							default:
 
-							break;
+								break;
 						}
 
 						break;

@@ -29,11 +29,9 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
  */
 @Component(property = {
 	"file.extensions=java",
-	"problem.title=Replaced the ReservedUserScreenNameException with UserScreenNameException.MustNotBeReserved in Us" +
-		"erLocalService",
+	"problem.title=Replaced the ReservedUserScreenNameException with UserScreenNameException.MustNotBeReserved in UserLocalService",
 	"problem.section=#replaced-the-reserveduserscreennameexception-with-userscreennameexception-m",
-	"problem.summary=Replaced the ReservedUserScreenNameException with UserScreenNameException.MustNotBeReserved in " +
-		"UserLocalService",
+	"problem.summary=Replaced the ReservedUserScreenNameException with UserScreenNameException.MustNotBeReserved in UserLocalService",
 	"problem.tickets=LPS-53113",  "version=7.0"
 },
 	service = FileMigrator.class)

@@ -31,7 +31,9 @@ public class ToolbarDropDownButton extends AbstractWidget {
 	}
 
 	public void menuClick(String menuItemLabel) {
-		new MenuItem(bot, this, menuItemLabel).click();
+		new MenuItem(
+			bot, this, menuItemLabel
+		).click();
 	}
 
 	@Override

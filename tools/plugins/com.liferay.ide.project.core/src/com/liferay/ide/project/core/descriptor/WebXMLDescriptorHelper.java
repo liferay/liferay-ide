@@ -125,7 +125,9 @@ public class WebXMLDescriptorHelper extends LiferayDescriptorHelper {
 			return null;
 		}
 
-		IStatus status = new DOMModelEditOperation(file) {
+		IStatus status = new DOMModelEditOperation(
+			file
+		) {
 
 			protected void createDefaultFile() {
 

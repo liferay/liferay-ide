@@ -685,7 +685,11 @@ public class NewPortletClassDataModelProvider
 
 					// make sure path first segment isn't the same as the portlet name
 
-					String path = new Path(folderValue).segment(0);
+					String path = new Path(
+						folderValue
+					).segment(
+						0
+					);
 
 					if (!CoreUtil.isNullOrEmpty(path) && path.equals(getStringProperty(PORTLET_NAME))) {
 						return PortletCore.createErrorStatus(Msgs.jspFolderNotMatchPortletName);
@@ -761,11 +765,8 @@ public class NewPortletClassDataModelProvider
 
 	protected ParamValue[] createDefaultParamValuesForModes(String[] modes, String[] names, String[] values) {
 		Assert.isTrue(
-			(modes != null) &&
-			(names != null) &&
-			(values != null) &&
-			 (modes.length == names.length) &&
-			 (names.length == values.length));
+			(modes != null) && (names != null) && (values != null) && (modes.length == names.length) &&
+			(names.length == values.length));
 
 		List<ParamValue> defaultParams = new ArrayList<>();
 
@@ -902,6 +903,7 @@ public class NewPortletClassDataModelProvider
 	}
 
 	protected String getPortletNameFromClassName(String oldName) {
+
 		/**
 		 * Explaination for following regex first part, the rule is
 		 * "before this place there is not a line start" then, two options - 1. after

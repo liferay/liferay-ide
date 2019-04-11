@@ -31,7 +31,7 @@ import org.eclipse.ui.IWorkbenchWizard;
  * @author Andy Wu
  */
 public class ImportLiferayModuleProjectWizard
-	extends SapphireWizard<ImportLiferayModuleProjectOp> implements IWorkbenchWizard, INewWizard {
+	extends SapphireWizard<ImportLiferayModuleProjectOp> implements INewWizard, IWorkbenchWizard {
 
 	public ImportLiferayModuleProjectWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(ImportLiferayModuleProjectWizard.class).wizard());

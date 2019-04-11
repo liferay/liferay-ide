@@ -184,8 +184,8 @@ public class UpgradeStep {
 	public int hashCode() {
 		int hash = 31;
 
-		hash = 31 * hash + (_description != null ? _description.hashCode() : 0);
-		hash = 31 * hash + (_icon != null ? _icon.hashCode() : 0);
+		hash = 31 * hash + ((_description != null) ? _description.hashCode() : 0);
+		hash = 31 * hash + ((_icon != null) ? _icon.hashCode() : 0);
 
 		Stream<UpgradeStep> stream = _children.stream();
 
@@ -195,11 +195,11 @@ public class UpgradeStep {
 			0, Integer::sum
 		).intValue();
 
-		hash = 31 * hash + (_requirement != null ? _requirement.hashCode() : 0);
+		hash = 31 * hash + ((_requirement != null) ? _requirement.hashCode() : 0);
 		hash = 31 * hash + childrenHashCodes;
-		hash = 31 * hash + (_url != null ? _url.hashCode() : 0);
-		hash = 31 * hash + (_title != null ? _title.hashCode() : 0);
-		hash = 31 * hash + (_commandId != null ? _commandId.hashCode() : 0);
+		hash = 31 * hash + ((_url != null) ? _url.hashCode() : 0);
+		hash = 31 * hash + ((_title != null) ? _title.hashCode() : 0);
+		hash = 31 * hash + ((_commandId != null) ? _commandId.hashCode() : 0);
 
 		return hash;
 	}

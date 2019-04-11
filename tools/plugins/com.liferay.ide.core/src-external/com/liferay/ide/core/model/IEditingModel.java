@@ -19,7 +19,7 @@ import org.eclipse.jface.text.IDocument;
 /**
  * @author Gregory Amerson
  */
-public interface IEditingModel extends IModel, IModelChangeProvider, IReconcilingParticipant, IEditable {
+public interface IEditingModel extends IEditable, IModel, IModelChangeProvider, IReconcilingParticipant {
 
 	public String getCharset();
 

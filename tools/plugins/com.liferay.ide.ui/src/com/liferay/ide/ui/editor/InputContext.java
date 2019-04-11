@@ -661,8 +661,7 @@ public abstract class InputContext {
 	 * @throws InvocationTargetException
 	 */
 	private void _handleSaveAs(IProgressMonitor monitor, IPath path)
-		throws CoreException, Exception, InterruptedException,
-			   InvocationTargetException {
+		throws CoreException, Exception, InterruptedException, InvocationTargetException {
 
 		// Ensure a new location was selected
 

@@ -151,32 +151,32 @@ public class BinaryProjectRecord {
 		if (_binaryName.contains(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
 			index = _binaryName.indexOf(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX);
 
-			hook = index != -1 ? true : false;
+			hook = (index != -1) ? true : false;
 		}
 		else if (_binaryName.contains(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
 			index = _binaryName.indexOf(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX);
 
-			theme = index != -1 ? true : false;
+			theme = (index != -1) ? true : false;
 		}
 		else if (_binaryName.contains(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
 			index = _binaryName.indexOf(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX);
 
-			portlet = index != -1 ? true : false;
+			portlet = (index != -1) ? true : false;
 		}
 		else if (_binaryName.contains(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
 			index = _binaryName.indexOf(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX);
 
-			layoutTpl = index != -1 ? true : false;
+			layoutTpl = (index != -1) ? true : false;
 		}
 		else if (_binaryName.contains(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
 			index = _binaryName.indexOf(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX);
 
-			ext = index != -1 ? true : false;
+			ext = (index != -1) ? true : false;
 		}
 		else if (_binaryName.contains(ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX)) {
 			index = _binaryName.indexOf(ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX);
 
-			web = index != -1 ? true : false;
+			web = (index != -1) ? true : false;
 		}
 
 		if (index != -1) {

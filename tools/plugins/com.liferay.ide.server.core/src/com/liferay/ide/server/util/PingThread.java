@@ -86,6 +86,7 @@ public class PingThread {
 			// ignore
 
 		}
+
 		while (!_stop) {
 			try {
 				if (count == _maxPings) {

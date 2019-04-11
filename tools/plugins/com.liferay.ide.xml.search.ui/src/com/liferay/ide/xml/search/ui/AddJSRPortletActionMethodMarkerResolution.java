@@ -116,7 +116,8 @@ public class AddJSRPortletActionMethodMarkerResolution extends CommonWorkbenchMa
 	private final String _code =
 		"@ProcessAction(name = \"{0}\")\npublic void {0}" +
 			"(ActionRequest actionRequest, ActionResponse actionResponse) '{\n}'";
-	private String[] _imports =
-		{"javax.portlet.ActionRequest", "javax.portlet.ActionResponse", "javax.portlet.ProcessAction"};
+	private String[] _imports = {
+		"javax.portlet.ActionRequest", "javax.portlet.ActionResponse", "javax.portlet.ProcessAction"
+	};
 
 }

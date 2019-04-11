@@ -31,7 +31,7 @@ import org.eclipse.ui.forms.widgets.Section;
 /**
  * @author Gregory Amerson
  */
-public abstract class IDESection extends SectionPart implements IModelChangedListener, IContextPart, IAdaptable {
+public abstract class IDESection extends SectionPart implements IAdaptable, IContextPart, IModelChangedListener {
 
 	public IDESection(IDEFormPage page, Composite parent, int style) {
 		this(page, parent, style, true);

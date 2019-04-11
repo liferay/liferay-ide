@@ -195,12 +195,13 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 	}
 
 	public void propertyChange(PropertyChangeEvent event) {
+
 		/**
-
-		if (fSortAction.equals(event.getSource()) && IAction.RESULT.equals(event.getProperty())) {
-		updateUpDownButtons();
-		}
-
+		 
+		 if (fSortAction.equals(event.getSource()) && IAction.RESULT.equals(event.getProperty())) {
+		 updateUpDownButtons();
+		 }
+		 
 		 */
 	}
 
@@ -221,39 +222,41 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 	}
 
 	public boolean setFormInput(Object object) {
+
 		/**
-
-				if (object instanceof IPluginImport) {
-					ImportObject iobj = new ImportObject((IPluginImport)object);
-
-					fImportViewer.setSelection(new StructuredSelection(iobj), true);
-
-					return true;
-				}
-
+		 
+		 if (object instanceof IPluginImport) {
+		 ImportObject iobj = new ImportObject((IPluginImport)object);
+		 
+		 fImportViewer.setSelection(new StructuredSelection(iobj), true);
+		 
+		 return true;
+		 }
+		 
 		 */
 		return false;
 	}
 
 	public void swap(int index1, int index2) {
+
 		/**
-		Table table = getTablePart().getTableViewer().getTable();
-
-			IPluginImport dep1 = ((ImportObject)table.getItem(index1).getData()).getImport();
-				IPluginImport dep2 = ((ImportObject)table.getItem(index2).getData()).getImport();
-
-				try {
-					IPluginModelBase model = (IPluginModelBase)getPage().getModel();
-
-					IPluginBase pluginBase = model.getPluginBase();
-
-					pluginBase.swap(dep1, dep2);
-				}
-				catch (CoreException ce) {
-					PDEPlugin.logException(ce);
-				}
-
-		*/
+		 Table table = getTablePart().getTableViewer().getTable();
+		 
+		 IPluginImport dep1 = ((ImportObject)table.getItem(index1).getData()).getImport();
+		 IPluginImport dep2 = ((ImportObject)table.getItem(index2).getData()).getImport();
+		 
+		 try {
+		 IPluginModelBase model = (IPluginModelBase)getPage().getModel();
+		 
+		 IPluginBase pluginBase = model.getPluginBase();
+		 
+		 pluginBase.swap(dep1, dep2);
+		 }
+		 catch (CoreException ce) {
+		 PDEPlugin.logException(ce);
+		 }
+		 
+		 */
 	}
 
 	public class PortalJarsContentProvider extends DefaultContentProvider implements IStructuredContentProvider {
@@ -290,17 +293,21 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 
 	protected void buttonSelected(int index) {
 		switch (index) {
-			case _ADD_INDEX :
+			case _ADD_INDEX:
 				_handleAdd();
+
 				break;
-			case _REMOVE_INDEX :
+			case _REMOVE_INDEX:
 				_handleRemove();
+
 				break;
-			case _UP_INDEX :
+			case _UP_INDEX:
 				_handleUp();
+
 				break;
-			case _DOWN_INDEX :
+			case _DOWN_INDEX:
 				_handleDown();
+
 				break;
 		}
 	}
@@ -395,10 +402,11 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		// Cursor needs to be explicitly disposed
 
 		toolBar.addDisposeListener(listener);
+
 		/**
-		Add sort action to the tool bar
-		fSortAction = new SortAction(fViewer, "Sort alphabetically", null, null, this);
-		toolBarManager.add(fSortAction);
+		 Add sort action to the tool bar
+		 fSortAction = new SortAction(fViewer, "Sort alphabetically", null, null, this);
+		 toolBarManager.add(fSortAction);
 		 */
 		toolBarManager.update(true);
 
@@ -579,8 +587,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		public static String remove;
 		public static String specifyJars;
 
-		static
-		{
+		static {
 			initializeMessages(PortalJarsSection.class.getName(), Msgs.class);
 		}
 

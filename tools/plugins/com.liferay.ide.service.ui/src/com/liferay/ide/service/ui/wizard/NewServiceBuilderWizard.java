@@ -36,7 +36,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
  */
 @SuppressWarnings("restriction")
 public class NewServiceBuilderWizard
-	extends NewWebArtifactWizard implements INewWizard, INewServiceBuilderDataModelProperties {
+	extends NewWebArtifactWizard implements INewServiceBuilderDataModelProperties, INewWizard {
 
 	public static final String ID = "com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder";
 

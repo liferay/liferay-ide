@@ -267,8 +267,7 @@ public interface Entity extends Element {
 
 	@DefaultValue(text = "false")
 	@Documentation(
-		content = "If the [b]uuid-accessor[/b] value is true, then the service will generate a UUID column accessor for the service." +
-			"This accessor will provide a fast and type-safe way to access entity's UUID."
+		content = "If the [b]uuid-accessor[/b] value is true, then the service will generate a UUID column accessor for the service. This accessor will provide a fast and type-safe way to access entity's UUID."
 	)
 	@Label(standard = "&uuid accessor")
 	@Since("6.1")

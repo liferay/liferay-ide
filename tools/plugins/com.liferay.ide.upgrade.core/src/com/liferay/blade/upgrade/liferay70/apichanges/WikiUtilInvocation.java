@@ -28,13 +28,15 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf", "problem.title=Removed the getPageOrderByComparator Method from WikiUtil",
-	"problem.section=#removed-the-getpageorderbycomparator-method-from-wikiutil",
-	"problem.summary=Removed the getPageOrderByComparator Method from WikiUtil", "problem.tickets=LPS-60843",
-	"version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf", "problem.title=Removed the getPageOrderByComparator Method from WikiUtil",
+		"problem.section=#removed-the-getpageorderbycomparator-method-from-wikiutil",
+		"problem.summary=Removed the getPageOrderByComparator Method from WikiUtil", "problem.tickets=LPS-60843",
+		"version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class WikiUtilInvocation extends JavaFileMigrator {
 
 	@Override

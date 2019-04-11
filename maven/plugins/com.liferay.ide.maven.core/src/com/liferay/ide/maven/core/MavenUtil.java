@@ -270,7 +270,11 @@ public class MavenUtil {
 
 		String relativeBuildOutputDir = ProjectUtils.getRelativePath(project, buildOutputDir);
 
-		return new Path(relativeBuildOutputDir).append(ILiferayMavenConstants.M2E_LIFERAY_FOLDER);
+		return new Path(
+			relativeBuildOutputDir
+		).append(
+			ILiferayMavenConstants.M2E_LIFERAY_FOLDER
+		);
 	}
 
 	public static String getMajorMinorVersionOnly(String version) {
@@ -280,7 +284,9 @@ public class MavenUtil {
 
 		if (matcher.find()) {
 			try {
-				retval = new Version(matcher.group(1)).toString();
+				retval = new Version(
+					matcher.group(1)
+				).toString();
 			}
 			catch (Exception e) {
 			}
@@ -376,7 +382,9 @@ public class MavenUtil {
 			MavenProject mavenProject = facade.getMavenProject(new NullProgressMonitor());
 			IProject project = facade.getProject();
 
-			retval = new WarPluginConfiguration(mavenProject, project).getWarSourceDirectory();
+			retval = new WarPluginConfiguration(
+				mavenProject, project
+			).getWarSourceDirectory();
 		}
 		catch (CoreException ce) {
 			LiferayMavenCore.logError("Unable to get war source directory", ce);

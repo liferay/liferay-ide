@@ -321,7 +321,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 					}
 				}
 
-				minVersion = minVersion.compareTo(minNewVersion) < 0 ? minVersion : minNewVersion;
+				minVersion = (minVersion.compareTo(minNewVersion) < 0) ? minVersion : minNewVersion;
 
 				for (Profile existProfile : profiles) {
 					if (activeProfile.equals(existProfile.getId())) {
@@ -347,7 +347,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 					}
 				}
 
-				minVersion = minVersion.compareTo(minExistedVersion) < 0 ? minVersion : minExistedVersion;
+				minVersion = (minVersion.compareTo(minExistedVersion) < 0) ? minVersion : minExistedVersion;
 			}
 		}
 		catch (Exception e) {

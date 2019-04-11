@@ -63,14 +63,21 @@ import org.xml.sax.ErrorHandler;
 public class FileUtil {
 
 	public static void copyDirectiory(String sourceDir, String targetDir) throws IOException {
-		(new File(targetDir)).mkdirs();
+		(new File(
+			targetDir
+		)).mkdirs();
 
-		File[] files = (new File(sourceDir)).listFiles();
+		File[] files = (new File(
+			sourceDir
+		)).listFiles();
 
 		for (File file : files) {
 			if (file.isFile()) {
 				File sourceFile = file;
-				File targetFile = new File(new File(targetDir).getAbsolutePath() + File.separator + file.getName());
+				File targetFile = new File(
+					new File(
+						targetDir
+					).getAbsolutePath() + File.separator + file.getName());
 
 				copyFile(sourceFile, targetFile);
 			}

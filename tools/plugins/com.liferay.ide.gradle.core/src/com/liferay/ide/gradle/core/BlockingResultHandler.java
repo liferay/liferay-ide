@@ -60,7 +60,7 @@ public class BlockingResultHandler<T> implements ResultHandler<T> {
 	}
 
 	public void onComplete(T result) {
-		_queue.add(result == null ? _NULL : result);
+		_queue.add((result == null) ? _NULL : result);
 	}
 
 	public void onFailure(GradleConnectionException failure) {

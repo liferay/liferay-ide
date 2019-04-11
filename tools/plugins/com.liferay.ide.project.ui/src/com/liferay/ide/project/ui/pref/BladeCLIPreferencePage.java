@@ -176,7 +176,12 @@ public class BladeCLIPreferencePage extends FieldEditorPreferencePage implements
 
 					String newVersion = domain.getBundleVersion();
 
-					final boolean newAvailable = new Version(newVersion).compareTo(new Version(currentVersion)) > 0;
+					final boolean newAvailable =
+						new Version(
+							newVersion
+						).compareTo(
+							new Version(currentVersion)
+						) > 0;
 
 					UIUtil.async(
 						new Runnable() {

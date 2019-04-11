@@ -89,12 +89,18 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 			try {
 				URL[] runtimeLibs = _getLiferayRuntimeLibs(liferayRuntime);
 
-				new Job(Msgs.addDBConnnection) {
+				new Job(
+					Msgs.addDBConnnection
+				) {
 
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
 						try {
-							Class<?> classRef = new URLClassLoader(runtimeLibs).loadClass(driverName);
+							Class<?> classRef = new URLClassLoader(
+								runtimeLibs
+							).loadClass(
+								driverName
+							);
 
 							if (classRef != null) {
 								ProtectionDomain protectionDomain = classRef.getProtectionDomain();
@@ -107,7 +113,9 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 
 								String jarPath = URLDecoder.decode(libPath, "UTF-8");
 
-								String driverPath = new File(jarPath).getAbsolutePath();
+								String driverPath = new File(
+									jarPath
+								).getAbsolutePath();
 
 								LiferayDatabaseConnection dbConnection = _getLiferayDBConnection(
 									driverName, userName, password, connectionUrl);
@@ -272,7 +280,9 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 
 		if (ListUtil.isNotEmpty(extraLibs)) {
 			for (IPath url : extraLibs) {
-				URI uri = new File(url.toOSString()).toURI();
+				URI uri = new File(
+					url.toOSString()
+				).toURI();
 
 				libUrlList.add(uri.toURL());
 			}

@@ -422,8 +422,8 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 			return "Id";
 		}
 
-		return Character.toLowerCase(entityName.charAt(0)) + (entityName.length() > 1 ? entityName.substring(1) : "") +
-			"Id";
+		return Character.toLowerCase(entityName.charAt(0)) +
+			((entityName.length() > 1) ? entityName.substring(1) : "") + "Id";
 	}
 
 	private String _generateSampleEntityName(IDOMDocument document) {

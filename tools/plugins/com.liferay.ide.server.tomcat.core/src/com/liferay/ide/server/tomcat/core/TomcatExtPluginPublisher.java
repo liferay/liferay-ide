@@ -83,6 +83,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 				addExtModule(delegate, moduleTree[0], monitor);
 			}
 			else if (deltaKind == ServerBehaviourDelegate.REMOVED) {
+
 				/**
 				 * nothing to do right now
 				 * removeExtModule(delegate, moduleTree[0], monitor);
@@ -113,7 +114,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 
 		IServer server = delegate.getServer();
 
-		String mode = server.getServerState() == IServer.STATE_STARTED ? server.getMode() : null;
+		String mode = (server.getServerState() == IServer.STATE_STARTED) ? server.getMode() : null;
 
 		if (mode != null) {
 			LiferayTomcatUtil.syncStopServer(delegate.getServer());
@@ -124,7 +125,9 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 		assertStatus(status);
 
 		if (mode != null) {
-			new ServerJob(server, "Starting Liferay server after ext plugin deploy") {
+			new ServerJob(
+				server, "Starting Liferay server after ext plugin deploy"
+			) {
 
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {

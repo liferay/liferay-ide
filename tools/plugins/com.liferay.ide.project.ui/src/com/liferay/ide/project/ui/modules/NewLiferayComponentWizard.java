@@ -46,7 +46,7 @@ import org.eclipse.ui.ide.IDE;
  * @author Charles Wu
  */
 public class NewLiferayComponentWizard
-	extends SapphireWizard<NewLiferayComponentOp> implements IWorkbenchWizard, INewWizard, SapphireContentAccessor {
+	extends SapphireWizard<NewLiferayComponentOp> implements INewWizard, IWorkbenchWizard, SapphireContentAccessor {
 
 	public NewLiferayComponentWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(NewLiferayComponentWizard.class).wizard());

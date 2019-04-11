@@ -178,6 +178,7 @@ public class NewModuleFragmentFilesOpMethods {
 		return retval;
 	}
 
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
+	};
 
 }

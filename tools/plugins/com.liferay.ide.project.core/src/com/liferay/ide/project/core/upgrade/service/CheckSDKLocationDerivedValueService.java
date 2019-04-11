@@ -53,7 +53,7 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService imp
 			if (sdk != null) {
 				Map<String, Object> buildProperties = sdk.getBuildProperties(true);
 
-				liferay62ServerLocation = (String)(buildProperties.get(ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR));
+				liferay62ServerLocation = (String)buildProperties.get(ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR);
 
 				_checkProjects(op, sdk);
 			}
@@ -93,7 +93,11 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService imp
 				if (file.isDirectory()) {
 					op.setHasPortlet("true");
 
-					Path path = new Path(file.getPath()).append("docroot/WEB-INF/service.xml");
+					Path path = new Path(
+						file.getPath()
+					).append(
+						"docroot/WEB-INF/service.xml"
+					);
 
 					File serviceXml = path.toFile();
 
@@ -111,7 +115,11 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService imp
 				if (file.isDirectory()) {
 					op.setHasHook("true");
 
-					Path path = new Path(file.getPath()).append("docroot/WEB-INF/service.xml");
+					Path path = new Path(
+						file.getPath()
+					).append(
+						"docroot/WEB-INF/service.xml"
+					);
 
 					File serviceXml = path.toFile();
 

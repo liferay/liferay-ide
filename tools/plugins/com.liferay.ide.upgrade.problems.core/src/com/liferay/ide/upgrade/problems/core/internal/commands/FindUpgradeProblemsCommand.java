@@ -48,7 +48,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = "id=" + FindUpgradeProblemsCommandKeys.ID, scope = ServiceScope.PROTOTYPE, service = UpgradeCommand.class
 )
-public class FindUpgradeProblemsCommand implements UpgradeCommand, MarkerSupport {
+public class FindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {

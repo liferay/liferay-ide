@@ -94,9 +94,8 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 		section = toolkit.createSection(
 			parent,
-			ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED |
-			ExpandableComposite.TITLE_BAR | Section.DESCRIPTION |
-			ExpandableComposite.FOCUS_TITLE);
+			ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR |
+			Section.DESCRIPTION | ExpandableComposite.FOCUS_TITLE);
 
 		section.setText(Msgs.liferaySettings);
 		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL));
@@ -444,7 +443,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					};
 				}
 
-					// User specified value may not be under the ".metadata" folder of the workspace
+				// User specified value may not be under the ".metadata" folder of the workspace
 
 				else if (workspacePath.isPrefixOf(path) ||
 						 (!path.isAbsolute() && _METADATADIR.equals(path.segment(0)))) {
@@ -742,6 +741,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 			 */
 		}
 		else {
+
 			/**
 			 * serverDirCustom.setSelection(true);
 			 * serverDirMetadata.setSelection(false);
@@ -779,7 +779,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					return;
 				}
 
-					// User specified value may not be under the ".metadata" folder of the workspace
+				// User specified value may not be under the ".metadata" folder of the workspace
 
 				else if (workspacePath.isPrefixOf(path) ||
 						 (!path.isAbsolute() && _METADATADIR.equals(path.segment(0)))) {

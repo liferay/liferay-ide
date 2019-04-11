@@ -51,6 +51,7 @@ public class SDKProjectsImportWizard extends DataModelWizard implements IWorkben
 
 	public SDKProjectsImportWizard(SDK sdk) {
 		this((IDataModel)null);
+
 		this.sdk = sdk;
 	}
 

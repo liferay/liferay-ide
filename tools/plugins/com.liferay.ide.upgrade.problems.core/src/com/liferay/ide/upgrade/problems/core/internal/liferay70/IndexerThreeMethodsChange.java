@@ -31,10 +31,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
  */
 @Component(property = {
 	"file.extensions=java,jsp,jspf", "problem.title=Changes to Indexer methods",
-	"problem.summary=Method Indexer.addRelatedEntryFields(Document, Object) has been moved into RelatedEntryIndexer. " +
-		"Indexer.reindexDDMStructures(List<Long>) has been moved into DDMStructureIndexer. Indexer.getQueryString(" +
-			"SearchContext, Query) has been removed, in favor of calling SearchEngineUtil.getQueryString(" +
-				"SearchContext, Query)",
+	"problem.summary=Method Indexer.addRelatedEntryFields(Document, Object) has been moved into RelatedEntryIndexer. Indexer.reindexDDMStructures(List<Long>) has been moved into DDMStructureIndexer. Indexer.getQueryString(SearchContext, Query) has been removed, in favor of calling SearchEngineUtil.getQueryString(SearchContext, Query)",
 	"problem.tickets=LPS-55928",
 	"problem.section=#moved-indexer-addrelatedentryfields-and-indexer-reindexddmstructures-and-re",
 	 "version=7.0"

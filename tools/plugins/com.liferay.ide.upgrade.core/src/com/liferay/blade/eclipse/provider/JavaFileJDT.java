@@ -388,8 +388,8 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 						boolean argumentsMatch = false;
 
 						if (methodParamTypes != null) {
-							Expression[] argExpressions =
-								((List<Expression>)node.arguments()).toArray(new Expression[0]);
+							Expression[] argExpressions = ((List<Expression>)node.arguments()).toArray(
+								new Expression[0]);
 
 							if (argExpressions.length == methodParamTypes.length) {
 
@@ -470,8 +470,8 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 							}
 						}
 
-							// any method args types is OK without setting
-							// methodParamTypes
+						// any method args types is OK without setting
+						// methodParamTypes
 
 						else {
 							argumentsMatch = true;
@@ -789,14 +789,16 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 		return match;
 	}
 
-	private static final String[] _SERVICE_API_SUFFIXES =
-		{"LocalService", "LocalServiceUtil", "LocalServiceWrapper", "Service", "ServiceUtil", "ServiceWrapper"};
+	private static final String[] _SERVICE_API_SUFFIXES = {
+		"LocalService", "LocalServiceUtil", "LocalServiceWrapper", "Service", "ServiceUtil", "ServiceWrapper"
+	};
 
 	private CompilationUnit _ast;
 	private File _file;
 	private final FileHelper _fileHelper = new FileHelper();
 
-	private LoadingCache<Expression, Optional<ITypeBinding>> _typeCache = CacheBuilder.newBuilder().build(
+	private LoadingCache<Expression, Optional<ITypeBinding>> _typeCache = CacheBuilder.newBuilder(
+	).build(
 		new CacheLoader<Expression, Optional<ITypeBinding>>() {
 
 			@Override
@@ -804,6 +806,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 				return Optional.ofNullable(key.resolveTypeBinding());
 			}
 
-		});
+		}
+	);
 
 }

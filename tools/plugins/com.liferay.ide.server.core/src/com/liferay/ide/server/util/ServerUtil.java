@@ -232,7 +232,7 @@ public class ServerUtil {
 		File implJar = implJarPath.toFile();
 
 		if (FileUtil.exists(implJar)) {
-			try (JarFile jar = new JarFile(implJar);) {
+			try (JarFile jar = new JarFile(implJar)) {
 				Properties categories = new Properties();
 				Properties props = new Properties();
 
@@ -246,8 +246,7 @@ public class ServerUtil {
 
 						String name = element.toString();
 
-						if (name.startsWith("category."))
-						{
+						if (name.startsWith("category.")) {
 							categories.put(name, props.getProperty(name));
 						}
 					}
@@ -346,8 +345,7 @@ public class ServerUtil {
 		String categoryMy = categories.getProperty(myKey);
 
 		if ((portalVersion == null) ||
-			(CoreUtil.compareVersions(Version.parseVersion(portalVersion), ILiferayConstants.V620) <
-				0)) {
+			(CoreUtil.compareVersions(Version.parseVersion(portalVersion), ILiferayConstants.V620) < 0)) {
 
 			String portalKey = "category.portal";
 			String serverKey = "category.server";
@@ -866,7 +864,9 @@ public class ServerUtil {
 
 		IPath libGlobalDir = appServer.getAppServerLibGlobalDir();
 
-		String parentDir = new File(dir.toOSString()).getParent();
+		String parentDir = new File(
+			dir.toOSString()
+		).getParent();
 
 		IPath portalDir = appServer.getAppServerPortalDir();
 

@@ -22,7 +22,7 @@ import org.eclipse.sapphire.modeling.annotations.Image;
  * @author Kamesh Sampath
  */
 @Image(path = "images/user_icon.png")
-public interface UserAttribute extends Element, Identifiable, Describeable, Nameable {
+public interface UserAttribute extends Describeable, Element, Identifiable, Nameable {
 
 	public ElementType TYPE = new ElementType(UserAttribute.class);
 

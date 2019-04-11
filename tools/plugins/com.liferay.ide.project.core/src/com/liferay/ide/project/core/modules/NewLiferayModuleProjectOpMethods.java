@@ -398,7 +398,8 @@ public class NewLiferayModuleProjectOpMethods {
 		}
 	}
 
-	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {};
+	private static final SapphireContentAccessor _getter = new SapphireContentAccessor() {
+	};
 
 	private static class CheckComponentAnnotationVistor extends ASTVisitor {
 

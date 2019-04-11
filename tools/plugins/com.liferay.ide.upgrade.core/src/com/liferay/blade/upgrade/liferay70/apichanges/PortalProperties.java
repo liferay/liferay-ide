@@ -24,13 +24,15 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=Portal Property Changes",
-	"problem.summary=Removed Portal Properties Used to Display Sections in Form Navigators",
-	"problem.tickets=LPS-54903",
-	"problem.section=#removed-portal-properties-used-to-display-sections-in-form-navigators", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=properties", "problem.title=Portal Property Changes",
+		"problem.summary=Removed Portal Properties Used to Display Sections in Form Navigators",
+		"problem.tickets=LPS-54903",
+		"problem.section=#removed-portal-properties-used-to-display-sections-in-form-navigators", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class PortalProperties extends PropertiesFileMigrator {
 
 	@Override

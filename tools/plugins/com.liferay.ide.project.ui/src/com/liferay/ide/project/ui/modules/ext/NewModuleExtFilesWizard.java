@@ -45,7 +45,7 @@ import org.osgi.framework.Version;
  * @author Terry Jia
  */
 public class NewModuleExtFilesWizard
-	extends SapphireWizard<NewModuleExtFilesOp> implements IWorkbenchWizard, INewWizard {
+	extends SapphireWizard<NewModuleExtFilesOp> implements INewWizard, IWorkbenchWizard {
 
 	public NewModuleExtFilesWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(NewModuleExtFilesWizard.class).wizard());

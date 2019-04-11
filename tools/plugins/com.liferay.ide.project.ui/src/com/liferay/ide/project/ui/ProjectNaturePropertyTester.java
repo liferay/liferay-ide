@@ -43,7 +43,6 @@ public class ProjectNaturePropertyTester extends PropertyTester {
 				// ignore
 
 			}
-
 		}
 
 		return false;

@@ -97,6 +97,7 @@ public class LocationValidationService extends ValidationService implements Sapp
 		Status status = service.validation();
 
 		if (!useDefalutLocationValue.content(true) && status.ok() && (currentProjectName != null)) {
+
 			/**
 			 * IDE-1150, instead of using annotation "@Required",use this service to
 			 * validate the custom project location must be specified, let the wizard

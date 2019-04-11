@@ -91,8 +91,7 @@ public class WebServicesHelper {
 		while (m.find()) {
 			String urlStr = m.group();
 
-			if (urlStr.startsWith("(") && urlStr.endsWith(")"))
-			{
+			if (urlStr.startsWith("(") && urlStr.endsWith(")")) {
 				urlStr = urlStr.substring(1, urlStr.length() - 1);
 			}
 

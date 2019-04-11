@@ -28,16 +28,16 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java",
-	"problem.title=Replaced the ReservedUserScreenNameException with UserScreenNameException.MustNotBeReserved in Us" +
-		"erLocalService",
-	"problem.section=#replaced-the-reserveduserscreennameexception-with-userscreennameexception-m",
-	"problem.summary=Replaced the ReservedUserScreenNameException with UserScreenNameException.MustNotBeReserved in " +
-		"UserLocalService",
-	"problem.tickets=LPS-53113", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java",
+		"problem.title=Replaced the ReservedUserScreenNameException with UserScreenNameException.MustNotBeReserved in UserLocalService",
+		"problem.section=#replaced-the-reserveduserscreennameexception-with-userscreennameexception-m",
+		"problem.summary=Replaced the ReservedUserScreenNameException with UserScreenNameException.MustNotBeReserved in UserLocalService",
+		"problem.tickets=LPS-53113", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class ReplacedReservedUserScreenNameException extends JavaFileMigrator {
 
 	@Override

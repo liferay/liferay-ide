@@ -130,8 +130,8 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 					while (rbFilesIterator.hasNext()) {
 						IFile rbFile = rbFilesIterator.next();
 
-						try (InputStream inputStream =
-								new ByteArrayInputStream(StringUtil.getBytes(rbFileBuffer.toString()))) {
+						try (InputStream inputStream = new ByteArrayInputStream(
+								StringUtil.getBytes(rbFileBuffer.toString()))) {
 
 							rbFile.create(inputStream, true, monitor);
 						}
@@ -155,7 +155,11 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 		};
 
 		try {
-			(new ProgressMonitorDialog(((SwtPresentation)context).shell())).run(false, false, rbCreationProc);
+			(new ProgressMonitorDialog(
+				((SwtPresentation)context).shell()
+			)).run(
+				false, false, rbCreationProc
+			);
 
 			rbFiles.clear();
 		}

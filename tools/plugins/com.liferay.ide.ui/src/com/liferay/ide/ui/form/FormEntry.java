@@ -205,7 +205,7 @@ public class FormEntry {
 	 */
 	public void setValue(String value) {
 		if (_fText != null) {
-			_fText.setText(value != null ? value : "");
+			_fText.setText((value != null) ? value : "");
 		}
 
 		_fValue = (value != null) ? value : "";
@@ -356,7 +356,7 @@ public class FormEntry {
 				tspan = tcolspan;
 			}
 			else {
-				tspan = _fBrowse != null ? span - 2 : span - 1;
+				tspan = (_fBrowse != null) ? span - 2 : span - 1;
 			}
 
 			GridData gd;
@@ -393,7 +393,7 @@ public class FormEntry {
 				tspan = tcolspan;
 			}
 			else {
-				tspan = _fBrowse != null ? span - 2 : span - 1;
+				tspan = (_fBrowse != null) ? span - 2 : span - 1;
 			}
 
 			TableWrapData td;
@@ -438,7 +438,10 @@ public class FormEntry {
 		}
 		else if (e.character == '\u001b') {
 			if (!_fValue.equals(_fText.getText())) {
-				_fText.setText(_fValue != null ? _fValue : ""); // restore old
+
+				// restore old
+
+				_fText.setText((_fValue != null) ? _fValue : "");
 			}
 
 			_fDirty = false;

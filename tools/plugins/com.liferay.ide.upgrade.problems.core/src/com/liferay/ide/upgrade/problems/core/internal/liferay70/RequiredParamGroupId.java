@@ -30,8 +30,7 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
  */
 @Component(property = {
 	"file.extensions=java", "problem.title=Adding Tags, Categories, Vocabularies API Changes",
-	"problem.summary=The API for adding tags, categories, and vocabularies now requires passing the groupId " +
-		"parameter. Previously, it had to be included in the ServiceContext parameter passed to the method.",
+	"problem.summary=The API for adding tags, categories, and vocabularies now requires passing the groupId parameter. Previously, it had to be included in the ServiceContext parameter passed to the method.",
 	"problem.tickets=LPS-54570",
 	"problem.section=#added-required-parameter-groupid-for-adding-tags-categories-and-vocabularie",
 	 "version=7.0"

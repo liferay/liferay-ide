@@ -168,8 +168,7 @@ public class ComponentUtil {
 
 					String projectFacetId = projectFacet.getId();
 
-					if (projectFacetId.startsWith("liferay"))
-					{
+					if (projectFacetId.startsWith("liferay")) {
 						retval = true;
 
 						break;

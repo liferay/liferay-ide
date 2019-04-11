@@ -145,7 +145,9 @@ public class JSPMarkerResolutionGenerator implements IMarkerResolutionGenerator2
 		List<IFile> files = PropertiesUtil.getDefaultLanguagePropertiesFromProject(project);
 
 		if (ListUtil.isEmpty(files)) {
-			String[] portletNames = new PortletDescriptorHelper(project).getAllPortletNames();
+			String[] portletNames = new PortletDescriptorHelper(
+				project
+			).getAllPortletNames();
 
 			if (ListUtil.isNotEmpty(portletNames)) {
 				for (String portletName : portletNames) {

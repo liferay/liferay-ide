@@ -24,12 +24,14 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Charles Wu
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=Moved Three DL File Properties to OSGi Configuration",
-	"problem.summary=Two DL File properties have been moved from Server Administration", "problem.tickets=LPS-69208",
-	"problem.section=#moved-three-dl-file-properties", "version=7.1"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=properties", "problem.title=Moved Three DL File Properties to OSGi Configuration",
+		"problem.summary=Two DL File properties have been moved from Server Administration",
+		"problem.tickets=LPS-69208", "problem.section=#moved-three-dl-file-properties", "version=7.1"
+	},
+	service = FileMigrator.class
+)
 public class MovedThreeDLFileProperties extends PropertiesFileMigrator {
 
 	@Override

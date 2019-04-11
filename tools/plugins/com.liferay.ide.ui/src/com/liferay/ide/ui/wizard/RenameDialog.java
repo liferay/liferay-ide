@@ -62,7 +62,8 @@ public class RenameDialog extends SelectionStatusDialog {
 		initialize();
 
 		if (names != null) {
-			for (int i = 0; i < names.length; i++)addOldName(names[i]);
+			for (int i = 0; i < names.length; i++)
+				addOldName(names[i]);
 		}
 
 		setOldName(oldName);

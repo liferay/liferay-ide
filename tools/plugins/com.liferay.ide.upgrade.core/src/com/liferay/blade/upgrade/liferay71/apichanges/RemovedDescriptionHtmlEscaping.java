@@ -29,12 +29,14 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Haoyi Sun
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf", "problem.title=Removed description html escaping in PortletDisplay",
-	"problem.summary=Removed Description Html Escaping", "problem.tickets=LPS-83185",
-	"problem.section=#removed-description-html-escaping-in-portletdisplay", "version=7.1"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf", "problem.title=Removed description html escaping in PortletDisplay",
+		"problem.summary=Removed Description Html Escaping", "problem.tickets=LPS-83185",
+		"problem.section=#removed-description-html-escaping-in-portletdisplay", "version=7.1"
+	},
+	service = FileMigrator.class
+)
 public class RemovedDescriptionHtmlEscaping extends JavaFileMigrator {
 
 	@Override

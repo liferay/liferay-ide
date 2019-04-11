@@ -22,13 +22,16 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf", "problem.title=Deprecated the liferay-security:encrypt Tag with No Direct Replacement",
-	"problem.section=#deprecated-the-liferay-securityencrypt-tag-with-no-direct-replacement",
-	"problem.summary=Deprecated the liferay-security:encrypt Tag with No Direct Replacement",
-	"problem.tickets=LPS-63106", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=jsp,jspf",
+		"problem.title=Deprecated the liferay-security:encrypt Tag with No Direct Replacement",
+		"problem.section=#deprecated-the-liferay-securityencrypt-tag-with-no-direct-replacement",
+		"problem.summary=Deprecated the liferay-security:encrypt Tag with No Direct Replacement",
+		"problem.tickets=LPS-63106", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class DeprecatedLiferaySecurityEncryptTag extends JSPTagMigrator {
 
 	public DeprecatedLiferaySecurityEncryptTag() {

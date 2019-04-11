@@ -26,16 +26,17 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.title=Moved the Contact Name Exception Classes to Inner Classes of ContactNameException",
-	"problem.summary=The use of classes ContactFirstNameException, ContactFullNameException, and " +
-		"ContactLastNameException has been moved to inner classes in a new class called ContactNameException.",
-	"problem.tickets=LPS-55364",
-	"problem.section=#moved-the-contact-name-exception-classes-to-inner-classes-of-contactnameexc",
-	"auto.correct=import", "version=7.0"
-},
-	service = {AutoMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.title=Moved the Contact Name Exception Classes to Inner Classes of ContactNameException",
+		"problem.summary=The use of classes ContactFirstNameException, ContactFullNameException, and ContactLastNameException has been moved to inner classes in a new class called ContactNameException.",
+		"problem.tickets=LPS-55364",
+		"problem.section=#moved-the-contact-name-exception-classes-to-inner-classes-of-contactnameexc",
+		"auto.correct=import", "version=7.0"
+	},
+	service = {AutoMigrator.class, FileMigrator.class}
+)
 public class ContactNameExceptionImport extends ImportStatementMigrator {
 
 	public ContactNameExceptionImport() {

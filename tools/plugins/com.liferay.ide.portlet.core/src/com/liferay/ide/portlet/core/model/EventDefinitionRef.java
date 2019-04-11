@@ -32,7 +32,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-public interface EventDefinitionRef extends Element, Identifiable, Describeable {
+public interface EventDefinitionRef extends Describeable, Element, Identifiable {
 
 	public ElementType TYPE = new ElementType(EventDefinitionRef.class);
 

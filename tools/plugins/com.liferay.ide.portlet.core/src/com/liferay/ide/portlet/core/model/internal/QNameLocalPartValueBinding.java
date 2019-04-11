@@ -102,7 +102,7 @@ public class QNameLocalPartValueBinding extends XmlValueBindingImpl {
 		}
 
 		if (qNameElement != null) {
-			val = val != null ? value.trim() : StringPool.EMPTY;
+			val = (val != null) ? value.trim() : StringPool.EMPTY;
 
 			// update only local part
 

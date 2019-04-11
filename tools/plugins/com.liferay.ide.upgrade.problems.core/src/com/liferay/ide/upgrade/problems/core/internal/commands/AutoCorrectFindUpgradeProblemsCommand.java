@@ -52,7 +52,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = "id=" + AutoCorrectFindUpgradeProblemsCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
 	service = UpgradeCommand.class
 )
-public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, MarkerSupport {
+public class AutoCorrectFindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {

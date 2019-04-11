@@ -24,12 +24,14 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=Language Display Style Properties",
-	"problem.summary=Replaced the Language Portlet's Display Styles with ADTs", "problem.tickets=LPS-54419",
-	"problem.section=#replaced-the-language-portlets-display-styles-with-adts", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=properties", "problem.title=Language Display Style Properties",
+		"problem.summary=Replaced the Language Portlet's Display Styles with ADTs", "problem.tickets=LPS-54419",
+		"problem.section=#replaced-the-language-portlets-display-styles-with-adts", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class LanguageDisplayStyleProperties extends PropertiesFileMigrator {
 
 	@Override

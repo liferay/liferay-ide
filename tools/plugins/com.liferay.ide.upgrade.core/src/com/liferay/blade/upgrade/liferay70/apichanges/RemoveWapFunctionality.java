@@ -29,11 +29,13 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf", "problem.summary=Removed the WAP Functionality", "problem.tickets=LPS-62920",
-	"problem.title=Removed the WAP Functionality", "problem.section=#removed-the-wap-functionality", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf", "problem.summary=Removed the WAP Functionality", "problem.tickets=LPS-62920",
+		"problem.title=Removed the WAP Functionality", "problem.section=#removed-the-wap-functionality", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class RemoveWapFunctionality extends JavaFileMigrator {
 
 	@Override

@@ -22,7 +22,7 @@ import org.eclipse.sapphire.modeling.annotations.Image;
  * @author Kamesh Sampath
  */
 @Image(path = "images/elcl16/parameter_16x16.gif")
-public interface Param extends Element, Identifiable, Describeable, NameValue {
+public interface Param extends Describeable, Element, Identifiable, NameValue {
 
 	public ElementType TYPE = new ElementType(Param.class);
 

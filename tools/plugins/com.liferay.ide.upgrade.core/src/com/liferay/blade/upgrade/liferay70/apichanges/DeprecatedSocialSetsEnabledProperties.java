@@ -24,12 +24,14 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Haoyi Sun
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=Social Activity Properties Deprecated",
-	"problem.summary=Deprecated the social.activity.sets.enabled Property", "problem.tickets=LPS-63635",
-	"problem.section=#deprecated-the-social-activity-sets-enabled-Property", "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=properties", "problem.title=Social Activity Properties Deprecated",
+		"problem.summary=Deprecated the social.activity.sets.enabled Property", "problem.tickets=LPS-63635",
+		"problem.section=#deprecated-the-social-activity-sets-enabled-Property", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class DeprecatedSocialSetsEnabledProperties extends PropertiesFileMigrator {
 
 	@Override

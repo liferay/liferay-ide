@@ -414,7 +414,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 	public PropertiesConfiguration pluginPackageProperties;
 
 	protected void flushProperties() {
-		try (StringWriter output = new StringWriter();) {
+		try (StringWriter output = new StringWriter()) {
 			pluginPackageProperties.save(output);
 			getDocument().set(output.toString());
 		}

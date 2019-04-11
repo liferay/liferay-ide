@@ -28,12 +28,14 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Haoyi Sun
  */
-@Component(property = {
-	"file.extensions=java", "problem.title=Changed the From Last Publish Date Option in Staging",
-	"problem.summary=Changed Last Publish Date Option", "problem.tickets=LPS-81695",
-	"problem.section=#changed-last-publish-date-option", "version=7.1"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java", "problem.title=Changed the From Last Publish Date Option in Staging",
+		"problem.summary=Changed Last Publish Date Option", "problem.tickets=LPS-81695",
+		"problem.section=#changed-last-publish-date-option", "version=7.1"
+	},
+	service = FileMigrator.class
+)
 public class ChangedLastPublishDateOption extends JavaFileMigrator {
 
 	@Override

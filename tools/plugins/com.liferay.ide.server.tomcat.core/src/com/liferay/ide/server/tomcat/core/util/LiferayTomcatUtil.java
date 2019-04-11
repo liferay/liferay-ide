@@ -166,6 +166,7 @@ public class LiferayTomcatUtil {
 	}
 
 	public static void displayToggleMessage(String msg, String key) {
+
 		/**
 		 * UIUtil.postInfoWithToggle(
 		 * Msgs.liferayTomcatServer, msg, Msgs.notShowMessage, false,

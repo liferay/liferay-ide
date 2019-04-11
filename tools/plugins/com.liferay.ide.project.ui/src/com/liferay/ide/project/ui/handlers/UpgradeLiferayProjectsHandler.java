@@ -60,7 +60,9 @@ public class UpgradeLiferayProjectsHandler extends AbstractHandler {
 		final UpgradeLiferayProjectsWizard wizard = new UpgradeLiferayProjectsWizard(
 			projectList.toArray(new IProject[projectList.size()]));
 
-		new WizardDialog(HandlerUtil.getActiveShellChecked(event), wizard).open();
+		new WizardDialog(
+			HandlerUtil.getActiveShellChecked(event), wizard
+		).open();
 
 		return null;
 	}

@@ -34,7 +34,7 @@ import org.eclipse.ui.IWorkbenchWizard;
  * @author Simon Jiang
  */
 public class ImportSDKProjectsWizard
-	extends SapphireWizard<SDKProjectsImportOp> implements IWorkbenchWizard, INewWizard {
+	extends SapphireWizard<SDKProjectsImportOp> implements INewWizard, IWorkbenchWizard {
 
 	public ImportSDKProjectsWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(ImportSDKProjectsWizard.class).wizard());

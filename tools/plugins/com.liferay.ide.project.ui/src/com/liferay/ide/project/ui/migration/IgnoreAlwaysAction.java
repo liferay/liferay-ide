@@ -60,7 +60,9 @@ public class IgnoreAlwaysAction extends SelectionProviderAction implements IActi
 
 		_storeIgnoredProblem(problem);
 
-		new WorkspaceJob("Ignore all problems of this type") {
+		new WorkspaceJob(
+			"Ignore all problems of this type"
+		) {
 
 			public IStatus runInWorkspace(IProgressMonitor monitor) {
 				IStatus retval = Status.OK_STATUS;
