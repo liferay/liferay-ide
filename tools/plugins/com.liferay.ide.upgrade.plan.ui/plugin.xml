@@ -18,6 +18,10 @@
 			icon="icons/restart.gif"
 		/>
 		<image
+			commandId="com.liferay.ide.upgrade.plan.ui.switchupgradeplan"
+			icon="icons/switch_plan.gif"
+		/>
+		<image
 			commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
 			icon="icons/liferay_logo_16.png"
 		/>
@@ -88,6 +92,12 @@
 			>
 			</command>
 			<command
+				commandId="com.liferay.ide.upgrade.plan.ui.switchupgradeplan"
+				icon="icons/switch_plan.gif"
+				style="push"
+			>
+			</command>
+			<command
 				commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
 				icon="icons/liferay_logo_16.png"
 				style="push"
@@ -126,6 +136,11 @@
 		>
 		</command>
 		<command
+			id="com.liferay.ide.upgrade.plan.ui.switchupgradeplan"
+			name="Switch Upgrade Plan"
+		>
+		</command>
+		<command
 			id="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
 			name="New Upgrade Plan"
 		>
@@ -147,6 +162,11 @@
 		<handler
 			class="com.liferay.ide.upgrade.plan.ui.internal.RestartUpgradeHandler"
 			commandId="com.liferay.ide.upgrade.plan.ui.restartupgradeplan"
+		>
+		</handler>
+		<handler
+			class="com.liferay.ide.upgrade.plan.ui.internal.SwitchUpgradePlanHandler"
+			commandId="com.liferay.ide.upgrade.plan.ui.switchupgradeplan"
 		>
 		</handler>
 		<handler

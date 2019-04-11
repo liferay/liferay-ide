@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition>
+    <import>
+        <package>com.liferay.ide.upgrade.plan.core</package>
+        <package>org.eclipse.sapphire.ui.forms.swt</package>
+    </import>
+    <dialog>
+        <id>SwitchUpgradePlan</id>
+        <element-type>com.liferay.ide.upgrade.plan.core.UpgradePlansOp</element-type>
+        <label>Switch Upgrade Plan</label>
+        <content>
+            <property-editor>
+                <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                <property>Name</property>
+            </property-editor>
+        </content>
+    </dialog>
+</definition>
