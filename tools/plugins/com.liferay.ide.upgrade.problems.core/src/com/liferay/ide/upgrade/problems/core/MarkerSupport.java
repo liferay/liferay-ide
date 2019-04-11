@@ -86,9 +86,8 @@ public interface MarkerSupport {
 	}
 
 	public default void removeMarkers(Collection<UpgradeProblem> upgradeProblems) {
-		Stream<UpgradeProblem> ugradeProblemsStream = upgradeProblems.stream();
-
-		ugradeProblemsStream.map(
+		upgradeProblems.stream(
+		).map(
 			this::findMarker
 		).filter(
 			this::markerExists
