@@ -35,13 +35,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -58,6 +55,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Terry Jia
  */
 @Component(
 	property = "id=" + AutoCorrectFindUpgradeProblemsCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
@@ -80,113 +78,66 @@ public class AutoCorrectFindUpgradeProblemsCommand implements MarkerSupport, Upg
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		Stream<UpgradeProblem> ugradeProblemsStream = upgradeProblems.stream();
-
-		ugradeProblemsStream.map(
-			this::findMarker
-		).filter(
-			this::markerExists
-		).forEach(
-			this::deleteMarker
-		);
+		removeMarkers(upgradeProblems);
 
 		upgradeProblems.clear();
 
 		Stream<IProject> stream = projects.stream();
 
-		stream.forEach(
-			project -> {
-				File searchFile = FileUtil.getFile(project);
-
-				List<UpgradeProblem> foundUpgradeProblems = _fileMigration.findUpgradeProblems(
-					searchFile, upgradeVersions, Collections.singleton("auto.correct"), progressMonitor);
-
-				upgradePlan.addUpgradeProblems(foundUpgradeProblems);
-
-				addMarkers(foundUpgradeProblems);
-			});
-
-		_autoCorrectProblem(upgradePlan.getUpgradeProblems());
+		stream.map(
+			FileUtil::getFile
+		).map(
+			projectFile -> _fileMigration.findUpgradeProblems(
+				projectFile, upgradeVersions, Collections.singleton("auto.correct"), progressMonitor)
+		).flatMap(
+			List::stream
+		).forEach(
+			this::_autoCorrectProblem
+		);
 
 		_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, new ArrayList<>(upgradeProblems)));
 
 		return Status.OK_STATUS;
 	}
 
-	private void _autoCorrectProblem(Collection<UpgradeProblem> upgradeProblems) {
+	private void _autoCorrectProblem(UpgradeProblem upgradeProblem) {
 		Bundle bundle = FrameworkUtil.getBundle(AutoCorrectFindUpgradeProblemsCommand.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
 
-		Stream<UpgradeProblem> stream = upgradeProblems.stream();
+		String autoCorrectContext = upgradeProblem.getAutoCorrectContext();
 
-		stream.filter(
-			upgradeProblem -> upgradeProblem.getStatus() != UpgradeProblem.STATUS_IGNORE
-		).filter(
-			upgradeProblem -> FileUtil.exists(upgradeProblem.getResource())
-		).filter(
-			upgradeProblem -> Objects.nonNull(upgradeProblem.getAutoCorrectContext())
-		).forEach(
-			upgradeProblem -> {
-				String autoCorrectContext = upgradeProblem.getAutoCorrectContext();
+		String autoCorrectKey = autoCorrectContext;
 
-				String autoCorrectKey = autoCorrectContext;
+		int filterKeyIndex = autoCorrectContext.indexOf(":");
 
-				int filterKeyIndex = autoCorrectContext.indexOf(":");
+		if (filterKeyIndex > -1) {
+			autoCorrectKey = autoCorrectContext.substring(0, filterKeyIndex);
+		}
 
-				if (filterKeyIndex > -1) {
-					autoCorrectKey = autoCorrectContext.substring(0, filterKeyIndex);
-				}
+		try {
+			String filter = "(&(auto.correct=" + autoCorrectKey + ")(version=" + upgradeProblem.getVersion() + "))";
+
+			Collection<ServiceReference<AutoFileMigrator>> serviceReferences = bundleContext.getServiceReferences(
+				AutoFileMigrator.class, filter);
+
+			IResource resource = upgradeProblem.getResource();
+
+			File file = FileUtil.getFile(resource);
+
+			for (ServiceReference<AutoFileMigrator> reference : serviceReferences) {
+				AutoFileMigrator autoMigrator = bundleContext.getService(reference);
 
 				try {
-					String filter =
-						"(&(auto.correct=" + autoCorrectKey + ")(version=" + upgradeProblem.getVersion() + "))";
-
-					Collection<ServiceReference<AutoFileMigrator>> serviceReferences =
-						bundleContext.getServiceReferences(AutoFileMigrator.class, filter);
-
-					IResource resource = upgradeProblem.getResource();
-
-					File file = FileUtil.getFile(resource);
-
-					int problemsCorrected = 0;
-
-					for (ServiceReference<AutoFileMigrator> reference : serviceReferences) {
-						AutoFileMigrator autoMigrator = bundleContext.getService(reference);
-
-						try {
-							problemsCorrected =
-								problemsCorrected + autoMigrator.correctProblems(file, Arrays.asList(upgradeProblem));
-						}
-						catch (AutoFileMigrateException afme) {
-							UpgradeProblemsCorePlugin.logError(
-								"Error encountered auto migrating file " + file.getAbsolutePath(), afme);
-						}
-					}
-
-					if ((problemsCorrected > 0) && (resource != null)) {
-						_resolveMarker(upgradeProblem);
-					}
+					autoMigrator.correctProblems(file, Arrays.asList(upgradeProblem));
 				}
-				catch (InvalidSyntaxException ise) {
+				catch (AutoFileMigrateException afme) {
+					UpgradeProblemsCorePlugin.logError(
+						"Error encountered auto migrating file " + file.getAbsolutePath(), afme);
 				}
 			}
-		);
-	}
-
-	private void _resolveMarker(UpgradeProblem upgradeProblem) {
-		upgradeProblem.setStatus(UpgradeProblem.STATUS_RESOLVED);
-
-		IMarker marker = findMarker(upgradeProblem);
-
-		if (marker != null) {
-			try {
-				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_INFO);
-				marker.setAttribute(IMarker.DONE, Boolean.TRUE);
-				marker.setAttribute("upgradeProblem.resolved", Boolean.TRUE);
-			}
-			catch (CoreException ce) {
-			}
+		}
+		catch (InvalidSyntaxException ise) {
 		}
 	}
 
