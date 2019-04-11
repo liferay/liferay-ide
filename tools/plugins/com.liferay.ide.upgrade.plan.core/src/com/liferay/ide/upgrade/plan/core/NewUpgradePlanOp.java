@@ -92,7 +92,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	@PossibleValues(values = {"7.0", "7.1", "7.2"})
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
 
-	@DefaultValue(text = "07-liferay-data-upgrade-plan")
+	@DefaultValue(text = "07-liferay-code-upgrade-plan")
 	@PossibleValues(values = {"06-liferay-data-upgrade-plan", "07-liferay-code-upgrade-plan"})
 	@Required
 	public ValueProperty PROP_UPGRADE_PLAN_OUTLINE = new ValueProperty(TYPE, "UpgradePlanOutline");

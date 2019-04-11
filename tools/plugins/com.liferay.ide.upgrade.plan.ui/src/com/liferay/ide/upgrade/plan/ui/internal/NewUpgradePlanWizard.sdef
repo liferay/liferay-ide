@@ -15,7 +15,7 @@
                 <property-editor>Name</property-editor>
                 <property-editor>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
-                    <property>UpgradePlanName</property>
+                    <property>UpgradePlanOutline</property>
                 </property-editor>
                 <property-editor>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
@@ -27,7 +27,7 @@
                 </property-editor>
                 <property-editor>
                     <property>Location</property>
-                    <visible-when>${UpgradePlanName == '07-liferay-code-upgrade-plan'}</visible-when>
+                    <visible-when>${UpgradePlanOutline == '07-liferay-code-upgrade-plan'}</visible-when>
                 </property-editor>
             </content>
             <description>Create and start a new Upgrade Plan. Any existing plan will be replaced.</description>

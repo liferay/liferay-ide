@@ -32,7 +32,7 @@ Here are the steps for upgrading your custom plugins to @product-ver@.
                 <div class="title"><a href="">Create New Liferay Workspace</a></div>
                 <div class="description">If you have an existing 7.x workspace, skip to the next step.</div>
             </li>
-            <li icon="" requirement="required" commandId="import_existing_liferay_workspace">
+            <li icon="" requirement="required" commandId="import_existing_projects">
                 <div class="title"><a href="">Import Existing Liferay Workspace</a></div>
                 <div class="description">If you do not have an existing 7.x workspace, go to the previous step.</div>
             </li>
@@ -42,11 +42,11 @@ Here are the steps for upgrading your custom plugins to @product-ver@.
             <div class="description">Configure Liferay Workspace Settings</div>
         </li>
         <ol>
-            <li icon="" requirement="required" commandId="configure_bundle_url">
+            <li icon="" requirement="required">
                 <div class="title">Configure Bundle URL</div>
                 <div class="description">Configure Bundle URL</div>
             </li>
-            <li icon="" requirement="required" commandId="configure_target_platform_version">
+            <li icon="" requirement="required">
                 <div class="title">Configure Target Platform Version</div>
                 <div class="description">Configure Target Platform Version</div>
             </li>
@@ -61,11 +61,11 @@ Here are the steps for upgrading your custom plugins to @product-ver@.
         <div class="description">Migrate Plugin SDK Projects</div>
     </li>
     <ol>
-        <li icon="" requirement="required" commandId="import_existing_plugins_sdk">
+        <li icon="" requirement="required">
             <div class="title">Import Existing Plugins SDK Projects</div>
             <div class="description">Import Existing Plugins SDK Projects</div>
         </li>
-        <li icon="" requirement="required" commandId="migrate_existing_plugins_to_workspace">
+        <li icon="" requirement="required">
             <div class="title">Migrate Existing Plugins to Workspace</div>
             <div class="description">Migrate Existing Plugins to Workspace</div>
         </li>
@@ -93,11 +93,11 @@ Here are the steps for upgrading your custom plugins to @product-ver@.
         <div class="description">Fix Upgrade Problems</div>
     </li>
     <ol>
-        <li icon="" requirement="required" commandId="auto_correct_find_upgrade_problems">
+        <li icon="" requirement="required">
             <div class="title">Auto-Correct Upgrade Problems</div>
             <div class="description">Auto-Correct Upgrade Problems</div>
         </li>
-        <li icon="" requirement="required" commandId="find_upgrade_problems">
+        <li icon="" requirement="required">
             <div class="title">Find Upgrade Problems</div>
             <div class="description">Find Upgrade Problems</div>
         </li>
@@ -105,7 +105,7 @@ Here are the steps for upgrading your custom plugins to @product-ver@.
             <div class="title">Resolve Upgrade Problems</div>
             <div class="description">Resolve Upgrade Problems</div>
         </li>
-        <li icon="" requirement="required" commandId="remove_upgrade_problems_markers">
+        <li icon="" requirement="required">
             <div class="title">Remove Problem Markers</div>
             <div class="description">Remove Problem Markers</div>
         </li>
