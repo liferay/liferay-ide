@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
+import com.liferay.ide.upgrade.plan.core.UpgradeStepRequirement;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.knowledge.base.markdown.converter.MarkdownConverter;
 import com.liferay.knowledge.base.markdown.converter.factory.MarkdownConverterFactoryUtil;
@@ -77,6 +78,11 @@ public class UpgradeStepsBuilder {
 
 			if (html.startsWith("<li")) {
 				String requirement = child.attr("requirement");
+
+				if (CoreUtil.isNullOrEmpty(requirement)) {
+					requirement = UpgradeStepRequirement.REQUIRED.toString();
+				}
+
 				String commandId = child.attr("commandId");
 
 				Elements titleElements = child.getElementsByClass("title");
