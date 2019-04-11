@@ -27,6 +27,7 @@
                 </property-editor>
                 <property-editor>
                     <property>Location</property>
+                    <visible-when>${UpgradePlanName == '07-liferay-code-upgrade-plan'}</visible-when>
                 </property-editor>
             </content>
             <description>Create and start a new Upgrade Plan. Any existing plan will be replaced.</description>

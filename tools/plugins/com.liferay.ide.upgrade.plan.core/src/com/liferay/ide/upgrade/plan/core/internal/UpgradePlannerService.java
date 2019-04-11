@@ -175,10 +175,11 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 	@Override
 	public UpgradePlan newUpgradePlan(
-			String name, String upgradePlanName, String currentVersion, String targetVersion, Path sourceCodeLocation)
+			String name, String upgradePlanOutline, String currentVersion, String targetVersion,
+			Path sourceCodeLocation)
 		throws IOException {
 
-		String markdownFileName = upgradePlanName + ".markdown";
+		String markdownFileName = upgradePlanOutline + ".markdown";
 
 		UpgradeStepsBuilder upgradeStepsBuilder = new UpgradeStepsBuilder(
 			UpgradePlannerService.class.getResourceAsStream(markdownFileName));

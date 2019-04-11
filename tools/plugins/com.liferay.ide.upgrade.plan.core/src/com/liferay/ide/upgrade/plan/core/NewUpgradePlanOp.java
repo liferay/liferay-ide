@@ -30,7 +30,6 @@ import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
-import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.Fact;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
@@ -59,7 +58,7 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public Value<String> getTargetVersion();
 
-	public Value<String> getUpgradePlanName();
+	public Value<String> getUpgradePlanOutline();
 
 	public void setCurrentVersion(String currentVersion);
 
@@ -69,15 +68,14 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 
 	public void setTargetVersion(String targetVersion);
 
-	public void setUpgradePlanName(String upgradePlanName);
+	public void setUpgradePlanOutline(String upgradePlanOutline);
 
 	@DefaultValue(text = "6.2")
 	@Label(standard = "Current Liferay Version")
-	@PossibleValues(values = {"6.2", "7.0"})
+	@PossibleValues(values = {"6.2", "7.0", "7.1"})
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
 
 	@AbsolutePath
-	@Enablement(expr = "${UpgradePlanName == 'liferay-code-upgrade-plan'}")
 	@Fact(statement = "This location should be either a Plugins SDK, Liferay Workspace.")
 	@Label(standard = "Current Code Location")
 	@Service(impl = SourceLocationValidationService.class)
@@ -89,14 +87,14 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	@Service(impl = NameValidationService.class)
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-	@DefaultValue(text = "7.1")
+	@DefaultValue(text = "7.2")
 	@Label(standard = "Target Liferay Version")
-	@PossibleValues(values = {"7.0", "7.1"})
+	@PossibleValues(values = {"7.0", "7.1", "7.2"})
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
 
-	@DefaultValue(text = "liferay-upgrade-plan")
-	@PossibleValues(values = {"liferay-upgrade-plan", "liferay-code-upgrade-plan"})
+	@DefaultValue(text = "07-liferay-data-upgrade-plan")
+	@PossibleValues(values = {"06-liferay-data-upgrade-plan", "07-liferay-code-upgrade-plan"})
 	@Required
-	public ValueProperty PROP_UPGRADE_PLAN_NAME = new ValueProperty(TYPE, "UpgradePlanName");
+	public ValueProperty PROP_UPGRADE_PLAN_OUTLINE = new ValueProperty(TYPE, "UpgradePlanOutline");
 
 }
