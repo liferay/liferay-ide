@@ -48,7 +48,7 @@ public class SourceLocationValidationService
 			}
 
 			if (!(isValidGradleWorkspace(sourceLocationTarget) || isValidSDK(sourceLocationTarget))) {
-				retval = Status.createErrorStatus("Source code location must be a vailid gradle liferay workspace.");
+				retval = Status.createErrorStatus("Source code location must be a vaild gradle liferay workspace.");
 			}
 		}
 
