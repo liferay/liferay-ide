@@ -63,7 +63,7 @@ Here are the steps for upgrading your development environment and custom plugins
         <div class="description">Upgrade your build dependencies.</div>
     </li>
     <ol>
-        <li>
+        <li commandId="update_repository_url">
             <div class="title">Update Repository URL</div>
             <div class="description">Update your repository URL.</div>
         </li>

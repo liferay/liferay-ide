@@ -16,9 +16,12 @@ package com.liferay.ide.upgrade.plan.core;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public interface MessagePrompt {
 
-	public boolean prompt(String title, String message);
+	public void promptInfo(String title, String message);
+
+	public boolean promptQuestion(String title, String message);
 
 }

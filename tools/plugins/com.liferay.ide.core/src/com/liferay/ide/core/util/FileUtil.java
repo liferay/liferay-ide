@@ -893,6 +893,10 @@ public class FileUtil {
 		return readContents(getFile(file), false);
 	}
 
+	public static String readContents(IFile file, boolean includeNewlines) {
+		return readContents(getFile(file), includeNewlines);
+	}
+
 	public static String readContents(InputStream contents) throws IOException {
 		byte[] buffer = new byte[4096];
 
