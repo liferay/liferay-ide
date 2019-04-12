@@ -10,6 +10,10 @@
 			icon="icons/liferay_logo_16.png"
 		/>
 		<image
+			commandId="com.liferay.ide.upgrade.plan.ui.showprogressview"
+			icon="icons/progress.png"
+		/>
+		<image
 			commandId="com.liferay.ide.upgrade.plan.ui.expandall"
 			icon="icons/expand_node.png"
 		/>
@@ -84,6 +88,12 @@
 			>
 			</command>
 			<command
+				commandId="com.liferay.ide.upgrade.plan.ui.showprogressview"
+				icon="icons/progress.png"
+				style="push"
+			>
+			</command>
+			<command
 				commandId="com.liferay.ide.upgrade.plan.ui.expandall"
 				icon="icons/expand_node.png"
 				style="push"
@@ -136,6 +146,11 @@
 		>
 		</command>
 		<command
+			id="com.liferay.ide.upgrade.plan.ui.showprogressview"
+			name="Show Progress View"
+		>
+		</command>
+		<command
 			id="com.liferay.ide.upgrade.plan.ui.expandall"
 			name="Expand All"
 		>
@@ -167,6 +182,11 @@
 		<handler
 			class="com.liferay.ide.upgrade.plan.ui.internal.ShowUpgradePlanInfoViewHandler"
 			commandId="com.liferay.ide.upgrade.plan.ui.showupgradeplaninfoview"
+		>
+		</handler>
+		<handler
+			class="com.liferay.ide.upgrade.plan.ui.internal.ShowProgressViewHandler"
+			commandId="com.liferay.ide.upgrade.plan.ui.showprogressview"
 		>
 		</handler>
 		<handler
