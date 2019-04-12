@@ -54,6 +54,8 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 
 	public static final String STEP_PERFORM_IMAGE = "STEP_PERFORM_IMAGE";
 
+	public static final String STEP_PERVIEW_IMAGE = "STEP_PERVIEW_IMAGE";
+
 	public static final String STEP_RESTART_IMAGE = "STEP_RESTART_IMAGE";
 
 	public static final String STEP_SKIP_IMAGE = "STEP_SKIP_IMAGE";
@@ -189,6 +191,12 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
 		imageRegistry.put(CATEGORY_DATABASE_IMAGE, imageDescriptor);
+
+		path = _ICONS_PATH.append("preview.gif");
+
+		imageDescriptor = _createImageDescriptor(bundle, path);
+
+		imageRegistry.put(STEP_PERVIEW_IMAGE, imageDescriptor);
 	}
 
 	private static ImageDescriptor _createImageDescriptor(Bundle bundle, IPath path) {
