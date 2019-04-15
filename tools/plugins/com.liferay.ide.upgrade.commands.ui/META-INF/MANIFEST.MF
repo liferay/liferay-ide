@@ -25,4 +25,5 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.Resourc
  OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.MessagePromptImpl.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.CreateNewLiferayWorkspaceCommand.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.sdk.MigrateExistingPluginsToWorkspaceCommand.xml,
- OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.ConfigureBundleURLCommand.xml
+ OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.ConfigureBundleURLCommand.xml,
+ OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.UpgradeCompareImpl.xml

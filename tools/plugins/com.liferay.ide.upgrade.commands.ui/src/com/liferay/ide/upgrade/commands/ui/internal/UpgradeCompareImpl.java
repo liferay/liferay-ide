@@ -14,6 +14,8 @@
 
 package com.liferay.ide.upgrade.commands.ui.internal;
 
+import com.liferay.ide.upgrade.plan.core.UpgradeCompare;
+
 import java.io.File;
 import java.io.InputStream;
 
@@ -33,11 +35,15 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.graphics.Image;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Simon Jiang
  * @author Terry Jia
+ * @author Gregory Amerson
  */
-public class UpgradeCompare {
+@Component(service = UpgradeCompare.class)
+public class UpgradeCompareImpl implements UpgradeCompare {
 
 	public void openCompareEditor(File soruce, File target) {
 		ITypedElement left = new CompareItem(soruce);

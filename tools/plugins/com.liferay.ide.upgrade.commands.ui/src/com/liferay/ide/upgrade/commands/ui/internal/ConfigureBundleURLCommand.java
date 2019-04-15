@@ -21,6 +21,7 @@ import com.liferay.ide.upgrade.commands.core.code.ConfigureBundleURLCommandKeys;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
+import com.liferay.ide.upgrade.plan.core.UpgradeCompare;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradePreview;
@@ -86,11 +87,9 @@ public class ConfigureBundleURLCommand implements UpgradeCommand, UpgradePreview
 
 		_updateBundleURL(tempFile);
 
-		UpgradeCompare upgradeCompare = new UpgradeCompare();
-
 		UIUtil.async(
 			() -> {
-				upgradeCompare.openCompareEditor(gradeProperties, tempFile);
+				_upgradeCompare.openCompareEditor(gradeProperties, tempFile);
 			});
 	}
 
@@ -139,6 +138,9 @@ public class ConfigureBundleURLCommand implements UpgradeCommand, UpgradePreview
 
 	@Reference
 	private ResourceSelection _resourceSelection;
+
+	@Reference
+	private UpgradeCompare _upgradeCompare;
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;
