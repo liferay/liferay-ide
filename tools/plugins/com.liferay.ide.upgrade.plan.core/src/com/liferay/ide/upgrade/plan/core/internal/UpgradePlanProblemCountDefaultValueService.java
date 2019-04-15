@@ -17,7 +17,6 @@ package com.liferay.ide.upgrade.plan.core.internal;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 
 import java.util.Collection;
 
@@ -34,7 +33,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class UpgradePlanProblemCountDefaultValueService extends DefaultValueService {
 
 	public UpgradePlanProblemCountDefaultValueService() {
-		Bundle bundle = FrameworkUtil.getBundle(UpgradeStep.class);
+		Bundle bundle = FrameworkUtil.getBundle(UpgradePlanProblemCountDefaultValueService.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
 
