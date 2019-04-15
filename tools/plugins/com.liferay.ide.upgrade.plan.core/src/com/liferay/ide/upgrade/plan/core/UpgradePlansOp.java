@@ -25,6 +25,7 @@ import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
+import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 
 /**
@@ -42,6 +43,7 @@ public interface UpgradePlansOp extends ExecutableElement {
 
 	public void setName(String name);
 
+	@Required
 	@Service(impl = NamesPossibleValuesService.class)
 	@Service(impl = NamesDefaultValueService.class)
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");

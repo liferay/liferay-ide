@@ -15,6 +15,8 @@
 package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.upgrade.plan.core.IMemento;
+import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,10 +30,25 @@ import java.util.stream.Stream;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DefaultValueService;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Terry Jia
  */
 public class NamesDefaultValueService extends DefaultValueService {
+
+	public NamesDefaultValueService() {
+		Bundle bundle = FrameworkUtil.getBundle(NamesDefaultValueService.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+
+		_serviceTracker.open();
+	}
 
 	@Override
 	protected String compute() {
@@ -50,10 +67,16 @@ public class NamesDefaultValueService extends DefaultValueService {
 				IMemento rootMemento = XMLMemento.loadMemento(inputStream);
 
 				if (rootMemento != null) {
+					UpgradePlanner upgradePlanner = _serviceTracker.getService();
+
+					UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
+
 					List<String> names = Stream.of(
 						rootMemento.getChildren("upgradePlan")
 					).map(
 						memento -> memento.getString("upgradePlanName")
+					).filter(
+						name -> !name.equals(upgradePlan.getName())
 					).collect(
 						Collectors.toList()
 					);
@@ -69,5 +92,7 @@ public class NamesDefaultValueService extends DefaultValueService {
 
 		return retval;
 	}
+
+	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 
 }
