@@ -37,6 +37,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 public class NamesDefaultValueService extends DefaultValueService {
 
@@ -52,7 +53,14 @@ public class NamesDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected String compute() {
-		String retval = "";
+		return _defaultValue;
+	}
+
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
+
+		_defaultValue = "";
 
 		UpgradePlanCorePlugin upgradePlanCorePlugin = UpgradePlanCorePlugin.getInstance();
 
@@ -82,17 +90,16 @@ public class NamesDefaultValueService extends DefaultValueService {
 					);
 
 					if (!names.isEmpty()) {
-						retval = names.get(0);
+						_defaultValue = names.get(0);
 					}
 				}
 			}
 			catch (IOException ioe) {
 			}
 		}
-
-		return retval;
 	}
 
+	private String _defaultValue;
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 
 }
