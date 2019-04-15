@@ -18,7 +18,7 @@ import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanCurrentLocationDefa
 import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanCurrentVersionDefaultValueService;
 import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanDetailsOpMethods;
 import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanNameDefaultValueService;
-import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanProblemAmountDefaultValueService;
+import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanProblemCountDefaultValueService;
 import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanTargetLocationDefaultValueService;
 import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanTargetVersionDefaultValueService;
 
@@ -54,9 +54,9 @@ public interface UpgradePlanDetailsOp extends ExecutableElement {
 	@Service(impl = UpgradePlanNameDefaultValueService.class)
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-	@Label(standard = "Upgrade Problem Amount")
-	@Service(impl = UpgradePlanProblemAmountDefaultValueService.class)
-	public ValueProperty PROP_PROBLEM_AMOUNT = new ValueProperty(TYPE, "ProblemAmount");
+	@Label(standard = "Upgrade Problem Count")
+	@Service(impl = UpgradePlanProblemCountDefaultValueService.class)
+	public ValueProperty PROP_PROBLEM_COUNT = new ValueProperty(TYPE, "ProblemCount");
 
 	@Label(standard = "Target Code Location")
 	@Service(impl = UpgradePlanTargetLocationDefaultValueService.class)

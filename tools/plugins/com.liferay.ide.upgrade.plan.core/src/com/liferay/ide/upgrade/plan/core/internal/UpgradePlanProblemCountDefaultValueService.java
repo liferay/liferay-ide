@@ -31,9 +31,9 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * @author Terry Jia
  */
-public class UpgradePlanProblemAmountDefaultValueService extends DefaultValueService {
+public class UpgradePlanProblemCountDefaultValueService extends DefaultValueService {
 
-	public UpgradePlanProblemAmountDefaultValueService() {
+	public UpgradePlanProblemCountDefaultValueService() {
 		Bundle bundle = FrameworkUtil.getBundle(UpgradeStep.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
