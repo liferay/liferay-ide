@@ -49,15 +49,23 @@ public class UpgradePlanProblemCountDefaultValueService extends DefaultValueServ
 
 	@Override
 	protected String compute() {
+		return String.valueOf(_upgradeProblemCount);
+	}
+
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
+
 		UpgradePlanner upgradePlanner = _serviceTracker.getService();
 
 		UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		return String.valueOf(upgradeProblems.size());
+		_upgradeProblemCount = upgradeProblems.size();
 	}
 
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
+	private int _upgradeProblemCount;
 
 }
