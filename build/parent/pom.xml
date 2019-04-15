@@ -48,8 +48,8 @@
         <sapphire-site>http://download.eclipse.org/sapphire/9.1.1/repository/</sapphire-site>
         <maven-deps-plugin-site>http://ianbrandt.github.io/m2e-maven-dependency-plugin/0.0.4/</maven-deps-plugin-site>
         <gmaven.runtime>1.8</gmaven.runtime>
-        <blade-latest-download-url>https://repository.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/blade/com.liferay.blade.cli/3.6.0-SNAPSHOT/com.liferay.blade.cli-3.6.0-20190308.151937-3.jar</blade-latest-download-url>
-        <blade-latest-md5>5eb324b261ca6429b24a389606054d35</blade-latest-md5>
+        <blade-latest-download-url>https://repository.liferay.com/nexus/content/repositories/liferay-public-releases/com/liferay/blade/com.liferay.blade.cli/3.6.0/com.liferay.blade.cli-3.6.0.jar</blade-latest-download-url>
+        <blade-latest-md5>b3c07042a5ed801ed3da8db537fc799f</blade-latest-md5>
         <sign-apps>false</sign-apps>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
     </properties>
