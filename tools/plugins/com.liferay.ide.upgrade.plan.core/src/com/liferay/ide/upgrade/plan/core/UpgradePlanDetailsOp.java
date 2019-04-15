@@ -23,6 +23,7 @@ import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.ReadOnly;
 import org.eclipse.sapphire.modeling.annotations.Service;
 
 import org.osgi.framework.Bundle;
@@ -32,32 +33,39 @@ import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 public interface UpgradePlanDetailsOp extends Element {
 
 	public ElementType TYPE = new ElementType(UpgradePlanDetailsOp.class);
 
 	@Label(standard = "Current Liferay Version")
+	@ReadOnly
 	@Service(impl = UpgradePlanDefaultValueService.class)
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
 
 	@Label(standard = "Current Code Location")
+	@ReadOnly
 	@Service(impl = UpgradePlanDefaultValueService.class)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
 	@Label(standard = "Name")
+	@ReadOnly
 	@Service(impl = UpgradePlanDefaultValueService.class)
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
 	@Label(standard = "Upgrade Problem Count")
+	@ReadOnly
 	@Service(impl = UpgradePlanDefaultValueService.class)
 	public ValueProperty PROP_PROBLEM_COUNT = new ValueProperty(TYPE, "ProblemCount");
 
 	@Label(standard = "Target Code Location")
+	@ReadOnly
 	@Service(impl = UpgradePlanDefaultValueService.class)
 	public ValueProperty PROP_TARGET_LOCATION = new ValueProperty(TYPE, "TargetLocation");
 
 	@Label(standard = "Target Liferay Version")
+	@ReadOnly
 	@Service(impl = UpgradePlanDefaultValueService.class)
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
 
