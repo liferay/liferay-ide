@@ -16,12 +16,16 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanDetailsOp;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -55,9 +59,15 @@ public class UpgradePlanDetailsHandler extends AbstractHandler {
 			return null;
 		}
 
-		UpgradePlanDetailsDialog detailsDialog = new UpgradePlanDetailsDialog();
+		Element element = UpgradePlanDetailsOp.TYPE.instantiate();
 
-		return detailsDialog.open();
+		DefinitionLoader definitionLoader = DefinitionLoader.context(UpgradePlanDetailsHandler.class);
+
+		definitionLoader = definitionLoader.sdef("UpgradePlanDetailsDialog");
+
+		SapphireDialog sapphireDialog = new SapphireDialog(UIUtil.getActiveShell(), element, definitionLoader.dialog());
+
+		return sapphireDialog.open();
 	}
 
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
