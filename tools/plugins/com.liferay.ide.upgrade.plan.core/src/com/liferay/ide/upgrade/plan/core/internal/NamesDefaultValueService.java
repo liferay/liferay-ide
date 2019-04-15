@@ -15,6 +15,8 @@
 package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.upgrade.plan.core.IMemento;
+import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,14 +30,37 @@ import java.util.stream.Stream;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DefaultValueService;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 public class NamesDefaultValueService extends DefaultValueService {
 
+	public NamesDefaultValueService() {
+		Bundle bundle = FrameworkUtil.getBundle(NamesDefaultValueService.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+
+		_serviceTracker.open();
+	}
+
 	@Override
 	protected String compute() {
-		String retval = "";
+		return _defaultValue;
+	}
+
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
+
+		_defaultValue = "";
 
 		UpgradePlanCorePlugin upgradePlanCorePlugin = UpgradePlanCorePlugin.getInstance();
 
@@ -50,24 +75,31 @@ public class NamesDefaultValueService extends DefaultValueService {
 				IMemento rootMemento = XMLMemento.loadMemento(inputStream);
 
 				if (rootMemento != null) {
+					UpgradePlanner upgradePlanner = _serviceTracker.getService();
+
+					UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
+
 					List<String> names = Stream.of(
 						rootMemento.getChildren("upgradePlan")
 					).map(
 						memento -> memento.getString("upgradePlanName")
+					).filter(
+						name -> !name.equals(upgradePlan.getName())
 					).collect(
 						Collectors.toList()
 					);
 
 					if (!names.isEmpty()) {
-						retval = names.get(0);
+						_defaultValue = names.get(0);
 					}
 				}
 			}
 			catch (IOException ioe) {
 			}
 		}
-
-		return retval;
 	}
+
+	private String _defaultValue;
+	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 
 }

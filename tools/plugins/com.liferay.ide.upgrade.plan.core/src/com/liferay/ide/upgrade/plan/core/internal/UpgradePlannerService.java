@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -121,6 +122,10 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 	@Override
 	public UpgradePlan loadUpgradePlan(String name) {
+		if (name == null) {
+			return null;
+		}
+
 		try (InputStream inputStream = new FileInputStream(_getUpgradePlannerStorageFile())) {
 			IMemento rootMemento = XMLMemento.loadMemento(inputStream);
 
@@ -130,6 +135,8 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 			Optional<IMemento> upgradePlanMementoOptional = Stream.of(
 				rootMemento.getChildren("upgradePlan")
+			).filter(
+				Objects::nonNull
 			).filter(
 				memento -> name.equals(memento.getString("upgradePlanName"))
 			).findFirst();
