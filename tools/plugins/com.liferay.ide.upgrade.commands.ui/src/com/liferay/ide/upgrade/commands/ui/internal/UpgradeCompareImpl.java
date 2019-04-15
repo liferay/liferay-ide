@@ -36,38 +36,37 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.graphics.Image;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Simon Jiang
  * @author Terry Jia
  * @author Gregory Amerson
  */
-@Component(service = UpgradeCompare.class)
+@Component(scope = ServiceScope.SINGLETON, service = UpgradeCompare.class)
 public class UpgradeCompareImpl implements UpgradeCompare {
 
 	public void openCompareEditor(File soruce, File target) {
-		ITypedElement left = new CompareItem(soruce);
-		ITypedElement right = new CompareItem(target);
+		CompareItem sourceCompareItem = new CompareItem(soruce);
+		CompareItem targetCompareItem = new CompareItem(target);
 
-		CompareConfiguration configuration = new CompareConfiguration();
+		CompareConfiguration compareConfiguration = new CompareConfiguration();
 
-		configuration.setLeftLabel("Original File");
-		configuration.setRightLabel("Upgraded File");
+		compareConfiguration.setLeftLabel("Original file");
+		compareConfiguration.setRightLabel("Upgraded file");
 
-		CompareEditorInput compareEditorInput = new CompareEditorInput(configuration) {
+		CompareEditorInput compareEditorInput = new CompareEditorInput(compareConfiguration) {
 
 			@Override
 			protected Object prepareInput(IProgressMonitor monitor)
 				throws InterruptedException, InvocationTargetException {
 
-				return new DiffNode(left, right);
+				return new DiffNode(sourceCompareItem, targetCompareItem);
 			}
 
 		};
 
-		String title = "Compare ('" + soruce.getName() + "'-'" + target.getName() + "')";
-
-		compareEditorInput.setTitle(title);
+		compareEditorInput.setTitle("Compare ('" + soruce.getName() + "'-'" + target.getName() + "')");
 
 		CompareUI.openCompareEditor(compareEditorInput);
 	}

@@ -63,7 +63,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
+public class UpgradeStepItem implements ServicesLookup, UpgradeItem, UpgradeListener {
 
 	public UpgradeStepItem(FormToolkit formToolkit, ScrolledForm scrolledForm, UpgradeStep upgradeStep) {
 		_formToolkit = formToolkit;
@@ -278,7 +278,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 	private IStatus _perform(IProgressMonitor progressMonitor) {
 		String commandId = _upgradeStep.getCommandId();
 
-		UpgradeCommand upgradeCommand = ServicesLookup.getSingleService(UpgradeCommand.class, "(id=" + commandId + ")");
+		UpgradeCommand upgradeCommand = getSingleService(UpgradeCommand.class, "(id=" + commandId + ")");
 
 		IStatus performStatus = Status.CANCEL_STATUS;
 
@@ -304,9 +304,9 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 	private IStatus _preview(IProgressMonitor progressMonitor) {
 		String commandId = _upgradeStep.getCommandId();
 
-		UpgradePreview upgradePriview = ServicesLookup.getSingleService(UpgradePreview.class, "(id=" + commandId + ")");
+		UpgradePreview upgradePreview = getSingleService(UpgradePreview.class, "(id=" + commandId + ")");
 
-		upgradePriview.preview(progressMonitor);
+		upgradePreview.preview(progressMonitor);
 
 		return Status.OK_STATUS;
 	}
@@ -314,9 +314,9 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 	private boolean _previewable() {
 		String commandId = _upgradeStep.getCommandId();
 
-		UpgradePreview upgradePriview = ServicesLookup.getSingleService(UpgradePreview.class, "(id=" + commandId + ")");
+		UpgradePreview upgradePreview = getSingleService(UpgradePreview.class, "(id=" + commandId + ")");
 
-		if (upgradePriview != null) {
+		if (upgradePreview != null) {
 			return true;
 		}
 

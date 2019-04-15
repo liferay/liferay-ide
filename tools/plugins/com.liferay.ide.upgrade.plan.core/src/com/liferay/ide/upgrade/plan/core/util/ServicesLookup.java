@@ -33,9 +33,9 @@ import org.osgi.framework.ServiceReference;
 /**
  * @author Gregory Amerson
  */
-public class ServicesLookup {
+public interface ServicesLookup {
 
-	public static <T> List<T> getOrderedServices(BundleContext bundleContext, Class<T> clazz, String filter) {
+	public default <T> List<T> getOrderedServices(BundleContext bundleContext, Class<T> clazz, String filter) {
 		try {
 			Collection<ServiceReference<T>> serviceReferenceCollection = bundleContext.getServiceReferences(
 				clazz, filter);
@@ -86,7 +86,7 @@ public class ServicesLookup {
 		return Collections.emptyList();
 	}
 
-	public static <T> T getSingleService(Class<T> serviceClass, String filter) {
+	public default <T> T getSingleService(Class<T> serviceClass, String filter) {
 		Bundle bundle = FrameworkUtil.getBundle(ServicesLookup.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
