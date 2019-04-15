@@ -14,14 +14,13 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanCurrentLocationDefaultValueService;
-import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanCurrentVersionDefaultValueService;
 import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanDetailsOpMethods;
-import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanNameDefaultValueService;
-import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanProblemCountDefaultValueService;
-import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanTargetLocationDefaultValueService;
-import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanTargetVersionDefaultValueService;
 
+import java.nio.file.Path;
+
+import java.util.Collection;
+
+import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
 import org.eclipse.sapphire.ValueProperty;
@@ -30,6 +29,11 @@ import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Service;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Terry Jia
@@ -43,27 +47,100 @@ public interface UpgradePlanDetailsOp extends ExecutableElement {
 	public Status execute(ProgressMonitor monitor);
 
 	@Label(standard = "Current Liferay Version")
-	@Service(impl = UpgradePlanCurrentVersionDefaultValueService.class)
+	@Service(impl = UpgradePlanDefaultValueService.class)
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
 
 	@Label(standard = "Current Code Location")
-	@Service(impl = UpgradePlanCurrentLocationDefaultValueService.class)
+	@Service(impl = UpgradePlanDefaultValueService.class)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
 	@Label(standard = "Name")
-	@Service(impl = UpgradePlanNameDefaultValueService.class)
+	@Service(impl = UpgradePlanDefaultValueService.class)
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
 	@Label(standard = "Upgrade Problem Count")
-	@Service(impl = UpgradePlanProblemCountDefaultValueService.class)
+	@Service(impl = UpgradePlanDefaultValueService.class)
 	public ValueProperty PROP_PROBLEM_COUNT = new ValueProperty(TYPE, "ProblemCount");
 
 	@Label(standard = "Target Code Location")
-	@Service(impl = UpgradePlanTargetLocationDefaultValueService.class)
+	@Service(impl = UpgradePlanDefaultValueService.class)
 	public ValueProperty PROP_TARGET_LOCATION = new ValueProperty(TYPE, "TargetLocation");
 
 	@Label(standard = "Target Liferay Version")
-	@Service(impl = UpgradePlanTargetVersionDefaultValueService.class)
+	@Service(impl = UpgradePlanDefaultValueService.class)
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
+
+	public class UpgradePlanDefaultValueService extends DefaultValueService {
+
+		public UpgradePlanDefaultValueService() {
+			Bundle bundle = FrameworkUtil.getBundle(UpgradePlanDetailsOp.class);
+
+			BundleContext bundleContext = bundle.getBundleContext();
+
+			_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+
+			_serviceTracker.open();
+		}
+
+		@Override
+		public void dispose() {
+			_serviceTracker.close();
+		}
+
+		@Override
+		protected String compute() {
+			return _defaultValue;
+		}
+
+		@Override
+		protected void initDefaultValueService() {
+			super.initDefaultValueService();
+
+			UpgradePlanner upgradePlanner = _serviceTracker.getService();
+
+			UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
+
+			ValueProperty valueProperty = context(ValueProperty.class);
+
+			if (valueProperty.equals(UpgradePlanDetailsOp.PROP_CURRENT_VERSION)) {
+				_defaultValue = upgradePlan.getCurrentVersion();
+			}
+			else if (valueProperty.equals(UpgradePlanDetailsOp.PROP_LOCATION)) {
+				Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
+
+				if (currentProjectLocation == null) {
+					_defaultValue = "";
+				}
+				else {
+					_defaultValue = currentProjectLocation.toString();
+				}
+			}
+			else if (valueProperty.equals(UpgradePlanDetailsOp.PROP_NAME)) {
+				_defaultValue = upgradePlan.getName();
+			}
+			else if (valueProperty.equals(UpgradePlanDetailsOp.PROP_PROBLEM_COUNT)) {
+				Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
+
+				_defaultValue = String.valueOf(upgradeProblems.size());
+			}
+			else if (valueProperty.equals(UpgradePlanDetailsOp.PROP_TARGET_LOCATION)) {
+				Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
+
+				if (targetProjectLocation == null) {
+					_defaultValue = "";
+				}
+				else {
+					_defaultValue = targetProjectLocation.toString();
+				}
+			}
+			else if (valueProperty.equals(UpgradePlanDetailsOp.PROP_TARGET_VERSION)) {
+				_defaultValue = upgradePlan.getTargetVersion();
+			}
+		}
+
+		private String _defaultValue;
+		private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
+
+	}
 
 }
