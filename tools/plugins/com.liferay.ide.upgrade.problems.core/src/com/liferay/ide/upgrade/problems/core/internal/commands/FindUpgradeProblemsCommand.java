@@ -25,12 +25,9 @@ import com.liferay.ide.upgrade.problems.core.FileMigration;
 import com.liferay.ide.upgrade.problems.core.MarkerSupport;
 import com.liferay.ide.upgrade.problems.core.commands.FindUpgradeProblemsCommandKeys;
 
-import java.io.File;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -61,13 +58,10 @@ public class FindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand
 
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		List<String> upgradeVersions = upgradePlan.getUpgradeVersions();
-
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		Stream<UpgradeProblem> ugradeProblemsStream = upgradeProblems.stream();
-
-		ugradeProblemsStream.map(
+		upgradeProblems.stream(
+		).map(
 			this::findMarker
 		).filter(
 			this::markerExists
@@ -77,19 +71,18 @@ public class FindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand
 
 		upgradeProblems.clear();
 
-		Stream<IProject> stream = projects.stream();
+		List<String> upgradeVersions = upgradePlan.getUpgradeVersions();
 
-		stream.forEach(
-			project -> {
-				File searchFile = FileUtil.getFile(project);
+		projects.stream(
+		).map(
+			FileUtil::getFile
+		).map(
+			searchFile -> _fileMigration.findUpgradeProblems(searchFile, upgradeVersions, progressMonitor)
+		).forEach(
+			upgradePlan::addUpgradeProblems
+		);
 
-				List<UpgradeProblem> foundUpgradeProblems = _fileMigration.findUpgradeProblems(
-					searchFile, upgradeVersions, progressMonitor);
-
-				upgradePlan.addUpgradeProblems(foundUpgradeProblems);
-
-				addMarkers(foundUpgradeProblems);
-			});
+		addMarkers(upgradePlan.getUpgradeProblems());
 
 		_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, new ArrayList<>(upgradeProblems)));
 

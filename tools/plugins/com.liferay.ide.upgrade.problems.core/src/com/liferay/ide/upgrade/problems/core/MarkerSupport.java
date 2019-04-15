@@ -18,8 +18,6 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -27,13 +25,13 @@ import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public interface MarkerSupport {
 
-	public default void addMarkers(List<UpgradeProblem> upgradeProblems) {
-		Stream<UpgradeProblem> stream = upgradeProblems.stream();
-
-		stream.filter(
+	public default void addMarkers(Collection<UpgradeProblem> upgradeProblems) {
+		upgradeProblems.stream(
+		).filter(
 			upgradeProblem -> FileUtil.exists(upgradeProblem.getResource())
 		).forEach(
 			upgradeProblem -> {
