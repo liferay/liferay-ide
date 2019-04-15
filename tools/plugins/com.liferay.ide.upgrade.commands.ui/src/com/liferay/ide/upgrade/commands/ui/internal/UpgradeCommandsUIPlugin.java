@@ -26,7 +26,7 @@ import org.osgi.framework.BundleContext;
  */
 public class UpgradeCommandsUIPlugin extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = "com.liferay.ide.upgrade.steps.ui";
+	public static final String PLUGIN_ID = "com.liferay.ide.upgrade.commands.ui";
 
 	public static IStatus createErrorStatus(String msg) {
 		return createErrorStatus(msg, null);

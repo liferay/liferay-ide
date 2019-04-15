@@ -20,6 +20,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradePreview;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
@@ -62,7 +63,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
+public class UpgradeStepItem implements ServicesLookup, UpgradeItem, UpgradeListener {
 
 	public UpgradeStepItem(FormToolkit formToolkit, ScrolledForm scrolledForm, UpgradeStep upgradeStep) {
 		_formToolkit = formToolkit;
@@ -126,6 +127,18 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 			String commandId = _upgradeStep.getCommandId();
 
 			if (CoreUtil.isNotNullOrEmpty(commandId)) {
+				if (_previewable()) {
+					Image stepPreviewImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.STEP_PERVIEW_IMAGE);
+
+					ImageHyperlink previewImageHyperlink = createImageHyperlink(
+						_formToolkit, _buttonComposite, stepPreviewImage, this, "Click to preview",
+						"Performing " + _upgradeStep.getTitle() + "...", this::_preview, _upgradeStep);
+
+					_disposables.add(() -> previewImageHyperlink.dispose());
+
+					_enables.add(previewImageHyperlink);
+				}
+
 				Image stepPerformImage = UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.STEP_PERFORM_IMAGE);
 
 				ImageHyperlink performImageHyperlink = createImageHyperlink(
@@ -265,7 +278,7 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 	private IStatus _perform(IProgressMonitor progressMonitor) {
 		String commandId = _upgradeStep.getCommandId();
 
-		UpgradeCommand upgradeCommand = ServicesLookup.getSingleService(UpgradeCommand.class, "(id=" + commandId + ")");
+		UpgradeCommand upgradeCommand = getSingleService(UpgradeCommand.class, "(id=" + commandId + ")");
 
 		IStatus performStatus = Status.CANCEL_STATUS;
 
@@ -286,6 +299,28 @@ public class UpgradeStepItem implements UpgradeItem, UpgradeListener {
 		}
 
 		return performStatus;
+	}
+
+	private IStatus _preview(IProgressMonitor progressMonitor) {
+		String commandId = _upgradeStep.getCommandId();
+
+		UpgradePreview upgradePreview = getSingleService(UpgradePreview.class, "(id=" + commandId + ")");
+
+		upgradePreview.preview(progressMonitor);
+
+		return Status.OK_STATUS;
+	}
+
+	private boolean _previewable() {
+		String commandId = _upgradeStep.getCommandId();
+
+		UpgradePreview upgradePreview = getSingleService(UpgradePreview.class, "(id=" + commandId + ")");
+
+		if (upgradePreview != null) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private IStatus _restart(IProgressMonitor progressMonitor) {
