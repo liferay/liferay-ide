@@ -35,5 +35,4 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.sdk.P
  OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.prerequisite.CheckInstalledJDKsCommand.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.sdk.ImportExistingPluginsSDKCommand.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.buildservice.RebuildServicesCommand.xml,
- OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.code.ConfigureTargetPlatformVersionCommand.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.core.internal.code.ImportExistingLiferayWorkspaceCommand.xml
