@@ -12,16 +12,13 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core;
+package com.liferay.ide.upgrade.commands.ui.internal.dependencies;
 
 /**
- * @author Gregory Amerson
  * @author Terry Jia
  */
-public interface MessagePrompt {
+public class UpdateRepositoryURLCommandKeys {
 
-	public void displayInfo(String title, String message);
-
-	public boolean promptQuestion(String title, String message);
+	public static final String ID = "update_repository_url";
 
 }
