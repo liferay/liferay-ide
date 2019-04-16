@@ -43,6 +43,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMInstall2;
 
+import org.osgi.framework.Version;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -261,6 +263,15 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 		args.add("-Dcatalina.base=\"" + bundlePath.toPortableString() + "\"");
 		args.add("-Dcatalina.home=\"" + bundlePath.toPortableString() + "\"");
+
+		Version portalVersion = new Version(getVersion());
+
+		if (portalVersion.compareTo(new Version("7.0.0")) > 0) {
+			args.add("-Djdk.tls.ephemeralDHKeySize=2048");
+			args.add("-Djava.protocol.handler.pkgs=org.apache.catalina.webresources");
+			args.add("-Dorg.apache.catalina.security.SecurityListener.UMASK=0027");
+		}
+
 		args.add("-Dcom.sun.management.jmxremote");
 		args.add("-Dcom.sun.management.jmxremote.authenticate=false");
 		args.add("-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort());
