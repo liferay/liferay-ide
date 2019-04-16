@@ -352,7 +352,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 		for (IMemento upgradeStepMemento : upgradeStepMementos) {
 			String title = upgradeStepMemento.getString("title");
-			String description = upgradeStepMemento.getString("title");
+			String description = upgradeStepMemento.getString("description");
 			String commandId = upgradeStepMemento.getString("commandId");
 			String icon = upgradeStepMemento.getString("imagePath");
 			String url = upgradeStepMemento.getString("url");
