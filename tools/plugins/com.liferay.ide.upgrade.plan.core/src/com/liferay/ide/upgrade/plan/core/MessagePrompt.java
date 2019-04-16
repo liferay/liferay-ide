@@ -20,7 +20,7 @@ package com.liferay.ide.upgrade.plan.core;
  */
 public interface MessagePrompt {
 
-	public void promptInfo(String title, String message);
+	public void displayInfo(String title, String message);
 
 	public boolean promptQuestion(String title, String message);
 

@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 public class MessagePromptImpl implements MessagePrompt {
 
 	@Override
-	public void promptInfo(String title, String message) {
+	public void displayInfo(String title, String message) {
 		UIUtil.postInfo(title, message);
 	}
 

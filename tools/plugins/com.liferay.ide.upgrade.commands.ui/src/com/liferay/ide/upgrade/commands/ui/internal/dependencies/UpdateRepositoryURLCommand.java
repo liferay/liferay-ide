@@ -119,7 +119,7 @@ public class UpdateRepositoryURLCommand implements UpgradeCommand, UpgradePrevie
 			}
 		}
 		else {
-			_messagePrompt.promptInfo("No need to update", "There is no need to update for this project.");
+			_messagePrompt.displayInfo("No need to update", "There is no need to update for this project.");
 
 			return Status.CANCEL_STATUS;
 		}
