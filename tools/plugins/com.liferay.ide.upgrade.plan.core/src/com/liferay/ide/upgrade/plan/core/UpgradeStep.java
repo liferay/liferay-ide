@@ -41,6 +41,15 @@ public class UpgradeStep {
 		String commandId, UpgradeStep parentUpgradeStep) {
 
 		_title = title;
+
+		if (!description.startsWith("<form>")) {
+			description = "<form>" + description;
+		}
+
+		if (!description.endsWith("</form>")) {
+			description = description + "</form>";
+		}
+
 		_description = description;
 		_icon = imagePath;
 		_url = url;
@@ -145,7 +154,7 @@ public class UpgradeStep {
 	}
 
 	public String getDescription() {
-		return "<form>" + _description + "</form>";
+		return _description;
 	}
 
 	public String getImagePath() {
