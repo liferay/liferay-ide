@@ -30,14 +30,16 @@ import java.util.Set;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public class StandardUpgradePlan implements UpgradePlan {
 
 	public StandardUpgradePlan(
-		String name, String currentVersion, String targetVersion, Path currentProjectLocation,
-		List<UpgradeStep> upgradeSteps) {
+		String name, String upgradePlanOutline, String currentVersion, String targetVersion,
+		Path currentProjectLocation, List<UpgradeStep> upgradeSteps) {
 
 		_name = name;
+		_upgradePlanOutline = upgradePlanOutline;
 		_currentVersion = currentVersion;
 		_targetVersion = targetVersion;
 		_currentProjectLocation = currentProjectLocation;
@@ -73,6 +75,10 @@ public class StandardUpgradePlan implements UpgradePlan {
 	@Override
 	public String getTargetVersion() {
 		return _targetVersion;
+	}
+
+	public String getUpgradePlanOutline() {
+		return _upgradePlanOutline;
 	}
 
 	@Override
@@ -129,6 +135,7 @@ public class StandardUpgradePlan implements UpgradePlan {
 	private final String _name;
 	private Path _targetProjectLocation;
 	private final String _targetVersion;
+	private String _upgradePlanOutline;
 	private Set<UpgradeProblem> _upgradeProblems;
 	private final List<UpgradeStep> _upgradeSteps;
 
