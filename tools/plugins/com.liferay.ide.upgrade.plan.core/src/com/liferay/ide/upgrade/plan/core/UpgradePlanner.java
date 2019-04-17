@@ -38,8 +38,8 @@ public interface UpgradePlanner {
 	public UpgradePlan loadUpgradePlan(String name);
 
 	public UpgradePlan newUpgradePlan(
-			String name, String upgradePlanOutline, String currentVersion, String targetVersion,
-			Path sourceCodeLocation)
+			String name, String currentVersion, String targetVersion, Path sourceCodeLocation,
+			String upgradePlanOutline)
 		throws IOException;
 
 	public void removeListener(UpgradeListener upgradeListener);

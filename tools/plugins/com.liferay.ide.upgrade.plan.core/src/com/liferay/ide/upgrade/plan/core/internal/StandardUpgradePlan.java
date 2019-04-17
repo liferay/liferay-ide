@@ -35,14 +35,14 @@ import java.util.Set;
 public class StandardUpgradePlan implements UpgradePlan {
 
 	public StandardUpgradePlan(
-		String name, String upgradePlanOutline, String currentVersion, String targetVersion,
-		Path currentProjectLocation, List<UpgradeStep> upgradeSteps) {
+		String name, String currentVersion, String targetVersion, Path currentProjectLocation,
+		String upgradePlanOutline, List<UpgradeStep> upgradeSteps) {
 
 		_name = name;
-		_upgradePlanOutline = upgradePlanOutline;
 		_currentVersion = currentVersion;
 		_targetVersion = targetVersion;
 		_currentProjectLocation = currentProjectLocation;
+		_upgradePlanOutline = upgradePlanOutline;
 		_upgradeProblems = new HashSet<>();
 		_upgradeSteps = upgradeSteps;
 	}
