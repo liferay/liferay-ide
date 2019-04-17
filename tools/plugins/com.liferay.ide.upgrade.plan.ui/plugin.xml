@@ -33,6 +33,10 @@
 			commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
 			icon="icons/liferay_logo_16.png"
 		/>
+		<image
+			commandId="com.liferay.ide.upgrade.plan.ui.upgradeplandetails"
+			icon="icons/plan_details.gif"
+		/>
 	</extension>
 	<extension
 		point="org.eclipse.ui.perspectives"
@@ -123,6 +127,12 @@
 				style="push"
 			>
 			</command>
+			<command
+				commandId="com.liferay.ide.upgrade.plan.ui.upgradeplandetails"
+				icon="icons/plan_details.gif"
+				style="push"
+			>
+			</command>
 		</menuContribution>
 		<menuContribution
 			allPopups="false"
@@ -175,6 +185,11 @@
 			name="New Upgrade Plan"
 		>
 		</command>
+		<command
+			id="com.liferay.ide.upgrade.plan.ui.upgradeplandetails"
+			name="Upgrade Plan Details"
+		>
+		</command>
 	</extension>
 	<extension
 		point="org.eclipse.ui.handlers"
@@ -212,6 +227,11 @@
 		<handler
 			class="com.liferay.ide.upgrade.plan.ui.internal.NewUpgradePlanHandler"
 			commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
+		>
+		</handler>
+		<handler
+			class="com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanDetailsHandler"
+			commandId="com.liferay.ide.upgrade.plan.ui.upgradeplandetails"
 		>
 		</handler>
 	</extension>

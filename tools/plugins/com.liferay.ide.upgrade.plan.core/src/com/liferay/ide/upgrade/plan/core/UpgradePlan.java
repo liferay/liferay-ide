@@ -36,6 +36,8 @@ public interface UpgradePlan {
 
 	public String getTargetVersion();
 
+	public String getUpgradePlanOutline();
+
 	public Collection<UpgradeProblem> getUpgradeProblems();
 
 	public List<UpgradeStep> getUpgradeSteps();

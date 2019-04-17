@@ -159,8 +159,10 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 				_loadUpgradeSteps(upgradePlanMemento, upgradeSteps, null);
 
+				String upgradePlanOutline = upgradePlanMemento.getString("upgradePlanOutline");
+
 				_currentUpgradePlan = new StandardUpgradePlan(
-					name, currentVersion, targetVersion, projectPath, upgradeSteps);
+					name, currentVersion, targetVersion, projectPath, upgradePlanOutline, upgradeSteps);
 
 				String targetProjectLocationValue = upgradePlanMemento.getString("targetProjectLocation");
 
@@ -182,8 +184,8 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 	@Override
 	public UpgradePlan newUpgradePlan(
-			String name, String upgradePlanOutline, String currentVersion, String targetVersion,
-			Path sourceCodeLocation)
+			String name, String currentVersion, String targetVersion, Path sourceCodeLocation,
+			String upgradePlanOutline)
 		throws IOException {
 
 		String markdownFileName = upgradePlanOutline + ".markdown";
@@ -193,7 +195,8 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 		List<UpgradeStep> upgradeSteps = upgradeStepsBuilder.build();
 
-		return new StandardUpgradePlan(name, currentVersion, targetVersion, sourceCodeLocation, upgradeSteps);
+		return new StandardUpgradePlan(
+			name, currentVersion, targetVersion, sourceCodeLocation, upgradePlanOutline, upgradeSteps);
 	}
 
 	@Override
@@ -236,6 +239,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 			upgradePlanMemento.putString("upgradePlanName", upgradePlan.getName());
 			upgradePlanMemento.putString("currentVersion", upgradePlan.getCurrentVersion());
 			upgradePlanMemento.putString("targetVersion", upgradePlan.getTargetVersion());
+			upgradePlanMemento.putString("upgradePlanOutline", upgradePlan.getUpgradePlanOutline());
 
 			Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
 

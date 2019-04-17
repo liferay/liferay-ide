@@ -73,7 +73,7 @@ public class NewUpgradePlanOpMethods {
 
 		try {
 			UpgradePlan upgradePlan = upgradePlanner.newUpgradePlan(
-				name, upgradePlanOutline, currentVersion, targetVersion, sourceCodeLocation);
+				name, currentVersion, targetVersion, sourceCodeLocation, upgradePlanOutline);
 
 			upgradePlanner.startUpgradePlan(upgradePlan);
 		}
