@@ -30,6 +30,7 @@ import java.util.NoSuchElementException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -40,6 +41,11 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
@@ -47,6 +53,7 @@ import org.osgi.util.promise.PromiseFactory;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 @Component
 public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
@@ -115,16 +122,25 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		String url = upgradeStep.getUrl();
 
 		if (CoreUtil.isNotNullOrEmpty(url)) {
-			if (url.endsWith(".markdown")) {
+			if (url.startsWith("https://github.com")) {
 				try {
-					detail = _downloadAndRenderMarkdown(url);
+					detail = url;
 				}
 				catch (Throwable t) {
 					deferred.fail(t);
+
+					return;
 				}
 			}
-			else if (url.startsWith("https://")) {
-				detail = url;
+			else if (url.startsWith("https://web-community-beta.wedeploy.io")) {
+				try {
+					detail = _renderKBMainContent(url);
+				}
+				catch (Throwable t) {
+					deferred.fail(t);
+
+					return;
+				}
 			}
 		}
 
@@ -159,6 +175,61 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		Document document = parser.parse(content);
 
 		return renderer.render(document);
+	}
+
+	/**
+	 * only use temperate and only works well for https://web-community-beta.wedeploy.io
+	 */
+	private String _renderKBMainContent(String url) throws ClientProtocolException, IOException {
+		Connection connection = Jsoup.connect(url);
+
+		org.jsoup.nodes.Document document = connection.get();
+
+		StringBuffer sb = new StringBuffer();
+
+		sb.append("<html>");
+
+		Elements heads = document.getElementsByTag("head");
+
+		sb.append(heads.get(0));
+
+		// If it is possible, we should modify KB portlet by adding one main content id to allow us to get it easily.
+
+		// Actually the kb portlet of dev.liferay.com and one of web-community-beta.wedeploy.io seem to be different.
+
+		Elements kbEntityBodies = document.getElementsByClass("kb-entity-body");
+
+		Element kbEntityBody = kbEntityBodies.get(0);
+
+		Elements mainContents = kbEntityBody.getAllElements();
+
+		Element mainContent = mainContents.get(1);
+
+		try {
+			Elements h1s = mainContent.getElementsByTag("h1");
+
+			Element h1 = h1s.get(0);
+
+			h1.remove();
+		}
+		catch (Exception e) {
+		}
+
+		try {
+			Elements uls = mainContent.getElementsByTag("ul");
+
+			Element ul = uls.get(0);
+
+			ul.remove();
+		}
+		catch (Exception e) {
+		}
+
+		sb.append(mainContent.toString());
+
+		sb.append("</html>");
+
+		return sb.toString();
 	}
 
 	private final PromiseFactory _promiseFactory;
