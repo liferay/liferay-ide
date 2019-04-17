@@ -31,7 +31,7 @@
 		/>
 		<image
 			commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
-			icon="icons/liferay_logo_16.png"
+			icon="icons/liferay_new.png"
 		/>
 		<image
 			commandId="com.liferay.ide.upgrade.plan.ui.upgradeplandetails"
@@ -123,7 +123,7 @@
 			</command>
 			<command
 				commandId="com.liferay.ide.upgrade.plan.ui.newupgradeplan"
-				icon="icons/liferay_logo_16.png"
+				icon="icons/liferay_new.png"
 				style="push"
 			>
 			</command>
