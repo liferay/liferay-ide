@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
@@ -85,7 +86,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 
 			String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);
 
-			if (sectionHtml.equals("#legacy")) {
+			if (CoreUtil.isNullOrEmpty(sectionHtml) || sectionHtml.equals("#legacy")) {
 				sectionHtml = problemSummary;
 			}
 
