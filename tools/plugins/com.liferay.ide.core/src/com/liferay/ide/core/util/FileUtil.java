@@ -302,6 +302,14 @@ public class FileUtil {
 		return false;
 	}
 
+	public static boolean exists(java.nio.file.Path path) {
+		if (path != null) {
+			return exists(path.toFile());
+		}
+
+		return false;
+	}
+
 	public static File getCanonicalFile(IPath location) {
 		if (location == null) {
 			return null;

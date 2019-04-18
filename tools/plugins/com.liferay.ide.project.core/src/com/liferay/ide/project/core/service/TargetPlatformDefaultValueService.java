@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.service;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -43,7 +44,12 @@ public class TargetPlatformDefaultValueService extends DefaultValueService {
 			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, null, scopeContexts);
 
 		if (defaultLiferayVersion != null) {
-			defaultValue = WorkspaceConstants.liferayTargetPlatformVersions.get(defaultLiferayVersion)[0];
+			String[] targetPlatformVersions = WorkspaceConstants.liferayTargetPlatformVersions.get(
+				defaultLiferayVersion);
+
+			if (ListUtil.isNotEmpty(targetPlatformVersions)) {
+				defaultValue = WorkspaceConstants.liferayTargetPlatformVersions.get(defaultLiferayVersion)[0];
+			}
 		}
 
 		return defaultValue;

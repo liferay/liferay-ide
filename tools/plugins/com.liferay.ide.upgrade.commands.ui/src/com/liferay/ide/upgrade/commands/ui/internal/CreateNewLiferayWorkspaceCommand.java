@@ -15,9 +15,11 @@
 package com.liferay.ide.upgrade.commands.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.upgrade.plan.core.MessagePrompt;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
@@ -58,6 +60,19 @@ public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor
 		NewLiferayWorkspaceOp newLiferayWorkspaceOp = NewLiferayWorkspaceOp.TYPE.instantiate();
 
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+
+		java.nio.file.Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
+
+		if (FileUtil.exists(targetProjectLocation)) {
+			boolean result = _messagePrompt.promptQuestion(
+				"Target Project Location Exists",
+				"The path " + targetProjectLocation +
+					" already is used as target project location, do you want to override?");
+
+			if (!result) {
+				return Status.CANCEL_STATUS;
+			}
+		}
 
 		newLiferayWorkspaceOp.setLiferayVersion(upgradePlan.getTargetVersion());
 
@@ -100,6 +115,9 @@ public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor
 			return UpgradeCommandsUIPlugin.createErrorStatus("New Liferay Workspace was not created.");
 		}
 	}
+
+	@Reference
+	private MessagePrompt _messagePrompt;
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;
