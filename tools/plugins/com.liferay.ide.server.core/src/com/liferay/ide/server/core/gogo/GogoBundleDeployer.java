@@ -139,6 +139,10 @@ public class GogoBundleDeployer {
 	public long getBundleId(String bsn) throws IOException {
 		String result = run("lb -s " + bsn, true);
 
+		if (CoreUtil.isNullOrEmpty(result)) {
+			return -1;
+		}
+
 		if ("No matching bundles found".equals(result)) {
 			return -1;
 		}
@@ -244,7 +248,7 @@ public class GogoBundleDeployer {
 		return run("stop " + id);
 	}
 
-	public String uninstall(IBundleProject bundleProject) throws Exception {
+	public synchronized String uninstall(IBundleProject bundleProject) throws Exception {
 		String retVal = null;
 
 		boolean fragment = bundleProject.isFragmentBundle();
