@@ -21,6 +21,7 @@ import com.liferay.ide.core.adapter.NoopLiferayProject;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
+import com.liferay.ide.sdk.core.SDKUtil;
 
 import java.nio.file.Path;
 
@@ -39,7 +40,7 @@ import org.eclipse.core.runtime.CoreException;
  */
 public interface ResourceSelection {
 
-	public Path selectPath(String message);
+	public Path selectPath(String message, String failureMessage, Predicate<Path> validation) throws CoreException;
 
 	public List<IProject> selectProjects(String message, boolean initialSelectAll, Predicate<IProject> filter);
 
@@ -96,6 +97,15 @@ public interface ResourceSelection {
 
 	};
 
+	public Predicate<Path> SDK_LOCATION = new Predicate<Path>() {
+
+		@Override
+		public boolean test(Path path) {
+			return SDKUtil.isValidSDKLocation(path.toString());
+		}
+
+	};
+
 	public Predicate<IProject> SERVICE_BUILDER_PROJECTS = new Predicate<IProject>() {
 
 		@Override
@@ -109,6 +119,15 @@ public interface ResourceSelection {
 			List<IFile> serviceXmls = searchFilesVisitor.searchFiles(project, "service.xml");
 
 			return !serviceXmls.isEmpty();
+		}
+
+	};
+
+	public Predicate<Path> WORKSPACE_LOCATION = new Predicate<Path>() {
+
+		@Override
+		public boolean test(Path path) {
+			return LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path.toString());
 		}
 
 	};
