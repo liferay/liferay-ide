@@ -127,7 +127,7 @@ public class NewModuleExtOpMethods {
 
 					File file = null;
 
-					if (containsPath && path.startsWith("com/")) {
+					if (containsPath) {
 						if (path.startsWith("com/")) {
 							file = sourceFolder;
 						}
