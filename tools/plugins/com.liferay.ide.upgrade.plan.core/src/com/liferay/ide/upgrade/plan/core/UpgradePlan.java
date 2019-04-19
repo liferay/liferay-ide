@@ -44,6 +44,8 @@ public interface UpgradePlan {
 
 	public List<String> getUpgradeVersions();
 
+	public void setCurrentProjectLocation(Path path);
+
 	public void setTargetProjectLocation(Path path);
 
 }

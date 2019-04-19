@@ -30,6 +30,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
@@ -45,7 +47,7 @@ import org.osgi.service.component.annotations.Component;
 public class ResourceSelectionImpl implements ResourceSelection {
 
 	@Override
-	public Path selectPath(String message) {
+	public Path selectPath(String message, String failureMessage, Predicate<Path> validation) throws CoreException {
 		final String[] pathValue = new String[1];
 
 		UIUtil.sync(
@@ -59,7 +61,17 @@ public class ResourceSelectionImpl implements ResourceSelection {
 			return null;
 		}
 
-		return Paths.get(pathValue[0]);
+		Path path = Paths.get(pathValue[0]);
+
+		if (validation != null) {
+			if (!validation.test(path)) {
+				IStatus status = UpgradeCommandsUIPlugin.createErrorStatus(failureMessage);
+
+				throw new CoreException(status);
+			}
+		}
+
+		return path;
 	}
 
 	@Override

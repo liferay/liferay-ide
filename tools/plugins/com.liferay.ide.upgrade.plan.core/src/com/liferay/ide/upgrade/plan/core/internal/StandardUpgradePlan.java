@@ -117,6 +117,11 @@ public class StandardUpgradePlan implements UpgradePlan {
 	}
 
 	@Override
+	public void setCurrentProjectLocation(Path path) {
+		_currentProjectLocation = path;
+	}
+
+	@Override
 	public void setTargetProjectLocation(Path path) {
 		_targetProjectLocation = path;
 	}
@@ -130,7 +135,7 @@ public class StandardUpgradePlan implements UpgradePlan {
 		}
 	};
 
-	private final Path _currentProjectLocation;
+	private Path _currentProjectLocation;
 	private final String _currentVersion;
 	private final String _name;
 	private Path _targetProjectLocation;

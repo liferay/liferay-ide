@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.commands.core.internal.code;
 
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 import com.liferay.ide.upgrade.commands.core.code.ImportExistingLiferayWorkspaceCommandKeys;
+import com.liferay.ide.upgrade.commands.core.internal.UpgradeCommandsCorePlugin;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
@@ -23,6 +24,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
 import java.nio.file.Path;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -43,7 +45,16 @@ public class ImportExistingLiferayWorkspaceCommand implements UpgradeCommand {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		Path path = _resourceSelection.selectPath("Please select the workspace location.");
+		Path path = null;
+
+		try {
+			path = _resourceSelection.selectPath(
+				"Please select the workspace location.", "The chosen location is not valid liferay workspace location",
+				ResourceSelection.WORKSPACE_LOCATION);
+		}
+		catch (CoreException ce) {
+			return UpgradeCommandsCorePlugin.createErrorStatus(ce.getMessage(), ce);
+		}
 
 		if (path == null) {
 			return Status.CANCEL_STATUS;
