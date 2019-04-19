@@ -15,6 +15,9 @@
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
 import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,6 +31,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.osgi.service.component.annotations.Component;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -92,6 +96,17 @@ public class LegacyLayoutTemplate extends XMLFileMigrator implements AutoFileMig
 			}
 
 			tplDOMModel.save();
+
+			File tpl = FileUtil.getFile(tplFile);
+
+			if ((problemsCorrected > 0) && !tpl.equals(file)) {
+				try (InputStream xmlFileContent = tplFile.getContents()) {
+					Files.copy(xmlFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				}
+				catch (Exception e) {
+					throw new AutoFileMigrateException("Error writing corrected file", e);
+				}
+			}
 		}
 		catch (Exception e) {
 		}
@@ -135,4 +150,5 @@ public class LegacyLayoutTemplate extends XMLFileMigrator implements AutoFileMig
 		Pattern.compile(".*[\\s]{0,1}row-fluid", Pattern.CASE_INSENSITIVE | Pattern.DOTALL),
 		Pattern.compile(".*[\\s]{0,1}span[0-9]{1,2}", Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
 	};
+
 }

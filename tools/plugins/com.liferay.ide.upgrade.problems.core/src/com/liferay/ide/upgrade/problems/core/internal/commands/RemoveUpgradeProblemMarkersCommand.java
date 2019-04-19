@@ -25,7 +25,6 @@ import com.liferay.ide.upgrade.problems.core.commands.RemoveUpgradeProblemMarker
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -55,15 +54,7 @@ public class RemoveUpgradeProblemMarkersCommand implements MarkerSupport, Upgrad
 
 			Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-			Stream<UpgradeProblem> stream = upgradeProblems.stream();
-
-			stream.map(
-				this::findMarker
-			).filter(
-				this::markerExists
-			).forEach(
-				this::deleteMarker
-			);
+			removeMarkers(upgradeProblems);
 
 			_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, new ArrayList<>(upgradeProblems)));
 

@@ -17,7 +17,9 @@ package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,6 +29,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.osgi.framework.BundleContext;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
@@ -117,6 +120,18 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 
 			try (ByteArrayInputStream bos = new ByteArrayInputStream(contents.getBytes())) {
 				propertiesFile.setContents(bos, IResource.FORCE, null);
+			}
+
+
+			File properties = FileUtil.getFile(propertiesFile);
+
+			if ((problemsFixed > 0) && !properties.equals(file)) {
+				try (InputStream jspFileContent = propertiesFile.getContents()) {
+					Files.copy(jspFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				}
+				catch (Exception e) {
+					throw new AutoFileMigrateException("Error writing corrected file", e);
+				}
 			}
 
 			return problemsFixed;
