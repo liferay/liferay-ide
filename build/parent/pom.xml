@@ -27,7 +27,7 @@
     <name>Liferay IDE Parent</name>
 
     <properties>
-        <tycho-packaging-format>yyyyMMddHHmm'-m1'</tycho-packaging-format>
+        <tycho-packaging-format>yyyyMMddHHmm'-m2'</tycho-packaging-format>
         <tycho-version>1.3.0</tycho-version>
         <tycho-extras-version>1.0.0</tycho-extras-version>
         <eclipse-site>https://download.eclipse.org/releases/2018-12/201812191000/</eclipse-site>
