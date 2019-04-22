@@ -131,9 +131,9 @@ public class AutoCorrectFindUpgradeProblemsCommand implements MarkerSupport, Upg
 			).map(
 				bundleContext::getService
 			).forEach(
-				autoMigrator -> {
+				autoFileMigrator -> {
 					try {
-						autoMigrator.correctProblems(file, Arrays.asList(upgradeProblem));
+						autoFileMigrator.correctProblems(file, Arrays.asList(upgradeProblem));
 					}
 					catch (AutoFileMigrateException afme) {
 						UpgradeProblemsCorePlugin.logError(

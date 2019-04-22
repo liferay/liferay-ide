@@ -59,33 +59,36 @@ public class BaseAutoCorrectAction extends SelectionProviderAction implements Up
 
 		Bundle bundle = FrameworkUtil.getBundle(BaseAutoCorrectAction.class);
 
-		BundleContext context = bundle.getBundleContext();
+		BundleContext bundleContext = bundle.getBundleContext();
 
 		try {
-			Collection<ServiceReference<AutoFileMigrator>> serviceReferences = context.getServiceReferences(
+			Collection<ServiceReference<AutoFileMigrator>> serviceReferences = bundleContext.getServiceReferences(
 				AutoFileMigrator.class,
 				"(&(auto.correct=" + autoCorrectContext + ")(version=" + upgradeProblem.getVersion() + "))");
 
-			for (ServiceReference<AutoFileMigrator> serviceReference : serviceReferences) {
-				AutoFileMigrator autoFileMigrator = context.getService(serviceReference);
+			serviceReferences.stream(
+			).map(
+				bundleContext::getService
+			).forEach(
+				autoFileMigrator -> {
+					try {
+						int problemsCorrected = autoFileMigrator.correctProblems(
+							file, Collections.singletonList(upgradeProblem));
 
-				try {
-					int problemsCorrected = autoFileMigrator.correctProblems(
-						file, Collections.singletonList(upgradeProblem));
+						if ((problemsCorrected > 0) && removeMarker) {
+							IMarker marker = findMarker(upgradeProblem);
 
-					if ((problemsCorrected > 0) && removeMarker) {
-						IMarker marker = findMarker(upgradeProblem);
-
-						if (marker != null) {
-							deleteMarker(marker);
+							if (marker != null) {
+								deleteMarker(marker);
+							}
 						}
 					}
+					catch (AutoFileMigrateException afme) {
+						UpgradeProblemsUIPlugin.logError(
+							"Problem encountered when automatically migrating file " + file, afme);
+					}
 				}
-				catch (AutoFileMigrateException afme) {
-					UpgradeProblemsUIPlugin.logError(
-						"Problem encountered when automatically migrating file " + file, afme);
-				}
-			}
+			);
 		}
 		catch (InvalidSyntaxException ise) {
 		}
