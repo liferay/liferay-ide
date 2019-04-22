@@ -20,7 +20,7 @@ Here are some of the types of changes documented in this file:
   replaces an old API, in spite of the old API being kept in Liferay Portal for
   backwards compatibility.
 
-*This document has been reviewed through commit `946edcc08f6c`.*
+*This document has been reviewed through commit `5dda5217372e`.*
 
 ## Breaking Changes Contribution Guidelines
 
@@ -690,7 +690,8 @@ Liferay Portal 7.1 CE GA1 provides the Portlet 3.0 API dependency in the runtime
 classpath. Previous versions provided the Portlet 2.0 API.
 
 Full support for Portlet 3.0 will not be available until Liferay Portal 7.1 CE
-GA2 is released.
+GA4 is released. This will serve as a developer preview for the technology until
+it's officially promoted in Liferay Portal 7.2.
 
 #### Who is affected?
 
@@ -995,28 +996,53 @@ vulnerabilities.
 
 ---------------------------------------
 
-### Removed description html escaping in PortletDisplay [](id=removed-description-html-escaping-in-portletdisplay)
+### Removed Description HTML Escaping in PortletDisplay [](id=removed-description-html-escaping-in-portletdisplay)
 - **Date:** 2018-Jul-17
 - **JIRA Ticket:** LPS-83185
 
 #### What changed? [](id=what-changed-23)
 
-The portlet description stored inside `PortletDisplay.java` is no longer escaped
+The portlet description stored in `PortletDisplay.java` is no longer escaped
 automatically.
 
 #### Who is affected? [](id=what-is-affected-23)
 
-This affects anyone who relied on the value of the portlet description being
-already escaped and using it to generate some html. In that case, a small UI
-change might be observed as some characters might become unescaped.
+This affects anyone who relied on the portlet description's value already being
+escaped and used it to generate HTML. In that case, a small UI change might be
+observed as some characters could become unescaped.
 
 #### How should I update my code? [](id=how-should-i-update-my-code-23)
 
-If you were using the `portletDescription` value to generate some html, you
+If you were using the `portletDescription` value to generate HTML, you
 should escape it using the proper escape sequence using `HtmlUtil.escape`.
 
 #### Why was this change made? [](id=why-was-this-change-made-23)
 
 This change corrects a best practice violation regarding content escaping.
+
+---------------------------------------
+
+### Changed modelName Attribute to be Mandatory in liferay-ui:input-permissions Taglib [](id=changed-modelname-Attribute-to-be-mandatory)
+- **Date:** 2018-Oct-04
+- **JIRA Ticket:** LPS-85998
+
+#### What changed? [](id=what-changed-24)
+
+Previously, the taglib `liferay-ui:input-permissions` could be used without
+providing the attribute `modelName`. Now the attribute `modelName` is mandatory.
+
+#### Who is affected? [](id=what-is-affected-24)
+
+This affects any developer who used the taglib `liferay-ui:input-permissions` in
+their own portlets and was not setting the `modelName` attribute of the taglib.
+
+#### How should I update my code? [](id=how-should-i-update-my-code-24)
+
+You should invoke the taglib providing the model name to which you are assigning
+the permissions.
+
+#### Why was this change made? [](id=why-was-this-change-made-24)
+
+This change removes old logic that is no longer used in Liferay Portal.
 
 ---------------------------------------
