@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="com.liferay.ide.gradle.ui.upgrade.UpdateWorkspacePluginVersionCommand" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0">
+	<property name="id" value="update_workspace_plguin_version" />
+	<service scope="prototype">
+		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradeCommand" />
+		<provide interface="com.liferay.ide.upgrade.plan.core.UpgradePreview" />
+	</service>
+	<reference cardinality="1..1" field="_resourceSelection" interface="com.liferay.ide.upgrade.plan.core.ResourceSelection" name="_resourceSelection" />
+	<reference cardinality="1..1" field="_upgradeCompare" interface="com.liferay.ide.upgrade.plan.core.UpgradeCompare" name="_upgradeCompare" />
+	<reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner" />
+	<implementation class="com.liferay.ide.gradle.ui.upgrade.UpdateWorkspacePluginVersionCommand" />
+</scr:component>

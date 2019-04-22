@@ -35,6 +35,7 @@ import org.codehaus.groovy.ast.stmt.BlockStatement;
  *
  * @author Charles Wu
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class DependenciesClosureVisitor extends CodeVisitorSupport {
 
@@ -140,6 +141,8 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 			}
 
 			artifact.setConfiguration(_configurationName);
+			artifact.setConfigurationStartLineNumber(_configurationStartLineNumber);
+			artifact.setConfigurationEndLineNumber(_configurationEndLineNumber);
 
 			_dependencies.add(artifact);
 
@@ -168,6 +171,9 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 		else if (_dependenciesClosure && _dependencyStatement) {
 			_configurationName = methodString;
 
+			_configurationStartLineNumber = methodCallExpression.getLineNumber();
+			_configurationEndLineNumber = methodCallExpression.getLastLineNumber();
+
 			super.visitMethodCallExpression(methodCallExpression);
 
 			_configurationName = "";
@@ -175,7 +181,9 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 	}
 
 	private boolean _buildscript;
+	private int _configurationEndLineNumber = -1;
 	private String _configurationName = "";
+	private int _configurationStartLineNumber = -1;
 	private int _dependenceLineNumber = -1;
 	private List<Artifact> _dependencies = new ArrayList<>();
 	private boolean _dependenciesClosure = false;

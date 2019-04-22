@@ -15,6 +15,7 @@
 package com.liferay.ide.gradle.core.parser;
 
 import com.liferay.ide.core.Artifact;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
@@ -76,6 +77,16 @@ public class GradleDependencyUpdater {
 	}
 
 	public DependenciesClosureVisitor insertDependency(Artifact artifact) throws IOException {
+		return _insertDependency(wrapDependency(artifact));
+	}
+
+	public void updateDependency(String dependency) throws IOException {
+		_insertDependency(dependency);
+
+		FileUtils.writeLines(_file, _gradleFileContents);
+	}
+
+	public String wrapDependency(Artifact artifact) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(artifact.getConfiguration());
@@ -83,17 +94,17 @@ public class GradleDependencyUpdater {
 		sb.append(artifact.getGroupId());
 		sb.append("\", name:\"");
 		sb.append(artifact.getArtifactId());
-		sb.append("\", version:\"");
-		sb.append(artifact.getVersion());
-		sb.append("\"");
 
-		return _insertDependency(sb.toString());
-	}
+		if (CoreUtil.isNotNullOrEmpty(artifact.getVersion())) {
+			sb.append("\", version:\"");
+			sb.append(artifact.getVersion());
+			sb.append("\"");
+		}
+		else {
+			sb.append("\"");
+		}
 
-	public void updateDependency(String dependency) throws IOException {
-		_insertDependency(dependency);
-
-		FileUtils.writeLines(_file, _gradleFileContents);
+		return sb.toString();
 	}
 
 	private DependenciesClosureVisitor _insertDependency(String dependency) throws IOException {
