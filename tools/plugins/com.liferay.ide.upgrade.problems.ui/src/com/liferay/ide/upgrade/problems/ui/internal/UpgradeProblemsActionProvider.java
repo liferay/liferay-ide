@@ -14,12 +14,11 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.util.Editors;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
-
-import java.util.Iterator;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -67,26 +66,27 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 		if (selection instanceof TreeSelection) {
 			TreeSelection treeSelection = (TreeSelection)selection;
 
-			Iterator<?> items = treeSelection.iterator();
-
-			boolean selectionCompatible = true;
-
-			while (items.hasNext()) {
-				Object item = items.next();
-
-				if (!(item instanceof UpgradeProblem)) {
-					selectionCompatible = false;
-
-					break;
-				}
+			if (treeSelection.size() > 1) {
+				return;
 			}
 
-			if (selectionCompatible) {
+			Object element = treeSelection.getFirstElement();
+
+			if (element instanceof UpgradeProblem) {
+				UpgradeProblem upgradeProblem = (UpgradeProblem)element;
+
 				menuManager.removeAll();
 
 				menuManager.add(new MarkDoneAction(selectionProvider));
 				menuManager.add(new MarkUndoneAction(selectionProvider));
-				menuManager.add(new AutoCorrectAction(selectionProvider));
+
+				String autoCorrectContext = upgradeProblem.getAutoCorrectContext();
+
+				if (CoreUtil.isNotNullOrEmpty(autoCorrectContext)) {
+					menuManager.add(new AutoCorrectAction(selectionProvider));
+					menuManager.add(new AutoCorrectPreviewAction(selectionProvider));
+				}
+
 				menuManager.add(new IgnoreAction(selectionProvider));
 				menuManager.add(new IgnoreAlwaysAction(selectionProvider));
 			}

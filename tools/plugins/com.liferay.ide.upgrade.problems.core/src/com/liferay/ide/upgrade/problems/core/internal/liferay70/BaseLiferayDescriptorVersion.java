@@ -15,6 +15,9 @@
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
 import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,6 +31,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocumentType;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -78,8 +82,20 @@ public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator imple
 			}
 
 			domModel.save();
+
+			File xml = FileUtil.getFile(xmlFile);
+
+			if ((problemsCorrected > 0) && !xml.equals(file)) {
+				try (InputStream xmlFileContent = xmlFile.getContents()) {
+					Files.copy(xmlFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				}
+				catch (Exception e) {
+					throw new AutoFileMigrateException("Error writing corrected file", e);
+				}
+			}
 		}
 		catch (Exception e) {
+			throw new AutoFileMigrateException("Error writing corrected file", e);
 		}
 
 		return problemsCorrected;

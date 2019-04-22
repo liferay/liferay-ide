@@ -15,11 +15,14 @@
 package com.liferay.ide.upgrade.problems.core.internal.commands;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.upgrade.plan.core.MessagePrompt;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
+import com.liferay.ide.upgrade.plan.core.UpgradePreview;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -35,6 +38,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -58,44 +62,44 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @Component(
 	property = "id=" + AutoCorrectFindUpgradeProblemsCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
-	service = UpgradeCommand.class
+	service = {UpgradeCommand.class, UpgradePreview.class}
 )
-public class AutoCorrectFindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand {
+public class AutoCorrectFindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand, UpgradePreview {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		List<IProject> projects = _resourceSelection.selectProjects(
-			"Select projects to search for upgrade problems.", true, ResourceSelection.JAVA_PROJECTS);
+		List<UpgradeProblem> autoCorrectableUpgradeProblems = _findAutoCorrectableUpgradeProblems(progressMonitor);
 
-		if (projects.isEmpty()) {
-			return Status.CANCEL_STATUS;
+		if (ListUtil.isEmpty(autoCorrectableUpgradeProblems)) {
+			return Status.OK_STATUS;
 		}
 
-		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
-
-		List<String> upgradeVersions = upgradePlan.getUpgradeVersions();
-
-		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
-
-		removeMarkers(upgradeProblems);
-
-		upgradeProblems.clear();
-
-		projects.stream(
-		).map(
-			FileUtil::getFile
-		).map(
-			projectFile -> _fileMigration.findUpgradeProblems(
-				projectFile, upgradeVersions, Collections.singleton("auto.correct"), progressMonitor)
-		).flatMap(
-			List::stream
+		autoCorrectableUpgradeProblems.stream(
 		).forEach(
 			this::_autoCorrectProblem
 		);
 
-		_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, new ArrayList<>(upgradeProblems)));
+		_upgradePlanner.dispatch(
+			new UpgradeCommandPerformedEvent(this, new ArrayList<>(autoCorrectableUpgradeProblems)));
 
 		return Status.OK_STATUS;
+	}
+
+	@Override
+	public void preview(IProgressMonitor progressMonitor) {
+		List<UpgradeProblem> autoCorrectableUpgradeProblems = _findAutoCorrectableUpgradeProblems(progressMonitor);
+
+		if (ListUtil.isEmpty(autoCorrectableUpgradeProblems)) {
+			return;
+		}
+
+		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+
+		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
+
+		upgradeProblems.addAll(autoCorrectableUpgradeProblems);
+
+		_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, new ArrayList<>(upgradeProblems)));
 	}
 
 	private void _autoCorrectProblem(UpgradeProblem upgradeProblem) {
@@ -127,9 +131,9 @@ public class AutoCorrectFindUpgradeProblemsCommand implements MarkerSupport, Upg
 			).map(
 				bundleContext::getService
 			).forEach(
-				autoMigrator -> {
+				autoFileMigrator -> {
 					try {
-						autoMigrator.correctProblems(file, Arrays.asList(upgradeProblem));
+						autoFileMigrator.correctProblems(file, Arrays.asList(upgradeProblem));
 					}
 					catch (AutoFileMigrateException afme) {
 						UpgradeProblemsCorePlugin.logError(
@@ -142,8 +146,52 @@ public class AutoCorrectFindUpgradeProblemsCommand implements MarkerSupport, Upg
 		}
 	}
 
+	private List<UpgradeProblem> _findAutoCorrectableUpgradeProblems(IProgressMonitor progressMonitor) {
+		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+
+		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
+
+		if (ListUtil.isNotEmpty(upgradeProblems)) {
+			boolean result = _messagePrompt.promptQuestion(
+				"Remove the found results?",
+				"The found results will be removed if you do this, do you want to continue?");
+
+			if (!result) {
+				return Collections.emptyList();
+			}
+
+			removeMarkers(upgradeProblems);
+
+			upgradeProblems.clear();
+		}
+
+		List<IProject> projects = _resourceSelection.selectProjects(
+			"Select projects to search for upgrade problems.", true, ResourceSelection.JAVA_PROJECTS);
+
+		List<String> upgradeVersions = upgradePlan.getUpgradeVersions();
+
+		if (projects.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		return projects.stream(
+		).map(
+			FileUtil::getFile
+		).map(
+			projectFile -> _fileMigration.findUpgradeProblems(
+				projectFile, upgradeVersions, Collections.singleton("auto.correct"), progressMonitor)
+		).flatMap(
+			List::stream
+		).collect(
+			Collectors.toList()
+		);
+	}
+
 	@Reference
 	private FileMigration _fileMigration;
+
+	@Reference
+	private MessagePrompt _messagePrompt;
 
 	@Reference
 	private ResourceSelection _resourceSelection;

@@ -52,7 +52,7 @@ import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 	"problem.tickets=LPS-50156",
 	"problem.title=Moved MVCPortlet, ActionCommand and ActionCommandCache from util-bridges.jar to portal-service.jar",
 	"problem.section=#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar",
-	 "version=7.0"
+	"auto.correct=portlet-xml-portlet-class", "version=7.0"
 },
 	service = {AutoFileMigrator.class, FileMigrator.class})
 @SuppressWarnings("restriction")
