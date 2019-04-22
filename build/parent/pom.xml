@@ -34,7 +34,7 @@
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/</orbit-site>
         <tm-site>https://download.eclipse.org/tm/updates/4.5.0/repository/</tm-site>
         <liferay-ide-swtbot-testing-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
-        <osgi-bundles-site>https://repos-ide.wedeploy.io/liferay-ide-osgi-deps/</osgi-bundles-site>
+        <osgi-bundles-site>https://dl.bintray.com/gamerson/eclipse/liferay-ide-deps/201904221700/</osgi-bundles-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
         <m2e-site>http://download.eclipse.org/technology/m2e/releases/1.10/1.10.0.20181127-2120/</m2e-site>
