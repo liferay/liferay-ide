@@ -59,7 +59,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.AUILiferayTags.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.WebContentArticlesStrucAndTempl.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.DateUtilApiChange.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.BaseAssetRendererGetIconPathDecl.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.CategoryEntryforUsers.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.LockLegacyAPI.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedSocialSetsEnabledProperties.xml,
