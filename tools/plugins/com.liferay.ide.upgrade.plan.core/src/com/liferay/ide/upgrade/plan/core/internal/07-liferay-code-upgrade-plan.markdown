@@ -67,11 +67,11 @@ Here are the steps for upgrading your development environment and custom plugins
             <div class="title">Update Repository URL</div>
             <div class="description">Update your repository URL.</div>
         </li>
-        <li>
+        <li commandId="update_workspace_plguin_version">
             <div class="title">Update Workspace Plugin Version</div>
             <div class="description">Update your Workspace Plugin version</div>
         </li>
-        <li>
+        <li commandId="remove_dependency_version">
             <div class="title">Remove dependency Versions</div>
             <div class="description">Remove dependency versions.</div>
         </li>
