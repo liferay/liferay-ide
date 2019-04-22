@@ -48,7 +48,7 @@ public class BundleModulelDelegate extends ProjectModule {
 
 			IPath path = relativePath.append(moduleResource.getName());
 
-			if (bundleProject.filterResource(path)) {
+			if ((bundleProject != null) && bundleProject.filterResource(path)) {
 				continue;
 			}
 

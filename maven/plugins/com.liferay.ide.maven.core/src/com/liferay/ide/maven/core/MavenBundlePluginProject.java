@@ -228,6 +228,10 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 
 		IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade(getProject(), monitor);
 
+		if (projectFacade == null) {
+			return retval;
+		}
+
 		MavenProject mavenProject = projectFacade.getMavenProject(monitor);
 
 		Artifact artifact = mavenProject.getArtifact();
