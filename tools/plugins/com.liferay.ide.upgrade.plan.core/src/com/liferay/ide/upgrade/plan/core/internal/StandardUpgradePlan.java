@@ -23,9 +23,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * @author Gregory Amerson
@@ -43,7 +43,7 @@ public class StandardUpgradePlan implements UpgradePlan {
 		_targetVersion = targetVersion;
 		_currentProjectLocation = currentProjectLocation;
 		_upgradePlanOutline = upgradePlanOutline;
-		_upgradeProblems = new HashSet<>();
+		_upgradeProblems = new CopyOnWriteArraySet<>();
 		_upgradeSteps = upgradeSteps;
 	}
 
