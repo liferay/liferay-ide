@@ -222,6 +222,8 @@ public class UpgradePlanViewer implements IDoubleClickListener, UpgradeListener 
 		Object parent = _treeContentProvider.getParent(selectedObject);
 
 		if (parent == null) {
+			_treeViewer.setSelection(selection);
+
 			return;
 		}
 
