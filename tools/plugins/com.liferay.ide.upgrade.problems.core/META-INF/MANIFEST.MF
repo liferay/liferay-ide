@@ -159,4 +159,5 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.LiferayDescriptorVersion.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.LiferayVersionsProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.PortalServiceImports70.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.PortalServiceImports71.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.PortalServiceImports71.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.PortalServiceImports72.xml
