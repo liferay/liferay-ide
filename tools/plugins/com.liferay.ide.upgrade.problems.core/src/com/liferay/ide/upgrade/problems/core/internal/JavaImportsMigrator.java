@@ -51,6 +51,10 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 		return _PREFIX;
 	}
 
+	public JavaImportsMigrator() {
+		super(JavaFile.class);
+	}
+
 	public JavaImportsMigrator(Map<String, String> importFixes) {
 		super(JavaFile.class);
 
@@ -151,6 +155,10 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 		return searchResults;
 	}
 
+	public void setImportFixes(Map<String, String> importFixes) {
+		_importFixes = importFixes;
+	}
+
 	protected IFile getJavaFile(File file) {
 		JavaFile javaFileService = context.getService(context.getServiceReference(JavaFile.class));
 
@@ -198,6 +206,6 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 
 	private static final String _PREFIX = "import:";
 
-	private final Map<String, String> _importFixes;
+	private Map<String, String> _importFixes;
 
 }

@@ -1,12 +1,9 @@
-# Breaking Changes [](id=breaking-changes)
+# What are the Breaking Changes for Liferay 7.0? [](id=breaking-changes)
 
 This document presents a chronological list of changes that break existing
 functionality, APIs, or contracts with third party Liferay developers or users.
 We try our best to minimize these disruptions, but sometimes they are
 unavoidable.
-
-The breaking changes covered in this article apply to both the commercial and
-open source versions of Liferay.
 
 Here are some of the types of changes documented in this file:
 
@@ -22,6 +19,57 @@ Here are some of the types of changes documented in this file:
 * Recommendations: For example, recommending using a newly introduced API that
   replaces an old API, in spite of the old API being kept in Liferay Portal for
   backwards compatibility.
+
+*This document has been reviewed through commit `07cba9d23d9f`.*
+
+## Breaking Changes Contribution Guidelines
+
+Each change must have a brief descriptive title and contain the following
+information:
+
+* **[Title]** Provide a brief descriptive title. Use past tense and follow
+  the capitalization rules from
+  <http://en.wikibooks.org/wiki/Basic_Book_Design/Capitalizing_Words_in_Titles>.
+* **Date:** Specify the date you submitted the change. Format the date as
+  *YYYY-MMM* (e.g., 2014-Mar) or *YYYY-MMM-DD* (e.g., 2014-Feb-25).
+* **JIRA Ticket:** Reference the related JIRA ticket (e.g., LPS-123456)
+  (Optional).
+* **What changed?** Identify the affected component and the type of change that
+  was made.
+* **Who is affected?** Are end-users affected? Are developers affected? If the
+  only affected people are those using a certain feature or API, say so.
+* **How should I update my code?** Explain any client code changes required.
+* **Why was this change made?** Explain the reason for the change. If
+  applicable, justify why the breaking change was made instead of following a
+  deprecation process.
+
+Here's the template to use for each breaking change (note how it ends with a
+horizontal rule):
+
+```
+### Title
+- **Date:**
+- **JIRA Ticket:**
+
+#### What changed?
+
+#### Who is affected?
+
+#### How should I update my code?
+
+#### Why was this change made?
+
+---------------------------------------
+```
+
+**80 Columns Rule:** Text should not exceed 80 columns. Keeping text within 80
+columns makes it easier to see the changes made between different versions of
+the document. Titles, links, and tables are exempt from this rule. Code samples
+must follow the column rules specified in Liferay's [Development
+Style](http://www.liferay.com/community/wiki/-/wiki/Main/Liferay+development+style).
+
+The remaining content of this document consists of the breaking changes listed
+in ascending chronological order.
 
 ## Breaking Changes List [](id=breaking-changes-list)
 
@@ -1290,19 +1338,19 @@ always required, but it was hidden by the `ServiceContext` object.
 
 The following tags have been removed:
 
-- `portlet:icon-close`
-- `portlet:icon-configuration`
-- `portlet:icon-edit`
-- `portlet:icon-edit-defaults`
-- `portlet:icon-edit-guest`
-- `portlet:icon-export-import`
-- `portlet:icon-help`
-- `portlet:icon-maximize`
-- `portlet:icon-minimize`
-- `portlet:icon-portlet-css`
-- `portlet:icon-print`
-- `portlet:icon-refresh`
-- `portlet:icon-staging`
+- `liferay-portlet:icon-close`
+- `liferay-portlet:icon-configuration`
+- `liferay-portlet:icon-edit`
+- `liferay-portlet:icon-edit-defaults`
+- `liferay-portlet:icon-edit-guest`
+- `liferay-portlet:icon-export-import`
+- `liferay-portlet:icon-help`
+- `liferay-portlet:icon-maximize`
+- `liferay-portlet:icon-minimize`
+- `liferay-portlet:icon-portlet-css`
+- `liferay-portlet:icon-print`
+- `liferay-portlet:icon-refresh`
+- `liferay-portlet:icon-staging`
 
 #### Who is affected? [](id=who-is-affected-35)
 
@@ -1314,7 +1362,8 @@ The tag `liferay-ui:icon` can replace the call to the previous tags. All the
 previous tags have been converted into Java classes that implement the methods
 that the `icon` tag requires.
 
-See the modules `portlet-configuration-icon-*` in the `modules/addons` folder.
+See the modules `portlet-configuration-icon-*` in the
+`modules/apps/web-experience/portlet-configuration` folder.
 
 #### Why was this change made? [](id=why-was-this-change-made-35)
 
@@ -2363,9 +2412,7 @@ In Velocity:
 
 In FreeMarker:
 
-    <#assign liferay_portlet = PortalJspTagLibs["/WEB-INF/tld/liferay-portlet-ext.tld"] />
-
-    <@liferay_portlet["runtime"] portletName="145" />
+    <@liferay_portlet_ext["runtime"] portletName="145" />
 
 #### Why was this change made? [](id=why-was-this-change-made-63)
 
@@ -2548,7 +2595,7 @@ issues, as they were undifferentiable from other errors.
 
 #### What changed? [](id=what-changed-68)
 
-All references to the `msnSn` column in the Contacts table have been removed
+All references to the `msnSn` column in the `Contacts` table have been removed
 from portal. All references to Windows Live Messenger have been removed from
 properties, tests, classes, and the frontend. Also, the `getMsnSn` and
 `setMsnSn` methods have been removed from the `Contact` and `LDAPUser` models.
@@ -2593,7 +2640,7 @@ When updating or adding a user or contact using one of the changed methods
 above, remove the `msnSn` argument from the method call. If you are using one of
 the removed items above, you should remove all references to them from your code
 and look for alternatives, if necessary. Lastly, remove any references to the
-`msnSN` column in the Contacts table from your SQL queries.
+`msnSN` column in the `Contacts` table from your SQL queries.
 
 #### Why was this change made? [](id=why-was-this-change-made-68)
 
@@ -3813,8 +3860,8 @@ in the OSGi container.
 #### What changed? [](id=what-changed-95)
 
 - `com.liferay.portal.kernel.security.exportimport.UserImporter`,
-  `com.liferay.portal.kernel.security.exportimport.UserExporter`, and
-  `com.liferay.portal.kernel.security.exportimport.UserOperation` have been
+  `com.liferay.portal.kernel.security.exportimport.UserExporter`,
+  and `com.liferay.portal.kernel.security.exportimport.UserOperation`  have been
   moved from portal-kernel to the portal-security-export-import-api module.
 
 - `com.liferay.portal.kernel.security.exportimport.UserImporterUtil` and
@@ -3909,8 +3956,8 @@ You should change the entry from `site_administration.pages` to
 
 #### Why was this change made? [](id=why-was-this-change-made-97)
 
-This change standardizes naming conventions and separates concepts in Product
-Menu
+This change standardizes naming conventions and separates concepts in the
+Product Menu.
 
 ---------------------------------------
 
@@ -4316,86 +4363,6 @@ tag.
 #### Why was this change made? [](id=why-was-this-change-made-107)
 
 This change was made as a part of the ongoing strategy to deprecate unused tags.
-
----------------------------------------
-
-### Classes in portal-service.jar moved [](id=classes-in-portal-service-jar-moved)
-- **Date:** 2016-Jun-24
-- **JIRA Ticket:** no ticket number
-
-#### What changed? [](id=what-changed-108)
-
-Many classes from former Liferay 6 JAR file portal-service.jar have been moved into application and framework API modules.
-
-#### Who is affected? [](id=who-is-affected-108)
-
-Any code that uses the moved classes.
-
-#### How should I update my code? [](id=how-should-i-update-my-code-108)
-
-You should change the package name via "correct automatically" in liferay-ide upgrade tool or you can do it manully. Then add denpencies for them. For more information, see [https://dev.liferay.com/develop/reference/-/knowledge_base/7-0/classes-moved-from-portal-service-jar](https://dev.liferay.com/develop/reference/-/knowledge_base/7-0/classes-moved-from-portal-service-jar)
-
-#### Why was this change made? [](id=why-was-this-change-made-108)
-
-To leverage the benefits of modularization in Liferay 7.
-
----------------------------------------
-
-### Changed the BaseAssetRenderer APIs getIconPath Method ThemeDisplay Parameters [](id=changed-the-baseassetrenderer-apis-geticonpath-method-themedisplay-parameters)
-- **Date:** 2017-Sept-27
-- **JIRA Ticket:** no ticket number
-
-#### What changed? [](id=what-changed-109)
-
-The `getIconPath(ThemeDisplay themeDisplay)` method in the BaseAssetRenderer API have changed into `getIconPath(PortletRequest portletRequest)`.
-
-#### Who is affected? [](id=who-is-affected-109)
-
-This method must be updated in all BaseAssetRenderer implementations.
-
-#### How should I update my code? [](id=how-should-i-update-my-code-109)
-
-**Example**
-
-Old signature:
-
-      protected String getIconPath(ThemeDisplay themeDisplay) {
-      return themeDisplay.getPathThemeImages() + "../icon.png";
-      }
-
-New signature:
-
-      public String getIconPath(PortletRequest portletRequest) {
-      return  PortalUtil.getPortalURL(portletRequest) +
-      "../icon.png";
-      }
- }
-
----------------------------------------
-
-### DateUtil compareTo() with three parameters' method removed [](id=dateutil-compareto-method-removed)
-- **Date:** 2017-Sept-29
-- **JIRA Ticket:** LPS-59192
-
-#### What changed? [](id=what-changed-110)
-
-`DateUtil.compareTo(Date date1, Date date2, boolean ignoreMilliseconds)` method removed.
-
-#### Who is affected? [](id=who-is-affected-110)
-
-This affects any Java code calling the `DateUtil.compareTo(date1,date2,true/false)`.
-
-#### How should I update my code? [](id=how-should-i-update-my-code-110)
-
-**Example**
-
-Old signature:
-
-      DateUtil.compareTo(date1,date2,true);
-
-New signature:
-
-      DateUtil.compareTo(date1,date2);
 
 ---------------------------------------
 

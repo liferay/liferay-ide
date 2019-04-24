@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.PortalServiceImports70">
+   <property name="file.extensions" value="java,jsp,jspf"/>
+   <property name="problem.title" value="Classes in portal-service.jar moved"/>
+   <property name="problem.summary" value="Many classes from former portal-service.jar from Liferay Portal 6.x have been moved into application and framework API modules."/>
+   <property name="problem.tickets" value=""/>
+   <property name="problem.section" value="#classes-in-portal-service-jar-moved"/>
+   <property name="auto.correct" value="import"/>
+   <property name="version" value="7.0"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.AutoFileMigrator"/>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay70.PortalServiceImports70"/>
+</scr:component>
