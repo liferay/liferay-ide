@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.problems.core.internal.commands;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
@@ -28,6 +29,8 @@ import com.liferay.ide.upgrade.problems.core.commands.FindUpgradeProblemsCommand
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -60,6 +63,13 @@ public class FindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
+		Set<UpgradeProblem> ignoredProblemSet = upgradeProblems.stream(
+		).filter(
+			problem -> UpgradeProblem.STATUS_IGNORE == problem.getStatus()
+		).collect(
+			Collectors.toSet()
+		);
+
 		upgradeProblems.stream(
 		).map(
 			this::findMarker
@@ -73,14 +83,20 @@ public class FindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand
 
 		List<String> upgradeVersions = upgradePlan.getUpgradeVersions();
 
-		projects.stream(
+		List<UpgradeProblem> foundUpgradeProblems = projects.stream(
 		).map(
 			FileUtil::getFile
 		).map(
 			searchFile -> _fileMigration.findUpgradeProblems(searchFile, upgradeVersions, progressMonitor)
-		).forEach(
-			upgradePlan::addUpgradeProblems
+		).flatMap(
+			findProblems -> findProblems.stream()
+		).filter(
+			findProblem -> ListUtil.notContains(ignoredProblemSet, findProblem)
+		).collect(
+			Collectors.toList()
 		);
+
+		upgradePlan.addUpgradeProblems(foundUpgradeProblems);
 
 		addMarkers(upgradePlan.getUpgradeProblems());
 

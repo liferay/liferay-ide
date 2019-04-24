@@ -14,21 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
-import org.osgi.framework.BundleContext;
-
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
@@ -40,6 +25,24 @@ import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker;
 import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker.KeyInfo;
 import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.WorkspaceFile;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+
+import org.osgi.framework.BundleContext;
 
 /**
  * @author Gregory Amerson

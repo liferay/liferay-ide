@@ -18,6 +18,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
 
+import java.util.Dictionary;
 import java.util.List;
 
 /**
@@ -26,5 +27,15 @@ import java.util.List;
 public interface FileMigrator {
 
 	public List<UpgradeProblem> analyze(File file);
+
+	public default String safeGet(Dictionary<String, Object> properties, String key) {
+		Object value = properties.get(key);
+
+		if (value == null) {
+			return "";
+		}
+
+		return value.toString();
+	}
 
 }
