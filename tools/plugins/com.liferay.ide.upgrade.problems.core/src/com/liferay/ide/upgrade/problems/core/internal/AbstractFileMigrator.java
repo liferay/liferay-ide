@@ -53,15 +53,15 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 
 		Dictionary<String, Object> properties = ctx.getProperties();
 
-		String fileExtensionsValue = get(properties, "file.extensions");
+		String fileExtensionsValue = safeGet(properties, "file.extensions");
 
 		fileExtentions = Arrays.asList(fileExtensionsValue.split(","));
 
-		problemTitle = get(properties, "problem.title");
-		problemSummary = get(properties, "problem.summary");
-		problemTickets = get(properties, "problem.tickets");
-		sectionKey = get(properties, "problem.section");
-		version = get(properties, "version");
+		problemTitle = safeGet(properties, "problem.title");
+		problemSummary = safeGet(properties, "problem.summary");
+		problemTickets = safeGet(properties, "problem.tickets");
+		sectionKey = safeGet(properties, "problem.section");
+		version = safeGet(properties, "version");
 
 		workspaceFile = new WorkspaceFile();
 	}

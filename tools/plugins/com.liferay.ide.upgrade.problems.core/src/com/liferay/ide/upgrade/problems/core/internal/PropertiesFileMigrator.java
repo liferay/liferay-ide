@@ -38,12 +38,12 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 
 		Dictionary<String, Object> properties = context.getProperties();
 
-		problemTitle = get(properties, "problem.title");
-		problemSummary = get(properties, "problem.summary");
-		problemType = get(properties, "file.extensions");
-		problemTickets = get(properties, "problem.tickets");
-		sectionKey = get(properties, "problem.section");
-		version = get(properties, "version");
+		problemTitle = safeGet(properties, "problem.title");
+		problemSummary = safeGet(properties, "problem.summary");
+		problemType = safeGet(properties, "file.extensions");
+		problemTickets = safeGet(properties, "problem.tickets");
+		sectionKey = safeGet(properties, "problem.section");
+		version = safeGet(properties, "version");
 
 		addPropertiesToSearch(this.properties);
 

@@ -15,17 +15,27 @@
 package com.liferay.ide.upgrade.problems.core;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.internal.DictionarySupport;
 
 import java.io.File;
 
+import java.util.Dictionary;
 import java.util.List;
 
 /**
  * @author Gregory Amerson
  */
-public interface FileMigrator extends DictionarySupport {
+public interface FileMigrator {
 
 	public List<UpgradeProblem> analyze(File file);
+
+	public default String safeGet(Dictionary<String, Object> properties, String key) {
+		Object value = properties.get(key);
+
+		if (value == null) {
+			return "";
+		}
+
+		return value.toString();
+	}
 
 }
