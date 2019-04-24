@@ -16,9 +16,14 @@ package com.liferay.ide.gradle.core.parser;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -49,6 +54,29 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 
 	public int getDependenceLineNumber() {
 		return _dependenceLineNumber;
+	}
+
+	public int[] getDependenceLineNumbers(Artifact artifact) {
+		int[] lineNumbers = new int[0];
+
+		Set<Artifact> dependencies = _dependenciesWithLineNumbers.keySet();
+
+		Optional<Artifact> optional = dependencies.stream(
+		).filter(
+			dependency -> StringUtil.equals(dependency.getConfiguration(), artifact.getConfiguration())
+		).filter(
+			dependency -> StringUtil.equals(dependency.getGroupId(), artifact.getGroupId())
+		).filter(
+			dependency -> StringUtil.equals(dependency.getArtifactId(), artifact.getArtifactId())
+		).findFirst();
+
+		if (optional.isPresent()) {
+			Artifact dependency = optional.get();
+
+			lineNumbers = _dependenciesWithLineNumbers.get(dependency);
+		}
+
+		return lineNumbers;
 	}
 
 	public List<Artifact> getDependencies(String configuration) {
@@ -141,10 +169,15 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 			}
 
 			artifact.setConfiguration(_configurationName);
-			artifact.setConfigurationStartLineNumber(_configurationStartLineNumber);
-			artifact.setConfigurationEndLineNumber(_configurationEndLineNumber);
 
 			_dependencies.add(artifact);
+
+			int[] lineNumbers = new int[2];
+
+			lineNumbers[0] = _startLineNumber;
+			lineNumbers[1] = _endLineNumber;
+
+			_dependenciesWithLineNumbers.put(artifact, lineNumbers);
 
 			super.visitMapExpression(expression);
 		}
@@ -171,8 +204,8 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 		else if (_dependenciesClosure && _dependencyStatement) {
 			_configurationName = methodString;
 
-			_configurationStartLineNumber = methodCallExpression.getLineNumber();
-			_configurationEndLineNumber = methodCallExpression.getLastLineNumber();
+			_startLineNumber = methodCallExpression.getLineNumber();
+			_endLineNumber = methodCallExpression.getLastLineNumber();
 
 			super.visitMethodCallExpression(methodCallExpression);
 
@@ -181,12 +214,13 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 	}
 
 	private boolean _buildscript;
-	private int _configurationEndLineNumber = -1;
 	private String _configurationName = "";
-	private int _configurationStartLineNumber = -1;
 	private int _dependenceLineNumber = -1;
 	private List<Artifact> _dependencies = new ArrayList<>();
 	private boolean _dependenciesClosure = false;
+	private Map<Artifact, int[]> _dependenciesWithLineNumbers = new HashMap<>();
 	private boolean _dependencyStatement = false;
+	private int _endLineNumber = -1;
+	private int _startLineNumber = -1;
 
 }
