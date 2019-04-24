@@ -14,8 +14,14 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay72;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
+
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -23,37 +29,33 @@ import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
-
 /**
  * @author Terry Jia
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf", "problem.title=Classes in portal-service.jar moved",
-	"problem.summary=Many classes from former portal-service.jar from Liferay Portal 6.x have been moved into application and framework API modules.",
-	"problem.tickets=", "problem.section=#classes-in-portal-service-jar-moved", "auto.correct=import",
-	 "version=7.2"
-},
-	service = {AutoFileMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf", "problem.title=Classes in portal-service.jar moved",
+		"problem.summary=Many classes from former portal-service.jar from Liferay Portal 6.x have been moved into application and framework API modules.",
+		"problem.tickets=", "problem.section=#classes-in-portal-service-jar-moved", "auto.correct=import", "version=7.2"
+	},
+	service = {AutoFileMigrator.class, FileMigrator.class}
+)
 public class PortalServiceImports72 extends JavaImportsMigrator {
 
 	public PortalServiceImports72() {
 		Map<String, String> importFixes = new HashMap<>();
 
-		for (String _modularizationPropertiesFileName : _modularizationPropertiesFileNames) {
-			Class<?> clazz = this.getClass();
+		for (String modularizationPropertiesFileName : _modularizationPropertiesFileNames) {
+			Class<?> clazz = getClass();
 
-			InputStream inputStream = clazz.getResourceAsStream(_modularizationPropertiesFileName);
+			InputStream inputStream = clazz.getResourceAsStream(modularizationPropertiesFileName);
 
 			Properties properties = new Properties();
 
 			try {
 				properties.load(inputStream);
 			}
-			catch (IOException e) {
+			catch (IOException ioe) {
 			}
 
 			Set<Object> keys = properties.keySet();
@@ -70,8 +72,9 @@ public class PortalServiceImports72 extends JavaImportsMigrator {
 		setImportFixes(importFixes);
 	}
 
-	private static final String[] _modularizationPropertiesFileNames = {
+	private final String[] _modularizationPropertiesFileNames = {
 		"modularization-comment-api.properties", "modularization-document-library-file-rank-service.properties",
-		"modularization-petra-function.properties" };
+		"modularization-petra-function.properties"
+	};
 
 }
