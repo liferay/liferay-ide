@@ -75,55 +75,55 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 	@Override
 	public Control createContents(Composite parent) {
-		Composite pageComponent = new Composite(parent, SWT.NULL);
+		Composite pageComposite = new Composite(parent, SWT.NULL);
 
-		GridLayout layout = new GridLayout();
+		GridLayout gridLayout = new GridLayout();
 
-		layout.numColumns = 2;
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
+		gridLayout.numColumns = 2;
+		gridLayout.marginWidth = 0;
+		gridLayout.marginHeight = 0;
 
-		pageComponent.setLayout(layout);
+		pageComposite.setLayout(gridLayout);
 
-		GridData data = new GridData();
+		GridData gridData = new GridData();
 
-		data.verticalAlignment = GridData.FILL;
-		data.horizontalAlignment = GridData.FILL;
+		gridData.verticalAlignment = GridData.FILL;
+		gridData.horizontalAlignment = GridData.FILL;
 
-		pageComponent.setLayoutData(data);
+		pageComposite.setLayoutData(gridData);
 
-		data = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
+		gridData = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
 
-		Label label = new Label(pageComponent, SWT.LEFT);
+		Label label = new Label(pageComposite, SWT.LEFT);
 
 		label.setText(
 			"These are ignored breaking change problems.\n You can remove them if you want to show this type of " +
 				"problem next time.");
 
-		data = new GridData();
+		gridData = new GridData();
 
-		data.horizontalAlignment = GridData.FILL;
-		data.horizontalSpan = 2;
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.horizontalSpan = 2;
 
-		label.setLayoutData(data);
+		label.setLayoutData(gridData);
 
-		_ignoredProblemTable = new TableViewer(pageComponent, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		_ignoredProblemsTableViewer = new TableViewer(pageComposite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 
-		data = new GridData(GridData.FILL_HORIZONTAL);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
 
 		_createColumns();
 
-		Table table = _ignoredProblemTable.getTable();
+		Table table = _ignoredProblemsTableViewer.getTable();
 
 		table.setHeaderVisible(true);
 
-		data.heightHint = 200;
+		gridData.heightHint = 200;
 
-		table.setLayoutData(data);
+		table.setLayoutData(gridData);
 
-		_ignoredProblemTable.setContentProvider(ArrayContentProvider.getInstance());
+		_ignoredProblemsTableViewer.setContentProvider(ArrayContentProvider.getInstance());
 
-		Composite groupComponent = new Composite(pageComponent, SWT.NULL);
+		Composite groupComponent = new Composite(pageComposite, SWT.NULL);
 
 		GridLayout groupLayout = new GridLayout();
 
@@ -131,12 +131,12 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 		groupLayout.marginHeight = 0;
 		groupComponent.setLayout(groupLayout);
 
-		data = new GridData();
+		gridData = new GridData();
 
-		data.verticalAlignment = GridData.FILL;
-		data.horizontalAlignment = GridData.FILL;
+		gridData.verticalAlignment = GridData.FILL;
+		gridData.horizontalAlignment = GridData.FILL;
 
-		groupComponent.setLayoutData(data);
+		groupComponent.setLayoutData(gridData);
 
 		_removeButton = new Button(groupComponent, SWT.PUSH);
 
@@ -151,7 +151,7 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 				@Override
 				public void widgetSelected(SelectionEvent selectionEvent) {
-					StructuredSelection selection = (StructuredSelection)_ignoredProblemTable.getSelection();
+					StructuredSelection selection = (StructuredSelection)_ignoredProblemsTableViewer.getSelection();
 
 					if ((selection != null) && (selection.getFirstElement() instanceof UpgradeProblem)) {
 						try {
@@ -161,7 +161,7 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 							_ignoreProblems.remove(problem);
 
-							_ignoredProblemTable.setInput(_ignoreProblems.toArray(new UpgradeProblem[0]));
+							_ignoredProblemsTableViewer.setInput(_ignoreProblems.toArray(new UpgradeProblem[0]));
 
 							UIUtil.async(
 								() -> {
@@ -179,32 +179,32 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 		setButtonLayoutData(_removeButton);
 
-		label = new Label(pageComponent, SWT.LEFT);
-		data = new GridData();
+		label = new Label(pageComposite, SWT.LEFT);
+		gridData = new GridData();
 
-		data.horizontalAlignment = GridData.FILL;
-		data.horizontalSpan = 2;
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.horizontalSpan = 2;
 
-		label.setLayoutData(data);
+		label.setLayoutData(gridData);
 
-		_detailInfoLabel = new Label(pageComponent, SWT.LEFT);
+		_detailInfoLabel = new Label(pageComposite, SWT.LEFT);
 
 		_detailInfoLabel.setText("Detail Information");
 
-		data = new GridData();
+		gridData = new GridData();
 
-		data.horizontalAlignment = GridData.FILL;
-		data.horizontalSpan = 2;
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.horizontalSpan = 2;
 
-		_detailInfoLabel.setLayoutData(data);
+		_detailInfoLabel.setLayoutData(gridData);
 
-		_browser = new Browser(pageComponent, SWT.BORDER);
+		_browser = new Browser(pageComposite, SWT.BORDER);
 
-		data = new GridData(GridData.FILL_BOTH);
+		gridData = new GridData(GridData.FILL_BOTH);
 
-		_browser.setLayoutData(data);
+		_browser.setLayoutData(gridData);
 
-		groupComponent = new Composite(pageComponent, SWT.NULL);
+		groupComponent = new Composite(pageComposite, SWT.NULL);
 
 		groupLayout = new GridLayout();
 
@@ -213,16 +213,16 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 		groupComponent.setLayout(groupLayout);
 
-		data = new GridData();
+		gridData = new GridData();
 
-		data.verticalAlignment = GridData.FILL;
-		data.horizontalAlignment = GridData.FILL;
+		gridData.verticalAlignment = GridData.FILL;
+		gridData.horizontalAlignment = GridData.FILL;
 
-		groupComponent.setLayoutData(data);
+		groupComponent.setLayoutData(gridData);
 
-		_ignoredProblemTable.setInput(_ignoreProblems.toArray(new UpgradeProblem[0]));
+		_ignoredProblemsTableViewer.setInput(_ignoreProblems.toArray(new UpgradeProblem[0]));
 
-		_ignoredProblemTable.addSelectionChangedListener(
+		_ignoredProblemsTableViewer.addSelectionChangedListener(
 			event -> {
 				UIUtil.async(
 					() -> {
@@ -231,7 +231,7 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 					50);
 			});
 
-		return pageComponent;
+		return pageComposite;
 	}
 
 	@Override
@@ -284,7 +284,8 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 		int[] bounds = {65, 55};
 
-		TableViewerColumn tableViewerColumn = _createTableViewerColumn(titles[0], bounds[0], _ignoredProblemTable);
+		TableViewerColumn tableViewerColumn = _createTableViewerColumn(
+			titles[0], bounds[0], _ignoredProblemsTableViewer);
 
 		tableViewerColumn.setLabelProvider(
 			new ColumnLabelProvider() {
@@ -298,7 +299,7 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 			});
 
-		tableViewerColumn = _createTableViewerColumn(titles[1], bounds[1], _ignoredProblemTable);
+		tableViewerColumn = _createTableViewerColumn(titles[1], bounds[1], _ignoredProblemsTableViewer);
 
 		tableViewerColumn.setLabelProvider(
 			new ColumnLabelProvider() {
@@ -314,7 +315,7 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 				public void update(ViewerCell viewerCell) {
 					super.update(viewerCell);
 
-					Table table = _ignoredProblemTable.getTable();
+					Table table = _ignoredProblemsTableViewer.getTable();
 
 					TableColumn tableColumn = table.getColumn(1);
 
@@ -421,7 +422,7 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 	private Browser _browser;
 	private Label _detailInfoLabel;
-	private TableViewer _ignoredProblemTable;
+	private TableViewer _ignoredProblemsTableViewer;
 	private Collection<UpgradeProblem> _ignoreProblems = new HashSet<>();
 	private Button _removeButton;
 	private Collection<UpgradeProblem> _restoreProblems = new HashSet<>();

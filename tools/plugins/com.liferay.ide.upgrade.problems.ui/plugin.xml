@@ -98,7 +98,7 @@
 			category="com.liferay.ide.ui.preferences.liferay"
 			class="com.liferay.ide.upgrade.problems.ui.internal.UpgradeProblemsPreferencePage"
 			id="com.liferay.ide.upgrade.problems.ui.internal.upgradeProblemsPreferencePage"
-			name="Upgrade Problem "
+			name="Upgrade Problems"
 		>
 		</page>
 	</extension>
