@@ -28,7 +28,6 @@ import com.liferay.ide.upgrade.problems.core.commands.FindUpgradeProblemsCommand
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,7 +63,7 @@ public class FindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		Set<UpgradeProblem> ignnoreProblemSet = upgradeProblems.stream(
+		Set<UpgradeProblem> ignoredProblemSet = upgradeProblems.stream(
 		).filter(
 			problem -> UpgradeProblem.STATUS_IGNORE == problem.getStatus()
 		).collect(
@@ -84,7 +83,7 @@ public class FindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand
 
 		List<String> upgradeVersions = upgradePlan.getUpgradeVersions();
 
-		projects.stream(
+		List<UpgradeProblem> foundUpgradeProblems = projects.stream(
 		).map(
 			FileUtil::getFile
 		).map(
@@ -92,10 +91,12 @@ public class FindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand
 		).flatMap(
 			findProblems -> findProblems.stream()
 		).filter(
-			findProblem -> !ListUtil.contains(ignnoreProblemSet, findProblem)
-		).forEach(
-			findProblem -> upgradePlan.addUpgradeProblems(Collections.singleton(findProblem))
+			findProblem -> ListUtil.notContains(ignoredProblemSet, findProblem)
+		).collect(
+			Collectors.toList()
 		);
+
+		upgradePlan.addUpgradeProblems(foundUpgradeProblems);
 
 		addMarkers(upgradePlan.getUpgradeProblems());
 

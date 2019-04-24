@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.google.common.base.Strings;
-
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
@@ -83,7 +81,7 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 
 							problems.add(
 								new UpgradeProblem(
-									problemTitle, problemSummary, problemType, Strings.nullToEmpty(problemTickets), version, _workspaceFile.getIFile(file),
+									problemTitle, problemSummary, problemType, problemTickets, version, _workspaceFile.getIFile(file),
 									searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
 									sectionHtml, searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
 									UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));

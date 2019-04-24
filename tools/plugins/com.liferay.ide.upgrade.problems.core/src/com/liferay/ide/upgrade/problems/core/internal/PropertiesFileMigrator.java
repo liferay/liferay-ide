@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.google.common.base.Strings;
-
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
@@ -40,12 +38,12 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 
 		Dictionary<String, Object> properties = context.getProperties();
 
-		problemTitle = (String)properties.get("problem.title");
-		problemSummary = (String)properties.get("problem.summary");
-		problemType = (String)properties.get("file.extensions");
-		problemTickets = (String)properties.get("problem.tickets");
-		sectionKey = (String)properties.get("problem.section");
-		version = (String)properties.get("version");
+		problemTitle = get(properties, "problem.title");
+		problemSummary = get(properties, "problem.summary");
+		problemType = get(properties, "file.extensions");
+		problemTickets = get(properties, "problem.tickets");
+		sectionKey = get(properties, "problem.section");
+		version = get(properties, "version");
 
 		addPropertiesToSearch(this.properties);
 
@@ -76,7 +74,7 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 				for (FileSearchResult searchResult : results) {
 					problems.add(
 						new UpgradeProblem(
-							problemTitle, problemSummary, problemType, Strings.nullToEmpty(problemTickets), version,
+							problemTitle, problemSummary, problemType, problemTickets, version,
 							_workspaceFile.getIFile(file), searchResult.startLine, searchResult.startOffset,
 							searchResult.endOffset, sectionHtml, searchResult.autoCorrectContext,
 							UpgradeProblem.STATUS_NOT_RESOLVED, UpgradeProblem.DEFAULT_MARKER_ID,

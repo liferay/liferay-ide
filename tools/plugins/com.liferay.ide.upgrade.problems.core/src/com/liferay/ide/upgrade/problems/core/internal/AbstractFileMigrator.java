@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.google.common.base.Strings;
-
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
@@ -55,13 +53,15 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 
 		Dictionary<String, Object> properties = ctx.getProperties();
 
-		fileExtentions = Arrays.asList(((String)properties.get("file.extensions")).split(","));
+		String fileExtensionsValue = get(properties, "file.extensions");
 
-		problemTitle = (String)properties.get("problem.title");
-		problemSummary = (String)properties.get("problem.summary");
-		problemTickets = (String)properties.get("problem.tickets");
-		sectionKey = (String)properties.get("problem.section");
-		version = (String)properties.get("version");
+		fileExtentions = Arrays.asList(fileExtensionsValue.split(","));
+
+		problemTitle = get(properties, "problem.title");
+		problemSummary = get(properties, "problem.summary");
+		problemTickets = get(properties, "problem.tickets");
+		sectionKey = get(properties, "problem.section");
+		version = get(properties, "version");
 
 		workspaceFile = new WorkspaceFile();
 	}
@@ -96,7 +96,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 				if (searchResult != null) {
 					problems.add(
 						new UpgradeProblem(
-							problemTitle, problemSummary, fileExtension, Strings.nullToEmpty(problemTickets), version,
+							problemTitle, problemSummary, fileExtension, problemTickets, version,
 							workspaceFile.getIFile(file), searchResult.startLine, searchResult.startOffset,
 							searchResult.endOffset, sectionHtml, searchResult.autoCorrectContext,
 							UpgradeProblem.STATUS_NOT_RESOLVED, UpgradeProblem.DEFAULT_MARKER_ID,
