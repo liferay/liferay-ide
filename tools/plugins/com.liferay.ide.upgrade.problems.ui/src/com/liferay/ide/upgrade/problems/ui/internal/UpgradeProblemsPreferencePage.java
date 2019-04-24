@@ -29,7 +29,6 @@ import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -77,17 +76,20 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 	@Override
 	public Control createContents(Composite parent) {
 		Composite pageComponent = new Composite(parent, SWT.NULL);
+
 		GridLayout layout = new GridLayout();
 
 		layout.numColumns = 2;
 		layout.marginWidth = 0;
 		layout.marginHeight = 0;
+
 		pageComponent.setLayout(layout);
 
 		GridData data = new GridData();
 
 		data.verticalAlignment = GridData.FILL;
 		data.horizontalAlignment = GridData.FILL;
+
 		pageComponent.setLayoutData(data);
 
 		data = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
@@ -109,7 +111,7 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 		data = new GridData(GridData.FILL_HORIZONTAL);
 
-		_createColumns(_ignoredProblemTable);
+		_createColumns();
 
 		Table table = _ignoredProblemTable.getTable();
 
@@ -122,6 +124,7 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 		_ignoredProblemTable.setContentProvider(ArrayContentProvider.getInstance());
 
 		Composite groupComponent = new Composite(pageComponent, SWT.NULL);
+
 		GridLayout groupLayout = new GridLayout();
 
 		groupLayout.marginWidth = 0;
@@ -132,20 +135,22 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 		data.verticalAlignment = GridData.FILL;
 		data.horizontalAlignment = GridData.FILL;
+
 		groupComponent.setLayoutData(data);
 
 		_removeButton = new Button(groupComponent, SWT.PUSH);
 
 		_removeButton.setText("Remove");
+
 		_removeButton.addSelectionListener(
 			new SelectionListener() {
 
 				@Override
-				public void widgetDefaultSelected(SelectionEvent arg0) {
+				public void widgetDefaultSelected(SelectionEvent selectionEvent) {
 				}
 
 				@Override
-				public void widgetSelected(SelectionEvent event) {
+				public void widgetSelected(SelectionEvent selectionEvent) {
 					StructuredSelection selection = (StructuredSelection)_ignoredProblemTable.getSelection();
 
 					if ((selection != null) && (selection.getFirstElement() instanceof UpgradeProblem)) {
@@ -159,12 +164,8 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 							_ignoredProblemTable.setInput(_ignoreProblems.toArray(new UpgradeProblem[0]));
 
 							UIUtil.async(
-								new Runnable() {
-
-									public void run() {
-										_browser.setText("");
-									}
-
+								() -> {
+									_browser.setText("");
 								},
 								50);
 						}
@@ -183,6 +184,7 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 		data.horizontalAlignment = GridData.FILL;
 		data.horizontalSpan = 2;
+
 		label.setLayoutData(data);
 
 		_detailInfoLabel = new Label(pageComponent, SWT.LEFT);
@@ -193,6 +195,7 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 		data.horizontalAlignment = GridData.FILL;
 		data.horizontalSpan = 2;
+
 		_detailInfoLabel.setLayoutData(data);
 
 		_browser = new Browser(pageComponent, SWT.BORDER);
@@ -207,6 +210,7 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 		groupLayout.marginWidth = 0;
 		groupLayout.marginHeight = 0;
+
 		groupComponent.setLayout(groupLayout);
 
 		data = new GridData();
@@ -219,20 +223,12 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 		_ignoredProblemTable.setInput(_ignoreProblems.toArray(new UpgradeProblem[0]));
 
 		_ignoredProblemTable.addSelectionChangedListener(
-			new ISelectionChangedListener() {
-
-				public void selectionChanged(final SelectionChangedEvent event) {
-					UIUtil.async(
-						new Runnable() {
-
-							public void run() {
-								_updateForm(event);
-							}
-
-						},
-						50);
-				}
-
+			event -> {
+				UIUtil.async(
+					() -> {
+						_updateForm(event);
+					},
+					50);
 			});
 
 		return pageComponent;
@@ -246,12 +242,12 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 	}
 
 	@Override
-	public void init(IWorkbench arg0) {
+	public void init(IWorkbench workbench) {
 		UpgradePlanner upgradePlanner = _serviceTracker.getService();
 
-		_upgradePlan = upgradePlanner.getCurrentUpgradePlan();
+		UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
 
-		Collection<UpgradeProblem> upgradeProblems = _upgradePlan.getUpgradeProblems();
+		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
 		_ignoreProblems = upgradeProblems.stream(
 		).filter(
@@ -265,88 +261,89 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 	public boolean performOk() {
 		UpgradePlanner upgradePlanner = _serviceTracker.getService();
 
-		Collection<UpgradeProblem> upgradeProblems = _upgradePlan.getUpgradeProblems();
+		UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
+
+		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
 		upgradeProblems.stream(
 		).filter(
-			upgradeProblem -> _restoreProblems.contains(upgradeProblem)
+			_restoreProblems::contains
 		).forEach(
 			upgradeProblem -> upgradeProblem.setStatus(UpgradeProblem.STATUS_NOT_RESOLVED)
 		);
 
-		upgradePlanner.saveUpgradePlan(_upgradePlan);
+		upgradePlanner.saveUpgradePlan(upgradePlan);
 
 		UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
 
 		return super.performOk();
 	}
 
-	private void _createColumns(final TableViewer problemsViewer) {
-		final String[] titles = {"Tickets", "Problem"};
-		final int[] bounds = {65, 55};
+	private void _createColumns() {
+		String[] titles = {"Tickets", "Problem"};
 
-		TableViewerColumn col = _createTableViewerColumn(titles[0], bounds[0], problemsViewer);
+		int[] bounds = {65, 55};
 
-		col.setLabelProvider(
+		TableViewerColumn tableViewerColumn = _createTableViewerColumn(titles[0], bounds[0], _ignoredProblemTable);
+
+		tableViewerColumn.setLabelProvider(
 			new ColumnLabelProvider() {
 
 				@Override
 				public String getText(Object element) {
-					UpgradeProblem p = (UpgradeProblem)element;
+					UpgradeProblem upgradeProblem = (UpgradeProblem)element;
 
-					return p.getTicket();
+					return upgradeProblem.getTicket();
 				}
 
 			});
 
-		col = _createTableViewerColumn(titles[1], bounds[1], problemsViewer);
+		tableViewerColumn = _createTableViewerColumn(titles[1], bounds[1], _ignoredProblemTable);
 
-		col.setLabelProvider(
+		tableViewerColumn.setLabelProvider(
 			new ColumnLabelProvider() {
 
 				@Override
 				public String getText(Object element) {
-					UpgradeProblem p = (UpgradeProblem)element;
+					UpgradeProblem upgradeProblem = (UpgradeProblem)element;
 
-					return p.getTitle();
+					return upgradeProblem.getTitle();
 				}
 
 				@Override
-				public void update(ViewerCell cell) {
-					super.update(cell);
+				public void update(ViewerCell viewerCell) {
+					super.update(viewerCell);
 
-					Table table = problemsViewer.getTable();
+					Table table = _ignoredProblemTable.getTable();
 
-					TableColumn column = table.getColumn(1);
+					TableColumn tableColumn = table.getColumn(1);
 
-					column.pack();
+					tableColumn.pack();
 				}
 
 			});
 	}
 
 	private TableViewerColumn _createTableViewerColumn(String title, int bound, TableViewer viewer) {
-		final TableViewerColumn viewerColumn = new TableViewerColumn(viewer, SWT.NONE);
+		TableViewerColumn tableViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
 
-		final TableColumn column = viewerColumn.getColumn();
+		TableColumn tableColumn = tableViewerColumn.getColumn();
 
-		column.setText(title);
-		column.setWidth(bound);
-		column.setResizable(true);
-		column.setMoveable(true);
+		tableColumn.setText(title);
+		tableColumn.setWidth(bound);
+		tableColumn.setResizable(true);
+		tableColumn.setMoveable(true);
 
-		return viewerColumn;
+		return tableViewerColumn;
 	}
 
 	private String _generateFormText(UpgradeProblem problem) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("<form><p>");
-
 		sb.append("<b>Problem:</b> ");
 		sb.append(problem.getTitle());
 		sb.append("<br/><br/>");
-
 		sb.append("<b>Description:</b><br/>");
 		sb.append("\t");
 		sb.append(problem.getSummary());
@@ -384,6 +381,7 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 		for (int i = 0; i < ticketNumberArray.length; i++) {
 			String ticketNumber = ticketNumberArray[i];
+
 			sb.append("<a href='https://issues.liferay.com/browse/");
 			sb.append(ticketNumber);
 			sb.append("'>");
@@ -398,10 +396,10 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 		return sb.toString();
 	}
 
-	private void _updateForm(SelectionChangedEvent event) {
-		final ISelection selection = event.getSelection();
+	private void _updateForm(SelectionChangedEvent selectionChangedEvent) {
+		ISelection selection = selectionChangedEvent.getSelection();
 
-		final IStructuredSelection structuredSelection = Adapters.adapt(selection, IStructuredSelection.class);
+		IStructuredSelection structuredSelection = Adapters.adapt(selection, IStructuredSelection.class);
 
 		if (structuredSelection == null) {
 			return;
@@ -413,13 +411,11 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 			return;
 		}
 
-		if (selectedProblem != null) {
-			if (CoreUtil.isNullOrEmpty(selectedProblem.getHtml())) {
-				_browser.setText(_generateFormText(selectedProblem));
-			}
-			else {
-				_browser.setText(selectedProblem.getHtml());
-			}
+		if (CoreUtil.isNullOrEmpty(selectedProblem.getHtml())) {
+			_browser.setText(_generateFormText(selectedProblem));
+		}
+		else {
+			_browser.setText(selectedProblem.getHtml());
 		}
 	}
 
@@ -430,6 +426,5 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 	private Button _removeButton;
 	private Collection<UpgradeProblem> _restoreProblems = new HashSet<>();
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
-	private UpgradePlan _upgradePlan;
 
 }
