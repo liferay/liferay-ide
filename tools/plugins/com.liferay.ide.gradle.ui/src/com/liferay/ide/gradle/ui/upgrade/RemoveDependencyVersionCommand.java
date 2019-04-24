@@ -16,6 +16,7 @@ package com.liferay.ide.gradle.ui.upgrade;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
@@ -27,17 +28,13 @@ import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
 import java.io.File;
+import java.io.IOException;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -48,6 +45,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Simon Jiang
+ * @author Terry Jia
  */
 @Component(
 	property = "id=" + RemoveDependencyVersionKeys.ID, scope = ServiceScope.PROTOTYPE, service = UpgradeCommand.class
@@ -56,25 +54,25 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		List<IFile> buildGradleFiles = _geLiferayProjectBuildGradleFiles();
+		List<File> buildGradleFiles = _getBuildGradleFiles();
 
 		if (buildGradleFiles == null) {
 			return Status.CANCEL_STATUS;
 		}
 
-		IStatus status = _removeDependencyVersion(buildGradleFiles);
+		buildGradleFiles.stream(
+		).forEach(
+			this::_removeDependencyVersion
+		);
 
 		GradleUtil.refreshProject(LiferayWorkspaceUtil.getWorkspaceProject());
 
-		if (status.isOK()) {
-			_upgradePlanner.dispatch(
-				new UpgradeCommandPerformedEvent(this, Collections.singletonList(buildGradleFiles)));
-		}
+		_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, Collections.singletonList(buildGradleFiles)));
 
-		return status;
+		return Status.OK_STATUS;
 	}
 
-	private List<IFile> _geLiferayProjectBuildGradleFiles() {
+	private List<File> _getBuildGradleFiles() {
 		List<IProject> projects = _resourceSelection.selectProjects(
 			"Select Liferay Project", false, ResourceSelection.JAVA_PROJECTS);
 
@@ -85,101 +83,42 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 		return projects.stream(
 		).map(
 			project -> project.getFile("build.gradle")
+		).map(
+			FileUtil::getFile
 		).collect(
 			Collectors.toList()
 		);
 	}
 
-	private IStatus _removeDependencyVersion(List<IFile> buildGradleFiles) {
-		try {
-			IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getGradleWorkspaceProject();
+	private void _removeDependencyVersion(File buildGradleFile) {
+		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getGradleWorkspaceProject();
 
-			List<Artifact> targetPlatformArtifacts = liferayWorkspaceProject.getTargetPlatformArtifacts();
-
-			buildGradleFiles.stream(
-			).forEach(
-				buildGradle -> {
-					try {
-						IPath buildGradlePagth = buildGradle.getLocation();
-
-						File buildGradeFile = buildGradlePagth.toFile();
-
-						GradleDependencyUpdater updater = new GradleDependencyUpdater(buildGradeFile);
-
-						List<Artifact> dependencies = updater.getDependencies("*");
-
-						dependencies.sort(
-							new Comparator<Artifact>() {
-
-								@Override
-								public int compare(Artifact artfiactA, Artifact artifactB) {
-									return artifactB.getConfiurationEndLineNumber() -
-										artfiactA.getConfiurationEndLineNumber();
-								}
-
-							});
-
-						List<String> gradleFileContents = FileUtils.readLines(buildGradeFile);
-
-						dependencies.stream(
-						).forEach(
-							artifact -> {
-								artifact.setVersion(null);
-
-								if (targetPlatformArtifacts.contains(artifact)) {
-									_updateCommonDependency(updater, gradleFileContents, artifact);
-								}
-							}
-						);
-
-						FileUtils.writeLines(buildGradeFile, gradleFileContents);
-					}
-					catch (Exception e) {
-					}
-				}
-			);
-
-			return Status.OK_STATUS;
-		}
-		catch (Exception ce) {
-			return LiferayGradleUI.createErrorStatus("Unable to configure bundle url", ce);
-		}
-	}
-
-	private void _updateCommonDependency(
-		GradleDependencyUpdater updater, List<String> gradleFileContents, Artifact artifact) {
+		List<Artifact> targetPlatformArtifacts = liferayWorkspaceProject.getTargetPlatformArtifacts();
 
 		try {
-			StringBuilder dependencyBuilder = new StringBuilder(updater.wrapDependency(artifact));
+			GradleDependencyUpdater gradleDependencyUpdater = new GradleDependencyUpdater(buildGradleFile);
 
-			String configurationContent = gradleFileContents.get(artifact.getConfiurationStartLineNumber() - 1);
+			List<Artifact> dependencies = gradleDependencyUpdater.getDependencies("*");
 
-			int startPos = configurationContent.indexOf(artifact.getConfiguration());
-
-			if (startPos == -1) {
-				return;
-			}
-
-			String prefixString = configurationContent.substring(0, startPos);
-
-			prefixString.chars(
+			List<Artifact> dependenciesWithoutVersion = dependencies.stream(
 			).filter(
-				ch -> ch == '\t'
-			).asLongStream(
-			).forEach(
-				it -> dependencyBuilder.insert(0, "\t")
+				targetPlatformArtifacts::contains
+			).map(
+				artifact -> {
+					artifact.setVersion(null);
+
+					return artifact;
+				}
+			).collect(
+				Collectors.toList()
 			);
 
-			gradleFileContents.set(artifact.getConfiurationStartLineNumber() - 1, dependencyBuilder.toString());
-
-			for (int i = artifact.getConfiurationEndLineNumber() - 1; i > artifact.getConfiurationStartLineNumber() - 1;
-				 i--) {
-
-				gradleFileContents.remove(i);
-			}
+			gradleDependencyUpdater.updateDependencyVersions(false, dependenciesWithoutVersion);
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (IOException ioe) {
+			LiferayGradleUI.logError(ioe);
+
+			return;
 		}
 	}
 

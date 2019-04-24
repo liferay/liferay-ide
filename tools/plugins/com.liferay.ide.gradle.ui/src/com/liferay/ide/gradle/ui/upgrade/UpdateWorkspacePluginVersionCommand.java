@@ -17,7 +17,6 @@ package com.liferay.ide.gradle.ui.upgrade;
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
@@ -31,12 +30,10 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradePreview;
 
 import java.io.File;
+import java.io.IOException;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-
-import org.apache.commons.io.FileUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -51,6 +48,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Simon Jiang
+ * @author Terry Jia
  */
 @Component(
 	property = "id=" + UpdateWorkspacePluginVersionKeys.ID, scope = ServiceScope.PROTOTYPE,
@@ -117,81 +115,44 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 
 	private IStatus _updateWorkspacePluginVersion(File workspaceSettings) {
 		try {
-			GradleDependencyUpdater updater = new GradleDependencyUpdater(workspaceSettings);
+			GradleDependencyUpdater gradleDependencyUpdater = new GradleDependencyUpdater(workspaceSettings);
 
-			List<Artifact> dependencies = updater.getDependencies(true, "classpath");
-
-			dependencies.sort(
-				new Comparator<Artifact>() {
-
-					@Override
-					public int compare(Artifact artfiactA, Artifact artifactB) {
-						return artifactB.getConfiurationEndLineNumber() - artfiactA.getConfiurationEndLineNumber();
-					}
-
-				});
-
-			List<String> gradleFileContents = FileUtils.readLines(workspaceSettings);
-
-			Artifact workspacePluginDependency = new Artifact(
-				"com.liferay", "com.liferay.gradle.plugins.workspace", _workspace_plugin_version, "classpath", null);
-
-			StringBuilder dependencyBuilder = new StringBuilder(updater.wrapDependency(workspacePluginDependency));
+			List<Artifact> dependencies = gradleDependencyUpdater.getDependencies(true, "classpath");
 
 			dependencies.stream(
 			).filter(
-				artifact -> StringUtil.equals(artifact.getGroupId(), workspacePluginDependency.getGroupId())
+				artifact -> "com.liferay".equals(artifact.getGroupId())
 			).filter(
-				artifact -> StringUtil.equals(artifact.getArtifactId(), workspacePluginDependency.getArtifactId())
+				artifact -> "com.liferay.gradle.plugins.workspace".equals(artifact.getArtifactId())
 			).filter(
 				artifact -> CoreUtil.isNotNullOrEmpty(artifact.getVersion())
 			).filter(
 				artifact -> {
 					Version existedVersion = Version.parseVersion(artifact.getVersion());
-					Version upgradeVersion = Version.parseVersion(workspacePluginDependency.getVersion());
+					Version upgradeVersion = Version.parseVersion(_workspacePluginLatestVersion);
 
 					return existedVersion.compareTo(upgradeVersion) < 0;
 				}
-			).forEach(
-				configuration -> {
-					String configurationContent = gradleFileContents.get(
-						configuration.getConfiurationStartLineNumber() - 1);
+			).findFirst(
+			).ifPresent(
+				artifact -> {
+					artifact.setVersion(_workspacePluginLatestVersion);
 
-					int startPos = configurationContent.indexOf(configuration.getConfiguration());
-
-					if (startPos != -1) {
-						String prefixString = configurationContent.substring(0, startPos);
-
-						prefixString.chars(
-						).filter(
-							ch -> ch == '\t'
-						).asLongStream(
-						).forEach(
-							it -> dependencyBuilder.insert(0, "\t")
-						);
-
-						gradleFileContents.set(
-							configuration.getConfiurationStartLineNumber() - 1, dependencyBuilder.toString());
-
-						for (int i = configuration.getConfiurationEndLineNumber() - 1;
-							 i > configuration.getConfiurationStartLineNumber() - 1; i--) {
-
-							gradleFileContents.remove(i);
-						}
+					try {
+						gradleDependencyUpdater.updateDependencyVersions(true, Collections.singletonList(artifact));
+					}
+					catch (IOException ioe) {
+						LiferayGradleUI.logError(ioe);
 					}
 				}
 			);
 
-			FileUtils.writeLines(workspaceSettings, gradleFileContents);
-
 			return Status.OK_STATUS;
 		}
-		catch (Exception ce) {
-			return LiferayGradleUI.createErrorStatus("Unable to configure bundle url", ce);
+		catch (IOException ioe) {
+			return LiferayGradleUI.createErrorStatus("Unable to configure bundle url", ioe);
 		}
 	}
-
-	private static String _workspace_plugin_version = "1.10.18";
 
 	@Reference
 	private ResourceSelection _resourceSelection;
@@ -202,6 +163,7 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 	@Reference
 	private UpgradePlanner _upgradePlanner;
 
+	private final String _workspacePluginLatestVersion = "2.0.0";
 	private IProject _workspaceProject;
 
 }

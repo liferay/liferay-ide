@@ -15,6 +15,7 @@
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectMovedEvent\.java" />
 		<suppress checks="CopyrightCheck" files="tools/plugins/com.liferay.ide.core/src/com/liferay/ide/core/workspace/ProjectOpenedEvent\.java" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.gradle.core/OSGI-INF/.*\.xml" />
+		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.gradle.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.commands.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.commands.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.plan.core/OSGI-INF/.*\.xml" />
@@ -22,6 +23,7 @@
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLIndentationCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.gradle.core/OSGI-INF/.*\.xml" />
+		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.gradle.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.upgrade.commands.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.upgrade.commands.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.upgrade.plan.core/OSGI-INF/.*\.xml" />
@@ -29,6 +31,7 @@
 		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLTagAttributesCheck" files="tools/plugins/com.liferay.ide.upgrade.problems.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.gradle.core/OSGI-INF/.*\.xml" />
+		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.gradle.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.upgrade.commands.core/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.upgrade.commands.ui/OSGI-INF/.*\.xml" />
 		<suppress checks="XMLWhitespaceCheck" files="tools/plugins/com.liferay.ide.upgrade.plan.core/OSGI-INF/.*\.xml" />

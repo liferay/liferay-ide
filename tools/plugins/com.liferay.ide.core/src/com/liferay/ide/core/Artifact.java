@@ -71,14 +71,6 @@ public class Artifact {
 		return _configuration;
 	}
 
-	public int getConfiurationEndLineNumber() {
-		return _endLineNumber;
-	}
-
-	public int getConfiurationStartLineNumber() {
-		return _startLineNumber;
-	}
-
 	public String getGroupId() {
 		return _groupId;
 	}
@@ -104,14 +96,6 @@ public class Artifact {
 		_configuration = configuration;
 	}
 
-	public void setConfigurationEndLineNumber(int endLineNumber) {
-		_endLineNumber = endLineNumber;
-	}
-
-	public void setConfigurationStartLineNumber(int startLineNumber) {
-		_startLineNumber = startLineNumber;
-	}
-
 	public void setGroupId(String groupId) {
 		_groupId = groupId;
 	}
@@ -131,10 +115,8 @@ public class Artifact {
 
 	private String _artifactId;
 	private String _configuration;
-	private int _endLineNumber;
 	private String _groupId;
 	private File _source;
-	private int _startLineNumber;
 	private String _version;
 
 }
