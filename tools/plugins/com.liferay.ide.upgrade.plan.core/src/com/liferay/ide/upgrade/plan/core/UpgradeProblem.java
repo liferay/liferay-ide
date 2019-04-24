@@ -99,10 +99,6 @@ public class UpgradeProblem {
 
 		UpgradeProblem other = Adapters.adapt(object, UpgradeProblem.class);
 
-		if (_uuid.equals(other._uuid)) {
-			return true;
-		}
-
 		if (_endOffset != other._endOffset) {
 			return false;
 		}
@@ -182,14 +178,6 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (_markerId != other._markerId) {
-			return false;
-		}
-
-		if (_markerType != other._markerType) {
-			return false;
-		}
-
 		return true;
 	}
 
@@ -264,8 +252,6 @@ public class UpgradeProblem {
 		hash = 31 * hash + ((_html != null) ? _html.hashCode() : 0);
 		hash = 31 * hash + Integer.hashCode(_endOffset);
 		hash = 31 * hash + Integer.hashCode(_lineNumber);
-		hash = 31 * hash + Long.hashCode(_markerId);
-		hash = 31 * hash + Integer.hashCode(_markerType);
 		hash = 31 * hash + Integer.hashCode(_number);
 		hash = 31 * hash + Integer.hashCode(_startOffset);
 		hash = 31 * hash + ((_resource != null) ? _resource.hashCode() : 0);
@@ -273,7 +259,6 @@ public class UpgradeProblem {
 		hash = 31 * hash + ((_title != null) ? _title.hashCode() : 0);
 		hash = 31 * hash + ((_ticket != null) ? _ticket.hashCode() : 0);
 		hash = 31 * hash + ((_type != null) ? _type.hashCode() : 0);
-		hash = 31 * hash + ((_uuid != null) ? _uuid.hashCode() : 0);
 		hash = 31 * hash + ((_version != null) ? _version.hashCode() : 0);
 
 		return hash;

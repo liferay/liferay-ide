@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.problems.core.internal.commands;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
@@ -27,7 +28,10 @@ import com.liferay.ide.upgrade.problems.core.commands.FindUpgradeProblemsCommand
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -60,6 +64,13 @@ public class FindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
+		Set<UpgradeProblem> ignnoreProblemSet = upgradeProblems.stream(
+		).filter(
+			problem -> UpgradeProblem.STATUS_IGNORE == problem.getStatus()
+		).collect(
+			Collectors.toSet()
+		);
+
 		upgradeProblems.stream(
 		).map(
 			this::findMarker
@@ -78,8 +89,12 @@ public class FindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand
 			FileUtil::getFile
 		).map(
 			searchFile -> _fileMigration.findUpgradeProblems(searchFile, upgradeVersions, progressMonitor)
+		).flatMap(
+			findProblems -> findProblems.stream()
+		).filter(
+			findProblem -> !ListUtil.contains(ignnoreProblemSet, findProblem)
 		).forEach(
-			upgradePlan::addUpgradeProblems
+			findProblem -> upgradePlan.addUpgradeProblems(Collections.singleton(findProblem))
 		);
 
 		addMarkers(upgradePlan.getUpgradeProblems());

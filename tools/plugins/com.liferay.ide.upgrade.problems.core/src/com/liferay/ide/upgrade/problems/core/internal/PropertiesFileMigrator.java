@@ -14,6 +14,8 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
+import com.google.common.base.Strings;
+
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
@@ -74,7 +76,7 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 				for (FileSearchResult searchResult : results) {
 					problems.add(
 						new UpgradeProblem(
-							problemTitle, problemSummary, problemType, problemTickets, version,
+							problemTitle, problemSummary, problemType, Strings.nullToEmpty(problemTickets), version,
 							_workspaceFile.getIFile(file), searchResult.startLine, searchResult.startOffset,
 							searchResult.endOffset, sectionHtml, searchResult.autoCorrectContext,
 							UpgradeProblem.STATUS_NOT_RESOLVED, UpgradeProblem.DEFAULT_MARKER_ID,
