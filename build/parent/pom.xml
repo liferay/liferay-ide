@@ -41,7 +41,7 @@
         <m2e-wtp-site>https://download.eclipse.org/m2e-wtp/releases/1.4/1.4.1.20181128-2152</m2e-wtp-site>
         <m2e-archiver-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/0.17.2.201606141937/</m2e-archiver-site>
         <eclipse-xml-search-site>https://dl.bintray.com/gamerson/eclipse-wtp-xml-search/</eclipse-xml-search-site>
-        <bndtools-site>https://dl.bintray.com/bndtools/bndtools/4.2.0/</bndtools-site>
+        <bndtools-site>https://dl.bintray.com/bndtools/bndtools/4.1.0/</bndtools-site>
         <gradle-site>https://download.eclipse.org/buildship/updates/e48/snapshots/3.x/3.0.2.v20181217-2319-s</gradle-site>
         <tycho-m2e-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.9.0/N/0.9.0.201412222151/</tycho-m2e-site>
         <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/2.6.0/</swtbot-site>

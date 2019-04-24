@@ -33,7 +33,7 @@
 	</license>
 
 	<requires>
-		<import feature="bndtools.main.feature" match="greaterOrEqual" version="4.2.0" />
+		<import feature="bndtools.main.feature" match="greaterOrEqual" version="4.1.0" />
 		<import feature="org.apache.ivy.feature" match="greaterOrEqual" version="2.3.0" />
 		<import feature="org.apache.ivyde.feature" match="greaterOrEqual" version="2.2.0" />
 		<import feature="org.eclipse.buildship" match="greaterOrEqual" version="2.1.1" />
