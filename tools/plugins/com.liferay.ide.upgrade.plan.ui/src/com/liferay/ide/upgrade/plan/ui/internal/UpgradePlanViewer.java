@@ -37,7 +37,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -56,7 +58,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class UpgradePlanViewer implements IDoubleClickListener, UpgradeListener {
+public class UpgradePlanViewer implements IDoubleClickListener, ITreeViewerListener, UpgradeListener {
 
 	public UpgradePlanViewer(Composite parentComposite) {
 		_treeViewer = new TreeViewer(parentComposite);
@@ -86,6 +88,8 @@ public class UpgradePlanViewer implements IDoubleClickListener, UpgradeListener 
 		}
 
 		_treeContentProvider = Adapters.adapt(contentProvider, ITreeContentProvider.class);
+
+		_treeViewer.addTreeListener(this);
 	}
 
 	public void addPostSelectionChangedListener(ISelectionChangedListener selectionChangedListener) {
@@ -212,6 +216,16 @@ public class UpgradePlanViewer implements IDoubleClickListener, UpgradeListener 
 			_treeViewer.setExpandedElements(elements);
 			_treeViewer.setExpandedTreePaths(treePaths);
 		}
+	}
+
+	@Override
+	public void treeCollapsed(TreeExpansionEvent event) {
+		_treeViewer.setSelection(new StructuredSelection(event.getElement()));
+	}
+
+	@Override
+	public void treeExpanded(TreeExpansionEvent event) {
+		_treeViewer.setSelection(new StructuredSelection(event.getElement()));
 	}
 
 	private void _changeSelection(ISelection selection) {
