@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay72.MovedStagingProperties">
+   <property name="file.extensions" value="properties"/>
+   <property name="problem.title" value="Moved Two Staging Properties to OSGi Configuration"/>
+   <property name="problem.summary" value="Two Staging properties have been moved from portal.properties to an OSGi configuration named ExportImportServiceConfiguration.java in the export-import-service module."/>
+   <property name="problem.tickets" value="LPS-88018"/>
+   <property name="problem.section" value="#moved-staging-properties"/>
+   <property name="version" value="7.2"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay72.MovedStagingProperties"/>
+</scr:component>
