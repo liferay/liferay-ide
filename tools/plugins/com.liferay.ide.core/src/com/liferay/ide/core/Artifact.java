@@ -21,6 +21,7 @@ import java.util.Objects;
 /**
  * @author Charles Wu
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class Artifact {
 

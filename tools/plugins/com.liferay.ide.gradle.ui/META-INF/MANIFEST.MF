@@ -5,33 +5,39 @@ Bundle-SymbolicName: com.liferay.ide.gradle.ui;singleton:=true
 Bundle-Version: 3.6.0.qualifier
 Bundle-Activator: com.liferay.ide.gradle.ui.LiferayGradleUI
 Bundle-Vendor: Liferay, Inc.
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.core.resources,
+Require-Bundle: com.liferay.ide.gradle.core,
  com.liferay.ide.project.ui,
- com.liferay.ide.ui,
- org.eclipse.debug.core,
- org.eclipse.ui.navigator,
- org.eclipse.buildship.core;bundle-version="[3.0.0,4.0.0)",
- org.eclipse.sapphire.ui;bundle-version="[9,10)",
- com.liferay.ide.gradle.core,
  com.liferay.ide.server.core,
- org.eclipse.ui.ide,
- org.eclipse.wst.web,
- org.eclipse.core.expressions,
- org.eclipse.wst.server.ui,
- org.eclipse.ui.navigator.resources,
+ com.liferay.ide.ui,
+ com.liferay.ide.upgrade.commands.core,
+ com.liferay.ide.upgrade.plan.core,
+ org.apache.commons.io,
+ org.eclipse.buildship.core;bundle-version="[3.0.0,4.0.0)",
  org.eclipse.compare,
+ org.eclipse.core.expressions,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.debug.core,
+ org.eclipse.jdt.core.manipulation,
+ org.eclipse.jdt.launching,
+ org.eclipse.jdt.ui,
+ org.eclipse.jface.text,
+ org.eclipse.ltk.core.refactoring,
+ org.eclipse.osgi,
+ org.eclipse.osgi.services,
+ org.eclipse.sapphire.ui;bundle-version="[9,10)",
  org.eclipse.team.core,
  org.eclipse.team.ui,
- org.eclipse.jface.text,
- org.eclipse.jdt.ui,
- org.eclipse.ltk.core.refactoring,
- org.eclipse.jdt.core.manipulation,
+ org.eclipse.ui.console,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.navigator,
+ org.eclipse.ui.navigator.resources,
  org.eclipse.ui.workbench,
- org.eclipse.jdt.launching,
- org.eclipse.ui.console
+ org.eclipse.wst.server.ui,
+ org.eclipse.wst.web
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: com.liferay.ide.gradle.ui
-
+Service-Component: OSGI-INF/com.liferay.ide.gradle.ui.upgrade.UpdateWorkspacePluginVersionCommand.xml,
+ OSGI-INF/com.liferay.ide.gradle.ui.upgrade.RemoveDependencyVersionCommand.xml

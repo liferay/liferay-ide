@@ -45,7 +45,7 @@ public class GradleParseTests extends BaseTests {
 
 		DependenciesClosureVisitor visitor = updater.insertDependency(artifact);
 
-		int dependenceLineNum = visitor.getDependenceLineNumber();
+		int dependenceLineNum = visitor.getDependenciesLineNumber();
 
 		Assert.assertEquals(24, dependenceLineNum);
 
@@ -68,7 +68,7 @@ public class GradleParseTests extends BaseTests {
 
 		DependenciesClosureVisitor visitor = updater.insertDependency(artifact);
 
-		int dependenceLineNum = visitor.getDependenceLineNumber();
+		int dependenceLineNum = visitor.getDependenciesLineNumber();
 
 		Assert.assertEquals(23, dependenceLineNum);
 
@@ -91,7 +91,7 @@ public class GradleParseTests extends BaseTests {
 
 		DependenciesClosureVisitor visitor = updater.insertDependency(artifact);
 
-		int dependenceLineNum = visitor.getDependenceLineNumber();
+		int dependenceLineNum = visitor.getDependenciesLineNumber();
 
 		Assert.assertEquals(24, dependenceLineNum);
 
@@ -114,7 +114,7 @@ public class GradleParseTests extends BaseTests {
 
 		DependenciesClosureVisitor visitor = updater.insertDependency(artifact);
 
-		int dependenceLineNum = visitor.getDependenceLineNumber();
+		int dependenceLineNum = visitor.getDependenciesLineNumber();
 
 		Assert.assertEquals(27, dependenceLineNum);
 
@@ -137,7 +137,7 @@ public class GradleParseTests extends BaseTests {
 
 		DependenciesClosureVisitor visitor = updater.insertDependency(artifact);
 
-		int dependenceLineNum = visitor.getDependenceLineNumber();
+		int dependenceLineNum = visitor.getDependenciesLineNumber();
 
 		Assert.assertEquals(-1, dependenceLineNum);
 
