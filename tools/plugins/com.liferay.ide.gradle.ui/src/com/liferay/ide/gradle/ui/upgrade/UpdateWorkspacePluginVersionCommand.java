@@ -163,7 +163,7 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 	@Reference
 	private UpgradePlanner _upgradePlanner;
 
-	private final String _workspacePluginLatestVersion = "2.0.0";
+	private final String _workspacePluginLatestVersion = "2.0.1";
 	private IProject _workspaceProject;
 
 }
