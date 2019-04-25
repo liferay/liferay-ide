@@ -170,28 +170,28 @@ configuration changes.
 
 ---------------------------------------
 
-### Remove Link Application URLs to Page Functionality
+### Remove Link Application URLs to Page Functionality [] (id=remove-link-application-urls-to-functionality)
 - **Date:** 2018-Dec-14
 - **JIRA Ticket:** [LPS-85948](https://issues.liferay.com/browse/LPS-85948)
 
-#### What changed?
+#### What changed? [](id=what-changed-4)
 
 The *Link Portlet URLs to Page* option in the Look and Feel portlet was marked
 as deprecated in Liferay Portal 7.1, allowing the user to show and hide the
 option through a configuration property. In Liferay Portal 7.2, this has been
 removed and can no longer be configured.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-4)
 
 This affects administrators who used the option in the UI and developers who
 leveraged the option in the portlet.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-4)
 
 You should update any portlets leveraging this feature, since any preconfigured
 reference to the property is ignored in the portal.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-4)
 
 A limited number of portlets use this property; there are better ways to achieve
 the same results.
