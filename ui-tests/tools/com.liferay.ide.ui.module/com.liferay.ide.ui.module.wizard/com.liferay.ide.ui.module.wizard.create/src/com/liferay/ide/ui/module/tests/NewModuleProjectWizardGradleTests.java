@@ -18,7 +18,6 @@ import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -208,7 +207,6 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createService() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -232,7 +230,6 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createServiceWrapper() {
 		wizardAction.openNewLiferayModuleWizard();

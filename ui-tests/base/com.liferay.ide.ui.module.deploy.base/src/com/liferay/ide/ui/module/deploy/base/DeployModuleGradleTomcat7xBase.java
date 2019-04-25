@@ -276,6 +276,16 @@ public abstract class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
+		viewAction.project.openFile(
+			project.getName(), "src/main/java", project.getName(), project.getCapitalName() + ".java");
+
+		viewAction.project.implementMethods(
+			project.getName(), "src/main/java", project.getName(), project.getCapitalName() + ".java");
+
+		dialogAction.confirm();
+
+		editorAction.save();
+
 		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
@@ -302,7 +312,7 @@ public abstract class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 
 		wizardAction.newModuleInfo.openSelectServiceDialog();
 
-		dialogAction.prepareText("*BookmarksEntryLocalServiceWrapper");
+		dialogAction.prepareText("*BlogsEntryServiceWrapper");
 
 		dialogAction.confirm();
 
