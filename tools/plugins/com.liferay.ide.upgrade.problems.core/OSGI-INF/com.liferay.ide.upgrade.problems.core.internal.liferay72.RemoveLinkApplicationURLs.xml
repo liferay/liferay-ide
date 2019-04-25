@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay72.RemoveLinkApplicationURLs">
+   <property name="file.extensions" value="java,jsp,jspf"/>
+   <property name="problem.title" value="Remove Link Application URLs to Page Functionality"/>
+   <property name="problem.summary" value="The Link Portlet URLs to Page option in the Look and Feel portlet was marked as deprecated in Liferay Portal 7.1, allowing the user to show and hide the option through a configuration property. In Liferay Portal 7.2, this has been removed and can no longer be configured."/>
+   <property name="problem.tickets" value="LPS-85948"/>
+   <property name="problem.section" value="#remove-link-application-urls-to-functionality"/>
+   <property name="version" value="7.2"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay72.RemoveLinkApplicationURLs"/>
+</scr:component>
