@@ -52,16 +52,12 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 		_buildscript = buildscript;
 	}
 
-	public int getDependenceLineNumber() {
-		return _dependenceLineNumber;
-	}
-
 	public int[] getDependenceLineNumbers(Artifact artifact) {
 		int[] lineNumbers = new int[0];
 
-		Set<Artifact> dependencies = _dependenciesWithLineNumbers.keySet();
+		Set<Artifact> dependencyArtifacts = _dependencyArtifactsToLineNumbers.keySet();
 
-		Optional<Artifact> optional = dependencies.stream(
+		Optional<Artifact> optional = dependencyArtifacts.stream(
 		).filter(
 			dependency -> StringUtil.equals(dependency.getConfiguration(), artifact.getConfiguration())
 		).filter(
@@ -71,9 +67,9 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 		).findFirst();
 
 		if (optional.isPresent()) {
-			Artifact dependency = optional.get();
+			Artifact dependencyArtifact = optional.get();
 
-			lineNumbers = _dependenciesWithLineNumbers.get(dependency);
+			lineNumbers = _dependencyArtifactsToLineNumbers.get(dependencyArtifact);
 		}
 
 		return lineNumbers;
@@ -81,16 +77,20 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 
 	public List<Artifact> getDependencies(String configuration) {
 		if ("*".equals(configuration)) {
-			return _dependencies;
+			return _dependencyArtifacts;
 		}
 
-		Stream<Artifact> stream = _dependencies.stream();
+		Stream<Artifact> stream = _dependencyArtifacts.stream();
 
 		return stream.filter(
 			artifact -> configuration.equals(artifact.getConfiguration())
 		).collect(
 			Collectors.toList()
 		);
+	}
+
+	public int getDependenciesLineNumber() {
+		return _dependenciesLineNumber;
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 			artifact.setVersion(version);
 			artifact.setConfiguration(_configurationName);
 
-			_dependencies.add(artifact);
+			_dependencyArtifacts.add(artifact);
 
 			super.visitArgumentlistExpression(argumentListExpression);
 		}
@@ -170,14 +170,14 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 
 			artifact.setConfiguration(_configurationName);
 
-			_dependencies.add(artifact);
+			_dependencyArtifacts.add(artifact);
 
 			int[] lineNumbers = new int[2];
 
 			lineNumbers[0] = _startLineNumber;
 			lineNumbers[1] = _endLineNumber;
 
-			_dependenciesWithLineNumbers.put(artifact, lineNumbers);
+			_dependencyArtifactsToLineNumbers.put(artifact, lineNumbers);
 
 			super.visitMapExpression(expression);
 		}
@@ -190,8 +190,8 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 		if ("dependencies".equals(methodString)) {
 			_dependenciesClosure = true;
 
-			if (_dependenceLineNumber == -1) {
-				_dependenceLineNumber = methodCallExpression.getLastLineNumber();
+			if (_dependenciesLineNumber == -1) {
+				_dependenciesLineNumber = methodCallExpression.getLastLineNumber();
 			}
 
 			super.visitMethodCallExpression(methodCallExpression);
@@ -215,10 +215,10 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 
 	private boolean _buildscript;
 	private String _configurationName = "";
-	private int _dependenceLineNumber = -1;
-	private List<Artifact> _dependencies = new ArrayList<>();
 	private boolean _dependenciesClosure = false;
-	private Map<Artifact, int[]> _dependenciesWithLineNumbers = new HashMap<>();
+	private int _dependenciesLineNumber = -1;
+	private List<Artifact> _dependencyArtifacts = new ArrayList<>();
+	private Map<Artifact, int[]> _dependencyArtifactsToLineNumbers = new HashMap<>();
 	private boolean _dependencyStatement = false;
 	private int _endLineNumber = -1;
 	private int _startLineNumber = -1;

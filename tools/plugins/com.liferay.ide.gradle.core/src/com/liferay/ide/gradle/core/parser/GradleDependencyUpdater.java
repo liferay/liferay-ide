@@ -21,6 +21,7 @@ import com.liferay.ide.core.util.FileUtil;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class GradleDependencyUpdater {
 	}
 
 	public DependenciesClosureVisitor insertDependency(Artifact artifact) throws IOException {
-		return _insertDependency(_wrapDependency(artifact));
+		return _insertDependency(_toGradleDependencyString(artifact));
 	}
 
 	public void updateDependency(String dependency) throws IOException {
@@ -88,27 +89,27 @@ public class GradleDependencyUpdater {
 	}
 
 	public void updateDependencyVersions(boolean buildscript, List<Artifact> artifacts) throws IOException {
-		DependenciesClosureVisitor visitor = new DependenciesClosureVisitor(buildscript);
+		DependenciesClosureVisitor dependenciesClosureVisitor = new DependenciesClosureVisitor(buildscript);
 
-		_walkScript(visitor);
+		_walkScript(dependenciesClosureVisitor);
 
 		artifacts.sort(
 			new Comparator<Artifact>() {
 
 				@Override
 				public int compare(Artifact artifact1, Artifact artifact2) {
-					int[] lineNumbers1 = visitor.getDependenceLineNumbers(artifact1);
-					int[] lineNumbers2 = visitor.getDependenceLineNumbers(artifact2);
+					int[] lineNumbers1 = dependenciesClosureVisitor.getDependenceLineNumbers(artifact1);
+					int[] lineNumbers2 = dependenciesClosureVisitor.getDependenceLineNumbers(artifact2);
 
 					return lineNumbers2[1] - lineNumbers1[1];
 				}
 
 			});
 
-		_gradleFileContents = FileUtils.readLines(_file);
+		_gradleFileContents = Arrays.asList(FileUtil.readLinesFromFile(_file));
 
 		for (Artifact artifact : artifacts) {
-			int[] lineNumbers = visitor.getDependenceLineNumbers(artifact);
+			int[] lineNumbers = dependenciesClosureVisitor.getDependenceLineNumbers(artifact);
 
 			if (lineNumbers.length != 2) {
 				return;
@@ -126,7 +127,7 @@ public class GradleDependencyUpdater {
 				return;
 			}
 
-			StringBuilder dependencyBuilder = new StringBuilder(_wrapDependency(artifact));
+			StringBuilder dependencyBuilder = new StringBuilder(_toGradleDependencyString(artifact));
 
 			String prefixString = content.substring(0, startPos);
 
@@ -153,13 +154,13 @@ public class GradleDependencyUpdater {
 
 		_walkScript(visitor);
 
-		_gradleFileContents = FileUtils.readLines(_file);
+		_gradleFileContents = Arrays.asList(FileUtil.readLinesFromFile(_file));
 
 		if (!dependency.startsWith("\t")) {
 			dependency = "\t" + dependency;
 		}
 
-		int dependencyLineNumber = visitor.getDependenceLineNumber();
+		int dependencyLineNumber = visitor.getDependenciesLineNumber();
 
 		if (dependencyLineNumber == -1) {
 			_gradleFileContents.add("");
@@ -174,13 +175,7 @@ public class GradleDependencyUpdater {
 		return visitor;
 	}
 
-	private void _walkScript(GroovyCodeVisitor visitor) {
-		for (ASTNode node : _nodes) {
-			node.visit(visitor);
-		}
-	}
-
-	private String _wrapDependency(Artifact artifact) {
+	private String _toGradleDependencyString(Artifact artifact) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(artifact.getConfiguration());
@@ -199,6 +194,12 @@ public class GradleDependencyUpdater {
 		}
 
 		return sb.toString();
+	}
+
+	private void _walkScript(GroovyCodeVisitor visitor) {
+		for (ASTNode node : _nodes) {
+			node.visit(visitor);
+		}
 	}
 
 	private File _file;
