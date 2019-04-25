@@ -14,29 +14,31 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf", "problem.title=Changes to Indexer methods",
-	"problem.summary=Method Indexer.addRelatedEntryFields(Document, Object) has been moved into RelatedEntryIndexer. Indexer.reindexDDMStructures(List<Long>) has been moved into DDMStructureIndexer. Indexer.getQueryString(SearchContext, Query) has been removed, in favor of calling SearchEngineUtil.getQueryString(SearchContext, Query)",
-	"problem.tickets=LPS-55928",
-	"problem.section=#moved-indexer-addrelatedentryfields-and-indexer-reindexddmstructures-and-re",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf", "problem.title=Changes to Indexer methods",
+		"problem.summary=Method Indexer.addRelatedEntryFields(Document, Object) has been moved into RelatedEntryIndexer. Indexer.reindexDDMStructures(List<Long>) has been moved into DDMStructureIndexer. Indexer.getQueryString(SearchContext, Query) has been removed, in favor of calling SearchEngineUtil.getQueryString(SearchContext, Query)",
+		"problem.tickets=LPS-55928",
+		"problem.section=#moved-indexer-addrelatedentryfields-and-indexer-reindexddmstructures-and-re", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class IndexerThreeMethodsChange extends JavaFileMigrator {
 
 	@Override

@@ -14,23 +14,25 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf",
-	"problem.title=Removed the liferay-ui:asset-categories-navigation Tag and Replaced with liferay-asset:asset-categories-navigation",
-	"problem.section=#removed-the-liferay-uiasset-categories-navigation-tag-and-replaced-with-lif",
-	"problem.summary=Removed the liferay-ui:asset-categories-navigation Tag and Replaced with liferay-asset:asset-categories-navigation",
-	"problem.tickets=LPS-60753", "auto.correct=jsptag",  "version=7.0"
-},
-	service = {AutoFileMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=jsp,jspf",
+		"problem.title=Removed the liferay-ui:asset-categories-navigation Tag and Replaced with liferay-asset:asset-categories-navigation",
+		"problem.section=#removed-the-liferay-uiasset-categories-navigation-tag-and-replaced-with-lif",
+		"problem.summary=Removed the liferay-ui:asset-categories-navigation Tag and Replaced with liferay-asset:asset-categories-navigation",
+		"problem.tickets=LPS-60753", "auto.correct=jsptag", "version=7.0"
+	},
+	service = {AutoFileMigrator.class, FileMigrator.class}
+)
 public class AssetCategoriesNavigationTags extends JSPTagMigrator {
 
 	public AssetCategoriesNavigationTags() {

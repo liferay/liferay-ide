@@ -14,10 +14,21 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
+import com.liferay.ide.upgrade.problems.core.XMLFile;
+import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
+
 import java.io.File;
 import java.io.InputStream;
+
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,32 +40,26 @@ import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+
 import org.osgi.service.component.annotations.Component;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Text;
-
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.FileSearchResult;
-import com.liferay.ide.upgrade.problems.core.XMLFile;
-import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=xml",
-	"problem.summary=The classes from package com.liferay.util.bridges.mvc in util-bridges.jar were moved to a new " +
-		"package com.liferay.portal.kernel.portlet.bridges.mvc in portal-service.jar.",
-	"problem.tickets=LPS-50156",
-	"problem.title=Moved MVCPortlet, ActionCommand and ActionCommandCache from util-bridges.jar to portal-service.jar",
-	"problem.section=#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar",
-	"auto.correct=portlet-xml-portlet-class", "version=7.0"
-},
-	service = {AutoFileMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=xml",
+		"problem.summary=The classes from package com.liferay.util.bridges.mvc in util-bridges.jar were moved to a new package com.liferay.portal.kernel.portlet.bridges.mvc in portal-service.jar.",
+		"problem.tickets=LPS-50156",
+		"problem.title=Moved MVCPortlet, ActionCommand and ActionCommandCache from util-bridges.jar to portal-service.jar",
+		"problem.section=#moved-mvcportlet-actioncommand-and-actioncommandcache-from-util-bridges-jar",
+		"auto.correct=portlet-xml-portlet-class", "version=7.0"
+	},
+	service = {AutoFileMigrator.class, FileMigrator.class}
+)
 @SuppressWarnings("restriction")
 public class MVCPortletClassInPortletXML extends XMLFileMigrator implements AutoFileMigrator {
 

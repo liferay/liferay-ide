@@ -14,24 +14,25 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
+
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
-
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=Portal Property Changes",
-	"problem.summary=Removed Portal Properties Used to Display Sections in Form Navigators",
-	"problem.tickets=LPS-54903",
-	"problem.section=#removed-portal-properties-used-to-display-sections-in-form-navigators",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=properties", "problem.title=Portal Property Changes",
+		"problem.summary=Removed Portal Properties Used to Display Sections in Form Navigators",
+		"problem.tickets=LPS-54903",
+		"problem.section=#removed-portal-properties-used-to-display-sections-in-form-navigators", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class PortalProperties extends PropertiesFileMigrator {
 
 	@Override

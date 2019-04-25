@@ -14,26 +14,28 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java", "problem.title=Created a New getType Method That is Implemented in DLProcessor",
-	"problem.summary=The DLProcessor interface has a new method getType().", "problem.tickets=LPS-53574",
-	"problem.section=#created-a-new-gettype-method-that-is-implemented-in-dlprocessor", 
-	"version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java", "problem.title=Created a New getType Method That is Implemented in DLProcessor",
+		"problem.summary=The DLProcessor interface has a new method getType().", "problem.tickets=LPS-53574",
+		"problem.section=#created-a-new-gettype-method-that-is-implemented-in-dlprocessor", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class DLProcessorGetType extends JavaFileMigrator {
 
 	@Override

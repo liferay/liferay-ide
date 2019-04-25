@@ -14,22 +14,24 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf", "problem.title=Removed the aui:button-item Tag and Replaced with aui:button",
-	"problem.section=#removed-the-auibutton-item-tag-and-replaced-with-auibutton",
-	"problem.summary=Removed the aui:button-item Tag and Replaced with aui:button", "problem.tickets=LPS-62922",
-	"auto.correct=jsptag",  "version=7.0"
-},
-	service = {AutoFileMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=jsp,jspf", "problem.title=Removed the aui:button-item Tag and Replaced with aui:button",
+		"problem.section=#removed-the-auibutton-item-tag-and-replaced-with-auibutton",
+		"problem.summary=Removed the aui:button-item Tag and Replaced with aui:button", "problem.tickets=LPS-62922",
+		"auto.correct=jsptag", "version=7.0"
+	},
+	service = {AutoFileMigrator.class, FileMigrator.class}
+)
 public class AUIButtonItemTags extends JSPTagMigrator {
 
 	public AUIButtonItemTags() {

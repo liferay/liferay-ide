@@ -14,21 +14,23 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf", "problem.title=Custom AUI Validators Are No Longer Implicitly Required",
-	"problem.section=#custom-aui-validators-are-no-longer-implicitly-required",
-	"problem.summary=The AUI Validator tag no longer forces custom validators to be required",
-	"problem.tickets=LPS-60995",  "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=jsp,jspf", "problem.title=Custom AUI Validators Are No Longer Implicitly Required",
+		"problem.section=#custom-aui-validators-are-no-longer-implicitly-required",
+		"problem.summary=The AUI Validator tag no longer forces custom validators to be required",
+		"problem.tickets=LPS-60995", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class CustomAUIValidatorTags extends JSPTagMigrator {
 
 	public CustomAUIValidatorTags() {

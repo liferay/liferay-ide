@@ -14,27 +14,29 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.summary=The getURLView method of AssetRenderer returns String instead of PortletURL",
-	"problem.tickets=LPS-61853", "problem.title=AssetRenderer API Changes",
-	"problem.section=#the-geturlview-method-of-assetrenderer-returns-string-instead-of-portleturl",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.summary=The getURLView method of AssetRenderer returns String instead of PortletURL",
+		"problem.tickets=LPS-61853", "problem.title=AssetRenderer API Changes",
+		"problem.section=#the-geturlview-method-of-assetrenderer-returns-string-instead-of-portleturl", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class AssetRendererGetURLViewDecl extends JavaFileMigrator {
 
 	@Override

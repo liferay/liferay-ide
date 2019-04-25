@@ -14,24 +14,25 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
+
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
-
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=Email Signature Properties",
-	"problem.summary=Removed Liferay Frontend Editor BBCode Web, Previously Known as Liferay BBCode Editor",
-	"problem.tickets=LPS-48334",
-	"problem.section=#removed-liferay-frontend-editor-bbcode-web-previously-known-as-liferay-bbco",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=properties", "problem.title=Email Signature Properties",
+		"problem.summary=Removed Liferay Frontend Editor BBCode Web, Previously Known as Liferay BBCode Editor",
+		"problem.tickets=LPS-48334",
+		"problem.section=#removed-liferay-frontend-editor-bbcode-web-previously-known-as-liferay-bbco", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class BBCodeProperties extends PropertiesFileMigrator {
 
 	@Override

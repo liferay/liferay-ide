@@ -14,22 +14,24 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf", "problem.title=Changed Usage of the liferay-ui:ddm-template-selector Tag",
-	"problem.section=#changed-usage-of-the-liferay-uiddm-template-selector-tag",
-	"problem.summary=The attribute classNameId of the liferay-ui:ddm-template-selector taglib tag has been renamed className",
-	"problem.tickets=LPS-53790", "auto.correct=jsptag",  "version=7.0"
-},
-	service = {AutoFileMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=jsp,jspf", "problem.title=Changed Usage of the liferay-ui:ddm-template-selector Tag",
+		"problem.section=#changed-usage-of-the-liferay-uiddm-template-selector-tag",
+		"problem.summary=The attribute classNameId of the liferay-ui:ddm-template-selector taglib tag has been renamed className",
+		"problem.tickets=LPS-53790", "auto.correct=jsptag", "version=7.0"
+	},
+	service = {AutoFileMigrator.class, FileMigrator.class}
+)
 public class DdmTemplateSelectorTags extends JSPTagMigrator {
 
 	public DdmTemplateSelectorTags() {

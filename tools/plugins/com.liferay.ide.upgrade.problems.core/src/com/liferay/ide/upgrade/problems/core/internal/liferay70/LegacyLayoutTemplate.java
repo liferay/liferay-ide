@@ -14,10 +14,21 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
+import com.liferay.ide.upgrade.problems.core.XMLFile;
+import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
+
 import java.io.File;
 import java.io.InputStream;
+
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,27 +40,20 @@ import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.FileSearchResult;
-import com.liferay.ide.upgrade.problems.core.XMLFile;
-import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Seiphon Wang
  */
-@Component(property = {
+@Component(
+	property = {
 		"file.extensions=tpl", "problem.title=Layout Template breaking change",
-		"problem.summary=The breaking change of Layout Template.",
-		"problem.section=#layout-template", "auto.correct=layout-template", 
-		"version=7.0"
+		"problem.summary=The breaking change of Layout Template.", "problem.section=#layout-template",
+		"auto.correct=layout-template", "version=7.0"
 	},
-		service = {AutoFileMigrator.class, FileMigrator.class})
+	service = {AutoFileMigrator.class, FileMigrator.class}
+)
 @SuppressWarnings("restriction")
 public class LegacyLayoutTemplate extends XMLFileMigrator implements AutoFileMigrator {
 

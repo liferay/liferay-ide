@@ -49,7 +49,6 @@ import org.osgi.framework.BundleContext;
  */
 public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrator implements AutoFileMigrator {
 
-	private WorkspaceFile _workspaceFile;
 	public BaseLiferayVersionsProperties(String oldVersionPattern, String newVersion) {
 		_oldVersionPattern = oldVersionPattern;
 		_newVersion = newVersion;
@@ -81,10 +80,11 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 
 							problems.add(
 								new UpgradeProblem(
-									problemTitle, problemSummary, problemType, problemTickets, version, _workspaceFile.getIFile(file),
-									searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
-									sectionHtml, searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
-									UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));
+									problemTitle, problemSummary, problemType, problemTickets, version,
+									_workspaceFile.getIFile(file), searchResult.startLine, searchResult.startOffset,
+									searchResult.endOffset, sectionHtml, searchResult.autoCorrectContext,
+									UpgradeProblem.STATUS_NOT_RESOLVED, UpgradeProblem.DEFAULT_MARKER_ID,
+									UpgradeProblem.MARKER_ERROR));
 						}
 					}
 				}
@@ -125,7 +125,6 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 				propertiesFile.setContents(bos, IResource.FORCE, null);
 			}
 
-
 			File properties = FileUtil.getFile(propertiesFile);
 
 			if ((problemsFixed > 0) && !properties.equals(file)) {
@@ -153,5 +152,6 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 
 	private String _newVersion;
 	private String _oldVersionPattern;
+	private WorkspaceFile _workspaceFile;
 
 }

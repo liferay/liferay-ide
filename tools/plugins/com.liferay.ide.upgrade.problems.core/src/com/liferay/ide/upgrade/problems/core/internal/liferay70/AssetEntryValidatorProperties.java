@@ -14,23 +14,24 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
+
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
-
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=Asset Entry Validator Property",
-	"problem.summary=Removed the asset.entry.validator Property", "problem.tickets=LPS-64370",
-	"problem.section=#removed-the-asset-entry-validator-property", 
-	"version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=properties", "problem.title=Asset Entry Validator Property",
+		"problem.summary=Removed the asset.entry.validator Property", "problem.tickets=LPS-64370",
+		"problem.section=#removed-the-asset-entry-validator-property", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class AssetEntryValidatorProperties extends PropertiesFileMigrator {
 
 	@Override

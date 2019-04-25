@@ -14,27 +14,29 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java", "problem.title=copy-request-parameters init-param default value change",
-	"problem.summary=The copy-request-parameters init parameter's default value is now set to true in all portlets that extend MVCPortlet.",
-	"problem.tickets=LPS-54798",
-	"problem.section=#changed-the-default-value-of-the-copy-request-parameters-init-parameter-for",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java", "problem.title=copy-request-parameters init-param default value change",
+		"problem.summary=The copy-request-parameters init parameter's default value is now set to true in all portlets that extend MVCPortlet.",
+		"problem.tickets=LPS-54798",
+		"problem.section=#changed-the-default-value-of-the-copy-request-parameters-init-parameter-for", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class MVCPortletInitParamsChangeClass extends JavaFileMigrator {
 
 	@Override

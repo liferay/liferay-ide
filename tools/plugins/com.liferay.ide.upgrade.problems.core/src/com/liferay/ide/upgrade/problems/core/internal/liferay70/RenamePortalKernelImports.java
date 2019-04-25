@@ -14,11 +14,19 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
+import com.liferay.ide.upgrade.problems.core.JavaFile;
+import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,24 +36,18 @@ import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.FileSearchResult;
-import com.liferay.ide.upgrade.problems.core.JavaFile;
-import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
-
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.summary=The portal-kernel and portal-impl folders have many packages with the same name. Therefore, all of these packages are affected by the split package problem",
-	"problem.tickets=LPS-61952", "problem.title=Renamed Packages to Fix the Split Packages Problem",
-	"problem.section=#renamed-packages-to-fix-the-split-packages-problem", "auto.correct=import",
-	 "version=7.0"
-},
-	service = {AutoFileMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.summary=The portal-kernel and portal-impl folders have many packages with the same name. Therefore, all of these packages are affected by the split package problem",
+		"problem.tickets=LPS-61952", "problem.title=Renamed Packages to Fix the Split Packages Problem",
+		"problem.section=#renamed-packages-to-fix-the-split-packages-problem", "auto.correct=import", "version=7.0"
+	},
+	service = {AutoFileMigrator.class, FileMigrator.class}
+)
 public class RenamePortalKernelImports extends JavaImportsMigrator {
 
 	public static String[] getFixedImports(String[][] packageChangeMap) {

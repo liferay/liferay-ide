@@ -14,26 +14,29 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.summary=All Marketplace APIs previously exposed as Liferay Portal API in 6.2 have been move out from portal-service into separate OSGi modules",
-	"problem.tickets=LPS-54165", "problem.title=Marketplace APIs migrated to OSGi module", "problem.section=#legacy",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.summary=All Marketplace APIs previously exposed as Liferay Portal API in 6.2 have been move out from portal-service into separate OSGi modules",
+		"problem.tickets=LPS-54165", "problem.title=Marketplace APIs migrated to OSGi module",
+		"problem.section=#legacy", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class MarketplaceLegacyAPI extends JavaFileMigrator {
 
 	@Override
@@ -41,7 +44,8 @@ public class MarketplaceLegacyAPI extends JavaFileMigrator {
 		return javaFileChecker.findServiceAPIs(_SERVICE_API_PREFIXES);
 	}
 
-	private static final String[] _SERVICE_API_PREFIXES =
-		{"com.liferay.marketplace.service.App", "com.liferay.marketplace.service.Module"};
+	private static final String[] _SERVICE_API_PREFIXES = {
+		"com.liferay.marketplace.service.App", "com.liferay.marketplace.service.Module"
+	};
 
 }

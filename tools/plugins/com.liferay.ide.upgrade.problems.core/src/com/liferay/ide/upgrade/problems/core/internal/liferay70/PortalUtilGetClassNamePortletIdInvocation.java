@@ -14,27 +14,30 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.title=Removed the getClassNamePortletId(String) Method from PortalUtil Class",
-	"problem.section=#removed-the-getclassnameportletidstring-method-from-portalutil-class",
-	"problem.summary=Removed the getClassNamePortletId(String) Method from PortalUtil Class",
-	"problem.tickets=LPS-50604",  "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.title=Removed the getClassNamePortletId(String) Method from PortalUtil Class",
+		"problem.section=#removed-the-getclassnameportletidstring-method-from-portalutil-class",
+		"problem.summary=Removed the getClassNamePortletId(String) Method from PortalUtil Class",
+		"problem.tickets=LPS-50604", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class PortalUtilGetClassNamePortletIdInvocation extends JavaFileMigrator {
 
 	@Override

@@ -14,23 +14,24 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
+
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
-
 /**
  * @author Haoyi Sun
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=Social Activity Properties Deprecated",
-	"problem.summary=Deprecated the social.activity.sets.enabled Property", "problem.tickets=LPS-63635",
-	"problem.section=#deprecated-the-social-activity-sets-enabled-Property",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=properties", "problem.title=Social Activity Properties Deprecated",
+		"problem.summary=Deprecated the social.activity.sets.enabled Property", "problem.tickets=LPS-63635",
+		"problem.section=#deprecated-the-social-activity-sets-enabled-Property", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class DeprecatedSocialSetsEnabledProperties extends PropertiesFileMigrator {
 
 	@Override
