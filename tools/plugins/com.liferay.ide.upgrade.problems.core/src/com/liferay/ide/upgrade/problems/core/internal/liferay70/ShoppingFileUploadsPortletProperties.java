@@ -14,23 +14,26 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
+
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
-
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=Moved Shopping File Uploads Portlet Properties to OSGi Configuration",
-	"problem.summary=Moved Shopping File Uploads Portlet Properties to OSGi Configuration", "problem.tickets=LPS-69210",
-	"problem.section=#moved-shopping-file-uploads-portlet-properties-to-osgi-configuration",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=properties",
+		"problem.title=Moved Shopping File Uploads Portlet Properties to OSGi Configuration",
+		"problem.summary=Moved Shopping File Uploads Portlet Properties to OSGi Configuration",
+		"problem.tickets=LPS-69210",
+		"problem.section=#moved-shopping-file-uploads-portlet-properties-to-osgi-configuration", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class ShoppingFileUploadsPortletProperties extends PropertiesFileMigrator {
 
 	@Override

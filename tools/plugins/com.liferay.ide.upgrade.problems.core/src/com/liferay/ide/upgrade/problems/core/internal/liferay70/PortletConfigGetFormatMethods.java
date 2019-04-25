@@ -14,28 +14,30 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.summary=Removed get and format Methods that Used PortletConfig Parameters", "problem.tickets=LPS-44342",
-	"problem.title=PortletConfig get/format methods",
-	"problem.section=#removed-get-and-format-methods-that-used-portletconfig-parameters",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.summary=Removed get and format Methods that Used PortletConfig Parameters",
+		"problem.tickets=LPS-44342", "problem.title=PortletConfig get/format methods",
+		"problem.section=#removed-get-and-format-methods-that-used-portletconfig-parameters", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class PortletConfigGetFormatMethods extends JavaFileMigrator {
 
 	@Override

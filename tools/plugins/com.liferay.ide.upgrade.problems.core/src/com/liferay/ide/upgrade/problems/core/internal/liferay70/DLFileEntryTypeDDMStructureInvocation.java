@@ -14,27 +14,30 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf", "problem.title=DLFileEntryTypeLocalServiceUtil Api Changes",
-	"problem.section=#removed-the-dlfileentrytypesddmstructures-mapping-table",
-	"problem.summary=Removed the DLFileEntryTypes_DDMStructures Mapping Table", "problem.tickets=LPS-56660",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf", "problem.title=DLFileEntryTypeLocalServiceUtil Api Changes",
+		"problem.section=#removed-the-dlfileentrytypesddmstructures-mapping-table",
+		"problem.summary=Removed the DLFileEntryTypes_DDMStructures Mapping Table", "problem.tickets=LPS-56660",
+		"version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class DLFileEntryTypeDDMStructureInvocation extends JavaFileMigrator {
 
 	@Override

@@ -14,22 +14,24 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf", "problem.title=Renamed URI Attribute Used to Generate AUI Tag Library",
-	"problem.section=#renamed-uri-attribute-used-to-generate-aui-tag-library",
-	"problem.summary=We should use the new AUI URI declaration:http://liferay.com/tld/aui", "problem.tickets=LPS-57809",
-	"auto.correct=jsptag",  "version=7.0"
-},
-	service = {AutoFileMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=jsp,jspf", "problem.title=Renamed URI Attribute Used to Generate AUI Tag Library",
+		"problem.section=#renamed-uri-attribute-used-to-generate-aui-tag-library",
+		"problem.summary=We should use the new AUI URI declaration:http://liferay.com/tld/aui",
+		"problem.tickets=LPS-57809", "auto.correct=jsptag", "version=7.0"
+	},
+	service = {AutoFileMigrator.class, FileMigrator.class}
+)
 public class AUILiferayTags extends JSPTagMigrator {
 
 	public AUILiferayTags() {

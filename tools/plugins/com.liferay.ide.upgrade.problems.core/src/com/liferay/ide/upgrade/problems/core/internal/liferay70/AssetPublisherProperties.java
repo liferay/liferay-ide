@@ -14,23 +14,25 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
+
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
-
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=Asset Publisher Properties Removed",
-	"problem.summary=Removed the asset.publisher.asset.entry.query.processors Property", "problem.tickets=LPS-52966",
-	"problem.section=#removed-the-asset-publisher-asset-entry-query-processors-property",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=properties", "problem.title=Asset Publisher Properties Removed",
+		"problem.summary=Removed the asset.publisher.asset.entry.query.processors Property",
+		"problem.tickets=LPS-52966",
+		"problem.section=#removed-the-asset-publisher-asset-entry-query-processors-property", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class AssetPublisherProperties extends PropertiesFileMigrator {
 
 	@Override

@@ -14,28 +14,30 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
+import com.liferay.ide.upgrade.problems.core.XMLFile;
+import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
+
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.FileSearchResult;
-import com.liferay.ide.upgrade.problems.core.XMLFile;
-import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
-
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=xml", "problem.title=Deprecated Category Entry for Users",
-	"problem.summary=The category entry for Site Administration > Users has been deprecated in favor of Site Administration > Members.",
-	"problem.tickets=LPS-63466", "problem.section=#deprecated-category-entry-for-users",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=xml", "problem.title=Deprecated Category Entry for Users",
+		"problem.summary=The category entry for Site Administration > Users has been deprecated in favor of Site Administration > Members.",
+		"problem.tickets=LPS-63466", "problem.section=#deprecated-category-entry-for-users", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class CategoryEntryforUsers extends XMLFileMigrator {
 
 	@Override

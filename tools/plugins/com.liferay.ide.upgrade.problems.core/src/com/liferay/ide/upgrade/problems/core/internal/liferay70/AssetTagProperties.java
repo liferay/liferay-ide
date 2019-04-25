@@ -14,27 +14,29 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf", "problem.title=Removed Asset Tag Properties",
-	"problem.summary=The Asset Tag Properties have been removed. The service no longer exists and the Asset Tag Service API no longer has this parameter. The behavior associated with tag properties in the Asset Publisher and XSL portlets has also been removed.",
-	"problem.tickets=LPS-52588", "problem.section=#removed-asset-tag-properties", 
-	"version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf", "problem.title=Removed Asset Tag Properties",
+		"problem.summary=The Asset Tag Properties have been removed. The service no longer exists and the Asset Tag Service API no longer has this parameter. The behavior associated with tag properties in the Asset Publisher and XSL portlets has also been removed.",
+		"problem.tickets=LPS-52588", "problem.section=#removed-asset-tag-properties", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class AssetTagProperties extends JavaFileMigrator {
 
 	@Override

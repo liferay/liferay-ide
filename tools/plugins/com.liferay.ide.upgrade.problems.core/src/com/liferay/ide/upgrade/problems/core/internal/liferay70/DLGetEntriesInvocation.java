@@ -14,28 +14,30 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.summary=The getEntries method was no longer used, and contained hardcoded references to classes that will be moved into OSGi bundles.",
-	"problem.tickets=LPS-56247", "problem.title=Removed Method getEntries from DL, DLImpl, and DLUtil Classes",
-	"problem.section=#removed-method-getentries-from-dl-dlimpl-and-dlutil-classes", 
-	"version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.summary=The getEntries method was no longer used, and contained hardcoded references to classes that will be moved into OSGi bundles.",
+		"problem.tickets=LPS-56247", "problem.title=Removed Method getEntries from DL, DLImpl, and DLUtil Classes",
+		"problem.section=#removed-method-getentries-from-dl-dlimpl-and-dlutil-classes", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class DLGetEntriesInvocation extends JavaFileMigrator {
 
 	@Override

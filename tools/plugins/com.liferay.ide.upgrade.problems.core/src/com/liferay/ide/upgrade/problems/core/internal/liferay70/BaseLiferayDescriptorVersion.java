@@ -14,10 +14,20 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileSearchResult;
+import com.liferay.ide.upgrade.problems.core.XMLFile;
+import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
+
 import java.io.File;
 import java.io.InputStream;
+
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,14 +40,6 @@ import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocumentType;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
-import com.liferay.ide.upgrade.problems.core.FileSearchResult;
-import com.liferay.ide.upgrade.problems.core.XMLFile;
-import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 
 /**
  * @author Seiphon Wang
@@ -134,8 +136,9 @@ public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator imple
 		Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
 	private Pattern _idPattern;
-	private String[] _liferayDtdNames =
-		{"liferay-portlet-app", "display", "service-builder", "hook", "layout-templates", "look-and-feel"};
+	private String[] _liferayDtdNames = {
+		"liferay-portlet-app", "display", "service-builder", "hook", "layout-templates", "look-and-feel"
+	};
 	private String _version;
 
 }

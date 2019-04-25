@@ -14,27 +14,29 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java",
-	"problem.summary=Changed the AssetRenderer and Indexer APIs to Include the PortletRequest and PortletResponse Parameters",
-	"problem.tickets=LPS-44639,LPS-44894", "problem.title=Indexer API Changes",
-	"problem.section=#changed-the-assetrenderer-and-indexer-apis-to-include-the-portletrequest-an",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java",
+		"problem.summary=Changed the AssetRenderer and Indexer APIs to Include the PortletRequest and PortletResponse Parameters",
+		"problem.tickets=LPS-44639,LPS-44894", "problem.title=Indexer API Changes",
+		"problem.section=#changed-the-assetrenderer-and-indexer-apis-to-include-the-portletrequest-an", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class IndexerDoGetSummaryDecl extends JavaFileMigrator {
 
 	@Override

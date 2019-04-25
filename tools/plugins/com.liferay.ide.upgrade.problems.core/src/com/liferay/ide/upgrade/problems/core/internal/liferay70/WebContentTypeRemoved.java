@@ -14,29 +14,31 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.summary=The field type from the Journal Article entity has been removed. ",
-	"problem.title=Migration of the Field Type from the Journal Article API into a Vocabulary. The Journal API no longer supports this parameter. A new vocabulary called Web Content Types is created when migrating from previous versions of Liferay, and the types from the existing articles are kept as categories of this vocabulary.",
-	"problem.tickets=LPS-50764",
-	"problem.section=#migration-of-the-field-type-from-the-journal-article-api-into-a-vocabulary",
-	"version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.summary=The field type from the Journal Article entity has been removed. ",
+		"problem.title=Migration of the Field Type from the Journal Article API into a Vocabulary. The Journal API no longer supports this parameter. A new vocabulary called Web Content Types is created when migrating from previous versions of Liferay, and the types from the existing articles are kept as categories of this vocabulary.",
+		"problem.tickets=LPS-50764",
+		"problem.section=#migration-of-the-field-type-from-the-journal-article-api-into-a-vocabulary", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class WebContentTypeRemoved extends JavaFileMigrator {
 
 	@Override
@@ -45,7 +47,8 @@ public class WebContentTypeRemoved extends JavaFileMigrator {
 
 		// check JournalArticle.getType() and JournalFeed.getType()
 
-		List<FileSearchResult> getTypes = javaFileChecker.findMethodInvocations("JournalArticle", null, "getType", null);
+		List<FileSearchResult> getTypes = javaFileChecker.findMethodInvocations(
+			"JournalArticle", null, "getType", null);
 
 		searchResults.addAll(getTypes);
 
@@ -55,13 +58,15 @@ public class WebContentTypeRemoved extends JavaFileMigrator {
 
 		// callers of ArticleTypeException's methods
 
-		FileSearchResult exceptionImports = javaFileChecker.findImport("com.liferay.portlet.journal.ArticleTypeException");
+		FileSearchResult exceptionImports = javaFileChecker.findImport(
+			"com.liferay.portlet.journal.ArticleTypeException");
 
 		if (exceptionImports != null) {
 			searchResults.add(exceptionImports);
 		}
 
-		List<FileSearchResult> catchExceptions = javaFileChecker.findCatchExceptions(new String[] {"ArticleTypeException"});
+		List<FileSearchResult> catchExceptions = javaFileChecker.findCatchExceptions(
+			new String[] {"ArticleTypeException"});
 
 		searchResults.addAll(catchExceptions);
 

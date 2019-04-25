@@ -14,25 +14,28 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf", "problem.title=Changed the Usage of Asset Preview",
-	"problem.section=#changed-the-usage-of-asset-preview", "problem.summary=Changed the Usage of Asset Preview",
-	"problem.tickets=LPS-53972",  "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf", "problem.title=Changed the Usage of Asset Preview",
+		"problem.section=#changed-the-usage-of-asset-preview", "problem.summary=Changed the Usage of Asset Preview",
+		"problem.tickets=LPS-53972", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class AssetPreviewTags extends JavaFileMigrator {
 
 	@Override

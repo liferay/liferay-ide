@@ -14,28 +14,30 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java", "problem.title=Adding Tags, Categories, Vocabularies API Changes",
-	"problem.summary=The API for adding tags, categories, and vocabularies now requires passing the groupId parameter. Previously, it had to be included in the ServiceContext parameter passed to the method.",
-	"problem.tickets=LPS-54570",
-	"problem.section=#added-required-parameter-groupid-for-adding-tags-categories-and-vocabularie",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java", "problem.title=Adding Tags, Categories, Vocabularies API Changes",
+		"problem.summary=The API for adding tags, categories, and vocabularies now requires passing the groupId parameter. Previously, it had to be included in the ServiceContext parameter passed to the method.",
+		"problem.tickets=LPS-54570",
+		"problem.section=#added-required-parameter-groupid-for-adding-tags-categories-and-vocabularie", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class RequiredParamGroupId extends JavaFileMigrator {
 
 	@Override

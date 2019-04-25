@@ -14,21 +14,24 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf", "problem.title=Deprecated the liferay-portlet:icon-back Tag with No Direct Replacement",
-	"problem.section=#deprecated-the-liferay-portleticon-back-tag-with-no-direct-replacement",
-	"problem.summary=Deprecated the liferay-portlet:icon-back Tag with No Direct Replacement",
-	"problem.tickets=LPS-63101",  "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=jsp,jspf",
+		"problem.title=Deprecated the liferay-portlet:icon-back Tag with No Direct Replacement",
+		"problem.section=#deprecated-the-liferay-portleticon-back-tag-with-no-direct-replacement",
+		"problem.summary=Deprecated the liferay-portlet:icon-back Tag with No Direct Replacement",
+		"problem.tickets=LPS-63101", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class DeprecatedLiferayPortletIconBackTags extends JSPTagMigrator {
 
 	public DeprecatedLiferayPortletIconBackTags() {

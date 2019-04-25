@@ -14,24 +14,25 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
+
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
-
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=properties", "problem.title=Email Signature Properties",
-	"problem.summary=Merged Configured Email Signature Field into the Body of Email Messages from Message Boards and Wiki",
-	"problem.tickets=LPS-44599",
-	"problem.section=#merged-configured-email-signature-field-into-the-body-of-email-messages-fro",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=properties", "problem.title=Email Signature Properties",
+		"problem.summary=Merged Configured Email Signature Field into the Body of Email Messages from Message Boards and Wiki",
+		"problem.tickets=LPS-44599",
+		"problem.section=#merged-configured-email-signature-field-into-the-body-of-email-messages-fro", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class EmailSignatureProperties extends PropertiesFileMigrator {
 
 	@Override

@@ -14,28 +14,31 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.JavaFileMigrator;
 
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=java,jsp,jspf",
-	"problem.summary=The method render has been removed from the interfaces AssetRenderer and WorkflowHandler.",
-	"problem.tickets=LPS-56705", "problem.title=Removed render Method from AssetRenderer API and WorkflowHandler API",
-	"problem.section=#removed-render-method-from-assetrenderer-api-and-workflowhandler-api",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=java,jsp,jspf",
+		"problem.summary=The method render has been removed from the interfaces AssetRenderer and WorkflowHandler.",
+		"problem.tickets=LPS-56705",
+		"problem.title=Removed render Method from AssetRenderer API and WorkflowHandler API",
+		"problem.section=#removed-render-method-from-assetrenderer-api-and-workflowhandler-api", "version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class AssetRendererAndWorkflowHandlerRenderInvocation extends JavaFileMigrator {
 
 	@Override
@@ -46,7 +49,8 @@ public class AssetRendererAndWorkflowHandlerRenderInvocation extends JavaFileMig
 
 		// render method declarations
 
-		List<FileSearchResult> declarations = javaFileChecker.findMethodDeclaration("render", assetRendererArgTypes, null);
+		List<FileSearchResult> declarations = javaFileChecker.findMethodDeclaration(
+			"render", assetRendererArgTypes, null);
 
 		searchResults.addAll(declarations);
 

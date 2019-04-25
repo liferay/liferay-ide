@@ -14,21 +14,23 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf", "problem.title=Deprecated the aui:tool Tag with No Direct Replacement",
-	"problem.section=#deprecated-the-auitool-tag-with-no-direct-replacement",
-	"problem.summary=Deprecated the aui:tool Tag with No Direct Replacement", "problem.tickets=LPS-70422",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=jsp,jspf", "problem.title=Deprecated the aui:tool Tag with No Direct Replacement",
+		"problem.section=#deprecated-the-auitool-tag-with-no-direct-replacement",
+		"problem.summary=Deprecated the aui:tool Tag with No Direct Replacement", "problem.tickets=LPS-70422",
+		"version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class DeprecatedAUIToolTags extends JSPTagMigrator {
 
 	public DeprecatedAUIToolTags() {

@@ -14,21 +14,23 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf", "problem.title=liferay-ui:logo-selector Tag Parameter Changes",
-	"problem.section=#the-liferay-uilogo-selector-tag-requires-parameter-changes",
-	"problem.summary=Removed the editLogoURL of liferay-ui:logo-selector Tag", "problem.tickets=LPS-42645",
-	 "version=7.0"
-},
-	service = FileMigrator.class)
+@Component(
+	property = {
+		"file.extensions=jsp,jspf", "problem.title=liferay-ui:logo-selector Tag Parameter Changes",
+		"problem.section=#the-liferay-uilogo-selector-tag-requires-parameter-changes",
+		"problem.summary=Removed the editLogoURL of liferay-ui:logo-selector Tag", "problem.tickets=LPS-42645",
+		"version=7.0"
+	},
+	service = FileMigrator.class
+)
 public class LogoSelectorTags extends JSPTagMigrator {
 
 	public LogoSelectorTags() {

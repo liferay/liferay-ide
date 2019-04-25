@@ -14,14 +14,14 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
+import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
+import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
-
-import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
-import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
 
 /**
  * @author Gregory Amerson
@@ -30,11 +30,10 @@ import com.liferay.ide.upgrade.problems.core.internal.JavaImportsMigrator;
 	property = {
 		"file.extensions=java,jsp,jspf",
 		"problem.title=Moved the Contact Name Exception Classes to Inner Classes of ContactNameException",
-		"problem.summary=The use of classes ContactFirstNameException, ContactFullNameException, and " +
-			"ContactLastNameException has been moved to inner classes in a new class called ContactNameException.",
+		"problem.summary=The use of classes ContactFirstNameException, ContactFullNameException, and ContactLastNameException has been moved to inner classes in a new class called ContactNameException.",
 		"problem.tickets=LPS-55364",
 		"problem.section=#moved-the-contact-name-exception-classes-to-inner-classes-of-contactnameexc",
-		"auto.correct=import",  "version=7.0"
+		"auto.correct=import", "version=7.0"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )

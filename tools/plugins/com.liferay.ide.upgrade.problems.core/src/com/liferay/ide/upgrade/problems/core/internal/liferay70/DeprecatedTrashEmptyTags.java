@@ -14,23 +14,25 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.internal.JSPTagMigrator;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Gregory Amerson
  */
-@Component(property = {
-	"file.extensions=jsp,jspf",
-	"problem.title=Removed the liferay-ui:trash-empty Tag and Replaced with liferay-trash:empty",
-	"problem.section=#removed-the-liferay-uitrash-empty-tag-and-replaced-with-liferay-trashempty",
-	"problem.summary=Removed the liferay-ui:trash-empty Tag and Replaced with liferay-trash:empty",
-	"problem.tickets=LPS-60779", "auto.correct=jsptag",  "version=7.0"
-},
-	service = {AutoFileMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=jsp,jspf",
+		"problem.title=Removed the liferay-ui:trash-empty Tag and Replaced with liferay-trash:empty",
+		"problem.section=#removed-the-liferay-uitrash-empty-tag-and-replaced-with-liferay-trashempty",
+		"problem.summary=Removed the liferay-ui:trash-empty Tag and Replaced with liferay-trash:empty",
+		"problem.tickets=LPS-60779", "auto.correct=jsptag", "version=7.0"
+	},
+	service = {AutoFileMigrator.class, FileMigrator.class}
+)
 public class DeprecatedTrashEmptyTags extends JSPTagMigrator {
 
 	public DeprecatedTrashEmptyTags() {

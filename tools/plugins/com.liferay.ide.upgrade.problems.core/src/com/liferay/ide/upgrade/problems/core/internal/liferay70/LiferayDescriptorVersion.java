@@ -24,12 +24,14 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Seiphon Wang
  */
-@Component(property = {
-	"file.extensions=xml", "problem.title=Descriptor XML DTD Versions Changes",
-	"problem.summary=The descriptor XML DTD versions should be matched with version 7.0.",
-	"problem.section=#descriptor-XML-DTD-version", "auto.correct=descriptor", "version=7.0"
-},
-	service = {AutoFileMigrator.class, FileMigrator.class})
+@Component(
+	property = {
+		"file.extensions=xml", "problem.title=Descriptor XML DTD Versions Changes",
+		"problem.summary=The descriptor XML DTD versions should be matched with version 7.0.",
+		"problem.section=#descriptor-XML-DTD-version", "auto.correct=descriptor", "version=7.0"
+	},
+	service = {AutoFileMigrator.class, FileMigrator.class}
+)
 public class LiferayDescriptorVersion extends BaseLiferayDescriptorVersion {
 
 	public LiferayDescriptorVersion() {
