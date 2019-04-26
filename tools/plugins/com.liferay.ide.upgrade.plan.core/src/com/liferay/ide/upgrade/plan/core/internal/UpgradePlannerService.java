@@ -316,6 +316,15 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 		List<UpgradeProblem> upgradeProblems = Stream.of(
 			upgradeProblemsMemento
+		).filter(
+			upgradeProblemMemento -> {
+				IFile[] resources = CoreUtil.findFilesForLocationURI(
+					new File(
+						upgradeProblemMemento.getString("resourceLocation")
+					).toURI());
+
+				return resources.length > 0;
+			}
 		).map(
 			upgradeProblemMemento -> {
 				String autoCorrectContext = upgradeProblemMemento.getString("autoCorrectContext");
