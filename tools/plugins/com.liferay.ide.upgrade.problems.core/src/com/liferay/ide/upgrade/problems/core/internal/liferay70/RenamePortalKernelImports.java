@@ -72,7 +72,7 @@ public class RenamePortalKernelImports extends JavaImportsMigrator {
 
 	public static String[][] readCSV() {
 		try (InputStream in = RenamePortalKernelImports.class.getResourceAsStream(
-				"/com/liferay/blade/upgrade/liferay70/apichanges/kernel-rename.csv")) {
+				"/com/liferay/ide/upgrade/problems/core/internal/liferay70/kernel-rename.csv")) {
 
 			List<String> lines = new ArrayList<>();
 
