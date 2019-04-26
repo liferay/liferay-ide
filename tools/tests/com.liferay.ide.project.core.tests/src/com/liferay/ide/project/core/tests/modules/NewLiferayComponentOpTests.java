@@ -158,8 +158,8 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         IFile buildgrade = modPorject.getFile( "build.gradle" );
         String buildgradeContent = FileUtil.readContents( buildgrade.getLocation().toFile(),true );
-        assertTrue( buildgradeContent.contains( "compileOnly group: \"com.liferay.portal\", name:\"com.liferay.util.bridges\", version:\"2.0.0\"" ) );
-        assertTrue( buildgradeContent.contains( "compileOnly group: \"org.osgi\", name:\"org.osgi.service.component.annotations\", version:\"1.3.0\"" ) );
+        assertTrue( buildgradeContent.contains( "compileOnly group: \"com.liferay.portal\", name: \"com.liferay.util.bridges\", version: \"2.0.0\"" ) );
+        assertTrue( buildgradeContent.contains( "compileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\", version: \"1.3.0\"" ) );
 
         NewLiferayComponentOp copRest = NewLiferayComponentOp.TYPE.instantiate();
         copRest.setProjectName( pop.getProjectName().content() );
@@ -176,7 +176,7 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         buildgrade = modPorject.getFile( "build.gradle" );
         buildgradeContent = FileUtil.readContents( buildgrade.getLocation().toFile(),true );
-        assertTrue( buildgradeContent.contains( "compileOnly group: \"javax.ws.rs\", name:\"javax.ws.rs-api\", version:\"2.0.1\"" ) );
+        assertTrue( buildgradeContent.contains( "compileOnly group: \"javax.ws.rs\", name: \"javax.ws.rs-api\", version: \"2.0.1\"" ) );
 
         NewLiferayComponentOp copAuth = NewLiferayComponentOp.TYPE.instantiate();
         copAuth.setProjectName( pop.getProjectName().content() );
@@ -196,7 +196,7 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         buildgrade = modPorject.getFile( "build.gradle" );
         buildgradeContent = FileUtil.readContents( buildgrade.getLocation().toFile() ,true);
-        assertTrue( buildgradeContent.contains( "compileOnly group: \"org.apache.shiro\", name:\"shiro-core\", version:\"1.1.0\"" ) );
+        assertTrue( buildgradeContent.contains( "compileOnly group: \"org.apache.shiro\", name: \"shiro-core\", version: \"1.1.0\"" ) );
 
         NewLiferayComponentOp copStruts = NewLiferayComponentOp.TYPE.instantiate();
         copStruts.setProjectName( pop.getProjectName().content() );
@@ -334,7 +334,7 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         String gradleFileContent = FileUtil.readContents( gradleFile.getLocation().toFile() ,true );
 
-        assertTrue( gradleFileContent.contains( "compileOnly group: \"javax.portlet\", name:\"portlet-api\", version:\"2.0\"" ) );
+        assertTrue( gradleFileContent.contains( "compileOnly group: \"javax.portlet\", name: \"portlet-api\", version: \"2.0\"" ) );
     }
 
     @Test
