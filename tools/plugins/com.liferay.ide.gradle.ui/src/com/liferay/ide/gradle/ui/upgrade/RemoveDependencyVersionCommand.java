@@ -96,6 +96,10 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 		List<Artifact> targetPlatformArtifacts = liferayWorkspaceProject.getTargetPlatformArtifacts();
 
 		try {
+			if (FileUtil.notExists(buildGradleFile)) {
+				return;
+			}
+
 			GradleDependencyUpdater gradleDependencyUpdater = new GradleDependencyUpdater(buildGradleFile);
 
 			List<Artifact> dependencies = gradleDependencyUpdater.getDependencies("*");
