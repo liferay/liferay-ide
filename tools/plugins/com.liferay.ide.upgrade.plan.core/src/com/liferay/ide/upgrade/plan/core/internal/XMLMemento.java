@@ -11,17 +11,39 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
-import java.io.*;
-import java.util.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
-
 import com.liferay.ide.upgrade.plan.core.IMemento;
 
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
+import org.xml.sax.InputSource;
 /**
  * A Memento is a class independent container for persistence
  * info.  It is a reflection of 3 storage requirements.
@@ -415,6 +437,27 @@ public final class XMLMemento implements IMemento {
 
 			if (type.equals(node.getNodeName())) {
 				element.removeChild(node);
+			}
+		}
+	}
+
+	@Override
+	public void removeChildren(String type, String attrName, String attrValue) {
+		NodeList childNodes = element.getChildNodes();
+
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node node = childNodes.item(i);
+
+			if (node instanceof Element) {
+				Element element2 = (Element)node;
+
+				if (type.equals(node.getNodeName())) {
+					String attributeValue = element2.getAttribute(attrName);
+
+					if (attributeValue.equals(attrValue)) {
+						element.removeChild(node);
+					}
+				}
 			}
 		}
 	}

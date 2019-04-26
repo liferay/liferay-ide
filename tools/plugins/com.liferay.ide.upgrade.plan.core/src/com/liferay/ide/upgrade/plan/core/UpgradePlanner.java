@@ -18,6 +18,8 @@ import java.io.IOException;
 
 import java.nio.file.Path;
 
+import java.util.List;
+
 /**
  * @author Gregory Amerson
  * @author Terry Jia
@@ -35,6 +37,8 @@ public interface UpgradePlanner {
 
 	public UpgradePlan getCurrentUpgradePlan();
 
+	public List<UpgradePlan> loadAllUpgradePlans();
+
 	public UpgradePlan loadUpgradePlan(String name);
 
 	public UpgradePlan newUpgradePlan(
@@ -43,6 +47,8 @@ public interface UpgradePlanner {
 		throws IOException;
 
 	public void removeListener(UpgradeListener upgradeListener);
+
+	public void removeUpgradePlan(UpgradePlan upgradePlan);
 
 	public void restartStep(UpgradeStep upgradeStep);
 
