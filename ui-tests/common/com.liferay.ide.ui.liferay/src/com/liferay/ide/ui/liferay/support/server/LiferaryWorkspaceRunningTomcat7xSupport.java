@@ -48,6 +48,14 @@ public class LiferaryWorkspaceRunningTomcat7xSupport extends SupportBase {
 
 		viewAction.servers.start(_workspace.getStoppedLabel());
 
+		jobAction.waitForConsoleContent(
+			_workspace.getServerName() + " [Liferay 7.x]",
+			"-Djava.protocol.handler.pkgs=org.apache.catalina.webresources", 30 * 1000);
+
+		jobAction.waitForConsoleContent(
+			_workspace.getServerName() + " [Liferay 7.x]", "-Dorg.apache.catalina.security.SecurityListener.UMASK",
+			30 * 1000);
+
 		jobAction.waitForServerStarted(_workspace.getServerName());
 	}
 
