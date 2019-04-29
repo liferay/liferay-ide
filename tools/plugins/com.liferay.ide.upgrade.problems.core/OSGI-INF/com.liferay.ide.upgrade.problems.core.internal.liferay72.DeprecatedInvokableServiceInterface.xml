@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay72.DeprecatedInvokableServiceInterface">
+   <property name="file.extensions" value="java,jsp,jspf"/>
+   <property name="problem.title" value="Deprecated com.liferay.portal.service.InvokableService Interface"/>
+   <property name="problem.summary" value="The InvokableService and InvokableLocalService interfaces in package com.liferay.portal.kernel.service were removed."/>
+   <property name="problem.tickets" value="LPS-88912"/>
+   <property name="problem.section" value="#deprecated-invokableservice-interface"/>
+   <property name="version" value="7.2"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay72.DeprecatedInvokableServiceInterface"/>
+</scr:component>
