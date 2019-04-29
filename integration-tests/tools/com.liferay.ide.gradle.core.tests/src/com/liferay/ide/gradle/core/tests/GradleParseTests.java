@@ -51,7 +51,8 @@ public class GradleParseTests extends BaseTests {
 
 		writeFile(fs, updater.getGradleFileContents());
 
-		assertFileContains(fs, "compile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"");
+		assertFileContains(
+			fs, "compile group: \"com.liferay\", name: \"com.liferay.bookmarks.api\", version: \"1.0.0\"");
 
 		fs.after();
 	}
@@ -74,7 +75,8 @@ public class GradleParseTests extends BaseTests {
 
 		writeFile(fs, updater.getGradleFileContents());
 
-		assertFileContains(fs, "compile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"");
+		assertFileContains(
+			fs, "compile group: \"com.liferay\", name: \"com.liferay.bookmarks.api\", version: \"1.0.0\"");
 
 		fs.after();
 	}
@@ -97,7 +99,8 @@ public class GradleParseTests extends BaseTests {
 
 		writeFile(fs, updater.getGradleFileContents());
 
-		assertFileContains(fs, "compile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"");
+		assertFileContains(
+			fs, "compile group: \"com.liferay\", name: \"com.liferay.bookmarks.api\", version: \"1.0.0\"");
 
 		fs.after();
 	}
@@ -120,7 +123,8 @@ public class GradleParseTests extends BaseTests {
 
 		writeFile(fs, updater.getGradleFileContents());
 
-		assertFileContains(fs, "compile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"");
+		assertFileContains(
+			fs, "compile group: \"com.liferay\", name: \"com.liferay.bookmarks.api\", version: \"1.0.0\"");
 
 		fs.after();
 	}
@@ -143,7 +147,8 @@ public class GradleParseTests extends BaseTests {
 
 		writeFile(fs, updater.getGradleFileContents());
 
-		assertFileContains(fs, "compile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"");
+		assertFileContains(
+			fs, "compile group: \"com.liferay\", name: \"com.liferay.bookmarks.api\", version: \"1.0.0\"");
 
 		fs.after();
 	}
