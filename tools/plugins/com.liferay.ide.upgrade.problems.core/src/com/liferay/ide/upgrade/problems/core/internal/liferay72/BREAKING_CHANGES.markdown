@@ -246,28 +246,28 @@ the chance of package version lock down.
 
 ---------------------------------------
 
-### Removed HibernateConfigurationConverter and Converter
+### Removed HibernateConfigurationConverter and Converter [](id=removed-hibernateconfigurationconverter-and-converter)
 - **Date:** 2019-Jan-07
 - **JIRA Ticket:** [LPS-88870](https://issues.liferay.com/browse/LPS-88870)
 
-#### What changed?
+#### What changed? [](id=what-changed-6)
 
 The interface `com.liferay.portal.kernel.util.Converter` and its implementation
 `com.liferay.portal.spring.hibernate.HibernateConfigurationConverter` were
 removed.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-6)
 
 This removes the support of generating customized `portlet-hbm.xml` files
 implemented by `HibernateConfigurationConverter`. Refer to
 [LPS-5363](https://issues.liferay.com/browse/LPS-5363) for more information.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-6)
 
 You should remove usages of `HibernateConfigurationConverter`. Make sure the
 generated `portlet-hbm.xml` is accurate.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-6)
 
 This is one of several steps to clean up kernel provider interfaces to reduce
 the chance of package version lock down.

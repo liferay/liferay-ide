@@ -164,4 +164,5 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.MovedStagingProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.RemoveLinkApplicationURLs.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.SwitchedToUseJDKPredicate.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.MovedTermsOfUseContentProvider.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.MovedTermsOfUseContentProvider.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.RemovedHibernateConfigurationConverterAndConverter.xml
