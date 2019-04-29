@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay72.SwitchToUseJDKFunctionAndSupplier">
+   <property name="file.extensions" value="java,jsp,jspf"/>
+   <property name="problem.title" value="Switched to Use JDK Function and Supplier"/>
+   <property name="problem.summary" value="The Function and Supplier interfaces in package com.liferay.portal.kernel.util were removed. Their usages were replaced with java.util.function.Function and java.util.function.Supplier."/>
+   <property name="problem.tickets" value="LPS-88911"/>
+   <property name="problem.section" value="#switched-to-use-jdk-function-and-supplier"/>
+   <property name="version" value="7.2"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay72.SwitchToUseJDKFunctionAndSupplier"/>
+</scr:component>
