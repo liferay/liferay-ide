@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
-import com.liferay.ide.ui.liferay.page.view.CodeUpgradeView;
+import com.liferay.ide.ui.liferay.page.view.LiferayUpgradePlanView;
 import com.liferay.ide.ui.swtbot.eclipse.page.DeleteResourcesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.ErrorLogView;
 import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
@@ -45,10 +45,6 @@ public class ViewAction extends UIAction {
 		return _viewAction;
 	}
 
-	public void showCodeUpgradeView() {
-		ide.showCodeUpgradeView();
-	}
-
 	public void showServersView() {
 		ide.showServersView();
 	}
@@ -65,35 +61,17 @@ public class ViewAction extends UIAction {
 		liferayPerspective.activate();
 	}
 
-	public CodeUpgradeViewAction codeUpgrade = new CodeUpgradeViewAction();
+	public void switchUpgradePlannerPerspective() {
+		Perspective upgradePlannerPerspective = ide.getUpgradePlannerPerspective();
+
+		upgradePlannerPerspective.activate();
+	}
+
 	public ErrorLogViewAction errorLog = new ErrorLogViewAction();
 	public ProgressViewAction progress = new ProgressViewAction();
 	public ProjectViewAction project = new ProjectViewAction();
 	public ServersViewAction servers = new ServersViewAction();
-
-	public class CodeUpgradeViewAction {
-
-		// Just for right now
-
-		public void prepareMigrateLayout(String migrateLayout) {
-			_codeUpgradeView.selectMigrateLayouts(migrateLayout);
-		}
-
-		public void restartUpgrade() {
-			_codeUpgradeView.clickRestartUpgradeBtn();
-		}
-
-		public void showAllPages() {
-			_codeUpgradeView.clickShowAllPagesBtn();
-		}
-
-		public void switchGear(int index) {
-			_codeUpgradeView.selectGear(index);
-		}
-
-		private final CodeUpgradeView _codeUpgradeView = new CodeUpgradeView(bot);
-
-	}
+	public LiferayUpgradePlanViewAction upgradePlan = new LiferayUpgradePlanViewAction();
 
 	public class ErrorLogViewAction {
 
@@ -108,6 +86,42 @@ public class ViewAction extends UIAction {
 		}
 
 		private final ErrorLogView _errorLogView = new ErrorLogView(bot);
+
+	}
+
+	public class LiferayUpgradePlanViewAction {
+
+		public void clickSkip() {
+			_liferayUpgradePlanView.click(SKIP);
+		}
+
+		public void clickToPerform() {
+			_liferayUpgradePlanView.click(CLICK_TO_PERFORM);
+		}
+
+		public void selectStep(String... files) {
+			ide.sleep();
+
+			_getSteps().setFocus();
+
+			try {
+				_getSteps().doubleClick(files);
+			}
+			catch (Exception e) {
+			}
+		}
+
+		private Tree _getSteps() {
+			String perspectiveLabel = ide.getPerspectiveLabel();
+
+			if (perspectiveLabel.equals(LIFERAY_UPGRADE_PLANNER)) {
+				return _liferayUpgradePlanView.getSteps();
+			}
+
+			return null;
+		}
+
+		private final LiferayUpgradePlanView _liferayUpgradePlanView = new LiferayUpgradePlanView(bot);
 
 	}
 
@@ -358,6 +372,9 @@ public class ViewAction extends UIAction {
 			}
 			else if (perspectiveLabel.equals(KALEO_DESIGNER)) {
 				return _packageExplorerView.getProjects();
+			}
+			else if (perspectiveLabel.equals(LIFERAY_UPGRADE_PLANNER)) {
+				return _projectExplorerView.getProjects();
 			}
 
 			return null;

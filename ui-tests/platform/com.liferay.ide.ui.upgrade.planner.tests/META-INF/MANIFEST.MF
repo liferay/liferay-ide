@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Liferay IDE UI Code Upgrade Tests
-Bundle-SymbolicName: com.liferay.ide.ui.code.upgrade.tests
+Bundle-Name: Liferay IDE UI Upgrade Planner Tests
+Bundle-SymbolicName: com.liferay.ide.ui.upgrade.planner.tests
 Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: Liferay
 Require-Bundle: org.junit,
@@ -10,6 +10,6 @@ Require-Bundle: org.junit,
  com.liferay.ide.ui.swtbot,
  com.liferay.ide.ui.liferay,
  org.eclipse.core.resources
-Export-Package: com.liferay.ide.ui.code.upgrade.tests
+Export-Package: com.liferay.ide.ui.upgrade.planner.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

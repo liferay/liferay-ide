@@ -55,8 +55,6 @@ public interface UI {
 
 	public final String ADD_ROLE = "Add Role";
 
-	public final String ADD_SERVER_WITH_DOT = "Add Server...";
-
 	public final String ADD_SERVICE = "Add Service";
 
 	public final String ADD_SERVICE_WRAPPER = "Add Service Wrapper";
@@ -91,8 +89,6 @@ public interface UI {
 
 	public final String AUTOMATIC_PROJECT_SYNCHRONIZATION = "Automatic Project Synchronization";
 
-	public final String AUTOMATICALLY_CORRECT_PROBLEMS = "Automatically Correct Problems";
-
 	public final String AVAILABLE_SOFTWARE_SITES = "Available Software Sites";
 
 	public final String BACK_WITH_LEFT_BRACKET = "< Back";
@@ -111,13 +107,9 @@ public interface UI {
 
 	public final String BUILD_TYPE = "Build type:";
 
-	public final String BUILD_WITH_DOT = "Build...";
-
 	public final String BUILD_WSDD = "Build WSDD";
 
 	public final String BUNDLE_URL = "Bundle url:";
-
-	public final String BUNDLE_URL_UPCASE = "Bundle URL:";
 
 	public final String CANCEL = "Cancel";
 
@@ -137,7 +129,7 @@ public interface UI {
 
 	public final String CLEAR_LOG_VIEWER = "Clear Log Viewer";
 
-	public final String CLEAR_RESULTS = "Clear Results";
+	public final String CLICK_TO_PERFORM = "Click to perform";
 
 	public final String CLOSE_PROJECT = "Close Project";
 
@@ -150,6 +142,8 @@ public interface UI {
 	public final String COMPONENT_SUITE = "Component Suite:";
 
 	public final String CONFIG = "Config";
+
+	public final String CONFIGURE_LIFERAY_WORKSPACE_SETTINGS = "Configure Liferay Workspace Settings";
 
 	public final String CONSOLE = "Console";
 
@@ -170,8 +164,6 @@ public interface UI {
 
 	public final String CONTROL_MENU_ENTRY = "control-menu-entry";
 
-	public final String CONVERTED_PROJECT_LOCATION = "Converted Project Location:";
-
 	public final String CREATE = "Create";
 
 	public final String CREATE_A_JAVA_PROJECT = "Create a Java project";
@@ -187,6 +179,8 @@ public interface UI {
 
 	public final String CREATE_JSP_FILES = "Create JSP files";
 
+	public final String CREATE_NEW_LIFERAY_WORKSPACE = "Create New Liferay Workspace [Required]";
+
 	public final String CREATE_NEW_PORTLET = "Create new portlet";
 
 	public final String CREATE_RESOURCE_BUNDLE_FILE = "Create resource bundle file";
@@ -196,6 +190,10 @@ public interface UI {
 	public final String CSS = "CSS:";
 
 	public final String CSS_CLASS_WRAPPER = "CSS class wrapper:";
+
+	public final String CURRENT_CODE_LOCATION = "Current Code Location:";
+
+	public final String CURRENT_LIFERAY_VERSION = "Current Liferay Version:";
 
 	public final String CUSTOM_JSP_FOLDER = "Custom JSP folder:";
 
@@ -257,8 +255,6 @@ public interface UI {
 
 	public final String DOWNLOAD_LIFERAY_BUNDLE = "Download Liferay bundle";
 
-	public final String DOWNLOAD_LIFERAY_BUNDLE_RECOMMENDED = "Download Liferay bundle (recommended)";
-
 	public final String EDIT = "Edit";
 
 	public final String EDIT_DEFAULTS = "Edit Defaults";
@@ -277,8 +273,6 @@ public interface UI {
 
 	public final String ERROR_LOG = "Error Log";
 
-	public final String ERROR_LOG_WORKSPACE_LOG = "Error Log (Workspace Log)";
-
 	public final String EVENT = "Event:";
 
 	public final String EXPAND_ALL = "Expand All";
@@ -290,8 +284,6 @@ public interface UI {
 	public final String FILE = "File";
 
 	public final String FINAL = "final";
-
-	public final String FIND_BREAKING_CHANGES = "Find Breaking Changes";
 
 	public final String FIND_LIFERAY_7_BREAKING_API_CHANGES = "Find Liferay 7 breaking API changes...";
 
@@ -340,11 +332,11 @@ public interface UI {
 
 	public final String IMPORT = "Import...";
 
+	public final String IMPORT_EXISTING_LIFERAY_WORKSPACE = "Import Existing Liferay Workspace [Required]";
+
 	public final String IMPORT_LIFERAY_MODULE_PROJECT = "Import Liferay Module Project or Multi-Module Projects";
 
 	public final String IMPORT_LIFERAY_WORKSPACE = "Import Liferay Workspace";
-
-	public final String IMPORT_PROJECTS = "Import Projects";
 
 	public final String INCLUDE_SAMPLE_CODE = "Include sample code";
 
@@ -408,8 +400,6 @@ public interface UI {
 
 	public final String LIFERAY_7_X = "Liferay 7.x";
 
-	public final String LIFERAY_CODE_UPGRADE = "Liferay Code Upgrade";
-
 	public final String LIFERAY_COMPONENT_CLASS = "Liferay Component Class";
 
 	public final String LIFERAY_FACES_ALLOY = "Liferay Faces Alloy";
@@ -446,11 +436,13 @@ public interface UI {
 
 	public final String LIFERAY_RUNTIME_NAME = "Liferay runtime name:";
 
-	public final String LIFERAY_SERVER_NAME = "Liferay Server Name:";
-
 	public final String LIFERAY_SERVICE_BUILDER = "Liferay Service Builder";
 
 	public final String LIFERAY_TOMCAT_DIRECTORY = "Liferay Tomcat directory";
+
+	public final String LIFERAY_UPGRADE_PLAN = "Liferay Upgrade Plan";
+
+	public final String LIFERAY_UPGRADE_PLANNER = "Liferay Upgrade Planner";
 
 	public final String LIFERAY_V_62_SERVER_TOMCAT_7 = "Liferay v6.2 Server (Tomcat 7)";
 
@@ -541,6 +533,8 @@ public interface UI {
 
 	public final String NEW_SERVICE_BUILDER = "New Service Builder";
 
+	public final String NEW_UPGRADE_PLAN = "New Upgrade Plan";
+
 	public final String NEW_WITH_DOT = "New...";
 
 	public final String NEXT_WITH_BRACKET = "Next >";
@@ -560,8 +554,6 @@ public interface UI {
 	public final String OOMPH = "Oomph";
 
 	public final String OPEN = "Open";
-
-	public final String OPEN_IGNORED_LIST = "Open Ignored List";
 
 	public final String OPEN_LIFERAY_HOME_FOLDER = "Open Liferay Home Folder";
 
@@ -588,8 +580,6 @@ public interface UI {
 	public final String PLUGIN_PROJECT = "Plugin project:";
 
 	public final String PLUGIN_TYPE = "Plugin type:";
-
-	public final String PLUGINS_SDK_OR_MAVEN_PROJECT_ROOT_LOCATION = "Plugins SDK or Maven Project Root Location:";
 
 	public final String POLLER_PROCESSOR = "Poller Processor";
 
@@ -653,8 +643,6 @@ public interface UI {
 
 	public final String REFRESH = "Refresh";
 
-	public final String REFRESH_RESULTS = "Refresh Results";
-
 	public final String REMOVE = "Remove";
 
 	public final String REMOVE_ALL = "<< Remove All";
@@ -668,10 +656,6 @@ public interface UI {
 	public final String REST = "rest";
 
 	public final String REST_UPCASE = "Rest";
-
-	public final String RESTART_CODE_UPGRADE = "Restart code upgrade?";
-
-	public final String RESTART_UPGRADE = "Restart Upgrade";
 
 	public final String RICHFACES = "RichFaces";
 
@@ -705,11 +689,7 @@ public interface UI {
 
 	public final String SELECT_MAVEN_PROFILES = "Select Maven Profiles...";
 
-	public final String SELECT_MIGRATE_LAYOUT = "Select Migrate Layout:";
-
 	public final String SELECT_MODEL_CLASS = "Select Model Class:";
-
-	public final String SELECT_PROJECTS = "Select Projects";
 
 	public final String SELECT_SERVICE_NAME = "Select Service Name:";
 
@@ -718,8 +698,6 @@ public interface UI {
 	public final String SERVER = "Server";
 
 	public final String SERVER_NAME = "Server name:";
-
-	public final String SERVER_NAME_UPCASE = "Server Name:";
 
 	public final String SERVER_RUNTIEME_ENVIRONMENTS = "Server runtime environments:";
 
@@ -753,13 +731,15 @@ public interface UI {
 
 	public final String SERVICES = "Services";
 
-	public final String SETUP_TASKS = "Setup Tasks";
+	public final String SET_UP_LIFERAY_WORKSPACE = "Set up Liferay Workspace";
 
-	public final String SHOW_ALL_PAGES = "Show All Pages";
+	public final String SETUP_TASKS = "Setup Tasks";
 
 	public final String SHOW_VIEW = "Show View";
 
 	public final String SIMULATION_PANEL_ENTRY = "simulation-panel-entry";
+
+	public final String SKIP = "Skip";
 
 	public final String SOCIAL_BOOKMARK = "social-bookmark";
 
@@ -801,6 +781,8 @@ public interface UI {
 
 	public final String SUPERCLASS = "Superclass:";
 
+	public final String TARGET_LIFERAY_VERSION = "Target Liferay Version:";
+
 	public final String TARGET_PLATFORM = "Target platform:";
 
 	public final String TEMPLATE_CONTEXT_CONCONTRIBUTOR = "template-context-contributor";
@@ -837,13 +819,13 @@ public interface UI {
 
 	public final String UPDATE_PROJECT = "Update Project...";
 
-	public final String UPGRADE_SELECTED = "Upgrade Selected";
+	public final String UPGRADE_PLAN_OUTLINE = "Upgrade plan outline:";
 
 	public final String UPGRADE_TO_LIFERAY_PLUGINS_SDK_7 = "Upgrade to Liferay Plugins SDK 7";
 
 	public final String UPGRADE_TO_LIFERAY_WORKSPACE = "Upgrade to Liferay Workspace";
 
-	public final String UPGRADE_WITH_DOT = "Upgrade...";
+	public final String UPGRADE_YOUR_DEVELOPMENT_ENVIRONMENT = "Upgrade Your Development Environment";
 
 	public final String UPLOAD_NEW_WORKFLOW = "Upload new workflow...";
 
