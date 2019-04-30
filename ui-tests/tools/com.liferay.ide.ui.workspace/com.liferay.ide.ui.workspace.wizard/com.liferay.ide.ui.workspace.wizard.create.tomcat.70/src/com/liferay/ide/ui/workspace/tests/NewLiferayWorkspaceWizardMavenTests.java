@@ -27,6 +27,7 @@ import org.junit.Test;
  * @author Vicky Wang
  * @author Ying Xu
  * @author Lily Li
+ * @author Rui Wang
  */
 public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
@@ -343,6 +344,55 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(warNames);
 
 		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
+	public void createLiferayWorkspaceSupportCustomizedFolder() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareMaven(project.getName(), "7.1");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(project.getName(), "pom.xml");
+
+		String text = "\t<liferayHome>test</liferayHome>\n";
+
+		editorAction.customizedText(project.getName() + "/pom.xml", 15, 1, text);
+
+		editorAction.save();
+
+		editorAction.close();
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.runMavenInitBundle(project.getName());
+
+		jobAction.waitForNoRunningJobs();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "test", "tomcat-9.0.10"));
+
+		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
+		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
+		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
+
+		viewAction.project.closeAndDelete(moduleNames);
+		viewAction.project.closeAndDelete(themeNames);
+		viewAction.project.closeAndDelete(warNames);
+
+		viewAction.project.closeAndDelete(project.getName());
+
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
+
+		String serverName = "Liferay Community Edition Portal 7.1.2 CE GA3";
+
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(serverName);
+
+		dialogAction.preferences.confirm();
 	}
 
 	@Ignore("Ignore forever and test the download bundle in createLiferayWorkspaceWithDownloadBundleChangeBundleUrl")

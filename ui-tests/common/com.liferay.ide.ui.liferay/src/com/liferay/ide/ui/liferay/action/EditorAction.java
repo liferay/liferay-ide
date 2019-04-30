@@ -42,6 +42,10 @@ public class EditorAction extends UIAction {
 		_editor.close();
 	}
 
+	public void customizedText(String fileName, int line, int column, String text) {
+		_editor.customizedText(fileName, line, column, text);
+	}
+
 	public String getContent() {
 		return _editor.getText();
 	}
