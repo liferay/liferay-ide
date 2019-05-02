@@ -4,7 +4,6 @@
         <package>com.liferay.ide.upgrade.plan.core</package>
         <package>org.eclipse.sapphire.ui.forms.swt</package>
     </import>
-    
     <dialog>
         <id>SwitchUpgradePlan</id>
         <element-type>com.liferay.ide.upgrade.plan.core.UpgradePlansOp</element-type>

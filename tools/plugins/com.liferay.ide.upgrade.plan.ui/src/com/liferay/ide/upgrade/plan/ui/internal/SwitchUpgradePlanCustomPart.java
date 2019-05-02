@@ -118,8 +118,7 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 				TableColumn upgradePlanStateColumn = colUpgradePlanStateName.getColumn();
 
-				upgradePlanStateColumn.setWidth(50);
-				upgradePlanStateColumn.setText("Current Upgrade Plan");
+				upgradePlanStateColumn.setText("");
 				upgradePlanStateColumn.pack();
 
 				colUpgradePlanStateName.setLabelProvider(
@@ -160,7 +159,7 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 				TableColumn upgradePlanNameColumn = colUpgradePlanName.getColumn();
 
 				upgradePlanNameColumn.setWidth(50);
-				upgradePlanNameColumn.setText("UpgradePlan Name");
+				upgradePlanNameColumn.setText("Name");
 				upgradePlanNameColumn.pack();
 
 				colUpgradePlanName.setLabelProvider(
@@ -211,6 +210,26 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 							UpgradePlan upgradePlan = (UpgradePlan)element;
 
 							return upgradePlan.getTargetVersion();
+						}
+
+					});
+
+				TableViewerColumn colOutline = new TableViewerColumn(_tableViewer, SWT.NONE);
+
+				TableColumn outlineColumn = colOutline.getColumn();
+
+				outlineColumn.setWidth(50);
+				outlineColumn.setText("Outline");
+				outlineColumn.pack();
+
+				colOutline.setLabelProvider(
+					new ColumnLabelProvider() {
+
+						@Override
+						public String getText(Object element) {
+							UpgradePlan upgradePlan = (UpgradePlan)element;
+
+							return upgradePlan.getUpgradePlanOutline();
 						}
 
 					});
@@ -295,7 +314,7 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 				_removePlanButton.setToolTipText(" Remove this Upgrade Plan");
 				_removePlanButton.setEnabled(false);
 
-				final Button closeButton = new Button(parent, SWT.PUSH | SWT.BORDER);
+				Button closeButton = new Button(parent, SWT.PUSH | SWT.BORDER);
 
 				closeButton.setText("Close Dialog");
 				closeButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
@@ -350,7 +369,7 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 		}
 
 		if (upgradePlan.equals(_currentUpgradePlan)) {
-			_startPlanButton.setEnabled(true);
+			_startPlanButton.setEnabled(false);
 			_removePlanButton.setEnabled(false);
 
 			return;

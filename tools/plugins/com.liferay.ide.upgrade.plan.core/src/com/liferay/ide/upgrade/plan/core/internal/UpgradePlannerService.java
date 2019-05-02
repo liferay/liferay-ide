@@ -211,6 +211,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 			rootMemento.removeChildren("upgradePlan", "upgradePlanName", upgradePlan.getName());
 
 			try (FileOutputStream fileOutputStream = new FileOutputStream(_getUpgradePlannerStorageFile())) {
+
 				((XMLMemento)rootMemento).save(fileOutputStream);
 			}
 		}
@@ -326,7 +327,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 		return file;
 	}
 
-	private StandardUpgradePlan _initUpgradePlan(IMemento upgradePlanMemento) {
+	private UpgradePlan _initUpgradePlan(IMemento upgradePlanMemento) {
 		String upgradePlanName = upgradePlanMemento.getString("upgradePlanName");
 
 		if (CoreUtil.isNullOrEmpty(upgradePlanName)) {
@@ -350,7 +351,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 		String upgradePlanOutline = upgradePlanMemento.getString("upgradePlanOutline");
 
-		StandardUpgradePlan currentUpgradePlan = new StandardUpgradePlan(
+		UpgradePlan currentUpgradePlan = new StandardUpgradePlan(
 			upgradePlanName, currentVersion, targetVersion, projectPath, upgradePlanOutline, upgradeSteps);
 
 		String targetProjectLocationValue = upgradePlanMemento.getString("targetProjectLocation");
