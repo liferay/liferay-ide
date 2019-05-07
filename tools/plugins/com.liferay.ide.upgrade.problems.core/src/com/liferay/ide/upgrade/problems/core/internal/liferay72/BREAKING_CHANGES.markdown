@@ -357,11 +357,11 @@ the chance of package version lock down.
 
 ---------------------------------------
 
-### Switched to Use JDK Predicate
+### Switched to Use JDK Predicate [](id=switched-to-use-jdk-predicate)
 - **Date:** 2019-Jan-14
 - **JIRA Ticket:** [LPS-89139](https://issues.liferay.com/browse/LPS-89139)
 
-#### What changed?
+#### What changed? [](id=what-changed-10)
 
 The interface `com.liferay.portal.kernel.util.PredicateFilter` was removed and
 replaced with `java.util.function.Predicate`. As a result, the following
@@ -374,13 +374,13 @@ implementations were removed:
 
 The `com.liferay.portal.kernel.util.ArrayUtil_IW` class was regenerated.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-10)
 
 This affects anyone who used `PredicateFilter`, `AggregatePredicateFilter`,
 `PrefixPredicateFilter`, `JavaScriptPortletResourcePredicateFilter`, and
 `DDMFormFieldValuePredicateFilter`.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-10)
 
 You should replace usages of `com.liferay.portal.kernel.util.PredicateFilter`
 with `java.util.function.Predicate`. Additionally, remove usages of
@@ -388,7 +388,7 @@ with `java.util.function.Predicate`. Additionally, remove usages of
 `JavaScriptPortletResourcePredicateFilter`, and
 `DDMFormFieldValuePredicateFilter`.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-10)
 
 This is one of several steps to clean up kernel provider interfaces to reduce
 the chance of package version lock down.

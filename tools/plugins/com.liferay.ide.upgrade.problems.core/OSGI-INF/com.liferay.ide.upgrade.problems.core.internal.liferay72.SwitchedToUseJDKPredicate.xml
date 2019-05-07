@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay72.SwitchedToUseJDKPredicate">
+   <property name="file.extensions" value="java,jsp,jspf"/>
+   <property name="problem.title" value="Switched to Use JDK Predicate"/>
+   <property name="problem.summary" value="The interface com.liferay.portal.kernel.util.PredicateFilter was removed and replaced with java.util.function.Predicate. And these implementations were removed. The com.liferay.portal.kernel.util.ArrayUtil_IW class was regenerated."/>
+   <property name="problem.tickets" value="LPS-89139"/>
+   <property name="problem.section" value="#switched-to-use-jdk-predicate"/>
+   <property name="version" value="7.2"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay72.SwitchedToUseJDKPredicate"/>
+</scr:component>
