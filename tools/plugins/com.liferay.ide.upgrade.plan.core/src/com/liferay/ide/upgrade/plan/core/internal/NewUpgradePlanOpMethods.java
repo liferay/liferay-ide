@@ -15,6 +15,7 @@
 package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
@@ -23,6 +24,8 @@ import java.io.IOException;
 
 import java.nio.file.Paths;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -74,6 +77,16 @@ public class NewUpgradePlanOpMethods {
 		try {
 			UpgradePlan upgradePlan = upgradePlanner.newUpgradePlan(
 				name, currentVersion, targetVersion, sourceCodeLocation, upgradePlanOutline);
+
+			IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+			if (workspaceProject != null) {
+				IPath location = workspaceProject.getLocation();
+
+				java.nio.file.Path targetProjectLocation = Paths.get(location.toOSString());
+
+				upgradePlan.setTargetProjectLocation(targetProjectLocation);
+			}
 
 			upgradePlanner.startUpgradePlan(upgradePlan);
 		}

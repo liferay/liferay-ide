@@ -14,9 +14,11 @@
 
 package com.liferay.ide.upgrade.commands.core.internal.code;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 import com.liferay.ide.upgrade.commands.core.code.ImportExistingLiferayWorkspaceCommandKeys;
 import com.liferay.ide.upgrade.commands.core.internal.UpgradeCommandsCorePlugin;
+import com.liferay.ide.upgrade.plan.core.MessagePrompt;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
@@ -45,6 +47,21 @@ public class ImportExistingLiferayWorkspaceCommand implements UpgradeCommand {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
+		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
+
+		Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
+
+		if (FileUtil.exists(targetProjectLocation)) {
+			boolean result = _messagePrompt.promptQuestion(
+				"Target Project Location Exists",
+				"The path " + targetProjectLocation +
+					" already is used as target project location, do you want to override?");
+
+			if (!result) {
+				return Status.CANCEL_STATUS;
+			}
+		}
+
 		Path path = null;
 
 		try {
@@ -60,12 +77,13 @@ public class ImportExistingLiferayWorkspaceCommand implements UpgradeCommand {
 			return Status.CANCEL_STATUS;
 		}
 
-		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
-
 		upgradePlan.setTargetProjectLocation(path);
 
 		return _provider.importProject(new org.eclipse.core.runtime.Path(path.toString()), progressMonitor);
 	}
+
+	@Reference
+	private MessagePrompt _messagePrompt;
 
 	@Reference(target = "(type=gradle_workspace)")
 	private NewLiferayWorkspaceProjectProvider<?> _provider;
