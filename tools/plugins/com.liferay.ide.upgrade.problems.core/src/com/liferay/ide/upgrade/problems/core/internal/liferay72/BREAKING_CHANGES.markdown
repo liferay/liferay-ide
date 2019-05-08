@@ -395,11 +395,11 @@ the chance of package version lock down.
 
 ---------------------------------------
 
-### Removed Unsafe Functional Interfaces in Package com.liferay.portal.kernel.util
+### Removed Unsafe Functional Interfaces in Package com.liferay.portal.kernel.util [](id=removed-unsafe-functional-interfaces-in-package-com-liferay-portal-kernel-util)
 - **Date:** 2019-Jan-15
 - **JIRA Ticket:** [LPS-89223](https://issues.liferay.com/browse/LPS-89223)
 
-#### What changed?
+#### What changed? [](id=what-changed-11)
 
 The `com.liferay.portal.osgi.util.test.OSGiServiceUtil` class was removed. Also,
 the following interfaces were removed from the `com.liferay.portal.kernel.util`
@@ -409,11 +409,11 @@ package:
 - `UnsafeFunction`
 - `UnsafeRunnable`
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-11)
 
 This affects anyone using the class/interfaces mentioned above.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-11)
 
 The `com.liferay.portal.osgi.util.test.OSGiServiceUtil` class has been
 deprecated since Liferay Portal 7.1. If usages for this class still exist,
@@ -422,7 +422,7 @@ replace it with its direct replacement:
 `UnsafeConsumer`, `UnsafeFunction` and `UnsafeRunnable` with their corresponding
 interfaces in package `com.liferay.petra.function`.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-11)
 
 This is one of several steps to clean up kernel provider interfaces to reduce
 the chance of package version lock down.
