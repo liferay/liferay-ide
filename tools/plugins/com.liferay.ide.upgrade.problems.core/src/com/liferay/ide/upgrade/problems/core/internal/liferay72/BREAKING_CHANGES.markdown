@@ -198,11 +198,11 @@ the same results.
 
 ---------------------------------------
 
-### Moved TermsOfUseContentProvider out of kernel.util
+### Moved TermsOfUseContentProvider out of kernel.util [](id=moved-termsofusecontentprovider-out-of-kernel-uitl)
 - **Date:** 2019-Jan-07
 - **JIRA Ticket:** [LPS-88869](https://issues.liferay.com/browse/LPS-88869)
 
-#### What changed?
+#### What changed? [](id=what-changed-5)
 
 The `TermsOfUseContentProvider` interface's package changed:
 
@@ -222,13 +222,13 @@ the order of registered services, the `TermsOfUseContentProvider` service is
 tracked and updated with `com.liferay.portal.kernel.util.ServiceProxyFactory`.
 As a result, the `TermsOfUseContentProvider` now respects service ranking.
 
-#### Who is affected?
+#### Who is affected? [](id=who-is-affected-5)
 
 This affects anyone who used
 `com.liferay.portal.kernel.util.TermsOfUseContentProviderRegistryUtil` to lookup
 the `com.liferay.portal.kernel.util.TermsOfUseContentProvider` service.
 
-#### How should I update my code?
+#### How should I update my code? [](id=how-should-i-update-my-code-5)
 
 If `com.liferay.portal.kernel.util.TermsOfUseContentProvider` is used, update
 the import package name. If there is any usage in `portal-web`, update
@@ -239,7 +239,7 @@ in modules and use the `@Reference` annotation to fetch the
 `com.liferay.portal.kernel.term.of.use.TermsOfUseContentProvider` service
 instead.
 
-#### Why was this change made?
+#### Why was this change made? [](id=why-was-this-change-made-5)
 
 This is one of several steps to clean up kernel provider interfaces to reduce
 the chance of package version lock down.
