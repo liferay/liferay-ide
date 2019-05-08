@@ -208,7 +208,17 @@ public class UpgradePlannerService implements UpgradePlanner {
 		try (InputStream inputStream = new FileInputStream(_getUpgradePlannerStorageFile())) {
 			IMemento rootMemento = XMLMemento.loadMemento(inputStream);
 
-			rootMemento.removeChildren("upgradePlan", "upgradePlanName", upgradePlan.getName());
+			IMemento[] upgradePlanMementos = rootMemento.getChildren("upgradePlan");
+
+			for (IMemento upgradePlanMemento : upgradePlanMementos) {
+				String upgradePlanName = upgradePlanMemento.getString("upgradePlanName");
+
+				if (upgradePlanName.equals(upgradePlan.getName())) {
+					rootMemento.removeChild(upgradePlanMemento);
+
+					break;
+				}
+			}
 
 			try (FileOutputStream fileOutputStream = new FileOutputStream(_getUpgradePlannerStorageFile())) {
 

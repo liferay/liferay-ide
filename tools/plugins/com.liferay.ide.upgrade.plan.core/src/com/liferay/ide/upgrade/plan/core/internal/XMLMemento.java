@@ -442,22 +442,18 @@ public final class XMLMemento implements IMemento {
 	}
 
 	@Override
-	public void removeChildren(String type, String attrName, String attrValue) {
+	public void removeChild(IMemento child) {
+		XMLMemento childMemento = (XMLMemento)child;
+
+		Element childElement = childMemento.element;
+
 		NodeList childNodes = element.getChildNodes();
 
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node node = childNodes.item(i);
 
-			if (node instanceof Element) {
-				Element element2 = (Element)node;
-
-				if (type.equals(node.getNodeName())) {
-					String attributeValue = element2.getAttribute(attrName);
-
-					if (attributeValue.equals(attrValue)) {
-						element.removeChild(node);
-					}
-				}
+			if (childElement.equals(node)) {
+				element.removeChild(node);
 			}
 		}
 	}
