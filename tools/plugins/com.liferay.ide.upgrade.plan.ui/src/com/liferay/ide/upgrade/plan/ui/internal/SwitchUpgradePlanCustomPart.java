@@ -26,6 +26,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import java.nio.file.Path;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Adapters;
@@ -114,174 +115,87 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 						_handleDoubleClick(upgradePlan);
 					});
 
-				TableViewerColumn stateTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
+				_createTableColumn(
+					_tableViewer, "", -1,
+					element -> {
+						UpgradePlan upgradePlan = (UpgradePlan)element;
 
-				TableColumn stateTableColumn = stateTableViewerColumn.getColumn();
+						UpgradePlan currentUpgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-				stateTableColumn.setText("");
-				stateTableColumn.pack();
-
-				stateTableViewerColumn.setLabelProvider(
-					new ColumnLabelProvider() {
-
-						@Override
-						public Image getImage(Object element) {
-							UpgradePlan upgradePlan = (UpgradePlan)element;
-
-							UpgradePlan currentUpgradePlan = _upgradePlanner.getCurrentUpgradePlan();
-
-							if (_currentUpgradePlan != null) {
-								currentUpgradePlan = _currentUpgradePlan;
-							}
-
-							if (upgradePlan.equals(currentUpgradePlan)) {
-								return UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.CHECKED_IMAGE_ID);
-							}
-
-							return UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.UNCHECKED_IMAGE_ID);
+						if (_currentUpgradePlan != null) {
+							currentUpgradePlan = _currentUpgradePlan;
 						}
 
-						@Override
-						public String getText(Object element) {
-							return "";
+						if (upgradePlan.equals(currentUpgradePlan)) {
+							return UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.CHECKED_IMAGE_ID);
 						}
 
+						return UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.UNCHECKED_IMAGE_ID);
+					},
+					element -> null);
+
+				_createTableColumn(
+					_tableViewer, "Name", 50, null,
+					element -> {
+						UpgradePlan upgradePlan = (UpgradePlan)element;
+
+						return upgradePlan.getName();
 					});
 
-				TableViewerColumn nameTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
+				_createTableColumn(
+					_tableViewer, "Current Version", 50, null,
+					element -> {
+						UpgradePlan upgradePlan = (UpgradePlan)element;
 
-				TableColumn nameTableColumn = nameTableViewerColumn.getColumn();
-
-				nameTableColumn.setWidth(50);
-				nameTableColumn.setText("Name");
-				nameTableColumn.pack();
-
-				nameTableViewerColumn.setLabelProvider(
-					new ColumnLabelProvider() {
-
-						@Override
-						public String getText(Object element) {
-							UpgradePlan upgradePlan = (UpgradePlan)element;
-
-							return upgradePlan.getName();
-						}
-
+						return upgradePlan.getCurrentVersion();
 					});
 
-				TableViewerColumn currentVersionTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
+				_createTableColumn(
+					_tableViewer, "Target Version", 50, null,
+					element -> {
+						UpgradePlan upgradePlan = (UpgradePlan)element;
 
-				TableColumn currentVersionTableColumn = currentVersionTableViewerColumn.getColumn();
-
-				currentVersionTableColumn.setWidth(50);
-				currentVersionTableColumn.setText("Current Version");
-				currentVersionTableColumn.pack();
-
-				currentVersionTableViewerColumn.setLabelProvider(
-					new ColumnLabelProvider() {
-
-						@Override
-						public String getText(Object element) {
-							UpgradePlan upgradePlan = (UpgradePlan)element;
-
-							return upgradePlan.getCurrentVersion();
-						}
-
+						return upgradePlan.getTargetVersion();
 					});
 
-				TableViewerColumn targetVersionTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
+				_createTableColumn(
+					_tableViewer, "Outline", 50, null,
+					element -> {
+						UpgradePlan upgradePlan = (UpgradePlan)element;
 
-				TableColumn targetVersionTableColumn = targetVersionTableViewerColumn.getColumn();
-
-				targetVersionTableColumn.setWidth(50);
-				targetVersionTableColumn.setText("Target Version");
-				targetVersionTableColumn.pack();
-
-				targetVersionTableViewerColumn.setLabelProvider(
-					new ColumnLabelProvider() {
-
-						@Override
-						public String getText(Object element) {
-							UpgradePlan upgradePlan = (UpgradePlan)element;
-
-							return upgradePlan.getTargetVersion();
-						}
-
+						return upgradePlan.getUpgradePlanOutline();
 					});
 
-				TableViewerColumn outlineTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
+				_createTableColumn(
+					_tableViewer, "Current Location", 200, null,
+					element -> {
+						UpgradePlan upgradePlan = (UpgradePlan)element;
 
-				TableColumn outlineTableColumn = outlineTableViewerColumn.getColumn();
+						Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
 
-				outlineTableColumn.setWidth(50);
-				outlineTableColumn.setText("Outline");
-				outlineTableColumn.pack();
+						String projectLocationString = currentProjectLocation.toString();
 
-				outlineTableViewerColumn.setLabelProvider(
-					new ColumnLabelProvider() {
-
-						@Override
-						public String getText(Object element) {
-							UpgradePlan upgradePlan = (UpgradePlan)element;
-
-							return upgradePlan.getUpgradePlanOutline();
+						if (CoreUtil.isNotNullOrEmpty(projectLocationString)) {
+							return projectLocationString;
 						}
 
+						return "";
 					});
 
-				TableViewerColumn currentLocationTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
+				_createTableColumn(
+					_tableViewer, "Target Location", 200, null,
+					element -> {
+						UpgradePlan upgradePlan = (UpgradePlan)element;
 
-				TableColumn currentLocationTableColumn = currentLocationTableViewerColumn.getColumn();
+						Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
 
-				currentLocationTableColumn.setWidth(200);
-				currentLocationTableColumn.setText("Current Location");
-				currentLocationTableColumn.pack();
+						String projectLocationString = targetProjectLocation.toString();
 
-				currentLocationTableViewerColumn.setLabelProvider(
-					new ColumnLabelProvider() {
-
-						@Override
-						public String getText(Object element) {
-							UpgradePlan upgradePlan = (UpgradePlan)element;
-
-							Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
-
-							String projectLocationString = currentProjectLocation.toString();
-
-							if (CoreUtil.isNotNullOrEmpty(projectLocationString)) {
-								return projectLocationString;
-							}
-
-							return "";
+						if (CoreUtil.isNotNullOrEmpty(projectLocationString)) {
+							return projectLocationString;
 						}
 
-					});
-
-				TableViewerColumn targetLocationTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
-
-				TableColumn targetLocationTableColumn = targetLocationTableViewerColumn.getColumn();
-
-				targetLocationTableColumn.setWidth(200);
-				targetLocationTableColumn.setText("Target Location");
-				targetLocationTableColumn.pack();
-
-				targetLocationTableViewerColumn.setLabelProvider(
-					new ColumnLabelProvider() {
-
-						@Override
-						public String getText(Object element) {
-							UpgradePlan upgradePlan = (UpgradePlan)element;
-
-							Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
-
-							String projectLocationString = targetProjectLocation.toString();
-
-							if (CoreUtil.isNotNullOrEmpty(projectLocationString)) {
-								return projectLocationString;
-							}
-
-							return "";
-						}
-
+						return "";
 					});
 
 				_startPlanButton = new Button(parent, SWT.PUSH | SWT.BORDER);
@@ -352,6 +266,46 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 			_loadUpgradePlans();
 		}
+	}
+
+	private static void _createTableColumn(
+		TableViewer tableViewer, String name, int width, Function<Object, Image> imageProvider,
+		Function<Object, String> textProvider) {
+
+		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+
+		TableColumn tableColumn = tableViewerColumn.getColumn();
+
+		tableColumn.setText(name);
+
+		if (width > -1) {
+			tableColumn.setWidth(width);
+		}
+
+		tableColumn.pack();
+
+		tableViewerColumn.setLabelProvider(
+			new ColumnLabelProvider() {
+
+				@Override
+				public Image getImage(Object element) {
+					if (imageProvider == null) {
+						return null;
+					}
+
+					return imageProvider.apply(element);
+				}
+
+				@Override
+				public String getText(Object element) {
+					if (textProvider == null) {
+						return null;
+					}
+
+					return textProvider.apply(element);
+				}
+
+			});
 	}
 
 	private void _enableButtons(UpgradePlan upgradePlan) {
