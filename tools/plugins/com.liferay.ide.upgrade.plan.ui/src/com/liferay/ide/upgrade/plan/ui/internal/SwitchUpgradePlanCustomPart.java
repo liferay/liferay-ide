@@ -25,7 +25,9 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
 import java.nio.file.Path;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -45,6 +47,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -79,9 +82,9 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 			@Override
 			public void render() {
-				final Composite parent = SWTUtil.createComposite(composite(), 2, 2, GridData.FILL_BOTH);
+				final Composite composite = SWTUtil.createComposite(composite(), 2, 2, GridData.FILL_BOTH);
 
-				final Table table = new Table(parent, SWT.FULL_SELECTION);
+				final Table table = new Table(composite, SWT.FULL_SELECTION);
 
 				final GridData tableData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 4);
 
@@ -198,42 +201,22 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 						return "";
 					});
 
-				_startPlanButton = new Button(parent, SWT.PUSH | SWT.BORDER);
+				_buttons.add(
+					_createButton(
+						composite, "Start Plan", " Start this upgrade plan.", event -> _handleStartPlanEvent()));
+				_buttons.add(
+					_createButton(
+						composite, "Remove Plan", " Remove this upgrade plan.", event -> _handleRemovePlanEvent()));
 
-				_startPlanButton.setText("Start Plan");
-				_startPlanButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-				_startPlanButton.addListener(
-					SWT.Selection,
+				Button closeButton = _createButton(
+					composite, "Close", "Close this dialog",
 					event -> {
-						_handleStartPlanEvent();
+						Shell shell = composite.getShell();
+
+						shell.close();
 					});
-				_startPlanButton.setToolTipText(" Start this Upgrade Plan");
-				_startPlanButton.setEnabled(false);
 
-				_removePlanButton = new Button(parent, SWT.PUSH | SWT.BORDER);
-
-				_removePlanButton.setText("Remove Plan");
-				_removePlanButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-				_removePlanButton.addListener(
-					SWT.Selection,
-					event -> {
-						_handleRemovePlanEvent();
-					});
-				_removePlanButton.setToolTipText(" Remove this Upgrade Plan");
-				_removePlanButton.setEnabled(false);
-
-				Button closeButton = new Button(parent, SWT.PUSH | SWT.BORDER);
-
-				closeButton.setText("Close");
-				closeButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-				closeButton.addListener(
-					SWT.Selection,
-					event -> {
-						Shell switchUpgradePlanShell = parent.getShell();
-
-						switchUpgradePlanShell.close();
-					});
-				closeButton.setToolTipText("Close Switch Upgrade Plan Dialog");
+				closeButton.setEnabled(true);
 
 				_tableViewer.addSelectionChangedListener(
 					event -> {
@@ -266,6 +249,18 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 			_loadUpgradePlans();
 		}
+	}
+
+	private static Button _createButton(Composite composite, String text, String tooltip, Listener listener) {
+		Button button = new Button(composite, SWT.PUSH | SWT.BORDER);
+
+		button.addListener(SWT.Selection, listener);
+		button.setEnabled(false);
+		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+		button.setText(text);
+		button.setToolTipText(tooltip);
+
+		return button;
 	}
 
 	private static void _createTableColumn(
@@ -309,22 +304,12 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 	}
 
 	private void _enableButtons(UpgradePlan upgradePlan) {
-		if (upgradePlan == null) {
-			_startPlanButton.setEnabled(false);
-			_removePlanButton.setEnabled(false);
-
-			return;
+		if ((upgradePlan == null) || upgradePlan.equals(_currentUpgradePlan)) {
+			_buttons.forEach(button -> button.setEnabled(false));
 		}
-
-		if (upgradePlan.equals(_currentUpgradePlan)) {
-			_startPlanButton.setEnabled(false);
-			_removePlanButton.setEnabled(false);
-
-			return;
+		else {
+			_buttons.forEach(button -> button.setEnabled(true));
 		}
-
-		_startPlanButton.setEnabled(true);
-		_removePlanButton.setEnabled(true);
 	}
 
 	private void _handleDoubleClick(UpgradePlan upgradePlan) {
@@ -399,10 +384,9 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 		}
 	}
 
+	private Set<Button> _buttons = new HashSet<>();
 	private UpgradePlan _currentUpgradePlan;
-	private Button _removePlanButton;
 	private ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
-	private Button _startPlanButton;
 	private TableViewer _tableViewer;
 	private UpgradePlanner _upgradePlanner;
 
