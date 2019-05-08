@@ -316,7 +316,7 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 				Button closeButton = new Button(parent, SWT.PUSH | SWT.BORDER);
 
-				closeButton.setText("Close Dialog");
+				closeButton.setText("Close");
 				closeButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 				closeButton.addListener(
 					SWT.Selection,
