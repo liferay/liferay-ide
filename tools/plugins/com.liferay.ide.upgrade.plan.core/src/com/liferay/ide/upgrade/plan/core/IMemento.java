@@ -144,4 +144,6 @@ public interface IMemento {
 
 	public void removeChildren(String type);
 
+	public void removeChild(IMemento memento);
+
 }

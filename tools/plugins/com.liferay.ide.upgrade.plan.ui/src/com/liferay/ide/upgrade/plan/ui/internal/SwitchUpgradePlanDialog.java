@@ -19,9 +19,12 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlansOp;
 
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class SwitchUpgradePlanDialog extends SapphireDialog {
 
@@ -29,6 +32,16 @@ public class SwitchUpgradePlanDialog extends SapphireDialog {
 		super(
 			UIUtil.getActiveShell(), UpgradePlansOp.TYPE,
 			DefinitionLoader.sdef(SwitchUpgradePlanDialog.class).dialog());
+	}
+
+	@Override
+	protected Control createButtonBar(final Composite parent) {
+		return null;
+	}
+
+	@Override
+	protected boolean isResizable() {
+		return false;
 	}
 
 }

@@ -18,6 +18,7 @@ Require-Bundle: com.liferay.ide.project.core,
  org.eclipse.core.expressions,
  org.eclipse.jdt.ui,
  org.eclipse.jface,
+ org.eclipse.help,
  org.eclipse.osgi,
  org.eclipse.osgi.services,
  org.eclipse.osgi.util,
@@ -31,5 +32,4 @@ Require-Bundle: com.liferay.ide.project.core,
  org.eclipse.ui.navigator.resources,
  org.eclipse.ui.workbench,
  org.eclipse.ui.workbench.texteditor
-Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanInfoProviderService.xml
 Service-Component: OSGI-INF/com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanInfoProviderService.xml

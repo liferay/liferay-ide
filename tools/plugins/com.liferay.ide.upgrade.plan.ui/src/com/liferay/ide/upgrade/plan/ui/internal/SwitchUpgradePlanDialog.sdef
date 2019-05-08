@@ -9,10 +9,10 @@
         <element-type>com.liferay.ide.upgrade.plan.core.UpgradePlansOp</element-type>
         <label>Switch Upgrade Plan</label>
         <content>
-            <property-editor>
-                <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
-                <property>Name</property>
-            </property-editor>
+            <custom>
+                <scale-vertically>true</scale-vertically>
+                <class>com.liferay.ide.upgrade.plan.ui.internal.SwitchUpgradePlanCustomPart</class>
+            </custom>
         </content>
     </dialog>
 </definition>

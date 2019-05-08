@@ -40,6 +40,8 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 
 	public static final String CATEGORY_DATABASE_IMAGE = "CATEGORY_DATABASE";
 
+	public static final String CHECKED_IMAGE_ID = "checked.image";
+
 	public static final String ITEM_SKIP_IMAGE = "ITEM_SKIP";
 
 	public static final String NO_STEPS_IMAGE = "NO_STEPS";
@@ -61,6 +63,8 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 	public static final String STEP_SKIP_IMAGE = "STEP_SKIP_IMAGE";
 
 	public static final String STEP_SKIP_OVERLAY_IMAGE = "STEP_SKIP_OVERLAY_IMAGE";
+
+	public static final String UNCHECKED_IMAGE_ID = "unchecked.image";
 
 	public static IStatus createErrorStatus(String msg) {
 		return createErrorStatus(msg, null);
@@ -197,6 +201,18 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		imageDescriptor = _createImageDescriptor(bundle, path);
 
 		imageRegistry.put(STEP_PERVIEW_IMAGE, imageDescriptor);
+
+		path = _ICONS_PATH.append("checked.png");
+
+		imageDescriptor = _createImageDescriptor(bundle, path);
+
+		imageRegistry.put(CHECKED_IMAGE_ID, imageDescriptor);
+
+		path = _ICONS_PATH.append("unchecked.png");
+
+		imageDescriptor = _createImageDescriptor(bundle, path);
+
+		imageRegistry.put(UNCHECKED_IMAGE_ID, imageDescriptor);
 	}
 
 	private static ImageDescriptor _createImageDescriptor(Bundle bundle, IPath path) {
