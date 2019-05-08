@@ -114,14 +114,14 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 						_handleDoubleClick(upgradePlan);
 					});
 
-				TableViewerColumn colUpgradePlanStateName = new TableViewerColumn(_tableViewer, SWT.NONE);
+				TableViewerColumn stateTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
 
-				TableColumn upgradePlanStateColumn = colUpgradePlanStateName.getColumn();
+				TableColumn stateTableColumn = stateTableViewerColumn.getColumn();
 
-				upgradePlanStateColumn.setText("");
-				upgradePlanStateColumn.pack();
+				stateTableColumn.setText("");
+				stateTableColumn.pack();
 
-				colUpgradePlanStateName.setLabelProvider(
+				stateTableViewerColumn.setLabelProvider(
 					new ColumnLabelProvider() {
 
 						@Override
@@ -154,15 +154,15 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 					});
 
-				TableViewerColumn colUpgradePlanName = new TableViewerColumn(_tableViewer, SWT.NONE);
+				TableViewerColumn nameTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
 
-				TableColumn upgradePlanNameColumn = colUpgradePlanName.getColumn();
+				TableColumn nameTableColumn = nameTableViewerColumn.getColumn();
 
-				upgradePlanNameColumn.setWidth(50);
-				upgradePlanNameColumn.setText("Name");
-				upgradePlanNameColumn.pack();
+				nameTableColumn.setWidth(50);
+				nameTableColumn.setText("Name");
+				nameTableColumn.pack();
 
-				colUpgradePlanName.setLabelProvider(
+				nameTableViewerColumn.setLabelProvider(
 					new ColumnLabelProvider() {
 
 						@Override
@@ -174,15 +174,15 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 					});
 
-				TableViewerColumn colCurrentVerssion = new TableViewerColumn(_tableViewer, SWT.NONE);
+				TableViewerColumn currentVersionTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
 
-				TableColumn currentVersionColumn = colCurrentVerssion.getColumn();
+				TableColumn currentVersionTableColumn = currentVersionTableViewerColumn.getColumn();
 
-				currentVersionColumn.setWidth(50);
-				currentVersionColumn.setText("Current Version");
-				currentVersionColumn.pack();
+				currentVersionTableColumn.setWidth(50);
+				currentVersionTableColumn.setText("Current Version");
+				currentVersionTableColumn.pack();
 
-				colCurrentVerssion.setLabelProvider(
+				currentVersionTableViewerColumn.setLabelProvider(
 					new ColumnLabelProvider() {
 
 						@Override
@@ -194,15 +194,15 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 					});
 
-				TableViewerColumn colTragetVersion = new TableViewerColumn(_tableViewer, SWT.NONE);
+				TableViewerColumn targetVersionTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
 
-				TableColumn targetVersionColumn = colTragetVersion.getColumn();
+				TableColumn targetVersionTableColumn = targetVersionTableViewerColumn.getColumn();
 
-				targetVersionColumn.setWidth(50);
-				targetVersionColumn.setText("Target Version");
-				targetVersionColumn.pack();
+				targetVersionTableColumn.setWidth(50);
+				targetVersionTableColumn.setText("Target Version");
+				targetVersionTableColumn.pack();
 
-				colTragetVersion.setLabelProvider(
+				targetVersionTableViewerColumn.setLabelProvider(
 					new ColumnLabelProvider() {
 
 						@Override
@@ -214,15 +214,15 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 					});
 
-				TableViewerColumn colOutline = new TableViewerColumn(_tableViewer, SWT.NONE);
+				TableViewerColumn outlineTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
 
-				TableColumn outlineColumn = colOutline.getColumn();
+				TableColumn outlineTableColumn = outlineTableViewerColumn.getColumn();
 
-				outlineColumn.setWidth(50);
-				outlineColumn.setText("Outline");
-				outlineColumn.pack();
+				outlineTableColumn.setWidth(50);
+				outlineTableColumn.setText("Outline");
+				outlineTableColumn.pack();
 
-				colOutline.setLabelProvider(
+				outlineTableViewerColumn.setLabelProvider(
 					new ColumnLabelProvider() {
 
 						@Override
@@ -234,15 +234,15 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 					});
 
-				TableViewerColumn colCurrentLocation = new TableViewerColumn(_tableViewer, SWT.NONE);
+				TableViewerColumn currentLocationTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
 
-				TableColumn currentLocationColumn = colCurrentLocation.getColumn();
+				TableColumn currentLocationTableColumn = currentLocationTableViewerColumn.getColumn();
 
-				currentLocationColumn.setWidth(200);
-				currentLocationColumn.setText("Current Location");
-				currentLocationColumn.pack();
+				currentLocationTableColumn.setWidth(200);
+				currentLocationTableColumn.setText("Current Location");
+				currentLocationTableColumn.pack();
 
-				colCurrentLocation.setLabelProvider(
+				currentLocationTableViewerColumn.setLabelProvider(
 					new ColumnLabelProvider() {
 
 						@Override
@@ -262,15 +262,15 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 					});
 
-				TableViewerColumn colTargetLocation = new TableViewerColumn(_tableViewer, SWT.NONE);
+				TableViewerColumn targetLocationTableViewerColumn = new TableViewerColumn(_tableViewer, SWT.NONE);
 
-				TableColumn targetLocationColumn = colTargetLocation.getColumn();
+				TableColumn targetLocationTableColumn = targetLocationTableViewerColumn.getColumn();
 
-				targetLocationColumn.setWidth(200);
-				targetLocationColumn.setText("Target Location");
-				targetLocationColumn.pack();
+				targetLocationTableColumn.setWidth(200);
+				targetLocationTableColumn.setText("Target Location");
+				targetLocationTableColumn.pack();
 
-				colTargetLocation.setLabelProvider(
+				targetLocationTableViewerColumn.setLabelProvider(
 					new ColumnLabelProvider() {
 
 						@Override
