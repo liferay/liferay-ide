@@ -134,17 +134,11 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 								currentUpgradePlan = _currentUpgradePlan;
 							}
 
-							if (currentUpgradePlan != null) {
-								if (upgradePlan.equals(currentUpgradePlan)) {
-									return UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.CHECKED_IMAGE_ID);
-								}
-								else {
-									return UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.UNCHECKED_IMAGE_ID);
-								}
+							if (upgradePlan.equals(currentUpgradePlan)) {
+								return UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.CHECKED_IMAGE_ID);
 							}
-							else {
-								return UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.UNCHECKED_IMAGE_ID);
-							}
+
+							return UpgradePlanUIPlugin.getImage(UpgradePlanUIPlugin.UNCHECKED_IMAGE_ID);
 						}
 
 						@Override
