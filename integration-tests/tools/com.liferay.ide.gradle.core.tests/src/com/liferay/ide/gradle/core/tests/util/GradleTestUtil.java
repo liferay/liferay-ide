@@ -15,10 +15,10 @@
 package com.liferay.ide.gradle.core.tests.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.core.LiferayGradleProject;
-import com.liferay.ide.project.core.jobs.JobUtil;
 import com.liferay.ide.test.core.base.support.ImportProjectSupport;
 
 import java.io.PrintWriter;

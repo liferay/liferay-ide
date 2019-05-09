@@ -14,8 +14,8 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
 
 import java.util.List;
 import java.util.stream.Stream;

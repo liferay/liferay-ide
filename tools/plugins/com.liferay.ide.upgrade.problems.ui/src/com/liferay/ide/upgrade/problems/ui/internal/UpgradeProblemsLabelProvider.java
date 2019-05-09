@@ -14,9 +14,9 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.ui.navigator.AbstractLabelProvider;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
+import com.liferay.ide.upgrade.plan.ui.navigator.AbstractLabelProvider;
 
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;

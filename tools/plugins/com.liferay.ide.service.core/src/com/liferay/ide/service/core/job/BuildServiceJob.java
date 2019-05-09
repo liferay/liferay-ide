@@ -15,8 +15,8 @@
 package com.liferay.ide.service.core.job;
 
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.service.core.ServiceCore;
 
 import org.eclipse.core.resources.IProject;

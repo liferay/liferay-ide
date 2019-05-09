@@ -12,17 +12,33 @@
  * details.
  */
 
-package com.liferay.ide.project.core;
+package com.liferay.ide.upgrade.plan.ui.navigator;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.viewers.LabelProvider;
 
 /**
  * @author Gregory Amerson
  */
-public interface IWorkspaceProjectBuilder {
+public abstract class AbstractLabelProvider extends LabelProvider {
 
-	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor);
+	public AbstractLabelProvider() {
+		_imageRegistry = new ImageRegistry();
+
+		initalizeImageRegistry(_imageRegistry);
+	}
+
+	@Override
+	public void dispose() {
+		_imageRegistry.dispose();
+	}
+
+	protected ImageRegistry getImageRegistry() {
+		return _imageRegistry;
+	}
+
+	protected abstract void initalizeImageRegistry(ImageRegistry registry);
+
+	private final ImageRegistry _imageRegistry;
 
 }

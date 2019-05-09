@@ -14,8 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
-import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
+import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
 
 import java.util.stream.Stream;
 

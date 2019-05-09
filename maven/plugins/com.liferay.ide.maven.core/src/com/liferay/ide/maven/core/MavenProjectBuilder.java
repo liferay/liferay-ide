@@ -16,13 +16,13 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.core.util.MultiStatusBuilder;
 import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
-import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 
 import java.io.File;
 import java.io.FileReader;

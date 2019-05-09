@@ -18,10 +18,10 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.ILiferayProjectAdapter;
+import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.maven.core.FacetedMavenProject;
 import com.liferay.ide.maven.core.IMavenProject;
-import com.liferay.ide.project.core.IProjectBuilder;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

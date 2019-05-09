@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.plan.ui.internal.steps;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
@@ -27,6 +26,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeStepStatusChangedEvent;
 import com.liferay.ide.upgrade.plan.core.util.ServicesLookup;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanUIPlugin;
+import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;

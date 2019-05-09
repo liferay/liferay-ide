@@ -12,22 +12,17 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.commands.core.internal;
+package com.liferay.ide.core;
 
-import com.liferay.ide.upgrade.commands.core.MigrateExistingPluginsToWorkspaceOp;
-
-import org.eclipse.sapphire.modeling.ProgressMonitor;
-import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 /**
- * @author Terry Jia
+ * @author Gregory Amerson
  */
-public class MigrateExistingPluginsToWorkspacOpMethods {
+public interface IWorkspaceProjectBuilder {
 
-	public static final Status execute(
-		MigrateExistingPluginsToWorkspaceOp sdkProjectsImportOp, ProgressMonitor progressMonitor) {
-
-		return Status.createOkStatus();
-	}
+	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor);
 
 }

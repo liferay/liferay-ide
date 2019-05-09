@@ -15,10 +15,10 @@
 package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringUtil;
-import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
 import com.liferay.ide.ui.util.SWTUtil;

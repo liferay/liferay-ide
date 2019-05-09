@@ -25,7 +25,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
-import com.liferay.ide.project.core.jobs.JobUtil;
+import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.project.core.model.PluginType;

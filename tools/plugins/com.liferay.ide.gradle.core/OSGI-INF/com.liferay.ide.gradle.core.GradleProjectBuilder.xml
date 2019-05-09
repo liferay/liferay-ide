@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.gradle.core.GradleProjectBuilder">
+   <property name="type" value="gradle"/>
+   <service>
+      <provide interface="com.liferay.ide.core.IWorkspaceProjectBuilder"/>
+   </service>
+   <implementation class="com.liferay.ide.gradle.core.GradleProjectBuilder"/>
+</scr:component>

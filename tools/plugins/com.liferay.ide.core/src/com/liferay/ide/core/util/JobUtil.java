@@ -12,10 +12,10 @@
  * details.
  */
 
-package com.liferay.ide.project.core.jobs;
+package com.liferay.ide.core.util;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.core.LiferayCore;
 
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
@@ -36,7 +36,7 @@ public class JobUtil {
 					job.join();
 				}
 				catch (InterruptedException ie) {
-					ProjectCore.logError(ie);
+					LiferayCore.logError(ie);
 				}
 			}
 		}

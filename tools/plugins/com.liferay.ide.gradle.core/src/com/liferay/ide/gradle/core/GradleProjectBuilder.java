@@ -16,11 +16,11 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ArtifactBuilder;
+import com.liferay.ide.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
-import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 
 import java.io.IOException;
 
@@ -44,10 +44,17 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Terry Jia
  */
+@Component(property = "type=gradle", service = IWorkspaceProjectBuilder.class)
 public class GradleProjectBuilder extends AbstractProjectBuilder implements ArtifactBuilder, IWorkspaceProjectBuilder {
+
+	public GradleProjectBuilder() {
+		super(null);
+	}
 
 	public GradleProjectBuilder(IProject project) {
 		super(project);
@@ -134,16 +141,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 			}
 		}
 
-		_runGradleTask("initBundle", monitor);
-
-		try {
-			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		}
-		catch (CoreException ce) {
-			LiferayGradleCore.logError(ce);
-		}
-
-		return Status.OK_STATUS;
+		return _runGradleTask(project, "initBundle", monitor);
 	}
 
 	@Override
@@ -172,6 +170,31 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 		}
 
 		return Status.OK_STATUS;
+	}
+
+	private IStatus _runGradleTask(IProject project, String task, IProgressMonitor monitor) {
+		if (FileUtil.notExists(project.getFile("build.gradle"))) {
+			return LiferayGradleCore.createErrorStatus("No build.gradle file");
+		}
+
+		IStatus status = Status.OK_STATUS;
+
+		try {
+			monitor.beginTask(task, 100);
+
+			GradleUtil.runGradleTask(project, task, monitor);
+
+			monitor.worked(80);
+
+			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+
+			monitor.worked(10);
+		}
+		catch (Exception e) {
+			status = LiferayGradleCore.createErrorStatus("Error running Gradle goal " + task, e);
+		}
+
+		return status;
 	}
 
 	private IStatus _runGradleTask(String task, IProgressMonitor monitor) {

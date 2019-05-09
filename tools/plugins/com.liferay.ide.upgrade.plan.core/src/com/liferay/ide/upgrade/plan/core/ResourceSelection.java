@@ -18,10 +18,10 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.adapter.NoopLiferayProject;
-import com.liferay.ide.project.core.LiferayWorkspaceProject;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.util.SearchFilesVisitor;
-import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.upgrade.plan.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.upgrade.plan.core.util.SearchFilesVisitor;
+
+import java.io.File;
 
 import java.nio.file.Path;
 
@@ -101,7 +101,21 @@ public interface ResourceSelection {
 
 		@Override
 		public boolean test(Path path) {
-			return SDKUtil.isValidSDKLocation(path.toString());
+			boolean retval = false;
+
+			try {
+				File sdkDir = new File(path.toString());
+
+				File buildProperties = new File(sdkDir, "build.properties");
+				File portletsBuildXml = new File(sdkDir, "portlets/build.xml");
+				File hooksBuildXml = new File(sdkDir, "hooks/build.xml");
+
+				retval = buildProperties.exists() && portletsBuildXml.exists() && hooksBuildXml.exists();
+			}
+			catch (Exception e) {
+			}
+
+			return retval;
 		}
 
 	};
@@ -138,10 +152,8 @@ public interface ResourceSelection {
 		public boolean test(IProject project) {
 			return Optional.ofNullable(
 				project
-			).map(
-				p -> LiferayCore.create(LiferayWorkspaceProject.class, p)
 			).filter(
-				Objects::nonNull
+				LiferayWorkspaceUtil::isValidWorkspace
 			).isPresent();
 		}
 

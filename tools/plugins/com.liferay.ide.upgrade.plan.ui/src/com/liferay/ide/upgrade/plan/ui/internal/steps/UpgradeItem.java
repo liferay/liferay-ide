@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal.steps;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.ui.Disposable;
 import com.liferay.ide.upgrade.plan.ui.Perform;
@@ -55,6 +56,11 @@ public interface UpgradeItem extends Disposable, ISelectionProvider {
 				@Override
 				public void linkActivated(HyperlinkEvent e) {
 					Job job = new Job(jobText) {
+
+						@Override
+						public boolean belongsTo(Object family) {
+							return family.equals(LiferayCore.LIFERAY_JOB_FAMILY);
+						}
 
 						@Override
 						protected IStatus run(IProgressMonitor progressMonitor) {

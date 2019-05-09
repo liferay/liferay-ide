@@ -15,9 +15,9 @@
 package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeCompare;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
 
 import java.io.File;
 

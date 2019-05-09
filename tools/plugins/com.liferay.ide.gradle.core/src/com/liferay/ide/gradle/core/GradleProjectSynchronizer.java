@@ -14,7 +14,7 @@
 
 package com.liferay.ide.gradle.core;
 
-import com.liferay.ide.project.core.ProjectSynchronizer;
+import com.liferay.ide.core.ProjectSynchronizer;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;

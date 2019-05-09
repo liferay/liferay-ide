@@ -16,9 +16,9 @@ package com.liferay.ide.project.ui.modules.ext;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtFilesOp;
 
 import java.io.File;

@@ -14,9 +14,8 @@
 
 package com.liferay.ide.upgrade.commands.core.internal.code;
 
-import com.liferay.ide.project.core.jobs.InitBundleJob;
+import com.liferay.ide.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.upgrade.commands.core.code.InitializeServerBundleCommandKeys;
-import com.liferay.ide.upgrade.commands.core.internal.UpgradeCommandsCorePlugin;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
@@ -36,6 +35,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 @Component(
 	property = "id=" + InitializeServerBundleCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
@@ -54,19 +54,10 @@ public class InitializeServerBundleCommand implements UpgradeCommand {
 
 		IProject project = projects.get(0);
 
-		InitBundleJob initBundleJob = new InitBundleJob(project, project.getName(), null);
+		IStatus status = _workspaceProjectBuilder.initBundle(project, null, progressMonitor);
 
-		initBundleJob.schedule();
-
-		try {
-			initBundleJob.join();
-		}
-		catch (InterruptedException ie) {
-			IStatus error = UpgradeCommandsCorePlugin.createErrorStatus("Unable to initialize server bundle", ie);
-
-			UpgradeCommandsCorePlugin.log(error);
-
-			return error;
+		if (!status.isOK()) {
+			return status;
 		}
 
 		_upgradePlanner.dispatch(new UpgradeCommandPerformedEvent(this, Collections.singletonList(project)));
@@ -79,5 +70,8 @@ public class InitializeServerBundleCommand implements UpgradeCommand {
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;
+
+	@Reference(target = "(type=gradle)")
+	private IWorkspaceProjectBuilder _workspaceProjectBuilder;
 
 }

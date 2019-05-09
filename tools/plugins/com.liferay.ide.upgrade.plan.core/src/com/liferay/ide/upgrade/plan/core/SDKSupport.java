@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import com.liferay.ide.sdk.core.ISDKConstants;
-
 import java.io.File;
 
 /**
@@ -24,9 +22,9 @@ import java.io.File;
 public interface SDKSupport {
 
 	public default boolean isValidSDK(File sdkDir) {
-		File buildProperties = new File(sdkDir, ISDKConstants.BUILD_PROPERTIES);
-		File portletsBuildXml = new File(sdkDir, ISDKConstants.PORTLET_PLUGIN_ANT_BUILD);
-		File hooksBuildXml = new File(sdkDir, ISDKConstants.HOOK_PLUGIN_ANT_BUILD);
+		File buildProperties = new File(sdkDir, "build.properties");
+		File portletsBuildXml = new File(sdkDir, "portlets/build.xml");
+		File hooksBuildXml = new File(sdkDir, "hooks/build.xml");
 
 		if (buildProperties.exists() && portletsBuildXml.exists() && hooksBuildXml.exists()) {
 			return true;

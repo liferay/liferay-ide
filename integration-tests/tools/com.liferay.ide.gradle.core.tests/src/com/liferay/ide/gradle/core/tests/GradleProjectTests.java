@@ -17,13 +17,13 @@ package com.liferay.ide.gradle.core.tests;
 import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.core.LiferayGradleProject;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.gradle.core.tests.util.GradleTestUtil;
-import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.test.core.base.support.ImportProjectSupport;
 import com.liferay.ide.test.project.core.base.ProjectBase;
 

@@ -12,13 +12,17 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.commands.ui.internal.sdk;
+package com.liferay.ide.core;
+
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 /**
- * @author Gregory Amerson
+ * @author Terry Jia
  */
-public class MigrateExistingPluginsToWorkspaceCommandKeys {
+public interface ProjectSynchronizer {
 
-	public static final String ID = "migrate_existing_plugins_to_workspace";
+	public IStatus synchronizePath(IPath path, IProgressMonitor progressMonitor);
 
 }
