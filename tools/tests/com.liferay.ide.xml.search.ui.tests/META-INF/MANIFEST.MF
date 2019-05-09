@@ -9,14 +9,20 @@ Require-Bundle: org.junit,
  org.eclipse.ui.ide,
  org.eclipse.wst.xml.search.editor,
  org.eclipse.jface.text,
+ org.eclipse.wst.xml.core,
+ org.eclipse.wst.validation,
  com.liferay.ide.project.core.tests,
  com.liferay.ide.server.core.tests,
  com.liferay.ide.xml.search.ui,
  com.liferay.ide.project.core,
  org.eclipse.wst.sse.ui,
  com.liferay.ide.ui.tests,
+ org.eclipse.wst.sse.core,
  com.liferay.ide.core,
- org.apache.commons.lang;bundle-version="2.6.0"
+ org.apache.commons.lang,
+ org.eclipse.core.resources,
+ org.eclipse.wst.common.project.facet.core,
+ org.eclipse.core.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.xml.search.ui.tests

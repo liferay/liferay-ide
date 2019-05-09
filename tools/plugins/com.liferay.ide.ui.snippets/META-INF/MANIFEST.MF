@@ -5,19 +5,17 @@ Bundle-SymbolicName: com.liferay.ide.ui.snippets;singleton:=true
 Bundle-Version: 3.6.0.qualifier
 Bundle-Activator: com.liferay.ide.ui.snippets.SnippetsUIPlugin
 Bundle-Vendor: %bundle.vendor
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.wst.common.snippets;visibility:=reexport,
- org.eclipse.jface.text,
- org.eclipse.ui.workbench.texteditor,
- com.liferay.ide.core,
- org.eclipse.gef,
+Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.ui,
- org.eclipse.jdt.ui,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.gef,
  org.eclipse.jdt.core,
- org.eclipse.ui.ide,
+ org.eclipse.jdt.ui,
  org.eclipse.jst.jsf.common,
- org.eclipse.core.resources
+ org.eclipse.ui,
+ org.eclipse.ui.ide,
+ org.eclipse.wst.common.snippets
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.ui.snippets,

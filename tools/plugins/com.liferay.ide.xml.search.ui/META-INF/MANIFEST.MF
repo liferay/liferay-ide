@@ -16,6 +16,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.wst.validation,
  org.eclipse.jdt.core,
+ com.liferay.ide.server.core,
  com.liferay.ide.core,
  org.eclipse.wst.jsdt.core,
  com.liferay.ide.project.core,
@@ -27,10 +28,12 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.ui,
  com.liferay.ide.portlet.core,
  org.eclipse.jdt.ui,
+ org.eclipse.wst.server.core,
  org.eclipse.wst.html.search.editor,
  org.eclipse.text,
  org.eclipse.jst.jsp.ui,
- org.eclipse.wst.jsdt.web.support.jsp
+ org.eclipse.wst.jsdt.web.support.jsp,
+ org.eclipse.jst.j2ee
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.liferay.ide.xml.search.ui,

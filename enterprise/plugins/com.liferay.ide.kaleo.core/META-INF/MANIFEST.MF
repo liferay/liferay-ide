@@ -5,16 +5,22 @@ Bundle-SymbolicName: com.liferay.ide.kaleo.core;singleton:=true
 Bundle-Version: 3.6.0.qualifier
 Bundle-Activator: com.liferay.ide.kaleo.core.KaleoCore
 Bundle-Vendor: Liferay, Inc.
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.sapphire.modeling;bundle-version="[9,10)";visibility:=reexport,
- org.eclipse.sapphire.modeling.xml;bundle-version="[9,10)";visibility:=reexport,
- org.eclipse.sapphire.workspace;bundle-version="[9,10)",
- com.liferay.ide.core,
+Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.project.core,
- org.eclipse.jdt.launching,
  com.liferay.ide.scripting.core,
- org.json,
- com.liferay.ide.scripting.core
+ com.liferay.ide.server.core,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.launching,
+ org.eclipse.sapphire.modeling;bundle-version="[9,10)",
+ org.eclipse.sapphire.modeling.xml;bundle-version="[9,10)",
+ org.eclipse.sapphire.workspace;bundle-version="[9,10)",
+ org.eclipse.wst.server.core,
+ org.eclipse.wst.sse.core,
+ org.eclipse.wst.validation,
+ org.eclipse.wst.xml.core,
+ org.json
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.kaleo.core,

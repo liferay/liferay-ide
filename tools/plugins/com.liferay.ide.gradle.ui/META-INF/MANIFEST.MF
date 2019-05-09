@@ -5,13 +5,18 @@ Bundle-SymbolicName: com.liferay.ide.gradle.ui;singleton:=true
 Bundle-Version: 3.6.0.qualifier
 Bundle-Activator: com.liferay.ide.gradle.ui.LiferayGradleUI
 Bundle-Vendor: Liferay, Inc.
-Require-Bundle: com.liferay.ide.gradle.core,
+Require-Bundle: com.liferay.ide.core,
+ com.liferay.ide.gradle.core,
+ com.liferay.ide.project.core,
  com.liferay.ide.project.ui,
+ com.liferay.ide.server.core,
  com.liferay.ide.ui,
  com.liferay.ide.upgrade.commands.core,
  com.liferay.ide.upgrade.plan.core,
  org.eclipse.buildship.core;bundle-version="[3.0.0,4.0.0)",
  org.eclipse.core.expressions,
+ org.eclipse.core.runtime,
+ org.eclipse.jdt.core,
  org.eclipse.jdt.core.manipulation,
  org.eclipse.jdt.launching,
  org.eclipse.jdt.ui,
@@ -21,7 +26,9 @@ Require-Bundle: com.liferay.ide.gradle.core,
  org.eclipse.sapphire.ui;bundle-version="[9,10)",
  org.eclipse.ui.console,
  org.eclipse.ui.ide,
- org.eclipse.ui.navigator
+ org.eclipse.ui.navigator,
+ org.eclipse.wst.common.project.facet.ui,
+ org.eclipse.wst.server.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
