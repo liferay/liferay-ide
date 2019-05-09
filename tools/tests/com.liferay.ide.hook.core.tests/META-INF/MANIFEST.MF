@@ -10,7 +10,11 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.project.core.tests,
  com.liferay.ide.hook.core,
  org.eclipse.jem.util,
- com.liferay.ide.server.core.tests
+ com.liferay.ide.server.core.tests,
+ com.liferay.ide.project.core,
+ org.apache.commons.lang,
+ org.eclipse.sapphire.modeling.xml,
+ org.eclipse.sapphire.modeling
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.hook.core.tests

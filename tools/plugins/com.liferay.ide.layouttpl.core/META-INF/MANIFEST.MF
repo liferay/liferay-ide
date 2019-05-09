@@ -5,17 +5,20 @@ Bundle-SymbolicName: com.liferay.ide.layouttpl.core;singleton:=true
 Bundle-Version: 3.6.0.qualifier
 Bundle-Activator: com.liferay.ide.layouttpl.core.LayoutTplCore
 Bundle-Vendor: %bundle.vendor
-Require-Bundle: org.eclipse.core.runtime,
- com.liferay.ide.project.core;visibility:=reexport,
+Require-Bundle: com.liferay.ide.core,
+ com.liferay.ide.project.core,
+ com.liferay.ide.sdk.core,
+ com.liferay.ide.server.core,
+ org.apache.commons.collections,
+ org.eclipse.core.runtime,
+ org.eclipse.debug.core,
  org.eclipse.jdt.core,
  org.eclipse.jst.j2ee,
- org.eclipse.wst.xml.core;visibility:=reexport,
- org.eclipse.wst.sse.core;visibility:=reexport,
- org.eclipse.jst.j2ee.web,
- com.liferay.ide.sdk.core,
- org.apache.commons.collections,
- org.eclipse.core.resources,
- org.eclipse.sapphire.modeling;bundle-version="[9,10)"
+ org.eclipse.sapphire.modeling;bundle-version="[9,10)",
+ org.eclipse.wst.common.frameworks,
+ org.eclipse.wst.common.project.facet.core,
+ org.eclipse.wst.sse.core,
+ org.eclipse.wst.xml.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.layouttpl.core,

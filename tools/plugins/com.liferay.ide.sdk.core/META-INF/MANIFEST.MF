@@ -5,19 +5,18 @@ Bundle-SymbolicName: com.liferay.ide.sdk.core;singleton:=true
 Bundle-Version: 3.6.0.qualifier
 Bundle-Activator: com.liferay.ide.sdk.core.SDKCorePlugin
 Bundle-Vendor: %bundle.vendor
-Require-Bundle: org.eclipse.jdt.launching,
- org.eclipse.debug.core,
+Require-Bundle: com.liferay.ide.core,
+ org.apache.ant,
  org.eclipse.ant.core,
- com.liferay.ide.core,
- org.eclipse.jdt.core,
- org.eclipse.wst.server.core,
- org.eclipse.wst.common.project.facet.core,
  org.eclipse.ant.launching,
- org.eclipse.core.externaltools,
  org.eclipse.core.expressions,
+ org.eclipse.core.externaltools,
+ org.eclipse.core.runtime,
  org.eclipse.core.variables,
- org.apache.commons.lang,
- org.apache.ant
+ org.eclipse.debug.core,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.launching,
+ org.eclipse.wst.server.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.sdk.core

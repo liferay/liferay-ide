@@ -7,7 +7,8 @@ Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  com.liferay.ide.core.tests,
- com.liferay.ide.layouttpl.core
+ com.liferay.ide.layouttpl.core,
+ org.eclipse.sapphire.modeling
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.layouttpl.core.tests
