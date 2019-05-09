@@ -22,7 +22,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.maven.core.MavenUtil;
-import com.liferay.ide.project.core.IProjectBuilder;
+import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOpMethods;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;

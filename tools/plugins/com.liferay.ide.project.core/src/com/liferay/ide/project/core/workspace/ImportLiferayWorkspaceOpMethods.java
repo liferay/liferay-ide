@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.jobs.JobUtil;
+import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;

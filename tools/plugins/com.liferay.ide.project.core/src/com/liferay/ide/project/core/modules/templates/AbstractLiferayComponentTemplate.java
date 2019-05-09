@@ -16,11 +16,11 @@ package com.liferay.ide.project.core.modules.templates;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.IComponentTemplate;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;

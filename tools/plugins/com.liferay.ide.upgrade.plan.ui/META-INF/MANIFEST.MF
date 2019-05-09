@@ -11,12 +11,15 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.liferay.ide.upgrade.plan.ui;singleton:=true
 Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 3.6.0.qualifier
-Export-Package: com.liferay.ide.upgrade.plan.ui
-Require-Bundle: com.liferay.ide.project.core,
- com.liferay.ide.ui,
+Export-Package: com.liferay.ide.upgrade.plan.ui,
+ com.liferay.ide.upgrade.plan.ui.navigator,
+ com.liferay.ide.upgrade.plan.ui.util
+Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.upgrade.plan.core,
  org.eclipse.core.expressions,
- org.eclipse.jdt.ui,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.equinox.registry,
  org.eclipse.jface,
  org.eclipse.help,
  org.eclipse.osgi,

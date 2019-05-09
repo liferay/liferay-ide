@@ -6,5 +6,6 @@
    </service>
    <reference cardinality="1..1" field="_resourceSelection" interface="com.liferay.ide.upgrade.plan.core.ResourceSelection" name="_resourceSelection"/>
    <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
+   <reference cardinality="1..1" field="_workspaceProjectBuilder" interface="com.liferay.ide.core.IWorkspaceProjectBuilder" name="_workspaceProjectBuilder" target="(type=gradle)"/>
    <implementation class="com.liferay.ide.upgrade.commands.core.internal.code.InitializeServerBundleCommand"/>
 </scr:component>

@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.Artifact;
+import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 
@@ -31,6 +32,9 @@ import org.eclipse.core.runtime.Path;
  * @author Simon Jiang
  */
 public abstract class AbstractProjectBuilder implements IProjectBuilder {
+
+	public AbstractProjectBuilder() {
+	}
 
 	public AbstractProjectBuilder(IProject project) {
 		_project = project;

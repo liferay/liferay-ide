@@ -15,8 +15,6 @@
 package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.core.util.StringUtil;
-import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
@@ -25,6 +23,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.ui.internal.steps.UpgradeStepViewer;
+import com.liferay.ide.upgrade.plan.ui.util.SWTUtil;
+import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -87,7 +87,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 
 	@Override
 	public void dispose() {
-		_upgradePlanner.dispose(_upgradePlanner.getCurrentUpgradePlan());
+		if (_upgradePlanner != null) {
+			_upgradePlanner.dispose(_upgradePlanner.getCurrentUpgradePlan());
+		}
 
 		_upgradePlanner.removeListener(this);
 		_serviceTracker.close();

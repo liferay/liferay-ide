@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayPortal;
+import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;

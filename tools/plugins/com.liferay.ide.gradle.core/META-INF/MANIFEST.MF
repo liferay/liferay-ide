@@ -13,24 +13,16 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.liferay.blade.gradle.model,
  com.liferay.ide.gradle.core,
  com.liferay.ide.gradle.core.parser
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.core.resources,
+Require-Bundle: biz.aQute.bndlib;bundle-version="[4,5)",
  com.liferay.ide.core,
- com.liferay.ide.server.core,
- org.eclipse.jdt.core,
- org.eclipse.debug.core,
- org.eclipse.jface,
- biz.aQute.bndlib;bundle-version="[4,5)",
- org.eclipse.buildship.core;bundle-version="[3.0.0,4.0.0)",
  com.liferay.ide.project.core,
  org.apache.commons.io,
- org.gradle.toolingapi;bundle-version="5.0.0",
- com.google.guava,
- org.eclipse.osgi.services,
+ org.apache.commons.lang,
+ org.eclipse.buildship.core;bundle-version="[3.0.0,4.0.0)",
  org.eclipse.jdt.launching,
  org.eclipse.ltk.core.refactoring,
- org.eclipse.core.expressions,
- com.liferay.ide.upgrade.commands.core,
- com.liferay.ide.upgrade.plan.core
+ org.eclipse.osgi.services,
+ org.gradle.toolingapi;bundle-version="5.0.0"
 Service-Component: OSGI-INF/com.liferay.ide.gradle.core.LiferayGradleWorkspaceProjectProvider.xml,
- OSGI-INF/com.liferay.ide.gradle.core.GradleProjectSynchronizer.xml
+ OSGI-INF/com.liferay.ide.gradle.core.GradleProjectSynchronizer.xml,
+ OSGI-INF/com.liferay.ide.gradle.core.GradleProjectBuilder.xml

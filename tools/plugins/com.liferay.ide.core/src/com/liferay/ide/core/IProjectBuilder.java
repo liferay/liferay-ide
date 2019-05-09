@@ -12,9 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.project.core;
-
-import com.liferay.ide.core.Artifact;
+package com.liferay.ide.core;
 
 import java.util.List;
 

@@ -15,8 +15,8 @@
 package com.liferay.ide.upgrade.commands.core.internal.buildservice;
 
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.upgrade.commands.core.buildservice.RebuildServicesCommandKeys;
 import com.liferay.ide.upgrade.commands.core.internal.UpgradeCommandsCorePlugin;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;

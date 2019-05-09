@@ -16,7 +16,6 @@ package com.liferay.ide.upgrade.commands.core.internal.sdk;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.upgrade.commands.core.ProjectImporter;
 import com.liferay.ide.upgrade.commands.core.internal.UpgradeCommandsCorePlugin;
 
@@ -44,11 +43,11 @@ public class PluginsSDKProjectImporter implements ProjectImporter {
 			return UpgradeCommandsCorePlugin.createErrorStatus("SDK location does not exists.");
 		}
 
-		Path buildProperties = rootProjectPath.resolve(ISDKConstants.BUILD_PROPERTIES);
+		Path buildProperties = rootProjectPath.resolve("build.properties");
 
-		Path portletsBuildXml = rootProjectPath.resolve(ISDKConstants.PORTLET_PLUGIN_ANT_BUILD);
+		Path portletsBuildXml = rootProjectPath.resolve("portlets/build.xml");
 
-		Path hooksBuildXml = rootProjectPath.resolve(ISDKConstants.HOOK_PLUGIN_ANT_BUILD);
+		Path hooksBuildXml = rootProjectPath.resolve("hooks/build.xml");
 
 		if (FileUtil.notExists(buildProperties.toFile()) || FileUtil.notExists(portletsBuildXml.toFile()) ||
 			FileUtil.notExists(hooksBuildXml.toFile())) {

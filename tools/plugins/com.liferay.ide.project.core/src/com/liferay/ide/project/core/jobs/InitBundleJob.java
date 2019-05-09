@@ -14,8 +14,9 @@
 
 package com.liferay.ide.project.core.jobs;
 
+import com.liferay.ide.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
+import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 

@@ -15,8 +15,8 @@
 package com.liferay.ide.gradle.core.tests;
 
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.gradle.core.tests.base.NewModuleGradleBase;
-import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
 import org.eclipse.core.runtime.NullProgressMonitor;

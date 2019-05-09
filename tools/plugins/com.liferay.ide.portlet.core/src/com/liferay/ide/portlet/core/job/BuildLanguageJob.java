@@ -15,10 +15,10 @@
 package com.liferay.ide.portlet.core.job;
 
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.PortletCore;
-import com.liferay.ide.project.core.IProjectBuilder;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
