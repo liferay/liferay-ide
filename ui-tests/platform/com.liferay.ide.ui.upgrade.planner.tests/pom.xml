@@ -28,8 +28,8 @@
 		<version>3.6.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.liferay.ide.ui.code.upgrade.tests</artifactId>
+	<artifactId>com.liferay.ide.ui.upgrade.planner.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 
-	<name>Liferay IDE UI Code Upgrade Tests</name>
+	<name>Liferay IDE UI Upgrade Planner Tests</name>
 </project>

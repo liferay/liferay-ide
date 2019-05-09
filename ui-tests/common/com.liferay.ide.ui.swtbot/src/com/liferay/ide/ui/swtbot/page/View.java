@@ -59,7 +59,9 @@ public class View extends AbstractPart {
 			((SWTWorkbenchBot)bot).activeView();
 		}
 
-		return ((SWTWorkbenchBot)bot).viewByTitle(label);
+		//SWTBotView testView = ((SWTWorkbenchBot)bot).viewByTitle(label);
+
+		return ((SWTWorkbenchBot)bot).viewByPartName(label);
 	}
 
 }

@@ -18,8 +18,10 @@ import com.liferay.ide.ui.liferay.page.button.CreateLifeayProjectToolbarDropDown
 import com.liferay.ide.ui.liferay.page.button.NewToolbarDropDownButton;
 import com.liferay.ide.ui.swtbot.Eclipse;
 import com.liferay.ide.ui.swtbot.page.Perspective;
+import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 
 /**
  * @author Terry Jia
@@ -54,8 +56,12 @@ public class LiferayIDE extends Eclipse {
 		return _newBtn;
 	}
 
-	public void showCodeUpgradeView() {
-		showView(LIFERAY_CODE_UPGRADE);
+	public ToolbarButtonWithTooltip getNewUpgradePlan() {
+		return _newUpgradePlan;
+	}
+
+	public Perspective getUpgradePlannerPerspective() {
+		return _upgradePlannerPerspective;
 	}
 
 	private LiferayIDE(SWTWorkbenchBot bot) {
@@ -65,7 +71,13 @@ public class LiferayIDE extends Eclipse {
 		_kaleoDesignerPerspective = new Perspective(bot, KALEO_DESIGNER);
 		_liferayPerspective = new Perspective(bot, LIFERAY_PLUGINS);
 		_liferayWorkspacePerspective = new Perspective(bot, LIFERAY_WORKSPACE);
+		_upgradePlannerPerspective = new Perspective(bot, LIFERAY_UPGRADE_PLANNER);
 		_newBtn = new NewToolbarDropDownButton(bot);
+		_newUpgradePlan = new ToolbarButtonWithTooltip(_getShell().bot(), NEW_UPGRADE_PLAN);
+	}
+
+	private SWTBotShell _getShell() {
+		return bot.shell(getLabel());
 	}
 
 	private static LiferayIDE _ide;
@@ -75,5 +87,7 @@ public class LiferayIDE extends Eclipse {
 	private Perspective _liferayPerspective;
 	private Perspective _liferayWorkspacePerspective;
 	private NewToolbarDropDownButton _newBtn;
+	private ToolbarButtonWithTooltip _newUpgradePlan;
+	private Perspective _upgradePlannerPerspective;
 
 }
