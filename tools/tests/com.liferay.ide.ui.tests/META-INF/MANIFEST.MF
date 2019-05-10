@@ -6,24 +6,18 @@ Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.sdk.core,
- org.eclipse.core.runtime,
+ com.liferay.ide.ui,
  org.eclipse.core.resources,
+ org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.sapphire.ui;bundle-version="[9,10)",
  org.eclipse.sapphire.ui.swt.xml.editor;bundle-version="[9,10)",
+ org.eclipse.ui.console,
  org.eclipse.ui.ide,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.sse.ui,
  org.eclipse.wst.xml.core,
  org.eclipse.wst.xml.ui,
- org.hamcrest.core,
- org.eclipse.swt,
- org.eclipse.debug.ui,
- org.eclipse.ui.console,
- com.liferay.ide.ui,
- org.apache.log4j,
- org.eclipse.ui.workbench,
- org.eclipse.jface,
  org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
