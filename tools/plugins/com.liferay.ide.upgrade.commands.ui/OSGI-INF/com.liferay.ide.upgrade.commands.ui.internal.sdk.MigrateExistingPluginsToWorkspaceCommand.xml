@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.ide.upgrade.commands.ui.internal.sdk.MigrateExistingPluginsToWorkspaceCommand">
+   <property name="id" value="migrate_existing_plugins_to_workspace"/>
+   <service scope="prototype">
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeCommand"/>
+   </service>
+   <reference cardinality="1..1" field="_synchronizer" interface="com.liferay.ide.core.ProjectSynchronizer" name="_synchronizer" target="(type=gradle)"/>
+   <reference cardinality="1..1" field="_upgradePlanner" interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner" name="_upgradePlanner"/>
+   <implementation class="com.liferay.ide.upgrade.commands.ui.internal.sdk.MigrateExistingPluginsToWorkspaceCommand"/>
+</scr:component>

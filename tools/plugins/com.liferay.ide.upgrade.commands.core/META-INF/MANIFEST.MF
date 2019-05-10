@@ -13,6 +13,7 @@ Export-Package: com.liferay.ide.upgrade.commands.core,
  com.liferay.ide.upgrade.commands.core.sdk
 Require-Bundle: com.google.guava,
  com.liferay.ide.core,
+ com.liferay.ide.project.core,
  com.liferay.ide.server.core,
  com.liferay.ide.upgrade.plan.core,
  org.eclipse.core.resources,

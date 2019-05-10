@@ -26,6 +26,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.osgi,
  org.eclipse.osgi.services,
  org.eclipse.sapphire.modeling;bundle-version="[9,10)",
+ org.eclipse.sapphire.platform;bundle-version="[9,10)",
  org.eclipse.sapphire.ui;bundle-version="[9,10)",
  org.eclipse.swt,
  org.eclipse.ui.workbench
@@ -35,4 +36,5 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.Resourc
  OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.ConfigureBundleURLCommand.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.UpgradeCompareImpl.xml,
  OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.dependencies.UpdateRepositoryURLCommand.xml,
- OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.code.ConfigureTargetPlatformVersionCommand.xml
+ OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.code.ConfigureTargetPlatformVersionCommand.xml,
+ OSGI-INF/com.liferay.ide.upgrade.commands.ui.internal.sdk.MigrateExistingPluginsToWorkspaceCommand.xml
