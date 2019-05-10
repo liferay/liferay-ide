@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay72.DroppedSupportOfServiceLoaderCondition">
+   <property name="file.extensions" value="java,jsp,jspf"/>
+   <property name="problem.title" value="Dropped Support of ServiceLoaderCondition"/>
+   <property name="problem.summary" value="The interface ServiceLoaderCondition and its implementation DefaultServiceLoaderCondition in package com.liferay.portal.kernel.util were removed."/>
+   <property name="problem.tickets" value="LPS-88913"/>
+   <property name="problem.section" value="#dropped-support-of-serviceloadercondition"/>
+   <property name="version" value="7.2"/>
+   <service>
+      <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
+   </service>
+   <implementation class="com.liferay.ide.upgrade.problems.core.internal.liferay72.DroppedSupportOfServiceLoaderCondition"/>
+</scr:component>
