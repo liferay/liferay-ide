@@ -4,25 +4,24 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-SymbolicName: com.liferay.ide.xml.search.ui.tests
 Bundle-Version: 3.6.0.qualifier
-Require-Bundle: org.junit,
+Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.core.tests,
- org.eclipse.ui.ide,
- org.eclipse.wst.xml.search.editor,
- org.eclipse.jface.text,
- org.eclipse.wst.xml.core,
- org.eclipse.wst.validation,
+ com.liferay.ide.project.core,
  com.liferay.ide.project.core.tests,
  com.liferay.ide.server.core.tests,
- com.liferay.ide.xml.search.ui,
- com.liferay.ide.project.core,
- org.eclipse.wst.sse.ui,
  com.liferay.ide.ui.tests,
- org.eclipse.wst.sse.core,
- com.liferay.ide.core,
- org.apache.commons.lang,
+ com.liferay.ide.xml.search.ui,
  org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text,
+ org.eclipse.ui.ide,
  org.eclipse.wst.common.project.facet.core,
- org.eclipse.core.runtime
+ org.eclipse.wst.sse.core,
+ org.eclipse.wst.sse.ui,
+ org.eclipse.wst.validation,
+ org.eclipse.wst.xml.core,
+ org.eclipse.wst.xml.search.editor,
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.xml.search.ui.tests
