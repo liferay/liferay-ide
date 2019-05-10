@@ -4,11 +4,13 @@ Bundle-Name: Liferay Layout Templates Core Tests
 Bundle-SymbolicName: com.liferay.ide.layouttpl.core.tests
 Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: Liferay, Inc.
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.core.resources,
+Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.core.tests,
  com.liferay.ide.layouttpl.core,
- org.eclipse.sapphire.modeling
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.sapphire.modeling;bundle-version="[9,10)",
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.layouttpl.core.tests

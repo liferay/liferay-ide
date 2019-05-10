@@ -4,7 +4,8 @@ Bundle-Name: Liferay Server Core Tests
 Bundle-SymbolicName: com.liferay.ide.server.core.tests
 Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: Liferay, Inc.
-Require-Bundle: org.eclipse.core.runtime,
+Require-Bundle: com.liferay.ide.core,
+ org.eclipse.core.runtime,
  org.eclipse.wst.server.core,
  com.liferay.ide.core.tests,
  com.liferay.ide.server.core,
@@ -18,7 +19,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.sapphire.platform,
  org.eclipse.sapphire.modeling,
  org.eclipse.wst.common.project.facet.core,
- org.eclipse.jdt.launching
+ org.eclipse.jdt.launching,
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.core.tests

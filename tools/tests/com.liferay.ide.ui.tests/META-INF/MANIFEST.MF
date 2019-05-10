@@ -16,7 +16,6 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.wst.sse.ui,
  org.eclipse.wst.xml.core,
  org.eclipse.wst.xml.ui,
- org.junit,
  org.hamcrest.core,
  org.eclipse.swt,
  org.eclipse.debug.ui,
@@ -24,7 +23,8 @@ Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.ui,
  org.apache.log4j,
  org.eclipse.ui.workbench,
- org.eclipse.jface
+ org.eclipse.jface,
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.ui.tests

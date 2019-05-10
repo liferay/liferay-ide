@@ -4,10 +4,15 @@ Bundle-Name: Liferay IDE Test Project Core Base
 Bundle-SymbolicName: com.liferay.ide.test.project.core.base
 Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: Liferay, Inc.
-Require-Bundle: org.junit;visibility:=reexport,
+Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.project.core,
  com.liferay.ide.test.core.base,
- org.eclipse.sapphire.modeling
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.sapphire.modeling;bundle-version="[9,10)",
+ org.eclipse.sapphire.platform;bundle-version="[9,10)",
+ org.eclipse.wst.validation,
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.test.project.core.base
