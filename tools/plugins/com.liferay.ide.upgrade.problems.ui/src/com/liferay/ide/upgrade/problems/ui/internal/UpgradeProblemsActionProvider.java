@@ -20,6 +20,7 @@ import com.liferay.ide.upgrade.plan.ui.util.Editors;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -34,6 +35,7 @@ import org.eclipse.ui.navigator.ICommonViewerSite;
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class UpgradeProblemsActionProvider extends CommonActionProvider {
 
@@ -115,7 +117,11 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 
 						int length = upgradeProblem.getEndOffset() - offset;
 
-						Editors.open(upgradeProblem.getResource(), upgradeProblem.getMarkerId(), offset, length);
+						File file = upgradeProblem.getResource();
+
+						IFile[] resources = CoreUtil.findFilesForLocationURI(file.toURI());
+
+						Editors.open(resources[0], upgradeProblem.getMarkerId(), offset, length);
 					}
 					else if (element instanceof FileProblemsContainer) {
 						FileProblemsContainer fileProblemsContainer = (FileProblemsContainer)element;

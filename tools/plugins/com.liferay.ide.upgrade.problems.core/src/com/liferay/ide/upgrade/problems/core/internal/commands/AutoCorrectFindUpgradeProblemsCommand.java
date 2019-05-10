@@ -41,7 +41,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -123,9 +122,7 @@ public class AutoCorrectFindUpgradeProblemsCommand implements MarkerSupport, Upg
 			Collection<ServiceReference<AutoFileMigrator>> serviceReferences = bundleContext.getServiceReferences(
 				AutoFileMigrator.class, filter);
 
-			IResource resource = upgradeProblem.getResource();
-
-			File file = FileUtil.getFile(resource);
+			File file = upgradeProblem.getResource();
 
 			serviceReferences.stream(
 			).map(

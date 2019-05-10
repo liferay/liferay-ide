@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -25,16 +24,17 @@ import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
@@ -45,6 +45,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Seiphon Wang
+ * @author Simon Jiang
  */
 @Component(
 	property = {
@@ -58,20 +59,17 @@ import org.osgi.service.component.annotations.Component;
 public class LegacyLayoutTemplate extends XMLFileMigrator implements AutoFileMigrator {
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
-		IFile tplFile = getXmlFile(file);
-
-		if (tplFile == null) {
-			return 0;
-		}
-
 		int problemsCorrected = 0;
 		IDOMModel tplDOMModel = null;
 
 		try {
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			tplDOMModel = (IDOMModel)modelManager.getModelForEdit(tplFile);
+			try (InputStream input = Files.newInputStream(Paths.get(file.toURI()), StandardOpenOption.READ)) {
+				tplDOMModel = (IDOMModel)modelManager.getModelForEdit(file.getAbsolutePath(), input, null);
+			}
 
 			List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
@@ -99,16 +97,11 @@ public class LegacyLayoutTemplate extends XMLFileMigrator implements AutoFileMig
 				problemsCorrected++;
 			}
 
-			tplDOMModel.save();
+			if (problemsCorrected > 0) {
+				try (OutputStream output = Files.newOutputStream(
+						Paths.get(file.toURI()), StandardOpenOption.WRITE, StandardOpenOption.DSYNC)) {
 
-			File tpl = FileUtil.getFile(tplFile);
-
-			if ((problemsCorrected > 0) && !tpl.equals(file)) {
-				try (InputStream xmlFileContent = tplFile.getContents()) {
-					Files.copy(xmlFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-				}
-				catch (Exception e) {
-					throw new AutoFileMigrateException("Error writing corrected file", e);
+					tplDOMModel.save(output);
 				}
 			}
 		}

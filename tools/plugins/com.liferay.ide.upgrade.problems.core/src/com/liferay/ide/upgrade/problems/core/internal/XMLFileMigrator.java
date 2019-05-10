@@ -16,23 +16,14 @@ package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.upgrade.problems.core.XMLFile;
 
-import java.io.File;
-
-import org.eclipse.core.resources.IFile;
-
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public abstract class XMLFileMigrator extends AbstractFileMigrator<XMLFile> {
 
 	public XMLFileMigrator() {
 		super(XMLFile.class);
-	}
-
-	protected IFile getXmlFile(File file) {
-		XMLFile xmlFileService = context.getService(context.getServiceReference(XMLFile.class));
-
-		return xmlFileService.getIFile(file);
 	}
 
 }

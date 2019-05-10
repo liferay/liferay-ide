@@ -47,7 +47,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 
 import org.osgi.service.component.annotations.Component;
@@ -405,15 +404,11 @@ public class UpgradePlannerService implements UpgradePlanner {
 				int markerType = upgradeProblemMemento.getInteger("markerType");
 				int startOffset = upgradeProblemMemento.getInteger("startOffset");
 				int status = upgradeProblemMemento.getInteger("status");
-
-				IFile[] resources = CoreUtil.findFilesForLocationURI(
-					new File(
-						upgradeProblemMemento.getString("resourceLocation")
-					).toURI());
+				String resourceLocation = upgradeProblemMemento.getString("resourceLocation");
 
 				UpgradeProblem upgradeProblem = new UpgradeProblem(
-					uuid, title, summary, type, ticket, version, resources[0], lineNumber, startOffset, endOffset, html,
-					autoCorrectContext, status, markerId, markerType);
+					uuid, title, summary, type, ticket, version, new File(resourceLocation), lineNumber, startOffset,
+					endOffset, html, autoCorrectContext, status, markerId, markerType);
 
 				return upgradeProblem;
 			}
@@ -463,11 +458,11 @@ public class UpgradePlannerService implements UpgradePlanner {
 		for (UpgradeProblem upgradeProblem : upgradeProblems) {
 			IMemento upgradeProblemMemento = memento.createChild("upgradeProblem");
 
-			IResource resource = upgradeProblem.getResource();
+			File resource = upgradeProblem.getResource();
 
-			IPath location = resource.getLocation();
+			String resourceLocation = resource.getAbsolutePath();
 
-			if (location == null) {
+			if (CoreUtil.isNullOrEmpty(resourceLocation)) {
 				continue;
 			}
 
@@ -487,9 +482,8 @@ public class UpgradePlannerService implements UpgradePlanner {
 			upgradeProblemMemento.putString("markerId", String.valueOf(markerId));
 
 			upgradeProblemMemento.putInteger("markerType", upgradeProblem.getMarkerType());
-			upgradeProblemMemento.putInteger("number", upgradeProblem.getNumber());
 
-			upgradeProblemMemento.putString("resourceLocation", location.toOSString());
+			upgradeProblemMemento.putString("resourceLocation", resourceLocation);
 
 			upgradeProblemMemento.putInteger("startOffset", upgradeProblem.getStartOffset());
 			upgradeProblemMemento.putInteger("status", upgradeProblem.getStatus());

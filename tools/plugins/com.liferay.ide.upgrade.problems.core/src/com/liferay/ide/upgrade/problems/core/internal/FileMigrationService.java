@@ -14,6 +14,8 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
+import com.google.common.collect.ImmutableSet;
+
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
@@ -35,6 +37,12 @@ import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -179,38 +187,33 @@ public class FileMigrationService implements FileMigration {
 
 			if (ListUtil.isNotEmpty(fileMigrators)) {
 				try {
-					Stream<ServiceReference<FileMigrator>> migratorStream = fileMigrators.stream();
+					Stream<ServiceReference<FileMigrator>> migratorStream = fileMigrators.parallelStream();
 
-					migratorStream.filter(
-						serviceReference -> {
-							if (requiredProperties == null) {
+					upgradeProblems.addAll(
+						migratorStream.filter(
+							serviceReference -> {
+								if (requiredProperties == null) {
+									return true;
+								}
+
+								Dictionary<String, Object> properties = serviceReference.getProperties();
+
+								for (String key : requiredProperties) {
+									Object value = properties.get(key);
+
+									if (value == null) {
+										return false;
+									}
+								}
+
 								return true;
 							}
-
-							Dictionary<String, Object> properties = serviceReference.getProperties();
-
-							for (String key : requiredProperties) {
-								Object value = properties.get(key);
-
-								if (value == null) {
-									return false;
-								}
-							}
-
-							return true;
-						}
-					).map(
-						_context::getService
-					).parallel(
-					).forEach(
-						fileMigrator -> {
-							List<UpgradeProblem> problems = fileMigrator.analyze(file);
-
-							if (ListUtil.isNotEmpty(problems)) {
-								upgradeProblems.addAll(problems);
-							}
-						}
-					);
+						).map(
+							_context::getService
+						).unordered(
+						).collect(
+							new ProblemsCollector(file)
+						));
 				}
 				catch (Exception e) {
 				}
@@ -348,5 +351,48 @@ public class FileMigrationService implements FileMigration {
 
 	private BundleContext _context;
 	private ServiceTracker<FileMigrator, FileMigrator> _fileMigratorTracker;
+
+	private class ProblemsCollector implements Collector<FileMigrator, Set<UpgradeProblem>, Set<UpgradeProblem>> {
+
+		public ProblemsCollector(File file) {
+			_file = file;
+		}
+
+		@Override
+		public BiConsumer<Set<UpgradeProblem>, FileMigrator> accumulator() {
+			return (container, migrator) -> {
+				container.addAll(migrator.analyze(_file));
+			};
+		}
+
+		@Override
+		public Set<Characteristics> characteristics() {
+			return ImmutableSet.of(
+				Collector.Characteristics.CONCURRENT, Collector.Characteristics.UNORDERED,
+				Collector.Characteristics.IDENTITY_FINISH);
+		}
+
+		@Override
+		public BinaryOperator<Set<UpgradeProblem>> combiner() {
+			return (left, right) -> {
+				left.addAll(right);
+
+				return left;
+			};
+		}
+
+		@Override
+		public Function<Set<UpgradeProblem>, Set<UpgradeProblem>> finisher() {
+			return Function.identity();
+		}
+
+		@Override
+		public Supplier<Set<UpgradeProblem>> supplier() {
+			return CopyOnWriteArraySet<UpgradeProblem>::new;
+		}
+
+		private File _file;
+
+	}
 
 }

@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -25,16 +24,17 @@ import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
@@ -48,6 +48,7 @@ import org.w3c.dom.Text;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @Component(
 	property = {
@@ -64,16 +65,18 @@ import org.w3c.dom.Text;
 public class MVCPortletClassInPortletXML extends XMLFileMigrator implements AutoFileMigrator {
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
 		int corrected = 0;
-		IFile xmlFile = getXmlFile(file);
 		IDOMModel xmlModel = null;
 
-		if (xmlFile != null) {
+		if (file != null) {
 			try {
 				IModelManager modelManager = StructuredModelManager.getModelManager();
 
-				xmlModel = (IDOMModel)modelManager.getModelForEdit(xmlFile);
+				try (InputStream input = Files.newInputStream(Paths.get(file.toURI()), StandardOpenOption.READ)) {
+					xmlModel = (IDOMModel)modelManager.getModelForEdit(file.getAbsolutePath(), input, null);
+				}
 
 				List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
@@ -106,7 +109,13 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 					corrected++;
 				}
 
-				xmlModel.save();
+				if (corrected > 0) {
+					try (OutputStream output = Files.newOutputStream(
+							Paths.get(file.toURI()), StandardOpenOption.WRITE, StandardOpenOption.DSYNC)) {
+
+						xmlModel.save(output);
+					}
+				}
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -115,17 +124,6 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 				if (xmlModel != null) {
 					xmlModel.releaseFromEdit();
 				}
-			}
-		}
-
-		File xml = FileUtil.getFile(xmlFile);
-
-		if ((corrected > 0) && !xml.equals(file)) {
-			try (InputStream xmlFileContent = xmlFile.getContents()) {
-				Files.copy(xmlFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			}
-			catch (Exception e) {
-				throw new AutoFileMigrateException("Error writing corrected file", e);
 			}
 		}
 

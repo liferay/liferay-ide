@@ -17,12 +17,17 @@ package com.liferay.ide.upgrade.problems.core.internal;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.XMLFile;
 
+import java.io.InputStream;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
@@ -38,22 +43,25 @@ import org.w3c.dom.NodeList;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @Component(property = "file.extension=xml")
 @SuppressWarnings("restriction")
 public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public FileSearchResult findDocumentTypeDeclaration(String name, Pattern idPattern) {
 		FileSearchResult result = null;
 
-		IFile xmlFile = getIFile(file);
 		IDOMModel domModel = null;
 
 		try {
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			domModel = (IDOMModel)modelManager.getModelForRead(xmlFile);
+			try (InputStream input = Files.newInputStream(Paths.get(file.toURI()), StandardOpenOption.READ)) {
+				domModel = (IDOMModel)modelManager.getModelForRead(file.getAbsolutePath(), input, null);
+			}
 
 			IDOMDocument document = domModel.getDocument();
 
@@ -93,16 +101,18 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public List<FileSearchResult> findElement(String tagName, String value) {
 		List<FileSearchResult> results = new ArrayList<>();
 
-		IFile xmlFile = getIFile(file);
 		IDOMModel domModel = null;
 
 		try {
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			domModel = (IDOMModel)modelManager.getModelForRead(xmlFile);
+			try (InputStream input = Files.newInputStream(Paths.get(file.toURI()), StandardOpenOption.READ)) {
+				domModel = (IDOMModel)modelManager.getModelForRead(file.getAbsolutePath(), input, null);
+			}
 
 			IDOMDocument document = domModel.getDocument();
 
@@ -144,17 +154,18 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public List<FileSearchResult> findElementAttribute(String tagName, Pattern pattern) {
 		List<FileSearchResult> results = new ArrayList<>();
-
-		IFile tplFile = getIFile(file);
 
 		IDOMModel domModel = null;
 
 		try {
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			domModel = (IDOMModel)modelManager.getModelForRead(tplFile);
+			try (InputStream input = Files.newInputStream(Paths.get(file.toURI()), StandardOpenOption.READ)) {
+				domModel = (IDOMModel)modelManager.getModelForRead(file.getAbsolutePath(), input, null);
+			}
 
 			IDOMDocument domDocument = domModel.getDocument();
 

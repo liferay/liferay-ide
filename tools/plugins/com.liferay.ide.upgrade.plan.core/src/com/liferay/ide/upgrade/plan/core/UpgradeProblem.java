@@ -14,9 +14,10 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import java.io.File;
+
 import java.util.UUID;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Adapters;
 
 /**
@@ -61,7 +62,7 @@ public class UpgradeProblem {
 	}
 
 	public UpgradeProblem(
-		String title, String summary, String type, String ticket, String version, IResource resource, int lineNumber,
+		String title, String summary, String type, String ticket, String version, File resource, int lineNumber,
 		int startOffset, int endOffset, String html, String autoCorrectContext, int status, long markerId,
 		int markerType) {
 
@@ -71,7 +72,7 @@ public class UpgradeProblem {
 	}
 
 	public UpgradeProblem(
-		String uuid, String title, String summary, String type, String ticket, String version, IResource resource,
+		String uuid, String title, String summary, String type, String ticket, String version, File resource,
 		int lineNumber, int startOffset, int endOffset, String html, String autoCorrectContext, int status,
 		long markerId, int markerType) {
 
@@ -113,10 +114,6 @@ public class UpgradeProblem {
 		}
 
 		if (_lineNumber != other._lineNumber) {
-			return false;
-		}
-
-		if (_number != other._number) {
 			return false;
 		}
 
@@ -205,11 +202,7 @@ public class UpgradeProblem {
 		return _markerType;
 	}
 
-	public int getNumber() {
-		return _number;
-	}
-
-	public IResource getResource() {
+	public File getResource() {
 		return _resource;
 	}
 
@@ -252,7 +245,6 @@ public class UpgradeProblem {
 		hash = 31 * hash + ((_html != null) ? _html.hashCode() : 0);
 		hash = 31 * hash + Integer.hashCode(_endOffset);
 		hash = 31 * hash + Integer.hashCode(_lineNumber);
-		hash = 31 * hash + Integer.hashCode(_number);
 		hash = 31 * hash + Integer.hashCode(_startOffset);
 		hash = 31 * hash + ((_resource != null) ? _resource.hashCode() : 0);
 		hash = 31 * hash + ((_summary != null) ? _summary.hashCode() : 0);
@@ -284,11 +276,7 @@ public class UpgradeProblem {
 		_markerType = markerType;
 	}
 
-	public void setNumber(int number) {
-		_number = number;
-	}
-
-	public void setResource(IResource resource) {
+	public void setResource(File resource) {
 		_resource = resource;
 	}
 
@@ -324,14 +312,32 @@ public class UpgradeProblem {
 		_version = version;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("Problem description : " + _summary + System.getProperty("line.separator"));
+		builder.append("	Uuid is :" + _uuid + System.getProperty("line.separator"));
+		builder.append("	File location is :" + _resource.getAbsolutePath() + System.getProperty("line.separator"));
+		builder.append("	Ticket is :" + _ticket + System.getProperty("line.separator"));
+		builder.append("	Line Number is :" + _lineNumber + System.getProperty("line.separator"));
+		builder.append("	Title is :" + _title + System.getProperty("line.separator"));
+		builder.append("	Version is :" + _version + System.getProperty("line.separator"));
+		builder.append("	Type is :" + _type + System.getProperty("line.separator"));
+		builder.append("	Status is :" + _status + System.getProperty("line.separator"));
+		builder.append("	StartOffset is :" + _startOffset + System.getProperty("line.separator"));
+		builder.append("	EndOffset is :" + _endOffset + System.getProperty("line.separator"));
+
+		return builder.toString();
+	}
+
 	private String _autoCorrectContext;
 	private int _endOffset;
 	private String _html;
 	private int _lineNumber;
 	private long _markerId;
 	private int _markerType;
-	private int _number;
-	private IResource _resource;
+	private File _resource;
 	private int _startOffset;
 	private int _status;
 	private String _summary;

@@ -29,6 +29,7 @@ import org.osgi.service.component.annotations.Activate;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public abstract class PropertiesFileMigrator implements FileMigrator {
 
@@ -46,8 +47,6 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 		version = safeGet(properties, "version");
 
 		addPropertiesToSearch(this.properties);
-
-		_workspaceFile = new WorkspaceFile();
 	}
 
 	@Override
@@ -74,11 +73,10 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 				for (FileSearchResult searchResult : results) {
 					problems.add(
 						new UpgradeProblem(
-							problemTitle, problemSummary, problemType, problemTickets, version,
-							_workspaceFile.getIFile(file), searchResult.startLine, searchResult.startOffset,
-							searchResult.endOffset, sectionHtml, searchResult.autoCorrectContext,
-							UpgradeProblem.STATUS_NOT_RESOLVED, UpgradeProblem.DEFAULT_MARKER_ID,
-							UpgradeProblem.MARKER_ERROR));
+							problemTitle, problemSummary, problemType, problemTickets, version, file,
+							searchResult.startLine, searchResult.startOffset, searchResult.endOffset, sectionHtml,
+							searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
+							UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));
 				}
 			}
 		}
@@ -96,7 +94,5 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 	protected final List<String> properties = new ArrayList<>();
 	protected String sectionKey = "";
 	protected String version = "";
-
-	private WorkspaceFile _workspaceFile;
 
 }
