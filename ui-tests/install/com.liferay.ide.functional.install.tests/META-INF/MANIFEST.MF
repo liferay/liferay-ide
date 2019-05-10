@@ -6,7 +6,6 @@ Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: Liferay
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Require-Bundle: com.liferay.ide.ui.swtbot,
- org.junit,
- org.eclipse.swtbot.eclipse.finder,
- com.liferay.ide.ui.liferay
+Require-Bundle: com.liferay.ide.ui.liferay,
+ com.liferay.ide.ui.swtbot,
+ org.junit

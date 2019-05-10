@@ -4,10 +4,9 @@ Bundle-Name: Liferay IDE UI Fragment Deploy Base
 Bundle-SymbolicName: com.liferay.ide.ui.fragment.deploy.base
 Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: Liferay, Inc.
-Require-Bundle: com.liferay.ide.ui.swtbot,
- com.liferay.ide.ui.liferay,
- org.eclipse.swtbot.go,
- org.junit
+Require-Bundle: com.liferay.ide.ui.liferay,
+ com.liferay.ide.ui.swtbot,
+ org.eclipse.swtbot.go
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.liferay.ide.ui.fragment.deploy.base
