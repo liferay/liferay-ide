@@ -4,13 +4,13 @@ Bundle-Name: Liferay Core Tests
 Bundle-SymbolicName: com.liferay.ide.core.tests
 Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: Liferay, Inc.
-Require-Bundle: org.eclipse.core.runtime,
+Require-Bundle: com.liferay.ide.core,
  org.eclipse.core.resources,
- org.junit;visibility:=reexport,
+ org.eclipse.core.runtime,
+ org.eclipse.jdt.core,
  org.eclipse.sapphire.modeling;bundle-version="[9,10)",
- com.liferay.ide.core;visibility:=reexport,
  org.eclipse.wst.validation,
- org.eclipse.jdt.core
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.core.tests
