@@ -75,7 +75,7 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 		viewAction.servers.startWatchingProject(server.getStartedLabel(), workspace.getName(), project.getName());
 
 		jobAction.waitForConsoleContent(
-			server.getServerName() + " [Liferay 7.x]", "STARTED " + project.getName() + "_", M1);
+			server.getServerName() + " [Liferay 7.x]", "STARTED " + project.getName() + "_", M2);
 
 		viewAction.servers.stopWatchingProject(
 			server.getStartedLabel(), workspace.getName(), project.getName() + " [watching]");
