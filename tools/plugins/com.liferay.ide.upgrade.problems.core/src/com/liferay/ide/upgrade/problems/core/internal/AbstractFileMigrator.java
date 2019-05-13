@@ -40,6 +40,7 @@ import org.osgi.service.component.annotations.Activate;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public abstract class AbstractFileMigrator<T extends SourceFile> implements FileMigrator {
 
@@ -62,8 +63,6 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 		problemTickets = safeGet(properties, "problem.tickets");
 		sectionKey = safeGet(properties, "problem.section");
 		version = safeGet(properties, "version");
-
-		workspaceFile = new WorkspaceFile();
 	}
 
 	@Override
@@ -99,11 +98,10 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 				if (searchResult != null) {
 					problems.add(
 						new UpgradeProblem(
-							problemTitle, problemSummary, fileExtension, problemTickets, version,
-							workspaceFile.getIFile(file), searchResult.startLine, searchResult.startOffset,
-							searchResult.endOffset, sectionHtml, searchResult.autoCorrectContext,
-							UpgradeProblem.STATUS_NOT_RESOLVED, UpgradeProblem.DEFAULT_MARKER_ID,
-							UpgradeProblem.MARKER_ERROR));
+							problemTitle, problemSummary, fileExtension, problemTickets, version, file,
+							searchResult.startLine, searchResult.startOffset, searchResult.endOffset, sectionHtml,
+							searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
+							UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));
 				}
 			}
 		}
@@ -150,6 +148,5 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 	protected String sectionKey;
 	protected final Class<T> type;
 	protected String version;
-	protected WorkspaceFile workspaceFile;
 
 }

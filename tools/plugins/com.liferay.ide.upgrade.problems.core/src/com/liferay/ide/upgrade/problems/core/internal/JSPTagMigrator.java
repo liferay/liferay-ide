@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
@@ -24,9 +23,11 @@ import com.liferay.ide.upgrade.problems.core.JSPFile;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +36,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
@@ -50,6 +50,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
 public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> implements AutoFileMigrator {
@@ -70,6 +71,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
 		int corrected = 0;
 
@@ -108,15 +110,15 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 
 			});
 
-		IFile jspFile = getJSPFile(file);
-
 		if (ListUtil.isNotEmpty(autoCorrectTagOffsets)) {
 			IDOMModel domModel = null;
 
 			try {
 				IModelManager modelManager = StructuredModelManager.getModelManager();
 
-				domModel = (IDOMModel)modelManager.getModelForEdit(jspFile);
+				try (InputStream input = Files.newInputStream(Paths.get(file.toURI()), StandardOpenOption.READ)) {
+					domModel = (IDOMModel)modelManager.getModelForEdit(file.getAbsolutePath(), input, null);
+				}
 
 				List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
@@ -195,8 +197,14 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 					}
 
 					domModel.changedModel();
+				}
 
-					domModel.save();
+				if (corrected > 0) {
+					try (OutputStream output = Files.newOutputStream(
+							Paths.get(file.toURI()), StandardOpenOption.WRITE, StandardOpenOption.DSYNC)) {
+
+						domModel.save(output);
+					}
 				}
 			}
 			catch (Exception e) {
@@ -207,26 +215,9 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 					domModel.releaseFromEdit();
 				}
 			}
-
-			File jsp = FileUtil.getFile(jspFile);
-
-			if ((corrected > 0) && !jsp.equals(file)) {
-				try (InputStream jspFileContent = jspFile.getContents()) {
-					Files.copy(jspFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-				}
-				catch (Exception e) {
-					throw new AutoFileMigrateException("Error writing corrected file", e);
-				}
-			}
 		}
 
 		return corrected;
-	}
-
-	protected IFile getJSPFile(File file) {
-		JSPFile jspFileService = context.getService(context.getServiceReference(JSPFile.class));
-
-		return jspFileService.getIFile(file);
 	}
 
 	@Override

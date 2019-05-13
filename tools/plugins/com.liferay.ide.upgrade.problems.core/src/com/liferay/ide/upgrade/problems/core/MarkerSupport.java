@@ -14,11 +14,16 @@
 
 package com.liferay.ide.upgrade.problems.core;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+
+import java.io.File;
 
 import java.util.Collection;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -26,6 +31,7 @@ import org.eclipse.core.runtime.CoreException;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public interface MarkerSupport {
 
@@ -33,12 +39,22 @@ public interface MarkerSupport {
 		upgradeProblems.stream(
 		).filter(
 			upgradeProblem -> FileUtil.exists(upgradeProblem.getResource())
+		).filter(
+			upgradeProblem -> {
+				File resource = upgradeProblem.getResource();
+
+				IFile[] problemFiles = CoreUtil.findFilesForLocationURI(resource.toURI());
+
+				return ListUtil.isNotEmpty(problemFiles);
+			}
 		).forEach(
 			upgradeProblem -> {
-				IResource resource = upgradeProblem.getResource();
+				File resource = upgradeProblem.getResource();
+
+				IFile[] problemFiles = CoreUtil.findFilesForLocationURI(resource.toURI());
 
 				try {
-					IMarker marker = resource.createMarker(UpgradeProblem.MARKER_TYPE);
+					IMarker marker = problemFiles[0].createMarker(UpgradeProblem.MARKER_TYPE);
 
 					upgradeProblem.setMarkerId(marker.getId());
 
@@ -63,7 +79,11 @@ public interface MarkerSupport {
 			return null;
 		}
 
-		IResource resource = upgradeProblem.getResource();
+		File file = upgradeProblem.getResource();
+
+		IFile[] iFiles = CoreUtil.findFilesForLocationURI(file.toURI());
+
+		IResource resource = iFiles[0];
 
 		long markerId = upgradeProblem.getMarkerId();
 
@@ -106,7 +126,11 @@ public interface MarkerSupport {
 		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_TICKET, upgradeProblem.getTicket());
 		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_TYPE, upgradeProblem.getType());
 
-		IResource resource = upgradeProblem.getResource();
+		File file = upgradeProblem.getResource();
+
+		IFile[] iFiles = CoreUtil.findFilesForLocationURI(file.toURI());
+
+		IResource resource = iFiles[0];
 
 		marker.setAttribute(IMarker.LOCATION, resource.getName());
 

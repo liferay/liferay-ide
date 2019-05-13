@@ -14,45 +14,35 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
-import com.liferay.ide.upgrade.problems.core.JavaFile;
 import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker;
 import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileChecker.KeyInfo;
 import com.liferay.ide.upgrade.problems.core.internal.PropertiesFileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.WorkspaceFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
-
-import org.osgi.framework.BundleContext;
+import org.apache.commons.io.FileUtils;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrator implements AutoFileMigrator {
 
 	public BaseLiferayVersionsProperties(String oldVersionPattern, String newVersion) {
 		_oldVersionPattern = oldVersionPattern;
 		_newVersion = newVersion;
-		_workspaceFile = new WorkspaceFile();
 	}
 
 	@Override
@@ -80,11 +70,10 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 
 							problems.add(
 								new UpgradeProblem(
-									problemTitle, problemSummary, problemType, problemTickets, version,
-									_workspaceFile.getIFile(file), searchResult.startLine, searchResult.startOffset,
-									searchResult.endOffset, sectionHtml, searchResult.autoCorrectContext,
-									UpgradeProblem.STATUS_NOT_RESOLVED, UpgradeProblem.DEFAULT_MARKER_ID,
-									UpgradeProblem.MARKER_ERROR));
+									problemTitle, problemSummary, problemType, problemTickets, version, file,
+									searchResult.startLine, searchResult.startOffset, searchResult.endOffset,
+									sectionHtml, searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
+									UpgradeProblem.DEFAULT_MARKER_ID, UpgradeProblem.MARKER_ERROR));
 						}
 					}
 				}
@@ -98,12 +87,6 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
 		try {
 			String contents = new String(Files.readAllBytes(file.toPath()));
-
-			BundleContext bundleContext = context.getBundleContext();
-
-			JavaFile javaFile = bundleContext.getService(bundleContext.getServiceReference(JavaFile.class));
-
-			IFile propertiesFile = javaFile.getIFile(file);
 
 			int problemsFixed = 0;
 
@@ -121,24 +104,15 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 				}
 			}
 
-			try (ByteArrayInputStream bos = new ByteArrayInputStream(contents.getBytes())) {
-				propertiesFile.setContents(bos, IResource.FORCE, null);
-			}
-
-			File properties = FileUtil.getFile(propertiesFile);
-
-			if ((problemsFixed > 0) && !properties.equals(file)) {
-				try (InputStream jspFileContent = propertiesFile.getContents()) {
-					Files.copy(jspFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-				}
-				catch (Exception e) {
-					throw new AutoFileMigrateException("Error writing corrected file", e);
+			if (problemsFixed > 0) {
+				try (ByteArrayInputStream input = new ByteArrayInputStream(contents.getBytes())) {
+					FileUtils.copyInputStreamToFile(input, file);
 				}
 			}
 
 			return problemsFixed;
 		}
-		catch (CoreException | IOException e) {
+		catch (Exception e) {
 		}
 
 		return 0;
@@ -152,6 +126,5 @@ public abstract class BaseLiferayVersionsProperties extends PropertiesFileMigrat
 
 	private String _newVersion;
 	private String _oldVersionPattern;
-	private WorkspaceFile _workspaceFile;
 
 }

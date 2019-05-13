@@ -36,13 +36,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IFile;
-
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings("rawtypes")
 public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile> implements AutoFileMigrator {
@@ -157,12 +156,6 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 
 	public void setImportFixes(Map<String, String> importFixes) {
 		_importFixes = importFixes;
-	}
-
-	protected IFile getJavaFile(File file) {
-		JavaFile javaFileService = context.getService(context.getServiceReference(JavaFile.class));
-
-		return javaFileService.getIFile(file);
 	}
 
 	private static String[] _readLines(InputStream inputStream) {

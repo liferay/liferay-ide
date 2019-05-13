@@ -21,15 +21,17 @@ import com.liferay.ide.upgrade.problems.core.JSPFile;
 import com.liferay.ide.upgrade.problems.core.JavaFile;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
@@ -48,6 +50,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @Component(property = "file.extension=jsp", service = {JavaFile.class, JSPFile.class})
 @SuppressWarnings({"rawtypes", "restriction"})
@@ -191,6 +194,7 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	protected FileSearchResult createSearchResult(
 		String searchContext, int startOffset, int endOffset, int startLine, int endLine, boolean fullMatch) {
 
@@ -200,9 +204,13 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 			int jspStartOffset = _translation.getJspOffset(startOffset);
 			int jspEndOffset = _translation.getJspOffset(endOffset);
 
+			File jspFile = _translation.getJspFile();
+
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			jspModel = (IDOMModel)modelManager.getModelForRead(_translation.getJspFile());
+			try (InputStream input = Files.newInputStream(Paths.get(jspFile.toURI()), StandardOpenOption.READ)) {
+				jspModel = (IDOMModel)modelManager.getModelForRead(jspFile.getAbsolutePath(), input, null);
+			}
 
 			IDOMDocument domDocument = jspModel.getDocument();
 
@@ -233,15 +241,18 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 		return text.toCharArray();
 	}
 
+	@SuppressWarnings("deprecation")
 	private int _getJspLine(int offset) {
-		IFile jspFile = _translation.getJspFile();
-
 		IDOMModel jspModel = null;
 
 		try {
+			File jspFile = _translation.getJspFile();
+
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			jspModel = (IDOMModel)modelManager.getModelForRead(jspFile);
+			try (InputStream input = Files.newInputStream(Paths.get(jspFile.toURI()), StandardOpenOption.READ)) {
+				jspModel = (IDOMModel)modelManager.getModelForRead(jspFile.getAbsolutePath(), input, null);
+			}
 
 			IDOMDocument domDocument = jspModel.getDocument();
 
@@ -249,7 +260,7 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 
 			return structuredDocument.getLineOfOffset(offset) + 1;
 		}
-		catch (CoreException | IOException e) {
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		finally {
@@ -261,21 +272,24 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 		return 0;
 	}
 
+	@SuppressWarnings("deprecation")
 	private NodeList _getTagNodes(String tagName) {
-		IFile jspFile = _translation.getJspFile();
-
 		IDOMModel jspModel = null;
 
 		try {
+			File jspFile = _translation.getJspFile();
+
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			jspModel = (IDOMModel)modelManager.getModelForRead(jspFile);
+			try (InputStream input = Files.newInputStream(Paths.get(jspFile.toURI()), StandardOpenOption.READ)) {
+				jspModel = (IDOMModel)modelManager.getModelForRead(jspFile.getAbsolutePath(), input, null);
+			}
 
 			IDOMDocument domDocument = jspModel.getDocument();
 
 			return domDocument.getElementsByTagName(tagName);
 		}
-		catch (CoreException | IOException e) {
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		finally {

@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -25,7 +24,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.actions.SelectionProviderAction;
 
@@ -37,6 +35,7 @@ import org.osgi.framework.ServiceReference;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class BaseAutoCorrectAction extends SelectionProviderAction implements UpgradeProblemSupport {
 
@@ -92,14 +91,6 @@ public class BaseAutoCorrectAction extends SelectionProviderAction implements Up
 		}
 		catch (InvalidSyntaxException ise) {
 		}
-	}
-
-	protected File getUpgradeFile(UpgradeProblem upgradeProblem) {
-		IResource resource = upgradeProblem.getResource();
-
-		File file = FileUtil.getFile(resource);
-
-		return file;
 	}
 
 }

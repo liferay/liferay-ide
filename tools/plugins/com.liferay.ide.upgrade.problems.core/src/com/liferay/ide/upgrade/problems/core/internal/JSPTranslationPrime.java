@@ -14,27 +14,29 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import org.eclipse.core.resources.IFile;
+import java.io.File;
+
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jst.jsp.core.internal.java.JSPTranslation;
 import org.eclipse.jst.jsp.core.internal.java.JSPTranslator;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
 public class JSPTranslationPrime extends JSPTranslation {
 
-	public JSPTranslationPrime(IJavaProject javaProject, JSPTranslator translator, IFile jspFile) {
+	public JSPTranslationPrime(IJavaProject javaProject, JSPTranslator translator, File jspFile) {
 		super(javaProject, translator);
 
 		_jspFile = jspFile;
 	}
 
-	public IFile getJspFile() {
+	public File getJspFile() {
 		return _jspFile;
 	}
 
-	private IFile _jspFile;
+	private File _jspFile;
 
 }

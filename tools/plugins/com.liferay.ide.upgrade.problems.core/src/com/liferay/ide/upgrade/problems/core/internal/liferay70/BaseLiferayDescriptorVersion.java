@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay70;
 
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -24,9 +23,11 @@ import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,7 +35,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
@@ -43,6 +43,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
 /**
  * @author Seiphon Wang
+ * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
 public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator implements AutoFileMigrator {
@@ -53,15 +54,17 @@ public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator imple
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
 		int problemsCorrected = 0;
+		IDOMModel domModel = null;
 
 		try {
-			IFile xmlFile = getXmlFile(file);
-
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			IDOMModel domModel = (IDOMModel)modelManager.getModelForEdit(xmlFile);
+			try (InputStream input = Files.newInputStream(Paths.get(file.toURI()), StandardOpenOption.READ)) {
+				domModel = (IDOMModel)modelManager.getModelForEdit(file.getAbsolutePath(), input, null);
+			}
 
 			IDOMDocument domDocument = domModel.getDocument();
 
@@ -83,21 +86,21 @@ public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator imple
 				problemsCorrected++;
 			}
 
-			domModel.save();
+			if (problemsCorrected > 0) {
+				try (OutputStream output = Files.newOutputStream(
+						Paths.get(file.toURI()), StandardOpenOption.WRITE, StandardOpenOption.DSYNC)) {
 
-			File xml = FileUtil.getFile(xmlFile);
-
-			if ((problemsCorrected > 0) && !xml.equals(file)) {
-				try (InputStream xmlFileContent = xmlFile.getContents()) {
-					Files.copy(xmlFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-				}
-				catch (Exception e) {
-					throw new AutoFileMigrateException("Error writing corrected file", e);
+					domModel.save(output);
 				}
 			}
 		}
 		catch (Exception e) {
 			throw new AutoFileMigrateException("Error writing corrected file", e);
+		}
+		finally {
+			if (domModel != null) {
+				domModel.releaseFromEdit();
+			}
 		}
 
 		return problemsCorrected;

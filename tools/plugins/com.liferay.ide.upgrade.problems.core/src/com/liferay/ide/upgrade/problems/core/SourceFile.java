@@ -16,14 +16,11 @@ package com.liferay.ide.upgrade.problems.core;
 
 import java.io.File;
 
-import org.eclipse.core.resources.IFile;
-
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public interface SourceFile {
-
-	public IFile getIFile(File file);
 
 	public void setFile(File file);
 

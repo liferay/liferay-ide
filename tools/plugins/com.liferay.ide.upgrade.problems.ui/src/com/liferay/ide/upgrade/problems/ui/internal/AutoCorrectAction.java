@@ -35,6 +35,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * @author Seiphon Wang
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class AutoCorrectAction extends BaseAutoCorrectAction implements UpgradeProblemSupport {
 
@@ -56,7 +57,7 @@ public class AutoCorrectAction extends BaseAutoCorrectAction implements UpgradeP
 
 		UpgradeProblem upgradeProblem = getUpgradeProblem(selection);
 
-		File file = getUpgradeFile(upgradeProblem);
+		File file = upgradeProblem.getResource();
 
 		autoCorrect(file, upgradeProblem, true);
 

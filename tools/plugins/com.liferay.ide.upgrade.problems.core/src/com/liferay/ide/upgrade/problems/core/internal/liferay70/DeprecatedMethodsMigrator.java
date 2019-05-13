@@ -37,6 +37,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @Component(property = "file.extensions=java,jsp,jspf", service = FileMigrator.class)
 public class DeprecatedMethodsMigrator extends JavaFileMigrator {
@@ -98,8 +99,8 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 							problems.add(
 								new UpgradeProblem(
 									_tempMethod.getString("javadoc"), _tempMethod.getString("javadoc"), fileExtension,
-									"", "7.0", workspaceFile.getIFile(file), searchResult.startLine,
-									searchResult.startOffset, searchResult.endOffset, _tempMethod.getString("javadoc"),
+									"", "7.0", file, searchResult.startLine, searchResult.startOffset,
+									searchResult.endOffset, _tempMethod.getString("javadoc"),
 									searchResult.autoCorrectContext, UpgradeProblem.STATUS_NOT_RESOLVED,
 									UpgradeProblem.DEFAULT_MARKER_ID, makerType));
 						}

@@ -14,17 +14,29 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.problems.core.CUCache;
+import com.liferay.ide.upgrade.problems.core.FileMigration;
 
 import java.io.File;
+import java.io.InputStream;
 
 import java.lang.ref.WeakReference;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
@@ -40,6 +52,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @Component(property = "type=jsp", service = CUCache.class)
 @SuppressWarnings("restriction")
@@ -84,21 +97,36 @@ public class CUCacheWTP implements CUCache<JSPTranslationPrime> {
 		}
 	}
 
+	private void _addNaturesToProject(IProject proj, String[] natureIds, IProgressMonitor monitor)
+		throws CoreException {
+
+		IProjectDescription description = proj.getDescription();
+
+		String[] prevNatures = description.getNatureIds();
+
+		String[] newNatures = new String[prevNatures.length + natureIds.length];
+
+		System.arraycopy(prevNatures, 0, newNatures, 0, prevNatures.length);
+
+		for (int i = prevNatures.length; i < newNatures.length; i++) {
+			newNatures[i] = natureIds[i - prevNatures.length];
+		}
+
+		description.setNatureIds(newNatures);
+
+		proj.setDescription(description, monitor);
+	}
+
+	@SuppressWarnings("deprecation")
 	private JSPTranslationPrime _createJSPTranslation(File file) {
 		IDOMModel jspModel = null;
 
 		try {
-
-			// try to find the file in the current workspace, if it can't find
-			// it then fall back to copy
-
-			WorkspaceFile workspaceFile = new WorkspaceFile();
-
-			IFile jspFile = workspaceFile.getIFile(file);
-
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			jspModel = (IDOMModel)modelManager.getModelForRead(jspFile);
+			try (InputStream input = Files.newInputStream(Paths.get(file.toURI()), StandardOpenOption.READ)) {
+				jspModel = (IDOMModel)modelManager.getModelForRead(file.getAbsolutePath(), input, null);
+			}
 
 			IDOMDocument domDocument = jspModel.getDocument();
 
@@ -116,9 +144,20 @@ public class CUCacheWTP implements CUCache<JSPTranslationPrime> {
 
 			translator.translate();
 
-			IJavaProject javaProject = JavaCore.create(jspFile.getProject());
+			IFile[] resourceFiles = CoreUtil.findFilesForLocationURI(file.toURI());
 
-			return new JSPTranslationPrime(javaProject, translator, jspFile);
+			IJavaProject javaProject = null;
+
+			if (ListUtil.isNotEmpty(resourceFiles)) {
+				IProject project = resourceFiles[0].getProject();
+
+				javaProject = _getJavaProject(project.getName());
+			}
+			else {
+				javaProject = _getJavaProject(FileMigration.HELPER_PROJECT_NAME);
+			}
+
+			return new JSPTranslationPrime(javaProject, translator, file);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -130,6 +169,28 @@ public class CUCacheWTP implements CUCache<JSPTranslationPrime> {
 		}
 
 		return null;
+	}
+
+	private IJavaProject _getJavaProject(String projectName) throws CoreException {
+		IProject javaProject = CoreUtil.getProject(projectName);
+
+		IProgressMonitor monitor = new NullProgressMonitor();
+
+		if (!javaProject.exists()) {
+			IWorkspace workspace = CoreUtil.getWorkspace();
+
+			IProjectDescription description = workspace.newProjectDescription(projectName);
+
+			javaProject.create(monitor);
+			javaProject.open(monitor);
+			javaProject.setDescription(description, monitor);
+		}
+
+		javaProject.open(monitor);
+
+		_addNaturesToProject(javaProject, new String[] {JavaCore.NATURE_ID}, monitor);
+
+		return JavaCore.create(javaProject);
 	}
 
 	private static final Map<File, Long> _fileModifiedTimeMap = new HashMap<>();

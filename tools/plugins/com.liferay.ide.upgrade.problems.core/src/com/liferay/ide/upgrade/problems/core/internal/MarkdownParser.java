@@ -34,6 +34,7 @@ import org.jsoup.select.Elements;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class MarkdownParser {
 
@@ -72,7 +73,7 @@ public class MarkdownParser {
 				retval = sections;
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				UpgradeProblemsCorePlugin.logError(e.getMessage());
 			}
 		}
 
