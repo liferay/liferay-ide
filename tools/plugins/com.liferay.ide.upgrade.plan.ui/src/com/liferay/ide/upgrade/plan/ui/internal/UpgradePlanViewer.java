@@ -17,7 +17,6 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
-import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
@@ -176,14 +175,7 @@ public class UpgradePlanViewer implements IDoubleClickListener, ITreeViewerListe
 
 	@Override
 	public void onUpgradeEvent(UpgradeEvent upgradeEvent) {
-		if (upgradeEvent instanceof UpgradePlanStartedEvent) {
-			UpgradePlanStartedEvent upgradePlanStartedEvent = (UpgradePlanStartedEvent)upgradeEvent;
-
-			UpgradePlan upgradePlan = upgradePlanStartedEvent.getUpgradePlan();
-
-			UIUtil.sync(() -> _treeViewer.setInput(upgradePlan));
-		}
-		else if (upgradeEvent instanceof UpgradeStepStatusChangedEvent) {
+		if (upgradeEvent instanceof UpgradeStepStatusChangedEvent) {
 			UIUtil.async(
 				() -> {
 					UpgradeStepStatusChangedEvent statusEvent = Adapters.adapt(
