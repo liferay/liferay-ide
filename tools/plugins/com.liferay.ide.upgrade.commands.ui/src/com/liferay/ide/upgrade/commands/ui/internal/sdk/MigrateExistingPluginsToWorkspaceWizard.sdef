@@ -27,7 +27,7 @@
                 <spacer></spacer>
                 <custom>
                     <scale-vertically>true</scale-vertically>
-                    <class>com.liferay.ide.upgrade.commands.ui.internal.MigrateExistingPluginsToWorkspaceCheckboxCustomPart</class>
+                    <class>com.liferay.ide.upgrade.commands.ui.internal.sdk.MigrateExistingPluginsToWorkspaceCheckboxCustomPart</class>
                 </custom>
             </content>
             <scale-vertically>true</scale-vertically>
