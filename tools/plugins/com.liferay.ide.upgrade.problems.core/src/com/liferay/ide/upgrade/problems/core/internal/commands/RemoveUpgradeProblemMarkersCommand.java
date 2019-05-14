@@ -20,7 +20,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.MarkerSupport;
+import com.liferay.ide.upgrade.problems.core.ProblemSupport;
 import com.liferay.ide.upgrade.problems.core.commands.RemoveUpgradeProblemMarkersCommandKeys;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = "id=" + RemoveUpgradeProblemMarkersCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
 	service = UpgradeCommand.class
 )
-public class RemoveUpgradeProblemMarkersCommand implements MarkerSupport, UpgradeCommand {
+public class RemoveUpgradeProblemMarkersCommand implements ProblemSupport, UpgradeCommand {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {

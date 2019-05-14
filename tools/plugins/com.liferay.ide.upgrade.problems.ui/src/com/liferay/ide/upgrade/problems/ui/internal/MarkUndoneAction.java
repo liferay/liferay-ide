@@ -30,7 +30,7 @@ import org.eclipse.ui.actions.SelectionProviderAction;
  * @author Seiphon Wang
  * @author Terry Jia
  */
-public class MarkUndoneAction extends SelectionProviderAction implements UpgradeProblemSupport {
+public class MarkUndoneAction extends SelectionProviderAction implements ProblemUISupport {
 
 	public MarkUndoneAction(ISelectionProvider provider) {
 		super(provider, "Mark undone");
