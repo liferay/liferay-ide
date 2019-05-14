@@ -4,17 +4,13 @@ Bundle-Name: UI Liferay Base
 Bundle-SymbolicName: com.liferay.ide.ui.liferay
 Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: Liferay, Inc.
-Require-Bundle: org.junit,
- org.eclipse.debug.ui,
- org.eclipse.swtbot.go,
- org.eclipse.ui.console,
- org.eclipse.core.filesystem,
- org.eclipse.ui.ide,
- org.eclipse.wst.sse.core,
+Require-Bundle: 
  com.liferay.ide.ui.swtbot,
  org.apache.ant,
- org.eclipse.ui.forms,
- org.eclipse.swtbot.forms.finder
+ org.eclipse.debug.ui,
+ org.eclipse.swtbot.forms.finder,
+ org.eclipse.swtbot.go,
+ org.eclipse.ui.forms
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.ui.liferay,

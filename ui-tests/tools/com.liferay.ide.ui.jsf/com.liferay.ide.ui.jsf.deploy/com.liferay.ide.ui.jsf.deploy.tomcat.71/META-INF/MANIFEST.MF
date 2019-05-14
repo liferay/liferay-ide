@@ -4,10 +4,9 @@ Bundle-Name: Liferay IDE UI Jsf Deploy Tomcat 71 Tests
 Bundle-SymbolicName: com.liferay.ide.ui.jsf.deploy.tomcat.71.tests
 Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: Liferay, Inc.
-Require-Bundle: com.liferay.ide.ui.swtbot,
+Require-Bundle: com.liferay.ide.ui.jsf.deploy.base,
  com.liferay.ide.ui.liferay,
- org.eclipse.swtbot.go,
- org.junit,
- com.liferay.ide.ui.jsf.deploy.base
+ com.liferay.ide.ui.swtbot,
+ org.eclipse.swtbot.go
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
