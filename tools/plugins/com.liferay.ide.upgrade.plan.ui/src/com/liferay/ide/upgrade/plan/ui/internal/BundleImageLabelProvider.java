@@ -74,8 +74,8 @@ public class BundleImageLabelProvider extends LabelProvider {
 				Objects::nonNull
 			).map(
 				this::_getImage
-			).orElse(
-				super.getImage(element)
+			).orElseGet(
+				() -> super.getImage(element)
 			);
 		}
 
