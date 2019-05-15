@@ -237,6 +237,8 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 	public void dispose() {
 		_serviceTracker.close();
 
+		_upgradePlanner.removeListener(this);
+
 		super.dispose();
 	}
 
