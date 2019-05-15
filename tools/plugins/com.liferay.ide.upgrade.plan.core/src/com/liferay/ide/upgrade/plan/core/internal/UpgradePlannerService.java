@@ -125,7 +125,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 			IMemento rootMemento = XMLMemento.loadMemento(inputStream);
 
 			if (rootMemento == null) {
-				return null;
+				return Collections.emptyList();
 			}
 
 			return Stream.of(
@@ -144,7 +144,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 			UpgradePlanCorePlugin.logError("Could not load upgrade plan list.", ioe);
 		}
 
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
