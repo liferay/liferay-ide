@@ -316,17 +316,19 @@ public class UpgradeProblem {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append("Problem description : " + _summary + System.getProperty("line.separator"));
-		builder.append("	Uuid is :" + _uuid + System.getProperty("line.separator"));
-		builder.append("	File location is :" + _resource.getAbsolutePath() + System.getProperty("line.separator"));
-		builder.append("	Ticket is :" + _ticket + System.getProperty("line.separator"));
-		builder.append("	Line Number is :" + _lineNumber + System.getProperty("line.separator"));
-		builder.append("	Title is :" + _title + System.getProperty("line.separator"));
-		builder.append("	Version is :" + _version + System.getProperty("line.separator"));
-		builder.append("	Type is :" + _type + System.getProperty("line.separator"));
-		builder.append("	Status is :" + _status + System.getProperty("line.separator"));
-		builder.append("	StartOffset is :" + _startOffset + System.getProperty("line.separator"));
-		builder.append("	EndOffset is :" + _endOffset + System.getProperty("line.separator"));
+		String lineSparator = System.getProperty("line.separator");
+
+		builder.append("Problem description : " + _summary + lineSparator);
+		builder.append("	Uuid is :" + _uuid + lineSparator);
+		builder.append("	File location is :" + _resource.getAbsolutePath() + lineSparator);
+		builder.append("	Ticket is :" + _ticket + lineSparator);
+		builder.append("	Line Number is :" + _lineNumber + lineSparator);
+		builder.append("	Title is :" + _title + lineSparator);
+		builder.append("	Version is :" + _version + lineSparator);
+		builder.append("	Type is :" + _type + lineSparator);
+		builder.append("	Status is :" + _status + lineSparator);
+		builder.append("	StartOffset is :" + _startOffset + lineSparator);
+		builder.append("	EndOffset is :" + _endOffset + lineSparator);
 
 		return builder.toString();
 	}

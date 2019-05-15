@@ -133,7 +133,6 @@ public class UpgradeStep {
 		}
 
 		if (isEqualIgnoreCase(_description, baseUpgradeStep._description) &&
-			isEqualIgnoreCase(_icon, baseUpgradeStep._icon) &&
 			isEqualIgnoreCase(_requirement, baseUpgradeStep._requirement) &&
 			isEqualIgnoreCase(_commandId, baseUpgradeStep._commandId) &&
 			isEqualIgnoreCase(_url, baseUpgradeStep._url) && isEqual(_children, baseUpgradeStep._children) &&
@@ -194,7 +193,6 @@ public class UpgradeStep {
 		int hash = 31;
 
 		hash = 31 * hash + ((_description != null) ? _description.hashCode() : 0);
-		hash = 31 * hash + ((_icon != null) ? _icon.hashCode() : 0);
 
 		Stream<UpgradeStep> stream = _children.stream();
 
