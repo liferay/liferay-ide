@@ -14,6 +14,8 @@
 
 package com.liferay.ide.core.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -42,6 +44,40 @@ import org.eclipse.osgi.util.NLS;
  *         Komissarchik</a>
  */
 public final class ZipUtil {
+
+	public static ByteArrayInputStream getEmbedStream(InputStream in, ZipEntry entry) throws IOException {
+		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+			long size = entry.getSize();
+
+			if (size > -1) {
+				byte[] buffer = new byte[1024 * 4];
+				int n = 0;
+				long count = 0;
+
+				while (((n = in.read(buffer)) != -1) && (count < size)) {
+					byteArrayOutputStream.write(buffer, 0, n);
+					count += n;
+				}
+			}
+			else {
+				while (true) {
+					int b = in.read();
+
+					if (b == -1) {
+						break;
+					}
+
+					byteArrayOutputStream.write(b);
+				}
+			}
+
+			return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+		}
+		catch (Exception e) {
+		}
+
+		return null;
+	}
 
 	public static String getFirstZipEntryName(File zipFile) throws Exception {
 		ZipFile zip = new ZipFile(zipFile);
