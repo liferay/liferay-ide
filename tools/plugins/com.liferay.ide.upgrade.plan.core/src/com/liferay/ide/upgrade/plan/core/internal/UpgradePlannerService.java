@@ -250,7 +250,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 		}
 
 		try (InputStream inputStream = new FileInputStream(_getUpgradePlannerStorageFile())) {
-			final IMemento rootMemento = Optional.of(
+			final IMemento rootMemento = Optional.ofNullable(
 				XMLMemento.loadMemento(inputStream)
 			).orElseGet(
 				() -> XMLMemento.createWriteRoot("upgradePlanner")
