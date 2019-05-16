@@ -22,18 +22,20 @@ import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import java.io.File;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * @author Gregory Amerson
  * @author Terry Jia
  * @author Simon Jiang
  */
-public interface MarkerSupport {
+public interface UpgradeProblemSupport {
 
 	public default void addMarkers(Collection<UpgradeProblem> upgradeProblems) {
 		upgradeProblems.stream(
@@ -101,6 +103,26 @@ public interface MarkerSupport {
 		}
 
 		return false;
+	}
+
+	public default void refreshProjects(Collection<UpgradeProblem> upgradeProblems, IProgressMonitor progressMonitor) {
+		upgradeProblems.stream(
+		).map(
+			UpgradeProblem::getResource
+		).map(
+			CoreUtil::getProject
+		).filter(
+			Objects::nonNull
+		).distinct(
+		).forEach(
+			project -> {
+				try {
+					project.refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
+				}
+				catch (CoreException ce) {
+				}
+			}
+		);
 	}
 
 	public default void removeMarkers(Collection<UpgradeProblem> upgradeProblems) {

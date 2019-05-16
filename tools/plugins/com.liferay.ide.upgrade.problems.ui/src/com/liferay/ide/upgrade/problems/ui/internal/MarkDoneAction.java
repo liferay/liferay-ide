@@ -30,7 +30,7 @@ import org.eclipse.ui.actions.SelectionProviderAction;
  * @author Seiphon Wang
  * @author Terry Jia
  */
-public class MarkDoneAction extends SelectionProviderAction implements UpgradeProblemSupport {
+public class MarkDoneAction extends SelectionProviderAction implements UpgradeProblemUISupport {
 
 	public MarkDoneAction(ISelectionProvider provider) {
 		super(provider, "Mark done");

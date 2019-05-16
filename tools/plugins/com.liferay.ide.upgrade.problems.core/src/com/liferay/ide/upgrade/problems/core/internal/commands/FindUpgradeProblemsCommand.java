@@ -23,7 +23,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
-import com.liferay.ide.upgrade.problems.core.MarkerSupport;
+import com.liferay.ide.upgrade.problems.core.UpgradeProblemSupport;
 import com.liferay.ide.upgrade.problems.core.commands.FindUpgradeProblemsCommandKeys;
 
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 @Component(
 	property = "id=" + FindUpgradeProblemsCommandKeys.ID, scope = ServiceScope.PROTOTYPE, service = UpgradeCommand.class
 )
-public class FindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand {
+public class FindUpgradeProblemsCommand implements UpgradeCommand, UpgradeProblemSupport {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -95,6 +95,8 @@ public class FindUpgradeProblemsCommand implements MarkerSupport, UpgradeCommand
 		).collect(
 			Collectors.toList()
 		);
+
+		refreshProjects(foundUpgradeProblems, progressMonitor);
 
 		upgradePlan.addUpgradeProblems(foundUpgradeProblems);
 

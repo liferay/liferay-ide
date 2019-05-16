@@ -36,7 +36,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Seiphon Wang
  * @author Terry Jia
  */
-public class IgnoreAlwaysAction extends SelectionProviderAction implements UpgradeProblemSupport {
+public class IgnoreAlwaysAction extends SelectionProviderAction implements UpgradeProblemUISupport {
 
 	public IgnoreAlwaysAction(ISelectionProvider provider) {
 		super(provider, "Ignore all problems of this type");
