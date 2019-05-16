@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.problems.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-import com.liferay.ide.upgrade.problems.core.ProblemSupport;
+import com.liferay.ide.upgrade.problems.core.UpgradeProblemSupport;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,7 +28,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 /**
  * @author Seiphon Wang
  */
-public interface ProblemUISupport extends ProblemSupport {
+public interface UpgradeProblemUISupport extends UpgradeProblemSupport {
 
 	public default UpgradeProblem getUpgradeProblem(ISelection selection) {
 		if (selection instanceof IStructuredSelection) {

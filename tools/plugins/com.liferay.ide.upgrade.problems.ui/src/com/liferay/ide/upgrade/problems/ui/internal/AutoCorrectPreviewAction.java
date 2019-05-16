@@ -34,7 +34,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Terry Jia
  * @author Simon Jiang
  */
-public class AutoCorrectPreviewAction extends BaseAutoCorrectAction implements ProblemUISupport {
+public class AutoCorrectPreviewAction extends BaseAutoCorrectAction implements UpgradeProblemUISupport {
 
 	public AutoCorrectPreviewAction(ISelectionProvider provider) {
 		super(provider, "Correct automatically - preview");

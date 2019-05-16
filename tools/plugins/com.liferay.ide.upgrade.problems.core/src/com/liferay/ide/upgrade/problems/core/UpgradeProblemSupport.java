@@ -35,7 +35,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * @author Terry Jia
  * @author Simon Jiang
  */
-public interface ProblemSupport {
+public interface UpgradeProblemSupport {
 
 	public default void addMarkers(Collection<UpgradeProblem> upgradeProblems) {
 		upgradeProblems.stream(
@@ -105,31 +105,21 @@ public interface ProblemSupport {
 		return false;
 	}
 
-	public default void refreshProblemProject(Collection<UpgradeProblem> problems, IProgressMonitor progressMonitor) {
-		problems.stream(
+	public default void refreshProjects(Collection<UpgradeProblem> upgradeProblems, IProgressMonitor progressMonitor) {
+		upgradeProblems.stream(
 		).map(
-			problem -> problem.getResource()
+			UpgradeProblem::getResource
 		).map(
-			resource -> {
-				IFile[] files = CoreUtil.findFilesForLocationURI(resource.toURI());
-
-				if (ListUtil.isNotEmpty(files)) {
-					return files[0];
-				}
-
-				return null;
-			}
+			CoreUtil::getProject
 		).filter(
 			Objects::nonNull
-		).map(
-			IResource::getProject
 		).distinct(
 		).forEach(
 			project -> {
 				try {
 					project.refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
 				}
-				catch (Exception e) {
+				catch (CoreException ce) {
 				}
 			}
 		);

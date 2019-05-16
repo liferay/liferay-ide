@@ -37,7 +37,7 @@ import org.osgi.framework.ServiceReference;
  * @author Terry Jia
  * @author Simon Jiang
  */
-public class BaseAutoCorrectAction extends SelectionProviderAction implements ProblemUISupport {
+public class BaseAutoCorrectAction extends SelectionProviderAction implements UpgradeProblemUISupport {
 
 	protected BaseAutoCorrectAction(ISelectionProvider provider, String text) {
 		super(provider, text);

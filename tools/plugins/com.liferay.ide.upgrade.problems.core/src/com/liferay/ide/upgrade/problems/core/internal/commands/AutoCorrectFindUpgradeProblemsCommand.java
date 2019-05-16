@@ -27,7 +27,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
-import com.liferay.ide.upgrade.problems.core.ProblemSupport;
+import com.liferay.ide.upgrade.problems.core.UpgradeProblemSupport;
 import com.liferay.ide.upgrade.problems.core.commands.AutoCorrectFindUpgradeProblemsCommandKeys;
 import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
 
@@ -63,7 +63,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	property = "id=" + AutoCorrectFindUpgradeProblemsCommandKeys.ID, scope = ServiceScope.PROTOTYPE,
 	service = {UpgradeCommand.class, UpgradePreview.class}
 )
-public class AutoCorrectFindUpgradeProblemsCommand implements ProblemSupport, UpgradeCommand, UpgradePreview {
+public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, UpgradePreview, UpgradeProblemSupport {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -78,7 +78,7 @@ public class AutoCorrectFindUpgradeProblemsCommand implements ProblemSupport, Up
 			this::_autoCorrectProblem
 		);
 
-		refreshProblemProject(autoCorrectableUpgradeProblems, progressMonitor);
+		refreshProjects(autoCorrectableUpgradeProblems, progressMonitor);
 
 		_upgradePlanner.dispatch(
 			new UpgradeCommandPerformedEvent(this, new ArrayList<>(autoCorrectableUpgradeProblems)));

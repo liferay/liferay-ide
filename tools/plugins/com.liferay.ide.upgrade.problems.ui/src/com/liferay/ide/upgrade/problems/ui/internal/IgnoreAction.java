@@ -28,7 +28,7 @@ import org.eclipse.ui.actions.SelectionProviderAction;
  * @author Seiphon Wang
  * @author Terry Jia
  */
-public class IgnoreAction extends SelectionProviderAction implements ProblemUISupport {
+public class IgnoreAction extends SelectionProviderAction implements UpgradeProblemUISupport {
 
 	public IgnoreAction(ISelectionProvider provider) {
 		super(provider, "Ignore");
