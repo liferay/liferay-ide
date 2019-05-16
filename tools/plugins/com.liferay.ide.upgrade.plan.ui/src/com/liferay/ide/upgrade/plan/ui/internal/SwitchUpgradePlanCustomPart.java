@@ -32,6 +32,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.jface.dialogs.DialogSettings;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -74,6 +76,8 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 		_upgradePlanner = _serviceTracker.getService();
 
 		_upgradePlanner.addListener(this);
+
+		_upgradePlanSettings = UpgradePlanUIPlugin.getUpgradePlanSettings();
 	}
 
 	@Override
@@ -336,6 +340,8 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 			_upgradePlanner.removeUpgradePlan(upgradePlan);
 
+			_removeUpgradePlanExpansionSettings(upgradePlan.getName());
+
 			_loadUpgradePlans();
 		}
 	}
@@ -386,11 +392,24 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 		}
 	}
 
+	private void _removeUpgradePlanExpansionSettings(String upgradePlanName) {
+		IDialogSettings upgradePlanSection = _upgradePlanSettings.getSection(upgradePlanName);
+
+		if (upgradePlanSection != null) {
+			DialogSettings dialogSetting = Adapters.adapt(_upgradePlanSettings, DialogSettings.class);
+
+			dialogSetting.removeSection(upgradePlanSection);
+
+			UpgradePlanUIPlugin.saveUpgradePlanSettings();
+		}
+	}
+
 	private Set<Button> _buttons = new HashSet<>();
 	private UpgradePlan _currentUpgradePlan;
 	private ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 	private TableViewer _tableViewer;
 	private UpgradePlanner _upgradePlanner;
+	private IDialogSettings _upgradePlanSettings;
 
 	private class SwitchUpgradePlanContentProvider implements IStructuredContentProvider {
 

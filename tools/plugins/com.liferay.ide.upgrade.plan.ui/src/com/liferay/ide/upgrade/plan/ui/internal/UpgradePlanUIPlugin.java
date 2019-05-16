@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
@@ -94,6 +95,10 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		return _plugin;
 	}
 
+	public static IDialogSettings getUpgradePlanSettings() {
+		return _plugin.getDialogSettings();
+	}
+
 	public static void logError(Exception e) {
 		ILog log = _plugin.getLog();
 
@@ -104,6 +109,10 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		ILog log = _plugin.getLog();
 
 		log.log(createErrorStatus(msg, e));
+	}
+
+	public static void saveUpgradePlanSettings() {
+		_plugin.saveDialogSettings();
 	}
 
 	@Override
