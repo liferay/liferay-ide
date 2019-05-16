@@ -77,7 +77,7 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 		_upgradePlanner.addListener(this);
 
-		_upgradeDialogSettings = UpgradePlanUIPlugin.getUpgradeDialogSettings();
+		_upgradePlanSettings = UpgradePlanUIPlugin.getUpgradePlanSettings();
 	}
 
 	@Override
@@ -393,14 +393,14 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 	}
 
 	private void _removeUpgradePlanExpansionSettings(String upgradePlanName) {
-		IDialogSettings upgradePlanSection = _upgradeDialogSettings.getSection(upgradePlanName);
+		IDialogSettings upgradePlanSection = _upgradePlanSettings.getSection(upgradePlanName);
 
 		if (upgradePlanSection != null) {
-			DialogSettings dialogSetting = Adapters.adapt(_upgradeDialogSettings, DialogSettings.class);
+			DialogSettings dialogSetting = Adapters.adapt(_upgradePlanSettings, DialogSettings.class);
 
 			dialogSetting.removeSection(upgradePlanSection);
 
-			UpgradePlanUIPlugin.saveUpgradeDialogSettings();
+			UpgradePlanUIPlugin.saveUpgradePlanSettings();
 		}
 	}
 
@@ -408,8 +408,8 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 	private UpgradePlan _currentUpgradePlan;
 	private ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 	private TableViewer _tableViewer;
-	private IDialogSettings _upgradeDialogSettings;
 	private UpgradePlanner _upgradePlanner;
+	private IDialogSettings _upgradePlanSettings;
 
 	private class SwitchUpgradePlanContentProvider implements IStructuredContentProvider {
 

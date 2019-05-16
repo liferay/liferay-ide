@@ -95,7 +95,7 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		return _plugin;
 	}
 
-	public static IDialogSettings getUpgradeDialogSettings() {
+	public static IDialogSettings getUpgradePlanSettings() {
 		return _plugin.getDialogSettings();
 	}
 
@@ -111,7 +111,7 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		log.log(createErrorStatus(msg, e));
 	}
 
-	public static void saveUpgradeDialogSettings() {
+	public static void saveUpgradePlanSettings() {
 		_plugin.saveDialogSettings();
 	}
 

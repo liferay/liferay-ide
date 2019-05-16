@@ -75,7 +75,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 
 		_serviceTracker.open();
 
-		_upgradeDialogSettings = UpgradePlanUIPlugin.getUpgradeDialogSettings();
+		_upgradePlanSettings = UpgradePlanUIPlugin.getUpgradePlanSettings();
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 		_upgradePlanner.addListener(this);
 
 		Optional.ofNullable(
-			_loadActionUpgradePlanName()
+			_loadActiveUpgradePlanName()
 		).filter(
 			Objects::nonNull
 		).ifPresent(
@@ -174,9 +174,9 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 
 						_upgradePlanViewer.initTreeExpansion(upgradePlan, _loadTreeExpansion(upgradePlan.getName()));
 
-						_saveActionUpgradePlanSettings(upgradePlan.getName());
+						_saveActiveUpgradePlanSettings(upgradePlan.getName());
 
-						UpgradePlanUIPlugin.saveUpgradeDialogSettings();
+						UpgradePlanUIPlugin.saveUpgradePlanSettings();
 					});
 			}
 		}
@@ -190,7 +190,7 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 
 			_upgradePlanner.saveUpgradePlan(upgradePlan);
 
-			UpgradePlanUIPlugin.saveUpgradeDialogSettings();
+			UpgradePlanUIPlugin.saveUpgradePlanSettings();
 		}
 	}
 
@@ -208,13 +208,15 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 		if (upgradePlanViewerInput instanceof UpgradePlan) {
 			UpgradePlan upgradePlan = (UpgradePlan)upgradePlanViewerInput;
 
-			_saveTreeExpansion(upgradePlan.getName(), _upgradePlanViewer.getTreeExpansion());
+			String upgradePlanName = upgradePlan.getName();
+
+			_saveTreeExpansion(upgradePlanName, _upgradePlanViewer.getTreeExpansion());
 
 			_upgradePlanner.saveUpgradePlan(upgradePlan);
 
-			_saveActionUpgradePlanSettings(upgradePlan.getName());
+			_saveActiveUpgradePlanSettings(upgradePlanName);
 
-			UpgradePlanUIPlugin.saveUpgradeDialogSettings();
+			UpgradePlanUIPlugin.saveUpgradePlanSettings();
 		}
 	}
 
@@ -265,18 +267,18 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 			});
 	}
 
-	private String _loadActionUpgradePlanName() {
-		IDialogSettings activeUpgradePlanSection = _upgradeDialogSettings.getSection("activeUpgradePlanName");
+	private String _loadActiveUpgradePlanName() {
+		IDialogSettings activeUpgradePlanSection = _upgradePlanSettings.getSection("activeUpgradePlanName");
 
 		if (activeUpgradePlanSection == null) {
-			activeUpgradePlanSection = _upgradeDialogSettings.addNewSection("activeUpgradePlanName");
+			activeUpgradePlanSection = _upgradePlanSettings.addNewSection("activeUpgradePlanName");
 		}
 
 		return activeUpgradePlanSection.get("activeUpgradePlanName");
 	}
 
 	private List<String> _loadTreeExpansion(String upgradePlanName) {
-		IDialogSettings upgradePlanSection = _upgradeDialogSettings.getSection(upgradePlanName);
+		IDialogSettings upgradePlanSection = _upgradePlanSettings.getSection(upgradePlanName);
 
 		if (upgradePlanSection == null) {
 			return Collections.emptyList();
@@ -293,11 +295,11 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 		return Arrays.asList(titles);
 	}
 
-	private void _saveActionUpgradePlanSettings(String upgradePlanName) {
-		IDialogSettings activeUpgradePlanSection = _upgradeDialogSettings.getSection("activeUpgradePlanName");
+	private void _saveActiveUpgradePlanSettings(String upgradePlanName) {
+		IDialogSettings activeUpgradePlanSection = _upgradePlanSettings.getSection("activeUpgradePlanName");
 
 		if (activeUpgradePlanSection == null) {
-			activeUpgradePlanSection = _upgradeDialogSettings.addNewSection("activeUpgradePlanName");
+			activeUpgradePlanSection = _upgradePlanSettings.addNewSection("activeUpgradePlanName");
 		}
 
 		activeUpgradePlanSection.put("activeUpgradePlanName", upgradePlanName);
@@ -308,10 +310,10 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 			return;
 		}
 
-		IDialogSettings upgradePlanSection = _upgradeDialogSettings.getSection(upgradePlanName);
+		IDialogSettings upgradePlanSection = _upgradePlanSettings.getSection(upgradePlanName);
 
 		if (upgradePlanSection == null) {
-			upgradePlanSection = _upgradeDialogSettings.addNewSection(upgradePlanName);
+			upgradePlanSection = _upgradePlanSettings.addNewSection(upgradePlanName);
 		}
 
 		String[] stepTitles = Stream.of(
@@ -331,8 +333,8 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 
 	private ListenerList<ISelectionChangedListener> _listeners = new ListenerList<>();
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
-	private IDialogSettings _upgradeDialogSettings;
 	private UpgradePlanner _upgradePlanner;
+	private IDialogSettings _upgradePlanSettings;
 	private UpgradePlanViewer _upgradePlanViewer;
 	private UpgradeStepViewer _upgradeStepViewer;
 	private UpgradeViewProgressBar _upgradeViewProgressBar;
