@@ -32,6 +32,14 @@ public class Editor extends AbstractPart {
 		super(bot, label);
 	}
 
+	public void customizedText(String fileName, int line, int column, String text) {
+		SWTBotEditor fileEditor = ((SWTWorkbenchBot)bot).editorByTitle(fileName);
+
+		SWTBotEclipseEditor fileContent = fileEditor.toTextEditor();
+
+		fileContent.insertText(line, column, text);
+	}
+
 	public String getLabel() {
 		if (isLabelNull()) {
 			SWTBotEditor botActiveEditor = ((SWTWorkbenchBot)bot).activeEditor();
