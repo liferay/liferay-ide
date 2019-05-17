@@ -47,7 +47,7 @@ public class RemovedHibernateConfigurationConverterAndConverter extends JavaFile
 		searchResults.addAll(fileChecker.findMethodInvocations("HibernateConfigurationConverter", null, "*", null));
 		searchResults.add(
 			fileChecker.findImport("com.liferay.portal.spring.hibernate.HibernateConfigurationConverter"));
-		searchResults.add(fileChecker.findImport("package com.liferay.portal.kernel.util.Converter"));
+		searchResults.add(fileChecker.findImport("com.liferay.portal.kernel.util.Converter"));
 
 		return searchResults;
 	}
