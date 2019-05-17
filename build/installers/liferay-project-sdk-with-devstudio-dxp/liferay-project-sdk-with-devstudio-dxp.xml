@@ -426,7 +426,7 @@
                 <propertiesFileSet>
                     <file>${lrws}${platform_path_separator}gradle.properties</file>
                     <key>liferay.workspace.bundle.url</key>
-                    <value>https://files.liferay.com/private/ee/portal/7.2.10-rc2/liferay-dxp-tomcat-7.2.10-rc2-20190510181508660.tar.gz</value>
+                    <value>https://api.liferay.com/downloads/portal/7.2.10-rc2/liferay-dxp-tomcat-7.2.10-rc2-20190510181508660.tar.gz</value>
                 </propertiesFileSet>
                 <createDirectory>
                     <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
