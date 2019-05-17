@@ -46,10 +46,10 @@
         <tycho-m2e-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.9.0/N/0.9.0.201412222151/</tycho-m2e-site>
         <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/2.6.0/</swtbot-site>
         <sapphire-site>http://download.eclipse.org/sapphire/9.1.1/repository/</sapphire-site>
-	<maven-deps-plugin-site>https://github.com/ianbrandt/m2e-maven-dependency-plugin/raw/gh-pages/0.0.4/</maven-deps-plugin-site>
+        <maven-deps-plugin-site>https://github.com/ianbrandt/m2e-maven-dependency-plugin/raw/gh-pages/0.0.4/</maven-deps-plugin-site>
         <gmaven.runtime>1.8</gmaven.runtime>
-        <blade-latest-download-url>https://repository.liferay.com/nexus/content/repositories/liferay-public-releases/com/liferay/blade/com.liferay.blade.cli/3.6.0/com.liferay.blade.cli-3.6.0.jar</blade-latest-download-url>
-        <blade-latest-md5>b3c07042a5ed801ed3da8db537fc799f</blade-latest-md5>
+        <blade-latest-download-url>https://dl.bintray.com/liferay-blade-cli/liferay-blade-cli/blade.jar</blade-latest-download-url>
+        <blade-latest-md5>16e61cdc73f3f1290774d390156a3acc</blade-latest-md5>
         <sign-apps>false</sign-apps>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
     </properties>
