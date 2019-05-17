@@ -29,7 +29,7 @@
                             <origin>../shared/download/com.liferay.portal.tools.bundle.support.jar</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../shared/download/liferay-ce-portal-tomcat-7.1.1-ga2-20181112144637000.tar.gz</origin>
+                            <origin>../shared/download/liferay-ce-portal-tomcat-7.2.0-rc2-20190503192513771.tar.gz</origin>
                         </distributionFile>
                         <distributionFile>
                             <origin>../shared/download/biz.aQute.bnd.jar</origin>
@@ -199,8 +199,8 @@
                     <progressText>Creating directory...</progressText>
                 </createDirectory>
                 <copyFile>
-                    <destination>${liferayBundlesPath}${platform_path_separator}liferay-ce-portal-tomcat-7.1.1-ga2-20181112144637000.tar.gz</destination>
-                    <origin>${installdir}${platform_path_separator}liferay-ce-portal-tomcat-7.1.1-ga2-20181112144637000.tar.gz</origin>
+                    <destination>${liferayBundlesPath}${platform_path_separator}liferay-ce-portal-tomcat-7.2.0-rc2-20190503192513771.tar.gz</destination>
+                    <origin>${installdir}${platform_path_separator}liferay-ce-portal-tomcat-7.2.0-rc2-20190503192513771.tar.gz</origin>
                 </copyFile>
                 <include file="../components/run-java-jpm.xml" />
             </actionList>
@@ -283,7 +283,7 @@
                 <propertiesFileSet>
                     <file>${lrws}${platform_path_separator}gradle.properties</file>
                     <key>liferay.workspace.bundle.url</key>
-                    <value>https://releases-cdn.liferay.com/portal/7.1.1-ga2/liferay-ce-portal-tomcat-7.1.1-ga2-20181112144637000.tar.gz</value>
+                    <value>https://releases-cdn.liferay.com/portal/7.2.0-rc2/liferay-ce-portal-tomcat-7.2.0-rc2-20190503192513771.tar.gz</value>
                 </propertiesFileSet>
                 <createDirectory>
                     <path>${userHome}${platform_path_separator}.gradle</path>
@@ -422,7 +422,7 @@
             </ruleList>
         </runProgram>
         <deleteFile>
-            <path>${installdir}${platform_path_separator}liferay-ce-portal-tomcat-7.1.1-ga2-20181112144637000.tar.gz</path>
+            <path>${installdir}${platform_path_separator}liferay-ce-portal-tomcat-7.2.0-rc2-20190503192513771.tar.gz</path>
         </deleteFile>
         <deleteFile>
             <path>${installdir}${platform_path_separator}blade.jar</path>
