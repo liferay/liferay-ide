@@ -17,11 +17,11 @@ Here are the steps for upgrading your development environment and custom plugins
         </li>
         <ol>
             <li commandId="create_new_liferay_workspace">
-                <div class="title"><a href="https://web-community-beta.wedeploy.io/web/guest/docs/7-2/reference/-/knowledge_base/reference/tooling">Create New Liferay Workspace</a></div>
+                <div class="title">Create New Liferay Workspace</div>
                 <div class="description">If you have an existing 7.x workspace, skip to the next step.</div>
             </li>
             <li commandId="import_existing_liferay_workspace">
-                <div class="title"><a href="https://web-community-beta.wedeploy.io/web/guest/docs/7-2/reference/-/knowledge_base/reference/blade-cli">Import Existing Liferay Workspace</a></div>
+                <div class="title">Import Existing Liferay Workspace</div>
                 <div class="description">If you do not have an existing 7.x workspace, go to the previous step.</div>
             </li>
         </ol>
