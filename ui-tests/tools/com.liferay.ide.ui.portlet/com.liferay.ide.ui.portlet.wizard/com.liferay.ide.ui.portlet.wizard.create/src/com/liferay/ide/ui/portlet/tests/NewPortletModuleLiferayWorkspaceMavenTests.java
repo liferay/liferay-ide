@@ -33,6 +33,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 	@ClassRule
 	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
 
+	@Ignore("ignore to wait BLADE-435")
 	@Test
 	public void createFreemarkerPortlet() {
 		String packageName = "test.freemarker.portlet.maven";
@@ -180,6 +181,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projectNames);
 	}
 
+	@Ignore("ignore because blade 3.7 remove portlet template")
 	@Test
 	public void createPortlet() {
 		String packageName = "test.portlet.maven";
@@ -209,7 +211,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projectNames);
 	}
 
-	@Ignore("ignore to wait IDE-3579 as it will take too long unexpected")
+	@Ignore("ignore because blade 3.7 remove soy-portlet template")
 	@Test
 	public void createSoyPortlet() {
 		String packageName = "test.soy.portlet.maven";

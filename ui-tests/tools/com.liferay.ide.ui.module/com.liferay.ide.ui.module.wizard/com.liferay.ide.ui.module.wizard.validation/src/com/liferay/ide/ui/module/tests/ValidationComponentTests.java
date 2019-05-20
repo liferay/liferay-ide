@@ -356,7 +356,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName2, PORTLET);
+		wizardAction.newModule.prepareGradle(projectName2, PORTLET_PROVIDER);
 
 		wizardAction.finish();
 

@@ -130,7 +130,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projects.getName(1), PORTLET);
+		wizardAction.newModule.prepareMaven(projects.getName(1), PORTLET_PROVIDER);
 
 		wizardAction.finish();
 
@@ -174,7 +174,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projects.getName(1), PORTLET);
+		wizardAction.newModule.prepareMaven(projects.getName(1), PORTLET_PROVIDER);
 
 		wizardAction.finish();
 

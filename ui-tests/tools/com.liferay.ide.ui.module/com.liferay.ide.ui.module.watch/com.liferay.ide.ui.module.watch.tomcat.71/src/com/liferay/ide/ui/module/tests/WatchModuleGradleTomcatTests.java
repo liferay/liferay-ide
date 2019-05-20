@@ -35,10 +35,10 @@ public class WatchModuleGradleTomcatTests extends SwtbotBase {
 	public static RuleChain chain = RuleUtil.getTomcat7xRunningRuleChain(bot, tomcat);
 
 	@Test
-	public void watchPortlet() {
+	public void watchMVCPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), PORTLET, "7.1");
+		wizardAction.newModule.prepareGradle(project.getName(), MVC_PORTLET, "7.1");
 
 		wizardAction.finish();
 
