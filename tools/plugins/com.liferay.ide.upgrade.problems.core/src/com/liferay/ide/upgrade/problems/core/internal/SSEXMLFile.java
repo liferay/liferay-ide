@@ -178,14 +178,26 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 			for (int i = 0; i < elements.getLength(); i++) {
 				IDOMElement domElement = (IDOMElement)elements.item(i);
 
-				String classValue = domElement.getAttribute("class");
+				String attributeValue = null;
+				String attributeName = null;
 
-				Matcher matcher = pattern.matcher(classValue);
+				if (tagName.equals("div")) {
+					attributeName = "class";
 
-				if ((classValue != null) && matcher.matches()) {
+					attributeValue = domElement.getAttribute(attributeName);
+				}
+				else if (tagName.equals("property")) {
+					attributeName = "value";
+
+					attributeValue = domElement.getAttribute(attributeName);
+				}
+
+				Matcher matcher = pattern.matcher(attributeValue);
+
+				if ((attributeValue != null) && matcher.matches()) {
 					IStructuredDocument structuredDocument = domDocument.getStructuredDocument();
 
-					IDOMNode attributeNode = (IDOMNode)domElement.getAttributeNode("class");
+					IDOMNode attributeNode = (IDOMNode)domElement.getAttributeNode(attributeName);
 
 					int startOffset = attributeNode.getStartOffset();
 					int endOffset = attributeNode.getEndOffset();
