@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.ui.upgrade.planner.tests;
+package com.liferay.ide.functional.upgrade.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
