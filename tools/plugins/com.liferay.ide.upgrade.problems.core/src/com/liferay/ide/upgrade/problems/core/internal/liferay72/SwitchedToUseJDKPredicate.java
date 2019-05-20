@@ -45,8 +45,6 @@ public class SwitchedToUseJDKPredicate extends JavaFileMigrator {
 
 		searchResults.addAll(fileChecker.findImports(_imports));
 
-		searchResults.addAll(fileChecker.findImplementsInterface("PredicateFilter"));
-
 		return searchResults;
 	}
 
