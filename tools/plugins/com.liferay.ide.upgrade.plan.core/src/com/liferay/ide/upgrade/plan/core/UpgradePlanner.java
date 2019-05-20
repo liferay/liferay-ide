@@ -16,9 +16,8 @@ package com.liferay.ide.upgrade.plan.core;
 
 import java.io.IOException;
 
-import java.nio.file.Path;
-
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Gregory Amerson
@@ -42,8 +41,8 @@ public interface UpgradePlanner {
 	public UpgradePlan loadUpgradePlan(String name);
 
 	public UpgradePlan newUpgradePlan(
-			String name, String currentVersion, String targetVersion, Path sourceCodeLocation,
-			String upgradePlanOutline)
+			String name, String currentVersion, String targetVersion, String upgradePlanOutline,
+			Map<String, String> upgradeContexts)
 		throws IOException;
 
 	public void removeListener(UpgradeListener upgradeListener);

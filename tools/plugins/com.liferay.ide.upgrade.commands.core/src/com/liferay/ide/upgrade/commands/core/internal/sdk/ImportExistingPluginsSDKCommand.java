@@ -24,8 +24,10 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import java.util.Collections;
+import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -49,9 +51,13 @@ public class ImportExistingPluginsSDKCommand implements UpgradeCommand {
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		Path rootProjectPath = upgradePlan.getCurrentProjectLocation();
+		Map<String, String> upgradeContexts = upgradePlan.getUpgradeContexts();
 
-		if (rootProjectPath == null) {
+		String currentProjectLocation = upgradeContexts.get("currentProjectLocation");
+
+		Path rootProjectPath = null;
+
+		if (currentProjectLocation == null) {
 			try {
 				rootProjectPath = _resourceSelection.selectPath(
 					"Please select the plugins sdk location.", "The chosen location is not valid plugins sdk location",
@@ -61,14 +67,17 @@ public class ImportExistingPluginsSDKCommand implements UpgradeCommand {
 				return UpgradeCommandsCorePlugin.createErrorStatus(ce.getMessage(), ce);
 			}
 		}
+		else {
+			rootProjectPath = Paths.get(currentProjectLocation);
+		}
+
+		upgradeContexts.put("currentProjectLocation", rootProjectPath.toString());
 
 		IStatus status = _projectImporter.canImport(rootProjectPath);
 
 		if (!status.isOK()) {
 			return status;
 		}
-
-		upgradePlan.setCurrentProjectLocation(rootProjectPath);
 
 		status = _projectImporter.importProjects(rootProjectPath, progressMonitor);
 

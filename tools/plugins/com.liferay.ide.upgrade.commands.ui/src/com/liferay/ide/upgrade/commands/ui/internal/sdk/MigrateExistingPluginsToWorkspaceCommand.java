@@ -28,15 +28,19 @@ import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
-import java.nio.file.Path;
+import java.io.File;
+
+import java.nio.file.Paths;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -64,24 +68,26 @@ public class MigrateExistingPluginsToWorkspaceCommand implements SapphireContent
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
+		Map<String, String> upgradeContexts = upgradePlan.getUpgradeContexts();
+
+		String currentProjectLocation = upgradeContexts.get("currentProjectLocation");
 
 		if (currentProjectLocation == null) {
 			return UpgradeCommandsUIPlugin.createErrorStatus(
 				"There is no current project configured for current plan.");
 		}
 
-		if (FileUtil.notExists(currentProjectLocation.toFile())) {
+		if (FileUtil.notExists(new File(currentProjectLocation))) {
 			return UpgradeCommandsUIPlugin.createErrorStatus("There is no code located at " + currentProjectLocation);
 		}
 
-		Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
+		String targetProjectLocation = upgradeContexts.get("targetProjectLocation");
 
 		if (targetProjectLocation == null) {
 			return UpgradeCommandsUIPlugin.createErrorStatus("There is no target project configured for current plan.");
 		}
 
-		if (FileUtil.notExists(targetProjectLocation.toFile())) {
+		if (FileUtil.notExists(new File(targetProjectLocation))) {
 			return UpgradeCommandsUIPlugin.createErrorStatus("There is no code located at " + targetProjectLocation);
 		}
 
@@ -93,7 +99,7 @@ public class MigrateExistingPluginsToWorkspaceCommand implements SapphireContent
 		UIUtil.sync(
 			() -> {
 				MigrateExistingPluginsToWorkspaceWizard importSDKProjectsWizard =
-					new MigrateExistingPluginsToWorkspaceWizard(sdkProjectsImportOp, currentProjectLocation);
+					new MigrateExistingPluginsToWorkspaceWizard(sdkProjectsImportOp, Paths.get(currentProjectLocation));
 
 				IWorkbench workbench = PlatformUI.getWorkbench();
 
@@ -121,7 +127,7 @@ public class MigrateExistingPluginsToWorkspaceCommand implements SapphireContent
 				location -> {
 					StringBuilder sb = new StringBuilder();
 
-					org.eclipse.core.runtime.Path path = new org.eclipse.core.runtime.Path(location.toString());
+					Path path = new Path(location.toString());
 
 					String name = path.lastSegment();
 
@@ -129,9 +135,9 @@ public class MigrateExistingPluginsToWorkspaceCommand implements SapphireContent
 
 					sb.append("convert ");
 					sb.append("--source \"");
-					sb.append(currentProjectLocation.toString());
+					sb.append(currentProjectLocation);
 					sb.append("\" --base \"");
-					sb.append(targetProjectLocation.toString());
+					sb.append(targetProjectLocation);
 					sb.append("\" \"");
 					sb.append(name);
 					sb.append("\"");
@@ -152,7 +158,7 @@ public class MigrateExistingPluginsToWorkspaceCommand implements SapphireContent
 				}
 			);
 
-			org.eclipse.core.runtime.Path path = new org.eclipse.core.runtime.Path(targetProjectLocation.toString());
+			Path path = new Path(targetProjectLocation);
 
 			IStatus syncStatus = _synchronizer.synchronizePath(path, progressMonitor);
 

@@ -25,6 +25,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
 import java.nio.file.Path;
 
+import java.util.Map;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -63,7 +65,9 @@ public class ImportExistingLiferayWorkspaceCommand implements UpgradeCommand {
 
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		upgradePlan.setTargetProjectLocation(path);
+		Map<String, String> upgradeContexts = upgradePlan.getUpgradeContexts();
+
+		upgradeContexts.put("targetProjectLocation", path.toString());
 
 		org.eclipse.core.runtime.Path wsLocation = new org.eclipse.core.runtime.Path(path.toString());
 

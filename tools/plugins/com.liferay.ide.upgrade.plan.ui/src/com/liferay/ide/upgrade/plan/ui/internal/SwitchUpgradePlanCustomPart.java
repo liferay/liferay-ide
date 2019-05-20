@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
@@ -22,8 +21,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.ui.util.SWTUtil;
 import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
-
-import java.nio.file.Path;
 
 import java.util.HashSet;
 import java.util.List;
@@ -171,38 +168,6 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 						UpgradePlan upgradePlan = (UpgradePlan)element;
 
 						return upgradePlan.getUpgradePlanOutline();
-					});
-
-				_createTableColumn(
-					_tableViewer, "Current Location", 200, null,
-					element -> {
-						UpgradePlan upgradePlan = (UpgradePlan)element;
-
-						Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
-
-						String projectLocationString = currentProjectLocation.toString();
-
-						if (CoreUtil.isNotNullOrEmpty(projectLocationString)) {
-							return projectLocationString;
-						}
-
-						return "";
-					});
-
-				_createTableColumn(
-					_tableViewer, "Target Location", 200, null,
-					element -> {
-						UpgradePlan upgradePlan = (UpgradePlan)element;
-
-						Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
-
-						String projectLocationString = targetProjectLocation.toString();
-
-						if (CoreUtil.isNotNullOrEmpty(projectLocationString)) {
-							return projectLocationString;
-						}
-
-						return "";
 					});
 
 				_buttons.add(

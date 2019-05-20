@@ -14,27 +14,25 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import java.nio.file.Path;
-
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public interface UpgradePlan {
 
 	public void addUpgradeProblems(Collection<UpgradeProblem> upgradeProblems);
 
-	public Path getCurrentProjectLocation();
-
 	public String getCurrentVersion();
 
 	public String getName();
 
-	public Path getTargetProjectLocation();
-
 	public String getTargetVersion();
+
+	public Map<String, String> getUpgradeContexts();
 
 	public String getUpgradePlanOutline();
 
@@ -43,9 +41,5 @@ public interface UpgradePlan {
 	public List<UpgradeStep> getUpgradeSteps();
 
 	public List<String> getUpgradeVersions();
-
-	public void setCurrentProjectLocation(Path path);
-
-	public void setTargetProjectLocation(Path path);
 
 }

@@ -23,7 +23,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Stream;
@@ -38,16 +40,16 @@ import org.eclipse.core.runtime.Adapters;
 public class StandardUpgradePlan implements UpgradePlan {
 
 	public StandardUpgradePlan(
-		String name, String currentVersion, String targetVersion, Path currentProjectLocation,
-		String upgradePlanOutline, List<UpgradeStep> upgradeSteps) {
+		String name, String currentVersion, String targetVersion, String upgradePlanOutline,
+		List<UpgradeStep> upgradeSteps, Map<String, String> upgradeContexts) {
 
 		_name = name;
 		_currentVersion = currentVersion;
 		_targetVersion = targetVersion;
-		_currentProjectLocation = currentProjectLocation;
 		_upgradePlanOutline = upgradePlanOutline;
 		_upgradeProblems = new CopyOnWriteArraySet<>();
 		_upgradeSteps = upgradeSteps;
+		_upgradeContexts = upgradeContexts;
 	}
 
 	@Override
@@ -71,7 +73,6 @@ public class StandardUpgradePlan implements UpgradePlan {
 			isEqualIgnoreCase(_currentVersion, targetUpgradePlan._currentVersion) &&
 			isEqualIgnoreCase(_targetVersion, targetUpgradePlan._targetVersion) &&
 			isEqualIgnoreCase(_upgradePlanOutline, targetUpgradePlan._upgradePlanOutline) &&
-			isEqualIgnoreCase(_currentProjectLocation, targetUpgradePlan._currentProjectLocation) &&
 			_upgradeProblems.equals(targetUpgradePlan._upgradeProblems) &&
 			_upgradeSteps.equals(targetUpgradePlan._upgradeSteps)) {
 
@@ -79,11 +80,6 @@ public class StandardUpgradePlan implements UpgradePlan {
 		}
 
 		return false;
-	}
-
-	@Override
-	public Path getCurrentProjectLocation() {
-		return _currentProjectLocation;
 	}
 
 	@Override
@@ -97,13 +93,13 @@ public class StandardUpgradePlan implements UpgradePlan {
 	}
 
 	@Override
-	public Path getTargetProjectLocation() {
-		return _targetProjectLocation;
+	public String getTargetVersion() {
+		return _targetVersion;
 	}
 
 	@Override
-	public String getTargetVersion() {
-		return _targetVersion;
+	public Map<String, String> getUpgradeContexts() {
+		return _upgradeContexts;
 	}
 
 	public String getUpgradePlanOutline() {
@@ -152,7 +148,6 @@ public class StandardUpgradePlan implements UpgradePlan {
 		hash = 31 * hash + ((_name != null) ? _name.hashCode() : 0);
 		hash = 31 * hash + ((_currentVersion != null) ? _currentVersion.hashCode() : 0);
 		hash = 31 * hash + ((_targetVersion != null) ? _targetVersion.hashCode() : 0);
-		hash = 31 * hash + ((_currentProjectLocation != null) ? _currentProjectLocation.hashCode() : 0);
 		hash = 31 * hash + ((_upgradePlanOutline != null) ? _upgradePlanOutline.hashCode() : 0);
 
 		Stream<UpgradeStep> stepStream = _upgradeSteps.stream();
@@ -201,16 +196,6 @@ public class StandardUpgradePlan implements UpgradePlan {
 		return false;
 	}
 
-	@Override
-	public void setCurrentProjectLocation(Path path) {
-		_currentProjectLocation = path;
-	}
-
-	@Override
-	public void setTargetProjectLocation(Path path) {
-		_targetProjectLocation = path;
-	}
-
 	@SuppressWarnings("serial")
 	private static final List<String> _liferayVersions = new ArrayList<String>() {
 		{
@@ -220,11 +205,10 @@ public class StandardUpgradePlan implements UpgradePlan {
 		}
 	};
 
-	private Path _currentProjectLocation;
 	private final String _currentVersion;
 	private final String _name;
-	private Path _targetProjectLocation;
 	private final String _targetVersion;
+	private Map<String, String> _upgradeContexts = new HashMap<>();
 	private String _upgradePlanOutline;
 	private Set<UpgradeProblem> _upgradeProblems;
 	private final List<UpgradeStep> _upgradeSteps;

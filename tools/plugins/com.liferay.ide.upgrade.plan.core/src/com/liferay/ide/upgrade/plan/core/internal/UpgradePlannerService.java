@@ -36,13 +36,13 @@ import java.io.InputStream;
 
 import java.net.URL;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -186,8 +186,8 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 	@Override
 	public UpgradePlan newUpgradePlan(
-			String name, String currentVersion, String targetVersion, Path sourceCodeLocation,
-			String upgradePlanOutline)
+			String name, String currentVersion, String targetVersion, String upgradePlanOutline,
+			Map<String, String> upgradeContexts)
 		throws IOException {
 
 		URL url = new URL(upgradePlanOutline);
@@ -197,7 +197,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 		List<UpgradeStep> upgradeSteps = upgradeStepsBuilder.build();
 
 		return new StandardUpgradePlan(
-			name, currentVersion, targetVersion, sourceCodeLocation, upgradePlanOutline, upgradeSteps);
+			name, currentVersion, targetVersion, upgradePlanOutline, upgradeSteps, upgradeContexts);
 	}
 
 	@Override
@@ -274,16 +274,31 @@ public class UpgradePlannerService implements UpgradePlanner {
 			upgradePlanMemento.putString("targetVersion", upgradePlan.getTargetVersion());
 			upgradePlanMemento.putString("upgradePlanOutline", upgradePlan.getUpgradePlanOutline());
 
-			Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
+			Map<String, String> upgradeContexts = upgradePlan.getUpgradeContexts();
 
-			if (currentProjectLocation != null) {
-				upgradePlanMemento.putString("currentProjectLocation", currentProjectLocation.toString());
-			}
+			IMemento[] existingUpgradeContextMementos = upgradePlanMemento.getChildren("upgradeContext");
 
-			Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
+			for (Entry<String, String> entry : upgradeContexts.entrySet()) {
+				String key = entry.getKey();
 
-			if (targetProjectLocation != null) {
-				upgradePlanMemento.putString("targetProjectLocation", targetProjectLocation.toString());
+				IMemento upgradeContextMemento = null;
+
+				for (IMemento existingUpgradeContextMemento : existingUpgradeContextMementos) {
+					String existingKey = existingUpgradeContextMemento.getString("key");
+
+					if (existingKey.equals(key)) {
+						upgradeContextMemento = existingUpgradeContextMemento;
+
+						break;
+					}
+				}
+
+				if (upgradeContextMemento == null) {
+					upgradeContextMemento = upgradePlanMemento.createChild("upgradeContext");
+				}
+
+				upgradeContextMemento.putString("key", key);
+				upgradeContextMemento.putString("value", entry.getValue());
 			}
 
 			List<UpgradeStep> rootUpgradeSteps = upgradePlan.getUpgradeSteps();
@@ -354,28 +369,25 @@ public class UpgradePlannerService implements UpgradePlanner {
 		String currentVersion = upgradePlanMemento.getString("currentVersion");
 		String targetVersion = upgradePlanMemento.getString("targetVersion");
 
-		String currentProjectLocation = upgradePlanMemento.getString("currentProjectLocation");
-
-		Path projectPath = null;
-
-		if (currentProjectLocation != null) {
-			projectPath = Paths.get(currentProjectLocation);
-		}
-
 		List<UpgradeStep> upgradeSteps = new ArrayList<>();
 
 		_loadUpgradeSteps(upgradePlanMemento, upgradeSteps, null);
 
 		String upgradePlanOutline = upgradePlanMemento.getString("upgradePlanOutline");
 
-		UpgradePlan currentUpgradePlan = new StandardUpgradePlan(
-			upgradePlanName, currentVersion, targetVersion, projectPath, upgradePlanOutline, upgradeSteps);
+		IMemento[] upgradeContextMementos = upgradePlanMemento.getChildren("upgradeContext");
 
-		String targetProjectLocationValue = upgradePlanMemento.getString("targetProjectLocation");
+		Map<String, String> upgradeContexts = new HashMap<>();
 
-		if (targetProjectLocationValue != null) {
-			currentUpgradePlan.setTargetProjectLocation(Paths.get(targetProjectLocationValue));
+		for (IMemento upgradeContextMemento : upgradeContextMementos) {
+			String key = upgradeContextMemento.getString("key");
+			String value = upgradeContextMemento.getString("value");
+
+			upgradeContexts.put(key, value);
 		}
+
+		UpgradePlan currentUpgradePlan = new StandardUpgradePlan(
+			upgradePlanName, currentVersion, targetVersion, upgradePlanOutline, upgradeSteps, upgradeContexts);
 
 		_loadUpgradeProblems(upgradePlanMemento, currentUpgradePlan);
 
