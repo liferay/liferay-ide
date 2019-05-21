@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: com.liferay.ide.upgrade.plan.core.internal.UpgradePlanCorePlugin
+Bundle-Activator: com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin
 Bundle-ClassPath: .,
  libs/com.liferay.markdown.parser.jar
 Bundle-ManifestVersion: 2

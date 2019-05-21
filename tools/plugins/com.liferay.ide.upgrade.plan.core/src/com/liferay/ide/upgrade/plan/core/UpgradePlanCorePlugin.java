@@ -12,7 +12,10 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.plan.core.internal;
+package com.liferay.ide.upgrade.plan.core;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
@@ -27,6 +30,9 @@ import org.osgi.framework.BundleContext;
 public class UpgradePlanCorePlugin extends Plugin {
 
 	public static final String ID = "com.liferay.ide.upgrade.plan.core";
+
+	public static final List<String> defaultUpgradePlanOutlines = Arrays.asList(
+		"http://localhost:8080/web/guest/docs/7-2/reference#upgrading-code-to-liferay-portal-ce-72");
 
 	public static IStatus createErrorStatus(String msg) {
 		return new Status(IStatus.ERROR, ID, msg);

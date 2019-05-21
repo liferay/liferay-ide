@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.upgrade.plan.core.IMemento;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
 import java.io.File;

@@ -17,6 +17,7 @@ package com.liferay.ide.upgrade.plan.core.internal;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.upgrade.plan.core.IMemento;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
 
 import java.io.File;
 import java.io.FileInputStream;

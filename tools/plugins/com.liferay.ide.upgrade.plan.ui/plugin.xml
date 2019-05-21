@@ -235,4 +235,15 @@
 		>
 		</handler>
 	</extension>
+	<extension
+		point="org.eclipse.ui.preferencePages"
+	>
+		<page
+			category="com.liferay.ide.ui.preferences.liferay"
+			class="com.liferay.ide.upgrade.plan.ui.internal.UpgradePlannerPreferencePage"
+			id="com.liferay.ide.upgrade.problems.ui.internal.upgradePlannerPreferencePage"
+			name="Upgrade Planner"
+		>
+		</page>
+	</extension>
 </plugin>

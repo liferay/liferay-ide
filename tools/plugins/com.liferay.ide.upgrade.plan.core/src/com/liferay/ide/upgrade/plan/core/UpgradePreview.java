@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import com.liferay.ide.upgrade.plan.core.internal.UpgradePlanCorePlugin;
-
 import java.io.File;
 
 import org.eclipse.core.runtime.IPath;
