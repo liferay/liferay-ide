@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.problems.core;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -27,6 +26,7 @@ public interface XMLFile extends SourceFile {
 
 	public Collection<FileSearchResult> findElement(String elementName, String elementValue);
 
-	public List<FileSearchResult> findElementAttributeValue(String name, String attribute, Pattern pattern);
+	public Collection<FileSearchResult> findElementAttribute(
+		String tagName, String attributeName, Pattern valuePattern);
 
 }
