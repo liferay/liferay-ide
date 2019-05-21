@@ -21,6 +21,7 @@ import com.liferay.ide.upgrade.plan.core.IMemento;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
@@ -32,6 +33,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import java.net.URL;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -187,10 +190,9 @@ public class UpgradePlannerService implements UpgradePlanner {
 			String upgradePlanOutline)
 		throws IOException {
 
-		String markdownFileName = upgradePlanOutline + ".markdown";
+		URL url = new URL(upgradePlanOutline);
 
-		UpgradeStepsBuilder upgradeStepsBuilder = new UpgradeStepsBuilder(
-			UpgradePlannerService.class.getResourceAsStream(markdownFileName));
+		UpgradeStepsBuilder upgradeStepsBuilder = new UpgradeStepsBuilder(url);
 
 		List<UpgradeStep> upgradeSteps = upgradeStepsBuilder.build();
 

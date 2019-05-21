@@ -14,15 +14,13 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepRequirement;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
-import com.liferay.knowledge.base.markdown.converter.MarkdownConverter;
-import com.liferay.knowledge.base.markdown.converter.factory.MarkdownConverterFactoryUtil;
 
 import java.io.IOException;
-import java.io.InputStream;
+
+import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,25 +35,16 @@ import org.jsoup.select.Elements;
  */
 public class UpgradeStepsBuilder {
 
-	public UpgradeStepsBuilder() {
-	}
-
-	public UpgradeStepsBuilder(InputStream builderInputStream) {
-		inputStream(builderInputStream);
+	public UpgradeStepsBuilder(URL url) {
+		_url = url;
 	}
 
 	public List<UpgradeStep> build() throws IOException {
 		List<UpgradeStep> upgradeSteps = new ArrayList<>();
 
-		String markdown = CoreUtil.readStreamToString(_builderInputStream);
+		Document document = Jsoup.parse(_url, 10000);
 
-		MarkdownConverter markdownConverter = MarkdownConverterFactoryUtil.create();
-
-		String html = markdownConverter.convert(markdown);
-
-		Document document = Jsoup.parse(html);
-
-		Elements roots = document.select("#root");
+		Elements roots = document.select("ol");
 
 		Element root = roots.get(0);
 
@@ -64,11 +53,7 @@ public class UpgradeStepsBuilder {
 		return upgradeSteps;
 	}
 
-	public void inputStream(InputStream builderInputStream) {
-		_builderInputStream = builderInputStream;
-	}
-
-	private static void _loopChildren(List<UpgradeStep> upgradeSteps, UpgradeStep parent, Element olElement) {
+	private void _loopChildren(List<UpgradeStep> upgradeSteps, UpgradeStep parent, Element olElement) {
 		Elements children = olElement.children();
 
 		UpgradeStep upgradeStep = null;
@@ -77,48 +62,45 @@ public class UpgradeStepsBuilder {
 			String html = child.toString();
 
 			if (html.startsWith("<li")) {
-				String requirement = child.attr("requirement");
+				String requirement = UpgradeStepRequirement.REQUIRED.toString();
 
-				if (CoreUtil.isNullOrEmpty(requirement)) {
-					requirement = UpgradeStepRequirement.REQUIRED.toString();
-				}
-
-				String commandId = child.attr("commandId");
-
-				Elements titleElements = child.getElementsByClass("title");
+				Elements pTags = child.getElementsByTag("p");
 
 				String title = "";
 
 				String url = "";
 
-				if (titleElements.size() > 0) {
-					Element titleElement = titleElements.get(0);
+				Element titleElement = pTags.get(0);
 
-					Elements aTags = titleElement.getElementsByTag("a");
+				Elements aTags = titleElement.getElementsByTag("a");
 
-					if (aTags.size() > 0) {
-						Element aTag = aTags.get(0);
+				if (aTags.size() > 0) {
+					Element aTag = aTags.get(0);
 
-						url = aTag.attr("href");
+					String protocol = _url.getProtocol();
 
-						title = aTag.html();
-					}
-					else {
-						title = titleElement.html();
-					}
+					String authority = _url.getAuthority();
+
+					url = protocol + "://" + authority + aTag.attr("href");
+
+					title = aTag.text();
 				}
-
-				Elements descriptionElements = child.getElementsByClass("description");
+				else {
+					title = titleElement.text();
+				}
 
 				String description = "";
 
-				if (descriptionElements.size() > 0) {
-					Element descriptionElement = descriptionElements.get(0);
+				Element titleNextElement = titleElement.nextElementSibling();
 
-					description = descriptionElement.html();
+				if ((titleNextElement != null) && "p".equals(titleNextElement.nodeName())) {
+					description = titleNextElement.text();
+				}
+				else {
+					description = title;
 				}
 
-				// String imagePath = child.attr("imagePath");
+				String commandId = child.attr("commandid");
 
 				String imagePath = "";
 
@@ -131,13 +113,20 @@ public class UpgradeStepsBuilder {
 				else {
 					parent.appendChild(upgradeStep);
 				}
-			}
-			else if (html.startsWith("<ol")) {
-				_loopChildren(upgradeSteps, upgradeStep, child);
+
+				if (titleNextElement != null) {
+					if ("p".equals(titleNextElement.nodeName())) {
+						titleNextElement = titleNextElement.nextElementSibling();
+					}
+
+					if ((titleNextElement != null) && "ol".equals(titleNextElement.nodeName())) {
+						_loopChildren(upgradeSteps, upgradeStep, titleNextElement);
+					}
+				}
 			}
 		}
 	}
 
-	private InputStream _builderInputStream;
+	private URL _url;
 
 }
