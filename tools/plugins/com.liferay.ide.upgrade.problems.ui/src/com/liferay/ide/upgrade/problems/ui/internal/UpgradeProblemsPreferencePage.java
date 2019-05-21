@@ -247,6 +247,10 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 		UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
 
+		if (upgradePlan == null) {
+			return;
+		}
+
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
 		_ignoreProblems = upgradeProblems.stream(
