@@ -130,7 +130,7 @@ public class NewLiferayComponentOpTests extends BaseTests
         NewLiferayModuleProjectOp pop = NewLiferayModuleProjectOp.TYPE.instantiate();
 
         pop.setProjectName( "testGradleModuleComponentBnd" );
-        pop.setProjectTemplateName( "portlet" );
+        pop.setProjectTemplateName( "mvc-portlet" );
         pop.setProjectProvider( "gradle-module" );
 
         Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( pop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
@@ -262,7 +262,7 @@ public class NewLiferayComponentOpTests extends BaseTests
         NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
         op.setProjectName( "testGradleStrutsActionComponent" );
-        op.setProjectTemplateName( "portlet" );
+        op.setProjectTemplateName( "mvc-portlet" );
         op.setProjectProvider( "gradle-module" );
 
         Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
@@ -284,8 +284,8 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         assertEquals( Status.createOkStatus(),status );
 
-        IFile javaFile = modProject.getFile( "/src/main/java/testGradleStrutsActionComponent" +
-            "/portlet/TestgradlestrutsactioncomponentStrutsAction.java" );
+        IFile javaFile = modProject.getFile( "/src/main/java/" +
+            "/content/TestgradlestrutsactioncomponentStrutsAction.java" );
 
         assertTrue(javaFile.exists());
 
@@ -351,7 +351,7 @@ public class NewLiferayComponentOpTests extends BaseTests
         NewLiferayModuleProjectOp pop = NewLiferayModuleProjectOp.TYPE.instantiate();
 
         pop.setProjectName( "testProjectValidation" );
-        pop.setProjectTemplateName( "portlet" );
+        pop.setProjectTemplateName( "mvc-portlet" );
         pop.setProjectProvider( "gradle-module" );
 
         Status moduleProjectStatus = NewLiferayModuleProjectOpMethods.execute( pop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
