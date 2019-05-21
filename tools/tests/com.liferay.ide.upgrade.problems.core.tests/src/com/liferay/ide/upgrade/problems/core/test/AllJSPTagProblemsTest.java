@@ -44,7 +44,7 @@ public class AllJSPTagProblemsTest {
 
 		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/"), versions, new NullProgressMonitor());
 
-		final int expectedSize = 400;
+		final int expectedSize = 404;
 		final int size = problems.size();
 
 		if (size != expectedSize) {

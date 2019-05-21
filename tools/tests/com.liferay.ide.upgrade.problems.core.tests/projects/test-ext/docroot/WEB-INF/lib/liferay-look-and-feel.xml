@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE look-and-feel PUBLIC "-//Liferay//DTD Look and Feel 7.1.0//EN" "http://www.liferay.com/dtd/liferay-look-and-feel_7_1_0.dtd">
+
+<look-and-feel>
+	<compatibility>
+		<version>7.1.2+</version>
+	</compatibility>
+	<theme id="themeTest" name="ThemeTest">
+		<template-extension>jsp</template-extension>
+	</theme>
+</look-and-feel>
+
+<project>
+	<properties>
+		<liferay.theme.parent>_styled</liferay.theme.parent>
+		<liferay.theme.type>jsp</liferay.theme.type>
+	</properties>
+</project>
+
+<project name="themeTest-theme" basedir="." default="deploy">
+	<property name="theme.parent" value="_styled" />
+
+	<import file="../build-common-theme.xml" />
+	<property name="theme.type" value="jsp" />
+</project>

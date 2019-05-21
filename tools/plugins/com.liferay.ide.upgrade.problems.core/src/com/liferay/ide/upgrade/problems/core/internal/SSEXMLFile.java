@@ -155,7 +155,7 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public List<FileSearchResult> findElementAttribute(String tagName, Pattern pattern) {
+	public List<FileSearchResult> findElementAttribute(String tagName, String attributeName, Pattern valuePattern) {
 		List<FileSearchResult> results = new ArrayList<>();
 
 		IDOMModel domModel = null;
@@ -178,14 +178,14 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 			for (int i = 0; i < elements.getLength(); i++) {
 				IDOMElement domElement = (IDOMElement)elements.item(i);
 
-				String classValue = domElement.getAttribute("class");
+				String attributeValue = domElement.getAttribute(attributeName);
 
-				Matcher matcher = pattern.matcher(classValue);
+				Matcher matcher = valuePattern.matcher(attributeValue);
 
-				if ((classValue != null) && matcher.matches()) {
+				if ((attributeValue != null) && matcher.matches()) {
 					IStructuredDocument structuredDocument = domDocument.getStructuredDocument();
 
-					IDOMNode attributeNode = (IDOMNode)domElement.getAttributeNode("class");
+					IDOMNode attributeNode = (IDOMNode)domElement.getAttributeNode(attributeName);
 
 					int startOffset = attributeNode.getStartOffset();
 					int endOffset = attributeNode.getEndOffset();

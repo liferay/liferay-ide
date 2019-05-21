@@ -12,21 +12,30 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core;
+package com.liferay.ide.upgrade.problems.test.apichanges72;
 
-import java.util.Collection;
-import java.util.regex.Pattern;
+import java.io.File;
+
+import com.liferay.ide.upgrade.problems.test.apichanges.APITestBase;
 
 /**
- * @author Gregory Amerson
+ * @author Seiphon Wang
  */
-public interface XMLFile extends SourceFile {
+public class RemovedSupportForJSPTemplatesTest extends APITestBase {
 
-	public FileSearchResult findDocumentTypeDeclaration(String name, Pattern idPattern);
+	@Override
+	public int getExpectedNumber() {
+		return 3;
+	}
 
-	public Collection<FileSearchResult> findElement(String elementName, String elementValue);
+	@Override
+	public String getComponentName() {
+		return "com.liferay.ide.upgrade.problems.core.internal.liferay72.RemovedSupportForJSPTemplates";
+	}
 
-	public Collection<FileSearchResult> findElementAttribute(
-		String tagName, String attributeName, Pattern valuePattern);
+	@Override
+	public File getTestFile() {
+		return new File("projects/test-ext/docroot/WEB-INF/lib/liferay-look-and-feel.xml");
+	}
 
 }
