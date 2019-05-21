@@ -59,6 +59,14 @@ public class DialogAction extends UIAction {
 		_jobAction.waitForShellClosed(title);
 	}
 
+	public void close() {
+		String title = _getDialog().getLabel();
+
+		_getDialog().close();
+
+		_jobAction.waitForShellClosed(title);
+	}
+
 	public void confirm() {
 		String title = _getDialog().getLabel();
 

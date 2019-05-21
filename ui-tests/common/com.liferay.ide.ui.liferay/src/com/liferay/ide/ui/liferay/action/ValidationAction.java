@@ -19,11 +19,13 @@ import com.liferay.ide.ui.swtbot.page.AbstractWidget;
 import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.page.Table;
+import com.liferay.ide.ui.swtbot.page.View;
 
 import java.util.Arrays;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.SWTBotAssert;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 import org.junit.Assert;
 
@@ -97,6 +99,20 @@ public class ValidationAction extends UIAction {
 
 	public void assertTextEquals(String expect, AbstractWidget widget) {
 		Assert.assertEquals(expect, widget.getText());
+	}
+
+	public void assertTreeItemCollapsed(SWTBotTreeItem treeItems) {
+		Assert.assertFalse(treeItems.isExpanded());
+	}
+
+	public void assertTreeItemExpanded(SWTBotTreeItem treeItems) {
+		Assert.assertTrue(treeItems.isExpanded());
+	}
+
+	public void assertViewVisible(String label) {
+		View view = new View(bot, label);
+
+		Assert.assertTrue(view.isActive());
 	}
 
 	private ValidationAction(SWTWorkbenchBot bot) {

@@ -52,6 +52,14 @@ public class Dialog extends Shell {
 		return new Button(bot, _cancelBtnLabel);
 	}
 
+	public void close() {
+		clickBtn(closeBtn());
+	}
+
+	public Button closeBtn() {
+		return new Button(bot, _closeBtnLabel);
+	}
+
 	public void confirm() {
 		clickBtn(confirmBtn());
 	}
@@ -65,6 +73,7 @@ public class Dialog extends Shell {
 	}
 
 	private String _cancelBtnLabel = CANCEL;
+	private String _closeBtnLabel = CLOSE;
 	private String _confirmBtnLabel = OK;
 
 }

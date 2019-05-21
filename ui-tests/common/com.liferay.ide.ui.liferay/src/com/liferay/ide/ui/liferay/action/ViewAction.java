@@ -91,24 +91,68 @@ public class ViewAction extends UIAction {
 
 	public class LiferayUpgradePlanViewAction {
 
+		public boolean checkVisible(String label) {
+			return _liferayUpgradePlanView.isVisible(label);
+		}
+
+		public void clickCollapseAll() {
+			ide.sleep();
+
+			_getSteps().setFocus();
+
+			_liferayUpgradePlanView.collapseAll();
+		}
+
+		public void clickExpandAll() {
+			ide.sleep();
+
+			_getSteps().setFocus();
+
+			_liferayUpgradePlanView.expandAll();
+		}
+
+		public void clickRestartUpgradePlan() {
+			_liferayUpgradePlanView.restartUpgradePlan();
+		}
+
 		public void clickSkip() {
 			_liferayUpgradePlanView.click(SKIP);
+		}
+
+		public void clickSwitchUpgradePlan() {
+			_liferayUpgradePlanView.switchUpgradePlan();
 		}
 
 		public void clickToPerform() {
 			_liferayUpgradePlanView.click(CLICK_TO_PERFORM);
 		}
 
-		public void selectStep(String... files) {
+		public void clickUpgradePlanDetails() {
+			_liferayUpgradePlanView.upgradePlanDetails();
+		}
+
+		public SWTBotTreeItem getTreeItem(String... steps) {
+			return _getSteps().getTreeItem(steps);
+		}
+
+		public void selectStep(String... steps) {
 			ide.sleep();
 
 			_getSteps().setFocus();
 
 			try {
-				_getSteps().doubleClick(files);
+				_getSteps().doubleClick(steps);
 			}
 			catch (Exception e) {
 			}
+		}
+
+		public void showProgressView() {
+			_liferayUpgradePlanView.showProgressView();
+		}
+
+		public void showUpgradePlanInfoView() {
+			_liferayUpgradePlanView.showUpgradePlanInfoView();
 		}
 
 		private Tree _getSteps() {
