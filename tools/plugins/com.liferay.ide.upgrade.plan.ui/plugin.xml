@@ -240,9 +240,9 @@
 	>
 		<page
 			category="com.liferay.ide.ui.preferences.liferay"
-			class="com.liferay.ide.upgrade.plan.ui.internal.UpgradePlanPreferencePage"
-			id="com.liferay.ide.upgrade.problems.ui.internal.upgradePlanPreferencePage"
-			name="Upgrade Plan"
+			class="com.liferay.ide.upgrade.plan.ui.internal.UpgradePlannerPreferencePage"
+			id="com.liferay.ide.upgrade.problems.ui.internal.upgradePlannerPreferencePage"
+			name="Upgrade Planner"
 		>
 		</page>
 	</extension>

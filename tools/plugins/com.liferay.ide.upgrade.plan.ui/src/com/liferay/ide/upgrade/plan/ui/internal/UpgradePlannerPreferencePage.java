@@ -50,17 +50,17 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 /**
  * @author Terry Jia
  */
-public class UpgradePlanPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+public class UpgradePlannerPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
-	public UpgradePlanPreferencePage() {
-		super("Upgrade Plan");
+	public UpgradePlannerPreferencePage() {
+		super("Upgrade Planner");
 
 		_preferenceStore = new ScopedPreferenceStore(InstanceScope.INSTANCE, "com.liferay.ide.upgrade.plan.core");
 	}
 
 	@Override
 	public Control createContents(Composite parent) {
-		Composite pageComposite = new Composite(parent, SWT.NULL);
+		Composite composite = new Composite(parent, SWT.NULL);
 
 		GridLayout gridLayout = new GridLayout();
 
@@ -68,20 +68,20 @@ public class UpgradePlanPreferencePage extends PreferencePage implements IWorkbe
 		gridLayout.marginWidth = 0;
 		gridLayout.marginHeight = 0;
 
-		pageComposite.setLayout(gridLayout);
+		composite.setLayout(gridLayout);
 
 		GridData gridData = new GridData();
 
 		gridData.verticalAlignment = GridData.FILL;
 		gridData.horizontalAlignment = GridData.FILL;
 
-		pageComposite.setLayoutData(gridData);
+		composite.setLayoutData(gridData);
 
 		gridData = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
 
-		Label label = new Label(pageComposite, SWT.LEFT);
+		Label label = new Label(composite, SWT.LEFT);
 
-		label.setText("You can configurate Upgrade Plan Outline Name and URL here.");
+		label.setText("Configure Upgrade Planner outlines");
 
 		gridData = new GridData();
 
@@ -90,7 +90,7 @@ public class UpgradePlanPreferencePage extends PreferencePage implements IWorkbe
 
 		label.setLayoutData(gridData);
 
-		_upgradePlanOutlineTableViewer = new TableViewer(pageComposite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		_upgradePlanOutlineTableViewer = new TableViewer(composite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 
@@ -108,7 +108,7 @@ public class UpgradePlanPreferencePage extends PreferencePage implements IWorkbe
 
 		_upgradePlanOutlineTableViewer.setInput(_outlines.toArray());
 
-		Composite groupComponent = new Composite(pageComposite, SWT.NULL);
+		Composite groupComponent = new Composite(composite, SWT.NULL);
 
 		GridLayout groupLayout = new GridLayout();
 
@@ -179,7 +179,7 @@ public class UpgradePlanPreferencePage extends PreferencePage implements IWorkbe
 
 		setButtonLayoutData(_removeButton);
 
-		return pageComposite;
+		return composite;
 	}
 
 	@Override
