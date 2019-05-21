@@ -29,6 +29,7 @@ import org.junit.Test;
  */
 public class NewPortletModuleMavenTests extends SwtbotBase {
 
+	@Ignore("ignore to wait BLADE-435")
 	@Test
 	public void createFreemarkerPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -101,6 +102,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("ignore because blade 3.7 remove portlet template")
 	@Test
 	public void createPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -116,7 +118,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Ignore("ignore to wait IDE-3579 as it will take too long unexpected")
+	@Ignore("ignore because blade 3.7 remove soy-portlet template")
 	@Test
 	public void createSoyPortlet() {
 		wizardAction.openNewLiferayModuleWizard();

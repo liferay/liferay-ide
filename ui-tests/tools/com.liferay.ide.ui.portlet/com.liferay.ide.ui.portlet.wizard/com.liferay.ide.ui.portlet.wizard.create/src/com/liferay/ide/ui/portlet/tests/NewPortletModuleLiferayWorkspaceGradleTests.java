@@ -32,6 +32,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 	@ClassRule
 	public static LiferayWorkspaceGradleSupport liferayWorkspace = new LiferayWorkspaceGradleSupport(bot);
 
+	@Ignore("ignore to wait BLADE-435")
 	@Test
 	public void createFreemarkerPortlet() {
 		String packageName = "test.freemarker.portlet.gradle";
@@ -149,6 +150,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
+	@Ignore("ignore because blade 3.7 remove portlet template")
 	@Test
 	public void createPortlet() {
 		String packageName = "test.npm.angular.portlet.gradle";
@@ -172,7 +174,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
-	@Ignore("ignore to wait IDE-3579 as it will take too long unexpected")
+	@Ignore("ignore because blade 3.7 remove soy-portlet template")
 	@Test
 	public void createSoyPortlet() {
 		String packageName = "test.soy.portlet.gradle";

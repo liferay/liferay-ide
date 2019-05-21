@@ -20,12 +20,14 @@ import com.liferay.ide.ui.liferay.util.RuleUtil;
 import com.liferay.ide.ui.portlet.deploy.base.DeployPortletGradleTomcat7xBase;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
  * @author Rui Wang
  */
+@Ignore("ignore to wait BLADE-435")
 public class DeployPortletGradleTomcatDxpTests extends DeployPortletGradleTomcat7xBase {
 
 	@ClassRule

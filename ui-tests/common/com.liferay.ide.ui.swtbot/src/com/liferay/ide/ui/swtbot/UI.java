@@ -853,6 +853,8 @@ public interface UI {
 
 	public final String WAR = "war";
 
+	public final String WAR_CORE_EXT = "war-core-ext";
+
 	public final String WAR_HOOK = "war-hook";
 
 	public final String WAR_MVC_PORTLET = "war-mvc-portlet";

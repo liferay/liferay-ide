@@ -197,7 +197,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		String targetPlateformVersionMessage = "liferay.workspace.target.platform.version = 7.1.0";
+		String targetPlateformVersionMessage = "liferay.workspace.target.platform.version = 7.1.3";
 
 		viewAction.project.openFile(project.getName(), "gradle.properties");
 
