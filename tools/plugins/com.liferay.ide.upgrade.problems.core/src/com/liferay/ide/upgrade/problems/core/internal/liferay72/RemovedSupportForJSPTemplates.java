@@ -47,7 +47,7 @@ public class RemovedSupportForJSPTemplates extends XMLFileMigrator {
 
 		results.addAll(xmlFileChecker.findElement("template-extension", "jsp"));
 		results.addAll(xmlFileChecker.findElement("liferay.theme.type", "jsp"));
-		results.addAll(xmlFileChecker.findElementAttribute("property", _pattern));
+		results.addAll(xmlFileChecker.findElementAttributeValue("property", "value", _pattern));
 
 		return results;
 	}
