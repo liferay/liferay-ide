@@ -42,7 +42,7 @@ public interface UpgradePlanner {
 
 	public UpgradePlan newUpgradePlan(
 			String name, String currentVersion, String targetVersion, String upgradePlanOutline,
-			Map<String, String> upgradeContexts)
+			Map<String, String> upgradeContext)
 		throws IOException;
 
 	public void removeListener(UpgradeListener upgradeListener);

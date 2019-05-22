@@ -41,7 +41,7 @@ public class StandardUpgradePlan implements UpgradePlan {
 
 	public StandardUpgradePlan(
 		String name, String currentVersion, String targetVersion, String upgradePlanOutline,
-		List<UpgradeStep> upgradeSteps, Map<String, String> upgradeContexts) {
+		List<UpgradeStep> upgradeSteps, Map<String, String> upgradeContext) {
 
 		_name = name;
 		_currentVersion = currentVersion;
@@ -49,7 +49,7 @@ public class StandardUpgradePlan implements UpgradePlan {
 		_upgradePlanOutline = upgradePlanOutline;
 		_upgradeProblems = new CopyOnWriteArraySet<>();
 		_upgradeSteps = upgradeSteps;
-		_upgradeContexts = upgradeContexts;
+		_upgradeContext = upgradeContext;
 	}
 
 	@Override
@@ -98,8 +98,8 @@ public class StandardUpgradePlan implements UpgradePlan {
 	}
 
 	@Override
-	public Map<String, String> getUpgradeContexts() {
-		return _upgradeContexts;
+	public Map<String, String> getUpgradeContext() {
+		return _upgradeContext;
 	}
 
 	public String getUpgradePlanOutline() {
@@ -208,7 +208,7 @@ public class StandardUpgradePlan implements UpgradePlan {
 	private final String _currentVersion;
 	private final String _name;
 	private final String _targetVersion;
-	private Map<String, String> _upgradeContexts = new HashMap<>();
+	private Map<String, String> _upgradeContext = new HashMap<>();
 	private String _upgradePlanOutline;
 	private Set<UpgradeProblem> _upgradeProblems;
 	private final List<UpgradeStep> _upgradeSteps;

@@ -65,9 +65,9 @@ public class ImportExistingLiferayWorkspaceCommand implements UpgradeCommand {
 
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		Map<String, String> upgradeContexts = upgradePlan.getUpgradeContexts();
+		Map<String, String> upgradeContext = upgradePlan.getUpgradeContext();
 
-		upgradeContexts.put("targetProjectLocation", path.toString());
+		upgradeContext.put("targetProjectLocation", path.toString());
 
 		org.eclipse.core.runtime.Path wsLocation = new org.eclipse.core.runtime.Path(path.toString());
 

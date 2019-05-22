@@ -32,7 +32,7 @@ public interface UpgradePlan {
 
 	public String getTargetVersion();
 
-	public Map<String, String> getUpgradeContexts();
+	public Map<String, String> getUpgradeContext();
 
 	public String getUpgradePlanOutline();
 

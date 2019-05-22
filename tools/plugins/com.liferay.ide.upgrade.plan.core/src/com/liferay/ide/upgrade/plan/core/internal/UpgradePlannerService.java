@@ -187,7 +187,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 	@Override
 	public UpgradePlan newUpgradePlan(
 			String name, String currentVersion, String targetVersion, String upgradePlanOutline,
-			Map<String, String> upgradeContexts)
+			Map<String, String> upgradeContext)
 		throws IOException {
 
 		URL url = new URL(upgradePlanOutline);
@@ -197,7 +197,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 		List<UpgradeStep> upgradeSteps = upgradeStepsBuilder.build();
 
 		return new StandardUpgradePlan(
-			name, currentVersion, targetVersion, upgradePlanOutline, upgradeSteps, upgradeContexts);
+			name, currentVersion, targetVersion, upgradePlanOutline, upgradeSteps, upgradeContext);
 	}
 
 	@Override
@@ -274,20 +274,20 @@ public class UpgradePlannerService implements UpgradePlanner {
 			upgradePlanMemento.putString("targetVersion", upgradePlan.getTargetVersion());
 			upgradePlanMemento.putString("upgradePlanOutline", upgradePlan.getUpgradePlanOutline());
 
-			Map<String, String> upgradeContexts = upgradePlan.getUpgradeContexts();
+			Map<String, String> upgradeContext = upgradePlan.getUpgradeContext();
 
-			IMemento[] existingUpgradeContextMementos = upgradePlanMemento.getChildren("upgradeContext");
+			IMemento[] existingUpgradeContextEntries = upgradePlanMemento.getChildren("upgradeContext");
 
-			for (Entry<String, String> entry : upgradeContexts.entrySet()) {
+			for (Entry<String, String> entry : upgradeContext.entrySet()) {
 				String key = entry.getKey();
 
 				IMemento upgradeContextMemento = null;
 
-				for (IMemento existingUpgradeContextMemento : existingUpgradeContextMementos) {
-					String existingKey = existingUpgradeContextMemento.getString("key");
+				for (IMemento existingUpgradeContextEntry : existingUpgradeContextEntries) {
+					String existingKey = existingUpgradeContextEntry.getString("key");
 
 					if (existingKey.equals(key)) {
-						upgradeContextMemento = existingUpgradeContextMemento;
+						upgradeContextMemento = existingUpgradeContextEntry;
 
 						break;
 					}
@@ -375,19 +375,19 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 		String upgradePlanOutline = upgradePlanMemento.getString("upgradePlanOutline");
 
-		IMemento[] upgradeContextMementos = upgradePlanMemento.getChildren("upgradeContext");
+		IMemento[] upgradeContextEntries = upgradePlanMemento.getChildren("upgradeContext");
 
-		Map<String, String> upgradeContexts = new HashMap<>();
+		Map<String, String> upgradeContext = new HashMap<>();
 
-		for (IMemento upgradeContextMemento : upgradeContextMementos) {
-			String key = upgradeContextMemento.getString("key");
-			String value = upgradeContextMemento.getString("value");
+		for (IMemento upgradeContextEntry : upgradeContextEntries) {
+			String key = upgradeContextEntry.getString("key");
+			String value = upgradeContextEntry.getString("value");
 
-			upgradeContexts.put(key, value);
+			upgradeContext.put(key, value);
 		}
 
 		UpgradePlan currentUpgradePlan = new StandardUpgradePlan(
-			upgradePlanName, currentVersion, targetVersion, upgradePlanOutline, upgradeSteps, upgradeContexts);
+			upgradePlanName, currentVersion, targetVersion, upgradePlanOutline, upgradeSteps, upgradeContext);
 
 		_loadUpgradeProblems(upgradePlanMemento, currentUpgradePlan);
 

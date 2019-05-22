@@ -66,20 +66,20 @@ public class NewUpgradePlanOpMethods {
 
 		String targetVersion = _getter.get(newUpgradePlanOp.getTargetVersion());
 
-		Map<String, String> upgradeContexts = new HashMap<>();
+		Map<String, String> upgradeContext = new HashMap<>();
 
 		try {
 			UpgradePlan upgradePlan = upgradePlanner.newUpgradePlan(
-				name, currentVersion, targetVersion, upgradePlanOutline, upgradeContexts);
+				name, currentVersion, targetVersion, upgradePlanOutline, upgradeContext);
 
 			IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
 			if (workspaceProject != null) {
 				IPath location = workspaceProject.getLocation();
 
-				upgradeContexts = upgradePlan.getUpgradeContexts();
+				upgradeContext = upgradePlan.getUpgradeContext();
 
-				upgradeContexts.put("targetProjectLocation", location.toOSString());
+				upgradeContext.put("targetProjectLocation", location.toOSString());
 			}
 
 			upgradePlanner.startUpgradePlan(upgradePlan);

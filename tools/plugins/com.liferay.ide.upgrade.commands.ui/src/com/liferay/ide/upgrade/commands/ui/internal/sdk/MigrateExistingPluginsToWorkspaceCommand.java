@@ -68,9 +68,9 @@ public class MigrateExistingPluginsToWorkspaceCommand implements SapphireContent
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		Map<String, String> upgradeContexts = upgradePlan.getUpgradeContexts();
+		Map<String, String> upgradeContext = upgradePlan.getUpgradeContext();
 
-		String currentProjectLocation = upgradeContexts.get("currentProjectLocation");
+		String currentProjectLocation = upgradeContext.get("currentProjectLocation");
 
 		if (currentProjectLocation == null) {
 			return UpgradeCommandsUIPlugin.createErrorStatus(
@@ -81,7 +81,7 @@ public class MigrateExistingPluginsToWorkspaceCommand implements SapphireContent
 			return UpgradeCommandsUIPlugin.createErrorStatus("There is no code located at " + currentProjectLocation);
 		}
 
-		String targetProjectLocation = upgradeContexts.get("targetProjectLocation");
+		String targetProjectLocation = upgradeContext.get("targetProjectLocation");
 
 		if (targetProjectLocation == null) {
 			return UpgradeCommandsUIPlugin.createErrorStatus("There is no target project configured for current plan.");

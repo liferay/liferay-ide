@@ -61,9 +61,9 @@ public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor
 
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		Map<String, String> upgradeContexts = upgradePlan.getUpgradeContexts();
+		Map<String, String> upgradeContext = upgradePlan.getUpgradeContext();
 
-		String targetProjectLocation = upgradeContexts.get("targetProjectLocation");
+		String targetProjectLocation = upgradeContext.get("targetProjectLocation");
 
 		if (targetProjectLocation != null) {
 			boolean result = _messagePrompt.promptQuestion(
@@ -105,7 +105,7 @@ public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor
 
 			path = path.resolve(workspaceName);
 
-			upgradeContexts.put("targetProjectLocation", path.toString());
+			upgradeContext.put("targetProjectLocation", path.toString());
 
 			IProject project = CoreUtil.getProject(workspaceName);
 

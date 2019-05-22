@@ -51,9 +51,9 @@ public class ImportExistingPluginsSDKCommand implements UpgradeCommand {
 	public IStatus perform(IProgressMonitor progressMonitor) {
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		Map<String, String> upgradeContexts = upgradePlan.getUpgradeContexts();
+		Map<String, String> upgradeContext = upgradePlan.getUpgradeContext();
 
-		String currentProjectLocation = upgradeContexts.get("currentProjectLocation");
+		String currentProjectLocation = upgradeContext.get("currentProjectLocation");
 
 		Path rootProjectPath = null;
 
@@ -71,7 +71,7 @@ public class ImportExistingPluginsSDKCommand implements UpgradeCommand {
 			rootProjectPath = Paths.get(currentProjectLocation);
 		}
 
-		upgradeContexts.put("currentProjectLocation", rootProjectPath.toString());
+		upgradeContext.put("currentProjectLocation", rootProjectPath.toString());
 
 		IStatus status = _projectImporter.canImport(rootProjectPath);
 
