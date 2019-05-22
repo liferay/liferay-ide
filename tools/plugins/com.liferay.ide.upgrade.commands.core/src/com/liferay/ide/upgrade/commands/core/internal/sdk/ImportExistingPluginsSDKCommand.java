@@ -14,9 +14,11 @@
 
 package com.liferay.ide.upgrade.commands.core.internal.sdk;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.commands.core.ProjectImporter;
 import com.liferay.ide.upgrade.commands.core.internal.UpgradeCommandsCorePlugin;
 import com.liferay.ide.upgrade.commands.core.sdk.ImportExistingPluginsSDKCommandKeys;
+import com.liferay.ide.upgrade.plan.core.MessagePrompt;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
@@ -57,18 +59,31 @@ public class ImportExistingPluginsSDKCommand implements UpgradeCommand {
 
 		Path rootProjectPath = null;
 
-		if (currentProjectLocation == null) {
+		boolean override = false;
+
+		if (currentProjectLocation != null) {
+			rootProjectPath = Paths.get(currentProjectLocation);
+
+			if (FileUtil.notExists(rootProjectPath.toFile())) {
+				override = true;
+			}
+			else {
+				override = _messagePrompt.promptQuestion(
+					"Override existing setting",
+					"The path " + currentProjectLocation +
+						" currently configured to import.  Do you want to select a different location?");
+			}
+		}
+
+		if ((currentProjectLocation == null) || override) {
 			try {
 				rootProjectPath = _resourceSelection.selectPath(
-					"Please select the plugins sdk location.", "The chosen location is not valid plugins sdk location",
+					"Please select the plugins sdk location.", "The location is not a valid Plugins SDK directory.",
 					ResourceSelection.SDK_LOCATION);
 			}
 			catch (CoreException ce) {
 				return UpgradeCommandsCorePlugin.createErrorStatus(ce.getMessage(), ce);
 			}
-		}
-		else {
-			rootProjectPath = Paths.get(currentProjectLocation);
 		}
 
 		upgradeContext.put("currentProjectLocation", rootProjectPath.toString());
@@ -89,6 +104,9 @@ public class ImportExistingPluginsSDKCommand implements UpgradeCommand {
 
 		return Status.OK_STATUS;
 	}
+
+	@Reference
+	private MessagePrompt _messagePrompt;
 
 	@Reference(target = "(type=plugins_sdk)")
 	private ProjectImporter _projectImporter;
