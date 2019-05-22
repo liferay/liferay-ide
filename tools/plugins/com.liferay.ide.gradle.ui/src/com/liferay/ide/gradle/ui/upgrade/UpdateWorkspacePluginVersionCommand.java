@@ -75,7 +75,7 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 			}
 		}
 		catch (BladeCLIException bclie) {
-			LiferayGradleUI.logError("Failed to find blade jar file", bclie);
+			LiferayGradleUI.logError("Failed to find blade jar file.", bclie);
 		}
 	}
 
@@ -128,7 +128,7 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 			while ((zipEntry = bladeJarInputStream.getNextEntry()) != null) {
 				String entryName = zipEntry.getName();
 
-				if (entryName.startsWith(_workspace_template_name) && entryName.endsWith(".jar")) {
+				if (entryName.startsWith(_workspaceTemplateName) && entryName.endsWith(".jar")) {
 					try (ZipInputStream workspaceJarInputStream = new ZipInputStream(
 							ZipUtil.getEmbedStream(bladeJarInputStream, zipEntry))) {
 
@@ -151,9 +151,9 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 
 									return classpathDependencies.stream(
 									).filter(
-										artifact -> _workspace_plugin_groupId.equals(artifact.getGroupId())
+										artifact -> _workspacePluginGroupId.equals(artifact.getGroupId())
 									).filter(
-										artifact -> _workspace_plugin_artficatId.equals(artifact.getArtifactId())
+										artifact -> _workspacePluginArtficatId.equals(artifact.getArtifactId())
 									).map(
 										artifact -> artifact.getVersion()
 									).findFirst(
@@ -197,9 +197,9 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 
 			dependencies.stream(
 			).filter(
-				artifact -> _workspace_plugin_groupId.equals(artifact.getGroupId())
+				artifact -> _workspacePluginGroupId.equals(artifact.getGroupId())
 			).filter(
-				artifact -> _workspace_plugin_artficatId.equals(artifact.getArtifactId())
+				artifact -> _workspacePluginArtficatId.equals(artifact.getArtifactId())
 			).filter(
 				artifact -> CoreUtil.isNotNullOrEmpty(artifact.getVersion())
 			).filter(
@@ -226,7 +226,7 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 			return Status.OK_STATUS;
 		}
 		catch (IOException ioe) {
-			return LiferayGradleUI.createErrorStatus("Unable to configure bundle url", ioe);
+			return LiferayGradleUI.createErrorStatus("Unable to configure workspace plugin version.", ioe);
 		}
 	}
 
@@ -239,10 +239,10 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 	@Reference
 	private UpgradePlanner _upgradePlanner;
 
-	private String _workspace_plugin_artficatId = "com.liferay.gradle.plugins.workspace";
-	private String _workspace_plugin_groupId = "com.liferay";
-	private String _workspace_template_name = "com.liferay.project.templates.workspace";
-	private String _workspacePluginLatestVersion = "2.0.1";
+	private final String _workspacePluginArtficatId = "com.liferay.gradle.plugins.workspace";
+	private final String _workspacePluginGroupId = "com.liferay";
+	private String _workspacePluginLatestVersion = "2.0.3";
 	private IProject _workspaceProject;
+	private final String _workspaceTemplateName = "com.liferay.project.templates.workspace";
 
 }
