@@ -444,7 +444,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 		for (IMemento upgradeStepMemento : upgradeStepMementos) {
 			String title = upgradeStepMemento.getString("title");
-			String description = upgradeStepMemento.getString("description");
+			String summary = upgradeStepMemento.getString("summary");
 			String commandId = upgradeStepMemento.getString("commandId");
 			String icon = upgradeStepMemento.getString("imagePath");
 			String url = upgradeStepMemento.getString("url");
@@ -452,7 +452,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 			String requirement = upgradeStepMemento.getString("requirement");
 
 			UpgradeStep upgradeStep = new UpgradeStep(
-				title, description, icon, url, requirement, UpgradeStepStatus.valueOf(status), commandId,
+				title, summary, icon, url, requirement, UpgradeStepStatus.valueOf(status), commandId,
 				parentUpgradeStep);
 
 			if (parentUpgradeStep == null) {
@@ -531,7 +531,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 			}
 
 			stepMemento.putString("title", upgradeStep.getTitle());
-			stepMemento.putString("description", upgradeStep.getDescription());
+			stepMemento.putString("summary", upgradeStep.getSummary());
 			stepMemento.putString("imagePath", upgradeStep.getImagePath());
 			stepMemento.putString("url", upgradeStep.getUrl());
 			stepMemento.putString("commandId", upgradeStep.getCommandId());

@@ -318,7 +318,7 @@ public class UpgradeProblem {
 
 		String lineSparator = System.getProperty("line.separator");
 
-		builder.append("Problem description : " + _summary + lineSparator);
+		builder.append("Problem summary : " + _summary + lineSparator);
 		builder.append("	Uuid is :" + _uuid + lineSparator);
 		builder.append("	File location is :" + _resource.getAbsolutePath() + lineSparator);
 		builder.append("	Ticket is :" + _ticket + lineSparator);
