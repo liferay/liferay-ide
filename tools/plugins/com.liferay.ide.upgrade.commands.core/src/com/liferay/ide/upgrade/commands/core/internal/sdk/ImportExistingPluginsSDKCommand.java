@@ -69,16 +69,16 @@ public class ImportExistingPluginsSDKCommand implements UpgradeCommand {
 			}
 			else {
 				override = _messagePrompt.promptQuestion(
-					"Target Project Location Exists",
+					"Override existing setting",
 					"The path " + currentProjectLocation +
-						" already is used as current project location, do you want to override?");
+						" currently configured to import.  Do you want to select a different location?");
 			}
 		}
 
 		if ((currentProjectLocation == null) || override) {
 			try {
 				rootProjectPath = _resourceSelection.selectPath(
-					"Please select the plugins sdk location.", "The chosen location is not valid plugins sdk location",
+					"Please select the plugins sdk location.", "The location is not a valid Plugins SDK directory.",
 					ResourceSelection.SDK_LOCATION);
 			}
 			catch (CoreException ce) {
