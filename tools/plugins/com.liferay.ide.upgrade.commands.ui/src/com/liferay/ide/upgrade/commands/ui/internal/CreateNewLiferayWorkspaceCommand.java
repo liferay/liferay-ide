@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.commands.ui.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.ui.util.UIUtil;
@@ -28,6 +27,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import java.nio.file.Paths;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.core.resources.IProject;
@@ -61,9 +61,11 @@ public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor
 
 		UpgradePlan upgradePlan = _upgradePlanner.getCurrentUpgradePlan();
 
-		java.nio.file.Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
+		Map<String, String> upgradeContext = upgradePlan.getUpgradeContext();
 
-		if (FileUtil.exists(targetProjectLocation)) {
+		String targetProjectLocation = upgradeContext.get("targetProjectLocation");
+
+		if (targetProjectLocation != null) {
 			boolean result = _messagePrompt.promptQuestion(
 				"Target Project Location Exists",
 				"The path " + targetProjectLocation +
@@ -103,7 +105,7 @@ public class CreateNewLiferayWorkspaceCommand implements SapphireContentAccessor
 
 			path = path.resolve(workspaceName);
 
-			upgradePlan.setTargetProjectLocation(path);
+			upgradeContext.put("targetProjectLocation", path.toString());
 
 			IProject project = CoreUtil.getProject(workspaceName);
 

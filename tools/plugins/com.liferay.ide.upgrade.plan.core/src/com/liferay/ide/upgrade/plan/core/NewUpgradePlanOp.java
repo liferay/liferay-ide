@@ -18,26 +18,20 @@ import com.liferay.ide.upgrade.plan.core.internal.NameValidationService;
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
 import com.liferay.ide.upgrade.plan.core.internal.OutlinePossibleValuesService;
 import com.liferay.ide.upgrade.plan.core.internal.OutlineValidationService;
-import com.liferay.ide.upgrade.plan.core.internal.SourceLocationValidationService;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
 import org.eclipse.sapphire.PossibleValues;
-import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
-import org.eclipse.sapphire.modeling.annotations.Fact;
-import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
  * @author Terry Jia
@@ -76,14 +70,6 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	@Label(standard = "Current Liferay Version")
 	@PossibleValues(values = {"6.2", "7.0"})
 	public ValueProperty PROP_CURRENT_VERSION = new ValueProperty(TYPE, "CurrentVersion");
-
-	@AbsolutePath
-	@Fact(statement = "This location should be either a Plugins SDK, Liferay Workspace.")
-	@Label(standard = "Current Code Location")
-	@Service(impl = SourceLocationValidationService.class)
-	@Type(base = Path.class)
-	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
-	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
 	@Required
 	@Service(impl = NameValidationService.class)

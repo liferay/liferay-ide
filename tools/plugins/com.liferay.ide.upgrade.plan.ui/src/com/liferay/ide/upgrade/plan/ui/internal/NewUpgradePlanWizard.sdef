@@ -25,10 +25,6 @@
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                     <property>TargetVersion</property>
                 </property-editor>
-                <property-editor>
-                    <property>Location</property>
-                    <visible-when>${UpgradePlanOutline == '07-liferay-code-upgrade-plan'}</visible-when>
-                </property-editor>
             </content>
             <description>Create and start a new Upgrade Plan. Any existing plan will be replaced.</description>
             <image>NewUpgradePlanWizard.png</image>

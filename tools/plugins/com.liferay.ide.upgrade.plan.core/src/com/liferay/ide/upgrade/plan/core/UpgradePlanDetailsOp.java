@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import java.nio.file.Path;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -120,16 +118,6 @@ public interface UpgradePlanDetailsOp extends Element {
 			if (valueProperty.equals(UpgradePlanDetailsOp.PROP_CURRENT_VERSION)) {
 				_initialValue = upgradePlan.getCurrentVersion();
 			}
-			else if (valueProperty.equals(UpgradePlanDetailsOp.PROP_LOCATION)) {
-				Path currentProjectLocation = upgradePlan.getCurrentProjectLocation();
-
-				if (currentProjectLocation == null) {
-					_initialValue = "";
-				}
-				else {
-					_initialValue = currentProjectLocation.toString();
-				}
-			}
 			else if (valueProperty.equals(UpgradePlanDetailsOp.PROP_NAME)) {
 				_initialValue = upgradePlan.getName();
 			}
@@ -137,16 +125,6 @@ public interface UpgradePlanDetailsOp extends Element {
 				Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
 				_initialValue = String.valueOf(upgradeProblems.size());
-			}
-			else if (valueProperty.equals(UpgradePlanDetailsOp.PROP_TARGET_LOCATION)) {
-				Path targetProjectLocation = upgradePlan.getTargetProjectLocation();
-
-				if (targetProjectLocation == null) {
-					_initialValue = "";
-				}
-				else {
-					_initialValue = targetProjectLocation.toString();
-				}
 			}
 			else if (valueProperty.equals(UpgradePlanDetailsOp.PROP_TARGET_VERSION)) {
 				_initialValue = upgradePlan.getTargetVersion();

@@ -22,11 +22,11 @@ import com.liferay.ide.upgrade.plan.core.util.LiferayWorkspaceUtil;
 
 import java.io.IOException;
 
-import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 
@@ -66,26 +66,20 @@ public class NewUpgradePlanOpMethods {
 
 		String targetVersion = _getter.get(newUpgradePlanOp.getTargetVersion());
 
-		Path path = _getter.get(newUpgradePlanOp.getLocation());
-
-		java.nio.file.Path sourceCodeLocation = null;
-
-		if (path != null) {
-			sourceCodeLocation = Paths.get(path.toOSString());
-		}
+		Map<String, String> upgradeContext = new HashMap<>();
 
 		try {
 			UpgradePlan upgradePlan = upgradePlanner.newUpgradePlan(
-				name, currentVersion, targetVersion, sourceCodeLocation, upgradePlanOutline);
+				name, currentVersion, targetVersion, upgradePlanOutline, upgradeContext);
 
 			IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
 			if (workspaceProject != null) {
 				IPath location = workspaceProject.getLocation();
 
-				java.nio.file.Path targetProjectLocation = Paths.get(location.toOSString());
+				upgradeContext = upgradePlan.getUpgradeContext();
 
-				upgradePlan.setTargetProjectLocation(targetProjectLocation);
+				upgradeContext.put("targetProjectLocation", location.toOSString());
 			}
 
 			upgradePlanner.startUpgradePlan(upgradePlan);
