@@ -125,8 +125,8 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 			try {
 				detail = _renderKBMainContent(url);
 			}
-			catch (Throwable t) {
-				deferred.fail(t);
+			catch (Exception e) {
+				UpgradePlanUIPlugin.logError("Fetching content from " + url + " failed.", e);
 
 				return;
 			}
@@ -165,9 +165,6 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		return renderer.render(document);
 	}
 
-	/**
-	 * only use temperate and only works well for https://web-community-beta.wedeploy.io
-	 */
 	private String _renderKBMainContent(String url) throws ClientProtocolException, IOException {
 		Connection connection = Jsoup.connect(url);
 
