@@ -96,18 +96,18 @@ public class UpgradeStepItem implements ServicesLookup, UpgradeItem, UpgradeList
 			return;
 		}
 
-		FormText description = _formToolkit.createFormText(_parentComposite, true);
+		FormText summary = _formToolkit.createFormText(_parentComposite, true);
 
-		String des = _upgradeStep.getDescription();
+		String summaryValue = _upgradeStep.getSummary();
 
-		if (CoreUtil.isNotNullOrEmpty(des)) {
-			description.setText(des, true, false);
+		if (CoreUtil.isNotNullOrEmpty(summaryValue)) {
+			summary.setText(summaryValue, true, false);
 		}
 		else {
-			description.setText("", true, false);
+			summary.setText("", true, false);
 		}
 
-		_disposables.add(() -> description.dispose());
+		_disposables.add(() -> summary.dispose());
 
 		_buttonComposite = _formToolkit.createComposite(_parentComposite);
 

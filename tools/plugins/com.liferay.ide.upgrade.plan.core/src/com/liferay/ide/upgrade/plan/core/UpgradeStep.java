@@ -37,20 +37,20 @@ import org.osgi.util.tracker.ServiceTracker;
 public class UpgradeStep {
 
 	public UpgradeStep(
-		String title, String description, String imagePath, String url, String requirement, UpgradeStepStatus status,
+		String title, String summary, String imagePath, String url, String requirement, UpgradeStepStatus status,
 		String commandId, UpgradeStep parentUpgradeStep) {
 
 		_title = title;
 
-		if (!description.startsWith("<form>")) {
-			description = "<form>" + description;
+		if (!summary.startsWith("<form>")) {
+			summary = "<form>" + summary;
 		}
 
-		if (!description.endsWith("</form>")) {
-			description = description + "</form>";
+		if (!summary.endsWith("</form>")) {
+			summary = summary + "</form>";
 		}
 
-		_description = description;
+		_summary = summary;
 		_icon = imagePath;
 		_url = url;
 		_requirement = requirement;
@@ -132,7 +132,7 @@ public class UpgradeStep {
 			return false;
 		}
 
-		if (isEqualIgnoreCase(_description, baseUpgradeStep._description) &&
+		if (isEqualIgnoreCase(_summary, baseUpgradeStep._summary) &&
 			isEqualIgnoreCase(_requirement, baseUpgradeStep._requirement) &&
 			isEqualIgnoreCase(_commandId, baseUpgradeStep._commandId) &&
 			isEqualIgnoreCase(_url, baseUpgradeStep._url) && isEqual(_children, baseUpgradeStep._children) &&
@@ -150,10 +150,6 @@ public class UpgradeStep {
 
 	public String getCommandId() {
 		return _commandId;
-	}
-
-	public String getDescription() {
-		return _description;
 	}
 
 	public String getImagePath() {
@@ -181,6 +177,10 @@ public class UpgradeStep {
 		return _status;
 	}
 
+	public String getSummary() {
+		return _summary;
+	}
+
 	public String getTitle() {
 		return _title;
 	}
@@ -192,7 +192,7 @@ public class UpgradeStep {
 	public int hashCode() {
 		int hash = 31;
 
-		hash = 31 * hash + ((_description != null) ? _description.hashCode() : 0);
+		hash = 31 * hash + ((_summary != null) ? _summary.hashCode() : 0);
 
 		Stream<UpgradeStep> stream = _children.stream();
 
@@ -297,12 +297,12 @@ public class UpgradeStep {
 
 	private List<UpgradeStep> _children = new ArrayList<>();
 	private String _commandId;
-	private String _description;
 	private String _icon;
 	private UpgradeStep _parentUpgradeStep;
 	private String _requirement;
 	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 	private UpgradeStepStatus _status = UpgradeStepStatus.INCOMPLETE;
+	private String _summary;
 	private String _title;
 	private String _url;
 

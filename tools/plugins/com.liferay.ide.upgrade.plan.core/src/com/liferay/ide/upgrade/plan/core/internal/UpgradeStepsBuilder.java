@@ -89,15 +89,15 @@ public class UpgradeStepsBuilder {
 					title = titleElement.text();
 				}
 
-				String description = "";
+				String summary = "";
 
 				Element titleNextElement = titleElement.nextElementSibling();
 
 				if ((titleNextElement != null) && "p".equals(titleNextElement.nodeName())) {
-					description = titleNextElement.text();
+					summary = titleNextElement.text();
 				}
 				else {
-					description = title;
+					summary = title;
 				}
 
 				String commandId = child.attr("commandid");
@@ -105,7 +105,7 @@ public class UpgradeStepsBuilder {
 				String imagePath = "";
 
 				upgradeStep = new UpgradeStep(
-					title, description, imagePath, url, requirement, UpgradeStepStatus.INCOMPLETE, commandId, parent);
+					title, summary, imagePath, url, requirement, UpgradeStepStatus.INCOMPLETE, commandId, parent);
 
 				if (parent == null) {
 					upgradeSteps.add(upgradeStep);
