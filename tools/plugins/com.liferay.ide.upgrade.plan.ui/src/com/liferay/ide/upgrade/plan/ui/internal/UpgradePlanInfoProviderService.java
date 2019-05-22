@@ -122,25 +122,13 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		String url = upgradeStep.getUrl();
 
 		if (CoreUtil.isNotNullOrEmpty(url)) {
-			if (url.startsWith("https://github.com")) {
-				try {
-					detail = url;
-				}
-				catch (Throwable t) {
-					deferred.fail(t);
-
-					return;
-				}
+			try {
+				detail = _renderKBMainContent(url);
 			}
-			else if (url.startsWith("https://web-community-beta.wedeploy.io")) {
-				try {
-					detail = _renderKBMainContent(url);
-				}
-				catch (Throwable t) {
-					deferred.fail(t);
+			catch (Throwable t) {
+				deferred.fail(t);
 
-					return;
-				}
+				return;
 			}
 		}
 
