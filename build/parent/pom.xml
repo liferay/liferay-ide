@@ -48,8 +48,8 @@
         <sapphire-site>http://download.eclipse.org/sapphire/9.1.1/repository/</sapphire-site>
         <maven-deps-plugin-site>https://github.com/ianbrandt/m2e-maven-dependency-plugin/raw/gh-pages/0.0.4/</maven-deps-plugin-site>
         <gmaven.runtime>1.8</gmaven.runtime>
-        <blade-latest-download-url>https://dl.bintray.com/liferay-blade-cli/liferay-blade-cli/blade.jar</blade-latest-download-url>
-        <blade-latest-md5>16e61cdc73f3f1290774d390156a3acc</blade-latest-md5>
+        <blade-latest-download-url>https://repository-cdn.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/blade/com.liferay.blade.cli/3.7.0-SNAPSHOT/com.liferay.blade.cli-3.7.0-20190523.171145-9.jar</blade-latest-download-url>
+        <blade-latest-md5>5a0d806250dfda8a6b40ab031cc37348</blade-latest-md5>
         <sign-apps>false</sign-apps>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
     </properties>
