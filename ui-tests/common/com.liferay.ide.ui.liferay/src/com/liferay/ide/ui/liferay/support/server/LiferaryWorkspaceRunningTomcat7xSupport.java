@@ -57,6 +57,12 @@ public class LiferaryWorkspaceRunningTomcat7xSupport extends SupportBase {
 			30 * 1000);
 
 		jobAction.waitForServerStarted(_workspace.getServerName());
+
+		viewAction.servers.openGogoShell(_workspace.getStartedLabel());
+
+		validationAction.assertGogoShellVisible();
+
+		viewAction.closeView("Terminal");
 	}
 
 	private LiferaryWorkspaceTomcat7xSupport _workspace;
