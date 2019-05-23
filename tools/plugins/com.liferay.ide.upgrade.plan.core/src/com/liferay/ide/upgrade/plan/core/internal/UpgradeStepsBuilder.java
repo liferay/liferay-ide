@@ -74,6 +74,8 @@ public class UpgradeStepsBuilder {
 
 				Elements aTags = titleElement.getElementsByTag("a");
 
+				String commandId = "";
+
 				if (aTags.size() > 0) {
 					Element aTag = aTags.get(0);
 
@@ -84,6 +86,8 @@ public class UpgradeStepsBuilder {
 					url = protocol + "://" + authority + aTag.attr("href");
 
 					title = aTag.text();
+
+					commandId = aTag.attr("commandid");
 				}
 				else {
 					title = titleElement.text();
@@ -99,8 +103,6 @@ public class UpgradeStepsBuilder {
 				else {
 					summary = title;
 				}
-
-				String commandId = child.attr("commandid");
 
 				String imagePath = "";
 
