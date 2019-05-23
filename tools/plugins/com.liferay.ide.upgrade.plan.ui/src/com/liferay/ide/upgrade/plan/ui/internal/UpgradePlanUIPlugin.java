@@ -111,6 +111,12 @@ public class UpgradePlanUIPlugin extends AbstractUIPlugin {
 		log.log(createErrorStatus(msg, e));
 	}
 
+	public static void logError(String msg, Throwable t) {
+		ILog log = _plugin.getLog();
+
+		log.log(createErrorStatus(msg, t));
+	}
+
 	public static void saveUpgradePlanSettings() {
 		_plugin.saveDialogSettings();
 	}
