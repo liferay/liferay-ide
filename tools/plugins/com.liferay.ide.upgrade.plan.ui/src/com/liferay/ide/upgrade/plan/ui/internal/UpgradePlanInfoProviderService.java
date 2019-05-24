@@ -83,7 +83,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 						Throwable failure = promise.getFailure();
 
 						if (failure != null) {
-							return UpgradePlanUIPlugin.createErrorStatus(
+							UpgradePlanUIPlugin.logError(
 								"Error retrieving " + upgradeStep.getTitle() + " detail.", failure);
 						}
 					}
@@ -125,8 +125,8 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 			try {
 				detail = _renderKBMainContent(url);
 			}
-			catch (Exception e) {
-				UpgradePlanUIPlugin.logError("Fetching content from " + url + " failed.", e);
+			catch (Throwable t) {
+				deferred.fail(t);
 
 				return;
 			}
