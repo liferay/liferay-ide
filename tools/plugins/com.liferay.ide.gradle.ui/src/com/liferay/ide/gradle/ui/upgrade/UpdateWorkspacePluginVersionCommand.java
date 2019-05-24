@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
+import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.commands.core.code.UpdateWorkspacePluginVersionKeys;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
@@ -32,11 +33,18 @@ import com.liferay.ide.upgrade.plan.core.UpgradePreview;
 import java.io.File;
 import java.io.IOException;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -55,6 +63,21 @@ import org.osgi.service.component.annotations.ServiceScope;
 	service = {UpgradeCommand.class, UpgradePreview.class}
 )
 public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, UpgradePreview {
+
+	public UpdateWorkspacePluginVersionCommand() {
+		try {
+			IPath bladeCLIPath = BladeCLI.getBladeCLIPath();
+
+			File bladeJarFile = bladeCLIPath.toFile();
+
+			if (FileUtil.exists(bladeJarFile)) {
+				_workspacePluginLatestVersion = _getWorkspacePluginVersion(bladeJarFile);
+			}
+		}
+		catch (Exception e) {
+			LiferayGradleUI.logError("Failed to find latest workspace plugin latest version.", e);
+		}
+	}
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
@@ -98,6 +121,66 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 			});
 	}
 
+	private String _getWorkspacePluginVersion(File file) throws Exception {
+		try (ZipFile zipFile = new ZipFile(file)) {
+			Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+			while (entries.hasMoreElements()) {
+				ZipEntry zipEntry = entries.nextElement();
+
+				String entryName = zipEntry.getName();
+
+				if (entryName.startsWith(_WORKSPACE_TEMPLATE_NAME) && entryName.endsWith(".jar")) {
+					Path jarFile = Files.createTempFile(_WORKSPACE_TEMPLATE_NAME, ".jar");
+
+					FileUtil.writeFile(jarFile.toFile(), zipFile.getInputStream(zipEntry));
+
+					try (ZipFile workspaceJarZipFile = new ZipFile(jarFile.toFile())) {
+						Enumeration<? extends ZipEntry> workspaceEntries = workspaceJarZipFile.entries();
+
+						while (workspaceEntries.hasMoreElements()) {
+							ZipEntry workspaceZipEntry = workspaceEntries.nextElement();
+
+							String workspaceEntryName = workspaceZipEntry.getName();
+
+							if (workspaceEntryName.endsWith("settings.gradle")) {
+								Path settingsFile = Files.createTempFile("settings", ".gradle");
+
+								String settingsGradle = FileUtil.readContents(
+									workspaceJarZipFile.getInputStream(workspaceZipEntry));
+
+								Files.delete(settingsFile);
+
+								GradleDependencyUpdater gradleDependencyUpdater = new GradleDependencyUpdater(
+									settingsGradle);
+
+								List<Artifact> classpathDependencies = gradleDependencyUpdater.getDependencies(
+									true, "classpath");
+
+								return classpathDependencies.stream(
+								).filter(
+									artifact -> _WORKSPACE_PLUGIN_GROUP_ID.equals(artifact.getGroupId())
+								).filter(
+									artifact -> _WORKSPACE_PLUGIN_ARTIFACT_ID.equals(artifact.getArtifactId())
+								).map(
+									artifact -> artifact.getVersion()
+								).findFirst(
+								).orElseGet(
+									() -> _workspacePluginLatestVersion
+								);
+							}
+						}
+					}
+					finally {
+						Files.delete(jarFile);
+					}
+				}
+			}
+		}
+
+		return _workspacePluginLatestVersion;
+	}
+
 	private File _getWorkspaceSettings() {
 		List<IProject> projects = _resourceSelection.selectProjects(
 			"Select Liferay Workspace Project", false, ResourceSelection.WORKSPACE_PROJECTS);
@@ -121,9 +204,9 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 
 			dependencies.stream(
 			).filter(
-				artifact -> "com.liferay".equals(artifact.getGroupId())
+				artifact -> _WORKSPACE_PLUGIN_GROUP_ID.equals(artifact.getGroupId())
 			).filter(
-				artifact -> "com.liferay.gradle.plugins.workspace".equals(artifact.getArtifactId())
+				artifact -> _WORKSPACE_PLUGIN_ARTIFACT_ID.equals(artifact.getArtifactId())
 			).filter(
 				artifact -> CoreUtil.isNotNullOrEmpty(artifact.getVersion())
 			).filter(
@@ -150,9 +233,15 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 			return Status.OK_STATUS;
 		}
 		catch (IOException ioe) {
-			return LiferayGradleUI.createErrorStatus("Unable to configure bundle url", ioe);
+			return LiferayGradleUI.createErrorStatus("Unable to configure workspace plugin version.", ioe);
 		}
 	}
+
+	private static final String _WORKSPACE_PLUGIN_ARTIFACT_ID = "com.liferay.gradle.plugins.workspace";
+
+	private static final String _WORKSPACE_PLUGIN_GROUP_ID = "com.liferay";
+
+	private static final String _WORKSPACE_TEMPLATE_NAME = "com.liferay.project.templates.workspace";
 
 	@Reference
 	private ResourceSelection _resourceSelection;
@@ -163,7 +252,7 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 	@Reference
 	private UpgradePlanner _upgradePlanner;
 
-	private final String _workspacePluginLatestVersion = "2.0.1";
+	private String _workspacePluginLatestVersion = "2.0.3";
 	private IProject _workspaceProject;
 
 }
