@@ -130,8 +130,8 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 
 				String entryName = zipEntry.getName();
 
-				if (entryName.startsWith(_workspaceTemplateName) && entryName.endsWith(".jar")) {
-					Path jarFile = Files.createTempFile(_workspaceTemplateName, ".jar");
+				if (entryName.startsWith(_WORKSPACE_TEMPLATE_NAME) && entryName.endsWith(".jar")) {
+					Path jarFile = Files.createTempFile(_WORKSPACE_TEMPLATE_NAME, ".jar");
 
 					FileUtil.writeFile(jarFile.toFile(), zipFile.getInputStream(zipEntry));
 
@@ -159,9 +159,9 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 
 								return classpathDependencies.stream(
 								).filter(
-									artifact -> _workspacePluginGroupId.equals(artifact.getGroupId())
+									artifact -> _WORKSPACE_PLUGIN_GROUP_ID.equals(artifact.getGroupId())
 								).filter(
-									artifact -> _workspacePluginArtficatId.equals(artifact.getArtifactId())
+									artifact -> _WORKSPACE_PLUGIN_ARTIFACT_ID.equals(artifact.getArtifactId())
 								).map(
 									artifact -> artifact.getVersion()
 								).findFirst(
@@ -204,9 +204,9 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 
 			dependencies.stream(
 			).filter(
-				artifact -> _workspacePluginGroupId.equals(artifact.getGroupId())
+				artifact -> _WORKSPACE_PLUGIN_GROUP_ID.equals(artifact.getGroupId())
 			).filter(
-				artifact -> _workspacePluginArtficatId.equals(artifact.getArtifactId())
+				artifact -> _WORKSPACE_PLUGIN_ARTIFACT_ID.equals(artifact.getArtifactId())
 			).filter(
 				artifact -> CoreUtil.isNotNullOrEmpty(artifact.getVersion())
 			).filter(
@@ -237,6 +237,12 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 		}
 	}
 
+	private static final String _WORKSPACE_PLUGIN_ARTIFACT_ID = "com.liferay.gradle.plugins.workspace";
+
+	private static final String _WORKSPACE_PLUGIN_GROUP_ID = "com.liferay";
+
+	private static final String _WORKSPACE_TEMPLATE_NAME = "com.liferay.project.templates.workspace";
+
 	@Reference
 	private ResourceSelection _resourceSelection;
 
@@ -246,10 +252,7 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 	@Reference
 	private UpgradePlanner _upgradePlanner;
 
-	private final String _workspacePluginArtficatId = "com.liferay.gradle.plugins.workspace";
-	private final String _workspacePluginGroupId = "com.liferay";
 	private String _workspacePluginLatestVersion = "2.0.3";
 	private IProject _workspaceProject;
-	private final String _workspaceTemplateName = "com.liferay.project.templates.workspace";
 
 }
