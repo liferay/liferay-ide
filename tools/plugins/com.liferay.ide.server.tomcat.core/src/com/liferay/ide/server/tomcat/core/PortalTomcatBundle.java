@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.AbstractPortalBundle;
+import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.JavaUtil;
 
 import java.io.File;
@@ -79,8 +80,25 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 	public IPath getAppServerPortalDir() {
 		IPath retval = null;
 
-		if (bundlePath != null) {
-			retval = bundlePath.append("webapps/ROOT");
+		IPath appBasePath = bundlePath.append("webapps");
+
+		File appBaseFolder = FileUtil.getFile(appBasePath);
+
+		File[] files = null;
+
+		if (FileUtil.notExists(appBaseFolder)) {
+			files = new File[0];
+		}
+		else {
+			files = appBaseFolder.listFiles();
+		}
+
+		for (File file : files) {
+			if (LiferayTomcatUtil.isLiferayPortal(file)) {
+				PortalContext portalContext = new PortalContext(file.getName(), false);
+
+				retval = appBasePath.append(portalContext.getBaseName());
+			}
 		}
 
 		return retval;

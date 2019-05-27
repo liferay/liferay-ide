@@ -29,6 +29,7 @@ import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime70;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
+import com.liferay.ide.server.tomcat.core.PortalContext;
 import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -358,6 +359,26 @@ public class LiferayTomcatUtil {
 		return retval;
 	}
 
+	public static boolean isLiferayPortal(File file) {
+		IPath path = new Path(file.getAbsolutePath());
+
+		path = path.append("WEB-INF/web.xml");
+
+		File webXMLFile = path.toFile();
+
+		if (FileUtil.notExists(webXMLFile)) {
+			return false;
+		}
+
+		String fileContents = FileUtil.readContents(webXMLFile);
+
+		if (fileContents.contains("id=\"Liferay_Portal\"")) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public static Context loadContextFile(File contextFile) {
 		Context context = null;
 
@@ -559,7 +580,28 @@ public class LiferayTomcatUtil {
 
 			IPath hostPath = serverPath.append(_HOST_NAME);
 
+			IPath appBasePath = appServerDir.append("webapps");
+
+			File appBaseFolder = FileUtil.getFile(appBasePath);
+
+			File[] files = null;
+
+			if (FileUtil.notExists(appBaseFolder)) {
+				files = new File[0];
+			}
+			else {
+				files = appBaseFolder.listFiles();
+			}
+
 			IPath contextFilePath = hostPath.append(_DEFAULT_PORTAL_CONTEXT_FILE);
+
+			for (File file : files) {
+				if (isLiferayPortal(file)) {
+					PortalContext portalContext = new PortalContext(file.getName(), false);
+
+					contextFilePath = hostPath.append(portalContext.getName() + ".xml");
+				}
+			}
 
 			File contextFile = contextFilePath.toFile();
 

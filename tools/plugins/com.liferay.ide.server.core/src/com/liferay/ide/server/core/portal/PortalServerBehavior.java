@@ -210,6 +210,18 @@ public class PortalServerBehavior
 				url += ":" + port;
 			}
 
+			IPath appServerPortalPath = _getPortalRuntime().getAppServerPortalDir();
+
+			if (appServerPortalPath != null) {
+				String appServerPortalDir = appServerPortalPath.toString();
+
+				String folderName = appServerPortalDir.substring(appServerPortalDir.lastIndexOf("/"));
+
+				if (!"/ROOT".equals(folderName)) {
+					url += folderName;
+				}
+			}
+
 			_ping = new PingThread(getServer(), url, -1, this);
 		}
 		catch (Exception e) {
