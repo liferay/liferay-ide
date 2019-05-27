@@ -28,8 +28,8 @@
 		<version>3.6.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.liferay.ide.functional.upgrade.view.icons.tests</artifactId>
+	<artifactId>com.liferay.ide.functional.upgrade.view.actions.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 
-	<name>Liferay IDE Functional Upgrade View Icons Tests</name>
+	<name>Liferay IDE Functional Upgrade View Actions Tests</name>
 </project>

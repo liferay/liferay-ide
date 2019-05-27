@@ -16,8 +16,9 @@ package com.liferay.ide.functional.upgrade.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.swtbot.util.StringPool;
+import com.liferay.ide.ui.liferay.support.upgrade.LiferayUpgradePlanSupport;
 
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -26,15 +27,16 @@ import org.junit.Test;
  */
 public class UpgradePlannerTests extends SwtbotBase {
 
+	@ClassRule
+	public static LiferayUpgradePlanSupport upgradePlanner = new LiferayUpgradePlanSupport(bot);
+
 	@Test
 	public void testSetUpLiferayWorkspace() {
 		viewAction.switchUpgradePlannerPerspective();
 
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare("test", "07-liferay-code-upgrade-plan", "6.2", "7.1");
-
-		wizardAction.newUpgradePlan.prepareCurrentCodeLocation(StringPool.BLANK);
+		wizardAction.newUpgradePlan.prepare("test", UPGRADE_CODE_OUTLINE, "6.2", "7.1");
 
 		wizardAction.finish();
 

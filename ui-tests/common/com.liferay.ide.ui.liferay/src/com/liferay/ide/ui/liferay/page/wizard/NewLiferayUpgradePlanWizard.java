@@ -29,10 +29,6 @@ public class NewLiferayUpgradePlanWizard extends Wizard {
 		super(bot);
 	}
 
-	public Text getCurrentCodeLocation() {
-		return new Text(getShell().bot(), CURRENT_CODE_LOCATION);
-	}
-
 	public ComboBox getCurrentLiferayVersion() {
 		return new ComboBox(getShell().bot(), CURRENT_LIFERAY_VERSION);
 	}
@@ -49,10 +45,6 @@ public class NewLiferayUpgradePlanWizard extends Wizard {
 		return new ComboBox(getShell().bot(), UPGRADE_PLAN_OUTLINE);
 	}
 
-	public void setCurrentCodeLocation(String location) {
-		getCurrentCodeLocation().setText(location);
-	}
-
 	public void setCurrentLiferayVersion(String version) {
 		getCurrentLiferayVersion().setSelection(version);
 	}
@@ -65,8 +57,8 @@ public class NewLiferayUpgradePlanWizard extends Wizard {
 		getTargetLiferayVersion().setSelection(version);
 	}
 
-	public void setUpgradePlanOutline(String planType) {
-		getUpgradePlanOutline().setSelection(planType);
+	public void setUpgradePlanOutline(String planOutline) {
+		getUpgradePlanOutline().setSelection(planOutline);
 	}
 
 }

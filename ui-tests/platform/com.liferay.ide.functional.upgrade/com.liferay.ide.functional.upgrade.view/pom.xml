@@ -36,6 +36,6 @@
 
 	<modules>
 		<module>com.liferay.ide.functional.upgrade.view.steps</module>
-		<module>com.liferay.ide.functional.upgrade.view.icons</module>
+		<module>com.liferay.ide.functional.upgrade.view.actions</module>
 	</modules>
 </project>

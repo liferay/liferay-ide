@@ -147,6 +147,8 @@ public interface UI {
 
 	public final String CONFIGURE_LIFERAY_WORKSPACE_SETTINGS = "Configure Liferay Workspace Settings";
 
+	public final String CONFIGURE_UPGRADE_PLANNER_OUTLINES = "Configure Upgrade Planner outlines";
+
 	public final String CONSOLE = "Console";
 
 	public final String CONSTRUCTORS_FROM_SUPERCLASS = "Constructors from superclass";
@@ -831,9 +833,15 @@ public interface UI {
 
 	public final String UPDATE_PROJECT = "Update Project...";
 
+	public final String UPGRADE_CODE_OUTLINE =
+		"http://192.168.133.135:8080/web/guest/docs/7-2/reference/-/knowledge_base/reference" +
+			"/upgrading-code-to-product-ver";
+
 	public final String UPGRADE_PLAN_DETAILS = "Upgrade Plan Details";
 
 	public final String UPGRADE_PLAN_OUTLINE = "Upgrade plan outline:";
+
+	public final String UPGRADE_PLANNER = "Upgrade Planner";
 
 	public final String UPGRADE_TO_LIFERAY_PLUGINS_SDK_7 = "Upgrade to Liferay Plugins SDK 7";
 

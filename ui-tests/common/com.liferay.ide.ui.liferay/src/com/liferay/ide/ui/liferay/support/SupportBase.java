@@ -89,6 +89,16 @@ public class SupportBase extends ExternalResource {
 		catch (NumberFormatException nfe) {
 			nfe.printStackTrace();
 		}
+
+		if (isSwitchToUpgradePespective()) {
+			Perspective upgradePlannerPerspective = ide.getUpgradePlannerPerspective();
+
+			upgradePlannerPerspective.activate();
+		}
+	}
+
+	public boolean isSwitchToUpgradePespective() {
+		return false;
 	}
 
 	public BrowserAction browserAction;

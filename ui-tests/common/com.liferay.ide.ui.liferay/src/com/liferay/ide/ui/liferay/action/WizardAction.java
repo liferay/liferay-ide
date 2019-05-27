@@ -793,15 +793,13 @@ public class WizardAction extends UIAction {
 
 	public class NewLiferayUpgradePlanWizardAction {
 
-		public void prepare(String name, String planType, String currentLiferayVersion, String targetLiferayVersion) {
+		public void prepare(
+			String name, String planOutline, String currentLiferayVersion, String targetLiferayVersion) {
+
 			_newLiferayUpgradePlanWizard.setName(name);
-			_newLiferayUpgradePlanWizard.setUpgradePlanOutline(planType);
+			_newLiferayUpgradePlanWizard.setUpgradePlanOutline(planOutline);
 			_newLiferayUpgradePlanWizard.setCurrentLiferayVersion(currentLiferayVersion);
 			_newLiferayUpgradePlanWizard.setTargetLiferayVersion(targetLiferayVersion);
-		}
-
-		public void prepareCurrentCodeLocation(String location) {
-			_newLiferayUpgradePlanWizard.setCurrentCodeLocation(location);
 		}
 
 		private final NewLiferayUpgradePlanWizard _newLiferayUpgradePlanWizard = new NewLiferayUpgradePlanWizard(bot);

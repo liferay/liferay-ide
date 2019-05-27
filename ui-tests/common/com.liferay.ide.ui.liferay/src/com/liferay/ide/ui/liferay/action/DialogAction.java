@@ -16,6 +16,7 @@ package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.page.dialog.AddRepositoryDialog;
+import com.liferay.ide.ui.liferay.page.dialog.AddUrlDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.AddAndRemoveDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.AvailableSoftwareSitesPreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.GradlePreferencesDialog;
@@ -26,6 +27,7 @@ import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextTableDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TreeDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.UpdateMavenProjectDialog;
+import com.liferay.ide.ui.swtbot.eclipse.page.UpgradePlannerPreferencesDialog;
 import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Menu;
@@ -140,10 +142,12 @@ public class DialogAction extends UIAction {
 	public AddRepositoryDialogAction addRepository = new AddRepositoryDialogAction();
 	public AvailableSoftwareSitesDialogAction availableSoftwareSites = new AvailableSoftwareSitesDialogAction();
 	public GradleDialogAction gradle = new GradleDialogAction();
+	public AddPlannerOutlineDialogAction plannerOutline = new AddPlannerOutlineDialogAction();
 	public PreferencesDialogAction preferences = new PreferencesDialogAction();
 	public ServerRuntimeEnvironmentsDialogAction serverRuntimeEnvironments =
 		new ServerRuntimeEnvironmentsDialogAction();
 	public UpdateMavenProjectDialogAction updateMavenProject = new UpdateMavenProjectDialogAction();
+	public UpgradePlannerDialogAction upgradePlanner = new UpgradePlannerDialogAction();
 	public WorkspaceFileDialogAction workspaceFile = new WorkspaceFileDialogAction();
 
 	public class AddAndRemoveDialogAction {
@@ -165,6 +169,18 @@ public class DialogAction extends UIAction {
 		}
 
 		private final AddAndRemoveDialog _addAndRemoveDialog = new AddAndRemoveDialog(bot);
+
+	}
+
+	public class AddPlannerOutlineDialogAction {
+
+		public void addUrl(String url) {
+			_plannerUrl.setUrl(url);
+
+			_plannerUrl.confirm();
+		}
+
+		private final AddUrlDialog _plannerUrl = new AddUrlDialog(bot);
 
 	}
 
@@ -233,6 +249,22 @@ public class DialogAction extends UIAction {
 
 			try {
 				_openPreferenceType(GRADLE);
+			}
+			catch (Exception e) {
+			}
+
+			SWTBotPreferences.TIMEOUT = origin;
+		}
+
+		public void openLiferayUpgradePlannerTry() {
+			assertTitle(_getDialog(), _preferencesDialog);
+
+			long origin = SWTBotPreferences.TIMEOUT;
+
+			SWTBotPreferences.TIMEOUT = 500;
+
+			try {
+				_openPreferenceType(LIFERAY, UPGRADE_PLANNER);
 			}
 			catch (Exception e) {
 			}
@@ -353,6 +385,24 @@ public class DialogAction extends UIAction {
 		}
 
 		private final UpdateMavenProjectDialog _updateMavenProjectDialog = new UpdateMavenProjectDialog(bot);
+
+	}
+
+	public class UpgradePlannerDialogAction {
+
+		public void addOutline() {
+			_upgradePlannerDialog.clickAddBtn();
+		}
+
+		public void deleteOutline(int row) {
+			assertTitle(_getDialog(), _upgradePlannerDialog);
+
+			_upgradePlannerDialog.clickUrl(row);
+
+			_upgradePlannerDialog.clickRemoveBtn();
+		}
+
+		private final UpgradePlannerPreferencesDialog _upgradePlannerDialog = new UpgradePlannerPreferencesDialog(bot);
 
 	}
 

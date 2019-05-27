@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Liferay IDE Functional Upgrade View Icons Tests
-Bundle-SymbolicName: com.liferay.ide.functional.upgrade.view.icons.tests
+Bundle-Name: Liferay IDE Functional Upgrade View Actions Tests
+Bundle-SymbolicName: com.liferay.ide.functional.upgrade.view.actions.tests
 Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.ui.liferay,
