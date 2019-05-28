@@ -23,19 +23,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.functional.tests.upgrade</groupId>
-		<artifactId>upgrade-tests</artifactId>
+		<groupId>com.liferay.ide.functional.tests.upgrade.view</groupId>
+		<artifactId>upgrade-view-tests</artifactId>
 		<version>3.6.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.upgrade.view</groupId>
-	<artifactId>upgrade-view-tests</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>com.liferay.ide.functional.upgrade.view.actions.tests</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
 
-	<name>Liferay IDE Functional Upgrade View</name>
-
-	<modules>
-		<module>com.liferay.ide.functional.upgrade.view.steps</module>
-		<module>com.liferay.ide.functional.upgrade.view.actions</module>
-	</modules>
+	<name>Liferay IDE Functional Upgrade View Actions Tests</name>
 </project>

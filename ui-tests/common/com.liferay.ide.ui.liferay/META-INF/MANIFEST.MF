@@ -25,6 +25,7 @@ Export-Package: com.liferay.ide.ui.liferay,
  com.liferay.ide.ui.liferay.support,
  com.liferay.ide.ui.liferay.support.server,
  com.liferay.ide.ui.liferay.support.project,
+ com.liferay.ide.ui.liferay.support.upgrade,
  com.liferay.ide.ui.liferay.support.workspace,
  com.liferay.ide.ui.liferay.support.sdk,
  com.liferay.ide.ui.liferay.util

@@ -131,6 +131,8 @@ public interface UI {
 
 	public final String CLICK_TO_PERFORM = "Click to perform";
 
+	public final String CLOSE = "Close";
+
 	public final String CLOSE_PROJECT = "Close Project";
 
 	public final String COLLAPSE_ALL = "Collapse All";
@@ -144,6 +146,8 @@ public interface UI {
 	public final String CONFIG = "Config";
 
 	public final String CONFIGURE_LIFERAY_WORKSPACE_SETTINGS = "Configure Liferay Workspace Settings";
+
+	public final String CONFIGURE_UPGRADE_PLANNER_OUTLINES = "Configure Upgrade Planner outlines";
 
 	public final String CONSOLE = "Console";
 
@@ -442,6 +446,8 @@ public interface UI {
 
 	public final String LIFERAY_UPGRADE_PLAN = "Liferay Upgrade Plan";
 
+	public final String LIFERAY_UPGRADE_PLAN_INFO = "Liferay Upgrade Plan Info";
+
 	public final String LIFERAY_UPGRADE_PLANNER = "Liferay Upgrade Planner";
 
 	public final String LIFERAY_V_62_SERVER_TOMCAT_7 = "Liferay v6.2 Server (Tomcat 7)";
@@ -657,6 +663,8 @@ public interface UI {
 
 	public final String REST_UPCASE = "Rest";
 
+	public final String RESTART_UPGRADE_PLAN = "Restart Upgrade Plan";
+
 	public final String RICHFACES = "RichFaces";
 
 	public final String ROLE_ID = "Role-id:";
@@ -735,6 +743,10 @@ public interface UI {
 
 	public final String SETUP_TASKS = "Setup Tasks";
 
+	public final String SHOW_PROGRESS_VIEW = "Show Progress View";
+
+	public final String SHOW_UPGRADE_PLAN_INFO_VIEW = "Show Upgrade Plan Info View";
+
 	public final String SHOW_VIEW = "Show View";
 
 	public final String SIMULATION_PANEL_ENTRY = "simulation-panel-entry";
@@ -781,6 +793,8 @@ public interface UI {
 
 	public final String SUPERCLASS = "Superclass:";
 
+	public final String SWITCH_UPGRADE_PLAN = "Switch Upgrade Plan";
+
 	public final String TARGET_LIFERAY_VERSION = "Target Liferay Version:";
 
 	public final String TARGET_PLATFORM = "Target platform:";
@@ -819,7 +833,15 @@ public interface UI {
 
 	public final String UPDATE_PROJECT = "Update Project...";
 
+	public final String UPGRADE_CODE_OUTLINE =
+		"http://192.168.133.135:8080/web/guest/docs/7-2/reference/-/knowledge_base/reference" +
+			"/upgrading-code-to-product-ver";
+
+	public final String UPGRADE_PLAN_DETAILS = "Upgrade Plan Details";
+
 	public final String UPGRADE_PLAN_OUTLINE = "Upgrade plan outline:";
+
+	public final String UPGRADE_PLANNER = "Upgrade Planner";
 
 	public final String UPGRADE_TO_LIFERAY_PLUGINS_SDK_7 = "Upgrade to Liferay Plugins SDK 7";
 
