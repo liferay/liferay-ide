@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay Upgrade Planner UI
+Bundle-SymbolicName: com.liferay.ide.upgrade.planner.ui;singleton:=true
+Bundle-Version: 3.6.0.qualifier
+Bundle-Activator: com.liferay.ide.upgrade.planner.ui.UpgradePlannerPlugin
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: com.liferay.ide.core,
+ com.liferay.ide.ui,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.ui.intro
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Bundle-Localization: plugin
+Export-Package: com.liferay.ide.upgrade.planner.ui
+Eclipse-BundleShape: dir
+Bundle-ClassPath: .

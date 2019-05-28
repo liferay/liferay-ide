@@ -44,6 +44,32 @@
             </modules>
         </profile>
         <profile>
+            <id>upgradePlanner</id>
+            <modules>
+                <module>../tools/features/com.liferay.ide.upgrade.planner</module>
+                <module>../tools/plugins/com.liferay.ide.core</module>
+                <module>../tools/plugins/com.liferay.ide.gradle.core</module>
+                <module>../tools/plugins/com.liferay.ide.gradle.ui</module>
+                <module>../tools/plugins/com.liferay.ide.project.core</module>
+                <module>../tools/plugins/com.liferay.ide.project.ui</module>
+                <module>../tools/plugins/com.liferay.ide.sdk.core</module>
+                <module>../tools/plugins/com.liferay.ide.server.core</module>
+                <module>../tools/plugins/com.liferay.ide.server.tomcat.core</module>
+                <module>../tools/plugins/com.liferay.ide.server.tomcat.ui</module>
+                <module>../tools/plugins/com.liferay.ide.server.ui</module>
+                <module>../tools/plugins/com.liferay.ide.ui</module>
+                <module>../tools/plugins/com.liferay.ide.upgrade.commands.core</module>
+                <module>../tools/plugins/com.liferay.ide.upgrade.commands.ui</module>
+                <module>../tools/plugins/com.liferay.ide.upgrade.core</module>
+                <module>../tools/plugins/com.liferay.ide.upgrade.plan.core</module>
+                <module>../tools/plugins/com.liferay.ide.upgrade.plan.ui</module>
+                <module>../tools/plugins/com.liferay.ide.upgrade.planner.ui</module>
+                <module>../tools/plugins/com.liferay.ide.upgrade.problems.core</module>
+                <module>../tools/plugins/com.liferay.ide.upgrade.problems.ui</module>
+                <module>com.liferay.ide.upgrade.planner-repository</module>
+            </modules>
+        </profile>
+        <profile>
             <id>installersOnly</id>
             <modules>
                 <module>installers</module>

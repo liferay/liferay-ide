@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+	id="com.liferay.ide.upgrade.planner"
+	label="Liferay Upgrade Planner"
+	provider-name="Liferay, Inc."
+	version="3.6.0.qualifier"
+>
+
+	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
+	  Liferay Upgrade Planner
+	</description>
+
+	<copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
+	  /**
+* Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+*
+* This library is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later
+* version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+* the GNU Lesser General Public License for more details.
+*/
+	</copyright>
+
+	<license url="http://www.gnu.org/licenses/lgpl-2.1.html">
+	  Liferay Upgrade Planner is free software distributed under the terms of the Lesser GNU Public License. See URL for full license text.  http://www.gnu.org/licenses/lgpl-2.1.html
+	</license>
+
+	<includes
+		id="org.eclipse.buildship"
+		version="0.0.0"
+	/>
+
+	<requires>
+		<import feature="org.apache.ivy.feature" match="greaterOrEqual" version="2.3.0" />
+		<import feature="org.apache.ivyde.feature" match="greaterOrEqual" version="2.2.0" />
+		<import feature="org.eclipse.buildship" match="greaterOrEqual" version="2.1.1" />
+		<import feature="org.eclipse.jsf.feature" match="greaterOrEqual" version="3.2.0" />
+		<import feature="org.eclipse.jst.common.fproj.enablement.jdt" match="greaterOrEqual" version="3.2.0" />
+		<import feature="org.eclipse.jst.enterprise_ui.feature" match="greaterOrEqual" version="3.2.0" />
+		<import feature="org.eclipse.jst.server_adapters.ext.feature" match="greaterOrEqual" version="3.2.0" />
+		<import feature="org.eclipse.jst.server_adapters.feature" match="greaterOrEqual" version="3.2.0" />
+		<import feature="org.eclipse.jst.server_ui.feature" match="greaterOrEqual" version="3.2.0" />
+		<import feature="org.eclipse.jst.web_ui.feature" match="greaterOrEqual" version="3.2.0" />
+		<import feature="org.eclipse.mylyn.commons.notifications" match="greaterOrEqual" version="1.0.0" />
+		<import feature="org.eclipse.sapphire" match="compatible" version="9.1.0" />
+		<import feature="org.eclipse.sapphire.java" match="compatible" version="9.1.0" />
+		<import feature="org.eclipse.sapphire.java.jdt" match="compatible" version="9.1.0" />
+		<import feature="org.eclipse.sapphire.modeling.xml" match="compatible" version="9.1.0" />
+		<import feature="org.eclipse.sapphire.osgi" match="compatible" version="9.1.0" />
+		<import feature="org.eclipse.sapphire.platform" match="compatible" version="9.1.0" />
+		<import feature="org.eclipse.sapphire.ui" match="compatible" version="9.1.0" />
+		<import feature="org.eclipse.sapphire.ui.swt.gef" match="compatible" version="9.1.0" />
+		<import feature="org.eclipse.sapphire.ui.swt.xml.editor" match="compatible" version="9.1.0" />
+		<import feature="org.eclipse.wst.common.fproj" match="greaterOrEqual" version="3.2.0" />
+		<import feature="org.eclipse.wst.common_ui.feature" match="greaterOrEqual" version="3.2.0" />
+		<import feature="org.eclipse.wst.server_adapters.feature" match="greaterOrEqual" version="3.2.0" />
+		<import feature="org.eclipse.wst.server_ui.feature" match="greaterOrEqual" version="3.2.0" />
+		<import feature="org.eclipse.wst.web_ui.feature" match="greaterOrEqual" version="3.2.0" />
+		<import feature="org.eclipse.wst.xml_ui.feature" match="greaterOrEqual" version="3.2.0" />
+		<import feature="org.eclipse.wst.xml.search.core-feature" match="greaterOrEqual" version="1.0.0" />
+		<import feature="org.eclipse.tm.terminal.connector.telnet.feature" match="greaterOrEqual" version="4.0.0" />
+		<import feature="org.eclipse.tm.terminal.view.feature" match="greaterOrEqual" version="4.0.0" />
+	</requires>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.core"
+		install-size="0"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.ui"
+		install-size="0"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.project.core"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.project.ui"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.server.core"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.server.tomcat.core"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.server.tomcat.ui"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.server.ui"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.sdk.core"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.gradle.core"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.gradle.ui"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.upgrade.core"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.upgrade.plan.core"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.upgrade.plan.ui"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.upgrade.problems.core"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.upgrade.problems.ui"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.upgrade.commands.core"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.upgrade.commands.ui"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.google.guava"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.google.gson"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="org.apache.commons.codec"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="org.apache.commons.collections"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="org.apache.commons.io"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="org.apache.commons.lang"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="org.apache.commons.logging"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="org.eclipse.jst.jsp.search.editor"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="org.eclipse.wst.html.search.editor"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="org.gradle.toolingapi"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="org.json"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+	<plugin
+		download-size="0"
+		id="org.objectweb.asm"
+		install-size="0"
+		unpack="false"
+		version="5.2.0.v20170126-0011"
+	/>
+
+	<plugin
+		download-size="0"
+		id="org.objectweb.asm"
+		install-size="0"
+		unpack="false"
+		version="6.0.0.v20180414-0329"
+	/>
+
+	<plugin
+		download-size="0"
+		id="com.liferay.ide.upgrade.planner.ui"
+		install-size="0"
+		unpack="false"
+		version="0.0.0"
+	/>
+
+</feature>

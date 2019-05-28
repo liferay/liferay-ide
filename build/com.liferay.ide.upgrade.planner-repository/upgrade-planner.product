@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product name="Liferay Upgrade Planner" uid="com.liferay.ide.upgrade.planner" id="com.liferay.ide.upgrade.planner" application="org.eclipse.ui.ide.workbench" version="3.6.0.qualifier" useFeatures="true" includeLaunchers="true">
+
+   <aboutInfo>
+      <image path="images/about.png"/>
+      <text>
+         %aboutText
+      </text>
+   </aboutInfo>
+
+   <configIni use="">
+   </configIni>
+
+   <launcherArgs>
+      <programArgs>-product
+com.liferay.ide.upgrade.planner.ui.product
+--launcher.defaultAction
+openFile
+--launcher.XXMaxPermSize
+384M
+-showsplash
+com.liferay.ide.upgrade.planner.ui
+--launcher.defaultAction
+openFile
+      </programArgs>
+      <vmArgs>-Dosgi.requiredJavaVersion=1.8
+-Xms40m
+-Xmx1024m
+-Dsun.java2d.noddraw=true
+      </vmArgs>
+      <vmArgsMac>-Dosgi.requiredJavaVersion=1.8
+-XstartOnFirstThread
+-Dorg.eclipse.swt.internal.carbon.smallFonts
+-XX:MaxPermSize=384m
+-Xms40m
+-Xmx1024m
+-Xdock:icon=../Resources/UpgradePlanner.icns
+-XstartOnFirstThread
+-Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
+   </launcherArgs>
+
+   <windowImages i16="images/liferay-16x16.png" i32="images/liferay-32x32.png" i48="images/liferay-48x48.png" i64="images/liferay-64x64.png" i128="images/liferay-128x128.png"/>
+
+   <splash
+      location="com.liferay.ide.upgrade.planner.ui"
+      startupProgressRect="82,295,375,18"
+      startupMessageRect="82,278,375,18"
+      startupForegroundColor="000000" />
+   <launcher name="UpgradePlanner">
+      <linux icon="icons/UpgradePlanner.xpm"/>
+      <macosx icon="icons/UpgradePlanner.icns"/>
+      <win useIco="true">
+         <ico path="icons/UpgradePlanner.ico"/>
+         <bmp/>
+      </win>
+   </launcher>
+
+   <vm>
+      <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
+   </vm>
+
+   <license>
+        <text>
+   Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+
+The contents of this feature are subject to the terms of the
+End User License Agreement for Liferay Developer Studio (&quot;License&quot;).
+You may not use this feature except in compliance with the License.
+You can obtain a copy of the License by contacting Liferay, Inc.
+See the License for the specific language governing permissions
+and limitations under the License, including but not limited
+to distribution rights of the Software.
+         </text>
+   </license>
+
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="com.liferay.ide.upgrade.planner" installMode="root"/>
+      <feature id="org.eclipse.buildship" installMode="root"/>
+      <feature id="org.eclipse.epp.logging.aeri.feature" installMode="root"/>
+      <feature id="org.eclipse.equinox.core.feature" installMode="root"/>
+      <feature id="org.eclipse.jdt" installMode="root"/>
+      <feature id="org.eclipse.jst.common.fproj.enablement.jdt" installMode="root"/>
+      <feature id="org.eclipse.jst.server_adapters.feature" installMode="root"/>
+      <feature id="org.eclipse.jst.server_ui.feature" installMode="root"/>
+      <feature id="org.eclipse.jst.web_ui.feature" installMode="root"/>
+      <feature id="org.eclipse.m2e.feature" installMode="root"/>
+      <feature id="org.eclipse.m2e.wtp.feature" installMode="root"/>
+      <feature id="org.eclipse.mylyn_feature" installMode="root"/>
+      <feature id="org.eclipse.tm.terminal.feature" installMode="root"/>
+      <feature id="org.eclipse.wst.common.fproj" installMode="root"/>
+      <feature id="org.eclipse.wst.jsdt.feature" installMode="root"/>
+      <feature id="org.eclipse.wst.server_adapters.feature" installMode="root"/>
+      <feature id="org.eclipse.wst.web_ui.feature" installMode="root"/>
+      <feature id="org.eclipse.wst.xml_ui.feature" installMode="root"/>
+   </features>
+
+   <configurations>
+      <plugin id="com.liferay.ide.upgrade.planner.ui" autoStart="false" startLevel="5" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="4" />
+      <property name="eclipse.buildId" value="${unqualifiedVersion}.${buildQualifier}" />
+      <property name="osgi.instance.area.default" value="@user.home/eclipse-workspace" />
+   </configurations>
+
+   <preferencesInfo>
+      <targetfile overwrite="false"/>
+   </preferencesInfo>
+
+   <cssInfo>
+   </cssInfo>
+
+</product>
