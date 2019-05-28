@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -78,8 +79,6 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 	@Override
 	public IPath getAppServerPortalDir() {
-		IPath retval = null;
-
 		IPath appBasePath = bundlePath.append("webapps");
 
 		File appBaseFolder = FileUtil.getFile(appBasePath);
@@ -93,15 +92,22 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 			files = appBaseFolder.listFiles();
 		}
 
-		for (File file : files) {
-			if (LiferayTomcatUtil.isLiferayPortal(file)) {
-				PortalContext portalContext = new PortalContext(file.getName(), false);
-
-				retval = appBasePath.append(portalContext.getBaseName());
-			}
-		}
-
-		return retval;
+		return Stream.of(
+			files
+		).filter(
+			LiferayTomcatUtil::isLiferayPortal
+		).map(
+			File::getName
+		).map(
+			fileName -> new PortalContext(fileName)
+		).map(
+			PortalContext::getBaseName
+		).map(
+			baseName -> appBasePath.append(baseName)
+		).findFirst(
+		).orElseGet(
+			null
+		);
 	}
 
 	@Override

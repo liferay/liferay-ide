@@ -225,8 +225,9 @@ public class LiferayTomcatUtil {
 		return libs.toArray(new IPath[0]);
 	}
 
-	// to read liferay info from manifest need at least version 6.2.0
-
+	/**
+	 *  to read liferay info from manifest need at least version 6.2.0
+	 */
 	public static String getConfigInfoFromCache(String configType, IPath portalDir) {
 		IPath configInfoPath = null;
 
@@ -597,7 +598,7 @@ public class LiferayTomcatUtil {
 
 			for (File file : files) {
 				if (isLiferayPortal(file)) {
-					PortalContext portalContext = new PortalContext(file.getName(), false);
+					PortalContext portalContext = new PortalContext(file.getName());
 
 					contextFilePath = hostPath.append(portalContext.getName() + ".xml");
 				}
