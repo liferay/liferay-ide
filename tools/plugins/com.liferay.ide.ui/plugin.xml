@@ -267,31 +267,6 @@
 		</settingsTransfer>
 	</extension>
 	<extension
-		point="org.eclipse.epp.logging.aeri.ide.servers"
-	>
-		<server
-			class="org.eclipse.epp.internal.logging.aeri.ide.server.mars.ServerConnection"
-			description="Please help us improve Liferay IDE by sending error reports to Liferay."
-			icon16="icons/liferay_logo_16.png"
-			icon32="icons/liferay_logo_32.png"
-			id="com.liferay.ide.error.server"
-			name="Liferay IDE Error Reporter"
-		>
-
-			<link
-				href="https://www.liferay.com"
-				rel="provider"
-				title="Liferay IDE"
-			/>
-
-			<link
-				href="https://aer.ctrlflow.com/liferay/community/discovery"
-				rel="discovery"
-				title="Discovery URL"
-			/>
-		</server>
-	</extension>
-	<extension
 		point="org.eclipse.mylyn.commons.notifications.ui.notifications"
 	>
 		<category
