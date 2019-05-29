@@ -92,22 +92,26 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 			files = appBaseFolder.listFiles();
 		}
 
-		return Stream.of(
-			files
-		).filter(
-			LiferayTomcatUtil::isLiferayPortal
-		).map(
-			File::getName
-		).map(
-			fileName -> new PortalContext(fileName)
-		).map(
-			PortalContext::getBaseName
-		).map(
-			baseName -> appBasePath.append(baseName)
-		).findFirst(
-		).orElseGet(
-			null
-		);
+		if ((_appServerPortalDir == null) || FileUtil.notExists(_appServerPortalDir.toFile())) {
+			_appServerPortalDir = Stream.of(
+				files
+			).filter(
+				LiferayTomcatUtil::isLiferayPortal
+			).map(
+				File::getName
+			).map(
+				fileName -> new PortalContext(fileName)
+			).map(
+				PortalContext::getBaseName
+			).map(
+				baseName -> appBasePath.append(baseName)
+			).findFirst(
+			).orElseGet(
+				null
+			);
+		}
+
+		return _appServerPortalDir;
 	}
 
 	@Override
@@ -379,6 +383,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 		}
 	}
 
+	private IPath _appServerPortalDir = null;
 	private Matcher _matcher;
 	private Pattern _pattern;
 

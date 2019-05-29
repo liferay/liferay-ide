@@ -14,6 +14,8 @@
 
 package com.liferay.ide.server.tomcat.core;
 
+import java.util.Locale;
+
 /**
  * @author Seiphon Wang
  */
@@ -30,6 +32,12 @@ public class PortalContext {
 
 		if (baseName.startsWith("##") || "".equals(baseName)) {
 			baseName = "ROOT" + baseName;
+		}
+
+		String lowerCaseBaseName = baseName.toLowerCase(Locale.ENGLISH);
+
+		if (lowerCaseBaseName.endsWith(".war") || lowerCaseBaseName.endsWith(".xml")) {
+			baseName = baseName.substring(0, baseName.length() - 4);
 		}
 
 		_baseName = baseName;
