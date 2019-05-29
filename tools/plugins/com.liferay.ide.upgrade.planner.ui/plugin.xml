@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+	<extension
+		id="product"
+		point="org.eclipse.core.runtime.products"
+	>
+		<product
+			application="org.eclipse.ui.ide.workbench"
+			description="Liferay Upgrade Planner"
+			name="Liferay Upgrade Planner"
+		>
+			<property
+				name="aboutImage"
+				value="images/about.png"
+			>
+			</property>
+			<property
+				name="aboutText"
+				value="%aboutText"
+			>
+			</property>
+			<property
+				name="appName"
+				value="Liferay Upgrade Planner"
+			>
+			</property>
+			<property
+				name="preferenceCustomization"
+				value="product_customization.ini"
+			>
+			</property>
+			<property
+				name="startupForegroundColor"
+				value="ffffff"
+			>
+			</property>
+			<property
+				name="startupMessageRect"
+				value="274,120,305,16"
+			>
+			</property>
+			<property
+				name="startupProgressRect"
+				value="274,154,302,16"
+			>
+			</property>
+			<property
+				name="windowImages"
+				value="images/liferay-16x16.png,images/liferay-32x32.png,images/liferay-48x48.png,images/liferay-64x64.png,images/liferay-128x128.png"
+			>
+			</property>
+			<property
+				name="introTitle"
+				value="Liferay Upgrade Planner"
+			>
+			</property>
+			<property
+				name="introBrandingImageText"
+				value="Liferay Upgrade Planner"
+			>
+			</property>
+			<property
+				name="introBrandingImage"
+				value="product:images/liferay_logo_large.png"
+			>
+			</property>
+			<property
+				name="buildIdRect"
+				value="172,85,404,52"
+			>
+			</property>
+			<property
+				name="applicationXMI"
+				value="org.eclipse.platform/LegacyIDE.e4xmi"
+			>
+			</property>
+			<property
+				name="cssTheme"
+				value="org.eclipse.e4.ui.css.theme.e4_default"
+			>
+			</property>
+			<property
+				name="applicationCSSResources"
+				value="platform:/plugin/org.eclipse.ui.themes/images/"
+			>
+			</property>
+		</product>
+	</extension>
+	<extension
+		point="org.eclipse.ui.splashHandlers"
+	>
+		<splashHandler
+			class="com.liferay.ide.upgrade.planner.ui.UpgradePlannerSplashHandler"
+			id="com.liferay.ide.upgrade.planner.product.splashHandler"
+		>
+		</splashHandler>
+		<splashHandlerProductBinding
+			productId="com.liferay.ide.upgrade.planner.ui.product"
+			splashId="com.liferay.ide.upgrade.planner.product.splashHandler"
+		>
+		</splashHandlerProductBinding>
+	</extension>
+</plugin>

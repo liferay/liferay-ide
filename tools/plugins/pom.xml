@@ -61,6 +61,7 @@
 		<module>com.liferay.ide.upgrade.core</module>
 		<module>com.liferay.ide.upgrade.plan.core</module>
 		<module>com.liferay.ide.upgrade.plan.ui</module>
+		<module>com.liferay.ide.upgrade.planner.ui</module>
 		<module>com.liferay.ide.upgrade.problems.core</module>
 		<module>com.liferay.ide.upgrade.problems.ui</module>
 		<module>com.liferay.ide.upgrade.commands.core</module>

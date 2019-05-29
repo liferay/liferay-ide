@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="com.liferay.ide.upgrade.planner" version="0.0.0">
+      <category name="liferay-upgrade-planner"/>
+   </feature>
+   <feature id="org.eclipse.buildship" version="0.0.0">
+      <category name="liferay-upgrade-planner"/>
+   </feature>
+   <feature id="org.eclipse.m2e.feature" version="0.0.0">
+      <category name="liferay-upgrade-planner"/>
+   </feature>
+   <feature id="org.eclipse.m2e.wtp.feature" version="0.0.0">
+      <category name="liferay-upgrade-planner"/>
+   </feature>
+   <category-def name="liferay-upgrade-planner" label="Liferay Upgrade Planner">
+      <description>
+         Liferay Upgrade Planner
+      </description>
+   </category-def>
+</site>
