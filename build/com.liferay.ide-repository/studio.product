@@ -174,7 +174,6 @@ to distribution rights of the Software.
       <feature id="org.eclipse.wst.web_ui.feature" installMode="root"/>
       <feature id="org.eclipse.wst.xml_ui.feature" installMode="root"/>
       <feature id="org.eclipse.wst.xsl.feature" installMode="root"/>
-      <feature id="org.eclipse.epp.logging.aeri.feature" installMode="root"/>
       <feature id="org.eclipse.equinox.core.feature" installMode="root"/>
    </features>
 

@@ -82,7 +82,6 @@ to distribution rights of the Software.
    <features>
       <feature id="com.liferay.ide.upgrade.planner" installMode="root"/>
       <feature id="org.eclipse.buildship" installMode="root"/>
-      <feature id="org.eclipse.epp.logging.aeri.feature" installMode="root"/>
       <feature id="org.eclipse.equinox.core.feature" installMode="root"/>
       <feature id="org.eclipse.jdt" installMode="root"/>
       <feature id="org.eclipse.jst.common.fproj.enablement.jdt" installMode="root"/>
