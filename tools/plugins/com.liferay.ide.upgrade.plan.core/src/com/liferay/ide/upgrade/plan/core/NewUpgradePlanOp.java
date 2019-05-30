@@ -18,6 +18,7 @@ import com.liferay.ide.upgrade.plan.core.internal.NameValidationService;
 import com.liferay.ide.upgrade.plan.core.internal.NewUpgradePlanOpMethods;
 import com.liferay.ide.upgrade.plan.core.internal.OutlinePossibleValuesService;
 import com.liferay.ide.upgrade.plan.core.internal.OutlineValidationService;
+import com.liferay.ide.upgrade.plan.core.internal.TargetVersionValidationService;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
@@ -75,9 +76,10 @@ public interface NewUpgradePlanOp extends ExecutableElement {
 	@Service(impl = NameValidationService.class)
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-	@DefaultValue(text = "7.1")
+	@DefaultValue(text = "7.2")
 	@Label(standard = "Target Liferay Version")
 	@PossibleValues(values = {"7.0", "7.1", "7.2"})
+	@Service(impl = TargetVersionValidationService.class)
 	public ValueProperty PROP_TARGET_VERSION = new ValueProperty(TYPE, "TargetVersion");
 
 	@Required
