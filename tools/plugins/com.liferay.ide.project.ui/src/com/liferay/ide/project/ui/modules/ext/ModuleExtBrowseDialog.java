@@ -164,7 +164,7 @@ public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog im
 		}
 		else if (!indexSources) {
 			_customLabel.setText(
-				"This dialog only works well when the property \"target.platform.index.sources\" is set to true");
+				"This feature only works as when the property \"target.platform.index.sources\" is set to true.");
 
 			return;
 		}

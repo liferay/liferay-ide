@@ -30,8 +30,8 @@ public class TargetPlatformIndexSourcesValidationService extends ValidationServi
 
 		if (indexSources) {
 			return Status.createWarningStatus(
-				"This will cause all of the BOM artifacts jars and their java sources to be indexed by Eclipse. " +
-					"Note: this process can slow down your IDE's project synchornization.");
+				"This will cause all of the BOM artifact jars and their Java sources to be indexed by Eclipse. Note: " +
+					"this process will slow down your IDE's project synchronization.");
 		}
 
 		return Status.createOkStatus();
