@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.blade.eclipse.provider.SSEXMLFile">
-   <property name="file.extension" value="xml"/>
-   <service>
-      <provide interface="com.liferay.blade.api.XMLFile"/>
-   </service>
-   <implementation class="com.liferay.blade.eclipse.provider.SSEXMLFile"/>
-</scr:component>

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.blade.eclipse.provider.CUCacheWTP">
-   <property name="type" value="jsp"/>
-   <service>
-      <provide interface="com.liferay.blade.api.CUCache"/>
-   </service>
-   <implementation class="com.liferay.blade.eclipse.provider.CUCacheWTP"/>
-</scr:component>

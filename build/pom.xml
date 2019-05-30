@@ -60,7 +60,6 @@
                 <module>../tools/plugins/com.liferay.ide.ui</module>
                 <module>../tools/plugins/com.liferay.ide.upgrade.commands.core</module>
                 <module>../tools/plugins/com.liferay.ide.upgrade.commands.ui</module>
-                <module>../tools/plugins/com.liferay.ide.upgrade.core</module>
                 <module>../tools/plugins/com.liferay.ide.upgrade.plan.core</module>
                 <module>../tools/plugins/com.liferay.ide.upgrade.plan.ui</module>
                 <module>../tools/plugins/com.liferay.ide.upgrade.planner.ui</module>

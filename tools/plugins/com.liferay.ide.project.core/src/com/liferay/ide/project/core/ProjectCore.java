@@ -21,7 +21,6 @@ import com.liferay.ide.project.core.descriptor.IDescriptorOperation;
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 import com.liferay.ide.project.core.modules.IComponentTemplate;
 import com.liferay.ide.project.core.modules.LiferayComponentTemplateReader;
-import com.liferay.ide.project.core.upgrade.ILiferayLegacyProjectUpdater;
 
 import java.net.URL;
 
@@ -44,7 +43,6 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * The activator class controls the plugin life cycle
@@ -301,19 +299,11 @@ public class ProjectCore extends Plugin {
 		_sdkProjectDeleteListener = new SDKProjectDeleteListener();
 	}
 
-	public ILiferayLegacyProjectUpdater getLiferayLegacyProjectUpdater() {
-		return _liferayLegacyProjectUpdaterTracker.getService();
-	}
-
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
 		_plugin = this;
-
-		_liferayLegacyProjectUpdaterTracker = new ServiceTracker<>(context, ILiferayLegacyProjectUpdater.class, null);
-
-		_liferayLegacyProjectUpdaterTracker.open();
 
 		IWorkspace workspace = CoreUtil.getWorkspace();
 
@@ -374,8 +364,6 @@ public class ProjectCore extends Plugin {
 	}
 
 	private static LiferayComponentTemplateReader _componentTemplateReader;
-	private static ServiceTracker<ILiferayLegacyProjectUpdater, ILiferayLegacyProjectUpdater>
-		_liferayLegacyProjectUpdaterTracker;
 	private static ProjectCore _plugin;
 	private static PluginPackageResourceListener _pluginPackageResourceListener;
 	private static IPortletFramework[] _portletFrameworks;

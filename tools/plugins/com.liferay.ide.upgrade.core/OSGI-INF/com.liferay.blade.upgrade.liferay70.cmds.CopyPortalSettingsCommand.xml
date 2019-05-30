@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.blade.upgrade.liferay70.cmds.CopyPortalSettingsCommand">
-   <property name="osgi.command.scope" value="blade"/>
-   <property name="osgi.command.function" value="copyPortalSettings"/>
-   <service>
-      <provide interface="com.liferay.blade.api.Command"/>
-   </service>
-   <implementation class="com.liferay.blade.upgrade.liferay70.cmds.CopyPortalSettingsCommand"/>
-</scr:component>

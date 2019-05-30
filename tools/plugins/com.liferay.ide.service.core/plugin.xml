@@ -104,13 +104,4 @@
 		</liferayDescriptorHelper>
 	</extension>
 
-	<extension point="com.liferay.ide.project.core.upgradeProjectHandlers">
-		<upgradeProjectHandler
-			class="com.liferay.ide.service.core.UpgradeServiceBuilderHandler"
-			description="Rebuild Services for service-builder projects"
-			id="com.liferay.ide.service.core.upgradeServiceBuildHandler"
-			name="ServiceBuilderUpgrade"
-		>
-		</upgradeProjectHandler>
-	</extension>
 </plugin>
