@@ -35,6 +35,8 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 
 	public Value<String> getBundleUrl();
 
+	public Value<Boolean> getIndexSources();
+
 	public Value<NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp>> getProjectProvider();
 
 	public Value<Boolean> getProvisionLiferayBundle();
@@ -42,6 +44,8 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 	public Value<String> getServerName();
 
 	public void setBundleUrl(String value);
+
+	public void setIndexSources(Boolean value);
 
 	public void setProjectProvider(NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> value);
 
@@ -56,6 +60,12 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 	@DefaultValue(text = WorkspaceConstants.BUNDLE_URL_CE_7_0)
 	@Service(impl = BundleUrlValidationService.class)
 	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, "bundleUrl");
+
+	@DefaultValue(text = "false")
+	@Label(standard = "index sources")
+	@Service(impl = TargetPlatformIndexSourcesValidationService.class)
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_INDEX_SOURCES = new ValueProperty(TYPE, "IndexSources");
 
 	@Label(standard = "build type")
 	@Service(impl = WorkspaceProjectProviderDefaultValueService.class)

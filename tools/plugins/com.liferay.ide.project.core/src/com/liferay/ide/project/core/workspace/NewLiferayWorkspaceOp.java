@@ -40,6 +40,7 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
  * @author Andy Wu
+ * @author Terry Jia
  */
 public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
