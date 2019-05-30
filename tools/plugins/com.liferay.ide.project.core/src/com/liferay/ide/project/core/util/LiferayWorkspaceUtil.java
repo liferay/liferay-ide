@@ -287,6 +287,21 @@ public class LiferayWorkspaceUtil {
 		return null;
 	}
 
+	public static boolean getIndexSource(IProject project) {
+		String result = "false";
+
+		if (FileUtil.exists(project)) {
+			IPath location = project.getLocation();
+
+			if (isValidGradleWorkspaceLocation(location)) {
+				result = getGradleProperty(
+					location.toOSString(), WorkspaceConstants.TARGET_PLATFORM_INDEX_SOURCES_PROPERTY, "false");
+			}
+		}
+
+		return Boolean.parseBoolean(result);
+	}
+
 	public static IWorkspaceProject getLiferayWorkspaceProject() {
 		IProject workspaceProject = getWorkspaceProject();
 

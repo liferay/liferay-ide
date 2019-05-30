@@ -47,6 +47,9 @@
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                     <property>TargetPlatform</property>
                 </property-editor>
+                <property-editor>
+                    <property>IndexSources</property>
+                </property-editor>
                 <spacer></spacer>
                 <property-editor>
                     <label>Download Liferay bundle</label>

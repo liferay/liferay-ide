@@ -60,6 +60,8 @@ public class WorkspaceConstants {
 
 	public static final String PLUGINS_SDK_DIR_PROPERTY = "liferay.workspace.plugins.sdk.dir";
 
+	public static final String TARGET_PLATFORM_INDEX_SOURCES_PROPERTY = "target.platform.index.sources";
+
 	public static final String TARGET_PLATFORM_VERSION_PROPERTY = "liferay.workspace.target.platform.version";
 
 	public static final String THEMES_DIR_PROPERTY = "liferay.workspace.themes.dir";
