@@ -156,14 +156,6 @@
 
 	<plugin
 		download-size="0"
-		id="com.liferay.ide.upgrade.core"
-		install-size="0"
-		unpack="false"
-		version="0.0.0"
-	/>
-
-	<plugin
-		download-size="0"
 		id="com.liferay.ide.upgrade.plan.core"
 		install-size="0"
 		unpack="false"

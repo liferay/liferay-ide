@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.blade.upgrade.liferay70.deprecatedmethods.DeprecatedMethodsMigrator">
-   <property name="file.extensions" value="java,jsp,jspf"/>
-   <service>
-      <provide interface="com.liferay.blade.api.FileMigrator"/>
-   </service>
-   <implementation class="com.liferay.blade.upgrade.liferay70.deprecatedmethods.DeprecatedMethodsMigrator"/>
-</scr:component>

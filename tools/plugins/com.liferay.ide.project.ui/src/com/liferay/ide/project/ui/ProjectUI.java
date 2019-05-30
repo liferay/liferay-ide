@@ -45,8 +45,6 @@ public class ProjectUI extends AbstractUIPlugin {
 
 	public static final String LIFERAY_LOGO_IMAGE_ID = "liferay.logo.image";
 
-	public static final String MIGRATION_TASKS_IMAGE_ID = "migration.tasks.image";
-
 	public static final String PLUGIN_ID = "com.liferay.ide.project.ui";
 
 	public static final String PROPERTIES_IMAGE_ID = "properties";
@@ -143,14 +141,6 @@ public class ProjectUI extends AbstractUIPlugin {
 		ImageDescriptor uncheckeddesc = ImageDescriptor.createFromURL(uncheckedurl);
 
 		registry.put(UNCHECKED_IMAGE_ID, uncheckeddesc);
-
-		IPath migrationtasks = new Path("icons/e16/migration-tasks.png");
-
-		URL migrationtasksurl = FileLocator.find(bundle, migrationtasks, null);
-
-		ImageDescriptor migrationtasksdesc = ImageDescriptor.createFromURL(migrationtasksurl);
-
-		registry.put(MIGRATION_TASKS_IMAGE_ID, migrationtasksdesc);
 
 		URL warPicUrl = FileLocator.find(bundle, new Path("icons/e16/war.gif"), null);
 
