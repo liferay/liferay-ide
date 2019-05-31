@@ -136,9 +136,7 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 			if (project.exists()) {
 				IPath projectLocation = project.getLocation();
 
-				IPath bladeDir = projectLocation.append(".blade");
-
-				IPath bladeSettingsPath = bladeDir.append("settings.properties");
+				IPath bladeSettingsPath = projectLocation.append(".blade.properties");
 
 				properties.putAll(PropertiesUtil.loadProperties(bladeSettingsPath));
 			}
