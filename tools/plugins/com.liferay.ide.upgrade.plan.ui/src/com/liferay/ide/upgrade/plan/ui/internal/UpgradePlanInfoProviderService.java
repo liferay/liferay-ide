@@ -26,6 +26,8 @@ import com.vladsch.flexmark.util.options.MutableDataSet;
 
 import java.io.IOException;
 
+import java.net.URL;
+
 import java.util.NoSuchElementException;
 
 import org.apache.http.HttpEntity;
@@ -208,6 +210,34 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 			ul.remove();
 		}
 		catch (Exception e) {
+		}
+
+		try {
+			Elements learnPathSteps = mainContent.getElementsByClass("learn-path-step");
+
+			Element learnPathStep = learnPathSteps.get(0);
+
+			learnPathStep.remove();
+		}
+		catch (Exception e) {
+		}
+
+		URL u = new URL(url);
+
+		String protocol = u.getProtocol();
+
+		String authority = u.getAuthority();
+
+		String prefix = protocol + "://" + authority;
+
+		for (Element element : mainContent.getAllElements()) {
+			if ("a".equals(element.tagName())) {
+				String href = element.attr("href");
+
+				if (href.startsWith("/")) {
+					element.attr("href", prefix + href);
+				}
+			}
 		}
 
 		sb.append(mainContent.toString());
