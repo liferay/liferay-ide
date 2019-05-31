@@ -79,20 +79,20 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 	@Override
 	public IPath getAppServerPortalDir() {
-		IPath appBasePath = bundlePath.append("webapps");
-
-		File appBaseFolder = FileUtil.getFile(appBasePath);
-
-		File[] files = null;
-
-		if (FileUtil.notExists(appBaseFolder)) {
-			files = new File[0];
-		}
-		else {
-			files = appBaseFolder.listFiles();
-		}
-
 		if ((_appServerPortalDir == null) || FileUtil.notExists(_appServerPortalDir.toFile())) {
+			IPath appBasePath = bundlePath.append("webapps");
+
+			File appBaseFolder = FileUtil.getFile(appBasePath);
+
+			File[] files = null;
+
+			if (FileUtil.notExists(appBaseFolder)) {
+				files = new File[0];
+			}
+			else {
+				files = appBaseFolder.listFiles();
+			}
+
 			_appServerPortalDir = Stream.of(
 				files
 			).filter(
