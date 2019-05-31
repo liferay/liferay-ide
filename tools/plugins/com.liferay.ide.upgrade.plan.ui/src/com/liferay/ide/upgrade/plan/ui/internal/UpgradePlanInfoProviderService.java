@@ -18,25 +18,13 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.ui.UpgradeInfoProvider;
 
-import com.vladsch.flexmark.ast.Document;
-import com.vladsch.flexmark.html.HtmlRenderer;
-import com.vladsch.flexmark.parser.Parser;
-import com.vladsch.flexmark.parser.Parser.Builder;
-import com.vladsch.flexmark.util.options.MutableDataSet;
-
 import java.io.IOException;
 
 import java.net.URL;
 
 import java.util.NoSuchElementException;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -45,6 +33,7 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -141,36 +130,10 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		return upgradeStep.getTitle();
 	}
 
-	private String _downloadAndRenderMarkdown(String url) throws IOException {
-		HttpClient httpClient = new DefaultHttpClient();
+	private String _renderKBMainContent(String upgradeStepUrl) throws ClientProtocolException, IOException {
+		Connection connection = Jsoup.connect(upgradeStepUrl);
 
-		HttpGet get = new HttpGet(url);
-
-		HttpResponse response = httpClient.execute(get);
-
-		HttpEntity entity = response.getEntity();
-
-		String content = EntityUtils.toString(entity);
-
-		MutableDataSet options = new MutableDataSet();
-
-		Builder parserBuilder = Parser.builder(options);
-
-		Parser parser = parserBuilder.build();
-
-		HtmlRenderer.Builder rendererBuilder = HtmlRenderer.builder(options);
-
-		HtmlRenderer renderer = rendererBuilder.build();
-
-		Document document = parser.parse(content);
-
-		return renderer.render(document);
-	}
-
-	private String _renderKBMainContent(String url) throws ClientProtocolException, IOException {
-		Connection connection = Jsoup.connect(url);
-
-		org.jsoup.nodes.Document document = connection.get();
+		Document document = connection.get();
 
 		StringBuffer sb = new StringBuffer();
 
@@ -222,11 +185,11 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		catch (Exception e) {
 		}
 
-		URL u = new URL(url);
+		URL url = new URL(upgradeStepUrl);
 
-		String protocol = u.getProtocol();
+		String protocol = url.getProtocol();
 
-		String authority = u.getAuthority();
+		String authority = url.getAuthority();
 
 		String prefix = protocol + "://" + authority;
 
