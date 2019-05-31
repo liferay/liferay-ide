@@ -122,6 +122,9 @@ public class ConfigureTargetPlatformVersionCommand implements UpgradeCommand, Up
 		else if ("7.1".equals(targetVersion)) {
 			targetPlatformVersion = WorkspaceConstants.liferayTargetPlatformVersions.get("7.1")[0];
 		}
+		else if ("7.2".equals(targetVersion)) {
+			targetPlatformVersion = WorkspaceConstants.liferayTargetPlatformVersions.get("7.2")[0];
+		}
 
 		try {
 			PropertiesConfiguration config = new PropertiesConfiguration(gradeProperties);
