@@ -124,6 +124,9 @@ public class ConfigureBundleURLCommand implements UpgradeCommand, UpgradePreview
 			else if ("7.1".equals(targetVersion)) {
 				bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_1;
 			}
+			else if ("7.2".equals(targetVersion)) {
+				bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_2;
+			}
 
 			config.setProperty(WorkspaceConstants.BUNDLE_URL_PROPERTY, bundleUrl);
 
