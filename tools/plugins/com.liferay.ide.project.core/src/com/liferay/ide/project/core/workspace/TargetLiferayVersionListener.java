@@ -46,11 +46,15 @@ public class TargetLiferayVersionListener
 
 		List<String> bundleUrls = new ArrayList<>();
 
+		bundleUrls.add(WorkspaceConstants.BUNDLE_URL_CE_7_2);
 		bundleUrls.add(WorkspaceConstants.BUNDLE_URL_CE_7_1);
 		bundleUrls.add(WorkspaceConstants.BUNDLE_URL_CE_7_0);
 
 		if (bundleUrls.contains(bundleUrl)) {
-			if (liferayVersion.equals("7.1")) {
+			if (liferayVersion.equals("7.2")) {
+				op.setBundleUrl(WorkspaceConstants.BUNDLE_URL_CE_7_2);
+			}
+			else if (liferayVersion.equals("7.1")) {
 				op.setBundleUrl(WorkspaceConstants.BUNDLE_URL_CE_7_1);
 			}
 			else {
