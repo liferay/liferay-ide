@@ -57,7 +57,7 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 
 	public void setServerName(String value);
 
-	@DefaultValue(text = WorkspaceConstants.BUNDLE_URL_CE_7_0)
+	@DefaultValue(text = WorkspaceConstants.BUNDLE_URL_CE_7_2)
 	@Service(impl = BundleUrlValidationService.class)
 	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, "bundleUrl");
 
