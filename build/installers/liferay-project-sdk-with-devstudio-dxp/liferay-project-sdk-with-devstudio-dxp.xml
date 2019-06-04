@@ -29,7 +29,7 @@
                             <origin>../shared/download/com.liferay.portal.tools.bundle.support.jar</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../shared/download/liferay-dxp-tomcat-7.2.10-rc2-20190510181508660.tar.gz</origin>
+                            <origin>../shared/download/liferay-dxp-tomcat-7.2.10-ga1-20190531140450482.tar.gz</origin>
                         </distributionFile>
                         <distributionFile>
                             <origin>../shared/download/biz.aQute.bnd.jar</origin>
@@ -337,8 +337,8 @@
                     <progressText>Creating directory...</progressText>
                 </createDirectory>
                 <copyFile>
-                    <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-tomcat-7.2.10-rc2-20190510181508660.tar.gz</destination>
-                    <origin>${installdir}${platform_path_separator}liferay-dxp-tomcat-7.2.10-rc2-20190510181508660.tar.gz</origin>
+                    <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-tomcat-7.2.10-ga1-20190531140450482.tar.gz</destination>
+                    <origin>${installdir}${platform_path_separator}liferay-dxp-tomcat-7.2.10-ga1-20190531140450482.tar.gz</origin>
                 </copyFile>
                 <include file="../components/run-java-jpm.xml" />
             </actionList>
@@ -426,7 +426,7 @@
                 <propertiesFileSet>
                     <file>${lrws}${platform_path_separator}gradle.properties</file>
                     <key>liferay.workspace.bundle.url</key>
-                    <value>https://api.liferay.com/downloads/portal/7.2.10-rc2/liferay-dxp-tomcat-7.2.10-rc2-20190510181508660.tar.gz</value>
+                    <value>https://api.liferay.com/downloads/portal/7.2.10/liferay-dxp-tomcat-7.2.10-ga1-20190531140450482.tar.gz</value>
                 </propertiesFileSet>
                 <createDirectory>
                     <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
@@ -584,7 +584,7 @@
             </ruleList>
         </runProgram>
         <deleteFile>
-            <path>${installdir}${platform_path_separator}liferay-dxp-tomcat-7.2.10-rc2-20190510181508660.tar.gz</path>
+            <path>${installdir}${platform_path_separator}liferay-dxp-tomcat-7.2.10-ga1-20190531140450482.tar.gz</path>
         </deleteFile>
         <deleteFile>
             <path>${installdir}${platform_path_separator}blade.jar</path>
