@@ -32,7 +32,7 @@ public class TargetPlatformDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected String compute() {
-		String[] liferayTargetPlatformVersions = WorkspaceConstants.liferayTargetPlatformVersions.get("7.1");
+		String[] liferayTargetPlatformVersions = WorkspaceConstants.liferayTargetPlatformVersions.get("7.2");
 
 		String defaultValue = liferayTargetPlatformVersions[0];
 
