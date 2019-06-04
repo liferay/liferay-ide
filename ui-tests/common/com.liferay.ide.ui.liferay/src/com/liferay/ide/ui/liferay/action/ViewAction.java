@@ -131,6 +131,10 @@ public class ViewAction extends UIAction {
 			_liferayUpgradePlanView.upgradePlanDetails();
 		}
 
+		public void doubleClickOpenUpgradePlanWizard(String... steps) {
+			selectStep(steps);
+		}
+
 		public SWTBotTreeItem getTreeItem(String... steps) {
 			return _getSteps().getTreeItem(steps);
 		}
