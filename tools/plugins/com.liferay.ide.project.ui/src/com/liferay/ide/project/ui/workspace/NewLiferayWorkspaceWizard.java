@@ -15,18 +15,14 @@
 package com.liferay.ide.project.ui.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.modules.BaseProjectWizard;
 import com.liferay.ide.ui.util.ProjectExplorerLayoutUtil;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
 import org.eclipse.ui.IWorkbench;
 
 /**
@@ -40,31 +36,6 @@ public class NewLiferayWorkspaceWizard extends BaseProjectWizard<NewLiferayWorks
 
 	public NewLiferayWorkspaceWizard(NewLiferayWorkspaceOp newLiferayWorkspaceOp) {
 		super(newLiferayWorkspaceOp, DefinitionLoader.sdef(NewLiferayWorkspaceWizard.class).wizard());
-	}
-
-	@Override
-	public IWizardPage[] getPages() {
-		IWizardPage[] wizardPages = super.getPages();
-
-		if (!_firstErrorMessageRemoved && (wizardPages != null)) {
-			SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
-
-			try {
-				if (LiferayWorkspaceUtil.hasWorkspace()) {
-					wizardPage.setMessage(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR);
-				}
-				else {
-					wizardPage.setMessage("Please enter the workspace project name.", SapphireWizardPage.NONE);
-				}
-			}
-			catch (CoreException ce) {
-				wizardPage.setMessage(LiferayWorkspaceUtil.multiWorkspaceErrorMsg, SapphireWizardPage.ERROR);
-			}
-
-			_firstErrorMessageRemoved = true;
-		}
-
-		return wizardPages;
 	}
 
 	@Override
@@ -94,7 +65,5 @@ public class NewLiferayWorkspaceWizard extends BaseProjectWizard<NewLiferayWorks
 	private static NewLiferayWorkspaceOp _createDefaultOp() {
 		return NewLiferayWorkspaceOp.TYPE.instantiate();
 	}
-
-	private boolean _firstErrorMessageRemoved = false;
 
 }
