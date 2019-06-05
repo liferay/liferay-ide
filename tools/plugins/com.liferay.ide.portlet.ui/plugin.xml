@@ -25,6 +25,37 @@
 			%wizard.description
 			</description>
 		</wizard>
+		<wizard
+			category="com.liferay.ide.newWizards"
+			class="com.liferay.ide.portlet.ui.jsf.NewJSFPortletWizard"
+			icon="icons/n16/liferay_faces_new.png"
+			id="com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet"
+			name="Liferay JSF Portlet (Legacy)"
+		>
+			<class class="com.liferay.ide.portlet.ui.jsf.NewJSFPortletWizard">
+				<parameter name="liferay_extra_artifact" value="true" />
+				<parameter name="menuIndex" value="10" />
+				<parameter name="validProjectTypes" value="portlet" />
+			</class>
+			<description>
+			Create a new Liferay JSF Portlet
+			</description>
+		</wizard>
+		<wizard
+			category="com.liferay.ide.newWizards"
+			icon="icons/n16/vaadinportlet_new.png"
+			id="com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.portlet"
+			name="%vaadin.portlet.wizard.name"
+		>
+			<class class="com.liferay.ide.portlet.vaadin.ui.wizard.NewVaadinPortletWizard">
+				<parameter name="liferay_extra_artifact" value="true" />
+				<parameter name="menuIndex" value="20" />
+				<parameter name="validProjectTypes" value="portlet" />
+			</class>
+			<description>
+			%vaadin.wizard.description
+			</description>
+		</wizard>
 	</extension>
 	<extension
 		point="org.eclipse.ui.editors.templates"
@@ -365,16 +396,6 @@
 	<extension
 		point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors"
 	>
-		<!-- no longer needed now supported by xml-search query spec
-<hyperlinkDetector
-	class="com.liferay.ide.portlet.ui.editor.PortletURLHyperlinkDetector"
-	description="Portlet URL Methods"
-	id="com.liferay.ide.portlet.ui.portletUrlHyperlinkDetector"
-	name="Portlet URL"
-	targetId="org.eclipse.jst.jsp.core.jspsource"
->
-	  </hyperlinkDetector>
-	  -->
 		<hyperlinkDetector
 			class="com.liferay.ide.portlet.ui.editor.MessageKeyHyperlinkDetector"
 			id="com.liferay.ide.portlet.ui.messageKeyHyperlinkDetector"
@@ -383,34 +404,6 @@
 		>
 		</hyperlinkDetector>
 	</extension>
-
-	<extension
-		id="com.liferay.ide.portlet.ui.newJSFPortletWizard"
-		point="org.eclipse.ui.newWizards"
-	>
-		<category
-			id="com.liferay.ide.newWizards"
-			name="%category.name"
-		>
-		</category>
-		<wizard
-			category="com.liferay.ide.newWizards"
-			class="com.liferay.ide.portlet.ui.jsf.NewJSFPortletWizard"
-			icon="icons/n16/liferay_faces_new.png"
-			id="com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet"
-			name="Liferay JSF Portlet (Legacy)"
-		>
-			<class class="com.liferay.ide.portlet.ui.jsf.NewJSFPortletWizard">
-				<parameter name="liferay_extra_artifact" value="true" />
-				<parameter name="menuIndex" value="10" />
-				<parameter name="validProjectTypes" value="portlet" />
-			</class>
-			<description>
-			Create a new Liferay JSF Portlet
-			</description>
-		</wizard>
-	</extension>
-
 	<extension
 		point="org.eclipse.ui.editors.templates"
 	>
@@ -456,30 +449,5 @@
 			sequence="M1+M3+N"
 		>
 		</key>
-	</extension>
-	<extension
-		id="com.liferay.ide.portlet.vaadin.ui.newVaadinPortletWizard"
-		point="org.eclipse.ui.newWizards"
-	>
-		<category
-			id="com.liferay.ide.newWizards"
-			name="%category.name"
-		>
-		</category>
-		<wizard
-			category="com.liferay.ide.newWizards"
-			icon="icons/n16/vaadinportlet_new.png"
-			id="com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.portlet"
-			name="%vaadin.portlet.wizard.name"
-		>
-			<class class="com.liferay.ide.portlet.vaadin.ui.wizard.NewVaadinPortletWizard">
-				<parameter name="liferay_extra_artifact" value="true" />
-				<parameter name="menuIndex" value="20" />
-				<parameter name="validProjectTypes" value="portlet" />
-			</class>
-			<description>
-			%vaadin.wizard.description
-			</description>
-		</wizard>
 	</extension>
 </plugin>
