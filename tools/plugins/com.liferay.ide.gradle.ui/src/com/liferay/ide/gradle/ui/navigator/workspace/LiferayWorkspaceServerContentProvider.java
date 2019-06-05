@@ -22,6 +22,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
 
@@ -50,6 +51,8 @@ public class LiferayWorkspaceServerContentProvider extends AbstractNavigatorCont
 				CoreUtil.getAllProjects()
 			).filter(
 				GradleUtil::isGradleProject
+			).filter(
+				project -> !ProjectUtil.isModuleExtProject(project)
 			).map(
 				project -> LiferayCore.create(ILiferayProject.class, project)
 			).filter(

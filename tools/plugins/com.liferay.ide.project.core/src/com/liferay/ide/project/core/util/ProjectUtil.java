@@ -1414,7 +1414,7 @@ public class ProjectUtil {
 		return retval;
 	}
 
-	public static boolean isModuleExtProject(Object resource) throws Exception {
+	public static boolean isModuleExtProject(Object resource) {
 		IProject project = null;
 
 		if (resource instanceof IFile) {
