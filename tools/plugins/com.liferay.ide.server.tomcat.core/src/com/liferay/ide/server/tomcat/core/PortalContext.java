@@ -42,7 +42,9 @@ public class PortalContext {
 
 		_baseName = baseName;
 
-		String path;
+		String path = _baseName;
+
+		_version = "";
 
 		int versionIndex = _baseName.indexOf("##");
 
@@ -51,24 +53,17 @@ public class PortalContext {
 
 			path = _baseName.substring(0, versionIndex);
 		}
-		else {
-			_version = "";
 
-			path = _baseName;
-		}
+		_path = "/" + path.replaceAll("#", "/");
 
 		if ("ROOT".equals(path)) {
 			_path = "";
 		}
-		else {
-			_path = "/" + path.replaceAll("#", "/");
-		}
+
+		_name = _path;
 
 		if (versionIndex > -1) {
 			_name = _path + "##" + _version;
-		}
-		else {
-			_name = _path;
 		}
 	}
 
@@ -89,8 +84,8 @@ public class PortalContext {
 	}
 
 	private final String _baseName;
-	private final String _name;
-	private final String _path;
-	private final String _version;
+	private String _name;
+	private String _path;
+	private String _version;
 
 }

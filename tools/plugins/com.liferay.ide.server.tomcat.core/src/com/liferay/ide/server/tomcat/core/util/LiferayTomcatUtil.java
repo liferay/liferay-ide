@@ -361,11 +361,7 @@ public class LiferayTomcatUtil {
 	}
 
 	public static boolean isLiferayPortal(File file) {
-		IPath path = new Path(file.getAbsolutePath());
-
-		path = path.append("WEB-INF/web.xml");
-
-		File webXMLFile = path.toFile();
+		File webXMLFile = new File(file, "WEB-INF/web.xml");
 
 		if (FileUtil.notExists(webXMLFile)) {
 			return false;
