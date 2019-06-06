@@ -24,7 +24,6 @@ import com.liferay.ide.project.core.util.ValidationUtil;
 import java.io.File;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
@@ -57,15 +56,10 @@ public class WorkspaceNameValidationService extends ValidationService implements
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
-		try {
-			if (LiferayWorkspaceUtil.hasWorkspace()) {
-				retval = Status.createErrorStatus(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg);
+		if (LiferayWorkspaceUtil.hasWorkspace()) {
+			retval = Status.createErrorStatus(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg);
 
-				return retval;
-			}
-		}
-		catch (CoreException ce) {
-			return StatusBridge.create(ce.getStatus());
+			return retval;
 		}
 
 		String currentWorkspaceName = get(_op().getWorkspaceName());

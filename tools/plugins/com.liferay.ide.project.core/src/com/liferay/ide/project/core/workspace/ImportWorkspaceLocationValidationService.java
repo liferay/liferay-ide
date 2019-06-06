@@ -19,7 +19,6 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
@@ -35,13 +34,8 @@ public class ImportWorkspaceLocationValidationService extends ValidationService 
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
-		try {
-			if (LiferayWorkspaceUtil.hasWorkspace()) {
-				return Status.createErrorStatus(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg);
-			}
-		}
-		catch (CoreException ce) {
-			return Status.createErrorStatus(LiferayWorkspaceUtil.multiWorkspaceErrorMsg);
+		if (LiferayWorkspaceUtil.hasWorkspace()) {
+			return Status.createErrorStatus(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg);
 		}
 
 		Value<Path> workspaceLocation = _op().getWorkspaceLocation();

@@ -1491,47 +1491,42 @@ public class ProjectUtil {
 	}
 
 	public static boolean isWorkspaceWars(IProject project) {
-		try {
-			if (LiferayWorkspaceUtil.hasWorkspace() && FileUtil.exists(project.getFolder("src"))) {
-				IProject wsProject = LiferayWorkspaceUtil.getWorkspaceProject();
+		if (LiferayWorkspaceUtil.hasWorkspace() && FileUtil.exists(project.getFolder("src"))) {
+			IProject wsProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-				File wsRootDir = LiferayWorkspaceUtil.getWorkspaceProjectFile();
+			File wsRootDir = LiferayWorkspaceUtil.getWorkspaceProjectFile();
 
-				String[] warsNames = LiferayWorkspaceUtil.getWarsDirs(wsProject);
+			String[] warsNames = LiferayWorkspaceUtil.getWarsDirs(wsProject);
 
-				File[] warsDirs = new File[warsNames.length];
+			File[] warsDirs = new File[warsNames.length];
 
-				for (int i = 0; i < warsNames.length; i++) {
-					warsDirs[i] = new File(wsRootDir, warsNames[i]);
+			for (int i = 0; i < warsNames.length; i++) {
+				warsDirs[i] = new File(wsRootDir, warsNames[i]);
+			}
+
+			IPath location = project.getLocation();
+
+			File projectDir = location.toFile();
+
+			File parentDir = projectDir.getParentFile();
+
+			if (parentDir == null) {
+				return false;
+			}
+
+			while (true) {
+				for (File dir : warsDirs) {
+					if (parentDir.equals(dir)) {
+						return true;
+					}
 				}
 
-				IPath location = project.getLocation();
-
-				File projectDir = location.toFile();
-
-				File parentDir = projectDir.getParentFile();
+				parentDir = parentDir.getParentFile();
 
 				if (parentDir == null) {
 					return false;
 				}
-
-				while (true) {
-					for (File dir : warsDirs) {
-						if (parentDir.equals(dir)) {
-							return true;
-						}
-					}
-
-					parentDir = parentDir.getParentFile();
-
-					if (parentDir == null) {
-						return false;
-					}
-				}
 			}
-		}
-		catch (CoreException ce) {
-			ProjectCore.logError(ce);
 		}
 
 		return false;
