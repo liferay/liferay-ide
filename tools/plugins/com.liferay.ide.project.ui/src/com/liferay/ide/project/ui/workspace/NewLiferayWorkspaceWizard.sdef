@@ -44,6 +44,9 @@
                     <property>LiferayVersion</property>
                 </property-editor>
                 <property-editor>
+                    <property>EnableTargetPlatform</property>
+                </property-editor>
+                <property-editor>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                     <property>TargetPlatform</property>
                 </property-editor>

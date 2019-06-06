@@ -23,6 +23,7 @@ import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
+import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Service;
 
@@ -35,6 +36,8 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 
 	public Value<String> getBundleUrl();
 
+	public Value<Boolean> getEnableTargetPlatform();
+
 	public Value<Boolean> getIndexSources();
 
 	public Value<NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp>> getProjectProvider();
@@ -44,6 +47,8 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 	public Value<String> getServerName();
 
 	public void setBundleUrl(String value);
+
+	public void setEnableTargetPlatform(Boolean value);
 
 	public void setIndexSources(Boolean value);
 
@@ -61,7 +66,13 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 	@Service(impl = BundleUrlValidationService.class)
 	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, "bundleUrl");
 
+	@DefaultValue(text = "true")
+	@Label(standard = "enable target platform")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_ENABLE_TARGET_PLATFORM = new ValueProperty(TYPE, "EnableTargetPlatform");
+
 	@DefaultValue(text = "false")
+	@Enablement(expr = "${ EnableTargetPlatform == 'true' }")
 	@Label(standard = "index sources")
 	@Service(impl = TargetPlatformIndexSourcesValidationService.class)
 	@Type(base = Boolean.class)

@@ -90,17 +90,22 @@ public class LiferayGradleWorkspaceProjectProvider
 			return ProjectCore.createErrorStatus(bclie);
 		}
 
-		try {
-			PropertiesConfiguration config = new PropertiesConfiguration(
-				FileUtil.getFile(workspaceLocation.append("gradle.properties")));
+		boolean enableTargetPlatform = get(op.getEnableTargetPlatform());
 
-			config.setProperty(WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, get(op.getTargetPlatform()));
-			config.setProperty(WorkspaceConstants.TARGET_PLATFORM_INDEX_SOURCES_PROPERTY, get(op.getIndexSources()));
+		if (enableTargetPlatform) {
+			try {
+				PropertiesConfiguration config = new PropertiesConfiguration(
+					FileUtil.getFile(workspaceLocation.append("gradle.properties")));
 
-			config.save();
-		}
-		catch (ConfigurationException ce) {
-			LiferayGradleCore.logError(ce);
+				config.setProperty(WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, get(op.getTargetPlatform()));
+				config.setProperty(
+					WorkspaceConstants.TARGET_PLATFORM_INDEX_SOURCES_PROPERTY, get(op.getIndexSources()));
+
+				config.save();
+			}
+			catch (ConfigurationException ce) {
+				LiferayGradleCore.logError(ce);
+			}
 		}
 
 		IPath wsLocation = location.append(workspaceName);
