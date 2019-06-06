@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.ui.tests.workspace.wizard</groupId>
 		<artifactId>workspace-wizard-tests</artifactId>
-		<version>3.6.0-SNAPSHOT</version>
+		<version>3.6.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.ui.workspace.wizard.import.tomcat.70.tests</artifactId>
