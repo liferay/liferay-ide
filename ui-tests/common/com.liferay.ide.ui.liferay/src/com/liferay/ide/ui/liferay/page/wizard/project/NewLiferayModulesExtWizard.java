@@ -27,6 +27,10 @@ public class NewLiferayModulesExtWizard extends NewProjectWizard {
 		super(bot, 2);
 	}
 
+	public ToolbarButtonWithTooltip getAddFilesFromOriginalModuleBtn() {
+		return new ToolbarButtonWithTooltip(getShell().bot(), ADD_FILES_FROM_ORIGINAL_MODULE_TO_OVERRIDE);
+	}
+
 	public ToolbarButtonWithTooltip getBrowseBtn() {
 		return new ToolbarButtonWithTooltip(getShell().bot(), BROWSE, 1);
 	}

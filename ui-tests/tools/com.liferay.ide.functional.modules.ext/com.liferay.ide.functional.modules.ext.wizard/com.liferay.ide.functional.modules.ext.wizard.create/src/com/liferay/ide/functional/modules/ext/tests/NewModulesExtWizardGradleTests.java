@@ -24,8 +24,18 @@ import org.junit.Test;
 public class NewModulesExtWizardGradleTests extends NewModulesExtWizardGradleBase {
 
 	@Test
-	public void addModulesExt() {
-		super.addModulesExt();
+	public void addModulesExtWithJavaAndJSP() {
+		super.addModulesExtWithJavaAndJSP();
+	}
+
+	@Test
+	public void addModulesExtWithOtherResources() {
+		super.addModulesExtWithOtherResources();
+	}
+
+	@Test
+	public void addModulesExtWithoutOverrideFiles() {
+		super.addModulesExtWithoutOverrideFiles();
 	}
 
 }

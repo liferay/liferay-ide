@@ -779,6 +779,14 @@ public class WizardAction extends UIAction {
 			return _newModulesExtWizard.getBrowseBtn();
 		}
 
+		public ToolbarButtonWithTooltip getAddOriginMoudleBtn() {
+			return _newModulesExtWizard.getAddFilesFromOriginalModuleBtn();
+		}
+
+		public void openAddOriginMoudleDialog() {
+			getAddOriginMoudleBtn().click();
+		}
+
 		public void openSelectBrowseDialog() {
 			browseBtn().click();
 		}
@@ -837,6 +845,12 @@ public class WizardAction extends UIAction {
 
 		public void prepareGradle(String projectName, String version) {
 			_prepare(projectName, GRADLE, version);
+		}
+
+		public void prepareGradleWithIndexSources(String projectName) {
+			_prepare(projectName, GRADLE);
+
+			_newLiferayWorkspaceWizard.selectIndexSources();
 		}
 
 		public void prepareMaven(String projectName) {

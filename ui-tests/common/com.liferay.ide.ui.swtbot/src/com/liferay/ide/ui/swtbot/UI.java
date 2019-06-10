@@ -41,6 +41,8 @@ public interface UI {
 
 	public final String ADD_FILE_PATH = "Add Override File Path";
 
+	public final String ADD_FILES_FROM_ORIGINAL_MODULE_TO_OVERRIDE = "Add Files From Original Module to Override...";
+
 	public final String ADD_FILES_FROM_OSGI_TO_OVERRIDE = "Add Files From OSGi Bundle to Override...";
 
 	public final String ADD_FROM_LIFERAY = "Add from Liferay...";
@@ -343,6 +345,8 @@ public interface UI {
 	public final String INCLUDE_SAMPLE_CODE = "Include sample code";
 
 	public final String INCLUDE_SAMPLE_ENTITY_IN_NEW_FILE = "Include sample entity in new file.";
+
+	public final String INDEX_SOURCES = "Index sources";
 
 	public final String INDEXER_POST_PROCESSOR = "Indexer Post Processor";
 
@@ -696,6 +700,8 @@ public interface UI {
 	public final String SELECT_MAVEN_PROFILES = "Select Maven Profiles...";
 
 	public final String SELECT_MODEL_CLASS = "Select Model Class:";
+
+	public final String SELECT_OVERRIDE_FILES = "Select Override Files";
 
 	public final String SELECT_SERVICE_NAME = "Select Service Name:";
 

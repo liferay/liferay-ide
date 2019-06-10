@@ -30,7 +30,99 @@ public class NewModulesExtWizardGradleBase extends SwtbotBase {
 	@ClassRule
 	public static LiferayWorkspaceGradleSupport liferayWorkspace = new LiferayWorkspaceGradleSupport(bot);
 
-	public void addModulesExt() {
+	public void addModulesExtWithJavaAndJSP() {
+		wizardAction.openNewLiferayModulesExtWizard();
+
+		wizardAction.newModulesExt.prepare(project.getName());
+
+		wizardAction.newModulesExt.openSelectBrowseDialog();
+
+		dialogAction.prepareText("com.liferay.login.web");
+
+		dialogAction.confirm();
+
+		wizardAction.next();
+
+		wizardAction.newModulesExt.openAddOriginMoudleDialog();
+
+		dialogAction.addFiles("META-INF", "resources", "configuration.jsp");
+
+		wizardAction.newModulesExt.openAddOriginMoudleDialog();
+
+		dialogAction.addFiles("com", "liferay", "login", "web", "internal", "constants", "LoginPortletKeys.java");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getName(), "ext", project.getName(), "src/main/java",
+				"com.liferay.login.web.internal.constants", "LoginPortletKeys.java"));
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getName(), "ext", project.getName(), "src/main/resources", "META-INF", "resources",
+				"configuration.jsp"));
+
+		viewAction.project.closeAndDelete(liferayWorkspace.getName(), "ext");
+	}
+
+	public void addModulesExtWithOtherResources() {
+		wizardAction.openNewLiferayModulesExtWizard();
+
+		wizardAction.newModulesExt.prepare(project.getName());
+
+		wizardAction.newModulesExt.openSelectBrowseDialog();
+
+		dialogAction.prepareText("com.liferay.login.web");
+
+		dialogAction.confirm();
+
+		wizardAction.next();
+
+		wizardAction.newModulesExt.openAddOriginMoudleDialog();
+
+		dialogAction.addFiles("META-INF", "MANIFEST.MF");
+
+		wizardAction.newModulesExt.openAddOriginMoudleDialog();
+
+		dialogAction.addFiles("resource-actions", "default.xml");
+
+		wizardAction.newModulesExt.openAddOriginMoudleDialog();
+
+		dialogAction.addFiles("portlet.properties");
+
+		wizardAction.newModulesExt.openAddOriginMoudleDialog();
+
+		dialogAction.addFiles("content", "Language.properties");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getName(), "ext", project.getName(), "src/main/resources", "META-INF", "MANIFEST.MF"));
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getName(), "ext", project.getName(), "src/main/resources", "content",
+				"Language.properties"));
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getName(), "ext", project.getName(), "src/main/resources", "resource-actions",
+				"default.xml"));
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getName(), "ext", project.getName(), "src/main/resources", "portlet.properties"));
+
+		viewAction.project.closeAndDelete(liferayWorkspace.getName(), "ext");
+	}
+
+	public void addModulesExtWithoutOverrideFiles() {
 		wizardAction.openNewLiferayModulesExtWizard();
 
 		wizardAction.newModulesExt.prepare(project.getName());
