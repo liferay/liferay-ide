@@ -37,7 +37,7 @@
         <bundle-support-download-base>https://repository-cdn.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.portal.tools.bundle.support</bundle-support-download-base>
         <bundle-support-name>com.liferay.portal.tools.bundle.support-3.4.3.jar</bundle-support-name>
         <bundle-support-version>3.4.3</bundle-support-version>
-        <bundle-support-md5>4dc4d11b402df552adf59ed5f007e47b</bundle-support-md5>
+        <bundle-support-md5>bdfc6e90fc0e3b1f60fbfb99c3dea084</bundle-support-md5>
         <gw-latest-download-url>https://github.com/david-truong/gw/releases/download/v1.0.1/gw.jar</gw-latest-download-url>
         <gw-latest-md5>488ddaed413c0f7ea67df049175380eb</gw-latest-md5>
         <portal-download-base>https://files-cdn.liferay.com/private/ee/portal</portal-download-base>
