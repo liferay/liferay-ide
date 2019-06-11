@@ -298,17 +298,31 @@
             <actionList>
                 <if>
                     <actionList>
-                        <setInstallerVariable name="selectbundleversion" value="7.1"/>
+                        <setInstallerVariable name="selectbundleversion" value="7.0"/>
                     </actionList>
                     <conditionRuleList>
                         <compareText>
                             <logic>contains</logic>
                             <text>${bundleversion}</text>
-                            <value>7_1</value>
+                            <value>7_0</value>
                         </compareText>
                     </conditionRuleList>
                     <elseActionList>
-                        <setInstallerVariable name="selectbundleversion" value="7.0"/>
+                        <if>
+                            <actionList>
+                                <setInstallerVariable name="selectbundleversion" value="7.1"/>
+                            </actionList>
+                            <conditionRuleList>
+                                <compareText>
+                                    <logic>contains</logic>
+                                    <text>${bundleversion}</text>
+                                    <value>7_1</value>
+                                </compareText>
+                            </conditionRuleList>
+                            <elseActionList>
+                                <setInstallerVariable name="selectbundleversion" value="7.2"/>
+                            </elseActionList>
+                        </if>
                     </elseActionList>
                 </if>
                 <setInstallerVariable>
@@ -631,7 +645,7 @@
             <description></description>
             <explanation>Specify initialized liferay bundle version.</explanation>
             <value></value>
-            <default>7_1</default>
+            <default>7_2</default>
             <parameterList>
                 <labelParameter>
                     <name>7_0</name>
@@ -644,6 +658,13 @@
                     <name>7_1</name>
                     <title>7.1</title>
                     <description>Liferay Bundle 7.1</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+                <labelParameter>
+                    <name>7_2</name>
+                    <title>7.2</title>
+                    <description>Liferay Bundle 7.2</description>
                     <explanation></explanation>
                     <image></image>
                 </labelParameter>

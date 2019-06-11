@@ -8,5 +8,12 @@
             <requireJDK>1</requireJDK>
             <vendor></vendor>
         </validVersion>
+        <validVersion>
+            <bitness>64</bitness>
+            <maxVersion>11</maxVersion>
+            <minVersion>11</minVersion>
+            <requireJDK>1</requireJDK>
+            <vendor></vendor>
+        </validVersion>
     </validVersionList>
 </autodetectJava>
