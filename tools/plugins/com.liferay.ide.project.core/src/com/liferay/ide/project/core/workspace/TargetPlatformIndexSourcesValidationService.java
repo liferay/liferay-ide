@@ -26,7 +26,13 @@ public class TargetPlatformIndexSourcesValidationService extends ValidationServi
 
 	@Override
 	protected Status compute() {
-		boolean indexSources = get(_op().getIndexSources());
+		boolean indexSources = false;
+
+		NewLiferayWorkspaceOp op = _op();
+
+		if (op != null) {
+			indexSources = get(op.getIndexSources());
+		}
 
 		if (indexSources) {
 			return Status.createWarningStatus(
