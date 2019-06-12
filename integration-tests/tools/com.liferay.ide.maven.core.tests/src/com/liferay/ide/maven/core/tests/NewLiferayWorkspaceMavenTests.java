@@ -18,6 +18,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.maven.core.tests.util.MavenTestUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.test.core.base.support.LiferayWorkspaceSupport;
@@ -86,8 +87,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	public void testNewMavenLiferayWorkspaceInitBundle() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		String defaultBundleUrl =
-			"https://releases-cdn.liferay.com/portal/7.0.6-ga7/liferay-ce-portal-tomcat-7.0-ga7-20180507111753223.zip";
+		String defaultBundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_2;
 
 		IPath rootLocation = CoreUtil.getWorkspaceRootLocation();
 
@@ -124,12 +124,45 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	}
 
 	@Test
-	public void testNewMavenLiferayWorkspaceOpWithBundle71() throws Exception {
+	public void testNewMavenLiferayWorkspaceOpWithBundle70() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		String default71BundleUrl =
-			"https://releases-cdn.liferay.com/portal/7.1.2-ga3/liferay-ce-portal-tomcat-7.1.2-ga3-" +
-				"20190107144105508.tar.gz";
+		IWorkspaceRoot wsRoot = CoreUtil.getWorkspaceRoot();
+
+		IPath workspaceLocation = wsRoot.getLocation();
+
+		op.setWorkspaceName(workspace.getName());
+		op.setLiferayVersion("7.0");
+		op.setProjectProvider(provider());
+		op.setLocation(workspaceLocation.toPortableString());
+
+		createOrImportAndBuild(
+			op, workspace.getName(), "Maven Liferay Workspace would not support Target Platform.", true);
+
+		IProject workspaceProject = CoreUtil.getProject(workspace.getName());
+
+		MavenTestUtil.waitForJobsToComplete();
+
+		IPath wsLocation = workspaceProject.getLocation();
+
+		IPath pomFilePath = wsLocation.append("pom.xml");
+
+		File pomFile = pomFilePath.toFile();
+
+		Assert.assertTrue(pomFile.exists());
+
+		String xml = FileUtil.readContents(pomFile);
+
+		Assert.assertTrue(xml.contains(WorkspaceConstants.BUNDLE_URL_CE_7_0));
+
+		assertLiferayServerNotExists(workspace.getName());
+
+		deleteProject(workspace.getName());
+	}
+
+	@Test
+	public void testNewMavenLiferayWorkspaceOpWithBundle71() throws Exception {
+		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
 		IWorkspaceRoot wsRoot = CoreUtil.getWorkspaceRoot();
 
@@ -157,7 +190,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 
 		String xml = FileUtil.readContents(pomFile);
 
-		Assert.assertTrue(xml.contains(default71BundleUrl));
+		Assert.assertTrue(xml.contains(WorkspaceConstants.BUNDLE_URL_CE_7_1));
 
 		assertLiferayServerNotExists(workspace.getName());
 
@@ -168,8 +201,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 	public void testNewMavenLiferayWorkspaceSetUrl() throws Exception {
 		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-		String bundleUrl =
-			"https://releases-cdn.liferay.com/portal/7.0.6-ga7/liferay-ce-portal-tomcat-7.0-ga7-20180507111753223.zip";
+		String bundleUrl = WorkspaceConstants.BUNDLE_URL_CE_7_0;
 
 		IWorkspaceRoot wsRoot = CoreUtil.getWorkspaceRoot();
 
