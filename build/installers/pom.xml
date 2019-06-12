@@ -46,8 +46,8 @@
         <portal-ce-download-base>https://releases-cdn.liferay.com/portal</portal-ce-download-base>
         <portal-ce-version>7.2.0-ga1</portal-ce-version>
         <portal-ce-zip-name>liferay-ce-portal-tomcat-7.2.0-ga1-20190531153709761.tar.gz</portal-ce-zip-name>
-        <jpmcli-latest-download-url>https://oss.sonatype.org/content/repositories/snapshots/biz/aQute/bnd/biz.aQute.jpm.run/4.0.0-SNAPSHOT/biz.aQute.jpm.run-4.0.0-20190611.221757-14.jar</jpmcli-latest-download-url>
-        <jpmcli-latest-md5>938f989b326f4cf8591d880621f016f7</jpmcli-latest-md5>
+        <jpmcli-latest-download-url>https://oss.sonatype.org/content/repositories/snapshots/biz/aQute/bnd/biz.aQute.jpm.run/4.0.0-SNAPSHOT/biz.aQute.jpm.run-4.0.0-20190612.143010-15.jar</jpmcli-latest-download-url>
+        <jpmcli-latest-md5>659bc2c6c8371d33f064a9bb4e02f9e9</jpmcli-latest-md5>
         <bnd-latest-download-url>https://repository-cdn.liferay.com/nexus/content/groups/public/biz/aQute/bnd/biz.aQute.bnd/3.5.0/biz.aQute.bnd-3.5.0.jar</bnd-latest-download-url>
         <bnd-latest-md5>19983bd645ec65d162355bd4dac910fa</bnd-latest-md5>
     </properties>
