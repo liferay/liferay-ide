@@ -28,8 +28,10 @@ public class TargetPlatformIndexSourcesValidationService extends ValidationServi
 	protected Status compute() {
 		boolean indexSources = false;
 
-		if (_op() != null) {
-			indexSources = get(_op().getIndexSources());
+		NewLiferayWorkspaceOp op = _op();
+
+		if (op != null) {
+			indexSources = get(op.getIndexSources());
 		}
 
 		if (indexSources) {
