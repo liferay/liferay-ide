@@ -801,6 +801,26 @@ public class WizardAction extends UIAction {
 
 	public class NewLiferayUpgradePlanWizardAction {
 
+		public ComboBox currentLiferayVersion() {
+			return _newLiferayUpgradePlanWizard.getCurrentLiferayVersion();
+		}
+
+		public String getCurrentLiferayVersion() {
+			return currentLiferayVersion().getText();
+		}
+
+		public String getTargetLiferayVersion() {
+			return targetLiferayVersion().getText();
+		}
+
+		public String getUpgradePlanOutline() {
+			return upgradePlanOutline().getText();
+		}
+
+		public Text name() {
+			return _newLiferayUpgradePlanWizard.getName();
+		}
+
 		public void prepare(
 			String name, String planOutline, String currentLiferayVersion, String targetLiferayVersion) {
 
@@ -808,6 +828,22 @@ public class WizardAction extends UIAction {
 			_newLiferayUpgradePlanWizard.setUpgradePlanOutline(planOutline);
 			_newLiferayUpgradePlanWizard.setCurrentLiferayVersion(currentLiferayVersion);
 			_newLiferayUpgradePlanWizard.setTargetLiferayVersion(targetLiferayVersion);
+		}
+
+		public void prepareName(String name) {
+			_newLiferayUpgradePlanWizard.setName(name);
+		}
+
+		public void prepareUpgradePlanOutline(String planOutline) {
+			_newLiferayUpgradePlanWizard.setUpgradePlanOutline(planOutline);
+		}
+
+		public ComboBox targetLiferayVersion() {
+			return _newLiferayUpgradePlanWizard.getTargetLiferayVersion();
+		}
+
+		public ComboBox upgradePlanOutline() {
+			return _newLiferayUpgradePlanWizard.getUpgradePlanOutline();
 		}
 
 		private final NewLiferayUpgradePlanWizard _newLiferayUpgradePlanWizard = new NewLiferayUpgradePlanWizard(bot);

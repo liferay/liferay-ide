@@ -837,10 +837,6 @@ public interface UI {
 
 	public final String UPDATE_PROJECT = "Update Project...";
 
-	public final String UPGRADE_CODE_OUTLINE =
-		"http://192.168.133.135:8080/web/guest/docs/7-2/reference/-/knowledge_base/reference" +
-			"/upgrading-code-to-product-ver";
-
 	public final String UPGRADE_PLAN_DETAILS = "Upgrade Plan Details";
 
 	public final String UPGRADE_PLAN_OUTLINE = "Upgrade plan outline:";
@@ -852,6 +848,14 @@ public interface UI {
 	public final String UPGRADE_TO_LIFERAY_WORKSPACE = "Upgrade to Liferay Workspace";
 
 	public final String UPGRADE_YOUR_DEVELOPMENT_ENVIRONMENT = "Upgrade Your Development Environment";
+
+	public final String UPGRADING_CODE_TO_PRODUCT_VER =
+		"upgrading-code-to-product-ver - https://portal.liferay.dev/docs/7-2/tutorials/-/knowledge_base/t" +
+			"/upgrading-code-to-product-ver";
+
+	public final String UPGRADING_TO_PRODUCT_VER =
+		"upgrading-to-product-ver - https://portal.liferay.dev/docs/7-2/deploy/-/knowledge_base/d" +
+			"/upgrading-to-product-ver";
 
 	public final String UPLOAD_NEW_WORKFLOW = "Upload new workflow...";
 

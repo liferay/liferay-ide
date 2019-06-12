@@ -15,7 +15,6 @@
 package com.liferay.ide.ui.liferay.support.upgrade;
 
 import com.liferay.ide.ui.liferay.support.SupportBase;
-import com.liferay.ide.ui.swtbot.UI;
 import com.liferay.ide.ui.swtbot.page.Perspective;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -36,18 +35,6 @@ public class LiferayUpgradePlanSupport extends SupportBase {
 		Perspective upgradePlannerPerspective = ide.getUpgradePlannerPerspective();
 
 		upgradePlannerPerspective.activate();
-
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openLiferayUpgradePlannerTry();
-
-		dialogAction.upgradePlanner.deleteOutline(0);
-
-		dialogAction.upgradePlanner.addOutline();
-
-		dialogAction.plannerOutline.addUrl(UI.UPGRADE_CODE_OUTLINE);
-
-		dialogAction.confirm(UI.APPLY_AND_CLOSE);
 	}
 
 }

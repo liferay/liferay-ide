@@ -36,7 +36,7 @@ public class UpgradePlannerActionsTests extends SwtbotBase {
 	public void expandAndcollapse() {
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare(project.getName(), UPGRADE_CODE_OUTLINE, "6.2", "7.1");
+		wizardAction.newUpgradePlan.prepare(project.getName(), UPGRADING_CODE_TO_PRODUCT_VER, "6.2", "7.1");
 
 		wizardAction.finish();
 
@@ -55,7 +55,7 @@ public class UpgradePlannerActionsTests extends SwtbotBase {
 	public void restartUpgradePlan() {
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare(project.getName(), UPGRADE_CODE_OUTLINE, "6.2", "7.1");
+		wizardAction.newUpgradePlan.prepare(project.getName(), UPGRADING_CODE_TO_PRODUCT_VER, "6.2", "7.1");
 
 		wizardAction.finish();
 

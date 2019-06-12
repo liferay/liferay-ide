@@ -32,11 +32,9 @@ public class UpgradePlannerTests extends SwtbotBase {
 
 	@Test
 	public void testSetUpLiferayWorkspace() {
-		viewAction.switchUpgradePlannerPerspective();
-
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare("test", UPGRADE_CODE_OUTLINE, "6.2", "7.1");
+		wizardAction.newUpgradePlan.prepare("test", UPGRADING_CODE_TO_PRODUCT_VER, "6.2", "7.1");
 
 		wizardAction.finish();
 
@@ -64,6 +62,13 @@ public class UpgradePlannerTests extends SwtbotBase {
 	}
 
 	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
+	public ProjectSupport project = new ProjectSupport(bot) {
+
+		@Override
+		public boolean isSwitchToUpgradePespective() {
+			return true;
+		}
+
+	};
 
 }
