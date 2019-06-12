@@ -161,6 +161,9 @@ public interface Messages {
 
 	public static final String NO_SUITABLE_LIFERAY_MODULE_PROJECT = "No suitable Liferay module project";
 
+	public static final String NO_UPGRADE_STEPS_DOUBLE_CLICK_TO_START_A_NEW_UPGRADE_PLAN =
+		"No upgrade steps. Double-click to start a new upgrade plan.";
+
 	public static final String NOT_A_JAVA_SOURCE_FOLDER = "Not a Java source folder.";
 
 	public static final String PACKAGE_NAME_MUST_BE_SPECIFIED = "Package name must be specified";

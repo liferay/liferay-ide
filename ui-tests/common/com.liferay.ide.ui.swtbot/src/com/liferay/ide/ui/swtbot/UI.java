@@ -195,8 +195,6 @@ public interface UI {
 
 	public final String CSS_CLASS_WRAPPER = "CSS class wrapper:";
 
-	public final String CURRENT_CODE_LOCATION = "Current Code Location:";
-
 	public final String CURRENT_LIFERAY_VERSION = "Current Liferay Version:";
 
 	public final String CUSTOM_JSP_FOLDER = "Custom JSP folder:";
@@ -739,7 +737,7 @@ public interface UI {
 
 	public final String SERVICES = "Services";
 
-	public final String SET_UP_LIFERAY_WORKSPACE = "Set up Liferay Workspace";
+	public final String SET_UP_LIFERAY_WORKSPACE = "Set Up Liferay Workspace";
 
 	public final String SETUP_TASKS = "Setup Tasks";
 

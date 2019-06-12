@@ -23,19 +23,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.ui.tests</groupId>
-		<artifactId>platform-tests</artifactId>
-		<version>3.6.1-SNAPSHOT</version>
+		<groupId>com.liferay.ide.functional.tests.upgrade</groupId>
+		<artifactId>upgrade-tests</artifactId>
+		<version>3.6.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.upgrade</groupId>
-	<artifactId>upgrade-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.upgrade.validation</groupId>
+	<artifactId>upgrade-validation-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Upgrade</name>
+	<name>Liferay IDE UI Upgrade Validation</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.upgrade.view</module>
-		<module>com.liferay.ide.functional.upgrade.validation</module>
+		<module>com.liferay.ide.functional.upgrade.validation.wizard</module>
 	</modules>
 </project>
