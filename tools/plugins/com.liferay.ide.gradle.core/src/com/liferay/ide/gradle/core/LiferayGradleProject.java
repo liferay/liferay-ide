@@ -176,6 +176,10 @@ public class LiferayGradleProject
 
 		IPath buildLocation = FileUtil.pathAppend(gradleProject.getLocation(), "build", "libs");
 
+		if (FileUtil.notExists(buildLocation)) {
+			return null;
+		}
+
 		File buildFolder = buildLocation.toFile();
 
 		String[] fileNames = buildFolder.list();
