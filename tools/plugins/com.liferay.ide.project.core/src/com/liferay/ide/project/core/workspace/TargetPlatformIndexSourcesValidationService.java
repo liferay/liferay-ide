@@ -26,7 +26,11 @@ public class TargetPlatformIndexSourcesValidationService extends ValidationServi
 
 	@Override
 	protected Status compute() {
-		boolean indexSources = get(_op().getIndexSources());
+		boolean indexSources = false;
+
+		if (_op() != null) {
+			indexSources = get(_op().getIndexSources());
+		}
 
 		if (indexSources) {
 			return Status.createWarningStatus(
