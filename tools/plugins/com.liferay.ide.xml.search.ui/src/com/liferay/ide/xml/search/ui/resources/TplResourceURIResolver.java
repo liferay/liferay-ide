@@ -36,6 +36,7 @@ public class TplResourceURIResolver extends AbstractWebResourceURIResolver {
 
 	private static final Set<String> _extensions = new HashSet<String>() {
 		{
+			add("ftl");
 			add("tpl");
 		}
 	};
