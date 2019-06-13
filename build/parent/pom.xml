@@ -27,8 +27,8 @@
     <name>Liferay IDE Parent</name>
 
     <properties>
-        <blade-latest-download-url>https://repository.liferay.com/nexus/service/local/repositories/liferay-public-releases/content/com/liferay/blade/com.liferay.blade.cli/3.7.0/com.liferay.blade.cli-3.7.0.jar</blade-latest-download-url>
-        <blade-latest-md5>ee81c5dbb33cf2f53ea6266c19a47e1d</blade-latest-md5>
+        <blade-latest-download-url>https://repository-cdn.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/blade/com.liferay.blade.cli/3.7.1-SNAPSHOT/com.liferay.blade.cli-3.7.1-20190613.175750-5.jar</blade-latest-download-url>
+        <blade-latest-md5>9b57ed0179e1843bb4e8c47437669e02</blade-latest-md5>
         <bndtools-site>https://dl.bintray.com/bndtools/bndtools/4.1.0/</bndtools-site>
         <eclipse-site>https://download.eclipse.org/releases/2018-12/201812191000/</eclipse-site>
         <eclipse-xml-search-site>https://dl.bintray.com/gamerson/eclipse-wtp-xml-search/</eclipse-xml-search-site>
