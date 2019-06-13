@@ -32,7 +32,8 @@ public class UpgradePlanCorePlugin extends Plugin {
 	public static final String ID = "com.liferay.ide.upgrade.plan.core";
 
 	public static final List<String> defaultUpgradePlanOutlines = Arrays.asList(
-		"https://portal.liferay.dev/docs/7-2/tutorials/-/knowledge_base/t/upgrading-code-to-product-ver");
+		"https://portal.liferay.dev/docs/7-2/tutorials/-/knowledge_base/t/upgrading-code-to-product-ver",
+		"https://portal.liferay.dev/docs/7-2/deploy/-/knowledge_base/d/upgrading-to-product-ver");
 
 	public static IStatus createErrorStatus(String msg) {
 		return new Status(IStatus.ERROR, ID, msg);
