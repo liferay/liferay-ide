@@ -29,6 +29,7 @@ import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime70;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
+import com.liferay.ide.server.tomcat.core.PortalContext;
 import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -224,8 +225,9 @@ public class LiferayTomcatUtil {
 		return libs.toArray(new IPath[0]);
 	}
 
-	// to read liferay info from manifest need at least version 6.2.0
-
+	/**
+	 *  to read liferay info from manifest need at least version 6.2.0
+	 */
 	public static String getConfigInfoFromCache(String configType, IPath portalDir) {
 		IPath configInfoPath = null;
 
@@ -356,6 +358,22 @@ public class LiferayTomcatUtil {
 		}
 
 		return retval;
+	}
+
+	public static boolean isLiferayPortal(File file) {
+		File webXMLFile = new File(file, "WEB-INF/web.xml");
+
+		if (FileUtil.notExists(webXMLFile)) {
+			return false;
+		}
+
+		String fileContents = FileUtil.readContents(webXMLFile);
+
+		if (fileContents.contains("id=\"Liferay_Portal\"")) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public static Context loadContextFile(File contextFile) {
@@ -559,7 +577,28 @@ public class LiferayTomcatUtil {
 
 			IPath hostPath = serverPath.append(_HOST_NAME);
 
+			IPath appBasePath = appServerDir.append("webapps");
+
+			File appBaseFolder = FileUtil.getFile(appBasePath);
+
+			File[] files = null;
+
+			if (FileUtil.notExists(appBaseFolder)) {
+				files = new File[0];
+			}
+			else {
+				files = appBaseFolder.listFiles();
+			}
+
 			IPath contextFilePath = hostPath.append(_DEFAULT_PORTAL_CONTEXT_FILE);
+
+			for (File file : files) {
+				if (isLiferayPortal(file)) {
+					PortalContext portalContext = new PortalContext(file.getName());
+
+					contextFilePath = hostPath.append(portalContext.getName() + ".xml");
+				}
+			}
 
 			File contextFile = contextFilePath.toFile();
 

@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.AbstractPortalBundle;
+import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.JavaUtil;
 
 import java.io.File;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -77,13 +79,39 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 	@Override
 	public IPath getAppServerPortalDir() {
-		IPath retval = null;
+		if ((_appServerPortalDir == null) || FileUtil.notExists(_appServerPortalDir.toFile())) {
+			IPath appBasePath = bundlePath.append("webapps");
 
-		if (bundlePath != null) {
-			retval = bundlePath.append("webapps/ROOT");
+			File appBaseFolder = FileUtil.getFile(appBasePath);
+
+			File[] files = null;
+
+			if (FileUtil.notExists(appBaseFolder)) {
+				files = new File[0];
+			}
+			else {
+				files = appBaseFolder.listFiles();
+			}
+
+			_appServerPortalDir = Stream.of(
+				files
+			).filter(
+				LiferayTomcatUtil::isLiferayPortal
+			).map(
+				File::getName
+			).map(
+				fileName -> new PortalContext(fileName)
+			).map(
+				PortalContext::getBaseName
+			).map(
+				baseName -> appBasePath.append(baseName)
+			).findFirst(
+			).orElseGet(
+				null
+			);
 		}
 
-		return retval;
+		return _appServerPortalDir;
 	}
 
 	@Override
@@ -355,6 +383,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 		}
 	}
 
+	private IPath _appServerPortalDir = null;
 	private Matcher _matcher;
 	private Pattern _pattern;
 
