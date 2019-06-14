@@ -47,6 +47,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugEvent;
@@ -68,6 +69,8 @@ import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.internal.Server;
+import org.eclipse.wst.server.core.model.IModuleResource;
+import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 
 /**
@@ -539,6 +542,30 @@ public class PortalServerBehavior
 	@Override
 	protected void publishServer(int kind, IProgressMonitor monitor) throws CoreException {
 		setServerPublishState(IServer.PUBLISH_STATE_UNKNOWN);
+	}
+
+	@Override
+	protected void publishModules(
+		int kind, List modules, List deltaKind2, MultiStatus multi, IProgressMonitor monitor) {
+
+		int size = modules.size();
+
+		for (int i = 0; i < size; i++) {
+			IModule[] module = (IModule[])modules.get(i);
+
+			Integer deltaKind = (Integer)deltaKind2.get(i);
+			IModuleResourceDelta[] deltas = ((Server)getServer()).getPublishedResourceDelta(module);
+
+			if ((deltas.length == 1) && (kind == IServer.PUBLISH_AUTO) &&
+				(deltaKind == ServerBehaviourDelegate.CHANGED)) {
+
+				IModuleResource moduleResource = deltas[0].getModuleResource();
+
+				if (".classpath".equals(moduleResource.getName())) {
+					setModulePublishState2(module, IServer.PUBLISH_STATE_NONE);
+				}
+			}
+		}
 	}
 
 	protected void terminate() {
