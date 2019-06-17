@@ -14,6 +14,7 @@
 
 package com.liferay.ide.gradle.core.tests;
 
+import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.test.core.base.support.LiferayWorkspaceSupport;
 import com.liferay.ide.test.project.core.base.ProjectOpBase;
@@ -51,8 +52,7 @@ public class NewLiferayWorkspaceGradleTests extends ProjectOpBase<NewLiferayWork
 
 		assertPropertyValue(
 			workspace.getName(), "gradle.properties", "liferay.workspace.bundle.url",
-			"https://releases-cdn.liferay.com/portal/7.1.2-ga3" +
-				"/liferay-ce-portal-tomcat-7.1.2-ga3-20190107144105508.tar.gz");
+			WorkspaceConstants.BUNDLE_URL_CE_7_1);
 
 		deleteProject(workspace.getName());
 	}
