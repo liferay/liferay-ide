@@ -40,6 +40,10 @@ public class TypePossibleValuesService extends PossibleValuesService implements 
 		if (version.compareTo(new Version("6.2")) >= 0) {
 			values.add("Blob");
 		}
+
+		if (version.compareTo(new Version("7.0")) >= 0) {
+			values.add("BigDecimal");
+		}
 	}
 
 	private static final String[] _DEFAULT_TYPES = {"String", "long", "boolean", "int", "double", "Date", "Collection"};

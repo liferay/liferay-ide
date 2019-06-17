@@ -27,6 +27,7 @@ public class ColumnTypeQuerySpecification extends StaticValueQuerySpecification 
 
 		_visitor.registerValue("boolean", "");
 		_visitor.registerValue("Blob", "");
+		_visitor.registerValue("BigDecimal", "");
 		_visitor.registerValue("Collection", "");
 		_visitor.registerValue("Date", "");
 		_visitor.registerValue("double", "");
