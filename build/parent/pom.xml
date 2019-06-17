@@ -33,7 +33,7 @@
         <eclipse-site>https://download.eclipse.org/releases/2018-12/201812191000/</eclipse-site>
         <eclipse-xml-search-site>https://dl.bintray.com/gamerson/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <gmaven.runtime>1.8</gmaven.runtime>
-        <gradle-site>https://download.eclipse.org/buildship/updates/e48/snapshots/3.x/3.0.2.v20181217-2319-s</gradle-site>
+        <gradle-site>https://download.eclipse.org/buildship/updates/e410/snapshots/3.x/3.1.1.v20190611-2334-s</gradle-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
         <liferay-ide-swtbot-testing-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
@@ -211,7 +211,7 @@
                         <generateDownloadStatsProperty>true</generateDownloadStatsProperty>
                     </configuration>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.eclipse.tycho</groupId>
                     <artifactId>target-platform-configuration</artifactId>
