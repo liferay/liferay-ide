@@ -54,14 +54,6 @@ public class DialogAction extends UIAction {
 		return _dialogAction;
 	}
 
-	public void addFiles(String... items) {
-		Tree tree = _treeDialog.getItems();
-
-		tree.selectTreeItem(items);
-
-		confirm();
-	}
-
 	public void cancel() {
 		String title = _getDialog().getLabel();
 
@@ -141,6 +133,14 @@ public class DialogAction extends UIAction {
 		Tree tree = _treeDialog.getItems();
 
 		tree.select(items);
+	}
+
+	public void selectOverrideFile(String... items) {
+		Tree tree = _treeDialog.getItems();
+
+		tree.selectTreeItem(items);
+
+		confirm();
 	}
 
 	public void selectTableItem(String item) {

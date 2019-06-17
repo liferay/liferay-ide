@@ -21,9 +21,9 @@ import org.junit.Assert;
 /**
  * @author Terry Jia
  */
-public class LiferayWorkspaceGradleSupport extends LiferayWorkspaceSupport {
+public class LiferayWorkspaceIndexSourcesGradleSupport extends LiferayWorkspaceSupport {
 
-	public LiferayWorkspaceGradleSupport(SWTWorkbenchBot bot) {
+	public LiferayWorkspaceIndexSourcesGradleSupport(SWTWorkbenchBot bot) {
 		super(bot);
 	}
 
@@ -41,7 +41,7 @@ public class LiferayWorkspaceGradleSupport extends LiferayWorkspaceSupport {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(getName());
+		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(getName());
 
 		wizardAction.finish();
 
