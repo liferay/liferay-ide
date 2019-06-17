@@ -42,6 +42,7 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 /**
  * @author Terry Jia
  * @author Ying Xu
+ * @author Rui Wang
  */
 public class DialogAction extends UIAction {
 
@@ -132,6 +133,14 @@ public class DialogAction extends UIAction {
 		Tree tree = _treeDialog.getItems();
 
 		tree.select(items);
+	}
+
+	public void selectOverrideFile(String... items) {
+		Tree tree = _treeDialog.getItems();
+
+		tree.selectTreeItem(items);
+
+		confirm();
 	}
 
 	public void selectTableItem(String item) {

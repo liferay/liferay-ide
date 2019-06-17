@@ -38,12 +38,20 @@ public class NewLiferayWorkspaceWizard extends NewProjectWizard {
 		return new CheckBox(getShell().bot(), DOWNLOAD_LIFERAY_BUNDLE);
 	}
 
+	public CheckBox getIndexSources() {
+		return new CheckBox(getShell().bot(), INDEX_SOURCES);
+	}
+
 	public Text getServerName() {
 		return new Text(getShell().bot(), SERVER_NAME);
 	}
 
 	public ComboBox getTargetPlatform() {
 		return new ComboBox(getShell().bot(), TARGET_PLATFORM);
+	}
+
+	public void selectIndexSources() {
+		getIndexSources().select();
 	}
 
 	public void setBundleUrl(String url) {
