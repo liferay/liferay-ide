@@ -85,7 +85,10 @@ public class NewUpgradePlanOpMethods {
 			upgradePlanner.startUpgradePlan(upgradePlan);
 		}
 		catch (IOException ioe) {
-			return Status.createErrorStatus("Could not create upgrade plan named: " + name, ioe);
+			return Status.createErrorStatus(
+				"Could not create upgrade plan named: " + name +
+					", please check your internet connection or use offline upgrade plan outline.",
+				ioe);
 		}
 
 		return Status.createOkStatus();
