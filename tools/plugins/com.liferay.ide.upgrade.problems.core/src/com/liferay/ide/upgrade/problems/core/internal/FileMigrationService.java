@@ -238,19 +238,19 @@ public class FileMigrationService implements FileMigration {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
-				if (dir.equals(new File(startDir.getPath() + "/bin").toPath())) {
+				if (dir.equals(new File(startDir, "bin").toPath())) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
-				if (dir.equals(new File(startDir.getPath() + "/out").toPath())) {
+				if (dir.equals(new File(startDir, "out").toPath())) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
-				if (dir.equals(new File(startDir.getPath() + "/build").toPath())) {
+				if (dir.equals(new File(startDir, "build").toPath())) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
-				if (dir.equals(new File(startDir.getPath() + "/target").toPath())) {
+				if (dir.equals(new File(startDir, "target").toPath())) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
@@ -304,19 +304,19 @@ public class FileMigrationService implements FileMigration {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
-				if (dir.equals(new File(startDir.getPath() + "/bin").toPath())) {
+				if (dir.equals(new File(startDir, "bin").toPath())) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
-				if (dir.equals(new File(startDir.getPath() + "/out").toPath())) {
+				if (dir.equals(new File(startDir, "out").toPath())) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
-				if (dir.equals(new File(startDir.getPath() + "/build").toPath())) {
+				if (dir.equals(new File(startDir, "build").toPath())) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
-				if (dir.equals(new File(startDir.getPath() + "/target").toPath())) {
+				if (dir.equals(new File(startDir, "target").toPath())) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
