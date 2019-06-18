@@ -220,7 +220,7 @@ public class PortalServerBehavior
 
 				String folderName = appServerPortalDir.substring(appServerPortalDir.lastIndexOf("/"));
 
-				if (!"/ROOT".equals(folderName)) {
+				if (!("/ROOT".equals(folderName) || "/ROOT.war".equals(folderName))) {
 					url += folderName;
 				}
 			}
