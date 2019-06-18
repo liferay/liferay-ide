@@ -238,11 +238,19 @@ public class FileMigrationService implements FileMigration {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
-				if (dir.endsWith("bin") && dir.startsWith(startDir.getPath())) {
+				if (dir.equals(new File(startDir, "bin").toPath())) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
-				if (dir.endsWith("target") && dir.startsWith(startDir.getPath())) {
+				if (dir.equals(new File(startDir, "out").toPath())) {
+					return FileVisitResult.SKIP_SUBTREE;
+				}
+
+				if (dir.equals(new File(startDir, "build").toPath())) {
+					return FileVisitResult.SKIP_SUBTREE;
+				}
+
+				if (dir.equals(new File(startDir, "target").toPath())) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
@@ -296,11 +304,19 @@ public class FileMigrationService implements FileMigration {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
-				if (dir.endsWith("bin") && dir.startsWith(startDir.getPath())) {
+				if (dir.equals(new File(startDir, "bin").toPath())) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
-				if (dir.endsWith("target") && dir.startsWith(startDir.getPath())) {
+				if (dir.equals(new File(startDir, "out").toPath())) {
+					return FileVisitResult.SKIP_SUBTREE;
+				}
+
+				if (dir.equals(new File(startDir, "build").toPath())) {
+					return FileVisitResult.SKIP_SUBTREE;
+				}
+
+				if (dir.equals(new File(startDir, "target").toPath())) {
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 
