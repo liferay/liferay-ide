@@ -43,6 +43,15 @@ public class TypePossibleValuesService extends PossibleValuesService implements 
 
 		if (version.compareTo(new Version("7.0")) >= 0) {
 			values.add("BigDecimal");
+			values.add("Boolean");
+			values.add("Double");
+			values.add("float");
+			values.add("Float");
+			values.add("Integer");
+			values.add("Long");
+			values.add("short");
+			values.add("Short");
+			values.add("Map");
 		}
 	}
 
