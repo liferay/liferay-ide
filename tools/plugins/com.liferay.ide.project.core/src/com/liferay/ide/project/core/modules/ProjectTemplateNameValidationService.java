@@ -14,56 +14,183 @@
 
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.ide.core.util.ListUtil;
+import aQute.bnd.version.Version;
+import aQute.bnd.version.VersionRange;
 
-import java.util.Set;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.project.core.ProjectCore;
 
-import org.eclipse.sapphire.Event;
-import org.eclipse.sapphire.Listener;
-import org.eclipse.sapphire.Value;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import org.apache.commons.io.IOUtils;
+
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
-public class ProjectTemplateNameValidationService extends ValidationService {
+public class ProjectTemplateNameValidationService extends ValidationService implements SapphireContentAccessor {
+
+	@Override
+	public void dispose() {
+		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
+
+		if (op != null) {
+			SapphireUtil.detachListener(op.property(NewLiferayModuleProjectOp.PROP_LIFERAY_VERSION), _listener);
+		}
+
+		super.dispose();
+	}
 
 	@Override
 	protected Status compute() {
-		return _templateNameStatus;
+		Status retval = Status.createOkStatus();
+
+		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
+
+		String liferayVersion = get(op.getLiferayVersion());
+
+		String projectTemplateName = get(op.getProjectTemplateName());
+
+		projectTemplateName = projectTemplateName.replace("-", ".");
+
+		VersionRange versionRange = _projectTemplateVersionRangeMap.get(projectTemplateName);
+
+		if (versionRange == null) {
+			versionRange = _getSupportedVersionRange(projectTemplateName);
+		}
+
+		if (versionRange != null) {
+			boolean include = versionRange.includes(new Version(liferayVersion));
+
+			if (!include) {
+				retval = Status.createErrorStatus(
+					"Specified Liferay version is invaild. Must be in range " + versionRange);
+			}
+		}
+		else {
+			retval = Status.createWarningStatus("Unable to get supported Liferay version.");
+		}
+
+		return retval;
 	}
 
 	@Override
 	protected void initValidationService() {
 		super.initValidationService();
 
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
 		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
 
-		Value<Object> value = op.property(NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME);
-
-		ProjectTemplateNamePossibleValuesService pvs = value.service(ProjectTemplateNamePossibleValuesService.class);
-
-		Set<String> templateNames = pvs.values();
-
-		if (ListUtil.isNotEmpty(templateNames)) {
-			_templateNameStatus = Status.createOkStatus();
-		}
-		else {
-			pvs.attach(
-				new Listener() {
-
-					@Override
-					public void handle(Event event) {
-						_templateNameStatus = Status.createOkStatus();
-
-						refresh();
-					}
-
-				});
-		}
+		SapphireUtil.attachListener(op.property(NewLiferayModuleProjectOp.PROP_LIFERAY_VERSION), _listener);
 	}
 
-	private Status _templateNameStatus = Status.createErrorStatus("Downloading templates, please wait...");
+	private VersionRange _getSupportedVersionRange(String projectTemplateName) {
+		VersionRange versionRange = null;
+
+		File bladeJar = null;
+
+		try {
+			bladeJar = FileUtil.getFile(BladeCLI.getBladeCLIPath());
+		}
+		catch (BladeCLIException bclie) {
+		}
+
+		if (bladeJar == null) {
+			return versionRange;
+		}
+
+		try (ZipFile zipFile = new ZipFile(bladeJar)) {
+			Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+			while (entries.hasMoreElements()) {
+				ZipEntry entry = entries.nextElement();
+
+				String entryName = entry.getName();
+
+				if (entryName.endsWith(".jar") &&
+					entryName.startsWith("com.liferay.project.templates." + projectTemplateName)) {
+
+					try (InputStream in = zipFile.getInputStream(entry)) {
+						ProjectCore projectCore = ProjectCore.getDefault();
+
+						File stateFile = FileUtil.getFile(projectCore.getStateLocation());
+
+						File tempFile = new File(stateFile, entryName);
+
+						FileUtil.writeFileFromStream(tempFile, in);
+
+						try (ZipFile tempZipFile = new ZipFile(tempFile)) {
+							Enumeration<? extends ZipEntry> tempEntries = tempZipFile.entries();
+
+							while (tempEntries.hasMoreElements()) {
+								ZipEntry tempEntry = tempEntries.nextElement();
+
+								String tempEntryName = tempEntry.getName();
+
+								if (tempEntryName.equals("META-INF/MANIFEST.MF")) {
+									try (InputStream manifestInput = tempZipFile.getInputStream(tempEntry)) {
+										List<String> lines = IOUtils.readLines(manifestInput);
+
+										for (String line : lines) {
+											String liferayVersionString = "Liferay-Versions:";
+
+											if (line.startsWith(liferayVersionString)) {
+												String versionRangeValue = line.substring(
+													liferayVersionString.length());
+
+												versionRange = new VersionRange(versionRangeValue);
+
+												_projectTemplateVersionRangeMap.put(projectTemplateName, versionRange);
+
+												break;
+											}
+										}
+									}
+
+									break;
+								}
+							}
+						}
+
+						tempFile.delete();
+					}
+
+					break;
+				}
+			}
+		}
+		catch (IOException ioe) {
+		}
+
+		return versionRange;
+	}
+
+	private static Map<String, VersionRange> _projectTemplateVersionRangeMap = new HashMap<>();
+
+	private FilteredListener<PropertyContentEvent> _listener;
 
 }
