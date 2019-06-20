@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -208,7 +209,9 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 	}
 
 	protected boolean isProjectValid(IProject project) {
-		if (ProjectUtil.isHookProject(project) || ProjectUtil.isPortletProject(project)) {
+		IFile liferayHookXml = project.getFile("src/main/webapp/WEB-INF/liferay-hook.xml");
+
+		if (ProjectUtil.isHookProject(project) || ProjectUtil.isPortletProject(project) || liferayHookXml.exists()) {
 			return true;
 		}
 

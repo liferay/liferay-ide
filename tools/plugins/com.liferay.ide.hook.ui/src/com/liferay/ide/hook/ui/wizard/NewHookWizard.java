@@ -153,7 +153,7 @@ public class NewHookWizard extends DataModelWizard implements INewHookDataModelP
 		getDataModel();
 		ValidProjectChecker checker = new ValidProjectChecker(ID);
 
-		checker.checkValidProjectTypes();
+		checker.checkValidHookProjectTypes();
 	}
 
 	@Override

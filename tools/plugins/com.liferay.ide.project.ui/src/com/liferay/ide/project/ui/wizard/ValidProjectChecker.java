@@ -14,15 +14,19 @@
 
 package com.liferay.ide.project.ui.wizard;
 
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.action.NewPluginProjectDropDownAction;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -40,6 +44,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 /**
  * @author Cindy Li
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 public class ValidProjectChecker {
 
@@ -47,6 +52,72 @@ public class ValidProjectChecker {
 		this.wizardId = wizardId;
 
 		init();
+	}
+
+	public void checkValidHookProjectTypes() {
+		IProject[] projects = CoreUtil.getAllProjects();
+		boolean hasValidProjectTypes = false;
+
+		for (IProject project : projects) {
+			IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
+
+			if (bundleProject != null) {
+				IFile liferayHookXml = project.getFile("src/main/webapp/WEB-INF/liferay-hook.xml");
+
+				if (liferayHookXml.exists()) {
+					hasValidProjectTypes = true;
+
+					break;
+				}
+			}
+
+			if (ProjectUtil.isLiferayFacetedProject(project)) {
+				IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
+
+				Set<IProjectFacetVersion> facets = facetedProject.getProjectFacets();
+
+				if ((validProjectTypes != null) && (facets != null)) {
+					String[] validTypes = validProjectTypes.split(StringPool.COMMA);
+
+					for (String validProjectType : validTypes) {
+						for (IProjectFacetVersion facet : facets) {
+							IProjectFacet projectFacet = facet.getProjectFacet();
+
+							String id = projectFacet.getId();
+
+							if (id.startsWith("liferay.") && id.equals("liferay." + validProjectType)) {
+								hasValidProjectTypes = true;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if (!hasValidProjectTypes) {
+			Shell activeShell = UIUtil.getActiveShell();
+
+			Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
+				activeShell, NLS.bind(Msgs.newElement, wizardName),
+				NLS.bind(Msgs.noSuitableLiferayProjects, wizardName));
+
+			if (openNewLiferayProjectWizard) {
+				Action defaultAction = null;
+
+				if (LiferayWorkspaceUtil.hasWorkspace()) {
+					defaultAction = NewPluginProjectDropDownAction.getDefaultAction();
+				}
+				else {
+					defaultAction = NewPluginProjectDropDownAction.getPluginProjectAction();
+				}
+
+				if (defaultAction != null) {
+					defaultAction.run();
+
+					checkValidProjectTypes();
+				}
+			}
+		}
 	}
 
 	public void checkValidProjectTypes() {

@@ -17,11 +17,18 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.util.FileUtil;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 
 /**
  * @author Andy Wu
@@ -71,6 +78,32 @@ public class FacetedGradleBundleProject extends LiferayGradleProject implements 
 
 	@Override
 	public IPath getLibraryPath(String filename) {
+		IJavaProject javaProject = JavaCore.create(getProject());
+
+		try {
+			Optional<IPath> option = Stream.of(
+				javaProject.getResolvedClasspath(true)
+			).map(
+				IClasspathEntry::getPath
+			).filter(
+				path -> {
+					String lastSegment = path.lastSegment();
+
+					if (lastSegment.startsWith(filename) && lastSegment.endsWith(".jar")) {
+						return true;
+					}
+
+					return false;
+				}
+			).findFirst();
+
+			if (option.isPresent()) {
+				return option.get();
+			}
+		}
+		catch (JavaModelException jme) {
+		}
+
 		return null;
 	}
 

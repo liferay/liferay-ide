@@ -15,6 +15,7 @@
 package com.liferay.ide.hook.core.operation;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -41,7 +42,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jem.workbench.utility.JemProjectUtilities;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.osgi.util.NLS;
@@ -430,6 +430,15 @@ public class NewHookDataModelProvider
 				return null;
 			}
 		}
+		else {
+			ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
+
+			IFolder[] sourceFolders = liferayProject.getSourceFolders();
+
+			if (ListUtil.isNotEmpty(sourceFolders)) {
+				return sourceFolders[0];
+			}
+		}
 
 		return null;
 	}
@@ -446,7 +455,7 @@ public class NewHookDataModelProvider
 		IProject project = getTargetProject();
 
 		if (project != null) {
-			IJavaProject aJavaProject = JemProjectUtilities.getJavaProject(project);
+			IJavaProject aJavaProject = JavaCore.create(project);
 
 			// Return the source folder for the java project of the selected
 			// project
@@ -456,6 +465,17 @@ public class NewHookDataModelProvider
 
 				if (sourcefolder != null) {
 					return aJavaProject.getPackageFragmentRoot(sourcefolder);
+				}
+				else {
+					ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
+
+					IFolder[] sourceFolders = liferayProject.getSourceFolders();
+
+					if (ListUtil.isNotEmpty(sourceFolders)) {
+						sourcefolder = sourceFolders[0];
+
+						return aJavaProject.getPackageFragmentRoot(sourcefolder);
+					}
 				}
 			}
 		}
