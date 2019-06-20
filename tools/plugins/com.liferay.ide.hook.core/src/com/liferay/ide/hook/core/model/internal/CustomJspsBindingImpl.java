@@ -18,6 +18,7 @@ import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.model.CustomJsp;
 import com.liferay.ide.hook.core.util.HookUtil;
 
@@ -80,7 +81,12 @@ public class CustomJspsBindingImpl extends HookListBindingImpl {
 		if (type.equals(CustomJsp.TYPE)) {
 			retval = new ObjectValue<>();
 
-			_customJsps.add(retval);
+			if (_customJsps != null) {
+				_customJsps.add(retval);
+			}
+			else {
+				HookCore.logError("Could not find Liferay Portal Home.", null);
+			}
 		}
 
 		return retval;

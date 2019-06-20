@@ -21,15 +21,20 @@ import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.Event;
 import com.liferay.ide.core.EventListener;
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.IResourceBundleProject;
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.PortalBundle;
 
 import java.io.File;
 import java.io.InputStream;
@@ -87,6 +92,28 @@ public class LiferayGradleProject
 			final IProjectBuilder projectBuilder = new GradleProjectBuilder(getProject());
 
 			return adapterType.cast(projectBuilder);
+		}
+
+		if (ILiferayPortal.class.equals(adapterType)) {
+			if (LiferayWorkspaceUtil.inLiferayWorkspace(getProject())) {
+				IWorkspaceProject workspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
+				String liferayHome = workspaceProject.getLiferayHome();
+
+				IProject project = workspaceProject.getProject();
+
+				IFolder liferayHomeFolder = project.getFolder(liferayHome);
+
+				if (liferayHomeFolder.exists()) {
+					IPath liferayHomeLocation = liferayHomeFolder.getLocation();
+
+					PortalBundle portalBundle = LiferayServerCore.newPortalBundle(liferayHomeLocation);
+
+					if (portalBundle != null) {
+						return adapterType.cast(portalBundle);
+					}
+				}
+			}
 		}
 
 		return null;
