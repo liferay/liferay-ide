@@ -86,6 +86,10 @@ public class ImportExistingPluginsSDKCommand implements UpgradeCommand {
 			}
 		}
 
+		if (rootProjectPath == null) {
+			return Status.CANCEL_STATUS;
+		}
+
 		upgradeContext.put("currentProjectLocation", rootProjectPath.toString());
 
 		IStatus status = _projectImporter.canImport(rootProjectPath);
