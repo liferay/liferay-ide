@@ -73,7 +73,7 @@ public class BaseProjectWizard<T extends Element>
 			final int messageType = wizardPage.getMessageType();
 
 			if ((messageType == IMessageProvider.ERROR) && !CoreUtil.isNullOrEmpty(message)) {
-				wizardPage.setMessage("Please enter a project name.", SapphireWizardPage.NONE);
+				wizardPage.setMessage(getFirstErrorMessage(), SapphireWizardPage.NONE);
 				_firstErrorMessageRemoved = true;
 			}
 		}
@@ -123,6 +123,10 @@ public class BaseProjectWizard<T extends Element>
 				}
 			}
 		}
+	}
+
+	protected String getFirstErrorMessage() {
+		return "Please enter a project name.";
 	}
 
 	protected void openLiferayPerspective(IProject newProject) {
