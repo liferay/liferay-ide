@@ -40,6 +40,11 @@ public class ImportLiferayWorkspaceWizard extends BaseProjectWizard<ImportLifera
 	}
 
 	@Override
+	protected String getFirstErrorMessage() {
+		return "Please select the workspace location.";
+	}
+
+	@Override
 	protected void performPostFinish() {
 		super.performPostFinish();
 
