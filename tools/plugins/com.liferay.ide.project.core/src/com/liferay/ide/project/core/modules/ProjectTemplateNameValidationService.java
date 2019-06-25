@@ -26,6 +26,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.nio.charset.Charset;
+
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -71,10 +73,6 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		VersionRange versionRange = _projectTemplateVersionRangeMap.get(projectTemplateName);
 
-		if (versionRange == null) {
-			versionRange = _getSupportedVersionRange(projectTemplateName);
-		}
-
 		if (versionRange != null) {
 			boolean include = versionRange.includes(new Version(liferayVersion));
 
@@ -106,11 +104,11 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
 
 		SapphireUtil.attachListener(op.property(NewLiferayModuleProjectOp.PROP_LIFERAY_VERSION), _listener);
+
+		_loadSupportedVersionRanges();
 	}
 
-	private VersionRange _getSupportedVersionRange(String projectTemplateName) {
-		VersionRange versionRange = null;
-
+	private void _loadSupportedVersionRanges() {
 		File bladeJar = null;
 
 		try {
@@ -119,74 +117,70 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 		catch (BladeCLIException bclie) {
 		}
 
-		if (bladeJar == null) {
-			return versionRange;
-		}
+		if (bladeJar != null) {
+			try (ZipFile zipFile = new ZipFile(bladeJar)) {
+				Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-		try (ZipFile zipFile = new ZipFile(bladeJar)) {
-			Enumeration<? extends ZipEntry> entries = zipFile.entries();
+				while (entries.hasMoreElements()) {
+					ZipEntry entry = entries.nextElement();
 
-			while (entries.hasMoreElements()) {
-				ZipEntry entry = entries.nextElement();
+					String entryName = entry.getName();
 
-				String entryName = entry.getName();
+					if (entryName.endsWith(".jar") && entryName.startsWith("com.liferay.project.templates.")) {
+						try (InputStream in = zipFile.getInputStream(entry)) {
+							ProjectCore projectCore = ProjectCore.getDefault();
 
-				if (entryName.endsWith(".jar") &&
-					entryName.startsWith("com.liferay.project.templates." + projectTemplateName)) {
+							File stateFile = FileUtil.getFile(projectCore.getStateLocation());
 
-					try (InputStream in = zipFile.getInputStream(entry)) {
-						ProjectCore projectCore = ProjectCore.getDefault();
+							File tempFile = new File(stateFile, entryName);
 
-						File stateFile = FileUtil.getFile(projectCore.getStateLocation());
+							FileUtil.writeFileFromStream(tempFile, in);
 
-						File tempFile = new File(stateFile, entryName);
+							try (ZipFile tempZipFile = new ZipFile(tempFile)) {
+								Enumeration<? extends ZipEntry> tempEntries = tempZipFile.entries();
 
-						FileUtil.writeFileFromStream(tempFile, in);
+								while (tempEntries.hasMoreElements()) {
+									ZipEntry tempEntry = tempEntries.nextElement();
 
-						try (ZipFile tempZipFile = new ZipFile(tempFile)) {
-							Enumeration<? extends ZipEntry> tempEntries = tempZipFile.entries();
+									String tempEntryName = tempEntry.getName();
 
-							while (tempEntries.hasMoreElements()) {
-								ZipEntry tempEntry = tempEntries.nextElement();
+									if (tempEntryName.equals("META-INF/MANIFEST.MF")) {
+										try (InputStream manifestInput = tempZipFile.getInputStream(tempEntry)) {
+											List<String> lines = IOUtils.readLines(
+												manifestInput, Charset.defaultCharset());
 
-								String tempEntryName = tempEntry.getName();
+											for (String line : lines) {
+												String liferayVersionString = "Liferay-Versions:";
 
-								if (tempEntryName.equals("META-INF/MANIFEST.MF")) {
-									try (InputStream manifestInput = tempZipFile.getInputStream(tempEntry)) {
-										List<String> lines = IOUtils.readLines(manifestInput);
+												if (line.startsWith(liferayVersionString)) {
+													String versionRangeValue = line.substring(
+														liferayVersionString.length());
 
-										for (String line : lines) {
-											String liferayVersionString = "Liferay-Versions:";
+													String projectTemplateName = entryName.substring(
+														"com.liferay.project.templates.".length(),
+														entryName.indexOf('-'));
 
-											if (line.startsWith(liferayVersionString)) {
-												String versionRangeValue = line.substring(
-													liferayVersionString.length());
+													_projectTemplateVersionRangeMap.put(
+														projectTemplateName, new VersionRange(versionRangeValue));
 
-												versionRange = new VersionRange(versionRangeValue);
-
-												_projectTemplateVersionRangeMap.put(projectTemplateName, versionRange);
-
-												break;
+													break;
+												}
 											}
 										}
-									}
 
-									break;
+										break;
+									}
 								}
 							}
+
+							tempFile.delete();
 						}
-
-						tempFile.delete();
 					}
-
-					break;
 				}
 			}
+			catch (IOException ioe) {
+			}
 		}
-		catch (IOException ioe) {
-		}
-
-		return versionRange;
 	}
 
 	private static Map<String, VersionRange> _projectTemplateVersionRangeMap = new HashMap<>();
