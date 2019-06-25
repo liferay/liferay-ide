@@ -124,6 +124,7 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp {
 	@Label(standard = "Project Template Name")
 	@Listeners(ModuleProjectNameListener.class)
 	@Service(impl = ProjectTemplateNamePossibleValuesService.class)
+	@Service(impl = ProjectTemplateNameValidationService.class)
 	public ValueProperty PROP_PROJECT_TEMPLATE_NAME = new ValueProperty(TYPE, "ProjectTemplateName");
 
 	@Label(standard = "Properties")
