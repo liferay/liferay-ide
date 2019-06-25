@@ -26,8 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import java.nio.charset.Charset;
-
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -146,8 +144,7 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 									if (tempEntryName.equals("META-INF/MANIFEST.MF")) {
 										try (InputStream manifestInput = tempZipFile.getInputStream(tempEntry)) {
-											List<String> lines = IOUtils.readLines(
-												manifestInput, Charset.defaultCharset());
+											List<String> lines = IOUtils.readLines(manifestInput);
 
 											for (String line : lines) {
 												String liferayVersionString = "Liferay-Versions:";
