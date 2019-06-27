@@ -91,7 +91,7 @@
             <initial-focus>PropertyKeys</initial-focus>
             <margin-right>10</margin-right>
             <margin-left>0</margin-left>
-            <visible-when>${ProjectTemplateName != 'theme-contributor' &amp;&amp; ProjectTemplateName != 'theme'  &amp;&amp;  ProjectTemplateName != 'service-builder'}</visible-when>
+            <visible-when>${ProjectTemplateName != 'theme-contributor' &amp;&amp; ProjectTemplateName != 'theme'  &amp;&amp;  ProjectTemplateName != 'service-builder'  &amp;&amp;  ProjectTemplateName != 'war-mvc-portlet'  &amp;&amp;  ProjectTemplateName != 'layout-template'  &amp;&amp;  ProjectTemplateName != 'war-core-ext'}</visible-when>
         </page>
         <page>
             <id>LiferayPortletServiceBuilderModuleSettingWizardPage</id>
