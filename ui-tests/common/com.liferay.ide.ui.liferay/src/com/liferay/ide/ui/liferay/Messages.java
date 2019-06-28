@@ -239,6 +239,9 @@ public interface Messages {
 	public static final String SPECIFY_PORTLET_DEPLOYMENT_DESCRIPTOR_DETAILS =
 		"Specify portlet deployment descriptor details.";
 
+	public static final String TARGET_VERSION_GREATER_THAN_CURRENT_VERSION =
+		"Target version must be greater than current version.";
+
 	public static final String TEMPLATE_FILE_ALREDAY_EXIST_OVERWRITTEN =
 		"Template file already exists and will be overwritten.";
 

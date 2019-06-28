@@ -16,9 +16,7 @@ package com.liferay.ide.functional.upgrade.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.liferay.support.upgrade.LiferayUpgradePlanSupport;
 
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -26,9 +24,6 @@ import org.junit.Test;
  * @author Lily Li
  */
 public class UpgradePlannerTests extends SwtbotBase {
-
-	@ClassRule
-	public static LiferayUpgradePlanSupport upgradePlanner = new LiferayUpgradePlanSupport(bot);
 
 	@Test
 	public void testSetUpLiferayWorkspace() {
