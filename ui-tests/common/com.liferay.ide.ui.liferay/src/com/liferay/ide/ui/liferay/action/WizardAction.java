@@ -889,6 +889,12 @@ public class WizardAction extends UIAction {
 			_newLiferayWorkspaceWizard.selectIndexSources();
 		}
 
+		public void prepareGradleWithIndexSources(String projectName, String version) {
+			_prepare(projectName, GRADLE, version);
+
+			_newLiferayWorkspaceWizard.selectIndexSources();
+		}
+
 		public void prepareMaven(String projectName) {
 			_prepare(projectName, MAVEN);
 		}

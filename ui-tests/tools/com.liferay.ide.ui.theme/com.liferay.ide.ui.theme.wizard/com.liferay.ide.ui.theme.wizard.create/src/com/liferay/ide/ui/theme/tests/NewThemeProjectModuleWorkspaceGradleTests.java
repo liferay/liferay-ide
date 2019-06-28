@@ -16,7 +16,7 @@ package com.liferay.ide.ui.theme.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceGradleSupport;
+import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceGradle71Support;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -30,7 +30,7 @@ import org.junit.Test;
 public class NewThemeProjectModuleWorkspaceGradleTests extends SwtbotBase {
 
 	@ClassRule
-	public static LiferayWorkspaceGradleSupport liferayWorkspace = new LiferayWorkspaceGradleSupport(bot);
+	public static LiferayWorkspaceGradle71Support liferayWorkspace = new LiferayWorkspaceGradle71Support(bot);
 
 	@Test
 	public void createTheme() {

@@ -34,7 +34,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 	public void checkDependenciesVersionForExt() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(project.getName());
+		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(project.getName(), "7.1");
 
 		wizardAction.finish();
 
