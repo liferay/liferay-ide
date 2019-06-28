@@ -21,9 +21,9 @@ import org.junit.Assert;
 /**
  * @author Terry Jia
  */
-public class LiferayWorkspaceGradleSupport extends LiferayWorkspaceSupport {
+public class LiferayWorkspaceGradle71Support extends LiferayWorkspaceSupport {
 
-	public LiferayWorkspaceGradleSupport(SWTWorkbenchBot bot) {
+	public LiferayWorkspaceGradle71Support(SWTWorkbenchBot bot) {
 		super(bot);
 	}
 
@@ -41,7 +41,7 @@ public class LiferayWorkspaceGradleSupport extends LiferayWorkspaceSupport {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(getName());
+		wizardAction.newLiferayWorkspace.prepareGradle(getName(), "7.1");
 
 		wizardAction.finish();
 

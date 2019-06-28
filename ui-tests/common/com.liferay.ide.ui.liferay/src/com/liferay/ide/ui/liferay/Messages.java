@@ -61,6 +61,9 @@ public interface Messages {
 
 	public static final String CREATE_A_VAADIN_PORTLET_APPLICATION_CLASS = "Create a Vaadin portlet application class.";
 
+	public static final String CREATE_AND_START_A_NEW_UPGRADE_PLAN =
+		"Create and start a new Upgrade Plan. Any existing plan will be replaced.";
+
 	public static final String CREATE_NEW_PROJECT_AS_LIFERAY_PLUGIN =
 		"Create a new project configured as a Liferay plugin";
 
@@ -236,6 +239,9 @@ public interface Messages {
 	public static final String SPECIFY_PORTLET_DEPLOYMENT_DESCRIPTOR_DETAILS =
 		"Specify portlet deployment descriptor details.";
 
+	public static final String TARGET_VERSION_GREATER_THAN_CURRENT_VERSION =
+		"Target version must be greater than current version.";
+
 	public static final String TEMPLATE_FILE_ALREDAY_EXIST_OVERWRITTEN =
 		"Template file already exists and will be overwritten.";
 
@@ -269,6 +275,8 @@ public interface Messages {
 		"Thumbnail file already exists and will be overwritten.";
 
 	public static final String THUMBNAIL_FILE_NAME_IS_INVALID = "Thumbnail file name is invalid.";
+
+	public static final String UPGRADE_PLAN_OUTLINE_MUST_BE_SPECIFIED = "Upgrade plan outline must be specified";
 
 	public static final String VALIDATION_SERVICE_WRAPPER_MESSAGE = "Service Name must be specified";
 

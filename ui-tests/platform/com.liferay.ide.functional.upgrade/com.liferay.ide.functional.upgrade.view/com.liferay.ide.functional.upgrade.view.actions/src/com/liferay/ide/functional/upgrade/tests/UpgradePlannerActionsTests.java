@@ -16,10 +16,8 @@ package com.liferay.ide.functional.upgrade.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.liferay.support.upgrade.LiferayUpgradePlanSupport;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -29,14 +27,11 @@ import org.junit.Test;
  */
 public class UpgradePlannerActionsTests extends SwtbotBase {
 
-	@ClassRule
-	public static LiferayUpgradePlanSupport upgradePlanner = new LiferayUpgradePlanSupport(bot);
-
 	@Test
 	public void expandAndcollapse() {
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare(project.getName(), UPGRADE_CODE_OUTLINE, "6.2", "7.1");
+		wizardAction.newUpgradePlan.prepare(project.getName(), UPGRADING_CODE_TO_PRODUCT_VER, "6.2", "7.1");
 
 		wizardAction.finish();
 
@@ -55,7 +50,7 @@ public class UpgradePlannerActionsTests extends SwtbotBase {
 	public void restartUpgradePlan() {
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		wizardAction.newUpgradePlan.prepare(project.getName(), UPGRADE_CODE_OUTLINE, "6.2", "7.1");
+		wizardAction.newUpgradePlan.prepare(project.getName(), UPGRADING_CODE_TO_PRODUCT_VER, "6.2", "7.1");
 
 		wizardAction.finish();
 
