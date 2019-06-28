@@ -85,7 +85,7 @@
                      <show-label>true</show-label>
                      <child-property>Name</child-property>
                      <child-property>Value</child-property>
-                    <visible-when>${ProjectTemplateName != 'activator' &amp;&amp; ProjectTemplateName != 'api' &amp;&amp; ProjectTemplateName != 'theme-contributor' &amp;&amp; ProjectTemplateName != 'portlet-provider'  &amp;&amp; ProjectTemplateName != 'content-targeting-report' &amp;&amp; ProjectTemplateName != 'content-targeting-tracking-action'}</visible-when>
+                    <visible-when>${ProjectTemplateName != 'activator' &amp;&amp; ProjectTemplateName != 'api' &amp;&amp; ProjectTemplateName != 'theme-contributor' &amp;&amp; ProjectTemplateName != 'portlet-provider'  &amp;&amp; ProjectTemplateName != 'content-targeting-report' &amp;&amp; ProjectTemplateName != 'content-targeting-tracking-action' &amp;&amp; ProjectTemplateName != 'spring-mvc-portlet' &amp;&amp; ProjectTemplateName != 'war-hook'}</visible-when>
                  </property-editor>
             </content>
             <initial-focus>PropertyKeys</initial-focus>
