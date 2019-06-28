@@ -224,7 +224,7 @@ public interface LiferayPortlet extends Element {
 	@XmlBinding(path = "control-panel-entry-category")
 	public ValueProperty PROP_CONTROL_PANEL_ENTRY_CATEGORY = new ValueProperty(TYPE, "ControlPanelEntryCategory");
 
-	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.portlet.ControlPanelEntry")
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = {"com.liferay.portlet.ControlPanelEntry", "com.liferay.portal.kernel.portlet.ControlPanelEntry"})
 	@Label(standard = "Control Panel Entry Class")
 	@MustExist
 	@Reference(target = JavaType.class)
