@@ -20,6 +20,7 @@ import com.liferay.ide.gradle.core.tests.base.NewModuleGradleBase;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.sapphire.Value;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -60,6 +61,12 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 	public void createContentTargetingReport() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
+		Value<String> version = op.getLiferayVersion();
+
+		if ("7.2".equals(version.getDefaultContent())) {
+			return;
+		}
+
 		op.setProjectName(project.getName());
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("content-targeting-report");
@@ -73,6 +80,12 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 	public void createContentTargetingRule() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
+		Value<String> version = op.getLiferayVersion();
+
+		if ("7.2".equals(version.getDefaultContent())) {
+			return;
+		}
+
 		op.setProjectName(project.getName());
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("content-targeting-rule");
@@ -85,6 +98,12 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 	@Test
 	public void createContentTargetingTrackingAction() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		Value<String> version = op.getLiferayVersion();
+
+		if ("7.2".equals(version.getDefaultContent())) {
+			return;
+		}
 
 		op.setProjectName(project.getName());
 		op.setProjectProvider(provider());
@@ -111,6 +130,12 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 	@Test
 	public void createFormField() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		Value<String> version = op.getLiferayVersion();
+
+		if ("7.2".equals(version.getDefaultContent())) {
+			return;
+		}
 
 		op.setProjectName(project.getName());
 		op.setProjectProvider(provider());

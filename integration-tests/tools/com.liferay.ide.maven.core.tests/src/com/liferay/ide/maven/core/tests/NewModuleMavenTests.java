@@ -17,6 +17,8 @@ package com.liferay.ide.maven.core.tests;
 import com.liferay.ide.maven.core.tests.base.NewModuleMavenBase;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
+import org.eclipse.sapphire.Value;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -56,6 +58,12 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 	public void createContentTargetingReport() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
+		Value<String> version = op.getLiferayVersion();
+
+		if ("7.2".equals(version.getDefaultContent())) {
+			return;
+		}
+
 		op.setProjectName(project.getName());
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("content-targeting-report");
@@ -69,6 +77,12 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 	public void createContentTargetingRule() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
+		Value<String> version = op.getLiferayVersion();
+
+		if ("7.2".equals(version.getDefaultContent())) {
+			return;
+		}
+
 		op.setProjectName(project.getName());
 		op.setProjectProvider(provider());
 		op.setProjectTemplateName("content-targeting-rule");
@@ -81,6 +95,12 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 	@Test
 	public void createContentTargetingTrackingAction() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		Value<String> version = op.getLiferayVersion();
+
+		if ("7.2".equals(version.getDefaultContent())) {
+			return;
+		}
 
 		op.setProjectName(project.getName());
 		op.setProjectProvider(provider());
@@ -107,6 +127,12 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 	@Test
 	public void createFormField() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		Value<String> version = op.getLiferayVersion();
+
+		if ("7.2".equals(version.getDefaultContent())) {
+			return;
+		}
 
 		op.setProjectName(project.getName());
 		op.setProjectProvider(provider());
