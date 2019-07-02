@@ -332,14 +332,6 @@ public class PortalServerBehavior
 
 	private class LiferayServerListener implements IServerListener {
 
-		private PortalRuntime _runtime;
-
-		public LiferayServerListener() {
-			IRuntime runtime = getServer().getRuntime();
-
-			_runtime = (PortalRuntime)runtime.loadAdapter(PortalRuntime.class, new NullProgressMonitor());
-		}
-
 		private boolean _needHandle(ServerEvent event, int serverState) {
 			return ((event.getKind() & ServerEvent.SERVER_CHANGE) > 0) && (event.getState() == serverState);
 		}
@@ -372,7 +364,12 @@ public class PortalServerBehavior
 					);
 				}
 				else if (_needHandle(event, IServer.STATE_STARTED)) {
-					GogoBundleDeployer deployer = ServerUtil.createBundleDeployer(_runtime, getServer());
+					IRuntime runtime = getServer().getRuntime();
+
+					PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
+						PortalRuntime.class, new NullProgressMonitor());
+
+					GogoBundleDeployer deployer = ServerUtil.createBundleDeployer(portalRuntime, getServer());
 
 					Stream.of(
 						getServer().getModules()
