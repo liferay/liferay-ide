@@ -44,6 +44,10 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
+		validationAction.assertEquals(PLEASE_SELECT_THE_WORKSPACE_LOCATION, wizardAction.getValidationMsg(2));
+
+		wizardAction.importLiferayWorkspace.prepareLocation(project.getPath());
+
 		validationAction.assertEquals(A_LIFERAY_WORKSPACE_PROJECT_ALREADY_EXISTS, wizardAction.getValidationMsg(2));
 
 		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());

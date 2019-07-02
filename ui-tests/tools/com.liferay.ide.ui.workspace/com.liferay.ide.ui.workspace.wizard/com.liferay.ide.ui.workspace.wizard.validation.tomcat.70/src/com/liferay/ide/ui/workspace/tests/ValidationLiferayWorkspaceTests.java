@@ -85,7 +85,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 	public void checkInitialState() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		validationAction.assertEquals(PLEASE_ENTER_THE_WORKSPACE_NAME, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, wizardAction.getValidationMsg(2));
 
 		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newLiferayWorkspace.projectName());
 
