@@ -297,7 +297,7 @@ public interface LiferayPortlet extends Element {
 	@XmlBinding(path = "instanceable")
 	public ValueProperty PROP_INSTANCEABLE = new ValueProperty(TYPE, "Instanceable");
 
-	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.lar.PortletDataHandler")
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = {"com.liferay.portal.kernel.lar.PortletDataHandler", "com.liferay.exportimport.kernel.lar.PortletDataHandler"})
 	@Label(standard = "Portlet Data Handler Class")
 	@MustExist
 	@Reference(target = JavaType.class)
