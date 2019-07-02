@@ -372,7 +372,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "test", "tomcat-9.0.10"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "test", "tomcat-9.0.17"));
 
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
@@ -388,9 +388,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		String serverName = "Liferay Community Edition Portal 7.1.2 CE GA3";
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(serverName);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(0);
 
 		dialogAction.preferences.confirm();
 	}

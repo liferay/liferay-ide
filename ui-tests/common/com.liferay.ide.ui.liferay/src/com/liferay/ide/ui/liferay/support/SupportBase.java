@@ -19,6 +19,7 @@ import com.liferay.ide.ui.liferay.action.DialogAction;
 import com.liferay.ide.ui.liferay.action.EditorAction;
 import com.liferay.ide.ui.liferay.action.EnvAction;
 import com.liferay.ide.ui.liferay.action.JobAction;
+import com.liferay.ide.ui.liferay.action.ValidationAction;
 import com.liferay.ide.ui.liferay.action.ViewAction;
 import com.liferay.ide.ui.liferay.action.WizardAction;
 import com.liferay.ide.ui.liferay.page.LiferayIDE;
@@ -44,6 +45,7 @@ public class SupportBase extends ExternalResource {
 		editorAction = EditorAction.getInstance(bot);
 		wizardAction = WizardAction.getInstance(bot);
 		viewAction = ViewAction.getInstance(bot);
+		validationAction = ValidationAction.getInstance(bot);
 		jobAction = JobAction.getInstance(bot);
 		browserAction = BrowserAction.getInstance(bot);
 	}
@@ -107,6 +109,7 @@ public class SupportBase extends ExternalResource {
 	public EnvAction envAction;
 	public LiferayIDE ide;
 	public JobAction jobAction;
+	public ValidationAction validationAction;
 	public ViewAction viewAction;
 	public WizardAction wizardAction;
 

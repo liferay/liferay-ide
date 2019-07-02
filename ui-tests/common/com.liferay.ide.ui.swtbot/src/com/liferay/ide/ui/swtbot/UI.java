@@ -410,6 +410,8 @@ public interface UI {
 
 	public final String LIFERAY_FACES_ALLOY = "Liferay Faces Alloy";
 
+	public final String LIFERAY_GOGO_SHELL = "Liferay Gogo Shell";
+
 	public final String LIFERAY_HOOK_CONFIGURATION = "Liferay Hook Configuration";
 
 	public final String LIFERAY_IDE_STABLE_RELEASES = "Liferay IDE Stable releases";
@@ -562,6 +564,8 @@ public interface UI {
 	public final String OOMPH = "Oomph";
 
 	public final String OPEN = "Open";
+
+	public final String OPEN_GOGO_SHELL = "Open Gogo Shell";
 
 	public final String OPEN_LIFERAY_HOME_FOLDER = "Open Liferay Home Folder";
 

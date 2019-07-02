@@ -16,6 +16,7 @@ package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.swtbot.page.AbstractWidget;
+import com.liferay.ide.ui.swtbot.page.CTabItem;
 import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.page.Table;
@@ -87,6 +88,12 @@ public class ValidationAction extends UIAction {
 		for (int i = 0; i < items.length; i++) {
 			Assert.assertEquals(expects[i], items[i]);
 		}
+	}
+
+	public void assertGogoShellVisible() {
+		CTabItem gogoShell = new CTabItem(bot, LIFERAY_GOGO_SHELL);
+
+		Assert.assertTrue(gogoShell.isActive());
 	}
 
 	public void assertLengthEquals(Object[] a1, Object[] a2) {

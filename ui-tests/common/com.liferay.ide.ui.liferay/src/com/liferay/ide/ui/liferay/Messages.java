@@ -175,8 +175,6 @@ public interface Messages {
 
 	public static final String PLEASE_ENTER_A_PROJECT_NAME = "Please enter a project name.";
 
-	public static final String PLEASE_ENTER_THE_WORKSPACE_NAME = "Please enter the workspace project name.";
-
 	public static final String PLEASE_SELECT_AT_LEAST_ONE_PROJECT_TO_IMPORT =
 		"Please select at least one project to import.";
 

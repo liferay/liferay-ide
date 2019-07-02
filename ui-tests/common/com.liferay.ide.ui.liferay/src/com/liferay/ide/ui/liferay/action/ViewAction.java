@@ -24,6 +24,7 @@ import com.liferay.ide.ui.swtbot.eclipse.page.ProjectExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServersView;
 import com.liferay.ide.ui.swtbot.page.Perspective;
 import com.liferay.ide.ui.swtbot.page.Tree;
+import com.liferay.ide.ui.swtbot.page.View;
 
 import java.util.Arrays;
 
@@ -43,6 +44,12 @@ public class ViewAction extends UIAction {
 		}
 
 		return _viewAction;
+	}
+
+	public void closeView(String label) {
+		View view = new View(bot, label);
+
+		view.close();
 	}
 
 	public void showServersView() {
@@ -460,6 +467,10 @@ public class ViewAction extends UIAction {
 
 		public void openEditor(String serverLabel) {
 			_getServers().doubleClick(serverLabel);
+		}
+
+		public void openGogoShell(String serverLabel) {
+			_getServers().contextMenu(true, OPEN_GOGO_SHELL, serverLabel);
 		}
 
 		public void openLiferayPortalHome(String serverLabel) {
