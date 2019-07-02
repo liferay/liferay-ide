@@ -48,7 +48,10 @@ public interface CustomUserAttribute extends Element {
 
 	public void setCustomClass(String value);
 
-	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "com.liferay.portlet.CustomUserAttributes")
+	@JavaTypeConstraint(
+		kind = JavaTypeKind.CLASS,
+		type = {"com.liferay.portlet.CustomUserAttributes", "com.liferay.portal.kernel.portlet.CustomUserAttributes"}
+	)
 	@Label(standard = "Custom Class")
 	@MustExist
 	@Reference(target = JavaType.class)
