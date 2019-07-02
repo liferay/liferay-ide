@@ -17,8 +17,6 @@ package com.liferay.ide.portlet.ui.action;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
 
-import java.util.Arrays;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
@@ -45,6 +43,7 @@ import org.eclipse.ui.dialogs.SelectionDialog;
 
 /**
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class HierarchyBrowseActionHandler extends BrowseActionHandler {
 
@@ -63,12 +62,18 @@ public class HierarchyBrowseActionHandler extends BrowseActionHandler {
 
 			TypeSelectionExtension extension = null;
 
-			String javaType = _getClassReferenceType(property);
+			String[] javaTypes = _getClassReferenceType(property);
 
-			if (javaType != null) {
+			if (javaTypes.length > 0) {
 				IJavaProject javaProject = JavaCore.create(project);
 
-				scope = SearchEngine.createHierarchyScope(javaProject.findType(javaType));
+				for (String javaType : javaTypes) {
+					IType type = javaProject.findType(javaType);
+
+					if (type != null) {
+						scope = SearchEngine.createHierarchyScope(type);
+					}
+				}
 			}
 			else {
 				MessageDialog.openInformation(
@@ -111,16 +116,12 @@ public class HierarchyBrowseActionHandler extends BrowseActionHandler {
 		setId(ID);
 	}
 
-	private String _getClassReferenceType(Property property) {
+	private String[] _getClassReferenceType(Property property) {
 		PropertyDef propertyDef = property.definition();
 
 		JavaTypeConstraint typeConstraint = propertyDef.getAnnotation(JavaTypeConstraint.class);
 
-		String retval = Arrays.toString(typeConstraint.type());
-
-		retval = retval.replaceAll("[\\[\\]\\s,]", "");
-
-		return retval;
+		return typeConstraint.type();
 	}
 
 	private static class Msgs extends NLS {
