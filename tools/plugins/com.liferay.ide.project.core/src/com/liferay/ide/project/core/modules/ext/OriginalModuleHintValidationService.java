@@ -49,13 +49,7 @@ public class OriginalModuleHintValidationService extends ValidationService imple
 		URI uri = get(moduleExtOp.getSourceFileURI());
 
 		if (uri == null) {
-			if (moduleExtOp instanceof NewModuleExtFilesOp) {
-				return Status.createErrorStatus(
-					"Unable to identify original module in current context, did you refresh project with Gradle?");
-			}
-			else {
-				return Status.createWarningStatus("Unable to identify original module in current context.");
-			}
+			return Status.createWarningStatus("Unable to identify original module source in current context.");
 		}
 
 		return Status.createOkStatus();

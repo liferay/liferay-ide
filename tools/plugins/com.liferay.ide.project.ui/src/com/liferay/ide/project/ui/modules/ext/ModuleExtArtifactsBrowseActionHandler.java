@@ -24,8 +24,6 @@ import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.forms.BrowseActionHandler;
 import org.eclipse.sapphire.ui.forms.swt.FormComponentPresentation;
 
-import org.osgi.framework.Version;
-
 /**
  * @author Charles Wu
  */
@@ -53,13 +51,15 @@ public final class ModuleExtArtifactsBrowseActionHandler extends BrowseActionHan
 		if ((result != null) && (result.length == 1)) {
 			Artifact artifact = (Artifact)result[0];
 
-			Version version = new Version(artifact.getVersion());
+			String version = artifact.getVersion();
 
 			newModuleExtOp.setOriginalModuleVersion(version);
 
 			File source = artifact.getSource();
 
-			newModuleExtOp.setSourceFileURI(source.toURI());
+			if (source != null) {
+				newModuleExtOp.setSourceFileURI(source.toURI());
+			}
 
 			return artifact.getArtifactId();
 		}

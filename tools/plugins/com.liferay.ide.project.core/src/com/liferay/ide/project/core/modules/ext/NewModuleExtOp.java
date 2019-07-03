@@ -36,8 +36,6 @@ import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 
-import org.osgi.framework.Version;
-
 /**
  * @author Charles Wu
  */
@@ -51,7 +49,7 @@ public interface NewModuleExtOp extends BaseModuleOp {
 
 	public Value<String> getOriginalModuleName();
 
-	public Value<Version> getOriginalModuleVersion();
+	public Value<String> getOriginalModuleVersion();
 
 	public ElementList<OverrideSourceEntry> getOverrideFiles();
 
@@ -61,7 +59,7 @@ public interface NewModuleExtOp extends BaseModuleOp {
 
 	public void setOriginalModuleName(String value);
 
-	public void setOriginalModuleVersion(Version value);
+	public void setOriginalModuleVersion(String value);
 
 	public void setSourceFileURI(URI value);
 
@@ -82,7 +80,6 @@ public interface NewModuleExtOp extends BaseModuleOp {
 
 	@Enablement(expr = "${ TargetPlatformVersion == null }")
 	@Required
-	@Type(base = Version.class)
 	public ValueProperty PROP_ORIGINAL_MODULE_VERSION = new ValueProperty(TYPE, "OriginalModuleVersion");
 
 	@Label(standard = "Overridden files")
