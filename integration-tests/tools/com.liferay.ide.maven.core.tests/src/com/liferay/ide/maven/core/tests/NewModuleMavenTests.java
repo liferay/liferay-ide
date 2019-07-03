@@ -169,6 +169,7 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 		deleteProject(project.getName());
 	}
 
+	@Ignore("no portlet template since blade 3.7.0")
 	@Test
 	public void createPortlet() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -247,7 +248,7 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 		deleteProject(project.getName());
 	}
 
-	@Ignore("ignore as endless building")
+	@Ignore("ignore as endless building, no this template since blade 3.7.0")
 	@Test
 	public void createSoyPortlet() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();

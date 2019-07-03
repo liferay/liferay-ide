@@ -172,6 +172,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		deleteProject(project.getName());
 	}
 
+	@Ignore("no portlet template since blade 3.7.0")
 	@Test
 	public void createPortlet() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -320,7 +321,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		deleteProject(project.getName());
 	}
 
-	@Ignore("")
+	@Ignore("no this template since blade 3.7.0")
 	@Test
 	public void createSoyPortlet() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
