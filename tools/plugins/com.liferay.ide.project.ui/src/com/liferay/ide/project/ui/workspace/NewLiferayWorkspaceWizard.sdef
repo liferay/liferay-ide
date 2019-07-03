@@ -44,13 +44,16 @@
                     <property>LiferayVersion</property>
                 </property-editor>
                 <property-editor>
+                    <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
                     <property>EnableTargetPlatform</property>
                 </property-editor>
                 <property-editor>
+                    <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                     <property>TargetPlatform</property>
                 </property-editor>
                 <property-editor>
+                    <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
                     <property>IndexSources</property>
                 </property-editor>
                 <spacer></spacer>
