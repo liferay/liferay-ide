@@ -60,7 +60,7 @@ public class ModuleExtProjectNameListener
 
 			IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-			String extFolder = LiferayWorkspaceUtil.getModuleExtDir(liferayWorkspaceProject);
+			String extFolder = LiferayWorkspaceUtil.getExtDir(liferayWorkspaceProject);
 
 			if ((extFolder != null) && (liferayWorkspaceProject != null)) {
 				IPath path = liferayWorkspaceProject.getLocation();

@@ -115,12 +115,21 @@ public class ModuleProjectNameListener
 					if (FileUtil.exists(liferayWorkspaceProject)) {
 						IPath workspaceLocation = liferayWorkspaceProject.getLocation();
 
+						NewLiferayModuleProjectOp moduleProjectOp = op;
+
+						String projectTemplateName = get(moduleProjectOp.getProjectTemplateName());
+
 						if (themeProject) {
 							String[] warsNames = LiferayWorkspaceUtil.getWarsDirs(liferayWorkspaceProject);
 
 							// use the first configured wars fodle name
 
 							newLocationBase = PathBridge.create(workspaceLocation.append(warsNames[0]));
+						}
+						else if ("war-core-ext".equals(projectTemplateName)) {
+							String extName = LiferayWorkspaceUtil.getExtDir(liferayWorkspaceProject);
+
+							newLocationBase = PathBridge.create(workspaceLocation.append(extName));
 						}
 						else {
 							String folder = LiferayWorkspaceUtil.getModulesDir(liferayWorkspaceProject);
