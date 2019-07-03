@@ -14,6 +14,11 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.Event;
+import com.liferay.ide.core.EventListener;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.ListenerRegistry;
+import com.liferay.ide.core.workspace.ProjectDeletedEvent;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.HashMap;
@@ -28,10 +33,14 @@ import org.eclipse.wst.server.core.util.ProjectModuleFactoryDelegate;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public class BundleFactoryDelegate extends ProjectModuleFactoryDelegate {
+public class BundleFactoryDelegate extends ProjectModuleFactoryDelegate implements EventListener {
 
 	public BundleFactoryDelegate() {
+		ListenerRegistry listenerRegistry = LiferayCore.listenerRegistry();
+
+		listenerRegistry.addEventListener(this);
 	}
 
 	public IModule createSimpleModule(IProject project) {
@@ -51,6 +60,13 @@ public class BundleFactoryDelegate extends ProjectModuleFactoryDelegate {
 		_moduleDelegates.put(module, md);
 
 		return md;
+	}
+
+	@Override
+	public void onEvent(Event event) {
+		if (event instanceof ProjectDeletedEvent) {
+			clearCache(((ProjectDeletedEvent)event).getProject());
+		}
 	}
 
 	@Override
