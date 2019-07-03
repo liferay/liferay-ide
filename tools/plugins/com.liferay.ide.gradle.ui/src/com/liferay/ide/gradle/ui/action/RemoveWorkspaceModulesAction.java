@@ -23,7 +23,11 @@ import java.util.Iterator;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.actions.SelectionProviderAction;
+import org.eclipse.wst.server.core.IServer;
 
 /**
  * @author Terry Jia
@@ -36,9 +40,21 @@ public class RemoveWorkspaceModulesAction extends SelectionProviderAction {
 
 	@Override
 	public void run() {
-		Iterator<?> iterator = getStructuredSelection().iterator();
+		IStructuredSelection selection = getStructuredSelection();
+
+		if (selection instanceof TreeSelection) {
+			TreePath treePath = ((TreeSelection)selection).getPaths()[0];
+
+			IServer server = (IServer)treePath.getFirstSegment();
+
+			if (IServer.STATE_STARTED != server.getServerState()) {
+				return;
+			}
+		}
 
 		GogoBundleDeployer deployer = new GogoBundleDeployer();
+
+		Iterator<?> iterator = selection.iterator();
 
 		while (iterator.hasNext()) {
 			Object obj = iterator.next();
