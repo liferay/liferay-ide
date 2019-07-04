@@ -50,7 +50,7 @@
 	<modules>
 		<module>com.liferay.ide.ui.fragment</module>
 		<module>com.liferay.ide.ui.theme</module>
-		<module>com.liferay.ide.ui.hook</module>
+		<module>com.liferay.ide.functional.hook</module>
 		<module>com.liferay.ide.ui.jsf</module>
 		<module>com.liferay.ide.ui.layouttpl</module>
 		<module>com.liferay.ide.ui.module</module>

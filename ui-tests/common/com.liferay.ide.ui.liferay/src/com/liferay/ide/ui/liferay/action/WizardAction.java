@@ -169,6 +169,14 @@ public class WizardAction extends UIAction {
 		menu.click();
 	}
 
+	public void openNewLiferayHookConfigurationWizard() {
+		assertTitleStartBy(_getWizard(), ide.getShell());
+
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayHookConfiguration();
+
+		menu.click();
+	}
+
 	public void openNewLiferayJsfProjectWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
