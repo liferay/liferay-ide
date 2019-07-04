@@ -48,7 +48,7 @@
 	</repositories>
 
 	<modules>
-		<module>com.liferay.ide.ui.fragment</module>
+		<module>com.liferay.ide.functional.fragment</module>
 		<module>com.liferay.ide.ui.theme</module>
 		<module>com.liferay.ide.functional.hook</module>
 		<module>com.liferay.ide.ui.jsf</module>
