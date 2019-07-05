@@ -36,6 +36,8 @@ public interface PortalBundle extends ILiferayPortal {
 
 	public IPath[] getBundleDependencyJars();
 
+	public IPath getDefaultLogPath();
+
 	public String getDisplayName();
 
 	public String getHttpPort();
