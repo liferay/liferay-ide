@@ -5,7 +5,7 @@
 	<bundle id="com.liferay.ide.ui.swtbot" version="0.0.0" />
 	<bundle id="com.liferay.ide.functional.fragment.deploy.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.functional.fragment.wizard.base" version="0.0.0" />
-	<bundle id="com.liferay.ide.ui.module.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.module.deploy.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.ui.portlet.deploy.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.ui.server.deploy.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.ui.server.wizard.base" version="0.0.0" />

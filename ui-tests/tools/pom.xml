@@ -53,7 +53,7 @@
 		<module>com.liferay.ide.functional.hook</module>
 		<module>com.liferay.ide.functional.jsf</module>
 		<module>com.liferay.ide.functional.layouttpl</module>
-		<module>com.liferay.ide.ui.module</module>
+		<module>com.liferay.ide.functional.module</module>
 		<module>com.liferay.ide.ui.portlet</module>
 		<module>com.liferay.ide.ui.sdk.tests</module>
 		<module>com.liferay.ide.ui.server</module>
