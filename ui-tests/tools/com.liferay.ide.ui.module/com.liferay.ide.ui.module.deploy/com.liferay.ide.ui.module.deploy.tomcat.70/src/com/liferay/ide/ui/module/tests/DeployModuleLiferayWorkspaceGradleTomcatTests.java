@@ -21,15 +21,14 @@ import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceGradle71Supp
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
  * @author Terry Jia
+ * @author Ashley Yuan
  */
-@Ignore("ignore to wait IDE-4306")
 public class DeployModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
@@ -48,7 +47,7 @@ public class DeployModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		// need to use job instead
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		ide.sleep(5000);
 

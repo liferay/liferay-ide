@@ -334,7 +334,6 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createServiceWrapper() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -404,7 +403,6 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Ignore
 	@Test
 	public void createThemeContributor() {
 		wizardAction.openNewLiferayModuleWizard();

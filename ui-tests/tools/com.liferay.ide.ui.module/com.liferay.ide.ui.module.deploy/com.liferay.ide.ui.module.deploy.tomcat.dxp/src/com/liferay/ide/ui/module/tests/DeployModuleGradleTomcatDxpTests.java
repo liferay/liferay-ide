@@ -20,13 +20,13 @@ import com.liferay.ide.ui.liferay.util.RuleUtil;
 import com.liferay.ide.ui.module.deploy.base.DeployModuleGradleTomcat7xBase;
 
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
  * @author Terry Jia
  * @author Lily Li
+ * @author Ashley Yuan
  */
 public class DeployModuleGradleTomcatDxpTests extends DeployModuleGradleTomcat7xBase {
 
@@ -56,7 +56,6 @@ public class DeployModuleGradleTomcatDxpTests extends DeployModuleGradleTomcat7x
 		super.deployControlMenuEntry();
 	}
 
-	@Ignore("ignore as IDE-4188")
 	@Test
 	public void deployFormField() {
 		super.deployFormField();
@@ -87,13 +86,11 @@ public class DeployModuleGradleTomcatDxpTests extends DeployModuleGradleTomcat7x
 		super.deployRest();
 	}
 
-	@Ignore("ignore to wait target platform way")
 	@Test
 	public void deployService() {
 		super.deployService();
 	}
 
-	@Ignore("ignore to wait target platform way")
 	@Test
 	public void deployServiceWrapper() {
 		super.deployServiceWrapper();

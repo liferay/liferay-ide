@@ -204,12 +204,14 @@ public class ValidationComponentTests extends SwtbotBase {
 		validationAction.assertEquals(
 			packageName + "." + className + "Portlet" + ALREADY_EXISTS, wizardAction.getValidationMsg(2));
 
-		wizardAction.newLiferayComponent.prepareComponentClass(project.getName() + "portlet");
+		wizardAction.newLiferayComponent.prepareComponentClass(className + "portlet");
 
-		// wait for IDE-4059 fixed
-		// validationAction.assertEquals(packageName + "." + className + "Portlet" + ALREADY_EXISTS,
+		validationAction.assertEquals(CREATE_A_NEW_LIEFRAY_COMPONENT_CLASS, wizardAction.getValidationMsg(2));
 
-		//wizardAction.getValidationMsg(2));
+		wizardAction.newLiferayComponent.prepareComponentClass(className + "Portlet");
+
+		validationAction.assertEquals(
+			packageName + "." + className + "Portlet" + ALREADY_EXISTS, wizardAction.getValidationMsg(2));
 
 		wizardAction.cancel();
 
