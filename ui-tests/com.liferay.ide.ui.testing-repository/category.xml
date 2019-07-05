@@ -10,7 +10,7 @@
 	<bundle id="com.liferay.ide.ui.server.deploy.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.ui.server.wizard.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.functional.layouttpl.deploy.base" version="0.0.0" />
-	<bundle id="com.liferay.ide.ui.theme.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.theme.deploy.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.functional.jsf.deploy.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.ui.service.builder.deploy.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.functional.hook.deploy.base" version="0.0.0" />

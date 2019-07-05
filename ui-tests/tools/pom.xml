@@ -49,7 +49,7 @@
 
 	<modules>
 		<module>com.liferay.ide.functional.fragment</module>
-		<module>com.liferay.ide.ui.theme</module>
+		<module>com.liferay.ide.functional.theme</module>
 		<module>com.liferay.ide.functional.hook</module>
 		<module>com.liferay.ide.functional.jsf</module>
 		<module>com.liferay.ide.functional.layouttpl</module>
