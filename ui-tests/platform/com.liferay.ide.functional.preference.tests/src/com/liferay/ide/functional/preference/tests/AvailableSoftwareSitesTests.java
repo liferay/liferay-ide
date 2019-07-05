@@ -12,19 +12,25 @@
  * details.
  */
 
-package com.liferay.ide.ui.sdk.tests;
+package com.liferay.ide.functional.preference.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
 import org.junit.Test;
 
 /**
- * @author Terry Jia
+ * @author Joye Luo
  */
-public class NewPluginProjectWizardMavenTests extends SwtbotBase {
+public class AvailableSoftwareSitesTests extends SwtbotBase {
 
 	@Test
-	public void createSampleProject() {
+	public void checkLiferayIdeSite() {
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.preferences.openAvailableSoftwareSites();
+
+		validationAction.assertTableContains(
+			dialogAction.availableSoftwareSites.getSites(), LIFERAY_IDE_STABLE_RELEASES);
 	}
 
 }

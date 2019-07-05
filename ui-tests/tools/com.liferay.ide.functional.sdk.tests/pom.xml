@@ -15,17 +15,21 @@
  *
  *******************************************************************************/
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>com.liferay.ide.ui.tests</groupId>
-		<artifactId>platform-tests</artifactId>
+		<artifactId>tools-tests</artifactId>
 		<version>3.6.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.liferay.ide.ui.preference.tests</artifactId>
+	<artifactId>com.liferay.ide.functional.sdk.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 
-	<name>Liferay IDE UI Preference Tests</name>
+	<name>Liferay IDE Functional SDK Tests</name>
 </project>
