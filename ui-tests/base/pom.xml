@@ -39,7 +39,7 @@
 		<module>com.liferay.ide.functional.fragment.wizard.base</module>
 		<module>com.liferay.ide.functional.fragment.deploy.base</module>
 		<module>com.liferay.ide.functional.module.deploy.base</module>
-		<module>com.liferay.ide.ui.portlet.deploy.base</module>
+		<module>com.liferay.ide.functional.portlet.deploy.base</module>
 		<module>com.liferay.ide.ui.server.deploy.base</module>
 		<module>com.liferay.ide.ui.server.wizard.base</module>
 		<module>com.liferay.ide.functional.layouttpl.deploy.base</module>
