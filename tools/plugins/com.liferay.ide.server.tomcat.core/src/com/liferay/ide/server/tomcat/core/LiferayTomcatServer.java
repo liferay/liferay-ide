@@ -348,6 +348,10 @@ public class LiferayTomcatServer
 	public void saveConfiguration(IProgressMonitor monitor) throws CoreException {
 		IRuntime serverRuntime = getServer().getRuntime();
 
+		if (serverRuntime == null) {
+			return;
+		}
+
 		LiferayTomcatRuntime portalRuntime = (LiferayTomcatRuntime)serverRuntime.loadAdapter(
 			LiferayTomcatRuntime.class, monitor);
 
