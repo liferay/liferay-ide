@@ -662,29 +662,34 @@ public class PortalServerBehavior
 						portalext.createNewFile();
 					}
 
-					PortalPropertiesConfiguration config = new PortalPropertiesConfiguration();
+					if (FileUtil.exists(portalext) && portalext.canRead() && portalext.canWrite()) {
+						PortalPropertiesConfiguration config = new PortalPropertiesConfiguration();
 
-					try (InputStream in = Files.newInputStream(portalext.toPath())) {
-						config.load(in);
-					}
-
-					String[] p = config.getStringArray("include-and-override");
-
-					boolean existing = false;
-
-					for (String prop : p) {
-						if (prop.equals("portal-developer.properties")) {
-							existing = true;
-
-							break;
+						try (InputStream in = Files.newInputStream(portalext.toPath())) {
+							config.load(in);
 						}
-					}
 
-					if (!existing) {
-						config.addProperty("include-and-override", "portal-developer.properties");
-					}
+						String[] p = config.getStringArray("include-and-override");
 
-					config.save(portalext);
+						boolean existing = false;
+
+						for (String prop : p) {
+							if (prop.equals("portal-developer.properties")) {
+								existing = true;
+
+								break;
+							}
+						}
+
+						if (!existing) {
+							config.addProperty("include-and-override", "portal-developer.properties");
+						}
+
+						config.save(portalext);
+					}
+					else {
+						LiferayServerCore.logInfo("Can not save portal develop model to portal-ext properties file.");
+					}
 				}
 				catch (Exception e) {
 					LiferayServerCore.logError(e);
@@ -693,13 +698,18 @@ public class PortalServerBehavior
 			else if (FileUtil.exists(portalext)) {
 				String contents = FileUtil.readContents(portalext, true);
 
-				contents = contents.replace("include-and-override=portal-developer.properties", "");
+				if (portalext.canWrite()) {
+					contents = contents.replace("include-and-override=portal-developer.properties", "");
 
-				try {
-					FileUtils.write(portalext, contents);
+					try {
+						FileUtils.write(portalext, contents);
+					}
+					catch (IOException ioe) {
+						LiferayServerCore.logError(ioe);
+					}
 				}
-				catch (IOException ioe) {
-					LiferayServerCore.logError(ioe);
+				else {
+					LiferayServerCore.logInfo("Can not save portal default model to portal-ext properties file.");
 				}
 			}
 		}
