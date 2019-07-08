@@ -7,8 +7,8 @@
 	<bundle id="com.liferay.ide.functional.fragment.wizard.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.functional.module.deploy.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.functional.portlet.deploy.base" version="0.0.0" />
-	<bundle id="com.liferay.ide.ui.server.deploy.base" version="0.0.0" />
-	<bundle id="com.liferay.ide.ui.server.wizard.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.server.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.server.wizard.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.functional.layouttpl.deploy.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.functional.theme.deploy.base" version="0.0.0" />
 	<bundle id="com.liferay.ide.functional.jsf.deploy.base" version="0.0.0" />
