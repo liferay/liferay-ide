@@ -158,7 +158,7 @@ public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog im
 		boolean indexSources = LiferayWorkspaceUtil.getIndexSource(project);
 
 		if (get(newModuleExtOp.getTargetPlatformVersion()) == null) {
-			_customLabel.setText("No Target Plarform configuration detected in gradle.properties");
+			_customLabel.setText("No Target Platform configuration detected in gradle.properties");
 
 			return;
 		}
