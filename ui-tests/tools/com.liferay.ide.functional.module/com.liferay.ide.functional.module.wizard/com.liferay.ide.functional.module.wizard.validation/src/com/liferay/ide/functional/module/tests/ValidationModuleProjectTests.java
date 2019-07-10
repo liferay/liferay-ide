@@ -325,6 +325,40 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
+	@Test
+	public void validateTemplatesWithLiferayVersions() {
+		String projectName = "test";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		String[] versions = {"7.0", "7.2"};
+
+		for (String version : versions) {
+			wizardAction.newModule.prepareGradle(projectName, SOCIAL_BOOKMARK, version);
+
+			validationAction.assertEquals(
+				SPECIFIED_LIFERAY_VERSION_IS_INVAILD_MUST_BE_IN_RANGE_710_720, wizardAction.getValidationMsg(2));
+
+			validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
+		}
+
+		String[] templates = {
+			CONTENT_TARGETING_REPORT, CONTENT_TARGETING_RULE, CONTENT_TARGETING_TRACKING_ACTION, FORM_FIELD,
+			NPM_ANGULAR_PORTLET, NPM_REACT_PORTLET, NPM_VUEJS_PORTLET
+		};
+
+		for (String template : templates) {
+			wizardAction.newModule.prepareGradle(projectName, template, "7.2");
+
+			validationAction.assertEquals(
+				SPECIFIED_LIFERAY_VERSION_IS_INVAILD_MUST_BE_IN_RANGE_700_720, wizardAction.getValidationMsg(2));
+
+			validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
+		}
+
+		wizardAction.cancel();
+	}
+
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
 
