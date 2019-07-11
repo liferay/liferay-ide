@@ -61,6 +61,42 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 	}
 
 	@Test
+	public void checkEnableTargePlatform() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
+
+		validationAction.assertEnabledTrue(wizardAction.newLiferayWorkspace.enableTargetPlatform());
+
+		validationAction.assertCheckedTrue(wizardAction.newLiferayWorkspace.enableTargetPlatform());
+
+		validationAction.assertTextEquals("7.2.0", wizardAction.newLiferayWorkspace.getTargetPlatform());
+
+		validationAction.assertEnabledTrue(wizardAction.newLiferayWorkspace.indexSources());
+
+		validationAction.assertCheckedFalse(wizardAction.newLiferayWorkspace.indexSources());
+
+		wizardAction.newLiferayWorkspace.deselectEnableTargetPlatform();
+
+		validationAction.assertActiveFalse(wizardAction.newLiferayWorkspace.getTargetPlatform());
+
+		validationAction.assertActiveFalse(wizardAction.newLiferayWorkspace.indexSources());
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.openFile(project.getName(), "gradle.properties");
+
+		validationAction.assertDoesNotContains(
+			"liferay.workspace.target.platform.version = 7.2.0", editorAction.getContent());
+
+		validationAction.assertDoesNotContains("target.platform.index.sources = false", editorAction.getContent());
+
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
+	}
+
+	@Test
 	public void checkExsitingLiferayWorkspace() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -78,7 +114,26 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDeleteFromDisk(projectName);
+	}
+
+	@Test
+	public void checkIndexSources() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(project.getName());
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.openFile(project.getName(), "gradle.properties");
+
+		validationAction.assertContains("liferay.workspace.target.platform.version = 7.2.0", editorAction.getContent());
+
+		validationAction.assertContains("target.platform.index.sources = true", editorAction.getContent());
+
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Test
@@ -87,7 +142,15 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		validationAction.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, wizardAction.getValidationMsg(2));
 
+		validationAction.assertTextEquals("7.2", wizardAction.newLiferayWorkspace.liferayVersion());
+
+		validationAction.assertEnabledTrue(wizardAction.newLiferayWorkspace.getTargetPlatform());
+
+		validationAction.assertTextEquals("7.2.0", wizardAction.newLiferayWorkspace.getTargetPlatform());
+
 		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newLiferayWorkspace.projectName());
+
+		validationAction.assertCheckedFalse(wizardAction.newLiferayWorkspace.indexSources());
 
 		validationAction.assertCheckedTrue(wizardAction.newLiferayWorkspace.useDefaultLocation());
 

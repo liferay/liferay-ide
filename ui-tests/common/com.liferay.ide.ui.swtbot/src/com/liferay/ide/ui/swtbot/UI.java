@@ -269,6 +269,8 @@ public interface UI {
 
 	public final String EMAIL_ADDRESS = "Email address:";
 
+	public final String ENABLE_TARGET_PLATFORM = "Enable target platform";
+
 	public final String ENTRY_CATEGORY = "Entry Category:";
 
 	public final String ENTRY_CLASS = "Entry Class:";
