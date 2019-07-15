@@ -95,6 +95,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 		}
 		else if (source.equals(_nameField)) {
 			getRuntime().setName(_nameField.getText());
+
 			validate();
 		}
 	}
@@ -186,7 +187,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 
 		_updateFields();
 
-		_compositeInit = false;
+		_compositeInit = true;
 	}
 
 	protected void updateJREs() {
@@ -339,21 +340,16 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 	}
 
 	private String _formateRuntimeName(String runtimeName, int suffix) {
-		String name = null;
-
 		if (suffix != -1) {
-			name = NLS.bind(Msgs.defaultRuntimeName, new String[] {runtimeName, suffix + ""});
-		}
-		else {
-			name = NLS.bind(Msgs.defaultRuntimeName2, new String[] {runtimeName});
+			return NLS.bind(Msgs.defaultRuntimeNameWithSuffix, new String[] {runtimeName, String.valueOf(suffix)});
 		}
 
-		return name;
+		return NLS.bind(Msgs.defaultRuntimeName, new String[] {runtimeName});
 	}
 
-	private int _setRuntimeName(IRuntimeWorkingCopy runtime, int suffix) {
+	private void _setRuntimeName(IRuntimeWorkingCopy runtime, int suffix) {
 		if (runtime == null) {
-			return -1;
+			return;
 		}
 
 		IRuntimeType runtimeType = runtime.getRuntimeType();
@@ -362,25 +358,21 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 
 		PortalBundle portalBundle = portalRuntime.getPortalBundle();
 
-		String name = (portalBundle != null) ? portalBundle.getServerReleaseInfo() : runtimeType.getName();
+		String runtimeName = (portalBundle != null) ? portalBundle.getServerReleaseInfo() : runtimeType.getName();
 
 		if (portalBundle != null) {
 			if (suffix == -1) {
-				name = NLS.bind(Msgs.defaultRuntimeName2, name);
+				runtimeName = NLS.bind(Msgs.defaultRuntimeName, runtimeName);
 			}
 			else {
-				name = NLS.bind(Msgs.defaultRuntimeName, new String[] {name, suffix + ""});
+				runtimeName = NLS.bind(
+					Msgs.defaultRuntimeNameWithSuffix, new String[] {runtimeName, String.valueOf(suffix)});
 			}
-
-			name = _verifyRuntimeName(runtime, name, suffix);
-		}
-		else {
-			name = _verifyRuntimeName(runtime, name, suffix);
 		}
 
-		runtime.setName(name);
+		runtimeName = _verifyRuntimeName(runtime, runtimeName, suffix);
 
-		return suffix;
+		runtime.setName(runtimeName);
 	}
 
 	private void _updateFields() {
@@ -399,7 +391,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 			}
 		}
 
-		if (_compositeInit) {
+		if (!_compositeInit) {
 			return;
 		}
 
@@ -424,6 +416,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 
 			while (ServerPlugin.isNameInUse(runtime.getOriginal(), name)) {
 				suffix++;
+
 				name = _formateRuntimeName(runtimeName, suffix);
 			}
 		}
@@ -434,7 +427,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 		return name;
 	}
 
-	private boolean _compositeInit = true;
+	private boolean _compositeInit = false;
 	private Text _dirField;
 	private List<IVMInstall> _installedJREs;
 	private Button _jreButton;
@@ -450,7 +443,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 
 		public static String browse;
 		public static String defaultRuntimeName;
-		public static String defaultRuntimeName2;
+		public static String defaultRuntimeNameWithSuffix;
 		public static String defaultWorkbenchJRE;
 		public static String detectedPortalBundleType;
 		public static String installedJREs;
