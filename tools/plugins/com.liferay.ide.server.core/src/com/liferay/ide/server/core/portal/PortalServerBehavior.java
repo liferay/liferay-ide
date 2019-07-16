@@ -31,7 +31,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 
 import java.util.ArrayList;
@@ -647,6 +646,7 @@ public class PortalServerBehavior
 		return portalBundle.getRuntimeStartProgArgs();
 	}
 
+	@SuppressWarnings("deprecation")
 	private String[] _getRuntimeStartVMArguments() {
 		boolean launchSetting = _getPortalServer().getLaunchSettings();
 
@@ -703,7 +703,7 @@ public class PortalServerBehavior
 					contents = contents.replace("include-and-override=portal-developer.properties", "");
 
 					try {
-						FileUtils.write(portalext, contents, Charset.defaultCharset());
+						FileUtils.write(portalext, contents);
 					}
 					catch (IOException ioe) {
 						LiferayServerCore.logError(ioe);
