@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 
 import java.util.ArrayList;
@@ -688,7 +689,7 @@ public class PortalServerBehavior
 						config.save(portalext);
 					}
 					else {
-						LiferayServerCore.logInfo("Can not save portal develop model to portal-ext properties file.");
+						LiferayServerCore.logInfo("Can not write portal-ext.properties file.");
 					}
 				}
 				catch (Exception e) {
@@ -702,14 +703,14 @@ public class PortalServerBehavior
 					contents = contents.replace("include-and-override=portal-developer.properties", "");
 
 					try {
-						FileUtils.write(portalext, contents);
+						FileUtils.write(portalext, contents, Charset.defaultCharset());
 					}
 					catch (IOException ioe) {
 						LiferayServerCore.logError(ioe);
 					}
 				}
 				else {
-					LiferayServerCore.logInfo("Can not save portal default model to portal-ext properties file.");
+					LiferayServerCore.logInfo("Can not write portal-ext.properties file.");
 				}
 			}
 		}
