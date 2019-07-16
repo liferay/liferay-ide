@@ -743,7 +743,9 @@
             <mustExist>1</mustExist>
             <width>30</width>
             <ruleList>
-                <isFalse value="${clitools}"/>
+                <isTrue>
+                    <value>${clitools}</value>
+                </isTrue>
             </ruleList>
         </fileParameter>
         <choiceParameterGroup>
@@ -791,9 +793,6 @@
                     </optionList>
                 </choiceParameter>
             </parameterList>
-            <ruleList>
-                <isFalse value="${clitools}"/>
-            </ruleList>
         </choiceParameterGroup>
         <parameterGroup>
             <name>httpproxyinfo</name>
