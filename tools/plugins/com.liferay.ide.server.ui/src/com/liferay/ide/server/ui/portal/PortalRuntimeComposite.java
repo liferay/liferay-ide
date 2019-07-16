@@ -47,7 +47,9 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
+import org.eclipse.wst.server.core.internal.ServerPlugin;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 
 /**
@@ -55,6 +57,7 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
  * @author Simon Jiang
  * @author Andy Wu
  */
+@SuppressWarnings("restriction")
 public class PortalRuntimeComposite extends Composite implements ModifyListener {
 
 	public static void setFieldValue(Text field, String value) {
@@ -92,6 +95,8 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 		}
 		else if (source.equals(_nameField)) {
 			getRuntime().setName(_nameField.getText());
+
+			validate();
 		}
 	}
 
@@ -181,6 +186,8 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 		setFieldValue(_dirField, (location != null) ? location.toOSString() : StringPool.EMPTY);
 
 		_updateFields();
+
+		_compositeInit = true;
 	}
 
 	protected void updateJREs() {
@@ -332,16 +339,95 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 		return new GridData(GridData.FILL_BOTH);
 	}
 
+	private String _formateRuntimeName(String runtimeName, int suffix) {
+		if (suffix != -1) {
+			return NLS.bind(Msgs.defaultRuntimeNameWithSuffix, new String[] {runtimeName, String.valueOf(suffix)});
+		}
+
+		return NLS.bind(Msgs.defaultRuntimeName, new String[] {runtimeName});
+	}
+
+	private void _setRuntimeName(IRuntimeWorkingCopy runtime, int suffix) {
+		if (runtime == null) {
+			return;
+		}
+
+		IRuntimeType runtimeType = runtime.getRuntimeType();
+
+		PortalRuntime portalRuntime = getPortalRuntime();
+
+		PortalBundle portalBundle = portalRuntime.getPortalBundle();
+
+		String runtimeName = (portalBundle != null) ? portalBundle.getServerReleaseInfo() : runtimeType.getName();
+
+		if (portalBundle != null) {
+			if (suffix == -1) {
+				runtimeName = NLS.bind(Msgs.defaultRuntimeName, runtimeName);
+			}
+			else {
+				runtimeName = NLS.bind(
+					Msgs.defaultRuntimeNameWithSuffix, new String[] {runtimeName, String.valueOf(suffix)});
+			}
+		}
+
+		runtimeName = _verifyRuntimeName(runtime, runtimeName, suffix);
+
+		runtime.setName(runtimeName);
+	}
+
 	private void _updateFields() {
 		PortalRuntime portalRuntime = getPortalRuntime();
+
+		_setRuntimeName(getRuntime(), -1);
 
 		if (portalRuntime != null) {
 			PortalBundle portalBundle = portalRuntime.getPortalBundle();
 
-			setFieldValue(_typeField, (portalBundle != null) ? portalBundle.getDisplayName() : StringPool.BLANK);
+			if (portalBundle != null) {
+				setFieldValue(_typeField, portalBundle.getDisplayName());
+			}
+			else {
+				setFieldValue(_typeField, StringPool.BLANK);
+			}
 		}
+
+		if (!_compositeInit) {
+			return;
+		}
+
+		setFieldValue(_nameField, getRuntime().getName());
 	}
 
+	private String _verifyRuntimeName(IRuntimeWorkingCopy runtime, String runtimeName, int suffix) {
+		String name = null;
+
+		if (ServerPlugin.isNameInUse(runtime.getOriginal(), runtimeName)) {
+			if (suffix == -1) {
+
+				// If the no suffix name is in use, the next suffix to try is 2
+
+				suffix = 2;
+			}
+			else {
+				suffix++;
+			}
+
+			name = _formateRuntimeName(runtimeName, suffix);
+
+			while (ServerPlugin.isNameInUse(runtime.getOriginal(), name)) {
+				suffix++;
+
+				name = _formateRuntimeName(runtimeName, suffix);
+			}
+		}
+		else {
+			name = runtimeName;
+		}
+
+		return name;
+	}
+
+	private boolean _compositeInit = false;
 	private Text _dirField;
 	private List<IVMInstall> _installedJREs;
 	private Button _jreButton;
@@ -356,6 +442,8 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener 
 	private static class Msgs extends NLS {
 
 		public static String browse;
+		public static String defaultRuntimeName;
+		public static String defaultRuntimeNameWithSuffix;
 		public static String defaultWorkbenchJRE;
 		public static String detectedPortalBundleType;
 		public static String installedJREs;
