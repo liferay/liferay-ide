@@ -1,0 +1,5 @@
+..,".." is not an absolute path.,win32
+##,"##" is not an absolute path.,win32
+*,"*" is not a valid path,win32
+d,"d" is not an absolute path.,win32
+,Location must be specified.,win32

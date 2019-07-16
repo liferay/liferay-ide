@@ -571,6 +571,12 @@ public interface UI {
 
 	public final String OPEN_LIFERAY_PORTAL_HOME = "Open Liferay Portal Home";
 
+	public final String ORIGINAL_MODULE_NAME = "Original module name:";
+
+	public final String ORIGINAL_MODULE_NAMES = "Original Module Name";
+
+	public final String ORIGINAL_MODULE_VERSION = "Original module version:";
+
 	public final String OTHER = "Other...";
 
 	public final String OVERRIDDEN_FILES = "Overridden files:";

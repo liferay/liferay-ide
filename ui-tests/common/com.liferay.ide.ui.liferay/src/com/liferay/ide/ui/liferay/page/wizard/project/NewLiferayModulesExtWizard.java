@@ -14,6 +14,7 @@
 
 package com.liferay.ide.ui.liferay.page.wizard.project;
 
+import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
@@ -33,6 +34,14 @@ public class NewLiferayModulesExtWizard extends NewProjectWizard {
 
 	public ToolbarButtonWithTooltip getBrowseBtn() {
 		return new ToolbarButtonWithTooltip(getShell().bot(), BROWSE, 1);
+	}
+
+	public Text getOrigialModuleName() {
+		return new Text(getShell().bot(), ORIGINAL_MODULE_NAME);
+	}
+
+	public Text getOrigialModuleVersion() {
+		return new Text(getShell().bot(), ORIGINAL_MODULE_VERSION);
 	}
 
 }
