@@ -215,6 +215,26 @@ public class LiferayWorkspaceUtil {
 		return null;
 	}
 
+	public static String getExtDir(IProject project) {
+		String retval = null;
+
+		if (project != null) {
+			IPath projectLocation = project.getLocation();
+
+			if (projectLocation != null) {
+				retval = getGradleProperty(
+					projectLocation.toPortableString(), WorkspaceConstants.EXT_DIR_PROPERTY,
+					WorkspaceConstants.DEFAULT_EXT_DIR);
+			}
+		}
+
+		if (CoreUtil.empty(retval)) {
+			return WorkspaceConstants.DEFAULT_EXT_DIR;
+		}
+
+		return retval;
+	}
+
 	public static String getGradleProperty(String projectLocation, String key, String defaultValue) {
 		File gradleProperties = new File(projectLocation, "gradle.properties");
 
@@ -356,26 +376,6 @@ public class LiferayWorkspaceUtil {
 		}
 
 		return defaultValue;
-	}
-
-	public static String getModuleExtDir(IProject project) {
-		String retval = null;
-
-		if (project != null) {
-			IPath projectLocation = project.getLocation();
-
-			if (projectLocation != null) {
-				retval = getGradleProperty(
-					projectLocation.toPortableString(), WorkspaceConstants.EXT_DIR_PROPERTY,
-					WorkspaceConstants.DEFAULT_EXT_DIR);
-			}
-		}
-
-		if (CoreUtil.empty(retval)) {
-			return WorkspaceConstants.DEFAULT_EXT_DIR;
-		}
-
-		return retval;
 	}
 
 	public static String getModulesDir(IProject project) {
