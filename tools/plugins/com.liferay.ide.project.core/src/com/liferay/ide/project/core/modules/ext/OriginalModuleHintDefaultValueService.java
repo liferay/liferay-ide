@@ -23,8 +23,6 @@ import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 
-import org.osgi.framework.Version;
-
 /**
  * @author Charles Wu
  */
@@ -47,7 +45,7 @@ public class OriginalModuleHintDefaultValueService extends DerivedValueService i
 		NewModuleExtOp moduleExtOp = _op();
 
 		String name = get(moduleExtOp.getOriginalModuleName());
-		Version version = get(moduleExtOp.getOriginalModuleVersion());
+		String version = get(moduleExtOp.getOriginalModuleVersion());
 
 		if ((name != null) && (version != null)) {
 			return name + ":" + version;

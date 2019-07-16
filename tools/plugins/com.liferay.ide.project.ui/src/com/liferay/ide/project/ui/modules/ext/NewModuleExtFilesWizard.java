@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtFilesOp;
 
 import java.io.File;
@@ -38,8 +39,6 @@ import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
-
-import org.osgi.framework.Version;
 
 /**
  * @author Terry Jia
@@ -78,6 +77,12 @@ public class NewModuleExtFilesWizard
 
 				IProjectBuilder builder = extProject.adapt(IProjectBuilder.class);
 
+				if (builder == null) {
+					ProjectCore.logWarning("Please wait for synchronized jobs finish.");
+
+					return;
+				}
+
 				List<Artifact> dependencies = builder.getDependencies("originalModule");
 
 				if (!dependencies.isEmpty()) {
@@ -90,7 +95,7 @@ public class NewModuleExtFilesWizard
 
 						moduleExtFilesOp.setSourceFileURI(sourceFile.toURI());
 						moduleExtFilesOp.setOriginalModuleName(artifact.getArtifactId());
-						moduleExtFilesOp.setOriginalModuleVersion(new Version(artifact.getVersion()));
+						moduleExtFilesOp.setOriginalModuleVersion(artifact.getVersion());
 						moduleExtFilesOp.setProjectName(_initialProject.getName());
 
 						IPath projectLocation = _initialProject.getLocation();

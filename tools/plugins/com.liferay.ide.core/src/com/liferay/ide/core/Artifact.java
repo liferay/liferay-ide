@@ -110,7 +110,13 @@ public class Artifact {
 
 	@Override
 	public String toString() {
-		return _artifactId + ":" + _version;
+		String s = _groupId + ":" + _artifactId + ":" + _version;
+
+		if (_source == null) {
+			s = s + "(without source)";
+		}
+
+		return s;
 	}
 
 	private String _artifactId;

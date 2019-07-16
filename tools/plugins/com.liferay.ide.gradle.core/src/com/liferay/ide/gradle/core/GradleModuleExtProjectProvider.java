@@ -33,8 +33,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.sapphire.platform.PathBridge;
 
-import org.osgi.framework.Version;
-
 /**
  * @author Charles Wu
  * @author Simon Jiang
@@ -53,7 +51,7 @@ public class GradleModuleExtProjectProvider
 
 		String projectName = get(op.getProjectName());
 		String originalModuleName = get(op.getOriginalModuleName());
-		Version originalModuleVersion = get(op.getOriginalModuleVersion());
+		String originalModuleVersion = get(op.getOriginalModuleVersion());
 		String targetPlatform = get(op.getTargetPlatformVersion());
 
 		IPath location = PathBridge.create(get(op.getLocation()));
