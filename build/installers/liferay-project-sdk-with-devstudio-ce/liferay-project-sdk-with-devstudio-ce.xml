@@ -577,9 +577,6 @@
                     </optionList>
                 </choiceParameter>
             </parameterList>
-            <ruleList>
-                <isTrue value="${clitools}"/>
-            </ruleList>
         </choiceParameterGroup>
         <parameterGroup>
             <name>httpproxyinfo</name>
