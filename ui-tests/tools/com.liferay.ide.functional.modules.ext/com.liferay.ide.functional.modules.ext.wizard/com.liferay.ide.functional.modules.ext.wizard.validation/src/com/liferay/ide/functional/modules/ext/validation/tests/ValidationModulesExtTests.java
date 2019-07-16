@@ -29,6 +29,7 @@ import org.junit.Test;
 
 /**
  * @author Rui Wang
+ * @author Ashley Yuan
  */
 public class ValidationModulesExtTests extends SwtbotBase {
 
@@ -116,6 +117,39 @@ public class ValidationModulesExtTests extends SwtbotBase {
 			wizardAction.getValidationMsg(4));
 
 		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
+
+		wizardAction.cancel();
+
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
+	}
+
+	@Test
+	public void checkExtWithWorkspaceWithoutIndexSources() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayModulesExtWizard();
+
+		validationAction.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, wizardAction.getValidationMsg(4));
+
+		wizardAction.newModulesExt.prepare(projects.getName(0));
+
+		validationAction.assertEquals(ORIGINAL_MODULE_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(4));
+
+		wizardAction.newModulesExt.openSelectBrowseDialog();
+
+		validationAction.assertEquals(
+			THIS_FEATURE_ONLY_WORKS_WHEN_TARGET_PLATFORM_INDEX_SOURCES_IS_SET_TO_TRUE,
+			dialogAction.getValidationMsg(0));
+
+		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
+
+		dialogAction.cancel();
 
 		wizardAction.cancel();
 

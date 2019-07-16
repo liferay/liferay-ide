@@ -270,6 +270,9 @@ public interface Messages {
 
 	public static final String THE_TYPE_NAME = "The type name ";
 
+	public static final String THIS_FEATURE_ONLY_WORKS_WHEN_TARGET_PLATFORM_INDEX_SOURCES_IS_SET_TO_TRUE =
+		"This feature only works when the property \"target.platform.index.sources\" is set to true.";
+
 	public static final String THIS_PROJECT_HAS_DIFF_SDK = "This project has different sdk than current workspace sdk";
 
 	public static final String THIS_SDK_LOCATION_EMPTY = "This sdk location is empty ";
