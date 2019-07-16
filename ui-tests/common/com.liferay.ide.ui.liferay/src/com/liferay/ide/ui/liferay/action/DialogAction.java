@@ -100,6 +100,12 @@ public class DialogAction extends UIAction {
 		return _getDialog().confirmBtn();
 	}
 
+	public String getValidationMsg(int validationMsgIndex) {
+		ide.sleep();
+
+		return _getDialog().getValidationMsg(validationMsgIndex);
+	}
+
 	public void openPreferencesDialog() {
 		_jobAction.waitForShellAppeared(ide.getLabel());
 

@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.swtbot.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotLabel;
 
 /**
  * @author Terry Jia
@@ -70,6 +71,14 @@ public class Dialog extends Shell {
 
 	public Button confirmBtn() {
 		return new Button(bot, _confirmBtnLabel);
+	}
+
+	public String getValidationMsg(int validationMsgIndex) {
+		SWTBotLabel label = bot.label(validationMsgIndex);
+
+		String text = label.getText();
+
+		return text.trim();
 	}
 
 	private String _cancelBtnLabel = CANCEL;

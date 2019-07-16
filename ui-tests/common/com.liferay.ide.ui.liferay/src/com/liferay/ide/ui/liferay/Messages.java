@@ -148,6 +148,9 @@ public interface Messages {
 
 	public static final String MODEL_CLASS_MUST_BE_SPECIFIED = "Model Class must be specified";
 
+	public static final String MODULE_EXT_PROJECTS_ONLY_WORK_ON_LIFERAY_WORKSPACE_WHICH_VERSION_IS_GREATER_THAN_70 =
+		"Module Ext projects only work on liferay workspace which version is greater than 7.0.";
+
 	public static final String MUST_SPECIFY_A_PORTLET_SUPERCLASS = "Must specify a portlet superclass.";
 
 	public static final String MUST_SPECIFY_JSF_PORTLET_CLASS = "Must specify a JSF portlet class.";
@@ -168,6 +171,8 @@ public interface Messages {
 		"No upgrade steps. Double-click to start a new upgrade plan.";
 
 	public static final String NOT_A_JAVA_SOURCE_FOLDER = "Not a Java source folder.";
+
+	public static final String ORIGINAL_MODULE_NAME_MUST_BE_SPECIFIED = "Original module name must be specified";
 
 	public static final String PACKAGE_NAME_MUST_BE_SPECIFIED = "Package name must be specified";
 
@@ -265,6 +270,9 @@ public interface Messages {
 
 	public static final String THE_TYPE_NAME = "The type name ";
 
+	public static final String THIS_FEATURE_ONLY_WORKS_WHEN_TARGET_PLATFORM_INDEX_SOURCES_IS_SET_TO_TRUE =
+		"This feature only works when the property \"target.platform.index.sources\" is set to true.";
+
 	public static final String THIS_PROJECT_HAS_DIFF_SDK = "This project has different sdk than current workspace sdk";
 
 	public static final String THIS_SDK_LOCATION_EMPTY = "This sdk location is empty ";
@@ -295,6 +303,9 @@ public interface Messages {
 
 	public static final String WARNING_PACKAGE_NAME_START_WITH_A_LOWERCASE_LETTER =
 		"Warning: By convention, package names usually start with a lowercase letter";
+
+	public static final String WE_RECOMMEND_LIFERAY_GRADLE_WORKSPACE_TO_DEVELOP_MODULE_EXT_PROJECT =
+		"We recommend Liferay Gradle workspace to develop module ext project!";
 
 	public static final String WEB_SDK_62_ERRORR_MESSAGE =
 		"The selected Plugins SDK does not support creating new web type plugins.  Please configure version 7.0.0 or " +

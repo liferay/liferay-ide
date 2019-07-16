@@ -791,8 +791,28 @@ public class WizardAction extends UIAction {
 			browseBtn().click();
 		}
 
+		public Text origialModuleName() {
+			return _newModulesExtWizard.getOrigialModuleName();
+		}
+
+		public Text origialModuleVersion() {
+			return _newModulesExtWizard.getOrigialModuleVersion();
+		}
+
 		public void prepare(String projectName) {
 			_newModulesExtWizard.setProjectName(projectName);
+		}
+
+		public void prepareGradle(String projectName, String location) {
+			_prepare(projectName, location);
+		}
+
+		private void _prepare(String projectName, String location) {
+			_newModulesExtWizard.setProjectName(projectName);
+
+			if (!location.equals(StringPool.BLANK)) {
+				_newModulesExtWizard.setLocation(location);
+			}
 		}
 
 		private final NewLiferayModulesExtWizard _newModulesExtWizard = new NewLiferayModulesExtWizard(bot);
