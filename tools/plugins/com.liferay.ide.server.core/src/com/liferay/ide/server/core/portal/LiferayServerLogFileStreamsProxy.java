@@ -59,7 +59,6 @@ public class LiferayServerLogFileStreamsProxy extends LiferayServerFileStreamsPr
 		}
 	}
 
-	@Override
 	public IStreamMonitor getErrorStreamMonitor() {
 		return null;
 	}

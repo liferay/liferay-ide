@@ -14,7 +14,6 @@
 
 package com.liferay.ide.server.ui;
 
-import com.liferay.ide.server.core.portal.ITerminateableStreamsProxy;
 import com.liferay.ide.server.core.portal.LiferayServerLogFileStreamsProxy;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalJBossBundle;
@@ -107,6 +106,6 @@ public class LiferayConsoleProvider extends ConsoleColorProvider {
 	}
 
 	private transient IDebugEventSetListener _processListener = null;
-	private ITerminateableStreamsProxy _streamsProxy = null;
+	private LiferayServerLogFileStreamsProxy _streamsProxy = null;
 
 }

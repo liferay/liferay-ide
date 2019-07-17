@@ -24,7 +24,7 @@ import org.eclipse.debug.core.model.IStreamMonitor;
 /**
  * @author Simon Jiang
  */
-public abstract class LiferayServerFileStreamsProxy implements ITerminateableStreamsProxy {
+public abstract class LiferayServerFileStreamsProxy {
 
 	public IStreamMonitor getOutputStreamMonitor() {
 		return sysOut;
