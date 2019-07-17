@@ -180,7 +180,7 @@ public class PortletUtil {
 	 * @return
 	 * @throws JavaModelException
 	 */
-	public static IPackageFragmentRoot getResourcesFolderPacageFragmentRoot(IJavaProject javaProject)
+	public static IPackageFragmentRoot getResourcesFolderPackageFragmentRoot(IJavaProject javaProject)
 		throws JavaModelException {
 
 		IPackageFragmentRoot[] packageFragmentRoots = Stream.of(

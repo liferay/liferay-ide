@@ -116,7 +116,7 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 				try {
 					IJavaProject javaProject = JavaCore.create(project);
 
-					IPackageFragmentRoot pkgSrc = PortletUtil.getResourcesFolderPacageFragmentRoot(javaProject);
+					IPackageFragmentRoot pkgSrc = PortletUtil.getResourcesFolderPackageFragmentRoot(javaProject);
 
 					IPackageFragment rbPackageFragment = pkgSrc.getPackageFragment(packageName);
 
