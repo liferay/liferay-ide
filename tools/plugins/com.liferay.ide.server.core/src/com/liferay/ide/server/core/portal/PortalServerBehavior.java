@@ -85,7 +85,8 @@ import org.osgi.framework.Bundle;
  */
 @SuppressWarnings({"restriction", "rawtypes"})
 public class PortalServerBehavior
-	extends ServerBehaviourDelegate implements IJavaLaunchConfigurationConstants, ILiferayServerBehavior {
+	extends ServerBehaviourDelegate
+	implements IJavaLaunchConfigurationConstants, ILiferayServerBehavior, IServerListener {
 
 	public static final String ATTR_STOP = "stop-server";
 
@@ -326,63 +327,64 @@ public class PortalServerBehavior
 	}
 
 	public void setServerStarted() {
-		getServer().addServerListener(new LiferayServerListener());
+		IServer server = getServer();
+
+		server.addServerListener(this);
+
 		setServerState(IServer.STATE_STARTED);
 	}
 
-	private class LiferayServerListener implements IServerListener {
+	private boolean _needHandle(ServerEvent event, int serverState) {
+		return ((event.getKind() & ServerEvent.SERVER_CHANGE) > 0) && (event.getState() == serverState);
+	}
 
-		private boolean _needHandle(ServerEvent event, int serverState) {
-			return ((event.getKind() & ServerEvent.SERVER_CHANGE) > 0) && (event.getState() == serverState);
-		}
+	private int _getModuleState(IModule module, GogoBundleDeployer deployer) {
+		try {
+			IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, module.getProject());
 
-		private int _getModuleState(IModule module, GogoBundleDeployer deployer) {
-			try {
-				IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, module.getProject());
+			if (bundleProject != null) {
+				int bundleState = deployer.getBundleState(bundleProject.getSymbolicName());
 
-				if (bundleProject != null) {
-					int bundleState = deployer.getBundleState(bundleProject.getSymbolicName());
-
-					return (bundleState == Bundle.ACTIVE) ? IServer.STATE_STARTED : IServer.STATE_STOPPED;
-				}
-			}
-			catch (Exception e) {
-				LiferayServerCore.logError(e);
-			}
-
-			return IServer.STATE_STOPPED;
-		}
-
-		@Override
-		public void serverChanged(ServerEvent event) {
-			try {
-				if (_needHandle(event, IServer.STATE_STOPPED)) {
-					Stream.of(
-						getServer().getModules()
-					).forEach(
-						module -> setModuleState2(new IModule[] {module}, IServer.STATE_STOPPED)
-					);
-				}
-				else if (_needHandle(event, IServer.STATE_STARTED)) {
-					IRuntime runtime = getServer().getRuntime();
-
-					PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
-						PortalRuntime.class, new NullProgressMonitor());
-
-					GogoBundleDeployer deployer = ServerUtil.createBundleDeployer(portalRuntime, getServer());
-
-					Stream.of(
-						getServer().getModules()
-					).forEach(
-						module -> setModuleState2(new IModule[] {module}, _getModuleState(module, deployer))
-					);
-				}
-			}
-			catch (Exception e) {
-				LiferayServerCore.logError(e);
+				return (bundleState == Bundle.ACTIVE) ? IServer.STATE_STARTED : IServer.STATE_STOPPED;
 			}
 		}
+		catch (Exception e) {
+			LiferayServerCore.logError(e);
+		}
 
+		return IServer.STATE_STOPPED;
+	}
+
+	@Override
+	public void serverChanged(ServerEvent event) {
+		try {
+			IServer server = getServer();
+
+			if (_needHandle(event, IServer.STATE_STOPPED)) {
+				Stream.of(
+					server.getModules()
+				).forEach(
+					module -> setModuleState2(new IModule[] {module}, IServer.STATE_STOPPED)
+				);
+			}
+			else if (_needHandle(event, IServer.STATE_STARTED)) {
+				IRuntime runtime = server.getRuntime();
+
+				PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
+					PortalRuntime.class, new NullProgressMonitor());
+
+				GogoBundleDeployer deployer = ServerUtil.createBundleDeployer(portalRuntime, server);
+
+				Stream.of(
+					server.getModules()
+				).forEach(
+					module -> setModuleState2(new IModule[] {module}, _getModuleState(module, deployer))
+				);
+			}
+		}
+		catch (Exception e) {
+			LiferayServerCore.logError(e);
+		}
 	}
 
 	@Override
