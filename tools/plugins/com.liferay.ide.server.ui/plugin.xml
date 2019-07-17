@@ -782,4 +782,19 @@
 		>
 		</consoleColorProvider>
 	</extension>
+	<extension point="org.eclipse.ui.decorators">
+		<decorator
+			adaptable="true"
+			class="com.liferay.ide.server.ui.LiferayModuleDecorator"
+			id="com.liferay.ide.server.ui.liferayModuleDecorator"
+			label="liferay module decorator"
+			lightweight="true"
+			state="true"
+		>
+			<description>liferay module decorator</description>
+			<enablement>
+				<objectState name="nature" value="com.liferay.ide.core.liferayNature" />
+			</enablement>
+		</decorator>
+	</extension>
 </plugin>
