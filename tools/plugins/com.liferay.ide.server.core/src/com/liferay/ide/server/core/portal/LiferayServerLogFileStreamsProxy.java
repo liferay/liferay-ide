@@ -28,34 +28,34 @@ import org.eclipse.debug.core.model.IStreamMonitor;
  */
 public class LiferayServerLogFileStreamsProxy {
 
-	public LiferayServerLogFileStreamsProxy(PortalRuntime runtime, ILaunch curLaunch) {
-		this(runtime, curLaunch, new LiferayServerOutputStreamMonitor(), new LiferayServerOutputStreamMonitor());
+	public LiferayServerLogFileStreamsProxy(PortalRuntime portalRuntime, ILaunch launch) {
+		this(portalRuntime, launch, new LiferayServerOutputStreamMonitor(), new LiferayServerOutputStreamMonitor());
 	}
 
 	public LiferayServerLogFileStreamsProxy(
-		PortalRuntime runtime, ILaunch curLaunch, LiferayServerOutputStreamMonitor systemOut,
-		LiferayServerOutputStreamMonitor systemErr) {
+		PortalRuntime portalRuntime, ILaunch launch, LiferayServerOutputStreamMonitor serverOut,
+		LiferayServerOutputStreamMonitor serverErr) {
 
 		_launch = null;
 
-		if (runtime == null) {
+		if (portalRuntime == null) {
 			return;
 		}
 
-		PortalBundle portalBundle = runtime.getPortalBundle();
+		PortalBundle portalBundle = portalRuntime.getPortalBundle();
 
-		_launch = curLaunch;
+		_launch = launch;
 
 		try {
 			IPath defaultLogPath = portalBundle.getLogPath();
 
-			sysoutFile = defaultLogPath.toOSString();
+			_sysoutFile = defaultLogPath.toOSString();
 
-			if (systemOut != null) {
-				sysOut = systemOut;
+			if (serverOut != null) {
+				_sysOut = serverOut;
 			}
 			else {
-				sysOut = new LiferayServerOutputStreamMonitor();
+				_sysOut = new LiferayServerOutputStreamMonitor();
 			}
 
 			startMonitoring();
@@ -73,7 +73,7 @@ public class LiferayServerLogFileStreamsProxy {
 	}
 
 	public IStreamMonitor getOutputStreamMonitor() {
-		return sysOut;
+		return _sysOut;
 	}
 
 	public boolean isTerminated() {
@@ -81,11 +81,11 @@ public class LiferayServerLogFileStreamsProxy {
 	}
 
 	public void terminate() {
-		if (_bufferOut != null) {
+		if (_bufferedOut != null) {
 			try {
-				_bufferOut.close();
+				_bufferedOut.close();
 
-				_bufferOut = null;
+				_bufferedOut = null;
 			}
 			catch (Exception e) {
 			}
@@ -116,11 +116,11 @@ public class LiferayServerLogFileStreamsProxy {
 	}
 
 	protected void startMonitoring() {
-		if (_streamThread != null) {
+		if (_monitorThread != null) {
 			return;
 		}
 
-		_streamThread = new Thread("Liferay Portal Log Monitor Thread") {
+		_monitorThread = new Thread("Liferay Portal Log Monitor Thread") {
 
 			public void run() {
 				boolean outInitialized = false;
@@ -128,10 +128,10 @@ public class LiferayServerLogFileStreamsProxy {
 
 				while (!_done && !outInitialized) {
 					try {
-						_fpOut = (sysoutFile != null) ? new File(sysoutFile) : null;
+						_logFile = (_sysoutFile != null) ? new File(_sysoutFile) : null;
 
 						if (!outInitialized) {
-							if (!_fpOut.exists()) {
+							if (!_logFile.exists()) {
 								outFileEmpty = true;
 							}
 							else {
@@ -155,17 +155,17 @@ public class LiferayServerLogFileStreamsProxy {
 
 				try {
 					if (outInitialized) {
-						_bufferOut = new BufferedReader(new FileReader(_fpOut));
+						_bufferedOut = new BufferedReader(new FileReader(_logFile));
 
 						if (!outFileEmpty) {
-							readToNow(_bufferOut);
+							readToNow(_bufferedOut);
 						}
 					}
 				}
 				catch (Exception e) {
 				}
 
-				long originalFpOutSize = _fpOut.length();
+				long originalLogFileSize = _logFile.length();
 
 				while (!_done) {
 					try {
@@ -178,23 +178,23 @@ public class LiferayServerLogFileStreamsProxy {
 						String s = "";
 
 						while ((s != null) && !_done) {
-							long newFpOutSize = _fpOut.length();
+							long newLogFileSize = _logFile.length();
 
-							if (shouldReloadFileReader(originalFpOutSize, newFpOutSize)) {
-								if (_bufferOut != null) {
-									_bufferOut.close();
+							if (shouldReloadFileReader(originalLogFileSize, newLogFileSize)) {
+								if (_bufferedOut != null) {
+									_bufferedOut.close();
 								}
 
-								_bufferOut = new BufferedReader(new FileReader(_fpOut));
+								_bufferedOut = new BufferedReader(new FileReader(_logFile));
 							}
 
-							originalFpOutSize = newFpOutSize;
+							originalLogFileSize = newLogFileSize;
 
-							if (_bufferOut != null) {
-								s = _bufferOut.readLine();
+							if (_bufferedOut != null) {
+								s = _bufferedOut.readLine();
 
 								if (s != null) {
-									sysOut.append(s + "\n");
+									_sysOut.append(s + "\n");
 								}
 							}
 						}
@@ -203,25 +203,24 @@ public class LiferayServerLogFileStreamsProxy {
 					}
 				}
 
-				_streamThread = null;
+				_monitorThread = null;
 			}
 
 		};
 
-		_streamThread.setPriority(1);
+		_monitorThread.setPriority(1);
 
-		_streamThread.setDaemon(true);
+		_monitorThread.setDaemon(true);
 
-		_streamThread.start();
+		_monitorThread.start();
 	}
 
-	protected LiferayServerOutputStreamMonitor sysOut;
-	protected String sysoutFile;
-
-	private BufferedReader _bufferOut = null;
+	private BufferedReader _bufferedOut = null;
 	private boolean _done = false;
-	private File _fpOut = null;
 	private ILaunch _launch;
-	private Thread _streamThread;
+	private File _logFile = null;
+	private Thread _monitorThread;
+	private LiferayServerOutputStreamMonitor _sysOut;
+	private String _sysoutFile;
 
 }
