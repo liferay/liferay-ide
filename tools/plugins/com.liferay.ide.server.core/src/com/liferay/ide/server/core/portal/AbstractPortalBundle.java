@@ -31,7 +31,10 @@ import java.io.OutputStream;
 
 import java.nio.file.Files;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -128,6 +131,13 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 	@Override
 	public IPath getLiferayHome() {
 		return liferayHome;
+	}
+
+	public IPath getLogPath() {
+		IPath liferayHomeLogsPath = liferayHome.append("logs");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+		return liferayHomeLogsPath.append("liferay." + simpleDateFormat.format(new Date()) + ".log");
 	}
 
 	@Override

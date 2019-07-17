@@ -772,4 +772,14 @@
 		>
 		</serverToolTip>
 	</extension>
+	<extension
+		point="org.eclipse.debug.ui.consoleColorProviders"
+	>
+		<consoleColorProvider
+			class="com.liferay.ide.server.ui.LiferayConsoleProvider"
+			id="com.liferay.ide.server.ui.liferayConsoleProvider"
+			processType="java"
+		>
+		</consoleColorProvider>
+	</extension>
 </plugin>

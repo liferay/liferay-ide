@@ -44,6 +44,8 @@ public interface PortalBundle extends ILiferayPortal {
 
 	public IPath getLiferayHome();
 
+	public IPath getLogPath();
+
 	public String getMainClass();
 
 	public IPath getModulesPath();
