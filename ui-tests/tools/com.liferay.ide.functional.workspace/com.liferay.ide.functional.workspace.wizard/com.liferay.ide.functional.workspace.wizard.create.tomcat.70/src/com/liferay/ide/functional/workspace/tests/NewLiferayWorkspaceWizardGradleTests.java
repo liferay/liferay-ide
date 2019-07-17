@@ -48,7 +48,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.newModulesExt.openSelectBrowseDialog();
 
-		dialogAction.prepareText("com.liferay.login.web");
+		dialogAction.prepareText("com.liferay:com.liferay.login.web");
 
 		dialogAction.confirm();
 
