@@ -113,13 +113,6 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 		return libs.toArray(new IPath[libs.size()]);
 	}
 
-	public IPath getDefaultLogPath() {
-		SimpleDateFormat dateFormate = new SimpleDateFormat("yyyy-MM-dd");
-		IPath liferayLogPath = liferayHome.append("logs");
-
-		return liferayLogPath.append("liferay." + dateFormate.format(new Date()) + ".log");
-	}
-
 	@Override
 	public String[] getHookSupportedProperties() {
 		IPath portalDir = getAppServerPortalDir();
@@ -138,6 +131,13 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 	@Override
 	public IPath getLiferayHome() {
 		return liferayHome;
+	}
+
+	public IPath getLogPath() {
+		IPath liferayHomeLogsPath = liferayHome.append("logs");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+		return liferayHomeLogsPath.append("liferay." + simpleDateFormat.format(new Date()) + ".log");
 	}
 
 	@Override

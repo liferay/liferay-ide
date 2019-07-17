@@ -42,7 +42,7 @@ public class LiferayServerLogFileStreamsProxy extends LiferayServerFileStreamsPr
 		_launch = curLaunch;
 
 		try {
-			IPath defaultLogPath = portalBundle.getDefaultLogPath();
+			IPath defaultLogPath = portalBundle.getLogPath();
 
 			sysoutFile = defaultLogPath.toOSString();
 
