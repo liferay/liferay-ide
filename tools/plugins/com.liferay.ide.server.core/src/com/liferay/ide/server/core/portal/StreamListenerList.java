@@ -21,9 +21,9 @@ import org.eclipse.debug.core.IStreamListener;
 /**
  * @author Simon Jiang
  */
-public class PortalListenerList {
+public class StreamListenerList {
 
-	public PortalListenerList(int capacity) {
+	public StreamListenerList(int capacity) {
 		if (capacity < 1) {
 			throw new IllegalArgumentException();
 		}

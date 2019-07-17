@@ -80,7 +80,7 @@ public class LiferayServerOutputStreamMonitor implements IFlushableStreamMonitor
 
 	private boolean _buffered = true;
 	private StringBuffer _contentsBuffer;
-	private PortalListenerList _listeners = new PortalListenerList(1);
+	private StreamListenerList _listeners = new StreamListenerList(1);
 
 	private class StreamNotifier implements ISafeRunnable {
 
@@ -97,19 +97,19 @@ public class LiferayServerOutputStreamMonitor implements IFlushableStreamMonitor
 			Object[] listeners = _listeners.getListeners();
 
 			for (int i = 0; i < listeners.length; ++i) {
-				_listener = (IStreamListener)listeners[i];
+				_streamListener = (IStreamListener)listeners[i];
 				SafeRunner.run(this);
 			}
 
-			_listener = null;
+			_streamListener = null;
 			_text = null;
 		}
 
 		public void run() throws Exception {
-			_listener.streamAppended(_text, LiferayServerOutputStreamMonitor.this);
+			_streamListener.streamAppended(_text, LiferayServerOutputStreamMonitor.this);
 		}
 
-		private IStreamListener _listener;
+		private IStreamListener _streamListener;
 		private String _text;
 
 	}
