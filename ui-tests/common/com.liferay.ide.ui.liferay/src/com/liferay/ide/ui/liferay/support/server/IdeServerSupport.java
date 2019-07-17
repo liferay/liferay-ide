@@ -31,7 +31,7 @@ public class IdeServerSupport extends SupportBase {
 
 	@Override
 	public void after() {
-		dialogAction.deleteRuntimFromPreferences(server.getServerName());
+		dialogAction.deleteRuntimFromPreferences(0);
 
 		super.after();
 	}

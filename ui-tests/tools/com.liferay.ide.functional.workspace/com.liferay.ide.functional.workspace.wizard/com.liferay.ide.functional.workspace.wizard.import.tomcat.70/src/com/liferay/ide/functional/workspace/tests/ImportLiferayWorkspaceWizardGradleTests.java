@@ -53,7 +53,7 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(project.getName());
 
-		dialogAction.deleteRuntimFromPreferences(project.getName());
+		dialogAction.deleteRuntimFromPreferences(0);
 	}
 
 	@Test
@@ -83,7 +83,7 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(project.getName());
 
-		dialogAction.deleteRuntimFromPreferences(project.getName());
+		dialogAction.deleteRuntimFromPreferences(0);
 	}
 
 	@Test
@@ -153,7 +153,7 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName(), "plugins-sdk");
 		viewAction.project.closeAndDelete(project.getName());
 
-		dialogAction.deleteRuntimFromPreferences(project.getName());
+		dialogAction.deleteRuntimFromPreferences(0);
 	}
 
 	//@Ignore("Need more time to deal with bundle on Linux, will add bundle test back")
@@ -202,7 +202,7 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName(), "plugins-sdk");
 		viewAction.project.closeAndDelete(project.getName());
 
-		dialogAction.deleteRuntimFromPreferences(project.getName());
+		dialogAction.deleteRuntimFromPreferences(0);
 	}
 
 	@Rule

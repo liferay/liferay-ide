@@ -39,7 +39,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		dialogAction.preferences.confirm();
 
-		dialogAction.deleteRuntimFromPreferences(testServer.getServerName());
+		dialogAction.deleteRuntimFromPreferences(0);
 
 		resetTestServer();
 	}
@@ -67,7 +67,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		wizardAction.finish();
 
-		dialogAction.deleteRuntimFromPreferences(testServer.getServerName());
+		dialogAction.deleteRuntimFromPreferences(0);
 
 		resetTestServer();
 	}
@@ -113,7 +113,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		editorAction.close();
 
-		dialogAction.deleteRuntimFromPreferences(testServer.getServerName());
+		dialogAction.deleteRuntimFromPreferences(0);
 
 		resetTestServer();
 	}
@@ -169,7 +169,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		editorAction.close();
 
-		dialogAction.deleteRuntimFromPreferences(testServer.getServerName());
+		dialogAction.deleteRuntimFromPreferences(0);
 
 		resetTestServer();
 	}
@@ -301,7 +301,7 @@ public class ServerTomcat7xBase extends ServerTestBase {
 
 		// jobAction.waitForServerStopped(serverName);
 
-		dialogAction.deleteRuntimFromPreferences(testServer.getServerName());
+		dialogAction.deleteRuntimFromPreferences(0);
 
 		resetTestServer();
 	}
