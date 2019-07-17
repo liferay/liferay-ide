@@ -116,7 +116,7 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 				try {
 					IJavaProject javaProject = JavaCore.create(project);
 
-					IPackageFragmentRoot pkgSrc = PortletUtil.getSourceFolder(javaProject);
+					IPackageFragmentRoot pkgSrc = PortletUtil.getResourcesFolderPackageFragmentRoot(javaProject);
 
 					IPackageFragment rbPackageFragment = pkgSrc.getPackageFragment(packageName);
 
@@ -177,24 +177,22 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 	 * @return
 	 */
 	protected boolean getFileFromClasspath(IProject project, String ioFileName) {
-		IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries(project);
+		IClasspathEntry classpathEntry = PortletUtil.getResourceFolderClasspathEntry(project);
 
-		for (IClasspathEntry iClasspathEntry : cpEntries) {
-			if (IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind()) {
-				IFolder folder = wroot.getFolder(iClasspathEntry.getPath());
+		if (classpathEntry != null) {
+			IFolder folder = wroot.getFolder(classpathEntry.getPath());
 
-				IPath entryPath = folder.getLocation();
+			IPath entryPath = folder.getLocation();
 
-				entryPath = entryPath.append(ioFileName);
+			entryPath = entryPath.append(ioFileName);
 
-				IFile resourceBundleFile = wroot.getFileForLocation(entryPath);
+			IFile resourceBundleFile = wroot.getFileForLocation(entryPath);
 
-				if (FileUtil.exists(resourceBundleFile)) {
-					return true;
-				}
-				else {
-					return false;
-				}
+			if (FileUtil.exists(resourceBundleFile)) {
+				return true;
+			}
+			else {
+				return false;
 			}
 		}
 
@@ -207,21 +205,19 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 	 * @return
 	 */
 	protected IFolder getResourceBundleFolderLocation(IProject project, String ioFileName) {
-		IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries(project);
+		IClasspathEntry classpathEntry = PortletUtil.getResourceFolderClasspathEntry(project);
 
-		for (IClasspathEntry iClasspathEntry : cpEntries) {
-			if (IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind()) {
-				IFolder srcFolder = wroot.getFolder(iClasspathEntry.getPath());
+		if (classpathEntry != null) {
+			IFolder srcFolder = wroot.getFolder(classpathEntry.getPath());
 
-				IPath rbSourcePath = srcFolder.getLocation();
+			IPath rbSourcePath = srcFolder.getLocation();
 
-				rbSourcePath = rbSourcePath.append(ioFileName);
+			rbSourcePath = rbSourcePath.append(ioFileName);
 
-				IFile resourceBundleFile = wroot.getFileForLocation(rbSourcePath);
+			IFile resourceBundleFile = wroot.getFileForLocation(rbSourcePath);
 
-				if (resourceBundleFile != null) {
-					return srcFolder;
-				}
+			if (resourceBundleFile != null) {
+				return srcFolder;
 			}
 		}
 

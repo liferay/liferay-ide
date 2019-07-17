@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 
 import java.util.Locale;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -133,6 +134,45 @@ public class PortletUtil {
 	}
 
 	/**
+	 * @param text
+	 * @return
+	 */
+	public static IClasspathEntry getResourceFolderClasspathEntry(IProject project) {
+		IClasspathEntry[] classpathEntries = Stream.of(
+			CoreUtil.getClasspathEntries(project)
+		).filter(
+			classpathEntry -> IClasspathEntry.CPE_SOURCE == classpathEntry.getEntryKind()
+		).toArray(
+			IClasspathEntry[]::new
+		);
+
+		if (classpathEntries.length == 0) {
+			return null;
+		}
+
+		IClasspathEntry classpathEntry = null;
+
+		if (classpathEntries.length == 1) {
+			classpathEntry = classpathEntries[0];
+		}
+		else {
+			IFolder resourcesFolder = project.getFolder("/src/main/resources");
+
+			if (resourcesFolder.exists()) {
+				for (IClasspathEntry entry : classpathEntries) {
+					IPath path = entry.getPath();
+
+					if (path.equals(resourcesFolder.getFullPath())) {
+						return entry;
+					}
+				}
+			}
+		}
+
+		return classpathEntry;
+	}
+
+	/**
 	 * This method will return the first source folder of the Java project
 	 *
 	 * @param javaProject
@@ -140,14 +180,57 @@ public class PortletUtil {
 	 * @return
 	 * @throws JavaModelException
 	 */
-	public static IPackageFragmentRoot getSourceFolder(IJavaProject javaProject) throws JavaModelException {
-		for (IPackageFragmentRoot root : javaProject.getPackageFragmentRoots()) {
-			if (root.getKind() == IPackageFragmentRoot.K_SOURCE) {
-				return root;
+	public static IPackageFragmentRoot getResourcesFolderPackageFragmentRoot(IJavaProject javaProject)
+		throws JavaModelException {
+
+		IPackageFragmentRoot[] packageFragmentRoots = Stream.of(
+			javaProject.getPackageFragmentRoots()
+		).filter(
+			packageFragmentRoot -> {
+				try {
+					if (packageFragmentRoot.getKind() == IPackageFragmentRoot.K_SOURCE) {
+						return true;
+					}
+					else {
+						return false;
+					}
+				}
+				catch (JavaModelException jme) {
+					return false;
+				}
+			}
+		).toArray(
+			IPackageFragmentRoot[]::new
+		);
+
+		if (packageFragmentRoots.length == 0) {
+			return null;
+		}
+
+		IPackageFragmentRoot retval = null;
+
+		if (packageFragmentRoots.length == 1) {
+			retval = packageFragmentRoots[0];
+		}
+		else {
+			IProject project = javaProject.getProject();
+
+			IFolder resourcesFolder = project.getFolder("/src/main/resources");
+
+			if (resourcesFolder.exists()) {
+				for (IPackageFragmentRoot packageFragmentRoot : packageFragmentRoots) {
+					retval = packageFragmentRoot;
+
+					IPath path = retval.getPath();
+
+					if (path.equals(resourcesFolder.getFullPath())) {
+						return packageFragmentRoot;
+					}
+				}
 			}
 		}
 
-		return null;
+		return retval;
 	}
 
 	/**
