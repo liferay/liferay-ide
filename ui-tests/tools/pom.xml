@@ -48,17 +48,17 @@
 	</repositories>
 
 	<modules>
-		<module>com.liferay.ide.ui.fragment</module>
-		<module>com.liferay.ide.ui.theme</module>
-		<module>com.liferay.ide.ui.hook</module>
-		<module>com.liferay.ide.ui.jsf</module>
-		<module>com.liferay.ide.ui.layouttpl</module>
-		<module>com.liferay.ide.ui.module</module>
-		<module>com.liferay.ide.ui.portlet</module>
-		<module>com.liferay.ide.ui.sdk.tests</module>
-		<module>com.liferay.ide.ui.server</module>
-		<module>com.liferay.ide.ui.workspace</module>
-		<module>com.liferay.ide.ui.service.builder</module>
+		<module>com.liferay.ide.functional.fragment</module>
+		<module>com.liferay.ide.functional.theme</module>
+		<module>com.liferay.ide.functional.hook</module>
+		<module>com.liferay.ide.functional.jsf</module>
+		<module>com.liferay.ide.functional.layouttpl</module>
+		<module>com.liferay.ide.functional.module</module>
+		<module>com.liferay.ide.functional.portlet</module>
+		<module>com.liferay.ide.functional.sdk.tests</module>
+		<module>com.liferay.ide.functional.server</module>
+		<module>com.liferay.ide.functional.workspace</module>
+		<module>com.liferay.ide.functional.service.builder</module>
 		<module>com.liferay.ide.functional.kaleo</module>
 		<module>com.liferay.ide.functional.modules.ext</module>
 	</modules>

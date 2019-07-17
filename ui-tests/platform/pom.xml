@@ -48,7 +48,7 @@
 	</repositories>
 
 	<modules>
-		<module>com.liferay.ide.ui.preference.tests</module>
+		<module>com.liferay.ide.functional.preference.tests</module>
 		<module>com.liferay.ide.functional.upgrade</module>
 	</modules>
 </project>

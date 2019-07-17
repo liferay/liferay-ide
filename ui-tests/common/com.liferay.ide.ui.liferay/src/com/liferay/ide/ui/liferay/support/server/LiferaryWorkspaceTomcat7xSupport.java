@@ -32,7 +32,7 @@ public class LiferaryWorkspaceTomcat7xSupport extends SupportBase {
 
 	@Override
 	public void after() {
-		dialogAction.deleteRuntimFromPreferences(getServerName());
+		dialogAction.deleteRuntimFromPreferences(0);
 	}
 
 	@Override

@@ -81,7 +81,7 @@ public class ValidationModulesExtTests extends SwtbotBase {
 
 		dialogAction.prepareText("*login");
 
-		dialogAction.selectTableItem("com.liferay.login.web");
+		dialogAction.selectTableItem("com.liferay:com.liferay.login.web");
 
 		validationAction.assertEnabledTrue(dialogAction.getConfirmBtn());
 
@@ -203,7 +203,7 @@ public class ValidationModulesExtTests extends SwtbotBase {
 
 		dialogAction.prepareText("*login");
 
-		dialogAction.selectTableItem("com.liferay.login.web:3.0.26");
+		dialogAction.selectTableItem("com.liferay:com.liferay.login.web:3.0.26");
 
 		dialogAction.confirm();
 

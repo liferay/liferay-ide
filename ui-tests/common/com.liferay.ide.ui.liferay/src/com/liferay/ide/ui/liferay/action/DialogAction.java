@@ -86,6 +86,16 @@ public class DialogAction extends UIAction {
 		_jobAction.waitForShellClosed(title);
 	}
 
+	public void deleteRuntimFromPreferences(int runtimeIndex) {
+		openPreferencesDialog();
+
+		preferences.openServerRuntimeEnvironmentsTry();
+
+		serverRuntimeEnvironments.deleteRuntimeTryConfirm(runtimeIndex);
+
+		preferences.confirm();
+	}
+
 	public void deleteRuntimFromPreferences(String runtimeName) {
 		openPreferencesDialog();
 

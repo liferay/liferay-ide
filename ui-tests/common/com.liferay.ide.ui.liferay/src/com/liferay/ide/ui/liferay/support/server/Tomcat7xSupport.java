@@ -34,7 +34,7 @@ public class Tomcat7xSupport extends SupportBase {
 
 	@Override
 	public void after() {
-		dialogAction.deleteRuntimFromPreferences(_server.getServerName());
+		dialogAction.deleteRuntimFromPreferences(0);
 
 		super.after();
 	}
