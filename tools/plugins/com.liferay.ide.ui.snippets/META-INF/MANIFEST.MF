@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.ui.snippets;singleton:=true
-Bundle-Version: 3.6.1.qualifier
+Bundle-Version: 3.6.2.qualifier
 Bundle-Activator: com.liferay.ide.ui.snippets.SnippetsUIPlugin
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.liferay.ide.core,

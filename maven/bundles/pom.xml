@@ -12,7 +12,7 @@
 
 	<groupId>com.liferay.ide.maven.bundles</groupId>
 	<artifactId>maven-bundles</artifactId>
-	<version>3.6.1-SNAPSHOT</version>
+	<version>3.6.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>

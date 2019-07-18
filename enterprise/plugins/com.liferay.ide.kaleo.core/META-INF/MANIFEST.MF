@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Kaleo Core
 Bundle-SymbolicName: com.liferay.ide.kaleo.core;singleton:=true
-Bundle-Version: 3.6.1.qualifier
+Bundle-Version: 3.6.2.qualifier
 Bundle-Activator: com.liferay.ide.kaleo.core.KaleoCore
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.core,
