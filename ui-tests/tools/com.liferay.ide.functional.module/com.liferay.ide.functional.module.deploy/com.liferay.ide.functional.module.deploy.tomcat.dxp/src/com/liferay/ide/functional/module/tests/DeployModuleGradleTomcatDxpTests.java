@@ -20,6 +20,7 @@ import com.liferay.ide.ui.liferay.support.server.ServerSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -56,6 +57,7 @@ public class DeployModuleGradleTomcatDxpTests extends DeployModuleGradleTomcat7x
 		super.deployControlMenuEntry();
 	}
 
+	@Ignore("IDE-4188 better to build first for downloading before deploy")
 	@Test
 	public void deployFormField() {
 		super.deployFormField();
