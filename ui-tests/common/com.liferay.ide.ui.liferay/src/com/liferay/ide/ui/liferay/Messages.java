@@ -233,6 +233,12 @@ public interface Messages {
 	public static final String SOUCCE_FOLDER_MUST_BE_ABSOLUTE_PATH =
 		"Source folder path must be a workspace relative absolute path.";
 
+	public static final String SPECIFIED_LIFERAY_VERSION_IS_INVAILD_MUST_BE_IN_RANGE_700_720 =
+		"Specified Liferay version is invaild. Must be in range [7.0.0,7.2.0)";
+
+	public static final String SPECIFIED_LIFERAY_VERSION_IS_INVAILD_MUST_BE_IN_RANGE_710_720 =
+		"Specified Liferay version is invaild. Must be in range [7.1.0,7.2.0)";
+
 	public static final String SPECIFY_LIFERAY_PORTLET_DEPLOYMENT_DESCRIPTOR_DETAILS =
 		"Specify Liferay portlet deployment descriptor details.";
 

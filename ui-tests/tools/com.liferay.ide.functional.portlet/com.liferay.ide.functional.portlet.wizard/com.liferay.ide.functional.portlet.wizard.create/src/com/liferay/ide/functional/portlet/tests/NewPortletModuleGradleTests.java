@@ -58,6 +58,17 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		jobAction.waitForValidate(project.getName());
 
+		viewAction.project.openFile(
+			project.getName(), "src/main/java", project.getName() + ".constants",
+			project.getCapitalName() + "PortletKeys.java");
+
+		String projectName = project.getName();
+
+		validationAction.assertContains(
+			"public static final String " + projectName.toUpperCase(), editorAction.getContent());
+
+		editorAction.close();
+
 		viewAction.project.closeAndDelete(project.getName());
 	}
 

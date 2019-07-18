@@ -23,6 +23,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 /**
  * @author Vicky Wang
  * @author Ying Xu
+ * @author Rui Wang
  */
 public class NewLiferayWorkspaceWizard extends NewProjectWizard {
 
@@ -36,6 +37,10 @@ public class NewLiferayWorkspaceWizard extends NewProjectWizard {
 
 	public CheckBox getDownloadLiferayBundle() {
 		return new CheckBox(getShell().bot(), DOWNLOAD_LIFERAY_BUNDLE);
+	}
+
+	public CheckBox getEnableTargetPlatfom() {
+		return new CheckBox(getShell().bot(), ENABLE_TARGET_PLATFORM);
 	}
 
 	public CheckBox getIndexSources() {

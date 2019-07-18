@@ -884,8 +884,16 @@ public class WizardAction extends UIAction {
 			downloadLiferayBundle().deselect();
 		}
 
+		public void deselectEnableTargetPlatform() {
+			enableTargetPlatform().deselect();
+		}
+
 		public CheckBox downloadLiferayBundle() {
 			return _newLiferayWorkspaceWizard.getDownloadLiferayBundle();
+		}
+
+		public CheckBox enableTargetPlatform() {
+			return _newLiferayWorkspaceWizard.getEnableTargetPlatfom();
 		}
 
 		public Text getBundleUrl() {
@@ -894,6 +902,10 @@ public class WizardAction extends UIAction {
 
 		public ComboBox getTargetPlatform() {
 			return _newLiferayWorkspaceWizard.getTargetPlatform();
+		}
+
+		public CheckBox indexSources() {
+			return _newLiferayWorkspaceWizard.getIndexSources();
 		}
 
 		public void prepareGradle(String projectName) {
