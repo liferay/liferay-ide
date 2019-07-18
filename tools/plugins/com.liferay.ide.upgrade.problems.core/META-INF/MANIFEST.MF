@@ -13,6 +13,7 @@ Export-Package: com.liferay.ide.upgrade.problems.core,
  com.liferay.ide.upgrade.problems.core.commands
 Require-Bundle: com.google.guava,
  com.liferay.ide.core,
+ com.liferay.ide.gradle.core,
  com.liferay.ide.upgrade.plan.core,
  org.apache.commons.io,
  org.eclipse.core.resources,

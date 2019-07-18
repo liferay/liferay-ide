@@ -155,6 +155,20 @@ public class GradleDependencyUpdater {
 
 		_gradleFileContents = FileUtils.readLines(_file);
 
+		String d = dependency.trim();
+
+		boolean exist = _gradleFileContents.stream(
+		).map(
+			line -> line.trim()
+		).filter(
+			line -> line.equals(d)
+		).findAny(
+		).isPresent();
+
+		if (exist) {
+			return visitor;
+		}
+
 		if (!dependency.startsWith("\t")) {
 			dependency = "\t" + dependency;
 		}

@@ -14,7 +14,11 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
+import com.liferay.ide.core.Artifact;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -35,6 +39,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.io.FileUtils;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -62,6 +71,14 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 
 	@Override
 	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
+		IProject project = CoreUtil.getProject(file);
+
+		IFile buildGradle = null;
+
+		if (project != null) {
+			buildGradle = project.getFile("build.gradle");
+		}
+
 		int problemsFixed = 0;
 
 		List<String> importsToRewrite = new ArrayList<>();
@@ -89,6 +106,8 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 		}
 
 		if (ListUtil.isNotEmpty(importsToRewrite)) {
+			List<Artifact> needToAddDependencies = new ArrayList<>();
+
 			try (InputStream inputStream = Files.newInputStream(file.toPath())) {
 				String[] lines = _readLines(inputStream);
 
@@ -105,8 +124,23 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 						String importName = importMap[1];
 
 						if ((lineNumber > 0) && (lineNumber < editedLines.length)) {
-							editedLines[lineNumber - 1] = editedLines[lineNumber - 1].replaceAll(
-								importName, _importFixes.get(importName));
+							String importFix = _importFixes.get(importName);
+
+							String[] s = importFix.split(",");
+
+							String newImport = s[0];
+
+							editedLines[lineNumber - 1] = editedLines[lineNumber - 1].replaceAll(importName, newImport);
+
+							if (s.length == 3) {
+								Artifact artifact = new Artifact();
+
+								artifact.setConfiguration("compileOnly");
+								artifact.setGroupId(s[1]);
+								artifact.setArtifactId(s[2]);
+
+								needToAddDependencies.add(artifact);
+							}
 						}
 					}
 					catch (NumberFormatException nfe) {
@@ -123,6 +157,17 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 
 				try (FileWriter writer = new FileWriter(file)) {
 					writer.write(sb.toString());
+				}
+
+				if (FileUtil.exists(buildGradle) && !needToAddDependencies.isEmpty()) {
+					GradleDependencyUpdater gradleDependencyUpdater = new GradleDependencyUpdater(buildGradle);
+
+					for (Artifact artifact : needToAddDependencies) {
+						gradleDependencyUpdater.insertDependency(artifact);
+					}
+
+					FileUtils.writeLines(
+						FileUtil.getFile(buildGradle), gradleDependencyUpdater.getGradleFileContents());
 				}
 
 				_clearCache(file);

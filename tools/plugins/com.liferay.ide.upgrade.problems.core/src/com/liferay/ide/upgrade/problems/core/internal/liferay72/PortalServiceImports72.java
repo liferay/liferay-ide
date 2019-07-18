@@ -58,12 +58,16 @@ public class PortalServiceImports72 extends JavaImportsMigrator {
 			catch (IOException ioe) {
 			}
 
+			String moduleLayout = properties.getProperty("module.layout");
+
 			Set<Object> keys = properties.keySet();
 
 			for (Object key : keys) {
 				String value = (String)properties.get(key);
 
 				if (CoreUtil.isNotNullOrEmpty(value)) {
+					value = value + "," + moduleLayout;
+
 					importFixes.put((String)key, value);
 				}
 			}
