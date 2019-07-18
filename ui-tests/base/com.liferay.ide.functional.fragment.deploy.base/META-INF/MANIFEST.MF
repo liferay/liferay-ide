@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Functional Fragment Deploy Base
 Bundle-SymbolicName: com.liferay.ide.functional.fragment.deploy.base
-Bundle-Version: 3.6.1.qualifier
+Bundle-Version: 3.6.2.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.ui.liferay,
  com.liferay.ide.ui.swtbot,

@@ -21,7 +21,7 @@
 
     <groupId>com.liferay.ide</groupId>
     <artifactId>parent</artifactId>
-    <version>3.6.1-SNAPSHOT</version>
+    <version>3.6.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Liferay IDE Parent</name>

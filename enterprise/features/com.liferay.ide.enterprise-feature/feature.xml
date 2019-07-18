@@ -3,7 +3,7 @@
 	id="com.liferay.ide.enterprise"
 	label="Liferay IDE Enterprise"
 	provider-name="Liferay, Inc."
-	version="3.6.1.qualifier"
+	version="3.6.2.qualifier"
 >
 
 	<description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
