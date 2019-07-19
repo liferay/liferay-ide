@@ -66,15 +66,30 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
 
-		validationAction.assertEnabledTrue(wizardAction.newLiferayWorkspace.enableTargetPlatform());
+		wizardAction.newLiferayWorkspace.deselectEnableTargetPlatform();
 
-		validationAction.assertCheckedTrue(wizardAction.newLiferayWorkspace.enableTargetPlatform());
+		validationAction.assertActiveFalse(wizardAction.newLiferayWorkspace.getTargetPlatform());
 
-		validationAction.assertTextEquals("7.2.0", wizardAction.newLiferayWorkspace.getTargetPlatform());
+		validationAction.assertActiveFalse(wizardAction.newLiferayWorkspace.indexSources());
 
-		validationAction.assertEnabledTrue(wizardAction.newLiferayWorkspace.indexSources());
+		wizardAction.finish();
 
-		validationAction.assertCheckedFalse(wizardAction.newLiferayWorkspace.indexSources());
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.openFile(project.getName(), "gradle.properties");
+
+		validationAction.assertDoesNotContains(
+			"liferay.workspace.target.platform.version = 7.2.0", editorAction.getContent());
+
+		validationAction.assertDoesNotContains("target.platform.index.sources = false", editorAction.getContent());
+
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
+
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
+
+		wizardAction.newLiferayWorkspace.indexSources();
 
 		wizardAction.newLiferayWorkspace.deselectEnableTargetPlatform();
 
@@ -100,21 +115,23 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 	public void checkExsitingLiferayWorkspace() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		String projectName = "test";
-
-		wizardAction.newLiferayWorkspace.prepareGradle(projectName);
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
 
 		wizardAction.finish();
 
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(projectName);
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
 
 		validationAction.assertEquals(A_LIFERAY_WORKSPACE_PROJECT_ALREADY_EXISTS, wizardAction.getValidationMsg(2));
 
+		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
+
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDeleteFromDisk(projectName);
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Test
@@ -122,6 +139,8 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
 		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(project.getName());
+
+		validationAction.assertEquals(THIS_WILL_CAUSE_ALL_OF_THE_BOM_ARTFACT_JARS, wizardAction.getValidationMsg(2));
 
 		wizardAction.finish();
 
@@ -145,6 +164,8 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 		validationAction.assertTextEquals("7.2", wizardAction.newLiferayWorkspace.liferayVersion());
 
 		validationAction.assertEnabledTrue(wizardAction.newLiferayWorkspace.getTargetPlatform());
+
+		validationAction.assertCheckedTrue(wizardAction.newLiferayWorkspace.enableTargetPlatform());
 
 		validationAction.assertTextEquals("7.2.0", wizardAction.newLiferayWorkspace.getTargetPlatform());
 

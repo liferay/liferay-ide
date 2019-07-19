@@ -283,6 +283,10 @@ public interface Messages {
 
 	public static final String THIS_SDK_LOCATION_EMPTY = "This sdk location is empty ";
 
+	public static final String THIS_WILL_CAUSE_ALL_OF_THE_BOM_ARTFACT_JARS =
+		"This will cause all of the BOM artifact jars and their Java sources to be indexed by Eclipse. Note: this " +
+			"process will slow down your IDE's project synchronization.";
+
 	public static final String THUMBNAIL_FILE_ALREDAY_EXIST_AND_OVERWRITTEN =
 		"Thumbnail file already exists and will be overwritten.";
 
