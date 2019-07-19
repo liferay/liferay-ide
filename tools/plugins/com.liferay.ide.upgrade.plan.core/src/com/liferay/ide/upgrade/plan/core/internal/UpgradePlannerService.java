@@ -401,12 +401,10 @@ public class UpgradePlannerService implements UpgradePlanner {
 			upgradeProblemsMemento
 		).filter(
 			upgradeProblemMemento -> {
-				IFile[] resources = CoreUtil.findFilesForLocationURI(
-					new File(
-						upgradeProblemMemento.getString("resourceLocation")
-					).toURI());
+				IFile resource = CoreUtil.findFilesForLocationURI(
+					new File(upgradeProblemMemento.getString("resourceLocation")));
 
-				return resources.length > 0;
+				return resource != null;
 			}
 		).map(
 			upgradeProblemMemento -> {

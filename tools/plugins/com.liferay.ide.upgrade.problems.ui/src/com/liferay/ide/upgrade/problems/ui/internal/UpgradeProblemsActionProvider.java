@@ -119,9 +119,9 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 
 						File file = upgradeProblem.getResource();
 
-						IFile[] resources = CoreUtil.findFilesForLocationURI(file.toURI());
+						IFile resource = CoreUtil.findFilesForLocationURI(file);
 
-						Editors.open(resources[0], upgradeProblem.getMarkerId(), offset, length);
+						Editors.open(resource, upgradeProblem.getMarkerId(), offset, length);
 					}
 					else if (element instanceof FileProblemsContainer) {
 						FileProblemsContainer fileProblemsContainer = (FileProblemsContainer)element;
