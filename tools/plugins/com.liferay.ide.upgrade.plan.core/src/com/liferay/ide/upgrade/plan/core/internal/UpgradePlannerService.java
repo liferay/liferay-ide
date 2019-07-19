@@ -50,7 +50,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 
 import org.osgi.service.component.annotations.Component;
@@ -401,7 +401,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 			upgradeProblemsMemento
 		).filter(
 			upgradeProblemMemento -> {
-				IFile resource = CoreUtil.findFilesForLocationURI(
+				IResource resource = CoreUtil.findResourceForLocationURI(
 					new File(upgradeProblemMemento.getString("resourceLocation")));
 
 				return resource != null;

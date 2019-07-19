@@ -44,7 +44,7 @@ public interface UpgradeProblemSupport {
 			upgradeProblem -> {
 				File resource = upgradeProblem.getResource();
 
-				IFile problemFile = CoreUtil.findFilesForLocationURI(resource);
+				IResource problemFile = CoreUtil.findResourceForLocationURI(resource);
 
 				return problemFile != null;
 			}
@@ -52,7 +52,7 @@ public interface UpgradeProblemSupport {
 			upgradeProblem -> {
 				File resource = upgradeProblem.getResource();
 
-				IFile problemFile = CoreUtil.findFilesForLocationURI(resource);
+				IResource problemFile = CoreUtil.findResourceForLocationURI(resource);
 
 				try {
 					IMarker marker = problemFile.createMarker(UpgradeProblem.MARKER_TYPE);
@@ -82,7 +82,7 @@ public interface UpgradeProblemSupport {
 
 		File file = upgradeProblem.getResource();
 
-		IFile resource = CoreUtil.findFilesForLocationURI(file);
+		IFile resource = (IFile)CoreUtil.findResourceForLocationURI(file);
 
 		if (resource != null) {
 			long markerId = upgradeProblem.getMarkerId();
@@ -150,7 +150,7 @@ public interface UpgradeProblemSupport {
 
 		File file = upgradeProblem.getResource();
 
-		IResource resource = CoreUtil.findFilesForLocationURI(file);
+		IResource resource = CoreUtil.findResourceForLocationURI(file);
 
 		marker.setAttribute(IMarker.LOCATION, resource.getName());
 

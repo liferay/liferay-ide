@@ -35,7 +35,7 @@ public class Editors {
 
 	public static void open(File file) {
 		try {
-			IResource resource = CoreUtil.findFilesForLocationURI(file);
+			IResource resource = CoreUtil.findResourceForLocationURI(file);
 
 			if (resource instanceof IFile) {
 				IDE.openEditor(UIUtil.getActivePage(), (IFile)resource);

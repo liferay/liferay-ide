@@ -119,7 +119,7 @@ public class UpgradeProblemsActionProvider extends CommonActionProvider {
 
 						File file = upgradeProblem.getResource();
 
-						IFile resource = CoreUtil.findFilesForLocationURI(file);
+						IFile resource = (IFile)CoreUtil.findResourceForLocationURI(file);
 
 						Editors.open(resource, upgradeProblem.getMarkerId(), offset, length);
 					}

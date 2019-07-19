@@ -213,14 +213,14 @@ public class CoreUtil {
 		return isNullOrEmpty(val);
 	}
 
-	public static IFile findFilesForLocationURI(File file) {
-		IWorkspaceRoot ws = getWorkspaceRoot();
+	public static IResource findResourceForLocationURI(File file) {
+		IWorkspaceRoot root = getWorkspaceRoot();
 
-		IFile[] files = ws.findFilesForLocationURI(file.toURI());
+		IFile[] files = root.findFilesForLocationURI(file.toURI());
 
 		IResource resource = _filterIResouece(files);
 
-		return (IFile)resource;
+		return resource;
 	}
 
 	public static IProject[] getAllProjects() {
@@ -709,16 +709,16 @@ public class CoreUtil {
 	private static IResource _filterIResouece(IResource[] resources) {
 		IResource result = null;
 
-		for (IResource iResource : resources) {
+		for (IResource resource : resources) {
 			if (result == null) {
-				result = iResource;
+				result = resource;
 			}
 			else {
-				IPath filePath = iResource.getProjectRelativePath();
+				IPath filePath = resource.getProjectRelativePath();
 				IPath resourcePath = result.getProjectRelativePath();
 
 				if (filePath.segmentCount() < resourcePath.segmentCount()) {
-					result = iResource;
+					result = resource;
 				}
 			}
 		}
