@@ -330,8 +330,6 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_PORTAL_BUNDLE);
 
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(projectName);
-
 		dialogAction.preferences.confirm();
 
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};

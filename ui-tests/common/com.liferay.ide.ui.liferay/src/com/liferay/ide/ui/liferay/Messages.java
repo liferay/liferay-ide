@@ -167,6 +167,9 @@ public interface Messages {
 
 	public static final String NO_SUITABLE_LIFERAY_MODULE_PROJECT = "No suitable Liferay module project";
 
+	public static final String NO_TARGET_PLATFORM_CONFIGURATION_DETECTED =
+		"No Target Platform configuration detected in gradle.properties";
+
 	public static final String NO_UPGRADE_STEPS_DOUBLE_CLICK_TO_START_A_NEW_UPGRADE_PLAN =
 		"No upgrade steps. Double-click to start a new upgrade plan.";
 
@@ -282,6 +285,10 @@ public interface Messages {
 	public static final String THIS_PROJECT_HAS_DIFF_SDK = "This project has different sdk than current workspace sdk";
 
 	public static final String THIS_SDK_LOCATION_EMPTY = "This sdk location is empty ";
+
+	public static final String THIS_WILL_CAUSE_ALL_OF_THE_BOM_ARTFACT_JARS =
+		"This will cause all of the BOM artifact jars and their Java sources to be indexed by Eclipse. Note: this " +
+			"process will slow down your IDE's project synchronization.";
 
 	public static final String THUMBNAIL_FILE_ALREDAY_EXIST_AND_OVERWRITTEN =
 		"Thumbnail file already exists and will be overwritten.";
