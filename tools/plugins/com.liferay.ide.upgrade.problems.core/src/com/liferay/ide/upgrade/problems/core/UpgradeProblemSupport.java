@@ -85,16 +85,20 @@ public interface UpgradeProblemSupport {
 
 		IFile[] iFiles = CoreUtil.findFilesForLocationURI(file.toURI());
 
-		IResource resource = iFiles[0];
+		if (ListUtil.isNotEmpty(iFiles)) {
+			IResource resource = iFiles[0];
 
-		long markerId = upgradeProblem.getMarkerId();
+			long markerId = upgradeProblem.getMarkerId();
 
-		try {
-			return resource.findMarker(markerId);
+			try {
+				return resource.findMarker(markerId);
+			}
+			catch (CoreException ce) {
+				return null;
+			}
 		}
-		catch (CoreException ce) {
-			return null;
-		}
+
+		return null;
 	}
 
 	public default boolean markerExists(IMarker marker) {
