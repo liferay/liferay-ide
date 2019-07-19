@@ -24,11 +24,16 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
  * @author Vicky Wang
  * @author Ying Xu
  * @author Rui Wang
+ * @author Ashley Yuan
  */
 public class NewLiferayWorkspaceWizard extends NewProjectWizard {
 
 	public NewLiferayWorkspaceWizard(SWTBot bot) {
 		super(bot, 2);
+	}
+
+	public void deselectEnableTargetPlatfom() {
+		getEnableTargetPlatfom().deselect();
 	}
 
 	public Text getBundleUrl() {

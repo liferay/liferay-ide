@@ -167,6 +167,9 @@ public interface Messages {
 
 	public static final String NO_SUITABLE_LIFERAY_MODULE_PROJECT = "No suitable Liferay module project";
 
+	public static final String NO_TARGET_PLATFORM_CONFIGURATION_DETECTED =
+		"No Target Platform configuration detected in gradle.properties";
+
 	public static final String NO_UPGRADE_STEPS_DOUBLE_CLICK_TO_START_A_NEW_UPGRADE_PLAN =
 		"No upgrade steps. Double-click to start a new upgrade plan.";
 

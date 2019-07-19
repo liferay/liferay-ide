@@ -157,6 +157,37 @@ public class ValidationModulesExtTests extends SwtbotBase {
 	}
 
 	@Test
+	public void checkExtWithWorkspaceWithoutTargetPlatform() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradleWithoutTargetPlatform(project.getName());
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.openNewLiferayModulesExtWizard();
+
+		validationAction.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, wizardAction.getValidationMsg(4));
+
+		wizardAction.newModulesExt.prepare(projects.getName(0));
+
+		validationAction.assertEquals(ORIGINAL_MODULE_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(4));
+
+		wizardAction.newModulesExt.openSelectBrowseDialog();
+
+		validationAction.assertEquals(NO_TARGET_PLATFORM_CONFIGURATION_DETECTED, dialogAction.getValidationMsg(0));
+
+		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
+
+		dialogAction.cancel();
+
+		wizardAction.cancel();
+
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
+	}
+
+	@Test
 	public void checkLocation() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 

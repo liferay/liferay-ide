@@ -935,6 +935,12 @@ public class WizardAction extends UIAction {
 			_newLiferayWorkspaceWizard.selectIndexSources();
 		}
 
+		public void prepareGradleWithoutTargetPlatform(String projectName) {
+			_prepare(projectName, GRADLE);
+
+			_newLiferayWorkspaceWizard.deselectEnableTargetPlatfom();
+		}
+
 		public void prepareMaven(String projectName) {
 			_prepare(projectName, MAVEN);
 		}
