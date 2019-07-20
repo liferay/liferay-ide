@@ -385,6 +385,10 @@ public class CoreUtil {
 
 		IResource resource = _filterIResouece(containers);
 
+		if (resource == null) {
+			return null;
+		}
+
 		return resource.getProject();
 	}
 
