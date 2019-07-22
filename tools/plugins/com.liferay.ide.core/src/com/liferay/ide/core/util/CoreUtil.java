@@ -35,8 +35,6 @@ import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import java.net.URI;
-
 import java.security.MessageDigest;
 
 import java.util.ArrayList;
@@ -215,10 +213,14 @@ public class CoreUtil {
 		return isNullOrEmpty(val);
 	}
 
-	public static IFile[] findFilesForLocationURI(URI uri) {
+	public static IResource findResourceForLocationURI(File file) {
 		IWorkspaceRoot root = getWorkspaceRoot();
 
-		return root.findFilesForLocationURI(uri);
+		IFile[] files = root.findFilesForLocationURI(file.toURI());
+
+		IResource resource = _filterIResouece(files);
+
+		return resource;
 	}
 
 	public static IProject[] getAllProjects() {
@@ -381,21 +383,7 @@ public class CoreUtil {
 
 		IResource[] containers = ws.findContainersForLocationURI(file.toURI());
 
-		IResource resource = null;
-
-		for (IResource container : containers) {
-			if (resource == null) {
-				resource = container;
-			}
-			else {
-				IPath containerPath = container.getProjectRelativePath();
-				IPath resourcePath = resource.getProjectRelativePath();
-
-				if (containerPath.segmentCount() < resourcePath.segmentCount()) {
-					resource = container;
-				}
-			}
-		}
+		IResource resource = _filterIResouece(containers);
 
 		if (resource == null) {
 			return null;
@@ -720,6 +708,30 @@ public class CoreUtil {
 			}
 			while (read >= 0);
 		}
+	}
+
+	private static IResource _filterIResouece(IResource[] resources) {
+		IResource result = null;
+
+		for (IResource resource : resources) {
+			if (result == null) {
+				result = resource;
+			}
+			else {
+				IPath filePath = resource.getProjectRelativePath();
+				IPath resourcePath = result.getProjectRelativePath();
+
+				if (filePath.segmentCount() < resourcePath.segmentCount()) {
+					result = resource;
+				}
+			}
+		}
+
+		if (result == null) {
+			return null;
+		}
+
+		return result;
 	}
 
 }

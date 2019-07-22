@@ -20,10 +20,8 @@ import java.io.File;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.util.OpenStrategy;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
@@ -37,7 +35,7 @@ public class Editors {
 
 	public static void open(File file) {
 		try {
-			IResource resource = _getIResourceFromFile(file);
+			IResource resource = CoreUtil.findResourceForLocationURI(file);
 
 			if (resource instanceof IFile) {
 				IDE.openEditor(UIUtil.getActivePage(), (IFile)resource);
@@ -74,49 +72,6 @@ public class Editors {
 		}
 		catch (PartInitException pie) {
 		}
-	}
-
-	private static IResource _getIResourceFromFile(File f) {
-		IResource retval = null;
-
-		IFile[] files = CoreUtil.findFilesForLocationURI(f.toURI());
-
-		for (IFile file : files) {
-			if (file.exists()) {
-				if (retval == null) {
-
-					// always prefer the file in a liferay project
-
-					if (CoreUtil.isLiferayProject(file.getProject())) {
-						retval = file;
-					}
-				}
-				else {
-
-					// if not lets pick the one that is shortest path
-
-					IPath fileFullPath = file.getFullPath();
-					IPath retvalFullPath = retval.getFullPath();
-
-					if (fileFullPath.segmentCount() < retvalFullPath.segmentCount()) {
-						retval = file;
-					}
-				}
-			}
-			else {
-				if (retval == null) {
-					IPath path = file.getFullPath();
-
-					IProject project = CoreUtil.getProject(path.segment(path.segmentCount() - 1));
-
-					if (project.exists()) {
-						retval = project;
-					}
-				}
-			}
-		}
-
-		return retval;
 	}
 
 }

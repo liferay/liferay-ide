@@ -15,7 +15,6 @@
 package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.problems.core.CUCache;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
 
@@ -32,7 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
@@ -144,13 +142,11 @@ public class CUCacheWTP implements CUCache<JSPTranslationPrime> {
 
 			translator.translate();
 
-			IFile[] resourceFiles = CoreUtil.findFilesForLocationURI(file.toURI());
+			IProject project = CoreUtil.getProject(file);
 
 			IJavaProject javaProject = null;
 
-			if (ListUtil.isNotEmpty(resourceFiles)) {
-				IProject project = resourceFiles[0].getProject();
-
+			if (project != null) {
 				javaProject = _getJavaProject(project.getName());
 			}
 			else {
