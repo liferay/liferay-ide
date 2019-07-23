@@ -14,6 +14,8 @@
 
 package com.liferay.ide.portlet.core.model;
 
+import com.liferay.ide.portlet.core.model.internal.PortletDefinitionRootElementController;
+
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ListProperty;
@@ -23,10 +25,9 @@ import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlRootBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlNamespace;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlSchema;
 
 /**
  * The root container model class that will have &lt;portlet-app&gt;
@@ -34,13 +35,9 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlSchema;
  * @author Kamesh Sampath <br/>
  * @author Gregory Amerson
  */
+@CustomXmlRootBinding(value = PortletDefinitionRootElementController.class)
 @Image(path = "images/obj16/portlet_model_obj.gif")
 @XmlBinding(path = "portlet-app")
-@XmlNamespace(prefix = "", uri = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd")
-@XmlSchema(
-	location = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd",
-	namespace = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
-)
 public interface PortletApp extends Identifiable, ResourceBundle {
 
 	public ElementType TYPE = new ElementType(PortletApp.class);
