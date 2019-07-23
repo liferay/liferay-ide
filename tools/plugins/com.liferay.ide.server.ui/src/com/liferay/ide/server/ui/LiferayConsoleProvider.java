@@ -46,9 +46,23 @@ public class LiferayConsoleProvider extends ConsoleColorProvider {
 
 			ILaunchConfiguration launchConfiguration = launch.getLaunchConfiguration();
 
+			if (launchConfiguration == null) {
+				return;
+			}
+
 			IServer server = ServerUtil.getServer(launchConfiguration);
 
+			if (server == null) {
+				return;
+			}
+
 			if (IServer.STATE_STOPPED == server.getServerState()) {
+				return;
+			}
+
+			ILaunch serverStartLaunch = server.getLaunch();
+
+			if ((serverStartLaunch == null) || ((serverStartLaunch != null) && !launch.equals(serverStartLaunch))) {
 				return;
 			}
 
@@ -100,9 +114,11 @@ public class LiferayConsoleProvider extends ConsoleColorProvider {
 
 	@Override
 	public void disconnect() {
-		DebugPlugin debugPlugin = DebugPlugin.getDefault();
+		if (_processListener != null) {
+			DebugPlugin debugPlugin = DebugPlugin.getDefault();
 
-		debugPlugin.removeDebugEventListener(_processListener);
+			debugPlugin.removeDebugEventListener(_processListener);
+		}
 	}
 
 	private transient IDebugEventSetListener _processListener = null;

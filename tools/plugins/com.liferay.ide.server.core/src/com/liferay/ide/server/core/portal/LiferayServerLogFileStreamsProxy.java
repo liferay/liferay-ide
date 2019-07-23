@@ -177,7 +177,7 @@ public class LiferayServerLogFileStreamsProxy {
 					try {
 						String s = "";
 
-						while ((s != null) && !_done) {
+						while (!_done) {
 							long newLogFileSize = _logFile.length();
 
 							if (shouldReloadFileReader(originalLogFileSize, newLogFileSize)) {
