@@ -17,6 +17,7 @@ package com.liferay.ide.ui.liferay.action;
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.page.dialog.AddRepositoryDialog;
 import com.liferay.ide.ui.liferay.page.dialog.AddUrlDialog;
+import com.liferay.ide.ui.liferay.page.dialog.SwitchUpgradePlanDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.AddAndRemoveDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.AvailableSoftwareSitesPreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.GradlePreferencesDialog;
@@ -58,14 +59,6 @@ public class DialogAction extends UIAction {
 		String title = _getDialog().getLabel();
 
 		_getDialog().cancel();
-
-		_jobAction.waitForShellClosed(title);
-	}
-
-	public void close() {
-		String title = _getDialog().getLabel();
-
-		_getDialog().close();
 
 		_jobAction.waitForShellClosed(title);
 	}
@@ -171,6 +164,7 @@ public class DialogAction extends UIAction {
 	public PreferencesDialogAction preferences = new PreferencesDialogAction();
 	public ServerRuntimeEnvironmentsDialogAction serverRuntimeEnvironments =
 		new ServerRuntimeEnvironmentsDialogAction();
+	public SwitchUpgradePlanDialogAction switchUpgradePlan = new SwitchUpgradePlanDialogAction();
 	public UpdateMavenProjectDialogAction updateMavenProject = new UpdateMavenProjectDialogAction();
 	public UpgradePlannerDialogAction upgradePlanner = new UpgradePlannerDialogAction();
 	public WorkspaceFileDialogAction workspaceFile = new WorkspaceFileDialogAction();
@@ -393,6 +387,52 @@ public class DialogAction extends UIAction {
 
 		private final ServerRuntimeEnvironmentsPreferencesDialog _serverRuntimeEnvironmentsDialog =
 			new ServerRuntimeEnvironmentsPreferencesDialog(bot);
+
+	}
+
+	public class SwitchUpgradePlanDialogAction {
+
+		public void chooseUpgradePlan(String upgradePlanName) {
+			_switchUpgradePlanDialog.select(upgradePlanName);
+		}
+
+		public void close() {
+			_switchUpgradePlanDialog.clickClose();
+		}
+
+		public Boolean containsUpgradePlan(String upgradePlanName) {
+			if (_switchUpgradePlanDialog.upgradePlanRow(upgradePlanName) == -1) {
+				return false;
+			}
+
+			return true;
+		}
+
+		public Button getRemovePlanBtn() {
+			return _switchUpgradePlanDialog.removePlanBtn();
+		}
+
+		public Button getStartPlanBtn() {
+			return _switchUpgradePlanDialog.startPlanBtn();
+		}
+
+		public String[] getUpgradePlan(String upgradePlanName) {
+			return _switchUpgradePlanDialog.upgradePlanMessage(upgradePlanName);
+		}
+
+		public void removePlan() {
+			_switchUpgradePlanDialog.clickRemovePlan();
+		}
+
+		public void selectUpgradePlan(String upgradePlanName) {
+			_switchUpgradePlanDialog.doubleClick(upgradePlanName);
+		}
+
+		public void startPlan() {
+			_switchUpgradePlanDialog.clickStartPlan();
+		}
+
+		private final SwitchUpgradePlanDialog _switchUpgradePlanDialog = new SwitchUpgradePlanDialog(bot);
 
 	}
 

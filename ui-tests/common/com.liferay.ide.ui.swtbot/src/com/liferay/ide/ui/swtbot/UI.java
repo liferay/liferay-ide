@@ -671,6 +671,8 @@ public interface UI {
 
 	public final String REMOVE_ALL = "<< Remove All";
 
+	public final String REMOVE_PLAN = "Remove Plan";
+
 	public final String REMOVE_PROJECT = "< Remove";
 
 	public final String REMOVE_WITH_DOT = "Remove...";
@@ -791,6 +793,8 @@ public interface UI {
 
 	public final String START = "Start";
 
+	public final String START_PLAN = "Start Plan";
+
 	public final String START_THE_SERVER_IN_DEBUG_MODE_WITH_KEY = "Start the server in debug mode (Ctrl+Alt+D)";
 
 	public final String START_THE_SERVER_IN_DEBUG_MODE_WITH_KEY_MAC = "Start the server in debug mode (⌥⌘D)";
@@ -869,9 +873,15 @@ public interface UI {
 		"upgrading-code-to-product-ver - https://portal.liferay.dev/docs/7-2/tutorials/-/knowledge_base/t" +
 			"/upgrading-code-to-product-ver";
 
+	public final String UPGRADING_CODE_TO_PRODUCT_VER_URL =
+		"https://portal.liferay.dev/docs/7-2/tutorials/-/knowledge_base/t/upgrading-code-to-product-ver";
+
 	public final String UPGRADING_TO_PRODUCT_VER =
 		"upgrading-to-product-ver - https://portal.liferay.dev/docs/7-2/deploy/-/knowledge_base/d" +
 			"/upgrading-to-product-ver";
+
+	public final String UPGRADING_TO_PRODUCT_VER_URL =
+		"https://portal.liferay.dev/docs/7-2/deploy/-/knowledge_base/d/upgrading-to-product-ver";
 
 	public final String UPLOAD_NEW_WORKFLOW = "Upload new workflow...";
 

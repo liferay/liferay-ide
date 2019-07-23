@@ -146,6 +146,10 @@ public class ViewAction extends UIAction {
 			return _getSteps().getTreeItem(steps);
 		}
 
+		public String getViewTitle() {
+			return _liferayUpgradePlanView.getUpgradePlanViewTitle();
+		}
+
 		public void selectStep(String... steps) {
 			ide.sleep();
 

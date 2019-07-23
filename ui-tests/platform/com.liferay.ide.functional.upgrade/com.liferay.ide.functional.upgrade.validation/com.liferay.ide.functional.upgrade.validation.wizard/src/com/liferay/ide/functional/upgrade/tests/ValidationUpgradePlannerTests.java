@@ -32,16 +32,16 @@ public class ValidationUpgradePlannerTests extends SwtbotBase {
 	public void checkCurrentLifrayVersion() {
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		String[] expectedBuildTypes = {"6.2", "7.0", "7.1"};
+		String[] expectedCurrentVersions = {"6.2", "7.0", "7.1"};
 
-		ComboBox buildTypeComboBox = wizardAction.newUpgradePlan.currentLiferayVersion();
+		ComboBox currentVersionComboBox = wizardAction.newUpgradePlan.currentLiferayVersion();
 
-		String[] buildTypes = buildTypeComboBox.items();
+		String[] currentVersions = currentVersionComboBox.items();
 
-		validationAction.assertLengthEquals(expectedBuildTypes, buildTypes);
+		validationAction.assertLengthEquals(expectedCurrentVersions, currentVersions);
 
-		for (int i = 0; i < buildTypes.length; i++) {
-			validationAction.assertEquals(expectedBuildTypes[i], buildTypes[i]);
+		for (int i = 0; i < currentVersions.length; i++) {
+			validationAction.assertEquals(expectedCurrentVersions[i], currentVersions[i]);
 		}
 
 		wizardAction.cancel();
@@ -104,16 +104,16 @@ public class ValidationUpgradePlannerTests extends SwtbotBase {
 	public void checkTargetLiferayVersion() {
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
-		String[] expectedBuildTypes = {"7.0", "7.1", "7.2"};
+		String[] expectedTargetVersions = {"7.0", "7.1", "7.2"};
 
-		ComboBox buildTypeComboBox = wizardAction.newUpgradePlan.targetLiferayVersion();
+		ComboBox targetVersionComboBox = wizardAction.newUpgradePlan.targetLiferayVersion();
 
-		String[] buildTypes = buildTypeComboBox.items();
+		String[] targetVersions = targetVersionComboBox.items();
 
-		validationAction.assertLengthEquals(expectedBuildTypes, buildTypes);
+		validationAction.assertLengthEquals(expectedTargetVersions, targetVersions);
 
-		for (int i = 0; i < buildTypes.length; i++) {
-			validationAction.assertEquals(expectedBuildTypes[i], buildTypes[i]);
+		for (int i = 0; i < targetVersions.length; i++) {
+			validationAction.assertEquals(expectedTargetVersions[i], targetVersions[i]);
 		}
 
 		wizardAction.cancel();
@@ -129,16 +129,16 @@ public class ValidationUpgradePlannerTests extends SwtbotBase {
 
 		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
-		String[] expectedBuildTypes = {UPGRADING_TO_PRODUCT_VER, UPGRADING_CODE_TO_PRODUCT_VER};
+		String[] expectedUpgradePlanOutlines = {UPGRADING_TO_PRODUCT_VER, UPGRADING_CODE_TO_PRODUCT_VER};
 
-		ComboBox buildTypeComboBox = wizardAction.newUpgradePlan.upgradePlanOutline();
+		ComboBox upgradePlanOutlineComboBox = wizardAction.newUpgradePlan.upgradePlanOutline();
 
-		String[] buildTypes = buildTypeComboBox.items();
+		String[] upgradePlanOutlines = upgradePlanOutlineComboBox.items();
 
-		validationAction.assertLengthEquals(expectedBuildTypes, buildTypes);
+		validationAction.assertLengthEquals(expectedUpgradePlanOutlines, upgradePlanOutlines);
 
-		for (int i = 0; i < buildTypes.length; i++) {
-			validationAction.assertEquals(expectedBuildTypes[i], buildTypes[i]);
+		for (int i = 0; i < upgradePlanOutlines.length; i++) {
+			validationAction.assertEquals(expectedUpgradePlanOutlines[i], upgradePlanOutlines[i]);
 		}
 
 		wizardAction.cancel();

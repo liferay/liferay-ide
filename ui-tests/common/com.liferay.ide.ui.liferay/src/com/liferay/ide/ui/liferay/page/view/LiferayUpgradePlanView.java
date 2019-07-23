@@ -99,6 +99,10 @@ public class LiferayUpgradePlanView extends View {
 		return new ToolbarButtonWithTooltip(_getShell().bot(), UPGRADE_PLAN_DETAILS);
 	}
 
+	public String getUpgradePlanViewTitle() {
+		return getReference().getTitle();
+	}
+
 	public boolean isVisible(String label) {
 		Matcher matcherImageHyperLink = allOf(widgetOfType(Hyperlink.class), withMnemonic(label));
 
