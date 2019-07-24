@@ -67,6 +67,8 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		String projectTemplateName = get(op.getProjectTemplateName());
 
+		boolean npm = projectTemplateName.startsWith("npm");
+
 		projectTemplateName = projectTemplateName.replace("-", ".");
 
 		VersionRange versionRange = _projectTemplateVersionRangeMap.get(projectTemplateName);
@@ -75,8 +77,15 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 			boolean include = versionRange.includes(new Version(liferayVersion));
 
 			if (!include) {
-				retval = Status.createErrorStatus(
-					"Specified Liferay version is invaild. Must be in range " + versionRange);
+				if (npm) {
+					retval = Status.createErrorStatus(
+						"NPM portlet project templates generated from this tool are not supported for specified " +
+							"Liferay version. See LPS-97950 for full details.");
+				}
+				else {
+					retval = Status.createErrorStatus(
+						"Specified Liferay version is invaild. Must be in range " + versionRange);
+				}
 			}
 		}
 		else {
