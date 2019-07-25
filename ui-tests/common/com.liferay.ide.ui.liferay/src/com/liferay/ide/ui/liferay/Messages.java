@@ -175,6 +175,10 @@ public interface Messages {
 
 	public static final String NOT_A_JAVA_SOURCE_FOLDER = "Not a Java source folder.";
 
+	public static final String NPM_PORTLET_PROJECT_TEMPLATES_NOT_SUPPORT_FOR_SPECIFIED_LIFERAY_VERSION =
+		"NPM portlet project templates generated from this tool are not supported for specified Liferay version. See " +
+			"LPS-97950 for full details.";
+
 	public static final String ORIGINAL_MODULE_NAME_MUST_BE_SPECIFIED = "Original module name must be specified";
 
 	public static final String PACKAGE_NAME_MUST_BE_SPECIFIED = "Package name must be specified";
