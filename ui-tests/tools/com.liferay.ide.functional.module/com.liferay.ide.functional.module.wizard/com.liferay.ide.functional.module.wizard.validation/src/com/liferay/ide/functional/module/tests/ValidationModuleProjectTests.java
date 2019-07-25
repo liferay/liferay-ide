@@ -343,8 +343,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		}
 
 		String[] templates = {
-			CONTENT_TARGETING_REPORT, CONTENT_TARGETING_RULE, CONTENT_TARGETING_TRACKING_ACTION, FORM_FIELD,
-			NPM_ANGULAR_PORTLET, NPM_REACT_PORTLET, NPM_VUEJS_PORTLET
+			CONTENT_TARGETING_REPORT, CONTENT_TARGETING_RULE, CONTENT_TARGETING_TRACKING_ACTION, FORM_FIELD
 		};
 
 		for (String template : templates) {
@@ -352,6 +351,18 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 			validationAction.assertEquals(
 				SPECIFIED_LIFERAY_VERSION_IS_INVAILD_MUST_BE_IN_RANGE_700_720, wizardAction.getValidationMsg(2));
+
+			validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
+		}
+
+		String[] npmTemplates = {NPM_ANGULAR_PORTLET, NPM_REACT_PORTLET, NPM_VUEJS_PORTLET};
+
+		for (String template : npmTemplates) {
+			wizardAction.newModule.prepareGradle(projectName, template, "7.2");
+
+			validationAction.assertEquals(
+				NPM_PORTLET_PROJECT_TEMPLATES_NOT_SUPPORT_FOR_SPECIFIED_LIFERAY_VERSION,
+				wizardAction.getValidationMsg(2));
 
 			validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 		}
