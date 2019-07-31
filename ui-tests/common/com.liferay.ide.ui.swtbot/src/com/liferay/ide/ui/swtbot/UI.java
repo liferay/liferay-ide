@@ -424,6 +424,8 @@ public interface UI {
 
 	public final String LIFERAY_LAYOUT_TEMPLATE = "Liferay Layout Template";
 
+	public final String LIFERAY_MODULE_EXT_FILES = "Liferay Module Ext Files";
+
 	public final String LIFERAY_MODULE_FRAGMENT_FILES = "Liferay Module Fragment Files";
 
 	public final String LIFERAY_MODULE_PROJECT = "Liferay Module Project";
@@ -572,6 +574,8 @@ public interface UI {
 	public final String OPEN_LIFERAY_HOME_FOLDER = "Open Liferay Home Folder";
 
 	public final String OPEN_LIFERAY_PORTAL_HOME = "Open Liferay Portal Home";
+
+	public final String ORIGINAL_MODULE = "Original Module:";
 
 	public final String ORIGINAL_MODULE_NAME = "Original module name:";
 
