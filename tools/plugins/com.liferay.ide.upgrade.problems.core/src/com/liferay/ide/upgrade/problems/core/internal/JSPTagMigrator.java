@@ -201,7 +201,8 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 
 				if (corrected > 0) {
 					try (OutputStream output = Files.newOutputStream(
-							Paths.get(file.toURI()), StandardOpenOption.WRITE, StandardOpenOption.DSYNC)) {
+							Paths.get(file.toURI()), StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING,
+							StandardOpenOption.DSYNC)) {
 
 						domModel.save(output);
 					}

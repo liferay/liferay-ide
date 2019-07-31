@@ -111,7 +111,8 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 
 				if (corrected > 0) {
 					try (OutputStream output = Files.newOutputStream(
-							Paths.get(file.toURI()), StandardOpenOption.WRITE, StandardOpenOption.DSYNC)) {
+							Paths.get(file.toURI()), StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING,
+							StandardOpenOption.DSYNC)) {
 
 						xmlModel.save(output);
 					}
