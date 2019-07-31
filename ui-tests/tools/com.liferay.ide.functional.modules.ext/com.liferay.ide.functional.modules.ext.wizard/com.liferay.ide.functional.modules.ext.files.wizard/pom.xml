@@ -23,20 +23,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.functional.tests.modules.ext</groupId>
-		<artifactId>modules-ext-tests</artifactId>
+		<groupId>com.liferay.ide.functional.tests.modules.ext.wizard</groupId>
+		<artifactId>modules-ext-wizard-tests</artifactId>
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.modules.ext.wizard</groupId>
-	<artifactId>modules-ext-wizard-tests</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>com.liferay.ide.functional.modules.ext.files.wizard.tests</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
 
-	<name>Liferay IDE Funtional Modules Ext Wizard</name>
-
-	<modules>
-		<module>com.liferay.ide.functional.modules.ext.wizard.create</module>
-		<module>com.liferay.ide.functional.modules.ext.wizard.validation</module>
-		<module>com.liferay.ide.functional.modules.ext.files.wizard</module>
-	</modules>
+	<name>Liferay IDE Functional Modules Ext Files Wizard Tests</name>
 </project>

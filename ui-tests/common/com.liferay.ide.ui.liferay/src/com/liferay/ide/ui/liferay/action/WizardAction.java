@@ -36,6 +36,7 @@ import com.liferay.ide.ui.liferay.page.wizard.project.NewFragmentWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayJsfWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayModuleInfoWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayModuleWizard;
+import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayModulesExtFilesWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayModulesExtWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayPluginWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayWorkspaceWizard;
@@ -282,6 +283,7 @@ public class WizardAction extends UIAction {
 	public NewModuleWizardAction newModule = new NewModuleWizardAction();
 	public NewModuleInfoWizardAction newModuleInfo = new NewModuleInfoWizardAction();
 	public NewLiferayModulesExtWizardAction newModulesExt = new NewLiferayModulesExtWizardAction();
+	public NewLiferayModulesExtFilesWizardAction newModulesExtFiles = new NewLiferayModulesExtFilesWizardAction();
 	public NewPluginWizardAction newPlugin = new NewPluginWizardAction();
 	public NewProjectWizardAction newProject = new NewProjectWizardAction();
 	public NewRuntimeWizardAction newRuntime = new NewRuntimeWizardAction();
@@ -778,6 +780,29 @@ public class WizardAction extends UIAction {
 		}
 
 		private final NewLiferayJsfWizard _newJsfProjectWizard = new NewLiferayJsfWizard(bot);
+
+	}
+
+	public class NewLiferayModulesExtFilesWizardAction extends NewLiferayModulesExtWizardAction {
+
+		public void openFileMenuModulesExtFilesWizard() {
+			ide.clickFileMenu(NEW, OTHER);
+
+			_prepare(LIFERAY, LIFERAY_MODULE_EXT_FILES);
+
+			next();
+		}
+
+		public Text origialModule() {
+			return _newModulesExtFilesWizard.getOrigialModule();
+		}
+
+		private void _prepare(String category, String type) {
+			_newModulesExtFilesWizard.selectType(category, type);
+		}
+
+		private final NewLiferayModulesExtFilesWizard _newModulesExtFilesWizard = new NewLiferayModulesExtFilesWizard(
+			bot);
 
 	}
 

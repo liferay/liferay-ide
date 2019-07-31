@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Functional Modules Ext Files Wizard Tests
+Bundle-SymbolicName: com.liferay.ide.functional.modules.ext.files.wizard.tests
+Bundle-Version: 3.6.2.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: com.liferay.ide.ui.liferay,
+ com.liferay.ide.ui.swtbot,
+ org.eclipse.swtbot.go
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy

@@ -29,6 +29,8 @@ public interface Messages {
 
 	public static final String A_PROJECT_WITH_THAT_NAME_ALREADY_EXISTS = "A project with that name already exists.";
 
+	public static final String ADD_SOURCE_FILES_TO_OVERRIDE = "Add Source Files To Override";
+
 	public static final String ALREADY_EXISTS = " already exists.";
 
 	public static final String AT_LEAST_ONE_PROJECT_MUST_BE_SPECIFY = "At least one project must be specified.";
@@ -150,6 +152,9 @@ public interface Messages {
 
 	public static final String MODULE_EXT_PROJECTS_ONLY_WORK_ON_LIFERAY_WORKSPACE_WHICH_VERSION_IS_GREATER_THAN_70 =
 		"Module Ext projects only work on liferay workspace which version is greater than 7.0.";
+
+	public static final String MULTIPLE_OCCURRENCE_OF_PORTLET_PROPERTIES_WERE_FOUND =
+		"Multiple occurrence of \"portlet.properties\" were found";
 
 	public static final String MUST_SPECIFY_A_PORTLET_SUPERCLASS = "Must specify a portlet superclass.";
 
@@ -298,6 +303,12 @@ public interface Messages {
 		"Thumbnail file already exists and will be overwritten.";
 
 	public static final String THUMBNAIL_FILE_NAME_IS_INVALID = "Thumbnail file name is invalid.";
+
+	public static final String UNABLE_TO_GET_SOURCE_FILES_IN_CURRENT_CONTEXT =
+		"Unable to get source files in current context.";
+
+	public static final String UNABLE_TO_IDENTIFY_ORIGINAL_MODULE_SOURCE_IN_CURRENT_CONTEXT =
+		"Unable to identify original module source in current context.";
 
 	public static final String UPGRADE_PLAN_OUTLINE_MUST_BE_SPECIFIED = "Upgrade plan outline must be specified";
 

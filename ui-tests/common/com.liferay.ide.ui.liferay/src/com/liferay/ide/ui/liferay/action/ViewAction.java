@@ -298,6 +298,12 @@ public class ViewAction extends UIAction {
 			_getProjects().contextMenu(LIFERAY_MODULE_FRAGMENT_FILES);
 		}
 
+		public void openProjectNewModuleExtFilesWizard(String workspace, String projectName) {
+			_getProjects().selectTreeItem(workspace, "ext", projectName);
+
+			_getProjects().contextMenu(LIFERAY_MODULE_EXT_FILES);
+		}
+
 		public void openUpdateMavenProjectDialog(String projectName) {
 			try {
 				_getProjects().contextMenu("Update Project...", projectName);
