@@ -4465,3 +4465,25 @@ sync both components, and simplify its internal logic, activity sets are always
 enabled by default, with no option to disable them.
 
 ---------------------------------------
+
+### Deprecated wap-template-path tag on 7.x for layout templates [](id=deprecated-wap-template-path-for-layout-templates)
+- **Date:** 2019-Jul-30
+- **JIRA Ticket:**
+
+#### What changed? [](id=what-changed-114)
+
+The <wap-template-path> tag doesn't exist on liferay portal 7.0 anymore.
+
+#### Who is affected? [](id=who-is-affected-114)
+
+This change affects liferay-layout-template.xml in layout templates.
+
+#### How should I update my code? [](id=how-should-i-update-my-code-114)
+
+Remove <wap-template-path> tag.
+
+#### Why was this change made? [](id=why-was-this-change-made-114)
+
+The <wap-template-path> tag was deprecated on 7.x for layout-templates.
+
+---------------------------------------
