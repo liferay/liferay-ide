@@ -305,30 +305,23 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.newLiferayWorkspace.prepareMaven(projectName, "7.0");
 
-		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
-
-		wizardAction.newLiferayWorkspace.setServerName(projectName);
-
-		wizardAction.newLiferayWorkspace.setBundleUrl(
-			"http://ide-resources-site/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip");
-
 		wizardAction.finish();
 
 		jobAction.waitForNoRunningJobs();
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "bundles"));
 
 		viewAction.project.runMavenInitBundle(projectName);
 
 		jobAction.waitForNoRunningJobs();
 
-		Assert.assertTrue(viewAction.servers.visibleServer(LIFERAY_PORTAL_BUNDLE));
+		jobAction.waitForConsoleContent(project.getName() + " [Maven Build]", "BUILD SUCCESS", M1);
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "bundles"));
 
 		dialogAction.openPreferencesDialog();
 
 		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_PORTAL_BUNDLE);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(0);
 
 		dialogAction.preferences.confirm();
 
@@ -437,7 +430,9 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
 
-		wizardAction.newLiferayWorkspace.setServerName("Liferay 7-change-bundle-url");
+		String serverName = "Liferay 7-change-bundle-url";
+
+		wizardAction.newLiferayWorkspace.setServerName(serverName);
 
 		wizardAction.newLiferayWorkspace.setBundleUrl(bundleUrl);
 
@@ -445,26 +440,40 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
+		jobAction.waitForConsoleContent(project.getName() + " [Maven Build]", "BUILD SUCCESS", M1);
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "bundles"));
+
+		Assert.assertTrue(viewAction.servers.visibleServer(serverName));
+
 		dialogAction.openPreferencesDialog();
 
 		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(serverName);
 
 		dialogAction.preferences.confirm();
 
-		String[] bundles = {project.getName(), "bundles"};
+		jobAction.waitForNoRunningJobs();
 
-		viewAction.project.delete(bundles);
+		viewAction.project.openFile(project.getName(), "pom.xml");
+
+		String text = "\t<liferayHome>test</liferayHome>\n";
+
+		editorAction.customizedText(project.getName() + "/pom.xml", 15, 1, text);
+
+		editorAction.save();
+
+		editorAction.close();
 
 		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.runMavenInitBundle(project.getName());
 
 		jobAction.waitForNoRunningJobs();
-		jobAction.waitForConsoleContent(project.getName() + " [Maven Build]", "BUILD SUCCESS", M1);
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "bundles"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "test"));
+
 		Assert.assertTrue(viewAction.servers.visibleServer(LIFERAY_PORTAL_BUNDLE));
 
 		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
