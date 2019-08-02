@@ -63,7 +63,7 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 		if (!CoreUtil.isNullOrEmpty(externalPropetiesValue)) {
 			File externalPropertiesFile = new File(externalPropetiesValue);
 
-			if (FileUtil.exists(externalPropertiesFile) || !ServerUtil.isValidPropertiesFile(externalPropertiesFile)) {
+			if (!ServerUtil.isValidPropertiesFile(externalPropertiesFile)) {
 				return new IStatus[] {
 					new Status(IStatus.ERROR, LiferayServerUI.PLUGIN_ID, Msgs.invalidExternalPropertiesFile)
 				};
