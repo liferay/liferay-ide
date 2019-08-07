@@ -36,8 +36,8 @@
 	<name>Liferay IDE UI Base</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.fragment.wizard.base</module>
-		<module>com.liferay.ide.functional.fragment.deploy.base</module>
+		<module>fragment.wizard.base</module>
+		<module>fragment.deploy.base</module>
 		<module>com.liferay.ide.functional.module.deploy.base</module>
 		<module>com.liferay.ide.functional.portlet.deploy.base</module>
 		<module>com.liferay.ide.functional.server.deploy.base</module>
