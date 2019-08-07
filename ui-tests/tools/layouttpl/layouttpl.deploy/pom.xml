@@ -15,40 +15,28 @@
  *
  *******************************************************************************/
 -->
-
 <project
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
 >
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide</groupId>
-		<artifactId>ui-tests</artifactId>
+		<groupId>com.liferay.ide.functional.tests.layouttpl</groupId>
+		<artifactId>layouttpl-tests</artifactId>
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.ui.tests</groupId>
-	<artifactId>platform-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.layouttpl.deploy</groupId>
+	<artifactId>layouttpl-deploy-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE UI Platform Tests</name>
-
-	<properties>
-		<liferay-ide-swtbot-testing-site>file:/${basedir}/../../com.liferay.ide.ui.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
-	</properties>
-
-	<repositories>
-		<repository>
-			<id>liferay-ide-swtbot-testing-site</id>
-			<layout>p2</layout>
-			<url>${liferay-ide-swtbot-testing-site}</url>
-		</repository>
-	</repositories>
+	<name>Liferay IDE Functional Layouttpl Deploy</name>
 
 	<modules>
-		<module>preference</module>
-		<module>com.liferay.ide.functional.upgrade</module>
+		<module>layouttpl.deploy.tomcat.70</module>
+		<module>layouttpl.deploy.tomcat.71</module>
+		<module>layouttpl.deploy.tomcat.dxp</module>
 	</modules>
 </project>

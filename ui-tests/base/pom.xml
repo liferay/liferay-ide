@@ -36,18 +36,18 @@
 	<name>Liferay IDE UI Base</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.fragment.wizard.base</module>
-		<module>com.liferay.ide.functional.fragment.deploy.base</module>
-		<module>com.liferay.ide.functional.module.deploy.base</module>
-		<module>com.liferay.ide.functional.portlet.deploy.base</module>
+		<module>fragment.wizard.base</module>
+		<module>fragment.deploy.base</module>
+		<module>module.deploy.base</module>
+		<module>portlet.deploy.base</module>
 		<module>com.liferay.ide.functional.server.deploy.base</module>
 		<module>com.liferay.ide.functional.server.wizard.base</module>
-		<module>com.liferay.ide.functional.layouttpl.deploy.base</module>
-		<module>com.liferay.ide.functional.theme.deploy.base</module>
-		<module>com.liferay.ide.functional.jsf.deploy.base</module>
+		<module>layouttpl.deploy.base</module>
+		<module>theme.deploy.base</module>
+		<module>jsf.deploy.base</module>
 		<module>com.liferay.ide.functional.service.builder.deploy.base</module>
-		<module>com.liferay.ide.functional.hook.deploy.base</module>
-		<module>com.liferay.ide.functional.kaleo.deploy.base</module>
-		<module>com.liferay.ide.functional.modules.ext.base</module>
+		<module>hook.deploy.base</module>
+		<module>kaleo.deploy.base</module>
+		<module>modules.ext.base</module>
 	</modules>
 </project>
