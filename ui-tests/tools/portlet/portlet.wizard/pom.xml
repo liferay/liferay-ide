@@ -23,19 +23,19 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.functional.tests.module</groupId>
-		<artifactId>module-tests</artifactId>
+		<groupId>com.liferay.ide.functional.tests.portlet</groupId>
+		<artifactId>portlet-tests</artifactId>
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.module.wizard</groupId>
-	<artifactId>module-wizard-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.portlet.wizard</groupId>
+	<artifactId>portlet-wizard-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Module Wizard</name>
+	<name>Liferay IDE Functional Portlet Wizard</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.module.wizard.create</module>
-		<module>com.liferay.ide.functional.module.wizard.validation</module>
+		<module>portlet.wizard.create</module>
+		<module>portlet.wizard.validation</module>
 	</modules>
 </project>

@@ -28,14 +28,15 @@
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.portlet.wizard</groupId>
-	<artifactId>portlet-wizard-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.portlet.deploy</groupId>
+	<artifactId>portlet-deploy-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Portlet Wizard</name>
+	<name>Liferay IDE Functional portlet Deploy</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.portlet.wizard.create</module>
-		<module>com.liferay.ide.functional.portlet.wizard.validation</module>
+		<module>portlet.deploy.tomcat.70</module>
+		<module>portlet.deploy.tomcat.71</module>
+		<module>portlet.deploy.tomcat.dxp</module>
 	</modules>
 </project>

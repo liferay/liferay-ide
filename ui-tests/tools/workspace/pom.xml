@@ -28,13 +28,13 @@
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.modules.ext</groupId>
-	<artifactId>modules-ext-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.workspace</groupId>
+	<artifactId>workspace-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Funtional Modules Ext</name>
+	<name>Liferay IDE functional Workspace</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.modules.ext.wizard</module>
+		<module>workspace.wizard</module>
 	</modules>
 </project>

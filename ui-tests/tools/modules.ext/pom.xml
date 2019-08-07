@@ -23,18 +23,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.functional.tests.module</groupId>
-		<artifactId>module-tests</artifactId>
+		<groupId>com.liferay.ide.ui.tests</groupId>
+		<artifactId>tools-tests</artifactId>
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.module.watch</groupId>
-	<artifactId>module-watch-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.modules.ext</groupId>
+	<artifactId>modules-ext-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Module Watch</name>
+	<name>Liferay IDE Funtional Modules Ext</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.module.watch.tomcat.71</module>
+		<module>modules.ext.wizard</module>
 	</modules>
 </project>

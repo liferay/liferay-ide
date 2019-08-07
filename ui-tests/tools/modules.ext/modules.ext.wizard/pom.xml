@@ -35,8 +35,8 @@
 	<name>Liferay IDE Funtional Modules Ext Wizard</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.modules.ext.wizard.create</module>
-		<module>com.liferay.ide.functional.modules.ext.wizard.validation</module>
-		<module>com.liferay.ide.functional.modules.ext.files.wizard</module>
+		<module>modules.ext.wizard.create</module>
+		<module>modules.ext.wizard.validation</module>
+		<module>modules.ext.files.wizard</module>
 	</modules>
 </project>

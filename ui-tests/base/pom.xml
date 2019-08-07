@@ -38,8 +38,8 @@
 	<modules>
 		<module>fragment.wizard.base</module>
 		<module>fragment.deploy.base</module>
-		<module>com.liferay.ide.functional.module.deploy.base</module>
-		<module>com.liferay.ide.functional.portlet.deploy.base</module>
+		<module>module.deploy.base</module>
+		<module>portlet.deploy.base</module>
 		<module>com.liferay.ide.functional.server.deploy.base</module>
 		<module>com.liferay.ide.functional.server.wizard.base</module>
 		<module>layouttpl.deploy.base</module>
@@ -48,6 +48,6 @@
 		<module>com.liferay.ide.functional.service.builder.deploy.base</module>
 		<module>hook.deploy.base</module>
 		<module>kaleo.deploy.base</module>
-		<module>com.liferay.ide.functional.modules.ext.base</module>
+		<module>modules.ext.base</module>
 	</modules>
 </project>

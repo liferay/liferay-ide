@@ -23,20 +23,20 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.ui.tests</groupId>
-		<artifactId>tools-tests</artifactId>
+		<groupId>com.liferay.ide.functional.tests.workspace</groupId>
+		<artifactId>workspace-tests</artifactId>
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.module</groupId>
-	<artifactId>module-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.workspace.wizard</groupId>
+	<artifactId>workspace-wizard-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Module</name>
+	<name>Liferay IDE Functional Workspace Wizard</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.module.deploy</module>
-		<module>com.liferay.ide.functional.module.wizard</module>
-		<module>com.liferay.ide.functional.module.watch</module>
+		<module>workspace.wizard.create.tomcat.70</module>
+		<module>workspace.wizard.import.tomcat.70</module>
+		<module>workspace.wizard.validation.tomcat.70</module>
 	</modules>
 </project>

@@ -53,13 +53,13 @@
 		<module>hook</module>
 		<module>jsf</module>
 		<module>layouttpl</module>
-		<module>com.liferay.ide.functional.module</module>
-		<module>com.liferay.ide.functional.portlet</module>
+		<module>module</module>
+		<module>portlet</module>
 		<module>com.liferay.ide.functional.sdk.tests</module>
 		<module>com.liferay.ide.functional.server</module>
-		<module>com.liferay.ide.functional.workspace</module>
+		<module>workspace</module>
 		<module>com.liferay.ide.functional.service.builder</module>
 		<module>kaleo</module>
-		<module>com.liferay.ide.functional.modules.ext</module>
+		<module>modules.ext</module>
 	</modules>
 </project>

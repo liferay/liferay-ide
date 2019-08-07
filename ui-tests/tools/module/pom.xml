@@ -28,14 +28,15 @@
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.portlet</groupId>
-	<artifactId>portlet-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.module</groupId>
+	<artifactId>module-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Portlet</name>
+	<name>Liferay IDE Functional Module</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.portlet.deploy</module>
-		<module>com.liferay.ide.functional.portlet.wizard</module>
+		<module>module.deploy</module>
+		<module>module.wizard</module>
+		<module>module.watch</module>
 	</modules>
 </project>

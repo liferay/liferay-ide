@@ -23,20 +23,19 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.functional.tests.portlet</groupId>
-		<artifactId>portlet-tests</artifactId>
+		<groupId>com.liferay.ide.ui.tests</groupId>
+		<artifactId>tools-tests</artifactId>
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.portlet.deploy</groupId>
-	<artifactId>portlet-deploy-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.portlet</groupId>
+	<artifactId>portlet-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional portlet Deploy</name>
+	<name>Liferay IDE Functional Portlet</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.portlet.deploy.tomcat.70</module>
-		<module>com.liferay.ide.functional.portlet.deploy.tomcat.71</module>
-		<module>com.liferay.ide.functional.portlet.deploy.tomcat.dxp</module>
+		<module>portlet.deploy</module>
+		<module>portlet.wizard</module>
 	</modules>
 </project>
