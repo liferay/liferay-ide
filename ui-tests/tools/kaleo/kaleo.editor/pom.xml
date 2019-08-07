@@ -15,39 +15,26 @@
  *
  *******************************************************************************/
 -->
-
 <project
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
 >
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide</groupId>
-		<artifactId>ui-tests</artifactId>
+		<groupId>com.liferay.ide.functional.tests.kaleo</groupId>
+		<artifactId>kaleo-tests</artifactId>
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.ui.base</groupId>
-	<artifactId>base-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.kaleo.editor</groupId>
+	<artifactId>kaleo-editor-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE UI Base</name>
+	<name>Liferay IDE Functional Kaleo Editor</name>
 
 	<modules>
-		<module>fragment.wizard.base</module>
-		<module>fragment.deploy.base</module>
-		<module>com.liferay.ide.functional.module.deploy.base</module>
-		<module>com.liferay.ide.functional.portlet.deploy.base</module>
-		<module>com.liferay.ide.functional.server.deploy.base</module>
-		<module>com.liferay.ide.functional.server.wizard.base</module>
-		<module>layouttpl.deploy.base</module>
-		<module>theme.deploy.base</module>
-		<module>jsf.deploy.base</module>
-		<module>com.liferay.ide.functional.service.builder.deploy.base</module>
-		<module>hook.deploy.base</module>
-		<module>kaleo.deploy.base</module>
-		<module>com.liferay.ide.functional.modules.ext.base</module>
+		<module>kaleo.editor.operation</module>
 	</modules>
 </project>
