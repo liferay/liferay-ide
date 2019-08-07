@@ -49,6 +49,7 @@
 
 	<modules>
 		<module>fragment</module>
+		<module>sdk</module>
 		<module>theme</module>
 		<module>hook</module>
 		<module>jsf</module>

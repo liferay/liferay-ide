@@ -18,7 +18,7 @@
 	<name>Liferay IDE Install Tests</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.install.tests</module>
+		<module>install.tests</module>
 	</modules>
 
 	<properties>

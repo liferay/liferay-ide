@@ -15,7 +15,11 @@
  *
  *******************************************************************************/
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -24,8 +28,13 @@
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.liferay.ide.functional.preference.tests</artifactId>
-	<packaging>eclipse-test-plugin</packaging>
+	<groupId>com.liferay.ide.functional.tests.preference</groupId>
+	<artifactId>preference-tests</artifactId>
+	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Preference Tests</name>
+	<name>Liferay IDE Functional Preference</name>
+
+	<modules>
+		<module>preference.tests</module>
+	</modules>
 </project>
