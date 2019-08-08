@@ -23,20 +23,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.ui.tests</groupId>
-		<artifactId>tools-tests</artifactId>
+		<groupId>com.liferay.ide.functional.tests.server.settings</groupId>
+		<artifactId>server-settings-tests</artifactId>
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.server</groupId>
-	<artifactId>server-tests</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>com.liferay.ide.functional.server.settings.tomcat.72.tests</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
 
-	<name>Liferay IDE Functional Module</name>
-
-	<modules>
-		<module>com.liferay.ide.functional.server.deploy</module>
-		<module>com.liferay.ide.functional.server.wizard</module>
-		<module>com.liferay.ide.functional.server.settings</module>
-	</modules>
+	<name>Liferay IDE Functional Server Settings Tomcat 72 Tests</name>
 </project>
