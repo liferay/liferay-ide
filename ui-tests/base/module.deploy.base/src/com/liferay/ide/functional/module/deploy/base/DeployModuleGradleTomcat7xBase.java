@@ -312,7 +312,7 @@ public abstract class DeployModuleGradleTomcat7xBase extends ServerTestBase {
 
 		wizardAction.newModuleInfo.openSelectServiceDialog();
 
-		dialogAction.prepareText("*BlogsEntryServiceWrapper");
+		dialogAction.prepareText("*AccountLocalServiceWrapper");
 
 		dialogAction.confirm();
 

@@ -61,7 +61,7 @@ public class TomcatDxpDeployTests extends Tomcat7xDeployBase {
 
 	@Override
 	protected String getVersion() {
-		return "7.1";
+		return "7.2";
 	}
 
 }
