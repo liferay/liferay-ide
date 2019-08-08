@@ -46,7 +46,7 @@ public class DeployPortletGradleTomcatDxpTests extends DeployPortletGradleTomcat
 
 	@Override
 	protected String getVersion() {
-		return "7.1";
+		return "7.2";
 	}
 
 }
