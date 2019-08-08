@@ -23,20 +23,20 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.ui.tests</groupId>
-		<artifactId>tools-tests</artifactId>
+		<groupId>com.liferay.ide.functional.tests.server</groupId>
+		<artifactId>server-tests</artifactId>
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.server</groupId>
-	<artifactId>server-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.server.deploy</groupId>
+	<artifactId>server-deploy-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Module</name>
+	<name>Liferay IDE Functional Server Deploy</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.server.deploy</module>
-		<module>com.liferay.ide.functional.server.wizard</module>
-		<module>com.liferay.ide.functional.server.settings</module>
+		<module>server.deploy.tomcat.70</module>
+		<module>server.deploy.tomcat.71</module>
+		<module>server.deploy.tomcat.dxp</module>
 	</modules>
 </project>

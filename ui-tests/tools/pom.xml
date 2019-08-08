@@ -57,7 +57,7 @@
 		<module>module</module>
 		<module>portlet</module>
 		<module>com.liferay.ide.functional.sdk.tests</module>
-		<module>com.liferay.ide.functional.server</module>
+		<module>server</module>
 		<module>workspace</module>
 		<module>com.liferay.ide.functional.service.builder</module>
 		<module>kaleo</module>
