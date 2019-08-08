@@ -76,7 +76,7 @@ public class ViewAction extends UIAction {
 		upgradePlannerPerspective.activate();
 	}
 
-	public ConsoleViewAction consoleView = new ConsoleViewAction();
+	public ConsoleViewAction console = new ConsoleViewAction();
 	public ErrorLogViewAction errorLog = new ErrorLogViewAction();
 	public GradleTasksViewAction gradleTasks = new GradleTasksViewAction();
 	public ProgressViewAction progress = new ProgressViewAction();
@@ -88,6 +88,10 @@ public class ViewAction extends UIAction {
 
 		public void clickRemoveGradleConsoleBtn() {
 			_consoleView.clickRomoveGradleConsoleBtn();
+		}
+
+		public void clearConsole() {
+			_consoleView.clickClearConsoleBtn();
 		}
 
 		private final ConsoleView _consoleView = new ConsoleView(bot);
@@ -523,6 +527,13 @@ public class ViewAction extends UIAction {
 			_getServers().selectTreeItem(serverLabel, KALEO_WORKFLOWS);
 
 			_getServers().contextMenu(true, "Upload new workflow...", serverLabel, KALEO_WORKFLOWS);
+		}
+
+		public void redeployModule(String serverName, String projectName) {
+			_getServers().selectTreeItem(serverName, projectName + "  [Started, Synchronized] (" + projectName + ")");
+
+			_getServers().contextMenu(
+				true, "Redeploy", serverName, projectName + "  [Started, Synchronized] (" + projectName + ")");
 		}
 
 		public void removeModule(String serverLabel, String projectName) {

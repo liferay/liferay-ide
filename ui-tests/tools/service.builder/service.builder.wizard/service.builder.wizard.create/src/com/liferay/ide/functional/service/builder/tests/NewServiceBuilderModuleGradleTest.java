@@ -51,7 +51,7 @@ public class NewServiceBuilderModuleGradleTest extends SwtbotBase {
 
 		jobAction.waitForConsoleContent(project.getName(), "BUILD FAILED", M1);
 
-		viewAction.consoleView.clickRemoveGradleConsoleBtn();
+		viewAction.console.clickRemoveGradleConsoleBtn();
 
 		viewAction.project.runBuildService(project.getName());
 

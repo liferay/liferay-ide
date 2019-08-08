@@ -32,6 +32,10 @@ public class ConsoleView extends View {
 		clickToolbarButton(REMOVE_GRADLE_CONSOLE);
 	}
 
+	public void clickClearConsoleBtn() {
+		clickToolbarButton(CLEAR_CONSOLE);
+	}
+
 	public StyledText getLog() {
 		return new StyledText(getPart().bot());
 	}

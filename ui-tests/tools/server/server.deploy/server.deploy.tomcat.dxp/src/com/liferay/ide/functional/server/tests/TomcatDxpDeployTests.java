@@ -20,6 +20,7 @@ import com.liferay.ide.ui.liferay.support.server.ServerSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -49,6 +50,7 @@ public class TomcatDxpDeployTests extends Tomcat7xDeployBase {
 		super.deployModule();
 	}
 
+	@Ignore("Ignore because the portlet plugin project version is 7.0")
 	@Test
 	public void deployPluginPortlet() {
 		super.deployPluginPortlet();
@@ -57,6 +59,11 @@ public class TomcatDxpDeployTests extends Tomcat7xDeployBase {
 	@Test
 	public void deployWar() {
 		super.deployWar();
+	}
+
+	@Test
+	public void redeployModule() {
+		super.redeployModule();
 	}
 
 	@Override

@@ -59,6 +59,11 @@ public class Tomcat70DeployTests extends Tomcat7xDeployBase {
 		super.deployWar();
 	}
 
+	@Test
+	public void redeployModule() {
+		super.redeployModule();
+	}
+
 	@Override
 	protected String getVersion() {
 		return "7.0";

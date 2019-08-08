@@ -129,6 +129,8 @@ public interface UI {
 
 	public final String CLASSNAME = "Classname:";
 
+	public final String CLEAR_CONSOLE = "Clear Console";
+
 	public final String CLEAR_LOG_VIEWER = "Clear Log Viewer";
 
 	public final String CLICK_TO_PERFORM = "Click to perform";
