@@ -90,6 +90,12 @@ public class ValidationAction extends UIAction {
 		}
 	}
 
+	public void assertEquals(String[] expects, String[] actual) {
+		for (int i = 0; i < actual.length; i++) {
+			Assert.assertEquals(expects[i], actual[i]);
+		}
+	}
+
 	public void assertGogoShellVisible() {
 		CTabItem gogoShell = new CTabItem(bot, LIFERAY_GOGO_SHELL);
 

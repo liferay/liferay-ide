@@ -16,6 +16,7 @@ package com.liferay.ide.functional.upgrade.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.project.ProjectsSupport;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -28,7 +29,7 @@ import org.junit.Test;
 public class UpgradePlannerActionsTests extends SwtbotBase {
 
 	@Test
-	public void expandAndcollapse() {
+	public void expandAndCollapse() {
 		wizardAction.openNewLiferayUpgradePlanWizard();
 
 		wizardAction.newUpgradePlan.prepare(project.getName(), UPGRADING_CODE_TO_PRODUCT_VER, "6.2", "7.1");
@@ -83,9 +84,60 @@ public class UpgradePlannerActionsTests extends SwtbotBase {
 
 	@Test
 	public void switchUpgradePlan() {
+		wizardAction.openNewLiferayUpgradePlanWizard();
+
+		wizardAction.newUpgradePlan.prepare(projects.getName(0), UPGRADING_CODE_TO_PRODUCT_VER, "6.2", "7.1");
+
+		wizardAction.finish();
+
 		viewAction.upgradePlan.clickSwitchUpgradePlan();
 
-		dialogAction.close();
+		validationAction.assertEnabledFalse(dialogAction.switchUpgradePlan.getStartPlanBtn());
+
+		validationAction.assertEnabledFalse(dialogAction.switchUpgradePlan.getRemovePlanBtn());
+
+		dialogAction.switchUpgradePlan.close();
+
+		wizardAction.openNewLiferayUpgradePlanWizard();
+
+		wizardAction.newUpgradePlan.prepare(projects.getName(1), UPGRADING_TO_PRODUCT_VER, "7.0", "7.2");
+
+		wizardAction.finish();
+
+		validationAction.assertContains(projects.getName(1), viewAction.upgradePlan.getViewTitle());
+
+		viewAction.upgradePlan.clickSwitchUpgradePlan();
+
+		String[] firstUpgradePlan = {projects.getName(0), "6.2", "7.1", UPGRADING_CODE_TO_PRODUCT_VER_URL};
+		String[] secondUpgradePlan = {projects.getName(1), "7.0", "7.2", UPGRADING_TO_PRODUCT_VER_URL};
+
+		validationAction.assertEquals(
+			firstUpgradePlan, dialogAction.switchUpgradePlan.getUpgradePlan(projects.getName(0)));
+
+		validationAction.assertEquals(
+			secondUpgradePlan, dialogAction.switchUpgradePlan.getUpgradePlan(projects.getName(1)));
+
+		dialogAction.switchUpgradePlan.chooseUpgradePlan(projects.getName(0));
+
+		validationAction.assertEnabledTrue(dialogAction.switchUpgradePlan.getStartPlanBtn());
+
+		validationAction.assertEnabledTrue(dialogAction.switchUpgradePlan.getRemovePlanBtn());
+
+		dialogAction.switchUpgradePlan.startPlan();
+
+		validationAction.assertContains(projects.getName(0), viewAction.upgradePlan.getViewTitle());
+
+		dialogAction.switchUpgradePlan.selectUpgradePlan(projects.getName(1));
+
+		validationAction.assertContains(projects.getName(1), viewAction.upgradePlan.getViewTitle());
+
+		dialogAction.switchUpgradePlan.chooseUpgradePlan(projects.getName(0));
+
+		dialogAction.switchUpgradePlan.removePlan();
+
+		Assert.assertFalse(dialogAction.switchUpgradePlan.containsUpgradePlan(projects.getName(0)));
+
+		dialogAction.switchUpgradePlan.close();
 	}
 
 	@Test
@@ -104,5 +156,8 @@ public class UpgradePlannerActionsTests extends SwtbotBase {
 		}
 
 	};
+
+	@Rule
+	public ProjectsSupport projects = new ProjectsSupport(bot);
 
 }

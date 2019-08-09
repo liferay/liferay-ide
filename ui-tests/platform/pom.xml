@@ -49,6 +49,6 @@
 
 	<modules>
 		<module>preference</module>
-		<module>com.liferay.ide.functional.upgrade</module>
+		<module>upgrade</module>
 	</modules>
 </project>

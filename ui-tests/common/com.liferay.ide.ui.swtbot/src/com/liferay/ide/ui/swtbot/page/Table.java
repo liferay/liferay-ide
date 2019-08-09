@@ -52,12 +52,42 @@ public class Table extends AbstractWidget {
 		tableItem.click();
 	}
 
+	public int columnCount() {
+		return getWidget().columnCount();
+	}
+
 	public boolean containsItem(String item) {
 		return getWidget().containsItem(item);
 	}
 
+	public void doubleClick(int row) {
+		SWTBotTableItem tableItem = getWidget().getTableItem(row);
+
+		tableItem.doubleClick();
+	}
+
 	public void doubleClick(int row, int column) {
 		getWidget().doubleClick(row, column);
+	}
+
+	public String getItem(int row) {
+		SWTBotTableItem tableItem = getWidget().getTableItem(row);
+
+		return tableItem.toString();
+	}
+
+	public String getText(int row, int column) {
+		SWTBotTableItem tableItem = getWidget().getTableItem(row);
+
+		return tableItem.getText(column);
+	}
+
+	public int searchText(String itemText) {
+		return getWidget().searchText(itemText);
+	}
+
+	public void select(int row) {
+		getWidget().select(row);
 	}
 
 	public void setText(int index, String text) {
@@ -71,11 +101,15 @@ public class Table extends AbstractWidget {
 	}
 
 	protected SWTBotTable getWidget() {
-		if (isLabelNull()) {
+		if (isLabelNull() && hasIndex()) {
 			return bot.table(index);
 		}
-
-		return bot.tableWithLabel(label, 0);
+		else if (isLabelNull() && !hasIndex()) {
+			return bot.table();
+		}
+		else {
+			return bot.tableWithLabel(label, 0);
+		}
 	}
 
 }

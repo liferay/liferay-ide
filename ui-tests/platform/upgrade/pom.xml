@@ -35,7 +35,7 @@
 	<name>Liferay IDE Functional Upgrade</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.upgrade.view</module>
-		<module>com.liferay.ide.functional.upgrade.validation</module>
+		<module>upgrade.view</module>
+		<module>upgrade.wizard</module>
 	</modules>
 </project>

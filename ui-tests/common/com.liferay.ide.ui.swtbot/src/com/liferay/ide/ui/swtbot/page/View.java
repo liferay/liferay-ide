@@ -17,6 +17,7 @@ package com.liferay.ide.ui.swtbot.page;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotToolbarButton;
+import org.eclipse.ui.IViewReference;
 
 /**
  * @author Terry Jia
@@ -46,6 +47,10 @@ public class View extends AbstractPart {
 
 	public String getLabel() {
 		return label;
+	}
+
+	public IViewReference getReference() {
+		return getPart().getReference();
 	}
 
 	public SWTBotToolbarButton toolbarBtn(String btnLabel) {

@@ -28,14 +28,13 @@
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.upgrade.view</groupId>
-	<artifactId>upgrade-view-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.upgrade.wizard</groupId>
+	<artifactId>upgrade-wizard-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Upgrade View</name>
+	<name>Liferay IDE Functional Upgrade Wizard</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.upgrade.view.steps</module>
-		<module>com.liferay.ide.functional.upgrade.view.actions</module>
+		<module>upgrade.wizard.validation</module>
 	</modules>
 </project>
