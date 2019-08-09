@@ -40,8 +40,8 @@
 		<module>fragment.deploy.base</module>
 		<module>module.deploy.base</module>
 		<module>portlet.deploy.base</module>
-		<module>com.liferay.ide.functional.server.deploy.base</module>
-		<module>com.liferay.ide.functional.server.wizard.base</module>
+		<module>server.deploy.base</module>
+		<module>server.wizard.base</module>
 		<module>layouttpl.deploy.base</module>
 		<module>theme.deploy.base</module>
 		<module>jsf.deploy.base</module>

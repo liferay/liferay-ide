@@ -35,6 +35,6 @@
 	<name>Liferay IDE Functional Server Settings</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.server.settings.tomcat.72</module>
+		<module>server.settings.tomcat.72</module>
 	</modules>
 </project>

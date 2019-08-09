@@ -35,6 +35,6 @@
 	<name>Liferay IDE Functional Server Wizard</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.server.wizard.create</module>
+		<module>server.wizard.create</module>
 	</modules>
 </project>
