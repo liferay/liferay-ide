@@ -16,8 +16,10 @@ package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.page.view.LiferayUpgradePlanView;
+import com.liferay.ide.ui.swtbot.eclipse.page.ConsoleView;
 import com.liferay.ide.ui.swtbot.eclipse.page.DeleteResourcesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.ErrorLogView;
+import com.liferay.ide.ui.swtbot.eclipse.page.GradleTasksView;
 import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ProgressView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ProjectExplorerView;
@@ -74,11 +76,23 @@ public class ViewAction extends UIAction {
 		upgradePlannerPerspective.activate();
 	}
 
+	public ConsoleViewAction consoleView = new ConsoleViewAction();
 	public ErrorLogViewAction errorLog = new ErrorLogViewAction();
+	public GradleTasksViewAction gradleTasks = new GradleTasksViewAction();
 	public ProgressViewAction progress = new ProgressViewAction();
 	public ProjectViewAction project = new ProjectViewAction();
 	public ServersViewAction servers = new ServersViewAction();
 	public LiferayUpgradePlanViewAction upgradePlan = new LiferayUpgradePlanViewAction();
+
+	public class ConsoleViewAction {
+
+		public void clickRemoveGradleConsoleBtn() {
+			_consoleView.clickRomoveGradleConsoleBtn();
+		}
+
+		private final ConsoleView _consoleView = new ConsoleView(bot);
+
+	}
 
 	public class ErrorLogViewAction {
 
@@ -93,6 +107,20 @@ public class ViewAction extends UIAction {
 		}
 
 		private final ErrorLogView _errorLogView = new ErrorLogView(bot);
+
+	}
+
+	public class GradleTasksViewAction {
+
+		public void runGradleTask(String... task) {
+			_getGradleTasks().doubleClick(task);
+		}
+
+		private Tree _getGradleTasks() {
+			return _gradleTasks.getGradleTasks();
+		}
+
+		private final GradleTasksView _gradleTasks = new GradleTasksView(bot);
 
 	}
 

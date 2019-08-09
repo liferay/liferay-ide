@@ -14,26 +14,22 @@
 
 package com.liferay.ide.ui.swtbot.eclipse.page;
 
-import com.liferay.ide.ui.swtbot.page.StyledText;
+import com.liferay.ide.ui.swtbot.page.Tree;
 import com.liferay.ide.ui.swtbot.page.View;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
- * @author Terry Jia
+ * @author Rui Wang
  */
-public class ConsoleView extends View {
+public class GradleTasksView extends View {
 
-	public ConsoleView(SWTWorkbenchBot bot) {
-		super(bot, CONSOLE);
+	public GradleTasksView(SWTWorkbenchBot bot) {
+		super(bot, GRADLE_TASKS);
 	}
 
-	public void clickRomoveGradleConsoleBtn() {
-		clickToolbarButton(REMOVE_GRADLE_CONSOLE);
-	}
-
-	public StyledText getLog() {
-		return new StyledText(getPart().bot());
+	public Tree getGradleTasks() {
+		return new Tree(getPart().bot());
 	}
 
 }

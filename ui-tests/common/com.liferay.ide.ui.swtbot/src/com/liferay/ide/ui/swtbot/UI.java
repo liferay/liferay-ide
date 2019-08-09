@@ -313,6 +313,8 @@ public interface UI {
 
 	public final String GRADLE_LIFERAY_WORKSPACE = "gradle-liferay-workspace";
 
+	public final String GRADLE_TASKS = "Gradle Tasks";
+
 	public final String HELP = "Help";
 
 	public final String HOOK = "Hook";
@@ -670,6 +672,8 @@ public interface UI {
 	public final String REMOVE = "Remove";
 
 	public final String REMOVE_ALL = "<< Remove All";
+
+	public final String REMOVE_GRADLE_CONSOLE = "Remove Gradle Console";
 
 	public final String REMOVE_PLAN = "Remove Plan";
 
