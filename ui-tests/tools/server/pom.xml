@@ -23,18 +23,20 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.functional.tests.server</groupId>
-		<artifactId>server-tests</artifactId>
+		<groupId>com.liferay.ide.ui.tests</groupId>
+		<artifactId>tools-tests</artifactId>
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.server.wizard</groupId>
-	<artifactId>server-wizard-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.server</groupId>
+	<artifactId>server-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Server Wizard</name>
+	<name>Liferay IDE Functional Module</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.server.wizard.create</module>
+		<module>server.deploy</module>
+		<module>server.wizard</module>
+		<module>server.settings</module>
 	</modules>
 </project>
