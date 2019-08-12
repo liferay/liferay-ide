@@ -36,6 +36,14 @@
 			shortName="gradle-liferay-workspace"
 		>
 		</liferayProjectProvider>
+		<liferayProjectProvider
+			class="com.liferay.ide.gradle.core.GradleSpringProjectProvider"
+			displayName="Gradle"
+			id="com.liferay.ide.gradle.core.gradleSpringProjectProvider"
+			projectType="spring"
+			shortName="gradle-spring"
+		>
+		</liferayProjectProvider>
 	</extension>
 	<extension
 		point="com.liferay.ide.core.liferayProjectImporters"

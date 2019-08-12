@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.project.ui.modules;
+package com.liferay.ide.project.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;

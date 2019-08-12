@@ -56,6 +56,15 @@
 			shortName="maven-jsf"
 		>
 		</liferayProjectProvider>
+		<liferayProjectProvider
+			class="com.liferay.ide.maven.core.MavenSpringProjectProvider"
+			displayName="Maven"
+			id="com.liferay.ide.maven.core.mavenSpringProjectProvider"
+			priority="high"
+			projectType="spring"
+			shortName="maven-spring"
+		>
+		</liferayProjectProvider>
 	</extension>
 	<extension
 		point="com.liferay.ide.core.liferayProjectProviders"

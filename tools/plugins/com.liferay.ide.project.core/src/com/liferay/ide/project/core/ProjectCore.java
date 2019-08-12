@@ -79,9 +79,12 @@ public class ProjectCore extends Plugin {
 	public static final String PREF_DEFAULT_PLUGIN_PROJECT_BUILD_TYPE_OPTION =
 		"project-plugin_default-build-type-option";
 
+	public static final String PREF_DEFAULT_PLUGIN_PROJECT_MAVEN_GROUPID = "default-plugin-project-maven-groupid";
+
 	// The key of default project build type for creating a new liferay plug in project
 
-	public static final String PREF_DEFAULT_PLUGIN_PROJECT_MAVEN_GROUPID = "default-plugin-project-maven-groupid";
+	public static final String PREF_DEFAULT_SPRING_PROJECT_BUILD_TYPE_OPTION =
+		"project-spring-default-build-type-option";
 
 	public static final String PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION =
 		"project-workspace-default-build-type-option";
