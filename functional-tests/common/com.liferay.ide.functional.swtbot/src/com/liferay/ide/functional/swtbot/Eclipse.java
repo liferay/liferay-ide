@@ -121,6 +121,10 @@ public class Eclipse extends BasePageObject {
 		return _welcomeView;
 	}
 
+	public void showConsoleView() {
+		showView(CONSOLE);
+	}
+
 	public void showErrorLogView() {
 		showView(ERROR_LOG);
 	}

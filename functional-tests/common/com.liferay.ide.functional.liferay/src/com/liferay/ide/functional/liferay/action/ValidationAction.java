@@ -19,6 +19,7 @@ import com.liferay.ide.functional.swtbot.page.AbstractWidget;
 import com.liferay.ide.functional.swtbot.page.CTabItem;
 import com.liferay.ide.functional.swtbot.page.CheckBox;
 import com.liferay.ide.functional.swtbot.page.ComboBox;
+import com.liferay.ide.functional.swtbot.page.Editor;
 import com.liferay.ide.functional.swtbot.page.Table;
 import com.liferay.ide.functional.swtbot.page.View;
 
@@ -66,6 +67,12 @@ public class ValidationAction extends UIAction {
 
 	public void assertDoesNotContains(String expect, String stack) {
 		SWTBotAssert.assertDoesNotContain(expect, stack);
+	}
+
+	public void assertEditorVisible(String label) {
+		Editor editor = new Editor(bot, label);
+
+		Assert.assertTrue(editor.isActive());
 	}
 
 	public void assertEnabledFalse(AbstractWidget widget) {
