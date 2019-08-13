@@ -45,7 +45,7 @@
 		<module>layouttpl.deploy.base</module>
 		<module>theme.deploy.base</module>
 		<module>jsf.deploy.base</module>
-		<module>com.liferay.ide.functional.service.builder.deploy.base</module>
+		<module>service.builder.deploy.base</module>
 		<module>hook.deploy.base</module>
 		<module>kaleo.deploy.base</module>
 		<module>modules.ext.base</module>

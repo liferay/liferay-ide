@@ -23,18 +23,20 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.functional.tests.service.builder</groupId>
-		<artifactId>service-builder-tests</artifactId>
+		<groupId>com.liferay.ide.ui.tests</groupId>
+		<artifactId>tools-tests</artifactId>
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.service.builder.wizard</groupId>
-	<artifactId>service-builder-wizard-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.service.builder</groupId>
+	<artifactId>service-builder-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Service Builder Wizard</name>
+	<name>Liferay IDE Functional Service Builder</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.service.builder.wizard.create</module>
+		<module>service.builder.wizard</module>
+		<module>service.builder.editor</module>
+		<module>service.builder.deploy</module>
 	</modules>
 </project>

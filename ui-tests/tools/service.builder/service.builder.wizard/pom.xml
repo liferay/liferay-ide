@@ -28,13 +28,13 @@
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.service.builder.editor</groupId>
-	<artifactId>service-builder-editor-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.service.builder.wizard</groupId>
+	<artifactId>service-builder-wizard-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Service Builder Editor</name>
+	<name>Liferay IDE Functional Service Builder Wizard</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.service.builder.editor.operation</module>
+		<module>service.builder.wizard.create</module>
 	</modules>
 </project>

@@ -28,15 +28,13 @@
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.service.builder.deploy</groupId>
-	<artifactId>service-builder-deploy-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.service.builder.editor</groupId>
+	<artifactId>service-builder-editor-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Service Builder Deploy</name>
+	<name>Liferay IDE Functional Service Builder Editor</name>
 
 	<modules>
-		<module>com.liferay.ide.functional.service.builder.deploy.tomcat.70</module>
-		<module>com.liferay.ide.functional.service.builder.deploy.tomcat.71</module>
-		<module>com.liferay.ide.functional.service.builder.deploy.tomcat.dxp</module>
+		<module>service.builder.editor.operation</module>
 	</modules>
 </project>

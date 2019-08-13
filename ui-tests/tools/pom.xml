@@ -59,7 +59,7 @@
 		<module>com.liferay.ide.functional.sdk.tests</module>
 		<module>server</module>
 		<module>workspace</module>
-		<module>com.liferay.ide.functional.service.builder</module>
+		<module>service.builder</module>
 		<module>kaleo</module>
 		<module>modules.ext</module>
 	</modules>
