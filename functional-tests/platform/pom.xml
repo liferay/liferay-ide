@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+-->
+
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.liferay.ide</groupId>
+		<artifactId>functional-tests</artifactId>
+		<version>3.6.2-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.liferay.ide.functional.tests</groupId>
+	<artifactId>platform-tests</artifactId>
+	<packaging>pom</packaging>
+
+	<name>Liferay IDE Functional Platform Tests</name>
+
+	<properties>
+		<liferay-ide-swtbot-testing-site>file:/${basedir}/../../com.liferay.ide.functional.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>liferay-ide-swtbot-testing-site</id>
+			<layout>p2</layout>
+			<url>${liferay-ide-swtbot-testing-site}</url>
+		</repository>
+	</repositories>
+
+	<modules>
+		<module>preference</module>
+		<module>upgrade</module>
+	</modules>
+</project>
