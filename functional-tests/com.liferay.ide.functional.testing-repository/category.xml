@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<site>
+	<bundle id="com.liferay.ide.functional.liferay" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.swtbot" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.fragment.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.fragment.wizard.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.module.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.portlet.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.server.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.server.wizard.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.layouttpl.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.theme.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.jsf.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.service.builder.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.hook.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.kaleo.deploy.base" version="0.0.0" />
+	<bundle id="com.liferay.ide.functional.modules.ext.base" version="0.0.0" />
+</site>

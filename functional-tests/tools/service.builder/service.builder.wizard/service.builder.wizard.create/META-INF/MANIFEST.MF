@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Functional Service Builder Wizard Create Tests
+Bundle-SymbolicName: com.liferay.ide.functional.service.builder.wizard.create.tests
+Bundle-Version: 3.6.2.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: com.liferay.ide.functional.liferay,
+ com.liferay.ide.functional.swtbot,
+ org.eclipse.swtbot.go
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy

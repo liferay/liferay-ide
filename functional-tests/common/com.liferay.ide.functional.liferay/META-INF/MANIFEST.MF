@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Functional Liferay Base
+Bundle-SymbolicName: com.liferay.ide.functional.liferay
+Bundle-Version: 3.6.2.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: 
+ com.liferay.ide.functional.swtbot,
+ org.apache.ant,
+ org.eclipse.debug.ui,
+ org.eclipse.swtbot.forms.finder,
+ org.eclipse.swtbot.go,
+ org.eclipse.ui.forms
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.functional.liferay,
+ com.liferay.ide.functional.liferay.action,
+ com.liferay.ide.functional.liferay.page,
+ com.liferay.ide.functional.liferay.page.button,
+ com.liferay.ide.functional.liferay.page.dialog,
+ com.liferay.ide.functional.liferay.page.editor,
+ com.liferay.ide.functional.liferay.page.view,
+ com.liferay.ide.functional.liferay.page.wizard,
+ com.liferay.ide.functional.liferay.page.wizard.project,
+ com.liferay.ide.functional.liferay.support,
+ com.liferay.ide.functional.liferay.support.project,
+ com.liferay.ide.functional.liferay.support.sdk,
+ com.liferay.ide.functional.liferay.support.server,
+ com.liferay.ide.functional.liferay.support.workspace,
+ com.liferay.ide.functional.liferay.util
