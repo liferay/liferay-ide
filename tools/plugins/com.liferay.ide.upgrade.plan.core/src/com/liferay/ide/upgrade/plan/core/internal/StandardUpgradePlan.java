@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.Adapters;
  * @author Gregory Amerson
  * @author Simon Jiang
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 public class StandardUpgradePlan implements UpgradePlan {
 
@@ -48,8 +49,14 @@ public class StandardUpgradePlan implements UpgradePlan {
 		_targetVersion = targetVersion;
 		_upgradePlanOutline = upgradePlanOutline;
 		_upgradeProblems = new CopyOnWriteArraySet<>();
+		_ignoredProblems = new CopyOnWriteArraySet<>();
 		_upgradeSteps = upgradeSteps;
 		_upgradeContext = upgradeContext;
+	}
+
+	@Override
+	public void addIgnoredProblems(Collection<UpgradeProblem> ignoredProblems) {
+		_ignoredProblems.addAll(ignoredProblems);
 	}
 
 	@Override
@@ -85,6 +92,11 @@ public class StandardUpgradePlan implements UpgradePlan {
 	@Override
 	public String getCurrentVersion() {
 		return _currentVersion;
+	}
+
+	@Override
+	public Set<UpgradeProblem> getIgnoredProblems() {
+		return _ignoredProblems;
 	}
 
 	@Override
@@ -206,6 +218,7 @@ public class StandardUpgradePlan implements UpgradePlan {
 	};
 
 	private final String _currentVersion;
+	private Set<UpgradeProblem> _ignoredProblems;
 	private final String _name;
 	private final String _targetVersion;
 	private Map<String, String> _upgradeContext = new HashMap<>();

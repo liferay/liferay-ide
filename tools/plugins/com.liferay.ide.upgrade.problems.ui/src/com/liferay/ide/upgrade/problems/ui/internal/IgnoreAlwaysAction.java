@@ -21,6 +21,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
 
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -67,6 +69,15 @@ public class IgnoreAlwaysAction extends SelectionProviderAction implements Upgra
 		).forEach(
 			this::ignore
 		);
+
+		Set<UpgradeProblem> ignoredProblems = upgradeProblems.stream(
+		).filter(
+			upgradeProblem -> UpgradeProblem.STATUS_IGNORE == upgradeProblem.getStatus()
+		).collect(
+			Collectors.toSet()
+		);
+
+		upgradePlan.addIgnoredProblems(ignoredProblems);
 
 		Viewer viewer = (Viewer)getSelectionProvider();
 
