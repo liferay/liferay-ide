@@ -12,23 +12,23 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core;
+package com.liferay.ide.upgrade.problems.test.apichanges;
 
-import java.util.Collection;
-import java.util.regex.Pattern;
+import java.io.File;
 
 /**
- * @author Gregory Amerson
+ * @author Seiphon Wang
  */
-public interface XMLFile extends SourceFile {
+public class DeprecatedLayoutTemplateTagsTest extends APITestBase {
 
-	public FileSearchResult findDocumentTypeDeclaration(String name, Pattern idPattern);
+	@Override
+	public String getComponentName() {
+		return "com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedLayoutTemplateTags";
+	}
 
-	public Collection<FileSearchResult> findElement(String elementName);
-
-	public Collection<FileSearchResult> findElement(String elementName, String elementValue);
-
-	public Collection<FileSearchResult> findElementAttribute(
-		String tagName, String attributeName, Pattern valuePattern);
+	@Override
+	public File getTestFile() {
+		return new File("tests/files/liferay-layout-templates.xml");
+	}
 
 }

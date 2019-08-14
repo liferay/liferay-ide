@@ -24,6 +24,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -102,6 +103,55 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 
 	@Override
 	@SuppressWarnings("deprecation")
+	public Collection<FileSearchResult> findElement(String tagName) {
+		List<FileSearchResult> results = new ArrayList<>();
+
+		IDOMModel domModel = null;
+
+		try {
+			IModelManager modelManager = StructuredModelManager.getModelManager();
+
+			try (InputStream input = Files.newInputStream(file.toPath(), StandardOpenOption.READ)) {
+				domModel = (IDOMModel)modelManager.getModelForRead(file.getAbsolutePath(), input, null);
+			}
+
+			IDOMDocument domDocument = domModel.getDocument();
+
+			NodeList elements = domDocument.getElementsByTagName(tagName);
+
+			if (elements != null) {
+				for (int i = 0; i < elements.getLength(); i++) {
+					IDOMElement element = (IDOMElement)elements.item(i);
+
+					if (element != null) {
+						IStructuredDocument structuredDocument = domDocument.getStructuredDocument();
+
+						int startOffset = element.getStartOffset();
+						int endOffset = element.getEndOffset();
+						int startLine = structuredDocument.getLineOfOffset(startOffset) + 1;
+						int endLine = structuredDocument.getLineOfOffset(endOffset) + 1;
+
+						FileSearchResult result = new FileSearchResult(
+							file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
+
+						results.add(result);
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+		}
+		finally {
+			if (domModel != null) {
+				domModel.releaseFromRead();
+			}
+		}
+
+		return results;
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
 	public List<FileSearchResult> findElement(String tagName, String value) {
 		List<FileSearchResult> results = new ArrayList<>();
 
@@ -110,7 +160,7 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 		try {
 			IModelManager modelManager = StructuredModelManager.getModelManager();
 
-			try (InputStream input = Files.newInputStream(Paths.get(file.toURI()), StandardOpenOption.READ)) {
+			try (InputStream input = Files.newInputStream(file.toPath(), StandardOpenOption.READ)) {
 				domModel = (IDOMModel)modelManager.getModelForRead(file.getAbsolutePath(), input, null);
 			}
 
