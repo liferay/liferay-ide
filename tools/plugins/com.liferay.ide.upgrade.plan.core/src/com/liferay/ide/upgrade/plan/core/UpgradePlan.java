@@ -21,12 +21,17 @@ import java.util.Map;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 public interface UpgradePlan {
+
+	public void addIgnoredProblems(Collection<UpgradeProblem> ignoredProblems);
 
 	public void addUpgradeProblems(Collection<UpgradeProblem> upgradeProblems);
 
 	public String getCurrentVersion();
+
+	public Collection<UpgradeProblem> getIgnoredProblems();
 
 	public String getName();
 

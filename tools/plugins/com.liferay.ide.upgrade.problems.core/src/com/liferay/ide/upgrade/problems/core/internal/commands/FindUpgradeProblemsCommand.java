@@ -44,6 +44,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Seiphon Wang
  */
 @Component(
 	property = "id=" + FindUpgradeProblemsCommandKeys.ID, scope = ServiceScope.PROTOTYPE, service = UpgradeCommand.class
@@ -63,12 +64,18 @@ public class FindUpgradeProblemsCommand implements UpgradeCommand, UpgradeProble
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		Set<UpgradeProblem> ignoredProblemSet = upgradeProblems.stream(
-		).filter(
-			problem -> UpgradeProblem.STATUS_IGNORE == problem.getStatus()
-		).collect(
-			Collectors.toSet()
-		);
+		Collection<UpgradeProblem> ignoredProblems = upgradePlan.getIgnoredProblems();
+
+		if ((ignoredProblems == null) || ignoredProblems.isEmpty()) {
+			Set<UpgradeProblem> ignoredProblemSet = upgradeProblems.stream(
+			).filter(
+				problem -> UpgradeProblem.STATUS_IGNORE == problem.getStatus()
+			).collect(
+				Collectors.toSet()
+			);
+
+			upgradePlan.addIgnoredProblems(ignoredProblemSet);
+		}
 
 		upgradeProblems.stream(
 		).map(
@@ -91,7 +98,7 @@ public class FindUpgradeProblemsCommand implements UpgradeCommand, UpgradeProble
 		).flatMap(
 			findProblems -> findProblems.stream()
 		).filter(
-			findProblem -> ListUtil.notContains(ignoredProblemSet, findProblem)
+			findProblem -> ListUtil.notContains((Set<UpgradeProblem>)upgradePlan.getIgnoredProblems(), findProblem)
 		).collect(
 			Collectors.toList()
 		);
