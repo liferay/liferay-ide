@@ -34,6 +34,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -400,7 +401,27 @@ public class PortalServerBehavior
 
 		String[] configVMArgs = _getRuntimeStartVMArguments();
 
-		launch.setAttribute(ATTR_VM_ARGUMENTS, _mergeArguments(existingVMArgs, configVMArgs, null));
+		if (null != existingVMArgs) {
+			String[] parsedVMArgs = DebugPlugin.parseArguments(existingVMArgs);
+
+			List<String> memoryArgs = new ArrayList<>();
+
+			if (CoreUtil.isNotNullOrEmpty(Arrays.toString(parsedVMArgs))) {
+				for (String pArg : parsedVMArgs) {
+					if (pArg.startsWith("-Xm")) {
+						memoryArgs.add(pArg);
+					}
+				}
+			}
+
+			String[] excludeArgs = memoryArgs.toArray(new String[memoryArgs.size()]);
+
+			launch.setAttribute(
+				ATTR_VM_ARGUMENTS, _mergeArguments(configVMArgs[0] + " " + existingVMArgs, configVMArgs, excludeArgs));
+		}
+		else {
+			launch.setAttribute(ATTR_VM_ARGUMENTS, _mergeArguments(existingVMArgs, configVMArgs, null));
+		}
 
 		PortalRuntime portalRuntime = _getPortalRuntime();
 
