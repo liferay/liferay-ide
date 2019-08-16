@@ -14,6 +14,8 @@
 
 package com.liferay.ide.upgrade.problems.ui.internal;
 
+import com.liferay.ide.upgrade.plan.core.UpgradePlan;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
 
@@ -24,6 +26,11 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.actions.SelectionProviderAction;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+
 /**
  * @author Seiphon Wang
  * @author Terry Jia
@@ -32,19 +39,35 @@ public class IgnoreAction extends SelectionProviderAction implements UpgradeProb
 
 	public IgnoreAction(ISelectionProvider provider) {
 		super(provider, "Ignore");
+
+		Bundle bundle = FrameworkUtil.getBundle(IgnoreAlwaysAction.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		_serviceTracker = new ServiceTracker<>(bundleContext, UpgradePlanner.class, null);
+
+		_serviceTracker.open();
 	}
 
 	@Override
 	public void run() {
 		List<UpgradeProblem> upgradeProblems = getUpgradeProblems(getSelection());
 
+		UpgradePlanner upgradePlanner = _serviceTracker.getService();
+
+		UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
+
 		Stream<UpgradeProblem> stream = upgradeProblems.stream();
 
 		stream.forEach(this::ignore);
+
+		upgradePlan.addIgnoredProblems(upgradeProblems);
 
 		Viewer viewer = (Viewer)getSelectionProvider();
 
 		UIUtil.async(() -> viewer.refresh());
 	}
+
+	private final ServiceTracker<UpgradePlanner, UpgradePlanner> _serviceTracker;
 
 }
