@@ -66,45 +66,5 @@
 			<image>NewModuleExtWizard.png</image>
 		</page>
 		<description>Create a new project configured as a Liferay Module Ext Project</description>
-		<page>
-			<id>ModuleExtOverrideFiles</id>
-			<label>Module Ext Override Files</label>
-			<content>
-				<property-editor>
-					<property>OriginalModuleHint</property>
-                    <hint>
-                        <name>read.only</name>
-                        <value>true</value>
-                    </hint>
-				</property-editor>
-				<spacer/>
-				<property-editor>
-					<property>OverrideFiles</property>
-					<action>
-						<id>AddFilesFromSourceJar</id>
-						<label>Add files from Original Module to override...</label>
-						<image>icons/n16/server_new.png</image>
-						<location>before:Sapphire.Add</location>
-					</action>
-					<action-handler>
-						<action>AddFilesFromSourceJar</action>
-						<id>AddFilesFromSourceJarHandler</id>
-						<impl>com.liferay.ide.project.ui.modules.ext.AddFilesFromSourceJarAction</impl>
-					</action-handler>
-					<scale-vertically>true</scale-vertically>
-				</property-editor>
-			</content>
-			<description>Add Source Files To Override</description>
-			<scale-vertically>true</scale-vertically>
-			<margin-right>10</margin-right>
-			<scroll-vertically>true</scroll-vertically>
-			<margin-left>0</margin-left>
-			<margin-bottom>0</margin-bottom>
-			<margin-top>0</margin-top>
-			<margin-horizontal>0</margin-horizontal>
-			<margin-vertical>0</margin-vertical>
-			<margin>0</margin>
-			<image>NewModuleExtWizard.png</image>
-		</page>
 	</wizard>
 </definition>

@@ -20,7 +20,9 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import java.util.List;
 import java.util.Optional;
@@ -241,10 +243,10 @@ public class GradleUtil {
 		synchronizeJob.schedule();
 	}
 
-	public static void runGradleTask(IProject project, String task, IProgressMonitor monitor) throws CoreException {
+	public static String runGradleTask(IProject project, String task, IProgressMonitor monitor) throws CoreException {
 		CancellationTokenSource cancellationTokenSource = GradleConnector.newCancellationTokenSource();
 
-		runGradleTask(project, new String[] {task}, new String[0], cancellationTokenSource, monitor);
+		return runGradleTask(project, new String[] {task}, new String[0], cancellationTokenSource, monitor);
 	}
 
 	public static void runGradleTask(IProject project, String[] tasks, IProgressMonitor monitor) throws CoreException {
@@ -253,13 +255,13 @@ public class GradleUtil {
 		runGradleTask(project, tasks, new String[0], cancellationTokenSource, monitor);
 	}
 
-	public static void runGradleTask(
+	public static String runGradleTask(
 			IProject project, String[] tasks, String[] arguments, CancellationTokenSource cancellationTokenSource,
 			IProgressMonitor monitor)
 		throws CoreException {
 
 		if ((project == null) || (project.getLocation() == null)) {
-			return;
+			return "";
 		}
 
 		GradleWorkspace workspace = GradleCore.getWorkspace();
@@ -267,6 +269,8 @@ public class GradleUtil {
 		Optional<GradleBuild> gradleBuildOpt = workspace.getBuild(project);
 
 		GradleBuild gradleBuild = gradleBuildOpt.get();
+
+		OutputStream outputStream = new ByteArrayOutputStream();
 
 		try {
 			gradleBuild.withConnection(
@@ -278,6 +282,8 @@ public class GradleUtil {
 						tasks
 					).withCancellationToken(
 						cancellationTokenSource.token()
+					).setStandardOutput(
+						outputStream
 					).run();
 
 					return null;
@@ -287,6 +293,8 @@ public class GradleUtil {
 		catch (Exception e) {
 			LiferayGradleCore.logError(e);
 		}
+
+		return outputStream.toString();
 	}
 
 	public static IStatus synchronizeProject(IPath dir, IProgressMonitor monitor) {

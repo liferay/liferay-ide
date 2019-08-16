@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -153,18 +152,8 @@ public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog im
 	private void _refreshAction(Composite composite) {
 		NewModuleExtOp newModuleExtOp = _property.nearest(NewModuleExtOp.class);
 
-		IProject project = LiferayWorkspaceUtil.getWorkspaceProject();
-
-		boolean indexSources = LiferayWorkspaceUtil.getIndexSource(project);
-
 		if (get(newModuleExtOp.getTargetPlatformVersion()) == null) {
 			_customLabel.setText("No Target Platform configuration detected in gradle.properties");
-
-			return;
-		}
-		else if (!indexSources) {
-			_customLabel.setText(
-				"This feature only works when the property \"target.platform.index.sources\" is set to true.");
 
 			return;
 		}
