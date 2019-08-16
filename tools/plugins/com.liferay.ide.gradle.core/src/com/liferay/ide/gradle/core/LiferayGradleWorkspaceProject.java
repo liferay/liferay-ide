@@ -21,14 +21,18 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.ILiferayServer;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,19 +46,13 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
-
-import org.gradle.tooling.GradleConnectionException;
-import org.gradle.tooling.GradleConnector;
-import org.gradle.tooling.ProjectConnection;
-import org.gradle.tooling.model.DomainObjectSet;
-import org.gradle.tooling.model.GradleModuleVersion;
-import org.gradle.tooling.model.eclipse.EclipseExternalDependency;
-import org.gradle.tooling.model.eclipse.EclipseProject;
 
 /**
  * @author Andy Wu
@@ -115,36 +113,62 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 	@Override
 	public List<Artifact> getTargetPlatformArtifacts() {
 		if ((getTargetPlatformVersion() != null) && _targetPlatformArtifacts.isEmpty()) {
-			GradleConnector gradleConnector = GradleConnector.newConnector();
-
-			gradleConnector.forProjectDirectory(FileUtil.getFile(getProject()));
-
-			ProjectConnection projectConnection = gradleConnector.connect();
+			String output = "";
 
 			try {
-				EclipseProject eclipseProject = projectConnection.getModel(EclipseProject.class);
+				output = GradleUtil.runGradleTask(
+					LiferayWorkspaceUtil.getWorkspaceProject(), "dependencyManagement", new NullProgressMonitor());
+			}
+			catch (CoreException ce) {
+			}
 
-				DomainObjectSet<? extends EclipseExternalDependency> eclipseExternalDependencies =
-					eclipseProject.getClasspath();
+			List<String> list = new ArrayList<>();
 
-				_targetPlatformArtifacts = new ArrayList<>(eclipseExternalDependencies.size());
+			if (!output.equals("")) {
+				BufferedReader bufferedReader = new BufferedReader(new StringReader(output));
 
-				for (EclipseExternalDependency eclipseExternalDependency : eclipseExternalDependencies) {
-					GradleModuleVersion gradleModuleVersion = eclipseExternalDependency.getGradleModuleVersion();
+				String line;
 
-					if (gradleModuleVersion != null) {
-						_targetPlatformArtifacts.add(
-							new Artifact(
-								gradleModuleVersion.getGroup(), gradleModuleVersion.getName(),
-								gradleModuleVersion.getVersion(), "classpath", eclipseExternalDependency.getSource()));
+				try {
+					boolean start = false;
+
+					while ((line = bufferedReader.readLine()) != null) {
+						if ("compileOnly - Dependency management for the compileOnly configuration".equals(line)) {
+							start = true;
+
+							continue;
+						}
+
+						if (start) {
+							if (StringUtil.equals(line.trim(), "")) {
+								break;
+							}
+
+							list.add(line.trim());
+						}
 					}
 				}
+				catch (IOException ioe) {
+				}
 			}
-			catch (GradleConnectionException gce) {
-			}
-			finally {
-				projectConnection.close();
-			}
+
+			_targetPlatformArtifacts = list.stream(
+			).map(
+				s -> {
+					int i1 = s.indexOf(":");
+					int i2 = s.indexOf(" ");
+
+					String groupId = s.substring(0, i1);
+					String artifactId = s.substring(i1 + 1, i2);
+					String version = s.substring(i2 + 1);
+
+					Artifact artifact = new Artifact(groupId, artifactId, version, "compileOnly", null);
+
+					return artifact;
+				}
+			).collect(
+				Collectors.toList()
+			);
 		}
 
 		return _targetPlatformArtifacts;
