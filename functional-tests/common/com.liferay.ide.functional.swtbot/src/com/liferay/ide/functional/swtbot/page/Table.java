@@ -76,6 +76,10 @@ public class Table extends AbstractWidget {
 		return tableItem.toString();
 	}
 
+	public SWTBotTableItem getTableItem(String item) {
+		return getWidget().getTableItem(item);
+	}
+
 	public String getText(int row, int column) {
 		SWTBotTableItem tableItem = getWidget().getTableItem(row);
 

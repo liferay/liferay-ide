@@ -963,7 +963,13 @@ public class WizardAction extends UIAction {
 		public void prepareGradleWithoutTargetPlatform(String projectName) {
 			_prepare(projectName, GRADLE);
 
-			_newLiferayWorkspaceWizard.deselectEnableTargetPlatfom();
+			_newLiferayWorkspaceWizard.deselectEnableTargetPlatform();
+		}
+
+		public void prepareGradleWithoutTargetPlatform(String projectName, String version) {
+			_prepare(projectName, GRADLE, version);
+
+			_newLiferayWorkspaceWizard.deselectEnableTargetPlatform();
 		}
 
 		public void prepareMaven(String projectName) {

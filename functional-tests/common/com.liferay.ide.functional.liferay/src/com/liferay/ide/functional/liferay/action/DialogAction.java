@@ -17,6 +17,7 @@ package com.liferay.ide.functional.liferay.action;
 import com.liferay.ide.functional.liferay.UIAction;
 import com.liferay.ide.functional.liferay.page.dialog.AddRepositoryDialog;
 import com.liferay.ide.functional.liferay.page.dialog.AddUrlDialog;
+import com.liferay.ide.functional.liferay.page.dialog.ProjectSelectionDialog;
 import com.liferay.ide.functional.liferay.page.dialog.SwitchUpgradePlanDialog;
 import com.liferay.ide.functional.swtbot.eclipse.page.AddAndRemoveDialog;
 import com.liferay.ide.functional.swtbot.eclipse.page.AvailableSoftwareSitesPreferencesDialog;
@@ -162,6 +163,7 @@ public class DialogAction extends UIAction {
 	public GradleDialogAction gradle = new GradleDialogAction();
 	public AddPlannerOutlineDialogAction plannerOutline = new AddPlannerOutlineDialogAction();
 	public PreferencesDialogAction preferences = new PreferencesDialogAction();
+	public ProjectSelectionDialogAction projectSelection = new ProjectSelectionDialogAction();
 	public ServerRuntimeEnvironmentsDialogAction serverRuntimeEnvironments =
 		new ServerRuntimeEnvironmentsDialogAction();
 	public SwitchUpgradePlanDialogAction switchUpgradePlan = new SwitchUpgradePlanDialogAction();
@@ -320,6 +322,16 @@ public class DialogAction extends UIAction {
 		}
 
 		private final PreferencesDialog _preferencesDialog = new PreferencesDialog(bot);
+
+	}
+
+	public class ProjectSelectionDialogAction {
+
+		public void selectProject(String projectName) {
+			_projectSelectionDialog.selectProject(projectName);
+		}
+
+		private final ProjectSelectionDialog _projectSelectionDialog = new ProjectSelectionDialog(bot);
 
 	}
 

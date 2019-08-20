@@ -32,7 +32,7 @@ public class NewLiferayWorkspaceWizard extends NewProjectWizard {
 		super(bot, 2);
 	}
 
-	public void deselectEnableTargetPlatfom() {
+	public void deselectEnableTargetPlatform() {
 		getEnableTargetPlatfom().deselect();
 	}
 

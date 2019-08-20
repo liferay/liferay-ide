@@ -54,6 +54,10 @@ public class ViewAction extends UIAction {
 		view.close();
 	}
 
+	public void showConsoleView() {
+		ide.showConsoleView();
+	}
+
 	public void showServersView() {
 		ide.showServersView();
 	}
@@ -68,6 +72,12 @@ public class ViewAction extends UIAction {
 		Perspective liferayPerspective = ide.getLiferayPerspective();
 
 		liferayPerspective.activate();
+	}
+
+	public void switchLiferayWorkspacePerspective() {
+		Perspective liferayWorkspacePerspective = ide.getLiferayWorkspacePerspective();
+
+		liferayWorkspacePerspective.activate();
 	}
 
 	public void switchUpgradePlannerPerspective() {
@@ -164,6 +174,10 @@ public class ViewAction extends UIAction {
 
 		public void clickToPerform() {
 			_liferayUpgradePlanView.click(CLICK_TO_PERFORM);
+		}
+
+		public void clickToPreview() {
+			_liferayUpgradePlanView.click(CLICK_TO_PREVIEW);
 		}
 
 		public void clickUpgradePlanDetails() {

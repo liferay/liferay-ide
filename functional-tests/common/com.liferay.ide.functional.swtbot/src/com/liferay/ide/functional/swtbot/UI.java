@@ -135,6 +135,8 @@ public interface UI {
 
 	public final String CLICK_TO_PERFORM = "Click to perform";
 
+	public final String CLICK_TO_PREVIEW = "Click to preview";
+
 	public final String CLOSE = "Close";
 
 	public final String CLOSE_PROJECT = "Close Project";
@@ -149,7 +151,11 @@ public interface UI {
 
 	public final String CONFIG = "Config";
 
+	public final String CONFIGURE_BUNDLE_URL = "Configure Bundle URL [Required]";
+
 	public final String CONFIGURE_LIFERAY_WORKSPACE_SETTINGS = "Configure Liferay Workspace Settings";
+
+	public final String CONFIGURE_TARGET_PLATFORM_VERSION = "Configure Target Platform Version [Required]";
 
 	public final String CONFIGURE_UPGRADE_PLANNER_OUTLINES = "Configure Upgrade Planner outlines";
 
@@ -363,6 +369,8 @@ public interface UI {
 	public final String INIT_BUNDLE = "init-bundle";
 
 	public final String INITIALIZE_SERVER_BUNDLE = "Initialize Server Bundle";
+
+	public final String INITIALIZE_SERVER_BUNDLE_REQUIRED = "Initialize Server Bundle [Required]";
 
 	public final String INSTALL_NEW_SOFTWARE = "Install New Software...";
 
