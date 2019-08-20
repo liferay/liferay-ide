@@ -57,7 +57,7 @@ public class ValidationModulesExtTests extends SwtbotBase {
 	public void checkExtWithValidWorkspace() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(project.getName());
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
 
 		wizardAction.finish();
 
@@ -77,17 +77,18 @@ public class ValidationModulesExtTests extends SwtbotBase {
 
 		wizardAction.newModulesExt.openSelectBrowseDialog();
 
+		validationAction.assertEquals(SELECT_ORIGINAL_MODULE_NAMES, dialogAction.getValidationMsg(0));
+
 		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
 
 		dialogAction.prepareText("*login");
 
 		dialogAction.selectTableItem("com.liferay:com.liferay.login.web");
 
-		validationAction.assertEnabledTrue(dialogAction.getConfirmBtn());
-
 		dialogAction.confirm();
 
-		validationAction.assertEnabledTrue(wizardAction.getNextBtn());
+		validationAction.assertEquals(
+			CREATE_A_CONFIGURED_AS_LIFERAY_MODULE_EXT_PROJECT, wizardAction.getValidationMsg(4));
 
 		validationAction.assertEnabledTrue(wizardAction.getFinishBtn());
 
@@ -100,7 +101,7 @@ public class ValidationModulesExtTests extends SwtbotBase {
 	public void checkExtWithWorkspace70() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(project.getName(), "7.0");
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.0");
 
 		wizardAction.finish();
 
@@ -117,39 +118,6 @@ public class ValidationModulesExtTests extends SwtbotBase {
 			wizardAction.getValidationMsg(4));
 
 		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
-
-		wizardAction.cancel();
-
-		viewAction.project.closeAndDeleteFromDisk(project.getName());
-	}
-
-	@Test
-	public void checkExtWithWorkspaceWithoutIndexSources() {
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
-
-		wizardAction.finish();
-
-		jobAction.waitForNoRunningJobs();
-
-		wizardAction.openNewLiferayModulesExtWizard();
-
-		validationAction.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, wizardAction.getValidationMsg(4));
-
-		wizardAction.newModulesExt.prepare(projects.getName(0));
-
-		validationAction.assertEquals(ORIGINAL_MODULE_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(4));
-
-		wizardAction.newModulesExt.openSelectBrowseDialog();
-
-		validationAction.assertEquals(
-			THIS_FEATURE_ONLY_WORKS_WHEN_TARGET_PLATFORM_INDEX_SOURCES_IS_SET_TO_TRUE,
-			dialogAction.getValidationMsg(0));
-
-		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
-
-		dialogAction.cancel();
 
 		wizardAction.cancel();
 
@@ -191,7 +159,7 @@ public class ValidationModulesExtTests extends SwtbotBase {
 	public void checkLocation() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(project.getName());
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
 
 		wizardAction.finish();
 
@@ -247,7 +215,7 @@ public class ValidationModulesExtTests extends SwtbotBase {
 	public void checkModulesExtProjectName() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradleWithIndexSources(project.getName(), "7.2");
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.2");
 
 		wizardAction.finish();
 

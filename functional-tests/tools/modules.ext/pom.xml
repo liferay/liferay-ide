@@ -36,5 +36,6 @@
 
 	<modules>
 		<module>modules.ext.wizard</module>
+		<module>modules.ext.files.wizard</module>
 	</modules>
 </project>
