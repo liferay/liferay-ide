@@ -17,8 +17,8 @@ package com.liferay.ide.server.ui.cmd;
 import com.liferay.ide.server.core.portal.PortalServer;
 import com.liferay.ide.server.core.portal.PortalServerDelegate;
 
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
+import org.eclipse.wst.server.ui.internal.Messages;
 import org.eclipse.wst.server.ui.internal.command.ServerCommand;
 
 /**
@@ -28,7 +28,7 @@ import org.eclipse.wst.server.ui.internal.command.ServerCommand;
 public class SetExternalPropertiesCommand extends ServerCommand {
 
 	public SetExternalPropertiesCommand(IServerWorkingCopy server, String externalProperties) {
-		super(server, Msgs.setExternalProperties);
+		super(server, Messages.editorResourceModifiedTitle);
 
 		this.externalProperties = externalProperties;
 	}
@@ -51,15 +51,5 @@ public class SetExternalPropertiesCommand extends ServerCommand {
 
 	protected String externalProperties;
 	protected String oldExternalProperties;
-
-	private static class Msgs extends NLS {
-
-		public static String setExternalProperties;
-
-		static {
-			initializeMessages(SetExternalPropertiesCommand.class.getName(), Msgs.class);
-		}
-
-	}
 
 }

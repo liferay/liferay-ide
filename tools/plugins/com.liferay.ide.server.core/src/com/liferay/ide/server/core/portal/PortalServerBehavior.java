@@ -14,6 +14,8 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.google.common.collect.Lists;
+
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayRuntimeClasspathEntry;
@@ -21,6 +23,7 @@ import com.liferay.ide.core.properties.PortalPropertiesConfiguration;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
@@ -39,6 +42,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
@@ -83,6 +87,7 @@ import org.osgi.framework.Bundle;
  * @author Gregory Amerson
  * @author Simon Jiang
  * @author Terry Jia
+ * @author Ashely Yuan
  */
 @SuppressWarnings({"restriction", "rawtypes"})
 public class PortalServerBehavior
@@ -402,22 +407,35 @@ public class PortalServerBehavior
 		String[] configVMArgs = _getRuntimeStartVMArguments();
 
 		if (null != existingVMArgs) {
-			String[] parsedVMArgs = DebugPlugin.parseArguments(existingVMArgs);
+			CopyOnWriteArrayList<String> formattedExisteingVMArgs = Lists.newCopyOnWriteArrayList(
+				Lists.newArrayList(DebugPlugin.parseArguments(existingVMArgs)));
 
-			List<String> memoryArgs = new ArrayList<>();
+			List<String> customizedMemoryArgsList = Arrays.asList(_getPortalServer().getMemoryArgs());
 
-			if (CoreUtil.isNotNullOrEmpty(Arrays.toString(parsedVMArgs))) {
-				for (String pArg : parsedVMArgs) {
+			if (ListUtil.isNotEmpty(formattedExisteingVMArgs)) {
+				for (String pArg : formattedExisteingVMArgs) {
 					if (pArg.startsWith("-Xm")) {
-						memoryArgs.add(pArg);
+						for (String memoryPrefix : _vmMemoryArgsPrefix) {
+							if (pArg.startsWith(memoryPrefix)) {
+								boolean matchedPrefix = customizedMemoryArgsList.stream(
+								).anyMatch(
+									arg -> arg.startsWith(memoryPrefix)
+								);
+
+								if (matchedPrefix) {
+									formattedExisteingVMArgs.remove(pArg);
+								}
+							}
+						}
 					}
 				}
 			}
 
-			String[] excludeArgs = memoryArgs.toArray(new String[memoryArgs.size()]);
+			String[] modifyExistingVMArgs = formattedExisteingVMArgs.toArray(
+				new String[formattedExisteingVMArgs.size()]);
 
 			launch.setAttribute(
-				ATTR_VM_ARGUMENTS, _mergeArguments(configVMArgs[0] + " " + existingVMArgs, configVMArgs, excludeArgs));
+				ATTR_VM_ARGUMENTS, _mergeArguments(StringUtil.merge(modifyExistingVMArgs, " "), configVMArgs, null));
 		}
 		else {
 			launch.setAttribute(ATTR_VM_ARGUMENTS, _mergeArguments(existingVMArgs, configVMArgs, null));
@@ -1099,6 +1117,8 @@ public class PortalServerBehavior
 		"-Dcom.sun.management.jmxremote", "-Dcom.sun.management.jmxremote.port=", "-Dcom.sun.management.jmxremote.ssl=",
 		"-Dcom.sun.management.jmxremote.authenticate="
 	};
+
+	private static String[] _vmMemoryArgsPrefix = {"-Xmx", "-Xms", "-Xmn"};
 
 	private IAdaptable _info;
 	private transient PingThread _ping = null;

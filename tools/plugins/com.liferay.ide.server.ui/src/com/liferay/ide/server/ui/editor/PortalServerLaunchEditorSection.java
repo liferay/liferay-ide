@@ -18,9 +18,9 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalServer;
 import com.liferay.ide.server.core.portal.PortalServerConstants;
-import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.ui.cmd.SetDeveloperModeCommand;
 import com.liferay.ide.server.ui.cmd.SetExternalPropertiesCommand;
 import com.liferay.ide.server.ui.cmd.SetLaunchSettingsCommand;
@@ -31,8 +31,11 @@ import java.beans.PropertyChangeEvent;
 
 import java.io.File;
 
+import java.util.stream.Stream;
+
+import org.apache.commons.lang3.StringUtils;
+
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -50,6 +53,7 @@ import org.eclipse.wst.server.core.internal.Server;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
 public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorSection {
@@ -58,19 +62,11 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 	}
 
 	public IStatus[] getSaveStatus() {
-		String externalPropetiesValue = portalServer.getExternalProperties();
-
-		if (!CoreUtil.isNullOrEmpty(externalPropetiesValue)) {
-			File externalPropertiesFile = new File(externalPropetiesValue);
-
-			if (!ServerUtil.isValidPropertiesFile(externalPropertiesFile)) {
-				return new IStatus[] {
-					new Status(IStatus.ERROR, LiferayServerUI.PLUGIN_ID, Msgs.invalidExternalPropertiesFile)
-				};
-			}
+		if (getErrorMessage() == null) {
+			return super.getSaveStatus();
 		}
 
-		return super.getSaveStatus();
+		return new IStatus[] {LiferayServerCore.createErrorStatus(getErrorMessage())};
 	}
 
 	@Override
@@ -178,9 +174,9 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 
 					execute(new SetMemoryArgsCommand(server, m.trim()));
 
-					updating = false;
-
 					validate();
+
+					updating = false;
 				}
 
 			});
@@ -345,6 +341,21 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 				}
 			}
 
+			String[] memoryArrays = StringUtils.split(memoryArgs.getText(), " ");
+
+			boolean memoryArgInvalid = Stream.of(
+				memoryArrays
+			).filter(
+				arg -> !arg.startsWith("-Xm")
+			).findAny(
+			).isPresent();
+
+			if (memoryArgInvalid) {
+				setErrorMessage(Msgs.memoryArgumentsInvalid);
+
+				return;
+			}
+
 			setErrorMessage(null);
 		}
 	}
@@ -380,6 +391,7 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 		public static String invalidExternalPropertiesFile;
 		public static String liferayLaunch;
 		public static String memoryArgsLabel;
+		public static String memoryArgumentsInvalid;
 		public static String useDeveloperMode;
 
 		static {
