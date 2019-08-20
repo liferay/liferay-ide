@@ -15,38 +15,21 @@
  *
  *******************************************************************************/
 -->
-
 <project
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
 >
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide</groupId>
-		<artifactId>functional-tests</artifactId>
+		<groupId>com.liferay.ide.functional.tests.modules.ext.files.wizard</groupId>
+		<artifactId>modules-ext-files-wizard-tests</artifactId>
 		<version>3.6.2-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.base</groupId>
-	<artifactId>base-tests</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>com.liferay.ide.functional.modules.ext.files.wizard.create.tests</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
 
-	<name>Liferay IDE Functional Base</name>
-
-	<modules>
-		<module>fragment.wizard.base</module>
-		<module>fragment.deploy.base</module>
-		<module>module.deploy.base</module>
-		<module>portlet.deploy.base</module>
-		<module>server.deploy.base</module>
-		<module>server.wizard.base</module>
-		<module>layouttpl.deploy.base</module>
-		<module>theme.deploy.base</module>
-		<module>jsf.deploy.base</module>
-		<module>service.builder.deploy.base</module>
-		<module>hook.deploy.base</module>
-		<module>kaleo.deploy.base</module>
-	</modules>
+	<name>Liferay IDE Functional Modules Ext Files Wizard Create Tests</name>
 </project>

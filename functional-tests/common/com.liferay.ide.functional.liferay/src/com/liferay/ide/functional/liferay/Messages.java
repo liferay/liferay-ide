@@ -45,6 +45,9 @@ public interface Messages {
 
 	public static final String COULD_NOT_DETERMINE_SDK = "Could not determine SDK from project location";
 
+	public static final String CREATE_A_CONFIGURED_AS_LIFERAY_MODULE_EXT_PROJECT =
+		"Create a new project configured as a Liferay Module Ext Project";
+
 	public static final String CREATE_A_LIFERAY_LAYOUT_TEMPLATE = "Create a Liferay layout template.";
 
 	public static final String CREATE_A_NEW_LIEFRAY_COMPONENT_CLASS = "Create a new Liferay Component Class";
@@ -238,6 +241,8 @@ public interface Messages {
 	public static final String SELECT_OPTIONS_FOR_CREATING_NEW_THEME_PROJECT =
 		"Select options for creating new theme project.";
 
+	public static final String SELECT_ORIGINAL_MODULE_NAMES = "Select Original Module Names";
+
 	public static final String SERVERS_HOST_NAME_MUST_BE_SET = "Server's host name must be set.";
 
 	public static final String SERVICE_NAME_MUST_BE_SPECIFIED = "Service Name must be specified";
@@ -287,9 +292,6 @@ public interface Messages {
 	public static final String THE_SOURCE_FOLDER_CANNOT_BE_EMPTY = "The source folder cannot be empty.";
 
 	public static final String THE_TYPE_NAME = "The type name ";
-
-	public static final String THIS_FEATURE_ONLY_WORKS_WHEN_TARGET_PLATFORM_INDEX_SOURCES_IS_SET_TO_TRUE =
-		"This feature only works when the property \"target.platform.index.sources\" is set to true.";
 
 	public static final String THIS_PROJECT_HAS_DIFF_SDK = "This project has different sdk than current workspace sdk";
 
