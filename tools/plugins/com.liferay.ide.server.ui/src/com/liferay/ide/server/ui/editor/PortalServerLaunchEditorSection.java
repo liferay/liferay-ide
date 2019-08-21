@@ -33,9 +33,11 @@ import java.io.File;
 
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -56,9 +58,16 @@ import org.eclipse.wst.server.core.internal.Server;
  * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
-public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorSection {
+public class PortalServerLaunchEditorSection
+	extends AbstractPortalServerEditorSection implements IJavaLaunchConfigurationConstants {
 
 	public PortalServerLaunchEditorSection() {
+	}
+
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+		ServerUtil.setupPortalDevelopModeConfiguration(portalRuntime, portalServer);
+		super.doSave(monitor);
 	}
 
 	public IStatus[] getSaveStatus() {

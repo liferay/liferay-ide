@@ -18,6 +18,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.properties.PortalPropertiesConfiguration;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
@@ -1065,6 +1066,79 @@ public class ServerUtil {
 		}
 
 		return true;
+	}
+
+	public static void setupPortalDevelopModeConfiguration(PortalRuntime portalRuntime, PortalServer portalServer) {
+		boolean defaultLaunchSetting = portalServer.getLaunchSettings();
+
+		IPath liferayHome = portalRuntime.getLiferayHome();
+
+		IPath portalExtPath = liferayHome.append("portal-ext.properties");
+
+		File portalext = portalExtPath.toFile();
+
+		try {
+			PortalPropertiesConfiguration config = new PortalPropertiesConfiguration();
+
+			if (!defaultLaunchSetting && FileUtil.notExists(portalext)) {
+				portalext.createNewFile();
+			}
+
+			if (FileUtil.exists(portalext) && portalext.canRead()) {
+				try (InputStream in = Files.newInputStream(portalext.toPath())) {
+					config.load(in);
+				}
+			}
+			else {
+				LiferayServerCore.logInfo("Can not read portal-ext.properties file.");
+			}
+
+			String[] includeAndOverrideProperties = config.getStringArray("include-and-override");
+			boolean needAdd = true;
+			boolean needRemove = false;
+
+			if (!defaultLaunchSetting && portalServer.getDeveloperMode()) {
+				for (String prop : includeAndOverrideProperties) {
+					if (prop.equals("portal-developer.properties")) {
+						needAdd = false;
+
+						break;
+					}
+				}
+
+				needRemove = false;
+
+				if (needAdd) {
+					config.addProperty("include-and-override", "portal-developer.properties");
+				}
+			}
+			else if (FileUtil.exists(portalext)) {
+				config.clearProperty("include-and-override");
+
+				for (String prop : includeAndOverrideProperties) {
+					if (!prop.equals("portal-developer.properties")) {
+						config.addProperty("include-and-override", prop);
+					}
+					else {
+						needRemove = true;
+					}
+				}
+
+				needAdd = false;
+			}
+
+			if (needAdd || needRemove) {
+				if (portalext.canWrite()) {
+					config.save(portalext);
+				}
+				else {
+					LiferayServerCore.logInfo("Can not save change to portal-ext.properties file.");
+				}
+			}
+		}
+		catch (Exception e) {
+			LiferayServerCore.logError(e);
+		}
 	}
 
 	public static void terminateLaunchesForConfig(ILaunchConfigurationWorkingCopy config) throws DebugException {
