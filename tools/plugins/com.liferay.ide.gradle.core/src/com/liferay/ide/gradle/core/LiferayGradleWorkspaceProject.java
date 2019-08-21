@@ -117,7 +117,8 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 			try {
 				output = GradleUtil.runGradleTask(
-					LiferayWorkspaceUtil.getWorkspaceProject(), "dependencyManagement", new NullProgressMonitor());
+					LiferayWorkspaceUtil.getWorkspaceProject(), "dependencyManagement", true,
+					new NullProgressMonitor());
 			}
 			catch (CoreException ce) {
 			}
