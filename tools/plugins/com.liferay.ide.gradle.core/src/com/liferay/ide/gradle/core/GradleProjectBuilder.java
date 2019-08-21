@@ -182,7 +182,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 		try {
 			monitor.beginTask(task, 100);
 
-			GradleUtil.runGradleTask(project, task, monitor);
+			GradleUtil.runGradleTask(project, task, false, monitor);
 
 			monitor.worked(80);
 
@@ -207,7 +207,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 		try {
 			monitor.beginTask(task, 100);
 
-			GradleUtil.runGradleTask(getProject(), task, monitor);
+			GradleUtil.runGradleTask(getProject(), task, false, monitor);
 
 			monitor.worked(80);
 

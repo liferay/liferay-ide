@@ -243,21 +243,24 @@ public class GradleUtil {
 		synchronizeJob.schedule();
 	}
 
-	public static String runGradleTask(IProject project, String task, IProgressMonitor monitor) throws CoreException {
+	public static String runGradleTask(IProject project, String task, boolean redirectOutput, IProgressMonitor monitor)
+		throws CoreException {
+
 		CancellationTokenSource cancellationTokenSource = GradleConnector.newCancellationTokenSource();
 
-		return runGradleTask(project, new String[] {task}, new String[0], cancellationTokenSource, monitor);
+		return runGradleTask(
+			project, new String[] {task}, new String[0], cancellationTokenSource, redirectOutput, monitor);
 	}
 
 	public static void runGradleTask(IProject project, String[] tasks, IProgressMonitor monitor) throws CoreException {
 		CancellationTokenSource cancellationTokenSource = GradleConnector.newCancellationTokenSource();
 
-		runGradleTask(project, tasks, new String[0], cancellationTokenSource, monitor);
+		runGradleTask(project, tasks, new String[0], cancellationTokenSource, false, monitor);
 	}
 
 	public static String runGradleTask(
 			IProject project, String[] tasks, String[] arguments, CancellationTokenSource cancellationTokenSource,
-			IProgressMonitor monitor)
+			boolean redirectOutput, IProgressMonitor monitor)
 		throws CoreException {
 
 		if ((project == null) || (project.getLocation() == null)) {
@@ -270,31 +273,51 @@ public class GradleUtil {
 
 		GradleBuild gradleBuild = gradleBuildOpt.get();
 
-		OutputStream outputStream = new ByteArrayOutputStream();
-
 		try {
-			gradleBuild.withConnection(
-				connection -> {
-					connection.newBuild(
-					).addArguments(
-						arguments
-					).forTasks(
-						tasks
-					).withCancellationToken(
-						cancellationTokenSource.token()
-					).setStandardOutput(
-						outputStream
-					).run();
+			if (redirectOutput) {
+				OutputStream outputStream = new ByteArrayOutputStream();
 
-					return null;
-				},
-				monitor);
+				gradleBuild.withConnection(
+					connection -> {
+						connection.newBuild(
+						).addArguments(
+							arguments
+						).forTasks(
+							tasks
+						).withCancellationToken(
+							cancellationTokenSource.token()
+						).setStandardOutput(
+							outputStream
+						).run();
+
+						return null;
+					},
+					monitor);
+
+				return outputStream.toString();
+			}
+			else {
+				gradleBuild.withConnection(
+					connection -> {
+						connection.newBuild(
+						).addArguments(
+							arguments
+						).forTasks(
+							tasks
+						).withCancellationToken(
+							cancellationTokenSource.token()
+						).run();
+
+						return null;
+					},
+					monitor);
+			}
 		}
 		catch (Exception e) {
 			LiferayGradleCore.logError(e);
 		}
 
-		return outputStream.toString();
+		return null;
 	}
 
 	public static IStatus synchronizeProject(IPath dir, IProgressMonitor monitor) {

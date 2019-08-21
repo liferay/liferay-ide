@@ -78,7 +78,7 @@ public class WatchJob extends Job {
 
 			String[] args = {"--continuous", "--continue", "--rerun-tasks"};
 
-			GradleUtil.runGradleTask(_project, _tasks.toArray(new String[0]), args, _cancelToken, monitor);
+			GradleUtil.runGradleTask(_project, _tasks.toArray(new String[0]), args, _cancelToken, false, monitor);
 		}
 		catch (Exception e) {
 			return LiferayGradleCore.createErrorStatus("Error running watch task for project " + _project, e);
