@@ -49,6 +49,16 @@
 					<property>OriginalModuleVersion</property>
 				</property-editor>
 				<spacer/>
+				<composite>
+					<indent>true</indent>
+					<content>
+						<property-editor>
+							<property>CreateModuleExtFiles</property>
+							<label>Launch Liferay Module Ext Files Wizard after project is created</label>
+						</property-editor>
+					</content>
+				</composite>
+				<spacer/>
 				<custom>
 					<class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
 				</custom>

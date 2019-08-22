@@ -25,6 +25,10 @@
 			<label>Module Ext Override Files</label>
 			<content>
 				<property-editor>
+					<property>ModuleExtProjectName</property>
+					<style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+				</property-editor>
+				<property-editor>
 					<property>OriginalModuleHint</property>
                     <hint>
                         <name>read.only</name>

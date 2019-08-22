@@ -15,16 +15,33 @@
 package com.liferay.ide.project.ui.modules.ext;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.JobUtil;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.modules.BaseProjectWizard;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.internal.ui.util.CoreUtility;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Charles Wu
+ * @author Seiphon Wang
  */
+@SuppressWarnings("restriction")
 public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> {
 
 	public NewModuleExtWizard() {
@@ -47,10 +64,54 @@ public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> {
 		}
 
 		openLiferayPerspective(project);
+
+		boolean createNewMoudleExtFiles = get(newModuleExtOp.getCreateModuleExtFiles());
+
+		if (createNewMoudleExtFiles) {
+			_openNewModuleExtFilesWizard(project);
+		}
 	}
 
 	private static NewModuleExtOp _createDefaultOp() {
 		return NewModuleExtOp.TYPE.instantiate();
+	}
+
+	private void _openNewModuleExtFilesWizard(IProject project) {
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+
+		IExtension extension = registry.getExtension("com.liferay.ide.portlet.ui.newModuleExtWizard");
+
+		IConfigurationElement[] elements = extension.getConfigurationElements();
+
+		for (IConfigurationElement element : elements) {
+			if ("wizard".equals(element.getName()) &&
+				"com.liferay.ide.project.ui.newModuleExtFilesWizard".equals(element.getAttribute("id"))) {
+
+				UIUtil.async(
+					() -> {
+						try {
+							JobUtil.waitForLiferayProjectJob();
+
+							INewWizard wizard = (INewWizard)CoreUtility.createExtension(element, "class");
+
+							IWorkbenchWindow activeWorkbenchWindow = UIUtil.getActiveWorkbenchWindow();
+
+							Shell shell = activeWorkbenchWindow.getShell();
+
+							wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(project));
+
+							WizardDialog dialog = new WizardDialog(shell, wizard);
+
+							dialog.create();
+
+							dialog.open();
+						}
+						catch (CoreException ce) {
+							ProjectCore.createErrorStatus(ce);
+						}
+					});
+			}
+		}
 	}
 
 }
