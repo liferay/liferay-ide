@@ -61,8 +61,6 @@ public interface NewModuleExtOp extends BaseModuleOp {
 
 	public void setCreateModuleExtFiles(Boolean value);
 
-	public void setCreateModuleExtFiles(String value);
-
 	public void setOriginalModuleName(String value);
 
 	public void setOriginalModuleVersion(String value);

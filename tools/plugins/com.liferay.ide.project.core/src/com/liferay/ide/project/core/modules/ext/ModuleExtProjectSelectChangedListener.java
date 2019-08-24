@@ -52,9 +52,9 @@ public class ModuleExtProjectSelectChangedListener extends ModuleExtProjectNameL
 	}
 
 	private void _updateOriginalMoules(NewModuleExtFilesOp op) {
-		op.getModuleExtProjectName();
+		String projectName = get(op.getModuleExtProjectName());
 
-		IProject project = ProjectUtil.getProject(get(op.getModuleExtProjectName()));
+		IProject project = ProjectUtil.getProject(projectName);
 
 		ILiferayProject extProject = LiferayCore.create(ILiferayProject.class, project);
 

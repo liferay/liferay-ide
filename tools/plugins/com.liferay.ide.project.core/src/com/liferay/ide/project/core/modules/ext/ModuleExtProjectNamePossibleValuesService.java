@@ -18,6 +18,8 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
@@ -25,6 +27,7 @@ import org.eclipse.sapphire.PossibleValuesService;
 
 /**
  * @author Seiphon Wang
+ * @author Terry Jia
  */
 public class ModuleExtProjectNamePossibleValuesService extends PossibleValuesService {
 
@@ -32,27 +35,29 @@ public class ModuleExtProjectNamePossibleValuesService extends PossibleValuesSer
 	protected void compute(Set<String> values) {
 		IProject[] projects = CoreUtil.getAllProjects();
 
-		IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-		String extFolder = LiferayWorkspaceUtil.getExtDir(liferayWorkspaceProject);
+		IPath extDirLocation = LiferayWorkspaceUtil.getExtDirLocation(workspaceProject);
 
-		IPath path = liferayWorkspaceProject.getLocation();
+		Set<String> projectNames = Stream.of(
+			projects
+		).filter(
+			project -> {
+				IPath location = project.getLocation();
 
-		IPath appendPath = path.append(extFolder);
+				if (extDirLocation.isPrefixOf(location) && !location.equals(extDirLocation)) {
+					return true;
+				}
 
-		String parentLcation = appendPath.toString();
-
-		for (IProject project : projects) {
-			IPath location = project.getLocation();
-
-			String locationString = location.toString();
-
-			if (locationString.contains(parentLcation) && !locationString.equals(parentLcation)) {
-				String projectName = project.getName();
-
-				values.add(projectName);
+				return false;
 			}
-		}
+		).map(
+			IProject::getName
+		).collect(
+			Collectors.toSet()
+		);
+
+		values.addAll(projectNames);
 	}
 
 }
