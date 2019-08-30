@@ -733,12 +733,14 @@ public class PortalServerBehavior
 	private String[] _getRuntimeStartVMArguments() {
 		List<String> retval = new ArrayList<>();
 
-		boolean customLaunchSettings = _getPortalServer().getCustomLaunchSettings();
+		PortalServer portalServer = _getPortalServer();
+
+		boolean customLaunchSettings = portalServer.getCustomLaunchSettings();
 
 		if (customLaunchSettings) {
-			Collections.addAll(retval, _getPortalServer().getMemoryArgs());
+			Collections.addAll(retval, portalServer.getMemoryArgs());
 
-			String externalProperties = _getPortalServer().getExternalProperties();
+			String externalProperties = portalServer.getExternalProperties();
 
 			if (CoreUtil.isNotNullOrEmpty(externalProperties) && FileUtil.exists(new File(externalProperties))) {
 				Path externalPropertiesPath = new Path(externalProperties);
@@ -746,7 +748,7 @@ public class PortalServerBehavior
 				retval.add("-Dexternal-properties=\"" + externalPropertiesPath.toOSString() + "\"");
 			}
 
-			ServerUtil.setupPortalDevelopModeConfiguration(_getPortalRuntime(), _getPortalServer());
+			ServerUtil.setupPortalDevelopModeConfiguration(_getPortalRuntime(), portalServer);
 		}
 
 		PortalBundle portalBundle = _getPortalRuntime().getPortalBundle();
