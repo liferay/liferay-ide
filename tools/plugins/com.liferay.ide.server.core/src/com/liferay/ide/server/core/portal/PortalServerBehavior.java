@@ -36,7 +36,6 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
@@ -399,7 +398,7 @@ public class PortalServerBehavior
 		String[] configVMArgs = _getRuntimeStartVMArguments();
 
 		if (null != existingVMArgs) {
-			CopyOnWriteArrayList<String> formattedExisteingVMArgs = Lists.newCopyOnWriteArrayList(
+			List<String> formattedExisteingVMArgs = Lists.newCopyOnWriteArrayList(
 				Lists.newArrayList(DebugPlugin.parseArguments(existingVMArgs)));
 
 			if (ListUtil.isNotEmpty(formattedExisteingVMArgs)) {
