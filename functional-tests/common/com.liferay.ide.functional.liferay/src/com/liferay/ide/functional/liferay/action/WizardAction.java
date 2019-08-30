@@ -1251,19 +1251,21 @@ public class WizardAction extends UIAction {
 
 	public class NewRuntime7WizardAction {
 
-		public void prepare(String location) {
-			Text serverLocation = _newLiferay7RuntimeWizard.getLocation();
+		public String getDetectedPortalBundleType() {
+			return _newLiferay7RuntimeWizard.getDetectedPortalBundleType();
+		}
 
-			serverLocation.setText(location);
+		public String getName() {
+			return _newLiferay7RuntimeWizard.getName();
+		}
+
+		public void prepare(String location) {
+			_newLiferay7RuntimeWizard.setLiferayPortalBundleDirectory(location);
 		}
 
 		public void prepare(String name, String location) {
-			Text serverName = _newLiferay7RuntimeWizard.getName();
-
-			Text serverLocation = _newLiferay7RuntimeWizard.getLocation();
-
-			serverName.setText(name);
-			serverLocation.setText(location);
+			_newLiferay7RuntimeWizard.setName(name);
+			_newLiferay7RuntimeWizard.setLiferayPortalBundleDirectory(location);
 		}
 
 		private final NewRuntime7Wizard _newLiferay7RuntimeWizard = new NewRuntime7Wizard(bot);

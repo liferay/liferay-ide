@@ -29,16 +29,32 @@ public class NewRuntime7Wizard extends Wizard {
 		super(bot, 3);
 	}
 
-	public Text getLocation() {
+	public Text detectedPortalBundleType() {
+		return new Text(getShell().bot(), DETECTED_PORTAL_BUNDLE_TYPE);
+	}
+
+	public String getDetectedPortalBundleType() {
+		return detectedPortalBundleType().getText();
+	}
+
+	public String getName() {
+		return name().getText();
+	}
+
+	public Text liferayPortalBundleDirectory() {
 		return new Text(getShell().bot(), LIFERAY_PORTAL_BUNDLE_DIRECTORY);
 	}
 
-	public Text getName() {
+	public Text name() {
 		return new Text(getShell().bot(), NAME);
 	}
 
-	public Text getPortalBundleType() {
-		return new Text(getShell().bot(), DETECTED_PORTAL_BUNDLE_TYPE);
+	public void setLiferayPortalBundleDirectory(String location) {
+		liferayPortalBundleDirectory().setText(location);
+	}
+
+	public void setName(String name) {
+		name().setText(name);
 	}
 
 }
