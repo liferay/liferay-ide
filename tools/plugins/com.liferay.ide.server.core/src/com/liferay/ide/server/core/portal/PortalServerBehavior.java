@@ -398,23 +398,22 @@ public class PortalServerBehavior
 		String[] configVMArgs = _getRuntimeStartVMArguments();
 
 		if (null != existingVMArgs) {
-			List<String> formattedExisteingVMArgs = Lists.newCopyOnWriteArrayList(
+			List<String> parsedExistingVMArgs = Lists.newCopyOnWriteArrayList(
 				Lists.newArrayList(DebugPlugin.parseArguments(existingVMArgs)));
 
-			if (ListUtil.isNotEmpty(formattedExisteingVMArgs)) {
-				for (String pArg : formattedExisteingVMArgs) {
-					if (pArg.startsWith("-Xm")) {
-						formattedExisteingVMArgs.remove(pArg);
+			if (ListUtil.isNotEmpty(parsedExistingVMArgs)) {
+				for (String parsedArg : parsedExistingVMArgs) {
+					if (parsedArg.startsWith("-Xm")) {
+						parsedExistingVMArgs.remove(parsedArg);
 					}
 
-					if (pArg.startsWith("-Dexternal-properties")) {
-						formattedExisteingVMArgs.remove(pArg);
+					if (parsedArg.startsWith("-Dexternal-properties")) {
+						parsedExistingVMArgs.remove(parsedArg);
 					}
 				}
 			}
 
-			String[] modifyExistingVMArgs = formattedExisteingVMArgs.toArray(
-				new String[formattedExisteingVMArgs.size()]);
+			String[] modifyExistingVMArgs = parsedExistingVMArgs.toArray(new String[parsedExistingVMArgs.size()]);
 
 			launch.setAttribute(
 				ATTR_VM_ARGUMENTS, _mergeArguments(StringUtil.merge(modifyExistingVMArgs, " "), configVMArgs, null));
