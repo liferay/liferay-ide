@@ -413,10 +413,11 @@ public class PortalServerBehavior
 				}
 			}
 
-			String[] modifyExistingVMArgs = parsedExistingVMArgs.toArray(new String[parsedExistingVMArgs.size()]);
-
 			launch.setAttribute(
-				ATTR_VM_ARGUMENTS, _mergeArguments(StringUtil.merge(modifyExistingVMArgs, " "), configVMArgs, null));
+				ATTR_VM_ARGUMENTS,
+				_mergeArguments(
+					StringUtil.merge(parsedExistingVMArgs.toArray(new String[parsedExistingVMArgs.size()]), " "),
+					configVMArgs, null));
 		}
 		else {
 			launch.setAttribute(ATTR_VM_ARGUMENTS, _mergeArguments(existingVMArgs, configVMArgs, null));
@@ -732,9 +733,9 @@ public class PortalServerBehavior
 	private String[] _getRuntimeStartVMArguments() {
 		List<String> retval = new ArrayList<>();
 
-		boolean defaultLaunchSetting = _getPortalServer().getLaunchSettings();
+		boolean customLaunchSettings = _getPortalServer().getCustomLaunchSettings();
 
-		if (!defaultLaunchSetting) {
+		if (customLaunchSettings) {
 			Collections.addAll(retval, _getPortalServer().getMemoryArgs());
 
 			String externalProperties = _getPortalServer().getExternalProperties();

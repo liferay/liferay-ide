@@ -21,11 +21,11 @@ import com.liferay.ide.server.core.ILiferayServerWorkingCopy;
  */
 public interface PortalServerWorkingCopy extends ILiferayServerWorkingCopy, PortalServer {
 
+	public void setCustomLaunchSettings(boolean customLaunchSettings);
+
 	public void setDeveloperMode(boolean developmentMode);
 
 	public void setExternalProperties(String externalProperties);
-
-	public void setLaunchSettings(boolean launchSettings);
 
 	public void setMemoryArgs(String memoryArgs);
 

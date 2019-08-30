@@ -21,9 +21,9 @@ import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalServer;
 import com.liferay.ide.server.core.portal.PortalServerConstants;
+import com.liferay.ide.server.ui.cmd.SetCustomLaunchSettingsCommand;
 import com.liferay.ide.server.ui.cmd.SetDeveloperModeCommand;
 import com.liferay.ide.server.ui.cmd.SetExternalPropertiesCommand;
-import com.liferay.ide.server.ui.cmd.SetLaunchSettingsCommand;
 import com.liferay.ide.server.ui.cmd.SetMemoryArgsCommand;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -89,7 +89,7 @@ public class PortalServerLaunchEditorSection
 		else if (PortalServer.PROPERTY_DEVELOPER_MODE.equals(event.getPropertyName())) {
 			developerMode.setSelection((Boolean)event.getNewValue());
 		}
-		else if (PortalServer.PROPERTY_LAUNCH_SETTINGS.equals(event.getPropertyName())) {
+		else if (PortalServer.PROPERTY_CUSTOM_LAUNCH_SETTINGS.equals(event.getPropertyName())) {
 			boolean s = (Boolean)event.getNewValue();
 
 			defaultLaunchSettings.setSelection(s);
@@ -115,7 +115,7 @@ public class PortalServerLaunchEditorSection
 				public void widgetSelected(SelectionEvent e) {
 					updating = true;
 
-					execute(new SetLaunchSettingsCommand(server, defaultLaunchSettings.getSelection()));
+					execute(new SetCustomLaunchSettingsCommand(server, defaultLaunchSettings.getSelection()));
 
 					updating = false;
 
@@ -142,7 +142,7 @@ public class PortalServerLaunchEditorSection
 				public void widgetSelected(SelectionEvent e) {
 					updating = true;
 
-					execute(new SetLaunchSettingsCommand(server, !customLaunchSettings.getSelection()));
+					execute(new SetCustomLaunchSettingsCommand(server, !customLaunchSettings.getSelection()));
 
 					updating = false;
 
@@ -296,10 +296,10 @@ public class PortalServerLaunchEditorSection
 
 	@Override
 	protected void initProperties() {
-		_applyDefaultPortalServerSetting(portalServer.getLaunchSettings());
+		_applyDefaultPortalServerSetting(portalServer.getCustomLaunchSettings());
 
-		customLaunchSettings.setSelection(!portalServer.getLaunchSettings());
-		defaultLaunchSettings.setSelection(portalServer.getLaunchSettings());
+		customLaunchSettings.setSelection(portalServer.getCustomLaunchSettings());
+		defaultLaunchSettings.setSelection(!portalServer.getCustomLaunchSettings());
 		developerMode.setSelection(portalServer.getDeveloperMode());
 		externalProperties.setText(portalServer.getExternalProperties());
 		memoryArgs.setText(StringUtil.merge(portalServer.getMemoryArgs(), " "));
@@ -325,13 +325,13 @@ public class PortalServerLaunchEditorSection
 
 		developerMode.setSelection(PortalServerConstants.DEFAULT_DEVELOPER_MODE);
 
-		execute(new SetLaunchSettingsCommand(server, PortalServerConstants.DEFAULT_LAUNCH_SETTING));
+		execute(new SetCustomLaunchSettingsCommand(server, PortalServerConstants.DEFAULT_CUSTOM_LAUNCH_SETTING));
 
-		defaultLaunchSettings.setSelection(PortalServerConstants.DEFAULT_LAUNCH_SETTING);
+		customLaunchSettings.setSelection(PortalServerConstants.DEFAULT_CUSTOM_LAUNCH_SETTING);
 
-		customLaunchSettings.setSelection(!PortalServerConstants.DEFAULT_LAUNCH_SETTING);
+		defaultLaunchSettings.setSelection(!PortalServerConstants.DEFAULT_CUSTOM_LAUNCH_SETTING);
 
-		_applyDefaultPortalServerSetting(PortalServerConstants.DEFAULT_LAUNCH_SETTING);
+		_applyDefaultPortalServerSetting(PortalServerConstants.DEFAULT_CUSTOM_LAUNCH_SETTING);
 	}
 
 	protected void validate() {
@@ -376,18 +376,18 @@ public class PortalServerLaunchEditorSection
 	protected Button externalPropertiesBrowse;
 	protected Text memoryArgs;
 
-	private void _applyDefaultPortalServerSetting(boolean useDefaultPortalSeverSetting) {
-		if (useDefaultPortalSeverSetting) {
-			developerMode.setEnabled(false);
-			externalProperties.setEnabled(false);
-			externalPropertiesBrowse.setEnabled(false);
-			memoryArgs.setEnabled(false);
-		}
-		else {
+	private void _applyDefaultPortalServerSetting(boolean customLaunchSettings) {
+		if (customLaunchSettings) {
 			developerMode.setEnabled(true);
 			externalProperties.setEnabled(true);
 			externalPropertiesBrowse.setEnabled(true);
 			memoryArgs.setEnabled(true);
+		}
+		else {
+			developerMode.setEnabled(false);
+			externalProperties.setEnabled(false);
+			externalPropertiesBrowse.setEnabled(false);
+			memoryArgs.setEnabled(false);
 		}
 	}
 

@@ -1069,7 +1069,7 @@ public class ServerUtil {
 	}
 
 	public static void setupPortalDevelopModeConfiguration(PortalRuntime portalRuntime, PortalServer portalServer) {
-		boolean defaultLaunchSetting = portalServer.getLaunchSettings();
+		boolean customLaunchSettings = portalServer.getCustomLaunchSettings();
 
 		IPath liferayHome = portalRuntime.getLiferayHome();
 
@@ -1080,7 +1080,7 @@ public class ServerUtil {
 		try {
 			PortalPropertiesConfiguration config = new PortalPropertiesConfiguration();
 
-			if (!defaultLaunchSetting && FileUtil.notExists(portalext)) {
+			if (customLaunchSettings && FileUtil.notExists(portalext)) {
 				portalext.createNewFile();
 			}
 
@@ -1097,7 +1097,7 @@ public class ServerUtil {
 			boolean needAdd = true;
 			boolean needRemove = false;
 
-			if (!defaultLaunchSetting && portalServer.getDeveloperMode()) {
+			if (customLaunchSettings && portalServer.getDeveloperMode()) {
 				for (String prop : includeAndOverrideProperties) {
 					if (prop.equals("portal-developer.properties")) {
 						needAdd = false;
