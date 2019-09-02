@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
  */
 public interface PortalServerConstants {
 
-	public boolean DEFAULT_CUSTOM_LAUNCH_SETTING = false;
+	public boolean DEFAULT_CUSTOM_LAUNCH_SETTING = true;
 
 	public boolean DEFAULT_DEVELOPER_MODE = true;
 

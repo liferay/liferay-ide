@@ -115,13 +115,11 @@ public class PortalServerLaunchEditorSection
 				public void widgetSelected(SelectionEvent e) {
 					updating = true;
 
-					execute(new SetCustomLaunchSettingsCommand(server, defaultLaunchSettings.getSelection()));
+					execute(new SetCustomLaunchSettingsCommand(server, !defaultLaunchSettings.getSelection()));
 
 					updating = false;
 
-					_applyDefaultPortalServerSetting(defaultLaunchSettings.getSelection());
-
-					customLaunchSettings.setSelection(!defaultLaunchSettings.getSelection());
+					_applyDefaultPortalServerSetting(!defaultLaunchSettings.getSelection());
 
 					validate();
 				}
@@ -142,13 +140,11 @@ public class PortalServerLaunchEditorSection
 				public void widgetSelected(SelectionEvent e) {
 					updating = true;
 
-					execute(new SetCustomLaunchSettingsCommand(server, !customLaunchSettings.getSelection()));
+					execute(new SetCustomLaunchSettingsCommand(server, customLaunchSettings.getSelection()));
 
 					updating = false;
 
-					_applyDefaultPortalServerSetting(!customLaunchSettings.getSelection());
-
-					defaultLaunchSettings.setSelection(!customLaunchSettings.getSelection());
+					_applyDefaultPortalServerSetting(customLaunchSettings.getSelection());
 
 					validate();
 				}

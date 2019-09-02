@@ -750,6 +750,9 @@ public class PortalServerBehavior
 
 			ServerUtil.setupPortalDevelopModeConfiguration(_getPortalRuntime(), portalServer);
 		}
+		else {
+			Collections.addAll(retval, PortalServerConstants.DEFAULT_MEMORY_ARGS);
+		}
 
 		PortalBundle portalBundle = _getPortalRuntime().getPortalBundle();
 
