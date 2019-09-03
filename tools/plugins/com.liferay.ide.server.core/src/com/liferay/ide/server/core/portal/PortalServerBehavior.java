@@ -14,13 +14,15 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.google.common.collect.Lists;
+
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayRuntimeClasspathEntry;
-import com.liferay.ide.core.properties.PortalPropertiesConfiguration;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
@@ -28,10 +30,6 @@ import com.liferay.ide.server.util.PingThread;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.nio.file.Files;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,8 +37,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
-
-import org.apache.commons.io.FileUtils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -82,6 +78,7 @@ import org.osgi.framework.Bundle;
  * @author Gregory Amerson
  * @author Simon Jiang
  * @author Terry Jia
+ * @author Ashely Yuan
  */
 @SuppressWarnings({"restriction", "rawtypes"})
 public class PortalServerBehavior
@@ -400,7 +397,31 @@ public class PortalServerBehavior
 
 		String[] configVMArgs = _getRuntimeStartVMArguments();
 
-		launch.setAttribute(ATTR_VM_ARGUMENTS, _mergeArguments(existingVMArgs, configVMArgs, null));
+		if (null != existingVMArgs) {
+			List<String> parsedExistingVMArgs = Lists.newCopyOnWriteArrayList(
+				Lists.newArrayList(DebugPlugin.parseArguments(existingVMArgs)));
+
+			if (ListUtil.isNotEmpty(parsedExistingVMArgs)) {
+				for (String parsedArg : parsedExistingVMArgs) {
+					if (parsedArg.startsWith("-Xm")) {
+						parsedExistingVMArgs.remove(parsedArg);
+					}
+
+					if (parsedArg.startsWith("-Dexternal-properties")) {
+						parsedExistingVMArgs.remove(parsedArg);
+					}
+				}
+			}
+
+			launch.setAttribute(
+				ATTR_VM_ARGUMENTS,
+				_mergeArguments(
+					StringUtil.merge(parsedExistingVMArgs.toArray(new String[parsedExistingVMArgs.size()]), " "),
+					configVMArgs, null));
+		}
+		else {
+			launch.setAttribute(ATTR_VM_ARGUMENTS, _mergeArguments(existingVMArgs, configVMArgs, null));
+		}
 
 		PortalRuntime portalRuntime = _getPortalRuntime();
 
@@ -709,78 +730,29 @@ public class PortalServerBehavior
 		return portalBundle.getRuntimeStartProgArgs();
 	}
 
-	@SuppressWarnings("deprecation")
 	private String[] _getRuntimeStartVMArguments() {
-		boolean launchSetting = _getPortalServer().getLaunchSettings();
-
-		IPath liferayHome = _getPortalRuntime().getLiferayHome();
-
-		IPath portalExtPath = liferayHome.append("portal-ext.properties");
-
-		if (!launchSetting) {
-			File portalext = portalExtPath.toFile();
-
-			if (_getPortalServer().getDeveloperMode()) {
-				try {
-					if (FileUtil.notExists(portalext)) {
-						portalext.createNewFile();
-					}
-
-					if (FileUtil.exists(portalext) && portalext.canRead() && portalext.canWrite()) {
-						PortalPropertiesConfiguration config = new PortalPropertiesConfiguration();
-
-						try (InputStream in = Files.newInputStream(portalext.toPath())) {
-							config.load(in);
-						}
-
-						String[] p = config.getStringArray("include-and-override");
-
-						boolean existing = false;
-
-						for (String prop : p) {
-							if (prop.equals("portal-developer.properties")) {
-								existing = true;
-
-								break;
-							}
-						}
-
-						if (!existing) {
-							config.addProperty("include-and-override", "portal-developer.properties");
-						}
-
-						config.save(portalext);
-					}
-					else {
-						LiferayServerCore.logInfo("Can not write portal-ext.properties file.");
-					}
-				}
-				catch (Exception e) {
-					LiferayServerCore.logError(e);
-				}
-			}
-			else if (FileUtil.exists(portalext)) {
-				String contents = FileUtil.readContents(portalext, true);
-
-				if (portalext.canWrite()) {
-					contents = contents.replace("include-and-override=portal-developer.properties", "");
-
-					try {
-						FileUtils.write(portalext, contents);
-					}
-					catch (IOException ioe) {
-						LiferayServerCore.logError(ioe);
-					}
-				}
-				else {
-					LiferayServerCore.logInfo("Can not write portal-ext.properties file.");
-				}
-			}
-		}
-
 		List<String> retval = new ArrayList<>();
 
-		Collections.addAll(retval, _getPortalServer().getMemoryArgs());
+		PortalServer portalServer = _getPortalServer();
+
+		boolean customLaunchSettings = portalServer.getCustomLaunchSettings();
+
+		if (customLaunchSettings) {
+			Collections.addAll(retval, portalServer.getMemoryArgs());
+
+			String externalProperties = portalServer.getExternalProperties();
+
+			if (CoreUtil.isNotNullOrEmpty(externalProperties) && FileUtil.exists(new File(externalProperties))) {
+				Path externalPropertiesPath = new Path(externalProperties);
+
+				retval.add("-Dexternal-properties=\"" + externalPropertiesPath.toOSString() + "\"");
+			}
+
+			ServerUtil.setupPortalDevelopModeConfiguration(_getPortalRuntime(), portalServer);
+		}
+		else {
+			Collections.addAll(retval, PortalServerConstants.DEFAULT_MEMORY_ARGS);
+		}
 
 		PortalBundle portalBundle = _getPortalRuntime().getPortalBundle();
 

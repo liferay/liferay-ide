@@ -25,11 +25,11 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
  */
 public interface PortalServerConstants {
 
+	public boolean DEFAULT_CUSTOM_LAUNCH_SETTING = true;
+
 	public boolean DEFAULT_DEVELOPER_MODE = true;
 
 	public String DEFAULT_HTTP_PORT = "8080";
-
-	public boolean DEFAULT_LAUNCH_SETTING = false;
 
 	public IEclipsePreferences defaultPrefs = DefaultScope.INSTANCE.getNode(LiferayServerCore.PLUGIN_ID);
 

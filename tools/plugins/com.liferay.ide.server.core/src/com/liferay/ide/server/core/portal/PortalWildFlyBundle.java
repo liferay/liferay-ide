@@ -64,10 +64,10 @@ public class PortalWildFlyBundle extends PortalJBossBundle {
 		if (jdkVersion.compareTo(jdk8Version) <= 0) {
 			args.add(
 				"-Xbootclasspath/p:\"" + bundlePath +
-					"/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager- + " + "2.0.3.Final.jar\"");
+					"/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-2.0.3.Final.jar\"");
 			args.add(
 				"-Xbootclasspath/p:\"" + bundlePath +
-					"/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager- + " +
+					"/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager-" +
 						"1.1.2.Final.jar\"");
 		}
 

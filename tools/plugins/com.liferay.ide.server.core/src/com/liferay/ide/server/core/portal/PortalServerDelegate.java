@@ -87,6 +87,11 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
 	}
 
 	@Override
+	public boolean getCustomLaunchSettings() {
+		return getAttribute(PROPERTY_CUSTOM_LAUNCH_SETTINGS, PortalServerConstants.DEFAULT_CUSTOM_LAUNCH_SETTING);
+	}
+
+	@Override
 	public boolean getDeveloperMode() {
 		return getAttribute(PROPERTY_DEVELOPER_MODE, PortalServerConstants.DEFAULT_DEVELOPER_MODE);
 	}
@@ -106,11 +111,6 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
 
 	public String getId() {
 		return getServer().getId();
-	}
-
-	@Override
-	public boolean getLaunchSettings() {
-		return getAttribute(PROPERTY_LAUNCH_SETTINGS, PortalServerConstants.DEFAULT_LAUNCH_SETTING);
 	}
 
 	public String[] getMemoryArgs() {
@@ -181,6 +181,11 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
 	}
 
 	@Override
+	public void setCustomLaunchSettings(boolean customLaunchSettings) {
+		setAttribute(PROPERTY_CUSTOM_LAUNCH_SETTINGS, customLaunchSettings);
+	}
+
+	@Override
 	public void setDefaults(IProgressMonitor monitor) {
 		setAttribute(Server.PROP_AUTO_PUBLISH_TIME, getAutoPublishTime());
 		ServerUtil.setServerDefaultName(getServerWorkingCopy());
@@ -205,11 +210,6 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
 		PortalBundle portalRuntime = runtime.getPortalBundle();
 
 		portalRuntime.setHttpPort(httpPort);
-	}
-
-	@Override
-	public void setLaunchSettings(boolean launchSettings) {
-		setAttribute(PROPERTY_LAUNCH_SETTINGS, launchSettings);
 	}
 
 	public void setMemoryArgs(String memoryArgs) {

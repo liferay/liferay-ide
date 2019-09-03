@@ -24,33 +24,34 @@ import org.eclipse.wst.server.ui.internal.command.ServerCommand;
 /**
  * @author Simon Jiang
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 @SuppressWarnings("restriction")
-public class SetLaunchSettingsCommand extends ServerCommand {
+public class SetCustomLaunchSettingsCommand extends ServerCommand {
 
-	public SetLaunchSettingsCommand(IServerWorkingCopy server, boolean launchSettings) {
+	public SetCustomLaunchSettingsCommand(IServerWorkingCopy server, boolean customLaunchSettings) {
 		super(server, Messages.editorResourceModifiedTitle);
 
-		this.launchSettings = launchSettings;
+		_customLaunchSettings = customLaunchSettings;
 	}
 
 	public void execute() {
 		PortalServer portalServer = (PortalServer)server.loadAdapter(PortalServer.class, null);
 
-		oldLaunchSettings = portalServer.getLaunchSettings();
+		_oldLaunchSettings = portalServer.getCustomLaunchSettings();
 
 		PortalServerDelegate portalServerDelegate = (PortalServerDelegate)server.loadAdapter(PortalServer.class, null);
 
-		portalServerDelegate.setLaunchSettings(launchSettings);
+		portalServerDelegate.setCustomLaunchSettings(_customLaunchSettings);
 	}
 
 	public void undo() {
 		PortalServerDelegate portalServerDelegate = (PortalServerDelegate)server.loadAdapter(PortalServer.class, null);
 
-		portalServerDelegate.setLaunchSettings(oldLaunchSettings);
+		portalServerDelegate.setCustomLaunchSettings(_oldLaunchSettings);
 	}
 
-	protected boolean launchSettings;
-	protected boolean oldLaunchSettings;
+	private boolean _customLaunchSettings;
+	private boolean _oldLaunchSettings;
 
 }

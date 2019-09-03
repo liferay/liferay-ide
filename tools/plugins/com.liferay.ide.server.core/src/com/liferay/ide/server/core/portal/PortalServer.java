@@ -25,11 +25,11 @@ public interface PortalServer extends ILiferayServer {
 
 	public int getAutoPublishTime();
 
+	public boolean getCustomLaunchSettings();
+
 	public boolean getDeveloperMode();
 
 	public String getExternalProperties();
-
-	public boolean getLaunchSettings();
 
 	public String[] getMemoryArgs();
 
@@ -37,11 +37,11 @@ public interface PortalServer extends ILiferayServer {
 
 	public String ID = "com.liferay.ide.server.portal";
 
+	public String PROPERTY_CUSTOM_LAUNCH_SETTINGS = "customLaunchSettings";
+
 	public String PROPERTY_DEVELOPER_MODE = "developerMode";
 
 	public String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties";
-
-	public String PROPERTY_LAUNCH_SETTINGS = "launchSettings";
 
 	public String PROPERTY_MEMORY_ARGS = "memoryArgs";
 

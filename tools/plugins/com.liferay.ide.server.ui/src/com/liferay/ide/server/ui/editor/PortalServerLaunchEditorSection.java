@@ -18,12 +18,12 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalServer;
 import com.liferay.ide.server.core.portal.PortalServerConstants;
-import com.liferay.ide.server.ui.LiferayServerUI;
+import com.liferay.ide.server.ui.cmd.SetCustomLaunchSettingsCommand;
 import com.liferay.ide.server.ui.cmd.SetDeveloperModeCommand;
 import com.liferay.ide.server.ui.cmd.SetExternalPropertiesCommand;
-import com.liferay.ide.server.ui.cmd.SetLaunchSettingsCommand;
 import com.liferay.ide.server.ui.cmd.SetMemoryArgsCommand;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -31,8 +31,13 @@ import java.beans.PropertyChangeEvent;
 
 import java.io.File;
 
+import java.util.stream.Stream;
+
+import org.apache.commons.lang.StringUtils;
+
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -50,27 +55,27 @@ import org.eclipse.wst.server.core.internal.Server;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
-public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorSection {
+public class PortalServerLaunchEditorSection
+	extends AbstractPortalServerEditorSection implements IJavaLaunchConfigurationConstants {
 
 	public PortalServerLaunchEditorSection() {
 	}
 
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+		ServerUtil.setupPortalDevelopModeConfiguration(portalRuntime, portalServer);
+		super.doSave(monitor);
+	}
+
 	public IStatus[] getSaveStatus() {
-		String externalPropetiesValue = portalServer.getExternalProperties();
-
-		if (!CoreUtil.isNullOrEmpty(externalPropetiesValue)) {
-			File externalPropertiesFile = new File(externalPropetiesValue);
-
-			if (!ServerUtil.isValidPropertiesFile(externalPropertiesFile)) {
-				return new IStatus[] {
-					new Status(IStatus.ERROR, LiferayServerUI.PLUGIN_ID, Msgs.invalidExternalPropertiesFile)
-				};
-			}
+		if (getErrorMessage() == null) {
+			return super.getSaveStatus();
 		}
 
-		return super.getSaveStatus();
+		return new IStatus[] {LiferayServerCore.createErrorStatus(getErrorMessage())};
 	}
 
 	@Override
@@ -84,7 +89,7 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 		else if (PortalServer.PROPERTY_DEVELOPER_MODE.equals(event.getPropertyName())) {
 			developerMode.setSelection((Boolean)event.getNewValue());
 		}
-		else if (PortalServer.PROPERTY_LAUNCH_SETTINGS.equals(event.getPropertyName())) {
+		else if (PortalServer.PROPERTY_CUSTOM_LAUNCH_SETTINGS.equals(event.getPropertyName())) {
 			boolean s = (Boolean)event.getNewValue();
 
 			defaultLaunchSettings.setSelection(s);
@@ -110,13 +115,11 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 				public void widgetSelected(SelectionEvent e) {
 					updating = true;
 
-					execute(new SetLaunchSettingsCommand(server, defaultLaunchSettings.getSelection()));
+					execute(new SetCustomLaunchSettingsCommand(server, !defaultLaunchSettings.getSelection()));
 
 					updating = false;
 
-					_applyDefaultPortalServerSetting(defaultLaunchSettings.getSelection());
-
-					customLaunchSettings.setSelection(!defaultLaunchSettings.getSelection());
+					_applyDefaultPortalServerSetting(!defaultLaunchSettings.getSelection());
 
 					validate();
 				}
@@ -137,13 +140,11 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 				public void widgetSelected(SelectionEvent e) {
 					updating = true;
 
-					execute(new SetLaunchSettingsCommand(server, !customLaunchSettings.getSelection()));
+					execute(new SetCustomLaunchSettingsCommand(server, customLaunchSettings.getSelection()));
 
 					updating = false;
 
-					_applyDefaultPortalServerSetting(!customLaunchSettings.getSelection());
-
-					defaultLaunchSettings.setSelection(!customLaunchSettings.getSelection());
+					_applyDefaultPortalServerSetting(customLaunchSettings.getSelection());
 
 					validate();
 				}
@@ -178,9 +179,9 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 
 					execute(new SetMemoryArgsCommand(server, m.trim()));
 
-					updating = false;
-
 					validate();
+
+					updating = false;
 				}
 
 			});
@@ -291,10 +292,10 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 
 	@Override
 	protected void initProperties() {
-		_applyDefaultPortalServerSetting(portalServer.getLaunchSettings());
+		_applyDefaultPortalServerSetting(portalServer.getCustomLaunchSettings());
 
-		customLaunchSettings.setSelection(!portalServer.getLaunchSettings());
-		defaultLaunchSettings.setSelection(portalServer.getLaunchSettings());
+		customLaunchSettings.setSelection(portalServer.getCustomLaunchSettings());
+		defaultLaunchSettings.setSelection(!portalServer.getCustomLaunchSettings());
 		developerMode.setSelection(portalServer.getDeveloperMode());
 		externalProperties.setText(portalServer.getExternalProperties());
 		memoryArgs.setText(StringUtil.merge(portalServer.getMemoryArgs(), " "));
@@ -320,13 +321,13 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 
 		developerMode.setSelection(PortalServerConstants.DEFAULT_DEVELOPER_MODE);
 
-		execute(new SetLaunchSettingsCommand(server, PortalServerConstants.DEFAULT_LAUNCH_SETTING));
+		execute(new SetCustomLaunchSettingsCommand(server, PortalServerConstants.DEFAULT_CUSTOM_LAUNCH_SETTING));
 
-		defaultLaunchSettings.setSelection(PortalServerConstants.DEFAULT_LAUNCH_SETTING);
+		customLaunchSettings.setSelection(PortalServerConstants.DEFAULT_CUSTOM_LAUNCH_SETTING);
 
-		customLaunchSettings.setSelection(!PortalServerConstants.DEFAULT_LAUNCH_SETTING);
+		defaultLaunchSettings.setSelection(!PortalServerConstants.DEFAULT_CUSTOM_LAUNCH_SETTING);
 
-		_applyDefaultPortalServerSetting(PortalServerConstants.DEFAULT_LAUNCH_SETTING);
+		_applyDefaultPortalServerSetting(PortalServerConstants.DEFAULT_CUSTOM_LAUNCH_SETTING);
 	}
 
 	protected void validate() {
@@ -345,6 +346,21 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 				}
 			}
 
+			String[] memoryArrays = StringUtils.split(memoryArgs.getText(), " ");
+
+			boolean memoryArgInvalid = Stream.of(
+				memoryArrays
+			).filter(
+				arg -> !arg.startsWith("-Xm")
+			).findAny(
+			).isPresent();
+
+			if (memoryArgInvalid) {
+				setErrorMessage(Msgs.memoryArgumentsInvalid);
+
+				return;
+			}
+
 			setErrorMessage(null);
 		}
 	}
@@ -356,18 +372,18 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 	protected Button externalPropertiesBrowse;
 	protected Text memoryArgs;
 
-	private void _applyDefaultPortalServerSetting(boolean useDefaultPortalSeverSetting) {
-		if (useDefaultPortalSeverSetting) {
-			developerMode.setEnabled(false);
-			externalProperties.setEnabled(false);
-			externalPropertiesBrowse.setEnabled(false);
-			memoryArgs.setEnabled(false);
-		}
-		else {
+	private void _applyDefaultPortalServerSetting(boolean customLaunchSettings) {
+		if (customLaunchSettings) {
 			developerMode.setEnabled(true);
 			externalProperties.setEnabled(true);
 			externalPropertiesBrowse.setEnabled(true);
 			memoryArgs.setEnabled(true);
+		}
+		else {
+			developerMode.setEnabled(false);
+			externalProperties.setEnabled(false);
+			externalPropertiesBrowse.setEnabled(false);
+			memoryArgs.setEnabled(false);
 		}
 	}
 
@@ -380,6 +396,7 @@ public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorS
 		public static String invalidExternalPropertiesFile;
 		public static String liferayLaunch;
 		public static String memoryArgsLabel;
+		public static String memoryArgumentsInvalid;
 		public static String useDeveloperMode;
 
 		static {

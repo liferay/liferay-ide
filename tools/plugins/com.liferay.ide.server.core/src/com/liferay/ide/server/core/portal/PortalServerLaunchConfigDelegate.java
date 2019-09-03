@@ -146,9 +146,9 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 
 		String classToLaunch = portalServer.getClassToLaunch();
 
-		String[] classpath = getClasspath(config);
+		String[][] classpathAndModulepath = getClasspathAndModulepath(config);
 
-		VMRunnerConfiguration runConfig = new VMRunnerConfiguration(classToLaunch, classpath);
+		VMRunnerConfiguration runConfig = new VMRunnerConfiguration(classToLaunch, classpathAndModulepath[0]);
 
 		runConfig.setProgramArguments(execArgs.getProgramArgumentsArray());
 

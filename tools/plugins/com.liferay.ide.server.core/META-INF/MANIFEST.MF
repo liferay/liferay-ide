@@ -5,7 +5,8 @@ Bundle-SymbolicName: com.liferay.ide.server.core;singleton:=true
 Bundle-Version: 3.6.2.qualifier
 Bundle-Activator: com.liferay.ide.server.core.LiferayServerCore
 Bundle-Vendor: %bundle.vendor
-Require-Bundle: com.liferay.ide.core,
+Require-Bundle: com.google.guava,
+ com.liferay.ide.core,
  com.liferay.ide.sdk.core,
  org.apache.commons.codec,
  org.apache.commons.io,
