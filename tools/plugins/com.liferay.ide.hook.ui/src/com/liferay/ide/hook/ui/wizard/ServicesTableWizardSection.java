@@ -328,8 +328,19 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 
 			IPath serviceJarPathKernel = liferayProject.getLibraryPath("portal-kernel");
 
-			scope.setEnclosingJarPaths(
-				new IPath[] {(serviceJarPathService != null) ? serviceJarPathService : serviceJarPathKernel});
+			IPath newServiceJarPathKernel = liferayProject.getLibraryPath("com.liferay.portal.kernel");
+
+			IPath enclosingjarPath = serviceJarPathService;
+
+			if (enclosingjarPath == null) {
+				enclosingjarPath = serviceJarPathKernel;
+			}
+
+			if (enclosingjarPath == null) {
+				enclosingjarPath = newServiceJarPathKernel;
+			}
+
+			scope.setEnclosingJarPaths(new IPath[] {newServiceJarPathKernel});
 
 			FilteredTypesSelectionDialog dialog = new FilteredTypesSelectionDialogEx(
 				getShell(), false, null, scope, IJavaSearchConstants.INTERFACE);
