@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -74,10 +75,36 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 
 	@Override
 	public IStatus buildWSDD(IProgressMonitor monitor) throws CoreException {
+		if (FileUtil.notExists(_gradleBuildFile)) {
+			return LiferayGradleCore.createErrorStatus("There is no build.gradle file.");
+		}
 
-		// TODO Waiting for IDE-2850
+		GradleDependencyUpdater dependencyUpdater = null;
 
-		return null;
+		try {
+			dependencyUpdater = new GradleDependencyUpdater(_gradleBuildFile);
+		}
+		catch (IOException ioe) {
+			return LiferayGradleCore.createErrorStatus("Could not parse dependencies for " + _gradleBuildFile, ioe);
+		}
+
+		List<Artifact> dependencies = dependencyUpdater.getDependencies(true, "classpath");
+
+		Optional<Artifact> optional = dependencies.stream(
+		).filter(
+			artifact -> "com.liferay".equals(artifact.getGroupId())
+		).filter(
+			artifact -> "com.liferay.gradle.plugins.wsdd.builder".equals(artifact.getArtifactId())
+		).findAny();
+
+		if (optional.isPresent()) {
+			GradleUtil.runGradleTask(_gradleBuildFile.getProject(), "buildWSDD", monitor);
+
+			return Status.OK_STATUS;
+		}
+		else {
+			return LiferayGradleCore.createErrorStatus("Could not find wsdd builder plugin in " + _gradleBuildFile);
+		}
 	}
 
 	@Override
