@@ -98,7 +98,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 		).findAny();
 
 		if (optional.isPresent()) {
-			GradleUtil.runGradleTask(_gradleBuildFile.getProject(), "buildWSDD", monitor);
+			GradleUtil.runGradleTask(_gradleBuildFile.getProject(), "buildWSDD", false, monitor);
 
 			return Status.OK_STATUS;
 		}
