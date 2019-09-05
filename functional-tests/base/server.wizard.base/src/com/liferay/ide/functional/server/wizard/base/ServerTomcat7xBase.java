@@ -266,6 +266,40 @@ public class ServerTomcat7xBase extends ServerTestBase {
 		resetTestServer();
 	}
 
+	public void testDefaultServerName() {
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
+
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
+
+		wizardAction.newRuntime.prepare7();
+
+		wizardAction.next();
+
+		validationAction.assertEquals(LIFERAY_7_X, wizardAction.newRuntime7.getName());
+
+		wizardAction.newRuntime7.prepare(testServer.getFullServerDir());
+
+		validationAction.assertContains("Liferay Community Edition Portal 7", wizardAction.newRuntime7.getName());
+
+		validationAction.assertEquals("Tomcat", wizardAction.newRuntime7.getDetectedPortalBundleType());
+
+		wizardAction.finish();
+
+		dialogAction.preferences.confirm();
+
+		wizardAction.openNewLiferayServerWizard();
+
+		wizardAction.finish();
+
+		viewAction.servers.visibleServer("Liferay Community Edition Portal 7");
+
+		dialogAction.deleteRuntimFromPreferences(0);
+
+		resetTestServer();
+	}
+
 	public void testLiferay7ServerDebug() {
 		dialogAction.openPreferencesDialog();
 
