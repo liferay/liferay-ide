@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.LiferayUIPlugin;
+import com.liferay.ide.ui.util.SWTUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,8 +35,11 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -45,6 +49,7 @@ import org.eclipse.ui.dialogs.SelectionStatusDialog;
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class ProjectsSelectionDialog extends SelectionStatusDialog {
 
@@ -138,6 +143,25 @@ public class ProjectsSelectionDialog extends SelectionStatusDialog {
 		if (_initialSelectAll && ListUtil.isNotEmpty(table.getItems())) {
 			_tableViewer.setAllChecked(true);
 		}
+
+		Button selectAllButton = SWTUtil.createCheckButton(composite, "Select All Projects", null, true, 1);
+
+		selectAllButton.addSelectionListener(
+			new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					if (selectAllButton.getSelection()) {
+						_tableViewer.setAllChecked(true);
+					}
+					else {
+						_tableViewer.setAllChecked(false);
+					}
+				}
+
+			});
+
+		selectAllButton.setSelection(_initialSelectAll);
 
 		updateStatus(new Status(IStatus.OK, LiferayUIPlugin.PLUGIN_ID, StringPool.EMPTY));
 
