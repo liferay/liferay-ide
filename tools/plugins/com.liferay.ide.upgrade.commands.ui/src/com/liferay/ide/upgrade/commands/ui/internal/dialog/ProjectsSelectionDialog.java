@@ -157,6 +157,10 @@ public class ProjectsSelectionDialog extends SelectionStatusDialog {
 					else {
 						_tableViewer.setAllChecked(false);
 					}
+
+					Object[] checkedElements = _tableViewer.getCheckedElements();
+
+					getOkButton().setEnabled(checkedElements.length != 0);
 				}
 
 			});
