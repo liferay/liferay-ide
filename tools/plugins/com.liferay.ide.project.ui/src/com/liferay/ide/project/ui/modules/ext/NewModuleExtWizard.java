@@ -65,9 +65,7 @@ public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> {
 
 		openLiferayPerspective(project);
 
-		boolean createNewMoudleExtFiles = get(newModuleExtOp.getCreateModuleExtFiles());
-
-		if (createNewMoudleExtFiles) {
+		if (get(newModuleExtOp.getCreateModuleExtFiles())) {
 			_openNewModuleExtFilesWizard(project);
 		}
 	}
@@ -77,34 +75,35 @@ public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> {
 	}
 
 	private void _openNewModuleExtFilesWizard(IProject project) {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
 
 		IExtension extension = registry.getExtension("com.liferay.ide.portlet.ui.newModuleExtWizard");
 
-		IConfigurationElement[] elements = extension.getConfigurationElements();
+		IConfigurationElement[] configurationElements = extension.getConfigurationElements();
 
-		for (IConfigurationElement element : elements) {
-			if ("wizard".equals(element.getName()) &&
-				"com.liferay.ide.project.ui.newModuleExtFilesWizard".equals(element.getAttribute("id"))) {
+		for (IConfigurationElement configurationElement : configurationElements) {
+			if ("wizard".equals(configurationElement.getName()) &&
+				"com.liferay.ide.project.ui.newModuleExtFilesWizard".equals(configurationElement.getAttribute("id"))) {
 
 				UIUtil.async(
 					() -> {
 						try {
 							JobUtil.waitForLiferayProjectJob();
 
-							INewWizard wizard = (INewWizard)CoreUtility.createExtension(element, "class");
+							INewWizard newWizard = (INewWizard)CoreUtility.createExtension(
+								configurationElement, "class");
 
 							IWorkbenchWindow activeWorkbenchWindow = UIUtil.getActiveWorkbenchWindow();
 
 							Shell shell = activeWorkbenchWindow.getShell();
 
-							wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(project));
+							newWizard.init(PlatformUI.getWorkbench(), new StructuredSelection(project));
 
-							WizardDialog dialog = new WizardDialog(shell, wizard);
+							WizardDialog wizardDialog = new WizardDialog(shell, newWizard);
 
-							dialog.create();
+							wizardDialog.create();
 
-							dialog.open();
+							wizardDialog.open();
 						}
 						catch (CoreException ce) {
 							ProjectCore.createErrorStatus(ce);
