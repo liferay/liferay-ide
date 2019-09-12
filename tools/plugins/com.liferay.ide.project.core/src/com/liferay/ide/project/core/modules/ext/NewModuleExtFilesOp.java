@@ -15,12 +15,17 @@
 package com.liferay.ide.project.core.modules.ext;
 
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
+import org.eclipse.sapphire.modeling.annotations.Listeners;
+import org.eclipse.sapphire.modeling.annotations.Service;
 
 /**
  * @author Charles Wu
+ * @author Seiphon Wang
  */
 public interface NewModuleExtFilesOp extends NewModuleExtOp {
 
@@ -29,5 +34,13 @@ public interface NewModuleExtFilesOp extends NewModuleExtOp {
 	@DelegateImplementation(NewModuleExtFilesOpMethods.class)
 	@Override
 	public Status execute(ProgressMonitor monitor);
+
+	public Value<String> getModuleExtProjectName();
+
+	public void setModuleExtProjectName(String value);
+
+	@Listeners(ModuleExtProjectNameSelectionChangedListener.class)
+	@Service(impl = ModuleExtProjectNamePossibleValuesService.class)
+	public ValueProperty PROP_MODULE_EXT_PROJECT_NAME = new ValueProperty(TYPE, "ModuleExtProjectName");
 
 }

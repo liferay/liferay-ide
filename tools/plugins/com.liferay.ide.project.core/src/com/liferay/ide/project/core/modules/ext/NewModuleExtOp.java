@@ -47,6 +47,8 @@ public interface NewModuleExtOp extends BaseModuleOp {
 	@Override
 	public Status execute(ProgressMonitor monitor);
 
+	public Value<Boolean> getCreateModuleExtFiles();
+
 	public Value<String> getOriginalModuleName();
 
 	public Value<String> getOriginalModuleVersion();
@@ -57,6 +59,8 @@ public interface NewModuleExtOp extends BaseModuleOp {
 
 	public Value<String> getTargetPlatformVersion();
 
+	public void setCreateModuleExtFiles(Boolean value);
+
 	public void setOriginalModuleName(String value);
 
 	public void setOriginalModuleVersion(String value);
@@ -64,6 +68,10 @@ public interface NewModuleExtOp extends BaseModuleOp {
 	public void setSourceFileURI(URI value);
 
 	public void setTargetPlatformVersion(String value);
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_CREATE_MODULE_EXT_FILES = new ValueProperty(TYPE, "CreateModuleExtFiles");
 
 	@Service(impl = CommonProjectLocationInitialValueService.class)
 	@Service(impl = ModuleExtProjectLocationValidationService.class)

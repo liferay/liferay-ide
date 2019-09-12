@@ -3,6 +3,7 @@
 <plugin>
 
 	<extension
+		id="newModuleWizards"
 		point="org.eclipse.ui.newWizards"
 	>
 		<category
@@ -72,7 +73,7 @@
 
 		<wizard
 			category="com.liferay.ide.newWizards"
-			icon="icons/e16/bundle.png"
+			icon="icons/n16/bundle_new.png"
 			id="com.liferay.ide.project.ui.newModuleExtFilesWizard"
 			name="Liferay Module Ext Files"
 		>
@@ -91,7 +92,7 @@
 
 		<wizard
 			category="com.liferay.ide.newWizards"
-			icon="icons/e16/bundle.png"
+			icon="icons/n16/bundle_new.png"
 			id="com.liferay.ide.project.ui.newModuleFragmentFilesWizard"
 			name="Liferay Module Fragment Files"
 		>

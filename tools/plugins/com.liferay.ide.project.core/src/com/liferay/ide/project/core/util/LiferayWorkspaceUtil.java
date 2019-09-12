@@ -235,6 +235,14 @@ public class LiferayWorkspaceUtil {
 		return retval;
 	}
 
+	public static IPath getExtDirLocation(IProject workspaceProject) {
+		String extDir = getExtDir(workspaceProject);
+
+		IPath projectLocation = workspaceProject.getLocation();
+
+		return projectLocation.append(extDir);
+	}
+
 	public static String getGradleProperty(String projectLocation, String key, String defaultValue) {
 		File gradleProperties = new File(projectLocation, "gradle.properties");
 

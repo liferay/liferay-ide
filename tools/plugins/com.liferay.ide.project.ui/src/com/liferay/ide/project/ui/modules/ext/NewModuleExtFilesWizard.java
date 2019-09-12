@@ -97,6 +97,7 @@ public class NewModuleExtFilesWizard
 						moduleExtFilesOp.setOriginalModuleName(artifact.getArtifactId());
 						moduleExtFilesOp.setOriginalModuleVersion(artifact.getVersion());
 						moduleExtFilesOp.setProjectName(_initialProject.getName());
+						moduleExtFilesOp.setModuleExtProjectName(_initialProject.getName());
 
 						IPath projectLocation = _initialProject.getLocation();
 
