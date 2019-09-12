@@ -39,7 +39,7 @@ public interface NewModuleExtFilesOp extends NewModuleExtOp {
 
 	public void setModuleExtProjectName(String value);
 
-	@Listeners(ModuleExtProjectSelectChangedListener.class)
+	@Listeners(ModuleExtProjectNameSelectionChangedListener.class)
 	@Service(impl = ModuleExtProjectNamePossibleValuesService.class)
 	public ValueProperty PROP_MODULE_EXT_PROJECT_NAME = new ValueProperty(TYPE, "ModuleExtProjectName");
 

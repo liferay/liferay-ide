@@ -36,7 +36,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Seiphon Wang
  */
-public class ModuleExtProjectSelectChangedListener extends ModuleExtProjectNameListener {
+public class ModuleExtProjectNameSelectionChangedListener extends ModuleExtProjectNameListener {
 
 	@Override
 	protected void handleTypedEvent(PropertyContentEvent event) {
