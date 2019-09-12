@@ -77,7 +77,7 @@ public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> {
 	private void _openNewModuleExtFilesWizard(IProject project) {
 		IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
 
-		IExtension extension = registry.getExtension("com.liferay.ide.portlet.ui.newModuleExtWizard");
+		IExtension extension = extensionRegistry.getExtension("newModuleWizards");
 
 		IConfigurationElement[] configurationElements = extension.getConfigurationElements();
 
