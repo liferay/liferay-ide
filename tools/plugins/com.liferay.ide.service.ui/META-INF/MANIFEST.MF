@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.service.ui;singleton:=true
-Bundle-Version: 3.6.2.qualifier
+Bundle-Version: 3.7.0.qualifier
 Bundle-Activator: com.liferay.ide.service.ui.ServiceUI
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.liferay.ide.core,

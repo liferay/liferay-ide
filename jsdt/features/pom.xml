@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>com.liferay.ide.jsdt</groupId>
 		<artifactId>jsdt</artifactId>
-		<version>3.6.2-SNAPSHOT</version>
+		<version>3.7.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.liferay.ide.jsdt.features</groupId>
