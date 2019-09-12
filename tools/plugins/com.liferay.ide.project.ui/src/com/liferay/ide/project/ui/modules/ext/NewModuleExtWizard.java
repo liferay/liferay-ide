@@ -109,6 +109,8 @@ public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> {
 							ProjectCore.createErrorStatus(ce);
 						}
 					});
+
+				break;
 			}
 		}
 	}
