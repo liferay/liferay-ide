@@ -29,6 +29,7 @@ import org.apache.commons.io.FileUtils;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.GroovyCodeVisitor;
 import org.codehaus.groovy.ast.builder.AstBuilder;
+import org.codehaus.groovy.control.CompilePhase;
 
 import org.eclipse.core.resources.IFile;
 
@@ -54,7 +55,7 @@ public class GradleDependencyUpdater {
 	public GradleDependencyUpdater(String scriptContents) {
 		AstBuilder builder = new AstBuilder();
 
-		_nodes = builder.buildFromString(scriptContents);
+		_nodes = builder.buildFromString(CompilePhase.CONVERSION, scriptContents);
 	}
 
 	public List<Artifact> getDependencies(boolean buildscript, String configuration) {
