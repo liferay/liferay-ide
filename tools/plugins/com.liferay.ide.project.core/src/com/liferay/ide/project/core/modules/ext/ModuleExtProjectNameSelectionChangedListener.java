@@ -40,7 +40,7 @@ public class ModuleExtProjectNameSelectionChangedListener extends ModuleExtProje
 
 	@Override
 	protected void handleTypedEvent(PropertyContentEvent event) {
-		_updateOriginalMoules(op(event));
+		_updateOriginalModules(op(event));
 	}
 
 	protected NewModuleExtFilesOp op(PropertyContentEvent event) {
@@ -51,22 +51,20 @@ public class ModuleExtProjectNameSelectionChangedListener extends ModuleExtProje
 		return element.nearest(NewModuleExtFilesOp.class);
 	}
 
-	private void _updateOriginalMoules(NewModuleExtFilesOp op) {
-		String projectName = get(op.getModuleExtProjectName());
-
-		IProject project = ProjectUtil.getProject(projectName);
+	private void _updateOriginalModules(NewModuleExtFilesOp op) {
+		IProject project = ProjectUtil.getProject(get(op.getModuleExtProjectName()));
 
 		ILiferayProject extProject = LiferayCore.create(ILiferayProject.class, project);
 
-		IProjectBuilder builder = extProject.adapt(IProjectBuilder.class);
+		IProjectBuilder projectBuilder = extProject.adapt(IProjectBuilder.class);
 
-		if (builder == null) {
-			ProjectCore.logWarning("Please wait for synchronized jobs finish.");
+		if (projectBuilder == null) {
+			ProjectCore.logWarning("Please wait for synchronized jobs to finish.");
 
 			return;
 		}
 
-		List<Artifact> dependencies = builder.getDependencies("originalModule");
+		List<Artifact> dependencies = projectBuilder.getDependencies("originalModule");
 
 		if (!dependencies.isEmpty()) {
 			Artifact artifact = dependencies.get(0);
