@@ -21,6 +21,7 @@ import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
+import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 
 /**
@@ -40,6 +41,7 @@ public interface NewModuleExtFilesOp extends NewModuleExtOp {
 	public void setModuleExtProjectName(String value);
 
 	@Listeners(ModuleExtProjectNameSelectionChangedListener.class)
+	@Required
 	@Service(impl = ModuleExtProjectNamePossibleValuesService.class)
 	public ValueProperty PROP_MODULE_EXT_PROJECT_NAME = new ValueProperty(TYPE, "ModuleExtProjectName");
 
