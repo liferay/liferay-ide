@@ -416,7 +416,7 @@
                 </runProgram>
                 <runProgram>
                     <program>${bladeCommandPath}</program>
-                    <programArguments>--base "${lrws}" init</programArguments>
+                    <programArguments>--base "${lrws}" init -v "7.2"</programArguments>
                 </runProgram>
                 <propertiesFileSet>
                     <file>${lrws}${platform_path_separator}gradle.properties</file>
