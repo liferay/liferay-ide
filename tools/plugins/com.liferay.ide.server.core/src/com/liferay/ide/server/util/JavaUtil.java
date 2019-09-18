@@ -145,38 +145,6 @@ public class JavaUtil {
 		return null;
 	}
 
-	public static boolean isVMRequireVersion(String javaVersion, int requireVersion) {
-		Integer version = null;
-
-		int index = javaVersion.indexOf('.');
-
-		if (index > 0) {
-			try {
-				int major = Integer.parseInt(javaVersion.substring(0, index)) * 100;
-
-				index++;
-
-				int index2 = javaVersion.indexOf('.', index);
-
-				if (index2 > 0) {
-					int minor = Integer.parseInt(javaVersion.substring(index, index2));
-
-					version = Integer.valueOf(major + minor);
-				}
-			}
-			catch (NumberFormatException nfe) {
-			}
-		}
-
-		// If we have a version, and it isn't equal to the required version, fail the check
-
-		if ((version != null) && (version.intValue() != requireVersion)) {
-			return false;
-		}
-
-		return true;
-	}
-
 	public static boolean scanFolderJarsForManifestProp(
 		File location, String mainFolder, String property, String propPrefix) {
 
