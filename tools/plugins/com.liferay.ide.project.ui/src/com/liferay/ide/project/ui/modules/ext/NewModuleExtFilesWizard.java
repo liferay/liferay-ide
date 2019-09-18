@@ -90,19 +90,20 @@ public class NewModuleExtFilesWizard
 
 					File sourceFile = artifact.getSource();
 
+					NewModuleExtFilesOp moduleExtFilesOp = element();
+
 					if (FileUtil.exists(sourceFile)) {
-						NewModuleExtFilesOp moduleExtFilesOp = element();
-
 						moduleExtFilesOp.setSourceFileURI(sourceFile.toURI());
-						moduleExtFilesOp.setOriginalModuleName(artifact.getArtifactId());
-						moduleExtFilesOp.setOriginalModuleVersion(artifact.getVersion());
-						moduleExtFilesOp.setProjectName(_initialProject.getName());
-						moduleExtFilesOp.setModuleExtProjectName(_initialProject.getName());
-
-						IPath projectLocation = _initialProject.getLocation();
-
-						moduleExtFilesOp.setLocation(PathBridge.create(projectLocation.removeLastSegments(1)));
 					}
+
+					moduleExtFilesOp.setOriginalModuleName(artifact.getArtifactId());
+					moduleExtFilesOp.setOriginalModuleVersion(artifact.getVersion());
+					moduleExtFilesOp.setProjectName(_initialProject.getName());
+					moduleExtFilesOp.setModuleExtProjectName(_initialProject.getName());
+
+					IPath projectLocation = _initialProject.getLocation();
+
+					moduleExtFilesOp.setLocation(PathBridge.create(projectLocation.removeLastSegments(1)));
 				}
 			}
 		}
