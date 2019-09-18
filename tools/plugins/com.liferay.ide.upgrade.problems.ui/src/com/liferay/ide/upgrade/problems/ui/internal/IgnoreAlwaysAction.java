@@ -65,7 +65,9 @@ public class IgnoreAlwaysAction extends SelectionProviderAction implements Upgra
 		Stream<UpgradeProblem> stream = upgradeProblems.stream();
 
 		stream.filter(
-			upgradeProblem -> StringUtil.equals(upgradeProblem.getTicket(), problem.getTicket())
+			upgradeProblem ->
+				StringUtil.equals(upgradeProblem.getTicket(), problem.getTicket()) &&
+				StringUtil.equals(upgradeProblem.getTitle(), problem.getTitle())
 		).forEach(
 			this::ignore
 		);
