@@ -91,7 +91,6 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedAUIToolTags.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.AssetCategoriesNavigationTags.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.DDMStructureUpdateStructureInvocation.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.IndexerDoGetSummaryDecl.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.AUIButtonItemTags.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.IndexerGetFacetQuery.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.DDMTemplateUpdateTemplateInvocation.xml,
@@ -170,4 +169,5 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.DroppedSupportOfServiceLoaderCondition.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.RemovedSupportForJSPTemplates.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.RemovedUnsafeFunctionalInterface.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedLayoutTemplateTags.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedLayoutTemplateTags.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.IndexerDoGetSummaryDecl.xml
