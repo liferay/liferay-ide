@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.problems.core.internal.liferay70.BBCodeProperties">
    <property name="file.extensions" value="properties"/>
-   <property name="problem.title" value="Email Signature Properties"/>
+   <property name="problem.title" value="Email Signature Properties BBCode"/>
    <property name="problem.summary" value="Removed Liferay Frontend Editor BBCode Web, Previously Known as Liferay BBCode Editor"/>
    <property name="problem.tickets" value="LPS-48334"/>
    <property name="problem.section" value="#removed-liferay-frontend-editor-bbcode-web-previously-known-as-liferay-bbco"/>

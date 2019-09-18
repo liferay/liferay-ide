@@ -3,7 +3,7 @@
    <property name="file.extensions" value="java"/>
    <property name="problem.summary" value="Changed the AssetRenderer and Indexer APIs to Include the PortletRequest and PortletResponse Parameters"/>
    <property name="problem.tickets" value="LPS-44639,LPS-44894"/>
-   <property name="problem.title" value="Indexer API Changes"/>
+   <property name="problem.title" value="Indexer API Changes doGetSummary"/>
    <property name="problem.section" value="#changed-the-assetrenderer-and-indexer-apis-to-include-the-portletrequest-an"/>
    <property name="version" value="7.0"/>
    <service>
