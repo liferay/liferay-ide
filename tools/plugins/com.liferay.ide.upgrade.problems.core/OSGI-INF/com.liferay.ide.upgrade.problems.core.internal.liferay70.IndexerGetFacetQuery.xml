@@ -3,7 +3,7 @@
    <property name="file.extensions" value="java,jsp,jspf"/>
    <property name="problem.summary" value="Replaced Method getFacetQuery with getFacetBooleanFilter in Indexer"/>
    <property name="problem.tickets" value="LPS-56064"/>
-   <property name="problem.title" value="Indexer API Changes -getFacetQuery"/>
+   <property name="problem.title" value="Indexer API Changes getFacetQuery"/>
    <property name="problem.section" value="#replaced-method-getpermissionquery-with-getpermissionfilter-in-searchpermis"/>
    <property name="version" value="7.0"/>
    <service>
