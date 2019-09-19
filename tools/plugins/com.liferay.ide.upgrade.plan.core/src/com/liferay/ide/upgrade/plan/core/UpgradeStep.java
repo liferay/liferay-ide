@@ -109,7 +109,7 @@ public class UpgradeStep {
 				break;
 			}
 
-			if (_isRequiredIncompleted(sibling)) {
+			if (!sibling.completed()) {
 				return false;
 			}
 		}
@@ -285,14 +285,6 @@ public class UpgradeStep {
 		UpgradePlanner upgradePlanner = _serviceTracker.getService();
 
 		upgradePlanner.dispatch(upgradeStepStatusChangedEvent);
-	}
-
-	private boolean _isRequiredIncompleted(UpgradeStep upgradeStep) {
-		if (UpgradeStepRequirement.REQUIRED.equals(upgradeStep.getRequirement()) && !upgradeStep.completed()) {
-			return true;
-		}
-
-		return false;
 	}
 
 	private List<UpgradeStep> _children = new ArrayList<>();
