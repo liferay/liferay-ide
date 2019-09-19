@@ -21,6 +21,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtFilesOp;
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
 
@@ -70,6 +71,12 @@ public class NewModuleExtFilesWizard
 				IResource resource = ((IJavaElement)element).getResource();
 
 				_initialProject = resource.getProject();
+			}
+
+			if (!ProjectUtil.isModuleExtProject(_initialProject)) {
+				ProjectCore.logWarning("Selected project is not a module ext project.");
+
+				return;
 			}
 
 			if (_initialProject != null) {
