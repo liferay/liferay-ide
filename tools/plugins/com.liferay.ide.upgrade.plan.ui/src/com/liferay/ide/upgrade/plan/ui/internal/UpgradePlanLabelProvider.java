@@ -16,9 +16,7 @@ package com.liferay.ide.upgrade.plan.ui.internal;
 
 import com.liferay.ide.upgrade.plan.core.Pair;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
-import com.liferay.ide.upgrade.plan.core.UpgradeStepRequirement;
 
-import java.util.List;
 import java.util.function.Function;
 
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
@@ -65,14 +63,6 @@ public class UpgradePlanLabelProvider extends BundleImageLabelProvider implement
 			}
 
 			StyledString styledString = new StyledString(upgradeStep.getTitle(), styler);
-
-			List<UpgradeStep> children = upgradeStep.getChildren();
-
-			if (children.isEmpty()) {
-				UpgradeStepRequirement upgradeStepRequirement = upgradeStep.getRequirement();
-
-				styledString.append(" [" + upgradeStepRequirement.toString() + "]", StyledString.DECORATIONS_STYLER);
-			}
 
 			return styledString;
 		}
