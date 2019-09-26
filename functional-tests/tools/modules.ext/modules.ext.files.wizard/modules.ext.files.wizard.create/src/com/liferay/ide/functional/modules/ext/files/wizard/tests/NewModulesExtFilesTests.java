@@ -20,7 +20,6 @@ import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGrad
 
 import org.junit.Assert;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -28,14 +27,13 @@ import org.junit.Test;
  * @author Rui Wang
  * @author Ashley Yuan
  */
-@Ignore("IDE-4647 No original module when new ext files on a module ext project")
 public class NewModulesExtFilesTests extends SwtbotBase {
 
 	@ClassRule
 	public static LiferayWorkspaceGradle72Support liferayWorkspace = new LiferayWorkspaceGradle72Support(bot);
 
 	@Test
-	public void addModulesExtWithJava() {
+	public void addEmptyMoudlesExtFiles() {
 		wizardAction.openNewLiferayModulesExtWizard();
 
 		wizardAction.newModulesExt.prepare(project.getName());
@@ -51,6 +49,33 @@ public class NewModulesExtFilesTests extends SwtbotBase {
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		wizardAction.newModulesExtFiles.openFileMenuModulesExtFilesWizard();
+
+		wizardAction.newModulesExtFiles.selectModuleExtProjectName(project.getName());
+
+		wizardAction.finish();
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext");
+	}
+
+	@Test
+	public void addJavaModulesExtFiles() {
+		wizardAction.openNewLiferayModulesExtWizard();
+
+		wizardAction.newModulesExt.prepare(project.getName());
+
+		wizardAction.newModulesExt.openSelectBrowseDialog();
+
+		dialogAction.prepareText("com.liferay:com.liferay.login.web");
+
+		dialogAction.confirm();
+
+		wizardAction.newModulesExt.selectLaunchModulesExtFiles();
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		wizardAction.newModulesExtFiles.selectModuleExtProjectName(project.getName());
 
 		wizardAction.newModulesExt.openAddOriginMoudleDialog();
 
@@ -65,10 +90,12 @@ public class NewModulesExtFilesTests extends SwtbotBase {
 			viewAction.project.visibleFileTry(
 				liferayWorkspace.getName(), "ext", project.getName(), "src/main/java",
 				"com.liferay.login.web.internal.constants", "LoginPortletKeys.java"));
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext");
 	}
 
 	@Test
-	public void addModulesExtWithJSP() {
+	public void addJSPModulesExtFiles() {
 		wizardAction.openNewLiferayModulesExtWizard();
 
 		wizardAction.newModulesExt.prepare(project.getName());
@@ -85,6 +112,8 @@ public class NewModulesExtFilesTests extends SwtbotBase {
 
 		wizardAction.newModulesExtFiles.openFileMenuModulesExtFilesWizard();
 
+		wizardAction.newModulesExtFiles.selectModuleExtProjectName(project.getName());
+
 		wizardAction.newModulesExt.openAddOriginMoudleDialog();
 
 		dialogAction.selectOverrideFile("META-INF", "resources", "configuration.jsp");
@@ -97,10 +126,12 @@ public class NewModulesExtFilesTests extends SwtbotBase {
 			viewAction.project.visibleFileTry(
 				liferayWorkspace.getName(), "ext", project.getName(), "src/main/resources", "META-INF", "resources",
 				"configuration.jsp"));
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext");
 	}
 
 	@Test
-	public void addModulesExtWithLanguageProperties() {
+	public void addLanguagePropertiesModulesExtFiles() {
 		wizardAction.openNewLiferayModulesExtWizard();
 
 		wizardAction.newModulesExt.prepare(project.getName());
@@ -115,8 +146,9 @@ public class NewModulesExtFilesTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		//wizardAction.newModulesExtFiles.openFileMenuModulesExtFilesWizard();
 		viewAction.project.openProjectNewModuleExtFilesWizard(liferayWorkspace.getName(), project.getName());
+
+		wizardAction.newModulesExtFiles.selectModuleExtProjectName(project.getName());
 
 		wizardAction.newModulesExt.openAddOriginMoudleDialog();
 
@@ -130,10 +162,12 @@ public class NewModulesExtFilesTests extends SwtbotBase {
 			viewAction.project.visibleFileTry(
 				liferayWorkspace.getName(), "ext", project.getName(), "src/main/resources", "content",
 				"Language.properties"));
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext");
 	}
 
 	@Test
-	public void addModulesExtWithManifest() {
+	public void addManifestModulesExtFiles() {
 		wizardAction.openNewLiferayModulesExtWizard();
 
 		wizardAction.newModulesExt.prepare(project.getName());
@@ -144,11 +178,11 @@ public class NewModulesExtFilesTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
+		wizardAction.newModulesExt.selectLaunchModulesExtFiles();
+
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningProjectBuildingJobs();
-
-		viewAction.project.openProjectNewModuleExtFilesWizard(liferayWorkspace.getName(), project.getName());
+		jobAction.waitForNoRunningJobs();
 
 		wizardAction.newModulesExt.openAddOriginMoudleDialog();
 
@@ -161,10 +195,12 @@ public class NewModulesExtFilesTests extends SwtbotBase {
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
 				liferayWorkspace.getName(), "ext", project.getName(), "src/main/resources", "META-INF", "MANIFEST.MF"));
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext");
 	}
 
 	@Test
-	public void addModulesExtWithPortletProperties() {
+	public void addPortletPropertiesModulesExtFiles() {
 		wizardAction.openNewLiferayModulesExtWizard();
 
 		wizardAction.newModulesExt.prepare(project.getName());
@@ -175,11 +211,11 @@ public class NewModulesExtFilesTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
+		wizardAction.newModulesExt.selectLaunchModulesExtFiles();
+
 		wizardAction.finish();
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
-
-		viewAction.project.openProjectNewModuleExtFilesWizard(liferayWorkspace.getName(), project.getName());
 
 		wizardAction.newModulesExt.openAddOriginMoudleDialog();
 
@@ -192,10 +228,12 @@ public class NewModulesExtFilesTests extends SwtbotBase {
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
 				liferayWorkspace.getName(), "ext", project.getName(), "src/main/resources", "portlet.properties"));
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext");
 	}
 
 	@Test
-	public void addModulesExtWithResourceAction() {
+	public void addResourceActionModulesExtFiles() {
 		wizardAction.openNewLiferayModulesExtWizard();
 
 		wizardAction.newModulesExt.prepare(project.getName());
@@ -210,7 +248,9 @@ public class NewModulesExtFilesTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.project.openProjectNewModuleExtFilesWizard(liferayWorkspace.getName(), project.getName());
+		wizardAction.newModulesExtFiles.openFileMenuModulesExtFilesWizard();
+
+		wizardAction.newModulesExtFiles.selectModuleExtProjectName(project.getName());
 
 		wizardAction.newModulesExt.openAddOriginMoudleDialog();
 
@@ -224,6 +264,8 @@ public class NewModulesExtFilesTests extends SwtbotBase {
 			viewAction.project.visibleFileTry(
 				liferayWorkspace.getName(), "ext", project.getName(), "src/main/resources", "resource-actions",
 				"default.xml"));
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext");
 	}
 
 	@Rule

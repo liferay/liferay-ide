@@ -153,6 +153,8 @@ public interface Messages {
 
 	public static final String MODEL_CLASS_MUST_BE_SPECIFIED = "Model Class must be specified";
 
+	public static final String MODULE_EXT_PROJECT_NAME_MUST_BE_SPECIFIED = "Module ext project name must be specified";
+
 	public static final String MODULE_EXT_PROJECTS_ONLY_WORK_ON_LIFERAY_WORKSPACE_WHICH_VERSION_IS_GREATER_THAN_70 =
 		"Module Ext projects only work on liferay workspace which version is greater than 7.0.";
 
@@ -309,7 +311,7 @@ public interface Messages {
 	public static final String UNABLE_TO_GET_SOURCE_FILES_IN_CURRENT_CONTEXT =
 		"Unable to get source files in current context.";
 
-	public static final String UNABLE_TO_IDENTIFY_ORIGINAL_MODULE_SOURCE_IN_CURRENT_CONTEXT =
+	public static final String UNABLE_TO_IDENTIFY_ORIGINAL_MODULE_IN_CURRENT_CONTEXT =
 		"Unable to identify original module source in current context.";
 
 	public static final String UPGRADE_PLAN_OUTLINE_MUST_BE_SPECIFIED = "Upgrade plan outline must be specified";

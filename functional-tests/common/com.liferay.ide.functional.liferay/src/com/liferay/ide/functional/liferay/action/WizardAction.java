@@ -785,6 +785,14 @@ public class WizardAction extends UIAction {
 
 	public class NewLiferayModulesExtFilesWizardAction extends NewLiferayModulesExtWizardAction {
 
+		public ComboBox moduleExtProjectName() {
+			return _newModulesExtFilesWizard.getModuleExtProjectName();
+		}
+
+		public String[] moduleExtProjectNames() {
+			return moduleExtProjectName().items();
+		}
+
 		public void openFileMenuModulesExtFilesWizard() {
 			ide.clickFileMenu(NEW, OTHER);
 
@@ -795,6 +803,12 @@ public class WizardAction extends UIAction {
 
 		public Text origialModule() {
 			return _newModulesExtFilesWizard.getOrigialModule();
+		}
+
+		public void selectModuleExtProjectName(String projectName) {
+			moduleExtProjectName().setSelection(projectName);
+
+			ide.sleep();
 		}
 
 		private void _prepare(String category, String type) {
@@ -814,6 +828,10 @@ public class WizardAction extends UIAction {
 
 		public ToolbarButtonWithTooltip getAddOriginMoudleBtn() {
 			return _newModulesExtWizard.getAddFilesFromOriginalModuleBtn();
+		}
+
+		public CheckBox getLaunchModulesExtFiles() {
+			return _newModulesExtWizard.getLaunchModulesExtFiles();
 		}
 
 		public void openAddOriginMoudleDialog() {
@@ -838,6 +856,10 @@ public class WizardAction extends UIAction {
 
 		public void prepareGradle(String projectName, String location) {
 			_prepare(projectName, location);
+		}
+
+		public void selectLaunchModulesExtFiles() {
+			getLaunchModulesExtFiles().select();
 		}
 
 		private void _prepare(String projectName, String location) {

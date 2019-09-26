@@ -15,12 +15,11 @@
 package com.liferay.ide.functional.modules.ext.files.wizard.tests;
 
 import com.liferay.ide.functional.liferay.SwtbotBase;
-import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
+import com.liferay.ide.functional.liferay.support.project.ProjectsSupport;
 import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle72Support;
 import com.liferay.ide.functional.swtbot.util.StringPool;
 
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -33,10 +32,10 @@ public class ValidationModulesExtFilesTests extends SwtbotBase {
 	public static LiferayWorkspaceGradle72Support liferayWorkspace = new LiferayWorkspaceGradle72Support(bot);
 
 	@Test
-	public void checkExistingOverridenFiles() {
+	public void checkAvailableProjectNames() {
 		wizardAction.openNewLiferayModulesExtWizard();
 
-		wizardAction.newModulesExt.prepare(project.getName());
+		wizardAction.newModulesExt.prepare(projects.getName(0));
 
 		wizardAction.newModulesExt.openSelectBrowseDialog();
 
@@ -48,7 +47,61 @@ public class ValidationModulesExtFilesTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		viewAction.project.openProjectNewModuleExtFilesWizard(liferayWorkspace.getName(), project.getName());
+		wizardAction.openNewLiferayModulesExtWizard();
+
+		wizardAction.newModulesExt.prepare(projects.getName(1));
+
+		wizardAction.newModulesExt.openSelectBrowseDialog();
+
+		dialogAction.prepareText("com.liferay:com.liferay.login.web");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.newModulesExtFiles.openFileMenuModulesExtFilesWizard();
+
+		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newModulesExtFiles.moduleExtProjectName());
+
+		String[] expectedProjectNames = {projects.getName(0), projects.getName(1)};
+		String[] actualProjectNames = wizardAction.newModulesExtFiles.moduleExtProjectNames();
+
+		validationAction.assertLengthEquals(expectedProjectNames, actualProjectNames);
+
+		for (int i = 0; i < actualProjectNames.length; i++) {
+			validationAction.assertEquals(expectedProjectNames[i], actualProjectNames[i]);
+		}
+
+		wizardAction.cancel();
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext", projects.getName(0));
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext", projects.getName(1));
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext");
+	}
+
+	@Test
+	public void checkExistingOverridenFiles() {
+		wizardAction.openNewLiferayModulesExtWizard();
+
+		wizardAction.newModulesExt.prepare(projects.getName(0));
+
+		wizardAction.newModulesExt.openSelectBrowseDialog();
+
+		dialogAction.prepareText("com.liferay:com.liferay.login.web");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		wizardAction.newModulesExtFiles.openFileMenuModulesExtFilesWizard();
+
+		wizardAction.newModulesExtFiles.selectModuleExtProjectName(projects.getName(0));
 
 		wizardAction.newModulesExt.openAddOriginMoudleDialog();
 
@@ -69,8 +122,6 @@ public class ValidationModulesExtFilesTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext", project.getName());
-
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext");
 	}
 
@@ -78,8 +129,9 @@ public class ValidationModulesExtFilesTests extends SwtbotBase {
 	public void checkExtFilesWithoutProjects() {
 		wizardAction.newModulesExtFiles.openFileMenuModulesExtFilesWizard();
 
-		validationAction.assertEquals(
-			UNABLE_TO_IDENTIFY_ORIGINAL_MODULE_SOURCE_IN_CURRENT_CONTEXT, wizardAction.getValidationMsg(1));
+		validationAction.assertEquals(MODULE_EXT_PROJECT_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(1));
+
+		validationAction.assertEquals(null, wizardAction.newModulesExtFiles.moduleExtProjectNames());
 
 		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newModulesExtFiles.origialModule());
 
@@ -95,7 +147,7 @@ public class ValidationModulesExtFilesTests extends SwtbotBase {
 
 		validationAction.assertEnabledTrue(wizardAction.getBackBtn());
 
-		validationAction.assertEnabledTrue(wizardAction.getFinishBtn());
+		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
 		validationAction.assertEnabledTrue(wizardAction.getCancelBtn());
 
@@ -104,12 +156,11 @@ public class ValidationModulesExtFilesTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
-	@Ignore("IDE-4647 No original module when new ext files on a module ext project")
 	@Test
 	public void checkInfoInitialState() {
 		wizardAction.openNewLiferayModulesExtWizard();
 
-		wizardAction.newModulesExt.prepare(project.getName());
+		wizardAction.newModulesExt.prepare(projects.getName(0));
 
 		validationAction.assertEnabledTrue(wizardAction.newModulesExt.browseBtn());
 
@@ -119,11 +170,11 @@ public class ValidationModulesExtFilesTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
+		wizardAction.newModulesExt.selectLaunchModulesExtFiles();
+
 		wizardAction.finish();
 
 		jobAction.waitForNoRunningJobs();
-
-		viewAction.project.openProjectNewModuleExtFilesWizard(liferayWorkspace.getName(), project.getName());
 
 		validationAction.assertEquals(ADD_SOURCE_FILES_TO_OVERRIDE, wizardAction.getValidationMsg(1));
 
@@ -141,8 +192,6 @@ public class ValidationModulesExtFilesTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext", project.getName());
-
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext");
 	}
 
@@ -150,7 +199,7 @@ public class ValidationModulesExtFilesTests extends SwtbotBase {
 	public void checkOverrideFileOnNoSourceModule() {
 		wizardAction.openNewLiferayModulesExtWizard();
 
-		wizardAction.newModulesExt.prepare(project.getName());
+		wizardAction.newModulesExt.prepare(projects.getName(0));
 
 		wizardAction.newModulesExt.openSelectBrowseDialog();
 
@@ -160,10 +209,11 @@ public class ValidationModulesExtFilesTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		wizardAction.newModulesExtFiles.openFileMenuModulesExtFilesWizard();
+		jobAction.waitForNoRunningJobs();
 
-		validationAction.assertEquals(
-			UNABLE_TO_IDENTIFY_ORIGINAL_MODULE_SOURCE_IN_CURRENT_CONTEXT, wizardAction.getValidationMsg(1));
+		viewAction.project.openProjectNewModuleExtFilesWizard(liferayWorkspace.getName(), projects.getName(0));
+
+		validationAction.assertEquals(MODULE_EXT_PROJECT_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(1));
 
 		wizardAction.newModulesExt.openAddOriginMoudleDialog();
 
@@ -175,12 +225,10 @@ public class ValidationModulesExtFilesTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext", project.getName());
-
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext");
 	}
 
 	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
+	public ProjectsSupport projects = new ProjectsSupport(bot);
 
 }
