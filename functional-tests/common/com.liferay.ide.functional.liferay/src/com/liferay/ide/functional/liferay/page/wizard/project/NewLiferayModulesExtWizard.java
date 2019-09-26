@@ -14,6 +14,7 @@
 
 package com.liferay.ide.functional.liferay.page.wizard.project;
 
+import com.liferay.ide.functional.swtbot.page.CheckBox;
 import com.liferay.ide.functional.swtbot.page.Text;
 import com.liferay.ide.functional.swtbot.page.ToolbarButtonWithTooltip;
 
@@ -34,6 +35,10 @@ public class NewLiferayModulesExtWizard extends NewProjectWizard {
 
 	public ToolbarButtonWithTooltip getBrowseBtn() {
 		return new ToolbarButtonWithTooltip(getShell().bot(), BROWSE, 1);
+	}
+
+	public CheckBox getLaunchModulesExtFiles() {
+		return new CheckBox(getShell().bot(), LAUCH_LIFERAY_MODULE_EXT_FILES_WIZARD_AFTER_PROJECT_IS_CREATED);
 	}
 
 	public Text getOrigialModuleName() {

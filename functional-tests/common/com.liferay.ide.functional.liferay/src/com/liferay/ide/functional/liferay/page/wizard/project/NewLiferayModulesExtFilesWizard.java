@@ -14,6 +14,7 @@
 
 package com.liferay.ide.functional.liferay.page.wizard.project;
 
+import com.liferay.ide.functional.swtbot.page.ComboBox;
 import com.liferay.ide.functional.swtbot.page.Text;
 import com.liferay.ide.functional.swtbot.page.Tree;
 
@@ -26,6 +27,10 @@ public class NewLiferayModulesExtFilesWizard extends NewProjectWizard {
 
 	public NewLiferayModulesExtFilesWizard(SWTBot bot) {
 		super(bot, 2);
+	}
+
+	public ComboBox getModuleExtProjectName() {
+		return new ComboBox(getShell().bot(), MODULE_EXT_PROJECT_NAME);
 	}
 
 	public Text getOrigialModule() {

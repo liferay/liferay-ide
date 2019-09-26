@@ -406,6 +406,9 @@ public interface UI {
 
 	public final String LANGUAGE_PROPERTY_FILES = "Language property files:";
 
+	public final String LAUCH_LIFERAY_MODULE_EXT_FILES_WIZARD_AFTER_PROJECT_IS_CREATED =
+		"Launch Liferay Module Ext Files Wizard after project is created";
+
 	public final String LAUNCH_NEW_PORTLET_WIZARD_AFTER_PROJECT = "Launch New Portlet Wizard after project is created";
 
 	public final String LAYOUT_PLUGIN_PROJECT = "Layout plugin project:";
@@ -495,6 +498,8 @@ public interface UI {
 	public final String MODEL_CLASS = "Model Class:";
 
 	public final String MODEL_LISTENER = "Model Listener";
+
+	public final String MODULE_EXT_PROJECT_NAME = "Module ext project name:";
 
 	public final String MOVE_DOWN = "Move Down";
 
