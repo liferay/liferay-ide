@@ -42,7 +42,9 @@ public class ProjectTemplateNamePossibleValuesService extends PossibleValuesServ
 			String[] projectTemplates = BladeCLI.getProjectTemplates();
 
 			for (String projectTemplate : projectTemplates) {
-				if (!projectTemplate.contains("fragment") && !projectTemplate.contains("modules-ext")) {
+				if (!projectTemplate.contains("fragment") && !projectTemplate.contains("modules-ext") &&
+					!projectTemplate.contains("spring-mvc-portlet")) {
+
 					values.add(projectTemplate);
 				}
 			}

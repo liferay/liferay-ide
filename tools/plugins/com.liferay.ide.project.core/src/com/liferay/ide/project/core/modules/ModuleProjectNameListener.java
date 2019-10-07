@@ -95,7 +95,7 @@ public class ModuleProjectNameListener
 					}
 				}
 
-				boolean themeProject = false;
+				boolean warProject = false;
 
 				if (op instanceof NewLiferayModuleProjectOp) {
 					NewLiferayModuleProjectOp moduleProjectOp = op;
@@ -104,7 +104,7 @@ public class ModuleProjectNameListener
 
 					for (String projectType : _WAR_TYPE_PROJECT) {
 						if (projectType.equals(projectTemplateName)) {
-							themeProject = true;
+							warProject = true;
 						}
 					}
 				}
@@ -119,7 +119,7 @@ public class ModuleProjectNameListener
 
 						String projectTemplateName = get(moduleProjectOp.getProjectTemplateName());
 
-						if (themeProject) {
+						if (warProject) {
 							String[] warsNames = LiferayWorkspaceUtil.getWarsDirs(liferayWorkspaceProject);
 
 							// use the first configured wars fodle name
@@ -151,8 +151,6 @@ public class ModuleProjectNameListener
 		}
 	}
 
-	private static final String[] _WAR_TYPE_PROJECT = {
-		"layout-template", "spring-mvc-portlet", "theme", "war-hook", "war-mvc-portlet"
-	};
+	private static final String[] _WAR_TYPE_PROJECT = {"layout-template", "theme", "war-hook", "war-mvc-portlet"};
 
 }
