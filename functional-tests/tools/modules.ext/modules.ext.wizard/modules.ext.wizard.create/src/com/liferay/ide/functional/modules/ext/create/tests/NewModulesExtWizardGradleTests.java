@@ -33,6 +33,27 @@ public class NewModulesExtWizardGradleTests extends SwtbotBase {
 	public static LiferayWorkspaceGradle72Support liferayWorkspace = new LiferayWorkspaceGradle72Support(bot);
 
 	@Test
+	public void addModulesExtWithLaunchExtFiles() {
+		wizardAction.openNewLiferayModulesExtWizard();
+
+		wizardAction.newModulesExt.prepare(project.getName());
+
+		wizardAction.newModulesExt.openSelectBrowseDialog();
+
+		dialogAction.prepareText("com.liferay:com.liferay.login.web");
+
+		dialogAction.confirm();
+
+		wizardAction.newModulesExt.selectLaunchModulesExtFiles();
+
+		wizardAction.finish();
+
+		wizardAction.cancel();
+
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext", project.getName());
+	}
+
+	@Test
 	public void addWithoutOverrideFilesModulesExt() {
 		wizardAction.openNewLiferayModulesExtWizard();
 
@@ -78,21 +99,6 @@ public class NewModulesExtWizardGradleTests extends SwtbotBase {
 			viewAction.project.visibleFileTry(liferayWorkspace.getName(), "ext", project.getName(), "build.gradle"));
 
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getName(), "ext", project.getName());
-	}
-
-	@Test
-	public void cancelModulesExt() {
-		wizardAction.openNewLiferayModulesExtWizard();
-
-		wizardAction.newModulesExt.prepare(project.getName());
-
-		wizardAction.newModulesExt.openSelectBrowseDialog();
-
-		dialogAction.cancel();
-
-		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
-
-		wizardAction.cancel();
 	}
 
 	@Rule

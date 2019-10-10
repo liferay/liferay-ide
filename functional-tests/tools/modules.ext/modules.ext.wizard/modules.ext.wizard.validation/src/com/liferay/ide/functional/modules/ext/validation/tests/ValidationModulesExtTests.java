@@ -90,6 +90,8 @@ public class ValidationModulesExtTests extends SwtbotBase {
 		validationAction.assertEquals(
 			CREATE_A_CONFIGURED_AS_LIFERAY_MODULE_EXT_PROJECT, wizardAction.getValidationMsg(4));
 
+		validationAction.assertCheckedFalse(wizardAction.newModulesExt.getLaunchModulesExtFiles());
+
 		validationAction.assertEnabledTrue(wizardAction.getFinishBtn());
 
 		wizardAction.cancel();
@@ -195,8 +197,6 @@ public class ValidationModulesExtTests extends SwtbotBase {
 		}
 
 		wizardAction.newModulesExt.prepareGradle(project.getName(), workspacePath + "/testLocation");
-
-		ide.sleep();
 
 		wizardAction.newModulesExt.openSelectBrowseDialog();
 
