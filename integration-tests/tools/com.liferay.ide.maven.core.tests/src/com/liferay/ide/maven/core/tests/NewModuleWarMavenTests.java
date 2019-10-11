@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core.tests;
 import com.liferay.ide.maven.core.tests.base.NewModuleMavenBase;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -38,6 +39,7 @@ public class NewModuleWarMavenTests extends NewModuleMavenBase {
 		deleteProject(project.getName());
 	}
 
+	@Ignore("ignore to wait new Spring MVC Portlet Wizard")
 	@Test
 	public void createSpringMvcPortlet() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();

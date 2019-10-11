@@ -44,6 +44,7 @@ public class NewModuleWarGradleTests extends NewModuleGradleBase {
 		deleteProject(project.getName());
 	}
 
+	@Ignore("ignore to wait new Spring MVC Portlet Wizard")
 	@Test
 	public void createSpringMvcPortlet() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
