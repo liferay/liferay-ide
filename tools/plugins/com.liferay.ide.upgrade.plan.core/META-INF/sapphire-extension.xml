@@ -5,4 +5,24 @@
 		<name>Contains</name>
 		<impl>com.liferay.ide.upgrade.plan.core.ContainsFunction</impl>
 	</function>
+	<service>
+		<id>Sapphire.ValueLabelService.UpgradePlan.Outline</id>
+		<context>Sapphire.Property.MetaModel</context>
+		<implementation>com.liferay.ide.upgrade.plan.core.internal.OutlineValueLabelService</implementation>
+		<condition>com.liferay.ide.upgrade.plan.core.internal.OutlineValueServiceConditon</condition>
+		<overrides>Sapphire.ValueLabelService.Default</overrides>
+	</service>
+	<service>
+		<context>Sapphire</context>
+		<description>ConversionService implementation for IUpgradePlanOutline to String conversions.</description>
+		<id>Sapphire.ConversionService.IUpgradePlanOutlineToString</id>
+		<implementation>com.liferay.ide.upgrade.plan.core.internal.IUpgradePlanOutlineToStringConversionService</implementation>
+		<overrides>Sapphire.ConversionService.ObjectToString</overrides>
+	</service>
+	<service>
+		<id>Sapphire.ConversionService.StringToIUpgradePlanOutline</id>
+		<implementation>com.liferay.ide.upgrade.plan.core.internal.StringToIUpgradePlanOutlineConversionService</implementation>
+		<context>Sapphire</context>
+		<description>ConversionService implementation for String to IUpgradePlanOutline conversions.</description>
+	</service>
 </extension>

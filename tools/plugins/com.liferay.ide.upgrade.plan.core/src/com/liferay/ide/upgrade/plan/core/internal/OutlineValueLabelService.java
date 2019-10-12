@@ -14,26 +14,39 @@
 
 package com.liferay.ide.upgrade.plan.core.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.upgrade.plan.core.IUpgradePlanOutline;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.sapphire.services.ValueLabelService;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class OutlineValueLabelService extends ValueLabelService {
 
 	@Override
 	public String provide(String value) {
-		String retval = "";
+		List<IUpgradePlanOutline> outlines = new CopyOnWriteArrayList<>();
 
-		if (CoreUtil.isNotNullOrEmpty(value)) {
-			String[] s = value.split("/");
+		outlines.addAll(UpgradePlanCorePlugin.getOutlines(UpgradePlanCorePlugin.CUSTOMER_OUTLINE_KEY));
+		outlines.addAll(UpgradePlanCorePlugin.getOutlines(UpgradePlanCorePlugin.OFFLINE_OUTLINE_KEY));
+		outlines.addAll(UpgradePlanCorePlugin.getOutlines(UpgradePlanCorePlugin.DEFAULT_OUTLINE_KEY));
 
-			retval = s[s.length - 1] + " - " + value;
+		IUpgradePlanOutline outline = UpgradePlanCorePlugin.getFilterOutlines(value);
+
+		if (outline != null) {
+			if (outline.isOffline()) {
+				return outline.getName() + "(Offline)";
+			}
+
+			return outline.getName();
 		}
 
-		return retval;
+		return value;
 	}
 
 }

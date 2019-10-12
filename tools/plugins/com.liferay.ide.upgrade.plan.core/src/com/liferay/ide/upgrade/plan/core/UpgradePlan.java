@@ -41,7 +41,7 @@ public interface UpgradePlan {
 
 	public Map<String, String> getUpgradeContext();
 
-	public String getUpgradePlanOutline();
+	public IUpgradePlanOutline getUpgradePlanOutline();
 
 	public Collection<UpgradeProblem> getUpgradeProblems();
 

@@ -6,6 +6,7 @@ Bundle-Version: 3.9.0.qualifier
 Bundle-Activator: com.liferay.ide.core.LiferayCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.google.gson,
+ com.google.guava,
  org.apache.commons.codec,
  org.apache.commons.collections,
  org.apache.commons.io,
@@ -64,9 +65,13 @@ Export-Package: com.liferay.ide.core,
  org.apache.commons.configuration.tree.xpath,
  org.apache.commons.configuration.web,
  org.apache.http.entity.mime,
- org.apache.http.entity.mime.content
+ org.apache.http.entity.mime.content,
+ org.jsoup,
+ org.jsoup.nodes,
+ org.jsoup.select
 Bundle-ClassPath: .,
- lib/freemarker-2.3.17-patched.jar,
  lib/commons-configuration-1.6.jar,
  lib/com.liferay.portal.tools.bundle.support-3.6.0.jar,
+ lib/freemarker-2.3.17-patched.jar,
+ lib/com.liferay.markdown.parser.jar,
  lib/org.apache.httpcomponents.httpmime_4.2.1.jar

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
+import com.liferay.ide.upgrade.plan.core.IUpgradePlanOutline;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
@@ -167,7 +168,9 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 					element -> {
 						UpgradePlan upgradePlan = (UpgradePlan)element;
 
-						return upgradePlan.getUpgradePlanOutline();
+						IUpgradePlanOutline upgradePlanOutline = upgradePlan.getUpgradePlanOutline();
+
+						return upgradePlanOutline.getName();
 					});
 
 				_buttons.add(

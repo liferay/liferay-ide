@@ -15,34 +15,55 @@
 package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.upgrade.plan.core.IUpgradePlanOutline;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.sapphire.PossibleValuesService;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class OutlinePossibleValuesService extends PossibleValuesService implements SapphireContentAccessor {
 
 	@Override
 	protected void compute(Set<String> values) {
-		IPreferencesService preferencesService = Platform.getPreferencesService();
+		values.addAll(_possibleValues);
+	}
 
-		String outlines = preferencesService.getString(UpgradePlanCorePlugin.ID, "outlines", "", null);
+	@Override
+	protected void initPossibleValuesService() {
+		_possibleValues = new ArrayList<>();
 
-		List<String> outlineList = UpgradePlanCorePlugin.defaultUpgradePlanOutlines;
+		List<IUpgradePlanOutline> customerOutlines = UpgradePlanCorePlugin.getOutlines(
+			UpgradePlanCorePlugin.CUSTOMER_OUTLINE_KEY);
 
-		if (!"".equals(outlines)) {
-			outlineList = Arrays.asList(outlines.split(","));
+		for (IUpgradePlanOutline outline : customerOutlines) {
+			_possibleValues.add(outline.getName());
 		}
 
-		values.addAll(outlineList);
+		List<IUpgradePlanOutline> offlineOutlines = UpgradePlanCorePlugin.getOutlines(
+			UpgradePlanCorePlugin.OFFLINE_OUTLINE_KEY);
+
+		for (IUpgradePlanOutline outline : offlineOutlines) {
+			_possibleValues.add(outline.getName());
+		}
+
+		List<IUpgradePlanOutline> defaultOutlines = UpgradePlanCorePlugin.getOutlines(
+			UpgradePlanCorePlugin.DEFAULT_OUTLINE_KEY);
+
+		for (IUpgradePlanOutline outline : defaultOutlines) {
+			_possibleValues.add(outline.getName());
+		}
+
+		Collections.sort(_possibleValues);
 	}
+
+	private List<String> _possibleValues;
 
 }

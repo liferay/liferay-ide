@@ -152,6 +152,12 @@ public class UpgradeStep {
 		return _commandId;
 	}
 
+	public UpgradePlan getCurrentUpgradePlan() {
+		UpgradePlanner upgradePlanner = _serviceTracker.getService();
+
+		return upgradePlanner.getCurrentUpgradePlan();
+	}
+
 	public String getImagePath() {
 		if (completed()) {
 			return "icons/completed.gif";

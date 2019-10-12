@@ -14,6 +14,11 @@
 
 package com.liferay.ide.core.util;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -150,6 +155,18 @@ public class StringUtil {
 		return sb.toString();
 	}
 
+	public static String objectToString(Iterable<?> input, String delimiter) {
+		Joiner joiner = Joiner.on(delimiter);
+
+		return joiner.join(input);
+	}
+
+	public static String objectToString(Iterator<?> input, String delimiter) {
+		Joiner joiner = Joiner.on(delimiter);
+
+		return joiner.join(input);
+	}
+
 	public static String replace(String content, String source, String target) {
 		if (content == null) {
 			return null;
@@ -184,6 +201,20 @@ public class StringUtil {
 		}
 
 		return s1.startsWith(s2);
+	}
+
+	public static String[] stringToArray(String input, String delimiter) {
+		Splitter splitter = Splitter.on(delimiter);
+
+		List<String> splitToList = splitter.splitToList(input);
+
+		return splitToList.toArray(new String[splitToList.size()]);
+	}
+
+	public static List<String> stringToList(String input, String delimiter) {
+		Splitter splitter = Splitter.on(delimiter);
+
+		return splitter.splitToList(input);
 	}
 
 	public static String toLowerCase(String s) {

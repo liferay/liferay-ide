@@ -84,6 +84,7 @@ public class UpgradeProblemsLabelProvider extends AbstractLabelProvider {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	protected void initalizeImageRegistry(ImageRegistry imageRegistry) {
 		imageRegistry.put(
 			"FileProblemsContainer",

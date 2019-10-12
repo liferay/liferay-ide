@@ -33,6 +33,10 @@ public class AddOutlineDialog extends Dialog {
 		super(parentShell);
 	}
 
+	public String getName() {
+		return _name;
+	}
+
 	public String getURL() {
 		return _url;
 	}
@@ -43,9 +47,19 @@ public class AddOutlineDialog extends Dialog {
 
 		areaParent.setLayout(new GridLayout(2, false));
 
+		_nameLabel = new Label(areaParent, SWT.LEFT);
+
+		_nameLabel.setText("Outline Name:");
+
+		_nameLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+
+		_nameText = new Text(areaParent, SWT.SINGLE | SWT.BORDER);
+
+		_nameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		_urlLabel = new Label(areaParent, SWT.LEFT);
 
-		_urlLabel.setText("URL:");
+		_urlLabel.setText("Outline URL:");
 
 		_urlLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 
@@ -59,10 +73,14 @@ public class AddOutlineDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		_url = _urlText.getText();
+		_name = _nameText.getText();
 
 		super.okPressed();
 	}
 
+	private String _name;
+	private Label _nameLabel;
+	private Text _nameText;
 	private String _url;
 	private Label _urlLabel;
 	private Text _urlText;

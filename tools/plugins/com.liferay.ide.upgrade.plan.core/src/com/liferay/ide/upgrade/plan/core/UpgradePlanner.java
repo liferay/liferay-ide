@@ -41,7 +41,7 @@ public interface UpgradePlanner {
 	public UpgradePlan loadUpgradePlan(String name);
 
 	public UpgradePlan newUpgradePlan(
-			String name, String currentVersion, String targetVersion, String upgradePlanOutline,
+			String name, String currentVersion, String targetVersion, IUpgradePlanOutline upgradePlanOutline,
 			Map<String, String> upgradeContext)
 		throws IOException;
 

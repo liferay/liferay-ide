@@ -16,6 +16,7 @@ package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.upgrade.plan.core.IUpgradePlanOutline;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
@@ -60,7 +61,7 @@ public class NewUpgradePlanOpMethods {
 
 		String name = _getter.get(newUpgradePlanOp.getName());
 
-		String upgradePlanOutline = _getter.get(newUpgradePlanOp.getUpgradePlanOutline());
+		IUpgradePlanOutline upgradePlanOutline = _getter.get(newUpgradePlanOp.getUpgradePlanOutline());
 
 		String currentVersion = _getter.get(newUpgradePlanOp.getCurrentVersion());
 

@@ -18,10 +18,12 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.upgrade.plan.core.IMemento;
+import com.liferay.ide.upgrade.plan.core.IUpgradePlanOutline;
 import com.liferay.ide.upgrade.plan.core.UpgradeEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradeListener;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanOutline;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
@@ -34,8 +36,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -189,13 +189,11 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradeProblemSupp
 
 	@Override
 	public UpgradePlan newUpgradePlan(
-			String name, String currentVersion, String targetVersion, String upgradePlanOutline,
+			String name, String currentVersion, String targetVersion, IUpgradePlanOutline upgradePlanOutline,
 			Map<String, String> upgradeContext)
 		throws IOException {
 
-		URL url = new URL(upgradePlanOutline);
-
-		UpgradeStepsBuilder upgradeStepsBuilder = new UpgradeStepsBuilder(url);
+		UpgradeStepsBuilder upgradeStepsBuilder = new UpgradeStepsBuilder(upgradePlanOutline);
 
 		List<UpgradeStep> upgradeSteps = upgradeStepsBuilder.build();
 
@@ -275,7 +273,16 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradeProblemSupp
 			upgradePlanMemento.putString("upgradePlanName", upgradePlan.getName());
 			upgradePlanMemento.putString("currentVersion", upgradePlan.getCurrentVersion());
 			upgradePlanMemento.putString("targetVersion", upgradePlan.getTargetVersion());
-			upgradePlanMemento.putString("upgradePlanOutline", upgradePlan.getUpgradePlanOutline());
+
+			IUpgradePlanOutline upgradePlanOutline = upgradePlan.getUpgradePlanOutline();
+
+			if (upgradePlanOutline != null) {
+				IMemento upgradeOutlineMemento = upgradePlanMemento.createChild("upgradePlanOutline");
+
+				upgradeOutlineMemento.putString("name", upgradePlanOutline.getName());
+				upgradeOutlineMemento.putString("location", upgradePlanOutline.getLocation());
+				upgradeOutlineMemento.putBoolean("offline", upgradePlanOutline.isOffline());
+			}
 
 			Map<String, String> upgradeContext = upgradePlan.getUpgradeContext();
 
@@ -382,7 +389,18 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradeProblemSupp
 
 		_loadUpgradeSteps(upgradePlanMemento, upgradeSteps, null);
 
-		String upgradePlanOutline = upgradePlanMemento.getString("upgradePlanOutline");
+		IMemento upgradePlanOutlineMemento = upgradePlanMemento.getChild("upgradePlanOutline");
+
+		UpgradePlanOutline upgradePlanOutline = null;
+
+		if (upgradePlanOutlineMemento != null) {
+			String upgradePlanOutlineName = upgradePlanOutlineMemento.getString("name");
+			String upgradePlanOutlineLocation = upgradePlanOutlineMemento.getString("location");
+			Boolean offline = upgradePlanOutlineMemento.getBoolean("offline");
+
+			upgradePlanOutline = new UpgradePlanOutline(
+				upgradePlanOutlineName, upgradePlanOutlineLocation, (offline != null) ? offline.booleanValue() : false);
+		}
 
 		IMemento[] upgradeContextEntries = upgradePlanMemento.getChildren("upgradeContext");
 

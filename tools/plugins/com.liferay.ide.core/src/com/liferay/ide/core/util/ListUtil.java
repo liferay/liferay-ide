@@ -15,6 +15,7 @@
 package com.liferay.ide.core.util;
 
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
 
@@ -55,6 +56,14 @@ public class ListUtil {
 		return false;
 	}
 
+	public static boolean isEmpty(Enumeration<?> collection) {
+		if ((collection == null) || !collection.hasMoreElements()) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public static boolean isEmpty(List<?> list) {
 		if ((list == null) || list.isEmpty()) {
 			return true;
@@ -88,6 +97,10 @@ public class ListUtil {
 	}
 
 	public static boolean isNotEmpty(Collection<?> collection) {
+		return !isEmpty(collection);
+	}
+
+	public static boolean isNotEmpty(Enumeration<?> collection) {
 		return !isEmpty(collection);
 	}
 

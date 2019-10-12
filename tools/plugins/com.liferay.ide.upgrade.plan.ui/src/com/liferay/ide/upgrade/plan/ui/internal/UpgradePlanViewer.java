@@ -168,7 +168,7 @@ public class UpgradePlanViewer implements IDoubleClickListener, ITreeViewerListe
 			_findMatchedSteps(upgradeStep, titles, matchedSteps);
 		}
 
-		_treeViewer.setExpandedElements(matchedSteps.toArray(new UpgradeStep[0]));
+		_treeViewer.setExpandedElements(matchedSteps.toArray(new Object[0]));
 
 		refresh();
 	}

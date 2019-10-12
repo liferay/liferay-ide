@@ -15,16 +15,17 @@
 package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.upgrade.plan.core.IUpgradePlanOutline;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import org.apache.commons.validator.routines.UrlValidator;
 
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class OutlineValidationService extends ValidationService implements SapphireContentAccessor {
 
@@ -34,13 +35,16 @@ public class OutlineValidationService extends ValidationService implements Sapph
 
 		NewUpgradePlanOp op = context(NewUpgradePlanOp.class);
 
-		String outline = get(op.getUpgradePlanOutline());
+		IUpgradePlanOutline upgradePlanOutline = get(op.getUpgradePlanOutline());
 
-		try {
-			new URL(outline);
-		}
-		catch (MalformedURLException murle) {
-			retval = Status.createErrorStatus(outline + " is not a vaild url.");
+		if ((upgradePlanOutline != null) && !upgradePlanOutline.isOffline()) {
+			UrlValidator urlValidator = new UrlValidator();
+
+			boolean validStatus = urlValidator.isValid(upgradePlanOutline.getLocation());
+
+			if (!validStatus) {
+				return Status.createErrorStatus(upgradePlanOutline.getName() + " is not a vaild url.");
+			}
 		}
 
 		return retval;

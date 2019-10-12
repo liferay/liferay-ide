@@ -14,27 +14,37 @@
 
 package com.liferay.ide.upgrade.plan.ui.internal;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
+import com.liferay.ide.upgrade.plan.core.UpgradePlanOutline;
+import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
 
 import java.io.IOException;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -49,13 +59,14 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class UpgradePlannerPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	public UpgradePlannerPreferencePage() {
 		super("Upgrade Planner");
 
-		_preferenceStore = new ScopedPreferenceStore(InstanceScope.INSTANCE, "com.liferay.ide.upgrade.plan.core");
+		_preferenceStore = new ScopedPreferenceStore(InstanceScope.INSTANCE, UpgradePlanCorePlugin.ID);
 	}
 
 	@Override
@@ -94,7 +105,21 @@ public class UpgradePlannerPreferencePage extends PreferencePage implements IWor
 
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 
-		_createColumns();
+		_createTableColumn(
+			_upgradePlanOutlineTableViewer, "Outline Name", 50, null,
+			element -> {
+				UpgradePlanOutline outline = (UpgradePlanOutline)element;
+
+				return outline.getName();
+			});
+
+		_createTableColumn(
+			_upgradePlanOutlineTableViewer, "Outline Url", 150, null,
+			element -> {
+				UpgradePlanOutline outline = (UpgradePlanOutline)element;
+
+				return outline.getLocation();
+			});
 
 		Table table = _upgradePlanOutlineTableViewer.getTable();
 
@@ -104,9 +129,7 @@ public class UpgradePlannerPreferencePage extends PreferencePage implements IWor
 
 		table.setLayoutData(gridData);
 
-		_upgradePlanOutlineTableViewer.setContentProvider(ArrayContentProvider.getInstance());
-
-		_upgradePlanOutlineTableViewer.setInput(_outlines.toArray());
+		_upgradePlanOutlineTableViewer.setContentProvider(new CutomizedOutlineContentProvider());
 
 		Composite groupComponent = new Composite(composite, SWT.NULL);
 
@@ -142,10 +165,13 @@ public class UpgradePlannerPreferencePage extends PreferencePage implements IWor
 
 					if (addOutlineDialog.open() == Window.OK) {
 						String url = addOutlineDialog.getURL();
+						String name = addOutlineDialog.getName();
 
-						_outlines.add(url);
+						UpgradePlanOutline newOutline = new UpgradePlanOutline(name, url, false);
 
-						_upgradePlanOutlineTableViewer.add(url);
+						_outlines.add(newOutline);
+
+						_upgradePlanOutlineTableViewer.add(newOutline);
 					}
 				}
 
@@ -168,7 +194,7 @@ public class UpgradePlannerPreferencePage extends PreferencePage implements IWor
 				public void widgetSelected(SelectionEvent selectionEvent) {
 					StructuredSelection selection = (StructuredSelection)_upgradePlanOutlineTableViewer.getSelection();
 
-					String outline = (String)selection.getFirstElement();
+					UpgradePlanOutline outline = (UpgradePlanOutline)selection.getFirstElement();
 
 					_outlines.remove(outline);
 
@@ -178,6 +204,8 @@ public class UpgradePlannerPreferencePage extends PreferencePage implements IWor
 			});
 
 		setButtonLayoutData(_removeButton);
+
+		_loadCustomerOutline();
 
 		return composite;
 	}
@@ -189,23 +217,66 @@ public class UpgradePlannerPreferencePage extends PreferencePage implements IWor
 
 	@Override
 	public void init(IWorkbench workbench) {
-		String outlines = _preferenceStore.getString("outlines");
+		String outlineString = _preferenceStore.getString(UpgradePlanCorePlugin.CUSTOMER_OUTLINE_KEY);
 
-		if ("".equals(outlines)) {
-			_outlines.addAll(UpgradePlanCorePlugin.defaultUpgradePlanOutlines);
+		if (CoreUtil.isNullOrEmpty(outlineString)) {
+			return;
 		}
-		else {
-			String[] outlineArray = outlines.split(",");
 
-			Collections.addAll(_outlines, outlineArray);
+		List<String> outlineValueList = StringUtil.stringToList(outlineString, "|");
+
+		if (ListUtil.isEmpty(outlineValueList)) {
+			return;
+		}
+
+		_outlines.addAll(
+			Lists.transform(
+				outlineValueList,
+				new Function<String, UpgradePlanOutline>() {
+
+					@Override
+					public UpgradePlanOutline apply(String input) {
+						String[] outlineValue = StringUtil.stringToArray(input, ",");
+
+						return new UpgradePlanOutline(
+							outlineValue[0].trim(), outlineValue[1].trim(), Boolean.getBoolean(outlineValue[2].trim()));
+					}
+
+				}));
+
+		try {
+			UIUtil.async(
+				() -> {
+					if (_upgradePlanOutlineTableViewer == null) {
+						return;
+					}
+
+					Table upgradePlanTable = _upgradePlanOutlineTableViewer.getTable();
+
+					if (upgradePlanTable.isDisposed()) {
+						return;
+					}
+
+					_upgradePlanOutlineTableViewer.setInput(
+						_outlines.toArray(new UpgradePlanOutline[_outlines.size()]));
+
+					Stream.of(
+						upgradePlanTable.getColumns()
+					).forEach(
+						obj -> obj.pack()
+					);
+				});
+		}
+		catch (Exception e) {
+			UpgradePlanUIPlugin.logError(e);
 		}
 	}
 
 	@Override
 	public boolean performOk() {
-		String outlines = StringUtil.merge(_outlines.toArray(new String[0]), ",");
+		String outlineString = StringUtil.objectToString(_outlines, "|");
 
-		_preferenceStore.setValue("outlines", outlines);
+		_preferenceStore.setValue(UpgradePlanCorePlugin.CUSTOMER_OUTLINE_KEY, outlineString);
 
 		try {
 			_preferenceStore.save();
@@ -217,37 +288,100 @@ public class UpgradePlannerPreferencePage extends PreferencePage implements IWor
 		return super.performOk();
 	}
 
-	private void _createColumns() {
-		TableViewerColumn tableViewerColumn = _createTableViewerColumn("URL", 100, _upgradePlanOutlineTableViewer);
+	private static void _createTableColumn(
+		TableViewer tableViewer, String name, int width, Function<Object, Image> imageProvider,
+		Function<Object, String> textProvider) {
+
+		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+
+		TableColumn tableColumn = tableViewerColumn.getColumn();
+
+		tableColumn.setText(name);
+
+		if (width > -1) {
+			tableColumn.setWidth(width);
+		}
+
+		tableColumn.pack();
 
 		tableViewerColumn.setLabelProvider(
 			new ColumnLabelProvider() {
 
 				@Override
+				public Image getImage(Object element) {
+					if (imageProvider == null) {
+						return null;
+					}
+
+					return imageProvider.apply(element);
+				}
+
+				@Override
 				public String getText(Object element) {
-					return (String)element;
+					if (textProvider == null) {
+						return null;
+					}
+
+					return textProvider.apply(element);
 				}
 
 			});
 	}
 
-	private TableViewerColumn _createTableViewerColumn(String title, int bound, TableViewer viewer) {
-		TableViewerColumn tableViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
+	private void _loadCustomerOutline() {
+		try {
+			UIUtil.async(
+				() -> {
+					if (_upgradePlanOutlineTableViewer == null) {
+						return;
+					}
 
-		TableColumn tableColumn = tableViewerColumn.getColumn();
+					Table upgradePlanTable = _upgradePlanOutlineTableViewer.getTable();
 
-		tableColumn.setText(title);
-		tableColumn.setWidth(bound);
-		tableColumn.setResizable(true);
-		tableColumn.setMoveable(true);
+					if (upgradePlanTable.isDisposed()) {
+						return;
+					}
 
-		return tableViewerColumn;
+					_upgradePlanOutlineTableViewer.setInput(
+						_outlines.toArray(new UpgradePlanOutline[_outlines.size()]));
+
+					Stream.of(
+						upgradePlanTable.getColumns()
+					).forEach(
+						obj -> obj.pack()
+					);
+				});
+		}
+		catch (Exception e) {
+			UpgradePlanUIPlugin.logError(e);
+		}
 	}
 
 	private Button _addButton;
-	private List<String> _outlines = new ArrayList<>();
+	private Collection<UpgradePlanOutline> _outlines = new ArrayList<>();
 	private final ScopedPreferenceStore _preferenceStore;
 	private Button _removeButton;
 	private TableViewer _upgradePlanOutlineTableViewer;
+
+	private class CutomizedOutlineContentProvider implements IStructuredContentProvider {
+
+		@Override
+		public void dispose() {
+		}
+
+		@Override
+		public Object[] getElements(Object inputElement) {
+			if (inputElement instanceof UpgradePlanOutline[]) {
+				return (UpgradePlanOutline[])inputElement;
+			}
+
+			return new Object[] {inputElement};
+		}
+
+		@Override
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		}
+
+	}
 
 }
