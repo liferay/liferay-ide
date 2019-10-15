@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.functional.tests.fragment</groupId>
 		<artifactId>fragment-tests</artifactId>
-		<version>3.7.0-SNAPSHOT</version>
+		<version>3.7.1-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.liferay.ide.functional.tests.fragment.wizard</groupId>
