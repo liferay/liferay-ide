@@ -195,6 +195,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
+	@Ignore("ignore to wait new Spring MVC Portlet wizard")
 	@Test
 	public void createSpringMvcPortlet() {
 		String packageName = "test.spring.mvc.portlet.gradle";

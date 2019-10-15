@@ -131,6 +131,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("ignore to wait new Spring MVC Portlet Wziard")
 	@Test
 	public void createSpringMvcPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
