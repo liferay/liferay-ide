@@ -399,7 +399,7 @@ public class PortalServerBehavior
 
 		if (null != existingVMArgs) {
 			List<String> parsedExistingVMArgs = Lists.newCopyOnWriteArrayList(
-				Lists.newArrayList(DebugPlugin.parseArguments(existingVMArgs)));
+				Lists.newArrayList(DebugPlugin.splitArguments(existingVMArgs)));
 
 			if (ListUtil.isNotEmpty(parsedExistingVMArgs)) {
 				for (String parsedArg : parsedExistingVMArgs) {
