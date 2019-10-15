@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Developer Studio Scripting Core
 Bundle-SymbolicName: com.liferay.ide.scripting.core;singleton:=true
-Bundle-Version: 3.7.0.qualifier
+Bundle-Version: 3.7.1.qualifier
 Bundle-Activator: com.liferay.ide.scripting.core.ScriptingCore
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.core.runtime
