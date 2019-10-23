@@ -47,7 +47,7 @@
         <osgi-bundles-site>https://dl.bintray.com/gamerson/eclipse/liferay-ide-deps/201904221700/</osgi-bundles-site>
         <sapphire-site>http://download.eclipse.org/sapphire/9.1.1/repository/</sapphire-site>
         <sign-apps>false</sign-apps>
-        <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/2.6.0/</swtbot-site>
+        <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/2.8.0/</swtbot-site>
         <tm-site>https://download.eclipse.org/tm/updates/4.5.0/repository/</tm-site>
         <tycho-extras-version>1.0.0</tycho-extras-version>
         <tycho-m2e-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.9.0/N/0.9.0.201412222151/</tycho-m2e-site>

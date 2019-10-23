@@ -51,9 +51,13 @@ public abstract class Wildfly7xDeployBase extends ServerTestBase {
 
 		Assert.assertTrue(viewAction.servers.visibleModuleTry(wildfly.getStartedLabel(), project.getName()));
 
+		jobAction.waitForConsoleContent(wildfly.getServerName(), "STARTED " + project.getName() + "_", M1);
+
 		viewAction.servers.removeModule(wildfly.getServerName(), project.getName());
 
 		dialogAction.confirm();
+
+		jobAction.waitForConsoleContent(wildfly.getServerName(), "STOPPED " + project.getName() + "_", M1);
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
@@ -75,9 +79,13 @@ public abstract class Wildfly7xDeployBase extends ServerTestBase {
 
 		Assert.assertTrue(viewAction.servers.visibleModuleTry(wildfly.getStartedLabel(), project.getName()));
 
+		jobAction.waitForConsoleContent(wildfly.getServerName(), "STARTED " + project.getName() + "_", M1);
+
 		viewAction.servers.removeModule(wildfly.getServerName(), project.getName());
 
 		dialogAction.confirm();
+
+		jobAction.waitForConsoleContent(wildfly.getServerName(), "STOPPED " + project.getName() + "_", M1);
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
