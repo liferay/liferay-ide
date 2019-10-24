@@ -64,17 +64,6 @@
                 <version>1.3.0</version>
                 <executions>
                     <execution>
-                        <id>download-ce-bundle</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>${portal-ce-download-base}/${portal-ce-version}/${portal-ce-zip-name}</url>
-                            <outputDirectory>../shared/download/</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>download-blade</id>
                         <phase>package</phase>
                         <goals>
