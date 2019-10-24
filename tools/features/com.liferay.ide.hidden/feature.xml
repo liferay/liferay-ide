@@ -142,12 +142,4 @@
 		version="5.2.0.v20170126-0011"
 	/>
 
-	<plugin
-		download-size="0"
-		id="org.objectweb.asm"
-		install-size="0"
-		unpack="false"
-		version="6.0.0.v20180414-0329"
-	/>
-
 </feature>
