@@ -29,9 +29,6 @@
                             <origin>../shared/download/com.liferay.portal.tools.bundle.support.jar</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../shared/download/liferay-dxp-tomcat-7.2.10-ga1-20190531140450482.tar.gz</origin>
-                        </distributionFile>
-                        <distributionFile>
                             <origin>../shared/download/biz.aQute.bnd.jar</origin>
                         </distributionFile>
                     </distributionFileList>
@@ -328,18 +325,6 @@
         </if>
         <if>
             <actionList>
-                <setInstallerVariable>
-                    <name>liferayBundlesPath</name>
-                    <value>${userHome}${platform_path_separator}.liferay${platform_path_separator}bundles</value>
-                </setInstallerVariable>
-                <createDirectory>
-                    <path>${liferayBundlesPath}</path>
-                    <progressText>Creating directory...</progressText>
-                </createDirectory>
-                <copyFile>
-                    <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-tomcat-7.2.10-ga1-20190531140450482.tar.gz</destination>
-                    <origin>${installdir}${platform_path_separator}liferay-dxp-tomcat-7.2.10-ga1-20190531140450482.tar.gz</origin>
-                </copyFile>
                 <include file="../components/run-java-jpm.xml" />
             </actionList>
             <conditionRuleList>
@@ -583,9 +568,6 @@
                 </fileExists>
             </ruleList>
         </runProgram>
-        <deleteFile>
-            <path>${installdir}${platform_path_separator}liferay-dxp-tomcat-7.2.10-ga1-20190531140450482.tar.gz</path>
-        </deleteFile>
         <deleteFile>
             <path>${installdir}${platform_path_separator}blade.jar</path>
         </deleteFile>

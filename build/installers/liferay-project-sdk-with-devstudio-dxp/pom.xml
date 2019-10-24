@@ -64,17 +64,6 @@
                 <version>1.3.0</version>
                 <executions>
                     <execution>
-                        <id>download-dxp-bundle</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>${portal-download-base}/${portal-version}/${portal-zip-name}</url>
-                            <outputDirectory>../shared/download/</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>download-blade</id>
                         <phase>package</phase>
                         <goals>
