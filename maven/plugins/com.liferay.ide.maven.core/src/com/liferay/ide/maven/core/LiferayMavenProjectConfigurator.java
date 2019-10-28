@@ -671,7 +671,8 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 	private static final String _WAR_SOURCE_FOLDER = "/src/main/webapp";
 
 	private static final IPath _rootPath = new Path("/");
-	private static final Pattern _versionPattern = Pattern.compile("^(.*)-([0-9]\\.[0-9]\\.[0-9])(?:-SNAPSHOT)?$");
+	private static final Pattern _versionPattern = Pattern.compile(
+		"^(.*)-([0-9]+((.[0-9]+)?(.[0-9]+)?)*)(?:-SNAPSHOT)?$");
 
 	private IMavenMarkerManager _mavenMarkerManager;
 
