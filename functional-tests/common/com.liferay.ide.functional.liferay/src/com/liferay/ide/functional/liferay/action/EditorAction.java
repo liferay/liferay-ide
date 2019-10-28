@@ -50,8 +50,30 @@ public class EditorAction extends UIAction {
 		return _editor.getText();
 	}
 
+	public void openContextMenu(String text) {
+		_editor.contextMenu(text);
+	}
+
 	public void save() {
 		_editor.save();
+	}
+
+	public void selectText(String text) {
+		if (getContent().contains(text)) {
+			int textIndex = getContent().indexOf(text);
+
+			String previousText = getContent().substring(0, textIndex);
+
+			String modifyPreviousText = previousText.replace("\n", "");
+
+			int lastEnterIndex = previousText.lastIndexOf("\n");
+
+			int line = (previousText.length() - modifyPreviousText.length()) / "\n".length();
+
+			int column = textIndex - lastEnterIndex - 1;
+
+			_editor.selectRange(line, column, text.length());
+		}
 	}
 
 	public void setText(String text) {

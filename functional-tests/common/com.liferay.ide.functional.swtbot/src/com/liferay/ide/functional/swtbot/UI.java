@@ -680,6 +680,8 @@ public interface UI {
 
 	public final String PUBLIC = "public";
 
+	public final String QUICK_FIX = "Quick Fix";
+
 	public final String RECORD_INTO = "Record into:";
 
 	public final String REFRESH = "Refresh";
