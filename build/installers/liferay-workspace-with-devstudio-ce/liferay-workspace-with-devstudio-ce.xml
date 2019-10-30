@@ -1,6 +1,6 @@
 <project>
-    <shortName>LiferayProjectSDKwithDevStudioCommunityEdition</shortName>
-    <fullName>Liferay Project SDK with DevStudio - Community Edition</fullName>
+    <shortName>LiferayWorkspacewithDevStudioCommunityEdition</shortName>
+    <fullName>Liferay Workspace with DevStudio - Community Edition</fullName>
     <logoImage>../shared/images/studio_logo.png</logoImage>
     <componentList>
         <component>
@@ -727,4 +727,3 @@
         </parameterGroup>
     </parameterList>
 </project>
-

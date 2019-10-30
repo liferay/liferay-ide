@@ -25,10 +25,10 @@
         <version>3.7.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>liferay.project.sdk.with.devstudio.dxp.installer</artifactId>
+    <artifactId>liferay.workspace.with.devstudio.ce.installer</artifactId>
     <packaging>pom</packaging>
 
-    <name>Liferay Project SDK with DevStudio DXP Installer</name>
+    <name>Liferay Workspace with DevStudio Community Edition Installer</name>
 
     <properties>
         <studio-installer-version>${maven.build.timestamp}</studio-installer-version>
@@ -141,7 +141,7 @@
                 <version>1.6.0</version>
                 <executions>
                     <execution>
-                        <id>linux64</id>
+                        <id>linux64-ce</id>
                         <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
@@ -150,7 +150,7 @@
                             <executable>${install-builder-executable}</executable>
                             <arguments>
                                 <argument>build</argument>
-                                <argument>./liferay-project-sdk-with-devstudio-dxp.xml</argument>
+                                <argument>./liferay-workspace-with-devstudio-ce.xml</argument>
                                 <argument>linux-x64</argument>
                                 <argument>--setvars</argument>
                                 <argument>project.version=${studio-installer-version}</argument>
@@ -158,7 +158,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>windows</id>
+                        <id>windows-ce</id>
                         <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
@@ -167,7 +167,7 @@
                             <executable>${install-builder-executable}</executable>
                             <arguments>
                                 <argument>build</argument>
-                                <argument>./liferay-project-sdk-with-devstudio-dxp.xml</argument>
+                                <argument>./liferay-workspace-with-devstudio-ce.xml</argument>
                                 <argument>windows</argument>
                                 <argument>--setvars</argument>
                                 <argument>project.version=${studio-installer-version}</argument>
@@ -175,7 +175,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>osx</id>
+                        <id>osx-ce</id>
                         <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
@@ -184,7 +184,7 @@
                             <executable>${install-builder-executable}</executable>
                             <arguments>
                                 <argument>build</argument>
-                                <argument>./liferay-project-sdk-with-devstudio-dxp.xml</argument>
+                                <argument>./liferay-workspace-with-devstudio-ce.xml</argument>
                                 <argument>osx</argument>
                                 <argument>--setvars</argument>
                                 <argument>project.version=${studio-installer-version}</argument>
@@ -208,7 +208,7 @@
                 </executions>
                 <configuration>
                     <properties>
-                        <appPath>${pom.basedir}/../outputs/LiferayProjectSDKwithDevStudioDXP-${studio-installer-version}-osx-installer.app</appPath>
+                        <appPath>${pom.basedir}/../outputs/LiferayWorkspacewithDevStudioCommunityEdition-${studio-installer-version}-osx-installer.app</appPath>
                         <signingServerURL>${signingServerURL}</signingServerURL>
                         <signApps>${signApps}</signApps>
                         <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
@@ -229,7 +229,7 @@
                         <phase>package</phase>
                         <configuration>
                             <target>
-                                <delete dir="../outputs/LiferayProjectSDKwithDevStudioDXP-${studio-installer-version}-osx-installer.app"/>
+                                <delete dir="../outputs/LiferayWorkspacewithDevStudioCommunityEdition-${studio-installer-version}-osx-installer.app"/>
                             </target>
                         </configuration>
                         <goals>
