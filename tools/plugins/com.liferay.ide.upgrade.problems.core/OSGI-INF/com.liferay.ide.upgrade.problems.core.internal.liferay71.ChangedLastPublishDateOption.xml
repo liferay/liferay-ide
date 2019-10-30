@@ -4,7 +4,7 @@
    <property name="problem.title" value="Changed the From Last Publish Date Option in Staging"/>
    <property name="problem.summary" value="Changed Last Publish Date Option"/>
    <property name="problem.tickets" value="LPS-81695"/>
-   <property name="problem.section" value="#changed-last-publish-date-option"/>
+   <property name="problem.section" value="#changed-the-from-last-publish-date-option-in-staging"/>
    <property name="version" value="7.1"/>
    <service>
       <provide interface="com.liferay.ide.upgrade.problems.core.FileMigrator"/>
