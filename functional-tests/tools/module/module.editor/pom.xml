@@ -23,21 +23,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.functional.tests</groupId>
-		<artifactId>tools-tests</artifactId>
+		<groupId>com.liferay.ide.functional.tests.module</groupId>
+		<artifactId>module-tests</artifactId>
 		<version>3.7.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.liferay.ide.functional.tests.module</groupId>
-	<artifactId>module-tests</artifactId>
+	<groupId>com.liferay.ide.functional.tests.module.editor</groupId>
+	<artifactId>module-editor-tests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Liferay IDE Functional Module</name>
+	<name>Liferay IDE Functional Module Editor</name>
 
 	<modules>
-		<module>module.deploy</module>
-		<module>module.wizard</module>
-		<module>module.watch</module>
-		<module>module.editor</module>
+		<module>module.editor.operation</module>
 	</modules>
 </project>

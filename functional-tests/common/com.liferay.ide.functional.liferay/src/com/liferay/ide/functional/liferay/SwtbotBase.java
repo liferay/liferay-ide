@@ -19,6 +19,7 @@ import com.liferay.ide.functional.liferay.action.DialogAction;
 import com.liferay.ide.functional.liferay.action.EditorAction;
 import com.liferay.ide.functional.liferay.action.EnvAction;
 import com.liferay.ide.functional.liferay.action.JobAction;
+import com.liferay.ide.functional.liferay.action.KeyboardAction;
 import com.liferay.ide.functional.liferay.action.ValidationAction;
 import com.liferay.ide.functional.liferay.action.ViewAction;
 import com.liferay.ide.functional.liferay.action.WizardAction;
@@ -58,6 +59,7 @@ public class SwtbotBase implements FileConstants, Keys, Messages, Times, UI {
 	public static EnvAction envAction;
 	public static LiferayIDE ide;
 	public static JobAction jobAction;
+	public static KeyboardAction keyboardAction;
 	public static ValidationAction validationAction;
 	public static ViewAction viewAction;
 	public static WizardAction wizardAction;
@@ -100,6 +102,7 @@ public class SwtbotBase implements FileConstants, Keys, Messages, Times, UI {
 		jobAction = JobAction.getInstance(bot);
 		browserAction = BrowserAction.getInstance(bot);
 		validationAction = ValidationAction.getInstance(bot);
+		keyboardAction = KeyboardAction.getInstance(bot);
 
 		try {
 			long origin = SWTBotPreferences.TIMEOUT;

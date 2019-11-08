@@ -14,9 +14,12 @@
 
 package com.liferay.ide.functional.swtbot.page;
 
+import java.util.List;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEclipseEditor;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 
 /**
  * @author Terry Jia
@@ -30,6 +33,14 @@ public class Editor extends AbstractPart {
 
 	public Editor(SWTWorkbenchBot bot, String label) {
 		super(bot, label);
+	}
+
+	public void contextMenu(String text) {
+		SWTBotEclipseEditor botEditor = getPart().toTextEditor();
+
+		SWTBotMenu menu = botEditor.contextMenu(text);
+
+		menu.click();
 	}
 
 	public void customizedText(String fileName, int line, int column, String text) {
@@ -50,6 +61,18 @@ public class Editor extends AbstractPart {
 		return label;
 	}
 
+	public int getLineCount() {
+		SWTBotEclipseEditor botEditor = getPart().toTextEditor();
+
+		return botEditor.getLineCount();
+	}
+
+	public List<String> getLines() {
+		SWTBotEclipseEditor botEditor = getPart().toTextEditor();
+
+		return botEditor.getLines();
+	}
+
 	public String getText() {
 		SWTBotEclipseEditor botEditor = getPart().toTextEditor();
 
@@ -58,6 +81,12 @@ public class Editor extends AbstractPart {
 
 	public void save() {
 		getPart().save();
+	}
+
+	public void selectRange(int line, int column, int length) {
+		SWTBotEclipseEditor botEditor = getPart().toTextEditor();
+
+		botEditor.selectRange(line, column, length);
 	}
 
 	public void setText(String text) {
