@@ -22,6 +22,8 @@ import com.liferay.ide.functional.liferay.page.editor.ServiceXmlEditor;
 import com.liferay.ide.functional.liferay.page.editor.WorkflowXmlEditor;
 import com.liferay.ide.functional.swtbot.page.Editor;
 
+import java.util.List;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
@@ -59,20 +61,18 @@ public class EditorAction extends UIAction {
 	}
 
 	public void selectText(String text) {
-		if (getContent().contains(text)) {
-			int textIndex = getContent().indexOf(text);
+		for (int i = 0; i < _editor.getLineCount(); i++) {
+			List<String> lines = _editor.getLines();
 
-			String previousText = getContent().substring(0, textIndex);
+			String line = lines.get(i);
 
-			String modifyPreviousText = previousText.replace("\n", "");
+			if (line.contains(text)) {
+				int index = line.indexOf(text);
 
-			int lastEnterIndex = previousText.lastIndexOf("\n");
+				_editor.selectRange(i, index, text.length());
 
-			int line = (previousText.length() - modifyPreviousText.length()) / "\n".length();
-
-			int column = textIndex - lastEnterIndex - 1;
-
-			_editor.selectRange(line, column, text.length());
+				break;
+			}
 		}
 	}
 

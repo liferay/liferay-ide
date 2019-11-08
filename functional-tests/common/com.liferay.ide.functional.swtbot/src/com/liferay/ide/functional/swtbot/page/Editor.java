@@ -14,6 +14,8 @@
 
 package com.liferay.ide.functional.swtbot.page;
 
+import java.util.List;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEclipseEditor;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
@@ -57,6 +59,18 @@ public class Editor extends AbstractPart {
 		}
 
 		return label;
+	}
+
+	public int getLineCount() {
+		SWTBotEclipseEditor botEditor = getPart().toTextEditor();
+
+		return botEditor.getLineCount();
+	}
+
+	public List<String> getLines() {
+		SWTBotEclipseEditor botEditor = getPart().toTextEditor();
+
+		return botEditor.getLines();
 	}
 
 	public String getText() {

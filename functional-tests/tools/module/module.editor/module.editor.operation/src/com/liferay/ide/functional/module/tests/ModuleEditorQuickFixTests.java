@@ -47,7 +47,7 @@ public class ModuleEditorQuickFixTests extends SwtbotBase {
 
 		String firletter = projectName.substring(0, 1);
 
-		viewAction.project.openFile(
+		viewAction.project.openWithGenericTextEditor(
 			projects.getName(0), "modules", projects.getName(1), "src/main/java", projects.getName(1),
 			firletter.toUpperCase() + projectName.substring(1) + ".java");
 
@@ -58,6 +58,8 @@ public class ModuleEditorQuickFixTests extends SwtbotBase {
 		keyboardAction.pressKeyEnter();
 
 		jobAction.waitForNoRunningJobs();
+
+		ide.sleep();
 
 		editorAction.close();
 

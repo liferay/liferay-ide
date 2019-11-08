@@ -362,6 +362,18 @@ public class ViewAction extends UIAction {
 			}
 		}
 
+		public void openWithGenericTextEditor(String... files) {
+			ide.sleep();
+
+			_getProjects().setFocus();
+
+			try {
+				_getProjects().contextMenu("Generic Text Editor", files);
+			}
+			catch (Exception e) {
+			}
+		}
+
 		public void refreshGradleProject(String projectName) {
 			ide.sleep(1000);
 
