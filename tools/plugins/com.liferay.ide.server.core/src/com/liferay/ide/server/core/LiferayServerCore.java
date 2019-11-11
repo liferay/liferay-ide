@@ -25,6 +25,8 @@ import com.liferay.ide.server.core.portal.AbstractPortalBundleFactory;
 import com.liferay.ide.server.core.portal.LiferayPortalRuntimeLifecycleListener;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
+import com.liferay.ide.server.core.portal.docker.PortalDockerRuntimeLifecycleAdapter;
+import com.liferay.ide.server.core.portal.docker.PortalDockerServerLifecycleAdapter;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 import com.liferay.ide.server.remote.ServerManagerConnection;
@@ -618,6 +620,9 @@ public class LiferayServerCore extends Plugin {
 		_runtimeLifecycleListener = new LiferayPortalRuntimeLifecycleListener();
 
 		ServerCore.addRuntimeLifecycleListener(_runtimeLifecycleListener);
+		_dockerRuntimeListener = new PortalDockerRuntimeLifecycleAdapter();
+		_dockerServerListener = new PortalDockerServerLifecycleAdapter();
+
 	}
 
 	@Override
@@ -633,6 +638,9 @@ public class LiferayServerCore extends Plugin {
 		ServerCore.removeServerLifecycleListener(_globalServerLifecycleListener);
 
 		ServerCore.removeRuntimeLifecycleListener(_runtimeLifecycleListener);
+
+		ServerCore.removeRuntimeLifecycleListener(_dockerRuntimeListener);
+		ServerCore.removeServerLifecycleListener(_dockerServerListener);
 
 		IJobManager jobManager = Job.getJobManager();
 
@@ -867,8 +875,11 @@ public class LiferayServerCore extends Plugin {
 	private static IRuntimeDelegateValidator[] _runtimeDelegateValidators;
 	private static ILiferayRuntimeStub[] _runtimeStubs;
 
+
 	private IRuntimeLifecycleListener _globalRuntimeLifecycleListener;
 	private IServerLifecycleListener _globalServerLifecycleListener;
+	private IRuntimeLifecycleListener _dockerRuntimeListener;
+	private IServerLifecycleListener _dockerServerListener;
 	private IRuntimeLifecycleListener _runtimeLifecycleListener;
 	private ISDKListener _sdkListener;
 

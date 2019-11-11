@@ -38,6 +38,10 @@
 					name="init-bundle"
 				>
 				</groupMarker>
+				<groupMarker
+					name="init-docker-bundle"
+				>
+				</groupMarker>
 			</menu>
 		</objectContribution>
 		<objectContribution
@@ -88,6 +92,15 @@
 				id="com.liferay.ide.gradle.popup.action.mergelang"
 				label="merge-lang"
 				menubarPath="liferayPopupMenuCategory/merge-lang"
+			>
+			</action>
+			<action
+				class="com.liferay.ide.gradle.action.InitDockerBundleTaskAction"
+				enablesFor="1"
+				icon="icons/e16/liferay_logo_16.png"
+				id="com.liferay.ide.gradle.popup.action.initDockerBundle"
+				label="Init Portal Docker Bundle"
+				menubarPath="liferayPopupMenuCategory/init-docker-bundle"
 			>
 			</action>
 			<enablement>
@@ -397,4 +410,82 @@
 		>
 		</quickFixProcessor>
 	</extension>
+	<extension
+		point="org.eclipse.wst.server.ui.serverImages"
+	>
+		<image
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.server.remote.image"
+			typeIds="com.liferay.ide.eclipse.server.remote"
+		>
+		</image>
+		<image
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.server.runtime.stub.image"
+			typeIds="com.liferay.ide.eclipse.server.runtime.stub"
+		>
+		</image>
+		<image
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.server.portal.image"
+			typeIds="com.liferay.ide.server.portal"
+		>
+		</image>
+		<image
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.server.portal.docker.image"
+			typeIds="com.liferay.ide.server.portal.docker"
+		>
+		</image>
+		<image
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.server.portal.runtime.image"
+			typeIds="com.liferay.ide.server.portal.runtime"
+		>
+		</image>
+		<image
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.server.portal.docker.runtime.image"
+			typeIds="com.liferay.ide.server.portal.docker.runtime"
+		>
+		</image>
+	</extension>
+	<extension
+		point="org.eclipse.wst.server.ui.wizardFragments"
+	>
+		<fragment
+			class="com.liferay.ide.gradle.ui.portal.docker.DockerRuntimeWizard"
+			id="com.liferay.ide.server.portal.docker.runtime.fragment"
+			typeIds="com.liferay.ide.server.portal.docker.runtime"
+		>
+		</fragment>
+		<fragment
+			class="com.liferay.ide.gradle.ui.portal.docker.DockerServerWizard"
+			id="com.liferay.ide.server.portal.docker.fragment"
+			typeIds="com.liferay.ide.server.portal.docker"
+		>
+		</fragment>
+	</extension>
+	<extension
+		point="org.eclipse.debug.ui.launchConfigurationTabGroups"
+	>
+		<launchConfigurationTabGroup
+			class="com.liferay.ide.gradle.ui.portal.docker.DockerServerLaunchTabGroup"
+			id="com.liferay.ide.server.portal.docker.launch.tab"
+			type="com.liferay.ide.server.portal.docker.launch"
+		>
+		</launchConfigurationTabGroup>
+	</extension>
+
+	<extension
+		point="org.eclipse.debug.ui.launchConfigurationTypeImages"
+	>
+		<launchConfigurationTypeImage
+			configTypeID="com.liferay.ide.server.portal.docker.launch"
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.server.portal.docker.launch.image"
+		>
+		</launchConfigurationTypeImage>
+	</extension>
+
 </plugin>
