@@ -17,12 +17,12 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.gradle.core.LiferayGradleCore;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.util.Optional;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
@@ -34,9 +34,7 @@ import org.eclipse.buildship.core.GradleWorkspace;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.gradle.tooling.ModelBuilder;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 

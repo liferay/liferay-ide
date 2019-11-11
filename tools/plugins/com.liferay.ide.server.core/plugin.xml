@@ -1485,6 +1485,19 @@
 			>
 			</moduleType>
 		</runtimeType>
+		<runtimeType
+			class="com.liferay.ide.server.core.portal.docker.PortalDockerRuntime"
+			description="Liferay Docker"
+			id="com.liferay.ide.server.portal.docker.runtime"
+			name="Liferay Docker"
+			vendor="Liferay, Inc."
+		>
+			<moduleType
+				types="liferay.bundle"
+				versions="*"
+			>
+			</moduleType>
+		</runtimeType>
 	</extension>
 	<extension
 		point="org.eclipse.wst.server.core.serverTypes"
@@ -1518,6 +1531,22 @@
 			supportsRemoteHosts="true"
 		>
 		</serverType>
+		<serverType
+			behaviourClass="com.liferay.ide.server.core.portal.docker.PortalDockerServerBehavior"
+			class="com.liferay.ide.server.core.portal.docker.PortalDockerServer"
+			description="Liferay Docker Server"
+			id="com.liferay.ide.server.portal.docker"
+			initialState="stopped"
+			launchConfigId="com.liferay.ide.server.portal.docker.launch"
+			name="Liferay Docker Server"
+			runtime="true"
+			runtimeTypeId="com.liferay.ide.server.portal.docker.runtime"
+			startBeforePublish="true"
+			startTimeout="900000"
+			stopTimeout="300000"
+			supportsRemoteHosts="true"
+		>
+		</serverType>
 	</extension>
 	<extension
 		point="org.eclipse.debug.core.launchConfigurationTypes"
@@ -1537,6 +1566,16 @@
 			id="com.liferay.ide.server.portal.launch"
 			modes="run,debug"
 			name="Liferay 7.x"
+			public="true"
+			sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
+			sourcePathComputerId="com.liferay.ide.server.core.portal.sourcePathComputer"
+		>
+		</launchConfigurationType>
+		<launchConfigurationType
+			delegate="com.liferay.ide.server.core.portal.docker.PortalDockerServerLaunchConfigDelegate"
+			id="com.liferay.ide.server.portal.docker.launch"
+			modes="run,debug"
+			name="Liferay Docker"
 			public="true"
 			sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
 			sourcePathComputerId="com.liferay.ide.server.core.portal.sourcePathComputer"

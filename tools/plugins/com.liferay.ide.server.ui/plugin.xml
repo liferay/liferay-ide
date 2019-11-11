@@ -336,13 +336,13 @@
 			objectClass="org.eclipse.wst.server.core.IServer"
 		>
 			<visibility>
-				<and>
+				<or>
 					<objectState
 						name="serverType"
-						value="com.liferay.ide.server.portal"
+						value="com.liferay.ide.server.*"
 					>
 					</objectState>
-				</and>
+				</or>
 			</visibility>
 			<action
 				class="com.liferay.ide.server.ui.action.OpenGogoShellAction"
@@ -377,8 +377,20 @@
 		</image>
 		<image
 			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.server.portal.docker.image"
+			typeIds="com.liferay.ide.server.portal.docker"
+		>
+		</image>
+		<image
+			icon="icons/liferay_logo_16.png"
 			id="com.liferay.ide.server.portal.runtime.image"
 			typeIds="com.liferay.ide.server.portal.runtime"
+		>
+		</image>
+		<image
+			icon="icons/liferay_logo_16.png"
+			id="com.liferay.ide.server.portal.docker.runtime.image"
+			typeIds="com.liferay.ide.server.portal.docker.runtime"
 		>
 		</image>
 	</extension>
@@ -426,6 +438,7 @@
 		>
 		</launchConfigurationTabGroup>
 	</extension>
+
 	<extension
 		point="org.eclipse.debug.ui.launchConfigurationTypeImages"
 	>
