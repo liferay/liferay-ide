@@ -151,11 +151,11 @@ public interface UI {
 
 	public final String CONFIG = "Config";
 
-	public final String CONFIGURE_BUNDLE_URL = "Configure Bundle URL [Required]";
+	public final String CONFIGURE_BUNDLE_URL = "Configure Bundle URL";
 
 	public final String CONFIGURE_LIFERAY_WORKSPACE_SETTINGS = "Configure Liferay Workspace Settings";
 
-	public final String CONFIGURE_TARGET_PLATFORM_VERSION = "Configure Target Platform Version [Required]";
+	public final String CONFIGURE_TARGET_PLATFORM_VERSION = "Configure Target Platform Version";
 
 	public final String CONFIGURE_UPGRADE_PLANNER_OUTLINES = "Configure Upgrade Planner outlines";
 
@@ -193,7 +193,7 @@ public interface UI {
 
 	public final String CREATE_JSP_FILES = "Create JSP files";
 
-	public final String CREATE_NEW_LIFERAY_WORKSPACE = "Create New Liferay Workspace [Required]";
+	public final String CREATE_NEW_LIFERAY_WORKSPACE = "Create New Liferay Workspace";
 
 	public final String CREATE_NEW_PORTLET = "Create new portlet";
 
@@ -348,7 +348,7 @@ public interface UI {
 
 	public final String IMPORT = "Import...";
 
-	public final String IMPORT_EXISTING_LIFERAY_WORKSPACE = "Import Existing Liferay Workspace [Required]";
+	public final String IMPORT_EXISTING_LIFERAY_WORKSPACE = "Import Existing Liferay Workspace";
 
 	public final String IMPORT_LIFERAY_MODULE_PROJECT = "Import Liferay Module Project or Multi-Module Projects";
 
@@ -369,8 +369,6 @@ public interface UI {
 	public final String INIT_BUNDLE = "init-bundle";
 
 	public final String INITIALIZE_SERVER_BUNDLE = "Initialize Server Bundle";
-
-	public final String INITIALIZE_SERVER_BUNDLE_REQUIRED = "Initialize Server Bundle [Required]";
 
 	public final String INSTALL_NEW_SOFTWARE = "Install New Software...";
 

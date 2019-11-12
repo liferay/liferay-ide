@@ -184,8 +184,7 @@ public class UpgradePlannerTests extends SwtbotBase {
 		viewAction.upgradePlan.clickSkip();
 
 		viewAction.upgradePlan.selectStep(
-			UPGRADE_YOUR_DEVELOPMENT_ENVIRONMENT, CONFIGURE_LIFERAY_WORKSPACE_SETTINGS,
-			INITIALIZE_SERVER_BUNDLE_REQUIRED);
+			UPGRADE_YOUR_DEVELOPMENT_ENVIRONMENT, CONFIGURE_LIFERAY_WORKSPACE_SETTINGS, INITIALIZE_SERVER_BUNDLE);
 
 		viewAction.upgradePlan.clickToPerform();
 
