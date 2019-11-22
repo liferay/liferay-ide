@@ -33,7 +33,7 @@ public interface PortalServerConstants {
 
 	public IEclipsePreferences defaultPrefs = DefaultScope.INSTANCE.getNode(LiferayServerCore.PLUGIN_ID);
 
-	public String DEFAULT_MEMORY_ARGS = defaultPrefs.get("default.memory.args", "-Xmx1024m");
+	public String DEFAULT_MEMORY_ARGS = defaultPrefs.get("default.memory.args", "-Xmx2560m");
 
 	public String DEFAULT_USERNAME = "test@liferay.com";
 
