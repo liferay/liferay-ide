@@ -119,7 +119,7 @@ public class ServerCustomSettingTests extends ServerCoreBase
         final LiferayTomcatServerBehavior behavior =
             (LiferayTomcatServerBehavior) newServer.loadAdapter( LiferayTomcatServerBehavior.class, npm );
 
-        assertEquals( "-Xmx1024m", behavior.getRuntimeVMArguments()[6] );
+        assertEquals( "-Xmx2560m", behavior.getRuntimeVMArguments()[6] );
     }
 
     @Test
@@ -174,7 +174,7 @@ public class ServerCustomSettingTests extends ServerCoreBase
         final LiferayTomcatServerBehavior behavior =
             (LiferayTomcatServerBehavior) newServer.loadAdapter( LiferayTomcatServerBehavior.class, npm );
 
-        assertEquals( "-Xmx1024m", behavior.getRuntimeVMArguments()[6] );
+        assertEquals( "-Xmx2560m", behavior.getRuntimeVMArguments()[6] );
     }
 
 }
