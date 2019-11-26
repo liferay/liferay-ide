@@ -34,7 +34,7 @@ public interface ILiferayTomcatConstants {
 
 	public static final String DEFAULT_DEPLOYDIR = "webapps";
 
-	public static final String DEFAULT_MEMORY_ARGS = defaultPrefs.get("default.memory.args", "-Xmx1024m");
+	public static final String DEFAULT_MEMORY_ARGS = defaultPrefs.get("default.memory.args", "-Xmx2560m");
 
 	public static final boolean DEFAULT_USE_DEFAULT_PORTAL_SERVER_SETTING = false;
 
