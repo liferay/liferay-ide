@@ -148,7 +148,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		viewAction.project.openFile(project.getName(), "gradle.properties");
 
-		validationAction.assertContains("liferay.workspace.target.platform.version = 7.2.0", editorAction.getContent());
+		validationAction.assertContains("liferay.workspace.target.platform.version = 7.2.1", editorAction.getContent());
 
 		validationAction.assertContains("target.platform.index.sources = true", editorAction.getContent());
 
@@ -167,7 +167,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		validationAction.assertCheckedTrue(wizardAction.newLiferayWorkspace.enableTargetPlatform());
 
-		validationAction.assertTextEquals("7.2.0", wizardAction.newLiferayWorkspace.getTargetPlatform());
+		validationAction.assertTextEquals("7.2.1", wizardAction.newLiferayWorkspace.getTargetPlatform());
 
 		validationAction.assertTextEquals(StringPool.BLANK, wizardAction.newLiferayWorkspace.projectName());
 
@@ -279,7 +279,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 	public void checkTargetPlatform() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		String[] expectedTargetPlatform = {"7.0.6", "7.1.0", "7.1.1", "7.1.2", "7.1.3", "7.2.0"};
+		String[] expectedTargetPlatform = {"7.0.6", "7.1.0", "7.1.1", "7.1.2", "7.1.3", "7.2.0", "7.2.1"};
 
 		ComboBox targetPlatformComboBox = wizardAction.newLiferayWorkspace.getTargetPlatform();
 
@@ -301,7 +301,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.2");
 
-		validationAction.assertEquals(expectedTargetPlatform[5], targetPlatformComboBox.getText());
+		validationAction.assertEquals(expectedTargetPlatform[6], targetPlatformComboBox.getText());
 
 		wizardAction.cancel();
 	}

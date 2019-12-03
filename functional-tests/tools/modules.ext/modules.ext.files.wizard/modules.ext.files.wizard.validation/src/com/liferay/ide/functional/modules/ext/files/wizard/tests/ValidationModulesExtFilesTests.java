@@ -203,7 +203,7 @@ public class ValidationModulesExtFilesTests extends SwtbotBase {
 
 		wizardAction.newModulesExt.openSelectBrowseDialog();
 
-		dialogAction.prepareText("com.liferay:com.caucho");
+		dialogAction.prepareText("com.liferay:asm-util");
 
 		dialogAction.confirm();
 
@@ -212,8 +212,6 @@ public class ValidationModulesExtFilesTests extends SwtbotBase {
 		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.openProjectNewModuleExtFilesWizard(liferayWorkspace.getName(), projects.getName(0));
-
-		validationAction.assertEquals(MODULE_EXT_PROJECT_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(1));
 
 		wizardAction.newModulesExt.openAddOriginMoudleDialog();
 
