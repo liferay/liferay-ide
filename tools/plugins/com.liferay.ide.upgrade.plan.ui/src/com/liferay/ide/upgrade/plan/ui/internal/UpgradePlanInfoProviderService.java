@@ -133,6 +133,10 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 	private String _renderKBMainContent(String upgradeStepUrl) throws ClientProtocolException, IOException {
 		Connection connection = Jsoup.connect(upgradeStepUrl);
 
+		connection = connection.timeout(10000);
+
+		connection = connection.validateTLSCertificates(false);
+
 		Document document = connection.get();
 
 		StringBuffer sb = new StringBuffer();
