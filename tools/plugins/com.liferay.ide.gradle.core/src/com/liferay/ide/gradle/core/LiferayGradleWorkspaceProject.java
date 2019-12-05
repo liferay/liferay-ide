@@ -21,6 +21,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringUtil;
@@ -125,7 +126,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 			List<String> list = new ArrayList<>();
 
-			if (!output.equals("")) {
+			if (CoreUtil.isNotNullOrEmpty(output) && !output.equals("")) {
 				BufferedReader bufferedReader = new BufferedReader(new StringReader(output));
 
 				String line;
@@ -151,6 +152,11 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 				}
 				catch (IOException ioe) {
 				}
+			}
+			else {
+				LiferayGradleCore.log(
+					LiferayGradleCore.createWarningStatus(
+						new String("Please check liferay target platform dependencies.")));
 			}
 
 			_targetPlatformArtifacts = list.stream(
