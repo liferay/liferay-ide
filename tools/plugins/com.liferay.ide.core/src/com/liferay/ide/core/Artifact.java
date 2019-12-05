@@ -14,6 +14,8 @@
 
 package com.liferay.ide.core;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import java.io.File;
 
 import java.util.Objects;
@@ -111,6 +113,14 @@ public class Artifact {
 	@Override
 	public String toString() {
 		return _groupId + ":" + _artifactId + ":" + _version;
+	}
+
+	public boolean validate() {
+		if (CoreUtil.isNotNullOrEmpty(_groupId) && CoreUtil.isNotNullOrEmpty(_artifactId)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private String _artifactId;

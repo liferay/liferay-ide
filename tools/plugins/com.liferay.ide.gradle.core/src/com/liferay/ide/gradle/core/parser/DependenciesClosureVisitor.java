@@ -108,6 +108,10 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 
 			String[] groups = text.split(":");
 
+			if (groups.length < 2) {
+				return;
+			}
+
 			String version = (groups.length > 2) ? groups[2] : "";
 
 			Artifact artifact = new Artifact();
@@ -118,6 +122,15 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 			artifact.setConfiguration(_configurationName);
 
 			_dependencyArtifacts.add(artifact);
+
+			if (artifact.validate()) {
+				int[] lineNumbers = new int[2];
+
+				lineNumbers[0] = _startLineNumber;
+				lineNumbers[1] = _endLineNumber;
+
+				_dependencyArtifactsToLineNumbers.put(artifact, lineNumbers);
+			}
 
 			super.visitArgumentlistExpression(argumentListExpression);
 		}
@@ -168,16 +181,18 @@ public class DependenciesClosureVisitor extends CodeVisitorSupport {
 				}
 			}
 
-			artifact.setConfiguration(_configurationName);
+			if (artifact.validate()) {
+				artifact.setConfiguration(_configurationName);
 
-			_dependencyArtifacts.add(artifact);
+				_dependencyArtifacts.add(artifact);
 
-			int[] lineNumbers = new int[2];
+				int[] lineNumbers = new int[2];
 
-			lineNumbers[0] = _startLineNumber;
-			lineNumbers[1] = _endLineNumber;
+				lineNumbers[0] = _startLineNumber;
+				lineNumbers[1] = _endLineNumber;
 
-			_dependencyArtifactsToLineNumbers.put(artifact, lineNumbers);
+				_dependencyArtifactsToLineNumbers.put(artifact, lineNumbers);
+			}
 
 			super.visitMapExpression(expression);
 		}
