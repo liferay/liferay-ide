@@ -47,7 +47,7 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		viewAction.servers.startWatchingProject(server.getStartedLabel(), workspace.getName());
+		viewAction.servers.startWatchingWorkspaceProject(server.getStartedLabel(), workspace.getName());
 
 		jobAction.waitForConsoleContent(
 			server.getServerName() + " [Liferay 7.x]", "STARTED " + project.getName() + "_", M1);
@@ -58,7 +58,7 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 		jobAction.waitForConsoleContent(
 			server.getServerName() + " [Liferay 7.x]", "STOPPED " + project.getName() + "_", M1);
 
-		viewAction.servers.stopWatchingProject(server.getStartedLabel(), workspace.getName() + " [watching]");
+		viewAction.servers.stopWatchingWorkspaceProject(server.getStartedLabel(), workspace.getName() + " [watching]");
 
 		jobAction.waitForNoRunningJobs();
 
@@ -81,7 +81,7 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		viewAction.servers.startWatchingProject(server.getStartedLabel(), workspace.getName());
+		viewAction.servers.startWatchingWorkspaceProject(server.getStartedLabel(), workspace.getName());
 
 		jobAction.waitForConsoleContent(
 			server.getServerName() + " [Liferay 7.x]", "STARTED " + project.getName() + ".api_", M2);
@@ -102,7 +102,7 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 				server.getStartedLabel(), workspace.getName() + " [watching]",
 				project.getName() + "-service [Active]"));
 
-		viewAction.servers.stopWatchingProject(server.getStartedLabel(), workspace.getName() + " [watching]");
+		viewAction.servers.stopWatchingWorkspaceProject(server.getStartedLabel(), workspace.getName() + " [watching]");
 
 		jobAction.waitForNoRunningJobs();
 

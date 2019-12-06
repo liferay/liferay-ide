@@ -590,16 +590,16 @@ public class ViewAction extends UIAction {
 			_serversView.clickStartBtn();
 		}
 
-		public void startWatchingProject(String serverName, String workspaceName) {
-			_getServers().selectTreeItem(serverName, workspaceName);
-
-			_getServers().contextMenu(true, START_WATCHING_PROJECT, serverName, workspaceName);
-		}
-
 		public void startWatchingProject(String serverName, String workspaceName, String projectName) {
 			_getServers().selectTreeItem(serverName, workspaceName, projectName);
 
 			_getServers().contextMenu(true, START_WATCHING_PROJECT, serverName, workspaceName, projectName);
+		}
+
+		public void startWatchingWorkspaceProject(String serverName, String workspaceName) {
+			_getServers().selectTreeItem(serverName, workspaceName);
+
+			_getServers().contextMenu(true, START_WATCHING_PROJECT, serverName, workspaceName);
 		}
 
 		public void stop(String serverLabel) {
@@ -608,16 +608,16 @@ public class ViewAction extends UIAction {
 			_getServers().contextMenu(true, STOP, serverLabel);
 		}
 
-		public void stopWatchingProject(String serverName, String workspaceName) {
-			_getServers().selectTreeItem(serverName, workspaceName);
-
-			_getServers().contextMenu(true, STOP_WATCHING_PROJECT, serverName, workspaceName);
-		}
-
 		public void stopWatchingProject(String serverName, String workspaceName, String projectName) {
 			_getServers().selectTreeItem(serverName, workspaceName, projectName);
 
 			_getServers().contextMenu(true, STOP_WATCHING_PROJECT, serverName, workspaceName, projectName);
+		}
+
+		public void stopWatchingWorkspaceProject(String serverName, String workspaceName) {
+			_getServers().selectTreeItem(serverName, workspaceName);
+
+			_getServers().contextMenu(true, STOP_WATCHING_PROJECT, serverName, workspaceName);
 		}
 
 		public boolean visibleKaleoNameTry(String serverLabel, String kaleoName) {
