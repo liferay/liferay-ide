@@ -47,19 +47,80 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		viewAction.servers.startWatchingProject(server.getStartedLabel(), workspace.getName(), project.getName());
+		viewAction.servers.startWatchingWorkspaceProject(server.getStartedLabel(), workspace.getName());
 
 		jobAction.waitForConsoleContent(
 			server.getServerName() + " [Liferay 7.x]", "STARTED " + project.getName() + "_", M1);
 
-		viewAction.servers.stopWatchingProject(
-			server.getStartedLabel(), workspace.getName(), project.getName() + " [watching]");
+		viewAction.servers.removeModuleFromPortal(
+			server.getStartedLabel(), workspace.getName() + " [watching]", project.getName());
+
+		jobAction.waitForConsoleContent(
+			server.getServerName() + " [Liferay 7.x]", "STOPPED " + project.getName() + "_", M1);
+
+		viewAction.servers.stopWatchingWorkspaceProject(server.getStartedLabel(), workspace.getName() + " [watching]");
 
 		jobAction.waitForNoRunningJobs();
 
 		viewAction.project.closeAndDeleteFromDisk(workspace.getModuleFiles(project.getName()));
 
 		Assert.assertFalse(viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName()));
+	}
+
+	@Test
+	public void watchServiceBuilder() {
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_BUILDER, "7.1");
+
+		wizardAction.finish();
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.runBuildService(workspace.getName(), "modules", project.getName());
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.servers.startWatchingWorkspaceProject(server.getStartedLabel(), workspace.getName());
+
+		jobAction.waitForConsoleContent(
+			server.getServerName() + " [Liferay 7.x]", "STARTED " + project.getName() + ".api_", M2);
+
+		jobAction.waitForConsoleContent(
+			server.getServerName() + " [Liferay 7.x]", "STARTED " + project.getName() + ".service_", M2);
+
+		viewAction.servers.refreshWatchProject(server.getStartedLabel(), workspace.getName() + " [watching]");
+
+		ide.sleep();
+
+		Assert.assertTrue(
+			viewAction.servers.visibleWorkspaceTry(
+				server.getStartedLabel(), workspace.getName() + " [watching]", project.getName() + "-api [Active]"));
+
+		Assert.assertTrue(
+			viewAction.servers.visibleWorkspaceTry(
+				server.getStartedLabel(), workspace.getName() + " [watching]",
+				project.getName() + "-service [Active]"));
+
+		viewAction.servers.stopWatchingWorkspaceProject(server.getStartedLabel(), workspace.getName() + " [watching]");
+
+		jobAction.waitForNoRunningJobs();
+
+		jobAction.waitForConsoleContent(
+			server.getServerName() + " [Liferay 7.x]", "STOPPED " + project.getName() + ".api_", M2);
+
+		jobAction.waitForConsoleContent(
+			server.getServerName() + " [Liferay 7.x]", "STOPPED " + project.getName() + ".service_", M2);
+
+		viewAction.project.closeAndDeleteFromDisk(
+			workspace.getModuleFiles(project.getName(), project.getName() + "-service"));
+
+		viewAction.project.closeAndDeleteFromDisk(
+			workspace.getModuleFiles(project.getName(), project.getName() + "-api"));
+
+		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.closeAndDeleteFromDisk(workspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -70,21 +131,24 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.refreshGradleProject(workspace.getName());
 
 		viewAction.servers.startWatchingProject(server.getStartedLabel(), workspace.getName(), project.getName());
 
 		jobAction.waitForConsoleContent(
-			server.getServerName() + " [Liferay 7.x]", "STARTED " + project.getName() + "_", M2);
+			server.getServerName() + " [Liferay 7.x]", "STARTED " + project.getName() + "_", M5);
 
 		viewAction.servers.stopWatchingProject(
 			server.getStartedLabel(), workspace.getName(), project.getName() + " [watching]");
 
-		jobAction.waitForNoRunningJobs();
+		jobAction.waitForConsoleContent(
+			server.getServerName() + " [Liferay 7.x]", "STOPPED " + project.getName() + "_", M5);
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDeleteFromDisk(workspace.getWarFiles(project.getName()));
-
-		Assert.assertFalse(viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName()));
 	}
 
 	@Rule

@@ -255,7 +255,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 	public void createDefaultComponent() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), FORM_FIELD);
+		wizardAction.newModule.prepareMaven(project.getName(), ACTIVATOR);
 
 		wizardAction.finish();
 
@@ -267,7 +267,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		String packageName = project.getName() + ".form.field";
+		String packageName = project.getName();
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
