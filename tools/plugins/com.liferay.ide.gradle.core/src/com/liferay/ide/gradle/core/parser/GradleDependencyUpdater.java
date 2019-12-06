@@ -101,9 +101,6 @@ public class GradleDependencyUpdater {
 					int[] lineNumbers1 = dependenciesClosureVisitor.getDependenceLineNumbers(artifact1);
 					int[] lineNumbers2 = dependenciesClosureVisitor.getDependenceLineNumbers(artifact2);
 
-					System.out.println(artifact1);
-					System.out.println(artifact2);
-
 					return lineNumbers2[1] - lineNumbers1[1];
 				}
 
