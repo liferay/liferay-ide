@@ -559,7 +559,13 @@ public class ViewAction extends UIAction {
 			_getServers().selectTreeItem(serverName, projectName + "  [Started, Synchronized] (" + projectName + ")");
 
 			_getServers().contextMenu(
-				true, "Redeploy", serverName, projectName + "  [Started, Synchronized] (" + projectName + ")");
+				true, REDEPLOY, serverName, projectName + "  [Started, Synchronized] (" + projectName + ")");
+		}
+
+		public void refreshWatchProject(String serverName, String workspaceName) {
+			_getServers().selectTreeItem(serverName, workspaceName);
+
+			_getServers().contextMenu(true, REFRESH, serverName, workspaceName);
 		}
 
 		public void removeModule(String serverLabel, String projectName) {
@@ -567,7 +573,13 @@ public class ViewAction extends UIAction {
 
 			_getServers().setFocus();
 
-			_getServers().contextMenu(true, "Remove", serverLabel, projectName);
+			_getServers().contextMenu(true, REMOVE, serverLabel, projectName);
+		}
+
+		public void removeModuleFromPortal(String serverName, String workspaceName, String projectName) {
+			_getServers().selectTreeItem(serverName, workspaceName, projectName);
+
+			_getServers().contextMenu(true, REMOVE_MODULES_FROM_PORTAL, serverName, workspaceName, projectName);
 		}
 
 		public void start(String serverLabel) {
@@ -581,13 +593,13 @@ public class ViewAction extends UIAction {
 		public void startWatchingProject(String serverName, String workspaceName) {
 			_getServers().selectTreeItem(serverName, workspaceName);
 
-			_getServers().contextMenu(true, "Start watching project", serverName, workspaceName);
+			_getServers().contextMenu(true, START_WATCHING_PROJECT, serverName, workspaceName);
 		}
 
-		public void startWatchingProject(String serverName, String workspaceName, String... modules) {
-			_getServers().selectTreeItem(serverName, workspaceName, modules[0]);
+		public void startWatchingProject(String serverName, String workspaceName, String projectName) {
+			_getServers().selectTreeItem(serverName, workspaceName, projectName);
 
-			_getServers().contextMenu(true, "Start watching project", serverName, workspaceName, modules[0]);
+			_getServers().contextMenu(true, START_WATCHING_PROJECT, serverName, workspaceName, projectName);
 		}
 
 		public void stop(String serverLabel) {
@@ -596,10 +608,16 @@ public class ViewAction extends UIAction {
 			_getServers().contextMenu(true, STOP, serverLabel);
 		}
 
-		public void stopWatchingProject(String serverName, String workspaceName, String... modules) {
-			_getServers().selectTreeItem(serverName, workspaceName, modules[0]);
+		public void stopWatchingProject(String serverName, String workspaceName) {
+			_getServers().selectTreeItem(serverName, workspaceName);
 
-			_getServers().contextMenu(true, "Stop watching project", serverName, workspaceName, modules[0]);
+			_getServers().contextMenu(true, STOP_WATCHING_PROJECT, serverName, workspaceName);
+		}
+
+		public void stopWatchingProject(String serverName, String workspaceName, String projectName) {
+			_getServers().selectTreeItem(serverName, workspaceName, projectName);
+
+			_getServers().contextMenu(true, STOP_WATCHING_PROJECT, serverName, workspaceName, projectName);
 		}
 
 		public boolean visibleKaleoNameTry(String serverLabel, String kaleoName) {
@@ -643,6 +661,21 @@ public class ViewAction extends UIAction {
 
 		public boolean visibleServer(String serverName) {
 			return _getServers().isVisibleStartsBy(serverName);
+		}
+
+		public boolean visibleWorkspaceTry(String serverLabel, String workspaceName, String projectName) {
+			try {
+				return _getServers().isVisibleStartsBy(serverLabel, workspaceName, projectName);
+			}
+			catch (Exception e) {
+				_getServers().setFocus();
+
+				_getServers().select(serverLabel);
+
+				_getServers().expand(serverLabel);
+
+				return _getServers().isVisibleStartsBy(serverLabel, workspaceName, projectName);
+			}
 		}
 
 		private Tree _getServers() {

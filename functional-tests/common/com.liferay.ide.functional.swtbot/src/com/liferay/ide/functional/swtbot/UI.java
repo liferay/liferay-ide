@@ -682,6 +682,8 @@ public interface UI {
 
 	public final String RECORD_INTO = "Record into:";
 
+	public final String REDEPLOY = "Redeploy";
+
 	public final String REFRESH = "Refresh";
 
 	public final String REMOVE = "Remove";
@@ -689,6 +691,8 @@ public interface UI {
 	public final String REMOVE_ALL = "<< Remove All";
 
 	public final String REMOVE_GRADLE_CONSOLE = "Remove Gradle Console";
+
+	public final String REMOVE_MODULES_FROM_PORTAL = "Remove module(s) from portal";
 
 	public final String REMOVE_PLAN = "Remove Plan";
 
@@ -822,11 +826,15 @@ public interface UI {
 
 	public final String START_THE_SERVER_WITH_KEYS_MAC = "Start the server (⌥⌘R)";
 
+	public final String START_WATCHING_PROJECT = "Start watching project";
+
 	public final String STOP = "Stop";
 
 	public final String STOP_THE_SERVER_WITH_KEYS = "Stop the server (Ctrl+Alt+S)";
 
 	public final String STOP_THE_SERVER_WITH_KEYS_MAC = "Stop the server (⌥⌘S)";
+
+	public final String STOP_WATCHING_PROJECT = "Stop watching project";
 
 	public final String STRUTS_IN_ACTION = "Struts In Action";
 
