@@ -121,6 +121,16 @@ public class Eclipse extends BasePageObject {
 		return _welcomeView;
 	}
 
+	public void maximize() {
+		Shell shell = new Shell(bot);
+
+		String label = shell.getLabel();
+
+		SWTBotShell activeShell = _getShell(label);
+
+		activeShell.maximize(true);
+	}
+
 	public void showConsoleView() {
 		showView(CONSOLE);
 	}
