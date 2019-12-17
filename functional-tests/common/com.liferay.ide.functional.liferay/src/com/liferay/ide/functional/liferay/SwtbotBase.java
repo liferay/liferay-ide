@@ -131,6 +131,8 @@ public class SwtbotBase implements FileConstants, Keys, Messages, Times, UI {
 
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
 
+		ide.maximize();
+
 		ide.showErrorLogView();
 
 		viewAction.errorLog.checkErrorLog();
