@@ -87,7 +87,7 @@ public class Artifact {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(_artifactId, _groupId, _version);
+		return Objects.hash(_artifactId, _configuration, _groupId, _version);
 	}
 
 	public void setArtifactId(String artifactId) {
