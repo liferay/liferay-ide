@@ -79,4 +79,14 @@
 		>
 		</configurator>
 	</extension>
+	<extension
+		point="com.liferay.ide.server.core.dockerPublishers"
+	>
+		<liferayDockerPublisher
+			class="com.liferay.ide.gradle.core.LiferayGradleDockerDeployer"
+			id="com.liferay.ide.gradle.core.dockerDeployer"
+			name="Liferay Gradle Docker Deployer"
+		>
+		</liferayDockerPublisher>
+	</extension>
 </plugin>
