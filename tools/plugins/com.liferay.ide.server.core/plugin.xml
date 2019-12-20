@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <?eclipse version="3.4"?>
 <plugin>
+	<extension-point id="dockerPublishers" name="Liferay Docker Publisher" schema="schema/dockerPublishers.exsd" />
 	<extension-point id="pluginPublishers" name="%plugin.publishers.extension.point.name" schema="schema/pluginPublishers.exsd" />
 	<extension-point id="portalLaunchParticipants" name="Portal Launch Participants" schema="schema/portalLaunchParticipants.exsd" />
 	<extension-point id="runtimeDelegateValidators" name="%runtime.delegate.validators.extension.point.name" schema="schema/runtimeDelegateValidators.exsd" />
@@ -1700,7 +1701,7 @@
 		<publishTask
 			class="com.liferay.ide.server.core.portal.PortalPublishTask"
 			id="com.liferay.ide.server.portal.publishTask"
-			typeIds="com.liferay.ide.server.portal"
+			typeIds="com.liferay.ide.server.portal,com.liferay.ide.server.portal.docker"
 		>
 		</publishTask>
 	</extension>

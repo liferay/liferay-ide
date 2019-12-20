@@ -24,6 +24,7 @@ import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.server.core.portal.AbstractPortalBundleFactory;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
+import com.liferay.ide.server.core.portal.docker.IDockerPublisher;
 import com.liferay.ide.server.core.portal.docker.PortalDockerRuntimeLifecycleAdapter;
 import com.liferay.ide.server.core.portal.docker.PortalDockerServerLifecycleAdapter;
 import com.liferay.ide.server.remote.IRemoteServer;
@@ -134,6 +135,35 @@ public class LiferayServerCore extends Plugin {
 
 	public static LiferayServerCore getDefault() {
 		return _plugin;
+	}
+
+	public static IDockerPublisher[] getDockerPublishers() {
+		if (_dockerPublishers == null) {
+			IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
+
+			IConfigurationElement[] elements = extensionRegistry.getConfigurationElementsFor(IDockerPublisher.ID);
+
+			try {
+				List<IDockerPublisher> deployers = new ArrayList<>();
+
+				for (IConfigurationElement element : elements) {
+					Object o = element.createExecutableExtension("class");
+
+					if (o instanceof IDockerPublisher) {
+						IDockerPublisher dockerDeployer = (IDockerPublisher)o;
+
+						deployers.add(dockerDeployer);
+					}
+				}
+
+				_dockerPublishers = deployers.toArray(new IDockerPublisher[0]);
+			}
+			catch (Exception e) {
+				logError("Unable to get docker deployer extensions", e);
+			}
+		}
+
+		return _dockerPublishers;
 	}
 
 	public static URL getPluginEntry(String path) {
@@ -863,6 +893,7 @@ public class LiferayServerCore extends Plugin {
 	}
 
 	private static Map<String, IServerManagerConnection> _connections = null;
+	private static IDockerPublisher[] _dockerPublishers = null;
 	private static LiferayServerCore _plugin;
 	private static IPluginPublisher[] _pluginPublishers = null;
 	private static PortalBundleFactory[] _portalBundleFactories;
