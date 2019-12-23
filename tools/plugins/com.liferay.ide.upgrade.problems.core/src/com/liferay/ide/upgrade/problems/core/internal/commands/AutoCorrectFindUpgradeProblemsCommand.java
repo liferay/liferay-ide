@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
@@ -150,6 +151,19 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
+		Collection<UpgradeProblem> ignoredProblems = upgradePlan.getIgnoredProblems();
+
+		if ((ignoredProblems == null) || ignoredProblems.isEmpty()) {
+			Set<UpgradeProblem> ignoredProblemSet = upgradeProblems.stream(
+			).filter(
+				problem -> UpgradeProblem.STATUS_IGNORE == problem.getStatus()
+			).collect(
+				Collectors.toSet()
+			);
+
+			upgradePlan.addIgnoredProblems(ignoredProblemSet);
+		}
+
 		if (ListUtil.isNotEmpty(upgradeProblems)) {
 			boolean result = _messagePrompt.promptQuestion(
 				"Remove the found results?",
@@ -180,7 +194,9 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 			projectFile -> _fileMigration.findUpgradeProblems(
 				projectFile, upgradeVersions, Collections.singleton("auto.correct"), progressMonitor)
 		).flatMap(
-			List::stream
+			findProblems -> findProblems.stream()
+		).filter(
+			findProblem -> ListUtil.notContains((Set<UpgradeProblem>)upgradePlan.getIgnoredProblems(), findProblem)
 		).collect(
 			Collectors.toList()
 		);
