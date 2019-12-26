@@ -37,6 +37,7 @@ import org.eclipse.core.resources.IFile;
  * @author Lovett Li
  * @author Simon Jiang
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 public class GradleDependencyUpdater {
 
@@ -56,6 +57,14 @@ public class GradleDependencyUpdater {
 		AstBuilder builder = new AstBuilder();
 
 		_nodes = builder.buildFromString(CompilePhase.CONVERSION, scriptContents);
+	}
+
+	public int[] getDependenceLineNumbers(Artifact artifact) {
+		DependenciesClosureVisitor visitor = new DependenciesClosureVisitor();
+
+		_walkScript(visitor);
+
+		return visitor.getDependenceLineNumbers(artifact);
 	}
 
 	public List<Artifact> getDependencies(boolean buildscript, String configuration) {
@@ -82,13 +91,7 @@ public class GradleDependencyUpdater {
 		return _insertDependency(_toGradleDependencyString(artifact));
 	}
 
-	public void updateDependency(String dependency) throws IOException {
-		_insertDependency(dependency);
-
-		FileUtils.writeLines(_file, _gradleFileContents);
-	}
-
-	public void updateDependencyVersions(boolean buildscript, List<Artifact> artifacts) throws IOException {
+	public void updateDependencies(boolean buildscript, List<Artifact> artifacts) throws IOException {
 		DependenciesClosureVisitor dependenciesClosureVisitor = new DependenciesClosureVisitor(buildscript);
 
 		_walkScript(dependenciesClosureVisitor);
@@ -109,42 +112,64 @@ public class GradleDependencyUpdater {
 		_gradleFileContents = FileUtils.readLines(_file);
 
 		for (Artifact artifact : artifacts) {
-			int[] lineNumbers = dependenciesClosureVisitor.getDependenceLineNumbers(artifact);
-
-			if (lineNumbers.length != 2) {
-				return;
-			}
-
-			int startLineNumber = lineNumbers[0];
-
-			int endLineNumber = lineNumbers[1];
-
-			String content = _gradleFileContents.get(startLineNumber - 1);
-
-			int startPos = content.indexOf(artifact.getConfiguration());
-
-			if (startPos == -1) {
-				return;
-			}
-
-			StringBuilder dependencyBuilder = new StringBuilder(_toGradleDependencyString(artifact));
-
-			String prefixString = content.substring(0, startPos);
-
-			prefixString.chars(
-			).filter(
-				ch -> ch == '\t'
-			).asLongStream(
-			).forEach(
-				it -> dependencyBuilder.insert(0, "\t")
-			);
-
-			_gradleFileContents.set(startLineNumber - 1, dependencyBuilder.toString());
-
-			for (int i = endLineNumber - 1; i > startLineNumber - 1; i--) {
-				_gradleFileContents.remove(i);
-			}
+			updateDependency(dependenciesClosureVisitor, artifact, artifact);
 		}
+
+		FileUtils.writeLines(_file, _gradleFileContents);
+	}
+
+	public void updateDependency(boolean buildscript, Artifact oldArtifact, Artifact newArtifact) throws IOException {
+		DependenciesClosureVisitor dependenciesClosureVisitor = new DependenciesClosureVisitor(buildscript);
+
+		_walkScript(dependenciesClosureVisitor);
+
+		_gradleFileContents = FileUtils.readLines(_file);
+
+		updateDependency(dependenciesClosureVisitor, oldArtifact, newArtifact);
+
+		FileUtils.writeLines(_file, _gradleFileContents);
+	}
+
+	public void updateDependency(DependenciesClosureVisitor visitor, Artifact oldArtifact, Artifact newArtifact) {
+		int[] lineNumbers = visitor.getDependenceLineNumbers(oldArtifact);
+
+		if (lineNumbers.length != 2) {
+			return;
+		}
+
+		int startLineNumber = lineNumbers[0];
+
+		int endLineNumber = lineNumbers[1];
+
+		String content = _gradleFileContents.get(startLineNumber - 1);
+
+		int startPos = content.indexOf(oldArtifact.getConfiguration());
+
+		if (startPos == -1) {
+			return;
+		}
+
+		StringBuilder dependencyBuilder = new StringBuilder(_toGradleDependencyString(newArtifact));
+
+		String prefixString = content.substring(0, startPos);
+
+		prefixString.chars(
+		).filter(
+			ch -> ch == '\t'
+		).asLongStream(
+		).forEach(
+			it -> dependencyBuilder.insert(0, "\t")
+		);
+
+		_gradleFileContents.set(startLineNumber - 1, dependencyBuilder.toString());
+
+		for (int i = endLineNumber - 1; i > startLineNumber - 1; i--) {
+			_gradleFileContents.remove(i);
+		}
+	}
+
+	public void updateDependency(String dependency) throws IOException {
+		_insertDependency(dependency);
 
 		FileUtils.writeLines(_file, _gradleFileContents);
 	}

@@ -117,7 +117,7 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 				Collectors.toList()
 			);
 
-			gradleDependencyUpdater.updateDependencyVersions(false, dependenciesWithoutVersion);
+			gradleDependencyUpdater.updateDependencies(false, dependenciesWithoutVersion);
 		}
 		catch (IOException ioe) {
 			LiferayGradleUI.logError(ioe);

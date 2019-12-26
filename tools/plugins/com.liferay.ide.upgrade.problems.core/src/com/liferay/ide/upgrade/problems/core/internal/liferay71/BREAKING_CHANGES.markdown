@@ -1046,3 +1046,27 @@ the permissions.
 This change removes old logic that is no longer used in Liferay Portal.
 
 ---------------------------------------
+
+### Spring Extender ArtifactId Changed [](id=spring-extender-artifactid-changed)
+- **Date:** 2018-Oct-04
+- **JIRA Ticket:** LPS-85710
+
+#### What changed? [](id=what-changed-25)
+
+The dependency artifactId for the spring extender dependencies have changed.
+com.liferay.portal.spring.extender changed as com.liferay.portal.spring.extender.api.
+
+#### Who is affected? [](id=what-is-affected-25)
+
+This affects the service builder project in Liferay portal of 7.1.x.
+
+#### How should I update my code? [](id=how-should-i-update-my-code-25)
+
+You should change the dependency from com.liferay.portal.spring.extender to
+com.liferay.portal.spring.extender.api.
+
+#### Why was this change made? [](id=why-was-this-change-made-25)
+This change is needed by Liferay portal 7.1.x or high version, otherwise the service builder
+project will not work.
+
+---------------------------------------
