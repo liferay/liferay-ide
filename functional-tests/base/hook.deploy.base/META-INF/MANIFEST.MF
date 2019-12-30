@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Functional Hook Deploy Base
 Bundle-SymbolicName: com.liferay.ide.functional.hook.deploy.base
-Bundle-Version: 3.7.1.qualifier
+Bundle-Version: 3.8.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.functional.liferay,
  com.liferay.ide.functional.swtbot,
