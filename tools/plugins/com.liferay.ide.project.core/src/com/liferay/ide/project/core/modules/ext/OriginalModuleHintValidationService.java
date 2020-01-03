@@ -49,7 +49,7 @@ public class OriginalModuleHintValidationService extends ValidationService imple
 		URI uri = get(moduleExtOp.getSourceFileURI());
 
 		if (uri == null) {
-			return Status.createWarningStatus("Unable to identify original module source in current context.");
+			return Status.createErrorStatus("Unable to identify original module source in current context.");
 		}
 
 		return Status.createOkStatus();
