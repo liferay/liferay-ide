@@ -29,7 +29,7 @@ public interface Messages {
 
 	public static final String A_PROJECT_WITH_THAT_NAME_ALREADY_EXISTS = "A project with that name already exists.";
 
-	public static final String ADD_SOURCE_FILES_TO_OVERRIDE = "Add Source Files To Override";
+	public static final String ADD_SOURCE_FILES_TO_OVERRIDE = "Add files from original module to override";
 
 	public static final String ALREADY_EXISTS = " already exists.";
 

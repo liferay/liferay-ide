@@ -78,7 +78,7 @@
                     <scale-vertically>true</scale-vertically>
                 </property-editor>
             </content>
-            <description>Add JSP files to a exsicting fragment project</description>
+            <description>Add JSP files to an existing fragment project</description>
             <scale-vertically>true</scale-vertically>
             <margin-right>10</margin-right>
             <scroll-vertically>true</scroll-vertically>
@@ -90,6 +90,6 @@
             <margin>0</margin>
             <image>NewModuleFragmentWizard.png</image>
         </page>
-        <description>Add JSP files to a exsicting fragment project</description>
+        <description>Add JSP files to an existing fragment project</description>
     </wizard>
 </definition>
