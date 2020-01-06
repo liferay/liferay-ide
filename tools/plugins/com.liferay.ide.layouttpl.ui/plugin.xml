@@ -37,7 +37,7 @@
 			name="%layout.wizard.name"
 		>
 			<class class="com.liferay.ide.layouttpl.ui.wizard.NewLayoutTplWizard">
-				<parameter name="liferay_artifact" value="true" />
+				<parameter name="liferay_plugin_artifact" value="true" />
 				<parameter name="menuIndex" value="40" />
 				<parameter name="validProjectTypes" value="layouttpl" />
 			</class>

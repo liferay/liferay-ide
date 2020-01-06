@@ -17,7 +17,7 @@
 			name="%service.wizard.name"
 		>
 			<class class="com.liferay.ide.service.ui.wizard.NewServiceBuilderWizard">
-				<parameter name="liferay_artifact" value="true" />
+				<parameter name="liferay_plugin_artifact" value="true" />
 				<parameter name="menuIndex" value="30" />
 				<parameter name="validProjectTypes" value="portlet,hook,ext" />
 			</class>

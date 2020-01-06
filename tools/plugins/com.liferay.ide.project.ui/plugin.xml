@@ -27,52 +27,7 @@
 		</wizard>
 		<wizard
 			category="com.liferay.ide.newWizards"
-			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
-			icon="icons/n16/bundle_new.png"
-			id="com.liferay.ide.project.ui.newModuleFragmentWizard"
-			name="Liferay Module Project Fragment"
-			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
-			project="true"
-		>
-			<class class="com.liferay.ide.project.ui.modules.fragment.NewModuleFragmentWizard">
-				<parameter name="liferay_project" value="true" />
-				<parameter name="menuIndex" value="2" />
-			</class>
-
-			<description>
-			Create a project for developing Liferay Module Fragment to deploy to Liferay Portal Server
-			</description>
-			<selection
-				class="org.eclipse.core.resources.IResource"
-			>
-			</selection>
-		</wizard>
-
-		<wizard
-			category="com.liferay.ide.newWizards"
-			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
-			icon="icons/n16/bundle_new.png"
-			id="com.liferay.ide.project.ui.newModuleExtWizard"
-			name="Liferay Module Ext Project"
-			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
-			project="true"
-		>
-			<class class="com.liferay.ide.project.ui.modules.ext.NewModuleExtWizard">
-				<parameter name="liferay_project" value="true" />
-				<parameter name="menuIndex" value="1" />
-			</class>
-
-			<description>
-			Create a project for developing Liferay Module Ext to deploy to Liferay Portal Server
-			</description>
-			<selection
-				class="org.eclipse.core.resources.IResource"
-			>
-			</selection>
-		</wizard>
-
-		<wizard
-			category="com.liferay.ide.newWizards"
+			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
 			icon="icons/n16/bundle_new.png"
 			id="com.liferay.ide.project.ui.newModuleExtFilesWizard"
 			name="Liferay Module Ext Files"
@@ -80,9 +35,11 @@
 			<class
 				class="com.liferay.ide.project.ui.modules.ext.NewModuleExtFilesWizard"
 			>
+				<parameter name="liferay_artifact" value="false" />
+				<parameter name="menuIndex" value="2" />
 			</class>
 			<description>
-			Liferay Module Ext Files
+				Create a project for developing Liferay Module Ext Files to deploy to Liferay Portal Server
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"
@@ -92,40 +49,36 @@
 
 		<wizard
 			category="com.liferay.ide.newWizards"
+			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
 			icon="icons/n16/bundle_new.png"
 			id="com.liferay.ide.project.ui.newModuleFragmentFilesWizard"
 			name="Liferay Module Fragment Files"
 		>
-			<class class="com.liferay.ide.project.ui.modules.fragment.NewModuleFragmentFilesWizard" />
+			<class class="com.liferay.ide.project.ui.modules.fragment.NewModuleFragmentFilesWizard">
+				<parameter name="liferay_artifact" value="false" />
+				<parameter name="menuIndex" value="3" />
+			</class>
 			<description>
-			Liferay Module Fragment Files
+				Create a project for developing Liferay Module Fragment Files to deploy to Liferay Portal Server
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"
 			>
 			</selection>
 		</wizard>
-	</extension>
-	<extension
-		point="org.eclipse.ui.newWizards"
-	>
-		<category
-			id="com.liferay.ide.newWizards"
-			name="%category.name"
-		>
-		</category>
+
 		<wizard
 			category="com.liferay.ide.newWizards"
-			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
-			icon="icons/n16/plugin_new.png"
-			id="com.liferay.ide.project.ui.newPluginProjectWizard"
-			name="%new.plugin.project.wizard.name"
-			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
+			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
+			icon="icons/n16/liferay_faces_new.png"
+			id="com.liferay.ide.project.ui.newJsfModuleProjectWizard"
+			name="Liferay JSF Project"
+			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
 			project="true"
 		>
-			<class class="com.liferay.ide.project.ui.wizard.NewLiferayPluginProjectWizard">
+			<class class="com.liferay.ide.project.ui.modules.NewLiferayJSFModuleProjectWizard">
 				<parameter name="liferay_project" value="true" />
-				<parameter name="menuIndex" value="4" />
+				<parameter name="menuIndex" value="1" />
 			</class>
 
 			<description>
@@ -136,9 +89,10 @@
 			>
 			</selection>
 		</wizard>
+
 		<wizard
 			category="com.liferay.ide.newWizards"
-			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
+			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
 			icon="icons/n16/bundle_new.png"
 			id="com.liferay.ide.project.ui.newModuleProjectWizard"
 			name="Liferay Module Project"
@@ -147,7 +101,53 @@
 		>
 			<class class="com.liferay.ide.project.ui.modules.NewLiferayModuleProjectWizard">
 				<parameter name="liferay_project" value="true" />
-				<parameter name="menuIndex" value="1" />
+				<parameter name="menuIndex" value="2" />
+			</class>
+
+			<description>
+			%new.project.wizard.description
+			</description>
+			<selection
+				class="org.eclipse.core.resources.IResource"
+			>
+			</selection>
+		</wizard>
+
+		<wizard
+			category="com.liferay.ide.newWizards"
+			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
+			icon="icons/n16/bundle_new.png"
+			id="com.liferay.ide.project.ui.newModuleExtWizard"
+			name="Liferay Module Ext Project"
+			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
+			project="true"
+		>
+			<class class="com.liferay.ide.project.ui.modules.ext.NewModuleExtWizard">
+				<parameter name="liferay_project" value="true" />
+				<parameter name="menuIndex" value="3" />
+			</class>
+
+			<description>
+			%new.project.wizard.description
+			</description>
+			<selection
+				class="org.eclipse.core.resources.IResource"
+			>
+			</selection>
+		</wizard>
+
+		<wizard
+			category="com.liferay.ide.newWizards"
+			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
+			icon="icons/n16/bundle_new.png"
+			id="com.liferay.ide.project.ui.newModuleFragmentWizard"
+			name="Liferay Module Project Fragment"
+			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
+			project="true"
+		>
+			<class class="com.liferay.ide.project.ui.modules.fragment.NewModuleFragmentWizard">
+				<parameter name="liferay_project" value="true" />
+				<parameter name="menuIndex" value="4" />
 			</class>
 
 			<description>
@@ -191,10 +191,32 @@
 		>
 			<class class="com.liferay.ide.project.ui.workspace.NewLiferayWorkspaceWizard">
 				<parameter name="liferay_project" value="true" />
-				<parameter name="menuIndex" value="3" />
+				<parameter name="menuIndex" value="5" />
 			</class>
 			<description>
 			Create a new Liferay Workspace project for developing modules and themes for Liferay 7
+			</description>
+			<selection
+				class="org.eclipse.core.resources.IResource"
+			>
+			</selection>
+		</wizard>
+		<wizard
+			category="com.liferay.ide.newWizards"
+			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
+			icon="icons/n16/plugin_new.png"
+			id="com.liferay.ide.project.ui.newPluginProjectWizard"
+			name="%new.plugin.project.wizard.name"
+			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
+			project="true"
+		>
+			<class class="com.liferay.ide.project.ui.wizard.NewLiferayPluginProjectWizard">
+				<parameter name="liferay_plugin_project" value="true" />
+				<parameter name="menuIndex" value="1" />
+			</class>
+
+			<description>
+			%new.project.wizard.description
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"
@@ -211,31 +233,12 @@
 			project="true"
 		>
 			<class class="com.liferay.ide.project.ui.wizard.ImportSDKProjectsWizard">
-			</class>
-			<description>
-			%import.projects.sdk.wizard.description
-			</description>
-			<selection
-				class="org.eclipse.core.resources.IResource"
-			>
-			</selection>
-		</wizard>
-		<wizard
-			category="com.liferay.ide.newWizards"
-			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
-			icon="icons/n16/liferay_faces_new.png"
-			id="com.liferay.ide.project.ui.newJsfModuleProjectWizard"
-			name="Liferay JSF Project"
-			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
-			project="true"
-		>
-			<class class="com.liferay.ide.project.ui.modules.NewLiferayJSFModuleProjectWizard">
-				<parameter name="liferay_project" value="true" />
-				<parameter name="menuIndex" value="1" />
+				<parameter name="liferay_plugin_project" value="false" />
+				<parameter name="menuIndex" value="2" />
 			</class>
 
 			<description>
-			Create a project for developing Liferay JSF Module to deploy to Liferay Portal Server
+				%import.projects.sdk.wizard.description
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"
@@ -396,30 +399,28 @@
 			Liferay Plugins SDK Directory
 			</description>
 		</wizard>
-		<!--
-<wizard
-	category="com.liferay.ide.projects.import"
-	class="com.liferay.ide.project.ui.wizard.BinaryProjectImportWizard"
-	icon="icons/e16/import.png"
-	id="com.liferay.ide.project.ui.wizard.PluginBinaryProjectImportWizard"
-	name="%import.binary.plugin.wizard.name"
->
-		 <description>
-			%import.binary.plugin.wizard.description
-		 </description>
-	  </wizard>
-<wizard
-	category="com.liferay.ide.projects.import"
-	class="com.liferay.ide.project.ui.wizard.BinaryProjectsImportWizard"
-	icon="icons/e16/import.png"
-	id="com.liferay.ide.project.ui.wizard.PluginBinaryProjectImportWizard"
-	name="%import.binary.plugins.wizard.name"
->
-		 <description>
-			%import.binary.plugins.wizard.description
-		 </description>
-	  </wizard>
-	  -->
+		<!-- <wizard
+				category="com.liferay.ide.projects.import"
+				class="com.liferay.ide.project.ui.wizard.BinaryProjectImportWizard"
+				icon="icons/e16/import.png"
+				id="com.liferay.ide.project.ui.wizard.PluginBinaryProjectImportWizard"
+				name="%import.binary.plugin.wizard.name"
+		>
+			<description>
+				%import.binary.plugin.wizard.description
+			</description>
+		</wizard>
+		<wizard
+			category="com.liferay.ide.projects.import"
+			class="com.liferay.ide.project.ui.wizard.BinaryProjectsImportWizard"
+			icon="icons/e16/import.png"
+			id="com.liferay.ide.project.ui.wizard.PluginBinaryProjectImportWizard"
+			name="%import.binary.plugins.wizard.name"
+		>
+			<description>
+				%import.binary.plugins.wizard.description
+			</description>
+		</wizard> -->
 		<wizard
 			category="com.liferay.ide.projects.import"
 			class="com.liferay.ide.project.ui.modules.ImportLiferayModuleProjectWizard"
@@ -461,7 +462,11 @@
 				</and>
 			</visibility>
 		</objectContribution>
-		<objectContribution adaptable="true" id="com.liferay.ide.ui.popupmenu" objectClass="org.eclipse.core.resources.IResource">
+		<objectContribution
+			adaptable="true"
+			id="com.liferay.ide.ui.popupmenu"
+			objectClass="org.eclipse.core.resources.IResource"
+		>
 			<menu
 				icon="icons/liferay_logo_16.png"
 				id="liferayPopupMenuCategory"
@@ -673,40 +678,38 @@
 		</decorator>
 	</extension>
 
-	<!--
-<extension
-	point="org.eclipse.ui.preferencePages"
->
-<page
-	category="com.liferay.ide.ui.preferences.liferay"
-	class="com.liferay.ide.project.ui.pref.ProjectValidationSettingsPage"
-	id="com.liferay.ide.project.ui.validation"
-	name="Project Validation"
->
-	  </page>
-</extension>
-<extension
-	point="org.eclipse.ui.propertyPages"
->
-<page
-	category="com.liferay.ide.project.ui.properties"
-	class="com.liferay.ide.project.ui.pref.ProjectValidationSettingsPage"
-	id="com.liferay.ide.project.ui.propertyPage.project.validation"
-	name="Project Validation"
->
-		 <enabledWhen>
-<adapt
-	type="org.eclipse.core.resources.IProject"
->
-<test
-	property="com.liferay.ide.project.ui.isLiferayProject"
->
-			   </test>
-			</adapt>
-		 </enabledWhen>
-	  </page>
-</extension>
--->
+	<!-- <extension
+		point="org.eclipse.ui.preferencePages"
+		>
+		<page
+			category="com.liferay.ide.ui.preferences.liferay"
+			class="com.liferay.ide.project.ui.pref.ProjectValidationSettingsPage"
+			id="com.liferay.ide.project.ui.validation"
+			name="Project Validation"
+		>
+		</page>
+	</extension>
+	<extension
+		point="org.eclipse.ui.propertyPages"
+	>
+		<page
+			category="com.liferay.ide.project.ui.properties"
+			class="com.liferay.ide.project.ui.pref.ProjectValidationSettingsPage"
+			id="com.liferay.ide.project.ui.propertyPage.project.validation"
+			name="Project Validation"
+		>
+			<enabledWhen>
+				<adapt
+					type="org.eclipse.core.resources.IProject"
+				>
+					<test
+						property="com.liferay.ide.project.ui.isLiferayProject"
+					>
+					</test>
+				</adapt>
+			</enabledWhen>
+		</page>
+	</extension> -->
 
 	<extension
 		point="org.eclipse.ui.actionSets"
@@ -715,35 +718,50 @@
 			id="com.liferay.ide.eclipse.ui.shortcuts.actionSet"
 			label="%ide.actions.label"
 		>
-			<!--
-<action
-	class="com.liferay.ide.project.ui.action.NewServerDropDownAction"
-	icon="icons/n16/server_new.png"
-	id="com.liferay.ide.ui.action.newLiferayServer"
-	label="%new.server.action.label"
-	style="pulldown"
-	toolbarPath="Normal/Liferay"
-	tooltip="%new.server.action.tooltip"
->
-		 </action>
-<action
-	class="com.liferay.ide.project.ui.action.NewPortletDropDownAction"
-	icon="icons/n16/portlet_new.png"
-	id="com.liferay.ide.ui.action.newPortlet"
-	label="%new.portlet.action.label"
-	style="pulldown"
-	toolbarPath="Normal/Liferay"
-	tooltip="%new.portlet.action.tooltip"
->
-		 </action> -->
+			<!-- <action
+				class="com.liferay.ide.project.ui.action.NewServerDropDownAction"
+				icon="icons/n16/server_new.png"
+				id="com.liferay.ide.ui.action.newLiferayServer"
+				label="%new.server.action.label"
+				style="pulldown"
+				toolbarPath="Normal/Liferay"
+				tooltip="%new.server.action.tooltip"
+			>
+			</action>
 			<action
-				class="com.liferay.ide.project.ui.action.NewPluginProjectDropDownAction"
+				class="com.liferay.ide.project.ui.action.NewPortletDropDownAction"
+				icon="icons/n16/portlet_new.png"
+				id="com.liferay.ide.ui.action.newPortlet"
+				label="%new.portlet.action.label"
+				style="pulldown"
+				toolbarPath="Normal/Liferay"
+				tooltip="%new.portlet.action.tooltip"
+			>
+			</action> -->
+
+			<action
+				class="com.liferay.ide.project.ui.action.NewProjectDropDownAction"
+				icon="icons/n16/server_new.png"
+				id="com.liferay.ide.ui.action.newProject"
+				label="%new.project.action.label"
+				style="pulldown"
+				toolbarPath="Normal/Liferay"
+				tooltip="%new.project.action.tooltip"
+			>
+			</action>
+		</actionSet>
+		<actionSet
+			id="com.liferay.ide.eclipse.ui.shortcuts.plugin.actionSet"
+			label="%ide.actions.label"
+		>
+			<action
+				class="com.liferay.ide.project.ui.action.NewProjectDropDownAction"
 				icon="icons/n16/server_new.png"
 				id="com.liferay.ide.ui.action.newPluginProject"
 				label="%new.project.action.label"
 				style="pulldown"
 				toolbarPath="Normal/Liferay"
-				tooltip="%new.project.action.tooltip"
+				tooltip="%new.plugin.project.action.tooltip"
 			>
 			</action>
 		</actionSet>
@@ -1570,29 +1588,6 @@
 			</triggerPoints>
 			<commonWizard
 				type="new"
-				wizardId="com.liferay.ide.project.ui.newModuleProjectWizard"
-			>
-				<enablement>
-					<or>
-						<instanceof
-							value="org.eclipse.core.resources.IResource"
-						>
-						</instanceof>
-						<and>
-							<instanceof
-								value="java.util.Collection"
-							>
-							</instanceof>
-							<count
-								value="0"
-							>
-							</count>
-						</and>
-					</or>
-				</enablement>
-			</commonWizard>
-			<commonWizard
-				type="new"
 				wizardId="com.liferay.ide.project.ui.modules.NewLiferayComponentWizard"
 			>
 				<enablement>
@@ -1616,25 +1611,17 @@
 			</commonWizard>
 			<commonWizard
 				type="new"
-				wizardId="com.liferay.ide.project.ui.workspace.newLiferayWorkspaceWizard"
+				wizardId="com.liferay.ide.project.ui.newModuleExtFilesWizard"
 			>
 				<enablement>
-					<or>
-						<instanceof
-							value="org.eclipse.core.resources.IResource"
-						>
-						</instanceof>
-						<and>
-							<instanceof
-								value="java.util.Collection"
-							>
-							</instanceof>
-							<count
-								value="0"
-							>
-							</count>
-						</and>
-					</or></enablement>
+					<adapt type="org.eclipse.core.resources.IResource">
+						<test
+							forcePluginActivation="true"
+							property="com.liferay.ide.project.ui.isModuleExtProject"
+							value="true"
+						/>
+					</adapt>
+				</enablement>
 			</commonWizard>
 			<commonWizard
 				type="new"
@@ -1656,20 +1643,76 @@
 							>
 							</count>
 						</and>
-					</or></enablement>
+					</or>
+				</enablement>
 			</commonWizard>
 			<commonWizard
 				type="new"
-				wizardId="com.liferay.ide.project.ui.newModuleExtFilesWizard"
+				wizardId="com.liferay.ide.project.ui.newModuleProjectWizard"
 			>
 				<enablement>
-					<adapt type="org.eclipse.core.resources.IResource">
-						<test
-							forcePluginActivation="true"
-							property="com.liferay.ide.project.ui.isModuleExtProject"
-							value="true"
-						/>
-					</adapt>
+					<or>
+						<instanceof
+							value="org.eclipse.core.resources.IResource"
+						>
+						</instanceof>
+						<and>
+							<instanceof
+								value="java.util.Collection"
+							>
+							</instanceof>
+							<count
+								value="0"
+							>
+							</count>
+						</and>
+					</or>
+				</enablement>
+			</commonWizard>
+			<commonWizard
+				type="new"
+				wizardId="com.liferay.ide.project.ui.newJsfModuleProjectWizard"
+			>
+				<enablement>
+					<or>
+						<instanceof
+							value="org.eclipse.core.resources.IResource"
+						>
+						</instanceof>
+						<and>
+							<instanceof
+								value="java.util.Collection"
+							>
+							</instanceof>
+							<count
+								value="0"
+							>
+							</count>
+						</and>
+					</or>
+				</enablement>
+			</commonWizard>
+			<commonWizard
+				type="new"
+				wizardId="com.liferay.ide.project.ui.newModuleExtWizard"
+			>
+				<enablement>
+					<or>
+						<instanceof
+							value="org.eclipse.core.resources.IResource"
+						>
+						</instanceof>
+						<and>
+							<instanceof
+								value="java.util.Collection"
+							>
+							</instanceof>
+							<count
+								value="0"
+							>
+							</count>
+						</and>
+					</or>
 				</enablement>
 			</commonWizard>
 			<commonWizard
@@ -1692,35 +1735,12 @@
 							>
 							</count>
 						</and>
-					</or></enablement>
+					</or>
+				</enablement>
 			</commonWizard>
-
 			<commonWizard
 				type="new"
-				wizardId="com.liferay.ide.project.ui.newModuleExtWizard"
-			>
-				<enablement>
-					<or>
-						<instanceof
-							value="org.eclipse.core.resources.IResource"
-						>
-						</instanceof>
-						<and>
-							<instanceof
-								value="java.util.Collection"
-							>
-							</instanceof>
-							<count
-								value="0"
-							>
-							</count>
-						</and>
-					</or></enablement>
-			</commonWizard>
-
-			<commonWizard
-				type="new"
-				wizardId="com.liferay.ide.project.ui.newJsfModuleProjectWizard"
+				wizardId="com.liferay.ide.project.ui.workspace.newLiferayWorkspaceWizard"
 			>
 				<enablement>
 					<or>
@@ -1786,6 +1806,59 @@
 					</or></enablement>
 			</commonWizard>
 		</navigatorContent>
+		<navigatorContent
+			activeByDefault="true"
+			contentProvider="org.eclipse.ui.internal.navigator.resources.workbench.ResourceExtensionContentProvider"
+			icon="icons/n16/bundle_new.png"
+			id="com.liferay.ide.project.ui.wizards.plugincontent"
+			labelProvider="org.eclipse.ui.internal.navigator.resources.workbench.ResourceExtensionLabelProvider"
+			name="Liferay Plugin Project"
+			priority="lowest"
+		>
+			<triggerPoints>
+				<or>
+					<instanceof
+						value="org.eclipse.core.resources.IResource"
+					>
+					</instanceof>
+				</or>
+			</triggerPoints>
+			<commonWizard
+				type="new"
+				wizardId="com.liferay.ide.project.ui.newPluginProjectWizard"
+			>
+				<enablement>
+					<or>
+						<instanceof
+							value="org.eclipse.core.resources.IResource"
+						>
+						</instanceof>
+						<and>
+							<instanceof
+								value="java.util.Collection"
+							>
+							</instanceof>
+							<count
+								value="0"
+							>
+							</count>
+						</and>
+					</or>
+				</enablement>
+			</commonWizard>
+		</navigatorContent>
+	</extension>
+
+	<extension
+		point="org.eclipse.ui.navigator.viewer"
+	>
+		<viewerContentBinding
+			viewerId="org.eclipse.ui.navigator.PackagetExplorer"
+		>
+			<includes>
+				<contentExtension pattern="com.liferay.ide.project.ui.wizards.plugincontent" />
+			</includes>
+		</viewerContentBinding>
 	</extension>
 	<extension
 		point="org.eclipse.ui.navigator.viewer"

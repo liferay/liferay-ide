@@ -17,8 +17,8 @@
 			name="%liferay.portlet.wizard.name"
 		>
 			<class class="com.liferay.ide.portlet.ui.wizard.NewPortletWizard">
-				<parameter name="liferay_artifact" value="true" />
-				<parameter name="menuIndex" value="10" />
+				<parameter name="liferay_extra_artifact" value="true" />
+				<parameter name="menuIndex" value="1" />
 				<parameter name="validProjectTypes" value="portlet" />
 			</class>
 			<description>
@@ -34,7 +34,7 @@
 		>
 			<class class="com.liferay.ide.portlet.ui.jsf.NewJSFPortletWizard">
 				<parameter name="liferay_extra_artifact" value="true" />
-				<parameter name="menuIndex" value="10" />
+				<parameter name="menuIndex" value="2" />
 				<parameter name="validProjectTypes" value="portlet" />
 			</class>
 			<description>
@@ -49,7 +49,7 @@
 		>
 			<class class="com.liferay.ide.portlet.vaadin.ui.wizard.NewVaadinPortletWizard">
 				<parameter name="liferay_extra_artifact" value="true" />
-				<parameter name="menuIndex" value="20" />
+				<parameter name="menuIndex" value="3" />
 				<parameter name="validProjectTypes" value="portlet" />
 			</class>
 			<description>

@@ -209,7 +209,7 @@
 			name="Liferay Kaleo Workflow"
 		>
 			<class class="com.liferay.ide.kaleo.ui.wizard.NewWorkflowDefinitionWizard">
-				<parameter name="liferay_extra_artifact" value="true" />
+				<parameter name="liferay_kaleo_workflow" value="true" />
 				<parameter name="menuIndex" value="30" />
 			</class>
 		</wizard>
