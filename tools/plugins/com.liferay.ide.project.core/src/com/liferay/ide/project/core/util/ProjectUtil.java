@@ -38,6 +38,8 @@ import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PluginFacetProjectCreationDataModelProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
+import com.liferay.ide.project.core.modules.templates.BndProperties;
+import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -117,6 +119,7 @@ import org.osgi.framework.Version;
  * @author Kuo Zhang
  * @author Terry Jia
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 @SuppressWarnings("restriction")
 public class ProjectUtil {
@@ -914,6 +917,43 @@ public class ProjectUtil {
 		IPreset preset = ProjectFacetsManager.getPreset(presetId);
 
 		return preset.getProjectFacets();
+	}
+
+	public static String getFragmentHost(IProject project) {
+		IFile bndFile = project.getFile("bnd.bnd");
+
+		if (FileUtil.notExists(bndFile)) {
+			return null;
+		}
+
+		try {
+			BndProperties bnd = new BndProperties();
+
+			bnd.load(FileUtil.getFile(bndFile));
+
+			BndPropertiesValue fragmentHost = (BndPropertiesValue)bnd.get("Fragment-Host");
+
+			if (fragmentHost != null) {
+				String fragmentHostValue = fragmentHost.getOriginalValue();
+
+				String[] b = fragmentHostValue.split(";");
+
+				if (ListUtil.isNotEmpty(b) && (b.length > 1)) {
+					String[] f = b[1].split("=");
+
+					String version = f[1].substring(1, f[1].length() - 1);
+
+					return b[0] + "-" + version;
+				}
+			}
+
+			return null;
+		}
+		catch (IOException ioe) {
+			ProjectCore.logError("Failed to parsed bnd.bnd for project " + project.getName(), ioe);
+		}
+
+		return null;
 	}
 
 	public static IProjectFacet getLiferayFacet(IFacetedProject facetedProject) {

@@ -15,24 +15,18 @@
 package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.modules.templates.BndProperties;
-import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
+import com.liferay.ide.project.core.util.ProjectUtil;
 
-import java.io.IOException;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.sapphire.DerivedValueService;
+import org.eclipse.sapphire.DefaultValueService;
 
 /**
  * @author Terry Jia
  * @author Andy Wu
+ * @author Seiphon Wang
  */
-public class HostOSGiBundleDefaultValueService extends DerivedValueService implements SapphireContentAccessor {
+public class HostOSGiBundleDefaultValueService extends DefaultValueService implements SapphireContentAccessor {
 
 	@Override
 	protected String compute() {
@@ -46,40 +40,7 @@ public class HostOSGiBundleDefaultValueService extends DerivedValueService imple
 
 		IProject project = CoreUtil.getProject(projectName);
 
-		IFile bndFile = project.getFile("bnd.bnd");
-
-		if (FileUtil.notExists(bndFile)) {
-			return null;
-		}
-
-		try {
-			BndProperties bnd = new BndProperties();
-
-			bnd.load(FileUtil.getFile(bndFile));
-
-			BndPropertiesValue fragmentHost = (BndPropertiesValue)bnd.get("Fragment-Host");
-
-			if (fragmentHost != null) {
-				String fragmentHostValue = fragmentHost.getOriginalValue();
-
-				String[] b = fragmentHostValue.split(";");
-
-				if (ListUtil.isNotEmpty(b) && (b.length > 1)) {
-					String[] f = b[1].split("=");
-
-					String version = f[1].substring(1, f[1].length() - 1);
-
-					return b[0] + "-" + version;
-				}
-			}
-
-			return null;
-		}
-		catch (IOException ioe) {
-			ProjectCore.logError("Failed to parsed bnd.bnd for project " + project.getName(), ioe);
-		}
-
-		return null;
+		return ProjectUtil.getFragmentHost(project);
 	}
 
 	private NewModuleFragmentFilesOp _op() {

@@ -17,13 +17,16 @@ package com.liferay.ide.project.ui.modules.fragment;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentFilesOp;
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.ui.INewWizard;
@@ -67,6 +70,11 @@ public class NewModuleFragmentFilesWizard
 
 				if ((bundleProject != null) && bundleProject.isFragmentBundle()) {
 					element().setProjectName(_initialProject.getName());
+					element().setHostOsgiBundle(ProjectUtil.getFragmentHost(_initialProject));
+
+					IPath projectLocation = _initialProject.getLocation();
+
+					element().setLocation(PathBridge.create(projectLocation.removeLastSegments(1)));
 				}
 			}
 		}

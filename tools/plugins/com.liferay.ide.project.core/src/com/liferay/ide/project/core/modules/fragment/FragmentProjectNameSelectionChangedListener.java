@@ -12,19 +12,13 @@
  * details.
  */
 
-package com.liferay.ide.project.core.modules.ext;
+package com.liferay.ide.project.core.modules.fragment;
 
-import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
-
-import java.io.File;
-
-import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
@@ -37,27 +31,28 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Seiphon Wang
  */
-public class ModuleExtProjectNameSelectionChangedListener extends ModuleExtProjectNameListener {
+public class FragmentProjectNameSelectionChangedListener extends FragmentProjectNameListener {
 
 	@Override
 	protected void handleTypedEvent(PropertyContentEvent event) {
-		_updateOriginalModules(op(event));
+		_updateProject(op(event));
 	}
 
-	protected NewModuleExtFilesOp op(PropertyContentEvent event) {
+	@Override
+	protected NewModuleFragmentFilesOp op(PropertyContentEvent event) {
 		Property property = event.property();
 
 		Element element = property.element();
 
-		return element.nearest(NewModuleExtFilesOp.class);
+		return element.nearest(NewModuleFragmentFilesOp.class);
 	}
 
-	private void _updateOriginalModules(NewModuleExtFilesOp op) {
-		IProject project = ProjectUtil.getProject(get(op.getModuleExtProjectName()));
+	private void _updateProject(NewModuleFragmentFilesOp op) {
+		IProject project = ProjectUtil.getProject(get(op.getProjectName()));
 
-		ILiferayProject extProject = LiferayCore.create(ILiferayProject.class, project);
+		ILiferayProject fragmentProject = LiferayCore.create(ILiferayProject.class, project);
 
-		IProjectBuilder projectBuilder = extProject.adapt(IProjectBuilder.class);
+		IProjectBuilder projectBuilder = fragmentProject.adapt(IProjectBuilder.class);
 
 		if (projectBuilder == null) {
 			ProjectCore.logWarning("Please wait for synchronized jobs to finish.");
@@ -65,31 +60,14 @@ public class ModuleExtProjectNameSelectionChangedListener extends ModuleExtProje
 			return;
 		}
 
-		List<Artifact> dependencies = projectBuilder.getDependencies("originalModule");
-
-		if (!dependencies.isEmpty()) {
-			Artifact artifact = dependencies.get(0);
-
-			File sourceFile = artifact.getSource();
-
-			if (FileUtil.exists(sourceFile)) {
-				op.setSourceFileURI(sourceFile.toURI());
-			}
-			else {
-				op.setSourceFileURI(null);
-			}
-
-			op.setOriginalModuleName(artifact.getArtifactId());
-			op.setOriginalModuleVersion(artifact.getVersion());
-		}
-
 		op.setProjectName(project.getName());
+		op.setHostOsgiBundle(ProjectUtil.getFragmentHost(project));
 
 		IPath projectLocation = project.getLocation();
 
 		op.setLocation(PathBridge.create(projectLocation.removeLastSegments(1)));
 
-		ElementList<OverrideSourceEntry> overrideFiles = op.getOverrideFiles();
+		ElementList<OverrideFilePath> overrideFiles = op.getOverrideFiles();
 
 		overrideFiles.clear();
 	}
