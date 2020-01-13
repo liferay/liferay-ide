@@ -62,7 +62,7 @@ public class WorkspaceConstants {
 
 	public static final String PLUGINS_SDK_DIR_PROPERTY = "liferay.workspace.plugins.sdk.dir";
 
-	public static final String[] SPRING_FRAMEWORK = {"Portlet MVC For Spring", "Spring Portlet MVC"};
+	public static final String[] SPRING_FRAMEWORK = {"PortletMVC4Spring", "Spring Portlet MVC"};
 
 	public static final String[] SPRING_FRAMEWORK_DEPENDENCIES = {"Embedded", "Provided"};
 

@@ -40,7 +40,7 @@
 			</class>
 
 			<description>
-			%new.project.wizard.description
+			Create a project for developing Liferay Module Fragment to deploy to Liferay Portal Server
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"
@@ -63,7 +63,7 @@
 			</class>
 
 			<description>
-			%new.project.wizard.description
+			Create a project for developing Liferay Module Ext to deploy to Liferay Portal Server
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"
@@ -151,7 +151,7 @@
 			</class>
 
 			<description>
-			%new.project.wizard.description
+			Create a project for developing Liferay Module to deploy to Liferay Portal Server
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"
@@ -161,9 +161,9 @@
 		<wizard
 			category="com.liferay.ide.newWizards"
 			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
-			icon="icons/n16/bundle_new.png"
+			icon="icons/n16/spring.png"
 			id="com.liferay.ide.project.ui.newSpringProjectWizard"
-			name="Liferay Spring MVC Project"
+			name="Liferay Spring MVC Portlet"
 			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
 			project="true"
 		>
@@ -173,7 +173,7 @@
 			</class>
 
 			<description>
-			%new.project.wizard.description
+			Create a project for developing Liferay Spring MVC Portlet to deploy to Liferay Portal Server
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"
@@ -235,7 +235,7 @@
 			</class>
 
 			<description>
-			%new.project.wizard.description
+			Create a project for developing Liferay JSF Module to deploy to Liferay Portal Server
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"

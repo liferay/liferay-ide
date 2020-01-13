@@ -22,10 +22,10 @@
     <wizard>
         <id>NewLiferaySpringProjectWizard</id>
         <element-type>com.liferay.ide.project.core.spring.NewLiferaySpringProjectOp</element-type>
-        <label>New Liferay Spring MVC Project</label>
+        <label>New Liferay Spring MVC Portlet</label>
         <page>
             <id>LiferaySpringProjectWizardPage</id>
-            <label>Liferay Spring MVC Project</label>
+            <label>Liferay Spring MVC Portlet</label>
             <content>
                 <property-editor>ProjectName</property-editor>
                 <spacer/>
@@ -49,7 +49,7 @@
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
                 </custom>
             </content>
-            <description>Enter a name for a new Liferay Spring MVC Project.</description>
+            <description>Enter a name for a new Liferay Spring MVC Portlet Project.</description>
             <scale-vertically>true</scale-vertically>
             <margin-right>10</margin-right>
             <scroll-vertically>true</scroll-vertically>
@@ -61,11 +61,11 @@
             <margin>0</margin>
             <image>NewLiferaySpringProjectWizard.png</image>
         </page>
-        <description>Create a new project configured as a Liferay Spring MVC Project</description>
+        <description>Create a new project configured as a Liferay Spring MVC Portlet</description>
          <page>
             <id>LiferaySpringSettingWizardPage</id>
-            <label>Liferay Spring MVC Project</label>
-            <description>Configure Spring Setting</description>
+            <label>Liferay Spring MVC Portlet</label>
+            <description>Framework Selection and Configuration</description>
             <content>
                 <custom>
                     <scale-vertically>true</scale-vertically>
@@ -74,17 +74,7 @@
             </content>type filter text
             <margin-right>10</margin-right>
             <margin-left>0</margin-left>
+            <image>NewLiferaySpringProjectWizard.png</image>
         </page>       
-        <page>
-            <id>LiferaProjectSettingWizardPage</id>
-            <label>Liferay Spring MVC Project</label>
-            <description>Configure Package Name</description>
-            <content>
-                 <property-editor>PackageName</property-editor>
-            </content>
-            <initial-focus>PackageName</initial-focus>
-            <margin-right>10</margin-right>
-            <margin-left>0</margin-left>
-        </page>
     </wizard>
 </definition>

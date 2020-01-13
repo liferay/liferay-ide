@@ -21,6 +21,7 @@ import com.liferay.ide.project.core.spring.NewLiferaySpringProjectOp;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValuePropertyContentEvent;
@@ -33,6 +34,8 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Text;
 
 /**
  * @author Simon Jiang
@@ -131,9 +134,39 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 
 					});
 
+				SWTUtil.createVerticalSpacer(parent, 2, 2);
+
+				SWTUtil.createSeparator(parent, 2);
+
+				SWTUtil.createVerticalSpacer(parent, 2, 2);
+
+				SWTUtil.createLabel(parent, "Package Name:", 1);
+
+				Display pageDdisplay = parent.getDisplay();
+
+				_packageNameText = SWTUtil.createSingleText(parent, 1);
+
+				_packageNameText.setForeground(pageDdisplay.getSystemColor(SWT.COLOR_DARK_GRAY));
+
+				_packageNameText.setText(get(_op().getProjectName()));
+
+				_packageNameText.addModifyListener(
+					new ModifyListener() {
+
+						@Override
+						public void modifyText(ModifyEvent e) {
+							if (_packageNameText.equals(e.getSource())) {
+								String value = _packageNameText.getText();
+
+								_op().setPackageName(value);
+							}
+						}
+
+					});
+
 				_intializeSpringConfigurationData(get(_op().getLiferayVersion()));
 
-				_listener = new FilteredListener<ValuePropertyContentEvent>() {
+				_liferayVersionListener = new FilteredListener<ValuePropertyContentEvent>() {
 
 					@Override
 					protected void handleTypedEvent(final ValuePropertyContentEvent valueChangeEvent) {
@@ -153,7 +186,7 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 
 				Value<Object> liferayVersionProperty = _op().property(NewLiferaySpringProjectOp.PROP_LIFERAY_VERSION);
 
-				liferayVersionProperty.attach(_listener);
+				liferayVersionProperty.attach(_liferayVersionListener);
 			}
 
 		};
@@ -161,10 +194,16 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 
 	@Override
 	public void dispose() {
-		if (_listener != null) {
+		if (_liferayVersionListener != null) {
 			Value<Object> liferayVersion = _op().property(NewLiferaySpringProjectOp.PROP_LIFERAY_VERSION);
 
-			liferayVersion.detach(_listener);
+			liferayVersion.detach(_liferayVersionListener);
+		}
+
+		if (_projectNameListener != null) {
+			Value<Object> projectName = _op().property(NewLiferaySpringProjectOp.PROP_PROJECT_NAME);
+
+			projectName.detach(_projectNameListener);
 		}
 
 		super.dispose();
@@ -186,6 +225,32 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 			_op().setFrameworkDependencies(WorkspaceConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
 			_op().setViewType(WorkspaceConstants.SPRING_VIEW_TYPE[0]);
 		}
+
+		_projectNameListener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				PropertyDef eventDef = SapphireUtil.getPropertyDef(event);
+
+				if (eventDef.equals(NewLiferaySpringProjectOp.PROP_PROJECT_NAME)) {
+					String packageName = _getPackageName(get(_op().getProjectName()));
+
+					if (packageName != null) {
+						if (_packageNameText == null) {
+							_op().setPackageName(packageName);
+						}
+						else {
+							_packageNameText.setText(packageName);
+						}
+					}
+				}
+			}
+
+		};
+
+		Value<Object> projectNameProperty = _op().property(NewLiferaySpringProjectOp.PROP_PROJECT_NAME);
+
+		projectNameProperty.attach(_projectNameListener);
 	}
 
 	private void _clearSpringConfigurationData() {
@@ -200,6 +265,16 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 		if (_frameworkCombo != null) {
 			_viewTypeCombo.removeAll();
 		}
+	}
+
+	private String _getPackageName(String projectName) {
+		if (projectName != null) {
+			String packageNameText = projectName.replace('-', '.');
+
+			return packageNameText.replace(' ', '.');
+		}
+
+		return null;
 	}
 
 	private void _intializeSpringConfigurationData(String liferayVersion) {
@@ -227,7 +302,9 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 
 	private Combo _frameworkCombo;
 	private Combo _frameworkDependenciesCombo;
-	private FilteredListener<ValuePropertyContentEvent> _listener;
+	private FilteredListener<ValuePropertyContentEvent> _liferayVersionListener;
+	private Text _packageNameText;
+	private FilteredListener<PropertyContentEvent> _projectNameListener;
 	private Combo _viewTypeCombo;
 
 }
