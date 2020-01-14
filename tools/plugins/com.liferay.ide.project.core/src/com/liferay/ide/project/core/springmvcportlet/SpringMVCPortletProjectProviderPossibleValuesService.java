@@ -12,9 +12,11 @@
  * details.
  */
 
-package com.liferay.ide.project.core.service;
+package com.liferay.ide.project.core.springmvcportlet;
 
-import com.liferay.ide.core.workspace.WorkspaceConstants;
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,19 +26,32 @@ import java.util.Set;
 import org.eclipse.sapphire.PossibleValuesService;
 
 /**
- * @author Terry Jia
+ * @author Simon Jiang
  */
-public class TargetPlatformPossibleValuesService extends PossibleValuesService {
+public class SpringMVCPortletProjectProviderPossibleValuesService extends PossibleValuesService {
+
+	@Override
+	public boolean ordered() {
+		return true;
+	}
 
 	@Override
 	protected void compute(Set<String> values) {
-		List<String> possibleValues = new ArrayList<>();
+		values.addAll(_possibleValues);
+	}
 
-		for (String[] liferayTargetPlatformVersions : WorkspaceConstants.liferayTargetPlatformVersions.values()) {
-			Collections.addAll(possibleValues, liferayTargetPlatformVersions);
+	protected void initPossibleValuesService() {
+		_possibleValues = new ArrayList<>();
+
+		for (ILiferayProjectProvider provider : LiferayCore.getProviders("spring-mvc-portlet")) {
+			if (provider instanceof NewLiferayProjectProvider<?>) {
+				_possibleValues.add(provider.getShortName());
+			}
 		}
 
-		values.addAll(possibleValues);
+		Collections.sort(_possibleValues);
 	}
+
+	private List<String> _possibleValues;
 
 }

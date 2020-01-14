@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.commands.ui.internal.code;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.WorkspaceConstants;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.commands.core.code.ConfigureTargetPlatformVersionCommandKeys;
 import com.liferay.ide.upgrade.commands.ui.internal.UpgradeCommandsUIPlugin;

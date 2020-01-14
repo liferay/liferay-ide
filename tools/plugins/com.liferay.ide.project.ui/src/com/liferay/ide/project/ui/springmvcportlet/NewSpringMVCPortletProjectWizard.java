@@ -12,12 +12,12 @@
  * details.
  */
 
-package com.liferay.ide.project.ui.modules;
+package com.liferay.ide.project.ui.springmvcportlet;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.model.ProjectName;
-import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
+import com.liferay.ide.project.core.springmvcportlet.NewSpringMVCPortletProjectOp;
 import com.liferay.ide.project.ui.BaseProjectWizard;
 import com.liferay.ide.project.ui.ProjectUI;
 
@@ -31,10 +31,10 @@ import org.eclipse.sapphire.ui.def.DefinitionLoader;
 /**
  * @author Simon Jiang
  */
-public class NewLiferayModuleProjectWizard extends BaseProjectWizard<NewLiferayModuleProjectOp> {
+public class NewSpringMVCPortletProjectWizard extends BaseProjectWizard<NewSpringMVCPortletProjectOp> {
 
-	public NewLiferayModuleProjectWizard() {
-		super(_createDefaultOp(), DefinitionLoader.sdef(NewLiferayModuleProjectWizard.class).wizard());
+	public NewSpringMVCPortletProjectWizard() {
+		super(_createDefaultOp(), DefinitionLoader.sdef(NewSpringMVCPortletProjectWizard.class).wizard());
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class NewLiferayModuleProjectWizard extends BaseProjectWizard<NewLiferayM
 
 		final List<IProject> projects = new ArrayList<>();
 
-		final NewLiferayModuleProjectOp op = element().nearest(NewLiferayModuleProjectOp.class);
+		final NewSpringMVCPortletProjectOp op = element().nearest(NewSpringMVCPortletProjectOp.class);
 
 		ElementList<ProjectName> projectNames = op.getProjectNames();
 
@@ -71,8 +71,8 @@ public class NewLiferayModuleProjectWizard extends BaseProjectWizard<NewLiferayM
 		}
 	}
 
-	private static NewLiferayModuleProjectOp _createDefaultOp() {
-		return NewLiferayModuleProjectOp.TYPE.instantiate();
+	private static NewSpringMVCPortletProjectOp _createDefaultOp() {
+		return NewSpringMVCPortletProjectOp.TYPE.instantiate();
 	}
 
 }

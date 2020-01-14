@@ -47,6 +47,7 @@ Export-Package: com.liferay.ide.project.core,
  com.liferay.ide.project.core.modules,
  com.liferay.ide.project.core.modules.ext,
  com.liferay.ide.project.core.modules.fragment,
+ com.liferay.ide.project.core.springmvcportlet,
  com.liferay.ide.project.core.util,
  com.liferay.ide.project.core.workspace
 Bundle-ClassPath: lib/jackson-core-asl-1.9.13.jar,

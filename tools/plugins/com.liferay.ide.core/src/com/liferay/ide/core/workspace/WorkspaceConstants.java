@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.core.util;
+package com.liferay.ide.core.workspace;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +55,8 @@ public class WorkspaceConstants {
 	public static final String HOME_DIR_PROPERTY = "liferay.workspace.home.dir";
 
 	public static final String LIFERAY_HOME_PROPERTY = "liferayHome";
+
+	public static final String[] LIFERAY_VERSIONS = {"7.0", "7.1", "7.2", "7.3"};
 
 	public static final String MODULES_DIR_PROPERTY = "liferay.workspace.modules.dir";
 

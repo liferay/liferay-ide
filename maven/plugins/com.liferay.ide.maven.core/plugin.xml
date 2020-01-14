@@ -56,6 +56,15 @@
 			shortName="maven-jsf"
 		>
 		</liferayProjectProvider>
+		<liferayProjectProvider
+			class="com.liferay.ide.maven.core.NewMavenSpringMVCPortletProjectProvider"
+			displayName="Maven"
+			id="com.liferay.ide.maven.core.mavenSpringMVCPortletProjectProvider"
+			priority="high"
+			projectType="spring-mvc-portlet"
+			shortName="maven-spring-mvc-portlet"
+		>
+		</liferayProjectProvider>
 	</extension>
 	<extension
 		point="com.liferay.ide.core.liferayProjectProviders"

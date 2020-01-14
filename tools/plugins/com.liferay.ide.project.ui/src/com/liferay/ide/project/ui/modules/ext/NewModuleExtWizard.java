@@ -18,8 +18,8 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.JobUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
+import com.liferay.ide.project.ui.BaseProjectWizard;
 import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.modules.BaseProjectWizard;
 import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IProject;

@@ -12,23 +12,22 @@
  * details.
  */
 
-package com.liferay.ide.project.core.service;
+package com.liferay.ide.project.core.springmvcportlet;
 
-import com.liferay.ide.core.workspace.WorkspaceConstants;
-
-import java.util.Set;
-
-import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
- * @author Joye Luo
- * @author Terry Jia
+ * @author Simon Jiang
  */
-public class TargetLiferayVersionPossibleValuesService extends PossibleValuesService {
+public class SpringMVCPortletProjectUseDefaultLocationListener extends SpringMVCPortletProjectNameListener {
 
 	@Override
-	protected void compute(Set<String> values) {
-		values.addAll(WorkspaceConstants.liferayTargetPlatformVersions.keySet());
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		NewSpringMVCPortletProjectOp op = op(event);
+
+		if (get(op.getUseDefaultLocation())) {
+			super.handleTypedEvent(event);
+		}
 	}
 
 }

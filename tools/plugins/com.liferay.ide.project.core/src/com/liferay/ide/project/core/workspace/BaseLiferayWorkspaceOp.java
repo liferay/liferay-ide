@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.util.WorkspaceConstants;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;

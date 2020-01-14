@@ -12,12 +12,11 @@
  * details.
  */
 
-package com.liferay.ide.project.core.service;
+package com.liferay.ide.project.core.springmvcportlet;
 
-import com.liferay.ide.core.workspace.WorkspaceConstants;
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.ProjectCore;
-
-import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
@@ -27,31 +26,29 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
 
 /**
- * @author Joye Luo
- * @author Terry Jia
+ * @author Simon Jiang
  */
-public class TargetLiferayVersionDefaultValueService extends DefaultValueService {
+public class SpringMVCPortletProjectProviderDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected String compute() {
-		Set<String> liferayTargetPlatformVersions = WorkspaceConstants.liferayTargetPlatformVersions.keySet();
-
-		String[] versions = liferayTargetPlatformVersions.toArray(new String[0]);
-
-		String defaultValue = versions[versions.length - 1];
-
-		IScopeContext[] scopeContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
+		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 
-		String defaultLiferayVersion = preferencesService.getString(
-			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, null, scopeContexts);
+		String defaultProjectBuildType = preferencesService.getString(
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_SPRING_MVC_PORTLET_PROJECT_BUILD_TYPE_OPTION, null,
+			prefContexts);
 
-		if (defaultLiferayVersion != null) {
-			defaultValue = defaultLiferayVersion;
+		if (defaultProjectBuildType != null) {
+			ILiferayProjectProvider provider = LiferayCore.getProvider(defaultProjectBuildType);
+
+			if (provider != null) {
+				return defaultProjectBuildType;
+			}
 		}
 
-		return defaultValue;
+		return "gradle-spring-mvc-portlet";
 	}
 
 }

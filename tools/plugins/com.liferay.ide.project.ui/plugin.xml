@@ -40,7 +40,7 @@
 			</class>
 
 			<description>
-			%new.project.wizard.description
+			Create a project for developing Liferay Module Fragment to deploy to Liferay Portal Server
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"
@@ -63,7 +63,7 @@
 			</class>
 
 			<description>
-			%new.project.wizard.description
+			Create a project for developing Liferay Module Ext to deploy to Liferay Portal Server
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"
@@ -151,7 +151,29 @@
 			</class>
 
 			<description>
-			%new.project.wizard.description
+			Create a project for developing Liferay Module to deploy to Liferay Portal Server
+			</description>
+			<selection
+				class="org.eclipse.core.resources.IResource"
+			>
+			</selection>
+		</wizard>
+		<wizard
+			category="com.liferay.ide.newWizards"
+			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
+			icon="icons/n16/portletMVC4Spring_16x16_new.png"
+			id="com.liferay.ide.project.ui.newSpringMVCPortletProjectWizard"
+			name="Liferay Spring MVC Portlet Project"
+			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
+			project="true"
+		>
+			<class class="com.liferay.ide.project.ui.springmvcportlet.NewSpringMVCPortletProjectWizard">
+				<parameter name="liferay_project" value="true" />
+				<parameter name="menuIndex" value="1" />
+			</class>
+
+			<description>
+			Creates a new Liferay Spring MVC Portlet project for deploy to Liferay Portal
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"
@@ -213,7 +235,7 @@
 			</class>
 
 			<description>
-			%new.project.wizard.description
+			Create a project for developing Liferay JSF Module to deploy to Liferay Portal Server
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"

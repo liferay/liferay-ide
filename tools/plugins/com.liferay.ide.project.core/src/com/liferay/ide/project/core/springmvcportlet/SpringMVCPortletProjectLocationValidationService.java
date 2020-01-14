@@ -12,23 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.project.core.service;
+package com.liferay.ide.project.core.springmvcportlet;
 
-import com.liferay.ide.core.workspace.WorkspaceConstants;
-
-import java.util.Set;
-
-import org.eclipse.sapphire.PossibleValuesService;
+import com.liferay.ide.project.core.modules.AbstractProjectLocationValidationService;
 
 /**
- * @author Joye Luo
- * @author Terry Jia
+ * @author Simon Jiang
  */
-public class TargetLiferayVersionPossibleValuesService extends PossibleValuesService {
+public class SpringMVCPortletProjectLocationValidationService
+	extends AbstractProjectLocationValidationService<NewSpringMVCPortletProjectOp> {
 
 	@Override
-	protected void compute(Set<String> values) {
-		values.addAll(WorkspaceConstants.liferayTargetPlatformVersions.keySet());
+	protected NewSpringMVCPortletProjectOp op() {
+		return context(NewSpringMVCPortletProjectOp.class);
 	}
 
 }

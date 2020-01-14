@@ -16,8 +16,8 @@ package com.liferay.ide.project.ui.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.ui.BaseProjectWizard;
 import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.modules.BaseProjectWizard;
 import com.liferay.ide.ui.util.ProjectExplorerLayoutUtil;
 
 import org.eclipse.core.resources.IProject;
