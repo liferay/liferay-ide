@@ -41,7 +41,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Simon Jiang
  */
-public class MavenSpringProjectProvider
+public class NewMavenSpringMVCPortletProjectProvider
 	extends LiferayMavenProjectProvider
 	implements NewLiferayProjectProvider<NewLiferaySpringProjectOp>, SapphireContentAccessor {
 
