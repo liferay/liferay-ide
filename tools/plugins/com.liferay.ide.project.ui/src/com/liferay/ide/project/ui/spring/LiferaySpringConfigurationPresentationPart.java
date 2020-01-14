@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.spring.NewLiferaySpringProjectOp;
+import com.liferay.ide.project.core.spring.SpringMVCPortletProjectConstants;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.sapphire.FilteredListener;
@@ -64,12 +65,12 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 							if (_frameworkCombo.equals(e.getSource())) {
 								String value = _frameworkCombo.getText();
 
-								if (value.equals(WorkspaceConstants.SPRING_FRAMEWORK[0])) {
+								if (value.equals(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK[0])) {
 									_frameworkDependenciesCombo.removeAll();
 									_frameworkDependenciesCombo.setItems(
-										WorkspaceConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
+										SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
 								}
-								else if (value.equals(WorkspaceConstants.SPRING_FRAMEWORK[1])) {
+								else if (value.equals(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK[1])) {
 									_frameworkDependenciesCombo.removeAll();
 
 									String version = get(_op().getLiferayVersion());
@@ -78,11 +79,11 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 										version.equals(WorkspaceConstants.LIFERAY_VERSIONS[2])) {
 
 										_frameworkDependenciesCombo.setItems(
-											WorkspaceConstants.SPRING_FRAMEWORK_DEPENDENCIES);
+											SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES);
 									}
 									else {
 										_frameworkDependenciesCombo.setItems(
-											WorkspaceConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
+											SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
 									}
 								}
 
@@ -216,14 +217,14 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 		String liferayVersion = get(_op().getLiferayVersion());
 
 		if (liferayVersion.equals(WorkspaceConstants.LIFERAY_VERSIONS[0])) {
-			_op().setFramework(WorkspaceConstants.SPRING_FRAMEWORK[1]);
-			_op().setFrameworkDependencies(WorkspaceConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
-			_op().setViewType(WorkspaceConstants.SPRING_VIEW_TYPE[0]);
+			_op().setFramework(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK[1]);
+			_op().setFrameworkDependencies(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
+			_op().setViewType(SpringMVCPortletProjectConstants.SPRING_VIEW_TYPE[0]);
 		}
 		else {
-			_op().setFramework(WorkspaceConstants.SPRING_FRAMEWORK[0]);
-			_op().setFrameworkDependencies(WorkspaceConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
-			_op().setViewType(WorkspaceConstants.SPRING_VIEW_TYPE[0]);
+			_op().setFramework(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK[0]);
+			_op().setFrameworkDependencies(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
+			_op().setViewType(SpringMVCPortletProjectConstants.SPRING_VIEW_TYPE[0]);
 		}
 
 		_projectNameListener = new FilteredListener<PropertyContentEvent>() {
@@ -281,14 +282,14 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 		_clearSpringConfigurationData();
 
 		if (liferayVersion.equals(WorkspaceConstants.LIFERAY_VERSIONS[0])) {
-			_frameworkCombo.setItems(WorkspaceConstants.SPRING_FRAMEWORK[1]);
-			_frameworkDependenciesCombo.setItems(WorkspaceConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
-			_viewTypeCombo.setItems(WorkspaceConstants.SPRING_VIEW_TYPE);
+			_frameworkCombo.setItems(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK[1]);
+			_frameworkDependenciesCombo.setItems(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
+			_viewTypeCombo.setItems(SpringMVCPortletProjectConstants.SPRING_VIEW_TYPE);
 		}
 		else {
-			_frameworkCombo.setItems(WorkspaceConstants.SPRING_FRAMEWORK);
-			_frameworkDependenciesCombo.setItems(WorkspaceConstants.SPRING_FRAMEWORK_DEPENDENCIES);
-			_viewTypeCombo.setItems(WorkspaceConstants.SPRING_VIEW_TYPE);
+			_frameworkCombo.setItems(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK);
+			_frameworkDependenciesCombo.setItems(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES);
+			_viewTypeCombo.setItems(SpringMVCPortletProjectConstants.SPRING_VIEW_TYPE);
 		}
 
 		_frameworkCombo.select(0);

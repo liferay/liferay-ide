@@ -20,11 +20,11 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.spring.NewLiferaySpringProjectOp;
+import com.liferay.ide.project.core.spring.SpringMVCPortletProjectConstants;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -115,7 +115,7 @@ public class GradleSpringProjectProvider
 		if (framework != null) {
 			sb.append("--framework ");
 
-			Map<String, String> springframeworks = WorkspaceConstants.springFrameworks;
+			Map<String, String> springframeworks = SpringMVCPortletProjectConstants.springFrameworks;
 
 			sb.append(springframeworks.get(framework));
 
@@ -125,7 +125,7 @@ public class GradleSpringProjectProvider
 		if (viewType != null) {
 			sb.append("--view-type ");
 
-			Map<String, String> springviewtypes = WorkspaceConstants.springViewTypes;
+			Map<String, String> springviewtypes = SpringMVCPortletProjectConstants.springViewTypes;
 
 			sb.append(springviewtypes.get(viewType));
 
@@ -135,7 +135,8 @@ public class GradleSpringProjectProvider
 		if (dependencyInjector != null) {
 			sb.append("--dependency-injector ");
 
-			Map<String, String> springdependenciesinjectors = WorkspaceConstants.springDependenciesInjectors;
+			Map<String, String> springdependenciesinjectors =
+				SpringMVCPortletProjectConstants.springDependenciesInjectors;
 
 			sb.append(springdependenciesinjectors.get(dependencyInjector));
 
@@ -145,7 +146,8 @@ public class GradleSpringProjectProvider
 		if (frameworkDependencies != null) {
 			sb.append("--framework-dependencies ");
 
-			Map<String, String> springframeworkdependeices = WorkspaceConstants.springFrameworkDependeices;
+			Map<String, String> springframeworkdependeices =
+				SpringMVCPortletProjectConstants.springFrameworkDependeices;
 
 			sb.append(springframeworkdependeices.get(frameworkDependencies));
 

@@ -14,14 +14,14 @@
 
 package com.liferay.ide.project.core.service;
 
+import com.liferay.ide.core.workspace.WorkspaceConstants;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.sapphire.PossibleValuesService;
-
-import com.liferay.ide.core.workspace.WorkspaceConstants;
 
 /**
  * @author Terry Jia
