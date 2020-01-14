@@ -37,11 +37,11 @@
 		>
 		</liferayProjectProvider>
 		<liferayProjectProvider
-			class="com.liferay.ide.gradle.core.GradleSpringProjectProvider"
+			class="com.liferay.ide.gradle.core.NewGradleSpringMVCPortletProjectProvider"
 			displayName="Gradle"
-			id="com.liferay.ide.gradle.core.gradleSpringProjectProvider"
-			projectType="spring"
-			shortName="gradle-spring"
+			id="com.liferay.ide.gradle.core.gradleSpringMVCPortletProjectProvider"
+			projectType="spring-mvc-portlet"
+			shortName="gradle-spring-mvc-portlet"
 		>
 		</liferayProjectProvider>
 	</extension>

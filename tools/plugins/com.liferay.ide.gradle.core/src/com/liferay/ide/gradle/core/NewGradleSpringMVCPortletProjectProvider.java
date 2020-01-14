@@ -44,11 +44,11 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Simon Jiang
  */
-public class GradleSpringProjectProvider
+public class NewGradleSpringMVCPortletProjectProvider
 	extends AbstractLiferayProjectProvider
 	implements NewLiferayProjectProvider<NewLiferaySpringProjectOp>, SapphireContentAccessor {
 
-	public GradleSpringProjectProvider() {
+	public NewGradleSpringMVCPortletProjectProvider() {
 		super(new Class<?>[] {IProject.class});
 	}
 
