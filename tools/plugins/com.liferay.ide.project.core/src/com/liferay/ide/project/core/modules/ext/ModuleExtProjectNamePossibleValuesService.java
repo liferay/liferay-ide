@@ -28,12 +28,19 @@ import org.eclipse.sapphire.PossibleValuesService;
 /**
  * @author Seiphon Wang
  * @author Terry Jia
+ * @author Ashley Yuan
  */
 public class ModuleExtProjectNamePossibleValuesService extends PossibleValuesService {
 
 	@Override
 	protected void compute(Set<String> values) {
-		IPath extDirLocation = LiferayWorkspaceUtil.getExtDirLocation(LiferayWorkspaceUtil.getWorkspaceProject());
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		if (workspaceProject == null) {
+			return;
+		}
+
+		IPath extDirLocation = LiferayWorkspaceUtil.getExtDirLocation(workspaceProject);
 
 		values.addAll(
 			Stream.of(
