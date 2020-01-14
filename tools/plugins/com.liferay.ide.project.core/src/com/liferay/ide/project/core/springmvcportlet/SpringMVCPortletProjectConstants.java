@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.project.core.spring;
+package com.liferay.ide.project.core.springmvcportlet;
 
 import java.util.HashMap;
 import java.util.Map;

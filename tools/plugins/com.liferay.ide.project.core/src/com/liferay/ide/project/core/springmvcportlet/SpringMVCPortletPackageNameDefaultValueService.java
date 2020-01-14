@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.project.core.spring;
+package com.liferay.ide.project.core.springmvcportlet;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
@@ -24,7 +24,7 @@ import org.eclipse.sapphire.PropertyContentEvent;
 /**
  * @author Simon Jiang
  */
-public class SpringMVCPortletComponentNameDefaultValueService
+public class SpringMVCPortletPackageNameDefaultValueService
 	extends DefaultValueService implements SapphireContentAccessor {
 
 	@Override
@@ -47,13 +47,9 @@ public class SpringMVCPortletComponentNameDefaultValueService
 		String projectName = get(op.getProjectName());
 
 		if (projectName != null) {
-			String className = _getClassName(projectName);
+			String packageName = projectName.replace('-', '.');
 
-			if ((className.length() > 7) && className.endsWith("Portlet")) {
-				className = className.substring(0, className.length() - 7);
-			}
-
-			retVal = className;
+			retVal = packageName.replace(' ', '.');
 		}
 
 		return retVal;
@@ -77,63 +73,8 @@ public class SpringMVCPortletComponentNameDefaultValueService
 		SapphireUtil.attachListener(op.property(NewSpringMVCPortletProjectOp.PROP_PROJECT_NAME), _listener);
 	}
 
-	private static String _capitalize(String s, char separator) {
-		StringBuilder sb = new StringBuilder(s.length());
-
-		sb.append(s);
-
-		for (int i = 0; i < sb.length(); i++) {
-			char c = sb.charAt(i);
-
-			if ((i == 0) || (sb.charAt(i - 1) == separator)) {
-				c = Character.toUpperCase(c);
-			}
-
-			sb.setCharAt(i, c);
-		}
-
-		return sb.toString();
-	}
-
-	private String _getCapitalizedName(String name) {
-		name = name.replace('-', ' ');
-		name = name.replace('.', ' ');
-
-		return _capitalize(name, ' ');
-	}
-
-	private String _getClassName(String name) {
-		name = _getCapitalizedName(name);
-
-		return _removeChar(name, ' ');
-	}
-
 	private NewSpringMVCPortletProjectOp _op() {
 		return context(NewSpringMVCPortletProjectOp.class);
-	}
-
-	private String _removeChar(String s, char c) {
-		int y = s.indexOf(c);
-
-		if (y == -1) {
-			return s;
-		}
-
-		StringBuilder sb = new StringBuilder(s.length());
-
-		int x = 0;
-
-		while (x <= y) {
-			sb.append(s.substring(x, y));
-
-			x = y + 1;
-
-			y = s.indexOf(c, x);
-		}
-
-		sb.append(s.substring(x));
-
-		return sb.toString();
 	}
 
 	private FilteredListener<PropertyContentEvent> _listener;

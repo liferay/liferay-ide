@@ -17,8 +17,8 @@ package com.liferay.ide.project.ui.spring;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
-import com.liferay.ide.project.core.spring.NewSpringMVCPortletProjectOp;
-import com.liferay.ide.project.core.spring.SpringMVCPortletProjectConstants;
+import com.liferay.ide.project.core.springmvcportlet.NewSpringMVCPortletProjectOp;
+import com.liferay.ide.project.core.springmvcportlet.SpringMVCPortletProjectConstants;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.sapphire.FilteredListener;

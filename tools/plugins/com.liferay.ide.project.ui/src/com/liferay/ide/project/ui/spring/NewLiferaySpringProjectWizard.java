@@ -17,7 +17,7 @@ package com.liferay.ide.project.ui.spring;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.model.ProjectName;
-import com.liferay.ide.project.core.spring.NewSpringMVCPortletProjectOp;
+import com.liferay.ide.project.core.springmvcportlet.NewSpringMVCPortletProjectOp;
 import com.liferay.ide.project.ui.BaseProjectWizard;
 import com.liferay.ide.project.ui.ProjectUI;
 

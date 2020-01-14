@@ -23,8 +23,8 @@ import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.spring.NewSpringMVCPortletProjectOp;
-import com.liferay.ide.project.core.spring.SpringMVCPortletProjectConstants;
+import com.liferay.ide.project.core.springmvcportlet.NewSpringMVCPortletProjectOp;
+import com.liferay.ide.project.core.springmvcportlet.SpringMVCPortletProjectConstants;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 

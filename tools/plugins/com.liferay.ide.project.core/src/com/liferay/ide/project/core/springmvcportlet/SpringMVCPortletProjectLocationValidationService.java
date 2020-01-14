@@ -12,22 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.project.core.spring;
+package com.liferay.ide.project.core.springmvcportlet;
 
-import org.eclipse.sapphire.PropertyContentEvent;
+import com.liferay.ide.project.core.modules.AbstractProjectLocationValidationService;
 
 /**
  * @author Simon Jiang
  */
-public class SpringMVCPortletProjectUseDefaultLocationListener extends SpringMVCPortletProjectNameListener {
+public class SpringMVCPortletProjectLocationValidationService
+	extends AbstractProjectLocationValidationService<NewSpringMVCPortletProjectOp> {
 
 	@Override
-	protected void handleTypedEvent(PropertyContentEvent event) {
-		NewSpringMVCPortletProjectOp op = op(event);
-
-		if (get(op.getUseDefaultLocation())) {
-			super.handleTypedEvent(event);
-		}
+	protected NewSpringMVCPortletProjectOp op() {
+		return context(NewSpringMVCPortletProjectOp.class);
 	}
 
 }

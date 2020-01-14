@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.project.core.spring;
+package com.liferay.ide.project.core.springmvcportlet;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
