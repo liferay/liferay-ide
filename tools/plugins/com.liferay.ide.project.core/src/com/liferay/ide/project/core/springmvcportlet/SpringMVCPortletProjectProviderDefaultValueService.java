@@ -48,7 +48,7 @@ public class SpringMVCPortletProjectProviderDefaultValueService extends DefaultV
 			}
 		}
 
-		return "gradle-spring";
+		return "gradle-spring-mvc-portlet";
 	}
 
 }

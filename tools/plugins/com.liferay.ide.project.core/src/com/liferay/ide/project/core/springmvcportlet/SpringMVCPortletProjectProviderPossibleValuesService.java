@@ -43,7 +43,7 @@ public class SpringMVCPortletProjectProviderPossibleValuesService extends Possib
 	protected void initPossibleValuesService() {
 		_possibleValues = new ArrayList<>();
 
-		for (ILiferayProjectProvider provider : LiferayCore.getProviders("spring")) {
+		for (ILiferayProjectProvider provider : LiferayCore.getProviders("spring-mvc-portlet")) {
 			if (provider instanceof NewLiferayProjectProvider<?>) {
 				_possibleValues.add(provider.getShortName());
 			}
