@@ -19,8 +19,8 @@ import com.liferay.ide.core.EventListener;
 import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.WorkspaceConstants;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
 
 import java.io.File;

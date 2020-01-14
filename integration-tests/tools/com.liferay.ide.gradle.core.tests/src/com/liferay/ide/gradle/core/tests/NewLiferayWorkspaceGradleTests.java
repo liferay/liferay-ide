@@ -14,7 +14,7 @@
 
 package com.liferay.ide.gradle.core.tests;
 
-import com.liferay.ide.core.util.WorkspaceConstants;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.test.core.base.support.LiferayWorkspaceSupport;
 import com.liferay.ide.test.project.core.base.ProjectOpBase;

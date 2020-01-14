@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.core.util;
+package com.liferay.ide.core.workspace;
 
 import java.util.HashMap;
 import java.util.Map;

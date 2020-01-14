@@ -16,7 +16,7 @@ package com.liferay.ide.project.ui.spring;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
-import com.liferay.ide.core.util.WorkspaceConstants;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.spring.NewLiferaySpringProjectOp;
 import com.liferay.ide.ui.util.SWTUtil;
 

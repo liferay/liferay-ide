@@ -18,7 +18,7 @@ import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ArtifactBuilder;
 import com.liferay.ide.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.WorkspaceConstants;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
 

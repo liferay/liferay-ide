@@ -21,7 +21,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
-import com.liferay.ide.core.util.WorkspaceConstants;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;

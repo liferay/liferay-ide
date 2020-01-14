@@ -15,7 +15,7 @@
 package com.liferay.ide.upgrade.commands.ui.internal;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.WorkspaceConstants;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.commands.core.code.ConfigureBundleURLCommandKeys;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;

@@ -16,7 +16,7 @@ package com.liferay.ide.upgrade.plan.core;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
-import com.liferay.ide.core.util.WorkspaceConstants;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 
 import java.io.File;
 

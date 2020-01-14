@@ -14,11 +14,11 @@
 
 package com.liferay.ide.project.core.service;
 
-import com.liferay.ide.core.util.WorkspaceConstants;
-
 import java.util.Set;
 
 import org.eclipse.sapphire.PossibleValuesService;
+
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 
 /**
  * @author Joye Luo

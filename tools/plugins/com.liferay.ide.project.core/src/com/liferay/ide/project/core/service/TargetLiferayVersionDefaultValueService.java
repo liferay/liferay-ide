@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.service;
 
-import com.liferay.ide.core.util.WorkspaceConstants;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.util.Set;
