@@ -44,7 +44,7 @@
 	<service>
 		<id>Sapphire.ValueLabelService.PluginProjectProvider</id>
 		<context>Sapphire.Property.MetaModel</context>
-		<implementation>com.liferay.ide.project.core.model.interProjectProviderValueLabelServicenal.ProjectProviderValueLabelService</implementation>
+		<implementation>com.liferay.ide.project.core.model.internal.ProjectProviderValueLabelService</implementation>
 		<condition>com.liferay.ide.project.core.model.internal.PluginProjectProviderValueServiceConditon</condition>
 		<overrides>Sapphire.ValueLabelService.Default</overrides>
 	</service>
