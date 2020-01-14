@@ -161,7 +161,7 @@
 		<wizard
 			category="com.liferay.ide.newWizards"
 			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
-			icon="icons/n16/spring.png"
+			icon="icons/n16/portletMVC4Spring_16x16_new.png"
 			id="com.liferay.ide.project.ui.newSpringMVCPortletProjectWizard"
 			name="Liferay Spring MVC Portlet"
 			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
