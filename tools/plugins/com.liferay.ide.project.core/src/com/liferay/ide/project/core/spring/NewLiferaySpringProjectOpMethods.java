@@ -125,7 +125,7 @@ public class NewLiferaySpringProjectOpMethods {
 
 			prefs.put(ProjectCore.PREF_DEFAULT_LIFERAY_VERSION_OPTION, SapphireUtil.getText(op.getLiferayVersion()));
 			prefs.put(
-				ProjectCore.PREF_DEFAULT_SPRING_PROJECT_BUILD_TYPE_OPTION,
+				ProjectCore.PREF_DEFAULT_SPRING_MVC_PORTLET_PROJECT_BUILD_TYPE_OPTION,
 				SapphireUtil.getText(op.getProjectProvider()));
 
 			prefs.flush();

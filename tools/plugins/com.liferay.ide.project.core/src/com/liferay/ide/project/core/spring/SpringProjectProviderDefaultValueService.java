@@ -37,7 +37,8 @@ public class SpringProjectProviderDefaultValueService extends DefaultValueServic
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 
 		String defaultProjectBuildType = preferencesService.getString(
-			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_SPRING_PROJECT_BUILD_TYPE_OPTION, null, prefContexts);
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_SPRING_MVC_PORTLET_PROJECT_BUILD_TYPE_OPTION, null,
+			prefContexts);
 
 		if (defaultProjectBuildType != null) {
 			ILiferayProjectProvider provider = LiferayCore.getProvider(defaultProjectBuildType);

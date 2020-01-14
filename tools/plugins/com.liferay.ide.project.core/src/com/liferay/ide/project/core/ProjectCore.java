@@ -83,8 +83,8 @@ public class ProjectCore extends Plugin {
 
 	// The key of default project build type for creating a new liferay plug in project
 
-	public static final String PREF_DEFAULT_SPRING_PROJECT_BUILD_TYPE_OPTION =
-		"project-spring-default-build-type-option";
+	public static final String PREF_DEFAULT_SPRING_MVC_PORTLET_PROJECT_BUILD_TYPE_OPTION =
+		"project-spring-mvc-portlet-default-build-type-option";
 
 	public static final String PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION =
 		"project-workspace-default-build-type-option";
