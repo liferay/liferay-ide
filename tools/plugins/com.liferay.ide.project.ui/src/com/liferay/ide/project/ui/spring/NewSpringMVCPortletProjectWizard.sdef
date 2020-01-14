@@ -64,7 +64,7 @@
         <description>Create a new project configured as a Liferay Spring MVC Portlet</description>
          <page>
             <id>LiferaySpringSettingWizardPage</id>
-            <label>Liferay Spring MVC Portlet</label>
+            <label>Liferay Spring MVC Portlet Project</label>
             <description>Framework Selection and Configuration</description>
             <content>
                 <custom>
