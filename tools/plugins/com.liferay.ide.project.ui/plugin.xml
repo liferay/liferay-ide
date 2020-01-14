@@ -162,18 +162,18 @@
 			category="com.liferay.ide.newWizards"
 			finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
 			icon="icons/n16/spring.png"
-			id="com.liferay.ide.project.ui.newSpringProjectWizard"
+			id="com.liferay.ide.project.ui.newSpringMVCPortletProjectWizard"
 			name="Liferay Spring MVC Portlet"
 			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
 			project="true"
 		>
-			<class class="com.liferay.ide.project.ui.spring.NewLiferaySpringProjectWizard">
+			<class class="com.liferay.ide.project.ui.spring.NewSpringMVCPortletProjectWizard">
 				<parameter name="liferay_project" value="true" />
 				<parameter name="menuIndex" value="1" />
 			</class>
 
 			<description>
-			Create a project for developing Liferay Spring MVC Portlet to deploy to Liferay Portal Server
+			Creates a new Liferay Spring MVC Portlet project for deploy to Liferay Portal
 			</description>
 			<selection
 				class="org.eclipse.core.resources.IResource"

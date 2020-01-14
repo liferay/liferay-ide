@@ -31,10 +31,10 @@ import org.eclipse.sapphire.ui.def.DefinitionLoader;
 /**
  * @author Simon Jiang
  */
-public class NewLiferaySpringProjectWizard extends BaseProjectWizard<NewSpringMVCPortletProjectOp> {
+public class NewSpringMVCPortletProjectWizard extends BaseProjectWizard<NewSpringMVCPortletProjectOp> {
 
-	public NewLiferaySpringProjectWizard() {
-		super(_createDefaultOp(), DefinitionLoader.sdef(NewLiferaySpringProjectWizard.class).wizard());
+	public NewSpringMVCPortletProjectWizard() {
+		super(_createDefaultOp(), DefinitionLoader.sdef(NewSpringMVCPortletProjectWizard.class).wizard());
 	}
 
 	@Override

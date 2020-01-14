@@ -17,15 +17,15 @@
  -->
 <definition>
     <import>
-        <package>com.liferay.ide.project.ui.spring</package>
+        <package>com.liferay.ide.project.ui.springmvcportlet</package>
     </import>
     <wizard>
-        <id>NewLiferaySpringProjectWizard</id>
-        <element-type>com.liferay.ide.project.core.spring.NewLiferaySpringProjectOp</element-type>
-        <label>New Liferay Spring MVC Portlet</label>
+        <id>NewSpringMVCPortletProjectWizard</id>
+        <element-type>com.liferay.ide.project.core.spring.NewSpringMVCPortletProjectOp</element-type>
+        <label>New Liferay Spring MVC Portlet Project</label>
         <page>
-            <id>LiferaySpringProjectWizardPage</id>
-            <label>Liferay Spring MVC Portlet</label>
+            <id>LiferaySpringMVCPortletProjectWizardPage</id>
+            <label>Liferay Spring MVC Portlet Project</label>
             <content>
                 <property-editor>ProjectName</property-editor>
                 <spacer/>
@@ -59,7 +59,7 @@
             <margin-horizontal>0</margin-horizontal>
             <margin-vertical>0</margin-vertical>
             <margin>0</margin>
-            <image>NewLiferaySpringProjectWizard.png</image>
+            <image>NewSpringMVCPortletProjectWizard.png</image>
         </page>
         <description>Create a new project configured as a Liferay Spring MVC Portlet</description>
          <page>
@@ -69,12 +69,12 @@
             <content>
                 <custom>
                     <scale-vertically>true</scale-vertically>
-                    <class>com.liferay.ide.project.ui.spring.LiferaySpringConfigurationPresentationPart</class>
+                    <class>com.liferay.ide.project.ui.springmvcportlet.SpringMVCPortletConfigurationPresentationPart</class>
                 </custom>
             </content>type filter text
             <margin-right>10</margin-right>
             <margin-left>0</margin-left>
-            <image>NewLiferaySpringProjectWizard.png</image>
+            <image>NewSpringMVCPortletProjectWizard.png</image>
         </page>       
     </wizard>
 </definition>
