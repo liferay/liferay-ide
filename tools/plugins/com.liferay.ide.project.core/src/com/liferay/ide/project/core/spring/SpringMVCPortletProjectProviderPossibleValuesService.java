@@ -28,7 +28,7 @@ import org.eclipse.sapphire.PossibleValuesService;
 /**
  * @author Simon Jiang
  */
-public class SpringProjectProviderPossibleValuesService extends PossibleValuesService {
+public class SpringMVCPortletProjectProviderPossibleValuesService extends PossibleValuesService {
 
 	@Override
 	public boolean ordered() {

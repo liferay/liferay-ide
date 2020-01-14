@@ -24,14 +24,15 @@ import org.eclipse.sapphire.PropertyContentEvent;
 /**
  * @author Simon Jiang
  */
-public class SpringComponentNameDefaultValueService extends DefaultValueService implements SapphireContentAccessor {
+public class SpringMVCPortletComponentNameDefaultValueService
+	extends DefaultValueService implements SapphireContentAccessor {
 
 	@Override
 	public void dispose() {
-		NewLiferaySpringProjectOp op = _op();
+		NewSpringMVCPortletProjectOp op = _op();
 
 		if (op != null) {
-			SapphireUtil.detachListener(op.property(NewLiferaySpringProjectOp.PROP_PROJECT_NAME), _listener);
+			SapphireUtil.detachListener(op.property(NewSpringMVCPortletProjectOp.PROP_PROJECT_NAME), _listener);
 		}
 
 		super.dispose();
@@ -41,7 +42,7 @@ public class SpringComponentNameDefaultValueService extends DefaultValueService 
 	protected String compute() {
 		String retVal = "";
 
-		NewLiferaySpringProjectOp op = _op();
+		NewSpringMVCPortletProjectOp op = _op();
 
 		String projectName = get(op.getProjectName());
 
@@ -71,9 +72,9 @@ public class SpringComponentNameDefaultValueService extends DefaultValueService 
 
 		};
 
-		NewLiferaySpringProjectOp op = _op();
+		NewSpringMVCPortletProjectOp op = _op();
 
-		SapphireUtil.attachListener(op.property(NewLiferaySpringProjectOp.PROP_PROJECT_NAME), _listener);
+		SapphireUtil.attachListener(op.property(NewSpringMVCPortletProjectOp.PROP_PROJECT_NAME), _listener);
 	}
 
 	private static String _capitalize(String s, char separator) {
@@ -107,8 +108,8 @@ public class SpringComponentNameDefaultValueService extends DefaultValueService 
 		return _removeChar(name, ' ');
 	}
 
-	private NewLiferaySpringProjectOp _op() {
-		return context(NewLiferaySpringProjectOp.class);
+	private NewSpringMVCPortletProjectOp _op() {
+		return context(NewSpringMVCPortletProjectOp.class);
 	}
 
 	private String _removeChar(String s, char c) {

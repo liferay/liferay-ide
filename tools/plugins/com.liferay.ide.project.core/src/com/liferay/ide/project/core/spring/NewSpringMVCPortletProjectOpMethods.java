@@ -41,9 +41,9 @@ import org.eclipse.sapphire.platform.StatusBridge;
 /**
  * @author Simon Jiang
  */
-public class NewLiferaySpringProjectOpMethods {
+public class NewSpringMVCPortletProjectOpMethods {
 
-	public static final Status execute(NewLiferaySpringProjectOp op, ProgressMonitor pm) {
+	public static final Status execute(NewSpringMVCPortletProjectOp op, ProgressMonitor pm) {
 		IProgressMonitor monitor = ProgressMonitorBridge.create(pm);
 
 		monitor.beginTask("Creating Liferay spring mvc project (this process may take several minutes)", 100);
@@ -81,7 +81,7 @@ public class NewLiferaySpringProjectOpMethods {
 		return retval;
 	}
 
-	public static String getMavenParentPomGroupId(NewLiferaySpringProjectOp op, String projectName, IPath path) {
+	public static String getMavenParentPomGroupId(NewSpringMVCPortletProjectOp op, String projectName, IPath path) {
 		String retval = null;
 
 		File parentProjectDir = path.toFile();
@@ -101,7 +101,7 @@ public class NewLiferaySpringProjectOpMethods {
 		return retval;
 	}
 
-	public static String getMavenParentPomVersion(NewLiferaySpringProjectOp op, String projectName, IPath path) {
+	public static String getMavenParentPomVersion(NewSpringMVCPortletProjectOp op, String projectName, IPath path) {
 		File parentProjectDir = path.toFile();
 
 		NewLiferayProjectProvider<BaseModuleOp> provider = _getter.get(op.getProjectProvider());
@@ -119,7 +119,7 @@ public class NewLiferaySpringProjectOpMethods {
 		return "";
 	}
 
-	private static void _updateBuildAndVersionPrefs(NewLiferaySpringProjectOp op) {
+	private static void _updateBuildAndVersionPrefs(NewSpringMVCPortletProjectOp op) {
 		try {
 			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
 

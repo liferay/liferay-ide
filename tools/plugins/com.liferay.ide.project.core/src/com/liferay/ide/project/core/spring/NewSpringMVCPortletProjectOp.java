@@ -34,11 +34,11 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 /**
  * @author Simon Jiang
  */
-public interface NewLiferaySpringProjectOp extends BaseModuleOp {
+public interface NewSpringMVCPortletProjectOp extends BaseModuleOp {
 
-	public ElementType TYPE = new ElementType(NewLiferaySpringProjectOp.class);
+	public ElementType TYPE = new ElementType(NewSpringMVCPortletProjectOp.class);
 
-	@DelegateImplementation(NewLiferaySpringProjectOpMethods.class)
+	@DelegateImplementation(NewSpringMVCPortletProjectOpMethods.class)
 	@Override
 	public Status execute(ProgressMonitor monitor);
 
@@ -75,8 +75,8 @@ public interface NewLiferaySpringProjectOp extends BaseModuleOp {
 	public void setViewType(String value);
 
 	@Label(standard = "Component Class Name")
-	@Service(impl = SpringComponentNameDefaultValueService.class)
-	@Service(impl = SpringComponentNameValidationService.class)
+	@Service(impl = SpringMVCPortletComponentNameDefaultValueService.class)
+	@Service(impl = SpringMVCPortletComponentNameValidationService.class)
 	public ValueProperty PROP_COMPONENT_NAME = new ValueProperty(TYPE, "ComponentName");
 
 	public ValueProperty PROP_DEPENDENCY_INJECTOR = new ValueProperty(TYPE, "DependencyInjector");
@@ -86,35 +86,35 @@ public interface NewLiferaySpringProjectOp extends BaseModuleOp {
 	public ValueProperty PROP_FRAMEWORK_DEPENDENCIES = new ValueProperty(TYPE, "FrameworkDependencies");
 
 	@Label(standard = "liferay version")
-	@Listeners(SpringProjectNameListener.class)
+	@Listeners(SpringMVCPortletProjectNameListener.class)
 	@Service(impl = TargetLiferayVersionDefaultValueService.class)
 	@Service(impl = TargetLiferayVersionPossibleValuesService.class)
 	public ValueProperty PROP_LIFERAY_VERSION = new ValueProperty(TYPE, "LiferayVersion");
 
 	@Service(impl = CommonProjectLocationInitialValueService.class)
-	@Service(impl = SpringProjectLocationValidationService.class)
+	@Service(impl = SpringMVCPortletProjectLocationValidationService.class)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_LOCATION);
 
 	@Label(standard = "Package name")
-	@Service(impl = SpringPackageNameDefaultValueService.class)
+	@Service(impl = SpringMVCPortletPackageNameDefaultValueService.class)
 	public ValueProperty PROP_PACKAGE_NAME = new ValueProperty(TYPE, "PackageName");
 
-	@Listeners(SpringProjectNameListener.class)
+	@Listeners(SpringMVCPortletProjectNameListener.class)
 	@Service(impl = ModuleProjectNameValidationService.class)
 	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_NAME);
 
 	@Label(standard = "build type")
-	@Listeners(SpringProjectNameListener.class)
-	@Service(impl = SpringProjectProviderDefaultValueService.class)
-	@Service(impl = SpringProjectProviderPossibleValuesService.class)
+	@Listeners(SpringMVCPortletProjectNameListener.class)
+	@Service(impl = SpringMVCPortletProjectProviderDefaultValueService.class)
+	@Service(impl = SpringMVCPortletProjectProviderPossibleValuesService.class)
 	public ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_PROVIDER);
 
 	@InitialValue(text = "spring-mvc-portlet")
 	@Label(standard = "Project Template Name")
-	@Listeners(SpringProjectNameListener.class)
+	@Listeners(SpringMVCPortletProjectNameListener.class)
 	public ValueProperty PROP_PROJECT_TEMPLATE_NAME = new ValueProperty(TYPE, "ProjectTemplateName");
 
-	@Listeners(SpringProjectUseDefaultLocationListener.class)
+	@Listeners(SpringMVCPortletProjectUseDefaultLocationListener.class)
 	public ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_USE_DEFAULT_LOCATION);
 
 	public ValueProperty PROP_VIEW_TYPE = new ValueProperty(TYPE, "ViewType");

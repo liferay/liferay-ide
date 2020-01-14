@@ -27,11 +27,12 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
-public class SpringComponentNameValidationService extends ValidationService implements SapphireContentAccessor {
+public class SpringMVCPortletComponentNameValidationService
+	extends ValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
-		NewLiferaySpringProjectOp op = _op();
+		NewSpringMVCPortletProjectOp op = _op();
 
 		String className = get(op.getComponentName());
 
@@ -55,8 +56,8 @@ public class SpringComponentNameValidationService extends ValidationService impl
 		return retval;
 	}
 
-	private NewLiferaySpringProjectOp _op() {
-		return context(NewLiferaySpringProjectOp.class);
+	private NewSpringMVCPortletProjectOp _op() {
+		return context(NewSpringMVCPortletProjectOp.class);
 	}
 
 }

@@ -23,7 +23,7 @@ import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.spring.NewLiferaySpringProjectOp;
+import com.liferay.ide.project.core.spring.NewSpringMVCPortletProjectOp;
 import com.liferay.ide.project.core.spring.SpringMVCPortletProjectConstants;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -46,14 +46,14 @@ import org.eclipse.sapphire.platform.PathBridge;
  */
 public class NewGradleSpringMVCPortletProjectProvider
 	extends AbstractLiferayProjectProvider
-	implements NewLiferayProjectProvider<NewLiferaySpringProjectOp>, SapphireContentAccessor {
+	implements NewLiferayProjectProvider<NewSpringMVCPortletProjectOp>, SapphireContentAccessor {
 
 	public NewGradleSpringMVCPortletProjectProvider() {
 		super(new Class<?>[] {IProject.class});
 	}
 
 	@Override
-	public IStatus createNewProject(NewLiferaySpringProjectOp op, IProgressMonitor monitor) throws CoreException {
+	public IStatus createNewProject(NewSpringMVCPortletProjectOp op, IProgressMonitor monitor) throws CoreException {
 		IStatus retval = Status.OK_STATUS;
 
 		String projectName = get(op.getProjectName());

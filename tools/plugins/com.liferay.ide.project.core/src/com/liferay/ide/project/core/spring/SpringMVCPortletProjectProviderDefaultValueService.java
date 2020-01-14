@@ -28,7 +28,7 @@ import org.eclipse.sapphire.DefaultValueService;
 /**
  * @author Simon Jiang
  */
-public class SpringProjectProviderDefaultValueService extends DefaultValueService {
+public class SpringMVCPortletProjectProviderDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected String compute() {

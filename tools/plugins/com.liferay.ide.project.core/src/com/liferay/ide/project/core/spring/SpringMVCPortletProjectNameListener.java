@@ -34,7 +34,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Simon Jiang
  */
-public class SpringProjectNameListener
+public class SpringMVCPortletProjectNameListener
 	extends FilteredListener<PropertyContentEvent> implements SapphireContentAccessor {
 
 	@Override
@@ -42,13 +42,13 @@ public class SpringProjectNameListener
 		_updateLocation(op(event));
 	}
 
-	protected NewLiferaySpringProjectOp op(PropertyContentEvent event) {
+	protected NewSpringMVCPortletProjectOp op(PropertyContentEvent event) {
 		Element element = SapphireUtil.getElement(event);
 
-		return element.nearest(NewLiferaySpringProjectOp.class);
+		return element.nearest(NewSpringMVCPortletProjectOp.class);
 	}
 
-	private void _updateLocation(NewLiferaySpringProjectOp op) {
+	private void _updateLocation(NewSpringMVCPortletProjectOp op) {
 		String currentProjectName = get(op.getProjectName());
 
 		if (CoreUtil.isNullOrEmpty(currentProjectName)) {

@@ -17,7 +17,7 @@ package com.liferay.ide.project.ui.spring;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
-import com.liferay.ide.project.core.spring.NewLiferaySpringProjectOp;
+import com.liferay.ide.project.core.spring.NewSpringMVCPortletProjectOp;
 import com.liferay.ide.project.core.spring.SpringMVCPortletProjectConstants;
 import com.liferay.ide.ui.util.SWTUtil;
 
@@ -173,7 +173,7 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 					protected void handleTypedEvent(final ValuePropertyContentEvent valueChangeEvent) {
 						PropertyDef eventDef = SapphireUtil.getPropertyDef(valueChangeEvent);
 
-						if (eventDef.equals(NewLiferaySpringProjectOp.PROP_LIFERAY_VERSION)) {
+						if (eventDef.equals(NewSpringMVCPortletProjectOp.PROP_LIFERAY_VERSION)) {
 							String beforeVersion = valueChangeEvent.before();
 							String afterVersion = valueChangeEvent.after();
 
@@ -185,7 +185,8 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 
 				};
 
-				Value<Object> liferayVersionProperty = _op().property(NewLiferaySpringProjectOp.PROP_LIFERAY_VERSION);
+				Value<Object> liferayVersionProperty = _op().property(
+					NewSpringMVCPortletProjectOp.PROP_LIFERAY_VERSION);
 
 				liferayVersionProperty.attach(_liferayVersionListener);
 			}
@@ -196,13 +197,13 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 	@Override
 	public void dispose() {
 		if (_liferayVersionListener != null) {
-			Value<Object> liferayVersion = _op().property(NewLiferaySpringProjectOp.PROP_LIFERAY_VERSION);
+			Value<Object> liferayVersion = _op().property(NewSpringMVCPortletProjectOp.PROP_LIFERAY_VERSION);
 
 			liferayVersion.detach(_liferayVersionListener);
 		}
 
 		if (_projectNameListener != null) {
-			Value<Object> projectName = _op().property(NewLiferaySpringProjectOp.PROP_PROJECT_NAME);
+			Value<Object> projectName = _op().property(NewSpringMVCPortletProjectOp.PROP_PROJECT_NAME);
 
 			projectName.detach(_projectNameListener);
 		}
@@ -233,7 +234,7 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 			protected void handleTypedEvent(PropertyContentEvent event) {
 				PropertyDef eventDef = SapphireUtil.getPropertyDef(event);
 
-				if (eventDef.equals(NewLiferaySpringProjectOp.PROP_PROJECT_NAME)) {
+				if (eventDef.equals(NewSpringMVCPortletProjectOp.PROP_PROJECT_NAME)) {
 					String packageName = _getPackageName(get(_op().getProjectName()));
 
 					if (packageName != null) {
@@ -249,7 +250,7 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 
 		};
 
-		Value<Object> projectNameProperty = _op().property(NewLiferaySpringProjectOp.PROP_PROJECT_NAME);
+		Value<Object> projectNameProperty = _op().property(NewSpringMVCPortletProjectOp.PROP_PROJECT_NAME);
 
 		projectNameProperty.attach(_projectNameListener);
 	}
@@ -297,8 +298,8 @@ public class LiferaySpringConfigurationPresentationPart extends FormComponentPar
 		_viewTypeCombo.select(0);
 	}
 
-	private NewLiferaySpringProjectOp _op() {
-		return getLocalModelElement().nearest(NewLiferaySpringProjectOp.class);
+	private NewSpringMVCPortletProjectOp _op() {
+		return getLocalModelElement().nearest(NewSpringMVCPortletProjectOp.class);
 	}
 
 	private Combo _frameworkCombo;
