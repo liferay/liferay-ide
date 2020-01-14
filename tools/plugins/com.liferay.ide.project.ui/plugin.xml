@@ -167,7 +167,7 @@
 			preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
 			project="true"
 		>
-			<class class="com.liferay.ide.project.ui.spring.NewSpringMVCPortletProjectWizard">
+			<class class="com.liferay.ide.project.ui.springmvcportlet.NewSpringMVCPortletProjectWizard">
 				<parameter name="liferay_project" value="true" />
 				<parameter name="menuIndex" value="1" />
 			</class>

@@ -36,6 +36,8 @@ import org.eclipse.sapphire.modeling.annotations.Service;
  */
 public interface NewSpringMVCPortletProjectOp extends BaseModuleOp {
 
+	public ElementType TYPE = new ElementType(NewSpringMVCPortletProjectOp.class);
+
 	@DelegateImplementation(NewSpringMVCPortletProjectOpMethods.class)
 	@Override
 	public Status execute(ProgressMonitor monitor);
@@ -116,7 +118,5 @@ public interface NewSpringMVCPortletProjectOp extends BaseModuleOp {
 	public ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_USE_DEFAULT_LOCATION);
 
 	public ValueProperty PROP_VIEW_TYPE = new ValueProperty(TYPE, "ViewType");
-
-	public ElementType TYPE = new ElementType(NewSpringMVCPortletProjectOp.class);
 
 }

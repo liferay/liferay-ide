@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.project.ui.spring;
+package com.liferay.ide.project.ui.springmvcportlet;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;

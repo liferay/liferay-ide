@@ -21,7 +21,7 @@
     </import>
     <wizard>
         <id>NewSpringMVCPortletProjectWizard</id>
-        <element-type>com.liferay.ide.project.core.spring.NewSpringMVCPortletProjectOp</element-type>
+        <element-type>com.liferay.ide.project.core.springmvcportlet.NewSpringMVCPortletProjectOp</element-type>
         <label>New Liferay Spring MVC Portlet Project</label>
         <page>
             <id>LiferaySpringMVCPortletProjectWizardPage</id>

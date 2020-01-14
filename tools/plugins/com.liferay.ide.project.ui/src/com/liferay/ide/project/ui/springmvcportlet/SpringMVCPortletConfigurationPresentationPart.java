@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.project.ui.spring;
+package com.liferay.ide.project.ui.springmvcportlet;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
@@ -41,7 +41,8 @@ import org.eclipse.swt.widgets.Text;
 /**
  * @author Simon Jiang
  */
-public class LiferaySpringConfigurationPresentationPart extends FormComponentPart implements SapphireContentAccessor {
+public class SpringMVCPortletConfigurationPresentationPart
+	extends FormComponentPart implements SapphireContentAccessor {
 
 	@Override
 	public FormComponentPresentation createPresentation(SwtPresentation parent, Composite composite) {
