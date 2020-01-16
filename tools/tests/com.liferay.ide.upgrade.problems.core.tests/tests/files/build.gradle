@@ -1,0 +1,14 @@
+dependencies {
+	compileOnly group: "biz.aQute.bnd", name: "biz.aQute.bnd.annotation", version: "3.5.0"
+	compileOnly group: "com.liferay", name: "com.liferay.portal.spring.extender"
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel"
+	compileOnly group: "org.osgi", name: "org.osgi.core"
+	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations"
+	compileOnly project(":modules:testsb:testsb-api")
+}
+
+buildService {
+	apiDir = "../testsb-api/src/main/java"
+}
+
+group = "testsb"

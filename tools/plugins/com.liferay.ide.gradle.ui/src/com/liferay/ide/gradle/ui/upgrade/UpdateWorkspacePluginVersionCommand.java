@@ -222,7 +222,7 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 					artifact.setVersion(_workspacePluginLatestVersion);
 
 					try {
-						gradleDependencyUpdater.updateDependencyVersions(true, Collections.singletonList(artifact));
+						gradleDependencyUpdater.updateDependencies(true, Collections.singletonList(artifact));
 					}
 					catch (IOException ioe) {
 						LiferayGradleUI.logError(ioe);
