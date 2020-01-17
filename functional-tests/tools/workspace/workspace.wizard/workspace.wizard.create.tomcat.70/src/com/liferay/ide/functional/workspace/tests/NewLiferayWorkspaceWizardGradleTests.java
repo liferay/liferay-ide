@@ -30,6 +30,18 @@ import org.junit.Test;
  */
 public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
+	String expectedBuildGradle =
+			"dependencies {\n" + 
+			"	compileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\"\n" +
+			"	compileOnly group: \"com.liferay.portal\", name: \"com.liferay.util.taglib\"\n" +
+			"	compileOnly group: \"javax.portlet\", name: \"portlet-api\"\n" +
+			"	compileOnly group: \"javax.servlet\", name: \"javax.servlet-api\"\n" +
+			"	compileOnly group: \"jstl\", name: \"jstl\"\n" +
+			"	compileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\"\n" +
+			"\n" +
+			"	cssBuilder group: \"com.liferay\", name: \"com.liferay.css.builder\", version: \"3.0.2\"\n" +
+			"}\n";
+
 	@Test
 	public void checkDependenciesVersionForExt() {
 		wizardAction.openNewLiferayWorkspaceWizard();
@@ -100,7 +112,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		viewAction.project.openFile(project.getName(), "modules", projectName, "build.gradle");
 
-		validationAction.assertDoesNotContains("version", editorAction.getContent());
+		validationAction.assertEquals(expectedBuildGradle, editorAction.getContent());
 
 		editorAction.close();
 
