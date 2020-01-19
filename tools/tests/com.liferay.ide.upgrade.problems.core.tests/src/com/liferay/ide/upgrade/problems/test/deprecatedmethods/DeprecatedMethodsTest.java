@@ -56,7 +56,7 @@ public class DeprecatedMethodsTest extends APITestBase {
 
 	@Override
 	public int getExpectedNumber() {
-		return 60;
+		return 55;
 	}
 
 	@Override
