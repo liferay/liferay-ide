@@ -277,6 +277,8 @@ public interface UI {
 
 	public final String EMAIL_ADDRESS = "Email address:";
 
+	public final String EMBEDDED = "Embedded";
+
 	public final String ENABLE_TARGET_PLATFORM = "Enable target platform";
 
 	public final String ENTRY_CATEGORY = "Entry Category:";
@@ -308,6 +310,10 @@ public interface UI {
 	public final String FOLDER_NAME = "Folder name:";
 
 	public final String FORM_FIELD = "form-field";
+
+	public final String FRAMEWORK = "Framework:";
+
+	public final String FRAMEWORK_DEPENDENCIES = "Framework Dependencies:";
 
 	public final String FREEMARKER = "Freemarker";
 
@@ -395,6 +401,8 @@ public interface UI {
 	public final String JSP_FILES_TO_OVERRIDE = "JSP files to override";
 
 	public final String JSP_FOLDER = "JSP folder:";
+
+	public final String JSP_WITH_VIEW_TYPE = "Jsp";
 
 	public final String KALEO_DESIGNER = "Kaleo Designer";
 
@@ -552,6 +560,8 @@ public interface UI {
 
 	public final String NEW_LIFERAY_SERVICE_BUILDER = "New Liferay Service Builder (Legacy)";
 
+	public final String NEW_LIFERAY_SPRING_MVC_PORTLET_PROJECT = "New Liferay Spring MVC Portlet Project";
+
 	public final String NEW_LIFERAY_VAADIN_PORTLET = "New Liferay Vaadin Portlet (Legacy)";
 
 	public final String NEW_LIFERAY_WORPSPACE_PROJECT = "New Liferay Workspace Project";
@@ -648,6 +658,8 @@ public interface UI {
 
 	public final String PORTLET_UPCASE = "Portlet";
 
+	public final String PORTLETMVC4SPRING = "PortletMVC4Spring";
+
 	public final String PREFERENCE_RECORDER = "Preference Recorder";
 
 	public final String PREFERENCES = "Preferences";
@@ -675,6 +687,8 @@ public interface UI {
 	public final String PROPERTIES = "Properties:";
 
 	public final String PROPERTY = "Property:";
+
+	public final String PROVIDED = "Provided";
 
 	public final String PUBLIC = "public";
 
@@ -812,6 +826,8 @@ public interface UI {
 
 	public final String SPRING_MVC_PORTLET = "spring-mvc-portlet";
 
+	public final String SPRING_PORTLET_MVC = "Spring Portlet MVC";
+
 	public final String STANDARD_JSF = "Standard JSF";
 
 	public final String START = "Start";
@@ -874,6 +890,8 @@ public interface UI {
 
 	public final String THUMBNAIL_FILE_SELECTION = "Thumbnail file selection";
 
+	public final String THYMELEAF = "Thymeleaf";
+
 	public final String TITLE = "Title:";
 
 	public final String TYPE = "Type";
@@ -929,6 +947,8 @@ public interface UI {
 	public final String VIEW = "View";
 
 	public final String VIEW_FOLDER = "View folder:";
+
+	public final String VIEW_TYPE = "View Type:";
 
 	public final String WAP_TEMPLATE_FILE = "WAP template file:";
 
