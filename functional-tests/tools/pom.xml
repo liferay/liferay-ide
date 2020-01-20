@@ -62,5 +62,6 @@
 		<module>service.builder</module>
 		<module>kaleo</module>
 		<module>modules.ext</module>
+		<module>springmvc.portlet</module>
 	</modules>
 </project>
