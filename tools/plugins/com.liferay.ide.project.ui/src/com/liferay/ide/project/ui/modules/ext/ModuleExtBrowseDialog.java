@@ -17,8 +17,8 @@ package com.liferay.ide.project.ui.modules.ext;
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.Arrays;

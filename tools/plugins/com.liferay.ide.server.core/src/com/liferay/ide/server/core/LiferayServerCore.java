@@ -106,6 +106,10 @@ public class LiferayServerCore extends Plugin {
 		return new Status(IStatus.ERROR, pluginId, msg, e);
 	}
 
+	public static IStatus createErrorStatus(String msg, Throwable t) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg, t);
+	}
+
 	public static IStatus createWarningStatus(String message) {
 		return new Status(IStatus.WARNING, PLUGIN_ID, message);
 	}

@@ -16,10 +16,10 @@ package com.liferay.ide.gradle.ui.quickfix;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 
 import java.io.IOException;

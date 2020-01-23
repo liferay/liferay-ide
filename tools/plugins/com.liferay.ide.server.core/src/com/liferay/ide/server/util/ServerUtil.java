@@ -17,12 +17,14 @@ package com.liferay.ide.server.util;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.properties.PortalPropertiesConfiguration;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -59,6 +61,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
+import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -67,10 +70,12 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
@@ -117,6 +122,75 @@ import org.w3c.dom.NodeList;
  */
 @SuppressWarnings("restriction")
 public class ServerUtil {
+
+	public static IStatus addPortalRuntime() {
+		return addPortalRuntime(null);
+	}
+
+	public static IStatus addPortalRuntime(String serverName) {
+		IProject project = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		try {
+			if (project == null) {
+				return LiferayServerCore.createErrorStatus("Can not get a valid Liferay Workspace project.");
+			}
+
+			IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
+
+			String bundlesDir = workspaceProject.getLiferayHome();
+
+			IPath projectLocation = project.getLocation();
+
+			IPath bundlesLocation = projectLocation.append(bundlesDir);
+
+			if (FileUtil.exists(bundlesLocation)) {
+				PortalBundle bundle = LiferayServerCore.newPortalBundle(bundlesLocation);
+
+				if (bundle == null) {
+					return LiferayServerCore.createErrorStatus("Bundle can not be found in:" + bundlesLocation);
+				}
+
+				if (serverName == null) {
+					serverName = bundle.getServerReleaseInfo();
+				}
+
+				addPortalRuntimeAndServer(serverName, bundlesLocation, new NullProgressMonitor());
+
+				IProject pluginsSDK = CoreUtil.getProject(
+					LiferayWorkspaceUtil.getPluginsSDKDir(FileUtil.toPortableString(project.getLocation())));
+
+				if (FileUtil.exists(pluginsSDK)) {
+					SDK sdk = SDKUtil.createSDKFromLocation(pluginsSDK.getLocation());
+
+					if (sdk != null) {
+						Map<String, String> appServerPropertiesMap = new HashMap<>();
+
+						appServerPropertiesMap.put(
+							"app.server.deploy.dir", FileUtil.toOSString(bundle.getAppServerDeployDir()));
+						appServerPropertiesMap.put("app.server.dir", FileUtil.toOSString(bundle.getAppServerDir()));
+						appServerPropertiesMap.put(
+							"app.server.lib.global.dir", FileUtil.toOSString(bundle.getAppServerLibGlobalDir()));
+						appServerPropertiesMap.put(
+							"app.server.parent.dir", FileUtil.toOSString(bundle.getLiferayHome()));
+						appServerPropertiesMap.put(
+							"app.server.portal.dir", FileUtil.toOSString(bundle.getAppServerPortalDir()));
+						appServerPropertiesMap.put("app.server.type", bundle.getType());
+
+						sdk.addOrUpdateServerProperties(appServerPropertiesMap);
+
+						pluginsSDK.refreshLocal(IResource.DEPTH_INFINITE, null);
+
+						sdk.validate(true);
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			return LiferayServerCore.createErrorStatus("Add Liferay server failed", e);
+		}
+
+		return Status.OK_STATUS;
+	}
 
 	public static void addPortalRuntimeAndServer(String serverRuntimeName, IPath location, IProgressMonitor monitor)
 		throws CoreException {
@@ -196,6 +270,45 @@ public class ServerUtil {
 			}
 
 			targetRuntime.delete();
+		}
+	}
+
+	public static void deleteWorkspaceServerAndRuntime(IProject project) {
+		IWorkspaceProject liferayWorkpsaceProject = LiferayCore.create(IWorkspaceProject.class, project);
+
+		IPath bundlesLocation = LiferayWorkspaceUtil.getHomeLocation(project);
+
+		if ((liferayWorkpsaceProject != null) && (bundlesLocation != null)) {
+			Stream.of(
+				ServerCore.getServers()
+			).filter(
+				server -> server != null
+			).filter(
+				server -> {
+					IRuntime runtime = server.getRuntime();
+
+					if (runtime != null) {
+						return bundlesLocation.equals(runtime.getLocation());
+					}
+
+					return true;
+				}
+			).forEach(
+				server -> {
+					try {
+						IRuntime runtime = server.getRuntime();
+
+						server.delete();
+
+						if (runtime != null) {
+							runtime.delete();
+						}
+					}
+					catch (Exception e) {
+						LiferayServerCore.logError("Failed to delete server and runtime", e);
+					}
+				}
+			);
 		}
 	}
 

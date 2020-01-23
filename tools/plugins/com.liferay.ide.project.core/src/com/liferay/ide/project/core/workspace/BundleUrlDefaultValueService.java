@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;

@@ -16,7 +16,8 @@ package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.JobUtil;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -99,7 +100,7 @@ public class ImportLiferayWorkspaceOpMethods {
 					}
 
 					protected IStatus run(IProgressMonitor monitor) {
-						LiferayWorkspaceUtil.addPortalRuntime(serverName);
+						ServerUtil.addPortalRuntime(serverName);
 
 						return org.eclipse.core.runtime.Status.OK_STATUS;
 					}

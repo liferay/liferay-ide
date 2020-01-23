@@ -16,8 +16,8 @@ package com.liferay.ide.gradle.ui;
 
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.jobs.IJobManager;

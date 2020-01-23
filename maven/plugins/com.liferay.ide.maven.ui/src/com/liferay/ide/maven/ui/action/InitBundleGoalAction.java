@@ -14,9 +14,10 @@
 
 package com.liferay.ide.maven.ui.action;
 
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
 import com.liferay.ide.maven.core.MavenGoalUtil;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -40,12 +41,12 @@ public class InitBundleGoalAction extends MavenGoalAction {
 
 	@Override
 	protected void afterAction() {
-		LiferayWorkspaceUtil.addPortalRuntime();
+		ServerUtil.addPortalRuntime();
 	}
 
 	@Override
 	protected void beforeAction() {
-		LiferayWorkspaceUtil.deleteWorkspaceServerAndRuntime(project);
+		ServerUtil.deleteWorkspaceServerAndRuntime(project);
 	}
 
 	@Override

@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.modules.ext;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 
 import java.util.Set;
 import java.util.stream.Collectors;

@@ -17,8 +17,8 @@ package com.liferay.ide.gradle.ui.quickfix;
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.ArtifactBuilder;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.LiferayGradleWorkspaceProject;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.modules.ext;
 
 import com.liferay.ide.core.IWorkspaceProject;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 
 import org.eclipse.sapphire.DefaultValueService;
 

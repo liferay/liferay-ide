@@ -14,7 +14,8 @@
 
 package com.liferay.ide.gradle.action;
 
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -34,12 +35,12 @@ public class InitBundleTaskAction extends GradleTaskAction {
 	}
 
 	protected void afterAction() {
-		LiferayWorkspaceUtil.addPortalRuntime();
+		ServerUtil.addPortalRuntime();
 	}
 
 	@Override
 	protected void beforeAction() {
-		LiferayWorkspaceUtil.deleteWorkspaceServerAndRuntime(project);
+		ServerUtil.deleteWorkspaceServerAndRuntime(project);
 	}
 
 	@Override

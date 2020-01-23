@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.project.core.util;
+package com.liferay.ide.core.workspace;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
@@ -21,35 +21,19 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
-import com.liferay.ide.core.workspace.WorkspaceConstants;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.PortalBundle;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
 
 import java.nio.file.Files;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.wst.server.core.IRuntime;
-import org.eclipse.wst.server.core.ServerCore;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -66,75 +50,6 @@ public class LiferayWorkspaceUtil {
 	public static String hasLiferayWorkspaceMsg =
 		"A Liferay Workspace project already exists in this Eclipse instance.";
 	public static String multiWorkspaceErrorMsg = "More than one Liferay workspace build in current Eclipse workspace.";
-
-	public static IStatus addPortalRuntime() {
-		return addPortalRuntime(null);
-	}
-
-	public static IStatus addPortalRuntime(String serverName) {
-		IProject project = getWorkspaceProject();
-
-		try {
-			if (project == null) {
-				return ProjectCore.createErrorStatus("Can not get a valid Liferay Workspace project.");
-			}
-
-			IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
-
-			String bundlesDir = workspaceProject.getLiferayHome();
-
-			IPath projectLocation = project.getLocation();
-
-			IPath bundlesLocation = projectLocation.append(bundlesDir);
-
-			if (FileUtil.exists(bundlesLocation)) {
-				PortalBundle bundle = LiferayServerCore.newPortalBundle(bundlesLocation);
-
-				if (bundle == null) {
-					return ProjectCore.createErrorStatus("Bundle can not be found in:" + bundlesLocation);
-				}
-
-				if (serverName == null) {
-					serverName = bundle.getServerReleaseInfo();
-				}
-
-				ServerUtil.addPortalRuntimeAndServer(serverName, bundlesLocation, new NullProgressMonitor());
-
-				IProject pluginsSDK = CoreUtil.getProject(
-					getPluginsSDKDir(FileUtil.toPortableString(project.getLocation())));
-
-				if (FileUtil.exists(pluginsSDK)) {
-					SDK sdk = SDKUtil.createSDKFromLocation(pluginsSDK.getLocation());
-
-					if (sdk != null) {
-						Map<String, String> appServerPropertiesMap = new HashMap<>();
-
-						appServerPropertiesMap.put(
-							"app.server.deploy.dir", FileUtil.toOSString(bundle.getAppServerDeployDir()));
-						appServerPropertiesMap.put("app.server.dir", FileUtil.toOSString(bundle.getAppServerDir()));
-						appServerPropertiesMap.put(
-							"app.server.lib.global.dir", FileUtil.toOSString(bundle.getAppServerLibGlobalDir()));
-						appServerPropertiesMap.put(
-							"app.server.parent.dir", FileUtil.toOSString(bundle.getLiferayHome()));
-						appServerPropertiesMap.put(
-							"app.server.portal.dir", FileUtil.toOSString(bundle.getAppServerPortalDir()));
-						appServerPropertiesMap.put("app.server.type", bundle.getType());
-
-						sdk.addOrUpdateServerProperties(appServerPropertiesMap);
-
-						pluginsSDK.refreshLocal(IResource.DEPTH_INFINITE, null);
-
-						sdk.validate(true);
-					}
-				}
-			}
-		}
-		catch (Exception e) {
-			return ProjectCore.createErrorStatus("Add Liferay server failed", e);
-		}
-
-		return Status.OK_STATUS;
-	}
 
 	public static void clearWorkspace(String location) {
 		File projectFile = new File(location, ".project");
@@ -153,45 +68,6 @@ public class LiferayWorkspaceUtil {
 
 		if (FileUtil.isDir(settings)) {
 			FileUtil.deleteDir(settings, true);
-		}
-	}
-
-	public static void deleteWorkspaceServerAndRuntime(IProject project) {
-		IWorkspaceProject liferayWorkpsaceProject = LiferayCore.create(IWorkspaceProject.class, project);
-
-		IPath bundlesLocation = getHomeLocation(project);
-
-		if ((liferayWorkpsaceProject != null) && (bundlesLocation != null)) {
-			Stream.of(
-				ServerCore.getServers()
-			).filter(
-				server -> server != null
-			).filter(
-				server -> {
-					IRuntime runtime = server.getRuntime();
-
-					if (runtime != null) {
-						return bundlesLocation.equals(runtime.getLocation());
-					}
-
-					return true;
-				}
-			).forEach(
-				server -> {
-					try {
-						IRuntime runtime = server.getRuntime();
-
-						server.delete();
-
-						if (runtime != null) {
-							runtime.delete();
-						}
-					}
-					catch (Exception e) {
-						ProjectCore.logError("Failed to delete server and runtime", e);
-					}
-				}
-			);
 		}
 	}
 
@@ -481,13 +357,13 @@ public class LiferayWorkspaceUtil {
 		final ILiferayProject liferayProject = LiferayCore.create(ILiferayProject.class, project);
 
 		if (liferayProject == null) {
-			throw new CoreException(ProjectCore.createErrorStatus("Can not find Liferay workspace project."));
+			throw new CoreException(LiferayCore.createErrorStatus("Can not find Liferay workspace project."));
 		}
 
 		final IWorkspaceProjectBuilder builder = liferayProject.adapt(IWorkspaceProjectBuilder.class);
 
 		if (builder == null) {
-			throw new CoreException(ProjectCore.createErrorStatus("Can not find Liferay Gradle project builder."));
+			throw new CoreException(LiferayCore.createErrorStatus("Can not find Liferay Gradle project builder."));
 		}
 
 		return builder;
@@ -583,7 +459,7 @@ public class LiferayWorkspaceUtil {
 			return true;
 		}
 		else if (count > 1) {
-			throw new CoreException(ProjectCore.createErrorStatus(multiWorkspaceErrorMsg));
+			throw new CoreException(LiferayCore.createErrorStatus(multiWorkspaceErrorMsg));
 		}
 
 		return false;
@@ -604,7 +480,7 @@ public class LiferayWorkspaceUtil {
 			return true;
 		}
 		else if (count > 1) {
-			throw new CoreException(ProjectCore.createErrorStatus(multiWorkspaceErrorMsg));
+			throw new CoreException(LiferayCore.createErrorStatus(multiWorkspaceErrorMsg));
 		}
 
 		return false;

@@ -16,12 +16,12 @@ package com.liferay.ide.gradle.ui.navigator.workspace;
 
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
 import com.liferay.ide.gradle.ui.action.RefreshWorkspaceModulesAction;
 import com.liferay.ide.gradle.ui.action.RemoveWorkspaceModulesAction;
 import com.liferay.ide.gradle.ui.action.StopWorkspaceModulesAction;
 import com.liferay.ide.gradle.ui.action.WatchWorkspaceModulesAction;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.util.Set;
 
