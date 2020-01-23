@@ -25,8 +25,7 @@ Require-Bundle: com.google.guava,
  org.eclipse.osgi.services,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.xml.core,
- org.json,
- com.liferay.ide.project.core;bundle-version="3.8.0"
+ org.json
 Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXMLFile.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.JSPFileWTP.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.JSPFFileWTP.xml,
