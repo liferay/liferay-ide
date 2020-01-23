@@ -26,6 +26,7 @@ import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.project.core.PluginsSDKBundleProject;

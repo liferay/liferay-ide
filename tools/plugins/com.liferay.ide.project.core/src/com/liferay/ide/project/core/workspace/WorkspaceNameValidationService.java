@@ -18,7 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ValidationUtil;
 
 import java.io.File;

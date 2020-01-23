@@ -15,8 +15,8 @@
 package com.liferay.ide.project.core.modules.ext;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.modeling.Status;

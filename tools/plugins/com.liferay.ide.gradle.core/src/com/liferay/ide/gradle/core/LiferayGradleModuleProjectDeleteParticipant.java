@@ -16,7 +16,7 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 
 import java.util.HashSet;
 import java.util.Set;

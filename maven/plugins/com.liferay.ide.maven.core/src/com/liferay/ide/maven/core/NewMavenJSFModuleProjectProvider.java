@@ -18,10 +18,10 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
 

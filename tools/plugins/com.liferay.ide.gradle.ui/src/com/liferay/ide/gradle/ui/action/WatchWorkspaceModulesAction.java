@@ -18,9 +18,9 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 import com.liferay.ide.ui.util.UIUtil;
 

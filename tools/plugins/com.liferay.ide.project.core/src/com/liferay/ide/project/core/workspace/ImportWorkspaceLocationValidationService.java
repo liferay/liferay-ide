@@ -16,7 +16,7 @@ package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 
 import org.eclipse.core.runtime.IStatus;

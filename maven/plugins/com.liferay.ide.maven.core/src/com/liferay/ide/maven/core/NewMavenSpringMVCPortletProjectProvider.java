@@ -17,13 +17,13 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.springmvcportlet.NewSpringMVCPortletProjectOp;
 import com.liferay.ide.project.core.springmvcportlet.SpringMVCPortletProjectConstants;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
 

@@ -18,7 +18,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.adapter.NoopLiferayProject;
-import com.liferay.ide.upgrade.plan.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.upgrade.plan.core.util.SearchFilesVisitor;
 
 import java.io.File;

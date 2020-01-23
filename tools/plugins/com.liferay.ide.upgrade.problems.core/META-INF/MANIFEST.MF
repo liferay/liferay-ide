@@ -171,4 +171,5 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.RemovedUnsafeFunctionalInterface.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedLayoutTemplateTags.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.IndexerDoGetSummaryDecl.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.SpringExtenderArtifactIdChanged.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.SpringExtenderArtifactIdChanged.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.SpringExtenderArtifactIdChangedForMavenProject.xml

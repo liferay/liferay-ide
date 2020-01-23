@@ -18,10 +18,10 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
 

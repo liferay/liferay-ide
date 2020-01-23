@@ -12,27 +12,29 @@
  * details.
  */
 
-package com.liferay.ide.project.core.modules.ext;
+package com.liferay.ide.upgrade.problems.test.apichanges71;
 
-import com.liferay.ide.core.IWorkspaceProject;
-import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import java.io.File;
 
-import org.eclipse.sapphire.DefaultValueService;
+import com.liferay.ide.upgrade.problems.test.apichanges.APITestBase;
 
 /**
- * @author Charles Wu
+ * @author Seiphon
  */
-public class TargetPlatformVersionDefaultValueService extends DefaultValueService {
+public class SpringExtenderArtifactIdChangedForMavenProjectTest extends APITestBase {
+
+	public int getExpectedNumber() {
+		return 1;
+	}
 
 	@Override
-	protected String compute() {
-		IWorkspaceProject gradleWorkspaceProject = LiferayWorkspaceUtil.getGradleWorkspaceProject();
+	public String getComponentName() {
+		return "com.liferay.ide.upgrade.problems.core.internal.liferay71.SpringExtenderArtifactIdChangedForMavenProject";
+	}
 
-		if (gradleWorkspaceProject != null) {
-			return gradleWorkspaceProject.getTargetPlatformVersion();
-		}
-
-		return null;
+	@Override
+	public File getTestFile() {
+		return new File("tests/files/pom.xml");
 	}
 
 }

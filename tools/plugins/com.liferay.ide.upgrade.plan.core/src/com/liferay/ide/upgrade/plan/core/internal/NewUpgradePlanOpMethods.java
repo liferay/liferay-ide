@@ -15,10 +15,10 @@
 package com.liferay.ide.upgrade.plan.core.internal;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.upgrade.plan.core.NewUpgradePlanOp;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
-import com.liferay.ide.upgrade.plan.core.util.LiferayWorkspaceUtil;
 
 import java.io.IOException;
 

@@ -16,7 +16,7 @@ package com.liferay.ide.project.core.modules.ext;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;

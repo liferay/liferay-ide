@@ -17,8 +17,9 @@ package com.liferay.ide.project.core.jobs;
 import com.liferay.ide.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.JobUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -50,7 +51,7 @@ public class InitBundleJob extends Job {
 
 				@Override
 				public void done(IJobChangeEvent event) {
-					LiferayWorkspaceUtil.addPortalRuntime(serverName);
+					ServerUtil.addPortalRuntime(serverName);
 				}
 
 			});

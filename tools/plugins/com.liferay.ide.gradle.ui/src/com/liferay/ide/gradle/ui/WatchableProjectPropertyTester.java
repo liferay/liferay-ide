@@ -14,8 +14,8 @@
 
 package com.liferay.ide.gradle.ui;
 
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFile;
