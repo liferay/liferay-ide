@@ -75,20 +75,6 @@ public abstract class APITestBase {
 		Assert.assertEquals("", getExpectedNumber(), problems.size());
 	}
 
-	@Test
-	public void test2() throws Exception {
-		FileMigrator fmigrator = context.getService(fileMigrators[0]);
-
-		List<UpgradeProblem> problems = fmigrator.analyze(getTestFile());
-
-		problems = fmigrator.analyze(getTestFile());
-
-		context.ungetService(fileMigrators[0]);
-
-		Assert.assertNotNull(problems);
-		Assert.assertEquals("", getExpectedNumber(), problems.size());
-	}
-
 	protected BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();
 	protected ServiceReference<FileMigrator>[] fileMigrators;
 

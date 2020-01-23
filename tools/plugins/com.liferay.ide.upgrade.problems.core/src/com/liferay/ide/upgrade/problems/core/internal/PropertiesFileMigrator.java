@@ -14,6 +14,7 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
@@ -58,7 +59,7 @@ public abstract class PropertiesFileMigrator implements FileMigrator {
 		for (String key : properties) {
 			List<FileSearchResult> results = propertiesFileChecker.findProperties(key);
 
-			if (results != null) {
+			if (ListUtil.isNotEmpty(results)) {
 				String fileName = "BREAKING_CHANGES.markdown";
 
 				if ("7.0".equals(version)) {

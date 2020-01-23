@@ -60,6 +60,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * Parses a java file and provides some methods for finding search results
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @Component(property = "file.extension=java", service = JavaFile.class)
 @SuppressWarnings("rawtypes")
@@ -376,7 +377,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 						// not strictly check the type and will check equals later
 
 						(((typeHint != null) && (type != null) &&
-							StringUtil.endsWith(type.getName(), typeHint)) ||
+							StringUtil.equals(type.getName(), typeHint)) ||
 
 							// with no typeHint then expressions can be used to
 							// match Static invocation

@@ -78,7 +78,7 @@ public class JavaFileJDTTest {
 
 		Assert.assertNotNull(searchResults);
 
-		Assert.assertEquals(searchResults.toString(), 4, searchResults.size());
+		Assert.assertEquals(searchResults.toString(), 3, searchResults.size());
 
 		FileSearchResult searchResult = searchResults.get(0);
 
