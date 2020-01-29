@@ -52,7 +52,7 @@
         <tycho-extras-version>1.0.0</tycho-extras-version>
         <tycho-m2e-site>https://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.9.0/N/0.9.0.201811261502/</tycho-m2e-site>
         <tycho-packaging-format>yyyyMMddHHmm'-ga1'</tycho-packaging-format>
-        <tycho-version>1.4.0</tycho-version>
+        <tycho-version>1.6.0</tycho-version>
     </properties>
 
     <repositories>
