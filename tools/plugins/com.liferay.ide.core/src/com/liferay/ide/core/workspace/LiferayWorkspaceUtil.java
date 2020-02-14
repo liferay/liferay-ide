@@ -225,9 +225,7 @@ public class LiferayWorkspaceUtil {
 
 		IPath workspaceProjectPath = workspaceProject.getLocation();
 
-		IPath bladePropertiesPath = workspaceProjectPath.append(".blade.properties");
-
-		Properties bladeProperties = PropertiesUtil.loadProperties(bladePropertiesPath);
+		Properties bladeProperties = PropertiesUtil.loadProperties(workspaceProjectPath.append(".blade.properties"));
 
 		return bladeProperties.getProperty("liferay.version.default");
 	}
