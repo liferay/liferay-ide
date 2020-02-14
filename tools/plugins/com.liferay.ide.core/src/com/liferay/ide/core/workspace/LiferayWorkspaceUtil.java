@@ -216,6 +216,20 @@ public class LiferayWorkspaceUtil {
 		return null;
 	}
 
+	public static String getLiferayWorkspaceProjectVersion() {
+		IProject workspaceProject = getWorkspaceProject();
+
+		if (workspaceProject == null) {
+			return null;
+		}
+
+		IPath workspaceProjectPath = workspaceProject.getLocation();
+
+		Properties bladeProperties = PropertiesUtil.loadProperties(workspaceProjectPath.append(".blade.properties"));
+
+		return bladeProperties.getProperty("liferay.version.default");
+	}
+
 	public static String[] getLiferayWorkspaceProjectWarsDirs(String workspaceLocation) {
 		String[] retval = null;
 
