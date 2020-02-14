@@ -79,6 +79,10 @@ public interface BaseModuleOp extends ExecutableElement {
 	@DefaultValue(text = "${ProjectName}")
 	public ValueProperty PROP_FINAL_PROJECT_NAME = new ValueProperty(TYPE, "FinalProjectName");
 
+	@Service(impl = HasWorkspaceProjectDefaultValueService.class)
+	@Type(base = String.class)
+	public ValueProperty PROP_HAS_WORKSPACE_PROJECT = new ValueProperty(TYPE, "HasWorkspaceProject");
+
 	@AbsolutePath
 	@Type(base = Path.class)
 	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)

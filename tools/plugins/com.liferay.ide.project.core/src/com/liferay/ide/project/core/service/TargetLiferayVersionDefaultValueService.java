@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.core.service;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -34,6 +36,12 @@ public class TargetLiferayVersionDefaultValueService extends DefaultValueService
 
 	@Override
 	protected String compute() {
+		String liferayWorkspaceProjectVersion = LiferayWorkspaceUtil.getLiferayWorkspaceProjectVersion();
+
+		if (CoreUtil.isNotNullOrEmpty(liferayWorkspaceProjectVersion)) {
+			return liferayWorkspaceProjectVersion;
+		}
+
 		Set<String> liferayTargetPlatformVersions = WorkspaceConstants.liferayTargetPlatformVersions.keySet();
 
 		String[] versions = liferayTargetPlatformVersions.toArray(new String[0]);

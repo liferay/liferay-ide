@@ -18,7 +18,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.modeling.Status;
 
 import org.osgi.framework.Version;
@@ -35,9 +34,7 @@ public class ModuleExtProjectNameValidationService extends ModuleProjectNameVali
 			return Status.createErrorStatus("We recommend Liferay Gradle workspace to develop module ext project!");
 		}
 
-		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
-
-		Version liferayWorkspaceVersion = new Version(LiferayWorkspaceUtil.guessLiferayVersion(workspaceProject));
+		Version liferayWorkspaceVersion = new Version(LiferayWorkspaceUtil.getLiferayWorkspaceProjectVersion());
 
 		Version version70 = new Version("7.0");
 
