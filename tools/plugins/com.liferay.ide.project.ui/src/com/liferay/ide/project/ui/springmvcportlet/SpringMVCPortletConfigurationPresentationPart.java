@@ -68,8 +68,17 @@ public class SpringMVCPortletConfigurationPresentationPart
 
 								if (value.equals(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK[0])) {
 									_frameworkDependenciesCombo.removeAll();
-									_frameworkDependenciesCombo.setItems(
-										SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
+
+									String version = get(_op().getLiferayVersion());
+
+									if (version.equals(WorkspaceConstants.LIFERAY_VERSIONS[3])) {
+										_frameworkDependenciesCombo.setItems(
+											SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES);
+									}
+									else {
+										_frameworkDependenciesCombo.setItems(
+											SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
+									}
 								}
 								else if (value.equals(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK[1])) {
 									_frameworkDependenciesCombo.removeAll();
