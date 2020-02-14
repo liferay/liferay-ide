@@ -66,15 +66,24 @@ public class SpringMVCPortletConfigurationPresentationPart
 							if (_frameworkCombo.equals(e.getSource())) {
 								String value = _frameworkCombo.getText();
 
+								NewSpringMVCPortletProjectOp op = _op();
+
+								String version = get(op.getLiferayVersion());
+
 								if (value.equals(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK[0])) {
 									_frameworkDependenciesCombo.removeAll();
-									_frameworkDependenciesCombo.setItems(
-										SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
+
+									if (version.equals(WorkspaceConstants.LIFERAY_VERSIONS[3])) {
+										_frameworkDependenciesCombo.setItems(
+											SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES);
+									}
+									else {
+										_frameworkDependenciesCombo.setItems(
+											SpringMVCPortletProjectConstants.SPRING_FRAMEWORK_DEPENDENCIES[0]);
+									}
 								}
 								else if (value.equals(SpringMVCPortletProjectConstants.SPRING_FRAMEWORK[1])) {
 									_frameworkDependenciesCombo.removeAll();
-
-									String version = get(_op().getLiferayVersion());
 
 									if (version.equals(WorkspaceConstants.LIFERAY_VERSIONS[1]) ||
 										version.equals(WorkspaceConstants.LIFERAY_VERSIONS[2])) {
@@ -90,7 +99,7 @@ public class SpringMVCPortletConfigurationPresentationPart
 
 								_frameworkDependenciesCombo.select(0);
 
-								_op().setFramework(value);
+								op.setFramework(value);
 							}
 						}
 
