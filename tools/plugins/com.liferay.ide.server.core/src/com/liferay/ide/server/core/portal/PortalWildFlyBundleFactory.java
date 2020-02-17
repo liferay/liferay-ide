@@ -28,6 +28,8 @@ import java.util.Map;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
+import org.osgi.framework.Version;
+
 /**
  * @author Simon Jiang
  * @author Charles Wu
@@ -59,8 +61,15 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory {
 				new File[] {new File(path.toPortableString(), "modules")}, "org.jboss.as.product",
 				"wildfly-full/dir/META-INF", _WF_RELEASE_MANIFEST_KEY);
 
-			if ((vers != null) && (vers.startsWith("10.") || vers.startsWith("11."))) {
-				return true;
+			if (vers != null) {
+				Version version = Version.parseVersion(vers);
+
+				if (version.compareTo(new Version("10.0")) >= 0) {
+					return true;
+				}
+				else {
+					return super.detectBundleDir(path);
+				}
 			}
 			else {
 				return super.detectBundleDir(path);
