@@ -249,7 +249,8 @@ public class GradleUtil {
 		CancellationTokenSource cancellationTokenSource = GradleConnector.newCancellationTokenSource();
 
 		return runGradleTask(
-			project, new String[] {task}, new String[0], cancellationTokenSource, redirectOutput, monitor);
+			project, new String[] {task}, new String[] {"--rerun-tasks"}, cancellationTokenSource, redirectOutput,
+			monitor);
 	}
 
 	public static void runGradleTask(IProject project, String[] tasks, IProgressMonitor monitor) throws CoreException {
