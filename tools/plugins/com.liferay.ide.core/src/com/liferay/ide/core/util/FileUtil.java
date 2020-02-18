@@ -531,6 +531,12 @@ public class FileUtil {
 		return location.toString();
 	}
 
+	public static java.nio.file.Path getPath(IFile file) {
+		File f = getFile(file);
+
+		return f.toPath();
+	}
+
 	public static IPath getRawLocation(IContainer container) {
 		if (container == null) {
 			return null;

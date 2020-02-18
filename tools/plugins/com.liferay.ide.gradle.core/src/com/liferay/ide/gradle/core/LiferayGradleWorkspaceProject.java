@@ -130,16 +130,14 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 			List<? extends GradleTask> tasksList = tasksSet.getAll();
 
-			List<? extends GradleTask> dependencyManagementTasks = tasksList.stream(
+			Optional<? extends GradleTask> dependencyManagementTask = tasksList.stream(
 			).filter(
 				task -> StringUtil.equals("dependencyManagement", task.getName())
 			).filter(
 				task -> workspaceGradleProject.equals(task.getProject())
-			).collect(
-				Collectors.toList()
-			);
+			).findAny();
 
-			if (ListUtil.isNotEmpty(dependencyManagementTasks)) {
+			if (dependencyManagementTask.isPresent()) {
 				try {
 					output = GradleUtil.runGradleTask(
 						LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"dependencyManagement"},
@@ -160,18 +158,23 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 				catch (IOException ioe) {
 				}
 
-				List<Artifact> dependencies = gradleDependencyUpdater.getDependencies(true, "classpath");
+				String workspacePluginVersion = Optional.ofNullable(
+					gradleDependencyUpdater
+				).flatMap(
+					updater -> {
+						List<Artifact> artifacts = updater.getDependencies(true, "classpath");
 
-				final String workspacePluginVersion = dependencies.stream(
-				).filter(
-					artifact -> "com.liferay".equals(artifact.getGroupId())
-				).filter(
-					artifact -> "com.liferay.gradle.plugins.workspace".equals(artifact.getArtifactId())
-				).filter(
-					artifact -> CoreUtil.isNotNullOrEmpty(artifact.getVersion())
-				).map(
-					artifact -> artifact.getVersion()
-				).findFirst(
+						return artifacts.stream(
+						).filter(
+							artifact -> "com.liferay".equals(artifact.getGroupId())
+						).filter(
+							artifact -> "com.liferay.gradle.plugins.workspace".equals(artifact.getArtifactId())
+						).filter(
+							artifact -> CoreUtil.isNotNullOrEmpty(artifact.getVersion())
+						).map(
+							artifact -> artifact.getVersion()
+						).findFirst();
+					}
 				).orElseGet(
 					() -> "2.2.4"
 				);
