@@ -35,6 +35,7 @@ import com.liferay.ide.server.core.ILiferayServer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -54,9 +55,11 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+
 import org.gradle.tooling.model.DomainObjectSet;
 import org.gradle.tooling.model.GradleProject;
 import org.gradle.tooling.model.GradleTask;
+
 import org.osgi.framework.Version;
 
 /**
@@ -121,19 +124,26 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 		if ((getTargetPlatformVersion() != null) && _targetPlatformArtifacts.isEmpty()) {
 			String output = "";
 
-			GradleProject gradleModel = GradleUtil.getGradleProject(getProject());
+			GradleProject workspaceGradleProject = GradleUtil.getGradleProject(getProject());
 
-			DomainObjectSet<? extends GradleTask> tasksSet = gradleModel.getTasks();
+			DomainObjectSet<? extends GradleTask> tasksSet = workspaceGradleProject.getTasks();
 
 			List<? extends GradleTask> tasksList = tasksSet.getAll();
 
-			String tasks = tasksList.toString();
+			List<? extends GradleTask> dependencyManagementTasks = tasksList.stream(
+			).filter(
+				task -> StringUtil.equals("dependencyManagement", task.getName())
+			).filter(
+				task -> workspaceGradleProject.equals(task.getProject())
+			).collect(
+				Collectors.toList()
+			);
 
-			if (tasks.contains("LaunchableGradleProjectTask{path=':dependencyManagement',public=true}")) {
+			if (ListUtil.isNotEmpty(dependencyManagementTasks)) {
 				try {
 					output = GradleUtil.runGradleTask(
-						LiferayWorkspaceUtil.getWorkspaceProject(), "dependencyManagement", true,
-						new NullProgressMonitor());
+						LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"dependencyManagement"},
+						new String[] {"--rerun-tasks"}, true, new NullProgressMonitor());
 				}
 				catch (CoreException ce) {
 				}

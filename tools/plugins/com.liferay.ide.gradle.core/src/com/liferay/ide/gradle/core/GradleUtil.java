@@ -249,14 +249,22 @@ public class GradleUtil {
 		CancellationTokenSource cancellationTokenSource = GradleConnector.newCancellationTokenSource();
 
 		return runGradleTask(
-			project, new String[] {task}, new String[] {"--rerun-tasks"}, cancellationTokenSource, redirectOutput,
-			monitor);
+			project, new String[] {task}, new String[0], cancellationTokenSource, redirectOutput, monitor);
 	}
 
 	public static void runGradleTask(IProject project, String[] tasks, IProgressMonitor monitor) throws CoreException {
 		CancellationTokenSource cancellationTokenSource = GradleConnector.newCancellationTokenSource();
 
 		runGradleTask(project, tasks, new String[0], cancellationTokenSource, false, monitor);
+	}
+
+	public static String runGradleTask(
+			IProject project, String[] tasks, String[] arguments, boolean redirectOutput, IProgressMonitor monitor)
+		throws CoreException {
+
+		CancellationTokenSource cancellationTokenSource = GradleConnector.newCancellationTokenSource();
+
+		return runGradleTask(project, tasks, arguments, cancellationTokenSource, redirectOutput, monitor);
 	}
 
 	public static String runGradleTask(
