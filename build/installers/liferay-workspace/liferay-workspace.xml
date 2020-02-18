@@ -322,6 +322,9 @@
                             <elseActionList>
                                 <setInstallerVariable name="selectbundleversion" value="7.2"/>
                             </elseActionList>
+                            <elseActionList>
+                                <setInstallerVariable name="selectbundleversion" value="7.3"/>
+                            </elseActionList>
                         </if>
                     </elseActionList>
                 </if>
@@ -665,6 +668,13 @@
                     <name>7_2</name>
                     <title>7.2</title>
                     <description>Liferay Bundle 7.2</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+                <labelParameter>
+                    <name>7_3</name>
+                    <title>7.3</title>
+                    <description>Liferay Bundle 7.3</description>
                     <explanation></explanation>
                     <image></image>
                 </labelParameter>
