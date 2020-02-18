@@ -28,6 +28,7 @@ import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
+import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import com.liferay.ide.server.core.ILiferayServer;
 
@@ -55,10 +56,17 @@ import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 
+import org.gradle.tooling.model.DomainObjectSet;
+import org.gradle.tooling.model.GradleProject;
+import org.gradle.tooling.model.GradleTask;
+
+import org.osgi.framework.Version;
+
 /**
  * @author Andy Wu
  * @author Simon Jiang
  * @author Terry Jia
+ * @author Ethan Sun
  */
 public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject implements EventListener {
 
@@ -116,66 +124,136 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 		if ((getTargetPlatformVersion() != null) && _targetPlatformArtifacts.isEmpty()) {
 			String output = "";
 
-			try {
-				output = GradleUtil.runGradleTask(
-					LiferayWorkspaceUtil.getWorkspaceProject(), "dependencyManagement", true,
-					new NullProgressMonitor());
-			}
-			catch (CoreException ce) {
-			}
+			GradleProject workspaceGradleProject = GradleUtil.getGradleProject(getProject());
 
-			List<String> list = new ArrayList<>();
+			DomainObjectSet<? extends GradleTask> tasksSet = workspaceGradleProject.getTasks();
 
-			if (CoreUtil.isNotNullOrEmpty(output) && !output.equals("")) {
-				BufferedReader bufferedReader = new BufferedReader(new StringReader(output));
+			List<? extends GradleTask> tasksList = tasksSet.getAll();
 
-				String line;
+			Optional<? extends GradleTask> dependencyManagementTask = tasksList.stream(
+			).filter(
+				task -> StringUtil.equals("dependencyManagement", task.getName())
+			).filter(
+				task -> workspaceGradleProject.equals(task.getProject())
+			).findAny();
+
+			if (dependencyManagementTask.isPresent()) {
+				try {
+					output = GradleUtil.runGradleTask(
+						LiferayWorkspaceUtil.getWorkspaceProject(), new String[] {"dependencyManagement"},
+						new String[] {"--rerun-tasks"}, true, new NullProgressMonitor());
+				}
+				catch (CoreException ce) {
+				}
+
+				IProject project = getProject();
+
+				IFile settingsGradleFile = project.getFile("settings.gradle");
+
+				GradleDependencyUpdater gradleDependencyUpdater = null;
 
 				try {
-					boolean start = false;
-
-					while ((line = bufferedReader.readLine()) != null) {
-						if ("compileOnly - Dependency management for the compileOnly configuration".equals(line)) {
-							start = true;
-
-							continue;
-						}
-
-						if (start) {
-							if (StringUtil.equals(line.trim(), "")) {
-								break;
-							}
-
-							list.add(line.trim());
-						}
-					}
+					gradleDependencyUpdater = new GradleDependencyUpdater(settingsGradleFile);
 				}
 				catch (IOException ioe) {
 				}
-			}
-			else {
-				LiferayGradleCore.log(
-					LiferayGradleCore.createWarningStatus(
-						new String("Please check liferay target platform dependencies.")));
-			}
 
-			_targetPlatformArtifacts = list.stream(
-			).map(
-				s -> {
-					int i1 = s.indexOf(":");
-					int i2 = s.indexOf(" ");
+				String workspacePluginVersion = Optional.ofNullable(
+					gradleDependencyUpdater
+				).flatMap(
+					updater -> {
+						List<Artifact> artifacts = updater.getDependencies(true, "classpath");
 
-					String groupId = s.substring(0, i1);
-					String artifactId = s.substring(i1 + 1, i2);
-					String version = s.substring(i2 + 1);
+						return artifacts.stream(
+						).filter(
+							artifact -> "com.liferay".equals(artifact.getGroupId())
+						).filter(
+							artifact -> "com.liferay.gradle.plugins.workspace".equals(artifact.getArtifactId())
+						).filter(
+							artifact -> CoreUtil.isNotNullOrEmpty(artifact.getVersion())
+						).map(
+							artifact -> artifact.getVersion()
+						).findFirst();
+					}
+				).orElseGet(
+					() -> "2.2.4"
+				);
 
-					Artifact artifact = new Artifact(groupId, artifactId, version, "compileOnly", null);
+				String taskOutputInfo;
 
-					return artifact;
+				if (CoreUtil.compareVersions(new Version(workspacePluginVersion), new Version("2.2.4")) < 0) {
+					taskOutputInfo = "compileOnly - Dependency management for the compileOnly configuration";
 				}
-			).collect(
-				Collectors.toList()
-			);
+				else {
+					taskOutputInfo = "> Task :dependencyManagement";
+				}
+
+				List<String> list = new ArrayList<>();
+
+				if (CoreUtil.isNotNullOrEmpty(output) && !output.equals("")) {
+					BufferedReader bufferedReader = new BufferedReader(new StringReader(output));
+
+					String line;
+
+					try {
+						boolean start = false;
+
+						while ((line = bufferedReader.readLine()) != null) {
+							if (taskOutputInfo.equals(line)) {
+								start = true;
+
+								continue;
+							}
+
+							if (start) {
+								if (StringUtil.equals(line.trim(), "")) {
+									break;
+								}
+
+								list.add(line.trim());
+							}
+						}
+					}
+					catch (IOException ioe) {
+					}
+				}
+				else {
+					LiferayGradleCore.log(
+						LiferayGradleCore.createWarningStatus(
+							new String("Please check liferay target platform dependencies.")));
+				}
+
+				_targetPlatformArtifacts = list.stream(
+				).map(
+					s -> {
+						String groupId;
+						String artifactId;
+						String version;
+
+						if (CoreUtil.compareVersions(new Version(workspacePluginVersion), new Version("2.2.4")) < 0) {
+							int i1 = s.indexOf(":");
+							int i2 = s.indexOf(" ");
+
+							groupId = s.substring(0, i1);
+							artifactId = s.substring(i1 + 1, i2);
+							version = s.substring(i2 + 1);
+						}
+						else {
+							String[] artifactArray = s.split(":");
+
+							groupId = artifactArray[0];
+							artifactId = artifactArray[1];
+							version = artifactArray[2];
+						}
+
+						Artifact artifact = new Artifact(groupId, artifactId, version, "compileOnly", null);
+
+						return artifact;
+					}
+				).collect(
+					Collectors.toList()
+				);
+			}
 		}
 
 		return _targetPlatformArtifacts;

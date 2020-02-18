@@ -259,6 +259,15 @@ public class GradleUtil {
 	}
 
 	public static String runGradleTask(
+			IProject project, String[] tasks, String[] arguments, boolean redirectOutput, IProgressMonitor monitor)
+		throws CoreException {
+
+		CancellationTokenSource cancellationTokenSource = GradleConnector.newCancellationTokenSource();
+
+		return runGradleTask(project, tasks, arguments, cancellationTokenSource, redirectOutput, monitor);
+	}
+
+	public static String runGradleTask(
 			IProject project, String[] tasks, String[] arguments, CancellationTokenSource cancellationTokenSource,
 			boolean redirectOutput, IProgressMonitor monitor)
 		throws CoreException {

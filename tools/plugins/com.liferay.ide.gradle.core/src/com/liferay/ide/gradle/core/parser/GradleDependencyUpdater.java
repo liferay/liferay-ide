@@ -21,6 +21,8 @@ import com.liferay.ide.core.util.FileUtil;
 import java.io.File;
 import java.io.IOException;
 
+import java.nio.file.Files;
+
 import java.util.Comparator;
 import java.util.List;
 
@@ -42,13 +44,13 @@ import org.eclipse.core.resources.IFile;
 public class GradleDependencyUpdater {
 
 	public GradleDependencyUpdater(File file) throws IOException {
-		this(FileUtils.readFileToString(file, "UTF-8"));
+		this(new String(Files.readAllBytes(file.toPath())));
 
 		_file = file;
 	}
 
 	public GradleDependencyUpdater(IFile file) throws IOException {
-		this(FileUtils.readFileToString(FileUtil.getFile(file), "UTF-8"));
+		this(new String(Files.readAllBytes(FileUtil.getPath(file))));
 
 		_file = FileUtil.getFile(file);
 	}
@@ -109,7 +111,7 @@ public class GradleDependencyUpdater {
 
 			});
 
-		_gradleFileContents = FileUtils.readLines(_file);
+		_gradleFileContents = Files.readAllLines(_file.toPath());
 
 		for (Artifact artifact : artifacts) {
 			updateDependency(dependenciesClosureVisitor, artifact, artifact);
@@ -123,7 +125,7 @@ public class GradleDependencyUpdater {
 
 		_walkScript(dependenciesClosureVisitor);
 
-		_gradleFileContents = FileUtils.readLines(_file);
+		_gradleFileContents = Files.readAllLines(_file.toPath());
 
 		updateDependency(dependenciesClosureVisitor, oldArtifact, newArtifact);
 
@@ -179,7 +181,7 @@ public class GradleDependencyUpdater {
 
 		_walkScript(visitor);
 
-		_gradleFileContents = FileUtils.readLines(_file);
+		_gradleFileContents = Files.readAllLines(_file.toPath());
 
 		String d = dependency.trim();
 
