@@ -320,10 +320,21 @@
                                 </compareText>
                             </conditionRuleList>
                             <elseActionList>
-                                <setInstallerVariable name="selectbundleversion" value="7.2"/>
-                            </elseActionList>
-                            <elseActionList>
-                                <setInstallerVariable name="selectbundleversion" value="7.3"/>
+                                <if>
+                                    <actionList>
+                                        <setInstallerVariable name="selectbundleversion" value="7.2"/>
+                                    </actionList>
+                                    <conditionRuleList>
+                                        <compareText>
+                                            <logic>contains</logic>
+                                            <text>${bundleversion}</text>
+                                            <value>7_2</value>
+                                        </compareText>
+                                    </conditionRuleList>
+                                    <elseActionList>
+                                        <setInstallerVariable name="selectbundleversion" value="7.3"/>
+                                    </elseActionList>
+                                </if>
                             </elseActionList>
                         </if>
                     </elseActionList>
