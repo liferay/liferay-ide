@@ -71,6 +71,10 @@ public class PortalWildFlyBundle extends PortalJBossBundle {
 						"1.1.2.Final.jar\"");
 		}
 
+		args.add(
+			"-Xbootclasspath/p:\"" + bundlePath +
+				"/modules/system/layers/base/org/wildfly/common/main/wildfly-common-1.4.0.Final.jar\"");
+
 		args.add("-Dorg.jboss.boot.log.file=\"" + bundlePath.append("/standalone/log/boot.log") + "\"");
 		args.add("-Dlogging.configuration=file:\"" + bundlePath + "/standalone/configuration/logging.properties\"");
 		args.add("-Djboss.home.dir=\"" + bundlePath + "\"");
