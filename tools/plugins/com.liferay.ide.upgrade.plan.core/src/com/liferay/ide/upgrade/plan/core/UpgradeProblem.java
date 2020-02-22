@@ -14,6 +14,8 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import java.io.File;
 
 import java.util.UUID;
@@ -23,6 +25,7 @@ import org.eclipse.core.runtime.Adapters;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class UpgradeProblem {
 
@@ -121,8 +124,8 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (_summary == null) {
-			if (other._summary != null) {
+		if (CoreUtil.isNullOrEmpty(_summary)) {
+			if (CoreUtil.isNotNullOrEmpty(other._summary)) {
 				return false;
 			}
 		}
@@ -130,8 +133,8 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (_ticket == null) {
-			if (other._ticket != null) {
+		if (CoreUtil.isNullOrEmpty(_ticket)) {
+			if (CoreUtil.isNotNullOrEmpty(other._ticket)) {
 				return false;
 			}
 		}
@@ -139,8 +142,8 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (_title == null) {
-			if (other._title != null) {
+		if (CoreUtil.isNullOrEmpty(_title)) {
+			if (CoreUtil.isNotNullOrEmpty(other._title)) {
 				return false;
 			}
 		}
@@ -148,8 +151,8 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (_type == null) {
-			if (other._type != null) {
+		if (CoreUtil.isNullOrEmpty(_type)) {
+			if (CoreUtil.isNotNullOrEmpty(other._type)) {
 				return false;
 			}
 		}
@@ -157,8 +160,8 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (_version == null) {
-			if (other._version != null) {
+		if (CoreUtil.isNullOrEmpty(_version)) {
+			if (CoreUtil.isNotNullOrEmpty(other._version)) {
 				return false;
 			}
 		}
@@ -166,8 +169,8 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (_autoCorrectContext == null) {
-			if (other._autoCorrectContext != null) {
+		if (CoreUtil.isNullOrEmpty(_autoCorrectContext)) {
+			if (CoreUtil.isNotNullOrEmpty(other._autoCorrectContext)) {
 				return false;
 			}
 		}

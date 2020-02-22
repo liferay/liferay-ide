@@ -64,19 +64,6 @@ public class FindUpgradeProblemsCommand implements UpgradeCommand, UpgradeProble
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		Collection<UpgradeProblem> ignoredProblems = upgradePlan.getIgnoredProblems();
-
-		if ((ignoredProblems == null) || ignoredProblems.isEmpty()) {
-			Set<UpgradeProblem> ignoredProblemSet = upgradeProblems.stream(
-			).filter(
-				problem -> UpgradeProblem.STATUS_IGNORE == problem.getStatus()
-			).collect(
-				Collectors.toSet()
-			);
-
-			upgradePlan.addIgnoredProblems(ignoredProblemSet);
-		}
-
 		upgradeProblems.stream(
 		).map(
 			this::findMarker
@@ -88,6 +75,8 @@ public class FindUpgradeProblemsCommand implements UpgradeCommand, UpgradeProble
 
 		upgradeProblems.clear();
 
+		Collection<UpgradeProblem> ignoredProblems = upgradePlan.getIgnoredProblems();
+
 		List<String> upgradeVersions = upgradePlan.getUpgradeVersions();
 
 		List<UpgradeProblem> foundUpgradeProblems = projects.stream(
@@ -98,7 +87,7 @@ public class FindUpgradeProblemsCommand implements UpgradeCommand, UpgradeProble
 		).flatMap(
 			findProblems -> findProblems.stream()
 		).filter(
-			findProblem -> ListUtil.notContains((Set<UpgradeProblem>)upgradePlan.getIgnoredProblems(), findProblem)
+			findProblem -> ListUtil.notContains((Set<UpgradeProblem>)ignoredProblems, findProblem)
 		).collect(
 			Collectors.toList()
 		);

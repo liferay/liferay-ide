@@ -22,8 +22,6 @@ import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.preference.PreferencePage;
@@ -158,6 +156,8 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 						try {
 							UpgradeProblem problem = (UpgradeProblem)selection.getFirstElement();
 
+							problem.setStatus(UpgradeProblem.STATUS_NOT_RESOLVED);
+
 							_restoreProblems.add(problem);
 
 							_ignoreProblems.remove(problem);
@@ -261,23 +261,9 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 		UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
 
-		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
+		upgradePlan.addUpgradeProblems(_restoreProblems);
 
-		upgradeProblems.stream(
-		).filter(
-			_restoreProblems::contains
-		).forEach(
-			upgradeProblem -> upgradeProblem.setStatus(UpgradeProblem.STATUS_NOT_RESOLVED)
-		);
-
-		Set<UpgradeProblem> ignoredProblemSet = upgradeProblems.stream(
-		).filter(
-			problem -> UpgradeProblem.STATUS_IGNORE == problem.getStatus()
-		).collect(
-			Collectors.toSet()
-		);
-
-		upgradePlan.addIgnoredProblems(ignoredProblemSet);
+		upgradePlan.removeIgnoredProblems(_restoreProblems);
 
 		upgradePlanner.saveUpgradePlan(upgradePlan);
 

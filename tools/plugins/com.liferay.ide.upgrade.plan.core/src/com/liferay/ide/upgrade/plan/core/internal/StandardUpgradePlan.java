@@ -55,8 +55,17 @@ public class StandardUpgradePlan implements UpgradePlan {
 	}
 
 	@Override
+	public void addIgnoredProblem(UpgradeProblem ignoredProblem) {
+		_ignoredProblems.add(ignoredProblem);
+
+		_upgradeProblems.remove(ignoredProblem);
+	}
+
+	@Override
 	public void addIgnoredProblems(Collection<UpgradeProblem> ignoredProblems) {
 		_ignoredProblems.addAll(ignoredProblems);
+
+		_upgradeProblems.removeAll(ignoredProblems);
 	}
 
 	@Override
@@ -81,6 +90,7 @@ public class StandardUpgradePlan implements UpgradePlan {
 			isEqualIgnoreCase(_targetVersion, targetUpgradePlan._targetVersion) &&
 			isEqualIgnoreCase(_upgradePlanOutline, targetUpgradePlan._upgradePlanOutline) &&
 			_upgradeProblems.equals(targetUpgradePlan._upgradeProblems) &&
+			_ignoredProblems.equals(targetUpgradePlan._ignoredProblems) &&
 			_upgradeSteps.equals(targetUpgradePlan._upgradeSteps)) {
 
 			return true;
@@ -206,6 +216,11 @@ public class StandardUpgradePlan implements UpgradePlan {
 		}
 
 		return false;
+	}
+
+	@Override
+	public void removeIgnoredProblems(Collection<UpgradeProblem> upgradeProblems) {
+		_ignoredProblems.removeAll(upgradeProblems);
 	}
 
 	@SuppressWarnings("serial")
