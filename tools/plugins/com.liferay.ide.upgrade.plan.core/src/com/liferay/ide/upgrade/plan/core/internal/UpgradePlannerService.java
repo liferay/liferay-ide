@@ -45,6 +45,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
@@ -397,7 +398,10 @@ public class UpgradePlannerService implements UpgradePlanner {
 	private void _loadUpgradeProblems(IMemento memento, UpgradePlan upgradePlan) {
 		IMemento[] upgradeProblemsMemento = memento.getChildren("upgradeProblem");
 
-		List<UpgradeProblem> upgradeProblems = Stream.of(
+		Set<UpgradeProblem> ignoreUpgradeProlems = new CopyOnWriteArraySet<>();
+		Set<UpgradeProblem> upgradeProlems = new CopyOnWriteArraySet<>();
+
+		Stream.of(
 			upgradeProblemsMemento
 		).filter(
 			upgradeProblemMemento -> {
@@ -406,7 +410,7 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 				return resource != null;
 			}
-		).map(
+		).forEach(
 			upgradeProblemMemento -> {
 				String autoCorrectContext = upgradeProblemMemento.getString("autoCorrectContext");
 				String html = upgradeProblemMemento.getString("html");
@@ -428,13 +432,18 @@ public class UpgradePlannerService implements UpgradePlanner {
 					uuid, title, summary, type, ticket, version, new File(resourceLocation), lineNumber, startOffset,
 					endOffset, html, autoCorrectContext, status, markerId, markerType);
 
-				return upgradeProblem;
+				if (upgradeProblem.getStatus() == UpgradeProblem.STATUS_IGNORE) {
+					ignoreUpgradeProlems.add(upgradeProblem);
+				}
+				else {
+					upgradeProlems.add(upgradeProblem);
+				}
 			}
-		).collect(
-			Collectors.toList()
 		);
 
-		upgradePlan.addUpgradeProblems(upgradeProblems);
+		upgradePlan.addIgnoredProblems(ignoreUpgradeProlems);
+
+		upgradePlan.addUpgradeProblems(upgradeProlems);
 	}
 
 	private void _loadUpgradeSteps(IMemento memento, List<UpgradeStep> upgradeSteps, UpgradeStep parentUpgradeStep) {
@@ -471,9 +480,12 @@ public class UpgradePlannerService implements UpgradePlanner {
 	private void _saveUpgradeProblems(IMemento memento, UpgradePlan upgradePlan) {
 		memento.removeChildren("upgradeProblem");
 
-		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
+		Collection<UpgradeProblem> allUpgradeProblems = new CopyOnWriteArraySet<>();
 
-		for (UpgradeProblem upgradeProblem : upgradeProblems) {
+		allUpgradeProblems.addAll(upgradePlan.getUpgradeProblems());
+		allUpgradeProblems.addAll(upgradePlan.getIgnoredProblems());
+
+		for (UpgradeProblem upgradeProblem : allUpgradeProblems) {
 			IMemento upgradeProblemMemento = memento.createChild("upgradeProblem");
 
 			File resource = upgradeProblem.getResource();

@@ -19,9 +19,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.actions.SelectionProviderAction;
@@ -51,17 +48,15 @@ public class IgnoreAction extends SelectionProviderAction implements UpgradeProb
 
 	@Override
 	public void run() {
-		List<UpgradeProblem> upgradeProblems = getUpgradeProblems(getSelection());
+		UpgradeProblem upgradeProblem = getUpgradeProblem(getSelection());
 
 		UpgradePlanner upgradePlanner = _serviceTracker.getService();
 
 		UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
 
-		Stream<UpgradeProblem> stream = upgradeProblems.stream();
+		ignore(upgradeProblem);
 
-		stream.forEach(this::ignore);
-
-		upgradePlan.addIgnoredProblems(upgradeProblems);
+		upgradePlan.addIgnoredProblem(upgradeProblem);
 
 		Viewer viewer = (Viewer)getSelectionProvider();
 

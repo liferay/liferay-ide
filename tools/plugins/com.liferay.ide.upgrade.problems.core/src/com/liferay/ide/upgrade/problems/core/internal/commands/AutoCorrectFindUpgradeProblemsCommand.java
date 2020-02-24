@@ -51,6 +51,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -151,19 +152,6 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 
 		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
 
-		Collection<UpgradeProblem> ignoredProblems = upgradePlan.getIgnoredProblems();
-
-		if ((ignoredProblems == null) || ignoredProblems.isEmpty()) {
-			Set<UpgradeProblem> ignoredProblemSet = upgradeProblems.stream(
-			).filter(
-				problem -> UpgradeProblem.STATUS_IGNORE == problem.getStatus()
-			).collect(
-				Collectors.toSet()
-			);
-
-			upgradePlan.addIgnoredProblems(ignoredProblemSet);
-		}
-
 		if (ListUtil.isNotEmpty(upgradeProblems)) {
 			boolean result = _messagePrompt.promptQuestion(
 				"Remove the found results?",
@@ -187,7 +175,7 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 			return Collections.emptyList();
 		}
 
-		return projects.stream(
+		List<UpgradeProblem> autoCorrectProblems = projects.stream(
 		).map(
 			FileUtil::getFile
 		).map(
@@ -200,6 +188,16 @@ public class AutoCorrectFindUpgradeProblemsCommand implements UpgradeCommand, Up
 		).collect(
 			Collectors.toList()
 		);
+
+		autoCorrectProblems.sort(
+			(problem1, problem2) -> {
+				Version version1 = new Version(problem1.getVersion());
+				Version version2 = new Version(problem2.getVersion());
+
+				return version1.compareTo(version2);
+			});
+
+		return autoCorrectProblems;
 	}
 
 	@Reference

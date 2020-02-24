@@ -19,11 +19,10 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
+import com.liferay.ide.upgrade.problems.core.UpgradeProblemSupport;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.preference.PreferencePage;
@@ -59,8 +58,10 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * @author Lovett Li
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
-public class UpgradeProblemsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+public class UpgradeProblemsPreferencePage
+	extends PreferencePage implements IWorkbenchPreferencePage, UpgradeProblemSupport {
 
 	public UpgradeProblemsPreferencePage() {
 		super("Ignored Upgrade Problems");
@@ -158,6 +159,8 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 						try {
 							UpgradeProblem problem = (UpgradeProblem)selection.getFirstElement();
 
+							problem.setStatus(UpgradeProblem.STATUS_NOT_RESOLVED);
+
 							_restoreProblems.add(problem);
 
 							_ignoreProblems.remove(problem);
@@ -252,6 +255,8 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 			return;
 		}
 
+		noDefaultAndApplyButton();
+
 		_ignoreProblems = upgradePlan.getIgnoredProblems();
 	}
 
@@ -261,23 +266,11 @@ public class UpgradeProblemsPreferencePage extends PreferencePage implements IWo
 
 		UpgradePlan upgradePlan = upgradePlanner.getCurrentUpgradePlan();
 
-		Collection<UpgradeProblem> upgradeProblems = upgradePlan.getUpgradeProblems();
+		upgradePlan.addUpgradeProblems(_restoreProblems);
 
-		upgradeProblems.stream(
-		).filter(
-			_restoreProblems::contains
-		).forEach(
-			upgradeProblem -> upgradeProblem.setStatus(UpgradeProblem.STATUS_NOT_RESOLVED)
-		);
+		upgradePlan.removeIgnoredProblems(_restoreProblems);
 
-		Set<UpgradeProblem> ignoredProblemSet = upgradeProblems.stream(
-		).filter(
-			problem -> UpgradeProblem.STATUS_IGNORE == problem.getStatus()
-		).collect(
-			Collectors.toSet()
-		);
-
-		upgradePlan.addIgnoredProblems(ignoredProblemSet);
+		addMarkers(_restoreProblems);
 
 		upgradePlanner.saveUpgradePlan(upgradePlan);
 

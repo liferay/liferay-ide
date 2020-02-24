@@ -133,6 +133,24 @@ public class FileMigrationService implements FileMigration {
 						return true;
 					}
 				}
+			).filter(
+				serviceReference -> {
+					if (requiredProperties == null) {
+						return true;
+					}
+
+					Dictionary<String, Object> properties = serviceReference.getProperties();
+
+					for (String key : requiredProperties) {
+						Object value = properties.get(key);
+
+						if (value == null) {
+							return false;
+						}
+					}
+
+					return true;
+				}
 			).collect(
 				Collectors.toList()
 			);
@@ -190,25 +208,7 @@ public class FileMigrationService implements FileMigration {
 					Stream<ServiceReference<FileMigrator>> migratorStream = fileMigrators.parallelStream();
 
 					upgradeProblems.addAll(
-						migratorStream.filter(
-							serviceReference -> {
-								if (requiredProperties == null) {
-									return true;
-								}
-
-								Dictionary<String, Object> properties = serviceReference.getProperties();
-
-								for (String key : requiredProperties) {
-									Object value = properties.get(key);
-
-									if (value == null) {
-										return false;
-									}
-								}
-
-								return true;
-							}
-						).map(
+						migratorStream.map(
 							_context::getService
 						).unordered(
 						).collect(
