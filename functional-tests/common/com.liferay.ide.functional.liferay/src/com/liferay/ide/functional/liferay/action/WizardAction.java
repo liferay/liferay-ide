@@ -39,6 +39,7 @@ import com.liferay.ide.functional.liferay.page.wizard.project.NewLiferayModuleWi
 import com.liferay.ide.functional.liferay.page.wizard.project.NewLiferayModulesExtFilesWizard;
 import com.liferay.ide.functional.liferay.page.wizard.project.NewLiferayModulesExtWizard;
 import com.liferay.ide.functional.liferay.page.wizard.project.NewLiferayPluginWizard;
+import com.liferay.ide.functional.liferay.page.wizard.project.NewLiferaySpringMvcPortletWizard;
 import com.liferay.ide.functional.liferay.page.wizard.project.NewLiferayWorkspaceWizard;
 import com.liferay.ide.functional.liferay.page.wizard.project.NewProjectWizard;
 import com.liferay.ide.functional.liferay.page.wizard.project.SetSDKLocationWizard;
@@ -250,6 +251,14 @@ public class WizardAction extends UIAction {
 		menu.click();
 	}
 
+	public void openNewLiferaySpringMvcPortletWizard() {
+		assertTitleStartBy(_getWizard(), ide.getShell());
+
+		MenuItem menu = _createLiferayProjectToolbar().getNewLiferaySpringMvcPortletProject();
+
+		menu.click();
+	}
+
 	public void openNewLiferayUpgradePlanWizard() {
 		ToolbarButtonWithTooltip newUpgradePlan = ide.getNewUpgradePlan();
 
@@ -290,6 +299,7 @@ public class WizardAction extends UIAction {
 	public NewRuntime7WizardAction newRuntime7 = new NewRuntime7WizardAction();
 	public NewRuntime62WizardAction newRuntime62 = new NewRuntime62WizardAction();
 	public NewServerWizardAction newServer = new NewServerWizardAction();
+	public NewSpringMvcPortletWizardAction newSpringMvcPortlet = new NewSpringMvcPortletWizardAction();
 	public NewLiferayUpgradePlanWizardAction newUpgradePlan = new NewLiferayUpgradePlanWizardAction();
 	public ProjectFromExistSourceWizardAction projectFromExistSource = new ProjectFromExistSourceWizardAction();
 	public SetSdkLocationWizardAction setSdkLocation = new SetSdkLocationWizardAction();
@@ -1362,6 +1372,23 @@ public class WizardAction extends UIAction {
 		}
 
 		private final NewServerWizard _newServerWizard = new NewServerWizard(bot);
+
+	}
+
+	public class NewSpringMvcPortletWizardAction {
+
+		public void prepareProjectName(String projectName) {
+			_newSpringMvcPortletWizard.setProjectName(projectName);
+		}
+
+		public void prepareSelection(String framework, String frameworksDependencies, String viewType) {
+			_newSpringMvcPortletWizard.setFramework(framework);
+			_newSpringMvcPortletWizard.setFrameworkDependencies(frameworksDependencies);
+			_newSpringMvcPortletWizard.setViewType(viewType);
+		}
+
+		private final NewLiferaySpringMvcPortletWizard _newSpringMvcPortletWizard =
+			new NewLiferaySpringMvcPortletWizard(bot);
 
 	}
 
