@@ -255,6 +255,8 @@ public class UpgradeProblemsPreferencePage
 			return;
 		}
 
+		noDefaultAndApplyButton();
+
 		_ignoreProblems = upgradePlan.getIgnoredProblems();
 	}
 
