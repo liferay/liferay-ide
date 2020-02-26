@@ -25,6 +25,7 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanCorePlugin;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanStartedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblemSupport;
 import com.liferay.ide.upgrade.plan.core.UpgradeStep;
 import com.liferay.ide.upgrade.plan.core.UpgradeStepStatus;
 
@@ -60,9 +61,10 @@ import org.osgi.service.component.annotations.Component;
  * @author Gregory Amerson
  * @author Terry Jia
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 @Component
-public class UpgradePlannerService implements UpgradePlanner {
+public class UpgradePlannerService implements UpgradePlanner, UpgradeProblemSupport {
 
 	@Override
 	public void addListener(UpgradeListener upgradeListener) {
@@ -337,7 +339,19 @@ public class UpgradePlannerService implements UpgradePlanner {
 
 	@Override
 	public void startUpgradePlan(UpgradePlan upgradePlan) {
+		boolean lastUpgradePlanIsNull = true;
+
+		if (_currentUpgradePlan != null) {
+			removeMarkers(_currentUpgradePlan.getUpgradeProblems());
+
+			lastUpgradePlanIsNull = false;
+		}
+
 		_currentUpgradePlan = upgradePlan;
+
+		if (!lastUpgradePlanIsNull) {
+			addMarkers(_currentUpgradePlan.getUpgradeProblems());
+		}
 
 		UpgradeEvent upgradeEvent = new UpgradePlanStartedEvent(upgradePlan);
 

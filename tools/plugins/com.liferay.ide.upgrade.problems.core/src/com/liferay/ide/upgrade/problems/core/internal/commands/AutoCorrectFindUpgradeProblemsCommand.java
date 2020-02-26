@@ -24,10 +24,10 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradePreview;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblemSupport;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
-import com.liferay.ide.upgrade.problems.core.UpgradeProblemSupport;
 import com.liferay.ide.upgrade.problems.core.commands.AutoCorrectFindUpgradeProblemsCommandKeys;
 import com.liferay.ide.upgrade.problems.core.internal.UpgradeProblemsCorePlugin;
 

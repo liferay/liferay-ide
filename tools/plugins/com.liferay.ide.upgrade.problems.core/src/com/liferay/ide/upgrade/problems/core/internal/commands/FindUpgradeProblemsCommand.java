@@ -22,8 +22,8 @@ import com.liferay.ide.upgrade.plan.core.UpgradeCommandPerformedEvent;
 import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+import com.liferay.ide.upgrade.plan.core.UpgradeProblemSupport;
 import com.liferay.ide.upgrade.problems.core.FileMigration;
-import com.liferay.ide.upgrade.problems.core.UpgradeProblemSupport;
 import com.liferay.ide.upgrade.problems.core.commands.FindUpgradeProblemsCommandKeys;
 
 import java.util.ArrayList;
