@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
-
 import java.io.File;
 
 import java.util.Collection;

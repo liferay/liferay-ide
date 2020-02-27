@@ -142,6 +142,8 @@ public class UpgradePlanView extends ViewPart implements ISelectionProvider, Upg
 				UpgradePlan upgradePlan = _upgradePlanner.loadUpgradePlan(upgradePlanName);
 
 				_upgradePlanner.startUpgradePlan(upgradePlan);
+
+				UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
 			}
 		);
 	}

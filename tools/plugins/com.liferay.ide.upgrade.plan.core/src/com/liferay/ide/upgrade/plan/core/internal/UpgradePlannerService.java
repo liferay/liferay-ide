@@ -339,19 +339,13 @@ public class UpgradePlannerService implements UpgradePlanner, UpgradeProblemSupp
 
 	@Override
 	public void startUpgradePlan(UpgradePlan upgradePlan) {
-		boolean lastUpgradePlanIsNull = true;
-
 		if (_currentUpgradePlan != null) {
 			removeMarkers(_currentUpgradePlan.getUpgradeProblems());
-
-			lastUpgradePlanIsNull = false;
 		}
 
 		_currentUpgradePlan = upgradePlan;
 
-		if (!lastUpgradePlanIsNull) {
-			addMarkers(_currentUpgradePlan.getUpgradeProblems());
-		}
+		addMarkers(_currentUpgradePlan.getUpgradeProblems());
 
 		UpgradeEvent upgradeEvent = new UpgradePlanStartedEvent(upgradePlan);
 
