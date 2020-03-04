@@ -17,7 +17,6 @@ package com.liferay.ide.project.ui.modules.fragment;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentFilesOp;
-import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -69,9 +68,6 @@ public class NewModuleFragmentFilesWizard
 				final IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, _initialProject);
 
 				if ((bundleProject != null) && bundleProject.isFragmentBundle()) {
-					element().setProjectName(_initialProject.getName());
-					element().setHostOsgiBundle(ProjectUtil.getFragmentHost(_initialProject));
-
 					IPath projectLocation = _initialProject.getLocation();
 
 					element().setLocation(PathBridge.create(projectLocation.removeLastSegments(1)));

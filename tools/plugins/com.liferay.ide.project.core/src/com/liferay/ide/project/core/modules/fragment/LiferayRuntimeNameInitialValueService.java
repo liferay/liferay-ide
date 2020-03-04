@@ -18,15 +18,15 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
+import java.util.Map;
+
 import org.eclipse.core.resources.IProject;
-import org.eclipse.sapphire.DefaultValueService;
+import org.eclipse.sapphire.InitialValueService;
 
 /**
- * @author Terry Jia
- * @author Andy Wu
- * @author Seiphon Wang
+ * @author Ethan Sun
  */
-public class HostOSGiBundleDefaultValueService extends DefaultValueService implements SapphireContentAccessor {
+public class LiferayRuntimeNameInitialValueService extends InitialValueService implements SapphireContentAccessor {
 
 	@Override
 	protected String compute() {
@@ -40,7 +40,9 @@ public class HostOSGiBundleDefaultValueService extends DefaultValueService imple
 
 		IProject project = CoreUtil.getProject(projectName);
 
-		return ProjectUtil.getFragmentHost(project);
+		Map<String, String> fragmentProjectInfo = ProjectUtil.getFragmentProjectInfo(project);
+
+		return fragmentProjectInfo.get("LiferayRuntimeName");
 	}
 
 	private NewModuleFragmentFilesOp _op() {

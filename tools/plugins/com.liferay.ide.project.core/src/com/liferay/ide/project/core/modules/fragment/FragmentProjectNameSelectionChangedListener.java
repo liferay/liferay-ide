@@ -20,6 +20,8 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
+import java.util.Map;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.Element;
@@ -30,6 +32,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Seiphon Wang
+ * @author Ethan Sun
  */
 public class FragmentProjectNameSelectionChangedListener extends FragmentProjectNameListener {
 
@@ -60,8 +63,10 @@ public class FragmentProjectNameSelectionChangedListener extends FragmentProject
 			return;
 		}
 
-		op.setProjectName(project.getName());
-		op.setHostOsgiBundle(ProjectUtil.getFragmentHost(project));
+		Map<String, String> fragmentProjectInfo = ProjectUtil.getFragmentProjectInfo(project);
+
+		op.setHostOsgiBundle(fragmentProjectInfo.get("HostOSGiBundleName"));
+		op.setLiferayRuntimeName(fragmentProjectInfo.get("LiferayRuntimeName"));
 
 		IPath projectLocation = project.getLocation();
 

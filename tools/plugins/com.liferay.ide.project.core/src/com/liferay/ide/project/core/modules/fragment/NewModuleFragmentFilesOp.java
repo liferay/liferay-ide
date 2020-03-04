@@ -20,6 +20,7 @@ import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
+import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
@@ -44,10 +45,17 @@ public interface NewModuleFragmentFilesOp extends NewModuleFragmentOp {
 
 	public void setProjectName(String value);
 
+	@Enablement(expr = "false")
 	@Label(standard = "Host OSGi Bundle")
 	@Required
-	@Service(impl = HostOSGiBundleDefaultValueService.class)
+	@Service(impl = HostOSGiBundleInitialValueService.class)
 	public ValueProperty PROP_HOST_OSGI_BUNDLE = new ValueProperty(TYPE, "HostOsgiBundle");
+
+	@Enablement(expr = "false")
+	@Label(standard = "Liferay Runtime Name")
+	@Required
+	@Service(impl = LiferayRuntimeNameInitialValueService.class)
+	public ValueProperty PROP_LIFERAY_RUNTIME_NAME = new ValueProperty(TYPE, "LiferayRuntimeName");
 
 	@Label(standard = "project name")
 	@Listeners(FragmentProjectNameSelectionChangedListener.class)

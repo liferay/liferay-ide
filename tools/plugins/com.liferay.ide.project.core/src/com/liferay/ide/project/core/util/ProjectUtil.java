@@ -54,8 +54,10 @@ import java.io.InputStreamReader;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -919,7 +921,7 @@ public class ProjectUtil {
 		return preset.getProjectFacets();
 	}
 
-	public static String getFragmentHost(IProject project) {
+	public static Map<String, String> getFragmentProjectInfo(IProject project) {
 		IFile bndFile = project.getFile("bnd.bnd");
 
 		if (FileUtil.notExists(bndFile)) {
@@ -927,24 +929,32 @@ public class ProjectUtil {
 		}
 
 		try {
-			BndProperties bnd = new BndProperties();
+			BndProperties bndProperty = new BndProperties();
 
-			bnd.load(FileUtil.getFile(bndFile));
+			bndProperty.load(FileUtil.getFile(bndFile));
 
-			BndPropertiesValue fragmentHost = (BndPropertiesValue)bnd.get("Fragment-Host");
+			BndPropertiesValue liferayRuntimeNameValue = (BndPropertiesValue)bndProperty.get("Belongs-RuntimeName");
 
-			if (fragmentHost != null) {
-				String fragmentHostValue = fragmentHost.getOriginalValue();
+			BndPropertiesValue fragmentHostValue = (BndPropertiesValue)bndProperty.get("Fragment-Host");
 
-				String[] b = fragmentHostValue.split(";");
+			Map<String, String> fragmentProjectInfo = new HashMap<>();
 
-				if (ListUtil.isNotEmpty(b) && (b.length > 1)) {
-					String[] f = b[1].split("=");
+			if ((liferayRuntimeNameValue != null) && (fragmentHostValue != null)) {
+				fragmentProjectInfo.put("LiferayRuntimeName", liferayRuntimeNameValue.getOriginalValue());
+
+				String fragmentHost = fragmentHostValue.getOriginalValue();
+
+				String[] hostOSGiBundleArray = fragmentHost.split(";");
+
+				if (ListUtil.isNotEmpty(hostOSGiBundleArray) && (hostOSGiBundleArray.length > 1)) {
+					String[] f = hostOSGiBundleArray[1].split("=");
 
 					String version = f[1].substring(1, f[1].length() - 1);
 
-					return b[0] + "-" + version;
+					fragmentProjectInfo.put("HostOSGiBundleName", hostOSGiBundleArray[0] + "-" + version);
 				}
+
+				return fragmentProjectInfo;
 			}
 
 			return null;
