@@ -29,4 +29,4 @@ jobs:
           ${{ runner.os }}-maven- 
     - name: Verify build
       shell: bash
-      run: ./mvnw -Dmaven.repo.local=${GITHUB_WORKSPACE}/liferay-ide-m2-repository verify -DskipTests=true
+      run: ./mvnw -Dmaven.repo.local=${GITHUB_WORKSPACE}/liferay-ide-m2-repository verify -Dliferay.bundles.dir="./tests-resources"
