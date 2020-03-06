@@ -152,9 +152,7 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.commands.AutoCorrectFindUpgradeProblemsCommand.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.commands.FindUpgradeProblemsCommand.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.commands.RemoveUpgradeProblemMarkersCommand.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.LiferayDescriptorVersion.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.LiferayVersionsProperties.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.LiferayDescriptorVersion.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.LiferayVersionsProperties.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.PortalServiceImports70.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.PortalServiceImports71.xml,
@@ -172,4 +170,7 @@ Service-Component: OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.SSEXM
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.DeprecatedLayoutTemplateTags.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.IndexerDoGetSummaryDecl.xml,
  OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.SpringExtenderArtifactIdChanged.xml,
- OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.SpringExtenderArtifactIdChangedForMavenProject.xml
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.SpringExtenderArtifactIdChangedForMavenProject.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay72.Liferay72DescriptorVersion.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay71.Liferay71DescriptorVersion.xml,
+ OSGI-INF/com.liferay.ide.upgrade.problems.core.internal.liferay70.Liferay70DescriptorVersion.xml

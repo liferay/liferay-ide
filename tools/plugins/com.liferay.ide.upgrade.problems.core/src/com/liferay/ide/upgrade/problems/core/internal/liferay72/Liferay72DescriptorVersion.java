@@ -12,34 +12,35 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal.liferay70;
+package com.liferay.ide.upgrade.problems.core.internal.liferay72;
 
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
+import com.liferay.ide.upgrade.problems.core.internal.liferay70.BaseLiferayDescriptorVersion;
 
 import java.util.regex.Pattern;
 
 import org.osgi.service.component.annotations.Component;
 
 /**
- * @author Seiphon Wang
+ * @author Gregory Amerson
  */
 @Component(
 	property = {
-		"file.extensions=xml", "problem.title=Descriptor XML DTD Versions Changes 7.0",
-		"problem.summary=The descriptor XML DTD versions should be matched with version 7.0.",
-		"problem.section=#descriptor-XML-DTD-version", "auto.correct=descriptor", "version=7.0"
+		"file.extensions=xml", "problem.title=Descriptor XML DTD Versions Changes 7.2",
+		"problem.summary=The descriptor XML DTD versions should be matched with version 7.2.",
+		"problem.section=#descriptor-XML-DTD-version", "auto.correct=descriptor", "version=7.2"
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )
-public class LiferayDescriptorVersion extends BaseLiferayDescriptorVersion {
+public class Liferay72DescriptorVersion extends BaseLiferayDescriptorVersion {
 
-	public LiferayDescriptorVersion() {
-		super(_publicIDPattern, "7.0.0");
+	public Liferay72DescriptorVersion() {
+		super(_publicPattern, "7.2.0");
 	}
 
-	private static final Pattern _publicIDPattern = Pattern.compile(
-		"-\\//(?:[A-z]+)\\//(?:[A-z]+)[\\s+(?:[A-z0-9_]*)]*\\s+(7\\.[0-9]\\.[0-9])\\//(?:[A-z]+)",
+	private static final Pattern _publicPattern = Pattern.compile(
+		"-\\//(?:[A-z]+)\\//(?:[A-z]+)[\\s+(?:[A-z0-9_]*)]*\\s+(7\\.[1-9]\\.[0-9])\\//(?:[A-z]+)",
 		Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
 }

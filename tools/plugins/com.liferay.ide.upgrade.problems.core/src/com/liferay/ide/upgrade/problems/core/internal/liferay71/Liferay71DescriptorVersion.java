@@ -33,9 +33,9 @@ import org.osgi.service.component.annotations.Component;
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )
-public class LiferayDescriptorVersion extends BaseLiferayDescriptorVersion {
+public class Liferay71DescriptorVersion extends BaseLiferayDescriptorVersion {
 
-	public LiferayDescriptorVersion() {
+	public Liferay71DescriptorVersion() {
 		super(_publicPattern, "7.1.0");
 	}
 
