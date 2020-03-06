@@ -14,10 +14,13 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
 import com.liferay.knowledge.base.markdown.converter.MarkdownConverter;
 import com.liferay.knowledge.base.markdown.converter.factory.MarkdownConverterFactoryUtil;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,36 +48,35 @@ public class MarkdownParser {
 			retval = "#legacy";
 		}
 		else {
-			Map<String, String> sections = parse(fileName);
+			try {
+				Map<String, String> sections = parse(fileName);
 
-			if (sections != null) {
-				retval = sections.get(sectionKey);
+				if (sections != null) {
+					retval = sections.get(sectionKey);
+				}
+			}
+			catch (IOException ioe) {
 			}
 		}
 
 		return retval;
 	}
 
-	public static Map<String, String> parse(String fileName) {
+	public static Map<String, String> parse(String fileName) throws IOException {
 		Map<String, String> retval = _markdowns.get(fileName);
 
 		if (retval == null) {
-			try {
-				String markdown = CoreUtil.readStreamToString(MarkdownParser.class.getResourceAsStream(fileName));
+			String markdown = _readStreamToString(MarkdownParser.class.getResourceAsStream(fileName), true);
 
-				MarkdownConverter markdownConverter = MarkdownConverterFactoryUtil.create();
+			MarkdownConverter markdownConverter = MarkdownConverterFactoryUtil.create();
 
-				String html = markdownConverter.convert(markdown);
+			String html = markdownConverter.convert(markdown);
 
-				Map<String, String> sections = _parseHtml(html);
+			Map<String, String> sections = _parseHtml(html);
 
-				_markdowns.put(fileName, sections);
+			_markdowns.put(fileName, sections);
 
-				retval = sections;
-			}
-			catch (Exception e) {
-				UpgradeProblemsCorePlugin.logError(e.getMessage());
-			}
+			retval = sections;
 		}
 
 		return retval;
@@ -100,7 +102,9 @@ public class MarkdownParser {
 			for (int i = index; i < siblings.size(); i++) {
 				Node sibling = siblings.get(i);
 
-				if (StringUtil.startsWith(sibling.toString(), "<hr")) {
+				String text = sibling.toString();
+
+				if ((text != null) && text.startsWith("<hr")) {
 					break;
 				}
 				else {
@@ -137,6 +141,35 @@ public class MarkdownParser {
 		}
 
 		return retval;
+	}
+
+	private static String _readStreamToString(InputStream contents, boolean closeStream) throws IOException {
+		if (contents == null) {
+			return null;
+		}
+
+		char[] buffer = new char[0x10000];
+
+		StringBuilder out = new StringBuilder();
+
+		try (Reader in = new InputStreamReader(contents, "UTF-8")) {
+			int read;
+
+			do {
+				read = in.read(buffer, 0, buffer.length);
+
+				if (read > 0) {
+					out.append(buffer, 0, read);
+				}
+			}
+			while (read >= 0);
+		}
+
+		if (closeStream) {
+			contents.close();
+		}
+
+		return out.toString();
 	}
 
 	private static final Map<String, Map<String, String>> _markdowns = new HashMap<>();

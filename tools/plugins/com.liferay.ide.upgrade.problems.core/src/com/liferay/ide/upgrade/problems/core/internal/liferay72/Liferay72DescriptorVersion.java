@@ -16,7 +16,7 @@ package com.liferay.ide.upgrade.problems.core.internal.liferay72;
 
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.liferay70.BaseLiferayDescriptorVersion;
+import com.liferay.ide.upgrade.problems.core.internal.BaseLiferayDescriptorVersion;
 
 import java.util.regex.Pattern;
 

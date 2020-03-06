@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
@@ -29,6 +27,7 @@ import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.runtime.Path;
 
@@ -75,7 +74,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 
 		List<FileSearchResult> searchResults = searchFile(file, createFileChecker(type, file, fileExtension));
 
-		if (ListUtil.isNotEmpty(searchResults)) {
+		if (!searchResults.isEmpty()) {
 			String fileName = "BREAKING_CHANGES.markdown";
 
 			if ("7.0".equals(version)) {
@@ -90,7 +89,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 
 			String sectionHtml = MarkdownParser.getSection(fileName, sectionKey);
 
-			if (CoreUtil.isNullOrEmpty(sectionHtml) || sectionHtml.equals("#legacy")) {
+			if (Objects.equals(sectionHtml, "#legacy")) {
 				sectionHtml = problemSummary;
 			}
 
@@ -114,7 +113,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 			Collection<ServiceReference<T>> refs = context.getServiceReferences(
 				type, "(file.extension=" + fileExtension + ")");
 
-			if (ListUtil.isNotEmpty(refs)) {
+			if ((refs != null) && !refs.isEmpty()) {
 				Iterator<ServiceReference<T>> iterator = refs.iterator();
 
 				T service = context.getService(iterator.next());

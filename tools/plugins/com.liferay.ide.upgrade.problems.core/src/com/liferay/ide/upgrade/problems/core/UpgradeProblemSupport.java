@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 
 import java.io.File;
@@ -25,8 +23,13 @@ import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -39,12 +42,18 @@ public interface UpgradeProblemSupport {
 	public default void addMarkers(Collection<UpgradeProblem> upgradeProblems) {
 		upgradeProblems.stream(
 		).filter(
-			upgradeProblem -> FileUtil.exists(upgradeProblem.getResource())
+			upgradeProblem -> Objects.nonNull(upgradeProblem.getResource())
 		).filter(
 			upgradeProblem -> {
-				File resource = upgradeProblem.getResource();
+				File resourceFile = upgradeProblem.getResource();
 
-				IResource problemFile = CoreUtil.findResourceForLocationURI(resource);
+				return resourceFile.exists();
+			}
+		).filter(
+			upgradeProblem -> {
+				File resourceFile = upgradeProblem.getResource();
+
+				IResource problemFile = findResourceForLocationURI(resourceFile);
 
 				return problemFile != null;
 			}
@@ -52,7 +61,7 @@ public interface UpgradeProblemSupport {
 			upgradeProblem -> {
 				File resource = upgradeProblem.getResource();
 
-				IResource problemFile = CoreUtil.findResourceForLocationURI(resource);
+				IResource problemFile = findResourceForLocationURI(resource);
 
 				try {
 					IMarker marker = problemFile.createMarker(UpgradeProblem.MARKER_TYPE);
@@ -75,6 +84,30 @@ public interface UpgradeProblemSupport {
 		}
 	}
 
+	public default IResource filterIResource(IResource[] resources) {
+		IResource result = null;
+
+		for (IResource resource : resources) {
+			if (result == null) {
+				result = resource;
+			}
+			else {
+				IPath filePath = resource.getProjectRelativePath();
+				IPath resourcePath = result.getProjectRelativePath();
+
+				if (filePath.segmentCount() < resourcePath.segmentCount()) {
+					result = resource;
+				}
+			}
+		}
+
+		if (result == null) {
+			return null;
+		}
+
+		return result;
+	}
+
 	public default IMarker findMarker(UpgradeProblem upgradeProblem) {
 		if (upgradeProblem == null) {
 			return null;
@@ -82,7 +115,7 @@ public interface UpgradeProblemSupport {
 
 		File file = upgradeProblem.getResource();
 
-		IFile resource = (IFile)CoreUtil.findResourceForLocationURI(file);
+		IFile resource = (IFile)findResourceForLocationURI(file);
 
 		if (resource != null) {
 			long markerId = upgradeProblem.getMarkerId();
@@ -95,6 +128,38 @@ public interface UpgradeProblemSupport {
 		}
 
 		return null;
+	}
+
+	public default IResource findResourceForLocationURI(File file) {
+		IWorkspaceRoot root = getWorkspaceRoot();
+
+		IFile[] files = root.findFilesForLocationURI(file.toURI());
+
+		IResource resource = filterIResource(files);
+
+		return resource;
+	}
+
+	public default IProject getProject(File file) {
+		IWorkspaceRoot ws = getWorkspaceRoot();
+
+		IResource[] containers = ws.findContainersForLocationURI(file.toURI());
+
+		IResource resource = filterIResource(containers);
+
+		if (resource == null) {
+			return null;
+		}
+
+		return resource.getProject();
+	}
+
+	public default IWorkspace getWorkspace() {
+		return ResourcesPlugin.getWorkspace();
+	}
+
+	public default IWorkspaceRoot getWorkspaceRoot() {
+		return getWorkspace().getRoot();
 	}
 
 	public default boolean markerExists(IMarker marker) {
@@ -110,7 +175,7 @@ public interface UpgradeProblemSupport {
 		).map(
 			UpgradeProblem::getResource
 		).map(
-			CoreUtil::getProject
+			this::getProject
 		).filter(
 			Objects::nonNull
 		).distinct(
@@ -150,7 +215,7 @@ public interface UpgradeProblemSupport {
 
 		File file = upgradeProblem.getResource();
 
-		IResource resource = CoreUtil.findResourceForLocationURI(file);
+		IResource resource = findResourceForLocationURI(file);
 
 		marker.setAttribute(IMarker.LOCATION, resource.getName());
 
