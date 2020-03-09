@@ -19,7 +19,8 @@ import com.liferay.ide.core.ArtifactBuilder;
 import com.liferay.ide.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
-import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
+import com.liferay.ide.gradle.core.model.GradleBuildScript;
+import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -41,6 +43,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
@@ -79,25 +82,25 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 			return LiferayGradleCore.createErrorStatus("There is no build.gradle file.");
 		}
 
-		GradleDependencyUpdater dependencyUpdater = null;
+		GradleBuildScript gradleBuildScript = null;
 
 		try {
-			dependencyUpdater = new GradleDependencyUpdater(_gradleBuildFile);
+			gradleBuildScript = new GradleBuildScript(FileUtil.getFile(_gradleBuildFile));
 		}
 		catch (IOException ioe) {
 			return LiferayGradleCore.createErrorStatus("Could not parse dependencies for " + _gradleBuildFile, ioe);
 		}
 
-		List<Artifact> dependencies = dependencyUpdater.getDependencies(true, "classpath");
+		List<GradleDependency> buildScriptDependencies = gradleBuildScript.getBuildScriptDependencies();
 
-		Optional<Artifact> optional = dependencies.stream(
+		Optional<GradleDependency> wsddBuilderDependency = buildScriptDependencies.stream(
 		).filter(
-			artifact -> "com.liferay".equals(artifact.getGroupId())
+			dependency -> "com.liferay".equals(dependency.getGroup())
 		).filter(
-			artifact -> "com.liferay.gradle.plugins.wsdd.builder".equals(artifact.getArtifactId())
+			dependency -> "com.liferay.gradle.plugins.wsdd.builder".equals(dependency.getName())
 		).findAny();
 
-		if (optional.isPresent()) {
+		if (wsddBuilderDependency.isPresent()) {
 			GradleUtil.runGradleTask(_gradleBuildFile.getProject(), "buildWSDD", false, monitor);
 
 			return Status.OK_STATUS;
@@ -113,26 +116,35 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 			return Collections.emptyList();
 		}
 
-		GradleDependencyUpdater dependencyUpdater = null;
+		GradleBuildScript gradleBuildScript = null;
 
 		try {
-			dependencyUpdater = new GradleDependencyUpdater(_gradleBuildFile);
+			gradleBuildScript = new GradleBuildScript(FileUtil.getFile(_gradleBuildFile));
 		}
 		catch (IOException ioe) {
 		}
 
-		if (dependencyUpdater == null) {
+		if (gradleBuildScript == null) {
 			return Collections.emptyList();
 		}
 
-		List<Artifact> dependencies = dependencyUpdater.getDependencies(configuration);
+		List<GradleDependency> dependencies = gradleBuildScript.getDependencies(configuration);
+
+		List<Artifact> artifacts = dependencies.stream(
+		).map(
+			this::_dependencyToArtifact
+		).collect(
+			Collectors.toList()
+		);
 
 		IJavaProject javaProject = JavaCore.create(getProject());
 
 		try {
-			for (Artifact artifact : dependencies) {
+			IClasspathEntry[] classpath = javaProject.getResolvedClasspath(true);
+
+			for (Artifact artifact : artifacts) {
 				Stream.of(
-					javaProject.getResolvedClasspath(true)
+					classpath
 				).map(
 					this::classpathEntryToArtifact
 				).filter(
@@ -151,7 +163,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 		catch (JavaModelException jme) {
 		}
 
-		return dependencies;
+		return artifacts;
 	}
 
 	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) {
@@ -172,21 +184,28 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 	}
 
 	@Override
-	public IStatus updateDependencies(IProject project, List<Artifact> dependencies) throws CoreException {
+	public IStatus updateDependencies(IProject project, List<Artifact> dependencyArtifacts) throws CoreException {
 		if (FileUtil.notExists(_gradleBuildFile)) {
 			return Status.OK_STATUS;
 		}
 
 		try {
-			GradleDependencyUpdater updater = new GradleDependencyUpdater(FileUtil.getFile(_gradleBuildFile));
+			GradleBuildScript gradleBuildScript = new GradleBuildScript(FileUtil.getFile(_gradleBuildFile));
 
-			List<Artifact> existDependencies = updater.getDependencies("*");
+			List<GradleDependency> existingDependencies = gradleBuildScript.getDependencies("*");
 
-			for (Artifact artifact : dependencies) {
-				if (!existDependencies.contains(artifact)) {
-					updater.insertDependency(artifact);
+			List<Artifact> existingArtifacts = existingDependencies.stream(
+			).map(
+				this::_dependencyToArtifact
+			).collect(
+				Collectors.toList()
+			);
 
-					FileUtils.writeLines(FileUtil.getFile(_gradleBuildFile), updater.getGradleFileContents());
+			for (Artifact dependencyArtifact : dependencyArtifacts) {
+				if (!existingArtifacts.contains(dependencyArtifact)) {
+					gradleBuildScript.insertDependency(_artifactToDependency(dependencyArtifact));
+
+					FileUtils.writeLines(FileUtil.getFile(_gradleBuildFile), gradleBuildScript.getFileContents());
 
 					GradleUtil.refreshProject(project);
 				}
@@ -197,6 +216,18 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements Arti
 		}
 
 		return Status.OK_STATUS;
+	}
+
+	private GradleDependency _artifactToDependency(Artifact artifact) {
+		return new GradleDependency(
+			artifact.getConfiguration(), artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), -1,
+			-1);
+	}
+
+	private Artifact _dependencyToArtifact(GradleDependency gradleDependency) {
+		return new Artifact(
+			gradleDependency.getGroup(), gradleDependency.getName(), gradleDependency.getVersion(),
+			gradleDependency.getConfiguration(), null);
 	}
 
 	private IStatus _runGradleTask(IProject project, String task, IProgressMonitor monitor) {

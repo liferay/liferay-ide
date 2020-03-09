@@ -14,11 +14,11 @@
 
 package com.liferay.ide.gradle.ui.upgrade;
 
-import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
-import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
+import com.liferay.ide.gradle.core.model.GradleBuildScript;
+import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.ui.util.UIUtil;
@@ -151,17 +151,16 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 
 								Files.delete(settingsFile);
 
-								GradleDependencyUpdater gradleDependencyUpdater = new GradleDependencyUpdater(
-									settingsGradle);
+								GradleBuildScript gradleBuildScript = new GradleBuildScript(settingsGradle);
 
-								List<Artifact> classpathDependencies = gradleDependencyUpdater.getDependencies(
-									true, "classpath");
+								List<GradleDependency> classpathDependencies =
+									gradleBuildScript.getBuildScriptDependencies();
 
 								return classpathDependencies.stream(
 								).filter(
-									artifact -> _WORKSPACE_PLUGIN_GROUP_ID.equals(artifact.getGroupId())
+									artifact -> _WORKSPACE_PLUGIN_GROUP_ID.equals(artifact.getGroup())
 								).filter(
-									artifact -> _WORKSPACE_PLUGIN_ARTIFACT_ID.equals(artifact.getArtifactId())
+									artifact -> _WORKSPACE_PLUGIN_ARTIFACT_ID.equals(artifact.getName())
 								).map(
 									artifact -> artifact.getVersion()
 								).findFirst(
@@ -198,15 +197,15 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 
 	private IStatus _updateWorkspacePluginVersion(File workspaceSettings) {
 		try {
-			GradleDependencyUpdater gradleDependencyUpdater = new GradleDependencyUpdater(workspaceSettings);
+			GradleBuildScript gradleBuildScript = new GradleBuildScript(workspaceSettings);
 
-			List<Artifact> dependencies = gradleDependencyUpdater.getDependencies(true, "classpath");
+			List<GradleDependency> dependencies = gradleBuildScript.getBuildScriptDependencies();
 
 			dependencies.stream(
 			).filter(
-				artifact -> _WORKSPACE_PLUGIN_GROUP_ID.equals(artifact.getGroupId())
+				artifact -> _WORKSPACE_PLUGIN_GROUP_ID.equals(artifact.getGroup())
 			).filter(
-				artifact -> _WORKSPACE_PLUGIN_ARTIFACT_ID.equals(artifact.getArtifactId())
+				artifact -> _WORKSPACE_PLUGIN_ARTIFACT_ID.equals(artifact.getName())
 			).filter(
 				artifact -> CoreUtil.isNotNullOrEmpty(artifact.getVersion())
 			).filter(
@@ -222,7 +221,7 @@ public class UpdateWorkspacePluginVersionCommand implements UpgradeCommand, Upgr
 					artifact.setVersion(_workspacePluginLatestVersion);
 
 					try {
-						gradleDependencyUpdater.updateDependencies(true, Collections.singletonList(artifact));
+						gradleBuildScript.updateDependencies(Collections.singletonList(artifact));
 					}
 					catch (IOException ioe) {
 						LiferayGradleUI.logError(ioe);

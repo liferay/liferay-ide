@@ -16,7 +16,7 @@ package com.liferay.ide.upgrade.problems.core.internal.liferay71;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
+import com.liferay.ide.gradle.core.model.GradleDependencyUpdater;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;

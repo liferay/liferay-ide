@@ -14,9 +14,9 @@
 
 package com.liferay.ide.gradle.core.tests;
 
-import com.liferay.ide.core.Artifact;
-import com.liferay.ide.gradle.core.parser.DependenciesClosureVisitor;
-import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
+import com.liferay.ide.gradle.core.model.BuildScriptVisitor;
+import com.liferay.ide.gradle.core.model.GradleBuildScript;
+import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.test.core.base.BaseTests;
 import com.liferay.ide.test.core.base.support.FileSupport;
 
@@ -30,6 +30,7 @@ import org.junit.Test;
 /**
  * @author Lovett Li
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 public class GradleParseTests extends BaseTests {
 
@@ -39,17 +40,18 @@ public class GradleParseTests extends BaseTests {
 
 		fs.before();
 
-		GradleDependencyUpdater updater = new GradleDependencyUpdater(fs.getFile());
+		GradleBuildScript gradleBuildScript = new GradleBuildScript(fs.getFile());
 
-		Artifact artifact = new Artifact("com.liferay", "com.liferay.bookmarks.api", "1.0.0", "compile", null);
+		GradleDependency gradleDependency = new GradleDependency(
+			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1);
 
-		DependenciesClosureVisitor visitor = updater.insertDependency(artifact);
+		BuildScriptVisitor buildScriptVisitor = gradleBuildScript.insertDependency(gradleDependency);
 
-		int dependenceLineNum = visitor.getDependenciesLineNumber();
+		int dependenceLineNum = buildScriptVisitor.getDependenciesLastLineNumber();
 
 		Assert.assertEquals(24, dependenceLineNum);
 
-		writeFile(fs, updater.getGradleFileContents());
+		writeFile(fs, gradleBuildScript.getFileContents());
 
 		assertFileContains(
 			fs, "compile group: \"com.liferay\", name: \"com.liferay.bookmarks.api\", version: \"1.0.0\"");
@@ -63,17 +65,18 @@ public class GradleParseTests extends BaseTests {
 
 		fs.before();
 
-		GradleDependencyUpdater updater = new GradleDependencyUpdater(fs.getFile());
+		GradleBuildScript gradleBuildScript = new GradleBuildScript(fs.getFile());
 
-		Artifact artifact = new Artifact("com.liferay", "com.liferay.bookmarks.api", "1.0.0", "compile", null);
+		GradleDependency gradleDependency = new GradleDependency(
+			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1);
 
-		DependenciesClosureVisitor visitor = updater.insertDependency(artifact);
+		BuildScriptVisitor buildScriptVisitor = gradleBuildScript.insertDependency(gradleDependency);
 
-		int dependenceLineNum = visitor.getDependenciesLineNumber();
+		int dependenceLineNum = buildScriptVisitor.getDependenciesLastLineNumber();
 
 		Assert.assertEquals(23, dependenceLineNum);
 
-		writeFile(fs, updater.getGradleFileContents());
+		writeFile(fs, gradleBuildScript.getFileContents());
 
 		assertFileContains(
 			fs, "compile group: \"com.liferay\", name: \"com.liferay.bookmarks.api\", version: \"1.0.0\"");
@@ -87,17 +90,18 @@ public class GradleParseTests extends BaseTests {
 
 		fs.before();
 
-		GradleDependencyUpdater updater = new GradleDependencyUpdater(fs.getFile());
+		GradleBuildScript gradleBuildScript = new GradleBuildScript(fs.getFile());
 
-		Artifact artifact = new Artifact("com.liferay", "com.liferay.bookmarks.api", "1.0.0", "compile", null);
+		GradleDependency gradleDependency = new GradleDependency(
+			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1);
 
-		DependenciesClosureVisitor visitor = updater.insertDependency(artifact);
+		BuildScriptVisitor buildScriptVisitor = gradleBuildScript.insertDependency(gradleDependency);
 
-		int dependenceLineNum = visitor.getDependenciesLineNumber();
+		int dependenceLineNum = buildScriptVisitor.getDependenciesLastLineNumber();
 
 		Assert.assertEquals(24, dependenceLineNum);
 
-		writeFile(fs, updater.getGradleFileContents());
+		writeFile(fs, gradleBuildScript.getFileContents());
 
 		assertFileContains(
 			fs, "compile group: \"com.liferay\", name: \"com.liferay.bookmarks.api\", version: \"1.0.0\"");
@@ -111,17 +115,18 @@ public class GradleParseTests extends BaseTests {
 
 		fs.before();
 
-		GradleDependencyUpdater updater = new GradleDependencyUpdater(fs.getFile());
+		GradleBuildScript gradleBuildScript = new GradleBuildScript(fs.getFile());
 
-		Artifact artifact = new Artifact("com.liferay", "com.liferay.bookmarks.api", "1.0.0", "compile", null);
+		GradleDependency gradleDependency = new GradleDependency(
+			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1);
 
-		DependenciesClosureVisitor visitor = updater.insertDependency(artifact);
+		BuildScriptVisitor buildScriptVisitor = gradleBuildScript.insertDependency(gradleDependency);
 
-		int dependenceLineNum = visitor.getDependenciesLineNumber();
+		int dependenceLineNum = buildScriptVisitor.getDependenciesLastLineNumber();
 
 		Assert.assertEquals(27, dependenceLineNum);
 
-		writeFile(fs, updater.getGradleFileContents());
+		writeFile(fs, gradleBuildScript.getFileContents());
 
 		assertFileContains(
 			fs, "compile group: \"com.liferay\", name: \"com.liferay.bookmarks.api\", version: \"1.0.0\"");
@@ -135,17 +140,18 @@ public class GradleParseTests extends BaseTests {
 
 		fs.before();
 
-		GradleDependencyUpdater updater = new GradleDependencyUpdater(fs.getFile());
+		GradleBuildScript gradleBuildScript = new GradleBuildScript(fs.getFile());
 
-		Artifact artifact = new Artifact("com.liferay", "com.liferay.bookmarks.api", "1.0.0", "compile", null);
+		GradleDependency gradleDependency = new GradleDependency(
+			"compile", "com.liferay", "com.liferay.bookmarks.api", "1.0.0", -1, -1);
 
-		DependenciesClosureVisitor visitor = updater.insertDependency(artifact);
+		BuildScriptVisitor buildScriptVisitor = gradleBuildScript.insertDependency(gradleDependency);
 
-		int dependenceLineNum = visitor.getDependenciesLineNumber();
+		int dependenceLineNum = buildScriptVisitor.getDependenciesLastLineNumber();
 
 		Assert.assertEquals(-1, dependenceLineNum);
 
-		writeFile(fs, updater.getGradleFileContents());
+		writeFile(fs, gradleBuildScript.getFileContents());
 
 		assertFileContains(
 			fs, "compile group: \"com.liferay\", name: \"com.liferay.bookmarks.api\", version: \"1.0.0\"");
@@ -159,9 +165,9 @@ public class GradleParseTests extends BaseTests {
 
 		fs.before();
 
-		GradleDependencyUpdater updater = new GradleDependencyUpdater(fs.getFile());
+		GradleBuildScript gradleBuildScript = new GradleBuildScript(fs.getFile());
 
-		List<Artifact> allDependencies = updater.getDependencies("*");
+		List<GradleDependency> allDependencies = gradleBuildScript.getDependencies();
 
 		Assert.assertEquals("", 3, allDependencies.size());
 
@@ -174,9 +180,9 @@ public class GradleParseTests extends BaseTests {
 
 		fs.before();
 
-		GradleDependencyUpdater updater = new GradleDependencyUpdater(fs.getFile());
+		GradleBuildScript gradleBuildScript = new GradleBuildScript(fs.getFile());
 
-		List<Artifact> allDependencies = updater.getDependencies("*");
+		List<GradleDependency> allDependencies = gradleBuildScript.getDependencies();
 
 		Assert.assertEquals("", 3, allDependencies.size());
 
@@ -189,9 +195,9 @@ public class GradleParseTests extends BaseTests {
 
 		fs.before();
 
-		GradleDependencyUpdater updater = new GradleDependencyUpdater(fs.getFile());
+		GradleBuildScript gradleBuildScript = new GradleBuildScript(fs.getFile());
 
-		List<Artifact> allDependencies = updater.getDependencies("*");
+		List<GradleDependency> allDependencies = gradleBuildScript.getDependencies();
 
 		Assert.assertEquals("", 3, allDependencies.size());
 

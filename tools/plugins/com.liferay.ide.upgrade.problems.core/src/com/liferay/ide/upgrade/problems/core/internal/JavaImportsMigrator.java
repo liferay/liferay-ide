@@ -14,11 +14,10 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
+import com.liferay.ide.gradle.core.model.GradleDependencyUpdater;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -106,7 +105,7 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 		}
 
 		if (ListUtil.isNotEmpty(importsToRewrite)) {
-			List<Artifact> needToAddDependencies = new ArrayList<>();
+			List<Dependency> needToAddDependencies = new ArrayList<>();
 
 			try (InputStream inputStream = Files.newInputStream(file.toPath())) {
 				String[] lines = _readLines(inputStream);
@@ -133,13 +132,13 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 							editedLines[lineNumber - 1] = editedLines[lineNumber - 1].replaceAll(importName, newImport);
 
 							if (s.length == 3) {
-								Artifact artifact = new Artifact();
+								Dependency dependency = new Dependency();
 
-								artifact.setConfiguration("compileOnly");
-								artifact.setGroupId(s[1]);
-								artifact.setArtifactId(s[2]);
+								dependency.setConfiguration("compileOnly");
+								dependency.setGroupId(s[1]);
+								dependency.setArtifactId(s[2]);
 
-								needToAddDependencies.add(artifact);
+								needToAddDependencies.add(dependency);
 							}
 						}
 					}
@@ -162,8 +161,8 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 				if (FileUtil.exists(buildGradle) && !needToAddDependencies.isEmpty()) {
 					GradleDependencyUpdater gradleDependencyUpdater = new GradleDependencyUpdater(buildGradle);
 
-					for (Artifact artifact : needToAddDependencies) {
-						gradleDependencyUpdater.insertDependency(artifact);
+					for (Dependency dependency : needToAddDependencies) {
+						gradleDependencyUpdater.insertDependency(dependency);
 					}
 
 					FileUtils.writeLines(
