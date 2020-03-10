@@ -14,10 +14,8 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.gradle.core.model.GradleDependencyUpdater;
+import com.liferay.ide.gradle.core.model.GradleBuildScript;
+import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -43,6 +41,11 @@ import org.apache.commons.io.FileUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -70,7 +73,7 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 
 	@Override
 	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
-		IProject project = CoreUtil.getProject(file);
+		IProject project = _getProject(file);
 
 		IFile buildGradle = null;
 
@@ -104,8 +107,8 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 			}
 		}
 
-		if (ListUtil.isNotEmpty(importsToRewrite)) {
-			List<Dependency> needToAddDependencies = new ArrayList<>();
+		if (_isNotEmpty(importsToRewrite)) {
+			List<GradleDependency> needToAddDependencies = new ArrayList<>();
 
 			try (InputStream inputStream = Files.newInputStream(file.toPath())) {
 				String[] lines = _readLines(inputStream);
@@ -132,13 +135,8 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 							editedLines[lineNumber - 1] = editedLines[lineNumber - 1].replaceAll(importName, newImport);
 
 							if (s.length == 3) {
-								Dependency dependency = new Dependency();
-
-								dependency.setConfiguration("compileOnly");
-								dependency.setGroupId(s[1]);
-								dependency.setArtifactId(s[2]);
-
-								needToAddDependencies.add(dependency);
+								needToAddDependencies.add(
+									new GradleDependency("compileOnly", s[1], s[2], null, -1, -1));
 							}
 						}
 					}
@@ -158,15 +156,14 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 					writer.write(sb.toString());
 				}
 
-				if (FileUtil.exists(buildGradle) && !needToAddDependencies.isEmpty()) {
-					GradleDependencyUpdater gradleDependencyUpdater = new GradleDependencyUpdater(buildGradle);
+				if (_exists(buildGradle) && !needToAddDependencies.isEmpty()) {
+					GradleBuildScript gradleBuildScript = new GradleBuildScript(_getFile(buildGradle));
 
-					for (Dependency dependency : needToAddDependencies) {
-						gradleDependencyUpdater.insertDependency(dependency);
+					for (GradleDependency dependency : needToAddDependencies) {
+						gradleBuildScript.insertDependency(dependency);
 					}
 
-					FileUtils.writeLines(
-						FileUtil.getFile(buildGradle), gradleDependencyUpdater.getGradleFileContents());
+					FileUtils.writeLines(_getFile(buildGradle), gradleBuildScript.getFileContents());
 				}
 
 				_clearCache(file);
@@ -200,6 +197,80 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 
 	public void setImportFixes(Map<String, String> importFixes) {
 		_importFixes = importFixes;
+	}
+
+	private static boolean _exists(IFile file) {
+		if ((file != null) && file.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private static IResource _filterIResouece(IResource[] resources) {
+		IResource result = null;
+
+		for (IResource resource : resources) {
+			if (result == null) {
+				result = resource;
+			}
+			else {
+				IPath filePath = resource.getProjectRelativePath();
+				IPath resourcePath = result.getProjectRelativePath();
+
+				if (filePath.segmentCount() < resourcePath.segmentCount()) {
+					result = resource;
+				}
+			}
+		}
+
+		if (result == null) {
+			return null;
+		}
+
+		return result;
+	}
+
+	private static File _getFile(IFile file) {
+		if (file == null) {
+			return null;
+		}
+
+		IPath location = file.getLocation();
+
+		return location.toFile();
+	}
+
+	private static IProject _getProject(File file) {
+		IWorkspaceRoot ws = _getWorkspaceRoot();
+
+		IResource[] containers = ws.findContainersForLocationURI(file.toURI());
+
+		IResource resource = _filterIResouece(containers);
+
+		if (resource == null) {
+			return null;
+		}
+
+		return resource.getProject();
+	}
+
+	private static IWorkspaceRoot _getWorkspaceRoot() {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		return workspace.getRoot();
+	}
+
+	private static boolean _isEmpty(List<?> list) {
+		if ((list == null) || list.isEmpty()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private static boolean _isNotEmpty(List<?> list) {
+		return !_isEmpty(list);
 	}
 
 	private static String[] _readLines(InputStream inputStream) {
