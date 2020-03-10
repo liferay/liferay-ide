@@ -138,7 +138,7 @@ public class GradleBuildScript {
 		_fileContents = Files.readAllLines(_path);
 
 		for (GradleDependency gradleDependency : gradleDependencies) {
-			updateDependency(buildScriptVisitor, gradleDependency, gradleDependency);
+			_updateDependency(buildScriptVisitor, gradleDependency, gradleDependency);
 		}
 
 		String content = _fileContents.stream(
@@ -149,44 +149,12 @@ public class GradleBuildScript {
 		Files.write(_path, content.getBytes());
 	}
 
-	public void updateDependency(
-		BuildScriptVisitor buildScriptVisitor, GradleDependency oldArtifact, GradleDependency newArtifact) {
+	public void updateDependency(GradleDependency oldArtifact, GradleDependency newArtifact) {
+		BuildScriptVisitor buildScriptVisitor = new BuildScriptVisitor();
 
-		int[] lineNumbers = buildScriptVisitor.getDependencyLineNumbers(oldArtifact);
+		_walkScript(buildScriptVisitor);
 
-		if (lineNumbers.length != 2) {
-			return;
-		}
-
-		int startLineNumber = lineNumbers[0];
-
-		int endLineNumber = lineNumbers[1];
-
-		String content = _fileContents.get(startLineNumber - 1);
-
-		int startPos = content.indexOf(oldArtifact.getConfiguration());
-
-		if (startPos == -1) {
-			return;
-		}
-
-		StringBuilder dependencyBuilder = new StringBuilder(_toGradleDependencyString(newArtifact));
-
-		String prefixString = content.substring(0, startPos);
-
-		prefixString.chars(
-		).filter(
-			ch -> ch == '\t'
-		).asLongStream(
-		).forEach(
-			it -> dependencyBuilder.insert(0, "\t")
-		);
-
-		_fileContents.set(startLineNumber - 1, dependencyBuilder.toString());
-
-		for (int i = endLineNumber - 1; i > startLineNumber - 1; i--) {
-			_fileContents.remove(i);
-		}
+		_updateDependency(buildScriptVisitor, oldArtifact, newArtifact);
 	}
 
 	public void updateDependency(String dependency) throws IOException {
@@ -270,6 +238,46 @@ public class GradleBuildScript {
 		}
 
 		return sb.toString();
+	}
+
+	private void _updateDependency(
+		BuildScriptVisitor buildScriptVisitor, GradleDependency oldArtifact, GradleDependency newArtifact) {
+
+		int[] lineNumbers = buildScriptVisitor.getDependencyLineNumbers(oldArtifact);
+
+		if (lineNumbers.length != 2) {
+			return;
+		}
+
+		int startLineNumber = lineNumbers[0];
+
+		int endLineNumber = lineNumbers[1];
+
+		String content = _fileContents.get(startLineNumber - 1);
+
+		int startPos = content.indexOf(oldArtifact.getConfiguration());
+
+		if (startPos == -1) {
+			return;
+		}
+
+		StringBuilder dependencyBuilder = new StringBuilder(_toGradleDependencyString(newArtifact));
+
+		String prefixString = content.substring(0, startPos);
+
+		prefixString.chars(
+		).filter(
+			ch -> ch == '\t'
+		).asLongStream(
+		).forEach(
+			it -> dependencyBuilder.insert(0, "\t")
+		);
+
+		_fileContents.set(startLineNumber - 1, dependencyBuilder.toString());
+
+		for (int i = endLineNumber - 1; i > startLineNumber - 1; i--) {
+			_fileContents.remove(i);
+		}
 	}
 
 	private void _walkScript(GroovyCodeVisitor visitor) {
