@@ -29,12 +29,11 @@ jobs:
           ${{ runner.os }}-maven- 
     - name: Verify build
       shell: bash
-      run: ./mvnw --fail-at-end -e -Dmaven.repo.local=${GITHUB_WORKSPACE}/liferay-ide-m2-repository verify -Dliferay.bundles.dir="./tests-resources"
-    - name: Archive tests
-      shell: bash
-      run: tar cvzf surefire-reports.tar.gz $(find . -name '*surefire-reports*')
+      run: |
+        ./run-tests.sh
     - name: Upload tests
       uses: actions/upload-artifact@v1
+      if: failure()
       with:
         name: surefire-reports.tar.gz
         path: surefire-reports.tar.gz
