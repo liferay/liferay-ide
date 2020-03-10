@@ -33,8 +33,8 @@ jobs:
     - name: Archive tests
       shell: bash
       run: tar cvzf surefire-reports.tar.gz $(find . -name '*surefire-reports*')
-    - name: Upload surefire-reports.tar.gz
-        uses: actions/upload-artifact@v1
-        with:
-          name: surefire-reports.tar.gz
-          path: surefire-reports.tar.gz
+    - name: Upload tests
+      uses: actions/upload-artifact@v1
+      with:
+        name: surefire-reports.tar.gz
+        path: surefire-reports.tar.gz
