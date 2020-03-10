@@ -52,6 +52,8 @@ public class SDKUtilTests extends ProjectCoreBase
     @Test
     public void nullWorkSpaceSDKProject() throws Exception
     {
+        deleteAllWorkspaceProjects();
+
         IProject project = SDKUtil.getWorkspaceSDKProject();
 
         assertNull( project );
