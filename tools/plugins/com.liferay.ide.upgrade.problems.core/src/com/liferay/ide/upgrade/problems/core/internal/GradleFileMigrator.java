@@ -92,17 +92,6 @@ public abstract class GradleFileMigrator implements FileMigrator {
 		return problems;
 	}
 
-	public List<GradleDependency> findDependenciesByName(GradleBuildScript gradleBuildScript, String name) {
-		List<GradleDependency> gradleDependencies = gradleBuildScript.getDependencies();
-
-		return gradleDependencies.stream(
-		).filter(
-			dep -> Objects.equals(name, dep.getName())
-		).collect(
-			Collectors.toList()
-		);
-	}
-
 	public List<FileSearchResult> findDependencies(File file, String artifactId) {
 		GradleBuildScript gradleBuildScript = getGradleBuildScript(file);
 
@@ -158,6 +147,17 @@ public abstract class GradleFileMigrator implements FileMigrator {
 
 				return result;
 			}
+		).collect(
+			Collectors.toList()
+		);
+	}
+
+	public List<GradleDependency> findDependenciesByName(GradleBuildScript gradleBuildScript, String name) {
+		List<GradleDependency> gradleDependencies = gradleBuildScript.getDependencies();
+
+		return gradleDependencies.stream(
+		).filter(
+			dep -> Objects.equals(name, dep.getName())
 		).collect(
 			Collectors.toList()
 		);

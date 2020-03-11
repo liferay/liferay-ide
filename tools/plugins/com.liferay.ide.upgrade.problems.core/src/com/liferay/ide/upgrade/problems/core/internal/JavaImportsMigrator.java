@@ -156,15 +156,21 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 				}
 
 				if (_exists(buildGradle) && !needToAddDependencies.isEmpty()) {
-					GradleBuildScript gradleBuildScript = new GradleBuildScript(_getFile(buildGradle));
+					File buildGradleFile = _getFile(buildGradle);
+
+					GradleBuildScript gradleBuildScript = new GradleBuildScript(buildGradleFile);
 
 					for (GradleDependency dependency : needToAddDependencies) {
 						gradleBuildScript.insertDependency(dependency);
 					}
 
-					String contents = gradleBuildScript.getFileContents().stream().collect(Collectors.joining(System.lineSeparator()));
+					String contents = gradleBuildScript.getFileContents(
+					).stream(
+					).collect(
+						Collectors.joining(System.lineSeparator())
+					);
 
-					Files.write(_getFile(buildGradle).toPath(), contents.getBytes());
+					Files.write(buildGradleFile.toPath(), contents.getBytes());
 				}
 
 				_clearCache(file);

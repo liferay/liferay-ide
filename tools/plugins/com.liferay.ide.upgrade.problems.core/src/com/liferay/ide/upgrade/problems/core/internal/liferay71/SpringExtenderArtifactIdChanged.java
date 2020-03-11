@@ -26,7 +26,9 @@ import com.liferay.ide.upgrade.problems.core.internal.GradleFileMigrator;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.text.MessageFormat;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -57,7 +59,8 @@ public class SpringExtenderArtifactIdChanged extends GradleFileMigrator implemen
 			return problemsFixed;
 		}
 
-		List<GradleDependency> gradleDependencies = findDependenciesByName(gradleBuildScript, _springExtenderArtifactId);
+		List<GradleDependency> gradleDependencies = findDependenciesByName(
+			gradleBuildScript, _springExtenderArtifactId);
 
 		for (GradleDependency dependency : gradleDependencies) {
 			GradleDependency newDependency = new GradleDependency(
@@ -67,8 +70,9 @@ public class SpringExtenderArtifactIdChanged extends GradleFileMigrator implemen
 			try {
 				gradleBuildScript.updateDependency(dependency, newDependency);
 			}
-			catch (IOException e) {
-				throw new AutoFileMigrateException(MessageFormat.format("Failed to update dependency {0} to {1}", dependency, newDependency), e);
+			catch (IOException ioe) {
+				throw new AutoFileMigrateException(
+					MessageFormat.format("Failed to update dependency {0} to {1}", dependency, newDependency), ioe);
 			}
 
 			problemsFixed++;

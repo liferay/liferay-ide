@@ -94,6 +94,14 @@ public class UpgradeProblem implements Comparable<UpgradeProblem> {
 		_markerType = markerType;
 	}
 
+	@Override
+	public int compareTo(UpgradeProblem that) {
+		String thisString = toString();
+		String thatString = that.toString();
+
+		return thisString.compareTo(thatString);
+	}
+
 	public boolean equals(Object object) {
 		if ((object instanceof UpgradeProblem) == false) {
 			return false;
@@ -366,10 +374,5 @@ public class UpgradeProblem implements Comparable<UpgradeProblem> {
 	private String _type;
 	private String _uuid;
 	private String _version = "7.0";
-
-	@Override
-	public int compareTo(UpgradeProblem other) {
-		return this.toString().compareTo(other.toString());
-	}
 
 }

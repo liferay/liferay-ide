@@ -89,11 +89,6 @@ public class GradleDependency {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return MessageFormat.format("{0} group: {1}, name: {2}, version: {3}",_configuration, _group, _name, _version);
-	}
-
 	public String getConfiguration() {
 		return _configuration;
 	}
@@ -132,6 +127,11 @@ public class GradleDependency {
 
 	public void setVersion(String version) {
 		_version = version;
+	}
+
+	@Override
+	public String toString() {
+		return MessageFormat.format("{0} group: {1}, name: {2}, version: {3}", _configuration, _group, _name, _version);
 	}
 
 	private String _configuration;

@@ -138,7 +138,7 @@ public class GradleBuildScript {
 		_fileContents = Files.readAllLines(_path);
 
 		for (GradleDependency gradleDependency : gradleDependencies) {
-			_updateDependency(buildScriptVisitor, gradleDependency, gradleDependency);
+			_updateDependency(gradleDependency, gradleDependency);
 		}
 
 		String content = _fileContents.stream(
@@ -150,13 +150,9 @@ public class GradleBuildScript {
 	}
 
 	public void updateDependency(GradleDependency oldArtifact, GradleDependency newArtifact) throws IOException {
-		BuildScriptVisitor buildScriptVisitor = new BuildScriptVisitor();
-
-		_walkScript(buildScriptVisitor);
-
 		_fileContents = Files.readAllLines(_path);
 
-		_updateDependency(buildScriptVisitor, oldArtifact, newArtifact);
+		_updateDependency(oldArtifact, newArtifact);
 
 		String content = _fileContents.stream(
 		).collect(
@@ -249,10 +245,8 @@ public class GradleBuildScript {
 		return sb.toString();
 	}
 
-	private void _updateDependency(
-		BuildScriptVisitor buildScriptVisitor, GradleDependency oldArtifact, GradleDependency newArtifact) {
-
-		int[] lineNumbers = new int[] {oldArtifact.getLineNumber(), oldArtifact.getLastLineNumber()};
+	private void _updateDependency(GradleDependency oldArtifact, GradleDependency newArtifact) {
+		int[] lineNumbers = {oldArtifact.getLineNumber(), oldArtifact.getLastLineNumber()};
 
 		if (lineNumbers.length != 2) {
 			return;
