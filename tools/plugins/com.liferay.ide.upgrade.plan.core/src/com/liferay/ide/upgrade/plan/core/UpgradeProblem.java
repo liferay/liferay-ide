@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.Adapters;
  * @author Simon Jiang
  * @author Seiphon Wang
  */
-public class UpgradeProblem {
+public class UpgradeProblem implements Comparable<UpgradeProblem> {
 
 	public static final long DEFAULT_MARKER_ID = -1;
 
@@ -320,7 +320,6 @@ public class UpgradeProblem {
 		String lineSparator = System.getProperty("line.separator");
 
 		builder.append("Problem summary : " + _summary + lineSparator);
-		builder.append("	Uuid is :" + _uuid + lineSparator);
 		builder.append("	File location is :" + _resource.getAbsolutePath() + lineSparator);
 		builder.append("	Ticket is :" + _ticket + lineSparator);
 		builder.append("	Line Number is :" + _lineNumber + lineSparator);
@@ -367,5 +366,10 @@ public class UpgradeProblem {
 	private String _type;
 	private String _uuid;
 	private String _version = "7.0";
+
+	@Override
+	public int compareTo(UpgradeProblem other) {
+		return this.toString().compareTo(other.toString());
+	}
 
 }
