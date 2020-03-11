@@ -36,8 +36,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -163,7 +162,9 @@ public abstract class JavaImportsMigrator extends AbstractFileMigrator<JavaFile>
 						gradleBuildScript.insertDependency(dependency);
 					}
 
-					FileUtils.writeLines(_getFile(buildGradle), gradleBuildScript.getFileContents());
+					String contents = gradleBuildScript.getFileContents().stream().collect(Collectors.joining(System.lineSeparator()));
+
+					Files.write(_getFile(buildGradle).toPath(), contents.getBytes());
 				}
 
 				_clearCache(file);
