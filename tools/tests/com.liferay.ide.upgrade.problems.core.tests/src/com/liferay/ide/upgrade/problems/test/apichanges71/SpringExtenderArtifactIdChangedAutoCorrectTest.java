@@ -63,15 +63,15 @@ public class SpringExtenderArtifactIdChangedAutoCorrectTest {
 			}
 		}
 
-		Assert.assertEquals("", 1, problems.size());
+		Assert.assertEquals("Expecting exactly 1 problem found.", 1, problems.size());
 
 		int problemsFixed = ((AutoFileMigrator)migrator).correctProblems(testFile, problems);
 
-		Assert.assertEquals("", 1, problemsFixed);
+		Assert.assertEquals("Expecting exactly 1 problem fixed.", 1, problemsFixed);
 
 		problems = migrator.analyze(testFile);
 
-		Assert.assertEquals("", 0, problems.size());
+		Assert.assertEquals("Expecting no problems found.", 0, problems.size());
 	}
 
 	private final BundleContext _context = FrameworkUtil.getBundle(getClass()).getBundleContext();

@@ -38,11 +38,11 @@ public class InitJSPParseTest {
 	public void initParseErrorCheck() throws Exception {
 		ServiceReference<FileMigration> sr = _context.getServiceReference(FileMigration.class);
 
-		FileMigration m = _context.getService(sr);
+		FileMigration fileMigration = _context.getService(sr);
 
 		List<String> versions = Arrays.asList("7.0", "7.1", "7.2");
 
-		List<UpgradeProblem> problems = m.findUpgradeProblems(new File("jsptests/jukebox-portlet/"), versions, new NullProgressMonitor());
+		List<UpgradeProblem> problems = fileMigration.findUpgradeProblems(new File("jsptests/jukebox-portlet/"), versions, new NullProgressMonitor());
 
 		Assert.assertEquals("", 334, problems.size());
 

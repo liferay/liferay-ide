@@ -46,10 +46,6 @@ public class BuildScriptVisitor extends CodeVisitorSupport {
 		return _dependenciesLastLineNumber;
 	}
 
-	public int[] getDependencyLineNumbers(GradleDependency gradleDependency) {
-		return _gradleDependencyLineNumbers.get(gradleDependency);
-	}
-
 	@Override
 	public void visitArgumentlistExpression(ArgumentListExpression argumentListExpression) {
 		List<Expression> expressions = argumentListExpression.getExpressions();
@@ -64,18 +60,16 @@ public class BuildScriptVisitor extends CodeVisitorSupport {
 			String[] deps = expressionText.split(":");
 
 			if (deps.length >= 3) {
+				GradleDependency gradleDependency = new GradleDependency(
+					_configurationName, deps[0], deps[1], deps[2], constantExpression.getLineNumber(),
+					constantExpression.getLastLineNumber());
+
 				if (_inDependencies && !_inBuildscriptDependencies) {
-					_dependencies.add(
-						new GradleDependency(
-							_configurationName, deps[0], deps[1], deps[2], constantExpression.getLineNumber(),
-							constantExpression.getLastLineNumber()));
+					_dependencies.add(gradleDependency);
 				}
 
 				if (_inBuildscriptDependencies) {
-					_buildscriptDependencies.add(
-						new GradleDependency(
-							_configurationName, deps[0], deps[1], deps[2], constantExpression.getLineNumber(),
-							constantExpression.getLastLineNumber()));
+					_buildscriptDependencies.add(gradleDependency);
 				}
 			}
 		}
@@ -191,7 +185,6 @@ public class BuildScriptVisitor extends CodeVisitorSupport {
 	private String _configurationName;
 	private List<GradleDependency> _dependencies = new ArrayList<>();
 	private int _dependenciesLastLineNumber = -1;
-	private Map<GradleDependency, int[]> _gradleDependencyLineNumbers = new HashMap<>();
 	private boolean _inBuildscript = false;
 	private boolean _inBuildscriptDependencies = false;
 	private boolean _inDependencies = false;

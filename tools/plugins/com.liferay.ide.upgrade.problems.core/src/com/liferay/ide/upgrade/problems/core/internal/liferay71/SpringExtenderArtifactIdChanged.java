@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay71;
 
-import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.gradle.core.model.GradleDependency;
@@ -26,10 +25,10 @@ import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.internal.GradleFileMigrator;
 
 import java.io.File;
-
+import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 
@@ -58,21 +57,19 @@ public class SpringExtenderArtifactIdChanged extends GradleFileMigrator implemen
 			return problemsFixed;
 		}
 
-		List<Artifact> dependencies = findArtifactsbyArtifactId(gradleBuildScript, _springExtenderArtifactId);
-
-		List<GradleDependency> gradleDependencies = dependencies.stream(
-		).map(
-			this::_artifactToDependency
-		).collect(
-			Collectors.toList()
-		);
+		List<GradleDependency> gradleDependencies = findDependenciesByName(gradleBuildScript, _springExtenderArtifactId);
 
 		for (GradleDependency dependency : gradleDependencies) {
 			GradleDependency newDependency = new GradleDependency(
 				dependency.getConfiguration(), dependency.getGroup(), _newSpringExtenderArtifactId,
-				_getArtifactVersion(), -1, -1);
+				_getArtifactVersion(), dependency.getLineNumber(), dependency.getLastLineNumber());
 
-			gradleBuildScript.updateDependency(dependency, newDependency);
+			try {
+				gradleBuildScript.updateDependency(dependency, newDependency);
+			}
+			catch (IOException e) {
+				throw new AutoFileMigrateException(MessageFormat.format("Failed to update dependency {0} to {1}", dependency, newDependency), e);
+			}
 
 			problemsFixed++;
 		}
@@ -88,12 +85,6 @@ public class SpringExtenderArtifactIdChanged extends GradleFileMigrator implemen
 	@Override
 	protected List<FileSearchResult> searchFile(File file, String artifactId) {
 		return findDependencies(file, artifactId);
-	}
-
-	private GradleDependency _artifactToDependency(Artifact artifact) {
-		return new GradleDependency(
-			artifact.getConfiguration(), artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), -1,
-			-1);
 	}
 
 	private String _getArtifactVersion() {

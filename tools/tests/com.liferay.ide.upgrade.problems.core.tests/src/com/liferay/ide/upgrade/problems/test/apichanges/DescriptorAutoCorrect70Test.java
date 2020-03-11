@@ -19,11 +19,11 @@ import java.io.File;
 /**
  * @author Seiphon Wang
  */
-public class DescriptorAutoCorrectTest extends AutoCorrectDescriptorTestBase {
+public class DescriptorAutoCorrect70Test extends AutoCorrectDescriptorTestBase {
 
 	@Override
 	public String getImplClassName() {
-		return "LiferayDescriptorVersion";
+		return "Liferay70DescriptorVersion";
 	}
 
 	@Override

@@ -18,12 +18,13 @@ import java.io.File;
 
 /**
  * @author Seiphon Wang
+ * @author Gregory Amerson
  */
-public class DescriptorsTest extends APIVersionSupportTestBase {
+public class Descriptors70Test extends APIVersionSupportTestBase {
 
 	@Override
 	public String getComponentName() {
-		return "com.liferay.ide.upgrade.problems.core.internal.liferay70.LiferayDescriptorVersion";
+		return "com.liferay.ide.upgrade.problems.core.internal.liferay70.Liferay70DescriptorVersion";
 	}
 
 	@Override

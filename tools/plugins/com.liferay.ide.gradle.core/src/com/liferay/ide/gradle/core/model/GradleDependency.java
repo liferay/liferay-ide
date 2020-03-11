@@ -14,6 +14,8 @@
 
 package com.liferay.ide.gradle.core.model;
 
+import java.text.MessageFormat;
+
 /**
  * @author Lovett Li
  * @author Vernon Singleton
@@ -85,6 +87,11 @@ public class GradleDependency {
 		}
 
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return MessageFormat.format("{0} group: {1}, name: {2}, version: {3}",_configuration, _group, _name, _version);
 	}
 
 	public String getConfiguration() {

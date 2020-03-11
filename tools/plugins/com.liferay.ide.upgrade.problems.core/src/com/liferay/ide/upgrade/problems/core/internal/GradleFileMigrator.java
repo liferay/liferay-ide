@@ -14,7 +14,6 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.core.Artifact;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
@@ -30,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -92,14 +92,12 @@ public abstract class GradleFileMigrator implements FileMigrator {
 		return problems;
 	}
 
-	public List<Artifact> findArtifactsbyArtifactId(GradleBuildScript gradleBuildScript, String artifactId) {
+	public List<GradleDependency> findDependenciesByName(GradleBuildScript gradleBuildScript, String name) {
 		List<GradleDependency> gradleDependencies = gradleBuildScript.getDependencies();
 
 		return gradleDependencies.stream(
 		).filter(
-			dep -> artifactId.equals(dep.getName())
-		).map(
-			this::_dependencyToArtifact
+			dep -> Objects.equals(name, dep.getName())
 		).collect(
 			Collectors.toList()
 		);
@@ -190,11 +188,5 @@ public abstract class GradleFileMigrator implements FileMigrator {
 	protected String problemType;
 	protected String sectionKey = "";
 	protected String version = "";
-
-	private Artifact _dependencyToArtifact(GradleDependency gradleDependency) {
-		return new Artifact(
-			gradleDependency.getGroup(), gradleDependency.getName(), gradleDependency.getVersion(),
-			gradleDependency.getConfiguration(), null);
-	}
 
 }

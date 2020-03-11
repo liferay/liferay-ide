@@ -127,10 +127,10 @@ public class GradleBuildScript {
 
 				@Override
 				public int compare(GradleDependency dep1, GradleDependency dep2) {
-					int[] lineNumbers1 = buildScriptVisitor.getDependencyLineNumbers(dep1);
-					int[] lineNumbers2 = buildScriptVisitor.getDependencyLineNumbers(dep2);
+					int lastLineNumber1 = dep1.getLastLineNumber();
+					int lastLineNumber2 = dep2.getLastLineNumber();
 
-					return lineNumbers2[1] - lineNumbers1[1];
+					return lastLineNumber2 - lastLineNumber1;
 				}
 
 			});
@@ -149,12 +149,21 @@ public class GradleBuildScript {
 		Files.write(_path, content.getBytes());
 	}
 
-	public void updateDependency(GradleDependency oldArtifact, GradleDependency newArtifact) {
+	public void updateDependency(GradleDependency oldArtifact, GradleDependency newArtifact) throws IOException {
 		BuildScriptVisitor buildScriptVisitor = new BuildScriptVisitor();
 
 		_walkScript(buildScriptVisitor);
 
+		_fileContents = Files.readAllLines(_path);
+
 		_updateDependency(buildScriptVisitor, oldArtifact, newArtifact);
+
+		String content = _fileContents.stream(
+		).collect(
+			Collectors.joining(System.lineSeparator())
+		);
+
+		Files.write(_path, content.getBytes());
 	}
 
 	public void updateDependency(String dependency) throws IOException {
@@ -243,7 +252,7 @@ public class GradleBuildScript {
 	private void _updateDependency(
 		BuildScriptVisitor buildScriptVisitor, GradleDependency oldArtifact, GradleDependency newArtifact) {
 
-		int[] lineNumbers = buildScriptVisitor.getDependencyLineNumbers(oldArtifact);
+		int[] lineNumbers = new int[] {oldArtifact.getLineNumber(), oldArtifact.getLastLineNumber()};
 
 		if (lineNumbers.length != 2) {
 			return;
