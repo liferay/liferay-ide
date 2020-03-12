@@ -42,13 +42,13 @@ import org.codehaus.groovy.ast.stmt.BlockStatement;
  * @author Terry Jia
  * @author Simon Jiang
  */
-public class ToRemoveDependenciesClosureVisitor extends CodeVisitorSupport {
+public class UnusedDependenciesClosureVisitor extends CodeVisitorSupport {
 
-	public ToRemoveDependenciesClosureVisitor() {
+	public UnusedDependenciesClosureVisitor() {
 		_buildscript = false;
 	}
 
-	public ToRemoveDependenciesClosureVisitor(boolean buildscript) {
+	public UnusedDependenciesClosureVisitor(boolean buildscript) {
 		_buildscript = buildscript;
 	}
 

@@ -41,28 +41,28 @@ import org.eclipse.core.resources.IFile;
  * @author Terry Jia
  * @author Seiphon Wang
  */
-public class ToRemoveGradleDependencyUpdater {
+public class UnusedGradleDependencyUpdater {
 
-	public ToRemoveGradleDependencyUpdater(File file) throws IOException {
+	public UnusedGradleDependencyUpdater(File file) throws IOException {
 		this(new String(Files.readAllBytes(file.toPath())));
 
 		_file = file;
 	}
 
-	public ToRemoveGradleDependencyUpdater(IFile file) throws IOException {
+	public UnusedGradleDependencyUpdater(IFile file) throws IOException {
 		this(new String(Files.readAllBytes(FileUtil.getPath(file))));
 
 		_file = FileUtil.getFile(file);
 	}
 
-	public ToRemoveGradleDependencyUpdater(String scriptContents) {
+	public UnusedGradleDependencyUpdater(String scriptContents) {
 		AstBuilder builder = new AstBuilder();
 
 		_nodes = builder.buildFromString(CompilePhase.CONVERSION, scriptContents);
 	}
 
 	public int[] getDependenceLineNumbers(Artifact artifact) {
-		ToRemoveDependenciesClosureVisitor visitor = new ToRemoveDependenciesClosureVisitor();
+		UnusedDependenciesClosureVisitor visitor = new UnusedDependenciesClosureVisitor();
 
 		_walkScript(visitor);
 
@@ -70,7 +70,7 @@ public class ToRemoveGradleDependencyUpdater {
 	}
 
 	public List<Artifact> getDependencies(boolean buildscript, String configuration) {
-		ToRemoveDependenciesClosureVisitor visitor = new ToRemoveDependenciesClosureVisitor(buildscript);
+		UnusedDependenciesClosureVisitor visitor = new UnusedDependenciesClosureVisitor(buildscript);
 
 		_walkScript(visitor);
 
@@ -78,7 +78,7 @@ public class ToRemoveGradleDependencyUpdater {
 	}
 
 	public List<Artifact> getDependencies(String configuration) {
-		ToRemoveDependenciesClosureVisitor visitor = new ToRemoveDependenciesClosureVisitor();
+		UnusedDependenciesClosureVisitor visitor = new UnusedDependenciesClosureVisitor();
 
 		_walkScript(visitor);
 
@@ -89,12 +89,12 @@ public class ToRemoveGradleDependencyUpdater {
 		return _gradleFileContents;
 	}
 
-	public ToRemoveDependenciesClosureVisitor insertDependency(Artifact artifact) throws IOException {
+	public UnusedDependenciesClosureVisitor insertDependency(Artifact artifact) throws IOException {
 		return _insertDependency(_toGradleDependencyString(artifact));
 	}
 
 	public void updateDependencies(boolean buildscript, List<Artifact> artifacts) throws IOException {
-		ToRemoveDependenciesClosureVisitor dependenciesClosureVisitor = new ToRemoveDependenciesClosureVisitor(
+		UnusedDependenciesClosureVisitor dependenciesClosureVisitor = new UnusedDependenciesClosureVisitor(
 			buildscript);
 
 		_walkScript(dependenciesClosureVisitor);
@@ -122,7 +122,7 @@ public class ToRemoveGradleDependencyUpdater {
 	}
 
 	public void updateDependency(boolean buildscript, Artifact oldArtifact, Artifact newArtifact) throws IOException {
-		ToRemoveDependenciesClosureVisitor dependenciesClosureVisitor = new ToRemoveDependenciesClosureVisitor(
+		UnusedDependenciesClosureVisitor dependenciesClosureVisitor = new UnusedDependenciesClosureVisitor(
 			buildscript);
 
 		_walkScript(dependenciesClosureVisitor);
@@ -141,7 +141,7 @@ public class ToRemoveGradleDependencyUpdater {
 	}
 
 	public void updateDependency(
-		ToRemoveDependenciesClosureVisitor visitor, Artifact oldArtifact, Artifact newArtifact) {
+		UnusedDependenciesClosureVisitor visitor, Artifact oldArtifact, Artifact newArtifact) {
 
 		int[] lineNumbers = visitor.getDependenceLineNumbers(oldArtifact);
 
@@ -180,8 +180,8 @@ public class ToRemoveGradleDependencyUpdater {
 		}
 	}
 
-	private ToRemoveDependenciesClosureVisitor _insertDependency(String dependency) throws IOException {
-		ToRemoveDependenciesClosureVisitor visitor = new ToRemoveDependenciesClosureVisitor();
+	private UnusedDependenciesClosureVisitor _insertDependency(String dependency) throws IOException {
+		UnusedDependenciesClosureVisitor visitor = new UnusedDependenciesClosureVisitor();
 
 		_walkScript(visitor);
 
