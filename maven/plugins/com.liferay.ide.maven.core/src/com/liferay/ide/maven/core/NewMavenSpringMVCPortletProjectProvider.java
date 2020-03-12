@@ -40,6 +40,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class NewMavenSpringMVCPortletProjectProvider
 	extends LiferayMavenProjectProvider
@@ -67,7 +68,9 @@ public class NewMavenSpringMVCPortletProjectProvider
 
 		String viewType = get(op.getViewType());
 
-		File targetDir = location.toFile();
+		IPath targetDirPath = location.removeLastSegments(1);
+
+		File targetDir = targetDirPath.toFile();
 
 		targetDir.mkdirs();
 

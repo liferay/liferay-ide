@@ -53,6 +53,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Terry Jia
  * @author Charles Wu
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 @Component(property = "type=gradle_workspace", service = NewLiferayWorkspaceProjectProvider.class)
 public class LiferayGradleWorkspaceProjectProvider
@@ -71,13 +72,11 @@ public class LiferayGradleWorkspaceProjectProvider
 
 		String workspaceName = get(op.getWorkspaceName());
 
-		IPath workspaceLocation = location.append(workspaceName);
-
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("--base ");
 		sb.append("\"");
-		sb.append(workspaceLocation.toOSString());
+		sb.append(location.toOSString());
 		sb.append("\" ");
 		sb.append("init ");
 		sb.append("-v ");
@@ -95,7 +94,7 @@ public class LiferayGradleWorkspaceProjectProvider
 		if (enableTargetPlatform) {
 			try {
 				PropertiesConfiguration config = new PropertiesConfiguration(
-					FileUtil.getFile(workspaceLocation.append("gradle.properties")));
+					FileUtil.getFile(location.append("gradle.properties")));
 
 				config.setProperty(WorkspaceConstants.TARGET_PLATFORM_VERSION_PROPERTY, get(op.getTargetPlatform()));
 				config.setProperty(
@@ -108,9 +107,7 @@ public class LiferayGradleWorkspaceProjectProvider
 			}
 		}
 
-		IPath wsLocation = location.append(workspaceName);
-
-		IStatus importProjectStatus = importProject(wsLocation, monitor);
+		IStatus importProjectStatus = importProject(location, monitor);
 
 		if (importProjectStatus != Status.OK_STATUS) {
 			return importProjectStatus;

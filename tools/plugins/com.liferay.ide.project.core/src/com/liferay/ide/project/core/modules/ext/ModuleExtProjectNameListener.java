@@ -29,6 +29,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Charles Wu
+ * @author Seiphon Wang
  */
 public class ModuleExtProjectNameListener
 	extends FilteredListener<PropertyContentEvent> implements SapphireContentAccessor {
@@ -71,7 +72,7 @@ public class ModuleExtProjectNameListener
 			}
 
 			if (newLocationBase != null) {
-				op.setLocation(newLocationBase);
+				op.setLocation(newLocationBase.append(currentProjectName));
 			}
 		}
 	}

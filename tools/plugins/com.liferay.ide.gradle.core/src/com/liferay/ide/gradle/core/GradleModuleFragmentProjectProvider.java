@@ -38,6 +38,7 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Terry Jia
  * @author Lovett Li
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class GradleModuleFragmentProjectProvider
 	extends AbstractLiferayProjectProvider
@@ -61,12 +62,14 @@ public class GradleModuleFragmentProjectProvider
 
 		StringBuilder sb = new StringBuilder();
 
-		File locationFile = location.toFile();
+		IPath targetDirPath = location.removeLastSegments(1);
+
+		File targetDir = targetDirPath.toFile();
 
 		sb.append("create ");
 		sb.append("");
 		sb.append("-d \"");
-		sb.append(locationFile.getAbsolutePath());
+		sb.append(targetDir.getAbsolutePath());
 		sb.append("\" ");
 		sb.append("");
 		sb.append("-t ");
@@ -99,8 +102,6 @@ public class GradleModuleFragmentProjectProvider
 
 		NewModuleFragmentOpMethods.copyOverrideFiles(op);
 
-		IPath projectLocation = location.append(projectName);
-
 		boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
 		boolean useDefaultLocation = get(op.getUseDefaultLocation());
 		boolean inWorkspacePath = false;
@@ -116,7 +117,7 @@ public class GradleModuleFragmentProjectProvider
 				if (liferayWorkspaceProjectModulesDir != null) {
 					IPath modulesPath = workspaceLocation.append(liferayWorkspaceProjectModulesDir);
 
-					if (modulesPath.isPrefixOf(projectLocation)) {
+					if (modulesPath.isPrefixOf(location)) {
 						inWorkspacePath = true;
 					}
 				}
@@ -127,8 +128,8 @@ public class GradleModuleFragmentProjectProvider
 			GradleUtil.refreshProject(liferayWorkspaceProject);
 		}
 		else {
-			CoreUtil.openProject(projectName, projectLocation, monitor);
-			GradleUtil.synchronizeProject(projectLocation, monitor);
+			CoreUtil.openProject(projectName, location, monitor);
+			GradleUtil.synchronizeProject(location, monitor);
 		}
 
 		return retval;

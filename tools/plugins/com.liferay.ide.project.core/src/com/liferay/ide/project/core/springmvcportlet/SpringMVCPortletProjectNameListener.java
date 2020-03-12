@@ -33,6 +33,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class SpringMVCPortletProjectNameListener
 	extends FilteredListener<PropertyContentEvent> implements SapphireContentAccessor {
@@ -110,7 +111,7 @@ public class SpringMVCPortletProjectNameListener
 			}
 
 			if (newLocationBase != null) {
-				op.setLocation(newLocationBase);
+				op.setLocation(newLocationBase.append(currentProjectName));
 			}
 		}
 	}

@@ -106,6 +106,7 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	public ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty(TYPE, "UseDefaultLocation");
 
 	@Label(standard = "Project name")
+	@Listeners(WorkspaceNameListener.class)
 	@Required
 	@Service(impl = WorkspaceNameValidationService.class)
 	public ValueProperty PROP_WORKSPACE_NAME = new ValueProperty(TYPE, "WorkspaceName");

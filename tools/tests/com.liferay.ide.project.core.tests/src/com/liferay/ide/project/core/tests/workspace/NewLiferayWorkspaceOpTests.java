@@ -47,6 +47,7 @@ import org.junit.Test;
 
 /**
  * @author Andy Wu
+ * @author Seiphon Wang
  */
 public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
 {
@@ -102,7 +103,7 @@ public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
 
         String projectName = "test-liferay-workspace-new";
 
-        IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+        IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation().append(projectName);
 
         op.setWorkspaceName( projectName );
         op.setUseDefaultLocation( false );
@@ -112,7 +113,7 @@ public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
 
         waitForBuildAndValidation();
 
-        String wsLocation = workspaceLocation.append( projectName ).toPortableString();
+        String wsLocation = workspaceLocation.toPortableString();
 
         File wsFile = new File( wsLocation );
 
@@ -142,7 +143,7 @@ public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
         moduleProjectOp.setProjectName( "testThemeWarNotDefault" );
         moduleProjectOp.setProjectTemplateName( "theme" );
         moduleProjectOp.setUseDefaultLocation( false );
-        moduleProjectOp.setLocation( wsLocation + "/wars" );
+        moduleProjectOp.setLocation( wsLocation + "/wars/testThemeWarNotDefault" );
 
         moduleProjectOp.execute( new ProgressMonitor() );
 
@@ -155,7 +156,7 @@ public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
         moduleProjectOp.setProjectName( "testThemeWar2" );
         moduleProjectOp.setProjectTemplateName( "theme" );
         moduleProjectOp.setUseDefaultLocation( false );
-        moduleProjectOp.setLocation( wsLocation + "/wars2" );
+        moduleProjectOp.setLocation( wsLocation + "/wars2/testThemeWar2" );
 
         moduleProjectOp.execute( new ProgressMonitor() );
 

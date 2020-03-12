@@ -38,6 +38,7 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Joye Luo
  * @author Andy Wu
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 public class LiferayMavenWorkspaceProjectProvider
 	extends LiferayMavenProjectProvider implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> {
@@ -52,15 +53,13 @@ public class LiferayMavenWorkspaceProjectProvider
 
 		String workspaceName = workspaceNameValue.content();
 
-		IPath workspaceLocation = location.append(workspaceName);
-
 		Value<String> version = op.getLiferayVersion();
 
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("--base ");
 		sb.append("\"");
-		sb.append(workspaceLocation.toOSString());
+		sb.append(location.toOSString());
 		sb.append("\" ");
 		sb.append("init ");
 		sb.append("-b ");
@@ -75,7 +74,7 @@ public class LiferayMavenWorkspaceProjectProvider
 			return ProjectCore.createErrorStatus(bclie);
 		}
 
-		IStatus importProjectStatus = importProject(workspaceLocation, monitor);
+		IStatus importProjectStatus = importProject(location, monitor);
 
 		if (importProjectStatus != Status.OK_STATUS) {
 			return importProjectStatus;

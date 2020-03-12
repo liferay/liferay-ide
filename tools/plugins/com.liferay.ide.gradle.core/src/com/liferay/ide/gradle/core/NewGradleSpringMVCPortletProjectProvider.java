@@ -43,6 +43,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class NewGradleSpringMVCPortletProjectProvider
 	extends AbstractLiferayProjectProvider
@@ -74,7 +75,9 @@ public class NewGradleSpringMVCPortletProjectProvider
 
 		String viewType = get(op.getViewType());
 
-		File targetDir = location.toFile();
+		IPath targetDirPath = location.removeLastSegments(1);
+
+		File targetDir = targetDirPath.toFile();
 
 		targetDir.mkdirs();
 
@@ -179,16 +182,6 @@ public class NewGradleSpringMVCPortletProjectProvider
 
 			name.setName(projectName);
 
-			IPath projectLocation = location;
-
-			String lastSegment = location.lastSegment();
-
-			if ((location != null) && (location.segmentCount() > 0)) {
-				if (!lastSegment.equals(projectName)) {
-					projectLocation = location.append(projectName);
-				}
-			}
-
 			boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
 			boolean useDefaultLocation = get(op.getUseDefaultLocation());
 			boolean inWorkspacePath = false;
@@ -197,7 +190,7 @@ public class NewGradleSpringMVCPortletProjectProvider
 				IPath workspaceLocation = liferayWorkspaceProject.getLocation();
 
 				if (workspaceLocation != null) {
-					inWorkspacePath = workspaceLocation.isPrefixOf(projectLocation);
+					inWorkspacePath = workspaceLocation.isPrefixOf(location);
 				}
 			}
 
@@ -205,9 +198,9 @@ public class NewGradleSpringMVCPortletProjectProvider
 				GradleUtil.refreshProject(liferayWorkspaceProject);
 			}
 			else {
-				CoreUtil.openProject(projectName, projectLocation, monitor);
+				CoreUtil.openProject(projectName, location, monitor);
 
-				GradleUtil.synchronizeProject(projectLocation, monitor);
+				GradleUtil.synchronizeProject(location, monitor);
 			}
 		}
 		catch (Exception e) {

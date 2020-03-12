@@ -36,6 +36,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Charles Wu
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class GradleModuleExtProjectProvider
 	extends AbstractLiferayProjectProvider
@@ -59,10 +60,12 @@ public class GradleModuleExtProjectProvider
 
 		StringBuilder sb = new StringBuilder();
 
-		File locationFile = location.toFile();
+		IPath targetDirPath = location.removeLastSegments(1);
+
+		File targetDir = targetDirPath.toFile();
 
 		sb.append("create -d \"");
-		sb.append(locationFile.getAbsolutePath());
+		sb.append(targetDir.getAbsolutePath());
 
 		if (workspaceProject != null) {
 			sb.append("\" ");
@@ -94,15 +97,13 @@ public class GradleModuleExtProjectProvider
 			return LiferayGradleCore.createErrorStatus("Could not create module ext project.", e);
 		}
 
-		IPath projecLocation = location.append(projectName);
+		CoreUtil.openProject(projectName, location, monitor);
 
-		CoreUtil.openProject(projectName, projecLocation, monitor);
-
-		if (LiferayWorkspaceUtil.inLiferayWorkspace(projecLocation)) {
+		if (LiferayWorkspaceUtil.inLiferayWorkspace(location)) {
 			GradleUtil.refreshProject(workspaceProject);
 		}
 		else {
-			GradleUtil.synchronizeProject(projecLocation, monitor);
+			GradleUtil.synchronizeProject(location, monitor);
 		}
 
 		return status;

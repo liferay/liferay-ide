@@ -39,6 +39,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Joye Luo
  * @author Charles Wu
+ * @author Seiphon Wang
  */
 public class LiferayMavenModuleProjectProvider
 	extends LiferayMavenProjectProvider
@@ -68,7 +69,9 @@ public class LiferayMavenModuleProjectProvider
 			properties.add(get(propertyKey.getName()) + "=" + get(propertyKey.getValue()));
 		}
 
-		File targetDir = location.toFile();
+		IPath targetDirPath = location.removeLastSegments(1);
+
+		File targetDir = targetDirPath.toFile();
 
 		targetDir.mkdirs();
 
@@ -130,19 +133,9 @@ public class LiferayMavenModuleProjectProvider
 				name.setName(projectName + "-service");
 			}
 
-			IPath projectLocation = location;
+			CoreUtil.openProject(projectName, location, monitor);
 
-			String lastSegment = location.lastSegment();
-
-			if ((location != null) && (location.segmentCount() > 0)) {
-				if (!lastSegment.equals(projectName)) {
-					projectLocation = location.append(projectName);
-				}
-			}
-
-			CoreUtil.openProject(projectName, projectLocation, monitor);
-
-			MavenUtil.updateProjectConfiguration(projectName, projectLocation.toOSString(), monitor);
+			MavenUtil.updateProjectConfiguration(projectName, location.toOSString(), monitor);
 		}
 		catch (Exception e) {
 			ProjectCore.logError(e);
