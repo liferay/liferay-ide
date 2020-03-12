@@ -22,13 +22,15 @@ import com.liferay.ide.core.IProjectBuilder;
 import com.liferay.ide.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.ProjectChangedEvent;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
-import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
+import com.liferay.ide.gradle.core.model.GradleBuildScript;
+import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import com.liferay.ide.server.core.ILiferayServer;
 
@@ -150,29 +152,29 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 				IFile settingsGradleFile = project.getFile("settings.gradle");
 
-				GradleDependencyUpdater gradleDependencyUpdater = null;
+				GradleBuildScript gradleBuildScript = null;
 
 				try {
-					gradleDependencyUpdater = new GradleDependencyUpdater(settingsGradleFile);
+					gradleBuildScript = new GradleBuildScript(FileUtil.getFile(settingsGradleFile));
 				}
 				catch (IOException ioe) {
 				}
 
 				String workspacePluginVersion = Optional.ofNullable(
-					gradleDependencyUpdater
+					gradleBuildScript
 				).flatMap(
-					updater -> {
-						List<Artifact> artifacts = updater.getDependencies(true, "classpath");
+					buildScript -> {
+						List<GradleDependency> dependencies = buildScript.getBuildScriptDependencies();
 
-						return artifacts.stream(
+						return dependencies.stream(
 						).filter(
-							artifact -> "com.liferay".equals(artifact.getGroupId())
+							dep -> "com.liferay".equals(dep.getGroup())
 						).filter(
-							artifact -> "com.liferay.gradle.plugins.workspace".equals(artifact.getArtifactId())
+							dep -> "com.liferay.gradle.plugins.workspace".equals(dep.getName())
 						).filter(
-							artifact -> CoreUtil.isNotNullOrEmpty(artifact.getVersion())
+							dep -> CoreUtil.isNotNullOrEmpty(dep.getVersion())
 						).map(
-							artifact -> artifact.getVersion()
+							dep -> dep.getVersion()
 						).findFirst();
 					}
 				).orElseGet(

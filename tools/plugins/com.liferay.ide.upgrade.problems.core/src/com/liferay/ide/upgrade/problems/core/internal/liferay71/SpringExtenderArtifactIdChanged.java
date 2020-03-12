@@ -14,9 +14,9 @@
 
 package com.liferay.ide.upgrade.problems.core.internal.liferay71;
 
-import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
+import com.liferay.ide.gradle.core.model.GradleBuildScript;
+import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
@@ -26,6 +26,8 @@ import com.liferay.ide.upgrade.problems.core.internal.GradleFileMigrator;
 
 import java.io.File;
 import java.io.IOException;
+
+import java.text.MessageFormat;
 
 import java.util.Collection;
 import java.util.List;
@@ -51,26 +53,29 @@ public class SpringExtenderArtifactIdChanged extends GradleFileMigrator implemen
 	public int correctProblems(File file, Collection<UpgradeProblem> upgradeProblems) throws AutoFileMigrateException {
 		int problemsFixed = 0;
 
-		GradleDependencyUpdater gradleDependencyUpdater = getGradleDependencyUpdater(file);
+		GradleBuildScript gradleBuildScript = getGradleBuildScript(file);
 
-		if (gradleDependencyUpdater == null) {
+		if (gradleBuildScript == null) {
 			return problemsFixed;
 		}
 
-		List<Artifact> dependencies = findArtifactsbyArtifactId(gradleDependencyUpdater, _springExtenderArtifactId);
+		List<GradleDependency> gradleDependencies = findDependenciesByName(
+			gradleBuildScript, _springExtenderArtifactId);
 
-		for (Artifact dependency : dependencies) {
+		for (GradleDependency dependency : gradleDependencies) {
+			GradleDependency newDependency = new GradleDependency(
+				dependency.getConfiguration(), dependency.getGroup(), _newSpringExtenderArtifactId,
+				_getArtifactVersion(), dependency.getLineNumber(), dependency.getLastLineNumber());
+
 			try {
-				Artifact newDependency = new Artifact(
-					dependency.getGroupId(), _newSpringExtenderArtifactId, _getArtifactVersion(),
-					dependency.getConfiguration(), dependency.getSource());
-
-				gradleDependencyUpdater.updateDependency(false, dependency, newDependency);
-
-				problemsFixed++;
+				gradleBuildScript.updateDependency(dependency, newDependency);
 			}
 			catch (IOException ioe) {
+				throw new AutoFileMigrateException(
+					MessageFormat.format("Failed to update dependency {0} to {1}", dependency, newDependency), ioe);
 			}
+
+			problemsFixed++;
 		}
 
 		return problemsFixed;

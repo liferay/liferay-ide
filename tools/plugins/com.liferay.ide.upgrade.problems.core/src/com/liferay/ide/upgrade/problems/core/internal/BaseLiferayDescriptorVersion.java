@@ -12,14 +12,13 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core.internal.liferay70;
+package com.liferay.ide.upgrade.problems.core.internal;
 
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrateException;
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import com.liferay.ide.upgrade.problems.core.XMLFile;
-import com.liferay.ide.upgrade.problems.core.internal.XMLFileMigrator;
 
 import java.io.File;
 import java.io.InputStream;

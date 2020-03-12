@@ -19,7 +19,8 @@ import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
-import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
+import com.liferay.ide.gradle.core.model.GradleBuildScript;
+import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
 import com.liferay.ide.upgrade.commands.core.code.RemoveDependencyVersionKeys;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
@@ -72,6 +73,12 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 		return Status.OK_STATUS;
 	}
 
+	private Artifact _dependencyToArtifact(GradleDependency gradleDependency) {
+		return new Artifact(
+			gradleDependency.getGroup(), gradleDependency.getName(), gradleDependency.getVersion(),
+			gradleDependency.getConfiguration(), null);
+	}
+
 	private List<File> _getBuildGradleFiles() {
 		List<IProject> projects = _resourceSelection.selectProjects(
 			"Select Liferay Project", false, ResourceSelection.JAVA_PROJECTS);
@@ -100,24 +107,24 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 				return;
 			}
 
-			GradleDependencyUpdater gradleDependencyUpdater = new GradleDependencyUpdater(buildGradleFile);
+			GradleBuildScript gradleBuildScript = new GradleBuildScript(buildGradleFile);
 
-			List<Artifact> dependencies = gradleDependencyUpdater.getDependencies("*");
+			List<GradleDependency> dependencies = gradleBuildScript.getDependencies();
 
-			List<Artifact> dependenciesWithoutVersion = dependencies.stream(
+			List<GradleDependency> dependenciesWithoutVersion = dependencies.stream(
 			).map(
-				artifact -> {
-					artifact.setVersion(null);
+				dependency -> {
+					dependency.setVersion(null);
 
-					return artifact;
+					return dependency;
 				}
 			).filter(
-				targetPlatformArtifacts::contains
+				dependency -> targetPlatformArtifacts.contains(_dependencyToArtifact(dependency))
 			).collect(
 				Collectors.toList()
 			);
 
-			gradleDependencyUpdater.updateDependencies(false, dependenciesWithoutVersion);
+			gradleBuildScript.updateDependencies(dependenciesWithoutVersion);
 		}
 		catch (IOException ioe) {
 			LiferayGradleUI.logError(ioe);

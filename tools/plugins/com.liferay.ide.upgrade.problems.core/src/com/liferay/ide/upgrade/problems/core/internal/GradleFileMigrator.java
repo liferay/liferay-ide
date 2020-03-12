@@ -14,8 +14,8 @@
 
 package com.liferay.ide.upgrade.problems.core.internal;
 
-import com.liferay.ide.core.Artifact;
-import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
+import com.liferay.ide.gradle.core.model.GradleBuildScript;
+import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileSearchResult;
@@ -23,9 +23,14 @@ import com.liferay.ide.upgrade.problems.core.FileSearchResult;
 import java.io.File;
 import java.io.IOException;
 
+import java.nio.file.Files;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
@@ -87,95 +92,90 @@ public abstract class GradleFileMigrator implements FileMigrator {
 		return problems;
 	}
 
-	public List<Artifact> findArtifactsbyArtifactId(
-		GradleDependencyUpdater gradleDependencyUpdater, String artifactId) {
-
-		List<Artifact> artifacts = new ArrayList<>();
-
-		List<Artifact> dependencies = gradleDependencyUpdater.getDependencies("*");
-
-		artifacts = dependencies.stream(
-		).filter(
-			artifact -> artifactId.equals(artifact.getArtifactId())
-		).collect(
-			Collectors.toList()
-		);
-
-		return artifacts;
-	}
-
 	public List<FileSearchResult> findDependencies(File file, String artifactId) {
-		List<FileSearchResult> retval = new ArrayList<>();
+		GradleBuildScript gradleBuildScript = getGradleBuildScript(file);
 
-		GradleDependencyUpdater gradleDependencyUpdater = getGradleDependencyUpdater(file);
-
-		if (gradleDependencyUpdater == null) {
-			return retval;
+		if (gradleBuildScript == null) {
+			return Collections.emptyList();
 		}
 
-		List<String> gradleFileContents = new ArrayList<>();
+		final List<String> gradleFileContents = new ArrayList<>();
 
-		String gradleFileContentString = "";
+		final AtomicReference<String> gradleFileContentString = new AtomicReference<>();
 
 		try {
-			gradleFileContents = FileUtils.readLines(file);
+			Files.readAllLines(
+				file.toPath()
+			).stream(
+			).forEach(
+				gradleFileContents::add
+			);
 
-			gradleFileContentString = FileUtils.readFileToString(file, "UTF-8");
+			gradleFileContentString.set(FileUtils.readFileToString(file, "UTF-8"));
 		}
 		catch (Exception e) {
 		}
 
-		List<Artifact> dependencies = gradleDependencyUpdater.getDependencies("*");
+		List<GradleDependency> dependencies = gradleBuildScript.getDependencies();
 
-		List<Artifact> artifacts = dependencies.stream(
+		return dependencies.stream(
 		).filter(
-			artifact -> artifactId.equals(artifact.getArtifactId())
+			dep -> artifactId.equals(dep.getName())
+		).map(
+			dep -> {
+				int startLineNumber = dep.getLineNumber();
+				int endLineNumber = dep.getLastLineNumber();
+
+				String startLineContent = gradleFileContents.get(startLineNumber - 1);
+
+				String endLineContent = gradleFileContents.get(endLineNumber - 1);
+
+				int originLength = startLineContent.length();
+
+				startLineContent = startLineContent.trim();
+
+				String contents = gradleFileContentString.get();
+
+				int startPos = contents.indexOf(startLineContent) + originLength - startLineContent.length();
+
+				int endPos = contents.indexOf(endLineContent) + endLineContent.length();
+
+				FileSearchResult result = new FileSearchResult(
+					file, startPos, endPos, startLineNumber, endLineNumber, true);
+
+				result.autoCorrectContext = "dependency:artifactId";
+
+				return result;
+			}
 		).collect(
 			Collectors.toList()
 		);
+	}
 
-		for (Artifact artifact : artifacts) {
-			int[] lineNumbers = gradleDependencyUpdater.getDependenceLineNumbers(artifact);
+	public List<GradleDependency> findDependenciesByName(GradleBuildScript gradleBuildScript, String name) {
+		List<GradleDependency> gradleDependencies = gradleBuildScript.getDependencies();
 
-			int startLineNumber = lineNumbers[0];
-			int endLineNumber = lineNumbers[1];
-
-			String startLineContent = gradleFileContents.get(startLineNumber - 1);
-
-			String endLineContent = gradleFileContents.get(endLineNumber - 1);
-
-			int originLength = startLineContent.length();
-
-			startLineContent = startLineContent.trim();
-
-			int startPos = gradleFileContentString.indexOf(startLineContent) + originLength - startLineContent.length();
-
-			int endPos = gradleFileContentString.indexOf(endLineContent) + endLineContent.length();
-
-			FileSearchResult result = new FileSearchResult(
-				file, startPos, endPos, startLineNumber, endLineNumber, true);
-
-			result.autoCorrectContext = "dependency:artifactId";
-
-			retval.add(result);
-		}
-
-		return retval;
+		return gradleDependencies.stream(
+		).filter(
+			dep -> Objects.equals(name, dep.getName())
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	protected abstract void addDependenciesToSearch(List<String> dependencies);
 
-	protected GradleDependencyUpdater getGradleDependencyUpdater(File file) {
-		GradleDependencyUpdater gradleDependencyUpdater = null;
+	protected GradleBuildScript getGradleBuildScript(File file) {
+		GradleBuildScript gradleBuildScript = null;
 
 		try {
-			gradleDependencyUpdater = new GradleDependencyUpdater(file);
+			gradleBuildScript = new GradleBuildScript(file);
 		}
 		catch (IOException ioe) {
 			return null;
 		}
 
-		return gradleDependencyUpdater;
+		return gradleBuildScript;
 	}
 
 	protected abstract List<FileSearchResult> searchFile(File file, String artifactId);

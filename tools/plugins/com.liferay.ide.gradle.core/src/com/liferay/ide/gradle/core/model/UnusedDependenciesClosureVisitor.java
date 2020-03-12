@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.gradle.core.parser;
+package com.liferay.ide.gradle.core.model;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.CoreUtil;
@@ -42,13 +42,13 @@ import org.codehaus.groovy.ast.stmt.BlockStatement;
  * @author Terry Jia
  * @author Simon Jiang
  */
-public class DependenciesClosureVisitor extends CodeVisitorSupport {
+public class UnusedDependenciesClosureVisitor extends CodeVisitorSupport {
 
-	public DependenciesClosureVisitor() {
+	public UnusedDependenciesClosureVisitor() {
 		_buildscript = false;
 	}
 
-	public DependenciesClosureVisitor(boolean buildscript) {
+	public UnusedDependenciesClosureVisitor(boolean buildscript) {
 		_buildscript = buildscript;
 	}
 

@@ -12,21 +12,20 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.test.apichanges71;
+package com.liferay.ide.upgrade.problems.test.apichanges72;
 
 import com.liferay.ide.upgrade.problems.test.apichanges.AutoCorrectDescriptorTestBase;
 
 import java.io.File;
 
 /**
- * @author Seiphon Wang
  * @author Gregory Amerson
  */
-public class DescriptorAutoCorrect71Test extends AutoCorrectDescriptorTestBase {
+public class DescriptorAutoCorrect72Test extends AutoCorrectDescriptorTestBase {
 
 	@Override
 	public String getImplClassName() {
-		return "Liferay71DescriptorVersion";
+		return "Liferay72DescriptorVersion";
 	}
 
 	@Override
@@ -36,6 +35,6 @@ public class DescriptorAutoCorrect71Test extends AutoCorrectDescriptorTestBase {
 
 	@Override
 	public String getVersion() {
-		return "7.1";
+		return "7.2";
 	}
 }

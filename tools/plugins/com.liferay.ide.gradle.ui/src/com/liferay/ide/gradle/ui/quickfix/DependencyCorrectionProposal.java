@@ -16,10 +16,11 @@ package com.liferay.ide.gradle.ui.quickfix;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleCore;
-import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
+import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.project.ui.ProjectUI;
 
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class DependencyCorrectionProposal extends CUCorrectionProposal {
 	@Override
 	public void apply(IDocument document) {
 		try {
-			GradleDependencyUpdater gradleDependencyUpdater = new GradleDependencyUpdater(_gradleFile);
+			GradleBuildScript gradleBuildScript = new GradleBuildScript(FileUtil.getFile(_gradleFile));
 
 			StringBuilder sb = new StringBuilder();
 
@@ -63,7 +64,7 @@ public class DependencyCorrectionProposal extends CUCorrectionProposal {
 
 			sb.append("'");
 
-			gradleDependencyUpdater.updateDependency(sb.toString());
+			gradleBuildScript.updateDependency(sb.toString());
 
 			GradleUtil.refreshProject(_gradleFile.getProject());
 		}

@@ -12,30 +12,29 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.test.apichanges71;
+package com.liferay.ide.upgrade.problems.test.apichanges72;
 
-import com.liferay.ide.upgrade.problems.test.apichanges.AutoCorrectDescriptorTestBase;
+import com.liferay.ide.upgrade.problems.test.apichanges.APIVersionSupportTestBase;
 
 import java.io.File;
 
 /**
- * @author Seiphon Wang
  * @author Gregory Amerson
  */
-public class DescriptorAutoCorrect71Test extends AutoCorrectDescriptorTestBase {
+public class Descriptors72Test extends APIVersionSupportTestBase {
 
 	@Override
-	public String getImplClassName() {
-		return "Liferay71DescriptorVersion";
+	public String getComponentName() {
+		return "com.liferay.ide.upgrade.problems.core.internal.liferay72.Liferay72DescriptorVersion";
 	}
 
 	@Override
-	public File getOriginalTestFile() {
+	public File getTestFile() {
 		return new File("projects/legacy-apis-ant-portlet/docroot/WEB-INF/liferay-portlet.xml");
 	}
 
 	@Override
 	public String getVersion() {
-		return "7.1";
+		return "7.2";
 	}
 }

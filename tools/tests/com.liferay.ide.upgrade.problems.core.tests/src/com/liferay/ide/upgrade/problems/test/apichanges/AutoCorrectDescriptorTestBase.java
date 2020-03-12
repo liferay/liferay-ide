@@ -44,37 +44,40 @@ public abstract class AutoCorrectDescriptorTestBase {
 
 		Files.copy(getOriginalTestFile().toPath(), testFile.toPath());
 
-		List<UpgradeProblem> problems = null;
-		FileMigrator migrator = null;
+		FileMigrator descriptorFileMigrator = null;
 
 		Collection<ServiceReference<FileMigrator>> mrefs =
 			context.getServiceReferences(FileMigrator.class, "(version=" + getVersion() + ")");
 
 		for (ServiceReference<FileMigrator> mref : mrefs) {
-			migrator = context.getService(mref);
+			FileMigrator fileMigrator = context.getService(mref);
 
-			Class<?> clazz = migrator.getClass();
+			Class<?> clazz = fileMigrator.getClass();
 
 			if (clazz.getName().contains(getImplClassName())) {
-				problems = migrator.analyze(testFile);
+				descriptorFileMigrator = fileMigrator;
 
 				break;
 			}
 		}
 
-		Assert.assertEquals("", 1, problems.size());
+		Assert.assertNotNull("Expected that a valid descriptorFileMigrator would be found", descriptorFileMigrator);
+
+		List<UpgradeProblem> upgradeProblems = descriptorFileMigrator.analyze(testFile);
+
+		Assert.assertEquals("Expected to have found exactly one problem.", 1, upgradeProblems.size());
 
 		File dest = new File(tempFolder, "Updated.xml");
 
 		Files.copy(testFile.toPath(), dest.toPath());
 
-		int problemsFixed = ((AutoFileMigrator)migrator).correctProblems(dest, problems);
+		int problemsFixed = ((AutoFileMigrator)descriptorFileMigrator).correctProblems(dest, upgradeProblems);
 
-		Assert.assertEquals("", 1, problemsFixed);
+		Assert.assertEquals("Expected to have fixed exactly one problem.", 1, problemsFixed);
 
-		problems = migrator.analyze(dest);
+		upgradeProblems = descriptorFileMigrator.analyze(dest);
 
-		Assert.assertEquals("", 0, problems.size());
+		Assert.assertEquals("Expected to not find any problems.", 0, upgradeProblems.size());
 	}
 
 	public abstract String getImplClassName();

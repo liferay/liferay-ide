@@ -16,7 +16,7 @@ package com.liferay.ide.upgrade.problems.core.internal.liferay71;
 
 import com.liferay.ide.upgrade.problems.core.AutoFileMigrator;
 import com.liferay.ide.upgrade.problems.core.FileMigrator;
-import com.liferay.ide.upgrade.problems.core.internal.liferay70.BaseLiferayDescriptorVersion;
+import com.liferay.ide.upgrade.problems.core.internal.BaseLiferayDescriptorVersion;
 
 import java.util.regex.Pattern;
 
@@ -33,9 +33,9 @@ import org.osgi.service.component.annotations.Component;
 	},
 	service = {AutoFileMigrator.class, FileMigrator.class}
 )
-public class LiferayDescriptorVersion extends BaseLiferayDescriptorVersion {
+public class Liferay71DescriptorVersion extends BaseLiferayDescriptorVersion {
 
-	public LiferayDescriptorVersion() {
+	public Liferay71DescriptorVersion() {
 		super(_publicPattern, "7.1.0");
 	}
 

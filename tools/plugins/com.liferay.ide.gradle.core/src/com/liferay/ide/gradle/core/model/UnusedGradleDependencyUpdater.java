@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.gradle.core.parser;
+package com.liferay.ide.gradle.core.model;
 
 import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.util.CoreUtil;
@@ -41,28 +41,28 @@ import org.eclipse.core.resources.IFile;
  * @author Terry Jia
  * @author Seiphon Wang
  */
-public class GradleDependencyUpdater {
+public class UnusedGradleDependencyUpdater {
 
-	public GradleDependencyUpdater(File file) throws IOException {
+	public UnusedGradleDependencyUpdater(File file) throws IOException {
 		this(new String(Files.readAllBytes(file.toPath())));
 
 		_file = file;
 	}
 
-	public GradleDependencyUpdater(IFile file) throws IOException {
+	public UnusedGradleDependencyUpdater(IFile file) throws IOException {
 		this(new String(Files.readAllBytes(FileUtil.getPath(file))));
 
 		_file = FileUtil.getFile(file);
 	}
 
-	public GradleDependencyUpdater(String scriptContents) {
+	public UnusedGradleDependencyUpdater(String scriptContents) {
 		AstBuilder builder = new AstBuilder();
 
 		_nodes = builder.buildFromString(CompilePhase.CONVERSION, scriptContents);
 	}
 
 	public int[] getDependenceLineNumbers(Artifact artifact) {
-		DependenciesClosureVisitor visitor = new DependenciesClosureVisitor();
+		UnusedDependenciesClosureVisitor visitor = new UnusedDependenciesClosureVisitor();
 
 		_walkScript(visitor);
 
@@ -70,7 +70,7 @@ public class GradleDependencyUpdater {
 	}
 
 	public List<Artifact> getDependencies(boolean buildscript, String configuration) {
-		DependenciesClosureVisitor visitor = new DependenciesClosureVisitor(buildscript);
+		UnusedDependenciesClosureVisitor visitor = new UnusedDependenciesClosureVisitor(buildscript);
 
 		_walkScript(visitor);
 
@@ -78,7 +78,7 @@ public class GradleDependencyUpdater {
 	}
 
 	public List<Artifact> getDependencies(String configuration) {
-		DependenciesClosureVisitor visitor = new DependenciesClosureVisitor();
+		UnusedDependenciesClosureVisitor visitor = new UnusedDependenciesClosureVisitor();
 
 		_walkScript(visitor);
 
@@ -89,12 +89,13 @@ public class GradleDependencyUpdater {
 		return _gradleFileContents;
 	}
 
-	public DependenciesClosureVisitor insertDependency(Artifact artifact) throws IOException {
+	public UnusedDependenciesClosureVisitor insertDependency(Artifact artifact) throws IOException {
 		return _insertDependency(_toGradleDependencyString(artifact));
 	}
 
 	public void updateDependencies(boolean buildscript, List<Artifact> artifacts) throws IOException {
-		DependenciesClosureVisitor dependenciesClosureVisitor = new DependenciesClosureVisitor(buildscript);
+		UnusedDependenciesClosureVisitor dependenciesClosureVisitor = new UnusedDependenciesClosureVisitor(
+			buildscript);
 
 		_walkScript(dependenciesClosureVisitor);
 
@@ -121,7 +122,8 @@ public class GradleDependencyUpdater {
 	}
 
 	public void updateDependency(boolean buildscript, Artifact oldArtifact, Artifact newArtifact) throws IOException {
-		DependenciesClosureVisitor dependenciesClosureVisitor = new DependenciesClosureVisitor(buildscript);
+		UnusedDependenciesClosureVisitor dependenciesClosureVisitor = new UnusedDependenciesClosureVisitor(
+			buildscript);
 
 		_walkScript(dependenciesClosureVisitor);
 
@@ -132,7 +134,15 @@ public class GradleDependencyUpdater {
 		FileUtils.writeLines(_file, _gradleFileContents);
 	}
 
-	public void updateDependency(DependenciesClosureVisitor visitor, Artifact oldArtifact, Artifact newArtifact) {
+	public void updateDependency(String dependency) throws IOException {
+		_insertDependency(dependency);
+
+		FileUtils.writeLines(_file, _gradleFileContents);
+	}
+
+	public void updateDependency(
+		UnusedDependenciesClosureVisitor visitor, Artifact oldArtifact, Artifact newArtifact) {
+
 		int[] lineNumbers = visitor.getDependenceLineNumbers(oldArtifact);
 
 		if (lineNumbers.length != 2) {
@@ -170,14 +180,8 @@ public class GradleDependencyUpdater {
 		}
 	}
 
-	public void updateDependency(String dependency) throws IOException {
-		_insertDependency(dependency);
-
-		FileUtils.writeLines(_file, _gradleFileContents);
-	}
-
-	private DependenciesClosureVisitor _insertDependency(String dependency) throws IOException {
-		DependenciesClosureVisitor visitor = new DependenciesClosureVisitor();
+	private UnusedDependenciesClosureVisitor _insertDependency(String dependency) throws IOException {
+		UnusedDependenciesClosureVisitor visitor = new UnusedDependenciesClosureVisitor();
 
 		_walkScript(visitor);
 

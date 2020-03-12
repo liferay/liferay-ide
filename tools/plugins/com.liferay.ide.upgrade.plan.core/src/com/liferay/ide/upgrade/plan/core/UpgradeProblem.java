@@ -14,8 +14,6 @@
 
 package com.liferay.ide.upgrade.plan.core;
 
-import com.liferay.ide.core.util.CoreUtil;
-
 import java.io.File;
 
 import java.util.UUID;
@@ -27,7 +25,7 @@ import org.eclipse.core.runtime.Adapters;
  * @author Simon Jiang
  * @author Seiphon Wang
  */
-public class UpgradeProblem {
+public class UpgradeProblem implements Comparable<UpgradeProblem> {
 
 	public static final long DEFAULT_MARKER_ID = -1;
 
@@ -96,6 +94,14 @@ public class UpgradeProblem {
 		_markerType = markerType;
 	}
 
+	@Override
+	public int compareTo(UpgradeProblem that) {
+		String thisString = toString();
+		String thatString = that.toString();
+
+		return thisString.compareTo(thatString);
+	}
+
 	public boolean equals(Object object) {
 		if ((object instanceof UpgradeProblem) == false) {
 			return false;
@@ -124,8 +130,8 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (CoreUtil.isNullOrEmpty(_summary)) {
-			if (CoreUtil.isNotNullOrEmpty(other._summary)) {
+		if (_isNullOrEmpty(_summary)) {
+			if (_isNotNullOrEmpty(other._summary)) {
 				return false;
 			}
 		}
@@ -133,8 +139,8 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (CoreUtil.isNullOrEmpty(_ticket)) {
-			if (CoreUtil.isNotNullOrEmpty(other._ticket)) {
+		if (_isNullOrEmpty(_ticket)) {
+			if (_isNotNullOrEmpty(other._ticket)) {
 				return false;
 			}
 		}
@@ -142,8 +148,8 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (CoreUtil.isNullOrEmpty(_title)) {
-			if (CoreUtil.isNotNullOrEmpty(other._title)) {
+		if (_isNullOrEmpty(_title)) {
+			if (_isNotNullOrEmpty(other._title)) {
 				return false;
 			}
 		}
@@ -151,8 +157,8 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (CoreUtil.isNullOrEmpty(_type)) {
-			if (CoreUtil.isNotNullOrEmpty(other._type)) {
+		if (_isNullOrEmpty(_type)) {
+			if (_isNotNullOrEmpty(other._type)) {
 				return false;
 			}
 		}
@@ -160,8 +166,8 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (CoreUtil.isNullOrEmpty(_version)) {
-			if (CoreUtil.isNotNullOrEmpty(other._version)) {
+		if (_isNullOrEmpty(_version)) {
+			if (_isNotNullOrEmpty(other._version)) {
 				return false;
 			}
 		}
@@ -169,8 +175,8 @@ public class UpgradeProblem {
 			return false;
 		}
 
-		if (CoreUtil.isNullOrEmpty(_autoCorrectContext)) {
-			if (CoreUtil.isNotNullOrEmpty(other._autoCorrectContext)) {
+		if (_isNullOrEmpty(_autoCorrectContext)) {
+			if (_isNotNullOrEmpty(other._autoCorrectContext)) {
 				return false;
 			}
 		}
@@ -322,7 +328,6 @@ public class UpgradeProblem {
 		String lineSparator = System.getProperty("line.separator");
 
 		builder.append("Problem summary : " + _summary + lineSparator);
-		builder.append("	Uuid is :" + _uuid + lineSparator);
 		builder.append("	File location is :" + _resource.getAbsolutePath() + lineSparator);
 		builder.append("	Ticket is :" + _ticket + lineSparator);
 		builder.append("	Line Number is :" + _lineNumber + lineSparator);
@@ -334,6 +339,24 @@ public class UpgradeProblem {
 		builder.append("	EndOffset is :" + _endOffset + lineSparator);
 
 		return builder.toString();
+	}
+
+	private static boolean _isNotNullOrEmpty(String val) {
+		return !_isNullOrEmpty(val);
+	}
+
+	private static boolean _isNullOrEmpty(String val) {
+		if ((val == null) || val.equals("")) {
+			return true;
+		}
+
+		String s = val.trim();
+
+		if (s.equals("")) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private String _autoCorrectContext;
