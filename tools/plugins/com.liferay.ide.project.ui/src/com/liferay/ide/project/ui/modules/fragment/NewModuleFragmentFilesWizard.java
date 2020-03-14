@@ -34,6 +34,7 @@ import org.eclipse.ui.IWorkbenchWizard;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class NewModuleFragmentFilesWizard
 	extends SapphireWizard<NewModuleFragmentFilesOp> implements INewWizard, IWorkbenchWizard {
@@ -71,6 +72,8 @@ public class NewModuleFragmentFilesWizard
 					IPath projectLocation = _initialProject.getLocation();
 
 					element().setLocation(PathBridge.create(projectLocation.removeLastSegments(1)));
+
+					element().setProjectName(_initialProject.getName());
 				}
 			}
 		}

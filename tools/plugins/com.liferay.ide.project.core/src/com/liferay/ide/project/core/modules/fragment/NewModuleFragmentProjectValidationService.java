@@ -17,6 +17,9 @@ package com.liferay.ide.project.core.modules.fragment;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.project.core.util.ProjectUtil;
+
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -25,6 +28,7 @@ import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Joye Luo
+ * @author Simon Jiang
  */
 public class NewModuleFragmentProjectValidationService extends ValidationService implements SapphireContentAccessor {
 
@@ -44,6 +48,14 @@ public class NewModuleFragmentProjectValidationService extends ValidationService
 
 		if (FileUtil.notExists(bndFile)) {
 			return Status.createErrorStatus("Can not find bnd.bnd file in the project.");
+		}
+
+		Map<String, String> fragmentProjectInfo = ProjectUtil.getFragmentProjectInfo(project);
+
+		String protalBundleVersion = fragmentProjectInfo.get("Portal-Bundle-Version");
+
+		if (CoreUtil.isNullOrEmpty(protalBundleVersion)) {
+			return Status.createErrorStatus("Can not find Portal-Bundle-Version in bnd.bnd file in the project.");
 		}
 
 		return Status.createOkStatus();

@@ -25,9 +25,12 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Services;
 
 /**
  * @author Terry Jia
+ * @author Ethan Sun
+ * @author Simon Jiang
  */
 public interface NewModuleFragmentFilesOp extends NewModuleFragmentOp {
 
@@ -51,10 +54,14 @@ public interface NewModuleFragmentFilesOp extends NewModuleFragmentOp {
 	@Service(impl = HostOSGiBundleInitialValueService.class)
 	public ValueProperty PROP_HOST_OSGI_BUNDLE = new ValueProperty(TYPE, "HostOsgiBundle");
 
-	@Enablement(expr = "false")
-	@Label(standard = "Liferay Runtime Name")
 	@Required
-	@Service(impl = LiferayRuntimeNameInitialValueService.class)
+	@Services(
+		value = {
+			@Service(impl = LiferayFragmentRuntimeNamePossibleValuesService.class),
+			@Service(impl = LiferayFragmentRuntimeNameDefaultValueService.class),
+			@Service(impl = LiferayRuntimeNameValidationService.class)
+		}
+	)
 	public ValueProperty PROP_LIFERAY_RUNTIME_NAME = new ValueProperty(TYPE, "LiferayRuntimeName");
 
 	@Label(standard = "project name")

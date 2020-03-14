@@ -38,8 +38,8 @@ import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PluginFacetProjectCreationDataModelProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
-import com.liferay.ide.project.core.modules.templates.BndProperties;
-import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
+import com.liferay.ide.project.core.modules.BndProperties;
+import com.liferay.ide.project.core.modules.BndPropertiesValue;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -929,19 +929,24 @@ public class ProjectUtil {
 		}
 
 		try {
+			Map<String, String> fragmentProjectInfo = new HashMap<>();
+
 			BndProperties bndProperty = new BndProperties();
 
 			bndProperty.load(FileUtil.getFile(bndFile));
 
-			BndPropertiesValue liferayRuntimeNameValue = (BndPropertiesValue)bndProperty.get("Belongs-RuntimeName");
+			BndPropertiesValue portalBundleVersion = (BndPropertiesValue)bndProperty.get("Portal-Bundle-Version");
+
+			if (portalBundleVersion != null) {
+				fragmentProjectInfo.put("Portal-Bundle-Version", portalBundleVersion.getOriginalValue());
+			}
+			else {
+				fragmentProjectInfo.put("Portal-Bundle-Version", null);
+			}
 
 			BndPropertiesValue fragmentHostValue = (BndPropertiesValue)bndProperty.get("Fragment-Host");
 
-			Map<String, String> fragmentProjectInfo = new HashMap<>();
-
-			if ((liferayRuntimeNameValue != null) && (fragmentHostValue != null)) {
-				fragmentProjectInfo.put("LiferayRuntimeName", liferayRuntimeNameValue.getOriginalValue());
-
+			if (fragmentHostValue != null) {
 				String fragmentHost = fragmentHostValue.getOriginalValue();
 
 				String[] hostOSGiBundleArray = fragmentHost.split(";");

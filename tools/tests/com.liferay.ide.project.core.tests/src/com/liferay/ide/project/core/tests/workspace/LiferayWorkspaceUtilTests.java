@@ -15,39 +15,61 @@
 
 package com.liferay.ide.project.core.tests.workspace;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
-import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.core.workspace.WorkspaceConstants;
+import com.liferay.ide.project.core.tests.ProjectCoreBase;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
 
 import java.io.File;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author Andy Wu
+ * @author Simon Jiang
  */
-public class LiferayWorkspaceUtilTests
+public class LiferayWorkspaceUtilTests extends ProjectCoreBase
 {
-    @Test
+    @BeforeClass
+    public static void removeAllProjects() throws Exception
+    {
+        IProgressMonitor monitor = new NullProgressMonitor();
+
+        for( IProject project : CoreUtil.getAllProjects() )
+        {
+            project.delete( true, monitor );
+
+            assertFalse( project.exists() );
+        }
+    }
+
+	@Test
     public void testLiferayWorkspaceUtil() throws Exception
     {
         NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 
         op.setWorkspaceName( "test-liferay-workspace" );
+        op.setUseDefaultLocation( true );
 
         if( op.validation().ok() )
         {
-            op.execute( new ProgressMonitor() );
+            NewLiferayWorkspaceOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
         }
+
+        waitForBuildAndValidation();
 
         IProject workspaceProject = CoreUtil.getProject( "test-liferay-workspace" );
 

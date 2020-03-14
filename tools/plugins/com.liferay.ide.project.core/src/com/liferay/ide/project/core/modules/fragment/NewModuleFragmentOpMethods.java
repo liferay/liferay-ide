@@ -25,8 +25,9 @@ import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
-import com.liferay.ide.project.core.modules.templates.BndProperties;
-import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
+import com.liferay.ide.project.core.modules.BndProperties;
+import com.liferay.ide.project.core.modules.BndPropertiesValue;
+import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
@@ -37,20 +38,14 @@ import java.nio.file.Files;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.IJobChangeListener;
-import org.eclipse.core.runtime.jobs.IJobManager;
-import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.ElementList;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Status.Severity;
@@ -63,6 +58,7 @@ import org.eclipse.wst.server.core.IRuntime;
  * @author Terry Jia
  * @author Charles Wu
  * @author Ethan Sun
+ * @author Simon Jiang
  */
 public class NewModuleFragmentOpMethods {
 
@@ -181,7 +177,6 @@ public class NewModuleFragmentOpMethods {
 
 			if (retval.ok()) {
 				_updateBuildPrefs(op);
-				_storeRuntimeInfo(op);
 			}
 			else if ((retval.severity() == Severity.ERROR) && (retval.exception() != null)) {
 				errorStack = retval.exception();
@@ -281,74 +276,48 @@ public class NewModuleFragmentOpMethods {
 		return retval;
 	}
 
-	private static void _storeRuntimeInfo(NewModuleFragmentOp op) throws CoreException, InterruptedException {
+	public static void storeRuntimeInfo(NewModuleFragmentOp op) {
 		String projectName = _getter.get(op.getProjectName());
 
-		IProject project = CoreUtil.getProject(projectName);
+		IPath location = PathBridge.create(_getter.get(op.getLocation()));
 
-		Value<String> runtimeNameValue = op.getLiferayRuntimeName();
+		IPath projectLocation = location.append(projectName);
 
-		String runtimeName = runtimeNameValue.text();
+		String runtimeName = _getter.get(op.getLiferayRuntimeName());
 
-		IJobManager jobManager = Job.getJobManager();
+		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
-		Job[] jobSequence = jobManager.find(null);
+		if (runtime == null) {
+			return;
+		}
 
-		for (Job it : jobSequence) {
-			if ("Liferay refresh gradle project job".equals(it.getName())) {
-				IJobChangeListener listener = new IJobChangeListener() {
+		PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
+			PortalRuntime.class, new NullProgressMonitor());
 
-					@Override
-					public void aboutToRun(IJobChangeEvent event) {
-					}
+		if (portalRuntime == null) {
+			return;
+		}
 
-					@Override
-					public void awake(IJobChangeEvent event) {
-					}
+		IPath bndFilePath = projectLocation.append("bnd.bnd");
 
-					@Override
-					public void done(IJobChangeEvent event) {
-						IFile bndFile = project.getFile("bnd.bnd");
+		File bndFile = bndFilePath.toFile();
 
-						if (bndFile.exists()) {
-							BndProperties bndProperty = new BndProperties();
+		if (bndFile.exists()) {
+			BndProperties bndProperty = new BndProperties();
 
-							File file = FileUtil.getFile(bndFile);
+			try {
+				bndProperty.load(bndFile);
+			}
+			catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
 
-							try {
-								bndProperty.load(file);
-							}
-							catch (IOException ioe) {
-								ioe.printStackTrace();
-							}
+			try (OutputStream out = Files.newOutputStream(bndFile.toPath())) {
+				bndProperty.addValue("Portal-Bundle-Version", new BndPropertiesValue(portalRuntime.getPortalVersion()));
 
-							try (OutputStream out = Files.newOutputStream(file.toPath())) {
-								bndProperty.addValue("Belongs-RuntimeName", new BndPropertiesValue(runtimeName));
-
-								bndProperty.store(out, null);
-							}
-							catch (Exception e) {
-							}
-						}
-
-						it.removeJobChangeListener(this);
-					}
-
-					@Override
-					public void running(IJobChangeEvent event) {
-					}
-
-					@Override
-					public void scheduled(IJobChangeEvent event) {
-					}
-
-					@Override
-					public void sleeping(IJobChangeEvent event) {
-					}
-
-				};
-
-				it.addJobChangeListener(listener);
+				bndProperty.store(out, null);
+			}
+			catch (Exception e) {
 			}
 		}
 	}

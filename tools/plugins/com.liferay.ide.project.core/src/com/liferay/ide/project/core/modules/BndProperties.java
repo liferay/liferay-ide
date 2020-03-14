@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.project.core.modules.templates;
+package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
 

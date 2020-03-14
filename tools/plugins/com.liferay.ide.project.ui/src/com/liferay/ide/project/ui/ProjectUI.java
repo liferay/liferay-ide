@@ -87,6 +87,12 @@ public class ProjectUI extends AbstractUIPlugin {
 		log.log(createErrorStatus(e.getMessage(), e));
 	}
 
+	public static void logError(String msg) {
+		ILog log = _plugin.getLog();
+
+		log.log(createErrorStatus(msg));
+	}
+
 	public static void logError(String msg, Exception e) {
 		ILog log = _plugin.getLog();
 

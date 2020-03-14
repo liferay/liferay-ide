@@ -26,6 +26,7 @@ import org.eclipse.sapphire.InitialValueService;
 /**
  * @author Terry Jia
  * @author Andy Wu
+ * @author Seiphon Wang
  * @author Ethan Sun
  */
 public class HostOSGiBundleInitialValueService extends InitialValueService implements SapphireContentAccessor {
