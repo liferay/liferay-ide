@@ -94,8 +94,7 @@ public class UnusedGradleDependencyUpdater {
 	}
 
 	public void updateDependencies(boolean buildscript, List<Artifact> artifacts) throws IOException {
-		UnusedDependenciesClosureVisitor dependenciesClosureVisitor = new UnusedDependenciesClosureVisitor(
-			buildscript);
+		UnusedDependenciesClosureVisitor dependenciesClosureVisitor = new UnusedDependenciesClosureVisitor(buildscript);
 
 		_walkScript(dependenciesClosureVisitor);
 
@@ -122,8 +121,7 @@ public class UnusedGradleDependencyUpdater {
 	}
 
 	public void updateDependency(boolean buildscript, Artifact oldArtifact, Artifact newArtifact) throws IOException {
-		UnusedDependenciesClosureVisitor dependenciesClosureVisitor = new UnusedDependenciesClosureVisitor(
-			buildscript);
+		UnusedDependenciesClosureVisitor dependenciesClosureVisitor = new UnusedDependenciesClosureVisitor(buildscript);
 
 		_walkScript(dependenciesClosureVisitor);
 
@@ -140,9 +138,7 @@ public class UnusedGradleDependencyUpdater {
 		FileUtils.writeLines(_file, _gradleFileContents);
 	}
 
-	public void updateDependency(
-		UnusedDependenciesClosureVisitor visitor, Artifact oldArtifact, Artifact newArtifact) {
-
+	public void updateDependency(UnusedDependenciesClosureVisitor visitor, Artifact oldArtifact, Artifact newArtifact) {
 		int[] lineNumbers = visitor.getDependenceLineNumbers(oldArtifact);
 
 		if (lineNumbers.length != 2) {
