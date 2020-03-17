@@ -135,9 +135,7 @@ public interface UpgradeProblemSupport {
 
 		IFile[] files = root.findFilesForLocationURI(file.toURI());
 
-		IResource resource = filterIResource(files);
-
-		return resource;
+		return filterIResource(files);
 	}
 
 	public default IProject getProject(File file) {
@@ -159,7 +157,9 @@ public interface UpgradeProblemSupport {
 	}
 
 	public default IWorkspaceRoot getWorkspaceRoot() {
-		return getWorkspace().getRoot();
+		IWorkspace workspace = getWorkspace();
+
+		return workspace.getRoot();
 	}
 
 	public default boolean markerExists(IMarker marker) {
@@ -202,14 +202,14 @@ public interface UpgradeProblemSupport {
 	}
 
 	public default void upgradeProblemToMarker(UpgradeProblem upgradeProblem, IMarker marker) throws CoreException {
-		marker.setAttribute(IMarker.CHAR_START, upgradeProblem.getStartOffset());
 		marker.setAttribute(IMarker.CHAR_END, upgradeProblem.getEndOffset());
+		marker.setAttribute(IMarker.CHAR_START, upgradeProblem.getStartOffset());
 		marker.setAttribute(IMarker.LINE_NUMBER, upgradeProblem.getLineNumber());
 		marker.setAttribute(IMarker.MESSAGE, upgradeProblem.getTitle());
 		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_AUTOCORRECTCONTEXT, upgradeProblem.getAutoCorrectContext());
 		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_HTML, upgradeProblem.getHtml());
-		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_SUMMARY, upgradeProblem.getSummary());
 		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_STATUS, upgradeProblem.getStatus());
+		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_SUMMARY, upgradeProblem.getSummary());
 		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_TICKET, upgradeProblem.getTicket());
 		marker.setAttribute(UpgradeProblem.MARKER_ATTRIBUTE_TYPE, upgradeProblem.getType());
 
