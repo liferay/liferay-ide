@@ -25,7 +25,7 @@ jobs:
         shell: bash
         working-directory: build/com.liferay.ide.build.source.formatter
         run: |
-          ./sf.sh
+          ./csf.sh
   Verify:
     name: Verify
     runs-on: ubuntu-latest
