@@ -60,10 +60,8 @@ public class FileSearchResult {
 
 		FileSearchResult other = (FileSearchResult)obj;
 
-		if (autoCorrectContext == null) {
-			if (other.autoCorrectContext != null) {
-				return false;
-			}
+		if ((autoCorrectContext == null) && (other.autoCorrectContext != null)) {
+			return false;
 		}
 
 		if (endLine != other.endLine) {
@@ -74,10 +72,8 @@ public class FileSearchResult {
 			return false;
 		}
 
-		if (file == null) {
-			if (other.file != null) {
-				return false;
-			}
+		if ((file == null) && (other.file != null)) {
+			return false;
 		}
 		else if (!file.equals(other.file)) {
 			return false;
@@ -102,6 +98,7 @@ public class FileSearchResult {
 	public int hashCode() {
 		int prime = 31;
 		int result = 1;
+
 		result = prime * result + ((autoCorrectContext == null) ? 0 : autoCorrectContext.hashCode());
 		result = prime * result + endLine;
 		result = prime * result + endOffset;

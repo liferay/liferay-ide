@@ -107,9 +107,8 @@ public class MarkdownParser {
 				if ((text != null) && text.startsWith("<hr")) {
 					break;
 				}
-				else {
-					interesting.add(sibling);
-				}
+
+				interesting.add(sibling);
 			}
 
 			for (Node node : interesting) {

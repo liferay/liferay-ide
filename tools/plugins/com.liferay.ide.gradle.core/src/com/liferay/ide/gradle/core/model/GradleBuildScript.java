@@ -254,8 +254,6 @@ public class GradleBuildScript {
 
 		int startLineNumber = lineNumbers[0];
 
-		int endLineNumber = lineNumbers[1];
-
 		String content = _fileContents.get(startLineNumber - 1);
 
 		int startPos = content.indexOf(oldArtifact.getConfiguration());
@@ -263,6 +261,8 @@ public class GradleBuildScript {
 		if (startPos == -1) {
 			return;
 		}
+
+		int endLineNumber = lineNumbers[1];
 
 		StringBuilder dependencyBuilder = new StringBuilder(_toGradleDependencyString(newArtifact));
 
@@ -278,7 +278,7 @@ public class GradleBuildScript {
 
 		_fileContents.set(startLineNumber - 1, dependencyBuilder.toString());
 
-		for (int i = endLineNumber - 1; i > startLineNumber - 1; i--) {
+		for (int i = endLineNumber - 1; i > (startLineNumber - 1); i--) {
 			_fileContents.remove(i);
 		}
 	}
