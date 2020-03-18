@@ -47,6 +47,21 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
+		viewAction.project.openFile(workspace.getName(), "modules", project.getName(), "build.gradle");
+
+		String buildGradleText = editorAction.getContent();
+
+		String previousDependency = "compileOnly group: \"javax.servlet\", name: \"javax.servlet-api\"";
+
+		String newDependency =
+			"compileOnly(group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\") { force = true}";
+
+		editorAction.setText(buildGradleText.replace(previousDependency, newDependency));
+
+		editorAction.save();
+
+		editorAction.close();
+
 		viewAction.servers.startWatchingWorkspaceProject(server.getStartedLabel(), workspace.getName());
 
 		jobAction.waitForConsoleContent(
