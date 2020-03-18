@@ -36,7 +36,7 @@ public class NewThemeProjectModuleWorkspaceGradleTests extends SwtbotBase {
 	public void createTheme() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), THEME);
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), THEME);
 
 		wizardAction.finish();
 

@@ -43,7 +43,7 @@ public class DeployModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 	public void deployActivator() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), ACTIVATOR);
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), ACTIVATOR);
 
 		wizardAction.finish();
 
