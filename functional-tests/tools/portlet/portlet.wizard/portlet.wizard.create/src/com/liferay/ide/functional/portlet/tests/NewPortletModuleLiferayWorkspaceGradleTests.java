@@ -38,7 +38,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), FREEMARKER_PORTLET);
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), FREEMARKER_PORTLET);
 
 		wizardAction.next();
 
@@ -61,7 +61,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), MVC_PORTLET);
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.next();
 
@@ -86,7 +86,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), NPM_ANGULAR_PORTLET);
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), NPM_ANGULAR_PORTLET);
 
 		wizardAction.next();
 
@@ -109,7 +109,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), NPM_REACT_PORTLET);
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), NPM_REACT_PORTLET);
 
 		wizardAction.next();
 
@@ -132,7 +132,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), NPM_VUEJS_PORTLET);
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), NPM_VUEJS_PORTLET);
 
 		wizardAction.next();
 

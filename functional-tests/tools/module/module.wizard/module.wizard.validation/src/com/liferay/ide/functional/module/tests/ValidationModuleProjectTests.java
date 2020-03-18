@@ -25,6 +25,7 @@ import java.io.File;
 
 import org.eclipse.core.runtime.Platform;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -34,6 +35,7 @@ import org.junit.Test;
  */
 public class ValidationModuleProjectTests extends SwtbotBase {
 
+	@Ignore("Ignore because of the change caused by IDE-4740")
 	@Test
 	public void checkDefaultVersionInLiferayWorkspace70() {
 		wizardAction.openNewLiferayWorkspaceWizard();
@@ -53,6 +55,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("Ignore because of the change caused by IDE-4740")
 	@Test
 	public void checkDefaultVersionInLiferayWorkspace71() {
 		wizardAction.openNewLiferayWorkspaceWizard();
@@ -93,7 +96,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 	public void checkLiferayVersion() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		String[] expectedLiferayVersions = {"7.0", "7.1", "7.2"};
+		String[] expectedLiferayVersions = {"7.0", "7.1", "7.2", "7.3"};
 
 		ComboBox liferayVersionComboBox = wizardAction.newLiferayWorkspace.liferayVersion();
 
@@ -130,13 +133,13 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projects.getName(1), MVC_PORTLET);
+		wizardAction.newModule.prepareGradleInWorkspace(projects.getName(1), MVC_PORTLET);
 
 		ide.sleep();
 
 		validationAction.assertEquals(workspaceModuleFolderLocation, wizardAction.newModule.getLocation());
 
-		wizardAction.newModule.prepareGradle(projects.getName(1), WAR_MVC_PORTLET);
+		wizardAction.newModule.prepareGradleInWorkspace(projects.getName(1), WAR_MVC_PORTLET);
 
 		ide.sleep();
 
@@ -226,7 +229,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 	}
 
 	@Test
-	public void validatemoduleprojectTemplate() {
+	public void validateModuleProjectTemplate() {
 		String projectName = "test-template";
 
 		String[] templates = {

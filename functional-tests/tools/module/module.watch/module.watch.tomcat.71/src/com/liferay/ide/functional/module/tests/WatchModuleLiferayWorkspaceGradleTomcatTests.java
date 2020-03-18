@@ -41,11 +41,26 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 	public void watchMVCPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), MVC_PORTLET, "7.1");
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
 		jobAction.waitForNoRunningJobs();
+
+		viewAction.project.openFile(workspace.getName(), "modules", project.getName(), "build.gradle");
+
+		String buildGradleText = editorAction.getContent();
+
+		String previousDependency = "compileOnly group: \"javax.servlet\", name: \"javax.servlet-api\"";
+
+		String newDependency =
+			"compileOnly(group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\") { force = true}";
+
+		editorAction.setText(buildGradleText.replace(previousDependency, newDependency));
+
+		editorAction.save();
+
+		editorAction.close();
 
 		viewAction.servers.startWatchingWorkspaceProject(server.getStartedLabel(), workspace.getName());
 
@@ -71,7 +86,7 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 	public void watchServiceBuilder() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_BUILDER, "7.1");
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), SERVICE_BUILDER);
 
 		wizardAction.finish();
 
@@ -127,7 +142,7 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 	public void watchWarMvcPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET, "7.1");
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), WAR_MVC_PORTLET);
 
 		wizardAction.finish();
 
