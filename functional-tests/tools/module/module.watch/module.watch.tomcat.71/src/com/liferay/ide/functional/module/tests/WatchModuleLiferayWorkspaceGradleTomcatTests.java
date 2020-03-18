@@ -41,7 +41,7 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 	public void watchMVCPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), MVC_PORTLET, "7.1");
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -71,7 +71,7 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 	public void watchServiceBuilder() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_BUILDER, "7.1");
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), SERVICE_BUILDER);
 
 		wizardAction.finish();
 
@@ -127,7 +127,7 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 	public void watchWarMvcPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET, "7.1");
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), WAR_MVC_PORTLET);
 
 		wizardAction.finish();
 

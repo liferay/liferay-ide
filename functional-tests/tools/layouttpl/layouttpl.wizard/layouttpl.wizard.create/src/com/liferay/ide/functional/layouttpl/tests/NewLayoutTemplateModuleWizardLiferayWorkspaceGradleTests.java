@@ -35,7 +35,7 @@ public class NewLayoutTemplateModuleWizardLiferayWorkspaceGradleTests extends Sw
 	public void createLayoutTemplate() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), LAYOUT_TEMPLATE);
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), LAYOUT_TEMPLATE);
 
 		wizardAction.finish();
 

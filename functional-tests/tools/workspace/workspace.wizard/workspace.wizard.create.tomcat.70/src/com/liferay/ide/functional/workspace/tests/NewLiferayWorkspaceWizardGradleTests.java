@@ -100,7 +100,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		String projectName = "test-mvc-portlet";
 
-		wizardAction.newModule.prepareGradle(projectName, MVC_PORTLET);
+		wizardAction.newModule.prepareGradleInWorkspace(projectName, MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -138,7 +138,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		String projectName = "test-war-hook";
 
-		wizardAction.newModule.prepareGradle(projectName, WAR_HOOK);
+		wizardAction.newModule.prepareGradleInWorkspace(projectName, WAR_HOOK);
 
 		wizardAction.finish();
 
@@ -271,7 +271,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		String projectName = "test-mvc-portlet";
 
-		wizardAction.newModule.prepareGradle(projectName, MVC_PORTLET);
+		wizardAction.newModule.prepareGradleInWorkspace(projectName, MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -324,7 +324,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		String projectName = "test-theme";
 
-		wizardAction.newModule.prepareGradle("test-theme", THEME);
+		wizardAction.newModule.prepareGradleInWorkspace("test-theme", THEME);
 
 		wizardAction.finish();
 
