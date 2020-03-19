@@ -15,50 +15,41 @@
 package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.Map;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.services.ValidationService;
+import org.eclipse.sapphire.InitialValueService;
 
 /**
- * @author Joye Luo
- * @author Simon Jiang
+ * @author Terry Jia
+ * @author Andy Wu
+ * @author Seiphon Wang
+ * @author Ethan Sun
  */
-public class NewModuleFragmentProjectValidationService extends ValidationService implements SapphireContentAccessor {
+public class HostOSGiBundleInitialValueService extends InitialValueService implements SapphireContentAccessor {
 
 	@Override
-	protected Status compute() {
-		NewModuleFragmentFilesOp op = context(NewModuleFragmentFilesOp.class);
+	protected String compute() {
+		NewModuleFragmentFilesOp op = _op();
 
 		String projectName = get(op.getProjectName());
 
-		if (projectName == null) {
-			return Status.createErrorStatus("No suitable Liferay fragment project.");
+		if (CoreUtil.empty(projectName)) {
+			return null;
 		}
 
 		IProject project = CoreUtil.getProject(projectName);
 
-		IFile bndFile = project.getFile("bnd.bnd");
-
-		if (FileUtil.notExists(bndFile)) {
-			return Status.createErrorStatus("Can not find bnd.bnd file in the project.");
-		}
-
 		Map<String, String> fragmentProjectInfo = ProjectUtil.getFragmentProjectInfo(project);
 
-		String protalBundleVersion = fragmentProjectInfo.get("Portal-Bundle-Version");
+		return fragmentProjectInfo.get("HostOSGiBundleName");
+	}
 
-		if (CoreUtil.isNullOrEmpty(protalBundleVersion)) {
-			return Status.createErrorStatus("Can not find Portal-Bundle-Version in bnd.bnd file in the project.");
-		}
-
-		return Status.createOkStatus();
+	private NewModuleFragmentFilesOp _op() {
+		return context(NewModuleFragmentFilesOp.class);
 	}
 
 }

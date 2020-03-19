@@ -20,13 +20,17 @@ import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
-import org.eclipse.sapphire.modeling.annotations.Derived;
+import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Services;
 
 /**
  * @author Terry Jia
+ * @author Ethan Sun
+ * @author Simon Jiang
  */
 public interface NewModuleFragmentFilesOp extends NewModuleFragmentOp {
 
@@ -44,13 +48,24 @@ public interface NewModuleFragmentFilesOp extends NewModuleFragmentOp {
 
 	public void setProjectName(String value);
 
-	@Derived
+	@Enablement(expr = "false")
 	@Label(standard = "Host OSGi Bundle")
 	@Required
-	@Service(impl = HostOSGiBundleDefaultValueService.class)
+	@Service(impl = HostOSGiBundleInitialValueService.class)
 	public ValueProperty PROP_HOST_OSGI_BUNDLE = new ValueProperty(TYPE, "HostOsgiBundle");
 
+	@Required
+	@Services(
+		value = {
+			@Service(impl = LiferayFragmentRuntimeNamePossibleValuesService.class),
+			@Service(impl = LiferayFragmentRuntimeNameDefaultValueService.class),
+			@Service(impl = LiferayRuntimeNameValidationService.class)
+		}
+	)
+	public ValueProperty PROP_LIFERAY_RUNTIME_NAME = new ValueProperty(TYPE, "LiferayRuntimeName");
+
 	@Label(standard = "project name")
+	@Listeners(FragmentProjectNameSelectionChangedListener.class)
 	@Required
 	@Service(impl = NewModuleFragmentProjectNameDefaultValueService.class)
 	@Service(impl = NewModuleFragmentProjectNamePossibleService.class)

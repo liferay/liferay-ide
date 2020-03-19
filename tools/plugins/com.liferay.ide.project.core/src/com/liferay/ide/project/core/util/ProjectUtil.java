@@ -38,6 +38,8 @@ import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PluginFacetProjectCreationDataModelProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
+import com.liferay.ide.project.core.modules.BndProperties;
+import com.liferay.ide.project.core.modules.BndPropertiesValue;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -52,8 +54,10 @@ import java.io.InputStreamReader;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -117,6 +121,7 @@ import org.osgi.framework.Version;
  * @author Kuo Zhang
  * @author Terry Jia
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 @SuppressWarnings("restriction")
 public class ProjectUtil {
@@ -914,6 +919,56 @@ public class ProjectUtil {
 		IPreset preset = ProjectFacetsManager.getPreset(presetId);
 
 		return preset.getProjectFacets();
+	}
+
+	public static Map<String, String> getFragmentProjectInfo(IProject project) {
+		IFile bndFile = project.getFile("bnd.bnd");
+
+		if (FileUtil.notExists(bndFile)) {
+			return null;
+		}
+
+		try {
+			Map<String, String> fragmentProjectInfo = new HashMap<>();
+
+			BndProperties bndProperty = new BndProperties();
+
+			bndProperty.load(FileUtil.getFile(bndFile));
+
+			BndPropertiesValue portalBundleVersion = (BndPropertiesValue)bndProperty.get("Portal-Bundle-Version");
+
+			if (portalBundleVersion != null) {
+				fragmentProjectInfo.put("Portal-Bundle-Version", portalBundleVersion.getOriginalValue());
+			}
+			else {
+				fragmentProjectInfo.put("Portal-Bundle-Version", null);
+			}
+
+			BndPropertiesValue fragmentHostValue = (BndPropertiesValue)bndProperty.get("Fragment-Host");
+
+			if (fragmentHostValue != null) {
+				String fragmentHost = fragmentHostValue.getOriginalValue();
+
+				String[] hostOSGiBundleArray = fragmentHost.split(";");
+
+				if (ListUtil.isNotEmpty(hostOSGiBundleArray) && (hostOSGiBundleArray.length > 1)) {
+					String[] f = hostOSGiBundleArray[1].split("=");
+
+					String version = f[1].substring(1, f[1].length() - 1);
+
+					fragmentProjectInfo.put("HostOSGiBundleName", hostOSGiBundleArray[0] + "-" + version);
+				}
+
+				return fragmentProjectInfo;
+			}
+
+			return null;
+		}
+		catch (IOException ioe) {
+			ProjectCore.logError("Failed to parsed bnd.bnd for project " + project.getName(), ioe);
+		}
+
+		return null;
 	}
 
 	public static IProjectFacet getLiferayFacet(IFacetedProject facetedProject) {

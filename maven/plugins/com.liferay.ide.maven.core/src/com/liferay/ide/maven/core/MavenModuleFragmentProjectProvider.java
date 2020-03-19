@@ -32,6 +32,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Joye Luo
+ * @author Simon Jiang
  */
 public class MavenModuleFragmentProjectProvider
 	extends LiferayMavenProjectProvider implements NewLiferayProjectProvider<NewModuleFragmentOp> {
@@ -94,6 +95,8 @@ public class MavenModuleFragmentProjectProvider
 		IPath l = PathBridge.create(location);
 
 		IPath projectLocation = l.append(projectName);
+
+		NewModuleFragmentOpMethods.storeRuntimeInfo(op);
 
 		CoreUtil.openProject(projectName, projectLocation, monitor);
 

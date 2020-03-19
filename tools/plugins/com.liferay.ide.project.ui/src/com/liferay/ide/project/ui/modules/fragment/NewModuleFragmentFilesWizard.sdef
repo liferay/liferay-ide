@@ -55,11 +55,11 @@
                     </action-handler>
                 </property-editor>
                 <property-editor>
-                    <property>HostOsgiBundle</property>
                     <hint>
                         <name>read.only</name>
                         <value>true</value>
                     </hint>
+                    <property>HostOsgiBundle</property>
                 </property-editor>
                 <spacer/>
                 <property-editor>

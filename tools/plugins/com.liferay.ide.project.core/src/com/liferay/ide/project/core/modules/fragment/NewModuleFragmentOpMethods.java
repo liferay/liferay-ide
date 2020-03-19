@@ -25,10 +25,16 @@ import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
+import com.liferay.ide.project.core.modules.BndProperties;
+import com.liferay.ide.project.core.modules.BndPropertiesValue;
+import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+
+import java.nio.file.Files;
 
 import java.util.List;
 
@@ -36,6 +42,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.ElementList;
@@ -50,6 +57,8 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Terry Jia
  * @author Charles Wu
+ * @author Ethan Sun
+ * @author Simon Jiang
  */
 public class NewModuleFragmentOpMethods {
 
@@ -265,6 +274,52 @@ public class NewModuleFragmentOpMethods {
 		}
 
 		return retval;
+	}
+
+	public static void storeRuntimeInfo(NewModuleFragmentOp op) {
+		String projectName = _getter.get(op.getProjectName());
+
+		IPath location = PathBridge.create(_getter.get(op.getLocation()));
+
+		IPath projectLocation = location.append(projectName);
+
+		String runtimeName = _getter.get(op.getLiferayRuntimeName());
+
+		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
+
+		if (runtime == null) {
+			return;
+		}
+
+		PortalRuntime portalRuntime = (PortalRuntime)runtime.loadAdapter(
+			PortalRuntime.class, new NullProgressMonitor());
+
+		if (portalRuntime == null) {
+			return;
+		}
+
+		IPath bndFilePath = projectLocation.append("bnd.bnd");
+
+		File bndFile = bndFilePath.toFile();
+
+		if (bndFile.exists()) {
+			BndProperties bndProperty = new BndProperties();
+
+			try {
+				bndProperty.load(bndFile);
+			}
+			catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+
+			try (OutputStream out = Files.newOutputStream(bndFile.toPath())) {
+				bndProperty.addValue("Portal-Bundle-Version", new BndPropertiesValue(portalRuntime.getPortalVersion()));
+
+				bndProperty.store(out, null);
+			}
+			catch (Exception e) {
+			}
+		}
 	}
 
 	private static void _updateBuildPrefs(NewModuleFragmentOp op) {

@@ -22,6 +22,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.BndProperties;
 import com.liferay.ide.project.core.modules.IComponentTemplate;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.PropertyKey;

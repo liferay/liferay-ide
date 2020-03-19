@@ -101,6 +101,8 @@ public class GradleModuleFragmentProjectProvider
 
 		IPath projectLocation = location.append(projectName);
 
+		NewModuleFragmentOpMethods.storeRuntimeInfo(op);
+
 		boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
 		boolean useDefaultLocation = get(op.getUseDefaultLocation());
 		boolean inWorkspacePath = false;

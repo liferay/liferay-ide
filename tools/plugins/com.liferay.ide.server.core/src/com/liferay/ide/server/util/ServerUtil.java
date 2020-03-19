@@ -104,6 +104,7 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.server.core.internal.ServerPlugin;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
@@ -154,6 +155,14 @@ public class ServerUtil {
 					serverName = bundle.getServerReleaseInfo();
 				}
 
+				IRuntime runtime = getRuntime(serverName);
+
+				if (runtime != null) {
+					if (bundlesLocation.equals(runtime.getLocation())) {
+						deleteRuntimeAndServer(PortalRuntime.ID, bundlesLocation.toFile());
+					}
+				}
+
 				addPortalRuntimeAndServer(serverName, bundlesLocation, new NullProgressMonitor());
 
 				IProject pluginsSDK = CoreUtil.getProject(
@@ -197,9 +206,10 @@ public class ServerUtil {
 
 		IRuntimeType portalRuntimeType = ServerCore.findRuntimeType(PortalRuntime.ID);
 
-		IRuntimeWorkingCopy runtimeWC = portalRuntimeType.createRuntime(serverRuntimeName, monitor);
+		IRuntimeWorkingCopy runtimeWC = portalRuntimeType.createRuntime(null, monitor);
 
-		runtimeWC.setName(serverRuntimeName);
+		serverRuntimeName = _setRuntimeName(runtimeWC, serverRuntimeName, -1);
+
 		runtimeWC.setLocation(location);
 
 		runtimeWC.save(true, monitor);
@@ -1301,6 +1311,62 @@ public class ServerUtil {
 		}
 
 		return moduleOsgiBundle;
+	}
+
+	private static String _formateRuntimeName(String runtimeName, int suffix) {
+		if (suffix != -1) {
+			return MessageFormat.format("{0}({1})", runtimeName, String.valueOf(suffix));
+		}
+
+		return MessageFormat.format("{0}", runtimeName);
+	}
+
+	private static String _setRuntimeName(IRuntimeWorkingCopy runtime, String runtimeName, int suffix) {
+		if (runtime == null) {
+			return null;
+		}
+
+		if (suffix == -1) {
+			runtimeName = MessageFormat.format("{0}", runtimeName);
+		}
+		else {
+			runtimeName = MessageFormat.format("{0}({1})", runtimeName, String.valueOf(suffix));
+		}
+
+		runtimeName = _verifyRuntimeName(runtime, runtimeName, suffix);
+
+		runtime.setName(runtimeName);
+
+		return runtimeName;
+	}
+
+	private static String _verifyRuntimeName(IRuntimeWorkingCopy runtime, String runtimeName, int suffix) {
+		String name = null;
+
+		if (ServerPlugin.isNameInUse(runtime.getOriginal(), runtimeName)) {
+			if (suffix == -1) {
+
+				// If the no suffix name is in use, the next suffix to try is 2
+
+				suffix = 2;
+			}
+			else {
+				suffix++;
+			}
+
+			name = _formateRuntimeName(runtimeName, suffix);
+
+			while (ServerPlugin.isNameInUse(runtime.getOriginal(), name)) {
+				suffix++;
+
+				name = _formateRuntimeName(runtimeName, suffix);
+			}
+		}
+		else {
+			name = runtimeName;
+		}
+
+		return name;
 	}
 
 }
