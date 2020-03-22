@@ -60,7 +60,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
 			for (IConfigurationElement element : elements) {
-				if (TAG_WIZARD.equals(element.getName()) && _isProjectWizard(element, getAttribute())) {
+				if (TAG_WIZARD.equals(element.getName()) && _isProjectWizard(element, _getAttribute())) {
 					containers.add(new NewWizardAction(element));
 				}
 			}
@@ -130,7 +130,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
 			for (IConfigurationElement element : elements) {
-				if (TAG_WIZARD.equals(element.getName()) && _isProjectWizard(element, getExtraTypeAttribute())) {
+				if (TAG_WIZARD.equals(element.getName()) && _isProjectWizard(element, _getExtraTypeAttribute())) {
 					containers.add(new NewWizardAction(element));
 				}
 			}
@@ -179,7 +179,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 
 			case LiferayPerspectiveFactory.ID:
 
-				NewWizardAction[] pluginProjectActions = getActionFromDescriptors(getPluginProjectTypeAttribute());
+				NewWizardAction[] pluginProjectActions = getActionFromDescriptors(_getPluginProjectTypeAttribute());
 
 				for (NewWizardAction action : pluginProjectActions) {
 					action.setShell(fWizardShell);
@@ -279,27 +279,6 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 	public void selectionChanged(IAction action, ISelection selection) {
 	}
 
-	protected static String getAttribute() {
-		if (LiferayPerspectiveFactory.ID.equals(_getPerspectiveID())) {
-			return getPluginProjectTypeAttribute();
-		}
-		else {
-			return getTypeAttribute();
-		}
-	}
-
-	protected static String getExtraTypeAttribute() {
-		return "liferay_extra_project";
-	}
-
-	protected static String getPluginProjectTypeAttribute() {
-		return "liferay_plugin_project";
-	}
-
-	protected static String getTypeAttribute() {
-		return "liferay_project";
-	}
-
 	protected String getKaleoTypeAttribute() {
 		return "liferay_kaleo_workflow";
 	}
@@ -339,6 +318,19 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 	protected Menu fMenu;
 	protected Shell fWizardShell;
 
+	private static String _getAttribute() {
+		if (LiferayPerspectiveFactory.ID.equals(_getPerspectiveID())) {
+			return _getPluginProjectTypeAttribute();
+		}
+		else {
+			return _getTypeAttribute();
+		}
+	}
+
+	private static String _getExtraTypeAttribute() {
+		return "liferay_extra_project";
+	}
+
 	private static String _getPerspectiveID() {
 		IWorkbenchPage activePage = UIUtil.getActivePage();
 
@@ -347,6 +339,14 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 		String perspectiveID = perspective.getId();
 
 		return perspectiveID;
+	}
+
+	private static String _getPluginProjectTypeAttribute() {
+		return "liferay_plugin_project";
+	}
+
+	private static String _getTypeAttribute() {
+		return "liferay_project";
 	}
 
 	private static boolean _isProjectWizard(IConfigurationElement element, String typeAttribute) {
@@ -366,7 +366,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 
 		// old way, deprecated
 
-		return Boolean.valueOf(element.getAttribute(getTypeAttribute()));
+		return Boolean.valueOf(element.getAttribute(_getTypeAttribute()));
 	}
 
 	private boolean _isLiferayArtifactWizard(IConfigurationElement element, String typeAttribute) {
@@ -388,7 +388,7 @@ public class NewProjectDropDownAction extends Action implements IMenuCreator, IW
 
 		// old way, deprecated
 
-		return Boolean.valueOf(element.getAttribute(getTypeAttribute()));
+		return Boolean.valueOf(element.getAttribute(_getTypeAttribute()));
 	}
 
 }

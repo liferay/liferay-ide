@@ -65,8 +65,6 @@ public class LiferayPerspectiveFactory extends AbstractPerspectiveFactory {
 
 		topLeft.addView(ID_PACKAGE_EXPLORER_VIEW);
 
-		//		topLeft.addView(ID_J2EE_HIERARCHY_VIEW);
-
 		topLeft.addPlaceholder(ID_J2EE_HIERARCHY_VIEW);
 		topLeft.addPlaceholder(IPageLayout.ID_RES_NAV);
 		topLeft.addPlaceholder(JavaUI.ID_TYPE_HIERARCHY);
