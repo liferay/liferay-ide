@@ -52,7 +52,7 @@
 			name="%hook.wizard.name"
 		>
 			<class class="com.liferay.ide.hook.ui.wizard.NewHookWizard">
-				<parameter name="liferay_artifact" value="true" />
+				<parameter name="liferay_plugin_artifact" value="true" />
 				<parameter name="menuIndex" value="20" />
 				<parameter name="validProjectTypes" value="portlet,hook" />
 			</class>

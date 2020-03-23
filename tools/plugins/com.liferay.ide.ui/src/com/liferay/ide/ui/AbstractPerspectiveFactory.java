@@ -107,26 +107,6 @@ public abstract class AbstractPerspectiveFactory implements IPerspectiveFactory 
 	}
 
 	protected void addShortcuts(IPageLayout layout) {
-		layout.addNewWizardShortcut(ID_NEW_MODULE_PROJECT_WIZARD);
-		layout.addNewWizardShortcut(ID_NEW_JSF_MODULE_WIZARD);
-		layout.addNewWizardShortcut(ID_NEW_MODULE_FRAGMENT_PROJECT_WIZARD);
-		layout.addNewWizardShortcut(ID_NEW_WORKSPACE_PROJECT_WIZARD);
-		layout.addNewWizardShortcut(ID_NEW_PLUGIN_PROJECT_WIZARD);
-		layout.addNewWizardShortcut(ID_NEW_PLUGIN_PROJECT_WIZARD_EXISTING_SOURCE);
-		layout.addNewWizardShortcut(ID_NEW_COMPONENT_WIZARD);
-		layout.addNewWizardShortcut(ID_NEW_MODULE_FRAGMENT_FILES_WIZARD);
-		layout.addNewWizardShortcut(ID_NEW_PORTLET_WIZARD);
-		layout.addNewWizardShortcut(ID_NEW_JSF_PORTLET_WIZARD);
-		layout.addNewWizardShortcut(ID_NEW_VAADIN_PORTLET_WIZARD);
-		layout.addNewWizardShortcut(ID_NEW_HOOK_WIZARD);
-		layout.addNewWizardShortcut(ID_NEW_SERVICE_BUILDER_WIZARD);
-		layout.addNewWizardShortcut(ID_NEW_LAYOUT_TEMPLATE_WIZARD);
-		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewPackageCreationWizard");
-		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewClassCreationWizard");
-		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewInterfaceCreationWizard");
-		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");
-		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");
-		layout.addNewWizardShortcut("org.eclipse.ui.editors.wizards.UntitledTextFileWizard");
 		layout.addPerspectiveShortcut("org.eclipse.jst.j2ee.J2EEPerspective");
 		layout.addPerspectiveShortcut("org.eclipse.jdt.ui.JavaPerspective");
 		layout.addPerspectiveShortcut("org.eclipse.debug.ui.DebugPerspective");
@@ -159,7 +139,7 @@ public abstract class AbstractPerspectiveFactory implements IPerspectiveFactory 
 		layout.addActionSet(IDebugUIConstants.LAUNCH_ACTION_SET);
 		layout.addActionSet(IDebugUIConstants.DEBUG_ACTION_SET);
 		layout.addActionSet(IPageLayout.ID_NAVIGATE_ACTION_SET);
-		layout.addActionSet("com.liferay.ide.eclipse.ui.shortcuts.actionSet");
+		//		layout.addActionSet("com.liferay.ide.eclipse.ui.shortcuts.actionSet");
 		layout.addActionSet("org.eclipse.wst.server.ui.internal.webbrowser.actionSet");
 		layout.addActionSet("org.eclipse.wst.ws.explorer.explorer");
 

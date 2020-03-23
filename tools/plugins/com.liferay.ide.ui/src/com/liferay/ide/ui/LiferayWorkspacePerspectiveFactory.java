@@ -36,6 +36,15 @@ public class LiferayWorkspacePerspectiveFactory extends AbstractPerspectiveFacto
 		setupActions(layout);
 	}
 
+	protected void addShortcuts(IPageLayout layout) {
+		layout.addNewWizardShortcut(ID_NEW_COMPONENT_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_MODULE_FRAGMENT_FILES_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_MODULE_PROJECT_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_JSF_MODULE_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_MODULE_FRAGMENT_PROJECT_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_WORKSPACE_PROJECT_WIZARD);
+	}
+
 	protected void createLayout(IPageLayout layout) {
 
 		// Editors are placed for free.
@@ -89,6 +98,10 @@ public class LiferayWorkspacePerspectiveFactory extends AbstractPerspectiveFacto
 		bottom.addPlaceholder(ID_SEARCH_VIEW);
 
 		ProjectExplorerLayoutUtil.setNested(true);
+	}
+
+	protected void setupActions(IPageLayout layout) {
+		layout.addActionSet("com.liferay.ide.eclipse.ui.shortcuts.actionSet");
 	}
 
 }

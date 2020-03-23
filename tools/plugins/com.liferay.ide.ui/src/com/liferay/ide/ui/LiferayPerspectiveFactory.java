@@ -34,6 +34,25 @@ public class LiferayPerspectiveFactory extends AbstractPerspectiveFactory {
 		addShortcuts(layout);
 	}
 
+	protected void addShortcuts(IPageLayout layout) {
+		layout.addNewWizardShortcut(ID_NEW_PLUGIN_PROJECT_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_PLUGIN_PROJECT_WIZARD_EXISTING_SOURCE);
+
+		layout.addNewWizardShortcut(ID_NEW_PORTLET_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_JSF_PORTLET_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_VAADIN_PORTLET_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_HOOK_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_LAYOUT_TEMPLATE_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_SERVICE_BUILDER_WIZARD);
+
+		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");
+		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");
+		layout.addNewWizardShortcut("org.eclipse.ui.editors.wizards.UntitledTextFileWizard");
+		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewPackageCreationWizard");
+		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewInterfaceCreationWizard");
+		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewClassCreationWizard");
+	}
+
 	protected void createLayout(IPageLayout layout) {
 
 		// Editors are placed for free.
@@ -45,8 +64,6 @@ public class LiferayPerspectiveFactory extends AbstractPerspectiveFactory {
 		IFolderLayout topLeft = layout.createFolder("topLeft", IPageLayout.LEFT, 0.20F, editorArea);
 
 		topLeft.addView(ID_PACKAGE_EXPLORER_VIEW);
-
-		// topLeft.addView(ID_J2EE_HIERARCHY_VIEW);
 
 		topLeft.addPlaceholder(ID_J2EE_HIERARCHY_VIEW);
 		topLeft.addPlaceholder(IPageLayout.ID_RES_NAV);
@@ -91,6 +108,10 @@ public class LiferayPerspectiveFactory extends AbstractPerspectiveFactory {
 		bottom.addPlaceholder(IPageLayout.ID_PROBLEM_VIEW);
 		bottom.addPlaceholder(IProgressConstants.PROGRESS_VIEW_ID);
 		bottom.addPlaceholder(ID_SEARCH_VIEW);
+	}
+
+	protected void setupActions(IPageLayout layout) {
+		layout.addActionSet("com.liferay.ide.eclipse.ui.shortcuts.plugin.actionSet");
 	}
 
 }

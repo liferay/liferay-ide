@@ -21,7 +21,7 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.project.ui.action.NewPluginProjectDropDownAction;
+import com.liferay.ide.project.ui.action.NewProjectDropDownAction;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.Set;
@@ -105,10 +105,10 @@ public class ValidProjectChecker {
 				Action defaultAction = null;
 
 				if (LiferayWorkspaceUtil.hasWorkspace()) {
-					defaultAction = NewPluginProjectDropDownAction.getDefaultAction();
+					defaultAction = NewProjectDropDownAction.getDefaultAction();
 				}
 				else {
-					defaultAction = NewPluginProjectDropDownAction.getPluginProjectAction();
+					defaultAction = NewProjectDropDownAction.getPluginProjectAction();
 				}
 
 				if (defaultAction != null) {
@@ -166,7 +166,7 @@ public class ValidProjectChecker {
 				NLS.bind(Msgs.noSuitableLiferayProjects, wizardName));
 
 			if (openNewLiferayProjectWizard) {
-				Action defaultAction = NewPluginProjectDropDownAction.getPluginProjectAction();
+				Action defaultAction = NewProjectDropDownAction.getPluginProjectAction();
 
 				if (defaultAction != null) {
 					defaultAction.run();

@@ -16,6 +16,9 @@ package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.ui.LiferayPerspectiveFactory;
+import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +34,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowPulldownDelegate2;
 import org.eclipse.ui.PlatformUI;
@@ -40,7 +45,7 @@ import org.eclipse.ui.PlatformUI;
  * @author Kuo Zhang
  * @author Simon Jiang
  */
-public class NewPluginProjectDropDownAction extends Action implements IMenuCreator, IWorkbenchWindowPulldownDelegate2 {
+public class NewProjectDropDownAction extends Action implements IMenuCreator, IWorkbenchWindowPulldownDelegate2 {
 
 	public static Action getDefaultAction() {
 		return getWizardAction(DEFAULT_WIZARD_ID);
@@ -55,7 +60,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
 			for (IConfigurationElement element : elements) {
-				if (TAG_WIZARD.equals(element.getName()) && _isProjectWizard(element, getTypeAttribute())) {
+				if (TAG_WIZARD.equals(element.getName()) && _isProjectWizard(element, _getAttribute())) {
 					containers.add(new NewWizardAction(element));
 				}
 			}
@@ -86,7 +91,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 		return null;
 	}
 
-	public NewPluginProjectDropDownAction() {
+	public NewProjectDropDownAction() {
 		fMenu = null;
 		setMenuCreator(this);
 	}
@@ -125,7 +130,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
 			for (IConfigurationElement element : elements) {
-				if (TAG_WIZARD.equals(element.getName()) && _isProjectWizard(element, getExtraTypeAttribute())) {
+				if (TAG_WIZARD.equals(element.getName()) && _isProjectWizard(element, _getExtraTypeAttribute())) {
 					containers.add(new NewWizardAction(element));
 				}
 			}
@@ -139,74 +144,116 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 	}
 
 	public Menu getMenu(Control parent) {
-		if (fMenu == null) {
-			fMenu = new Menu(parent);
+		fMenu = new Menu(parent);
 
-			NewWizardAction[] actions = getNewProjectActions();
+		switch (_getPerspectiveID()) {
+			case LiferayWorkspacePerspectiveFactory.ID:
 
-			// only do the first project action (not the 5 separate ones)
+				// add non project items
 
-			for (NewWizardAction action : actions) {
-				action.setShell(fWizardShell);
+				NewWizardAction[] nonProjectActions = getActionFromDescriptors(getNonProjectTypeAttribute());
 
-				ActionContributionItem projectItem = new ActionContributionItem(action);
+				for (NewWizardAction action : nonProjectActions) {
+					action.setShell(fWizardShell);
 
-				projectItem.fill(fMenu, -1);
-			}
+					ActionContributionItem nonProjectItem = new ActionContributionItem(action);
 
-			NewWizardAction importAction = new ImportLiferayProjectsWizardAction();
+					nonProjectItem.fill(fMenu, -1);
+				}
 
-			importAction.setShell(fWizardShell);
+				new Separator().fill(fMenu, -1);
 
-			ActionContributionItem item = new ActionContributionItem(importAction);
+				NewWizardAction[] actions = getNewProjectActions();
 
-			item.fill(fMenu, -1);
+				// only do the first project action (not the 5 separate ones)
 
-			NewWizardAction[] projectExtraActions = getExtraProjectActions();
+				for (NewWizardAction action : actions) {
+					action.setShell(fWizardShell);
 
-			for (NewWizardAction extraAction : projectExtraActions) {
-				extraAction.setShell(fWizardShell);
+					ActionContributionItem projectItem = new ActionContributionItem(action);
 
-				ActionContributionItem extraItem = new ActionContributionItem(extraAction);
+					projectItem.fill(fMenu, -1);
+				}
 
-				extraItem.fill(fMenu, -1);
-			}
+				break;
 
-			new Separator().fill(fMenu, -1);
+			case LiferayPerspectiveFactory.ID:
 
-			// add non project items
+				NewWizardAction[] pluginProjectActions = getActionFromDescriptors(_getPluginProjectTypeAttribute());
 
-			NewWizardAction[] nonProjectActions = getActionFromDescriptors(getNonProjectTypeAttribute());
+				for (NewWizardAction action : pluginProjectActions) {
+					action.setShell(fWizardShell);
 
-			for (NewWizardAction action : nonProjectActions) {
-				action.setShell(fWizardShell);
+					ActionContributionItem pluginProjectitem = new ActionContributionItem(action);
 
-				ActionContributionItem noProjectitem = new ActionContributionItem(action);
+					pluginProjectitem.fill(fMenu, -1);
+				}
 
-				noProjectitem.fill(fMenu, -1);
-			}
+				NewWizardAction importAction = new ImportLiferayProjectsWizardAction();
 
-			new Separator().fill(fMenu, -1);
+				importAction.setShell(fWizardShell);
 
-			NewWizardAction[] noProjectExtraActions = getActionFromDescriptors(getNonProjectExtraTypeAttribute());
+				ActionContributionItem item = new ActionContributionItem(importAction);
 
-			for (NewWizardAction action : noProjectExtraActions) {
-				action.setShell(fWizardShell);
+				item.fill(fMenu, -1);
 
-				ActionContributionItem noProjectExtraitem = new ActionContributionItem(action);
+				new Separator().fill(fMenu, -1);
 
-				noProjectExtraitem.fill(fMenu, -1);
-			}
+				NewWizardAction[] pluginNonProjectActions = getActionFromDescriptors(
+					getPluginNonProjectTypeAttribute());
 
-			new Separator().fill(fMenu, -1);
+				for (NewWizardAction action : pluginNonProjectActions) {
+					action.setShell(fWizardShell);
 
-			Action[] sdkActions = getServerActions(parent.getShell());
+					ActionContributionItem pluginNonProjectItem = new ActionContributionItem(action);
 
-			for (Action action : sdkActions) {
-				ActionContributionItem sdkItem = new ActionContributionItem(action);
+					pluginNonProjectItem.fill(fMenu, -1);
+				}
 
-				sdkItem.fill(fMenu, -1);
-			}
+				new Separator().fill(fMenu, -1);
+
+				NewWizardAction[] noProjectExtraActions = getActionFromDescriptors(getNonProjectExtraTypeAttribute());
+
+				for (NewWizardAction action : noProjectExtraActions) {
+					action.setShell(fWizardShell);
+
+					ActionContributionItem noProjectExtraItem = new ActionContributionItem(action);
+
+					noProjectExtraItem.fill(fMenu, -1);
+				}
+
+				//None Project Right Now!
+				NewWizardAction[] projectExtraActions = getExtraProjectActions();
+
+				for (NewWizardAction extraAction : projectExtraActions) {
+					extraAction.setShell(fWizardShell);
+
+					ActionContributionItem extraItem = new ActionContributionItem(extraAction);
+
+					extraItem.fill(fMenu, -1);
+				}
+
+				break;
+		}
+
+		new Separator().fill(fMenu, -1);
+
+		NewWizardAction[] kaleoActions = getActionFromDescriptors(getKaleoTypeAttribute());
+
+		for (NewWizardAction action : kaleoActions) {
+			action.setShell(fWizardShell);
+
+			ActionContributionItem kaleoItem = new ActionContributionItem(action);
+
+			kaleoItem.fill(fMenu, -1);
+		}
+
+		Action[] sdkActions = getServerActions(parent.getShell());
+
+		for (Action action : sdkActions) {
+			ActionContributionItem sdkItem = new ActionContributionItem(action);
+
+			sdkItem.fill(fMenu, -1);
 		}
 
 		return fMenu;
@@ -221,18 +268,19 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 	}
 
 	public void run(IAction action) {
-		getDefaultAction().run();
+		if (LiferayPerspectiveFactory.ID.equals(_getPerspectiveID())) {
+			getPluginProjectAction().run();
+		}
+		else {
+			getDefaultAction().run();
+		}
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
 	}
 
-	protected static String getExtraTypeAttribute() {
-		return "liferay_extra_project";
-	}
-
-	protected static String getTypeAttribute() {
-		return "liferay_project";
+	protected String getKaleoTypeAttribute() {
+		return "liferay_kaleo_workflow";
 	}
 
 	protected String getNonProjectExtraTypeAttribute() {
@@ -241,6 +289,10 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 
 	protected String getNonProjectTypeAttribute() {
 		return "liferay_artifact";
+	}
+
+	protected String getPluginNonProjectTypeAttribute() {
+		return "liferay_plugin_artifact";
 	}
 
 	protected Action[] getServerActions(Shell shell) {
@@ -266,6 +318,37 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 	protected Menu fMenu;
 	protected Shell fWizardShell;
 
+	private static String _getAttribute() {
+		if (LiferayPerspectiveFactory.ID.equals(_getPerspectiveID())) {
+			return _getPluginProjectTypeAttribute();
+		}
+		else {
+			return _getTypeAttribute();
+		}
+	}
+
+	private static String _getExtraTypeAttribute() {
+		return "liferay_extra_project";
+	}
+
+	private static String _getPerspectiveID() {
+		IWorkbenchPage activePage = UIUtil.getActivePage();
+
+		IPerspectiveDescriptor perspective = activePage.getPerspective();
+
+		String perspectiveID = perspective.getId();
+
+		return perspectiveID;
+	}
+
+	private static String _getPluginProjectTypeAttribute() {
+		return "liferay_plugin_project";
+	}
+
+	private static String _getTypeAttribute() {
+		return "liferay_project";
+	}
+
 	private static boolean _isProjectWizard(IConfigurationElement element, String typeAttribute) {
 		IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);
 
@@ -283,7 +366,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 
 		// old way, deprecated
 
-		return Boolean.valueOf(element.getAttribute(getTypeAttribute()));
+		return Boolean.valueOf(element.getAttribute(_getTypeAttribute()));
 	}
 
 	private boolean _isLiferayArtifactWizard(IConfigurationElement element, String typeAttribute) {
@@ -305,7 +388,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 
 		// old way, deprecated
 
-		return Boolean.valueOf(element.getAttribute(getTypeAttribute()));
+		return Boolean.valueOf(element.getAttribute(_getTypeAttribute()));
 	}
 
 }
