@@ -50,6 +50,8 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp {
 
 	public Value<String> getComponentName();
 
+	public Value<String> getContributorType();
+
 	public Value<String> getGroupId();
 
 	public Value<String> getLiferayVersion();
@@ -67,6 +69,8 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp {
 	public void setArtifactVersion(String value);
 
 	public void setComponentName(String value);
+
+	public void setContributor(String value);
 
 	public void setGroupId(String value);
 
@@ -89,6 +93,11 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp {
 	@Service(impl = ComponentNameDefaultValueService.class)
 	@Service(impl = ComponentNameValidationService.class)
 	public ValueProperty PROP_COMPONENT_NAME = new ValueProperty(TYPE, "ComponentName");
+
+	@Label(standard = "Contributor type")
+	@Service(impl = ContributorTypeDefaultValueService.class)
+	@Service(impl = ContributorTypeValidationService.class)
+	public ValueProperty PROP_CONTRIBUTOR_TYPE = new ValueProperty(TYPE, "ContributorType");
 
 	@Label(standard = "group id")
 	@Service(impl = ModuleProjectGroupIdDefaultValueService.class)

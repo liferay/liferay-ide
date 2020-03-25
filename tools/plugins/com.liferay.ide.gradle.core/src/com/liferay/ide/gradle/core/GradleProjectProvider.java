@@ -71,6 +71,8 @@ public class GradleProjectProvider
 
 		String packageName = get(op.getPackageName());
 
+		String contributorType = get(op.getContributorType());
+
 		ElementList<PropertyKey> propertyKeys = op.getPropertyKeys();
 
 		List<String> properties = new ArrayList<>();
@@ -126,6 +128,12 @@ public class GradleProjectProvider
 		if (packageName != null) {
 			sb.append("-p ");
 			sb.append(packageName);
+			sb.append(" ");
+		}
+
+		if (contributorType != null) {
+			sb.append("-C ");
+			sb.append(contributorType);
 			sb.append(" ");
 		}
 
