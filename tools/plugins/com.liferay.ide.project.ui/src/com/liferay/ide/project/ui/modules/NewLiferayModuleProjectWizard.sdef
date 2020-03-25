@@ -106,5 +106,17 @@
             <margin-left>0</margin-left>
             <visible-when>${ProjectTemplateName == 'service-builder'}</visible-when>
         </page>
+        <page>
+            <id>LiferayPortletThemeContributorModuleSettingWizardPage</id>
+            <label>Liferay Module Project</label>
+            <description>Contributor Type</description>
+            <content>
+                <property-editor>ContributorType</property-editor>
+            </content>
+            <initial-focus>null</initial-focus>
+            <margin-right>10</margin-right>
+            <margin-left>0</margin-left>
+            <visible-when>${ProjectTemplateName == 'theme-contributor'}</visible-when>
+        </page>
     </wizard>
 </definition>
