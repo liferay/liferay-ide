@@ -7,7 +7,7 @@ Bundle-Name: Liferay IDE Upgrade Plan Commands UI
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.liferay.ide.upgrade.commands.ui;singleton:=true
 Bundle-Vendor: Liferay, Inc.
-Bundle-Version: 3.8.0.qualifier
+Bundle-Version: 3.8.1.qualifier
 Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.project.core,
  com.liferay.ide.project.ui,

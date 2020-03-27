@@ -21,7 +21,7 @@
 
     <groupId>com.liferay.ide</groupId>
     <artifactId>parent</artifactId>
-    <version>3.8.0-SNAPSHOT</version>
+    <version>3.8.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Liferay IDE Parent</name>
@@ -37,7 +37,7 @@
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
         <liferay-ide-swtbot-testing-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
-        <liferay-ide-tag>ga1</liferay-ide-tag>
+        <liferay-ide-tag>ga2</liferay-ide-tag>
         <m2e-site>https://download.eclipse.org/technology/m2e/releases/1.13/1.13.0.20190716-1624/</m2e-site>
         <m2e-wtp-site>https://download.eclipse.org/m2e-wtp/releases/1.4/1.4.3.20191209-1849/</m2e-wtp-site>
         <m2e-archiver-site>https://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/0.17.2.201606141937/</m2e-archiver-site>
@@ -51,7 +51,7 @@
         <tm-site>https://download.eclipse.org/tm/updates/4.5.0/repository/</tm-site>
         <tycho-extras-version>1.0.0</tycho-extras-version>
         <tycho-m2e-site>https://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.9.0/N/0.9.0.201811261502/</tycho-m2e-site>
-        <tycho-packaging-format>yyyyMMddHHmm'-ga1'</tycho-packaging-format>
+        <tycho-packaging-format>yyyyMMddHHmm'-ga2'</tycho-packaging-format>
         <tycho-version>1.6.0</tycho-version>
     </properties>
 

@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.liferay.ide.functional.tests.jsf.wizard</groupId>
 		<artifactId>jsf-wizard-tests</artifactId>
-		<version>3.8.0-SNAPSHOT</version>
+		<version>3.8.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.liferay.ide.functional.jsf.wizard.create.tests</artifactId>

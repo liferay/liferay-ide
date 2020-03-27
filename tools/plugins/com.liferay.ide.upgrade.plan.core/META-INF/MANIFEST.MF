@@ -8,7 +8,7 @@ Bundle-Name: Liferay IDE Upgrade Plan Core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.liferay.ide.upgrade.plan.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
-Bundle-Version: 3.8.0.qualifier
+Bundle-Version: 3.8.1.qualifier
 Export-Package: com.liferay.ide.upgrade.plan.core,
  com.liferay.ide.upgrade.plan.core.util
 Require-Bundle: com.liferay.ide.core,
