@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Server Core Tests
 Bundle-SymbolicName: com.liferay.ide.server.core.tests
-Bundle-Version: 3.8.0.qualifier
+Bundle-Version: 3.8.1.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.core,
  com.liferay.ide.core.tests,

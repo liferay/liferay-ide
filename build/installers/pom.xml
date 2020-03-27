@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.liferay.ide.build</groupId>
         <artifactId>build</artifactId>
-        <version>3.8.0-SNAPSHOT</version>
+        <version>3.8.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>installers</artifactId>
