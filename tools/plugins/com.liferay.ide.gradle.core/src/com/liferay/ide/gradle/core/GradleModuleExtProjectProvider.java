@@ -52,7 +52,6 @@ public class GradleModuleExtProjectProvider
 		String projectName = get(op.getProjectName());
 		String originalModuleName = get(op.getOriginalModuleName());
 		String originalModuleVersion = get(op.getOriginalModuleVersion());
-		String targetPlatform = get(op.getTargetPlatformVersion());
 
 		IPath location = PathBridge.create(get(op.getLocation()));
 		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
@@ -78,10 +77,8 @@ public class GradleModuleExtProjectProvider
 		sb.append("-m ");
 		sb.append(originalModuleName);
 
-		if (CoreUtil.isNullOrEmpty(targetPlatform)) {
-			sb.append(" -M ");
-			sb.append(originalModuleVersion);
-		}
+		sb.append(" -M ");
+		sb.append(originalModuleVersion);
 
 		sb.append(" \"");
 		sb.append(projectName);
