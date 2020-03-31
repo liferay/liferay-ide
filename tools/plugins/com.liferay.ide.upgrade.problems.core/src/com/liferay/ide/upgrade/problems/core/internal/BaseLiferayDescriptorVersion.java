@@ -106,7 +106,12 @@ public abstract class BaseLiferayDescriptorVersion extends XMLFileMigrator imple
 		List<FileSearchResult> results = new ArrayList<>();
 
 		for (String liferayDtdName : _liferayDtdNames) {
-			results.add(xmlFileChecker.findDocumentTypeDeclaration(liferayDtdName, _idPattern));
+			FileSearchResult documentTypeResult = xmlFileChecker.findDocumentTypeDeclaration(
+				liferayDtdName, _idPattern);
+
+			if (documentTypeResult != null) {
+				results.add(documentTypeResult);
+			}
 		}
 
 		return results;
