@@ -40,7 +40,7 @@ public class Liferay70DescriptorVersion extends BaseLiferayDescriptorVersion {
 	}
 
 	private static final Pattern _publicIDPattern = Pattern.compile(
-		"-\\//(?:[A-z]+)\\//(?:[A-z]+)[\\s+(?:[A-z0-9_]*)]*\\s+([6-7]\\.[0-9]\\.[0-9])\\//(?:[A-z]+)",
+		"-\\//(?:[A-z]+)\\//(?:[A-z]+)[\\s+(?:[A-z0-9_]*)]*\\s+(6\\.[1-2]\\.0)\\//(?:[A-z]+)",
 		Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
 }
