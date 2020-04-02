@@ -55,6 +55,7 @@ public class MavenModuleFragmentProjectProvider
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("create ");
+		sb.append("-q ");
 		sb.append("-d \"");
 
 		File file = location.toFile();

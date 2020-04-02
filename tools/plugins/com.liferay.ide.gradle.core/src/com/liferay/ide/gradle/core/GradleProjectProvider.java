@@ -90,6 +90,7 @@ public class GradleProjectProvider
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("create ");
+		sb.append("-q ");
 		sb.append("-d \"");
 		sb.append(targetDir.getAbsolutePath());
 		sb.append("\" ");

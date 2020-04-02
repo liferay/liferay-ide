@@ -76,6 +76,7 @@ public class NewMavenSpringMVCPortletProjectProvider
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("create ");
+		sb.append("-q ");
 		sb.append("-b maven ");
 		sb.append("-d \"");
 		sb.append(targetDir.getAbsolutePath());
