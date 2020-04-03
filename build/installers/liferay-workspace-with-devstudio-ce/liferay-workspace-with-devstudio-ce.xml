@@ -26,9 +26,6 @@
                             <origin>../shared/download/gw.jar</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../shared/download/com.liferay.portal.tools.bundle.support.jar</origin>
-                        </distributionFile>
-                        <distributionFile>
                             <origin>../shared/download/biz.aQute.bnd.jar</origin>
                         </distributionFile>
                     </distributionFileList>
@@ -414,9 +411,6 @@
         </deleteFile>
         <deleteFile>
             <path>${installdir}${platform_path_separator}biz.aQute.jpm.run.jar</path>
-        </deleteFile>
-        <deleteFile>
-            <path>${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar</path>
         </deleteFile>
         <deleteFile>
             <path>${installdir}${platform_path_separator}biz.aQute.bnd.jar</path>
