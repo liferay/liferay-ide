@@ -64,7 +64,7 @@ public class GradleModuleFragmentProjectProvider
 		File locationFile = location.toFile();
 
 		sb.append("create ");
-		sb.append("");
+		sb.append("-q ");
 		sb.append("-d \"");
 		sb.append(locationFile.getAbsolutePath());
 		sb.append("\" ");

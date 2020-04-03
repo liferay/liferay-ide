@@ -75,7 +75,7 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 
 				Matcher m = idPattern.matcher(docTypePublicId);
 
-				if (docTypeName.equals(name) && !m.matches()) {
+				if (docTypeName.equals(name) && m.matches()) {
 					IStructuredDocument structuredDocument = document.getStructuredDocument();
 
 					int startOffset = docType.getStartOffset();

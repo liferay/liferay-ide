@@ -144,15 +144,15 @@ public class BladeCLITests
     }
 
     @Test
-    public void bladeCLICreateProject() throws Exception
-    {
-        Path temp = Files.createTempDirectory( "path with spaces" );
+    public void bladeCLICreateProject() throws Exception {
+        Path temp = Files.createTempDirectory("path with spaces");
 
         StringBuilder sb = new StringBuilder();
-        sb.append( "create " );
-        sb.append( "-d \"" + temp.toAbsolutePath().toString() + "\" " );
-        sb.append( "-t mvc-portlet " );
-        sb.append( "foo" );
+        sb.append("create ");
+        sb.append("-q ");
+        sb.append("-d \"" + temp.toAbsolutePath().toString() + "\" ");
+        sb.append("-t mvc-portlet ");
+        sb.append("foo");
 
         BladeCLI.execute( sb.toString() );
 
@@ -160,19 +160,15 @@ public class BladeCLITests
     }
 
     @Test
-    @Ignore("will add it back when blade help command back")
-    public void bladeCLIExecute() throws Exception
-    {
-        String[] output = BladeCLI.execute( "help" );
+    public void bladeCLIExecute() throws Exception {
+        String[] output = BladeCLI.execute("help -q");
 
-        assertNotNull( output );
+        assertNotNull(output);
 
-        assertTrue( output.length > 0 );
+        assertTrue(output.length > 0);
 
-        for( String line : output )
-        {
-            if( line.contains( "[null]" ) )
-            {
+        for( String line : output ) {
+            if( line.contains( "[null]" ) ) {
                 fail( "Output contains [null]" );
             }
         }

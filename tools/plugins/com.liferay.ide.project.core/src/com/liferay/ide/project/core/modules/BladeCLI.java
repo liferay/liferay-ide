@@ -198,7 +198,7 @@ public class BladeCLI {
 	public static synchronized String[] getProjectTemplates() throws BladeCLIException {
 		List<String> templateNames = new ArrayList<>();
 
-		String[] executeResult = execute("create -l");
+		String[] executeResult = execute("create -q -l");
 
 		for (String name : executeResult) {
 			name = name.trim();

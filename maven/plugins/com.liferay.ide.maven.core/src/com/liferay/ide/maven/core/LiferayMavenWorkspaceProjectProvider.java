@@ -58,6 +58,7 @@ public class LiferayMavenWorkspaceProjectProvider
 
 		StringBuilder sb = new StringBuilder();
 
+		sb.append("-q ");
 		sb.append("--base ");
 		sb.append("\"");
 		sb.append(workspaceLocation.toOSString());

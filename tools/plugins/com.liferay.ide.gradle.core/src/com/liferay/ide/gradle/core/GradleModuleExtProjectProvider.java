@@ -60,7 +60,7 @@ public class GradleModuleExtProjectProvider
 
 		File locationFile = location.toFile();
 
-		sb.append("create -d \"");
+		sb.append("create -q -d \"");
 		sb.append(locationFile.getAbsolutePath());
 
 		if (workspaceProject != null) {
