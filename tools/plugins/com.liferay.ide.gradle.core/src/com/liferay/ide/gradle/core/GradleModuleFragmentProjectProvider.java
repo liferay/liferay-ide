@@ -65,6 +65,19 @@ public class GradleModuleFragmentProjectProvider
 
 		sb.append("create ");
 		sb.append("-q ");
+
+		IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		if (liferayWorkspaceProject != null) {
+			sb.append("--base \"");
+
+			IPath workspaceLocation = liferayWorkspaceProject.getLocation();
+
+			sb.append(workspaceLocation.toOSString());
+
+			sb.append("\" ");
+		}
+
 		sb.append("-d \"");
 		sb.append(locationFile.getAbsolutePath());
 		sb.append("\" ");
@@ -106,8 +119,6 @@ public class GradleModuleFragmentProjectProvider
 		boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
 		boolean useDefaultLocation = get(op.getUseDefaultLocation());
 		boolean inWorkspacePath = false;
-
-		IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
 		if (hasGradleWorkspace && (liferayWorkspaceProject != null) && !useDefaultLocation) {
 			IPath workspaceLocation = liferayWorkspaceProject.getLocation();
