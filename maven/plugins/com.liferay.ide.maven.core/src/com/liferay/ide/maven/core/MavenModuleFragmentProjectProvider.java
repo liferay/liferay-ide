@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
@@ -22,6 +23,7 @@ import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOpMethods;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -56,6 +58,19 @@ public class MavenModuleFragmentProjectProvider
 
 		sb.append("create ");
 		sb.append("-q ");
+
+		IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		if (liferayWorkspaceProject != null) {
+			sb.append("--base \"");
+
+			IPath workspaceLocation = liferayWorkspaceProject.getLocation();
+
+			sb.append(workspaceLocation.toOSString());
+
+			sb.append("\" ");
+		}
+
 		sb.append("-d \"");
 
 		File file = location.toFile();
