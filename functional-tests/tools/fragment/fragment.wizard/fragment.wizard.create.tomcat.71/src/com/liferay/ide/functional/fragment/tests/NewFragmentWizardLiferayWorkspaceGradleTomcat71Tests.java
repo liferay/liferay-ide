@@ -15,7 +15,8 @@
 package com.liferay.ide.functional.fragment.tests;
 
 import com.liferay.ide.functional.fragment.wizard.base.NewFragmentWizardLiferayWorkspaceGradleBase;
-import com.liferay.ide.functional.liferay.support.server.PureTomcat71Support;
+import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat71Support;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle71Support;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
@@ -27,44 +28,47 @@ import org.junit.rules.RuleChain;
  */
 public class NewFragmentWizardLiferayWorkspaceGradleTomcat71Tests extends NewFragmentWizardLiferayWorkspaceGradleBase {
 
-	public static PureTomcat71Support tomcat = new PureTomcat71Support(bot);
+	public static LiferayWorkspaceGradle71Support liferayWorkspace = new LiferayWorkspaceGradle71Support(bot);
+	public static LiferaryWorkspaceTomcat71Support server = new LiferaryWorkspaceTomcat71Support(bot, liferayWorkspace);
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getTomcat7xRuleChain(bot, tomcat);
+	public static RuleChain chain = RuleUtil.getTomcat71LiferayWorkspaceRuleChain(bot, liferayWorkspace, server);
 
 	@Test
 	public void createFragmentChangeModulesDir() {
-		super.createFragmentChangeModulesDir();
+		super.createFragmentChangeModulesDir(liferayWorkspace);
 	}
 
 	@Test
 	public void createFragmentWithJsp() {
-		super.createFragmentWithJsp();
+		super.createFragmentWithJsp(liferayWorkspace);
 	}
 
 	@Test
 	public void createFragmentWithJspf() {
-		super.createFragmentWithJspf();
+		super.createFragmentWithJspf(liferayWorkspace);
 	}
 
 	@Test
 	public void createFragmentWithoutFiles() {
-		super.createFragmentWithoutFiles();
+		super.createFragmentWithoutFiles(liferayWorkspace);
 	}
 
 	@Test
 	public void createFragmentWithPortletProperites() {
-		super.createFragmentWithPortletProperites();
+		super.createFragmentWithPortletProperites(liferayWorkspace);
 	}
 
 	@Test
 	public void createFragmentWithResourceAction() {
-		super.createFragmentWithResourceAction();
+		super.createFragmentWithResourceAction(liferayWorkspace);
 	}
 
 	@Test
 	public void createFragmentWithWholeFiles() {
-		super.createFragmentWithWholeFiles();
+		super.createFragmentWithWholeFiles(liferayWorkspace);
 	}
+
+	public String serverName = "Liferay Community Edition Portal 7.1.3 CE GA4";
 
 }

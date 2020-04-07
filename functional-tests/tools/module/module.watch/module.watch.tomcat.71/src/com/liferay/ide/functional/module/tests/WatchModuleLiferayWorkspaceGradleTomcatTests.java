@@ -16,7 +16,7 @@ package com.liferay.ide.functional.module.tests;
 
 import com.liferay.ide.functional.liferay.SwtbotBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
-import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat7xSupport;
+import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat71Support;
 import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle71Support;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 
@@ -32,7 +32,7 @@ import org.junit.rules.RuleChain;
 public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 	public static LiferayWorkspaceGradle71Support workspace = new LiferayWorkspaceGradle71Support(bot);
-	public static LiferaryWorkspaceTomcat7xSupport server = new LiferaryWorkspaceTomcat7xSupport(bot, workspace);
+	public static LiferaryWorkspaceTomcat71Support server = new LiferaryWorkspaceTomcat71Support(bot, workspace);
 
 	@ClassRule
 	public static RuleChain chain = RuleUtil.getTomcat7xRunningLiferayWokrspaceRuleChain(bot, workspace, server);
