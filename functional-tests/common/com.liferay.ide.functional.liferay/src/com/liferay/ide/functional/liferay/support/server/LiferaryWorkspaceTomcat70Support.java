@@ -20,7 +20,7 @@ import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceSupp
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
- * @author Terry Jia
+ * @author Lily Li
  */
 public class LiferaryWorkspaceTomcat70Support extends SupportBase {
 

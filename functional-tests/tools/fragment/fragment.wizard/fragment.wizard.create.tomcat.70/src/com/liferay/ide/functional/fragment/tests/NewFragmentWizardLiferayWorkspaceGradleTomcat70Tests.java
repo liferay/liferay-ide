@@ -17,6 +17,7 @@ package com.liferay.ide.functional.fragment.tests;
 import com.liferay.ide.functional.fragment.wizard.base.NewFragmentWizardLiferayWorkspaceGradleBase;
 import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat70Support;
 import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle70Support;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceSupport;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
@@ -29,6 +30,12 @@ import org.junit.rules.RuleChain;
 public class NewFragmentWizardLiferayWorkspaceGradleTomcat70Tests extends NewFragmentWizardLiferayWorkspaceGradleBase {
 
 	public static LiferayWorkspaceGradle70Support liferayWorkspace = new LiferayWorkspaceGradle70Support(bot);
+
+	@Override
+	protected LiferayWorkspaceSupport getLiferayWorkspace() {
+		return liferayWorkspace;
+	}
+
 	public static LiferaryWorkspaceTomcat70Support server = new LiferaryWorkspaceTomcat70Support(bot, liferayWorkspace);
 
 	@ClassRule
@@ -36,37 +43,37 @@ public class NewFragmentWizardLiferayWorkspaceGradleTomcat70Tests extends NewFra
 
 	@Test
 	public void createFragmentChangeModulesDir() {
-		super.createFragmentChangeModulesDir(liferayWorkspace);
+		super.createFragmentChangeModulesDir();
 	}
 
 	@Test
 	public void createFragmentWithJsp() {
-		super.createFragmentWithJsp(liferayWorkspace);
+		super.createFragmentWithJsp();
 	}
 
 	@Test
 	public void createFragmentWithJspf() {
-		super.createFragmentWithJspf(liferayWorkspace);
+		super.createFragmentWithJspf();
 	}
 
 	@Test
 	public void createFragmentWithoutFiles() {
-		super.createFragmentWithoutFiles(liferayWorkspace);
+		super.createFragmentWithoutFiles();
 	}
 
 	@Test
 	public void createFragmentWithPortletProperites() {
-		super.createFragmentWithPortletProperites(liferayWorkspace);
+		super.createFragmentWithPortletProperites();
 	}
 
 	@Test
 	public void createFragmentWithResourceAction() {
-		super.createFragmentWithResourceAction(liferayWorkspace);
+		super.createFragmentWithResourceAction();
 	}
 
 	@Test
 	public void createFragmentWithWholeFiles() {
-		super.createFragmentWithWholeFiles(liferayWorkspace);
+		super.createFragmentWithWholeFiles();
 	}
 
 }
