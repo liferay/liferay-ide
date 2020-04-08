@@ -30,17 +30,7 @@ public class CreateLifeayProjectToolbarDropDownButton extends ToolbarDropDownBut
 	public CreateLifeayProjectToolbarDropDownButton(SWTBot bot) {
 		super(bot, CREATE_A_NEW_LIFERAY_MODULE_PROJECT);
 
-		_newLiferayPlugin = new MenuItem(bot, this, NEW_LIFERAY_PLUGIN_PROJECT);
-		_newLiferayPluginProjectFromExistingSource = new MenuItem(
-			bot, this, NEW_LIFERAY_PLUGIN_PROJECTS_FROM_EXISING_SOURCE);
-
-		_newLiferayPortlet = new MenuItem(bot, this, NEW_LIFERAY_PORTLET);
-		_newLiferayHookConfiguration = new MenuItem(bot, this, NEW_LIFERAY_HOOK_CONFIGURATION);
 		_newLiferayServer = new MenuItem(bot, this, NEW_LIFERAY_SERVER);
-		_newLiferayServiceBuilder = new MenuItem(bot, this, NEW_LIFERAY_SERVICE_BUILDER);
-		_newLiferayJSFPortlet = new MenuItem(bot, this, NEW_LIFERAY_JSF_PORTLET);
-		_newLiferayVaadinPortlet = new MenuItem(bot, this, NEW_LIFERAY_VAADIN_PORTLET);
-		_newLiferayLayouTemplate = new MenuItem(bot, this, NEW_LIFERAY_LAYOUT_TMEPLATE);
 		_newLiferayModuleFragment = new MenuItem(bot, this, NEW_LIFERAY_MODULE_PROJECT_FRAGMENT);
 		_newLiferayWorkspaceProject = new MenuItem(bot, this, NEW_LIFERAY_WORPSPACE_PROJECT);
 		_newLiferayComponentClass = new MenuItem(bot, this, NEW_LIFERAY_COMPONENT_CLASS);
@@ -55,24 +45,12 @@ public class CreateLifeayProjectToolbarDropDownButton extends ToolbarDropDownBut
 		return _newLiferayComponentClass;
 	}
 
-	public MenuItem getNewLiferayHookConfiguration() {
-		return _newLiferayHookConfiguration;
-	}
-
-	public MenuItem getNewLiferayJSFPortlet() {
-		return _newLiferayJSFPortlet;
-	}
-
 	public MenuItem getNewLiferayJSFProject() {
 		return _newLiferayJSFProject;
 	}
 
 	public MenuItem getNewLiferayKaleoWorkflow() {
 		return _newLiferayKaleoWorkflow;
-	}
-
-	public MenuItem getNewLiferayLayoutTemplate() {
-		return _newLiferayLayouTemplate;
 	}
 
 	public MenuItem getNewLiferayModule() {
@@ -87,32 +65,12 @@ public class CreateLifeayProjectToolbarDropDownButton extends ToolbarDropDownBut
 		return _newLiferayModulesExt;
 	}
 
-	public MenuItem getNewLiferayPlugin() {
-		return _newLiferayPlugin;
-	}
-
-	public MenuItem getNewLiferayPluginProjectFromExistingSource() {
-		return _newLiferayPluginProjectFromExistingSource;
-	}
-
-	public MenuItem getNewLiferayPortlet() {
-		return _newLiferayPortlet;
-	}
-
 	public MenuItem getNewLiferayServer() {
 		return _newLiferayServer;
 	}
 
-	public MenuItem getNewLiferayServiceBuilder() {
-		return _newLiferayServiceBuilder;
-	}
-
 	public MenuItem getNewLiferaySpringMvcPortletProject() {
 		return _newLiferaySpringMVCPortlet;
-	}
-
-	public MenuItem getNewLiferayVaadinPortlet() {
-		return _newLiferayVaadinPortlet;
 	}
 
 	public MenuItem getNewLiferayWorkspaceProject() {
@@ -120,21 +78,13 @@ public class CreateLifeayProjectToolbarDropDownButton extends ToolbarDropDownBut
 	}
 
 	private MenuItem _newLiferayComponentClass;
-	private MenuItem _newLiferayHookConfiguration;
-	private MenuItem _newLiferayJSFPortlet;
 	private MenuItem _newLiferayJSFProject;
 	private MenuItem _newLiferayKaleoWorkflow;
-	private MenuItem _newLiferayLayouTemplate;
 	private MenuItem _newLiferayModule;
 	private MenuItem _newLiferayModuleFragment;
 	private MenuItem _newLiferayModulesExt;
-	private MenuItem _newLiferayPlugin;
-	private MenuItem _newLiferayPluginProjectFromExistingSource;
-	private MenuItem _newLiferayPortlet;
 	private MenuItem _newLiferayServer;
-	private MenuItem _newLiferayServiceBuilder;
 	private MenuItem _newLiferaySpringMVCPortlet;
-	private MenuItem _newLiferayVaadinPortlet;
 	private MenuItem _newLiferayWorkspaceProject;
 
 }

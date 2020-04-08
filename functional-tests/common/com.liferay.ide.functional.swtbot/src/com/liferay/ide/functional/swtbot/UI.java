@@ -187,6 +187,8 @@ public interface UI {
 
 	public final String CREATE_A_NEW_LIFERAY_MODULE_PROJECT = "Create a new Liferay Module Project";
 
+	public final String CREATE_A_NEW_LIFERAY_PLUGIN_PROJECT = "Create a new Liferay Plugin Project (Legacy)";
+
 	public final String CREATE_A_NEW_PROJECT_RESOURCE = "Create a new project resource";
 
 	public final String CREATE_ENTRY_CLASS = "Create Entry Class";
@@ -435,7 +437,7 @@ public interface UI {
 
 	public final String LIFERAY_GOGO_SHELL = "Liferay Gogo Shell";
 
-	public final String LIFERAY_HOOK_CONFIGURATION = "Liferay Hook Configuration";
+	public final String LIFERAY_HOOK_CONFIGURATION = "Liferay Hook Configuration (Legacy)";
 
 	public final String LIFERAY_IDE_STABLE_RELEASES = "Liferay IDE Stable releases";
 
@@ -455,7 +457,7 @@ public interface UI {
 
 	public final String LIFERAY_MVC = "Liferay MVC";
 
-	public final String LIFERAY_PLUGIN_PROJECT = "Liferay Plugin Project";
+	public final String LIFERAY_PLUGIN_PROJECT = "Liferay Plugin Project (Legacy)";
 
 	public final String LIFERAY_PLUGINS = "Liferay Plugins (Legacy)";
 

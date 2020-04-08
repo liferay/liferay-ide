@@ -14,6 +14,7 @@
 
 package com.liferay.ide.functional.liferay.page;
 
+import com.liferay.ide.functional.liferay.page.button.CreateLifeayPluginProjectToolbarDropDownButton;
 import com.liferay.ide.functional.liferay.page.button.CreateLifeayProjectToolbarDropDownButton;
 import com.liferay.ide.functional.liferay.page.button.NewToolbarDropDownButton;
 import com.liferay.ide.functional.swtbot.Eclipse;
@@ -34,6 +35,10 @@ public class LiferayIDE extends Eclipse {
 		}
 
 		return _ide;
+	}
+
+	public CreateLifeayPluginProjectToolbarDropDownButton getCreateLiferayPluginProjectToobar() {
+		return _createLiferayPluginProjectToolbar;
 	}
 
 	public CreateLifeayProjectToolbarDropDownButton getCreateLiferayProjectToolbar() {
@@ -68,6 +73,7 @@ public class LiferayIDE extends Eclipse {
 		super(bot);
 
 		_createLiferayProjectToolbar = new CreateLifeayProjectToolbarDropDownButton(bot);
+		_createLiferayPluginProjectToolbar = new CreateLifeayPluginProjectToolbarDropDownButton(bot);
 		_kaleoDesignerPerspective = new Perspective(bot, KALEO_DESIGNER);
 		_liferayPerspective = new Perspective(bot, LIFERAY_PLUGINS);
 		_liferayWorkspacePerspective = new Perspective(bot, LIFERAY_WORKSPACE);
@@ -82,6 +88,7 @@ public class LiferayIDE extends Eclipse {
 
 	private static LiferayIDE _ide;
 
+	private CreateLifeayPluginProjectToolbarDropDownButton _createLiferayPluginProjectToolbar;
 	private CreateLifeayProjectToolbarDropDownButton _createLiferayProjectToolbar;
 	private Perspective _kaleoDesignerPerspective;
 	private Perspective _liferayPerspective;
