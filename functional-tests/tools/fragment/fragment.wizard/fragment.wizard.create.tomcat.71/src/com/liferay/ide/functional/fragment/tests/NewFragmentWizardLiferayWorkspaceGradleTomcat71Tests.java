@@ -18,8 +18,11 @@ import com.liferay.ide.functional.fragment.wizard.base.NewFragmentWizardLiferayW
 import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat71Support;
 import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle71Support;
 import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceSupport;
+import com.liferay.ide.functional.liferay.util.RuleUtil;
 
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 
 /**
  * @author Lily Li
@@ -27,12 +30,17 @@ import org.junit.Test;
  */
 public class NewFragmentWizardLiferayWorkspaceGradleTomcat71Tests extends NewFragmentWizardLiferayWorkspaceGradleBase {
 
+	public static LiferayWorkspaceGradle71Support liferayWorkspace = new LiferayWorkspaceGradle71Support(bot);
+
 	@Override
 	protected LiferayWorkspaceSupport getLiferayWorkspace() {
-		return new LiferayWorkspaceGradle71Support(bot);
+		return liferayWorkspace;
 	}
 
-	public LiferaryWorkspaceTomcat71Support server = new LiferaryWorkspaceTomcat71Support(bot, getLiferayWorkspace());
+	public static LiferaryWorkspaceTomcat71Support server = new LiferaryWorkspaceTomcat71Support(bot, liferayWorkspace);
+
+	@ClassRule
+	public static RuleChain chain = RuleUtil.getTomcat71LiferayWorkspaceRuleChain(bot, liferayWorkspace, server);
 
 	@Test
 	public void createFragmentChangeModulesDir() {
