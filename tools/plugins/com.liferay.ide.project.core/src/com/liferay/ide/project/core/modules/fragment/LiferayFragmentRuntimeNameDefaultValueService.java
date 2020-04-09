@@ -115,6 +115,10 @@ public class LiferayFragmentRuntimeNameDefaultValueService
 
 		String projectName = get(op.getProjectName());
 
+		if (CoreUtil.isNullOrEmpty(projectName)) {
+			return null;
+		}
+
 		IProject project = CoreUtil.getProject(projectName);
 
 		if (project == null) {
