@@ -45,6 +45,7 @@ import org.osgi.util.promise.PromiseFactory;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 @Component
 public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
@@ -114,7 +115,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 		if (CoreUtil.isNotNullOrEmpty(url)) {
 			try {
-				detail = _renderKBMainContent(url);
+				detail = _renderArticleMainContent(url);
 			}
 			catch (Throwable t) {
 				deferred.fail(t);
@@ -130,7 +131,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		return upgradeStep.getTitle();
 	}
 
-	private String _renderKBMainContent(String upgradeStepUrl) throws ClientProtocolException, IOException {
+	private String _renderArticleMainContent(String upgradeStepUrl) throws ClientProtocolException, IOException {
 		Connection connection = Jsoup.connect(upgradeStepUrl);
 
 		connection = connection.timeout(10000);
@@ -147,20 +148,20 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 		sb.append(heads.get(0));
 
-		// If it is possible, we should modify KB portlet by adding one main content id to allow us to get it easily.
+		if (upgradeStepUrl.contains("#")) {
+			sb.append("<script type='text/javascript'>");
+			sb.append("window.onload=function(){location.href='");
+			sb.append(upgradeStepUrl.substring(upgradeStepUrl.lastIndexOf("#")));
+			sb.append("'}");
+			sb.append("</script>");
+		}
 
-		// Actually the kb portlet of dev.liferay.com and one of web-community-beta.wedeploy.io seem to be different.
+		Elements articleBodies = document.getElementsByClass("article-body");
 
-		Elements kbEntityBodies = document.getElementsByClass("kb-entity-body");
-
-		Element kbEntityBody = kbEntityBodies.get(0);
-
-		Elements mainContents = kbEntityBody.getAllElements();
-
-		Element mainContent = mainContents.get(1);
+		Element articleBody = articleBodies.get(0);
 
 		try {
-			Elements h1s = mainContent.getElementsByTag("h1");
+			Elements h1s = articleBody.getElementsByTag("h1");
 
 			Element h1 = h1s.get(0);
 
@@ -170,7 +171,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		}
 
 		try {
-			Elements uls = mainContent.getElementsByTag("ul");
+			Elements uls = articleBody.getElementsByTag("ul");
 
 			Element ul = uls.get(0);
 
@@ -180,7 +181,17 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 		}
 
 		try {
-			Elements learnPathSteps = mainContent.getElementsByClass("learn-path-step");
+			Elements learnPathSteps = articleBody.getElementsByClass("learn-path-step");
+
+			Element learnPathStep = learnPathSteps.get(0);
+
+			learnPathStep.remove();
+		}
+		catch (Exception e) {
+		}
+
+		try {
+			Elements learnPathSteps = articleBody.getElementsByClass("article-siblings");
 
 			Element learnPathStep = learnPathSteps.get(0);
 
@@ -197,7 +208,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 
 		String prefix = protocol + "://" + authority;
 
-		for (Element element : mainContent.getAllElements()) {
+		for (Element element : articleBody.getAllElements()) {
 			if ("a".equals(element.tagName())) {
 				String href = element.attr("href");
 
@@ -207,7 +218,7 @@ public class UpgradePlanInfoProviderService implements UpgradeInfoProvider {
 			}
 		}
 
-		sb.append(mainContent.toString());
+		sb.append(articleBody.toString());
 
 		sb.append("</html>");
 

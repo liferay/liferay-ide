@@ -33,6 +33,7 @@ import org.jsoup.select.Elements;
 
 /**
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 public class UpgradeStepsBuilder {
 
@@ -53,9 +54,17 @@ public class UpgradeStepsBuilder {
 
 		Elements roots = document.select("ol");
 
-		Element root = roots.get(0);
+		for (int i = 0; i <= roots.size(); i++) {
+			Element root = roots.get(i);
 
-		_loopChildren(upgradeSteps, null, root);
+			String attributeName = root.attr("class");
+
+			if ("root".equals(attributeName)) {
+				_loopChildren(upgradeSteps, null, root);
+
+				break;
+			}
+		}
 
 		return upgradeSteps;
 	}
@@ -86,11 +95,7 @@ public class UpgradeStepsBuilder {
 				if (aTags.size() > 0) {
 					Element aTag = aTags.get(0);
 
-					String protocol = _url.getProtocol();
-
-					String authority = _url.getAuthority();
-
-					url = protocol + "://" + authority + aTag.attr("href");
+					url = aTag.attr("href");
 
 					title = aTag.text();
 
