@@ -363,11 +363,11 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		for (String template : npmTemplates) {
 			wizardAction.newModule.prepareGradle(projectName, template, "7.2");
 
+			//update on blade 392
 			validationAction.assertEquals(
-				NPM_PORTLET_PROJECT_TEMPLATES_NOT_SUPPORT_FOR_SPECIFIED_LIFERAY_VERSION,
-				wizardAction.getValidationMsg(2));
+				ENTER_A_NAME_AND_CHOOSE_A_TEMPLATE_FOR_A_NEW_LIFERAY_MODULE, wizardAction.getValidationMsg(2));
 
-			validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
+			validationAction.assertEnabledTrue(wizardAction.getFinishBtn());
 		}
 
 		wizardAction.cancel();

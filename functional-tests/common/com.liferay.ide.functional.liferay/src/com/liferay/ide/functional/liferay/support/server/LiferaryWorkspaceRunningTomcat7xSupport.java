@@ -25,7 +25,7 @@ import org.junit.Assert;
  */
 public class LiferaryWorkspaceRunningTomcat7xSupport extends SupportBase {
 
-	public LiferaryWorkspaceRunningTomcat7xSupport(SWTWorkbenchBot bot, LiferaryWorkspaceTomcat7xSupport workspace) {
+	public LiferaryWorkspaceRunningTomcat7xSupport(SWTWorkbenchBot bot, LiferaryWorkspaceTomcat71Support workspace) {
 		super(bot);
 
 		_workspace = workspace;
@@ -65,6 +65,6 @@ public class LiferaryWorkspaceRunningTomcat7xSupport extends SupportBase {
 		viewAction.closeView("Terminal");
 	}
 
-	private LiferaryWorkspaceTomcat7xSupport _workspace;
+	private LiferaryWorkspaceTomcat71Support _workspace;
 
 }

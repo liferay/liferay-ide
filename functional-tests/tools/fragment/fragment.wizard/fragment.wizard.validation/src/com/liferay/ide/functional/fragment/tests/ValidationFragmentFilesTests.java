@@ -20,6 +20,7 @@ import com.liferay.ide.functional.liferay.support.server.PureTomcat70Support;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -149,6 +150,7 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("ignore to wait IDE-4772")
 	@Test
 	public void testAddFilesOnNonFragment() {
 		wizardAction.openNewLiferayModuleWizard();

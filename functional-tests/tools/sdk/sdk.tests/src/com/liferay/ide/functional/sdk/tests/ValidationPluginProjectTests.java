@@ -27,6 +27,8 @@ public class ValidationPluginProjectTests extends SwtbotBase {
 
 	@Test
 	public void testDefaults() {
+		viewAction.switchLiferayPerspective();
+
 		wizardAction.openNewLiferayPluginProjectsFromExistingSourceWizard();
 
 		Assert.assertEquals(PLEASE_SELECT_AT_LEAST_ONE_PROJECT_TO_IMPORT, wizardAction.getValidationMsg(2));

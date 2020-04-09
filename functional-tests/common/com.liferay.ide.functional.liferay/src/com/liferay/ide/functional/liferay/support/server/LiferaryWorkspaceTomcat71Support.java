@@ -22,9 +22,9 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class LiferaryWorkspaceTomcat7xSupport extends SupportBase {
+public class LiferaryWorkspaceTomcat71Support extends SupportBase {
 
-	public LiferaryWorkspaceTomcat7xSupport(SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace) {
+	public LiferaryWorkspaceTomcat71Support(SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace) {
 		super(bot);
 
 		_workspace = workspace;

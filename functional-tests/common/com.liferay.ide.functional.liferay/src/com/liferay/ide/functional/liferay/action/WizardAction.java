@@ -15,6 +15,7 @@
 package com.liferay.ide.functional.liferay.action;
 
 import com.liferay.ide.functional.liferay.UIAction;
+import com.liferay.ide.functional.liferay.page.button.CreateLifeayPluginProjectToolbarDropDownButton;
 import com.liferay.ide.functional.liferay.page.button.CreateLifeayProjectToolbarDropDownButton;
 import com.liferay.ide.functional.liferay.page.button.NewToolbarDropDownButton;
 import com.liferay.ide.functional.liferay.page.wizard.ChooseAssignmentTypeWizard;
@@ -174,7 +175,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayHookConfigurationWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayHookConfiguration();
+		MenuItem menu = _createLiferayPlguinProjectToolbar().getNewLiferayHookConfiguration();
 
 		menu.click();
 	}
@@ -190,7 +191,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayKaleoWorkflowWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayKaleoWorkflow();
+		MenuItem menu = _createLiferayPlguinProjectToolbar().getNewLiferayKaleoWorkflow();
 
 		menu.click();
 	}
@@ -198,7 +199,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayLayoutTemplate() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayLayoutTemplate();
+		MenuItem menu = _createLiferayPlguinProjectToolbar().getNewLiferayLayoutTemplate();
 
 		menu.click();
 	}
@@ -222,7 +223,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayPluginProjectsFromExistingSourceWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayPluginProjectFromExistingSource();
+		MenuItem menu = _createLiferayPlguinProjectToolbar().getNewLiferayPluginProjectFromExistingSource();
 
 		menu.click();
 	}
@@ -230,7 +231,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayPluginProjectWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayPlugin();
+		MenuItem menu = _createLiferayPlguinProjectToolbar().getNewLiferayPlugin();
 
 		menu.click();
 	}
@@ -238,7 +239,7 @@ public class WizardAction extends UIAction {
 	public void openNewLiferayPortletWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
-		MenuItem menu = _createLiferayProjectToolbar().getNewLiferayPortlet();
+		MenuItem menu = _createLiferayPlguinProjectToolbar().getNewLiferayPortlet();
 
 		menu.click();
 	}
@@ -1441,6 +1442,10 @@ public class WizardAction extends UIAction {
 
 	private WizardAction(SWTWorkbenchBot bot) {
 		super(bot);
+	}
+
+	private CreateLifeayPluginProjectToolbarDropDownButton _createLiferayPlguinProjectToolbar() {
+		return ide.getCreateLiferayPluginProjectToobar();
 	}
 
 	private CreateLifeayProjectToolbarDropDownButton _createLiferayProjectToolbar() {
