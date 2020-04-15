@@ -135,6 +135,7 @@ public class MigrateExistingPluginsToWorkspaceCommand implements SapphireContent
 
 					sb.append("convert ");
 					sb.append("-q ");
+					sb.append("-t ");
 					sb.append("--source \"");
 					sb.append(currentProjectLocation);
 					sb.append("\" --base \"");
