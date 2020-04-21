@@ -14,12 +14,8 @@
 
 package com.liferay.ide.project.core.springmvcportlet;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
+import com.liferay.ide.project.core.InitProviderPossibleValuesService;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -27,8 +23,10 @@ import org.eclipse.sapphire.PossibleValuesService;
 
 /**
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
-public class SpringMVCPortletProjectProviderPossibleValuesService extends PossibleValuesService {
+public class SpringMVCPortletProjectProviderPossibleValuesService
+	extends PossibleValuesService implements InitProviderPossibleValuesService {
 
 	@Override
 	public boolean ordered() {
@@ -41,15 +39,7 @@ public class SpringMVCPortletProjectProviderPossibleValuesService extends Possib
 	}
 
 	protected void initPossibleValuesService() {
-		_possibleValues = new ArrayList<>();
-
-		for (ILiferayProjectProvider provider : LiferayCore.getProviders("spring-mvc-portlet")) {
-			if (provider instanceof NewLiferayProjectProvider<?>) {
-				_possibleValues.add(provider.getShortName());
-			}
-		}
-
-		Collections.sort(_possibleValues);
+		_possibleValues = initPossibleValues("spring-mvc-portlet");
 	}
 
 	private List<String> _possibleValues;

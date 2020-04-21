@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.springmvcportlet;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.Platform;
@@ -27,11 +28,24 @@ import org.eclipse.sapphire.DefaultValueService;
 
 /**
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class SpringMVCPortletProjectProviderDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected String compute() {
+		try {
+			if (LiferayWorkspaceUtil.hasGradleWorkspace()) {
+				return "gradle-spring-mvc-portlet";
+			}
+
+			if (LiferayWorkspaceUtil.hasMavenWorkspace()) {
+				return "maven-spring-mvc-portlet";
+			}
+		}
+		catch (Exception e) {
+		}
+
 		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
 		IPreferencesService preferencesService = Platform.getPreferencesService();

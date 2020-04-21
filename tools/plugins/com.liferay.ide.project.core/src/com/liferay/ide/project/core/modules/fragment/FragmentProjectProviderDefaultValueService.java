@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.Platform;
@@ -27,12 +28,25 @@ import org.eclipse.sapphire.DefaultValueService;
 
 /**
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 public class FragmentProjectProviderDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected String compute() {
 		String retval = "gradle-module-fragment";
+
+		try {
+			if (LiferayWorkspaceUtil.hasGradleWorkspace()) {
+				return retval;
+			}
+
+			if (LiferayWorkspaceUtil.hasMavenWorkspace()) {
+				return "maven-module-fragment";
+			}
+		}
+		catch (Exception e) {
+		}
 
 		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
