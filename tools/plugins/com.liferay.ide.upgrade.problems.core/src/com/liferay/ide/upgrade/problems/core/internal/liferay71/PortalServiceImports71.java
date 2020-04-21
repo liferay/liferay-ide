@@ -80,7 +80,16 @@ public class PortalServiceImports71 extends JavaImportsMigrator {
 		"modularization-blogs-api.properties", "modularization-document-library-content-api.properties",
 		"modularization-document-library-file-rank-api.properties",
 		"modularization-document-library-sync-api.properties", "modularization-message-boards-api.properties",
-		"modularization-petra-api.properties", "modularization-petra-string.properties"
+		"modularization-petra-api.properties", "modularization-petra-string.properties",
+		"modularization-adaptive-media-image-api.properties", "modularization-bookmarks-api.properties",
+		"modularization-document-library-content-service.properties",
+		"modularization-dynamic-data-lists-service.properties", "modularization-dynamic-data-mapping-api.properties",
+		"modularization-flags-service.properties", "modularization-journal-api.properties",
+		"modularization-message-boards-web.properties", "modularization-mobile-device-rules-web.properties",
+		"modularization-petra-lang.properties", "modularization-petra-memory.properties",
+		"modularization-petra-nio.properties", "modularization-portal-compound-session-id.properties",
+		"modularization-portal-monitoring.properties", "modularization-portal-search-web.properties",
+		"modularization-portlet-display-template-api.properties", "modularization-roles-admin-web.properties"
 	};
 
 }

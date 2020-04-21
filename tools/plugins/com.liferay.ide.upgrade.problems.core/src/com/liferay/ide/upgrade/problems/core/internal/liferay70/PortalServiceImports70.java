@@ -93,7 +93,7 @@ public class PortalServiceImports70 extends JavaImportsMigrator {
 		"modularization-portal-rules-engine-api.properties", "modularization-portal-scheduler.properties",
 		"modularization-portal-scripting-api.properties", "modularization-portal-search-test.properties",
 		"modularization-portal-search.properties", "modularization-portal-security-audit-api.properties",
-		"modularization-portal-security-ldap.properties", "modularization-protal-tools-db-upgrade-client.properties",
+		"modularization-portal-security-ldap.properties", "modularization-portal-tools-db-upgrade-client.properties",
 		"modularization-portal-workflow-kaleo-api.properties",
 		"modularization-portal-workflow-kaleo-definition-api.properties",
 		"modularization-portlet-display-template.properties", "modularization-shopping-api.properties",

@@ -78,7 +78,10 @@ public class PortalServiceImports72 extends JavaImportsMigrator {
 
 	private final String[] _modularizationPropertiesFileNames = {
 		"modularization-comment-api.properties", "modularization-document-library-file-rank-service.properties",
-		"modularization-petra-function.properties"
+		"modularization-petra-function.properties", "modularization-asset-list-service.properties",
+		"modularization-exportimport-test-util.properties", "modularization-petra-process.properties",
+		"modularization-portal-cache-multiple.properties", "modularization-portal-search.properties",
+		"modularization-portal-vulcan-api.properties"
 	};
 
 }
