@@ -297,7 +297,7 @@ public class NewMavenJSFModuleProjectProvider
 
 		try {
 			String responseString = getHttpResponse(
-				"http://search.maven.org/solrsearch/select?q=g:com.liferay.faces.archetype+AND+a:" + artifactId +
+				"https://search.maven.org/solrsearch/select?q=g:com.liferay.faces.archetype+AND+a:" + artifactId +
 					"&rows=20&wt=json");
 
 			Object result = _getJSONResponse(responseString);
