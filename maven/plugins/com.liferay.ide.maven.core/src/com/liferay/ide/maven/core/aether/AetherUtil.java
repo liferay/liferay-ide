@@ -138,7 +138,7 @@ public class AetherUtil {
 
 	public static RemoteRepository newCentralRepository() {
 		return new RemoteRepository.Builder(
-			"central", "default", "http://repo1.maven.org/maven2/"
+			"central", "default", "https://repo1.maven.org/maven2/"
 		).build();
 	}
 
