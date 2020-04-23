@@ -14,12 +14,8 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
+import com.liferay.ide.project.core.InitProviderPossibleValuesService;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -27,8 +23,10 @@ import org.eclipse.sapphire.PossibleValuesService;
 
 /**
  * @author Terry Jia
+ * @author Seiphon Wang
  */
-public class FragmentProjectProviderPossibleValuesService extends PossibleValuesService {
+public class FragmentProjectProviderPossibleValuesService
+	extends PossibleValuesService implements InitProviderPossibleValuesService {
 
 	@Override
 	public boolean ordered() {
@@ -41,15 +39,7 @@ public class FragmentProjectProviderPossibleValuesService extends PossibleValues
 	}
 
 	protected void initPossibleValuesService() {
-		_possibleValues = new ArrayList<>();
-
-		for (final ILiferayProjectProvider provider : LiferayCore.getProviders("module-fragment")) {
-			if (provider instanceof NewLiferayProjectProvider<?>) {
-				_possibleValues.add(provider.getShortName());
-			}
-		}
-
-		Collections.sort(_possibleValues);
+		_possibleValues = initPossibleValues("module-fragment");
 	}
 
 	private List<String> _possibleValues;
