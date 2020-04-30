@@ -342,6 +342,14 @@ public class NewLiferayComponentOpTests extends BaseTests
     {
         deleteAllWorkspaceProjects();
 
+        TestUtil.waitForBuildAndValidation();
+
+        IProject[] projects = CoreUtil.getAllProjects();
+
+        if(!(projects.length==0)) {
+            deleteAllWorkspaceProjects();
+        }
+
         NewLiferayComponentOp cop = NewLiferayComponentOp.TYPE.instantiate();
 
         Status projectValidationStatus = cop.getProjectName().validation();
