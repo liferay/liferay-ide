@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOpMethods;
@@ -206,6 +207,8 @@ public class NewLiferayModuleProjectOpTests
             NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
         assertEquals( "OK", exStatus.message() );
+
+        TestUtil.waitForBuildAndValidation();
 
         IProject modPorject = CoreUtil.getProject( op.getProjectName().content() );
         modPorject.open( new NullProgressMonitor() );
