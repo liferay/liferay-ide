@@ -19,7 +19,6 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlan;
 import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
 import com.liferay.ide.upgrade.plan.ui.util.UIUtil;
-import com.liferay.ide.upgrade.problems.core.UpgradeProblemSupport;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -61,7 +60,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Seiphon Wang
  */
 public class UpgradeProblemsPreferencePage
-	extends PreferencePage implements IWorkbenchPreferencePage, UpgradeProblemSupport {
+	extends PreferencePage implements IWorkbenchPreferencePage, UpgradeProblemUISupport {
 
 	public UpgradeProblemsPreferencePage() {
 		super("Ignored Upgrade Problems");

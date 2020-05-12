@@ -12,9 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.upgrade.problems.core;
-
-import com.liferay.ide.upgrade.plan.core.UpgradeProblem;
+package com.liferay.ide.upgrade.plan.core;
 
 import java.io.File;
 
@@ -36,6 +34,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * @author Gregory Amerson
  * @author Terry Jia
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public interface UpgradeProblemSupport {
 

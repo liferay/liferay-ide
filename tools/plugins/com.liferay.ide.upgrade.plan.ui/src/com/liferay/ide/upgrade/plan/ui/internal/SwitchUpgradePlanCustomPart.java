@@ -285,6 +285,8 @@ public class SwitchUpgradePlanCustomPart extends FormComponentPart implements Up
 
 	private void _handleDoubleClick(UpgradePlan upgradePlan) {
 		_upgradePlanner.startUpgradePlan(upgradePlan);
+
+		UIUtil.refreshCommonView("org.eclipse.ui.navigator.ProjectExplorer");
 	}
 
 	private void _handleRemovePlanEvent() {
