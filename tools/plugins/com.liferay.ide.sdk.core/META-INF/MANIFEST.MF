@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.sdk.core;singleton:=true
-Bundle-Version: 3.8.1.qualifier
+Bundle-Version: 3.9.0.qualifier
 Bundle-Activator: com.liferay.ide.sdk.core.SDKCorePlugin
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: com.liferay.ide.core,

@@ -8,7 +8,7 @@ Bundle-Name: Liferay IDE Upgrade Problems Core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.liferay.ide.upgrade.problems.core;singleton:=true
 Bundle-Vendor: Liferay, Inc.
-Bundle-Version: 3.8.1.qualifier
+Bundle-Version: 3.9.0.qualifier
 Export-Package: com.liferay.ide.upgrade.problems.core,
  com.liferay.ide.upgrade.problems.core.commands
 Require-Bundle: com.google.guava,
