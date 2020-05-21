@@ -2,6 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.liferay.ide.upgrade.plan.core.internal.UpgradePlannerService">
    <service>
       <provide interface="com.liferay.ide.upgrade.plan.core.UpgradePlanner"/>
+      <provide interface="com.liferay.ide.upgrade.plan.core.UpgradeProblemSupport"/>
    </service>
    <implementation class="com.liferay.ide.upgrade.plan.core.internal.UpgradePlannerService"/>
 </scr:component>
