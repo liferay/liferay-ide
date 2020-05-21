@@ -51,7 +51,6 @@ public class GradleModuleExtProjectProvider
 
 		String projectName = get(op.getProjectName());
 		String originalModuleName = get(op.getOriginalModuleName());
-		String originalModuleVersion = get(op.getOriginalModuleVersion());
 
 		IPath location = PathBridge.create(get(op.getLocation()));
 		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
@@ -76,9 +75,6 @@ public class GradleModuleExtProjectProvider
 		sb.append("modules-ext ");
 		sb.append("-m ");
 		sb.append(originalModuleName);
-
-		sb.append(" -M ");
-		sb.append(originalModuleVersion);
 
 		sb.append(" \"");
 		sb.append(projectName);
