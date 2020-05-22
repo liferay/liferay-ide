@@ -76,6 +76,22 @@ public class StringUtil {
 		return s1.equals(s2);
 	}
 
+	public static boolean equalsIgnoreCase(String s1, Object o) {
+		if ((s1 == null) || (o == null)) {
+			return false;
+		}
+
+		return s1.equalsIgnoreCase(o.toString());
+	}
+
+	public static boolean equalsIgnoreCase(String s1, String s2) {
+		if ((s1 == null) || (s2 == null)) {
+			return false;
+		}
+
+		return s1.equalsIgnoreCase(s2);
+	}
+
 	public static byte[] getBytes(String s) {
 		if (s == null) {
 			return new byte[0];
