@@ -20,6 +20,8 @@ import aQute.bnd.version.VersionRange;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
@@ -67,6 +69,8 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		String projectTemplateName = get(op.getProjectTemplateName());
 
+		boolean warCoreExt = projectTemplateName.equals("war-core-ext");
+
 		boolean npm = projectTemplateName.startsWith("npm");
 
 		projectTemplateName = projectTemplateName.replace("-", ".");
@@ -90,6 +94,16 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 		}
 		else {
 			retval = Status.createWarningStatus("Unable to get supported Liferay version.");
+		}
+
+		if (warCoreExt && retval.ok()) {
+			NewLiferayProjectProvider<BaseModuleOp> newLiferayProjectProvider = get(op.getProjectProvider());
+
+			String displayName = newLiferayProjectProvider.getDisplayName();
+
+			if (StringUtil.equalsIgnoreCase(displayName, "maven")) {
+				retval = Status.createErrorStatus("Not support to create maven war-core-ext project.");
+			}
 		}
 
 		return retval;
