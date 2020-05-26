@@ -17,7 +17,6 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
@@ -46,6 +45,7 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Terry Jia
  * @author Andy Wu
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class GradleProjectProvider
 	extends AbstractLiferayProjectProvider
@@ -94,18 +94,15 @@ public class GradleProjectProvider
 		sb.append("-d \"");
 		sb.append(targetDir.getAbsolutePath());
 		sb.append("\" ");
+		sb.append("--base \"");
 
 		IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-		if (liferayWorkspaceProject != null) {
-			sb.append("--base \"");
+		IPath workspaceLocation = liferayWorkspaceProject.getLocation();
 
-			IPath workspaceLocation = liferayWorkspaceProject.getLocation();
+		sb.append(workspaceLocation.toOSString());
 
-			sb.append(workspaceLocation.toOSString());
-
-			sb.append("\" ");
-		}
+		sb.append("\" ");
 
 		sb.append("-v ");
 		sb.append(liferayVersion);
@@ -161,36 +158,7 @@ public class GradleProjectProvider
 				name.setName(projectName + "-service");
 			}
 
-			IPath projectLocation = location;
-
-			String lastSegment = location.lastSegment();
-
-			if ((location != null) && (location.segmentCount() > 0)) {
-				if (!lastSegment.equals(projectName)) {
-					projectLocation = location.append(projectName);
-				}
-			}
-
-			boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
-			boolean useDefaultLocation = get(op.getUseDefaultLocation());
-			boolean inWorkspacePath = false;
-
-			if (hasGradleWorkspace && (liferayWorkspaceProject != null) && !useDefaultLocation) {
-				IPath workspaceLocation = liferayWorkspaceProject.getLocation();
-
-				if (workspaceLocation != null) {
-					inWorkspacePath = workspaceLocation.isPrefixOf(projectLocation);
-				}
-			}
-
-			if ((hasGradleWorkspace && useDefaultLocation) || inWorkspacePath) {
-				GradleUtil.refreshProject(liferayWorkspaceProject);
-			}
-			else {
-				CoreUtil.openProject(projectName, projectLocation, monitor);
-
-				GradleUtil.synchronizeProject(projectLocation, monitor);
-			}
+			GradleUtil.refreshProject(liferayWorkspaceProject);
 		}
 		catch (Exception e) {
 			retval = LiferayGradleCore.createErrorStatus("Can not create module project: " + e.getMessage(), e);
