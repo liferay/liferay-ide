@@ -20,21 +20,34 @@ import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.ui.BaseProjectWizard;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.ValidLiferayWorkspaceChecker;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.ui.IWorkbench;
 
 /**
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class NewLiferayModuleProjectWizard extends BaseProjectWizard<NewLiferayModuleProjectOp> {
 
 	public NewLiferayModuleProjectWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(NewLiferayModuleProjectWizard.class).wizard());
+	}
+
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		super.init(workbench, selection);
+
+		ValidLiferayWorkspaceChecker checker = new ValidLiferayWorkspaceChecker("Liferay Module Project");
+
+		checker.checkValidLiferayWorkspace();
 	}
 
 	@Override

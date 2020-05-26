@@ -41,6 +41,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Joye Luo
  * @author Charles Wu
+ * @author Seiphon Wang
  */
 public class LiferayMavenModuleProjectProvider
 	extends LiferayMavenProjectProvider
@@ -82,18 +83,15 @@ public class LiferayMavenModuleProjectProvider
 
 		sb.append("create ");
 		sb.append("-q ");
+		sb.append("--base \"");
 
 		IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-		if (liferayWorkspaceProject != null) {
-			sb.append("--base \"");
+		IPath workspaceLocation = liferayWorkspaceProject.getLocation();
 
-			IPath workspaceLocation = liferayWorkspaceProject.getLocation();
+		sb.append(workspaceLocation.toOSString());
 
-			sb.append(workspaceLocation.toOSString());
-
-			sb.append("\" ");
-		}
+		sb.append("\" ");
 
 		sb.append("-d \"");
 		sb.append(targetDir.getAbsolutePath());

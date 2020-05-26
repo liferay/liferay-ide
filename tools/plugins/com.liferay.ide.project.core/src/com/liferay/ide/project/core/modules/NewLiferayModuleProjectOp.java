@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.project.core.LiferayWorkspaceValidationService;
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
 import com.liferay.ide.project.core.service.TargetLiferayVersionDefaultValueService;
 import com.liferay.ide.project.core.service.TargetLiferayVersionPossibleValuesService;
@@ -120,6 +121,7 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp {
 	public ValueProperty PROP_PACKAGE_NAME = new ValueProperty(TYPE, "PackageName");
 
 	@Listeners(ModuleProjectNameListener.class)
+	@Service(impl = LiferayWorkspaceValidationService.class)
 	@Service(impl = ModuleProjectNameValidationService.class)
 	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_NAME);
 

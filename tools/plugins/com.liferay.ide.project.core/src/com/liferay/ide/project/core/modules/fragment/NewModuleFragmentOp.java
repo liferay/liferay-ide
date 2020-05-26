@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
+import com.liferay.ide.project.core.LiferayWorkspaceValidationService;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
@@ -106,6 +107,7 @@ public interface NewModuleFragmentOp extends BaseModuleOp {
 	public ListProperty PROP_OVERRIDE_FILES = new ListProperty(TYPE, "OverrideFiles");
 
 	@Listeners(FragmentProjectNameListener.class)
+	@Service(impl = LiferayWorkspaceValidationService.class)
 	@Service(impl = ModuleProjectNameValidationService.class)
 	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_NAME);
 

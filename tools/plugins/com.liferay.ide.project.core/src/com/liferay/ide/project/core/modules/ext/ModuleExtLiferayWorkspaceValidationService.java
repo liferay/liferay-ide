@@ -15,23 +15,26 @@
 package com.liferay.ide.project.core.modules.ext;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
+import com.liferay.ide.project.core.LiferayWorkspaceValidationService;
 
 import org.eclipse.sapphire.modeling.Status;
 
 import org.osgi.framework.Version;
 
 /**
- * @author Charles Wu
- * @author Terry Jia
+ * @author Seiphon Wang
  */
-public class ModuleExtProjectNameValidationService extends ModuleProjectNameValidationService {
+public class ModuleExtLiferayWorkspaceValidationService
+	extends LiferayWorkspaceValidationService implements SapphireContentAccessor {
 
 	@Override
 	protected Status compute() {
-		if (LiferayWorkspaceUtil.getGradleWorkspaceProject() == null) {
-			return Status.createErrorStatus("We recommend Liferay Gradle workspace to develop module ext project!");
+		Status retval = super.compute();
+
+		if (!retval.ok()) {
+			return retval;
 		}
 
 		Version liferayWorkspaceVersion = new Version(LiferayWorkspaceUtil.getLiferayWorkspaceProjectVersion());
@@ -39,11 +42,11 @@ public class ModuleExtProjectNameValidationService extends ModuleProjectNameVali
 		Version version70 = new Version("7.0");
 
 		if (CoreUtil.compareVersions(liferayWorkspaceVersion, version70) <= 0) {
-			return Status.createErrorStatus(
+			retval = Status.createErrorStatus(
 				"Module Ext projects only work on liferay workspace which version is greater than 7.0.");
 		}
 
-		return super.compute();
+		return retval;
 	}
 
 }

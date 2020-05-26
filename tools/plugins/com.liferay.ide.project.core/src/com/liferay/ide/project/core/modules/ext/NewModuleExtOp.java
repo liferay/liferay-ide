@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules.ext;
 
 import com.liferay.ide.project.core.modules.BaseModuleOp;
+import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
 
 import java.net.URI;
@@ -95,7 +96,8 @@ public interface NewModuleExtOp extends BaseModuleOp {
 	public ListProperty PROP_OVERRIDE_FILES = new ListProperty(TYPE, "OverrideFiles");
 
 	@Listeners(ModuleExtProjectNameListener.class)
-	@Service(impl = ModuleExtProjectNameValidationService.class)
+	@Service(impl = ModuleExtLiferayWorkspaceValidationService.class)
+	@Service(impl = ModuleProjectNameValidationService.class)
 	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_NAME);
 
 	@DefaultValue(text = "gradle-module-ext")

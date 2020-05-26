@@ -70,6 +70,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
  * @author Simon Jiang
  * @author Kuo Zhang
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 @SuppressWarnings("restriction")
 public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider implements SapphireContentAccessor {
