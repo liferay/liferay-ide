@@ -48,7 +48,6 @@
                     <property>EnableTargetPlatform</property>
                 </property-editor>
                 <property-editor>
-                    <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                     <property>TargetPlatform</property>
                 </property-editor>

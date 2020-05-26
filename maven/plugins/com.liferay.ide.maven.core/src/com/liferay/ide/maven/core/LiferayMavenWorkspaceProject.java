@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.Event;
 import com.liferay.ide.core.EventListener;
 import com.liferay.ide.core.IProjectBuilder;
@@ -25,7 +26,7 @@ import com.liferay.ide.project.core.LiferayWorkspaceProject;
 
 import java.io.File;
 import java.io.FileReader;
-
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.maven.model.Model;
@@ -36,6 +37,7 @@ import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implements EventListener {
 
@@ -90,6 +92,18 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implem
 		).ifPresent(
 			e -> _stale = true
 		);
+	}
+
+	@Override
+	public List<Artifact> getTargetPlatformArtifacts() {
+		// TODO Auto-generated method stub
+		return super.getTargetPlatformArtifacts();
+	}
+
+	@Override
+	public String getTargetPlatformVersion() {
+		// TODO Auto-generated method stub
+		return super.getTargetPlatformVersion();
 	}
 
 	private void _initializeMavenWorkspaceProperties(IProject project) {
