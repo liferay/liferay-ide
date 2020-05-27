@@ -21,6 +21,7 @@ import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -28,6 +29,7 @@ import org.junit.rules.RuleChain;
 /**
  * @author Rui Wang
  */
+@Ignore("ignore because blade 3.10.0 does not support the creation of gradle standalone")
 public class WatchModuleGradleTomcatTests extends SwtbotBase {
 
 	public static PureTomcat71Support tomcat = new PureTomcat71Support(bot);

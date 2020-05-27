@@ -16,7 +16,8 @@ package com.liferay.ide.functional.liferay.util;
 
 import com.liferay.ide.functional.liferay.support.sdk.Sdk62Support;
 import com.liferay.ide.functional.liferay.support.sdk.SdkSupport;
-import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceRunningTomcat7xSupport;
+import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceRunningTomcat70Support;
+import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceRunningTomcat71Support;
 import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat70Support;
 import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat71Support;
 import com.liferay.ide.functional.liferay.support.server.ServerRunningSupport;
@@ -51,15 +52,6 @@ public class RuleUtil {
 		return getRuleChain(server, new Tomcat7xSupport(bot, server));
 	}
 
-	public static RuleChain getTomcat7xRunningLiferayWokrspaceRuleChain(
-		SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace, LiferaryWorkspaceTomcat71Support server) {
-
-		LiferaryWorkspaceRunningTomcat7xSupport runningServer = new LiferaryWorkspaceRunningTomcat7xSupport(
-			bot, server);
-
-		return getRuleChain(workspace, server, runningServer);
-	}
-
 	public static RuleChain getTomcat7xRunningRuleChain(SWTWorkbenchBot bot, ServerSupport server) {
 		return getRuleChain(server, new Tomcat7xSupport(bot, server), new ServerRunningSupport(bot, server));
 	}
@@ -84,10 +76,37 @@ public class RuleUtil {
 		return getRuleChain(workspace, server);
 	}
 
+	public static RuleChain getTomcat70RunningLiferayWorkspaceRuleChain(
+		SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace, LiferaryWorkspaceTomcat70Support server) {
+
+		LiferaryWorkspaceRunningTomcat70Support runningServer = new LiferaryWorkspaceRunningTomcat70Support(
+			bot, server);
+
+		return getRuleChain(workspace, server, runningServer);
+	}
+
 	public static RuleChain getTomcat71LiferayWorkspaceRuleChain(
 		SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace, LiferaryWorkspaceTomcat71Support server) {
 
 		return getRuleChain(workspace, server);
+	}
+
+	public static RuleChain getTomcat71RunningLiferayWokrspaceRuleChain(
+		SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace, LiferaryWorkspaceTomcat71Support server) {
+
+		LiferaryWorkspaceRunningTomcat71Support runningServer = new LiferaryWorkspaceRunningTomcat71Support(
+			bot, server);
+
+		return getRuleChain(workspace, server, runningServer);
+	}
+
+	public static RuleChain getTomcat71RunningLiferayWorkspaceRuleChain(
+		SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace, LiferaryWorkspaceTomcat71Support server) {
+
+		LiferaryWorkspaceRunningTomcat71Support runningServer = new LiferaryWorkspaceRunningTomcat71Support(
+			bot, server);
+
+		return getRuleChain(workspace, server, runningServer);
 	}
 
 }

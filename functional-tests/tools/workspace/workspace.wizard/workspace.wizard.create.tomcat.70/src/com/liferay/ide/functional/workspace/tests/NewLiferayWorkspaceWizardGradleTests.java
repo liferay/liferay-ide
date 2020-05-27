@@ -40,7 +40,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 			"	compileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\"\n" +
 			"\n" +
 			"	cssBuilder group: \"com.liferay\", name: \"com.liferay.css.builder\", version: \"3.0.2\"\n" +
-			"}\n";
+			"}";
 
 	@Test
 	public void checkDependenciesVersionForExt() {

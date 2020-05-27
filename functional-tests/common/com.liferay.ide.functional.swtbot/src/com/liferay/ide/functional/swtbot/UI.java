@@ -392,6 +392,10 @@ public interface UI {
 
 	public final String JAVAX_PORTLET_FACES_GENERICFACESPORTLET = "javax.portlet.faces.GenericFacesPortlet";
 
+	public final String JS_THEME = "js-theme";
+
+	public final String JS_WIDGET = "js-widget";
+
 	public final String JSF_2_X = "JSF 2.x";
 
 	public final String JSF_STANDARD = "JSF Standard";

@@ -14,10 +14,11 @@
 
 package com.liferay.ide.functional.module.tests;
 
-import com.liferay.ide.functional.liferay.support.server.PureTomcat71Support;
-import com.liferay.ide.functional.liferay.support.server.ServerSupport;
+import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat71Support;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle71Support;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceSupport;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
-import com.liferay.ide.functional.module.deploy.base.DeployModuleGradleTomcat7xBase;
+import com.liferay.ide.functional.module.deploy.base.DeployModuleLiferayWorkspaceGradleTomcat7xBase;
 
 import org.junit.ClassRule;
 import org.junit.Ignore;
@@ -25,28 +26,16 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
- * @author Terry Jia
  * @author Lily Li
  */
-@Ignore("ignore because blade 3.10.0 does not support the creation of gradle standalone")
-public class DeployModuleGradleTomcat71Tests extends DeployModuleGradleTomcat7xBase {
+@Ignore("ignore for more modifications")
+public class DeployModuleLiferayWorkspaceGradleTomcat71Tests extends DeployModuleLiferayWorkspaceGradleTomcat7xBase {
+
+	public static LiferayWorkspaceGradle71Support workspace = new LiferayWorkspaceGradle71Support(bot);
+	public static LiferaryWorkspaceTomcat71Support server = new LiferaryWorkspaceTomcat71Support(bot, workspace);
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getTomcat7xRunningRuleChain(bot, getServer());
-
-	public static ServerSupport getServer() {
-		if (PureTomcat71Support.isNot(server)) {
-			server = new PureTomcat71Support(bot);
-		}
-
-		return server;
-	}
-
-	@Ignore("ignore because blade 3.10.0 remove activator")
-	@Test
-	public void deployActivator() {
-		super.deployActivator();
-	}
+	public static RuleChain chain = RuleUtil.getTomcat71RunningLiferayWorkspaceRuleChain(bot, workspace, server);
 
 	@Test
 	public void deployApi() {
@@ -58,7 +47,6 @@ public class DeployModuleGradleTomcat71Tests extends DeployModuleGradleTomcat7xB
 		super.deployControlMenuEntry();
 	}
 
-	@Ignore("IDE-4188 better to build first for downloading before deploy")
 	@Test
 	public void deployFormField() {
 		super.deployFormField();
@@ -125,8 +113,18 @@ public class DeployModuleGradleTomcat71Tests extends DeployModuleGradleTomcat7xB
 	}
 
 	@Override
-	protected String getVersion() {
-		return "7.1";
+	protected LiferayWorkspaceSupport getLiferayWorkspace() {
+		return workspace;
+	}
+
+	@Override
+	protected String getServerName() {
+		return server.getServerName();
+	}
+
+	@Override
+	protected String getStartedLabel() {
+		return server.getStartedLabel();
 	}
 
 }

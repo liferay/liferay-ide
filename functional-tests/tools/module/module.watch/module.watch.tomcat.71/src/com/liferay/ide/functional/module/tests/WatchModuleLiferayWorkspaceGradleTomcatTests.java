@@ -35,7 +35,7 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 	public static LiferaryWorkspaceTomcat71Support server = new LiferaryWorkspaceTomcat71Support(bot, workspace);
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getTomcat7xRunningLiferayWokrspaceRuleChain(bot, workspace, server);
+	public static RuleChain chain = RuleUtil.getTomcat71RunningLiferayWokrspaceRuleChain(bot, workspace, server);
 
 	@Test
 	public void watchMVCPortlet() {

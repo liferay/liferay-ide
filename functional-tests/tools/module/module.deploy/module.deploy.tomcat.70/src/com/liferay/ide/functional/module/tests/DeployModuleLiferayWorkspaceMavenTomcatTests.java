@@ -40,6 +40,7 @@ public class DeployModuleLiferayWorkspaceMavenTomcatTests extends SwtbotBase {
 	@ClassRule
 	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
 
+	@Ignore("ignore because blade 3.10.0 remove activator")
 	@Test
 	public void deployActivator() {
 		wizardAction.openNewLiferayModuleWizard();

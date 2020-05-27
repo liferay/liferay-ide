@@ -20,6 +20,7 @@ import com.liferay.ide.functional.liferay.util.RuleUtil;
 import com.liferay.ide.functional.module.deploy.base.DeployModuleGradleTomcat7xBase;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -28,6 +29,7 @@ import org.junit.rules.RuleChain;
  * @author Lily Li
  * @author Ashley Yuan
  */
+@Ignore("ignore because blade 3.10.0 does not support the creation of gradle standalone")
 public class DeployModuleGradleTomcatDxpTests extends DeployModuleGradleTomcat7xBase {
 
 	@ClassRule
@@ -41,6 +43,7 @@ public class DeployModuleGradleTomcatDxpTests extends DeployModuleGradleTomcat7x
 		return server;
 	}
 
+	@Ignore("ignore because blade 3.10.0 remove activator")
 	@Test
 	public void deployActivator() {
 		super.deployActivator();
