@@ -24,18 +24,19 @@ import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import java.nio.charset.StandardCharsets;
 
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import org.apache.commons.io.IOUtils;
 
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -54,6 +55,7 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		if (op != null) {
 			SapphireUtil.detachListener(op.property(NewLiferayModuleProjectOp.PROP_LIFERAY_VERSION), _listener);
+			SapphireUtil.detachListener(op.property(NewLiferayModuleProjectOp.PROP_PROJECT_PROVIDER), _listener);
 		}
 
 		super.dispose();
@@ -125,6 +127,7 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
 
 		SapphireUtil.attachListener(op.property(NewLiferayModuleProjectOp.PROP_LIFERAY_VERSION), _listener);
+		SapphireUtil.attachListener(op.property(NewLiferayModuleProjectOp.PROP_PROJECT_PROVIDER), _listener);
 
 		_loadSupportedVersionRanges();
 	}
@@ -166,10 +169,14 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 									String tempEntryName = tempEntry.getName();
 
 									if (tempEntryName.equals("META-INF/MANIFEST.MF")) {
-										try (InputStream manifestInput = tempZipFile.getInputStream(tempEntry)) {
-											List<String> lines = IOUtils.readLines(manifestInput);
+										try (InputStream manifestInput = tempZipFile.getInputStream(tempEntry);
+											InputStreamReader inputReader = new InputStreamReader(
+												manifestInput, StandardCharsets.UTF_8);
+											BufferedReader bufferReader = new BufferedReader(inputReader)) {
 
-											for (String line : lines) {
+											while (bufferReader.ready()) {
+												String line = bufferReader.readLine();
+
 												String liferayVersionString = "Liferay-Versions:";
 
 												if (line.startsWith(liferayVersionString)) {
