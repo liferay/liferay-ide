@@ -17,6 +17,17 @@ package com.liferay.ide.project.core.tests.modules;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
@@ -27,16 +38,8 @@ import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOpMethods;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOpMethods;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.platform.ProgressMonitorBridge;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
 
 /**
  * @author Gregory Amerson
@@ -122,6 +125,23 @@ public class NewLiferayComponentOpTests extends BaseTests
         prefs.put( BladeCLI.BLADE_CLI_REPO_URL, "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/" );
 
         prefs.flush();
+
+        NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
+
+        op.setWorkspaceName( "test-liferay-workspace" );
+        op.setUseDefaultLocation( true );
+
+        if( op.validation().ok() )
+        {
+            NewLiferayWorkspaceOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+        }
+
+        TestUtil.waitForBuildAndValidation();
+    }
+
+    @AfterClass
+    public static void deleteLiferayWorkspace() throws Exception {
+        deleteAllWorkspaceProjects();
     }
 
     @Test
@@ -217,7 +237,7 @@ public class NewLiferayComponentOpTests extends BaseTests
         NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
         op.setProjectName( "action-command-test" );
-        op.setProjectTemplateName( "activator" );
+        op.setProjectTemplateName( "api" );
         op.setProjectProvider( "gradle-module" );
 
         Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
@@ -239,13 +259,13 @@ public class NewLiferayComponentOpTests extends BaseTests
 
         assertEquals( Status.createOkStatus(),status );
 
-        IFile javaFile = modProject.getFile( "/src/main/java/action/command/test/ActionCommandTestActionCommand.java" );
+        IFile javaFile = modProject.getFile( "/src/main/java/action/command/test/api/ActionCommandTestActionCommand.java" );
 
         assertTrue(javaFile.exists());
 
         String javaFileContent = FileUtil.readContents( javaFile.getLocation().toFile(), true );
 
-        assertTrue( javaFileContent.contains( "javax.portlet.name=action_command_test_ActionCommandTestPortlet" ) );
+        assertTrue( javaFileContent.contains( "javax.portlet.name=action_command_test_api_ActionCommandTestPortlet" ) );
         assertTrue( javaFileContent.contains( "mvc.command.name=greet" ) );
 
         IFile initFile = modProject.getFile( "/src/main/resources/META-INF/resources/actioncommandtestportletactioncommand/init.ftl" );
@@ -340,15 +360,7 @@ public class NewLiferayComponentOpTests extends BaseTests
     @Test
     public void testNewLiferayComponentProjectValidation() throws Exception
     {
-        deleteAllWorkspaceProjects();
-
         TestUtil.waitForBuildAndValidation();
-
-        IProject[] projects = CoreUtil.getAllProjects();
-
-        if(!(projects.length==0)) {
-            deleteAllWorkspaceProjects();
-        }
 
         NewLiferayComponentOp cop = NewLiferayComponentOp.TYPE.instantiate();
 
