@@ -30,7 +30,7 @@ public class LiferayWorkspaceValidationService extends ValidationService impleme
 		Status retval = Status.createOkStatus();
 
 		if (LiferayWorkspaceUtil.getGradleWorkspaceProject() == null) {
-			retval = Status.createErrorStatus("We recommend Liferay Gradle workspace to develop current project!");
+			retval = Status.createErrorStatus("We recommend Liferay workspace to develop current project!");
 		}
 
 		return retval;

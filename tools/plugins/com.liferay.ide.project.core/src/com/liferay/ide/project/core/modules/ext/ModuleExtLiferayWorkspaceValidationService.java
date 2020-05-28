@@ -34,7 +34,7 @@ public class ModuleExtLiferayWorkspaceValidationService
 		Status retval = super.compute();
 
 		if (!retval.ok()) {
-			return retval;
+			return Status.createErrorStatus("We recommend Liferay Gradle workspace to develop current project!");
 		}
 
 		Version liferayWorkspaceVersion = new Version(LiferayWorkspaceUtil.getLiferayWorkspaceProjectVersion());

@@ -34,6 +34,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -43,6 +44,13 @@ import org.junit.Test;
  */
 public class LiferayWorkspaceUtilTests extends ProjectCoreBase
 {
+	@AfterClass
+	public static void removeWorkspaceProjects() throws Exception {
+		IProject workspaceProject = CoreUtil.getProject( "test-liferay-workspace" );
+
+		workspaceProject.delete(true, null);
+	}
+
     @BeforeClass
     public static void removeAllProjects() throws Exception
     {

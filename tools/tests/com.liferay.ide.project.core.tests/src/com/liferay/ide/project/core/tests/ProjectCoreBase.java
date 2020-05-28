@@ -32,6 +32,8 @@ import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.model.ProfileLocation;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKCorePlugin;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -115,6 +117,25 @@ public class ProjectCoreBase extends ServerCoreBase
                 assertFalse( project.exists() );
             }
         }
+    }
+
+    public static void createLiferayWorkspaceProject() throws Exception {
+        NewLiferayWorkspaceOp workspaceOp = NewLiferayWorkspaceOp.TYPE.instantiate();
+
+        workspaceOp.setWorkspaceName( "test-liferay-workspace" );
+        workspaceOp.setUseDefaultLocation( true );
+
+        if( workspaceOp.validation().ok() )
+        {
+            NewLiferayWorkspaceOpMethods.execute( workspaceOp, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+        }
+
+        waitForBuildAndValidation();
+
+        IProject workspaceProject = CoreUtil.getProject( "test-liferay-workspace" );
+
+        assertTrue(workspaceProject != null);
+        assertTrue(workspaceProject.exists());
     }
 
     protected static void waitForBuildAndValidation() throws Exception
