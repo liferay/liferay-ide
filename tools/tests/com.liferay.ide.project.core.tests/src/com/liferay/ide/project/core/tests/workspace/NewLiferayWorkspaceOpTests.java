@@ -42,6 +42,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -62,6 +63,17 @@ public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
 
             assertFalse( project.exists() );
         }
+    }
+
+    @AfterClass
+    public static void removeWorkspaceProjects() throws Exception {
+		IProject workspaceProject = CoreUtil.getProject( "test-liferay-workspace-new" );
+
+		IProject existingProject = CoreUtil.getProject( "existingProject" );
+
+		workspaceProject.delete(true, null);
+
+		existingProject.delete(true, null);
     }
 
     @Test
