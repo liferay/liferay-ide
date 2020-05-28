@@ -31,6 +31,7 @@ import org.junit.Test;
  */
 public class NewModuleGradleTests extends NewModuleGradleBase {
 
+	@Ignore("Template activator has been remove on latest blade 3.10.0")
 	@Test
 	public void createActivator() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -57,6 +58,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		deleteProject(project.getName());
 	}
 
+	@Ignore("Template has been remove on latest blade 3.10.0")
 	@Test
 	public void createContentTargetingReport() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -76,6 +78,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		deleteProject(project.getName());
 	}
 
+	@Ignore("Template has been remove on latest blade 3.10.0")
 	@Test
 	public void createContentTargetingRule() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -95,6 +98,7 @@ public class NewModuleGradleTests extends NewModuleGradleBase {
 		deleteProject(project.getName());
 	}
 
+	@Ignore("Template has been remove on latest blade 3.10.0")
 	@Test
 	public void createContentTargetingTrackingAction() {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();

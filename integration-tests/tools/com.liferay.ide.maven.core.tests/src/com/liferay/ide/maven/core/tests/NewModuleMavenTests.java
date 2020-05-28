@@ -28,6 +28,7 @@ import org.junit.Test;
  */
 public class NewModuleMavenTests extends NewModuleMavenBase {
 
+	@Ignore("Template has been removed on latest blade 3.10.0")
 	@Test
 	public void createActivator() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -54,6 +55,7 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 		deleteProject(project.getName());
 	}
 
+	@Ignore("Template has been removed on latest blade 3.10.0")
 	@Test
 	public void createContentTargetingReport() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -73,6 +75,7 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 		deleteProject(project.getName());
 	}
 
+	@Ignore("Template has been removed on latest blade 3.10.0")
 	@Test
 	public void createContentTargetingRule() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -92,6 +95,7 @@ public class NewModuleMavenTests extends NewModuleMavenBase {
 		deleteProject(project.getName());
 	}
 
+	@Ignore("Template has been removed on latest blade 3.10.0")
 	@Test
 	public void createContentTargetingTrackingAction() throws Exception {
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();

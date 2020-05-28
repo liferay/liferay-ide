@@ -14,19 +14,49 @@
 
 package com.liferay.ide.maven.core.tests.base;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
 import com.liferay.ide.test.project.core.base.NewModuleOpBase;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.tests.common.JobHelpers;
 import org.eclipse.m2e.tests.common.JobHelpers.IJobMatcher;
+import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
 /**
  * @author Terry Jia
  */
 @SuppressWarnings("restriction")
 public abstract class NewModuleMavenBase extends NewModuleOpBase<NewLiferayModuleProjectOp> {
+
+	@BeforeClass
+	public static void createLiferayWorkspace() {
+		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
+
+		op.setWorkspaceName("liferay-maven-workspace");
+		op.setProjectProvider("maven-liferay-workspace");
+
+		NewLiferayWorkspaceOpMethods.execute(op, ProgressMonitorBridge.create(new NullProgressMonitor()));
+	}
+
+	@AfterClass
+	public static void deleteWorksapceProject() throws CoreException {
+		IProgressMonitor monitor = new NullProgressMonitor();
+
+		for (IProject project : CoreUtil.getAllProjects()) {
+			project.delete(true, monitor);
+		}
+	}
 
 	@Override
 	protected String provider() {
