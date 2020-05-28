@@ -14,8 +14,11 @@
 
 package com.liferay.ide.functional.server.tests;
 
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle70Support;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceSupport;
 import com.liferay.ide.functional.server.deploy.base.Wildfly7xDeployBase;
 
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
@@ -23,6 +26,9 @@ import org.junit.Test;
  * @author Rui Wang
  */
 public class WildflyDeployTests extends Wildfly7xDeployBase {
+
+	@ClassRule
+	public static LiferayWorkspaceGradle70Support liferayWorkspace = new LiferayWorkspaceGradle70Support(bot);
 
 	@Test
 	public void deployModule() {
@@ -32,6 +38,11 @@ public class WildflyDeployTests extends Wildfly7xDeployBase {
 	@Test
 	public void deployWar() {
 		super.deployWar();
+	}
+
+	@Override
+	protected LiferayWorkspaceSupport getLiferayWorkspace() {
+		return liferayWorkspace;
 	}
 
 }

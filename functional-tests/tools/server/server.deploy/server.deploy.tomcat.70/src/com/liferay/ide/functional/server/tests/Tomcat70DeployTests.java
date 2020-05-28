@@ -20,12 +20,14 @@ import com.liferay.ide.functional.liferay.util.RuleUtil;
 import com.liferay.ide.functional.server.deploy.base.Tomcat7xDeployBase;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
  * @author Terry Jia
  */
+@Ignore("ignore for more updating")
 public class Tomcat70DeployTests extends Tomcat7xDeployBase {
 
 	@ClassRule

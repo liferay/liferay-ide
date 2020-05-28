@@ -1138,7 +1138,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void prepareGradle(String projectName, String template) {
-			_prepare(projectName, GRADLE, template, "7.0");
+			_prepare(projectName, GRADLE, template);
 		}
 
 		public void prepareGradle(String projectName, String template, String version) {
