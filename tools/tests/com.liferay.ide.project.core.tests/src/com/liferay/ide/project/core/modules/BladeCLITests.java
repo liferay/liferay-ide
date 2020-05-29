@@ -181,7 +181,7 @@ public class BladeCLITests
 
         assertNotNull( projectTemplates );
 
-        assertTrue( projectTemplates[0], projectTemplates[0].startsWith("activator"));
+        assertTrue( projectTemplates[0], projectTemplates[0].startsWith("api"));
 
         assertTrue(
             projectTemplates[projectTemplates.length - 1],

@@ -20,6 +20,7 @@ import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGrad
 
 import org.junit.Assert;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -33,6 +34,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 	@ClassRule
 	public static LiferayWorkspaceGradle71Support liferayWorkspace = new LiferayWorkspaceGradle71Support(bot);
 
+	@Ignore("ignore because blade 3.10.0 remove activator")
 	@Test
 	public void createActivator() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -67,6 +69,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
+	@Ignore("ignore because blade 3.10.0 remove content-targeting-report")
 	@Test
 	public void createContentTargetingReport() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -84,6 +87,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
+	@Ignore("ignore because blade 3.10.0 remove content-targeting-rule")
 	@Test
 	public void createContentTargetingRule() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -101,6 +105,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
+	@Ignore("ignore because blade 3.10.0 remove content-targeting-tracking-action")
 	@Test
 	public void createContentTargetingTrackingAction() {
 		wizardAction.openNewLiferayModuleWizard();

@@ -16,6 +16,7 @@ package com.liferay.ide.functional.module.tests;
 
 import com.liferay.ide.functional.liferay.SwtbotBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle72Support;
 import com.liferay.ide.functional.liferay.util.ValidationMsg;
 import com.liferay.ide.functional.swtbot.util.StringPool;
 
@@ -24,6 +25,7 @@ import java.io.File;
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,11 +36,14 @@ import org.junit.Test;
  */
 public class ValidationComponentTests extends SwtbotBase {
 
+	@ClassRule
+	public static LiferayWorkspaceGradle72Support liferayWorkspace = new LiferayWorkspaceGradle72Support(bot);
+
 	@Test
 	public void checkBrowsePackageNameDialog() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName());
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -66,14 +71,14 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void checkComponentClassName() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName());
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -98,14 +103,14 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void checkComponentClassTemplate() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName());
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -124,14 +129,14 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void checkComponentForServiceBuilder() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_BUILDER);
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), SERVICE_BUILDER);
 
 		wizardAction.finish();
 
@@ -139,9 +144,11 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		String[] projectNames = {project.getName() + "-api", project.getName() + "-service"};
 
-		String[] apiNames = {project.getName(), project.getName() + "-api"};
+		String[] apiNames = {liferayWorkspace.getName(), "modules", project.getName(), project.getName() + "-api"};
 
-		String[] serviceNames = {project.getName(), project.getName() + "-service"};
+		String[] serviceNames = {
+			liferayWorkspace.getName(), "modules", project.getName(), project.getName() + "-service"
+		};
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -159,7 +166,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.runBuildService(project.getName());
+		viewAction.project.runBuildService(liferayWorkspace.getName(), "modules", project.getName());
 
 		jobAction.waitForNoRunningJobs();
 
@@ -171,12 +178,12 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				project.getName(), project.getName() + "-api", "src/main/java",
+				liferayWorkspace.getName(), "modules", project.getName(), project.getName() + "-api", "src/main/java",
 				project.getName() + ".service.persistence", project.getCapitalName() + "ApiPortlet.java"));
 
 		viewAction.project.closeAndDelete(apiNames);
 		viewAction.project.closeAndDelete(serviceNames);
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -185,7 +192,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		String projectName = project.getName();
 
-		wizardAction.newModule.prepareGradle(projectName);
+		wizardAction.newModule.prepareGradleInWorkspace(projectName, MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -215,14 +222,14 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void checkInfoInitialState() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName());
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -240,7 +247,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -266,7 +273,7 @@ public class ValidationComponentTests extends SwtbotBase {
 	public void checkModelListenerTemplate() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName());
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -307,14 +314,14 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void checkPackageName() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName());
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -339,7 +346,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -348,7 +355,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName1);
+		wizardAction.newModule.prepareGradleInWorkspace(projectName1, REST);
 
 		wizardAction.finish();
 
@@ -358,7 +365,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName2, PORTLET_PROVIDER);
+		wizardAction.newModule.prepareGradleInWorkspace(projectName2, PORTLET_PROVIDER);
 
 		wizardAction.finish();
 
@@ -381,9 +388,9 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(projectName1);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(projectName1));
 
-		viewAction.project.closeAndDelete(projectName2);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(projectName2));
 	}
 
 	@Ignore("ignore to wait target platform way")
@@ -391,7 +398,7 @@ public class ValidationComponentTests extends SwtbotBase {
 	public void checkServiceWrapperTemplate() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName());
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -431,7 +438,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.cancel();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Rule

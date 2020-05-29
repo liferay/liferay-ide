@@ -36,6 +36,7 @@ public class DeployModuleMavenTomcatTests extends SwtbotBase {
 	@ClassRule
 	public static RuleChain chain = RuleUtil.getTomcat7xRunningRuleChain(bot, tomcat);
 
+	@Ignore("ignore because blade 3.10.0 remove activator")
 	@Test
 	public void deployActivator() {
 		wizardAction.openNewLiferayModuleWizard();

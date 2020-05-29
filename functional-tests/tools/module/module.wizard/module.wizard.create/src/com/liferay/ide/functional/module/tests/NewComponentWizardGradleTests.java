@@ -16,8 +16,10 @@ package com.liferay.ide.functional.module.tests;
 
 import com.liferay.ide.functional.liferay.SwtbotBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle72Support;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -28,11 +30,14 @@ import org.junit.Test;
  */
 public class NewComponentWizardGradleTests extends SwtbotBase {
 
+	@ClassRule
+	public static LiferayWorkspaceGradle72Support liferayWorkspace = new LiferayWorkspaceGradle72Support(bot);
+
 	@Test
 	public void createComponentModelListener() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), MVC_PORTLET);
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -55,9 +60,11 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		wizardAction.finish();
 
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getName(), "modules", project.getName(), "src/main/java", packageName,
+				className + ".java"));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -67,7 +74,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(firstProjectName);
+		wizardAction.newModule.prepareGradleInWorkspace(firstProjectName, MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -75,7 +82,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(secondProjectName);
+		wizardAction.newModule.prepareGradleInWorkspace(secondProjectName, MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -89,7 +96,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				firstProjectName, "src/main/java", "content", "FirstComponentGradlePortlet.java"));
+				liferayWorkspace.getName(), "modules", firstProjectName, "src/main/java", "content",
+				"FirstComponentGradlePortlet.java"));
 
 		editorAction.close();
 
@@ -105,18 +113,19 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				secondProjectName, "src/main/java", "content", "SecondComponentGradlePortlet.java"));
+				liferayWorkspace.getName(), "modules", secondProjectName, "src/main/java", "content",
+				"SecondComponentGradlePortlet.java"));
 
-		viewAction.project.closeAndDelete(firstProjectName);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(firstProjectName));
 
-		viewAction.project.closeAndDelete(secondProjectName);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(secondProjectName));
 	}
 
 	@Test
 	public void createComponentPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName());
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -135,16 +144,18 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getName(), "modules", project.getName(), "src/main/java", packageName,
+				className + ".java"));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createComponentServiceWrapper() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName());
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -169,16 +180,18 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		jobAction.waitForNoRunningJobs();
 
 		Assert.assertTrue(
-			viewAction.project.visibleFileTry(project.getName(), "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getName(), "modules", project.getName(), "src/main/java", packageName,
+				className + ".java"));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createComponentShortcuts() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName());
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -194,11 +207,12 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				project.getName(), "src/main/java", "content", project.getCapitalName() + "MVCPortlet.java"));
+				liferayWorkspace.getName(), "modules", project.getName(), "src/main/java", "content",
+				project.getCapitalName() + "MVCPortlet.java"));
 
 		editorAction.close();
 
-		viewAction.project.openComponentClassWizard(project.getName());
+		viewAction.project.openComponentClassWizard(liferayWorkspace.getName(), "modules", project.getName());
 
 		wizardAction.newLiferayComponent.prepare(REST_UPCASE);
 
@@ -208,7 +222,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				project.getName(), "src/main/java", "content", project.getCapitalName() + "RestService.java"));
+				liferayWorkspace.getName(), "modules", project.getName(), "src/main/java", "content",
+				project.getCapitalName() + "RestService.java"));
 
 		editorAction.close();
 
@@ -220,16 +235,17 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				project.getName(), "src/main/java", "content", project.getCapitalName() + "Portlet.java"));
+				liferayWorkspace.getName(), "modules", project.getName(), "src/main/java", "content",
+				project.getCapitalName() + "Portlet.java"));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createComponentWithPackage() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName());
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -251,16 +267,17 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				project.getName(), "src/main/java", packageName, project.getCapitalName() + "Portlet.java"));
+				liferayWorkspace.getName(), "modules", project.getName(), "src/main/java", packageName,
+				project.getCapitalName() + "Portlet.java"));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createDefaultComponent() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName());
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -274,9 +291,10 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				project.getName(), "src/main/java", "content", project.getCapitalName() + "Portlet.java"));
+				liferayWorkspace.getName(), "modules", project.getName(), "src/main/java", "content",
+				project.getCapitalName() + "Portlet.java"));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Rule

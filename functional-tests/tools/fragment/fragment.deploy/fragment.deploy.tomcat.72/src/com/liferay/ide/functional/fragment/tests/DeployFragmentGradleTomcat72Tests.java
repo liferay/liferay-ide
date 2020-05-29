@@ -20,12 +20,14 @@ import com.liferay.ide.functional.liferay.support.server.ServerSupport;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
  * @author Lily Li
  */
+@Ignore("ignore because blade 3.10.0 does not support the creation of gradle standalone")
 public class DeployFragmentGradleTomcat72Tests extends FragmentTomcat7xGradleDeployBase {
 
 	@ClassRule

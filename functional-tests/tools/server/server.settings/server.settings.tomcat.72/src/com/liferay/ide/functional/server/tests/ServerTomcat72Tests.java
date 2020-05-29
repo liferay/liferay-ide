@@ -17,11 +17,13 @@ package com.liferay.ide.functional.server.tests;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
 import com.liferay.ide.functional.liferay.support.server.PureTomcat72Support;
 import com.liferay.ide.functional.liferay.support.server.ServerSupport;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle72Support;
 import com.liferay.ide.functional.server.wizard.base.ServerTomcat7xBase;
 
 import java.io.File;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -29,6 +31,9 @@ import org.junit.Test;
  * @author Lily Li
  */
 public class ServerTomcat72Tests extends ServerTomcat7xBase {
+
+	@ClassRule
+	public static LiferayWorkspaceGradle72Support liferayWorkspace = new LiferayWorkspaceGradle72Support(bot);
 
 	@Test
 	public void addCustomContext() {
@@ -75,7 +80,7 @@ public class ServerTomcat72Tests extends ServerTomcat7xBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), MVC_PORTLET, "7.2");
+		wizardAction.newModule.prepareGradle(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -97,7 +102,7 @@ public class ServerTomcat72Tests extends ServerTomcat7xBase {
 
 		jobAction.waitForConsoleContent(testServer.getServerName(), "STOPPED " + project.getName() + "_", M1);
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 
 		viewAction.servers.stop(testServer.getStartedLabel());
 

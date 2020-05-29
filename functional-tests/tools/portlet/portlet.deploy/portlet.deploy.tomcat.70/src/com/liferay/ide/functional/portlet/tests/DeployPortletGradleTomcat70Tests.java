@@ -20,6 +20,7 @@ import com.liferay.ide.functional.liferay.util.RuleUtil;
 import com.liferay.ide.functional.portlet.deploy.base.DeployPortletGradleTomcat7xBase;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -27,6 +28,7 @@ import org.junit.rules.RuleChain;
  * @author Terry Jia
  * @author Rui Wang
  */
+@Ignore("ignore because blade 3.10.0 does not support the creation of gradle standalone")
 public class DeployPortletGradleTomcat70Tests extends DeployPortletGradleTomcat7xBase {
 
 	@ClassRule
@@ -40,6 +42,7 @@ public class DeployPortletGradleTomcat70Tests extends DeployPortletGradleTomcat7
 		return server;
 	}
 
+	@Ignore("ignore because blade 3.10.0 remove freemarker")
 	@Test
 	public void deployFreemarkerPortlet() {
 		super.deployFreemarkerPortlet();

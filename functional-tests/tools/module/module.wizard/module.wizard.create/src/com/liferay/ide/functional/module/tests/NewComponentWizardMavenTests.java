@@ -255,7 +255,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 	public void createDefaultComponent() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), ACTIVATOR);
+		wizardAction.newModule.prepareMaven(project.getName(), REST);
 
 		wizardAction.finish();
 
@@ -271,7 +271,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
-				project.getName(), "src/main/java", packageName,
+				project.getName(), "src/main/java", packageName + ".application",
 				project.getCapitalName() + "Portlet.java [Component]"));
 
 		viewAction.project.closeAndDelete(project.getName());

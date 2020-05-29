@@ -32,6 +32,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 	@ClassRule
 	public static LiferayWorkspaceGradle71Support liferayWorkspace = new LiferayWorkspaceGradle71Support(bot);
 
+	@Ignore("ignore because blade 3.10 remove freemarker-portlet template")
 	@Test
 	public void createFreemarkerPortlet() {
 		String packageName = "test.freemarker.portlet.gradle";
@@ -77,7 +78,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		jobAction.waitForValidate(project.getName());
 
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -100,7 +101,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -123,7 +124,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -146,7 +147,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Ignore("ignore because blade 3.7 remove portlet template")

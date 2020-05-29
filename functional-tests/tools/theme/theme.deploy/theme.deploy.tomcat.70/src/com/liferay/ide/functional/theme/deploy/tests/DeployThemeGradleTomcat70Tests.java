@@ -20,6 +20,7 @@ import com.liferay.ide.functional.liferay.util.RuleUtil;
 import com.liferay.ide.functional.theme.deploy.base.DeployThemeGradleTomcat7xBase;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -27,6 +28,7 @@ import org.junit.rules.RuleChain;
  * @author Terry Jia
  * @author Lily Li
  */
+@Ignore("ignore because blade 3.10.0 does not support the creation of gradle standalone")
 public class DeployThemeGradleTomcat70Tests extends DeployThemeGradleTomcat7xBase {
 
 	@ClassRule

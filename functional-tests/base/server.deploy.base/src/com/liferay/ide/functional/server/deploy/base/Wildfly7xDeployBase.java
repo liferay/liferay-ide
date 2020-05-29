@@ -17,6 +17,7 @@ package com.liferay.ide.functional.server.deploy.base;
 import com.liferay.ide.functional.liferay.ServerTestBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
 import com.liferay.ide.functional.liferay.support.server.PureWildfly70Support;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceSupport;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.Assert;
@@ -37,7 +38,7 @@ public abstract class Wildfly7xDeployBase extends ServerTestBase {
 	public void deployModule() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), MVC_PORTLET, "7.0");
+		wizardAction.newModule.prepareGradle(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -59,13 +60,13 @@ public abstract class Wildfly7xDeployBase extends ServerTestBase {
 
 		jobAction.waitForConsoleContent(wildfly.getServerName(), "STOPPED " + project.getName() + "_", M1);
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
 	}
 
 	public void deployWar() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET, "7.0");
+		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET);
 
 		wizardAction.finish();
 
@@ -87,10 +88,12 @@ public abstract class Wildfly7xDeployBase extends ServerTestBase {
 
 		jobAction.waitForConsoleContent(wildfly.getServerName(), "STOPPED " + project.getName() + "_", M1);
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getWarFiles(project.getName()));
 	}
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
+
+	protected abstract LiferayWorkspaceSupport getLiferayWorkspace();
 
 }

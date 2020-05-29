@@ -21,6 +21,7 @@ import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGrad
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -29,6 +30,7 @@ import org.junit.rules.RuleChain;
  * @author Terry Jia
  * @author Ashley Yuan
  */
+@Ignore("ignore because blade 3.10.0 remove activator")
 public class DeployModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);

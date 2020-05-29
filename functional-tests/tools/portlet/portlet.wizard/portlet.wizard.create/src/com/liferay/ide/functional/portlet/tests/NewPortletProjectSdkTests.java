@@ -52,7 +52,7 @@ public class NewPortletProjectSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDeleteFromDisk(projectName);
 	}
 
 }

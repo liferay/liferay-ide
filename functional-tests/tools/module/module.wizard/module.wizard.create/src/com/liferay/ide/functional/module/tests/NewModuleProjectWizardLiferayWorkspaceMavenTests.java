@@ -34,6 +34,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	@ClassRule
 	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
 
+	@Ignore("ignore because blade 3.10.0 remove activator")
 	@Test
 	public void createActivator() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -80,6 +81,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
+	@Ignore("ignore because blade 3.10.0 remove content-targeting-report")
 	@Test
 	public void createContentTargetingReport() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -103,6 +105,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
+	@Ignore("ignore because blade 3.10.0 remove content-targeting-rule")
 	@Test
 	public void createContentTargetingRule() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -126,6 +129,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
+	@Ignore("ignore because blade 3.10.0 remove content-targeting-tracking-action")
 	@Test
 	public void createContentTargetingTrackingAction() {
 		wizardAction.openNewLiferayModuleWizard();

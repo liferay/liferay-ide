@@ -41,6 +41,8 @@ public class NewModuleWarGradleTests extends NewModuleGradleBase {
 
 		createOrImportAndBuild(op, project.getName());
 
+		waitForBuildAndValidation();
+
 		deleteProject(project.getName());
 	}
 
@@ -86,11 +88,15 @@ public class NewModuleWarGradleTests extends NewModuleGradleBase {
 
 		createOrImportAndBuild(op, project.getName());
 
+		waitForBuildAndValidation();
+
 		deleteProject(project.getName());
 	}
 
 	@Test
 	public void createWarMvcPortlet() {
+		waitForBuildAndValidation();
+
 		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
 		op.setProjectName(project.getName());

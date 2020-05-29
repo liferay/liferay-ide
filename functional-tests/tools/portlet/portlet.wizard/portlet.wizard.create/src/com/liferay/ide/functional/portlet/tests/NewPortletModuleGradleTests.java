@@ -16,8 +16,10 @@ package com.liferay.ide.functional.portlet.tests;
 
 import com.liferay.ide.functional.liferay.SwtbotBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle71Support;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,6 +31,10 @@ import org.junit.Test;
  */
 public class NewPortletModuleGradleTests extends SwtbotBase {
 
+	@ClassRule
+	public static LiferayWorkspaceGradle71Support liferayWorkspace = new LiferayWorkspaceGradle71Support(bot);
+
+	@Ignore("ignore because blade 3.10 remove freemarker-portlet template")
 	@Test
 	public void createFreemarkerPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -54,13 +60,14 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
 		jobAction.waitForValidate(project.getName());
 
 		viewAction.project.openFile(
-			project.getName(), "src/main/java", project.getName() + ".constants",
-			project.getCapitalName() + "PortletKeys.java");
+			liferayWorkspace.getModuleFiles(
+				project.getName(), "src/main/java", project.getName() + ".constants",
+				project.getCapitalName() + "PortletKeys.java"));
 
 		String projectName = project.getName();
 
@@ -69,7 +76,7 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		editorAction.close();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -82,9 +89,9 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -97,9 +104,9 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -112,9 +119,9 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Ignore("ignore because blade 3.7 remove portlet template")

@@ -27,6 +27,7 @@ import org.junit.rules.RuleChain;
 /**
  * @author Terry Jia
  */
+@Ignore("ignore for more updating")
 public class Tomcat71DeployTests extends Tomcat7xDeployBase {
 
 	@ClassRule

@@ -18,6 +18,7 @@ import com.liferay.ide.functional.liferay.SwtbotBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -25,8 +26,10 @@ import org.junit.Test;
  * @author Ying Xu
  * @author Sunny Shi
  */
+@Ignore("ignore because blade 3.10.0 does not support the creation of gradle standalone")
 public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
+	@Ignore("ignore because blade 3.10.0 remove activator")
 	@Test
 	public void createActivator() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -57,6 +60,7 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("ignore because blade 3.10.0 remove content-targeting-report")
 	@Test
 	public void createContentTargetingReport() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -72,6 +76,7 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("ignore because blade 3.10.0 remove content-targeting-rule")
 	@Test
 	public void createContentTargetingRule() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -87,6 +92,7 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore("ignore because blade 3.10.0 remove content-targeting-tracking-action")
 	@Test
 	public void createContentTargetingTrackingAction() {
 		wizardAction.openNewLiferayModuleWizard();
