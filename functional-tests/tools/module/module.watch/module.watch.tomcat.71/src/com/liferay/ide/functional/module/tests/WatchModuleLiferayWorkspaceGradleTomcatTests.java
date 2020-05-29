@@ -22,6 +22,7 @@ import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -29,6 +30,7 @@ import org.junit.rules.RuleChain;
 /**
  * @author Rui Wang
  */
+@Ignore("ignore for more research")
 public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 	public static LiferayWorkspaceGradle71Support workspace = new LiferayWorkspaceGradle71Support(bot);
