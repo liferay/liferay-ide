@@ -26,6 +26,7 @@ import com.liferay.ide.project.core.LiferayWorkspaceProject;
 
 import java.io.File;
 import java.io.FileReader;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -68,6 +69,16 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implem
 	}
 
 	@Override
+	public List<Artifact> getTargetPlatformArtifacts() {
+		return super.getTargetPlatformArtifacts();
+	}
+
+	@Override
+	public String getTargetPlatformVersion() {
+		return super.getTargetPlatformVersion();
+	}
+
+	@Override
 	public boolean isStale() {
 		return _stale;
 	}
@@ -92,18 +103,6 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implem
 		).ifPresent(
 			e -> _stale = true
 		);
-	}
-
-	@Override
-	public List<Artifact> getTargetPlatformArtifacts() {
-		// TODO Auto-generated method stub
-		return super.getTargetPlatformArtifacts();
-	}
-
-	@Override
-	public String getTargetPlatformVersion() {
-		// TODO Auto-generated method stub
-		return super.getTargetPlatformVersion();
 	}
 
 	private void _initializeMavenWorkspaceProperties(IProject project) {

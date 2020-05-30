@@ -26,16 +26,11 @@ import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.util.Properties;
 
 import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -89,19 +84,17 @@ public class LiferayMavenWorkspaceProjectProvider
 			return ProjectCore.createErrorStatus(bclie);
 		}
 
-		boolean enableTargetPlatform = get(op.getEnableTargetPlatform());
+		File pomFile = FileUtil.getFile(workspaceLocation.append("pom.xml"));
 
-		if (enableTargetPlatform) {
-			File pomFile = FileUtil.getFile(workspaceLocation.append("pom.xml"));
-
+		if (FileUtil.exists(pomFile)) {
 			try {
-				Model pomModel = _getMavenModel(pomFile);
+				Model pomModel = MavenUtil.getMavenModel(pomFile);
 
 				Properties properties = pomModel.getProperties();
 
 				properties.setProperty("liferay.bom.version", get(op.getTargetPlatform()));
 
-				_updateMavenPom(pomModel, pomFile);
+				MavenUtil.updateMavenPom(pomModel, pomFile);
 			}
 			catch (Exception e) {
 				LiferayMavenCore.logError(e);
@@ -179,19 +172,4 @@ public class LiferayMavenWorkspaceProjectProvider
 		return retval;
 	}
 
-	private Model _getMavenModel(File pomFile) throws FileNotFoundException, IOException, XmlPullParserException {
-		MavenXpp3Reader mavenReader = new MavenXpp3Reader();
-
-		mavenReader.setAddDefaultEntities(true);
-
-		return mavenReader.read(new FileReader(pomFile));
-	}
-
-	private void _updateMavenPom(Model model, File file) throws IOException {
-		MavenXpp3Writer mavenWriter = new MavenXpp3Writer();
-
-		FileWriter fileWriter = new FileWriter(file);
-
-		mavenWriter.write(fileWriter, model);
-	}
 }

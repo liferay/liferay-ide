@@ -14,29 +14,70 @@
 
 package com.liferay.ide.project.core.service;
 
+import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
-public class TargetPlatformPossibleValuesService extends PossibleValuesService {
+public class TargetPlatformPossibleValuesService extends PossibleValuesService implements SapphireContentAccessor {
+
+	@Override
+	public void dispose() {
+		NewLiferayWorkspaceOp op = context(NewLiferayWorkspaceOp.class);
+
+		if (op != null) {
+			SapphireUtil.detachListener(op.property(NewLiferayWorkspaceOp.PROP_LIFERAY_VERSION), _listener);
+		}
+
+		super.dispose();
+	}
 
 	@Override
 	protected void compute(Set<String> values) {
 		List<String> possibleValues = new ArrayList<>();
 
-		for (String[] liferayTargetPlatformVersions : WorkspaceConstants.liferayTargetPlatformVersions.values()) {
-			Collections.addAll(possibleValues, liferayTargetPlatformVersions);
-		}
+		WorkspaceConstants.liferayTargetPlatformVersions.forEach(
+			(liferayVersion, targetPlatformVersion) -> {
+				String version = get(_op.getLiferayVersion());
+
+				if (liferayVersion.equals(version)) {
+					Collections.addAll(possibleValues, targetPlatformVersion);
+				}
+			});
 
 		values.addAll(possibleValues);
 	}
+
+	@Override
+	protected void initPossibleValuesService() {
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		_op = context(NewLiferayWorkspaceOp.class);
+
+		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_LIFERAY_VERSION), _listener);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+	private NewLiferayWorkspaceOp _op;
 
 }
