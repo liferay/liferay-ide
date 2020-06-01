@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.Event;
 import com.liferay.ide.core.EventListener;
 import com.liferay.ide.core.IProjectBuilder;
@@ -26,6 +27,7 @@ import com.liferay.ide.project.core.LiferayWorkspaceProject;
 import java.io.File;
 import java.io.FileReader;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.maven.model.Model;
@@ -36,6 +38,7 @@ import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implements EventListener {
 
@@ -63,6 +66,16 @@ public class LiferayMavenWorkspaceProject extends LiferayWorkspaceProject implem
 	@Override
 	public String getLiferayHome() {
 		return getProperty(WorkspaceConstants.LIFERAY_HOME_PROPERTY, WorkspaceConstants.DEFAULT_HOME_DIR);
+	}
+
+	@Override
+	public List<Artifact> getTargetPlatformArtifacts() {
+		return super.getTargetPlatformArtifacts();
+	}
+
+	@Override
+	public String getTargetPlatformVersion() {
+		return super.getTargetPlatformVersion();
 	}
 
 	@Override

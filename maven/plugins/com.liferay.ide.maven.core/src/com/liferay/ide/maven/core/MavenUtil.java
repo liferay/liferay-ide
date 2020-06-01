@@ -20,7 +20,10 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -42,12 +45,14 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.settings.Settings;
 
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -295,6 +300,14 @@ public class MavenUtil {
 		return retval;
 	}
 
+	public static Model getMavenModel(File pomFile) throws FileNotFoundException, IOException, XmlPullParserException {
+		MavenXpp3Reader mavenReader = new MavenXpp3Reader();
+
+		mavenReader.setAddDefaultEntities(true);
+
+		return mavenReader.read(new FileReader(pomFile));
+	}
+
 	public static Plugin getPlugin(IMavenProjectFacade facade, String pluginKey, IProgressMonitor monitor)
 		throws CoreException {
 
@@ -534,6 +547,14 @@ public class MavenUtil {
 		}
 
 		childNode.setValue((value == null) ? null : value.toString());
+	}
+
+	public static void updateMavenPom(Model model, File file) throws IOException {
+		MavenXpp3Writer mavenWriter = new MavenXpp3Writer();
+
+		FileWriter fileWriter = new FileWriter(file);
+
+		mavenWriter.write(fileWriter, model);
 	}
 
 	public static void updateProjectConfiguration(String projectName, String location, IProgressMonitor monitor)

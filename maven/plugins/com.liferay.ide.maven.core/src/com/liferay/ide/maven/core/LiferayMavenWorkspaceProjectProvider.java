@@ -16,6 +16,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.core.workspace.WorkspaceConstants;
 import com.liferay.ide.project.core.ProjectCore;
@@ -23,6 +24,12 @@ import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
+
+import java.io.File;
+
+import java.util.Properties;
+
+import org.apache.maven.model.Model;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -38,6 +45,7 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Joye Luo
  * @author Andy Wu
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 public class LiferayMavenWorkspaceProjectProvider
 	extends LiferayMavenProjectProvider implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> {
@@ -74,6 +82,23 @@ public class LiferayMavenWorkspaceProjectProvider
 		}
 		catch (BladeCLIException bclie) {
 			return ProjectCore.createErrorStatus(bclie);
+		}
+
+		File pomFile = FileUtil.getFile(workspaceLocation.append("pom.xml"));
+
+		if (FileUtil.exists(pomFile)) {
+			try {
+				Model pomModel = MavenUtil.getMavenModel(pomFile);
+
+				Properties properties = pomModel.getProperties();
+
+				properties.setProperty("liferay.bom.version", get(op.getTargetPlatform()));
+
+				MavenUtil.updateMavenPom(pomModel, pomFile);
+			}
+			catch (Exception e) {
+				LiferayMavenCore.logError(e);
+			}
 		}
 
 		IStatus importProjectStatus = importProject(workspaceLocation, monitor);

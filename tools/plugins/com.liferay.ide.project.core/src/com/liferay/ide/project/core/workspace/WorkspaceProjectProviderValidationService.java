@@ -21,6 +21,7 @@ import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 public class WorkspaceProjectProviderValidationService extends ValidationService implements SapphireContentAccessor {
 
@@ -30,10 +31,6 @@ public class WorkspaceProjectProviderValidationService extends ValidationService
 
 		if (projectProvider == null) {
 			return Status.createErrorStatus("Create workspace project failure, project provider can not be null.");
-		}
-
-		if ("maven-liferay-workspace".equals(projectProvider.getShortName())) {
-			return Status.createWarningStatus("Maven Liferay Workspace would not support Target Platform.");
 		}
 
 		return Status.createOkStatus();
