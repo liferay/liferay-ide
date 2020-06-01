@@ -65,7 +65,7 @@ public class ModuleProjectNameValidationService extends ValidationService implem
 			if ((workspaceProject == null) ||
 				!LiferayWorkspaceUtil.inLiferayWorkspace(PathBridge.create(currentProjectLocation))) {
 
-				return Status.createErrorStatus("Cannot create project content out of liferay workspace project. ");
+				return Status.createErrorStatus("Cannot create project content out of liferay workspace project.");
 			}
 		}
 
