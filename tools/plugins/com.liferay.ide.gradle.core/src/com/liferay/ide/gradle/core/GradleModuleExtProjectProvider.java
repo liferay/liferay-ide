@@ -62,14 +62,12 @@ public class GradleModuleExtProjectProvider
 		sb.append("create -q -d \"");
 		sb.append(locationFile.getAbsolutePath());
 
-		if (workspaceProject != null) {
-			sb.append("\" ");
-			sb.append("--base \"");
+		sb.append("\" ");
+		sb.append("--base \"");
 
-			IPath workspaceLocation = workspaceProject.getLocation();
+		IPath workspaceLocation = workspaceProject.getLocation();
 
-			sb.append(workspaceLocation.toOSString());
-		}
+		sb.append(workspaceLocation.toOSString());
 
 		sb.append("\" -t ");
 		sb.append("modules-ext ");

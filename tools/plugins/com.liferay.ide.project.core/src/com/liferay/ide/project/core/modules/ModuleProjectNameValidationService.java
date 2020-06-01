@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.ProjectName;
@@ -25,6 +26,7 @@ import com.liferay.ide.project.core.util.ValidationUtil;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -33,6 +35,7 @@ import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.sapphire.services.ValidationService;
 
@@ -54,6 +57,18 @@ public class ModuleProjectNameValidationService extends ValidationService implem
 
 		BaseModuleOp op = op();
 
+		Path currentProjectLocation = get(op.getLocation());
+
+		if (_requiredLiferayWorkspace) {
+			IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+			if ((workspaceProject == null) ||
+				!LiferayWorkspaceUtil.inLiferayWorkspace(PathBridge.create(currentProjectLocation))) {
+
+				return Status.createErrorStatus("Cannot create project content out of liferay workspace project. ");
+			}
+		}
+
 		String currentProjectName = get(op.getProjectName());
 
 		if (!CoreUtil.empty(currentProjectName)) {
@@ -70,8 +85,6 @@ public class ModuleProjectNameValidationService extends ValidationService implem
 			if (!_validProjectName(currentProjectName)) {
 				return Status.createErrorStatus("The project name is invalid.");
 			}
-
-			Path currentProjectLocation = get(op.getLocation());
 
 			// double check to make sure this project wont overlap with existing dir
 
@@ -103,6 +116,12 @@ public class ModuleProjectNameValidationService extends ValidationService implem
 	protected void initValidationService() {
 		super.initValidationService();
 
+		String requiredLiferayWorkspaceParam = param("requiredLiferayWorkspace");
+
+		if (!CoreUtil.isNullOrEmpty(requiredLiferayWorkspaceParam)) {
+			_requiredLiferayWorkspace = Boolean.getBoolean(requiredLiferayWorkspaceParam);
+		}
+
 		_listener = new FilteredListener<PropertyContentEvent>() {
 
 			@Override
@@ -132,5 +151,6 @@ public class ModuleProjectNameValidationService extends ValidationService implem
 	private static final String _PROJECT_NAME_REGEX = "([A-Za-z0-9_\\-.]+[A-Za-z0-9]$)|([A-Za-z0-9])";
 
 	private FilteredListener<PropertyContentEvent> _listener;
+	private boolean _requiredLiferayWorkspace = true;
 
 }

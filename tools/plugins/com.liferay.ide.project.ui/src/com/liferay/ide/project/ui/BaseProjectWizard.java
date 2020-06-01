@@ -111,14 +111,14 @@ public class BaseProjectWizard<T extends Element>
 
 			for (final Object formPart : children.all()) {
 				if (formPart instanceof WorkingSetCustomPart) {
-					WorkingSetCustomPart workingSetPart = (WorkingSetCustomPart)formPart;
+					try (WorkingSetCustomPart workingSetPart = (WorkingSetCustomPart)formPart) {
+						IWorkingSet[] workingSets = workingSetPart.getWorkingSets();
 
-					IWorkingSet[] workingSets = workingSetPart.getWorkingSets();
+						if (ListUtil.isNotEmpty(workingSets)) {
+							IWorkingSetManager workingSetManager = UIUtil.getWorkingSetManager();
 
-					if (ListUtil.isNotEmpty(workingSets)) {
-						IWorkingSetManager workingSetManager = UIUtil.getWorkingSetManager();
-
-						workingSetManager.addToWorkingSets(newProject, workingSets);
+							workingSetManager.addToWorkingSets(newProject, workingSets);
+						}
 					}
 				}
 			}

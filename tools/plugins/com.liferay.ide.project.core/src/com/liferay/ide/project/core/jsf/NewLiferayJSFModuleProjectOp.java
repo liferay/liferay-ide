@@ -55,7 +55,10 @@ public interface NewLiferayJSFModuleProjectOp extends BaseModuleOp {
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_LOCATION);
 
 	@Listeners(JSFModuleProjectNameListener.class)
-	@Service(impl = ModuleProjectNameValidationService.class)
+	@Service(
+		impl = ModuleProjectNameValidationService.class,
+		params = {@Service.Param(name = "requiredLiferayWorkspace", value = "false")}
+	)
 	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_NAME);
 
 	@Label(standard = "Build type")

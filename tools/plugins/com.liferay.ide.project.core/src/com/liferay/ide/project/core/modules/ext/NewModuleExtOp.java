@@ -96,7 +96,7 @@ public interface NewModuleExtOp extends BaseModuleOp {
 	public ListProperty PROP_OVERRIDE_FILES = new ListProperty(TYPE, "OverrideFiles");
 
 	@Listeners(ModuleExtProjectNameListener.class)
-	@Service(impl = ModuleExtLiferayWorkspaceValidationService.class)
+	@Service(impl = ModuleExtProjectNameValidationService.class)
 	@Service(impl = ModuleProjectNameValidationService.class)
 	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_NAME);
 

@@ -15,29 +15,26 @@
 package com.liferay.ide.project.core.modules.ext;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.LiferayWorkspaceValidationService;
+import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
 
 import org.eclipse.sapphire.modeling.Status;
 
 import org.osgi.framework.Version;
 
 /**
+ * @author Charles Wu
+ * @author Terry Jia
  * @author Seiphon Wang
  */
-public class ModuleExtLiferayWorkspaceValidationService
-	extends LiferayWorkspaceValidationService implements SapphireContentAccessor {
+public class ModuleExtProjectNameValidationService extends ModuleProjectNameValidationService {
 
 	@Override
 	protected Status compute() {
 		Status retval = super.compute();
 
-		if (!retval.ok()) {
-			return Status.createErrorStatus("We recommend Liferay Gradle workspace to develop current project!");
-		}
-
-		Version liferayWorkspaceVersion = new Version(LiferayWorkspaceUtil.getLiferayWorkspaceProjectVersion());
+		Version liferayWorkspaceVersion = Version.parseVersion(
+			LiferayWorkspaceUtil.getLiferayWorkspaceProjectVersion());
 
 		Version version70 = new Version("7.0");
 
