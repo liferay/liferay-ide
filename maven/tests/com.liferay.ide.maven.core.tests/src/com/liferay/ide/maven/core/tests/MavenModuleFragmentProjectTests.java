@@ -174,7 +174,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 
 		Status projectNameOkValidationStatus1 = op.getProjectName().validation();
 
-		Assert.assertEquals("We recommend Liferay workspace to develop current project!", projectNameOkValidationStatus1.message());
+		Assert.assertEquals("ok", projectNameOkValidationStatus1.message());
 
 		op.setProjectName("#test-module-fragment");
 
@@ -186,7 +186,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 
 		Status projectNameOkValidationStatus2 = op.getProjectName().validation();
 
-		Assert.assertEquals("We recommend Liferay workspace to develop current project!", projectNameOkValidationStatus2.message());
+		Assert.assertEquals("ok", projectNameOkValidationStatus2.message());
 	}
 
 	@Override
