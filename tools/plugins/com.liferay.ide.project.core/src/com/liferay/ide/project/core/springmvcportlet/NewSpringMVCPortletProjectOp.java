@@ -14,7 +14,6 @@
 
 package com.liferay.ide.project.core.springmvcportlet;
 
-import com.liferay.ide.project.core.LiferayWorkspaceValidationService;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
@@ -101,7 +100,6 @@ public interface NewSpringMVCPortletProjectOp extends BaseModuleOp {
 	public ValueProperty PROP_PACKAGE_NAME = new ValueProperty(TYPE, "PackageName");
 
 	@Listeners(SpringMVCPortletProjectNameListener.class)
-	@Service(impl = LiferayWorkspaceValidationService.class)
 	@Service(impl = ModuleProjectNameValidationService.class)
 	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_NAME);
 
