@@ -45,7 +45,7 @@ import org.eclipse.ui.PlatformUI;
  * @author Seiphon Wang
  */
 @SuppressWarnings("restriction")
-public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> {
+public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> implements RequireLiferayWorkspaceProject {
 
 	public NewModuleExtWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(NewModuleExtWizard.class).wizard());
@@ -55,9 +55,7 @@ public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> {
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);
 
-		RequireLiferayWorkspaceProject checker = new RequireLiferayWorkspaceProject("Liferay Module Ext Project");
-
-		checker.checkValidLiferayWorkspace();
+		promptIfLiferayWorkspaceNotExists("Liferay Module Ext Project");
 	}
 
 	@Override

@@ -35,7 +35,8 @@ import org.eclipse.ui.IWorkbench;
  * @author Simon Jiang
  * @author Seiphon Wang
  */
-public class NewLiferayModuleProjectWizard extends BaseProjectWizard<NewLiferayModuleProjectOp> {
+public class NewLiferayModuleProjectWizard
+	extends BaseProjectWizard<NewLiferayModuleProjectOp> implements RequireLiferayWorkspaceProject {
 
 	public NewLiferayModuleProjectWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(NewLiferayModuleProjectWizard.class).wizard());
@@ -45,9 +46,7 @@ public class NewLiferayModuleProjectWizard extends BaseProjectWizard<NewLiferayM
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);
 
-		RequireLiferayWorkspaceProject checker = new RequireLiferayWorkspaceProject("Liferay Module Project");
-
-		checker.checkValidLiferayWorkspace();
+		promptIfLiferayWorkspaceNotExists("Liferay Module Project");
 	}
 
 	@Override

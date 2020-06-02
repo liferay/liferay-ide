@@ -29,7 +29,8 @@ import org.eclipse.ui.IWorkbench;
  * @author Terry Jia
  * @author Seiphon Wang
  */
-public class NewModuleFragmentWizard extends BaseProjectWizard<NewModuleFragmentOp> {
+public class NewModuleFragmentWizard
+	extends BaseProjectWizard<NewModuleFragmentOp> implements RequireLiferayWorkspaceProject {
 
 	public NewModuleFragmentWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(NewModuleFragmentWizard.class).wizard());
@@ -37,9 +38,9 @@ public class NewModuleFragmentWizard extends BaseProjectWizard<NewModuleFragment
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		RequireLiferayWorkspaceProject checker = new RequireLiferayWorkspaceProject("Liferay Module Fragment Project");
+		super.init(workbench, selection);
 
-		checker.checkValidLiferayWorkspace();
+		promptIfLiferayWorkspaceNotExists("Liferay Module Fragment Project");
 	}
 
 	@Override

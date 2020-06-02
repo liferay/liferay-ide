@@ -31,13 +31,9 @@ import org.eclipse.ui.PlatformUI;
 /**
  * @author Seiphon Wang
  */
-public class RequireLiferayWorkspaceProject {
+public interface RequireLiferayWorkspaceProject {
 
-	public RequireLiferayWorkspaceProject(String wizardName) {
-		this.wizardName = wizardName;
-	}
-
-	public void checkValidLiferayWorkspace() {
+	public default void promptIfLiferayWorkspaceNotExists(String wizardName) {
 		IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
 		if (liferayWorkspaceProject == null) {
@@ -65,9 +61,7 @@ public class RequireLiferayWorkspaceProject {
 		}
 	}
 
-	protected String wizardName = null;
-
-	private static class Msgs extends NLS {
+	public static class Msgs extends NLS {
 
 		public static String needLiferayWorkspace;
 		public static String newElement;
