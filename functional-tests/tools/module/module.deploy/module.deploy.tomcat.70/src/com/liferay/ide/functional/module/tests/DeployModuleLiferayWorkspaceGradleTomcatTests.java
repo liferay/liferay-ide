@@ -33,13 +33,13 @@ import org.junit.rules.RuleChain;
 @Ignore("ignore because blade 3.10.0 remove activator")
 public class DeployModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
+	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
+
 	@ClassRule
 	public static RuleChain chain = RuleUtil.getTomcat7xRunningRuleChain(bot, tomcat);
 
 	@ClassRule
 	public static LiferayWorkspaceGradle71Support liferayWorkspace = new LiferayWorkspaceGradle71Support(bot);
-
-	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
 
 	@Test
 	public void deployActivator() {

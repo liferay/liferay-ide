@@ -14,11 +14,21 @@
 
 package com.liferay.ide.maven.core.tests;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.maven.core.tests.base.NewModuleMavenBase;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -27,6 +37,25 @@ import org.junit.Test;
  * @author Terry Jia
  */
 public class NewModuleMavenTests extends NewModuleMavenBase {
+
+	@BeforeClass
+	public static void createLiferayWorkspace() {
+		NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
+
+		op.setWorkspaceName("new-maven-workspace");
+		op.setProjectProvider("maven-liferay-workspace");
+
+		NewLiferayWorkspaceOpMethods.execute(op, ProgressMonitorBridge.create(new NullProgressMonitor()));
+	}
+
+	@AfterClass
+	public static void deleteWorksapceProject() throws CoreException {
+		IProgressMonitor monitor = new NullProgressMonitor();
+
+		for (IProject project : CoreUtil.getAllProjects()) {
+			project.delete(true, monitor);
+		}
+	}
 
 	@Ignore("Template has been removed on latest blade 3.10.0")
 	@Test
