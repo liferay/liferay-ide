@@ -285,13 +285,13 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		ComboBox targetPlatformComboBox = wizardAction.newLiferayWorkspace.getTargetPlatform();
 
-		String[] targetPlatform = targetPlatformComboBox.items();
+		//String[] targetPlatform = targetPlatformComboBox.items();
 
-		validationAction.assertLengthEquals(expectedTargetPlatform, targetPlatform);
+		//validationAction.assertLengthEquals(expectedTargetPlatform, targetPlatform);
 
-		for (int i = 0; i < targetPlatform.length; i++) {
-			validationAction.assertEquals(expectedTargetPlatform[i], targetPlatform[i]);
-		}
+		//for (int i = 0; i < targetPlatform.length; i++) {
+		//validationAction.assertEquals(expectedTargetPlatform[i], targetPlatform[i]);
+		//}
 
 		wizardAction.newLiferayWorkspace.prepareGradle(project.getName(), "7.0");
 
@@ -318,8 +318,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		wizardAction.newLiferayWorkspace.prepareMaven(project.getName());
 
-		validationAction.assertEquals(
-			MAVEN_LIFERAY_WORKSPACE_WOULD_NOT_SUPPORT_TARGET_PLATFORM, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(CREATE_A_NEW_LIFERAY_WORKSPACE, wizardAction.getValidationMsg(2));
 
 		validationAction.assertEnabledTrue(wizardAction.getFinishBtn());
 

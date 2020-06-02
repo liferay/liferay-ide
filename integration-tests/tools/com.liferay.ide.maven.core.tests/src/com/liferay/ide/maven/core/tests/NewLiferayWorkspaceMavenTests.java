@@ -28,11 +28,14 @@ import java.io.File;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.IJobManager;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -51,10 +54,20 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 		op.setWorkspaceName(workspace.getName());
 		op.setProjectProvider(provider());
 
-		createOrImportAndBuild(
-			op, workspace.getName(), "Maven Liferay Workspace would not support Target Platform.", true);
+		createOrImportAndBuild(op, workspace.getName());
+
+		waitForBuildAndValidation();
 
 		deleteProject(workspace.getName());
+	}
+
+	@After
+	public void deleteWorksapceProject() throws CoreException {
+		IProgressMonitor monitor = new NullProgressMonitor();
+
+		for (IProject project : CoreUtil.getAllProjects()) {
+			project.delete(true, monitor);
+		}
 	}
 
 	@Test
@@ -69,8 +82,9 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 
 		op.setServerName(workspace.getName());
 
-		createOrImportAndBuild(
-			op, workspace.getName(), "Maven Liferay Workspace would not support Target Platform.", true);
+		createOrImportAndBuild(op, workspace.getName());
+
+		waitForBuildAndValidation();
 
 		IProject workspaceProject = CoreUtil.getProject(workspace.getName());
 
@@ -101,10 +115,11 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 
 		Assert.assertEquals(defaultBundleUrl, bundleUrl);
 
-		createOrImportAndBuild(
-			op, workspace.getName(), "Maven Liferay Workspace would not support Target Platform.", true);
+		createOrImportAndBuild(op, workspace.getName());
 
 		MavenTestUtil.waitForJobsToComplete();
+
+		waitForBuildAndValidation();
 
 		IPath fullLocation = rootLocation.append(workspace.getName());
 
@@ -136,8 +151,9 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 		op.setProjectProvider(provider());
 		op.setLocation(workspaceLocation.toPortableString());
 
-		createOrImportAndBuild(
-			op, workspace.getName(), "Maven Liferay Workspace would not support Target Platform.", true);
+		createOrImportAndBuild(op, workspace.getName());
+
+		waitForBuildAndValidation();
 
 		IProject workspaceProject = CoreUtil.getProject(workspace.getName());
 
@@ -173,8 +189,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 		op.setProjectProvider(provider());
 		op.setLocation(workspaceLocation.toPortableString());
 
-		createOrImportAndBuild(
-			op, workspace.getName(), "Maven Liferay Workspace would not support Target Platform.", true);
+		createOrImportAndBuild(op, workspace.getName());
 
 		IProject workspaceProject = CoreUtil.getProject(workspace.getName());
 
@@ -193,6 +208,8 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 		Assert.assertTrue(xml.contains(WorkspaceConstants.BUNDLE_URL_CE_7_1));
 
 		assertLiferayServerNotExists(workspace.getName());
+
+		waitForBuildAndValidation();
 
 		deleteProject(workspace.getName());
 	}
@@ -214,8 +231,7 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 		op.setProvisionLiferayBundle(true);
 		op.setBundleUrl(bundleUrl);
 
-		createOrImportAndBuild(
-			op, workspace.getName(), "Maven Liferay Workspace would not support Target Platform.", true);
+		createOrImportAndBuild(op, workspace.getName());
 
 		MavenTestUtil.waitForJobsToComplete();
 
@@ -240,6 +256,8 @@ public class NewLiferayWorkspaceMavenTests extends ProjectOpBase<NewLiferayWorks
 		Assert.assertEquals(content.contains(bundleUrl), true);
 
 		assertLiferayServerExists(workspace.getName());
+
+		waitForBuildAndValidation();
 
 		deleteServer(workspace.getName());
 
