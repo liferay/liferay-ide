@@ -51,7 +51,10 @@ public interface NewLiferayJSFModuleProjectOp extends BaseModuleOp {
 	@Service(impl = JSFModuleProjectArchetypeDefaultValueService.class)
 	public ValueProperty PROP_ARCHETYPE = new ValueProperty(TYPE, "Archetype");
 
-	@Service(impl = JSFModuleProjectLocationValidationService.class)
+	@Service(
+		impl = JSFModuleProjectLocationValidationService.class,
+		params = {@Service.Param(name = "requiredLiferayWorkspace", value = "false")}
+	)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_LOCATION);
 
 	@Listeners(JSFModuleProjectNameListener.class)

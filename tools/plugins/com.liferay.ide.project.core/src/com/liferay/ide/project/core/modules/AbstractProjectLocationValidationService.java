@@ -14,13 +14,16 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
+import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.ExecutableElement;
@@ -29,6 +32,7 @@ import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.services.ValidationService;
 
 /**
@@ -68,6 +72,16 @@ public abstract class AbstractProjectLocationValidationService<T extends Executa
 		 */
 		if (userDefaultLocation) {
 			return retval;
+		}
+
+		if (_requiredLiferayWorkspace) {
+			IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+			if ((workspaceProject == null) ||
+				!LiferayWorkspaceUtil.inLiferayWorkspace(PathBridge.create(currentProjectLocation))) {
+
+				return Status.createErrorStatus("Cannot set project location be out of liferay workspace project.");
+			}
 		}
 
 		/**
@@ -122,6 +136,12 @@ public abstract class AbstractProjectLocationValidationService<T extends Executa
 
 	@Override
 	protected void initValidationService() {
+		String requiredLiferayWorkspaceParam = param("requiredLiferayWorkspace");
+
+		if (!CoreUtil.isNullOrEmpty(requiredLiferayWorkspaceParam)) {
+			_requiredLiferayWorkspace = Boolean.getBoolean(requiredLiferayWorkspaceParam);
+		}
+
 		_listener = new FilteredListener<PropertyContentEvent>() {
 
 			@Override
@@ -152,5 +172,6 @@ public abstract class AbstractProjectLocationValidationService<T extends Executa
 	}
 
 	private Listener _listener;
+	private boolean _requiredLiferayWorkspace = true;
 
 }
