@@ -23,9 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import java.util.NoSuchElementException;
-
 import org.apache.http.client.ClientProtocolException;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
