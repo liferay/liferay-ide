@@ -20,7 +20,7 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
 import com.liferay.ide.project.ui.BaseProjectWizard;
 import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.ValidLiferayWorkspaceChecker;
+import com.liferay.ide.project.ui.RequireLiferayWorkspaceProject;
 import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -55,7 +55,7 @@ public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> {
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);
 
-		ValidLiferayWorkspaceChecker checker = new ValidLiferayWorkspaceChecker("Liferay Module Ext Project");
+		RequireLiferayWorkspaceProject checker = new RequireLiferayWorkspaceProject("Liferay Module Ext Project");
 
 		checker.checkValidLiferayWorkspace();
 	}

@@ -31,9 +31,9 @@ import org.eclipse.ui.PlatformUI;
 /**
  * @author Seiphon Wang
  */
-public class ValidLiferayWorkspaceChecker {
+public class RequireLiferayWorkspaceProject {
 
-	public ValidLiferayWorkspaceChecker(String wizardName) {
+	public RequireLiferayWorkspaceProject(String wizardName) {
 		this.wizardName = wizardName;
 	}
 
@@ -73,7 +73,7 @@ public class ValidLiferayWorkspaceChecker {
 		public static String newElement;
 
 		static {
-			initializeMessages(ValidLiferayWorkspaceChecker.class.getName(), Msgs.class);
+			initializeMessages(RequireLiferayWorkspaceProject.class.getName(), Msgs.class);
 		}
 
 	}

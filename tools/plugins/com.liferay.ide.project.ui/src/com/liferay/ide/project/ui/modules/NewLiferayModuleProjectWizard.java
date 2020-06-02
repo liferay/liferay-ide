@@ -20,7 +20,7 @@ import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.ui.BaseProjectWizard;
 import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.ValidLiferayWorkspaceChecker;
+import com.liferay.ide.project.ui.RequireLiferayWorkspaceProject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class NewLiferayModuleProjectWizard extends BaseProjectWizard<NewLiferayM
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);
 
-		ValidLiferayWorkspaceChecker checker = new ValidLiferayWorkspaceChecker("Liferay Module Project");
+		RequireLiferayWorkspaceProject checker = new RequireLiferayWorkspaceProject("Liferay Module Project");
 
 		checker.checkValidLiferayWorkspace();
 	}
