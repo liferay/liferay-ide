@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui;
 
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.ui.workspace.ImportLiferayWorkspaceWizard;
 import com.liferay.ide.project.ui.workspace.NewLiferayWorkspaceWizard;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -23,10 +24,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Seiphon Wang
@@ -39,24 +38,36 @@ public interface RequireLiferayWorkspaceProject {
 		if (liferayWorkspaceProject == null) {
 			Shell activeShell = UIUtil.getActiveShell();
 
-			Boolean openNewLiferayWorkspaceProjectWizard = MessageDialog.openQuestion(
-				activeShell, NLS.bind(Msgs.newElement, wizardName), NLS.bind(Msgs.needLiferayWorkspace, wizardName));
+			int requireLiferayWorkspace = MessageDialog.open(
+				MessageDialog.QUESTION, activeShell, NLS.bind(Msgs.newElement, wizardName),
+				NLS.bind(Msgs.needLiferayWorkspace, wizardName), SWT.NONE, "Create New LiferayWorkspace",
+				"Import Existing LiferayWorkspace", "Cancel");
 
-			if (openNewLiferayWorkspaceProjectWizard) {
-				NewLiferayWorkspaceOp newLiferayWorkspaceOp = NewLiferayWorkspaceOp.TYPE.instantiate();
+			switch (requireLiferayWorkspace) {
+				case 0:
+					NewLiferayWorkspaceOp newLiferayWorkspaceOp = NewLiferayWorkspaceOp.TYPE.instantiate();
 
-				NewLiferayWorkspaceWizard newLiferayWorkspaceWizard = new NewLiferayWorkspaceWizard(
-					newLiferayWorkspaceOp);
+					NewLiferayWorkspaceWizard newLiferayWorkspaceWizard = new NewLiferayWorkspaceWizard(
+						newLiferayWorkspaceOp);
 
-				IWorkbench workbench = PlatformUI.getWorkbench();
+					WizardDialog wizardDialog = new WizardDialog(activeShell, newLiferayWorkspaceWizard);
 
-				IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
+					wizardDialog.open();
 
-				Shell shell = workbenchWindow.getShell();
+					break;
 
-				WizardDialog wizardDialog = new WizardDialog(shell, newLiferayWorkspaceWizard);
+				case 1:
+					ImportLiferayWorkspaceWizard wizard = new ImportLiferayWorkspaceWizard();
 
-				wizardDialog.open();
+					WizardDialog dialog = new WizardDialog(activeShell, wizard);
+
+					dialog.open();
+
+					break;
+
+				case 2:
+
+					break;
 			}
 		}
 	}
