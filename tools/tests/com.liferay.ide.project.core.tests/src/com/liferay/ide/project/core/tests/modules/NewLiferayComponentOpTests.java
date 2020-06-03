@@ -47,6 +47,12 @@ import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
  */
 public class NewLiferayComponentOpTests extends BaseTests
 {
+	@AfterClass
+	public static void removeWorkspaceProjects() throws Exception {
+		IProject workspaceProject = CoreUtil.getProject( "test-liferay-workspace" );
+
+		workspaceProject.delete(true, null);
+	}
 
     @Test
     public void testNewLiferayComponentDefaultValueServiceDashes() throws Exception

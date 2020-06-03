@@ -14,12 +14,17 @@
 
 package com.liferay.ide.maven.core.tests;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentFilesOp;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOpMethods;
 import com.liferay.ide.server.core.tests.ServerCoreBase;
 import com.liferay.ide.server.util.ServerUtil;
+
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -28,11 +33,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
-
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -134,29 +141,6 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 		Assert.assertNotNull(bundles);
 
 		for (String hostOsgiBundle : bundles) {
-			if (hostOsgiBundle.contains("com.liferay.asset.display.web")) {
-				op.setProjectName("test-gradle-module-fragment");
-				op.setProjectProvider("gradle-module-fragment");
-				op.setLiferayRuntimeName(runtimeName);
-				op.setHostOsgiBundle(hostOsgiBundle);
-
-				OverrideFilePath overrideFilePath = op.getOverrideFiles().insert();
-
-				overrideFilePath.setValue("META-INF/resources/view.jsp");
-
-				IProject existedGradleProject = MavenTestUtil.create(op);
-
-				Assert.assertNotNull(existedGradleProject);
-
-				IFile gradleFile = existedGradleProject.getFile("build.gradle");
-
-				Assert.assertTrue(gradleFile.exists());
-
-				IFile overrideFile = existedGradleProject.getFile("src/main/resources/META-INF/resources/view.jsp");
-
-				Assert.assertTrue(overrideFile.exists());
-			}
-
 			if (hostOsgiBundle.contains("com.liferay.login.web")) {
 				op.setProjectName("test-maven-module-fragment");
 				op.setProjectProvider("maven-module-fragment");
@@ -222,4 +206,30 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 		return "com.liferay.ide.server.portal.runtime";
 	}
 
+    @BeforeClass
+    public static void createLiferayWorkspaceProject() throws Exception {
+        NewLiferayWorkspaceOp workspaceOp = NewLiferayWorkspaceOp.TYPE.instantiate();
+
+        workspaceOp.setWorkspaceName( "test-maven-liferay-workspace" );
+        workspaceOp.setUseDefaultLocation( true );
+
+        if( workspaceOp.validation().ok() )
+        {
+            workspaceOp.setProjectProvider("maven-liferay-workspace");
+
+            NewLiferayWorkspaceOpMethods.execute( workspaceOp, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+        }
+
+        IProject workspaceProject = CoreUtil.getProject( "test-maven-liferay-workspace" );
+
+        assertTrue(workspaceProject != null);
+        assertTrue(workspaceProject.exists());
+    }
+
+	@AfterClass
+	public static void removeWorkspaceProjects() throws Exception {
+		IProject workspaceProject = CoreUtil.getProject( "test-maven-liferay-workspace" );
+
+		workspaceProject.delete(true, null);
+	}
 }

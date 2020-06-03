@@ -23,15 +23,19 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.core.modules.PropertyKey;
+import com.liferay.ide.project.core.tests.ProjectCoreBase;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -39,8 +43,28 @@ import org.junit.Test;
  * @author Simon Jiang
  * @author Andy Wu
  */
-public class NewLiferayModuleProjectOpTests
+public class NewLiferayModuleProjectOpTests extends ProjectCoreBase
 {
+
+	public void deleteAllWorkspaceProject() throws CoreException {
+		for (IProject project : CoreUtil.getAllProjects()) {
+			project.close(new NullProgressMonitor());
+
+			project.delete(true, new NullProgressMonitor());
+		}
+	}
+
+	@AfterClass
+	public static void removeWorkspaceProjects() throws Exception {
+		IProject workspaceProject = CoreUtil.getProject( "test-liferay-workspace" );
+
+		workspaceProject.delete(true, null);
+	}
+
+	@BeforeClass
+	public static void creatLiferayWorkspace() throws Exception {
+		createLiferayWorkspaceProject();
+	}
 
     @Test
     @Ignore
@@ -261,5 +285,4 @@ public class NewLiferayModuleProjectOpTests
 
         assertTrue( actual.contains( "property-test-key=property-test-value" ) );
     }
-
 }

@@ -25,25 +25,25 @@ import org.osgi.framework.Version;
 /**
  * @author Charles Wu
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 public class ModuleExtProjectNameValidationService extends ModuleProjectNameValidationService {
 
 	@Override
 	protected Status compute() {
-		if (LiferayWorkspaceUtil.getGradleWorkspaceProject() == null) {
-			return Status.createErrorStatus("We recommend Liferay Gradle workspace to develop module ext project!");
-		}
+		Status retval = super.compute();
 
-		Version liferayWorkspaceVersion = new Version(LiferayWorkspaceUtil.getLiferayWorkspaceProjectVersion());
+		Version liferayWorkspaceVersion = Version.parseVersion(
+			LiferayWorkspaceUtil.getLiferayWorkspaceProjectVersion());
 
 		Version version70 = new Version("7.0");
 
 		if (CoreUtil.compareVersions(liferayWorkspaceVersion, version70) <= 0) {
-			return Status.createErrorStatus(
+			retval = Status.createErrorStatus(
 				"Module Ext projects only work on liferay workspace which version is greater than 7.0.");
 		}
 
-		return super.compute();
+		return retval;
 	}
 
 }

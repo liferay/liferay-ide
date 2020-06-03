@@ -20,6 +20,7 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
 import com.liferay.ide.project.ui.BaseProjectWizard;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.RequireLiferayWorkspaceProject;
 import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -29,11 +30,13 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.internal.ui.util.CoreUtility;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
@@ -42,10 +45,17 @@ import org.eclipse.ui.PlatformUI;
  * @author Seiphon Wang
  */
 @SuppressWarnings("restriction")
-public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> {
+public class NewModuleExtWizard extends BaseProjectWizard<NewModuleExtOp> implements RequireLiferayWorkspaceProject {
 
 	public NewModuleExtWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(NewModuleExtWizard.class).wizard());
+	}
+
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		super.init(workbench, selection);
+
+		promptIfLiferayWorkspaceNotExists("Liferay Module Ext Project");
 	}
 
 	@Override

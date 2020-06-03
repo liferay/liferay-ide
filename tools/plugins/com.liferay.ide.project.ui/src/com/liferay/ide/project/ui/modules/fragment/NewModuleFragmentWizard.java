@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.ui.BaseProjectWizard;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.RequireLiferayWorkspaceProject;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -26,8 +27,10 @@ import org.eclipse.ui.IWorkbench;
 
 /**
  * @author Terry Jia
+ * @author Seiphon Wang
  */
-public class NewModuleFragmentWizard extends BaseProjectWizard<NewModuleFragmentOp> {
+public class NewModuleFragmentWizard
+	extends BaseProjectWizard<NewModuleFragmentOp> implements RequireLiferayWorkspaceProject {
 
 	public NewModuleFragmentWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(NewModuleFragmentWizard.class).wizard());
@@ -35,6 +38,9 @@ public class NewModuleFragmentWizard extends BaseProjectWizard<NewModuleFragment
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		super.init(workbench, selection);
+
+		promptIfLiferayWorkspaceNotExists("Liferay Module Fragment Project");
 	}
 
 	@Override
