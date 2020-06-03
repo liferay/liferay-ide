@@ -40,31 +40,23 @@ public interface RequireLiferayWorkspaceProject {
 
 			int requireLiferayWorkspace = MessageDialog.open(
 				MessageDialog.QUESTION, activeShell, NLS.bind(Msgs.newElement, wizardName),
-				NLS.bind(Msgs.needLiferayWorkspace, wizardName), SWT.NONE, "Create New LiferayWorkspace",
-				"Import Existing LiferayWorkspace", "Cancel");
+				NLS.bind(Msgs.needLiferayWorkspace, wizardName), SWT.NONE, "Create New Liferay Workspace...",
+				"Import Existing Liferay Workspace...", "Cancel");
 
 			switch (requireLiferayWorkspace) {
 				case 0:
-					NewLiferayWorkspaceOp newLiferayWorkspaceOp = NewLiferayWorkspaceOp.TYPE.instantiate();
-
-					NewLiferayWorkspaceWizard newLiferayWorkspaceWizard = new NewLiferayWorkspaceWizard(
-						newLiferayWorkspaceOp);
-
-					WizardDialog wizardDialog = new WizardDialog(activeShell, newLiferayWorkspaceWizard);
+					WizardDialog wizardDialog = new WizardDialog(
+						activeShell, new NewLiferayWorkspaceWizard(NewLiferayWorkspaceOp.TYPE.instantiate()));
 
 					wizardDialog.open();
 
 					break;
-
 				case 1:
-					ImportLiferayWorkspaceWizard wizard = new ImportLiferayWorkspaceWizard();
-
-					WizardDialog dialog = new WizardDialog(activeShell, wizard);
+					WizardDialog dialog = new WizardDialog(activeShell, new ImportLiferayWorkspaceWizard());
 
 					dialog.open();
 
 					break;
-
 				case 2:
 
 					break;
