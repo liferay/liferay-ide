@@ -219,7 +219,7 @@ public class NewLiferayModuleProjectOpTests extends ProjectCoreBase
 
         op.setProjectName( "test-properties-in-portlet" );
 
-        op.setProjectTemplateName( "portlet" );
+        op.setProjectTemplateName( "mvc-portlet" );
         op.setComponentName( "Test" );
 
         PropertyKey pk = op.getPropertyKeys().insert();
@@ -249,13 +249,13 @@ public class NewLiferayModuleProjectOpTests extends ProjectCoreBase
     }
 
     @Test
-    public void testNewLiferayPortletProviderNewProperties() throws Exception
+    public void testNewLiferayPanelAppNewProperties() throws Exception
     {
         NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "test-properties-in-portlet-provider" );
+        op.setProjectName( "test-properties-in-panel-app" );
         op.setComponentName( "Test" );
-        op.setProjectTemplateName( "portlet-provider" );
+        op.setProjectTemplateName( "panel-app" );
 
         PropertyKey pk = op.getPropertyKeys().insert();
 
@@ -270,13 +270,13 @@ public class NewLiferayModuleProjectOpTests extends ProjectCoreBase
         IProject modPorject = CoreUtil.getProject( op.getProjectName().content() );
         modPorject.open( new NullProgressMonitor() );
 
-        IFile testAddPortletProvider =
-            modPorject.getFile( "src/main/java/test/properties/in/portlet/provider/portlet/TestAddPortletProvider.java" );
+        IFile testAddPanelApp =
+            modPorject.getFile( "src/main/java/test/properties/in/panel/app/portlet/TestPortlet.java" );
 
-        assertTrue( testAddPortletProvider.exists() );
+        assertTrue( testAddPanelApp.exists() );
 
         SearchFilesVisitor sv = new SearchFilesVisitor();
-        List<IFile> searchFiles = sv.searchFiles( modPorject, "TestAddPortletProvider.java" );
+        List<IFile> searchFiles = sv.searchFiles( modPorject, "TestPortlet.java" );
         IFile componentClassFile = searchFiles.get( 0 );
 
         assertEquals( componentClassFile.exists(), true );
