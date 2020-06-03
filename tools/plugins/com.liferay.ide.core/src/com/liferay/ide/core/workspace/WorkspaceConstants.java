@@ -35,7 +35,7 @@ public class WorkspaceConstants {
 		"https://releases-cdn.liferay.com/portal/7.2.1-ga2/liferay-ce-portal-tomcat-7.2.1-ga2-20191111141448326.tar.gz";
 
 	public static final String BUNDLE_URL_CE_7_3 =
-		"https://releases-cdn.liferay.com/portal/7.3.1-ga2/liferay-ce-portal-tomcat-7.3.1-ga2-20200327090859603.tar.gz";
+		"https://releases-cdn.liferay.com/portal/7.3.2-ga3/liferay-ce-portal-tomcat-7.3.2-ga3-20200519164024819.tar.gz";
 
 	public static final String BUNDLE_URL_PROPERTY = "liferay.workspace.bundle.url";
 
@@ -75,7 +75,7 @@ public class WorkspaceConstants {
 
 	public static final Map<String, String[]> liferayTargetPlatformVersions = new HashMap<String, String[]>() {
 		{
-			put("7.3", new String[] {"7.3.1", "7.3.0"});
+			put("7.3", new String[] {"7.3.2", "7.3.1", "7.3.0"});
 			put("7.2", new String[] {"7.2.1", "7.2.0"});
 			put("7.1", new String[] {"7.1.3", "7.1.2", "7.1.1", "7.1.0"});
 			put("7.0", new String[] {"7.0.6"});
