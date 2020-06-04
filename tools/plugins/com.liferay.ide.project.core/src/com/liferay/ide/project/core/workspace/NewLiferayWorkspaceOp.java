@@ -15,6 +15,10 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
+import com.liferay.ide.project.core.service.ProductKeyDefaultValueService;
+import com.liferay.ide.project.core.service.ProductKeyPossibleValuesService;
+import com.liferay.ide.project.core.service.ProductVersionDefaultValueService;
+import com.liferay.ide.project.core.service.ProductVersionPossibleValuesService;
 import com.liferay.ide.project.core.service.TargetLiferayVersionDefaultValueService;
 import com.liferay.ide.project.core.service.TargetLiferayVersionPossibleValuesService;
 import com.liferay.ide.project.core.service.TargetPlatformDefaultValueService;
@@ -41,6 +45,7 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 /**
  * @author Andy Wu
  * @author Terry Jia
+ * @author Ethan Sun
  */
 public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
@@ -54,6 +59,10 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
 	public Value<Path> getLocation();
 
+	public Value<String> getProductKey();
+
+	public Value<String> getProductVersion();
+
 	public Value<String> getTargetPlatform();
 
 	public Value<Boolean> getUseDefaultLocation();
@@ -65,6 +74,10 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	public void setLocation(Path value);
 
 	public void setLocation(String value);
+
+	public void setProductKey(String value);
+
+	public void setProductVersion(String value);
 
 	public void setTargetPlatform(String value);
 
@@ -90,10 +103,21 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
+	@Label(standard = "product key")
+	@Listeners(value = ProductKeyListener.class)
+	@Service(impl = ProductKeyDefaultValueService.class)
+	@Service(impl = ProductKeyPossibleValuesService.class)
+	public ValueProperty PROP_PRODUCT_KEY = new ValueProperty(TYPE, "ProductKey");
+
+	@Label(standard = "product version")
+	@Service(impl = ProductVersionDefaultValueService.class)
+	@Service(impl = ProductVersionPossibleValuesService.class)
+	public ValueProperty PROP_PRODUCT_VERSION = new ValueProperty(TYPE, "ProductVersion");
+
 	@Service(impl = NewLiferayWorkspaceServerNameService.class)
 	public ValueProperty PROP_SERVER_NAME = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME);
 
-	@Enablement(expr = "${ EnableTargetPlatform == 'true' }")
+	//	@Enablement(expr = "${ EnableTargetPlatform == 'true' }")
 	@Label(standard = "target platform")
 	@Service(impl = TargetPlatformDefaultValueService.class)
 	@Service(impl = TargetPlatformPossibleValuesService.class)
