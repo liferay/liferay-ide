@@ -519,7 +519,7 @@ public class LiferayWorkspaceUtil {
 	}
 
 	public static boolean inLiferayWorkspace(IPath location) {
-		if (FileUtil.notExists(location) || FileUtil.notExists(getWorkspaceProject())) {
+		if (FileUtil.notExists(getWorkspaceProject())) {
 			return false;
 		}
 
