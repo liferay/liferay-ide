@@ -1,3 +1,23 @@
+name: Publish
+
+on:
+    push:
+        branches:
+            - master
+        paths-ignore:
+            - '**/*.markdown'
+            - '*.commits'
+            - '*.markdown'ame: Publish
+
+on:
+    push:
+        branches:
+            - master
+        paths-ignore:
+            - '**/*.markdown'
+            - '*.commits'
+            - '*.markdown'
+
 env:
     LC_ALL: en_US.UTF-8
 
@@ -45,13 +65,3 @@ jobs:
               uses: actions/setup-java@v1
               with:
                   java-version: 1.8
-name: Publish
-
-on:
-    push:
-        branches:
-            - master
-        paths-ignore:
-            - '**/*.markdown'
-            - '*.commits'
-            - '*.markdown'
