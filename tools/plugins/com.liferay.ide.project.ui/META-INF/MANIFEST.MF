@@ -5,7 +5,7 @@ Bundle-SymbolicName: com.liferay.ide.project.ui;singleton:=true
 Bundle-Version: 3.9.0.qualifier
 Bundle-Activator: com.liferay.ide.project.ui.ProjectUI
 Bundle-Vendor: %bundle.vendor
-Require-Bundle: biz.aQute.bndlib;bundle-version="[4,5)",
+Require-Bundle: biz.aQute.bndlib;bundle-version="[5,6)",
  com.liferay.ide.core,
  com.liferay.ide.project.core,
  com.liferay.ide.sdk.core,
