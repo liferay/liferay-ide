@@ -162,6 +162,8 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase {
 				IFile overrideFile1 = existedMavenProject.getFile("src/main/resources/META-INF/resources/login.jsp");
 
 				Assert.assertTrue(overrideFile1.exists());
+
+				break;
 			}
 		}
 	}
