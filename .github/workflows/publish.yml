@@ -1,58 +1,58 @@
 name: Publish
 
 on:
-    push:
-        branches:
-            - master
-        paths-ignore:
-            - '**/*.markdown'
-            - '*.commits'
-            - '*.markdown'
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '*.commits'
+      - '*.markdown'
+      - '**/*.markdown'
 
 env:
-    LC_ALL: en_US.UTF-8
+  LC_ALL: en_US.UTF-8
 
 jobs:
-    Publish:
-        if: (github.repository == 'liferay/liferay-ide')
-        name: Publish
-        runs-on: ubuntu-18.04
-        steps:
-            - env:
-                  BINTRAY_API_KEY: ${{ secrets.bintray_apikey }}
-                  BINTRAY_USER: ${{ secrets.bintray_usename }}
-              name: Upload to bintray
-              run: |
-                  ./deployToBintray.sh target/repository/ gamerson eclipse liferay-ide update-snapshot
-              shell: bash
-              working-directory: build/com.liferay.ide-repository
-            - name: Build repository
-              run: |
-                  ./mvnw clean package -DskipTests=true
-              shell: bash
-            - name: Cache
-              uses: actions/cache@v1.1.0
-              with:
-                  key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-                  path: liferay-ide-m2-repository/.cache/download-maven-plugin
-                  restore-keys: |
-                      ${{ runner.os }}-maven-
-            - name: Checkout liferay-ide
-              uses: actions/checkout@v2
-            - name: Checkout liferay-ide-m2-repository
-              uses: actions/checkout@v2
-              with:
-                  path: liferay-ide-m2-repository
-                  repository: gamerson/liferay-ide-m2-repository
-            - name: Free space
-              run: |
-                  df -h
-                  docker rmi $(docker image ls -aq)
-                  sudo rm -f /swapfile
-                  sudo swapoff -a
-                  sudo swapoff /swapfile
-                  sudo swapon -a
-            - name: Set up JDK 1.8
-              uses: actions/setup-java@v1
-              with:
-                  java-version: 1.8
+  Publish:
+    if: (github.repository == 'liferay/liferay-ide')
+    name: Publish
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout liferay-ide
+        uses: actions/checkout@v2
+      - name: Checkout liferay-ide-m2-repository
+        uses: actions/checkout@v2
+        with:
+          repository: gamerson/liferay-ide-m2-repository
+          path: liferay-ide-m2-repository
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Free space
+        run: |
+          sudo swapoff -a
+          sudo swapon -a
+          sudo swapoff /swapfile
+          sudo rm -f /swapfile
+          docker rmi $(docker image ls -aq)
+          df -h
+      - name: Cache
+        uses: actions/cache@v1.1.0
+        with:
+          path: liferay-ide-m2-repository/.cache/download-maven-plugin
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Build repository
+        shell: bash
+        run: |
+          ./mvnw clean package -DskipTests=true
+      - name: Upload to bintray
+        env:
+          BINTRAY_USER: ${{ secrets.bintray_usename }}
+          BINTRAY_API_KEY: ${{ secrets.bintray_apikey }}
+        shell: bash
+        working-directory: build/com.liferay.ide-repository
+        run: |
+          ./deployToBintray.sh target/repository/ gamerson eclipse liferay-ide update-snapshot
