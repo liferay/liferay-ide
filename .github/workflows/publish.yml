@@ -9,15 +9,6 @@ on:
             - '*.commits'
             - '*.markdown'
 
-on:
-    push:
-        branches:
-            - master
-        paths-ignore:
-            - '**/*.markdown'
-            - '*.commits'
-            - '*.markdown'
-
 env:
     LC_ALL: en_US.UTF-8
 
