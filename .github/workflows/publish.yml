@@ -7,7 +7,7 @@ on:
         paths-ignore:
             - '**/*.markdown'
             - '*.commits'
-            - '*.markdown'ame: Publish
+            - '*.markdown'
 
 on:
     push:
