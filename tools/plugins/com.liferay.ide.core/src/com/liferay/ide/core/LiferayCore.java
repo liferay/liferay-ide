@@ -16,6 +16,7 @@ package com.liferay.ide.core;
 
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.workspace.ProjectChangeListener;
+import com.liferay.ide.project.core.util.ProductKeyUtil;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -259,6 +260,7 @@ public class LiferayCore extends Plugin {
 		_listenerRegistryService = context.registerService(
 			ListenerRegistry.class.getName(), new DefaultListenerRegistry(), preferences);
 		_projectChangeListener = ProjectChangeListener.createAndRegister();
+		ProductKeyUtil.downloadProductKey();
 	}
 
 	@Override

@@ -41,11 +41,17 @@
                 </property-editor>
                 <property-editor>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
-                    <property>LiferayVersion</property>
+                    <property>ProductKey</property>
+                    <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
                 </property-editor>
                 <property-editor>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <property>ProductVersion</property>
                     <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
-                    <property>EnableTargetPlatform</property>
+                </property-editor>
+                <property-editor>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <property>LiferayVersion</property>
                 </property-editor>
                 <property-editor>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
