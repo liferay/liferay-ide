@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.service;
 
-import com.liferay.ide.project.core.util.ProductKeyUtil;
+import com.liferay.ide.core.util.WorkspaceProductInfoUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +30,7 @@ public class ProductKeyPossibleValuesService extends PossibleValuesService {
 	protected void compute(Set<String> values) {
 		Set<String> productCategory = new HashSet<>();
 
-		Set<String> productKeysSet = ProductKeyUtil.getKeyCategory();
+		Set<String> productKeysSet = WorkspaceProductInfoUtil.getProductCategory();
 
 		productKeysSet.forEach(
 			entry -> {

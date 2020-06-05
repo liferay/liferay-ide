@@ -16,7 +16,7 @@ package com.liferay.ide.project.core.service;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
-import com.liferay.ide.project.core.util.ProductKeyUtil;
+import com.liferay.ide.core.util.WorkspaceProductInfoUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 
 		String key = get(_op.getProductKey());
 
-		possibleValues = ProductKeyUtil.getProductVersionList(key);
+		possibleValues = WorkspaceProductInfoUtil.getProductVersionList(key);
 
 		values.addAll(possibleValues);
 	}

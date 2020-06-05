@@ -24,7 +24,7 @@ Require-Bundle: org.apache.commons.codec,
  org.json,
  org.apache.httpcomponents.httpcore;bundle-version="4.4.10",
  org.apache.httpcomponents.httpclient;bundle-version="4.5.6",
- com.liferay.ide.project.core
+ com.google.gson;bundle-version="2.8.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.core,
@@ -68,4 +68,6 @@ Export-Package: com.liferay.ide.core,
 Bundle-ClassPath: .,
  lib/freemarker-2.3.17-patched.jar,
  lib/commons-configuration-1.6.jar,
+ lib/com.liferay.portal.tools.bundle.support-3.6.0.jar,
  lib/org.apache.httpcomponents.httpmime_4.2.1.jar
+Import-Package: com.google.common.collect

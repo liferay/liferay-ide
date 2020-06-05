@@ -103,13 +103,13 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
-	@Label(standard = "product key")
+	@Label(standard = "Product Category")
 	@Listeners(value = ProductKeyListener.class)
 	@Service(impl = ProductKeyDefaultValueService.class)
 	@Service(impl = ProductKeyPossibleValuesService.class)
 	public ValueProperty PROP_PRODUCT_KEY = new ValueProperty(TYPE, "ProductKey");
 
-	@Label(standard = "product version")
+	@Label(standard = "Product Version")
 	@Service(impl = ProductVersionDefaultValueService.class)
 	@Service(impl = ProductVersionPossibleValuesService.class)
 	public ValueProperty PROP_PRODUCT_VERSION = new ValueProperty(TYPE, "ProductVersion");

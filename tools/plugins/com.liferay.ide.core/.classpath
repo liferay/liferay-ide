@@ -11,5 +11,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/freemarker-2.3.17-patched.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-configuration-1.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/org.apache.httpcomponents.httpmime_4.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/com.liferay.portal.tools.bundle.support-3.6.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

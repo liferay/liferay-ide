@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.SapphireContentAccessor;
-import com.liferay.ide.project.core.util.ProductKeyUtil;
+import com.liferay.ide.core.util.WorkspaceProductInfoUtil;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class ProductKeyListener extends FilteredListener<PropertyContentEvent> i
 
 		NewLiferayWorkspaceOp op = newLiferayWorkspaceOp.adapt(NewLiferayWorkspaceOp.class);
 
-		List<String> possibleValues = ProductKeyUtil.getProductVersionList(productCategory);
+		List<String> possibleValues = WorkspaceProductInfoUtil.getProductVersionList(productCategory);
 
 		op.setProductVersion(possibleValues.get(0));
 	}

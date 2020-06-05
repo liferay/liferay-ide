@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.service;
 
 import com.liferay.ide.core.util.ListUtil;
-import com.liferay.ide.project.core.util.ProductKeyUtil;
+import com.liferay.ide.core.util.WorkspaceProductInfoUtil;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class ProductVersionDefaultValueService extends DefaultValueService {
 
 		String defaultProductKey = "portal";
 
-		List<String> productVersionsList = ProductKeyUtil.getProductVersionList(defaultProductKey);
+		List<String> productVersionsList = WorkspaceProductInfoUtil.getProductVersionList(defaultProductKey);
 
 		if (ListUtil.isNotEmpty(productVersionsList)) {
 			defaultValue = productVersionsList.get(0);

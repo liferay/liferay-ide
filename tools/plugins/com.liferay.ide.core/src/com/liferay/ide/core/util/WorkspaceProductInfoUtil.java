@@ -12,14 +12,14 @@
  * details.
  */
 
-package com.liferay.ide.project.core.util;
+package com.liferay.ide.core.util;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.portal.tools.bundle.support.commands.DownloadCommand;
 
 import java.io.File;
@@ -29,28 +29,31 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.ICoreRunnable;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
  * @author Ethan Sun
  */
-public class ProductKeyUtil {
+public class WorkspaceProductInfoUtil {
 
-	public static void downloadProductKey() {
-		Job job = Job.create(
-			"Request ProductKeys",
-			(ICoreRunnable)monitor -> {
+	public static void downloadProductInfo() {
+		Job job = new Job("") {
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					DownloadCommand downloadCommand = new DownloadCommand();
 
@@ -59,30 +62,35 @@ public class ProductKeyUtil {
 					downloadCommand.setToken(false);
 					downloadCommand.setUrl(new URL(_PRODUCT_INFO_URL));
 					downloadCommand.setUserName(null);
+					downloadCommand.setQuiet(true);
 
 					downloadCommand.execute();
 				}
 				catch (Exception exception) {
-					exception.printStackTrace();
+					LiferayCore.logError("Failed to dwonload product info", exception);
 				}
-			});
+
+				return Status.OK_STATUS;
+			}
+
+		};
 
 		job.setSystem(true);
 
-		job.setUser(true);
+		job.setUser(false);
 
 		job.schedule();
 	}
 
-	public static Set<String> getKeyCategory() {
+	public static Set<String> getProductCategory() {
 		Set<String> productCategory = new HashSet<>();
 
 		try {
-			Set<String> productKeysSet = getProductKeys().keySet();
+			Map<String, ProductInfo> productInfoMap = _getProductInfos();
 
-			productKeysSet.forEach(
-				entry -> {
-					String category = entry.split("-")[0];
+			productInfoMap.forEach(
+				(productKey, productInfo) -> {
+					String category = productKey.split("-")[0];
 
 					productCategory.add(category);
 				});
@@ -94,88 +102,22 @@ public class ProductKeyUtil {
 		return productCategory;
 	}
 
-	public static Map<String, ProductInfo> getProductKeys() throws CoreException {
-		Path downloadPath = _workspaceCacheFile.toPath();
-
-		try (JsonReader jsonReader = new JsonReader(Files.newBufferedReader(downloadPath))) {
-			Gson gson = new Gson();
-
-			TypeToken<Map<String, ProductInfo>> typeToken = new TypeToken<Map<String, ProductInfo>>() {
-			};
-
-			return gson.fromJson(jsonReader, typeToken.getType());
-		}
-		catch (Exception ce) {
-			throw new CoreException(ProjectCore.createErrorStatus("Cannot Find ProductKeys Info", ce));
-		}
-	}
-
 	public static List<String> getProductVersionList(String key) {
 		Set<String> productKeysSet = null;
 
 		try {
-			productKeysSet = getProductKeys().keySet();
+			productKeysSet = _getProductInfos().keySet();
 		}
 		catch (CoreException ce) {
-			ce.printStackTrace();
+			LiferayCore.logError("Failed to load product Info.", ce);
 		}
 
-		Map<String, List<String>> productInfoGroupByMap = productKeysSet.stream(
+		return productKeysSet.stream(
+		).filter(
+			productKey -> productKey.startsWith(key)
 		).collect(
-			Collectors.groupingBy(entry -> entry.split("-")[0])
+			Collectors.toList()
 		);
-
-		if ("commerce".equals(key)) {
-			return productInfoGroupByMap.get(
-				key
-			).stream(
-			).sorted(
-				Comparator.reverseOrder()
-			).collect(
-				Collectors.toList()
-			);
-		}
-		else {
-			List<String> productVersionList = new ArrayList<>();
-
-			List<String> multiGAVersion = productInfoGroupByMap.get(
-				key
-			).stream(
-			).filter(
-				micro -> micro.split("-")[2].contains("ga")
-			).collect(
-				Collectors.toList()
-			);
-
-			productVersionList.addAll(multiGAVersion);
-
-			Map<String, List<String>> maxSPVersionList = productInfoGroupByMap.get(
-				key
-			).stream(
-			).filter(
-				micro -> micro.split("-")[2].contains("sp")
-			).collect(
-				Collectors.groupingBy(entry -> entry.split("-")[1])
-			);
-
-			maxSPVersionList.forEach(
-				(minor, list) -> {
-					Optional<String> maxMinorVersion = list.stream(
-					).max(
-						(v1, v2) -> Integer.valueOf(
-							v1.split("-")[2].substring(2)
-						).compareTo(
-							Integer.valueOf(v2.split("-")[2].substring(2))
-						)
-					);
-
-					if (maxMinorVersion.isPresent()) {
-						productVersionList.add(maxMinorVersion.get());
-					}
-				});
-
-			return productVersionList;
-		}
 	}
 
 	public class ProductInfo {
@@ -204,11 +146,18 @@ public class ProductKeyUtil {
 			return _targetPlatformVersion;
 		}
 
+		public boolean isInitialVersion() {
+			return _initialVersion;
+		}
+
 		@SerializedName("appServerTomcatVersion")
 		private String _appServerTomcatVersion;
 
 		@SerializedName("bundleUrl")
 		private String _bundleUrl;
+
+		@SerializedName("targetPlatformVersion")
+		private boolean _initialVersion = true;
 
 		@SerializedName("liferayDockerImage")
 		private String _liferayDockerImage;
@@ -222,6 +171,42 @@ public class ProductKeyUtil {
 		@SerializedName("targetPlatformVersion")
 		private String _targetPlatformVersion;
 
+	}
+
+	private static Map<String, ProductInfo> _getProductInfos() throws CoreException {
+		Path downloadPath = _workspaceCacheFile.toPath();
+
+		try (JsonReader jsonReader = new JsonReader(Files.newBufferedReader(downloadPath))) {
+			Gson gson = new Gson();
+
+			TypeToken<Map<String, ProductInfo>> typeToken = new TypeToken<Map<String, ProductInfo>>() {
+			};
+
+			Map<String, ProductInfo> productInfoMap = gson.fromJson(jsonReader, typeToken.getType());
+
+			if (productInfoMap == null) {
+				return Collections.emptyMap();
+			}
+
+			Set<Entry<String, ProductInfo>> productInfoEntrySet = productInfoMap.entrySet();
+
+			Iterator<Entry<String, ProductInfo>> productInfoIterator = productInfoEntrySet.iterator();
+
+			while (productInfoIterator.hasNext()) {
+				Entry<String, ProductInfo> productEntry = productInfoIterator.next();
+
+				ProductInfo productInfo = productEntry.getValue();
+
+				if (!productInfo.isInitialVersion()) {
+					productInfoIterator.remove();
+				}
+			}
+
+			return productInfoMap;
+		}
+		catch (Exception ce) {
+			throw new CoreException(LiferayCore.createErrorStatus("Cannot Find Product Info", ce));
+		}
 	}
 
 	private static final String _DEFAULT_WORKSPACE_CACHE_DIR_NAME = ".liferay/workspace";
