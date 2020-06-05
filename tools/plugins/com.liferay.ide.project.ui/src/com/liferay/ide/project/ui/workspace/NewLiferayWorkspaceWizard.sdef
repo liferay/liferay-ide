@@ -52,10 +52,12 @@
                 <property-editor>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                     <property>LiferayVersion</property>
+                    <visible-when>${ ProjectProvider != 'gradle-liferay-workspace' }</visible-when>
                 </property-editor>
                 <property-editor>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                     <property>TargetPlatform</property>
+                    <visible-when>${ ProjectProvider != 'gradle-liferay-workspace' }</visible-when>
                 </property-editor>
                 <property-editor>
                     <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
