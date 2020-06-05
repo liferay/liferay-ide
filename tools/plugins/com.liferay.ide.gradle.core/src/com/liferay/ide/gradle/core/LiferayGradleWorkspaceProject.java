@@ -123,7 +123,7 @@ public class LiferayGradleWorkspaceProject extends LiferayWorkspaceProject imple
 
 	@Override
 	public List<Artifact> getTargetPlatformArtifacts() {
-		if ((getTargetPlatformVersion() != null) && _targetPlatformArtifacts.isEmpty()) {
+		if (_targetPlatformArtifacts.isEmpty()) {
 			String output = "";
 
 			GradleProject workspaceGradleProject = GradleUtil.getGradleProject(getProject());

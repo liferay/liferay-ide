@@ -58,8 +58,6 @@ public interface NewModuleExtOp extends BaseModuleOp {
 
 	public Value<URI> getSourceFileURI();
 
-	public Value<String> getTargetPlatformVersion();
-
 	public void setCreateModuleExtFiles(Boolean value);
 
 	public void setOriginalModuleName(String value);
@@ -67,8 +65,6 @@ public interface NewModuleExtOp extends BaseModuleOp {
 	public void setOriginalModuleVersion(String value);
 
 	public void setSourceFileURI(URI value);
-
-	public void setTargetPlatformVersion(String value);
 
 	@DefaultValue(text = "false")
 	@Type(base = Boolean.class)
@@ -87,7 +83,7 @@ public interface NewModuleExtOp extends BaseModuleOp {
 	@Required
 	public ValueProperty PROP_ORIGINAL_MODULE_NAME = new ValueProperty(TYPE, "OriginalModuleName");
 
-	@Enablement(expr = "${ TargetPlatformVersion == null }")
+	@Enablement(expr = "false")
 	@Required
 	public ValueProperty PROP_ORIGINAL_MODULE_VERSION = new ValueProperty(TYPE, "OriginalModuleVersion");
 
@@ -105,10 +101,6 @@ public interface NewModuleExtOp extends BaseModuleOp {
 
 	@Type(base = URI.class)
 	public ValueProperty PROP_SOURCE_FILE_URI = new ValueProperty(TYPE, "SourceFileUri");
-
-	@Service(impl = TargetPlatformVersionDefaultValueService.class)
-	@Type(base = String.class)
-	public ValueProperty PROP_TARGET_PLATFORM_VERSION = new ValueProperty(TYPE, "TargetPlatformVersion");
 
 	@Listeners(ModuleExtProjectUseDefaultLocationListener.class)
 	public ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_USE_DEFAULT_LOCATION);
