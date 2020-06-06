@@ -32,18 +32,16 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
 import java.io.File;
 import java.io.IOException;
-
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -67,7 +65,7 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 			return Status.CANCEL_STATUS;
 		}
 
-		List<IFile> buildGradleFiles = _getBuildGradleFiles();
+		Collection<File> buildGradleFiles = _getBuildGradleFiles();
 
 		if (buildGradleFiles == null) {
 			return Status.CANCEL_STATUS;
@@ -91,34 +89,32 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 			gradleDependency.getConfiguration(), null);
 	}
 
-	private List<IFile> _getBuildGradleFiles() {
-		List<IFile> buildGradleFiles = new ArrayList<>();
+	private Collection<File> _getBuildGradleFiles() {
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-		for (String folder : _searchableFolders) {
-			SearchFilesVisitor searchFilesVisitor = new SearchFilesVisitor();
-
-			List<IFile> searchResults = searchFilesVisitor.searchFiles(
-				FileUtil.getFolder(LiferayWorkspaceUtil.getWorkspaceProject(), folder), "build.gradle");
-
-			buildGradleFiles.addAll(searchResults);
-		}
-
-		return buildGradleFiles;
+		return Stream.of(
+			_searchableFolders
+		).map(
+			searchFolder -> new SearchFilesVisitor().searchFiles(
+				FileUtil.getFolder(workspaceProject, searchFolder), "build.gradle")
+		).flatMap(
+			gradleFiles -> gradleFiles.stream()
+		).map(
+			buildGradleFile -> FileUtil.getFile(buildGradleFile)
+		).collect(
+			Collectors.toSet()
+		);
 	}
 
-	private void _removeDependencyVersion(IFile buildGradleIFile) {
+	private void _removeDependencyVersion(File buildGradleFile) {
 		IWorkspaceProject liferayWorkspaceProject = LiferayWorkspaceUtil.getGradleWorkspaceProject();
 
 		List<Artifact> targetPlatformArtifacts = liferayWorkspaceProject.getTargetPlatformArtifacts();
 
 		try {
-			if (FileUtil.notExists(buildGradleIFile)) {
+			if (FileUtil.notExists(buildGradleFile)) {
 				return;
 			}
-
-			IPath buildGradleFileLocation = buildGradleIFile.getLocation();
-
-			File buildGradleFile = new File(buildGradleFileLocation.toOSString());
 
 			GradleBuildScript gradleBuildScript = new GradleBuildScript(buildGradleFile);
 
