@@ -18,7 +18,6 @@ import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.modules.ext.NewModuleExtOp;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.Arrays;
@@ -150,67 +149,58 @@ public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog im
 	}
 
 	private void _refreshAction(Composite composite) {
-		NewModuleExtOp newModuleExtOp = _property.nearest(NewModuleExtOp.class);
+		if (_job == null) {
+			_job = new Job("Reading target platform configuration") {
 
-		if (get(newModuleExtOp.getTargetPlatformVersion()) == null) {
-			_customLabel.setText("No Target Platform configuration detected in gradle.properties");
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					Object[] elements = _getElements();
 
-			return;
-		}
-		else {
-			if (_job == null) {
-				_job = new Job("Reading target platform configuration") {
+					UIUtil.async(
+						() -> {
+							if (!composite.isDisposed()) {
+								setListElements(elements);
+							}
+						});
+
+					return Status.OK_STATUS;
+				}
+
+			};
+
+			_job.addJobChangeListener(
+				new JobChangeAdapter() {
 
 					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						Object[] elements = _getElements();
-
+					public void done(IJobChangeEvent event) {
 						UIUtil.async(
 							() -> {
 								if (!composite.isDisposed()) {
-									setListElements(elements);
+									_customLabel.setText(_defaultMessage);
+									_filterText.setEnabled(true);
+									composite.setCursor(null);
 								}
 							});
-
-						return Status.OK_STATUS;
 					}
 
-				};
+					@Override
+					public void running(IJobChangeEvent event) {
+						UIUtil.async(
+							() -> {
+								if (!composite.isDisposed()) {
+									_customLabel.setText("Refreshing bundle list");
+									composite.setCursor(new Cursor(null, SWT.CURSOR_WAIT));
+								}
+							});
+					}
 
-				_job.addJobChangeListener(
-					new JobChangeAdapter() {
-
-						@Override
-						public void done(IJobChangeEvent event) {
-							UIUtil.async(
-								() -> {
-									if (!composite.isDisposed()) {
-										_customLabel.setText(_defaultMessage);
-										_filterText.setEnabled(true);
-										composite.setCursor(null);
-									}
-								});
-						}
-
-						@Override
-						public void running(IJobChangeEvent event) {
-							UIUtil.async(
-								() -> {
-									if (!composite.isDisposed()) {
-										_customLabel.setText("Refreshing bundle list");
-										composite.setCursor(new Cursor(null, SWT.CURSOR_WAIT));
-									}
-								});
-						}
-
-					});
-			}
-			else if (_job.getState() == Job.RUNNING) {
-				return;
-			}
-
-			_job.schedule();
+				});
 		}
+		else if (_job.getState() == Job.RUNNING) {
+			return;
+		}
+
+		_job.schedule();
 	}
 
 	private static Job _job;
