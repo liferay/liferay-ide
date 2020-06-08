@@ -14,12 +14,15 @@
 
 package com.liferay.ide.gradle.core.model;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import java.io.File;
 import java.io.IOException;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -51,7 +54,12 @@ public class GradleBuildScript {
 	public GradleBuildScript(String scriptContents) throws MultipleCompilationErrorsException {
 		AstBuilder astBuilder = new AstBuilder();
 
-		_astNodes = astBuilder.buildFromString(scriptContents);
+		if (CoreUtil.isNotNullOrEmpty(scriptContents)) {
+			_astNodes = astBuilder.buildFromString(scriptContents);
+		}
+		else {
+			_astNodes = Collections.emptyList();
+		}
 	}
 
 	public List<GradleDependency> getBuildScriptDependencies() {

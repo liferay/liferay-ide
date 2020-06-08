@@ -22,6 +22,8 @@ import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.model.GradleBuildScript;
 import com.liferay.ide.gradle.core.model.GradleDependency;
 import com.liferay.ide.gradle.ui.LiferayGradleUI;
+import com.liferay.ide.project.core.util.SearchFilesVisitor;
+import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.ide.upgrade.commands.core.code.RemoveDependencyVersionKeys;
 import com.liferay.ide.upgrade.plan.core.ResourceSelection;
 import com.liferay.ide.upgrade.plan.core.UpgradeCommand;
@@ -30,16 +32,16 @@ import com.liferay.ide.upgrade.plan.core.UpgradePlanner;
 
 import java.io.File;
 import java.io.IOException;
-
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -47,6 +49,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 /**
  * @author Simon Jiang
  * @author Terry Jia
+ * @author Seiphon Wang
  */
 @Component(
 	property = "id=" + RemoveDependencyVersionKeys.ID, scope = ServiceScope.PROTOTYPE, service = UpgradeCommand.class
@@ -55,7 +58,14 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 
 	@Override
 	public IStatus perform(IProgressMonitor progressMonitor) {
-		List<File> buildGradleFiles = _getBuildGradleFiles();
+		boolean removeDependencyVersions = UIUtil.promptQuestion(
+			"Remove Dependency Versions", "Do you want remove dependency versions now?");
+
+		if (!removeDependencyVersions) {
+			return Status.CANCEL_STATUS;
+		}
+
+		Collection<File> buildGradleFiles = _getBuildGradleFiles();
 
 		if (buildGradleFiles == null) {
 			return Status.CANCEL_STATUS;
@@ -79,21 +89,20 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 			gradleDependency.getConfiguration(), null);
 	}
 
-	private List<File> _getBuildGradleFiles() {
-		List<IProject> projects = _resourceSelection.selectProjects(
-			"Select Liferay Project", false, ResourceSelection.JAVA_PROJECTS);
+	private Collection<File> _getBuildGradleFiles() {
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-		if (projects.isEmpty()) {
-			return null;
-		}
-
-		return projects.stream(
+		return Stream.of(
+			_searchableFolders
 		).map(
-			project -> project.getFile("build.gradle")
+			searchFolder -> new SearchFilesVisitor().searchFiles(
+				FileUtil.getFolder(workspaceProject, searchFolder), "build.gradle")
+		).flatMap(
+			gradleFiles -> gradleFiles.stream()
 		).map(
-			FileUtil::getFile
+			buildGradleFile -> FileUtil.getFile(buildGradleFile)
 		).collect(
-			Collectors.toList()
+			Collectors.toSet()
 		);
 	}
 
@@ -135,6 +144,8 @@ public class RemoveDependencyVersionCommand implements UpgradeCommand {
 
 	@Reference
 	private ResourceSelection _resourceSelection;
+
+	private String[] _searchableFolders = {"modules", "wars", "themes", "ext"};
 
 	@Reference
 	private UpgradePlanner _upgradePlanner;
