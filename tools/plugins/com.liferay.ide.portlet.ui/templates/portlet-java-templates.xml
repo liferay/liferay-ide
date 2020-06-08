@@ -5,7 +5,7 @@
 	<template context="java-statements" description="Grabs the current session from portletRequest" enabled="true" id="portlet.Session" name="http-session">
 HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(${request:var('javax.portlet.PortletRequest')});
 HttpSession session = httpRequest.getSession();
-${:import(com.liferay.portal.util.PortalUtil,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpSession)}
+${:import(com.liferay.portal.kernel.util.PortalUtil,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpSession)}
 ${cursor}
 	</template>
 
@@ -21,7 +21,7 @@ ${:import(javax.portlet.Event,javax.portlet.EventRequest,javax.portlet.EventResp
 
 	<template autoinsert="true" context="java-statements" deleted="false" description="utilizes the permission checker from themeDisplay for checking permissions" enabled="true" id="portlet.permissioncheck" name="permissioncheck">
 // e.g. get the group id you're interested in like this:
-// long groupId = ${themeDisplay:var(com.liferay.portal.theme.ThemeDisplay)}.getScopeGroupId();
+// long groupId = ${themeDisplay:var(com.liferay.portal.kernel.theme.ThemeDisplay)}.getScopeGroupId();
 
 if (${themeDisplay}.getPermissionChecker()
 	.hasPermission(${groupId}, ${classOrPackageNameAsString},
@@ -46,10 +46,15 @@ long groupId = ${themeDisplay}.getScopeGroupId();
 // long someParameter = ParamUtil.getLong(request, "someParameter");
 ${cursor}
 
-${:import(com.liferay.portal.theme.ThemeDisplay,com.liferay.portal.kernel.util.WebKeys,com.liferay.portal.kernel.util.ParamUtil)}
+${:import(com.liferay.portal.kernel.theme.ThemeDisplay,com.liferay.portal.kernel.util.WebKeys,com.liferay.portal.kernel.util.ParamUtil)}
 	</template>
 
-	<template autoinsert="true" context="java-statements" deleted="false" description="ParamUtil get boolean" enabled="true" id="param.getBoolean" name="getboolean">
+    <template autoinsert="true" context="java" deleted="false" description="insert static (Liferay) log member" enabled="true" name="log">
+${:import(com.liferay.portal.kernel.log.Log,com.liferay.portal.kernel.log.LogFactoryUtil)}
+private static Log log = LogFactoryUtil.getLog(${enclosing_type}.class);
+    </template>
+    
+    <template autoinsert="true" context="java-statements" deleted="false" description="ParamUtil get boolean" enabled="true" id="param.getBoolean" name="getboolean">
 boolean ${param} = ParamUtil.getBoolean(${request:var('javax.portlet.PortletRequest')}, "${param}");
 ${:import(com.liferay.portal.kernel.util.ParamUtil)}
 	</template>
