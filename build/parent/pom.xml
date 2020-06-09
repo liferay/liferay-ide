@@ -42,7 +42,7 @@
         <m2e-wtp-site>https://download.eclipse.org/m2e-wtp/releases/1.4/1.4.3.20191209-1849/</m2e-wtp-site>
         <m2e-archiver-site>https://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/0.17.2.201606141937/</m2e-archiver-site>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
-        <maven-deps-plugin-site>https://github.com/ianbrandt/m2e-maven-dependency-plugin/raw/gh-pages/0.0.4/</maven-deps-plugin-site>
+        <maven-deps-plugin-site>https://dl.bintray.com/gamerson/eclipse/m2e-maven-dependency-plugin/0.0.4/</maven-deps-plugin-site>
         <orbit-site>https://download.eclipse.org/tools/orbit/downloads/drops/R20181128170323/repository/</orbit-site>
         <osgi-bundles-site>https://dl.bintray.com/gamerson/eclipse/liferay-ide-deps/201904221700/</osgi-bundles-site>
         <sapphire-site>https://download.eclipse.org/sapphire/9.1.1/repository/</sapphire-site>
