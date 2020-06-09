@@ -20,7 +20,6 @@ import com.liferay.ide.core.util.StringPool;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,10 +48,8 @@ import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
-
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

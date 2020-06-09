@@ -24,7 +24,6 @@ import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
 
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -41,7 +40,6 @@ import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
-
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -54,11 +52,9 @@ import org.eclipse.m2e.core.internal.MavenPluginActivator;
 import org.eclipse.m2e.core.internal.embedder.MavenImpl;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.platform.PathBridge;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import org.osgi.framework.Version;
 
 /**
