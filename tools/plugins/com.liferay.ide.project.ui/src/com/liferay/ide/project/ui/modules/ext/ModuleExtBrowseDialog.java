@@ -149,6 +149,22 @@ public class ModuleExtBrowseDialog extends AbstractElementListSelectionDialog im
 	}
 
 	private void _refreshAction(Composite composite) {
+		IWorkspaceProject gradleWorkspaceProject = LiferayWorkspaceUtil.getGradleWorkspaceProject();
+
+		if (gradleWorkspaceProject == null) {
+			_customLabel.setText("No Target Platform configuration detected");
+
+			return;
+		}
+
+		List<Artifact> artifacts = gradleWorkspaceProject.getTargetPlatformArtifacts();
+
+		if (artifacts.isEmpty()) {
+			_customLabel.setText("No Target Platform configuration detected");
+
+			return;
+		}
+
 		if (_job == null) {
 			_job = new Job("Reading target platform configuration") {
 

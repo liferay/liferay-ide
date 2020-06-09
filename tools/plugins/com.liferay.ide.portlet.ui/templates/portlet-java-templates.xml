@@ -49,12 +49,12 @@ ${cursor}
 ${:import(com.liferay.portal.kernel.theme.ThemeDisplay,com.liferay.portal.kernel.util.WebKeys,com.liferay.portal.kernel.util.ParamUtil)}
 	</template>
 
-    <template autoinsert="true" context="java" deleted="false" description="insert static (Liferay) log member" enabled="true" name="log">
+	<template autoinsert="true" context="java" deleted="false" description="insert static (Liferay) log member" enabled="true" name="log">
 ${:import(com.liferay.portal.kernel.log.Log,com.liferay.portal.kernel.log.LogFactoryUtil)}
 private static Log log = LogFactoryUtil.getLog(${enclosing_type}.class);
-    </template>
-    
-    <template autoinsert="true" context="java-statements" deleted="false" description="ParamUtil get boolean" enabled="true" id="param.getBoolean" name="getboolean">
+	</template>
+
+	<template autoinsert="true" context="java-statements" deleted="false" description="ParamUtil get boolean" enabled="true" id="param.getBoolean" name="getboolean">
 boolean ${param} = ParamUtil.getBoolean(${request:var('javax.portlet.PortletRequest')}, "${param}");
 ${:import(com.liferay.portal.kernel.util.ParamUtil)}
 	</template>
