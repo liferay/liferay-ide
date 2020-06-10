@@ -49,6 +49,7 @@ jobs:
           sudo rm -f /swapfile
           docker rmi $(docker image ls -aq)
           df -h
+        continue-on-error: true
       - name: Cache
         uses: actions/cache@v1.1.0
         with:
