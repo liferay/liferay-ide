@@ -18,6 +18,8 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.Status;
 
 import org.osgi.framework.Version;
@@ -32,6 +34,18 @@ public class ModuleExtProjectNameValidationService extends ModuleProjectNameVali
 	@Override
 	protected Status compute() {
 		Status retval = super.compute();
+
+		if (!retval.ok()) {
+			return retval;
+		}
+
+		IProject workspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+		IPath workspaceLocation = workspaceProject.getLocation();
+
+		if (LiferayWorkspaceUtil.isValidMavenWorkspaceLocation(workspaceLocation.toOSString())) {
+			return Status.createErrorStatus("We recommend Liferay Gradle workspace to develop current project!");
+		}
 
 		Version liferayWorkspaceVersion = Version.parseVersion(
 			LiferayWorkspaceUtil.getLiferayWorkspaceProjectVersion());

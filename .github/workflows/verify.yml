@@ -41,14 +41,15 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Free space
-        run: |
-          sudo swapoff -a
-          sudo swapon -a
-          sudo swapoff /swapfile
-          sudo rm -f /swapfile
-          docker rmi $(docker image ls -aq)
-          df -h
+#      - name: Free space
+#        run: |
+#          sudo swapoff -a
+#          sudo swapon -a
+#          sudo swapoff /swapfile
+#          sudo rm -f /swapfile
+#          docker rmi $(docker image ls -aq)
+#          df -h
+#        continue-on-error: true
       - name: Cache
         uses: actions/cache@v1.1.0
         with:
@@ -69,7 +70,7 @@ jobs:
           CHECK_RUN_REPORTER_TOKEN: ${{ secrets.check_run_reporter_token }}
       - name: Upload tests
         uses: actions/upload-artifact@v1
-        if: failure()
+        if: ${{ always() }}
         with:
           name: surefire-reports.tar.gz
           path: surefire-reports.tar.gz
