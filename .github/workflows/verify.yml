@@ -70,7 +70,7 @@ jobs:
           CHECK_RUN_REPORTER_TOKEN: ${{ secrets.check_run_reporter_token }}
       - name: Upload tests
         uses: actions/upload-artifact@v1
-        if: failure()
+        if: ${{ always() }}
         with:
           name: surefire-reports.tar.gz
           path: surefire-reports.tar.gz
