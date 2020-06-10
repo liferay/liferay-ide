@@ -12,7 +12,9 @@
  * details.
  */
 
-package com.liferay.ide.core.util;
+package com.liferay.ide.project.core.util;
+
+import com.beust.jcommander.internal.Sets;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
@@ -29,12 +31,10 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,32 +49,37 @@ import org.eclipse.core.runtime.jobs.Job;
  */
 public class WorkspaceProductInfoUtil {
 
-	public static void downloadProductInfo() {
-		Job job = new Job("") {
+	public static final String DEFAULT_WORKSPACE_CACHE_FILE = ".liferay/workspace/.product_info.json";
 
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					DownloadCommand downloadCommand = new DownloadCommand();
+	public static Job job = new Job("") {
 
-					downloadCommand.setCacheDir(_workspaceCacheDir);
-					downloadCommand.setPassword(null);
-					downloadCommand.setToken(false);
-					downloadCommand.setUrl(new URL(_PRODUCT_INFO_URL));
-					downloadCommand.setUserName(null);
-					downloadCommand.setQuiet(true);
+		@Override
+		protected IStatus run(IProgressMonitor monitor) {
+			try {
+				DownloadCommand downloadCommand = new DownloadCommand();
 
-					downloadCommand.execute();
-				}
-				catch (Exception exception) {
-					LiferayCore.logError("Failed to dwonload product info", exception);
-				}
+				downloadCommand.setCacheDir(_workspaceCacheDir);
+				downloadCommand.setPassword(null);
+				downloadCommand.setToken(false);
+				downloadCommand.setUrl(new URL(_PRODUCT_INFO_URL));
+				downloadCommand.setUserName(null);
+				downloadCommand.setQuiet(true);
 
-				return Status.OK_STATUS;
+				downloadCommand.execute();
+			}
+			catch (Exception exception) {
+				LiferayCore.logError("Failed to dwonload product info", exception);
 			}
 
-		};
+			return Status.OK_STATUS;
+		}
 
+	};
+
+	public static final File workspaceCacheFile = new File(
+		System.getProperty("user.home"), DEFAULT_WORKSPACE_CACHE_FILE);
+
+	public static void downloadProductInfo() {
 		job.setSystem(true);
 
 		job.setUser(false);
@@ -83,41 +88,65 @@ public class WorkspaceProductInfoUtil {
 	}
 
 	public static Set<String> getProductCategory() {
-		Set<String> productCategory = new HashSet<>();
+		Set<String> productCategorySet = new HashSet<>();
 
-		try {
-			Map<String, ProductInfo> productInfoMap = _getProductInfos();
+		if (workspaceCacheFile.exists()) {
+			productCategorySet.clear();
 
-			productInfoMap.forEach(
-				(productKey, productInfo) -> {
-					String category = productKey.split("-")[0];
+			try {
+				Map<String, ProductInfo> productInfoMap = _getProductInfos();
 
-					productCategory.add(category);
-				});
+				productInfoMap.forEach(
+					(productCategory, productInfo) -> {
+						String category = productCategory.split("-")[0];
+
+						productCategorySet.add(category);
+					});
+			}
+			catch (CoreException ce) {
+				ce.printStackTrace();
+			}
 		}
-		catch (CoreException ce) {
-			ce.printStackTrace();
-		}
 
-		return productCategory;
+		return productCategorySet;
 	}
 
-	public static List<String> getProductVersionList(String key) {
-		Set<String> productKeysSet = null;
+	public static List<String> getProductVersionList(String category, boolean showAll) {
+		List<String> productVersionList = new ArrayList<>();
 
-		try {
-			productKeysSet = _getProductInfos().keySet();
-		}
-		catch (CoreException ce) {
-			LiferayCore.logError("Failed to load product Info.", ce);
+		if (workspaceCacheFile.exists()) {
+			final Set<String> productCategorySet = Sets.newHashSet();
+
+			try {
+				Map<String, ProductInfo> productInfos = _getProductInfos();
+
+				if (!showAll) {
+					productInfos.forEach(
+						(key, product) -> {
+							if (product.isInitialVersion()) {
+								productCategorySet.add(key);
+							}
+						});
+				}
+				else {
+					productCategorySet.addAll(_getProductInfos().keySet());
+				}
+			}
+			catch (CoreException ce) {
+				LiferayCore.logError("Failed to load product Info.", ce);
+			}
+
+			if (productCategorySet != null) {
+				productVersionList = productCategorySet.stream(
+				).filter(
+					productCategory -> productCategory.startsWith(category)
+				).collect(
+					Collectors.toList()
+				);
+			}
 		}
 
-		return productKeysSet.stream(
-		).filter(
-			productKey -> productKey.startsWith(key)
-		).collect(
-			Collectors.toList()
-		);
+		return productVersionList;
 	}
 
 	public class ProductInfo {
@@ -147,7 +176,7 @@ public class WorkspaceProductInfoUtil {
 		}
 
 		public boolean isInitialVersion() {
-			return _initialVersion;
+			return getLiferayProductVersion().contains("GA");
 		}
 
 		@SerializedName("appServerTomcatVersion")
@@ -156,8 +185,8 @@ public class WorkspaceProductInfoUtil {
 		@SerializedName("bundleUrl")
 		private String _bundleUrl;
 
-		@SerializedName("targetPlatformVersion")
-		private boolean _initialVersion = true;
+		//		@SerializedName("initialVersion")
+		//		private boolean _initialVersion = true;
 
 		@SerializedName("liferayDockerImage")
 		private String _liferayDockerImage;
@@ -174,7 +203,7 @@ public class WorkspaceProductInfoUtil {
 	}
 
 	private static Map<String, ProductInfo> _getProductInfos() throws CoreException {
-		Path downloadPath = _workspaceCacheFile.toPath();
+		Path downloadPath = workspaceCacheFile.toPath();
 
 		try (JsonReader jsonReader = new JsonReader(Files.newBufferedReader(downloadPath))) {
 			Gson gson = new Gson();
@@ -182,27 +211,7 @@ public class WorkspaceProductInfoUtil {
 			TypeToken<Map<String, ProductInfo>> typeToken = new TypeToken<Map<String, ProductInfo>>() {
 			};
 
-			Map<String, ProductInfo> productInfoMap = gson.fromJson(jsonReader, typeToken.getType());
-
-			if (productInfoMap == null) {
-				return Collections.emptyMap();
-			}
-
-			Set<Entry<String, ProductInfo>> productInfoEntrySet = productInfoMap.entrySet();
-
-			Iterator<Entry<String, ProductInfo>> productInfoIterator = productInfoEntrySet.iterator();
-
-			while (productInfoIterator.hasNext()) {
-				Entry<String, ProductInfo> productEntry = productInfoIterator.next();
-
-				ProductInfo productInfo = productEntry.getValue();
-
-				if (!productInfo.isInitialVersion()) {
-					productInfoIterator.remove();
-				}
-			}
-
-			return productInfoMap;
+			return gson.fromJson(jsonReader, typeToken.getType());
 		}
 		catch (Exception ce) {
 			throw new CoreException(LiferayCore.createErrorStatus("Cannot Find Product Info", ce));
@@ -211,12 +220,9 @@ public class WorkspaceProductInfoUtil {
 
 	private static final String _DEFAULT_WORKSPACE_CACHE_DIR_NAME = ".liferay/workspace";
 
-	private static final String _DEFAULT_WORKSPACE_CACHE_FILE = ".liferay/workspace/.product_info.json";
-
 	private static final String _PRODUCT_INFO_URL = "https://releases.liferay.com/tools/workspace/.product_info.json";
 
-	private static File _workspaceCacheDir = new File(
+	private static final File _workspaceCacheDir = new File(
 		System.getProperty("user.home"), _DEFAULT_WORKSPACE_CACHE_DIR_NAME);
-	private static File _workspaceCacheFile = new File(System.getProperty("user.home"), _DEFAULT_WORKSPACE_CACHE_FILE);
 
 }

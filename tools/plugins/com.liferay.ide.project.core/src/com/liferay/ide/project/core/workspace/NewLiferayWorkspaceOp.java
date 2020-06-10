@@ -15,8 +15,8 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
-import com.liferay.ide.project.core.service.ProductKeyDefaultValueService;
-import com.liferay.ide.project.core.service.ProductKeyPossibleValuesService;
+import com.liferay.ide.project.core.service.ProductCategoryDefaultValueService;
+import com.liferay.ide.project.core.service.ProductCategoryPossibleValuesService;
 import com.liferay.ide.project.core.service.ProductVersionDefaultValueService;
 import com.liferay.ide.project.core.service.ProductVersionPossibleValuesService;
 import com.liferay.ide.project.core.service.TargetLiferayVersionDefaultValueService;
@@ -59,9 +59,11 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
 	public Value<Path> getLocation();
 
-	public Value<String> getProductKey();
+	public Value<String> getProductCategory();
 
 	public Value<String> getProductVersion();
+
+	public Value<Boolean> getShowAllVersionProduct();
 
 	public Value<String> getTargetPlatform();
 
@@ -75,9 +77,11 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
 	public void setLocation(String value);
 
-	public void setProductKey(String value);
+	public void setProductCategory(String value);
 
 	public void setProductVersion(String value);
+
+	public void setShowAllVersionProduct(Boolean value);
 
 	public void setTargetPlatform(String value);
 
@@ -103,19 +107,23 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
-	@Label(standard = "Product Category")
-	@Listeners(value = ProductKeyListener.class)
-	@Service(impl = ProductKeyDefaultValueService.class)
-	@Service(impl = ProductKeyPossibleValuesService.class)
-	public ValueProperty PROP_PRODUCT_KEY = new ValueProperty(TYPE, "ProductKey");
+	@Label(standard = "product category")
+	@Service(impl = ProductCategoryDefaultValueService.class)
+	@Service(impl = ProductCategoryPossibleValuesService.class)
+	public ValueProperty PROP_PRODUCT_CATEGORY = new ValueProperty(TYPE, "ProductCategory");
 
-	@Label(standard = "Product Version")
+	@Label(standard = "product version")
 	@Service(impl = ProductVersionDefaultValueService.class)
 	@Service(impl = ProductVersionPossibleValuesService.class)
 	public ValueProperty PROP_PRODUCT_VERSION = new ValueProperty(TYPE, "ProductVersion");
 
 	@Service(impl = NewLiferayWorkspaceServerNameService.class)
 	public ValueProperty PROP_SERVER_NAME = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME);
+
+	@DefaultValue(text = "false")
+	@Label(standard = "show all version product")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_SHOW_ALL_VERSION_PRODUCT = new ValueProperty(TYPE, "ShowAllVersionProduct");
 
 	//	@Enablement(expr = "${ EnableTargetPlatform == 'true' }")
 	@Label(standard = "target platform")

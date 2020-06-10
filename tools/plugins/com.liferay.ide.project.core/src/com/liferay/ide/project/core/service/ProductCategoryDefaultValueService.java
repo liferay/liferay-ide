@@ -14,42 +14,39 @@
 
 package com.liferay.ide.project.core.service;
 
-import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.util.WorkspaceProductInfoUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
-import java.util.List;
+import java.util.Set;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 
 /**
  * @author Ethan Sun
  */
-public class ProductVersionDefaultValueService extends DefaultValueService implements SapphireContentAccessor {
-
-	@Override
-	public void dispose() {
-		if (_op != null) {
-			SapphireUtil.detachListener(_op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_CATEGORY), _listener);
-		}
-
-		super.dispose();
-	}
+public class ProductCategoryDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected String compute() {
-		String category = get(_op.getProductCategory());
+		Set<String> productCategoryValues;
 
-		if (category != null) {
-			List<String> productVersionsList = WorkspaceProductInfoUtil.getProductVersionList(
-				category, get(_op.getShowAllVersionProduct()));
+		Value<String> productCategory = _op.getProductCategory();
 
-			productVersionsList.sort(String::compareTo);
+		PossibleValuesService service = productCategory.service(ProductCategoryPossibleValuesService.class);
 
-			return productVersionsList.get(productVersionsList.size() - 1);
+		productCategoryValues = service.values();
+
+		if (!productCategoryValues.isEmpty()) {
+			return productCategoryValues.toArray(new String[0])[0];
 		}
 
 		return null;
@@ -61,15 +58,6 @@ public class ProductVersionDefaultValueService extends DefaultValueService imple
 
 			@Override
 			protected void handleTypedEvent(PropertyContentEvent event) {
-				String category = get(_op.getProductCategory());
-
-				List<String> productVersionsList = WorkspaceProductInfoUtil.getProductVersionList(
-					category, get(_op.getShowAllVersionProduct()));
-
-				productVersionsList.sort(String::compareTo);
-
-				_op.setProductVersion(productVersionsList.get(productVersionsList.size() - 1));
-
 				refresh();
 			}
 
@@ -78,8 +66,27 @@ public class ProductVersionDefaultValueService extends DefaultValueService imple
 		_op = context(NewLiferayWorkspaceOp.class);
 
 		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_CATEGORY), _listener);
+
+		if (!WorkspaceProductInfoUtil.workspaceCacheFile.exists()) {
+			_job.addJobChangeListener(
+				new JobChangeAdapter() {
+
+					@Override
+					public void done(final IJobChangeEvent event) {
+						IStatus status = event.getResult();
+
+						if (status.isOK()) {
+							refresh();
+						}
+					}
+
+				});
+
+			WorkspaceProductInfoUtil.downloadProductInfo();
+		}
 	}
 
+	private Job _job = WorkspaceProductInfoUtil.job;
 	private FilteredListener<PropertyContentEvent> _listener;
 	private NewLiferayWorkspaceOp _op;
 
