@@ -71,6 +71,11 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		String projectTemplateName = get(op.getProjectTemplateName());
 
+		if (projectTemplateName.startsWith("js")) {
+			return Status.createErrorStatus(
+				"The UI do not support current project for now, we recommend using terminal to create it.");
+		}
+
 		boolean warCoreExt = projectTemplateName.equals("war-core-ext");
 
 		boolean npm = projectTemplateName.startsWith("npm");
