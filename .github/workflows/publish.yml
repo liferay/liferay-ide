@@ -37,10 +37,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: Build repository
-        env:
-          BINTRAY_USER: ${{ secrets.bintray_usename }}
-          BINTRAY_API_KEY: ${{ secrets.bintray_apikey }}
         shell: bash
         run: |
           ./mvnw clean package -DskipTests=true
-          ./build/com.liferay.ide-repository/deployToBintray.sh ./build/com.liferay.ide-repository/target/repository/ gamerson eclipse liferay-ide update-snapshot
+#      - name: Upload p2 repository
+#        env:
+#          BINTRAY_USER: ${{ secrets.bintray_usename }}
+#          BINTRAY_API_KEY: ${{ secrets.bintray_apikey }}
+#        shell: bash
+#        run: |
+#          ./build/com.liferay.ide-repository/deployToBintray.sh ./build/com.liferay.ide-repository/target/repository/ gamerson eclipse liferay-ide update-snapshot
