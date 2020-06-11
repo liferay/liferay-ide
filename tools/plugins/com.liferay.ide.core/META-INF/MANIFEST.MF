@@ -5,11 +5,14 @@ Bundle-SymbolicName: com.liferay.ide.core;singleton:=true
 Bundle-Version: 3.9.0.qualifier
 Bundle-Activator: com.liferay.ide.core.LiferayCore
 Bundle-Vendor: %bundle.vendor
-Require-Bundle: org.apache.commons.codec,
+Require-Bundle: com.google.gson,
+ org.apache.commons.codec,
  org.apache.commons.collections,
  org.apache.commons.io,
  org.apache.commons.lang,
  org.apache.commons.logging,
+ org.apache.httpcomponents.httpcore,
+ org.apache.httpcomponents.httpclient,
  org.eclipse.core.contenttype,
  org.eclipse.core.expressions,
  org.eclipse.core.filesystem,
@@ -21,10 +24,7 @@ Require-Bundle: org.apache.commons.codec,
  org.eclipse.jdt.launching,
  org.eclipse.jface.text,
  org.eclipse.sapphire.modeling;bundle-version="[9,10)",
- org.json,
- org.apache.httpcomponents.httpcore,
- org.apache.httpcomponents.httpclient,
- com.google.gson;bundle-version="2.8.2"
+ org.json 
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.core,
@@ -70,4 +70,3 @@ Bundle-ClassPath: .,
  lib/commons-configuration-1.6.jar,
  lib/com.liferay.portal.tools.bundle.support-3.6.0.jar,
  lib/org.apache.httpcomponents.httpmime_4.2.1.jar
-Import-Package: com.google.common.collect

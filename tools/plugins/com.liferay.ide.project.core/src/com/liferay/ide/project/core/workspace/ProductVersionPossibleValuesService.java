@@ -12,12 +12,12 @@
  * details.
  */
 
-package com.liferay.ide.project.core.service;
+package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
-import com.liferay.ide.project.core.util.WorkspaceProductInfoUtil;
-import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.WorkspaceProductInfo;
 
 import java.util.List;
 import java.util.Set;
@@ -48,7 +48,7 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 
 		Boolean showAll = get(_op.getShowAllVersionProduct());
 
-		values.addAll(WorkspaceProductInfoUtil.getProductVersionList(category, showAll));
+		values.addAll(_productInfo.getProductVersionList(category, showAll));
 	}
 
 	@Override
@@ -63,10 +63,10 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 
 				String version = get(_op.getProductVersion());
 
-				List<String> productVersionsList = WorkspaceProductInfoUtil.getProductVersionList(
+				List<String> productVersionsList = _productInfo.getProductVersionList(
 					category, get(_op.getShowAllVersionProduct()));
 
-				if (!productVersionsList.contains(version)) {
+				if (!productVersionsList.contains(version) && ListUtil.isNotEmpty(productVersionsList)) {
 					productVersionsList.sort(String::compareTo);
 
 					_op.setProductVersion(productVersionsList.get(productVersionsList.size() - 1));
@@ -84,5 +84,6 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 
 	private FilteredListener<PropertyContentEvent> _listener;
 	private NewLiferayWorkspaceOp _op;
+	private WorkspaceProductInfo _productInfo = WorkspaceProductInfo.getInstance();
 
 }

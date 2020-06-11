@@ -9,7 +9,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/jackson-core-asl-1.9.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jackson-mapper-asl-1.9.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-validator-1.6.jar"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/com.liferay.portal.tools.bundle.support-3.6.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/com.liferay.portal.tools.bundle.support-3.6.0.jar"/>
+	<classpathentry kind="src" path="src/"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

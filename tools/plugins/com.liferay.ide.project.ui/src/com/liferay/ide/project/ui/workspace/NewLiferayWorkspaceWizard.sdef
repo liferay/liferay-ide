@@ -67,7 +67,6 @@
                     <visible-when>${ ProjectProvider == 'gradle-liferay-workspace' }</visible-when>
                     <property>IndexSources</property>
                 </property-editor>
-                <spacer></spacer>
                 <property-editor>
                     <label>Download Liferay bundle</label>
                     <property>provisionLiferayBundle</property>
@@ -80,7 +79,7 @@
                     <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
                     <property>bundleUrl</property>
                 </property-editor>
-                <spacer></spacer>
+                <spacer/>
                 <custom>
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
                 </custom>

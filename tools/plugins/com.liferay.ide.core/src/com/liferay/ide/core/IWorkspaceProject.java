@@ -14,6 +14,7 @@
 
 package com.liferay.ide.core;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -29,11 +30,19 @@ public interface IWorkspaceProject extends ILiferayProject {
 
 	public String getLiferayHome();
 
-	public List<Artifact> getTargetPlatformArtifacts();
+	public default List<Artifact> getTargetPlatformArtifacts() {
+		return Collections.emptyList();
+	}
 
 	public String getTargetPlatformVersion();
 
-	public boolean isWatchable();
+	public default ProductInfo getWorkspaceProductInfo() {
+		return null;
+	}
+
+	public default boolean isWatchable() {
+		return false;
+	}
 
 	public void watch(Set<IProject> childProjects);
 

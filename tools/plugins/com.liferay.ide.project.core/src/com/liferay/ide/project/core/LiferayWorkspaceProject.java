@@ -14,7 +14,6 @@
 
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.core.Artifact;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
@@ -28,7 +27,6 @@ import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -108,16 +106,6 @@ public abstract class LiferayWorkspaceProject extends BaseLiferayProject impleme
 	@Override
 	public IFolder[] getSourceFolders() {
 		return new IFolder[0];
-	}
-
-	@Override
-	public List<Artifact> getTargetPlatformArtifacts() {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public String getTargetPlatformVersion() {
-		return null;
 	}
 
 	@Override

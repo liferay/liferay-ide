@@ -11,6 +11,8 @@ Require-Bundle: com.google.guava,
  org.apache.commons.codec,
  org.apache.commons.io,
  org.apache.commons.lang,
+ org.apache.httpcomponents.httpcore,
+ org.apache.httpcomponents.httpclient,
  org.eclipse.core.commands,
  org.eclipse.core.expressions,
  org.eclipse.core.net,
@@ -25,9 +27,7 @@ Require-Bundle: com.google.guava,
  org.eclipse.wst.common.project.facet.core,
  org.eclipse.wst.server.core,
  org.eclipse.wst.validation,
- org.json,
- org.apache.httpcomponents.httpcore,
- org.apache.httpcomponents.httpclient
+ org.json
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.core,

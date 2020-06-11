@@ -15,10 +15,6 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
-import com.liferay.ide.project.core.service.ProductCategoryDefaultValueService;
-import com.liferay.ide.project.core.service.ProductCategoryPossibleValuesService;
-import com.liferay.ide.project.core.service.ProductVersionDefaultValueService;
-import com.liferay.ide.project.core.service.ProductVersionPossibleValuesService;
 import com.liferay.ide.project.core.service.TargetLiferayVersionDefaultValueService;
 import com.liferay.ide.project.core.service.TargetLiferayVersionPossibleValuesService;
 import com.liferay.ide.project.core.service.TargetPlatformDefaultValueService;
@@ -110,18 +106,20 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	@Label(standard = "product category")
 	@Service(impl = ProductCategoryDefaultValueService.class)
 	@Service(impl = ProductCategoryPossibleValuesService.class)
+	@Service(impl = ProductCategoryValidationService.class)
 	public ValueProperty PROP_PRODUCT_CATEGORY = new ValueProperty(TYPE, "ProductCategory");
 
 	@Label(standard = "product version")
 	@Service(impl = ProductVersionDefaultValueService.class)
 	@Service(impl = ProductVersionPossibleValuesService.class)
+	@Service(impl = ProductVersionValidationService.class)
 	public ValueProperty PROP_PRODUCT_VERSION = new ValueProperty(TYPE, "ProductVersion");
 
 	@Service(impl = NewLiferayWorkspaceServerNameService.class)
 	public ValueProperty PROP_SERVER_NAME = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME);
 
 	@DefaultValue(text = "false")
-	@Label(standard = "show all version product")
+	@Label(standard = "Show All Version Product")
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_SHOW_ALL_VERSION_PRODUCT = new ValueProperty(TYPE, "ShowAllVersionProduct");
 
