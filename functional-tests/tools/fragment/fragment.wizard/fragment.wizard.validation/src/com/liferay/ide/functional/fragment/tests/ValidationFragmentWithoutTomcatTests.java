@@ -16,7 +16,10 @@ package com.liferay.ide.functional.fragment.tests;
 
 import com.liferay.ide.functional.liferay.SwtbotBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle72Support;
 
+import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -24,6 +27,9 @@ import org.junit.Test;
  * @author Lily Li
  */
 public class ValidationFragmentWithoutTomcatTests extends SwtbotBase {
+
+	@ClassRule
+	public static LiferayWorkspaceGradle72Support liferayWorkspace = new LiferayWorkspaceGradle72Support(bot);
 
 	@Test
 	public void createFragmentWithoutRuntime() {
@@ -38,6 +44,7 @@ public class ValidationFragmentWithoutTomcatTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
+	@Ignore("ignore because blade 3.10.0 does not support the creation of gradle standalone")
 	@Test
 	public void createFragmentWithoutRuntimeLiferayWorkspace() {
 		wizardAction.openNewLiferayWorkspaceWizard();

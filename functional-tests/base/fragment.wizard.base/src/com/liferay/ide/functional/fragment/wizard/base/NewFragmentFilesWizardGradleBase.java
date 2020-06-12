@@ -16,6 +16,7 @@ package com.liferay.ide.functional.fragment.wizard.base;
 
 import com.liferay.ide.functional.liferay.SwtbotBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceSupport;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -25,7 +26,7 @@ import org.junit.Rule;
  * @author Lily Li
  * @author Ashley Yuan
  */
-public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
+public abstract class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 	public void addFragmentFilesShortcuts() {
 		wizardAction.openNewFragmentWizard();
@@ -54,7 +55,10 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] buttonjspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "init.jsp"};
+		String[] buttonjspFile = {
+			getLiferayWorkspace().getName(), "modules", project.getName(), "src", "main", "resources", "META-INF",
+			"resources", "init.jsp"
+		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(buttonjspFile));
 
@@ -69,7 +73,8 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] pageFile = {
-			project.getName(), "src", "main", "resources", "META-INF", "resources", "article", "display_page.jsp"
+			getLiferayWorkspace().getName(), "modules", project.getName(), "src", "main", "resources", "META-INF",
+			"resources", "article", "display_page.jsp"
 		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(pageFile));
@@ -84,11 +89,14 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] propertiesFile = {project.getName(), "src", "main", "java", "portlet-ext.properties"};
+		String[] propertiesFile = {
+			getLiferayWorkspace().getName(), "modules", project.getName(), "src", "main", "java",
+			"portlet-ext.properties"
+		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(propertiesFile));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
 	}
 
 	public void addFragmentJspfFiles() {
@@ -119,12 +127,13 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] jspfFile = {
-			project.getName(), "src", "main", "resources", "META-INF", "resources", "edit_vocabulary_settings.jspf"
+			getLiferayWorkspace().getName(), "modules", project.getName(), "src", "main", "resources", "META-INF",
+			"resources", "edit_vocabulary_settings.jspf"
 		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspfFile));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
 	}
 
 	public void addFragmentJspFiles() {
@@ -154,11 +163,14 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] jspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "init-ext.jsp"};
+		String[] jspFile = {
+			getLiferayWorkspace().getName(), "modules", project.getName(), "src", "main", "resources", "META-INF",
+			"resources", "init-ext.jsp"
+		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspFile));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
 	}
 
 	public void addFragmentPortletPropertiesFiles() {
@@ -188,11 +200,14 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] protletFile = {project.getName(), "src", "main", "java", "portlet-ext.properties"};
+		String[] portletFile = {
+			getLiferayWorkspace().getName(), "modules", project.getName(), "src", "main", "java",
+			"portlet-ext.properties"
+		};
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(protletFile));
+		Assert.assertTrue(viewAction.project.visibleFileTry(portletFile));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
 	}
 
 	public void addFragmentResourceActionFiles() {
@@ -223,12 +238,13 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] resourceActionFile = {
-			project.getName(), "src", "main", "resources", "resource-actions", "default-ext.xml"
+			getLiferayWorkspace().getName(), "modules", project.getName(), "src", "main", "resources",
+			"resource-actions", "default-ext.xml"
 		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(resourceActionFile));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
 	}
 
 	public void testFragmentFilesWithDeleteFuction() {
@@ -278,18 +294,26 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] viewjspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "view.jsp"};
+		String[] viewjspFile = {
+			getLiferayWorkspace().getName(), "modules", project.getName(), "src", "main", "resources", "META-INF",
+			"resources", "view.jsp"
+		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(viewjspFile));
 
-		String[] initFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "init.jsp"};
+		String[] initFile = {
+			getLiferayWorkspace().getName(), "modules", project.getName(), "src", "main", "resources", "META-INF",
+			"resources", "init.jsp"
+		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(initFile));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
 	}
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
+
+	protected abstract LiferayWorkspaceSupport getLiferayWorkspace();
 
 }

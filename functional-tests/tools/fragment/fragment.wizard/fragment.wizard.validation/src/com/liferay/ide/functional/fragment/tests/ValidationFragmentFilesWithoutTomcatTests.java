@@ -15,14 +15,19 @@
 package com.liferay.ide.functional.fragment.tests;
 
 import com.liferay.ide.functional.liferay.SwtbotBase;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle72Support;
 import com.liferay.ide.functional.swtbot.util.StringPool;
 
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * @author Lily Li
  */
 public class ValidationFragmentFilesWithoutTomcatTests extends SwtbotBase {
+
+	@ClassRule
+	public static LiferayWorkspaceGradle72Support liferayWorkspace = new LiferayWorkspaceGradle72Support(bot);
 
 	@Test
 	public void checkInitialStateWithoutRuntime() {

@@ -1054,6 +1054,7 @@ public class WizardAction extends UIAction {
 			_newLiferayWorkspaceWizard.setProjectName(projectName);
 			ide.sleep(800);
 			_newLiferayWorkspaceWizard.setBuildType(buildType);
+			ide.sleep(800);
 			_newLiferayWorkspaceWizard.setLiferayVersion(version);
 			ide.sleep(800);
 		}

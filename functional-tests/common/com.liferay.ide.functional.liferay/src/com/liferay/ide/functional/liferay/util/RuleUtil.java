@@ -18,8 +18,10 @@ import com.liferay.ide.functional.liferay.support.sdk.Sdk62Support;
 import com.liferay.ide.functional.liferay.support.sdk.SdkSupport;
 import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceRunningTomcat70Support;
 import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceRunningTomcat71Support;
+import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceRunningTomcat72Support;
 import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat70Support;
 import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat71Support;
+import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat72Support;
 import com.liferay.ide.functional.liferay.support.server.ServerRunningSupport;
 import com.liferay.ide.functional.liferay.support.server.ServerSupport;
 import com.liferay.ide.functional.liferay.support.server.Tomcat62Support;
@@ -91,7 +93,7 @@ public class RuleUtil {
 		return getRuleChain(workspace, server);
 	}
 
-	public static RuleChain getTomcat71RunningLiferayWokrspaceRuleChain(
+	public static RuleChain getTomcat71RunningLiferayWorkspaceRuleChain(
 		SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace, LiferaryWorkspaceTomcat71Support server) {
 
 		LiferaryWorkspaceRunningTomcat71Support runningServer = new LiferaryWorkspaceRunningTomcat71Support(
@@ -100,10 +102,10 @@ public class RuleUtil {
 		return getRuleChain(workspace, server, runningServer);
 	}
 
-	public static RuleChain getTomcat71RunningLiferayWorkspaceRuleChain(
-		SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace, LiferaryWorkspaceTomcat71Support server) {
+	public static RuleChain getTomcat72RunningLiferayWorkspaceRuleChain(
+		SWTWorkbenchBot bot, LiferayWorkspaceSupport workspace, LiferaryWorkspaceTomcat72Support server) {
 
-		LiferaryWorkspaceRunningTomcat71Support runningServer = new LiferaryWorkspaceRunningTomcat71Support(
+		LiferaryWorkspaceRunningTomcat72Support runningServer = new LiferaryWorkspaceRunningTomcat72Support(
 			bot, server);
 
 		return getRuleChain(workspace, server, runningServer);

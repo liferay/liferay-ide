@@ -25,9 +25,9 @@ import org.junit.Test;
 /**
  * @author Terry Jia
  */
+@Ignore("ignore because blade 3.10.0 does not support the creation of maven standalone")
 public class NewThemeProjectModuleMavenTests extends SwtbotBase {
 
-	@Ignore
 	@Test
 	public void createTheme() {
 		wizardAction.openNewLiferayModuleWizard();

@@ -16,7 +16,7 @@ package com.liferay.ide.functional.module.tests;
 
 import com.liferay.ide.functional.liferay.SwtbotBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
-import com.liferay.ide.functional.liferay.support.project.ProjectsSupport;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle72Support;
 import com.liferay.ide.functional.liferay.util.ValidationMsg;
 import com.liferay.ide.functional.swtbot.page.ComboBox;
 import com.liferay.ide.functional.swtbot.util.StringPool;
@@ -25,6 +25,7 @@ import java.io.File;
 
 import org.eclipse.core.runtime.Platform;
 
+import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,6 +35,9 @@ import org.junit.Test;
  * @author Rui Wang
  */
 public class ValidationModuleProjectTests extends SwtbotBase {
+
+	@ClassRule
+	public static LiferayWorkspaceGradle72Support liferayWorkspace = new LiferayWorkspaceGradle72Support(bot);
 
 	@Ignore("Ignore because of the change caused by IDE-4740")
 	@Test
@@ -92,6 +96,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
+	@Ignore("Ignore because of the change caused by IDE-4789")
 	@Test
 	public void checkLiferayVersion() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -113,18 +118,10 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 	@Test
 	public void checkLocationWithWorkspace() {
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(projects.getName(0));
-
-		wizardAction.finish();
-
-		jobAction.waitForNoRunningJobs();
-
 		String exceptLocation = envAction.getEclipseWorkspacePathOSString();
 
-		String workspaceModuleFolderLocation = exceptLocation + "/" + projects.getName(0) + "/modules";
-		String workspaceWarFolderLocation = exceptLocation + "/" + projects.getName(0) + "/wars";
+		String workspaceModuleFolderLocation = exceptLocation + "/" + liferayWorkspace.getName() + "/modules";
+		String workspaceWarFolderLocation = exceptLocation + "/" + liferayWorkspace.getName() + "/wars";
 
 		if ("win32".equals(Platform.getOS())) {
 			workspaceModuleFolderLocation = workspaceModuleFolderLocation.replaceAll("\\\\", "/");
@@ -133,23 +130,22 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradleInWorkspace(projects.getName(1), MVC_PORTLET);
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), MVC_PORTLET);
 
 		ide.sleep();
 
 		validationAction.assertEquals(workspaceModuleFolderLocation, wizardAction.newModule.getLocation());
 
-		wizardAction.newModule.prepareGradleInWorkspace(projects.getName(1), WAR_MVC_PORTLET);
+		wizardAction.newModule.prepareGradleInWorkspace(project.getName(), WAR_MVC_PORTLET);
 
 		ide.sleep();
 
 		validationAction.assertEquals(workspaceWarFolderLocation, wizardAction.newModule.getLocation());
 
 		wizardAction.cancel();
-
-		viewAction.project.closeAndDelete(projects.getName(0));
 	}
 
+	@Ignore("Ignore because of the change caused by IDE-4789")
 	@Test
 	public void validateBuildType() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -191,6 +187,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
+	@Ignore("Ignore because of the change caused by IDE-4789")
 	@Test
 	public void validateLoaction() {
 		String projectName = "test-location";
@@ -374,8 +371,5 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
-
-	@Rule
-	public ProjectsSupport projects = new ProjectsSupport(bot);
 
 }

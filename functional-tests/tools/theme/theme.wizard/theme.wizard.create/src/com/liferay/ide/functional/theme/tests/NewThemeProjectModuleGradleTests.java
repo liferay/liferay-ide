@@ -18,12 +18,14 @@ import com.liferay.ide.functional.liferay.SwtbotBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
+@Ignore("ignore because blade 3.10.0 does not support the creation of gradle standalone")
 public class NewThemeProjectModuleGradleTests extends SwtbotBase {
 
 	@Test

@@ -16,6 +16,7 @@ package com.liferay.ide.functional.layouttpl.deploy.base;
 
 import com.liferay.ide.functional.liferay.ServerTestBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceSupport;
 
 import org.junit.Rule;
 
@@ -27,32 +28,36 @@ public abstract class DeployLayoutTemplateModuleGradleTomcat7xBase extends Serve
 	public void deployLayoutTemplate() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), LAYOUT_TEMPLATE, getVersion());
+		wizardAction.newModule.prepareGradle(project.getName(), LAYOUT_TEMPLATE);
 
 		wizardAction.finish();
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
+		viewAction.servers.openAddAndRemoveDialog(getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
 
 		dialogAction.confirm(FINISH);
 
-		viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName());
+		viewAction.servers.visibleModuleTry(getStartedLabel(), project.getName());
 
-		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName() + "_", M1);
+		jobAction.waitForConsoleContent(getServerName(), "STARTED " + project.getName() + "_", M1);
 
-		viewAction.servers.removeModule(server.getServerName(), project.getName());
+		viewAction.servers.removeModule(getServerName(), project.getName());
 
 		dialogAction.confirm();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getWarFiles(project.getName()));
 	}
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
 
-	protected abstract String getVersion();
+	protected abstract LiferayWorkspaceSupport getLiferayWorkspace();
+
+	protected abstract String getServerName();
+
+	protected abstract String getStartedLabel();
 
 }

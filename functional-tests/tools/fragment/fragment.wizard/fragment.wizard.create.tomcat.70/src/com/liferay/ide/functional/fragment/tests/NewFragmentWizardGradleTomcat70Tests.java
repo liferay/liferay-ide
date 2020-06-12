@@ -19,12 +19,14 @@ import com.liferay.ide.functional.liferay.support.server.PureTomcat70Support;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
  * @author Lily Li
  */
+@Ignore("ignore because blade 3.10.0 does not support the creation of gradle standalone")
 public class NewFragmentWizardGradleTomcat70Tests extends NewFragmentWizardGradleBase {
 
 	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
