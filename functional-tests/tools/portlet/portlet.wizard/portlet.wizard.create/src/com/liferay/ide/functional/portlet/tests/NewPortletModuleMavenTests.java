@@ -62,6 +62,8 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 

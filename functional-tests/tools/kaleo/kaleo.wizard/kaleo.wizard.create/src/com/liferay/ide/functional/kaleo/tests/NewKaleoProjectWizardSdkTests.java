@@ -16,7 +16,9 @@ package com.liferay.ide.functional.kaleo.tests;
 
 import com.liferay.ide.functional.liferay.SwtbotBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle71Support;
 
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -25,6 +27,9 @@ import org.junit.Test;
  */
 public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
+	@ClassRule
+	public static LiferayWorkspaceGradle71Support liferayWorkspace = new LiferayWorkspaceGradle71Support(bot);
+
 	@Test
 	public void createKaleoWorkflowAssignCreatorOnProject() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -32,6 +37,8 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -49,7 +56,7 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Test
@@ -59,6 +66,8 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -80,7 +89,7 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Test
@@ -90,6 +99,8 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -111,7 +122,7 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Test
@@ -121,6 +132,8 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -144,7 +157,7 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Test
@@ -154,6 +167,8 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -175,7 +190,7 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Test
@@ -185,6 +200,8 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -206,7 +223,7 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Test
@@ -216,6 +233,8 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -229,7 +248,7 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Rule

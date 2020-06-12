@@ -15,7 +15,9 @@
 package com.liferay.ide.functional.fragment.tests;
 
 import com.liferay.ide.functional.fragment.wizard.base.NewFragmentFilesWizardMavenBase;
-import com.liferay.ide.functional.liferay.support.server.PureTomcat70Support;
+import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat70Support;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceMaven70Support;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceSupport;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
@@ -27,10 +29,11 @@ import org.junit.rules.RuleChain;
  */
 public class NewFragmentFilesWizardMavenTomcat70Tests extends NewFragmentFilesWizardMavenBase {
 
-	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
+	public static LiferayWorkspaceMaven70Support liferayWorkspace = new LiferayWorkspaceMaven70Support(bot);
+	public static LiferaryWorkspaceTomcat70Support server = new LiferaryWorkspaceTomcat70Support(bot, liferayWorkspace);
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getTomcat7xRuleChain(bot, tomcat);
+	public static RuleChain chain = RuleUtil.getTomcat70LiferayWorkspaceRuleChain(bot, liferayWorkspace, server);
 
 	@Test
 	public void addFragmentFilesShortcuts() {
@@ -60,6 +63,11 @@ public class NewFragmentFilesWizardMavenTomcat70Tests extends NewFragmentFilesWi
 	@Test
 	public void testFragmentFilesWithDeleteButton() {
 		super.testFragmentFilesWithDeleteButton();
+	}
+
+	@Override
+	protected LiferayWorkspaceSupport getLiferayWorkspace() {
+		return liferayWorkspace;
 	}
 
 }

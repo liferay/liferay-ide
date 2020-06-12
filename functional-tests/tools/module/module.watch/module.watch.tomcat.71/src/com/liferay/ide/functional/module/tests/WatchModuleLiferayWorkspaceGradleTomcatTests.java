@@ -22,7 +22,6 @@ import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -30,14 +29,13 @@ import org.junit.rules.RuleChain;
 /**
  * @author Rui Wang
  */
-@Ignore("ignore for more research")
 public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 	public static LiferayWorkspaceGradle71Support workspace = new LiferayWorkspaceGradle71Support(bot);
 	public static LiferaryWorkspaceTomcat71Support server = new LiferaryWorkspaceTomcat71Support(bot, workspace);
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getTomcat71RunningLiferayWokrspaceRuleChain(bot, workspace, server);
+	public static RuleChain chain = RuleUtil.getTomcat71RunningLiferayWorkspaceRuleChain(bot, workspace, server);
 
 	@Test
 	public void watchMVCPortlet() {
@@ -78,6 +76,8 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 		viewAction.servers.stopWatchingWorkspaceProject(server.getStartedLabel(), workspace.getName() + " [watching]");
 
 		jobAction.waitForNoRunningJobs();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDeleteFromDisk(workspace.getModuleFiles(project.getName()));
 
@@ -123,6 +123,8 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 		jobAction.waitForNoRunningJobs();
 
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
 		jobAction.waitForConsoleContent(
 			server.getServerName() + " [Liferay 7.x]", "STOPPED " + project.getName() + ".api_", M2);
 
@@ -136,6 +138,8 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 			workspace.getModuleFiles(project.getName(), project.getName() + "-api"));
 
 		jobAction.waitForNoRunningJobs();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.closeAndDeleteFromDisk(workspace.getModuleFiles(project.getName()));
 	}
@@ -162,6 +166,8 @@ public class WatchModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 		jobAction.waitForConsoleContent(
 			server.getServerName() + " [Liferay 7.x]", "STOPPED " + project.getName() + "_", M5);
+
+		jobAction.waitForNoRunningJobs();
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 

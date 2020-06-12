@@ -16,13 +16,14 @@ package com.liferay.ide.functional.fragment.deploy.base;
 
 import com.liferay.ide.functional.liferay.ServerTestBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceSupport;
 
 import org.junit.Rule;
 
 /**
  * @author Terry Jia
  */
-public class FragmentTomcat7xMavenDeployBase extends ServerTestBase {
+public abstract class FragmentTomcat7xMavenDeployBase extends ServerTestBase {
 
 	public void deployFragmentWithJsp() {
 		wizardAction.openNewFragmentWizard();
@@ -47,24 +48,32 @@ public class FragmentTomcat7xMavenDeployBase extends ServerTestBase {
 
 		jobAction.waitForNoRunningProjectBuildingJobs();
 
-		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
+		viewAction.servers.openAddAndRemoveDialog(getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
 
 		dialogAction.confirm(FINISH);
 
-		jobAction.waitForConsoleContent(server.getServerName(), "STOPPED com.liferay.blogs.web", M1);
+		jobAction.waitForConsoleContent(getServerName(), "STOPPED com.liferay.blogs.web", M1);
 
-		jobAction.waitForConsoleContent(server.getServerName(), "STARTED com.liferay.blogs.web", M1);
+		jobAction.waitForConsoleContent(getServerName(), "STARTED com.liferay.blogs.web", M1);
 
-		viewAction.servers.removeModule(server.getServerName(), project.getName());
+		viewAction.servers.removeModule(getServerName(), project.getName());
 
 		dialogAction.confirm();
 
-		viewAction.project.closeAndDelete(project.getName());
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspace().getModuleFiles(project.getName()));
 	}
 
 	@Rule
 	public ProjectSupport project = new ProjectSupport(bot);
+
+	protected abstract LiferayWorkspaceSupport getLiferayWorkspace();
+
+	protected abstract String getServerName();
+
+	protected abstract String getStartedLabel();
 
 }

@@ -16,12 +16,14 @@ package com.liferay.ide.functional.kaleo.tests;
 
 import com.liferay.ide.functional.kaleo.deploy.base.DeployKaleoGradleTomcat7xBase;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  * @author Rui Wang
  */
+@Ignore("ignore because blade 3.10.0 does not support the creation of gradle standalone")
 public class DeployKaleoTomcatDxpTests extends DeployKaleoGradleTomcat7xBase {
 
 	@Test

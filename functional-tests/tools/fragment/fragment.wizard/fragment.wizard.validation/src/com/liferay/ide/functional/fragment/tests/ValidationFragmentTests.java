@@ -16,7 +16,8 @@ package com.liferay.ide.functional.fragment.tests;
 
 import com.liferay.ide.functional.liferay.SwtbotBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
-import com.liferay.ide.functional.liferay.support.server.PureTomcat70Support;
+import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat70Support;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle70Support;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 import com.liferay.ide.functional.liferay.util.ValidationMsg;
 import com.liferay.ide.functional.swtbot.util.StringPool;
@@ -26,6 +27,7 @@ import java.io.File;
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -36,11 +38,13 @@ import org.junit.rules.RuleChain;
  */
 public class ValidationFragmentTests extends SwtbotBase {
 
-	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
+	public static LiferayWorkspaceGradle70Support liferayWorkspace = new LiferayWorkspaceGradle70Support(bot);
+	public static LiferaryWorkspaceTomcat70Support server = new LiferaryWorkspaceTomcat70Support(bot, liferayWorkspace);
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getTomcat7xRuleChain(bot, tomcat);
+	public static RuleChain chain = RuleUtil.getTomcat70LiferayWorkspaceRuleChain(bot, liferayWorkspace, server);
 
+	@Ignore("Ignore because of the change caused by IDE-4789")
 	@Test
 	public void checkBuildType() {
 		wizardAction.openNewFragmentWizard();
@@ -131,6 +135,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
+	@Ignore("Ignore because of the change caused by IDE-4789")
 	@Test
 	public void checkLocation() {
 		wizardAction.openNewFragmentWizard();

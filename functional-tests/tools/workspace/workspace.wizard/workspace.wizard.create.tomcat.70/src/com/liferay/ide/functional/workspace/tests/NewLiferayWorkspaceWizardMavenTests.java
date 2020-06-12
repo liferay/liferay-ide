@@ -188,6 +188,10 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		editorAction.close();
 
+		jobAction.waitForNoRunningJobs();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
+
 		viewAction.project.deleteProjectFromDisk(
 			projects.getName(0), projects.getName(0) + "-modules (in modules)", projects.getName(1));
 
@@ -277,6 +281,8 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		editorAction.close();
 
 		jobAction.waitForNoRunningJobs();
+
+		jobAction.waitForNoRunningProjectBuildingJobs();
 
 		viewAction.project.deleteProjectFromDisk(
 			projects.getName(0), projects.getName(0) + "-wars (in wars)", projects.getName(1));

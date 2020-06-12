@@ -19,6 +19,7 @@ import com.liferay.ide.functional.liferay.support.server.PureTomcat71Support;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -26,6 +27,7 @@ import org.junit.rules.RuleChain;
  * @author Ashley Yuan
  * @author Ying Xu
  */
+@Ignore("ignore because blade 3.10.0 does not support the creation of maven standalone")
 public class NewFragmentWizardMavenTomcat71Tests extends NewFragmentWizardMavenBase {
 
 	public static PureTomcat71Support tomcat = new PureTomcat71Support(bot);

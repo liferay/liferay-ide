@@ -15,35 +15,44 @@
 package com.liferay.ide.functional.fragment.tests;
 
 import com.liferay.ide.functional.fragment.deploy.base.FragmentTomcat7xGradleDeployBase;
-import com.liferay.ide.functional.liferay.support.server.PureTomcat72Support;
-import com.liferay.ide.functional.liferay.support.server.ServerSupport;
+import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat72Support;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle72Support;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceSupport;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
  * @author Lily Li
  */
-@Ignore("ignore because blade 3.10.0 does not support the creation of gradle standalone")
 public class DeployFragmentGradleTomcat72Tests extends FragmentTomcat7xGradleDeployBase {
 
+	public static LiferayWorkspaceGradle72Support workspace = new LiferayWorkspaceGradle72Support(bot);
+	public static LiferaryWorkspaceTomcat72Support server = new LiferaryWorkspaceTomcat72Support(bot, workspace);
+
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getTomcat7xRunningRuleChain(bot, getServer());
-
-	public static ServerSupport getServer() {
-		if ((server == null) || !(server instanceof PureTomcat72Support)) {
-			server = new PureTomcat72Support(bot);
-		}
-
-		return server;
-	}
+	public static RuleChain chain = RuleUtil.getTomcat72RunningLiferayWorkspaceRuleChain(bot, workspace, server);
 
 	@Test
 	public void deployFragmentWithJsp() {
 		super.deployFragmentWithJsp();
+	}
+
+	@Override
+	protected LiferayWorkspaceSupport getLiferayWorkspace() {
+		return workspace;
+	}
+
+	@Override
+	protected String getServerName() {
+		return server.getServerName();
+	}
+
+	@Override
+	protected String getStartedLabel() {
+		return server.getStartedLabel();
 	}
 
 }

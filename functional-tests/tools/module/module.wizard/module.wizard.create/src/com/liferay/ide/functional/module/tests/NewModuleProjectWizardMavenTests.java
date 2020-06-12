@@ -27,6 +27,7 @@ import org.junit.Test;
  * @author Ying Xu
  * @author Ashley Yuan
  */
+@Ignore("ignore because blade 3.10.0 does not support the creation of maven standalone")
 public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Ignore("ignore because blade 3.10.0 remove activator")

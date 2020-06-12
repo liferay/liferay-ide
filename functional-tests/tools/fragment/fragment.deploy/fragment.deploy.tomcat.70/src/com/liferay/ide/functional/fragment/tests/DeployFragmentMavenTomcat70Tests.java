@@ -15,8 +15,9 @@
 package com.liferay.ide.functional.fragment.tests;
 
 import com.liferay.ide.functional.fragment.deploy.base.FragmentTomcat7xMavenDeployBase;
-import com.liferay.ide.functional.liferay.support.server.PureTomcat70Support;
-import com.liferay.ide.functional.liferay.support.server.ServerSupport;
+import com.liferay.ide.functional.liferay.support.server.LiferaryWorkspaceTomcat70Support;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceMaven70Support;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceSupport;
 import com.liferay.ide.functional.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
@@ -28,20 +29,30 @@ import org.junit.rules.RuleChain;
  */
 public class DeployFragmentMavenTomcat70Tests extends FragmentTomcat7xMavenDeployBase {
 
+	public static LiferayWorkspaceMaven70Support liferayWorkspace = new LiferayWorkspaceMaven70Support(bot);
+	public static LiferaryWorkspaceTomcat70Support server = new LiferaryWorkspaceTomcat70Support(bot, liferayWorkspace);
+
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getTomcat7xRunningRuleChain(bot, getServer());
-
-	public static ServerSupport getServer() {
-		if ((server == null) || !(server instanceof PureTomcat70Support)) {
-			server = new PureTomcat70Support(bot);
-		}
-
-		return server;
-	}
+	public static RuleChain chain = RuleUtil.getTomcat70RunningLiferayWorkspaceRuleChain(bot, liferayWorkspace, server);
 
 	@Test
 	public void deployFragmentWithJsp() {
 		super.deployFragmentWithJsp();
+	}
+
+	@Override
+	protected LiferayWorkspaceSupport getLiferayWorkspace() {
+		return liferayWorkspace;
+	}
+
+	@Override
+	protected String getServerName() {
+		return server.getServerName();
+	}
+
+	@Override
+	protected String getStartedLabel() {
+		return server.getStartedLabel();
 	}
 
 }

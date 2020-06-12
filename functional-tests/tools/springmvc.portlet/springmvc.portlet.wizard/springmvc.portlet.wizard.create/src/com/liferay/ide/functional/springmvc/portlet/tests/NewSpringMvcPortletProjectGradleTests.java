@@ -16,7 +16,9 @@ package com.liferay.ide.functional.springmvc.portlet.tests;
 
 import com.liferay.ide.functional.liferay.SwtbotBase;
 import com.liferay.ide.functional.liferay.support.project.ProjectSupport;
+import com.liferay.ide.functional.liferay.support.workspace.LiferayWorkspaceGradle72Support;
 
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -24,6 +26,9 @@ import org.junit.Test;
  * @author Rui Wang
  */
 public class NewSpringMvcPortletProjectGradleTests extends SwtbotBase {
+
+	@ClassRule
+	public static LiferayWorkspaceGradle72Support liferayWorkspace = new LiferayWorkspaceGradle72Support(bot);
 
 	@Test
 	public void createPortletMVC4SpringEmbeddedJsp() {
@@ -37,7 +42,7 @@ public class NewSpringMvcPortletProjectGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDeleteFromDisk(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
 	}
 
 	@Test
@@ -52,7 +57,7 @@ public class NewSpringMvcPortletProjectGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDeleteFromDisk(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
 	}
 
 	@Test
@@ -67,7 +72,7 @@ public class NewSpringMvcPortletProjectGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDeleteFromDisk(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
 	}
 
 	@Test
@@ -82,7 +87,7 @@ public class NewSpringMvcPortletProjectGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDeleteFromDisk(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
 	}
 
 	@Test
@@ -97,7 +102,7 @@ public class NewSpringMvcPortletProjectGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDeleteFromDisk(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
 	}
 
 	@Test
@@ -112,7 +117,7 @@ public class NewSpringMvcPortletProjectGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDeleteFromDisk(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
 	}
 
 	@Rule
