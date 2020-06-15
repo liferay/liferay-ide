@@ -262,11 +262,6 @@
                     <program>${bladeCommandPath}</program>
                     <programArguments>--base "${lrws}" init -v "7.2"</programArguments>
                 </runProgram>
-                <propertiesFileSet>
-                    <file>${lrws}${platform_path_separator}gradle.properties</file>
-                    <key>liferay.workspace.bundle.url</key>
-                    <value>https://releases-cdn.liferay.com/portal/7.2.0-ga1/liferay-ce-portal-tomcat-7.2.0-ga1-20190531153709761.tar.gz</value>
-                </propertiesFileSet>
                 <createDirectory>
                     <path>${userHome}${platform_path_separator}.gradle</path>
                 </createDirectory>
