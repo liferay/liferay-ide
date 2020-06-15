@@ -71,6 +71,12 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		String projectTemplateName = get(op.getProjectTemplateName());
 
+		if (projectTemplateName.startsWith("js")) {
+			return Status.createErrorStatus(
+				"This wizard does not support creating this type of module. Create it using the CLI first and then " +
+					"import here.");
+		}
+
 		boolean warCoreExt = projectTemplateName.equals("war-core-ext");
 
 		boolean npm = projectTemplateName.startsWith("npm");
