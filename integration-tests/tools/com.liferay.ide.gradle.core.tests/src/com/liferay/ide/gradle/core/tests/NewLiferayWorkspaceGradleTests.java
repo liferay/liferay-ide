@@ -51,8 +51,8 @@ public class NewLiferayWorkspaceGradleTests extends ProjectOpBase<NewLiferayWork
 		createOrImportAndBuild(op, workspace.getName());
 
 		assertPropertyValue(
-			workspace.getName(), "gradle.properties", "liferay.workspace.bundle.url",
-			WorkspaceConstants.BUNDLE_URL_CE_7_1);
+			workspace.getName(), "gradle.properties", "liferay.workspace.product",
+			WorkspaceConstants.WORKSPACE_PRODUCT_7_1);
 
 		deleteProject(workspace.getName());
 	}

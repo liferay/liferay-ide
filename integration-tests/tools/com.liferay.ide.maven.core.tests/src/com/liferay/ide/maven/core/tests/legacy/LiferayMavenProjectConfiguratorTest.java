@@ -46,6 +46,8 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 		assertNotNull(facade);
 
 		assertTrue(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
+
+		deleteProject("default-webapp-no-liferay-plugin");
 	}
 
 	@Test
@@ -63,6 +65,8 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 		waitForJobsToComplete();
 
 		assertTrue(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
+
+		deleteProject("webapp-alternate-webapp-folder");
 	}
 
 	@Test
@@ -78,6 +82,8 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 		assertNotNull(facade);
 
 		assertFalse(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
+
+		deleteProject("webapp-1");
 	}
 
 	@Test
@@ -95,6 +101,8 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 		waitForJobsToComplete();
 
 		assertTrue(LiferayCore.create(ILiferayProject.class, project) instanceof FacetedMavenProject);
+
+		deleteProject("bad-war-config");
 	}
 
 }
