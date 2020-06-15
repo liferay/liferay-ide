@@ -14,10 +14,18 @@
 
 package com.liferay.ide.project.core.workspace;
 
-import com.liferay.ide.project.core.WorkspaceProductInfo;
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.project.core.modules.BladeCLI;
 
+import java.util.Arrays;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.PossibleValuesService;
 
 /**
@@ -27,23 +35,57 @@ public class ProductCategoryPossibleValuesService extends PossibleValuesService 
 
 	@Override
 	protected void compute(Set<String> values) {
-		values.addAll(_productInfo.getProductCategory());
+		if (ListUtil.isEmpty(_workspaceProducts)) {
+			return;
+		}
+
+		Set<String> categorySet = Stream.of(
+			_workspaceProducts
+		).map(
+			productTemplete -> productTemplete.split("-")[0]
+		).collect(
+			Collectors.toSet()
+		);
+
+		if (ListUtil.isNotEmpty(categorySet)) {
+			values.addAll(categorySet);
+
+			String[] productCategoryValuesArr = categorySet.toArray(new String[0]);
+
+			Arrays.sort(productCategoryValuesArr, String::compareTo);
+
+			_op.setProductCategory(productCategoryValuesArr[productCategoryValuesArr.length - 1]);
+		}
 	}
 
 	@Override
 	protected void initPossibleValuesService() {
-		_productInfo.startWorkspaceProductDownload(
-			new Runnable() {
+		_op = context(NewLiferayWorkspaceOp.class);
 
-				@Override
-				public void run() {
-					System.out.println("VVVVVVVVVVVVVVVVVVVVVVVV");
+		Job refreshWorkspaceProductJob = new Job("") {
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					_workspaceProducts = BladeCLI.getInitPromotedWorkspaceProduct(true);
+
 					refresh();
 				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
 
-			});
+				return Status.OK_STATUS;
+			}
+
+		};
+
+		refreshWorkspaceProductJob.setSystem(true);
+
+		refreshWorkspaceProductJob.schedule();
 	}
 
-	private WorkspaceProductInfo _productInfo = WorkspaceProductInfo.getInstance();
+	private NewLiferayWorkspaceOp _op;
+	private String[] _workspaceProducts;
 
 }

@@ -18,10 +18,16 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.WorkspaceProductInfo;
+import com.liferay.ide.project.core.modules.BladeCLI;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -44,11 +50,13 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 
 	@Override
 	protected void compute(Set<String> values) {
-		String category = get(_op.getProductCategory());
+		if (ListUtil.isNotEmpty(_workspaceProducts)) {
+			String category = get(_op.getProductCategory());
 
-		Boolean showAll = get(_op.getShowAllVersionProduct());
+			List<String> productVersionList = _productInfo.getProductVersionList(category, _workspaceProducts);
 
-		values.addAll(_productInfo.getProductVersionList(category, showAll));
+			values.addAll(productVersionList);
+		}
 	}
 
 	@Override
@@ -59,20 +67,44 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 
 			@Override
 			protected void handleTypedEvent(PropertyContentEvent event) {
-				String category = get(_op.getProductCategory());
+				Job refreshWorkspaceProductJob = new Job("") {
 
-				String version = get(_op.getProductVersion());
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						try {
+							String category = get(_op.getProductCategory());
 
-				List<String> productVersionsList = _productInfo.getProductVersionList(
-					category, get(_op.getShowAllVersionProduct()));
+							String version = get(_op.getProductVersion());
 
-				if (!productVersionsList.contains(version) && ListUtil.isNotEmpty(productVersionsList)) {
-					productVersionsList.sort(String::compareTo);
+							boolean showAll = get(_op.getShowAllVersionProduct());
 
-					_op.setProductVersion(productVersionsList.get(productVersionsList.size() - 1));
-				}
+							_workspaceProducts = BladeCLI.getInitPromotedWorkspaceProduct(showAll);
 
-				refresh();
+							List<String> productVersionsList = _productInfo.getProductVersionList(
+								category, _workspaceProducts);
+
+							if (Objects.nonNull(version) && !productVersionsList.contains(version) &&
+								ListUtil.isNotEmpty(productVersionsList)) {
+
+								productVersionsList.sort(String::compareTo);
+
+								_op.setProductVersion(productVersionsList.get(productVersionsList.size() - 1));
+							}
+
+							refresh();
+						}
+						catch (Exception e) {
+							e.printStackTrace();
+						}
+
+						return Status.OK_STATUS;
+					}
+
+				};
+
+				refreshWorkspaceProductJob.setSystem(true);
+
+				refreshWorkspaceProductJob.schedule();
 			}
 
 		};
@@ -85,5 +117,6 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 	private FilteredListener<PropertyContentEvent> _listener;
 	private NewLiferayWorkspaceOp _op;
 	private WorkspaceProductInfo _productInfo = WorkspaceProductInfo.getInstance();
+	private String[] _workspaceProducts;
 
 }

@@ -18,9 +18,14 @@ import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.WorkspaceProductInfo;
+import com.liferay.ide.project.core.modules.BladeCLI;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -42,20 +47,17 @@ public class ProductVersionDefaultValueService extends DefaultValueService imple
 
 	@Override
 	protected String compute() {
-		String category = get(_op.getProductCategory());
-
-		if (category != null) {
-			List<String> productVersionsList = _productInfo.getProductVersionList(
-				category, get(_op.getShowAllVersionProduct()));
-
-			productVersionsList.sort(String::compareTo);
-
-			if (ListUtil.isNotEmpty(productVersionsList)) {
-				return productVersionsList.get(productVersionsList.size() - 1);
-			}
+		if (ListUtil.isEmpty(_workspaceProducts)) {
+			return null;
 		}
 
-		return "";
+		String category = get(_op.getProductCategory());
+
+		List<String> productVersionsList = _productInfo.getProductVersionList(category, _workspaceProducts);
+
+		productVersionsList.sort(String::compareTo);
+
+		return productVersionsList.get(productVersionsList.size() - 1);
 	}
 
 	@Override
@@ -66,20 +68,29 @@ public class ProductVersionDefaultValueService extends DefaultValueService imple
 
 			@Override
 			protected void handleTypedEvent(PropertyContentEvent event) {
-				String category = get(_op.getProductCategory());
+				Job refreshWorkspaceProductJob = new Job("") {
 
-				String version = get(_op.getProductVersion());
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						try {
+							boolean showAll = get(_op.getShowAllVersionProduct());
 
-				List<String> productVersionsList = _productInfo.getProductVersionList(
-					category, get(_op.getShowAllVersionProduct()));
+							_workspaceProducts = BladeCLI.getInitPromotedWorkspaceProduct(showAll);
 
-				productVersionsList.sort(String::compareTo);
+							refresh();
+						}
+						catch (Exception e) {
+							e.printStackTrace();
+						}
 
-				if (ListUtil.isNotEmpty(productVersionsList) && !productVersionsList.contains(version)) {
-					_op.setProductVersion(productVersionsList.get(productVersionsList.size() - 1));
-				}
+						return Status.OK_STATUS;
+					}
 
-				refresh();
+				};
+
+				refreshWorkspaceProductJob.setSystem(true);
+
+				refreshWorkspaceProductJob.schedule();
 			}
 
 		};
@@ -91,5 +102,6 @@ public class ProductVersionDefaultValueService extends DefaultValueService imple
 	private FilteredListener<PropertyContentEvent> _listener;
 	private NewLiferayWorkspaceOp _op;
 	private WorkspaceProductInfo _productInfo = WorkspaceProductInfo.getInstance();
+	private String[] _workspaceProducts;
 
 }

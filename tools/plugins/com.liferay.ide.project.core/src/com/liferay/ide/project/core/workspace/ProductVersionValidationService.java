@@ -16,10 +16,13 @@ package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.util.Objects;
 
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.StatusBridge;
@@ -34,9 +37,9 @@ public class ProductVersionValidationService extends ValidationService implement
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
-		Value<String> productCategory = _op().getProductCategory();
+		Value<String> productVersion = _op.getProductVersion();
 
-		ProductVersionPossibleValuesService possibleValuesService = productCategory.service(
+		ProductVersionPossibleValuesService possibleValuesService = productVersion.service(
 			ProductVersionPossibleValuesService.class);
 
 		if (Objects.isNull(possibleValuesService) || ListUtil.isEmpty(possibleValuesService.values())) {
@@ -46,8 +49,23 @@ public class ProductVersionValidationService extends ValidationService implement
 		return retval;
 	}
 
-	private NewLiferayWorkspaceOp _op() {
-		return context(NewLiferayWorkspaceOp.class);
+	@Override
+	protected void initValidationService() {
+		_op = context(NewLiferayWorkspaceOp.class);
+
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_VERSION), _listener);
 	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+	private NewLiferayWorkspaceOp _op;
 
 }

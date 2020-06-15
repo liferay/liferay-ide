@@ -16,11 +16,13 @@ package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
+import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.WorkspaceProductInfo;
 
 import java.util.Objects;
 
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.StatusBridge;
@@ -35,7 +37,7 @@ public class ProductCategoryValidationService extends ValidationService implemen
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
-		Value<String> productCategory = _op().getProductCategory();
+		Value<String> productCategory = _op.getProductCategory();
 
 		ProductCategoryPossibleValuesService possibleValuesService = productCategory.service(
 			ProductCategoryPossibleValuesService.class);
@@ -49,22 +51,21 @@ public class ProductCategoryValidationService extends ValidationService implemen
 
 	@Override
 	protected void initValidationService() {
-		_productInfo.startWorkspaceProductDownload(
-			new Runnable() {
+		_op = context(NewLiferayWorkspaceOp.class);
 
-				@Override
-				public void run() {
-					System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBB");
-					refresh();
-				}
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
-			});
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_PRODUCT_CATEGORY), _listener);
 	}
 
-	private NewLiferayWorkspaceOp _op() {
-		return context(NewLiferayWorkspaceOp.class);
-	}
-
-	private WorkspaceProductInfo _productInfo = WorkspaceProductInfo.getInstance();
+	private FilteredListener<PropertyContentEvent> _listener;
+	private NewLiferayWorkspaceOp _op;
 
 }

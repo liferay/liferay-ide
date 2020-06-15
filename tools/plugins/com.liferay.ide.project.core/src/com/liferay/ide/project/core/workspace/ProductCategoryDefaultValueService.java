@@ -14,13 +14,14 @@
 
 package com.liferay.ide.project.core.workspace;
 
-import com.liferay.ide.project.core.WorkspaceProductInfo;
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.project.core.modules.BladeCLI;
 
-import java.util.Set;
-
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.DefaultValueService;
-import org.eclipse.sapphire.PossibleValuesService;
-import org.eclipse.sapphire.Value;
 
 /**
  * @author Ethan Sun
@@ -29,38 +30,38 @@ public class ProductCategoryDefaultValueService extends DefaultValueService {
 
 	@Override
 	protected String compute() {
-		Set<String> productCategoryValues;
-
-		Value<String> productCategory = _op.getProductCategory();
-
-		PossibleValuesService service = productCategory.service(ProductCategoryPossibleValuesService.class);
-
-		productCategoryValues = service.values();
-
-		if (!productCategoryValues.isEmpty()) {
-			return productCategoryValues.toArray(new String[0])[0];
+		if (ListUtil.isEmpty(_workspaceProducts)) {
+			return null;
 		}
 
-		return null;
+		return "portal";
 	}
 
 	@Override
 	protected void initDefaultValueService() {
-		_op = context(NewLiferayWorkspaceOp.class);
+		Job refreshWorkspaceProductJob = new Job("") {
 
-		_productInfo.startWorkspaceProductDownload(
-			new Runnable() {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					_workspaceProducts = BladeCLI.getInitPromotedWorkspaceProduct(true);
 
-				@Override
-				public void run() {
-					System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA");
 					refresh();
 				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
 
-			});
+				return Status.OK_STATUS;
+			}
+
+		};
+
+		refreshWorkspaceProductJob.setSystem(true);
+
+		refreshWorkspaceProductJob.schedule();
 	}
 
-	private NewLiferayWorkspaceOp _op;
-	private WorkspaceProductInfo _productInfo = WorkspaceProductInfo.getInstance();
+	private String[] _workspaceProducts;
 
 }

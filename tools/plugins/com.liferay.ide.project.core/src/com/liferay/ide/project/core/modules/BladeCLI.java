@@ -195,6 +195,27 @@ public class BladeCLI {
 		}
 	}
 
+	public static synchronized String[] getInitPromotedWorkspaceProduct(boolean showAll) throws BladeCLIException {
+		List<String> templateNames = new ArrayList<>();
+
+		String[] executeResult;
+
+		if (showAll) {
+			executeResult = execute("init -a -l");
+		}
+		else {
+			executeResult = execute("init -l");
+		}
+
+		for (String category : executeResult) {
+			category = category.trim();
+
+			templateNames.add(category);
+		}
+
+		return templateNames.toArray(new String[0]);
+	}
+
 	public static synchronized String[] getProjectTemplates() throws BladeCLIException {
 		List<String> templateNames = new ArrayList<>();
 

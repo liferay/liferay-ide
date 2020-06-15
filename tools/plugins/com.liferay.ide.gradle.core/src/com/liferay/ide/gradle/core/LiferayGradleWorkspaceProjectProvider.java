@@ -82,7 +82,7 @@ public class LiferayGradleWorkspaceProjectProvider
 		sb.append("\" ");
 		sb.append("init ");
 		sb.append("-v ");
-		sb.append(get(op.getLiferayVersion()));
+		sb.append(get(op.getProductVersion()));
 
 		try {
 			BladeCLI.execute(sb.toString());
