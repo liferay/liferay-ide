@@ -383,11 +383,6 @@
                     <program>${bladeCommandPath}</program>
                     <programArguments>--base "${lrws}" init -v "7.2"</programArguments>
                 </runProgram>
-                <propertiesFileSet>
-                    <file>${lrws}${platform_path_separator}gradle.properties</file>
-                    <key>liferay.workspace.bundle.url</key>
-                    <value>https://api.liferay.com/downloads/portal/7.2.10/liferay-dxp-tomcat-7.2.10-ga1-20190531140450482.tar.gz</value>
-                </propertiesFileSet>
                 <createDirectory>
                     <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
                     <ruleList>
