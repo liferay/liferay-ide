@@ -73,7 +73,8 @@ public class ProjectTemplateNameValidationService extends ValidationService impl
 
 		if (projectTemplateName.startsWith("js")) {
 			return Status.createErrorStatus(
-				"The UI do not support current project for now, we recommend using terminal to create it.");
+				"This wizard does not support creating this type of module. Create it using the CLI first and then " +
+					"import here.");
 		}
 
 		boolean warCoreExt = projectTemplateName.equals("war-core-ext");
