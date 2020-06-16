@@ -41,22 +41,19 @@ import org.eclipse.m2e.core.internal.MavenPluginActivator;
 /**
  * A helper to boot the repository system and a repository system session.
  * @author Gregory Amerson
+ * @author Seiphon Wang
  */
 @SuppressWarnings("restriction")
 public class AetherUtil {
 
-	public static Artifact getLatestAvailableArtifact(String gavCoords) {
+	public static Artifact getAvailableArtifact(String gavCoords) {
 		Artifact retval = null;
 
 		RepositorySystem system = newRepositorySystem();
 
 		RepositorySystemSession session = newRepositorySystemSession(system);
 
-		String latestVersion = getLatestVersion(gavCoords, system, session);
-
-		String[] gav = gavCoords.split(":");
-
-		Artifact defaultArtifact = new DefaultArtifact(gav[0] + ":" + gav[1] + ":" + latestVersion);
+		Artifact defaultArtifact = new DefaultArtifact(gavCoords);
 
 		ArtifactRequest artifactRequest = new ArtifactRequest();
 
@@ -90,6 +87,18 @@ public class AetherUtil {
 		}
 
 		return retval;
+	}
+
+	public static Artifact getLatestAvailableArtifact(String gavCoords) {
+		RepositorySystem system = newRepositorySystem();
+
+		RepositorySystemSession session = newRepositorySystemSession(system);
+
+		String latestVersion = getLatestVersion(gavCoords, system, session);
+
+		String[] gav = gavCoords.split(":");
+
+		return getAvailableArtifact(gav[0] + ":" + gav[1] + ":" + latestVersion);
 	}
 
 	public static String getLatestVersion(String gavCoords, RepositorySystem system, RepositorySystemSession session) {

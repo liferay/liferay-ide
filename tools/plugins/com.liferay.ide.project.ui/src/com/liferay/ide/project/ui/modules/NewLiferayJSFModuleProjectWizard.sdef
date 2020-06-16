@@ -37,6 +37,11 @@
                 </property-editor>
                 <spacer/>
                 <property-editor>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <property>LiferayVersion</property>
+                </property-editor>
+                <spacer/>
+                <property-editor>
                     <property>ProjectProvider</property>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                 </property-editor>

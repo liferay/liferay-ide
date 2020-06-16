@@ -25,8 +25,6 @@ import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
 
 import java.io.File;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.http.HttpEntity;
@@ -55,14 +53,9 @@ import org.eclipse.m2e.core.internal.embedder.MavenImpl;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.platform.PathBridge;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import org.osgi.framework.Version;
-
 /**
  * @author Simon Jiang
+ * @author Seiphon Wang
  */
 @SuppressWarnings("restriction")
 public class NewMavenJSFModuleProjectProvider
@@ -92,27 +85,6 @@ public class NewMavenJSFModuleProjectProvider
 		retval = Status.OK_STATUS;
 
 		return retval;
-	}
-
-	@Override
-	public <T> List<T> getData(String key, Class<T> type, Object... params) {
-		if ("archetypeGAV".equals(key) && type.equals(String.class) && (params.length == 1)) {
-			List<T> retval = new ArrayList<>();
-
-			String templateName = params[0].toString();
-
-			Version latestVersion = _extractLatestVersion("com.liferay.faces.archetype." + templateName + ".portlet");
-
-			String gav =
-				"com.liferay.faces.archetype:com.liferay.faces.archetype." + templateName + ".portlet:" +
-					latestVersion.toString();
-
-			retval.add(type.cast(gav));
-
-			return retval;
-		}
-
-		return super.getData(key, type, params);
 	}
 
 	public String getHttpResponse(String request) {
@@ -232,7 +204,11 @@ public class NewMavenJSFModuleProjectProvider
 
 		archetype.setVersion(archetypeVersion);
 
-		Artifact artifact = AetherUtil.getLatestAvailableArtifact(archetypeArtifactId);
+		Artifact artifact = AetherUtil.getAvailableArtifact(archetypeArtifactId);
+
+		if (artifact == null) {
+			throw new CoreException(LiferayCore.createErrorStatus("Unable to create project from archetype."));
+		}
 
 		Properties properties = new Properties();
 
@@ -292,74 +268,12 @@ public class NewMavenJSFModuleProjectProvider
 		return projectLocation;
 	}
 
-	private Version _extractLatestVersion(String artifactId) {
-		Version maxVersion = new Version("5.0.1");
-
-		try {
-			String responseString = getHttpResponse(
-				"https://search.maven.org/solrsearch/select?q=g:com.liferay.faces.archetype+AND+a:" + artifactId +
-					"&rows=20&wt=json");
-
-			Object result = _getJSONResponse(responseString);
-
-			if (result instanceof JSONObject) {
-				JSONObject jsonResult = (JSONObject)result;
-
-				Object response = jsonResult.get("response");
-
-				if (response != null) {
-					JSONObject jsonResponse = (JSONObject)response;
-
-					Object docs = jsonResponse.get("docs");
-
-					if ((docs != null) && docs instanceof JSONArray) {
-						JSONArray jsonDocs = (JSONArray)docs;
-
-						for (int i = 0; i < jsonDocs.length(); i++) {
-							JSONObject jsonDoc = (JSONObject)jsonDocs.get(i);
-
-							String versionString = (String)jsonDoc.get("latestVersion");
-
-							Version tmpVersion = Version.parseVersion(versionString);
-
-							if ((tmpVersion.compareTo(maxVersion) > 0) || (maxVersion == null)) {
-								maxVersion = tmpVersion;
-							}
-						}
-					}
-				}
-			}
-		}
-		catch (Exception e) {
-			LiferayMavenCore.logError("Failed to get latest JSF archtype version", e);
-		}
-
-		return maxVersion;
-	}
-
 	private ArchetypeManager _getArchetyper() {
 		MavenPluginActivator plugin = MavenPluginActivator.getDefault();
 
 		org.eclipse.m2e.core.internal.archetype.ArchetypeManager archetypeManager = plugin.getArchetypeManager();
 
 		return archetypeManager.getArchetyper();
-	}
-
-	private Object _getJSONResponse(String response) {
-		Object retval = null;
-
-		try {
-			retval = new JSONObject(response);
-		}
-		catch (JSONException e) {
-			try {
-				retval = new JSONArray(response);
-			}
-			catch (JSONException e1) {
-			}
-		}
-
-		return retval;
 	}
 
 }
