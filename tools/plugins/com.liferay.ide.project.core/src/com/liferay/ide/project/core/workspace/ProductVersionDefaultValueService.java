@@ -70,7 +70,7 @@ public class ProductVersionDefaultValueService extends DefaultValueService imple
 						try {
 							boolean showAll = get(_op.getShowAllVersionProduct());
 
-							_workspaceProducts = BladeCLI.getWorkspaceProduct(showAll);
+							_workspaceProducts = BladeCLI.getWorkspaceProducts(showAll);
 
 							refresh();
 						}

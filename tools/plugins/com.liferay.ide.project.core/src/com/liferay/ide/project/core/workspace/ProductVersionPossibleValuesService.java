@@ -79,11 +79,21 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					_productVersions.clear();
-					Collections.addAll(_productVersions, BladeCLI.getWorkspaceProduct(true));
+					String[] allWorkspaceProducts = BladeCLI.getWorkspaceProducts(true);
 
-					_promotedProductVersions.clear();
-					Collections.addAll(_promotedProductVersions, BladeCLI.getWorkspaceProduct(false));
+					if (!_isEmpty(allWorkspaceProducts)) {
+						_productVersions.clear();
+
+						Collections.addAll(_productVersions, allWorkspaceProducts);
+					}
+
+					String[] promotedProducts = BladeCLI.getWorkspaceProducts(false);
+
+					if (!_isEmpty(promotedProducts)) {
+						_promotedProductVersions.clear();
+
+						Collections.addAll(_promotedProductVersions, promotedProducts);
+					}
 
 					refresh();
 				}
@@ -110,6 +120,14 @@ public class ProductVersionPossibleValuesService extends PossibleValuesService i
 		};
 
 		SapphireUtil.attachListener(op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
+	}
+
+	private boolean _isEmpty(String[] values) {
+		if ((values != null) && (values.length > 0)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private FilteredListener<PropertyContentEvent> _listener;

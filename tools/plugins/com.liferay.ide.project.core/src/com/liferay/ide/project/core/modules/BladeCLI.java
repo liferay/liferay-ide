@@ -220,16 +220,16 @@ public class BladeCLI {
 		return templateNames.toArray(new String[0]);
 	}
 
-	public static synchronized String[] getWorkspaceProduct(boolean showAll) throws BladeCLIException {
+	public static synchronized String[] getWorkspaceProducts(boolean showAll) throws BladeCLIException {
 		List<String> workspaceProducts = new ArrayList<>();
 
 		String[] executeResult;
 
 		if (showAll) {
-			executeResult = execute("init -l --all");
+			executeResult = execute("init --list --all");
 		}
 		else {
-			executeResult = execute("init -l");
+			executeResult = execute("init --list");
 		}
 
 		for (String result : executeResult) {
