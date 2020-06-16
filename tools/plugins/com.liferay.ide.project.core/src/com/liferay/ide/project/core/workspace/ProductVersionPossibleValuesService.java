@@ -14,15 +14,15 @@
 
 package com.liferay.ide.project.core.workspace;
 
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.SapphireContentAccessor;
 import com.liferay.ide.core.util.SapphireUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -37,75 +37,83 @@ import org.eclipse.sapphire.PropertyContentEvent;
  */
 public class ProductVersionPossibleValuesService extends PossibleValuesService implements SapphireContentAccessor {
 
+	public ProductVersionPossibleValuesService() {
+		_productVersions = new CopyOnWriteArrayList<>();
+		_promotedProductVersions = new CopyOnWriteArrayList<>();
+	}
+
 	@Override
 	public void dispose() {
-		if (_op != null) {
-			SapphireUtil.detachListener(_op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
+		NewLiferayWorkspaceOp op = context(NewLiferayWorkspaceOp.class);
+
+		if (op != null) {
+			SapphireUtil.detachListener(op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
 		}
 
 		super.dispose();
 	}
 
 	@Override
-	protected void compute(Set<String> values) {
-		if (ListUtil.isNotEmpty(_workspaceProducts)) {
-			List<String> productVersionList = NewLiferayWorkspaceOpMethods.getProductVersionList(_workspaceProducts);
+	public boolean ordered() {
+		return true;
+	}
 
-			values.addAll(productVersionList);
+	@Override
+	protected void compute(Set<String> values) {
+		NewLiferayWorkspaceOp op = context(NewLiferayWorkspaceOp.class);
+
+		if (get(op.getShowAllVersionProduct())) {
+			values.addAll(_productVersions);
+		}
+		else {
+			values.addAll(_promotedProductVersions);
 		}
 	}
 
 	@Override
 	protected void initPossibleValuesService() {
-		_op = context(NewLiferayWorkspaceOp.class);
+		NewLiferayWorkspaceOp op = context(NewLiferayWorkspaceOp.class);
+
+		Job getProductVersions = new Job("Get product versions") {
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					_productVersions.clear();
+					Collections.addAll(_productVersions, BladeCLI.getWorkspaceProduct(true));
+
+					_promotedProductVersions.clear();
+					Collections.addAll(_promotedProductVersions, BladeCLI.getWorkspaceProduct(false));
+
+					refresh();
+				}
+				catch (Exception exception) {
+					ProjectCore.logError("Failed to init product version list.", exception);
+				}
+
+				return Status.OK_STATUS;
+			}
+
+		};
+
+		getProductVersions.setSystem(true);
+
+		getProductVersions.schedule();
 
 		_listener = new FilteredListener<PropertyContentEvent>() {
 
 			@Override
 			protected void handleTypedEvent(PropertyContentEvent event) {
-				Job refreshWorkspaceProductJob = new Job("") {
-
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						try {
-							String version = get(_op.getProductVersion());
-
-							boolean showAll = get(_op.getShowAllVersionProduct());
-
-							_workspaceProducts = BladeCLI.getWorkspaceProduct(showAll);
-
-							List<String> productVersionsList = NewLiferayWorkspaceOpMethods.getProductVersionList(
-								_workspaceProducts);
-
-							if (Objects.nonNull(version) && !productVersionsList.contains(version) &&
-								ListUtil.isNotEmpty(productVersionsList)) {
-
-								_op.setProductVersion(productVersionsList.get(0));
-							}
-
-							refresh();
-						}
-						catch (Exception exception) {
-							ProjectCore.logError("Failed to init product version list.", exception);
-						}
-
-						return Status.OK_STATUS;
-					}
-
-				};
-
-				refreshWorkspaceProductJob.setSystem(true);
-
-				refreshWorkspaceProductJob.schedule();
+				refresh();
 			}
 
 		};
 
-		SapphireUtil.attachListener(_op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
+		SapphireUtil.attachListener(op.property(NewLiferayWorkspaceOp.PROP_SHOW_ALL_VERSION_PRODUCT), _listener);
 	}
 
 	private FilteredListener<PropertyContentEvent> _listener;
-	private NewLiferayWorkspaceOp _op;
-	private String[] _workspaceProducts;
+	private List<String> _productVersions;
+	private List<String> _promotedProductVersions;
 
 }
